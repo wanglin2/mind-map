@@ -1,0 +1,11 @@
+{
+  "name": "simple-mind-map",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {},
+  "dependencies": {
+    "@svgdotjs/svg.js": "^3.0.16",
+    "deepmerge": "^1.5.2",
+    "eventemitter3": "^4.0.7"
+  }
+}
