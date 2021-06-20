@@ -26,7 +26,7 @@ class LogicalStructure extends Base {
      * @Desc: 布局
      */
     doLayout() {
-        // 计算节点的left、width、height
+        // 遍历数据计算节点的left、width、height
         this.computedBaseValue()
         // 计算节点的top
         this.computedTopValue()
@@ -40,39 +40,41 @@ class LogicalStructure extends Base {
      * javascript comment 
      * @Author: 王林25 
      * @Date: 2021-04-08 09:49:32 
-     * @Desc: 计算节点的left、width、height 
+     * @Desc: 遍历数据计算节点的left、width、height
      */
     computedBaseValue() {
-        walk(this.renderTree, null, (node, parent, isRoot, layerIndex) => {
-            // 遍历子节点前设置left、width、height
+        walk(this.renderTree, null, (cur, parent, isRoot, layerIndex) => {
             // 创建节点
             let newNode = new Node({
+                data: cur,
                 uid: this.mindMap.uid++,
-                data: node,
                 renderer: this.renderer,
                 mindMap: this.mindMap,
                 draw: this.draw,
                 layerIndex
             })
-            // 计算节点的宽高
-            newNode.refreshSize()
+            // 数据关联实际节点
+            cur._node = newNode
+            // 根节点定位在画布中心位置
             if (isRoot) {
                 newNode.isRoot = true
                 newNode.left = (this.mindMap.width - newNode.width) / 2
                 newNode.top = (this.mindMap.height - newNode.height) / 2
                 this.root = newNode
             } else {
-                let marginX = layerIndex === 1 ? this.themeConfig.secondLevel.marginX : this.themeConfig.node.marginX
-                newNode.left = parent._node.left + parent._node.width + marginX,
-                    newNode.parent = parent._node
+                // 非根节点
+                let marginX = layerIndex === 1 ? this.themeConfig.second.marginX : this.themeConfig.node.marginX
+                // 定位到父节点右侧
+                newNode.left = parent._node.left + parent._node.width + marginX
+                // 互相收集
+                newNode.parent = parent._node
                 parent._node.addChildren(newNode)
             }
-            node._node = newNode
-        }, (node, parent, isRoot, layerIndex) => {
+        }, (cur, parent, isRoot, layerIndex) => {
             // 返回时计算节点的areaHeight，也就是子节点所占的高度之和，包括外边距
-            let len = node.expand === false ? 0 : node._node.children.length
-            node._node.childrenAreaHeight = len ? node._node.children.reduce((h, cur) => {
-                return h + cur.height
+            let len = cur.data.expand === false ? 0 : cur._node.children.length
+            cur._node.childrenAreaHeight = len ? cur._node.children.reduce((h, item) => {
+                return h + item.height
             }, 0) + (len + 1) * this.getMarginY(layerIndex) : 0
         }, true, 0)
     }
@@ -81,7 +83,7 @@ class LogicalStructure extends Base {
      * javascript comment 
      * @Author: 王林25 
      * @Date: 2021-04-08 09:59:25 
-     * @Desc: 计算节点的top 
+     * @Desc: 遍历节点树计算节点的top 
      */
     computedTopValue() {
         walk(this.root, null, (node, parent, isRoot, layerIndex) => {
@@ -151,7 +153,7 @@ class LogicalStructure extends Base {
      * @Desc: 获取节点的marginY
      */
     getMarginY(layerIndex) {
-        return layerIndex === 1 ? this.themeConfig.secondLevel.marginY : this.themeConfig.node.marginY;
+        return layerIndex === 1 ? this.themeConfig.second.marginY : this.themeConfig.node.marginY;
     }
 
     /** 
@@ -183,7 +185,7 @@ class LogicalStructure extends Base {
      * @Date: 2021-04-11 14:42:48 
      * @Desc: 绘制连线，连接该节点到其子节点
      */
-    drawLine(node) {
+    renderLine(node) {
         if (node.children.length <= 0) {
             return [];
         }
@@ -220,7 +222,7 @@ class LogicalStructure extends Base {
      * @Date: 2021-04-11 19:54:26 
      * @Desc: 渲染按钮 
      */
-    drawIcon(node, icons) {
+    renderExpandBtn(node, icons) {
         let {
             left,
             top,

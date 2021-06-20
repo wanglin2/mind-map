@@ -16,6 +16,7 @@ export default class TextEdit {
      * @Desc: 构造函数 
      */
     constructor(renderer) {
+        this.renderer = renderer
         this.mindMap = renderer.mindMap
         // 文本编辑框
         this.textEditNode = null
@@ -37,12 +38,6 @@ export default class TextEdit {
         this.mindMap.on('draw_click', () => {
             // 隐藏文本编辑框
             this.hideEditTextBox()
-            // 清除激活状态
-            if (this.activeNodeList.length > 0) {
-                this.clearActive()
-                this.mindMap.render()
-                this.mindMap.emit('node_active', null, [])
-            }
         })
         // 展开收缩按钮点击事件
         this.mindMap.on('expand_btn_click', () => {
@@ -64,10 +59,10 @@ export default class TextEdit {
      * @Desc: 显示文本编辑框 
      */
     show(node) {
-        if (!node.text) {
+        if (!node.nodeData.data.text) {
             return;
         }
-        this.showEditTextBox(this, this.textNode.node.node.getBoundingClientRect())
+        this.showEditTextBox(node, node.textNode.node.node.getBoundingClientRect())
     }
 
     /** 
@@ -83,7 +78,7 @@ export default class TextEdit {
             document.body.appendChild(this.textEditNode)
         }
         node.style.domText(this.textEditNode)
-        this.textEditNode.innerHTML = node.data.text.split(/\n/img).join('<br>')
+        this.textEditNode.innerHTML = node.nodeData.data.text.split(/\n/img).join('<br>')
         this.textEditNode.style.minWidth = rect.width + 10 + 'px'
         this.textEditNode.style.minHeight = rect.height + 6 + 'px'
         this.textEditNode.style.left = rect.left + 'px'
@@ -101,12 +96,12 @@ export default class TextEdit {
         if (!this.showTextEdit) {
             return
         }
-        this.activeNodeList.forEach((node) => {
+        this.renderer.activeNodeList.forEach((node) => {
             let str = getStrWithBrFromHtml(this.textEditNode.innerHTML)
-            node.data.text = str
+            node.nodeData.data.text = str
             this.mindMap.render()
         })
-        this.mindMap.emit('hide_text_edit', this.textEditNode, this.activeNodeList)
+        this.mindMap.emit('hide_text_edit', this.textEditNode, this.renderer.activeNodeList)
         this.textEditNode.style.display = 'none'
         this.textEditNode.innerHTML = ''
         this.textEditNode.style.fontFamily = 'inherit'

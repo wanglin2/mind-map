@@ -35,9 +35,28 @@ class Render {
         // 文本编辑框
         this.textEdit = new TextEdit(this)
         // 布局
-        this.layout = new(layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts.logicalStructure)(this)
+        this.layout = new (layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts.logicalStructure)(this)
+        // 绑定事件
+        this.bindEvent()
         // 注册命令
         this.registerCommands()
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-06-20 10:34:06 
+     * @Desc:  绑定事件
+     */
+    bindEvent() {
+        // 点击事件
+        this.mindMap.on('draw_click', () => {
+            // 清除激活状态
+            if (this.activeNodeList.length > 0) {
+                this.clearActive()
+                this.mindMap.render()
+                this.mindMap.emit('node_active', null, [])
+            }
+        })
     }
 
     /** 
@@ -167,7 +186,7 @@ class Render {
      */
     updateNodeData(node, data) {
         Object.keys(data).forEach((key) => {
-            node.data[key] = data[key]
+            node.nodeData.data[key] = data[key]
         })
     }
 }

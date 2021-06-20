@@ -19,7 +19,7 @@ export default merge(defaultTheme, {
         }
     },
     // 二级节点样式
-    secondLevel: {
+    second: {
         fillColor: 'rgb(239, 238, 246)',
         color: '#333',
         borderColor: 'rgb(123, 115, 191)',

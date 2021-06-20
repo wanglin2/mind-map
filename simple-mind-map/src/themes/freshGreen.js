@@ -16,7 +16,7 @@ export default merge(defaultTheme, {
         fillColor: '#1fb27d'
     },
     // 二级节点样式
-    secondLevel: {
+    second: {
         fillColor: '#fff',
         color: '#565656',
         borderColor: 'transparent',
