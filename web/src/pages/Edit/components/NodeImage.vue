@@ -25,7 +25,6 @@ export default {
     this.$bus.$on("node_active", (...args) => {
       let activeNodes = args[1];
       this.activeNode = activeNodes[0];
-      console.log(args);
     });
     this.$bus.$on("showNodeImage", () => {
       this.dialogVisible = true;

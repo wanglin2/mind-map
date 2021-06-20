@@ -1,3 +1,26 @@
+const tagColorList = [
+    {
+        color: 'rgb(77, 65, 0)',
+        background: 'rgb(255, 244, 179)'
+    },
+    {
+        color: 'rgb(0, 50, 77)',
+        background: 'rgb(179, 229, 255)'
+    },
+    {
+        color: 'rgb(77, 0, 73)',
+        background: 'rgb(255, 179, 251)'
+    },
+    {
+        color: 'rgb(57, 77, 0)',
+        background: 'rgb(236, 255, 179)'
+    },
+    {
+        color: 'rgb(0, 77, 47)',
+        background: 'rgb(179, 255, 226)'
+    }
+]
+const rootProp = ['paddingX', 'paddingY']
 
 /** 
  * @Author: 王林 
@@ -37,23 +60,23 @@ class Style {
     merge(prop, root, isActive) {
         // 三级及以下节点
         let defaultConfig = this.themeConfig.node
-        if (root) {// 直接使用最外层样式
+        if (root || rootProp.includes(prop)) {// 直接使用最外层样式
             defaultConfig = this.themeConfig
         } else if (this.ctx.layerIndex === 0) {// 根节点
             defaultConfig = this.themeConfig.root
         } else if (this.ctx.layerIndex === 1) {// 二级节点
-            defaultConfig = this.themeConfig.secondLevel
+            defaultConfig = this.themeConfig.second
         }
         // 激活状态
-        if (isActive !== undefined ? isActive : this.ctx.isActive) {
-            if (this.ctx.activeStyle && this.ctx.activeStyle[prop] !== undefined) {
-                return this.ctx.activeStyle[prop];
+        if (isActive !== undefined ? isActive : this.ctx.nodeData.data.isActive) {
+            if (this.ctx.nodeData.data.activeStyle && this.ctx.nodeData.data.activeStyle[prop] !== undefined) {
+                return this.ctx.nodeData.data.activeStyle[prop];
             } else if (defaultConfig.active && defaultConfig.active[prop]) {
                 return defaultConfig.active[prop]
             }
         }
         // 优先使用节点本身的样式
-        return this.ctx[prop] !== undefined ? this.ctx[prop] : defaultConfig[prop]
+        return this.ctx.nodeData.data[prop] !== undefined ? this.ctx.nodeData.data[prop] : defaultConfig[prop]
     }
 
     /** 
@@ -97,6 +120,30 @@ class Style {
         node.style.fontFamily = this.merge('fontFamily')
         node.style.fontSize = this.merge('fontSize') + 'px'
         node.style.fontWeight = this.merge('fontWeight') || 'normal'
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-06-20 20:02:18 
+     * @Desc: 标签文字 
+     */
+    tagText(node, index) {
+        node.fill({
+            color: tagColorList[index].color
+        }).css({
+            'font-size': '12px'
+        })
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-06-20 21:04:11 
+     * @Desc: 标签矩形 
+     */
+    tagRect(node, index) {
+        node.fill({
+            color: tagColorList[index].background
+        })
     }
 
     /** 

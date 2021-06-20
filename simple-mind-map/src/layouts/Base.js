@@ -38,17 +38,17 @@ class Base {
      * @Date: 2021-04-12 22:41:04 
      * @Desc: 连线 
      */
-    drawLine() {
-        throw new Error('【drawLine】方法为必要方法，需要子类进行重写！')
+    renderLine() {
+        throw new Error('【renderLine】方法为必要方法，需要子类进行重写！')
     }
 
     /** 
      * @Author: 王林 
      * @Date: 2021-04-12 22:42:08 
-     * @Desc: 定位显示展开收缩按钮 
+     * @Desc: 定位展开收缩按钮 
      */
-    drawIcon() {
-        throw new Error('【drawIcon】方法为必要方法，需要子类进行重写！')
+    renderExpandBtn() {
+        throw new Error('【renderExpandBtn】方法为必要方法，需要子类进行重写！')
     }
 
     /** 

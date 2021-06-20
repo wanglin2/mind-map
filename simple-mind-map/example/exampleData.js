@@ -6,29 +6,27 @@
 export default {
     "root": {
         "data": {
-            "text": "鱼骨头图",
+            "text": "根节点",
         },
         "children": [{
             "data": {
-                "text": "分支主题",
-                "expand": true
+                "text": "二级节点",
+                "expand": true,
             },
             "children": [{
                 "data": {
-                    "text": "分支主题",
-                    "hyperlink": "https://naotu.baidu.com/",
-                    "hyperlinkTitle": "百度脑图",
-                    "image": "https://kityminder-img.gz.bcebos.com/865551aedebd1e02ac6e76d24c093231df9aafda",
+                    "text": "子节点",
+                    "image": "http://aliyuncdn.lxqnsys.com/whbm/enJFNMHnedQTYTESGfDkctCp2",
                     "imageTitle": "图片名称",
                     "imageSize": {
-                        "width": 200,
-                        "height": 112
+                        "width": 1000,
+                        "height": 563
                     },
-                    "note": "我是备注",
-                    "resource": ["标签1", "标签2"],
-                    "priority": 5,
-                    "progress": 7,
-                    // ... 其他类型的图标
+                    "icon": ['a'],
+                    "tag": ["标签1", "标签2"],
+                    "hyperlink": "http://lxqnsys.com/",
+                    "hyperlinkTitle": "理想青年实验室",
+                    "note": "理想青年实验室\n一个有意思的角落"
                 },
                 "children": []
             }]

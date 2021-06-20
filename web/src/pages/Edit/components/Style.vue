@@ -6,6 +6,7 @@
         <el-tab-pane label="选中状态" name="active"></el-tab-pane>
       </el-tabs>
       <div class="sidebarContent" v-if="activeNode">
+        <!-- 文字 -->
         <div class="title noTop">文字</div>
         <div class="row">
           <el-select
@@ -94,6 +95,7 @@
             </el-radio-group>
           </el-popover>
         </div>
+        <!-- 边框 -->
         <div class="title">边框</div>
         <div class="row">
           <div class="rowItem">
@@ -167,6 +169,7 @@
             </el-select>
           </div>
         </div>
+        <!-- 背景 -->
         <div class="title">背景</div>
         <div class="row">
           <div class="rowItem">
@@ -179,6 +182,28 @@
             <el-popover ref="popover4" placement="bottom" trigger="click">
               <Color :color="style.fillColor" @change="changeFillColor"></Color>
             </el-popover>
+          </div>
+        </div>
+        <!-- 节点内边距 -->
+        <div class="title noTop">节点内边距</div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">水平</span>
+            <el-slider
+              style="width: 230px"
+              v-model="style.paddingX"
+              @change="update('paddingX')"
+            ></el-slider>
+          </div>
+        </div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">垂直</span>
+            <el-slider
+              style="width: 230px"
+              v-model="style.paddingY"
+              @change="update('paddingY')"
+            ></el-slider>
           </div>
         </div>
       </div>
@@ -213,6 +238,8 @@ export default {
       activeNode: null,
       activeTab: "normal",
       style: {
+        paddingX: 0,
+        paddingY: 0,
         color: "",
         fontFamily: "",
         fontSize: "",
@@ -229,7 +256,7 @@ export default {
   },
   created() {
     this.$bus.$on("node_active", (...args) => {
-      this.activeTab = 'normal'
+      this.activeTab = "normal";
       let activeNodes = args[1];
       this.activeNode = activeNodes[0];
       this.$refs.sidebar.show = activeNodes.length > 0;
@@ -237,14 +264,14 @@ export default {
     });
   },
   methods: {
-		/** 
-		 * @Author: 王林 
-		 * @Date: 2021-05-05 11:42:32 
-		 * @Desc: tab切换 
-		 */
-		handleTabClick() {
-			this.initNodeStyle()
-		},
+    /**
+     * @Author: 王林
+     * @Date: 2021-05-05 11:42:32
+     * @Desc: tab切换
+     */
+    handleTabClick() {
+      this.initNodeStyle();
+    },
 
     /**
      * @Author: 王林
@@ -253,10 +280,12 @@ export default {
      */
     initNodeStyle() {
       if (!this.activeNode) {
-				this.activeTab = 'normal'
+        this.activeTab = "normal";
         return;
       }
       [
+        "paddingX",
+        "paddingY",
         "color",
         "fontFamily",
         "fontSize",
@@ -269,7 +298,11 @@ export default {
         "borderDasharray",
         "borderRadius",
       ].forEach((item) => {
-        this.style[item] = this.activeNode.getStyle(item, false, this.activeTab === 'active');
+        this.style[item] = this.activeNode.getStyle(
+          item,
+          false,
+          this.activeTab === "active"
+        );
       });
     },
 
@@ -279,7 +312,11 @@ export default {
      * @Desc: 修改样式
      */
     update(prop) {
-      this.activeNode.setStyle(prop, this.style[prop], this.activeTab === 'active');
+      this.activeNode.setStyle(
+        prop,
+        this.style[prop],
+        this.activeTab === "active"
+      );
     },
 
     /**
@@ -345,21 +382,21 @@ export default {
 
 <style lang="less" scoped>
 .styleBox {
-	width: 100%;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
-	.tab {
-		flex-grow: 0;
-		flex-shrink: 0;
-		padding: 0 20px;
-	}
+  .tab {
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding: 0 20px;
+  }
 }
 
 .sidebarContent {
-	padding: 20px;
-	padding-top: 10px;
+  padding: 20px;
+  padding-top: 10px;
 
   .title {
     font-size: 16px;
@@ -369,9 +406,9 @@ export default {
     margin-bottom: 10px;
     margin-top: 20px;
 
-		&.noTop {
-			margin-top: 0;
-		}
+    &.noTop {
+      margin-top: 0;
+    }
   }
 
   .row {

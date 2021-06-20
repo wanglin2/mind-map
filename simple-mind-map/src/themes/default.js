@@ -8,9 +8,9 @@ export default {
     paddingX: 20,
     paddingY: 10,
     // 图片显示的最大宽度
-    imgMaxWidth: 200,
+    imgMaxWidth: 100,
     // 图片显示的最大高度
-    imgMaxHeight: 200,
+    imgMaxHeight: 100,
     // icon的大小
     iconSize: 20,
     // 连线的粗细
@@ -43,7 +43,7 @@ export default {
         }
     },
     // 二级节点样式
-    secondLevel: {
+    second: {
         marginX: 100,
         marginY: 40,
         fillColor: '#fff',
