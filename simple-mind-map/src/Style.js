@@ -1,25 +1,4 @@
-const tagColorList = [
-    {
-        color: 'rgb(77, 65, 0)',
-        background: 'rgb(255, 244, 179)'
-    },
-    {
-        color: 'rgb(0, 50, 77)',
-        background: 'rgb(179, 229, 255)'
-    },
-    {
-        color: 'rgb(77, 0, 73)',
-        background: 'rgb(255, 179, 251)'
-    },
-    {
-        color: 'rgb(57, 77, 0)',
-        background: 'rgb(236, 255, 179)'
-    },
-    {
-        color: 'rgb(0, 77, 47)',
-        background: 'rgb(179, 255, 226)'
-    }
-]
+import { tagColorList } from './utils/constant';
 const rootProp = ['paddingX', 'paddingY']
 
 /** 
@@ -34,11 +13,13 @@ class Style {
      * @Desc:  设置背景样式
      */
     static setBackgroundStyle(el, themeConfig) {
-        let { backgroundColor, backgroundImage, backgroundRepeat } = themeConfig
+        let { backgroundColor, backgroundImage, backgroundRepeat, backgroundSize, backgroundPosition } = themeConfig
         el.style.backgroundColor = backgroundColor
         if (backgroundImage) {
             el.style.backgroundImage = `url(${backgroundImage})`
             el.style.backgroundRepeat = backgroundRepeat
+            el.style.backgroundSize = backgroundSize
+            el.style.backgroundPosition = backgroundPosition
         }
     }
 

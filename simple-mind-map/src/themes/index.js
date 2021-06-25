@@ -9,6 +9,8 @@ import classic from './classic';
 import classic2 from './classic2';
 import classic3 from './classic3';
 import dark from './dark';
+import classicGreen from './classicGreen';
+import classicBlue from './classicBlue';
 
 export default {
     default: defaultTheme,
@@ -21,5 +23,7 @@ export default {
     classic,
     classic2,
     classic3,
-    dark
+    dark,
+    classicGreen,
+    classicBlue
 }

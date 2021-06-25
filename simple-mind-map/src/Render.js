@@ -125,7 +125,7 @@ class Render {
             this.insertChildNode()
         } else {
             let index = this.getNodeIndex(first)
-            first.parent.originData.children.splice(index + 1, 0, {
+            first.parent.nodeData.children.splice(index + 1, 0, {
                 "data": {
                     "text": "分支主题",
                     "expand": true
@@ -146,7 +146,7 @@ class Render {
             return;
         }
         let first = this.activeNodeList[0]
-        first.originData.children.push({
+        first.nodeData.children.push({
             "data": {
                 "text": "分支主题",
                 "expand": true
@@ -168,11 +168,11 @@ class Render {
         this.activeNodeList.forEach((item) => {
             if (item.isRoot) {
                 item.children = []
-                item.originData.children = []
+                item.nodeData.children = []
             } else {
                 let index = this.getNodeIndex(item)
                 item.parent.children.splice(index, 1)
-                item.parent.originData.children.splice(index, 1)
+                item.parent.nodeData.children.splice(index, 1)
             }
         })
         this.clearActive()
@@ -188,6 +188,7 @@ class Render {
         Object.keys(data).forEach((key) => {
             node.nodeData.data[key] = data[key]
         })
+        this.mindMap.render()
     }
 }
 
