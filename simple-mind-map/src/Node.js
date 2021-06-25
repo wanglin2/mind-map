@@ -212,16 +212,13 @@ class Node {
         if (!_data.icon || _data.icon.length <= 0) {
             return [];
         }
-        let node = SVG('<svg t="1617947697619" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="999" width="200" height="200"><path d="M512 899.5c-213.668 0-387.5-173.832-387.5-387.5S298.332 124.5 512 124.5 899.5 298.332 899.5 512 725.668 899.5 512 899.5z" fill="#4472C4" p-id="1000"></path><path d="M512 137c-206.776 0-375 168.224-375 375s168.224 375 375 375 375-168.224 375-375-168.224-375-375-375m0-25c220.914 0 400 179.086 400 400S732.914 912 512 912 112 732.914 112 512s179.086-400 400-400z" fill="#4472C4" p-id="1001"></path><path d="M597.681 335.009c0-7.67-2.36-13.569-7.08-17.109a35.115 35.115 0 0 0-20.061-5.9c-3.54 0-6.49 1.77-10.029 4.13-3.54 2.95-6.49 5.31-8.26 7.08a75.758 75.758 0 0 0-11.211 13.569c-3.54 4.72-7.67 9.44-11.209 13.569-11.209 12.979-23.009 27.139-35.988 41.3-13.569 14.749-26.549 27.729-38.938 39.528-1.18 1.18-2.95 2.36-4.13 3.54l-4.72 2.36c-1.77 1.18-3.54 1.77-4.72 2.95l-5.31 3.54c-2.95 2.36-5.31 4.13-7.08 5.9-2.36 2.36-2.95 4.13-2.95 5.9 0 7.08 2.95 12.389 10.03 16.519 5.9 4.72 12.979 6.49 20.059 6.49a31.985 31.985 0 0 0 14.756-3.543c4.13-2.36 8.26-5.9 12.979-10.619 2.95-3.54 6.49-7.67 11.209-12.979l11.8-12.979c2.95-2.95 7.67-7.67 13.569-14.159s12.389-14.159 20.649-23.009c-1.77 9.44-3.54 20.649-4.72 33.628-2.36 12.979-4.13 25.959-5.9 40.118l-4.72 41.888c-1.18 14.159-2.36 27.729-2.95 39.528-1.18 22.419-2.36 44.838-2.95 67.257q-1.77 33.628-1.77 58.407c0 9.44 2.36 16.519 7.67 21.829 5.31 5.9 12.389 8.26 21.829 8.26a43.479 43.479 0 0 0 15.929-3.54c4.72-2.36 7.67-5.31 7.67-8.85 0-1.77-0.59-5.31-0.59-11.209a149.392 149.392 0 0 1-2.36-18.879 116.91 116.91 0 0 1-2.36-21.239 132.008 132.008 0 0 1-1.18-20.649c0-41.3 1.18-82.6 4.72-124.484 3.54-41.3 10.03-82.6 20.649-123.3a106.366 106.366 0 0 1 2.95-11.209l2.36-11.209 1.77-11.209c-0.002-3.547 0.588-7.086 0.588-11.216z" fill="#FFFFFF" p-id="1002"></path></svg>').size(this.themeConfig.iconSize, this.themeConfig.iconSize)
-        return [{
-            node,
-            width: this.themeConfig.iconSize,
-            height: this.themeConfig.iconSize
-        }, {
-            node: node.clone(),
-            width: this.themeConfig.iconSize,
-            height: this.themeConfig.iconSize
-        }]
+        return _data.icon.map((item) => {
+            return {
+                node: SVG(iconsSvg.getNodeIconListIcon(item)).size(this.themeConfig.iconSize, this.themeConfig.iconSize),
+                width: this.themeConfig.iconSize,
+                height: this.themeConfig.iconSize
+            };
+        });
     }
 
     /** 
@@ -328,6 +325,7 @@ class Node {
             border-radius: 5px;
             box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
             display: none;
+            background-color: #fff;
         `
         el.innerText = this.nodeData.data.note
         document.body.appendChild(el)
@@ -524,7 +522,6 @@ class Node {
             this.mindMap.execCommand('UPDATE_NODE_DATA', this, {
                 expand: !this.nodeData.data.expand
             })
-            this.mindMap.render()
             this.mindMap.emit('expand_btn_click', this)
         })
         g.add(fillNode)
@@ -571,7 +568,24 @@ class Node {
                 [prop]: value
             })
         }
-        this.mindMap.render()
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-06-22 22:04:02 
+     * @Desc: 获取数据 
+     */
+    getData(key) {
+        return key ? this.nodeData.data[key] || '' : this.nodeData.data;
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-06-22 22:12:01 
+     * @Desc: 设置数据 
+     */
+    setData(data = {}) {
+        this.mindMap.execCommand('UPDATE_NODE_DATA', this, data)
     }
 }
 

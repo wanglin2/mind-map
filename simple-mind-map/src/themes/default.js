@@ -20,9 +20,13 @@ export default {
     // 背景颜色
     backgroundColor: '#fafafa',
     // 背景图片
-    backgroundImage: '',
+    backgroundImage: 'none',
     // 背景重复
-    backgroundRepeat: 'none',
+    backgroundRepeat: 'no-repeat',
+    // 背景图像大小
+    backgroundSize: 'auto',
+    // 背景图像定位
+    backgroundPosition: '0% 0%',
     // 根节点样式
     root: {
         fillColor: '#549688',
