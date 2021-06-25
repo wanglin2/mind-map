@@ -222,6 +222,11 @@ import {
   borderRadiusList,
 } from "@/config";
 
+/** 
+ * @Author: 王林 
+ * @Date: 2021-06-24 22:54:47 
+ * @Desc: 节点样式设置 
+ */
 export default {
   name: "Style",
   components: {

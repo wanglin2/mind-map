@@ -1,17 +1,100 @@
 <template>
   <Sidebar ref="sidebar" title="基础样式">
     <div class="sidebarContent" v-if="data">
+      <!-- 背景 -->
       <div class="title noTop">背景</div>
       <div class="row">
-        <Color
-          :color="style.backgroundColor"
-          @change="
-            (color) => {
-              update('backgroundColor', color);
-            }
-          "
-        ></Color>
+        <el-tabs class="tab" v-model="activeTab">
+          <el-tab-pane label="颜色" name="color">
+            <Color
+              :color="style.backgroundColor"
+              @change="
+                (color) => {
+                  update('backgroundColor', color);
+                }
+              "
+            ></Color>
+          </el-tab-pane>
+          <el-tab-pane label="图片" name="image">
+            <ImgUpload
+              class="imgUpload"
+              v-model="style.backgroundImage"
+              @change="
+                (img) => {
+                  update('backgroundImage', img);
+                }
+              "
+            ></ImgUpload>
+            <div class="rowItem">
+              <span class="name">图片重复</span>
+              <el-select
+                size="mini"
+                style="width: 80px"
+                v-model="style.backgroundRepeat"
+                placeholder=""
+                @change="
+                  (value) => {
+                    update('backgroundRepeat', value);
+                  }
+                "
+              >
+                <el-option
+                  v-for="item in backgroundRepeatList"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <div class="rowItem">
+              <span class="name">图片大小</span>
+              <el-select
+                size="mini"
+                style="width: 80px"
+                v-model="style.backgroundSize"
+                placeholder=""
+                @change="
+                  (value) => {
+                    update('backgroundSize', value);
+                  }
+                "
+              >
+                <el-option
+                  v-for="item in backgroundSizeList"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <div class="rowItem">
+              <span class="name">图片定位</span>
+              <el-select
+                size="mini"
+                style="width: 80px"
+                v-model="style.backgroundPosition"
+                placeholder=""
+                @change="
+                  (value) => {
+                    update('backgroundPosition', value);
+                  }
+                "
+              >
+                <el-option
+                  v-for="item in backgroundPositionList"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+          </el-tab-pane>
+        </el-tabs>
       </div>
+      <!-- 连线 -->
       <div class="title noTop">连线</div>
       <div class="row">
         <div class="rowItem">
@@ -55,12 +138,13 @@
           </el-select>
         </div>
       </div>
+      <!-- 内边距 -->
       <div class="title noTop">节点内边距</div>
       <div class="row">
         <div class="rowItem">
           <span class="name">水平</span>
           <el-slider
-            style="width: 230px"
+            style="width: 210px"
             v-model="style.paddingX"
             @change="
               (value) => {
@@ -74,11 +158,63 @@
         <div class="rowItem">
           <span class="name">垂直</span>
           <el-slider
-            style="width: 230px"
+            style="width: 210px"
             v-model="style.paddingY"
             @change="
               (value) => {
                 update('paddingY', value);
+              }
+            "
+          ></el-slider>
+        </div>
+      </div>
+      <!-- 图片 -->
+      <div class="title noTop">图片</div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">显示的最大宽度</span>
+          <el-slider
+            style="width: 150px"
+            v-model="style.imgMaxWidth"
+            :min="10"
+            :max="300"
+            @change="
+              (value) => {
+                update('imgMaxWidth', value);
+              }
+            "
+          ></el-slider>
+        </div>
+      </div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">显示的最大高度</span>
+          <el-slider
+            style="width: 150px"
+            v-model="style.imgMaxHeight"
+            :min="10"
+            :max="300"
+            @change="
+              (value) => {
+                update('imgMaxHeight', value);
+              }
+            "
+          ></el-slider>
+        </div>
+      </div>
+      <!-- 图标 -->
+      <div class="title noTop">图标</div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">大小</span>
+          <el-slider
+            style="width: 210px"
+            v-model="style.iconSize"
+            :min="12"
+            :max="50"
+            @change="
+              (value) => {
+                update('iconSize', value);
               }
             "
           ></el-slider>
@@ -91,13 +227,20 @@
 <script>
 import Sidebar from "./Sidebar";
 import Color from "./Color";
-import { lineWidthList } from "@/config";
+import { lineWidthList, backgroundRepeatList, backgroundSizeList, backgroundPositionList } from "@/config";
+import ImgUpload from "@/components/ImgUpload";
 
+/** 
+ * @Author: 王林 
+ * @Date: 2021-06-24 22:52:56 
+ * @Desc: 基础样式 
+ */
 export default {
   name: "BaseStyle",
   components: {
     Sidebar,
     Color,
+    ImgUpload,
   },
   props: {
     data: {
@@ -111,17 +254,28 @@ export default {
   data() {
     return {
       lineWidthList,
+      backgroundRepeatList,
+      backgroundSizeList,
+      backgroundPositionList,
+      activeTab: "color",
       style: {
         backgroundColor: "",
         lineColor: "",
         lineWidth: "",
         paddingX: 0,
         paddingY: 0,
+        imgMaxWidth: 0,
+        imgMaxHeight: 0,
+        iconSize: 0,
+        backgroundImage: "",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: 'auto',
+        backgroundPosition: '0% 0%'
       },
     };
   },
   created() {
-    this.$bus.$on("showTheme", () => {
+    this.$bus.$on("showBaseStyle", () => {
       this.$refs.sidebar.show = true;
       this.initStyle();
     });
@@ -139,6 +293,13 @@ export default {
         "lineColor",
         "paddingX",
         "paddingY",
+        "imgMaxWidth",
+        "imgMaxHeight",
+        "iconSize",
+        "backgroundImage",
+        "backgroundRepeat",
+        "backgroundSize",
+        "backgroundPosition"
       ].forEach((key) => {
         this.style[key] = this.mindMap.getThemeConfig(key);
       });
@@ -181,6 +342,14 @@ export default {
     justify-content: space-between;
     margin-bottom: 10px;
 
+    .tab {
+      width: 100%;
+    }
+
+    .imgUpload {
+      margin-bottom: 5px;
+    }
+
     .btnGroup {
       width: 100%;
       display: flex;
@@ -190,6 +359,7 @@ export default {
     .rowItem {
       display: flex;
       align-items: center;
+      margin-bottom: 5px;
 
       .name {
         font-size: 12px;

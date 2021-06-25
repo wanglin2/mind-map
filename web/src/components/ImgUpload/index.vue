@@ -1,16 +1,14 @@
 <template>
   <div class="imgUploadContainer">
     <div class="imgUploadPanel">
-      <div class="upBtn" v-if="!previewSrc">
+      <div class="upBtn" v-if="!value">
         <label
           for="imgUploadInput"
           class="imgUploadInputArea"
           @dragenter.stop.prevent
           @dragover.stop.prevent
           @drop.stop.prevent="onDrop"
-          v-loading="loading"
-          element-loading-text="上传中..."
-          >点击此处添加图片、或拖动图片到此</label
+          >点击此处选择图片、或拖动图片到此</label
         >
         <input
           type="file"
@@ -19,10 +17,10 @@
           @change="onImgUploadInputChange"
         />
       </div>
-      <div v-if="previewSrc" class="uploadInfoBox">
+      <div v-if="value" class="uploadInfoBox">
         <div
           class="previewBox"
-          :style="{ backgroundImage: `url('${previewSrc}')` }"
+          :style="{ backgroundImage: `url('${value}')` }"
         ></div>
         <span class="delBtn el-icon-close" @click="deleteImg"></span>
       </div>
@@ -33,11 +31,19 @@
 <script>
 export default {
   name: "ImgUpload",
+  model: {
+    prop: "value",
+    event: "change",
+  },
+  props: {
+    value: {
+      type: String,
+      default: "",
+    },
+  },
   data() {
     return {
       file: null,
-      previewSrc: "",
-      loading: false,
     };
   },
   methods: {
@@ -48,7 +54,7 @@ export default {
      */
     onImgUploadInputChange(e) {
       let file = e.target.files[0];
-      this.uploadImg(file);
+      this.selectImg(file);
     },
 
     /**
@@ -59,40 +65,42 @@ export default {
     onDrop(e) {
       let dt = e.dataTransfer;
       let file = dt.files && dt.files[0];
-      this.uploadImg(file);
+      this.selectImg(file);
     },
 
     /**
      * @Author: 王林
      * @Date: 2021-06-06 16:56:14
-     * @Desc: 显示图片
+     * @Desc: 选择图片
      */
-    showImg(file) {
+    selectImg(file) {
       this.file = file;
       let fr = new FileReader();
       fr.readAsDataURL(file);
       fr.onload = (e) => {
-        this.previewSrc = e.target.result;
+        this.$emit("change", e.target.result);
       };
     },
 
     /**
      * @Author: 王林
-     * @Date: 2019-12-22 19:51:13
-     * @Desc: 上传图片
+     * @Date: 2021-06-22 23:03:46
+     * @Desc: 获取图片大小
      */
-    async uploadImg(file) {
-      this.loading = true;
-    
-    },
-
-    /**
-     * @Author: 王林
-     * @Date: 2021-06-06 22:33:28
-     * @Desc: 获取图片url
-     */
-    getUrl() {
-      return this.this.previewSrc;
+    getSize() {
+      return new Promise((resolve, reject) => {
+        let img = new Image();
+        img.src = this.value;
+        img.onload = () => {
+          resolve({
+            width: img.width,
+            height: img.height,
+          });
+        };
+        img.onerror = (e) => {
+          reject(e);
+        };
+      });
     },
 
     /**
@@ -101,7 +109,7 @@ export default {
      * @Desc: 删除图片
      */
     deleteImg() {
-      this.previewSrc = "";
+      this.$emit("change", "none");
       this.file = null;
     },
   },
