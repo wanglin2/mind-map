@@ -11,6 +11,11 @@
 </template>
 
 <script>
+/** 
+ * @Author: 王林 
+ * @Date: 2021-06-24 22:54:25 
+ * @Desc: 侧边栏容器 
+ */
 export default {
   name: "Sidebar",
   props: {
@@ -31,7 +36,7 @@ export default {
 .sidebarContainer {
   position: fixed;
   right: -300px;
-  top: 62px;
+  top: 100px;
   bottom: 0;
   width: 300px;
   background-color: #fff;
