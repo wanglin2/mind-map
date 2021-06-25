@@ -155,6 +155,15 @@ class MindMap {
 
     /** 
      * @Author: 王林 
+     * @Date: 2021-06-25 23:52:37 
+     * @Desc: 获取当前主题 
+     */
+    getTheme() {
+        return this.opt.theme;
+    }
+
+    /** 
+     * @Author: 王林 
      * @Date: 2021-05-05 13:50:17 
      * @Desc: 设置主题配置 
      */

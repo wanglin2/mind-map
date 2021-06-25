@@ -125,7 +125,7 @@ export const simpleDeepClone = (data) => {
 export const copyRenderTree = (tree, root) => {
     tree.data = simpleDeepClone(root.data)
     tree.children = []
-    if (root.children.length > 0) {
+    if (root.children && root.children.length > 0) {
         root.children.forEach((item, index) => {
             tree.children[index] = copyRenderTree({}, item)
         })
