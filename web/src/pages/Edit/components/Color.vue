@@ -23,6 +23,11 @@
 <script>
 import { colorList } from "@/config";
 
+/** 
+ * @Author: 王林 
+ * @Date: 2021-06-24 22:53:10 
+ * @Desc: 颜色选择器 
+ */
 export default {
   name: "Color",
   props: {

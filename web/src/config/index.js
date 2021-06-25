@@ -126,3 +126,83 @@ export const borderRadiusList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 // 线宽
 export const lineWidthList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+// 图片重复方式
+export const backgroundRepeatList = [
+    {
+        name: '不重复',
+        value: 'no-repeat'
+    },
+    {
+        name: '重复',
+        value: 'repeat'
+    },
+    {
+        name: '水平方向重复',
+        value: 'repeat-x'
+    },
+    {
+        name: '垂直方向重复',
+        value: 'repeat-y'
+    }
+]
+
+// 背景图片大小
+export const backgroundSizeList = [
+    {
+        name: '自动',
+        value: 'auto'
+    },
+    {
+        name: '完全覆盖',
+        value: 'cover'
+    },
+    {
+        name: '最合适',
+        value: 'contain'
+    }
+]
+
+// 背景图片定位
+export const backgroundPositionList = [
+    {
+        name: '默认',
+        value: '0% 0%'
+    },
+    {
+        name: '左上',
+        value: 'left top'
+    },
+    {
+        name: '左中',
+        value: 'left center'
+    },
+    {
+        name: '左下',
+        value: 'left bottom'
+    },
+    {
+        name: '右上',
+        value: 'right top'
+    },
+    {
+        name: '右中',
+        value: 'right center'
+    },
+    {
+        name: '右下',
+        value: 'right bottom'
+    },
+    {
+        name: '中上',
+        value: 'center top'
+    },
+    {
+        name: '居中',
+        value: 'center center'
+    },
+    {
+        name: '中下',
+        value: 'center bottom'
+    }
+]

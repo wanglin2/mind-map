@@ -8,33 +8,41 @@
       :mindMap="mindMap"
       @change="changeThemeConfig"
     ></BaseStyle>
+    <Theme :mindMap="mindMap"></Theme>
   </div>
 </template>
 
 <script>
-import MindMap from 'simple-mind-map'
-import Outline from './Outline'
-import Style from './Style'
-import BaseStyle from './BaseStyle'
-import exampleData from 'simple-mind-map/example/exampleData'
+import MindMap from "simple-mind-map";
+import Outline from "./Outline";
+import Style from "./Style";
+import BaseStyle from "./BaseStyle";
+import exampleData from "simple-mind-map/example/exampleData";
+import Theme from "./Theme";
 
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:56:17
+ * @Desc: 编辑区域
+ */
 export default {
-  name: 'Edit',
+  name: "Edit",
   components: {
     Outline,
     Style,
     BaseStyle,
+    Theme,
   },
   data() {
     return {
       mindMap: null,
       mindMapData: exampleData,
-    }
+    };
   },
   created() {},
   mounted() {
-    this.init()
-    this.$bus.$on('execCommand', this.execCommand)
+    this.init();
+    this.$bus.$on("execCommand", this.execCommand);
   },
   methods: {
     /**
@@ -43,20 +51,20 @@ export default {
      * @Desc: 初始化
      */
     init() {
-      let { root, layout, theme } = this.mindMapData
+      let { root, layout, theme } = this.mindMapData;
       this.mindMap = new MindMap({
         el: this.$refs.mindMapContainer,
         data: root,
         layout: layout,
         theme: theme.template,
         themeConfig: theme.config,
-      })
-      this.mindMap.on('node_active', (...args) => {
-        this.$bus.$emit('node_active', ...args)
-      })
-      this.mindMap.on('data_change', (...args) => {
-        this.$bus.$emit('data_change', ...args)
-      })
+      });
+      this.mindMap.on("node_active", (...args) => {
+        this.$bus.$emit("node_active", ...args);
+      });
+      this.mindMap.on("data_change", (...args) => {
+        this.$bus.$emit("data_change", ...args);
+      });
     },
 
     /**
@@ -65,7 +73,7 @@ export default {
      * @Desc: 修改主题配置
      */
     changeThemeConfig() {
-      this.mindMap.setThemeConfig(this.mindMapData.theme.config)
+      this.mindMap.setThemeConfig(this.mindMapData.theme.config);
     },
 
     /**
@@ -74,7 +82,7 @@ export default {
      * @Desc: 重新渲染
      */
     reRender() {
-      this.mindMap.render()
+      this.mindMap.render();
     },
 
     /**
@@ -83,10 +91,10 @@ export default {
      * @Desc: 执行命令
      */
     execCommand(...args) {
-      this.mindMap.execCommand(...args)
+      this.mindMap.execCommand(...args);
     },
   },
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -94,7 +102,7 @@ export default {
   position: fixed;
   left: 0;
   right: 0;
-  top: 62px;
+  top: 0;
   bottom: 0;
 
   .mindMapContainer {

@@ -1,91 +1,145 @@
 <template>
   <div class="toolbarContainer">
     <div class="toolbar">
-      <div
-        class="toolbarBtn"
-        :class="{
-          disabled: activeNodes.length <= 0,
-        }"
-        @click="$bus.$emit('execCommand', 'INSERT_NODE')"
-      >
-        <span class="icon iconfont iconjiedian"></span>
-        <span class="text">插入同级节点</span>
+      <!-- 节点操作 -->
+      <div class="left">
+        <div
+          class="toolbarBtn"
+          :class="{
+            disabled: activeNodes.length <= 0 || hasRoot,
+          }"
+          @click="$bus.$emit('execCommand', 'INSERT_NODE')"
+        >
+          <span class="icon iconfont iconjiedian"></span>
+          <span class="text">插入同级节点</span>
+        </div>
+        <div
+          class="toolbarBtn"
+          :class="{
+            disabled: activeNodes.length <= 0,
+          }"
+          @click="$bus.$emit('execCommand', 'INSERT_CHILD_NODE')"
+        >
+          <span class="icon iconfont icontianjiazijiedian"></span>
+          <span class="text">插入子节点</span>
+        </div>
+        <div
+          class="toolbarBtn"
+          :class="{
+            disabled: activeNodes.length <= 0,
+          }"
+          @click="$bus.$emit('execCommand', 'REMOVE_NODE')"
+        >
+          <span class="icon iconfont iconshanchu"></span>
+          <span class="text">删除节点</span>
+        </div>
+        <div
+          class="toolbarBtn"
+          :class="{
+            disabled: activeNodes.length <= 0,
+          }"
+          @click="$bus.$emit('showNodeImage')"
+        >
+          <span class="icon iconfont iconimage"></span>
+          <span class="text">图片</span>
+        </div>
+        <div
+          class="toolbarBtn"
+          :class="{
+            disabled: activeNodes.length <= 0,
+          }"
+          @click="$bus.$emit('showNodeIcon')"
+        >
+          <span class="icon iconfont iconxiaolian"></span>
+          <span class="text">图标</span>
+        </div>
+        <div
+          class="toolbarBtn"
+          :class="{
+            disabled: activeNodes.length <= 0,
+          }"
+          @click="$bus.$emit('showNodeLink')"
+        >
+          <span class="icon iconfont iconchaolianjie"></span>
+          <span class="text">超链接</span>
+        </div>
+        <div
+          class="toolbarBtn"
+          :class="{
+            disabled: activeNodes.length <= 0,
+          }"
+          @click="$bus.$emit('showNodeNote')"
+        >
+          <span class="icon iconfont iconflow-Mark"></span>
+          <span class="text">备注</span>
+        </div>
+        <div
+          class="toolbarBtn"
+          :class="{
+            disabled: activeNodes.length <= 0,
+          }"
+          @click="$bus.$emit('showNodeTag')"
+        >
+          <span class="icon iconfont iconbiaoqian"></span>
+          <span class="text">标签</span>
+        </div>
       </div>
-      <div
-        class="toolbarBtn"
-        :class="{
-          disabled: activeNodes.length <= 0,
-        }"
-        @click="$bus.$emit('execCommand', 'INSERT_CHILD_NODE')"
-      >
-        <span class="icon iconfont icontianjiazijiedian"></span>
-        <span class="text">插入子节点</span>
-      </div>
-      <div
-        class="toolbarBtn"
-        :class="{
-          disabled: activeNodes.length <= 0,
-        }"
-        @click="$bus.$emit('execCommand', 'REMOVE_NODE')"
-      >
-        <span class="icon iconfont iconshanchu"></span>
-        <span class="text">删除节点</span>
-      </div>
-      <div
-        class="toolbarBtn"
-        :class="{
-          disabled: activeNodes.length <= 0,
-        }"
-        @click="$bus.$emit('showNodeImage')"
-      >
-        <span class="icon iconfont iconimage"></span>
-        <span class="text">图片</span>
-      </div>
-      <div
-        class="toolbarBtn"
-        :class="{
-          disabled: activeNodes.length <= 0,
-        }"
-        @click="$bus.$emit('showNodeIcon')"
-      >
-        <span class="icon iconfont iconxiaolian"></span>
-        <span class="text">图标</span>
-      </div>
-      <div
-        class="toolbarBtn"
-        :class="{
-          disabled: activeNodes.length <= 0,
-        }"
-        @click="$bus.$emit('showNodeLink')"
-      >
-        <span class="icon iconfont iconchaolianjie"></span>
-        <span class="text">超链接</span>
-      </div>
-      <div class="toolbarBtn" @click="$bus.$emit('showOutline')">
-        <span class="icon iconfont iconfuhao-dagangshu"></span>
-        <span class="text">显示大纲</span>
-      </div>
-      <div class="toolbarBtn" @click="$bus.$emit('showTheme')">
-        <span class="icon iconfont iconyangshi"></span>
-        <span class="text">基础样式</span>
+      <!-- 通用操作 -->
+      <div class="center">
+        <div class="toolbarBtn" @click="$bus.$emit('showOutline')">
+          <span class="icon iconfont iconfuhao-dagangshu"></span>
+          <span class="text">显示大纲</span>
+        </div>
+        <div class="toolbarBtn" @click="$bus.$emit('showBaseStyle')">
+          <span class="icon iconfont iconyangshi"></span>
+          <span class="text">基础样式</span>
+        </div>
+        <div class="toolbarBtn" @click="$bus.$emit('showTheme')">
+          <span class="icon iconfont iconjingzi"></span>
+          <span class="text">主题</span>
+        </div>
       </div>
     </div>
     <NodeImage></NodeImage>
+    <NodeHyperlink></NodeHyperlink>
+    <NodeIcon></NodeIcon>
+    <NodeNote></NodeNote>
+    <NodeTag></NodeTag>
   </div>
 </template>
 
 <script>
 import NodeImage from "./NodeImage";
+import NodeHyperlink from "./NodeHyperlink";
+import NodeIcon from "./NodeIcon";
+import NodeNote from "./NodeNote";
+import NodeTag from "./NodeTag";
 
+/** 
+ * @Author: 王林 
+ * @Date: 2021-06-24 22:54:58 
+ * @Desc: 工具栏 
+ */
 export default {
   name: "Toolbar",
   components: {
     NodeImage,
+    NodeHyperlink,
+    NodeIcon,
+    NodeNote,
+    NodeTag,
   },
   data() {
     return {
-      activeNodes: [],
+      activeNodes: []
     };
+  },
+  computed: {
+    hasRoot() {
+      return this.activeNodes.find((node) => {
+        return node.isRoot;
+      });
+    },
   },
   created() {
     this.$bus.$on("node_active", (...args) => {
@@ -97,22 +151,30 @@ export default {
 
 <style lang="less" scoped>
 .toolbarContainer {
-  height: 62px;
-  background: #fafafa;
-  padding-left: 40px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  border-top: 1px solid #e8e8e8;
-  border-bottom: 1px solid #e8e8e8;
-  font-size: 12px;
-  font-family: PingFangSC-Regular, PingFang SC;
-  font-weight: 400;
-  color: rgba(26, 26, 26, 0.8);
-
   .toolbar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
     display: flex;
-    align-items: center;
+    padding: 0 20px;
+    padding-top: 20px;
+    font-size: 12px;
+    font-family: PingFangSC-Regular, PingFang SC;
+    font-weight: 400;
+    color: rgba(26, 26, 26, 0.8);
+    z-index: 2;
+
+    .left,
+    .center {
+      display: flex;
+      background-color: #fff;
+      padding: 10px 20px;
+      border-radius: 6px;
+      box-shadow: 0 2px 16px 0 rgb(0 0 0 / 6%);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      margin-right: 20px;
+    }
 
     .toolbarBtn {
       display: flex;
@@ -120,6 +182,10 @@ export default {
       flex-direction: column;
       cursor: pointer;
       margin-right: 20px;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
 
       &:hover {
         &:not(.disabled) {
