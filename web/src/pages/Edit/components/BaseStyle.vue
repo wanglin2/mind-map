@@ -227,13 +227,18 @@
 <script>
 import Sidebar from "./Sidebar";
 import Color from "./Color";
-import { lineWidthList, backgroundRepeatList, backgroundSizeList, backgroundPositionList } from "@/config";
+import {
+  lineWidthList,
+  backgroundRepeatList,
+  backgroundSizeList,
+  backgroundPositionList,
+} from "@/config";
 import ImgUpload from "@/components/ImgUpload";
 
-/** 
- * @Author: 王林 
- * @Date: 2021-06-24 22:52:56 
- * @Desc: 基础样式 
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:52:56
+ * @Desc: 基础样式
  */
 export default {
   name: "BaseStyle",
@@ -269,15 +274,18 @@ export default {
         iconSize: 0,
         backgroundImage: "",
         backgroundRepeat: "no-repeat",
-        backgroundSize: 'auto',
-        backgroundPosition: '0% 0%'
+        backgroundSize: "auto",
+        backgroundPosition: "0% 0%",
       },
     };
   },
   created() {
     this.$bus.$on("showBaseStyle", () => {
-      this.$refs.sidebar.show = true;
-      this.initStyle();
+      this.$refs.sidebar.show = false;
+      this.$nextTick(() => {
+        this.$refs.sidebar.show = true;
+        this.initStyle();
+      });
     });
   },
   methods: {
@@ -299,7 +307,7 @@ export default {
         "backgroundImage",
         "backgroundRepeat",
         "backgroundSize",
-        "backgroundPosition"
+        "backgroundPosition",
       ].forEach((key) => {
         this.style[key] = this.mindMap.getThemeConfig(key);
       });

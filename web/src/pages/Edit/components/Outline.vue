@@ -7,10 +7,10 @@
 <script>
 import Sidebar from "./Sidebar";
 
-/** 
- * @Author: 王林 
- * @Date: 2021-06-24 22:54:14 
- * @Desc: 大纲内容 
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:54:14
+ * @Desc: 大纲内容
  */
 export default {
   name: "Outline",
@@ -31,9 +31,12 @@ export default {
     this.$bus.$on("data_change", (data) => {
       this.data = [data];
     });
-		this.$bus.$on('showOutline', () => {
-			this.$refs.sidebar.show = true
-		})
+    this.$bus.$on("showOutline", () => {
+      this.$refs.sidebar.show = false;
+      this.$nextTick(() => {
+        this.$refs.sidebar.show = true;
+      });
+    });
   },
 };
 </script>
