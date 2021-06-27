@@ -8,7 +8,8 @@ import merge from 'deepmerge'
  * javascript comment 
  * @Author: 王林25 
  * @Date: 2021-04-08 16:25:07 
- * @Desc: 鱼骨图
+ * @Desc: 目录组织图
+ * 思路：第一轮只计算节点的宽高，以及某个节点的所有子节点所占的高度之和，以及该节点里所有子节点中宽度最宽是多少、第二轮计算节点的left和top，需要区分二级节点和其他节点，二级节点top相同，一行依次从做向右排开，其他节点的left相同，一列从上往下依次排开
  */
 class Render {
     /** 
@@ -50,9 +51,9 @@ class Render {
         // 计算节点的left、top
         this.computedLeftTopValue()
         // 调整节点top
-        // this.adjustTopValue()
+        this.adjustTopValue()
         // 调整节点left
-        // this.adjustLeftValue()
+        this.adjustLeftValue()
     }
 
     /** 
@@ -62,16 +63,7 @@ class Render {
      * @Desc: 计算节点的width、height 
      */
     computedBaseValue() {
-        walk(this.renderTree, null, (node, parent, isRoot, index, layerIndex) => {
-            // 生长方向
-            let dir = ''
-            if (isRoot) {
-                dir = ''
-            } else if (parent._node.isRoot) {
-                dir = index % 2 === 0 ? 'up' : 'down'
-            } else {
-                dir = parent._node.dir
-            }
+        walk(this.renderTree, null, (node, parent, isRoot) => {
             // 设置width、height
             let {
                 children,
@@ -80,9 +72,7 @@ class Render {
             let newNode = new Node({
                 ...props,
                 mindMap: this.mindMap,
-                draw: this.draw,
-                dir,
-                layerIndex
+                draw: this.draw
             })
             // 计算节点的宽高
             newNode.refreshSize()
@@ -99,7 +89,13 @@ class Render {
             node._node = newNode
         }, (node) => {
             // 遍历完子节点返回时
+            // 计算节点的areaHeight，也就是子节点所占的高度之和，包括外边距
             let len = node._node.children.length
+            if (node._node.isRoot) {
+                node._node.childrenAreaWidth = len ? node._node.children.reduce((h, cur) => {
+                    return h + cur.width
+                }, 0) + (len + 1) * this.mindMap.opt.marginX : 0
+            }
             node._node.childrenAreaHeight = len ? node._node.children.reduce((h, cur) => {
                 return h + cur.height
             }, 0) + (len + 1) * this.mindMap.opt.marginY : 0
@@ -114,126 +110,24 @@ class Render {
      */
     computedLeftTopValue() {
         walk(this.root, null, (node) => {
-            // 二级节点
-            if (node.isRoot && node.children && node.children.length) {
-                let totalLeft = node.left + node.width + this.mindMap.opt.marginX
-                node.children.forEach((item) => {
-                    item.left = totalLeft
-                    item.top = node.top + node.height / 2 - this.mindMap.opt.marginY - item.height
-                    totalLeft += item.width + this.mindMap.opt.marginX
-                    this.computedThirdLevelLeftTopValue(item)
-                })
-            }
-        }, null, true)
-    }
-
-    /** 
-     * javascript comment 
-     * @Author: 王林25 
-     * @Date: 2021-04-13 09:33:04 
-     * @Desc: 计算三级节点 
-     */
-    computedThirdLevelLeftTopValue(node) {
-        if (node.children && node.children.length > 0) {
-            let totalLeft = node.left
-            let totalTop = node.top - this.mindMap.opt.marginY
-            node.children.forEach((item) => {
-                let h = node.height + this.mindMap.opt.marginY
-                let w = h / Math.tan(70)
-                item.left = totalLeft + w
-                totalLeft += w
-                item.top = totalTop - item.height
-                totalTop -= this.mindMap.opt.marginY + item.height
-                this.computedThirdAfterLevelLeftTopValue(item)
-            })
-        }
-    }
-
-    /** 
-     * javascript comment 
-     * @Author: 王林25 
-     * @Date: 2021-04-13 09:55:54 
-     * @Desc: 计算三级以后的节点 
-     */
-    computedThirdAfterLevelLeftTopValue(root) {
-        let marginY = this.mindMap.opt.marginY
-        let marginX = this.mindMap.opt.marginX
-        // 计算left、top
-        walk(root, null, (node) => {
             if (node.children && node.children.length) {
-                let totalTop = node.top + node.height + marginY
-                node.children.forEach((cur) => {
-                    cur.left = node.left + node.width / 5 + marginX
-                    cur.top = totalTop
-                    totalTop += cur.height + marginY
-                })
-            }
-        }, null, true)
-        // 调整top
-        const updateBrothersTopValue = (node, addHeight) => {
-            if (node.parent) {
-                let childrenList = node.parent.children
-                let index = childrenList.findIndex((item) => {
-                    return item === node
-                })
-                childrenList.forEach((item, _index) => {
-                    let _offset = 0
-                    if (_index > index) {
-                        _offset = addHeight
-                    }
-                    item.top += _offset
-                    // 同步更新子节点的位置
-                    if (item.children && item.children.length) {
-                        this.updateChildren(item.children, 'top', _offset)
-                    }
-                })
-                // 更新父节点的位置
-                updateBrothersTopValue(node.parent, addHeight)
-            }
-        }
-        walk(root, null, (node) => {
-            // 判断子节点的areaHeight是否大于该节点自身，大于则需要调整位置
-            if (node.children && node.children.length > 0) {
-                let difference = node.childrenAreaHeight - marginY
-                updateBrothersTopValue(node, difference)
-            }
-        }, null, true)
-        // 调整left
-        const updateBrothersLeftValue = (node, w, h) => {
-            if (node.parent && node.parent.layerIndex > 0) {
-                let childrenList = node.parent.children
-                let index = childrenList.findIndex((item) => {
-                    return item === node
-                })
-                childrenList.forEach((item, _index) => {
-                    let _w = 0
-                    let _h = 0
-                    if (_index >= index) {
-                        _w = w
-                        _h = -h
-                    }
-                    console.log(item.text, _w, _h)
-                    item.left += _w
-                    item.top += _h
-                    // 同步更新子节点的位置
-                    if (item.children && item.children.length) {
-                        this.updateChildren(item.children, 'left', _w)
-                        this.updateChildren(item.children, 'left', _h)
-                    }
-                })
-                // 更新父节点的位置
-                updateBrothersLeftValue(node.parent, w, h)
-            }
-        }
-        walk(root, null, (node) => {
-            if (node.layerIndex > 1) {
-                let h = node.childrenAreaHeight - marginY
-                if (h > 0) {
-                    let w = h / Math.tan(70)
-                    console.log(node.text, w, h)
-                    // let childrenAreaWidth = getNodeWidth(node)
-                    // let differenceX = childrenAreaWidth - node.width
-                    // updateBrothersLeftValue(node, w, h)
+                if (node.isRoot) {
+                    let left = node.left + node.width / 2 - node.childrenAreaWidth / 2
+                    let totalLeft = left + this.mindMap.opt.marginX
+                    node.children.forEach((cur) => {
+                        // left
+                        cur.left = totalLeft
+                        totalLeft += cur.width + this.mindMap.opt.marginX
+                        // top
+                        cur.top = node.top + node.height + this.mindMap.opt.marginY
+                    })
+                } else {
+                    let totalTop = node.top + node.height + this.mindMap.opt.marginY
+                    node.children.forEach((cur) => {
+                        cur.left = node.left + node.width / 5 + this.mindMap.opt.marginX
+                        cur.top = totalTop
+                        totalTop += cur.height + this.mindMap.opt.marginY
+                    })
                 }
             }
         }, null, true)

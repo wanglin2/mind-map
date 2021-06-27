@@ -1,6 +1,7 @@
 import Style from './Style'
 import {
-    resizeImgSize
+    resizeImgSize,
+    copyRenderTree
 } from './utils'
 import {
     Image,
@@ -62,6 +63,8 @@ class Node {
         this._textContentItemMargin = 2
         // 图片和文字节点的间距
         this._blockContentMargin = 5
+        // 展开收缩按钮尺寸
+        this._expandBtnSize = 20
         // 计算节点尺寸
         this.refreshSize()
     }
@@ -491,7 +494,7 @@ class Node {
      * @Desc: 展开收缩按钮 
      */
     renderExpandBtn() {
-        if (this.children.length <= 0 || this.isRoot) {
+        if ((!this.nodeData.data.cacheChildren || this.nodeData.data.cacheChildren.length <= 0) && this.children.length <= 0 || this.isRoot) {
             return;
         }
         let g = this.draw.group()
@@ -501,8 +504,8 @@ class Node {
         } else {
             iconSvg = btnsSvg.close
         }
-        let node = SVG(iconSvg).size(20, 20)
-        let fillNode = new Circle().size(20)
+        let node = SVG(iconSvg).size(this._expandBtnSize, this._expandBtnSize)
+        let fillNode = new Circle().size(this._expandBtnSize)
         this.renderer.layout.renderExpandBtn(this, [node, fillNode])
         node.dx(0).dy(-10)
         fillNode.dx(0).dy(-10)
@@ -518,10 +521,21 @@ class Node {
             })
         })
         g.click(() => {
-            // 需要反映到实际数据上
-            this.mindMap.execCommand('UPDATE_NODE_DATA', this, {
-                expand: !this.nodeData.data.expand
-            })
+            // 展开收缩
+            let data = {}
+            let children = []
+            if (this.nodeData.data.expand) {
+                data.expand = false
+                data.cacheChildren = this.nodeData.children.map((item) => {
+                    return copyRenderTree({}, item);
+                })
+                children = []
+            } else {
+                data.expand = true
+                children = this.nodeData.data.cacheChildren
+                data.cacheChildren = []
+            }
+            this.mindMap.execCommand('UPDATE_NODE_DATA', this, data, children)
             this.mindMap.emit('expand_btn_click', this)
         })
         g.add(fillNode)

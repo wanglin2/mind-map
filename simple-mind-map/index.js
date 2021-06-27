@@ -5,7 +5,8 @@ import merge from 'deepmerge'
 import theme from './src/themes'
 import Style from './src/Style'
 import KeyCommand from './src/KeyCommand'
-import Command from './src/Command';
+import Command from './src/Command'
+import BatchExecution from './src/BatchExecution'
 import {
     SVG
 } from '@svgdotjs/svg.js'
@@ -52,7 +53,7 @@ class MindMap {
 
         // 画笔
         this.draw = SVG().addTo(this.el).size(width, height)
-        
+
         // 节点id
         this.uid = 0
 
@@ -85,6 +86,9 @@ class MindMap {
             draw: this.draw
         })
 
+        // 批量执行类
+        this.batchExecution = new BatchExecution()
+
         // 初始渲染
         this.renderer.render()
         setTimeout(() => {
@@ -99,9 +103,11 @@ class MindMap {
      * @Desc: 渲染 
      */
     render() {
-        this.draw.clear()
-        this.initTheme()
-        this.renderer.render()
+        this.batchExecution.push('render', () => {
+            this.draw.clear()
+            this.initTheme()
+            this.renderer.render()
+        })
     }
 
     /** 

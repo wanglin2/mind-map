@@ -99,6 +99,7 @@ export default class TextEdit {
         this.renderer.activeNodeList.forEach((node) => {
             let str = getStrWithBrFromHtml(this.textEditNode.innerHTML)
             node.nodeData.data.text = str
+            console.log(8)
             this.mindMap.render()
         })
         this.mindMap.emit('hide_text_edit', this.textEditNode, this.renderer.activeNodeList)

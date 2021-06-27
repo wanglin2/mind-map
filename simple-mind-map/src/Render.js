@@ -1,11 +1,17 @@
 import merge from 'deepmerge'
 import LogicalStructure from './layouts/LogicalStructure'
+import MindMap from './layouts/MindMap'
+import CatalogOrganization from './layouts/CatalogOrganization';
 import TextEdit from './TextEdit'
 
 // 布局列表
 const layouts = {
+    // 逻辑结构图
+    logicalStructure: LogicalStructure,
     // 思维导图
-    logicalStructure: LogicalStructure
+    mindMap: MindMap,
+    // 目录组织图
+    catalogOrganization: CatalogOrganization
 }
 
 /** 
@@ -146,6 +152,9 @@ class Render {
             return;
         }
         let first = this.activeNodeList[0]
+        if (!first.nodeData.children) {
+            first.nodeData.children = []
+        }
         first.nodeData.children.push({
             "data": {
                 "text": "分支主题",
@@ -184,10 +193,13 @@ class Render {
      * @Date: 2021-05-04 14:19:48 
      * @Desc: 更新节点数据 
      */
-    updateNodeData(node, data) {
+    updateNodeData(node, data, children) {
         Object.keys(data).forEach((key) => {
             node.nodeData.data[key] = data[key]
         })
+        if (children) {
+            node.nodeData.children = children
+        }
         this.mindMap.render()
     }
 }
