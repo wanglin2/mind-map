@@ -1,5 +1,10 @@
 <template>
-  <div class="sidebarContainer" :class="{show: show}">
+  <div
+    class="sidebarContainer"
+    @click.stop
+    :class="{ show: show }"
+    :style="{ zIndex: zIndex }"
+  >
     <span class="closeBtn el-icon-close" @click="show = false"></span>
     <div class="sidebarHeader" v-if="title">
       {{ title }}
@@ -11,10 +16,12 @@
 </template>
 
 <script>
-/** 
- * @Author: 王林 
- * @Date: 2021-06-24 22:54:25 
- * @Desc: 侧边栏容器 
+import { store } from "@/config";
+
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:54:25
+ * @Desc: 侧边栏容器
  */
 export default {
   name: "Sidebar",
@@ -24,11 +31,19 @@ export default {
       default: "",
     },
   },
-	data() {
-		return {
-			show: false
-		}
-	}
+  data() {
+    return {
+      show: false,
+      zIndex: 0,
+    };
+  },
+  watch: {
+    show(val, oldVal) {
+      if (val && !oldVal) {
+        this.zIndex = store.sidebarZIndex++;
+      }
+    },
+  },
 };
 </script>
 
@@ -43,11 +58,11 @@ export default {
   border-left: 1px solid #e8e8e8;
   display: flex;
   flex-direction: column;
-	transition: all 0.3s;
+  transition: all 0.3s;
 
-	&.show {
-		right: 0;
-	}
+  &.show {
+    right: 0;
+  }
 
   .closeBtn {
     position: absolute;

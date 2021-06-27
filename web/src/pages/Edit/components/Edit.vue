@@ -9,6 +9,7 @@
       @change="changeThemeConfig"
     ></BaseStyle>
     <Theme :mindMap="mindMap"></Theme>
+    <Structure :mindMap="mindMap"></Structure>
   </div>
 </template>
 
@@ -19,6 +20,7 @@ import Style from "./Style";
 import BaseStyle from "./BaseStyle";
 import exampleData from "simple-mind-map/example/exampleData";
 import Theme from "./Theme";
+import Structure from './Structure';
 
 /**
  * @Author: 王林
@@ -32,6 +34,7 @@ export default {
     Style,
     BaseStyle,
     Theme,
+    Structure
   },
   data() {
     return {
@@ -82,6 +85,7 @@ export default {
      * @Desc: 重新渲染
      */
     reRender() {
+      console.log(12)
       this.mindMap.render();
     },
 

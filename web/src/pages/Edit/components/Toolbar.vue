@@ -98,6 +98,10 @@
           <span class="icon iconfont iconjingzi"></span>
           <span class="text">主题</span>
         </div>
+        <div class="toolbarBtn" @click="$bus.$emit('showStructure')">
+          <span class="icon iconfont iconjiegou"></span>
+          <span class="text">结构</span>
+        </div>
       </div>
     </div>
     <NodeImage></NodeImage>

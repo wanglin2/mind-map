@@ -44,8 +44,11 @@ export default {
   },
   created() {
     this.$bus.$on("showTheme", () => {
-      this.theme = this.mindMap.getTheme();
-      this.$refs.sidebar.show = true;
+      this.$refs.sidebar.show = false;
+      this.$nextTick(() => {
+        this.theme = this.mindMap.getTheme();
+        this.$refs.sidebar.show = true;
+      });
     });
   },
   methods: {

@@ -206,3 +206,8 @@ export const backgroundPositionList = [
         value: 'center bottom'
     }
 ]
+
+// 数据存储
+export const store = {
+    sidebarZIndex: 1//侧边栏zIndex
+}

@@ -261,11 +261,14 @@ export default {
   },
   created() {
     this.$bus.$on("node_active", (...args) => {
-      this.activeTab = "normal";
-      let activeNodes = args[1];
-      this.activeNode = activeNodes[0];
-      this.$refs.sidebar.show = activeNodes.length > 0;
-      this.initNodeStyle();
+      this.$refs.sidebar.show = false;
+      this.$nextTick(() => {
+        this.activeTab = "normal";
+        let activeNodes = args[1];
+        this.activeNode = activeNodes[0];
+        this.$refs.sidebar.show = activeNodes.length > 0;
+        this.initNodeStyle();
+      });
     });
   },
   methods: {

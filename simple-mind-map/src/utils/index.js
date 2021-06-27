@@ -4,15 +4,15 @@
  * @Date: 2021-04-06 14:13:17 
  * @Desc: 深度优先遍历树 
  */
-export const walk = (root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0) => {
-    beforeCallback && beforeCallback(root, parent, isRoot, layerIndex)
+export const walk = (root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0) => {
+    beforeCallback && beforeCallback(root, parent, isRoot, layerIndex, index)
     if (root.children && root.children.length > 0) {
         let _layerIndex = layerIndex + 1
-        root.children.forEach((node) => {
-            walk(node, root, beforeCallback, afterCallback, false, _layerIndex)
+        root.children.forEach((node, nodeIndex) => {
+            walk(node, root, beforeCallback, afterCallback, false, _layerIndex, nodeIndex)
         })
     }
-    afterCallback && afterCallback(root, parent, isRoot, layerIndex)
+    afterCallback && afterCallback(root, parent, isRoot, layerIndex, index)
 }
 
 /** 
@@ -118,10 +118,10 @@ export const simpleDeepClone = (data) => {
 }
 
 /** 
-     * @Author: 王林 
-     * @Date: 2021-05-04 14:40:11 
-     * @Desc: 复制渲染树数据 
-     */
+ * @Author: 王林 
+ * @Date: 2021-05-04 14:40:11 
+ * @Desc: 复制渲染树数据 
+ */
 export const copyRenderTree = (tree, root) => {
     tree.data = simpleDeepClone(root.data)
     tree.children = []
