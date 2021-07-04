@@ -1,16 +1,16 @@
 const createFullData = () => {
     return {
-        // "image": "http://aliyuncdn.lxqnsys.com/whbm/enJFNMHnedQTYTESGfDkctCp2",
-        // "imageTitle": "图片名称",
-        // "imageSize": {
-        //     "width": 1000,
-        //     "height": 563
-        // },
-        // "icon": ['priority_1'],
-        // "tag": ["标签1", "标签2"],
-        // "hyperlink": "http://lxqnsys.com/",
-        // "hyperlinkTitle": "理想青年实验室",
-        // "note": "理想青年实验室\n一个有意思的角落"
+        "image": "http://192.168.3.118:8080/enJFNMHnedQTYTESGfDkctCp2.jpeg",
+        "imageTitle": "图片名称",
+        "imageSize": {
+            "width": 1000,
+            "height": 563
+        },
+        "icon": ['priority_1'],
+        "tag": ["标签1", "标签2"],
+        "hyperlink": "http://lxqnsys.com/",
+        "hyperlinkTitle": "理想青年实验室",
+        "note": "理想青年实验室\n一个有意思的角落"
     };
 }
 
@@ -22,7 +22,7 @@ const createFullData = () => {
 export default {
     "root": {
         "data": {
-            "text": "根节点",
+            "text": "根节点"
         },
         "children": [
             {
@@ -38,7 +38,6 @@ export default {
                 }, {
                     "data": {
                         "text": "子节点1-2",
-                        ...createFullData()
                     }
                 },]
             },
@@ -56,31 +55,26 @@ export default {
                             {
                                 "data": {
                                     "text": "子节点2-1-1",
-                                    ...createFullData()
                                 }
                             },
                             {
                                 "data": {
                                     "text": "子节点2-1-2",
-                                    ...createFullData()
                                 },
                                 "children": [
                                     {
                                         "data": {
                                             "text": "子节点2-1-2-1",
-                                            ...createFullData()
                                         }
                                     },
                                     {
                                         "data": {
                                             "text": "子节点2-1-2-2",
-                                            ...createFullData()
                                         },
                                         "children": [
                                             {
                                                 "data": {
                                                     "text": "子节点2-1-2-2-1",
-                                                    ...createFullData()
                                                 }
                                             },
                                             {
@@ -92,7 +86,6 @@ export default {
                                             {
                                                 "data": {
                                                     "text": "子节点2-1-2-2-3",
-                                                    ...createFullData()
                                                 }
                                             }
                                         ]
@@ -108,7 +101,6 @@ export default {
                             {
                                 "data": {
                                     "text": "子节点2-1-3",
-                                    ...createFullData()
                                 }
                             }
                         ]
@@ -116,7 +108,6 @@ export default {
                     {
                         "data": {
                             "text": "子节点2-2",
-                            ...createFullData()
                         }
                     }
                 ]
@@ -129,7 +120,6 @@ export default {
                     {
                         "data": {
                             "text": "子节点3-1",
-                            ...createFullData()
                         }
                     },
                     {
@@ -148,19 +138,16 @@ export default {
                     {
                         "data": {
                             "text": "子节点4-1",
-                            ...createFullData()
                         },
                         "children": [
                             {
                                 "data": {
                                     "text": "子节点4-1-1",
-                                    ...createFullData()
                                 }
                             },
                             {
                                 "data": {
                                     "text": "子节点4-1-2",
-                                    ...createFullData()
                                 }
                             },
                             {
@@ -174,7 +161,6 @@ export default {
                     {
                         "data": {
                             "text": "子节点4-2",
-                            ...createFullData()
                         }
                     }
                 ]

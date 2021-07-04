@@ -190,7 +190,7 @@
           <div class="rowItem">
             <span class="name">水平</span>
             <el-slider
-              style="width: 230px"
+              style="width: 200px"
               v-model="style.paddingX"
               @change="update('paddingX')"
             ></el-slider>
@@ -200,7 +200,7 @@
           <div class="rowItem">
             <span class="name">垂直</span>
             <el-slider
-              style="width: 230px"
+              style="width: 200px"
               v-model="style.paddingY"
               @change="update('paddingY')"
             ></el-slider>
@@ -222,10 +222,10 @@ import {
   borderRadiusList,
 } from "@/config";
 
-/** 
- * @Author: 王林 
- * @Date: 2021-06-24 22:54:47 
- * @Desc: 节点样式设置 
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:54:47
+ * @Desc: 节点样式设置
  */
 export default {
   name: "Style",
@@ -320,6 +320,7 @@ export default {
      * @Desc: 修改样式
      */
     update(prop) {
+      console.log(this.style[prop])
       this.activeNode.setStyle(
         prop,
         this.style[prop],
@@ -436,7 +437,7 @@ export default {
 
       .name {
         font-size: 12px;
-        margin-right: 5px;
+        margin-right: 10px;
       }
 
       .block {

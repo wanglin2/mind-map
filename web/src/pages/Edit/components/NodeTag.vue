@@ -9,6 +9,7 @@
       v-model="tag"
       @keyup.native.enter="add"
       :disabled="tagArr.length >= max"
+      placeholder="请按回车键添加"
     >
     </el-input>
     <div class="tagList">

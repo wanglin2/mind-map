@@ -1,13 +1,10 @@
 <template>
   <div class="editContainer">
     <div class="mindMapContainer" ref="mindMapContainer"></div>
+    <Count></Count>
     <Outline></Outline>
     <Style></Style>
-    <BaseStyle
-      :data="mindMapData"
-      :mindMap="mindMap"
-      @change="changeThemeConfig"
-    ></BaseStyle>
+    <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
     <Theme :mindMap="mindMap"></Theme>
     <Structure :mindMap="mindMap"></Structure>
   </div>
@@ -20,7 +17,8 @@ import Style from "./Style";
 import BaseStyle from "./BaseStyle";
 import exampleData from "simple-mind-map/example/exampleData";
 import Theme from "./Theme";
-import Structure from './Structure';
+import Structure from "./Structure";
+import Count from "./Count";
 
 /**
  * @Author: 王林
@@ -34,20 +32,32 @@ export default {
     Style,
     BaseStyle,
     Theme,
-    Structure
+    Structure,
+    Count,
   },
   data() {
     return {
       mindMap: null,
-      mindMapData: exampleData,
+      mindMapData: null,
+      prevImg: "",
     };
   },
-  created() {},
   mounted() {
+    this.getData();
     this.init();
     this.$bus.$on("execCommand", this.execCommand);
+    this.$bus.$on("export", this.export);
   },
   methods: {
+    /**
+     * @Author: 王林
+     * @Date: 2021-07-03 22:11:37
+     * @Desc: 获取思维导图数据，实际应该调接口获取
+     */
+    getData() {
+      this.mindMapData = exampleData;
+    },
+
     /**
      * @Author: 王林
      * @Date: 2021-04-10 15:01:01
@@ -72,20 +82,10 @@ export default {
 
     /**
      * @Author: 王林
-     * @Date: 2021-05-05 13:49:25
-     * @Desc: 修改主题配置
-     */
-    changeThemeConfig() {
-      this.mindMap.setThemeConfig(this.mindMapData.theme.config);
-    },
-
-    /**
-     * @Author: 王林
      * @Date: 2021-05-05 13:32:11
      * @Desc: 重新渲染
      */
     reRender() {
-      console.log(12)
       this.mindMap.render();
     },
 
@@ -96,6 +96,19 @@ export default {
      */
     execCommand(...args) {
       this.mindMap.execCommand(...args);
+    },
+
+    /**
+     * @Author: 王林
+     * @Date: 2021-07-01 22:33:02
+     * @Desc: 导出
+     */
+    async export(...args) {
+      try {
+        this.mindMap.export(...args);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

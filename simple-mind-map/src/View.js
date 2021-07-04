@@ -1,5 +1,3 @@
-import merge from 'deepmerge'
-
 /** 
  * javascript comment 
  * @Author: 王林25 
@@ -16,19 +14,11 @@ class View {
     constructor(opt = {}) {
         this.opt = opt
         this.mindMap = this.opt.mindMap
-        this.viewBox = {
-            x: 0,
-            y: 0,
-            width: this.mindMap.width,
-            height: this.mindMap.height
-        }
-        this.cacheViewBox = {
-            x: 0,
-            y: 0,
-            width: this.mindMap.width,
-            height: this.mindMap.height
-        }
         this.scale = 1
+        this.sx = 0
+        this.sy = 0
+        this.x = 0
+        this.y = 0
         this.bind()
     }
 
@@ -41,29 +31,35 @@ class View {
     bind() {
         // 拖动视图
         this.mindMap.event.on('mousedown', () => {
-            this.cacheViewBox = merge({}, this.viewBox)
+            this.sx = this.x
+            this.sy = this.y
         })
         this.mindMap.event.on('drag', (e, event) => {
-            // 视图放大缩小后拖动的距离也要相应变化
-            this.viewBox.x = this.cacheViewBox.x - event.mousemoveOffset.x * this.scale
-            this.viewBox.y = this.cacheViewBox.y - event.mousemoveOffset.y * this.scale
-            this.setViewBox()
+            this.x = this.sx + event.mousemoveOffset.x
+            this.y = this.sy + event.mousemoveOffset.y
+            this.mindMap.draw.transform({
+                scale: this.scale,
+                origin: 'left center',
+                translate: [this.x, this.y],
+            })
         })
         // 放大缩小视图
         this.mindMap.event.on('mousewheel', (e, dir) => {
-            let stepWidth = this.viewBox.width * this.mindMap.opt.scaleRatio
-            let stepHeight = this.viewBox.height * this.mindMap.opt.scaleRatio
-            // 放大
+            // // 放大
             if (dir === 'down') {
                 this.scale += this.mindMap.opt.scaleRatio
-                this.viewBox.width += stepWidth
-                this.viewBox.height += stepHeight
             } else { // 缩小
-                this.scale -= this.mindMap.opt.scaleRatio
-                this.viewBox.width -= stepWidth
-                this.viewBox.height -= stepHeight
+                if (this.scale - this.mindMap.opt.scaleRatio > 0.1) {
+                    this.scale -= this.mindMap.opt.scaleRatio
+                } else {
+                    this.scale = 0.1
+                }
             }
-            this.setViewBox()
+            this.mindMap.draw.transform({
+                scale: this.scale,
+                origin: 'left center',
+                translate: [this.x, this.y],
+            })
         })
     }
 
@@ -73,13 +69,10 @@ class View {
      * @Date: 2021-04-07 15:43:26 
      * @Desc: 设置视图 
      */
-    setViewBox() {
-        let {
-            x,
-            y,
-            width,
-            height
-        } = this.viewBox
+    setViewBox({ x,
+        y,
+        width,
+        height }) {
         this.opt.draw.viewbox(x, y, width, height)
     }
 }

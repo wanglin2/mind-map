@@ -63,7 +63,7 @@ class LogicalStructure extends Base {
                 this.root = newNode
             } else {
                 // 非根节点
-                let marginX = layerIndex === 1 ? this.themeConfig.second.marginX : this.themeConfig.node.marginX
+                let marginX = layerIndex === 1 ? this.mindMap.themeConfig.second.marginX : this.mindMap.themeConfig.node.marginX
                 // 定位到父节点右侧
                 newNode.left = parent._node.left + parent._node.width + marginX
                 // 互相收集
