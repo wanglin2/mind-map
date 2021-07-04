@@ -6,6 +6,34 @@
   "description": "思维导图",
   "glyphs": [
     {
+      "icon_id": "397753",
+      "name": "定位",
+      "font_class": "dingwei",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "2605158",
+      "name": "导航",
+      "font_class": "daohang",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "6528451",
+      "name": "键盘",
+      "font_class": "jianpan",
+      "unicode": "e64d",
+      "unicode_decimal": 58957
+    },
+    {
+      "icon_id": "7556170",
+      "name": "全屏",
+      "font_class": "quanping",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    },
+    {
       "icon_id": "788015",
       "name": "导出",
       "font_class": "daochu",

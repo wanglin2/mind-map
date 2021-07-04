@@ -65,8 +65,8 @@ export default {
     },
     // 三级及以下节点样式
     node: {
-        marginX: 60,
-        marginY: 40,
+        marginX: 50,
+        marginY: 10,
         fillColor: 'transparent',
         fontFamily: '微软雅黑, Microsoft YaHei',
         color: '#6a6d6c',

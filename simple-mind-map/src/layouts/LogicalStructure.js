@@ -45,16 +45,26 @@ class LogicalStructure extends Base {
     computedBaseValue() {
         walk(this.renderTree, null, (cur, parent, isRoot, layerIndex) => {
             // 创建节点
-            let newNode = new Node({
-                data: cur,
-                uid: this.mindMap.uid++,
-                renderer: this.renderer,
-                mindMap: this.mindMap,
-                draw: this.draw,
-                layerIndex
-            })
-            // 数据关联实际节点
-            cur._node = newNode
+            let newNode = null
+            if (cur && cur._node) {
+                newNode = cur._node
+                newNode.children = []
+                newNode.parent = null
+                if (cur._node.changed) {
+                    newNode.refreshSize()
+                }
+            } else {
+                newNode = new Node({
+                    data: cur,
+                    uid: this.mindMap.uid++,
+                    renderer: this.renderer,
+                    mindMap: this.mindMap,
+                    draw: this.draw,
+                    layerIndex
+                })
+                // 数据关联实际节点
+                cur._node = newNode
+            }
             // 根节点定位在画布中心位置
             if (isRoot) {
                 newNode.isRoot = true
