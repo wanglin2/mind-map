@@ -13,13 +13,11 @@ class Style {
      * @Desc:  设置背景样式
      */
     static setBackgroundStyle(el, themeConfig) {
-        let { backgroundColor, backgroundImage, backgroundRepeat, backgroundSize, backgroundPosition } = themeConfig
+        let { backgroundColor, backgroundImage, backgroundRepeat } = themeConfig
         el.style.backgroundColor = backgroundColor
         if (backgroundImage) {
             el.style.backgroundImage = `url(${backgroundImage})`
             el.style.backgroundRepeat = backgroundRepeat
-            el.style.backgroundSize = backgroundSize
-            el.style.backgroundPosition = backgroundPosition
         }
     }
 
@@ -124,6 +122,17 @@ class Style {
     tagRect(node, index) {
         node.fill({
             color: tagColorList[index].background
+        })
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-03 22:37:19 
+     * @Desc: 内置图标 
+     */
+    iconNode(node) {
+        node.attr({
+            fill: this.merge('color')
         })
     }
 

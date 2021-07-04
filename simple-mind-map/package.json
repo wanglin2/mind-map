@@ -5,6 +5,7 @@
   "scripts": {},
   "dependencies": {
     "@svgdotjs/svg.js": "^3.0.16",
+    "canvg": "^3.0.7",
     "deepmerge": "^1.5.2",
     "eventemitter3": "^4.0.7"
   }

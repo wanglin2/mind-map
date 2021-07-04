@@ -147,22 +147,6 @@ export const backgroundRepeatList = [
     }
 ]
 
-// 背景图片大小
-export const backgroundSizeList = [
-    {
-        name: '自动',
-        value: 'auto'
-    },
-    {
-        name: '完全覆盖',
-        value: 'cover'
-    },
-    {
-        name: '最合适',
-        value: 'contain'
-    }
-]
-
 // 背景图片定位
 export const backgroundPositionList = [
     {
