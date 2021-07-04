@@ -33,7 +33,6 @@ export default {
                 "children": [{
                     "data": {
                         "text": "子节点1-1",
-                        ...createFullData()
                     },
                 }, {
                     "data": {
@@ -48,8 +47,7 @@ export default {
                 "children": [
                     {
                         "data": {
-                            "text": "子节点2-1",
-                            ...createFullData()
+                            "text": "子节点2-1"
                         },
                         "children": [
                             {
@@ -79,8 +77,7 @@ export default {
                                             },
                                             {
                                                 "data": {
-                                                    "text": "子节点2-1-2-2-2",
-                                                    ...createFullData()
+                                                    "text": "子节点2-1-2-2-2"
                                                 }
                                             },
                                             {
@@ -92,8 +89,7 @@ export default {
                                     },
                                     {
                                         "data": {
-                                            "text": "子节点4-1-2-3",
-                                            ...createFullData()
+                                            "text": "子节点4-1-2-3"
                                         }
                                     }
                                 ]
@@ -108,7 +104,58 @@ export default {
                     {
                         "data": {
                             "text": "子节点2-2",
-                        }
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "text": "子节点2-1-1",
+                                }
+                            },
+                            {
+                                "data": {
+                                    "text": "子节点2-1-2",
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "text": "子节点2-1-2-1",
+                                        }
+                                    },
+                                    {
+                                        "data": {
+                                            "text": "子节点2-1-2-2",
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "text": "子节点2-1-2-2-1",
+                                                }
+                                            },
+                                            {
+                                                "data": {
+                                                    "text": "子节点2-1-2-2-2"
+                                                }
+                                            },
+                                            {
+                                                "data": {
+                                                    "text": "子节点2-1-2-2-3",
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "text": "子节点4-1-2-3"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "text": "子节点2-1-3",
+                                }
+                            }
+                        ]
                     }
                 ]
             },
@@ -120,12 +167,62 @@ export default {
                     {
                         "data": {
                             "text": "子节点3-1",
-                        }
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "text": "子节点2-1-1",
+                                }
+                            },
+                            {
+                                "data": {
+                                    "text": "子节点2-1-2",
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "text": "子节点2-1-2-1",
+                                        }
+                                    },
+                                    {
+                                        "data": {
+                                            "text": "子节点2-1-2-2",
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "text": "子节点2-1-2-2-1",
+                                                }
+                                            },
+                                            {
+                                                "data": {
+                                                    "text": "子节点2-1-2-2-2"
+                                                }
+                                            },
+                                            {
+                                                "data": {
+                                                    "text": "子节点2-1-2-2-3",
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "text": "子节点4-1-2-3"
+                                        }
+                                    }
+                                ]
+                            },
+                            {
+                                "data": {
+                                    "text": "子节点2-1-3",
+                                }
+                            }
+                        ]
                     },
                     {
                         "data": {
-                            "text": "子节点3-2",
-                            ...createFullData()
+                            "text": "子节点3-2"
                         }
                     }
                 ]
@@ -143,7 +240,58 @@ export default {
                             {
                                 "data": {
                                     "text": "子节点4-1-1",
-                                }
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "text": "子节点2-1-1",
+                                        }
+                                    },
+                                    {
+                                        "data": {
+                                            "text": "子节点2-1-2",
+                                        },
+                                        "children": [
+                                            {
+                                                "data": {
+                                                    "text": "子节点2-1-2-1",
+                                                }
+                                            },
+                                            {
+                                                "data": {
+                                                    "text": "子节点2-1-2-2",
+                                                },
+                                                "children": [
+                                                    {
+                                                        "data": {
+                                                            "text": "子节点2-1-2-2-1",
+                                                        }
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "text": "子节点2-1-2-2-2"
+                                                        }
+                                                    },
+                                                    {
+                                                        "data": {
+                                                            "text": "子节点2-1-2-2-3",
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "data": {
+                                                    "text": "子节点4-1-2-3"
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "data": {
+                                            "text": "子节点2-1-3",
+                                        }
+                                    }
+                                ]
                             },
                             {
                                 "data": {
@@ -152,8 +300,7 @@ export default {
                             },
                             {
                                 "data": {
-                                    "text": "子节点4-1-3",
-                                    ...createFullData()
+                                    "text": "子节点4-1-3"
                                 }
                             }
                         ]

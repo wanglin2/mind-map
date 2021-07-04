@@ -58,7 +58,7 @@ export default {
   position: fixed;
   left: 20px;
   bottom: 20px;
-  background: hsla(0, 0%, 100%, 0.6);
+  background: hsla(0, 0%, 100%, 0.8);
   border-radius: 2px;
   opacity: 0.8;
   height: 22px;

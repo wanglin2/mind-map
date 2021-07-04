@@ -59,7 +59,6 @@ class Render {
             // 清除激活状态
             if (this.activeNodeList.length > 0) {
                 this.clearActive()
-                this.mindMap.render()
                 this.mindMap.emit('node_active', null, [])
             }
         })
@@ -88,6 +87,7 @@ class Render {
      * @Desc:  渲染
      */
     render() {
+        console.log('渲染')
         this.root = this.layout.doLayout()
         this.root.render()
     }
@@ -102,6 +102,7 @@ class Render {
             this.mindMap.execCommand('UPDATE_NODE_DATA', item, {
                 isActive: false
             })
+            item.renderNode()
         })
         this.activeNodeList = []
     }
@@ -200,6 +201,7 @@ class Render {
         if (children) {
             node.nodeData.children = children
         }
+        node.changed = true
         this.mindMap.render()
     }
 }

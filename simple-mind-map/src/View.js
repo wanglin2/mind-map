@@ -37,30 +37,56 @@ class View {
         this.mindMap.event.on('drag', (e, event) => {
             this.x = this.sx + event.mousemoveOffset.x
             this.y = this.sy + event.mousemoveOffset.y
-            this.mindMap.draw.transform({
-                scale: this.scale,
-                origin: 'left center',
-                translate: [this.x, this.y],
-            })
+            this.transform()
         })
         // 放大缩小视图
         this.mindMap.event.on('mousewheel', (e, dir) => {
             // // 放大
             if (dir === 'down') {
-                this.scale += this.mindMap.opt.scaleRatio
+                this.enlarge()
             } else { // 缩小
-                if (this.scale - this.mindMap.opt.scaleRatio > 0.1) {
-                    this.scale -= this.mindMap.opt.scaleRatio
-                } else {
-                    this.scale = 0.1
-                }
+                this.narrow()
             }
-            this.mindMap.draw.transform({
-                scale: this.scale,
-                origin: 'left center',
-                translate: [this.x, this.y],
-            })
         })
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-04 17:13:14 
+     * @Desc:  应用变换
+     */
+    transform() {
+        this.mindMap.draw.transform({
+            scale: this.scale,
+            origin: 'left center',
+            translate: [this.x, this.y],
+        })
+    }
+
+    /** 
+         * @Author: 王林 
+         * @Date: 2021-07-04 17:10:34 
+         * @Desc: 缩小 
+         */
+    narrow() {
+        if (this.scale - this.mindMap.opt.scaleRatio > 0.1) {
+            this.scale -= this.mindMap.opt.scaleRatio
+        } else {
+            this.scale = 0.1
+        }
+        this.transform()
+        this.mindMap.emit('scale', this.scale)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-04 17:10:41 
+     * @Desc: 放大 
+     */
+    enlarge() {
+        this.scale += this.mindMap.opt.scaleRatio
+        this.transform()
+        this.mindMap.emit('scale', this.scale)
     }
 
     /** 

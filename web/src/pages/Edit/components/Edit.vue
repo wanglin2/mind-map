@@ -2,6 +2,7 @@
   <div class="editContainer">
     <div class="mindMapContainer" ref="mindMapContainer"></div>
     <Count></Count>
+    <NavigatorToolbar :mindMap="mindMap"></NavigatorToolbar>
     <Outline></Outline>
     <Style></Style>
     <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
@@ -19,6 +20,7 @@ import exampleData from "simple-mind-map/example/exampleData";
 import Theme from "./Theme";
 import Structure from "./Structure";
 import Count from "./Count";
+import NavigatorToolbar from './NavigatorToolbar';
 
 /**
  * @Author: 王林
@@ -34,6 +36,7 @@ export default {
     Theme,
     Structure,
     Count,
+    NavigatorToolbar
   },
   data() {
     return {
