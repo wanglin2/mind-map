@@ -16,8 +16,6 @@ class Base {
         this.mindMap = renderer.mindMap
         // 渲染树
         this.renderTree = renderer.renderTree
-        // 主题配置
-        this.themeConfig = this.mindMap.themeConfig
         // 绘图对象
         this.draw = this.mindMap.draw
         // 根节点
@@ -97,7 +95,7 @@ class Base {
      * @Desc:  获取节点的marginX
      */
     getMarginX(layerIndex) {
-        return layerIndex === 1 ? this.themeConfig.second.marginX : this.themeConfig.node.marginX;
+        return layerIndex === 1 ? this.mindMap.themeConfig.second.marginX : this.mindMap.themeConfig.node.marginX;
     }
 
     /** 
@@ -106,7 +104,7 @@ class Base {
      * @Desc: 获取节点的marginY
      */
     getMarginY(layerIndex) {
-        return layerIndex === 1 ? this.themeConfig.second.marginY : this.themeConfig.node.marginY;
+        return layerIndex === 1 ? this.mindMap.themeConfig.second.marginY : this.mindMap.themeConfig.node.marginY;
     }
 }
 

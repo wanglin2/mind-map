@@ -29,7 +29,7 @@
               <span class="name">图片重复</span>
               <el-select
                 size="mini"
-                style="width: 80px"
+                style="width: 120px"
                 v-model="style.backgroundRepeat"
                 placeholder=""
                 @change="
@@ -40,50 +40,6 @@
               >
                 <el-option
                   v-for="item in backgroundRepeatList"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </div>
-            <div class="rowItem">
-              <span class="name">图片大小</span>
-              <el-select
-                size="mini"
-                style="width: 80px"
-                v-model="style.backgroundSize"
-                placeholder=""
-                @change="
-                  (value) => {
-                    update('backgroundSize', value);
-                  }
-                "
-              >
-                <el-option
-                  v-for="item in backgroundSizeList"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
-                >
-                </el-option>
-              </el-select>
-            </div>
-            <div class="rowItem">
-              <span class="name">图片定位</span>
-              <el-select
-                size="mini"
-                style="width: 80px"
-                v-model="style.backgroundPosition"
-                placeholder=""
-                @change="
-                  (value) => {
-                    update('backgroundPosition', value);
-                  }
-                "
-              >
-                <el-option
-                  v-for="item in backgroundPositionList"
                   :key="item.value"
                   :label="item.name"
                   :value="item.value"
@@ -220,6 +176,44 @@
           ></el-slider>
         </div>
       </div>
+      <!-- 二级节点外边距 -->
+      <div class="title noTop">节点外边距</div>
+      <div class="row column">
+        <el-tabs
+          class="tab"
+          v-model="marginActiveTab"
+          @tab-click="initMarginStyle"
+        >
+          <el-tab-pane label="二级节点" name="second"></el-tab-pane>
+          <el-tab-pane label="三级及以下节点" name="node"></el-tab-pane>
+        </el-tabs>
+        <div class="rowItem">
+          <span class="name">水平</span>
+          <el-slider
+            :max="200"
+            style="width: 200px"
+            v-model="style.marginX"
+            @change="
+              (value) => {
+                updateMargin('marginX', value);
+              }
+            "
+          ></el-slider>
+        </div>
+        <div class="rowItem">
+          <span class="name">垂直</span>
+          <el-slider
+            :max="200"
+            style="width: 200px"
+            v-model="style.marginY"
+            @change="
+              (value) => {
+                updateMargin('marginY', value);
+              }
+            "
+          ></el-slider>
+        </div>
+      </div>
     </div>
   </Sidebar>
 </template>
@@ -229,9 +223,7 @@ import Sidebar from "./Sidebar";
 import Color from "./Color";
 import {
   lineWidthList,
-  backgroundRepeatList,
-  backgroundSizeList,
-  backgroundPositionList,
+  backgroundRepeatList
 } from "@/config";
 import ImgUpload from "@/components/ImgUpload";
 
@@ -260,9 +252,8 @@ export default {
     return {
       lineWidthList,
       backgroundRepeatList,
-      backgroundSizeList,
-      backgroundPositionList,
       activeTab: "color",
+      marginActiveTab: "second",
       style: {
         backgroundColor: "",
         lineColor: "",
@@ -274,8 +265,8 @@ export default {
         iconSize: 0,
         backgroundImage: "",
         backgroundRepeat: "no-repeat",
-        backgroundSize: "auto",
-        backgroundPosition: "0% 0%",
+        marginX: 0,
+        marginY: 0,
       },
     };
   },
@@ -306,10 +297,24 @@ export default {
         "iconSize",
         "backgroundImage",
         "backgroundRepeat",
-        "backgroundSize",
-        "backgroundPosition",
       ].forEach((key) => {
         this.style[key] = this.mindMap.getThemeConfig(key);
+        if (key === "backgroundImage" && this.style[key] === "none") {
+          this.style[key] = "";
+        }
+      });
+      this.initMarginStyle();
+    },
+
+    /**
+     * @Author: 王林
+     * @Date: 2021-07-03 22:27:32
+     * @Desc: margin初始值
+     */
+    initMarginStyle() {
+      ["marginX", "marginY"].forEach((key) => {
+        this.style[key] =
+          this.mindMap.getThemeConfig()[this.marginActiveTab][key];
       });
     },
 
@@ -319,9 +324,27 @@ export default {
      * @Desc: 更新配置
      */
     update(key, value) {
-      this.style[key] = value;
+      if (key === "backgroundImage" && value === "none") {
+        this.style[key] = "";
+      } else {
+        this.style[key] = value;
+      }
       this.data.theme.config[key] = value;
-      this.$emit("change");
+      this.mindMap.setThemeConfig(this.data.theme.config);
+    },
+
+    /**
+     * @Author: 王林
+     * @Date: 2021-07-03 22:08:12
+     * @Desc: 设置margin
+     */
+    updateMargin(type, value) {
+      this.style[type] = value;
+      if (!this.data.theme.config[this.marginActiveTab]) {
+        this.data.theme.config[this.marginActiveTab] = {};
+      }
+      this.data.theme.config[this.marginActiveTab][type] = value;
+      this.mindMap.setThemeConfig(this.data.theme.config);
     },
   },
 };
@@ -350,6 +373,10 @@ export default {
     justify-content: space-between;
     margin-bottom: 10px;
 
+    &.column {
+      flex-direction: column;
+    }
+
     .tab {
       width: 100%;
     }
@@ -371,7 +398,7 @@ export default {
 
       .name {
         font-size: 12px;
-        margin-right: 5px;
+        margin-right: 10px;
       }
 
       .block {

@@ -7,11 +7,12 @@ import Style from './src/Style'
 import KeyCommand from './src/KeyCommand'
 import Command from './src/Command'
 import BatchExecution from './src/BatchExecution'
+import Export from './src/Export';
 import {
     SVG
 } from '@svgdotjs/svg.js'
 
-// 默认选项
+// 默认选项配置
 const defaultOpt = {
     // 布局
     layout: 'logicalStructure',
@@ -19,8 +20,12 @@ const defaultOpt = {
     theme: 'default', // 内置主题：default（默认主题）
     // 主题配置，会和所选择的主题进行合并
     themeConfig: {},
-    // 放大缩小的增量比例，即step = scaleRatio * width|height
-    scaleRatio: 0.1
+    // 放大缩小的增量比例
+    scaleRatio: 0.1,
+    // 设置鼠标左键还是右键按下拖动，1（左键）、2（右键）
+    dragButton: 1,
+    // 最多显示几个标签
+    maxTag: 5
 }
 
 /** 
@@ -38,7 +43,7 @@ class MindMap {
      */
     constructor(opt = {}) {
         // 合并选项
-        this.opt = merge(defaultOpt, opt)
+        this.opt = this.handleOpt(merge(defaultOpt, opt))
 
         // 容器元素
         this.el = this.opt.el
@@ -51,8 +56,9 @@ class MindMap {
         this.width = width
         this.height = height
 
-        // 画笔
-        this.draw = SVG().addTo(this.el).size(width, height)
+        // 画布
+        this.svg = SVG().addTo(this.el).size(width, height)
+        this.draw = this.svg.group()
 
         // 节点id
         this.uid = 0
@@ -86,6 +92,11 @@ class MindMap {
             draw: this.draw
         })
 
+        // 导出类
+        this.doExport = new Export({
+            mindMap: this
+        })
+
         // 批量执行类
         this.batchExecution = new BatchExecution()
 
@@ -94,6 +105,23 @@ class MindMap {
         setTimeout(() => {
             this.command.addHistory()
         }, 0);
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-01 22:15:22 
+     * @Desc: 配置参数处理 
+     */
+    handleOpt(opt) {
+        // 检查布局配置
+        if (!['logicalStructure'].includes(opt.layout)) {
+            opt.layout = 'logicalStructure'
+        }
+        // 检查主题配置
+        opt.theme = opt.theme && theme[opt.theme] ? opt.theme : 'default'
+        // 检查鼠标键值
+        opt.dragButton = [1, 3].includes(opt.dragButton) ? opt.dragButton : 1
+        return opt
     }
 
     /** 
@@ -144,7 +172,7 @@ class MindMap {
      */
     initTheme() {
         // 合并主题配置
-        this.themeConfig = merge(this.opt.theme && theme[this.opt.theme] ? theme[this.opt.theme] : theme.default, this.opt.themeConfig)
+        this.themeConfig = merge(theme[this.opt.theme], this.opt.themeConfig)
         // 设置背景样式
         Style.setBackgroundStyle(this.el, this.themeConfig)
     }
@@ -194,6 +222,16 @@ class MindMap {
      */
     execCommand(...args) {
         this.command.exec(...args)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-01 22:06:38 
+     * @Desc: 导出 
+     */
+    async export(...args) {
+        let result = await this.doExport.export(...args)
+        return result;
     }
 }
 

@@ -2,7 +2,7 @@
   <div class="toolbarContainer">
     <div class="toolbar">
       <!-- 节点操作 -->
-      <div class="left">
+      <div class="toolbarBlock">
         <div
           class="toolbarBtn"
           :class="{
@@ -85,7 +85,7 @@
         </div>
       </div>
       <!-- 通用操作 -->
-      <div class="center">
+      <div class="toolbarBlock">
         <div class="toolbarBtn" @click="$bus.$emit('showOutline')">
           <span class="icon iconfont iconfuhao-dagangshu"></span>
           <span class="text">显示大纲</span>
@@ -103,12 +103,20 @@
           <span class="text">结构</span>
         </div>
       </div>
+      <!-- 导出 -->
+      <div class="toolbarBlock">
+        <div class="toolbarBtn" @click="$bus.$emit('showExport')">
+          <span class="icon iconfont icondaochu"></span>
+          <span class="text">导出</span>
+        </div>
+      </div>
     </div>
     <NodeImage></NodeImage>
     <NodeHyperlink></NodeHyperlink>
     <NodeIcon></NodeIcon>
     <NodeNote></NodeNote>
     <NodeTag></NodeTag>
+    <Export></Export>
   </div>
 </template>
 
@@ -118,6 +126,7 @@ import NodeHyperlink from "./NodeHyperlink";
 import NodeIcon from "./NodeIcon";
 import NodeNote from "./NodeNote";
 import NodeTag from "./NodeTag";
+import Export from './Export';
 
 /** 
  * @Author: 王林 
@@ -132,6 +141,7 @@ export default {
     NodeIcon,
     NodeNote,
     NodeTag,
+    Export
   },
   data() {
     return {
@@ -159,7 +169,6 @@ export default {
     position: fixed;
     left: 0;
     top: 0;
-    width: 100%;
     display: flex;
     padding: 0 20px;
     padding-top: 20px;
@@ -169,8 +178,7 @@ export default {
     color: rgba(26, 26, 26, 0.8);
     z-index: 2;
 
-    .left,
-    .center {
+    .toolbarBlock {
       display: flex;
       background-color: #fff;
       padding: 10px 20px;
@@ -178,6 +186,10 @@ export default {
       box-shadow: 0 2px 16px 0 rgb(0 0 0 / 6%);
       border: 1px solid rgba(0, 0, 0, 0.06);
       margin-right: 20px;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
     }
 
     .toolbarBtn {

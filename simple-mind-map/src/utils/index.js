@@ -132,3 +132,45 @@ export const copyRenderTree = (tree, root) => {
     }
     return tree;
 }
+
+/** 
+ * @Author: 王林 
+ * @Date: 2021-07-04 09:08:43 
+ * @Desc: 图片转成dataURL 
+ */
+export const imgToDataUrl = (src) => {
+    return new Promise((resolve, reject) => {
+        const img = new Image()
+        // 跨域图片需要添加这个属性，否则画布被污染了无法导出图片
+        img.setAttribute('crossOrigin', 'anonymous')
+        img.onload = () => {
+            try {
+                let canvas = document.createElement('canvas')
+                canvas.width = img.width
+                canvas.height = img.height
+                let ctx = canvas.getContext('2d')
+                // 图片绘制到canvas里
+                ctx.drawImage(img, 0, 0, img.width, img.height)
+                resolve(canvas.toDataURL())
+            } catch (error) {
+                reject(e)
+            }
+        }
+        img.onerror = (e) => {
+            reject(e)
+        }
+        img.src = src
+    });
+}
+
+/** 
+ * @Author: 王林 
+ * @Date: 2021-07-04 16:20:06 
+ * @Desc: 下载文件 
+ */
+export const downloadFile = (file, fileName) => {
+    let a = document.createElement('a')
+    a.href = file
+    a.download = fileName
+    a.click()
+}

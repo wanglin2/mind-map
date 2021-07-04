@@ -23,10 +23,6 @@ export default {
     backgroundImage: 'none',
     // 背景重复
     backgroundRepeat: 'no-repeat',
-    // 背景图像大小
-    backgroundSize: 'auto',
-    // 背景图像定位
-    backgroundPosition: '0% 0%',
     // 根节点样式
     root: {
         fillColor: '#549688',

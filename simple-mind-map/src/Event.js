@@ -55,11 +55,16 @@ class Event extends EventEmitter {
      * @Desc: 绑定事件 
      */
     bind() {
-        this.mindMap.draw.on('click', this.onDrawClick)
+        this.mindMap.svg.on('click', this.onDrawClick)
         this.mindMap.el.addEventListener('mousedown', this.onMousedown)
         window.addEventListener('mousemove', this.onMousemove)
         window.addEventListener('mouseup', this.onMouseup)
-        this.mindMap.el.addEventListener('mousewheel', this.onMousewheel)
+        // 兼容火狐浏览器
+        if(window.navigator.userAgent.toLowerCase().indexOf("firefox") != -1){
+            this.mindMap.el.addEventListener('DOMMouseScroll', this.onMousewheel)
+        } else {
+            this.mindMap.el.addEventListener('mousewheel', this.onMousewheel)
+        }
     }
 
     /** 
@@ -91,6 +96,9 @@ class Event extends EventEmitter {
      * @Desc: 鼠标按下事件 
      */
     onMousedown(e) {
+        if (e.which !== this.mindMap.opt.dragButton) {
+            return;
+        }
         e.preventDefault()
         this.isMousedown = true
         this.mousedownPos.x = e.clientX
@@ -137,7 +145,7 @@ class Event extends EventEmitter {
         e.stopPropagation()
         e.preventDefault()
         let dir
-        if (e.wheelDeltaY > 0) {
+        if ((e.wheelDeltaY || e.detail) > 0) {
             dir = 'up'
         } else {
             dir = 'down'

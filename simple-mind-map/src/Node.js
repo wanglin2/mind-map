@@ -1,7 +1,8 @@
 import Style from './Style'
 import {
     resizeImgSize,
-    copyRenderTree
+    copyRenderTree,
+    imgToDataUrl
 } from './utils'
 import {
     Image,
@@ -215,11 +216,12 @@ class Node {
         if (!_data.icon || _data.icon.length <= 0) {
             return [];
         }
+        let iconSize = this.themeConfig.iconSize
         return _data.icon.map((item) => {
             return {
-                node: SVG(iconsSvg.getNodeIconListIcon(item)).size(this.themeConfig.iconSize, this.themeConfig.iconSize),
-                width: this.themeConfig.iconSize,
-                height: this.themeConfig.iconSize
+                node: SVG(iconsSvg.getNodeIconListIcon(item)).size(iconSize, iconSize),
+                width: iconSize,
+                height: iconSize
             };
         });
     }
@@ -231,10 +233,7 @@ class Node {
      * @Desc: 创建文本节点 
      */
     createTextNode() {
-        if (!this.nodeData.data.text) {
-            return
-        }
-        let node = this.draw.text(this.nodeData.data.text)
+        let node = this.draw.text(this.nodeData.data.text || '')
         this.style.text(node)
         let {
             width,
@@ -255,22 +254,24 @@ class Node {
      * @Desc: 创建超链接节点 
      */
     createHyperlinkNode() {
-        if (!this.nodeData.data.hyperlink) {
+        let { hyperlink, hyperlinkTitle } = this.nodeData.data
+        if (!hyperlink) {
             return
         }
         let iconSize = this.themeConfig.iconSize
-        let node = this.draw.element('a')
+        let node = this.draw.link(hyperlink).target('_blank')
         node.node.addEventListener('click', (e) => {
             e.stopPropagation()
         })
-        node.attr('href', this.nodeData.data.hyperlink).attr('target', '_blank')
-        if (this.nodeData.data.hyperlinkTitle) {
-            node.attr('title', this.nodeData.data.hyperlinkTitle)
+        if (hyperlinkTitle) {
+            node.attr('title', hyperlinkTitle)
         }
-        node.add(this.draw.rect(iconSize, iconSize).fill({ color: 'transparent' }))
-        node.add(SVG(iconsSvg.hyperlink).size(iconSize, iconSize))
+        node.rect(iconSize, iconSize).fill({ color: 'transparent' })
+        let iconNode = SVG(iconsSvg.hyperlink).size(iconSize, iconSize)
+        this.style.iconNode(iconNode)
+        node.add(iconNode)
         return {
-            node: this.draw.nested().add(node),
+            node: node,
             width: iconSize,
             height: iconSize
         }
@@ -282,12 +283,13 @@ class Node {
      * @Desc: 创建标签节点 
      */
     createTagNode() {
-        if (!this.nodeData.data.tag || this.nodeData.data.tag.length <= 0) {
+        let tagData = this.nodeData.data.tag
+        if (!tagData || tagData.length <= 0) {
             return [];
         }
         let nodes = []
-        this.nodeData.data.tag.slice(0, 5).forEach((item, index) => {
-            let tag = this.draw.nested()
+        tagData.slice(0, this.mindMap.opt.maxTag).forEach((item, index) => {
+            let tag = this.draw.group()
             let text = this.draw.text(item).x(8).cy(10)
             this.style.tagText(text, index)
             let {
@@ -317,10 +319,12 @@ class Node {
         if (!this.nodeData.data.note) {
             return null;
         }
-        let node = this.draw.nested().attr('cursor', 'pointer')
+        let node = this.draw.group().attr('cursor', 'pointer')
         let iconSize = this.themeConfig.iconSize
         node.add(this.draw.rect(iconSize, iconSize).fill({ color: 'transparent' }))
-        node.add(SVG(iconsSvg.note).size(iconSize, iconSize))
+        let iconNode = SVG(iconsSvg.note).size(iconSize, iconSize)
+        this.style.iconNode(iconNode)
+        node.add(iconNode)
         let el = document.createElement('div')
         el.style.cssText = `
             position: absolute;
@@ -377,11 +381,11 @@ class Node {
             imgObj.node.cx(left + width / 2).y(top + paddingY)
         }
         // 内容节点
-        let textContentNested = this.draw.nested()
+        let textContentNested = this.draw.group()
         let textContentOffsetX = 0
         // icon
         let iconObjs = this.createIconNode()
-        let iconNested = this.draw.nested()
+        let iconNested = this.draw.group()
         if (iconObjs && iconObjs.length > 0) {
             let iconLeft = 0
             iconObjs.forEach((item) => {
@@ -403,13 +407,13 @@ class Node {
         // 超链接
         let hyperlinkObj = this.createHyperlinkNode()
         if (hyperlinkObj) {
-            hyperlinkObj.node.x(textContentOffsetX).y((_textContentHeight - hyperlinkObj.height) / 2)
+            hyperlinkObj.node.translate(textContentOffsetX, (_textContentHeight - hyperlinkObj.height) / 2)
             textContentNested.add(hyperlinkObj.node)
             textContentOffsetX += hyperlinkObj.width + _textContentItemMargin
         }
         // 标签
         let tagObjs = this.createTagNode()
-        let tagNested = this.draw.nested()
+        let tagNested = this.draw.group()
         if (tagObjs && tagObjs.length > 0) {
             let tagLeft = 0
             tagObjs.forEach((item) => {
@@ -423,12 +427,15 @@ class Node {
         // 备注
         let noteObj = this.createNoteNode()
         if (noteObj) {
-            noteObj.node.x(textContentOffsetX).y((_textContentHeight - noteObj.height) / 2)
+            noteObj.node.translate(textContentOffsetX, (_textContentHeight - noteObj.height) / 2)
             textContentNested.add(noteObj.node)
             textContentOffsetX += noteObj.width
         }
         // 文字内容整体
-        textContentNested.x(left + width / 2).dx(-textContentNested.bbox().width / 2).y(top + imgHeight + paddingY + (imgHeight > 0 && _textContentHeight > 0 ? this._blockContentMargin : 0))
+        textContentNested.translate(
+            left + width / 2 - textContentNested.bbox().width / 2,
+            top + imgHeight + paddingY + (imgHeight > 0 && _textContentHeight > 0 ? this._blockContentMargin : 0)
+        )
         group.add(textContentNested)
         // 单击事件
         group.click((e) => {
