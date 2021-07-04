@@ -58,6 +58,10 @@ class Node {
         this.parent = opt.parent || null
         // 子节点
         this.children = opt.children || []
+        // 节点内容的容器
+        this.group = null
+        // 节点内容是否发生了变化，是的话会重新计算和渲染
+        this.changed = true
         // 文本节点
         this.textNode = null
         // icon间距
@@ -98,6 +102,9 @@ class Node {
      * @Desc: 刷新节点的宽高 
      */
     refreshSize() {
+        if (!this.changed) {
+            return;
+        }
         let {
             width,
             height
@@ -369,15 +376,15 @@ class Node {
         } = this
         let { paddingY } = this.getPaddingVale()
         // 创建组
-        let group = this.draw.group()
+        this.group = this.draw.group()
         // 节点矩形
-        this.style.rect(group.rect(width, height).x(left).y(top))
+        this.style.rect(this.group.rect(width, height).x(left).y(top))
         // 图片节点
         let imgObj = this.createImgNode()
         let imgHeight = 0
         if (imgObj) {
             imgHeight = imgObj.height
-            group.add(imgObj.node)
+            this.group.add(imgObj.node)
             imgObj.node.cx(left + width / 2).y(top + paddingY)
         }
         // 内容节点
@@ -436,9 +443,9 @@ class Node {
             left + width / 2 - textContentNested.bbox().width / 2,
             top + imgHeight + paddingY + (imgHeight > 0 && _textContentHeight > 0 ? this._blockContentMargin : 0)
         )
-        group.add(textContentNested)
-        // 单击事件
-        group.click((e) => {
+        this.group.add(textContentNested)
+        // 单击事件，选中节点
+        this.group.click((e) => {
             e.stopPropagation()
             if (this.nodeData.data.isActive) {
                 return;
@@ -448,15 +455,36 @@ class Node {
             this.mindMap.execCommand('UPDATE_NODE_DATA', this, {
                 isActive: !this.nodeData.data.isActive
             })
+            this.renderNode()
             this.renderer.activeNodeList.push(this)
-            this.mindMap.render()
             this.mindMap.emit('node_active', this, this.renderer.activeNodeList)
         })
         // 双击事件
-        group.dblclick(() => {
+        this.group.dblclick(() => {
             this.mindMap.emit('node_dblclick', this)
         })
-        return group
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-04 20:20:09 
+     * @Desc: 渲染节点到画布 
+     */
+    renderNode() {
+        if (this.group) {
+            this.group.remove()
+        }
+        this.createNode()
+        this.draw.add(this.group)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-04 22:47:01 
+     * @Desc: 更新整体位置 
+     */
+    updatePos() {
+        
     }
 
     /** 
@@ -471,7 +499,12 @@ class Node {
         // 按钮
         this.renderExpandBtn()
         // 节点
-        this.draw.add(this.createNode())
+        if (this.changed) {
+            this.renderNode()
+        } else {
+            this.updatePos()
+        }
+        this.changed = false
         // 子节点
         if (this.children && this.children.length && this.nodeData.data.expand !== false) {
             this.children.forEach((child) => {
@@ -501,7 +534,7 @@ class Node {
      * @Desc: 展开收缩按钮 
      */
     renderExpandBtn() {
-        if ((!this.nodeData.data.cacheChildren || this.nodeData.data.cacheChildren.length <= 0) && this.children.length <= 0 || this.isRoot) {
+        if (this.children.length <= 0 || this.isRoot) {
             return;
         }
         let g = this.draw.group()
@@ -529,20 +562,9 @@ class Node {
         })
         g.click(() => {
             // 展开收缩
-            let data = {}
-            let children = []
-            if (this.nodeData.data.expand) {
-                data.expand = false
-                data.cacheChildren = this.nodeData.children.map((item) => {
-                    return copyRenderTree({}, item);
-                })
-                children = []
-            } else {
-                data.expand = true
-                children = this.nodeData.data.cacheChildren
-                data.cacheChildren = []
-            }
-            this.mindMap.execCommand('UPDATE_NODE_DATA', this, data, children)
+            this.mindMap.execCommand('UPDATE_NODE_DATA', this, {
+                expand: !this.mindMap.nodeData.data.expand
+            }, children)
             this.mindMap.emit('expand_btn_click', this)
         })
         g.add(fillNode)
@@ -589,6 +611,7 @@ class Node {
                 [prop]: value
             })
         }
+        this.renderNode()
     }
 
     /** 

@@ -98,6 +98,7 @@ export default class TextEdit {
             this.mindMap.execCommand('UPDATE_NODE_DATA', node, {
                 text: str
             })
+            node.changed = true
             this.mindMap.render()
         })
         this.mindMap.emit('hide_text_edit', this.textEditNode, this.renderer.activeNodeList)
