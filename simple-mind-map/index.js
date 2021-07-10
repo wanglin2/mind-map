@@ -7,7 +7,7 @@ import Style from './src/Style'
 import KeyCommand from './src/KeyCommand'
 import Command from './src/Command'
 import BatchExecution from './src/BatchExecution'
-import Export from './src/Export';
+import Export from './src/Export'
 import {
     SVG
 } from '@svgdotjs/svg.js'
@@ -101,10 +101,10 @@ class MindMap {
         this.batchExecution = new BatchExecution()
 
         // 初始渲染
-        this.renderer.render()
+        this.reRender()
         setTimeout(() => {
             this.command.addHistory()
-        }, 0);
+        }, 0)
     }
 
     /** 
@@ -128,12 +128,26 @@ class MindMap {
      * javascript comment 
      * @Author: 王林25 
      * @Date: 2021-04-06 18:47:29 
-     * @Desc: 渲染 
+     * @Desc: 渲染，部分渲染
      */
     render() {
         this.batchExecution.push('render', () => {
+            this.initTheme()
+            this.renderer.reRender = false
+            this.renderer.render()
+        })
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-08 22:05:11 
+     * @Desc: 重新渲染 
+     */
+    reRender() {
+        this.batchExecution.push('render', () => {
             this.draw.clear()
             this.initTheme()
+            this.renderer.reRender = true
             this.renderer.render()
         })
     }
@@ -184,7 +198,7 @@ class MindMap {
      */
     setTheme(theme) {
         this.opt.theme = theme
-        this.render()
+        this.reRender()
     }
 
     /** 
@@ -193,7 +207,7 @@ class MindMap {
      * @Desc: 获取当前主题 
      */
     getTheme() {
-        return this.opt.theme;
+        return this.opt.theme
     }
 
     /** 
@@ -203,7 +217,7 @@ class MindMap {
      */
     setThemeConfig(config) {
         this.opt.themeConfig = config
-        this.render()
+        this.reRender()
     }
 
     /** 
@@ -231,7 +245,7 @@ class MindMap {
      */
     async export(...args) {
         let result = await this.doExport.export(...args)
-        return result;
+        return result
     }
 }
 

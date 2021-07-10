@@ -38,10 +38,10 @@
 <script>
 import { tagColorList } from "simple-mind-map/src/utils/constant";
 
-/** 
- * @Author: 王林 
- * @Date: 2021-06-24 22:54:03 
- * @Desc: 节点标签内容设置 
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:54:03
+ * @Desc: 节点标签内容设置
  */
 export default {
   name: "NodeTag",
@@ -105,9 +105,7 @@ export default {
      * @Desc:  确定
      */
     confirm() {
-      this.activeNode.setData({
-        tag: this.tagArr,
-      });
+      this.activeNode.setTag(this.tagArr);
       this.cancel();
     },
   },

@@ -65,9 +65,7 @@ export default {
      * @Desc:  确定
      */
     confirm() {
-      this.activeNode.setData({
-        note: this.note,
-      });
+      this.activeNode.setNote(this.note);
       this.cancel();
     },
   },

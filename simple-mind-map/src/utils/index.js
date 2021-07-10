@@ -5,8 +5,11 @@
  * @Desc: 深度优先遍历树 
  */
 export const walk = (root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0) => {
-    beforeCallback && beforeCallback(root, parent, isRoot, layerIndex, index)
-    if (root.children && root.children.length > 0) {
+    let stop = false
+    if (beforeCallback) {
+        stop = beforeCallback(root, parent, isRoot, layerIndex, index)
+    } 
+    if (!stop && root.children && root.children.length > 0) {
         let _layerIndex = layerIndex + 1
         root.children.forEach((node, nodeIndex) => {
             walk(node, root, beforeCallback, afterCallback, false, _layerIndex, nodeIndex)
