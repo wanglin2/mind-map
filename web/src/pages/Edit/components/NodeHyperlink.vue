@@ -68,10 +68,7 @@ export default {
      * @Desc:  确定
      */
     confirm() {
-      this.activeNode.setData({
-        hyperlink: this.link,
-        hyperlinkTitle: this.linkTitle,
-      });
+      this.activeNode.setHyperlink(this.link, this.linkTitle);
       this.cancel();
     },
   },

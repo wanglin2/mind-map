@@ -67,9 +67,7 @@ export default {
 			} else {
 				this.icon.push(type + '_' + name)
 			}
-			this.activeNode.setData({
-				icon: [...this.icon]
-			})
+			this.activeNode.setIcon([...this.icon])
 		}
   },
 };

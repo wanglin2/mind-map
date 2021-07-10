@@ -9,37 +9,62 @@
         <!-- 文字 -->
         <div class="title noTop">文字</div>
         <div class="row">
-          <el-select
-            size="mini"
-            style="width: 160px"
-            v-model="style.fontFamily"
-            placeholder=""
-            @change="update('fontFamily')"
-          >
-            <el-option
-              v-for="item in fontFamilyList"
-              :key="item.value"
-              :label="item.name"
-              :value="item.value"
-              :style="{ fontFamily: item.value }"
+          <div class="rowItem">
+            <span class="name">字体</span>
+            <el-select
+              size="mini"
+              v-model="style.fontFamily"
+              placeholder=""
+              @change="update('fontFamily')"
             >
-            </el-option>
-          </el-select>
-          <el-select
-            size="mini"
-            style="width: 80px"
-            v-model="style.fontSize"
-            placeholder=""
-            @change="update('fontSize')"
-          >
-            <el-option
-              v-for="item in fontSizeList"
-              :key="item"
-              :label="item"
-              :value="item"
+              <el-option
+                v-for="item in fontFamilyList"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
+                :style="{ fontFamily: item.value }"
+              >
+              </el-option>
+            </el-select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">字号</span>
+            <el-select
+              size="mini"
+              style="width: 80px"
+              v-model="style.fontSize"
+              placeholder=""
+              @change="update('fontSize')"
             >
-            </el-option>
-          </el-select>
+              <el-option
+                v-for="item in fontSizeList"
+                :key="item"
+                :label="item"
+                :value="item"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <div class="rowItem">
+            <span class="name">行高</span>
+            <el-select
+              size="mini"
+              style="width: 80px"
+              v-model="style.lineHeight"
+              placeholder=""
+              @change="update('lineHeight')"
+            >
+              <el-option
+                v-for="item in lineHeightList"
+                :key="item"
+                :label="item"
+                :value="item"
+              >
+              </el-option>
+            </el-select>
+          </div>
         </div>
         <div class="row">
           <div class="btnGroup">
@@ -220,6 +245,7 @@ import {
   borderWidthList,
   borderDasharrayList,
   borderRadiusList,
+  lineHeightList,
 } from "@/config";
 
 /**
@@ -240,6 +266,7 @@ export default {
       borderWidthList,
       borderDasharrayList,
       borderRadiusList,
+      lineHeightList,
       activeNode: null,
       activeTab: "normal",
       style: {
@@ -248,6 +275,7 @@ export default {
         color: "",
         fontFamily: "",
         fontSize: "",
+        lineHeight: "",
         textDecoration: "",
         fontWeight: "",
         fontStyle: "",
@@ -297,6 +325,7 @@ export default {
         "color",
         "fontFamily",
         "fontSize",
+        "lineHeight",
         "textDecoration",
         "fontWeight",
         "fontStyle",
@@ -320,7 +349,6 @@ export default {
      * @Desc: 修改样式
      */
     update(prop) {
-      console.log(this.style[prop])
       this.activeNode.setStyle(
         prop,
         this.style[prop],

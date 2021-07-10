@@ -1,3 +1,5 @@
+import Node from '../Node'
+
 /** 
  * @Author: 王林 
  * @Date: 2021-04-12 22:24:30 
@@ -28,7 +30,6 @@ class Base {
      * @Desc: 计算节点位置 
      */
     doLayout() {
-        console.log('布局')
         throw new Error('【computed】方法为必要方法，需要子类进行重写！')
     }
 
@@ -48,6 +49,44 @@ class Base {
      */
     renderExpandBtn() {
         throw new Error('【renderExpandBtn】方法为必要方法，需要子类进行重写！')
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-10 21:30:54 
+     * @Desc: 创建节点实例 
+     */
+    createNode(data, parent, isRoot, layerIndex) {
+        // 创建节点
+        let newNode = null
+        // 复用节点
+        if (data && data._node && !this.renderer.reRender) {
+            newNode = data._node
+            newNode.reset()
+            newNode.layerIndex = layerIndex
+        } else {// 创建新节点
+            newNode = new Node({
+                data,
+                uid: this.mindMap.uid++,
+                renderer: this.renderer,
+                mindMap: this.mindMap,
+                draw: this.draw,
+                layerIndex
+            })
+            newNode.getSize()
+            // 数据关联实际节点
+            data._node = newNode
+        }
+        // 根节点
+        if (isRoot) {
+            newNode.isRoot = true
+            this.root = newNode
+        } else {
+            // 互相收集
+            newNode.parent = parent._node
+            parent._node.addChildren(newNode)
+        }
+        return newNode;
     }
 
     /** 

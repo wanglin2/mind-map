@@ -98,7 +98,10 @@ export default {
           });
         };
         img.onerror = (e) => {
-          reject(e);
+          resolve({
+            width: 0,
+            height: 0,
+          });
         };
       });
     },
@@ -109,7 +112,7 @@ export default {
      * @Desc: 删除图片
      */
     deleteImg() {
-      this.$emit("change", "none");
+      this.$emit("change", "");
       this.file = null;
     },
   },

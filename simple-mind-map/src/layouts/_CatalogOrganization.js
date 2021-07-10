@@ -75,7 +75,7 @@ class Render {
                 draw: this.draw
             })
             // 计算节点的宽高
-            newNode.refreshSize()
+            newNode.getSize()
             // 计算节点的top
             if (isRoot) {
                 newNode.isRoot = true

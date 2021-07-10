@@ -59,7 +59,7 @@ export default class TextEdit {
      * @Desc: 显示文本编辑框 
      */
     show(node) {
-        this.showEditTextBox(node, node.textNode.node.node.getBoundingClientRect())
+        this.showEditTextBox(node, node._textData.node.node.getBoundingClientRect())
     }
 
     /** 
@@ -95,10 +95,7 @@ export default class TextEdit {
         }
         this.renderer.activeNodeList.forEach((node) => {
             let str = getStrWithBrFromHtml(this.textEditNode.innerHTML)
-            this.mindMap.execCommand('UPDATE_NODE_DATA', node, {
-                text: str
-            })
-            node.changed = true
+            this.mindMap.execCommand('SET_NODE_TEXT', node, str)
             this.mindMap.render()
         })
         this.mindMap.emit('hide_text_edit', this.textEditNode, this.renderer.activeNodeList)
