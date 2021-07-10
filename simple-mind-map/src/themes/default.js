@@ -5,8 +5,8 @@
  */
 export default {
     // 节点内边距
-    paddingX: 20,
-    paddingY: 10,
+    paddingX: 15,
+    paddingY: 5,
     // 图片显示的最大宽度
     imgMaxWidth: 100,
     // 图片显示的最大高度
@@ -31,6 +31,7 @@ export default {
         fontSize: 16,
         fontWeight: 'bold',
         fontStyle: 'normal',
+        lineHeight: 1.5,
         borderColor: 'transparent',
         borderWidth: 0,
         borderDasharray: 'none',
@@ -52,6 +53,7 @@ export default {
         fontSize: 16,
         fontWeight: 'noraml',
         fontStyle: 'normal',
+        lineHeight: 1.5,
         borderColor: '#549688',
         borderWidth: 1,
         borderDasharray: 'none',
@@ -66,13 +68,14 @@ export default {
     // 三级及以下节点样式
     node: {
         marginX: 50,
-        marginY: 10,
+        marginY: 0,
         fillColor: 'transparent',
         fontFamily: '微软雅黑, Microsoft YaHei',
         color: '#6a6d6c',
         fontSize: 14,
         fontWeight: 'noraml',
         fontStyle: 'normal',
+        lineHeight: 1.5,
         borderColor: 'transparent',
         borderWidth: 0,
         borderRadius: 5,

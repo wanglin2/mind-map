@@ -1,16 +1,18 @@
 import Style from './Style'
 import {
-    resizeImgSize,
-    copyRenderTree,
-    imgToDataUrl
+    resizeImgSize
 } from './utils'
 import {
     Image,
     SVG,
-    Circle
+    Circle,
+    A,
+    G,
+    Rect,
+    Text
 } from '@svgdotjs/svg.js'
 import btnsSvg from './svg/btns'
-import iconsSvg from './svg/icons';
+import iconsSvg from './svg/icons'
 
 /** 
  * javascript comment 
@@ -48,8 +50,6 @@ class Node {
         this.width = opt.width || 0
         // 节点高
         this.height = opt.height || 0
-        // 节点文字内容部分高
-        this._textContentHeight = 0
         // left
         this.left = opt.left || 0
         // top
@@ -60,18 +60,47 @@ class Node {
         this.children = opt.children || []
         // 节点内容的容器
         this.group = null
-        // 节点内容是否发生了变化，是的话会重新计算和渲染
-        this.changed = true
-        // 文本节点
-        this.textNode = null
+        // 节点内容对象
+        this._imgData = null
+        this._iconData = null
+        this._textData = null
+        this._hyperlinkData = null
+        this._tagData = null
+        this._noteData = null
+        this._expandBtn = null
+        this._lines = []
+        // 尺寸信息
+        this._rectInfo = {
+            imgContentWidth: 0,
+            imgContentHeight: 0,
+            textContentHeight: 0,
+            textContentHeight: 0
+        }
         // icon间距
         this._textContentItemMargin = 2
         // 图片和文字节点的间距
         this._blockContentMargin = 5
         // 展开收缩按钮尺寸
         this._expandBtnSize = 20
-        // 计算节点尺寸
-        this.refreshSize()
+        // 初始渲染
+        this._initRender = true
+        // 初始化
+        this.createNodeData()
+        this.getSize()
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-05 23:11:39 
+     * @Desc: 复位部分布局时会重新设置的数据 
+     */
+    reset() {
+        this.children = []
+        this.parent = null
+        this.isRoot = false
+        this.layerIndex = 0
+        this.left = 0
+        this.top = 0
     }
 
     /** 
@@ -82,7 +111,8 @@ class Node {
     handleData(data) {
         data.data.expand = data.data.expand === false ? false : true
         data.data.isActive = data.data.isActive === true ? true : false
-        return data;
+        data.children = data.children || []
+        return data
     }
 
     /** 
@@ -96,21 +126,83 @@ class Node {
     }
 
     /** 
+     * @Author: 王林 
+     * @Date: 2021-07-06 22:08:09 
+     * @Desc: 创建节点的各个内容对象数据
+     */
+    createNodeData() {
+        this._imgData = this.createImgNode()
+        this._iconData = this.createIconNode()
+        this._textData = this.createTextNode()
+        this._hyperlinkData = this.createHyperlinkNode()
+        this._tagData = this.createTagNode()
+        this._noteData = this.createNoteNode()
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-10 09:20:02 
+     * @Desc: 解绑所有事件 
+     */
+    removeAllEvent() {
+        if (this._noteData) {
+            this._noteData.node.off(['mouseover', 'mouseout'])
+        }
+        if (this._expandBtn) {
+            this._expandBtn.off(['mouseover', 'mouseout', 'click'])
+        }
+        if (this.group) {
+            this.group.off(['click', 'dblclick'])
+        }
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-07 21:27:24 
+     * @Desc: 移除节点内容
+     */
+    removeAllNode() {
+        // 节点内的内容
+        ;[this._imgData, this._iconData, this._textData, this._hyperlinkData, this._tagData, this._noteData].forEach((item) => {
+            if (item && item.node) item.node.remove()
+        })
+        this._imgData = null
+        this._iconData = null
+        this._textData = null
+        this._hyperlinkData = null
+        this._tagData = null
+        this._noteData = null
+        // 展开收缩按钮
+        if (this._expandBtn) {
+            this._expandBtn.remove()
+            this._expandBtn = null
+        }
+        // 组
+        if (this.group) {
+            this.group.clear()
+            this.group.remove()
+            this.group = null
+        }
+    }
+
+    /** 
      * javascript comment 
      * @Author: 王林25 
      * @Date: 2021-04-09 09:46:23 
-     * @Desc: 刷新节点的宽高 
+     * @Desc: 计算节点的宽高 
      */
-    refreshSize() {
-        if (!this.changed) {
-            return;
-        }
+    getSize() {
+        this.removeAllNode()
+        this.createNodeData()
         let {
             width,
             height
         } = this.getNodeRect()
+        // 判断节点尺寸是否有变化
+        let changed = this.width !== width || this.height !== height
         this.width = width
         this.height = height
+        return changed
     }
 
     /** 
@@ -126,50 +218,42 @@ class Node {
         let textContentWidth = 0
         let textContentHeight = 0
         // 存在图片
-        let imgObj = this.createImgNode()
-        if (imgObj) {
-            imgContentWidth = imgObj.width
-            imgContentHeight = imgObj.height
+        if (this._imgData) {
+            this._rectInfo.imgContentWidth = imgContentWidth = this._imgData.width
+            this._rectInfo.imgContentHeight = imgContentHeight = this._imgData.height
         }
         // 图标
-        let iconObjs = this.createIconNode()
-        if (iconObjs.length > 0) {
-            textContentWidth += iconObjs.reduce((sum, cur) => {
+        if (this._iconData.length > 0) {
+            textContentWidth += this._iconData.reduce((sum, cur) => {
                 textContentHeight = Math.max(textContentHeight, cur.height)
                 return sum += cur.width + this._textContentItemMargin
             }, 0)
         }
         // 文字
-        let textObj = this.createTextNode()
-        if (textObj) {
-            textContentWidth += textObj.width
-            textContentHeight = Math.max(textContentHeight, textObj.height)
+        if (this._textData) {
+            textContentWidth += this._textData.width
+            textContentHeight = Math.max(textContentHeight, this._textData.height)
         }
         // 超链接
-        let hyperlinkObj = this.createHyperlinkNode()
-        if (hyperlinkObj) {
-            textContentWidth += hyperlinkObj.width
-            textContentHeight = Math.max(textContentHeight, hyperlinkObj.height)
-            hyperlinkObj.node.remove()
+        if (this._hyperlinkData) {
+            textContentWidth += this._hyperlinkData.width
+            textContentHeight = Math.max(textContentHeight, this._hyperlinkData.height)
         }
         // 标签
-        let tagObjs = this.createTagNode()
-        if (tagObjs.length > 0) {
-            textContentWidth += tagObjs.reduce((sum, cur) => {
+        if (this._tagData.length > 0) {
+            textContentWidth += this._tagData.reduce((sum, cur) => {
                 textContentHeight = Math.max(textContentHeight, cur.height)
-                cur.node.remove()
                 return sum += cur.width + this._textContentItemMargin
             }, 0)
         }
         // 备注
-        let noteObj = this.createNoteNode()
-        if (noteObj) {
-            textContentWidth += noteObj.width
-            textContentHeight = Math.max(textContentHeight, noteObj.height)
-            noteObj.node.remove()
+        if (this._noteData) {
+            textContentWidth += this._noteData.width
+            textContentHeight = Math.max(textContentHeight, this._noteData.height)
         }
-        // 文字内容部分的高度
-        this._textContentHeight = textContentHeight
+        // 文字内容部分的尺寸
+        this._rectInfo.textContentWidth = textContentWidth
+        this._rectInfo.textContentHeight = textContentHeight
         // 间距
         let margin = imgContentHeight > 0 && textContentHeight > 0 ? this._blockContentMargin : 0
         let { paddingX, paddingY } = this.getPaddingVale()
@@ -221,7 +305,7 @@ class Node {
     createIconNode() {
         let _data = this.nodeData.data
         if (!_data.icon || _data.icon.length <= 0) {
-            return [];
+            return []
         }
         let iconSize = this.themeConfig.iconSize
         return _data.icon.map((item) => {
@@ -229,8 +313,8 @@ class Node {
                 node: SVG(iconsSvg.getNodeIconListIcon(item)).size(iconSize, iconSize),
                 width: iconSize,
                 height: iconSize
-            };
-        });
+            }
+        })
     }
 
     /** 
@@ -240,16 +324,21 @@ class Node {
      * @Desc: 创建文本节点 
      */
     createTextNode() {
-        let node = this.draw.text(this.nodeData.data.text || '')
-        this.style.text(node)
+        let g = new G()
+        let fontSize = this.getStyle('fontSize', this.isRoot, this.nodeData.data.isActive)
+        let lineHeight = this.getStyle('lineHeight', this.isRoot, this.nodeData.data.isActive)
+        this.nodeData.data.text.split(/\n/img).forEach((item, index) => {
+            let node = new Text().text(item)
+            this.style.text(node)
+            node.y(fontSize * lineHeight * index)
+            g.add(node)
+        })
         let {
             width,
             height
-        } = node.bbox()
-        let cloneNode = node.clone()
-        node.remove()
+        } = g.bbox()
         return {
-            node: cloneNode,
+            node: g,
             width,
             height
         }
@@ -266,19 +355,24 @@ class Node {
             return
         }
         let iconSize = this.themeConfig.iconSize
-        let node = this.draw.link(hyperlink).target('_blank')
-        node.node.addEventListener('click', (e) => {
+        let node = new SVG()
+        // 超链接节点
+        let a = new A().to(hyperlink).target('_blank')
+        a.node.addEventListener('click', (e) => {
             e.stopPropagation()
         })
         if (hyperlinkTitle) {
-            node.attr('title', hyperlinkTitle)
+            a.attr('title', hyperlinkTitle)
         }
-        node.rect(iconSize, iconSize).fill({ color: 'transparent' })
+        // 添加一个透明的层，作为鼠标区域
+        a.rect(iconSize, iconSize).fill({ color: 'transparent' })
+        // 超链接图标
         let iconNode = SVG(iconsSvg.hyperlink).size(iconSize, iconSize)
         this.style.iconNode(iconNode)
-        node.add(iconNode)
+        a.add(iconNode)
+        node.add(a)
         return {
-            node: node,
+            node,
             width: iconSize,
             height: iconSize
         }
@@ -292,29 +386,29 @@ class Node {
     createTagNode() {
         let tagData = this.nodeData.data.tag
         if (!tagData || tagData.length <= 0) {
-            return [];
+            return []
         }
         let nodes = []
         tagData.slice(0, this.mindMap.opt.maxTag).forEach((item, index) => {
-            let tag = this.draw.group()
-            let text = this.draw.text(item).x(8).cy(10)
+            let tag = new G()
+            // 标签文本
+            let text = new Text().text(item).x(8).cy(10)
             this.style.tagText(text, index)
             let {
                 width,
                 height
             } = text.bbox()
-            let cloneText = text.clone()
-            text.remove()
-            let rect = this.draw.rect(width + 16, 20)
+            // 标签矩形
+            let rect = new Rect().size(width + 16, 20)
             this.style.tagRect(rect, index)
-            tag.add(rect).add(cloneText)
+            tag.add(rect).add(text)
             nodes.push({
                 node: tag,
                 width: width + 16,
                 height: 20
             })
         })
-        return nodes;
+        return nodes
     }
 
     /** 
@@ -324,14 +418,17 @@ class Node {
      */
     createNoteNode() {
         if (!this.nodeData.data.note) {
-            return null;
+            return null
         }
-        let node = this.draw.group().attr('cursor', 'pointer')
         let iconSize = this.themeConfig.iconSize
-        node.add(this.draw.rect(iconSize, iconSize).fill({ color: 'transparent' }))
+        let node = new SVG().attr('cursor', 'pointer')
+        // 透明的层，用来作为鼠标区域
+        node.add(new Rect().size(iconSize, iconSize).fill({ color: 'transparent' }))
+        // 备注图标
         let iconNode = SVG(iconsSvg.note).size(iconSize, iconSize)
         this.style.iconNode(iconNode)
         node.add(iconNode)
+        // 备注tooltip
         let el = document.createElement('div')
         el.style.cssText = `
             position: absolute;
@@ -356,47 +453,43 @@ class Node {
             node,
             width: iconSize,
             height: iconSize
-        };
+        }
     }
 
     /** 
      * javascript comment 
      * @Author: 王林25 
      * @Date: 2021-04-09 11:10:11 
-     * @Desc: 创建内容节点 
+     * @Desc: 定位节点内容
      */
-    createNode() {
+    layout() {
         let {
-            left,
-            top,
             width,
             height,
-            _textContentHeight,
             _textContentItemMargin
         } = this
         let { paddingY } = this.getPaddingVale()
         // 创建组
-        this.group = this.draw.group()
+        this.group = new G()
+        this.updatePos(false)
         // 节点矩形
-        this.style.rect(this.group.rect(width, height).x(left).y(top))
+        this.style.rect(this.group.rect(width, height))
         // 图片节点
-        let imgObj = this.createImgNode()
         let imgHeight = 0
-        if (imgObj) {
-            imgHeight = imgObj.height
-            this.group.add(imgObj.node)
-            imgObj.node.cx(left + width / 2).y(top + paddingY)
+        if (this._imgData) {
+            imgHeight = this._imgData.height
+            this.group.add(this._imgData.node)
+            this._imgData.node.cx(width / 2).y(paddingY)
         }
         // 内容节点
-        let textContentNested = this.draw.group()
+        let textContentNested = new G()
         let textContentOffsetX = 0
         // icon
-        let iconObjs = this.createIconNode()
-        let iconNested = this.draw.group()
-        if (iconObjs && iconObjs.length > 0) {
+        let iconNested = new G()
+        if (this._iconData && this._iconData.length > 0) {
             let iconLeft = 0
-            iconObjs.forEach((item) => {
-                item.node.x(textContentOffsetX + iconLeft).y((_textContentHeight - item.height) / 2)
+            this._iconData.forEach((item) => {
+                item.node.x(textContentOffsetX + iconLeft).y((this._rectInfo.textContentHeight - item.height) / 2)
                 iconNested.add(item.node)
                 iconLeft += item.width + _textContentItemMargin
             })
@@ -404,27 +497,23 @@ class Node {
             textContentOffsetX += iconLeft
         }
         // 文字
-        let textObj = this.createTextNode()
-        if (textObj) {
-            textObj.node.x(textContentOffsetX).y(0)
-            this.textNode = textObj
-            textContentNested.add(textObj.node)
-            textContentOffsetX += textObj.width + _textContentItemMargin
+        if (this._textData) {
+            this._textData.node.x(textContentOffsetX).y(0)
+            textContentNested.add(this._textData.node)
+            textContentOffsetX += this._textData.width + _textContentItemMargin
         }
         // 超链接
-        let hyperlinkObj = this.createHyperlinkNode()
-        if (hyperlinkObj) {
-            hyperlinkObj.node.translate(textContentOffsetX, (_textContentHeight - hyperlinkObj.height) / 2)
-            textContentNested.add(hyperlinkObj.node)
-            textContentOffsetX += hyperlinkObj.width + _textContentItemMargin
+        if (this._hyperlinkData) {
+            this._hyperlinkData.node.x(textContentOffsetX).y((this._rectInfo.textContentHeight - this._hyperlinkData.height) / 2)
+            textContentNested.add(this._hyperlinkData.node)
+            textContentOffsetX += this._hyperlinkData.width + _textContentItemMargin
         }
         // 标签
-        let tagObjs = this.createTagNode()
-        let tagNested = this.draw.group()
-        if (tagObjs && tagObjs.length > 0) {
+        let tagNested = new G()
+        if (this._tagData && this._tagData.length > 0) {
             let tagLeft = 0
-            tagObjs.forEach((item) => {
-                item.node.x(textContentOffsetX + tagLeft).y((_textContentHeight - item.height) / 2)
+            this._tagData.forEach((item) => {
+                item.node.x(textContentOffsetX + tagLeft).y((this._rectInfo.textContentHeight - item.height) / 2)
                 tagNested.add(item.node)
                 tagLeft += item.width + _textContentItemMargin
             })
@@ -432,83 +521,113 @@ class Node {
             textContentOffsetX += tagLeft
         }
         // 备注
-        let noteObj = this.createNoteNode()
-        if (noteObj) {
-            noteObj.node.translate(textContentOffsetX, (_textContentHeight - noteObj.height) / 2)
-            textContentNested.add(noteObj.node)
-            textContentOffsetX += noteObj.width
+        if (this._noteData) {
+            this._noteData.node.x(textContentOffsetX).y((this._rectInfo.textContentHeight - this._noteData.height) / 2)
+            textContentNested.add(this._noteData.node)
+            textContentOffsetX += this._noteData.width
         }
         // 文字内容整体
         textContentNested.translate(
-            left + width / 2 - textContentNested.bbox().width / 2,
-            top + imgHeight + paddingY + (imgHeight > 0 && _textContentHeight > 0 ? this._blockContentMargin : 0)
+            width / 2 - textContentNested.bbox().width / 2,
+            imgHeight + paddingY + (imgHeight > 0 && this._rectInfo.textContentHeight > 0 ? this._blockContentMargin : 0)
         )
         this.group.add(textContentNested)
         // 单击事件，选中节点
-        this.group.click((e) => {
-            e.stopPropagation()
-            if (this.nodeData.data.isActive) {
-                return;
-            }
-            this.mindMap.emit('before_node_active', this, this.renderer.activeNodeList)
-            this.renderer.clearActive()
-            this.mindMap.execCommand('UPDATE_NODE_DATA', this, {
-                isActive: !this.nodeData.data.isActive
-            })
-            this.renderNode()
-            this.renderer.activeNodeList.push(this)
-            this.mindMap.emit('node_active', this, this.renderer.activeNodeList)
+        this.group.on('click', (e) => {
+            this.active(e)
         })
         // 双击事件
-        this.group.dblclick(() => {
+        this.group.on('dblclick', () => {
             this.mindMap.emit('node_dblclick', this)
         })
     }
 
     /** 
      * @Author: 王林 
+     * @Date: 2021-07-10 16:44:22 
+     * @Desc: 激活节点 
+     */
+    active(e) {
+        e.stopPropagation()
+        if (this.nodeData.data.isActive) {
+            return
+        }
+        this.mindMap.emit('before_node_active', this, this.renderer.activeNodeList)
+        this.renderer.clearActive()
+        this.mindMap.execCommand('SET_NODE_ACTIVE', this, !this.nodeData.data.isActive)
+        this.renderer.activeNodeList.push(this)
+        this.mindMap.emit('node_active', this, this.renderer.activeNodeList)
+    }
+
+    /** 
+     * @Author: 王林 
      * @Date: 2021-07-04 20:20:09 
-     * @Desc: 渲染节点到画布 
+     * @Desc: 渲染节点到画布，会移除旧的，创建新的
      */
     renderNode() {
-        if (this.group) {
-            this.group.remove()
-        }
-        this.createNode()
+        this.removeAllEvent()
+        this.removeAllNode()
+        this.createNodeData()
+        this.layout()
+        this.renderExpandBtn()
         this.draw.add(this.group)
     }
 
     /** 
      * @Author: 王林 
      * @Date: 2021-07-04 22:47:01 
-     * @Desc: 更新整体位置 
+     * @Desc: 更新节点位置 
      */
-    updatePos() {
-        
+    updatePos(animate = true) {
+        if (!this.group) {
+            return;
+        }
+        let t = this.group.transform()
+        if (animate) {
+            this.group.animate(300).translate(this.left - t.translateX, this.top - t.translateY)
+        } else {
+            this.group.translate(this.left - t.translateX, this.top - t.translateY)
+        }
     }
 
     /** 
      * javascript comment 
      * @Author: 王林25 
      * @Date: 2021-04-07 13:55:58 
-     * @Desc: 渲染 
+     * @Desc: 递归渲染 
      */
     render() {
         // 连线
         this.renderLine()
-        // 按钮
-        this.renderExpandBtn()
         // 节点
-        if (this.changed) {
+        if (this._initRender) {
+            this._initRender = false
             this.renderNode()
         } else {
             this.updatePos()
         }
-        this.changed = false
         // 子节点
         if (this.children && this.children.length && this.nodeData.data.expand !== false) {
             this.children.forEach((child) => {
                 child.render()
+            })
+        }
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-10 09:24:55 
+     * @Desc: 递归删除 
+     */
+    remove() {
+        this._initRender = true
+        this.removeAllEvent()
+        this.removeAllNode()
+        this.removeLine()
+        // 子节点
+        if (this.children && this.children.length) {
+            this.children.forEach((child) => {
+                child.remove()
             })
         }
     }
@@ -520,24 +639,50 @@ class Node {
      */
     renderLine() {
         if (this.nodeData.data.expand === false) {
-            return;
+            return
         }
-        let lines = this.renderer.layout.renderLine(this)
-        lines.forEach((line) => {
+        let childrenLen = this.nodeData.children.length
+        if (childrenLen > this._lines.length) {
+            // 创建缺少的线
+            new Array(childrenLen - this._lines.length).fill(0).forEach(() => {
+                this._lines.push(this.draw.path())
+            })
+        } else if (childrenLen < this._lines.length) {
+            // 删除多余的线
+            this._lines.slice(childrenLen).forEach((line) => {
+                line.remove()
+            })
+            this._lines = this._lines.slice(0, childrenLen)
+        }
+        // 画线
+        this.renderer.layout.renderLine(this, this._lines)
+        // 添加样式
+        this._lines.forEach((line) => {
             this.style.line(line)
         })
     }
 
     /** 
      * @Author: 王林 
-     * @Date: 2021-04-11 19:47:01 
-     * @Desc: 展开收缩按钮 
+     * @Date: 2021-07-10 16:40:21 
+     * @Desc: 移除连线 
      */
-    renderExpandBtn() {
-        if (this.children.length <= 0 || this.isRoot) {
-            return;
+    removeLine() {
+        this._lines.forEach((line) => {
+            line.remove()
+        })
+        this._lines = []
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-10 17:59:14 
+     * @Desc: 创建或更新展开收缩按钮内容 
+     */
+    updateExpandBtnNode() {
+        if (this._expandBtn) {
+            this._expandBtn.clear()
         }
-        let g = this.draw.group()
         let iconSvg
         if (this.nodeData.data.expand === false) {
             iconSvg = btnsSvg.open
@@ -546,29 +691,43 @@ class Node {
         }
         let node = SVG(iconSvg).size(this._expandBtnSize, this._expandBtnSize)
         let fillNode = new Circle().size(this._expandBtnSize)
-        this.renderer.layout.renderExpandBtn(this, [node, fillNode])
-        node.dx(0).dy(-10)
-        fillNode.dx(0).dy(-10)
+        node.x(0).y(-this._expandBtnSize / 2)
+        fillNode.x(0).y(-this._expandBtnSize / 2)
         this.style.iconBtn(node, fillNode)
-        g.mouseover(() => {
-            g.css({
+        this._expandBtn.add(fillNode).add(node)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-04-11 19:47:01 
+     * @Desc: 展开收缩按钮 
+     */
+    renderExpandBtn() {
+        if (!this.nodeData.children || this.nodeData.children.length <= 0 || this.isRoot) {
+            return
+        }
+        this._expandBtn = new G()
+        this.updateExpandBtnNode()
+        this._expandBtn.on('mouseover', (e) => {
+            e.stopPropagation()
+            this._expandBtn.css({
                 cursor: 'pointer'
             })
         })
-        g.mouseout(() => {
-            g.css({
+        this._expandBtn.on('mouseout', (e) => {
+            e.stopPropagation()
+            this._expandBtn.css({
                 cursor: 'auto'
             })
         })
-        g.click(() => {
+        this._expandBtn.on('click', (e) => {
+            e.stopPropagation()
             // 展开收缩
-            this.mindMap.execCommand('UPDATE_NODE_DATA', this, {
-                expand: !this.mindMap.nodeData.data.expand
-            }, children)
+            this.mindMap.execCommand('SET_NODE_EXPAND', this, !this.nodeData.data.expand)
             this.mindMap.emit('expand_btn_click', this)
         })
-        g.add(fillNode)
-        g.add(node)
+        this.group.add(this._expandBtn)
+        this.renderer.layout.renderExpandBtn(this, this._expandBtn)
     }
 
     /** 
@@ -580,7 +739,7 @@ class Node {
         return {
             paddingX: this.getStyle('paddingX', true, this.nodeData.data.isActive),
             paddingY: this.getStyle('paddingY', true, this.nodeData.data.isActive)
-        };
+        }
     }
 
     /** 
@@ -599,19 +758,7 @@ class Node {
      * @Desc: 修改某个样式 
      */
     setStyle(prop, value, isActive) {
-        if (isActive) {
-            this.mindMap.execCommand('UPDATE_NODE_DATA', this, {
-                activeStyle: {
-                    ...(this.nodeData.data.activeStyle || {}),
-                    [prop]: value
-                }
-            })
-        } else {
-            this.mindMap.execCommand('UPDATE_NODE_DATA', this, {
-                [prop]: value
-            })
-        }
-        this.renderNode()
+        this.mindMap.execCommand('SET_NODE_STYLE', this, prop, value, isActive)
     }
 
     /** 
@@ -620,7 +767,7 @@ class Node {
      * @Desc: 获取数据 
      */
     getData(key) {
-        return key ? this.nodeData.data[key] || '' : this.nodeData.data;
+        return key ? this.nodeData.data[key] || '' : this.nodeData.data
     }
 
     /** 
@@ -629,7 +776,61 @@ class Node {
      * @Desc: 设置数据 
      */
     setData(data = {}) {
-        this.mindMap.execCommand('UPDATE_NODE_DATA', this, data)
+        this.mindMap.execCommand('SET_NODE_DATA', this, data)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-10 08:41:28 
+     * @Desc: 设置文本 
+     */
+    setText(text) {
+        this.mindMap.execCommand('SET_NODE_TEXT', this, text)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-10 08:42:19 
+     * @Desc: 设置图片 
+     */
+    setImage(imgData) {
+        this.mindMap.execCommand('SET_NODE_IMAGE', this, imgData)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-10 08:47:29 
+     * @Desc: 设置图标 
+     */
+    setIcon(icons) {
+        this.mindMap.execCommand('SET_NODE_ICON', this, icons)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-10 08:50:41 
+     * @Desc: 设置超链接 
+     */
+    setHyperlink(link, title) {
+        this.mindMap.execCommand('SET_NODE_HYPERLINK', this, link, title)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-10 08:53:24 
+     * @Desc: 设置备注 
+     */
+    setNote(note) {
+        this.mindMap.execCommand('SET_NODE_NOTE', this, note)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-10 08:55:08 
+     * @Desc: 设置标签 
+     */
+    setTag(tag) {
+        this.mindMap.execCommand('SET_NODE_TAG', this, tag)
     }
 }
 

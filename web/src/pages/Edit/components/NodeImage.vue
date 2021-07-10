@@ -20,10 +20,10 @@
 <script>
 import ImgUpload from "@/components/ImgUpload";
 
-/** 
- * @Author: 王林 
- * @Date: 2021-06-24 22:53:45 
- * @Desc: 节点图片内容设置 
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:53:45
+ * @Desc: 节点图片内容设置
  */
 export default {
   name: "NodeImage",
@@ -73,16 +73,16 @@ export default {
     async confirm() {
       try {
         let { width, height } = await this.$refs.ImgUpload.getSize();
-        this.activeNode.setData({
-          image: this.img,
-          imageTitle: this.imgTitle,
-          imageSize: {
-            width,
-            height,
-          },
+        this.activeNode.setImage({
+          url: this.img || "none",
+          title: this.imgTitle,
+          width,
+          height,
         });
         this.cancel();
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };
