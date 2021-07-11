@@ -48,6 +48,8 @@ class Render {
         this.bindEvent()
         // 注册命令
         this.registerCommands()
+        // 注册快捷键
+        this.registerShortcutKeys()
     }
 
     /** 
@@ -114,6 +116,35 @@ class Render {
         // 设置节点标签
         this.setNodeTag = this.setNodeTag.bind(this)
         this.mindMap.command.add('SET_NODE_TAG', this.setNodeTag)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-11 16:55:44 
+     * @Desc: 注册快捷键 
+     */
+    registerShortcutKeys() {
+        // 插入下级节点
+        this.mindMap.keyCommand.addShortcut('Tab', () => {
+            this.insertChildNode()
+        })
+        // 插入同级节点
+        this.mindMap.keyCommand.addShortcut('Enter', () => {
+            this.insertNode()
+        })
+        // 展开/收起节点
+        this.mindMap.keyCommand.addShortcut('/', () => {
+            this.activeNodeList.forEach((node) => {
+                if (node.nodeData.children.length <= 0) {
+                    return
+                }
+                this.toggleNodeExpand(node)
+            })
+        })
+        // 删除节点
+        this.mindMap.keyCommand.addShortcut('Del|Backspace', () => {
+            this.removeNode()
+        })
     }
 
     /** 
@@ -324,6 +355,15 @@ class Render {
             node.updateExpandBtnNode()
         }
         this.mindMap.render()
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-11 17:15:33 
+     * @Desc: 切换节点展开状态 
+     */
+    toggleNodeExpand(node) {
+        this.mindMap.execCommand('SET_NODE_EXPAND', node, !node.nodeData.data.expand)
     }
 
     /** 

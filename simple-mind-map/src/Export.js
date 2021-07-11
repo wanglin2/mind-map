@@ -14,6 +14,7 @@ class Export {
      */
     constructor(opt) {
         this.mindMap = opt.mindMap
+        this.exportPadding = this.mindMap.opt.exportPadding
     }
 
     /** 
@@ -85,13 +86,13 @@ class Export {
             img.onload = async () => {
                 try {
                     let canvas = document.createElement('canvas')
-                    canvas.width = img.width
-                    canvas.height = img.height
+                    canvas.width = img.width + this.exportPadding * 2
+                    canvas.height = img.height + this.exportPadding * 2
                     let ctx = canvas.getContext('2d')
                     // 绘制背景
-                    await this.drawBackgroundToCanvas(ctx, img.width, img.height)
+                    await this.drawBackgroundToCanvas(ctx, canvas.width, canvas.height)
                     // 图片绘制到canvas里
-                    ctx.drawImage(img, 0, 0, img.width, img.height)
+                    ctx.drawImage(img, 0, 0, img.width, img.height, this.exportPadding, this.exportPadding, img.width, img.height)
                     resolve(canvas.toDataURL())
                 } catch (error) {
                     reject(error)

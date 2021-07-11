@@ -51,6 +51,10 @@ export default class TextEdit {
         this.mindMap.keyCommand.addShortcut('Enter', () => {
             this.hideEditTextBox()
         })
+        // 注册编辑快捷键
+        this.mindMap.keyCommand.addShortcut('F2', () => {
+            this.show()
+        })
     }
 
     /** 

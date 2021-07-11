@@ -24,14 +24,14 @@ export default {
         "data": {
             "text": "根节点"
         },
-        "childrens": [
+        "children": [
             {
                 "data": {
                     "text": "二级节点1"
                 }
             }
         ],
-        "children": [
+        "childrens": [
             {
                 "data": {
                     "text": "二级节点1",
