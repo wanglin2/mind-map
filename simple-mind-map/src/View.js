@@ -29,6 +29,16 @@ class View {
      * @Desc: 绑定 
      */
     bind() {
+        // 快捷键
+        this.mindMap.keyCommand.addShortcut('Control+=', () => {
+            this.enlarge()
+        })
+        this.mindMap.keyCommand.addShortcut('Control+-', () => {
+            this.narrow()
+        })
+        this.mindMap.keyCommand.addShortcut('Control+Enter', () => {
+            this.reset()
+        })
         // 拖动视图
         this.mindMap.event.on('mousedown', () => {
             this.sx = this.x
@@ -56,6 +66,23 @@ class View {
      * @Desc:  应用变换
      */
     transform() {
+        this.mindMap.draw.transform({
+            scale: this.scale,
+            origin: 'left center',
+            translate: [this.x, this.y],
+        })
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-11 17:41:35 
+     * @Desc: 恢复
+     */
+    reset() {
+        let t = this.mindMap.draw.transform()
+        this.scale = 1
+        this.x = 0
+        this.y = 0
         this.mindMap.draw.transform({
             scale: this.scale,
             origin: 'left center',

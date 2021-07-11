@@ -49,7 +49,8 @@ class Select {
                 [this.mouseMoveX, this.mouseMoveY],
                 [this.mouseDownX, this.mouseMoveY]
             ])
-            this.mindMap.batchExecution.push('checkInNodes', this.checkInNodes)
+            this.checkInNodes()
+            // this.mindMap.batchExecution.push('checkInNodes', this.checkInNodes)
         })
         this.mindMap.on('mouseup', (e) => {
             if (!this.isMousedown) {
@@ -110,11 +111,15 @@ class Select {
                 top >= miny &&
                 bottom <= maxy
             ) {
-                this.mindMap.execCommand('SET_NODE_ACTIVE', node, true)
-                this.mindMap.renderer.addActiveNode(node)
+                this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
+                    this.mindMap.execCommand('SET_NODE_ACTIVE', node, true)
+                    this.mindMap.renderer.addActiveNode(node)
+                })
             } else if (node.nodeData.data.isActive) {
-                this.mindMap.execCommand('SET_NODE_ACTIVE', node, false)
-                this.mindMap.renderer.removeActiveNode(node)
+                this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
+                    this.mindMap.execCommand('SET_NODE_ACTIVE', node, false)
+                    this.mindMap.renderer.removeActiveNode(node)
+                })
             }
         })
     }

@@ -6,6 +6,48 @@
   "description": "思维导图",
   "glyphs": [
     {
+      "icon_id": "19980541",
+      "name": "恢复默认",
+      "font_class": "huifumoren",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "1616783",
+      "name": "换行",
+      "font_class": "huanhang",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "4777227",
+      "name": "缩小",
+      "font_class": "suoxiao",
+      "unicode": "ec13",
+      "unicode_decimal": 60435
+    },
+    {
+      "icon_id": "18811980",
+      "name": "编辑",
+      "font_class": "bianji",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "21188137",
+      "name": "放大",
+      "font_class": "fangda",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "21189639",
+      "name": "全屏",
+      "font_class": "quanping1",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    },
+    {
       "icon_id": "397753",
       "name": "定位",
       "font_class": "dingwei",

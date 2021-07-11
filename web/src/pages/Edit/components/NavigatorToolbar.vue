@@ -1,13 +1,17 @@
 <template>
   <div class="navigatorContainer">
-		<div class="item">
-			<Scale :mindMap="mindMap"></Scale>
-		</div>
-	</div>
+    <div class="item">
+      <Scale :mindMap="mindMap"></Scale>
+    </div>
+    <div class="item">
+      <Fullscreen :mindMap="mindMap"></Fullscreen>
+    </div>
+  </div>
 </template>
 
 <script>
-import Scale from './Scale';
+import Scale from "./Scale";
+import Fullscreen from "./Fullscreen";
 
 /**
  * @Author: 王林
@@ -16,19 +20,15 @@ import Scale from './Scale';
  */
 export default {
   name: "NavigatorToolbar",
-	components: {
-		Scale
-	},
+  components: {
+    Scale,
+    Fullscreen,
+  },
   props: {
-		mindMap: {
+    mindMap: {
       type: Object,
     },
-	},
-  data() {
-    return {};
-  },
-  created() {},
-  methods: {},
+  }
 };
 </script>
 
@@ -44,6 +44,14 @@ export default {
   height: 44px;
   font-size: 12px;
   display: flex;
-	align-items: center;
+  align-items: center;
+
+  .item {
+    margin-right: 20px;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
 }
 </style>

@@ -109,6 +109,10 @@
           <span class="icon iconfont icondaochu"></span>
           <span class="text">导出</span>
         </div>
+        <div class="toolbarBtn" @click="$bus.$emit('showShortcutKey')">
+          <span class="icon iconfont iconjianpan"></span>
+          <span class="text">快捷键</span>
+        </div>
       </div>
     </div>
     <NodeImage></NodeImage>
@@ -126,12 +130,12 @@ import NodeHyperlink from "./NodeHyperlink";
 import NodeIcon from "./NodeIcon";
 import NodeNote from "./NodeNote";
 import NodeTag from "./NodeTag";
-import Export from './Export';
+import Export from "./Export";
 
-/** 
- * @Author: 王林 
- * @Date: 2021-06-24 22:54:58 
- * @Desc: 工具栏 
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:54:58
+ * @Desc: 工具栏
  */
 export default {
   name: "Toolbar",
@@ -141,11 +145,11 @@ export default {
     NodeIcon,
     NodeNote,
     NodeTag,
-    Export
+    Export,
   },
   data() {
     return {
-      activeNodes: []
+      activeNodes: [],
     };
   },
   computed: {
