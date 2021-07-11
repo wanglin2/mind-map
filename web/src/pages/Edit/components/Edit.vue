@@ -8,6 +8,7 @@
     <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
     <Theme :mindMap="mindMap"></Theme>
     <Structure :mindMap="mindMap"></Structure>
+    <ShortcutKey></ShortcutKey>
   </div>
 </template>
 
@@ -20,7 +21,8 @@ import exampleData from "simple-mind-map/example/exampleData";
 import Theme from "./Theme";
 import Structure from "./Structure";
 import Count from "./Count";
-import NavigatorToolbar from './NavigatorToolbar';
+import NavigatorToolbar from "./NavigatorToolbar";
+import ShortcutKey from "./ShortcutKey";
 
 /**
  * @Author: 王林
@@ -36,7 +38,8 @@ export default {
     Theme,
     Structure,
     Count,
-    NavigatorToolbar
+    NavigatorToolbar,
+    ShortcutKey,
   },
   data() {
     return {

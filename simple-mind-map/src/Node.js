@@ -76,12 +76,12 @@ class Node {
             textContentHeight: 0,
             textContentHeight: 0
         }
-        // icon间距
-        this._textContentItemMargin = 2
+        // 各种文字信息的间距
+        this._textContentItemMargin = this.mindMap.opt.textContentMargin
         // 图片和文字节点的间距
-        this._blockContentMargin = 5
+        this._blockContentMargin = this.mindMap.opt.imgTextMargin
         // 展开收缩按钮尺寸
-        this._expandBtnSize = 20
+        this._expandBtnSize = this.mindMap.opt.expandBtnSize
         // 初始渲染
         this._initRender = true
         // 初始化
@@ -574,7 +574,6 @@ class Node {
         this.removeAllNode()
         this.createNodeData()
         this.layout()
-        this.renderExpandBtn()
         this.draw.add(this.group)
     }
 
@@ -591,6 +590,7 @@ class Node {
         if (this._expandBtn && this.nodeData.children.length <= 0) {
             this.removeExpandBtn()
         } else if (!this._expandBtn && this.nodeData.children.length > 0) {// 需要添加展开收缩按钮
+            
             this.renderExpandBtn()
         }
         let t = this.group.transform()
@@ -749,9 +749,7 @@ class Node {
     removeExpandBtn() {
         if (this._expandBtn) {
             this._expandBtn.off(['mouseover', 'mouseout', 'click'])
-        }
-        // 展开收缩按钮
-        if (this._expandBtn) {
+            this._expandBtn.clear()
             this._expandBtn.remove()
             this._expandBtn = null
         }

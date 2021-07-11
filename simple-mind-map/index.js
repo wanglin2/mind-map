@@ -26,7 +26,15 @@ const defaultOpt = {
     // 设置鼠标左键还是右键按下拖动，1（左键）、2（右键）
     dragButton: 1,
     // 最多显示几个标签
-    maxTag: 5
+    maxTag: 5,
+    // 导出图片时的内边距
+    exportPadding: 20,
+    // 展开收缩按钮尺寸
+    expandBtnSize: 20,
+    // 节点里图片和文字的间距
+    imgTextMargin: 5,
+    // 节点里各种文字信息的间距，如图标和文字的间距
+    textContentMargin: 2
 }
 
 /** 
@@ -153,6 +161,18 @@ class MindMap {
             this.renderer.reRender = true
             this.renderer.render()
         })
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-11 21:16:52 
+     * @Desc: 容器尺寸变化，调整尺寸 
+     */
+    resize() {
+        this.elRect = this.el.getBoundingClientRect()
+        this.width = this.elRect.width
+        this.height = this.elRect.height
+        this.svg.size(this.width, this.height)
     }
 
     /** 
