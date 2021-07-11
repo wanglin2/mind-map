@@ -16,8 +16,6 @@ class Base {
         this.renderer = renderer
         // 控制实例
         this.mindMap = renderer.mindMap
-        // 渲染树
-        this.renderTree = renderer.renderTree
         // 绘图对象
         this.draw = this.mindMap.draw
         // 根节点
