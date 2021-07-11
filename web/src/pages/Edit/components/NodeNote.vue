@@ -21,10 +21,10 @@
 </template>
 
 <script>
-/** 
- * @Author: 王林 
- * @Date: 2021-06-24 22:53:54 
- * @Desc: 节点备注内容设置 
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:53:54
+ * @Desc: 节点备注内容设置
  */
 export default {
   name: "NodeNote",
@@ -32,15 +32,15 @@ export default {
     return {
       dialogVisible: false,
       note: "",
-      activeNode: null,
+      activeNodes: [],
     };
   },
   created() {
     this.$bus.$on("node_active", (...args) => {
-      let activeNodes = args[1];
-      if (activeNodes.length > 0) {
-        this.activeNode = activeNodes[0];
-        this.note = this.activeNode.getData("note");
+      this.activeNodes = args[1];
+      if (this.activeNodes.length > 0) {
+        let firstNode = this.activeNodes[0];
+        this.note = firstNode.getData("note");
       } else {
         this.note = "";
       }
@@ -65,7 +65,9 @@ export default {
      * @Desc:  确定
      */
     confirm() {
-      this.activeNode.setNote(this.note);
+      this.activeNodes.forEach((node) => {
+        node.setNote(this.note);
+      });
       this.cancel();
     },
   },
@@ -76,7 +78,7 @@ export default {
 .nodeDialog {
   .tip {
     margin-top: 5px;
-    color: #DCDFE6;
+    color: #dcdfe6;
   }
 }
 </style>

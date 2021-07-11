@@ -51,16 +51,16 @@ export default {
       tagColorList,
       tagArr: [],
       tag: "",
-      activeNode: null,
+      activeNodes: [],
       max: 5,
     };
   },
   created() {
     this.$bus.$on("node_active", (...args) => {
-      let activeNodes = args[1];
-      if (activeNodes.length > 0) {
-        this.activeNode = activeNodes[0];
-        this.tagArr = this.activeNode.getData("tag") || [];
+      this.activeNodes = args[1];
+      if (this.activeNodes.length > 0) {
+        let firstNode = this.activeNodes[0];
+        this.tagArr = firstNode.getData("tag") || [];
       } else {
         this.tagArr = [];
         this.tag = "";
@@ -105,7 +105,9 @@ export default {
      * @Desc:  确定
      */
     confirm() {
-      this.activeNode.setTag(this.tagArr);
+      this.activeNodes.forEach((node) => {
+        node.setTag(this.tagArr);
+      });
       this.cancel();
     },
   },

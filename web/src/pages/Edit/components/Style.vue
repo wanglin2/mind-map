@@ -5,7 +5,7 @@
         <el-tab-pane label="常态" name="normal"></el-tab-pane>
         <el-tab-pane label="选中状态" name="active"></el-tab-pane>
       </el-tabs>
-      <div class="sidebarContent" v-if="activeNode">
+      <div class="sidebarContent" v-if="activeNodes.length > 0">
         <!-- 文字 -->
         <div class="title noTop">文字</div>
         <div class="row">
@@ -267,7 +267,7 @@ export default {
       borderDasharrayList,
       borderRadiusList,
       lineHeightList,
-      activeNode: null,
+      activeNodes: [],
       activeTab: "normal",
       style: {
         paddingX: 0,
@@ -292,9 +292,8 @@ export default {
       this.$refs.sidebar.show = false;
       this.$nextTick(() => {
         this.activeTab = "normal";
-        let activeNodes = args[1];
-        this.activeNode = activeNodes[0];
-        this.$refs.sidebar.show = activeNodes.length > 0;
+        this.activeNodes = args[1];
+        this.$refs.sidebar.show = this.activeNodes.length > 0;
         this.initNodeStyle();
       });
     });
@@ -315,7 +314,7 @@ export default {
      * @Desc: 初始节点样式
      */
     initNodeStyle() {
-      if (!this.activeNode) {
+      if (this.activeNodes.length <= 0) {
         this.activeTab = "normal";
         return;
       }
@@ -335,7 +334,7 @@ export default {
         "borderDasharray",
         "borderRadius",
       ].forEach((item) => {
-        this.style[item] = this.activeNode.getStyle(
+        this.style[item] = this.activeNodes[0].getStyle(
           item,
           false,
           this.activeTab === "active"
@@ -349,11 +348,9 @@ export default {
      * @Desc: 修改样式
      */
     update(prop) {
-      this.activeNode.setStyle(
-        prop,
-        this.style[prop],
-        this.activeTab === "active"
-      );
+      this.activeNodes.forEach((node) => {
+        node.setStyle(prop, this.style[prop], this.activeTab === "active");
+      });
     },
 
     /**

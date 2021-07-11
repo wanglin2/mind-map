@@ -35,20 +35,19 @@ export default {
       dialogVisible: false,
       img: "",
       imgTitle: "",
-      activeNode: null,
+      activeNodes: null,
     };
   },
   created() {
     this.$bus.$on("node_active", (...args) => {
-      let activeNodes = args[1];
-      if (activeNodes.length > 0) {
-        this.activeNode = activeNodes[0];
-        this.img = this.activeNode.getData("image");
-        this.imgTitle = this.activeNode.getData("imageTitle");
+      this.activeNodes = args[1];
+      if (this.activeNodes.length > 0) {
+        let firstNode = this.activeNodes[0];
+        this.img = firstNode.getData("image");
+        this.imgTitle = firstNode.getData("imageTitle");
       } else {
         this.img = "";
         this.imgTitle = "";
-        this.activeNode = null;
       }
     });
     this.$bus.$on("showNodeImage", () => {
@@ -73,11 +72,13 @@ export default {
     async confirm() {
       try {
         let { width, height } = await this.$refs.ImgUpload.getSize();
-        this.activeNode.setImage({
-          url: this.img || "none",
-          title: this.imgTitle,
-          width,
-          height,
+        this.activeNodes.forEach((node) => {
+          node.setImage({
+            url: this.img || "none",
+            title: this.imgTitle,
+            width,
+            height,
+          });
         });
         this.cancel();
       } catch (error) {
