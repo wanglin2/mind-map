@@ -8,7 +8,7 @@ export const walk = (root, parent, beforeCallback, afterCallback, isRoot, layerI
     let stop = false
     if (beforeCallback) {
         stop = beforeCallback(root, parent, isRoot, layerIndex, index)
-    } 
+    }
     if (!stop && root.children && root.children.length > 0) {
         let _layerIndex = layerIndex + 1
         root.children.forEach((node, nodeIndex) => {
@@ -176,4 +176,22 @@ export const downloadFile = (file, fileName) => {
     a.href = file
     a.download = fileName
     a.click()
+}
+
+/** 
+ * @Author: 王林 
+ * @Date: 2021-07-11 10:36:47 
+ * @Desc: 节流函数 
+ */
+export const throttle = (fn, time = 300, ctx) => {
+    let timer = null
+    return () => {
+        if (timer) {
+            return
+        }
+        timer = setTimeout(() => {
+            fn.call(ctx)
+            timer = null
+        }, 300)
+    };
 }

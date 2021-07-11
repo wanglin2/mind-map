@@ -46,6 +46,7 @@ class Event extends EventEmitter {
         this.onMousemove = this.onMousemove.bind(this)
         this.onMouseup = this.onMouseup.bind(this)
         this.onMousewheel = this.onMousewheel.bind(this)
+        this.onContextmenu = this.onContextmenu.bind(this)
     }
 
     /** 
@@ -65,6 +66,7 @@ class Event extends EventEmitter {
         } else {
             this.mindMap.el.addEventListener('mousewheel', this.onMousewheel)
         }
+        this.mindMap.svg.on('contextmenu', this.onContextmenu)
     }
 
     /** 
@@ -74,10 +76,12 @@ class Event extends EventEmitter {
      * @Desc: 解绑事件 
      */
     unbind() {
+        this.mindMap.svg.off('click', this.onDrawClick)
         this.mindMap.el.removeEventListener('mousedown', this.onMousedown)
         window.removeEventListener('mousemove', this.onMousemove)
         window.removeEventListener('mouseup', this.onMouseup)
         this.mindMap.el.removeEventListener('mousewheel', this.onMousewheel)
+        this.mindMap.svg.off('contextmenu', this.onContextmenu)
     }
 
     /** 
@@ -151,6 +155,16 @@ class Event extends EventEmitter {
             dir = 'down'
         }
         this.emit('mousewheel', e, dir, this)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-10 22:34:13 
+     * @Desc: 鼠标右键菜单事件 
+     */
+    onContextmenu(e) {
+        e.preventDefault()
+        this.emit('contextmenu', e)
     }
 }
 

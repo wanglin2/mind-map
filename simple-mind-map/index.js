@@ -8,6 +8,7 @@ import KeyCommand from './src/KeyCommand'
 import Command from './src/Command'
 import BatchExecution from './src/BatchExecution'
 import Export from './src/Export'
+import Select from './src/Select'
 import {
     SVG
 } from '@svgdotjs/svg.js'
@@ -47,17 +48,14 @@ class MindMap {
 
         // 容器元素
         this.el = this.opt.el
-        let {
-            width,
-            height
-        } = this.el.getBoundingClientRect()
+        this.elRect = this.el.getBoundingClientRect()
 
         // 画布宽高
-        this.width = width
-        this.height = height
+        this.width = this.elRect.width
+        this.height = this.elRect.height
 
         // 画布
-        this.svg = SVG().addTo(this.el).size(width, height)
+        this.svg = SVG().addTo(this.el).size(this.width, this.height)
         this.draw = this.svg.group()
 
         // 节点id
@@ -94,6 +92,11 @@ class MindMap {
 
         // 导出类
         this.doExport = new Export({
+            mindMap: this
+        })
+
+        // 选择类
+        this.select = new Select({
             mindMap: this
         })
 
