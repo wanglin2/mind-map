@@ -141,14 +141,35 @@ class Render {
 
     /** 
      * @Author: 王林 
+     * @Date: 2021-07-11 10:54:00 
+     * @Desc:  添加节点到激活列表里
+     */
+    addActiveNode(node) {
+        let index = this.findActiveNodeIndex(node)
+        if (index === -1) {
+            this.activeNodeList.push(node)
+        }
+    }
+
+    /** 
+     * @Author: 王林 
      * @Date: 2021-07-10 10:04:04 
      * @Desc: 在激活列表里移除某个节点 
      */
     removeActiveNode(node) {
-        let index = this.activeNodeList.findIndex((item) => {
+        let index = this.findActiveNodeIndex(node)
+        this.activeNodeList.splice(index, 1)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-11 10:55:23 
+     * @Desc: 检索某个节点在激活列表里的索引 
+     */
+    findActiveNodeIndex(node) {
+        return this.activeNodeList.findIndex((item) => {
             return item === node;
         })
-        this.activeNodeList.splice(index, 1)
     }
 
     /** 
@@ -165,7 +186,7 @@ class Render {
     /** 
      * @Author: 王林 
      * @Date: 2021-05-04 13:19:54 
-     * @Desc: 插入同级节点 
+     * @Desc: 插入同级节点，多个节点只会操作第一个节点
      */
     insertNode() {
         if (this.activeNodeList.length <= 0) {
@@ -196,24 +217,24 @@ class Render {
         if (this.activeNodeList.length <= 0) {
             return;
         }
-        let node = this.activeNodeList[0]
-        if (!node.nodeData.children) {
-            node.nodeData.children = []
-        }
-        let len = node.nodeData.children.length
-        node.nodeData.children.push({
-            "data": {
-                "text": "分支主题",
-                "expand": true
-            },
-            "children": []
+        this.activeNodeList.forEach((node, index) => {
+            if (!node.nodeData.children) {
+                node.nodeData.children = []
+            }
+            node.nodeData.children.push({
+                "data": {
+                    "text": "分支主题",
+                    "expand": true
+                },
+                "children": []
+            })
+            if (node.isRoot) {
+                this.mindMap.batchExecution.push('renderNode' + index, () => {
+                    node.renderNode()
+                })
+            }
         })
         this.mindMap.render()
-        if (node.isRoot || len <= 0) {
-            this.mindMap.batchExecution.push('renderNode', () => {
-                node.renderNode()
-            })
-        }
     }
 
     /** 
@@ -225,21 +246,24 @@ class Render {
         if (this.activeNodeList.length <= 0) {
             return;
         }
-        this.activeNodeList.forEach((item) => {
-            if (item.isRoot) {
-                item.children.forEach((child) => {
+        for (let i = 0; i < this.activeNodeList.length; i++) {
+            let node = this.activeNodeList[i]
+            if (node.isRoot) {
+                node.children.forEach((child) => {
                     child.remove()
                 })
-                item.children = []
-                item.nodeData.children = []
+                node.children = []
+                node.nodeData.children = []
+                break
             } else {
-                this.removeActiveNode(item)
-                let index = this.getNodeIndex(item)
-                item.remove()
-                item.parent.children.splice(index, 1)
-                item.parent.nodeData.children.splice(index, 1)
+                this.removeActiveNode(node)
+                let index = this.getNodeIndex(node)
+                node.remove()
+                node.parent.children.splice(index, 1)
+                node.parent.nodeData.children.splice(index, 1)
+                i--
             }
-        })
+        }
         this.mindMap.render()
     }
 

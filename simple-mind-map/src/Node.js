@@ -152,7 +152,7 @@ class Node {
             this._expandBtn.off(['mouseover', 'mouseout', 'click'])
         }
         if (this.group) {
-            this.group.off(['click', 'dblclick'])
+            this.group.off(['click', 'dblclick', 'contextmenu'])
         }
     }
 
@@ -471,7 +471,7 @@ class Node {
         let { paddingY } = this.getPaddingVale()
         // 创建组
         this.group = new G()
-        this.updatePos(false)
+        this.update(false)
         // 节点矩形
         this.style.rect(this.group.rect(width, height))
         // 图片节点
@@ -540,6 +540,11 @@ class Node {
         this.group.on('dblclick', () => {
             this.mindMap.emit('node_dblclick', this)
         })
+        // 右键菜单事件
+        this.group.on('contextmenu', (e) => {
+            e.stopPropagation()
+            e.preventDefault()
+        })
     }
 
     /** 
@@ -555,7 +560,7 @@ class Node {
         this.mindMap.emit('before_node_active', this, this.renderer.activeNodeList)
         this.renderer.clearActive()
         this.mindMap.execCommand('SET_NODE_ACTIVE', this, !this.nodeData.data.isActive)
-        this.renderer.activeNodeList.push(this)
+        this.renderer.addActiveNode(this)
         this.mindMap.emit('node_active', this, this.renderer.activeNodeList)
     }
 
@@ -576,11 +581,17 @@ class Node {
     /** 
      * @Author: 王林 
      * @Date: 2021-07-04 22:47:01 
-     * @Desc: 更新节点位置 
+     * @Desc: 更新节点
      */
-    updatePos(animate = true) {
+    update(animate = true) {
         if (!this.group) {
             return;
+        }
+        // 需要移除展开收缩按钮
+        if (this._expandBtn && this.nodeData.children.length <= 0) {
+            this.removeExpandBtn()
+        } else if (!this._expandBtn && this.nodeData.children.length > 0) {// 需要添加展开收缩按钮
+            this.renderExpandBtn()
         }
         let t = this.group.transform()
         if (animate) {
@@ -604,7 +615,7 @@ class Node {
             this._initRender = false
             this.renderNode()
         } else {
-            this.updatePos()
+            this.update()
         }
         // 子节点
         if (this.children && this.children.length && this.nodeData.data.expand !== false) {
@@ -728,6 +739,22 @@ class Node {
         })
         this.group.add(this._expandBtn)
         this.renderer.layout.renderExpandBtn(this, this._expandBtn)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-11 13:26:00 
+     * @Desc: 移除展开收缩按钮 
+     */
+    removeExpandBtn() {
+        if (this._expandBtn) {
+            this._expandBtn.off(['mouseover', 'mouseout', 'click'])
+        }
+        // 展开收缩按钮
+        if (this._expandBtn) {
+            this._expandBtn.remove()
+            this._expandBtn = null
+        }
     }
 
     /** 
