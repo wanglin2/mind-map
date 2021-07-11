@@ -33,6 +33,15 @@ class Style {
 
     /** 
      * @Author: 王林 
+     * @Date: 2021-07-12 07:40:14 
+     * @Desc: 更新主题配置 
+     */
+    updateThemeConfig(themeConfig) {
+        this.themeConfig = themeConfig
+    }
+
+    /** 
+     * @Author: 王林 
      * @Date: 2021-04-11 12:02:55 
      * @Desc: 合并样式 
      */

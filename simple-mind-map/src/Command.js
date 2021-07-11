@@ -29,6 +29,9 @@ class Command {
             this.commands[name].forEach((fn) => {
                 fn(...args)
             })
+            if (name === 'BACK' || name === 'FORWARD') {
+                return ;
+            }
             this.addHistory()
         }
     }
@@ -56,6 +59,18 @@ class Command {
         this.history.push(simpleDeepClone(data))
         this.activeHistoryIndex++
         this.mindMap.emit('data_change', data)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-11 22:34:53 
+     * @Desc: 回退 
+     */
+    back(step = 1) {
+        if (this.activeHistoryIndex - step >= 0) {
+            this.activeHistoryIndex -= step
+            return simpleDeepClone(this.history[this.activeHistoryIndex]);
+        }
     }
 
     /** 

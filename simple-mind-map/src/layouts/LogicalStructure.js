@@ -42,7 +42,7 @@ class LogicalStructure extends Base {
      * @Desc: 遍历数据计算节点的left、width、height
      */
     computedBaseValue() {
-        walk(this.renderTree, null, (cur, parent, isRoot, layerIndex) => {
+        walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
             let newNode = this.createNode(cur, parent, isRoot, layerIndex)
             // 根节点定位在画布中心位置
             if (isRoot) {

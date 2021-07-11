@@ -91,6 +91,18 @@ class Node {
 
     /** 
      * @Author: 王林 
+     * @Date: 2021-07-12 07:40:47 
+     * @Desc: 更新主题配置 
+     */
+    updateThemeConfig() {
+        // 主题配置
+        this.themeConfig = this.mindMap.themeConfig
+        // 样式实例
+        this.style.updateThemeConfig(this.themeConfig)
+    }
+
+    /** 
+     * @Author: 王林 
      * @Date: 2021-07-05 23:11:39 
      * @Desc: 复位部分布局时会重新设置的数据 
      */
@@ -471,6 +483,7 @@ class Node {
         let { paddingY } = this.getPaddingVale()
         // 创建组
         this.group = new G()
+        this.draw.add(this.group)
         this.update(false)
         // 节点矩形
         this.style.rect(this.group.rect(width, height))
@@ -574,7 +587,6 @@ class Node {
         this.removeAllNode()
         this.createNodeData()
         this.layout()
-        this.draw.add(this.group)
     }
 
     /** 
@@ -584,13 +596,13 @@ class Node {
      */
     update(animate = true) {
         if (!this.group) {
-            return;
+            return
         }
         // 需要移除展开收缩按钮
         if (this._expandBtn && this.nodeData.children.length <= 0) {
             this.removeExpandBtn()
         } else if (!this._expandBtn && this.nodeData.children.length > 0) {// 需要添加展开收缩按钮
-            
+
             this.renderExpandBtn()
         }
         let t = this.group.transform()
@@ -619,9 +631,21 @@ class Node {
         }
         // 子节点
         if (this.children && this.children.length && this.nodeData.data.expand !== false) {
-            this.children.forEach((child) => {
-                child.render()
-            })
+            let index = 0
+            let loop = () => {
+                if (index >= this.children.length) {
+                    return
+                }
+                this.children[index].render()
+                setTimeout(() => {
+                    index++
+                    loop()
+                }, 0)
+            }
+            loop()
+            // this.children.forEach((child) => {
+            //     child.render()
+            // })
         }
     }
 
@@ -637,9 +661,21 @@ class Node {
         this.removeLine()
         // 子节点
         if (this.children && this.children.length) {
-            this.children.forEach((child) => {
-                child.remove()
-            })
+            let index = 0
+            let loop = () => {
+                if (index >= this.children.length) {
+                    return
+                }
+                this.children[index].remove()
+                setTimeout(() => {
+                    index++
+                    loop()
+                }, 0)
+            }
+            loop()
+            // this.children.forEach((child) => {
+            //     child.remove()
+            // })
         }
     }
 

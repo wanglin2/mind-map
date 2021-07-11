@@ -74,6 +74,9 @@ class Render {
      * @Desc: 注册命令 
      */
     registerCommands() {
+        // 回退
+        this.back = this.back.bind(this)
+        this.mindMap.command.add('BACK', this.back)
         // 插入同级节点
         this.insertNode = this.insertNode.bind(this)
         this.mindMap.command.add('INSERT_NODE', this.insertNode)
@@ -154,8 +157,11 @@ class Render {
      * @Desc:  渲染
      */
     render() {
+        let s = Date.now()
         this.root = this.layout.doLayout()
+        console.log(Date.now() - s)
         this.root.render()
+        console.log(Date.now() - s)
     }
 
     /** 
@@ -212,6 +218,19 @@ class Render {
         return node.parent ? node.parent.children.findIndex((item) => {
             return item === node
         }) : 0
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-11 22:34:12 
+     * @Desc: 回退 
+     */
+    back(step) {
+        let data = this.mindMap.command.back(step)
+        if (data) {
+            this.renderTree = data
+            this.mindMap.reRender()
+        }
     }
 
     /** 
@@ -295,6 +314,7 @@ class Render {
                 i--
             }
         }
+        this.mindMap.emit('node_active', null, [])
         this.mindMap.render()
     }
 
@@ -329,7 +349,9 @@ class Render {
         this.setNodeData(node, {
             isActive: active
         })
+        let s = Date.now()
         node.renderNode()
+        console.log(Date.now() - s)
     }
 
     /** 

@@ -6,6 +6,26 @@
         <div
           class="toolbarBtn"
           :class="{
+            disabled: false,
+          }"
+          @click="$bus.$emit('execCommand', 'BACK')"
+        >
+          <span class="icon iconfont iconwithdraw"></span>
+          <span class="text">回退</span>
+        </div>
+        <div
+          class="toolbarBtn"
+          :class="{
+            disabled: false,
+          }"
+          @click="$bus.$emit('execCommand', 'FORWARD')"
+        >
+          <span class="icon iconfont iconqianjin"></span>
+          <span class="text">前进</span>
+        </div>
+        <div
+          class="toolbarBtn"
+          :class="{
             disabled: activeNodes.length <= 0 || hasRoot,
           }"
           @click="$bus.$emit('execCommand', 'INSERT_NODE')"
