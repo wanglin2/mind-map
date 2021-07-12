@@ -10,7 +10,7 @@
           }"
           @click="$bus.$emit('execCommand', 'BACK')"
         >
-          <span class="icon iconfont iconwithdraw"></span>
+          <span class="icon iconfont iconhoutui-shi"></span>
           <span class="text">回退</span>
         </div>
         <div
@@ -20,7 +20,7 @@
           }"
           @click="$bus.$emit('execCommand', 'FORWARD')"
         >
-          <span class="icon iconfont iconqianjin"></span>
+          <span class="icon iconfont iconqianjin1"></span>
           <span class="text">前进</span>
         </div>
         <div
