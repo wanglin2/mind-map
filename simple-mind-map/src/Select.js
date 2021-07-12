@@ -30,7 +30,10 @@ class Select {
      */
     bindEvent() {
         this.checkInNodes = throttle(this.checkInNodes, 500, this)
-        this.mindMap.on('contextmenu', (e) => {
+        this.mindMap.on('mousedown', (e) => {
+            if (e.which !== 3) {
+                return
+            }
             this.isMousedown = true
             let { x, y } = this.toPos(e.clientX, e.clientY)
             this.mouseDownX = x
@@ -50,7 +53,6 @@ class Select {
                 [this.mouseDownX, this.mouseMoveY]
             ])
             this.checkInNodes()
-            // this.mindMap.batchExecution.push('checkInNodes', this.checkInNodes)
         })
         this.mindMap.on('mouseup', (e) => {
             if (!this.isMousedown) {

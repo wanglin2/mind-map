@@ -195,3 +195,29 @@ export const throttle = (fn, time = 300, ctx) => {
         }, 300)
     };
 }
+
+/** 
+ * javascript comment 
+ * @Author: 王林25 
+ * @Date: 2021-07-12 10:27:36 
+ * @Desc: 异步执行任务队列 
+ */
+export const asyncRun = (taskList, callback = () => {}) => {
+    let index = 0
+    let len = taskList.length
+    if (len <= 0) {
+        return
+    }
+    let loop = () => {
+        if (index >= len) {
+            callback()
+            return
+        }
+        taskList[index]()
+        setTimeout(() => {
+            index++
+            loop()
+        }, 0)
+    }
+    loop()
+}

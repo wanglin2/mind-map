@@ -100,7 +100,7 @@
         <div class="rowItem">
           <span class="name">水平</span>
           <el-slider
-            style="width: 210px"
+            style="width: 200px"
             v-model="style.paddingX"
             @change="
               (value) => {
@@ -114,7 +114,7 @@
         <div class="rowItem">
           <span class="name">垂直</span>
           <el-slider
-            style="width: 210px"
+            style="width: 200px"
             v-model="style.paddingY"
             @change="
               (value) => {
@@ -130,7 +130,7 @@
         <div class="rowItem">
           <span class="name">显示的最大宽度</span>
           <el-slider
-            style="width: 150px"
+            style="width: 140px"
             v-model="style.imgMaxWidth"
             :min="10"
             :max="300"
@@ -146,7 +146,7 @@
         <div class="rowItem">
           <span class="name">显示的最大高度</span>
           <el-slider
-            style="width: 150px"
+            style="width: 140px"
             v-model="style.imgMaxHeight"
             :min="10"
             :max="300"
@@ -164,7 +164,7 @@
         <div class="rowItem">
           <span class="name">大小</span>
           <el-slider
-            style="width: 210px"
+            style="width: 200px"
             v-model="style.iconSize"
             :min="12"
             :max="50"

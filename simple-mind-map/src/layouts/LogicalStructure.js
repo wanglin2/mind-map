@@ -1,6 +1,7 @@
 import Base from './Base';
 import {
-    walk
+    walk,
+    asyncRun
 } from '../utils'
 
 /** 
@@ -24,15 +25,17 @@ class LogicalStructure extends Base {
      * @Date: 2021-04-06 14:04:20 
      * @Desc: 布局
      */
-    doLayout() {
-        // 遍历数据计算节点的left、width、height
-        this.computedBaseValue()
-        // 计算节点的top
-        this.computedTopValue()
-        // 调整节点top
-        this.adjustTopValue()
-
-        return this.root;
+    doLayout(callback) {
+        let task = [() => {
+            this.computedBaseValue()
+        }, () => {
+            this.computedTopValue()
+        }, () => {
+            this.adjustTopValue()
+        }, () => {
+            callback(this.root)
+        }]
+        asyncRun(task)
     }
 
     /** 
@@ -122,7 +125,7 @@ class LogicalStructure extends Base {
                 // 上面的节点往上移
                 if (_index < index) {
                     _offset = -addHeight
-                } else if (_index > index) {// 下面的节点往下移
+                } else if (_index > index) { // 下面的节点往下移
                     _offset = addHeight
                 }
                 item.top += _offset

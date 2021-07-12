@@ -43,6 +43,16 @@ export const themeList = [
         img: require('../assets/classic.jpg')
     },
     {
+        name: '小黄人',
+        value: 'minions',
+        img: require('../assets/minions.jpg')
+    },
+    {
+        name: '粉红葡萄',
+        value: 'pinkGrape',
+        img: require('../assets/pinkGrape.jpg')
+    },
+    {
         name: '脑图经典2',
         value: 'classic2',
         img: require('../assets/classic2.jpg')
