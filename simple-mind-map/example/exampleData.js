@@ -795,6 +795,6 @@ export default {
     },
     // "layout": "mindMap",
     // "layout": "logicalStructure"
-    "layout": "catalogOrganization"
-    // "layout": "organizationStructure"
+    // "layout": "catalogOrganization"
+    "layout": "organizationStructure"
 }

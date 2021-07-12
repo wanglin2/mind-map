@@ -6,6 +6,20 @@
   "description": "思维导图",
   "glyphs": [
     {
+      "icon_id": "5110748",
+      "name": "后退-实",
+      "font_class": "houtui-shi",
+      "unicode": "e656",
+      "unicode_decimal": 58966
+    },
+    {
+      "icon_id": "14420971",
+      "name": "前进",
+      "font_class": "qianjin1",
+      "unicode": "e654",
+      "unicode_decimal": 58964
+    },
+    {
       "icon_id": "1368553",
       "name": "撤回",
       "font_class": "withdraw",

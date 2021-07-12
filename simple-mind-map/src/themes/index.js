@@ -13,6 +13,12 @@ import classicGreen from './classicGreen'
 import classicBlue from './classicBlue'
 import minions from './minions'
 import pinkGrape from './pinkGrape'
+import mint from './mint'
+import gold from './gold'
+import vitalityOrange from './vitalityOrange'
+import greenLeaf from './greenLeaf'
+import dark2 from './dark2'
+import skyGreen from './skyGreen'
 
 export default {
     default: defaultTheme,
@@ -29,5 +35,11 @@ export default {
     classicGreen,
     classicBlue,
     minions,
-    pinkGrape
+    pinkGrape,
+    mint,
+    gold,
+    vitalityOrange,
+    greenLeaf,
+    dark2,
+    skyGreen
 }
