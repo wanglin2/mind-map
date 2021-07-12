@@ -785,8 +785,8 @@ const data3 = {
 
 export default {
     // ...data1,
-    // ...data2,
-    ...data3,
+    ...data2,
+    // ...data3,
     "theme": {
         "template": "default",
         "config": {
@@ -794,6 +794,7 @@ export default {
         }
     },
     // "layout": "mindMap",
-    "layout": "logicalStructure"
-    // "layout": "catalogOrganization"
+    // "layout": "logicalStructure"
+    "layout": "catalogOrganization"
+    // "layout": "organizationStructure"
 }
