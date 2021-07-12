@@ -6,7 +6,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: false,
+            disabled: backEnd,
           }"
           @click="$bus.$emit('execCommand', 'BACK')"
         >
@@ -16,7 +16,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: false,
+            disabled: forwardEnd,
           }"
           @click="$bus.$emit('execCommand', 'FORWARD')"
         >
@@ -170,6 +170,8 @@ export default {
   data() {
     return {
       activeNodes: [],
+      backEnd: false,
+      forwardEnd: true
     };
   },
   computed: {
@@ -182,6 +184,11 @@ export default {
   created() {
     this.$bus.$on("node_active", (...args) => {
       this.activeNodes = args[1];
+    });
+    this.$bus.$on("back_forward", (index, len) => {
+      console.log(index, len)
+      this.backEnd = index <= 0
+      this.forwardEnd = index >= len - 1
     });
   },
 };

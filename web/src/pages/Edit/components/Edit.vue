@@ -84,6 +84,9 @@ export default {
       this.mindMap.on("data_change", (...args) => {
         this.$bus.$emit("data_change", ...args);
       });
+      this.mindMap.on("back_forward", (...args) => {
+        this.$bus.$emit("back_forward", ...args);
+      });
     },
 
     /**
@@ -92,7 +95,7 @@ export default {
      * @Desc: 重新渲染
      */
     reRender() {
-      this.mindMap.render();
+      this.mindMap.reRender();
     },
 
     /**

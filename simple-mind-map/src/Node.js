@@ -1,6 +1,7 @@
 import Style from './Style'
 import {
-    resizeImgSize
+    resizeImgSize,
+    asyncRun
 } from './utils'
 import {
     Image,
@@ -631,21 +632,23 @@ class Node {
         }
         // 子节点
         if (this.children && this.children.length && this.nodeData.data.expand !== false) {
-            let index = 0
-            let loop = () => {
-                if (index >= this.children.length) {
-                    return
+            asyncRun(this.children.map((item) => {
+                return () =>{
+                    item.render()
                 }
-                this.children[index].render()
-                setTimeout(() => {
-                    index++
-                    loop()
-                }, 0)
-            }
-            loop()
-            // this.children.forEach((child) => {
-            //     child.render()
-            // })
+            }))
+            // let index = 0
+            // let loop = () => {
+            //     if (index >= this.children.length) {
+            //         return
+            //     }
+            //     this.children[index].render()
+            //     setTimeout(() => {
+            //         index++
+            //         loop()
+            //     }, 0)
+            // }
+            // loop()
         }
     }
 
@@ -661,21 +664,23 @@ class Node {
         this.removeLine()
         // 子节点
         if (this.children && this.children.length) {
-            let index = 0
-            let loop = () => {
-                if (index >= this.children.length) {
-                    return
+            asyncRun(this.children.map((item) => {
+                return () =>{
+                    item.remove()
                 }
-                this.children[index].remove()
-                setTimeout(() => {
-                    index++
-                    loop()
-                }, 0)
-            }
-            loop()
-            // this.children.forEach((child) => {
-            //     child.remove()
-            // })
+            }))
+            // let index = 0
+            // let loop = () => {
+            //     if (index >= this.children.length) {
+            //         return
+            //     }
+            //     this.children[index].remove()
+            //     setTimeout(() => {
+            //         index++
+            //         loop()
+            //     }, 0)
+            // }
+            // loop()
         }
     }
 

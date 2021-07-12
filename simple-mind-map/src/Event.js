@@ -17,7 +17,7 @@ class Event extends EventEmitter {
         super()
         this.opt = opt
         this.mindMap = opt.mindMap
-        this.isMousedown = false
+        this.isLeftMousedown = false
         this.mousedownPos = {
             x: 0,
             y: 0
@@ -100,11 +100,11 @@ class Event extends EventEmitter {
      * @Desc: 鼠标按下事件 
      */
     onMousedown(e) {
-        if (e.which !== this.mindMap.opt.dragButton) {
-            return;
-        }
         e.preventDefault()
-        this.isMousedown = true
+        // 鼠标左键
+        if (e.which === 1) {
+            this.isLeftMousedown = true
+        }
         this.mousedownPos.x = e.clientX
         this.mousedownPos.y = e.clientY
         this.emit('mousedown', e, this)
@@ -123,7 +123,7 @@ class Event extends EventEmitter {
         this.mousemoveOffset.x = e.clientX - this.mousedownPos.x
         this.mousemoveOffset.y = e.clientY - this.mousedownPos.y
         this.emit('mousemove', e, this)
-        if (this.isMousedown) {
+        if (this.isLeftMousedown) {
             this.emit('drag', e, this)
         }
     }
@@ -135,7 +135,7 @@ class Event extends EventEmitter {
      * @Desc: 鼠标松开事件 
      */
     onMouseup(e) {
-        this.isMousedown = false
+        this.isLeftMousedown = false
         this.emit('mouseup', e, this)
     }
 
