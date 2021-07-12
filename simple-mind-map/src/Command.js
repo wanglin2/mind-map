@@ -57,8 +57,9 @@ class Command {
     addHistory() {
         let data = this.getCopyData()
         this.history.push(simpleDeepClone(data))
-        this.activeHistoryIndex++
+        this.activeHistoryIndex = this.history.length - 1
         this.mindMap.emit('data_change', data)
+        this.mindMap.emit('back_forward', this.activeHistoryIndex, this.history.length)
     }
 
     /** 
@@ -69,6 +70,22 @@ class Command {
     back(step = 1) {
         if (this.activeHistoryIndex - step >= 0) {
             this.activeHistoryIndex -= step
+            this.mindMap.emit('back_forward', this.activeHistoryIndex, this.history.length)
+            return simpleDeepClone(this.history[this.activeHistoryIndex]);
+        }
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-07-12 10:45:31 
+     * @Desc: 前进 
+     */
+    forward(step = 1) {
+        let len = this.history.length
+        if (this.activeHistoryIndex + step <= len - 1) {
+            this.activeHistoryIndex += step
+            this.mindMap.emit('back_forward', this.activeHistoryIndex,)
             return simpleDeepClone(this.history[this.activeHistoryIndex]);
         }
     }

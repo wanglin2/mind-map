@@ -23,8 +23,6 @@ const defaultOpt = {
     themeConfig: {},
     // 放大缩小的增量比例
     scaleRatio: 0.1,
-    // 设置鼠标左键还是右键按下拖动，1（左键）、2（右键）
-    dragButton: 1,
     // 最多显示几个标签
     maxTag: 5,
     // 导出图片时的内边距
@@ -130,8 +128,6 @@ class MindMap {
         }
         // 检查主题配置
         opt.theme = opt.theme && theme[opt.theme] ? opt.theme : 'default'
-        // 检查鼠标键值
-        opt.dragButton = [1, 3].includes(opt.dragButton) ? opt.dragButton : 1
         return opt
     }
 

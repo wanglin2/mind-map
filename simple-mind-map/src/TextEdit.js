@@ -53,7 +53,10 @@ export default class TextEdit {
         })
         // 注册编辑快捷键
         this.mindMap.keyCommand.addShortcut('F2', () => {
-            this.show()
+            if (this.renderer.activeNodeList.length <= 0){
+                return
+            }
+            this.show(this.renderer.activeNodeList[0])
         })
     }
 

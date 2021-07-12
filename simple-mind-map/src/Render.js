@@ -40,8 +40,6 @@ class Render {
         this.activeNodeList = []
         // 根节点
         this.root = null
-        // 文本编辑框
-        this.textEdit = new TextEdit(this)
         // 布局
         this.layout = new (layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts.logicalStructure)(this)
         // 绑定事件
@@ -50,6 +48,8 @@ class Render {
         this.registerCommands()
         // 注册快捷键
         this.registerShortcutKeys()
+        // 文本编辑框
+        this.textEdit = new TextEdit(this)
     }
 
     /** 
@@ -77,6 +77,9 @@ class Render {
         // 回退
         this.back = this.back.bind(this)
         this.mindMap.command.add('BACK', this.back)
+        // 前进
+        this.forward = this.forward.bind(this)
+        this.mindMap.command.add('FORWARD', this.forward)
         // 插入同级节点
         this.insertNode = this.insertNode.bind(this)
         this.mindMap.command.add('INSERT_NODE', this.insertNode)
@@ -133,6 +136,9 @@ class Render {
         })
         // 插入同级节点
         this.mindMap.keyCommand.addShortcut('Enter', () => {
+            if (this.textEdit.showTextEdit) {
+                return
+            }
             this.insertNode()
         })
         // 展开/收起节点
@@ -157,11 +163,10 @@ class Render {
      * @Desc:  渲染
      */
     render() {
-        let s = Date.now()
-        this.root = this.layout.doLayout()
-        console.log(Date.now() - s)
-        this.root.render()
-        console.log(Date.now() - s)
+        this.layout.doLayout((root) => {
+            this.root = root
+            this.root.render()
+        })
     }
 
     /** 
@@ -227,6 +232,20 @@ class Render {
      */
     back(step) {
         let data = this.mindMap.command.back(step)
+        if (data) {
+            this.renderTree = data
+            this.mindMap.reRender()
+        }
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-07-12 10:44:51 
+     * @Desc: 前进 
+     */
+    forward(step) {
+        let data = this.mindMap.command.forward(step)
         if (data) {
             this.renderTree = data
             this.mindMap.reRender()
