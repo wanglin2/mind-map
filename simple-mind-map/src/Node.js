@@ -85,6 +85,8 @@ class Node {
         this._expandBtnSize = this.mindMap.opt.expandBtnSize
         // 初始渲染
         this._initRender = true
+        // 更新的时候的钩子
+        this.updateHooks = []
         // 初始化
         this.createNodeData()
         this.getSize()
@@ -485,7 +487,7 @@ class Node {
         // 创建组
         this.group = new G()
         this.draw.add(this.group)
-        this.update(false)
+        this.update(true)
         // 节点矩形
         this.style.rect(this.group.rect(width, height))
         // 图片节点
@@ -595,7 +597,7 @@ class Node {
      * @Date: 2021-07-04 22:47:01 
      * @Desc: 更新节点
      */
-    update(animate = true) {
+    update(layout = false) {
         if (!this.group) {
             return
         }
@@ -603,11 +605,15 @@ class Node {
         if (this._expandBtn && this.nodeData.children.length <= 0) {
             this.removeExpandBtn()
         } else if (!this._expandBtn && this.nodeData.children.length > 0) {// 需要添加展开收缩按钮
-
             this.renderExpandBtn()
         }
+        if (!layout) {
+            this.updateHooks.forEach((hook) => {
+                hook(this)
+            })
+        }
         let t = this.group.transform()
-        if (animate) {
+        if (!layout) {
             this.group.animate(300).translate(this.left - t.translateX, this.top - t.translateY)
         } else {
             this.group.translate(this.left - t.translateX, this.top - t.translateY)
@@ -637,18 +643,6 @@ class Node {
                     item.render()
                 }
             }))
-            // let index = 0
-            // let loop = () => {
-            //     if (index >= this.children.length) {
-            //         return
-            //     }
-            //     this.children[index].render()
-            //     setTimeout(() => {
-            //         index++
-            //         loop()
-            //     }, 0)
-            // }
-            // loop()
         }
     }
 
@@ -669,18 +663,6 @@ class Node {
                     item.remove()
                 }
             }))
-            // let index = 0
-            // let loop = () => {
-            //     if (index >= this.children.length) {
-            //         return
-            //     }
-            //     this.children[index].remove()
-            //     setTimeout(() => {
-            //         index++
-            //         loop()
-            //     }, 0)
-            // }
-            // loop()
         }
     }
 
@@ -747,6 +729,20 @@ class Node {
         fillNode.x(0).y(-this._expandBtnSize / 2)
         this.style.iconBtn(node, fillNode)
         this._expandBtn.add(fillNode).add(node)
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-07-12 18:18:13 
+     * @Desc: 更新展开收缩按钮位置 
+     */
+    updateExpandBtnPos() {
+        if (!this._expandBtn) {
+            return
+        }
+        console.log('更新')
+        this.renderer.layout.renderExpandBtn(this, this._expandBtn)
     }
 
     /** 
