@@ -186,7 +186,6 @@ export default {
       this.activeNodes = args[1];
     });
     this.$bus.$on("back_forward", (index, len) => {
-      console.log(index, len)
       this.backEnd = index <= 0
       this.forwardEnd = index >= len - 1
     });

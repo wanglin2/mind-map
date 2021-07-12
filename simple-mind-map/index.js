@@ -123,7 +123,7 @@ class MindMap {
      */
     handleOpt(opt) {
         // 检查布局配置
-        if (!['logicalStructure'].includes(opt.layout)) {
+        if (!['logicalStructure', 'mindMap', 'catalogOrganization', 'organizationStructure'].includes(opt.layout)) {
             opt.layout = 'logicalStructure'
         }
         // 检查主题配置

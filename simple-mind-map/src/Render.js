@@ -2,6 +2,7 @@ import merge from 'deepmerge'
 import LogicalStructure from './layouts/LogicalStructure'
 import MindMap from './layouts/MindMap'
 import CatalogOrganization from './layouts/CatalogOrganization';
+import OrganizationStructure from './layouts/OrganizationStructure'
 import TextEdit from './TextEdit'
 
 // 布局列表
@@ -11,7 +12,9 @@ const layouts = {
     // 思维导图
     mindMap: MindMap,
     // 目录组织图
-    catalogOrganization: CatalogOrganization
+    catalogOrganization: CatalogOrganization,
+    // 组织结构图
+    organizationStructure: OrganizationStructure
 }
 
 /** 

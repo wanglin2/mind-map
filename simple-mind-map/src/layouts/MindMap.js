@@ -1,14 +1,14 @@
 import Base from './Base';
 import {
-    walk
+    walk,
+    asyncRun
 } from '../utils'
-import Node from '../Node'
 
 /** 
  * @Author: 王林 
  * @Date: 2021-04-12 22:25:58 
  * @Desc: 思维导图 
- * 思路：在逻辑结构图的基础上增加一个变量来记录生长方向，向左还是向右，同时在计算left的时候根据方向来计算、调整top时只考虑同方向的节点即可
+ * 在逻辑结构图的基础上增加一个变量来记录生长方向，向左还是向右，同时在计算left的时候根据方向来计算、调整top时只考虑同方向的节点即可
  */
 class MindMap extends Base {
     /** 
@@ -26,14 +26,17 @@ class MindMap extends Base {
      * @Date: 2021-04-06 14:04:20 
      * @Desc: 布局
      */
-    doLayout() {
-        // 遍历数据计算节点的left、width、height
-        this.computedBaseValue()
-        // 计算节点的top
-        this.computedTopValue()
-        // 调整节点top
-        this.adjustTopValue()
-        return this.root;
+    doLayout(callback) {
+        let task = [() => {
+            this.computedBaseValue()
+        }, () => {
+            this.computedTopValue()
+        }, () => {
+            this.adjustTopValue()
+        }, () => {
+            callback(this.root)
+        }]
+        asyncRun(task)
     }
 
     /** 
@@ -43,65 +46,55 @@ class MindMap extends Base {
      * @Desc: 遍历数据计算节点的left、width、height
      */
     computedBaseValue() {
-        walk(this.renderTree, null, (cur, parent, isRoot, layerIndex, index) => {
-            // 节点生长方向
-            let dir = ''
-            if (isRoot) {
-                dir = ''
-            } else if (parent._node.isRoot) {// 二级节点根据索引来判断显示在左侧还是右侧
-                dir = index % 2 === 0 ? 'right' : 'left'
-            } else {// 三级及以下节点以上级为准
-                dir = parent._node.dir
+        walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex, index) => {
+            let newNode = this.createNode(cur, parent, isRoot, layerIndex)
+            // 更新时展开收缩按钮位置可能会变化，需要更新
+            if (newNode.updateHooks.length <= 0) {
+                newNode.updateHooks.push((node) => {
+                    node.updateExpandBtnPos()
+                })
             }
-            // 创建节点
-            let newNode = new Node({
-                data: cur,
-                uid: this.mindMap.uid++,
-                renderer: this.renderer,
-                mindMap: this.mindMap,
-                draw: this.draw,
-                layerIndex
-            })
-            newNode.dir = dir
-            // 数据关联实际节点
-            cur._node = newNode
             // 根节点定位在画布中心位置
             if (isRoot) {
-                newNode.isRoot = true
                 newNode.left = (this.mindMap.width - newNode.width) / 2
                 newNode.top = (this.mindMap.height - newNode.height) / 2
-                this.root = newNode
             } else {
                 // 非根节点
-                let marginX = layerIndex === 1 ? this.themeConfig.second.marginX : this.themeConfig.node.marginX
-                // 根据生长方向定位到父节点的左侧还是右侧
-                newNode.left = dir === 'right' ? parent._node.left + parent._node.width + marginX : parent._node.left - newNode.width - marginX
-                // 互相收集
-                newNode.parent = parent._node
-                parent._node.addChildren(newNode)
+                // 三级及以下节点以上级为准
+                if (parent._node.dir) {
+                    newNode.dir = parent._node.dir
+                } else { // 节点生长方向
+                    newNode.dir = index % 2 === 0 ? 'right' : 'left'
+                }
+                // 根据生长方向定位到父节点的左侧或右侧
+                newNode.left = newNode.dir === 'right' ? parent._node.left + parent._node.width + this.getMarginX(layerIndex) : parent._node.left - this.getMarginX(layerIndex) - newNode.width
+            }
+            if (!cur.data.expand) {
+                return true;
             }
         }, (cur, parent, isRoot, layerIndex) => {
-            // 返回时计算节点的areaHeight，也就是子节点所占的高度之和，包括外边距
-            if (cur.data.expand === false) {
+            // 返回时计算节点的leftChildrenAreaHeight和rightChildrenAreaHeight，也就是左侧和右侧子节点所占的高度之和，包括外边距
+            if (!cur.data.expand) {
                 cur._node.leftChildrenAreaHeight = 0
                 cur._node.rightChildrenAreaHeight = 0
-                return ;
+                return
             }
+            // 理论上只有根节点是存在两个方向的子节点的，其他节点的子节点一定全都是同方向，但是为了逻辑统一，就不按特殊处理的方式来写了
             let leftLen = 0
             let rightLen = 0
-            let leftAreaHeight = 0
-            let rightAreaHeight = 0
+            let leftChildrenAreaHeight = 0
+            let rightChildrenAreaHeight = 0
             cur._node.children.forEach((item) => {
                 if (item.dir === 'left') {
                     leftLen++
-                    leftAreaHeight += item.height
+                    leftChildrenAreaHeight += item.height
                 } else {
                     rightLen++
-                    rightAreaHeight += item.height
+                    rightChildrenAreaHeight += item.height
                 }
             })
-            cur._node.leftChildrenAreaHeight = leftAreaHeight + (leftLen + 1) * this.getMarginY(layerIndex)
-            cur._node.rightChildrenAreaHeight = rightAreaHeight + (rightLen + 1) * this.getMarginY(layerIndex)
+            cur._node.leftChildrenAreaHeight = leftChildrenAreaHeight + (leftLen + 1) * this.getMarginY(layerIndex + 1)
+            cur._node.rightChildrenAreaHeight = rightChildrenAreaHeight + (rightLen + 1) * this.getMarginY(layerIndex + 1)
         }, true, 0)
     }
 
@@ -113,11 +106,12 @@ class MindMap extends Base {
      */
     computedTopValue() {
         walk(this.root, null, (node, parent, isRoot, layerIndex) => {
-            if (node.children && node.children.length) {
-                let marginY = this.getMarginY(layerIndex)
-                let top = node.top + node.height / 2
-                let leftTotalTop = top - node.leftChildrenAreaHeight / 2 + marginY
-                let rightTotalTop = top - node.rightChildrenAreaHeight / 2 + marginY
+            if (node.nodeData.data.expand && node.children && node.children.length) {
+                let marginY = this.getMarginY(layerIndex + 1)
+                let baseTop = node.top + node.height / 2 + marginY
+                // 第一个子节点的top值 = 该节点中心的top值 - 子节点的高度之和的一半
+                let leftTotalTop = baseTop - node.leftChildrenAreaHeight / 2
+                let rightTotalTop = baseTop - node.rightChildrenAreaHeight / 2
                 node.children.forEach((cur) => {
                     if (cur.dir === 'left') {
                         cur.top = leftTotalTop
@@ -139,10 +133,13 @@ class MindMap extends Base {
      */
     adjustTopValue() {
         walk(this.root, null, (node, parent, isRoot, layerIndex) => {
+            if (!node.nodeData.data.expand) {
+                return;
+            }
             // 判断子节点所占的高度之和是否大于该节点自身，大于则需要调整位置
-            let h =  this.getMarginY(layerIndex) + node.height
-            let leftDifference = node.leftChildrenAreaHeight - h
-            let rightDifference = node.rightChildrenAreaHeight - h
+            let base = this.getMarginY(layerIndex + 1) * 2 + node.height
+            let leftDifference = node.leftChildrenAreaHeight - base
+            let rightDifference = node.rightChildrenAreaHeight - base
             if (leftDifference > 0 || rightDifference > 0) {
                 this.updateBrothers(node, leftDifference / 2, rightDifference / 2)
             }
@@ -157,6 +154,7 @@ class MindMap extends Base {
      */
     updateBrothers(node, leftAddHeight, rightAddHeight) {
         if (node.parent) {
+            // 过滤出和自己同方向的节点
             let childrenList = node.parent.children.filter((item) => {
                 return item.dir === node.dir
             })
@@ -169,7 +167,7 @@ class MindMap extends Base {
                 // 上面的节点往上移
                 if (_index < index) {
                     _offset = -addHeight
-                } else if (_index > index) {// 下面的节点往下移
+                } else if (_index > index) { // 下面的节点往下移
                     _offset = addHeight
                 }
                 item.top += _offset
@@ -188,7 +186,7 @@ class MindMap extends Base {
      * @Date: 2021-04-11 14:42:48 
      * @Desc: 绘制连线，连接该节点到其子节点
      */
-    renderLine(node) {
+    renderLine(node, lines) {
         if (node.children.length <= 0) {
             return [];
         }
@@ -199,15 +197,10 @@ class MindMap extends Base {
             height,
             _expandBtnSize
         } = node
-        let lines = []
-        // if (!node.isRoot) {
-            // let line = this.draw.line(left + width, top + height / 2, left + width + 20, top + height / 2)
-            // lines.push(line)
-        // }
-        node.children.forEach((item) => {
-            let x1 = node.layerIndex === 0 ? left + width / 2 : item.dir === 'right' ? left + width + _expandBtnSize : left - _expandBtnSize
+        node.children.forEach((item, index) => {
+            let x1 = node.layerIndex === 0 ? left + width / 2 : item.dir === 'left' ? left - _expandBtnSize : left + width + 20
             let y1 = node.layerIndex === 0 ? top + height / 2 : top + height / 2
-            let x2 =  item.dir === 'right' ? item.left : item.left + item.width
+            let x2 = item.dir === 'left' ? item.left + item.width : item.left
             let y2 = item.top + item.height / 2
             let path = ''
             if (node.isRoot) {
@@ -215,10 +208,8 @@ class MindMap extends Base {
             } else {
                 path = this.cubicBezierPath(x1, y1, x2, y2)
             }
-            let line = this.draw.path(path)
-            lines.push(line)
+            lines[index].plot(path)
         })
-        return lines;
     }
 
     /** 
@@ -226,17 +217,19 @@ class MindMap extends Base {
      * @Date: 2021-04-11 19:54:26 
      * @Desc: 渲染按钮 
      */
-    renderExpandBtn(node, icons) {
+    renderExpandBtn(node, btn) {
         let {
-            left,
-            top,
             width,
             height,
             _expandBtnSize
         } = node
-        icons.forEach((icon) => {
-            node.dir === 'right' ? icon.x(left + width).y(top + height / 2) : icon.x(left - _expandBtnSize).y(top + height / 2)
-        })
+        let {
+            translateX,
+            translateY
+        } = btn.transform()
+        let x = (node.dir === 'left' ? 0 - _expandBtnSize : width) - translateX
+        let y = height / 2 - translateY
+        btn.translate(x, y)
     }
 }
 
