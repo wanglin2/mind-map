@@ -179,7 +179,11 @@ class LogicalStructure extends Base {
             width,
             height
         } = node
-        btn.translate(width, height / 2)
+        let {
+            translateX,
+            translateY
+        } = btn.transform()
+        btn.translate(width - translateX, height / 2 - translateY)
     }
 }
 

@@ -10,6 +10,9 @@ import BatchExecution from './src/BatchExecution'
 import Export from './src/Export'
 import Select from './src/Select'
 import {
+    layoutValueList
+} from './src/utils/constant'
+import {
     SVG
 } from '@svgdotjs/svg.js'
 
@@ -32,7 +35,11 @@ const defaultOpt = {
     // 节点里图片和文字的间距
     imgTextMargin: 5,
     // 节点里各种文字信息的间距，如图标和文字的间距
-    textContentMargin: 2
+    textContentMargin: 2,
+    // 多选节点时鼠标移动到边缘时的画布移动偏移量
+    selectTranslateStep: 3,
+    // 多选节点时鼠标移动距边缘多少距离时开始偏移
+    selectTranslateLimit: 20
 }
 
 /** 
@@ -123,7 +130,7 @@ class MindMap {
      */
     handleOpt(opt) {
         // 检查布局配置
-        if (!['logicalStructure', 'mindMap', 'catalogOrganization', 'organizationStructure'].includes(opt.layout)) {
+        if (!layoutValueList.includes(opt.layout)) {
             opt.layout = 'logicalStructure'
         }
         // 检查主题配置
@@ -249,6 +256,32 @@ class MindMap {
     }
 
     /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-07-13 16:17:06 
+     * @Desc: 获取当前布局结构 
+     */
+    getLayout() {
+        return this.opt.layout
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-07-13 16:17:33 
+     * @Desc: 设置布局结构 
+     */
+    setLayout(layout) {
+        // 检查布局配置
+        if (!layoutValueList.includes(layout)) {
+            layout = 'logicalStructure'
+        }
+        this.opt.layout = layout
+        this.renderer.setLayout()
+        this.render()
+    }
+
+    /** 
      * @Author: 王林 
      * @Date: 2021-05-04 13:01:00 
      * @Desc: 执行命令 
@@ -262,7 +295,7 @@ class MindMap {
      * @Date: 2021-07-01 22:06:38 
      * @Desc: 导出 
      */
-    async export(...args) {
+    async export (...args) {
         let result = await this.doExport.export(...args)
         return result
     }
