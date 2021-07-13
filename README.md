@@ -6,11 +6,11 @@
 
 1.simple-mind-map
 
-思维导图工具包。
+思维导图工具库。
 
 2.web
 
-使用`simple-mind-map`工具包搭建的在线思维导图。
+使用`simple-mind-map`工具库，基于vue2.x、ElementUI搭建的在线思维导图。
 
 ## 开发
 
