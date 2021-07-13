@@ -44,8 +44,9 @@ class Select {
             if (!this.isMousedown) {
                 return
             }
-            this.mouseMoveX = e.clientX
-            this.mouseMoveY = e.clientY
+            let { x, y } = this.toPos(e.clientX, e.clientY)
+            this.mouseMoveX = x
+            this.mouseMoveY = y
             this.rect.plot([
                 [this.mouseDownX, this.mouseDownY],
                 [this.mouseMoveX, this.mouseDownY],
@@ -53,6 +54,7 @@ class Select {
                 [this.mouseDownX, this.mouseMoveY]
             ])
             this.checkInNodes()
+            this.move(x, y)
         })
         this.mindMap.on('mouseup', (e) => {
             if (!this.isMousedown) {
@@ -63,6 +65,21 @@ class Select {
             if (this.rect) this.rect.remove()
             this.rect = null
         })
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-13 07:55:49 
+     * @Desc: 鼠标移动到边缘后移动画布 
+     */
+    move (x, y) {
+        if (x >= this.mindMap.elRect.right - 20) {
+            console.log('小于')
+        }
+        if (y >= this.mindMap.elRect.bottom - 20) {
+            console.log('小于')
+            this.mindMap.view.translateY(-3)
+        }
     }
 
     /** 
@@ -114,11 +131,17 @@ class Select {
                 bottom <= maxy
             ) {
                 this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
+                    if (node.nodeData.data.isActive) {
+                        return ;
+                    }
                     this.mindMap.execCommand('SET_NODE_ACTIVE', node, true)
                     this.mindMap.renderer.addActiveNode(node)
                 })
             } else if (node.nodeData.data.isActive) {
                 this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
+                    if (!node.nodeData.data.isActive) {
+                        return ;
+                    }
                     this.mindMap.execCommand('SET_NODE_ACTIVE', node, false)
                     this.mindMap.renderer.removeActiveNode(node)
                 })
