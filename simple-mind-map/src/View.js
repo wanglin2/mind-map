@@ -60,6 +60,15 @@ class View {
         })
     }
 
+    translateX() {
+
+    }
+
+    translateY(step) {
+        this.y += step
+        this.transform()
+    }
+
     /** 
      * @Author: 王林 
      * @Date: 2021-07-04 17:13:14 
