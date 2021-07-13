@@ -34,3 +34,4 @@ npm run serve
 cd web
 npm run build
 ```
+然后把index.html移到根目录
