@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-    publicPath: 'mind-map/dist',
+    publicPath: './dist',
     outputDir: '../dist',
     lintOnSave: false,
     productionSourceMap: false,
