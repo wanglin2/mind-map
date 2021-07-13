@@ -48,12 +48,6 @@ class MindMap extends Base {
     computedBaseValue() {
         walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex, index) => {
             let newNode = this.createNode(cur, parent, isRoot, layerIndex)
-            // 更新时展开收缩按钮位置可能会变化，需要更新
-            if (newNode.updateHooks.length <= 0) {
-                newNode.updateHooks.push((node) => {
-                    node.updateExpandBtnPos()
-                })
-            }
             // 根节点定位在画布中心位置
             if (isRoot) {
                 newNode.left = (this.mindMap.width - newNode.width) / 2
@@ -195,10 +189,10 @@ class MindMap extends Base {
             top,
             width,
             height,
-            _expandBtnSize
+            expandBtnSize
         } = node
         node.children.forEach((item, index) => {
-            let x1 = node.layerIndex === 0 ? left + width / 2 : item.dir === 'left' ? left - _expandBtnSize : left + width + 20
+            let x1 = node.layerIndex === 0 ? left + width / 2 : item.dir === 'left' ? left - expandBtnSize : left + width + 20
             let y1 = node.layerIndex === 0 ? top + height / 2 : top + height / 2
             let x2 = item.dir === 'left' ? item.left + item.width : item.left
             let y2 = item.top + item.height / 2
@@ -221,13 +215,13 @@ class MindMap extends Base {
         let {
             width,
             height,
-            _expandBtnSize
+            expandBtnSize
         } = node
         let {
             translateX,
             translateY
         } = btn.transform()
-        let x = (node.dir === 'left' ? 0 - _expandBtnSize : width) - translateX
+        let x = (node.dir === 'left' ? 0 - expandBtnSize : width) - translateX
         let y = height / 2 - translateY
         btn.translate(x, y)
     }

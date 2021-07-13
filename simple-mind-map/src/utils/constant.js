@@ -27,6 +27,36 @@ export const tagColorList = [
 ]
 
 /** 
+ * javascript comment 
+ * @Author: 王林25 
+ * @Date: 2021-07-13 15:56:28 
+ * @Desc: 布局结构列表 
+ */
+export const layoutList = [
+    {
+        name: '逻辑结构图',
+        value: 'logicalStructure',
+        img: require('../assets/logicalStructure.jpg')
+    },
+    {
+        name: '思维导图',
+        value: 'mindMap',
+        img: require('../assets/mindMap.jpg')
+    },
+    {
+        name: '组织结构图',
+        value: 'organizationStructure',
+        img: require('../assets/organizationStructure.jpg')
+    },
+    {
+        name: '目录组织图',
+        value: 'catalogOrganization',
+        img: require('../assets/catalogOrganization.jpg')
+    }
+]
+export const layoutValueList = ['logicalStructure', 'mindMap', 'catalogOrganization', 'organizationStructure']
+
+/** 
  * @Author: 王林 
  * @Date: 2021-06-24 22:58:42 
  * @Desc: 主题列表 
@@ -51,6 +81,36 @@ export const themeList = [
         name: '粉红葡萄',
         value: 'pinkGrape',
         img: require('../assets/pinkGrape.jpg')
+    },
+    {
+        name: '薄荷',
+        value: 'mint',
+        img: require('../assets/mint.jpg')
+    },
+    {
+        name: '金色vip',
+        value: 'gold',
+        img: require('../assets/gold.jpg')
+    },
+    {
+        name: '活力橙',
+        value: 'vitalityOrange',
+        img: require('../assets/vitalityOrange.jpg')
+    },
+    {
+        name: '绿叶',
+        value: 'greenLeaf',
+        img: require('../assets/greenLeaf.jpg')
+    },
+    {
+        name: '暗色2',
+        value: 'dark2',
+        img: require('../assets/dark2.jpg')
+    },
+    {
+        name: '天清绿',
+        value: 'skyGreen',
+        img: require('../assets/skyGreen.jpg')
     },
     {
         name: '脑图经典2',

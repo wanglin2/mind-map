@@ -44,7 +44,7 @@ class Render {
         // 根节点
         this.root = null
         // 布局
-        this.layout = new (layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts.logicalStructure)(this)
+        this.setLayout()
         // 绑定事件
         this.bindEvent()
         // 注册命令
@@ -53,6 +53,16 @@ class Render {
         this.registerShortcutKeys()
         // 文本编辑框
         this.textEdit = new TextEdit(this)
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-07-13 16:20:07 
+     * @Desc: 设置布局结构 
+     */
+    setLayout() {
+        this.layout = new (layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts.logicalStructure)(this)
     }
 
     /** 
@@ -371,9 +381,7 @@ class Render {
         this.setNodeData(node, {
             isActive: active
         })
-        let s = Date.now()
         node.renderNode()
-        console.log(Date.now() - s)
     }
 
     /** 

@@ -73,12 +73,27 @@ class Select {
      * @Desc: 鼠标移动到边缘后移动画布 
      */
     move (x, y) {
-        if (x >= this.mindMap.elRect.right - 20) {
-            console.log('小于')
+        let step = this.mindMap.opt.selectTranslateStep
+        let limit = this.mindMap.opt.selectTranslateLimit
+        // 左边缘
+        if (x <= this.mindMap.elRect.left + limit) {
+            this.mouseDownX += step
+            this.mindMap.view.translateX(step)
         }
-        if (y >= this.mindMap.elRect.bottom - 20) {
-            console.log('小于')
-            this.mindMap.view.translateY(-3)
+        // 右边缘
+        if (x >= this.mindMap.elRect.right - limit) {
+            this.mouseDownX -= step
+            this.mindMap.view.translateX(-step)
+        }
+        // 上边缘
+        if (y <= this.mindMap.elRect.top + limit) {
+            this.mouseDownY += step
+            this.mindMap.view.translateY(step)
+        }
+        // 下边缘
+        if (y >= this.mindMap.elRect.bottom - limit) {
+            this.mouseDownY -= step
+            this.mindMap.view.translateY(-step)
         }
     }
 

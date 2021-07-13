@@ -78,15 +78,13 @@ class Node {
             textContentHeight: 0
         }
         // 各种文字信息的间距
-        this._textContentItemMargin = this.mindMap.opt.textContentMargin
+        this.textContentItemMargin = this.mindMap.opt.textContentMargin
         // 图片和文字节点的间距
-        this._blockContentMargin = this.mindMap.opt.imgTextMargin
+        this.blockContentMargin = this.mindMap.opt.imgTextMargin
         // 展开收缩按钮尺寸
-        this._expandBtnSize = this.mindMap.opt.expandBtnSize
+        this.expandBtnSize = this.mindMap.opt.expandBtnSize
         // 初始渲染
-        this._initRender = true
-        // 更新的时候的钩子
-        this.updateHooks = []
+        this.initRender = true
         // 初始化
         this.createNodeData()
         this.getSize()
@@ -241,7 +239,7 @@ class Node {
         if (this._iconData.length > 0) {
             textContentWidth += this._iconData.reduce((sum, cur) => {
                 textContentHeight = Math.max(textContentHeight, cur.height)
-                return sum += cur.width + this._textContentItemMargin
+                return sum += cur.width + this.textContentItemMargin
             }, 0)
         }
         // 文字
@@ -258,7 +256,7 @@ class Node {
         if (this._tagData.length > 0) {
             textContentWidth += this._tagData.reduce((sum, cur) => {
                 textContentHeight = Math.max(textContentHeight, cur.height)
-                return sum += cur.width + this._textContentItemMargin
+                return sum += cur.width + this.textContentItemMargin
             }, 0)
         }
         // 备注
@@ -270,7 +268,7 @@ class Node {
         this._rectInfo.textContentWidth = textContentWidth
         this._rectInfo.textContentHeight = textContentHeight
         // 间距
-        let margin = imgContentHeight > 0 && textContentHeight > 0 ? this._blockContentMargin : 0
+        let margin = imgContentHeight > 0 && textContentHeight > 0 ? this.blockContentMargin : 0
         let { paddingX, paddingY } = this.getPaddingVale()
         return {
             width: Math.max(imgContentWidth, textContentWidth) + paddingX * 2,
@@ -481,7 +479,7 @@ class Node {
         let {
             width,
             height,
-            _textContentItemMargin
+            textContentItemMargin
         } = this
         let { paddingY } = this.getPaddingVale()
         // 创建组
@@ -507,7 +505,7 @@ class Node {
             this._iconData.forEach((item) => {
                 item.node.x(textContentOffsetX + iconLeft).y((this._rectInfo.textContentHeight - item.height) / 2)
                 iconNested.add(item.node)
-                iconLeft += item.width + _textContentItemMargin
+                iconLeft += item.width + textContentItemMargin
             })
             textContentNested.add(iconNested)
             textContentOffsetX += iconLeft
@@ -516,13 +514,13 @@ class Node {
         if (this._textData) {
             this._textData.node.x(textContentOffsetX).y(0)
             textContentNested.add(this._textData.node)
-            textContentOffsetX += this._textData.width + _textContentItemMargin
+            textContentOffsetX += this._textData.width + textContentItemMargin
         }
         // 超链接
         if (this._hyperlinkData) {
             this._hyperlinkData.node.x(textContentOffsetX).y((this._rectInfo.textContentHeight - this._hyperlinkData.height) / 2)
             textContentNested.add(this._hyperlinkData.node)
-            textContentOffsetX += this._hyperlinkData.width + _textContentItemMargin
+            textContentOffsetX += this._hyperlinkData.width + textContentItemMargin
         }
         // 标签
         let tagNested = new G()
@@ -531,7 +529,7 @@ class Node {
             this._tagData.forEach((item) => {
                 item.node.x(textContentOffsetX + tagLeft).y((this._rectInfo.textContentHeight - item.height) / 2)
                 tagNested.add(item.node)
-                tagLeft += item.width + _textContentItemMargin
+                tagLeft += item.width + textContentItemMargin
             })
             textContentNested.add(tagNested)
             textContentOffsetX += tagLeft
@@ -545,7 +543,7 @@ class Node {
         // 文字内容整体
         textContentNested.translate(
             width / 2 - textContentNested.bbox().width / 2,
-            imgHeight + paddingY + (imgHeight > 0 && this._rectInfo.textContentHeight > 0 ? this._blockContentMargin : 0)
+            imgHeight + paddingY + (imgHeight > 0 && this._rectInfo.textContentHeight > 0 ? this.blockContentMargin : 0)
         )
         this.group.add(textContentNested)
         // 单击事件，选中节点
@@ -606,11 +604,8 @@ class Node {
             this.removeExpandBtn()
         } else if (!this._expandBtn && this.nodeData.children.length > 0) {// 需要添加展开收缩按钮
             this.renderExpandBtn()
-        }
-        if (!layout) {
-            this.updateHooks.forEach((hook) => {
-                hook(this)
-            })
+        } else {
+            this.updateExpandBtnPos()
         }
         let t = this.group.transform()
         if (!layout) {
@@ -630,8 +625,8 @@ class Node {
         // 连线
         this.renderLine()
         // 节点
-        if (this._initRender) {
-            this._initRender = false
+        if (this.initRender) {
+            this.initRender = false
             this.renderNode()
         } else {
             this.update()
@@ -652,7 +647,7 @@ class Node {
      * @Desc: 递归删除 
      */
     remove() {
-        this._initRender = true
+        this.initRender = true
         this.removeAllEvent()
         this.removeAllNode()
         this.removeLine()
@@ -723,10 +718,10 @@ class Node {
         } else {
             iconSvg = btnsSvg.close
         }
-        let node = SVG(iconSvg).size(this._expandBtnSize, this._expandBtnSize)
-        let fillNode = new Circle().size(this._expandBtnSize)
-        node.x(0).y(-this._expandBtnSize / 2)
-        fillNode.x(0).y(-this._expandBtnSize / 2)
+        let node = SVG(iconSvg).size(this.expandBtnSize, this.expandBtnSize)
+        let fillNode = new Circle().size(this.expandBtnSize)
+        node.x(0).y(-this.expandBtnSize / 2)
+        fillNode.x(0).y(-this.expandBtnSize / 2)
         this.style.iconBtn(node, fillNode)
         this._expandBtn.add(fillNode).add(node)
     }
@@ -741,7 +736,6 @@ class Node {
         if (!this._expandBtn) {
             return
         }
-        console.log('更新')
         this.renderer.layout.renderExpandBtn(this, this._expandBtn)
     }
 
@@ -775,7 +769,7 @@ class Node {
             this.mindMap.emit('expand_btn_click', this)
         })
         this.group.add(this._expandBtn)
-        this.renderer.layout.renderExpandBtn(this, this._expandBtn)
+        this.updateExpandBtnPos()
     }
 
     /** 

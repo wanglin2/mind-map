@@ -60,10 +60,23 @@ class View {
         })
     }
 
-    translateX() {
-
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-07-13 15:49:06 
+     * @Desc: 平移x方向 
+     */
+    translateX(step) {
+        this.x += step
+        this.transform()
     }
 
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-07-13 15:48:52 
+     * @Desc: 平移y方向 
+     */
     translateY(step) {
         this.y += step
         this.transform()

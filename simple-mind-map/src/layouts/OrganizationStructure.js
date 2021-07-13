@@ -154,7 +154,7 @@ class OrganizationStructure extends Base {
             top,
             width,
             height,
-            _expandBtnSize,
+            expandBtnSize,
             isRoot
         } = node
         let x1 = left + width / 2
@@ -178,8 +178,8 @@ class OrganizationStructure extends Base {
         // 父节点的竖线
         let line1 = this.draw.path()
         node.style.line(line1)
-        _expandBtnSize = len > 0 && !isRoot ? _expandBtnSize : 0
-        line1.plot(`M ${x1},${y1 + _expandBtnSize} L ${x1},${y1 + s1}`)
+        expandBtnSize = len > 0 && !isRoot ? expandBtnSize : 0
+        line1.plot(`M ${x1},${y1 + expandBtnSize} L ${x1},${y1 + s1}`)
         node._lines.push(line1)
         // 水平线
         if (len > 1) {
@@ -199,9 +199,13 @@ class OrganizationStructure extends Base {
         let {
             width,
             height,
-            _expandBtnSize
+            expandBtnSize
         } = node
-        btn.translate(width / 2 - _expandBtnSize / 2, height + _expandBtnSize / 2)
+        let {
+            translateX,
+            translateY
+        } = btn.transform()
+        btn.translate(width / 2 - expandBtnSize / 2 - translateX, height + expandBtnSize / 2 - translateY)
     }
 }
 

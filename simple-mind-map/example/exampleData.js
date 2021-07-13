@@ -793,8 +793,8 @@ export default {
             // 自定义配置...
         }
     },
+    "layout": "logicalStructure",
     // "layout": "mindMap",
-    // "layout": "logicalStructure"
     // "layout": "catalogOrganization"
-    "layout": "organizationStructure"
+    // "layout": "organizationStructure"
 }
