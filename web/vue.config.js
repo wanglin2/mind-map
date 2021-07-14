@@ -1,7 +1,8 @@
 const path = require('path');
+const isDev = process.env.NODE_ENV === 'development'
 
 module.exports = {
-    publicPath: './dist',
+    publicPath: isDev ? '' : './dist',
     outputDir: '../dist',
     lintOnSave: false,
     productionSourceMap: false,
