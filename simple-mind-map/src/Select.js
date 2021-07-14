@@ -47,6 +47,9 @@ class Select {
             let { x, y } = this.toPos(e.clientX, e.clientY)
             this.mouseMoveX = x
             this.mouseMoveY = y
+            if (Math.abs(x - this.mouseDownX) <= 10 && Math.abs(y - this.mouseDownY) <= 10) {
+                return
+            }
             this.rect.plot([
                 [this.mouseDownX, this.mouseDownY],
                 [this.mouseMoveX, this.mouseDownY],
