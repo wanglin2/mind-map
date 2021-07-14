@@ -213,7 +213,7 @@ export default {
       background-color: #fff;
       padding: 10px 20px;
       border-radius: 6px;
-      box-shadow: 0 2px 16px 0 rgb(0, 0, 0, 0.06);
+      box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
       border: 1px solid rgba(0, 0, 0, 0.06);
       margin-right: 20px;
 
