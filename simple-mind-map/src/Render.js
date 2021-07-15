@@ -62,7 +62,7 @@ class Render {
      * @Desc: 设置布局结构 
      */
     setLayout() {
-        this.layout = new (layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts.logicalStructure)(this)
+        this.layout = new(layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts.logicalStructure)(this)
     }
 
     /** 
@@ -108,6 +108,9 @@ class Render {
         // 删除节点
         this.removeNode = this.removeNode.bind(this)
         this.mindMap.command.add('REMOVE_NODE', this.removeNode)
+        // 复制节点
+        this.copyNode = this.copyNode.bind(this)
+        this.mindMap.command.add('COPY_NODE', this.copyNode)
         // 修改节点样式
         this.setNodeStyle = this.setNodeStyle.bind(this)
         this.mindMap.command.add('SET_NODE_STYLE', this.setNodeStyle)
@@ -419,6 +422,20 @@ class Render {
     }
 
     /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-07-15 09:53:23 
+     * @Desc: 复制节点 
+     */
+    copyNode() {
+        if (this.activeNodeList.length <= 0) {
+            return;
+        }
+        let copyData = []
+        
+    }
+
+    /** 
      * @Author: 王林 
      * @Date: 2021-07-08 21:54:30 
      * @Desc: 设置节点样式 
@@ -461,13 +478,13 @@ class Render {
         this.setNodeData(node, {
             expand
         })
-        if (expand) {// 展开
+        if (expand) { // 展开
             node.children.forEach((item) => {
                 item.render()
             })
             node.renderLine()
             node.updateExpandBtnNode()
-        } else {// 收缩
+        } else { // 收缩
             node.children.forEach((item) => {
                 item.remove()
             })
@@ -502,7 +519,12 @@ class Render {
      * @Date: 2021-07-10 08:37:40 
      * @Desc: 设置节点图片 
      */
-    setNodeImage(node, { url, title, width, height }) {
+    setNodeImage(node, {
+        url,
+        title,
+        width,
+        height
+    }) {
         this.setNodeDataRender(node, {
             image: url,
             imageTitle: title || '',
