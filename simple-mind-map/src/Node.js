@@ -551,7 +551,8 @@ class Node {
             this.active(e)
         })
         // 双击事件
-        this.group.on('dblclick', () => {
+        this.group.on('dblclick', (e) => {
+            e.stopPropagation()
             this.mindMap.emit('node_dblclick', this)
         })
         // 右键菜单事件
