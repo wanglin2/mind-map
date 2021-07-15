@@ -99,6 +99,12 @@ class Render {
         // 插入子节点
         this.insertChildNode = this.insertChildNode.bind(this)
         this.mindMap.command.add('INSERT_CHILD_NODE', this.insertChildNode)
+        // 上移节点
+        this.upNode = this.upNode.bind(this)
+        this.mindMap.command.add('UP_NODE', this.upNode)
+        // 下移节点
+        this.downNode = this.downNode.bind(this)
+        this.mindMap.command.add('DOWN_NODE', this.downNode)
         // 删除节点
         this.removeNode = this.removeNode.bind(this)
         this.mindMap.command.add('REMOVE_NODE', this.removeNode)
@@ -316,6 +322,68 @@ class Render {
                 })
             }
         })
+        this.mindMap.render()
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-14 23:34:14 
+     * @Desc: 上移节点，多个节点只会操作第一个节点
+     */
+    upNode() {
+        if (this.activeNodeList.length <= 0) {
+            return
+        }
+        let node = this.activeNodeList[0]
+        if (node.isRoot) {
+            return
+        }
+        let parent = node.parent
+        let childList = parent.children
+        let index = childList.findIndex((item) => {
+            return item === node;
+        })
+        if (index === -1 || index === 0) {
+            return
+        }
+        let insertIndex = index - 1
+        // 节点实例
+        childList.splice(index, 1)
+        childList.splice(insertIndex, 0, node)
+        // 节点数据
+        parent.nodeData.children.splice(index, 1)
+        parent.nodeData.children.splice(insertIndex, 0, node.nodeData)
+        this.mindMap.render()
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-14 23:34:18 
+     * @Desc: 下移节点，多个节点只会操作第一个节点 
+     */
+    downNode() {
+        if (this.activeNodeList.length <= 0) {
+            return
+        }
+        let node = this.activeNodeList[0]
+        if (node.isRoot) {
+            return
+        }
+        let parent = node.parent
+        let childList = parent.children
+        let index = childList.findIndex((item) => {
+            return item === node;
+        })
+        if (index === -1 || index === childList.length - 1) {
+            return
+        }
+        let insertIndex = index + 1
+        // 节点实例
+        childList.splice(index, 1)
+        childList.splice(insertIndex, 0, node)
+        // 节点数据
+        parent.nodeData.children.splice(index, 1)
+        parent.nodeData.children.splice(insertIndex, 0, node.nodeData)
         this.mindMap.render()
     }
 
