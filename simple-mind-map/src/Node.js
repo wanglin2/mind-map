@@ -560,6 +560,9 @@ class Node {
         this.group.on('contextmenu', (e) => {
             e.stopPropagation()
             e.preventDefault()
+            if (this.nodeData.data.isActive) {
+                this.renderer.clearActive()
+            }
             this.active(e)
             this.mindMap.emit('node_contextmenu', e, this)
         })
