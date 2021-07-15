@@ -9,6 +9,7 @@
     <Theme :mindMap="mindMap"></Theme>
     <Structure :mindMap="mindMap"></Structure>
     <ShortcutKey></ShortcutKey>
+    <Contextmenu :mindMap="mindMap"></Contextmenu>
   </div>
 </template>
 
@@ -23,6 +24,7 @@ import Structure from "./Structure";
 import Count from "./Count";
 import NavigatorToolbar from "./NavigatorToolbar";
 import ShortcutKey from "./ShortcutKey";
+import Contextmenu from "./Contextmenu";
 
 /**
  * @Author: 王林
@@ -40,6 +42,7 @@ export default {
     Count,
     NavigatorToolbar,
     ShortcutKey,
+    Contextmenu,
   },
   data() {
     return {
@@ -78,14 +81,19 @@ export default {
         theme: theme.template,
         themeConfig: theme.config,
       });
-      this.mindMap.on("node_active", (...args) => {
-        this.$bus.$emit("node_active", ...args);
-      });
-      this.mindMap.on("data_change", (...args) => {
-        this.$bus.$emit("data_change", ...args);
-      });
-      this.mindMap.on("back_forward", (...args) => {
-        this.$bus.$emit("back_forward", ...args);
+      // 转发事件
+      [
+        "node_active",
+        "data_change",
+        "back_forward",
+        "node_contextmenu",
+        "node_click",
+        "draw_click",
+        "expand_btn_click"
+      ].forEach((event) => {
+        this.mindMap.on(event, (...args) => {
+          this.$bus.$emit(event, ...args);
+        });
       });
     },
 

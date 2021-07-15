@@ -548,6 +548,7 @@ class Node {
         this.group.add(textContentNested)
         // 单击事件，选中节点
         this.group.on('click', (e) => {
+            this.mindMap.emit('node_click', this)
             this.active(e)
         })
         // 双击事件
@@ -559,6 +560,8 @@ class Node {
         this.group.on('contextmenu', (e) => {
             e.stopPropagation()
             e.preventDefault()
+            this.active(e)
+            this.mindMap.emit('node_contextmenu', e, this)
         })
     }
 
