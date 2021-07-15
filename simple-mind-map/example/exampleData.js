@@ -783,18 +783,85 @@ const data3 = {
     }
 }
 
+const data4 = {
+    "root": {
+        "data": {
+            "text": "根节点"
+        },
+        "children": [
+            {
+                "data": {
+                    "text": "二级节点1"
+                },
+                "children": [
+                    {
+                        "data": {
+                            "text": "子节点1-1"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "text": "子节点1-1-1"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "text": "子节点1-1-2"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "text": "子节点1-2"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "text": "子节点1-2-1"
+                                },
+                                "children": []
+                            },
+                            {
+                                "data": {
+                                    "text": "子节点1-2-2"
+                                },
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "text": "子节点1-3"
+                        },
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "data": {
+                    "text": "二级节点2"
+                }
+            }
+        ]
+    }
+}
+
 export default {
     // ...data1,
     ...data2,
     // ...data3,
+    // ...data4,
     "theme": {
         "template": "default",
         "config": {
             // 自定义配置...
         }
     },
-    "layout": "logicalStructure",
+    // "layout": "logicalStructure",
     // "layout": "mindMap",
     // "layout": "catalogOrganization"
-    // "layout": "organizationStructure"
+    "layout": "organizationStructure"
 }
