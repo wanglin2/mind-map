@@ -165,7 +165,7 @@ class OrganizationStructure extends Base {
         let maxx = 0
         let len = node.children.length
         node.children.forEach((item, index) => {
-            let x2 = item.left +item.width / 2
+            let x2 = item.left + item.width / 2
             let y2 = item.top
             if (index === 0) {
                 minx = x2
