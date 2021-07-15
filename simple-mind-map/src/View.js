@@ -39,6 +39,9 @@ class View {
         this.mindMap.keyCommand.addShortcut('Control+Enter', () => {
             this.reset()
         })
+        this.mindMap.svg.on('dblclick', () => {
+            this.reset()
+        })
         // 拖动视图
         this.mindMap.event.on('mousedown', () => {
             this.sx = this.x
