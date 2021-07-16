@@ -165,7 +165,7 @@ class Node {
             this._expandBtn.off(['mouseover', 'mouseout', 'click'])
         }
         if (this.group) {
-            this.group.off(['click', 'dblclick', 'contextmenu'])
+            this.group.off(['click', 'dblclick', 'contextmenu', 'mousedown', 'mouseup'])
         }
     }
 
@@ -550,6 +550,14 @@ class Node {
         this.group.on('click', (e) => {
             this.mindMap.emit('node_click', this)
             this.active(e)
+        })
+        this.group.on('mousedown', (e) => {
+            e.stopPropagation()
+            this.mindMap.emit('node_mousedown', this)
+        })
+        this.group.on('mouseup', (e) => {
+            e.stopPropagation()
+            this.mindMap.emit('node_mouseup', this)
         })
         // 双击事件
         this.group.on('dblclick', (e) => {

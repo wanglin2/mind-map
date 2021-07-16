@@ -138,6 +138,23 @@ export const copyRenderTree = (tree, root) => {
 
 /** 
  * @Author: 王林 
+ * @Date: 2021-05-04 14:40:11 
+ * @Desc: 复制节点树数据 
+ */
+export const copyNodeTree = (tree, root) => {
+    tree.data = simpleDeepClone(root.nodeData.data)
+    tree.data.isActive = false
+    tree.children = []
+    if (root.children && root.children.length > 0) {
+        root.children.forEach((item, index) => {
+            tree.children[index] = copyNodeTree({}, item)
+        })
+    }
+    return tree;
+}
+
+/** 
+ * @Author: 王林 
  * @Date: 2021-07-04 09:08:43 
  * @Desc: 图片转成dataURL 
  */

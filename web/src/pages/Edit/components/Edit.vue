@@ -89,7 +89,9 @@ export default {
         "node_contextmenu",
         "node_click",
         "draw_click",
-        "expand_btn_click"
+        "expand_btn_click",
+        "svg_mousedown",
+        "mouseup"
       ].forEach((event) => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args);
