@@ -47,6 +47,7 @@ class Event extends EventEmitter {
         this.onMouseup = this.onMouseup.bind(this)
         this.onMousewheel = this.onMousewheel.bind(this)
         this.onContextmenu = this.onContextmenu.bind(this)
+        this.onSvgMousedown = this.onSvgMousedown.bind(this)
     }
 
     /** 
@@ -58,6 +59,7 @@ class Event extends EventEmitter {
     bind() {
         this.mindMap.svg.on('click', this.onDrawClick)
         this.mindMap.el.addEventListener('mousedown', this.onMousedown)
+        this.mindMap.svg.on('mousedown', this.onSvgMousedown)
         window.addEventListener('mousemove', this.onMousemove)
         window.addEventListener('mouseup', this.onMouseup)
         // 兼容火狐浏览器
@@ -91,6 +93,15 @@ class Event extends EventEmitter {
      */
     onDrawClick(e) {
         this.emit('draw_click', e)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-16 13:37:30 
+     * @Desc:  svg画布的鼠标按下事件
+     */
+    onSvgMousedown(e) {
+        this.emit('svg_mousedown', e)
     }
 
     /** 
