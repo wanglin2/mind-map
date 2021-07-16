@@ -88,6 +88,16 @@ class Base {
     }
 
     /** 
+     * @Author: 王林 
+     * @Date: 2021-07-16 13:48:43 
+     * @Desc: 定位节点到画布中间 
+     */
+    setNodeCenter(node) {
+        node.left = (this.mindMap.width - node.width) / 2
+        node.top = (this.mindMap.height - node.height) / 2
+    }
+
+    /** 
      * javascript comment 
      * @Author: 王林25 
      * @Date: 2021-04-07 11:25:52 
