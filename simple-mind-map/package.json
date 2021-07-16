@@ -1,8 +1,8 @@
 {
   "name": "simple-mind-map",
   "version": "0.1.0",
-  "private": true,
   "scripts": {},
+  "main": "index.js",
   "dependencies": {
     "@svgdotjs/svg.js": "^3.0.16",
     "canvg": "^3.0.7",

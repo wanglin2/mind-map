@@ -548,21 +548,21 @@ class Node {
         this.group.add(textContentNested)
         // 单击事件，选中节点
         this.group.on('click', (e) => {
-            this.mindMap.emit('node_click', this)
+            this.mindMap.emit('node_click', this, e)
             this.active(e)
         })
         this.group.on('mousedown', (e) => {
             e.stopPropagation()
-            this.mindMap.emit('node_mousedown', this)
+            this.mindMap.emit('node_mousedown', this, e)
         })
         this.group.on('mouseup', (e) => {
             e.stopPropagation()
-            this.mindMap.emit('node_mouseup', this)
+            this.mindMap.emit('node_mouseup', this, e)
         })
         // 双击事件
         this.group.on('dblclick', (e) => {
             e.stopPropagation()
-            this.mindMap.emit('node_dblclick', this)
+            this.mindMap.emit('node_dblclick', this, e)
         })
         // 右键菜单事件
         this.group.on('contextmenu', (e) => {
