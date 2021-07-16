@@ -140,19 +140,6 @@ class View {
         this.transform()
         this.mindMap.emit('scale', this.scale)
     }
-
-    /** 
-     * javascript comment 
-     * @Author: 王林25 
-     * @Date: 2021-04-07 15:43:26 
-     * @Desc: 设置视图 
-     */
-    setViewBox({ x,
-        y,
-        width,
-        height }) {
-        this.opt.draw.viewbox(x, y, width, height)
-    }
 }
 
 export default View
