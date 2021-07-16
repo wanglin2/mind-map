@@ -49,8 +49,7 @@ class CatalogOrganization extends Base {
             let newNode = this.createNode(cur, parent, isRoot, layerIndex)
             // 根节点定位在画布中心位置
             if (isRoot) {
-                newNode.left = (this.mindMap.width - newNode.width) / 2
-                newNode.top = (this.mindMap.height - newNode.height) / 2
+                this.setNodeCenter(newNode)
             } else {
                 // 非根节点
                 if (parent._node.isRoot) {
