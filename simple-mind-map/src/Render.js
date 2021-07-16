@@ -1,9 +1,10 @@
 import merge from 'deepmerge'
 import LogicalStructure from './layouts/LogicalStructure'
 import MindMap from './layouts/MindMap'
-import CatalogOrganization from './layouts/CatalogOrganization';
+import CatalogOrganization from './layouts/CatalogOrganization'
 import OrganizationStructure from './layouts/OrganizationStructure'
 import TextEdit from './TextEdit'
+import { copyNodeTree, simpleDeepClone, walk } from './utils'
 
 // 布局列表
 const layouts = {
@@ -62,7 +63,7 @@ class Render {
      * @Desc: 设置布局结构 
      */
     setLayout() {
-        this.layout = new(layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts.logicalStructure)(this)
+        this.layout = new (layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts.logicalStructure)(this)
     }
 
     /** 
@@ -108,9 +109,12 @@ class Render {
         // 删除节点
         this.removeNode = this.removeNode.bind(this)
         this.mindMap.command.add('REMOVE_NODE', this.removeNode)
-        // 复制节点
-        this.copyNode = this.copyNode.bind(this)
-        this.mindMap.command.add('COPY_NODE', this.copyNode)
+        // 粘贴节点
+        this.pasteNode = this.pasteNode.bind(this)
+        this.mindMap.command.add('PASTE_NODE', this.pasteNode)
+        // 剪切节点
+        this.cutNode = this.cutNode.bind(this)
+        this.mindMap.command.add('CUT_NODE', this.cutNode)
         // 修改节点样式
         this.setNodeStyle = this.setNodeStyle.bind(this)
         this.mindMap.command.add('SET_NODE_STYLE', this.setNodeStyle)
@@ -123,6 +127,12 @@ class Render {
         // 切换节点是否展开
         this.setNodeExpand = this.setNodeExpand.bind(this)
         this.mindMap.command.add('SET_NODE_EXPAND', this.setNodeExpand)
+        // 展开所有节点
+        this.expandAllNode = this.expandAllNode.bind(this)
+        this.mindMap.command.add('EXPAND_ALL', this.expandAllNode)
+        // 收起所有节点
+        this.unexpandAllNode = this.unexpandAllNode.bind(this)
+        this.mindMap.command.add('UNEXPAND_ALL', this.unexpandAllNode)
         // 设置节点数据
         this.setNodeData = this.setNodeData.bind(this)
         this.mindMap.command.add('SET_NODE_DATA', this.setNodeData)
@@ -222,6 +232,9 @@ class Render {
      */
     removeActiveNode(node) {
         let index = this.findActiveNodeIndex(node)
+        if (index === -1) {
+            return
+        }
         this.activeNodeList.splice(index, 1)
     }
 
@@ -232,7 +245,7 @@ class Render {
      */
     findActiveNodeIndex(node) {
         return this.activeNodeList.findIndex((item) => {
-            return item === node;
+            return item === node
         })
     }
 
@@ -281,7 +294,7 @@ class Render {
      */
     insertNode() {
         if (this.activeNodeList.length <= 0) {
-            return;
+            return
         }
         let first = this.activeNodeList[0]
         if (first.isRoot) {
@@ -306,7 +319,7 @@ class Render {
      */
     insertChildNode() {
         if (this.activeNodeList.length <= 0) {
-            return;
+            return
         }
         this.activeNodeList.forEach((node, index) => {
             if (!node.nodeData.children) {
@@ -344,7 +357,7 @@ class Render {
         let parent = node.parent
         let childList = parent.children
         let index = childList.findIndex((item) => {
-            return item === node;
+            return item === node
         })
         if (index === -1 || index === 0) {
             return
@@ -375,7 +388,7 @@ class Render {
         let parent = node.parent
         let childList = parent.children
         let index = childList.findIndex((item) => {
-            return item === node;
+            return item === node
         })
         if (index === -1 || index === childList.length - 1) {
             return
@@ -397,7 +410,7 @@ class Render {
      */
     removeNode() {
         if (this.activeNodeList.length <= 0) {
-            return;
+            return
         }
         for (let i = 0; i < this.activeNodeList.length; i++) {
             let node = this.activeNodeList[i]
@@ -410,10 +423,7 @@ class Render {
                 break
             } else {
                 this.removeActiveNode(node)
-                let index = this.getNodeIndex(node)
-                node.remove()
-                node.parent.children.splice(index, 1)
-                node.parent.nodeData.children.splice(index, 1)
+                this.removeOneNode(node)
                 i--
             }
         }
@@ -422,17 +432,66 @@ class Render {
     }
 
     /** 
+     * @Author: 王林 
+     * @Date: 2021-07-15 22:46:27 
+     * @Desc: 移除某个指定节点 
+     */
+    removeOneNode(node) {
+        let index = this.getNodeIndex(node)
+        node.remove()
+        node.parent.children.splice(index, 1)
+        node.parent.nodeData.children.splice(index, 1)
+    }
+
+    /** 
      * javascript comment 
      * @Author: 王林25 
      * @Date: 2021-07-15 09:53:23 
-     * @Desc: 复制节点 
+     * @Desc: 复制节点，多个节点只会操作第一个节点 
      */
     copyNode() {
         if (this.activeNodeList.length <= 0) {
-            return;
+            return
         }
-        let copyData = []
-        
+        return copyNodeTree({}, this.activeNodeList[0])
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-15 22:36:45 
+     * @Desc: 剪切节点，多个节点只会操作第一个节点
+     */
+    cutNode(callback) {
+        if (this.activeNodeList.length <= 0) {
+            return
+        }
+        let node = this.activeNodeList[0]
+        if (node.isRoot) {
+            return null
+        }
+        let copyData = copyNodeTree({}, node)
+        this.removeActiveNode(node)
+        this.removeOneNode(node)
+        this.mindMap.emit('node_active', null, this.activeNodeList)
+        this.mindMap.render()
+        if (callback && typeof callback === 'function') {
+            callback(copyData)
+        }
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-15 20:09:39 
+     * @Desc:  粘贴节点到节点
+     */
+    pasteNode(data) {
+        if (this.activeNodeList.length <= 0) {
+            return
+        }
+        this.activeNodeList.forEach((item) => {
+            item.nodeData.children.push(simpleDeepClone(data))
+        })
+        this.mindMap.render()
     }
 
     /** 
@@ -492,6 +551,39 @@ class Render {
             node.updateExpandBtnNode()
         }
         this.mindMap.render()
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-15 23:23:37 
+     * @Desc: 展开所有 
+     */
+    expandAllNode() {
+        walk(this.renderTree, null, (node) => {
+            if (!node.data.expand) {
+                node.data.expand = true
+            }
+        }, null, true, 0, 0)
+        this.mindMap.render()
+        this.root.children.forEach((item) => {
+            item.updateExpandBtnNode()
+        })
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-15 23:27:14 
+     * @Desc: 收起所有 
+     */
+    unexpandAllNode() {
+        this.root.children.forEach((item) => {
+            this.setNodeExpand(item, false)
+        })
+        walk(this.renderTree, null, (node, parent, isRoot) => {
+            if (!isRoot) {
+                node.data.expand = false
+            }
+        }, null, true, 0, 0)
     }
 
     /** 
