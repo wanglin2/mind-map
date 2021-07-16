@@ -30,7 +30,7 @@ class Command {
                 fn(...args)
             })
             if (name === 'BACK' || name === 'FORWARD') {
-                return ;
+                return;
             }
             this.addHistory()
         }
@@ -47,6 +47,28 @@ class Command {
         } else[
             this.commands[name] = [fn]
         ]
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-15 23:02:41 
+     * @Desc: 移除命令 
+     */
+    remove(name, fn) {
+        if (!this.commands[name]) {
+            return
+        }
+        if (!fn) {
+            this.commands[name] = []
+            delete this.commands[name]
+        } else {
+            let index = this.commands[name].find((item) => {
+                return item === fn;
+            })
+            if (index !== -1) {
+                this.commands[name].splice(index, 1)
+            }
+        }
     }
 
     /** 
