@@ -120,6 +120,9 @@ class LogicalStructure extends Base {
                 return item === node
             })
             childrenList.forEach((item, _index) => {
+                if (item === node) {
+                    return
+                }
                 let _offset = 0
                 // 上面的节点往上移
                 if (_index < index) {
@@ -151,11 +154,12 @@ class LogicalStructure extends Base {
             left,
             top,
             width,
-            height
+            height,
+            expandBtnSize
         } = node
         node.children.forEach((item, index) => {
-            let x1 = node.layerIndex === 0 ? left + width / 2 : left + width + 20
-            let y1 = node.layerIndex === 0 ? top + height / 2 : top + height / 2
+            let x1 = node.layerIndex === 0 ? left + width / 2 : left + width + expandBtnSize
+            let y1 = top + height / 2
             let x2 = item.left
             let y2 = item.top + item.height / 2
             let path = ''

@@ -50,7 +50,7 @@ npm run build
 npm i simple-mind-map
 ```
 
-#API
+# API
 
 ## 实例化
 
@@ -74,6 +74,7 @@ const mindMap = new MindMap({
 | 字段名称             | 类型    | 默认值           | 描述                                                         | 是否必填 |
 | -------------------- | ------- | ---------------- | ------------------------------------------------------------ | -------- |
 | el                   | Element |                  | 容器元素，必须为DOM元素                                      | 是       |
+| data                 | Object  | {}               | 思维导图数据，可参考：[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js) |          |
 | layout               | String  | logicalStructure | 布局类型，可选列表：logicalStructure（逻辑结构图）、mindMap（思维导图）、catalogOrganization（目录组织图）、organizationStructure（组织结构图） |          |
 | theme                | String  | default          | 主题，可选列表：default（默认）、classic（脑图经典）、minions（小黄人）、pinkGrape（粉红葡萄）、mint（薄荷）、gold（金色vip）、vitalityOrange（活力橙）、greenLeaf（绿叶）、dark2（暗色2）、skyGreen（天清绿）、classic2（脑图经典2）、classic3（脑图经典3）、classicGreen（经典绿）、classicBlue（经典蓝）、blueSky（天空蓝）、brainImpairedPink（脑残粉）、dark（暗色）、earthYellow（泥土黄）、freshGreen（清新绿）、freshRed（清新红）、romanticPurple（浪漫紫） |          |
 | themeConfig          | Object  | {}               | 主题配置，会和所选择的主题进行合并，可用字段可参考：[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js) |          |
@@ -211,7 +212,7 @@ const mindMap = new MindMap({
 | SET_NODE_ICON      | 设置节点图标                                                 | node（要设置的节点）、icons（数组，预定义的图片名称组成的数组，可用图标可在[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js)文件里的`nodeIconList`列表里获取到，图标名称为`type_name`，如`['priority_1']`） |
 | SET_NODE_HYPERLINK | 设置节点超链接                                               | node（要设置的节点）、link（超链接地址）、title（超链接名称，可选） |
 | SET_NODE_NOTE      | 设置节点备注                                                 | node（要设置的节点）、note（备注文字）                       |
-| SET_NODE_TAG       | 设置节点标签                                                 | node（要设置的节点）、tag（字符串数组，内置颜色信息可在[]()） |
+| SET_NODE_TAG       | 设置节点标签                                                 | node（要设置的节点）、tag（字符串数组，内置颜色信息可在[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js)里获取到） |
 
 
 
