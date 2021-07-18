@@ -588,7 +588,7 @@ class Node {
         }
         this.mindMap.emit('before_node_active', this, this.renderer.activeNodeList)
         this.renderer.clearActive()
-        this.mindMap.execCommand('SET_NODE_ACTIVE', this, !this.nodeData.data.isActive)
+        this.mindMap.execCommand('SET_NODE_ACTIVE', this, true)
         this.renderer.addActiveNode(this)
         this.mindMap.emit('node_active', this, this.renderer.activeNodeList)
     }
