@@ -122,7 +122,7 @@ class Node {
 
 思维导图有多种结构，我们先看最基础的【逻辑结构图】如何进行布局计算，其他的几种会在下一篇里进行介绍。
 
-![image-20210717174716810](/Users/linwang/Library/Application Support/typora-user-images/image-20210717174716810.png)
+![image-20210717174716810](./assets/image-20210717174716810.png)
 
 逻辑结构图如上图所示，子节点在父节点的右侧，然后父节点相对于子节点总体来说是垂直居中的。
 
@@ -132,7 +132,7 @@ class Node {
 
 这个思路源于笔者在网上看到的，首先根节点我们把它定位到画布中间的位置，然后遍历子节点，那么子节点的`left`就是根节点的`left `+根节点的`width`+它们之间的间距`marginX`，如下图所示：
 
-![image-20210717202607786](/Users/linwang/Library/Application Support/typora-user-images/image-20210717202607786.png)
+![image-20210717202607786](./assets/image-20210717202607786.png)
 
 然后再遍历每个子节点的子节点（其实就是递归遍历）以同样的方式进行计算`left`，这样一次遍历完成后所有节点的`left`值就计算好了。
 
@@ -172,7 +172,7 @@ firstChildNode.top = (node.top + node.height / 2) - childrenAreaHeight / 2
 
 如图所示：
 
-![image-20210717210355763](/Users/linwang/Library/Application Support/typora-user-images/image-20210717210355763.png)
+![image-20210717210355763](./assets/image-20210717210355763.png)
 
 第一个子节点的`top`确定了，其他节点只要在前一个节点的`top`上累加即可。
 
@@ -211,11 +211,11 @@ walk(this.root, null, (node, parent, isRoot, layerIndex) => {
 
 事情到这里并没有结束，请看下图：
 
-![image-20210717224527681](/Users/linwang/Library/Application Support/typora-user-images/image-20210717224527681.png)
+![image-20210717224527681](./assets/image-20210717224527681.png)
 
 可以看到对于每个节点来说，位置都是正确的，但是，整体来看就不对了，因为发生了重叠，原因很简单，因为【二级节点1】的子节点太多了，子节点占的总高度已经超出了该节点自身的高，因为【二级节点】的定位是依据【二级节点】的总高度来计算的，并没有考虑其子节点，解决方法也很简单，再来一轮遍历，当发现某个节点的子节点所占总高度大于其自身的高度时，就让该节点前后的节点都往外挪一挪，比如上图，假设子节点所占的高度比节点自身的高度多出了`100px`，那我们就让【二级节点2】向下移动`50px`，如果它上面还有节点的话也让它向上移动`50px`，需要注意的是，这个调整的过程需要一直往父节点上冒泡，比如：
 
-![image-20210717230808662](/Users/linwang/Library/Application Support/typora-user-images/image-20210717230808662.png)
+![image-20210717230808662](./assets/image-20210717230808662.png)
 
 【子节点1-2】的子元素总高度明显大于其自身，所以【子节点1-1】需要往上移动，这样显然还不够，假设上面还有【二级节点0】的子节点，那么它们可能也要发生重叠了，而且下方的【子节点2-1-1】和【子节点1-2-3】显然挨的太近了，所以【子节点1-1】自己的兄弟节点调整完后，父节点【二级节点1】的兄弟节点也需要同样进行调整，上面的往上移，下面的往下移，一直到根节点为止：
 
@@ -279,7 +279,7 @@ updateChildren(children, prop, offset) {
 
 到此【逻辑结构图】的整个布局计算就完成了，当然，有一个小小小的问题：
 
-![image-20210718083616076](/Users/linwang/Library/Application Support/typora-user-images/image-20210718083616076.png)
+![image-20210718083616076](./assets/image-20210718083616076.png)
 
 就是严格来说，某个节点可能不再相对于其所有子节点居中了，而是相对于所有子孙节点居中，其实这样问题不大，实在有洁癖的话，解决方法也有，各位可以自行思考一下，这部分完整代码请移步[LogicalStructure.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/layouts/LogicalStructure.js)。
 
@@ -289,11 +289,11 @@ updateChildren(children, prop, offset) {
 
 节点定位好了，接下来就要进行连线，把节点和其所有子节点连接起来，连线风格有很多，可以使用直线，也可以使用曲线，直线的话很简单，因为所有节点的`left`、`top`、`width`、`height`都已经知道了，所以连接线的转折点坐标都可以轻松计算出来：
 
-![image-20210718092817830](/Users/linwang/Library/Application Support/typora-user-images/image-20210718092817830.png)
+![image-20210718092817830](./assets/image-20210718092817830.png)
 
 我们重点看一下曲线连接，如之前的图片所示，根节点的连线和其他节点的线是不一样的，根节点到其子节点的如下所示：
 
-![image-20210718102434530](/Users/linwang/Library/Application Support/typora-user-images/image-20210718102434530.png)
+![image-20210718102434530](./assets/image-20210718102434530.png)
 
 这种简单的曲线可以使用二次贝塞尔曲线，起点坐标为根节点的中间点：
 
@@ -316,15 +316,15 @@ let cx = x1 + (x2 - x1) * 0.2
 let cy = y1 + (y2 - y1) * 0.8）
 ```
 
-![image-20210718110652705](/Users/linwang/Library/Application Support/typora-user-images/image-20210718110652705.png)
+![image-20210718110652705](./assets/image-20210718110652705.png)
 
 再看下级节点的连线：
 
-![image-20210718111334085](/Users/linwang/Library/Application Support/typora-user-images/image-20210718111334085.png)
+![image-20210718111334085](./assets/image-20210718111334085.png)
 
 可以看到有两段弯曲，所以需要使用三次贝塞尔曲线，也是一样，自己选择两个合适的控制点位置，笔者的选择如下图，就是处于起点和终点的中间：
 
-![image-20210718134525691](/Users/linwang/Library/Application Support/typora-user-images/image-20210718134525691.png)
+![image-20210718134525691](./assets/image-20210718134525691.png)
 
 ```js
   let cx1 = x1 + (x2 - x1) / 2
@@ -527,7 +527,7 @@ class Node {
 }
 ```
 
-![image-20210718184835414](/Users/linwang/Library/Application Support/typora-user-images/image-20210718184835414.png)
+![image-20210718184835414](./assets/image-20210718184835414.png)
 
 `SET_NODE_EXPAND`命令会设置节点的展开收起状态，并渲染或删除其所有子孙节点，达到展开或收起的效果，并且还需要重新计算和移动所有节点的位置，遍历树计算位置的相关代码也需要加上这个判断：
 
@@ -570,7 +570,7 @@ walk(this.root, null, (node, parent, isRoot, layerIndex) => {
   }, null, true)
 ```
 
-![image-20210718191124627](/Users/linwang/Library/Application Support/typora-user-images/image-20210718191124627.png)
+![image-20210718191124627](./assets/image-20210718191124627.png)
 
 到这里，一个基本可用的思维导图就完成了。
 
@@ -829,13 +829,13 @@ class Style {
 
 样式编辑就是把所有这些可配置的样式通过可视化的控件来展示与修改，实现上，可以监听节点的激活事件，然后打开样式编辑区域，先回显当前的样式，然后当修改了某个样式就通过相应的命令设置到当前激活节点上：
 
-![image-20210718222150055](/Users/linwang/Library/Application Support/typora-user-images/image-20210718222150055.png)
+![image-20210718222150055](./assets/image-20210718222150055.png)
 
 可以看到可以区分常态与选中态，这部分代码可以参考：[Style.vue](https://github.com/wanglin2/mind-map/blob/main/web/src/pages/Edit/components/Style.vue)。
 
 除了节点样式编辑，对于非节点的样式也是同样的方式进行修改，先获取到当前的主题配置，然后进行回显，修改后通过相应的方法设置：
 
-![image-20210718222612078](/Users/linwang/Library/Application Support/typora-user-images/image-20210718222612078.png)
+![image-20210718222612078](./assets/image-20210718222612078.png)
 
 这部分的代码在[BaseStyle.vue](https://github.com/wanglin2/mind-map/blob/main/web/src/pages/Edit/components/BaseStyle.vue)。
 
