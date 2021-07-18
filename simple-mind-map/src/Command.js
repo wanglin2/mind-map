@@ -44,9 +44,9 @@ class Command {
     add(name, fn) {
         if (this.commands[name]) {
             this.commands[name].push(fn)
-        } else[
+        } else {
             this.commands[name] = [fn]
-        ]
+        }
     }
 
     /** 

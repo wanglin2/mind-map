@@ -131,7 +131,7 @@ class Base {
     cubicBezierPath(x1, y1, x2, y2) {
         let cx1 = x1 + (x2 - x1) / 2
         let cy1 = y1
-        let cx2 = x2 - (x2 - x1) / 2
+        let cx2 = cx1
         let cy2 = y2
         return `M ${x1},${y1} C ${cx1},${cy1} ${cx2},${cy2} ${x2},${y2}`
     }

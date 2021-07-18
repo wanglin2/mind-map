@@ -195,6 +195,9 @@ class Render {
      * @Desc:  渲染
      */
     render() {
+        if (this.reRender) {
+            this.clearActive()
+        }
         this.layout.doLayout((root) => {
             this.root = root
             this.root.render()

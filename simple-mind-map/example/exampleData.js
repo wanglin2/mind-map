@@ -798,20 +798,7 @@ const data4 = {
                         "data": {
                             "text": "子节点1-1"
                         },
-                        "children": [
-                            {
-                                "data": {
-                                    "text": "子节点1-1-1"
-                                },
-                                "children": []
-                            },
-                            {
-                                "data": {
-                                    "text": "子节点1-1-2"
-                                },
-                                "children": []
-                            }
-                        ]
+                        "children": []
                     },
                     {
                         "data": {
@@ -829,21 +816,49 @@ const data4 = {
                                     "text": "子节点1-2-2"
                                 },
                                 "children": []
+                            },
+                            {
+                                "data": {
+                                    "text": "子节点1-2-3"
+                                },
+                                "children": []
                             }
                         ]
-                    },
-                    {
-                        "data": {
-                            "text": "子节点1-3"
-                        },
-                        "children": []
                     }
                 ]
             },
             {
                 "data": {
                     "text": "二级节点2"
-                }
+                },
+                "children": [
+                    {
+                        "data": {
+                            "text": "子节点2-1"
+                        },
+                        "children": [
+                            {
+                                "data": {
+                                    "text": "子节点2-1-1"
+                                },
+                                "children": [
+                                    {
+                                        "data": {
+                                            "text": "子节点2-1-1-1"
+                                        },
+                                        "children": []
+                                    },
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "data": {
+                            "text": "子节点2-2"
+                        },
+                        "children": []
+                    }
+                ]
             }
         ]
     }
@@ -851,9 +866,9 @@ const data4 = {
 
 export default {
     // ...data1,
-    ...data2,
+    // ...data2,
     // ...data3,
-    // ...data4,
+    ...data4,
     "theme": {
         "template": "default",
         "config": {

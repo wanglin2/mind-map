@@ -192,7 +192,7 @@ class MindMap extends Base {
         } = node
         node.children.forEach((item, index) => {
             let x1 = node.layerIndex === 0 ? left + width / 2 : item.dir === 'left' ? left - expandBtnSize : left + width + 20
-            let y1 = node.layerIndex === 0 ? top + height / 2 : top + height / 2
+            let y1 = top + height / 2
             let x2 = item.dir === 'left' ? item.left + item.width : item.left
             let y2 = item.top + item.height / 2
             let path = ''
