@@ -14,23 +14,25 @@
 
 # 技术选型
 
-这种图形类的绘制一般有两种选择：`svg`与`canvas`，因为思维导图主要是节点与线的连接，使用与`html`比较接近的`svg`比较容易操作，`svg`的类库在试用了[svgjs](https://svgjs.dev/docs/3.0/)和[snap](http://snapsvg.io/)后，有些需求在`snap`里没有找到对应的方法，所以笔者最终选择了`svgjs`，为了能跨框架使用，所以思维导图的主体部分作为一个单独的`npm`包来开发及发布，通过`类`的方式来组织代码，示例页面的开发使用的是`vue2.x`全家桶。
+这种图形类的绘制一般有两种选择：`svg`与`canvas`，因为思维导图主要是节点与线的连接，使用与`html`比较接近的`svg`比较容易操作，`svg`的类库在试用了[svgjs](https://svgjs.dev/docs/3.0/)和[snap](http://snapsvg.io/)后，有些需求在`snap`里没有找到对应的方法，所以笔者最终选择了`svgjs`。
+
+为了能跨框架使用，所以思维导图的主体部分作为一个单独的`npm`包来开发及发布，通过`类`的方式来组织代码，示例页面的开发使用的是`vue2.x`全家桶。
 
 
 
 # 整体思路
 
-笔者最初的思路是先写一个渲染器，根据输入的思维导图数据，可以渲染成`svg`节点，并且计算好各个节点的位置，然后定位显示到画布，连上线即可，接下来对思维导图的操作都只需要维护这份数据，数据变化了就清空画布，然后重新渲染，这种数据驱动的思想很简单，在最初的开发中也没有任何问题，一切都很顺利，因为模拟数据就写了四五个节点，然而后来当我把节点数量增加到几十个的时候，发现凉了，太卡了，点击节点激活或者展开收缩节点的时候一秒左右才有反应。
+笔者最初的思路是先写一个渲染器，根据输入的思维导图数据，可以渲染成`svg`节点，并且计算好各个节点的位置，然后定位并显示到画布，连上线即可，接下来对思维导图的操作都只需要维护这份数据，数据变化了就清空画布，然后重新渲染，这种数据驱动的思想很简单，在最初的开发中也没有任何问题，一切都很顺利，因为模拟数据就写了四五个节点，然而后来当我把节点数量增加到几十个的时候，发现凉了，太卡了，点击节点激活或者展开收缩节点的时候一秒左右才有反应，就算只是个`demo`也无法接受。
 
 卡的原因一方面是因为计算节点位置，每种布局结构最少都需要三次遍历节点树，加上一些计算逻辑，会比较耗时，另一方面是因为渲染节点内容，因为一个思维导图节点除了文本，还要支持图片、图标、标签等信息、`svg`不像`html`会自动按流式布局来帮你排版，所以每种信息都需要先创建对应的`svg`元素，然后计算其宽高，还要根据其他信息节点计算其位置，最后还要再根据所有这些内容子节点来计算节点整体的宽高，所以也是很耗时的一个操作。并且因为`svg`元素也算是`dom`节点，所以数量多了又要频繁操作，当然就卡了。
 
-卡顿的原因找到了，怎么解决呢？一种方法是不用`svg`，改用`canvas`，但是笔者发现该问题的时候已经写了较多代码了，所以采用的方法的是不再每次都完全重新渲染，而是按需进行渲染，比如点击节点激活该节点的时候，不需要重新渲染其他节点，只需要重新渲染被点击的节点就可以了，又比如某个节点收缩或展开时，其他节点只是位置需要变化，节点内容并不需要重新渲染，所以只需要重新计算其他节点的位置并把它们移动过去即可，这样额外的好处是还可以让它们通过动画的方式移动过去，其他相关的操作也是如此，尽量只更新必要的节点和进行必要的操作，重构完后虽然还是会存在一定卡顿的现象，但是相比之前已经好了很多。
+卡顿的原因找到了，怎么解决呢？一种方法是不用`svg`，改用`canvas`，但是笔者发现该问题的时候已经写了较多代码了，而且就算用`canvas`树的遍历也无法避免，所以笔者最后采用的方法的是不再每次都完全重新渲染，而是按需进行渲染，比如点击节点激活该节点的时候，不需要重新渲染其他节点，只需要重新渲染被点击的节点就可以了，又比如某个节点收缩或展开时，其他节点只是位置需要变化，节点内容并不需要重新渲染，所以只需要重新计算其他节点的位置并把它们移动过去即可，这样额外的好处是还可以让它们通过动画的方式移动过去，其他相关的操作也是如此，尽量只更新必要的节点和进行必要的操作，改造完后虽然还是会存在一定卡顿的现象，但是相比之前已经好了很多。
 
 
 
 # 数据结构
 
-思维导图可以看成就是一棵树，所以基本的结构就是树的结构，每个节点保存节点本身的信息再加上子节点的信息，对于一个具体的节点来说，大概需要包含节点的各种内容（文本、图片、图标等固定格式）、节点展开状态、子节点等等，此外还要包括该节点的特定样式，用来覆盖主题的默认样式，这样可以对每个节点进行个性化：
+思维导图可以看成就是一棵树，我把它称作渲染树，所以基本的结构就是树的结构，每个节点保存节点本身的信息再加上子节点的信息，具体来说，大概需要包含节点的各种内容（文本、图片、图标等固定格式）、节点展开状态、子节点等等，此外还要包括该节点的特定样式，用来覆盖主题的默认样式，这样可以对每个节点进行个性化：
 
 ```json
 {
@@ -45,13 +47,13 @@
 
 详细结构可参考：[节点结构](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)。
 
-仅有这棵数据树是不够的，我们需要再定义一个节点类，当遍历数据树的时候，每个节点都会创建一个节点实例，用来保存该节点的状态，执行渲染、计算宽高、绑定事件等等操作：
+仅有这棵渲染树是不够的，我们需要再定义一个节点类，当遍历渲染树的时候，每个节点都会创建一个节点实例，用来保存该节点的状态，以及执行渲染、计算宽高、绑定事件等等操作：
 
 ```js
 // 节点类
 class Node {
   constructor(opt = {}) {
-    this.nodeData = opt.data// 节点真实数据，就是上述说的数据结构
+    this.nodeData = opt.data// 节点真实数据，就是上述说的渲染树的节点
     this.isRoot =  opt.isRoot// 是否是根节点
     this.layerIndex = opt.layerIndex// 节点层级
     this.width = 0// 节点宽
@@ -93,7 +95,7 @@ class Node {
     let node = new Text().text(this.nodeData.data.text)
     let { width, height } = node.bbox()// 获取文本节点的宽高
     return {
-      node: g,
+      node,
       width,
       height
     }
@@ -101,11 +103,13 @@ class Node {
   // 渲染节点
   render() {
     let textData = this.createTextNode()
-    textData.node.translate(10, 5)// 文字节点相对于容器偏移内边距的大小
+    textData.node.x(10).y(5)// 文字节点相对于容器偏移内边距的大小
     // 创建一个矩形来作为边框
     this.group.rect(this.width, this.height).x(0).y(0)
     // 文本节点添加到节点容器里
     this.group.add(textData.node)
+    // 定位
+    this.group.translate(this.left, this.top)
     // 容器添加到画布上
     this.draw.add(this.group)
   }
@@ -137,34 +141,36 @@ class Node {
 然后再遍历每个子节点的子节点（其实就是递归遍历）以同样的方式进行计算`left`，这样一次遍历完成后所有节点的`left`值就计算好了。
 
 ```js
-// 第一次遍历数据树
-walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
-  // 先序遍历
-  // 创建节点实例
-  let newNode = new Node({
-    data: cur,
-    layerIndex
-  })
-  // 节点实例关联到节点数据上
-  cur._node = newNode
-  // 根节点
-  if (isRoot) {
-    this.root = newNode
-    // 定位在画布中心位置
-    newNode.left = (this.mindMap.width - node.width) / 2
-    newNode.top = (this.mindMap.height - node.height) / 2
-  } else {
-    // 非根节点
-    // 互相收集
-    newNode.parent = parent._node
-    parent._node.addChildren(newNode)
-    // 定位到父节点右侧
-    newNode.left = parent._node.left + parent._node.width + marginX
-  }
-}, null, true, 0)
+class Render {
+  // 第一次遍历渲染树
+  walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
+    // 先序遍历
+    // 创建节点实例
+    let newNode = new Node({
+      data: cur,
+      layerIndex
+    })
+    // 节点实例关联到节点数据上
+    cur._node = newNode
+    // 根节点
+    if (isRoot) {
+      this.root = newNode
+      // 定位在画布中心位置
+      newNode.left = (this.mindMap.width - node.width) / 2
+      newNode.top = (this.mindMap.height - node.height) / 2
+    } else {
+      // 非根节点
+      // 互相收集
+      newNode.parent = parent._node
+      parent._node.addChildren(newNode)
+      // 定位到父节点右侧
+      newNode.left = parent._node.left + parent._node.width + marginX
+    }
+  }, null, true, 0)
+}
 ```
 
-接下来是`top`，首先最开始也是只有根节点的`top`是确定的，那么子节点怎么根据父节点的`top`进行定位呢？上面说过每个节点是相对于其所有子节点居中显示的，那么如果我们知道所有子节点的总高度，那么第一个子节点的`top`也就确定了：
+接下来是`top`，首先最开始也只有根节点的`top`是确定的，那么子节点怎么根据父节点的`top`进行定位呢？上面说过每个节点是相对于其所有子节点居中显示的，那么如果我们知道所有子节点的总高度，那么第一个子节点的`top`也就确定了：
 
 ```js
 firstChildNode.top = (node.top + node.height / 2) - childrenAreaHeight / 2
@@ -176,31 +182,34 @@ firstChildNode.top = (node.top + node.height / 2) - childrenAreaHeight / 2
 
 第一个子节点的`top`确定了，其他节点只要在前一个节点的`top`上累加即可。
 
-那么怎么计算`childrenAreaHeight`呢？首先第一次遍历到一个节点时，我们会给它创建一个`Node`实例，然后触发计算该节点的大小，所以只有当所有子节点都遍历完回来后我们才能计算总高度，那么显然可以在后序遍历的时候来计算，但是要计算节点的`top`只能在下一次遍历时，为什么不在计算完一个节点的`childrenAreaHeight`后立即就计算其子节点的`top`呢？原因很简单，当前节点的`top`都还没确定，怎么确定其子节点的位置呢？
+那么怎么计算`childrenAreaHeight`呢？首先第一次遍历到一个节点时，我们会给它创建一个`Node`实例，然后触发计算该节点的大小，所以只有当所有子节点都遍历完回来后我们才能计算总高度，那么显然可以在后序遍历的时候来计算，但是要计算节点的`top`只能在下一次遍历渲染树时，为什么不在计算完一个节点的`childrenAreaHeight`后立即就计算其子节点的`top`呢？原因很简单，当前节点的`top`都还没确定，怎么确定其子节点的位置呢？
 
 ```js
+// 第一次遍历
 walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
   // 先序遍历
   // ...
 }, (cur, parent, isRoot, layerIndex) => {
   // 后序遍历
   // 计算该节点所有子节点所占高度之和，包括节点之间的margin
+  let len = cur._node.children
   cur._node.childrenAreaHeight = cur._node.children.reduce((h, node) => {
     return h + node.height
   }, 0) + (len + 1) * marginY
 }, true, 0)
 ```
 
-总结一下，在第一轮遍历数据树时，我们在先序遍历时创建`Node`实例，然后计算节点的`left`，在后序遍历时计算每个节点的所有子节点的所占的总高度。
+总结一下，在第一轮遍历渲染树时，我们在先序遍历时创建`Node`实例，然后计算节点的`left`，在后序遍历时计算每个节点的所有子节点的所占的总高度。
 
-接下来开启第二轮遍历，这轮遍历可以计算所有节点的`top`，因为此时节点树已经创建成功了，所以可以不用再遍历数据树，直接遍历节点树：
+接下来开启第二轮遍历，这轮遍历可以计算所有节点的`top`，因为此时节点树已经创建成功了，所以可以不用再遍历渲染树，直接遍历节点树：
 
 ```js
+// 第二次遍历
 walk(this.root, null, (node, parent, isRoot, layerIndex) => {
   if (node.children && node.children.length > 0) {
     // 第一个子节点的top值 = 该节点中心的top值 - 子节点的高度之和的一半
     let top = node.top + node.height / 2 - node.childrenAreaHeight / 2
-    let totalTop = top + marginY// node.childrenAreaHeight是包括子节点整体两侧的间距的
+    let totalTop = top + marginY// node.childrenAreaHeight是包括子节点整体前后的间距的
     node.children.forEach((cur) => {
       cur.top = totalTop
       totalTop += cur.height + marginY// 在上一个节点的top基础上加上间距marginY和该节点的height
@@ -213,7 +222,7 @@ walk(this.root, null, (node, parent, isRoot, layerIndex) => {
 
 ![image-20210717224527681](./assets/image-20210717224527681.png)
 
-可以看到对于每个节点来说，位置都是正确的，但是，整体来看就不对了，因为发生了重叠，原因很简单，因为【二级节点1】的子节点太多了，子节点占的总高度已经超出了该节点自身的高，因为【二级节点】的定位是依据【二级节点】的总高度来计算的，并没有考虑其子节点，解决方法也很简单，再来一轮遍历，当发现某个节点的子节点所占总高度大于其自身的高度时，就让该节点前后的节点都往外挪一挪，比如上图，假设子节点所占的高度比节点自身的高度多出了`100px`，那我们就让【二级节点2】向下移动`50px`，如果它上面还有节点的话也让它向上移动`50px`，需要注意的是，这个调整的过程需要一直往父节点上冒泡，比如：
+可以看到对于每个节点来说，位置都是正确的，但是，整体来看就不对了，因为发生了重叠，原因很简单，因为【二级节点1】的子节点太多了，子节点占的总高度已经超出了该节点自身的高，因为【二级节点】的定位是依据【二级节点】的总高度来计算的，并没有考虑到其子节点，解决方法也很简单，再来一轮遍历，当发现某个节点的子节点所占总高度大于其自身的高度时，就让该节点前后的节点都往外挪一挪，比如上图，假设子节点所占的高度比节点自身的高度多出了`100px`，那我们就让【二级节点2】向下移动`50px`，如果它上面还有节点的话也让它向上移动`50px`，需要注意的是，这个调整的过程需要一直往父节点上冒泡，比如：
 
 ![image-20210717230808662](./assets/image-20210717230808662.png)
 
@@ -231,7 +240,7 @@ walk(this.root, null, (node, parent, isRoot, layerIndex) => {
 }, null, true)
 ```
 
-`updateBrothers`用来向上递归移动节点：
+`updateBrothers`用来向上递归移动兄弟节点：
 
 ```js
 updateBrothers(node, addHeight) {
@@ -281,7 +290,7 @@ updateChildren(children, prop, offset) {
 
 ![image-20210718083616076](./assets/image-20210718083616076.png)
 
-就是严格来说，某个节点可能不再相对于其所有子节点居中了，而是相对于所有子孙节点居中，其实这样问题不大，实在有洁癖的话，解决方法也有，各位可以自行思考一下，这部分完整代码请移步[LogicalStructure.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/layouts/LogicalStructure.js)。
+就是严格来说，某个节点可能不再相对于其所有子节点居中了，而是相对于所有子孙节点居中，其实这样问题也不大，实在有强迫症的话，可以自行思考一下如何优化，这部分完整代码请移步[LogicalStructure.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/layouts/LogicalStructure.js)。
 
 
 
@@ -322,7 +331,7 @@ let cy = y1 + (y2 - y1) * 0.8）
 
 ![image-20210718111334085](./assets/image-20210718111334085.png)
 
-可以看到有两段弯曲，所以需要使用三次贝塞尔曲线，也是一样，自己选择两个合适的控制点位置，笔者的选择如下图，就是处于起点和终点的中间：
+可以看到有两段弯曲，所以需要使用三次贝塞尔曲线，也是一样，自己选择两个合适的控制点位置，笔者的选择如下图，两个控制点的`x`处于起点和终点的中间：
 
 ![image-20210718134525691](./assets/image-20210718134525691.png)
 
@@ -381,9 +390,9 @@ const cubicBezierPath = (x1, y1, x2, y2) => {
 
 # 节点激活
 
-点击某个节点就相对于把它激活，为了能有点反馈，所以需要给它加一点激活的样式，通常都是给它加个边框，但是笔者不满足于此，笔者觉得节点所有的样式，激活时都可以改变，也就是有两种状态，普通状态和激活状态，它们可以设置的样式都是一样的。
+点击某个节点就相对于把它激活，为了能有点反馈，所以需要给它加一点激活的样式，通常都是给它加个边框，但是笔者不满足于此，笔者认为节点所有的样式，激活时都可以改变，这样可以更好的与主题融合，也就是节点的所有样式都有两种状态，普通状态和激活状态。
 
-监听节点的单击事件，设置节点的激活标志，因为同时是可以存在多个激活节点的，所以用一个数组来保存所有的激活节点。
+实现上可以监听节点的单击事件，然后设置节点的激活标志，因为同时是可以存在多个激活节点的，所以用一个数组来保存所有的激活节点。
 
 ```js
 class Node {
@@ -411,7 +420,7 @@ class Node {
 
 # 文字编辑
 
-文字编辑比较简单，监听节点容器的双击事件，然后获取文字节点的宽高和位置，最后再盖一个编辑层在上面即可，编辑完监听回车键，隐藏编辑层，修改节点数据然后重新渲染该节点，如果节点大小变化了就更新其他节点的位置。
+文字编辑比较简单，监听节点容器的双击事件，然后获取文字节点的宽高和位置，最后再盖一个同样大小的编辑层在上面即可，编辑完监听回车键，隐藏编辑层，修改节点数据然后重新渲染该节点，如果节点大小变化了就更新其他节点的位置。
 
 ```js
 class Node {
@@ -442,7 +451,7 @@ class Node {
       this.textEditNode.setAttribute('contenteditable', true)
       document.body.appendChild(this.textEditNode)
     }
-    // 把文字的换行符替换成换行节点
+    // 把文字的换行符替换成换行元素
     this.textEditNode.innerHTML = this.nodeData.data.text.split(/\n/img).join('<br>')
     // 定位和显示文本编辑框
     this.textEditNode.style.minWidth = rect.width + 10 + 'px'
@@ -454,7 +463,7 @@ class Node {
 }
 ```
 
-有个小细节，就是当节点支持个性化的时候，需要把节点文字的样式，比如`font-size`、`line-height`之类样式也要设置到这个编辑节点上，这样可以尽量保持一致性，虽然是个盖上去的层，但是并不会让人感觉很突兀。
+有个小细节，就是当节点支持个性化的时候，需要把节点文字的样式，比如`font-size`、`line-height`之类样式也设置到这个编辑节点上，这样可以尽量保持一致性，虽然是个盖上去的层，但是并不会让人感觉很突兀。
 
 ```js
 class Node {
@@ -529,7 +538,7 @@ class Node {
 
 ![image-20210718184835414](./assets/image-20210718184835414.png)
 
-`SET_NODE_EXPAND`命令会设置节点的展开收起状态，并渲染或删除其所有子孙节点，达到展开或收起的效果，并且还需要重新计算和移动所有节点的位置，遍历树计算位置的相关代码也需要加上这个判断：
+`SET_NODE_EXPAND`命令会设置节点的展开收起状态，并渲染或删除其所有子孙节点，达到展开或收起的效果，并且还需要重新计算和移动所有节点的位置，此外遍历树计算位置的相关代码也需要加上这个判断：
 
 ```js
 // 第一次遍历
@@ -574,11 +583,22 @@ walk(this.root, null, (node, parent, isRoot, layerIndex) => {
 
 到这里，一个基本可用的思维导图就完成了。
 
+补充一个小细节，就是上面一直提到的移动节点，代码其实很简单：
+
+```js
+let t = this.group.transform()
+this.group.animate(300).translate(this.left - t.translateX, this.top - t.translateY)
+```
+
+因为`translate`是在之前的基础上进行变换的，所以需要先获取到当前的变换，然后相减得到本次的增量，至于动画，使用`svgjs`只要顺便执行一下`animate`方法就可以了。
+
+![snow9](./assets/1.gif)
+
 
 
 # 命令
 
-上面的代码已经涉及到几个命令了，我们把会修改节点状态的操作通过命令来调用，每调用一个命令就会保存一份当前的节点数据副本，用来回退和前进。
+前面的代码已经涉及到几个命令了，我们把会修改节点状态的操作通过命令来调用，每调用一个命令就会保存一份当前的节点数据副本，用来回退和前进。
 
 命令类似于发布订阅者，先注册命令，然后再触发命令的执行：
 
@@ -633,9 +653,11 @@ class Render {
 
   // 设置节点是否激活
   setNodeActive(node, active) {
+    // 设置节点激活状态
     this.setNodeData(node, {
       isActive: active
     })
+    // 重新渲染节点内容
     node.renderNode()
   }
 }
@@ -645,7 +667,7 @@ class Render {
 
 # 回退与前进
 
-上一节的命令里已经保存了所有操作后的副本数据，所以回退和前进就只要操作指针`activeHistoryIndex`，然后获取到这个位置的历史数据，复制一份替换当前的数据树，最后再触发重新渲染即可，这里会进行整体全部的重新渲染，所以会稍微有点卡顿。
+上一节的命令里已经保存了所有操作后的副本数据，所以回退和前进就只要操作指针`activeHistoryIndex`，然后获取到这个位置的历史数据，复制一份替换当前的渲染树，最后再触发重新渲染即可，这里会进行整体全部的重新渲染，所以会稍微有点卡顿。
 
 ```js
 class Command {
@@ -746,7 +768,7 @@ export default {
 }
 ```
 
-最外层的是非节点样式，对于节点来说，也分成了三种类型，分别是根节点、二级节点及其他节点，每种节点里面有分成了常态样式和激活时的样式，它们能设置的样式是完全一样的，完整结构请看[default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js)。
+最外层的是非节点样式，对于节点来说，也分成了三种类型，分别是根节点、二级节点及其他节点，每种节点里面又分成了常态样式和激活时的样式，它们能设置的样式是完全一样的，完整结构请看[default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js)。
 
 创建节点的每个信息元素时都会给它应用相关的样式，比如之前提到的文本元素和边框元素：
 
@@ -776,7 +798,7 @@ class Node {
 }
 ```
 
-`style`是样式类`Style`的实例，每个节点都会实例化一个（其实没必要，后续可能会修改），用来给各种元素设置样式，它会根据节点的类型和激活状态来选择不同的样式：
+`style`是样式类`Style`的实例，每个节点都会实例化一个（其实没必要，后续可能会修改），用来给各种元素设置样式，它会根据节点的类型和激活状态来选择对应的样式：
 
 ```js
 class Style {
@@ -795,11 +817,11 @@ class Style {
 }
 ```
 
-`merge`就是用来判断使用什么哪个样式的方法：
+`merge`就是用来判断使用哪个样式的方法：
 
 ```js
 class Style {
-  // root不是根节点，而是代表非节点的样式
+  // 这里的root不是根节点，而是代表非节点的样式
   merge(prop, root) {
     // 三级及以下节点的样式
     let defaultConfig = this.themeConfig.node
@@ -827,17 +849,113 @@ class Style {
 
 我们会先判断一个节点自身是否设置了样式，有的话那就优先使用自身的，这样来达到每个节点都可以进行个性化的能力。
 
-样式编辑就是把所有这些可配置的样式通过可视化的控件来展示与修改，实现上，可以监听节点的激活事件，然后打开样式编辑区域，先回显当前的样式，然后当修改了某个样式就通过相应的命令设置到当前激活节点上：
+样式编辑就是把所有这些可配置的样式通过可视化的控件来展示与修改，实现上，可以监听节点的激活事件，然后打开样式编辑面板，先回显当前的样式，然后当修改了某个样式就通过相应的命令设置到当前激活节点上：
 
 ![image-20210718222150055](./assets/image-20210718222150055.png)
 
-可以看到可以区分常态与选中态，这部分代码可以参考：[Style.vue](https://github.com/wanglin2/mind-map/blob/main/web/src/pages/Edit/components/Style.vue)。
+可以看到区分了常态与选中态，这部分代码很简单，可以参考：[Style.vue](https://github.com/wanglin2/mind-map/blob/main/web/src/pages/Edit/components/Style.vue)。
 
-除了节点样式编辑，对于非节点的样式也是同样的方式进行修改，先获取到当前的主题配置，然后进行回显，修改后通过相应的方法设置：
+除了节点样式编辑，对于非节点的样式也是同样的方式进行修改，先获取到当前的主题配置，然后进行回显，用户修改了就通过相应的方法进行设置：
 
 ![image-20210718222612078](./assets/image-20210718222612078.png)
 
 这部分的代码在[BaseStyle.vue](https://github.com/wanglin2/mind-map/blob/main/web/src/pages/Edit/components/BaseStyle.vue)。
+
+
+
+# 快捷键
+
+快捷键简单来说就是监听到按下了特定的按键后执行特定的操作，实现上其实也是一种发布订阅模式，先注册快捷键，然后监听到了该按键就执行对应的方法。
+
+首先键值都是数字，不容易记忆，所以我们需要维护一份键名到键值的映射表，像下面这样：
+
+```js
+const map = {
+    'Backspace': 8,
+    'Tab': 9,
+    'Enter': 13,
+  	// ...
+}
+```
+
+完整数据请点这里：[keyMap.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/keyMap.js)。
+
+快捷键包含三种：单个按键、组合键、多个”或“关系的按键，可以使用一个对象来保存键值及回调：
+
+```js
+{
+  'Enter': [() => {}],
+  'Control+Enter': [],
+  'Del|Backspace': []
+}
+```
+
+然后实现一个注册快捷键的方法：
+
+```js
+class KeyCommand {
+  // 注册快捷键
+  addShortcut(key, fn) {
+    // 把或的快捷键转换成单个按键进行处理
+    key.split(/\s*\|\s*/).forEach((item) => {
+      if (this.shortcutMap[item]) {
+        this.shortcutMap[item].push(fn)
+      } else {
+        this.shortcutMap[item] = [fn]
+      }
+    })
+  }
+}
+```
+
+比如注册一个删除节点的快捷键：
+
+```js
+this.mindMap.keyCommand.addShortcut('Del|Backspace', () => {
+  this.removeNode()
+})
+```
+
+有了注册表，当然需要监听按键事件来判断是否有快捷操作要执行：
+
+```js
+class KeyCommand {
+  bindEvent() {
+    window.addEventListener('keydown', (e) => {
+      // 遍历注册的所有键值，看本次是否匹配，匹配到了就执行它的回调队列
+      Object.keys(this.shortcutMap).forEach((key) => {
+        if (this.checkKey(e, key)) {
+          e.stopPropagation()
+          e.preventDefault()
+          this.shortcutMap[key].forEach((fn) => {
+            fn()
+          })
+        }
+      })
+    })
+  }
+}
+```
+
+接下来只要实现上述的`checkKey`方法即可，需要说明的是组合键一般指的是`ctrl`、`alt`、`shift`三个键和其他按键的组合，如果按下了这三个键，事件对象`e`里对应的字段会被置为`true`，
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -846,19 +964,6 @@ class Style {
 # 多选节点
 
 # 拖动、放大缩小
-
-# 快捷键
-
-快捷键就是监听了到特定的按键来执行特定的操作，包含单个按键和组合键，我们可以使用一个对象来保存快捷键和对应的命令，`key`代表按键，`value`代表要执行的命令，比如：
-
-```js
-const shortcutKeys = {
-	'enter': 'addSiblingNode',
-    'ctrl+b': 'bold'
-}
-```
-
-包含两种类型，单个按键、以`+`拼接的组合键，接下来只要监听`keydown`事件来检查即可，首先要说明的是组合键一般指的是`ctrl`、`alt`、`shift`
 
 # 导入导出、其他格式
 
