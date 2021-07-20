@@ -14,7 +14,7 @@
 
 # 技术选型
 
-这种图形类的绘制一般有两种选择：`svg`与`canvas`，因为思维导图主要是节点与线的连接，使用与`html`比较接近的`svg`比较容易操作，`svg`的类库在试用了[svgjs](https://svgjs.dev/docs/3.0/)和[snap](http://snapsvg.io/)后，有些需求在`snap`里没有找到对应的方法，所以笔者最终选择了`svgjs`。
+这种图形类的绘制一般有两种选择：`svg`和`canvas`，因为思维导图主要是节点与线的连接，使用与`html`比较接近的`svg`比较容易操作，`svg`的类库在试用了[svgjs](https://svgjs.dev/docs/3.0/)和[snap](http://snapsvg.io/)后，有些需求在`snap`里没有找到对应的方法，所以笔者最终选择了`svgjs`。
 
 为了能跨框架使用，所以思维导图的主体部分作为一个单独的`npm`包来开发及发布，通过`类`的方式来组织代码，示例页面的开发使用的是`vue2.x`全家桶。
 
@@ -890,7 +890,7 @@ const map = {
 }
 ```
 
-然后实现一个注册快捷键的方法：
+然后添加一个注册快捷键的方法：
 
 ```js
 class KeyCommand {
@@ -916,7 +916,7 @@ this.mindMap.keyCommand.addShortcut('Del|Backspace', () => {
 })
 ```
 
-有了注册表，当然需要监听按键事件来判断是否有快捷操作要执行：
+有了注册表，当然需要监听按键事件才行：
 
 ```js
 class KeyCommand {
@@ -937,47 +937,162 @@ class KeyCommand {
 }
 ```
 
-接下来只要实现上述的`checkKey`方法即可，需要说明的是组合键一般指的是`ctrl`、`alt`、`shift`三个键和其他按键的组合，如果按下了这三个键，事件对象`e`里对应的字段会被置为`true`，
+`checkKey`方法用来检查注册的键值是否和本次按下的匹配，需要说明的是组合键一般指的是`ctrl`、`alt`、`shift`三个键和其他按键的组合，如果按下了这三个键，事件对象`e`里对应的字段会被置为`true`，然后再结合`keyCode`字段判断是否匹配到了组合键。
+
+```js
+class KeyCommand {
+    checkKey(e, key) {
+        // 获取事件对象里的键值数组
+        let o = this.getOriginEventCodeArr(e)
+        // 注册的键值数组，
+        let k = this.getKeyCodeArr(key)
+        // 检查两个数组是否相同，相同则说明匹配到了
+        if (this.isSame(o, k)) {
+            return true
+        }
+        return false
+    }
+}
+```
+
+`getOriginEventCodeArr`方法通过事件对象获取按下的键值，返回一个数组：
+
+```js
+getOriginEventCodeArr(e) {
+    let arr = []
+    // 按下了control键
+    if (e.ctrlKey || e.metaKey) {
+        arr.push(keyMap['Control'])
+    }
+    // 按下了alt键
+    if (e.altKey) {
+        arr.push(keyMap['Alt'])
+    }
+    // 按下了shift键
+    if (e.shiftKey) {
+        arr.push(keyMap['Shift'])
+    }
+    // 同时按下了其他按键
+    if (!arr.includes(e.keyCode)) {
+        arr.push(e.keyCode)
+    }
+    return arr
+}
+```
+
+`getKeyCodeArr`方法用来获取注册的键值数组，除了组合键，其他都只有一项，组合键的话通过`+`把字符串切割成数组：
+
+```js
+getKeyCodeArr(key) {
+    let keyArr = key.split(/\s*\+\s*/)
+    let arr = []
+    keyArr.forEach((item) => {
+        arr.push(keyMap[item])
+    })
+    return arr
+}
+```
 
 
 
+# 拖动、放大缩小
 
+首先请看一下基本结构：
 
+![image-20210720191943989](./assets/image-20210720191943989.png)
 
+![image-20210720192008277](./assets/image-20210720192008277.png)
 
+```js
+// 画布
+this.svg = SVG().addTo(this.el).size(this.width, this.height)
+// 思维导图节点实际的容器
+this.draw = this.svg.group()
+```
 
+所以拖动、放大缩小都是操作这个`g`元素，对它应用相关变换即可。拖动的话只要监听鼠标移动事件，然后修改`g`元素的`translate`属性：
 
+```js
+class View {
+    constructor() {
+        // 鼠标按下时的起始偏移量
+        this.sx = 0
+        this.sy = 0
+        // 当前实时的偏移量
+        this.x = 0
+        this.y = 0
+        // 拖动视图
+        this.mindMap.event.on('mousedown', () => {
+            this.sx = this.x
+            this.sy = this.y
+        })
+        this.mindMap.event.on('drag', (e, event) => {
+            // event.mousemoveOffset表示本次鼠标按下后移动的距离
+            this.x = this.sx + event.mousemoveOffset.x
+            this.y = this.sy + event.mousemoveOffset.y
+            this.transform()
+        })
+    }
+    
+    // 设置变换
+    transform() {
+        this.mindMap.draw.transform({
+            scale: this.scale,
+            origin: 'left center',
+            translate: [this.x, this.y],
+        })
+    }
+}
+```
 
+![2.gif](./assets/2.gif)
 
+放大缩小也很简单，监听鼠标的滚轮事件，然后增大或减小`this.scale`的值即可：
 
+```js
+this.scale = 1
 
+// 放大缩小视图
+this.mindMap.event.on('mousewheel', (e, dir) => {
+    // // 放大
+    if (dir === 'down') {
+        this.scale += 0.1
+    } else { // 缩小
+        this.scale -= 0.1
+    }
+    this.transform()
+})
+```
 
-
-
-
-
-
-
+![2.gif](./assets/3.gif)
 
 
 
 # 多选节点
 
-# 拖动、放大缩小
 
-# 导入导出、其他格式
 
-https://github.com/canvg/canvg
+# 导出
 
-https://github.com/fex-team/kityminder/tree/dev/src/protocol
+其实导出的范围很大，可以导出为`svg`、图片、纯文本、`markdown`、`pdf`、`json`、甚至是其他思维导图的格式，有些纯靠前端也很难实现，所以本小节只介绍如何导出为`svg`和`图片`。
 
-https://github.com/fex-team/kityminder/tree/dev/native-support
+## 导出svg
 
-json、freemind、xmind
+导出`svg`很简单，因为我们本身就是用`svg`绘制的，所以只要把`svg`整个节点转换成`html`字符串导出就可以了，但是直接这样是不行的，因为实际上思维导图只占画布的一部分，剩下的大片空白其实没用，另外如果放大后，思维导图部分已经超出画布了，那么导出的又不完整，所以我们想要导出的应该是下图阴影所示的内容，而且是原本的大小，与缩放无关：
 
-png、svg
+![image-20210720200816281](./assets/image-20210720200816281.png)
 
-# 其他几种变种结构
+上面的【拖动、放大缩小】小节里介绍了思维导图所有的节点都是通过一个`g`元素来包裹的，相关变换效果也是应用在这个元素上，我们的思路是先去除它的放大缩小效果，这样能获取到它原本的宽高，然后把画布也就是`svg`元素调整成这个宽高，然后再获取当前变换后的`g`元素和`svg`的距离，最后移动过去即可，
 
-逻辑结构图、鱼骨图、思维导图、组织结构图、目录组织图
+
+
+
+
+
+
+
+
+
+
+
 
