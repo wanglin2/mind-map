@@ -78,7 +78,9 @@ export default class KeyCommand {
         if (e.shiftKey) {
             arr.push(keyMap['Shift'])
         }
-        arr.push(e.keyCode)
+        if (!arr.includes(e.keyCode)) {
+            arr.push(e.keyCode)
+        }
         return arr
     }
 
