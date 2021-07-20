@@ -46,10 +46,11 @@ class Export {
         const origWidth = svg.width()
         const origHeight = svg.height()
         const origTransform = draw.transform()
-        // 去除变换效果
-        draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY).translate(0, 0)
-        // 获取实际内容当前变换后的位置信息
+        // 去除放大缩小的变换效果
+        draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY)
+        // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
         const rect = draw.rbox()
+        console.log(rect, draw.bbox())
         // 将svg设置为实际内容的宽高
         svg.size(rect.wdith, rect.height)
         // 把实际内容变换
