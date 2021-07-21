@@ -1070,6 +1070,47 @@ this.mindMap.event.on('mousewheel', (e, dir) => {
 
 # 多选节点
 
+多选节点也是一个重要功能，比如我想同时删除多个节点，或者给多个节点设置同样的样式，挨个节点节点操作显然比较慢，市面上的思维导图一般都是鼠标左键按着拖动进行多选，右键拖动移动画布，但是笔者的个人习惯把它反了一下。
+
+多选其实很简单，鼠标按下为起点，鼠标移动的实时位置为终点，那么如果某个节点在这两个点组成的矩形区域内就相当于被选中了，需要注意的是要考虑变换问题，比如拖动和放大缩小后，那么节点的`left`和`top`也需要变换一下：
+
+```js
+class Select {
+    // 检测节点是否在选区内
+    checkInNodes() {
+        let { scaleX, scaleY, translateX, translateY } = this.mindMap.draw.transform()
+        let minx = Math.min(this.mouseDownX, this.mouseMoveX)
+        let miny = Math.min(this.mouseDownY, this.mouseMoveY)
+        let maxx = Math.max(this.mouseDownX, this.mouseMoveX)
+        let maxy = Math.max(this.mouseDownY, this.mouseMoveY)
+        // 遍历节点树
+        bfsWalk(this.mindMap.renderer.root, (node) => {
+            let { left, top, width, height } = node
+            let right = (left + width) * scaleX + translateX
+            let bottom = (top + height) * scaleY + translateY
+            left = left * scaleX + translateX
+            top = top * scaleY + translateY
+            if (
+                left >= minx &&
+                right <= maxx &&
+                top >= miny &&
+                bottom <= maxy
+            ) {
+                // 在选区内，激活节点
+            } else if (node.nodeData.data.isActive) {
+                // 不再选区内，如果当前是激活状态则取消激活
+            }
+        })
+    }
+}
+```
+
+另外一个细节是当鼠标移动到画布边缘时`g`需要进行移动变换，否则画布外的节点就没办法被选中了：
+
+![2021-07-21-19-54-48](./assets/2021-07-21-19-54-48.gif)
+
+完整代码请参考[Select.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/Select.js)。
+
 
 
 # 导出
@@ -1082,17 +1123,190 @@ this.mindMap.event.on('mousewheel', (e, dir) => {
 
 ![image-20210720200816281](./assets/image-20210720200816281.png)
 
-上面的【拖动、放大缩小】小节里介绍了思维导图所有的节点都是通过一个`g`元素来包裹的，相关变换效果也是应用在这个元素上，我们的思路是先去除它的放大缩小效果，这样能获取到它原本的宽高，然后把画布也就是`svg`元素调整成这个宽高，然后再获取当前变换后的`g`元素和`svg`的距离，最后移动过去即可，
+上面的【拖动、放大缩小】小节里介绍了思维导图所有的节点都是通过一个`g`元素来包裹的，相关变换效果也是应用在这个元素上，我们的思路是先去除它的放大缩小效果，这样能获取到它原本的宽高，然后把画布也就是`svg`元素调整成这个宽高，然后再想办法把`g`元素移动到`svg`的位置上，这样导出`svg`刚好就是原大小且完整的，导出成功后再把`svg`元素恢复之前的不换及大小。
+
+接下来一步步图示：
+
+1.初始状态
+
+![image-20210721183307656](./assets/image-20210721183307656.png)
+
+2.拖动+放大
+
+![image-20210721183340310](./assets/image-20210721183340310.png)
+
+3.去除它的放大缩小变换
+
+```js
+// 获取当前的变换数据
+const origTransform = this.mindMap.draw.transform()
+// 去除放大缩小的变换效果，和translate一样也是在之前的基础上操作的，所以除以当前的缩放得到1
+this.mindMap.draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY)
+```
+
+![image-20210721183823754](./assets/image-20210721183823754.png)
+
+4.把`svg`画布调整为`g`的实际大小
+
+```js
+// rbox是svgjs提供的用来获取变换后的位置和尺寸信息，其实是getBoundingClientRect方法的包装方法
+const rect = this.mindMap.draw.rbox()
+this.mindMap.svg.size(rect.wdith, rect.height)
+```
+
+![image-20210721184140488](./assets/image-20210721184140488.png)
+
+`svg`元素变成左上方阴影区域的大小，另外可以看到因为`g`元素超出当前的`svg`范围，已经看不见了。
+
+5.把`g`元素移动到`svg`左上角
+
+```js
+const rect = this.mindMap.draw.rbox()
+const elRect = this.mindMap.el.getBoundingClientRect()
+this.mindMap.draw.translate(-rect.x + elRect.left, -rect.y + elRect.top)
+```
+
+![image-20210721185453825](./assets/image-20210721185453825.png)
+
+这样`g`元素刚好可以完整显示：
+
+![image-20210721190700979](./assets/image-20210721190700979.png)
+
+6.导出`svg`元素即可
+
+完整代码如下：
+
+```js
+class Export {
+    // 获取要导出的svg数据
+    getSvgData() {
+        const svg = this.mindMap.svg
+        const draw = this.mindMap.draw
+        // 保存原始信息
+        const origWidth = svg.width()
+        const origHeight = svg.height()
+        const origTransform = draw.transform()
+        const elRect = this.mindMap.el.getBoundingClientRect()
+        // 去除放大缩小的变换效果
+        draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY)
+        // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
+        const rect = draw.rbox()
+        // 将svg设置为实际内容的宽高
+        svg.size(rect.wdith, rect.height)
+        // 把g移动到和svg刚好重合
+        draw.translate(-rect.x + elRect.left, -rect.y + elRect.top)
+        // 克隆一下svg节点
+        const clone = svg.clone()
+        // 恢复原先的大小和变换信息
+        svg.size(origWidth, origHeight)
+        draw.transform(origTransform)
+        return {
+            node: clone,// 节点对象
+            str: clone.svg()// html字符串
+        }
+    }
+    
+    // 导出svg文件
+    svg() {
+        let { str } = this.getSvgData()
+        // 转换成blob数据
+        let blob = new Blob([str], {
+            type: 'image/svg+xml'
+        });
+        let file = URL.createObjectURL(blob)
+        let a = document.createElement('a')
+        a.href = file
+        a.download = fileName
+        a.click()
+    }
+}
+```
 
 
 
+## 导出png
+
+导出`png`是在导出`svg`的基础上进行的，我们上一步已经获取到了要导出的`svg`的内容，所以这一步就是要想办法把`svg`转成`png`，首先我们知道`img`标签是可以直接显示`svg`文件的，所以我们可以通过`img`标签来打开`svg`，然后再把图片绘制到`canvas`上，最后导出为`png`格式即可。
+
+不过这之前还有另外一个问题要解决，就是如果`svg`里面存在`image`图片元素的话，且图片是通过链接方式引用的（无论同源还是非同源），绘制到`canvas`上都显示不出来，一般有两个解决方法，一是把所有图片元素从`svg`里面剔除，然后手动绘制到`canvas`上；二是把图片`url`都转换成`data:url`格式，笔者选择的是第二种方法：
+
+```js
+class Export {
+    async getSvgData() {
+		// ...
+        // 把图片的url转换成data:url类型，否则导出会丢失图片
+        let imageList = clone.find('image')
+        let task = imageList.map(async (item) => {
+            let imgUlr = item.attr('href') || item.attr('xlink:href')
+            let imgData = await imgToDataUrl(imgUlr)
+            item.attr('href', imgData)
+        })
+        await Promise.all(task)
+        return {
+            node: clone,
+            str: clone.svg()
+        }
+    }
+}
+```
+
+`imgToDataUrl`方法也是通过`canvas`来把图片转换成`data:url`。这样转换后的`svg`内容再绘制到`canvas`上就能正常显示了：
+
+```js
+class Export {
+    // 导出png
+    async png() {
+        let { str } = await this.getSvgData()
+        // 转换成blob数据
+        let blob = new Blob([str], {
+            type: 'image/svg+xml'
+        })
+        // 转换成data:url数据
+        let svgUrl = URL.createObjectURL(blob)
+        // 绘制到canvas上，转换成png
+        let imgDataUrl = await this.svgToPng(svgUrl)
+        // 下载
+        let a = document.createElement('a')
+        a.href = file
+        a.download = fileName
+        a.click()
+    }
+    
+    // svg转png
+    svgToPng(svgSrc) {
+        return new Promise((resolve, reject) => {
+            const img = new Image()
+            // 跨域图片需要添加这个属性，否则画布被污染了无法导出图片
+            img.setAttribute('crossOrigin', 'anonymous')
+            img.onload = async () => {
+                try {
+                    let canvas = document.createElement('canvas')
+                    canvas.width = img.width + this.exportPadding * 2
+                    canvas.height = img.height + this.exportPadding * 2
+                    let ctx = canvas.getContext('2d')
+                    // 图片绘制到canvas里
+                    ctx.drawImage(img, 0, 0, img.width, img.height, this.exportPadding, this.exportPadding, img.width, img.height)
+                    resolve(canvas.toDataURL())
+                } catch (error) {
+                    reject(error)
+                }
+            }
+            img.onerror = (e) => {
+                reject(e)
+            }
+            img.src = svgSrc
+        })
+    }
+}
+```
+
+到这里导出就完成了，不过上面省略了一个细节，就是背景的绘制，实际上我们之前背景相关样式都是设置到容器`el`元素上的，那么导出前就需要设置到`svg`或者`canvas`上，否则导出就没有背景了，相关代码可以阅读[Export.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/Export.js)。
 
 
 
+# 总结
 
+本文介绍了实现一个`web`思维导图涉及到的一些技术点，代码较粗糙，而且性能上存在一定问题，所以仅供参考，另外因为是笔者第一次使用`svg`，所以难免会有`svg`方面的错误，或者有更好的实现，欢迎留言探讨。
 
-
-
-
-
+其他还有一些常见功能，比如小窗口导航、自由主题等，有兴趣的可以自行实现，下一篇主要会介绍一下另外三种变种结构的实现，敬请期待。
 

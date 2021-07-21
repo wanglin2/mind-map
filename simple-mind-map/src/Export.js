@@ -1,4 +1,4 @@
-import { imgToDataUrl, downloadFile } from './utils';
+import { imgToDataUrl, downloadFile } from './utils'
 const URL = window.URL || window.webkitURL || window
 
 /** 
@@ -28,9 +28,9 @@ class Export {
             if (isDownload) {
                 downloadFile(result, '思维导图.' + type)
             }
-            return result;
+            return result
         } else {
-            return null;
+            return null
         }
     }
 
@@ -46,15 +46,15 @@ class Export {
         const origWidth = svg.width()
         const origHeight = svg.height()
         const origTransform = draw.transform()
+        const elRect = this.mindMap.el.getBoundingClientRect()
         // 去除放大缩小的变换效果
         draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY)
         // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
         const rect = draw.rbox()
-        console.log(rect, draw.bbox())
         // 将svg设置为实际内容的宽高
         svg.size(rect.wdith, rect.height)
         // 把实际内容变换
-        draw.translate(-rect.x, -rect.y)
+        draw.translate(-rect.x + elRect.left, -rect.y + elRect.top)
         // 克隆一份数据
         const clone = svg.clone()
         // 恢复原先的大小和变换信息
@@ -71,7 +71,7 @@ class Export {
         return {
             node: clone,
             str: clone.svg()
-        };
+        }
     }
 
     /** 
@@ -103,7 +103,7 @@ class Export {
                 reject(e)
             }
             img.src = svgSrc
-        });
+        })
     }
 
     /** 
@@ -139,7 +139,7 @@ class Export {
             } else {
                 resolve()
             }
-        });
+        })
     }
 
     /** 
@@ -154,12 +154,12 @@ class Export {
         // 转换成blob数据
         let blob = new Blob([str], {
             type: 'image/svg+xml'
-        });
+        })
         // 转换成data:url数据
-        let svgUrl = URL.createObjectURL(blob);
+        let svgUrl = URL.createObjectURL(blob)
         // 绘制到canvas上
         let imgDataUrl = await this.svgToPng(svgUrl)
-        URL.revokeObjectURL(svgUrl);
+        URL.revokeObjectURL(svgUrl)
         return imgDataUrl
     }
 
@@ -182,7 +182,7 @@ class Export {
             } else {
                 resolve()
             }
-        });
+        })
     }
 
     /** 
@@ -197,8 +197,8 @@ class Export {
         // 转换成blob数据
         let blob = new Blob([str], {
             type: 'image/svg+xml'
-        });
-        return URL.createObjectURL(blob);
+        })
+        return URL.createObjectURL(blob)
     }
 }
 
