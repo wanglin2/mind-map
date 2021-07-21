@@ -22,7 +22,7 @@
 
 # 整体思路
 
-笔者最初的思路是先写一个渲染器，根据输入的思维导图数据，可以渲染成`svg`节点，并且计算好各个节点的位置，然后定位并显示到画布，连上线即可，接下来对思维导图的操作都只需要维护这份数据，数据变化了就清空画布，然后重新渲染，这种数据驱动的思想很简单，在最初的开发中也没有任何问题，一切都很顺利，因为模拟数据就写了四五个节点，然而后来当我把节点数量增加到几十个的时候，发现凉了，太卡了，点击节点激活或者展开收缩节点的时候一秒左右才有反应，就算只是个`demo`也无法接受。
+笔者最初的思路是先写一个渲染器，根据输入的思维导图数据，可以渲染成`svg`节点，并且计算好各个节点的位置，然后定位并显示到画布，连上线即可，接下来对思维导图的操作都只需要维护这份数据，数据变化了就清空画布，然后重新渲染，这种数据驱动的思想很简单，在最初的开发中也没有任何问题，一切都很顺利，因为模拟数据就写了四五个节点，然而后来当我把节点数量增加到几十个的时候，发现凉了，太卡了，点击节点激活或者展开收缩节点的时候一秒左右才有反应，就算只是个`demo`也无法让人接受。
 
 卡的原因一方面是因为计算节点位置，每种布局结构最少都需要三次遍历节点树，加上一些计算逻辑，会比较耗时，另一方面是因为渲染节点内容，因为一个思维导图节点除了文本，还要支持图片、图标、标签等信息、`svg`不像`html`会自动按流式布局来帮你排版，所以每种信息都需要先创建对应的`svg`元素，然后计算其宽高，还要根据其他信息节点计算其位置，最后还要再根据所有这些内容子节点来计算节点整体的宽高，所以也是很耗时的一个操作。并且因为`svg`元素也算是`dom`节点，所以数量多了又要频繁操作，当然就卡了。
 
@@ -32,7 +32,7 @@
 
 # 数据结构
 
-思维导图可以看成就是一棵树，我把它称作渲染树，所以基本的结构就是树的结构，每个节点保存节点本身的信息再加上子节点的信息，具体来说，大概需要包含节点的各种内容（文本、图片、图标等固定格式）、节点展开状态、子节点等等，此外还要包括该节点的特定样式，用来覆盖主题的默认样式，这样可以对每个节点进行个性化：
+思维导图可以看成就是一棵树，我把它称作渲染树，所以基本的结构就是树的结构，每个节点保存节点本身的信息再加上子节点的信息，具体来说，大概需要包含节点的各种内容（文本、图片、图标等固定格式）、节点展开状态、子节点等等，此外还要包括该节点的私有样式，用来覆盖主题的默认样式，这样可以对每个节点进行个性化：
 
 ```json
 {
@@ -47,7 +47,7 @@
 
 详细结构可参考：[节点结构](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)。
 
-仅有这棵渲染树是不够的，我们需要再定义一个节点类，当遍历渲染树的时候，每个节点都会创建一个节点实例，用来保存该节点的状态，以及执行渲染、计算宽高、绑定事件等等操作：
+仅有这棵渲染树是不够的，我们需要再定义一个节点类，当遍历渲染树的时候，每个数据节点都会创建一个节点实例，用来保存该节点的状态，以及执行渲染、计算宽高、绑定事件等等操作：
 
 ```js
 // 节点类
@@ -108,7 +108,7 @@ class Node {
     this.group.rect(this.width, this.height).x(0).y(0)
     // 文本节点添加到节点容器里
     this.group.add(textData.node)
-    // 定位
+    // 在画布上定位节点整体
     this.group.translate(this.left, this.top)
     // 容器添加到画布上
     this.draw.add(this.group)
@@ -147,8 +147,8 @@ class Render {
     // 先序遍历
     // 创建节点实例
     let newNode = new Node({
-      data: cur,
-      layerIndex
+      data: cur,// 节点数据
+      layerIndex// 层级
     })
     // 节点实例关联到节点数据上
     cur._node = newNode
@@ -158,8 +158,7 @@ class Render {
       // 定位在画布中心位置
       newNode.left = (this.mindMap.width - node.width) / 2
       newNode.top = (this.mindMap.height - node.height) / 2
-    } else {
-      // 非根节点
+    } else {// 非根节点
       // 互相收集
       newNode.parent = parent._node
       parent._node.addChildren(newNode)
@@ -191,7 +190,7 @@ walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
   // ...
 }, (cur, parent, isRoot, layerIndex) => {
   // 后序遍历
-  // 计算该节点所有子节点所占高度之和，包括节点之间的margin
+  // 计算该节点所有子节点所占高度之和，包括节点之间的margin、节点整体前后的间距
   let len = cur._node.children
   cur._node.childrenAreaHeight = cur._node.children.reduce((h, node) => {
     return h + node.height
@@ -390,7 +389,7 @@ const cubicBezierPath = (x1, y1, x2, y2) => {
 
 # 节点激活
 
-点击某个节点就相对于把它激活，为了能有点反馈，所以需要给它加一点激活的样式，通常都是给它加个边框，但是笔者不满足于此，笔者认为节点所有的样式，激活时都可以改变，这样可以更好的与主题融合，也就是节点的所有样式都有两种状态，普通状态和激活状态。
+点击某个节点就相对于把它激活，为了能有点反馈，所以需要给它加一点激活的样式，通常都是给它加个边框，但是笔者不满足于此，笔者认为节点所有的样式，激活时都可以改变，这样可以更好的与主题融合，也就是节点的所有样式都有两种状态，普通状态和激活状态，缺点是激活和取消激活时的操作多了，会带来一点卡顿。
 
 实现上可以监听节点的单击事件，然后设置节点的激活标志，因为同时是可以存在多个激活节点的，所以用一个数组来保存所有的激活节点。
 
@@ -405,7 +404,7 @@ class Node {
       }
       // 清除当前已经激活节点的激活状态
       this.renderer.clearActive()
-      // 执行激活点击节点的激活状态的命令
+      // 执行激活 点击节点的激活状态 的命令
       this.mindMap.execCommand('SET_NODE_ACTIVE', this, true)
       // 添加到激活列表里
       this.renderer.addActiveNode(this)
@@ -448,6 +447,7 @@ class Node {
         margin-left: -5px;
         margin-top: -3px;
         outline: none;`
+      // 开启编辑模式
       this.textEditNode.setAttribute('contenteditable', true)
       document.body.appendChild(this.textEditNode)
     }
@@ -481,7 +481,7 @@ class Node {
     this.renderer.activeNodeList.forEach((node) => {
       // 这个方法会去掉html字符串里的标签及把br标签替换成\n
       let str = getStrWithBrFromHtml(this.textEditNode.innerHTML)
-      // 执行设置节点文本的命令
+      // 执行 设置节点文本 的命令
       this.mindMap.execCommand('SET_NODE_TEXT', this, str)
       // 更新其他节点
       this.mindMap.render()
@@ -493,7 +493,7 @@ class Node {
 }
 ```
 
-上面涉及到了两个东西，一个是注册快捷键，另一个是执行命令，这两个话题后面的小节里会进行介绍，节点编辑类完整代码：[TextEdit.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/TextEdit.js).
+上面涉及到了其他两个概念，一个是注册快捷键，另一个是执行命令，这两个话题后面的小节里会进行介绍，节点编辑类完整代码：[TextEdit.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/TextEdit.js).
 
 
 
@@ -525,7 +525,7 @@ class Node {
     // 绑定点击事件
     this._expandBtn.on('click', (e) => {
       e.stopPropagation()
-      // 展开收缩
+      // 执行展开收缩的命令
       this.mindMap.execCommand('SET_NODE_EXPAND', this, !this.nodeData.data.expand)
     })
     // 设置按钮的显示位置，显示到节点的右侧垂直居中的位置
@@ -538,7 +538,7 @@ class Node {
 
 ![image-20210718184835414](./assets/image-20210718184835414.png)
 
-`SET_NODE_EXPAND`命令会设置节点的展开收起状态，并渲染或删除其所有子孙节点，达到展开或收起的效果，并且还需要重新计算和移动所有节点的位置，此外遍历树计算位置的相关代码也需要加上这个判断：
+`SET_NODE_EXPAND`命令会设置节点的展开收起状态，并渲染或删除其所有子孙节点，达到展开或收起的效果，并且还需要重新计算和移动其他所有节点的位置，此外遍历树计算位置的相关代码也需要加上展开收缩的判断：
 
 ```js
 // 第一次遍历
@@ -546,7 +546,7 @@ walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
   // ...
 }, (cur, parent, isRoot, layerIndex) => {
   // 后序遍历
-  if (cur.data.expand) {
+  if (cur.data.expand) {// 展开状态
     cur._node.childrenAreaHeight = cur._node.children.reduce((h, node) => {
       return h + node.height
     }, 0) + (len + 1) * marginY
@@ -559,7 +559,7 @@ walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
 ```js
 // 第二次遍历
 walk(this.root, null, (node, parent, isRoot, layerIndex) => {
-  // 收起状态的子节点就不用计算了
+  // 只计算展开状态节点的子节点
   if (node.nodeData.data.expand && node.children && node.children.length > 0) {
     let top = node.top + node.height / 2 - node.childrenAreaHeight / 2
     // ...
@@ -696,6 +696,7 @@ class Render {
   back(step) {
     let data = this.mindMap.command.back(step)
     if (data) {
+      // 替换当前的渲染树
       this.renderTree = data
       this.mindMap.reRender()
     }
@@ -847,7 +848,7 @@ class Style {
 }
 ```
 
-我们会先判断一个节点自身是否设置了样式，有的话那就优先使用自身的，这样来达到每个节点都可以进行个性化的能力。
+我们会先判断一个节点自身是否设置了该样式，有的话那就优先使用自身的，这样来达到每个节点都可以进行个性化的能力。
 
 样式编辑就是把所有这些可配置的样式通过可视化的控件来展示与修改，实现上，可以监听节点的激活事件，然后打开样式编辑面板，先回显当前的样式，然后当修改了某个样式就通过相应的命令设置到当前激活节点上：
 
@@ -878,7 +879,7 @@ const map = {
 }
 ```
 
-完整数据请点这里：[keyMap.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/keyMap.js)。
+完整映射表请点这里：[keyMap.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/keyMap.js)。
 
 快捷键包含三种：单个按键、组合键、多个”或“关系的按键，可以使用一个对象来保存键值及回调：
 
@@ -922,7 +923,7 @@ this.mindMap.keyCommand.addShortcut('Del|Backspace', () => {
 class KeyCommand {
   bindEvent() {
     window.addEventListener('keydown', (e) => {
-      // 遍历注册的所有键值，看本次是否匹配，匹配到了就执行它的回调队列
+      // 遍历注册的所有键值，看本次是否匹配，匹配到了哪个就执行它的回调队列
       Object.keys(this.shortcutMap).forEach((key) => {
         if (this.checkKey(e, key)) {
           e.stopPropagation()
@@ -946,7 +947,7 @@ class KeyCommand {
         let o = this.getOriginEventCodeArr(e)
         // 注册的键值数组，
         let k = this.getKeyCodeArr(key)
-        // 检查两个数组是否相同，相同则说明匹配到了
+        // 检查两个数组是否相同，相同则说明匹配成功
         if (this.isSame(o, k)) {
             return true
         }
@@ -1070,7 +1071,7 @@ this.mindMap.event.on('mousewheel', (e, dir) => {
 
 # 多选节点
 
-多选节点也是一个重要功能，比如我想同时删除多个节点，或者给多个节点设置同样的样式，挨个节点节点操作显然比较慢，市面上的思维导图一般都是鼠标左键按着拖动进行多选，右键拖动移动画布，但是笔者的个人习惯把它反了一下。
+多选节点也是一个不可缺少的功能，比如我想同时删除多个节点，或者给多个节点设置同样的样式，挨个节点节点操作显然比较慢，市面上的思维导图一般都是鼠标左键按着拖动进行多选，右键拖动移动画布，但是笔者的个人习惯把它反了一下。
 
 多选其实很简单，鼠标按下为起点，鼠标移动的实时位置为终点，那么如果某个节点在这两个点组成的矩形区域内就相当于被选中了，需要注意的是要考虑变换问题，比如拖动和放大缩小后，那么节点的`left`和`top`也需要变换一下：
 
@@ -1086,6 +1087,7 @@ class Select {
         // 遍历节点树
         bfsWalk(this.mindMap.renderer.root, (node) => {
             let { left, top, width, height } = node
+            // 节点的位置需要进行相应的变换
             let right = (left + width) * scaleX + translateX
             let bottom = (top + height) * scaleY + translateY
             left = left * scaleX + translateX
@@ -1105,7 +1107,7 @@ class Select {
 }
 ```
 
-另外一个细节是当鼠标移动到画布边缘时`g`需要进行移动变换，否则画布外的节点就没办法被选中了：
+另外一个细节是当鼠标移动到画布边缘时`g`元素需要进行移动变换，当然，鼠标按下的起点位置也需要同步变化，否则画布外的节点就没办法被选中了：
 
 ![2021-07-21-19-54-48](./assets/2021-07-21-19-54-48.gif)
 
@@ -1123,7 +1125,7 @@ class Select {
 
 ![image-20210720200816281](./assets/image-20210720200816281.png)
 
-上面的【拖动、放大缩小】小节里介绍了思维导图所有的节点都是通过一个`g`元素来包裹的，相关变换效果也是应用在这个元素上，我们的思路是先去除它的放大缩小效果，这样能获取到它原本的宽高，然后把画布也就是`svg`元素调整成这个宽高，然后再想办法把`g`元素移动到`svg`的位置上，这样导出`svg`刚好就是原大小且完整的，导出成功后再把`svg`元素恢复之前的不换及大小。
+上面的【拖动、放大缩小】小节里介绍了思维导图所有的节点都是通过一个`g`元素来包裹的，相关变换效果也是应用在这个元素上，我们的思路是先去除它的放大缩小效果，这样能获取到它原本的宽高，然后把画布也就是`svg`元素调整成这个宽高，然后再想办法把`g`元素移动到`svg`的位置上和它重合，这样导出`svg`刚好就是原大小且完整的，导出成功后再把`svg`元素恢复之前的变换及大小即可。
 
 接下来一步步图示：
 
@@ -1146,7 +1148,7 @@ this.mindMap.draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY)
 
 ![image-20210721183823754](./assets/image-20210721183823754.png)
 
-4.把`svg`画布调整为`g`的实际大小
+4.把`svg`画布调整为`g`元素的实际大小
 
 ```js
 // rbox是svgjs提供的用来获取变换后的位置和尺寸信息，其实是getBoundingClientRect方法的包装方法
@@ -1214,6 +1216,7 @@ class Export {
             type: 'image/svg+xml'
         });
         let file = URL.createObjectURL(blob)
+        // 触发下载
         let a = document.createElement('a')
         a.href = file
         a.download = fileName
@@ -1228,7 +1231,7 @@ class Export {
 
 导出`png`是在导出`svg`的基础上进行的，我们上一步已经获取到了要导出的`svg`的内容，所以这一步就是要想办法把`svg`转成`png`，首先我们知道`img`标签是可以直接显示`svg`文件的，所以我们可以通过`img`标签来打开`svg`，然后再把图片绘制到`canvas`上，最后导出为`png`格式即可。
 
-不过这之前还有另外一个问题要解决，就是如果`svg`里面存在`image`图片元素的话，且图片是通过链接方式引用的（无论同源还是非同源），绘制到`canvas`上都显示不出来，一般有两个解决方法，一是把所有图片元素从`svg`里面剔除，然后手动绘制到`canvas`上；二是把图片`url`都转换成`data:url`格式，笔者选择的是第二种方法：
+不过这之前还有另外一个问题要解决，就是如果`svg`里面存在`image`图片元素的话，且图片是通过外链方式引用的（无论同源还是非同源），绘制到`canvas`上一律都显示不出来，一般有两个解决方法：一是把所有图片元素从`svg`里面剔除，然后手动绘制到`canvas`上；二是把图片`url`都转换成`data:url`格式，简单起见，笔者选择的是第二种方法：
 
 ```js
 class Export {
@@ -1261,7 +1264,7 @@ class Export {
         let blob = new Blob([str], {
             type: 'image/svg+xml'
         })
-        // 转换成data:url数据
+        // 转换成对象URL
         let svgUrl = URL.createObjectURL(blob)
         // 绘制到canvas上，转换成png
         let imgDataUrl = await this.svgToPng(svgUrl)
@@ -1306,7 +1309,7 @@ class Export {
 
 # 总结
 
-本文介绍了实现一个`web`思维导图涉及到的一些技术点，代码较粗糙，而且性能上存在一定问题，所以仅供参考，另外因为是笔者第一次使用`svg`，所以难免会有`svg`方面的错误，或者有更好的实现，欢迎留言探讨。
+本文介绍了实现一个`web`思维导图涉及到的一些技术点，需要说明的是，代码实现较粗糙，而且性能上存在一定问题，所以仅供参考，另外因为是笔者第一次使用`svg`，所以难免会有`svg`方面的错误，或者有更好的实现，欢迎留言探讨。
 
 其他还有一些常见功能，比如小窗口导航、自由主题等，有兴趣的可以自行实现，下一篇主要会介绍一下另外三种变种结构的实现，敬请期待。
 
