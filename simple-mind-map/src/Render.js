@@ -336,9 +336,10 @@ class Render {
                 "children": []
             })
             if (node.isRoot) {
-                this.mindMap.batchExecution.push('renderNode' + index, () => {
-                    node.renderNode()
-                })
+                node.initRender = true
+                // this.mindMap.batchExecution.push('renderNode' + index, () => {
+                //     node.renderNode()
+                // })
             }
         })
         this.mindMap.render()
