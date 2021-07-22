@@ -50,20 +50,15 @@ class Select {
             if (Math.abs(x - this.mouseDownX) <= 10 && Math.abs(y - this.mouseDownY) <= 10) {
                 return
             }
-            this.rect.plot([
-                [this.mouseDownX, this.mouseDownY],
-                [this.mouseMoveX, this.mouseDownY],
-                [this.mouseMoveX, this.mouseMoveY],
-                [this.mouseDownX, this.mouseMoveY]
-            ])
-            this.checkInNodes()
-            this.move(x, y)
+            clearTimeout(this.autoMoveTimer)
+            this.onMove(x, y)
         })
         this.mindMap.on('mouseup', (e) => {
             if (!this.isMousedown) {
                 return;
             }
             this.mindMap.emit('node_active', null, this.mindMap.renderer.activeNodeList)
+            clearTimeout(this.autoMoveTimer)
             this.isMousedown = false
             if (this.rect) this.rect.remove()
             this.rect = null
@@ -73,31 +68,59 @@ class Select {
     /** 
      * @Author: 王林 
      * @Date: 2021-07-13 07:55:49 
-     * @Desc: 鼠标移动到边缘后移动画布 
+     * @Desc: 鼠标移动事件
      */
-    move (x, y) {
+    onMove (x, y) {
+        // 绘制矩形
+        this.rect.plot([
+            [this.mouseDownX, this.mouseDownY],
+            [this.mouseMoveX, this.mouseDownY],
+            [this.mouseMoveX, this.mouseMoveY],
+            [this.mouseDownX, this.mouseMoveY]
+        ])
+        this.checkInNodes()
+        // 检测边缘移动
         let step = this.mindMap.opt.selectTranslateStep
         let limit = this.mindMap.opt.selectTranslateLimit
+        let count = 0
         // 左边缘
         if (x <= this.mindMap.elRect.left + limit) {
             this.mouseDownX += step
             this.mindMap.view.translateX(step)
+            count++
         }
         // 右边缘
         if (x >= this.mindMap.elRect.right - limit) {
             this.mouseDownX -= step
             this.mindMap.view.translateX(-step)
+            count++
         }
         // 上边缘
         if (y <= this.mindMap.elRect.top + limit) {
             this.mouseDownY += step
             this.mindMap.view.translateY(step)
+            count++
         }
         // 下边缘
         if (y >= this.mindMap.elRect.bottom - limit) {
             this.mouseDownY -= step
             this.mindMap.view.translateY(-step)
+            count++
         }
+        if (count > 0) {
+            this.startAutoMove(x, y)
+        }
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-22 08:02:23 
+     * @Desc: 开启自动移动 
+     */
+    startAutoMove(x, y) {
+        this.autoMoveTimer = setTimeout(() => {
+            this.onMove(x, y)
+        }, 20);
     }
 
     /** 
