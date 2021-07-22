@@ -866,9 +866,9 @@ const data4 = {
 
 export default {
     // ...data1,
-    // ...data2,
+    ...data2,
     // ...data3,
-    ...data4,
+    // ...data4,
     "theme": {
         "template": "default",
         "config": {
