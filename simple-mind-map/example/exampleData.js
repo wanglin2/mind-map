@@ -870,7 +870,7 @@ export default {
     // ...data3,
     // ...data4,
     "theme": {
-        "template": "default",
+        "template": "minions",
         "config": {
             // 自定义配置...
         }
