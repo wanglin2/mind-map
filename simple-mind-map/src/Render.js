@@ -183,8 +183,12 @@ class Render {
             })
         })
         // 删除节点
-        this.mindMap.keyCommand.addShortcut('Del|Backspace', () => {
-            this.removeNode()
+        this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNode)
+        this.mindMap.on('before_show_text_edit', () => {
+            this.mindMap.keyCommand.removeShortcut('Del|Backspace')
+        })
+        this.mindMap.on('hide_text_edit', () => {
+            this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNode)
         })
     }
 
