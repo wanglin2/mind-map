@@ -115,4 +115,28 @@ export default class KeyCommand {
             }
         })
     }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-07-27 14:06:16 
+     * @Desc: 移除快捷键命令 
+     */
+    removeShortcut(key, fn) {
+        key.split(/\s*\|\s*/).forEach((item) => {
+            if (this.shortcutMap[item]) {
+                if (fn) {
+                    let index = this.shortcutMap[item].findIndex((f) => {
+                        return f === fn
+                    })
+                    if (index !== -1) {
+                        this.shortcutMap[item].splice(index, 1)
+                    }
+                } else {
+                    this.shortcutMap[item] = []
+                    delete this.shortcutMap[item]
+                }
+            }
+        })
+    }
 }
