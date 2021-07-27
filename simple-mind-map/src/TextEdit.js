@@ -75,6 +75,7 @@ export default class TextEdit {
      * @Desc: 显示文本编辑框 
      */
     showEditTextBox(node, rect) {
+        this.mindMap.emit('before_show_text_edit')
         if (!this.textEditNode) {
             this.textEditNode = document.createElement('div')
             this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);padding: 3px 5px;margin-left: -5px;margin-top: -3px;outline: none;`
