@@ -20,6 +20,7 @@
 <script>
 import Sidebar from "./Sidebar";
 import { layoutList } from "simple-mind-map/src/utils/constant";
+import { storeConfig } from "@/api";
 
 /**
  * @Author: 王林
@@ -39,7 +40,7 @@ export default {
   data() {
     return {
       layoutList,
-      layout: ''
+      layout: "",
     };
   },
   created() {
@@ -60,6 +61,9 @@ export default {
     useLayout(layout) {
       this.layout = layout.value;
       this.mindMap.setLayout(layout.value);
+      storeConfig({
+        layout: layout.value,
+      });
     },
   },
 };

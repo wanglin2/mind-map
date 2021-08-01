@@ -226,6 +226,7 @@ import {
   backgroundRepeatList
 } from "@/config";
 import ImgUpload from "@/components/ImgUpload";
+import { storeConfig } from "@/api";
 
 /**
  * @Author: 王林
@@ -331,6 +332,12 @@ export default {
       }
       this.data.theme.config[key] = value;
       this.mindMap.setThemeConfig(this.data.theme.config);
+      storeConfig({
+        theme: {
+            "template": this.mindMap.getTheme(),
+            "config": this.data.theme.config
+        }
+      });
     },
 
     /**

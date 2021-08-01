@@ -166,7 +166,9 @@ const mindMap = new MindMap({
 
 设置主题配置，`config`同上面选项表格里的选项`themeConfig`
 
+#### getCustomThemeConfig()
 
+获取自定义主题配置
 
 #### getThemeConfig(prop)
 

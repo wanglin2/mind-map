@@ -864,11 +864,21 @@ const data4 = {
     }
 }
 
+const rootData = {
+    "root": {
+        "data": {
+            "text": "根节点"
+        },
+        "children": []
+    }
+}
+
 export default {
     // ...data1,
-    ...data2,
+    // ...data2,
     // ...data3,
     // ...data4,
+    ...rootData,
     "theme": {
         "template": "minions",
         "config": {
