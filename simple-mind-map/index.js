@@ -248,6 +248,15 @@ class MindMap {
 
     /** 
      * @Author: 王林 
+     * @Date: 2021-08-01 10:38:34 
+     * @Desc: 获取自定义主题配置 
+     */
+    getCustomThemeConfig() {
+        return this.opt.themeConfig
+    }
+
+    /** 
+     * @Author: 王林 
      * @Date: 2021-05-05 14:01:29 
      * @Desc: 获取某个主题配置值 
      */
@@ -295,7 +304,7 @@ class MindMap {
      * @Date: 2021-07-01 22:06:38 
      * @Desc: 导出 
      */
-    async export (...args) {
+    async export(...args) {
         let result = await this.doExport.export(...args)
         return result
     }

@@ -18,13 +18,13 @@ import MindMap from "simple-mind-map";
 import Outline from "./Outline";
 import Style from "./Style";
 import BaseStyle from "./BaseStyle";
-import exampleData from "simple-mind-map/example/exampleData";
 import Theme from "./Theme";
 import Structure from "./Structure";
 import Count from "./Count";
 import NavigatorToolbar from "./NavigatorToolbar";
 import ShortcutKey from "./ShortcutKey";
 import Contextmenu from "./Contextmenu";
+import { getData, storeData } from "@/api";
 
 /**
  * @Author: 王林
@@ -64,7 +64,19 @@ export default {
      * @Desc: 获取思维导图数据，实际应该调接口获取
      */
     getData() {
-      this.mindMapData = exampleData;
+      let storeData = getData();
+      this.mindMapData = storeData;
+    },
+
+    /**
+     * @Author: 王林
+     * @Date: 2021-08-01 10:19:07
+     * @Desc: 存储数据当数据有变时
+     */
+    bindSaveEvent() {
+      this.$bus.$on("data_change", (data) => {
+        storeData(data);
+      });
     },
 
     /**
@@ -91,12 +103,13 @@ export default {
         "draw_click",
         "expand_btn_click",
         "svg_mousedown",
-        "mouseup"
+        "mouseup",
       ].forEach((event) => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args);
         });
       });
+      this.bindSaveEvent();
     },
 
     /**
