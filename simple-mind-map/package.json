@@ -1,6 +1,22 @@
 {
   "name": "simple-mind-map",
-  "version": "0.1.0",
+  "version": "0.1.2",
+  "description": "一个简单的web在线思维导图",
+  "authors": [
+    {
+      "name": "街角小林",
+      "email": "1013335014@qq.com"
+    },
+    {
+      "name": "理想青年实验室",
+      "url": "http://lxqnsys.com/"
+    }
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wanglin2/mind-map"
+  },
   "scripts": {},
   "main": "index.js",
   "dependencies": {
@@ -8,5 +24,12 @@
     "canvg": "^3.0.7",
     "deepmerge": "^1.5.2",
     "eventemitter3": "^4.0.7"
-  }
+  },
+  "keywords": [
+    "javascript",
+    "svg",
+    "mind-map",
+    "mindMap",
+    "MindMap"
+  ]
 }
