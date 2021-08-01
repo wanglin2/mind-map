@@ -20,6 +20,7 @@
 <script>
 import Sidebar from "./Sidebar";
 import { themeList } from "simple-mind-map/src/utils/constant";
+import { storeConfig } from "@/api";
 
 /**
  * @Author: 王林
@@ -60,6 +61,12 @@ export default {
     useTheme(theme) {
       this.theme = theme.value;
       this.mindMap.setTheme(theme.value);
+      storeConfig({
+        theme: {
+            "template": theme.value,
+            "config": this.mindMap.getCustomThemeConfig()
+        }
+      });
     },
   },
 };
