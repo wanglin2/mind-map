@@ -233,6 +233,11 @@ export const shortcutKeyList = [
                 icon: 'iconhuanhang',
                 name: '文本换行',
                 value: 'Shift + Enter'
+            },
+            {
+                icon: 'iconhoutui-shi',
+                name: '回退',
+                value: 'Ctrl + z'
             }
         ]
     },

@@ -6,6 +6,13 @@
   "description": "思维导图",
   "glyphs": [
     {
+      "icon_id": "17606306",
+      "name": "导入",
+      "font_class": "daoru",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
       "icon_id": "5110748",
       "name": "后退-实",
       "font_class": "houtui-shi",

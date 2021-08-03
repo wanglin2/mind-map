@@ -53,7 +53,7 @@ export default class TextEdit {
         })
         // 注册编辑快捷键
         this.mindMap.keyCommand.addShortcut('F2', () => {
-            if (this.renderer.activeNodeList.length <= 0){
+            if (this.renderer.activeNodeList.length <= 0) {
                 return
             }
             this.show(this.renderer.activeNodeList[0])
@@ -90,6 +90,21 @@ export default class TextEdit {
         this.textEditNode.style.top = rect.top + 'px'
         this.textEditNode.style.display = 'block'
         this.showTextEdit = true
+        // 选中文本
+        this.selectNodeText()
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-08-02 23:13:50 
+     * @Desc: 选中文本 
+     */
+    selectNodeText() {
+        let selection = window.getSelection()
+        let range = document.createRange()
+        range.selectNodeContents(this.textEditNode)
+        selection.removeAllRanges()
+        selection.addRange(range)
     }
 
     /** 
