@@ -17,6 +17,30 @@ class Command {
         this.commands = {}
         this.history = []
         this.activeHistoryIndex = 0
+        // 注册快捷键
+        this.registerShortcutKeys()
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-08-03 23:06:55 
+     * @Desc: 清空历史数据 
+     */
+    clearHistory() {
+        this.history = []
+        this.activeHistoryIndex = 0
+        this.mindMap.emit('back_forward', 0, 0)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-08-02 23:23:19 
+     * @Desc: 注册快捷键 
+     */
+    registerShortcutKeys() {
+        this.mindMap.keyCommand.addShortcut('Control+z', () => {
+            this.mindMap.execCommand('BACK')
+        })
     }
 
     /** 

@@ -44,6 +44,8 @@ class Render {
         this.activeNodeList = []
         // 根节点
         this.root = null
+        // 文本编辑框，需要再bindEvent之前实例化，否则单击事件只能触发隐藏文本编辑框，而无法保存文本修改
+        this.textEdit = new TextEdit(this)
         // 布局
         this.setLayout()
         // 绑定事件
@@ -52,8 +54,6 @@ class Render {
         this.registerCommands()
         // 注册快捷键
         this.registerShortcutKeys()
-        // 文本编辑框
-        this.textEdit = new TextEdit(this)
     }
 
     /** 
@@ -122,8 +122,8 @@ class Render {
         this.setNodeActive = this.setNodeActive.bind(this)
         this.mindMap.command.add('SET_NODE_ACTIVE', this.setNodeActive)
         // 清除所有激活节点
-        this.clearActive = this.clearActive.bind(this)
-        this.mindMap.command.add('CLEAR_ACTIVE_NODE', this.clearActive)
+        this.clearAllActive = this.clearAllActive.bind(this)
+        this.mindMap.command.add('CLEAR_ACTIVE_NODE', this.clearAllActive)
         // 切换节点是否展开
         this.setNodeExpand = this.setNodeExpand.bind(this)
         this.mindMap.command.add('SET_NODE_EXPAND', this.setNodeExpand)
@@ -164,15 +164,16 @@ class Render {
     registerShortcutKeys() {
         // 插入下级节点
         this.mindMap.keyCommand.addShortcut('Tab', () => {
-            this.insertChildNode()
+            this.mindMap.execCommand('INSERT_CHILD_NODE')
         })
         // 插入同级节点
-        this.mindMap.keyCommand.addShortcut('Enter', () => {
+        let insertNodeWrap = () => {
             if (this.textEdit.showTextEdit) {
                 return
             }
-            this.insertNode()
-        })
+            this.mindMap.execCommand('INSERT_NODE')
+        }
+        this.mindMap.keyCommand.addShortcut('Enter', insertNodeWrap)
         // 展开/收起节点
         this.mindMap.keyCommand.addShortcut('/', () => {
             this.activeNodeList.forEach((node) => {
@@ -183,12 +184,18 @@ class Render {
             })
         })
         // 删除节点
-        this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNode)
+        let removeNodeWrap = () => {
+            this.mindMap.execCommand('REMOVE_NODE')
+        }
+        this.mindMap.keyCommand.addShortcut('Del|Backspace', removeNodeWrap)
+        // 节点编辑时某些快捷键会存在冲突，需要暂时去除
         this.mindMap.on('before_show_text_edit', () => {
             this.mindMap.keyCommand.removeShortcut('Del|Backspace')
+            this.mindMap.keyCommand.removeShortcut('Enter', insertNodeWrap)
         })
         this.mindMap.on('hide_text_edit', () => {
-            this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNode)
+            this.mindMap.keyCommand.addShortcut('Del|Backspace', removeNodeWrap)
+            this.mindMap.keyCommand.addShortcut('Enter', insertNodeWrap)
         })
     }
 
@@ -218,6 +225,16 @@ class Render {
             this.mindMap.execCommand('SET_NODE_ACTIVE', item, false)
         })
         this.activeNodeList = []
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-08-03 23:14:34 
+     * @Desc: 清除当前所有激活节点，并会触发事件 
+     */
+    clearAllActive() {
+        this.clearActive()
+        this.mindMap.emit('node_active', null, [])
     }
 
     /** 
