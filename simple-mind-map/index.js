@@ -301,6 +301,18 @@ class MindMap {
 
     /** 
      * @Author: 王林 
+     * @Date: 2021-08-03 22:58:12 
+     * @Desc: 动态设置思维导图数据 
+     */
+    setData(data) {
+        this.execCommand('CLEAR_ACTIVE_NODE')
+        this.command.clearHistory()
+        this.renderer.renderTree = data
+        this.reRender()
+    }
+
+    /** 
+     * @Author: 王林 
      * @Date: 2021-07-01 22:06:38 
      * @Desc: 导出 
      */

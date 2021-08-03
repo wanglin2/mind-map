@@ -125,6 +125,10 @@
       </div>
       <!-- 导出 -->
       <div class="toolbarBlock">
+        <div class="toolbarBtn" @click="$bus.$emit('showImport')">
+          <span class="icon iconfont icondaoru"></span>
+          <span class="text">导入</span>
+        </div>
         <div class="toolbarBtn" @click="$bus.$emit('showExport')">
           <span class="icon iconfont icondaochu"></span>
           <span class="text">导出</span>
@@ -141,6 +145,7 @@
     <NodeNote></NodeNote>
     <NodeTag></NodeTag>
     <Export></Export>
+    <Import></Import>
   </div>
 </template>
 
@@ -151,6 +156,7 @@ import NodeIcon from "./NodeIcon";
 import NodeNote from "./NodeNote";
 import NodeTag from "./NodeTag";
 import Export from "./Export";
+import Import from './Import';
 
 /**
  * @Author: 王林
@@ -166,6 +172,7 @@ export default {
     NodeNote,
     NodeTag,
     Export,
+    Import
   },
   data() {
     return {

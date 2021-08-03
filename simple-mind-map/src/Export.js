@@ -200,6 +200,27 @@ class Export {
         })
         return URL.createObjectURL(blob)
     }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-08-03 22:19:17 
+     * @Desc: 导出为json 
+     */
+    json () {
+        let data = this.mindMap.command.getCopyData()
+        let str = JSON.stringify(data)
+        let blob = new Blob([str])
+        return URL.createObjectURL(blob)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-08-03 22:24:24 
+     * @Desc: 专有文件，其实就是json文件 
+     */
+    smm () {
+        return this.json();
+    }
 }
 
 export default Export
