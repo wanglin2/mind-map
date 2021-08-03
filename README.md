@@ -218,6 +218,12 @@ const mindMap = new MindMap({
 | SET_NODE_TAG       | 设置节点标签                                                 | node（要设置的节点）、tag（字符串数组，内置颜色信息可在[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js)里获取到） |
 
 
+#### setData(data)
+
+动态设置思维导图数据
+
+`data`：思维导图结构数据
+
 
 #### export(type, isDownload)
 
@@ -352,6 +358,9 @@ mindMap.keyCommand.addShortcut('Control+Enter', () => {})
 
 获取渲染树数据副本
 
+#### clearHistory()
+
+清空历史堆栈数据
 
 
 ## view实例

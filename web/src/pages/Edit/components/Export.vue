@@ -11,9 +11,12 @@
         <el-input style="width: 300px" v-model="fileName" size="mini"></el-input>
       </div>
       <el-radio-group v-model="exportType">
-        <el-radio label="png">图片文件（PNG）</el-radio>
-        <el-radio label="svg">svg文件（SVG）</el-radio>
+        <el-radio label="smm">专有文件（.smm）</el-radio>
+        <el-radio label="json">json文件（.json）</el-radio>
+        <el-radio label="png">图片文件（.png）</el-radio>
+        <el-radio label="svg">svg文件（.svg）</el-radio>
       </el-radio-group>
+      <div class="tip">tips：.smm文件可用于导入</div>
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancel">取 消</el-button>
@@ -33,7 +36,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      exportType: "png",
+      exportType: "smm",
       fileName: '思维导图'
     };
   },
@@ -59,6 +62,10 @@ export default {
      */
     confirm() {
       this.$bus.$emit("export", this.exportType);
+      this.$notify.info({
+          title: '消息',
+          message: '如果没有触发下载，请检查是否被浏览器拦截了'
+        });
       this.cancel();
     },
   },
@@ -73,6 +80,10 @@ export default {
     .name {
       margin-right: 10px;
     }
+  }
+
+  .tip {
+    margin-top: 10px;
   }
 }
 </style>

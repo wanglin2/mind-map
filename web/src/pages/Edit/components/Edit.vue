@@ -56,6 +56,7 @@ export default {
     this.init();
     this.$bus.$on("execCommand", this.execCommand);
     this.$bus.$on("export", this.export);
+    this.$bus.$on("setData", this.setData);
   },
   methods: {
     /**
@@ -81,6 +82,16 @@ export default {
 
     /**
      * @Author: 王林
+     * @Date: 2021-08-02 23:19:52
+     * @Desc: 手动保存
+     */
+    manualSave() {
+      let data = this.mindMap.command.getCopyData();
+      storeData(data);
+    },
+
+    /**
+     * @Author: 王林
      * @Date: 2021-04-10 15:01:01
      * @Desc: 初始化
      */
@@ -92,6 +103,9 @@ export default {
         layout: layout,
         theme: theme.template,
         themeConfig: theme.config,
+      });
+      this.mindMap.keyCommand.addShortcut("Control+s", () => {
+        this.manualSave();
       });
       // 转发事件
       [
@@ -110,6 +124,16 @@ export default {
         });
       });
       this.bindSaveEvent();
+    },
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-08-03 23:01:13 
+     * @Desc: 动态设置思维导图数据 
+     */
+    setData(data) {
+      this.mindMap.setData(data)
+      this.manualSave()
     },
 
     /**
