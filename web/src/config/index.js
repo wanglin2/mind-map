@@ -237,7 +237,17 @@ export const shortcutKeyList = [
             {
                 icon: 'iconhoutui-shi',
                 name: '回退',
-                value: 'Ctrl + z'
+                value: 'Ctrl + Z'
+            },
+            {
+                icon: 'iconqianjin1',
+                name: '前进',
+                value: 'Ctrl + Y'
+            },
+            {
+                icon: 'iconquanxuan',
+                name: '全选',
+                value: 'Ctrl + A'
             }
         ]
     },

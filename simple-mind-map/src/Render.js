@@ -88,6 +88,9 @@ class Render {
      * @Desc: 注册命令 
      */
     registerCommands() {
+        // 全选
+        this.selectAll = this.selectAll.bind(this)
+        this.mindMap.command.add('SELECT_ALL', this.selectAll)
         // 回退
         this.back = this.back.bind(this)
         this.mindMap.command.add('BACK', this.back)
@@ -197,6 +200,10 @@ class Render {
             this.mindMap.keyCommand.addShortcut('Del|Backspace', removeNodeWrap)
             this.mindMap.keyCommand.addShortcut('Enter', insertNodeWrap)
         })
+        // 全选
+        this.mindMap.keyCommand.addShortcut('Control+a', () => {
+            this.mindMap.execCommand('SELECT_ALL')
+        })
     }
 
     /** 
@@ -282,6 +289,23 @@ class Render {
         return node.parent ? node.parent.children.findIndex((item) => {
             return item === node
         }) : 0
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-08-04 23:54:52 
+     * @Desc: 全选 
+     */
+    selectAll() {
+        walk(this.root, null, (node) => {
+            if (!node.nodeData.data.isActive) {
+                node.nodeData.data.isActive = true
+                this.addActiveNode(node)
+                setTimeout(() => {
+                    node.renderNode()
+                }, 0);
+            }
+        }, null, true, 0, 0)
     }
 
     /** 
