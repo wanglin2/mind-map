@@ -76,7 +76,7 @@ class Render {
         this.mindMap.on('draw_click', () => {
             // 清除激活状态
             if (this.activeNodeList.length > 0) {
-                this.clearActive()
+                this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
                 this.mindMap.emit('node_active', null, [])
             }
         })
@@ -222,7 +222,7 @@ class Render {
      */
     clearActive() {
         this.activeNodeList.forEach((item) => {
-            this.mindMap.execCommand('SET_NODE_ACTIVE', item, false)
+            this.setNodeActive(item, false)
         })
         this.activeNodeList = []
     }
@@ -290,6 +290,7 @@ class Render {
      * @Desc: 回退 
      */
     back(step) {
+        this.clearAllActive()
         let data = this.mindMap.command.back(step)
         if (data) {
             this.renderTree = data
@@ -304,6 +305,7 @@ class Render {
      * @Desc: 前进 
      */
     forward(step) {
+        this.clearAllActive()
         let data = this.mindMap.command.forward(step)
         if (data) {
             this.renderTree = data
@@ -324,6 +326,9 @@ class Render {
         if (first.isRoot) {
             this.insertChildNode()
         } else {
+            if (first.layerIndex === 1) {
+                first.parent.initRender = true
+            }
             let index = this.getNodeIndex(first)
             first.parent.nodeData.children.splice(index + 1, 0, {
                 "data": {
