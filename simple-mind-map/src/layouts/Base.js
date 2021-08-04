@@ -74,6 +74,9 @@ class Base {
             newNode.getSize()
             // 数据关联实际节点
             data._node = newNode
+            if (data.data.isActive) {
+                this.renderer.addActiveNode(newNode)
+            }
         }
         // 根节点
         if (isRoot) {
