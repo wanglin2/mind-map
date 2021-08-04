@@ -41,6 +41,9 @@ class Command {
         this.mindMap.keyCommand.addShortcut('Control+z', () => {
             this.mindMap.execCommand('BACK')
         })
+        this.mindMap.keyCommand.addShortcut('Control+y', () => {
+            this.mindMap.execCommand('FORWARD')
+        })
     }
 
     /** 
