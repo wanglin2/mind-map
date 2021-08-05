@@ -223,6 +223,7 @@ class MindMap {
      * @Desc: 设置主题 
      */
     setTheme(theme) {
+        this.renderer.clearAllActive()
         this.opt.theme = theme
         this.reRender()
     }
