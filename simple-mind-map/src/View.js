@@ -19,6 +19,7 @@ class View {
         this.sy = 0
         this.x = 0
         this.y = 0
+        this.setTransformData(this.mindMap.opt.viewData)
         this.bind()
     }
 
@@ -66,6 +67,42 @@ class View {
     /** 
      * javascript comment 
      * @Author: 王林25 
+     * @Date: 2021-11-22 18:30:24 
+     * @Desc: 获取当前变换状态数据 
+     */
+    getTransformData() {
+        return {
+            transform: this.mindMap.draw.transform(),
+            state: {
+                scale: this.scale,
+                x: this.x,
+                y: this.y,
+                sx: this.sx,
+                sy: this.sy
+            }
+        }
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-11-22 19:54:17 
+     * @Desc: 动态设置变换状态数据 
+     */
+    setTransformData(viewData) {
+        if (viewData) {
+            Object.keys(viewData.state).forEach((prop) => {
+                this[prop] = viewData.state[prop]
+            })
+            this.mindMap.draw.transform({
+                ...viewData.transform
+            })
+        }
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
      * @Date: 2021-07-13 15:49:06 
      * @Desc: 平移x方向 
      */
@@ -96,6 +133,7 @@ class View {
             origin: 'left center',
             translate: [this.x, this.y],
         })
+        this.mindMap.emit('view_data_change', this.getTransformData())
     }
 
     /** 
@@ -104,22 +142,18 @@ class View {
      * @Desc: 恢复
      */
     reset() {
-        let t = this.mindMap.draw.transform()
+        // let t = this.mindMap.draw.transform()
         this.scale = 1
         this.x = 0
         this.y = 0
-        this.mindMap.draw.transform({
-            scale: this.scale,
-            origin: 'left center',
-            translate: [this.x, this.y],
-        })
+        this.transform()
     }
 
     /** 
-         * @Author: 王林 
-         * @Date: 2021-07-04 17:10:34 
-         * @Desc: 缩小 
-         */
+     * @Author: 王林 
+     * @Date: 2021-07-04 17:10:34 
+     * @Desc: 缩小 
+     */
     narrow() {
         if (this.scale - this.mindMap.opt.scaleRatio > 0.1) {
             this.scale -= this.mindMap.opt.scaleRatio
