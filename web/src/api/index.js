@@ -10,7 +10,7 @@ const SIMPLE_MIND_MAP_DATA = 'SIMPLE_MIND_MAP_DATA'
  */
 const copyMindMapTreeData = (tree, root) => {
     tree.data = simpleDeepClone(root.data)
-    tree.data.isActive = false
+    // tree.data.isActive = false
     tree.children = []
     if (root.children && root.children.length > 0) {
         root.children.forEach((item, index) => {
