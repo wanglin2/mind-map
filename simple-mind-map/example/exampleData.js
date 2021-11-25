@@ -876,9 +876,9 @@ const rootData = {
 export default {
     // ...data1,
     // ...data2,
-    // ...data3,
+    ...data3,
     // ...data4,
-    ...rootData,
+    // ...rootData,
     "theme": {
         "template": "minions",
         "config": {

@@ -27,12 +27,18 @@ export const walk = (root, parent, beforeCallback, afterCallback, isRoot, layerI
 export const bfsWalk = (root, callback) => {
     callback(root)
     let stack = [root]
+    let isStop = false
     while (stack.length) {
+        if (isStop) {
+            break
+        }
         let cur = stack.shift()
         if (cur.children && cur.children.length) {
             cur.children.forEach((item) => {
                 stack.push(item)
-                callback(item)
+                if(callback(item) === 'stop') {
+                    isStop = true
+                }
             })
         }
     }

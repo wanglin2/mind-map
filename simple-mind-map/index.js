@@ -9,6 +9,7 @@ import Command from './src/Command'
 import BatchExecution from './src/BatchExecution'
 import Export from './src/Export'
 import Select from './src/Select'
+import Drag from './src/Drag'
 import {
     layoutValueList
 } from './src/utils/constant'
@@ -110,6 +111,11 @@ class MindMap {
 
         // 选择类
         this.select = new Select({
+            mindMap: this
+        })
+
+        // 拖动类
+        this.drag = new Drag({
             mindMap: this
         })
 
@@ -320,6 +326,18 @@ class MindMap {
     async export(...args) {
         let result = await this.doExport.export(...args)
         return result
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-07-11 09:20:03 
+     * @Desc: 转换位置 
+     */
+    toPos(x, y) {
+        return {
+            x: x - this.elRect.left,
+            y: y - this.elRect.top
+        }
     }
 }
 

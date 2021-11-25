@@ -82,7 +82,7 @@ export default class TextEdit {
             this.textEditNode.setAttribute('contenteditable', true)
             document.body.appendChild(this.textEditNode)
         }
-        node.style.domText(this.textEditNode)
+        node.style.domText(this.textEditNode, this.mindMap.view.scale)
         this.textEditNode.innerHTML = node.nodeData.data.text.split(/\n/img).join('<br>')
         this.textEditNode.style.minWidth = rect.width + 10 + 'px'
         this.textEditNode.style.minHeight = rect.height + 6 + 'px'
