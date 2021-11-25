@@ -55,6 +55,8 @@ class Node {
         this.left = opt.left || 0
         // top
         this.top = opt.top || 0
+        // 是否正在拖拽中
+        this.isDrag = false
         // 父节点
         this.parent = opt.parent || null
         // 子节点
@@ -677,6 +679,50 @@ class Node {
     }
 
     /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-11-23 18:39:14 
+     * @Desc: 隐藏节点 
+     */
+    hide() {
+        this.group.hide()
+        if (this.parent) {
+            let index = this.parent.children.indexOf(this)
+            this.parent._lines[index].hide()
+        }
+        // 子节点
+        if (this.children && this.children.length) {
+            asyncRun(this.children.map((item) => {
+                return () =>{
+                    item.hide()
+                }
+            }))
+        }
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-11-23 18:39:14 
+     * @Desc: 显示节点 
+     */
+     show() {
+        this.group.show()
+        if (this.parent) {
+            let index = this.parent.children.indexOf(this)
+            this.parent._lines[index].show()
+        }
+        // 子节点
+        if (this.children && this.children.length) {
+            asyncRun(this.children.map((item) => {
+                return () =>{
+                    item.show()
+                }
+            }))
+        }
+    }
+
+    /** 
      * @Author: 王林 
      * @Date: 2021-04-10 22:01:53 
      * @Desc: 连线 
@@ -799,6 +845,42 @@ class Node {
             this._expandBtn.remove()
             this._expandBtn = null
         }
+    }
+
+    
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-11-25 09:51:37 
+     * @Desc: 检测当前节点是否是某个节点的祖先节点
+     */
+    isParent(node) {
+        if (this === node) {
+            return false
+        }
+        let parent = node.parent
+        while(parent) {
+            if (this === parent) {
+                return true
+            }
+            parent = parent.parent
+        }
+        return false
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-11-25 10:32:34 
+     * @Desc: 检测当前节点是否是某个节点的兄弟节点
+     */
+    isBrother(node) {
+        if (!this.parent || this === node) {
+            return false
+        }
+        return this.parent.children.find((item) => {
+            return item === node
+        })
     }
 
     /** 

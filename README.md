@@ -1,6 +1,22 @@
-[TOC]
-
 # web思维导图的简单实现
+
+## 特性
+
+- [x] 支持逻辑结构图、思维导图、组织结构图、目录组织图四种结构
+
+- [x] 内置多种主题，允许高度自定义样式
+
+- [x] 支持快捷键
+
+- [x] 节点内容支持图片、图标、超链接、备注、标签
+
+- [x] 支持前进后退
+
+- [x] 支持拖动、缩放
+
+- [x] 支持右键多选
+
+- [x] 支持节点拖拽
 
 ## 目录介绍
 
@@ -43,6 +59,10 @@ cd web
 npm run build
 ```
 会自动把`index.html`移动到根目录。
+
+## 相关文章
+
+[Web思维导图实现的技术点分析](https://juejin.cn/post/6987711560521089061)
 
 # 安装
 
@@ -193,31 +213,34 @@ const mindMap = new MindMap({
 
 执行命令，每执行一个命令就会在历史堆栈里添加一条记录用于回退或前进。所有命令如下：
 
-| 命令名称           | 描述                                                         | 参数                                                         |
-| ------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| SELECT_ALL         | 全选                                                         |                                                              |
-| BACK               | 回退指定的步数                                               | step（要回退的步数，默认为1）                                |
-| FORWARD            | 前进指定的步数                                               | step（要前进的步数，默认为1）                                |
-| INSERT_NODE        | 插入同级节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效 |                                                              |
-| INSERT_CHILD_NODE  | 插入子节点，操作节点为当前激活的节点                         |                                                              |
-| UP_NODE            | 上移节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的第一个节点使用无效 |                                                              |
-| DOWN_NODE          | 操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的最后一个节点使用无效 |                                                              |
-| REMOVE_NODE        | 删除节点，操作节点为当前激活的节点                           |                                                              |
-| PASTE_NODE         | 粘贴节点到节点，操作节点为当前激活的节点                     | data（要粘贴的节点数据，一般通过`renderer.copyNode()`方法和`renderer.cutNode()`方法获取） |
-| CUT_NODE           | 剪切节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点使用无效 | callback(回调函数，剪切的节点数据会通过调用该函数并通过参数返回) |
-| SET_NODE_STYLE     | 修改节点样式                                                 | node（要设置样式的节点）、prop（样式属性）、value（样式属性值）、isActive（布尔值，是否设置的是激活状态的样式） |
-| SET_NODE_ACTIVE    | 设置节点是否激活                                             | node（要设置的节点）、active（布尔值，是否激活）             |
-| CLEAR_ACTIVE_NODE  | 清除当前已激活节点的激活状态，操作节点为当前激活的节点       |                                                              |
-| SET_NODE_EXPAND    | 设置节点是否展开                                             | node（要设置的节点）、expand（布尔值，是否展开）             |
-| EXPAND_ALL         | 展开所有节点                                                 |                                                              |
-| UNEXPAND_ALL       | 收起所有节点                                                 |                                                              |
-| SET_NODE_DATA      | 更新节点数据，即更新节点数据对象里`data`对象的数据           | node（要设置的节点）、data（对象，要更新的数据，如`{expand: true}`） |
-| SET_NODE_TEXT      | 设置节点文本                                                 | node（要设置的节点）、text（要设置的文本字符串，换行可以使用`\n`） |
-| SET_NODE_IMAGE     | 设置节点图片                                                 | node（要设置的节点）、imgData（对象，图片信息，结构为：`{url, title, width, height}`，图片的宽高必须要传） |
-| SET_NODE_ICON      | 设置节点图标                                                 | node（要设置的节点）、icons（数组，预定义的图片名称组成的数组，可用图标可在[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js)文件里的`nodeIconList`列表里获取到，图标名称为`type_name`，如`['priority_1']`） |
-| SET_NODE_HYPERLINK | 设置节点超链接                                               | node（要设置的节点）、link（超链接地址）、title（超链接名称，可选） |
-| SET_NODE_NOTE      | 设置节点备注                                                 | node（要设置的节点）、note（备注文字）                       |
-| SET_NODE_TAG       | 设置节点标签                                                 | node（要设置的节点）、tag（字符串数组，内置颜色信息可在[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js)里获取到） |
+| 命令名称                 | 描述                                                         | 参数                                                         |
+| ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| SELECT_ALL               | 全选                                                         |                                                              |
+| BACK                     | 回退指定的步数                                               | step（要回退的步数，默认为1）                                |
+| FORWARD                  | 前进指定的步数                                               | step（要前进的步数，默认为1）                                |
+| INSERT_NODE              | 插入同级节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效 |                                                              |
+| INSERT_CHILD_NODE        | 插入子节点，操作节点为当前激活的节点                         |                                                              |
+| UP_NODE                  | 上移节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的第一个节点使用无效 |                                                              |
+| DOWN_NODE                | 操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的最后一个节点使用无效 |                                                              |
+| REMOVE_NODE              | 删除节点，操作节点为当前激活的节点                           |                                                              |
+| PASTE_NODE               | 粘贴节点到节点，操作节点为当前激活的节点                     | data（要粘贴的节点数据，一般通过`renderer.copyNode()`方法和`renderer.cutNode()`方法获取） |
+| CUT_NODE                 | 剪切节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点使用无效 | callback(回调函数，剪切的节点数据会通过调用该函数并通过参数返回) |
+| SET_NODE_STYLE           | 修改节点样式                                                 | node（要设置样式的节点）、prop（样式属性）、value（样式属性值）、isActive（布尔值，是否设置的是激活状态的样式） |
+| SET_NODE_ACTIVE          | 设置节点是否激活                                             | node（要设置的节点）、active（布尔值，是否激活）             |
+| CLEAR_ACTIVE_NODE        | 清除当前已激活节点的激活状态，操作节点为当前激活的节点       |                                                              |
+| SET_NODE_EXPAND          | 设置节点是否展开                                             | node（要设置的节点）、expand（布尔值，是否展开）             |
+| EXPAND_ALL               | 展开所有节点                                                 |                                                              |
+| UNEXPAND_ALL             | 收起所有节点                                                 |                                                              |
+| SET_NODE_DATA            | 更新节点数据，即更新节点数据对象里`data`对象的数据           | node（要设置的节点）、data（对象，要更新的数据，如`{expand: true}`） |
+| SET_NODE_TEXT            | 设置节点文本                                                 | node（要设置的节点）、text（要设置的文本字符串，换行可以使用`\n`） |
+| SET_NODE_IMAGE           | 设置节点图片                                                 | node（要设置的节点）、imgData（对象，图片信息，结构为：`{url, title, width, height}`，图片的宽高必须要传） |
+| SET_NODE_ICON            | 设置节点图标                                                 | node（要设置的节点）、icons（数组，预定义的图片名称组成的数组，可用图标可在[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js)文件里的`nodeIconList`列表里获取到，图标名称为`type_name`，如`['priority_1']`） |
+| SET_NODE_HYPERLINK       | 设置节点超链接                                               | node（要设置的节点）、link（超链接地址）、title（超链接名称，可选） |
+| SET_NODE_NOTE            | 设置节点备注                                                 | node（要设置的节点）、note（备注文字）                       |
+| SET_NODE_TAG             | 设置节点标签                                                 | node（要设置的节点）、tag（字符串数组，内置颜色信息可在[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js)里获取到） |
+| INSERT_AFTER（v0.1.5+）  | 将节点移动到另一个节点的后面                                 | node（要移动的节点）、 exist（目标节点）                     |
+| INSERT_BEFORE（v0.1.5+） | 将节点移动到另一个节点的前面                                 | node（要移动的节点）、 exist（目标节点）                     |
+| MOVE_NODE_TO（v0.1.5+）  | 移动一个节点作为另一个节点的子节点                           | node（要移动的节点）、 toNode（目标节点）                    |
 
 
 #### setData(data)
@@ -235,7 +258,11 @@ const mindMap = new MindMap({
 
 `isDownload`：是否需要直接触发下载，布尔值，默认为`false`
 
+#### toPos(x, y)
 
+v0.1.5+
+
+将浏览器可视窗口的坐标转换成相对于画布的坐标
 
 ## render实例
 
@@ -298,6 +325,30 @@ const mindMap = new MindMap({
 #### setNodeDataRender(node, data)
 
 设置节点数据，即`data`字段的数据，并会根据节点大小是否变化来判断是否需要重新渲染该节点，`data`为对象，如：`{text: '我是新文本'}`
+
+
+
+#### moveNodeTo(node, toNode)
+
+v0.1.5+
+
+移动一个节点作为另一个节点的子节点
+
+
+
+#### insertBefore(node, exist)
+
+v0.1.5+
+
+将节点移动到另一个节点的前面
+
+
+
+#### insertAfter(node, exist)
+
+v0.1.5+
+
+将节点移动到另一个节点的后面
 
 
 
@@ -558,6 +609,14 @@ v0.1.1+
 
 
 
+#### isDrag
+
+v0.1.5+
+
+节点是否正在拖拽中
+
+
+
 ### 方法
 
 #### addChildren(node)
@@ -677,6 +736,38 @@ v0.1.1+
 #### setTag(tag)
 
 设置节点标签，`SET_NODE_TAG`的快捷方法
+
+
+
+#### hide()
+
+v0.1.5+
+
+隐藏节点及其下级节点
+
+
+
+#### show()
+
+v0.1.5+
+
+显示节点及其下级节点
+
+
+
+#### isParent(node)
+
+v0.1.5+
+
+检测当前节点是否是某个节点的祖先节点
+
+
+
+#### isBrother(node)
+
+v0.1.5+
+
+检测当前节点是否是某个节点的兄弟节点
 
 
 

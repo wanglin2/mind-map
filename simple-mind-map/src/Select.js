@@ -35,7 +35,7 @@ class Select {
                 return
             }
             this.isMousedown = true
-            let { x, y } = this.toPos(e.clientX, e.clientY)
+            let { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
             this.mouseDownX = x
             this.mouseDownY = y
             this.createRect(x, y)
@@ -44,7 +44,7 @@ class Select {
             if (!this.isMousedown) {
                 return
             }
-            let { x, y } = this.toPos(e.clientX, e.clientY)
+            let { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
             this.mouseMoveX = x
             this.mouseMoveY = y
             if (Math.abs(x - this.mouseDownX) <= 10 && Math.abs(y - this.mouseDownY) <= 10) {
@@ -138,18 +138,6 @@ class Select {
 
     /** 
      * @Author: 王林 
-     * @Date: 2021-07-11 09:20:03 
-     * @Desc: 转换位置 
-     */
-    toPos(x, y) {
-        return {
-            x: x - this.mindMap.elRect.left,
-            y: y - this.mindMap.elRect.top
-        }
-    }
-
-    /** 
-     * @Author: 王林 
      * @Date: 2021-07-11 10:20:43 
      * @Desc: 检测在选区里的节点 
      */
@@ -175,7 +163,7 @@ class Select {
                     if (node.nodeData.data.isActive) {
                         return ;
                     }
-                    this.mindMap.execCommand('SET_NODE_ACTIVE', node, true)
+                    this.mindMap.renderer.setNodeActive(node, true)
                     this.mindMap.renderer.addActiveNode(node)
                 })
             } else if (node.nodeData.data.isActive) {
@@ -183,7 +171,7 @@ class Select {
                     if (!node.nodeData.data.isActive) {
                         return ;
                     }
-                    this.mindMap.execCommand('SET_NODE_ACTIVE', node, false)
+                    this.mindMap.renderer.setNodeActive(node, false)
                     this.mindMap.renderer.removeActiveNode(node)
                 })
             }
