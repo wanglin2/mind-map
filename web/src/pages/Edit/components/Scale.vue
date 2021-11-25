@@ -32,12 +32,22 @@ export default {
     mindMap(val, oldVal) {
       if (val && !oldVal) {
         this.mindMap.on("scale", (scale) => {
-          this.scaleNum = (scale * 100).toFixed(0);
+          this.scaleNum = this.toPer(scale);
         });
+        this.scaleNum = this.toPer(this.mindMap.view.scale)
       }
     },
   },
   methods: {
+    /** 
+     * @Author: 王林25 
+     * @Date: 2021-11-25 14:20:16 
+     * @Desc: 转换成百分数 
+     */
+    toPer(scale) {
+      return (scale * 100).toFixed(0)
+    },
+
     /**
      * @Author: 王林
      * @Date: 2021-07-04 17:10:34
