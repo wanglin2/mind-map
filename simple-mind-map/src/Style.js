@@ -104,9 +104,9 @@ class Style {
      * @Date: 2021-04-13 08:14:34 
      * @Desc: html文字节点 
      */
-    domText(node) {
+    domText(node, fontSizeScale = 1) {
         node.style.fontFamily = this.merge('fontFamily')
-        node.style.fontSize = this.merge('fontSize') + 'px'
+        node.style.fontSize = this.merge('fontSize') * fontSizeScale + 'px'
         node.style.fontWeight = this.merge('fontWeight') || 'normal'
     }
 

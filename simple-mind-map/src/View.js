@@ -19,6 +19,7 @@ class View {
         this.sy = 0
         this.x = 0
         this.y = 0
+        this.firstDrag = true
         this.setTransformData(this.mindMap.opt.viewData)
         this.bind()
     }
@@ -49,9 +50,17 @@ class View {
             this.sy = this.y
         })
         this.mindMap.event.on('drag', (e, event) => {
+            if (this.firstDrag) {
+                this.firstDrag = false
+                // 清除激活节点
+                this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
+            }
             this.x = this.sx + event.mousemoveOffset.x
             this.y = this.sy + event.mousemoveOffset.y
             this.transform()
+        })
+        this.mindMap.event.on('mouseup', () => {
+            this.firstDrag = true
         })
         // 放大缩小视图
         this.mindMap.event.on('mousewheel', (e, dir) => {
@@ -97,6 +106,8 @@ class View {
             this.mindMap.draw.transform({
                 ...viewData.transform
             })
+            this.mindMap.emit('view_data_change', this.getTransformData())
+            this.mindMap.emit('scale', this.scale)
         }
     }
 
@@ -130,7 +141,7 @@ class View {
     transform() {
         this.mindMap.draw.transform({
             scale: this.scale,
-            origin: 'left center',
+            // origin: 'center center',
             translate: [this.x, this.y],
         })
         this.mindMap.emit('view_data_change', this.getTransformData())
@@ -142,7 +153,6 @@ class View {
      * @Desc: 恢复
      */
     reset() {
-        // let t = this.mindMap.draw.transform()
         this.scale = 1
         this.x = 0
         this.y = 0

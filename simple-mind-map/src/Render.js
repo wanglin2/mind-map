@@ -77,7 +77,6 @@ class Render {
             // 清除激活状态
             if (this.activeNodeList.length > 0) {
                 this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
-                this.mindMap.emit('node_active', null, [])
             }
         })
     }
@@ -109,6 +108,13 @@ class Render {
         // 下移节点
         this.downNode = this.downNode.bind(this)
         this.mindMap.command.add('DOWN_NODE', this.downNode)
+        // 移动节点
+        this.insertAfter = this.insertAfter.bind(this)
+        this.mindMap.command.add('INSERT_AFTER', this.insertAfter)
+        this.insertBefore = this.insertBefore.bind(this)
+        this.mindMap.command.add('INSERT_BEFORE', this.insertBefore)
+        this.moveNodeTo = this.moveNodeTo.bind(this)
+        this.mindMap.command.add('MOVE_NODE_TO', this.moveNodeTo)
         // 删除节点
         this.removeNode = this.removeNode.bind(this)
         this.mindMap.command.add('REMOVE_NODE', this.removeNode)
@@ -240,6 +246,9 @@ class Render {
      * @Desc: 清除当前所有激活节点，并会触发事件 
      */
     clearAllActive() {
+        if (this.activeNodeList.length <= 0) {
+            return
+        }
         this.clearActive()
         this.mindMap.emit('node_active', null, [])
     }
@@ -458,6 +467,88 @@ class Render {
     }
 
     /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-11-25 10:51:34 
+     * @Desc: 将节点移动到另一个节点的前面
+     */
+    insertBefore(node, exist) {
+        if (node.isRoot) {
+            return
+        }
+        let parent = node.parent
+        let childList = parent.children
+        // 要移动节点的索引
+        let index = childList.findIndex((item) => {
+            return item === node
+        })
+        if (index === -1) {
+            return
+        }
+        // 目标节点的索引
+        let existIndex = childList.findIndex((item) => {
+            return item === exist
+        })
+        if (existIndex === -1) {
+            return
+        }
+        // 当前节点在目标节点前面
+        if (index < existIndex) {
+            existIndex = existIndex - 1
+        } else {
+            existIndex = existIndex
+        }
+        // 节点实例
+        childList.splice(index, 1)
+        childList.splice(existIndex, 0, node)
+        // 节点数据
+        parent.nodeData.children.splice(index, 1)
+        parent.nodeData.children.splice(existIndex, 0, node.nodeData)
+        this.mindMap.render()
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-11-25 10:51:34 
+     * @Desc: 将节点移动到另一个节点的后面
+     */
+    insertAfter(node, exist) {
+        if (node.isRoot) {
+            return
+        }
+        let parent = node.parent
+        let childList = parent.children
+        // 要移动节点的索引
+        let index = childList.findIndex((item) => {
+            return item === node
+        })
+        if (index === -1) {
+            return
+        }
+        // 目标节点的索引
+        let existIndex = childList.findIndex((item) => {
+            return item === exist
+        })
+        if (existIndex === -1) {
+            return
+        }
+        // 当前节点在目标节点前面
+        if (index < existIndex) {
+            existIndex = existIndex
+        } else {
+            existIndex = existIndex + 1
+        }
+        // 节点实例
+        childList.splice(index, 1)
+        childList.splice(existIndex, 0, node)
+        // 节点数据
+        parent.nodeData.children.splice(index, 1)
+        parent.nodeData.children.splice(existIndex, 0, node.nodeData)
+        this.mindMap.render()
+    }
+
+    /** 
      * @Author: 王林 
      * @Date: 2021-05-04 13:40:39 
      * @Desc: 移除节点 
@@ -531,6 +622,24 @@ class Render {
         if (callback && typeof callback === 'function') {
             callback(copyData)
         }
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2021-11-24 16:54:01 
+     * @Desc: 移动一个节点作为另一个节点的子节点 
+     */
+    moveNodeTo(node, toNode) {
+        if (node.isRoot) {
+            return
+        }
+        let copyData = copyNodeTree({}, node)
+        this.removeActiveNode(node)
+        this.removeOneNode(node)
+        this.mindMap.emit('node_active', null, this.activeNodeList)
+        toNode.nodeData.children.push(copyData)
+        this.mindMap.render()
     }
 
     /** 

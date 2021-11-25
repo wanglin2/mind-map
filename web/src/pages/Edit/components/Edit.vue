@@ -130,7 +130,6 @@ export default {
         storeData(data)
       })
       this.$bus.$on('view_data_change', (data) => {
-        console.log(JSON.stringify(data))
         storeConfig({
           view: data,
         })
