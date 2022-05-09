@@ -70,6 +70,7 @@ class Node {
         this._hyperlinkData = null
         this._tagData = null
         this._noteData = null
+        this.noteEl = null
         this._expandBtn = null
         this._lines = []
         // 尺寸信息
@@ -444,25 +445,27 @@ class Node {
         this.style.iconNode(iconNode)
         node.add(iconNode)
         // 备注tooltip
-        let el = document.createElement('div')
-        el.style.cssText = `
-            position: absolute;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
-            display: none;
-            background-color: #fff;
-        `
-        el.innerText = this.nodeData.data.note
-        document.body.appendChild(el)
+        if (!this.noteEl) {
+            this.noteEl = document.createElement('div')
+            this.noteEl.style.cssText = `
+                position: absolute;
+                padding: 10px;
+                border-radius: 5px;
+                box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
+                display: none;
+                background-color: #fff;
+            `
+        }
+        this.noteEl.innerText = this.nodeData.data.note
+        document.body.appendChild(this.noteEl)
         node.on('mouseover', () => {
             let { left, top } = node.node.getBoundingClientRect()
-            el.style.left = left + 'px'
-            el.style.top = top + iconSize + 'px'
-            el.style.display = 'block'
+            this.noteEl.style.left = left + 'px'
+            this.noteEl.style.top = top + iconSize + 'px'
+            this.noteEl.style.display = 'block'
         })
         node.on('mouseout', () => {
-            el.style.display = 'none'
+            this.noteEl.style.display = 'none'
         })
         return {
             node,
