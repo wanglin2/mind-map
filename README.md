@@ -105,7 +105,7 @@ const mindMap = new MindMap({
 | textContentMargin    | Number  | 2                | 节点里各种文字信息的间距，如图标和文字的间距                 |          |
 | selectTranslateStep  | Number  | 3                | 多选节点时鼠标移动到边缘时的画布移动偏移量                   |          |
 | selectTranslateLimit | Number  | 20               | 多选节点时鼠标移动距边缘多少距离时开始偏移                   |          |
-
+| customNoteContentShow（v0.1.6+） | Object  | null               | 自定义节点备注内容显示，Object类型，结构为：{show: (noteContent, left, top) => {// 你的显示节点备注逻辑 }, hide: () => {// 你的隐藏节点备注逻辑 }}                   |          |
 
 
 ### 实例方法：

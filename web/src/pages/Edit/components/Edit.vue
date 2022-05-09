@@ -10,6 +10,7 @@
     <Structure :mindMap="mindMap"></Structure>
     <ShortcutKey></ShortcutKey>
     <Contextmenu :mindMap="mindMap"></Contextmenu>
+    <NodeNoteContentShow></NodeNoteContentShow>
   </div>
 </template>
 
@@ -24,6 +25,7 @@ import Count from './Count'
 import NavigatorToolbar from './NavigatorToolbar'
 import ShortcutKey from './ShortcutKey'
 import Contextmenu from './Contextmenu'
+import NodeNoteContentShow from './NodeNoteContentShow.vue'
 import { getData, storeData, storeConfig } from '@/api'
 
 /**
@@ -43,6 +45,7 @@ export default {
     NavigatorToolbar,
     ShortcutKey,
     Contextmenu,
+    NodeNoteContentShow
   },
   data() {
     return {
@@ -173,6 +176,14 @@ export default {
         theme: theme.template,
         themeConfig: theme.config,
         viewData: view,
+        customNoteContentShow: {
+          show: (content, left, top) => {
+            this.$bus.$emit('showNoteContent', content, left, top);
+          },
+          hide: () => {
+            this.$bus.$emit('hideNoteContent');
+          }
+        }
       })
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
         this.manualSave()

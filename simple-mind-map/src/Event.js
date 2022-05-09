@@ -111,7 +111,7 @@ class Event extends EventEmitter {
      * @Desc: 鼠标按下事件 
      */
     onMousedown(e) {
-        e.preventDefault()
+        // e.preventDefault()
         // 鼠标左键
         if (e.which === 1) {
             this.isLeftMousedown = true
@@ -128,7 +128,7 @@ class Event extends EventEmitter {
      * @Desc: 鼠标移动事件 
      */
     onMousemove(e) {
-        e.preventDefault()
+        // e.preventDefault()
         this.mousemovePos.x = e.clientX
         this.mousemovePos.y = e.clientY
         this.mousemoveOffset.x = e.clientX - this.mousedownPos.x
