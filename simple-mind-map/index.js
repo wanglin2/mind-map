@@ -40,7 +40,15 @@ const defaultOpt = {
     // 多选节点时鼠标移动到边缘时的画布移动偏移量
     selectTranslateStep: 3,
     // 多选节点时鼠标移动距边缘多少距离时开始偏移
-    selectTranslateLimit: 20
+    selectTranslateLimit: 20,
+    // 自定义节点备注内容显示
+    customNoteContentShow: null
+    /*
+        {
+            show(){},
+            hide(){}
+        }
+    */
 }
 
 /** 
