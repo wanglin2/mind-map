@@ -67,6 +67,7 @@ export default {
       }
     });
     this.$bus.$on("showNodeTag", () => {
+      this.$bus.$emit('startTextEdit');
       this.dialogVisible = true;
     });
   },
@@ -97,6 +98,7 @@ export default {
      */
     cancel() {
       this.dialogVisible = false;
+      this.$bus.$emit('endTextEdit');
     },
 
     /**
