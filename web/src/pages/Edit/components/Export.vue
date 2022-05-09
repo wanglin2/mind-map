@@ -61,7 +61,7 @@ export default {
      * @Desc:  确定
      */
     confirm() {
-      this.$bus.$emit("export", this.exportType);
+      this.$bus.$emit("export", this.exportType, true, this.fileName);
       this.$notify.info({
           title: '消息',
           message: '如果没有触发下载，请检查是否被浏览器拦截了'

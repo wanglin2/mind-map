@@ -22,11 +22,11 @@ class Export {
      * @Date: 2021-07-02 07:44:06 
      * @Desc: 导出 
      */
-    async export(type, isDownload = true) {
+    async export(type, isDownload = true, name = '思维导图') {
         if (this[type]) {
             let result = await this[type]()
             if (isDownload) {
-                downloadFile(result, '思维导图.' + type)
+                downloadFile(result, name + '.' + type)
             }
             return result
         } else {

@@ -53,6 +53,7 @@ export default {
       }
     });
     this.$bus.$on("showNodeLink", () => {
+      this.$bus.$emit('startTextEdit');
       this.dialogVisible = true;
     });
   },
@@ -64,6 +65,7 @@ export default {
      */
     cancel() {
       this.dialogVisible = false;
+      this.$bus.$emit('endTextEdit');
     },
 
     /**
