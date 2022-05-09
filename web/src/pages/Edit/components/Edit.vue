@@ -58,6 +58,12 @@ export default {
     this.$bus.$on('execCommand', this.execCommand)
     this.$bus.$on('export', this.export)
     this.$bus.$on('setData', this.setData)
+    this.$bus.$on('startTextEdit', () => {
+      this.mindMap.renderer.startTextEdit();
+    });
+    this.$bus.$on('endTextEdit', () => {
+      this.mindMap.renderer.endTextEdit();
+    });
     if (this.openTest) {
       setTimeout(() => {
         this.test()

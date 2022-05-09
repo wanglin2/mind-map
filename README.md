@@ -250,13 +250,15 @@ const mindMap = new MindMap({
 `data`：思维导图结构数据
 
 
-#### export(type, isDownload)
+#### export(type, isDownload, fileName)
 
 导出
 
 `type`：要导出的类型，可选值：png、svg
 
 `isDownload`：是否需要直接触发下载，布尔值，默认为`false`
+
+`fileName`：（v0.1.6+）导出文件的名称，默认为`思维导图`
 
 #### toPos(x, y)
 
@@ -285,6 +287,14 @@ v0.1.5+
 
 
 ### 方法
+
+#### startTextEdit()
+
+（v0.1.6+）若有文字编辑需求可调用该方法，会禁用回车键和删除键相关快捷键防止冲突 
+
+#### endTextEdit()
+
+（v0.1.6+）结束文字编辑，会恢复回车键和删除键相关快捷键
 
 #### addActiveNode(node)
 

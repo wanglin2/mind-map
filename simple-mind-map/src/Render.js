@@ -176,13 +176,13 @@ class Render {
             this.mindMap.execCommand('INSERT_CHILD_NODE')
         })
         // 插入同级节点
-        let insertNodeWrap = () => {
+        this.insertNodeWrap = () => {
             if (this.textEdit.showTextEdit) {
                 return
             }
             this.mindMap.execCommand('INSERT_NODE')
         }
-        this.mindMap.keyCommand.addShortcut('Enter', insertNodeWrap)
+        this.mindMap.keyCommand.addShortcut('Enter', this.insertNodeWrap)
         // 展开/收起节点
         this.mindMap.keyCommand.addShortcut('/', () => {
             this.activeNodeList.forEach((node) => {
@@ -193,23 +193,43 @@ class Render {
             })
         })
         // 删除节点
-        let removeNodeWrap = () => {
+        this.removeNodeWrap = () => {
             this.mindMap.execCommand('REMOVE_NODE')
         }
-        this.mindMap.keyCommand.addShortcut('Del|Backspace', removeNodeWrap)
+        this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNodeWrap)
         // 节点编辑时某些快捷键会存在冲突，需要暂时去除
         this.mindMap.on('before_show_text_edit', () => {
-            this.mindMap.keyCommand.removeShortcut('Del|Backspace')
-            this.mindMap.keyCommand.removeShortcut('Enter', insertNodeWrap)
+            this.startTextEdit()
         })
         this.mindMap.on('hide_text_edit', () => {
-            this.mindMap.keyCommand.addShortcut('Del|Backspace', removeNodeWrap)
-            this.mindMap.keyCommand.addShortcut('Enter', insertNodeWrap)
+            this.endTextEdit()
         })
         // 全选
         this.mindMap.keyCommand.addShortcut('Control+a', () => {
             this.mindMap.execCommand('SELECT_ALL')
         })
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-05-09 10:43:52 
+     * @Desc: 开启文字编辑，会禁用回车键和删除键相关快捷键防止冲突 
+     */
+    startTextEdit() {
+        this.mindMap.keyCommand.removeShortcut('Del|Backspace')
+        this.mindMap.keyCommand.removeShortcut('Enter', this.insertNodeWrap)
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-05-09 10:45:11 
+     * @Desc: 结束文字编辑，会恢复回车键和删除键相关快捷键
+     */
+    endTextEdit() {
+        this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNodeWrap)
+        this.mindMap.keyCommand.addShortcut('Enter', this.insertNodeWrap)
     }
 
     /** 
