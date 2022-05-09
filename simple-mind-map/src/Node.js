@@ -445,27 +445,37 @@ class Node {
         this.style.iconNode(iconNode)
         node.add(iconNode)
         // 备注tooltip
-        if (!this.noteEl) {
-            this.noteEl = document.createElement('div')
-            this.noteEl.style.cssText = `
-                position: absolute;
-                padding: 10px;
-                border-radius: 5px;
-                box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
-                display: none;
-                background-color: #fff;
-            `
+        if (!this.mindMap.opt.customNoteContentShow) {
+            if (!this.noteEl) {
+                this.noteEl = document.createElement('div')
+                this.noteEl.style.cssText = `
+                    position: absolute;
+                    padding: 10px;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
+                    display: none;
+                    background-color: #fff;
+                `
+                document.body.appendChild(this.noteEl)
+            }
+            this.noteEl.innerText = this.nodeData.data.note
         }
-        this.noteEl.innerText = this.nodeData.data.note
-        document.body.appendChild(this.noteEl)
         node.on('mouseover', () => {
             let { left, top } = node.node.getBoundingClientRect()
-            this.noteEl.style.left = left + 'px'
-            this.noteEl.style.top = top + iconSize + 'px'
-            this.noteEl.style.display = 'block'
+            if (!this.mindMap.opt.customNoteContentShow) {
+                this.noteEl.style.left = left + 'px'
+                this.noteEl.style.top = top + iconSize + 'px'
+                this.noteEl.style.display = 'block'
+            } else {
+                this.mindMap.opt.customNoteContentShow.show(this.nodeData.data.note, left, top + iconSize)
+            }
         })
         node.on('mouseout', () => {
-            this.noteEl.style.display = 'none'
+            if (!this.mindMap.opt.customNoteContentShow) {
+                this.noteEl.style.display = 'none'
+            } else {
+                this.mindMap.opt.customNoteContentShow.hide()
+            }
         })
         return {
             node,

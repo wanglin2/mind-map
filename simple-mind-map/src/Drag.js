@@ -74,6 +74,7 @@ class Drag extends Base {
             if (e.which !== 1 || node.isRoot) {
                 return
             }
+            e.preventDefault()
             // 计算鼠标按下的位置距离节点左上角的距离
             this.drawTransform = this.mindMap.draw.transform()
             let {
@@ -98,6 +99,7 @@ class Drag extends Base {
             if (!this.isMousedown) {
                 return
             }
+            e.preventDefault()
             let {
                 x,
                 y
