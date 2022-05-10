@@ -70,6 +70,16 @@ npm run build
 npm i simple-mind-map
 ```
 
+注意：本项目为源码直接发布，并未进行打包，如果出现编译失败的情况，Vue CLI创建的项目可以在vue.config.js文件中增加如下配置来让babel-loader编译本依赖：
+
+```js
+module.exports = {
+  transpileDependencies: ['simple-mind-map']
+}
+```
+
+其他项目请自行修改打包配置。
+
 # API
 
 ## 实例化
