@@ -1,6 +1,6 @@
 {
   "name": "simple-mind-map",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "一个简单的web在线思维导图",
   "authors": [
     {
@@ -19,6 +19,7 @@
   },
   "scripts": {},
   "main": "index.js",
+  "type": "module",
   "dependencies": {
     "@svgdotjs/svg.js": "^3.0.16",
     "canvg": "^3.0.7",
