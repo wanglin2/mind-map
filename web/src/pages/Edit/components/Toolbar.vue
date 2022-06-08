@@ -6,7 +6,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: backEnd,
+            disabled: readonly || backEnd,
           }"
           @click="$bus.$emit('execCommand', 'BACK')"
         >
@@ -16,7 +16,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: forwardEnd,
+            disabled: readonly || forwardEnd,
           }"
           @click="$bus.$emit('execCommand', 'FORWARD')"
         >
@@ -178,7 +178,8 @@ export default {
     return {
       activeNodes: [],
       backEnd: false,
-      forwardEnd: true
+      forwardEnd: true,
+      readonly: false
     };
   },
   computed: {
@@ -189,6 +190,9 @@ export default {
     },
   },
   created() {
+    this.$bus.$on("mode_change", (mode) => {
+      this.readonly = mode === 'readonly'
+    });
     this.$bus.$on("node_active", (...args) => {
       this.activeNodes = args[1];
     });

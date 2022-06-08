@@ -116,6 +116,7 @@ const mindMap = new MindMap({
 | selectTranslateStep  | Number  | 3                | 多选节点时鼠标移动到边缘时的画布移动偏移量                   |          |
 | selectTranslateLimit | Number  | 20               | 多选节点时鼠标移动距边缘多少距离时开始偏移                   |          |
 | customNoteContentShow（v0.1.6+） | Object  | null               | 自定义节点备注内容显示，Object类型，结构为：{show: (noteContent, left, top) => {// 你的显示节点备注逻辑 }, hide: () => {// 你的隐藏节点备注逻辑 }}                   |          |
+| readonly（v0.1.7+） | Boolean  | false               |  是否是只读模式                  |          |
 
 
 ### 实例方法：
@@ -136,7 +137,11 @@ const mindMap = new MindMap({
 
 容器尺寸变化后，需要调用该方法进行适应
 
+#### setMode(mode)
 
+v0.1.7+。切换模式为只读或编辑。
+
+`mode`：readonly、edit
 
 #### on(event, fn)
 
@@ -297,6 +302,14 @@ v0.1.5+
 
 
 ### 方法
+
+#### clearActive()
+
+清除当前激活的节点
+
+#### clearAllActive()
+
+清除当前所有激活节点，并会触发`node_active`事件 
 
 #### startTextEdit()
 

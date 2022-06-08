@@ -19,6 +19,8 @@ import {
 
 // 默认选项配置
 const defaultOpt = {
+    // 是否只读
+    readonly: false,
     // 布局
     layout: 'logicalStructure',
     // 主题
@@ -346,6 +348,24 @@ class MindMap {
             x: x - this.elRect.left,
             y: y - this.elRect.top
         }
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-06-08 14:12:38 
+     * @Desc: 设置只读模式、编辑模式 
+     */
+    setMode(mode) {
+        if (!['readonly', 'edit'].includes(mode)) {
+            return
+        }
+        this.opt.readonly = mode === 'readonly'
+        if (this.opt.readonly) {
+            // 取消当前激活的元素
+            this.renderer.clearAllActive()
+        }
+        this.emit('mode_change', mode)
     }
 }
 
