@@ -31,6 +31,9 @@ class Select {
     bindEvent() {
         this.checkInNodes = throttle(this.checkInNodes, 500, this)
         this.mindMap.on('mousedown', (e) => {
+            if (this.mindMap.opt.readonly) {
+                return
+            }
             if (e.which !== 3) {
                 return
             }
@@ -41,6 +44,9 @@ class Select {
             this.createRect(x, y)
         })
         this.mindMap.on('mousemove', (e) => {
+            if (this.mindMap.opt.readonly) {
+                return
+            }
             if (!this.isMousedown) {
                 return
             }
@@ -54,6 +60,9 @@ class Select {
             this.onMove(x, y)
         })
         this.mindMap.on('mouseup', (e) => {
+            if (this.mindMap.opt.readonly) {
+                return
+            }
             if (!this.isMousedown) {
                 return;
             }
