@@ -1,6 +1,15 @@
 <template>
   <div class="navigatorContainer">
     <div class="item">
+      <el-switch
+        v-model="isReadonly"
+        active-text="只读模式"
+        inactive-text="编辑模式"
+        @change="readonlyChange"
+      >
+      </el-switch>
+    </div>
+    <div class="item">
       <Scale :mindMap="mindMap"></Scale>
     </div>
     <div class="item">
@@ -28,6 +37,16 @@ export default {
     mindMap: {
       type: Object,
     },
+  },
+  data () {
+    return {
+      isReadonly: false
+    }
+  },
+  methods: {
+    readonlyChange(value) {
+      this.mindMap.setMode(value ? 'readonly' : 'edit')
+    }
   }
 };
 </script>

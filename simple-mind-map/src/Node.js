@@ -576,11 +576,17 @@ class Node {
         })
         // 双击事件
         this.group.on('dblclick', (e) => {
+            if (this.mindMap.opt.readonly) {
+                return
+            }
             e.stopPropagation()
             this.mindMap.emit('node_dblclick', this, e)
         })
         // 右键菜单事件
         this.group.on('contextmenu', (e) => {
+            if (this.mindMap.opt.readonly) {
+                return
+            }
             e.stopPropagation()
             e.preventDefault()
             if (this.nodeData.data.isActive) {
@@ -597,6 +603,9 @@ class Node {
      * @Desc: 激活节点 
      */
     active(e) {
+        if (this.mindMap.opt.readonly) {
+            return
+        }
         e.stopPropagation()
         if (this.nodeData.data.isActive) {
             return
