@@ -255,6 +255,7 @@ export default {
       &.disabled {
         color: #bcbcbc;
         cursor: not-allowed;
+        pointer-events: none;
       }
 
       .icon {

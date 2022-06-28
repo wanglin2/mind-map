@@ -13,6 +13,9 @@
           v-for="icon in item.list"
           :key="icon.name"
           v-html="icon.icon"
+          :class="{
+            selected: iconList.includes(item.type + '_' + icon.name)
+          }"
           @click="setIcon(item.type, icon.name)"
         ></div>
       </div>
@@ -34,7 +37,7 @@ export default {
     return {
       nodeIconList,
       dialogVisible: false,
-      icon: [],
+      iconList: [],
       activeNodes: [],
     };
   },
@@ -43,10 +46,11 @@ export default {
       this.activeNodes = args[1];
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0];
-        this.icon = firstNode.getData("icon") || [];
+        this.iconList = firstNode.getData("icon") || [];
       } else {
-        this.icon = [];
+        this.iconList = [];
       }
+      console.log(this.iconList, nodeIconList);
     });
     this.$bus.$on("showNodeIcon", () => {
       this.dialogVisible = true;
@@ -59,16 +63,27 @@ export default {
      * @Desc: 设置icon
      */
     setIcon(type, name) {
-      let index = this.icon.findIndex((item) => {
-        return item.split("_")[0] === type;
+      let key = type + "_" + name;
+      let index = this.iconList.findIndex((item) => {
+        return item === key;
       });
+      // 删除icon
       if (index !== -1) {
-        this.icon.splice(index, 1, type + "_" + name);
+        this.iconList.splice(index, 1);
       } else {
-        this.icon.push(type + "_" + name);
+        let typeIndex = this.iconList.findIndex((item) => {
+          return item.split("_")[0] === type;
+        });
+        // 替换icon
+        if (typeIndex !== -1) {
+          this.iconList.splice(typeIndex, 1, key);
+        } else {
+          // 增加icon
+          this.iconList.push(key);
+        }
       }
       this.activeNodes.forEach((node) => {
-        node.setIcon([...this.icon]);
+        node.setIcon([...this.iconList]);
       });
     },
   },
@@ -79,6 +94,10 @@ export default {
 .nodeDialog {
   /deep/ .el-dialog__body {
     padding: 0 20px;
+  }
+
+  .deleteBtn {
+    margin-bottom: 20px;
   }
 
   .item {
@@ -99,6 +118,20 @@ export default {
         margin-right: 10px;
         margin-bottom: 10px;
         cursor: pointer;
+        position: relative;
+
+        &.selected {
+          &::after {
+            content: '';
+            position: absolute;
+            left: -4px;
+            top: -4px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid #409EFF;
+          }
+        }
       }
     }
   }
