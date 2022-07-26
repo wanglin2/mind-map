@@ -178,7 +178,7 @@ export const imgToDataUrl = (src) => {
                 // 图片绘制到canvas里
                 ctx.drawImage(img, 0, 0, img.width, img.height)
                 resolve(canvas.toDataURL())
-            } catch (error) {
+            } catch (e) {
                 reject(e)
             }
         }
