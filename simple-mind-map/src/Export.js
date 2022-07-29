@@ -52,7 +52,7 @@ class Export {
         // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
         const rect = draw.rbox()
         // 将svg设置为实际内容的宽高
-        svg.size(rect.wdith, rect.height)
+        svg.size(rect.width, rect.height)
         // 把实际内容变换
         draw.translate(-rect.x + elRect.left, -rect.y + elRect.top)
         // 克隆一份数据
