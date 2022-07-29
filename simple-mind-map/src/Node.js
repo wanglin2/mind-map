@@ -77,7 +77,7 @@ class Node {
         this._rectInfo = {
             imgContentWidth: 0,
             imgContentHeight: 0,
-            textContentHeight: 0,
+            textContentWidth: 0,
             textContentHeight: 0
         }
         // 各种文字信息的间距
