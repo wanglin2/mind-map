@@ -592,6 +592,7 @@ class Render {
                 this.setNodeData(node.generalizationBelongNode, {
                     generalization: null
                 })
+                node.generalizationBelongNode.update()
                 this.removeActiveNode(node)
                 i--
             } else if (node.isRoot) {
@@ -888,6 +889,7 @@ class Render {
                     text: '概要'
                 }
             })
+            node.update()
         })
         this.mindMap.render()
     }
@@ -908,6 +910,7 @@ class Render {
             this.setNodeData(node, {
                 generalization: null
             })
+            node.update()
         })
         this.mindMap.render()
     }
