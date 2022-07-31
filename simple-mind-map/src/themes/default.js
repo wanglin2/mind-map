@@ -21,6 +21,10 @@ export default {
     generalizationLineWidth: 1,
     // 概要连线的颜色
     generalizationLineColor: '#549688',
+    // 概要曲线距节点的距离
+    generalizationLineMargin: 0,
+    // 概要节点距节点的距离
+    generalizationNodeMargin: 20,
     // 背景颜色
     backgroundColor: '#fafafa',
     // 背景图片

@@ -213,17 +213,16 @@ class OrganizationStructure extends Base {
      * @Desc: 创建概要节点 
      */
     renderGeneralization(node, gLine, gNode) {
-        let { bottom, left, right } = this.getNodeBoundaries(node)
-        let space = 20
+        let { bottom, left, right, generalizationLineMargin, generalizationNodeMargin } = this.getNodeBoundaries(node, 'v')
         let x1 = left
-        let y1 = bottom
+        let y1 = bottom + generalizationLineMargin
         let x2 = right
-        let y2 = bottom
-        let cx = left + (right - left) / 2
-        let cy = bottom + space
+        let y2 = bottom + generalizationLineMargin
+        let cx = x1 + (x2 - x1) / 2
+        let cy = y1 + 20
         let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
         gLine.plot(path)
-        gNode.top = bottom + space
+        gNode.top = bottom + generalizationNodeMargin
         gNode.left = left + (right - left - gNode.width) / 2
     }
 }
