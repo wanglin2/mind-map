@@ -8,6 +8,7 @@ import earthYellow from './earthYellow'
 import classic from './classic'
 import classic2 from './classic2'
 import classic3 from './classic3'
+import classic4 from './classic4';
 import dark from './dark';
 import classicGreen from './classicGreen'
 import classicBlue from './classicBlue'
@@ -31,6 +32,7 @@ export default {
     classic,
     classic2,
     classic3,
+    classic4,
     dark,
     classicGreen,
     classicBlue,
