@@ -231,20 +231,18 @@ class MindMap extends Base {
      * @Desc: 创建概要节点 
      */
     renderGeneralization(node, gLine, gNode) {
-        let { top, bottom, left, right } = this.getNodeBoundaries(node)
         let isLeft = node.dir === 'left'
-        let space = 20
-        let x = isLeft ? left : right
-        space = (isLeft ? -space : space)
+        let { top, bottom, left, right, generalizationLineMargin, generalizationNodeMargin } = this.getNodeBoundaries(node, 'h', isLeft)
+        let x = isLeft ? left - generalizationLineMargin : right + generalizationLineMargin
         let x1 = x
         let y1 = top
         let x2 = x
         let y2 = bottom
-        let cx = x1 + space
+        let cx = x1 + (isLeft ? -20 : 20)
         let cy = y1 + (y2 - y1) / 2
         let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
         gLine.plot(path)
-        gNode.left = x + space - (isLeft ? gNode.width : 0)
+        gNode.left = x + (isLeft ? -generalizationNodeMargin : generalizationNodeMargin) - (isLeft ? gNode.width : 0)
         gNode.top = top + (bottom - top - gNode.height) / 2
     }
 }

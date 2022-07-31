@@ -145,7 +145,7 @@ class CatalogOrganization extends Base {
                     loop(item, width)
                 })
             } else {
-                width += node.width
+                width += node.width + (node._generalizationNode ? node._generalizationNode.width + this.mindMap.themeConfig.generalizationNodeMargin : 0)
                 widthArr.push(width)
             }
         }
@@ -317,17 +317,16 @@ class CatalogOrganization extends Base {
      * @Desc: 创建概要节点 
      */
     renderGeneralization(node, gLine, gNode) {
-        let { top, bottom, right } = this.getNodeBoundaries(node)
-        let space = 20
-        let x1 = right
+        let { top, bottom, right, generalizationLineMargin, generalizationNodeMargin } = this.getNodeBoundaries(node, 'h')
+        let x1 = right + generalizationLineMargin
         let y1 = top
-        let x2 = right
+        let x2 = right + generalizationLineMargin
         let y2 = bottom
-        let cx = x1 + space
+        let cx = x1 + 20
         let cy = y1 + (y2 - y1) / 2
         let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
         gLine.plot(path)
-        gNode.left = right + space
+        gNode.left = right + generalizationNodeMargin
         gNode.top = top + (bottom - top - gNode.height) / 2
     }
 }
