@@ -94,6 +94,50 @@
           </el-select>
         </div>
       </div>
+      <!-- 概要连线 -->
+      <div class="title noTop">概要的连线</div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">颜色</span>
+          <span
+            class="block"
+            v-popover:popover
+            :style="{ backgroundColor: style.generalizationLineColor }"
+          ></span>
+          <el-popover ref="popover" placement="bottom" trigger="click">
+            <Color
+              :color="style.generalizationLineColor"
+              @change="
+                (color) => {
+                  update('generalizationLineColor', color);
+                }
+              "
+            ></Color>
+          </el-popover>
+        </div>
+        <div class="rowItem">
+          <span class="name">粗细</span>
+          <el-select
+            size="mini"
+            style="width: 80px"
+            v-model="style.generalizationLineWidth"
+            placeholder=""
+            @change="
+              (value) => {
+                update('generalizationLineWidth', value);
+              }
+            "
+          >
+            <el-option
+              v-for="item in lineWidthList"
+              :key="item"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </div>
       <!-- 内边距 -->
       <div class="title noTop">节点内边距</div>
       <div class="row">
@@ -259,6 +303,8 @@ export default {
         backgroundColor: "",
         lineColor: "",
         lineWidth: "",
+        generalizationLineWidth: "",
+        generalizationLineColor: "",
         paddingX: 0,
         paddingY: 0,
         imgMaxWidth: 0,
@@ -291,6 +337,8 @@ export default {
         "backgroundColor",
         "lineWidth",
         "lineColor",
+        "generalizationLineWidth",
+        "generalizationLineColor",
         "paddingX",
         "paddingY",
         "imgMaxWidth",

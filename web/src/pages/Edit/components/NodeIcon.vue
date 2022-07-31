@@ -50,7 +50,6 @@ export default {
       } else {
         this.iconList = [];
       }
-      console.log(this.iconList, nodeIconList);
     });
     this.$bus.$on("showNodeIcon", () => {
       this.dialogVisible = true;

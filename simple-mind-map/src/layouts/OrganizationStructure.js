@@ -206,6 +206,26 @@ class OrganizationStructure extends Base {
         } = btn.transform()
         btn.translate(width / 2 - expandBtnSize / 2 - translateX, height + expandBtnSize / 2 - translateY)
     }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-07-30 08:30:35 
+     * @Desc: 创建概要节点 
+     */
+    renderGeneralization(node, gLine, gNode) {
+        let { bottom, left, right } = this.getNodeBoundaries(node)
+        let space = 20
+        let x1 = left
+        let y1 = bottom
+        let x2 = right
+        let y2 = bottom
+        let cx = left + (right - left) / 2
+        let cy = bottom + space
+        let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
+        gLine.plot(path)
+        gNode.top = bottom + space
+        gNode.left = left + (right - left - gNode.width) / 2
+    }
 }
 
 export default OrganizationStructure

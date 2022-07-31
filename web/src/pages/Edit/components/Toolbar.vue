@@ -26,7 +26,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: activeNodes.length <= 0 || hasRoot,
+            disabled: activeNodes.length <= 0 || hasRoot || hasGeneralization,
           }"
           @click="$bus.$emit('execCommand', 'INSERT_NODE')"
         >
@@ -36,7 +36,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: activeNodes.length <= 0,
+            disabled: activeNodes.length <= 0 || hasGeneralization,
           }"
           @click="$bus.$emit('execCommand', 'INSERT_CHILD_NODE')"
         >
@@ -102,6 +102,16 @@
         >
           <span class="icon iconfont iconbiaoqian"></span>
           <span class="text">标签</span>
+        </div>
+        <div
+          class="toolbarBtn"
+          :class="{
+            disabled: activeNodes.length <= 0 || hasRoot,
+          }"
+          @click="$bus.$emit('execCommand', 'ADD_GENERALIZATION')"
+        >
+          <span class="icon iconfont icongaikuozonglan"></span>
+          <span class="text">概要</span>
         </div>
       </div>
       <!-- 通用操作 -->
@@ -188,6 +198,11 @@ export default {
         return node.isRoot;
       });
     },
+    hasGeneralization() {
+      return this.activeNodes.find((node) => {
+        return node.isGeneralization;
+      });
+    }
   },
   created() {
     this.$bus.$on("mode_change", (mode) => {

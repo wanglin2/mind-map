@@ -50,6 +50,8 @@ class Style {
         let defaultConfig = this.themeConfig.node
         if (root || rootProp.includes(prop)) {// 直接使用最外层样式
             defaultConfig = this.themeConfig
+        } else if (this.ctx.isGeneralization) {// 概要节点
+            defaultConfig = this.themeConfig.generalization
         } else if (this.ctx.layerIndex === 0) {// 根节点
             defaultConfig = this.themeConfig.root
         } else if (this.ctx.layerIndex === 1) {// 二级节点
@@ -152,6 +154,15 @@ class Style {
      */
     line(node) {
         node.stroke({ width: this.merge('lineWidth', true), color: this.merge('lineColor', true) }).fill({ color: 'none' })
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-07-30 16:19:03 
+     * @Desc: 概要连线 
+     */
+    generalizationLine(node) {
+        node.stroke({ width: this.merge('generalizationLineWidth', true), color: this.merge('generalizationLineColor', true) }).fill({ color: 'none' })
     }
 
     /** 
