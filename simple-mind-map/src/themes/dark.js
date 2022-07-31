@@ -11,6 +11,10 @@ export default merge(defaultTheme, {
     lineColor: 'rgb(17, 68, 23)',
     // 连线的粗细
     lineWidth: 2,
+    // 概要连线的粗细
+    generalizationLineWidth: 2,
+    // 概要连线的颜色
+    generalizationLineColor: '#fff',
     // 背景颜色
     backgroundColor: 'rgb(15, 16, 17)',
     // 根节点样式
@@ -38,6 +42,15 @@ export default merge(defaultTheme, {
     node: {
         fontSize: 14,
         color: 'rgb(147, 148, 149)',
+        active: {
+            borderColor: 'rgb(17, 68, 23)'
+        }
+    },
+    // 概要节点样式
+    generalization: {
+        fillColor: '#fff',
+        borderColor: 'transparent',
+        color: '#333',
         active: {
             borderColor: 'rgb(17, 68, 23)'
         }

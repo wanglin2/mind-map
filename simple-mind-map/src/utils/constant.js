@@ -123,6 +123,11 @@ export const themeList = [
         img: require('../assets/classic3.jpg')
     },
     {
+        name: '脑图经典4',
+        value: 'classic4',
+        img: require('../assets/classic4.jpg')
+    },
+    {
         name: '经典绿',
         value: 'classicGreen',
         img: require('../assets/classicGreen.jpg')
