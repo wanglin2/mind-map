@@ -172,30 +172,55 @@ class Base {
      * @Date: 2022-07-31 09:14:03 
      * @Desc: 获取节点的边界值 
      */
-    getNodeBoundaries(node) {
-        let top = Infinity
-        let bottom = -Infinity
-        let left = Infinity
-        let right = -Infinity
-        walk(node, null, (root) => {
-            if (root.top < top) {
-                top = root.top
+    getNodeBoundaries(node, dir, isLeft) {
+        let { generalizationLineMargin, generalizationNodeMargin } = this.mindMap.themeConfig
+        let walk = (root) => {
+            let _left = Infinity
+            let _right = -Infinity
+            let _top = Infinity
+            let _bottom = -Infinity
+            if (root.children && root.children.length > 0) {
+                root.children.forEach((child) => {
+                    let {left, right, top, bottom} = walk(child)
+                    // 概要内容的宽度
+                    let generalizationWidth = child._generalizationNode ? child._generalizationNode.width + generalizationNodeMargin : 0
+                    // 概要内容的高度
+                    let generalizationHeight = child._generalizationNode ? child._generalizationNode.height + generalizationNodeMargin : 0
+                    if (left < _left) {
+                        _left = left - (isLeft ? generalizationWidth : 0)
+                    }
+                    if (right + (dir === 'h' ? generalizationWidth : 0) > _right) {
+                        _right = right + (dir === 'h' ? generalizationWidth : 0)
+                    }
+                    if (top < _top) {
+                        _top = top
+                    }
+                    if (bottom + (dir === 'v' ? generalizationHeight : 0) > _bottom) {
+                        _bottom = bottom + (dir === 'v' ? generalizationHeight : 0)
+                    }
+                })
             }
-            if (root.top + root.height > bottom) {
-                bottom = root.top + root.height
+            let cur = {
+                left: root.left,
+                right: root.left + root.width,
+                top: root.top,
+                bottom: root.top + root.height
             }
-            if (root.left < left) {
-                left = root.left
+            return {
+                left: cur.left < _left ? cur.left : _left,
+                right: cur.right > _right ? cur.right : _right,
+                top: cur.top < _top ? cur.top : _top,
+                bottom: cur.bottom > _bottom ? cur.bottom : _bottom
             }
-            if (root.left + root.width > right) {
-                right = root.left + root.width
-            }
-        }, null, true)
+        }
+        let {left, right, top, bottom} = walk(node)
         return {
             left, 
             right,
             top,
-            bottom
+            bottom,
+            generalizationLineMargin,
+            generalizationNodeMargin
         };
     }
 }
