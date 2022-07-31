@@ -224,6 +224,29 @@ class MindMap extends Base {
         let y = height / 2 - translateY
         btn.translate(x, y)
     }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-07-30 08:30:35 
+     * @Desc: 创建概要节点 
+     */
+    renderGeneralization(node, gLine, gNode) {
+        let { top, bottom, left, right } = this.getNodeBoundaries(node)
+        let isLeft = node.dir === 'left'
+        let space = 20
+        let x = isLeft ? left : right
+        space = (isLeft ? -space : space)
+        let x1 = x
+        let y1 = top
+        let x2 = x
+        let y2 = bottom
+        let cx = x1 + space
+        let cy = y1 + (y2 - y1) / 2
+        let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
+        gLine.plot(path)
+        gNode.left = x + space - (isLeft ? gNode.width : 0)
+        gNode.top = top + (bottom - top - gNode.height) / 2
+    }
 }
 
 export default MindMap

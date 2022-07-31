@@ -45,6 +45,9 @@ class Node {
         this.style = new Style(this, this.themeConfig)
         // 是否是根节点
         this.isRoot = opt.isRoot === undefined ? false : opt.isRoot
+        // 是否是概要节点
+        this.isGeneralization = opt.isGeneralization === undefined ? false : opt.isGeneralization
+        this.generalizationBelongNode = null
         // 节点层级
         this.layerIndex = opt.layerIndex === undefined ? 0 : opt.layerIndex
         // 节点宽
@@ -73,6 +76,8 @@ class Node {
         this.noteEl = null
         this._expandBtn = null
         this._lines = []
+        this._generalizationLine = null
+        this._generalizationNode = null
         // 尺寸信息
         this._rectInfo = {
             imgContentWidth: 0,
@@ -153,6 +158,7 @@ class Node {
         this._hyperlinkData = this.createHyperlinkNode()
         this._tagData = this.createTagNode()
         this._noteData = this.createNoteNode()
+        this.createGeneralizationNode()
     }
 
     /** 
@@ -584,7 +590,7 @@ class Node {
         })
         // 右键菜单事件
         this.group.on('contextmenu', (e) => {
-            if (this.mindMap.opt.readonly) {
+            if (this.mindMap.opt.readonly || this.isGeneralization) {
                 return
             }
             e.stopPropagation()
@@ -646,6 +652,7 @@ class Node {
         } else {
             this.updateExpandBtnPos()
         }
+        this.renderGeneralization()
         let t = this.group.transform()
         if (!layout) {
             this.group.animate(300).translate(this.left - t.translateX, this.top - t.translateY)
@@ -690,6 +697,7 @@ class Node {
         this.removeAllEvent()
         this.removeAllNode()
         this.removeLine()
+        this.removeGeneralization()
         // 子节点
         if (this.children && this.children.length) {
             asyncRun(this.children.map((item) => {
@@ -728,7 +736,10 @@ class Node {
      * @Date: 2021-11-23 18:39:14 
      * @Desc: 显示节点 
      */
-     show() {
+    show() {
+        if (!this.group) {
+            return;
+        }
         this.group.show()
         if (this.parent) {
             let index = this.parent.children.indexOf(this)
@@ -784,6 +795,71 @@ class Node {
             line.remove()
         })
         this._lines = []
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-07-31 09:41:28 
+     * @Desc: 创建概要节点 
+     */
+    createGeneralizationNode() {
+        if (this.isGeneralization || !this.nodeData.data.generalization) {
+            return
+        }
+        if (!this._generalizationLine) {
+            this._generalizationLine = this.draw.path()
+        }
+        if (!this._generalizationNode) {
+            this._generalizationNode = new Node({
+                data: {
+                    data: this.nodeData.data.generalization
+                },
+                uid: this.mindMap.uid++,
+                renderer: this.renderer,
+                mindMap: this.mindMap,
+                draw: this.draw,
+                isGeneralization: true
+            })
+            this._generalizationNode.generalizationBelongNode = this
+            if (this.nodeData.data.generalization.isActive) {
+                this.renderer.addActiveNode(this._generalizationNode)
+            }
+        }
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-07-30 08:35:51 
+     * @Desc: 创建概要节点 
+     */
+    renderGeneralization() {
+        if (this.isGeneralization) {
+            return
+        }
+        if (this.nodeData.data.expand === false || !this.nodeData.data.generalization) {
+            this.removeGeneralization()
+            return
+        }
+        this.createGeneralizationNode()
+        this.renderer.layout.renderGeneralization(this, this._generalizationLine, this._generalizationNode)
+        this.style.generalizationLine(this._generalizationLine)
+        this._generalizationNode.render()
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-07-30 13:11:27 
+     * @Desc: 删除概要节点 
+     */
+    removeGeneralization() {
+        if (this._generalizationLine) {
+            this._generalizationLine.remove()
+            this._generalizationLine = null
+        }
+        if (this._generalizationNode) {
+            this._generalizationNode.remove()
+            this._generalizationNode = null
+        }
     }
 
     /** 

@@ -6,6 +6,13 @@
   "description": "思维导图",
   "glyphs": [
     {
+      "icon_id": "14843439",
+      "name": "概要总览",
+      "font_class": "gaikuozonglan",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
       "icon_id": "19738998",
       "name": "全选",
       "font_class": "quanxuan",

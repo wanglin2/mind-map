@@ -864,6 +864,70 @@ const data4 = {
     }
 }
 
+// 带概要
+const data5 = {
+    "root": {
+        "data": {
+            "text": "根节点"
+        },
+        "children": [
+            {
+                "data": {
+                    "text": "二级节点",
+                    "generalization": {
+                        "text": "概要",
+                    }
+                },
+                "children": [
+                    {
+                        "data": {
+                            "text": "子节点"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "text": "子节点"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "text": "子节点"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "text": "子节点"
+                        },
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "data": {
+                    "text": "二级节点2"
+                },
+                "children": [
+                    {
+                        "data": {
+                            "text": "子节点"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "text": "子节点"
+                        },
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+}
+
 const rootData = {
     "root": {
         "data": {
@@ -876,8 +940,9 @@ const rootData = {
 export default {
     // ...data1,
     // ...data2,
-    ...data3,
+    // ...data3,
     // ...data4,
+    ...data5,
     // ...rootData,
     "theme": {
         "template": "minions",

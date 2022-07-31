@@ -17,6 +17,10 @@ export default {
     lineWidth: 1,
     // 连线的颜色
     lineColor: '#549688',
+    // 概要连线的粗细
+    generalizationLineWidth: 1,
+    // 概要连线的颜色
+    generalizationLineColor: '#549688',
     // 背景颜色
     backgroundColor: '#fafafa',
     // 背景图片
@@ -80,6 +84,28 @@ export default {
         borderWidth: 0,
         borderRadius: 5,
         borderDasharray: 'none',
+        textDecoration: 'none',
+        active: {
+            borderColor: 'rgb(57, 80, 96)',
+            borderWidth: 3,
+            borderDasharray: 'none',
+        }
+    },
+    // 概要节点样式
+    generalization: {
+        marginX: 100,
+        marginY: 40,
+        fillColor: '#fff',
+        fontFamily: '微软雅黑, Microsoft YaHei',
+        color: '#565656',
+        fontSize: 16,
+        fontWeight: 'noraml',
+        fontStyle: 'normal',
+        lineHeight: 1.5,
+        borderColor: '#549688',
+        borderWidth: 1,
+        borderDasharray: 'none',
+        borderRadius: 5,
         textDecoration: 'none',
         active: {
             borderColor: 'rgb(57, 80, 96)',
