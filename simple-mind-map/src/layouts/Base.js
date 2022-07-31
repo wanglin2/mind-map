@@ -169,6 +169,24 @@ class Base {
 
     /** 
      * @Author: 王林 
+     * @Date: 2022-07-31 20:53:12 
+     * @Desc: 获取节点包括概要在内的宽度 
+     */
+    getNodeWidthWithGeneralization(node) {
+        return Math.max(node.width, node._generalizationNode ? node._generalizationNode.width : 0)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-07-31 20:53:12 
+     * @Desc: 获取节点包括概要在内的高度 
+     */
+    getNodeHeightWithGeneralization(node) {
+        return Math.max(node.height, node._generalizationNode ? node._generalizationNode.height : 0)
+    }
+
+    /** 
+     * @Author: 王林 
      * @Date: 2022-07-31 09:14:03 
      * @Desc: 获取节点的边界值 
      */
