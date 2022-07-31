@@ -1,4 +1,7 @@
 import Node from '../Node'
+import {
+    walk,
+} from '../utils'
 
 /** 
  * @Author: 王林 
@@ -48,6 +51,13 @@ class Base {
     renderExpandBtn() {
         throw new Error('【renderExpandBtn】方法为必要方法，需要子类进行重写！')
     }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-07-30 22:49:28 
+     * @Desc: 概要节点 
+     */
+    renderGeneralization() {}
 
     /** 
      * @Author: 王林 
@@ -155,6 +165,38 @@ class Base {
      */
     getMarginY(layerIndex) {
         return layerIndex === 1 ? this.mindMap.themeConfig.second.marginY : this.mindMap.themeConfig.node.marginY;
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-07-31 09:14:03 
+     * @Desc: 获取节点的边界值 
+     */
+    getNodeBoundaries(node) {
+        let top = Infinity
+        let bottom = -Infinity
+        let left = Infinity
+        let right = -Infinity
+        walk(node, null, (root) => {
+            if (root.top < top) {
+                top = root.top
+            }
+            if (root.top + root.height > bottom) {
+                bottom = root.top + root.height
+            }
+            if (root.left < left) {
+                left = root.left
+            }
+            if (root.left + root.width > right) {
+                right = root.left + root.width
+            }
+        }, null, true)
+        return {
+            left, 
+            right,
+            top,
+            bottom
+        };
     }
 }
 

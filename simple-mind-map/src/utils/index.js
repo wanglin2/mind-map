@@ -229,7 +229,7 @@ export const asyncRun = (taskList, callback = () => {}) => {
     let index = 0
     let len = taskList.length
     if (len <= 0) {
-        return
+        return callback()
     }
     let loop = () => {
         if (index >= len) {

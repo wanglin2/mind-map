@@ -71,7 +71,7 @@ class Drag extends Base {
     bindEvent() {
         this.checkOverlapNode = throttle(this.checkOverlapNode, 300, this)
         this.mindMap.on('node_mousedown', (node, e) => {
-            if (this.mindMap.opt.readonly) {
+            if (this.mindMap.opt.readonly || node.isGeneralization) {
                 return
             }
             if (e.which !== 1 || node.isRoot) {
