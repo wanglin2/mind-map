@@ -188,6 +188,26 @@ class LogicalStructure extends Base {
         } = btn.transform()
         btn.translate(width - translateX, height / 2 - translateY)
     }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-07-30 08:30:35 
+     * @Desc: 创建概要节点 
+     */
+    renderGeneralization(node, gLine, gNode) {
+        let { top, bottom, right } = this.getNodeBoundaries(node)
+        let space = 20
+        let x1 = right
+        let y1 = top
+        let x2 = right
+        let y2 = bottom
+        let cx = x1 + space
+        let cy = y1 + (y2 - y1) / 2
+        let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
+        gLine.plot(path)
+        gNode.left = right + space
+        gNode.top = top + (bottom - top - gNode.height) / 2
+    }
 }
 
 export default LogicalStructure

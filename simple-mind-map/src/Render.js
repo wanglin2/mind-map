@@ -163,6 +163,12 @@ class Render {
         // 设置节点标签
         this.setNodeTag = this.setNodeTag.bind(this)
         this.mindMap.command.add('SET_NODE_TAG', this.setNodeTag)
+        // 添加节点概要
+        this.addGeneralization = this.addGeneralization.bind(this)
+        this.mindMap.command.add('ADD_GENERALIZATION', this.addGeneralization)
+        // 删除节点概要
+        this.removeGeneralization = this.removeGeneralization.bind(this)
+        this.mindMap.command.add('REMOVE_GENERALIZATION', this.removeGeneralization)
     }
 
     /** 
@@ -579,7 +585,14 @@ class Render {
         }
         for (let i = 0; i < this.activeNodeList.length; i++) {
             let node = this.activeNodeList[i]
-            if (node.isRoot) {
+            if (node.isGeneralization) {
+                // 删除概要节点
+                this.setNodeData(node.generalizationBelongNode, {
+                    generalization: null
+                })
+                this.removeActiveNode(node)
+                i--
+            } else if (node.isRoot) {
                 node.children.forEach((child) => {
                     child.remove()
                 })
@@ -853,6 +866,48 @@ class Render {
         this.setNodeDataRender(node, {
             tag
         })
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-07-30 20:52:42 
+     * @Desc: 添加节点概要
+     */
+    addGeneralization(data) {
+        if (this.activeNodeList.length <= 0) {
+            return
+        }
+        this.activeNodeList.forEach((node) => {
+            if (node.nodeData.data.generalization) {
+                return
+            }
+            this.setNodeData(node, {
+                generalization: data || {
+                    text: '概要'
+                }
+            })
+        })
+        this.mindMap.render()
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-07-30 21:16:33 
+     * @Desc: 删除节点概要
+     */
+    removeGeneralization() {
+        if (this.activeNodeList.length <= 0) {
+            return
+        }
+        this.activeNodeList.forEach((node) => {
+            if (!node.nodeData.data.generalization) {
+                return
+            }
+            this.setNodeData(node, {
+                generalization: null
+            })
+        })
+        this.mindMap.render()
     }
 
     /** 
