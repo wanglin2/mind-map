@@ -189,6 +189,8 @@ class Render {
             this.mindMap.execCommand('INSERT_NODE')
         }
         this.mindMap.keyCommand.addShortcut('Enter', this.insertNodeWrap)
+        // 插入概要
+        this.mindMap.keyCommand.addShortcut('Shift+s', this.addGeneralization)
         // 展开/收起节点
         this.mindMap.keyCommand.addShortcut('/', () => {
             this.activeNodeList.forEach((node) => {

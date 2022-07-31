@@ -215,6 +215,11 @@ export const shortcutKeyList = [
                 value: 'Enter'
             },
             {
+                icon: 'icongaikuozonglan',
+                name: '插入概要',
+                value: 'Shift + s'
+            },
+            {
                 icon: 'iconzhankai',
                 name: '展开/收起节点',
                 value: '/'
