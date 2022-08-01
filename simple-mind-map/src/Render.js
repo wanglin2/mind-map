@@ -254,6 +254,7 @@ class Render {
             this.root = root
             this.root.render()
         })
+        this.mindMap.emit('node_active', null, this.activeNodeList)
     }
 
     /** 
