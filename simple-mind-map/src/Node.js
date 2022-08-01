@@ -85,6 +85,9 @@ class Node {
             textContentWidth: 0,
             textContentHeight: 0
         }
+        // 概要节点的宽高
+        this._generalizationNodeWidth = 0
+        this._generalizationNodeHeight = 0
         // 各种文字信息的间距
         this.textContentItemMargin = this.mindMap.opt.textContentMargin
         // 图片和文字节点的间距
@@ -94,7 +97,7 @@ class Node {
         // 初始渲染
         this.initRender = true
         // 初始化
-        this.createNodeData()
+        // this.createNodeData()
         this.getSize()
     }
 
@@ -798,12 +801,22 @@ class Node {
     }
 
     /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-08-01 09:27:30 
+     * @Desc: 检查是否存在概要 
+     */
+    checkHasGeneralization() {
+        return !!this.nodeData.data.generalization
+    }
+
+    /** 
      * @Author: 王林 
      * @Date: 2022-07-31 09:41:28 
      * @Desc: 创建概要节点 
      */
     createGeneralizationNode() {
-        if (this.isGeneralization || !this.nodeData.data.generalization) {
+        if (this.isGeneralization || !this.checkHasGeneralization()) {
             return
         }
         if (!this._generalizationLine) {
@@ -820,6 +833,8 @@ class Node {
                 draw: this.draw,
                 isGeneralization: true
             })
+            this._generalizationNodeWidth = this._generalizationNode.width
+            this._generalizationNodeHeight = this._generalizationNode.height
             this._generalizationNode.generalizationBelongNode = this
             if (this.nodeData.data.generalization.isActive) {
                 this.renderer.addActiveNode(this._generalizationNode)
@@ -836,7 +851,13 @@ class Node {
         if (this.isGeneralization) {
             return
         }
-        if (this.nodeData.data.expand === false || !this.nodeData.data.generalization) {
+        if (!this.checkHasGeneralization()) {
+            this.removeGeneralization()
+            this._generalizationNodeWidth = 0
+            this._generalizationNodeHeight = 0
+            return
+        }
+        if (this.nodeData.data.expand === false) {
             this.removeGeneralization()
             return
         }
