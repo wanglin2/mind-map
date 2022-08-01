@@ -145,7 +145,7 @@ class CatalogOrganization extends Base {
                     loop(item, width)
                 })
             } else {
-                width += node.width + (node._generalizationNode ? node._generalizationNode.width + this.mindMap.themeConfig.generalizationNodeMargin : 0)
+                width += node.width
                 widthArr.push(width)
             }
         }
