@@ -719,6 +719,7 @@ class Node {
      */
     hide() {
         this.group.hide()
+        this.hideGeneralization()
         if (this.parent) {
             let index = this.parent.children.indexOf(this)
             this.parent._lines[index].hide()
@@ -744,6 +745,7 @@ class Node {
             return;
         }
         this.group.show()
+        this.showGeneralization()
         if (this.parent) {
             let index = this.parent.children.indexOf(this)
             this.parent._lines[index].show()
@@ -880,6 +882,36 @@ class Node {
         if (this._generalizationNode) {
             this._generalizationNode.remove()
             this._generalizationNode = null
+        }
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-08-01 09:56:46 
+     * @Desc: 隐藏概要节点 
+     */
+    hideGeneralization() {
+        if (this._generalizationLine) {
+            this._generalizationLine.hide()
+        }
+        if (this._generalizationNode) {
+            this._generalizationNode.hide()
+        }
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-08-01 09:57:42 
+     * @Desc: 显示概要节点 
+     */
+    showGeneralization() {
+        if (this._generalizationLine) {
+            this._generalizationLine.show()
+        }
+        if (this._generalizationNode) {
+            this._generalizationNode.show()
         }
     }
 
