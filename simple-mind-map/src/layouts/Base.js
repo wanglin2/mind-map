@@ -173,7 +173,7 @@ class Base {
      * @Desc: 获取节点包括概要在内的宽度 
      */
     getNodeWidthWithGeneralization(node) {
-        return Math.max(node.width, node._generalizationNode ? node._generalizationNode.width : 0)
+        return Math.max(node.width, node.checkHasGeneralization() ? node._generalizationNodeWidth : 0)
     }
 
     /** 
@@ -182,7 +182,7 @@ class Base {
      * @Desc: 获取节点包括概要在内的高度 
      */
     getNodeHeightWithGeneralization(node) {
-        return Math.max(node.height, node._generalizationNode ? node._generalizationNode.height : 0)
+        return Math.max(node.height, node.checkHasGeneralization() ? node._generalizationNodeHeight : 0)
     }
 
     /** 
@@ -201,9 +201,9 @@ class Base {
                 root.children.forEach((child) => {
                     let {left, right, top, bottom} = walk(child)
                     // 概要内容的宽度
-                    let generalizationWidth = child._generalizationNode ? child._generalizationNode.width + generalizationNodeMargin : 0
+                    let generalizationWidth = child.checkHasGeneralization() ? child._generalizationNodeWidth + generalizationNodeMargin : 0
                     // 概要内容的高度
-                    let generalizationHeight = child._generalizationNode ? child._generalizationNode.height + generalizationNodeMargin : 0
+                    let generalizationHeight = child.checkHasGeneralization() ? child._generalizationNodeHeight + generalizationNodeMargin : 0
                     if (left < _left) {
                         _left = left - (isLeft ? generalizationWidth : 0)
                     }
