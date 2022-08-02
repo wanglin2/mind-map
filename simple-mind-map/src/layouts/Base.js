@@ -189,6 +189,8 @@ class Base {
      * @Author: 王林 
      * @Date: 2022-07-31 09:14:03 
      * @Desc: 获取节点的边界值 
+     * dir：生长方向，h（水平）、v（垂直）
+     * isLeft：是否向左生长
      */
     getNodeBoundaries(node, dir, isLeft) {
         let { generalizationLineMargin, generalizationNodeMargin } = this.mindMap.themeConfig
@@ -201,11 +203,11 @@ class Base {
                 root.children.forEach((child) => {
                     let {left, right, top, bottom} = walk(child)
                     // 概要内容的宽度
-                    let generalizationWidth = child.checkHasGeneralization() ? child._generalizationNodeWidth + generalizationNodeMargin : 0
+                    let generalizationWidth = child.checkHasGeneralization() && child.nodeData.data.expand ? child._generalizationNodeWidth + generalizationNodeMargin : 0
                     // 概要内容的高度
-                    let generalizationHeight = child.checkHasGeneralization() ? child._generalizationNodeHeight + generalizationNodeMargin : 0
-                    if (left < _left) {
-                        _left = left - (isLeft ? generalizationWidth : 0)
+                    let generalizationHeight = child.checkHasGeneralization() && child.nodeData.data.expand ? child._generalizationNodeHeight + generalizationNodeMargin : 0
+                    if (left - (dir === 'h' ? generalizationWidth : 0) < _left) {
+                        _left = left - (dir === 'h' ? generalizationWidth : 0)
                     }
                     if (right + (dir === 'h' ? generalizationWidth : 0) > _right) {
                         _right = right + (dir === 'h' ? generalizationWidth : 0)
