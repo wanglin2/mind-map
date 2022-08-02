@@ -208,6 +208,8 @@ class Node {
             this.group.remove()
             this.group = null
         }
+        // 概要
+        this.removeGeneralization()
     }
 
     /** 
@@ -508,6 +510,10 @@ class Node {
         let { paddingY } = this.getPaddingVale()
         // 创建组
         this.group = new G()
+        // 概要节点添加一个带所属节点id的类名
+        if (this.isGeneralization && this.generalizationBelongNode) {
+            this.group.addClass('generalization_' + this.generalizationBelongNode.uid)
+        }
         this.draw.add(this.group)
         this.update(true)
         // 节点矩形
@@ -700,7 +706,6 @@ class Node {
         this.removeAllEvent()
         this.removeAllNode()
         this.removeLine()
-        this.removeGeneralization()
         // 子节点
         if (this.children && this.children.length) {
             asyncRun(this.children.map((item) => {
@@ -845,9 +850,20 @@ class Node {
     }
 
     /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-08-01 15:38:52 
+     * @Desc: 更新概要节点 
+     */
+    updateGeneralization() {
+        this.removeGeneralization()
+        this.createGeneralizationNode()
+    }
+
+    /** 
      * @Author: 王林 
      * @Date: 2022-07-30 08:35:51 
-     * @Desc: 创建概要节点 
+     * @Desc: 渲染概要节点 
      */
     renderGeneralization() {
         if (this.isGeneralization) {
@@ -880,8 +896,14 @@ class Node {
             this._generalizationLine = null
         }
         if (this._generalizationNode) {
+            // 删除概要节点时要同步从激活节点里删除
+            this.renderer.removeActiveNode(this._generalizationNode)
             this._generalizationNode.remove()
             this._generalizationNode = null
+        }
+        // hack修复当激活一个节点时创建概要，然后立即激活创建的概要节点后会重复创建概要节点并且无法删除的问题
+        if (this.generalizationBelongNode) {
+            this.draw.find('.generalization_' + this.generalizationBelongNode.uid).remove()
         }
     }
 

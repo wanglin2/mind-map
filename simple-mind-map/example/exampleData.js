@@ -890,40 +890,9 @@ const data5 = {
                             "text": "子节点"
                         },
                         "children": []
-                    },
-                    {
-                        "data": {
-                            "text": "子节点"
-                        },
-                        "children": []
-                    },
-                    {
-                        "data": {
-                            "text": "子节点"
-                        },
-                        "children": []
                     }
                 ]
             },
-            {
-                "data": {
-                    "text": "二级节点2"
-                },
-                "children": [
-                    {
-                        "data": {
-                            "text": "子节点"
-                        },
-                        "children": []
-                    },
-                    {
-                        "data": {
-                            "text": "子节点"
-                        },
-                        "children": []
-                    }
-                ]
-            }
         ]
     }
 }
@@ -945,7 +914,7 @@ export default {
     ...data5,
     // ...rootData,
     "theme": {
-        "template": "minions",
+        "template": "classic4",
         "config": {
             // 自定义配置...
         }
