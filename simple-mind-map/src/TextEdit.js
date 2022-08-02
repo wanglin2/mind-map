@@ -119,6 +119,10 @@ export default class TextEdit {
         this.renderer.activeNodeList.forEach((node) => {
             let str = getStrWithBrFromHtml(this.textEditNode.innerHTML)
             this.mindMap.execCommand('SET_NODE_TEXT', node, str)
+            if (node.isGeneralization) {
+                // 概要节点
+                node.generalizationBelongNode.updateGeneralization()
+            }
             this.mindMap.render()
         })
         this.mindMap.emit('hide_text_edit', this.textEditNode, this.renderer.activeNodeList)
