@@ -6,8 +6,50 @@
   "description": "思维导图",
   "glyphs": [
     {
+      "icon_id": "1117",
+      "name": "剪切",
+      "font_class": "jianqie",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "1415523",
+      "name": "整理",
+      "font_class": "zhengli",
+      "unicode": "e83b",
+      "unicode_decimal": 59451
+    },
+    {
+      "icon_id": "2815710",
+      "name": "复制",
+      "font_class": "fuzhi",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "11121506",
+      "name": "粘贴",
+      "font_class": "niantie",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "11383392",
+      "name": "上移",
+      "font_class": "shangyi",
+      "unicode": "e6be",
+      "unicode_decimal": 59070
+    },
+    {
+      "icon_id": "11383396",
+      "name": "下移",
+      "font_class": "xiayi",
+      "unicode": "e6bf",
+      "unicode_decimal": 59071
+    },
+    {
       "icon_id": "14843439",
-      "name": "概要总览",
+      "name": "概括总览",
       "font_class": "gaikuozonglan",
       "unicode": "e609",
       "unicode_decimal": 58889
