@@ -215,9 +215,19 @@ export const shortcutKeyList = [
                 value: 'Enter'
             },
             {
+                icon: '',
+                name: '上移节点',
+                value: 'Ctrl + ↑'
+            },
+            {
+                icon: '',
+                name: '下移节点',
+                value: 'Ctrl + ↓'
+            },
+            {
                 icon: 'icongaikuozonglan',
                 name: '插入概要',
-                value: 'Shift + s'
+                value: 'Shift + S'
             },
             {
                 icon: 'iconzhankai',
@@ -228,6 +238,21 @@ export const shortcutKeyList = [
                 icon: 'iconshanchu',
                 name: '删除节点',
                 value: 'Delete | Backspace'
+            },
+            {
+                icon: '',
+                name: '复制节点',
+                value: 'Ctrl + C'
+            },
+            {
+                icon: '',
+                name: '剪切节点',
+                value: 'Ctrl + X'
+            },
+            {
+                icon: '',
+                name: '粘贴节点',
+                value: 'Ctrl + V'
             },
             {
                 icon: 'iconbianji',
@@ -253,7 +278,12 @@ export const shortcutKeyList = [
                 icon: 'iconquanxuan',
                 name: '全选',
                 value: 'Ctrl + A'
-            }
+            },
+            {
+                icon: '',
+                name: '一键整理布局',
+                value: 'Shift + L'
+            },
         ]
     },
     {

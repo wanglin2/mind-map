@@ -10,7 +10,10 @@ const createFullData = () => {
         "tag": ["标签1", "标签2"],
         "hyperlink": "http://lxqnsys.com/",
         "hyperlinkTitle": "理想青年实验室",
-        "note": "理想青年实验室\n一个有意思的角落"
+        "note": "理想青年实验室\n一个有意思的角落",
+        // 自定义位置
+        // "customLeft": 1318,
+        // "customTop": 374.5
     };
 }
 
