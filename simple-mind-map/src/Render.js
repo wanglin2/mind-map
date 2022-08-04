@@ -169,6 +169,12 @@ class Render {
         // 删除节点概要
         this.removeGeneralization = this.removeGeneralization.bind(this)
         this.mindMap.command.add('REMOVE_GENERALIZATION', this.removeGeneralization)
+        // 设置节点自定义位置
+        this.setNodeCustomPosition = this.setNodeCustomPosition.bind(this)
+        this.mindMap.command.add('SET_NODE_CUSTOM_POSITION', this.setNodeCustomPosition)
+        // 一键整理布局
+        this.resetLayout = this.resetLayout.bind(this)
+        this.mindMap.command.add('RESET_LAYOUT', this.resetLayout)
     }
 
     /** 
@@ -388,13 +394,14 @@ class Render {
         if (first.isRoot) {
             this.insertChildNode()
         } else {
+            let text = first.layerIndex === 1 ? '二级节点' : '分支主题'
             if (first.layerIndex === 1) {
                 first.parent.initRender = true
             }
             let index = this.getNodeIndex(first)
             first.parent.nodeData.children.splice(index + 1, 0, {
                 "data": {
-                    "text": "分支主题",
+                    "text": text,
                     "expand": true
                 },
                 "children": []
@@ -416,9 +423,10 @@ class Render {
             if (!node.nodeData.children) {
                 node.nodeData.children = []
             }
+            let text = node.isRoot ? '二级节点' : '分支主题'
             node.nodeData.children.push({
                 "data": {
-                    "text": "分支主题",
+                    "text": text,
                     "expand": true
                 },
                 "children": []
@@ -917,6 +925,40 @@ class Render {
     }
 
     /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-08-02 19:04:24 
+     * @Desc: 设置节点自定义位置 
+     */
+    setNodeCustomPosition(node, left = undefined, top = undefined) {
+        let nodeList = [node] || this.activeNodeList
+        nodeList.forEach((item) => {
+            this.setNodeData(item, {
+                customLeft: left,
+                customTop: top
+            })
+        })
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-08-02 20:02:50 
+     * @Desc: 一键整理布局，即去除自定义位置 
+     */
+    resetLayout() {
+        walk(this.root, null, (node) => {
+            node.customLeft = undefined
+            node.customTop = undefined
+            this.setNodeData(node, {
+                customLeft: undefined,
+                customTop: undefined
+            })
+            this.mindMap.render()
+        }, null, true, 0, 0)
+    }
+
+    /** 
      * @Author: 王林 
      * @Date: 2021-05-04 14:19:48 
      * @Desc: 更新节点数据 
@@ -937,6 +979,10 @@ class Render {
         let changed = node.getSize()
         node.renderNode()
         if (changed) {
+            if (node.isGeneralization) {
+                // 概要节点
+                node.generalizationBelongNode.updateGeneralization()
+            }
             this.mindMap.render()
         }
     }
