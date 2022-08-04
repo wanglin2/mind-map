@@ -120,7 +120,7 @@ class LogicalStructure extends Base {
                 return item === node
             })
             childrenList.forEach((item, _index) => {
-                if (item === node) {
+                if (item === node || item.hasCustomPosition()) {// 适配自定义位置
                     return
                 }
                 let _offset = 0

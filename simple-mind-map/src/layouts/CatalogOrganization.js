@@ -165,15 +165,18 @@ class CatalogOrganization extends Base {
             let index = childrenList.findIndex((item) => {
                 return item === node
             })
-            // 第一个或最后一个节点自身也需要移动，否则两边不对称
-            if (index === 0 || index === childrenList.length - 1) {
+            // 存在大于一个节点时，第一个或最后一个节点自身也需要移动，否则两边不对称
+            if ((index === 0 || index === childrenList.length - 1) && childrenList.length > 1) {
                 let _offset = index === 0 ? -addWidth : addWidth
                 node.left += _offset
-                if (node.children && node.children.length) {
+                if (node.children && node.children.length && !node.hasCustomPosition()) {
                     this.updateChildren(node.children, 'left', _offset)
                 }
             }
             childrenList.forEach((item, _index) => {
+                if (item.hasCustomPosition()) {// 适配自定义位置
+                    return
+                }
                 let _offset = 0
                 if (_index < index) { // 左边的节点往左移
                     _offset = -addWidth
@@ -204,6 +207,9 @@ class CatalogOrganization extends Base {
                 return item === node
             })
             childrenList.forEach((item, _index) => {
+                if (item.hasCustomPosition()) {// 适配自定义位置
+                    return
+                }
                 let _offset = 0
                 // 下面的节点往下移
                 if (_index > index) {
@@ -239,44 +245,80 @@ class CatalogOrganization extends Base {
         let len = node.children.length
         let marginX = this.getMarginX(node.layerIndex + 1)
         if (node.isRoot) {
+            // 根节点
             let x1 = left + width / 2
             let y1 = top + height
             let s1 = marginX * 0.7
-            let minx = 0
-            let maxx = 0
+            let minx = Infinity
+            let maxx = -Infinity
             node.children.forEach((item, index) => {
                 let x2 = item.left +item.width / 2
                 let y2 = item.top
-                if (index === 0) {
+                if (x2 < minx) {
                     minx = x2
-                } else if (index >= len - 1) {
+                }
+                if (x2 > maxx) {
                     maxx = x2
                 }
-                let path = `M ${x2},${y1 + s1} L ${x2},${y2}`
+                let path = `M ${x2},${y1 + s1} L ${x2},${y1 + s1 > y2 ? y2 + item.height : y2}`
+                // 竖线
                 lines[index].plot(path)
             })
+            minx = Math.min(minx, x1)
+            maxx = Math.max(maxx, x1)
             // 父节点的竖线
             let line1 = this.draw.path()
             node.style.line(line1)
             line1.plot(`M ${x1},${y1} L ${x1},${y1 + s1}`)
             node._lines.push(line1)
             // 水平线
-            if (len > 1) {
+            if (len > 0) {
                 let lin2 = this.draw.path()
                 node.style.line(lin2)
                 lin2.plot(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`)
                 node._lines.push(lin2)
             }
         } else {
+            // 非根节点
             let y1 = top + height
-            let maxy = 0
+            let maxy = -Infinity
             let x2 = node.left + node.width * 0.3
             node.children.forEach((item, index) => {
+                // 为了适配自定义位置，下面做了各种位置的兼容
                 let y2 = item.top + item.height / 2
-                if (index >= len - 1) {
+                if (y2 > maxy) {
                     maxy = y2
                 }
-                let path = `M ${x2},${y2} L ${x2 + node.width * 0.2},${y2}`
+                // 水平线
+                let path = ''
+                let _left = item.left
+                let _isLeft = item.left + item.width < x2
+                let _isXCenter = false
+                if (_isLeft) {
+                    // 水平位置在父节点左边
+                    _left = item.left + item.width
+                } else if (item.left < x2 && item.left + item.width > x2) {
+                    // 水平位置在父节点之间
+                    _isXCenter = true
+                    y2 = item.top
+                    maxy = y2
+                }   
+                if (y2 > top && y2 < y1) {
+                    // 自定义位置的情况：垂直位置节点在父节点之间
+                    path = `M ${_isLeft ? node.left : node.left + node.width},${y2} L ${_left},${y2}`
+                } else if (y2 < y1) {
+                    // 自定义位置的情况：垂直位置节点在父节点上面
+                    if (_isXCenter) {
+                        y2 = item.top + item.height
+                        _left = x2
+                    }
+                    path = `M ${x2},${top} L ${x2},${y2} L ${_left},${y2}`
+                } else {
+                    if (_isXCenter) {
+                        _left = x2
+                    }
+                    path = `M ${x2},${y2} L ${_left},${y2}`
+                }
                 lines[index].plot(path)
             })
             // 竖线
@@ -284,7 +326,12 @@ class CatalogOrganization extends Base {
                 let lin2 = this.draw.path()
                 expandBtnSize = len > 0 ? expandBtnSize : 0
                 node.style.line(lin2)
-                lin2.plot(`M ${x2},${y1 + expandBtnSize} L ${x2},${maxy}`)
+                if (maxy < y1 + expandBtnSize) {
+                    lin2.hide()
+                } else {
+                    lin2.plot(`M ${x2},${y1 + expandBtnSize} L ${x2},${maxy}`)
+                    lin2.show()
+                }
                 node._lines.push(lin2)
             }
         }

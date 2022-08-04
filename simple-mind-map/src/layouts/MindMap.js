@@ -155,6 +155,9 @@ class MindMap extends Base {
                 return item === node
             })
             childrenList.forEach((item, _index) => {
+                if (item.hasCustomPosition()) {// 适配自定义位置
+                    return
+                }
                 let _offset = 0
                 let addHeight = item.dir === 'left' ? leftAddHeight : rightAddHeight
                 // 上面的节点往上移

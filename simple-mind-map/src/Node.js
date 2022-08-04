@@ -55,9 +55,12 @@ class Node {
         // 节点高
         this.height = opt.height || 0
         // left
-        this.left = opt.left || 0
+        this._left = opt.left || 0
         // top
-        this.top = opt.top || 0
+        this._top = opt.top || 0
+        // 自定义位置
+        this.customLeft = opt.data.data.customLeft || undefined
+        this.customTop = opt.data.data.customTop || undefined
         // 是否正在拖拽中
         this.isDrag = false
         // 父节点
@@ -101,6 +104,23 @@ class Node {
         this.getSize()
     }
 
+    // 支持自定义位置
+    get left() {
+        return this.customLeft || this._left
+    }
+
+    set left(val) {
+        this._left = val
+    }
+
+    get top() {
+        return this.customTop || this._top
+    }
+
+    set top(val) {
+        this._top = val
+    }
+
     /** 
      * @Author: 王林 
      * @Date: 2021-07-12 07:40:47 
@@ -137,6 +157,33 @@ class Node {
         data.data.isActive = data.data.isActive === true ? true : false
         data.children = data.children || []
         return data
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-08-02 19:53:40 
+     * @Desc: 检查节点是否存在自定义数据 
+     */
+    hasCustomPosition() {
+        return this.customLeft !== undefined && this.customTop !== undefined
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-08-04 09:06:56 
+     * @Desc: 检查节点是否存在自定义位置的祖先节点 
+     */
+    ancestorHasCustomPosition() {
+        let node = this
+        while(node) {
+            if (node.hasCustomPosition()) {
+                return true
+            }
+            node = node.parent
+        }
+        return false
     }
 
     /** 
