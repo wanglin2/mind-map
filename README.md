@@ -8,15 +8,15 @@
 
 - [x] 支持快捷键
 
-- [x] 节点内容支持图片、图标、超链接、备注、标签
+- [x] 节点内容支持图片、图标、超链接、备注、标签、概要
 
 - [x] 支持前进后退
 
 - [x] 支持拖动、缩放
 
-- [x] 支持右键多选
+- [x] 支持右键按住多选
 
-- [x] 支持节点拖拽
+- [x] 支持节点自由拖拽、拖拽调整
 
 ## 目录介绍
 
@@ -106,7 +106,7 @@ const mindMap = new MindMap({
 | el                   | Element |                  | 容器元素，必须为DOM元素                                      | 是       |
 | data                 | Object  | {}               | 思维导图数据，可参考：[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js) |          |
 | layout               | String  | logicalStructure | 布局类型，可选列表：logicalStructure（逻辑结构图）、mindMap（思维导图）、catalogOrganization（目录组织图）、organizationStructure（组织结构图） |          |
-| theme                | String  | default          | 主题，可选列表：default（默认）、classic（脑图经典）、minions（小黄人）、pinkGrape（粉红葡萄）、mint（薄荷）、gold（金色vip）、vitalityOrange（活力橙）、greenLeaf（绿叶）、dark2（暗色2）、skyGreen（天清绿）、classic2（脑图经典2）、classic3（脑图经典3）、classicGreen（经典绿）、classicBlue（经典蓝）、blueSky（天空蓝）、brainImpairedPink（脑残粉）、dark（暗色）、earthYellow（泥土黄）、freshGreen（清新绿）、freshRed（清新红）、romanticPurple（浪漫紫） |          |
+| theme                | String  | default          | 主题，可选列表：default（默认）、classic（脑图经典）、minions（小黄人）、pinkGrape（粉红葡萄）、mint（薄荷）、gold（金色vip）、vitalityOrange（活力橙）、greenLeaf（绿叶）、dark2（暗色2）、skyGreen（天清绿）、classic2（脑图经典2）、classic3（脑图经典3）、classic4（脑图经典4，v0.2.0+）、classicGreen（经典绿）、classicBlue（经典蓝）、blueSky（天空蓝）、brainImpairedPink（脑残粉）、dark（暗色）、earthYellow（泥土黄）、freshGreen（清新绿）、freshRed（清新红）、romanticPurple（浪漫紫） |          |
 | themeConfig          | Object  | {}               | 主题配置，会和所选择的主题进行合并，可用字段可参考：[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js) |          |
 | scaleRatio           | Number  | 0.1              | 放大缩小的增量比例                                           |          |
 | maxTag               | Number  | 5                | 节点里最多显示的标签数量，多余的会被丢弃                     |          |
@@ -228,34 +228,38 @@ v0.1.7+。切换模式为只读或编辑。
 
 执行命令，每执行一个命令就会在历史堆栈里添加一条记录用于回退或前进。所有命令如下：
 
-| 命令名称                 | 描述                                                         | 参数                                                         |
-| ------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| SELECT_ALL               | 全选                                                         |                                                              |
-| BACK                     | 回退指定的步数                                               | step（要回退的步数，默认为1）                                |
-| FORWARD                  | 前进指定的步数                                               | step（要前进的步数，默认为1）                                |
-| INSERT_NODE              | 插入同级节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效 |                                                              |
-| INSERT_CHILD_NODE        | 插入子节点，操作节点为当前激活的节点                         |                                                              |
-| UP_NODE                  | 上移节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的第一个节点使用无效 |                                                              |
-| DOWN_NODE                | 操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的最后一个节点使用无效 |                                                              |
-| REMOVE_NODE              | 删除节点，操作节点为当前激活的节点                           |                                                              |
-| PASTE_NODE               | 粘贴节点到节点，操作节点为当前激活的节点                     | data（要粘贴的节点数据，一般通过`renderer.copyNode()`方法和`renderer.cutNode()`方法获取） |
-| CUT_NODE                 | 剪切节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点使用无效 | callback(回调函数，剪切的节点数据会通过调用该函数并通过参数返回) |
-| SET_NODE_STYLE           | 修改节点样式                                                 | node（要设置样式的节点）、prop（样式属性）、value（样式属性值）、isActive（布尔值，是否设置的是激活状态的样式） |
-| SET_NODE_ACTIVE          | 设置节点是否激活                                             | node（要设置的节点）、active（布尔值，是否激活）             |
-| CLEAR_ACTIVE_NODE        | 清除当前已激活节点的激活状态，操作节点为当前激活的节点       |                                                              |
-| SET_NODE_EXPAND          | 设置节点是否展开                                             | node（要设置的节点）、expand（布尔值，是否展开）             |
-| EXPAND_ALL               | 展开所有节点                                                 |                                                              |
-| UNEXPAND_ALL             | 收起所有节点                                                 |                                                              |
-| SET_NODE_DATA            | 更新节点数据，即更新节点数据对象里`data`对象的数据           | node（要设置的节点）、data（对象，要更新的数据，如`{expand: true}`） |
-| SET_NODE_TEXT            | 设置节点文本                                                 | node（要设置的节点）、text（要设置的文本字符串，换行可以使用`\n`） |
-| SET_NODE_IMAGE           | 设置节点图片                                                 | node（要设置的节点）、imgData（对象，图片信息，结构为：`{url, title, width, height}`，图片的宽高必须要传） |
-| SET_NODE_ICON            | 设置节点图标                                                 | node（要设置的节点）、icons（数组，预定义的图片名称组成的数组，可用图标可在[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js)文件里的`nodeIconList`列表里获取到，图标名称为`type_name`，如`['priority_1']`） |
-| SET_NODE_HYPERLINK       | 设置节点超链接                                               | node（要设置的节点）、link（超链接地址）、title（超链接名称，可选） |
-| SET_NODE_NOTE            | 设置节点备注                                                 | node（要设置的节点）、note（备注文字）                       |
-| SET_NODE_TAG             | 设置节点标签                                                 | node（要设置的节点）、tag（字符串数组，内置颜色信息可在[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js)里获取到） |
-| INSERT_AFTER（v0.1.5+）  | 将节点移动到另一个节点的后面                                 | node（要移动的节点）、 exist（目标节点）                     |
-| INSERT_BEFORE（v0.1.5+） | 将节点移动到另一个节点的前面                                 | node（要移动的节点）、 exist（目标节点）                     |
-| MOVE_NODE_TO（v0.1.5+）  | 移动一个节点作为另一个节点的子节点                           | node（要移动的节点）、 toNode（目标节点）                    |
+| 命令名称                            | 描述                                                         | 参数                                                         |
+| ----------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| SELECT_ALL                          | 全选                                                         |                                                              |
+| BACK                                | 回退指定的步数                                               | step（要回退的步数，默认为1）                                |
+| FORWARD                             | 前进指定的步数                                               | step（要前进的步数，默认为1）                                |
+| INSERT_NODE                         | 插入同级节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效 |                                                              |
+| INSERT_CHILD_NODE                   | 插入子节点，操作节点为当前激活的节点                         |                                                              |
+| UP_NODE                             | 上移节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的第一个节点使用无效 |                                                              |
+| DOWN_NODE                           | 操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的最后一个节点使用无效 |                                                              |
+| REMOVE_NODE                         | 删除节点，操作节点为当前激活的节点                           |                                                              |
+| PASTE_NODE                          | 粘贴节点到节点，操作节点为当前激活的节点                     | data（要粘贴的节点数据，一般通过`renderer.copyNode()`方法和`renderer.cutNode()`方法获取） |
+| CUT_NODE                            | 剪切节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点使用无效 | callback(回调函数，剪切的节点数据会通过调用该函数并通过参数返回) |
+| SET_NODE_STYLE                      | 修改节点样式                                                 | node（要设置样式的节点）、prop（样式属性）、value（样式属性值）、isActive（布尔值，是否设置的是激活状态的样式） |
+| SET_NODE_ACTIVE                     | 设置节点是否激活                                             | node（要设置的节点）、active（布尔值，是否激活）             |
+| CLEAR_ACTIVE_NODE                   | 清除当前已激活节点的激活状态，操作节点为当前激活的节点       |                                                              |
+| SET_NODE_EXPAND                     | 设置节点是否展开                                             | node（要设置的节点）、expand（布尔值，是否展开）             |
+| EXPAND_ALL                          | 展开所有节点                                                 |                                                              |
+| UNEXPAND_ALL                        | 收起所有节点                                                 |                                                              |
+| SET_NODE_DATA                       | 更新节点数据，即更新节点数据对象里`data`对象的数据           | node（要设置的节点）、data（对象，要更新的数据，如`{expand: true}`） |
+| SET_NODE_TEXT                       | 设置节点文本                                                 | node（要设置的节点）、text（要设置的文本字符串，换行可以使用`\n`） |
+| SET_NODE_IMAGE                      | 设置节点图片                                                 | node（要设置的节点）、imgData（对象，图片信息，结构为：`{url, title, width, height}`，图片的宽高必须要传） |
+| SET_NODE_ICON                       | 设置节点图标                                                 | node（要设置的节点）、icons（数组，预定义的图片名称组成的数组，可用图标可在[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js)文件里的`nodeIconList`列表里获取到，图标名称为`type_name`，如`['priority_1']`） |
+| SET_NODE_HYPERLINK                  | 设置节点超链接                                               | node（要设置的节点）、link（超链接地址）、title（超链接名称，可选） |
+| SET_NODE_NOTE                       | 设置节点备注                                                 | node（要设置的节点）、note（备注文字）                       |
+| SET_NODE_TAG                        | 设置节点标签                                                 | node（要设置的节点）、tag（字符串数组，内置颜色信息可在[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js)里获取到） |
+| INSERT_AFTER（v0.1.5+）             | 将节点移动到另一个节点的后面                                 | node（要移动的节点）、 exist（目标节点）                     |
+| INSERT_BEFORE（v0.1.5+）            | 将节点移动到另一个节点的前面                                 | node（要移动的节点）、 exist（目标节点）                     |
+| MOVE_NODE_TO（v0.1.5+）             | 移动一个节点作为另一个节点的子节点                           | node（要移动的节点）、 toNode（目标节点）                    |
+| ADD_GENERALIZATION（v0.2.0+）       | 添加节点概要                                                 | data（概要的数据，对象格式，节点的数字段都支持，默认为{text: '概要'}） |
+| REMOVE_GENERALIZATION（v0.2.0+）    | 删除节点概要                                                 |                                                              |
+| SET_NODE_CUSTOM_POSITION（v0.2.0+） | 设置节点自定义位置                                           | node（要设置的节点）、 left（自定义的x坐标，默认为undefined）、 top（自定义的y坐标，默认为undefined） |
+| RESET_LAYOUT（v0.2.0+）             | 一键整理布局                                                 |                                                              |
 
 
 #### setData(data)
@@ -801,6 +805,54 @@ v0.1.5+
 v0.1.5+
 
 检测当前节点是否是某个节点的兄弟节点
+
+
+
+#### checkHasGeneralization()
+
+v0.2.0+
+
+检查是否存在概要 
+
+
+
+#### hideGeneralization()
+
+v0.2.0+
+
+隐藏概要节点 
+
+
+
+#### showGeneralization()
+
+v0.2.0+
+
+显示概要节点
+
+
+
+#### updateGeneralization()
+
+v0.2.0+
+
+更新概要节点 
+
+
+
+#### hasCustomPosition()
+
+v0.2.0+
+
+检查节点是否存在自定义数据
+
+
+
+#### ancestorHasCustomPosition()
+
+v0.2.0+
+
+检查节点是否存在自定义位置的祖先节点 
 
 
 
