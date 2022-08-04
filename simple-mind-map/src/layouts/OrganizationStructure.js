@@ -121,6 +121,9 @@ class OrganizationStructure extends Base {
                 return item === node
             })
             childrenList.forEach((item, _index) => {
+                if (item.hasCustomPosition()) {// 适配自定义位置
+                    return
+                }
                 let _offset = 0
                 // 上面的节点往上移
                 if (_index < index) {
@@ -160,20 +163,23 @@ class OrganizationStructure extends Base {
         let y1 = top + height
         let marginX = this.getMarginX(node.layerIndex + 1)
         let s1 = marginX * 0.7
-        let minx = 0
-        let maxx = 0
+        let minx = Infinity
+        let maxx = -Infinity
         let len = node.children.length
         node.children.forEach((item, index) => {
             let x2 = item.left + item.width / 2
-            let y2 = item.top
-            if (index === 0) {
+            let y2 = y1 + s1 > item.top ? item.top + item.height : item.top
+            if (x2 < minx) {
                 minx = x2
-            } else if (index >= len - 1) {
+            }
+            if (x2 > maxx) {
                 maxx = x2
             }
             let path = `M ${x2},${y1 + s1} L ${x2},${y2}`
             lines[index].plot(path)
         })
+        minx = Math.min(x1, minx)
+        maxx = Math.max(x1, maxx)
         // 父节点的竖线
         let line1 = this.draw.path()
         node.style.line(line1)
@@ -181,7 +187,7 @@ class OrganizationStructure extends Base {
         line1.plot(`M ${x1},${y1 + expandBtnSize} L ${x1},${y1 + s1}`)
         node._lines.push(line1)
         // 水平线
-        if (len > 1) {
+        if (len > 0) {
             let lin2 = this.draw.path()
             node.style.line(lin2)
             lin2.plot(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`)

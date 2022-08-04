@@ -42,6 +42,7 @@
       <div class="item" @click="exec('RETURN_CENTER')">回到中心</div>
       <div class="item" @click="exec('EXPAND_ALL')">展开所有</div>
       <div class="item" @click="exec('UNEXPAND_ALL')">收起所有</div>
+      <div class="item" @click="exec('RESET_LAYOUT')">一键整理布局</div>
     </template>
   </div>
 </template>

@@ -129,11 +129,12 @@ class Drag extends Base {
      * @Date: 2021-11-23 19:38:02 
      * @Desc: 鼠标松开事件 
      */
-    onMouseup() {
+    onMouseup(e) {
         if (!this.isMousedown) {
             return;
         }
         this.isMousedown = false
+        let _nodeIsDrag = this.node.isDrag
         this.node.isDrag = false
         this.node.show()
         this.removeCloneNode()
@@ -147,6 +148,26 @@ class Drag extends Base {
         } else if (this.nextNode) { // 存在下一个相邻节点，作为其前一个兄弟节点
             this.mindMap.renderer.setNodeActive(this.nextNode, false)
             this.mindMap.execCommand('INSERT_BEFORE', this.node, this.nextNode)
+        } else if (_nodeIsDrag) {
+            // 自定义位置
+            let {
+                x,
+                y
+            } = this.mindMap.toPos(e.clientX - this.offsetX, e.clientY - this.offsetY)
+            let {
+                scaleX,
+                scaleY,
+                translateX,
+                translateY
+            } = this.drawTransform
+            x = (x - translateX) / scaleX
+            y = (y - translateY) / scaleY
+            this.node.left = x
+            this.node.top = y
+            this.node.customLeft = x
+            this.node.customTop = y
+            this.mindMap.execCommand('SET_NODE_CUSTOM_POSITION', this.node, x, y)
+            this.mindMap.render()
         }
         this.reset()
     }
