@@ -9,7 +9,7 @@
     <Theme :mindMap="mindMap"></Theme>
     <Structure :mindMap="mindMap"></Structure>
     <ShortcutKey></ShortcutKey>
-    <Contextmenu :mindMap="mindMap"></Contextmenu>
+    <Contextmenu v-if="mindMap" :mindMap="mindMap"></Contextmenu>
     <NodeNoteContentShow></NodeNoteContentShow>
   </div>
 </template>
