@@ -119,7 +119,7 @@ class Base {
     updateChildren(children, prop, offset) {
         children.forEach((item) => {
             item[prop] += offset
-            if (item.children && item.children.length) {
+            if (item.children && item.children.length && !item.hasCustomPosition()) {// 适配自定义位置
                 this.updateChildren(item.children, prop, offset)
             }
         })
