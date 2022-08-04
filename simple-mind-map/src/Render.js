@@ -222,6 +222,13 @@ class Render {
         this.mindMap.keyCommand.addShortcut('Control+a', () => {
             this.mindMap.execCommand('SELECT_ALL')
         })
+        // 一键整理布局
+        this.mindMap.keyCommand.addShortcut('Shift+l', this.resetLayout)
+        // 上移节点
+        this.mindMap.keyCommand.addShortcut('Control+Up', this.upNode)
+        // 下移节点
+        this.mindMap.keyCommand.addShortcut('Control+Down', this.downNode)
+        // 复制节点、剪切节点、粘贴节点的快捷键需开发者自行注册实现，可参考demo
     }
 
     /** 
@@ -890,7 +897,7 @@ class Render {
             return
         }
         this.activeNodeList.forEach((node) => {
-            if (node.nodeData.data.generalization) {
+            if (node.nodeData.data.generalization || node.isRoot) {
                 return
             }
             this.setNodeData(node, {

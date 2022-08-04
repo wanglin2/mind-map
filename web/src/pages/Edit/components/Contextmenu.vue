@@ -11,14 +11,23 @@
         :class="{ disabled: insertNodeBtnDisabled }"
       >
         插入同级节点
+        <span class="desc">Enter</span>
       </div>
-      <div class="item" @click="exec('INSERT_CHILD_NODE')">插入子级节点</div>
+      <div class="item" @click="exec('INSERT_CHILD_NODE')">
+        插入子级节点
+        <span class="desc">Tab</span>
+      </div>
+      <div class="item" @click="exec('ADD_GENERALIZATION')" :class="{ disabled: insertNodeBtnDisabled }">
+        插入概要
+        <span class="desc">Shift + s</span>
+      </div>
       <div
         class="item"
         @click="exec('UP_NODE')"
         :class="{ disabled: upNodeBtnDisabled }"
       >
         上移节点
+        <span class="desc">Ctrl + ↑</span>
       </div>
       <div
         class="item"
@@ -26,23 +35,37 @@
         :class="{ disabled: downNodeBtnDisabled }"
       >
         下移节点
+        <span class="desc">Ctrl + ↓</span>
       </div>
-      <div class="item danger" @click="exec('REMOVE_NODE')">删除节点</div>
-      <div class="item" @click="exec('COPY_NODE')">复制节点</div>
-      <div class="item" @click="exec('CUT_NODE')">剪切节点</div>
+      <div class="item danger" @click="exec('REMOVE_NODE')">
+        删除节点
+        <span class="desc">Delete</span>
+      </div>
+      <div class="item" @click="exec('COPY_NODE')">
+        复制节点
+        <span class="desc">Ctrl + C</span>
+      </div>
+      <div class="item" @click="exec('CUT_NODE')">
+        剪切节点
+        <span class="desc">Ctrl + X</span>
+      </div>
       <div
         class="item"
         :class="{ disabled: copyData === null }"
         @click="exec('PASTE_NODE')"
       >
         粘贴节点
+        <span class="desc">Ctrl + V</span>
       </div>
     </template>
     <template v-if="type === 'svg'">
       <div class="item" @click="exec('RETURN_CENTER')">回到中心</div>
       <div class="item" @click="exec('EXPAND_ALL')">展开所有</div>
       <div class="item" @click="exec('UNEXPAND_ALL')">收起所有</div>
-      <div class="item" @click="exec('RESET_LAYOUT')">一键整理布局</div>
+      <div class="item" @click="exec('RESET_LAYOUT')">
+        一键整理布局
+        <span class="desc">Shift + L</span>
+      </div>
     </template>
   </div>
 </template>
@@ -107,6 +130,10 @@ export default {
     this.$bus.$on("expand_btn_click", this.hide);
     this.$bus.$on("svg_mousedown", this.onMousedown);
     this.$bus.$on("mouseup", this.onMouseup);
+    // 注册快捷键
+    this.mindMap.keyCommand.addShortcut('Control+c', this.copy);
+    this.mindMap.keyCommand.addShortcut('Control+v', this.paste);
+    this.mindMap.keyCommand.addShortcut('Control+x', this.cut);
   },
   beforeDestroy() {
     this.$bus.$off("node_contextmenu", this.show);
@@ -115,6 +142,10 @@ export default {
     this.$bus.$off("expand_btn_click", this.hide);
     this.$bus.$on("svg_mousedown", this.onMousedown);
     this.$bus.$on("mouseup", this.onMouseup);
+    // 移除快捷键
+    this.mindMap.keyCommand.removeShortcut('Control+c', this.copy);
+    this.mindMap.keyCommand.removeShortcut('Control+v', this.paste);
+    this.mindMap.keyCommand.removeShortcut('Control+x', this.cut);
   },
   methods: {
     /**
@@ -215,6 +246,33 @@ export default {
       }
       this.hide();
     },
+
+    /** 
+     * @Author: 王林25 
+     * @Date: 2022-08-04 14:25:45 
+     * @Desc: 复制 
+     */
+    copy() {
+      this.exec("COPY_NODE");
+    },
+
+    /** 
+     * @Author: 王林25 
+     * @Date: 2022-08-04 14:26:43 
+     * @Desc: 粘贴 
+     */
+    paste() {
+      this.exec("PASTE_NODE");
+    },
+
+    /** 
+     * @Author: 王林25 
+     * @Date: 2022-08-04 14:27:32 
+     * @Desc: 剪切 
+     */
+    cut() {
+      this.exec("CUT_NODE");
+    }
   },
 };
 </script>
@@ -222,7 +280,7 @@ export default {
 <style lang="less" scoped>
 .contextmenuContainer {
   position: fixed;
-  width: 161px;
+  width: 200px;
   background: #fff;
   box-shadow: 0 4px 12px 0 hsla(0, 0%, 69%, 0.5);
   border-radius: 4px;
@@ -236,8 +294,10 @@ export default {
   .item {
     height: 28px;
     line-height: 28px;
-    padding-left: 16px;
+    padding: 0 16px;
     cursor: pointer;
+    display: flex;
+    justify-content: space-between;
 
     &.danger {
       color: #f56c6c;
@@ -250,10 +310,15 @@ export default {
     &.disabled {
       color: grey;
       cursor: not-allowed;
+      pointer-events: none;
 
       &:hover {
         background: #fff;
       }
+    }
+
+    .desc {
+      color: #999;
     }
   }
 }
