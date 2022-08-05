@@ -11528,6 +11528,11 @@ var View_View = /*#__PURE__*/function () {
         _this.sy = _this.y;
       });
       this.mindMap.event.on('drag', function (e, event) {
+        if (e.ctrlKey) {
+          // 按住ctrl键拖动为多选
+          return;
+        }
+
         if (_this.firstDrag) {
           _this.firstDrag = false; // 清除激活节点
 
@@ -27094,7 +27099,7 @@ var Select_Select = /*#__PURE__*/function () {
           return;
         }
 
-        if (e.which !== 3) {
+        if (!e.ctrlKey && e.which !== 3) {
           return;
         }
 

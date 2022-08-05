@@ -50,6 +50,10 @@ class View {
             this.sy = this.y
         })
         this.mindMap.event.on('drag', (e, event) => {
+            if (e.ctrlKey) {
+                // 按住ctrl键拖动为多选
+                return
+            }
             if (this.firstDrag) {
                 this.firstDrag = false
                 // 清除激活节点
