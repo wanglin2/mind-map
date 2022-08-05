@@ -34,7 +34,7 @@ class Select {
             if (this.mindMap.opt.readonly) {
                 return
             }
-            if (e.which !== 3) {
+            if (!e.ctrlKey && e.which !== 3) {
                 return
             }
             this.isMousedown = true
