@@ -18,8 +18,8 @@
     "url": "https://github.com/wanglin2/mind-map"
   },
   "scripts": {},
-  "main": "index.js",
-  "type": "module",
+  "module": "index.js",
+  "main": "./dist/simpleMindMap.umd.min.js",
   "dependencies": {
     "@svgdotjs/svg.js": "^3.0.16",
     "canvg": "^3.0.7",

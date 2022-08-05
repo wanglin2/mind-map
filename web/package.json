@@ -5,7 +5,8 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && node ../copy.js",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "buildLibrary": "vue-cli-service build --target lib --name simpleMindMap ../simple-mind-map/index.js --dest ../simple-mind-map/dist"
   },
   "dependencies": {
     "@toast-ui/editor": "^3.1.5",
