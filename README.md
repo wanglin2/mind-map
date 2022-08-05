@@ -20,25 +20,25 @@
 
 ## 目录介绍
 
-1.simple-mind-map
+1.`simple-mind-map`
 
 思维导图工具库。
 
-2.web
+2.`web`
 
-使用`simple-mind-map`工具库，基于vue2.x、ElementUI搭建的在线思维导图。
+使用`simple-mind-map`工具库，基于`vue2.x`、`ElementUI`搭建的在线思维导图。
 
-3.dist
+3.`dist`
 
 打包后的资源文件夹。
 
-4.docs
+4.`docs`
 
 文档等。
 
 ## 开发
 
-本地开发
+### 本地开发
 
 ```bash
 git clone https://github.com/wanglin2/mind-map.git
@@ -52,7 +52,27 @@ npm link simple-mind-map
 npm run serve
 ```
 
-打包
+### 打包库
+
+自`0.2.0`版本开始增加了对核心库`simple-mind-map`的打包，复用了示例项目`web`的打包工具。
+
+```bash
+cd web
+npm run buildLibrary
+```
+
+`simple-mind-map`库的`package.json`文件提供了两个导出字段：
+
+```json
+{
+  "module": "index.js",
+  "main": "./dist/simpleMindMap.umd.min.js",
+}
+```
+
+支持`module`字段的环境会以`index.js`为入口，否则会以打包后的`simpleMindMap.umd.min.js`为入口。
+
+### 打包demo
 
 ```bash
 cd web
@@ -70,15 +90,17 @@ npm run build
 npm i simple-mind-map
 ```
 
-注意：本项目为源码直接发布，并未进行打包，如果出现编译失败的情况，Vue CLI创建的项目可以在vue.config.js文件中增加如下配置来让babel-loader编译本依赖：
+`0.2.0`版本之前的注意事项：
 
-```js
-module.exports = {
-  transpileDependencies: ['simple-mind-map']
-}
-```
-
-其他项目请自行修改打包配置。
+>注意：本项目为源码直接发布，并未进行打包，如果出现编译失败的情况，Vue CLI创建的项目可以在vue.config.js文件中增加如下配置来让babel-loader编译本依赖：
+>
+>```js
+>module.exports = {
+>  transpileDependencies: ['simple-mind-map']
+>}
+>```
+>
+>其他项目请自行修改打包配置。
 
 # API
 
