@@ -280,6 +280,11 @@ export const shortcutKeyList = [
                 value: 'Ctrl + A'
             },
             {
+                icon: 'iconquanxuan',
+                name: '多选',
+                value: '右键 / Ctrl + 左键'
+            },
+            {
                 icon: 'iconzhengli',
                 name: '一键整理布局',
                 value: 'Shift + L'

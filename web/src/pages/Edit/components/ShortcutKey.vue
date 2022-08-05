@@ -51,7 +51,7 @@ export default {
 
 <style lang="less" scoped>
 .box {
-  padding: 20px;
+  padding: 0 20px;
 
   .title {
     font-size: 16px;
