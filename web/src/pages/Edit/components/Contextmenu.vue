@@ -19,7 +19,7 @@
       </div>
       <div class="item" @click="exec('ADD_GENERALIZATION')" :class="{ disabled: insertNodeBtnDisabled }">
         插入概要
-        <span class="desc">Shift + s</span>
+        <span class="desc">Shift + S</span>
       </div>
       <div
         class="item"
