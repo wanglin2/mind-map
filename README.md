@@ -295,7 +295,7 @@ v0.1.7+。切换模式为只读或编辑。
 
 导出
 
-`type`：要导出的类型，可选值：png、svg
+`type`：要导出的类型，可选值：png、svg、json、pdf（v0.2.1+）、smm（本质也是json）
 
 `isDownload`：是否需要直接触发下载，布尔值，默认为`false`
 
