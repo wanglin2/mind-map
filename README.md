@@ -1004,3 +1004,6 @@ copyNodeTree({}, node)
 
 [知犀思维导图](https://www.zhixi.com/)
 
+# License
+
+[MIT](https://opensource.org/licenses/MIT)
