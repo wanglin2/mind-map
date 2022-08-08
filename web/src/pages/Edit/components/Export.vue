@@ -15,6 +15,7 @@
         <el-radio label="json">json文件（.json）</el-radio>
         <el-radio label="png">图片文件（.png）</el-radio>
         <el-radio label="svg">svg文件（.svg）</el-radio>
+        <el-radio label="pdf">pdf文件（.pdf）</el-radio>
       </el-radio-group>
       <div class="tip">tips：.smm文件可用于导入</div>
     </div>
