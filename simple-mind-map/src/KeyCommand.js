@@ -16,7 +16,26 @@ export default class KeyCommand {
         this.shortcutMap = {
             //Enter: [fn]
         }
+        this.isPause = false
         this.bindEvent()
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-08-14 08:57:55 
+     * @Desc: 暂停快捷键响应 
+     */
+    pause() {
+        this.isPause = true
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-08-14 08:58:43 
+     * @Desc: 恢复快捷键响应 
+     */
+    recovery() {
+        this.isPause = false
     }
 
     /** 
@@ -26,6 +45,9 @@ export default class KeyCommand {
      */
     bindEvent() {
         window.addEventListener('keydown', (e) => {
+            if (this.isPause) {
+                return
+            }
             Object.keys(this.shortcutMap).forEach((key) => {
                 if (this.checkKey(e, key)) {
                     e.stopPropagation()
@@ -138,5 +160,18 @@ export default class KeyCommand {
                 }
             }
         })
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-08-14 08:49:58 
+     * @Desc: 获取指定快捷键的处理函数 
+     */
+    getShortcutFn(key) {
+        let res = []
+        key.split(/\s*\|\s*/).forEach((item) => {
+            res = this.shortcutMap[item] || []
+        })
+        return res
     }
 }
