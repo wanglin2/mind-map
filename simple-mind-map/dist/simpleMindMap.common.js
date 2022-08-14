@@ -27687,15 +27687,8 @@ var Render_Render = /*#__PURE__*/function () {
 
       this.mindMap.keyCommand.addShortcut('Shift+s', this.addGeneralization); // 展开/收起节点
 
-      this.mindMap.keyCommand.addShortcut('/', function () {
-        _this2.activeNodeList.forEach(function (node) {
-          if (node.nodeData.children.length <= 0) {
-            return;
-          }
-
-          _this2.toggleNodeExpand(node);
-        });
-      }); // 删除节点
+      this.toggleActiveExpand = this.toggleActiveExpand.bind(this);
+      this.mindMap.keyCommand.addShortcut('/', this.toggleActiveExpand); // 删除节点
 
       this.removeNodeWrap = function () {
         _this2.mindMap.execCommand('REMOVE_NODE');
@@ -27731,6 +27724,7 @@ var Render_Render = /*#__PURE__*/function () {
     key: "startTextEdit",
     value: function startTextEdit() {
       this.mindMap.keyCommand.removeShortcut('Del|Backspace');
+      this.mindMap.keyCommand.removeShortcut('/');
       this.mindMap.keyCommand.removeShortcut('Enter', this.insertNodeWrap);
     }
     /** 
@@ -27744,6 +27738,7 @@ var Render_Render = /*#__PURE__*/function () {
     key: "endTextEdit",
     value: function endTextEdit() {
       this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNodeWrap);
+      this.mindMap.keyCommand.addShortcut('/', this.toggleActiveExpand);
       this.mindMap.keyCommand.addShortcut('Enter', this.insertNodeWrap);
     }
     /** 
@@ -28407,6 +28402,25 @@ var Render_Render = /*#__PURE__*/function () {
     }
     /** 
      * @Author: 王林 
+     * @Date: 2022-08-14 09:18:40 
+     * @Desc: 切换激活节点的展开状态 
+     */
+
+  }, {
+    key: "toggleActiveExpand",
+    value: function toggleActiveExpand() {
+      var _this7 = this;
+
+      this.activeNodeList.forEach(function (node) {
+        if (node.nodeData.children.length <= 0) {
+          return;
+        }
+
+        _this7.toggleNodeExpand(node);
+      });
+    }
+    /** 
+     * @Author: 王林 
      * @Date: 2021-07-11 17:15:33 
      * @Desc: 切换节点展开状态 
      */
@@ -28514,7 +28528,7 @@ var Render_Render = /*#__PURE__*/function () {
   }, {
     key: "addGeneralization",
     value: function addGeneralization(data) {
-      var _this7 = this;
+      var _this8 = this;
 
       if (this.activeNodeList.length <= 0) {
         return;
@@ -28525,7 +28539,7 @@ var Render_Render = /*#__PURE__*/function () {
           return;
         }
 
-        _this7.setNodeData(node, {
+        _this8.setNodeData(node, {
           generalization: data || {
             text: '概要'
           }
@@ -28544,7 +28558,7 @@ var Render_Render = /*#__PURE__*/function () {
   }, {
     key: "removeGeneralization",
     value: function removeGeneralization() {
-      var _this8 = this;
+      var _this9 = this;
 
       if (this.activeNodeList.length <= 0) {
         return;
@@ -28555,7 +28569,7 @@ var Render_Render = /*#__PURE__*/function () {
           return;
         }
 
-        _this8.setNodeData(node, {
+        _this9.setNodeData(node, {
           generalization: null
         });
 
@@ -28573,13 +28587,13 @@ var Render_Render = /*#__PURE__*/function () {
   }, {
     key: "setNodeCustomPosition",
     value: function setNodeCustomPosition(node) {
-      var _this9 = this;
+      var _this10 = this;
 
       var left = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
       var top = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
       var nodeList = [node] || false;
       nodeList.forEach(function (item) {
-        _this9.setNodeData(item, {
+        _this10.setNodeData(item, {
           customLeft: left,
           customTop: top
         });
@@ -28595,18 +28609,18 @@ var Render_Render = /*#__PURE__*/function () {
   }, {
     key: "resetLayout",
     value: function resetLayout() {
-      var _this10 = this;
+      var _this11 = this;
 
       walk(this.root, null, function (node) {
         node.customLeft = undefined;
         node.customTop = undefined;
 
-        _this10.setNodeData(node, {
+        _this11.setNodeData(node, {
           customLeft: undefined,
           customTop: undefined
         });
 
-        _this10.mindMap.render();
+        _this11.mindMap.render();
       }, null, true, 0, 0);
     }
     /** 
@@ -30127,21 +30141,48 @@ var KeyCommand_KeyCommand = /*#__PURE__*/function () {
     this.mindMap = opt.mindMap;
     this.shortcutMap = {//Enter: [fn]
     };
+    this.isPause = false;
     this.bindEvent();
   }
   /** 
    * @Author: 王林 
-   * @Date: 2021-04-24 15:23:22 
-   * @Desc: 绑定事件 
+   * @Date: 2022-08-14 08:57:55 
+   * @Desc: 暂停快捷键响应 
    */
 
 
   _createClass(KeyCommand, [{
+    key: "pause",
+    value: function pause() {
+      this.isPause = true;
+    }
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-08-14 08:58:43 
+     * @Desc: 恢复快捷键响应 
+     */
+
+  }, {
+    key: "recovery",
+    value: function recovery() {
+      this.isPause = false;
+    }
+    /** 
+     * @Author: 王林 
+     * @Date: 2021-04-24 15:23:22 
+     * @Desc: 绑定事件 
+     */
+
+  }, {
     key: "bindEvent",
     value: function bindEvent() {
       var _this = this;
 
       window.addEventListener('keydown', function (e) {
+        if (_this.isPause) {
+          return;
+        }
+
         Object.keys(_this.shortcutMap).forEach(function (key) {
           if (_this.checkKey(e, key)) {
             e.stopPropagation();
@@ -30287,6 +30328,23 @@ var KeyCommand_KeyCommand = /*#__PURE__*/function () {
           }
         }
       });
+    }
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-08-14 08:49:58 
+     * @Desc: 获取指定快捷键的处理函数 
+     */
+
+  }, {
+    key: "getShortcutFn",
+    value: function getShortcutFn(key) {
+      var _this4 = this;
+
+      var res = [];
+      key.split(/\s*\|\s*/).forEach(function (item) {
+        res = _this4.shortcutMap[item] || [];
+      });
+      return res;
     }
   }]);
 

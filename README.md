@@ -419,7 +419,7 @@ v0.1.5+
 
 ### 方法
 
-#### keyCommand(key, fn)
+#### addShortcut(key, fn)
 
 添加快捷键
 
@@ -427,7 +427,7 @@ v0.1.5+
 
 ```js
 // 单个按键
-mindMap.keyCommand..addShortcut('Enter', () => {})
+mindMap.keyCommand.addShortcut('Enter', () => {})
 // 或
 mindMap.keyCommand.addShortcut('Del|Backspace', () => {})
 // 组合键
@@ -436,6 +436,21 @@ mindMap.keyCommand.addShortcut('Control+Enter', () => {})
 
 `fn`：要执行的方法
 
+#### removeShortcut(key, fn)
+
+移除快捷键命令，`fn`不指定则移除该快捷键的所有回调方法
+
+#### getShortcutFn(key)
+
+v0.2.2+。获取指定快捷键的处理函数
+
+#### pause()
+
+v0.2.2+。暂停所有快捷键响应
+
+#### recovery()
+
+v0.2.2+。恢复快捷键响应
 
 
 ## command实例

@@ -198,14 +198,8 @@ class Render {
         // 插入概要
         this.mindMap.keyCommand.addShortcut('Shift+s', this.addGeneralization)
         // 展开/收起节点
-        this.mindMap.keyCommand.addShortcut('/', () => {
-            this.activeNodeList.forEach((node) => {
-                if (node.nodeData.children.length <= 0) {
-                    return
-                }
-                this.toggleNodeExpand(node)
-            })
-        })
+        this.toggleActiveExpand = this.toggleActiveExpand.bind(this)
+        this.mindMap.keyCommand.addShortcut('/', this.toggleActiveExpand)
         // 删除节点
         this.removeNodeWrap = () => {
             this.mindMap.execCommand('REMOVE_NODE')
@@ -239,6 +233,7 @@ class Render {
      */
     startTextEdit() {
         this.mindMap.keyCommand.removeShortcut('Del|Backspace')
+        this.mindMap.keyCommand.removeShortcut('/')
         this.mindMap.keyCommand.removeShortcut('Enter', this.insertNodeWrap)
     }
 
@@ -250,6 +245,7 @@ class Render {
      */
     endTextEdit() {
         this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNodeWrap)
+        this.mindMap.keyCommand.addShortcut('/', this.toggleActiveExpand)
         this.mindMap.keyCommand.addShortcut('Enter', this.insertNodeWrap)
     }
 
@@ -799,6 +795,20 @@ class Render {
                 node.data.expand = false
             }
         }, null, true, 0, 0)
+    }
+
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-08-14 09:18:40 
+     * @Desc: 切换激活节点的展开状态 
+     */
+    toggleActiveExpand() {
+        this.activeNodeList.forEach((node) => {
+            if (node.nodeData.children.length <= 0) {
+                return
+            }
+            this.toggleNodeExpand(node)
+        })
     }
 
     /** 
