@@ -227,7 +227,7 @@ export const shortcutKeyList = [
             {
                 icon: 'icongaikuozonglan',
                 name: '插入概要',
-                value: 'Shift + S'
+                value: 'Ctrl + S'
             },
             {
                 icon: 'iconzhankai',
@@ -287,7 +287,7 @@ export const shortcutKeyList = [
             {
                 icon: 'iconzhengli',
                 name: '一键整理布局',
-                value: 'Shift + L'
+                value: 'Ctrl + L'
             },
         ]
     },

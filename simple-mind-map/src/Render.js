@@ -196,7 +196,7 @@ class Render {
         }
         this.mindMap.keyCommand.addShortcut('Enter', this.insertNodeWrap)
         // 插入概要
-        this.mindMap.keyCommand.addShortcut('Shift+s', this.addGeneralization)
+        this.mindMap.keyCommand.addShortcut('Control+s', this.addGeneralization)
         // 展开/收起节点
         this.toggleActiveExpand = this.toggleActiveExpand.bind(this)
         this.mindMap.keyCommand.addShortcut('/', this.toggleActiveExpand)
@@ -217,7 +217,7 @@ class Render {
             this.mindMap.execCommand('SELECT_ALL')
         })
         // 一键整理布局
-        this.mindMap.keyCommand.addShortcut('Shift+l', this.resetLayout)
+        this.mindMap.keyCommand.addShortcut('Control+l', this.resetLayout)
         // 上移节点
         this.mindMap.keyCommand.addShortcut('Control+Up', this.upNode)
         // 下移节点
@@ -232,9 +232,10 @@ class Render {
      * @Desc: 开启文字编辑，会禁用回车键和删除键相关快捷键防止冲突 
      */
     startTextEdit() {
-        this.mindMap.keyCommand.removeShortcut('Del|Backspace')
-        this.mindMap.keyCommand.removeShortcut('/')
-        this.mindMap.keyCommand.removeShortcut('Enter', this.insertNodeWrap)
+        this.mindMap.keyCommand.save()
+        // this.mindMap.keyCommand.removeShortcut('Del|Backspace')
+        // this.mindMap.keyCommand.removeShortcut('/')
+        // this.mindMap.keyCommand.removeShortcut('Enter', this.insertNodeWrap)
     }
 
     /** 
@@ -244,9 +245,10 @@ class Render {
      * @Desc: 结束文字编辑，会恢复回车键和删除键相关快捷键
      */
     endTextEdit() {
-        this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNodeWrap)
-        this.mindMap.keyCommand.addShortcut('/', this.toggleActiveExpand)
-        this.mindMap.keyCommand.addShortcut('Enter', this.insertNodeWrap)
+        this.mindMap.keyCommand.restore()
+        // this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNodeWrap)
+        // this.mindMap.keyCommand.addShortcut('/', this.toggleActiveExpand)
+        // this.mindMap.keyCommand.addShortcut('Enter', this.insertNodeWrap)
     }
 
     /** 
