@@ -47,16 +47,25 @@ export default class TextEdit {
         this.mindMap.on('before_node_active', () => {
             this.hideEditTextBox()
         })
-        // 注册回车快捷键
-        this.mindMap.keyCommand.addShortcut('Enter', () => {
-            this.hideEditTextBox()
-        })
         // 注册编辑快捷键
         this.mindMap.keyCommand.addShortcut('F2', () => {
             if (this.renderer.activeNodeList.length <= 0) {
                 return
             }
             this.show(this.renderer.activeNodeList[0])
+        })
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-08-16 16:27:02 
+     * @Desc: 注册临时快捷键 
+     */
+    registerTmpShortcut() {
+        // 注册回车快捷键
+        this.mindMap.keyCommand.addShortcut('Enter', () => {
+            this.hideEditTextBox()
         })
     }
 
@@ -76,6 +85,7 @@ export default class TextEdit {
      */
     showEditTextBox(node, rect) {
         this.mindMap.emit('before_show_text_edit')
+        this.registerTmpShortcut()
         if (!this.textEditNode) {
             this.textEditNode = document.createElement('div')
             this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);padding: 3px 5px;margin-left: -5px;margin-top: -3px;outline: none;`
