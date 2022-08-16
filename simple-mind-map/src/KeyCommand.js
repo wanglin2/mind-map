@@ -16,6 +16,7 @@ export default class KeyCommand {
         this.shortcutMap = {
             //Enter: [fn]
         }
+        this.shortcutMapCache = {}
         this.isPause = false
         this.bindEvent()
     }
@@ -36,6 +37,28 @@ export default class KeyCommand {
      */
     recovery() {
         this.isPause = false
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-08-16 16:29:01 
+     * @Desc: 保存当前注册的快捷键数据，然后清空快捷键数据
+     */
+    save() {
+        this.shortcutMapCache = this.shortcutMap
+        this.shortcutMap = {}
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-08-16 16:29:38 
+     * @Desc: 恢复保存的快捷键数据，然后清空缓存数据 
+     */
+    restore() {
+        this.shortcutMap = this.shortcutMapCache
+        this.shortcutMapCache = {}
     }
 
     /** 
