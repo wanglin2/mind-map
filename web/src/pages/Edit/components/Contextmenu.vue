@@ -64,7 +64,7 @@
       <div class="item" @click="exec('UNEXPAND_ALL')">收起所有</div>
       <div class="item" @click="exec('RESET_LAYOUT')">
         一键整理布局
-        <span class="desc">Shift + L</span>
+        <span class="desc">Ctrl + L</span>
       </div>
     </template>
   </div>
