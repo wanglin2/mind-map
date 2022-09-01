@@ -990,6 +990,7 @@ class Node {
      * @Desc: 创建或更新展开收缩按钮内容 
      */
     updateExpandBtnNode() {
+        if (this.children.length === 0) return
         if (this._expandBtn) {
             this._expandBtn.clear()
         }
