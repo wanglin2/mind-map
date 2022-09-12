@@ -70,18 +70,39 @@ class Style {
     }
 
     /** 
+     * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-12 21:55:57 
+     * @Desc: 获取某个样式值 
+     */
+    getStyle(prop, root, isActive) {
+        return this.merge(prop, root, isActive)
+    }
+
+    /** 
      * @Author: 王林 
      * @Date: 2021-04-11 10:12:56 
      * @Desc: 矩形 
      */
     rect(node) {
+        this.shape(node)
+        node.radius(this.merge('borderRadius'))
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-12 15:04:28 
+     * @Desc:  矩形外的其他形状 
+     */
+    shape(node) {
         node.fill({
             color: this.merge('fillColor')
         }).stroke({
             color: this.merge('borderColor'),
             width: this.merge('borderWidth'),
             dasharray: this.merge('borderDasharray')
-        }).radius(this.merge('borderRadius'))
+        })
     }
 
     /** 

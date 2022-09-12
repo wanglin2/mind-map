@@ -15,6 +15,7 @@
               size="mini"
               v-model="style.fontFamily"
               placeholder=""
+              :disabled="checkDisabled('fontFamily')"
               @change="update('fontFamily')"
             >
               <el-option
@@ -36,6 +37,7 @@
               style="width: 80px"
               v-model="style.fontSize"
               placeholder=""
+              :disabled="checkDisabled('fontSize')"
               @change="update('fontSize')"
             >
               <el-option
@@ -54,6 +56,7 @@
               style="width: 80px"
               v-model="style.lineHeight"
               placeholder=""
+              :disabled="checkDisabled('lineHeight')"
               @change="update('lineHeight')"
             >
               <el-option
@@ -69,7 +72,7 @@
         <div class="row">
           <div class="btnGroup">
             <el-tooltip content="颜色" placement="bottom">
-              <div class="styleBtn" v-popover:popover>
+              <div class="styleBtn" v-popover:popover :class="{ disabled: checkDisabled('color') }">
                 A
                 <span
                   class="colorShow"
@@ -80,7 +83,7 @@
             <el-tooltip content="加粗" placement="bottom">
               <div
                 class="styleBtn"
-                :class="{ actived: style.fontWeight === 'bold' }"
+                :class="{ actived: style.fontWeight === 'bold', disabled: checkDisabled('fontWeight') }"
                 @click="toggleFontWeight"
               >
                 B
@@ -89,7 +92,7 @@
             <el-tooltip content="斜体" placement="bottom">
               <div
                 class="styleBtn i"
-                :class="{ actived: style.fontStyle === 'italic' }"
+                :class="{ actived: style.fontStyle === 'italic', disabled: checkDisabled('fontStyle') }"
                 @click="toggleFontStyle"
               >
                 I
@@ -99,16 +102,17 @@
               <div
                 class="styleBtn u"
                 :style="{ textDecoration: style.textDecoration || 'none' }"
+                :class="{ disabled: checkDisabled('textDecoration') }"
                 v-popover:popover2
               >
                 U
               </div>
             </el-tooltip>
           </div>
-          <el-popover ref="popover" placement="bottom" trigger="click">
+          <el-popover ref="popover" placement="bottom" trigger="click" :disabled="checkDisabled('color')">
             <Color :color="style.color" @change="changeFontColor"></Color>
           </el-popover>
-          <el-popover ref="popover2" placement="bottom" trigger="click">
+          <el-popover ref="popover2" placement="bottom" trigger="click" :disabled="checkDisabled('textDecoration')">
             <el-radio-group
               size="mini"
               v-model="style.textDecoration"
@@ -129,8 +133,9 @@
               class="block"
               v-popover:popover3
               :style="{ width: '80px', backgroundColor: style.borderColor }"
+              :class="{ disabled: checkDisabled('borderColor') }"
             ></span>
-            <el-popover ref="popover3" placement="bottom" trigger="click">
+            <el-popover ref="popover3" placement="bottom" trigger="click" :disabled="checkDisabled('borderColor')">
               <Color
                 :color="style.borderColor"
                 @change="changeBorderColor"
@@ -144,6 +149,7 @@
               style="width: 80px"
               v-model="style.borderDasharray"
               placeholder=""
+              :disabled="checkDisabled('borderDasharray')"
               @change="update('borderDasharray')"
             >
               <el-option
@@ -164,6 +170,7 @@
               style="width: 80px"
               v-model="style.borderWidth"
               placeholder=""
+              :disabled="checkDisabled('borderWidth')"
               @change="update('borderWidth')"
             >
               <el-option
@@ -182,6 +189,7 @@
               style="width: 80px"
               v-model="style.borderRadius"
               placeholder=""
+              :disabled="checkDisabled('borderRadius')"
               @change="update('borderRadius')"
             >
               <el-option
@@ -203,10 +211,34 @@
               class="block"
               v-popover:popover4
               :style="{ backgroundColor: style.fillColor }"
+              :class="{ disabled: checkDisabled('fillColor') }"
             ></span>
-            <el-popover ref="popover4" placement="bottom" trigger="click">
+            <el-popover ref="popover4" placement="bottom" trigger="click" :disabled="checkDisabled('fillColor')">
               <Color :color="style.fillColor" @change="changeFillColor"></Color>
             </el-popover>
+          </div>
+        </div>
+        <!-- 形状 -->
+        <div class="title">形状</div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">形状</span>
+            <el-select
+              size="mini"
+              style="width: 120px"
+              v-model="style.shape"
+              placeholder=""
+              :disabled="checkDisabled('shape')"
+              @change="update('shape')"
+            >
+              <el-option
+                v-for="item in shapeList"
+                :key="item"
+                :label="item.name"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
           </div>
         </div>
         <!-- 节点内边距 -->
@@ -217,6 +249,7 @@
             <el-slider
               style="width: 200px"
               v-model="style.paddingX"
+              :disabled="checkDisabled('paddingX')"
               @change="update('paddingX')"
             ></el-slider>
           </div>
@@ -227,6 +260,7 @@
             <el-slider
               style="width: 200px"
               v-model="style.paddingY"
+              :disabled="checkDisabled('paddingY')"
               @change="update('paddingY')"
             ></el-slider>
           </div>
@@ -246,7 +280,9 @@ import {
   borderDasharrayList,
   borderRadiusList,
   lineHeightList,
+  shapeList,
 } from "@/config";
+import { supportActiveStyle } from 'simple-mind-map/src/themes/default';
 
 /**
  * @Author: 王林
@@ -261,6 +297,8 @@ export default {
   },
   data() {
     return {
+      supportActiveStyle,
+      shapeList,
       fontFamilyList,
       fontSizeList,
       borderWidthList,
@@ -270,6 +308,7 @@ export default {
       activeNodes: [],
       activeTab: "normal",
       style: {
+        shape: '',
         paddingX: 0,
         paddingY: 0,
         color: "",
@@ -289,11 +328,11 @@ export default {
   },
   created() {
     this.$bus.$on("node_active", (...args) => {
-      this.$refs.sidebar.show = false;
+      if (this.$refs.sidebar) this.$refs.sidebar.show = false;
       this.$nextTick(() => {
         this.activeTab = "normal";
         this.activeNodes = args[1];
-        this.$refs.sidebar.show = this.activeNodes.length > 0;
+        if (this.$refs.sidebar) this.$refs.sidebar.show = this.activeNodes.length > 0;
         this.initNodeStyle();
       });
     });
@@ -308,6 +347,15 @@ export default {
       this.initNodeStyle();
     },
 
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-09-12 22:16:56 
+     * @Desc: 检查是否禁用 
+     */
+    checkDisabled(prop) {
+      return this.activeTab === 'active' && !this.supportActiveStyle.includes(prop)
+    },
+
     /**
      * @Author: 王林
      * @Date: 2021-05-05 09:48:52
@@ -319,6 +367,7 @@ export default {
         return;
       }
       [
+        "shape",
         "paddingX",
         "paddingY",
         "color",
@@ -472,6 +521,13 @@ export default {
         border: 1px solid #dcdfe6;
         border-radius: 4px;
         cursor: pointer;
+
+        &.disabled {
+          background-color: #F5F7FA !important;
+          border-color: #E4E7ED !important;
+          color: #C0C4CC !important;
+          cursor: not-allowed !important;
+        }
       }
     }
 
@@ -490,6 +546,13 @@ export default {
 
       &.actived {
         background-color: #eee;
+      }
+
+      &.disabled {
+        background-color: #F5F7FA !important;
+        border-color: #E4E7ED !important;
+        color: #C0C4CC !important;
+        cursor: not-allowed !important;
       }
 
       &.i {
