@@ -1,4 +1,5 @@
 import Style from './Style'
+import Shape from './Shape'
 import {
     resizeImgSize,
     asyncRun
@@ -43,6 +44,12 @@ class Node {
         this.themeConfig = this.mindMap.themeConfig
         // 样式实例
         this.style = new Style(this, this.themeConfig)
+        // 形状实例
+        this.shapeInstance = new Shape(this)
+        this.shapePadding = {
+            paddingX: 0,
+            paddingY: 0
+        }
         // 是否是根节点
         this.isRoot = opt.isRoot === undefined ? false : opt.isRoot
         // 是否是概要节点
@@ -331,9 +338,16 @@ class Node {
         // 间距
         let margin = imgContentHeight > 0 && textContentHeight > 0 ? this.blockContentMargin : 0
         let { paddingX, paddingY } = this.getPaddingVale()
+        // 纯内容宽高
+        let _width = Math.max(imgContentWidth, textContentWidth)
+        let _height = imgContentHeight + textContentHeight
+        // 计算节点形状需要的附加内边距
+        let { paddingX: shapePaddingX, paddingY: shapePaddingY } = this.shapeInstance.getShapePadding(_width, _height, paddingX, paddingY)
+        this.shapePadding.paddingX = shapePaddingX
+        this.shapePadding.paddingY = shapePaddingY
         return {
-            width: Math.max(imgContentWidth, textContentWidth) + paddingX * 2,
-            height: imgContentHeight + textContentHeight + paddingY * 2 + margin
+            width: _width + paddingX * 2 + shapePaddingX * 2,
+            height: _height + paddingY * 2 + margin + shapePaddingY * 2
         }
     }
 
@@ -544,6 +558,16 @@ class Node {
 
     /** 
      * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-12 22:02:07 
+     * @Desc: 获取节点形状 
+     */
+    getShape() {
+        return this.style.getStyle('shape', false, false)
+    }
+
+    /** 
+     * javascript comment 
      * @Author: 王林25 
      * @Date: 2021-04-09 11:10:11 
      * @Desc: 定位节点内容
@@ -555,6 +579,7 @@ class Node {
             textContentItemMargin
         } = this
         let { paddingY } = this.getPaddingVale()
+        paddingY += this.shapePadding.paddingY
         // 创建组
         this.group = new G()
         // 概要节点添加一个带所属节点id的类名
@@ -563,8 +588,9 @@ class Node {
         }
         this.draw.add(this.group)
         this.update(true)
-        // 节点矩形
-        this.style.rect(this.group.rect(width, height))
+        // 节点形状
+        const shape = this.getShape()
+        this.style[shape === 'rectangle' ? 'rect' : 'shape'](this.shapeInstance.createShape())
         // 图片节点
         let imgHeight = 0
         if (this._imgData) {
@@ -1205,6 +1231,16 @@ class Node {
      */
     setTag(tag) {
         this.mindMap.execCommand('SET_NODE_TAG', this, tag)
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-12 21:47:45 
+     * @Desc: 设置形状 
+     */
+    setShape(shape) {
+        this.mindMap.execCommand('SET_NODE_SHAPE', this, shape)
     }
 }
 

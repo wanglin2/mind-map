@@ -5,6 +5,7 @@ import CatalogOrganization from './layouts/CatalogOrganization'
 import OrganizationStructure from './layouts/OrganizationStructure'
 import TextEdit from './TextEdit'
 import { copyNodeTree, simpleDeepClone, walk } from './utils'
+import { shapeList } from './Shape';
 
 // 布局列表
 const layouts = {
@@ -175,6 +176,9 @@ class Render {
         // 一键整理布局
         this.resetLayout = this.resetLayout.bind(this)
         this.mindMap.command.add('RESET_LAYOUT', this.resetLayout)
+        // 设置节点形状
+        this.setNodeShape = this.setNodeShape.bind(this)
+        this.mindMap.command.add('SET_NODE_SHAPE', this.setNodeShape)
     }
 
     /** 
@@ -975,6 +979,22 @@ class Render {
             })
             this.mindMap.render()
         }, null, true, 0, 0)
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-12 21:44:01 
+     * @Desc: 设置节点形状 
+     */
+    setNodeShape(node, shape) {
+        if (!shape || !shapeList.includes(shape)) {
+            return
+        }
+        let nodeList = [node] || this.activeNodeList
+        nodeList.forEach((item) => {
+            this.setNodeStyle(item, 'shape', shape)
+        })
     }
 
     /** 

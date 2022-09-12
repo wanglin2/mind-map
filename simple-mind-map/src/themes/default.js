@@ -33,6 +33,7 @@ export default {
     backgroundRepeat: 'no-repeat',
     // 根节点样式
     root: {
+        shape: 'rectangle',
         fillColor: '#549688',
         fontFamily: '微软雅黑, Microsoft YaHei',
         color: '#fff',
@@ -53,6 +54,7 @@ export default {
     },
     // 二级节点样式
     second: {
+        shape: 'rectangle',
         marginX: 100,
         marginY: 40,
         fillColor: '#fff',
@@ -75,6 +77,7 @@ export default {
     },
     // 三级及以下节点样式
     node: {
+        shape: 'rectangle',
         marginX: 50,
         marginY: 0,
         fillColor: 'transparent',
@@ -97,6 +100,7 @@ export default {
     },
     // 概要节点样式
     generalization: {
+        shape: 'rectangle',
         marginX: 100,
         marginY: 40,
         fillColor: '#fff',
@@ -118,3 +122,7 @@ export default {
         }
     }
 }
+
+// 支持激活样式的属性
+// 简单来说，会改变节点大小的都不支持在激活时设置，为了性能考虑，节点切换激活态时不会重新计算节点大小
+export const supportActiveStyle = ['fillColor', 'color', 'fontWeight', 'fontStyle', 'borderColor', 'borderWidth', 'borderDasharray', 'borderRadius', 'textDecoration']

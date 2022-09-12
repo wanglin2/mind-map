@@ -312,3 +312,43 @@ export const shortcutKeyList = [
         ]
     }
 ]
+
+// 形状列表
+export const shapeList = [
+    {
+        name: '矩形',
+        value: 'rectangle'
+    },
+    {
+        name: '菱形',
+        value: 'diamond'
+    },
+    {
+        name: '平行四边形',
+        value: 'parallelogram'
+    },
+    {
+        name: '圆角矩形',
+        value: 'roundedRectangle'
+    },
+    {
+        name: '八角矩形',
+        value: 'octagonalRectangle'
+    },
+    {
+        name: '外三角矩形',
+        value: 'outerTriangularRectangle'
+    },
+    {
+        name: '内三角矩形',
+        value: 'innerTriangularRectangle'
+    },
+    {
+        name: '椭圆',
+        value: 'ellipse'
+    },
+    {
+        name: '圆',
+        value: 'circle'
+    }
+]
