@@ -1016,7 +1016,6 @@ class Node {
      * @Desc: 创建或更新展开收缩按钮内容 
      */
     updateExpandBtnNode() {
-        if (this.children.length === 0) return
         if (this._expandBtn) {
             this._expandBtn.clear()
         }
@@ -1031,7 +1030,7 @@ class Node {
         node.x(0).y(-this.expandBtnSize / 2)
         fillNode.x(0).y(-this.expandBtnSize / 2)
         this.style.iconBtn(node, fillNode)
-        this._expandBtn.add(fillNode).add(node)
+        if (this._expandBtn) this._expandBtn.add(fillNode).add(node)
     }
 
     /** 
