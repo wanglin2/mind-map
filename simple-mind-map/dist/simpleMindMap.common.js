@@ -15307,6 +15307,18 @@ var Style_Style = /*#__PURE__*/function () {
       return this.ctx.nodeData.data[prop] !== undefined ? this.ctx.nodeData.data[prop] : defaultConfig[prop];
     }
     /** 
+     * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-12 21:55:57 
+     * @Desc: 获取某个样式值 
+     */
+
+  }, {
+    key: "getStyle",
+    value: function getStyle(prop, root, isActive) {
+      return this.merge(prop, root, isActive);
+    }
+    /** 
      * @Author: 王林 
      * @Date: 2021-04-11 10:12:56 
      * @Desc: 矩形 
@@ -15315,13 +15327,26 @@ var Style_Style = /*#__PURE__*/function () {
   }, {
     key: "rect",
     value: function rect(node) {
+      this.shape(node);
+      node.radius(this.merge('borderRadius'));
+    }
+    /** 
+     * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-12 15:04:28 
+     * @Desc:  矩形外的其他形状 
+     */
+
+  }, {
+    key: "shape",
+    value: function shape(node) {
       node.fill({
         color: this.merge('fillColor')
       }).stroke({
         color: this.merge('borderColor'),
         width: this.merge('borderWidth'),
         dasharray: this.merge('borderDasharray')
-      }).radius(this.merge('borderRadius'));
+      });
     }
     /** 
      * @Author: 王林 
@@ -15470,6 +15495,287 @@ var Style_Style = /*#__PURE__*/function () {
 }();
 
 /* harmony default export */ var src_Style = (Style_Style);
+// CONCATENATED MODULE: ../simple-mind-map/src/Shape.js
+
+
+
+
+/** 
+ * @Author: 王林 
+ * @Date: 2022-08-22 21:32:50 
+ * @Desc: 节点形状类 
+ */
+var Shape_Shape = /*#__PURE__*/function () {
+  function Shape(node) {
+    _classCallCheck(this, Shape);
+
+    this.node = node;
+  }
+  /** 
+   * @Author: 王林 
+   * @Date: 2022-08-17 22:32:32 
+   * @Desc: 形状需要的padding 
+   */
+
+
+  _createClass(Shape, [{
+    key: "getShapePadding",
+    value: function getShapePadding(width, height, paddingX, paddingY) {
+      var shape = this.node.getShape();
+      var defaultPaddingX = 15;
+      var defaultPaddingY = 5;
+      var actWidth = width + paddingX * 2;
+      var actHeight = height + paddingY * 2;
+      var actOffset = Math.abs(actWidth - actHeight);
+
+      switch (shape) {
+        case 'roundedRectangle':
+          return {
+            paddingX: height > width ? (height - width) / 2 : 0,
+            paddingY: 0
+          };
+
+        case 'diamond':
+          return {
+            paddingX: width / 2,
+            paddingY: height / 2
+          };
+
+        case 'parallelogram':
+          return {
+            paddingX: paddingX <= 0 ? defaultPaddingX : 0,
+            paddingY: 0
+          };
+
+        case 'outerTriangularRectangle':
+          return {
+            paddingX: paddingX <= 0 ? defaultPaddingX : 0,
+            paddingY: 0
+          };
+
+        case 'innerTriangularRectangle':
+          return {
+            paddingX: paddingX <= 0 ? defaultPaddingX : 0,
+            paddingY: 0
+          };
+
+        case 'ellipse':
+          return {
+            paddingX: paddingX <= 0 ? defaultPaddingX : 0,
+            paddingY: paddingY <= 0 ? defaultPaddingY : 0
+          };
+
+        case 'circle':
+          return {
+            paddingX: actHeight > actWidth ? actOffset / 2 : 0,
+            paddingY: actHeight < actWidth ? actOffset / 2 : 0
+          };
+
+        default:
+          return {
+            paddingX: 0,
+            paddingY: 0
+          };
+      }
+    }
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-08-17 22:22:53 
+     * @Desc: 创建形状节点 
+     */
+
+  }, {
+    key: "createShape",
+    value: function createShape() {
+      var shape = this.node.getShape();
+      var _this$node = this.node,
+          width = _this$node.width,
+          height = _this$node.height;
+      var node = null; // 矩形
+
+      if (shape === 'rectangle') {
+        node = this.node.group.rect(width, height);
+      } else if (shape === 'diamond') {
+        // 菱形
+        node = this.createDiamond();
+      } else if (shape === 'parallelogram') {
+        // 平行四边形
+        node = this.createParallelogram();
+      } else if (shape === 'roundedRectangle') {
+        // 圆角矩形
+        node = this.createRoundedRectangle();
+      } else if (shape === 'octagonalRectangle') {
+        // 八角矩形
+        node = this.createOctagonalRectangle();
+      } else if (shape === 'outerTriangularRectangle') {
+        // 外三角矩形
+        node = this.createOuterTriangularRectangle();
+      } else if (shape === 'innerTriangularRectangle') {
+        // 内三角矩形
+        node = this.createInnerTriangularRectangle();
+      } else if (shape === 'ellipse') {
+        // 椭圆
+        node = this.createEllipse();
+      } else if (shape === 'circle') {
+        // 圆
+        node = this.createCircle();
+      }
+
+      return node;
+    }
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-09-04 09:08:54 
+     * @Desc: 创建菱形 
+     */
+
+  }, {
+    key: "createDiamond",
+    value: function createDiamond() {
+      var _this$node2 = this.node,
+          width = _this$node2.width,
+          height = _this$node2.height;
+      var halfWidth = width / 2;
+      var halfHeight = height / 2;
+      var topX = halfWidth;
+      var topY = 0;
+      var rightX = width;
+      var rightY = halfHeight;
+      var bottomX = halfWidth;
+      var bottomY = height;
+      var leftX = 0;
+      var leftY = halfHeight;
+      return this.node.group.polygon("\n            ".concat(topX, ", ").concat(topY, "\n            ").concat(rightX, ", ").concat(rightY, "\n            ").concat(bottomX, ", ").concat(bottomY, "\n            ").concat(leftX, ", ").concat(leftY, "\n        "));
+    }
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-09-03 16:14:12 
+     * @Desc: 创建平行四边形 
+     */
+
+  }, {
+    key: "createParallelogram",
+    value: function createParallelogram() {
+      var _this$node$getPadding = this.node.getPaddingVale(),
+          paddingX = _this$node$getPadding.paddingX;
+
+      paddingX = paddingX || this.node.shapePadding.paddingX;
+      var _this$node3 = this.node,
+          width = _this$node3.width,
+          height = _this$node3.height;
+      return this.node.group.polygon("\n            ".concat(paddingX, ", ", 0, "\n            ").concat(width, ", ", 0, "\n            ").concat(width - paddingX, ", ").concat(height, "\n            ", 0, ", ").concat(height, "\n        "));
+    }
+    /** 
+     * @Author: 王林 
+     * @Date: 2022-09-03 16:50:23 
+     * @Desc: 创建圆角矩形 
+     */
+
+  }, {
+    key: "createRoundedRectangle",
+    value: function createRoundedRectangle() {
+      var _this$node4 = this.node,
+          width = _this$node4.width,
+          height = _this$node4.height;
+      var halfHeight = height / 2;
+      return this.node.group.path("\n            M".concat(halfHeight, ",0\n            L").concat(width - halfHeight, ",0\n            A").concat(height / 2, ",").concat(height / 2, " 0 0,1 ").concat(width - halfHeight, ",").concat(height, " \n            L").concat(halfHeight, ",").concat(height, "\n            A").concat(height / 2, ",").concat(height / 2, " 0 0,1 ").concat(halfHeight, ",", 0, "\n        "));
+    }
+    /** 
+     * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-12 16:14:08 
+     * @Desc: 创建八角矩形 
+     */
+
+  }, {
+    key: "createOctagonalRectangle",
+    value: function createOctagonalRectangle() {
+      var w = 5;
+      var _this$node5 = this.node,
+          width = _this$node5.width,
+          height = _this$node5.height;
+      return this.node.group.polygon("\n            ".concat(0, ", ", w, "\n            ").concat(w, ", ", 0, "\n            ").concat(width - w, ", ", 0, "\n            ").concat(width, ", ").concat(w, "\n            ").concat(width, ", ").concat(height - w, "\n            ").concat(width - w, ", ").concat(height, "\n            ").concat(w, ", ").concat(height, "\n            ", 0, ", ").concat(height - w, "\n        "));
+    }
+    /** 
+     * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-12 20:55:50 
+     * @Desc: 创建外三角矩形 
+     */
+
+  }, {
+    key: "createOuterTriangularRectangle",
+    value: function createOuterTriangularRectangle() {
+      var _this$node$getPadding2 = this.node.getPaddingVale(),
+          paddingX = _this$node$getPadding2.paddingX;
+
+      paddingX = paddingX || this.node.shapePadding.paddingX;
+      var _this$node6 = this.node,
+          width = _this$node6.width,
+          height = _this$node6.height;
+      return this.node.group.polygon("\n            ".concat(paddingX, ", ", 0, "\n            ").concat(width - paddingX, ", ", 0, "\n            ").concat(width, ", ").concat(height / 2, "\n            ").concat(width - paddingX, ", ").concat(height, "\n            ").concat(paddingX, ", ").concat(height, "\n            ", 0, ", ").concat(height / 2, "\n        "));
+    }
+    /** 
+     * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-12 20:59:37 
+     * @Desc: 创建内三角矩形 
+     */
+
+  }, {
+    key: "createInnerTriangularRectangle",
+    value: function createInnerTriangularRectangle() {
+      var _this$node$getPadding3 = this.node.getPaddingVale(),
+          paddingX = _this$node$getPadding3.paddingX;
+
+      paddingX = paddingX || this.node.shapePadding.paddingX;
+      var _this$node7 = this.node,
+          width = _this$node7.width,
+          height = _this$node7.height;
+      return this.node.group.polygon("\n            ".concat(0, ", ", 0, "\n            ", width, ", ", 0, "\n            ").concat(width - paddingX / 2, ", ").concat(height / 2, "\n            ").concat(width, ", ").concat(height, "\n            ", 0, ", ").concat(height, "\n            ").concat(paddingX / 2, ", ").concat(height / 2, "\n        "));
+    }
+    /** 
+     * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-12 21:06:31 
+     * @Desc: 创建椭圆 
+     */
+
+  }, {
+    key: "createEllipse",
+    value: function createEllipse() {
+      var _this$node8 = this.node,
+          width = _this$node8.width,
+          height = _this$node8.height;
+      var halfWidth = width / 2;
+      var halfHeight = height / 2;
+      return this.node.group.path("\n            M".concat(halfWidth, ",0\n            A").concat(halfWidth, ",").concat(halfHeight, " 0 0,1 ").concat(halfWidth, ",").concat(height, " \n            M").concat(halfWidth, ",").concat(height, " \n            A").concat(halfWidth, ",").concat(halfHeight, " 0 0,1 ").concat(halfWidth, ",", 0, " \n        "));
+    }
+    /** 
+     * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-12 21:14:04 
+     * @Desc: 创建圆 
+     */
+
+  }, {
+    key: "createCircle",
+    value: function createCircle() {
+      var _this$node9 = this.node,
+          width = _this$node9.width,
+          height = _this$node9.height;
+      var halfWidth = width / 2;
+      var halfHeight = height / 2;
+      return this.node.group.path("\n            M".concat(halfWidth, ",0\n            A").concat(halfWidth, ",").concat(halfHeight, " 0 0,1 ").concat(halfWidth, ",").concat(height, " \n            M").concat(halfWidth, ",").concat(height, " \n            A").concat(halfWidth, ",").concat(halfHeight, " 0 0,1 ").concat(halfWidth, ",", 0, " \n        "));
+    }
+  }]);
+
+  return Shape;
+}(); // 形状列表
+
+
+
+var shapeList = ['rectangle', 'diamond', 'parallelogram', 'roundedRectangle', 'octagonalRectangle', 'outerTriangularRectangle', 'innerTriangularRectangle', 'ellipse', 'circle'];
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/core-js/modules/es.object.to-string.js
 var modules_es_object_to_string = __webpack_require__("0495");
 
@@ -18855,8 +19161,8 @@ class Defs extends Container {
 }
 register(Defs, 'Defs');
 
-class Shape extends Element {}
-register(Shape, 'Shape');
+class svg_esm_Shape extends Element {}
+register(svg_esm_Shape, 'Shape');
 
 function rx(rx) {
   return this.attr('rx', rx);
@@ -18902,7 +19208,7 @@ var circled = {
   height: height$2
 };
 
-class Ellipse extends Shape {
+class Ellipse extends svg_esm_Shape {
   constructor(node, attrs = node) {
     super(nodeOrNew('ellipse', node), attrs);
   }
@@ -19101,7 +19407,7 @@ registerMethods({
 });
 register(Pattern, 'Pattern');
 
-class svg_esm_Image extends Shape {
+class svg_esm_Image extends svg_esm_Shape {
   constructor(node, attrs = node) {
     super(nodeOrNew('image', node), attrs);
   } // (re)load image
@@ -19302,7 +19608,7 @@ var pointed = {
   height: height$1
 };
 
-class Line extends Shape {
+class Line extends svg_esm_Shape {
   // Initialize node
   constructor(node, attrs = node) {
     super(nodeOrNew('line', node), attrs);
@@ -20284,7 +20590,7 @@ function makeMorphable() {
   });
 }
 
-class Path extends Shape {
+class Path extends svg_esm_Shape {
   // Initialize node
   constructor(node, attrs = node) {
     super(nodeOrNew('path', node), attrs);
@@ -20383,7 +20689,7 @@ var poly = {
   size: size$1
 };
 
-class Polygon extends Shape {
+class Polygon extends svg_esm_Shape {
   // Initialize node
   constructor(node, attrs = node) {
     super(nodeOrNew('polygon', node), attrs);
@@ -20403,7 +20709,7 @@ extend(Polygon, pointed);
 extend(Polygon, poly);
 register(Polygon, 'Polygon');
 
-class Polyline extends Shape {
+class Polyline extends svg_esm_Shape {
   // Initialize node
   constructor(node, attrs = node) {
     super(nodeOrNew('polyline', node), attrs);
@@ -20423,7 +20729,7 @@ extend(Polyline, pointed);
 extend(Polyline, poly);
 register(Polyline, 'Polyline');
 
-class Rect extends Shape {
+class Rect extends svg_esm_Shape {
   // Initialize node
   constructor(node, attrs = node) {
     super(nodeOrNew('rect', node), attrs);
@@ -22051,7 +22357,7 @@ var textable = {
   build: build
 };
 
-class Text extends Shape {
+class Text extends svg_esm_Shape {
   // Initialize node
   constructor(node, attrs = node) {
     super(nodeOrNew('text', node), attrs);
@@ -22176,7 +22482,7 @@ registerMethods({
 });
 register(Text, 'Text');
 
-class Tspan extends Shape {
+class Tspan extends svg_esm_Shape {
   // Initialize node
   constructor(node, attrs = node) {
     super(nodeOrNew('tspan', node), attrs);
@@ -22249,7 +22555,7 @@ registerMethods({
 });
 register(Tspan, 'Tspan');
 
-class Circle extends Shape {
+class Circle extends svg_esm_Shape {
   constructor(node, attrs = node) {
     super(nodeOrNew('circle', node), attrs);
   }
@@ -22745,7 +23051,7 @@ registerMethods({
 TextPath.prototype.MorphArray = PathArray;
 register(TextPath, 'TextPath');
 
-class Use extends Shape {
+class Use extends svg_esm_Shape {
   constructor(node, attrs = node) {
     super(nodeOrNew('use', node), attrs);
   } // Use element as a reference
@@ -22779,7 +23085,7 @@ extend([Rect, Ellipse, Gradient, Runner], getMethodsFor('radius'));
 extend(EventTarget, getMethodsFor('EventTarget'));
 extend(Dom, getMethodsFor('Dom'));
 extend(Element, getMethodsFor('Element'));
-extend(Shape, getMethodsFor('Shape'));
+extend(svg_esm_Shape, getMethodsFor('Shape'));
 extend([Container, Fragment], getMethodsFor('Container'));
 extend(Gradient, getMethodsFor('Gradient'));
 extend(Runner, getMethodsFor('Runner'));
@@ -23059,6 +23365,7 @@ var getNodeIconListIcon = function getNodeIconListIcon(name) {
 
 
 
+
 /** 
  * javascript comment 
  * @Author: 王林25 
@@ -23091,7 +23398,13 @@ var Node_Node = /*#__PURE__*/function () {
 
     this.themeConfig = this.mindMap.themeConfig; // 样式实例
 
-    this.style = new src_Style(this, this.themeConfig); // 是否是根节点
+    this.style = new src_Style(this, this.themeConfig); // 形状实例
+
+    this.shapeInstance = new Shape_Shape(this);
+    this.shapePadding = {
+      paddingX: 0,
+      paddingY: 0
+    }; // 是否是根节点
 
     this.isRoot = opt.isRoot === undefined ? false : opt.isRoot; // 是否是概要节点
 
@@ -23423,11 +23736,23 @@ var Node_Node = /*#__PURE__*/function () {
 
       var _this$getPaddingVale = this.getPaddingVale(),
           paddingX = _this$getPaddingVale.paddingX,
-          paddingY = _this$getPaddingVale.paddingY;
+          paddingY = _this$getPaddingVale.paddingY; // 纯内容宽高
 
+
+      var _width = Math.max(imgContentWidth, textContentWidth);
+
+      var _height = imgContentHeight + textContentHeight; // 计算节点形状需要的附加内边距
+
+
+      var _this$shapeInstance$g = this.shapeInstance.getShapePadding(_width, _height, paddingX, paddingY),
+          shapePaddingX = _this$shapeInstance$g.paddingX,
+          shapePaddingY = _this$shapeInstance$g.paddingY;
+
+      this.shapePadding.paddingX = shapePaddingX;
+      this.shapePadding.paddingY = shapePaddingY;
       return {
-        width: Math.max(imgContentWidth, textContentWidth) + paddingX * 2,
-        height: imgContentHeight + textContentHeight + paddingY * 2 + margin
+        width: _width + paddingX * 2 + shapePaddingX * 2,
+        height: _height + paddingY * 2 + margin + shapePaddingY * 2
       };
     }
     /** 
@@ -23684,6 +24009,18 @@ var Node_Node = /*#__PURE__*/function () {
     }
     /** 
      * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-12 22:02:07 
+     * @Desc: 获取节点形状 
+     */
+
+  }, {
+    key: "getShape",
+    value: function getShape() {
+      return this.style.getStyle('shape', false, false);
+    }
+    /** 
+     * javascript comment 
      * @Author: 王林25 
      * @Date: 2021-04-09 11:10:11 
      * @Desc: 定位节点内容
@@ -23699,8 +24036,9 @@ var Node_Node = /*#__PURE__*/function () {
           textContentItemMargin = this.textContentItemMargin;
 
       var _this$getPaddingVale2 = this.getPaddingVale(),
-          paddingY = _this$getPaddingVale2.paddingY; // 创建组
+          paddingY = _this$getPaddingVale2.paddingY;
 
+      paddingY += this.shapePadding.paddingY; // 创建组
 
       this.group = new G(); // 概要节点添加一个带所属节点id的类名
 
@@ -23709,9 +24047,10 @@ var Node_Node = /*#__PURE__*/function () {
       }
 
       this.draw.add(this.group);
-      this.update(true); // 节点矩形
+      this.update(true); // 节点形状
 
-      this.style.rect(this.group.rect(width, height)); // 图片节点
+      var shape = this.getShape();
+      this.style[shape === 'rectangle' ? 'rect' : 'shape'](this.shapeInstance.createShape()); // 图片节点
 
       var imgHeight = 0;
 
@@ -24232,6 +24571,8 @@ var Node_Node = /*#__PURE__*/function () {
   }, {
     key: "updateExpandBtnNode",
     value: function updateExpandBtnNode() {
+      if (this.children.length === 0) return;
+
       if (this._expandBtn) {
         this._expandBtn.clear();
       }
@@ -24501,6 +24842,18 @@ var Node_Node = /*#__PURE__*/function () {
     key: "setTag",
     value: function setTag(tag) {
       this.mindMap.execCommand('SET_NODE_TAG', this, tag);
+    }
+    /** 
+     * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-12 21:47:45 
+     * @Desc: 设置形状 
+     */
+
+  }, {
+    key: "setShape",
+    value: function setShape(shape) {
+      this.mindMap.execCommand('SET_NODE_SHAPE', this, shape);
     }
   }]);
 
@@ -26401,6 +26754,9 @@ var TextEdit_TextEdit = /*#__PURE__*/function () {
 
 
 
+
+
+
  // 布局列表
 
 var layouts = {
@@ -26583,7 +26939,10 @@ var Render_Render = /*#__PURE__*/function () {
       this.mindMap.command.add('SET_NODE_CUSTOM_POSITION', this.setNodeCustomPosition); // 一键整理布局
 
       this.resetLayout = this.resetLayout.bind(this);
-      this.mindMap.command.add('RESET_LAYOUT', this.resetLayout);
+      this.mindMap.command.add('RESET_LAYOUT', this.resetLayout); // 设置节点形状
+
+      this.setNodeShape = this.setNodeShape.bind(this);
+      this.mindMap.command.add('SET_NODE_SHAPE', this.setNodeShape);
     }
     /** 
      * @Author: 王林 
@@ -27550,6 +27909,27 @@ var Render_Render = /*#__PURE__*/function () {
       }, null, true, 0, 0);
     }
     /** 
+     * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-12 21:44:01 
+     * @Desc: 设置节点形状 
+     */
+
+  }, {
+    key: "setNodeShape",
+    value: function setNodeShape(node, shape) {
+      var _this12 = this;
+
+      if (!shape || !shapeList.includes(shape)) {
+        return;
+      }
+
+      var nodeList = [node] || false;
+      nodeList.forEach(function (item) {
+        _this12.setNodeStyle(item, 'shape', shape);
+      });
+    }
+    /** 
      * @Author: 王林 
      * @Date: 2021-05-04 14:19:48 
      * @Desc: 更新节点数据 
@@ -27626,6 +28006,7 @@ var Render_Render = /*#__PURE__*/function () {
   backgroundRepeat: 'no-repeat',
   // 根节点样式
   root: {
+    shape: 'rectangle',
     fillColor: '#549688',
     fontFamily: '微软雅黑, Microsoft YaHei',
     color: '#fff',
@@ -27646,6 +28027,7 @@ var Render_Render = /*#__PURE__*/function () {
   },
   // 二级节点样式
   second: {
+    shape: 'rectangle',
     marginX: 100,
     marginY: 40,
     fillColor: '#fff',
@@ -27668,6 +28050,7 @@ var Render_Render = /*#__PURE__*/function () {
   },
   // 三级及以下节点样式
   node: {
+    shape: 'rectangle',
     marginX: 50,
     marginY: 0,
     fillColor: 'transparent',
@@ -27690,6 +28073,7 @@ var Render_Render = /*#__PURE__*/function () {
   },
   // 概要节点样式
   generalization: {
+    shape: 'rectangle',
     marginX: 100,
     marginY: 40,
     fillColor: '#fff',
@@ -27710,7 +28094,10 @@ var Render_Render = /*#__PURE__*/function () {
       borderDasharray: 'none'
     }
   }
-});
+}); // 支持激活样式的属性
+// 简单来说，会改变节点大小的都不支持在激活时设置，为了性能考虑，节点切换激活态时不会重新计算节点大小
+
+var supportActiveStyle = ['fillColor', 'color', 'fontWeight', 'fontStyle', 'borderColor', 'borderWidth', 'borderDasharray', 'borderRadius', 'textDecoration'];
 // CONCATENATED MODULE: ../simple-mind-map/src/themes/freshGreen.js
 
 
