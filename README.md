@@ -286,6 +286,7 @@ v0.1.7+。切换模式为只读或编辑。
 | REMOVE_GENERALIZATION（v0.2.0+）    | 删除节点概要                                                 |                                                              |
 | SET_NODE_CUSTOM_POSITION（v0.2.0+） | 设置节点自定义位置                                           | node（要设置的节点）、 left（自定义的x坐标，默认为undefined）、 top（自定义的y坐标，默认为undefined） |
 | RESET_LAYOUT（v0.2.0+）             | 一键整理布局                                                 |                                                              |
+| SET_NODE_SHAPE（v0.2.4+）           | 设置节点形状                                                 | node（要设置的节点）、shape（形状，全部形状：https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/Shape.js） |
 
 
 #### setData(data)
@@ -902,6 +903,22 @@ v0.2.0+
 v0.2.0+
 
 检查节点是否存在自定义位置的祖先节点 
+
+
+
+#### getShape()
+
+v0.2.4+
+
+获取节点形状
+
+
+
+#### setShape(shape)
+
+v0.2.4+
+
+设置节点形状，`SET_NODE_SHAPE`命令的快捷方法
 
 
 
