@@ -24580,8 +24580,6 @@ var Node_Node = /*#__PURE__*/function () {
   }, {
     key: "updateExpandBtnNode",
     value: function updateExpandBtnNode() {
-      if (this.children.length === 0) return;
-
       if (this._expandBtn) {
         this._expandBtn.clear();
       }
@@ -24599,8 +24597,7 @@ var Node_Node = /*#__PURE__*/function () {
       node.x(0).y(-this.expandBtnSize / 2);
       fillNode.x(0).y(-this.expandBtnSize / 2);
       this.style.iconBtn(node, fillNode);
-
-      this._expandBtn.add(fillNode).add(node);
+      if (this._expandBtn) this._expandBtn.add(fillNode).add(node);
     }
     /** 
      * javascript comment 
