@@ -861,10 +861,9 @@ class Node {
             this._lines = this._lines.slice(0, childrenLen)
         }
         // 画线
-        this.renderer.layout.renderLine(this, this._lines)
-        // 添加样式
-        this._lines.forEach((line) => {
-            this.styleLine(line)
+        this.renderer.layout.renderLine(this, this._lines, (line, node) => {
+            // 添加样式
+            this.styleLine(line, node)
         })
     }
 
@@ -874,10 +873,10 @@ class Node {
      * @Date: 2022-09-17 12:41:29 
      * @Desc: 设置连线样式 
      */
-    styleLine(line) {
-        let width = this.getSelfInhertStyle('lineWidth') || this.getStyle('lineWidth', true)
-        let color = this.getSelfInhertStyle('lineColor') || this.getStyle('lineColor', true)
-        let dasharray = this.getSelfInhertStyle('lineDasharray') || this.getStyle('lineDasharray', true)
+    styleLine(line, node) {
+        let width = node.getSelfInhertStyle('lineWidth') || node.getStyle('lineWidth', true)
+        let color = node.getSelfInhertStyle('lineColor') || node.getStyle('lineColor', true)
+        let dasharray = node.getSelfInhertStyle('lineDasharray') || node.getStyle('lineDasharray', true)
         this.style.line(line, {
             width,
             color,
