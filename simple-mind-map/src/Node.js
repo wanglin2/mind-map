@@ -723,6 +723,8 @@ class Node {
      * @Desc: 更新节点
      */
     update(layout = false) {
+        // 连线
+        this.renderLine()
         if (!this.group) {
             return
         }
@@ -750,8 +752,6 @@ class Node {
      * @Desc: 递归渲染 
      */
     render() {
-        // 连线
-        this.renderLine()
         // 节点
         if (this.initRender) {
             this.initRender = false
@@ -864,7 +864,24 @@ class Node {
         this.renderer.layout.renderLine(this, this._lines)
         // 添加样式
         this._lines.forEach((line) => {
-            this.style.line(line)
+            this.styleLine(line)
+        })
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: flydreame 
+     * @Date: 2022-09-17 12:41:29 
+     * @Desc: 设置连线样式 
+     */
+    styleLine(line) {
+        let width = this.getSelfInhertStyle('lineWidth') || this.getStyle('lineWidth', true)
+        let color = this.getSelfInhertStyle('lineColor') || this.getStyle('lineColor', true)
+        let dasharray = this.getSelfInhertStyle('lineDasharray') || this.getStyle('lineDasharray', true)
+        this.style.line(line, {
+            width,
+            color,
+            dasharray,
         })
     }
 
@@ -1149,6 +1166,40 @@ class Node {
     getStyle(prop, root, isActive) {
         let v = this.style.merge(prop, root, isActive)
         return v === undefined ? '' : v
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: flydreame 
+     * @Date: 2022-09-17 11:21:15 
+     * @Desc: 获取自定义样式 
+     */
+    getSelfStyle(prop) {
+        return this.style.getSelfStyle(prop)
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: flydreame 
+     * @Date: 2022-09-17 11:21:26 
+     * @Desc:  获取父级的自定义样式
+     */
+    getParentSelfStyle(prop) {
+        if (this.parent) {
+            return this.parent.getSelfStyle(prop) || this.parent.getParentSelfStyle(prop)
+        }
+        return null
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: flydreame 
+     * @Date: 2022-09-17 12:15:30 
+     * @Desc: 获取自身可继承样式 
+     */
+    getSelfInhertStyle(prop) {
+        return this.getSelfStyle(prop) // 自身
+        || this.getParentSelfStyle(prop) // 父级
     }
 
     /** 
