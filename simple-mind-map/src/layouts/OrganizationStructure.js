@@ -147,7 +147,7 @@ class OrganizationStructure extends Base {
      * @Date: 2021-04-11 14:42:48 
      * @Desc: 绘制连线，连接该节点到其子节点
      */
-    renderLine(node, lines) {
+    renderLine(node, lines, style) {
         if (node.children.length <= 0) {
             return [];
         }
@@ -177,6 +177,7 @@ class OrganizationStructure extends Base {
             }
             let path = `M ${x2},${y1 + s1} L ${x2},${y2}`
             lines[index].plot(path)
+            style && style(lines[index], item)
         })
         minx = Math.min(x1, minx)
         maxx = Math.max(x1, maxx)
@@ -186,12 +187,14 @@ class OrganizationStructure extends Base {
         expandBtnSize = len > 0 && !isRoot ? expandBtnSize : 0
         line1.plot(`M ${x1},${y1 + expandBtnSize} L ${x1},${y1 + s1}`)
         node._lines.push(line1)
+        style && style(line1, node)
         // 水平线
         if (len > 0) {
             let lin2 = this.draw.path()
             node.style.line(lin2)
             lin2.plot(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`)
             node._lines.push(lin2)
+            style && style(lin2, node)
         }
     }
 

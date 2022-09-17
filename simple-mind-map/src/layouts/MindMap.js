@@ -182,7 +182,7 @@ class MindMap extends Base {
      * @Date: 2021-04-11 14:42:48 
      * @Desc: 绘制连线，连接该节点到其子节点
      */
-    renderLine(node, lines) {
+    renderLine(node, lines, style) {
         if (node.children.length <= 0) {
             return [];
         }
@@ -205,6 +205,7 @@ class MindMap extends Base {
                 path = this.cubicBezierPath(x1, y1, x2, y2)
             }
             lines[index].plot(path)
+            style && style(lines[index], item)
         })
     }
 
