@@ -66,7 +66,7 @@ class Style {
             }
         }
         // 优先使用节点本身的样式
-        return this.ctx.nodeData.data[prop] !== undefined ? this.ctx.nodeData.data[prop] : defaultConfig[prop]
+        return this.getSelfStyle(prop) !== undefined ? this.getSelfStyle(prop) : defaultConfig[prop]
     }
 
     /** 
@@ -77,6 +77,16 @@ class Style {
      */
     getStyle(prop, root, isActive) {
         return this.merge(prop, root, isActive)
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: flydreame 
+     * @Date: 2022-09-17 12:09:39 
+     * @Desc: 获取自身自定义样式 
+     */
+    getSelfStyle(prop) {
+        return this.ctx.nodeData.data[prop]
     }
 
     /** 
@@ -173,8 +183,8 @@ class Style {
      * @Date: 2021-04-11 14:50:49 
      * @Desc: 连线 
      */
-    line(node) {
-        node.stroke({ width: this.merge('lineWidth', true), color: this.merge('lineColor', true) }).fill({ color: 'none' })
+    line(node, { width, color, dasharray } = {}) {
+        node.stroke({ width, color, dasharray }).fill({ color: 'none' })
     }
 
     /** 

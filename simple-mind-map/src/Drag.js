@@ -189,7 +189,7 @@ class Drag extends Base {
             // 连接线
             this.line = this.draw.path()
             this.line.opacity(0.5)
-            this.node.style.line(this.line)
+            this.node.styleLine(this.line)
             // 同级位置占位符
             this.placeholder = this.draw.rect().fill({
                 color: this.node.style.merge('lineColor', true)
