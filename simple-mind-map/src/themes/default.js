@@ -17,6 +17,8 @@ export default {
     lineWidth: 1,
     // 连线的颜色
     lineColor: '#549688',
+    // 连线样式
+    lineDasharray: 'none',
     // 概要连线的粗细
     generalizationLineWidth: 1,
     // 概要连线的颜色
