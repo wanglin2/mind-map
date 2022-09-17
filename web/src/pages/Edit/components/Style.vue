@@ -143,7 +143,7 @@
             </el-popover>
           </div>
           <div class="rowItem">
-            <span class="name" v-popover:popover5>样式</span>
+            <span class="name">样式</span>
             <el-select
               size="mini"
               style="width: 80px"
@@ -233,9 +233,68 @@
             >
               <el-option
                 v-for="item in shapeList"
-                :key="item"
+                :key="item.value"
                 :label="item.name"
                 :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+        </div>
+        <!-- 线条 -->
+        <div class="title">线条</div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">颜色</span>
+            <span
+              class="block"
+              v-popover:popover5
+              :style="{ width: '80px', backgroundColor: style.lineColor }"
+              :class="{ disabled: checkDisabled('lineColor') }"
+            ></span>
+            <el-popover ref="popover5" placement="bottom" trigger="click" :disabled="checkDisabled('lineColor')">
+              <Color
+                :color="style.lineColor"
+                @change="changeLineColor"
+              ></Color>
+            </el-popover>
+          </div>
+          <div class="rowItem">
+            <span class="name">样式</span>
+            <el-select
+              size="mini"
+              style="width: 80px"
+              v-model="style.lineDasharray"
+              placeholder=""
+              :disabled="checkDisabled('lineDasharray')"
+              @change="update('lineDasharray')"
+            >
+              <el-option
+                v-for="item in borderDasharrayList"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">宽度</span>
+            <el-select
+              size="mini"
+              style="width: 80px"
+              v-model="style.lineWidth"
+              placeholder=""
+              :disabled="checkDisabled('lineWidth')"
+              @change="update('lineWidth')"
+            >
+              <el-option
+                v-for="item in borderWidthList"
+                :key="item"
+                :label="item"
+                :value="item"
               >
               </el-option>
             </el-select>
@@ -323,6 +382,9 @@ export default {
         fillColor: "",
         borderDasharray: "",
         borderRadius: "",
+        lineColor: "",
+        lineDasharray: "",
+        lineWidth: "",
       },
     };
   },
@@ -382,6 +444,9 @@ export default {
         "fillColor",
         "borderDasharray",
         "borderRadius",
+        "lineColor",
+        "lineDasharray",
+        "lineWidth",
       ].forEach((item) => {
         this.style[item] = this.activeNodes[0].getStyle(
           item,
@@ -448,6 +513,16 @@ export default {
     changeBorderColor(color) {
       this.style.borderColor = color;
       this.update("borderColor");
+    },
+
+    /** 
+     * @Author: flydreame 
+     * @Date: 2022-09-17 10:18:15 
+     * @Desc: 修改线条颜色 
+     */
+    changeLineColor(color) {
+      this.style.lineColor = color;
+      this.update("lineColor");
     },
 
     /**
