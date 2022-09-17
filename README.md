@@ -88,7 +88,7 @@ npm run build
 
 # 安装
 
-> 当然仓库版本：0.2.4，当前npm版本：0.2.4
+> 当然仓库版本：0.2.5，当前npm版本：0.2.5
 
 ```bash
 npm i simple-mind-map
@@ -920,6 +920,23 @@ v0.2.4+
 
 设置节点形状，`SET_NODE_SHAPE`命令的快捷方法
 
+#### getSelfStyle(prop)
+
+v0.2.5+
+
+获取节点自身的自定义样式
+
+#### getParentSelfStyle(prop)
+
+v0.2.5+
+
+获取最近一个存在自身自定义样式的祖先节点的自定义样式
+
+#### getSelfInhertStyle(prop)
+
+v0.2.5+
+
+获取自身可继承的自定义样式
 
 
 ## 内置工具方法

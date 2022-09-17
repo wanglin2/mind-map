@@ -711,6 +711,8 @@ class Node {
      * @Desc: 渲染节点到画布，会移除旧的，创建新的
      */
     renderNode() {
+        // 连线
+        this.renderLine()
         this.removeAllEvent()
         this.removeAllNode()
         this.createNodeData()
@@ -723,8 +725,6 @@ class Node {
      * @Desc: 更新节点
      */
     update(layout = false) {
-        // 连线
-        this.renderLine()
         if (!this.group) {
             return
         }
@@ -757,6 +757,8 @@ class Node {
             this.initRender = false
             this.renderNode()
         } else {
+            // 连线
+            this.renderLine()
             this.update()
         }
         // 子节点
@@ -865,6 +867,10 @@ class Node {
             // 添加样式
             this.styleLine(line, node)
         })
+        // 和父级的连线也需要更新
+        if (this.parent) {
+            this.parent.renderLine()
+        }
     }
 
     /** 
@@ -1181,7 +1187,7 @@ class Node {
      * javascript comment 
      * @Author: flydreame 
      * @Date: 2022-09-17 11:21:26 
-     * @Desc:  获取父级的自定义样式
+     * @Desc:  获取最近一个存在自身自定义样式的祖先节点的自定义样式
      */
     getParentSelfStyle(prop) {
         if (this.parent) {
@@ -1194,7 +1200,7 @@ class Node {
      * javascript comment 
      * @Author: flydreame 
      * @Date: 2022-09-17 12:15:30 
-     * @Desc: 获取自身可继承样式 
+     * @Desc: 获取自身可继承的自定义样式 
      */
     getSelfInhertStyle(prop) {
         return this.getSelfStyle(prop) // 自身
