@@ -231,7 +231,7 @@ class CatalogOrganization extends Base {
      * @Date: 2021-04-11 14:42:48 
      * @Desc: 绘制连线，连接该节点到其子节点
      */
-    renderLine(node, lines) {
+    renderLine(node, lines, style) {
         if (node.children.length <= 0) {
             return [];
         }
@@ -263,6 +263,7 @@ class CatalogOrganization extends Base {
                 let path = `M ${x2},${y1 + s1} L ${x2},${y1 + s1 > y2 ? y2 + item.height : y2}`
                 // 竖线
                 lines[index].plot(path)
+                style && style(lines[index], item)
             })
             minx = Math.min(minx, x1)
             maxx = Math.max(maxx, x1)
@@ -271,12 +272,14 @@ class CatalogOrganization extends Base {
             node.style.line(line1)
             line1.plot(`M ${x1},${y1} L ${x1},${y1 + s1}`)
             node._lines.push(line1)
+            style && style(line1, node)
             // 水平线
             if (len > 0) {
                 let lin2 = this.draw.path()
                 node.style.line(lin2)
                 lin2.plot(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`)
                 node._lines.push(lin2)
+                style && style(lin2, node)
             }
         } else {
             // 非根节点
@@ -320,6 +323,7 @@ class CatalogOrganization extends Base {
                     path = `M ${x2},${y2} L ${_left},${y2}`
                 }
                 lines[index].plot(path)
+                style && style(lines[index], item)
             })
             // 竖线
             if (len > 0) {
@@ -333,6 +337,7 @@ class CatalogOrganization extends Base {
                     lin2.show()
                 }
                 node._lines.push(lin2)
+                style && style(lin2, node)
             }
         }
     }
