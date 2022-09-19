@@ -1,5 +1,8 @@
 import { imgToDataUrl, downloadFile } from './utils'
 import JsPDF from 'jspdf'
+import {
+    SVG,
+} from '@svgdotjs/svg.js'
 const URL = window.URL || window.webkitURL || window
 
 /** 
@@ -228,8 +231,9 @@ class Export {
      * @Date: 2021-07-04 14:54:07 
      * @Desc: 导出为svg 
      */
-    async svg() {
+    async svg(name) {
         let { node } = await this.getSvgData()
+        node.first().before(SVG(`<title>${name}</title>`))
         await this.drawBackgroundToSvg(node)
         let str = node.svg()
         // 转换成blob数据
