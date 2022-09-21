@@ -26,9 +26,9 @@ class Export {
      * @Date: 2021-07-02 07:44:06 
      * @Desc: 导出 
      */
-    async export(type, isDownload = true, name = '思维导图') {
+    async export(type, isDownload = true, name = '思维导图', ...args) {
         if (this[type]) {
-            let result = await this[type](name)
+            let result = await this[type](name, ...args)
             if (isDownload && type !== 'pdf') {
                 downloadFile(result, name + '.' + type)
             }
@@ -248,8 +248,22 @@ class Export {
      * @Date: 2021-08-03 22:19:17 
      * @Desc: 导出为json 
      */
-    json () {
-        let data = this.mindMap.command.getCopyData()
+    json (name, withConfig = true) {
+        let nodeData = this.mindMap.command.getCopyData()
+        let data = {}
+        if (withConfig) {
+            data = {
+                layout: this.mindMap.getLayout(),
+                root: nodeData,
+                theme: {
+                    template: this.mindMap.getTheme(),
+                    config: this.mindMap.getCustomThemeConfig()
+                },
+                view: this.mindMap.view.getTransformData()
+            }
+        } else {
+            data = nodeData
+        }
         let str = JSON.stringify(data)
         let blob = new Blob([str])
         return URL.createObjectURL(blob)
@@ -260,8 +274,8 @@ class Export {
      * @Date: 2021-08-03 22:24:24 
      * @Desc: 专有文件，其实就是json文件 
      */
-    smm () {
-        return this.json();
+    smm (name, withConfig) {
+        return this.json(name, withConfig);
     }
 }
 

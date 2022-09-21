@@ -20,11 +20,13 @@
 
 - [x] 支持多种节点形状
 
+- [x] 支持导出为`json`、`png`、`svg`、`pdf`，支持从`json`、`xmind`导入
+
 ## 目录介绍
 
 1.`simple-mind-map`
 
-思维导图工具库。
+思维导图工具库，框架无关，`Vue`、`React`等框架或无框架都可以使用。
 
 2.`web`
 
@@ -32,7 +34,7 @@
 
 3.`dist`
 
-打包后的资源文件夹。
+打包`web`后的资源文件夹。
 
 4.`docs`
 
@@ -88,7 +90,7 @@ npm run build
 
 # 安装
 
-> 当然仓库版本：0.2.6，当前npm版本：0.2.5
+> 当然仓库版本：0.2.7，当前npm版本：0.2.6
 
 ```bash
 npm i simple-mind-map
@@ -100,7 +102,7 @@ npm i simple-mind-map
 >
 >```js
 >module.exports = {
->  transpileDependencies: ['simple-mind-map']
+>  	transpileDependencies: ['simple-mind-map']
 >}
 >```
 >
@@ -123,7 +125,31 @@ const mindMap = new MindMap({
 });
 ```
 
+### Xmind解析方法
 
+v0.2.7+
+
+可以通过如下方法获取解析`Xmind`文件的方法：
+
+```js
+import MindMap from "simple-mind-map";
+
+console.log(MindMap.xmind)
+```
+
+`MindMap.xmind`对象上挂载了两个方法：
+
+#### parseXmindFile(file)
+
+解析`.xmind`文件，返回解析后的数据，注意是完整的数据，包含节点树、主题、结构等，可以使用`mindMap.setFullData(data)`来将返回的数据渲染到画布上
+
+`file`：`File`对象
+
+#### transformXmind(content)
+
+转换`xmind`数据，`.xmind`文件本质上是一个压缩包，改成`zip`后缀可以解压缩，里面存在一个`content.json`文件，如果你自己解析出了这个文件，那么可以把这个文件内容传递给这个方法进行转换，转换后的数据，注意是完整的数据，包含节点树、主题、结构等，可以使用`mindMap.setFullData(data)`来将返回的数据渲染到画布上
+
+`content`：`.xmind`压缩包内的`content.json`文件内容
 
 ### 实例化选项：
 
@@ -291,9 +317,17 @@ v0.1.7+。切换模式为只读或编辑。
 
 #### setData(data)
 
-动态设置思维导图数据
+动态设置思维导图数据，纯节点数据
 
 `data`：思维导图结构数据
+
+#### setFullData(*data*)
+
+v0.2.7+
+
+动态设置思维导图数据，包括节点数据、布局、主题、视图
+
+`data`：完整数据，结构可参考[exportFullData](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exportFullData.json)
 
 
 #### export(type, isDownload, fileName)
