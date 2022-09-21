@@ -1,6 +1,6 @@
 {
   "name": "simple-mind-map",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "一个简单的web在线思维导图",
   "authors": [
     {
@@ -25,7 +25,8 @@
     "canvg": "^3.0.7",
     "deepmerge": "^1.5.2",
     "eventemitter3": "^4.0.7",
-    "jspdf": "^2.5.1"
+    "jspdf": "^2.5.1",
+    "jszip": "^3.10.1"
   },
   "keywords": [
     "javascript",

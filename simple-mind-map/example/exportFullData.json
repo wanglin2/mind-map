@@ -1,0 +1,66 @@
+{
+    "layout": "logicalStructure",
+    "root": {
+        "data": {
+            "text": "根节点",
+            "expand": true,
+            "isActive": false
+        },
+        "children": [{
+            "data": {
+                "text": "二级节点",
+                "generalization": {
+                    "text": "概要",
+                    "expand": true,
+                    "isActive": false
+                },
+                "expand": true,
+                "isActive": false
+            },
+            "children": [{
+                "data": {
+                    "text": "分支主题",
+                    "expand": true,
+                    "isActive": false
+                },
+                "children": []
+            }, {
+                "data": {
+                    "text": "分支主题",
+                    "expand": true,
+                    "isActive": false
+                },
+                "children": []
+            }]
+        }]
+    },
+    "theme": {
+        "template": "classic4",
+        "config": {}
+    },
+    "view": {
+        "transform": {
+            "scaleX": 1,
+            "scaleY": 1,
+            "shear": 0,
+            "rotate": 0,
+            "translateX": 0,
+            "translateY": 0,
+            "originX": 0,
+            "originY": 0,
+            "a": 1,
+            "b": 0,
+            "c": 0,
+            "d": 1,
+            "e": 0,
+            "f": 0
+        },
+        "state": {
+            "scale": 1,
+            "x": 0,
+            "y": 0,
+            "sx": 0,
+            "sy": 0
+        }
+    }
+}
