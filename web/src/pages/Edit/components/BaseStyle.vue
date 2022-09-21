@@ -101,10 +101,10 @@
           <span class="name">颜色</span>
           <span
             class="block"
-            v-popover:popover
+            v-popover:popover2
             :style="{ backgroundColor: style.generalizationLineColor }"
           ></span>
-          <el-popover ref="popover" placement="bottom" trigger="click">
+          <el-popover ref="popover2" placement="bottom" trigger="click">
             <Color
               :color="style.generalizationLineColor"
               @change="
