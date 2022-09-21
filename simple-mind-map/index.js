@@ -16,6 +16,7 @@ import {
 import {
     SVG
 } from '@svgdotjs/svg.js'
+import xmind from './src/parse/xmind'
 
 // 默认选项配置
 const defaultOpt = {
@@ -319,13 +320,39 @@ class MindMap {
     /** 
      * @Author: 王林 
      * @Date: 2021-08-03 22:58:12 
-     * @Desc: 动态设置思维导图数据 
+     * @Desc: 动态设置思维导图数据，纯节点数据
      */
     setData(data) {
         this.execCommand('CLEAR_ACTIVE_NODE')
         this.command.clearHistory()
         this.renderer.renderTree = data
         this.reRender()
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-09-21 16:39:13 
+     * @Desc: 动态设置思维导图数据，包括节点数据、布局、主题、视图
+     */
+    setFullData(data) {
+        if (data.root) {
+            this.setData(data.root)
+        }
+        if (data.layout) {
+            this.setLayout(data.layout)
+        }
+        if (data.theme) {
+            if (data.theme.template) {
+                this.setTheme(data.theme.template)
+            }
+            if (data.theme.config) {
+                this.setThemeConfig(data.theme.config)
+            }
+        }
+        if (data.view) {
+            this.view.setTransformData(data.view)
+        }
     }
 
     /** 
@@ -368,5 +395,7 @@ class MindMap {
         this.emit('mode_change', mode)
     }
 }
+
+MindMap.xmind = xmind
 
 export default MindMap
