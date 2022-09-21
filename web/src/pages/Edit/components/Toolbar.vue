@@ -106,7 +106,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: activeNodes.length <= 0 || hasRoot,
+            disabled: activeNodes.length <= 0 || hasRoot || hasGeneralization,
           }"
           @click="$bus.$emit('execCommand', 'ADD_GENERALIZATION')"
         >
@@ -194,14 +194,14 @@ export default {
   },
   computed: {
     hasRoot() {
-      return this.activeNodes.find((node) => {
+      return this.activeNodes.findIndex((node) => {
         return node.isRoot;
-      });
+      }) !== -1;
     },
     hasGeneralization() {
-      return this.activeNodes.find((node) => {
+      return this.activeNodes.findIndex((node) => {
         return node.isGeneralization;
-      });
+      }) !== -1;;
     }
   },
   created() {
