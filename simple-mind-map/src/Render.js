@@ -143,6 +143,9 @@ class Render {
         // 收起所有节点
         this.unexpandAllNode = this.unexpandAllNode.bind(this)
         this.mindMap.command.add('UNEXPAND_ALL', this.unexpandAllNode)
+        // 展开到指定层级
+        this.expandToLevel = this.expandToLevel.bind(this)
+        this.mindMap.command.add('UNEXPAND_TO_LEVEL', this.expandToLevel)
         // 设置节点数据
         this.setNodeData = this.setNodeData.bind(this)
         this.mindMap.command.add('SET_NODE_DATA', this.setNodeData)
@@ -801,6 +804,19 @@ class Render {
                 node.data.expand = false
             }
         }, null, true, 0, 0)
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-09-23 16:31:27 
+     * @Desc: 展开到指定层级 
+     */
+    expandToLevel(level) {
+        walk(this.renderTree, null, (node, parent, isRoot, layerIndex) => {
+            node.data.expand = layerIndex < level
+        }, null, true, 0, 0)
+        this.mindMap.reRender()
     }
 
     /** 
