@@ -1,6 +1,6 @@
 <template>
   <div
-    class="contextmenuContainer"
+    class="contextmenuContainer listBox"
     v-if="isShow"
     :style="{ left: left + 'px', top: top + 'px' }"
   >
@@ -62,6 +62,12 @@
       <div class="item" @click="exec('RETURN_CENTER')">回到中心</div>
       <div class="item" @click="exec('EXPAND_ALL')">展开所有</div>
       <div class="item" @click="exec('UNEXPAND_ALL')">收起所有</div>
+      <div class="item">
+        展开到
+        <div class="subItems listBox">
+          <div class="item" v-for="(item, index) in expandList" :key="item" @click="exec('UNEXPAND_TO_LEVEL', false, index + 1)">{{item}}</div>
+        </div>
+      </div>
       <div class="item" @click="exec('RESET_LAYOUT')">
         一键整理布局
         <span class="desc">Ctrl + L</span>
@@ -93,7 +99,8 @@ export default {
       type: "",
       isMousedown: false,
       mosuedownX: 0,
-      mosuedownY: 0
+      mosuedownY: 0,
+      expandList: ['一级主题', '二级主题', '三级主题', '四级主题', '五级主题', '六级主题']
     };
   },
   computed: {
@@ -221,7 +228,7 @@ export default {
      * @Date: 2021-07-14 23:27:54
      * @Desc: 执行命令
      */
-    exec(key, disabled) {
+    exec(key, disabled, ...args) {
       if (disabled) {
         return;
       }
@@ -241,7 +248,7 @@ export default {
           this.mindMap.view.reset();
           break;
         default:
-          this.$bus.$emit("execCommand", key);
+          this.$bus.$emit("execCommand", key, ...args);
           break;
       }
       this.hide();
@@ -278,20 +285,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.contextmenuContainer {
-  position: fixed;
+.listBox {
   width: 200px;
   background: #fff;
   box-shadow: 0 4px 12px 0 hsla(0, 0%, 69%, 0.5);
   border-radius: 4px;
   padding-top: 16px;
   padding-bottom: 16px;
+}
+.contextmenuContainer {
+  position: fixed;
   font-size: 14px;
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #1a1a1a;
 
   .item {
+    position: relative;
     height: 28px;
     line-height: 28px;
     padding: 0 16px;
@@ -305,6 +315,10 @@ export default {
 
     &:hover {
       background: #f5f5f5;
+
+      .subItems {
+        visibility: visible;
+      }
     }
 
     &.disabled {
@@ -319,6 +333,13 @@ export default {
 
     .desc {
       color: #999;
+    }
+
+    .subItems {
+      position: absolute;
+      left: 100%;
+      top: 0;
+      visibility: hidden;
     }
   }
 }
