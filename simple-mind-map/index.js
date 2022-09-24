@@ -17,6 +17,7 @@ import {
     SVG
 } from '@svgdotjs/svg.js'
 import xmind from './src/parse/xmind'
+import { simpleDeepClone } from './src/utils';
 
 // 默认选项配置
 const defaultOpt = {
@@ -353,6 +354,31 @@ class MindMap {
         if (data.view) {
             this.view.setTransformData(data.view)
         }
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林 
+     * @Date: 2022-09-24 14:42:07 
+     * @Desc: 获取思维导图数据，节点树、主题、布局等 
+     */
+    getData(withConfig) {
+        let nodeData = this.command.getCopyData()
+        let data = {}
+        if (withConfig) {
+            data = {
+                layout: this.getLayout(),
+                root: nodeData,
+                theme: {
+                    template: this.getTheme(),
+                    config: this.getCustomThemeConfig()
+                },
+                view: this.view.getTransformData()
+            }
+        } else {
+            data = nodeData
+        }
+        return simpleDeepClone(data)
     }
 
     /** 

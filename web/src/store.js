@@ -6,7 +6,8 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
-        mindMapData: null // 思维导图数据
+        mindMapData: null, // 思维导图数据
+        isHandleLocalFile: false// 是否操作的是本地文件
     },
     mutations: {
         /** 
@@ -16,6 +17,16 @@ const store = new Vuex.Store({
          */
         setMindMapData(state, data) {
             state.mindMapData = data
+        },
+
+        /** 
+         * javascript comment 
+         * @Author: 王林 
+         * @Date: 2022-09-24 13:55:38 
+         * @Desc: 设置操作本地文件标志位 
+         */
+        setIsHandleLocalFile(state, data) {
+            state.isHandleLocalFile = data
         }
     },
     actions: {

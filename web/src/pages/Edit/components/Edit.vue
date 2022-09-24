@@ -154,12 +154,8 @@ export default {
       if (this.openTest) {
         return
       }
-      let data = this.mindMap.command.getCopyData()
-      storeData(data)
-      let viewData = this.mindMap.view.getTransformData()
-      storeConfig({
-        view: viewData,
-      })
+      let data = this.mindMap.getData(true)
+      storeConfig(data)
     },
 
     /**

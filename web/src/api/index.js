@@ -1,5 +1,6 @@
 import exampleData from "simple-mind-map/example/exampleData"
 import { simpleDeepClone } from 'simple-mind-map/src/utils/index'
+import Vue from 'vue'
 
 const SIMPLE_MIND_MAP_DATA = 'SIMPLE_MIND_MAP_DATA'
 
@@ -47,6 +48,7 @@ export const storeData = (data) => {
     try {
         let originData = getData()
         originData.root = copyMindMapTreeData({}, data)
+        Vue.prototype.$bus.$emit('write_local_file', originData)
         let dataStr = JSON.stringify(originData)
         localStorage.setItem(SIMPLE_MIND_MAP_DATA, dataStr)
     } catch (error) {
@@ -66,6 +68,7 @@ export const storeConfig = (config) => {
             ...originData,
             ...config
         }
+        Vue.prototype.$bus.$emit('write_local_file', originData)
         let dataStr = JSON.stringify(originData)
         localStorage.setItem(SIMPLE_MIND_MAP_DATA, dataStr)
     } catch (error) {
