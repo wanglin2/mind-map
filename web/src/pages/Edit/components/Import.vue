@@ -82,6 +82,7 @@ export default {
             if (this.fileList.length <= 0) {
                 return this.$message.error("请选择要导入的文件");
             }
+            this.$store.commit('setIsHandleLocalFile', false);
             let file = this.fileList[0];
             if (/\.(smm|json)$/.test(file.name)) {
                 this.handleSmm(file)
