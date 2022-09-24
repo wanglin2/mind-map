@@ -413,6 +413,7 @@ class Render {
             }
             let index = this.getNodeIndex(first)
             first.parent.nodeData.children.splice(index + 1, 0, {
+                "inserting": true,
                 "data": {
                     "text": text,
                     "expand": true
@@ -438,6 +439,7 @@ class Render {
             }
             let text = node.isRoot ? '二级节点' : '分支主题'
             node.nodeData.children.push({
+                "inserting": true,
                 "data": {
                     "text": text,
                     "expand": true
