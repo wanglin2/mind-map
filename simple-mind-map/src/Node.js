@@ -694,7 +694,7 @@ class Node {
         if (this.mindMap.opt.readonly) {
             return
         }
-        e.stopPropagation()
+        e && e.stopPropagation()
         if (this.nodeData.data.isActive) {
             return
         }
@@ -768,6 +768,12 @@ class Node {
                     item.render()
                 }
             }))
+        }
+        // 手动插入的节点立即获得焦点并且开启编辑模式
+        if (this.nodeData.inserting) {
+            delete this.nodeData.inserting
+            this.active()
+            this.mindMap.emit('node_dblclick', this)
         }
     }
 
