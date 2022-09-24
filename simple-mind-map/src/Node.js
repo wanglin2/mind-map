@@ -828,7 +828,7 @@ class Node {
         this.showGeneralization()
         if (this.parent) {
             let index = this.parent.children.indexOf(this)
-            this.parent._lines[index].show()
+            this.parent._lines[index] && this.parent._lines[index].show()
         }
         // 子节点
         if (this.children && this.children.length) {
