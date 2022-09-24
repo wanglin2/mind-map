@@ -6,6 +6,41 @@
   "description": "思维导图",
   "glyphs": [
     {
+      "icon_id": "1305460",
+      "name": "导出",
+      "font_class": "daochu1",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "4784101",
+      "name": "另存为",
+      "font_class": "lingcunwei",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
+      "icon_id": "9929033",
+      "name": "export",
+      "font_class": "export",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "4570294",
+      "name": "打开",
+      "font_class": "dakai",
+      "unicode": "ebdf",
+      "unicode_decimal": 60383
+    },
+    {
+      "icon_id": "5086088",
+      "name": "新建",
+      "font_class": "xinjian",
+      "unicode": "e64e",
+      "unicode_decimal": 58958
+    },
+    {
       "icon_id": "1117",
       "name": "剪切",
       "font_class": "jianqie",

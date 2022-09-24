@@ -249,21 +249,7 @@ class Export {
      * @Desc: 导出为json 
      */
     json (name, withConfig = true) {
-        let nodeData = this.mindMap.command.getCopyData()
-        let data = {}
-        if (withConfig) {
-            data = {
-                layout: this.mindMap.getLayout(),
-                root: nodeData,
-                theme: {
-                    template: this.mindMap.getTheme(),
-                    config: this.mindMap.getCustomThemeConfig()
-                },
-                view: this.mindMap.view.getTransformData()
-            }
-        } else {
-            data = nodeData
-        }
+        let data = this.mindMap.getData(withConfig)
         let str = JSON.stringify(data)
         let blob = new Blob([str])
         return URL.createObjectURL(blob)
