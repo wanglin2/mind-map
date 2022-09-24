@@ -784,10 +784,7 @@ class Render {
                 node.data.expand = true
             }
         }, null, true, 0, 0)
-        this.mindMap.render()
-        this.root.children.forEach((item) => {
-            item.updateExpandBtnNode()
-        })
+        this.mindMap.reRender()
     }
 
     /** 
@@ -796,14 +793,13 @@ class Render {
      * @Desc: 收起所有 
      */
     unexpandAllNode() {
-        this.root.children.forEach((item) => {
-            this.setNodeExpand(item, false)
-        })
         walk(this.renderTree, null, (node, parent, isRoot) => {
+            node._node = null
             if (!isRoot) {
                 node.data.expand = false
             }
         }, null, true, 0, 0)
+        this.mindMap.reRender()
     }
 
     /** 
@@ -814,6 +810,7 @@ class Render {
      */
     expandToLevel(level) {
         walk(this.renderTree, null, (node, parent, isRoot, layerIndex) => {
+            node._node = null
             node.data.expand = layerIndex < level
         }, null, true, 0, 0)
         this.mindMap.reRender()
