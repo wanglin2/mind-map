@@ -30,7 +30,17 @@
 
 2.`web`
 
-使用`simple-mind-map`工具库，基于`vue2.x`、`ElementUI`搭建的在线思维导图。
+使用`simple-mind-map`工具库，基于`vue2.x`、`ElementUI`搭建的在线思维导图。特性：
+
+- [x] 工具栏，支持插入节点、删除节点；编辑节点图片、图标、超链接、备注、标签、概要
+
+- [x] 侧边栏，基础样式设置面板、节点样式设置面板、大纲面板、主题选择面板、结构选择面板
+
+- [x] 导入导出功能；数据默认保存在浏览器本地存储，也支持直接创建、打开、编辑电脑本地文件
+
+- [x] 右键菜单，支持展开、收起、整理布局等操作
+
+- [x] 底部栏，支持节点数量、字数统计；支持切换编辑和只读模式；支持放大缩小；支持全屏切换
 
 3.`dist`
 
@@ -91,7 +101,7 @@ npm run build
 
 # 安装
 
-> 当然仓库版本：0.2.8，当前npm版本：0.2.8
+> 当然仓库版本：0.2.9，当前npm版本：0.2.9
 
 ```bash
 npm i simple-mind-map
@@ -303,8 +313,6 @@ v0.1.7+。切换模式为只读或编辑。
 | RESET_LAYOUT（v0.2.0+）             | 一键整理布局                                                   |                                                                                                                                                                                                                                                                          |
 | SET_NODE_SHAPE（v0.2.4+）           | 设置节点形状                                                   | node（要设置的节点）、shape（形状，全部形状：https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/Shape.js）                                                                                                                                                                  |
 
-
-
 #### setData(data)
 
 动态设置思维导图数据，纯节点数据
@@ -318,6 +326,14 @@ v0.2.7+
 动态设置思维导图数据，包括节点数据、布局、主题、视图
 
 `data`：完整数据，结构可参考[exportFullData](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exportFullData.json)
+
+#### getData(withConfig)
+
+v0.2.9+
+
+获取思维导图数据
+
+`withConfig`：`Boolean`，默认为`false`，即获取的数据只包括节点树，如果传`true`则会包含主题、布局、视图等数据
 
 #### export(type, isDownload, fileName)
 
