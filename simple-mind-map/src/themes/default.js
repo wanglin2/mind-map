@@ -128,3 +128,5 @@ export default {
 // 支持激活样式的属性
 // 简单来说，会改变节点大小的都不支持在激活时设置，为了性能考虑，节点切换激活态时不会重新计算节点大小
 export const supportActiveStyle = ['fillColor', 'color', 'fontWeight', 'fontStyle', 'borderColor', 'borderWidth', 'borderDasharray', 'borderRadius', 'textDecoration']
+
+export const lineStyleProps = ['lineColor', 'lineDasharray', 'lineWidth']

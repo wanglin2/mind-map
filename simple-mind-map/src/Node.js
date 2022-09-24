@@ -845,7 +845,7 @@ class Node {
      * @Date: 2021-04-10 22:01:53 
      * @Desc: 连线 
      */
-    renderLine() {
+    renderLine(deep = false) {
         if (this.nodeData.data.expand === false) {
             return
         }
@@ -867,9 +867,11 @@ class Node {
             // 添加样式
             this.styleLine(line, node)
         })
-        // 和父级的连线也需要更新
-        if (this.parent) {
-            this.parent.renderLine()
+        // 子级的连线也需要更新
+        if (deep && this.children && this.children.length > 0) {
+            this.children.forEach((item) => {
+                item.renderLine(deep)
+            })
         }
     }
 

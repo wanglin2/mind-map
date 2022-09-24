@@ -5,7 +5,8 @@ import CatalogOrganization from './layouts/CatalogOrganization'
 import OrganizationStructure from './layouts/OrganizationStructure'
 import TextEdit from './TextEdit'
 import { copyNodeTree, simpleDeepClone, walk } from './utils'
-import { shapeList } from './Shape';
+import { shapeList } from './Shape'
+import { lineStyleProps } from './themes/default'
 
 // 布局列表
 const layouts = {
@@ -734,6 +735,10 @@ class Render {
             }
         }
         this.setNodeDataRender(node, data)
+        // 更新了连线的样式
+        if (lineStyleProps.includes(prop)) {
+            (node.parent || node).renderLine(true)
+        }
     }
 
     /** 
