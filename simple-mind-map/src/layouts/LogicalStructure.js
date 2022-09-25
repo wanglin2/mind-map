@@ -156,6 +156,75 @@ class LogicalStructure extends Base {
             width,
             height,
             expandBtnSize
+        } = node 
+        let len = node.children.length
+        let marginX = this.getMarginX(node.layerIndex + 1)
+        let s1 = marginX * 0.7
+        let s2 = marginX * 0.3
+        let nodeLineY = top + height / 2
+        let nodeLineMaxX = left + width + s1
+        let miny = Infinity
+        let minNode = null
+        let maxy = -Infinity
+        let maxNode = null
+        node.children.forEach((item, index) => {
+            let y = item.top + item.height / 2
+            let path = ''
+            // 节点和垂直线相较
+            if (item.left <= nodeLineMaxX && item.left + item.width >= nodeLineMaxX) {
+                path = ''
+            } else if (item.left + item.width <= nodeLineMaxX) {
+                // 节点在垂直线左侧
+                path = `M ${nodeLineMaxX},${y} L ${item.left + item.width},${y}`
+            } else {
+                path = `M ${nodeLineMaxX},${y} L ${item.left},${y}`
+            }
+            if (y < miny) {
+                miny = y
+                minNode = item
+            }
+            if (y > maxy) {
+                maxy = y
+                maxNode = item
+            }
+            lines[index].plot(path)
+            style && style(lines[index], item)
+        })
+        if (minNode.left <= nodeLineMaxX && minNode.left + minNode.width >= nodeLineMaxX && minNode.top <= nodeLineY) {
+            miny += minNode.height / 2
+        }
+        if (maxNode.left <= nodeLineMaxX && maxNode.left + maxNode.width >= nodeLineMaxX && maxNode.top >= nodeLineY) {
+            maxy -= maxNode.height / 2
+        }
+        miny = Math.min(miny, nodeLineY)
+        maxy = Math.max(maxy, nodeLineY)
+        // 父节点的横线
+        let line1 = this.draw.path()
+        node.style.line(line1)
+        expandBtnSize = len > 0 && !node.isRoot ? expandBtnSize : 0
+        line1.plot(`M ${left + width + expandBtnSize},${nodeLineY} L ${nodeLineMaxX},${nodeLineY}`)
+        node._lines.push(line1)
+        style && style(line1, node)
+        // 垂直线
+        if (len > 0) {
+            let line2 = this.draw.path()
+            node.style.line(line2)
+            line2.plot(`M ${nodeLineMaxX},${miny} L ${nodeLineMaxX},${maxy}`)
+            node._lines.push(line2)
+            style && style(line2, node)
+        }
+    }
+
+    renderLine2(node, lines, style) {
+        if (node.children.length <= 0) {
+            return [];
+        }
+        let {
+            left,
+            top,
+            width,
+            height,
+            expandBtnSize
         } = node
         node.children.forEach((item, index) => {
             let x1 = node.layerIndex === 0 ? left + width / 2 : left + width + expandBtnSize
