@@ -146,7 +146,23 @@ class LogicalStructure extends Base {
      * @Date: 2021-04-11 14:42:48 
      * @Desc: 绘制连线，连接该节点到其子节点
      */
-    renderLine(node, lines, style) {
+    renderLine(node, lines, style, lineStyle) {
+        if (lineStyle === 'curve') {
+            this.renderLineCurve(node, lines, style)
+        } else if (lineStyle === 'direct') {
+            this.renderLineDirect(node, lines, style)
+        } else {
+            this.renderLineStraight(node, lines, style)
+        }
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-09-30 14:17:30 
+     * @Desc: 直线风格连线 
+     */
+    renderLineStraight(node, lines, style) {
         if (node.children.length <= 0) {
             return [];
         }
@@ -156,66 +172,55 @@ class LogicalStructure extends Base {
             width,
             height,
             expandBtnSize
-        } = node 
-        let len = node.children.length
+        } = node
         let marginX = this.getMarginX(node.layerIndex + 1)
-        let s1 = marginX * 0.7
-        let s2 = marginX * 0.3
-        let nodeLineY = top + height / 2
-        let nodeLineMaxX = left + width + s1
-        let miny = Infinity
-        let minNode = null
-        let maxy = -Infinity
-        let maxNode = null
+        let s1 = (marginX - expandBtnSize) * 0.6
         node.children.forEach((item, index) => {
-            let y = item.top + item.height / 2
-            let path = ''
-            // 节点和垂直线相较
-            if (item.left <= nodeLineMaxX && item.left + item.width >= nodeLineMaxX) {
-                path = ''
-            } else if (item.left + item.width <= nodeLineMaxX) {
-                // 节点在垂直线左侧
-                path = `M ${nodeLineMaxX},${y} L ${item.left + item.width},${y}`
-            } else {
-                path = `M ${nodeLineMaxX},${y} L ${item.left},${y}`
-            }
-            if (y < miny) {
-                miny = y
-                minNode = item
-            }
-            if (y > maxy) {
-                maxy = y
-                maxNode = item
-            }
+            let x1 = node.layerIndex === 0 ? left + width : left + width + expandBtnSize
+            let y1 = top + height / 2
+            let x2 = item.left
+            let y2 = item.top + item.height / 2
+            let path = `M ${x1},${y1} L ${x1 + s1},${y1} L ${x1 + s1},${y2} L ${x2},${y2}`
             lines[index].plot(path)
             style && style(lines[index], item)
         })
-        if (minNode.left <= nodeLineMaxX && minNode.left + minNode.width >= nodeLineMaxX && minNode.top <= nodeLineY) {
-            miny += minNode.height / 2
-        }
-        if (maxNode.left <= nodeLineMaxX && maxNode.left + maxNode.width >= nodeLineMaxX && maxNode.top >= nodeLineY) {
-            maxy -= maxNode.height / 2
-        }
-        miny = Math.min(miny, nodeLineY)
-        maxy = Math.max(maxy, nodeLineY)
-        // 父节点的横线
-        let line1 = this.draw.path()
-        node.style.line(line1)
-        expandBtnSize = len > 0 && !node.isRoot ? expandBtnSize : 0
-        line1.plot(`M ${left + width + expandBtnSize},${nodeLineY} L ${nodeLineMaxX},${nodeLineY}`)
-        node._lines.push(line1)
-        style && style(line1, node)
-        // 垂直线
-        if (len > 0) {
-            let line2 = this.draw.path()
-            node.style.line(line2)
-            line2.plot(`M ${nodeLineMaxX},${miny} L ${nodeLineMaxX},${maxy}`)
-            node._lines.push(line2)
-            style && style(line2, node)
-        }
     }
 
-    renderLine2(node, lines, style) {
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-09-30 14:34:41 
+     * @Desc: 直连风格 
+     */
+    renderLineDirect(node, lines, style) {
+        if (node.children.length <= 0) {
+            return [];
+        }
+        let {
+            left,
+            top,
+            width,
+            height,
+            expandBtnSize
+        } = node
+        node.children.forEach((item, index) => {
+            let x1 = node.layerIndex === 0 ? left + width / 2 : left + width + expandBtnSize
+            let y1 = top + height / 2
+            let x2 = item.left
+            let y2 = item.top + item.height / 2
+            let path = `M ${x1},${y1} L ${x2},${y2}`
+            lines[index].plot(path)
+            style && style(lines[index], item)
+        })
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-09-30 14:17:43 
+     * @Desc: 曲线风格连线 
+     */
+    renderLineCurve(node, lines, style) {
         if (node.children.length <= 0) {
             return [];
         }

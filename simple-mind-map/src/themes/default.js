@@ -19,6 +19,8 @@ export default {
     lineColor: '#549688',
     // 连线样式
     lineDasharray: 'none',
+    // 连线风格
+    lineStyle: 'straight',// 针对logicalStructure、mindMap两种结构。曲线（curve）、直线（straight）、直连（direct）
     // 概要连线的粗细
     generalizationLineWidth: 1,
     // 概要连线的颜色

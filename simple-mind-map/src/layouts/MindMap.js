@@ -182,7 +182,89 @@ class MindMap extends Base {
      * @Date: 2021-04-11 14:42:48 
      * @Desc: 绘制连线，连接该节点到其子节点
      */
-    renderLine(node, lines, style) {
+    renderLine(node, lines, style, lineStyle) {
+        if (lineStyle === 'curve') {
+            this.renderLineCurve(node, lines, style)
+        } else if (lineStyle === 'direct') {
+            this.renderLineDirect(node, lines, style)
+        } else {
+            this.renderLineStraight(node, lines, style)
+        }
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-09-30 14:10:47 
+     * @Desc: 直线风格连线 
+     */
+    renderLineStraight(node, lines, style) {
+        if (node.children.length <= 0) {
+            return [];
+        }
+        let {
+            left,
+            top,
+            width,
+            height,
+            expandBtnSize
+        } = node
+        let marginX = this.getMarginX(node.layerIndex + 1)
+        let s1 = (marginX - expandBtnSize) * 0.6
+        node.children.forEach((item, index) => {
+            let x1 = 0
+            let _s = 0
+            if (item.dir === 'left') {
+                _s = -s1
+                x1 = node.layerIndex === 0 ? left : left - expandBtnSize
+            } else {
+                _s = s1
+                x1 = node.layerIndex === 0 ? left + width : left + width + expandBtnSize
+            }
+            let y1 = top + height / 2
+            let x2 = item.dir === 'left' ? item.left + item.width : item.left
+            let y2 = item.top + item.height / 2
+            let path = path = `M ${x1},${y1} L ${x1 + _s},${y1} L ${x1 + _s},${y2} L ${x2},${y2}` 
+            lines[index].plot(path)
+            style && style(lines[index], item)
+        })
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-09-30 14:34:41 
+     * @Desc: 直连风格 
+     */
+     renderLineDirect(node, lines, style) {
+        if (node.children.length <= 0) {
+            return [];
+        }
+        let {
+            left,
+            top,
+            width,
+            height,
+            expandBtnSize
+        } = node
+        node.children.forEach((item, index) => {
+            let x1 = node.layerIndex === 0 ? left + width / 2 : item.dir === 'left' ? left - expandBtnSize : left + width + expandBtnSize
+            let y1 = top + height / 2
+            let x2 = item.dir === 'left' ? item.left + item.width : item.left
+            let y2 = item.top + item.height / 2
+            let path = `M ${x1},${y1} L ${x2},${y2}`
+            lines[index].plot(path)
+            style && style(lines[index], item)
+        })
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-09-30 14:10:56 
+     * @Desc: 曲线风格连线 
+     */
+    renderLineCurve(node, lines, style) {
         if (node.children.length <= 0) {
             return [];
         }
