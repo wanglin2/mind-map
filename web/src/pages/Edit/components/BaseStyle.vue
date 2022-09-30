@@ -94,6 +94,30 @@
           </el-select>
         </div>
       </div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">风格</span>
+          <el-select
+            size="mini"
+            style="width: 80px"
+            v-model="style.lineStyle"
+            placeholder=""
+            @change="
+              (value) => {
+                update('lineStyle', value);
+              }
+            "
+          >
+            <el-option
+              v-for="item in lineStyleList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </div>
       <!-- 概要连线 -->
       <div class="title noTop">概要的连线</div>
       <div class="row">
@@ -267,6 +291,7 @@ import Sidebar from "./Sidebar";
 import Color from "./Color";
 import {
   lineWidthList,
+  lineStyleList,
   backgroundRepeatList
 } from "@/config";
 import ImgUpload from "@/components/ImgUpload";
@@ -296,6 +321,7 @@ export default {
   data() {
     return {
       lineWidthList,
+      lineStyleList,
       backgroundRepeatList,
       activeTab: "color",
       marginActiveTab: "second",
@@ -303,6 +329,7 @@ export default {
         backgroundColor: "",
         lineColor: "",
         lineWidth: "",
+        lineStyle: "",
         generalizationLineWidth: "",
         generalizationLineColor: "",
         paddingX: 0,
@@ -336,6 +363,7 @@ export default {
       [
         "backgroundColor",
         "lineWidth",
+        "lineStyle",
         "lineColor",
         "generalizationLineWidth",
         "generalizationLineColor",

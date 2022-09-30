@@ -147,7 +147,48 @@ class OrganizationStructure extends Base {
      * @Date: 2021-04-11 14:42:48 
      * @Desc: 绘制连线，连接该节点到其子节点
      */
-    renderLine(node, lines, style) {
+    renderLine(node, lines, style, lineStyle) {
+        if (lineStyle === 'direct') {
+            this.renderLineDirect(node, lines, style)
+        } else {
+            this.renderLineStraight(node, lines, style)
+        }
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-09-30 14:34:41 
+     * @Desc: 直连风格 
+     */
+     renderLineDirect(node, lines, style) {
+        if (node.children.length <= 0) {
+            return [];
+        }
+        let {
+            left,
+            top,
+            width,
+            height,
+        } = node
+        let x1 = left + width / 2
+        let y1 = top + height
+        node.children.forEach((item, index) => {
+            let x2 = item.left + item.width / 2
+            let y2 = item.top
+            let path = `M ${x1},${y1} L ${x2},${y2}`
+            lines[index].plot(path)
+            style && style(lines[index], item)
+        })
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-09-30 14:39:07 
+     * @Desc: 直线风格连线 
+     */
+    renderLineStraight(node, lines, style) {
         if (node.children.length <= 0) {
             return [];
         }

@@ -872,7 +872,7 @@ class Node {
         this.renderer.layout.renderLine(this, this._lines, (line, node) => {
             // 添加样式
             this.styleLine(line, node)
-        })
+        }, this.style.getStyle('lineStyle', true))
         // 子级的连线也需要更新
         if (deep && this.children && this.children.length > 0) {
             this.children.forEach((item) => {
