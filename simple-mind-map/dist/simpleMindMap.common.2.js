@@ -3,7 +3,7 @@
 /***/ "b163":
 /***/ (function(module, exports, __webpack_require__) {
 
-/*! @license DOMPurify 2.4.0 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/2.4.0/LICENSE */
+/*! @license DOMPurify 2.3.10 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/2.3.10/LICENSE */
 
 (function (global, factory) {
    true ? module.exports = factory() :
@@ -330,7 +330,7 @@
      */
 
 
-    DOMPurify.version = '2.4.0';
+    DOMPurify.version = '2.3.10';
     /**
      * Array of elements that DOMPurify removed during sanitation.
      * Empty if nothing was removed.
@@ -488,27 +488,9 @@
      * case Trusted Types are not supported  */
 
     var RETURN_TRUSTED_TYPE = false;
-    /* Output should be free from DOM clobbering attacks?
-     * This sanitizes markups named with colliding, clobberable built-in DOM APIs.
-     */
+    /* Output should be free from DOM clobbering attacks? */
 
     var SANITIZE_DOM = true;
-    /* Achieve full DOM Clobbering protection by isolating the namespace of named
-     * properties and JS variables, mitigating attacks that abuse the HTML/DOM spec rules.
-     *
-     * HTML/DOM spec rules that enable DOM Clobbering:
-     *   - Named Access on Window (§7.3.3)
-     *   - DOM Tree Accessors (§3.1.5)
-     *   - Form Element Parent-Child Relations (§4.10.3)
-     *   - Iframe srcdoc / Nested WindowProxies (§4.8.5)
-     *   - HTMLCollection (§4.2.10.2)
-     *
-     * Namespace isolation is implemented by prefixing `id` and `name` attributes
-     * with a constant string, i.e., `user-content-`
-     */
-
-    var SANITIZE_NAMED_PROPS = false;
-    var SANITIZE_NAMED_PROPS_PREFIX = 'user-content-';
     /* Keep element content when removing element? */
 
     var KEEP_CONTENT = true;
@@ -621,8 +603,6 @@
       FORCE_BODY = cfg.FORCE_BODY || false; // Default false
 
       SANITIZE_DOM = cfg.SANITIZE_DOM !== false; // Default true
-
-      SANITIZE_NAMED_PROPS = cfg.SANITIZE_NAMED_PROPS || false; // Default false
 
       KEEP_CONTENT = cfg.KEEP_CONTENT !== false; // Default true
 
@@ -1280,18 +1260,6 @@
         if (!_isValidAttribute(lcTag, lcName, value)) {
           continue;
         }
-        /* Full DOM Clobbering protection via namespace isolation,
-         * Prefix id and name attributes with `user-content-`
-         */
-
-
-        if (SANITIZE_NAMED_PROPS && (lcName === 'id' || lcName === 'name')) {
-          // Remove the attribute with this value
-          _removeAttribute(name, currentNode); // Prefix the value and later re-create the attribute with the sanitized value
-
-
-          value = SANITIZE_NAMED_PROPS_PREFIX + value;
-        }
         /* Handle attributes that require Trusted Types */
 
 
@@ -1378,8 +1346,7 @@
     // eslint-disable-next-line complexity
 
 
-    DOMPurify.sanitize = function (dirty) {
-      var cfg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    DOMPurify.sanitize = function (dirty, cfg) {
       var body;
       var importedNode;
       var currentNode;
