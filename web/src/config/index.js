@@ -130,6 +130,22 @@ export const borderRadiusList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 // 线宽
 export const lineWidthList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
+// 连线风格
+export const lineStyleList = [
+    {
+        name: '直线',
+        value: 'straight'
+    },
+    {
+        name: '曲线',
+        value: 'curve'
+    },
+    {
+        name: '直连',
+        value: 'direct'
+    }
+]
+
 // 图片重复方式
 export const backgroundRepeatList = [
     {
