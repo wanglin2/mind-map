@@ -44,28 +44,9 @@ class Export {
      * @Desc: 获取svg数据 
      */
     async getSvgData() {
-        const svg = this.mindMap.svg
-        const draw = this.mindMap.draw
-        // 保存原始信息
-        const origWidth = svg.width()
-        const origHeight = svg.height()
-        const origTransform = draw.transform()
-        const elRect = this.mindMap.el.getBoundingClientRect()
-        // 去除放大缩小的变换效果
-        draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY)
-        // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
-        const rect = draw.rbox()
-        // 将svg设置为实际内容的宽高
-        svg.size(rect.width, rect.height)
-        // 把实际内容变换
-        draw.translate(-rect.x + elRect.left, -rect.y + elRect.top)
-        // 克隆一份数据
-        const clone = svg.clone()
-        // 恢复原先的大小和变换信息
-        svg.size(origWidth, origHeight)
-        draw.transform(origTransform)
+        let { svg, svgHTML } = this.mindMap.miniMap.getMiniMap()
         // 把图片的url转换成data:url类型，否则导出会丢失图片
-        let imageList = clone.find('image')
+        let imageList = svg.find('image')
         let task = imageList.map(async (item) => {
             let imgUlr = item.attr('href') || item.attr('xlink:href')
             let imgData = await imgToDataUrl(imgUlr)
@@ -73,8 +54,8 @@ class Export {
         })
         await Promise.all(task)
         return {
-            node: clone,
-            str: clone.svg()
+            node: svg,
+            str: svgHTML
         }
     }
 

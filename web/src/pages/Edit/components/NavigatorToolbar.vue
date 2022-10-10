@@ -1,6 +1,9 @@
 <template>
   <div class="navigatorContainer">
     <div class="item">
+      <el-checkbox v-model="openMiniMap" @change="toggleMiniMap">开启小地图</el-checkbox>
+    </div>
+    <div class="item">
       <el-switch
         v-model="isReadonly"
         active-text="只读模式"
@@ -40,12 +43,17 @@ export default {
   },
   data () {
     return {
-      isReadonly: false
+      isReadonly: false,
+      openMiniMap: false
     }
   },
   methods: {
     readonlyChange(value) {
       this.mindMap.setMode(value ? 'readonly' : 'edit')
+    },
+
+    toggleMiniMap(show) {
+      this.$bus.$emit('toggle_mini_map', show)
     }
   }
 };
