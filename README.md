@@ -3,24 +3,16 @@
 ## 特性
 
 - [x] 支持逻辑结构图、思维导图、组织结构图、目录组织图四种结构
-
 - [x] 内置多种主题，允许高度自定义样式
-
 - [x] 支持快捷键
-
 - [x] 节点内容支持图片、图标、超链接、备注、标签、概要
-
 - [x] 支持前进后退
-
 - [x] 支持拖动、缩放
-
 - [x] 支持右键按住多选
-
 - [x] 支持节点自由拖拽、拖拽调整
-
 - [x] 支持多种节点形状
-
 - [x] 支持导出为`json`、`png`、`svg`、`pdf`，支持从`json`、`xmind`导入
+- [x] 支持小地图
 
 ## 目录介绍
 
@@ -101,7 +93,7 @@ npm run build
 
 # 安装
 
-> 当然仓库版本：0.2.10，当前npm版本：0.2.10
+> 当然仓库版本：0.2.11，当前npm版本：0.2.10
 
 ```bash
 npm i simple-mind-map
@@ -520,6 +512,18 @@ v0.2.3+。恢复保存的快捷键数据，然后清空缓存数据
 
 `y`方向进行平移，`step`：要平移的像素
 
+#### translateXTo(x)
+
+v0.2.11+
+
+平移`x`方向到指定位置
+
+#### translateYTo(y)
+
+v0.2.11+
+
+平移`y`方向到指定位置
+
 #### reset()
 
 恢复到默认的变换
@@ -543,6 +547,94 @@ v0.1.1+
 v0.1.1+
 
 动态设置变换数据，可以通过getTransformData方法获取变换数据
+
+## MiniMap实例
+
+v0.2.11+
+
+用于帮助快速开发小地图功能，小地图由两部分组成，一个是当前的画布内容，一个是视口框，当缩放、移动、元素过多时画布上可能只显示了思维导图的部分内容，可以通过视口框来查看当前视口所在位置，以及可以通过在小地图上拖动来快速定位。
+
+可通过`mindMap.miniMap`获取到该实例。
+
+### 方法
+
+#### getMiniMap()
+
+获取小地图相关数据，这个函数一般不会直接使用，函数返回的内容：
+
+```js
+{
+      svg, // Element，思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）
+      svgHTML, // String，svg字符串，即html字符串，可以直接渲染到你准备的小地图容器内
+      rect: // Object，思维导图图形未缩放时的位置尺寸等信息
+      origWidth, // Number，画布宽度
+      origHeight, // Number，画布高度
+      scaleX, // Number，思维导图图形的水平缩放值
+      scaleY, // Number，思维导图图形的垂直缩放值
+}
+```
+
+#### calculationMiniMap(boxWidth, boxHeight)
+
+计算小地图的渲染数据，该函数内会调用`getMiniMap()`方法，所以一般使用该函数即可。
+
+`boxWidth`：小地图容器的宽度
+
+`boxHeight`：小地图容器的高度
+
+函数返回内容：
+
+```js
+{
+      svgHTML, // 小地图html
+      viewBoxStyle, // 视图框的位置信息
+      miniMapBoxScale, // 视图框的缩放值
+      miniMapBoxLeft, // 视图框的left值
+      miniMapBoxTop, // 视图框的top值
+}
+```
+
+小地图思路：
+
+1.准备一个容器元素`container`，定位不为`static`
+
+2.在`container`内创建一个小地图容器元素`miniMapContainer`，绝对定位
+
+3.在`container`内创建一个视口框元素`viewBoxContainer`，绝对定位，设置边框样式，过渡属性（可选）
+
+4.监听`data_change`和`view_data_change`事件，在该事件内调用`calculationMiniMap`方法获取计算数据，然后将`svgHTML`渲染到`miniMapContainer`元素内，并且设置它的样式：
+
+```js
+:style="{
+    transform: `scale(${svgBoxScale})`,
+    left: svgBoxLeft + 'px',
+    top: svgBoxTop + 'px',
+}"
+```
+
+5.将`viewBoxStyle`对象设置为`viewBoxContainer`元素的样式
+
+到这一步，当画布上的思维导图变化了，小地图也会实时更新，并且视口框元素会实时反映视口在思维导图图形上的位置
+
+6.监听`container`元素的`mousedown`、`mousemove`、`mouseup`事件，分别调用下面即将介绍的三个方法即可实现鼠标拖动时画布上的思维导图也随之拖动的效果
+
+#### onMousedown(e)
+
+小地图鼠标按下事件执行该函数
+
+`e`：事件对象
+
+#### onMousemove(e, sensitivityNum = 5)
+
+小地图鼠标移动事件执行该函数
+
+`e`：事件对象
+
+`sensitivityNum`：拖动灵敏度，灵敏度越大，在小地图上拖动相同距离时实际上的画布拖动距离就越大
+
+#### onMouseup()
+
+小地图鼠标松开事件执行该函数
 
 ## doExport实例
 
