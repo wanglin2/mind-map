@@ -224,7 +224,7 @@ class MindMap extends Base {
             let y1 = top + height / 2
             let x2 = item.dir === 'left' ? item.left + item.width : item.left
             let y2 = item.top + item.height / 2
-            let path = path = `M ${x1},${y1} L ${x1 + _s},${y1} L ${x1 + _s},${y2} L ${x2},${y2}` 
+            let path = `M ${x1},${y1} L ${x1 + _s},${y1} L ${x1 + _s},${y2} L ${x2},${y2}` 
             lines[index].plot(path)
             style && style(lines[index], item)
         })

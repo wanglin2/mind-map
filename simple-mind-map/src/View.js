@@ -129,11 +129,33 @@ class View {
     /** 
      * javascript comment 
      * @Author: 王林25 
+     * @Date: 2022-10-10 14:03:53 
+     * @Desc: 平移x方式到 
+     */
+    translateXTo(x) {
+        this.x = x
+        this.transform()
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
      * @Date: 2021-07-13 15:48:52 
      * @Desc: 平移y方向 
      */
     translateY(step) {
         this.y += step
+        this.transform()
+    }
+
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-10-10 14:04:10 
+     * @Desc: 平移y方向到 
+     */
+    translateYTo(y) {
+        this.y = y
         this.transform()
     }
 

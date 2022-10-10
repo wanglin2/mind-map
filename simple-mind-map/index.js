@@ -10,6 +10,7 @@ import BatchExecution from './src/BatchExecution'
 import Export from './src/Export'
 import Select from './src/Select'
 import Drag from './src/Drag'
+import MiniMap from './src/MiniMap';
 import {
     layoutValueList
 } from './src/utils/constant'
@@ -114,6 +115,11 @@ class MindMap {
         this.view = new View({
             mindMap: this,
             draw: this.draw
+        })
+
+        // 小地图类
+        this.miniMap = new MiniMap({
+            mindMap: this
         })
 
         // 导出类
