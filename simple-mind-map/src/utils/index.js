@@ -147,13 +147,19 @@ export const copyRenderTree = (tree, root) => {
  * @Date: 2021-05-04 14:40:11 
  * @Desc: 复制节点树数据 
  */
-export const copyNodeTree = (tree, root) => {
-    tree.data = simpleDeepClone(root.nodeData.data)
-    // tree.data.isActive = false
+export const copyNodeTree = (tree, root, removeActiveState = false) => {
+    tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data)
+    if (removeActiveState) {
+        tree.data.isActive = false
+    }
     tree.children = []
     if (root.children && root.children.length > 0) {
         root.children.forEach((item, index) => {
-            tree.children[index] = copyNodeTree({}, item)
+            tree.children[index] = copyNodeTree({}, item, removeActiveState)
+        })
+    } else if (root.nodeData && root.nodeData.children && root.nodeData.children.length > 0) {
+        root.nodeData.children.forEach((item, index) => {
+            tree.children[index] = copyNodeTree({}, item, removeActiveState)
         })
     }
     return tree;

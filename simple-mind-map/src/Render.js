@@ -658,7 +658,7 @@ class Render {
         if (this.activeNodeList.length <= 0) {
             return
         }
-        return copyNodeTree({}, this.activeNodeList[0])
+        return copyNodeTree({}, this.activeNodeList[0], true)
     }
 
     /** 
@@ -674,7 +674,7 @@ class Render {
         if (node.isRoot) {
             return null
         }
-        let copyData = copyNodeTree({}, node)
+        let copyData = copyNodeTree({}, node, true)
         this.removeActiveNode(node)
         this.removeOneNode(node)
         this.mindMap.emit('node_active', null, this.activeNodeList)
