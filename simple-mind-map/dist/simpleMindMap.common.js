@@ -23056,6 +23056,19 @@ var View_View = /*#__PURE__*/function () {
     /** 
      * javascript comment 
      * @Author: 王林25 
+     * @Date: 2022-10-10 14:03:53 
+     * @Desc: 平移x方式到 
+     */
+
+  }, {
+    key: "translateXTo",
+    value: function translateXTo(x) {
+      this.x = x;
+      this.transform();
+    }
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
      * @Date: 2021-07-13 15:48:52 
      * @Desc: 平移y方向 
      */
@@ -23064,6 +23077,19 @@ var View_View = /*#__PURE__*/function () {
     key: "translateY",
     value: function translateY(step) {
       this.y += step;
+      this.transform();
+    }
+    /** 
+     * javascript comment 
+     * @Author: 王林25 
+     * @Date: 2022-10-10 14:04:10 
+     * @Desc: 平移y方向到 
+     */
+
+  }, {
+    key: "translateYTo",
+    value: function translateYTo(y) {
+      this.y = y;
       this.transform();
     }
     /** 
@@ -34375,7 +34401,7 @@ var MindMap_MindMap = /*#__PURE__*/function (_Base) {
         var y1 = top + height / 2;
         var x2 = item.dir === 'left' ? item.left + item.width : item.left;
         var y2 = item.top + item.height / 2;
-        var path = path = "M ".concat(x1, ",").concat(y1, " L ").concat(x1 + _s, ",").concat(y1, " L ").concat(x1 + _s, ",").concat(y2, " L ").concat(x2, ",").concat(y2);
+        var path = "M ".concat(x1, ",").concat(y1, " L ").concat(x1 + _s, ",").concat(y1, " L ").concat(x1 + _s, ",").concat(y2, " L ").concat(x2, ",").concat(y2);
         lines[index].plot(path);
         style && style(lines[index], item);
       });
@@ -38958,33 +38984,15 @@ var Export_Export = /*#__PURE__*/function () {
     key: "getSvgData",
     value: function () {
       var _getSvgData = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
-        var svg, draw, origWidth, origHeight, origTransform, elRect, rect, clone, imageList, task;
+        var _this$mindMap$miniMap, svg, svgHTML, imageList, task;
+
         return regeneratorRuntime.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                svg = this.mindMap.svg;
-                draw = this.mindMap.draw; // 保存原始信息
+                _this$mindMap$miniMap = this.mindMap.miniMap.getMiniMap(), svg = _this$mindMap$miniMap.svg, svgHTML = _this$mindMap$miniMap.svgHTML; // 把图片的url转换成data:url类型，否则导出会丢失图片
 
-                origWidth = svg.width();
-                origHeight = svg.height();
-                origTransform = draw.transform();
-                elRect = this.mindMap.el.getBoundingClientRect(); // 去除放大缩小的变换效果
-
-                draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY); // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
-
-                rect = draw.rbox(); // 将svg设置为实际内容的宽高
-
-                svg.size(rect.width, rect.height); // 把实际内容变换
-
-                draw.translate(-rect.x + elRect.left, -rect.y + elRect.top); // 克隆一份数据
-
-                clone = svg.clone(); // 恢复原先的大小和变换信息
-
-                svg.size(origWidth, origHeight);
-                draw.transform(origTransform); // 把图片的url转换成data:url类型，否则导出会丢失图片
-
-                imageList = clone.find('image');
+                imageList = svg.find('image');
                 task = imageList.map( /*#__PURE__*/function () {
                   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(item) {
                     var imgUlr, imgData;
@@ -39012,16 +39020,16 @@ var Export_Export = /*#__PURE__*/function () {
                     return _ref.apply(this, arguments);
                   };
                 }());
-                _context3.next = 17;
+                _context3.next = 5;
                 return Promise.all(task);
 
-              case 17:
+              case 5:
                 return _context3.abrupt("return", {
-                  node: clone,
-                  str: clone.svg()
+                  node: svg,
+                  str: svgHTML
                 });
 
-              case 18:
+              case 6:
               case "end":
                 return _context3.stop();
             }
@@ -40007,6 +40015,221 @@ var Drag_Drag = /*#__PURE__*/function (_Base) {
 }(layouts_Base);
 
 /* harmony default export */ var src_Drag = (Drag_Drag);
+// CONCATENATED MODULE: ../simple-mind-map/src/MiniMap.js
+
+
+
+
+// 小地图类
+var MiniMap_MiniMap = /*#__PURE__*/function () {
+  /**
+   * javascript comment
+   * @Author: 王林25
+   * @Date: 2022-10-10 14:00:45
+   * @Desc: 构造函数
+   */
+  function MiniMap(opt) {
+    _classCallCheck(this, MiniMap);
+
+    this.mindMap = opt.mindMap;
+    this.isMousedown = false;
+    this.mousedownPos = {
+      x: 0,
+      y: 0
+    };
+    this.startViewPos = {
+      x: 0,
+      y: 0
+    };
+  }
+  /**
+   * javascript comment
+   * @Author: 王林25
+   * @Date: 2022-10-10 14:00:43
+   * @Desc:  获取小地图相关数据
+   */
+
+
+  _createClass(MiniMap, [{
+    key: "getMiniMap",
+    value: function getMiniMap() {
+      var svg = this.mindMap.svg;
+      var draw = this.mindMap.draw; // 保存原始信息
+
+      var origWidth = svg.width();
+      var origHeight = svg.height();
+      var origTransform = draw.transform();
+      var elRect = this.mindMap.el.getBoundingClientRect(); // 去除放大缩小的变换效果
+
+      draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY); // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
+
+      var rect = draw.rbox(); // 将svg设置为实际内容的宽高
+
+      svg.size(rect.width, rect.height); // 把实际内容变换
+
+      draw.translate(-rect.x + elRect.left, -rect.y + elRect.top); // 克隆一份数据
+
+      var clone = svg.clone(); // 恢复原先的大小和变换信息
+
+      svg.size(origWidth, origHeight);
+      draw.transform(origTransform);
+      return {
+        svg: clone,
+        // 思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）
+        svgHTML: clone.svg(),
+        // svg字符串
+        rect: _objectSpread2(_objectSpread2({}, rect), {}, {
+          // 思维导图图形未缩放时的位置尺寸等信息
+          ratio: rect.width / rect.height // 思维导图图形的宽高比
+
+        }),
+        origWidth: origWidth,
+        // 画布宽度
+        origHeight: origHeight,
+        // 画布高度
+        scaleX: origTransform.scaleX,
+        // 思维导图图形的水平缩放值
+        scaleY: origTransform.scaleY // 思维导图图形的垂直缩放值
+
+      };
+    }
+    /**
+     * javascript comment
+     * @Author: 王林25
+     * @Date: 2022-10-10 14:05:51
+     * @Desc: 计算小地图的渲染数据
+     * boxWidth：小地图容器的宽度
+     * boxHeight：小地图容器的高度
+     */
+
+  }, {
+    key: "calculationMiniMap",
+    value: function calculationMiniMap(boxWidth, boxHeight) {
+      var _this$getMiniMap = this.getMiniMap(),
+          svgHTML = _this$getMiniMap.svgHTML,
+          rect = _this$getMiniMap.rect,
+          origWidth = _this$getMiniMap.origWidth,
+          origHeight = _this$getMiniMap.origHeight,
+          scaleX = _this$getMiniMap.scaleX,
+          scaleY = _this$getMiniMap.scaleY; // 计算数据
+
+
+      var boxRatio = boxWidth / boxHeight;
+      var actWidth = 0;
+      var actHeight = 0;
+
+      if (boxRatio > rect.ratio) {
+        // 高度以box为准，缩放宽度
+        actHeight = boxHeight;
+        actWidth = rect.ratio * actHeight;
+      } else {
+        // 宽度以box为准，缩放高度
+        actWidth = boxWidth;
+        actHeight = actWidth / rect.ratio;
+      } // svg图形的缩放及位置
+
+
+      var miniMapBoxScale = actWidth / rect.width;
+      var miniMapBoxLeft = (boxWidth - actWidth) / 2;
+      var miniMapBoxTop = (boxHeight - actHeight) / 2; // 视口框大小及位置
+
+      var _rectX = rect.x - (rect.width * scaleX - rect.width) / 2;
+
+      var _rectX2 = rect.x2 + (rect.width * scaleX - rect.width) / 2;
+
+      var _rectY = rect.y - (rect.height * scaleY - rect.height) / 2;
+
+      var _rectY2 = rect.y2 + (rect.height * scaleY - rect.height) / 2;
+
+      var _rectWidth = rect.width * scaleX;
+
+      var _rectHeight = rect.height * scaleY;
+
+      var viewBoxStyle = {
+        left: 0,
+        top: 0,
+        right: 0,
+        bottom: 0
+      };
+      viewBoxStyle.left = Math.max(0, -_rectX / _rectWidth * actWidth) + miniMapBoxLeft + "px";
+      viewBoxStyle.right = Math.max(0, (_rectX2 - origWidth) / _rectWidth * actWidth) + miniMapBoxLeft + "px";
+      viewBoxStyle.top = Math.max(0, -_rectY / _rectHeight * actHeight) + miniMapBoxTop + "px";
+      viewBoxStyle.bottom = Math.max(0, (_rectY2 - origHeight) / _rectHeight * actHeight) + miniMapBoxTop + "px";
+      return {
+        svgHTML: svgHTML,
+        // 小地图html
+        viewBoxStyle: viewBoxStyle,
+        // 视图框的位置信息
+        miniMapBoxScale: miniMapBoxScale,
+        // 视图框的缩放值
+        miniMapBoxLeft: miniMapBoxLeft,
+        // 视图框的left值
+        miniMapBoxTop: miniMapBoxTop // 视图框的top值
+
+      };
+    }
+    /**
+     * javascript comment
+     * @Author: 王林25
+     * @Date: 2022-10-10 14:22:40
+     * @Desc: 小地图鼠标按下事件
+     */
+
+  }, {
+    key: "onMousedown",
+    value: function onMousedown(e) {
+      this.isMousedown = true;
+      this.mousedownPos = {
+        x: e.clientX,
+        y: e.clientY
+      }; // 保存视图当前的偏移量
+
+      var transformData = this.mindMap.view.getTransformData();
+      this.startViewPos = {
+        x: transformData.state.x,
+        y: transformData.state.y
+      };
+    }
+    /**
+     * javascript comment
+     * @Author: 王林25
+     * @Date: 2022-10-10 14:22:55
+     * @Desc: 小地图鼠标移动事件
+     */
+
+  }, {
+    key: "onMousemove",
+    value: function onMousemove(e) {
+      var sensitivityNum = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 5;
+
+      if (!this.isMousedown) {
+        return;
+      }
+
+      var ox = e.clientX - this.mousedownPos.x;
+      var oy = e.clientY - this.mousedownPos.y; // 在视图最初偏移量上累加更新量
+
+      this.mindMap.view.translateXTo(ox * sensitivityNum + this.startViewPos.x);
+      this.mindMap.view.translateYTo(oy * sensitivityNum + this.startViewPos.y);
+    }
+    /**
+     * javascript comment
+     * @Author: 王林25
+     * @Date: 2022-10-10 14:23:01
+     * @Desc: 小地图鼠标松开事件
+     */
+
+  }, {
+    key: "onMouseup",
+    value: function onMouseup() {
+      this.isMousedown = false;
+    }
+  }]);
+
+  return MiniMap;
+}();
+
+/* harmony default export */ var src_MiniMap = (MiniMap_MiniMap);
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/jszip/dist/jszip.min.js
 var jszip_min = __webpack_require__("5e89");
 var jszip_min_default = /*#__PURE__*/__webpack_require__.n(jszip_min);
@@ -40276,6 +40499,7 @@ var transformOldXmind = function transformOldXmind(content) {
 
 
 
+
  // 默认选项配置
 
 var defaultOpt = {
@@ -40370,6 +40594,10 @@ var simple_mind_map_MindMap = /*#__PURE__*/function () {
     this.view = new src_View({
       mindMap: this,
       draw: this.draw
+    }); // 小地图类
+
+    this.miniMap = new src_MiniMap({
+      mindMap: this
     }); // 导出类
 
     this.doExport = new src_Export({
