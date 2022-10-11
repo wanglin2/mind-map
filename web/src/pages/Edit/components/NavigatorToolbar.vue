@@ -47,6 +47,9 @@ export default {
       openMiniMap: false
     }
   },
+  mounted () {
+    this.toggleMiniMap(this.openMiniMap)
+  },
   methods: {
     readonlyChange(value) {
       this.mindMap.setMode(value ? 'readonly' : 'edit')
