@@ -36218,7 +36218,9 @@ var Render_Render = /*#__PURE__*/function () {
             "expand": true
           },
           "children": []
-        });
+        }); // 插入子节点时自动展开子节点
+
+        node.nodeData.data.expand = true;
 
         if (node.isRoot) {
           node.initRender = true; // this.mindMap.batchExecution.push('renderNode' + index, () => {
