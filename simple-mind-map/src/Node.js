@@ -367,6 +367,9 @@ class Node {
         if (this.nodeData.data.imageTitle) {
             node.attr('title', this.nodeData.data.imageTitle)
         }
+        node.on('dblclick', (e) => {
+            this.mindMap.emit('node_img_dblclick', this, e)
+        })
         return {
             node,
             width: imgSize[0],
