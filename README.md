@@ -93,7 +93,7 @@ npm run build
 
 # 安装
 
-> 当前仓库版本：0.2.14，当前npm版本：0.2.14
+> 当前仓库版本：0.2.15，当前npm版本：0.2.15
 
 ```bash
 npm i simple-mind-map
@@ -205,30 +205,31 @@ v0.1.7+。切换模式为只读或编辑。
 
 监听事件，事件列表：
 
-| 事件名称                      | 描述                    | 回调参数                                                  |
-| ------------------------- | --------------------- | ----------------------------------------------------- |
-| data_change               | 渲染树数据变化，可以监听该方法获取最新数据 | data（当前渲染树数据）                                         |
-| view_data_change（v0.1.1+） | 视图变化数据，比如拖动或缩放时会触发    | data（当前视图状态数据）                                        |
-| back_forward              | 前进或回退                 | activeHistoryIndex（当前在历史数据数组里的索引）、length（当前历史数据数组的长度） |
-| draw_click                | *画布的单击事件*             | e（事件对象）                                               |
-| svg_mousedown             | svg画布的鼠标按下事件          | e（事件对象）                                               |
-| mousedown                 | el元素的鼠标按下事件           | e（事件对象）、this（Event事件类实例）                              |
-| mousemove                 | el元素的鼠标移动事件           | e（事件对象）、this（Event事件类实例）                              |
-| drag                      | 如果是按住左键拖动的话会触发拖动事件    | e（事件对象）、this（Event事件类实例）                              |
-| mouseup                   | el元素的鼠标松开事件           | e（事件对象）、this（Event事件类实例）                              |
-| mousewheel                | 鼠标滚动事件                | e（事件对象）、dir（向上up还是向下down滚动）、this（Event事件类实例）          |
-| contextmenu               | svg画布的鼠标右键菜单事件        | e（事件对象）                                               |
-| node_click                | 节点的单击事件               | this（节点实例）、e（事件对象）                                    |
-| node_mousedown            | 节点的鼠标按下事件             | this（节点实例）、e（事件对象）                                    |
-| node_mouseup              | 节点的鼠标松开事件             | this（节点实例）、e（事件对象）                                    |
-| node_dblclick             | 节点的双击事件               | this（节点实例）、e（事件对象）                                    |
-| node_contextmenu          | 节点的右键菜单事件             | e（事件对象）、this（节点实例）                                    |
-| before_node_active        | 节点激活前事件               | this（节点实例）、activeNodeList（当前激活的所有节点列表）                |
-| node_active               | 节点激活事件                | this（节点实例）、activeNodeList（当前激活的所有节点列表）                |
-| expand_btn_click          | 节点展开或收缩事件             | this（节点实例）                                            |
-| before_show_text_edit     | 节点文本编辑框即将打开事件         |                                                       |
-| hide_text_edit            | 节点文本编辑框关闭事件           | textEditNode（文本编辑框DOM节点）、activeNodeList（当前激活的所有节点列表）  |
-| scale                     | 放大缩小事件                | scale（缩放比例）                                           |
+| 事件名称                      | 描述                                       | 回调参数                                                     |
+| ----------------------------- | ------------------------------------------ | ------------------------------------------------------------ |
+| data_change                   | 渲染树数据变化，可以监听该方法获取最新数据 | data（当前渲染树数据）                                       |
+| view_data_change（v0.1.1+）   | 视图变化数据，比如拖动或缩放时会触发       | data（当前视图状态数据）                                     |
+| back_forward                  | 前进或回退                                 | activeHistoryIndex（当前在历史数据数组里的索引）、length（当前历史数据数组的长度） |
+| draw_click                    | *画布的单击事件*                           | e（事件对象）                                                |
+| svg_mousedown                 | svg画布的鼠标按下事件                      | e（事件对象）                                                |
+| mousedown                     | el元素的鼠标按下事件                       | e（事件对象）、this（Event事件类实例）                       |
+| mousemove                     | el元素的鼠标移动事件                       | e（事件对象）、this（Event事件类实例）                       |
+| drag                          | 如果是按住左键拖动的话会触发拖动事件       | e（事件对象）、this（Event事件类实例）                       |
+| mouseup                       | el元素的鼠标松开事件                       | e（事件对象）、this（Event事件类实例）                       |
+| mousewheel                    | 鼠标滚动事件                               | e（事件对象）、dir（向上up还是向下down滚动）、this（Event事件类实例） |
+| contextmenu                   | svg画布的鼠标右键菜单事件                  | e（事件对象）                                                |
+| node_click                    | 节点的单击事件                             | this（节点实例）、e（事件对象）                              |
+| node_mousedown                | 节点的鼠标按下事件                         | this（节点实例）、e（事件对象）                              |
+| node_mouseup                  | 节点的鼠标松开事件                         | this（节点实例）、e（事件对象）                              |
+| node_dblclick                 | 节点的双击事件                             | this（节点实例）、e（事件对象）                              |
+| node_contextmenu              | 节点的右键菜单事件                         | e（事件对象）、this（节点实例）                              |
+| before_node_active            | 节点激活前事件                             | this（节点实例）、activeNodeList（当前激活的所有节点列表）   |
+| node_active                   | 节点激活事件                               | this（节点实例）、activeNodeList（当前激活的所有节点列表）   |
+| expand_btn_click              | 节点展开或收缩事件                         | this（节点实例）                                             |
+| before_show_text_edit         | 节点文本编辑框即将打开事件                 |                                                              |
+| hide_text_edit                | 节点文本编辑框关闭事件                     | textEditNode（文本编辑框DOM节点）、activeNodeList（当前激活的所有节点列表） |
+| scale                         | 放大缩小事件                               | scale（缩放比例）                                            |
+| node_img_dblclick（v0.2.15+） | 节点内图片的双击事件                       | this（节点实例）、e（事件对象）                              |
 
 #### emit(event, ...args)
 
