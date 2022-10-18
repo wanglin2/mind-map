@@ -12,6 +12,7 @@
     <ShortcutKey></ShortcutKey>
     <Contextmenu v-if="mindMap" :mindMap="mindMap"></Contextmenu>
     <NodeNoteContentShow></NodeNoteContentShow>
+    <NodeImgPreview v-if="mindMap" :mindMap="mindMap"></NodeImgPreview>
   </div>
 </template>
 
@@ -28,7 +29,8 @@ import ShortcutKey from './ShortcutKey'
 import Contextmenu from './Contextmenu'
 import NodeNoteContentShow from './NodeNoteContentShow.vue'
 import { getData, storeData, storeConfig } from '@/api'
-import Navigator from './Navigator.vue';
+import Navigator from './Navigator.vue'
+import NodeImgPreview from './NodeImgPreview.vue'
 
 /**
  * @Author: 王林
@@ -48,7 +50,8 @@ export default {
     ShortcutKey,
     Contextmenu,
     NodeNoteContentShow,
-    Navigator
+    Navigator,
+    NodeImgPreview
   },
   data() {
     return {
