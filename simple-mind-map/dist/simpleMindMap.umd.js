@@ -21900,7 +21900,9 @@ var View_View = /*#__PURE__*/function () {
         if (_this.firstDrag) {
           _this.firstDrag = false; // 清除激活节点
 
-          _this.mindMap.execCommand('CLEAR_ACTIVE_NODE');
+          if (_this.mindMap.renderer.activeNodeList.length > 0) {
+            _this.mindMap.execCommand('CLEAR_ACTIVE_NODE');
+          }
         }
 
         _this.x = _this.sx + event.mousemoveOffset.x;
@@ -31702,6 +31704,10 @@ var Node_Node = /*#__PURE__*/function () {
   }, {
     key: "render",
     value: function render() {
+      var _this7 = this;
+
+      var callback = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
+
       // 节点
       if (this.initRender) {
         this.initRender = false;
@@ -31714,11 +31720,20 @@ var Node_Node = /*#__PURE__*/function () {
 
 
       if (this.children && this.children.length && this.nodeData.data.expand !== false) {
+        var index = 0;
         asyncRun(this.children.map(function (item) {
           return function () {
-            item.render();
+            item.render(function () {
+              index++;
+
+              if (index >= _this7.children.length) {
+                callback();
+              }
+            });
           };
         }));
+      } else {
+        callback();
       } // 手动插入的节点立即获得焦点并且开启编辑模式
 
 
@@ -31818,7 +31833,7 @@ var Node_Node = /*#__PURE__*/function () {
   }, {
     key: "renderLine",
     value: function renderLine() {
-      var _this7 = this;
+      var _this8 = this;
 
       var deep = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
@@ -31831,7 +31846,7 @@ var Node_Node = /*#__PURE__*/function () {
       if (childrenLen > this._lines.length) {
         // 创建缺少的线
         new Array(childrenLen - this._lines.length).fill(0).forEach(function () {
-          _this7._lines.push(_this7.draw.path());
+          _this8._lines.push(_this8.draw.path());
         });
       } else if (childrenLen < this._lines.length) {
         // 删除多余的线
@@ -31845,7 +31860,7 @@ var Node_Node = /*#__PURE__*/function () {
 
       this.renderer.layout.renderLine(this, this._lines, function (line, node) {
         // 添加样式
-        _this7.styleLine(line, node);
+        _this8.styleLine(line, node);
       }, this.style.getStyle('lineStyle', true)); // 子级的连线也需要更新
 
       if (deep && this.children && this.children.length > 0) {
@@ -32099,7 +32114,7 @@ var Node_Node = /*#__PURE__*/function () {
   }, {
     key: "renderExpandBtn",
     value: function renderExpandBtn() {
-      var _this8 = this;
+      var _this9 = this;
 
       if (!this.nodeData.children || this.nodeData.children.length <= 0 || this.isRoot) {
         return;
@@ -32111,7 +32126,7 @@ var Node_Node = /*#__PURE__*/function () {
       this._expandBtn.on('mouseover', function (e) {
         e.stopPropagation();
 
-        _this8._expandBtn.css({
+        _this9._expandBtn.css({
           cursor: 'pointer'
         });
       });
@@ -32119,7 +32134,7 @@ var Node_Node = /*#__PURE__*/function () {
       this._expandBtn.on('mouseout', function (e) {
         e.stopPropagation();
 
-        _this8._expandBtn.css({
+        _this9._expandBtn.css({
           cursor: 'auto'
         });
       });
@@ -32127,9 +32142,9 @@ var Node_Node = /*#__PURE__*/function () {
       this._expandBtn.on('click', function (e) {
         e.stopPropagation(); // 展开收缩
 
-        _this8.mindMap.execCommand('SET_NODE_EXPAND', _this8, !_this8.nodeData.data.expand);
+        _this9.mindMap.execCommand('SET_NODE_EXPAND', _this9, !_this9.nodeData.data.expand);
 
-        _this8.mindMap.emit('expand_btn_click', _this8);
+        _this9.mindMap.emit('expand_btn_click', _this9);
       });
 
       this.group.add(this._expandBtn);
@@ -34928,7 +34943,9 @@ var Render_Render = /*#__PURE__*/function () {
       this.layout.doLayout(function (root) {
         _this3.root = root;
 
-        _this3.root.render();
+        _this3.root.render(function () {
+          _this3.mindMap.emit('node_tree_render_end');
+        });
       });
       this.mindMap.emit('node_active', null, this.activeNodeList);
     }

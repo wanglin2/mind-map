@@ -271,7 +271,9 @@ class Render {
         }
         this.layout.doLayout((root) => {
             this.root = root
-            this.root.render()
+            this.root.render(() => {
+                this.mindMap.emit('node_tree_render_end')
+            })
         })
         this.mindMap.emit('node_active', null, this.activeNodeList)
     }
