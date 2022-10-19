@@ -8,8 +8,17 @@
     <div>
       <div class="nameInputBox">
         <span class="name">导出文件名称</span>
-        <el-input style="width: 300px" v-model="fileName" size="mini"></el-input>
-        <el-checkbox v-show="['smm', 'json'].includes(exportType)" v-model="widthConfig" style="margin-left: 12px">是否包含主题、结构等配置数据</el-checkbox>
+        <el-input
+          style="width: 300px"
+          v-model="fileName"
+          size="mini"
+        ></el-input>
+        <el-checkbox
+          v-show="['smm', 'json'].includes(exportType)"
+          v-model="widthConfig"
+          style="margin-left: 12px"
+          >是否包含主题、结构等配置数据</el-checkbox
+        >
       </div>
       <el-radio-group v-model="exportType" size="mini">
         <el-radio-button label="smm">专有文件（.smm）</el-radio-button>
@@ -34,19 +43,19 @@
  * @Desc: 导出
  */
 export default {
-  name: "Export",
+  name: 'Export',
   data() {
     return {
       dialogVisible: false,
-      exportType: "smm",
+      exportType: 'smm',
       fileName: '思维导图',
       widthConfig: true
-    };
+    }
   },
   created() {
-    this.$bus.$on("showExport", () => {
-      this.dialogVisible = true;
-    });
+    this.$bus.$on('showExport', () => {
+      this.dialogVisible = true
+    })
   },
   methods: {
     /**
@@ -55,7 +64,7 @@ export default {
      * @Desc: 取消
      */
     cancel() {
-      this.dialogVisible = false;
+      this.dialogVisible = false
     },
 
     /**
@@ -64,15 +73,21 @@ export default {
      * @Desc:  确定
      */
     confirm() {
-      this.$bus.$emit("export", this.exportType, true, this.fileName, this.widthConfig);
+      this.$bus.$emit(
+        'export',
+        this.exportType,
+        true,
+        this.fileName,
+        this.widthConfig
+      )
       this.$notify.info({
-          title: '消息',
-          message: '如果没有触发下载，请检查是否被浏览器拦截了'
-        });
-      this.cancel();
-    },
-  },
-};
+        title: '消息',
+        message: '如果没有触发下载，请检查是否被浏览器拦截了'
+      })
+      this.cancel()
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

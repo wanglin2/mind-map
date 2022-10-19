@@ -18,20 +18,20 @@
  * @Desc: 字数及节点数量统计
  */
 export default {
-  name: "Count",
+  name: 'Count',
   props: {},
   data() {
     return {
       words: 0,
-      num: 0,
-    };
+      num: 0
+    }
   },
   created() {
-    this.$bus.$on("data_change", (data) => {
-      this.words = 0;
-      this.num = 0;
-      this.walk(data);
-    });
+    this.$bus.$on('data_change', data => {
+      this.words = 0
+      this.num = 0
+      this.walk(data)
+    })
   },
   methods: {
     /**
@@ -40,16 +40,16 @@ export default {
      * @Desc: 遍历
      */
     walk(data) {
-      this.num++;
-      this.words += (String(data.data.text) || "").length;
+      this.num++
+      this.words += (String(data.data.text) || '').length
       if (data.children && data.children.length > 0) {
-        data.children.forEach((item) => {
-          this.walk(item);
-        });
+        data.children.forEach(item => {
+          this.walk(item)
+        })
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

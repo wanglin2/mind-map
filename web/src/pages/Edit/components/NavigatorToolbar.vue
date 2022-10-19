@@ -1,7 +1,9 @@
 <template>
   <div class="navigatorContainer">
     <div class="item">
-      <el-checkbox v-model="openMiniMap" @change="toggleMiniMap">开启小地图</el-checkbox>
+      <el-checkbox v-model="openMiniMap" @change="toggleMiniMap"
+        >开启小地图</el-checkbox
+      >
     </div>
     <div class="item">
       <el-switch
@@ -22,8 +24,8 @@
 </template>
 
 <script>
-import Scale from "./Scale";
-import Fullscreen from "./Fullscreen";
+import Scale from './Scale'
+import Fullscreen from './Fullscreen'
 
 /**
  * @Author: 王林
@@ -31,23 +33,23 @@ import Fullscreen from "./Fullscreen";
  * @Desc: 导航器工具栏
  */
 export default {
-  name: "NavigatorToolbar",
+  name: 'NavigatorToolbar',
   components: {
     Scale,
-    Fullscreen,
+    Fullscreen
   },
   props: {
     mindMap: {
-      type: Object,
-    },
+      type: Object
+    }
   },
-  data () {
+  data() {
     return {
       isReadonly: false,
       openMiniMap: false
     }
   },
-  mounted () {
+  mounted() {
     this.toggleMiniMap(this.openMiniMap)
   },
   methods: {
@@ -59,7 +61,7 @@ export default {
       this.$bus.$emit('toggle_mini_map', show)
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

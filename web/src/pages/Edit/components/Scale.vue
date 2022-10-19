@@ -17,32 +17,32 @@
  * @Desc: 放大缩小
  */
 export default {
-  name: "Scale",
+  name: 'Scale',
   props: {
     mindMap: {
-      type: Object,
-    },
+      type: Object
+    }
   },
   data() {
     return {
-      scaleNum: 100,
-    };
+      scaleNum: 100
+    }
   },
   watch: {
     mindMap(val, oldVal) {
       if (val && !oldVal) {
-        this.mindMap.on("scale", (scale) => {
-          this.scaleNum = this.toPer(scale);
-        });
+        this.mindMap.on('scale', scale => {
+          this.scaleNum = this.toPer(scale)
+        })
         this.scaleNum = this.toPer(this.mindMap.view.scale)
       }
-    },
+    }
   },
   methods: {
-    /** 
-     * @Author: 王林25 
-     * @Date: 2021-11-25 14:20:16 
-     * @Desc: 转换成百分数 
+    /**
+     * @Author: 王林25
+     * @Date: 2021-11-25 14:20:16
+     * @Desc: 转换成百分数
      */
     toPer(scale) {
       return (scale * 100).toFixed(0)
@@ -54,7 +54,7 @@ export default {
      * @Desc: 缩小
      */
     narrow() {
-      this.mindMap.view.narrow();
+      this.mindMap.view.narrow()
     },
 
     /**
@@ -63,10 +63,10 @@ export default {
      * @Desc: 放大
      */
     enlarge() {
-      this.mindMap.view.enlarge();
-    },
-  },
-};
+      this.mindMap.view.enlarge()
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
@@ -79,8 +79,8 @@ export default {
   }
 
   .scaleInfo {
-		width: 40px;
-		text-align: center;
+    width: 40px;
+    text-align: center;
     margin: 0 20px;
   }
 }

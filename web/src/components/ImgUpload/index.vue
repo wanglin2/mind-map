@@ -30,21 +30,21 @@
 
 <script>
 export default {
-  name: "ImgUpload",
+  name: 'ImgUpload',
   model: {
-    prop: "value",
-    event: "change",
+    prop: 'value',
+    event: 'change'
   },
   props: {
     value: {
       type: String,
-      default: "",
-    },
+      default: ''
+    }
   },
   data() {
     return {
-      file: null,
-    };
+      file: null
+    }
   },
   methods: {
     /**
@@ -53,8 +53,8 @@ export default {
      * @Desc: 图片选择事件
      */
     onImgUploadInputChange(e) {
-      let file = e.target.files[0];
-      this.selectImg(file);
+      let file = e.target.files[0]
+      this.selectImg(file)
     },
 
     /**
@@ -63,9 +63,9 @@ export default {
      * @Desc: 拖动上传图片
      */
     onDrop(e) {
-      let dt = e.dataTransfer;
-      let file = dt.files && dt.files[0];
-      this.selectImg(file);
+      let dt = e.dataTransfer
+      let file = dt.files && dt.files[0]
+      this.selectImg(file)
     },
 
     /**
@@ -74,12 +74,12 @@ export default {
      * @Desc: 选择图片
      */
     selectImg(file) {
-      this.file = file;
-      let fr = new FileReader();
-      fr.readAsDataURL(file);
-      fr.onload = (e) => {
-        this.$emit("change", e.target.result);
-      };
+      this.file = file
+      let fr = new FileReader()
+      fr.readAsDataURL(file)
+      fr.onload = e => {
+        this.$emit('change', e.target.result)
+      }
     },
 
     /**
@@ -88,22 +88,22 @@ export default {
      * @Desc: 获取图片大小
      */
     getSize() {
-      return new Promise((resolve, reject) => {
-        let img = new Image();
-        img.src = this.value;
+      return new Promise(resolve => {
+        let img = new Image()
+        img.src = this.value
         img.onload = () => {
           resolve({
             width: img.width,
-            height: img.height,
-          });
-        };
-        img.onerror = (e) => {
+            height: img.height
+          })
+        }
+        img.onerror = () => {
           resolve({
             width: 0,
-            height: 0,
-          });
-        };
-      });
+            height: 0
+          })
+        }
+      })
     },
 
     /**
@@ -112,13 +112,13 @@ export default {
      * @Desc: 删除图片
      */
     deleteImg() {
-      this.$emit("change", "");
-      this.file = null;
-    },
-  },
-};
+      this.$emit('change', '')
+      this.file = null
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
-@import "./style.less";
+@import './style.less';
 </style>

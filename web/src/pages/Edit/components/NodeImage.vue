@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import ImgUpload from "@/components/ImgUpload";
+import ImgUpload from '@/components/ImgUpload'
 
 /**
  * @Author: 王林
@@ -26,33 +26,33 @@ import ImgUpload from "@/components/ImgUpload";
  * @Desc: 节点图片内容设置
  */
 export default {
-  name: "NodeImage",
+  name: 'NodeImage',
   components: {
-    ImgUpload,
+    ImgUpload
   },
   data() {
     return {
       dialogVisible: false,
-      img: "",
-      imgTitle: "",
-      activeNodes: null,
-    };
+      img: '',
+      imgTitle: '',
+      activeNodes: null
+    }
   },
   created() {
-    this.$bus.$on("node_active", (...args) => {
-      this.activeNodes = args[1];
+    this.$bus.$on('node_active', (...args) => {
+      this.activeNodes = args[1]
       if (this.activeNodes.length > 0) {
-        let firstNode = this.activeNodes[0];
-        this.img = firstNode.getData("image");
-        this.imgTitle = firstNode.getData("imageTitle");
+        let firstNode = this.activeNodes[0]
+        this.img = firstNode.getData('image')
+        this.imgTitle = firstNode.getData('imageTitle')
       } else {
-        this.img = "";
-        this.imgTitle = "";
+        this.img = ''
+        this.imgTitle = ''
       }
-    });
-    this.$bus.$on("showNodeImage", () => {
-      this.dialogVisible = true;
-    });
+    })
+    this.$bus.$on('showNodeImage', () => {
+      this.dialogVisible = true
+    })
   },
   methods: {
     /**
@@ -61,7 +61,7 @@ export default {
      * @Desc: 取消
      */
     cancel() {
-      this.dialogVisible = false;
+      this.dialogVisible = false
     },
 
     /**
@@ -71,22 +71,22 @@ export default {
      */
     async confirm() {
       try {
-        let { width, height } = await this.$refs.ImgUpload.getSize();
-        this.activeNodes.forEach((node) => {
+        let { width, height } = await this.$refs.ImgUpload.getSize()
+        this.activeNodes.forEach(node => {
           node.setImage({
-            url: this.img || "none",
+            url: this.img || 'none',
             title: this.imgTitle,
             width,
-            height,
-          });
-        });
-        this.cancel();
+            height
+          })
+        })
+        this.cancel()
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

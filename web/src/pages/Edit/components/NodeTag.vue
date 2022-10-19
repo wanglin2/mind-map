@@ -19,7 +19,7 @@
         :key="index"
         :style="{
           backgroundColor: tagColorList[index].background,
-          color: tagColorList[index].color,
+          color: tagColorList[index].color
         }"
       >
         {{ item }}
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import { tagColorList } from "simple-mind-map/src/utils/constant";
+import { tagColorList } from 'simple-mind-map/src/utils/constant'
 
 /**
  * @Author: 王林
@@ -44,32 +44,32 @@ import { tagColorList } from "simple-mind-map/src/utils/constant";
  * @Desc: 节点标签内容设置
  */
 export default {
-  name: "NodeTag",
+  name: 'NodeTag',
   data() {
     return {
       dialogVisible: false,
       tagColorList,
       tagArr: [],
-      tag: "",
+      tag: '',
       activeNodes: [],
-      max: 5,
-    };
+      max: 5
+    }
   },
   created() {
-    this.$bus.$on("node_active", (...args) => {
-      this.activeNodes = args[1];
+    this.$bus.$on('node_active', (...args) => {
+      this.activeNodes = args[1]
       if (this.activeNodes.length > 0) {
-        let firstNode = this.activeNodes[0];
-        this.tagArr = firstNode.getData("tag") || [];
+        let firstNode = this.activeNodes[0]
+        this.tagArr = firstNode.getData('tag') || []
       } else {
-        this.tagArr = [];
-        this.tag = "";
+        this.tagArr = []
+        this.tag = ''
       }
-    });
-    this.$bus.$on("showNodeTag", () => {
-      this.$bus.$emit('startTextEdit');
-      this.dialogVisible = true;
-    });
+    })
+    this.$bus.$on('showNodeTag', () => {
+      this.$bus.$emit('startTextEdit')
+      this.dialogVisible = true
+    })
   },
   methods: {
     /**
@@ -78,8 +78,8 @@ export default {
      * @Desc: 添加
      */
     add() {
-      this.tagArr.push(this.tag);
-      this.tag = "";
+      this.tagArr.push(this.tag)
+      this.tag = ''
     },
 
     /**
@@ -88,7 +88,7 @@ export default {
      * @Desc: 删除
      */
     del(index) {
-      this.tagArr.splice(index, 1);
+      this.tagArr.splice(index, 1)
     },
 
     /**
@@ -97,8 +97,8 @@ export default {
      * @Desc: 取消
      */
     cancel() {
-      this.dialogVisible = false;
-      this.$bus.$emit('endTextEdit');
+      this.dialogVisible = false
+      this.$bus.$emit('endTextEdit')
     },
 
     /**
@@ -107,13 +107,13 @@ export default {
      * @Desc:  确定
      */
     confirm() {
-      this.activeNodes.forEach((node) => {
-        node.setTag(this.tagArr);
-      });
-      this.cancel();
-    },
-  },
-};
+      this.activeNodes.forEach(node => {
+        node.setTag(this.tagArr)
+      })
+      this.cancel()
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
