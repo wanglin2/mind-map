@@ -9,8 +9,8 @@
             <Color
               :color="style.backgroundColor"
               @change="
-                (color) => {
-                  update('backgroundColor', color);
+                color => {
+                  update('backgroundColor', color)
                 }
               "
             ></Color>
@@ -20,8 +20,8 @@
               class="imgUpload"
               v-model="style.backgroundImage"
               @change="
-                (img) => {
-                  update('backgroundImage', img);
+                img => {
+                  update('backgroundImage', img)
                 }
               "
             ></ImgUpload>
@@ -33,8 +33,8 @@
                 v-model="style.backgroundRepeat"
                 placeholder=""
                 @change="
-                  (value) => {
-                    update('backgroundRepeat', value);
+                  value => {
+                    update('backgroundRepeat', value)
                   }
                 "
               >
@@ -64,8 +64,8 @@
             <Color
               :color="style.lineColor"
               @change="
-                (color) => {
-                  update('lineColor', color);
+                color => {
+                  update('lineColor', color)
                 }
               "
             ></Color>
@@ -79,8 +79,8 @@
             v-model="style.lineWidth"
             placeholder=""
             @change="
-              (value) => {
-                update('lineWidth', value);
+              value => {
+                update('lineWidth', value)
               }
             "
           >
@@ -103,8 +103,8 @@
             v-model="style.lineStyle"
             placeholder=""
             @change="
-              (value) => {
-                update('lineStyle', value);
+              value => {
+                update('lineStyle', value)
               }
             "
           >
@@ -132,8 +132,8 @@
             <Color
               :color="style.generalizationLineColor"
               @change="
-                (color) => {
-                  update('generalizationLineColor', color);
+                color => {
+                  update('generalizationLineColor', color)
                 }
               "
             ></Color>
@@ -147,8 +147,8 @@
             v-model="style.generalizationLineWidth"
             placeholder=""
             @change="
-              (value) => {
-                update('generalizationLineWidth', value);
+              value => {
+                update('generalizationLineWidth', value)
               }
             "
           >
@@ -171,8 +171,8 @@
             style="width: 200px"
             v-model="style.paddingX"
             @change="
-              (value) => {
-                update('paddingX', value);
+              value => {
+                update('paddingX', value)
               }
             "
           ></el-slider>
@@ -185,8 +185,8 @@
             style="width: 200px"
             v-model="style.paddingY"
             @change="
-              (value) => {
-                update('paddingY', value);
+              value => {
+                update('paddingY', value)
               }
             "
           ></el-slider>
@@ -203,8 +203,8 @@
             :min="10"
             :max="300"
             @change="
-              (value) => {
-                update('imgMaxWidth', value);
+              value => {
+                update('imgMaxWidth', value)
               }
             "
           ></el-slider>
@@ -219,8 +219,8 @@
             :min="10"
             :max="300"
             @change="
-              (value) => {
-                update('imgMaxHeight', value);
+              value => {
+                update('imgMaxHeight', value)
               }
             "
           ></el-slider>
@@ -237,8 +237,8 @@
             :min="12"
             :max="50"
             @change="
-              (value) => {
-                update('iconSize', value);
+              value => {
+                update('iconSize', value)
               }
             "
           ></el-slider>
@@ -262,8 +262,8 @@
             style="width: 200px"
             v-model="style.marginX"
             @change="
-              (value) => {
-                updateMargin('marginX', value);
+              value => {
+                updateMargin('marginX', value)
               }
             "
           ></el-slider>
@@ -275,8 +275,8 @@
             style="width: 200px"
             v-model="style.marginY"
             @change="
-              (value) => {
-                updateMargin('marginY', value);
+              value => {
+                updateMargin('marginY', value)
               }
             "
           ></el-slider>
@@ -287,15 +287,11 @@
 </template>
 
 <script>
-import Sidebar from "./Sidebar";
-import Color from "./Color";
-import {
-  lineWidthList,
-  lineStyleList,
-  backgroundRepeatList
-} from "@/config";
-import ImgUpload from "@/components/ImgUpload";
-import { storeConfig } from "@/api";
+import Sidebar from './Sidebar'
+import Color from './Color'
+import { lineWidthList, lineStyleList, backgroundRepeatList } from '@/config'
+import ImgUpload from '@/components/ImgUpload'
+import { storeConfig } from '@/api'
 
 /**
  * @Author: 王林
@@ -303,55 +299,55 @@ import { storeConfig } from "@/api";
  * @Desc: 基础样式
  */
 export default {
-  name: "BaseStyle",
+  name: 'BaseStyle',
   components: {
     Sidebar,
     Color,
-    ImgUpload,
+    ImgUpload
   },
   props: {
     data: {
       type: [Object, null],
-      default: null,
+      default: null
     },
     mindMap: {
-      type: Object,
-    },
+      type: Object
+    }
   },
   data() {
     return {
       lineWidthList,
       lineStyleList,
       backgroundRepeatList,
-      activeTab: "color",
-      marginActiveTab: "second",
+      activeTab: 'color',
+      marginActiveTab: 'second',
       style: {
-        backgroundColor: "",
-        lineColor: "",
-        lineWidth: "",
-        lineStyle: "",
-        generalizationLineWidth: "",
-        generalizationLineColor: "",
+        backgroundColor: '',
+        lineColor: '',
+        lineWidth: '',
+        lineStyle: '',
+        generalizationLineWidth: '',
+        generalizationLineColor: '',
         paddingX: 0,
         paddingY: 0,
         imgMaxWidth: 0,
         imgMaxHeight: 0,
         iconSize: 0,
-        backgroundImage: "",
-        backgroundRepeat: "no-repeat",
+        backgroundImage: '',
+        backgroundRepeat: 'no-repeat',
         marginX: 0,
-        marginY: 0,
-      },
-    };
+        marginY: 0
+      }
+    }
   },
   created() {
-    this.$bus.$on("showBaseStyle", () => {
-      this.$refs.sidebar.show = false;
+    this.$bus.$on('showBaseStyle', () => {
+      this.$refs.sidebar.show = false
       this.$nextTick(() => {
-        this.$refs.sidebar.show = true;
-        this.initStyle();
-      });
-    });
+        this.$refs.sidebar.show = true
+        this.initStyle()
+      })
+    })
   },
   methods: {
     /**
@@ -360,27 +356,27 @@ export default {
      * @Desc: 初始样式
      */
     initStyle() {
-      [
-        "backgroundColor",
-        "lineWidth",
-        "lineStyle",
-        "lineColor",
-        "generalizationLineWidth",
-        "generalizationLineColor",
-        "paddingX",
-        "paddingY",
-        "imgMaxWidth",
-        "imgMaxHeight",
-        "iconSize",
-        "backgroundImage",
-        "backgroundRepeat",
-      ].forEach((key) => {
-        this.style[key] = this.mindMap.getThemeConfig(key);
-        if (key === "backgroundImage" && this.style[key] === "none") {
-          this.style[key] = "";
+      ;[
+        'backgroundColor',
+        'lineWidth',
+        'lineStyle',
+        'lineColor',
+        'generalizationLineWidth',
+        'generalizationLineColor',
+        'paddingX',
+        'paddingY',
+        'imgMaxWidth',
+        'imgMaxHeight',
+        'iconSize',
+        'backgroundImage',
+        'backgroundRepeat'
+      ].forEach(key => {
+        this.style[key] = this.mindMap.getThemeConfig(key)
+        if (key === 'backgroundImage' && this.style[key] === 'none') {
+          this.style[key] = ''
         }
-      });
-      this.initMarginStyle();
+      })
+      this.initMarginStyle()
     },
 
     /**
@@ -389,10 +385,11 @@ export default {
      * @Desc: margin初始值
      */
     initMarginStyle() {
-      ["marginX", "marginY"].forEach((key) => {
-        this.style[key] =
-          this.mindMap.getThemeConfig()[this.marginActiveTab][key];
-      });
+      ;['marginX', 'marginY'].forEach(key => {
+        this.style[key] = this.mindMap.getThemeConfig()[this.marginActiveTab][
+          key
+        ]
+      })
     },
 
     /**
@@ -401,19 +398,19 @@ export default {
      * @Desc: 更新配置
      */
     update(key, value) {
-      if (key === "backgroundImage" && value === "none") {
-        this.style[key] = "";
+      if (key === 'backgroundImage' && value === 'none') {
+        this.style[key] = ''
       } else {
-        this.style[key] = value;
+        this.style[key] = value
       }
-      this.data.theme.config[key] = value;
-      this.mindMap.setThemeConfig(this.data.theme.config);
+      this.data.theme.config[key] = value
+      this.mindMap.setThemeConfig(this.data.theme.config)
       storeConfig({
         theme: {
-            "template": this.mindMap.getTheme(),
-            "config": this.data.theme.config
+          template: this.mindMap.getTheme(),
+          config: this.data.theme.config
         }
-      });
+      })
     },
 
     /**
@@ -422,15 +419,15 @@ export default {
      * @Desc: 设置margin
      */
     updateMargin(type, value) {
-      this.style[type] = value;
+      this.style[type] = value
       if (!this.data.theme.config[this.marginActiveTab]) {
-        this.data.theme.config[this.marginActiveTab] = {};
+        this.data.theme.config[this.marginActiveTab] = {}
       }
-      this.data.theme.config[this.marginActiveTab][type] = value;
-      this.mindMap.setThemeConfig(this.data.theme.config);
-    },
-  },
-};
+      this.data.theme.config[this.marginActiveTab][type] = value
+      this.mindMap.setThemeConfig(this.data.theme.config)
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

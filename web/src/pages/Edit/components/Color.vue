@@ -21,34 +21,34 @@
 </template>
 
 <script>
-import { colorList } from "@/config";
+import { colorList } from '@/config'
 
-/** 
- * @Author: 王林 
- * @Date: 2021-06-24 22:53:10 
- * @Desc: 颜色选择器 
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:53:10
+ * @Desc: 颜色选择器
  */
 export default {
-  name: "Color",
+  name: 'Color',
   props: {
     color: {
       type: String,
-      default: "",
-    },
+      default: ''
+    }
   },
   data() {
     return {
       colorList,
-      selectColor: "",
-    };
+      selectColor: ''
+    }
   },
   watch: {
     color() {
-      this.selectColor = this.color;
-    },
+      this.selectColor = this.color
+    }
   },
   created() {
-    this.selectColor = this.color;
+    this.selectColor = this.color
   },
   methods: {
     /**
@@ -57,7 +57,7 @@ export default {
      * @Desc: 点击预设颜色
      */
     clickColorItem(color) {
-      this.$emit("change", color);
+      this.$emit('change', color)
     },
 
     /**
@@ -66,10 +66,10 @@ export default {
      * @Desc: 修改颜色
      */
     changeColor() {
-      this.$emit("change", this.selectColor);
-    },
-  },
-};
+      this.$emit('change', this.selectColor)
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

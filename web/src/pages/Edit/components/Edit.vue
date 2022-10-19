@@ -68,11 +68,11 @@ export default {
     this.$bus.$on('export', this.export)
     this.$bus.$on('setData', this.setData)
     this.$bus.$on('startTextEdit', () => {
-      this.mindMap.renderer.startTextEdit();
-    });
+      this.mindMap.renderer.startTextEdit()
+    })
     this.$bus.$on('endTextEdit', () => {
-      this.mindMap.renderer.endTextEdit();
-    });
+      this.mindMap.renderer.endTextEdit()
+    })
     if (this.openTest) {
       setTimeout(() => {
         this.test()
@@ -88,7 +88,7 @@ export default {
     test() {
       let nodeData = {
         data: { text: '根节点', expand: true, isActive: false },
-        children: [],
+        children: []
       }
       setTimeout(() => {
         nodeData.data.text = '理想青年实验室'
@@ -97,25 +97,67 @@ export default {
         setTimeout(() => {
           nodeData.children.push({
             data: { text: '网站', expand: true, isActive: false },
-            children: [],
+            children: []
           })
           this.mindMap.setData(JSON.parse(JSON.stringify(nodeData)))
 
           setTimeout(() => {
             nodeData.children.push({
               data: { text: '博客', expand: true, isActive: false },
-              children: [],
+              children: []
             })
             this.mindMap.setData(JSON.parse(JSON.stringify(nodeData)))
 
             setTimeout(() => {
-              let viewData = {"transform":{"scaleX":1,"scaleY":1,"shear":0,"rotate":0,"translateX":179,"translateY":0,"originX":0,"originY":0,"a":1,"b":0,"c":0,"d":1,"e":179,"f":0},"state":{"scale":1,"x":179,"y":0,"sx":0,"sy":0}}
+              let viewData = {
+                transform: {
+                  scaleX: 1,
+                  scaleY: 1,
+                  shear: 0,
+                  rotate: 0,
+                  translateX: 179,
+                  translateY: 0,
+                  originX: 0,
+                  originY: 0,
+                  a: 1,
+                  b: 0,
+                  c: 0,
+                  d: 1,
+                  e: 179,
+                  f: 0
+                },
+                state: { scale: 1, x: 179, y: 0, sx: 0, sy: 0 }
+              }
               this.mindMap.view.setTransformData(viewData)
-              
+
               setTimeout(() => {
-                let viewData = {"transform":{"scaleX":1.6000000000000005,"scaleY":1.6000000000000005,"shear":0,"rotate":0,"translateX":-373.3000000000004,"translateY":-281.10000000000025,"originX":0,"originY":0,"a":1.6000000000000005,"b":0,"c":0,"d":1.6000000000000005,"e":-373.3000000000004,"f":-281.10000000000025},"state":{"scale":1.6000000000000005,"x":179,"y":0,"sx":0,"sy":0}}
+                let viewData = {
+                  transform: {
+                    scaleX: 1.6000000000000005,
+                    scaleY: 1.6000000000000005,
+                    shear: 0,
+                    rotate: 0,
+                    translateX: -373.3000000000004,
+                    translateY: -281.10000000000025,
+                    originX: 0,
+                    originY: 0,
+                    a: 1.6000000000000005,
+                    b: 0,
+                    c: 0,
+                    d: 1.6000000000000005,
+                    e: -373.3000000000004,
+                    f: -281.10000000000025
+                  },
+                  state: {
+                    scale: 1.6000000000000005,
+                    x: 179,
+                    y: 0,
+                    sx: 0,
+                    sy: 0
+                  }
+                }
                 this.mindMap.view.setTransformData(viewData)
-              }, 1000);
+              }, 1000)
             }, 1000)
           }, 1000)
         }, 1000)
@@ -141,12 +183,12 @@ export default {
       if (this.openTest) {
         return
       }
-      this.$bus.$on('data_change', (data) => {
+      this.$bus.$on('data_change', data => {
         storeData(data)
       })
-      this.$bus.$on('view_data_change', (data) => {
+      this.$bus.$on('view_data_change', data => {
         storeConfig({
-          view: data,
+          view: data
         })
       })
     },
@@ -180,10 +222,10 @@ export default {
         viewData: view,
         customNoteContentShow: {
           show: (content, left, top) => {
-            this.$bus.$emit('showNoteContent', content, left, top);
+            this.$bus.$emit('showNoteContent', content, left, top)
           },
           hide: () => {
-            this.$bus.$emit('hideNoteContent');
+            this.$bus.$emit('hideNoteContent')
           }
         }
       })
@@ -204,7 +246,7 @@ export default {
         'mouseup',
         'mode_change',
         'node_tree_render_end'
-      ].forEach((event) => {
+      ].forEach(event => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args)
         })
@@ -255,8 +297,8 @@ export default {
       } catch (error) {
         console.log(error)
       }
-    },
-  },
+    }
+  }
 }
 </script>
 

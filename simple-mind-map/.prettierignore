@@ -1,0 +1,10 @@
+src/assets
+*/.DS_Store
+dist
+example
+node_modules
+*.json
+*.md
+.eslintrc.js
+.prettierignore
+.prettierrc

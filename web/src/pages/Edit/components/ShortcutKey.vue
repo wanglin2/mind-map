@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import Sidebar from "./Sidebar";
-import { shortcutKeyList } from "@/config";
+import Sidebar from './Sidebar'
+import { shortcutKeyList } from '@/config'
 
 /**
  * @Author: 王林
@@ -29,24 +29,24 @@ import { shortcutKeyList } from "@/config";
  * @Desc: 快捷键
  */
 export default {
-  name: "ShortcutKey",
+  name: 'ShortcutKey',
   components: {
-    Sidebar,
+    Sidebar
   },
   data() {
     return {
-      shortcutKeyList,
-    };
+      shortcutKeyList
+    }
   },
   created() {
-    this.$bus.$on("showShortcutKey", () => {
-      this.$refs.sidebar.show = false;
+    this.$bus.$on('showShortcutKey', () => {
+      this.$refs.sidebar.show = false
       this.$nextTick(() => {
-        this.$refs.sidebar.show = true;
-      });
-    });
-  },
-};
+        this.$refs.sidebar.show = true
+      })
+    })
+  }
+}
 </script>
 
 <style lang="less" scoped>

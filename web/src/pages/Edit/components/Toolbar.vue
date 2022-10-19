@@ -6,7 +6,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: readonly || backEnd,
+            disabled: readonly || backEnd
           }"
           @click="$bus.$emit('execCommand', 'BACK')"
         >
@@ -16,7 +16,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: readonly || forwardEnd,
+            disabled: readonly || forwardEnd
           }"
           @click="$bus.$emit('execCommand', 'FORWARD')"
         >
@@ -26,7 +26,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: activeNodes.length <= 0 || hasRoot || hasGeneralization,
+            disabled: activeNodes.length <= 0 || hasRoot || hasGeneralization
           }"
           @click="$bus.$emit('execCommand', 'INSERT_NODE')"
         >
@@ -36,7 +36,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: activeNodes.length <= 0 || hasGeneralization,
+            disabled: activeNodes.length <= 0 || hasGeneralization
           }"
           @click="$bus.$emit('execCommand', 'INSERT_CHILD_NODE')"
         >
@@ -46,7 +46,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: activeNodes.length <= 0,
+            disabled: activeNodes.length <= 0
           }"
           @click="$bus.$emit('execCommand', 'REMOVE_NODE')"
         >
@@ -56,7 +56,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: activeNodes.length <= 0,
+            disabled: activeNodes.length <= 0
           }"
           @click="$bus.$emit('showNodeImage')"
         >
@@ -66,7 +66,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: activeNodes.length <= 0,
+            disabled: activeNodes.length <= 0
           }"
           @click="$bus.$emit('showNodeIcon')"
         >
@@ -76,7 +76,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: activeNodes.length <= 0,
+            disabled: activeNodes.length <= 0
           }"
           @click="$bus.$emit('showNodeLink')"
         >
@@ -86,7 +86,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: activeNodes.length <= 0,
+            disabled: activeNodes.length <= 0
           }"
           @click="$bus.$emit('showNodeNote')"
         >
@@ -96,7 +96,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: activeNodes.length <= 0,
+            disabled: activeNodes.length <= 0
           }"
           @click="$bus.$emit('showNodeTag')"
         >
@@ -106,7 +106,7 @@
         <div
           class="toolbarBtn"
           :class="{
-            disabled: activeNodes.length <= 0 || hasRoot || hasGeneralization,
+            disabled: activeNodes.length <= 0 || hasRoot || hasGeneralization
           }"
           @click="$bus.$emit('execCommand', 'ADD_GENERALIZATION')"
         >
@@ -172,26 +172,26 @@
 </template>
 
 <script>
-import NodeImage from "./NodeImage";
-import NodeHyperlink from "./NodeHyperlink";
-import NodeIcon from "./NodeIcon";
-import NodeNote from "./NodeNote";
-import NodeTag from "./NodeTag";
-import Export from "./Export";
-import Import from './Import';
-import { mapState } from 'vuex';
-import { Notification } from 'element-ui';
-import exampleData from 'simple-mind-map/example/exampleData';
-import { getData } from '../../../api';
+import NodeImage from './NodeImage'
+import NodeHyperlink from './NodeHyperlink'
+import NodeIcon from './NodeIcon'
+import NodeNote from './NodeNote'
+import NodeTag from './NodeTag'
+import Export from './Export'
+import Import from './Import'
+import { mapState } from 'vuex'
+import { Notification } from 'element-ui'
+import exampleData from 'simple-mind-map/example/exampleData'
+import { getData } from '../../../api'
 
 /**
  * @Author: 王林
  * @Date: 2021-06-24 22:54:58
  * @Desc: 工具栏
  */
-let fileHandle = null;
+let fileHandle = null
 export default {
-  name: "Toolbar",
+  name: 'Toolbar',
   components: {
     NodeImage,
     NodeHyperlink,
@@ -208,210 +208,220 @@ export default {
       forwardEnd: true,
       readonly: false,
       isFullDataFile: false,
-      timer: null,
-    };
+      timer: null
+    }
   },
   computed: {
     ...mapState(['isHandleLocalFile']),
     hasRoot() {
-      return this.activeNodes.findIndex((node) => {
-        return node.isRoot;
-      }) !== -1;
+      return (
+        this.activeNodes.findIndex(node => {
+          return node.isRoot
+        }) !== -1
+      )
     },
     hasGeneralization() {
-      return this.activeNodes.findIndex((node) => {
-        return node.isGeneralization;
-      }) !== -1;;
+      return (
+        this.activeNodes.findIndex(node => {
+          return node.isGeneralization
+        }) !== -1
+      )
     }
   },
   watch: {
     isHandleLocalFile(val) {
       if (!val) {
-        Notification.closeAll();
+        Notification.closeAll()
       }
     }
   },
   created() {
-    this.$bus.$on("mode_change", (mode) => {
+    this.$bus.$on('mode_change', mode => {
       this.readonly = mode === 'readonly'
-    });
-    this.$bus.$on("node_active", (...args) => {
-      this.activeNodes = args[1];
-    });
-    this.$bus.$on("back_forward", (index, len) => {
+    })
+    this.$bus.$on('node_active', (...args) => {
+      this.activeNodes = args[1]
+    })
+    this.$bus.$on('back_forward', (index, len) => {
       this.backEnd = index <= 0
       this.forwardEnd = index >= len - 1
-    });
-    this.$bus.$on("write_local_file", (content) => {
-      clearTimeout(this.timer);
+    })
+    this.$bus.$on('write_local_file', content => {
+      clearTimeout(this.timer)
       this.timer = setTimeout(() => {
-        this.writeLocalFile(content);
-      }, 1000);
-    });
+        this.writeLocalFile(content)
+      }, 1000)
+    })
   },
   methods: {
-    /** 
-     * @Author: 王林 
-     * @Date: 2022-09-24 15:40:09 
-     * @Desc: 打开本地文件 
+    /**
+     * @Author: 王林
+     * @Date: 2022-09-24 15:40:09
+     * @Desc: 打开本地文件
      */
     async openLocalFile() {
       try {
-        let [ _fileHandle ] = await window.showOpenFilePicker({
+        let [_fileHandle] = await window.showOpenFilePicker({
           types: [
             {
               description: '',
               accept: {
                 'application/json': ['.smm']
               }
-            },
+            }
           ],
           excludeAcceptAllOption: true,
           multiple: false
-        });
+        })
         if (!_fileHandle) {
-          return;
+          return
         }
-        fileHandle = _fileHandle;
+        fileHandle = _fileHandle
         if (fileHandle.kind === 'directory') {
-          this.$message.warning('请选择文件');
-          return;
+          this.$message.warning('请选择文件')
+          return
         }
-        this.readFile();
+        this.readFile()
       } catch (error) {
-        console.log(error);
+        console.log(error)
         if (error.toString().includes('aborted')) {
           return
         }
-        this.$message.warning('你的浏览器可能不支持，建议使用最新版本的Chrome浏览器');
+        this.$message.warning(
+          '你的浏览器可能不支持，建议使用最新版本的Chrome浏览器'
+        )
       }
     },
 
-    /** 
-     * @Author: 王林 
-     * @Date: 2022-09-24 15:40:18 
-     * @Desc: 读取本地文件 
+    /**
+     * @Author: 王林
+     * @Date: 2022-09-24 15:40:18
+     * @Desc: 读取本地文件
      */
     async readFile() {
-      let file = await fileHandle.getFile();
-      let fileReader = new FileReader();
+      let file = await fileHandle.getFile()
+      let fileReader = new FileReader()
       fileReader.onload = async () => {
-        this.$store.commit('setIsHandleLocalFile', true);
-        this.setData(fileReader.result);
-        Notification.closeAll();
+        this.$store.commit('setIsHandleLocalFile', true)
+        this.setData(fileReader.result)
+        Notification.closeAll()
         Notification({
           title: '提示',
-          message: `当前正在编辑你本机的【${ file.name }】文件`,
+          message: `当前正在编辑你本机的【${file.name}】文件`,
           duration: 0,
           showClose: false
-        });
+        })
       }
-      fileReader.readAsText(file);
+      fileReader.readAsText(file)
     },
 
-    /** 
-     * @Author: 王林 
-     * @Date: 2022-09-24 15:40:26 
-     * @Desc: 渲染读取的数据 
+    /**
+     * @Author: 王林
+     * @Date: 2022-09-24 15:40:26
+     * @Desc: 渲染读取的数据
      */
     setData(str) {
       try {
-        let data = JSON.parse(str);
+        let data = JSON.parse(str)
         if (typeof data !== 'object') {
-            throw new Error('文件内容有误');
+          throw new Error('文件内容有误')
         }
         if (data.root) {
-          this.isFullDataFile = true;
+          this.isFullDataFile = true
         } else {
-          this.isFullDataFile = false;
+          this.isFullDataFile = false
           data = {
             ...exampleData,
             root: data
           }
         }
-        this.$bus.$emit('setData', data);
+        this.$bus.$emit('setData', data)
       } catch (error) {
         console.log(error)
-        this.$message.error("文件打开失败");
+        this.$message.error('文件打开失败')
       }
     },
 
-    /** 
-     * @Author: 王林 
-     * @Date: 2022-09-24 15:40:42 
-     * @Desc: 写入本地文件 
+    /**
+     * @Author: 王林
+     * @Date: 2022-09-24 15:40:42
+     * @Desc: 写入本地文件
      */
     async writeLocalFile(content) {
       if (!fileHandle || !this.isHandleLocalFile) {
-        return;
+        return
       }
       if (!this.isFullDataFile) {
-        content = content.root;
+        content = content.root
       }
-      let string = JSON.stringify(content);
-      const writable = await fileHandle.createWritable();
-      await writable.write(string);
-      await writable.close();
+      let string = JSON.stringify(content)
+      const writable = await fileHandle.createWritable()
+      await writable.write(string)
+      await writable.close()
     },
 
-    /** 
-     * @Author: 王林 
-     * @Date: 2022-09-24 15:40:48 
-     * @Desc: 创建本地文件 
+    /**
+     * @Author: 王林
+     * @Date: 2022-09-24 15:40:48
+     * @Desc: 创建本地文件
      */
     async createNewLocalFile() {
-      await this.createLocalFile(exampleData);
+      await this.createLocalFile(exampleData)
     },
 
-    /** 
-     * @Author: 王林 
-     * @Date: 2022-09-24 15:49:17 
-     * @Desc: 另存为 
+    /**
+     * @Author: 王林
+     * @Date: 2022-09-24 15:49:17
+     * @Desc: 另存为
      */
     async saveLocalFile() {
-      let data = getData();
-      await this.createLocalFile(data);
+      let data = getData()
+      await this.createLocalFile(data)
     },
 
-    /** 
-     * @Author: 王林 
-     * @Date: 2022-09-24 15:50:22 
-     * @Desc: 创建本地文件 
+    /**
+     * @Author: 王林
+     * @Date: 2022-09-24 15:50:22
+     * @Desc: 创建本地文件
      */
     async createLocalFile(content) {
       try {
         let _fileHandle = await window.showSaveFilePicker({
-          types: [{
-            description: '',
-            accept: {'application/json': ['.smm']},
-          }],
+          types: [
+            {
+              description: '',
+              accept: { 'application/json': ['.smm'] }
+            }
+          ],
           suggestedName: '思维导图'
-        });
+        })
         if (!_fileHandle) {
-          return;
+          return
         }
         const loading = this.$loading({
           lock: true,
           text: '正在创建文件',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
-        });
-        fileHandle = _fileHandle;
-        this.$store.commit('setIsHandleLocalFile', true);
-        this.isFullDataFile = true;
-        await this.writeLocalFile(content);
-        await this.readFile();
-        loading.close();
+        })
+        fileHandle = _fileHandle
+        this.$store.commit('setIsHandleLocalFile', true)
+        this.isFullDataFile = true
+        await this.writeLocalFile(content)
+        await this.readFile()
+        loading.close()
       } catch (error) {
-        console.log(error);
+        console.log(error)
         if (error.toString().includes('aborted')) {
           return
         }
-        this.$message.warning('你的浏览器可能不支持，建议使用最新版本的Chrome浏览器');
+        this.$message.warning(
+          '你的浏览器可能不支持，建议使用最新版本的Chrome浏览器'
+        )
       }
-    },
+    }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>
