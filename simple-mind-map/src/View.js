@@ -57,7 +57,9 @@ class View {
             if (this.firstDrag) {
                 this.firstDrag = false
                 // 清除激活节点
-                this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
+                if (this.mindMap.renderer.activeNodeList.length > 0) {
+                    this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
+                }
             }
             this.x = this.sx + event.mousemoveOffset.x
             this.y = this.sy + event.mousemoveOffset.y

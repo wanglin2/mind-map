@@ -47,12 +47,14 @@ export default {
   mounted() {
     this.$bus.$on("toggle_mini_map", this.toggle_mini_map);
     this.$bus.$on("data_change", this.data_change);
-    this.$bus.$on("view_data_change", this.view_data_change);
+    this.$bus.$on("view_data_change", this.data_change);
+    this.$bus.$on("node_tree_render_end", this.data_change);
   },
   destroyed() {
     this.$bus.$off("toggle_mini_map", this.toggle_mini_map);
     this.$bus.$off("data_change", this.data_change);
-    this.$bus.$off("view_data_change", this.view_data_change);
+    this.$bus.$off("view_data_change", this.data_change);
+    this.$bus.$off("node_tree_render_end", this.data_change);
   },
   methods: {
     toggle_mini_map(show) {
@@ -67,15 +69,6 @@ export default {
       });
     },
     data_change() {
-      if (!this.showMiniMap) {
-        return;
-      }
-      clearTimeout(this.timer);
-      this.timer = setTimeout(() => {
-        this.drawMiniMap();
-      }, 500);
-    },
-    view_data_change() {
       if (!this.showMiniMap) {
         return;
       }
