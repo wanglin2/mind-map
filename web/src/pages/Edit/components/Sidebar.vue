@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { store } from "@/config";
+import { store } from '@/config'
 
 /**
  * @Author: 王林
@@ -24,27 +24,27 @@ import { store } from "@/config";
  * @Desc: 侧边栏容器
  */
 export default {
-  name: "Sidebar",
+  name: 'Sidebar',
   props: {
     title: {
       type: String,
-      default: "",
-    },
+      default: ''
+    }
   },
   data() {
     return {
       show: false,
-      zIndex: 0,
-    };
+      zIndex: 0
+    }
   },
   watch: {
     show(val, oldVal) {
       if (val && !oldVal) {
-        this.zIndex = store.sidebarZIndex++;
+        this.zIndex = store.sidebarZIndex++
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

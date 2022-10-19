@@ -6,7 +6,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && node ../copy.js",
     "lint": "vue-cli-service lint",
-    "buildLibrary": "vue-cli-service build --target lib --name simpleMindMap ../simple-mind-map/index.js --dest ../simple-mind-map/dist"
+    "buildLibrary": "vue-cli-service build --target lib --name simpleMindMap ../simple-mind-map/index.js --dest ../simple-mind-map/dist",
+    "format": "prettier --write src/**"
   },
   "dependencies": {
     "@toast-ui/editor": "^3.1.5",
@@ -26,6 +27,7 @@
     "eslint-plugin-vue": "^6.2.2",
     "less": "^3.12.2",
     "less-loader": "^7.1.0",
+    "prettier": "^1.19.1",
     "vue-template-compiler": "^2.6.11",
     "webpack": "^4.44.2"
   },

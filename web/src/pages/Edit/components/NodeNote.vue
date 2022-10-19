@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import Editor from '@toast-ui/editor';
-import '@toast-ui/editor/dist/toastui-editor.css'; // Editor's Style
+import Editor from '@toast-ui/editor'
+import '@toast-ui/editor/dist/toastui-editor.css' // Editor's Style
 
 /**
  * @Author: 王林
@@ -31,38 +31,38 @@ import '@toast-ui/editor/dist/toastui-editor.css'; // Editor's Style
  * @Desc: 节点备注内容设置
  */
 export default {
-  name: "NodeNote",
+  name: 'NodeNote',
   data() {
     return {
       dialogVisible: false,
-      note: "",
+      note: '',
       activeNodes: [],
       editor: null
-    };
+    }
   },
   created() {
-    this.$bus.$on("node_active", (...args) => {
-      this.activeNodes = args[1];
+    this.$bus.$on('node_active', (...args) => {
+      this.activeNodes = args[1]
       if (this.activeNodes.length > 0) {
-        let firstNode = this.activeNodes[0];
-        this.note = firstNode.getData("note");
+        let firstNode = this.activeNodes[0]
+        this.note = firstNode.getData('note')
       } else {
-        this.note = "";
+        this.note = ''
       }
-    });
-    this.$bus.$on("showNodeNote", () => {
-      this.$bus.$emit('startTextEdit');
-      this.dialogVisible = true;
+    })
+    this.$bus.$on('showNodeNote', () => {
+      this.$bus.$emit('startTextEdit')
+      this.dialogVisible = true
       this.$nextTick(() => {
-        this.initEditor();
-      });
-    });
+        this.initEditor()
+      })
+    })
   },
   methods: {
-    /** 
-     * @Author: 王林25 
-     * @Date: 2022-05-09 11:37:05 
-     * @Desc: 初始化编辑器 
+    /**
+     * @Author: 王林25
+     * @Date: 2022-05-09 11:37:05
+     * @Desc: 初始化编辑器
      */
     initEditor() {
       if (!this.editor) {
@@ -71,9 +71,9 @@ export default {
           height: '500px',
           initialEditType: 'markdown',
           previewStyle: 'vertical'
-        });
+        })
       }
-      this.editor.setMarkdown(this.note);
+      this.editor.setMarkdown(this.note)
     },
 
     /**
@@ -82,8 +82,8 @@ export default {
      * @Desc: 取消
      */
     cancel() {
-      this.dialogVisible = false;
-      this.$bus.$emit('endTextEdit');
+      this.dialogVisible = false
+      this.$bus.$emit('endTextEdit')
     },
 
     /**
@@ -92,14 +92,14 @@ export default {
      * @Desc:  确定
      */
     confirm() {
-      this.note = this.editor.getMarkdown();
-      this.activeNodes.forEach((node) => {
-        node.setNote(this.note);
-      });
-      this.cancel();
-    },
-  },
-};
+      this.note = this.editor.getMarkdown()
+      this.activeNodes.forEach(node => {
+        node.setNote(this.note)
+      })
+      this.cancel()
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

@@ -17,7 +17,10 @@
     "type": "git",
     "url": "https://github.com/wanglin2/mind-map"
   },
-  "scripts": {},
+  "scripts": {
+    "lint": "eslint src/",
+    "format": "prettier --write ."
+  },
   "module": "index.js",
   "main": "./dist/simpleMindMap.umd.min.js",
   "dependencies": {
@@ -35,5 +38,9 @@
     "mind-map",
     "mindMap",
     "MindMap"
-  ]
+  ],
+  "devDependencies": {
+    "eslint": "^8.25.0",
+    "prettier": "^2.7.1"
+  }
 }

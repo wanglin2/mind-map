@@ -72,7 +72,11 @@
         <div class="row">
           <div class="btnGroup">
             <el-tooltip content="颜色" placement="bottom">
-              <div class="styleBtn" v-popover:popover :class="{ disabled: checkDisabled('color') }">
+              <div
+                class="styleBtn"
+                v-popover:popover
+                :class="{ disabled: checkDisabled('color') }"
+              >
                 A
                 <span
                   class="colorShow"
@@ -83,7 +87,10 @@
             <el-tooltip content="加粗" placement="bottom">
               <div
                 class="styleBtn"
-                :class="{ actived: style.fontWeight === 'bold', disabled: checkDisabled('fontWeight') }"
+                :class="{
+                  actived: style.fontWeight === 'bold',
+                  disabled: checkDisabled('fontWeight')
+                }"
                 @click="toggleFontWeight"
               >
                 B
@@ -92,7 +99,10 @@
             <el-tooltip content="斜体" placement="bottom">
               <div
                 class="styleBtn i"
-                :class="{ actived: style.fontStyle === 'italic', disabled: checkDisabled('fontStyle') }"
+                :class="{
+                  actived: style.fontStyle === 'italic',
+                  disabled: checkDisabled('fontStyle')
+                }"
                 @click="toggleFontStyle"
               >
                 I
@@ -109,10 +119,20 @@
               </div>
             </el-tooltip>
           </div>
-          <el-popover ref="popover" placement="bottom" trigger="click" :disabled="checkDisabled('color')">
+          <el-popover
+            ref="popover"
+            placement="bottom"
+            trigger="click"
+            :disabled="checkDisabled('color')"
+          >
             <Color :color="style.color" @change="changeFontColor"></Color>
           </el-popover>
-          <el-popover ref="popover2" placement="bottom" trigger="click" :disabled="checkDisabled('textDecoration')">
+          <el-popover
+            ref="popover2"
+            placement="bottom"
+            trigger="click"
+            :disabled="checkDisabled('textDecoration')"
+          >
             <el-radio-group
               size="mini"
               v-model="style.textDecoration"
@@ -135,7 +155,12 @@
               :style="{ width: '80px', backgroundColor: style.borderColor }"
               :class="{ disabled: checkDisabled('borderColor') }"
             ></span>
-            <el-popover ref="popover3" placement="bottom" trigger="click" :disabled="checkDisabled('borderColor')">
+            <el-popover
+              ref="popover3"
+              placement="bottom"
+              trigger="click"
+              :disabled="checkDisabled('borderColor')"
+            >
               <Color
                 :color="style.borderColor"
                 @change="changeBorderColor"
@@ -213,7 +238,12 @@
               :style="{ backgroundColor: style.fillColor }"
               :class="{ disabled: checkDisabled('fillColor') }"
             ></span>
-            <el-popover ref="popover4" placement="bottom" trigger="click" :disabled="checkDisabled('fillColor')">
+            <el-popover
+              ref="popover4"
+              placement="bottom"
+              trigger="click"
+              :disabled="checkDisabled('fillColor')"
+            >
               <Color :color="style.fillColor" @change="changeFillColor"></Color>
             </el-popover>
           </div>
@@ -252,11 +282,13 @@
               :style="{ width: '80px', backgroundColor: style.lineColor }"
               :class="{ disabled: checkDisabled('lineColor') }"
             ></span>
-            <el-popover ref="popover5" placement="bottom" trigger="click" :disabled="checkDisabled('lineColor')">
-              <Color
-                :color="style.lineColor"
-                @change="changeLineColor"
-              ></Color>
+            <el-popover
+              ref="popover5"
+              placement="bottom"
+              trigger="click"
+              :disabled="checkDisabled('lineColor')"
+            >
+              <Color :color="style.lineColor" @change="changeLineColor"></Color>
             </el-popover>
           </div>
           <div class="rowItem">
@@ -330,8 +362,8 @@
 </template>
 
 <script>
-import Sidebar from "./Sidebar";
-import Color from "./Color";
+import Sidebar from './Sidebar'
+import Color from './Color'
 import {
   fontFamilyList,
   fontSizeList,
@@ -339,9 +371,9 @@ import {
   borderDasharrayList,
   borderRadiusList,
   lineHeightList,
-  shapeList,
-} from "@/config";
-import { supportActiveStyle } from 'simple-mind-map/src/themes/default';
+  shapeList
+} from '@/config'
+import { supportActiveStyle } from 'simple-mind-map/src/themes/default'
 
 /**
  * @Author: 王林
@@ -349,10 +381,10 @@ import { supportActiveStyle } from 'simple-mind-map/src/themes/default';
  * @Desc: 节点样式设置
  */
 export default {
-  name: "Style",
+  name: 'Style',
   components: {
     Sidebar,
-    Color,
+    Color
   },
   data() {
     return {
@@ -365,39 +397,40 @@ export default {
       borderRadiusList,
       lineHeightList,
       activeNodes: [],
-      activeTab: "normal",
+      activeTab: 'normal',
       style: {
         shape: '',
         paddingX: 0,
         paddingY: 0,
-        color: "",
-        fontFamily: "",
-        fontSize: "",
-        lineHeight: "",
-        textDecoration: "",
-        fontWeight: "",
-        fontStyle: "",
-        borderWidth: "",
-        borderColor: "",
-        fillColor: "",
-        borderDasharray: "",
-        borderRadius: "",
-        lineColor: "",
-        lineDasharray: "",
-        lineWidth: "",
-      },
-    };
+        color: '',
+        fontFamily: '',
+        fontSize: '',
+        lineHeight: '',
+        textDecoration: '',
+        fontWeight: '',
+        fontStyle: '',
+        borderWidth: '',
+        borderColor: '',
+        fillColor: '',
+        borderDasharray: '',
+        borderRadius: '',
+        lineColor: '',
+        lineDasharray: '',
+        lineWidth: ''
+      }
+    }
   },
   created() {
-    this.$bus.$on("node_active", (...args) => {
-      if (this.$refs.sidebar) this.$refs.sidebar.show = false;
+    this.$bus.$on('node_active', (...args) => {
+      if (this.$refs.sidebar) this.$refs.sidebar.show = false
       this.$nextTick(() => {
-        this.activeTab = "normal";
-        this.activeNodes = args[1];
-        if (this.$refs.sidebar) this.$refs.sidebar.show = this.activeNodes.length > 0;
-        this.initNodeStyle();
-      });
-    });
+        this.activeTab = 'normal'
+        this.activeNodes = args[1]
+        if (this.$refs.sidebar)
+          this.$refs.sidebar.show = this.activeNodes.length > 0
+        this.initNodeStyle()
+      })
+    })
   },
   methods: {
     /**
@@ -406,16 +439,18 @@ export default {
      * @Desc: tab切换
      */
     handleTabClick() {
-      this.initNodeStyle();
+      this.initNodeStyle()
     },
 
-    /** 
-     * @Author: 王林 
-     * @Date: 2022-09-12 22:16:56 
-     * @Desc: 检查是否禁用 
+    /**
+     * @Author: 王林
+     * @Date: 2022-09-12 22:16:56
+     * @Desc: 检查是否禁用
      */
     checkDisabled(prop) {
-      return this.activeTab === 'active' && !this.supportActiveStyle.includes(prop)
+      return (
+        this.activeTab === 'active' && !this.supportActiveStyle.includes(prop)
+      )
     },
 
     /**
@@ -425,35 +460,35 @@ export default {
      */
     initNodeStyle() {
       if (this.activeNodes.length <= 0) {
-        this.activeTab = "normal";
-        return;
+        this.activeTab = 'normal'
+        return
       }
-      [
-        "shape",
-        "paddingX",
-        "paddingY",
-        "color",
-        "fontFamily",
-        "fontSize",
-        "lineHeight",
-        "textDecoration",
-        "fontWeight",
-        "fontStyle",
-        "borderWidth",
-        "borderColor",
-        "fillColor",
-        "borderDasharray",
-        "borderRadius",
-        "lineColor",
-        "lineDasharray",
-        "lineWidth",
-      ].forEach((item) => {
+      ;[
+        'shape',
+        'paddingX',
+        'paddingY',
+        'color',
+        'fontFamily',
+        'fontSize',
+        'lineHeight',
+        'textDecoration',
+        'fontWeight',
+        'fontStyle',
+        'borderWidth',
+        'borderColor',
+        'fillColor',
+        'borderDasharray',
+        'borderRadius',
+        'lineColor',
+        'lineDasharray',
+        'lineWidth'
+      ].forEach(item => {
         this.style[item] = this.activeNodes[0].getStyle(
           item,
           false,
-          this.activeTab === "active"
-        );
-      });
+          this.activeTab === 'active'
+        )
+      })
     },
 
     /**
@@ -462,9 +497,9 @@ export default {
      * @Desc: 修改样式
      */
     update(prop) {
-      this.activeNodes.forEach((node) => {
-        node.setStyle(prop, this.style[prop], this.activeTab === "active");
-      });
+      this.activeNodes.forEach(node => {
+        node.setStyle(prop, this.style[prop], this.activeTab === 'active')
+      })
     },
 
     /**
@@ -473,12 +508,12 @@ export default {
      * @Desc: 切换加粗样式
      */
     toggleFontWeight() {
-      if (this.style.fontWeight === "bold") {
-        this.style.fontWeight = "normal";
+      if (this.style.fontWeight === 'bold') {
+        this.style.fontWeight = 'normal'
       } else {
-        this.style.fontWeight = "bold";
+        this.style.fontWeight = 'bold'
       }
-      this.update("fontWeight");
+      this.update('fontWeight')
     },
 
     /**
@@ -487,12 +522,12 @@ export default {
      * @Desc: 切换字体样式
      */
     toggleFontStyle() {
-      if (this.style.fontStyle === "italic") {
-        this.style.fontStyle = "normal";
+      if (this.style.fontStyle === 'italic') {
+        this.style.fontStyle = 'normal'
       } else {
-        this.style.fontStyle = "italic";
+        this.style.fontStyle = 'italic'
       }
-      this.update("fontStyle");
+      this.update('fontStyle')
     },
 
     /**
@@ -501,8 +536,8 @@ export default {
      * @Desc: 修改字体颜色
      */
     changeFontColor(color) {
-      this.style.color = color;
-      this.update("color");
+      this.style.color = color
+      this.update('color')
     },
 
     /**
@@ -511,18 +546,18 @@ export default {
      * @Desc: 修改边框颜色
      */
     changeBorderColor(color) {
-      this.style.borderColor = color;
-      this.update("borderColor");
+      this.style.borderColor = color
+      this.update('borderColor')
     },
 
-    /** 
-     * @Author: flydreame 
-     * @Date: 2022-09-17 10:18:15 
-     * @Desc: 修改线条颜色 
+    /**
+     * @Author: flydreame
+     * @Date: 2022-09-17 10:18:15
+     * @Desc: 修改线条颜色
      */
     changeLineColor(color) {
-      this.style.lineColor = color;
-      this.update("lineColor");
+      this.style.lineColor = color
+      this.update('lineColor')
     },
 
     /**
@@ -531,11 +566,11 @@ export default {
      * @Desc: 修改背景颜色
      */
     changeFillColor(color) {
-      this.style.fillColor = color;
-      this.update("fillColor");
-    },
-  },
-};
+      this.style.fillColor = color
+      this.update('fillColor')
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
@@ -598,9 +633,9 @@ export default {
         cursor: pointer;
 
         &.disabled {
-          background-color: #F5F7FA !important;
-          border-color: #E4E7ED !important;
-          color: #C0C4CC !important;
+          background-color: #f5f7fa !important;
+          border-color: #e4e7ed !important;
+          color: #c0c4cc !important;
           cursor: not-allowed !important;
         }
       }
@@ -624,9 +659,9 @@ export default {
       }
 
       &.disabled {
-        background-color: #F5F7FA !important;
-        border-color: #E4E7ED !important;
-        color: #C0C4CC !important;
+        background-color: #f5f7fa !important;
+        border-color: #e4e7ed !important;
+        color: #c0c4cc !important;
         cursor: not-allowed !important;
       }
 

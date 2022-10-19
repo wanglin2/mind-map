@@ -18,9 +18,9 @@
 </template>
 
 <script>
-import Sidebar from "./Sidebar";
-import { layoutList } from "simple-mind-map/src/utils/constant";
-import { storeConfig } from "@/api";
+import Sidebar from './Sidebar'
+import { layoutList } from 'simple-mind-map/src/utils/constant'
+import { storeConfig } from '@/api'
 
 /**
  * @Author: 王林
@@ -28,29 +28,29 @@ import { storeConfig } from "@/api";
  * @Desc: 结构
  */
 export default {
-  name: "Structure",
+  name: 'Structure',
   components: {
-    Sidebar,
+    Sidebar
   },
   props: {
     mindMap: {
-      type: Object,
-    },
+      type: Object
+    }
   },
   data() {
     return {
       layoutList,
-      layout: "",
-    };
+      layout: ''
+    }
   },
   created() {
-    this.$bus.$on("showStructure", () => {
-      this.$refs.sidebar.show = false;
+    this.$bus.$on('showStructure', () => {
+      this.$refs.sidebar.show = false
       this.$nextTick(() => {
-        this.layout = this.mindMap.getLayout();
-        this.$refs.sidebar.show = true;
-      });
-    });
+        this.layout = this.mindMap.getLayout()
+        this.$refs.sidebar.show = true
+      })
+    })
   },
   methods: {
     /**
@@ -59,14 +59,14 @@ export default {
      * @Desc: 使用主题
      */
     useLayout(layout) {
-      this.layout = layout.value;
-      this.mindMap.setLayout(layout.value);
+      this.layout = layout.value
+      this.mindMap.setLayout(layout.value)
       storeConfig({
-        layout: layout.value,
-      });
-    },
-  },
-};
+        layout: layout.value
+      })
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

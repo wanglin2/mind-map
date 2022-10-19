@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Sidebar from "./Sidebar";
+import Sidebar from './Sidebar'
 
 /**
  * @Author: 王林
@@ -13,33 +13,32 @@ import Sidebar from "./Sidebar";
  * @Desc: 大纲内容
  */
 export default {
-  name: "Outline",
+  name: 'Outline',
   components: {
-    Sidebar,
+    Sidebar
   },
   data() {
     return {
       data: [],
       defaultProps: {
         label(data) {
-          return data.data.text;
-        },
-      },
-    };
+          return data.data.text
+        }
+      }
+    }
   },
   created() {
-    this.$bus.$on("data_change", (data) => {
-      this.data = [data];
-    });
-    this.$bus.$on("showOutline", () => {
-      this.$refs.sidebar.show = false;
+    this.$bus.$on('data_change', data => {
+      this.data = [data]
+    })
+    this.$bus.$on('showOutline', () => {
+      this.$refs.sidebar.show = false
       this.$nextTick(() => {
-        this.$refs.sidebar.show = true;
-      });
-    });
-  },
-};
+        this.$refs.sidebar.show = true
+      })
+    })
+  }
+}
 </script>
 
-<style lang="less" scoped>
-</style>
+<style lang="less" scoped></style>

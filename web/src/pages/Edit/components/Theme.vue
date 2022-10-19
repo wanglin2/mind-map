@@ -18,9 +18,9 @@
 </template>
 
 <script>
-import Sidebar from "./Sidebar";
-import { themeList } from "simple-mind-map/src/utils/constant";
-import { storeConfig } from "@/api";
+import Sidebar from './Sidebar'
+import { themeList } from 'simple-mind-map/src/utils/constant'
+import { storeConfig } from '@/api'
 
 /**
  * @Author: 王林
@@ -28,29 +28,29 @@ import { storeConfig } from "@/api";
  * @Desc: 主题
  */
 export default {
-  name: "Theme",
+  name: 'Theme',
   components: {
-    Sidebar,
+    Sidebar
   },
   props: {
     mindMap: {
-      type: Object,
-    },
+      type: Object
+    }
   },
   data() {
     return {
       themeList,
-      theme: "",
-    };
+      theme: ''
+    }
   },
   created() {
-    this.$bus.$on("showTheme", () => {
-      this.$refs.sidebar.show = false;
+    this.$bus.$on('showTheme', () => {
+      this.$refs.sidebar.show = false
       this.$nextTick(() => {
-        this.theme = this.mindMap.getTheme();
-        this.$refs.sidebar.show = true;
-      });
-    });
+        this.theme = this.mindMap.getTheme()
+        this.$refs.sidebar.show = true
+      })
+    })
   },
   methods: {
     /**
@@ -59,17 +59,17 @@ export default {
      * @Desc: 使用主题
      */
     useTheme(theme) {
-      this.theme = theme.value;
-      this.mindMap.setTheme(theme.value);
+      this.theme = theme.value
+      this.mindMap.setTheme(theme.value)
       storeConfig({
         theme: {
-            "template": theme.value,
-            "config": this.mindMap.getCustomThemeConfig()
+          template: theme.value,
+          config: this.mindMap.getCustomThemeConfig()
         }
-      });
-    },
-  },
-};
+      })
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

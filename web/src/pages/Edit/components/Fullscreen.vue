@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { fullscrrenEvent, fullScreen } from "@/utils";
+import { fullscrrenEvent, fullScreen } from '@/utils'
 
 /**
  * @Author: 王林
@@ -15,27 +15,21 @@ import { fullscrrenEvent, fullScreen } from "@/utils";
  * @Desc: 全屏
  */
 export default {
-  name: "Fullscreen",
+  name: 'Fullscreen',
   props: {
     mindMap: {
-      type: Object,
-    },
+      type: Object
+    }
   },
   data() {
-    return {};
-  },
-  watch: {
-    mindMap(val, oldVal) {
-      if (val && !oldVal) {
-      }
-    },
+    return {}
   },
   created() {
-    document[fullscrrenEvent] = (e) => {
+    document[fullscrrenEvent] = () => {
       setTimeout(() => {
-        this.mindMap.resize();
-      }, 1000);
-    };
+        this.mindMap.resize()
+      }, 1000)
+    }
   },
   methods: {
     /**
@@ -44,10 +38,10 @@ export default {
      * @Desc: 准备全屏
      */
     toFullscreen() {
-      fullScreen(this.mindMap.el);
-    },
-  },
-};
+      fullScreen(this.mindMap.el)
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>

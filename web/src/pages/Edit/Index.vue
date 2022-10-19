@@ -8,34 +8,34 @@
 </template>
 
 <script>
-import Toolbar from "./components/Toolbar";
-import Edit from "./components/Edit";
-import { mapState, mapActions } from "vuex";
+import Toolbar from './components/Toolbar'
+import Edit from './components/Edit'
+import { mapActions } from 'vuex'
 
 export default {
-  name: "Index",
+  name: 'Index',
   components: {
     Toolbar,
-    Edit,
+    Edit
   },
   data() {
     return {
-      show: false,
-    };
+      show: false
+    }
   },
   async created() {
     const loading = this.$loading({
       lock: true,
-      text: "正在加载，请稍后...",
-    });
-    await this.getUserMindMapData();
-    this.show = true;
-    loading.close();
+      text: '正在加载，请稍后...'
+    })
+    await this.getUserMindMapData()
+    this.show = true
+    loading.close()
   },
   methods: {
-    ...mapActions(["getUserMindMapData"]),
-  },
-};
+    ...mapActions(['getUserMindMapData'])
+  }
+}
 </script>
 
 <style lang="less" scoped>

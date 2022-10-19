@@ -4,12 +4,10 @@ import EditPage from '@/pages/Edit/Index'
 
 Vue.use(VueRouter)
 
-const routes = [
-    { path: '/', name: 'Edit', component: EditPage }
-]
+const routes = [{ path: '/', name: 'Edit', component: EditPage }]
 
 const router = new VueRouter({
-    routes
+  routes
 })
 
 export default router

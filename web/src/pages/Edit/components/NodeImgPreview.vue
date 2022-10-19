@@ -10,32 +10,32 @@ export default {
     mindMap: {
       type: Object,
       default() {
-        return null;
-      },
-    },
+        return null
+      }
+    }
   },
   data() {
     return {
-      images: [],
-    };
+      images: []
+    }
   },
   mounted() {
-    this.mindMap.on("node_img_dblclick", this.onNodeTmgDblclick);
+    this.mindMap.on('node_img_dblclick', this.onNodeTmgDblclick)
   },
-  beforeDestroy () {
-    this.mindMap.off("node_img_dblclick", this.onNodeTmgDblclick);
+  beforeDestroy() {
+    this.mindMap.off('node_img_dblclick', this.onNodeTmgDblclick)
   },
   methods: {
     onNodeTmgDblclick(node, e) {
-      e.stopPropagation();
-      e.preventDefault();
-      this.images = [node.nodeData.data.image];
+      e.stopPropagation()
+      e.preventDefault()
+      this.images = [node.nodeData.data.image]
       this.$viewerApi({
-        images: this.images,
-      });
-    },
-  },
-};
+        images: this.images
+      })
+    }
+  }
+}
 </script>
 
 <style></style>

@@ -31,32 +31,32 @@
  * @Desc: 节点超链接内容设置
  */
 export default {
-  name: "NodeHyperlink",
+  name: 'NodeHyperlink',
   data() {
     return {
       dialogVisible: false,
-      link: "",
-      linkTitle: "",
-      activeNodes: [],
-    };
+      link: '',
+      linkTitle: '',
+      activeNodes: []
+    }
   },
   created() {
-    this.$bus.$on("node_active", (...args) => {
-      this.activeNodes = args[1];
+    this.$bus.$on('node_active', (...args) => {
+      this.activeNodes = args[1]
       if (this.activeNodes.length > 0) {
-        let firstNode = this.activeNodes[0];
-        this.link = firstNode.getData("hyperlink");
-        this.linkTitle = firstNode.getData("hyperlinkTitle");
+        let firstNode = this.activeNodes[0]
+        this.link = firstNode.getData('hyperlink')
+        this.linkTitle = firstNode.getData('hyperlinkTitle')
       } else {
-        this.link = "";
-        this.linkTitle = "";
+        this.link = ''
+        this.linkTitle = ''
       }
-    });
-    this.$bus.$on("showNodeLink", () => {
-      this.activeNodes[0].mindMap.keyCommand.pause();
-      this.$bus.$emit('startTextEdit');
-      this.dialogVisible = true;
-    });
+    })
+    this.$bus.$on('showNodeLink', () => {
+      this.activeNodes[0].mindMap.keyCommand.pause()
+      this.$bus.$emit('startTextEdit')
+      this.dialogVisible = true
+    })
   },
   methods: {
     /**
@@ -65,9 +65,9 @@ export default {
      * @Desc: 取消
      */
     cancel() {
-      this.dialogVisible = false;
-      this.activeNodes[0].mindMap.keyCommand.recovery();
-      this.$bus.$emit('endTextEdit');
+      this.dialogVisible = false
+      this.activeNodes[0].mindMap.keyCommand.recovery()
+      this.$bus.$emit('endTextEdit')
     },
 
     /**
@@ -76,13 +76,13 @@ export default {
      * @Desc:  确定
      */
     confirm() {
-      this.activeNodes.forEach((node) => {
-        node.setHyperlink(this.link, this.linkTitle);
-        this.cancel();
-      });
-    },
-  },
-};
+      this.activeNodes.forEach(node => {
+        node.setHyperlink(this.link, this.linkTitle)
+        this.cancel()
+      })
+    }
+  }
+}
 </script>
 
 <style lang="less" scoped>
