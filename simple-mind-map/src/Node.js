@@ -754,7 +754,7 @@ class Node {
      * @Date: 2021-04-07 13:55:58 
      * @Desc: 递归渲染 
      */
-    render() {
+    render(callback = () => {}) {
         // 节点
         if (this.initRender) {
             this.initRender = false
@@ -766,11 +766,19 @@ class Node {
         }
         // 子节点
         if (this.children && this.children.length && this.nodeData.data.expand !== false) {
+            let index = 0
             asyncRun(this.children.map((item) => {
                 return () =>{
-                    item.render()
+                    item.render(() => {
+                        index++
+                        if (index >= this.children.length) {
+                            callback()
+                        }
+                    })
                 }
             }))
+        } else {
+            callback()
         }
         // 手动插入的节点立即获得焦点并且开启编辑模式
         if (this.nodeData.inserting) {

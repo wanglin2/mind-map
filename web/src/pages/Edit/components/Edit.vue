@@ -202,7 +202,8 @@ export default {
         'expand_btn_click',
         'svg_mousedown',
         'mouseup',
-        'mode_change'
+        'mode_change',
+        'node_tree_render_end'
       ].forEach((event) => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args)
