@@ -430,6 +430,7 @@ export default {
     position: fixed;
     left: 0;
     top: 0;
+    right: 0;
     display: flex;
     padding: 0 20px;
     padding-top: 20px;
@@ -438,6 +439,7 @@ export default {
     font-weight: 400;
     color: rgba(26, 26, 26, 0.8);
     z-index: 2;
+    overflow-x: auto;
 
     .toolbarBlock {
       display: flex;
@@ -447,6 +449,7 @@ export default {
       box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
       border: 1px solid rgba(0, 0, 0, 0.06);
       margin-right: 20px;
+      flex-shrink: 0;
 
       &:last-of-type {
         margin-right: 0;
