@@ -16,7 +16,9 @@
       :on-exceed="onExceed"
     >
       <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-      <div slot="tip" class="el-upload__tip">支持.smm、.json、.xmind文件</div>
+      <div slot="tip" class="el-upload__tip">
+        支持.smm、.json、.xmind、.xlsx文件
+      </div>
     </el-upload>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancel">取 消</el-button>
@@ -27,6 +29,8 @@
 
 <script>
 import MindMap from 'simple-mind-map'
+import { fileToBuffer } from '@/utils'
+import { read, utils } from 'xlsx'
 
 /**
  * @Author: 王林
@@ -60,9 +64,9 @@ export default {
      * @Desc: 文件选择
      */
     onChange(file) {
-      let reg = /\.(smm|xmind|json)$/
+      let reg = /\.(smm|xmind|json|xlsx)$/
       if (!reg.test(file.name)) {
-        this.$message.error('请选择.smm、.json、.xmind文件')
+        this.$message.error('请选择.smm、.json、.xmind、.xlsx文件')
         this.fileList = []
       } else {
         this.fileList.push(file)
@@ -102,10 +106,17 @@ export default {
         this.handleSmm(file)
       } else if (/\.xmind$/.test(file.name)) {
         this.handleXmind(file)
+      } else if (/\.xlsx$/.test(file.name)) {
+        this.handleExcel(file)
       }
       this.cancel()
     },
 
+    /**
+     * @Author: 王林25
+     * @Date: 2022-10-24 14:19:33
+     * @Desc: 处理.smm文件
+     */
     handleSmm(file) {
       let fileReader = new FileReader()
       fileReader.readAsText(file.raw)
@@ -124,10 +135,82 @@ export default {
       }
     },
 
+    /**
+     * @Author: 王林25
+     * @Date: 2022-10-24 14:19:41
+     * @Desc: 处理.xmind文件
+     */
     async handleXmind(file) {
       try {
         let data = await MindMap.xmind.parseXmindFile(file.raw)
         this.$bus.$emit('setData', data)
+        this.$message.success('导入成功')
+      } catch (error) {
+        console.log(error)
+        this.$message.error('文件解析失败')
+      }
+    },
+
+    /**
+     * @Author: 王林25
+     * @Date: 2022-10-24 14:19:51
+     * @Desc: 处理.xlsx文件
+     */
+    async handleExcel(file) {
+      try {
+        const wb = read(await fileToBuffer(file.raw))
+        const data = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {
+          header: 1
+        })
+        if (data.length <= 0) {
+          return
+        }
+        let max = 0
+        data.forEach(arr => {
+          if (arr.length > max) {
+            max = arr.length
+          }
+        })
+        let layers = []
+        let walk = layer => {
+          if (!layers[layer]) {
+            layers[layer] = []
+          }
+          for (let i = 0; i < data.length; i++) {
+            if (data[i][layer]) {
+              let node = {
+                data: {
+                  text: data[i][layer]
+                },
+                children: [],
+                _row: i
+              }
+              layers[layer].push(node)
+            }
+          }
+          if (layer < max - 1) {
+            walk(layer + 1)
+          }
+        }
+        walk(0)
+        let getParent = (arr, row) => {
+          for (let i = arr.length - 1; i >= 0; i--) {
+            if (row >= arr[i]._row) {
+              return arr[i]
+            }
+          }
+        }
+        for (let i = 1; i < layers.length; i++) {
+          let arr = layers[i]
+          for (let j = 0; j < arr.length; j++) {
+            let item = arr[j]
+            let parent = getParent(layers[i - 1], item._row)
+            if (parent) {
+              parent.children.push(item)
+            }
+          }
+        }
+        this.$bus.$emit('setData', layers[0][0])
         this.$message.success('导入成功')
       } catch (error) {
         console.log(error)
