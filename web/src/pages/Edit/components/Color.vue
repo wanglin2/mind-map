@@ -10,7 +10,7 @@
       ></span>
     </div>
     <div class="moreColor">
-      <span>更多颜色</span>
+      <span>{{ $t('color.moreColor') }}</span>
       <el-color-picker
         size="mini"
         v-model="selectColor"

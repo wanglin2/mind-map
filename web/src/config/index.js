@@ -379,3 +379,15 @@ export const shapeList = [
     value: 'circle'
   }
 ]
+
+// 多语言列表
+export const langList = [
+  {
+    value: 'zh',
+    name: '简体中文'
+  },
+  {
+    value: 'en',
+    name: 'English'
+  }
+]

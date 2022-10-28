@@ -1,15 +1,30 @@
 <template>
   <div class="navigatorContainer">
     <div class="item">
-      <el-checkbox v-model="openMiniMap" @change="toggleMiniMap"
-        >开启小地图</el-checkbox
+      <el-select
+        v-model="lang"
+        size="small"
+        style="width: 100px"
+        @change="onLangChange"
       >
+        <el-option
+          v-for="item in langList"
+          :key="item.value"
+          :label="item.name"
+          :value="item.value"
+        />
+      </el-select>
+    </div>
+    <div class="item">
+      <el-checkbox v-model="openMiniMap" @change="toggleMiniMap">{{
+        $t('navigatorToolbar.openMiniMap')
+      }}</el-checkbox>
     </div>
     <div class="item">
       <el-switch
         v-model="isReadonly"
-        active-text="只读模式"
-        inactive-text="编辑模式"
+        :active-text="$t('navigatorToolbar.readonly')"
+        :inactive-text="$t('navigatorToolbar.edit')"
         @change="readonlyChange"
       >
       </el-switch>
@@ -26,6 +41,8 @@
 <script>
 import Scale from './Scale'
 import Fullscreen from './Fullscreen'
+import { langList } from '@/config'
+import i18n from '@/i18n'
 
 /**
  * @Author: 王林
@@ -45,6 +62,8 @@ export default {
   },
   data() {
     return {
+      langList,
+      lang: 'zh',
       isReadonly: false,
       openMiniMap: false
     }
@@ -59,6 +78,10 @@ export default {
 
     toggleMiniMap(show) {
       this.$bus.$emit('toggle_mini_map', show)
+    },
+
+    onLangChange(lang) {
+      i18n.locale = lang
     }
   }
 }

@@ -10,11 +10,11 @@
         @click="exec('INSERT_NODE', insertNodeBtnDisabled)"
         :class="{ disabled: insertNodeBtnDisabled }"
       >
-        插入同级节点
+        {{ $t('contextmenu.insertSiblingNode') }}
         <span class="desc">Enter</span>
       </div>
       <div class="item" @click="exec('INSERT_CHILD_NODE')">
-        插入子级节点
+        {{ $t('contextmenu.insertChildNode') }}
         <span class="desc">Tab</span>
       </div>
       <div
@@ -22,7 +22,7 @@
         @click="exec('ADD_GENERALIZATION')"
         :class="{ disabled: insertNodeBtnDisabled }"
       >
-        插入概要
+        {{ $t('contextmenu.insertSummary') }}
         <span class="desc">Ctrl + S</span>
       </div>
       <div
@@ -30,7 +30,7 @@
         @click="exec('UP_NODE')"
         :class="{ disabled: upNodeBtnDisabled }"
       >
-        上移节点
+        {{ $t('contextmenu.moveUpNode') }}
         <span class="desc">Ctrl + ↑</span>
       </div>
       <div
@@ -38,19 +38,19 @@
         @click="exec('DOWN_NODE')"
         :class="{ disabled: downNodeBtnDisabled }"
       >
-        下移节点
+        {{ $t('contextmenu.moveDownNode') }}
         <span class="desc">Ctrl + ↓</span>
       </div>
       <div class="item danger" @click="exec('REMOVE_NODE')">
-        删除节点
+        {{ $t('contextmenu.deleteNode') }}
         <span class="desc">Delete</span>
       </div>
       <div class="item" @click="exec('COPY_NODE')">
-        复制节点
+        {{ $t('contextmenu.copyNode') }}
         <span class="desc">Ctrl + C</span>
       </div>
       <div class="item" @click="exec('CUT_NODE')">
-        剪切节点
+        {{ $t('contextmenu.cutNode') }}
         <span class="desc">Ctrl + X</span>
       </div>
       <div
@@ -58,16 +58,22 @@
         :class="{ disabled: copyData === null }"
         @click="exec('PASTE_NODE')"
       >
-        粘贴节点
+        {{ $t('contextmenu.pasteNode') }}
         <span class="desc">Ctrl + V</span>
       </div>
     </template>
     <template v-if="type === 'svg'">
-      <div class="item" @click="exec('RETURN_CENTER')">回到中心</div>
-      <div class="item" @click="exec('EXPAND_ALL')">展开所有</div>
-      <div class="item" @click="exec('UNEXPAND_ALL')">收起所有</div>
+      <div class="item" @click="exec('RETURN_CENTER')">
+        {{ $t('contextmenu.backCenter') }}
+      </div>
+      <div class="item" @click="exec('EXPAND_ALL')">
+        {{ $t('contextmenu.expandAll') }}
+      </div>
+      <div class="item" @click="exec('UNEXPAND_ALL')">
+        {{ $t('contextmenu.unExpandAll') }}
+      </div>
       <div class="item">
-        展开到
+        {{ $t('contextmenu.expandTo') }}
         <div class="subItems listBox">
           <div
             class="item"
@@ -80,7 +86,7 @@
         </div>
       </div>
       <div class="item" @click="exec('RESET_LAYOUT')">
-        一键整理布局
+        {{ $t('contextmenu.arrangeLayout') }}
         <span class="desc">Ctrl + L</span>
       </div>
     </template>
@@ -112,12 +118,12 @@ export default {
       mosuedownX: 0,
       mosuedownY: 0,
       expandList: [
-        '一级主题',
-        '二级主题',
-        '三级主题',
-        '四级主题',
-        '五级主题',
-        '六级主题'
+        this.$t('contextmenu.level1'),
+        this.$t('contextmenu.level2'),
+        this.$t('contextmenu.level3'),
+        this.$t('contextmenu.level4'),
+        this.$t('contextmenu.level5'),
+        this.$t('contextmenu.level6')
       ]
     }
   },
