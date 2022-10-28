@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     class="nodeDialog"
-    title="导入"
+    :title="$t('import.title')"
     :visible.sync="dialogVisible"
     width="300px"
   >
@@ -15,14 +15,18 @@
       :limit="1"
       :on-exceed="onExceed"
     >
-      <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+      <el-button slot="trigger" size="small" type="primary">{{
+        $t('import.selectFile')
+      }}</el-button>
       <div slot="tip" class="el-upload__tip">
-        支持.smm、.json、.xmind、.xlsx文件
+        {{ $t('import.supportFile') }}
       </div>
     </el-upload>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="cancel">取 消</el-button>
-      <el-button type="primary" @click="confirm">确 定</el-button>
+      <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
+      <el-button type="primary" @click="confirm">{{
+        $t('dialog.confirm')
+      }}</el-button>
     </span>
   </el-dialog>
 </template>

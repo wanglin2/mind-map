@@ -1,6 +1,11 @@
 <template>
   <div class="fullscreenContainer">
-    <el-tooltip class="item" effect="dark" content="全屏" placement="top">
+    <el-tooltip
+      class="item"
+      effect="dark"
+      :content="$t('fullscreen.fullscreen')"
+      placement="top"
+    >
       <div class="btn iconfont iconquanping" @click="toFullscreen"></div>
     </el-tooltip>
   </div>
