@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     class="nodeDialog"
-    title="标签"
+    :title="$t('nodeTag.title')"
     :visible.sync="dialogVisible"
     width="500"
   >
@@ -9,7 +9,7 @@
       v-model="tag"
       @keyup.native.enter="add"
       :disabled="tagArr.length >= max"
-      placeholder="请按回车键添加"
+      :placeholder="$t('nodeTag.addTip')"
     >
     </el-input>
     <div class="tagList">
@@ -29,8 +29,10 @@
       </div>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="cancel">取 消</el-button>
-      <el-button type="primary" @click="confirm">确 定</el-button>
+      <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
+      <el-button type="primary" @click="confirm">{{
+        $t('dialog.confirm')
+      }}</el-button>
     </span>
   </el-dialog>
 </template>

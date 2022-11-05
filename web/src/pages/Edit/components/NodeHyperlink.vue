@@ -1,12 +1,12 @@
 <template>
   <el-dialog
     class="nodeDialog"
-    title="超链接"
+    :title="$t('nodeHyperlink.title')"
     :visible.sync="dialogVisible"
     width="500"
   >
     <div class="item">
-      <span class="name">链接</span>
+      <span class="name">{{ $t('nodeHyperlink.link') }}</span>
       <el-input
         v-model="link"
         size="mini"
@@ -14,12 +14,14 @@
       ></el-input>
     </div>
     <div class="item">
-      <span class="name">名称</span>
+      <span class="name">{{ $t('nodeHyperlink.name') }}</span>
       <el-input v-model="linkTitle" size="mini"></el-input>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="cancel">取 消</el-button>
-      <el-button type="primary" @click="confirm">确 定</el-button>
+      <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
+      <el-button type="primary" @click="confirm">{{
+        $t('dialog.confirm')
+      }}</el-button>
     </span>
   </el-dialog>
 </template>

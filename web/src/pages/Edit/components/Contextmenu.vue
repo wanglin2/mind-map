@@ -116,8 +116,12 @@ export default {
       type: '',
       isMousedown: false,
       mosuedownX: 0,
-      mosuedownY: 0,
-      expandList: [
+      mosuedownY: 0
+    }
+  },
+  computed: {
+    expandList() {
+      return [
         this.$t('contextmenu.level1'),
         this.$t('contextmenu.level2'),
         this.$t('contextmenu.level3'),
@@ -125,9 +129,7 @@ export default {
         this.$t('contextmenu.level5'),
         this.$t('contextmenu.level6')
       ]
-    }
-  },
-  computed: {
+    },
     insertNodeBtnDisabled() {
       return !this.node || this.node.isRoot
     },

@@ -1,5 +1,5 @@
 <template>
-  <Sidebar ref="sidebar" title="大纲">
+  <Sidebar ref="sidebar" :title="$t('outline.title')">
     <el-tree :data="data" :props="defaultProps" default-expand-all></el-tree>
   </Sidebar>
 </template>

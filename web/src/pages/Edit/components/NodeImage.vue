@@ -1,18 +1,20 @@
 <template>
   <el-dialog
     class="nodeDialog"
-    title="图片"
+    :title="$t('nodeImage.title')"
     :visible.sync="dialogVisible"
     width="500"
   >
     <ImgUpload ref="ImgUpload" v-model="img"></ImgUpload>
     <div class="imgTitleBox">
-      <span class="title">图片标题</span>
+      <span class="title">{{ $t('nodeImage.imgTitle') }}</span>
       <el-input v-model="imgTitle" size="mini"></el-input>
     </div>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="cancel">取 消</el-button>
-      <el-button type="primary" @click="confirm">确 定</el-button>
+      <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
+      <el-button type="primary" @click="confirm">{{
+        $t('dialog.confirm')
+      }}</el-button>
     </span>
   </el-dialog>
 </template>
