@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     class="nodeDialog"
-    title="备注"
+    :title="$t('nodeNote.title')"
     :visible.sync="dialogVisible"
     width="500"
   >
@@ -15,8 +15,10 @@
     <div class="noteEditor" ref="noteEditor"></div>
     <!-- <div class="tip">换行请使用：Enter+Shift</div> -->
     <span slot="footer" class="dialog-footer">
-      <el-button @click="cancel">取 消</el-button>
-      <el-button type="primary" @click="confirm">确 定</el-button>
+      <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
+      <el-button type="primary" @click="confirm">{{
+        $t('dialog.confirm')
+      }}</el-button>
     </span>
   </el-dialog>
 </template>

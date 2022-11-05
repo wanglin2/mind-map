@@ -3,6 +3,7 @@ import { simpleDeepClone } from 'simple-mind-map/src/utils/index'
 import Vue from 'vue'
 
 const SIMPLE_MIND_MAP_DATA = 'SIMPLE_MIND_MAP_DATA'
+const SIMPLE_MIND_MAP_LANG = 'SIMPLE_MIND_MAP_LANG'
 
 /**
  * @Author: 王林
@@ -74,4 +75,29 @@ export const storeConfig = config => {
   } catch (error) {
     console.log(error)
   }
+}
+
+/**
+ * javascript comment
+ * @Author: 王林
+ * @Date: 2022-11-05 14:36:50
+ * @Desc: 存储语言
+ */
+export const storeLang = lang => {
+  localStorage.setItem(SIMPLE_MIND_MAP_LANG, lang)
+}
+
+/**
+ * javascript comment
+ * @Author: 王林
+ * @Date: 2022-11-05 14:37:36
+ * @Desc: 获取存储的语言
+ */
+export const getLang = () => {
+  let lang = localStorage.getItem(SIMPLE_MIND_MAP_LANG)
+  if (lang) {
+    return lang
+  }
+  storeLang('zh')
+  return 'zh'
 }

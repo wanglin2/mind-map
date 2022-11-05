@@ -76,5 +76,89 @@ export default {
     openMiniMap: 'Open mini map',
     readonly: 'Readonly',
     edit: 'Edit'
+  },
+  nodeHyperlink: {
+    title: 'Link',
+    link: 'Href',
+    name: 'Name'
+  },
+  nodeIcon: {
+    title: 'Icon'
+  },
+  nodeImage: {
+    title: 'Image',
+    imgTitle: 'Title'
+  },
+  nodeNote: {
+    title: 'Note'
+  },
+  nodeTag: {
+    title: 'Tag',
+    addTip: 'Press Enter to add'
+  },
+  outline: {
+    title: 'Outline'
+  },
+  scale: {
+    zoomIn: 'Zoom in',
+    zoomOut: 'Zoom out'
+  },
+  shortcutKey: {
+    title: 'Shortcut key'
+  },
+  strusture: {
+    title: 'Strusture'
+  },
+  style: {
+    title: 'Node style',
+    normal: 'Normal',
+    active: 'Active',
+    text: 'Text',
+    fontFamily: 'Font family',
+    fontSize: 'Font size',
+    lineHeight: 'Line height',
+    color: 'color',
+    addFontWeight: 'add font weight',
+    italic: 'Italic',
+    textDecoration: 'Text decoration',
+    underline: 'Underline',
+    lineThrough: 'Line through',
+    overline: 'Overline',
+    border: 'Border',
+    style: 'Style',
+    width: 'Width',
+    borderRadius: 'Border radius',
+    background: 'Background',
+    shape: 'Shape',
+    line: 'Line',
+    nodePadding: 'Node padding',
+    horizontal: 'Horizontal',
+    vertical: 'Vertical'
+  },
+  theme: {
+    title: 'Theme'
+  },
+  toolbar: {
+    undo: 'Undo',
+    redo: 'Redo',
+    insertSiblingNode: 'Insert sibling node',
+    insertChildNode: 'Insert child node',
+    deleteNode: 'Delete node',
+    image: 'Image',
+    icon: 'Icon',
+    link: 'Link',
+    note: 'Note',
+    tag: 'Tag',
+    summary: 'Summary',
+    displayOutline: 'Display outline',
+    baseStyle: 'Base style',
+    theme: 'Theme',
+    strusture: 'Strusture',
+    newFile: 'New file',
+    openFile: 'Open file',
+    saveAs: 'Save as',
+    import: 'Import',
+    export: 'Export',
+    shortcutKey: 'Shortcut key'
   }
 }

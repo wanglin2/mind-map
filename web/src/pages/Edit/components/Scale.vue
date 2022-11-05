@@ -1,10 +1,20 @@
 <template>
   <div class="scaleContainer">
-    <el-tooltip class="item" effect="dark" content="缩小" placement="top">
+    <el-tooltip
+      class="item"
+      effect="dark"
+      :content="$t('scale.zoomOut')"
+      placement="top"
+    >
       <div class="btn el-icon-minus" @click="narrow"></div>
     </el-tooltip>
     <div class="scaleInfo">{{ scaleNum }}%</div>
-    <el-tooltip class="item" effect="dark" content="放大" placement="top">
+    <el-tooltip
+      class="item"
+      effect="dark"
+      :content="$t('scale.zoomIn')"
+      placement="top"
+    >
       <div class="btn el-icon-plus" @click="enlarge"></div>
     </el-tooltip>
   </div>

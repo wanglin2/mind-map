@@ -7,3 +7,5 @@ public
 .eslintrc.js
 .prettierignore
 .prettierrc
+package-lock.json
+package.json

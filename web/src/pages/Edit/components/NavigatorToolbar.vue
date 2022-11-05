@@ -43,6 +43,7 @@ import Scale from './Scale'
 import Fullscreen from './Fullscreen'
 import { langList } from '@/config'
 import i18n from '@/i18n'
+import { storeLang, getLang } from '@/api'
 
 /**
  * @Author: 王林
@@ -63,7 +64,7 @@ export default {
   data() {
     return {
       langList,
-      lang: 'zh',
+      lang: getLang(),
       isReadonly: false,
       openMiniMap: false
     }
@@ -82,6 +83,7 @@ export default {
 
     onLangChange(lang) {
       i18n.locale = lang
+      storeLang(lang)
     }
   }
 }
