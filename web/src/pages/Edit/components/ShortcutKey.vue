@@ -1,5 +1,5 @@
 <template>
-  <Sidebar ref="sidebar" title="快捷键">
+  <Sidebar ref="sidebar" :title="$t('shortcutKey.title')">
     <div class="box">
       <div v-for="item in shortcutKeyList" :key="item.type">
         <div class="title">{{ item.type }}</div>
@@ -34,8 +34,11 @@ export default {
     Sidebar
   },
   data() {
-    return {
-      shortcutKeyList
+    return {}
+  },
+  computed: {
+    shortcutKeyList() {
+      return shortcutKeyList[this.$i18n.locale] || shortcutKeyList.zh
     }
   },
   created() {

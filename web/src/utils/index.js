@@ -32,11 +32,11 @@ export const fullScreen = element => {
   }
 }
 
-/** 
- * javascript comment 
- * @Author: 王林25 
- * @Date: 2022-10-24 14:16:18 
- * @Desc: 文件转buffer 
+/**
+ * javascript comment
+ * @Author: 王林25
+ * @Date: 2022-10-24 14:16:18
+ * @Desc: 文件转buffer
  */
 export const fileToBuffer = file => {
   return new Promise(r => {

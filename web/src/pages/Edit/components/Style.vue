@@ -1,16 +1,16 @@
 <template>
-  <Sidebar ref="sidebar" title="节点样式">
+  <Sidebar ref="sidebar" :title="$t('style.title')">
     <div class="styleBox">
       <el-tabs class="tab" v-model="activeTab" @tab-click="handleTabClick">
-        <el-tab-pane label="常态" name="normal"></el-tab-pane>
-        <el-tab-pane label="选中状态" name="active"></el-tab-pane>
+        <el-tab-pane :label="$t('style.normal')" name="normal"></el-tab-pane>
+        <el-tab-pane :label="$t('style.active')" name="active"></el-tab-pane>
       </el-tabs>
       <div class="sidebarContent" v-if="activeNodes.length > 0">
         <!-- 文字 -->
-        <div class="title noTop">文字</div>
+        <div class="title noTop">{{ $t('style.text') }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">字体</span>
+            <span class="name">{{ $t('style.fontFamily') }}</span>
             <el-select
               size="mini"
               v-model="style.fontFamily"
@@ -31,7 +31,7 @@
         </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">字号</span>
+            <span class="name">{{ $t('style.fontSize') }}</span>
             <el-select
               size="mini"
               style="width: 80px"
@@ -50,7 +50,7 @@
             </el-select>
           </div>
           <div class="rowItem">
-            <span class="name">行高</span>
+            <span class="name">{{ $t('style.lineHeight') }}</span>
             <el-select
               size="mini"
               style="width: 80px"
@@ -71,7 +71,7 @@
         </div>
         <div class="row">
           <div class="btnGroup">
-            <el-tooltip content="颜色" placement="bottom">
+            <el-tooltip :content="$t('style.color')" placement="bottom">
               <div
                 class="styleBtn"
                 v-popover:popover
@@ -84,7 +84,7 @@
                 ></span>
               </div>
             </el-tooltip>
-            <el-tooltip content="加粗" placement="bottom">
+            <el-tooltip :content="$t('style.addFontWeight')" placement="bottom">
               <div
                 class="styleBtn"
                 :class="{
@@ -96,7 +96,7 @@
                 B
               </div>
             </el-tooltip>
-            <el-tooltip content="斜体" placement="bottom">
+            <el-tooltip :content="$t('style.italic')" placement="bottom">
               <div
                 class="styleBtn i"
                 :class="{
@@ -108,7 +108,10 @@
                 I
               </div>
             </el-tooltip>
-            <el-tooltip content="划线" placement="bottom">
+            <el-tooltip
+              :content="$t('style.textDecoration')"
+              placement="bottom"
+            >
               <div
                 class="styleBtn u"
                 :style="{ textDecoration: style.textDecoration || 'none' }"
@@ -138,17 +141,23 @@
               v-model="style.textDecoration"
               @change="update('textDecoration')"
             >
-              <el-radio-button label="underline">下划线</el-radio-button>
-              <el-radio-button label="line-through">中划线</el-radio-button>
-              <el-radio-button label="overline">上划线</el-radio-button>
+              <el-radio-button label="underline">{{
+                $t('style.underline')
+              }}</el-radio-button>
+              <el-radio-button label="line-through">{{
+                $t('style.lineThrough')
+              }}</el-radio-button>
+              <el-radio-button label="overline">{{
+                $t('style.overline')
+              }}</el-radio-button>
             </el-radio-group>
           </el-popover>
         </div>
         <!-- 边框 -->
-        <div class="title">边框</div>
+        <div class="title">{{ $t('style.border') }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">颜色</span>
+            <span class="name">{{ $t('style.color') }}</span>
             <span
               class="block"
               v-popover:popover3
@@ -168,7 +177,7 @@
             </el-popover>
           </div>
           <div class="rowItem">
-            <span class="name">样式</span>
+            <span class="name">{{ $t('style.style') }}</span>
             <el-select
               size="mini"
               style="width: 80px"
@@ -189,7 +198,7 @@
         </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">宽度</span>
+            <span class="name">{{ $t('style.width') }}</span>
             <el-select
               size="mini"
               style="width: 80px"
@@ -208,7 +217,7 @@
             </el-select>
           </div>
           <div class="rowItem">
-            <span class="name">圆角</span>
+            <span class="name">{{ $t('style.borderRadius') }}</span>
             <el-select
               size="mini"
               style="width: 80px"
@@ -228,10 +237,10 @@
           </div>
         </div>
         <!-- 背景 -->
-        <div class="title">背景</div>
+        <div class="title">{{ $t('style.background') }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">颜色</span>
+            <span class="name">{{ $t('style.color') }}</span>
             <span
               class="block"
               v-popover:popover4
@@ -249,10 +258,10 @@
           </div>
         </div>
         <!-- 形状 -->
-        <div class="title">形状</div>
+        <div class="title">{{ $t('style.shape') }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">形状</span>
+            <span class="name">{{ $t('style.shape') }}</span>
             <el-select
               size="mini"
               style="width: 120px"
@@ -272,10 +281,10 @@
           </div>
         </div>
         <!-- 线条 -->
-        <div class="title">线条</div>
+        <div class="title">{{ $t('style.line') }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">颜色</span>
+            <span class="name">{{ $t('style.color') }}</span>
             <span
               class="block"
               v-popover:popover5
@@ -292,7 +301,7 @@
             </el-popover>
           </div>
           <div class="rowItem">
-            <span class="name">样式</span>
+            <span class="name">{{ $t('style.style') }}</span>
             <el-select
               size="mini"
               style="width: 80px"
@@ -313,7 +322,7 @@
         </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">宽度</span>
+            <span class="name">{{ $t('style.width') }}</span>
             <el-select
               size="mini"
               style="width: 80px"
@@ -333,10 +342,10 @@
           </div>
         </div>
         <!-- 节点内边距 -->
-        <div class="title noTop">节点内边距</div>
+        <div class="title noTop">{{ $t('style.nodePadding') }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">水平</span>
+            <span class="name">{{ $t('style.horizontal') }}</span>
             <el-slider
               style="width: 200px"
               v-model="style.paddingX"
@@ -347,7 +356,7 @@
         </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">垂直</span>
+            <span class="name">{{ $t('style.vertical') }}</span>
             <el-slider
               style="width: 200px"
               v-model="style.paddingY"
@@ -389,11 +398,10 @@ export default {
   data() {
     return {
       supportActiveStyle,
-      shapeList,
-      fontFamilyList,
+
       fontSizeList,
       borderWidthList,
-      borderDasharrayList,
+
       borderRadiusList,
       lineHeightList,
       activeNodes: [],
@@ -418,6 +426,17 @@ export default {
         lineDasharray: '',
         lineWidth: ''
       }
+    }
+  },
+  computed: {
+    fontFamilyList() {
+      return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
+    },
+    borderDasharrayList() {
+      return borderDasharrayList[this.$i18n.locale] || borderDasharrayList.zh
+    },
+    shapeList() {
+      return shapeList[this.$i18n.locale] || shapeList.zh
     }
   },
   created() {

@@ -1,5 +1,5 @@
 <template>
-  <Sidebar ref="sidebar" title="主题">
+  <Sidebar ref="sidebar" :title="$t('style.title')">
     <div class="themeList">
       <div
         class="themeItem"

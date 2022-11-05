@@ -1,5 +1,5 @@
 <template>
-  <Sidebar ref="sidebar" title="结构">
+  <Sidebar ref="sidebar" :title="$t('strusture.title')">
     <div class="layoutList">
       <div
         class="layoutItem"

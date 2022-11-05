@@ -76,5 +76,89 @@ export default {
     openMiniMap: '开启小地图',
     readonly: '只读模式',
     edit: '编辑模式'
+  },
+  nodeHyperlink: {
+    title: '超链接',
+    link: '链接',
+    name: '名称'
+  },
+  nodeIcon: {
+    title: '图标'
+  },
+  nodeImage: {
+    title: '图片',
+    imgTitle: '图片标题'
+  },
+  nodeNote: {
+    title: '备注'
+  },
+  nodeTag: {
+    title: '标签',
+    addTip: '请按回车键添加'
+  },
+  outline: {
+    title: '大纲'
+  },
+  scale: {
+    zoomIn: '放大',
+    zoomOut: '缩小'
+  },
+  shortcutKey: {
+    title: '快捷键'
+  },
+  strusture: {
+    title: '结构'
+  },
+  style: {
+    title: '节点样式',
+    normal: '常态',
+    active: '选中状态',
+    text: '文字',
+    fontFamily: '字体',
+    fontSize: '字号',
+    lineHeight: '行高',
+    color: '颜色',
+    addFontWeight: '加粗',
+    italic: '斜体',
+    textDecoration: '划线',
+    underline: '下划线',
+    lineThrough: '中划线',
+    overline: '上划线',
+    border: '边框',
+    style: '样式',
+    width: '宽度',
+    borderRadius: '圆角',
+    background: '背景',
+    shape: '形状',
+    line: '线条',
+    nodePadding: '节点内边距',
+    horizontal: '水平',
+    vertical: '垂直'
+  },
+  theme: {
+    title: '主题'
+  },
+  toolbar: {
+    undo: '回退',
+    redo: '前进',
+    insertSiblingNode: '插入同级节点',
+    insertChildNode: '插入子节点',
+    deleteNode: '删除节点',
+    image: '图片',
+    icon: '图标',
+    link: '超链接',
+    note: '备注',
+    tag: '标签',
+    summary: '概要',
+    displayOutline: '显示大纲',
+    baseStyle: '基础样式',
+    theme: '主题',
+    strusture: '结构',
+    newFile: '新建',
+    openFile: '打开',
+    saveAs: '另存为',
+    import: '导入',
+    export: '导出',
+    shortcutKey: '快捷键'
   }
 }
