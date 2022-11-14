@@ -27,13 +27,23 @@ export default {
     }
   },
   created() {
-    this.$bus.$on('data_change', data => {
+    this.$bus.$on('data_change', this.onDataChange)
+  },
+  beforeDestroy() {
+    this.$bus.$off('data_change', this.onDataChange)
+  },
+  methods: {
+    /**
+     * @Author: 王林25
+     * @Date: 2022-11-14 19:20:20
+     * @Desc: 监听数据变化
+     */
+    onDataChange(data) {
       this.words = 0
       this.num = 0
       this.walk(data)
-    })
-  },
-  methods: {
+    },
+
     /**
      * @Author: 王林
      * @Date: 2021-06-30 22:13:07

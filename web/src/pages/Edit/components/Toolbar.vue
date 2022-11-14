@@ -236,24 +236,58 @@ export default {
     }
   },
   created() {
-    this.$bus.$on('mode_change', mode => {
+    this.$bus.$on('mode_change', this.onModeChange)
+    this.$bus.$on('node_active', this.onNodeActive)
+    this.$bus.$on('back_forward', this.onBackForward)
+    this.$bus.$on('write_local_file', this.onWriteLocalFile)
+  },
+  beforeDestroy() {
+    this.$bus.$off('mode_change', this.onModeChange)
+    this.$bus.$off('node_active', this.onNodeActive)
+    this.$bus.$off('back_forward', this.onBackForward)
+    this.$bus.$off('write_local_file', this.onWriteLocalFile)
+  },
+  methods: {
+    /**
+     * @Author: 王林25
+     * @Date: 2022-11-14 19:17:40
+     * @Desc: 监听模式切换
+     */
+    onModeChange(mode) {
       this.readonly = mode === 'readonly'
-    })
-    this.$bus.$on('node_active', (...args) => {
+    },
+
+    /**
+     * @Author: 王林25
+     * @Date: 2022-11-14 19:18:06
+     * @Desc: 监听节点激活
+     */
+    onNodeActive(...args) {
       this.activeNodes = args[1]
-    })
-    this.$bus.$on('back_forward', (index, len) => {
+    },
+
+    /**
+     * @Author: 王林25
+     * @Date: 2022-11-14 19:18:31
+     * @Desc: 监听前进后退
+     */
+    onBackForward(index, len) {
       this.backEnd = index <= 0
       this.forwardEnd = index >= len - 1
-    })
-    this.$bus.$on('write_local_file', content => {
+    },
+
+    /**
+     * @Author: 王林25
+     * @Date: 2022-11-14 19:19:14
+     * @Desc: 监听本地文件读写
+     */
+    onWriteLocalFile(content) {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         this.writeLocalFile(content)
       }, 1000)
-    })
-  },
-  methods: {
+    },
+
     /**
      * @Author: 王林
      * @Date: 2022-09-24 15:40:09

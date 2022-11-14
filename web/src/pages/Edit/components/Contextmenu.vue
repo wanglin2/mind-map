@@ -89,11 +89,17 @@
         {{ $t('contextmenu.arrangeLayout') }}
         <span class="desc">Ctrl + L</span>
       </div>
+      <div class="item" @click="exec('TOGGLE_ZEN_MODE')">
+        {{ $t('contextmenu.zenMode') }}
+        {{ isZenMode ? '√' : '' }}
+      </div>
     </template>
   </div>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
+
 /**
  * @Author: 王林
  * @Date: 2021-06-24 22:53:10
@@ -120,6 +126,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      isZenMode: state => state.localConfig.isZenMode
+    }),
     expandList() {
       return [
         this.$t('contextmenu.level1'),
@@ -181,6 +190,8 @@ export default {
     this.mindMap.keyCommand.removeShortcut('Control+x', this.cut)
   },
   methods: {
+    ...mapMutations(['setLocalConfig']),
+
     /**
      * @Author: 王林
      * @Date: 2021-07-14 21:38:50
@@ -275,6 +286,11 @@ export default {
           break
         case 'RETURN_CENTER':
           this.mindMap.view.reset()
+          break
+        case 'TOGGLE_ZEN_MODE':
+          this.setLocalConfig({
+            isZenMode: !this.isZenMode
+          })
           break
         default:
           this.$bus.$emit('execCommand', key, ...args)
