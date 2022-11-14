@@ -7,6 +7,7 @@
       top: this.top + 'px',
       visibility: show ? 'visible' : 'hidden'
     }"
+    @click.stop
   ></div>
 </template>
 
@@ -30,20 +31,42 @@ export default {
     }
   },
   created() {
-    this.$bus.$on('showNoteContent', (content, left, top) => {
-      this.editor.setMarkdown(content)
-      this.left = left
-      this.top = top
-      this.show = true
-    })
-    this.$bus.$on('hideNoteContent', () => {
-      this.show = false
-    })
+    this.$bus.$on('showNoteContent', this.onShowNoteContent)
+    this.$bus.$on('hideNoteContent', this.hideNoteContent)
+    document.body.addEventListener('click', this.hideNoteContent)
+    this.$bus.$on('node_active', this.hideNoteContent)
   },
   mounted() {
     this.initEditor()
   },
+  beforeDestroy() {
+    this.$bus.$off('showNoteContent', this.onShowNoteContent)
+    this.$bus.$off('hideNoteContent', this.hideNoteContent)
+    document.body.removeEventListener('click', this.hideNoteContent)
+    this.$bus.$off('node_active', this.hideNoteContent)
+  },
   methods: {
+    /**
+     * @Author: 王林25
+     * @Date: 2022-11-14 19:56:08
+     * @Desc: 显示备注浮层
+     */
+    onShowNoteContent(content, left, top) {
+      this.editor.setMarkdown(content)
+      this.left = left
+      this.top = top
+      this.show = true
+    },
+
+    /**
+     * @Author: 王林25
+     * @Date: 2022-11-14 19:56:20
+     * @Desc: 隐藏备注浮层
+     */
+    hideNoteContent() {
+      this.show = false
+    },
+
     /**
      * @Author: 王林25
      * @Date: 2022-05-09 11:37:05
@@ -66,5 +89,24 @@ export default {
   background-color: #fff;
   padding: 10px;
   border-radius: 5px;
+  max-height: 300px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 7px;
+    background-color: rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+  }
+
+  &::-webkit-scrollbar-track {
+    box-shadow: none;
+    background: transparent;
+    display: none;
+  }
 }
 </style>

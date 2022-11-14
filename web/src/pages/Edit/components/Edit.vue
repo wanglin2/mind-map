@@ -11,7 +11,10 @@
     <Structure :mindMap="mindMap"></Structure>
     <ShortcutKey></ShortcutKey>
     <Contextmenu v-if="mindMap" :mindMap="mindMap"></Contextmenu>
-    <NodeNoteContentShow></NodeNoteContentShow>
+    <NodeNoteContentShow
+      v-if="mindMap"
+      :mindMap="mindMap"
+    ></NodeNoteContentShow>
     <NodeImgPreview v-if="mindMap" :mindMap="mindMap"></NodeImgPreview>
   </div>
 </template>
@@ -231,7 +234,7 @@ export default {
             this.$bus.$emit('showNoteContent', content, left, top)
           },
           hide: () => {
-            this.$bus.$emit('hideNoteContent')
+            // this.$bus.$emit('hideNoteContent')
           }
         }
       })
