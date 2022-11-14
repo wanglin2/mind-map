@@ -43,7 +43,8 @@ export default {
     level3: '三级主题',
     level4: '四级主题',
     level5: '五级主题',
-    level6: '六级主题'
+    level6: '六级主题',
+    zenMode: '禅模式'
   },
   count: {
     words: '字数',

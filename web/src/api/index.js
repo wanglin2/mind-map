@@ -4,6 +4,7 @@ import Vue from 'vue'
 
 const SIMPLE_MIND_MAP_DATA = 'SIMPLE_MIND_MAP_DATA'
 const SIMPLE_MIND_MAP_LANG = 'SIMPLE_MIND_MAP_LANG'
+const SIMPLE_MIND_MAP_LOCAL_CONFIG = 'SIMPLE_MIND_MAP_LOCAL_CONFIG'
 
 /**
  * @Author: 王林
@@ -100,4 +101,28 @@ export const getLang = () => {
   }
   storeLang('zh')
   return 'zh'
+}
+
+/**
+ * javascript comment
+ * @Author: 王林25
+ * @Date: 2022-11-14 18:57:31
+ * @Desc: 存储本地配置
+ */
+export const storeLocalConfig = config => {
+  localStorage.setItem(SIMPLE_MIND_MAP_LOCAL_CONFIG, JSON.stringify(config))
+}
+
+/**
+ * javascript comment
+ * @Author: 王林25
+ * @Date: 2022-11-14 18:57:37
+ * @Desc: 获取本地配置
+ */
+export const getLocalConfig = () => {
+  let config = localStorage.getItem(SIMPLE_MIND_MAP_LOCAL_CONFIG)
+  if (config) {
+    return JSON.parse(config)
+  }
+  return null
 }

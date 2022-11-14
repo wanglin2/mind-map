@@ -43,7 +43,8 @@ export default {
     level3: 'Level3',
     level4: 'Level4',
     level5: 'Level5',
-    level6: 'Level6'
+    level6: 'Level6',
+    zenMode: 'Zen mode'
   },
   count: {
     words: 'Words',

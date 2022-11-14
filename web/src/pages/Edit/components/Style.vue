@@ -440,7 +440,18 @@ export default {
     }
   },
   created() {
-    this.$bus.$on('node_active', (...args) => {
+    this.$bus.$on('node_active', this.onNodeActive)
+  },
+  beforeDestroy() {
+    this.$bus.$off('node_active', this.onNodeActive)
+  },
+  methods: {
+    /**
+     * @Author: 王林25
+     * @Date: 2022-11-14 19:16:21
+     * @Desc: 监听节点激活事件
+     */
+    onNodeActive(...args) {
       if (this.$refs.sidebar) this.$refs.sidebar.show = false
       this.$nextTick(() => {
         this.activeTab = 'normal'
@@ -449,9 +460,8 @@ export default {
           this.$refs.sidebar.show = this.activeNodes.length > 0
         this.initNodeStyle()
       })
-    })
-  },
-  methods: {
+    },
+
     /**
      * @Author: 王林
      * @Date: 2021-05-05 11:42:32
