@@ -21,6 +21,7 @@
 import Sidebar from './Sidebar'
 import { layoutList } from 'simple-mind-map/src/utils/constant'
 import { storeConfig } from '@/api'
+import { mapState } from 'vuex'
 
 /**
  * @Author: 王林
@@ -43,14 +44,18 @@ export default {
       layout: ''
     }
   },
-  created() {
-    this.$bus.$on('showStructure', () => {
-      this.$refs.sidebar.show = false
-      this.$nextTick(() => {
+  computed: {
+    ...mapState(['activeSidebar'])
+  },
+  watch: {
+    activeSidebar(val) {
+      if (val === 'structure') {
         this.layout = this.mindMap.getLayout()
         this.$refs.sidebar.show = true
-      })
-    })
+      } else {
+        this.$refs.sidebar.show = false
+      }
+    }
   },
   methods: {
     /**

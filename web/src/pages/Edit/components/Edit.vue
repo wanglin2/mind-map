@@ -16,6 +16,7 @@
       :mindMap="mindMap"
     ></NodeNoteContentShow>
     <NodeImgPreview v-if="mindMap" :mindMap="mindMap"></NodeImgPreview>
+    <SidebarTrigger v-if="!isZenMode"></SidebarTrigger>
   </div>
 </template>
 
@@ -34,6 +35,7 @@ import NodeNoteContentShow from './NodeNoteContentShow.vue'
 import { getData, storeData, storeConfig } from '@/api'
 import Navigator from './Navigator.vue'
 import NodeImgPreview from './NodeImgPreview.vue'
+import SidebarTrigger from './SidebarTrigger.vue'
 import { mapState } from 'vuex'
 
 /**
@@ -55,7 +57,8 @@ export default {
     Contextmenu,
     NodeNoteContentShow,
     Navigator,
-    NodeImgPreview
+    NodeImgPreview,
+    SidebarTrigger
   },
   data() {
     return {

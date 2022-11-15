@@ -5,7 +5,7 @@
     :class="{ show: show }"
     :style="{ zIndex: zIndex }"
   >
-    <span class="closeBtn el-icon-close" @click="show = false"></span>
+    <span class="closeBtn el-icon-close" @click="close"></span>
     <div class="sidebarHeader" v-if="title">
       {{ title }}
     </div>
@@ -17,6 +17,7 @@
 
 <script>
 import { store } from '@/config'
+import { mapState, mapMutations } from 'vuex'
 
 /**
  * @Author: 王林
@@ -42,6 +43,14 @@ export default {
       if (val && !oldVal) {
         this.zIndex = store.sidebarZIndex++
       }
+    }
+  },
+  methods: {
+    ...mapMutations(['setActiveSidebar']),
+
+    close() {
+      this.show = false
+      this.setActiveSidebar('')
     }
   }
 }
