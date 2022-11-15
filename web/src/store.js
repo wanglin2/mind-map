@@ -12,7 +12,8 @@ const store = new Vuex.Store({
     localConfig: {
       // 本地配置
       isZenMode: false // 是否是禅模式
-    }
+    },
+    activeSidebar: '' // 当前显示的侧边栏
   },
   mutations: {
     /**
@@ -46,6 +47,16 @@ const store = new Vuex.Store({
         ...data
       }
       storeLocalConfig(state.localConfig)
+    },
+
+    /**
+     * javascript comment
+     * @Author: 王林25
+     * @Date: 2022-11-15 19:25:26
+     * @Desc: 设置当前显示的侧边栏
+     */
+    setActiveSidebar(state, data) {
+      state.activeSidebar = data
     }
   },
   actions: {

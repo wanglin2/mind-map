@@ -391,3 +391,37 @@ export const langList = [
     name: 'English'
   }
 ]
+
+// 侧边栏列表
+export const sidebarTriggerList = [
+  {
+    name: '节点样式',
+    value: 'nodeStyle',
+    icon: 'iconzhuti'
+  },
+  {
+    name: '基础样式',
+    value: 'baseStyle',
+    icon: 'iconyangshi'
+  },
+  {
+    name: '主题',
+    value: 'theme',
+    icon: 'iconjingzi'
+  },
+  {
+    name: '结构',
+    value: 'structure',
+    icon: 'iconjiegou'
+  },
+  {
+    name: '大纲',
+    value: 'outline',
+    icon: 'iconfuhao-dagangshu'
+  },
+  {
+    name: '快捷键',
+    value: 'shortcutKey',
+    icon: 'iconjianpan'
+  }
+]
