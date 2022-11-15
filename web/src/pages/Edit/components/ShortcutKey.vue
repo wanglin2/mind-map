@@ -22,6 +22,7 @@
 <script>
 import Sidebar from './Sidebar'
 import { shortcutKeyList } from '@/config'
+import { mapState } from 'vuex'
 
 /**
  * @Author: 王林
@@ -37,17 +38,20 @@ export default {
     return {}
   },
   computed: {
+    ...mapState(['activeSidebar']),
+
     shortcutKeyList() {
       return shortcutKeyList[this.$i18n.locale] || shortcutKeyList.zh
     }
   },
-  created() {
-    this.$bus.$on('showShortcutKey', () => {
-      this.$refs.sidebar.show = false
-      this.$nextTick(() => {
+  watch: {
+    activeSidebar(val) {
+      if (val === 'shortcutKey') {
         this.$refs.sidebar.show = true
-      })
-    })
+      } else {
+        this.$refs.sidebar.show = false
+      }
+    }
   }
 }
 </script>

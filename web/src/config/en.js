@@ -319,3 +319,37 @@ export const shapeList = [
     value: 'circle'
   }
 ]
+
+// 侧边栏列表
+export const sidebarTriggerList = [
+  {
+    name: 'Node style',
+    value: 'nodeStyle',
+    icon: 'iconzhuti'
+  },
+  {
+    name: 'Base style',
+    value: 'baseStyle',
+    icon: 'iconyangshi'
+  },
+  {
+    name: 'Theme',
+    value: 'theme',
+    icon: 'iconjingzi'
+  },
+  {
+    name: 'Structure',
+    value: 'structure',
+    icon: 'iconjiegou'
+  },
+  {
+    name: 'Outline',
+    value: 'outline',
+    icon: 'iconfuhao-dagangshu'
+  },
+  {
+    name: 'ShortcutKey',
+    value: 'shortcutKey',
+    icon: 'iconjianpan'
+  }
+]

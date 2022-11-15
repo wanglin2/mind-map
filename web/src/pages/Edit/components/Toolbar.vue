@@ -114,25 +114,6 @@
           <span class="text">{{ $t('toolbar.summary') }}</span>
         </div>
       </div>
-      <!-- 通用操作 -->
-      <div class="toolbarBlock">
-        <div class="toolbarBtn" @click="$bus.$emit('showOutline')">
-          <span class="icon iconfont iconfuhao-dagangshu"></span>
-          <span class="text">{{ $t('toolbar.displayOutline') }}</span>
-        </div>
-        <div class="toolbarBtn" @click="$bus.$emit('showBaseStyle')">
-          <span class="icon iconfont iconyangshi"></span>
-          <span class="text">{{ $t('toolbar.baseStyle') }}</span>
-        </div>
-        <div class="toolbarBtn" @click="$bus.$emit('showTheme')">
-          <span class="icon iconfont iconjingzi"></span>
-          <span class="text">{{ $t('toolbar.theme') }}</span>
-        </div>
-        <div class="toolbarBtn" @click="$bus.$emit('showStructure')">
-          <span class="icon iconfont iconjiegou"></span>
-          <span class="text">{{ $t('toolbar.strusture') }}</span>
-        </div>
-      </div>
       <!-- 导出 -->
       <div class="toolbarBlock">
         <div class="toolbarBtn" @click="createNewLocalFile">
@@ -154,10 +135,6 @@
         <div class="toolbarBtn" @click="$bus.$emit('showExport')">
           <span class="icon iconfont iconexport"></span>
           <span class="text">{{ $t('toolbar.export') }}</span>
-        </div>
-        <div class="toolbarBtn" @click="$bus.$emit('showShortcutKey')">
-          <span class="icon iconfont iconjianpan"></span>
-          <span class="text">{{ $t('toolbar.shortcutKey') }}</span>
         </div>
       </div>
     </div>

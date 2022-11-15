@@ -21,6 +21,7 @@
 import Sidebar from './Sidebar'
 import { themeList } from 'simple-mind-map/src/utils/constant'
 import { storeConfig } from '@/api'
+import { mapState } from 'vuex'
 
 /**
  * @Author: 王林
@@ -43,14 +44,18 @@ export default {
       theme: ''
     }
   },
-  created() {
-    this.$bus.$on('showTheme', () => {
-      this.$refs.sidebar.show = false
-      this.$nextTick(() => {
+  computed: {
+    ...mapState(['activeSidebar'])
+  },
+  watch: {
+    activeSidebar(val) {
+      if (val === 'theme') {
         this.theme = this.mindMap.getTheme()
         this.$refs.sidebar.show = true
-      })
-    })
+      } else {
+        this.$refs.sidebar.show = false
+      }
+    }
   },
   methods: {
     /**

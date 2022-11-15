@@ -298,6 +298,7 @@ import Color from './Color'
 import { lineWidthList, lineStyleList, backgroundRepeatList } from '@/config'
 import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
+import { mapState } from 'vuex'
 
 /**
  * @Author: 王林
@@ -345,6 +346,8 @@ export default {
     }
   },
   computed: {
+    ...mapState(['activeSidebar']),
+
     lineStyleList() {
       return lineStyleList[this.$i18n.locale] || lineStyleList.zh
     },
@@ -352,14 +355,15 @@ export default {
       return backgroundRepeatList[this.$i18n.locale] || backgroundRepeatList.zh
     }
   },
-  created() {
-    this.$bus.$on('showBaseStyle', () => {
-      this.$refs.sidebar.show = false
-      this.$nextTick(() => {
+  watch: {
+    activeSidebar(val) {
+      if (val === 'baseStyle') {
         this.$refs.sidebar.show = true
         this.initStyle()
-      })
-    })
+      } else {
+        this.$refs.sidebar.show = false
+      }
+    }
   },
   methods: {
     /**

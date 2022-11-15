@@ -6,6 +6,7 @@
 
 <script>
 import Sidebar from './Sidebar'
+import { mapState } from 'vuex'
 
 /**
  * @Author: 王林
@@ -27,15 +28,21 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState(['activeSidebar'])
+  },
+  watch: {
+    activeSidebar(val) {
+      if (val === 'outline') {
+        this.$refs.sidebar.show = true
+      } else {
+        this.$refs.sidebar.show = false
+      }
+    }
+  },
   created() {
     this.$bus.$on('data_change', data => {
       this.data = [data]
-    })
-    this.$bus.$on('showOutline', () => {
-      this.$refs.sidebar.show = false
-      this.$nextTick(() => {
-        this.$refs.sidebar.show = true
-      })
     })
   }
 }
