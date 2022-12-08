@@ -4,7 +4,7 @@
     <Count v-if="!isZenMode"></Count>
     <Navigator :mindMap="mindMap"></Navigator>
     <NavigatorToolbar :mindMap="mindMap" v-if="!isZenMode"></NavigatorToolbar>
-    <Outline></Outline>
+    <Outline :mindMap="mindMap"></Outline>
     <Style v-if="!isZenMode"></Style>
     <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
     <Theme :mindMap="mindMap"></Theme>
