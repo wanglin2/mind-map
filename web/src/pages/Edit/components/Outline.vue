@@ -8,7 +8,15 @@
       default-expand-all
     >
       <span class="customNode" slot-scope="{ node, data }">
-        <span class="nodeEdit" :key="getKey()" contenteditable="true" @keydown.stop @keyup.stop @blur="onBlur($event, node)" v-html="node.label"></span>
+        <span
+          class="nodeEdit"
+          :key="getKey()"
+          contenteditable="true"
+          @keydown.stop
+          @keyup.stop
+          @blur="onBlur($event, node)"
+          v-html="node.label"
+        ></span>
       </span>
     </el-tree>
   </Sidebar>

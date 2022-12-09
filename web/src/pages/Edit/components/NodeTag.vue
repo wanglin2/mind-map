@@ -8,6 +8,7 @@
     <el-input
       v-model="tag"
       @keyup.native.enter="add"
+      @keyup.native.stop
       :disabled="tagArr.length >= max"
       :placeholder="$t('nodeTag.addTip')"
     >

@@ -48,6 +48,7 @@ class Event extends EventEmitter {
     this.onMousewheel = this.onMousewheel.bind(this)
     this.onContextmenu = this.onContextmenu.bind(this)
     this.onSvgMousedown = this.onSvgMousedown.bind(this)
+    this.onKeyup = this.onKeyup.bind(this)
   }
 
   /**
@@ -69,6 +70,7 @@ class Event extends EventEmitter {
       this.mindMap.el.addEventListener('mousewheel', this.onMousewheel)
     }
     this.mindMap.svg.on('contextmenu', this.onContextmenu)
+    window.addEventListener('keyup', this.onKeyup)
   }
 
   /**
@@ -84,6 +86,7 @@ class Event extends EventEmitter {
     window.removeEventListener('mouseup', this.onMouseup)
     this.mindMap.el.removeEventListener('mousewheel', this.onMousewheel)
     this.mindMap.svg.off('contextmenu', this.onContextmenu)
+    window.removeEventListener('keyup', this.onKeyup)
   }
 
   /**
@@ -176,6 +179,16 @@ class Event extends EventEmitter {
   onContextmenu(e) {
     e.preventDefault()
     this.emit('contextmenu', e)
+  }
+
+  /**
+   * javascript comment
+   * @Author: 王林25
+   * @Date: 2022-12-09 11:12:11
+   * @Desc: 按键松开事件
+   */
+  onKeyup(e) {
+    this.emit('keyup', e)
   }
 }
 
