@@ -423,6 +423,14 @@ v0.1.5+
 
 将节点移动到另一个节点的后面
 
+#### moveNodeToCenter(node)
+
+v0.2.17+
+
+移动节点到画布中心。
+
+目前如果是存在缩放的情况下回到中心会重置缩放。
+
 ## keyCommand实例
 
 `keyCommand`实例负责快捷键的添加及触发，内置了一些快捷键，也可以自行添加。可通过`mindMap.keyCommand`获取到该实例。
@@ -549,6 +557,12 @@ v0.1.1+
 v0.1.1+
 
 动态设置变换数据，可以通过getTransformData方法获取变换数据
+
+#### setScale(scale)
+
+v0.2.17+
+
+设置缩放
 
 ## MiniMap实例
 

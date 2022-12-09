@@ -213,6 +213,18 @@ class View {
     this.transform()
     this.mindMap.emit('scale', this.scale)
   }
+
+  /**
+   * javascript comment
+   * @Author: 王林25
+   * @Date: 2022-12-09 16:31:59
+   * @Desc: 设置缩放
+   */
+  setScale(scale) {
+    this.scale = scale
+    this.transform()
+    this.mindMap.emit('scale', this.scale)
+  }
 }
 
 export default View

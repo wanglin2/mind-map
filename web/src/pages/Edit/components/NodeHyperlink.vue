@@ -11,11 +11,12 @@
         v-model="link"
         size="mini"
         placeholder="http://xxxx.com/"
+        @keyup.native.stop
       ></el-input>
     </div>
     <div class="item">
       <span class="name">{{ $t('nodeHyperlink.name') }}</span>
-      <el-input v-model="linkTitle" size="mini"></el-input>
+      <el-input v-model="linkTitle" size="mini" @keyup.native.stop></el-input>
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>

@@ -88,6 +88,9 @@ export default class TextEdit {
       this.textEditNode = document.createElement('div')
       this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);padding: 3px 5px;margin-left: -5px;margin-top: -3px;outline: none;`
       this.textEditNode.setAttribute('contenteditable', true)
+      this.textEditNode.addEventListener('keyup', e => {
+        e.stopPropagation()
+      })
       document.body.appendChild(this.textEditNode)
     }
     node.style.domText(this.textEditNode, this.mindMap.view.scale)
