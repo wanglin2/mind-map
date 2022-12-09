@@ -15,6 +15,7 @@ import { layoutValueList } from './src/utils/constant'
 import { SVG } from '@svgdotjs/svg.js'
 import xmind from './src/parse/xmind'
 import { simpleDeepClone } from './src/utils'
+import KeyboardNavigation from './src/KeyboardNavigation'
 
 // 默认选项配置
 const defaultOpt = {
@@ -130,6 +131,11 @@ class MindMap {
 
     // 拖动类
     this.drag = new Drag({
+      mindMap: this
+    })
+
+    // 键盘导航类
+    this.keyboardNavigation = new KeyboardNavigation({
       mindMap: this
     })
 

@@ -1097,6 +1097,28 @@ class Render {
       this.mindMap.render()
     }
   }
+
+  /**
+   * javascript comment
+   * @Author: 王林25
+   * @Date: 2022-12-09 11:46:57
+   * @Desc: 移动节点到画布中心
+   */
+  moveNodeToCenter(node) {
+    let halfWidth = this.mindMap.width / 2
+    let halfHeight = this.mindMap.height / 2
+    let { left, top, width, height } = node
+    let nodeCenterX = left + width / 2
+    let nodeCenterY = top + height / 2
+    let { state } = this.mindMap.view.getTransformData()
+    let targetX = halfWidth - state.x
+    let targetY = halfHeight - state.y
+    let offsetX = targetX - nodeCenterX
+    let offsetY = targetY - nodeCenterY
+    this.mindMap.view.translateX(offsetX)
+    this.mindMap.view.translateY(offsetY)
+    this.mindMap.view.setScale(1)
+  }
 }
 
 export default Render
