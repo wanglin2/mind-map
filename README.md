@@ -93,7 +93,7 @@ npm run build
 
 # 安装
 
-> 当前仓库版本：0.2.16，当前npm版本：0.2.16
+> 当前仓库版本：0.2.18，当前npm版本：0.2.18
 
 ```bash
 npm i simple-mind-map

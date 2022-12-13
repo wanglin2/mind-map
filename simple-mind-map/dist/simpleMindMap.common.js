@@ -40639,10 +40639,13 @@ var KeyboardNavigation_KeyboardNavigation = /*#__PURE__*/function () {
     value: function focus(dir) {
       var _this2 = this;
 
-      var currentActiveNode = this.mindMap.renderer.activeNodeList[0];
-      var currentActiveNodeRect = this.getNodeRect(currentActiveNode);
+      // 当前聚焦的节点
+      var currentActiveNode = this.mindMap.renderer.activeNodeList[0]; // 当前聚焦节点的位置信息
+
+      var currentActiveNodeRect = this.getNodeRect(currentActiveNode); // 寻找的下一个聚焦节点
+
       var targetNode = null;
-      var targetDis = Infinity;
+      var targetDis = Infinity; // 保存并维护距离最近的节点
 
       var checkNodeDis = function checkNodeDis(rect, node) {
         var dis = _this2.getDistance(currentActiveNodeRect, rect);
@@ -40651,39 +40654,183 @@ var KeyboardNavigation_KeyboardNavigation = /*#__PURE__*/function () {
           targetNode = node;
           targetDis = dis;
         }
-      };
+      }; // 第一优先级：阴影算法
 
-      bfsWalk(this.mindMap.renderer.root, function (node) {
-        var rect = _this2.getNodeRect(node);
 
-        var left = rect.left,
-            top = rect.top,
-            right = rect.right,
-            bottom = rect.bottom;
+      this.getFocusNodeByShadowAlgorithm({
+        currentActiveNode: currentActiveNode,
+        currentActiveNodeRect: currentActiveNodeRect,
+        dir: dir,
+        checkNodeDis: checkNodeDis
+      }); // 第二优先级：区域算法
 
-        if (dir === 'Right') {
-          if (left >= currentActiveNodeRect.right) {
-            checkNodeDis(rect, node);
-          }
-        } else if (dir === 'Left') {
-          if (right <= currentActiveNodeRect.left) {
-            checkNodeDis(rect, node);
-          }
-        } else if (dir === 'Up') {
-          if (bottom <= currentActiveNodeRect.top) {
-            checkNodeDis(rect, node);
-          }
-        } else if (dir === 'Down') {
-          if (top >= currentActiveNodeRect.bottom) {
-            checkNodeDis(rect, node);
-          }
-        }
-      });
+      if (!targetNode) {
+        this.getFocusNodeByAreaAlgorithm({
+          currentActiveNode: currentActiveNode,
+          currentActiveNodeRect: currentActiveNodeRect,
+          dir: dir,
+          checkNodeDis: checkNodeDis
+        });
+      } // 第三优先级：简单算法
+
+
+      if (!targetNode) {
+        this.getFocusNodeBySimpleAlgorithm({
+          currentActiveNode: currentActiveNode,
+          currentActiveNodeRect: currentActiveNodeRect,
+          dir: dir,
+          checkNodeDis: checkNodeDis
+        });
+      } // 找到了则让目标节点聚焦
+
 
       if (targetNode) {
         this.mindMap.renderer.moveNodeToCenter(targetNode);
         targetNode.active();
       }
+    }
+    /**
+     * javascript comment
+     * @Author: 王林25
+     * @Date: 2022-12-12 16:22:54
+     * @Desc: 1.简单算法
+     */
+
+  }, {
+    key: "getFocusNodeBySimpleAlgorithm",
+    value: function getFocusNodeBySimpleAlgorithm(_ref) {
+      var _this3 = this;
+
+      var currentActiveNode = _ref.currentActiveNode,
+          currentActiveNodeRect = _ref.currentActiveNodeRect,
+          dir = _ref.dir,
+          checkNodeDis = _ref.checkNodeDis;
+      // 遍历节点树
+      bfsWalk(this.mindMap.renderer.root, function (node) {
+        // 跳过当前聚焦的节点
+        if (node === currentActiveNode) return; // 当前遍历到的节点的位置信息
+
+        var rect = _this3.getNodeRect(node);
+
+        var left = rect.left,
+            top = rect.top,
+            right = rect.right,
+            bottom = rect.bottom;
+        var match = false; // 按下了左方向键
+
+        if (dir === 'Left') {
+          // 判断节点是否在当前节点的左侧
+          match = right <= currentActiveNodeRect.left; // 按下了右方向键
+        } else if (dir === 'Right') {
+          // 判断节点是否在当前节点的右侧
+          match = left >= currentActiveNodeRect.right; // 按下了上方向键
+        } else if (dir === 'Up') {
+          // 判断节点是否在当前节点的上面
+          match = bottom <= currentActiveNodeRect.top; // 按下了下方向键
+        } else if (dir === 'Down') {
+          // 判断节点是否在当前节点的下面
+          match = top >= currentActiveNodeRect.bottom;
+        } // 符合要求，判断是否是最近的节点
+
+
+        if (match) {
+          checkNodeDis(rect, node);
+        }
+      });
+    }
+    /**
+     * javascript comment
+     * @Author: 王林25
+     * @Date: 2022-12-12 16:24:54
+     * @Desc: 2.阴影算法
+     */
+
+  }, {
+    key: "getFocusNodeByShadowAlgorithm",
+    value: function getFocusNodeByShadowAlgorithm(_ref2) {
+      var _this4 = this;
+
+      var currentActiveNode = _ref2.currentActiveNode,
+          currentActiveNodeRect = _ref2.currentActiveNodeRect,
+          dir = _ref2.dir,
+          checkNodeDis = _ref2.checkNodeDis;
+      bfsWalk(this.mindMap.renderer.root, function (node) {
+        if (node === currentActiveNode) return;
+
+        var rect = _this4.getNodeRect(node);
+
+        var left = rect.left,
+            top = rect.top,
+            right = rect.right,
+            bottom = rect.bottom;
+        var match = false;
+
+        if (dir === 'Left') {
+          match = left < currentActiveNodeRect.left && top < currentActiveNodeRect.bottom && bottom > currentActiveNodeRect.top;
+        } else if (dir === 'Right') {
+          match = right > currentActiveNodeRect.right && top < currentActiveNodeRect.bottom && bottom > currentActiveNodeRect.top;
+        } else if (dir === 'Up') {
+          match = top < currentActiveNodeRect.top && left < currentActiveNodeRect.right && right > currentActiveNodeRect.left;
+        } else if (dir === 'Down') {
+          match = bottom > currentActiveNodeRect.bottom && left < currentActiveNodeRect.right && right > currentActiveNodeRect.left;
+        }
+
+        if (match) {
+          checkNodeDis(rect, node);
+        }
+      });
+    }
+    /**
+     * javascript comment
+     * @Author: 王林25
+     * @Date: 2022-12-13 16:15:36
+     * @Desc: 3.区域算法
+     */
+
+  }, {
+    key: "getFocusNodeByAreaAlgorithm",
+    value: function getFocusNodeByAreaAlgorithm(_ref3) {
+      var _this5 = this;
+
+      var currentActiveNode = _ref3.currentActiveNode,
+          currentActiveNodeRect = _ref3.currentActiveNodeRect,
+          dir = _ref3.dir,
+          checkNodeDis = _ref3.checkNodeDis;
+      // 当前聚焦节点的中心点
+      var cX = (currentActiveNodeRect.right + currentActiveNodeRect.left) / 2;
+      var cY = (currentActiveNodeRect.bottom + currentActiveNodeRect.top) / 2;
+      bfsWalk(this.mindMap.renderer.root, function (node) {
+        if (node === currentActiveNode) return;
+
+        var rect = _this5.getNodeRect(node);
+
+        var left = rect.left,
+            top = rect.top,
+            right = rect.right,
+            bottom = rect.bottom; // 遍历到的节点的中心点
+
+        var ccX = (right + left) / 2;
+        var ccY = (bottom + top) / 2; // 节点的中心点坐标和当前聚焦节点的中心点坐标的差值
+
+        var offsetX = ccX - cX;
+        var offsetY = ccY - cY;
+        if (offsetX === 0 && offsetY === 0) return;
+        var match = false;
+
+        if (dir === 'Left') {
+          match = offsetX <= 0 && offsetX <= offsetY && offsetX <= -offsetY;
+        } else if (dir === 'Right') {
+          match = offsetX > 0 && offsetX >= -offsetY && offsetX >= offsetY;
+        } else if (dir === 'Up') {
+          match = offsetY <= 0 && offsetY < offsetX && offsetY < -offsetX;
+        } else if (dir === 'Down') {
+          match = offsetY > 0 && -offsetY < offsetX && offsetY > offsetX;
+        }
+
+        if (match) {
+          checkNodeDis(rect, node);
+        }
+      });
     }
     /**
      * javascript comment
@@ -40735,11 +40882,11 @@ var KeyboardNavigation_KeyboardNavigation = /*#__PURE__*/function () {
 
   }, {
     key: "getCenter",
-    value: function getCenter(_ref) {
-      var left = _ref.left,
-          right = _ref.right,
-          top = _ref.top,
-          bottom = _ref.bottom;
+    value: function getCenter(_ref4) {
+      var left = _ref4.left,
+          right = _ref4.right,
+          top = _ref4.top,
+          bottom = _ref4.bottom;
       return {
         x: (left + right) / 2,
         y: (top + bottom) / 2
