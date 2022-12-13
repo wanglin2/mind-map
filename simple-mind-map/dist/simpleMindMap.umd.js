@@ -40623,18 +40623,20 @@ var KeyboardNavigation_KeyboardNavigation = /*#__PURE__*/function () {
     value: function onKeyup(e) {
       var _this = this;
 
-      if (this.mindMap.renderer.activeNodeList.length > 0) {
-        ;
-        ['Left', 'Up', 'Right', 'Down'].forEach(function (dir) {
-          if (keyMap_isKey(e, dir)) {
+      ;
+      ['Left', 'Up', 'Right', 'Down'].forEach(function (dir) {
+        if (keyMap_isKey(e, dir)) {
+          if (_this.mindMap.renderer.activeNodeList.length > 0) {
             _this.focus(dir);
+          } else {
+            var root = _this.mindMap.renderer.root;
+
+            _this.mindMap.renderer.moveNodeToCenter(root);
+
+            root.active();
           }
-        });
-      } else {
-        var root = this.mindMap.renderer.root;
-        this.mindMap.renderer.moveNodeToCenter(root);
-        root.active();
-      }
+        }
+      });
     }
     /**
      * javascript comment
