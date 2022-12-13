@@ -28,17 +28,17 @@ export default class KeyboardNavigation {
    * @Desc: 处理按键事件
    */
   onKeyup(e) {
-    if (this.mindMap.renderer.activeNodeList.length > 0) {
-      ;['Left', 'Up', 'Right', 'Down'].forEach(dir => {
-        if (isKey(e, dir)) {
+    ;['Left', 'Up', 'Right', 'Down'].forEach(dir => {
+      if (isKey(e, dir)) {
+        if (this.mindMap.renderer.activeNodeList.length > 0) {
           this.focus(dir)
+        } else {
+          let root = this.mindMap.renderer.root
+          this.mindMap.renderer.moveNodeToCenter(root)
+          root.active()
         }
-      })
-    } else {
-      let root = this.mindMap.renderer.root
-      this.mindMap.renderer.moveNodeToCenter(root)
-      root.active()
-    }
+      }
+    })
   }
 
   /**
