@@ -328,6 +328,11 @@ export default {
     top: 0px;
     width: 100%;
     height: 100%;
+
+    // left: 100px;
+    // top: 100px;
+    // right: 100px;
+    // bottom: 100px;
   }
 }
 </style>
