@@ -76,12 +76,11 @@ class Drag extends Base {
       // 计算鼠标按下的位置距离节点左上角的距离
       this.drawTransform = this.mindMap.draw.transform()
       let { scaleX, scaleY, translateX, translateY } = this.drawTransform
-      this.offsetX = e.clientX - (node.left * scaleX + translateX)
-      this.offsetY = e.clientY - (node.top * scaleY + translateY)
-      //
+      let { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
+      this.offsetX = x - (node.left * scaleX + translateX)
+      this.offsetY = y - (node.top * scaleY + translateY)
       this.node = node
       this.isMousedown = true
-      let { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
       this.mouseDownX = x
       this.mouseDownY = y
     })
@@ -275,7 +274,7 @@ class Drag extends Base {
         }
       }
       // 检测兄弟节点位置
-      if (!this.prevNode && !this.nextNode && this.node.isBrother(node)) {
+      if (!this.prevNode && !this.nextNode && !node.isRoot) {// && this.node.isBrother(node)
         if (left <= checkRight && right >= this.cloneNodeLeft) {
           if (this.cloneNodeTop > bottom && this.cloneNodeTop <= bottom + 10) {
             this.prevNode = node

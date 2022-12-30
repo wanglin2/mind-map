@@ -549,32 +549,30 @@ class Render {
     if (node.isRoot) {
       return
     }
-    let parent = node.parent
-    let childList = parent.children
-    // 要移动节点的索引
-    let index = childList.findIndex(item => {
+    // 移动节点
+    let nodeParent = node.parent
+    let nodeBorthers = nodeParent.children
+    let nodeIndex = nodeBorthers.findIndex(item => {
       return item === node
     })
-    if (index === -1) {
+    if (nodeIndex === -1) {
       return
     }
-    // 目标节点的索引
-    let existIndex = childList.findIndex(item => {
+    nodeBorthers.splice(nodeIndex, 1)
+    nodeParent.nodeData.children.splice(nodeIndex, 1)
+
+
+    // 目标节点
+    let existParent = exist.parent
+    let existBorthers = existParent.children
+    let existIndex = existBorthers.findIndex(item => {
       return item === exist
     })
     if (existIndex === -1) {
       return
     }
-    // 当前节点在目标节点前面
-    if (index < existIndex) {
-      existIndex = existIndex - 1
-    }
-    // 节点实例
-    childList.splice(index, 1)
-    childList.splice(existIndex, 0, node)
-    // 节点数据
-    parent.nodeData.children.splice(index, 1)
-    parent.nodeData.children.splice(existIndex, 0, node.nodeData)
+    existBorthers.splice(existIndex, 0, node)
+    existParent.nodeData.children.splice(existIndex, 0, node.nodeData)
     this.mindMap.render()
   }
 
@@ -588,34 +586,31 @@ class Render {
     if (node.isRoot) {
       return
     }
-    let parent = node.parent
-    let childList = parent.children
-    // 要移动节点的索引
-    let index = childList.findIndex(item => {
+    // 移动节点
+    let nodeParent = node.parent
+    let nodeBorthers = nodeParent.children
+    let nodeIndex = nodeBorthers.findIndex(item => {
       return item === node
     })
-    if (index === -1) {
+    if (nodeIndex === -1) {
       return
     }
-    // 目标节点的索引
-    let existIndex = childList.findIndex(item => {
+    nodeBorthers.splice(nodeIndex, 1)
+    nodeParent.nodeData.children.splice(nodeIndex, 1)
+
+
+    // 目标节点
+    let existParent = exist.parent
+    let existBorthers = existParent.children
+    let existIndex = existBorthers.findIndex(item => {
       return item === exist
     })
     if (existIndex === -1) {
       return
     }
-    // 当前节点在目标节点前面
-    if (index < existIndex) {
-      // do nothing
-    } else {
-      existIndex = existIndex + 1
-    }
-    // 节点实例
-    childList.splice(index, 1)
-    childList.splice(existIndex, 0, node)
-    // 节点数据
-    parent.nodeData.children.splice(index, 1)
-    parent.nodeData.children.splice(existIndex, 0, node.nodeData)
+    existIndex++
+    existBorthers.splice(existIndex, 0, node)
+    existParent.nodeData.children.splice(existIndex, 0, node.nodeData)
     this.mindMap.render()
   }
 
