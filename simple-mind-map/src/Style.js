@@ -115,15 +115,23 @@ class Style {
    * @Desc:  矩形外的其他形状
    */
   shape(node) {
-    node
-      .fill({
-        color: this.merge('fillColor')
-      })
-      .stroke({
-        color: this.merge('borderColor'),
-        width: this.merge('borderWidth'),
-        dasharray: this.merge('borderDasharray')
-      })
+    node.fill({
+      color: this.merge('fillColor')
+    })
+    // 节点使用横线样式，不需要渲染非激活状态的边框样式
+    if (
+      !this.ctx.isRoot &&
+      !this.ctx.isGeneralization &&
+      this.themeConfig.nodeUseLineStyle &&
+      !this.ctx.nodeData.data.isActive
+    ) {
+      return
+    }
+    node.stroke({
+      color: this.merge('borderColor'),
+      width: this.merge('borderWidth'),
+      dasharray: this.merge('borderDasharray')
+    })
   }
 
   /**

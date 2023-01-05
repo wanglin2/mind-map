@@ -35,6 +35,8 @@ export default {
   backgroundImage: 'none',
   // 背景重复
   backgroundRepeat: 'no-repeat',
+  // 节点使用横线样式
+  nodeUseLineStyle: false,
   // 根节点样式
   root: {
     shape: 'rectangle',

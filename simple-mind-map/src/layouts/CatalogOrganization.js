@@ -299,9 +299,13 @@ class CatalogOrganization extends Base {
         if (x2 > maxx) {
           maxx = x2
         }
-        let path = `M ${x2},${y1 + s1} L ${x2},${
-          y1 + s1 > y2 ? y2 + item.height : y2
-        }`
+        // 节点使用横线风格，需要额外渲染横线
+        let nodeUseLineStylePath = this.mindMap.themeConfig.nodeUseLineStyle
+          ? ` L ${item.left},${y2} L ${item.left + item.width},${y2}`
+          : ''
+        let path =
+          `M ${x2},${y1 + s1} L ${x2},${y1 + s1 > y2 ? y2 + item.height : y2}` +
+          nodeUseLineStylePath
         // 竖线
         lines[index].plot(path)
         style && style(lines[index], item)
@@ -365,6 +369,13 @@ class CatalogOrganization extends Base {
           }
           path = `M ${x2},${y2} L ${_left},${y2}`
         }
+        // 节点使用横线风格，需要额外渲染横线
+        let nodeUseLineStylePath = this.mindMap.themeConfig.nodeUseLineStyle
+          ? ` L ${_left},${y2 - item.height / 2} L ${_left},${
+              y2 + item.height / 2
+            }`
+          : ''
+        path += nodeUseLineStylePath
         lines[index].plot(path)
         style && style(lines[index], item)
       })

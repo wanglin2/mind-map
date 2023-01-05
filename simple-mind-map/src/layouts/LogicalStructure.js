@@ -209,9 +209,13 @@ class LogicalStructure extends Base {
       let y1 = top + height / 2
       let x2 = item.left
       let y2 = item.top + item.height / 2
-      let path = `M ${x1},${y1} L ${x1 + s1},${y1} L ${
-        x1 + s1
-      },${y2} L ${x2},${y2}`
+      // 节点使用横线风格，需要额外渲染横线
+      let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle
+        ? item.width
+        : 0
+      let path = `M ${x1},${y1} L ${x1 + s1},${y1} L ${x1 + s1},${y2} L ${
+        x2 + nodeUseLineStyleOffset
+      },${y2}`
       lines[index].plot(path)
       style && style(lines[index], item)
     })
@@ -234,7 +238,11 @@ class LogicalStructure extends Base {
       let y1 = top + height / 2
       let x2 = item.left
       let y2 = item.top + item.height / 2
-      let path = `M ${x1},${y1} L ${x2},${y2}`
+      // 节点使用横线风格，需要额外渲染横线
+      let nodeUseLineStylePath = this.mindMap.themeConfig.nodeUseLineStyle
+        ? ` L ${item.left + item.width},${y2}`
+        : ''
+      let path = `M ${x1},${y1} L ${x2},${y2}` + nodeUseLineStylePath
       lines[index].plot(path)
       style && style(lines[index], item)
     })
@@ -258,10 +266,14 @@ class LogicalStructure extends Base {
       let x2 = item.left
       let y2 = item.top + item.height / 2
       let path = ''
+      // 节点使用横线风格，需要额外渲染横线
+      let nodeUseLineStylePath = this.mindMap.themeConfig.nodeUseLineStyle
+        ? ` L ${item.left + item.width},${y2}`
+        : ''
       if (node.isRoot) {
-        path = this.quadraticCurvePath(x1, y1, x2, y2)
+        path = this.quadraticCurvePath(x1, y1, x2, y2) + nodeUseLineStylePath
       } else {
-        path = this.cubicBezierPath(x1, y1, x2, y2)
+        path = this.cubicBezierPath(x1, y1, x2, y2) + nodeUseLineStylePath
       }
       lines[index].plot(path)
       style && style(lines[index], item)
@@ -276,7 +288,14 @@ class LogicalStructure extends Base {
   renderExpandBtn(node, btn) {
     let { width, height } = node
     let { translateX, translateY } = btn.transform()
-    btn.translate(width - translateX, height / 2 - translateY)
+    // 节点使用横线风格，需要调整展开收起按钮位置
+    let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle
+      ? height / 2
+      : 0
+    btn.translate(
+      width - translateX,
+      height / 2 - translateY + nodeUseLineStyleOffset
+    )
   }
 
   /**
