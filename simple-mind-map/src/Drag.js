@@ -274,7 +274,8 @@ class Drag extends Base {
         }
       }
       // 检测兄弟节点位置
-      if (!this.prevNode && !this.nextNode && !node.isRoot) {// && this.node.isBrother(node)
+      if (!this.prevNode && !this.nextNode && !node.isRoot) {
+        // && this.node.isBrother(node)
         if (left <= checkRight && right >= this.cloneNodeLeft) {
           if (this.cloneNodeTop > bottom && this.cloneNodeTop <= bottom + 10) {
             this.prevNode = node

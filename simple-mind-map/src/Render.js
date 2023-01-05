@@ -561,7 +561,6 @@ class Render {
     nodeBorthers.splice(nodeIndex, 1)
     nodeParent.nodeData.children.splice(nodeIndex, 1)
 
-
     // 目标节点
     let existParent = exist.parent
     let existBorthers = existParent.children
@@ -597,7 +596,6 @@ class Render {
     }
     nodeBorthers.splice(nodeIndex, 1)
     nodeParent.nodeData.children.splice(nodeIndex, 1)
-
 
     // 目标节点
     let existParent = exist.parent

@@ -245,9 +245,14 @@ class MindMap extends Base {
     node.children.forEach((item, index) => {
       let x1 = 0
       let _s = 0
+      // 节点使用横线风格，需要额外渲染横线
+      let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle
+        ? item.width
+        : 0
       if (item.dir === 'left') {
         _s = -s1
         x1 = node.layerIndex === 0 ? left : left - expandBtnSize
+        nodeUseLineStyleOffset = -nodeUseLineStyleOffset
       } else {
         _s = s1
         x1 = node.layerIndex === 0 ? left + width : left + width + expandBtnSize
@@ -255,9 +260,9 @@ class MindMap extends Base {
       let y1 = top + height / 2
       let x2 = item.dir === 'left' ? item.left + item.width : item.left
       let y2 = item.top + item.height / 2
-      let path = `M ${x1},${y1} L ${x1 + _s},${y1} L ${
-        x1 + _s
-      },${y2} L ${x2},${y2}`
+      let path = `M ${x1},${y1} L ${x1 + _s},${y1} L ${x1 + _s},${y2} L ${
+        x2 + nodeUseLineStyleOffset
+      },${y2}`
       lines[index].plot(path)
       style && style(lines[index], item)
     })
@@ -284,7 +289,16 @@ class MindMap extends Base {
       let y1 = top + height / 2
       let x2 = item.dir === 'left' ? item.left + item.width : item.left
       let y2 = item.top + item.height / 2
-      let path = `M ${x1},${y1} L ${x2},${y2}`
+      // 节点使用横线风格，需要额外渲染横线
+      let nodeUseLineStylePath = ''
+      if (this.mindMap.themeConfig.nodeUseLineStyle) {
+        if (item.dir === 'left') {
+          nodeUseLineStylePath = ` L ${item.left},${y2}`
+        } else {
+          nodeUseLineStylePath = ` L ${item.left + item.width},${y2}`
+        }
+      }
+      let path = `M ${x1},${y1} L ${x2},${y2}` + nodeUseLineStylePath
       lines[index].plot(path)
       style && style(lines[index], item)
     })
@@ -312,10 +326,19 @@ class MindMap extends Base {
       let x2 = item.dir === 'left' ? item.left + item.width : item.left
       let y2 = item.top + item.height / 2
       let path = ''
+      // 节点使用横线风格，需要额外渲染横线
+      let nodeUseLineStylePath = ''
+      if (this.mindMap.themeConfig.nodeUseLineStyle) {
+        if (item.dir === 'left') {
+          nodeUseLineStylePath = ` L ${item.left},${y2}`
+        } else {
+          nodeUseLineStylePath = ` L ${item.left + item.width},${y2}`
+        }
+      }
       if (node.isRoot) {
-        path = this.quadraticCurvePath(x1, y1, x2, y2)
+        path = this.quadraticCurvePath(x1, y1, x2, y2) + nodeUseLineStylePath
       } else {
-        path = this.cubicBezierPath(x1, y1, x2, y2)
+        path = this.cubicBezierPath(x1, y1, x2, y2) + nodeUseLineStylePath
       }
       lines[index].plot(path)
       style && style(lines[index], item)
@@ -330,8 +353,12 @@ class MindMap extends Base {
   renderExpandBtn(node, btn) {
     let { width, height, expandBtnSize } = node
     let { translateX, translateY } = btn.transform()
+    // 节点使用横线风格，需要调整展开收起按钮位置
+    let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle
+      ? height / 2
+      : 0
     let x = (node.dir === 'left' ? 0 - expandBtnSize : width) - translateX
-    let y = height / 2 - translateY
+    let y = height / 2 - translateY + nodeUseLineStyleOffset
     btn.translate(x, y)
   }
 

@@ -18,7 +18,9 @@ export default {
     icon: 'Icon',
     size: 'Size',
     level2Node: 'Level2 node',
-    belowLevel2Node: 'Below level2 node'
+    belowLevel2Node: 'Below level2 node',
+    nodeBorderType: 'Node border style',
+    nodeUseLineStyle: 'Use only has bottom border style'
   },
   color: {
     moreColor: 'More color'
