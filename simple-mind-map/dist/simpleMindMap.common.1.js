@@ -8408,7 +8408,7 @@ var BUGGY_SAFARI_ITERATORS = false;
 // https://tc39.es/ecma262/#sec-%iteratorprototype%-object
 var IteratorPrototype, PrototypeOfArrayIteratorPrototype, arrayIterator;
 
-/* eslint-disable es-x/no-array-prototype-keys -- safe */
+/* eslint-disable es/no-array-prototype-keys -- safe */
 if ([].keys) {
   arrayIterator = [].keys();
   // Safari 8 has buggy iterators w/o `next`
@@ -8491,7 +8491,7 @@ try {
   iteratorWithReturn[ITERATOR] = function () {
     return this;
   };
-  // eslint-disable-next-line es-x/no-array-from, no-throw-literal -- required for testing
+  // eslint-disable-next-line es/no-array-from, no-throw-literal -- required for testing
   Array.from(iteratorWithReturn, function () { throw 2; });
 } catch (error) { /* empty */ }
 
@@ -8556,7 +8556,7 @@ var objectKeys = __webpack_require__("c085");
 
 // `Object.defineProperties` method
 // https://tc39.es/ecma262/#sec-object.defineproperties
-// eslint-disable-next-line es-x/no-object-defineproperties -- safe
+// eslint-disable-next-line es/no-object-defineproperties -- safe
 exports.f = DESCRIPTORS && !V8_PROTOTYPE_DEFINE_BUG ? Object.defineProperties : function defineProperties(O, Properties) {
   anObject(O);
   var props = toIndexedObject(Properties);
@@ -8658,9 +8658,9 @@ $({ target: 'Promise', stat: true, forced: FORCED_PROMISE_CONSTRUCTOR }, {
 
 "use strict";
 
-/* eslint-disable es-x/no-array-prototype-indexof -- required for testing */
+/* eslint-disable es/no-array-prototype-indexof -- required for testing */
 var $ = __webpack_require__("3475");
-var uncurryThis = __webpack_require__("46ab");
+var uncurryThis = __webpack_require__("a578");
 var $indexOf = __webpack_require__("0965").indexOf;
 var arrayMethodIsStrict = __webpack_require__("5afb");
 
@@ -8896,7 +8896,7 @@ module.exports.polyfill = function(object) {
 /***/ "6005":
 /***/ (function(module, exports, __webpack_require__) {
 
-var uncurryThis = __webpack_require__("46ab");
+var uncurryThis = __webpack_require__("a578");
 var aCallable = __webpack_require__("cc50");
 var NATIVE_BIND = __webpack_require__("2f2d");
 
@@ -8931,9 +8931,11 @@ module.exports = function (argument) {
 /***/ }),
 
 /***/ "60a6":
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
+var toPropertyKey = __webpack_require__("6f13");
 function _defineProperty(obj, key, value) {
+  key = toPropertyKey(key);
   if (key in obj) {
     Object.defineProperty(obj, key, {
       value: value,
@@ -8944,10 +8946,8 @@ function _defineProperty(obj, key, value) {
   } else {
     obj[key] = value;
   }
-
   return obj;
 }
-
 module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -9086,6 +9086,19 @@ module.exports = function (O, defaultConstructor) {
   return C === undefined || isNullOrUndefined(S = anObject(C)[SPECIES]) ? defaultConstructor : aConstructor(S);
 };
 
+
+/***/ }),
+
+/***/ "6f13":
+/***/ (function(module, exports, __webpack_require__) {
+
+var _typeof = __webpack_require__("6171")["default"];
+var toPrimitive = __webpack_require__("e8f7");
+function _toPropertyKey(arg) {
+  var key = toPrimitive(arg, "string");
+  return _typeof(key) === "symbol" ? key : String(key);
+}
+module.exports = _toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -9230,7 +9243,7 @@ var ObjectPrototype = $Object.prototype;
 
 // `Object.getPrototypeOf` method
 // https://tc39.es/ecma262/#sec-object.getprototypeof
-// eslint-disable-next-line es-x/no-object-getprototypeof -- safe
+// eslint-disable-next-line es/no-object-getprototypeof -- safe
 module.exports = CORRECT_PROTOTYPE_GETTER ? $Object.getPrototypeOf : function (O) {
   var object = toObject(O);
   if (hasOwn(object, IE_PROTO)) return object[IE_PROTO];
@@ -9428,21 +9441,6 @@ module.exports = fails(function () {
 
 /***/ }),
 
-/***/ "916c":
-/***/ (function(module, exports, __webpack_require__) {
-
-var classof = __webpack_require__("424c");
-
-// `IsArray` abstract operation
-// https://tc39.es/ecma262/#sec-isarray
-// eslint-disable-next-line es-x/no-array-isarray -- safe
-module.exports = Array.isArray || function isArray(argument) {
-  return classof(argument) == 'Array';
-};
-
-
-/***/ }),
-
 /***/ "92ca":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9498,11 +9496,11 @@ var String = global.String;
 var counter = 0;
 var queue = {};
 var ONREADYSTATECHANGE = 'onreadystatechange';
-var location, defer, channel, port;
+var $location, defer, channel, port;
 
 try {
   // Deno throws a ReferenceError on `location` access without `--location` flag
-  location = global.location;
+  $location = global.location;
 } catch (error) { /* empty */ }
 
 var run = function (id) {
@@ -9525,7 +9523,7 @@ var listener = function (event) {
 
 var post = function (id) {
   // old engines have not location.origin
-  global.postMessage(String(id), location.protocol + '//' + location.host);
+  global.postMessage(String(id), $location.protocol + '//' + $location.host);
 };
 
 // Node.js 0.9+ & IE10+ has setImmediate, otherwise:
@@ -9566,7 +9564,7 @@ if (!set || !clear) {
     global.addEventListener &&
     isCallable(global.postMessage) &&
     !global.importScripts &&
-    location && location.protocol !== 'file:' &&
+    $location && $location.protocol !== 'file:' &&
     !fails(post)
   ) {
     defer = post;
@@ -9695,7 +9693,7 @@ module.exports = function (R) {
 "use strict";
 
 var $ = __webpack_require__("3475");
-var uncurryThis = __webpack_require__("46ab");
+var uncurryThis = __webpack_require__("a578");
 var getOwnPropertyDescriptor = __webpack_require__("dacf").f;
 var toLength = __webpack_require__("933e");
 var toString = __webpack_require__("b2d1");
@@ -9704,7 +9702,7 @@ var requireObjectCoercible = __webpack_require__("601e");
 var correctIsRegExpLogic = __webpack_require__("2f7d");
 var IS_PURE = __webpack_require__("ec82");
 
-// eslint-disable-next-line es-x/no-string-prototype-startswith -- safe
+// eslint-disable-next-line es/no-string-prototype-startswith -- safe
 var nativeStartsWith = uncurryThis(''.startsWith);
 var stringSlice = uncurryThis(''.slice);
 var min = Math.min;
@@ -10410,6 +10408,22 @@ module.exports.f = function (C) {
 
 /***/ }),
 
+/***/ "a578":
+/***/ (function(module, exports, __webpack_require__) {
+
+var classofRaw = __webpack_require__("424c");
+var uncurryThis = __webpack_require__("46ab");
+
+module.exports = function (fn) {
+  // Nashorn bug:
+  //   https://github.com/zloirock/core-js/issues/1128
+  //   https://github.com/zloirock/core-js/issues/1130
+  if (classofRaw(fn) === 'Function') return uncurryThis(fn);
+};
+
+
+/***/ }),
+
 /***/ "badf":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10417,7 +10431,7 @@ module.exports.f = function (C) {
 
 // TODO: Remove from `core-js@4` since it's moved to entry points
 __webpack_require__("fd89");
-var uncurryThis = __webpack_require__("46ab");
+var uncurryThis = __webpack_require__("a578");
 var defineBuiltIn = __webpack_require__("0cca");
 var regexpExec = __webpack_require__("03e8");
 var fails = __webpack_require__("8af8");
@@ -10588,7 +10602,7 @@ var enumBugKeys = __webpack_require__("d0dc");
 
 // `Object.keys` method
 // https://tc39.es/ecma262/#sec-object.keys
-// eslint-disable-next-line es-x/no-object-keys -- safe
+// eslint-disable-next-line es/no-object-keys -- safe
 module.exports = Object.keys || function keys(O) {
   return internalObjectKeys(O, enumBugKeys);
 };
@@ -10604,7 +10618,7 @@ var fails = __webpack_require__("8af8");
 module.exports = !fails(function () {
   function F() { /* empty */ }
   F.prototype.constructor = null;
-  // eslint-disable-next-line es-x/no-object-getprototypeof -- required for testing
+  // eslint-disable-next-line es/no-object-getprototypeof -- required for testing
   return Object.getPrototypeOf(new F()) !== F.prototype;
 });
 
@@ -10734,7 +10748,7 @@ hiddenKeys[IE_PROTO] = true;
 
 // `Object.create` method
 // https://tc39.es/ecma262/#sec-object.create
-// eslint-disable-next-line es-x/no-object-create -- safe
+// eslint-disable-next-line es/no-object-create -- safe
 module.exports = Object.create || function create(O, Properties) {
   var result;
   if (O !== null) {
@@ -10867,7 +10881,7 @@ module.exports = function (it) {
 "use strict";
 
 var $ = __webpack_require__("3475");
-var uncurryThis = __webpack_require__("46ab");
+var uncurryThis = __webpack_require__("a578");
 var getOwnPropertyDescriptor = __webpack_require__("dacf").f;
 var toLength = __webpack_require__("933e");
 var toString = __webpack_require__("b2d1");
@@ -10876,7 +10890,7 @@ var requireObjectCoercible = __webpack_require__("601e");
 var correctIsRegExpLogic = __webpack_require__("2f7d");
 var IS_PURE = __webpack_require__("ec82");
 
-// eslint-disable-next-line es-x/no-string-prototype-endswith -- safe
+// eslint-disable-next-line es/no-string-prototype-endswith -- safe
 var nativeEndsWith = uncurryThis(''.endsWith);
 var slice = uncurryThis(''.slice);
 var min = Math.min;
@@ -10904,6 +10918,25 @@ $({ target: 'String', proto: true, forced: !MDN_POLYFILL_BUG && !CORRECT_IS_REGE
   }
 });
 
+
+/***/ }),
+
+/***/ "e8f7":
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__("f8ac");
+var _typeof = __webpack_require__("6171")["default"];
+function _toPrimitive(input, hint) {
+  if (_typeof(input) !== "object" || input === null) return input;
+  var prim = input[Symbol.toPrimitive];
+  if (prim !== undefined) {
+    var res = prim.call(input, hint || "default");
+    if (_typeof(res) !== "object") return res;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return (hint === "string" ? String : Number)(input);
+}
+module.exports = _toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -10991,34 +11024,28 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     reject(error);
     return;
   }
-
   if (info.done) {
     resolve(value);
   } else {
     Promise.resolve(value).then(_next, _throw);
   }
 }
-
 function _asyncToGenerator(fn) {
   return function () {
     var self = this,
-        args = arguments;
+      args = arguments;
     return new Promise(function (resolve, reject) {
       var gen = fn.apply(self, args);
-
       function _next(value) {
         asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
       }
-
       function _throw(err) {
         asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
       }
-
       _next(undefined);
     });
   };
 }
-
 module.exports = _asyncToGenerator, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
