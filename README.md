@@ -111,6 +111,20 @@ npm i simple-mind-map
 > 
 > 其他项目请自行修改打包配置。
 
+# 问题
+
+## 1.在Vite中使用报错，提示xml-js依赖出错
+
+解决方法：使用如下引入方式：
+
+```js
+import MindMap from "simple-mind-map/dist/simpleMindMap.umd.min"
+```
+
+`simple-mind-map`包提供未打包的入口字段`module`，依赖的`xml-js`包需要引入`node`环境下的包，所以在`Vite`中获取不到会报错，所以指定引入打包后的入口，相关包都已打包进产物，所以不会报错。
+
+如果需要二次开发，也就是必须要使用未打包代码的话，如果你不需要解析`xmind`文件的话，可以去除`xmind`模块，如果需要的话那么可以尝试换成其他的解析`xml`为`json`的库。
+
 # API
 
 ## 实例化
@@ -124,7 +138,14 @@ import MindMap from "simple-mind-map";
 
 const mindMap = new MindMap({
   el: document.getElementById('mindMapContainer'),
-  data: data
+  data: {
+    "root": {
+        "data": {
+            "text": "根节点"
+        },
+        "children": []
+    }
+  }
 });
 ```
 
