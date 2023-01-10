@@ -1,8 +1,4 @@
-/**
- * @Author: 王林
- * @Date: 2021-04-11 10:19:55
- * @Desc: 默认主题
- */
+//  默认主题
 export default {
   // 节点内边距
   paddingX: 15,

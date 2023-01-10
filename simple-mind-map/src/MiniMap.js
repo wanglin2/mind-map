@@ -1,11 +1,6 @@
 // 小地图类
 class MiniMap {
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-10-10 14:00:45
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt) {
     this.mindMap = opt.mindMap
     this.isMousedown = false
@@ -19,12 +14,7 @@ class MiniMap {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-10-10 14:00:43
-   * @Desc:  获取小地图相关数据
-   */
+  //   获取小地图相关数据
   getMiniMap() {
     const svg = this.mindMap.svg
     const draw = this.mindMap.draw
@@ -61,11 +51,8 @@ class MiniMap {
     }
   }
 
+  //  计算小地图的渲染数据
   /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-10-10 14:05:51
-   * @Desc: 计算小地图的渲染数据
    * boxWidth：小地图容器的宽度
    * boxHeight：小地图容器的高度
    */
@@ -124,12 +111,7 @@ class MiniMap {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-10-10 14:22:40
-   * @Desc: 小地图鼠标按下事件
-   */
+  //  小地图鼠标按下事件
   onMousedown(e) {
     this.isMousedown = true
     this.mousedownPos = {
@@ -144,12 +126,7 @@ class MiniMap {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-10-10 14:22:55
-   * @Desc: 小地图鼠标移动事件
-   */
+  //  小地图鼠标移动事件
   onMousemove(e, sensitivityNum = 5) {
     if (!this.isMousedown) {
       return
@@ -161,12 +138,7 @@ class MiniMap {
     this.mindMap.view.translateYTo(oy * sensitivityNum + this.startViewPos.y)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-10-10 14:23:01
-   * @Desc: 小地图鼠标松开事件
-   */
+  //  小地图鼠标松开事件
   onMouseup() {
     this.isMousedown = false
   }

@@ -1,8 +1,4 @@
-/**
- * @Author: 王林
- * @Date: 2021-06-27 13:16:23
- * @Desc: 在下一个事件循环里执行任务
- */
+//  在下一个事件循环里执行任务
 const nextTick = function (fn, ctx) {
   let pending = false
   let timerFunc = null
@@ -33,28 +29,16 @@ const nextTick = function (fn, ctx) {
   }
 }
 
-/**
- * @Author: 王林
- * @Date: 2021-06-26 22:40:52
- * @Desc: 批量执行
- */
+//  批量执行
 class BatchExecution {
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-26 22:41:41
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor() {
     this.has = {}
     this.queue = []
     this.nextTick = nextTick(this.flush, this)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-27 12:54:04
-   * @Desc: 添加任务
-   */
+  //  添加任务
   push(name, fn) {
     if (this.has[name]) {
       return
@@ -67,11 +51,7 @@ class BatchExecution {
     this.nextTick()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-27 13:09:24
-   * @Desc:  执行队列
-   */
+  //   执行队列
   flush() {
     let fns = this.queue.slice(0)
     this.queue = []

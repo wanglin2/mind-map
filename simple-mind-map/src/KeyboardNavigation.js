@@ -1,19 +1,9 @@
 import { isKey } from './utils/keyMap'
 import { bfsWalk } from './utils'
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2022-12-09 11:06:50
- * @Desc: 键盘导航类
- */
+//  键盘导航类
 export default class KeyboardNavigation {
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 11:07:24
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt) {
     this.opt = opt
     this.mindMap = opt.mindMap
@@ -21,12 +11,7 @@ export default class KeyboardNavigation {
     this.mindMap.on('keyup', this.onKeyup)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 14:12:27
-   * @Desc: 处理按键事件
-   */
+  //  处理按键事件
   onKeyup(e) {
     ;['Left', 'Up', 'Right', 'Down'].forEach(dir => {
       if (isKey(e, dir)) {
@@ -41,12 +26,7 @@ export default class KeyboardNavigation {
     })
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 14:12:39
-   * @Desc: 聚焦到下一个节点
-   */
+  //  聚焦到下一个节点
   focus(dir) {
     // 当前聚焦的节点
     let currentActiveNode = this.mindMap.renderer.activeNodeList[0]
@@ -99,12 +79,7 @@ export default class KeyboardNavigation {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-12 16:22:54
-   * @Desc: 1.简单算法
-   */
+  //  1.简单算法
   getFocusNodeBySimpleAlgorithm({
     currentActiveNode,
     currentActiveNodeRect,
@@ -143,12 +118,7 @@ export default class KeyboardNavigation {
     })
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-12 16:24:54
-   * @Desc: 2.阴影算法
-   */
+  //  2.阴影算法
   getFocusNodeByShadowAlgorithm({
     currentActiveNode,
     currentActiveNodeRect,
@@ -187,12 +157,7 @@ export default class KeyboardNavigation {
     })
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-13 16:15:36
-   * @Desc: 3.区域算法
-   */
+  //  3.区域算法
   getFocusNodeByAreaAlgorithm({
     currentActiveNode,
     currentActiveNodeRect,
@@ -229,12 +194,7 @@ export default class KeyboardNavigation {
     })
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 14:12:50
-   * @Desc: 获取节点的位置信息
-   */
+  //  获取节点的位置信息
   getNodeRect(node) {
     let { scaleX, scaleY, translateX, translateY } =
       this.mindMap.draw.transform()
@@ -247,12 +207,7 @@ export default class KeyboardNavigation {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 14:13:04
-   * @Desc: 获取两个节点的距离
-   */
+  //  获取两个节点的距离
   getDistance(node1Rect, node2Rect) {
     let center1 = this.getCenter(node1Rect)
     let center2 = this.getCenter(node2Rect)
@@ -261,12 +216,7 @@ export default class KeyboardNavigation {
     )
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 14:13:11
-   * @Desc: 获取节点的中心点
-   */
+  //  获取节点的中心点
   getCenter({ left, right, top, bottom }) {
     return {
       x: (left + right) / 2,

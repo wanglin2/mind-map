@@ -20,19 +20,9 @@ const layouts = {
   organizationStructure: OrganizationStructure
 }
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-08 16:25:07
- * @Desc: 渲染
- */
+//  渲染
 class Render {
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 16:25:32
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt = {}) {
     this.opt = opt
     this.mindMap = opt.mindMap
@@ -58,12 +48,7 @@ class Render {
     this.registerShortcutKeys()
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-13 16:20:07
-   * @Desc: 设置布局结构
-   */
+  //  设置布局结构
   setLayout() {
     this.layout = new (
       layouts[this.mindMap.opt.layout]
@@ -72,11 +57,7 @@ class Render {
     )(this)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-20 10:34:06
-   * @Desc:  绑定事件
-   */
+  //   绑定事件
   bindEvent() {
     // 点击事件
     this.mindMap.on('draw_click', () => {
@@ -87,11 +68,7 @@ class Render {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:19:06
-   * @Desc: 注册命令
-   */
+  //  注册命令
   registerCommands() {
     // 全选
     this.selectAll = this.selectAll.bind(this)
@@ -192,11 +169,7 @@ class Render {
     this.mindMap.command.add('SET_NODE_SHAPE', this.setNodeShape)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 16:55:44
-   * @Desc: 注册快捷键
-   */
+  //  注册快捷键
   registerShortcutKeys() {
     // 插入下级节点
     this.mindMap.keyCommand.addShortcut('Tab', () => {
@@ -240,12 +213,7 @@ class Render {
     // 复制节点、剪切节点、粘贴节点的快捷键需开发者自行注册实现，可参考demo
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-05-09 10:43:52
-   * @Desc: 开启文字编辑，会禁用回车键和删除键相关快捷键防止冲突
-   */
+  //  开启文字编辑，会禁用回车键和删除键相关快捷键防止冲突
   startTextEdit() {
     this.mindMap.keyCommand.save()
     // this.mindMap.keyCommand.removeShortcut('Del|Backspace')
@@ -253,12 +221,7 @@ class Render {
     // this.mindMap.keyCommand.removeShortcut('Enter', this.insertNodeWrap)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-05-09 10:45:11
-   * @Desc: 结束文字编辑，会恢复回车键和删除键相关快捷键
-   */
+  //  结束文字编辑，会恢复回车键和删除键相关快捷键
   endTextEdit() {
     this.mindMap.keyCommand.restore()
     // this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNodeWrap)
@@ -266,12 +229,7 @@ class Render {
     // this.mindMap.keyCommand.addShortcut('Enter', this.insertNodeWrap)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 16:27:55
-   * @Desc:  渲染
-   */
+  //   渲染
   render() {
     if (this.reRender) {
       this.clearActive()
@@ -285,11 +243,7 @@ class Render {
     this.mindMap.emit('node_active', null, this.activeNodeList)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-12 22:45:01
-   * @Desc: 清除当前激活的节点
-   */
+  //  清除当前激活的节点
   clearActive() {
     this.activeNodeList.forEach(item => {
       this.setNodeActive(item, false)
@@ -297,11 +251,7 @@ class Render {
     this.activeNodeList = []
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-03 23:14:34
-   * @Desc: 清除当前所有激活节点，并会触发事件
-   */
+  //  清除当前所有激活节点，并会触发事件
   clearAllActive() {
     if (this.activeNodeList.length <= 0) {
       return
@@ -310,11 +260,7 @@ class Render {
     this.mindMap.emit('node_active', null, [])
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 10:54:00
-   * @Desc:  添加节点到激活列表里
-   */
+  //   添加节点到激活列表里
   addActiveNode(node) {
     let index = this.findActiveNodeIndex(node)
     if (index === -1) {
@@ -322,11 +268,7 @@ class Render {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 10:04:04
-   * @Desc: 在激活列表里移除某个节点
-   */
+  //  在激活列表里移除某个节点
   removeActiveNode(node) {
     let index = this.findActiveNodeIndex(node)
     if (index === -1) {
@@ -335,22 +277,14 @@ class Render {
     this.activeNodeList.splice(index, 1)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 10:55:23
-   * @Desc: 检索某个节点在激活列表里的索引
-   */
+  //  检索某个节点在激活列表里的索引
   findActiveNodeIndex(node) {
     return this.activeNodeList.findIndex(item => {
       return item === node
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:46:08
-   * @Desc: 获取节点在同级里的索引位置
-   */
+  //  获取节点在同级里的索引位置
   getNodeIndex(node) {
     return node.parent
       ? node.parent.children.findIndex(item => {
@@ -359,11 +293,7 @@ class Render {
       : 0
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-04 23:54:52
-   * @Desc: 全选
-   */
+  //  全选
   selectAll() {
     walk(
       this.root,
@@ -384,11 +314,7 @@ class Render {
     )
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 22:34:12
-   * @Desc: 回退
-   */
+  //  回退
   back(step) {
     this.clearAllActive()
     let data = this.mindMap.command.back(step)
@@ -398,12 +324,7 @@ class Render {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-12 10:44:51
-   * @Desc: 前进
-   */
+  //  前进
   forward(step) {
     this.clearAllActive()
     let data = this.mindMap.command.forward(step)
@@ -413,11 +334,7 @@ class Render {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:19:54
-   * @Desc: 插入同级节点，多个节点只会操作第一个节点
-   */
+  //  插入同级节点，多个节点只会操作第一个节点
   insertNode() {
     if (this.activeNodeList.length <= 0) {
       return
@@ -443,11 +360,7 @@ class Render {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:31:02
-   * @Desc: 插入子节点
-   */
+  //  插入子节点
   insertChildNode() {
     if (this.activeNodeList.length <= 0) {
       return
@@ -477,11 +390,7 @@ class Render {
     this.mindMap.render()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-14 23:34:14
-   * @Desc: 上移节点，多个节点只会操作第一个节点
-   */
+  //  上移节点，多个节点只会操作第一个节点
   upNode() {
     if (this.activeNodeList.length <= 0) {
       return
@@ -508,11 +417,7 @@ class Render {
     this.mindMap.render()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-14 23:34:18
-   * @Desc: 下移节点，多个节点只会操作第一个节点
-   */
+  //  下移节点，多个节点只会操作第一个节点
   downNode() {
     if (this.activeNodeList.length <= 0) {
       return
@@ -539,12 +444,7 @@ class Render {
     this.mindMap.render()
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-25 10:51:34
-   * @Desc: 将节点移动到另一个节点的前面
-   */
+  //  将节点移动到另一个节点的前面
   insertBefore(node, exist) {
     if (node.isRoot) {
       return
@@ -575,12 +475,7 @@ class Render {
     this.mindMap.render()
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-25 10:51:34
-   * @Desc: 将节点移动到另一个节点的后面
-   */
+  //  将节点移动到另一个节点的后面
   insertAfter(node, exist) {
     if (node.isRoot) {
       return
@@ -612,11 +507,7 @@ class Render {
     this.mindMap.render()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:40:39
-   * @Desc: 移除节点
-   */
+  //  移除节点
   removeNode() {
     if (this.activeNodeList.length <= 0) {
       return
@@ -648,11 +539,7 @@ class Render {
     this.mindMap.render()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-15 22:46:27
-   * @Desc: 移除某个指定节点
-   */
+  //  移除某个指定节点
   removeOneNode(node) {
     let index = this.getNodeIndex(node)
     node.remove()
@@ -660,12 +547,7 @@ class Render {
     node.parent.nodeData.children.splice(index, 1)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-15 09:53:23
-   * @Desc: 复制节点，多个节点只会操作第一个节点
-   */
+  //  复制节点，多个节点只会操作第一个节点
   copyNode() {
     if (this.activeNodeList.length <= 0) {
       return
@@ -673,11 +555,7 @@ class Render {
     return copyNodeTree({}, this.activeNodeList[0], true)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-15 22:36:45
-   * @Desc: 剪切节点，多个节点只会操作第一个节点
-   */
+  //  剪切节点，多个节点只会操作第一个节点
   cutNode(callback) {
     if (this.activeNodeList.length <= 0) {
       return
@@ -696,12 +574,7 @@ class Render {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-24 16:54:01
-   * @Desc: 移动一个节点作为另一个节点的子节点
-   */
+  //  移动一个节点作为另一个节点的子节点
   moveNodeTo(node, toNode) {
     if (node.isRoot) {
       return
@@ -714,11 +587,7 @@ class Render {
     this.mindMap.render()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-15 20:09:39
-   * @Desc:  粘贴节点到节点
-   */
+  //   粘贴节点到节点
   pasteNode(data) {
     if (this.activeNodeList.length <= 0) {
       return
@@ -729,11 +598,7 @@ class Render {
     this.mindMap.render()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-08 21:54:30
-   * @Desc: 设置节点样式
-   */
+  //  设置节点样式
   setNodeStyle(node, prop, value, isActive) {
     let data = {}
     if (isActive) {
@@ -755,11 +620,7 @@ class Render {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-08 22:13:03
-   * @Desc: 设置节点是否激活
-   */
+  //  设置节点是否激活
   setNodeActive(node, active) {
     this.setNodeData(node, {
       isActive: active
@@ -767,11 +628,7 @@ class Render {
     node.renderNode()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 16:52:41
-   * @Desc: 设置节点是否展开
-   */
+  //  设置节点是否展开
   setNodeExpand(node, expand) {
     this.setNodeData(node, {
       expand
@@ -794,11 +651,7 @@ class Render {
     this.mindMap.render()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-15 23:23:37
-   * @Desc: 展开所有
-   */
+  //  展开所有
   expandAllNode() {
     walk(
       this.renderTree,
@@ -816,11 +669,7 @@ class Render {
     this.mindMap.reRender()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-15 23:27:14
-   * @Desc: 收起所有
-   */
+  //  收起所有
   unexpandAllNode() {
     walk(
       this.renderTree,
@@ -839,12 +688,7 @@ class Render {
     this.mindMap.reRender()
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-23 16:31:27
-   * @Desc: 展开到指定层级
-   */
+  //  展开到指定层级
   expandToLevel(level) {
     walk(
       this.renderTree,
@@ -861,11 +705,7 @@ class Render {
     this.mindMap.reRender()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-08-14 09:18:40
-   * @Desc: 切换激活节点的展开状态
-   */
+  //  切换激活节点的展开状态
   toggleActiveExpand() {
     this.activeNodeList.forEach(node => {
       if (node.nodeData.children.length <= 0) {
@@ -875,11 +715,7 @@ class Render {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 17:15:33
-   * @Desc: 切换节点展开状态
-   */
+  //  切换节点展开状态
   toggleNodeExpand(node) {
     this.mindMap.execCommand(
       'SET_NODE_EXPAND',
@@ -888,22 +724,14 @@ class Render {
     )
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-09 22:04:19
-   * @Desc: 设置节点文本
-   */
+  //  设置节点文本
   setNodeText(node, text) {
     this.setNodeDataRender(node, {
       text
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:37:40
-   * @Desc: 设置节点图片
-   */
+  //  设置节点图片
   setNodeImage(node, { url, title, width, height }) {
     this.setNodeDataRender(node, {
       image: url,
@@ -915,22 +743,14 @@ class Render {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:44:06
-   * @Desc: 设置节点图标
-   */
+  //  设置节点图标
   setNodeIcon(node, icons) {
     this.setNodeDataRender(node, {
       icon: icons
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:49:33
-   * @Desc: 设置节点超链接
-   */
+  //  设置节点超链接
   setNodeHyperlink(node, link, title = '') {
     this.setNodeDataRender(node, {
       hyperlink: link,
@@ -938,33 +758,21 @@ class Render {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:52:59
-   * @Desc: 设置节点备注
-   */
+  //  设置节点备注
   setNodeNote(node, note) {
     this.setNodeDataRender(node, {
       note
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:54:53
-   * @Desc: 设置节点标签
-   */
+  //  设置节点标签
   setNodeTag(node, tag) {
     this.setNodeDataRender(node, {
       tag
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 20:52:42
-   * @Desc: 添加节点概要
-   */
+  //  添加节点概要
   addGeneralization(data) {
     if (this.activeNodeList.length <= 0) {
       return
@@ -983,11 +791,7 @@ class Render {
     this.mindMap.render()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 21:16:33
-   * @Desc: 删除节点概要
-   */
+  //  删除节点概要
   removeGeneralization() {
     if (this.activeNodeList.length <= 0) {
       return
@@ -1004,12 +808,7 @@ class Render {
     this.mindMap.render()
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-02 19:04:24
-   * @Desc: 设置节点自定义位置
-   */
+  //  设置节点自定义位置
   setNodeCustomPosition(node, left = undefined, top = undefined) {
     let nodeList = [node] || this.activeNodeList
     nodeList.forEach(item => {
@@ -1020,12 +819,7 @@ class Render {
     })
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-02 20:02:50
-   * @Desc: 一键整理布局，即去除自定义位置
-   */
+  //  一键整理布局，即去除自定义位置
   resetLayout() {
     walk(
       this.root,
@@ -1046,12 +840,7 @@ class Render {
     )
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 21:44:01
-   * @Desc: 设置节点形状
-   */
+  //  设置节点形状
   setNodeShape(node, shape) {
     if (!shape || !shapeList.includes(shape)) {
       return
@@ -1062,22 +851,14 @@ class Render {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 14:19:48
-   * @Desc: 更新节点数据
-   */
+  //  更新节点数据
   setNodeData(node, data) {
     Object.keys(data).forEach(key => {
       node.nodeData.data[key] = data[key]
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:45:48
-   * @Desc: 设置节点数据，并判断是否渲染
-   */
+  //  设置节点数据，并判断是否渲染
   setNodeDataRender(node, data) {
     this.setNodeData(node, data)
     let changed = node.getSize()
@@ -1091,12 +872,7 @@ class Render {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 11:46:57
-   * @Desc: 移动节点到画布中心
-   */
+  //  移动节点到画布中心
   moveNodeToCenter(node) {
     let halfWidth = this.mindMap.width / 2
     let halfHeight = this.mindMap.height / 2

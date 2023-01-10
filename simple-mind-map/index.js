@@ -53,19 +53,9 @@ const defaultOpt = {
     */
 }
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-06 11:18:47
- * @Desc: 思维导图
- */
+//  思维导图
 class MindMap {
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 11:19:01
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt = {}) {
     // 合并选项
     this.opt = this.handleOpt(merge(defaultOpt, opt))
@@ -149,11 +139,7 @@ class MindMap {
     }, 0)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-01 22:15:22
-   * @Desc: 配置参数处理
-   */
+  //  配置参数处理
   handleOpt(opt) {
     // 检查布局配置
     if (!layoutValueList.includes(opt.layout)) {
@@ -164,12 +150,7 @@ class MindMap {
     return opt
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 18:47:29
-   * @Desc: 渲染，部分渲染
-   */
+  //  渲染，部分渲染
   render() {
     this.batchExecution.push('render', () => {
       this.initTheme()
@@ -178,11 +159,7 @@ class MindMap {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-08 22:05:11
-   * @Desc: 重新渲染
-   */
+  //  重新渲染
   reRender() {
     this.batchExecution.push('render', () => {
       this.draw.clear()
@@ -192,11 +169,7 @@ class MindMap {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 21:16:52
-   * @Desc: 容器尺寸变化，调整尺寸
-   */
+  //  容器尺寸变化，调整尺寸
   resize() {
     this.elRect = this.el.getBoundingClientRect()
     this.width = this.elRect.width
@@ -204,38 +177,22 @@ class MindMap {
     this.svg.size(this.width, this.height)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 13:25:50
-   * @Desc: 监听事件
-   */
+  //  监听事件
   on(event, fn) {
     this.event.on(event, fn)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 13:51:35
-   * @Desc: 触发事件
-   */
+  //  触发事件
   emit(event, ...args) {
     this.event.emit(event, ...args)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 13:53:54
-   * @Desc: 解绑事件
-   */
+  //  解绑事件
   off(event, fn) {
     this.event.off(event, fn)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-05 13:32:43
-   * @Desc: 设置主题
-   */
+  //  设置主题
   initTheme() {
     // 合并主题配置
     this.themeConfig = merge(theme[this.opt.theme], this.opt.themeConfig)
@@ -243,70 +200,40 @@ class MindMap {
     Style.setBackgroundStyle(this.el, this.themeConfig)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-05 13:52:08
-   * @Desc: 设置主题
-   */
+  //  设置主题
   setTheme(theme) {
     this.renderer.clearAllActive()
     this.opt.theme = theme
     this.reRender()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-25 23:52:37
-   * @Desc: 获取当前主题
-   */
+  //  获取当前主题
   getTheme() {
     return this.opt.theme
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-05 13:50:17
-   * @Desc: 设置主题配置
-   */
+  //  设置主题配置
   setThemeConfig(config) {
     this.opt.themeConfig = config
     this.reRender()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-01 10:38:34
-   * @Desc: 获取自定义主题配置
-   */
+  //  获取自定义主题配置
   getCustomThemeConfig() {
     return this.opt.themeConfig
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-05 14:01:29
-   * @Desc: 获取某个主题配置值
-   */
+  //  获取某个主题配置值
   getThemeConfig(prop) {
     return prop === undefined ? this.themeConfig : this.themeConfig[prop]
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-13 16:17:06
-   * @Desc: 获取当前布局结构
-   */
+  //  获取当前布局结构
   getLayout() {
     return this.opt.layout
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-13 16:17:33
-   * @Desc: 设置布局结构
-   */
+  //  设置布局结构
   setLayout(layout) {
     // 检查布局配置
     if (!layoutValueList.includes(layout)) {
@@ -317,20 +244,12 @@ class MindMap {
     this.render()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:01:00
-   * @Desc: 执行命令
-   */
+  //  执行命令
   execCommand(...args) {
     this.command.exec(...args)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-03 22:58:12
-   * @Desc: 动态设置思维导图数据，纯节点数据
-   */
+  //  动态设置思维导图数据，纯节点数据
   setData(data) {
     this.execCommand('CLEAR_ACTIVE_NODE')
     this.command.clearHistory()
@@ -338,12 +257,7 @@ class MindMap {
     this.reRender()
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-21 16:39:13
-   * @Desc: 动态设置思维导图数据，包括节点数据、布局、主题、视图
-   */
+  //  动态设置思维导图数据，包括节点数据、布局、主题、视图
   setFullData(data) {
     if (data.root) {
       this.setData(data.root)
@@ -364,12 +278,7 @@ class MindMap {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-24 14:42:07
-   * @Desc: 获取思维导图数据，节点树、主题、布局等
-   */
+  //  获取思维导图数据，节点树、主题、布局等
   getData(withConfig) {
     let nodeData = this.command.getCopyData()
     let data = {}
@@ -389,21 +298,13 @@ class MindMap {
     return simpleDeepClone(data)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-01 22:06:38
-   * @Desc: 导出
-   */
+  //  导出
   async export(...args) {
     let result = await this.doExport.export(...args)
     return result
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 09:20:03
-   * @Desc: 转换位置
-   */
+  //  转换位置
   toPos(x, y) {
     return {
       x: x - this.elRect.left,
@@ -411,12 +312,7 @@ class MindMap {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-06-08 14:12:38
-   * @Desc: 设置只读模式、编辑模式
-   */
+  //  设置只读模式、编辑模式
   setMode(mode) {
     if (!['readonly', 'edit'].includes(mode)) {
       return

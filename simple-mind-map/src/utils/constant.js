@@ -1,8 +1,4 @@
-/**
- * @Author: 王林
- * @Date: 2021-06-24 21:42:07
- * @Desc: 标签颜色列表
- */
+//  标签颜色列表
 export const tagColorList = [
   {
     color: 'rgb(77, 65, 0)',
@@ -26,12 +22,7 @@ export const tagColorList = [
   }
 ]
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-07-13 15:56:28
- * @Desc: 布局结构列表
- */
+//  布局结构列表
 export const layoutList = [
   {
     name: '逻辑结构图',
@@ -61,11 +52,7 @@ export const layoutValueList = [
   'organizationStructure'
 ]
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:58:42
- * @Desc: 主题列表
- */
+//  主题列表
 export const themeList = [
   {
     name: '默认',

@@ -1,16 +1,8 @@
 import { copyRenderTree, simpleDeepClone } from './utils'
 
-/**
- * @Author: 王林
- * @Date: 2021-05-04 13:10:06
- * @Desc: 命令类
- */
+//  命令类
 class Command {
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:10:24
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt = {}) {
     this.opt = opt
     this.mindMap = opt.mindMap
@@ -21,22 +13,14 @@ class Command {
     this.registerShortcutKeys()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-03 23:06:55
-   * @Desc: 清空历史数据
-   */
+  //  清空历史数据
   clearHistory() {
     this.history = []
     this.activeHistoryIndex = 0
     this.mindMap.emit('back_forward', 0, 0)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-02 23:23:19
-   * @Desc: 注册快捷键
-   */
+  //  注册快捷键
   registerShortcutKeys() {
     this.mindMap.keyCommand.addShortcut('Control+z', () => {
       this.mindMap.execCommand('BACK')
@@ -46,11 +30,7 @@ class Command {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:12:30
-   * @Desc: 执行命令
-   */
+  //  执行命令
   exec(name, ...args) {
     if (this.commands[name]) {
       this.commands[name].forEach(fn => {
@@ -63,11 +43,7 @@ class Command {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:13:01
-   * @Desc: 添加命令
-   */
+  //  添加命令
   add(name, fn) {
     if (this.commands[name]) {
       this.commands[name].push(fn)
@@ -76,11 +52,7 @@ class Command {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-15 23:02:41
-   * @Desc: 移除命令
-   */
+  //  移除命令
   remove(name, fn) {
     if (!this.commands[name]) {
       return
@@ -98,11 +70,7 @@ class Command {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 14:35:43
-   * @Desc: 添加回退数据
-   */
+  //  添加回退数据
   addHistory() {
     let data = this.getCopyData()
     this.history.push(simpleDeepClone(data))
@@ -115,11 +83,7 @@ class Command {
     )
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 22:34:53
-   * @Desc: 回退
-   */
+  //  回退
   back(step = 1) {
     if (this.activeHistoryIndex - step >= 0) {
       this.activeHistoryIndex -= step
@@ -132,12 +96,7 @@ class Command {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-12 10:45:31
-   * @Desc: 前进
-   */
+  //  前进
   forward(step = 1) {
     let len = this.history.length
     if (this.activeHistoryIndex + step <= len - 1) {
@@ -147,11 +106,7 @@ class Command {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 15:02:58
-   * @Desc: 获取渲染树数据副本
-   */
+  //  获取渲染树数据副本
   getCopyData() {
     return copyRenderTree({}, this.mindMap.renderer.renderTree)
   }

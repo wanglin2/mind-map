@@ -1,11 +1,7 @@
 import defaultTheme from './default'
 import merge from 'deepmerge'
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 经典蓝
- */
+//  经典蓝
 export default merge(defaultTheme, {
   // 连线的颜色
   lineColor: 'rgb(51, 51, 51)',

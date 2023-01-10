@@ -1,17 +1,9 @@
 import { bfsWalk, throttle } from './utils'
 
-/**
- * @Author: 王林
- * @Date: 2021-07-10 22:34:51
- * @Desc: 选择节点类
- */
+//  选择节点类
 
 class Select {
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 22:35:16
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor({ mindMap }) {
     this.mindMap = mindMap
     this.rect = null
@@ -23,11 +15,7 @@ class Select {
     this.bindEvent()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 22:36:36
-   * @Desc: 绑定事件
-   */
+  //  绑定事件
   bindEvent() {
     this.checkInNodes = throttle(this.checkInNodes, 500, this)
     this.mindMap.on('mousedown', e => {
@@ -81,11 +69,7 @@ class Select {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-13 07:55:49
-   * @Desc: 鼠标移动事件
-   */
+  //  鼠标移动事件
   onMove(x, y) {
     // 绘制矩形
     this.rect.plot([
@@ -128,22 +112,14 @@ class Select {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-22 08:02:23
-   * @Desc: 开启自动移动
-   */
+  //  开启自动移动
   startAutoMove(x, y) {
     this.autoMoveTimer = setTimeout(() => {
       this.onMove(x, y)
     }, 20)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 10:19:37
-   * @Desc: 创建矩形
-   */
+  //  创建矩形
   createRect(x, y) {
     this.rect = this.mindMap.svg
       .polygon()
@@ -156,11 +132,7 @@ class Select {
       .plot([[x, y]])
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 10:20:43
-   * @Desc: 检测在选区里的节点
-   */
+  //  检测在选区里的节点
   checkInNodes() {
     let { scaleX, scaleY, translateX, translateY } =
       this.mindMap.draw.transform()

@@ -1,27 +1,14 @@
 import Base from './Base'
 import { walk, asyncRun } from '../utils'
 
-/**
- * @Author: 王林
- * @Date: 2021-04-12 22:25:58
- * @Desc: 逻辑结构图
- */
+//  逻辑结构图
 class LogicalStructure extends Base {
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-12 22:26:31
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt = {}) {
     super(opt)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 14:04:20
-   * @Desc: 布局
-   */
+  //  布局
   doLayout(callback) {
     let task = [
       () => {
@@ -40,12 +27,7 @@ class LogicalStructure extends Base {
     asyncRun(task)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 09:49:32
-   * @Desc: 遍历数据计算节点的left、width、height
-   */
+  //  遍历数据计算节点的left、width、height
   computedBaseValue() {
     walk(
       this.renderer.renderTree,
@@ -80,12 +62,7 @@ class LogicalStructure extends Base {
     )
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 09:59:25
-   * @Desc: 遍历节点树计算节点的top
-   */
+  //  遍历节点树计算节点的top
   computedTopValue() {
     walk(
       this.root,
@@ -111,12 +88,7 @@ class LogicalStructure extends Base {
     )
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 10:04:05
-   * @Desc: 调整节点top
-   */
+  //  调整节点top
   adjustTopValue() {
     walk(
       this.root,
@@ -139,12 +111,7 @@ class LogicalStructure extends Base {
     )
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 14:26:03
-   * @Desc: 更新兄弟节点的top
-   */
+  //  更新兄弟节点的top
   updateBrothers(node, addHeight) {
     if (node.parent) {
       let childrenList = node.parent.children
@@ -175,11 +142,7 @@ class LogicalStructure extends Base {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 14:42:48
-   * @Desc: 绘制连线，连接该节点到其子节点
-   */
+  //  绘制连线，连接该节点到其子节点
   renderLine(node, lines, style, lineStyle) {
     if (lineStyle === 'curve') {
       this.renderLineCurve(node, lines, style)
@@ -190,12 +153,7 @@ class LogicalStructure extends Base {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:17:30
-   * @Desc: 直线风格连线
-   */
+  //  直线风格连线
   renderLineStraight(node, lines, style) {
     if (node.children.length <= 0) {
       return []
@@ -221,12 +179,7 @@ class LogicalStructure extends Base {
     })
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:34:41
-   * @Desc: 直连风格
-   */
+  //  直连风格
   renderLineDirect(node, lines, style) {
     if (node.children.length <= 0) {
       return []
@@ -248,12 +201,7 @@ class LogicalStructure extends Base {
     })
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:17:43
-   * @Desc: 曲线风格连线
-   */
+  //  曲线风格连线
   renderLineCurve(node, lines, style) {
     if (node.children.length <= 0) {
       return []
@@ -280,11 +228,7 @@ class LogicalStructure extends Base {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 19:54:26
-   * @Desc: 渲染按钮
-   */
+  //  渲染按钮
   renderExpandBtn(node, btn) {
     let { width, height } = node
     let { translateX, translateY } = btn.transform()
@@ -298,11 +242,7 @@ class LogicalStructure extends Base {
     )
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 08:30:35
-   * @Desc: 创建概要节点
-   */
+  //  创建概要节点
   renderGeneralization(node, gLine, gNode) {
     let {
       top,

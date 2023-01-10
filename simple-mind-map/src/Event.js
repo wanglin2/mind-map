@@ -1,18 +1,8 @@
 import EventEmitter from 'eventemitter3'
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-07 14:53:09
- * @Desc: 事件类
- */
+//  事件类
 class Event extends EventEmitter {
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 14:53:25
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt = {}) {
     super()
     this.opt = opt
@@ -34,12 +24,7 @@ class Event extends EventEmitter {
     this.bind()
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 15:52:24
-   * @Desc: 绑定函数上下文
-   */
+  //  绑定函数上下文
   bindFn() {
     this.onDrawClick = this.onDrawClick.bind(this)
     this.onMousedown = this.onMousedown.bind(this)
@@ -51,12 +36,7 @@ class Event extends EventEmitter {
     this.onKeyup = this.onKeyup.bind(this)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 14:53:43
-   * @Desc: 绑定事件
-   */
+  //  绑定事件
   bind() {
     this.mindMap.svg.on('click', this.onDrawClick)
     this.mindMap.el.addEventListener('mousedown', this.onMousedown)
@@ -73,12 +53,7 @@ class Event extends EventEmitter {
     window.addEventListener('keyup', this.onKeyup)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 15:40:51
-   * @Desc: 解绑事件
-   */
+  //  解绑事件
   unbind() {
     this.mindMap.svg.off('click', this.onDrawClick)
     this.mindMap.el.removeEventListener('mousedown', this.onMousedown)
@@ -89,30 +64,17 @@ class Event extends EventEmitter {
     window.removeEventListener('keyup', this.onKeyup)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 13:19:39
-   * @Desc:  画布的单击事件
-   */
+  //   画布的单击事件
   onDrawClick(e) {
     this.emit('draw_click', e)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-16 13:37:30
-   * @Desc:  svg画布的鼠标按下事件
-   */
+  //   svg画布的鼠标按下事件
   onSvgMousedown(e) {
     this.emit('svg_mousedown', e)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 15:17:35
-   * @Desc: 鼠标按下事件
-   */
+  //  鼠标按下事件
   onMousedown(e) {
     // e.preventDefault()
     // 鼠标左键
@@ -124,12 +86,7 @@ class Event extends EventEmitter {
     this.emit('mousedown', e, this)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 15:18:32
-   * @Desc: 鼠标移动事件
-   */
+  //  鼠标移动事件
   onMousemove(e) {
     // e.preventDefault()
     this.mousemovePos.x = e.clientX
@@ -142,23 +99,13 @@ class Event extends EventEmitter {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 15:18:57
-   * @Desc: 鼠标松开事件
-   */
+  //  鼠标松开事件
   onMouseup(e) {
     this.isLeftMousedown = false
     this.emit('mouseup', e, this)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 15:46:27
-   * @Desc: 鼠标滚动
-   */
+  //  鼠标滚动
   onMousewheel(e) {
     e.stopPropagation()
     e.preventDefault()
@@ -171,22 +118,13 @@ class Event extends EventEmitter {
     this.emit('mousewheel', e, dir, this)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 22:34:13
-   * @Desc: 鼠标右键菜单事件
-   */
+  //  鼠标右键菜单事件
   onContextmenu(e) {
     e.preventDefault()
     this.emit('contextmenu', e)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 11:12:11
-   * @Desc: 按键松开事件
-   */
+  //  按键松开事件
   onKeyup(e) {
     this.emit('keyup', e)
   }
