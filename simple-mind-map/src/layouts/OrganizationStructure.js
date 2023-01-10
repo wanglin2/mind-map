@@ -1,28 +1,17 @@
 import Base from './Base'
 import { walk, asyncRun } from '../utils'
 
-/**
- * @Author: 王林
- * @Date: 2021-04-12 22:25:58
- * @Desc: 组织结构图
- * 和逻辑结构图基本一样，只是方向变成向下生长，所以先计算节点的top，后计算节点的left、最后调整节点的left即可
- */
+//  组织结构图
+// 和逻辑结构图基本一样，只是方向变成向下生长，所以先计算节点的top，后计算节点的left、最后调整节点的left即可
 class OrganizationStructure extends Base {
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-12 22:26:31
-   * @Desc: 构造函数
-   */
+  //  构造函数
+
   constructor(opt = {}) {
     super(opt)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 14:04:20
-   * @Desc: 布局
-   */
+  //  布局
+
   doLayout(callback) {
     let task = [
       () => {
@@ -41,12 +30,8 @@ class OrganizationStructure extends Base {
     asyncRun(task)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 09:49:32
-   * @Desc: 遍历数据计算节点的left、width、height
-   */
+  //  遍历数据计算节点的left、width、height
+
   computedBaseValue() {
     walk(
       this.renderer.renderTree,
@@ -81,12 +66,8 @@ class OrganizationStructure extends Base {
     )
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 09:59:25
-   * @Desc: 遍历节点树计算节点的left
-   */
+  //  遍历节点树计算节点的left
+
   computedLeftValue() {
     walk(
       this.root,
@@ -112,12 +93,8 @@ class OrganizationStructure extends Base {
     )
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 10:04:05
-   * @Desc: 调整节点left
-   */
+  //  调整节点left
+
   adjustLeftValue() {
     walk(
       this.root,
@@ -140,12 +117,8 @@ class OrganizationStructure extends Base {
     )
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 14:26:03
-   * @Desc: 更新兄弟节点的left
-   */
+  //  更新兄弟节点的left
+
   updateBrothers(node, addWidth) {
     if (node.parent) {
       let childrenList = node.parent.children
@@ -176,11 +149,8 @@ class OrganizationStructure extends Base {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 14:42:48
-   * @Desc: 绘制连线，连接该节点到其子节点
-   */
+  //  绘制连线，连接该节点到其子节点
+
   renderLine(node, lines, style, lineStyle) {
     if (lineStyle === 'direct') {
       this.renderLineDirect(node, lines, style)
@@ -189,12 +159,8 @@ class OrganizationStructure extends Base {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:34:41
-   * @Desc: 直连风格
-   */
+  //  直连风格
+
   renderLineDirect(node, lines, style) {
     if (node.children.length <= 0) {
       return []
@@ -215,12 +181,8 @@ class OrganizationStructure extends Base {
     })
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:39:07
-   * @Desc: 直线风格连线
-   */
+  //  直线风格连线
+
   renderLineStraight(node, lines, style) {
     if (node.children.length <= 0) {
       return []
@@ -269,11 +231,8 @@ class OrganizationStructure extends Base {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 19:54:26
-   * @Desc: 渲染按钮
-   */
+  //  渲染按钮
+
   renderExpandBtn(node, btn) {
     let { width, height, expandBtnSize } = node
     let { translateX, translateY } = btn.transform()
@@ -283,11 +242,8 @@ class OrganizationStructure extends Base {
     )
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 08:30:35
-   * @Desc: 创建概要节点
-   */
+  //  创建概要节点
+
   renderGeneralization(node, gLine, gNode) {
     let {
       bottom,

@@ -1,12 +1,7 @@
 import JSZip from 'jszip'
 import xmlConvert from 'xml-js'
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2022-09-21 14:07:47
- * @Desc: 解析.xmind文件
- */
+//  解析.xmind文件
 const parseXmindFile = file => {
   return new Promise((resolve, reject) => {
     JSZip.loadAsync(file).then(
@@ -37,12 +32,7 @@ const parseXmindFile = file => {
   })
 }
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2022-09-21 18:57:25
- * @Desc: 转换xmind数据
- */
+//  转换xmind数据
 const transformXmind = content => {
   let data = JSON.parse(content)[0]
   let nodeTree = data.rootTopic
@@ -82,12 +72,7 @@ const transformXmind = content => {
   return newTree
 }
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2022-09-23 15:51:51
- * @Desc: 转换旧版xmind数据，xmind8
- */
+//  转换旧版xmind数据，xmind8
 const transformOldXmind = content => {
   let data = JSON.parse(content)
   let elements = data.elements

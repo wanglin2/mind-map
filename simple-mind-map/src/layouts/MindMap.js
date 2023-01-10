@@ -1,28 +1,17 @@
 import Base from './Base'
 import { walk, asyncRun } from '../utils'
 
-/**
- * @Author: 王林
- * @Date: 2021-04-12 22:25:58
- * @Desc: 思维导图
- * 在逻辑结构图的基础上增加一个变量来记录生长方向，向左还是向右，同时在计算left的时候根据方向来计算、调整top时只考虑同方向的节点即可
- */
+//  思维导图
+
 class MindMap extends Base {
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-12 22:26:31
-   * @Desc: 构造函数
-   */
+  //  构造函数
+  // 在逻辑结构图的基础上增加一个变量来记录生长方向，向左还是向右，同时在计算left的时候根据方向来计算、调整top时只考虑同方向的节点即可
   constructor(opt = {}) {
     super(opt)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 14:04:20
-   * @Desc: 布局
-   */
+  //  布局
+
   doLayout(callback) {
     let task = [
       () => {
@@ -41,12 +30,8 @@ class MindMap extends Base {
     asyncRun(task)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 09:49:32
-   * @Desc: 遍历数据计算节点的left、width、height
-   */
+  //  遍历数据计算节点的left、width、height
+
   computedBaseValue() {
     walk(
       this.renderer.renderTree,
@@ -110,12 +95,8 @@ class MindMap extends Base {
     )
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 09:59:25
-   * @Desc: 遍历节点树计算节点的top
-   */
+  //  遍历节点树计算节点的top
+
   computedTopValue() {
     walk(
       this.root,
@@ -147,12 +128,8 @@ class MindMap extends Base {
     )
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 10:04:05
-   * @Desc: 调整节点top
-   */
+  //  调整节点top
+
   adjustTopValue() {
     walk(
       this.root,
@@ -174,12 +151,8 @@ class MindMap extends Base {
     )
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 14:26:03
-   * @Desc: 更新兄弟节点的top
-   */
+  //  更新兄弟节点的top
+
   updateBrothers(node, leftAddHeight, rightAddHeight) {
     if (node.parent) {
       // 过滤出和自己同方向的节点
@@ -214,11 +187,8 @@ class MindMap extends Base {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 14:42:48
-   * @Desc: 绘制连线，连接该节点到其子节点
-   */
+  //  绘制连线，连接该节点到其子节点
+
   renderLine(node, lines, style, lineStyle) {
     if (lineStyle === 'curve') {
       this.renderLineCurve(node, lines, style)
@@ -229,12 +199,8 @@ class MindMap extends Base {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:10:47
-   * @Desc: 直线风格连线
-   */
+  //  直线风格连线
+
   renderLineStraight(node, lines, style) {
     if (node.children.length <= 0) {
       return []
@@ -268,12 +234,8 @@ class MindMap extends Base {
     })
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:34:41
-   * @Desc: 直连风格
-   */
+  //  直连风格
+
   renderLineDirect(node, lines, style) {
     if (node.children.length <= 0) {
       return []
@@ -304,12 +266,8 @@ class MindMap extends Base {
     })
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:10:56
-   * @Desc: 曲线风格连线
-   */
+  //  曲线风格连线
+
   renderLineCurve(node, lines, style) {
     if (node.children.length <= 0) {
       return []
@@ -345,11 +303,8 @@ class MindMap extends Base {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 19:54:26
-   * @Desc: 渲染按钮
-   */
+  //  渲染按钮
+
   renderExpandBtn(node, btn) {
     let { width, height, expandBtnSize } = node
     let { translateX, translateY } = btn.transform()
@@ -362,11 +317,8 @@ class MindMap extends Base {
     btn.translate(x, y)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 08:30:35
-   * @Desc: 创建概要节点
-   */
+  //  创建概要节点
+
   renderGeneralization(node, gLine, gNode) {
     let isLeft = node.dir === 'left'
     let {

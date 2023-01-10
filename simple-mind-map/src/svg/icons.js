@@ -278,11 +278,7 @@ export const nodeIconList = [
   }
 ]
 
-/**
- * @Author: 王林
- * @Date: 2021-06-23 22:36:56
- * @Desc: 获取nodeIconList icon内容
- */
+//  获取nodeIconList icon内容
 const getNodeIconListIcon = name => {
   let arr = name.split('_')
   let typeData = nodeIconList.find(item => {

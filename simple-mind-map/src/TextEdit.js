@@ -1,18 +1,8 @@
 import { getStrWithBrFromHtml } from './utils'
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-06-19 11:11:28
- * @Desc: 节点文字编辑类
- */
+//  节点文字编辑类
 export default class TextEdit {
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-06-19 11:22:57
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(renderer) {
     this.renderer = renderer
     this.mindMap = renderer.mindMap
@@ -23,11 +13,7 @@ export default class TextEdit {
     this.bindEvent()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 13:27:04
-   * @Desc: 事件
-   */
+  //  事件
   bindEvent() {
     this.show = this.show.bind(this)
     // 节点双击事件
@@ -54,12 +40,7 @@ export default class TextEdit {
     })
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-16 16:27:02
-   * @Desc: 注册临时快捷键
-   */
+  //  注册临时快捷键
   registerTmpShortcut() {
     // 注册回车快捷键
     this.mindMap.keyCommand.addShortcut('Enter', () => {
@@ -67,20 +48,12 @@ export default class TextEdit {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-13 22:15:56
-   * @Desc: 显示文本编辑框
-   */
+  //  显示文本编辑框
   show(node) {
     this.showEditTextBox(node, node._textData.node.node.getBoundingClientRect())
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-13 22:13:02
-   * @Desc: 显示文本编辑框
-   */
+  //  显示文本编辑框
   showEditTextBox(node, rect) {
     this.mindMap.emit('before_show_text_edit')
     this.registerTmpShortcut()
@@ -107,11 +80,7 @@ export default class TextEdit {
     this.selectNodeText()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-02 23:13:50
-   * @Desc: 选中文本
-   */
+  //  选中文本
   selectNodeText() {
     let selection = window.getSelection()
     let range = document.createRange()
@@ -120,11 +89,7 @@ export default class TextEdit {
     selection.addRange(range)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 13:48:16
-   * @Desc: 隐藏文本编辑框
-   */
+  //  隐藏文本编辑框
   hideEditTextBox() {
     if (!this.showTextEdit) {
       return

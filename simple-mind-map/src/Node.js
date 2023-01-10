@@ -5,19 +5,9 @@ import { Image, SVG, Circle, A, G, Rect, Text } from '@svgdotjs/svg.js'
 import btnsSvg from './svg/btns'
 import iconsSvg from './svg/icons'
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-06 11:26:00
- * @Desc: 节点类
- */
+//  节点类
 class Node {
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 11:26:17
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt = {}) {
     // 节点数据
     this.nodeData = this.handleData(opt.data || {})
@@ -118,11 +108,7 @@ class Node {
     this._top = val
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-12 07:40:47
-   * @Desc: 更新主题配置
-   */
+  //  更新主题配置
   updateThemeConfig() {
     // 主题配置
     this.themeConfig = this.mindMap.themeConfig
@@ -130,11 +116,7 @@ class Node {
     this.style.updateThemeConfig(this.themeConfig)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-05 23:11:39
-   * @Desc: 复位部分布局时会重新设置的数据
-   */
+  //  复位部分布局时会重新设置的数据
   reset() {
     this.children = []
     this.parent = null
@@ -144,11 +126,7 @@ class Node {
     this.top = 0
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-20 10:12:31
-   * @Desc: 处理数据
-   */
+  //  处理数据
   handleData(data) {
     data.data.expand = data.data.expand === false ? false : true
     data.data.isActive = data.data.isActive === true ? true : false
@@ -156,22 +134,12 @@ class Node {
     return data
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-02 19:53:40
-   * @Desc: 检查节点是否存在自定义数据
-   */
+  //  检查节点是否存在自定义数据
   hasCustomPosition() {
     return this.customLeft !== undefined && this.customTop !== undefined
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-04 09:06:56
-   * @Desc: 检查节点是否存在自定义位置的祖先节点
-   */
+  //  检查节点是否存在自定义位置的祖先节点
   ancestorHasCustomPosition() {
     let node = this
     while (node) {
@@ -183,21 +151,12 @@ class Node {
     return false
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 15:55:04
-   * @Desc: 添加子节点
-   */
+  //  添加子节点
   addChildren(node) {
     this.children.push(node)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-06 22:08:09
-   * @Desc: 创建节点的各个内容对象数据
-   */
+  //  创建节点的各个内容对象数据
   createNodeData() {
     this._imgData = this.createImgNode()
     this._iconData = this.createIconNode()
@@ -208,11 +167,7 @@ class Node {
     this.createGeneralizationNode()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 09:20:02
-   * @Desc: 解绑所有事件
-   */
+  //  解绑所有事件
   removeAllEvent() {
     if (this._noteData) {
       this._noteData.node.off(['mouseover', 'mouseout'])
@@ -231,11 +186,7 @@ class Node {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-07 21:27:24
-   * @Desc: 移除节点内容
-   */
+  //  移除节点内容
   removeAllNode() {
     // 节点内的内容
     ;[
@@ -269,12 +220,7 @@ class Node {
     this.removeGeneralization()
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-09 09:46:23
-   * @Desc: 计算节点的宽高
-   */
+  //  计算节点的宽高
   getSize() {
     this.removeAllNode()
     this.createNodeData()
@@ -286,12 +232,7 @@ class Node {
     return changed
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 14:52:17
-   * @Desc: 计算节点尺寸信息
-   */
+  //  计算节点尺寸信息
   getNodeRect() {
     // 宽高
     let imgContentWidth = 0
@@ -358,12 +299,7 @@ class Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-09 14:06:17
-   * @Desc: 创建图片节点
-   */
+  //  创建图片节点
   createImgNode() {
     let img = this.nodeData.data.image
     if (!img) {
@@ -384,12 +320,7 @@ class Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-09 10:12:51
-   * @Desc: 获取图片显示宽高
-   */
+  //  获取图片显示宽高
   getImgShowSize() {
     return resizeImgSize(
       this.nodeData.data.imageSize.width,
@@ -399,12 +330,7 @@ class Node {
     )
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-09 14:10:48
-   * @Desc: 创建icon节点
-   */
+  //  创建icon节点
   createIconNode() {
     let _data = this.nodeData.data
     if (!_data.icon || _data.icon.length <= 0) {
@@ -420,12 +346,7 @@ class Node {
     })
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-09 14:08:56
-   * @Desc: 创建文本节点
-   */
+  //  创建文本节点
   createTextNode() {
     let g = new G()
     let fontSize = this.getStyle(
@@ -452,11 +373,7 @@ class Node {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-20 15:28:54
-   * @Desc: 创建超链接节点
-   */
+  //  创建超链接节点
   createHyperlinkNode() {
     let { hyperlink, hyperlinkTitle } = this.nodeData.data
     if (!hyperlink) {
@@ -486,11 +403,7 @@ class Node {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-20 19:49:15
-   * @Desc: 创建标签节点
-   */
+  //  创建标签节点
   createTagNode() {
     let tagData = this.nodeData.data.tag
     if (!tagData || tagData.length <= 0) {
@@ -516,11 +429,7 @@ class Node {
     return nodes
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-20 21:19:36
-   * @Desc: 创建备注节点
-   */
+  //  创建备注节点
   createNoteNode() {
     if (!this.nodeData.data.note) {
       return null
@@ -577,12 +486,7 @@ class Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 22:02:07
-   * @Desc: 获取节点形状
-   */
+  //  获取节点形状
   getShape() {
     // 节点使用功能横线风格的话不支持设置形状，直接使用默认的矩形
     return this.themeConfig.nodeUseLineStyle
@@ -590,12 +494,7 @@ class Node {
       : this.style.getStyle('shape', false, false)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-09 11:10:11
-   * @Desc: 定位节点内容
-   */
+  //  定位节点内容
   layout() {
     let { width, textContentItemMargin } = this
     let { paddingY } = this.getPaddingVale()
@@ -719,11 +618,7 @@ class Node {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 16:44:22
-   * @Desc: 激活节点
-   */
+  //  激活节点
   active(e) {
     if (this.mindMap.opt.readonly) {
       return
@@ -739,11 +634,7 @@ class Node {
     this.mindMap.emit('node_active', this, this.renderer.activeNodeList)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-04 20:20:09
-   * @Desc: 渲染节点到画布，会移除旧的，创建新的
-   */
+  //  渲染节点到画布，会移除旧的，创建新的
   renderNode() {
     // 连线
     this.renderLine()
@@ -753,11 +644,7 @@ class Node {
     this.layout()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-04 22:47:01
-   * @Desc: 更新节点
-   */
+  //  更新节点
   update(layout = false) {
     if (!this.group) {
       return
@@ -798,12 +685,7 @@ class Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 13:55:58
-   * @Desc: 递归渲染
-   */
+  //  递归渲染
   render(callback = () => {}) {
     // 节点
     if (this.initRender) {
@@ -844,11 +726,7 @@ class Node {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 09:24:55
-   * @Desc: 递归删除
-   */
+  //  递归删除
   remove() {
     this.initRender = true
     this.removeAllEvent()
@@ -866,12 +744,7 @@ class Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-23 18:39:14
-   * @Desc: 隐藏节点
-   */
+  //  隐藏节点
   hide() {
     this.group.hide()
     this.hideGeneralization()
@@ -891,12 +764,7 @@ class Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-23 18:39:14
-   * @Desc: 显示节点
-   */
+  //  显示节点
   show() {
     if (!this.group) {
       return
@@ -919,11 +787,7 @@ class Node {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-10 22:01:53
-   * @Desc: 连线
-   */
+  //  连线
   renderLine(deep = false) {
     if (this.nodeData.data.expand === false) {
       return
@@ -959,12 +823,7 @@ class Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: flydreame
-   * @Date: 2022-09-17 12:41:29
-   * @Desc: 设置连线样式
-   */
+  //  设置连线样式
   styleLine(line, node) {
     let width =
       node.getSelfInhertStyle('lineWidth') || node.getStyle('lineWidth', true)
@@ -980,11 +839,7 @@ class Node {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 16:40:21
-   * @Desc: 移除连线
-   */
+  //  移除连线
   removeLine() {
     this._lines.forEach(line => {
       line.remove()
@@ -992,21 +847,12 @@ class Node {
     this._lines = []
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-01 09:27:30
-   * @Desc: 检查是否存在概要
-   */
+  //  检查是否存在概要
   checkHasGeneralization() {
     return !!this.nodeData.data.generalization
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-31 09:41:28
-   * @Desc: 创建概要节点
-   */
+  //  创建概要节点
   createGeneralizationNode() {
     if (this.isGeneralization || !this.checkHasGeneralization()) {
       return
@@ -1034,22 +880,13 @@ class Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-01 15:38:52
-   * @Desc: 更新概要节点
-   */
+  //  更新概要节点
   updateGeneralization() {
     this.removeGeneralization()
     this.createGeneralizationNode()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 08:35:51
-   * @Desc: 渲染概要节点
-   */
+  //  渲染概要节点
   renderGeneralization() {
     if (this.isGeneralization) {
       return
@@ -1074,11 +911,7 @@ class Node {
     this._generalizationNode.render()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 13:11:27
-   * @Desc: 删除概要节点
-   */
+  //  删除概要节点
   removeGeneralization() {
     if (this._generalizationLine) {
       this._generalizationLine.remove()
@@ -1098,12 +931,7 @@ class Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-01 09:56:46
-   * @Desc: 隐藏概要节点
-   */
+  //  隐藏概要节点
   hideGeneralization() {
     if (this._generalizationLine) {
       this._generalizationLine.hide()
@@ -1113,12 +941,7 @@ class Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-01 09:57:42
-   * @Desc: 显示概要节点
-   */
+  //  显示概要节点
   showGeneralization() {
     if (this._generalizationLine) {
       this._generalizationLine.show()
@@ -1128,11 +951,7 @@ class Node {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 17:59:14
-   * @Desc: 创建或更新展开收缩按钮内容
-   */
+  //  创建或更新展开收缩按钮内容
   updateExpandBtnNode() {
     if (this._expandBtn) {
       this._expandBtn.clear()
@@ -1151,12 +970,7 @@ class Node {
     if (this._expandBtn) this._expandBtn.add(fillNode).add(node)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-12 18:18:13
-   * @Desc: 更新展开收缩按钮位置
-   */
+  //  更新展开收缩按钮位置
   updateExpandBtnPos() {
     if (!this._expandBtn) {
       return
@@ -1164,11 +978,7 @@ class Node {
     this.renderer.layout.renderExpandBtn(this, this._expandBtn)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 19:47:01
-   * @Desc: 展开收缩按钮
-   */
+  //  展开收缩按钮
   renderExpandBtn() {
     if (
       !this.nodeData.children ||
@@ -1205,11 +1015,7 @@ class Node {
     this.updateExpandBtnPos()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 13:26:00
-   * @Desc: 移除展开收缩按钮
-   */
+  //  移除展开收缩按钮
   removeExpandBtn() {
     if (this._expandBtn) {
       this._expandBtn.off(['mouseover', 'mouseout', 'click'])
@@ -1219,12 +1025,7 @@ class Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-25 09:51:37
-   * @Desc: 检测当前节点是否是某个节点的祖先节点
-   */
+  //  检测当前节点是否是某个节点的祖先节点
   isParent(node) {
     if (this === node) {
       return false
@@ -1239,12 +1040,7 @@ class Node {
     return false
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-25 10:32:34
-   * @Desc: 检测当前节点是否是某个节点的兄弟节点
-   */
+  //  检测当前节点是否是某个节点的兄弟节点
   isBrother(node) {
     if (!this.parent || this === node) {
       return false
@@ -1254,11 +1050,7 @@ class Node {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-20 22:51:57
-   * @Desc: 获取padding值
-   */
+  //  获取padding值
   getPaddingVale() {
     return {
       paddingX: this.getStyle('paddingX', true, this.nodeData.data.isActive),
@@ -1266,32 +1058,18 @@ class Node {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 21:48:49
-   * @Desc: 获取某个样式
-   */
+  //  获取某个样式
   getStyle(prop, root, isActive) {
     let v = this.style.merge(prop, root, isActive)
     return v === undefined ? '' : v
   }
 
-  /**
-   * javascript comment
-   * @Author: flydreame
-   * @Date: 2022-09-17 11:21:15
-   * @Desc: 获取自定义样式
-   */
+  //  获取自定义样式
   getSelfStyle(prop) {
     return this.style.getSelfStyle(prop)
   }
 
-  /**
-   * javascript comment
-   * @Author: flydreame
-   * @Date: 2022-09-17 11:21:26
-   * @Desc:  获取最近一个存在自身自定义样式的祖先节点的自定义样式
-   */
+  //   获取最近一个存在自身自定义样式的祖先节点的自定义样式
   getParentSelfStyle(prop) {
     if (this.parent) {
       return (
@@ -1301,12 +1079,7 @@ class Node {
     return null
   }
 
-  /**
-   * javascript comment
-   * @Author: flydreame
-   * @Date: 2022-09-17 12:15:30
-   * @Desc: 获取自身可继承的自定义样式
-   */
+  //  获取自身可继承的自定义样式
   getSelfInhertStyle(prop) {
     return (
       this.getSelfStyle(prop) || // 自身
@@ -1314,93 +1087,52 @@ class Node {
     ) // 父级
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 22:18:07
-   * @Desc: 修改某个样式
-   */
+  //  修改某个样式
   setStyle(prop, value, isActive) {
     this.mindMap.execCommand('SET_NODE_STYLE', this, prop, value, isActive)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-22 22:04:02
-   * @Desc: 获取数据
-   */
+  //  获取数据
   getData(key) {
     return key ? this.nodeData.data[key] || '' : this.nodeData.data
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-22 22:12:01
-   * @Desc: 设置数据
-   */
+  //  设置数据
   setData(data = {}) {
     this.mindMap.execCommand('SET_NODE_DATA', this, data)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:41:28
-   * @Desc: 设置文本
-   */
+  //  设置文本
   setText(text) {
     this.mindMap.execCommand('SET_NODE_TEXT', this, text)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:42:19
-   * @Desc: 设置图片
-   */
+  //  设置图片
   setImage(imgData) {
     this.mindMap.execCommand('SET_NODE_IMAGE', this, imgData)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:47:29
-   * @Desc: 设置图标
-   */
+  //  设置图标
   setIcon(icons) {
     this.mindMap.execCommand('SET_NODE_ICON', this, icons)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:50:41
-   * @Desc: 设置超链接
-   */
+  //  设置超链接
   setHyperlink(link, title) {
     this.mindMap.execCommand('SET_NODE_HYPERLINK', this, link, title)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:53:24
-   * @Desc: 设置备注
-   */
+  //  设置备注
   setNote(note) {
     this.mindMap.execCommand('SET_NODE_NOTE', this, note)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:55:08
-   * @Desc: 设置标签
-   */
+  //  设置标签
   setTag(tag) {
     this.mindMap.execCommand('SET_NODE_TAG', this, tag)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 21:47:45
-   * @Desc: 设置形状
-   */
+  //  设置形状
   setShape(shape) {
     this.mindMap.execCommand('SET_NODE_SHAPE', this, shape)
   }

@@ -1,15 +1,7 @@
 import { keyMap } from './utils/keyMap'
-/**
- * @Author: 王林
- * @Date: 2021-04-24 15:20:46
- * @Desc: 快捷按键、命令处理类
- */
+//  快捷按键、命令处理类
 export default class KeyCommand {
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 15:21:32
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt) {
     this.opt = opt
     this.mindMap = opt.mindMap
@@ -21,51 +13,29 @@ export default class KeyCommand {
     this.bindEvent()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-08-14 08:57:55
-   * @Desc: 暂停快捷键响应
-   */
+  //  暂停快捷键响应
   pause() {
     this.isPause = true
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-08-14 08:58:43
-   * @Desc: 恢复快捷键响应
-   */
+  //  恢复快捷键响应
   recovery() {
     this.isPause = false
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-16 16:29:01
-   * @Desc: 保存当前注册的快捷键数据，然后清空快捷键数据
-   */
+  //  保存当前注册的快捷键数据，然后清空快捷键数据
   save() {
     this.shortcutMapCache = this.shortcutMap
     this.shortcutMap = {}
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-16 16:29:38
-   * @Desc: 恢复保存的快捷键数据，然后清空缓存数据
-   */
+  //  恢复保存的快捷键数据，然后清空缓存数据
   restore() {
     this.shortcutMap = this.shortcutMapCache
     this.shortcutMapCache = {}
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 15:23:22
-   * @Desc: 绑定事件
-   */
+  //  绑定事件
   bindEvent() {
     window.addEventListener('keydown', e => {
       if (this.isPause) {
@@ -83,11 +53,7 @@ export default class KeyCommand {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 19:24:53
-   * @Desc: 检查键值是否符合
-   */
+  //  检查键值是否符合
   checkKey(e, key) {
     let o = this.getOriginEventCodeArr(e)
     let k = this.getKeyCodeArr(key)
@@ -107,11 +73,7 @@ export default class KeyCommand {
     return true
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 19:15:19
-   * @Desc: 获取事件对象里的键值数组
-   */
+  //  获取事件对象里的键值数组
   getOriginEventCodeArr(e) {
     let arr = []
     if (e.ctrlKey || e.metaKey) {
@@ -129,11 +91,7 @@ export default class KeyCommand {
     return arr
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 19:40:11
-   * @Desc: 获取快捷键对应的键值数组
-   */
+  //  获取快捷键对应的键值数组
   getKeyCodeArr(key) {
     let keyArr = key.split(/\s*\+\s*/)
     let arr = []
@@ -143,10 +101,8 @@ export default class KeyCommand {
     return arr
   }
 
+  //  添加快捷键命令
   /**
-   * @Author: 王林
-   * @Date: 2021-04-24 15:23:00
-   * @Desc: 添加快捷键命令
    * Enter
    * Tab | Insert
    * Shift + a
@@ -161,12 +117,7 @@ export default class KeyCommand {
     })
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-27 14:06:16
-   * @Desc: 移除快捷键命令
-   */
+  //  移除快捷键命令
   removeShortcut(key, fn) {
     key.split(/\s*\|\s*/).forEach(item => {
       if (this.shortcutMap[item]) {
@@ -185,11 +136,7 @@ export default class KeyCommand {
     })
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-08-14 08:49:58
-   * @Desc: 获取指定快捷键的处理函数
-   */
+  //  获取指定快捷键的处理函数
   getShortcutFn(key) {
     let res = []
     key.split(/\s*\|\s*/).forEach(item => {

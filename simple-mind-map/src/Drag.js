@@ -1,18 +1,9 @@
 import { bfsWalk, throttle } from './utils'
 import Base from './layouts/Base'
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-11-23 17:38:55
- * @Desc: 节点拖动类
- */
+//  节点拖动类
 class Drag extends Base {
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 22:35:16
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor({ mindMap }) {
     super(mindMap.renderer)
     this.mindMap = mindMap
@@ -20,12 +11,7 @@ class Drag extends Base {
     this.bindEvent()
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-23 19:33:56
-   * @Desc: 复位
-   */
+  //  复位
   reset() {
     // 当前拖拽节点
     this.node = null
@@ -58,11 +44,7 @@ class Drag extends Base {
     this.mouseMoveY = 0
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 22:36:36
-   * @Desc: 绑定事件
-   */
+  //  绑定事件
   bindEvent() {
     this.checkOverlapNode = throttle(this.checkOverlapNode, 300, this)
     this.mindMap.on('node_mousedown', (node, e) => {
@@ -110,12 +92,7 @@ class Drag extends Base {
     this.mindMap.on('mouseup', this.onMouseup)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-23 19:38:02
-   * @Desc: 鼠标松开事件
-   */
+  //  鼠标松开事件
   onMouseup(e) {
     if (!this.isMousedown) {
       return
@@ -156,12 +133,7 @@ class Drag extends Base {
     this.reset()
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-23 19:34:53
-   * @Desc: 创建克隆节点
-   */
+  //  创建克隆节点
   createCloneNode() {
     if (!this.clone) {
       // 节点
@@ -182,12 +154,7 @@ class Drag extends Base {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-23 19:35:16
-   * @Desc: 移除克隆节点
-   */
+  //  移除克隆节点
   removeCloneNode() {
     if (!this.clone) {
       return
@@ -197,12 +164,7 @@ class Drag extends Base {
     this.placeholder.remove()
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-23 18:53:47
-   * @Desc: 拖动中
-   */
+  //  拖动中
   onMove(x, y) {
     if (!this.isMousedown) {
       return
@@ -228,11 +190,7 @@ class Drag extends Base {
     this.checkOverlapNode()
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 10:20:43
-   * @Desc: 检测重叠节点
-   */
+  //  检测重叠节点
   checkOverlapNode() {
     if (!this.drawTransform) {
       return

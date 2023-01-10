@@ -1,9 +1,4 @@
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-06 14:13:17
- * @Desc: 深度优先遍历树
- */
+//  深度优先遍历树
 export const walk = (
   root,
   parent,
@@ -34,12 +29,7 @@ export const walk = (
   afterCallback && afterCallback(root, parent, isRoot, layerIndex, index)
 }
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-07 18:47:20
- * @Desc: 广度优先遍历树
- */
+//  广度优先遍历树
 export const bfsWalk = (root, callback) => {
   callback(root)
   let stack = [root]
@@ -60,12 +50,7 @@ export const bfsWalk = (root, callback) => {
   }
 }
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-09 10:44:54
- * @Desc: 缩放图片尺寸
- */
+//  缩放图片尺寸
 export const resizeImgSize = (width, height, maxWidth, maxHeight) => {
   let nRatio = width / height
   let arr = []
@@ -98,12 +83,7 @@ export const resizeImgSize = (width, height, maxWidth, maxHeight) => {
   return arr
 }
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-09 10:18:42
- * @Desc: 缩放图片
- */
+//  缩放图片
 export const resizeImg = (imgUrl, maxWidth, maxHeight) => {
   return new Promise((resolve, reject) => {
     let img = new Image()
@@ -123,11 +103,7 @@ export const resizeImg = (imgUrl, maxWidth, maxHeight) => {
   })
 }
 
-/**
- * @Author: 王林
- * @Date: 2021-05-04 12:26:56
- * @Desc: 从头html结构字符串里获取带换行符的字符串
- */
+//  从头html结构字符串里获取带换行符的字符串
 export const getStrWithBrFromHtml = str => {
   str = str.replace(/<br>/gim, '\n')
   let el = document.createElement('div')
@@ -136,11 +112,7 @@ export const getStrWithBrFromHtml = str => {
   return str
 }
 
-/**
- * @Author: 王林
- * @Date: 2021-05-04 14:45:39
- * @Desc: 极简的深拷贝
- */
+//  极简的深拷贝
 export const simpleDeepClone = data => {
   try {
     return JSON.parse(JSON.stringify(data))
@@ -149,11 +121,7 @@ export const simpleDeepClone = data => {
   }
 }
 
-/**
- * @Author: 王林
- * @Date: 2021-05-04 14:40:11
- * @Desc: 复制渲染树数据
- */
+//  复制渲染树数据
 export const copyRenderTree = (tree, root) => {
   tree.data = simpleDeepClone(root.data)
   tree.children = []
@@ -165,11 +133,7 @@ export const copyRenderTree = (tree, root) => {
   return tree
 }
 
-/**
- * @Author: 王林
- * @Date: 2021-05-04 14:40:11
- * @Desc: 复制节点树数据
- */
+//  复制节点树数据
 export const copyNodeTree = (tree, root, removeActiveState = false) => {
   tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data)
   if (removeActiveState) {
@@ -192,11 +156,7 @@ export const copyNodeTree = (tree, root, removeActiveState = false) => {
   return tree
 }
 
-/**
- * @Author: 王林
- * @Date: 2021-07-04 09:08:43
- * @Desc: 图片转成dataURL
- */
+//  图片转成dataURL
 export const imgToDataUrl = src => {
   return new Promise((resolve, reject) => {
     const img = new Image()
@@ -222,11 +182,7 @@ export const imgToDataUrl = src => {
   })
 }
 
-/**
- * @Author: 王林
- * @Date: 2021-07-04 16:20:06
- * @Desc: 下载文件
- */
+//  下载文件
 export const downloadFile = (file, fileName) => {
   let a = document.createElement('a')
   a.href = file
@@ -234,11 +190,7 @@ export const downloadFile = (file, fileName) => {
   a.click()
 }
 
-/**
- * @Author: 王林
- * @Date: 2021-07-11 10:36:47
- * @Desc: 节流函数
- */
+//  节流函数
 export const throttle = (fn, time = 300, ctx) => {
   let timer = null
   return () => {
@@ -252,12 +204,7 @@ export const throttle = (fn, time = 300, ctx) => {
   }
 }
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-07-12 10:27:36
- * @Desc: 异步执行任务队列
- */
+//  异步执行任务队列
 export const asyncRun = (taskList, callback = () => {}) => {
   let index = 0
   let len = taskList.length

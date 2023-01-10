@@ -1,18 +1,10 @@
-/**
- * @Author: 王林
- * @Date: 2022-08-22 21:32:50
- * @Desc: 节点形状类
- */
+//  节点形状类
 export default class Shape {
   constructor(node) {
     this.node = node
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-08-17 22:32:32
-   * @Desc: 形状需要的padding
-   */
+  //  形状需要的padding
   getShapePadding(width, height, paddingX, paddingY) {
     const shape = this.node.getShape()
     const defaultPaddingX = 15
@@ -64,11 +56,7 @@ export default class Shape {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-08-17 22:22:53
-   * @Desc: 创建形状节点
-   */
+  //  创建形状节点
   createShape() {
     const shape = this.node.getShape()
     let { width, height } = this.node
@@ -104,11 +92,7 @@ export default class Shape {
     return node
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-09-04 09:08:54
-   * @Desc: 创建菱形
-   */
+  //  创建菱形
   createDiamond() {
     let { width, height } = this.node
     let halfWidth = width / 2
@@ -129,11 +113,7 @@ export default class Shape {
         `)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-09-03 16:14:12
-   * @Desc: 创建平行四边形
-   */
+  //  创建平行四边形
   createParallelogram() {
     let { paddingX } = this.node.getPaddingVale()
     paddingX = paddingX || this.node.shapePadding.paddingX
@@ -146,11 +126,7 @@ export default class Shape {
         `)
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-09-03 16:50:23
-   * @Desc: 创建圆角矩形
-   */
+  //  创建圆角矩形
   createRoundedRectangle() {
     let { width, height } = this.node
     let halfHeight = height / 2
@@ -163,12 +139,7 @@ export default class Shape {
         `)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 16:14:08
-   * @Desc: 创建八角矩形
-   */
+  //  创建八角矩形
   createOctagonalRectangle() {
     let w = 5
     let { width, height } = this.node
@@ -184,12 +155,7 @@ export default class Shape {
         `)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 20:55:50
-   * @Desc: 创建外三角矩形
-   */
+  //  创建外三角矩形
   createOuterTriangularRectangle() {
     let { paddingX } = this.node.getPaddingVale()
     paddingX = paddingX || this.node.shapePadding.paddingX
@@ -204,12 +170,7 @@ export default class Shape {
         `)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 20:59:37
-   * @Desc: 创建内三角矩形
-   */
+  //  创建内三角矩形
   createInnerTriangularRectangle() {
     let { paddingX } = this.node.getPaddingVale()
     paddingX = paddingX || this.node.shapePadding.paddingX
@@ -224,12 +185,7 @@ export default class Shape {
         `)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 21:06:31
-   * @Desc: 创建椭圆
-   */
+  //  创建椭圆
   createEllipse() {
     let { width, height } = this.node
     let halfWidth = width / 2
@@ -242,12 +198,7 @@ export default class Shape {
         `)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 21:14:04
-   * @Desc: 创建圆
-   */
+  //  创建圆
   createCircle() {
     let { width, height } = this.node
     let halfWidth = width / 2
