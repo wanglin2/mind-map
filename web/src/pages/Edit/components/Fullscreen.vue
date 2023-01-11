@@ -3,10 +3,18 @@
     <el-tooltip
       class="item"
       effect="dark"
-      :content="$t('fullscreen.fullscreen')"
+      :content="$t('fullscreen.fullscreenShow')"
       placement="top"
     >
-      <div class="btn iconfont iconquanping" @click="toFullscreen"></div>
+      <div class="btn iconfont iconquanping" @click="toFullscreenShow"></div>
+    </el-tooltip>
+    <el-tooltip
+      class="item"
+      effect="dark"
+      :content="$t('fullscreen.fullscreenEdit')"
+      placement="top"
+    >
+      <div class="btn iconfont iconquanping1" @click="toFullscreenEdit"></div>
     </el-tooltip>
   </div>
 </template>
@@ -37,13 +45,14 @@ export default {
     }
   },
   methods: {
-    /**
-     * @Author: 王林
-     * @Date: 2021-07-11 21:14:30
-     * @Desc: 准备全屏
-     */
-    toFullscreen() {
+    // 全屏查看
+    toFullscreenShow() {
       fullScreen(this.mindMap.el)
+    },
+
+    // 全屏编辑
+    toFullscreenEdit() {
+      fullScreen(document.body)
     }
   }
 }
@@ -53,6 +62,14 @@ export default {
 .fullscreenContainer {
   display: flex;
   align-items: center;
+
+  .item {
+    margin-right: 12px;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
 
   .btn {
     cursor: pointer;
