@@ -9,7 +9,7 @@
         :class="{ active: item.value === layout }"
       >
         <div class="imgBox">
-          <img :src="item.img" alt="" />
+          <img :src="layoutImgMap[item.value]" alt="" />
         </div>
         <div class="name">{{ item.name }}</div>
       </div>
@@ -22,6 +22,7 @@ import Sidebar from './Sidebar'
 import { layoutList } from 'simple-mind-map/src/utils/constant'
 import { storeConfig } from '@/api'
 import { mapState } from 'vuex'
+import { layoutImgMap } from '@/config/constant.js'
 
 /**
  * @Author: 王林
@@ -41,6 +42,7 @@ export default {
   data() {
     return {
       layoutList,
+      layoutImgMap,
       layout: ''
     }
   },

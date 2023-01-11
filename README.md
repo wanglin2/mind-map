@@ -1166,6 +1166,10 @@ The built-in themes and icons in the project come from:
 
 # Changelog
 
+## 0.2.22
+
+optimization：The theme and structure pictures of the built-in `simple-mind-map` package are removed and replaced by user self-maintenance. The original pictures can be found in the `web/sets/img/` directory.
+
 ## 0.2.21
 
 New: Support node horizontal line style.

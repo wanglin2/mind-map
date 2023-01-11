@@ -1068,6 +1068,10 @@ copyNodeTree({}, node)
 
 # Changelog
 
+## 0.2.22
+
+优化：取消内置`simple-mind-map`包的主题和结构图片，改为由使用者自行维护，原有图片可在`web/assets/img/`目录找到。
+
 ## 0.2.21
 
 新增：支持节点横线风格。
