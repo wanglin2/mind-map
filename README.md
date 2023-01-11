@@ -152,6 +152,10 @@ and if you do not need to parse the `xmind` file, you can remove the `xmind`
 module. If you need it, you can try using other libraries to parse `xml` to
 `json`.
 
+## Error `Getting bbox of element "text" is not possible: TypeError: Cannot read properties of undefined (reading 'apply')`
+
+The reason is that the installed version of `@svgdotjs/svg.js` is too high. You can manually reduce it to the version of `3.0.16`.
+
 # API
 
 ## Instantiating

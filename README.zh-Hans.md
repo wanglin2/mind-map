@@ -129,6 +129,10 @@ import MindMap from "simple-mind-map/dist/simpleMindMap.umd.min"
 
 如果需要二次开发，也就是必须要使用未打包代码的话，如果你不需要解析`xmind`文件的话，可以去除`xmind`模块，如果需要的话那么可以尝试换成其他的解析`xml`为`json`的库。
 
+## 2.报错`Getting bbox of element "text" is not possible: TypeError: Cannot read properties of undefined (reading 'apply')`
+
+原因为安装的`@svgdotjs/svg.js`版本太高，手动降到`3.0.16`版本即可。
+
 # API
 
 ## 实例化
