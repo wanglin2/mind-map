@@ -224,27 +224,6 @@ module.exports = function (bitmap, value) {
 
 /***/ }),
 
-/***/ "074d":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/brainImpairedPink.511fee22.jpg";
-
-/***/ }),
-
-/***/ "08be":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/vitalityOrange.5dd9014f.jpg";
-
-/***/ }),
-
-/***/ "0930":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/logicalStructure.624920ce.jpg";
-
-/***/ }),
-
 /***/ "0960":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -373,13 +352,6 @@ module.exports = function (O, key, value, options) {
   } return O;
 };
 
-
-/***/ }),
-
-/***/ "0d2c":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/classicBlue.4b8243c6.jpg";
 
 /***/ }),
 
@@ -791,13 +763,6 @@ module.exports = Math.trunc || function trunc(x) {
 
 /***/ }),
 
-/***/ "181c":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/dark.894c1d36.jpg";
-
-/***/ }),
-
 /***/ "1a33":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -805,13 +770,6 @@ var uncurryThis = __webpack_require__("46ab");
 
 module.exports = uncurryThis({}.isPrototypeOf);
 
-
-/***/ }),
-
-/***/ "1a34":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/earthYellow.c35e546d.jpg";
 
 /***/ }),
 
@@ -1493,13 +1451,6 @@ module.exports = function (options, source) {
 
 /***/ }),
 
-/***/ "3556":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/default.1312a3ba.jpg";
-
-/***/ }),
-
 /***/ "361f":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1756,13 +1707,6 @@ module.exports = __webpack_require__("faa1").EventEmitter;
 
 /***/ }),
 
-/***/ "42c9":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/dark2.c49dc11c.jpg";
-
-/***/ }),
-
 /***/ "4362":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1801,13 +1745,6 @@ exports.uptime = exports.memoryUsage =
 exports.uvCounters = function() {};
 exports.features = {};
 
-
-/***/ }),
-
-/***/ "43f9":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/classicGreen.c2ae7bde.jpg";
 
 /***/ }),
 
@@ -2468,13 +2405,6 @@ module.exports = deepmerge_1;
 
 /***/ }),
 
-/***/ "6967":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/organizationStructure.8064f4da.jpg";
-
-/***/ }),
-
 /***/ "6ba1":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2576,20 +2506,6 @@ exports.f = DESCRIPTORS ? V8_PROTOTYPE_DEFINE_BUG ? function defineProperty(O, P
   return O;
 };
 
-
-/***/ }),
-
-/***/ "6ef5":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/gold.3093b3c8.jpg";
-
-/***/ }),
-
-/***/ "72ed":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/greenLeaf.6789e8fc.jpg";
 
 /***/ }),
 
@@ -3326,13 +3242,6 @@ function simpleEnd(buf) {
 
 /***/ }),
 
-/***/ "7dda":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/freshGreen.0e344e3e.jpg";
-
-/***/ }),
-
 /***/ "7e07":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3347,13 +3256,6 @@ module.exports = !fails(function () {
   return error.stack !== 7;
 });
 
-
-/***/ }),
-
-/***/ "7f82":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/skyGreen.4cfa829a.jpg";
 
 /***/ }),
 
@@ -3401,13 +3303,6 @@ module.exports = function (argument) {
 // eslint-disable-next-line es/no-object-getownpropertysymbols -- safe
 exports.f = Object.getOwnPropertySymbols;
 
-
-/***/ }),
-
-/***/ "8617":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/classic.733f273c.jpg";
 
 /***/ }),
 
@@ -4392,13 +4287,6 @@ module.exports = function (js, options) {
 
 /***/ }),
 
-/***/ "9910":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/mindMap.223b38aa.jpg";
-
-/***/ }),
-
 /***/ "9a1c":
 /***/ (function(module, exports) {
 
@@ -4484,13 +4372,6 @@ module.exports = function (input, pref) {
   throw $TypeError("Can't convert object to primitive value");
 };
 
-
-/***/ }),
-
-/***/ "a3a6":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/classic2.cdfe2a8d.jpg";
 
 /***/ }),
 
@@ -6067,13 +5948,6 @@ module.exports = __webpack_require__.p + "img/classic2.cdfe2a8d.jpg";
 
 /***/ }),
 
-/***/ "ac18":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/catalogOrganization.380bb277.jpg";
-
-/***/ }),
-
 /***/ "ac5f":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7378,20 +7252,6 @@ module.exports = function (argument) {
   return $String(argument);
 };
 
-
-/***/ }),
-
-/***/ "b2e8":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/pinkGrape.32c2587b.jpg";
-
-/***/ }),
-
-/***/ "b533":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/blueSky.3c7f8ccb.jpg";
 
 /***/ }),
 
@@ -9426,25 +9286,11 @@ module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
 
 /***/ }),
 
-/***/ "c0d2":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/classic3.19d6c347.jpg";
-
-/***/ }),
-
 /***/ "c2ae":
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__("e372").PassThrough
 
-
-/***/ }),
-
-/***/ "c612":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/romanticPurple.7607e58a.jpg";
 
 /***/ }),
 
@@ -9472,13 +9318,6 @@ try {
 
 module.exports = g;
 
-
-/***/ }),
-
-/***/ "ca62":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/freshRed.1c5bde77.jpg";
 
 /***/ }),
 
@@ -9783,13 +9622,6 @@ exports.f = DESCRIPTORS ? $getOwnPropertyDescriptor : function getOwnPropertyDes
   if (hasOwn(O, P)) return createPropertyDescriptor(!call(propertyIsEnumerableModule.f, O, P), O[P]);
 };
 
-
-/***/ }),
-
-/***/ "db73":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/mint.7933f60a.jpg";
 
 /***/ }),
 
@@ -12790,13 +12622,6 @@ module.exports = SILENT_ON_NON_WRITABLE_LENGTH_SET ? function (O, length) {
 
 /***/ }),
 
-/***/ "e911":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/classic4.087902fc.jpg";
-
-/***/ }),
-
 /***/ "ec82":
 /***/ (function(module, exports) {
 
@@ -12873,13 +12698,6 @@ var WeakMap = global.WeakMap;
 
 module.exports = isCallable(WeakMap) && /native code/.test(String(WeakMap));
 
-
-/***/ }),
-
-/***/ "f260":
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__.p + "img/minions.c2a93f9e.jpg";
 
 /***/ }),
 
@@ -13514,19 +13332,9 @@ if (typeof window !== 'undefined') {
 var es_array_push = __webpack_require__("9d9f");
 
 // CONCATENATED MODULE: ../simple-mind-map/src/View.js
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-07 14:45:24
- * @Desc: 视图操作类
- */
+//  视图操作类
 class View {
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 14:45:40
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt = {}) {
     this.opt = opt;
     this.mindMap = this.opt.mindMap;
@@ -13540,12 +13348,7 @@ class View {
     this.bind();
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 15:38:51
-   * @Desc: 绑定
-   */
+  //  绑定
   bind() {
     // 快捷键
     this.mindMap.keyCommand.addShortcut('Control+=', () => {
@@ -13596,12 +13399,7 @@ class View {
     });
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-22 18:30:24
-   * @Desc: 获取当前变换状态数据
-   */
+  //  获取当前变换状态数据
   getTransformData() {
     return {
       transform: this.mindMap.draw.transform(),
@@ -13615,12 +13413,7 @@ class View {
     };
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-22 19:54:17
-   * @Desc: 动态设置变换状态数据
-   */
+  //  动态设置变换状态数据
   setTransformData(viewData) {
     if (viewData) {
       Object.keys(viewData.state).forEach(prop => {
@@ -13634,55 +13427,31 @@ class View {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-13 15:49:06
-   * @Desc: 平移x方向
-   */
+  //  平移x方向
   translateX(step) {
     this.x += step;
     this.transform();
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-10-10 14:03:53
-   * @Desc: 平移x方式到
-   */
+  //  平移x方式到
   translateXTo(x) {
     this.x = x;
     this.transform();
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-13 15:48:52
-   * @Desc: 平移y方向
-   */
+  //  平移y方向
   translateY(step) {
     this.y += step;
     this.transform();
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-10-10 14:04:10
-   * @Desc: 平移y方向到
-   */
+  //  平移y方向到
   translateYTo(y) {
     this.y = y;
     this.transform();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-04 17:13:14
-   * @Desc:  应用变换
-   */
+  //   应用变换
   transform() {
     this.mindMap.draw.transform({
       scale: this.scale,
@@ -13692,11 +13461,7 @@ class View {
     this.mindMap.emit('view_data_change', this.getTransformData());
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 17:41:35
-   * @Desc: 恢复
-   */
+  //  恢复
   reset() {
     this.scale = 1;
     this.x = 0;
@@ -13704,11 +13469,7 @@ class View {
     this.transform();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-04 17:10:34
-   * @Desc: 缩小
-   */
+  //  缩小
   narrow() {
     if (this.scale - this.mindMap.opt.scaleRatio > 0.1) {
       this.scale -= this.mindMap.opt.scaleRatio;
@@ -13719,23 +13480,14 @@ class View {
     this.mindMap.emit('scale', this.scale);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-04 17:10:41
-   * @Desc: 放大
-   */
+  //  放大
   enlarge() {
     this.scale += this.mindMap.opt.scaleRatio;
     this.transform();
     this.mindMap.emit('scale', this.scale);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 16:31:59
-   * @Desc: 设置缩放
-   */
+  //  设置缩放
   setScale(scale) {
     this.scale = scale;
     this.transform();
@@ -13750,19 +13502,9 @@ var eventemitter3_default = /*#__PURE__*/__webpack_require__.n(eventemitter3);
 // CONCATENATED MODULE: ../simple-mind-map/src/Event.js
 
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-07 14:53:09
- * @Desc: 事件类
- */
+//  事件类
 class Event_Event extends eventemitter3_default.a {
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 14:53:25
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt = {}) {
     super();
     this.opt = opt;
@@ -13784,12 +13526,7 @@ class Event_Event extends eventemitter3_default.a {
     this.bind();
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 15:52:24
-   * @Desc: 绑定函数上下文
-   */
+  //  绑定函数上下文
   bindFn() {
     this.onDrawClick = this.onDrawClick.bind(this);
     this.onMousedown = this.onMousedown.bind(this);
@@ -13801,12 +13538,7 @@ class Event_Event extends eventemitter3_default.a {
     this.onKeyup = this.onKeyup.bind(this);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 14:53:43
-   * @Desc: 绑定事件
-   */
+  //  绑定事件
   bind() {
     this.mindMap.svg.on('click', this.onDrawClick);
     this.mindMap.el.addEventListener('mousedown', this.onMousedown);
@@ -13823,12 +13555,7 @@ class Event_Event extends eventemitter3_default.a {
     window.addEventListener('keyup', this.onKeyup);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 15:40:51
-   * @Desc: 解绑事件
-   */
+  //  解绑事件
   unbind() {
     this.mindMap.svg.off('click', this.onDrawClick);
     this.mindMap.el.removeEventListener('mousedown', this.onMousedown);
@@ -13839,30 +13566,17 @@ class Event_Event extends eventemitter3_default.a {
     window.removeEventListener('keyup', this.onKeyup);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 13:19:39
-   * @Desc:  画布的单击事件
-   */
+  //   画布的单击事件
   onDrawClick(e) {
     this.emit('draw_click', e);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-16 13:37:30
-   * @Desc:  svg画布的鼠标按下事件
-   */
+  //   svg画布的鼠标按下事件
   onSvgMousedown(e) {
     this.emit('svg_mousedown', e);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 15:17:35
-   * @Desc: 鼠标按下事件
-   */
+  //  鼠标按下事件
   onMousedown(e) {
     // e.preventDefault()
     // 鼠标左键
@@ -13874,12 +13588,7 @@ class Event_Event extends eventemitter3_default.a {
     this.emit('mousedown', e, this);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 15:18:32
-   * @Desc: 鼠标移动事件
-   */
+  //  鼠标移动事件
   onMousemove(e) {
     // e.preventDefault()
     this.mousemovePos.x = e.clientX;
@@ -13892,23 +13601,13 @@ class Event_Event extends eventemitter3_default.a {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 15:18:57
-   * @Desc: 鼠标松开事件
-   */
+  //  鼠标松开事件
   onMouseup(e) {
     this.isLeftMousedown = false;
     this.emit('mouseup', e, this);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 15:46:27
-   * @Desc: 鼠标滚动
-   */
+  //  鼠标滚动
   onMousewheel(e) {
     e.stopPropagation();
     e.preventDefault();
@@ -13921,22 +13620,13 @@ class Event_Event extends eventemitter3_default.a {
     this.emit('mousewheel', e, dir, this);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 22:34:13
-   * @Desc: 鼠标右键菜单事件
-   */
+  //  鼠标右键菜单事件
   onContextmenu(e) {
     e.preventDefault();
     this.emit('contextmenu', e);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 11:12:11
-   * @Desc: 按键松开事件
-   */
+  //  按键松开事件
   onKeyup(e) {
     this.emit('keyup', e);
   }
@@ -13953,11 +13643,7 @@ var es_array_reduce = __webpack_require__("293c");
 var es_error_cause = __webpack_require__("f8ac");
 
 // CONCATENATED MODULE: ../simple-mind-map/src/utils/constant.js
-/**
- * @Author: 王林
- * @Date: 2021-06-24 21:42:07
- * @Desc: 标签颜色列表
- */
+//  标签颜色列表
 const tagColorList = [{
   color: 'rgb(77, 65, 0)',
   background: 'rgb(255, 244, 179)'
@@ -13975,140 +13661,99 @@ const tagColorList = [{
   background: 'rgb(179, 255, 226)'
 }];
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-07-13 15:56:28
- * @Desc: 布局结构列表
- */
+//  布局结构列表
 const layoutList = [{
   name: '逻辑结构图',
-  value: 'logicalStructure',
-  img: __webpack_require__("0930")
+  value: 'logicalStructure'
 }, {
   name: '思维导图',
-  value: 'mindMap',
-  img: __webpack_require__("9910")
+  value: 'mindMap'
 }, {
   name: '组织结构图',
-  value: 'organizationStructure',
-  img: __webpack_require__("6967")
+  value: 'organizationStructure'
 }, {
   name: '目录组织图',
-  value: 'catalogOrganization',
-  img: __webpack_require__("ac18")
+  value: 'catalogOrganization'
 }];
 const layoutValueList = ['logicalStructure', 'mindMap', 'catalogOrganization', 'organizationStructure'];
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:58:42
- * @Desc: 主题列表
- */
+//  主题列表
 const themeList = [{
   name: '默认',
-  value: 'default',
-  img: __webpack_require__("3556")
+  value: 'default'
 }, {
   name: '脑图经典',
-  value: 'classic',
-  img: __webpack_require__("8617")
+  value: 'classic'
 }, {
   name: '小黄人',
-  value: 'minions',
-  img: __webpack_require__("f260")
+  value: 'minions'
 }, {
   name: '粉红葡萄',
-  value: 'pinkGrape',
-  img: __webpack_require__("b2e8")
+  value: 'pinkGrape'
 }, {
   name: '薄荷',
-  value: 'mint',
-  img: __webpack_require__("db73")
+  value: 'mint'
 }, {
   name: '金色vip',
-  value: 'gold',
-  img: __webpack_require__("6ef5")
+  value: 'gold'
 }, {
   name: '活力橙',
-  value: 'vitalityOrange',
-  img: __webpack_require__("08be")
+  value: 'vitalityOrange'
 }, {
   name: '绿叶',
-  value: 'greenLeaf',
-  img: __webpack_require__("72ed")
+  value: 'greenLeaf'
 }, {
   name: '暗色2',
-  value: 'dark2',
-  img: __webpack_require__("42c9")
+  value: 'dark2'
 }, {
   name: '天清绿',
-  value: 'skyGreen',
-  img: __webpack_require__("7f82")
+  value: 'skyGreen'
 }, {
   name: '脑图经典2',
-  value: 'classic2',
-  img: __webpack_require__("a3a6")
+  value: 'classic2'
 }, {
   name: '脑图经典3',
-  value: 'classic3',
-  img: __webpack_require__("c0d2")
+  value: 'classic3'
 }, {
   name: '脑图经典4',
-  value: 'classic4',
-  img: __webpack_require__("e911")
+  value: 'classic4'
 }, {
   name: '经典绿',
-  value: 'classicGreen',
-  img: __webpack_require__("43f9")
+  value: 'classicGreen'
 }, {
   name: '经典蓝',
-  value: 'classicBlue',
-  img: __webpack_require__("0d2c")
+  value: 'classicBlue'
 }, {
   name: '天空蓝',
-  value: 'blueSky',
-  img: __webpack_require__("b533")
+  value: 'blueSky'
 }, {
   name: '脑残粉',
-  value: 'brainImpairedPink',
-  img: __webpack_require__("074d")
+  value: 'brainImpairedPink'
 }, {
   name: '暗色',
-  value: 'dark',
-  img: __webpack_require__("181c")
+  value: 'dark'
 }, {
   name: '泥土黄',
-  value: 'earthYellow',
-  img: __webpack_require__("1a34")
+  value: 'earthYellow'
 }, {
   name: '清新绿',
-  value: 'freshGreen',
-  img: __webpack_require__("7dda")
+  value: 'freshGreen'
 }, {
   name: '清新红',
-  value: 'freshRed',
-  img: __webpack_require__("ca62")
+  value: 'freshRed'
 }, {
   name: '浪漫紫',
-  value: 'romanticPurple',
-  img: __webpack_require__("c612")
+  value: 'romanticPurple'
 }];
 // CONCATENATED MODULE: ../simple-mind-map/src/Style.js
 
 const rootProp = ['paddingX', 'paddingY'];
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 10:09:08
- * @Desc: 样式类
- */
+//  样式类
+
 class Style_Style {
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 16:01:53
-   * @Desc:  设置背景样式
-   */
+  //   设置背景样式
+
   static setBackgroundStyle(el, themeConfig) {
     let {
       backgroundColor,
@@ -14122,30 +13767,21 @@ class Style_Style {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 10:10:11
-   * @Desc: 构造函数
-   */
+  //  构造函数
+
   constructor(ctx, themeConfig) {
     this.ctx = ctx;
     this.themeConfig = themeConfig;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-12 07:40:14
-   * @Desc: 更新主题配置
-   */
+  //  更新主题配置
+
   updateThemeConfig(themeConfig) {
     this.themeConfig = themeConfig;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 12:02:55
-   * @Desc: 合并样式
-   */
+  //  合并样式
+
   merge(prop, root, isActive) {
     // 三级及以下节点
     let defaultConfig = this.themeConfig.node;
@@ -14174,42 +13810,27 @@ class Style_Style {
     return this.getSelfStyle(prop) !== undefined ? this.getSelfStyle(prop) : defaultConfig[prop];
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 21:55:57
-   * @Desc: 获取某个样式值
-   */
+  //  获取某个样式值
+
   getStyle(prop, root, isActive) {
     return this.merge(prop, root, isActive);
   }
 
-  /**
-   * javascript comment
-   * @Author: flydreame
-   * @Date: 2022-09-17 12:09:39
-   * @Desc: 获取自身自定义样式
-   */
+  //  获取自身自定义样式
+
   getSelfStyle(prop) {
     return this.ctx.nodeData.data[prop];
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 10:12:56
-   * @Desc: 矩形
-   */
+  //  矩形
+
   rect(node) {
     this.shape(node);
     node.radius(this.merge('borderRadius'));
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 15:04:28
-   * @Desc:  矩形外的其他形状
-   */
+  //   矩形外的其他形状
+
   shape(node) {
     node.fill({
       color: this.merge('fillColor')
@@ -14225,11 +13846,8 @@ class Style_Style {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 12:07:59
-   * @Desc: 文字
-   */
+  //  文字
+
   text(node) {
     node.fill({
       color: this.merge('color')
@@ -14242,22 +13860,16 @@ class Style_Style {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-13 08:14:34
-   * @Desc: html文字节点
-   */
+  //  html文字节点
+
   domText(node, fontSizeScale = 1) {
     node.style.fontFamily = this.merge('fontFamily');
     node.style.fontSize = this.merge('fontSize') * fontSizeScale + 'px';
     node.style.fontWeight = this.merge('fontWeight') || 'normal';
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-20 20:02:18
-   * @Desc: 标签文字
-   */
+  //  标签文字
+
   tagText(node, index) {
     node.fill({
       color: tagColorList[index].color
@@ -14266,33 +13878,24 @@ class Style_Style {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-20 21:04:11
-   * @Desc: 标签矩形
-   */
+  //  标签矩形
+
   tagRect(node, index) {
     node.fill({
       color: tagColorList[index].background
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-03 22:37:19
-   * @Desc: 内置图标
-   */
+  //  内置图标
+
   iconNode(node) {
     node.attr({
       fill: this.merge('color')
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 14:50:49
-   * @Desc: 连线
-   */
+  //  连线
+
   line(node, {
     width,
     color,
@@ -14307,11 +13910,8 @@ class Style_Style {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 16:19:03
-   * @Desc: 概要连线
-   */
+  //  概要连线
+
   generalizationLine(node) {
     node.stroke({
       width: this.merge('generalizationLineWidth', true),
@@ -14321,11 +13921,8 @@ class Style_Style {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 20:03:59
-   * @Desc: 按钮
-   */
+  //  按钮
+
   iconBtn(node, fillNode) {
     node.fill({
       color: '#808080'
@@ -14337,21 +13934,13 @@ class Style_Style {
 }
 /* harmony default export */ var src_Style = (Style_Style);
 // CONCATENATED MODULE: ../simple-mind-map/src/Shape.js
-/**
- * @Author: 王林
- * @Date: 2022-08-22 21:32:50
- * @Desc: 节点形状类
- */
+//  节点形状类
 class Shape {
   constructor(node) {
     this.node = node;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-08-17 22:32:32
-   * @Desc: 形状需要的padding
-   */
+  //  形状需要的padding
   getShapePadding(width, height, paddingX, paddingY) {
     const shape = this.node.getShape();
     const defaultPaddingX = 15;
@@ -14403,11 +13992,7 @@ class Shape {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-08-17 22:22:53
-   * @Desc: 创建形状节点
-   */
+  //  创建形状节点
   createShape() {
     const shape = this.node.getShape();
     let {
@@ -14446,11 +14031,7 @@ class Shape {
     return node;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-09-04 09:08:54
-   * @Desc: 创建菱形
-   */
+  //  创建菱形
   createDiamond() {
     let {
       width,
@@ -14474,11 +14055,7 @@ class Shape {
         `);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-09-03 16:14:12
-   * @Desc: 创建平行四边形
-   */
+  //  创建平行四边形
   createParallelogram() {
     let {
       paddingX
@@ -14496,11 +14073,7 @@ class Shape {
         `);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-09-03 16:50:23
-   * @Desc: 创建圆角矩形
-   */
+  //  创建圆角矩形
   createRoundedRectangle() {
     let {
       width,
@@ -14516,12 +14089,7 @@ class Shape {
         `);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 16:14:08
-   * @Desc: 创建八角矩形
-   */
+  //  创建八角矩形
   createOctagonalRectangle() {
     let w = 5;
     let {
@@ -14540,12 +14108,7 @@ class Shape {
         `);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 20:55:50
-   * @Desc: 创建外三角矩形
-   */
+  //  创建外三角矩形
   createOuterTriangularRectangle() {
     let {
       paddingX
@@ -14565,12 +14128,7 @@ class Shape {
         `);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 20:59:37
-   * @Desc: 创建内三角矩形
-   */
+  //  创建内三角矩形
   createInnerTriangularRectangle() {
     let {
       paddingX
@@ -14590,12 +14148,7 @@ class Shape {
         `);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 21:06:31
-   * @Desc: 创建椭圆
-   */
+  //  创建椭圆
   createEllipse() {
     let {
       width,
@@ -14611,12 +14164,7 @@ class Shape {
         `);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 21:14:04
-   * @Desc: 创建圆
-   */
+  //  创建圆
   createCircle() {
     let {
       width,
@@ -14637,12 +14185,7 @@ class Shape {
 const shapeList = ['rectangle', 'diamond', 'parallelogram', 'roundedRectangle', 'octagonalRectangle', 'outerTriangularRectangle', 'innerTriangularRectangle', 'ellipse', 'circle'];
 // CONCATENATED MODULE: ../simple-mind-map/src/utils/index.js
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-06 14:13:17
- * @Desc: 深度优先遍历树
- */
+//  深度优先遍历树
 const walk = (root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0) => {
   let stop = false;
   if (beforeCallback) {
@@ -14657,12 +14200,7 @@ const walk = (root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 
   afterCallback && afterCallback(root, parent, isRoot, layerIndex, index);
 };
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-07 18:47:20
- * @Desc: 广度优先遍历树
- */
+//  广度优先遍历树
 const bfsWalk = (root, callback) => {
   callback(root);
   let stack = [root];
@@ -14683,12 +14221,7 @@ const bfsWalk = (root, callback) => {
   }
 };
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-09 10:44:54
- * @Desc: 缩放图片尺寸
- */
+//  缩放图片尺寸
 const resizeImgSize = (width, height, maxWidth, maxHeight) => {
   let nRatio = width / height;
   let arr = [];
@@ -14721,12 +14254,7 @@ const resizeImgSize = (width, height, maxWidth, maxHeight) => {
   return arr;
 };
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-09 10:18:42
- * @Desc: 缩放图片
- */
+//  缩放图片
 const resizeImg = (imgUrl, maxWidth, maxHeight) => {
   return new Promise((resolve, reject) => {
     let img = new Image();
@@ -14741,11 +14269,7 @@ const resizeImg = (imgUrl, maxWidth, maxHeight) => {
   });
 };
 
-/**
- * @Author: 王林
- * @Date: 2021-05-04 12:26:56
- * @Desc: 从头html结构字符串里获取带换行符的字符串
- */
+//  从头html结构字符串里获取带换行符的字符串
 const getStrWithBrFromHtml = str => {
   str = str.replace(/<br>/gim, '\n');
   let el = document.createElement('div');
@@ -14754,11 +14278,7 @@ const getStrWithBrFromHtml = str => {
   return str;
 };
 
-/**
- * @Author: 王林
- * @Date: 2021-05-04 14:45:39
- * @Desc: 极简的深拷贝
- */
+//  极简的深拷贝
 const simpleDeepClone = data => {
   try {
     return JSON.parse(JSON.stringify(data));
@@ -14767,11 +14287,7 @@ const simpleDeepClone = data => {
   }
 };
 
-/**
- * @Author: 王林
- * @Date: 2021-05-04 14:40:11
- * @Desc: 复制渲染树数据
- */
+//  复制渲染树数据
 const copyRenderTree = (tree, root) => {
   tree.data = simpleDeepClone(root.data);
   tree.children = [];
@@ -14783,11 +14299,7 @@ const copyRenderTree = (tree, root) => {
   return tree;
 };
 
-/**
- * @Author: 王林
- * @Date: 2021-05-04 14:40:11
- * @Desc: 复制节点树数据
- */
+//  复制节点树数据
 const copyNodeTree = (tree, root, removeActiveState = false) => {
   tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data);
   if (removeActiveState) {
@@ -14806,11 +14318,7 @@ const copyNodeTree = (tree, root, removeActiveState = false) => {
   return tree;
 };
 
-/**
- * @Author: 王林
- * @Date: 2021-07-04 09:08:43
- * @Desc: 图片转成dataURL
- */
+//  图片转成dataURL
 const imgToDataUrl = src => {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -14836,11 +14344,7 @@ const imgToDataUrl = src => {
   });
 };
 
-/**
- * @Author: 王林
- * @Date: 2021-07-04 16:20:06
- * @Desc: 下载文件
- */
+//  下载文件
 const downloadFile = (file, fileName) => {
   let a = document.createElement('a');
   a.href = file;
@@ -14848,11 +14352,7 @@ const downloadFile = (file, fileName) => {
   a.click();
 };
 
-/**
- * @Author: 王林
- * @Date: 2021-07-11 10:36:47
- * @Desc: 节流函数
- */
+//  节流函数
 const throttle = (fn, time = 300, ctx) => {
   let timer = null;
   return () => {
@@ -14866,12 +14366,7 @@ const throttle = (fn, time = 300, ctx) => {
   };
 };
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-07-12 10:27:36
- * @Desc: 异步执行任务队列
- */
+//  异步执行任务队列
 const asyncRun = (taskList, callback = () => {}) => {
   let index = 0;
   let len = taskList.length;
@@ -21961,18 +21456,10 @@ makeMorphable();
 //# sourceMappingURL=svg.esm.js.map
 
 // CONCATENATED MODULE: ../simple-mind-map/src/svg/btns.js
-/**
- * @Author: 王林
- * @Date: 2021-04-11 19:46:10
- * @Desc: 展开按钮
- */
+//  展开按钮
 const btns_open = `<svg t="1618141562310" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13476" width="200" height="200"><path d="M475.136 327.168v147.968h-147.968v74.24h147.968v147.968h74.24v-147.968h147.968v-74.24h-147.968v-147.968h-74.24z m36.864-222.208c225.28 0 407.04 181.76 407.04 407.04s-181.76 407.04-407.04 407.04-407.04-181.76-407.04-407.04 181.76-407.04 407.04-407.04z m0-74.24c-265.216 0-480.768 215.552-480.768 480.768s215.552 480.768 480.768 480.768 480.768-215.552 480.768-480.768-215.552-480.768-480.768-480.768z" p-id="13477"></path></svg>`;
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 19:46:23
- * @Desc: 收缩按钮
- */
+//  收缩按钮
 const btns_close = `<svg t="1618141589243" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13611" width="200" height="200"><path d="M512 105.472c225.28 0 407.04 181.76 407.04 407.04s-181.76 407.04-407.04 407.04-407.04-181.76-407.04-407.04 181.76-407.04 407.04-407.04z m0-74.24c-265.216 0-480.768 215.552-480.768 480.768s215.552 480.768 480.768 480.768 480.768-215.552 480.768-480.768-215.552-480.768-480.768-480.768z" p-id="13612"></path><path d="M252.928 474.624h518.144v74.24h-518.144z" p-id="13613"></path></svg>`;
 /* harmony default export */ var btns = ({
   open: btns_open,
@@ -22187,11 +21674,7 @@ const nodeIconList = [{
   }]
 }];
 
-/**
- * @Author: 王林
- * @Date: 2021-06-23 22:36:56
- * @Desc: 获取nodeIconList icon内容
- */
+//  获取nodeIconList icon内容
 const getNodeIconListIcon = name => {
   let arr = name.split('_');
   let typeData = nodeIconList.find(item => {
@@ -22217,19 +21700,11 @@ const getNodeIconListIcon = name => {
 
 
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-06 11:26:00
- * @Desc: 节点类
- */
+//  节点类
+
 class Node_Node {
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 11:26:17
-   * @Desc: 构造函数
-   */
+  //  构造函数
+
   constructor(opt = {}) {
     // 节点数据
     this.nodeData = this.handleData(opt.data || {});
@@ -22326,11 +21801,8 @@ class Node_Node {
     this._top = val;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-12 07:40:47
-   * @Desc: 更新主题配置
-   */
+  //  更新主题配置
+
   updateThemeConfig() {
     // 主题配置
     this.themeConfig = this.mindMap.themeConfig;
@@ -22338,11 +21810,8 @@ class Node_Node {
     this.style.updateThemeConfig(this.themeConfig);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-05 23:11:39
-   * @Desc: 复位部分布局时会重新设置的数据
-   */
+  //  复位部分布局时会重新设置的数据
+
   reset() {
     this.children = [];
     this.parent = null;
@@ -22352,11 +21821,8 @@ class Node_Node {
     this.top = 0;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-20 10:12:31
-   * @Desc: 处理数据
-   */
+  //  处理数据
+
   handleData(data) {
     data.data.expand = data.data.expand === false ? false : true;
     data.data.isActive = data.data.isActive === true ? true : false;
@@ -22364,22 +21830,14 @@ class Node_Node {
     return data;
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-02 19:53:40
-   * @Desc: 检查节点是否存在自定义数据
-   */
+  //  检查节点是否存在自定义数据
+
   hasCustomPosition() {
     return this.customLeft !== undefined && this.customTop !== undefined;
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-04 09:06:56
-   * @Desc: 检查节点是否存在自定义位置的祖先节点
-   */
+  //  检查节点是否存在自定义位置的祖先节点
+
   ancestorHasCustomPosition() {
     let node = this;
     while (node) {
@@ -22391,21 +21849,14 @@ class Node_Node {
     return false;
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 15:55:04
-   * @Desc: 添加子节点
-   */
+  //  添加子节点
+
   addChildren(node) {
     this.children.push(node);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-06 22:08:09
-   * @Desc: 创建节点的各个内容对象数据
-   */
+  //  创建节点的各个内容对象数据
+
   createNodeData() {
     this._imgData = this.createImgNode();
     this._iconData = this.createIconNode();
@@ -22416,11 +21867,8 @@ class Node_Node {
     this.createGeneralizationNode();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 09:20:02
-   * @Desc: 解绑所有事件
-   */
+  //  解绑所有事件
+
   removeAllEvent() {
     if (this._noteData) {
       this._noteData.node.off(['mouseover', 'mouseout']);
@@ -22433,11 +21881,8 @@ class Node_Node {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-07 21:27:24
-   * @Desc: 移除节点内容
-   */
+  //  移除节点内容
+
   removeAllNode() {
     // 节点内的内容
     ;
@@ -22465,12 +21910,8 @@ class Node_Node {
     this.removeGeneralization();
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-09 09:46:23
-   * @Desc: 计算节点的宽高
-   */
+  //  计算节点的宽高
+
   getSize() {
     this.removeAllNode();
     this.createNodeData();
@@ -22485,12 +21926,8 @@ class Node_Node {
     return changed;
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 14:52:17
-   * @Desc: 计算节点尺寸信息
-   */
+  //  计算节点尺寸信息
+
   getNodeRect() {
     // 宽高
     let imgContentWidth = 0;
@@ -22556,12 +21993,8 @@ class Node_Node {
     };
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-09 14:06:17
-   * @Desc: 创建图片节点
-   */
+  //  创建图片节点
+
   createImgNode() {
     let img = this.nodeData.data.image;
     if (!img) {
@@ -22582,22 +22015,14 @@ class Node_Node {
     };
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-09 10:12:51
-   * @Desc: 获取图片显示宽高
-   */
+  //  获取图片显示宽高
+
   getImgShowSize() {
     return resizeImgSize(this.nodeData.data.imageSize.width, this.nodeData.data.imageSize.height, this.themeConfig.imgMaxWidth, this.themeConfig.imgMaxHeight);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-09 14:10:48
-   * @Desc: 创建icon节点
-   */
+  //  创建icon节点
+
   createIconNode() {
     let _data = this.nodeData.data;
     if (!_data.icon || _data.icon.length <= 0) {
@@ -22613,12 +22038,8 @@ class Node_Node {
     });
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-09 14:08:56
-   * @Desc: 创建文本节点
-   */
+  //  创建文本节点
+
   createTextNode() {
     let g = new G();
     let fontSize = this.getStyle('fontSize', this.isRoot, this.nodeData.data.isActive);
@@ -22640,11 +22061,8 @@ class Node_Node {
     };
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-20 15:28:54
-   * @Desc: 创建超链接节点
-   */
+  //  创建超链接节点
+
   createHyperlinkNode() {
     let {
       hyperlink,
@@ -22679,11 +22097,8 @@ class Node_Node {
     };
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-20 19:49:15
-   * @Desc: 创建标签节点
-   */
+  //  创建标签节点
+
   createTagNode() {
     let tagData = this.nodeData.data.tag;
     if (!tagData || tagData.length <= 0) {
@@ -22711,11 +22126,8 @@ class Node_Node {
     return nodes;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-20 21:19:36
-   * @Desc: 创建备注节点
-   */
+  //  创建备注节点
+
   createNoteNode() {
     if (!this.nodeData.data.note) {
       return null;
@@ -22773,23 +22185,15 @@ class Node_Node {
     };
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 22:02:07
-   * @Desc: 获取节点形状
-   */
+  //  获取节点形状
+
   getShape() {
     // 节点使用功能横线风格的话不支持设置形状，直接使用默认的矩形
     return this.themeConfig.nodeUseLineStyle ? 'rectangle' : this.style.getStyle('shape', false, false);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-09 11:10:11
-   * @Desc: 定位节点内容
-   */
+  //  定位节点内容
+
   layout() {
     let {
       width,
@@ -22901,11 +22305,8 @@ class Node_Node {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 16:44:22
-   * @Desc: 激活节点
-   */
+  //  激活节点
+
   active(e) {
     if (this.mindMap.opt.readonly) {
       return;
@@ -22921,11 +22322,8 @@ class Node_Node {
     this.mindMap.emit('node_active', this, this.renderer.activeNodeList);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-04 20:20:09
-   * @Desc: 渲染节点到画布，会移除旧的，创建新的
-   */
+  //  渲染节点到画布，会移除旧的，创建新的
+
   renderNode() {
     // 连线
     this.renderLine();
@@ -22935,11 +22333,8 @@ class Node_Node {
     this.layout();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-04 22:47:01
-   * @Desc: 更新节点
-   */
+  //  更新节点
+
   update(layout = false) {
     if (!this.group) {
       return;
@@ -22967,12 +22362,8 @@ class Node_Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 13:55:58
-   * @Desc: 递归渲染
-   */
+  //  递归渲染
+
   render(callback = () => {}) {
     // 节点
     if (this.initRender) {
@@ -23007,11 +22398,8 @@ class Node_Node {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 09:24:55
-   * @Desc: 递归删除
-   */
+  //  递归删除
+
   remove() {
     this.initRender = true;
     this.removeAllEvent();
@@ -23027,12 +22415,8 @@ class Node_Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-23 18:39:14
-   * @Desc: 隐藏节点
-   */
+  //  隐藏节点
+
   hide() {
     this.group.hide();
     this.hideGeneralization();
@@ -23050,12 +22434,8 @@ class Node_Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-23 18:39:14
-   * @Desc: 显示节点
-   */
+  //  显示节点
+
   show() {
     if (!this.group) {
       return;
@@ -23076,11 +22456,8 @@ class Node_Node {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-10 22:01:53
-   * @Desc: 连线
-   */
+  //  连线
+
   renderLine(deep = false) {
     if (this.nodeData.data.expand === false) {
       return;
@@ -23111,12 +22488,8 @@ class Node_Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: flydreame
-   * @Date: 2022-09-17 12:41:29
-   * @Desc: 设置连线样式
-   */
+  //  设置连线样式
+
   styleLine(line, node) {
     let width = node.getSelfInhertStyle('lineWidth') || node.getStyle('lineWidth', true);
     let color = node.getSelfInhertStyle('lineColor') || node.getStyle('lineColor', true);
@@ -23128,11 +22501,8 @@ class Node_Node {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 16:40:21
-   * @Desc: 移除连线
-   */
+  //  移除连线
+
   removeLine() {
     this._lines.forEach(line => {
       line.remove();
@@ -23140,21 +22510,14 @@ class Node_Node {
     this._lines = [];
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-01 09:27:30
-   * @Desc: 检查是否存在概要
-   */
+  //  检查是否存在概要
+
   checkHasGeneralization() {
     return !!this.nodeData.data.generalization;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-31 09:41:28
-   * @Desc: 创建概要节点
-   */
+  //  创建概要节点
+
   createGeneralizationNode() {
     if (this.isGeneralization || !this.checkHasGeneralization()) {
       return;
@@ -23182,22 +22545,15 @@ class Node_Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-01 15:38:52
-   * @Desc: 更新概要节点
-   */
+  //  更新概要节点
+
   updateGeneralization() {
     this.removeGeneralization();
     this.createGeneralizationNode();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 08:35:51
-   * @Desc: 渲染概要节点
-   */
+  //  渲染概要节点
+
   renderGeneralization() {
     if (this.isGeneralization) {
       return;
@@ -23218,11 +22574,8 @@ class Node_Node {
     this._generalizationNode.render();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 13:11:27
-   * @Desc: 删除概要节点
-   */
+  //  删除概要节点
+
   removeGeneralization() {
     if (this._generalizationLine) {
       this._generalizationLine.remove();
@@ -23240,12 +22593,8 @@ class Node_Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-01 09:56:46
-   * @Desc: 隐藏概要节点
-   */
+  //  隐藏概要节点
+
   hideGeneralization() {
     if (this._generalizationLine) {
       this._generalizationLine.hide();
@@ -23255,12 +22604,8 @@ class Node_Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-01 09:57:42
-   * @Desc: 显示概要节点
-   */
+  //  显示概要节点
+
   showGeneralization() {
     if (this._generalizationLine) {
       this._generalizationLine.show();
@@ -23270,11 +22615,8 @@ class Node_Node {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 17:59:14
-   * @Desc: 创建或更新展开收缩按钮内容
-   */
+  //  创建或更新展开收缩按钮内容
+
   updateExpandBtnNode() {
     if (this._expandBtn) {
       this._expandBtn.clear();
@@ -23293,12 +22635,8 @@ class Node_Node {
     if (this._expandBtn) this._expandBtn.add(fillNode).add(node);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-12 18:18:13
-   * @Desc: 更新展开收缩按钮位置
-   */
+  //  更新展开收缩按钮位置
+
   updateExpandBtnPos() {
     if (!this._expandBtn) {
       return;
@@ -23306,11 +22644,8 @@ class Node_Node {
     this.renderer.layout.renderExpandBtn(this, this._expandBtn);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 19:47:01
-   * @Desc: 展开收缩按钮
-   */
+  //  展开收缩按钮
+
   renderExpandBtn() {
     if (!this.nodeData.children || this.nodeData.children.length <= 0 || this.isRoot) {
       return;
@@ -23339,11 +22674,8 @@ class Node_Node {
     this.updateExpandBtnPos();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 13:26:00
-   * @Desc: 移除展开收缩按钮
-   */
+  //  移除展开收缩按钮
+
   removeExpandBtn() {
     if (this._expandBtn) {
       this._expandBtn.off(['mouseover', 'mouseout', 'click']);
@@ -23353,12 +22685,8 @@ class Node_Node {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-25 09:51:37
-   * @Desc: 检测当前节点是否是某个节点的祖先节点
-   */
+  //  检测当前节点是否是某个节点的祖先节点
+
   isParent(node) {
     if (this === node) {
       return false;
@@ -23373,12 +22701,8 @@ class Node_Node {
     return false;
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-25 10:32:34
-   * @Desc: 检测当前节点是否是某个节点的兄弟节点
-   */
+  //  检测当前节点是否是某个节点的兄弟节点
+
   isBrother(node) {
     if (!this.parent || this === node) {
       return false;
@@ -23388,11 +22712,8 @@ class Node_Node {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-20 22:51:57
-   * @Desc: 获取padding值
-   */
+  //  获取padding值
+
   getPaddingVale() {
     return {
       paddingX: this.getStyle('paddingX', true, this.nodeData.data.isActive),
@@ -23400,32 +22721,21 @@ class Node_Node {
     };
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 21:48:49
-   * @Desc: 获取某个样式
-   */
+  //  获取某个样式
+
   getStyle(prop, root, isActive) {
     let v = this.style.merge(prop, root, isActive);
     return v === undefined ? '' : v;
   }
 
-  /**
-   * javascript comment
-   * @Author: flydreame
-   * @Date: 2022-09-17 11:21:15
-   * @Desc: 获取自定义样式
-   */
+  //  获取自定义样式
+
   getSelfStyle(prop) {
     return this.style.getSelfStyle(prop);
   }
 
-  /**
-   * javascript comment
-   * @Author: flydreame
-   * @Date: 2022-09-17 11:21:26
-   * @Desc:  获取最近一个存在自身自定义样式的祖先节点的自定义样式
-   */
+  //   获取最近一个存在自身自定义样式的祖先节点的自定义样式
+
   getParentSelfStyle(prop) {
     if (this.parent) {
       return this.parent.getSelfStyle(prop) || this.parent.getParentSelfStyle(prop);
@@ -23433,105 +22743,70 @@ class Node_Node {
     return null;
   }
 
-  /**
-   * javascript comment
-   * @Author: flydreame
-   * @Date: 2022-09-17 12:15:30
-   * @Desc: 获取自身可继承的自定义样式
-   */
+  //  获取自身可继承的自定义样式
+
   getSelfInhertStyle(prop) {
     return this.getSelfStyle(prop) ||
     // 自身
     this.getParentSelfStyle(prop); // 父级
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 22:18:07
-   * @Desc: 修改某个样式
-   */
+  //  修改某个样式
+
   setStyle(prop, value, isActive) {
     this.mindMap.execCommand('SET_NODE_STYLE', this, prop, value, isActive);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-22 22:04:02
-   * @Desc: 获取数据
-   */
+  //  获取数据
+
   getData(key) {
     return key ? this.nodeData.data[key] || '' : this.nodeData.data;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-22 22:12:01
-   * @Desc: 设置数据
-   */
+  //  设置数据
+
   setData(data = {}) {
     this.mindMap.execCommand('SET_NODE_DATA', this, data);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:41:28
-   * @Desc: 设置文本
-   */
+  //  设置文本
+
   setText(text) {
     this.mindMap.execCommand('SET_NODE_TEXT', this, text);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:42:19
-   * @Desc: 设置图片
-   */
+  //  设置图片
+
   setImage(imgData) {
     this.mindMap.execCommand('SET_NODE_IMAGE', this, imgData);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:47:29
-   * @Desc: 设置图标
-   */
+  //  设置图标
+
   setIcon(icons) {
     this.mindMap.execCommand('SET_NODE_ICON', this, icons);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:50:41
-   * @Desc: 设置超链接
-   */
+  //  设置超链接
+
   setHyperlink(link, title) {
     this.mindMap.execCommand('SET_NODE_HYPERLINK', this, link, title);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:53:24
-   * @Desc: 设置备注
-   */
+  //  设置备注
+
   setNote(note) {
     this.mindMap.execCommand('SET_NODE_NOTE', this, note);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:55:08
-   * @Desc: 设置标签
-   */
+  //  设置标签
+
   setTag(tag) {
     this.mindMap.execCommand('SET_NODE_TAG', this, tag);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 21:47:45
-   * @Desc: 设置形状
-   */
+  //  设置形状
+
   setShape(shape) {
     this.mindMap.execCommand('SET_NODE_SHAPE', this, shape);
   }
@@ -23541,17 +22816,9 @@ class Node_Node {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-12 22:24:30
- * @Desc: 布局基类
- */
+//  布局基类
 class Base_Base {
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-12 22:25:16
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(renderer) {
     // 渲染实例
     this.renderer = renderer;
@@ -23563,45 +22830,25 @@ class Base_Base {
     this.root = null;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-12 22:39:50
-   * @Desc: 计算节点位置
-   */
+  //  计算节点位置
   doLayout() {
     throw new Error('【computed】方法为必要方法，需要子类进行重写！');
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-12 22:41:04
-   * @Desc: 连线
-   */
+  //  连线
   renderLine() {
     throw new Error('【renderLine】方法为必要方法，需要子类进行重写！');
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-12 22:42:08
-   * @Desc: 定位展开收缩按钮
-   */
+  //  定位展开收缩按钮
   renderExpandBtn() {
     throw new Error('【renderExpandBtn】方法为必要方法，需要子类进行重写！');
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 22:49:28
-   * @Desc: 概要节点
-   */
+  //  概要节点
   renderGeneralization() {}
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 21:30:54
-   * @Desc: 创建节点实例
-   */
+  //  创建节点实例
   createNode(data, parent, isRoot, layerIndex) {
     // 创建节点
     let newNode = null;
@@ -23639,22 +22886,13 @@ class Base_Base {
     return newNode;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-16 13:48:43
-   * @Desc: 定位节点到画布中间
-   */
+  //  定位节点到画布中间
   setNodeCenter(node) {
     node.left = (this.mindMap.width - node.width) / 2;
     node.top = (this.mindMap.height - node.height) / 2;
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 11:25:52
-   * @Desc: 更新子节点属性
-   */
+  //  更新子节点属性
   updateChildren(children, prop, offset) {
     children.forEach(item => {
       item[prop] += offset;
@@ -23665,22 +22903,14 @@ class Base_Base {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 15:05:01
-   * @Desc: 二次贝塞尔曲线
-   */
+  //  二次贝塞尔曲线
   quadraticCurvePath(x1, y1, x2, y2) {
     let cx = x1 + (x2 - x1) * 0.2;
     let cy = y1 + (y2 - y1) * 0.8;
     return `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 15:05:18
-   * @Desc: 三次贝塞尔曲线
-   */
+  //  三次贝塞尔曲线
   cubicBezierPath(x1, y1, x2, y2) {
     let cx1 = x1 + (x2 - x1) / 2;
     let cy1 = y1;
@@ -23689,46 +22919,28 @@ class Base_Base {
     return `M ${x1},${y1} C ${cx1},${cy1} ${cx2},${cy2} ${x2},${y2}`;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-27 19:00:07
-   * @Desc:  获取节点的marginX
-   */
+  //   获取节点的marginX
   getMarginX(layerIndex) {
     return layerIndex === 1 ? this.mindMap.themeConfig.second.marginX : this.mindMap.themeConfig.node.marginX;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 15:34:20
-   * @Desc: 获取节点的marginY
-   */
+  //  获取节点的marginY
   getMarginY(layerIndex) {
     return layerIndex === 1 ? this.mindMap.themeConfig.second.marginY : this.mindMap.themeConfig.node.marginY;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-31 20:53:12
-   * @Desc: 获取节点包括概要在内的宽度
-   */
+  //  获取节点包括概要在内的宽度
   getNodeWidthWithGeneralization(node) {
     return Math.max(node.width, node.checkHasGeneralization() ? node._generalizationNodeWidth : 0);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-31 20:53:12
-   * @Desc: 获取节点包括概要在内的高度
-   */
+  //  获取节点包括概要在内的高度
   getNodeHeightWithGeneralization(node) {
     return Math.max(node.height, node.checkHasGeneralization() ? node._generalizationNodeHeight : 0);
   }
 
+  //  获取节点的边界值
   /**
-   * @Author: 王林
-   * @Date: 2022-07-31 09:14:03
-   * @Desc: 获取节点的边界值
    * dir：生长方向，h（水平）、v（垂直）
    * isLeft：是否向左生长
    */
@@ -23803,27 +23015,17 @@ class Base_Base {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-12 22:25:58
- * @Desc: 逻辑结构图
- */
+//  逻辑结构图
+
 class LogicalStructure_LogicalStructure extends layouts_Base {
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-12 22:26:31
-   * @Desc: 构造函数
-   */
+  //  构造函数
+
   constructor(opt = {}) {
     super(opt);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 14:04:20
-   * @Desc: 布局
-   */
+  //  布局
+
   doLayout(callback) {
     let task = [() => {
       this.computedBaseValue();
@@ -23837,12 +23039,8 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
     asyncRun(task);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 09:49:32
-   * @Desc: 遍历数据计算节点的left、width、height
-   */
+  //  遍历数据计算节点的left、width、height
+
   computedBaseValue() {
     walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
       let newNode = this.createNode(cur, parent, isRoot, layerIndex);
@@ -23866,12 +23064,8 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
     }, true, 0);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 09:59:25
-   * @Desc: 遍历节点树计算节点的top
-   */
+  //  遍历节点树计算节点的top
+
   computedTopValue() {
     walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (node.nodeData.data.expand && node.children && node.children.length) {
@@ -23887,12 +23081,8 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
     }, null, true);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 10:04:05
-   * @Desc: 调整节点top
-   */
+  //  调整节点top
+
   adjustTopValue() {
     walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (!node.nodeData.data.expand) {
@@ -23906,12 +23096,8 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
     }, null, true);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 14:26:03
-   * @Desc: 更新兄弟节点的top
-   */
+  //  更新兄弟节点的top
+
   updateBrothers(node, addHeight) {
     if (node.parent) {
       let childrenList = node.parent.children;
@@ -23942,11 +23128,8 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 14:42:48
-   * @Desc: 绘制连线，连接该节点到其子节点
-   */
+  //  绘制连线，连接该节点到其子节点
+
   renderLine(node, lines, style, lineStyle) {
     if (lineStyle === 'curve') {
       this.renderLineCurve(node, lines, style);
@@ -23957,12 +23140,8 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:17:30
-   * @Desc: 直线风格连线
-   */
+  //  直线风格连线
+
   renderLineStraight(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -23989,12 +23168,8 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
     });
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:34:41
-   * @Desc: 直连风格
-   */
+  //  直连风格
+
   renderLineDirect(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -24019,12 +23194,8 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
     });
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:17:43
-   * @Desc: 曲线风格连线
-   */
+  //  曲线风格连线
+
   renderLineCurve(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -24054,11 +23225,8 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 19:54:26
-   * @Desc: 渲染按钮
-   */
+  //  渲染按钮
+
   renderExpandBtn(node, btn) {
     let {
       width,
@@ -24073,11 +23241,8 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
     btn.translate(width - translateX, height / 2 - translateY + nodeUseLineStyleOffset);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 08:30:35
-   * @Desc: 创建概要节点
-   */
+  //  创建概要节点
+
   renderGeneralization(node, gLine, gNode) {
     let {
       top,
@@ -24103,28 +23268,17 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-12 22:25:58
- * @Desc: 思维导图
- * 在逻辑结构图的基础上增加一个变量来记录生长方向，向左还是向右，同时在计算left的时候根据方向来计算、调整top时只考虑同方向的节点即可
- */
+//  思维导图
+
 class MindMap_MindMap extends layouts_Base {
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-12 22:26:31
-   * @Desc: 构造函数
-   */
+  //  构造函数
+  // 在逻辑结构图的基础上增加一个变量来记录生长方向，向左还是向右，同时在计算left的时候根据方向来计算、调整top时只考虑同方向的节点即可
   constructor(opt = {}) {
     super(opt);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 14:04:20
-   * @Desc: 布局
-   */
+  //  布局
+
   doLayout(callback) {
     let task = [() => {
       this.computedBaseValue();
@@ -24138,12 +23292,8 @@ class MindMap_MindMap extends layouts_Base {
     asyncRun(task);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 09:49:32
-   * @Desc: 遍历数据计算节点的left、width、height
-   */
+  //  遍历数据计算节点的left、width、height
+
   computedBaseValue() {
     walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex, index) => {
       let newNode = this.createNode(cur, parent, isRoot, layerIndex);
@@ -24191,12 +23341,8 @@ class MindMap_MindMap extends layouts_Base {
     }, true, 0);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 09:59:25
-   * @Desc: 遍历节点树计算节点的top
-   */
+  //  遍历节点树计算节点的top
+
   computedTopValue() {
     walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (node.nodeData.data.expand && node.children && node.children.length) {
@@ -24218,12 +23364,8 @@ class MindMap_MindMap extends layouts_Base {
     }, null, true);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 10:04:05
-   * @Desc: 调整节点top
-   */
+  //  调整节点top
+
   adjustTopValue() {
     walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (!node.nodeData.data.expand) {
@@ -24239,12 +23381,8 @@ class MindMap_MindMap extends layouts_Base {
     }, null, true);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 14:26:03
-   * @Desc: 更新兄弟节点的top
-   */
+  //  更新兄弟节点的top
+
   updateBrothers(node, leftAddHeight, rightAddHeight) {
     if (node.parent) {
       // 过滤出和自己同方向的节点
@@ -24279,11 +23417,8 @@ class MindMap_MindMap extends layouts_Base {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 14:42:48
-   * @Desc: 绘制连线，连接该节点到其子节点
-   */
+  //  绘制连线，连接该节点到其子节点
+
   renderLine(node, lines, style, lineStyle) {
     if (lineStyle === 'curve') {
       this.renderLineCurve(node, lines, style);
@@ -24294,12 +23429,8 @@ class MindMap_MindMap extends layouts_Base {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:10:47
-   * @Desc: 直线风格连线
-   */
+  //  直线风格连线
+
   renderLineStraight(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -24335,12 +23466,8 @@ class MindMap_MindMap extends layouts_Base {
     });
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:34:41
-   * @Desc: 直连风格
-   */
+  //  直连风格
+
   renderLineDirect(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -24372,12 +23499,8 @@ class MindMap_MindMap extends layouts_Base {
     });
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:10:56
-   * @Desc: 曲线风格连线
-   */
+  //  曲线风格连线
+
   renderLineCurve(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -24414,11 +23537,8 @@ class MindMap_MindMap extends layouts_Base {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 19:54:26
-   * @Desc: 渲染按钮
-   */
+  //  渲染按钮
+
   renderExpandBtn(node, btn) {
     let {
       width,
@@ -24436,11 +23556,8 @@ class MindMap_MindMap extends layouts_Base {
     btn.translate(x, y);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 08:30:35
-   * @Desc: 创建概要节点
-   */
+  //  创建概要节点
+
   renderGeneralization(node, gLine, gNode) {
     let isLeft = node.dir === 'left';
     let {
@@ -24471,27 +23588,17 @@ class MindMap_MindMap extends layouts_Base {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-12 22:25:58
- * @Desc: 目录组织图
- */
+//  目录组织图
+
 class CatalogOrganization_CatalogOrganization extends layouts_Base {
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-12 22:26:31
-   * @Desc: 构造函数
-   */
+  //  构造函数
+
   constructor(opt = {}) {
     super(opt);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 14:04:20
-   * @Desc: 布局
-   */
+  //  布局
+
   doLayout(callback) {
     let task = [() => {
       this.computedBaseValue();
@@ -24505,12 +23612,8 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
     asyncRun(task);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 09:49:32
-   * @Desc: 遍历数据计算节点的left、width、height
-   */
+  //  遍历数据计算节点的left、width、height
+
   computedBaseValue() {
     walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
       let newNode = this.createNode(cur, parent, isRoot, layerIndex);
@@ -24536,12 +23639,8 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
     }, true, 0);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 09:59:25
-   * @Desc: 遍历节点树计算节点的left、top
-   */
+  //  遍历节点树计算节点的left、top
+
   computedLeftTopValue() {
     walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (node.nodeData.data.expand && node.children && node.children.length) {
@@ -24566,12 +23665,8 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
     }, null, true);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 10:04:05
-   * @Desc: 调整节点left、top
-   */
+  //  调整节点left、top
+
   adjustLeftTopValue() {
     walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (!node.nodeData.data.expand) {
@@ -24597,12 +23692,8 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
     }, null, true);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-12 18:55:03
-   * @Desc: 递归计算节点的宽度
-   */
+  //  递归计算节点的宽度
+
   getNodeAreaWidth(node) {
     let widthArr = [];
     let loop = (node, width) => {
@@ -24620,12 +23711,8 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
     return Math.max(...widthArr);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-13 11:12:51
-   * @Desc: 调整兄弟节点的left
-   */
+  //  调整兄弟节点的left
+
   updateBrothersLeft(node, addWidth) {
     if (node.parent) {
       let childrenList = node.parent.children;
@@ -24664,12 +23751,8 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 14:26:03
-   * @Desc: 调整兄弟节点的top
-   */
+  //  调整兄弟节点的top
+
   updateBrothersTop(node, addHeight) {
     if (node.parent && !node.parent.isRoot) {
       let childrenList = node.parent.children;
@@ -24697,11 +23780,8 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 14:42:48
-   * @Desc: 绘制连线，连接该节点到其子节点
-   */
+  //  绘制连线，连接该节点到其子节点
+
   renderLine(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -24818,11 +23898,8 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 19:54:26
-   * @Desc: 渲染按钮
-   */
+  //  渲染按钮
+
   renderExpandBtn(node, btn) {
     let {
       width,
@@ -24839,11 +23916,8 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 08:30:35
-   * @Desc: 创建概要节点
-   */
+  //  创建概要节点
+
   renderGeneralization(node, gLine, gNode) {
     let {
       top,
@@ -24871,28 +23945,17 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-12 22:25:58
- * @Desc: 组织结构图
- * 和逻辑结构图基本一样，只是方向变成向下生长，所以先计算节点的top，后计算节点的left、最后调整节点的left即可
- */
+//  组织结构图
+// 和逻辑结构图基本一样，只是方向变成向下生长，所以先计算节点的top，后计算节点的left、最后调整节点的left即可
 class OrganizationStructure_OrganizationStructure extends layouts_Base {
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-12 22:26:31
-   * @Desc: 构造函数
-   */
+  //  构造函数
+
   constructor(opt = {}) {
     super(opt);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 14:04:20
-   * @Desc: 布局
-   */
+  //  布局
+
   doLayout(callback) {
     let task = [() => {
       this.computedBaseValue();
@@ -24906,12 +23969,8 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
     asyncRun(task);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 09:49:32
-   * @Desc: 遍历数据计算节点的left、width、height
-   */
+  //  遍历数据计算节点的left、width、height
+
   computedBaseValue() {
     walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
       let newNode = this.createNode(cur, parent, isRoot, layerIndex);
@@ -24935,12 +23994,8 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
     }, true, 0);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 09:59:25
-   * @Desc: 遍历节点树计算节点的left
-   */
+  //  遍历节点树计算节点的left
+
   computedLeftValue() {
     walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (node.nodeData.data.expand && node.children && node.children.length) {
@@ -24956,12 +24011,8 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
     }, null, true);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 10:04:05
-   * @Desc: 调整节点left
-   */
+  //  调整节点left
+
   adjustLeftValue() {
     walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (!node.nodeData.data.expand) {
@@ -24975,12 +24026,8 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
     }, null, true);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-07 14:26:03
-   * @Desc: 更新兄弟节点的left
-   */
+  //  更新兄弟节点的left
+
   updateBrothers(node, addWidth) {
     if (node.parent) {
       let childrenList = node.parent.children;
@@ -25011,11 +24058,8 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 14:42:48
-   * @Desc: 绘制连线，连接该节点到其子节点
-   */
+  //  绘制连线，连接该节点到其子节点
+
   renderLine(node, lines, style, lineStyle) {
     if (lineStyle === 'direct') {
       this.renderLineDirect(node, lines, style);
@@ -25024,12 +24068,8 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:34:41
-   * @Desc: 直连风格
-   */
+  //  直连风格
+
   renderLineDirect(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -25053,12 +24093,8 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
     });
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-30 14:39:07
-   * @Desc: 直线风格连线
-   */
+  //  直线风格连线
+
   renderLineStraight(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -25112,11 +24148,8 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-11 19:54:26
-   * @Desc: 渲染按钮
-   */
+  //  渲染按钮
+
   renderExpandBtn(node, btn) {
     let {
       width,
@@ -25130,11 +24163,8 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
     btn.translate(width / 2 - expandBtnSize / 2 - translateX, height + expandBtnSize / 2 - translateY);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 08:30:35
-   * @Desc: 创建概要节点
-   */
+  //  创建概要节点
+
   renderGeneralization(node, gLine, gNode) {
     let {
       bottom,
@@ -25159,19 +24189,9 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
 // CONCATENATED MODULE: ../simple-mind-map/src/TextEdit.js
 
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-06-19 11:11:28
- * @Desc: 节点文字编辑类
- */
+//  节点文字编辑类
 class TextEdit_TextEdit {
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-06-19 11:22:57
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(renderer) {
     this.renderer = renderer;
     this.mindMap = renderer.mindMap;
@@ -25182,11 +24202,7 @@ class TextEdit_TextEdit {
     this.bindEvent();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 13:27:04
-   * @Desc: 事件
-   */
+  //  事件
   bindEvent() {
     this.show = this.show.bind(this);
     // 节点双击事件
@@ -25213,12 +24229,7 @@ class TextEdit_TextEdit {
     });
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-16 16:27:02
-   * @Desc: 注册临时快捷键
-   */
+  //  注册临时快捷键
   registerTmpShortcut() {
     // 注册回车快捷键
     this.mindMap.keyCommand.addShortcut('Enter', () => {
@@ -25226,20 +24237,12 @@ class TextEdit_TextEdit {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-13 22:15:56
-   * @Desc: 显示文本编辑框
-   */
+  //  显示文本编辑框
   show(node) {
     this.showEditTextBox(node, node._textData.node.node.getBoundingClientRect());
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-13 22:13:02
-   * @Desc: 显示文本编辑框
-   */
+  //  显示文本编辑框
   showEditTextBox(node, rect) {
     this.mindMap.emit('before_show_text_edit');
     this.registerTmpShortcut();
@@ -25264,11 +24267,7 @@ class TextEdit_TextEdit {
     this.selectNodeText();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-02 23:13:50
-   * @Desc: 选中文本
-   */
+  //  选中文本
   selectNodeText() {
     let selection = window.getSelection();
     let range = document.createRange();
@@ -25277,11 +24276,7 @@ class TextEdit_TextEdit {
     selection.addRange(range);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 13:48:16
-   * @Desc: 隐藏文本编辑框
-   */
+  //  隐藏文本编辑框
   hideEditTextBox() {
     if (!this.showTextEdit) {
       return;
@@ -25305,11 +24300,8 @@ class TextEdit_TextEdit {
   }
 }
 // CONCATENATED MODULE: ../simple-mind-map/src/themes/default.js
-/**
- * @Author: 王林
- * @Date: 2021-04-11 10:19:55
- * @Desc: 默认主题
- */
+//  默认主题
+
 /* harmony default export */ var themes_default = ({
   // 节点内边距
   paddingX: 15,
@@ -25465,19 +24457,11 @@ const layouts = {
   organizationStructure: layouts_OrganizationStructure
 };
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-08 16:25:07
- * @Desc: 渲染
- */
+//  渲染
+
 class Render_Render {
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 16:25:32
-   * @Desc: 构造函数
-   */
+  //  构造函数
+
   constructor(opt = {}) {
     this.opt = opt;
     this.mindMap = opt.mindMap;
@@ -25503,21 +24487,14 @@ class Render_Render {
     this.registerShortcutKeys();
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-13 16:20:07
-   * @Desc: 设置布局结构
-   */
+  //  设置布局结构
+
   setLayout() {
     this.layout = new (layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts.logicalStructure)(this);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-20 10:34:06
-   * @Desc:  绑定事件
-   */
+  //   绑定事件
+
   bindEvent() {
     // 点击事件
     this.mindMap.on('draw_click', () => {
@@ -25528,11 +24505,8 @@ class Render_Render {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:19:06
-   * @Desc: 注册命令
-   */
+  //  注册命令
+
   registerCommands() {
     // 全选
     this.selectAll = this.selectAll.bind(this);
@@ -25630,11 +24604,8 @@ class Render_Render {
     this.mindMap.command.add('SET_NODE_SHAPE', this.setNodeShape);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 16:55:44
-   * @Desc: 注册快捷键
-   */
+  //  注册快捷键
+
   registerShortcutKeys() {
     // 插入下级节点
     this.mindMap.keyCommand.addShortcut('Tab', () => {
@@ -25678,12 +24649,8 @@ class Render_Render {
     // 复制节点、剪切节点、粘贴节点的快捷键需开发者自行注册实现，可参考demo
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-05-09 10:43:52
-   * @Desc: 开启文字编辑，会禁用回车键和删除键相关快捷键防止冲突
-   */
+  //  开启文字编辑，会禁用回车键和删除键相关快捷键防止冲突
+
   startTextEdit() {
     this.mindMap.keyCommand.save();
     // this.mindMap.keyCommand.removeShortcut('Del|Backspace')
@@ -25691,12 +24658,8 @@ class Render_Render {
     // this.mindMap.keyCommand.removeShortcut('Enter', this.insertNodeWrap)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-05-09 10:45:11
-   * @Desc: 结束文字编辑，会恢复回车键和删除键相关快捷键
-   */
+  //  结束文字编辑，会恢复回车键和删除键相关快捷键
+
   endTextEdit() {
     this.mindMap.keyCommand.restore();
     // this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNodeWrap)
@@ -25704,12 +24667,8 @@ class Render_Render {
     // this.mindMap.keyCommand.addShortcut('Enter', this.insertNodeWrap)
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-08 16:27:55
-   * @Desc:  渲染
-   */
+  //   渲染
+
   render() {
     if (this.reRender) {
       this.clearActive();
@@ -25723,11 +24682,8 @@ class Render_Render {
     this.mindMap.emit('node_active', null, this.activeNodeList);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-12 22:45:01
-   * @Desc: 清除当前激活的节点
-   */
+  //  清除当前激活的节点
+
   clearActive() {
     this.activeNodeList.forEach(item => {
       this.setNodeActive(item, false);
@@ -25735,11 +24691,8 @@ class Render_Render {
     this.activeNodeList = [];
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-03 23:14:34
-   * @Desc: 清除当前所有激活节点，并会触发事件
-   */
+  //  清除当前所有激活节点，并会触发事件
+
   clearAllActive() {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -25748,11 +24701,8 @@ class Render_Render {
     this.mindMap.emit('node_active', null, []);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 10:54:00
-   * @Desc:  添加节点到激活列表里
-   */
+  //   添加节点到激活列表里
+
   addActiveNode(node) {
     let index = this.findActiveNodeIndex(node);
     if (index === -1) {
@@ -25760,11 +24710,8 @@ class Render_Render {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 10:04:04
-   * @Desc: 在激活列表里移除某个节点
-   */
+  //  在激活列表里移除某个节点
+
   removeActiveNode(node) {
     let index = this.findActiveNodeIndex(node);
     if (index === -1) {
@@ -25773,33 +24720,24 @@ class Render_Render {
     this.activeNodeList.splice(index, 1);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 10:55:23
-   * @Desc: 检索某个节点在激活列表里的索引
-   */
+  //  检索某个节点在激活列表里的索引
+
   findActiveNodeIndex(node) {
     return this.activeNodeList.findIndex(item => {
       return item === node;
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:46:08
-   * @Desc: 获取节点在同级里的索引位置
-   */
+  //  获取节点在同级里的索引位置
+
   getNodeIndex(node) {
     return node.parent ? node.parent.children.findIndex(item => {
       return item === node;
     }) : 0;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-04 23:54:52
-   * @Desc: 全选
-   */
+  //  全选
+
   selectAll() {
     walk(this.root, null, node => {
       if (!node.nodeData.data.isActive) {
@@ -25812,11 +24750,8 @@ class Render_Render {
     }, null, true, 0, 0);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 22:34:12
-   * @Desc: 回退
-   */
+  //  回退
+
   back(step) {
     this.clearAllActive();
     let data = this.mindMap.command.back(step);
@@ -25826,12 +24761,8 @@ class Render_Render {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-12 10:44:51
-   * @Desc: 前进
-   */
+  //  前进
+
   forward(step) {
     this.clearAllActive();
     let data = this.mindMap.command.forward(step);
@@ -25841,11 +24772,8 @@ class Render_Render {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:19:54
-   * @Desc: 插入同级节点，多个节点只会操作第一个节点
-   */
+  //  插入同级节点，多个节点只会操作第一个节点
+
   insertNode() {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -25871,11 +24799,8 @@ class Render_Render {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:31:02
-   * @Desc: 插入子节点
-   */
+  //  插入子节点
+
   insertChildNode() {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -25906,11 +24831,8 @@ class Render_Render {
     this.mindMap.render();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-14 23:34:14
-   * @Desc: 上移节点，多个节点只会操作第一个节点
-   */
+  //  上移节点，多个节点只会操作第一个节点
+
   upNode() {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -25937,11 +24859,8 @@ class Render_Render {
     this.mindMap.render();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-14 23:34:18
-   * @Desc: 下移节点，多个节点只会操作第一个节点
-   */
+  //  下移节点，多个节点只会操作第一个节点
+
   downNode() {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -25968,12 +24887,8 @@ class Render_Render {
     this.mindMap.render();
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-25 10:51:34
-   * @Desc: 将节点移动到另一个节点的前面
-   */
+  //  将节点移动到另一个节点的前面
+
   insertBefore(node, exist) {
     if (node.isRoot) {
       return;
@@ -26004,12 +24919,8 @@ class Render_Render {
     this.mindMap.render();
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-25 10:51:34
-   * @Desc: 将节点移动到另一个节点的后面
-   */
+  //  将节点移动到另一个节点的后面
+
   insertAfter(node, exist) {
     if (node.isRoot) {
       return;
@@ -26041,11 +24952,8 @@ class Render_Render {
     this.mindMap.render();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:40:39
-   * @Desc: 移除节点
-   */
+  //  移除节点
+
   removeNode() {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -26077,11 +24985,8 @@ class Render_Render {
     this.mindMap.render();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-15 22:46:27
-   * @Desc: 移除某个指定节点
-   */
+  //  移除某个指定节点
+
   removeOneNode(node) {
     let index = this.getNodeIndex(node);
     node.remove();
@@ -26089,12 +24994,8 @@ class Render_Render {
     node.parent.nodeData.children.splice(index, 1);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-15 09:53:23
-   * @Desc: 复制节点，多个节点只会操作第一个节点
-   */
+  //  复制节点，多个节点只会操作第一个节点
+
   copyNode() {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -26102,11 +25003,8 @@ class Render_Render {
     return copyNodeTree({}, this.activeNodeList[0], true);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-15 22:36:45
-   * @Desc: 剪切节点，多个节点只会操作第一个节点
-   */
+  //  剪切节点，多个节点只会操作第一个节点
+
   cutNode(callback) {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -26125,12 +25023,8 @@ class Render_Render {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-24 16:54:01
-   * @Desc: 移动一个节点作为另一个节点的子节点
-   */
+  //  移动一个节点作为另一个节点的子节点
+
   moveNodeTo(node, toNode) {
     if (node.isRoot) {
       return;
@@ -26143,11 +25037,8 @@ class Render_Render {
     this.mindMap.render();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-15 20:09:39
-   * @Desc:  粘贴节点到节点
-   */
+  //   粘贴节点到节点
+
   pasteNode(data) {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -26158,11 +25049,8 @@ class Render_Render {
     this.mindMap.render();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-08 21:54:30
-   * @Desc: 设置节点样式
-   */
+  //  设置节点样式
+
   setNodeStyle(node, prop, value, isActive) {
     let data = {};
     if (isActive) {
@@ -26185,11 +25073,8 @@ class Render_Render {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-08 22:13:03
-   * @Desc: 设置节点是否激活
-   */
+  //  设置节点是否激活
+
   setNodeActive(node, active) {
     this.setNodeData(node, {
       isActive: active
@@ -26197,11 +25082,8 @@ class Render_Render {
     node.renderNode();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 16:52:41
-   * @Desc: 设置节点是否展开
-   */
+  //  设置节点是否展开
+
   setNodeExpand(node, expand) {
     this.setNodeData(node, {
       expand
@@ -26224,11 +25106,8 @@ class Render_Render {
     this.mindMap.render();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-15 23:23:37
-   * @Desc: 展开所有
-   */
+  //  展开所有
+
   expandAllNode() {
     walk(this.renderTree, null, node => {
       if (!node.data.expand) {
@@ -26238,11 +25117,8 @@ class Render_Render {
     this.mindMap.reRender();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-15 23:27:14
-   * @Desc: 收起所有
-   */
+  //  收起所有
+
   unexpandAllNode() {
     walk(this.renderTree, null, (node, parent, isRoot) => {
       node._node = null;
@@ -26253,12 +25129,8 @@ class Render_Render {
     this.mindMap.reRender();
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-23 16:31:27
-   * @Desc: 展开到指定层级
-   */
+  //  展开到指定层级
+
   expandToLevel(level) {
     walk(this.renderTree, null, (node, parent, isRoot, layerIndex) => {
       node._node = null;
@@ -26267,11 +25139,8 @@ class Render_Render {
     this.mindMap.reRender();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-08-14 09:18:40
-   * @Desc: 切换激活节点的展开状态
-   */
+  //  切换激活节点的展开状态
+
   toggleActiveExpand() {
     this.activeNodeList.forEach(node => {
       if (node.nodeData.children.length <= 0) {
@@ -26281,31 +25150,22 @@ class Render_Render {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 17:15:33
-   * @Desc: 切换节点展开状态
-   */
+  //  切换节点展开状态
+
   toggleNodeExpand(node) {
     this.mindMap.execCommand('SET_NODE_EXPAND', node, !node.nodeData.data.expand);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-09 22:04:19
-   * @Desc: 设置节点文本
-   */
+  //  设置节点文本
+
   setNodeText(node, text) {
     this.setNodeDataRender(node, {
       text
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:37:40
-   * @Desc: 设置节点图片
-   */
+  //  设置节点图片
+
   setNodeImage(node, {
     url,
     title,
@@ -26322,22 +25182,16 @@ class Render_Render {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:44:06
-   * @Desc: 设置节点图标
-   */
+  //  设置节点图标
+
   setNodeIcon(node, icons) {
     this.setNodeDataRender(node, {
       icon: icons
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:49:33
-   * @Desc: 设置节点超链接
-   */
+  //  设置节点超链接
+
   setNodeHyperlink(node, link, title = '') {
     this.setNodeDataRender(node, {
       hyperlink: link,
@@ -26345,33 +25199,24 @@ class Render_Render {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:52:59
-   * @Desc: 设置节点备注
-   */
+  //  设置节点备注
+
   setNodeNote(node, note) {
     this.setNodeDataRender(node, {
       note
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:54:53
-   * @Desc: 设置节点标签
-   */
+  //  设置节点标签
+
   setNodeTag(node, tag) {
     this.setNodeDataRender(node, {
       tag
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 20:52:42
-   * @Desc: 添加节点概要
-   */
+  //  添加节点概要
+
   addGeneralization(data) {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -26390,11 +25235,8 @@ class Render_Render {
     this.mindMap.render();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-07-30 21:16:33
-   * @Desc: 删除节点概要
-   */
+  //  删除节点概要
+
   removeGeneralization() {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -26411,12 +25253,8 @@ class Render_Render {
     this.mindMap.render();
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-02 19:04:24
-   * @Desc: 设置节点自定义位置
-   */
+  //  设置节点自定义位置
+
   setNodeCustomPosition(node, left = undefined, top = undefined) {
     let nodeList = [node] || false;
     nodeList.forEach(item => {
@@ -26427,12 +25265,8 @@ class Render_Render {
     });
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-02 20:02:50
-   * @Desc: 一键整理布局，即去除自定义位置
-   */
+  //  一键整理布局，即去除自定义位置
+
   resetLayout() {
     walk(this.root, null, node => {
       node.customLeft = undefined;
@@ -26445,12 +25279,8 @@ class Render_Render {
     }, null, true, 0, 0);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-12 21:44:01
-   * @Desc: 设置节点形状
-   */
+  //  设置节点形状
+
   setNodeShape(node, shape) {
     if (!shape || !shapeList.includes(shape)) {
       return;
@@ -26461,22 +25291,16 @@ class Render_Render {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 14:19:48
-   * @Desc: 更新节点数据
-   */
+  //  更新节点数据
+
   setNodeData(node, data) {
     Object.keys(data).forEach(key => {
       node.nodeData.data[key] = data[key];
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 08:45:48
-   * @Desc: 设置节点数据，并判断是否渲染
-   */
+  //  设置节点数据，并判断是否渲染
+
   setNodeDataRender(node, data) {
     this.setNodeData(node, data);
     let changed = node.getSize();
@@ -26490,12 +25314,8 @@ class Render_Render {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 11:46:57
-   * @Desc: 移动节点到画布中心
-   */
+  //  移动节点到画布中心
+
   moveNodeToCenter(node) {
     let halfWidth = this.mindMap.width / 2;
     let halfHeight = this.mindMap.height / 2;
@@ -26524,11 +25344,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 清新绿
- */
+//  清新绿
 /* harmony default export */ var freshGreen = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: '#333',
@@ -26565,11 +25381,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 天空蓝
- */
+//  天空蓝
 /* harmony default export */ var blueSky = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(115, 161, 191)',
@@ -26619,11 +25431,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 脑残粉
- */
+//  脑残粉
 /* harmony default export */ var brainImpairedPink = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(191, 115, 148)',
@@ -26673,11 +25481,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 浪漫紫
- */
+//  浪漫紫
 /* harmony default export */ var romanticPurple = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(123, 115, 191)',
@@ -26727,11 +25531,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 清新红
- */
+//  清新红
 /* harmony default export */ var freshRed = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(191, 115, 115)',
@@ -26781,11 +25581,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 泥土黄
- */
+//  泥土黄
 /* harmony default export */ var earthYellow = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(191, 147, 115)',
@@ -26835,11 +25631,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 脑图经典
- */
+//  脑图经典
 /* harmony default export */ var classic = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: '#fff',
@@ -26903,11 +25695,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 经典2
- */
+//  经典2
 /* harmony default export */ var classic2 = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(51, 51, 51)',
@@ -26963,11 +25751,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 经典3
- */
+//  经典3
 /* harmony default export */ var classic3 = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(94, 202, 110)',
@@ -27026,11 +25810,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 经典4
- */
+//  经典4
 /* harmony default export */ var classic4 = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(30, 53, 86)',
@@ -27092,11 +25872,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 暗色
- */
+//  暗色
 /* harmony default export */ var dark = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(17, 68, 23)',
@@ -27151,11 +25927,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 经典绿
- */
+//  经典绿
 /* harmony default export */ var classicGreen = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(123, 199, 120)',
@@ -27207,11 +25979,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 经典蓝
- */
+//  经典蓝
 /* harmony default export */ var classicBlue = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(51, 51, 51)',
@@ -27264,11 +26032,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 小黄人
- */
+//  小黄人
 /* harmony default export */ var minions = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(51, 51, 51)',
@@ -27321,11 +26085,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 粉红葡萄
- */
+//  粉红葡萄
 /* harmony default export */ var pinkGrape = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(166, 101, 106)',
@@ -27381,11 +26141,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 薄荷
- */
+//  薄荷
 /* harmony default export */ var mint = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(104, 204, 202)',
@@ -27439,11 +26195,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 金色vip
- */
+//  金色vip
 /* harmony default export */ var gold = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(51, 56, 62)',
@@ -27499,11 +26251,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 活力橙
- */
+//  活力橙
 /* harmony default export */ var vitalityOrange = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(254, 146, 0)',
@@ -27559,11 +26307,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 绿叶
- */
+//  绿叶
 /* harmony default export */ var greenLeaf = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(40, 193, 84)',
@@ -27620,11 +26364,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 暗色2
- */
+//  暗色2
 /* harmony default export */ var dark2 = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: 'rgb(75, 81, 78)',
@@ -27681,11 +26421,7 @@ class Render_Render {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-11 15:22:18
- * @Desc: 天清绿
- */
+//  天清绿
 /* harmony default export */ var skyGreen = (cjs_default()(themes_default, {
   // 连线的颜色
   lineColor: '#fff',
@@ -27844,17 +26580,9 @@ const isKey = (e, key) => {
 // CONCATENATED MODULE: ../simple-mind-map/src/KeyCommand.js
 
 
-/**
- * @Author: 王林
- * @Date: 2021-04-24 15:20:46
- * @Desc: 快捷按键、命令处理类
- */
+//  快捷按键、命令处理类
 class KeyCommand_KeyCommand {
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 15:21:32
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt) {
     this.opt = opt;
     this.mindMap = opt.mindMap;
@@ -27866,51 +26594,29 @@ class KeyCommand_KeyCommand {
     this.bindEvent();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-08-14 08:57:55
-   * @Desc: 暂停快捷键响应
-   */
+  //  暂停快捷键响应
   pause() {
     this.isPause = true;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-08-14 08:58:43
-   * @Desc: 恢复快捷键响应
-   */
+  //  恢复快捷键响应
   recovery() {
     this.isPause = false;
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-16 16:29:01
-   * @Desc: 保存当前注册的快捷键数据，然后清空快捷键数据
-   */
+  //  保存当前注册的快捷键数据，然后清空快捷键数据
   save() {
     this.shortcutMapCache = this.shortcutMap;
     this.shortcutMap = {};
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-16 16:29:38
-   * @Desc: 恢复保存的快捷键数据，然后清空缓存数据
-   */
+  //  恢复保存的快捷键数据，然后清空缓存数据
   restore() {
     this.shortcutMap = this.shortcutMapCache;
     this.shortcutMapCache = {};
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 15:23:22
-   * @Desc: 绑定事件
-   */
+  //  绑定事件
   bindEvent() {
     window.addEventListener('keydown', e => {
       if (this.isPause) {
@@ -27928,11 +26634,7 @@ class KeyCommand_KeyCommand {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 19:24:53
-   * @Desc: 检查键值是否符合
-   */
+  //  检查键值是否符合
   checkKey(e, key) {
     let o = this.getOriginEventCodeArr(e);
     let k = this.getKeyCodeArr(key);
@@ -27952,11 +26654,7 @@ class KeyCommand_KeyCommand {
     return true;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 19:15:19
-   * @Desc: 获取事件对象里的键值数组
-   */
+  //  获取事件对象里的键值数组
   getOriginEventCodeArr(e) {
     let arr = [];
     if (e.ctrlKey || e.metaKey) {
@@ -27974,11 +26672,7 @@ class KeyCommand_KeyCommand {
     return arr;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 19:40:11
-   * @Desc: 获取快捷键对应的键值数组
-   */
+  //  获取快捷键对应的键值数组
   getKeyCodeArr(key) {
     let keyArr = key.split(/\s*\+\s*/);
     let arr = [];
@@ -27988,10 +26682,8 @@ class KeyCommand_KeyCommand {
     return arr;
   }
 
+  //  添加快捷键命令
   /**
-   * @Author: 王林
-   * @Date: 2021-04-24 15:23:00
-   * @Desc: 添加快捷键命令
    * Enter
    * Tab | Insert
    * Shift + a
@@ -28006,12 +26698,7 @@ class KeyCommand_KeyCommand {
     });
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-27 14:06:16
-   * @Desc: 移除快捷键命令
-   */
+  //  移除快捷键命令
   removeShortcut(key, fn) {
     key.split(/\s*\|\s*/).forEach(item => {
       if (this.shortcutMap[item]) {
@@ -28030,11 +26717,7 @@ class KeyCommand_KeyCommand {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2022-08-14 08:49:58
-   * @Desc: 获取指定快捷键的处理函数
-   */
+  //  获取指定快捷键的处理函数
   getShortcutFn(key) {
     let res = [];
     key.split(/\s*\|\s*/).forEach(item => {
@@ -28047,17 +26730,9 @@ class KeyCommand_KeyCommand {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-05-04 13:10:06
- * @Desc: 命令类
- */
+//  命令类
 class Command_Command {
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:10:24
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt = {}) {
     this.opt = opt;
     this.mindMap = opt.mindMap;
@@ -28068,22 +26743,14 @@ class Command_Command {
     this.registerShortcutKeys();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-03 23:06:55
-   * @Desc: 清空历史数据
-   */
+  //  清空历史数据
   clearHistory() {
     this.history = [];
     this.activeHistoryIndex = 0;
     this.mindMap.emit('back_forward', 0, 0);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-02 23:23:19
-   * @Desc: 注册快捷键
-   */
+  //  注册快捷键
   registerShortcutKeys() {
     this.mindMap.keyCommand.addShortcut('Control+z', () => {
       this.mindMap.execCommand('BACK');
@@ -28093,11 +26760,7 @@ class Command_Command {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:12:30
-   * @Desc: 执行命令
-   */
+  //  执行命令
   exec(name, ...args) {
     if (this.commands[name]) {
       this.commands[name].forEach(fn => {
@@ -28110,11 +26773,7 @@ class Command_Command {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:13:01
-   * @Desc: 添加命令
-   */
+  //  添加命令
   add(name, fn) {
     if (this.commands[name]) {
       this.commands[name].push(fn);
@@ -28123,11 +26782,7 @@ class Command_Command {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-15 23:02:41
-   * @Desc: 移除命令
-   */
+  //  移除命令
   remove(name, fn) {
     if (!this.commands[name]) {
       return;
@@ -28145,11 +26800,7 @@ class Command_Command {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 14:35:43
-   * @Desc: 添加回退数据
-   */
+  //  添加回退数据
   addHistory() {
     let data = this.getCopyData();
     this.history.push(simpleDeepClone(data));
@@ -28158,11 +26809,7 @@ class Command_Command {
     this.mindMap.emit('back_forward', this.activeHistoryIndex, this.history.length);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 22:34:53
-   * @Desc: 回退
-   */
+  //  回退
   back(step = 1) {
     if (this.activeHistoryIndex - step >= 0) {
       this.activeHistoryIndex -= step;
@@ -28171,12 +26818,7 @@ class Command_Command {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-12 10:45:31
-   * @Desc: 前进
-   */
+  //  前进
   forward(step = 1) {
     let len = this.history.length;
     if (this.activeHistoryIndex + step <= len - 1) {
@@ -28186,11 +26828,7 @@ class Command_Command {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 15:02:58
-   * @Desc: 获取渲染树数据副本
-   */
+  //  获取渲染树数据副本
   getCopyData() {
     return copyRenderTree({}, this.mindMap.renderer.renderTree);
   }
@@ -28198,11 +26836,7 @@ class Command_Command {
 /* harmony default export */ var src_Command = (Command_Command);
 // CONCATENATED MODULE: ../simple-mind-map/src/BatchExecution.js
 
-/**
- * @Author: 王林
- * @Date: 2021-06-27 13:16:23
- * @Desc: 在下一个事件循环里执行任务
- */
+//  在下一个事件循环里执行任务
 const nextTick = function (fn, ctx) {
   let pending = false;
   let timerFunc = null;
@@ -28234,28 +26868,16 @@ const nextTick = function (fn, ctx) {
   };
 };
 
-/**
- * @Author: 王林
- * @Date: 2021-06-26 22:40:52
- * @Desc: 批量执行
- */
+//  批量执行
 class BatchExecution {
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-26 22:41:41
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor() {
     this.has = {};
     this.queue = [];
     this.nextTick = nextTick(this.flush, this);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-27 12:54:04
-   * @Desc: 添加任务
-   */
+  //  添加任务
   push(name, fn) {
     if (this.has[name]) {
       return;
@@ -28268,11 +26890,7 @@ class BatchExecution {
     this.nextTick();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-27 13:09:24
-   * @Desc:  执行队列
-   */
+  //   执行队列
   flush() {
     let fns = this.queue.slice(0);
     this.queue = [];
@@ -28295,27 +26913,15 @@ var jspdf_es_min = __webpack_require__("77ee");
 
 const URL = window.URL || window.webkitURL || window;
 
-/**
- * @Author: 王林
- * @Date: 2021-07-01 22:05:16
- * @Desc: 导出类
- */
+//  导出类
 class Export_Export {
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-01 22:05:42
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt) {
     this.mindMap = opt.mindMap;
     this.exportPadding = this.mindMap.opt.exportPadding;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-02 07:44:06
-   * @Desc: 导出
-   */
+  //  导出
   async export(type, isDownload = true, name = '思维导图', ...args) {
     if (this[type]) {
       let result = await this[type](name, ...args);
@@ -28328,11 +26934,7 @@ class Export_Export {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-04 14:57:40
-   * @Desc: 获取svg数据
-   */
+  //  获取svg数据
   async getSvgData() {
     let {
       svg,
@@ -28352,11 +26954,7 @@ class Export_Export {
     };
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-04 15:25:19
-   * @Desc:  svg转png
-   */
+  //   svg转png
   svgToPng(svgSrc) {
     return new Promise((resolve, reject) => {
       const img = new Image();
@@ -28384,11 +26982,7 @@ class Export_Export {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-04 15:32:07
-   * @Desc: 在canvas上绘制思维导图背景
-   */
+  //  在canvas上绘制思维导图背景
   drawBackgroundToCanvas(ctx, width, height) {
     return new Promise((resolve, reject) => {
       let {
@@ -28424,10 +27018,8 @@ class Export_Export {
     });
   }
 
+  //  导出为png
   /**
-   * @Author: 王林
-   * @Date: 2021-07-01 22:09:51
-   * @Desc: 导出为png
    * 方法1.把svg的图片都转化成data:url格式，再转换
    * 方法2.把svg的图片提取出来再挨个绘制到canvas里，最后一起转换
    */
@@ -28447,12 +27039,7 @@ class Export_Export {
     return imgDataUrl;
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-08-08 19:23:08
-   * @Desc: 导出为pdf
-   */
+  //  导出为pdf
   async pdf(name) {
     let img = await this.png();
     let pdf = new jspdf_es_min["a" /* default */]('', 'pt', 'a4');
@@ -28484,11 +27071,7 @@ class Export_Export {
     image.src = img;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-04 15:32:07
-   * @Desc: 在svg上绘制思维导图背景
-   */
+  //  在svg上绘制思维导图背景
   drawBackgroundToSvg(svg) {
     return new Promise(async resolve => {
       let {
@@ -28510,11 +27093,7 @@ class Export_Export {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-04 14:54:07
-   * @Desc: 导出为svg
-   */
+  //  导出为svg
   async svg(name) {
     let {
       node
@@ -28529,11 +27108,7 @@ class Export_Export {
     return URL.createObjectURL(blob);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-03 22:19:17
-   * @Desc: 导出为json
-   */
+  //  导出为json
   json(name, withConfig = true) {
     let data = this.mindMap.getData(withConfig);
     let str = JSON.stringify(data);
@@ -28541,11 +27116,7 @@ class Export_Export {
     return URL.createObjectURL(blob);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-03 22:24:24
-   * @Desc: 专有文件，其实就是json文件
-   */
+  //  专有文件，其实就是json文件
   smm(name, withConfig) {
     return this.json(name, withConfig);
   }
@@ -28555,18 +27126,10 @@ class Export_Export {
 
 
 
-/**
- * @Author: 王林
- * @Date: 2021-07-10 22:34:51
- * @Desc: 选择节点类
- */
+//  选择节点类
 
 class Select_Select {
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 22:35:16
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor({
     mindMap
   }) {
@@ -28580,11 +27143,7 @@ class Select_Select {
     this.bindEvent();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 22:36:36
-   * @Desc: 绑定事件
-   */
+  //  绑定事件
   bindEvent() {
     this.checkInNodes = throttle(this.checkInNodes, 500, this);
     this.mindMap.on('mousedown', e => {
@@ -28637,11 +27196,7 @@ class Select_Select {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-13 07:55:49
-   * @Desc: 鼠标移动事件
-   */
+  //  鼠标移动事件
   onMove(x, y) {
     // 绘制矩形
     this.rect.plot([[this.mouseDownX, this.mouseDownY], [this.mouseMoveX, this.mouseDownY], [this.mouseMoveX, this.mouseMoveY], [this.mouseDownX, this.mouseMoveY]]);
@@ -28679,22 +27234,14 @@ class Select_Select {
     }
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-22 08:02:23
-   * @Desc: 开启自动移动
-   */
+  //  开启自动移动
   startAutoMove(x, y) {
     this.autoMoveTimer = setTimeout(() => {
       this.onMove(x, y);
     }, 20);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 10:19:37
-   * @Desc: 创建矩形
-   */
+  //  创建矩形
   createRect(x, y) {
     this.rect = this.mindMap.svg.polygon().stroke({
       color: '#0984e3'
@@ -28703,11 +27250,7 @@ class Select_Select {
     }).plot([[x, y]]);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 10:20:43
-   * @Desc: 检测在选区里的节点
-   */
+  //  检测在选区里的节点
   checkInNodes() {
     let {
       scaleX,
@@ -28755,18 +27298,11 @@ class Select_Select {
 
 
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-11-23 17:38:55
- * @Desc: 节点拖动类
- */
+//  节点拖动类
+
 class Drag_Drag extends layouts_Base {
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 22:35:16
-   * @Desc: 构造函数
-   */
+  //  构造函数
+
   constructor({
     mindMap
   }) {
@@ -28776,12 +27312,8 @@ class Drag_Drag extends layouts_Base {
     this.bindEvent();
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-23 19:33:56
-   * @Desc: 复位
-   */
+  //  复位
+
   reset() {
     // 当前拖拽节点
     this.node = null;
@@ -28814,11 +27346,8 @@ class Drag_Drag extends layouts_Base {
     this.mouseMoveY = 0;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-10 22:36:36
-   * @Desc: 绑定事件
-   */
+  //  绑定事件
+
   bindEvent() {
     this.checkOverlapNode = throttle(this.checkOverlapNode, 300, this);
     this.mindMap.on('node_mousedown', (node, e) => {
@@ -28873,12 +27402,8 @@ class Drag_Drag extends layouts_Base {
     this.mindMap.on('mouseup', this.onMouseup);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-23 19:38:02
-   * @Desc: 鼠标松开事件
-   */
+  //  鼠标松开事件
+
   onMouseup(e) {
     if (!this.isMousedown) {
       return;
@@ -28924,12 +27449,8 @@ class Drag_Drag extends layouts_Base {
     this.reset();
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-23 19:34:53
-   * @Desc: 创建克隆节点
-   */
+  //  创建克隆节点
+
   createCloneNode() {
     if (!this.clone) {
       // 节点
@@ -28950,12 +27471,8 @@ class Drag_Drag extends layouts_Base {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-23 19:35:16
-   * @Desc: 移除克隆节点
-   */
+  //  移除克隆节点
+
   removeCloneNode() {
     if (!this.clone) {
       return;
@@ -28965,12 +27482,8 @@ class Drag_Drag extends layouts_Base {
     this.placeholder.remove();
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-11-23 18:53:47
-   * @Desc: 拖动中
-   */
+  //  拖动中
+
   onMove(x, y) {
     if (!this.isMousedown) {
       return;
@@ -28994,11 +27507,8 @@ class Drag_Drag extends layouts_Base {
     this.checkOverlapNode();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 10:20:43
-   * @Desc: 检测重叠节点
-   */
+  //  检测重叠节点
+
   checkOverlapNode() {
     if (!this.drawTransform) {
       return;
@@ -29067,12 +27577,7 @@ class Drag_Drag extends layouts_Base {
 // CONCATENATED MODULE: ../simple-mind-map/src/MiniMap.js
 // 小地图类
 class MiniMap {
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-10-10 14:00:45
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt) {
     this.mindMap = opt.mindMap;
     this.isMousedown = false;
@@ -29086,12 +27591,7 @@ class MiniMap {
     };
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-10-10 14:00:43
-   * @Desc:  获取小地图相关数据
-   */
+  //   获取小地图相关数据
   getMiniMap() {
     const svg = this.mindMap.svg;
     const draw = this.mindMap.draw;
@@ -29134,11 +27634,8 @@ class MiniMap {
     };
   }
 
+  //  计算小地图的渲染数据
   /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-10-10 14:05:51
-   * @Desc: 计算小地图的渲染数据
    * boxWidth：小地图容器的宽度
    * boxHeight：小地图容器的高度
    */
@@ -29198,12 +27695,7 @@ class MiniMap {
     };
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-10-10 14:22:40
-   * @Desc: 小地图鼠标按下事件
-   */
+  //  小地图鼠标按下事件
   onMousedown(e) {
     this.isMousedown = true;
     this.mousedownPos = {
@@ -29218,12 +27710,7 @@ class MiniMap {
     };
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-10-10 14:22:55
-   * @Desc: 小地图鼠标移动事件
-   */
+  //  小地图鼠标移动事件
   onMousemove(e, sensitivityNum = 5) {
     if (!this.isMousedown) {
       return;
@@ -29235,12 +27722,7 @@ class MiniMap {
     this.mindMap.view.translateYTo(oy * sensitivityNum + this.startViewPos.y);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-10-10 14:23:01
-   * @Desc: 小地图鼠标松开事件
-   */
+  //  小地图鼠标松开事件
   onMouseup() {
     this.isMousedown = false;
   }
@@ -29260,12 +27742,7 @@ var lib_default = /*#__PURE__*/__webpack_require__.n(lib);
 
 
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2022-09-21 14:07:47
- * @Desc: 解析.xmind文件
- */
+//  解析.xmind文件
 const parseXmindFile = file => {
   return new Promise((resolve, reject) => {
     jszip_min_default.a.loadAsync(file).then(async zip => {
@@ -29293,12 +27770,7 @@ const parseXmindFile = file => {
   });
 };
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2022-09-21 18:57:25
- * @Desc: 转换xmind数据
- */
+//  转换xmind数据
 const transformXmind = content => {
   let data = JSON.parse(content)[0];
   let nodeTree = data.rootTopic;
@@ -29334,12 +27806,7 @@ const transformXmind = content => {
   return newTree;
 };
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2022-09-23 15:51:51
- * @Desc: 转换旧版xmind数据，xmind8
- */
+//  转换旧版xmind数据，xmind8
 const transformOldXmind = content => {
   let data = JSON.parse(content);
   let elements = data.elements;
@@ -29427,19 +27894,9 @@ const transformOldXmind = content => {
 
 
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2022-12-09 11:06:50
- * @Desc: 键盘导航类
- */
+//  键盘导航类
 class KeyboardNavigation_KeyboardNavigation {
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 11:07:24
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt) {
     this.opt = opt;
     this.mindMap = opt.mindMap;
@@ -29447,12 +27904,7 @@ class KeyboardNavigation_KeyboardNavigation {
     this.mindMap.on('keyup', this.onKeyup);
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 14:12:27
-   * @Desc: 处理按键事件
-   */
+  //  处理按键事件
   onKeyup(e) {
     ;
     ['Left', 'Up', 'Right', 'Down'].forEach(dir => {
@@ -29468,12 +27920,7 @@ class KeyboardNavigation_KeyboardNavigation {
     });
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 14:12:39
-   * @Desc: 聚焦到下一个节点
-   */
+  //  聚焦到下一个节点
   focus(dir) {
     // 当前聚焦的节点
     let currentActiveNode = this.mindMap.renderer.activeNodeList[0];
@@ -29526,12 +27973,7 @@ class KeyboardNavigation_KeyboardNavigation {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-12 16:22:54
-   * @Desc: 1.简单算法
-   */
+  //  1.简单算法
   getFocusNodeBySimpleAlgorithm({
     currentActiveNode,
     currentActiveNodeRect,
@@ -29575,12 +28017,7 @@ class KeyboardNavigation_KeyboardNavigation {
     });
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-12 16:24:54
-   * @Desc: 2.阴影算法
-   */
+  //  2.阴影算法
   getFocusNodeByShadowAlgorithm({
     currentActiveNode,
     currentActiveNodeRect,
@@ -29612,12 +28049,7 @@ class KeyboardNavigation_KeyboardNavigation {
     });
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-13 16:15:36
-   * @Desc: 3.区域算法
-   */
+  //  3.区域算法
   getFocusNodeByAreaAlgorithm({
     currentActiveNode,
     currentActiveNodeRect,
@@ -29659,12 +28091,7 @@ class KeyboardNavigation_KeyboardNavigation {
     });
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 14:12:50
-   * @Desc: 获取节点的位置信息
-   */
+  //  获取节点的位置信息
   getNodeRect(node) {
     let {
       scaleX,
@@ -29686,24 +28113,14 @@ class KeyboardNavigation_KeyboardNavigation {
     };
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 14:13:04
-   * @Desc: 获取两个节点的距离
-   */
+  //  获取两个节点的距离
   getDistance(node1Rect, node2Rect) {
     let center1 = this.getCenter(node1Rect);
     let center2 = this.getCenter(node2Rect);
     return Math.sqrt(Math.pow(center1.x - center2.x, 2) + Math.pow(center1.y - center2.y, 2));
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-12-09 14:13:11
-   * @Desc: 获取节点的中心点
-   */
+  //  获取节点的中心点
   getCenter({
     left,
     right,
@@ -29774,19 +28191,9 @@ const defaultOpt = {
     */
 };
 
-/**
- * javascript comment
- * @Author: 王林25
- * @Date: 2021-04-06 11:18:47
- * @Desc: 思维导图
- */
+//  思维导图
 class simple_mind_map_MindMap {
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 11:19:01
-   * @Desc: 构造函数
-   */
+  //  构造函数
   constructor(opt = {}) {
     // 合并选项
     this.opt = this.handleOpt(cjs_default()(defaultOpt, opt));
@@ -29870,11 +28277,7 @@ class simple_mind_map_MindMap {
     }, 0);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-01 22:15:22
-   * @Desc: 配置参数处理
-   */
+  //  配置参数处理
   handleOpt(opt) {
     // 检查布局配置
     if (!layoutValueList.includes(opt.layout)) {
@@ -29885,12 +28288,7 @@ class simple_mind_map_MindMap {
     return opt;
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-04-06 18:47:29
-   * @Desc: 渲染，部分渲染
-   */
+  //  渲染，部分渲染
   render() {
     this.batchExecution.push('render', () => {
       this.initTheme();
@@ -29899,11 +28297,7 @@ class simple_mind_map_MindMap {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-08 22:05:11
-   * @Desc: 重新渲染
-   */
+  //  重新渲染
   reRender() {
     this.batchExecution.push('render', () => {
       this.draw.clear();
@@ -29913,11 +28307,7 @@ class simple_mind_map_MindMap {
     });
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 21:16:52
-   * @Desc: 容器尺寸变化，调整尺寸
-   */
+  //  容器尺寸变化，调整尺寸
   resize() {
     this.elRect = this.el.getBoundingClientRect();
     this.width = this.elRect.width;
@@ -29925,38 +28315,22 @@ class simple_mind_map_MindMap {
     this.svg.size(this.width, this.height);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 13:25:50
-   * @Desc: 监听事件
-   */
+  //  监听事件
   on(event, fn) {
     this.event.on(event, fn);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 13:51:35
-   * @Desc: 触发事件
-   */
+  //  触发事件
   emit(event, ...args) {
     this.event.emit(event, ...args);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-04-24 13:53:54
-   * @Desc: 解绑事件
-   */
+  //  解绑事件
   off(event, fn) {
     this.event.off(event, fn);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-05 13:32:43
-   * @Desc: 设置主题
-   */
+  //  设置主题
   initTheme() {
     // 合并主题配置
     this.themeConfig = cjs_default()(themes[this.opt.theme], this.opt.themeConfig);
@@ -29964,70 +28338,40 @@ class simple_mind_map_MindMap {
     src_Style.setBackgroundStyle(this.el, this.themeConfig);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-05 13:52:08
-   * @Desc: 设置主题
-   */
+  //  设置主题
   setTheme(theme) {
     this.renderer.clearAllActive();
     this.opt.theme = theme;
     this.reRender();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-06-25 23:52:37
-   * @Desc: 获取当前主题
-   */
+  //  获取当前主题
   getTheme() {
     return this.opt.theme;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-05 13:50:17
-   * @Desc: 设置主题配置
-   */
+  //  设置主题配置
   setThemeConfig(config) {
     this.opt.themeConfig = config;
     this.reRender();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-01 10:38:34
-   * @Desc: 获取自定义主题配置
-   */
+  //  获取自定义主题配置
   getCustomThemeConfig() {
     return this.opt.themeConfig;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-05 14:01:29
-   * @Desc: 获取某个主题配置值
-   */
+  //  获取某个主题配置值
   getThemeConfig(prop) {
     return prop === undefined ? this.themeConfig : this.themeConfig[prop];
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-13 16:17:06
-   * @Desc: 获取当前布局结构
-   */
+  //  获取当前布局结构
   getLayout() {
     return this.opt.layout;
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2021-07-13 16:17:33
-   * @Desc: 设置布局结构
-   */
+  //  设置布局结构
   setLayout(layout) {
     // 检查布局配置
     if (!layoutValueList.includes(layout)) {
@@ -30038,20 +28382,12 @@ class simple_mind_map_MindMap {
     this.render();
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-05-04 13:01:00
-   * @Desc: 执行命令
-   */
+  //  执行命令
   execCommand(...args) {
     this.command.exec(...args);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-08-03 22:58:12
-   * @Desc: 动态设置思维导图数据，纯节点数据
-   */
+  //  动态设置思维导图数据，纯节点数据
   setData(data) {
     this.execCommand('CLEAR_ACTIVE_NODE');
     this.command.clearHistory();
@@ -30059,12 +28395,7 @@ class simple_mind_map_MindMap {
     this.reRender();
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-09-21 16:39:13
-   * @Desc: 动态设置思维导图数据，包括节点数据、布局、主题、视图
-   */
+  //  动态设置思维导图数据，包括节点数据、布局、主题、视图
   setFullData(data) {
     if (data.root) {
       this.setData(data.root);
@@ -30085,12 +28416,7 @@ class simple_mind_map_MindMap {
     }
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林
-   * @Date: 2022-09-24 14:42:07
-   * @Desc: 获取思维导图数据，节点树、主题、布局等
-   */
+  //  获取思维导图数据，节点树、主题、布局等
   getData(withConfig) {
     let nodeData = this.command.getCopyData();
     let data = {};
@@ -30110,21 +28436,13 @@ class simple_mind_map_MindMap {
     return simpleDeepClone(data);
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-01 22:06:38
-   * @Desc: 导出
-   */
+  //  导出
   async export(...args) {
     let result = await this.doExport.export(...args);
     return result;
   }
 
-  /**
-   * @Author: 王林
-   * @Date: 2021-07-11 09:20:03
-   * @Desc: 转换位置
-   */
+  //  转换位置
   toPos(x, y) {
     return {
       x: x - this.elRect.left,
@@ -30132,12 +28450,7 @@ class simple_mind_map_MindMap {
     };
   }
 
-  /**
-   * javascript comment
-   * @Author: 王林25
-   * @Date: 2022-06-08 14:12:38
-   * @Desc: 设置只读模式、编辑模式
-   */
+  //  设置只读模式、编辑模式
   setMode(mode) {
     if (!['readonly', 'edit'].includes(mode)) {
       return;
