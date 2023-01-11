@@ -68,7 +68,8 @@ export default {
     tips: 'tips：.smm和.json文件可用于导入'
   },
   fullscreen: {
-    fullscreen: '全屏'
+    fullscreenShow: '全屏查看',
+    fullscreenEdit: '全屏编辑'
   },
   import: {
     title: '导入',
