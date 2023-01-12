@@ -16,6 +16,7 @@ import { SVG } from '@svgdotjs/svg.js'
 import xmind from './src/parse/xmind'
 import { simpleDeepClone } from './src/utils'
 import KeyboardNavigation from './src/KeyboardNavigation'
+import defaultTheme from './src/themes/default'
 
 // 默认选项配置
 const defaultOpt = {
@@ -327,5 +328,13 @@ class MindMap {
 }
 
 MindMap.xmind = xmind
+
+// 定义新主题
+MindMap.defineTheme = (name, config = {}) => {
+  if (theme[name]) {
+    return new Error('该主题名称已存在')
+  }
+  theme[name] = merge(defaultTheme, config)
+}
 
 export default MindMap

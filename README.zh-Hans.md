@@ -187,7 +187,7 @@ v0.2.8+
 
 `content`：`.xmind`压缩包内的`content.xml`文件内容
 
-### 实例化选项：
+### 实例化选项
 
 | 字段名称                           | 类型      | 默认值              | 描述                                                                                                                                                                                                                                                                                                                                                        | 是否必填 |
 | ------------------------------ | ------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
@@ -206,7 +206,39 @@ v0.2.8+
 | customNoteContentShow（v0.1.6+） | Object  | null             | 自定义节点备注内容显示，Object类型，结构为：{show: (noteContent, left, top) => {// 你的显示节点备注逻辑 }, hide: () => {// 你的隐藏节点备注逻辑 }}                                                                                                                                                                                                                                               |      |
 | readonly（v0.1.7+）              | Boolean | false            | 是否是只读模式                                                                                                                                                                                                                                                                                                                                                   |      |
 
-### 实例方法：
+### 静态方法
+
+#### defineTheme(name, config)
+
+v0.2.23+
+
+定义新主题。
+
+`name`：新主题名称
+
+`config`：主题数据
+
+`simple-mind-map`内置了众多主题，另外你也可以注册新主题，建议在实例化之前进行注册，这样在实例化时可以直接使用新注册的主题，使用示例：
+
+```js
+import MindMap from 'simple-mind-map'
+// 注册新主题
+MindMap.defineTheme('主题名称', {})
+
+// 1.实例化时使用新注册的主题
+const mindMap = new MindMap({
+    theme: '主题名称'
+})
+
+// 2.动态切换新主题
+mindMap.setTheme('主题名称')
+```
+
+主题的所有配置可以参考[默认主题](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js)。`defineTheme`方法会把你传入的配置和默认配置做合并。大部分主题其实需要自定义的部分不是很多，一个典型的自定义主题配置可以参考[blueSky](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/blueSky.js)。
+
+
+
+### 实例方法
 
 #### render()
 
@@ -1058,11 +1090,17 @@ copyNodeTree({}, node)
 
 [知犀思维导图](https://www.zhixi.com/)
 
+尊重版权，主题和图片请勿直接用于商业项目。
+
 # License
 
 [MIT](https://opensource.org/licenses/MIT)
 
 # Changelog
+
+## 0.2.23
+
+新增：支持注册新主题。
 
 ## 0.2.22
 

@@ -29,6 +29,13 @@ export const themeMap = {
     earthYellow: require('../assets/img/earthYellow.jpg'),
     freshGreen: require('../assets/img/freshGreen.jpg'),
     freshRed: require('../assets/img/freshRed.jpg'),
-    romanticPurple: require('../assets/img/romanticPurple.jpg')
+    romanticPurple: require('../assets/img/romanticPurple.jpg'),
+    simpleBlack: require('../assets/img/simpleBlack.jpg'),
+    courseGreen: require('../assets/img/courseGreen.jpg'),
+    coffee: require('../assets/img/coffee.jpg'),
+    redSpirit: require('../assets/img/redSpirit.jpg'),
+    blackHumour: require('../assets/img/blackHumour.jpg'),
+    lateNightOffice: require('../assets/img/lateNightOffice.jpg'),
+    blackGold: require('../assets/img/blackGold.jpg'),
 }
   
