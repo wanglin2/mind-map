@@ -224,7 +224,7 @@ version does not have a `content.json`, it corresponds to `content.xml`.
 `content`: the contents of the `content.xml` file within the `.xmind` zip
 package
 
-### Instantiation options:
+### Instantiation options
 
 | Field Name                       | Type    | Default Value    | Description                                                                                                                                                                                                                                                          | Required |
 | -------------------------------- | ------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
@@ -243,7 +243,39 @@ package
 | customNoteContentShow（v0.1.6+） | Object  | null             | Custom node note content display, object type, structure: {show: (noteContent, left, top) => {// your display node note logic }, hide: () => {// your hide node note logic }}                                                                                        |          |
 | readonly（v0.1.7+）              | Boolean | false            | Whether it is read-only mode                                                                                                                                                                                                                                         |          |
 
-### Instance methods:
+### Static methods
+
+#### defineTheme(name, config)
+
+v0.2.23+
+
+Define new theme.
+
+`name`：New theme name
+
+`config`：New theme config
+
+`Simple-mind-map ` Built-in many themes. In addition, you can register new theme. It is recommended to register before instantiation, so that you can directly use the newly registered theme during instantiation. Use example:
+
+```js
+import MindMap from 'simple-mind-map'
+// 注册新主题
+MindMap.defineTheme('主题名称', {})
+
+// 1.实例化时使用新注册的主题
+const mindMap = new MindMap({
+    theme: '主题名称'
+})
+
+// 2.动态切换新主题
+mindMap.setTheme('主题名称')
+```
+
+For all configurations of theme, please refer to [Default Topic](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js). The `defineTheme`method will merge the configuration you passed in with the default configuration. Most of the themes  do not need custom many parts. For a typical customized theme configuration, please refer to [blueSky](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/blueSky.js).
+
+
+
+### Instance methods
 
 #### render()
 
@@ -1160,11 +1192,17 @@ The built-in themes and icons in the project come from:
 
 [Zhixi Mind Map](https://www.zhixi.com/)
 
+Respect the copyright, and do not use the theme and icons directly for commercial projects.
+
 # License
 
 [MIT](https://opensource.org/licenses/MIT)
 
 # Changelog
+
+## 0.2.23
+
+New: Support register new theme.
 
 ## 0.2.22
 

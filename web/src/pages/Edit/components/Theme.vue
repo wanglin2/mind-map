@@ -23,6 +23,7 @@ import { themeList } from 'simple-mind-map/src/utils/constant'
 import { storeConfig } from '@/api'
 import { mapState } from 'vuex'
 import { themeMap } from '@/config/constant.js'
+import customThemeList from '@/customThemes'
 
 /**
  * @Author: 王林
@@ -41,7 +42,7 @@ export default {
   },
   data() {
     return {
-      themeList,
+      themeList: [...themeList, ...customThemeList],
       themeMap,
       theme: ''
     }
