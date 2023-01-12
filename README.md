@@ -108,6 +108,8 @@ The `index.html` file will be automatically moved to the root directory.
 
 [Technical Analysis of Web Mind Map Implementation (chi)](https://juejin.cn/post/6987711560521089061)
 
+[Only a hundred lines of code are needed to add local file operation capability to your Web page. Are you sure not to try?](https://juejin.cn/post/7157681502506090510)
+
 # Installation
 
 > Things to note before version 0.2.0:
@@ -1166,7 +1168,7 @@ The built-in themes and icons in the project come from:
 
 ## 0.2.22
 
-optimization：The theme and structure pictures of the built-in `simple-mind-map` package are removed and replaced by user self-maintenance. The original pictures can be found in the `web/sets/img/` directory.
+optimization：The theme and structure pictures of the built-in `simple-mind-map` package are removed and replaced by user self-maintenance. The original pictures can be found in the `web/assets/img/` directory.
 
 ## 0.2.21
 
