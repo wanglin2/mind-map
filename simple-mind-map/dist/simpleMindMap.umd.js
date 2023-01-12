@@ -13340,6 +13340,9 @@ if (typeof window !== 'undefined') {
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/core-js/modules/es.array.push.js
 var es_array_push = __webpack_require__("9d9f");
 
+// EXTERNAL MODULE: ../simple-mind-map/node_modules/core-js/modules/es.error.cause.js
+var es_error_cause = __webpack_require__("f8ac");
+
 // CONCATENATED MODULE: ../simple-mind-map/src/View.js
 //  视图操作类
 class View {
@@ -13647,9 +13650,6 @@ var cjs_default = /*#__PURE__*/__webpack_require__.n(cjs);
 
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/core-js/modules/es.array.reduce.js
 var es_array_reduce = __webpack_require__("293c");
-
-// EXTERNAL MODULE: ../simple-mind-map/node_modules/core-js/modules/es.error.cause.js
-var es_error_cause = __webpack_require__("f8ac");
 
 // CONCATENATED MODULE: ../simple-mind-map/src/utils/constant.js
 //  标签颜色列表
@@ -28163,6 +28163,8 @@ class KeyboardNavigation_KeyboardNavigation {
 
 
 
+
+
 // 默认选项配置
 const defaultOpt = {
   // 是否只读
@@ -28473,6 +28475,14 @@ class simple_mind_map_MindMap {
   }
 }
 simple_mind_map_MindMap.xmind = xmind;
+
+// 定义新主题
+simple_mind_map_MindMap.defineTheme = (name, config = {}) => {
+  if (themes[name]) {
+    return new Error('该主题名称已存在');
+  }
+  themes[name] = cjs_default()(themes_default, config);
+};
 /* harmony default export */ var simple_mind_map = (simple_mind_map_MindMap);
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js
 
