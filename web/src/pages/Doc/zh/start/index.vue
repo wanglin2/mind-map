@@ -42,6 +42,21 @@ npm run build
 </code></pre>
 <p>其他项目请自行修改打包配置。</p>
 </blockquote>
+<h2>使用</h2>
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;mindMapContainer&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;simple-mind-map&quot;</span>;
+
+<span class="hljs-keyword">const</span> mindMap = <span class="hljs-keyword">new</span> MindMap({
+  <span class="hljs-attr">el</span>: <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;mindMapContainer&#x27;</span>),
+  <span class="hljs-attr">data</span>: {
+    <span class="hljs-string">&quot;data&quot;</span>: {
+        <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;根节点&quot;</span>
+    },
+    <span class="hljs-string">&quot;children&quot;</span>: []
+  }
+});
+</code></pre>
 <h2>问题</h2>
 <h3>1.在Vite中使用报错，提示xml-js依赖出错</h3>
 <p>解决方法：使用如下引入方式：</p>

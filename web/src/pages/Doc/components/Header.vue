@@ -1,7 +1,10 @@
 <template>
   <div class="headerContainer">
     <div class="left">
-      <div class="title">SimpleMindMap</div>
+      <div class="title">
+        <img src="../../../assets/img/logo.png" alt="">
+        SimpleMindMap
+      </div>
     </div>
     <div class="center">
       <div class="btn" @click="toDemo">{{ demoName }}</div>
@@ -103,6 +106,13 @@ export default {
       width: 200px;
       font-size: 24px;
       font-weight: bold;
+      display: flex;
+      align-items: center;
+
+      img {
+        width: 30px;
+        margin-right: 10px;
+      }
     }
   }
 

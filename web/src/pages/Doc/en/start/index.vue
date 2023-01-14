@@ -52,6 +52,21 @@ compile this dependency:</p>
 </code></pre>
 <p>Other projects should modify the packaging configuration as needed.</p>
 </blockquote>
+<h2>Usage</h2>
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;mindMapContainer&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;simple-mind-map&quot;</span>;
+
+<span class="hljs-keyword">const</span> mindMap = <span class="hljs-keyword">new</span> MindMap({
+  <span class="hljs-attr">el</span>: <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;mindMapContainer&#x27;</span>),
+  <span class="hljs-attr">data</span>: {
+    <span class="hljs-string">&quot;data&quot;</span>: {
+        <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Root Node&quot;</span>
+    },
+    <span class="hljs-string">&quot;children&quot;</span>: []
+  }
+});
+</code></pre>
 <h2>Problems</h2>
 <h3>Error when using in Vite, indicating xml-js dependency error</h3>
 <p>Solution: use the following import method:</p>
