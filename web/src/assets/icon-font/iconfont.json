@@ -6,6 +6,13 @@
   "description": "思维导图",
   "glyphs": [
     {
+      "icon_id": "8760187",
+      "name": "github",
+      "font_class": "github",
+      "unicode": "e64f",
+      "unicode_decimal": 58959
+    },
+    {
       "icon_id": "1009019",
       "name": "选择",
       "font_class": "choose1",
