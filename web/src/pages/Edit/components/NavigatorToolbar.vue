@@ -35,6 +35,11 @@
     <div class="item">
       <Fullscreen :mindMap="mindMap"></Fullscreen>
     </div>
+    <div class="item">
+      <a href="https://github.com/wanglin2/mind-map" target="_blank">
+        <span class="iconfont icongithub"></span>
+      </a>
+    </div>
   </div>
 </template>
 
@@ -108,6 +113,11 @@ export default {
 
     &:last-of-type {
       margin-right: 0;
+    }
+
+    a {
+      color: #303133;
+      text-decoration: none;
     }
   }
 }

@@ -63,6 +63,26 @@ npm i simple-mind-map
 > 
 > 其他项目请自行修改打包配置。
 
+## 使用
+
+```html
+<div id="mindMapContainer"></div>
+```
+
+```js
+import MindMap from "simple-mind-map";
+
+const mindMap = new MindMap({
+  el: document.getElementById('mindMapContainer'),
+  data: {
+    "data": {
+        "text": "根节点"
+    },
+    "children": []
+  }
+});
+```
+
 ## 问题
 
 ### 1.在Vite中使用报错，提示xml-js依赖出错

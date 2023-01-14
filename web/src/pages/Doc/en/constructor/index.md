@@ -13,7 +13,7 @@ const mindMap = new MindMap({
   el: document.getElementById("mindMapContainer"),
   data: {
     "data": {
-        "text": "根节点"
+        "text": "Root Node"
     },
     "children": []
   }
@@ -100,15 +100,15 @@ Define new theme.
 ```js
 import MindMap from 'simple-mind-map'
 // 注册新主题
-MindMap.defineTheme('主题名称', {})
+MindMap.defineTheme('Theme name', {})
 
 // 1.实例化时使用新注册的主题
 const mindMap = new MindMap({
-    theme: '主题名称'
+    theme: 'Theme name'
 })
 
 // 2.动态切换新主题
-mindMap.setTheme('主题名称')
+mindMap.setTheme('Theme name')
 ```
 
 For all configurations of theme, please refer to [Default Topic](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js). The `defineTheme`method will merge the configuration you passed in with the default configuration. Most of the themes  do not need custom many parts. For a typical customized theme configuration, please refer to [blueSky](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/blueSky.js).

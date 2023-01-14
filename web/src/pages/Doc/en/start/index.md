@@ -72,6 +72,26 @@ npm i simple-mind-map
 >
 > Other projects should modify the packaging configuration as needed.
 
+## Usage
+
+```html
+<div id="mindMapContainer"></div>
+```
+
+```js
+import MindMap from "simple-mind-map";
+
+const mindMap = new MindMap({
+  el: document.getElementById('mindMapContainer'),
+  data: {
+    "data": {
+        "text": "Root Node"
+    },
+    "children": []
+  }
+});
+```
+
 ## Problems
 
 ### Error when using in Vite, indicating xml-js dependency error

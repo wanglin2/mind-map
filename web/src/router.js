@@ -15,6 +15,12 @@ const routes = [
   ...routerList.map((item) => {
     return { 
       path: `/doc/${item.lang}/`, 
+      redirect: `/doc/${item.lang}/introduction/`
+    }
+  }),
+  ...routerList.map((item) => {
+    return { 
+      path: `/doc/${item.lang}/`, 
       component: DocPage, 
       children: item.children.map((child) => {
         return {

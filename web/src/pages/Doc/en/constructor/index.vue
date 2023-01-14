@@ -10,7 +10,7 @@
   <span class="hljs-attr">el</span>: <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&quot;mindMapContainer&quot;</span>),
   <span class="hljs-attr">data</span>: {
     <span class="hljs-string">&quot;data&quot;</span>: {
-        <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;根节点&quot;</span>
+        <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Root Node&quot;</span>
     },
     <span class="hljs-string">&quot;children&quot;</span>: []
   }
@@ -171,15 +171,15 @@ package</p>
 <p><code>Simple-mind-map </code> Built-in many themes. In addition, you can register new theme. It is recommended to register before instantiation, so that you can directly use the newly registered theme during instantiation. Use example:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
 <span class="hljs-comment">// 注册新主题</span>
-MindMap.defineTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>, {})
+MindMap.defineTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>, {})
 
 <span class="hljs-comment">// 1.实例化时使用新注册的主题</span>
 <span class="hljs-keyword">const</span> mindMap = <span class="hljs-keyword">new</span> MindMap({
-    <span class="hljs-attr">theme</span>: <span class="hljs-string">&#x27;主题名称&#x27;</span>
+    <span class="hljs-attr">theme</span>: <span class="hljs-string">&#x27;Theme name&#x27;</span>
 })
 
 <span class="hljs-comment">// 2.动态切换新主题</span>
-mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
+mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 </code></pre>
 <p>For all configurations of theme, please refer to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js">Default Topic</a>. The <code>defineTheme</code>method will merge the configuration you passed in with the default configuration. Most of the themes  do not need custom many parts. For a typical customized theme configuration, please refer to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/blueSky.js">blueSky</a>.</p>
 <h2>Instance methods</h2>
