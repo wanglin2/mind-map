@@ -45,13 +45,15 @@ const defaultOpt = {
   // 多选节点时鼠标移动距边缘多少距离时开始偏移
   selectTranslateLimit: 20,
   // 自定义节点备注内容显示
-  customNoteContentShow: null
+  customNoteContentShow: null,
   /*
         {
             show(){},
             hide(){}
         }
     */
+  // 是否开启节点自由拖拽
+  enableFreeDrag: false
 }
 
 //  思维导图
@@ -227,6 +229,16 @@ class MindMap {
   //  获取某个主题配置值
   getThemeConfig(prop) {
     return prop === undefined ? this.themeConfig : this.themeConfig[prop]
+  }
+
+  // 获取配置
+  getConfig(prop) {
+    return prop === undefined ? this.opt : this.opt[prop]
+  }
+
+  // 更新配置
+  updateConfig(opt = {}) {
+    this.opt = this.handleOpt(merge.all([defaultOpt, this.opt, opt]))
   }
 
   //  获取当前布局结构

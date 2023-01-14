@@ -1,9 +1,11 @@
 import { bfsWalk, throttle } from './utils'
 import Base from './layouts/Base'
 
-//  节点拖动类
+//  节点拖动类
+
 class Drag extends Base {
-  //  构造函数
+  //  构造函数
+
   constructor({ mindMap }) {
     super(mindMap.renderer)
     this.mindMap = mindMap
@@ -11,7 +13,8 @@ class Drag extends Base {
     this.bindEvent()
   }
 
-  //  复位
+  //  复位
+
   reset() {
     // 当前拖拽节点
     this.node = null
@@ -44,7 +47,8 @@ class Drag extends Base {
     this.mouseMoveY = 0
   }
 
-  //  绑定事件
+  //  绑定事件
+
   bindEvent() {
     this.checkOverlapNode = throttle(this.checkOverlapNode, 300, this)
     this.mindMap.on('node_mousedown', (node, e) => {
@@ -92,7 +96,8 @@ class Drag extends Base {
     this.mindMap.on('mouseup', this.onMouseup)
   }
 
-  //  鼠标松开事件
+  //  鼠标松开事件
+
   onMouseup(e) {
     if (!this.isMousedown) {
       return
@@ -114,7 +119,7 @@ class Drag extends Base {
       // 存在下一个相邻节点，作为其前一个兄弟节点
       this.mindMap.renderer.setNodeActive(this.nextNode, false)
       this.mindMap.execCommand('INSERT_BEFORE', this.node, this.nextNode)
-    } else if (_nodeIsDrag) {
+    } else if (_nodeIsDrag && this.mindMap.opt.enableFreeDrag) {
       // 自定义位置
       let { x, y } = this.mindMap.toPos(
         e.clientX - this.offsetX,
@@ -133,7 +138,8 @@ class Drag extends Base {
     this.reset()
   }
 
-  //  创建克隆节点
+  //  创建克隆节点
+
   createCloneNode() {
     if (!this.clone) {
       // 节点
@@ -154,7 +160,8 @@ class Drag extends Base {
     }
   }
 
-  //  移除克隆节点
+  //  移除克隆节点
+
   removeCloneNode() {
     if (!this.clone) {
       return
@@ -164,7 +171,8 @@ class Drag extends Base {
     this.placeholder.remove()
   }
 
-  //  拖动中
+  //  拖动中
+
   onMove(x, y) {
     if (!this.isMousedown) {
       return
@@ -190,7 +198,8 @@ class Drag extends Base {
     this.checkOverlapNode()
   }
 
-  //  检测重叠节点
+  //  检测重叠节点
+
   checkOverlapNode() {
     if (!this.drawTransform) {
       return

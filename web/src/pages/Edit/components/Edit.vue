@@ -230,7 +230,7 @@ export default {
      * @Desc: 初始化
      */
     init() {
-      let { root, layout, theme, view } = this.mindMapData
+      let { root, layout, theme, view, config } = this.mindMapData
       this.mindMap = new MindMap({
         el: this.$refs.mindMapContainer,
         data: root,
@@ -245,7 +245,8 @@ export default {
           hide: () => {
             // this.$bus.$emit('hideNoteContent')
           }
-        }
+        },
+        ...(config || {})
       })
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
         this.manualSave()
