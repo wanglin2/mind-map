@@ -56,22 +56,23 @@ console.log(MindMap.xmind)
 
 ## 实例化选项
 
-| 字段名称                           | 类型      | 默认值              | 描述                                                                                                                                                                                                                                                                                                                                                        | 是否必填 |
-| ------------------------------ | ------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
-| el                             | Element |                  | 容器元素，必须为DOM元素                                                                                                                                                                                                                                                                                                                                             | 是    |
-| data                           | Object  | {}               | 思维导图数据，可参考：[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)                                                                                                                                                                 |      |
-| layout                         | String  | logicalStructure | 布局类型，可选列表：logicalStructure（逻辑结构图）、mindMap（思维导图）、catalogOrganization（目录组织图）、organizationStructure（组织结构图）                                                                                                                                                                                                                                                   |      |
-| theme                          | String  | default          | 主题，可选列表：default（默认）、classic（脑图经典）、minions（小黄人）、pinkGrape（粉红葡萄）、mint（薄荷）、gold（金色vip）、vitalityOrange（活力橙）、greenLeaf（绿叶）、dark2（暗色2）、skyGreen（天清绿）、classic2（脑图经典2）、classic3（脑图经典3）、classic4（脑图经典4，v0.2.0+）、classicGreen（经典绿）、classicBlue（经典蓝）、blueSky（天空蓝）、brainImpairedPink（脑残粉）、dark（暗色）、earthYellow（泥土黄）、freshGreen（清新绿）、freshRed（清新红）、romanticPurple（浪漫紫） |      |
-| themeConfig                    | Object  | {}               | 主题配置，会和所选择的主题进行合并，可用字段可参考：[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js)                                                                                                                                                    |      |
-| scaleRatio                     | Number  | 0.1              | 放大缩小的增量比例                                                                                                                                                                                                                                                                                                                                                 |      |
-| maxTag                         | Number  | 5                | 节点里最多显示的标签数量，多余的会被丢弃                                                                                                                                                                                                                                                                                                                                      |      |
-| exportPadding                  | Number  | 20               | 导出图片时的内边距                                                                                                                                                                                                                                                                                                                                                 |      |
-| imgTextMargin                  | Number  | 5                | 节点里图片和文字的间距                                                                                                                                                                                                                                                                                                                                               |      |
-| textContentMargin              | Number  | 2                | 节点里各种文字信息的间距，如图标和文字的间距                                                                                                                                                                                                                                                                                                                                    |      |
-| selectTranslateStep            | Number  | 3                | 多选节点时鼠标移动到边缘时的画布移动偏移量                                                                                                                                                                                                                                                                                                                                     |      |
-| selectTranslateLimit           | Number  | 20               | 多选节点时鼠标移动距边缘多少距离时开始偏移                                                                                                                                                                                                                                                                                                                                     |      |
-| customNoteContentShow（v0.1.6+） | Object  | null             | 自定义节点备注内容显示，Object类型，结构为：{show: (noteContent, left, top) => {// 你的显示节点备注逻辑 }, hide: () => {// 你的隐藏节点备注逻辑 }}                                                                                                                                                                                                                                               |      |
-| readonly（v0.1.7+）              | Boolean | false            | 是否是只读模式                                                                                                                                                                                                                                                                                                                                                   |      |
+| 字段名称                         | 类型    | 默认值           | 描述                                                         | 是否必填 |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ | -------- |
+| el                               | Element |                  | 容器元素，必须为DOM元素                                      | 是       |
+| data                             | Object  | {}               | 思维导图数据，可参考：[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js) |          |
+| layout                           | String  | logicalStructure | 布局类型，可选列表：logicalStructure（逻辑结构图）、mindMap（思维导图）、catalogOrganization（目录组织图）、organizationStructure（组织结构图） |          |
+| theme                            | String  | default          | 主题，可选列表：default（默认）、classic（脑图经典）、minions（小黄人）、pinkGrape（粉红葡萄）、mint（薄荷）、gold（金色vip）、vitalityOrange（活力橙）、greenLeaf（绿叶）、dark2（暗色2）、skyGreen（天清绿）、classic2（脑图经典2）、classic3（脑图经典3）、classic4（脑图经典4，v0.2.0+）、classicGreen（经典绿）、classicBlue（经典蓝）、blueSky（天空蓝）、brainImpairedPink（脑残粉）、dark（暗色）、earthYellow（泥土黄）、freshGreen（清新绿）、freshRed（清新红）、romanticPurple（浪漫紫） |          |
+| themeConfig                      | Object  | {}               | 主题配置，会和所选择的主题进行合并，可用字段可参考：[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js) |          |
+| scaleRatio                       | Number  | 0.1              | 放大缩小的增量比例                                           |          |
+| maxTag                           | Number  | 5                | 节点里最多显示的标签数量，多余的会被丢弃                     |          |
+| exportPadding                    | Number  | 20               | 导出图片时的内边距                                           |          |
+| imgTextMargin                    | Number  | 5                | 节点里图片和文字的间距                                       |          |
+| textContentMargin                | Number  | 2                | 节点里各种文字信息的间距，如图标和文字的间距                 |          |
+| selectTranslateStep              | Number  | 3                | 多选节点时鼠标移动到边缘时的画布移动偏移量                   |          |
+| selectTranslateLimit             | Number  | 20               | 多选节点时鼠标移动距边缘多少距离时开始偏移                   |          |
+| customNoteContentShow（v0.1.6+） | Object  | null             | 自定义节点备注内容显示，Object类型，结构为：{show: (noteContent, left, top) => {// 你的显示节点备注逻辑 }, hide: () => {// 你的隐藏节点备注逻辑 }} |          |
+| readonly（v0.1.7+）              | Boolean | false            | 是否是只读模式                                               |          |
+| enableFreeDrag（v0.2.4+）        | Boolean | false            | 是否开启节点自由拖拽                                         |          |
 
 ## 静态方法
 
@@ -185,6 +186,30 @@ mindMap.setTheme('主题名称')
 ### getThemeConfig(prop)
 
 获取某个主题配置属性值
+
+### getConfig(*prop*)
+
+> 0.2.24+
+
+`prop`：获取指定配置的值，不传则返回整个配置
+
+获取配置，即`new MindMap(opt)`的`opt`
+
+### updateConfig(*opt* = {})
+
+> 0.2.24+
+
+`opt`：要更新的配置
+
+更新配置，即更新`new MindMap(opt)`的`opt`，可以只更新部分数据，比如：
+
+```js
+mindMap.updateConfig({
+    enableFreeDrag: true// 开启节点自由拖拽
+})
+```
+
+该方法只做更新配置的事情，没有其他副作用，比如触发画布重新渲染之类的
 
 ### getLayout()
 

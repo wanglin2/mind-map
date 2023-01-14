@@ -20,7 +20,9 @@ export default {
     level2Node: '二级节点',
     belowLevel2Node: '三级及以下节点',
     nodeBorderType: '节点边框风格',
-    nodeUseLineStyle: '是否使用只有底边框的风格'
+    nodeUseLineStyle: '是否使用只有底边框的风格',
+    otherConfig: '其他配置',
+    enableFreeDrag: '是否开启节点自由拖拽'
   },
   color: {
     moreColor: '更多颜色'

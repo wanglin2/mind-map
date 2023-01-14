@@ -66,22 +66,23 @@ package
 
 ## Instantiation options
 
-| Field Name                       | Type    | Default Value    | Description                                                                                                                                                                                                                                                          | Required |
-| -------------------------------- | ------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| el                               | Element |                  | Container element, must be a DOM element                                                                                                                                                                                                                             | Yes      |
-| data                             | Object  | {}               | Mind map data, refer to: https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js                                                                                                                                                       |          |
-| layout                           | String  | logicalStructure | Layout type, options: logicalStructure (logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)                                                                   |          |
+| Field Name                       | Type    | Default Value    | Description                                                  | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ | -------- |
+| el                               | Element |                  | Container element, must be a DOM element                     | Yes      |
+| data                             | Object  | {}               | Mind map data, refer to: https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js |          |
+| layout                           | String  | logicalStructure | Layout type, options: logicalStructure (logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram) |          |
 | theme                            | String  | default          | Theme, options: default, classic, minions, pinkGrape, mint, gold, vitalityOrange, greenLeaf, dark2, skyGreen, classic2, classic3, classic4 (v0.2.0+), classicGreen, classicBlue, blueSky, brainImpairedPink, dark, earthYellow, freshGreen, freshRed, romanticPurple |          |
-| themeConfig                      | Object  | {}               | Theme configuration, will be merged with the selected theme, available fields refer to: https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js                                                                                         |          |
-| scaleRatio                       | Number  | 0.1              | The incremental scaling ratio                                                                                                                                                                                                                                        |          |
-| maxTag                           | Number  | 5                | The maximum number of tags displayed in the node, any additional tags will be discarded                                                                                                                                                                              |          |
-| exportPadding                    | Number  | 20               | The padding for exporting images                                                                                                                                                                                                                                     |          |
-| imgTextMargin                    | Number  | 5                | The spacing between the image and text in the node                                                                                                                                                                                                                   |          |
-| textContentMargin                | Number  | 2                | The spacing between various text information in the node, such as the spacing between the icon and text                                                                                                                                                              |          |
-| selectTranslateStep              | Number  | 3                | The canvas offset when mouse moves to the edge during multi-select node                                                                                                                                                                                              |          |
-| selectTranslateLimit             | Number  | 20               | The distance from the edge when the canvas begins to offset during multi-select node                                                                                                                                                                                 |          |
-| customNoteContentShow（v0.1.6+） | Object  | null             | Custom node note content display, object type, structure: {show: (noteContent, left, top) => {// your display node note logic }, hide: () => {// your hide node note logic }}                                                                                        |          |
-| readonly（v0.1.7+）              | Boolean | false            | Whether it is read-only mode                                                                                                                                                                                                                                         |          |
+| themeConfig                      | Object  | {}               | Theme configuration, will be merged with the selected theme, available fields refer to: https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js |          |
+| scaleRatio                       | Number  | 0.1              | The incremental scaling ratio                                |          |
+| maxTag                           | Number  | 5                | The maximum number of tags displayed in the node, any additional tags will be discarded |          |
+| exportPadding                    | Number  | 20               | The padding for exporting images                             |          |
+| imgTextMargin                    | Number  | 5                | The spacing between the image and text in the node           |          |
+| textContentMargin                | Number  | 2                | The spacing between various text information in the node, such as the spacing between the icon and text |          |
+| selectTranslateStep              | Number  | 3                | The canvas offset when mouse moves to the edge during multi-select node |          |
+| selectTranslateLimit             | Number  | 20               | The distance from the edge when the canvas begins to offset during multi-select node |          |
+| customNoteContentShow（v0.1.6+） | Object  | null             | Custom node note content display, object type, structure: {show: (noteContent, left, top) => {// your display node note logic }, hide: () => {// your hide node note logic }} |          |
+| readonly（v0.1.7+）              | Boolean | false            | Whether it is read-only mode                                 |          |
+| enableFreeDrag（v0.2.4+）        | Boolean | false            | Enable node free drag                                        |          |
 
 ## Static methods
 
@@ -199,6 +200,30 @@ Gets the custom theme configuration.
 ### getThemeConfig(prop)
 
 Gets the value of a specific theme configuration property.
+
+### getConfig(*prop*)
+
+> 0.2.24+
+
+`prop`：Get the value of the specified configuration, and return the entire configuration if not passed
+
+Get config, That is,  `opt` of `new MindMap (opt)`
+
+### updateConfig(*opt* = {})
+
+> 0.2.24+
+
+`opt`：Configuration to update
+
+Update config，That is update `opt` of `new MindMap(opt)`，You can only update some data, such as:
+
+```js
+mindMap.updateConfig({
+    enableFreeDrag: true// 开启节点自由拖拽
+})
+```
+
+This method only updates the configuration and has no other side effects, such as triggering canvas re-rendering
 
 ### getLayout()
 

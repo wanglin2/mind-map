@@ -20,7 +20,9 @@ export default {
     level2Node: 'Level2 node',
     belowLevel2Node: 'Below level2 node',
     nodeBorderType: 'Node border style',
-    nodeUseLineStyle: 'Use only has bottom border style'
+    nodeUseLineStyle: 'Use only has bottom border style',
+    otherConfig: 'Other config',
+    enableFreeDrag: 'Enable node free drag'
   },
   color: {
     moreColor: 'More color'
