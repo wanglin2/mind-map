@@ -1,0 +1,103 @@
+# MiniMap instance
+
+> v0.2.11+
+
+Used to help quickly develop a small map feature, the small map consists of two
+parts, one is the current canvas content, and the other is the viewport frame.
+When zoomed, moved, or there are too many elements, the canvas may only display
+part of the mind map content. The viewport frame can be used to view the current
+viewport location, and can be quickly positioned by dragging on the small map.
+
+The `mindMap.miniMap` instance can be obtained through this.
+
+## Methods
+
+### getMiniMap()
+
+Obtain small map related data, this function is generally not used directly, the
+function returns:
+
+```js
+{
+      svg, // Element, the overall svg element of the mind map graphics, including: svg (canvas container), g (actual mind map group)
+      svgHTML, // String, svg string, i.e. html string, can be directly rendered to the small map container you prepared
+      rect: // Object, position, size, etc. of mind map graphics before zoom
+      origWidth, // Number, canvas width
+      origHeight, // Number, canvas height
+      scaleX, // Number, horizontal zoom value of mind map graphics
+      scaleY, // Number, vertical zoom value of mind map graphics
+}
+```
+
+### calculationMiniMap(boxWidth, boxHeight)
+
+"Calculate the rendering data for the small map, this function will call the
+`getMiniMap()` method, so using this function is sufficient.
+
+`boxWidth`: the width of the small map container
+
+`boxHeight`: the height of the small map container
+
+Function return content:
+
+```js
+{
+      svgHTML, // small map html
+      viewBoxStyle, // view box position information
+      miniMapBoxScale, // view box zoom value
+      miniMapBoxLeft, // view box left value
+      miniMapBoxTop, // view box top value
+}
+```
+
+Small map idea:
+
+1.Prepare a container element `container`, position is not `static`
+
+2.In `container`, create a small map container element `miniMapContainer`,
+absolute positioning
+
+3.In `container`, create a view box element `viewBoxContainer`, absolute
+positioning, set border style, transition property (optional)
+
+4.Listen for `data_change` and `view_data_change` events, and in this event call
+the `calculationMiniMap` method to get calculation data, then render `svgHTML`
+to the `miniMapContainer` element and set its style:
+
+```js
+:style="{
+    transform: `scale(${svgBoxScale})`,
+    left: svgBoxLeft + 'px',
+    top: svgBoxTop + 'px',
+}"
+```
+
+5.Set the `viewBoxStyle` object as the style of the `viewBoxContainer` element
+
+At this point, when the mind map on the canvas changes, the small map will also
+be updated in real time, and the view box element will reflect the position of
+the viewport on the mind map graph in real time
+
+6.Listen for the `mousedown`, `mousemove`, and `mouseup` events of the
+`container` element, and call the three methods that will be introduced below to
+achieve the effect of the mind map on the canvas being dragged with the mouse
+
+### onMousedown(e)
+
+Small map mouse down event executes this function
+
+`e`: event object
+
+### onMousemove(e, sensitivityNum = 5)
+
+This function is executed on the small map mouse move event.
+
+`e`: event object
+
+`sensitivityNum`: drag sensitivity, the higher the sensitivity, the greater the
+actual canvas dragging distance on the small map when dragging the same distance
+on the small map
+
+### onMouseup()
+
+This function is executed on the small map mouse release event.

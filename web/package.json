@@ -7,12 +7,14 @@
     "build": "vue-cli-service build && node ../copy.js",
     "lint": "vue-cli-service lint",
     "buildLibrary": "vue-cli-service build --target lib --name simpleMindMap ../simple-mind-map/index.js --dest ../simple-mind-map/dist",
-    "format": "prettier --write src/* src/*/* src/*/*/* src/*/*/*/*"
+    "format": "prettier --write src/* src/*/* src/*/*/* src/*/*/*/*",
+    "buildDoc": "node ./scripts/buildDoc.js"
   },
   "dependencies": {
     "@toast-ui/editor": "^3.1.5",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.1",
+    "highlight.js": "^10.7.3",
     "v-viewer": "^1.6.4",
     "vue": "^2.6.11",
     "vue-i18n": "^8.27.2",
@@ -29,6 +31,8 @@
     "eslint-plugin-vue": "^6.2.2",
     "less": "^3.12.2",
     "less-loader": "^7.1.0",
+    "markdown-it": "^13.0.1",
+    "markdown-it-checkbox": "^1.1.0",
     "prettier": "^1.19.1",
     "vue-template-compiler": "^2.6.11",
     "webpack": "^4.44.2"

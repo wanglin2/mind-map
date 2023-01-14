@@ -1,0 +1,272 @@
+# 构造函数
+
+## 基本使用
+
+```html
+<div id="mindMapContainer"></div>
+```
+
+```js
+import MindMap from "simple-mind-map";
+
+const mindMap = new MindMap({
+  el: document.getElementById('mindMapContainer'),
+  data: {
+    "data": {
+        "text": "根节点"
+    },
+    "children": []
+  }
+});
+```
+
+## Xmind解析方法
+
+> v0.2.7+
+
+可以通过如下方法获取解析`Xmind`文件的方法：
+
+```js
+import MindMap from "simple-mind-map";
+
+console.log(MindMap.xmind)
+```
+
+`MindMap.xmind`对象上挂载了两个方法：
+
+### parseXmindFile(file)
+
+解析`.xmind`文件，返回解析后的数据，注意是完整的数据，包含节点树、主题、结构等，可以使用`mindMap.setFullData(data)`来将返回的数据渲染到画布上
+
+`file`：`File`对象
+
+### transformXmind(content)
+
+转换`xmind`数据，`.xmind`文件本质上是一个压缩包，改成`zip`后缀可以解压缩，里面存在一个`content.json`文件，如果你自己解析出了这个文件，那么可以把这个文件内容传递给这个方法进行转换，转换后的数据，注意是完整的数据，包含节点树、主题、结构等，可以使用`mindMap.setFullData(data)`来将返回的数据渲染到画布上
+
+`content`：`.xmind`压缩包内的`content.json`文件内容
+
+### transformOldXmind(content)
+
+> v0.2.8+
+
+针对`xmind8`版本的数据解析，因为该版本的`.xmind`文件内没有`content.json`，对应的是`content.xml`。
+
+`content`：`.xmind`压缩包内的`content.xml`文件内容
+
+## 实例化选项
+
+| 字段名称                           | 类型      | 默认值              | 描述                                                                                                                                                                                                                                                                                                                                                        | 是否必填 |
+| ------------------------------ | ------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- |
+| el                             | Element |                  | 容器元素，必须为DOM元素                                                                                                                                                                                                                                                                                                                                             | 是    |
+| data                           | Object  | {}               | 思维导图数据，可参考：[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)                                                                                                                                                                 |      |
+| layout                         | String  | logicalStructure | 布局类型，可选列表：logicalStructure（逻辑结构图）、mindMap（思维导图）、catalogOrganization（目录组织图）、organizationStructure（组织结构图）                                                                                                                                                                                                                                                   |      |
+| theme                          | String  | default          | 主题，可选列表：default（默认）、classic（脑图经典）、minions（小黄人）、pinkGrape（粉红葡萄）、mint（薄荷）、gold（金色vip）、vitalityOrange（活力橙）、greenLeaf（绿叶）、dark2（暗色2）、skyGreen（天清绿）、classic2（脑图经典2）、classic3（脑图经典3）、classic4（脑图经典4，v0.2.0+）、classicGreen（经典绿）、classicBlue（经典蓝）、blueSky（天空蓝）、brainImpairedPink（脑残粉）、dark（暗色）、earthYellow（泥土黄）、freshGreen（清新绿）、freshRed（清新红）、romanticPurple（浪漫紫） |      |
+| themeConfig                    | Object  | {}               | 主题配置，会和所选择的主题进行合并，可用字段可参考：[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js)                                                                                                                                                    |      |
+| scaleRatio                     | Number  | 0.1              | 放大缩小的增量比例                                                                                                                                                                                                                                                                                                                                                 |      |
+| maxTag                         | Number  | 5                | 节点里最多显示的标签数量，多余的会被丢弃                                                                                                                                                                                                                                                                                                                                      |      |
+| exportPadding                  | Number  | 20               | 导出图片时的内边距                                                                                                                                                                                                                                                                                                                                                 |      |
+| imgTextMargin                  | Number  | 5                | 节点里图片和文字的间距                                                                                                                                                                                                                                                                                                                                               |      |
+| textContentMargin              | Number  | 2                | 节点里各种文字信息的间距，如图标和文字的间距                                                                                                                                                                                                                                                                                                                                    |      |
+| selectTranslateStep            | Number  | 3                | 多选节点时鼠标移动到边缘时的画布移动偏移量                                                                                                                                                                                                                                                                                                                                     |      |
+| selectTranslateLimit           | Number  | 20               | 多选节点时鼠标移动距边缘多少距离时开始偏移                                                                                                                                                                                                                                                                                                                                     |      |
+| customNoteContentShow（v0.1.6+） | Object  | null             | 自定义节点备注内容显示，Object类型，结构为：{show: (noteContent, left, top) => {// 你的显示节点备注逻辑 }, hide: () => {// 你的隐藏节点备注逻辑 }}                                                                                                                                                                                                                                               |      |
+| readonly（v0.1.7+）              | Boolean | false            | 是否是只读模式                                                                                                                                                                                                                                                                                                                                                   |      |
+
+## 静态方法
+
+### defineTheme(name, config)
+
+> v0.2.23+
+
+定义新主题。
+
+`name`：新主题名称
+
+`config`：主题数据
+
+`simple-mind-map`内置了众多主题，另外你也可以注册新主题，建议在实例化之前进行注册，这样在实例化时可以直接使用新注册的主题，使用示例：
+
+```js
+import MindMap from 'simple-mind-map'
+// 注册新主题
+MindMap.defineTheme('主题名称', {})
+
+// 1.实例化时使用新注册的主题
+const mindMap = new MindMap({
+    theme: '主题名称'
+})
+
+// 2.动态切换新主题
+mindMap.setTheme('主题名称')
+```
+
+主题的所有配置可以参考[默认主题](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js)。`defineTheme`方法会把你传入的配置和默认配置做合并。大部分主题其实需要自定义的部分不是很多，一个典型的自定义主题配置可以参考[blueSky](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/blueSky.js)。
+
+
+
+## 实例方法
+
+### render()
+
+触发整体渲染，会进行节点复用，性能较`reRender`会更好一点，如果只是节点位置变化了可以调用该方法进行渲染
+
+### reRender()
+
+整体重新渲染，会清空画布，节点也会重新创建，性能不好，慎重使用
+
+### resize()
+
+容器尺寸变化后，需要调用该方法进行适应
+
+### setMode(mode)
+
+> v0.1.7+
+
+切换模式为只读或编辑。
+
+`mode`：readonly、edit
+
+### on(event, fn)
+
+监听事件，事件列表：
+
+| 事件名称                         | 描述                                       | 回调参数                                                     |
+| -------------------------------- | ------------------------------------------ | ------------------------------------------------------------ |
+| data_change                      | 渲染树数据变化，可以监听该方法获取最新数据 | data（当前渲染树数据）                                       |
+| view_data_change（v0.1.1+）      | 视图变化数据，比如拖动或缩放时会触发       | data（当前视图状态数据）                                     |
+| back_forward                     | 前进或回退                                 | activeHistoryIndex（当前在历史数据数组里的索引）、length（当前历史数据数组的长度） |
+| draw_click                       | *画布的单击事件*                           | e（事件对象）                                                |
+| svg_mousedown                    | svg画布的鼠标按下事件                      | e（事件对象）                                                |
+| mousedown                        | el元素的鼠标按下事件                       | e（事件对象）、this（Event事件类实例）                       |
+| mousemove                        | el元素的鼠标移动事件                       | e（事件对象）、this（Event事件类实例）                       |
+| drag                             | 如果是按住左键拖动的话会触发拖动事件       | e（事件对象）、this（Event事件类实例）                       |
+| mouseup                          | el元素的鼠标松开事件                       | e（事件对象）、this（Event事件类实例）                       |
+| mousewheel                       | 鼠标滚动事件                               | e（事件对象）、dir（向上up还是向下down滚动）、this（Event事件类实例） |
+| contextmenu                      | svg画布的鼠标右键菜单事件                  | e（事件对象）                                                |
+| node_click                       | 节点的单击事件                             | this（节点实例）、e（事件对象）                              |
+| node_mousedown                   | 节点的鼠标按下事件                         | this（节点实例）、e（事件对象）                              |
+| node_mouseup                     | 节点的鼠标松开事件                         | this（节点实例）、e（事件对象）                              |
+| node_dblclick                    | 节点的双击事件                             | this（节点实例）、e（事件对象）                              |
+| node_contextmenu                 | 节点的右键菜单事件                         | e（事件对象）、this（节点实例）                              |
+| before_node_active               | 节点激活前事件                             | this（节点实例）、activeNodeList（当前激活的所有节点列表）   |
+| node_active                      | 节点激活事件                               | this（节点实例）、activeNodeList（当前激活的所有节点列表）   |
+| expand_btn_click                 | 节点展开或收缩事件                         | this（节点实例）                                             |
+| before_show_text_edit            | 节点文本编辑框即将打开事件                 |                                                              |
+| hide_text_edit                   | 节点文本编辑框关闭事件                     | textEditNode（文本编辑框DOM节点）、activeNodeList（当前激活的所有节点列表） |
+| scale                            | 放大缩小事件                               | scale（缩放比例）                                            |
+| node_img_dblclick（v0.2.15+）    | 节点内图片的双击事件                       | this（节点实例）、e（事件对象）                              |
+| node_tree_render_end（v0.2.16+） | 节点树渲染完毕事件                         |                                                              |
+
+### emit(event, ...args)
+
+触发事件，可以是上面表格里的事件，也可以是自定义事件
+
+### off(event, fn)
+
+解绑事件
+
+### setTheme(theme)
+
+切换主题，可选主题见上面的选项表格
+
+### getTheme()
+
+获取当前主题
+
+### setThemeConfig(config)
+
+设置主题配置，`config`同上面选项表格里的选项`themeConfig`
+
+### getCustomThemeConfig()
+
+获取自定义主题配置
+
+### getThemeConfig(prop)
+
+获取某个主题配置属性值
+
+### getLayout()
+
+获取当前的布局结构
+
+### setLayout(layout)
+
+设置布局结构，可选值见上面选项表格的`layout`字段
+
+### execCommand(name, ...args)
+
+执行命令，每执行一个命令就会在历史堆栈里添加一条记录用于回退或前进。所有命令如下：
+
+| 命令名称                              | 描述                                                       | 参数                                                                                                                                                                                                                                                                       |
+| --------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| SELECT_ALL                        | 全选                                                       |                                                                                                                                                                                                                                                                          |
+| BACK                              | 回退指定的步数                                                  | step（要回退的步数，默认为1）                                                                                                                                                                                                                                                        |
+| FORWARD                           | 前进指定的步数                                                  | step（要前进的步数，默认为1）                                                                                                                                                                                                                                                        |
+| INSERT_NODE                       | 插入同级节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效                   |                                                                                                                                                                                                                                                                          |
+| INSERT_CHILD_NODE                 | 插入子节点，操作节点为当前激活的节点                                       |                                                                                                                                                                                                                                                                          |
+| UP_NODE                           | 上移节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的第一个节点使用无效 |                                                                                                                                                                                                                                                                          |
+| DOWN_NODE                         | 操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的最后一个节点使用无效     |                                                                                                                                                                                                                                                                          |
+| REMOVE_NODE                       | 删除节点，操作节点为当前激活的节点                                        |                                                                                                                                                                                                                                                                          |
+| PASTE_NODE                        | 粘贴节点到节点，操作节点为当前激活的节点                                     | data（要粘贴的节点数据，一般通过`renderer.copyNode()`方法和`renderer.cutNode()`方法获取）                                                                                                                                                                                                      |
+| CUT_NODE                          | 剪切节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点使用无效            | callback(回调函数，剪切的节点数据会通过调用该函数并通过参数返回)                                                                                                                                                                                                                                    |
+| SET_NODE_STYLE                    | 修改节点样式                                                   | node（要设置样式的节点）、prop（样式属性）、value（样式属性值）、isActive（布尔值，是否设置的是激活状态的样式）                                                                                                                                                                                                       |
+| SET_NODE_ACTIVE                   | 设置节点是否激活                                                 | node（要设置的节点）、active（布尔值，是否激活）                                                                                                                                                                                                                                            |
+| CLEAR_ACTIVE_NODE                 | 清除当前已激活节点的激活状态，操作节点为当前激活的节点                              |                                                                                                                                                                                                                                                                          |
+| SET_NODE_EXPAND                   | 设置节点是否展开                                                 | node（要设置的节点）、expand（布尔值，是否展开）                                                                                                                                                                                                                                            |
+| EXPAND_ALL                        | 展开所有节点                                                   |                                                                                                                                                                                                                                                                          |
+| UNEXPAND_ALL                      | 收起所有节点                                                   |                                                                                                                                                                                                                                                                          |
+| UNEXPAND_TO_LEVEL（v0.2.8+）        | 展开到指定层级                                                  | level（要展开到的层级，1、2、3...）                                                                                                                                                                                                                                                  |
+| SET_NODE_DATA                     | 更新节点数据，即更新节点数据对象里`data`对象的数据                             | node（要设置的节点）、data（对象，要更新的数据，如`{expand: true}`）                                                                                                                                                                                                                           |
+| SET_NODE_TEXT                     | 设置节点文本                                                   | node（要设置的节点）、text（要设置的文本字符串，换行可以使用`\n`）                                                                                                                                                                                                                                  |
+| SET_NODE_IMAGE                    | 设置节点图片                                                   | node（要设置的节点）、imgData（对象，图片信息，结构为：`{url, title, width, height}`，图片的宽高必须要传）                                                                                                                                                                                                |
+| SET_NODE_ICON                     | 设置节点图标                                                   | node（要设置的节点）、icons（数组，预定义的图片名称组成的数组，可用图标可在[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js)文件里的`nodeIconList`列表里获取到，图标名称为`type_name`，如`['priority_1']`） |
+| SET_NODE_HYPERLINK                | 设置节点超链接                                                  | node（要设置的节点）、link（超链接地址）、title（超链接名称，可选）                                                                                                                                                                                                                                 |
+| SET_NODE_NOTE                     | 设置节点备注                                                   | node（要设置的节点）、note（备注文字）                                                                                                                                                                                                                                                  |
+| SET_NODE_TAG                      | 设置节点标签                                                   | node（要设置的节点）、tag（字符串数组，内置颜色信息可在[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js)里获取到）                                                         |
+| INSERT_AFTER（v0.1.5+）             | 将节点移动到另一个节点的后面                                           | node（要移动的节点）、 exist（目标节点）                                                                                                                                                                                                                                                |
+| INSERT_BEFORE（v0.1.5+）            | 将节点移动到另一个节点的前面                                           | node（要移动的节点）、 exist（目标节点）                                                                                                                                                                                                                                                |
+| MOVE_NODE_TO（v0.1.5+）             | 移动一个节点作为另一个节点的子节点                                        | node（要移动的节点）、 toNode（目标节点）                                                                                                                                                                                                                                               |
+| ADD_GENERALIZATION（v0.2.0+）       | 添加节点概要                                                   | data（概要的数据，对象格式，节点的数字段都支持，默认为{text: '概要'}）                                                                                                                                                                                                                               |
+| REMOVE_GENERALIZATION（v0.2.0+）    | 删除节点概要                                                   |                                                                                                                                                                                                                                                                          |
+| SET_NODE_CUSTOM_POSITION（v0.2.0+） | 设置节点自定义位置                                                | node（要设置的节点）、 left（自定义的x坐标，默认为undefined）、 top（自定义的y坐标，默认为undefined）                                                                                                                                                                                                      |
+| RESET_LAYOUT（v0.2.0+）             | 一键整理布局                                                   |                                                                                                                                                                                                                                                                          |
+| SET_NODE_SHAPE（v0.2.4+）           | 设置节点形状                                                   | node（要设置的节点）、shape（形状，全部形状：https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/Shape.js）                                                                                                                                                                  |
+
+### setData(data)
+
+动态设置思维导图数据，纯节点数据
+
+`data`：思维导图结构数据
+
+### setFullData(*data*)
+
+> v0.2.7+
+
+动态设置思维导图数据，包括节点数据、布局、主题、视图
+
+`data`：完整数据，结构可参考[exportFullData](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exportFullData.json)
+
+### getData(withConfig)
+
+> v0.2.9+
+
+获取思维导图数据
+
+`withConfig`：`Boolean`，默认为`false`，即获取的数据只包括节点树，如果传`true`则会包含主题、布局、视图等数据
+
+### export(type, isDownload, fileName)
+
+导出
+
+`type`：要导出的类型，可选值：png、svg、json、pdf（v0.2.1+）、smm（本质也是json）
+
+`isDownload`：是否需要直接触发下载，布尔值，默认为`false`
+
+`fileName`：（v0.1.6+）导出文件的名称，默认为`思维导图`
+
+### toPos(x, y)
+
+> v0.1.5+
+
+将浏览器可视窗口的坐标转换成相对于画布的坐标

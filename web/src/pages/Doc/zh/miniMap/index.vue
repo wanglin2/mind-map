@@ -1,0 +1,70 @@
+<template>
+  <div>
+    <h1>MiniMap实例</h1>
+<blockquote>
+<p>v0.2.11+</p>
+</blockquote>
+<p>用于帮助快速开发小地图功能，小地图由两部分组成，一个是当前的画布内容，一个是视口框，当缩放、移动、元素过多时画布上可能只显示了思维导图的部分内容，可以通过视口框来查看当前视口所在位置，以及可以通过在小地图上拖动来快速定位。</p>
+<p>可通过<code>mindMap.miniMap</code>获取到该实例。</p>
+<h2>方法</h2>
+<h3>getMiniMap()</h3>
+<p>获取小地图相关数据，这个函数一般不会直接使用，函数返回的内容：</p>
+<pre class="hljs"><code>{
+      svg, <span class="hljs-comment">// Element，思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）</span>
+      svgHTML, <span class="hljs-comment">// String，svg字符串，即html字符串，可以直接渲染到你准备的小地图容器内</span>
+      <span class="hljs-attr">rect</span>: <span class="hljs-comment">// Object，思维导图图形未缩放时的位置尺寸等信息</span>
+      origWidth, <span class="hljs-comment">// Number，画布宽度</span>
+      origHeight, <span class="hljs-comment">// Number，画布高度</span>
+      scaleX, <span class="hljs-comment">// Number，思维导图图形的水平缩放值</span>
+      scaleY, <span class="hljs-comment">// Number，思维导图图形的垂直缩放值</span>
+}
+</code></pre>
+<h3>calculationMiniMap(boxWidth, boxHeight)</h3>
+<p>计算小地图的渲染数据，该函数内会调用<code>getMiniMap()</code>方法，所以一般使用该函数即可。</p>
+<p><code>boxWidth</code>：小地图容器的宽度</p>
+<p><code>boxHeight</code>：小地图容器的高度</p>
+<p>函数返回内容：</p>
+<pre class="hljs"><code>{
+      svgHTML, <span class="hljs-comment">// 小地图html</span>
+      viewBoxStyle, <span class="hljs-comment">// 视图框的位置信息</span>
+      miniMapBoxScale, <span class="hljs-comment">// 视图框的缩放值</span>
+      miniMapBoxLeft, <span class="hljs-comment">// 视图框的left值</span>
+      miniMapBoxTop, <span class="hljs-comment">// 视图框的top值</span>
+}
+</code></pre>
+<p>小地图思路：</p>
+<p>1.准备一个容器元素<code>container</code>，定位不为<code>static</code></p>
+<p>2.在<code>container</code>内创建一个小地图容器元素<code>miniMapContainer</code>，绝对定位</p>
+<p>3.在<code>container</code>内创建一个视口框元素<code>viewBoxContainer</code>，绝对定位，设置边框样式，过渡属性（可选）</p>
+<p>4.监听<code>data_change</code>和<code>view_data_change</code>事件，在该事件内调用<code>calculationMiniMap</code>方法获取计算数据，然后将<code>svgHTML</code>渲染到<code>miniMapContainer</code>元素内，并且设置它的样式：</p>
+<pre class="hljs"><code>:style=<span class="hljs-string">&quot;{
+    transform: `scale(${svgBoxScale})`,
+    left: svgBoxLeft + &#x27;px&#x27;,
+    top: svgBoxTop + &#x27;px&#x27;,
+}&quot;</span>
+</code></pre>
+<p>5.将<code>viewBoxStyle</code>对象设置为<code>viewBoxContainer</code>元素的样式</p>
+<p>到这一步，当画布上的思维导图变化了，小地图也会实时更新，并且视口框元素会实时反映视口在思维导图图形上的位置</p>
+<p>6.监听<code>container</code>元素的<code>mousedown</code>、<code>mousemove</code>、<code>mouseup</code>事件，分别调用下面即将介绍的三个方法即可实现鼠标拖动时画布上的思维导图也随之拖动的效果</p>
+<h3>onMousedown(e)</h3>
+<p>小地图鼠标按下事件执行该函数</p>
+<p><code>e</code>：事件对象</p>
+<h3>onMousemove(e, sensitivityNum = 5)</h3>
+<p>小地图鼠标移动事件执行该函数</p>
+<p><code>e</code>：事件对象</p>
+<p><code>sensitivityNum</code>：拖动灵敏度，灵敏度越大，在小地图上拖动相同距离时实际上的画布拖动距离就越大</p>
+<h3>onMouseup()</h3>
+<p>小地图鼠标松开事件执行该函数</p>
+
+  </div>
+</template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style>
+
+</style>
