@@ -72,6 +72,9 @@ class Command {
 
   //  添加回退数据
   addHistory() {
+    if (this.mindMap.opt.readonly) {
+      return
+    }
     let data = this.getCopyData()
     this.history.push(simpleDeepClone(data))
     this.activeHistoryIndex = this.history.length - 1
@@ -85,6 +88,9 @@ class Command {
 
   //  回退
   back(step = 1) {
+    if (this.mindMap.opt.readonly) {
+      return
+    }
     if (this.activeHistoryIndex - step >= 0) {
       this.activeHistoryIndex -= step
       this.mindMap.emit(
@@ -98,6 +104,9 @@ class Command {
 
   //  前进
   forward(step = 1) {
+    if (this.mindMap.opt.readonly) {
+      return
+    }
     let len = this.history.length
     if (this.activeHistoryIndex + step <= len - 1) {
       this.activeHistoryIndex += step
