@@ -83,9 +83,39 @@ mindMap.setTheme('主题名称')
 
 主题的所有配置可以参考[默认主题](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js)。`defineTheme`方法会把你传入的配置和默认配置做合并。大部分主题其实需要自定义的部分不是很多，一个典型的自定义主题配置可以参考[blueSky](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/blueSky.js)。
 
+### usePlugin(plugin)
 
+> v0.3.0+
+
+注册插件，如果需要使用非核心的一些功能，比如小地图、水印等，可以通过该方法进行注册。
+
+## 静态属性
+
+### pluginList
+
+> v0.3.0+
+
+当前注册的所有插件列表。
 
 ## 实例方法
+
+### getSvgData()
+
+> v0.3.0+
+
+获取`svg`数据，返回一个对象，详细结构如下：
+
+```js
+{
+  svg, // Element，思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）
+  svgHTML, // String，svg字符串，即html字符串，可以直接渲染到你准备的小地图容器内
+  rect: // Object，思维导图图形未缩放时的位置尺寸等信息
+  origWidth, // Number，画布宽度
+  origHeight, // Number，画布高度
+  scaleX, // Number，思维导图图形的水平缩放值
+  scaleY, // Number，思维导图图形的垂直缩放值
+}
+```
 
 ### render()
 

@@ -207,7 +207,33 @@ MindMap.defineTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>, {
 mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </code></pre>
 <p>主题的所有配置可以参考<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js">默认主题</a>。<code>defineTheme</code>方法会把你传入的配置和默认配置做合并。大部分主题其实需要自定义的部分不是很多，一个典型的自定义主题配置可以参考<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/blueSky.js">blueSky</a>。</p>
+<h3>usePlugin(plugin)</h3>
+<blockquote>
+<p>v0.3.0+</p>
+</blockquote>
+<p>注册插件，如果需要使用非核心的一些功能，比如小地图、水印等，可以通过该方法进行注册。</p>
+<h2>静态属性</h2>
+<h3>pluginList</h3>
+<blockquote>
+<p>v0.3.0+</p>
+</blockquote>
+<p>当前注册的所有插件列表。</p>
 <h2>实例方法</h2>
+<h3>getSvgData()</h3>
+<blockquote>
+<p>v0.3.0+</p>
+</blockquote>
+<p>获取<code>svg</code>数据，返回一个对象，详细结构如下：</p>
+<pre class="hljs"><code>{
+  svg, <span class="hljs-comment">// Element，思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）</span>
+  svgHTML, <span class="hljs-comment">// String，svg字符串，即html字符串，可以直接渲染到你准备的小地图容器内</span>
+  <span class="hljs-attr">rect</span>: <span class="hljs-comment">// Object，思维导图图形未缩放时的位置尺寸等信息</span>
+  origWidth, <span class="hljs-comment">// Number，画布宽度</span>
+  origHeight, <span class="hljs-comment">// Number，画布高度</span>
+  scaleX, <span class="hljs-comment">// Number，思维导图图形的水平缩放值</span>
+  scaleY, <span class="hljs-comment">// Number，思维导图图形的垂直缩放值</span>
+}
+</code></pre>
 <h3>render()</h3>
 <p>触发整体渲染，会进行节点复用，性能较<code>reRender</code>会更好一点，如果只是节点位置变化了可以调用该方法进行渲染</p>
 <h3>reRender()</h3>
