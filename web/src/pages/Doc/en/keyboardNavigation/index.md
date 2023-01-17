@@ -1,8 +1,19 @@
-# KeyboardNavigation instance
+# KeyboardNavigation plugin
 
 > v0.2.17+
 
-`KeyboardNavigation` instance is responsible for handling keyboard navigation, that is, when you press the direction key, it will automatically find the next node and activate it, can be obtained through `mindMap.keyboardNavigation`
+`KeyboardNavigation` plugin provides keyboard navigation function, that is, when you press the direction key, it will automatically find the next node and activate it.
+
+## Register
+
+```js
+import MindMap from 'simple-mind-map'
+import KeyboardNavigation from 'simple-mind-map/src/KeyboardNavigation.js'
+
+MindMap.usePlugin(KeyboardNavigation)
+```
+
+After registration and instantiation of `MindMap`, the instance can be obtained through `mindMap.keyboardNavigation`.
 
 ## Methods
 

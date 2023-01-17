@@ -12,7 +12,6 @@ import Select from './src/Select'
 import { layoutValueList } from './src/utils/constant'
 import { SVG } from '@svgdotjs/svg.js'
 import { simpleDeepClone } from './src/utils'
-import KeyboardNavigation from './src/KeyboardNavigation'
 import defaultTheme from './src/themes/default'
 
 // 默认选项配置
@@ -126,16 +125,12 @@ class MindMap {
       mindMap: this
     })
 
-    // 键盘导航类
-    this.keyboardNavigation = new KeyboardNavigation({
-      mindMap: this
-    })
-
     // 批量执行类
     this.batchExecution = new BatchExecution()
 
     // 注册插件
     MindMap.pluginList.forEach((plugin) => {
+      console.log(plugin.instanceName);
       this[plugin.instanceName] = new plugin({
         mindMap: this
       })

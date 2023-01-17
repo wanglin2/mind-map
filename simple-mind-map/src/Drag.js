@@ -260,4 +260,6 @@ class Drag extends Base {
   }
 }
 
+Drag.instanceName = 'drag'
+
 export default Drag

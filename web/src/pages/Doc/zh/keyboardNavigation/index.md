@@ -1,8 +1,19 @@
-# KeyboardNavigation实例
+# KeyboardNavigation插件
 
 > v0.2.17+
 
-`KeyboardNavigation`实例负责处理键盘导航，也就是当你按下方向键时会自动寻找下一个节点并激活，可通过`mindMap.keyboardNavigation`获取到该实例
+`KeyboardNavigation`插件提供键盘导航的功能，也就是当你按下方向键时会自动寻找下一个节点并激活
+
+## 注册
+
+```js
+import MindMap from 'simple-mind-map'
+import KeyboardNavigation from 'simple-mind-map/src/KeyboardNavigation.js'
+
+MindMap.usePlugin(KeyboardNavigation)
+```
+
+注册完且实例化`MindMap`后可通过`mindMap.keyboardNavigation`获取到该实例。
 
 ## 方法
 

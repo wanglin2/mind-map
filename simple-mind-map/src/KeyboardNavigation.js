@@ -2,7 +2,7 @@ import { isKey } from './utils/keyMap'
 import { bfsWalk } from './utils'
 
 //  键盘导航类
-export default class KeyboardNavigation {
+class KeyboardNavigation {
   //  构造函数
   constructor(opt) {
     this.opt = opt
@@ -224,3 +224,7 @@ export default class KeyboardNavigation {
     }
   }
 }
+
+KeyboardNavigation.instanceName = 'keyboardNavigation'
+
+export default KeyboardNavigation
