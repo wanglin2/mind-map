@@ -4,6 +4,8 @@
 
 `Watermark`插件负责显示水印。
 
+配置请参考`MindMap`类的[实例化选项](/mind-map/#/doc/zh/constructor)。
+
 ## 注册
 
 ```js

@@ -5,6 +5,7 @@
 <p>0.2.24+</p>
 </blockquote>
 <p><code>Watermark</code>插件负责显示水印。</p>
+<p>配置请参考<code>MindMap</code>类的<a href="/mind-map/#/doc/zh/constructor">实例化选项</a>。</p>
 <h2>注册</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
 <span class="hljs-keyword">import</span> Watermark <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/Watermark.js&#x27;</span>

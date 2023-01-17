@@ -4,6 +4,8 @@
 
 `Watermark` instance is responsible for displaying the watermark.
 
+Please refer to the [Instantiation Options](/mind-map/#/doc/zh/constructor) of the `MindMap` class for configuration.
+
 ## Register
 
 ```js

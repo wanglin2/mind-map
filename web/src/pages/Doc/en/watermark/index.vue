@@ -5,6 +5,7 @@
 <p>0.2.24+</p>
 </blockquote>
 <p><code>Watermark</code> instance is responsible for displaying the watermark.</p>
+<p>Please refer to the <a href="/mind-map/#/doc/zh/constructor">Instantiation Options</a> of the <code>MindMap</code> class for configuration.</p>
 <h2>Register</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
 <span class="hljs-keyword">import</span> Watermark <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/Watermark.js&#x27;</span>

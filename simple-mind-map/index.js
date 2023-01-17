@@ -9,7 +9,6 @@ import Command from './src/Command'
 import BatchExecution from './src/BatchExecution'
 import Export from './src/Export'
 import Select from './src/Select'
-import Drag from './src/Drag'
 import { layoutValueList } from './src/utils/constant'
 import { SVG } from '@svgdotjs/svg.js'
 import { simpleDeepClone } from './src/utils'
@@ -124,11 +123,6 @@ class MindMap {
 
     // 选择类
     this.select = new Select({
-      mindMap: this
-    })
-
-    // 拖动类
-    this.drag = new Drag({
       mindMap: this
     })
 
