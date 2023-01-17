@@ -24,6 +24,7 @@ let APIList = [
   'command',
   'select',
   'batchExecution',
+  'xmind',
   'utils'
 ]
 

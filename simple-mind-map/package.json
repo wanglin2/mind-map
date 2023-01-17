@@ -22,7 +22,7 @@
     "format": "prettier --write ."
   },
   "module": "index.js",
-  "main": "./dist/simpleMindMap.umd.min.js",
+  "__main": "./dist/simpleMindMap.umd.min.js",
   "dependencies": {
     "@svgdotjs/svg.js": "^3.0.16",
     "canvg": "^3.0.7",
