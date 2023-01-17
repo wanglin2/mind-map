@@ -293,6 +293,8 @@ mindMap.updateConfig({
 
 ### export(type, isDownload, fileName)
 
+> 需要先注册`Export`插件
+
 导出
 
 `type`：要导出的类型，可选值：png、svg、json、pdf（v0.2.1+）、smm（本质也是json）

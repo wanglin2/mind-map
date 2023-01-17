@@ -604,6 +604,9 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <p>获取思维导图数据</p>
 <p><code>withConfig</code>：<code>Boolean</code>，默认为<code>false</code>，即获取的数据只包括节点树，如果传<code>true</code>则会包含主题、布局、视图等数据</p>
 <h3>export(type, isDownload, fileName)</h3>
+<blockquote>
+<p>需要先注册<code>Export</code>插件</p>
+</blockquote>
 <p>导出</p>
 <p><code>type</code>：要导出的类型，可选值：png、svg、json、pdf（v0.2.1+）、smm（本质也是json）</p>
 <p><code>isDownload</code>：是否需要直接触发下载，布尔值，默认为<code>false</code></p>

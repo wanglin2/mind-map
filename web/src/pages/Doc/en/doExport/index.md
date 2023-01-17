@@ -1,7 +1,17 @@
-# DoExport instance
+# Export plugin
 
-The `doExport` instance is responsible for exporting and can be obtained through
-`mindMap.doExport`.
+The `Export` plugin provides the export function.
+
+## Register
+
+```js
+import MindMap from 'simple-mind-map'
+import Export from 'simple-mind-map/src/Export.js'
+
+MindMap.usePlugin(Export)
+```
+
+After registration and instantiation of `MindMap`, the instance can be obtained through `mindMap.doExport`.
 
 ## Methods
 

@@ -1,7 +1,14 @@
 <template>
   <div>
-    <h1>DoExport实例</h1>
-<p><code>doExport</code>实例负责导出，可通过<code>mindMap.doExport</code>获取到该实例</p>
+    <h1>Export 插件</h1>
+<p><code>Export</code>插件提供导出的功能。</p>
+<h2>注册</h2>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
+<span class="hljs-keyword">import</span> Export <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/Export.js&#x27;</span>
+
+MindMap.usePlugin(Export)
+</code></pre>
+<p>注册完且实例化<code>MindMap</code>后可通过<code>mindMap.doExport</code>获取到该实例。</p>
 <h2>方法</h2>
 <h3>png()</h3>
 <p>导出为<code>png</code>，异步方法，返回图片数据，<code>data:url</code>数据，可以自行下载或显示</p>

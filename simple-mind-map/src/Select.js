@@ -167,4 +167,6 @@ class Select {
   }
 }
 
+Select.instanceName = 'select'
+
 export default Select
