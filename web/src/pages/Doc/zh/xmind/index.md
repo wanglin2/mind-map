@@ -10,6 +10,14 @@
 import xmind from 'simple-mind-map/src/parse/xmind.js'
 ```
 
+如果使用的是`umd`格式的文件，那么可以通过如下方式获取：
+
+```js
+import MindMap from "simple-mind-map/dist/simpleMindMap.umd.min"
+
+MindMap.xmind
+```
+
 ## 方法
 
 ### xmind.parseXmindFile(file)

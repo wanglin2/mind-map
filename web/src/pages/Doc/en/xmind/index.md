@@ -10,6 +10,14 @@ Provides methods for importing `XMind` files.
 import xmind from 'simple-mind-map/src/parse/xmind.js'
 ```
 
+If you are using the file in the format of `umd`, you can obtain it in the following way:
+
+```js
+import MindMap from "simple-mind-map/dist/simpleMindMap.umd.min"
+
+MindMap.xmind
+```
+
 ## Methods
 
 ### xmind.parseXmindFile(file)

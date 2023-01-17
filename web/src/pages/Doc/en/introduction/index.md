@@ -4,6 +4,7 @@
 
 ## Features
 
+- [x] Plugin architecture. In addition to core functions, other functions are provided as plugins, which can be used as needed to reduce the overall volume
 - [x] Supports four types of structures: logical structure diagrams, mind maps,
       organizational structure diagrams, and directory organization diagrams
 - [x] Built-in multiple themes and allows for highly customized styles, and support register new themes
@@ -32,20 +33,18 @@ on `Vue2.x` and `ElementUI`. Features include:
 
 - [x] Toolbar, which supports inserting and deleting nodes, and editing node
       images, icons, hyperlinks, notes, tags, and summaries
-
 - [x] Sidebar, with panels for basic style settings, node style settings,
       outline, theme selection, and structure selection
-
 - [x] Import and export functionality; data is saved in the browser's local
       storage by default, but it also supports creating, opening, and editing
       local files on the computer directly
-
 - [x] Right-click menu, which supports operations such as expanding, collapsing,
       and organizing layout
-
 - [x] Bottom bar, which supports node and word count statistics, switching
       between edit and read-only modes, zooming in and out, and switching to
       full screen, support mini map
+
+Provide document page service.
 
 3.`dist`
 
@@ -64,8 +63,8 @@ Documentation, etc.
 ## Special Note
 
 This project is rough and has not been thoroughly tested, its features are not
-yet fully developed, and there are some performance issues. It is only for
-learning and reference purposes and should not be used in actual projects.
+yet fully developed, and there are some performance issues, especially when the number of nodes is large. It is only for
+learning and reference purposes and please use it carefully for actual projects.
 
 The built-in themes and icons in the project come from:
 

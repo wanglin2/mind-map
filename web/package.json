@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && node ../copy.js",
     "lint": "vue-cli-service lint",
-    "buildLibrary": "vue-cli-service build --target lib --name simpleMindMap ../simple-mind-map/index.js --dest ../simple-mind-map/dist",
+    "buildLibrary": "vue-cli-service build --target lib --name simpleMindMap ../simple-mind-map/full.js --dest ../simple-mind-map/dist",
     "format": "prettier --write src/* src/*/* src/*/*/* src/*/*/*/*",
     "buildDoc": "node ./scripts/buildDoc.js"
   },

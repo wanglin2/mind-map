@@ -29,6 +29,10 @@ fields:</p>
 <p>Environments that support the <code>module</code> field will use <code>index.js</code> as the entry
 point, otherwise the packed <code>simpleMindMap.umd.min.js</code> will be used as the entry
 point.</p>
+<h3>Compile the doc</h3>
+<pre class="hljs"><code><span class="hljs-built_in">cd</span> web 
+npm run buildDoc
+</code></pre>
 <h3>Packaging the Demo</h3>
 <pre class="hljs"><code><span class="hljs-built_in">cd</span> web
 npm run build
@@ -67,6 +71,11 @@ compile this dependency:</p>
   }
 });
 </code></pre>
+<p>The non-packaged 'ES' module is introduced by default, and only contains core functions, not unregistered plugin content, which can effectively reduce the size. However, you need to configure the <code>babel</code> compilation <code>simple mind-map</code> in your project to prevent some newer <code>js</code> syntax some browsers not supporting it.</p>
+<p>If you need a file in the format of <code>umd</code> module, such as <code>CDN</code> in the browser, you can import it in the following way:</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;simple-mind-map/dist/simpleMindMap.umd.min.js&quot;</span>;
+</code></pre>
+<p>The disadvantage of this method is that it will contain all the content, including the plugins you have not registered, so the overall volume will be relatively large.</p>
 <h2>Problems</h2>
 <h3>Error when using in Vite, indicating xml-js dependency error</h3>
 <p>Solution: use the following import method:</p>

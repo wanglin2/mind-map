@@ -26823,6 +26823,9 @@ class Command_Command {
 
   //  添加回退数据
   addHistory() {
+    if (this.mindMap.opt.readonly) {
+      return;
+    }
     let data = this.getCopyData();
     this.history.push(simpleDeepClone(data));
     this.activeHistoryIndex = this.history.length - 1;
@@ -26832,6 +26835,9 @@ class Command_Command {
 
   //  回退
   back(step = 1) {
+    if (this.mindMap.opt.readonly) {
+      return;
+    }
     if (this.activeHistoryIndex - step >= 0) {
       this.activeHistoryIndex -= step;
       this.mindMap.emit('back_forward', this.activeHistoryIndex, this.history.length);
@@ -26841,6 +26847,9 @@ class Command_Command {
 
   //  前进
   forward(step = 1) {
+    if (this.mindMap.opt.readonly) {
+      return;
+    }
     let len = this.history.length;
     if (this.activeHistoryIndex + step <= len - 1) {
       this.activeHistoryIndex += step;
@@ -26925,6 +26934,866 @@ class BatchExecution {
   }
 }
 /* harmony default export */ var src_BatchExecution = (BatchExecution);
+// CONCATENATED MODULE: ../simple-mind-map/index.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// 默认选项配置
+const defaultOpt = {
+  // 是否只读
+  readonly: false,
+  // 布局
+  layout: 'logicalStructure',
+  // 主题
+  theme: 'default',
+  // 内置主题：default（默认主题）
+  // 主题配置，会和所选择的主题进行合并
+  themeConfig: {},
+  // 放大缩小的增量比例
+  scaleRatio: 0.1,
+  // 最多显示几个标签
+  maxTag: 5,
+  // 导出图片时的内边距
+  exportPadding: 20,
+  // 展开收缩按钮尺寸
+  expandBtnSize: 20,
+  // 节点里图片和文字的间距
+  imgTextMargin: 5,
+  // 节点里各种文字信息的间距，如图标和文字的间距
+  textContentMargin: 2,
+  // 多选节点时鼠标移动到边缘时的画布移动偏移量
+  selectTranslateStep: 3,
+  // 多选节点时鼠标移动距边缘多少距离时开始偏移
+  selectTranslateLimit: 20,
+  // 自定义节点备注内容显示
+  customNoteContentShow: null,
+  /*
+        {
+            show(){},
+            hide(){}
+        }
+    */
+  // 是否开启节点自由拖拽
+  enableFreeDrag: false,
+  // 水印配置
+  watermarkConfig: {
+    text: '',
+    lineSpacing: 100,
+    textSpacing: 100,
+    angle: 30,
+    textStyle: {
+      color: '#999',
+      opacity: 0.5,
+      fontSize: 14
+    }
+  }
+};
+
+//  思维导图
+class simple_mind_map_MindMap {
+  //  构造函数
+  constructor(opt = {}) {
+    // 合并选项
+    this.opt = this.handleOpt(cjs_default()(defaultOpt, opt));
+
+    // 容器元素
+    this.el = this.opt.el;
+    this.elRect = this.el.getBoundingClientRect();
+
+    // 画布宽高
+    this.width = this.elRect.width;
+    this.height = this.elRect.height;
+
+    // 画布
+    this.svg = SVG().addTo(this.el).size(this.width, this.height);
+    this.draw = this.svg.group();
+
+    // 节点id
+    this.uid = 0;
+
+    // 初始化主题
+    this.initTheme();
+
+    // 事件类
+    this.event = new src_Event({
+      mindMap: this
+    });
+
+    // 按键类
+    this.keyCommand = new KeyCommand_KeyCommand({
+      mindMap: this
+    });
+
+    // 命令类
+    this.command = new src_Command({
+      mindMap: this
+    });
+
+    // 渲染类
+    this.renderer = new src_Render({
+      mindMap: this
+    });
+
+    // 视图操作类
+    this.view = new src_View({
+      mindMap: this,
+      draw: this.draw
+    });
+
+    // 批量执行类
+    this.batchExecution = new src_BatchExecution();
+
+    // 注册插件
+    simple_mind_map_MindMap.pluginList.forEach(plugin => {
+      console.log(plugin.instanceName);
+      this[plugin.instanceName] = new plugin({
+        mindMap: this
+      });
+    });
+
+    // 初始渲染
+    this.reRender();
+    setTimeout(() => {
+      this.command.addHistory();
+    }, 0);
+  }
+
+  //  配置参数处理
+  handleOpt(opt) {
+    // 检查布局配置
+    if (!layoutValueList.includes(opt.layout)) {
+      opt.layout = 'logicalStructure';
+    }
+    // 检查主题配置
+    opt.theme = opt.theme && themes[opt.theme] ? opt.theme : 'default';
+    return opt;
+  }
+
+  //  渲染，部分渲染
+  render() {
+    this.batchExecution.push('render', () => {
+      this.initTheme();
+      this.renderer.reRender = false;
+      this.renderer.render();
+    });
+  }
+
+  //  重新渲染
+  reRender() {
+    this.batchExecution.push('render', () => {
+      this.draw.clear();
+      this.initTheme();
+      this.renderer.reRender = true;
+      this.renderer.render();
+    });
+  }
+
+  //  容器尺寸变化，调整尺寸
+  resize() {
+    this.elRect = this.el.getBoundingClientRect();
+    this.width = this.elRect.width;
+    this.height = this.elRect.height;
+    this.svg.size(this.width, this.height);
+  }
+
+  //  监听事件
+  on(event, fn) {
+    this.event.on(event, fn);
+  }
+
+  //  触发事件
+  emit(event, ...args) {
+    this.event.emit(event, ...args);
+  }
+
+  //  解绑事件
+  off(event, fn) {
+    this.event.off(event, fn);
+  }
+
+  //  设置主题
+  initTheme() {
+    // 合并主题配置
+    this.themeConfig = cjs_default()(themes[this.opt.theme], this.opt.themeConfig);
+    // 设置背景样式
+    src_Style.setBackgroundStyle(this.el, this.themeConfig);
+  }
+
+  //  设置主题
+  setTheme(theme) {
+    this.renderer.clearAllActive();
+    this.opt.theme = theme;
+    this.reRender();
+  }
+
+  //  获取当前主题
+  getTheme() {
+    return this.opt.theme;
+  }
+
+  //  设置主题配置
+  setThemeConfig(config) {
+    this.opt.themeConfig = config;
+    this.reRender();
+  }
+
+  //  获取自定义主题配置
+  getCustomThemeConfig() {
+    return this.opt.themeConfig;
+  }
+
+  //  获取某个主题配置值
+  getThemeConfig(prop) {
+    return prop === undefined ? this.themeConfig : this.themeConfig[prop];
+  }
+
+  // 获取配置
+  getConfig(prop) {
+    return prop === undefined ? this.opt : this.opt[prop];
+  }
+
+  // 更新配置
+  updateConfig(opt = {}) {
+    this.opt = this.handleOpt(cjs_default.a.all([defaultOpt, this.opt, opt]));
+  }
+
+  //  获取当前布局结构
+  getLayout() {
+    return this.opt.layout;
+  }
+
+  //  设置布局结构
+  setLayout(layout) {
+    // 检查布局配置
+    if (!layoutValueList.includes(layout)) {
+      layout = 'logicalStructure';
+    }
+    this.opt.layout = layout;
+    this.renderer.setLayout();
+    this.render();
+  }
+
+  //  执行命令
+  execCommand(...args) {
+    this.command.exec(...args);
+  }
+
+  //  动态设置思维导图数据，纯节点数据
+  setData(data) {
+    this.execCommand('CLEAR_ACTIVE_NODE');
+    this.command.clearHistory();
+    this.renderer.renderTree = data;
+    this.reRender();
+  }
+
+  //  动态设置思维导图数据，包括节点数据、布局、主题、视图
+  setFullData(data) {
+    if (data.root) {
+      this.setData(data.root);
+    }
+    if (data.layout) {
+      this.setLayout(data.layout);
+    }
+    if (data.theme) {
+      if (data.theme.template) {
+        this.setTheme(data.theme.template);
+      }
+      if (data.theme.config) {
+        this.setThemeConfig(data.theme.config);
+      }
+    }
+    if (data.view) {
+      this.view.setTransformData(data.view);
+    }
+  }
+
+  //  获取思维导图数据，节点树、主题、布局等
+  getData(withConfig) {
+    let nodeData = this.command.getCopyData();
+    let data = {};
+    if (withConfig) {
+      data = {
+        layout: this.getLayout(),
+        root: nodeData,
+        theme: {
+          template: this.getTheme(),
+          config: this.getCustomThemeConfig()
+        },
+        view: this.view.getTransformData()
+      };
+    } else {
+      data = nodeData;
+    }
+    return simpleDeepClone(data);
+  }
+
+  //  导出
+  async export(...args) {
+    let result = await this.doExport.export(...args);
+    return result;
+  }
+
+  //  转换位置
+  toPos(x, y) {
+    return {
+      x: x - this.elRect.left,
+      y: y - this.elRect.top
+    };
+  }
+
+  //  设置只读模式、编辑模式
+  setMode(mode) {
+    if (!['readonly', 'edit'].includes(mode)) {
+      return;
+    }
+    this.opt.readonly = mode === 'readonly';
+    if (this.opt.readonly) {
+      // 取消当前激活的元素
+      this.renderer.clearAllActive();
+    }
+    this.emit('mode_change', mode);
+  }
+
+  // 获取svg数据
+  getSvgData() {
+    const svg = this.svg;
+    const draw = this.draw;
+    // 保存原始信息
+    const origWidth = svg.width();
+    const origHeight = svg.height();
+    const origTransform = draw.transform();
+    const elRect = this.el.getBoundingClientRect();
+    // 去除放大缩小的变换效果
+    draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY);
+    // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
+    const rect = draw.rbox();
+    // 将svg设置为实际内容的宽高
+    svg.size(rect.width, rect.height);
+    // 把实际内容变换
+    draw.translate(-rect.x + elRect.left, -rect.y + elRect.top);
+    // 克隆一份数据
+    const clone = svg.clone();
+    // 恢复原先的大小和变换信息
+    svg.size(origWidth, origHeight);
+    draw.transform(origTransform);
+    return {
+      svg: clone,
+      // 思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）
+      svgHTML: clone.svg(),
+      // svg字符串
+      rect: {
+        ...rect,
+        // 思维导图图形未缩放时的位置尺寸等信息
+        ratio: rect.width / rect.height // 思维导图图形的宽高比
+      },
+
+      origWidth,
+      // 画布宽度
+      origHeight,
+      // 画布高度
+      scaleX: origTransform.scaleX,
+      // 思维导图图形的水平缩放值
+      scaleY: origTransform.scaleY // 思维导图图形的垂直缩放值
+    };
+  }
+}
+
+// 插件列表
+simple_mind_map_MindMap.pluginList = [];
+simple_mind_map_MindMap.usePlugin = plugin => {
+  simple_mind_map_MindMap.pluginList.push(plugin);
+  return simple_mind_map_MindMap;
+};
+
+// 定义新主题
+simple_mind_map_MindMap.defineTheme = (name, config = {}) => {
+  if (themes[name]) {
+    return new Error('该主题名称已存在');
+  }
+  themes[name] = cjs_default()(themes_default, config);
+};
+/* harmony default export */ var simple_mind_map = (simple_mind_map_MindMap);
+// CONCATENATED MODULE: ../simple-mind-map/src/MiniMap.js
+// 小地图类
+class MiniMap {
+  //  构造函数
+  constructor(opt) {
+    this.mindMap = opt.mindMap;
+    this.isMousedown = false;
+    this.mousedownPos = {
+      x: 0,
+      y: 0
+    };
+    this.startViewPos = {
+      x: 0,
+      y: 0
+    };
+  }
+
+  //  计算小地图的渲染数据
+  /**
+   * boxWidth：小地图容器的宽度
+   * boxHeight：小地图容器的高度
+   */
+  calculationMiniMap(boxWidth, boxHeight) {
+    let {
+      svgHTML,
+      rect,
+      origWidth,
+      origHeight,
+      scaleX,
+      scaleY
+    } = this.mindMap.getSvgData();
+    // 计算数据
+    let boxRatio = boxWidth / boxHeight;
+    let actWidth = 0;
+    let actHeight = 0;
+    if (boxRatio > rect.ratio) {
+      // 高度以box为准，缩放宽度
+      actHeight = boxHeight;
+      actWidth = rect.ratio * actHeight;
+    } else {
+      // 宽度以box为准，缩放高度
+      actWidth = boxWidth;
+      actHeight = actWidth / rect.ratio;
+    }
+    // svg图形的缩放及位置
+    let miniMapBoxScale = actWidth / rect.width;
+    let miniMapBoxLeft = (boxWidth - actWidth) / 2;
+    let miniMapBoxTop = (boxHeight - actHeight) / 2;
+    // 视口框大小及位置
+    let _rectX = rect.x - (rect.width * scaleX - rect.width) / 2;
+    let _rectX2 = rect.x2 + (rect.width * scaleX - rect.width) / 2;
+    let _rectY = rect.y - (rect.height * scaleY - rect.height) / 2;
+    let _rectY2 = rect.y2 + (rect.height * scaleY - rect.height) / 2;
+    let _rectWidth = rect.width * scaleX;
+    let _rectHeight = rect.height * scaleY;
+    let viewBoxStyle = {
+      left: 0,
+      top: 0,
+      right: 0,
+      bottom: 0
+    };
+    viewBoxStyle.left = Math.max(0, -_rectX / _rectWidth * actWidth) + miniMapBoxLeft + 'px';
+    viewBoxStyle.right = Math.max(0, (_rectX2 - origWidth) / _rectWidth * actWidth) + miniMapBoxLeft + 'px';
+    viewBoxStyle.top = Math.max(0, -_rectY / _rectHeight * actHeight) + miniMapBoxTop + 'px';
+    viewBoxStyle.bottom = Math.max(0, (_rectY2 - origHeight) / _rectHeight * actHeight) + miniMapBoxTop + 'px';
+    return {
+      svgHTML,
+      // 小地图html
+      viewBoxStyle,
+      // 视图框的位置信息
+      miniMapBoxScale,
+      // 视图框的缩放值
+      miniMapBoxLeft,
+      // 视图框的left值
+      miniMapBoxTop // 视图框的top值
+    };
+  }
+
+  //  小地图鼠标按下事件
+  onMousedown(e) {
+    this.isMousedown = true;
+    this.mousedownPos = {
+      x: e.clientX,
+      y: e.clientY
+    };
+    // 保存视图当前的偏移量
+    let transformData = this.mindMap.view.getTransformData();
+    this.startViewPos = {
+      x: transformData.state.x,
+      y: transformData.state.y
+    };
+  }
+
+  //  小地图鼠标移动事件
+  onMousemove(e, sensitivityNum = 5) {
+    if (!this.isMousedown) {
+      return;
+    }
+    let ox = e.clientX - this.mousedownPos.x;
+    let oy = e.clientY - this.mousedownPos.y;
+    // 在视图最初偏移量上累加更新量
+    this.mindMap.view.translateXTo(ox * sensitivityNum + this.startViewPos.x);
+    this.mindMap.view.translateYTo(oy * sensitivityNum + this.startViewPos.y);
+  }
+
+  //  小地图鼠标松开事件
+  onMouseup() {
+    this.isMousedown = false;
+  }
+}
+MiniMap.instanceName = 'miniMap';
+/* harmony default export */ var src_MiniMap = (MiniMap);
+// CONCATENATED MODULE: ../simple-mind-map/src/Watermark.js
+
+
+
+
+// 水印类
+class Watermark_Watermark {
+  constructor(opt = {}) {
+    this.mindMap = opt.mindMap;
+    this.lineSpacing = 0; // 水印行间距
+    this.textSpacing = 0; // 行内水印间距
+    this.angle = 0; // 旋转角度
+    this.text = ''; // 水印文字
+    this.textStyle = {}; // 水印文字样式
+    this.watermarkDraw = this.mindMap.svg.group().css({
+      'pointer-events': 'none',
+      'user-select': 'none'
+    });
+    this.maxLong = Math.sqrt(Math.pow(this.mindMap.width, 2) + Math.pow(this.mindMap.height, 2));
+    this.updateWatermark(this.mindMap.opt.watermarkConfig || {});
+  }
+
+  // 处理水印配置
+  handleConfig({
+    text,
+    lineSpacing,
+    textSpacing,
+    angle,
+    textStyle
+  }) {
+    this.text = text === undefined ? '' : String(text).trim();
+    this.lineSpacing = typeof lineSpacing === 'number' && lineSpacing > 0 ? lineSpacing : 100;
+    this.textSpacing = typeof textSpacing === 'number' && textSpacing > 0 ? textSpacing : 100;
+    this.angle = typeof angle === 'number' && angle >= 0 && angle <= 90 ? angle : 30;
+    this.textStyle = Object.assign(this.textStyle, textStyle || {});
+  }
+
+  // 绘制水印
+  // 非精确绘制，会绘制一些超出可视区域的水印
+  draw() {
+    this.watermarkDraw.clear();
+    if (!this.text.trim()) {
+      return;
+    }
+    let x = 0;
+    while (x < this.mindMap.width) {
+      this.drawText(x);
+      x += this.lineSpacing / Math.sin(degToRad(this.angle));
+    }
+    let yOffset = this.lineSpacing / Math.cos(degToRad(this.angle)) || this.lineSpacing;
+    let y = yOffset;
+    while (y < this.mindMap.height) {
+      this.drawText(0, y);
+      y += yOffset;
+    }
+  }
+
+  // 绘制文字
+  drawText(x, y) {
+    let long = Math.min(this.maxLong, (this.mindMap.width - x) / Math.cos(degToRad(this.angle)));
+    let g = new G();
+    let bbox = null;
+    let bboxWidth = 0;
+    let textHeight = -1;
+    while (bboxWidth < long) {
+      let text = new Text().text(this.text);
+      g.add(text);
+      text.transform({
+        translateX: bboxWidth
+      });
+      this.setTextStyle(text);
+      bbox = g.bbox();
+      if (textHeight === -1) {
+        textHeight = bbox.height;
+      }
+      bboxWidth = bbox.width + this.textSpacing;
+    }
+    let params = {
+      rotate: this.angle,
+      origin: 'top left',
+      translateX: x,
+      translateY: textHeight
+    };
+    if (y !== undefined) {
+      params.translateY = y + textHeight;
+    }
+    g.transform(params);
+    this.watermarkDraw.add(g);
+  }
+
+  // 给文字设置样式
+  setTextStyle(text) {
+    Object.keys(this.textStyle).forEach(item => {
+      let value = this.textStyle[item];
+      if (item === 'color') {
+        text.fill(value);
+      } else {
+        text.css(camelCaseToHyphen(item), value);
+      }
+    });
+  }
+
+  // 更新水印
+  updateWatermark(config) {
+    this.mindMap.opt.watermarkConfig = cjs_default()(this.mindMap.opt.watermarkConfig, config);
+    this.handleConfig(config);
+    this.draw();
+  }
+}
+Watermark_Watermark.instanceName = 'watermark';
+/* harmony default export */ var src_Watermark = (Watermark_Watermark);
+// CONCATENATED MODULE: ../simple-mind-map/src/KeyboardNavigation.js
+
+
+
+//  键盘导航类
+class KeyboardNavigation_KeyboardNavigation {
+  //  构造函数
+  constructor(opt) {
+    this.opt = opt;
+    this.mindMap = opt.mindMap;
+    this.onKeyup = this.onKeyup.bind(this);
+    this.mindMap.on('keyup', this.onKeyup);
+  }
+
+  //  处理按键事件
+  onKeyup(e) {
+    ;
+    ['Left', 'Up', 'Right', 'Down'].forEach(dir => {
+      if (isKey(e, dir)) {
+        if (this.mindMap.renderer.activeNodeList.length > 0) {
+          this.focus(dir);
+        } else {
+          let root = this.mindMap.renderer.root;
+          this.mindMap.renderer.moveNodeToCenter(root);
+          root.active();
+        }
+      }
+    });
+  }
+
+  //  聚焦到下一个节点
+  focus(dir) {
+    // 当前聚焦的节点
+    let currentActiveNode = this.mindMap.renderer.activeNodeList[0];
+    // 当前聚焦节点的位置信息
+    let currentActiveNodeRect = this.getNodeRect(currentActiveNode);
+    // 寻找的下一个聚焦节点
+    let targetNode = null;
+    let targetDis = Infinity;
+    // 保存并维护距离最近的节点
+    let checkNodeDis = (rect, node) => {
+      let dis = this.getDistance(currentActiveNodeRect, rect);
+      if (dis < targetDis) {
+        targetNode = node;
+        targetDis = dis;
+      }
+    };
+
+    // 第一优先级：阴影算法
+    this.getFocusNodeByShadowAlgorithm({
+      currentActiveNode,
+      currentActiveNodeRect,
+      dir,
+      checkNodeDis
+    });
+
+    // 第二优先级：区域算法
+    if (!targetNode) {
+      this.getFocusNodeByAreaAlgorithm({
+        currentActiveNode,
+        currentActiveNodeRect,
+        dir,
+        checkNodeDis
+      });
+    }
+
+    // 第三优先级：简单算法
+    if (!targetNode) {
+      this.getFocusNodeBySimpleAlgorithm({
+        currentActiveNode,
+        currentActiveNodeRect,
+        dir,
+        checkNodeDis
+      });
+    }
+
+    // 找到了则让目标节点聚焦
+    if (targetNode) {
+      this.mindMap.renderer.moveNodeToCenter(targetNode);
+      targetNode.active();
+    }
+  }
+
+  //  1.简单算法
+  getFocusNodeBySimpleAlgorithm({
+    currentActiveNode,
+    currentActiveNodeRect,
+    dir,
+    checkNodeDis
+  }) {
+    // 遍历节点树
+    bfsWalk(this.mindMap.renderer.root, node => {
+      // 跳过当前聚焦的节点
+      if (node === currentActiveNode) return;
+      // 当前遍历到的节点的位置信息
+      let rect = this.getNodeRect(node);
+      let {
+        left,
+        top,
+        right,
+        bottom
+      } = rect;
+      let match = false;
+      // 按下了左方向键
+      if (dir === 'Left') {
+        // 判断节点是否在当前节点的左侧
+        match = right <= currentActiveNodeRect.left;
+        // 按下了右方向键
+      } else if (dir === 'Right') {
+        // 判断节点是否在当前节点的右侧
+        match = left >= currentActiveNodeRect.right;
+        // 按下了上方向键
+      } else if (dir === 'Up') {
+        // 判断节点是否在当前节点的上面
+        match = bottom <= currentActiveNodeRect.top;
+        // 按下了下方向键
+      } else if (dir === 'Down') {
+        // 判断节点是否在当前节点的下面
+        match = top >= currentActiveNodeRect.bottom;
+      }
+      // 符合要求，判断是否是最近的节点
+      if (match) {
+        checkNodeDis(rect, node);
+      }
+    });
+  }
+
+  //  2.阴影算法
+  getFocusNodeByShadowAlgorithm({
+    currentActiveNode,
+    currentActiveNodeRect,
+    dir,
+    checkNodeDis
+  }) {
+    bfsWalk(this.mindMap.renderer.root, node => {
+      if (node === currentActiveNode) return;
+      let rect = this.getNodeRect(node);
+      let {
+        left,
+        top,
+        right,
+        bottom
+      } = rect;
+      let match = false;
+      if (dir === 'Left') {
+        match = left < currentActiveNodeRect.left && top < currentActiveNodeRect.bottom && bottom > currentActiveNodeRect.top;
+      } else if (dir === 'Right') {
+        match = right > currentActiveNodeRect.right && top < currentActiveNodeRect.bottom && bottom > currentActiveNodeRect.top;
+      } else if (dir === 'Up') {
+        match = top < currentActiveNodeRect.top && left < currentActiveNodeRect.right && right > currentActiveNodeRect.left;
+      } else if (dir === 'Down') {
+        match = bottom > currentActiveNodeRect.bottom && left < currentActiveNodeRect.right && right > currentActiveNodeRect.left;
+      }
+      if (match) {
+        checkNodeDis(rect, node);
+      }
+    });
+  }
+
+  //  3.区域算法
+  getFocusNodeByAreaAlgorithm({
+    currentActiveNode,
+    currentActiveNodeRect,
+    dir,
+    checkNodeDis
+  }) {
+    // 当前聚焦节点的中心点
+    let cX = (currentActiveNodeRect.right + currentActiveNodeRect.left) / 2;
+    let cY = (currentActiveNodeRect.bottom + currentActiveNodeRect.top) / 2;
+    bfsWalk(this.mindMap.renderer.root, node => {
+      if (node === currentActiveNode) return;
+      let rect = this.getNodeRect(node);
+      let {
+        left,
+        top,
+        right,
+        bottom
+      } = rect;
+      // 遍历到的节点的中心点
+      let ccX = (right + left) / 2;
+      let ccY = (bottom + top) / 2;
+      // 节点的中心点坐标和当前聚焦节点的中心点坐标的差值
+      let offsetX = ccX - cX;
+      let offsetY = ccY - cY;
+      if (offsetX === 0 && offsetY === 0) return;
+      let match = false;
+      if (dir === 'Left') {
+        match = offsetX <= 0 && offsetX <= offsetY && offsetX <= -offsetY;
+      } else if (dir === 'Right') {
+        match = offsetX > 0 && offsetX >= -offsetY && offsetX >= offsetY;
+      } else if (dir === 'Up') {
+        match = offsetY <= 0 && offsetY < offsetX && offsetY < -offsetX;
+      } else if (dir === 'Down') {
+        match = offsetY > 0 && -offsetY < offsetX && offsetY > offsetX;
+      }
+      if (match) {
+        checkNodeDis(rect, node);
+      }
+    });
+  }
+
+  //  获取节点的位置信息
+  getNodeRect(node) {
+    let {
+      scaleX,
+      scaleY,
+      translateX,
+      translateY
+    } = this.mindMap.draw.transform();
+    let {
+      left,
+      top,
+      width,
+      height
+    } = node;
+    return {
+      right: (left + width) * scaleX + translateX,
+      bottom: (top + height) * scaleY + translateY,
+      left: left * scaleX + translateX,
+      top: top * scaleY + translateY
+    };
+  }
+
+  //  获取两个节点的距离
+  getDistance(node1Rect, node2Rect) {
+    let center1 = this.getCenter(node1Rect);
+    let center2 = this.getCenter(node2Rect);
+    return Math.sqrt(Math.pow(center1.x - center2.x, 2) + Math.pow(center1.y - center2.y, 2));
+  }
+
+  //  获取节点的中心点
+  getCenter({
+    left,
+    right,
+    top,
+    bottom
+  }) {
+    return {
+      x: (left + right) / 2,
+      y: (top + bottom) / 2
+    };
+  }
+}
+KeyboardNavigation_KeyboardNavigation.instanceName = 'keyboardNavigation';
+/* harmony default export */ var src_KeyboardNavigation = (KeyboardNavigation_KeyboardNavigation);
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/jspdf/dist/jspdf.es.min.js
 var jspdf_es_min = __webpack_require__("77ee");
 
@@ -26960,7 +27829,7 @@ class Export_Export {
     let {
       svg,
       svgHTML
-    } = this.mindMap.miniMap.getMiniMap();
+    } = this.mindMap.getSvgData();
     // 把图片的url转换成data:url类型，否则导出会丢失图片
     let imageList = svg.find('image');
     let task = imageList.map(async item => {
@@ -27142,179 +28011,8 @@ class Export_Export {
     return this.json(name, withConfig);
   }
 }
+Export_Export.instanceName = 'doExport';
 /* harmony default export */ var src_Export = (Export_Export);
-// CONCATENATED MODULE: ../simple-mind-map/src/Select.js
-
-
-
-//  选择节点类
-
-class Select_Select {
-  //  构造函数
-  constructor({
-    mindMap
-  }) {
-    this.mindMap = mindMap;
-    this.rect = null;
-    this.isMousedown = false;
-    this.mouseDownX = 0;
-    this.mouseDownY = 0;
-    this.mouseMoveX = 0;
-    this.mouseMoveY = 0;
-    this.bindEvent();
-  }
-
-  //  绑定事件
-  bindEvent() {
-    this.checkInNodes = throttle(this.checkInNodes, 500, this);
-    this.mindMap.on('mousedown', e => {
-      if (this.mindMap.opt.readonly) {
-        return;
-      }
-      if (!e.ctrlKey && e.which !== 3) {
-        return;
-      }
-      this.isMousedown = true;
-      let {
-        x,
-        y
-      } = this.mindMap.toPos(e.clientX, e.clientY);
-      this.mouseDownX = x;
-      this.mouseDownY = y;
-      this.createRect(x, y);
-    });
-    this.mindMap.on('mousemove', e => {
-      if (this.mindMap.opt.readonly) {
-        return;
-      }
-      if (!this.isMousedown) {
-        return;
-      }
-      let {
-        x,
-        y
-      } = this.mindMap.toPos(e.clientX, e.clientY);
-      this.mouseMoveX = x;
-      this.mouseMoveY = y;
-      if (Math.abs(x - this.mouseDownX) <= 10 && Math.abs(y - this.mouseDownY) <= 10) {
-        return;
-      }
-      clearTimeout(this.autoMoveTimer);
-      this.onMove(x, y);
-    });
-    this.mindMap.on('mouseup', () => {
-      if (this.mindMap.opt.readonly) {
-        return;
-      }
-      if (!this.isMousedown) {
-        return;
-      }
-      this.mindMap.emit('node_active', null, this.mindMap.renderer.activeNodeList);
-      clearTimeout(this.autoMoveTimer);
-      this.isMousedown = false;
-      if (this.rect) this.rect.remove();
-      this.rect = null;
-    });
-  }
-
-  //  鼠标移动事件
-  onMove(x, y) {
-    // 绘制矩形
-    this.rect.plot([[this.mouseDownX, this.mouseDownY], [this.mouseMoveX, this.mouseDownY], [this.mouseMoveX, this.mouseMoveY], [this.mouseDownX, this.mouseMoveY]]);
-    this.checkInNodes();
-    // 检测边缘移动
-    let step = this.mindMap.opt.selectTranslateStep;
-    let limit = this.mindMap.opt.selectTranslateLimit;
-    let count = 0;
-    // 左边缘
-    if (x <= this.mindMap.elRect.left + limit) {
-      this.mouseDownX += step;
-      this.mindMap.view.translateX(step);
-      count++;
-    }
-    // 右边缘
-    if (x >= this.mindMap.elRect.right - limit) {
-      this.mouseDownX -= step;
-      this.mindMap.view.translateX(-step);
-      count++;
-    }
-    // 上边缘
-    if (y <= this.mindMap.elRect.top + limit) {
-      this.mouseDownY += step;
-      this.mindMap.view.translateY(step);
-      count++;
-    }
-    // 下边缘
-    if (y >= this.mindMap.elRect.bottom - limit) {
-      this.mouseDownY -= step;
-      this.mindMap.view.translateY(-step);
-      count++;
-    }
-    if (count > 0) {
-      this.startAutoMove(x, y);
-    }
-  }
-
-  //  开启自动移动
-  startAutoMove(x, y) {
-    this.autoMoveTimer = setTimeout(() => {
-      this.onMove(x, y);
-    }, 20);
-  }
-
-  //  创建矩形
-  createRect(x, y) {
-    this.rect = this.mindMap.svg.polygon().stroke({
-      color: '#0984e3'
-    }).fill({
-      color: 'rgba(9,132,227,0.3)'
-    }).plot([[x, y]]);
-  }
-
-  //  检测在选区里的节点
-  checkInNodes() {
-    let {
-      scaleX,
-      scaleY,
-      translateX,
-      translateY
-    } = this.mindMap.draw.transform();
-    let minx = Math.min(this.mouseDownX, this.mouseMoveX);
-    let miny = Math.min(this.mouseDownY, this.mouseMoveY);
-    let maxx = Math.max(this.mouseDownX, this.mouseMoveX);
-    let maxy = Math.max(this.mouseDownY, this.mouseMoveY);
-    bfsWalk(this.mindMap.renderer.root, node => {
-      let {
-        left,
-        top,
-        width,
-        height
-      } = node;
-      let right = (left + width) * scaleX + translateX;
-      let bottom = (top + height) * scaleY + translateY;
-      left = left * scaleX + translateX;
-      top = top * scaleY + translateY;
-      if (left >= minx && right <= maxx && top >= miny && bottom <= maxy) {
-        this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
-          if (node.nodeData.data.isActive) {
-            return;
-          }
-          this.mindMap.renderer.setNodeActive(node, true);
-          this.mindMap.renderer.addActiveNode(node);
-        });
-      } else if (node.nodeData.data.isActive) {
-        this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
-          if (!node.nodeData.data.isActive) {
-            return;
-          }
-          this.mindMap.renderer.setNodeActive(node, false);
-          this.mindMap.renderer.removeActiveNode(node);
-        });
-      }
-    });
-  }
-}
-/* harmony default export */ var src_Select = (Select_Select);
 // CONCATENATED MODULE: ../simple-mind-map/src/Drag.js
 
 
@@ -27594,270 +28292,181 @@ class Drag_Drag extends layouts_Base {
     }
   }
 }
+Drag_Drag.instanceName = 'drag';
 /* harmony default export */ var src_Drag = (Drag_Drag);
-// CONCATENATED MODULE: ../simple-mind-map/src/MiniMap.js
-// 小地图类
-class MiniMap {
+// CONCATENATED MODULE: ../simple-mind-map/src/Select.js
+
+
+
+//  选择节点类
+
+class Select_Select {
   //  构造函数
-  constructor(opt) {
-    this.mindMap = opt.mindMap;
-    this.isMousedown = false;
-    this.mousedownPos = {
-      x: 0,
-      y: 0
-    };
-    this.startViewPos = {
-      x: 0,
-      y: 0
-    };
-  }
-
-  //   获取小地图相关数据
-  getMiniMap() {
-    const svg = this.mindMap.svg;
-    const draw = this.mindMap.draw;
-    // 保存原始信息
-    const origWidth = svg.width();
-    const origHeight = svg.height();
-    const origTransform = draw.transform();
-    const elRect = this.mindMap.el.getBoundingClientRect();
-    // 去除放大缩小的变换效果
-    draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY);
-    // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
-    const rect = draw.rbox();
-    // 将svg设置为实际内容的宽高
-    svg.size(rect.width, rect.height);
-    // 把实际内容变换
-    draw.translate(-rect.x + elRect.left, -rect.y + elRect.top);
-    // 克隆一份数据
-    const clone = svg.clone();
-    // 恢复原先的大小和变换信息
-    svg.size(origWidth, origHeight);
-    draw.transform(origTransform);
-    return {
-      svg: clone,
-      // 思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）
-      svgHTML: clone.svg(),
-      // svg字符串
-      rect: {
-        ...rect,
-        // 思维导图图形未缩放时的位置尺寸等信息
-        ratio: rect.width / rect.height // 思维导图图形的宽高比
-      },
-
-      origWidth,
-      // 画布宽度
-      origHeight,
-      // 画布高度
-      scaleX: origTransform.scaleX,
-      // 思维导图图形的水平缩放值
-      scaleY: origTransform.scaleY // 思维导图图形的垂直缩放值
-    };
-  }
-
-  //  计算小地图的渲染数据
-  /**
-   * boxWidth：小地图容器的宽度
-   * boxHeight：小地图容器的高度
-   */
-  calculationMiniMap(boxWidth, boxHeight) {
-    let {
-      svgHTML,
-      rect,
-      origWidth,
-      origHeight,
-      scaleX,
-      scaleY
-    } = this.getMiniMap();
-    // 计算数据
-    let boxRatio = boxWidth / boxHeight;
-    let actWidth = 0;
-    let actHeight = 0;
-    if (boxRatio > rect.ratio) {
-      // 高度以box为准，缩放宽度
-      actHeight = boxHeight;
-      actWidth = rect.ratio * actHeight;
-    } else {
-      // 宽度以box为准，缩放高度
-      actWidth = boxWidth;
-      actHeight = actWidth / rect.ratio;
-    }
-    // svg图形的缩放及位置
-    let miniMapBoxScale = actWidth / rect.width;
-    let miniMapBoxLeft = (boxWidth - actWidth) / 2;
-    let miniMapBoxTop = (boxHeight - actHeight) / 2;
-    // 视口框大小及位置
-    let _rectX = rect.x - (rect.width * scaleX - rect.width) / 2;
-    let _rectX2 = rect.x2 + (rect.width * scaleX - rect.width) / 2;
-    let _rectY = rect.y - (rect.height * scaleY - rect.height) / 2;
-    let _rectY2 = rect.y2 + (rect.height * scaleY - rect.height) / 2;
-    let _rectWidth = rect.width * scaleX;
-    let _rectHeight = rect.height * scaleY;
-    let viewBoxStyle = {
-      left: 0,
-      top: 0,
-      right: 0,
-      bottom: 0
-    };
-    viewBoxStyle.left = Math.max(0, -_rectX / _rectWidth * actWidth) + miniMapBoxLeft + 'px';
-    viewBoxStyle.right = Math.max(0, (_rectX2 - origWidth) / _rectWidth * actWidth) + miniMapBoxLeft + 'px';
-    viewBoxStyle.top = Math.max(0, -_rectY / _rectHeight * actHeight) + miniMapBoxTop + 'px';
-    viewBoxStyle.bottom = Math.max(0, (_rectY2 - origHeight) / _rectHeight * actHeight) + miniMapBoxTop + 'px';
-    return {
-      svgHTML,
-      // 小地图html
-      viewBoxStyle,
-      // 视图框的位置信息
-      miniMapBoxScale,
-      // 视图框的缩放值
-      miniMapBoxLeft,
-      // 视图框的left值
-      miniMapBoxTop // 视图框的top值
-    };
-  }
-
-  //  小地图鼠标按下事件
-  onMousedown(e) {
-    this.isMousedown = true;
-    this.mousedownPos = {
-      x: e.clientX,
-      y: e.clientY
-    };
-    // 保存视图当前的偏移量
-    let transformData = this.mindMap.view.getTransformData();
-    this.startViewPos = {
-      x: transformData.state.x,
-      y: transformData.state.y
-    };
-  }
-
-  //  小地图鼠标移动事件
-  onMousemove(e, sensitivityNum = 5) {
-    if (!this.isMousedown) {
-      return;
-    }
-    let ox = e.clientX - this.mousedownPos.x;
-    let oy = e.clientY - this.mousedownPos.y;
-    // 在视图最初偏移量上累加更新量
-    this.mindMap.view.translateXTo(ox * sensitivityNum + this.startViewPos.x);
-    this.mindMap.view.translateYTo(oy * sensitivityNum + this.startViewPos.y);
-  }
-
-  //  小地图鼠标松开事件
-  onMouseup() {
-    this.isMousedown = false;
-  }
-}
-/* harmony default export */ var src_MiniMap = (MiniMap);
-// CONCATENATED MODULE: ../simple-mind-map/src/Watermark.js
-
-
-
-
-// 水印类
-class Watermark_Watermark {
-  constructor(opt = {}) {
-    this.mindMap = opt.mindMap;
-    this.lineSpacing = 0; // 水印行间距
-    this.textSpacing = 0; // 行内水印间距
-    this.angle = 0; // 旋转角度
-    this.text = ''; // 水印文字
-    this.textStyle = {}; // 水印文字样式
-    this.watermarkDraw = this.mindMap.svg.group().css({
-      'pointer-events': 'none',
-      'user-select': 'none'
-    });
-    this.maxLong = Math.sqrt(Math.pow(this.mindMap.width, 2) + Math.pow(this.mindMap.height, 2));
-    this.updateWatermark(this.mindMap.opt.watermarkConfig || {});
-  }
-
-  // 处理水印配置
-  handleConfig({
-    text,
-    lineSpacing,
-    textSpacing,
-    angle,
-    textStyle
+  constructor({
+    mindMap
   }) {
-    this.text = text === undefined ? '' : String(text).trim();
-    this.lineSpacing = typeof lineSpacing === 'number' && lineSpacing > 0 ? lineSpacing : 100;
-    this.textSpacing = typeof textSpacing === 'number' && textSpacing > 0 ? textSpacing : 100;
-    this.angle = typeof angle === 'number' && angle >= 0 && angle <= 90 ? angle : 30;
-    this.textStyle = Object.assign(this.textStyle, textStyle || {});
+    this.mindMap = mindMap;
+    this.rect = null;
+    this.isMousedown = false;
+    this.mouseDownX = 0;
+    this.mouseDownY = 0;
+    this.mouseMoveX = 0;
+    this.mouseMoveY = 0;
+    this.bindEvent();
   }
 
-  // 绘制水印
-  // 非精确绘制，会绘制一些超出可视区域的水印
-  draw() {
-    this.watermarkDraw.clear();
-    if (!this.text.trim()) {
-      return;
-    }
-    let x = 0;
-    while (x < this.mindMap.width) {
-      this.drawText(x);
-      x += this.lineSpacing / Math.sin(degToRad(this.angle));
-    }
-    let yOffset = this.lineSpacing / Math.cos(degToRad(this.angle)) || this.lineSpacing;
-    let y = yOffset;
-    while (y < this.mindMap.height) {
-      this.drawText(0, y);
-      y += yOffset;
-    }
-  }
-
-  // 绘制文字
-  drawText(x, y) {
-    let long = Math.min(this.maxLong, (this.mindMap.width - x) / Math.cos(degToRad(this.angle)));
-    let g = new G();
-    let bbox = null;
-    let bboxWidth = 0;
-    let textHeight = -1;
-    while (bboxWidth < long) {
-      let text = new Text().text(this.text);
-      g.add(text);
-      text.transform({
-        translateX: bboxWidth
-      });
-      this.setTextStyle(text);
-      bbox = g.bbox();
-      if (textHeight === -1) {
-        textHeight = bbox.height;
+  //  绑定事件
+  bindEvent() {
+    this.checkInNodes = throttle(this.checkInNodes, 500, this);
+    this.mindMap.on('mousedown', e => {
+      if (this.mindMap.opt.readonly) {
+        return;
       }
-      bboxWidth = bbox.width + this.textSpacing;
-    }
-    let params = {
-      rotate: this.angle,
-      origin: 'top left',
-      translateX: x,
-      translateY: textHeight
-    };
-    if (y !== undefined) {
-      params.translateY = y + textHeight;
-    }
-    g.transform(params);
-    this.watermarkDraw.add(g);
-  }
-
-  // 给文字设置样式
-  setTextStyle(text) {
-    Object.keys(this.textStyle).forEach(item => {
-      let value = this.textStyle[item];
-      if (item === 'color') {
-        text.fill(value);
-      } else {
-        text.css(camelCaseToHyphen(item), value);
+      if (!e.ctrlKey && e.which !== 3) {
+        return;
       }
+      this.isMousedown = true;
+      let {
+        x,
+        y
+      } = this.mindMap.toPos(e.clientX, e.clientY);
+      this.mouseDownX = x;
+      this.mouseDownY = y;
+      this.createRect(x, y);
+    });
+    this.mindMap.on('mousemove', e => {
+      if (this.mindMap.opt.readonly) {
+        return;
+      }
+      if (!this.isMousedown) {
+        return;
+      }
+      let {
+        x,
+        y
+      } = this.mindMap.toPos(e.clientX, e.clientY);
+      this.mouseMoveX = x;
+      this.mouseMoveY = y;
+      if (Math.abs(x - this.mouseDownX) <= 10 && Math.abs(y - this.mouseDownY) <= 10) {
+        return;
+      }
+      clearTimeout(this.autoMoveTimer);
+      this.onMove(x, y);
+    });
+    this.mindMap.on('mouseup', () => {
+      if (this.mindMap.opt.readonly) {
+        return;
+      }
+      if (!this.isMousedown) {
+        return;
+      }
+      this.mindMap.emit('node_active', null, this.mindMap.renderer.activeNodeList);
+      clearTimeout(this.autoMoveTimer);
+      this.isMousedown = false;
+      if (this.rect) this.rect.remove();
+      this.rect = null;
     });
   }
 
-  // 更新水印
-  updateWatermark(config) {
-    this.mindMap.opt.watermarkConfig = cjs_default()(this.mindMap.opt.watermarkConfig, config);
-    this.handleConfig(config);
-    this.draw();
+  //  鼠标移动事件
+  onMove(x, y) {
+    // 绘制矩形
+    this.rect.plot([[this.mouseDownX, this.mouseDownY], [this.mouseMoveX, this.mouseDownY], [this.mouseMoveX, this.mouseMoveY], [this.mouseDownX, this.mouseMoveY]]);
+    this.checkInNodes();
+    // 检测边缘移动
+    let step = this.mindMap.opt.selectTranslateStep;
+    let limit = this.mindMap.opt.selectTranslateLimit;
+    let count = 0;
+    // 左边缘
+    if (x <= this.mindMap.elRect.left + limit) {
+      this.mouseDownX += step;
+      this.mindMap.view.translateX(step);
+      count++;
+    }
+    // 右边缘
+    if (x >= this.mindMap.elRect.right - limit) {
+      this.mouseDownX -= step;
+      this.mindMap.view.translateX(-step);
+      count++;
+    }
+    // 上边缘
+    if (y <= this.mindMap.elRect.top + limit) {
+      this.mouseDownY += step;
+      this.mindMap.view.translateY(step);
+      count++;
+    }
+    // 下边缘
+    if (y >= this.mindMap.elRect.bottom - limit) {
+      this.mouseDownY -= step;
+      this.mindMap.view.translateY(-step);
+      count++;
+    }
+    if (count > 0) {
+      this.startAutoMove(x, y);
+    }
+  }
+
+  //  开启自动移动
+  startAutoMove(x, y) {
+    this.autoMoveTimer = setTimeout(() => {
+      this.onMove(x, y);
+    }, 20);
+  }
+
+  //  创建矩形
+  createRect(x, y) {
+    this.rect = this.mindMap.svg.polygon().stroke({
+      color: '#0984e3'
+    }).fill({
+      color: 'rgba(9,132,227,0.3)'
+    }).plot([[x, y]]);
+  }
+
+  //  检测在选区里的节点
+  checkInNodes() {
+    let {
+      scaleX,
+      scaleY,
+      translateX,
+      translateY
+    } = this.mindMap.draw.transform();
+    let minx = Math.min(this.mouseDownX, this.mouseMoveX);
+    let miny = Math.min(this.mouseDownY, this.mouseMoveY);
+    let maxx = Math.max(this.mouseDownX, this.mouseMoveX);
+    let maxy = Math.max(this.mouseDownY, this.mouseMoveY);
+    bfsWalk(this.mindMap.renderer.root, node => {
+      let {
+        left,
+        top,
+        width,
+        height
+      } = node;
+      let right = (left + width) * scaleX + translateX;
+      let bottom = (top + height) * scaleY + translateY;
+      left = left * scaleX + translateX;
+      top = top * scaleY + translateY;
+      if (left >= minx && right <= maxx && top >= miny && bottom <= maxy) {
+        this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
+          if (node.nodeData.data.isActive) {
+            return;
+          }
+          this.mindMap.renderer.setNodeActive(node, true);
+          this.mindMap.renderer.addActiveNode(node);
+        });
+      } else if (node.nodeData.data.isActive) {
+        this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
+          if (!node.nodeData.data.isActive) {
+            return;
+          }
+          this.mindMap.renderer.setNodeActive(node, false);
+          this.mindMap.renderer.removeActiveNode(node);
+        });
+      }
+    });
   }
 }
+Select_Select.instanceName = 'select';
+/* harmony default export */ var src_Select = (Select_Select);
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/jszip/dist/jszip.min.js
 var jszip_min = __webpack_require__("5e89");
 var jszip_min_default = /*#__PURE__*/__webpack_require__.n(jszip_min);
@@ -28020,625 +28629,22 @@ const transformOldXmind = content => {
   transformXmind,
   transformOldXmind
 });
-// CONCATENATED MODULE: ../simple-mind-map/src/KeyboardNavigation.js
+// CONCATENATED MODULE: ../simple-mind-map/full.js
 
 
 
-//  键盘导航类
-class KeyboardNavigation_KeyboardNavigation {
-  //  构造函数
-  constructor(opt) {
-    this.opt = opt;
-    this.mindMap = opt.mindMap;
-    this.onKeyup = this.onKeyup.bind(this);
-    this.mindMap.on('keyup', this.onKeyup);
-  }
 
-  //  处理按键事件
-  onKeyup(e) {
-    ;
-    ['Left', 'Up', 'Right', 'Down'].forEach(dir => {
-      if (isKey(e, dir)) {
-        if (this.mindMap.renderer.activeNodeList.length > 0) {
-          this.focus(dir);
-        } else {
-          let root = this.mindMap.renderer.root;
-          this.mindMap.renderer.moveNodeToCenter(root);
-          root.active();
-        }
-      }
-    });
-  }
 
-  //  聚焦到下一个节点
-  focus(dir) {
-    // 当前聚焦的节点
-    let currentActiveNode = this.mindMap.renderer.activeNodeList[0];
-    // 当前聚焦节点的位置信息
-    let currentActiveNodeRect = this.getNodeRect(currentActiveNode);
-    // 寻找的下一个聚焦节点
-    let targetNode = null;
-    let targetDis = Infinity;
-    // 保存并维护距离最近的节点
-    let checkNodeDis = (rect, node) => {
-      let dis = this.getDistance(currentActiveNodeRect, rect);
-      if (dis < targetDis) {
-        targetNode = node;
-        targetDis = dis;
-      }
-    };
 
-    // 第一优先级：阴影算法
-    this.getFocusNodeByShadowAlgorithm({
-      currentActiveNode,
-      currentActiveNodeRect,
-      dir,
-      checkNodeDis
-    });
 
-    // 第二优先级：区域算法
-    if (!targetNode) {
-      this.getFocusNodeByAreaAlgorithm({
-        currentActiveNode,
-        currentActiveNodeRect,
-        dir,
-        checkNodeDis
-      });
-    }
 
-    // 第三优先级：简单算法
-    if (!targetNode) {
-      this.getFocusNodeBySimpleAlgorithm({
-        currentActiveNode,
-        currentActiveNodeRect,
-        dir,
-        checkNodeDis
-      });
-    }
-
-    // 找到了则让目标节点聚焦
-    if (targetNode) {
-      this.mindMap.renderer.moveNodeToCenter(targetNode);
-      targetNode.active();
-    }
-  }
-
-  //  1.简单算法
-  getFocusNodeBySimpleAlgorithm({
-    currentActiveNode,
-    currentActiveNodeRect,
-    dir,
-    checkNodeDis
-  }) {
-    // 遍历节点树
-    bfsWalk(this.mindMap.renderer.root, node => {
-      // 跳过当前聚焦的节点
-      if (node === currentActiveNode) return;
-      // 当前遍历到的节点的位置信息
-      let rect = this.getNodeRect(node);
-      let {
-        left,
-        top,
-        right,
-        bottom
-      } = rect;
-      let match = false;
-      // 按下了左方向键
-      if (dir === 'Left') {
-        // 判断节点是否在当前节点的左侧
-        match = right <= currentActiveNodeRect.left;
-        // 按下了右方向键
-      } else if (dir === 'Right') {
-        // 判断节点是否在当前节点的右侧
-        match = left >= currentActiveNodeRect.right;
-        // 按下了上方向键
-      } else if (dir === 'Up') {
-        // 判断节点是否在当前节点的上面
-        match = bottom <= currentActiveNodeRect.top;
-        // 按下了下方向键
-      } else if (dir === 'Down') {
-        // 判断节点是否在当前节点的下面
-        match = top >= currentActiveNodeRect.bottom;
-      }
-      // 符合要求，判断是否是最近的节点
-      if (match) {
-        checkNodeDis(rect, node);
-      }
-    });
-  }
-
-  //  2.阴影算法
-  getFocusNodeByShadowAlgorithm({
-    currentActiveNode,
-    currentActiveNodeRect,
-    dir,
-    checkNodeDis
-  }) {
-    bfsWalk(this.mindMap.renderer.root, node => {
-      if (node === currentActiveNode) return;
-      let rect = this.getNodeRect(node);
-      let {
-        left,
-        top,
-        right,
-        bottom
-      } = rect;
-      let match = false;
-      if (dir === 'Left') {
-        match = left < currentActiveNodeRect.left && top < currentActiveNodeRect.bottom && bottom > currentActiveNodeRect.top;
-      } else if (dir === 'Right') {
-        match = right > currentActiveNodeRect.right && top < currentActiveNodeRect.bottom && bottom > currentActiveNodeRect.top;
-      } else if (dir === 'Up') {
-        match = top < currentActiveNodeRect.top && left < currentActiveNodeRect.right && right > currentActiveNodeRect.left;
-      } else if (dir === 'Down') {
-        match = bottom > currentActiveNodeRect.bottom && left < currentActiveNodeRect.right && right > currentActiveNodeRect.left;
-      }
-      if (match) {
-        checkNodeDis(rect, node);
-      }
-    });
-  }
-
-  //  3.区域算法
-  getFocusNodeByAreaAlgorithm({
-    currentActiveNode,
-    currentActiveNodeRect,
-    dir,
-    checkNodeDis
-  }) {
-    // 当前聚焦节点的中心点
-    let cX = (currentActiveNodeRect.right + currentActiveNodeRect.left) / 2;
-    let cY = (currentActiveNodeRect.bottom + currentActiveNodeRect.top) / 2;
-    bfsWalk(this.mindMap.renderer.root, node => {
-      if (node === currentActiveNode) return;
-      let rect = this.getNodeRect(node);
-      let {
-        left,
-        top,
-        right,
-        bottom
-      } = rect;
-      // 遍历到的节点的中心点
-      let ccX = (right + left) / 2;
-      let ccY = (bottom + top) / 2;
-      // 节点的中心点坐标和当前聚焦节点的中心点坐标的差值
-      let offsetX = ccX - cX;
-      let offsetY = ccY - cY;
-      if (offsetX === 0 && offsetY === 0) return;
-      let match = false;
-      if (dir === 'Left') {
-        match = offsetX <= 0 && offsetX <= offsetY && offsetX <= -offsetY;
-      } else if (dir === 'Right') {
-        match = offsetX > 0 && offsetX >= -offsetY && offsetX >= offsetY;
-      } else if (dir === 'Up') {
-        match = offsetY <= 0 && offsetY < offsetX && offsetY < -offsetX;
-      } else if (dir === 'Down') {
-        match = offsetY > 0 && -offsetY < offsetX && offsetY > offsetX;
-      }
-      if (match) {
-        checkNodeDis(rect, node);
-      }
-    });
-  }
-
-  //  获取节点的位置信息
-  getNodeRect(node) {
-    let {
-      scaleX,
-      scaleY,
-      translateX,
-      translateY
-    } = this.mindMap.draw.transform();
-    let {
-      left,
-      top,
-      width,
-      height
-    } = node;
-    return {
-      right: (left + width) * scaleX + translateX,
-      bottom: (top + height) * scaleY + translateY,
-      left: left * scaleX + translateX,
-      top: top * scaleY + translateY
-    };
-  }
-
-  //  获取两个节点的距离
-  getDistance(node1Rect, node2Rect) {
-    let center1 = this.getCenter(node1Rect);
-    let center2 = this.getCenter(node2Rect);
-    return Math.sqrt(Math.pow(center1.x - center2.x, 2) + Math.pow(center1.y - center2.y, 2));
-  }
-
-  //  获取节点的中心点
-  getCenter({
-    left,
-    right,
-    top,
-    bottom
-  }) {
-    return {
-      x: (left + right) / 2,
-      y: (top + bottom) / 2
-    };
-  }
-}
-// CONCATENATED MODULE: ../simple-mind-map/index.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 默认选项配置
-const defaultOpt = {
-  // 是否只读
-  readonly: false,
-  // 布局
-  layout: 'logicalStructure',
-  // 主题
-  theme: 'default',
-  // 内置主题：default（默认主题）
-  // 主题配置，会和所选择的主题进行合并
-  themeConfig: {},
-  // 放大缩小的增量比例
-  scaleRatio: 0.1,
-  // 最多显示几个标签
-  maxTag: 5,
-  // 导出图片时的内边距
-  exportPadding: 20,
-  // 展开收缩按钮尺寸
-  expandBtnSize: 20,
-  // 节点里图片和文字的间距
-  imgTextMargin: 5,
-  // 节点里各种文字信息的间距，如图标和文字的间距
-  textContentMargin: 2,
-  // 多选节点时鼠标移动到边缘时的画布移动偏移量
-  selectTranslateStep: 3,
-  // 多选节点时鼠标移动距边缘多少距离时开始偏移
-  selectTranslateLimit: 20,
-  // 自定义节点备注内容显示
-  customNoteContentShow: null,
-  /*
-        {
-            show(){},
-            hide(){}
-        }
-    */
-  // 是否开启节点自由拖拽
-  enableFreeDrag: false,
-  // 水印配置
-  watermarkConfig: {
-    text: '',
-    lineSpacing: 100,
-    textSpacing: 100,
-    angle: 30,
-    textStyle: {
-      color: '#999',
-      opacity: 0.5,
-      fontSize: 14
-    }
-  }
-};
-
-//  思维导图
-class simple_mind_map_MindMap {
-  //  构造函数
-  constructor(opt = {}) {
-    // 合并选项
-    this.opt = this.handleOpt(cjs_default()(defaultOpt, opt));
-
-    // 容器元素
-    this.el = this.opt.el;
-    this.elRect = this.el.getBoundingClientRect();
-
-    // 画布宽高
-    this.width = this.elRect.width;
-    this.height = this.elRect.height;
-
-    // 画布
-    this.svg = SVG().addTo(this.el).size(this.width, this.height);
-    this.draw = this.svg.group();
-
-    // 节点id
-    this.uid = 0;
-
-    // 初始化主题
-    this.initTheme();
-
-    // 事件类
-    this.event = new src_Event({
-      mindMap: this
-    });
-
-    // 按键类
-    this.keyCommand = new KeyCommand_KeyCommand({
-      mindMap: this
-    });
-
-    // 命令类
-    this.command = new src_Command({
-      mindMap: this
-    });
-
-    // 渲染类
-    this.renderer = new src_Render({
-      mindMap: this
-    });
-
-    // 视图操作类
-    this.view = new src_View({
-      mindMap: this,
-      draw: this.draw
-    });
-
-    // 小地图类
-    this.miniMap = new src_MiniMap({
-      mindMap: this
-    });
-
-    // 导出类
-    this.doExport = new src_Export({
-      mindMap: this
-    });
-
-    // 选择类
-    this.select = new src_Select({
-      mindMap: this
-    });
-
-    // 拖动类
-    this.drag = new src_Drag({
-      mindMap: this
-    });
-
-    // 键盘导航类
-    this.keyboardNavigation = new KeyboardNavigation_KeyboardNavigation({
-      mindMap: this
-    });
-
-    // 水印类
-    this.watermark = new Watermark_Watermark({
-      mindMap: this
-    });
-
-    // 批量执行类
-    this.batchExecution = new src_BatchExecution();
-
-    // 初始渲染
-    this.reRender();
-    setTimeout(() => {
-      this.command.addHistory();
-    }, 0);
-  }
-
-  //  配置参数处理
-  handleOpt(opt) {
-    // 检查布局配置
-    if (!layoutValueList.includes(opt.layout)) {
-      opt.layout = 'logicalStructure';
-    }
-    // 检查主题配置
-    opt.theme = opt.theme && themes[opt.theme] ? opt.theme : 'default';
-    return opt;
-  }
-
-  //  渲染，部分渲染
-  render() {
-    this.batchExecution.push('render', () => {
-      this.initTheme();
-      this.renderer.reRender = false;
-      this.renderer.render();
-    });
-  }
-
-  //  重新渲染
-  reRender() {
-    this.batchExecution.push('render', () => {
-      this.draw.clear();
-      this.initTheme();
-      this.renderer.reRender = true;
-      this.renderer.render();
-    });
-  }
-
-  //  容器尺寸变化，调整尺寸
-  resize() {
-    this.elRect = this.el.getBoundingClientRect();
-    this.width = this.elRect.width;
-    this.height = this.elRect.height;
-    this.svg.size(this.width, this.height);
-  }
-
-  //  监听事件
-  on(event, fn) {
-    this.event.on(event, fn);
-  }
-
-  //  触发事件
-  emit(event, ...args) {
-    this.event.emit(event, ...args);
-  }
-
-  //  解绑事件
-  off(event, fn) {
-    this.event.off(event, fn);
-  }
-
-  //  设置主题
-  initTheme() {
-    // 合并主题配置
-    this.themeConfig = cjs_default()(themes[this.opt.theme], this.opt.themeConfig);
-    // 设置背景样式
-    src_Style.setBackgroundStyle(this.el, this.themeConfig);
-  }
-
-  //  设置主题
-  setTheme(theme) {
-    this.renderer.clearAllActive();
-    this.opt.theme = theme;
-    this.reRender();
-  }
-
-  //  获取当前主题
-  getTheme() {
-    return this.opt.theme;
-  }
-
-  //  设置主题配置
-  setThemeConfig(config) {
-    this.opt.themeConfig = config;
-    this.reRender();
-  }
-
-  //  获取自定义主题配置
-  getCustomThemeConfig() {
-    return this.opt.themeConfig;
-  }
-
-  //  获取某个主题配置值
-  getThemeConfig(prop) {
-    return prop === undefined ? this.themeConfig : this.themeConfig[prop];
-  }
-
-  // 获取配置
-  getConfig(prop) {
-    return prop === undefined ? this.opt : this.opt[prop];
-  }
-
-  // 更新配置
-  updateConfig(opt = {}) {
-    this.opt = this.handleOpt(cjs_default.a.all([defaultOpt, this.opt, opt]));
-  }
-
-  //  获取当前布局结构
-  getLayout() {
-    return this.opt.layout;
-  }
-
-  //  设置布局结构
-  setLayout(layout) {
-    // 检查布局配置
-    if (!layoutValueList.includes(layout)) {
-      layout = 'logicalStructure';
-    }
-    this.opt.layout = layout;
-    this.renderer.setLayout();
-    this.render();
-  }
-
-  //  执行命令
-  execCommand(...args) {
-    this.command.exec(...args);
-  }
-
-  //  动态设置思维导图数据，纯节点数据
-  setData(data) {
-    this.execCommand('CLEAR_ACTIVE_NODE');
-    this.command.clearHistory();
-    this.renderer.renderTree = data;
-    this.reRender();
-  }
-
-  //  动态设置思维导图数据，包括节点数据、布局、主题、视图
-  setFullData(data) {
-    if (data.root) {
-      this.setData(data.root);
-    }
-    if (data.layout) {
-      this.setLayout(data.layout);
-    }
-    if (data.theme) {
-      if (data.theme.template) {
-        this.setTheme(data.theme.template);
-      }
-      if (data.theme.config) {
-        this.setThemeConfig(data.theme.config);
-      }
-    }
-    if (data.view) {
-      this.view.setTransformData(data.view);
-    }
-  }
-
-  //  获取思维导图数据，节点树、主题、布局等
-  getData(withConfig) {
-    let nodeData = this.command.getCopyData();
-    let data = {};
-    if (withConfig) {
-      data = {
-        layout: this.getLayout(),
-        root: nodeData,
-        theme: {
-          template: this.getTheme(),
-          config: this.getCustomThemeConfig()
-        },
-        view: this.view.getTransformData()
-      };
-    } else {
-      data = nodeData;
-    }
-    return simpleDeepClone(data);
-  }
-
-  //  导出
-  async export(...args) {
-    let result = await this.doExport.export(...args);
-    return result;
-  }
-
-  //  转换位置
-  toPos(x, y) {
-    return {
-      x: x - this.elRect.left,
-      y: y - this.elRect.top
-    };
-  }
-
-  //  设置只读模式、编辑模式
-  setMode(mode) {
-    if (!['readonly', 'edit'].includes(mode)) {
-      return;
-    }
-    this.opt.readonly = mode === 'readonly';
-    if (this.opt.readonly) {
-      // 取消当前激活的元素
-      this.renderer.clearAllActive();
-    }
-    this.emit('mode_change', mode);
-  }
-}
-simple_mind_map_MindMap.xmind = xmind;
-
-// 定义新主题
-simple_mind_map_MindMap.defineTheme = (name, config = {}) => {
-  if (themes[name]) {
-    return new Error('该主题名称已存在');
-  }
-  themes[name] = cjs_default()(themes_default, config);
-};
-/* harmony default export */ var simple_mind_map = (simple_mind_map_MindMap);
+simple_mind_map.xmind = xmind;
+simple_mind_map.usePlugin(src_MiniMap).usePlugin(src_Watermark).usePlugin(src_Drag).usePlugin(src_KeyboardNavigation).usePlugin(src_Export).usePlugin(src_Select);
+/* harmony default export */ var full = (simple_mind_map);
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js
 
 
-/* harmony default export */ var entry_lib = __webpack_exports__["default"] = (simple_mind_map);
+/* harmony default export */ var entry_lib = __webpack_exports__["default"] = (full);
 
 
 
