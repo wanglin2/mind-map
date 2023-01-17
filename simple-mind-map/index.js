@@ -14,7 +14,6 @@ import MiniMap from './src/MiniMap'
 import Watermark from './src/Watermark'
 import { layoutValueList } from './src/utils/constant'
 import { SVG } from '@svgdotjs/svg.js'
-import xmind from './src/parse/xmind'
 import { simpleDeepClone } from './src/utils'
 import KeyboardNavigation from './src/KeyboardNavigation'
 import defaultTheme from './src/themes/default'
@@ -356,8 +355,6 @@ class MindMap {
     this.emit('mode_change', mode)
   }
 }
-
-MindMap.xmind = xmind
 
 // 定义新主题
 MindMap.defineTheme = (name, config = {}) => {

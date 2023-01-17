@@ -16,28 +16,6 @@
   }
 });
 </code></pre>
-<h2>Xmind解析方法</h2>
-<blockquote>
-<p>v0.2.7+</p>
-</blockquote>
-<p>可以通过如下方法获取解析<code>Xmind</code>文件的方法：</p>
-<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;simple-mind-map&quot;</span>;
-
-<span class="hljs-built_in">console</span>.log(MindMap.xmind)
-</code></pre>
-<p><code>MindMap.xmind</code>对象上挂载了两个方法：</p>
-<h3>parseXmindFile(file)</h3>
-<p>解析<code>.xmind</code>文件，返回解析后的数据，注意是完整的数据，包含节点树、主题、结构等，可以使用<code>mindMap.setFullData(data)</code>来将返回的数据渲染到画布上</p>
-<p><code>file</code>：<code>File</code>对象</p>
-<h3>transformXmind(content)</h3>
-<p>转换<code>xmind</code>数据，<code>.xmind</code>文件本质上是一个压缩包，改成<code>zip</code>后缀可以解压缩，里面存在一个<code>content.json</code>文件，如果你自己解析出了这个文件，那么可以把这个文件内容传递给这个方法进行转换，转换后的数据，注意是完整的数据，包含节点树、主题、结构等，可以使用<code>mindMap.setFullData(data)</code>来将返回的数据渲染到画布上</p>
-<p><code>content</code>：<code>.xmind</code>压缩包内的<code>content.json</code>文件内容</p>
-<h3>transformOldXmind(content)</h3>
-<blockquote>
-<p>v0.2.8+</p>
-</blockquote>
-<p>针对<code>xmind8</code>版本的数据解析，因为该版本的<code>.xmind</code>文件内没有<code>content.json</code>，对应的是<code>content.xml</code>。</p>
-<p><code>content</code>：<code>.xmind</code>压缩包内的<code>content.xml</code>文件内容</p>
 <h2>实例化选项</h2>
 <table>
 <thead>

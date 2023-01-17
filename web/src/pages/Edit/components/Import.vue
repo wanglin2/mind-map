@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import MindMap from 'simple-mind-map'
+import xmind from 'simple-mind-map/src/parse/xmind.js'
 import { fileToBuffer } from '@/utils'
 import { read, utils } from 'xlsx'
 
@@ -146,7 +146,7 @@ export default {
      */
     async handleXmind(file) {
       try {
-        let data = await MindMap.xmind.parseXmindFile(file.raw)
+        let data = await xmind.parseXmindFile(file.raw)
         this.$bus.$emit('setData', data)
         this.$message.success('导入成功')
       } catch (error) {

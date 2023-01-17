@@ -20,50 +20,6 @@ const mindMap = new MindMap({
 });
 ```
 
-## Xmind Parsing Method
-
-> v0.2.7+
-
-You can get the `Xmind` parsing method as follows:
-
-```js
-import MindMap from "simple-mind-map";
-
-console.log(MindMap.xmind);
-```
-
-The `MindMap.xmind` object has two methods attached:
-
-### parseXmindFile(file)
-
-Parsing the `.xmind` file and returning the parsed data. Note that this is
-complete data, including the node tree, theme, and structure. You can use
-`mindMap.setFullData(data)` to render the returned data to the canvas.
-
-`file`: `File` object
-
-### transformXmind(content)
-
-Convert `xmind` data. The `.xmind` file is essentially a `zip` file that can be
-decompressed by changing the suffix to zip. Inside, there is a `content.json`
-file. If you have parsed this file yourself, you can pass the contents of this
-file to this method for conversion. The converted data is the complete data,
-including the node tree, theme, structure, etc. You can use
-`mindMap.setFullData(data)` to render the returned data to the canvas.
-
-`content`: the contents of the `content.json` file within the `.xmind` zip
-package
-
-### transformOldXmind(content)
-
-> v0.2.8+
-
-For data parsing of the `xmind8` version, because the `.xmind` file in this
-version does not have a `content.json`, it corresponds to `content.xml`.
-
-`content`: the contents of the `content.xml` file within the `.xmind` zip
-package
-
 ## Instantiation options
 
 | Field Name                       | Type    | Default Value    | Description                                                  | Required |
