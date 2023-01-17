@@ -16,7 +16,7 @@
 - [x] Supports free dragging and dragging to adjust nodes
 - [x] Supports various node shapes
 - [x] Supports export to json, png, svg, pdf, and import from json, xmind
-- [x] Supports mini map
+- [x] Supports mini map、support watermark
 
 ## Table of Contents
 

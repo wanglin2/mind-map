@@ -16,7 +16,7 @@ summaries</li>
 <li><input type="checkbox" id="checkbox23" checked="true"><label for="checkbox23">Supports free dragging and dragging to adjust nodes</label></li>
 <li><input type="checkbox" id="checkbox24" checked="true"><label for="checkbox24">Supports various node shapes</label></li>
 <li><input type="checkbox" id="checkbox25" checked="true"><label for="checkbox25">Supports export to json, png, svg, pdf, and import from json, xmind</label></li>
-<li><input type="checkbox" id="checkbox26" checked="true"><label for="checkbox26">Supports mini map</label></li>
+<li><input type="checkbox" id="checkbox26" checked="true"><label for="checkbox26">Supports mini map、support watermark</label></li>
 </ul>
 <h2>Table of Contents</h2>
 <p>1.<code>simple-mind-map</code></p>

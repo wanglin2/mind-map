@@ -211,7 +211,8 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
-<p>注册插件，如果需要使用非核心的一些功能，比如小地图、水印等，可以通过该方法进行注册。</p>
+<p>注册插件，如果需要使用非核心的一些功能，比如小地图、水印等，可以通过该方法进行注册。可链式调用。</p>
+<p>注意：插件需要在实例化<code>MindMap</code>前注册。</p>
 <h2>静态属性</h2>
 <h3>pluginList</h3>
 <blockquote>

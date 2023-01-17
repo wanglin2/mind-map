@@ -10,7 +10,6 @@ import BatchExecution from './src/BatchExecution'
 import Export from './src/Export'
 import Select from './src/Select'
 import Drag from './src/Drag'
-import Watermark from './src/Watermark'
 import { layoutValueList } from './src/utils/constant'
 import { SVG } from '@svgdotjs/svg.js'
 import { simpleDeepClone } from './src/utils'
@@ -135,11 +134,6 @@ class MindMap {
 
     // 键盘导航类
     this.keyboardNavigation = new KeyboardNavigation({
-      mindMap: this
-    })
-
-    // 水印类
-    this.watermark = new Watermark({
       mindMap: this
     })
 

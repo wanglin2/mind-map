@@ -3,7 +3,7 @@ import { degToRad, camelCaseToHyphen } from './utils'
 import merge from 'deepmerge'
 
 // 水印类
-export default class Watermark {
+class Watermark {
   constructor(opt = {}) {
     this.mindMap = opt.mindMap
     this.lineSpacing = 0 // 水印行间距
@@ -109,3 +109,7 @@ export default class Watermark {
     this.draw()
   }
 }
+
+Watermark.instanceName = 'watermark'
+
+export default Watermark

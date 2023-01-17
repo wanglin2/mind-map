@@ -1,10 +1,19 @@
-# MiniMap实例
+# MiniMap插件
 
 > v0.2.11+
 
 用于帮助快速开发小地图功能，小地图由两部分组成，一个是当前的画布内容，一个是视口框，当缩放、移动、元素过多时画布上可能只显示了思维导图的部分内容，可以通过视口框来查看当前视口所在位置，以及可以通过在小地图上拖动来快速定位。
 
-可通过`mindMap.miniMap`获取到该实例。
+## 注册
+
+```js
+import MindMap from 'simple-mind-map'
+import MiniMap from 'simple-mind-map/src/MiniMap.js'
+
+MindMap.usePlugin(MiniMap)
+```
+
+注册完且实例化`MindMap`后可通过`mindMap.miniMap`获取到该实例。
 
 ## 方法
 

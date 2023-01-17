@@ -211,7 +211,8 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
-<p>If you need to use some non-core functions, such as mini map, watermark, etc, you can register plugin through this method.</p>
+<p>If you need to use some non-core functions, such as mini map, watermark, etc, you can register plugin through this method. Can be called in chain.</p>
+<p>Note: The plugin needs to be registered before instantiating <code>MindMap</code>.</p>
 <h2>Static props</h2>
 <h3>pluginList</h3>
 <blockquote>

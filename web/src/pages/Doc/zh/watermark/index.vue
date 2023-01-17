@@ -1,10 +1,17 @@
 <template>
   <div>
-    <h1>Watermark实例</h1>
+    <h1>Watermark插件</h1>
 <blockquote>
 <p>0.2.24+</p>
 </blockquote>
-<p><code>Watermark</code>实例负责显示水印，可通过<code>mindMap.watermark</code>获取到该实例。</p>
+<p><code>Watermark</code>插件负责显示水印。</p>
+<h2>注册</h2>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
+<span class="hljs-keyword">import</span> Watermark <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/Watermark.js&#x27;</span>
+
+MindMap.usePlugin(Watermark)
+</code></pre>
+<p>注册完且实例化<code>MindMap</code>后可通过<code>mindMap.watermark</code>获取到该实例。</p>
 <h2>方法</h2>
 <h3>draw()</h3>
 <p>重新绘制水印。</p>

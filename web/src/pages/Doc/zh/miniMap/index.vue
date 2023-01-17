@@ -1,11 +1,17 @@
 <template>
   <div>
-    <h1>MiniMap实例</h1>
+    <h1>MiniMap插件</h1>
 <blockquote>
 <p>v0.2.11+</p>
 </blockquote>
 <p>用于帮助快速开发小地图功能，小地图由两部分组成，一个是当前的画布内容，一个是视口框，当缩放、移动、元素过多时画布上可能只显示了思维导图的部分内容，可以通过视口框来查看当前视口所在位置，以及可以通过在小地图上拖动来快速定位。</p>
-<p>可通过<code>mindMap.miniMap</code>获取到该实例。</p>
+<h2>注册</h2>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
+<span class="hljs-keyword">import</span> MiniMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/MiniMap.js&#x27;</span>
+
+MindMap.usePlugin(MiniMap)
+</code></pre>
+<p>注册完且实例化<code>MindMap</code>后可通过<code>mindMap.miniMap</code>获取到该实例。</p>
 <h2>方法</h2>
 <h3>calculationMiniMap(boxWidth, boxHeight)</h3>
 <p>计算小地图的渲染数据，该函数内会调用<code>getMiniMap()</code>方法，所以一般使用该函数即可。</p>
