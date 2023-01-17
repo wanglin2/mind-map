@@ -89,3 +89,15 @@ copyNodeTree({}, node)
 ### asyncRun(taskList, callback = () => {})
 
 异步执行任务队列，多个任务是同步执行的，没有先后顺序
+
+### degToRad(deg)
+
+> v0.2.24+
+
+角度转弧度
+
+### camelCaseToHyphen(str)
+
+> v0.2.24+
+
+驼峰转连字符

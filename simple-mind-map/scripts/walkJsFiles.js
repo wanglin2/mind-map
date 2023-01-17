@@ -1,4 +1,4 @@
-// 将/** */类型的注释转换为//类型
+// 遍历所有js文件
 const path = require('path')
 const fs = require('fs')
 
@@ -11,13 +11,26 @@ const transform = dir => {
     if (fs.statSync(file).isDirectory()) {
       transform(file)
     } else if (/\.js$/.test(file)) {
-      rewriteComments(file)
+      transformFile(file)
     }
   })
 }
 
-const rewriteComments = file => {
+const transformFile = file => {
+  console.log(file);
   let content = fs.readFileSync(file, 'utf-8')
+  countCodeLines(content)
+  // transformComments(file, content)
+}
+
+// 统计代码行数
+let totalLines = 0
+const countCodeLines = (content) => {
+  totalLines += content.split(/\n/).length
+}
+
+// 转换注释类型
+const transformComments = (file, content) => {
   console.log('当前转换文件：', file)
   content = content.replace(/\/\*\*[^/]+\*\//g, str => {
     let res = /@Desc:([^\n]+)\n/g.exec(str)
@@ -29,4 +42,5 @@ const rewriteComments = file => {
 }
 
 transform(entryPath)
-rewriteComments(path.join(__dirname, '../index.js'))
+transformFile(path.join(__dirname, '../index.js'))
+console.log(totalLines);

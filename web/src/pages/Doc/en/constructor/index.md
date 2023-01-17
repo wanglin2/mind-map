@@ -83,6 +83,17 @@ package
 | customNoteContentShow（v0.1.6+） | Object  | null             | Custom node note content display, object type, structure: {show: (noteContent, left, top) => {// your display node note logic }, hide: () => {// your hide node note logic }} |          |
 | readonly（v0.1.7+）              | Boolean | false            | Whether it is read-only mode                                 |          |
 | enableFreeDrag（v0.2.4+）        | Boolean | false            | Enable node free drag                                        |          |
+| watermarkConfig（v0.2.4+）       | Object  |                  | Watermark config, Please refer to the table 【Watermark config】 below for detailed configuration |          |
+
+### Watermark config
+
+| Field Name  | Type   | Default Value                               | Description                                                  |
+| ----------- | ------ | ------------------------------------------- | ------------------------------------------------------------ |
+| text        | String | ''                                          | Watermark text. If it is an empty string, the watermark will not be displayed |
+| lineSpacing | Number | 100                                         | Spacing between watermark lines                              |
+| textSpacing | Number | 100                                         | Spacing between watermarks in the same row                   |
+| angle       | Number | 30                                          | Tilt angle of watermark, range: [0, 90]                      |
+| textStyle   | Object | {color: '#999', opacity: 0.5, fontSize: 14} | Watermark text style                                         |
 
 ## Static methods
 

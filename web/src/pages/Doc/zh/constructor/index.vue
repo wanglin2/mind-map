@@ -148,6 +148,63 @@
 <td>是否是只读模式</td>
 <td></td>
 </tr>
+<tr>
+<td>enableFreeDrag（v0.2.4+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>是否开启节点自由拖拽</td>
+<td></td>
+</tr>
+<tr>
+<td>watermarkConfig（v0.2.4+）</td>
+<td>Object</td>
+<td></td>
+<td>水印配置，详细配置请参考下方表格【水印配置】</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>水印配置</h3>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text</td>
+<td>String</td>
+<td>''</td>
+<td>水印文字，如果为空字符串则不显示水印</td>
+</tr>
+<tr>
+<td>lineSpacing</td>
+<td>Number</td>
+<td>100</td>
+<td>水印每行之间的间距</td>
+</tr>
+<tr>
+<td>textSpacing</td>
+<td>Number</td>
+<td>100</td>
+<td>同一行水印之间的间距</td>
+</tr>
+<tr>
+<td>angle</td>
+<td>Number</td>
+<td>30</td>
+<td>水印的倾斜角度，范围：[0, 90]</td>
+</tr>
+<tr>
+<td>textStyle</td>
+<td>Object</td>
+<td>{color: '#999', opacity: 0.5, fontSize: 14}</td>
+<td>水印文字样式</td>
+</tr>
 </tbody>
 </table>
 <h2>静态方法</h2>
@@ -332,6 +389,23 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <p>获取自定义主题配置</p>
 <h3>getThemeConfig(prop)</h3>
 <p>获取某个主题配置属性值</p>
+<h3>getConfig(<em>prop</em>)</h3>
+<blockquote>
+<p>0.2.24+</p>
+</blockquote>
+<p><code>prop</code>：获取指定配置的值，不传则返回整个配置</p>
+<p>获取配置，即<code>new MindMap(opt)</code>的<code>opt</code></p>
+<h3>updateConfig(<em>opt</em> = {})</h3>
+<blockquote>
+<p>0.2.24+</p>
+</blockquote>
+<p><code>opt</code>：要更新的配置</p>
+<p>更新配置，即更新<code>new MindMap(opt)</code>的<code>opt</code>，可以只更新部分数据，比如：</p>
+<pre class="hljs"><code>mindMap.updateConfig({
+    <span class="hljs-attr">enableFreeDrag</span>: <span class="hljs-literal">true</span><span class="hljs-comment">// 开启节点自由拖拽</span>
+})
+</code></pre>
+<p>该方法只做更新配置的事情，没有其他副作用，比如触发画布重新渲染之类的</p>
 <h3>getLayout()</h3>
 <p>获取当前的布局结构</p>
 <h3>setLayout(layout)</h3>

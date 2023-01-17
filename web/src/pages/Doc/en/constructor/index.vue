@@ -158,6 +158,63 @@ package</p>
 <td>Whether it is read-only mode</td>
 <td></td>
 </tr>
+<tr>
+<td>enableFreeDrag（v0.2.4+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable node free drag</td>
+<td></td>
+</tr>
+<tr>
+<td>watermarkConfig（v0.2.4+）</td>
+<td>Object</td>
+<td></td>
+<td>Watermark config, Please refer to the table 【Watermark config】 below for detailed configuration</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>Watermark config</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>text</td>
+<td>String</td>
+<td>''</td>
+<td>Watermark text. If it is an empty string, the watermark will not be displayed</td>
+</tr>
+<tr>
+<td>lineSpacing</td>
+<td>Number</td>
+<td>100</td>
+<td>Spacing between watermark lines</td>
+</tr>
+<tr>
+<td>textSpacing</td>
+<td>Number</td>
+<td>100</td>
+<td>Spacing between watermarks in the same row</td>
+</tr>
+<tr>
+<td>angle</td>
+<td>Number</td>
+<td>30</td>
+<td>Tilt angle of watermark, range: [0, 90]</td>
+</tr>
+<tr>
+<td>textStyle</td>
+<td>Object</td>
+<td>{color: '#999', opacity: 0.5, fontSize: 14}</td>
+<td>Watermark text style</td>
+</tr>
 </tbody>
 </table>
 <h2>Static methods</h2>
@@ -350,6 +407,23 @@ in the options table above.</p>
 <p>Gets the custom theme configuration.</p>
 <h3>getThemeConfig(prop)</h3>
 <p>Gets the value of a specific theme configuration property.</p>
+<h3>getConfig(<em>prop</em>)</h3>
+<blockquote>
+<p>0.2.24+</p>
+</blockquote>
+<p><code>prop</code>：Get the value of the specified configuration, and return the entire configuration if not passed</p>
+<p>Get config, That is,  <code>opt</code> of <code>new MindMap (opt)</code></p>
+<h3>updateConfig(<em>opt</em> = {})</h3>
+<blockquote>
+<p>0.2.24+</p>
+</blockquote>
+<p><code>opt</code>：Configuration to update</p>
+<p>Update config，That is update <code>opt</code> of <code>new MindMap(opt)</code>，You can only update some data, such as:</p>
+<pre class="hljs"><code>mindMap.updateConfig({
+    <span class="hljs-attr">enableFreeDrag</span>: <span class="hljs-literal">true</span><span class="hljs-comment">// 开启节点自由拖拽</span>
+})
+</code></pre>
+<p>This method only updates the configuration and has no other side effects, such as triggering canvas re-rendering</p>
 <h3>getLayout()</h3>
 <p>Gets the current layout structure.</p>
 <h3>setLayout(layout)</h3>

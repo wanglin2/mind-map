@@ -11,6 +11,7 @@ import Export from './src/Export'
 import Select from './src/Select'
 import Drag from './src/Drag'
 import MiniMap from './src/MiniMap'
+import Watermark from './src/Watermark'
 import { layoutValueList } from './src/utils/constant'
 import { SVG } from '@svgdotjs/svg.js'
 import xmind from './src/parse/xmind'
@@ -53,7 +54,19 @@ const defaultOpt = {
         }
     */
   // 是否开启节点自由拖拽
-  enableFreeDrag: false
+  enableFreeDrag: false,
+  // 水印配置
+  watermarkConfig: {
+    text: '',
+    lineSpacing: 100,
+    textSpacing: 100,
+    angle: 30,
+    textStyle: {
+      color: '#999',
+      opacity: 0.5,
+      fontSize: 14
+    }
+  }
 }
 
 //  思维导图
@@ -129,6 +142,11 @@ class MindMap {
 
     // 键盘导航类
     this.keyboardNavigation = new KeyboardNavigation({
+      mindMap: this
+    })
+
+    // 水印类
+    this.watermark = new Watermark({
       mindMap: this
     })
 

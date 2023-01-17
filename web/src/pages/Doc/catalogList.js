@@ -18,6 +18,7 @@ let APIList = [
   'view',
   'miniMap',
   'doExport',
+  'watermark',
   'keyCommand',
   'keyboardNavigation',
   'command',

@@ -94,3 +94,15 @@ Throttle function
 ### asyncRun(taskList, callback = () => {})
 
 Run tasks in task list asynchronously, tasks are run synchronously without order
+
+### degToRad(deg)
+
+> v0.2.24+
+
+Angle to radian
+
+### camelCaseToHyphen(str)
+
+> v0.2.24+
+
+CamelCase to hyphen

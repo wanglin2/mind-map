@@ -224,3 +224,15 @@ export const asyncRun = (taskList, callback = () => {}) => {
   }
   loop()
 }
+
+// 角度转弧度
+export const degToRad = deg => {
+  return deg * (Math.PI / 180)
+}
+
+// 驼峰转连字符 
+export const camelCaseToHyphen = (str) => {
+  return str.replace(/([a-z])([A-Z])/g, (...args) => {
+    return args[1] + '-' + args[2].toLowerCase()
+  })
+}
