@@ -73,6 +73,19 @@ console.log(MindMap.xmind)
 | customNoteContentShow（v0.1.6+） | Object  | null             | 自定义节点备注内容显示，Object类型，结构为：{show: (noteContent, left, top) => {// 你的显示节点备注逻辑 }, hide: () => {// 你的隐藏节点备注逻辑 }} |          |
 | readonly（v0.1.7+）              | Boolean | false            | 是否是只读模式                                               |          |
 | enableFreeDrag（v0.2.4+）        | Boolean | false            | 是否开启节点自由拖拽                                         |          |
+| watermarkConfig（v0.2.4+）       | Object  |                  | 水印配置，详细配置请参考下方表格【水印配置】                 |          |
+
+### 水印配置
+
+| 字段名称    | 类型   | 默认值                                      | 描述                                 |
+| ----------- | ------ | ------------------------------------------- | ------------------------------------ |
+| text        | String | ''                                          | 水印文字，如果为空字符串则不显示水印 |
+| lineSpacing | Number | 100                                         | 水印每行之间的间距                   |
+| textSpacing | Number | 100                                         | 同一行水印之间的间距                 |
+| angle       | Number | 30                                          | 水印的倾斜角度，范围：[0, 90]        |
+| textStyle   | Object | {color: '#999', opacity: 0.5, fontSize: 14} | 水印文字样式                         |
+
+
 
 ## 静态方法
 

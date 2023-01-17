@@ -22,7 +22,17 @@ export default {
     nodeBorderType: 'Node border style',
     nodeUseLineStyle: 'Use only has bottom border style',
     otherConfig: 'Other config',
-    enableFreeDrag: 'Enable node free drag'
+    enableFreeDrag: 'Enable node free drag',
+    watermark: 'Watermark',
+    showWatermark: 'Is show watermark',
+    watermarkDefaultText: 'Watermark text',
+    watermarkText: 'Watermark text',
+    watermarkTextColor: 'Text color',
+    watermarkLineSpacing: 'Line spacing',
+    watermarkTextSpacing: 'Text spacing',
+    watermarkAngle: 'Angle',
+    watermarkTextOpacity: 'Text opacity',
+    watermarkTextFontSize: 'Font size'
   },
   color: {
     moreColor: 'More color'

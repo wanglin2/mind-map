@@ -22,7 +22,17 @@ export default {
     nodeBorderType: '节点边框风格',
     nodeUseLineStyle: '是否使用只有底边框的风格',
     otherConfig: '其他配置',
-    enableFreeDrag: '是否开启节点自由拖拽'
+    enableFreeDrag: '是否开启节点自由拖拽',
+    watermark: '水印',
+    showWatermark: '是否显示水印',
+    watermarkDefaultText: '水印文字',
+    watermarkText: '水印文字',
+    watermarkTextColor: '文字颜色',
+    watermarkLineSpacing: '水印行间距',
+    watermarkTextSpacing: '水印文字间距',
+    watermarkAngle: '旋转角度',
+    watermarkTextOpacity: '文字透明度',
+    watermarkTextFontSize: '文字字号'
   },
   color: {
     moreColor: '更多颜色'

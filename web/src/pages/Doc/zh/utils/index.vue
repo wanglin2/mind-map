@@ -46,6 +46,16 @@
 <p>节流函数</p>
 <h3>asyncRun(taskList, callback = () =&gt; {})</h3>
 <p>异步执行任务队列，多个任务是同步执行的，没有先后顺序</p>
+<h3>degToRad(deg)</h3>
+<blockquote>
+<p>v0.2.24+</p>
+</blockquote>
+<p>角度转弧度</p>
+<h3>camelCaseToHyphen(str)</h3>
+<blockquote>
+<p>v0.2.24+</p>
+</blockquote>
+<p>驼峰转连字符</p>
 
   </div>
 </template>

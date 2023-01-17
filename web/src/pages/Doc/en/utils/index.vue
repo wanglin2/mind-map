@@ -51,6 +51,16 @@ and copying the <code>data</code> of the data object, example:</p>
 <p>Throttle function</p>
 <h3>asyncRun(taskList, callback = () =&gt; {})</h3>
 <p>Run tasks in task list asynchronously, tasks are run synchronously without order</p>
+<h3>degToRad(deg)</h3>
+<blockquote>
+<p>v0.2.24+</p>
+</blockquote>
+<p>Angle to radian</p>
+<h3>camelCaseToHyphen(str)</h3>
+<blockquote>
+<p>v0.2.24+</p>
+</blockquote>
+<p>CamelCase to hyphen</p>
 
   </div>
 </template>
