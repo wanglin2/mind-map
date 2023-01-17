@@ -1,7 +1,17 @@
-# Select instance
+# Select plugin
 
-The `select` instance is responsible for the mouse right-click multi-selection
-of nodes, and can be obtained through `mindMap.select`
+The `Select` plugin provides the function of right-clicking to select multiple nodes.
+
+## Register
+
+```js
+import MindMap from 'simple-mind-map'
+import Select from 'simple-mind-map/src/Select.js'
+
+MindMap.usePlugin(Select)
+```
+
+After registration and instantiation of `MindMap`, the instance can be obtained through `mindMap.select`.
 
 ## Method
 
