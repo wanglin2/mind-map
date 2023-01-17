@@ -22,6 +22,7 @@
 
 <script>
 import MindMap from 'simple-mind-map'
+import MiniMap from 'simple-mind-map/src/MiniMap.js'
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -38,6 +39,9 @@ import NodeImgPreview from './NodeImgPreview.vue'
 import SidebarTrigger from './SidebarTrigger.vue'
 import { mapState } from 'vuex'
 import customThemeList from '@/customThemes'
+
+// 注册插件
+MindMap.usePlugin(MiniMap)
 
 // 注册自定义主题
 customThemeList.forEach((item) => {

@@ -26,7 +26,7 @@ class Export {
 
   //  获取svg数据
   async getSvgData() {
-    let { svg, svgHTML } = this.mindMap.miniMap.getMiniMap()
+    let { svg, svgHTML } = this.mindMap.getSvgData()
     // 把图片的url转换成data:url类型，否则导出会丢失图片
     let imageList = svg.find('image')
     let task = imageList.map(async item => {

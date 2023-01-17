@@ -81,9 +81,41 @@ mindMap.setTheme('Theme name')
 
 For all configurations of theme, please refer to [Default Topic](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js). The `defineTheme`method will merge the configuration you passed in with the default configuration. Most of the themes  do not need custom many parts. For a typical customized theme configuration, please refer to [blueSky](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/blueSky.js).
 
+### usePlugin(plugin)
+
+> v0.3.0+
+
+If you need to use some non-core functions, such as mini map, watermark, etc, you can register plugin through this method.
+
+## Static props
+
+### pluginList
+
+> v0.3.0+
+
+List of all currently registered plugins.
+
 
 
 ## Instance methods
+
+### getSvgData()
+
+> v0.3.0+
+
+Get the `svg` data and return an object. The detailed structure is as follows:
+
+```js
+{
+  svg, // Element, the overall svg element of the mind map graphics, including: svg (canvas container), g (actual mind map group)
+  svgHTML, // String, svg string, i.e. html string, can be directly rendered to the small map container you prepared
+  rect: // Object, position, size, etc. of mind map graphics before zoom
+  origWidth, // Number, canvas width
+  origHeight, // Number, canvas height
+  scaleX, // Number, horizontal zoom value of mind map graphics
+  scaleY, // Number, vertical zoom value of mind map graphics
+}
+```
 
 ### render()
 

@@ -14,43 +14,6 @@ class MiniMap {
     }
   }
 
-  //   获取小地图相关数据
-  getMiniMap() {
-    const svg = this.mindMap.svg
-    const draw = this.mindMap.draw
-    // 保存原始信息
-    const origWidth = svg.width()
-    const origHeight = svg.height()
-    const origTransform = draw.transform()
-    const elRect = this.mindMap.el.getBoundingClientRect()
-    // 去除放大缩小的变换效果
-    draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY)
-    // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
-    const rect = draw.rbox()
-    // 将svg设置为实际内容的宽高
-    svg.size(rect.width, rect.height)
-    // 把实际内容变换
-    draw.translate(-rect.x + elRect.left, -rect.y + elRect.top)
-    // 克隆一份数据
-    const clone = svg.clone()
-    // 恢复原先的大小和变换信息
-    svg.size(origWidth, origHeight)
-    draw.transform(origTransform)
-
-    return {
-      svg: clone, // 思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）
-      svgHTML: clone.svg(), // svg字符串
-      rect: {
-        ...rect, // 思维导图图形未缩放时的位置尺寸等信息
-        ratio: rect.width / rect.height // 思维导图图形的宽高比
-      },
-      origWidth, // 画布宽度
-      origHeight, // 画布高度
-      scaleX: origTransform.scaleX, // 思维导图图形的水平缩放值
-      scaleY: origTransform.scaleY // 思维导图图形的垂直缩放值
-    }
-  }
-
   //  计算小地图的渲染数据
   /**
    * boxWidth：小地图容器的宽度
@@ -58,7 +21,7 @@ class MiniMap {
    */
   calculationMiniMap(boxWidth, boxHeight) {
     let { svgHTML, rect, origWidth, origHeight, scaleX, scaleY } =
-      this.getMiniMap()
+      this.mindMap.getSvgData()
     // 计算数据
     let boxRatio = boxWidth / boxHeight
     let actWidth = 0
@@ -143,5 +106,7 @@ class MiniMap {
     this.isMousedown = false
   }
 }
+
+MiniMap.instanceName = 'miniMap'
 
 export default MiniMap

@@ -12,23 +12,6 @@ The `mindMap.miniMap` instance can be obtained through this.
 
 ## Methods
 
-### getMiniMap()
-
-Obtain small map related data, this function is generally not used directly, the
-function returns:
-
-```js
-{
-      svg, // Element, the overall svg element of the mind map graphics, including: svg (canvas container), g (actual mind map group)
-      svgHTML, // String, svg string, i.e. html string, can be directly rendered to the small map container you prepared
-      rect: // Object, position, size, etc. of mind map graphics before zoom
-      origWidth, // Number, canvas width
-      origHeight, // Number, canvas height
-      scaleX, // Number, horizontal zoom value of mind map graphics
-      scaleY, // Number, vertical zoom value of mind map graphics
-}
-```
-
 ### calculationMiniMap(boxWidth, boxHeight)
 
 "Calculate the rendering data for the small map, this function will call the

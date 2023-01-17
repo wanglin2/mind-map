@@ -10,7 +10,6 @@ import BatchExecution from './src/BatchExecution'
 import Export from './src/Export'
 import Select from './src/Select'
 import Drag from './src/Drag'
-import MiniMap from './src/MiniMap'
 import Watermark from './src/Watermark'
 import { layoutValueList } from './src/utils/constant'
 import { SVG } from '@svgdotjs/svg.js'
@@ -119,11 +118,6 @@ class MindMap {
       draw: this.draw
     })
 
-    // 小地图类
-    this.miniMap = new MiniMap({
-      mindMap: this
-    })
-
     // 导出类
     this.doExport = new Export({
       mindMap: this
@@ -151,6 +145,13 @@ class MindMap {
 
     // 批量执行类
     this.batchExecution = new BatchExecution()
+
+    // 注册插件
+    MindMap.pluginList.forEach((plugin) => {
+      this[plugin.instanceName] = new plugin({
+        mindMap: this
+      })
+    })
 
     // 初始渲染
     this.reRender()
@@ -354,6 +355,50 @@ class MindMap {
     }
     this.emit('mode_change', mode)
   }
+
+  // 获取svg数据
+  getSvgData() {
+    const svg = this.svg
+    const draw = this.draw
+    // 保存原始信息
+    const origWidth = svg.width()
+    const origHeight = svg.height()
+    const origTransform = draw.transform()
+    const elRect = this.el.getBoundingClientRect()
+    // 去除放大缩小的变换效果
+    draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY)
+    // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
+    const rect = draw.rbox()
+    // 将svg设置为实际内容的宽高
+    svg.size(rect.width, rect.height)
+    // 把实际内容变换
+    draw.translate(-rect.x + elRect.left, -rect.y + elRect.top)
+    // 克隆一份数据
+    const clone = svg.clone()
+    // 恢复原先的大小和变换信息
+    svg.size(origWidth, origHeight)
+    draw.transform(origTransform)
+
+    return {
+      svg: clone, // 思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）
+      svgHTML: clone.svg(), // svg字符串
+      rect: {
+        ...rect, // 思维导图图形未缩放时的位置尺寸等信息
+        ratio: rect.width / rect.height // 思维导图图形的宽高比
+      },
+      origWidth, // 画布宽度
+      origHeight, // 画布高度
+      scaleX: origTransform.scaleX, // 思维导图图形的水平缩放值
+      scaleY: origTransform.scaleY // 思维导图图形的垂直缩放值
+    }
+  }
+}
+
+// 插件列表
+MindMap.pluginList = []
+MindMap.usePlugin = (plugin) => {
+  MindMap.pluginList.push(plugin)
+  return MindMap
 }
 
 // 定义新主题

@@ -11,19 +11,6 @@ part of the mind map content. The viewport frame can be used to view the current
 viewport location, and can be quickly positioned by dragging on the small map.</p>
 <p>The <code>mindMap.miniMap</code> instance can be obtained through this.</p>
 <h2>Methods</h2>
-<h3>getMiniMap()</h3>
-<p>Obtain small map related data, this function is generally not used directly, the
-function returns:</p>
-<pre class="hljs"><code>{
-      svg, <span class="hljs-comment">// Element, the overall svg element of the mind map graphics, including: svg (canvas container), g (actual mind map group)</span>
-      svgHTML, <span class="hljs-comment">// String, svg string, i.e. html string, can be directly rendered to the small map container you prepared</span>
-      <span class="hljs-attr">rect</span>: <span class="hljs-comment">// Object, position, size, etc. of mind map graphics before zoom</span>
-      origWidth, <span class="hljs-comment">// Number, canvas width</span>
-      origHeight, <span class="hljs-comment">// Number, canvas height</span>
-      scaleX, <span class="hljs-comment">// Number, horizontal zoom value of mind map graphics</span>
-      scaleY, <span class="hljs-comment">// Number, vertical zoom value of mind map graphics</span>
-}
-</code></pre>
 <h3>calculationMiniMap(boxWidth, boxHeight)</h3>
 <p>&quot;Calculate the rendering data for the small map, this function will call the
 <code>getMiniMap()</code> method, so using this function is sufficient.</p>

@@ -207,7 +207,33 @@ MindMap.defineTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>, {})
 mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 </code></pre>
 <p>For all configurations of theme, please refer to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js">Default Topic</a>. The <code>defineTheme</code>method will merge the configuration you passed in with the default configuration. Most of the themes  do not need custom many parts. For a typical customized theme configuration, please refer to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/blueSky.js">blueSky</a>.</p>
+<h3>usePlugin(plugin)</h3>
+<blockquote>
+<p>v0.3.0+</p>
+</blockquote>
+<p>If you need to use some non-core functions, such as mini map, watermark, etc, you can register plugin through this method.</p>
+<h2>Static props</h2>
+<h3>pluginList</h3>
+<blockquote>
+<p>v0.3.0+</p>
+</blockquote>
+<p>List of all currently registered plugins.</p>
 <h2>Instance methods</h2>
+<h3>getSvgData()</h3>
+<blockquote>
+<p>v0.3.0+</p>
+</blockquote>
+<p>Get the <code>svg</code> data and return an object. The detailed structure is as follows:</p>
+<pre class="hljs"><code>{
+  svg, <span class="hljs-comment">// Element, the overall svg element of the mind map graphics, including: svg (canvas container), g (actual mind map group)</span>
+  svgHTML, <span class="hljs-comment">// String, svg string, i.e. html string, can be directly rendered to the small map container you prepared</span>
+  <span class="hljs-attr">rect</span>: <span class="hljs-comment">// Object, position, size, etc. of mind map graphics before zoom</span>
+  origWidth, <span class="hljs-comment">// Number, canvas width</span>
+  origHeight, <span class="hljs-comment">// Number, canvas height</span>
+  scaleX, <span class="hljs-comment">// Number, horizontal zoom value of mind map graphics</span>
+  scaleY, <span class="hljs-comment">// Number, vertical zoom value of mind map graphics</span>
+}
+</code></pre>
 <h3>render()</h3>
 <p>Triggers a full rendering, which will reuse nodes for better performance. If
 only the node positions have changed, this method can be called to <code>reRender</code>.</p>

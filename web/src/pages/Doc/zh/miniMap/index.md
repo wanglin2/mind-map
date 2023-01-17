@@ -8,22 +8,6 @@
 
 ## 方法
 
-### getMiniMap()
-
-获取小地图相关数据，这个函数一般不会直接使用，函数返回的内容：
-
-```js
-{
-      svg, // Element，思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）
-      svgHTML, // String，svg字符串，即html字符串，可以直接渲染到你准备的小地图容器内
-      rect: // Object，思维导图图形未缩放时的位置尺寸等信息
-      origWidth, // Number，画布宽度
-      origHeight, // Number，画布高度
-      scaleX, // Number，思维导图图形的水平缩放值
-      scaleY, // Number，思维导图图形的垂直缩放值
-}
-```
-
 ### calculationMiniMap(boxWidth, boxHeight)
 
 计算小地图的渲染数据，该函数内会调用`getMiniMap()`方法，所以一般使用该函数即可。
