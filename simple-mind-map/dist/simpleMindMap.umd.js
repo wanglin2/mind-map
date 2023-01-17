@@ -14395,6 +14395,18 @@ const asyncRun = (taskList, callback = () => {}) => {
   };
   loop();
 };
+
+// 角度转弧度
+const degToRad = deg => {
+  return deg * (Math.PI / 180);
+};
+
+// 驼峰转连字符 
+const camelCaseToHyphen = str => {
+  return str.replace(/([a-z])([A-Z])/g, (...args) => {
+    return args[1] + '-' + args[2].toLowerCase();
+  });
+};
 // CONCATENATED MODULE: ../simple-mind-map/node_modules/@svgdotjs/svg.js/dist/svg.esm.js
 /*!
 * @svgdotjs/svg.js - A lightweight library for manipulating and animating SVG.
@@ -16189,7 +16201,7 @@ function getBox(el, getBBoxFn, retry) {
   return box;
 }
 
-function bbox() {
+function svg_esm_bbox() {
   // Function to get bbox is getBBox()
   const getBBox = node => node.getBBox(); // Take all measures so that a stupid browser renders the element
   // so we can get the bbox from it when we try again
@@ -17231,7 +17243,7 @@ class Element extends Dom {
 
 }
 extend(Element, {
-  bbox,
+  bbox: svg_esm_bbox,
   rbox,
   inside,
   point,
@@ -21082,11 +21094,11 @@ function svg_esm_width(width, box = this.bbox()) {
   if (width == null) return box.width;
   return this.size(width, box.height, box);
 }
-function x(x, box = this.bbox()) {
+function svg_esm_x(x, box = this.bbox()) {
   if (x == null) return box.x;
   return this.move(x, box.y, box);
 }
-function y(y, box = this.bbox()) {
+function svg_esm_y(y, box = this.bbox()) {
   if (y == null) return box.y;
   return this.move(box.x, y, box);
 }
@@ -21100,8 +21112,8 @@ var containerGeometry = {
   move: move,
   size: size,
   width: svg_esm_width,
-  x: x,
-  y: y
+  x: svg_esm_x,
+  y: svg_esm_y
 };
 
 class G extends Container {
@@ -27434,7 +27446,7 @@ class Drag_Drag extends layouts_Base {
       // 存在下一个相邻节点，作为其前一个兄弟节点
       this.mindMap.renderer.setNodeActive(this.nextNode, false);
       this.mindMap.execCommand('INSERT_BEFORE', this.node, this.nextNode);
-    } else if (_nodeIsDrag) {
+    } else if (_nodeIsDrag && this.mindMap.opt.enableFreeDrag) {
       // 自定义位置
       let {
         x,
@@ -27737,6 +27749,115 @@ class MiniMap {
   }
 }
 /* harmony default export */ var src_MiniMap = (MiniMap);
+// CONCATENATED MODULE: ../simple-mind-map/src/Watermark.js
+
+
+
+
+// 水印类
+class Watermark_Watermark {
+  constructor(opt = {}) {
+    this.mindMap = opt.mindMap;
+    this.lineSpacing = 0; // 水印行间距
+    this.textSpacing = 0; // 行内水印间距
+    this.angle = 0; // 旋转角度
+    this.text = ''; // 水印文字
+    this.textStyle = {}; // 水印文字样式
+    this.watermarkDraw = this.mindMap.svg.group().css({
+      'pointer-events': 'none',
+      'user-select': 'none'
+    });
+    this.maxLong = Math.sqrt(Math.pow(this.mindMap.width, 2) + Math.pow(this.mindMap.height, 2));
+    this.updateWatermark(this.mindMap.opt.watermarkConfig || {});
+  }
+
+  // 处理水印配置
+  handleConfig({
+    text,
+    lineSpacing,
+    textSpacing,
+    angle,
+    textStyle
+  }) {
+    this.text = text === undefined ? '' : String(text).trim();
+    this.lineSpacing = typeof lineSpacing === 'number' && lineSpacing > 0 ? lineSpacing : 100;
+    this.textSpacing = typeof textSpacing === 'number' && textSpacing > 0 ? textSpacing : 100;
+    this.angle = typeof angle === 'number' && angle >= 0 && angle <= 90 ? angle : 30;
+    this.textStyle = Object.assign(this.textStyle, textStyle || {});
+  }
+
+  // 绘制水印
+  // 非精确绘制，会绘制一些超出可视区域的水印
+  draw() {
+    this.watermarkDraw.clear();
+    if (!this.text.trim()) {
+      return;
+    }
+    let x = 0;
+    while (x < this.mindMap.width) {
+      this.drawText(x);
+      x += this.lineSpacing / Math.sin(degToRad(this.angle));
+    }
+    let yOffset = this.lineSpacing / Math.cos(degToRad(this.angle)) || this.lineSpacing;
+    let y = yOffset;
+    while (y < this.mindMap.height) {
+      this.drawText(0, y);
+      y += yOffset;
+    }
+  }
+
+  // 绘制文字
+  drawText(x, y) {
+    let long = Math.min(this.maxLong, (this.mindMap.width - x) / Math.cos(degToRad(this.angle)));
+    let g = new G();
+    let bbox = null;
+    let bboxWidth = 0;
+    let textHeight = -1;
+    while (bboxWidth < long) {
+      let text = new Text().text(this.text);
+      g.add(text);
+      text.transform({
+        translateX: bboxWidth
+      });
+      this.setTextStyle(text);
+      bbox = g.bbox();
+      if (textHeight === -1) {
+        textHeight = bbox.height;
+      }
+      bboxWidth = bbox.width + this.textSpacing;
+    }
+    let params = {
+      rotate: this.angle,
+      origin: 'top left',
+      translateX: x,
+      translateY: textHeight
+    };
+    if (y !== undefined) {
+      params.translateY = y + textHeight;
+    }
+    g.transform(params);
+    this.watermarkDraw.add(g);
+  }
+
+  // 给文字设置样式
+  setTextStyle(text) {
+    Object.keys(this.textStyle).forEach(item => {
+      let value = this.textStyle[item];
+      if (item === 'color') {
+        text.fill(value);
+      } else {
+        text.css(camelCaseToHyphen(item), value);
+      }
+    });
+  }
+
+  // 更新水印
+  updateWatermark(config) {
+    this.mindMap.opt.watermarkConfig = cjs_default()(this.mindMap.opt.watermarkConfig, config);
+    this.handleConfig(config);
+    this.draw();
+  }
+}
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/jszip/dist/jszip.min.js
 var jszip_min = __webpack_require__("5e89");
 var jszip_min_default = /*#__PURE__*/__webpack_require__.n(jszip_min);
@@ -28165,6 +28286,7 @@ class KeyboardNavigation_KeyboardNavigation {
 
 
 
+
 // 默认选项配置
 const defaultOpt = {
   // 是否只读
@@ -28193,13 +28315,27 @@ const defaultOpt = {
   // 多选节点时鼠标移动距边缘多少距离时开始偏移
   selectTranslateLimit: 20,
   // 自定义节点备注内容显示
-  customNoteContentShow: null
+  customNoteContentShow: null,
   /*
         {
             show(){},
             hide(){}
         }
     */
+  // 是否开启节点自由拖拽
+  enableFreeDrag: false,
+  // 水印配置
+  watermarkConfig: {
+    text: '',
+    lineSpacing: 100,
+    textSpacing: 100,
+    angle: 30,
+    textStyle: {
+      color: '#999',
+      opacity: 0.5,
+      fontSize: 14
+    }
+  }
 };
 
 //  思维导图
@@ -28275,6 +28411,11 @@ class simple_mind_map_MindMap {
 
     // 键盘导航类
     this.keyboardNavigation = new KeyboardNavigation_KeyboardNavigation({
+      mindMap: this
+    });
+
+    // 水印类
+    this.watermark = new Watermark_Watermark({
       mindMap: this
     });
 
@@ -28375,6 +28516,16 @@ class simple_mind_map_MindMap {
   //  获取某个主题配置值
   getThemeConfig(prop) {
     return prop === undefined ? this.themeConfig : this.themeConfig[prop];
+  }
+
+  // 获取配置
+  getConfig(prop) {
+    return prop === undefined ? this.opt : this.opt[prop];
+  }
+
+  // 更新配置
+  updateConfig(opt = {}) {
+    this.opt = this.handleOpt(cjs_default.a.all([defaultOpt, this.opt, opt]));
   }
 
   //  获取当前布局结构
