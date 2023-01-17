@@ -612,6 +612,9 @@ redo. All commands are as follows:</p>
 includes the node tree, if <code>true</code> is passed, it will also include theme, layout,
 view, etc. data</p>
 <h3>export(type, isDownload, fileName)</h3>
+<blockquote>
+<p>You need to register the <code>Export</code> plugin first</p>
+</blockquote>
 <p>Export</p>
 <p><code>type</code>: the type to be exported, optional values: png, svg, json, pdf (v0.2.1+),
 smm (essentially also json)</p>

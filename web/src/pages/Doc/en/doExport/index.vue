@@ -1,8 +1,14 @@
 <template>
   <div>
-    <h1>DoExport instance</h1>
-<p>The <code>doExport</code> instance is responsible for exporting and can be obtained through
-<code>mindMap.doExport</code>.</p>
+    <h1>Export plugin</h1>
+<p>The <code>Export</code> plugin provides the export function.</p>
+<h2>Register</h2>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
+<span class="hljs-keyword">import</span> Export <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/Export.js&#x27;</span>
+
+MindMap.usePlugin(Export)
+</code></pre>
+<p>After registration and instantiation of <code>MindMap</code>, the instance can be obtained through <code>mindMap.doExport</code>.</p>
 <h2>Methods</h2>
 <h3>png()</h3>
 <p>Exports as <code>png</code>, an async method that returns image data, <code>data:url</code> data which

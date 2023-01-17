@@ -1,6 +1,17 @@
-# DoExport实例
+# Export 插件
 
-`doExport`实例负责导出，可通过`mindMap.doExport`获取到该实例
+`Export`插件提供导出的功能。
+
+## 注册
+
+```js
+import MindMap from 'simple-mind-map'
+import Export from 'simple-mind-map/src/Export.js'
+
+MindMap.usePlugin(Export)
+```
+
+注册完且实例化`MindMap`后可通过`mindMap.doExport`获取到该实例。
 
 ## 方法
 

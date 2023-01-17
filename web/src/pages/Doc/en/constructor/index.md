@@ -301,6 +301,8 @@ view, etc. data
 
 ### export(type, isDownload, fileName)
 
+> You need to register the `Export` plugin first
+
 Export
 
 `type`: the type to be exported, optional values: png, svg, json, pdf (v0.2.1+),

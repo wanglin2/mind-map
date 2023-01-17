@@ -215,4 +215,6 @@ class Export {
   }
 }
 
+Export.instanceName = 'doExport'
+
 export default Export
