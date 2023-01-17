@@ -23,6 +23,7 @@ let APIList = [
   'keyboardNavigation',
   'command',
   'select',
+  'drag',
   'batchExecution',
   'xmind',
   'utils'

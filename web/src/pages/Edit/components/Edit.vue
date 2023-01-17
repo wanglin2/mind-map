@@ -23,7 +23,8 @@
 <script>
 import MindMap from 'simple-mind-map'
 import MiniMap from 'simple-mind-map/src/MiniMap.js'
-import Watermark from 'simple-mind-map/src/Watermark.js';
+import Watermark from 'simple-mind-map/src/Watermark.js'
+import Drag from 'simple-mind-map/src/Drag.js'
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -45,6 +46,7 @@ import customThemeList from '@/customThemes'
 MindMap
   .usePlugin(MiniMap)
   .usePlugin(Watermark)
+  .usePlugin(Drag)
 
 // 注册自定义主题
 customThemeList.forEach((item) => {
