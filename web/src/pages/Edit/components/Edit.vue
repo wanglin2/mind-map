@@ -27,6 +27,7 @@ import Watermark from 'simple-mind-map/src/Watermark.js'
 import KeyboardNavigation from 'simple-mind-map/src/KeyboardNavigation.js'
 import Export from 'simple-mind-map/src/Export.js'
 import Drag from 'simple-mind-map/src/Drag.js'
+import Select from 'simple-mind-map/src/Select.js'
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -51,6 +52,7 @@ MindMap
   .usePlugin(Drag)
   .usePlugin(KeyboardNavigation)
   .usePlugin(Export)
+  .usePlugin(Select)
 
 // 注册自定义主题
 customThemeList.forEach((item) => {
