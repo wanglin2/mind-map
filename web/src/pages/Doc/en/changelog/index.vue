@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.2.24</h2>
+<p>New: Node free drag is changed to configurable, the default is <code>false</code>, not open; Support add watermark.</p>
 <h2>0.2.23</h2>
 <p>New: Support register new theme.</p>
 <h2>0.2.22</h2>
