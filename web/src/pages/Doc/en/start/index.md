@@ -40,6 +40,13 @@ Environments that support the `module` field will use `index.js` as the entry
 point, otherwise the packed `simpleMindMap.umd.min.js` will be used as the entry
 point.
 
+### Compile the doc
+
+```bash
+cd web 
+npm run buildDoc
+```
+
 ### Packaging the Demo
 
 ```bash
@@ -91,6 +98,16 @@ const mindMap = new MindMap({
   }
 });
 ```
+
+The non-packaged 'ES' module is introduced by default, and only contains core functions, not unregistered plugin content, which can effectively reduce the size. However, you need to configure the `babel` compilation `simple mind-map` in your project to prevent some newer `js` syntax some browsers not supporting it.
+
+If you need a file in the format of `umd` module, such as `CDN` in the browser, you can import it in the following way:
+
+```js
+import MindMap from "simple-mind-map/dist/simpleMindMap.umd.min.js";
+```
+
+The disadvantage of this method is that it will contain all the content, including the plugins you have not registered, so the overall volume will be relatively large.
 
 ## Problems
 

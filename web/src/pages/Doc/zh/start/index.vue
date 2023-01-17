@@ -25,6 +25,10 @@ npm run buildLibrary
 }
 </code></pre>
 <p>支持<code>module</code>字段的环境会以<code>index.js</code>为入口，否则会以打包后的<code>simpleMindMap.umd.min.js</code>为入口。</p>
+<h3>编译文档</h3>
+<pre class="hljs"><code><span class="hljs-built_in">cd</span> web 
+npm run buildDoc
+</code></pre>
 <h3>打包demo</h3>
 <pre class="hljs"><code><span class="hljs-built_in">cd</span> web
 npm run build
@@ -57,6 +61,11 @@ npm run build
   }
 });
 </code></pre>
+<p>默认引入的是未打包的<code>ES</code>模块，且只包含核心功能，不包含未注册的插件内容，能有效减小体积，不过你需要在你的项目中配置<code>babel</code>编译<code>simple-mind-map</code>，防止一些较新的<code>js</code>语法部分浏览器不支持。</p>
+<p>如果你需要<code>umd</code>模块格式的文件，比如以<code>CDN</code>的方式在浏览器上使用，那么你可以使用如下方式引入：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;simple-mind-map/dist/simpleMindMap.umd.min.js&quot;</span>;
+</code></pre>
+<p>这种方式的缺点是会包含所有的内容，包括你没有注册的插件，所以整体体积会比较大。</p>
 <h2>问题</h2>
 <h3>1.在Vite中使用报错，提示xml-js依赖出错</h3>
 <p>解决方法：使用如下引入方式：</p>

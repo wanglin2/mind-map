@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0
+
+Upgrade to plugin architecture, pull out some non-core functions as plugins, register as needed, and reduce the overall volume.
+
 ## 0.2.24
 
 New: Node free drag is changed to configurable, the default is `false`, not open; Support add watermark.

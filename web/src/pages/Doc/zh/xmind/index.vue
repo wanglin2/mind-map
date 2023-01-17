@@ -8,6 +8,11 @@
 <h2>引入</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> xmind <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/parse/xmind.js&#x27;</span>
 </code></pre>
+<p>如果使用的是<code>umd</code>格式的文件，那么可以通过如下方式获取：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;simple-mind-map/dist/simpleMindMap.umd.min&quot;</span>
+
+MindMap.xmind
+</code></pre>
 <h2>方法</h2>
 <h3>xmind.parseXmindFile(file)</h3>
 <p>解析<code>.xmind</code>文件，返回解析后的数据，注意是完整的数据，包含节点树、主题、结构等，可以使用<code>mindMap.setFullData(data)</code>来将返回的数据渲染到画布上</p>

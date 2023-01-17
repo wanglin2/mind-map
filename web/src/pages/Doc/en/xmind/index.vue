@@ -8,6 +8,11 @@
 <h2>Import</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> xmind <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/parse/xmind.js&#x27;</span>
 </code></pre>
+<p>If you are using the file in the format of <code>umd</code>, you can obtain it in the following way:</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;simple-mind-map/dist/simpleMindMap.umd.min&quot;</span>
+
+MindMap.xmind
+</code></pre>
 <h2>Methods</h2>
 <h3>xmind.parseXmindFile(file)</h3>
 <p>Parsing the <code>.xmind</code> file and returning the parsed data. Note that this is

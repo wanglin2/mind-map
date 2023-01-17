@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.3.0</h2>
+<p>Upgrade to plugin architecture, pull out some non-core functions as plugins, register as needed, and reduce the overall volume.</p>
 <h2>0.2.24</h2>
 <p>New: Node free drag is changed to configurable, the default is <code>false</code>, not open; Support add watermark.</p>
 <h2>0.2.23</h2>
