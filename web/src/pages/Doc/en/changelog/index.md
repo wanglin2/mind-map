@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.24
+
+New: Node free drag is changed to configurable, the default is `false`, not open; Support add watermark.
+
 ## 0.2.23
 
 New: Support register new theme.
