@@ -1,9 +1,19 @@
-# Watermark instance
+# Watermark plugin
 
 > 0.2.24+
 
-`Watermark` instance is responsible for displaying the watermark, and can be obtained
-through `mindMap.watermark`.
+`Watermark` instance is responsible for displaying the watermark.
+
+## Register
+
+```js
+import MindMap from 'simple-mind-map'
+import Watermark from 'simple-mind-map/src/Watermark.js'
+
+MindMap.usePlugin(Watermark)
+```
+
+After registration and instantiation of `MindMap`, the instance can be obtained through `mindMap.watermark`.
 
 ## Methods
 

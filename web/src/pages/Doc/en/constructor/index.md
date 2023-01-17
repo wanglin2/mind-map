@@ -85,7 +85,9 @@ For all configurations of theme, please refer to [Default Topic](https://github.
 
 > v0.3.0+
 
-If you need to use some non-core functions, such as mini map, watermark, etc, you can register plugin through this method.
+If you need to use some non-core functions, such as mini map, watermark, etc, you can register plugin through this method. Can be called in chain.
+
+Note: The plugin needs to be registered before instantiating `MindMap`.
 
 ## Static props
 

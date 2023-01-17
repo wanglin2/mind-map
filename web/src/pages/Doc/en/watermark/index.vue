@@ -1,11 +1,17 @@
 <template>
   <div>
-    <h1>Watermark instance</h1>
+    <h1>Watermark plugin</h1>
 <blockquote>
 <p>0.2.24+</p>
 </blockquote>
-<p><code>Watermark</code> instance is responsible for displaying the watermark, and can be obtained
-through <code>mindMap.watermark</code>.</p>
+<p><code>Watermark</code> instance is responsible for displaying the watermark.</p>
+<h2>Register</h2>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
+<span class="hljs-keyword">import</span> Watermark <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/Watermark.js&#x27;</span>
+
+MindMap.usePlugin(Watermark)
+</code></pre>
+<p>After registration and instantiation of <code>MindMap</code>, the instance can be obtained through <code>mindMap.watermark</code>.</p>
 <h2>Methods</h2>
 <h3>draw()</h3>
 <p>Redraw the watermark.</p>

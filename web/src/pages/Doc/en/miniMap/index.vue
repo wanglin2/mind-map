@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>MiniMap instance</h1>
+    <h1>MiniMap plugin</h1>
 <blockquote>
 <p>v0.2.11+</p>
 </blockquote>
@@ -9,7 +9,13 @@ parts, one is the current canvas content, and the other is the viewport frame.
 When zoomed, moved, or there are too many elements, the canvas may only display
 part of the mind map content. The viewport frame can be used to view the current
 viewport location, and can be quickly positioned by dragging on the small map.</p>
-<p>The <code>mindMap.miniMap</code> instance can be obtained through this.</p>
+<h2>Register</h2>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
+<span class="hljs-keyword">import</span> MiniMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/MiniMap.js&#x27;</span>
+
+MindMap.usePlugin(MiniMap)
+</code></pre>
+<p>After registration and instantiation of <code>MindMap</code>, the instance can be obtained through <code>mindMap.miniMap</code>.</p>
 <h2>Methods</h2>
 <h3>calculationMiniMap(boxWidth, boxHeight)</h3>
 <p>&quot;Calculate the rendering data for the small map, this function will call the

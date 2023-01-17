@@ -1,4 +1,4 @@
-# MiniMap instance
+# MiniMap plugin
 
 > v0.2.11+
 
@@ -8,7 +8,16 @@ When zoomed, moved, or there are too many elements, the canvas may only display
 part of the mind map content. The viewport frame can be used to view the current
 viewport location, and can be quickly positioned by dragging on the small map.
 
-The `mindMap.miniMap` instance can be obtained through this.
+## Register
+
+```js
+import MindMap from 'simple-mind-map'
+import MiniMap from 'simple-mind-map/src/MiniMap.js'
+
+MindMap.usePlugin(MiniMap)
+```
+
+After registration and instantiation of `MindMap`, the instance can be obtained through `mindMap.miniMap`.
 
 ## Methods
 

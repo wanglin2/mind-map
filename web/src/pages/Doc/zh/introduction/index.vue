@@ -14,7 +14,7 @@
 <li><input type="checkbox" id="checkbox7" checked="true"><label for="checkbox7">支持节点自由拖拽、拖拽调整</label></li>
 <li><input type="checkbox" id="checkbox8" checked="true"><label for="checkbox8">支持多种节点形状</label></li>
 <li><input type="checkbox" id="checkbox9" checked="true"><label for="checkbox9">支持导出为</label><code>json</code>、<code>png</code>、<code>svg</code>、<code>pdf</code>，支持从<code>json</code>、<code>xmind</code>导入</li>
-<li><input type="checkbox" id="checkbox10" checked="true"><label for="checkbox10">支持小地图</label></li>
+<li><input type="checkbox" id="checkbox10" checked="true"><label for="checkbox10">支持小地图、支持水印</label></li>
 </ul>
 <h2>目录介绍</h2>
 <p>1.<code>simple-mind-map</code></p>

@@ -23,6 +23,7 @@
 <script>
 import MindMap from 'simple-mind-map'
 import MiniMap from 'simple-mind-map/src/MiniMap.js'
+import Watermark from 'simple-mind-map/src/Watermark.js';
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -41,7 +42,9 @@ import { mapState } from 'vuex'
 import customThemeList from '@/customThemes'
 
 // 注册插件
-MindMap.usePlugin(MiniMap)
+MindMap
+  .usePlugin(MiniMap)
+  .usePlugin(Watermark)
 
 // 注册自定义主题
 customThemeList.forEach((item) => {
