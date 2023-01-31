@@ -580,6 +580,7 @@ export default {
         this.mindMap.watermark.updateWatermark({
           ...config
         })
+        this.data.config = this.data.config || {}
         this.data.config.watermarkConfig = this.mindMap.getConfig('watermarkConfig')
         storeConfig({
           config: this.data.config

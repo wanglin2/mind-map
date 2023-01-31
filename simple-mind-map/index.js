@@ -118,7 +118,6 @@ class MindMap {
 
     // 注册插件
     MindMap.pluginList.forEach((plugin) => {
-      console.log(plugin.instanceName);
       this[plugin.instanceName] = new plugin({
         mindMap: this
       })
