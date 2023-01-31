@@ -5,6 +5,8 @@ export default {
     color: '颜色',
     image: '图片',
     imageRepeat: '图片重复',
+    imagePosition: '图片位置',
+    imageSize: '图片大小',
     line: '连线',
     width: '粗细',
     style: '风格',

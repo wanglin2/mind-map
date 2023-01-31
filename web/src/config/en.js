@@ -166,6 +166,22 @@ export const backgroundPositionList = [
   }
 ]
 
+// 背景图片大小
+export const backgroundSizeList = [
+  {
+    name: 'Auto',
+    value: 'auto'
+  },
+  {
+    name: 'Cover',
+    value: 'cover'
+  },
+  {
+    name: 'Contain',
+    value: 'contain'
+  }
+]
+
 // 快捷键列表
 export const shortcutKeyList = [
   {

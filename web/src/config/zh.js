@@ -221,6 +221,22 @@ export const backgroundPositionList = [
   }
 ]
 
+// 背景图片大小
+export const backgroundSizeList = [
+  {
+    name: '自动',
+    value: 'auto'
+  },
+  {
+    name: '覆盖',
+    value: 'cover'
+  },
+  {
+    name: '保持',
+    value: 'contain'
+  }
+]
+
 // 数据存储
 export const store = {
   sidebarZIndex: 1 //侧边栏zIndex

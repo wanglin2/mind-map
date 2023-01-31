@@ -1,4 +1,5 @@
-//  默认主题
+//  默认主题
+
 export default {
   // 节点内边距
   paddingX: 15,
@@ -31,6 +32,10 @@ export default {
   backgroundImage: 'none',
   // 背景重复
   backgroundRepeat: 'no-repeat',
+  // 设置背景图像的起始位置
+  backgroundPosition: 'center center',
+  // 设置背景图片大小
+  backgroundSize: 'cover',
   // 节点使用横线样式
   nodeUseLineStyle: false,
   // 根节点样式
