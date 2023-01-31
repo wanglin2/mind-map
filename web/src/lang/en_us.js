@@ -5,6 +5,8 @@ export default {
     color: 'Color',
     image: 'Image',
     imageRepeat: 'Image repeat',
+    imagePosition: 'Image position',
+    imageSize: 'Image size',
     line: 'Line',
     width: 'Width',
     style: 'Style',

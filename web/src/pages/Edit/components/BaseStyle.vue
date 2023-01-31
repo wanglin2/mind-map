@@ -25,6 +25,7 @@
                 }
               "
             ></ImgUpload>
+            <!-- 图片重复方式 -->
             <div class="rowItem">
               <span class="name">{{ $t('baseStyle.imageRepeat') }}</span>
               <el-select
@@ -40,6 +41,52 @@
               >
                 <el-option
                   v-for="item in backgroundRepeatList"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <!-- 图片位置 -->
+            <div class="rowItem">
+              <span class="name">{{ $t('baseStyle.imagePosition') }}</span>
+              <el-select
+                size="mini"
+                style="width: 120px"
+                v-model="style.backgroundPosition"
+                placeholder=""
+                @change="
+                  value => {
+                    update('backgroundPosition', value)
+                  }
+                "
+              >
+                <el-option
+                  v-for="item in backgroundPositionList"
+                  :key="item.value"
+                  :label="item.name"
+                  :value="item.value"
+                >
+                </el-option>
+              </el-select>
+            </div>
+            <!-- 图片大小 -->
+            <div class="rowItem">
+              <span class="name">{{ $t('baseStyle.imageSize') }}</span>
+              <el-select
+                size="mini"
+                style="width: 120px"
+                v-model="style.backgroundSize"
+                placeholder=""
+                @change="
+                  value => {
+                    update('backgroundSize', value)
+                  }
+                "
+              >
+                <el-option
+                  v-for="item in backgroundSizeList"
                   :key="item.value"
                   :label="item.name"
                   :value="item.value"
@@ -389,7 +436,7 @@
 <script>
 import Sidebar from './Sidebar'
 import Color from './Color'
-import { lineWidthList, lineStyleList, backgroundRepeatList } from '@/config'
+import { lineWidthList, lineStyleList, backgroundRepeatList, backgroundPositionList, backgroundSizeList } from '@/config'
 import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
 import { mapState } from 'vuex'
@@ -434,6 +481,8 @@ export default {
         iconSize: 0,
         backgroundImage: '',
         backgroundRepeat: 'no-repeat',
+        backgroundPosition: '',
+        backgroundSize: '',
         marginX: 0,
         marginY: 0,
         nodeUseLineStyle: false
@@ -464,7 +513,13 @@ export default {
     },
     backgroundRepeatList() {
       return backgroundRepeatList[this.$i18n.locale] || backgroundRepeatList.zh
-    }
+    },
+    backgroundPositionList() {
+      return backgroundPositionList[this.$i18n.locale] || backgroundPositionList.zh
+    },
+    backgroundSizeList() {
+      return backgroundSizeList[this.$i18n.locale] || backgroundSizeList.zh
+    },
   },
   watch: {
     activeSidebar(val) {
@@ -499,6 +554,8 @@ export default {
         'iconSize',
         'backgroundImage',
         'backgroundRepeat',
+        'backgroundPosition',
+        'backgroundSize',
         'nodeUseLineStyle'
       ].forEach(key => {
         this.style[key] = this.mindMap.getThemeConfig(key)
