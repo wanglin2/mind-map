@@ -1,24 +1,7 @@
 // 编译文档
 const path = require('path')
 const fs = require('fs')
-const hljs = require('highlight.js')
-const md = require('markdown-it')({
-  highlight: function(str, lang) {
-    if (lang && hljs.getLanguage(lang)) {
-      try {
-        return (
-          '<pre class="hljs"><code>' +
-          hljs.highlight(lang, str, true).value +
-          '</code></pre>'
-        )
-      } catch (__) {}
-    }
-
-    return (
-      '<pre class="hljs"><code>' + md.utils.escapeHtml(str) + '</code></pre>'
-    )
-  }
-}).use(require('markdown-it-checkbox'))
+const { transformMdToVue } = require('./transformMdToVue')
 
 // 文档语言种类
 let langList = ['zh', 'en']
@@ -48,15 +31,12 @@ const compilerDir = (dir, dirName, routerList) => {
 const compilerFile = (dir, file, dirName, routerList) => {
   let filePath = path.join(dir, file)
   let destPath = path.join(dir, './index.vue')
-  let templatePath = path.join(__dirname, '../src/pages/Doc/Template.vue')
   let content = fs.readFileSync(filePath, 'utf-8')
   let title = /(^|\n\r)\s*#\s+([^\n\r]+)/g.exec(content)
   if (title && title[2]) {
     addRouter(dirName, routerList, title[2])
   }
-  let result = md.render(content)
-  let template = fs.readFileSync(templatePath, 'utf-8')
-  let doc = template.replace('$$$$', result)
+  let doc = transformMdToVue(content)
   fs.writeFileSync(destPath, doc)
 }
 

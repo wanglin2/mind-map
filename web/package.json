@@ -8,7 +8,8 @@
     "lint": "vue-cli-service lint",
     "buildLibrary": "vue-cli-service build --target lib --name simpleMindMap ../simple-mind-map/full.js --dest ../simple-mind-map/dist",
     "format": "prettier --write src/* src/*/* src/*/*/* src/*/*/*/*",
-    "buildDoc": "node ./scripts/buildDoc.js"
+    "buildDoc": "node ./scripts/buildDoc.js",
+    "autoBuildDoc": "node ./scripts/autoBuildDoc.js"
   },
   "dependencies": {
     "@toast-ui/editor": "^3.1.5",
@@ -27,6 +28,7 @@
     "@vue/cli-plugin-eslint": "^4.5.0",
     "@vue/cli-service": "^4.5.0",
     "babel-eslint": "^10.1.0",
+    "chokidar": "^3.5.3",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "less": "^3.12.2",
