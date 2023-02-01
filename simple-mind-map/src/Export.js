@@ -1,6 +1,7 @@
 import { imgToDataUrl, downloadFile } from './utils'
 import JsPDF from 'jspdf'
 import { SVG } from '@svgdotjs/svg.js'
+import drawBackgroundImageToCanvas from './utils/simulateCSSBackgroundInCanvas'
 const URL = window.URL || window.webkitURL || window
 
 //  导出类
@@ -85,7 +86,9 @@ class Export {
       let {
         backgroundColor = '#fff',
         backgroundImage,
-        backgroundRepeat = 'repeat'
+        backgroundRepeat = 'no-repeat',
+        backgroundPosition = 'center center',
+        backgroundSize = 'cover',
       } = this.mindMap.themeConfig
       // 背景颜色
       ctx.save()
@@ -96,19 +99,18 @@ class Export {
       // 背景图片
       if (backgroundImage && backgroundImage !== 'none') {
         ctx.save()
-        let img = new Image()
-        img.src = backgroundImage
-        img.onload = () => {
-          let pat = ctx.createPattern(img, backgroundRepeat)
-          ctx.rect(0, 0, width, height)
-          ctx.fillStyle = pat
-          ctx.fill()
+        drawBackgroundImageToCanvas(ctx, width, height, backgroundImage, {
+          backgroundRepeat,
+          backgroundPosition,
+          backgroundSize
+        }, (err) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve()
+          }
           ctx.restore()
-          resolve()
-        }
-        img.onerror = e => {
-          reject(e)
-        }
+        })
       } else {
         resolve()
       }

@@ -4,7 +4,7 @@
 
 Fix: 1.The problem that deleting the background image does not take effect; 2.The problem that the connector runs above the root node when the node is dragged to the root node.
 
-New: Add position and size settings for background image display.
+New: Add position and size settings for background image display. This setting is also supported for exported pictures.
 
 ## 0.3.0
 
