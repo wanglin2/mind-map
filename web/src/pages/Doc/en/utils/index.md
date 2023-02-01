@@ -1,14 +1,16 @@
 # Utility Methods
 
+## Base utility Methods
+
 Reference:
 
 ```js
 import {walk, ...} from 'simple-mind-map/src/utils'
 ```
 
-## Methods
+### Methods
 
-### walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)
+#### walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)
 
 Depth-first traversal of a tree
 
@@ -34,11 +36,11 @@ Example:
 walk(tree, null, () => {}, () => {}, false, 0, 0);
 ```
 
-### bfsWalk(root, callback)
+#### bfsWalk(root, callback)
 
 Breadth-first traversal of a tree
 
-### resizeImgSize(width, height, maxWidth, maxHeight)
+#### resizeImgSize(width, height, maxWidth, maxHeight)
 
 Resize image size
 
@@ -52,17 +54,17 @@ Resize image size
 
 `maxWidth` and `maxHeight` can both be passed, or only one of them can be passed
 
-### resizeImg(imgUrl, maxWidth, maxHeight)
+#### resizeImg(imgUrl, maxWidth, maxHeight)
 
 Resize image, internally loads the image first, then calls the `resizeImgSize`
 method, and returns a `promise`
 
-### simpleDeepClone(data)
+#### simpleDeepClone(data)
 
 Extremely simple deep copy method, can only be used for objects that are all
 basic data, otherwise it will throw an error
 
-### copyRenderTree(tree, root)
+#### copyRenderTree(tree, root)
 
 Copy render tree data, example:
 
@@ -70,7 +72,7 @@ Copy render tree data, example:
 copyRenderTree({}, this.mindMap.renderer.renderTree);
 ```
 
-### copyNodeTree(tree, root)
+#### copyNodeTree(tree, root)
 
 Copy node tree data, mainly eliminating the reference `node` instance `_node`
 and copying the `data` of the data object, example:
@@ -79,30 +81,60 @@ and copying the `data` of the data object, example:
 copyNodeTree({}, node);
 ```
 
-### imgToDataUrl(src)
+#### imgToDataUrl(src)
 
 Convert image to dataURL
 
-### downloadFile(file, fileName)
+#### downloadFile(file, fileName)
 
 Download file
 
-### throttle(fn, time = 300, ctx)
+#### throttle(fn, time = 300, ctx)
 
 Throttle function
 
-### asyncRun(taskList, callback = () => {})
+#### asyncRun(taskList, callback = () => {})
 
 Run tasks in task list asynchronously, tasks are run synchronously without order
 
-### degToRad(deg)
+#### degToRad(deg)
 
 > v0.2.24+
 
 Angle to radian
 
-### camelCaseToHyphen(str)
+#### camelCaseToHyphen(str)
 
 > v0.2.24+
 
 CamelCase to hyphen
+
+## Simulate CSS background in Canvas
+
+Import:
+
+```js
+import drawBackgroundImageToCanvas from 'simple-mind-map/src/utils/simulateCSSBackgroundInCanvas'
+```
+
+Usage：
+
+```js
+let width = 500
+let height = 500
+let img = '/1.jpg'
+let canvas = document.createElement('canvas')
+canvas.width = width
+canvas.height = height
+drawBackgroundImageToCanvas(ctx, width, height, img, {
+  backgroundRepeat: 'repeat-y',
+  backgroundSize: '60%',
+  backgroundPosition: 'center center'
+}, (err) => {
+  if (err) {
+    // fail
+  } else {
+    // success
+  }
+})
+```

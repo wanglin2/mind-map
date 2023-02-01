@@ -1,11 +1,12 @@
 <template>
   <div>
     <h1>Utility Methods</h1>
+<h2>Base utility Methods</h2>
 <p>Reference:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> {walk, ...} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils&#x27;</span>
 </code></pre>
-<h2>Methods</h2>
-<h3>walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)</h3>
+<h3>Methods</h3>
+<h4>walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)</h4>
 <p>Depth-first traversal of a tree</p>
 <p><code>root</code>: the root node of the tree to be traversed</p>
 <p><code>parent</code>: parent node</p>
@@ -19,48 +20,71 @@ root, parent, isRoot, layerIndex, index</p>
 <p>Example:</p>
 <pre class="hljs"><code>walk(tree, <span class="hljs-literal">null</span>, <span class="hljs-function">() =&gt;</span> {}, <span class="hljs-function">() =&gt;</span> {}, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
 </code></pre>
-<h3>bfsWalk(root, callback)</h3>
+<h4>bfsWalk(root, callback)</h4>
 <p>Breadth-first traversal of a tree</p>
-<h3>resizeImgSize(width, height, maxWidth, maxHeight)</h3>
+<h4>resizeImgSize(width, height, maxWidth, maxHeight)</h4>
 <p>Resize image size</p>
 <p><code>width</code>: original width of the image</p>
 <p><code>height</code>: original height of the image</p>
 <p><code>maxWidth</code>: the width to resize to</p>
 <p><code>maxHeight</code>: the height to resize to</p>
 <p><code>maxWidth</code> and <code>maxHeight</code> can both be passed, or only one of them can be passed</p>
-<h3>resizeImg(imgUrl, maxWidth, maxHeight)</h3>
+<h4>resizeImg(imgUrl, maxWidth, maxHeight)</h4>
 <p>Resize image, internally loads the image first, then calls the <code>resizeImgSize</code>
 method, and returns a <code>promise</code></p>
-<h3>simpleDeepClone(data)</h3>
+<h4>simpleDeepClone(data)</h4>
 <p>Extremely simple deep copy method, can only be used for objects that are all
 basic data, otherwise it will throw an error</p>
-<h3>copyRenderTree(tree, root)</h3>
+<h4>copyRenderTree(tree, root)</h4>
 <p>Copy render tree data, example:</p>
 <pre class="hljs"><code>copyRenderTree({}, <span class="hljs-built_in">this</span>.mindMap.renderer.renderTree);
 </code></pre>
-<h3>copyNodeTree(tree, root)</h3>
+<h4>copyNodeTree(tree, root)</h4>
 <p>Copy node tree data, mainly eliminating the reference <code>node</code> instance <code>_node</code>
 and copying the <code>data</code> of the data object, example:</p>
 <pre class="hljs"><code>copyNodeTree({}, node);
 </code></pre>
-<h3>imgToDataUrl(src)</h3>
+<h4>imgToDataUrl(src)</h4>
 <p>Convert image to dataURL</p>
-<h3>downloadFile(file, fileName)</h3>
+<h4>downloadFile(file, fileName)</h4>
 <p>Download file</p>
-<h3>throttle(fn, time = 300, ctx)</h3>
+<h4>throttle(fn, time = 300, ctx)</h4>
 <p>Throttle function</p>
-<h3>asyncRun(taskList, callback = () =&gt; {})</h3>
+<h4>asyncRun(taskList, callback = () =&gt; {})</h4>
 <p>Run tasks in task list asynchronously, tasks are run synchronously without order</p>
-<h3>degToRad(deg)</h3>
+<h4>degToRad(deg)</h4>
 <blockquote>
 <p>v0.2.24+</p>
 </blockquote>
 <p>Angle to radian</p>
-<h3>camelCaseToHyphen(str)</h3>
+<h4>camelCaseToHyphen(str)</h4>
 <blockquote>
 <p>v0.2.24+</p>
 </blockquote>
 <p>CamelCase to hyphen</p>
+<h2>Simulate CSS background in Canvas</h2>
+<p>Import:</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>
+</code></pre>
+<p>Usage：</p>
+<pre class="hljs"><code><span class="hljs-keyword">let</span> width = <span class="hljs-number">500</span>
+<span class="hljs-keyword">let</span> height = <span class="hljs-number">500</span>
+<span class="hljs-keyword">let</span> img = <span class="hljs-string">&#x27;/1.jpg&#x27;</span>
+<span class="hljs-keyword">let</span> canvas = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;canvas&#x27;</span>)
+canvas.width = width
+canvas.height = height
+drawBackgroundImageToCanvas(ctx, width, height, img, {
+  <span class="hljs-attr">backgroundRepeat</span>: <span class="hljs-string">&#x27;repeat-y&#x27;</span>,
+  <span class="hljs-attr">backgroundSize</span>: <span class="hljs-string">&#x27;60%&#x27;</span>,
+  <span class="hljs-attr">backgroundPosition</span>: <span class="hljs-string">&#x27;center center&#x27;</span>
+}, <span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (err) {
+    <span class="hljs-comment">// fail</span>
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// success</span>
+  }
+})
+</code></pre>
 
   </div>
 </template>

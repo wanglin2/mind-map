@@ -1,11 +1,12 @@
 <template>
   <div>
     <h1>内置工具方法</h1>
+<h2>基础工具方法</h2>
 <p>引用：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> {walk, ...} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils&#x27;</span>
 </code></pre>
-<h2>方法</h2>
-<h3>walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)</h3>
+<h3>方法</h3>
+<h4>walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)</h4>
 <p>深度优先遍历树</p>
 <p><code>root</code>：要遍历的树的根节点</p>
 <p><code>parent</code>：父节点</p>
@@ -17,45 +18,68 @@
 <p>示例：</p>
 <pre class="hljs"><code>walk(tree, <span class="hljs-literal">null</span>, <span class="hljs-function">() =&gt;</span> {}, <span class="hljs-function">() =&gt;</span> {}, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>)
 </code></pre>
-<h3>bfsWalk(root, callback)</h3>
+<h4>bfsWalk(root, callback)</h4>
 <p>广度优先遍历树</p>
-<h3>resizeImgSize(width, height, maxWidth, maxHeight)</h3>
+<h4>resizeImgSize(width, height, maxWidth, maxHeight)</h4>
 <p>缩放图片的尺寸</p>
 <p><code>width</code>：图片原本的宽</p>
 <p><code>height</code>：图片原本的高</p>
 <p><code>maxWidth</code>：要缩放到的宽</p>
 <p><code>maxHeight</code>：要缩放到的高</p>
 <p><code>maxWidth</code>和<code>maxHeight</code>可以同时都传，也可以只传一个</p>
-<h3>resizeImg(imgUrl, maxWidth, maxHeight)</h3>
+<h4>resizeImg(imgUrl, maxWidth, maxHeight)</h4>
 <p>缩放图片，内部先加载图片，然后调用<code>resizeImgSize</code>方法，返回一个<code>promise</code></p>
-<h3>simpleDeepClone(data)</h3>
+<h4>simpleDeepClone(data)</h4>
 <p>极简的深拷贝方法，只能针对全是基本数据的对象，否则会报错</p>
-<h3>copyRenderTree(tree, root)</h3>
+<h4>copyRenderTree(tree, root)</h4>
 <p>复制渲染树数据，示例：</p>
 <pre class="hljs"><code>copyRenderTree({}, <span class="hljs-built_in">this</span>.mindMap.renderer.renderTree)
 </code></pre>
-<h3>copyNodeTree(tree, root)</h3>
+<h4>copyNodeTree(tree, root)</h4>
 <p>复制节点树数据，主要是剔除其中的引用<code>node</code>实例的<code>_node</code>，然后复制<code>data</code>对象的数据，示例：</p>
 <pre class="hljs"><code>copyNodeTree({}, node)
 </code></pre>
-<h3>imgToDataUrl(src)</h3>
+<h4>imgToDataUrl(src)</h4>
 <p>图片转成dataURL</p>
-<h3>downloadFile(file, fileName)</h3>
+<h4>downloadFile(file, fileName)</h4>
 <p>下载文件</p>
-<h3>throttle(fn, time = 300, ctx)</h3>
+<h4>throttle(fn, time = 300, ctx)</h4>
 <p>节流函数</p>
-<h3>asyncRun(taskList, callback = () =&gt; {})</h3>
+<h4>asyncRun(taskList, callback = () =&gt; {})</h4>
 <p>异步执行任务队列，多个任务是同步执行的，没有先后顺序</p>
-<h3>degToRad(deg)</h3>
+<h4>degToRad(deg)</h4>
 <blockquote>
 <p>v0.2.24+</p>
 </blockquote>
 <p>角度转弧度</p>
-<h3>camelCaseToHyphen(str)</h3>
+<h4>camelCaseToHyphen(str)</h4>
 <blockquote>
 <p>v0.2.24+</p>
 </blockquote>
 <p>驼峰转连字符</p>
+<h2>在canvas中模拟css的背景属性</h2>
+<p>引入：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>
+</code></pre>
+<p>使用：</p>
+<pre class="hljs"><code><span class="hljs-keyword">let</span> width = <span class="hljs-number">500</span>
+<span class="hljs-keyword">let</span> height = <span class="hljs-number">500</span>
+<span class="hljs-keyword">let</span> img = <span class="hljs-string">&#x27;/1.jpg&#x27;</span>
+<span class="hljs-keyword">let</span> canvas = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;canvas&#x27;</span>)
+canvas.width = width
+canvas.height = height
+drawBackgroundImageToCanvas(ctx, width, height, img, {
+  <span class="hljs-attr">backgroundRepeat</span>: <span class="hljs-string">&#x27;repeat-y&#x27;</span>,
+  <span class="hljs-attr">backgroundSize</span>: <span class="hljs-string">&#x27;60%&#x27;</span>,
+  <span class="hljs-attr">backgroundPosition</span>: <span class="hljs-string">&#x27;center center&#x27;</span>
+}, <span class="hljs-function">(<span class="hljs-params">err</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (err) {
+    <span class="hljs-comment">// 失败</span>
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-comment">// 成功</span>
+  }
+})
+</code></pre>
 
   </div>
 </template>
