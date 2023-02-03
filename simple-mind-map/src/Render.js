@@ -239,7 +239,7 @@ class Render {
 
   //   渲染
 
-  render() {
+  render(callback = () => {}) {
     if (this.reRender) {
       this.clearActive()
     }
@@ -247,6 +247,7 @@ class Render {
       this.root = root
       this.root.render(() => {
         this.mindMap.emit('node_tree_render_end')
+        callback()
       })
     })
     this.mindMap.emit('node_active', null, this.activeNodeList)
@@ -472,6 +473,8 @@ class Render {
     if (node.isRoot) {
       return
     }
+    // 如果是二级节点变成了下级节点，或是下级节点变成了二级节点，节点样式需要更新
+    let nodeLayerChanged = (node.layerIndex === 1 && exist.layerIndex !== 1) || (node.layerIndex !== 1 && exist.layerIndex === 1)
     // 移动节点
     let nodeParent = node.parent
     let nodeBorthers = nodeParent.children
@@ -495,7 +498,12 @@ class Render {
     }
     existBorthers.splice(existIndex, 0, node)
     existParent.nodeData.children.splice(existIndex, 0, node.nodeData)
-    this.mindMap.render()
+    this.mindMap.render(() => {
+      if (nodeLayerChanged) {
+        node.getSize()
+        node.renderNode()
+      }
+    })
   }
 
   //  将节点移动到另一个节点的后面
@@ -504,6 +512,8 @@ class Render {
     if (node.isRoot) {
       return
     }
+    // 如果是二级节点变成了下级节点，或是下级节点变成了二级节点，节点样式需要更新
+    let nodeLayerChanged = (node.layerIndex === 1 && exist.layerIndex !== 1) || (node.layerIndex !== 1 && exist.layerIndex === 1)
     // 移动节点
     let nodeParent = node.parent
     let nodeBorthers = nodeParent.children
@@ -528,7 +538,12 @@ class Render {
     existIndex++
     existBorthers.splice(existIndex, 0, node)
     existParent.nodeData.children.splice(existIndex, 0, node.nodeData)
-    this.mindMap.render()
+    this.mindMap.render(() => {
+      if (nodeLayerChanged) {
+        node.getSize()
+        node.renderNode()
+      }
+    })
   }
 
   //  移除节点

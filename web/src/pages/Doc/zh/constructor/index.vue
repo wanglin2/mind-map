@@ -235,9 +235,15 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
   scaleY, <span class="hljs-comment">// Number，思维导图图形的垂直缩放值</span>
 }
 </code></pre>
-<h3>render()</h3>
+<h3>render(callback)</h3>
+<ul>
+<li><code>callback</code>：<code>v0.3.2+</code>，<code>Function</code>，当重新渲染完成时调用</li>
+</ul>
 <p>触发整体渲染，会进行节点复用，性能较<code>reRender</code>会更好一点，如果只是节点位置变化了可以调用该方法进行渲染</p>
-<h3>reRender()</h3>
+<h3>reRender(callback)</h3>
+<ul>
+<li><code>callback</code>：<code>v0.3.2+</code>，<code>Function</code>，当重新渲染完成时调用</li>
+</ul>
 <p>整体重新渲染，会清空画布，节点也会重新创建，性能不好，慎重使用</p>
 <h3>resize()</h3>
 <p>容器尺寸变化后，需要调用该方法进行适应</p>

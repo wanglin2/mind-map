@@ -119,12 +119,16 @@ Get the `svg` data and return an object. The detailed structure is as follows:
 }
 ```
 
-### render()
+### render(callback)
+
+- `callback`: `v0.3.2+`, `Function`, Called when the re-rendering is complete
 
 Triggers a full rendering, which will reuse nodes for better performance. If
 only the node positions have changed, this method can be called to `reRender`.
 
-### reRender()
+### reRender(callback)
+
+- `callback`: `v0.3.2+`, `Function`, Called when the re-rendering is complete
 
 Performs a full re-render, clearing the canvas and creating new nodes. This has
 poor performance and should be used sparingly.
