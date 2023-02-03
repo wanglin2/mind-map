@@ -235,10 +235,16 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
   scaleY, <span class="hljs-comment">// Number, vertical zoom value of mind map graphics</span>
 }
 </code></pre>
-<h3>render()</h3>
+<h3>render(callback)</h3>
+<ul>
+<li><code>callback</code>: <code>v0.3.2+</code>, <code>Function</code>, Called when the re-rendering is complete</li>
+</ul>
 <p>Triggers a full rendering, which will reuse nodes for better performance. If
 only the node positions have changed, this method can be called to <code>reRender</code>.</p>
-<h3>reRender()</h3>
+<h3>reRender(callback)</h3>
+<ul>
+<li><code>callback</code>: <code>v0.3.2+</code>, <code>Function</code>, Called when the re-rendering is complete</li>
+</ul>
 <p>Performs a full re-render, clearing the canvas and creating new nodes. This has
 poor performance and should be used sparingly.</p>
 <h3>resize()</h3>

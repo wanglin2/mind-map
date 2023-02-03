@@ -142,21 +142,21 @@ class MindMap {
   }
 
   //  渲染，部分渲染
-  render() {
+  render(callback) {
     this.batchExecution.push('render', () => {
       this.initTheme()
       this.renderer.reRender = false
-      this.renderer.render()
+      this.renderer.render(callback)
     })
   }
 
   //  重新渲染
-  reRender() {
+  reRender(callback) {
     this.batchExecution.push('render', () => {
       this.draw.clear()
       this.initTheme()
       this.renderer.reRender = true
-      this.renderer.render()
+      this.renderer.render(callback)
     })
   }
 
