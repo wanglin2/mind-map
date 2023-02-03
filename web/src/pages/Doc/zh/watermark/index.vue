@@ -31,6 +31,11 @@ MindMap.usePlugin(Watermark)
     }
 })
 </code></pre>
+<h3>hasWatermark()</h3>
+<blockquote>
+<p>v0.3.2+</p>
+</blockquote>
+<p>获取是否存在水印。</p>
 
   </div>
 </template>

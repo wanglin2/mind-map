@@ -20,6 +20,11 @@ class Watermark {
     this.updateWatermark(this.mindMap.opt.watermarkConfig || {})
   }
 
+  // 获取是否存在水印
+  hasWatermark() {
+    return !!this.text.trim()
+  }
+
   // 处理水印配置
   handleConfig({ text, lineSpacing, textSpacing, angle, textStyle }) {
     this.text = text === undefined ? '' : String(text).trim()
@@ -36,7 +41,7 @@ class Watermark {
   // 非精确绘制，会绘制一些超出可视区域的水印
   draw() {
     this.watermarkDraw.clear()
-    if (!this.text.trim()) {
+    if (!this.hasWatermark()) {
       return
     }
     let x = 0

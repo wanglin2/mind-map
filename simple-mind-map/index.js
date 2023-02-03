@@ -344,7 +344,17 @@ class MindMap {
     // 把实际内容变换
     draw.translate(-rect.x + elRect.left, -rect.y + elRect.top)
     // 克隆一份数据
-    const clone = svg.clone()
+    let clone = svg.clone()
+    // 如果实际图形宽高超出了屏幕宽高，且存在水印的话需要重新绘制水印，否则会出现超出部分没有水印的问题
+    if ((rect.width > origWidth || rect.height >  origHeight) && this.watermark && this.watermark.hasWatermark()) {
+      this.width = rect.width
+      this.height = rect.height
+      this.watermark.draw()
+      clone = svg.clone()
+      this.width = origWidth
+      this.height = origHeight
+      this.watermark.draw()
+    }
     // 恢复原先的大小和变换信息
     svg.size(origWidth, origHeight)
     draw.transform(origTransform)
