@@ -24700,7 +24700,7 @@ class Render_Render {
 
   //   渲染
 
-  render() {
+  render(callback = () => {}) {
     if (this.reRender) {
       this.clearActive();
     }
@@ -24708,6 +24708,7 @@ class Render_Render {
       this.root = root;
       this.root.render(() => {
         this.mindMap.emit('node_tree_render_end');
+        callback();
       });
     });
     this.mindMap.emit('node_active', null, this.activeNodeList);
@@ -24924,6 +24925,8 @@ class Render_Render {
     if (node.isRoot) {
       return;
     }
+    // 如果是二级节点变成了下级节点，或是下级节点变成了二级节点，节点样式需要更新
+    let nodeLayerChanged = node.layerIndex === 1 && exist.layerIndex !== 1 || node.layerIndex !== 1 && exist.layerIndex === 1;
     // 移动节点
     let nodeParent = node.parent;
     let nodeBorthers = nodeParent.children;
@@ -24947,7 +24950,12 @@ class Render_Render {
     }
     existBorthers.splice(existIndex, 0, node);
     existParent.nodeData.children.splice(existIndex, 0, node.nodeData);
-    this.mindMap.render();
+    this.mindMap.render(() => {
+      if (nodeLayerChanged) {
+        node.getSize();
+        node.renderNode();
+      }
+    });
   }
 
   //  将节点移动到另一个节点的后面
@@ -24956,6 +24964,8 @@ class Render_Render {
     if (node.isRoot) {
       return;
     }
+    // 如果是二级节点变成了下级节点，或是下级节点变成了二级节点，节点样式需要更新
+    let nodeLayerChanged = node.layerIndex === 1 && exist.layerIndex !== 1 || node.layerIndex !== 1 && exist.layerIndex === 1;
     // 移动节点
     let nodeParent = node.parent;
     let nodeBorthers = nodeParent.children;
@@ -24980,7 +24990,12 @@ class Render_Render {
     existIndex++;
     existBorthers.splice(existIndex, 0, node);
     existParent.nodeData.children.splice(existIndex, 0, node.nodeData);
-    this.mindMap.render();
+    this.mindMap.render(() => {
+      if (nodeLayerChanged) {
+        node.getSize();
+        node.renderNode();
+      }
+    });
   }
 
   //  移除节点
@@ -27095,21 +27110,21 @@ class simple_mind_map_MindMap {
   }
 
   //  渲染，部分渲染
-  render() {
+  render(callback) {
     this.batchExecution.push('render', () => {
       this.initTheme();
       this.renderer.reRender = false;
-      this.renderer.render();
+      this.renderer.render(callback);
     });
   }
 
   //  重新渲染
-  reRender() {
+  reRender(callback) {
     this.batchExecution.push('render', () => {
       this.draw.clear();
       this.initTheme();
       this.renderer.reRender = true;
-      this.renderer.render();
+      this.renderer.render(callback);
     });
   }
 
@@ -27297,7 +27312,17 @@ class simple_mind_map_MindMap {
     // 把实际内容变换
     draw.translate(-rect.x + elRect.left, -rect.y + elRect.top);
     // 克隆一份数据
-    const clone = svg.clone();
+    let clone = svg.clone();
+    // 如果实际图形宽高超出了屏幕宽高，且存在水印的话需要重新绘制水印，否则会出现超出部分没有水印的问题
+    if ((rect.width > origWidth || rect.height > origHeight) && this.watermark && this.watermark.hasWatermark()) {
+      this.width = rect.width;
+      this.height = rect.height;
+      this.watermark.draw();
+      clone = svg.clone();
+      this.width = origWidth;
+      this.height = origHeight;
+      this.watermark.draw();
+    }
     // 恢复原先的大小和变换信息
     svg.size(origWidth, origHeight);
     draw.transform(origTransform);
@@ -27472,6 +27497,11 @@ class Watermark_Watermark {
     this.updateWatermark(this.mindMap.opt.watermarkConfig || {});
   }
 
+  // 获取是否存在水印
+  hasWatermark() {
+    return !!this.text.trim();
+  }
+
   // 处理水印配置
   handleConfig({
     text,
@@ -27491,7 +27521,7 @@ class Watermark_Watermark {
   // 非精确绘制，会绘制一些超出可视区域的水印
   draw() {
     this.watermarkDraw.clear();
-    if (!this.text.trim()) {
+    if (!this.hasWatermark()) {
       return;
     }
     let x = 0;
