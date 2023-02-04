@@ -42,3 +42,9 @@ mindMap.watermark.updateWatermark({
     }
 })
 ```
+
+### hasWatermark()
+
+> v0.3.2+
+
+Gets whether the watermark exists.

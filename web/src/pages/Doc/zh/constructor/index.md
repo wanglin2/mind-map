@@ -119,11 +119,15 @@ mindMap.setTheme('主题名称')
 }
 ```
 
-### render()
+### render(callback)
+
+- `callback`：`v0.3.2+`，`Function`，当重新渲染完成时调用
 
 触发整体渲染，会进行节点复用，性能较`reRender`会更好一点，如果只是节点位置变化了可以调用该方法进行渲染
 
-### reRender()
+### reRender(callback)
+
+- `callback`：`v0.3.2+`，`Function`，当重新渲染完成时调用
 
 整体重新渲染，会清空画布，节点也会重新创建，性能不好，慎重使用
 
