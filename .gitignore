@@ -1,2 +1,5 @@
 node_modules
 .DS_Store
+.idea
+/web/.idea/
+/simple-mind-map/.idea/

@@ -17,10 +17,10 @@ const createFullData = () => {
     };
 }
 
-/** 
- * @Author: 王林 
- * @Date: 2021-04-15 22:23:24 
- * @Desc: 节点较多示例数据 
+/**
+ * @Author: 王林
+ * @Date: 2021-04-15 22:23:24
+ * @Desc: 节点较多示例数据
  */
 const data1 = {
     "root": {
@@ -464,11 +464,11 @@ const data1 = {
     }
 }
 
-/** 
- * javascript comment 
- * @Author: 王林25 
- * @Date: 2021-07-12 13:49:43 
- * @Desc: 真实场景数据 
+/**
+ * javascript comment
+ * @Author: 王林25
+ * @Date: 2021-07-12 13:49:43
+ * @Desc: 真实场景数据
  */
 const data2 = {
     "root": {
@@ -751,11 +751,11 @@ const data2 = {
     }
 }
 
-/** 
- * javascript comment 
- * @Author: 王林25 
- * @Date: 2021-07-12 14:29:10 
- * @Desc: 极简数据 
+/**
+ * javascript comment
+ * @Author: 王林25
+ * @Date: 2021-07-12 14:29:10
+ * @Desc: 极简数据
  */
 const data3 = {
     "root": {
@@ -873,13 +873,102 @@ const data5 = {
         "data": {
             "text": "根节点"
         },
+
         "children": [
             {
                 "data": {
                     "text": "二级节点",
                     "generalization": {
                         "text": "概要",
-                    }
+                    },
+                    "color": "#f23",
+                    "customText": [
+                        {
+                            content: "test10", //文本内容
+                            position: 'pre', //pre:前置,post后置
+                            styleConfig: {
+                                fontFamily: '',
+                                fontSize: 18,
+                                fontStyle: 'italic',
+                                fontWeight: 'bold',
+                                lineHeight: 1.5,
+                                textDecoration: 'underline',
+                                color: "#f23",
+                            },
+                            x: 10,
+                            y: 20,
+                            sort: 10,
+                            spacing: 7, //单词间距
+                            inheritsStyle: true
+                        },
+                        {
+                            content: "test2", //文本内容
+                            position: 'pre', //pre:前置,post后置
+                            styleConfig: {
+                                fontFamily: '',
+                                fontSize: 18,
+                                fontStyle: 'italic',
+                                fontWeight: 'bold',
+                                lineHeight: 1.5,
+                                textDecoration: 'underline',
+                                color: "#f23",
+                            },
+                            sort: 2,
+                            spacing: 7, //单词间距
+                            inheritsStyle: true
+                        },
+                        {
+                            content: "test3", //文本内容
+                            position: 'pre', //pre:前置,post后置
+                            styleConfig: {
+                                fontFamily: '',
+                                fontSize: 18,
+                                fontStyle: 'italic',
+                                fontWeight: 'bold',
+                                lineHeight: 1.5,
+                                textDecoration: 'underline',
+                                color: "#f23",
+                            },
+                            sort: 3,
+                            spacing: 7, //单词间距
+                            inheritsStyle: true
+                        },
+                        {
+                            content: "testp1", //文本内容
+                            position: 'post', //pre:前置,post后置
+                            styleConfig: {
+                                fontFamily: '',
+                                fontSize: 18,
+                                fontStyle: 'italic',
+                                fontWeight: 'bold',
+                                lineHeight: 1.5,
+                                textDecoration: 'underline',
+                                color: "#f23",
+                            },
+                            sort: 1,
+                            spacing: 7, //单词间距
+                            inheritsStyle: true
+                        },
+                        {
+                            content: "testp0", //文本内容
+                            position: 'post', //pre:前置,post后置
+                            styleConfig: {
+                                fontFamily: '',
+                                fontSize: 18,
+                                fontStyle: 'italic',
+                                fontWeight: 'bold',
+                                lineHeight: 1.5,
+                                textDecoration: 'underline',
+                                color: "#f23",
+                            },
+                            sort: 0,
+                            spacing: 7, //单词间距
+                            inheritsStyle: true
+                        }
+                    ],
+                    "direction": 'vertical', //排列方向 horizontal vertical ,默认水平排布
+
+
                 },
                 "children": [
                     {
