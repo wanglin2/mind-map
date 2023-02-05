@@ -143,6 +143,7 @@ export default {
     lineThrough: 'Line through',
     overline: 'Overline',
     border: 'Border',
+    customText: 'CustomText',
     style: 'Style',
     width: 'Width',
     borderRadius: 'Border radius',

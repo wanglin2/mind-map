@@ -34,7 +34,7 @@ export default {
     watermarkTextSpacing: '水印文字间距',
     watermarkAngle: '旋转角度',
     watermarkTextOpacity: '文字透明度',
-    watermarkTextFontSize: '文字字号'
+    watermarkTextFontSize: '文字字号',
   },
   color: {
     moreColor: '更多颜色'
@@ -143,6 +143,7 @@ export default {
     lineThrough: '中划线',
     overline: '上划线',
     border: '边框',
+    customText: '自定义文本',
     style: '样式',
     width: '宽度',
     borderRadius: '圆角',

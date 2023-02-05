@@ -1266,6 +1266,11 @@ class Node {
         this.mindMap.execCommand('SET_NODE_IMAGE', this, imgData)
     }
 
+    //  新增自定义文本
+    addCustomText(newCusData) {
+        this.mindMap.execCommand('SET_NODE_IMAGE', this, newCusData)
+    }
+
     //  设置图标
 
     setIcon(icons) {

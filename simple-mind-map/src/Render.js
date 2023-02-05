@@ -142,6 +142,9 @@ class Render {
         // 设置节点文本
         this.setNodeText = this.setNodeText.bind(this)
         this.mindMap.command.add('SET_NODE_TEXT', this.setNodeText)
+        // 添加添加节点自定义文本
+        this.addNodeCustomText = this.addNodeCustomText.bind(this)
+        this.mindMap.command.add('SET_NODE_IMAGE', this.addNodeCustomText)
         // 设置节点图片
         this.setNodeImage = this.setNodeImage.bind(this)
         this.mindMap.command.add('SET_NODE_IMAGE', this.setNodeImage)
@@ -673,13 +676,13 @@ class Render {
         }
     }
 
-    //设置节点自定义文本样式 -TODO
+    //设置节点自定义文本样式
     setNodeCustomTextConfig(node, prop, value, isActive, cusID) {
         let data
-        let index = 0
-        let cusData = node.nodeData.data?.customText.find((item,i) => {
-            if(item.id === cusID) {
-                index = 1
+        // let index = 0
+        let cusData = node.nodeData.data?.customText.find((item) => {
+            if (item.id === cusID) {
+                // index = 1
                 return true
             }
         })
@@ -817,6 +820,11 @@ class Render {
         }, cusID)
     }
 
+    //  添加新的节点自定义文本
+    addNodeCustomText(node, data) {
+        this.setNodeDataRender(node, data, null, 'addCustomData')
+    }
+
     //  设置节点图片
 
     setNodeImage(node, {url, title, width, height}) {
@@ -949,20 +957,22 @@ class Render {
 
     //  更新节点数据
 
-    setNodeData(node, data, type = 'origin', index) {
-        if (type === 'origin')
+    setNodeData(node, data, symbol = 'origin', index) {
+        if (symbol === 'origin')
             Object.keys(data).forEach(key => {
                 node.nodeData.data[key] = data[key]
             })
-        else
+        else if (symbol === 'custom')
             Object.keys(data).forEach(key => {
                 node.nodeData.data.customText[index][key] = data[key]
             })
+        else if (symbol === 'addCustomData')
+            node.nodeData.data.customText = [...node.nodeData.data.customText, ...data]
     }
 
     //  设置节点数据，并判断是否渲染
 
-    setNodeDataRender(node, data, cusID) {
+    setNodeDataRender(node, data, cusID, symbol) {
         if (cusID) {
             let cusIndex = 0
             node.nodeData.data.customText.forEach((item, index) => {
@@ -971,9 +981,11 @@ class Render {
                 }
             })
             this.setNodeData(node, data, 'custom', cusIndex)
-        } else {
+        } else
             this.setNodeData(node, data)
-        }
+        if (!cusID && symbol === 'addCustomData')
+            this.setNodeData(node, data, symbol)
+
 
         let changed = node.getSize()
         node.renderNode()
