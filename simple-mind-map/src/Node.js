@@ -91,6 +91,8 @@ class Node {
         // 初始化
         // this.createNodeData()
         this.getSize()
+        //是否存在自定义文本
+        this.hasCustomText = this.nodeData.data.customText && this.nodeData.data.customText.length
     }
 
     // 支持自定义位置
@@ -380,7 +382,8 @@ class Node {
         //自定义文字及样式
         let totalWidth = 0
         let totalHeight = 0
-        if (this.nodeData.data.customText) {
+
+        if (this.hasCustomText) {
             this.style.setCustomType(true)
             const direction = this.nodeData.data.direction
             const preCustomText = this.nodeData.data.customText.filter(item => item.position === 'pre').sort((pre, cur) => pre.sort - cur.sort)
@@ -391,18 +394,18 @@ class Node {
             customText.forEach((item, index) => {
                 const setRootData = () => {
                     if (!isCreateRootText) {
-                        this.nodeData.data.text.split(/\n/gim).forEach((item, index) => {
-                            let node = new Text().text(item)
+                        this.nodeData.data.text.split(/\n/gim).forEach((rootItem, rootIndex) => {
+                            let node = new Text().text(rootItem)
                             this.style.text(node)
-                            const rootY = fontSize * lineHeight * index
+                            const rootY = fontSize * lineHeight * rootIndex
                             node.y(rootY)
                             // totalIndex++
                            if(direction === 'horizontal' || !direction) {
                                node.x(totalWidth)
-                               totalWidth += this.measureText(item, fontSize).width + spacing
+                               totalWidth += this.measureText(rootItem, fontSize).width + spacing
                            } else if(direction === 'vertical'){
                                node.y(totalHeight + rootY)
-                               totalHeight += this.measureText(item, fontSize).height + spacing
+                               totalHeight += this.measureText(rootItem, fontSize).height + spacing
                            }
                             g.add(node)
                         })
@@ -430,8 +433,13 @@ class Node {
                     const customY = customTextFontSize * customTextLineHeight * childIndex
                     node.y(customY)
                     // totalIndex++
-
-                    if(direction === 'horizontal' || !direction) {
+                    node.attr({
+                        cusID: item.id || item.content
+                    })
+                    if(item.x && item.y) {
+                        node.x(item.x)
+                        node.y(item.y)
+                    } else if(direction === 'horizontal' || !direction) {
                         node.x(totalWidth)
                         totalWidth += this.measureText(childItem, customTextFontSize).width + spacing
                     } else if(direction === 'vertical'){
@@ -707,7 +715,9 @@ class Node {
                 return
             }
             e.stopPropagation()
+
             this.mindMap.emit('node_dblclick', this, e)
+
         })
         // 右键菜单事件
         this.group.on('contextmenu', e => {
@@ -796,8 +806,7 @@ class Node {
 
     //  递归渲染
 
-    render(callback = () => {
-    }) {
+    render(callback = () => {}) {
         // 节点
         if (this.initRender) {
             this.initRender = false
@@ -1230,8 +1239,8 @@ class Node {
     }
 
     //设置节点自定义文本的样式
-    setSelfCustomTextStyle(prop,value,isActive,index) {
-        this.mindMap.execCommand('SET_NODE_CUSTOM_STYLE',this,prop,value,isActive,index)
+    setSelfCustomTextStyle(prop,value,isActive,cusID) {
+        this.mindMap.execCommand('SET_NODE_CUSTOM_STYLE',this,prop,value,isActive,cusID)
     }
     //  获取数据
 

@@ -895,11 +895,12 @@ const data5 = {
                                 textDecoration: 'underline',
                                 color: "#f23",
                             },
-                            x: 10,
-                            y: 20,
+                            x: 100, //当同时存在x,y时,将不遵循direction排列,否则不生效
+                            y: 200,
+                            id: '1', //唯一标识
                             sort: 10,
                             spacing: 7, //单词间距
-                            inheritsStyle: true
+                            inheritsStyle: true, //是否继承rootData的样式
                         },
                         {
                             content: "test2", //文本内容
@@ -914,6 +915,7 @@ const data5 = {
                                 color: "#f23",
                             },
                             sort: 2,
+                            id: '2',
                             spacing: 7, //单词间距
                             inheritsStyle: true
                         },
@@ -930,6 +932,7 @@ const data5 = {
                                 color: "#f23",
                             },
                             sort: 3,
+                            id: '3',
                             spacing: 7, //单词间距
                             inheritsStyle: true
                         },
@@ -946,6 +949,7 @@ const data5 = {
                                 color: "#f23",
                             },
                             sort: 1,
+                            id: '4',
                             spacing: 7, //单词间距
                             inheritsStyle: true
                         },
@@ -962,6 +966,7 @@ const data5 = {
                                 color: "#f23",
                             },
                             sort: 0,
+                            id: '5',
                             spacing: 7, //单词间距
                             inheritsStyle: true
                         }
