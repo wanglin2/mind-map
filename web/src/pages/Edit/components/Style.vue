@@ -175,6 +175,7 @@
         </div>
         
         <!--自定义文本-->
+      <div v-if="customTextArray.length">
         <div class="title" style="display: flex;justify-content: space-around;align-items: center">
           <span>{{ $t("style.customText") }}</span>
           <el-select size="mini" v-model="activeCustomText" @change="handleCustomTextActive" :disabled="checkDisabled('customText')" placeholder=""
@@ -298,7 +299,7 @@
               </el-option>
             </el-select>
           </div>
-        
+  
         </div>
         <div class="row">
           <div class="btnGroup">
@@ -387,6 +388,7 @@
             </el-radio-group>
           </el-popover>
         </div>
+      </div>
         
         <!-- 边框 -->
         <div class="title">{{ $t("style.border") }}</div>
@@ -724,6 +726,9 @@ export default {
      */
     onNodeActive(...args) {
       this.$nextTick(() => {
+        this.customTextArray = []
+        this.customStyle = {}
+        this.activeCustomText = ''
         this.activeTab = "normal";
         this.activeNodes = args[1];
         this.initNodeStyle();
@@ -875,7 +880,7 @@ export default {
         this.activeTab = "normal";
         return;
       }
-      ;[
+      [
         "shape",
         "paddingX",
         "paddingY",

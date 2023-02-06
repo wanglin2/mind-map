@@ -540,7 +540,7 @@ export default {
      * @Desc: 初始样式
      */
     initStyle() {
-      ;[
+      [
         'backgroundColor',
         'lineWidth',
         'lineStyle',
@@ -568,7 +568,7 @@ export default {
 
     // 初始化其他配置
     initConfig() {
-      ;['enableFreeDrag'].forEach(key => {
+      ['enableFreeDrag'].forEach(key => {
         this.config[key] = this.mindMap.getConfig(key)
       })
     },
@@ -589,7 +589,7 @@ export default {
      * @Desc: margin初始值
      */
     initMarginStyle() {
-      ;['marginX', 'marginY'].forEach(key => {
+      ['marginX', 'marginY'].forEach(key => {
         this.style[key] = this.mindMap.getThemeConfig()[this.marginActiveTab][
           key
         ]

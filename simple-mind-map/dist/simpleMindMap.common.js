@@ -13778,6 +13778,8 @@ class Style_Style {
   constructor(ctx, themeConfig) {
     this.ctx = ctx;
     this.themeConfig = themeConfig;
+    this.hasCustom = false;
+    this.customID = 0;
   }
 
   //  更新主题配置
@@ -13813,7 +13815,7 @@ class Style_Style {
       }
     }
     // 优先使用节点本身的样式
-    return this.getSelfStyle(prop) !== undefined ? this.getSelfStyle(prop) : defaultConfig[prop];
+    return this.getSelfStyle(prop, this.hasCustom) !== undefined ? this.getSelfStyle(prop, this.hasCustom) : defaultConfig[prop];
   }
 
   //  获取某个样式值
@@ -13822,10 +13824,23 @@ class Style_Style {
     return this.merge(prop, root, isActive);
   }
 
+  //判断是否存在节点自定义文本
+  setCustomType(isCustomText) {
+    this.hasCustom = isCustomText;
+  }
+  //设置节点自定义文本的索引
+  setCustomTextId(id) {
+    this.customID = id;
+  }
   //  获取自身自定义样式
 
   getSelfStyle(prop) {
-    return this.ctx.nodeData.data[prop];
+    if (!this.hasCustom) return this.ctx.nodeData.data[prop];else {
+      const customText = this.ctx.nodeData.data.customText.find(item => {
+        return item.id === this.customID;
+      });
+      return customText.styleConfig[prop];
+    }
   }
 
   //  矩形
@@ -13854,7 +13869,9 @@ class Style_Style {
 
   //  文字
 
-  text(node) {
+  text(node, hasCustom = false, customID) {
+    this.hasCustom = hasCustom;
+    this.customID = hasCustom && customID;
     node.fill({
       color: this.merge('color')
     }).css({
@@ -13878,7 +13895,8 @@ class Style_Style {
 
   tagText(node, index) {
     node.fill({
-      color: tagColorList[index].color
+      color: tagColorList[index].color,
+      backgroundColor: '#ff2'
     }).css({
       'font-size': '12px'
     });
@@ -21803,6 +21821,8 @@ class Node_Node {
     // 初始化
     // this.createNodeData()
     this.getSize();
+    //是否存在自定义文本
+    this.hasCustomText = this.nodeData.data.customText && this.nodeData.data.customText.length;
   }
 
   // 支持自定义位置
@@ -21842,8 +21862,8 @@ class Node_Node {
   //  处理数据
 
   handleData(data) {
-    data.data.expand = data.data.expand === false ? false : true;
-    data.data.isActive = data.data.isActive === true ? true : false;
+    data.data.expand = data.data.expand !== false;
+    data.data.isActive = data.data.isActive === true;
     data.children = data.children || [];
     return data;
   }
@@ -22062,18 +22082,104 @@ class Node_Node {
     let g = new G();
     let fontSize = this.getStyle('fontSize', this.isRoot, this.nodeData.data.isActive);
     let lineHeight = this.getStyle('lineHeight', this.isRoot, this.nodeData.data.isActive);
-    this.nodeData.data.text.split(/\n/gim).forEach((item, index) => {
-      let node = new Text().text(item);
-      this.style.text(node);
-      node.y(fontSize * lineHeight * index);
-      g.add(node);
-    });
+
+    //自定义文字及样式
+    let totalWidth = 0;
+    let totalHeight = 0;
+    this.style.setCustomType(false);
+    if (this.hasCustomText) {
+      this.style.setCustomType(true);
+      const direction = this.nodeData.data.direction;
+      const preCustomText = this.nodeData.data.customText.filter(item => item.position === 'pre').sort((pre, cur) => pre.sort - cur.sort);
+      const postCustomText = this.nodeData.data.customText.filter(item => item.position === 'post').sort((pre, cur) => pre.sort - cur.sort);
+      const customText = [...preCustomText, ...postCustomText];
+      // let totalIndex = 0
+      let isCreateRootText = false;
+      customText.forEach((item, index) => {
+        const setRootData = () => {
+          if (!isCreateRootText) {
+            this.nodeData.data.text.split(/\n/gim).forEach((rootItem, rootIndex) => {
+              let node = new Text().text(rootItem);
+              this.style.text(node);
+              const rootY = fontSize * lineHeight * rootIndex;
+              node.y(rootY);
+              // totalIndex++
+              if (direction === 'horizontal' || !direction) {
+                node.x(totalWidth);
+                totalWidth += this.measureText(rootItem, fontSize).width + spacing;
+              } else if (direction === 'vertical') {
+                node.y(totalHeight + rootY);
+                totalHeight += this.measureText(rootItem, fontSize).height + spacing;
+              }
+              g.add(node);
+            });
+            isCreateRootText = true;
+          }
+        };
+        this.style.setCustomTextId(item.id);
+        let customTextFontSize = this.getStyle('fontSize', this.isRoot, this.nodeData.data.isActive);
+        let customTextLineHeight = this.getStyle('lineHeight', this.isRoot, this.nodeData.data.isActive);
+        const spacing = item.spacing || 6;
+        if (index === 0 && customText[index].position === 'post') {
+          setRootData();
+        }
+        item.content.split(/\n/gim).forEach((childItem, childIndex) => {
+          let node = new Text().text(childItem);
+          this.style.text(node, true, item.id);
+          const customY = customTextFontSize * customTextLineHeight * childIndex;
+          node.y(customY);
+          // totalIndex++
+          node.attr({
+            cusID: item.id || item.content
+          });
+          if (item.x && item.y) {
+            node.x(item.x);
+            node.y(item.y);
+          } else if (direction === 'horizontal' || !direction) {
+            node.x(totalWidth);
+            totalWidth += this.measureText(childItem, customTextFontSize).width + spacing;
+          } else if (direction === 'vertical') {
+            node.y(totalHeight + customY);
+            totalHeight += this.measureText(item, fontSize).height + spacing;
+          }
+          g.add(node);
+        });
+        if (index + 1 < customText.length && customText[index + 1].position !== 'pre' || index === customText.length - 1) {
+          setRootData();
+        }
+      });
+    } else {
+      this.nodeData.data.text.split(/\n/gim).forEach((item, index) => {
+        let node = new Text().text(item);
+        this.style.text(node);
+        node.y(fontSize * lineHeight * index);
+        g.add(node);
+      });
+    }
     let {
       width,
       height
     } = g.bbox();
     return {
       node: g,
+      width: totalWidth || width,
+      height
+    };
+  }
+
+  //计算文本长度
+  measureText(val, fontSize) {
+    const font = `${fontSize}px arial`;
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    context.font = font;
+    const {
+      width,
+      actualBoundingBoxAscent,
+      actualBoundingBoxDescent
+    } = context.measureText(val);
+    const height = actualBoundingBoxAscent + actualBoundingBoxDescent;
+    return {
       width,
       height
     };
@@ -22764,15 +22870,19 @@ class Node_Node {
   //  获取自身可继承的自定义样式
 
   getSelfInhertStyle(prop) {
-    return this.getSelfStyle(prop) ||
-    // 自身
-    this.getParentSelfStyle(prop); // 父级
+    return this.getSelfStyle(prop) || this.getParentSelfStyle(prop) // 自身
+    ; // 父级
   }
 
   //  修改某个样式
 
   setStyle(prop, value, isActive) {
     this.mindMap.execCommand('SET_NODE_STYLE', this, prop, value, isActive);
+  }
+
+  //设置节点自定义文本的样式
+  setSelfCustomTextStyle(prop, value, isActive, cusID) {
+    this.mindMap.execCommand('SET_NODE_CUSTOM_STYLE', this, prop, value, isActive, cusID);
   }
 
   //  获取数据
@@ -22797,6 +22907,11 @@ class Node_Node {
 
   setImage(imgData) {
     this.mindMap.execCommand('SET_NODE_IMAGE', this, imgData);
+  }
+
+  //  新增自定义文本
+  addCustomText(newCusData) {
+    this.mindMap.execCommand('SET_NODE_IMAGE', this, newCusData);
   }
 
   //  设置图标
@@ -24217,6 +24332,8 @@ class TextEdit_TextEdit {
     this.textEditNode = null;
     // 文本编辑框是否显示
     this.showTextEdit = false;
+    //自定义文本的id
+    this.activeCusID = '';
     this.bindEvent();
   }
 
@@ -24256,12 +24373,17 @@ class TextEdit_TextEdit {
   }
 
   //  显示文本编辑框
-  show(node) {
-    this.showEditTextBox(node, node._textData.node.node.getBoundingClientRect());
+  show(node, e) {
+    const activeCusID = e.target.parentElement.getAttribute('cusID');
+    if (activeCusID) {
+      this.showEditTextBox(node, node._textData.node.node.getBoundingClientRect(), activeCusID);
+    } else {
+      this.showEditTextBox(node, node._textData.node.node.getBoundingClientRect());
+    }
   }
 
   //  显示文本编辑框
-  showEditTextBox(node, rect) {
+  showEditTextBox(node, rect, activeCusID) {
     this.mindMap.emit('before_show_text_edit');
     this.registerTmpShortcut();
     if (!this.textEditNode) {
@@ -24274,7 +24396,11 @@ class TextEdit_TextEdit {
       document.body.appendChild(this.textEditNode);
     }
     node.style.domText(this.textEditNode, this.mindMap.view.scale);
-    this.textEditNode.innerHTML = node.nodeData.data.text.split(/\n/gim).join('<br>');
+    if (activeCusID) {
+      this.activeCusID = activeCusID;
+      const activeCustomText = node.nodeData.data.customText.find(item => item.id === activeCusID);
+      this.textEditNode.innerHTML = activeCustomText.content.split(/\n/gim).join('<br>');
+    } else this.textEditNode.innerHTML = node.nodeData.data.text.split(/\n/gim).join('<br>');
     this.textEditNode.style.minWidth = rect.width + 10 + 'px';
     this.textEditNode.style.minHeight = rect.height + 6 + 'px';
     this.textEditNode.style.left = rect.left + 'px';
@@ -24301,7 +24427,12 @@ class TextEdit_TextEdit {
     }
     this.renderer.activeNodeList.forEach(node => {
       let str = getStrWithBrFromHtml(this.textEditNode.innerHTML);
-      this.mindMap.execCommand('SET_NODE_TEXT', node, str);
+      if (this.activeCusID) {
+        this.mindMap.execCommand('SET_NODE_TEXT', node, str, this.activeCusID);
+        this.activeCusID = ''; //初始化
+      } else {
+        this.mindMap.execCommand('SET_NODE_TEXT', node, str);
+      }
       if (node.isGeneralization) {
         // 概要节点
         node.generalizationBelongNode.updateGeneralization();
@@ -24570,6 +24701,9 @@ class Render_Render {
     // 修改节点样式
     this.setNodeStyle = this.setNodeStyle.bind(this);
     this.mindMap.command.add('SET_NODE_STYLE', this.setNodeStyle);
+    // 修改节点自定义文本样式
+    this.setNodeCustomTextConfig = this.setNodeCustomTextConfig.bind(this);
+    this.mindMap.command.add('SET_NODE_CUSTOM_STYLE', this.setNodeCustomTextConfig);
     // 切换节点是否激活
     this.setNodeActive = this.setNodeActive.bind(this);
     this.mindMap.command.add('SET_NODE_ACTIVE', this.setNodeActive);
@@ -24594,6 +24728,9 @@ class Render_Render {
     // 设置节点文本
     this.setNodeText = this.setNodeText.bind(this);
     this.mindMap.command.add('SET_NODE_TEXT', this.setNodeText);
+    // 添加添加节点自定义文本
+    this.addNodeCustomText = this.addNodeCustomText.bind(this);
+    this.mindMap.command.add('SET_NODE_IMAGE', this.addNodeCustomText);
     // 设置节点图片
     this.setNodeImage = this.setNodeImage.bind(this);
     this.mindMap.command.add('SET_NODE_IMAGE', this.setNodeImage);
@@ -25113,6 +25250,32 @@ class Render_Render {
     }
   }
 
+  //设置节点自定义文本样式
+  setNodeCustomTextConfig(node, prop, value, isActive, cusID) {
+    var _node$nodeData$data;
+    let data;
+    // let index = 0
+    let cusData = (_node$nodeData$data = node.nodeData.data) === null || _node$nodeData$data === void 0 ? void 0 : _node$nodeData$data.customText.find(item => {
+      if (item.id === cusID) {
+        // index = 1
+        return true;
+      }
+    });
+    if (isActive) {
+      data = {
+        activeStyle: {
+          ...(cusData.activeStyle || {}),
+          [prop]: value
+        }
+      };
+    } else {
+      data = {
+        [prop]: value
+      };
+    }
+    this.setNodeDataRender(node, data, cusID);
+  }
+
   //  设置节点是否激活
 
   setNodeActive(node, active) {
@@ -25198,10 +25361,15 @@ class Render_Render {
 
   //  设置节点文本
 
-  setNodeText(node, text) {
+  setNodeText(node, text, cusID) {
     this.setNodeDataRender(node, {
-      text
-    });
+      [cusID ? 'content' : 'text']: text
+    }, cusID);
+  }
+
+  //  添加新的节点自定义文本
+  addNodeCustomText(node, data) {
+    this.setNodeDataRender(node, data, null, 'addCustomData');
   }
 
   //  设置节点图片
@@ -25333,16 +25501,27 @@ class Render_Render {
 
   //  更新节点数据
 
-  setNodeData(node, data) {
-    Object.keys(data).forEach(key => {
+  setNodeData(node, data, symbol = 'origin', index) {
+    if (symbol === 'origin') Object.keys(data).forEach(key => {
       node.nodeData.data[key] = data[key];
-    });
+    });else if (symbol === 'custom') Object.keys(data).forEach(key => {
+      if (['fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'lineHeight', 'textDecoration', 'color'].includes(key)) node.nodeData.data.customText[index]['styleConfig'][key] = data[key];else node.nodeData.data.customText[index][key] = data[key];
+    });else if (symbol === 'addCustomData') node.nodeData.data.customText = [...node.nodeData.data.customText, ...data];
   }
 
   //  设置节点数据，并判断是否渲染
 
-  setNodeDataRender(node, data) {
-    this.setNodeData(node, data);
+  setNodeDataRender(node, data, cusID, symbol) {
+    if (cusID) {
+      let cusIndex = 0;
+      node.nodeData.data.customText.forEach((item, index) => {
+        if (item.id === cusID) {
+          cusIndex = index;
+        }
+      });
+      this.setNodeData(node, data, 'custom', cusIndex);
+    } else this.setNodeData(node, data);
+    if (!cusID && symbol === 'addCustomData') this.setNodeData(node, data, symbol);
     let changed = node.getSize();
     node.renderNode();
     if (changed) {
