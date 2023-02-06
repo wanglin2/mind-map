@@ -7,23 +7,25 @@
       </el-tabs>
       <div class="sidebarContent" v-if="activeNodes.length > 0">
         <!-- 文字 -->
-        <div class="title noTop">{{ $t('style.text') }}</div>
+        <div class="title noTop">
+          <span>{{ $t("style.text") }}</span>
+        </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.fontFamily') }}</span>
+            <span class="name">{{ $t("style.fontFamily") }}</span>
             <el-select
-                size="mini"
-                v-model="style.fontFamily"
-                placeholder=""
-                :disabled="checkDisabled('fontFamily')"
-                @change="update('fontFamily')"
+              size="mini"
+              v-model="style.fontFamily"
+              placeholder=""
+              :disabled="checkDisabled('fontFamily')"
+              @change="update('fontFamily')"
             >
               <el-option
-                  v-for="item in fontFamilyList"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
-                  :style="{ fontFamily: item.value }"
+                v-for="item in fontFamilyList"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
+                :style="{ fontFamily: item.value }"
               >
               </el-option>
             </el-select>
@@ -31,40 +33,55 @@
         </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.fontSize') }}</span>
+            <span class="name">{{ $t("style.fontSize") }}</span>
             <el-select
-                size="mini"
-                style="width: 80px"
-                v-model="style.fontSize"
-                placeholder=""
-                :disabled="checkDisabled('fontSize')"
-                @change="update('fontSize')"
+              size="mini"
+              style="width: 80px"
+              v-model="style.fontSize"
+              placeholder=""
+              :disabled="checkDisabled('fontSize')"
+              @change="update('fontSize')"
             >
               <el-option
-                  v-for="item in fontSizeList"
-                  :key="item"
-                  :label="item"
-                  :value="item"
+                v-for="item in fontSizeList"
+                :key="item"
+                :label="item"
+                :value="item"
               >
               </el-option>
             </el-select>
           </div>
           <div class="rowItem">
-            <span class="name">{{ $t('style.lineHeight') }}</span>
+            <span class="name">{{ $t("style.lineHeight") }}</span>
             <el-select
-                size="mini"
-                style="width: 80px"
-                v-model="style.lineHeight"
-                placeholder=""
-                :disabled="checkDisabled('lineHeight')"
-                @change="update('lineHeight')"
+              size="mini"
+              style="width: 80px"
+              v-model="style.lineHeight"
+              placeholder=""
+              :disabled="checkDisabled('lineHeight')"
+              @change="update('lineHeight')"
             >
               <el-option
-                  v-for="item in lineHeightList"
-                  :key="item"
-                  :label="item"
-                  :value="item"
+                v-for="item in lineHeightList"
+                :key="item"
+                :label="item"
+                :value="item"
               >
+              </el-option>
+            </el-select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">{{ $t("style.direction") }}</span>
+            <el-select size="mini" v-model="customDirection" @change="handleDirectionChange('direction')"
+                       :disabled="checkDisabled('direction')"
+                       style="width: 100px">
+              <el-option
+                v-for="item in ['horizontal' ,'vertical'] "
+                :key="item"
+                :label="item"
+                :value="item">
               </el-option>
             </el-select>
           </div>
@@ -73,119 +90,119 @@
           <div class="btnGroup">
             <el-tooltip :content="$t('style.color')" placement="bottom">
               <div
-                  class="styleBtn"
-                  v-popover:popover
-                  :class="{ disabled: checkDisabled('color') }"
+                class="styleBtn"
+                v-popover:popover
+                :class="{ disabled: checkDisabled('color') }"
               >
                 A
                 <span
-                    class="colorShow"
-                    :style="{ backgroundColor: style.color || '#eee' }"
+                  class="colorShow"
+                  :style="{ backgroundColor: style.color || '#eee' }"
                 ></span>
               </div>
             </el-tooltip>
             <el-tooltip :content="$t('style.addFontWeight')" placement="bottom">
               <div
-                  class="styleBtn"
-                  :class="{
+                class="styleBtn"
+                :class="{
                   actived: style.fontWeight === 'bold',
                   disabled: checkDisabled('fontWeight')
                 }"
-                  @click="toggleFontWeight"
+                @click="toggleFontWeight"
               >
                 B
               </div>
             </el-tooltip>
             <el-tooltip :content="$t('style.italic')" placement="bottom">
               <div
-                  class="styleBtn i"
-                  :class="{
+                class="styleBtn i"
+                :class="{
                   actived: style.fontStyle === 'italic',
                   disabled: checkDisabled('fontStyle')
                 }"
-                  @click="toggleFontStyle"
+                @click="toggleFontStyle"
               >
                 I
               </div>
             </el-tooltip>
             <el-tooltip
-                :content="$t('style.textDecoration')"
-                placement="bottom"
+              :content="$t('style.textDecoration')"
+              placement="bottom"
             >
               <div
-                  class="styleBtn u"
-                  :style="{ textDecoration: style.textDecoration || 'none' }"
-                  :class="{ disabled: checkDisabled('textDecoration') }"
-                  v-popover:popover2
+                class="styleBtn u"
+                :style="{ textDecoration: style.textDecoration || 'none' }"
+                :class="{ disabled: checkDisabled('textDecoration') }"
+                v-popover:popover2
               >
                 U
               </div>
             </el-tooltip>
           </div>
           <el-popover
-              ref="popover"
-              placement="bottom"
-              trigger="click"
-              :disabled="checkDisabled('color')"
+            ref="popover"
+            placement="bottom"
+            trigger="click"
+            :disabled="checkDisabled('color')"
           >
             <Color :color="style.color" @change="changeFontColor"></Color>
           </el-popover>
           <el-popover
-              ref="popover2"
-              placement="bottom"
-              trigger="click"
-              :disabled="checkDisabled('textDecoration')"
+            ref="popover2"
+            placement="bottom"
+            trigger="click"
+            :disabled="checkDisabled('textDecoration')"
           >
             <el-radio-group
-                size="mini"
-                v-model="style.textDecoration"
-                @change="update('textDecoration')"
+              size="mini"
+              v-model="style.textDecoration"
+              @change="update('textDecoration')"
             >
               <el-radio-button label="underline">{{
-                  $t('style.underline')
+                  $t("style.underline")
                 }}
               </el-radio-button>
               <el-radio-button label="line-through">{{
-                  $t('style.lineThrough')
+                  $t("style.lineThrough")
                 }}
               </el-radio-button>
               <el-radio-button label="overline">{{
-                  $t('style.overline')
+                  $t("style.overline")
                 }}
               </el-radio-button>
             </el-radio-group>
           </el-popover>
         </div>
-
-
-        <!--自定义文本-TODO-->
+        
+        <!--自定义文本-->
         <div class="title" style="display: flex;justify-content: space-around;align-items: center">
-          <span>{{ $t('style.customText') }}</span>
-          <el-select v-model="activeCustomText" @change="handleCustomTextActive" placeholder="" style="width: 150px">
+          <span>{{ $t("style.customText") }}</span>
+          <el-select size="mini" v-model="activeCustomText" @change="handleCustomTextActive" :disabled="checkDisabled('customText')" placeholder=""
+                     style="width: 150px">
             <el-option
-                v-for="item in customTextArray"
-                :key="item.id"
-                :label="item.content"
-                :value="item.id">
+              v-for="item in customTextArray"
+              :key="item.id"
+              :label="item.content"
+              :value="item.id">
             </el-option>
           </el-select>
         </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.fontFamily') }}</span>
+            <span class="name">{{ $t("style.fontFamily") }}</span>
             <el-select
-                size="mini"
-                v-model="customStyle.fontFamily"
-                placeholder=""
-                :disabled="checkDisabled('fontFamily')"
-                @change="update('fontFamily')"
+              size="mini"
+              v-model="customStyle.styleConfig.fontFamily"
+              placeholder=""
+              :disabled="checkDisabled('fontFamily')"
+              @change="updateCustomText('fontFamily')"
             >
               <el-option
-                  v-for="item in fontFamilyList"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
-                  :style="{ fontFamily: item.value }"
+                v-for="item in fontFamilyList"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
+                :style="{ fontFamily: item.value }"
               >
               </el-option>
             </el-select>
@@ -193,39 +210,53 @@
         </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.fontSize') }}</span>
+            <span class="name">x</span>
+            <el-input-number v-model="customStyle.x" :step="1" @change="handleXChange" @focus="pauseShortcut"
+                             @blur="recoveryShortcut" :min="0" size="mini"
+                             :disabled="checkDisabled('x')" style="width: 100px"></el-input-number>
+          </div>
+          <div class="rowItem">
+            <span class="name">y</span>
+            <el-input-number v-model="customStyle.y" :step="1" @change="handleYChange" @focus="pauseShortcut"
+                             @blur="recoveryShortcut" :min="0" size="mini"
+                             :disabled="checkDisabled('y')" style="width: 100px"></el-input-number>
+          </div>
+        </div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">{{ $t("style.fontSize") }}</span>
             <el-select
-                size="mini"
-                style="width: 80px"
-                v-model="customStyle.fontSize"
-                placeholder=""
-                :disabled="checkDisabled('fontSize')"
-                @change="update('fontSize')"
+              size="mini"
+              style="width: 80px"
+              v-model="customStyle.styleConfig.fontSize"
+              placeholder=""
+              :disabled="checkDisabled('fontSize')"
+              @change="updateCustomText('fontSize')"
             >
               <el-option
-                  v-for="item in fontSizeList"
-                  :key="item"
-                  :label="item"
-                  :value="item"
+                v-for="item in fontSizeList"
+                :key="item"
+                :label="item"
+                :value="item"
               >
               </el-option>
             </el-select>
           </div>
           <div class="rowItem">
-            <span class="name">{{ $t('style.lineHeight') }}</span>
+            <span class="name">{{ $t("style.lineHeight") }}</span>
             <el-select
-                size="mini"
-                style="width: 80px"
-                v-model="customStyle.lineHeight"
-                placeholder=""
-                :disabled="checkDisabled('lineHeight')"
-                @change="update('lineHeight')"
+              size="mini"
+              style="width: 80px"
+              v-model="customStyle.styleConfig.lineHeight"
+              placeholder=""
+              :disabled="checkDisabled('lineHeight')"
+              @change="updateCustomText('lineHeight')"
             >
               <el-option
-                  v-for="item in lineHeightList"
-                  :key="item"
-                  :label="item"
-                  :value="item"
+                v-for="item in lineHeightList"
+                :key="item"
+                :label="item"
+                :value="item"
               >
               </el-option>
             </el-select>
@@ -233,171 +264,168 @@
         </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.fontSize') }}</span>
-            <el-select
-                size="mini"
-                style="width: 80px"
-                v-model="customStyle.fontSize"
-                placeholder=""
-                :disabled="checkDisabled('fontSize')"
-                @change="update('fontSize')"
-            >
-              <el-option
-                  v-for="item in fontSizeList"
-                  :key="item"
-                  :label="item"
-                  :value="item"
-              >
-              </el-option>
-            </el-select>
+            <span class="name">{{ $t("style.spacing") }}</span>
+            <el-input-number v-model="customStyle.spacing" :step="1" @change="handleSpacingChange"
+                             @focus="pauseShortcut"
+                             @blur="recoveryShortcut" :min="0" size="mini"
+                             :disabled="checkDisabled('spacing')" style="width: 100px"></el-input-number>
           </div>
+        </div>
+        <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.lineHeight') }}</span>
+            <span class="name">{{ $t("style.sort") }}</span>
+            <el-input-number v-model="customStyle.sort" :step="1" @change="handleSortChange" @focus="pauseShortcut"
+                             @blur="recoveryShortcut" :min="0" size="mini"
+                             :disabled="checkDisabled('sort')" style="width: 100px"></el-input-number>
+          </div>
+        </div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name" style="width:25px">{{ $t("style.position") }}</span>
             <el-select
-                size="mini"
-                style="width: 80px"
-                v-model="customStyle.lineHeight"
-                placeholder=""
-                :disabled="checkDisabled('lineHeight')"
-                @change="update('lineHeight')"
+              size="mini"
+              v-model="customStyle.position"
+              placeholder=""
+              :disabled="checkDisabled('position')"
+              @change="updateCustomText('position')"
             >
               <el-option
-                  v-for="item in lineHeightList"
-                  :key="item"
-                  :label="item"
-                  :value="item"
+                v-for="item in ['pre','post']"
+                :key="item"
+                :label="item"
+                :value="item"
               >
               </el-option>
             </el-select>
           </div>
+        
         </div>
         <div class="row">
           <div class="btnGroup">
             <el-tooltip :content="$t('style.color')" placement="bottom">
               <div
-                  class="styleBtn"
-                  v-popover:popover
-                  :class="{ disabled: checkDisabled('color') }"
+                class="styleBtn"
+                v-popover:popover99
+                :class="{ disabled: checkDisabled('color') }"
               >
                 A
                 <span
-                    class="colorShow"
-                    :style="{ backgroundColor: style.color || '#eee' }"
+                  class="colorShow"
+                  :style="{ backgroundColor: customStyle.styleConfig.color || '#eee' }"
                 ></span>
               </div>
             </el-tooltip>
             <el-tooltip :content="$t('style.addFontWeight')" placement="bottom">
               <div
-                  class="styleBtn"
-                  :class="{
-                  actived: style.fontWeight === 'bold',
+                class="styleBtn"
+                :class="{
+                  actived: customStyle.styleConfig.fontWeight === 'bold',
                   disabled: checkDisabled('fontWeight')
                 }"
-                  @click="toggleFontWeight"
+                @click="toggleCustomTextFontWeight"
               >
                 B
               </div>
             </el-tooltip>
             <el-tooltip :content="$t('style.italic')" placement="bottom">
               <div
-                  class="styleBtn i"
-                  :class="{
-                  actived: style.fontStyle === 'italic',
+                class="styleBtn i"
+                :class="{
+                  actived: customStyle.styleConfig.fontStyle === 'italic',
                   disabled: checkDisabled('fontStyle')
                 }"
-                  @click="toggleFontStyle"
+                @click="toggleCustomTextFontStyle"
               >
                 I
               </div>
             </el-tooltip>
             <el-tooltip
-                :content="$t('style.textDecoration')"
-                placement="bottom"
+              :content="$t('style.textDecoration')"
+              placement="bottom"
             >
               <div
-                  class="styleBtn u"
-                  :style="{ textDecoration: style.textDecoration || 'none' }"
-                  :class="{ disabled: checkDisabled('textDecoration') }"
-                  v-popover:popover2
+                class="styleBtn u"
+                :style="{ textDecoration: customStyle.styleConfig.textDecoration || 'none' }"
+                :class="{ disabled: checkDisabled('textDecoration') }"
+                v-popover:popover100
               >
                 U
               </div>
             </el-tooltip>
           </div>
           <el-popover
-              ref="popover"
-              placement="bottom"
-              trigger="click"
-              :disabled="checkDisabled('color')"
+            ref="popover99"
+            placement="bottom"
+            trigger="click"
+            :disabled="checkDisabled('color')"
           >
             <Color :color="style.color" @change="changeFontColor"></Color>
           </el-popover>
           <el-popover
-              ref="popover2"
-              placement="bottom"
-              trigger="click"
-              :disabled="checkDisabled('textDecoration')"
+            ref="popover100"
+            placement="bottom"
+            trigger="click"
+            :disabled="checkDisabled('textDecoration')"
           >
             <el-radio-group
-                size="mini"
-                v-model="style.textDecoration"
-                @change="update('textDecoration')"
+              size="mini"
+              v-model="customStyle.styleConfig.textDecoration"
+              @change="updateCustomText('textDecoration')"
             >
               <el-radio-button label="underline">{{
-                  $t('style.underline')
+                  $t("style.underline")
                 }}
               </el-radio-button>
               <el-radio-button label="line-through">{{
-                  $t('style.lineThrough')
+                  $t("style.lineThrough")
                 }}
               </el-radio-button>
               <el-radio-button label="overline">{{
-                  $t('style.overline')
+                  $t("style.overline")
                 }}
               </el-radio-button>
             </el-radio-group>
           </el-popover>
         </div>
-
-
+        
         <!-- 边框 -->
-        <div class="title">{{ $t('style.border') }}</div>
+        <div class="title">{{ $t("style.border") }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.color') }}</span>
+            <span class="name">{{ $t("style.color") }}</span>
             <span
-                class="block"
-                v-popover:popover3
-                :style="{ width: '80px', backgroundColor: style.borderColor }"
-                :class="{ disabled: checkDisabled('borderColor') }"
+              class="block"
+              v-popover:popover3
+              :style="{ width: '80px', backgroundColor: style.borderColor }"
+              :class="{ disabled: checkDisabled('borderColor') }"
             ></span>
             <el-popover
-                ref="popover3"
-                placement="bottom"
-                trigger="click"
-                :disabled="checkDisabled('borderColor')"
+              ref="popover3"
+              placement="bottom"
+              trigger="click"
+              :disabled="checkDisabled('borderColor')"
             >
               <Color
-                  :color="style.borderColor"
-                  @change="changeBorderColor"
+                :color="style.borderColor"
+                @change="changeBorderColor"
               ></Color>
             </el-popover>
           </div>
           <div class="rowItem">
-            <span class="name">{{ $t('style.style') }}</span>
+            <span class="name">{{ $t("style.style") }}</span>
             <el-select
-                size="mini"
-                style="width: 80px"
-                v-model="style.borderDasharray"
-                placeholder=""
-                :disabled="checkDisabled('borderDasharray')"
-                @change="update('borderDasharray')"
+              size="mini"
+              style="width: 80px"
+              v-model="style.borderDasharray"
+              placeholder=""
+              :disabled="checkDisabled('borderDasharray')"
+              @change="update('borderDasharray')"
             >
               <el-option
-                  v-for="item in borderDasharrayList"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
+                v-for="item in borderDasharrayList"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
               >
               </el-option>
             </el-select>
@@ -405,123 +433,123 @@
         </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.width') }}</span>
+            <span class="name">{{ $t("style.width") }}</span>
             <el-select
-                size="mini"
-                style="width: 80px"
-                v-model="style.borderWidth"
-                placeholder=""
-                :disabled="checkDisabled('borderWidth')"
-                @change="update('borderWidth')"
+              size="mini"
+              style="width: 80px"
+              v-model="style.borderWidth"
+              placeholder=""
+              :disabled="checkDisabled('borderWidth')"
+              @change="update('borderWidth')"
             >
               <el-option
-                  v-for="item in borderWidthList"
-                  :key="item"
-                  :label="item"
-                  :value="item"
+                v-for="item in borderWidthList"
+                :key="item"
+                :label="item"
+                :value="item"
               >
               </el-option>
             </el-select>
           </div>
           <div class="rowItem">
-            <span class="name">{{ $t('style.borderRadius') }}</span>
+            <span class="name">{{ $t("style.borderRadius") }}</span>
             <el-select
-                size="mini"
-                style="width: 80px"
-                v-model="style.borderRadius"
-                placeholder=""
-                :disabled="checkDisabled('borderRadius')"
-                @change="update('borderRadius')"
+              size="mini"
+              style="width: 80px"
+              v-model="style.borderRadius"
+              placeholder=""
+              :disabled="checkDisabled('borderRadius')"
+              @change="update('borderRadius')"
             >
               <el-option
-                  v-for="item in borderRadiusList"
-                  :key="item"
-                  :label="item"
-                  :value="item"
+                v-for="item in borderRadiusList"
+                :key="item"
+                :label="item"
+                :value="item"
               >
               </el-option>
             </el-select>
           </div>
         </div>
         <!-- 背景 -->
-        <div class="title">{{ $t('style.background') }}</div>
+        <div class="title">{{ $t("style.background") }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.color') }}</span>
+            <span class="name">{{ $t("style.color") }}</span>
             <span
-                class="block"
-                v-popover:popover4
-                :style="{ backgroundColor: style.fillColor }"
-                :class="{ disabled: checkDisabled('fillColor') }"
+              class="block"
+              v-popover:popover4
+              :style="{ backgroundColor: style.fillColor }"
+              :class="{ disabled: checkDisabled('fillColor') }"
             ></span>
             <el-popover
-                ref="popover4"
-                placement="bottom"
-                trigger="click"
-                :disabled="checkDisabled('fillColor')"
+              ref="popover4"
+              placement="bottom"
+              trigger="click"
+              :disabled="checkDisabled('fillColor')"
             >
               <Color :color="style.fillColor" @change="changeFillColor"></Color>
             </el-popover>
           </div>
         </div>
         <!-- 形状 -->
-        <div class="title">{{ $t('style.shape') }}</div>
+        <div class="title">{{ $t("style.shape") }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.shape') }}</span>
+            <span class="name">{{ $t("style.shape") }}</span>
             <el-select
-                size="mini"
-                style="width: 120px"
-                v-model="style.shape"
-                placeholder=""
-                :disabled="checkDisabled('shape')"
-                @change="update('shape')"
+              size="mini"
+              style="width: 120px"
+              v-model="style.shape"
+              placeholder=""
+              :disabled="checkDisabled('shape')"
+              @change="update('shape')"
             >
               <el-option
-                  v-for="item in shapeList"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
+                v-for="item in shapeList"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
               >
               </el-option>
             </el-select>
           </div>
         </div>
         <!-- 线条 -->
-        <div class="title">{{ $t('style.line') }}</div>
+        <div class="title">{{ $t("style.line") }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.color') }}</span>
+            <span class="name">{{ $t("style.color") }}</span>
             <span
-                class="block"
-                v-popover:popover5
-                :style="{ width: '80px', backgroundColor: style.lineColor }"
-                :class="{ disabled: checkDisabled('lineColor') }"
+              class="block"
+              v-popover:popover5
+              :style="{ width: '80px', backgroundColor: style.lineColor }"
+              :class="{ disabled: checkDisabled('lineColor') }"
             ></span>
             <el-popover
-                ref="popover5"
-                placement="bottom"
-                trigger="click"
-                :disabled="checkDisabled('lineColor')"
+              ref="popover5"
+              placement="bottom"
+              trigger="click"
+              :disabled="checkDisabled('lineColor')"
             >
               <Color :color="style.lineColor" @change="changeLineColor"></Color>
             </el-popover>
           </div>
           <div class="rowItem">
-            <span class="name">{{ $t('style.style') }}</span>
+            <span class="name">{{ $t("style.style") }}</span>
             <el-select
-                size="mini"
-                style="width: 80px"
-                v-model="style.lineDasharray"
-                placeholder=""
-                :disabled="checkDisabled('lineDasharray')"
-                @change="update('lineDasharray')"
+              size="mini"
+              style="width: 80px"
+              v-model="style.lineDasharray"
+              placeholder=""
+              :disabled="checkDisabled('lineDasharray')"
+              @change="update('lineDasharray')"
             >
               <el-option
-                  v-for="item in borderDasharrayList"
-                  :key="item.value"
-                  :label="item.name"
-                  :value="item.value"
+                v-for="item in borderDasharrayList"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
               >
               </el-option>
             </el-select>
@@ -529,46 +557,46 @@
         </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.width') }}</span>
+            <span class="name">{{ $t("style.width") }}</span>
             <el-select
-                size="mini"
-                style="width: 80px"
-                v-model="style.lineWidth"
-                placeholder=""
-                :disabled="checkDisabled('lineWidth')"
-                @change="update('lineWidth')"
+              size="mini"
+              style="width: 80px"
+              v-model="style.lineWidth"
+              placeholder=""
+              :disabled="checkDisabled('lineWidth')"
+              @change="update('lineWidth')"
             >
               <el-option
-                  v-for="item in borderWidthList"
-                  :key="item"
-                  :label="item"
-                  :value="item"
+                v-for="item in borderWidthList"
+                :key="item"
+                :label="item"
+                :value="item"
               >
               </el-option>
             </el-select>
           </div>
         </div>
         <!-- 节点内边距 -->
-        <div class="title noTop">{{ $t('style.nodePadding') }}</div>
+        <div class="title noTop">{{ $t("style.nodePadding") }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.horizontal') }}</span>
+            <span class="name">{{ $t("style.horizontal") }}</span>
             <el-slider
-                style="width: 200px"
-                v-model="style.paddingX"
-                :disabled="checkDisabled('paddingX')"
-                @change="update('paddingX')"
+              style="width: 200px"
+              v-model="style.paddingX"
+              :disabled="checkDisabled('paddingX')"
+              @change="update('paddingX')"
             ></el-slider>
           </div>
         </div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.vertical') }}</span>
+            <span class="name">{{ $t("style.vertical") }}</span>
             <el-slider
-                style="width: 200px"
-                v-model="style.paddingY"
-                :disabled="checkDisabled('paddingY')"
-                @change="update('paddingY')"
+              style="width: 200px"
+              v-model="style.paddingY"
+              :disabled="checkDisabled('paddingY')"
+              @change="update('paddingY')"
             ></el-slider>
           </div>
         </div>
@@ -582,8 +610,8 @@
 </template>
 
 <script>
-import Sidebar from './Sidebar'
-import Color from './Color'
+import Sidebar from "./Sidebar";
+import Color from "./Color";
 import {
   borderDasharrayList,
   borderRadiusList,
@@ -592,9 +620,9 @@ import {
   fontSizeList,
   lineHeightList,
   shapeList
-} from '@/config'
-import {supportActiveStyle} from 'simple-mind-map/src/themes/default'
-import {mapState} from 'vuex'
+} from "@/config";
+import { supportActiveStyle } from "simple-mind-map/src/themes/default";
+import { mapState } from "vuex";
 
 /**
  * @Author: 王林
@@ -602,89 +630,91 @@ import {mapState} from 'vuex'
  * @Desc: 节点样式设置
  */
 export default {
-  name: 'Style',
+  name: "Style",
   components: {
     Sidebar,
     Color
   },
+  props: ["mindMap"],
   data() {
     return {
       supportActiveStyle,
-
+      
       fontSizeList,
       borderWidthList,
-
+      
       borderRadiusList,
       lineHeightList,
       activeNodes: [],
-      activeTab: 'normal',
+      activeTab: "normal",
       customTextArray: [],
-      activeCustomText: '', //id
+      activeCustomText: "", //id
+      customDirection: "",
       style: {
-        shape: '',
+        shape: "",
         paddingX: 0,
         paddingY: 0,
-        color: '',
-        fontFamily: '',
-        fontSize: '',
-        lineHeight: '',
-        textDecoration: '',
-        fontWeight: '',
-        fontStyle: '',
-        borderWidth: '',
-        borderColor: '',
-        fillColor: '',
-        borderDasharray: '',
-        borderRadius: '',
-        lineColor: '',
-        lineDasharray: '',
-        lineWidth: '',
-        direction: '', //vertical,horizontal
+        color: "",
+        fontFamily: "",
+        fontSize: "",
+        lineHeight: "",
+        textDecoration: "",
+        fontWeight: "",
+        fontStyle: "",
+        borderWidth: "",
+        borderColor: "",
+        fillColor: "",
+        borderDasharray: "",
+        borderRadius: "",
+        lineColor: "",
+        lineDasharray: "",
+        lineWidth: "",
+        direction: "" //vertical,horizontal
       },
       customStyle: {
-        color: '',
-        fontFamily: '',
-        fontSize: '',
-        lineHeight: '',
-        textDecoration: '',
-        fontWeight: '',
-        fontStyle: '',
+        color: "",
+        fontFamily: "",
+        fontSize: "",
+        lineHeight: "",
+        textDecoration: "",
+        fontWeight: "",
+        fontStyle: "",
         x: 0,
         y: 0,
-        position: '',
+        position: "",
         sort: 0,
         space: 0,
         inheritsStyle: false
       }
-    }
+    };
   },
   computed: {
-    ...mapState(['activeSidebar']),
-
+    ...mapState(["activeSidebar"]),
+    
     fontFamilyList() {
-      return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
+      return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh;
     },
     borderDasharrayList() {
-      return borderDasharrayList[this.$i18n.locale] || borderDasharrayList.zh
+      return borderDasharrayList[this.$i18n.locale] || borderDasharrayList.zh;
     },
     shapeList() {
-      return shapeList[this.$i18n.locale] || shapeList.zh
+      return shapeList[this.$i18n.locale] || shapeList.zh;
     }
   },
   watch: {
     activeSidebar(val) {
-      if (val === 'nodeStyle') {
-        this.$refs.sidebar.show = true
+      if (val === "nodeStyle") {
+        this.$refs.sidebar.show = true;
       } else {
-        this.$refs.sidebar.show = false
+        this.$refs.sidebar.show = false;
       }
     }
   },
   created() {
-    this.$bus.$on('node_active', this.onNodeActive)
+    this.$bus.$on("node_active", this.onNodeActive);
   },
   beforeDestroy() {
-    this.$bus.$off('node_active', this.onNodeActive)
+    this.$bus.$off("node_active", this.onNodeActive);
   },
   methods: {
     /**
@@ -694,13 +724,13 @@ export default {
      */
     onNodeActive(...args) {
       this.$nextTick(() => {
-        this.activeTab = 'normal'
-        this.activeNodes = args[1]
-        this.initNodeStyle()
-        this.initCustomText()
-      })
+        this.activeTab = "normal";
+        this.activeNodes = args[1];
+        this.initNodeStyle();
+        this.initCustomText();
+      });
     },
-
+    
     /**
      * @Author: libai
      * @Date: 2023-02-06 00:11:51
@@ -708,39 +738,122 @@ export default {
      */
     initCustomText() {
       if (this.activeNodes[0]?.nodeData.data.customText) {
-        this.customTextArray = [...this.activeNodes[0].nodeData.data.customText]
-        this.activeCustomText = this.customTextArray[0].id
-        this.handleCustomTextActive()
+        this.customTextArray = [...this.activeNodes[0].nodeData.data.customText];
+        this.activeCustomText = this.customTextArray[0].id;
+        this.customDirection = this.activeNodes[0].nodeData.data.direction;
+        this.handleCustomTextActive();
       }
     },
-
+    
     /**
      * @Author: libai
      * @Date: 2023-02-06 00:16:19
      * @Desc: 选中某个自定义文本
      */
     handleCustomTextActive(e = this.activeCustomText) {
-      const activeCustom = this.customTextArray.find(item => item.id === e)
-      const normalStyle = activeCustom.styleConfig
-      this.customStyle.color= normalStyle.color
-      this.customStyle.fontFamily= normalStyle.fontFamily
-      this.customStyle.fontSize= normalStyle.fontSize
-      this.customStyle.fontStyle= normalStyle.fontStyle
-      this.customStyle.fontWeight= normalStyle.fontWeight
-      this.customStyle.lineHeight= normalStyle.lineHeight
-      this.customStyle.textDecoration = normalStyle.textDecoration
-
+      const activeCustom = this.customTextArray.find(item => item.id === e);
+      this.customStyle = { ...activeCustom };
+      // this.customStyle.fontFamily= normalStyle.fontFamily
+      // this.customStyle.fontSize= normalStyle.fontSize
+      // this.customStyle.fontStyle= normalStyle.fontStyle
+      // this.customStyle.fontWeight= normalStyle.fontWeight
+      // this.customStyle.lineHeight= normalStyle.lineHeight
+      // this.customStyle.textDecoration = normalStyle.textDecoration
     },
-
+    
+    /**
+     * @Author: libaii
+     * @Date: 2023-02-06 13:37:46
+     * @Desc: 自定义文本更新
+     */
+    updateCustomText(prop) {
+      if (["fontFamily",
+        "fontSize",
+        "fontStyle",
+        "fontWeight",
+        "lineHeight",
+        "textDecoration",
+        "color"].includes(prop)) {
+        this.activeNodes[0].setSelfCustomTextStyle(prop, this.customStyle.styleConfig[prop], this.activeTab === "active", this.activeCustomText);
+      } else {
+        this.activeNodes[0].setSelfCustomTextStyle(prop, this.customStyle[prop], this.activeTab === "active", this.activeCustomText);
+      }
+    },
+    
+    /**
+     * @Author: libaii
+     * @Date: 2023-02-06 16:56:28
+     * @Desc: 设置自定义文本排列方向
+     */
+    handleDirectionChange(prop) {
+      this.activeNodes.forEach(node => {
+        node.setStyle(prop, this.customDirection, this.activeTab === "active");
+      });
+    },
+    
+    /**
+     * @Author: libaii
+     * @Date: 2023-02-06 14:43:27
+     * @Desc: x更新
+     */
+    handleXChange(val) {
+      this.activeNodes[0].setSelfCustomTextStyle("x", val, this.activeTab === "active", this.activeCustomText);
+    },
+    
+    /**
+     * @Author: libaii
+     * @Date: 2023-02-06 14:44:07
+     * @Desc: x更新
+     */
+    handleYChange(val) {
+      this.activeNodes[0].setSelfCustomTextStyle("y", val, this.activeTab === "active", this.activeCustomText);
+    },
+    
+    /**
+     * @Author: libaii
+     * @Date: 2023-02-06 15:43:16
+     * @Desc: 更新自定义文本排序
+     */
+    handleSortChange(val) {
+      this.activeNodes[0].setSelfCustomTextStyle("sort", val, this.activeTab === "active", this.activeCustomText);
+    },
+    
+    /**
+     * @Author: libaii
+     * @Date: 2023-02-06 16:32:22
+     * @Desc: 更新自定义文本字距
+     */
+    handleSpacingChange(val) {
+      this.activeNodes[0].setSelfCustomTextStyle("spacing", val, this.activeTab === "active", this.activeCustomText);
+    },
+    
+    /**
+     * @Author: libaii
+     * @Date: 2023-02-06 14:57:05
+     * @Desc: 暂停快捷键
+     */
+    pauseShortcut() {
+      this.mindMap.keyCommand.pause();
+    },
+    
+    /**
+     * @Author: libaii
+     * @Date: 2023-02-06 14:57:05
+     * @Desc: 暂停快捷键
+     */
+    recoveryShortcut() {
+      this.mindMap.keyCommand.recovery();
+    },
+    
     /**
      * @Author: 王林
      * @Date: 2021-05-05 11:42:32
      * @Desc: tab切换
      */
     handleTabClick() {
-      this.initNodeStyle()
+      this.initNodeStyle();
     },
-
+    
     /**
      * @Author: 王林
      * @Date: 2022-09-12 22:16:56
@@ -748,10 +861,10 @@ export default {
      */
     checkDisabled(prop) {
       return (
-          this.activeTab === 'active' && !this.supportActiveStyle.includes(prop)
-      )
+        this.activeTab === "active" && !this.supportActiveStyle.includes(prop)
+      );
     },
-
+    
     /**
      * @Author: 王林
      * @Date: 2021-05-05 09:48:52
@@ -759,37 +872,37 @@ export default {
      */
     initNodeStyle() {
       if (this.activeNodes.length <= 0) {
-        this.activeTab = 'normal'
-        return
+        this.activeTab = "normal";
+        return;
       }
       ;[
-        'shape',
-        'paddingX',
-        'paddingY',
-        'color',
-        'fontFamily',
-        'fontSize',
-        'lineHeight',
-        'textDecoration',
-        'fontWeight',
-        'fontStyle',
-        'borderWidth',
-        'borderColor',
-        'fillColor',
-        'borderDasharray',
-        'borderRadius',
-        'lineColor',
-        'lineDasharray',
-        'lineWidth'
+        "shape",
+        "paddingX",
+        "paddingY",
+        "color",
+        "fontFamily",
+        "fontSize",
+        "lineHeight",
+        "textDecoration",
+        "fontWeight",
+        "fontStyle",
+        "borderWidth",
+        "borderColor",
+        "fillColor",
+        "borderDasharray",
+        "borderRadius",
+        "lineColor",
+        "lineDasharray",
+        "lineWidth"
       ].forEach(item => {
         this.style[item] = this.activeNodes[0].getStyle(
-            item,
-            false,
-            this.activeTab === 'active'
-        )
-      })
+          item,
+          false,
+          this.activeTab === "active"
+        );
+      });
     },
-
+    
     /**
      * @Author: 王林
      * @Date: 2021-05-04 22:08:16
@@ -797,79 +910,108 @@ export default {
      */
     update(prop) {
       this.activeNodes.forEach(node => {
-        node.setStyle(prop, this.style[prop], this.activeTab === 'active')
-      })
+        node.setStyle(prop, this.style[prop], this.activeTab === "active");
+      });
     },
-
+    
+    
     /**
      * @Author: 王林
      * @Date: 2021-05-05 09:41:34
      * @Desc: 切换加粗样式
      */
     toggleFontWeight() {
-      if (this.style.fontWeight === 'bold') {
-        this.style.fontWeight = 'normal'
+      if (this.style.fontWeight === "bold") {
+        this.style.fontWeight = "normal";
       } else {
-        this.style.fontWeight = 'bold'
+        this.style.fontWeight = "bold";
       }
-      this.update('fontWeight')
+      this.update("fontWeight");
     },
-
+    
+    /**
+     * @Author: libaii
+     * @Date: 2023-02-06 15:12:26
+     * @Desc: 切换自定义文本加粗样式
+     */
+    toggleCustomTextFontWeight() {
+      if (this.customStyle.styleConfig.fontWeight === "bold") {
+        this.customStyle.styleConfig.fontWeight = "normal";
+      } else {
+        this.customStyle.styleConfig.fontWeight = "bold";
+      }
+      this.updateCustomText("fontWeight");
+    },
+    
+    /**
+     * @Author: libaii
+     * @Date: 2023-02-06 15:13:06
+     * @Desc:
+     */
+    toggleCustomTextFontStyle() {
+      if (this.customStyle.styleConfig.fontStyle === "italic") {
+        this.customStyle.styleConfig.fontStyle = "normal";
+      } else {
+        this.customStyle.styleConfig.fontStyle = "italic";
+      }
+      this.updateCustomText("fontStyle");
+    },
+    
     /**
      * @Author: 王林
      * @Date: 2021-05-05 09:46:39
      * @Desc: 切换字体样式
      */
     toggleFontStyle() {
-      if (this.style.fontStyle === 'italic') {
-        this.style.fontStyle = 'normal'
+      if (this.style.fontStyle === "italic") {
+        this.style.fontStyle = "normal";
       } else {
-        this.style.fontStyle = 'italic'
+        this.style.fontStyle = "italic";
       }
-      this.update('fontStyle')
+      this.update("fontStyle");
     },
-
+    
     /**
      * @Author: 王林
      * @Date: 2021-05-05 10:18:59
      * @Desc: 修改字体颜色
      */
     changeFontColor(color) {
-      this.style.color = color
-      this.update('color')
+      this.style.color = color;
+      this.update("color");
     },
-
+    
     /**
      * @Author: 王林
      * @Date: 2021-05-05 10:18:59
      * @Desc: 修改边框颜色
      */
     changeBorderColor(color) {
-      this.style.borderColor = color
-      this.update('borderColor')
+      this.style.borderColor = color;
+      this.update("borderColor");
     },
-
+    
     /**
      * @Author: flydreame
      * @Date: 2022-09-17 10:18:15
      * @Desc: 修改线条颜色
      */
     changeLineColor(color) {
-      this.style.lineColor = color
-      this.update('lineColor')
+      this.style.lineColor = color;
+      this.update("lineColor");
     },
-
+    
     /**
      * @Author: 王林
      * @Date: 2021-05-05 10:18:59
      * @Desc: 修改背景颜色
      */
     changeFillColor(color) {
-      this.style.fillColor = color
-      this.update('fillColor')
+      this.style.fillColor = color;
+      this.update("fillColor");
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -878,7 +1020,7 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
-
+  
   .tab {
     flex-grow: 0;
     flex-shrink: 0;
@@ -894,7 +1036,7 @@ export default {
   justify-content: center;
   align-items: center;
   color: #666;
-
+  
   .tipIcon {
     font-size: 100px;
   }
@@ -903,7 +1045,7 @@ export default {
 .sidebarContent {
   padding: 20px;
   padding-top: 10px;
-
+  
   .title {
     font-size: 16px;
     font-family: PingFangSC-Medium, PingFang SC;
@@ -911,32 +1053,32 @@ export default {
     color: rgba(26, 26, 26, 0.9);
     margin-bottom: 10px;
     margin-top: 20px;
-
+    
     &.noTop {
       margin-top: 0;
     }
   }
-
+  
   .row {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
-
+    
     .btnGroup {
       width: 100%;
       display: flex;
       justify-content: space-between;
     }
-
+    
     .rowItem {
       display: flex;
       align-items: center;
-
+      
       .name {
         font-size: 12px;
         margin-right: 10px;
       }
-
+      
       .block {
         display: inline-block;
         width: 30px;
@@ -944,7 +1086,7 @@ export default {
         border: 1px solid #dcdfe6;
         border-radius: 4px;
         cursor: pointer;
-
+        
         &.disabled {
           background-color: #f5f7fa !important;
           border-color: #e4e7ed !important;
@@ -953,7 +1095,7 @@ export default {
         }
       }
     }
-
+    
     .styleBtn {
       position: relative;
       width: 50px;
@@ -966,25 +1108,25 @@ export default {
       font-weight: bold;
       cursor: pointer;
       border-radius: 4px;
-
+      
       &.actived {
         background-color: #eee;
       }
-
+      
       &.disabled {
         background-color: #f5f7fa !important;
         border-color: #e4e7ed !important;
         color: #c0c4cc !important;
         cursor: not-allowed !important;
       }
-
+      
       &.i {
         font-style: italic;
       }
-
+      
       &.u {
       }
-
+      
       .colorShow {
         position: absolute;
         left: 0;

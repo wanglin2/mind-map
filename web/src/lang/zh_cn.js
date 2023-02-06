@@ -34,7 +34,7 @@ export default {
     watermarkTextSpacing: '水印文字间距',
     watermarkAngle: '旋转角度',
     watermarkTextOpacity: '文字透明度',
-    watermarkTextFontSize: '文字字号',
+    watermarkTextFontSize: '文字字号'
   },
   color: {
     moreColor: '更多颜色'
@@ -152,7 +152,11 @@ export default {
     line: '线条',
     nodePadding: '节点内边距',
     horizontal: '水平',
-    vertical: '垂直'
+    vertical: '垂直',
+    sort: '排序',
+    spacing: '字距',
+    position: '相对位置',
+    direction: '自定义文本排列方向'
   },
   theme: {
     title: '主题'

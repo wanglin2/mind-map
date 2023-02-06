@@ -5,7 +5,7 @@
         <Navigator :mindMap="mindMap"></Navigator>
         <NavigatorToolbar :mindMap="mindMap" v-if="!isZenMode"></NavigatorToolbar>
         <Outline :mindMap="mindMap"></Outline>
-        <Style v-if="!isZenMode"></Style>
+        <Style v-if="!isZenMode" :mindMap="mindMap"></Style>
         <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
         <Theme :mindMap="mindMap"></Theme>
         <Structure :mindMap="mindMap"></Structure>

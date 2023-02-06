@@ -884,7 +884,7 @@ const data5 = {
                     "color": "#f23",
                     "customText": [
                         {
-                            content: "test10", //文本内容
+                            content: "测试abc01", //文本内容
                             position: 'pre', //pre:前置,post后置
                             styleConfig: {
                                 fontFamily: '',

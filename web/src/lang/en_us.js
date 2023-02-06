@@ -152,7 +152,11 @@ export default {
     line: 'Line',
     nodePadding: 'Node padding',
     horizontal: 'Horizontal',
-    vertical: 'Vertical'
+    vertical: 'Vertical',
+    sort: 'Sort',
+    spacing: 'Letter Spacing',
+    position: 'Relative Position',
+    direction: 'Custom Text Arrangement Direction'
   },
   theme: {
     title: 'Theme'
