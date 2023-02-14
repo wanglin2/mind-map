@@ -5,9 +5,11 @@ import { Image, SVG, Circle, A, G, Rect, Text } from '@svgdotjs/svg.js'
 import btnsSvg from './svg/btns'
 import iconsSvg from './svg/icons'
 
-//  节点类
+//  节点类
+
 class Node {
-  //  构造函数
+  //  构造函数
+
   constructor(opt = {}) {
     // 节点数据
     this.nodeData = this.handleData(opt.data || {})
@@ -108,7 +110,8 @@ class Node {
     this._top = val
   }
 
-  //  更新主题配置
+  //  更新主题配置
+
   updateThemeConfig() {
     // 主题配置
     this.themeConfig = this.mindMap.themeConfig
@@ -116,7 +119,8 @@ class Node {
     this.style.updateThemeConfig(this.themeConfig)
   }
 
-  //  复位部分布局时会重新设置的数据
+  //  复位部分布局时会重新设置的数据
+
   reset() {
     this.children = []
     this.parent = null
@@ -126,7 +130,8 @@ class Node {
     this.top = 0
   }
 
-  //  处理数据
+  //  处理数据
+
   handleData(data) {
     data.data.expand = data.data.expand === false ? false : true
     data.data.isActive = data.data.isActive === true ? true : false
@@ -134,12 +139,14 @@ class Node {
     return data
   }
 
-  //  检查节点是否存在自定义数据
+  //  检查节点是否存在自定义数据
+
   hasCustomPosition() {
     return this.customLeft !== undefined && this.customTop !== undefined
   }
 
-  //  检查节点是否存在自定义位置的祖先节点
+  //  检查节点是否存在自定义位置的祖先节点
+
   ancestorHasCustomPosition() {
     let node = this
     while (node) {
@@ -151,12 +158,14 @@ class Node {
     return false
   }
 
-  //  添加子节点
+  //  添加子节点
+
   addChildren(node) {
     this.children.push(node)
   }
 
-  //  创建节点的各个内容对象数据
+  //  创建节点的各个内容对象数据
+
   createNodeData() {
     this._imgData = this.createImgNode()
     this._iconData = this.createIconNode()
@@ -167,7 +176,8 @@ class Node {
     this.createGeneralizationNode()
   }
 
-  //  解绑所有事件
+  //  解绑所有事件
+
   removeAllEvent() {
     if (this._noteData) {
       this._noteData.node.off(['mouseover', 'mouseout'])
@@ -186,7 +196,8 @@ class Node {
     }
   }
 
-  //  移除节点内容
+  //  移除节点内容
+
   removeAllNode() {
     // 节点内的内容
     ;[
@@ -220,7 +231,8 @@ class Node {
     this.removeGeneralization()
   }
 
-  //  计算节点的宽高
+  //  计算节点的宽高
+
   getSize() {
     this.removeAllNode()
     this.createNodeData()
@@ -232,7 +244,8 @@ class Node {
     return changed
   }
 
-  //  计算节点尺寸信息
+  //  计算节点尺寸信息
+
   getNodeRect() {
     // 宽高
     let imgContentWidth = 0
@@ -299,7 +312,8 @@ class Node {
     }
   }
 
-  //  创建图片节点
+  //  创建图片节点
+
   createImgNode() {
     let img = this.nodeData.data.image
     if (!img) {
@@ -320,7 +334,8 @@ class Node {
     }
   }
 
-  //  获取图片显示宽高
+  //  获取图片显示宽高
+
   getImgShowSize() {
     return resizeImgSize(
       this.nodeData.data.imageSize.width,
@@ -330,7 +345,8 @@ class Node {
     )
   }
 
-  //  创建icon节点
+  //  创建icon节点
+
   createIconNode() {
     let _data = this.nodeData.data
     if (!_data.icon || _data.icon.length <= 0) {
@@ -346,22 +362,24 @@ class Node {
     })
   }
 
-  //  创建文本节点
+  //  创建文本节点
+
   createTextNode() {
     let g = new G()
     let fontSize = this.getStyle(
       'fontSize',
-      this.isRoot,
+      false,
       this.nodeData.data.isActive
     )
     let lineHeight = this.getStyle(
       'lineHeight',
-      this.isRoot,
+      false,
       this.nodeData.data.isActive
     )
     this.nodeData.data.text.split(/\n/gim).forEach((item, index) => {
       let node = new Text().text(item)
       this.style.text(node)
+      console.log(this.isRoot, fontSize, lineHeight, index);
       node.y(fontSize * lineHeight * index)
       g.add(node)
     })
@@ -373,7 +391,8 @@ class Node {
     }
   }
 
-  //  创建超链接节点
+  //  创建超链接节点
+
   createHyperlinkNode() {
     let { hyperlink, hyperlinkTitle } = this.nodeData.data
     if (!hyperlink) {
@@ -403,7 +422,8 @@ class Node {
     }
   }
 
-  //  创建标签节点
+  //  创建标签节点
+
   createTagNode() {
     let tagData = this.nodeData.data.tag
     if (!tagData || tagData.length <= 0) {
@@ -429,7 +449,8 @@ class Node {
     return nodes
   }
 
-  //  创建备注节点
+  //  创建备注节点
+
   createNoteNode() {
     if (!this.nodeData.data.note) {
       return null
@@ -486,7 +507,8 @@ class Node {
     }
   }
 
-  //  获取节点形状
+  //  获取节点形状
+
   getShape() {
     // 节点使用功能横线风格的话不支持设置形状，直接使用默认的矩形
     return this.themeConfig.nodeUseLineStyle
@@ -494,7 +516,8 @@ class Node {
       : this.style.getStyle('shape', false, false)
   }
 
-  //  定位节点内容
+  //  定位节点内容
+
   layout() {
     let { width, textContentItemMargin } = this
     let { paddingY } = this.getPaddingVale()
@@ -618,7 +641,8 @@ class Node {
     })
   }
 
-  //  激活节点
+  //  激活节点
+
   active(e) {
     if (this.mindMap.opt.readonly) {
       return
@@ -634,7 +658,8 @@ class Node {
     this.mindMap.emit('node_active', this, this.renderer.activeNodeList)
   }
 
-  //  渲染节点到画布，会移除旧的，创建新的
+  //  渲染节点到画布，会移除旧的，创建新的
+
   renderNode() {
     // 连线
     this.renderLine()
@@ -644,7 +669,8 @@ class Node {
     this.layout()
   }
 
-  //  更新节点
+  //  更新节点
+
   update(layout = false) {
     if (!this.group) {
       return
@@ -685,7 +711,8 @@ class Node {
     }
   }
 
-  //  递归渲染
+  //  递归渲染
+
   render(callback = () => {}) {
     // 节点
     if (this.initRender) {
@@ -726,7 +753,8 @@ class Node {
     }
   }
 
-  //  递归删除
+  //  递归删除
+
   remove() {
     this.initRender = true
     this.removeAllEvent()
@@ -744,7 +772,8 @@ class Node {
     }
   }
 
-  //  隐藏节点
+  //  隐藏节点
+
   hide() {
     this.group.hide()
     this.hideGeneralization()
@@ -764,7 +793,8 @@ class Node {
     }
   }
 
-  //  显示节点
+  //  显示节点
+
   show() {
     if (!this.group) {
       return
@@ -787,7 +817,8 @@ class Node {
     }
   }
 
-  //  连线
+  //  连线
+
   renderLine(deep = false) {
     if (this.nodeData.data.expand === false) {
       return
@@ -823,7 +854,8 @@ class Node {
     }
   }
 
-  //  设置连线样式
+  //  设置连线样式
+
   styleLine(line, node) {
     let width =
       node.getSelfInhertStyle('lineWidth') || node.getStyle('lineWidth', true)
@@ -839,7 +871,8 @@ class Node {
     })
   }
 
-  //  移除连线
+  //  移除连线
+
   removeLine() {
     this._lines.forEach(line => {
       line.remove()
@@ -847,12 +880,14 @@ class Node {
     this._lines = []
   }
 
-  //  检查是否存在概要
+  //  检查是否存在概要
+
   checkHasGeneralization() {
     return !!this.nodeData.data.generalization
   }
 
-  //  创建概要节点
+  //  创建概要节点
+
   createGeneralizationNode() {
     if (this.isGeneralization || !this.checkHasGeneralization()) {
       return
@@ -880,13 +915,15 @@ class Node {
     }
   }
 
-  //  更新概要节点
+  //  更新概要节点
+
   updateGeneralization() {
     this.removeGeneralization()
     this.createGeneralizationNode()
   }
 
-  //  渲染概要节点
+  //  渲染概要节点
+
   renderGeneralization() {
     if (this.isGeneralization) {
       return
@@ -911,7 +948,8 @@ class Node {
     this._generalizationNode.render()
   }
 
-  //  删除概要节点
+  //  删除概要节点
+
   removeGeneralization() {
     if (this._generalizationLine) {
       this._generalizationLine.remove()
@@ -931,7 +969,8 @@ class Node {
     }
   }
 
-  //  隐藏概要节点
+  //  隐藏概要节点
+
   hideGeneralization() {
     if (this._generalizationLine) {
       this._generalizationLine.hide()
@@ -941,7 +980,8 @@ class Node {
     }
   }
 
-  //  显示概要节点
+  //  显示概要节点
+
   showGeneralization() {
     if (this._generalizationLine) {
       this._generalizationLine.show()
@@ -951,7 +991,8 @@ class Node {
     }
   }
 
-  //  创建或更新展开收缩按钮内容
+  //  创建或更新展开收缩按钮内容
+
   updateExpandBtnNode() {
     if (this._expandBtn) {
       this._expandBtn.clear()
@@ -970,7 +1011,8 @@ class Node {
     if (this._expandBtn) this._expandBtn.add(fillNode).add(node)
   }
 
-  //  更新展开收缩按钮位置
+  //  更新展开收缩按钮位置
+
   updateExpandBtnPos() {
     if (!this._expandBtn) {
       return
@@ -978,7 +1020,8 @@ class Node {
     this.renderer.layout.renderExpandBtn(this, this._expandBtn)
   }
 
-  //  展开收缩按钮
+  //  展开收缩按钮
+
   renderExpandBtn() {
     if (
       !this.nodeData.children ||
@@ -1015,7 +1058,8 @@ class Node {
     this.updateExpandBtnPos()
   }
 
-  //  移除展开收缩按钮
+  //  移除展开收缩按钮
+
   removeExpandBtn() {
     if (this._expandBtn) {
       this._expandBtn.off(['mouseover', 'mouseout', 'click'])
@@ -1025,7 +1069,8 @@ class Node {
     }
   }
 
-  //  检测当前节点是否是某个节点的祖先节点
+  //  检测当前节点是否是某个节点的祖先节点
+
   isParent(node) {
     if (this === node) {
       return false
@@ -1040,7 +1085,8 @@ class Node {
     return false
   }
 
-  //  检测当前节点是否是某个节点的兄弟节点
+  //  检测当前节点是否是某个节点的兄弟节点
+
   isBrother(node) {
     if (!this.parent || this === node) {
       return false
@@ -1050,7 +1096,8 @@ class Node {
     })
   }
 
-  //  获取padding值
+  //  获取padding值
+
   getPaddingVale() {
     return {
       paddingX: this.getStyle('paddingX', true, this.nodeData.data.isActive),
@@ -1058,18 +1105,21 @@ class Node {
     }
   }
 
-  //  获取某个样式
+  //  获取某个样式
+
   getStyle(prop, root, isActive) {
     let v = this.style.merge(prop, root, isActive)
     return v === undefined ? '' : v
   }
 
-  //  获取自定义样式
+  //  获取自定义样式
+
   getSelfStyle(prop) {
     return this.style.getSelfStyle(prop)
   }
 
-  //   获取最近一个存在自身自定义样式的祖先节点的自定义样式
+  //   获取最近一个存在自身自定义样式的祖先节点的自定义样式
+
   getParentSelfStyle(prop) {
     if (this.parent) {
       return (
@@ -1079,7 +1129,8 @@ class Node {
     return null
   }
 
-  //  获取自身可继承的自定义样式
+  //  获取自身可继承的自定义样式
+
   getSelfInhertStyle(prop) {
     return (
       this.getSelfStyle(prop) || // 自身
@@ -1087,52 +1138,62 @@ class Node {
     ) // 父级
   }
 
-  //  修改某个样式
+  //  修改某个样式
+
   setStyle(prop, value, isActive) {
     this.mindMap.execCommand('SET_NODE_STYLE', this, prop, value, isActive)
   }
 
-  //  获取数据
+  //  获取数据
+
   getData(key) {
     return key ? this.nodeData.data[key] || '' : this.nodeData.data
   }
 
-  //  设置数据
+  //  设置数据
+
   setData(data = {}) {
     this.mindMap.execCommand('SET_NODE_DATA', this, data)
   }
 
-  //  设置文本
+  //  设置文本
+
   setText(text) {
     this.mindMap.execCommand('SET_NODE_TEXT', this, text)
   }
 
-  //  设置图片
+  //  设置图片
+
   setImage(imgData) {
     this.mindMap.execCommand('SET_NODE_IMAGE', this, imgData)
   }
 
-  //  设置图标
+  //  设置图标
+
   setIcon(icons) {
     this.mindMap.execCommand('SET_NODE_ICON', this, icons)
   }
 
-  //  设置超链接
+  //  设置超链接
+
   setHyperlink(link, title) {
     this.mindMap.execCommand('SET_NODE_HYPERLINK', this, link, title)
   }
 
-  //  设置备注
+  //  设置备注
+
   setNote(note) {
     this.mindMap.execCommand('SET_NODE_NOTE', this, note)
   }
 
-  //  设置标签
+  //  设置标签
+
   setTag(tag) {
     this.mindMap.execCommand('SET_NODE_TAG', this, tag)
   }
 
-  //  设置形状
+  //  设置形状
+
   setShape(shape) {
     this.mindMap.execCommand('SET_NODE_SHAPE', this, shape)
   }
