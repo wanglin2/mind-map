@@ -22069,11 +22069,12 @@ class Node_Node {
 
   createTextNode() {
     let g = new G();
-    let fontSize = this.getStyle('fontSize', this.isRoot, this.nodeData.data.isActive);
-    let lineHeight = this.getStyle('lineHeight', this.isRoot, this.nodeData.data.isActive);
+    let fontSize = this.getStyle('fontSize', false, this.nodeData.data.isActive);
+    let lineHeight = this.getStyle('lineHeight', false, this.nodeData.data.isActive);
     this.nodeData.data.text.split(/\n/gim).forEach((item, index) => {
       let node = new Text().text(item);
       this.style.text(node);
+      console.log(this.isRoot, fontSize, lineHeight, index);
       node.y(fontSize * lineHeight * index);
       g.add(node);
     });
