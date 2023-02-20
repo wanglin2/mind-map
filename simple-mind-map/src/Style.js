@@ -140,6 +140,8 @@ class Style {
     node.style.fontFamily = this.merge('fontFamily')
     node.style.fontSize = this.merge('fontSize') * fontSizeScale + 'px'
     node.style.fontWeight = this.merge('fontWeight') || 'normal'
+    node.style.lineHeight = this.merge('lineHeight')
+    node.style.fontStyle = this.merge('fontStyle')
   }
 
   //  标签文字
