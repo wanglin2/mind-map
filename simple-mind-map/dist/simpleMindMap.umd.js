@@ -13875,12 +13875,24 @@ class Style_Style {
     });
   }
 
+  // 获取文本样式
+  getTextFontStyle() {
+    return {
+      italic: this.merge('fontStyle') === 'italic',
+      bold: this.merge('fontWeight'),
+      fontSize: this.merge('fontSize'),
+      fontFamily: this.merge('fontFamily')
+    };
+  }
+
   //  html文字节点
 
   domText(node, fontSizeScale = 1) {
     node.style.fontFamily = this.merge('fontFamily');
     node.style.fontSize = this.merge('fontSize') * fontSizeScale + 'px';
     node.style.fontWeight = this.merge('fontWeight') || 'normal';
+    node.style.lineHeight = this.merge('lineHeight');
+    node.style.fontStyle = this.merge('fontStyle');
   }
 
   //  标签文字
@@ -14412,6 +14424,49 @@ const camelCaseToHyphen = str => {
   return str.replace(/([a-z])([A-Z])/g, (...args) => {
     return args[1] + '-' + args[2].toLowerCase();
   });
+};
+
+//计算节点的文本长宽
+let measureTextContext = null;
+const measureText = (text, {
+  italic,
+  bold,
+  fontSize,
+  fontFamily
+}) => {
+  const font = joinFontStr({
+    italic,
+    bold,
+    fontSize,
+    fontFamily
+  });
+  if (!measureTextContext) {
+    const canvas = document.createElement('canvas');
+    measureTextContext = canvas.getContext('2d');
+  }
+  measureTextContext.save();
+  measureTextContext.font = font;
+  const {
+    width,
+    actualBoundingBoxAscent,
+    actualBoundingBoxDescent
+  } = measureTextContext.measureText(text);
+  measureTextContext.restore();
+  const height = actualBoundingBoxAscent + actualBoundingBoxDescent;
+  return {
+    width,
+    height
+  };
+};
+
+// 拼接font字符串
+const joinFontStr = ({
+  italic,
+  bold,
+  fontSize,
+  fontFamily
+}) => {
+  return `${italic ? 'italic ' : ''} ${bold ? 'bold ' : ''} ${fontSize}px ${fontFamily} `;
 };
 // CONCATENATED MODULE: ../simple-mind-map/node_modules/@svgdotjs/svg.js/dist/svg.esm.js
 /*!
@@ -22071,10 +22126,31 @@ class Node_Node {
     let g = new G();
     let fontSize = this.getStyle('fontSize', false, this.nodeData.data.isActive);
     let lineHeight = this.getStyle('lineHeight', false, this.nodeData.data.isActive);
-    this.nodeData.data.text.split(/\n/gim).forEach((item, index) => {
+    // 文本超长自动换行
+    let textStyle = this.style.getTextFontStyle();
+    let textArr = this.nodeData.data.text.split(/\n/gim);
+    let maxWidth = this.mindMap.opt.textAutoWrapWidth;
+    textArr.forEach((item, index) => {
+      let arr = item.split('');
+      let lines = [];
+      let line = [];
+      while (arr.length) {
+        line.push(arr.shift());
+        let text = line.join('');
+        if (measureText(text, textStyle).width >= maxWidth) {
+          lines.push(text);
+          line = [];
+        }
+      }
+      if (line.length > 0) {
+        lines.push(line.join(''));
+      }
+      textArr[index] = lines.join('\n');
+    });
+    textArr = textArr.join('\n').split(/\n/gim);
+    textArr.forEach((item, index) => {
       let node = new Text().text(item);
       this.style.text(node);
-      console.log(this.isRoot, fontSize, lineHeight, index);
       node.y(fontSize * lineHeight * index);
       g.add(node);
     });
@@ -24276,20 +24352,25 @@ class TextEdit_TextEdit {
     this.registerTmpShortcut();
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div');
-      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);padding: 3px 5px;margin-left: -5px;margin-top: -3px;outline: none;`;
+      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);padding: 3px 5px;margin-left: -5px;margin-top: -3px;outline: none; word-break: break-all;`;
       this.textEditNode.setAttribute('contenteditable', true);
       this.textEditNode.addEventListener('keyup', e => {
         e.stopPropagation();
       });
       document.body.appendChild(this.textEditNode);
     }
-    node.style.domText(this.textEditNode, this.mindMap.view.scale);
+    let scale = this.mindMap.view.scale;
+    let lineHeight = node.style.merge('lineHeight');
+    let fontSize = node.style.merge('fontSize');
+    node.style.domText(this.textEditNode, scale);
     this.textEditNode.innerHTML = node.nodeData.data.text.split(/\n/gim).join('<br>');
     this.textEditNode.style.minWidth = rect.width + 10 + 'px';
     this.textEditNode.style.minHeight = rect.height + 6 + 'px';
     this.textEditNode.style.left = rect.left + 'px';
     this.textEditNode.style.top = rect.top + 'px';
     this.textEditNode.style.display = 'block';
+    this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth * scale + 'px';
+    this.textEditNode.style.transform = `translateY(${-(lineHeight * fontSize - fontSize) / 2 * scale}px)`;
     this.showTextEdit = true;
     // 选中文本
     this.selectNodeText();
@@ -25005,29 +25086,35 @@ class Render_Render {
     if (this.activeNodeList.length <= 0) {
       return;
     }
-    for (let i = 0; i < this.activeNodeList.length; i++) {
-      let node = this.activeNodeList[i];
-      if (node.isGeneralization) {
-        // 删除概要节点
-        this.setNodeData(node.generalizationBelongNode, {
-          generalization: null
-        });
-        node.generalizationBelongNode.update();
-        this.removeActiveNode(node);
-        i--;
-      } else if (node.isRoot) {
-        node.children.forEach(child => {
-          child.remove();
-        });
-        node.children = [];
-        node.nodeData.children = [];
-        break;
-      } else {
-        this.removeActiveNode(node);
-        this.removeOneNode(node);
-        i--;
+    let root = this.activeNodeList.find(node => {
+      return node.isRoot;
+    });
+    if (root) {
+      this.clearActive();
+      root.children.forEach(child => {
+        child.remove();
+      });
+      root.children = [];
+      root.nodeData.children = [];
+    } else {
+      for (let i = 0; i < this.activeNodeList.length; i++) {
+        let node = this.activeNodeList[i];
+        if (node.isGeneralization) {
+          // 删除概要节点
+          this.setNodeData(node.generalizationBelongNode, {
+            generalization: null
+          });
+          node.generalizationBelongNode.update();
+          this.removeActiveNode(node);
+          i--;
+        } else {
+          this.removeActiveNode(node);
+          this.removeOneNode(node);
+          i--;
+        }
       }
     }
+    this.activeNodeList = [];
     this.mindMap.emit('node_active', null, []);
     this.mindMap.render();
   }
@@ -27028,7 +27115,9 @@ const defaultOpt = {
       opacity: 0.5,
       fontSize: 14
     }
-  }
+  },
+  // 达到该宽度文本自动换行
+  textAutoWrapWidth: 500
 };
 
 //  思维导图
