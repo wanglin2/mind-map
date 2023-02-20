@@ -1,14 +1,17 @@
 import Base from './Base'
 import { walk, asyncRun } from '../utils'
 
-//  逻辑结构图
+//  逻辑结构图
+
 class LogicalStructure extends Base {
-  //  构造函数
+  //  构造函数
+
   constructor(opt = {}) {
     super(opt)
   }
 
-  //  布局
+  //  布局
+
   doLayout(callback) {
     let task = [
       () => {
@@ -27,7 +30,8 @@ class LogicalStructure extends Base {
     asyncRun(task)
   }
 
-  //  遍历数据计算节点的left、width、height
+  //  遍历数据计算节点的left、width、height
+
   computedBaseValue() {
     walk(
       this.renderer.renderTree,
@@ -62,7 +66,8 @@ class LogicalStructure extends Base {
     )
   }
 
-  //  遍历节点树计算节点的top
+  //  遍历节点树计算节点的top
+
   computedTopValue() {
     walk(
       this.root,
@@ -88,7 +93,8 @@ class LogicalStructure extends Base {
     )
   }
 
-  //  调整节点top
+  //  调整节点top
+
   adjustTopValue() {
     walk(
       this.root,
@@ -111,7 +117,8 @@ class LogicalStructure extends Base {
     )
   }
 
-  //  更新兄弟节点的top
+  //  更新兄弟节点的top
+
   updateBrothers(node, addHeight) {
     if (node.parent) {
       let childrenList = node.parent.children
@@ -142,7 +149,8 @@ class LogicalStructure extends Base {
     }
   }
 
-  //  绘制连线，连接该节点到其子节点
+  //  绘制连线，连接该节点到其子节点
+
   renderLine(node, lines, style, lineStyle) {
     if (lineStyle === 'curve') {
       this.renderLineCurve(node, lines, style)
@@ -153,7 +161,8 @@ class LogicalStructure extends Base {
     }
   }
 
-  //  直线风格连线
+  //  直线风格连线
+
   renderLineStraight(node, lines, style) {
     if (node.children.length <= 0) {
       return []
@@ -161,6 +170,7 @@ class LogicalStructure extends Base {
     let { left, top, width, height, expandBtnSize } = node
     let marginX = this.getMarginX(node.layerIndex + 1)
     let s1 = (marginX - expandBtnSize) * 0.6
+    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
     node.children.forEach((item, index) => {
       let x1 =
         node.layerIndex === 0 ? left + width : left + width + expandBtnSize
@@ -168,9 +178,11 @@ class LogicalStructure extends Base {
       let x2 = item.left
       let y2 = item.top + item.height / 2
       // 节点使用横线风格，需要额外渲染横线
-      let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle
+      let nodeUseLineStyleOffset = nodeUseLineStyle
         ? item.width
         : 0
+      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
+      y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       let path = `M ${x1},${y1} L ${x1 + s1},${y1} L ${x1 + s1},${y2} L ${
         x2 + nodeUseLineStyleOffset
       },${y2}`
@@ -179,20 +191,24 @@ class LogicalStructure extends Base {
     })
   }
 
-  //  直连风格
+  //  直连风格
+
   renderLineDirect(node, lines, style) {
     if (node.children.length <= 0) {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
+    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
     node.children.forEach((item, index) => {
       let x1 =
         node.layerIndex === 0 ? left + width / 2 : left + width + expandBtnSize
       let y1 = top + height / 2
       let x2 = item.left
       let y2 = item.top + item.height / 2
+      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
+      y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       // 节点使用横线风格，需要额外渲染横线
-      let nodeUseLineStylePath = this.mindMap.themeConfig.nodeUseLineStyle
+      let nodeUseLineStylePath = nodeUseLineStyle
         ? ` L ${item.left + item.width},${y2}`
         : ''
       let path = `M ${x1},${y1} L ${x2},${y2}` + nodeUseLineStylePath
@@ -201,12 +217,14 @@ class LogicalStructure extends Base {
     })
   }
 
-  //  曲线风格连线
+  //  曲线风格连线
+
   renderLineCurve(node, lines, style) {
     if (node.children.length <= 0) {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
+    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
     node.children.forEach((item, index) => {
       let x1 =
         node.layerIndex === 0 ? left + width / 2 : left + width + expandBtnSize
@@ -214,8 +232,10 @@ class LogicalStructure extends Base {
       let x2 = item.left
       let y2 = item.top + item.height / 2
       let path = ''
+      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
+      y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       // 节点使用横线风格，需要额外渲染横线
-      let nodeUseLineStylePath = this.mindMap.themeConfig.nodeUseLineStyle
+      let nodeUseLineStylePath = nodeUseLineStyle
         ? ` L ${item.left + item.width},${y2}`
         : ''
       if (node.isRoot) {
@@ -228,7 +248,8 @@ class LogicalStructure extends Base {
     })
   }
 
-  //  渲染按钮
+  //  渲染按钮
+
   renderExpandBtn(node, btn) {
     let { width, height } = node
     let { translateX, translateY } = btn.transform()
@@ -242,7 +263,8 @@ class LogicalStructure extends Base {
     )
   }
 
-  //  创建概要节点
+  //  创建概要节点
+
   renderGeneralization(node, gLine, gNode) {
     let {
       top,

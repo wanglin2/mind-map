@@ -22454,15 +22454,10 @@ class Node_Node {
     }
     this.renderGeneralization();
     let t = this.group.transform();
-    // 节点使用横线风格，有两种结构需要调整节点的位置
-    let nodeUseLineStyleOffset = 0;
-    if (['logicalStructure', 'mindMap'].includes(this.mindMap.opt.layout) && !this.isRoot && !this.isGeneralization && this.themeConfig.nodeUseLineStyle) {
-      nodeUseLineStyleOffset = this.height / 2;
-    }
     if (!layout) {
-      this.group.animate(300).translate(this.left - t.translateX, this.top - t.translateY - nodeUseLineStyleOffset);
+      this.group.animate(300).translate(this.left - t.translateX, this.top - t.translateY);
     } else {
-      this.group.translate(this.left - t.translateX, this.top - t.translateY - nodeUseLineStyleOffset);
+      this.group.translate(this.left - t.translateX, this.top - t.translateY);
     }
   }
 
@@ -23259,13 +23254,16 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
     } = node;
     let marginX = this.getMarginX(node.layerIndex + 1);
     let s1 = (marginX - expandBtnSize) * 0.6;
+    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node.children.forEach((item, index) => {
       let x1 = node.layerIndex === 0 ? left + width : left + width + expandBtnSize;
       let y1 = top + height / 2;
       let x2 = item.left;
       let y2 = item.top + item.height / 2;
       // 节点使用横线风格，需要额外渲染横线
-      let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle ? item.width : 0;
+      let nodeUseLineStyleOffset = nodeUseLineStyle ? item.width : 0;
+      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1;
+      y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2;
       let path = `M ${x1},${y1} L ${x1 + s1},${y1} L ${x1 + s1},${y2} L ${x2 + nodeUseLineStyleOffset},${y2}`;
       lines[index].plot(path);
       style && style(lines[index], item);
@@ -23285,13 +23283,16 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
       height,
       expandBtnSize
     } = node;
+    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node.children.forEach((item, index) => {
       let x1 = node.layerIndex === 0 ? left + width / 2 : left + width + expandBtnSize;
       let y1 = top + height / 2;
       let x2 = item.left;
       let y2 = item.top + item.height / 2;
+      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1;
+      y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2;
       // 节点使用横线风格，需要额外渲染横线
-      let nodeUseLineStylePath = this.mindMap.themeConfig.nodeUseLineStyle ? ` L ${item.left + item.width},${y2}` : '';
+      let nodeUseLineStylePath = nodeUseLineStyle ? ` L ${item.left + item.width},${y2}` : '';
       let path = `M ${x1},${y1} L ${x2},${y2}` + nodeUseLineStylePath;
       lines[index].plot(path);
       style && style(lines[index], item);
@@ -23311,14 +23312,17 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
       height,
       expandBtnSize
     } = node;
+    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node.children.forEach((item, index) => {
       let x1 = node.layerIndex === 0 ? left + width / 2 : left + width + expandBtnSize;
       let y1 = top + height / 2;
       let x2 = item.left;
       let y2 = item.top + item.height / 2;
       let path = '';
+      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1;
+      y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2;
       // 节点使用横线风格，需要额外渲染横线
-      let nodeUseLineStylePath = this.mindMap.themeConfig.nodeUseLineStyle ? ` L ${item.left + item.width},${y2}` : '';
+      let nodeUseLineStylePath = nodeUseLineStyle ? ` L ${item.left + item.width},${y2}` : '';
       if (node.isRoot) {
         path = this.quadraticCurvePath(x1, y1, x2, y2) + nodeUseLineStylePath;
       } else {
@@ -23548,11 +23552,12 @@ class MindMap_MindMap extends layouts_Base {
     } = node;
     let marginX = this.getMarginX(node.layerIndex + 1);
     let s1 = (marginX - expandBtnSize) * 0.6;
+    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node.children.forEach((item, index) => {
       let x1 = 0;
       let _s = 0;
       // 节点使用横线风格，需要额外渲染横线
-      let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle ? item.width : 0;
+      let nodeUseLineStyleOffset = nodeUseLineStyle ? item.width : 0;
       if (item.dir === 'left') {
         _s = -s1;
         x1 = node.layerIndex === 0 ? left : left - expandBtnSize;
@@ -23564,6 +23569,8 @@ class MindMap_MindMap extends layouts_Base {
       let y1 = top + height / 2;
       let x2 = item.dir === 'left' ? item.left + item.width : item.left;
       let y2 = item.top + item.height / 2;
+      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1;
+      y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2;
       let path = `M ${x1},${y1} L ${x1 + _s},${y1} L ${x1 + _s},${y2} L ${x2 + nodeUseLineStyleOffset},${y2}`;
       lines[index].plot(path);
       style && style(lines[index], item);
@@ -23583,14 +23590,17 @@ class MindMap_MindMap extends layouts_Base {
       height,
       expandBtnSize
     } = node;
+    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node.children.forEach((item, index) => {
       let x1 = node.layerIndex === 0 ? left + width / 2 : item.dir === 'left' ? left - expandBtnSize : left + width + expandBtnSize;
       let y1 = top + height / 2;
       let x2 = item.dir === 'left' ? item.left + item.width : item.left;
       let y2 = item.top + item.height / 2;
+      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1;
+      y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2;
       // 节点使用横线风格，需要额外渲染横线
       let nodeUseLineStylePath = '';
-      if (this.mindMap.themeConfig.nodeUseLineStyle) {
+      if (nodeUseLineStyle) {
         if (item.dir === 'left') {
           nodeUseLineStylePath = ` L ${item.left},${y2}`;
         } else {
@@ -23616,12 +23626,15 @@ class MindMap_MindMap extends layouts_Base {
       height,
       expandBtnSize
     } = node;
+    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node.children.forEach((item, index) => {
       let x1 = node.layerIndex === 0 ? left + width / 2 : item.dir === 'left' ? left - expandBtnSize : left + width + 20;
       let y1 = top + height / 2;
       let x2 = item.dir === 'left' ? item.left + item.width : item.left;
       let y2 = item.top + item.height / 2;
       let path = '';
+      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1;
+      y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2;
       // 节点使用横线风格，需要额外渲染横线
       let nodeUseLineStylePath = '';
       if (this.mindMap.themeConfig.nodeUseLineStyle) {
