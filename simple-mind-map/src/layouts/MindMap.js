@@ -208,11 +208,12 @@ class MindMap extends Base {
     let { left, top, width, height, expandBtnSize } = node
     let marginX = this.getMarginX(node.layerIndex + 1)
     let s1 = (marginX - expandBtnSize) * 0.6
+    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
     node.children.forEach((item, index) => {
       let x1 = 0
       let _s = 0
       // 节点使用横线风格，需要额外渲染横线
-      let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle
+      let nodeUseLineStyleOffset = nodeUseLineStyle
         ? item.width
         : 0
       if (item.dir === 'left') {
@@ -226,6 +227,8 @@ class MindMap extends Base {
       let y1 = top + height / 2
       let x2 = item.dir === 'left' ? item.left + item.width : item.left
       let y2 = item.top + item.height / 2
+      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
+      y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       let path = `M ${x1},${y1} L ${x1 + _s},${y1} L ${x1 + _s},${y2} L ${
         x2 + nodeUseLineStyleOffset
       },${y2}`
@@ -241,6 +244,7 @@ class MindMap extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
+    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
     node.children.forEach((item, index) => {
       let x1 =
         node.layerIndex === 0
@@ -251,9 +255,11 @@ class MindMap extends Base {
       let y1 = top + height / 2
       let x2 = item.dir === 'left' ? item.left + item.width : item.left
       let y2 = item.top + item.height / 2
+      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
+      y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       // 节点使用横线风格，需要额外渲染横线
       let nodeUseLineStylePath = ''
-      if (this.mindMap.themeConfig.nodeUseLineStyle) {
+      if (nodeUseLineStyle) {
         if (item.dir === 'left') {
           nodeUseLineStylePath = ` L ${item.left},${y2}`
         } else {
@@ -273,6 +279,7 @@ class MindMap extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
+    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
     node.children.forEach((item, index) => {
       let x1 =
         node.layerIndex === 0
@@ -284,6 +291,8 @@ class MindMap extends Base {
       let x2 = item.dir === 'left' ? item.left + item.width : item.left
       let y2 = item.top + item.height / 2
       let path = ''
+      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
+      y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       // 节点使用横线风格，需要额外渲染横线
       let nodeUseLineStylePath = ''
       if (this.mindMap.themeConfig.nodeUseLineStyle) {

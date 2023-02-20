@@ -4,7 +4,7 @@
 
 New：Automatic line wrapping function is added to node text.
 
-Fix: Fix the problem of deletion exceptions if there are root nodes in the batch deleted nodes.
+Fix: 1.Fix the problem of deletion exceptions if there are root nodes in the batch deleted nodes. 2.Fix the problem that high node height will overlap with other nodes in the case of bottom edge style.
 
 ## 0.3.3
 

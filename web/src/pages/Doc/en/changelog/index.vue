@@ -3,7 +3,7 @@
     <h1>Changelog</h1>
 <h2>0.3.4</h2>
 <p>New：Automatic line wrapping function is added to node text.</p>
-<p>Fix: Fix the problem of deletion exceptions if there are root nodes in the batch deleted nodes.</p>
+<p>Fix: 1.Fix the problem of deletion exceptions if there are root nodes in the batch deleted nodes. 2.Fix the problem that high node height will overlap with other nodes in the case of bottom edge style.</p>
 <h2>0.3.3</h2>
 <p>Fix: The root node text cannot wrap.</p>
 <h2>0.3.2</h2>

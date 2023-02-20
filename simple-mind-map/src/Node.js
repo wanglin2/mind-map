@@ -707,27 +707,17 @@ class Node {
     }
     this.renderGeneralization()
     let t = this.group.transform()
-    // 节点使用横线风格，有两种结构需要调整节点的位置
-    let nodeUseLineStyleOffset = 0
-    if (
-      ['logicalStructure', 'mindMap'].includes(this.mindMap.opt.layout) &&
-      !this.isRoot &&
-      !this.isGeneralization &&
-      this.themeConfig.nodeUseLineStyle
-    ) {
-      nodeUseLineStyleOffset = this.height / 2
-    }
     if (!layout) {
       this.group
         .animate(300)
         .translate(
           this.left - t.translateX,
-          this.top - t.translateY - nodeUseLineStyleOffset
+          this.top - t.translateY
         )
     } else {
       this.group.translate(
         this.left - t.translateX,
-        this.top - t.translateY - nodeUseLineStyleOffset
+        this.top - t.translateY
       )
     }
   }
