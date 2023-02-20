@@ -59,14 +59,17 @@ export default class TextEdit {
     this.registerTmpShortcut()
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div')
-      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);padding: 3px 5px;margin-left: -5px;margin-top: -3px;outline: none;`
+      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);padding: 3px 5px;margin-left: -5px;margin-top: -3px;outline: none; word-break: break-all;`
       this.textEditNode.setAttribute('contenteditable', true)
       this.textEditNode.addEventListener('keyup', e => {
         e.stopPropagation()
       })
       document.body.appendChild(this.textEditNode)
     }
-    node.style.domText(this.textEditNode, this.mindMap.view.scale)
+    let scale = this.mindMap.view.scale
+    let lineHeight = node.style.merge('lineHeight')
+    let fontSize = node.style.merge('fontSize')
+    node.style.domText(this.textEditNode, scale)
     this.textEditNode.innerHTML = node.nodeData.data.text
       .split(/\n/gim)
       .join('<br>')
@@ -75,7 +78,8 @@ export default class TextEdit {
     this.textEditNode.style.left = rect.left + 'px'
     this.textEditNode.style.top = rect.top + 'px'
     this.textEditNode.style.display = 'block'
-    this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth * this.mindMap.view.scale + 'px'
+    this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth * scale + 'px'
+    this.textEditNode.style.transform = `translateY(${-(lineHeight * fontSize - fontSize) / 2 * scale}px)`
     this.showTextEdit = true
     // 选中文本
     this.selectNodeText()
