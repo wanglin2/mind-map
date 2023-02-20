@@ -1,6 +1,6 @@
 import Style from './Style'
 import Shape from './Shape'
-import { resizeImgSize, asyncRun } from './utils'
+import { resizeImgSize, asyncRun, measureText } from './utils'
 import { Image, SVG, Circle, A, G, Rect, Text } from '@svgdotjs/svg.js'
 import btnsSvg from './svg/btns'
 import iconsSvg from './svg/icons'
@@ -376,10 +376,31 @@ class Node {
       false,
       this.nodeData.data.isActive
     )
-    this.nodeData.data.text.split(/\n/gim).forEach((item, index) => {
+    // 文本超长自动换行
+    let textStyle = this.style.getTextFontStyle()
+    let textArr = this.nodeData.data.text.split(/\n/gim)
+    let maxWidth = this.mindMap.opt.textAutoWrapWidth
+    textArr.forEach((item, index) => {
+      let arr = item.split('')
+      let lines = []
+      let line = []
+      while(arr.length) {
+        line.push(arr.shift())
+        let text = line.join('')
+        if (measureText(text, textStyle).width >= maxWidth) {
+          lines.push(text)
+          line = []
+        }
+      }
+      if (line.length > 0) {
+        lines.push(line.join(''))
+      }
+      textArr[index] = lines.join('\n')
+    })
+    textArr = textArr.join('\n').split(/\n/gim)
+    textArr.forEach((item, index) => {
       let node = new Text().text(item)
       this.style.text(node)
-      console.log(this.isRoot, fontSize, lineHeight, index);
       node.y(fontSize * lineHeight * index)
       g.add(node)
     })

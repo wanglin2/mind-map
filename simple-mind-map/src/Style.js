@@ -124,6 +124,16 @@ class Style {
       })
   }
 
+  // 获取文本样式
+  getTextFontStyle() {
+    return { 
+      italic: this.merge('fontStyle') === 'italic', 
+      bold: this.merge('fontWeight'), 
+      fontSize: this.merge('fontSize'), 
+      fontFamily: this.merge('fontFamily')
+    }
+  }
+
   //  html文字节点
 
   domText(node, fontSizeScale = 1) {

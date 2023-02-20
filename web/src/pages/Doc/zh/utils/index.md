@@ -104,6 +104,22 @@ copyNodeTree({}, node)
 
 驼峰转连字符
 
+#### joinFontStr({ italic, bold, fontSize, fontFamily })
+
+> v0.3.4+
+
+拼接`css`字体的`font`属性值
+
+#### measureText(text, { italic, bold, fontSize, fontFamily })
+
+> v0.3.4+
+
+测量文本的宽高，返回值：
+
+```js
+{ width, height }
+```
+
 ## 在canvas中模拟css的背景属性
 
 引入：

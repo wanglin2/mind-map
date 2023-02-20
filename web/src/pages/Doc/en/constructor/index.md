@@ -40,6 +40,7 @@ const mindMap = new MindMap({
 | readonly（v0.1.7+）              | Boolean | false            | Whether it is read-only mode                                 |          |
 | enableFreeDrag（v0.2.4+）        | Boolean | false            | Enable node free drag                                        |          |
 | watermarkConfig（v0.2.4+）       | Object  |                  | Watermark config, Please refer to the table 【Watermark config】 below for detailed configuration |          |
+| textAutoWrapWidth（v0.3.4+）     | Number  | 500 |   Each line of text in the node will wrap automatically when it reaches the width               |          |
 
 ### Watermark config
 

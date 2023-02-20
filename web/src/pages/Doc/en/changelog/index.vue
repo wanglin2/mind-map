@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.3.4</h2>
+<p>New：1.Automatic line wrapping function is added to node text.</p>
 <h2>0.3.3</h2>
 <p>Fix: The root node text cannot wrap.</p>
 <h2>0.3.2</h2>

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.4
+
+New：1.Automatic line wrapping function is added to node text.
+
 ## 0.3.3
 
 Fix: The root node text cannot wrap.
