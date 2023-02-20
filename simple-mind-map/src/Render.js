@@ -552,29 +552,35 @@ class Render {
     if (this.activeNodeList.length <= 0) {
       return
     }
-    for (let i = 0; i < this.activeNodeList.length; i++) {
-      let node = this.activeNodeList[i]
-      if (node.isGeneralization) {
-        // 删除概要节点
-        this.setNodeData(node.generalizationBelongNode, {
-          generalization: null
-        })
-        node.generalizationBelongNode.update()
-        this.removeActiveNode(node)
-        i--
-      } else if (node.isRoot) {
-        node.children.forEach(child => {
-          child.remove()
-        })
-        node.children = []
-        node.nodeData.children = []
-        break
-      } else {
-        this.removeActiveNode(node)
-        this.removeOneNode(node)
-        i--
+    let root = this.activeNodeList.find((node) => {
+      return node.isRoot
+    })
+    if (root) {
+      this.clearActive()
+      root.children.forEach(child => {
+        child.remove()
+      })
+      root.children = []
+      root.nodeData.children = []
+    } else {
+      for (let i = 0; i < this.activeNodeList.length; i++) {
+        let node = this.activeNodeList[i]
+        if (node.isGeneralization) {
+          // 删除概要节点
+          this.setNodeData(node.generalizationBelongNode, {
+            generalization: null
+          })
+          node.generalizationBelongNode.update()
+          this.removeActiveNode(node)
+          i--
+        } else {
+          this.removeActiveNode(node)
+          this.removeOneNode(node)
+          i--
+        }
       }
     }
+    this.activeNodeList = []
     this.mindMap.emit('node_active', null, [])
     this.mindMap.render()
   }

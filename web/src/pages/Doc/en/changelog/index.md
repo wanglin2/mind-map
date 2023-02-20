@@ -2,7 +2,9 @@
 
 ## 0.3.4
 
-New：1.Automatic line wrapping function is added to node text.
+New：Automatic line wrapping function is added to node text.
+
+Fix: Fix the problem of deletion exceptions if there are root nodes in the batch deleted nodes.
 
 ## 0.3.3
 
