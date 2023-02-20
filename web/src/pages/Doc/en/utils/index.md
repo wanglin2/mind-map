@@ -109,6 +109,22 @@ Angle to radian
 
 CamelCase to hyphen
 
+#### joinFontStr({ italic, bold, fontSize, fontFamily })
+
+> v0.3.4+
+
+Join the `font` attribute value of the `css` font
+
+#### measureText(text, { italic, bold, fontSize, fontFamily })
+
+> v0.3.4+
+
+Measure the width and height of the text, return value:
+
+```js
+{ width, height }
+```
+
 ## Simulate CSS background in Canvas
 
 Import:

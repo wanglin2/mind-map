@@ -62,6 +62,18 @@ and copying the <code>data</code> of the data object, example:</p>
 <p>v0.2.24+</p>
 </blockquote>
 <p>CamelCase to hyphen</p>
+<h4>joinFontStr({ italic, bold, fontSize, fontFamily })</h4>
+<blockquote>
+<p>v0.3.4+</p>
+</blockquote>
+<p>Join the <code>font</code> attribute value of the <code>css</code> font</p>
+<h4>measureText(text, { italic, bold, fontSize, fontFamily })</h4>
+<blockquote>
+<p>v0.3.4+</p>
+</blockquote>
+<p>Measure the width and height of the text, return value:</p>
+<pre class="hljs"><code>{ width, height }
+</code></pre>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

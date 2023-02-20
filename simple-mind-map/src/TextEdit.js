@@ -75,6 +75,7 @@ export default class TextEdit {
     this.textEditNode.style.left = rect.left + 'px'
     this.textEditNode.style.top = rect.top + 'px'
     this.textEditNode.style.display = 'block'
+    this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth * this.mindMap.view.scale + 'px'
     this.showTextEdit = true
     // 选中文本
     this.selectNodeText()

@@ -59,7 +59,9 @@ const defaultOpt = {
       opacity: 0.5,
       fontSize: 14
     }
-  }
+  },
+  // 达到该宽度文本自动换行
+  textAutoWrapWidth: 500
 }
 
 //  思维导图

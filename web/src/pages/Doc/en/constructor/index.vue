@@ -140,6 +140,13 @@
 <td>Watermark config, Please refer to the table 【Watermark config】 below for detailed configuration</td>
 <td></td>
 </tr>
+<tr>
+<td>textAutoWrapWidth（v0.3.4+）</td>
+<td>Number</td>
+<td>500</td>
+<td>Each line of text in the node will wrap automatically when it reaches the width</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>

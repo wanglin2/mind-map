@@ -57,6 +57,18 @@
 <p>v0.2.24+</p>
 </blockquote>
 <p>驼峰转连字符</p>
+<h4>joinFontStr({ italic, bold, fontSize, fontFamily })</h4>
+<blockquote>
+<p>v0.3.4+</p>
+</blockquote>
+<p>拼接<code>css</code>字体的<code>font</code>属性值</p>
+<h4>measureText(text, { italic, bold, fontSize, fontFamily })</h4>
+<blockquote>
+<p>v0.3.4+</p>
+</blockquote>
+<p>测量文本的宽高，返回值：</p>
+<pre class="hljs"><code>{ width, height }
+</code></pre>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

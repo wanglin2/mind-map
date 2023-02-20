@@ -236,3 +236,33 @@ export const camelCaseToHyphen = (str) => {
     return args[1] + '-' + args[2].toLowerCase()
   })
 }
+
+//计算节点的文本长宽
+let measureTextContext = null
+export const measureText = (text, { italic, bold, fontSize, fontFamily }) => {
+  const font = joinFontStr({
+    italic,
+    bold,
+    fontSize,
+    fontFamily
+  })
+  if (!measureTextContext) {
+    const canvas = document.createElement('canvas')
+    measureTextContext = canvas.getContext('2d')
+  }
+  measureTextContext.save()
+  measureTextContext.font = font
+  const {
+    width,
+    actualBoundingBoxAscent,
+    actualBoundingBoxDescent
+  } = measureTextContext.measureText(text)
+  measureTextContext.restore()
+  const height = actualBoundingBoxAscent + actualBoundingBoxDescent
+  return { width, height }
+}
+
+// 拼接font字符串
+export const joinFontStr = ({ italic, bold, fontSize, fontFamily }) => {
+  return `${italic ? 'italic ' : ''} ${bold ? 'bold ' : ''} ${fontSize}px ${fontFamily} `
+}

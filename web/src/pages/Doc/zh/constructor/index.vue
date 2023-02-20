@@ -140,6 +140,13 @@
 <td>水印配置，详细配置请参考下方表格【水印配置】</td>
 <td></td>
 </tr>
+<tr>
+<td>textAutoWrapWidth（v0.3.4+）</td>
+<td>Number</td>
+<td>500</td>
+<td>节点内每行文本达到该宽度后自动换行</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>水印配置</h3>

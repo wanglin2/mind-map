@@ -40,6 +40,7 @@ const mindMap = new MindMap({
 | readonly（v0.1.7+）              | Boolean | false            | 是否是只读模式                                               |          |
 | enableFreeDrag（v0.2.4+）        | Boolean | false            | 是否开启节点自由拖拽                                         |          |
 | watermarkConfig（v0.2.4+）       | Object  |                  | 水印配置，详细配置请参考下方表格【水印配置】                 |          |
+| textAutoWrapWidth（v0.3.4+）     | Number  | 500 |   节点内每行文本达到该宽度后自动换行               |          |
 
 ### 水印配置
 
