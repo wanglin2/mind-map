@@ -60,6 +60,8 @@ Documentation, etc.
 
 [Only a hundred lines of code are needed to add local file operation capability to your Web page. Are you sure not to try?](https://juejin.cn/post/7157681502506090510)
 
+[When you press the direction key, how does the TV find the next focus](https://juejin.cn/post/7199666255883927612)
+
 ## Special Note
 
 This project is rough and has not been thoroughly tested, its features are not
