@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.4.0</h2>
+<p>New: The node supports rich text editing.</p>
 <h2>0.3.4</h2>
 <p>New：Automatic line wrapping function is added to node text.</p>
 <p>Fix: 1.Fix the problem of deletion exceptions if there are root nodes in the batch deleted nodes. 2.Fix the problem that high node height will overlap with other nodes in the case of bottom edge style.</p>

@@ -19,18 +19,39 @@ MindMap.usePlugin(Export)
 
 导出为`png`，异步方法，返回图片数据，`data:url`数据，可以自行下载或显示
 
-### svg()
+### svg(name, domToImage = false, plusCssText)
+
+- `name`：`svg`标题
+
+- `domToImage`：v0.4.0+，当开启了节点富文本编辑，可以通过该参数指定是否将`svg`中的`dom`节点转换成图片的形式
+
+- `plusCssText`：v0.4.0+，当开启了节点富文本编辑，且`domToImage`传了`false`时，可以添加附加的`css`样式，如果`svg`中存在`dom`节点，想要设置一些针对节点的样式可以通过这个参数传入，比如：
+
+```js
+svg(
+  '', 
+  false, 
+  `* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }`
+)
+```
 
 导出为`svg`，异步方法，返回`svg`数据，`data:url`数据，可以自行下载或显示
 
-### getSvgData()
+### getSvgData(domToImage)
+
+- `domToImage`：v0.4.0+，如果开启了节点富文本，则可以通过该参数指定是否要将`svg`中嵌入的`DOM`节点转换为图片。
 
 获取`svg`数据，异步方法，返回一个对象：
 
 ```js
 {
   node// svg对象
-  str// svg字符串
+  str// svg字符串，如果开启了富文本编辑且domToImage设为true，那么该值返回的svg字符内的dom节点会被转换成图片的形式
+  nodeWithDomToImg// v0.4.0+，DOM节点转换为图片后的svg对象，只有当开启了富文本编辑且domToImage设为true才有值，否则为null
 }
 ```
 

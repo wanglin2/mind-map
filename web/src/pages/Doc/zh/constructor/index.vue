@@ -214,12 +214,20 @@ MindMap.defineTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>, {
 mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </code></pre>
 <p>主题的所有配置可以参考<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js">默认主题</a>。<code>defineTheme</code>方法会把你传入的配置和默认配置做合并。大部分主题其实需要自定义的部分不是很多，一个典型的自定义主题配置可以参考<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/blueSky.js">blueSky</a>。</p>
-<h3>usePlugin(plugin)</h3>
+<h3>usePlugin(plugin, opt = {})</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
+<ul>
+<li><code>opt</code>：v0.4.0+，插件参数。如果某个插件支持自定义选项的话可以通过这个参数传入。</li>
+</ul>
 <p>注册插件，如果需要使用非核心的一些功能，比如小地图、水印等，可以通过该方法进行注册。可链式调用。</p>
 <p>注意：插件需要在实例化<code>MindMap</code>前注册。</p>
+<h3>hasPlugin(plugin)</h3>
+<blockquote>
+<p>v0.4.0+</p>
+</blockquote>
+<p>获取是否注册了某个插件，返回的是插件在注册插件列表里的索引，为<code>-1</code>则代表插件没有注册。</p>
 <h2>静态属性</h2>
 <h3>pluginList</h3>
 <blockquote>
@@ -390,6 +398,16 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>node_tree_render_end（v0.2.16+）</td>
 <td>节点树渲染完毕事件</td>
 <td></td>
+</tr>
+<tr>
+<td>rich_text_selection_change（v0.4.0+）</td>
+<td>当注册了<code>RichText</code>插件时可用。当节点编辑时，文本选区发生改变时触发</td>
+<td>hasRange（是否存在选区）、rectInfo（选区的尺寸和位置信息）、formatInfo（选区的文本格式化信息）</td>
+</tr>
+<tr>
+<td>transforming-dom-to-images（v0.4.0+）</td>
+<td>当注册了<code>RichText</code>插件时可用。当<code>svg</code>中存在<code>DOM</code>节点时，导出为图片时会将<code>DOM</code>节点转换为图片，转换过程中会触发该事件，可用通过该事件给用户提示，告知目前转换到的节点</td>
+<td>index（当前转换到的节点索引）、len（一共需要转换的节点数量）</td>
 </tr>
 </tbody>
 </table>
@@ -629,6 +647,16 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <p>v0.1.5+</p>
 </blockquote>
 <p>将浏览器可视窗口的坐标转换成相对于画布的坐标</p>
+<h3>addPlugin(plugin, opt)</h3>
+<blockquote>
+<p>v0.4.0+</p>
+</blockquote>
+<p>注册插件，使用<code>MindMap.usePlugin</code>注册插件只能在实例化之前，实例化后注册的插件是不会生效的，所以如果想在实例化后注册插件可以使用实例的<code>addPlugin</code>方法。</p>
+<h3>removePlugin(plugin)</h3>
+<blockquote>
+<p>v0.4.0+</p>
+</blockquote>
+<p>移除注册的插件，无论是通过<code>usePlugin</code>还是<code>addPlugin</code>方法注册的插件都可以移除。</p>
 
   </div>
 </template>

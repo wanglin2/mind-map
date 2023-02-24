@@ -82,13 +82,22 @@ mindMap.setTheme('Theme name')
 
 For all configurations of theme, please refer to [Default Topic](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js). The `defineTheme`method will merge the configuration you passed in with the default configuration. Most of the themes  do not need custom many parts. For a typical customized theme configuration, please refer to [blueSky](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/blueSky.js).
 
-### usePlugin(plugin)
+### usePlugin(plugin, opt = {})
 
 > v0.3.0+
+
+- `opt`：v0.4.0+，Plugin options. If a plugin supports custom options, it can be passed in through this parameter.
 
 If you need to use some non-core functions, such as mini map, watermark, etc, you can register plugin through this method. Can be called in chain.
 
 Note: The plugin needs to be registered before instantiating `MindMap`.
+
+### hasPlugin(plugin)
+
+> v0.4.0+
+
+Get whether a plugin is registered, The index of the plugin in the registered plugin list is returned, If it is `-1`, it means that the plugin is not registered.
+
 
 ## Static props
 
@@ -177,6 +186,8 @@ Listen to an event. Event list:
 | scale                            | Zoom event                                                               | scale (zoom ratio)                                                                                              |
 | node_img_dblclick（v0.2.15+）    | Node image double-click event                                            | this (node instance), e (event object)                                                                          |
 | node_tree_render_end（v0.2.16+） | Node tree render end event                                               |                                                                                                                 |
+| rich_text_selection_change（v0.4.0+）         |  Available when the `RichText` plugin is registered. Triggered when the text selection area changes when the node is edited         |  hasRange（Whether there is a selection）、rectInfo（Size and location information of the selected area）、formatInfo（Text formatting information of the selected area）            |
+| transforming-dom-to-images（v0.4.0+）         |  Available when the `RichText` plugin is registered. When there is a `DOM` node in `svg`, the `DOM` node will be converted to an image when exporting to an image. This event will be triggered during the conversion process. You can use this event to prompt the user about the node to which you are currently converting         |  index（Index of the node currently converted to）、len（Total number of nodes to be converted）            |
 
 ### emit(event, ...args)
 
@@ -325,3 +336,15 @@ map).
 
 Convert the coordinates of the browser's visible window to coordinates relative
 to the canvas.
+
+### addPlugin(plugin, opt)
+
+> v0.4.0+
+
+Register plugin, Use `MindMap.usePlugin` to register plugin only before instantiation, The registered plugin will not take effect after instantiation, So if you want to register the plugin after instantiation, you can use the `addPlugin` method of the instance.
+
+### removePlugin(plugin)
+
+> v0.4.0+
+
+Remove registered plugin, Plugins registered through the `usePlugin` or `addPlugin` methods can be removed.

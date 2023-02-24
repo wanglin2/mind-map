@@ -19,6 +19,7 @@ let APIList = [
   'keyCommand',
   'command',
   'batchExecution',
+  'richText',
   'select',
   'drag',
   'keyboardNavigation',
