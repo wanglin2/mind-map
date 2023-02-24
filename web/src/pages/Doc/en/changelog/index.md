@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0
+
+New: The node supports rich text editing.
+
 ## 0.3.4
 
 New：Automatic line wrapping function is added to node text.

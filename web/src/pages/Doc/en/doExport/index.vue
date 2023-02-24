@@ -13,14 +13,39 @@ MindMap.usePlugin(Export)
 <h3>png()</h3>
 <p>Exports as <code>png</code>, an async method that returns image data, <code>data:url</code> data which
 can be downloaded or displayed.</p>
-<h3>svg()</h3>
+<h3>svg(name, domToImage = false, plusCssText)</h3>
+<ul>
+<li>
+<p><code>name</code>：<code>svg</code> title</p>
+</li>
+<li>
+<p><code>domToImage</code>：v0.4.0+, When node rich text editing is enabled, you can use this parameter to specify whether to convert the <code>dom</code> node in the <code>svg</code> into a picture</p>
+</li>
+<li>
+<p><code>plusCssText</code>：v0.4.0+, When node rich text editing is enabled and <code>domToImage</code> passes <code>false</code>, additional <code>css</code> styles can be added. If there is a <code>dom</code> node in <code>svg</code>, you can set some styles for the node through this parameter, such as:</p>
+</li>
+</ul>
+<pre class="hljs"><code>svg(
+  <span class="hljs-string">&#x27;&#x27;</span>, 
+  <span class="hljs-literal">false</span>, 
+  <span class="hljs-string">`* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }`</span>
+)
+</code></pre>
 <p>Exports as <code>svg</code>, an async method that returns <code>svg</code> data, <code>data:url</code> data which
 can be downloaded or displayed.</p>
-<h3>getSvgData()</h3>
+<h3>getSvgData(domToImage)</h3>
+<ul>
+<li><code>domToImage</code>：v0.4.0+, If node rich text is enabled, you can use this parameter to specify whether to convert the <code>DOM</code> node embedded in <code>svg</code> into a picture.</li>
+</ul>
 <p>Gets <code>svg</code> data, an async method that returns an object:</p>
 <pre class="hljs"><code>{
   node; <span class="hljs-comment">// svg object</span>
-  str; <span class="hljs-comment">// svg string</span>
+  str; <span class="hljs-comment">// svg string, if rich text editing is enabled and domToImage is set to true, the dom node in the svg character returned by this value will be converted into the form of an image</span>
+  nodeWithDomToImg<span class="hljs-comment">// v0.4.0+，The svg object after the DOM node is converted to an image has a value only when rich text editing is enabled and domToImage is set to true, otherwise null</span>
 }
 </code></pre>
 <h3>pdf(name)</h3>

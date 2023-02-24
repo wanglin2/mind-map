@@ -214,12 +214,20 @@ MindMap.defineTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>, {})
 mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 </code></pre>
 <p>For all configurations of theme, please refer to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js">Default Topic</a>. The <code>defineTheme</code>method will merge the configuration you passed in with the default configuration. Most of the themes  do not need custom many parts. For a typical customized theme configuration, please refer to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/blueSky.js">blueSky</a>.</p>
-<h3>usePlugin(plugin)</h3>
+<h3>usePlugin(plugin, opt = {})</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
+<ul>
+<li><code>opt</code>：v0.4.0+，Plugin options. If a plugin supports custom options, it can be passed in through this parameter.</li>
+</ul>
 <p>If you need to use some non-core functions, such as mini map, watermark, etc, you can register plugin through this method. Can be called in chain.</p>
 <p>Note: The plugin needs to be registered before instantiating <code>MindMap</code>.</p>
+<h3>hasPlugin(plugin)</h3>
+<blockquote>
+<p>v0.4.0+</p>
+</blockquote>
+<p>Get whether a plugin is registered, The index of the plugin in the registered plugin list is returned, If it is <code>-1</code>, it means that the plugin is not registered.</p>
 <h2>Static props</h2>
 <h3>pluginList</h3>
 <blockquote>
@@ -397,6 +405,16 @@ poor performance and should be used sparingly.</p>
 <td>node_tree_render_end（v0.2.16+）</td>
 <td>Node tree render end event</td>
 <td></td>
+</tr>
+<tr>
+<td>rich_text_selection_change（v0.4.0+）</td>
+<td>Available when the <code>RichText</code> plugin is registered. Triggered when the text selection area changes when the node is edited</td>
+<td>hasRange（Whether there is a selection）、rectInfo（Size and location information of the selected area）、formatInfo（Text formatting information of the selected area）</td>
+</tr>
+<tr>
+<td>transforming-dom-to-images（v0.4.0+）</td>
+<td>Available when the <code>RichText</code> plugin is registered. When there is a <code>DOM</code> node in <code>svg</code>, the <code>DOM</code> node will be converted to an image when exporting to an image. This event will be triggered during the conversion process. You can use this event to prompt the user about the node to which you are currently converting</td>
+<td>index（Index of the node currently converted to）、len（Total number of nodes to be converted）</td>
 </tr>
 </tbody>
 </table>
@@ -641,6 +659,16 @@ map).</p>
 </blockquote>
 <p>Convert the coordinates of the browser's visible window to coordinates relative
 to the canvas.</p>
+<h3>addPlugin(plugin, opt)</h3>
+<blockquote>
+<p>v0.4.0+</p>
+</blockquote>
+<p>Register plugin, Use <code>MindMap.usePlugin</code> to register plugin only before instantiation, The registered plugin will not take effect after instantiation, So if you want to register the plugin after instantiation, you can use the <code>addPlugin</code> method of the instance.</p>
+<h3>removePlugin(plugin)</h3>
+<blockquote>
+<p>v0.4.0+</p>
+</blockquote>
+<p>Remove registered plugin, Plugins registered through the <code>usePlugin</code> or <code>addPlugin</code> methods can be removed.</p>
 
   </div>
 </template>

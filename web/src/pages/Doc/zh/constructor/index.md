@@ -84,13 +84,22 @@ mindMap.setTheme('主题名称')
 
 主题的所有配置可以参考[默认主题](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js)。`defineTheme`方法会把你传入的配置和默认配置做合并。大部分主题其实需要自定义的部分不是很多，一个典型的自定义主题配置可以参考[blueSky](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/blueSky.js)。
 
-### usePlugin(plugin)
+### usePlugin(plugin, opt = {})
 
 > v0.3.0+
+
+- `opt`：v0.4.0+，插件参数。如果某个插件支持自定义选项的话可以通过这个参数传入。
+
 
 注册插件，如果需要使用非核心的一些功能，比如小地图、水印等，可以通过该方法进行注册。可链式调用。
 
 注意：插件需要在实例化`MindMap`前注册。
+
+### hasPlugin(plugin)
+
+> v0.4.0+
+
+获取是否注册了某个插件，返回的是插件在注册插件列表里的索引，为`-1`则代表插件没有注册。
 
 ## 静态属性
 
@@ -174,6 +183,8 @@ mindMap.setTheme('主题名称')
 | scale                            | 放大缩小事件                               | scale（缩放比例）                                            |
 | node_img_dblclick（v0.2.15+）    | 节点内图片的双击事件                       | this（节点实例）、e（事件对象）                              |
 | node_tree_render_end（v0.2.16+） | 节点树渲染完毕事件                         |                                                              |
+| rich_text_selection_change（v0.4.0+）         |  当注册了`RichText`插件时可用。当节点编辑时，文本选区发生改变时触发         |  hasRange（是否存在选区）、rectInfo（选区的尺寸和位置信息）、formatInfo（选区的文本格式化信息）            |
+| transforming-dom-to-images（v0.4.0+）         |  当注册了`RichText`插件时可用。当`svg`中存在`DOM`节点时，导出为图片时会将`DOM`节点转换为图片，转换过程中会触发该事件，可用通过该事件给用户提示，告知目前转换到的节点         |  index（当前转换到的节点索引）、len（一共需要转换的节点数量）            |
 
 ### emit(event, ...args)
 
@@ -313,3 +324,15 @@ mindMap.updateConfig({
 > v0.1.5+
 
 将浏览器可视窗口的坐标转换成相对于画布的坐标
+
+### addPlugin(plugin, opt)
+
+> v0.4.0+
+
+注册插件，使用`MindMap.usePlugin`注册插件只能在实例化之前，实例化后注册的插件是不会生效的，所以如果想在实例化后注册插件可以使用实例的`addPlugin`方法。
+
+### removePlugin(plugin)
+
+> v0.4.0+
+
+移除注册的插件，无论是通过`usePlugin`还是`addPlugin`方法注册的插件都可以移除。
