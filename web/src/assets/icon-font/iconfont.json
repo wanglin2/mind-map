@@ -6,6 +6,55 @@
   "description": "思维导图",
   "glyphs": [
     {
+      "icon_id": "586787",
+      "name": "case",
+      "font_class": "case",
+      "unicode": "e6c6",
+      "unicode_decimal": 59078
+    },
+    {
+      "icon_id": "4354254",
+      "name": "形状-文字",
+      "font_class": "xingzhuang-wenzi",
+      "unicode": "eb99",
+      "unicode_decimal": 60313
+    },
+    {
+      "icon_id": "6337466",
+      "name": "字体加粗",
+      "font_class": "zitijiacu",
+      "unicode": "ec83",
+      "unicode_decimal": 60547
+    },
+    {
+      "icon_id": "6337470",
+      "name": "字体下划线",
+      "font_class": "zitixiahuaxian",
+      "unicode": "ec85",
+      "unicode_decimal": 60549
+    },
+    {
+      "icon_id": "6337471",
+      "name": "字体斜体",
+      "font_class": "zitixieti",
+      "unicode": "ec86",
+      "unicode_decimal": 60550
+    },
+    {
+      "icon_id": "11975179",
+      "name": "删除线",
+      "font_class": "shanchuxian",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "34198316",
+      "name": "字体颜色",
+      "font_class": "zitiyanse",
+      "unicode": "e854",
+      "unicode_decimal": 59476
+    },
+    {
       "icon_id": "8760187",
       "name": "github",
       "font_class": "github",
