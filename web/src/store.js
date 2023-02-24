@@ -11,7 +11,9 @@ const store = new Vuex.Store({
     isHandleLocalFile: false, // 是否操作的是本地文件
     localConfig: {
       // 本地配置
-      isZenMode: false // 是否是禅模式
+      isZenMode: false, // 是否是禅模式
+      // 是否开启节点富文本
+      openNodeRichText: true
     },
     activeSidebar: '' // 当前显示的侧边栏
   },

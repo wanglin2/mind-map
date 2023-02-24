@@ -34,7 +34,8 @@ export default {
     watermarkTextSpacing: '水印文字间距',
     watermarkAngle: '旋转角度',
     watermarkTextOpacity: '文字透明度',
-    watermarkTextFontSize: '文字字号'
+    watermarkTextFontSize: '文字字号',
+    isEnableNodeRichText: '是否开启节点富文本编辑'
   },
   color: {
     moreColor: '更多颜色'
@@ -79,7 +80,13 @@ export default {
     imageFile: '图片文件',
     svgFile: 'svg文件',
     pdfFile: 'pdf文件',
-    tips: 'tips：.smm和.json文件可用于导入'
+    tips: 'tips：.smm和.json文件可用于导入',
+    domToImage: '是否将svg中富文本节点转换成图片',
+    pngTips: 'tips：富文本模式导出图片非常耗时，建议导出为svg格式',
+    svgTips: 'tips：富文本模式导出图片非常耗时',
+    transformingDomToImages: '正在转换节点：',
+    notifyTitle: '消息',
+    notifyMessage: '如果没有触发下载，请检查是否被浏览器拦截了'
   },
   fullscreen: {
     fullscreenShow: '全屏查看',
@@ -178,5 +185,9 @@ export default {
     import: '导入',
     export: '导出',
     shortcutKey: '快捷键'
+  },
+  edit: {
+    newFeatureNoticeTitle: '新特性提醒',
+    newFeatureNoticeMessage: '本次更新支持了节点富文本编辑，但是存在一定缺陷，最主要的影响是导出为图片的时间和节点数量成正比，所以对导出需求比较依赖的话可以通过【基础样式】-【其他配置】-【是否开启节点富文本编辑】设置关掉富文本编辑模式。'
   }
 }

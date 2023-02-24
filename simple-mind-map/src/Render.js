@@ -668,6 +668,15 @@ class Render {
         [prop]: value
       }
     }
+    // 如果开启了富文本，则需要应用到富文本上
+    if (this.mindMap.richText) {
+      this.mindMap.richText.showEditText(node)
+      let config = this.mindMap.richText.normalStyleToRichTextStyle({
+        [prop]: value
+      })
+      this.mindMap.richText.formatAllText(config)
+      this.mindMap.richText.hideEditText()
+    }
     this.setNodeDataRender(node, data)
     // 更新了连线的样式
     if (lineStyleProps.includes(prop)) {
@@ -788,9 +797,10 @@ class Render {
 
   //  设置节点文本
 
-  setNodeText(node, text) {
+  setNodeText(node, text, richText) {
     this.setNodeDataRender(node, {
-      text
+      text,
+      richText
     })
   }
 

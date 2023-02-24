@@ -1,7 +1,7 @@
 import Style from './Style'
 import Shape from './Shape'
 import { resizeImgSize, asyncRun, measureText } from './utils'
-import { Image, SVG, Circle, A, G, Rect, Text } from '@svgdotjs/svg.js'
+import { Image, SVG, Circle, A, G, Rect, Text, ForeignObject } from '@svgdotjs/svg.js'
 import btnsSvg from './svg/btns'
 import iconsSvg from './svg/icons'
 
@@ -362,9 +362,42 @@ class Node {
     })
   }
 
+  // 创建富文本节点
+  createRichTextNode() {
+    let g = new G()
+    let html = `<div>${this.nodeData.data.text}</div>`
+    let div = document.createElement('div')
+    div.innerHTML = html
+    div.style.cssText = `position: fixed; left: -999999px;`
+    let el = div.children[0]
+    el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
+    el.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + 'px'
+    this.mindMap.el.appendChild(div)
+    let { width, height } = el.getBoundingClientRect()
+    width = Math.ceil(width)
+    height = Math.ceil(height)
+    g.attr('data-width', width)
+    g.attr('data-height', height)
+    html = div.innerHTML
+    this.mindMap.el.removeChild(div)
+    let foreignObject = new ForeignObject()
+    foreignObject.width(width)
+    foreignObject.height(height)
+    foreignObject.add(SVG(html))
+    g.add(foreignObject)
+    return {
+      node: g,
+      width,
+      height
+    }
+  }
+
   //  创建文本节点
 
   createTextNode() {
+    if (this.nodeData.data.richText) {
+      return this.createRichTextNode()
+    }
     let g = new G()
     let fontSize = this.getStyle(
       'fontSize',
@@ -405,6 +438,10 @@ class Node {
       g.add(node)
     })
     let { width, height } = g.bbox()
+    width = Math.ceil(width)
+    height = Math.ceil(height)
+    g.attr('data-width', width)
+    g.attr('data-height', height)
     return {
       node: g,
       width,
@@ -582,6 +619,7 @@ class Node {
     }
     // 文字
     if (this._textData) {
+      this._textData.node.attr('data-offsetx', textContentOffsetX)
       this._textData.node.x(textContentOffsetX).y(0)
       textContentNested.add(this._textData.node)
       textContentOffsetX += this._textData.width + textContentItemMargin
@@ -760,7 +798,9 @@ class Node {
     if (this.nodeData.inserting) {
       delete this.nodeData.inserting
       this.active()
-      this.mindMap.emit('node_dblclick', this)
+      setTimeout(() => {
+        this.mindMap.emit('node_dblclick', this)
+      }, 0)
     }
   }
 

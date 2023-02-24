@@ -1,0 +1,256 @@
+<template>
+  <div
+    class="richTextToolbar"
+    ref="richTextToolbar"
+    :style="style"
+    @click.stop.passive
+    v-show="showRichTextToolbar"
+  >
+    <el-tooltip content="加粗" placement="top">
+      <div class="btn" :class="{ active: formatInfo.bold }" @click="toggleBold">
+        <span class="icon iconfont iconzitijiacu"></span>
+      </div>
+    </el-tooltip>
+
+    <el-tooltip content="斜体" placement="top">
+      <div
+        class="btn"
+        :class="{ active: formatInfo.italic }"
+        @click="toggleItalic"
+      >
+        <span class="icon iconfont iconzitixieti"></span>
+      </div>
+    </el-tooltip>
+
+    <el-tooltip content="下划线" placement="top">
+      <div
+        class="btn"
+        :class="{ active: formatInfo.underline }"
+        @click="toggleUnderline"
+      >
+        <span class="icon iconfont iconzitixiahuaxian"></span>
+      </div>
+    </el-tooltip>
+
+    <el-tooltip content="删除线" placement="top">
+      <div
+        class="btn"
+        :class="{ active: formatInfo.strike }"
+        @click="toggleStrike"
+      >
+        <span class="icon iconfont iconshanchuxian"></span>
+      </div>
+    </el-tooltip>
+
+    <el-tooltip content="字体" placement="top">
+      <el-popover placement="bottom" trigger="hover">
+        <div class="fontOptionsList">
+          <div
+            class="fontOptionItem"
+            v-for="item in fontFamilyList"
+            :key="item.value"
+            :style="{ fontFamily: item.value }"
+            :class="{ active: formatInfo.font === item.value }"
+            @click="changeFontFamily(item.value)"
+          >
+            {{ item.name }}
+          </div>
+        </div>
+        <div class="btn" slot="reference">
+          <span class="icon iconfont iconxingzhuang-wenzi"></span>
+        </div>
+      </el-popover>
+    </el-tooltip>
+
+    <el-tooltip content="字号" placement="top">
+      <el-popover placement="bottom" trigger="hover">
+        <div class="fontOptionsList">
+          <div
+            class="fontOptionItem"
+            v-for="item in fontSizeList"
+            :key="item"
+            :style="{ fontSize: item + 'px' }"
+            :class="{ active: formatInfo.size === item + 'px' }"
+            @click="changeFontSize(item)"
+          >
+            {{ item }}px
+          </div>
+        </div>
+        <div class="btn" slot="reference" :style="{ color: formatInfo.color }">
+          <span class="icon iconfont iconcase fontColor"></span>
+        </div>
+      </el-popover>
+    </el-tooltip>
+
+    <el-tooltip content="字体颜色" placement="top">
+      <el-popover placement="bottom" trigger="hover">
+        <Color :color="fontColor" @change="changeFontColor"></Color>
+        <div class="btn" slot="reference">
+          <span class="icon iconfont iconzitiyanse"></span>
+        </div>
+      </el-popover>
+    </el-tooltip>
+  </div>
+</template>
+
+<script>
+import { fontFamilyList, fontSizeList } from '@/config'
+import Color from './Color'
+
+export default {
+  name: 'RichTextToolbar',
+  components: {
+    Color
+  },
+  props: {
+    mindMap: {
+      type: Object
+    }
+  },
+  data() {
+    return {
+      fontSizeList,
+      showRichTextToolbar: false,
+      style: {
+        left: 0,
+        top: 0
+      },
+      fontColor: '',
+      formatInfo: {}
+    }
+  },
+  computed: {
+    fontFamilyList() {
+      return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
+    }
+  },
+  created() {
+    this.$bus.$on('rich_text_selection_change', this.onRichTextSelectionChange)
+  },
+  mounted() {
+    document.body.append(this.$refs.richTextToolbar)
+  },
+  beforeDestroy() {
+    this.$bus.$off('rich_text_selection_change', this.onRichTextSelectionChange)
+  },
+  methods: {
+    onRichTextSelectionChange(hasRange, rect, formatInfo) {
+      if (hasRange) {
+        this.style.left = rect.left + rect.width / 2 + 'px'
+        this.style.top = rect.top - 60 + 'px'
+        this.formatInfo = { ...(formatInfo || {}) }
+      }
+      this.showRichTextToolbar = hasRange
+    },
+
+    toggleBold() {
+      this.formatInfo.bold = !this.formatInfo.bold
+      this.mindMap.richText.formatText({
+        bold: this.formatInfo.bold
+      })
+    },
+
+    toggleItalic() {
+      this.formatInfo.italic = !this.formatInfo.italic
+      this.mindMap.richText.formatText({
+        italic: this.formatInfo.italic
+      })
+    },
+
+    toggleUnderline() {
+      this.formatInfo.underline = !this.formatInfo.underline
+      this.mindMap.richText.formatText({
+        underline: this.formatInfo.underline
+      })
+    },
+
+    toggleStrike() {
+      this.formatInfo.strike = !this.formatInfo.strike
+      this.mindMap.richText.formatText({
+        strike: this.formatInfo.strike
+      })
+    },
+
+    changeFontFamily(font) {
+      this.formatInfo.font = font
+      this.mindMap.richText.formatText({
+        font
+      })
+    },
+
+    changeFontSize(size) {
+      this.formatInfo.size = size
+      this.mindMap.richText.formatText({
+        size: size + 'px'
+      })
+    },
+
+    changeFontColor(color) {
+      this.formatInfo.color = color
+      this.mindMap.richText.formatText({
+        color
+      })
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.richTextToolbar {
+  position: fixed;
+  z-index: 99999;
+  height: 55px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  transform: translateX(-50%);
+
+  .btn {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #eefbed;
+    }
+
+    &.active {
+      color: #12bb37;
+    }
+
+    .icon {
+      font-size: 20px;
+
+      &.fontColor {
+        font-size: 26px;
+      }
+    }
+  }
+}
+
+.fontOptionsList {
+  width: 150px;
+
+  .fontOptionItem {
+    height: 30px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #f7f7f7;
+    }
+
+    &.active {
+      color: #12bb37;
+    }
+  }
+}
+</style>

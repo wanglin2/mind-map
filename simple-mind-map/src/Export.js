@@ -26,7 +26,7 @@ class Export {
   }
 
   //  获取svg数据
-  async getSvgData() {
+  async getSvgData(domToImage) {
     let { svg, svgHTML } = this.mindMap.getSvgData()
     // 把图片的url转换成data:url类型，否则导出会丢失图片
     let imageList = svg.find('image')
@@ -36,9 +36,17 @@ class Export {
       item.attr('href', imgData)
     })
     await Promise.all(task)
+    // 如果开启了富文本编辑，需要把svg中的dom元素转换成图片
+    let nodeWithDomToImg = null
+    if (domToImage && this.mindMap.richText) {
+      let res = await this.mindMap.richText.handleSvgDomElements(svg)
+      nodeWithDomToImg = res.svg
+      svgHTML = res.svgHTML
+    }
     return {
       node: svg,
-      str: svgHTML
+      str: svgHTML,
+      nodeWithDomToImg
     }
   }
 
@@ -123,7 +131,7 @@ class Export {
    * 方法2.把svg的图片提取出来再挨个绘制到canvas里，最后一起转换
    */
   async png() {
-    let { str } = await this.getSvgData()
+    let { str } = await this.getSvgData(true)
     // 转换成blob数据
     let blob = new Blob([str], {
       type: 'image/svg+xml'
@@ -191,8 +199,21 @@ class Export {
   }
 
   //  导出为svg
-  async svg(name) {
-    let { node } = await this.getSvgData()
+  // domToImage：是否将svg中的dom节点转换成图片的形式
+  // plusCssText：附加的css样式，如果svg中存在dom节点，想要设置一些针对节点的样式可以通过这个参数传入
+  async svg(name, domToImage = false, plusCssText) {
+    let { node, nodeWithDomToImg } = await this.getSvgData(domToImage)
+    // 开启了节点富文本编辑
+    if (this.mindMap.richText) {
+      if (domToImage) {
+        node = nodeWithDomToImg
+      } else if (plusCssText) {
+        let foreignObjectList = node.find('foreignObject')
+        if (foreignObjectList.length > 0) {
+          foreignObjectList[0].add(SVG(`<style>${plusCssText}</style>`))
+        }
+      }
+    }
     node.first().before(SVG(`<title>${name}</title>`))
     await this.drawBackgroundToSvg(node)
     let str = node.svg()
