@@ -50,7 +50,12 @@ export default class TextEdit {
 
   //  显示文本编辑框
   show(node) {
-    this.showEditTextBox(node, node._textData.node.node.getBoundingClientRect())
+    let rect = node._textData.node.node.getBoundingClientRect()
+    if (this.mindMap.richText) {
+      this.mindMap.richText.showEditText(node, rect)
+      return
+    }
+    this.showEditTextBox(node, rect)
   }
 
   //  显示文本编辑框
@@ -96,6 +101,9 @@ export default class TextEdit {
 
   //  隐藏文本编辑框
   hideEditTextBox() {
+    if (this.mindMap.richText) {
+      return this.mindMap.richText.hideEditText()
+    }
     if (!this.showTextEdit) {
       return
     }

@@ -45,6 +45,7 @@
                 :key="item"
                 :label="item"
                 :value="item"
+                :style="{ fontSize: item + 'px' }"
               >
               </el-option>
             </el-select>
@@ -125,7 +126,7 @@
           <el-popover
             ref="popover"
             placement="bottom"
-            trigger="click"
+            trigger="hover"
             :disabled="checkDisabled('color')"
           >
             <Color :color="style.color" @change="changeFontColor"></Color>
@@ -133,7 +134,7 @@
           <el-popover
             ref="popover2"
             placement="bottom"
-            trigger="click"
+            trigger="hover"
             :disabled="checkDisabled('textDecoration')"
           >
             <el-radio-group
@@ -167,7 +168,7 @@
             <el-popover
               ref="popover3"
               placement="bottom"
-              trigger="click"
+              trigger="hover"
               :disabled="checkDisabled('borderColor')"
             >
               <Color
@@ -250,7 +251,7 @@
             <el-popover
               ref="popover4"
               placement="bottom"
-              trigger="click"
+              trigger="hover"
               :disabled="checkDisabled('fillColor')"
             >
               <Color :color="style.fillColor" @change="changeFillColor"></Color>
@@ -294,7 +295,7 @@
             <el-popover
               ref="popover5"
               placement="bottom"
-              trigger="click"
+              trigger="hover"
               :disabled="checkDisabled('lineColor')"
             >
               <Color :color="style.lineColor" @change="changeLineColor"></Color>

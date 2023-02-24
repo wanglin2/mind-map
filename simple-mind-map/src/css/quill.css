@@ -1,0 +1,9 @@
+.ql-editor {
+    overflow: hidden;
+    padding: 0;
+    height: auto;
+}
+
+.ql-container {
+    height: auto;
+}

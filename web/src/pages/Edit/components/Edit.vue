@@ -11,6 +11,7 @@
     <Structure :mindMap="mindMap"></Structure>
     <ShortcutKey></ShortcutKey>
     <Contextmenu v-if="mindMap" :mindMap="mindMap"></Contextmenu>
+    <RichTextToolbar v-if="mindMap" :mindMap="mindMap"></RichTextToolbar>
     <NodeNoteContentShow
       v-if="mindMap"
       :mindMap="mindMap"
@@ -28,6 +29,7 @@ import KeyboardNavigation from 'simple-mind-map/src/KeyboardNavigation.js'
 import Export from 'simple-mind-map/src/Export.js'
 import Drag from 'simple-mind-map/src/Drag.js'
 import Select from 'simple-mind-map/src/Select.js'
+import RichText from 'simple-mind-map/src/RichText.js'
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -37,6 +39,7 @@ import Count from './Count'
 import NavigatorToolbar from './NavigatorToolbar'
 import ShortcutKey from './ShortcutKey'
 import Contextmenu from './Contextmenu'
+import RichTextToolbar from './RichTextToolbar'
 import NodeNoteContentShow from './NodeNoteContentShow.vue'
 import { getData, storeData, storeConfig } from '@/api'
 import Navigator from './Navigator.vue'
@@ -76,6 +79,7 @@ export default {
     NavigatorToolbar,
     ShortcutKey,
     Contextmenu,
+    RichTextToolbar,
     NodeNoteContentShow,
     Navigator,
     NodeImgPreview,
@@ -91,10 +95,21 @@ export default {
   },
   computed: {
     ...mapState({
-      isZenMode: state => state.localConfig.isZenMode
+      isZenMode: state => state.localConfig.isZenMode,
+      openNodeRichText: state => state.localConfig.openNodeRichText,
     })
   },
+  watch: {
+    openNodeRichText() {
+      if (this.openNodeRichText) {
+        this.addRichTextPlugin()
+      } else {
+        this.removeRichTextPlugin()
+      }
+    }
+  },
   mounted() {
+    this.showNewFeatureInfo()
     this.getData()
     this.init()
     this.$bus.$on('execCommand', this.execCommand)
@@ -263,6 +278,7 @@ export default {
         },
         ...(config || {})
       })
+      if (this.openNodeRichText) this.addRichTextPlugin()
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
         this.manualSave()
       })
@@ -279,7 +295,9 @@ export default {
         'svg_mousedown',
         'mouseup',
         'mode_change',
-        'node_tree_render_end'
+        'node_tree_render_end',
+        'rich_text_selection_change',
+        'transforming-dom-to-images'
       ].forEach(event => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args)
@@ -331,6 +349,32 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+
+    // 显示新特性提示
+    showNewFeatureInfo() {
+      let showed = localStorage.getItem('SIMPLE_MIND_MAP_NEW_FEATURE_TIP_1')
+      if (!showed) {
+        this.$notify.info({
+          title: this.$t('edit.newFeatureNoticeTitle'),
+          message: this.$t('edit.newFeatureNoticeMessage'), 
+          duration: 0,
+          onClose: () => {
+            localStorage.setItem('SIMPLE_MIND_MAP_NEW_FEATURE_TIP_1', true)
+          }
+        })
+      }
+    },
+
+    // 加载节点富文本编辑插件
+    addRichTextPlugin() {
+      if (!this.mindMap) return
+      this.mindMap.addPlugin(RichText)
+    },
+
+    // 移除节点富文本编辑插件
+    removeRichTextPlugin() {
+      this.mindMap.removePlugin(RichText)
     }
   }
 }

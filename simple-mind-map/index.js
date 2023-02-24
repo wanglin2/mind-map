@@ -120,9 +120,7 @@ class MindMap {
 
     // 注册插件
     MindMap.pluginList.forEach((plugin) => {
-      this[plugin.instanceName] = new plugin({
-        mindMap: this
-      })
+      this.initPlugin(plugin)
     })
 
     // 初始渲染
@@ -374,13 +372,50 @@ class MindMap {
       scaleY: origTransform.scaleY // 思维导图图形的垂直缩放值
     }
   }
+
+  // 添加插件
+  addPlugin(plugin, opt) {
+    let index = MindMap.hasPlugin(plugin)
+    if (index === -1) {
+      MindMap.usePlugin(plugin, opt)
+      this.initPlugin(plugin)
+    }
+  }
+
+  // 移除插件
+  removePlugin(plugin) {
+    let index = MindMap.hasPlugin(plugin)
+    if (index !== -1) {
+      MindMap.pluginList.splice(index, 1)
+      if (this[plugin.instanceName]) {
+        if (this[plugin.instanceName].beforePluginRemove) {
+          this[plugin.instanceName].beforePluginRemove()
+        }
+        delete this[plugin.instanceName]
+      }
+    }
+  }
+
+  // 实例化插件
+  initPlugin(plugin) {
+    this[plugin.instanceName] = new plugin({
+      mindMap: this,
+      pluginOpt: plugin.pluginOpt
+    })
+  }
 }
 
 // 插件列表
 MindMap.pluginList = []
-MindMap.usePlugin = (plugin) => {
+MindMap.usePlugin = (plugin, opt = {}) => {
+  plugin.pluginOpt = opt
   MindMap.pluginList.push(plugin)
   return MindMap
+}
+MindMap.hasPlugin = (plugin) => {
+  return MindMap.pluginList.findIndex((item) => {
+    return item === plugin
+  })
 }
 
 // 定义新主题

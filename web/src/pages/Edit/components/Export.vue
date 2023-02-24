@@ -4,6 +4,10 @@
     :title="$t('export.title')"
     :visible.sync="dialogVisible"
     width="700px"
+    v-loading.fullscreen.lock="loading"
+    :element-loading-text="loadingText"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
   >
     <div>
       <div class="nameInputBox">
@@ -18,6 +22,12 @@
           v-model="widthConfig"
           style="margin-left: 12px"
           >{{ $t('export.include') }}</el-checkbox
+        >
+        <el-checkbox
+          v-show="['svg'].includes(exportType)"
+          v-model="domToImage"
+          style="margin-left: 12px"
+          >{{ $t('export.domToImage') }}</el-checkbox
         >
       </div>
       <el-radio-group v-model="exportType" size="mini">
@@ -38,6 +48,8 @@
         >
       </el-radio-group>
       <div class="tip">{{ $t('export.tips') }}</div>
+      <div class="tip warning" v-if="openNodeRichText && ['png', 'pdf'].includes(exportType)">{{ $t('export.pngTips') }}</div>
+      <div class="tip warning" v-if="openNodeRichText && exportType === 'svg' && domToImage">{{ $t('export.svgTips') }}</div>
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
@@ -49,6 +61,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 /**
  * @Author: 王林
  * @Date: 2021-06-24 22:53:54
@@ -61,12 +75,27 @@ export default {
       dialogVisible: false,
       exportType: 'smm',
       fileName: '思维导图',
-      widthConfig: true
+      widthConfig: true,
+      domToImage: false,
+      loading: false,
+      loadingText: ''
     }
+  },
+  computed: {
+    ...mapState({
+      openNodeRichText: state => state.localConfig.openNodeRichText,
+    })
   },
   created() {
     this.$bus.$on('showExport', () => {
       this.dialogVisible = true
+    })
+    this.$bus.$on('transforming-dom-to-images', (index, len) => {
+      this.loading = true
+      this.loadingText = `${this.$t('export.transformingDomToImages')}${index + 1}/${len}`
+      if (index >= len - 1) {
+        this.loading = false
+      }
     })
   },
   methods: {
@@ -85,16 +114,31 @@ export default {
      * @Desc:  确定
      */
     confirm() {
-      this.$bus.$emit(
-        'export',
-        this.exportType,
-        true,
-        this.fileName,
-        this.widthConfig
-      )
+      if (this.exportType === 'svg') {
+        this.$bus.$emit(
+          'export',
+          this.exportType,
+          true,
+          this.fileName,
+          this.domToImage,
+          `* {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }`
+        )
+      } else {
+        this.$bus.$emit(
+          'export',
+          this.exportType,
+          true,
+          this.fileName,
+          this.widthConfig
+        )
+      }
       this.$notify.info({
-        title: '消息',
-        message: '如果没有触发下载，请检查是否被浏览器拦截了'
+        title: this.$t('export.notifyTitle'),
+        message: this.$t('export.notifyMessage')
       })
       this.cancel()
     }
@@ -114,6 +158,10 @@ export default {
 
   .tip {
     margin-top: 10px;
+
+    &.warning {
+      color: #F56C6C;
+    }
   }
 }
 </style>

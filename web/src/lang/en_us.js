@@ -34,7 +34,8 @@ export default {
     watermarkTextSpacing: 'Text spacing',
     watermarkAngle: 'Angle',
     watermarkTextOpacity: 'Text opacity',
-    watermarkTextFontSize: 'Font size'
+    watermarkTextFontSize: 'Font size',
+    isEnableNodeRichText: 'Enable node rich text editing'
   },
   color: {
     moreColor: 'More color'
@@ -79,7 +80,13 @@ export default {
     imageFile: 'Image file',
     svgFile: 'svg file',
     pdfFile: 'pdf file',
-    tips: 'tips：.smm and .json file can be import'
+    tips: 'tips: .smm and .json file can be import',
+    domToImage: 'Whether to convert rich text nodes in svg into pictures',
+    pngTips: 'tips: Exporting pictures in rich text mode is time-consuming. It is recommended to export to svg format',
+    svgTips: 'tips: Exporting pictures in rich text mode is time-consuming',
+    transformingDomToImages: 'Converting nodes: ',
+    notifyTitle: 'Info',
+    notifyMessage: 'If the download is not triggered, check whether it is blocked by the browser'
   },
   fullscreen: {
     fullscreenShow: 'Full screen show',
@@ -178,5 +185,9 @@ export default {
     import: 'Import',
     export: 'Export',
     shortcutKey: 'Shortcut key'
+  },
+  edit: {
+    newFeatureNoticeTitle: 'New feature reminder',
+    newFeatureNoticeMessage: 'This update supports node rich text editing, But there are some defects, The most important impact is that the time to export the image is proportional to the number of nodes, Therefore, if you are more dependent on export requirements, you can use【Base style】-【Other config】-【Enable node rich text editing】Set to turn off rich text editing mode.'
   }
 }

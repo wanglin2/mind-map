@@ -429,6 +429,11 @@
             ">{{ $t('baseStyle.enableFreeDrag') }}</el-checkbox>
         </div>
       </div>
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox v-model="enableNodeRichText" @change="enableNodeRichTextChange">{{ this.$t('baseStyle.isEnableNodeRichText') }}</el-checkbox>
+        </div>
+      </div>
     </div>
   </Sidebar>
 </template>
@@ -439,7 +444,7 @@ import Color from './Color'
 import { lineWidthList, lineStyleList, backgroundRepeatList, backgroundPositionList, backgroundSizeList } from '@/config'
 import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 /**
  * @Author: 王林
@@ -502,11 +507,12 @@ export default {
           fontSize: 1
         }
       },
-      updateWatermarkTimer: null
+      updateWatermarkTimer: null,
+      enableNodeRichText: true
     }
   },
   computed: {
-    ...mapState(['activeSidebar']),
+    ...mapState(['activeSidebar', 'localConfig']),
 
     lineStyleList() {
       return lineStyleList[this.$i18n.locale] || lineStyleList.zh
@@ -533,7 +539,12 @@ export default {
       }
     }
   },
+  created () {
+    this.enableNodeRichText = this.localConfig.openNodeRichText
+  },
   methods: {
+    ...mapMutations(['setLocalConfig']),
+
     /**
      * @Author: 王林
      * @Date: 2021-05-05 14:02:12
@@ -668,6 +679,13 @@ export default {
         this.watermarkConfig.text = ''
       }
       this.updateWatermarkConfig()
+    },
+
+    // 切换是否开启节点富文本编辑
+    enableNodeRichTextChange(e) {
+      this.setLocalConfig({
+        openNodeRichText: e
+      })
     }
   }
 }
