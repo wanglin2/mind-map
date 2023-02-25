@@ -56,3 +56,7 @@ const mindMap = new MindMap({
 # License
 
 MIT
+
+# 微信交流群
+
+![](http://assets.lxqnsys.com/IMG_0465.JPG)

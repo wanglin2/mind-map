@@ -14634,7 +14634,7 @@ var utils = {
 
 // Default namespaces
 const svg_esm_svg = 'http://www.w3.org/2000/svg';
-const html = 'http://www.w3.org/1999/xhtml';
+const svg_esm_html = 'http://www.w3.org/1999/xhtml';
 const xmlns = 'http://www.w3.org/2000/xmlns/';
 const xlink = 'http://www.w3.org/1999/xlink';
 const svgjs = 'http://svgjs.dev/svgjs';
@@ -14642,7 +14642,7 @@ const svgjs = 'http://svgjs.dev/svgjs';
 var namespaces = {
   __proto__: null,
   svg: svg_esm_svg,
-  html: html,
+  html: svg_esm_html,
   xmlns: xmlns,
   xlink: xlink,
   svgjs: svgjs
@@ -16948,7 +16948,7 @@ class Dom extends EventTarget {
   }
 
   html(htmlOrFn, outerHTML) {
-    return this.xml(htmlOrFn, outerHTML, html);
+    return this.xml(htmlOrFn, outerHTML, svg_esm_html);
   } // Get / set id
 
 
@@ -22120,9 +22120,45 @@ class Node_Node {
     });
   }
 
+  // 创建富文本节点
+  createRichTextNode() {
+    let g = new G();
+    let html = `<div>${this.nodeData.data.text}</div>`;
+    let div = document.createElement('div');
+    div.innerHTML = html;
+    div.style.cssText = `position: fixed; left: -999999px;`;
+    let el = div.children[0];
+    el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+    el.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + 'px';
+    this.mindMap.el.appendChild(div);
+    let {
+      width,
+      height
+    } = el.getBoundingClientRect();
+    width = Math.ceil(width);
+    height = Math.ceil(height);
+    g.attr('data-width', width);
+    g.attr('data-height', height);
+    html = div.innerHTML;
+    this.mindMap.el.removeChild(div);
+    let foreignObject = new ForeignObject();
+    foreignObject.width(width);
+    foreignObject.height(height);
+    foreignObject.add(SVG(html));
+    g.add(foreignObject);
+    return {
+      node: g,
+      width,
+      height
+    };
+  }
+
   //  创建文本节点
 
   createTextNode() {
+    if (this.nodeData.data.richText) {
+      return this.createRichTextNode();
+    }
     let g = new G();
     let fontSize = this.getStyle('fontSize', false, this.nodeData.data.isActive);
     let lineHeight = this.getStyle('lineHeight', false, this.nodeData.data.isActive);
@@ -22158,6 +22194,10 @@ class Node_Node {
       width,
       height
     } = g.bbox();
+    width = Math.ceil(width);
+    height = Math.ceil(height);
+    g.attr('data-width', width);
+    g.attr('data-height', height);
     return {
       node: g,
       width,
@@ -22342,6 +22382,7 @@ class Node_Node {
     }
     // 文字
     if (this._textData) {
+      this._textData.node.attr('data-offsetx', textContentOffsetX);
       this._textData.node.x(textContentOffsetX).y(0);
       textContentNested.add(this._textData.node);
       textContentOffsetX += this._textData.width + textContentItemMargin;
@@ -22493,7 +22534,9 @@ class Node_Node {
     if (this.nodeData.inserting) {
       delete this.nodeData.inserting;
       this.active();
-      this.mindMap.emit('node_dblclick', this);
+      setTimeout(() => {
+        this.mindMap.emit('node_dblclick', this);
+      }, 0);
     }
   }
 
@@ -24356,7 +24399,12 @@ class TextEdit_TextEdit {
 
   //  显示文本编辑框
   show(node) {
-    this.showEditTextBox(node, node._textData.node.node.getBoundingClientRect());
+    let rect = node._textData.node.node.getBoundingClientRect();
+    if (this.mindMap.richText) {
+      this.mindMap.richText.showEditText(node, rect);
+      return;
+    }
+    this.showEditTextBox(node, rect);
   }
 
   //  显示文本编辑框
@@ -24400,6 +24448,9 @@ class TextEdit_TextEdit {
 
   //  隐藏文本编辑框
   hideEditTextBox() {
+    if (this.mindMap.richText) {
+      return this.mindMap.richText.hideEditText();
+    }
     if (!this.showTextEdit) {
       return;
     }
@@ -25215,6 +25266,15 @@ class Render_Render {
         [prop]: value
       };
     }
+    // 如果开启了富文本，则需要应用到富文本上
+    if (this.mindMap.richText) {
+      this.mindMap.richText.showEditText(node);
+      let config = this.mindMap.richText.normalStyleToRichTextStyle({
+        [prop]: value
+      });
+      this.mindMap.richText.formatAllText(config);
+      this.mindMap.richText.hideEditText();
+    }
     this.setNodeDataRender(node, data);
     // 更新了连线的样式
     if (lineStyleProps.includes(prop)) {
@@ -25308,9 +25368,10 @@ class Render_Render {
 
   //  设置节点文本
 
-  setNodeText(node, text) {
+  setNodeText(node, text, richText) {
     this.setNodeDataRender(node, {
-      text
+      text,
+      richText
     });
   }
 
@@ -27189,9 +27250,7 @@ class simple_mind_map_MindMap {
 
     // 注册插件
     simple_mind_map_MindMap.pluginList.forEach(plugin => {
-      this[plugin.instanceName] = new plugin({
-        mindMap: this
-      });
+      this.initPlugin(plugin);
     });
 
     // 初始渲染
@@ -27449,13 +27508,50 @@ class simple_mind_map_MindMap {
       scaleY: origTransform.scaleY // 思维导图图形的垂直缩放值
     };
   }
+
+  // 添加插件
+  addPlugin(plugin, opt) {
+    let index = simple_mind_map_MindMap.hasPlugin(plugin);
+    if (index === -1) {
+      simple_mind_map_MindMap.usePlugin(plugin, opt);
+      this.initPlugin(plugin);
+    }
+  }
+
+  // 移除插件
+  removePlugin(plugin) {
+    let index = simple_mind_map_MindMap.hasPlugin(plugin);
+    if (index !== -1) {
+      simple_mind_map_MindMap.pluginList.splice(index, 1);
+      if (this[plugin.instanceName]) {
+        if (this[plugin.instanceName].beforePluginRemove) {
+          this[plugin.instanceName].beforePluginRemove();
+        }
+        delete this[plugin.instanceName];
+      }
+    }
+  }
+
+  // 实例化插件
+  initPlugin(plugin) {
+    this[plugin.instanceName] = new plugin({
+      mindMap: this,
+      pluginOpt: plugin.pluginOpt
+    });
+  }
 }
 
 // 插件列表
 simple_mind_map_MindMap.pluginList = [];
-simple_mind_map_MindMap.usePlugin = plugin => {
+simple_mind_map_MindMap.usePlugin = (plugin, opt = {}) => {
+  plugin.pluginOpt = opt;
   simple_mind_map_MindMap.pluginList.push(plugin);
   return simple_mind_map_MindMap;
+};
+simple_mind_map_MindMap.hasPlugin = plugin => {
+  return simple_mind_map_MindMap.pluginList.findIndex(item => {
+    return item === plugin;
+  });
 };
 
 // 定义新主题
@@ -28300,7 +28396,7 @@ class Export_Export {
   }
 
   //  获取svg数据
-  async getSvgData() {
+  async getSvgData(domToImage) {
     let {
       svg,
       svgHTML
@@ -28313,9 +28409,17 @@ class Export_Export {
       item.attr('href', imgData);
     });
     await Promise.all(task);
+    // 如果开启了富文本编辑，需要把svg中的dom元素转换成图片
+    let nodeWithDomToImg = null;
+    if (domToImage && this.mindMap.richText) {
+      let res = await this.mindMap.richText.handleSvgDomElements(svg);
+      nodeWithDomToImg = res.svg;
+      svgHTML = res.svgHTML;
+    }
     return {
       node: svg,
-      str: svgHTML
+      str: svgHTML,
+      nodeWithDomToImg
     };
   }
 
@@ -28392,7 +28496,7 @@ class Export_Export {
   async png() {
     let {
       str
-    } = await this.getSvgData();
+    } = await this.getSvgData(true);
     // 转换成blob数据
     let blob = new Blob([str], {
       type: 'image/svg+xml'
@@ -28460,10 +28564,24 @@ class Export_Export {
   }
 
   //  导出为svg
-  async svg(name) {
+  // domToImage：是否将svg中的dom节点转换成图片的形式
+  // plusCssText：附加的css样式，如果svg中存在dom节点，想要设置一些针对节点的样式可以通过这个参数传入
+  async svg(name, domToImage = false, plusCssText) {
     let {
-      node
-    } = await this.getSvgData();
+      node,
+      nodeWithDomToImg
+    } = await this.getSvgData(domToImage);
+    // 开启了节点富文本编辑
+    if (this.mindMap.richText) {
+      if (domToImage) {
+        node = nodeWithDomToImg;
+      } else if (plusCssText) {
+        let foreignObjectList = node.find('foreignObject');
+        if (foreignObjectList.length > 0) {
+          foreignObjectList[0].add(SVG(`<style>${plusCssText}</style>`));
+        }
+      }
+    }
     node.first().before(SVG(`<title>${name}</title>`));
     await this.drawBackgroundToSvg(node);
     let str = node.svg();

@@ -104,7 +104,6 @@ class RichText {
     let g = node._textData.node
     let originWidth = g.attr('data-width')
     let originHeight = g.attr('data-height')
-    console.log(`node`, node, rect, originWidth, originHeight)
     this.textEditNode.style.minWidth = originWidth + 'px'
     this.textEditNode.style.minHeight = originHeight + 'px'
     this.textEditNode.style.left =
@@ -282,6 +281,7 @@ class RichText {
         case 'textDecoration':
           config.underline = value === 'underline'
           config.strike = value === 'line-through'
+          break
         case 'color':
           config.color = value
           break

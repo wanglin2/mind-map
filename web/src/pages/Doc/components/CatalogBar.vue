@@ -52,7 +52,6 @@ export default {
       this.onScroll()
     },
     lang(newVal, oldVal) {
-      console.log(newVal, oldVal)
       if (!oldVal) {
         return
       }
