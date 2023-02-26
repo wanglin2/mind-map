@@ -900,6 +900,17 @@ const data5 = {
     }
 }
 
+// 富文本数据v0.4.0+，需要使用RichText插件才支持富文本编辑
+const richTextData = {
+    "root": {
+        "data": {
+            "text": "<a href='http://lxqnsys.com/' target='_blank'>理想去年实验室</a>",
+            "richText": true
+        },
+        "children": []
+    }
+}
+
 const rootData = {
     "root": {
         "data": {

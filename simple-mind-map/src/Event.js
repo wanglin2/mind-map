@@ -43,12 +43,7 @@ class Event extends EventEmitter {
     this.mindMap.svg.on('mousedown', this.onSvgMousedown)
     window.addEventListener('mousemove', this.onMousemove)
     window.addEventListener('mouseup', this.onMouseup)
-    // 兼容火狐浏览器
-    if (window.navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
-      this.mindMap.el.addEventListener('DOMMouseScroll', this.onMousewheel)
-    } else {
-      this.mindMap.el.addEventListener('mousewheel', this.onMousewheel)
-    }
+    this.mindMap.el.addEventListener('wheel', this.onMousewheel)
     this.mindMap.svg.on('contextmenu', this.onContextmenu)
     window.addEventListener('keyup', this.onKeyup)
   }
@@ -59,7 +54,7 @@ class Event extends EventEmitter {
     this.mindMap.el.removeEventListener('mousedown', this.onMousedown)
     window.removeEventListener('mousemove', this.onMousemove)
     window.removeEventListener('mouseup', this.onMouseup)
-    this.mindMap.el.removeEventListener('mousewheel', this.onMousewheel)
+    this.mindMap.el.removeEventListener('wheel', this.onMousewheel)
     this.mindMap.svg.off('contextmenu', this.onContextmenu)
     window.removeEventListener('keyup', this.onKeyup)
   }
@@ -110,10 +105,16 @@ class Event extends EventEmitter {
     e.stopPropagation()
     e.preventDefault()
     let dir
-    if ((e.wheelDeltaY || e.detail) > 0) {
-      dir = 'up'
+    // 解决mac触控板双指缩放方向相反的问题
+    if (e.ctrlKey) {
+      if (e.deltaY > 0) dir = 'up'
+      if (e.deltaY < 0) dir = 'down'
     } else {
-      dir = 'down'
+      if ((e.wheelDeltaY || e.detail) > 0) {
+        dir = 'up'
+      } else {
+        dir = 'down'
+      }
     }
     this.emit('mousewheel', e, dir, this)
   }

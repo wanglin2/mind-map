@@ -178,6 +178,8 @@ Listen to an event. Event list:
 | node_mouseup                     | Node mouseup event                                                       | this (node instance), e (event object)                                                                          |
 | node_dblclick                    | Node double-click event                                                  | this (node instance), e (event object)                                                                          |
 | node_contextmenu                 | Node right-click menu event                                              | e (event object), this (node instance)                                                                          |
+| node_mouseenter（v0.4.1+）       | Node mouseenter event     | this (node instance), e (event object)            |
+| node_mouseleave（v0.4.1+）       | Node mouseleave event     | this (node instance), e (event object)            |
 | before_node_active               | Event before node activation                                             | this (node instance), activeNodeList (current list of active nodes)                                             |
 | node_active                      | Node activation event                                                    | this (node instance), activeNodeList (current list of active nodes)                                             |
 | expand_btn_click                 | Node expand or collapse event                                            | this (node instance)                                                                                            |

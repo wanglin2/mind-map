@@ -175,6 +175,8 @@ mindMap.setTheme('主题名称')
 | node_mouseup                     | 节点的鼠标松开事件                         | this（节点实例）、e（事件对象）                              |
 | node_dblclick                    | 节点的双击事件                             | this（节点实例）、e（事件对象）                              |
 | node_contextmenu                 | 节点的右键菜单事件                         | e（事件对象）、this（节点实例）                              |
+| node_mouseenter（v0.4.1+）       | 节点的鼠标移入事件     | this（节点实例）、e（事件对象）            |
+| node_mouseleave（v0.4.1+）       | 节点的鼠标移出事件     | this（节点实例）、e（事件对象）            |
 | before_node_active               | 节点激活前事件                             | this（节点实例）、activeNodeList（当前激活的所有节点列表）   |
 | node_active                      | 节点激活事件                               | this（节点实例）、activeNodeList（当前激活的所有节点列表）   |
 | expand_btn_click                 | 节点展开或收缩事件                         | this（节点实例）                                             |

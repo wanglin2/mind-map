@@ -191,7 +191,9 @@ class Node {
         'dblclick',
         'contextmenu',
         'mousedown',
-        'mouseup'
+        'mouseup',
+        'mouseenter',
+        'mouseleave'
       ])
     }
   }
@@ -676,6 +678,12 @@ class Node {
     this.group.on('mouseup', e => {
       e.stopPropagation()
       this.mindMap.emit('node_mouseup', this, e)
+    })
+    this.group.on('mouseenter', e => {
+      this.mindMap.emit('node_mouseenter', this, e)
+    })
+    this.group.on('mouseleave', e => {
+      this.mindMap.emit('node_mouseleave', this, e)
     })
     // 双击事件
     this.group.on('dblclick', e => {

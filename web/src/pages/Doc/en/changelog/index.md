@@ -1,12 +1,18 @@
 # Changelog
 
+## 0.4.1
+
+New: Add and throw node mouseenter and mouseleave events.
+
+Fix: 1.Mac system touchpad scaling is the opposite problem; 2.When the device window.devicePixelRatio is not 1, the size of the rich text node in the exported image will become larger when there are rich text nodes.
+
 ## 0.4.0
 
 New: The node supports rich text editing.
 
 ## 0.3.4
 
-New：Automatic line wrapping function is added to node text.
+New: Automatic line wrapping function is added to node text.
 
 Fix: 1.Fix the problem of deletion exceptions if there are root nodes in the batch deleted nodes. 2.Fix the problem that high node height will overlap with other nodes in the case of bottom edge style.
 
