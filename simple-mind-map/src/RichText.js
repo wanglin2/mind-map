@@ -372,10 +372,13 @@ class RichText {
           let canvas = await html2canvas(clone, {
             backgroundColor: null
           })
+          // 优先使用原始宽高，因为当设备的window.devicePixelRatio不为1时，html2canvas输出的图片会更大
+          let imgNodeWidth = parent.attr('data-width') || canvas.width
+          let imgNodeHeight = parent.attr('data-height') || canvas.height
           this.mindMap.el.removeChild(div)
           let imgNode = new SvgImage()
             .load(canvas.toDataURL())
-            .size(canvas.width, canvas.height)
+            .size(imgNodeWidth, imgNodeHeight)
             .x((parent ? parent.attr('data-offsetx') : 0) || 0)
           item.replace(imgNode)
           if (index <= len - 1) {

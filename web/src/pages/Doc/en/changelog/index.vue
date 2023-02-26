@@ -1,10 +1,13 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.4.1</h2>
+<p>New: Add and throw node mouseenter and mouseleave events.</p>
+<p>Fix: 1.Mac system touchpad scaling is the opposite problem; 2.When the device window.devicePixelRatio is not 1, the size of the rich text node in the exported image will become larger when there are rich text nodes.</p>
 <h2>0.4.0</h2>
 <p>New: The node supports rich text editing.</p>
 <h2>0.3.4</h2>
-<p>New：Automatic line wrapping function is added to node text.</p>
+<p>New: Automatic line wrapping function is added to node text.</p>
 <p>Fix: 1.Fix the problem of deletion exceptions if there are root nodes in the batch deleted nodes. 2.Fix the problem that high node height will overlap with other nodes in the case of bottom edge style.</p>
 <h2>0.3.3</h2>
 <p>Fix: The root node text cannot wrap.</p>

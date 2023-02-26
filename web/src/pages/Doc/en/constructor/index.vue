@@ -367,6 +367,16 @@ poor performance and should be used sparingly.</p>
 <td>e (event object), this (node instance)</td>
 </tr>
 <tr>
+<td>node_mouseenter（v0.4.1+）</td>
+<td>Node mouseenter event</td>
+<td>this (node instance), e (event object)</td>
+</tr>
+<tr>
+<td>node_mouseleave（v0.4.1+）</td>
+<td>Node mouseleave event</td>
+<td>this (node instance), e (event object)</td>
+</tr>
+<tr>
 <td>before_node_active</td>
 <td>Event before node activation</td>
 <td>this (node instance), activeNodeList (current list of active nodes)</td>

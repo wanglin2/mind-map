@@ -360,6 +360,16 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>e（事件对象）、this（节点实例）</td>
 </tr>
 <tr>
+<td>node_mouseenter（v0.4.1+）</td>
+<td>节点的鼠标移入事件</td>
+<td>this（节点实例）、e（事件对象）</td>
+</tr>
+<tr>
+<td>node_mouseleave（v0.4.1+）</td>
+<td>节点的鼠标移出事件</td>
+<td>this（节点实例）、e（事件对象）</td>
+</tr>
+<tr>
 <td>before_node_active</td>
 <td>节点激活前事件</td>
 <td>this（节点实例）、activeNodeList（当前激活的所有节点列表）</td>
