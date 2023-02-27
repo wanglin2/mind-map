@@ -6,7 +6,7 @@
 
 This plugin provides the ability to edit rich text of nodes, and takes effect after registration.
 
-By default, node editing can only uniformly apply styles to all text in the node. This plugin can support rich text editing effects. Currently, it supports bold, italic, underline, strikethrough, font, font size, and color. Underline and line height are not supported.
+By default, node editing can only uniformly apply styles to all text in the node. This plugin can support rich text editing effects. Currently, it supports bold, italic, underline, strikethrough, font, font size, color, and backgroundColor. Underline and line height are not supported.
 
 The principle of this plugin is to use [Quill](https://github.com/quilljs/quill) editor implements rich text editing, and then uses the edited `DOM` node directly as the text data of the node, and embeds the `DOM` node through the `svg` `foreignObject` tag during rendering.
 

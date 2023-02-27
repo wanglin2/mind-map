@@ -6,6 +6,20 @@
   "description": "思维导图",
   "glyphs": [
     {
+      "icon_id": "1790495",
+      "name": "背景颜色",
+      "font_class": "beijingyanse",
+      "unicode": "e6f8",
+      "unicode_decimal": 59128
+    },
+    {
+      "icon_id": "11321310",
+      "name": "清除",
+      "font_class": "qingchu",
+      "unicode": "e605",
+      "unicode_decimal": 58885
+    },
+    {
       "icon_id": "586787",
       "name": "case",
       "font_class": "case",

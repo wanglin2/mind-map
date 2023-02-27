@@ -6,4 +6,5 @@
 
 .ql-container {
     height: auto;
+    font-size: inherit;
 }
