@@ -83,6 +83,11 @@ MindMap.usePlugin(RichText, opt?)
 <li><code>config</code>：Same as <code>formatText</code> method</li>
 </ul>
 <p>Formats all text of the current edit node.</p>
+<h3>removeFormat()</h3>
+<blockquote>
+<p>v0.4.1+</p>
+</blockquote>
+<p>Clears the style of the currently selected text.</p>
 <h3>normalStyleToRichTextStyle(style)</h3>
 <p>Converts a normal node style object to a rich text style object. Because there are differences between node style attributes and rich text style attributes during non-rich text editing, a conversion operation is required. For example:</p>
 <pre class="hljs"><code>{

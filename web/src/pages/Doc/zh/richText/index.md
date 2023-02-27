@@ -104,6 +104,12 @@ MindMap.usePlugin(RichText, opt?)
 
 格式化当前编辑节点的所有文本。
 
+### removeFormat()
+
+> v0.4.1+
+
+清除当前选中文本的样式。
+
 ### normalStyleToRichTextStyle(style) 
 
 将普通节点样式对象转换成富文本样式对象。因为非富文本编辑时的节点样式属性和富文本样式属性是存在差异的，所以需要一个转换操作。比如：

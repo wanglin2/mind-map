@@ -83,6 +83,11 @@ MindMap.usePlugin(RichText, opt?)
 <li><code>config</code>：同<code>formatText</code>方法</li>
 </ul>
 <p>格式化当前编辑节点的所有文本。</p>
+<h3>removeFormat()</h3>
+<blockquote>
+<p>v0.4.1+</p>
+</blockquote>
+<p>清除当前选中文本的样式。</p>
 <h3>normalStyleToRichTextStyle(style)</h3>
 <p>将普通节点样式对象转换成富文本样式对象。因为非富文本编辑时的节点样式属性和富文本样式属性是存在差异的，所以需要一个转换操作。比如：</p>
 <pre class="hljs"><code>{

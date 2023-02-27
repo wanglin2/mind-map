@@ -99,6 +99,14 @@
         </div>
       </el-popover>
     </el-tooltip>
+    
+    <el-tooltip content="清除样式" placement="top">
+      <div
+        class="btn" @click="removeFormat"
+      >
+        <span class="icon iconfont iconqingchu"></span>
+      </div>
+    </el-tooltip>
   </div>
 </template>
 
@@ -207,6 +215,10 @@ export default {
       this.mindMap.richText.formatText({
         background
       })
+    },
+
+    removeFormat() {
+      this.mindMap.richText.removeFormat()
     }
   }
 }
