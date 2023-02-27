@@ -229,15 +229,20 @@ class RichText {
   }
 
   // 格式化当前选中的文本
-  formatText(config = {}) {
+  formatText(config = {}, clear = false) {
     if (!this.range && !this.lastRange) return
-    this.syncFormatToNodeConfig(config)
+    this.syncFormatToNodeConfig(config, clear)
     let rangeLost = !this.range
     let range = rangeLost ? this.lastRange : this.range
-    this.quill.formatText(range.index, range.length, config)
+    clear ? this.quill.removeFormat(range.index, range.length) : this.quill.formatText(range.index, range.length, config)
     if (rangeLost) {
       this.quill.setSelection(this.lastRange.index, this.lastRange.length)
     }
+  }
+
+  // 清除当前选中文本的样式
+  removeFormat() {
+    this.formatText({}, true)
   }
 
   // 格式化指定范围的文本
@@ -254,10 +259,17 @@ class RichText {
   }
 
   // 同步格式化到节点样式配置
-  syncFormatToNodeConfig(config) {
+  syncFormatToNodeConfig(config, clear) {
     if (!this.node) return
-    let data = this.richTextStyleToNormalStyle(config)
-    this.mindMap.renderer.setNodeData(this.node, data)
+    if (clear) {
+      // 清除文本样式
+      ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'textDecoration', 'color'].forEach((prop) => {
+        delete this.node.nodeData.data[prop]
+      })
+    } else {
+      let data = this.richTextStyleToNormalStyle(config)
+      this.mindMap.renderer.setNodeData(this.node, data)
+    }
   }
 
   // 将普通节点样式对象转换成富文本样式对象

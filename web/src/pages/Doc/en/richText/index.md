@@ -104,6 +104,12 @@ Formats the text of the specified range.
 
 Formats all text of the current edit node.
 
+### removeFormat()
+
+> v0.4.1+
+
+Clears the style of the currently selected text.
+
 ### normalStyleToRichTextStyle(style) 
 
 Converts a normal node style object to a rich text style object. Because there are differences between node style attributes and rich text style attributes during non-rich text editing, a conversion operation is required. For example:

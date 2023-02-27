@@ -2,7 +2,7 @@
 
 ## 0.4.1
 
-New: Add and throw node mouseenter and mouseleave events.
+New: 1.Add and throw node mouseenter and mouseleave events; 2.Node rich text supports setting background color; 3.Node rich text supports clear style.
 
 Fix: 1.Mac system touchpad scaling is the opposite problem; 2.When the device window.devicePixelRatio is not 1, the size of the rich text node in the exported image will become larger when there are rich text nodes.
 
