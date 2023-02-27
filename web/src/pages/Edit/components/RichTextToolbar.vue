@@ -90,6 +90,15 @@
         </div>
       </el-popover>
     </el-tooltip>
+
+    <el-tooltip content="背景颜色" placement="top">
+      <el-popover placement="bottom" trigger="hover">
+        <Color :color="fontBackgroundColor" @change="changeFontBackgroundColor"></Color>
+        <div class="btn" slot="reference">
+          <span class="icon iconfont iconbeijingyanse"></span>
+        </div>
+      </el-popover>
+    </el-tooltip>
   </div>
 </template>
 
@@ -116,6 +125,7 @@ export default {
         top: 0
       },
       fontColor: '',
+      fontBackgroundColor: '',
       formatInfo: {}
     }
   },
@@ -189,6 +199,13 @@ export default {
       this.formatInfo.color = color
       this.mindMap.richText.formatText({
         color
+      })
+    },
+
+    changeFontBackgroundColor(background) {
+      this.formatInfo.background  = background
+      this.mindMap.richText.formatText({
+        background
       })
     }
   }

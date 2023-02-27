@@ -8,7 +8,7 @@
 <p>注意：这是一个测试性质和不完善的功能</p>
 </blockquote>
 <p>该插件提供节点富文本编辑的能力，注册了即可生效。</p>
-<p>默认节点编辑只能对节点内所有文本统一应用样式，通过该插件可以支持富文本编辑的效果，目前支持：加粗、斜体、下划线、删除线、字体、字号、颜色。不支持上划线、行高。</p>
+<p>默认节点编辑只能对节点内所有文本统一应用样式，通过该插件可以支持富文本编辑的效果，目前支持：加粗、斜体、下划线、删除线、字体、字号、颜色、背景颜色。不支持上划线、行高。</p>
 <p>该插件的原理是使用<a href="https://github.com/quilljs/quill">Quill</a>编辑器实现富文本编辑，然后把编辑后生成的<code>DOM</code>节点直接作为节点的文本数据，并且在渲染的时候通过<code>svg</code>的<code>foreignObject</code>标签嵌入<code>DOM</code>节点。</p>
 <p>这样也造成了一个问题，就是导出为图片的功能受到了影响，原本将<code>svg</code>导出为图片的原理很简单，获取到<code>svg</code>字符串，然后创建为<code>type=image/svg+xml</code>类型的<code>blob</code>数据，再使用<code>URL.createObjectURL</code>方法生成<code>data:url</code>数据，再创建一个<code>Image</code>标签，将<code>data:url</code>作为该图片的<code>src</code>，最后再将这个图片绘制到<code>canvas</code>对象上进行导出，但是经过测试，当<code>svg</code>中嵌入了<code>DOM</code>节点，这种方式导出会出错，并且尝试了多种方式后都无法实现完美的导出效果，目前的方式是遍历<code>svg</code>中的<code>foreignObject</code>节点，使用<a href="https://github.com/niklasvh/html2canvas">html2canvas</a>将<code>foreignObject</code>节点内的<code>DOM</code>节点转换为图片再替换掉<code>foreignObject</code>节点，这种方式可以工作，但是非常耗时，因为<code>html2canvas</code>转换一次的时间很长，导致转换一个节点都需要耗时差不多2秒，这样导致节点越多，转换时间越慢，所以如果无法忍受长时间的导出的话推荐不要使用该插件。</p>
 <p>如果你有更好的方式也欢迎留言。</p>
