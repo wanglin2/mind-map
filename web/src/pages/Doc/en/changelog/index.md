@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.2
+
+New: The `setText` method of the Node class adds a second parameter to support setting rich text content.
+
 ## 0.4.1
 
 New: 1.Add and throw node mouseenter and mouseleave events; 2.Node rich text supports setting background color; 3.Node rich text supports clear style.

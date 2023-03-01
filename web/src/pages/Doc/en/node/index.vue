@@ -67,7 +67,10 @@ if <code>key</code> is not passed, return the <code>data</code> object</p>
 <h3>setData(data)</h3>
 <p>Set the value of the specified key in the data object of the node's real data
 nodeData, <code>SET_NODE_DATA</code> command's shortcut method</p>
-<h3>setText(text)</h3>
+<h3>setText(text, richText)</h3>
+<ul>
+<li><code>richText</code>: v0.4.2+，<code>Boolean</code>, If you want to set rich text content, that is, <code>html</code> character, <code>richText</code> needs to be passed <code>true</code></li>
+</ul>
 <p>Setting the node text, a shortcut for the <code>SET_NODE_TEXT</code> command</p>
 <h3>setImage(imgData)</h3>
 <p>Setting the node image, a shortcut for the <code>SET_NODE_IMAGE</code> command</p>

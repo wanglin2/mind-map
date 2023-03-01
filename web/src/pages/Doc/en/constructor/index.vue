@@ -565,7 +565,7 @@ redo. All commands are as follows:</p>
 <tr>
 <td>SET_NODE_TEXT</td>
 <td>Set node text</td>
-<td>node (the node to set), text (the new text for the node)</td>
+<td>node (the node to set), text (the new text for the node), richText（v0.4.0+, If you want to set a rich text character, you need to set it to <code>true</code>）</td>
 </tr>
 <tr>
 <td>SET_NODE_IMAGE</td>

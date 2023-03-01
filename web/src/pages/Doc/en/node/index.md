@@ -121,7 +121,9 @@ if `key` is not passed, return the `data` object
 Set the value of the specified key in the data object of the node's real data
 nodeData, `SET_NODE_DATA` command's shortcut method
 
-### setText(text)
+### setText(text, richText)
+
+- `richText`: v0.4.2+，`Boolean`, If you want to set rich text content, that is, `html` character, `richText` needs to be passed `true`
 
 Setting the node text, a shortcut for the `SET_NODE_TEXT` command
 
