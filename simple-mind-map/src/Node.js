@@ -1217,8 +1217,8 @@ class Node {
 
   //  设置文本
 
-  setText(text) {
-    this.mindMap.execCommand('SET_NODE_TEXT', this, text)
+  setText(text, richText) {
+    this.mindMap.execCommand('SET_NODE_TEXT', this, text, richText)
   }
 
   //  设置图片

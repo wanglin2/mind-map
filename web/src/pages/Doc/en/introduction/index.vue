@@ -49,6 +49,7 @@ full screen, support mini map</li>
 <p><a href="https://juejin.cn/post/6987711560521089061">Technical Analysis of Web Mind Map Implementation (chi)</a></p>
 <p><a href="https://juejin.cn/post/7157681502506090510">Only a hundred lines of code are needed to add local file operation capability to your Web page. Are you sure not to try?</a></p>
 <p><a href="https://juejin.cn/post/7199666255883927612">When you press the direction key, how does the TV find the next focus</a></p>
+<p><a href="https://juejin.cn/post/7204854015463538744">How to simulate the background image style of css in canvas</a></p>
 <h2>Special Note</h2>
 <p>This project is rough and has not been thoroughly tested, its features are not
 yet fully developed, and there are some performance issues, especially when the number of nodes is large. It is only for

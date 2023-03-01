@@ -114,7 +114,9 @@
 
 设置节点数据，`SET_NODE_DATA`命令的快捷方法
 
-### setText(text)
+### setText(text, richText)
+
+- `richText`：v0.4.2+，`Boolean`，如果要设置的是富文本内容，也就是`html`字符，`richText`需要传`true`
 
 设置节点文本，`SET_NODE_TEXT`命令的快捷方法
 

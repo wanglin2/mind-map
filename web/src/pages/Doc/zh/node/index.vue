@@ -60,7 +60,10 @@
 <p>获取该节点真实数据<code>nodeData</code>的<code>data</code>对象里的指定值，<code>key</code>不传返回这个<code>data</code>对象</p>
 <h3>setData(data)</h3>
 <p>设置节点数据，<code>SET_NODE_DATA</code>命令的快捷方法</p>
-<h3>setText(text)</h3>
+<h3>setText(text, richText)</h3>
+<ul>
+<li><code>richText</code>：v0.4.2+，<code>Boolean</code>，如果要设置的是富文本内容，也就是<code>html</code>字符，<code>richText</code>需要传<code>true</code></li>
+</ul>
 <p>设置节点文本，<code>SET_NODE_TEXT</code>命令的快捷方法</p>
 <h3>setImage(imgData)</h3>
 <p>设置节点图片，<code>SET_NODE_IMAGE</code>命令的快捷方法</p>

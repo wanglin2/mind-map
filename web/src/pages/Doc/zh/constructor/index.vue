@@ -560,7 +560,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>SET_NODE_TEXT</td>
 <td>设置节点文本</td>
-<td>node（要设置的节点）、text（要设置的文本字符串，换行可以使用<code>\n</code>）</td>
+<td>node（要设置的节点）、text（要设置的文本字符串，换行可以使用<code>\n</code>）、richText（v0.4.0+，如果要设置的是富文本字符，需要设为<code>true</code>）</td>
 </tr>
 <tr>
 <td>SET_NODE_IMAGE</td>

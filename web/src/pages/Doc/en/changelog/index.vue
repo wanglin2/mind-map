@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.4.2</h2>
+<p>New: The <code>setText</code> method of the Node class adds a second parameter to support setting rich text content.</p>
 <h2>0.4.1</h2>
 <p>New: 1.Add and throw node mouseenter and mouseleave events; 2.Node rich text supports setting background color; 3.Node rich text supports clear style.</p>
 <p>Fix: 1.Mac system touchpad scaling is the opposite problem; 2.When the device window.devicePixelRatio is not 1, the size of the rich text node in the exported image will become larger when there are rich text nodes.</p>

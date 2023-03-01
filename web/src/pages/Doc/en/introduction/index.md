@@ -62,6 +62,8 @@ Documentation, etc.
 
 [When you press the direction key, how does the TV find the next focus](https://juejin.cn/post/7199666255883927612)
 
+[How to simulate the background image style of css in canvas](https://juejin.cn/post/7204854015463538744)
+
 ## Special Note
 
 This project is rough and has not been thoroughly tested, its features are not
