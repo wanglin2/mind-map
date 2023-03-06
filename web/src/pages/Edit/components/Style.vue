@@ -506,7 +506,7 @@ export default {
         this.activeTab = 'normal'
         return
       }
-      ;[
+      [
         'shape',
         'paddingX',
         'paddingY',
