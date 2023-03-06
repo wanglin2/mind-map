@@ -6,6 +6,27 @@
   "description": "思维导图",
   "glyphs": [
     {
+      "icon_id": "5387383",
+      "name": "电脑",
+      "font_class": "diannao",
+      "unicode": "eac0",
+      "unicode_decimal": 60096
+    },
+    {
+      "icon_id": "6940837",
+      "name": "主页",
+      "font_class": "zhuye",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
+      "icon_id": "17859315",
+      "name": "本地@1x",
+      "font_class": "bendi1x",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
       "icon_id": "1790495",
       "name": "背景颜色",
       "font_class": "beijingyanse",
