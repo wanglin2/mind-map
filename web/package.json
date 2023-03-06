@@ -2,6 +2,7 @@
   "name": "thoughts",
   "version": "0.1.0",
   "private": true,
+  "main": "main.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && node ../copy.js",
@@ -9,13 +10,15 @@
     "buildLibrary": "vue-cli-service build --target lib --name simpleMindMap ../simple-mind-map/full.js --dest ../simple-mind-map/dist",
     "format": "prettier --write src/* src/*/* src/*/*/* src/*/*/*/*",
     "buildDoc": "node ./scripts/buildDoc.js",
-    "autoBuildDoc": "node ./scripts/autoBuildDoc.js"
+    "autoBuildDoc": "node ./scripts/autoBuildDoc.js",
+    "start": "electron ."
   },
   "dependencies": {
     "@toast-ui/editor": "^3.1.5",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.1",
     "highlight.js": "^10.7.3",
+    "uuid": "^3.4.0",
     "v-viewer": "^1.6.4",
     "vue": "^2.6.11",
     "vue-i18n": "^8.27.2",
@@ -29,6 +32,7 @@
     "@vue/cli-service": "^4.5.0",
     "babel-eslint": "^10.1.0",
     "chokidar": "^3.5.3",
+    "electron": "^23.1.1",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "less": "^3.12.2",

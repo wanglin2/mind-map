@@ -8,6 +8,7 @@ import '@/assets/icon-font/iconfont.css'
 import 'viewerjs/dist/viewer.css'
 import VueViewer from 'v-viewer'
 import i18n from './i18n'
+import './css/global.css'
 
 Vue.config.productionTip = false
 Vue.prototype.$bus = new Vue()

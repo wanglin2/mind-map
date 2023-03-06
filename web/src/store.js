@@ -15,7 +15,8 @@ const store = new Vuex.Store({
       // 是否开启节点富文本
       openNodeRichText: true
     },
-    activeSidebar: '' // 当前显示的侧边栏
+    activeSidebar: '', // 当前显示的侧边栏
+    localEditList: []// 客户端中正在编辑的思维导图列表
   },
   mutations: {
     /**
@@ -59,6 +60,11 @@ const store = new Vuex.Store({
      */
     setActiveSidebar(state, data) {
       state.activeSidebar = data
+    },
+
+    // 设置客户端中当前正在编辑的思维导图列表
+    setLocalEditList(state, list) {
+      state.localEditList = list
     }
   },
   actions: {
