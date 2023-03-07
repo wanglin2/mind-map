@@ -14,6 +14,15 @@ Vue.config.productionTip = false
 Vue.prototype.$bus = new Vue()
 Vue.use(ElementUI)
 Vue.use(VueViewer)
+Vue.mixin({
+  data () {
+    return {
+      IS_ELECTRON: process.env.IS_ELECTRON,
+      IS_MAC: window.platform === 'darwin',
+      IS_WIN: window.platform === 'win32'
+    }
+  }
+})
 
 new Vue({
   render: h => h(App),

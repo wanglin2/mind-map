@@ -1,5 +1,5 @@
 <template>
-  <div class="editContainer">
+  <div class="editContainer" :style="{top: IS_ELECTRON ? '40px' : 0}">
     <div class="mindMapContainer" ref="mindMapContainer"></div>
     <Count v-if="!isZenMode"></Count>
     <Navigator :mindMap="mindMap"></Navigator>

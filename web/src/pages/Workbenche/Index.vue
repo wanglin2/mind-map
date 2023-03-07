@@ -1,6 +1,5 @@
 <template>
     <div class="workbencheContainer">
-        <Header></Header>
         <div class="workbencheContent">
             <router-view></router-view>
         </div>
@@ -8,13 +7,8 @@
 </template>
 
 <script>
-import Header from './components/Header.vue';
-
 export default {
     name: 'Workbenche',
-    components: {
-        Header
-    }
 }
 </script>
 

@@ -1,32 +1,46 @@
 <template>
-    <div class="workbencheHomeContainer">
-        <Sidebar></Sidebar>
-        <div class="workbencheHomeContent">
-            <router-view></router-view>
-        </div>
+  <div class="workbencheHomeContainer">
+    <div class="workbencheHomeHeader">
+      <MacControl></MacControl>
+      <WinControl></WinControl>
     </div>
+    <div class="workbencheHomeContent"></div>
+  </div>
 </template>
 
 <script>
-import Sidebar from '../components/Sidebar.vue'
+import WinControl from '../components/WinControl.vue'
+import MacControl from '../components/MacControl.vue'
 
 export default {
-    components: {
-        Sidebar
-    }
+  components: {
+    WinControl,
+    MacControl
+  }
 }
 </script>
 
 <style lang="less" scoped>
 .workbencheHomeContainer {
-    background-color: #f6f8f9;
-    width: 100%;
-    height: 100%;
-    display: flex;
+  background-color: #f6f8f9;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 
-    .workbencheHomeContent {
-        flex-grow: 1;
-        padding: 20px;
-    }
+  .workbencheHomeHeader {
+    width: 100%;
+    height: 40px;
+    background-color: #ebeef1;
+    -webkit-app-region: drag;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .workbencheHomeContent {
+    flex-grow: 1;
+    padding: 20px;
+  }
 }
 </style>

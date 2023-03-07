@@ -6,7 +6,6 @@ import routerList from '@/pages/Doc/routerList'
 import WorkbenchePage from '@/pages/Workbenche/Index'
 import WorkbencheHomePage from '@/pages/Workbenche/views/Home'
 import WorkbencheEditPage from '@/pages/Workbenche/views/Edit'
-import WorkbencheHomeLocalPage from '@/pages/Workbenche/views/Local'
 
 Vue.use(VueRouter)
 
@@ -20,19 +19,12 @@ const routes = [
     path: '/workbenche',
     name: 'Workbenche',
     component: WorkbenchePage,
-    redirect: '/workbenche/home/local',
+    redirect: '/workbenche/home',
     children: [
       {
         path: 'home',
         name: 'WorkbencheHome',
         component: WorkbencheHomePage,
-        children: [
-          {
-            path: 'local',
-            name: 'WorkbencheHomeLocal',
-            component: WorkbencheHomeLocalPage,
-          }
-        ]
       },
       {
         path: 'edit/:id',

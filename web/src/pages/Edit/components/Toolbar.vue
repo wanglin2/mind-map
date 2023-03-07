@@ -1,6 +1,6 @@
 <template>
   <div class="toolbarContainer">
-    <div class="toolbar">
+    <div class="toolbar" :style="{top: IS_ELECTRON ? '40px' : 0}">
       <!-- 节点操作 -->
       <div class="toolbarBlock">
         <div
@@ -116,15 +116,15 @@
       </div>
       <!-- 导出 -->
       <div class="toolbarBlock">
-        <div class="toolbarBtn" @click="createNewLocalFile">
+        <div class="toolbarBtn" @click="createNewLocalFile" v-if="!IS_ELECTRON">
           <span class="icon iconfont iconxinjian"></span>
           <span class="text">{{ $t('toolbar.newFile') }}</span>
         </div>
-        <div class="toolbarBtn" @click="openLocalFile">
+        <div class="toolbarBtn" @click="openLocalFile" v-if="!IS_ELECTRON">
           <span class="icon iconfont icondakai"></span>
           <span class="text">{{ $t('toolbar.openFile') }}</span>
         </div>
-        <div class="toolbarBtn" @click="saveLocalFile">
+        <div class="toolbarBtn" @click="saveLocalFile" v-if="!IS_ELECTRON">
           <span class="icon iconfont iconlingcunwei"></span>
           <span class="text">{{ $t('toolbar.saveAs') }}</span>
         </div>

@@ -13,8 +13,7 @@
     "electron:serve": "vue-cli-service electron:serve",
     "format": "prettier --write src/* src/*/* src/*/*/* src/*/*/*/*",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps",
-    "start": "electron ."
+    "postuninstall": "electron-builder install-app-deps"
   },
   "main": "background.js",
   "dependencies": {
