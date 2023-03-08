@@ -55,12 +55,25 @@ class View {
     })
     // 放大缩小视图
     this.mindMap.event.on('mousewheel', (e, dir) => {
-      // // 放大
-      if (dir === 'down') {
-        this.enlarge()
+      if (this.mindMap.opt.customHandleMousewheel && typeof this.mindMap.opt.customHandleMousewheel === 'function') {
+        return this.mindMap.opt.customHandleMousewheel(e)
+      }
+      if (this.mindMap.opt.mousewheelAction === 'zoom') {
+        // 放大
+        if (dir === 'down') {
+          this.enlarge()
+        } else {
+          // 缩小
+          this.narrow()
+        }
       } else {
-        // 缩小
-        this.narrow()
+        // 上移
+        if (dir === 'down') {
+          this.translateY(-this.mindMap.opt.mousewheelMoveStep)
+        } else {
+          // 下移
+          this.translateY(this.mindMap.opt.mousewheelMoveStep)
+        }
       }
     })
   }

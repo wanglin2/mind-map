@@ -35,7 +35,10 @@ export default {
     watermarkAngle: '旋转角度',
     watermarkTextOpacity: '文字透明度',
     watermarkTextFontSize: '文字字号',
-    isEnableNodeRichText: '是否开启节点富文本编辑'
+    isEnableNodeRichText: '是否开启节点富文本编辑',
+    mousewheelAction: '鼠标滚轮行为',
+    zoomView: '缩放视图',
+    moveViewUpDown: '上下移动视图'
   },
   color: {
     moreColor: '更多颜色'

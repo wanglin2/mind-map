@@ -35,7 +35,10 @@ export default {
     watermarkAngle: 'Angle',
     watermarkTextOpacity: 'Text opacity',
     watermarkTextFontSize: 'Font size',
-    isEnableNodeRichText: 'Enable node rich text editing'
+    isEnableNodeRichText: 'Enable node rich text editing',
+    mousewheelAction: 'Mouse wheel behavior',
+    zoomView: 'Zoom view',
+    moveViewUpDown: 'Move view up and down'
   },
   color: {
     moreColor: 'More color'
