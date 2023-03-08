@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.4.3</h2>
+<p>修复：前进回退后没有触发<code>data_change</code>事件的问题。</p>
+<p>新增：支持自定义鼠标滚轮事件；鼠标滚轮调整为支持缩放视图和上下移动视图。</p>
 <h2>0.4.2</h2>
 <p>新增：<code>Node</code>类的<code>setText</code>方法增加第二个参数，以支持设置富文本内容。</p>
 <h2>0.4.1</h2>

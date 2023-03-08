@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.3
+
+Fix: No trigger after forward and backward `data_ Change` event.
+
+New: Support user-defined mouse wheel events; The mouse wheel is adjusted to support zooming and moving the view up and down.
+
 ## 0.4.2
 
 New: The `setText` method of the Node class adds a second parameter to support setting rich text content.

@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.4.3</h2>
+<p>Fix: No trigger after forward and backward <code>data_ Change</code> event.</p>
+<p>New: Support user-defined mouse wheel events; The mouse wheel is adjusted to support zooming and moving the view up and down.</p>
 <h2>0.4.2</h2>
 <p>New: The <code>setText</code> method of the Node class adds a second parameter to support setting rich text content.</p>
 <h2>0.4.1</h2>

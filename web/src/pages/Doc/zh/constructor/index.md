@@ -41,6 +41,9 @@ const mindMap = new MindMap({
 | enableFreeDrag（v0.2.4+）        | Boolean | false            | 是否开启节点自由拖拽                                         |          |
 | watermarkConfig（v0.2.4+）       | Object  |                  | 水印配置，详细配置请参考下方表格【水印配置】                 |          |
 | textAutoWrapWidth（v0.3.4+）     | Number  | 500 |   节点内每行文本达到该宽度后自动换行               |          |
+| customHandleMousewheel（v0.4.3+）     | Function  | null | 自定义鼠标滚轮事件处理，可以传一个函数，回调参数为事件对象                 |          |
+| mousewheelAction（v0.4.3+）     | String  | zoom | 鼠标滚轮的行为，`zoom`（放大缩小）、`move`（上下移动）。如果`customHandleMousewheel`传了自定义函数，这个属性不生效                 |          |
+| mousewheelMoveStep（v0.4.3+）     | Number  | 100 | 当`mousewheelAction`设为`move`时，可以通过该属性控制鼠标滚动一下视图移动的步长，单位`px`               |          |
 
 ### 水印配置
 
