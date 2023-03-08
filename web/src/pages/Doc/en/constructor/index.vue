@@ -147,6 +147,27 @@
 <td>Each line of text in the node will wrap automatically when it reaches the width</td>
 <td></td>
 </tr>
+<tr>
+<td>customHandleMousewheel（v0.4.3+）</td>
+<td>Function</td>
+<td>null</td>
+<td>User-defined mouse wheel event processing can pass a function, and the callback parameter is the event object</td>
+<td></td>
+</tr>
+<tr>
+<td>mousewheelAction（v0.4.3+）</td>
+<td>String</td>
+<td>zoom</td>
+<td>The behavior of the mouse wheel, <code>zoom</code>(Zoom in and out)、<code>move</code>(Move up and down). If <code>customHandleMousewheel</code> passes a custom function, this property will not take effect</td>
+<td></td>
+</tr>
+<tr>
+<td>mousewheelMoveStep（v0.4.3+）</td>
+<td>Number</td>
+<td>100</td>
+<td>When the <code>mousewheelAction</code> is set to <code>move</code>, you can use this attribute to control the step length of the view movement when the mouse scrolls. The unit is <code>px</code></td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>

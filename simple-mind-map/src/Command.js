@@ -98,7 +98,9 @@ class Command {
         this.activeHistoryIndex,
         this.history.length
       )
-      return simpleDeepClone(this.history[this.activeHistoryIndex])
+      let data = simpleDeepClone(this.history[this.activeHistoryIndex])
+      this.mindMap.emit('data_change', data)
+      return data
     }
   }
 
@@ -111,7 +113,9 @@ class Command {
     if (this.activeHistoryIndex + step <= len - 1) {
       this.activeHistoryIndex += step
       this.mindMap.emit('back_forward', this.activeHistoryIndex)
-      return simpleDeepClone(this.history[this.activeHistoryIndex])
+      let data = simpleDeepClone(this.history[this.activeHistoryIndex])
+      this.mindMap.emit('data_change', data)
+      return data
     }
   }
 
