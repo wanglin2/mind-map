@@ -61,7 +61,14 @@ const defaultOpt = {
     }
   },
   // 达到该宽度文本自动换行
-  textAutoWrapWidth: 500
+  textAutoWrapWidth: 500,
+  // 自定义鼠标滚轮事件处理
+  // 可以传一个函数，回调参数为事件对象
+  customHandleMousewheel: null,
+  // 鼠标滚动的行为，如果customHandleMousewheel传了自定义函数，这个属性不生效
+  mousewheelAction: 'zoom',// zoom（放大缩小）、move（上下移动）
+  // 当mousewheelAction设为move时，可以通过该属性控制鼠标滚动一下视图移动的步长，单位px
+  mousewheelMoveStep: 100
 }
 
 //  思维导图
