@@ -109,12 +109,16 @@ class Event extends EventEmitter {
     if (e.ctrlKey) {
       if (e.deltaY > 0) dir = 'up'
       if (e.deltaY < 0) dir = 'down'
+      // 适配鼠标滚轮左右滚动
+      dir = e.deltaX > 0 ? 'left' : 'right'
     } else {
       if ((e.wheelDeltaY || e.detail) > 0) {
         dir = 'up'
       } else {
         dir = 'down'
       }
+      // 适配鼠标滚轮左右滚动
+      dir = (e.wheelDeltaX || e.detail) > 0 ? 'left' : 'right'
     }
     this.emit('mousewheel', e, dir, this)
   }
