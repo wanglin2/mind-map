@@ -109,12 +109,13 @@ class Event extends EventEmitter {
     if (e.ctrlKey) {
       if (e.deltaY > 0) dir = 'up'
       if (e.deltaY < 0) dir = 'down'
+      if (e.deltaX > 0) dir = 'left'
+      if (e.deltaX < 0) dir = 'right'
     } else {
-      if ((e.wheelDeltaY || e.detail) > 0) {
-        dir = 'up'
-      } else {
-        dir = 'down'
-      }
+      if ((e.wheelDeltaY || e.detail) > 0) dir = 'up'
+      if ((e.wheelDeltaY || e.detail) < 0) dir = 'down'
+      if ((e.wheelDeltaX || e.detail) > 0) dir = 'left'
+      if ((e.wheelDeltaX || e.detail) < 0) dir = 'right'
     }
     this.emit('mousewheel', e, dir, this)
   }
