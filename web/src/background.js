@@ -1,9 +1,10 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, ipcMain, BrowserView } from 'electron'
+import { app, protocol, BrowserWindow, ipcMain, BrowserView, dialog } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
+const fs = require('fs-extra')
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Scheme must be registered before the app is ready
@@ -28,7 +29,7 @@ async function createWindow() {
   })
 
   // 新建编辑页面
-  ipcMain.on('createNewEditPage', async id => {
+  ipcMain.on('create', async (event, id) => {
     const win = new BrowserWindow({
       width: 1200,
       height: 800,
@@ -53,6 +54,27 @@ async function createWindow() {
       win.loadURL('app://./index.html/#/workbenche/edit/' + id)
     }
   })
+  // 保存
+  const idToFilePath = {}
+  ipcMain.on('save', async (event, id, data) => {
+    if (!idToFilePath[id]) {
+      const webContents = event.sender
+      const win = BrowserWindow.fromWebContents(webContents)
+      const res = dialog.showSaveDialogSync(win, {
+        title: '保存',
+        defaultPath: '未命名.smm',
+        filters: [
+          { name: '思维导图', extensions: ['smm'] }
+        ]
+      })
+      if (res) {
+        idToFilePath[id] = res
+        fs.writeFile(res, data)
+      }
+      return 
+    }
+    fs.writeFile(idToFilePath[id], data)
+  })
   ;['minimize', 'maximize', 'unmaximize', 'close'].forEach(item => {
     ipcMain.on(item, event => {
       const webContents = event.sender
@@ -64,7 +86,7 @@ async function createWindow() {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '/#/workbenche')
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
+    // if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
     createProtocol('app')
     // Load the index.html when not in development

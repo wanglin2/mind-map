@@ -126,6 +126,9 @@ export default {
         this.test()
       }, 5000)
     }
+    if (window.IS_ELECTRON) {
+      this.mindMap.keyCommand.addShortcut('Control+s', this.saveToLocal)
+    }
   },
   methods: {
     /**
@@ -375,6 +378,13 @@ export default {
     // 移除节点富文本编辑插件
     removeRichTextPlugin() {
       this.mindMap.removePlugin(RichText)
+    },
+
+    saveToLocal() {
+      let id = this.$route.params.id
+      let data = this.mindMap.getData(true)
+      console.log('保存', id, data)
+      window.electronAPI.save(id, JSON.stringify(data))
     }
   }
 }

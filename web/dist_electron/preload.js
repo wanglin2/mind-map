@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const { contextBridge, ipcRenderer } = __webpack_require__(/*! electron */ \"electron\")\r\n\r\ncontextBridge.exposeInMainWorld('platform', process.platform)\r\n\r\ncontextBridge.exposeInMainWorld('electronAPI', {\r\n    minimize: () => ipcRenderer.send('minimize'),\r\n    maximize: () => ipcRenderer.send('maximize'),\r\n    unmaximize: () => ipcRenderer.send('unmaximize'),\r\n    close: () => ipcRenderer.send('close'),\r\n    createNewEditPage: (id) => ipcRenderer.send('createNewEditPage', id),\r\n    activeEditPage: (id) => ipcRenderer.send('activeEditPage', id),\r\n})\n\n//# sourceURL=webpack:///./src/electron/preload.js?");
+eval("const { contextBridge, ipcRenderer } = __webpack_require__(/*! electron */ \"electron\")\r\n\r\ncontextBridge.exposeInMainWorld('platform', process.platform)\r\ncontextBridge.exposeInMainWorld('IS_ELECTRON', true)\r\n\r\ncontextBridge.exposeInMainWorld('electronAPI', {\r\n    minimize: () => ipcRenderer.send('minimize'),\r\n    maximize: () => ipcRenderer.send('maximize'),\r\n    unmaximize: () => ipcRenderer.send('unmaximize'),\r\n    close: () => ipcRenderer.send('close'),\r\n    create: (id) => ipcRenderer.send('create', id),\r\n    save: (id, data) => ipcRenderer.send('save', id, data),\r\n})\n\n//# sourceURL=webpack:///./src/electron/preload.js?");
 
 /***/ }),
 

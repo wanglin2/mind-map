@@ -4,18 +4,25 @@
       <MacControl></MacControl>
       <WinControl></WinControl>
     </div>
-    <div class="workbencheHomeContent"></div>
+    <div class="workbencheHomeContent">
+      <Sidebar></Sidebar>
+      <FileList></FileList>
+    </div>
   </div>
 </template>
 
 <script>
 import WinControl from '../components/WinControl.vue'
 import MacControl from '../components/MacControl.vue'
+import Sidebar from '../components/Sidebar.vue'
+import FileList from '../components/FileList.vue'
 
 export default {
   components: {
     WinControl,
-    MacControl
+    MacControl,
+    Sidebar,
+    FileList
   }
 }
 </script>
@@ -41,6 +48,8 @@ export default {
   .workbencheHomeContent {
     flex-grow: 1;
     padding: 20px;
+    display: flex;
+    overflow: hidden;
   }
 }
 </style>

@@ -17,7 +17,7 @@ Vue.use(VueViewer)
 Vue.mixin({
   data () {
     return {
-      IS_ELECTRON: process.env.IS_ELECTRON,
+      IS_ELECTRON: window.IS_ELECTRON,
       IS_MAC: window.platform === 'darwin',
       IS_WIN: window.platform === 'win32'
     }

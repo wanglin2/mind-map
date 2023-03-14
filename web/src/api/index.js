@@ -34,7 +34,17 @@ export const getData = () => {
     return simpleDeepClone(exampleData)
   } else {
     try {
-      return JSON.parse(store)
+      let parsedData = JSON.parse(store)
+      if (window.IS_ELECTRON) {
+        return simpleDeepClone(exampleData)
+        let { root, ...rest } = parsedData
+        return {
+          ...rest,
+          root: simpleDeepClone(exampleData).root
+        }
+      } else {
+        return parsedData
+      } 
     } catch (error) {
       return simpleDeepClone(exampleData)
     }
