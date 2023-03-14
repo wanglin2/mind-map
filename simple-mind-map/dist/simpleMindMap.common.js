@@ -13396,20 +13396,36 @@ class View {
         return this.mindMap.opt.customHandleMousewheel(e);
       }
       if (this.mindMap.opt.mousewheelAction === 'zoom') {
-        // 放大
-        if (dir === 'down') {
-          this.enlarge();
-        } else {
-          // 缩小
-          this.narrow();
+        switch (dir) {
+          // 鼠标滚轮，向上和向左，都是缩小
+          case 'up':
+          case 'left':
+            this.narrow();
+            break;
+          // 鼠标滚轮，向下和向右，都是放大
+          case 'down':
+          case 'right':
+            this.enlarge();
+            break;
         }
       } else {
-        // 上移
-        if (dir === 'down') {
-          this.translateY(-this.mindMap.opt.mousewheelMoveStep);
-        } else {
+        switch (dir) {
+          // 上移
+          case 'down':
+            this.translateY(-this.mindMap.opt.mousewheelMoveStep);
+            break;
           // 下移
-          this.translateY(this.mindMap.opt.mousewheelMoveStep);
+          case 'up':
+            this.translateY(this.mindMap.opt.mousewheelMoveStep);
+            break;
+          // 右移
+          case 'left':
+            this.translateX(-this.mindMap.opt.mousewheelMoveStep);
+            break;
+          // 左移
+          case 'right':
+            this.translateX(this.mindMap.opt.mousewheelMoveStep);
+            break;
         }
       }
     });
@@ -13627,12 +13643,13 @@ class Event_Event extends eventemitter3_default.a {
     if (e.ctrlKey) {
       if (e.deltaY > 0) dir = 'up';
       if (e.deltaY < 0) dir = 'down';
+      if (e.deltaX > 0) dir = 'left';
+      if (e.deltaX < 0) dir = 'right';
     } else {
-      if ((e.wheelDeltaY || e.detail) > 0) {
-        dir = 'up';
-      } else {
-        dir = 'down';
-      }
+      if ((e.wheelDeltaY || e.detail) > 0) dir = 'up';
+      if ((e.wheelDeltaY || e.detail) < 0) dir = 'down';
+      if ((e.wheelDeltaX || e.detail) > 0) dir = 'left';
+      if ((e.wheelDeltaX || e.detail) < 0) dir = 'right';
     }
     this.emit('mousewheel', e, dir, this);
   }
