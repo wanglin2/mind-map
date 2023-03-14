@@ -2,7 +2,7 @@
 
 ## 0.4.4
 
-New: 1.Support horizontal scrolling in response to the mouse.
+New: Support horizontal scrolling in response to the mouse.
 
 ## 0.4.3
 

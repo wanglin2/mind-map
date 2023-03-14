@@ -2,7 +2,7 @@
   <div>
     <h1>Changelog</h1>
 <h2>0.4.4</h2>
-<p>New: 1.Support horizontal scrolling in response to the mouse.</p>
+<p>New: Support horizontal scrolling in response to the mouse.</p>
 <h2>0.4.3</h2>
 <p>Fix: No trigger after forward and backward <code>data_ Change</code> event.</p>
 <p>New: Support user-defined mouse wheel events; The mouse wheel is adjusted to support zooming and moving the view up and down.</p>
