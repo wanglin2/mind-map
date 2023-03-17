@@ -2,7 +2,7 @@
   <div>
     <h1>Changelog</h1>
 <h2>0.4.5</h2>
-<p>New: 1.Supports associative lines. 2.You can also drag the canvas by holding down the root node.</p>
+<p>New: 1.Supports associative lines. 2.You can also drag the canvas by holding down the root node. 3. Hold down the ctrl key to adjust multiple selected nodes.</p>
 <h2>0.4.4</h2>
 <p>New: Support horizontal scrolling in response to the mouse.</p>
 <h2>0.4.3</h2>
