@@ -675,6 +675,17 @@ class Node {
       if (!this.isRoot) {
         e.stopPropagation()
       }
+      // 多选和取消多选
+      if (e.ctrlKey) {
+        let isActive = this.nodeData.data.isActive
+        this.mindMap.renderer.setNodeActive(this, !isActive)
+        this.mindMap.renderer[isActive ? 'removeActiveNode' : 'addActiveNode'](this)
+        this.mindMap.emit(
+          'node_active',
+          isActive ? null : this,
+          this.mindMap.renderer.activeNodeList
+        )
+      }
       this.mindMap.emit('node_mousedown', this, e)
     })
     this.group.on('mouseup', e => {
@@ -699,7 +710,8 @@ class Node {
     })
     // 右键菜单事件
     this.group.on('contextmenu', e => {
-      if (this.mindMap.opt.readonly || this.isGeneralization) {
+      // 按住ctrl键点击鼠标左键不知为何触发的是contextmenu事件
+      if (this.mindMap.opt.readonly || this.isGeneralization || e.ctrlKey) {
         return
       }
       e.stopPropagation()

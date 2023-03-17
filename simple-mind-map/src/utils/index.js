@@ -195,12 +195,12 @@ export const downloadFile = (file, fileName) => {
 //  节流函数
 export const throttle = (fn, time = 300, ctx) => {
   let timer = null
-  return () => {
+  return (...args) => {
     if (timer) {
       return
     }
     timer = setTimeout(() => {
-      fn.call(ctx)
+      fn.call(ctx, ...args)
       timer = null
     }, time)
   }
