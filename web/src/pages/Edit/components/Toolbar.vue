@@ -113,6 +113,16 @@
           <span class="icon iconfont icongaikuozonglan"></span>
           <span class="text">{{ $t('toolbar.summary') }}</span>
         </div>
+        <div
+          class="toolbarBtn"
+          :class="{
+            disabled: activeNodes.length <= 0 || hasGeneralization
+          }"
+          @click="$bus.$emit('createAssociativeLine')"
+        >
+          <span class="icon iconfont iconlianjiexian"></span>
+          <span class="text">{{ $t('toolbar.associativeLine') }}</span>
+        </div>
       </div>
       <!-- 导出 -->
       <div class="toolbarBlock">

@@ -209,6 +209,92 @@
           </el-select>
         </div>
       </div>
+      <!-- 关联线 -->
+      <div class="title noTop">{{ $t('baseStyle.associativeLine') }}</div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.associativeLineColor') }}</span>
+          <span
+            class="block"
+            v-popover:popover4
+            :style="{ backgroundColor: style.associativeLineColor }"
+          ></span>
+          <el-popover ref="popover4" placement="bottom" trigger="click">
+            <Color
+              :color="style.associativeLineColor"
+              @change="
+                color => {
+                  update('associativeLineColor', color)
+                }
+              "
+            ></Color>
+          </el-popover>
+        </div>
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.associativeLineWidth') }}</span>
+          <el-select
+            size="mini"
+            style="width: 80px"
+            v-model="style.associativeLineWidth"
+            placeholder=""
+            @change="
+              value => {
+                update('associativeLineWidth', value)
+              }
+            "
+          >
+            <el-option
+              v-for="item in lineWidthList"
+              :key="item"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.associativeLineActiveColor') }}</span>
+          <span
+            class="block"
+            v-popover:popover5
+            :style="{ backgroundColor: style.associativeLineActiveColor }"
+          ></span>
+          <el-popover ref="popover5" placement="bottom" trigger="click">
+            <Color
+              :color="style.associativeLineActiveColor"
+              @change="
+                color => {
+                  update('associativeLineActiveColor', color)
+                }
+              "
+            ></Color>
+          </el-popover>
+        </div>
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.associativeLineActiveWidth') }}</span>
+          <el-select
+            size="mini"
+            style="width: 80px"
+            v-model="style.associativeLineActiveWidth"
+            placeholder=""
+            @change="
+              value => {
+                update('associativeLineActiveWidth', value)
+              }
+            "
+          >
+            <el-option
+              v-for="item in lineWidthList"
+              :key="item"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </div>
       <!-- 节点边框风格 -->
       <div class="title noTop">{{ $t('baseStyle.nodeBorderType') }}</div>
       <div class="row">
@@ -498,6 +584,10 @@ export default {
         lineStyle: '',
         generalizationLineWidth: '',
         generalizationLineColor: '',
+        associativeLineColor: '',
+        associativeLineWidth: 0,
+        associativeLineActiveWidth: 0,
+        associativeLineActiveColor: '',
         paddingX: 0,
         paddingY: 0,
         imgMaxWidth: 0,
@@ -579,6 +669,10 @@ export default {
         'lineColor',
         'generalizationLineWidth',
         'generalizationLineColor',
+        'associativeLineColor',
+        'associativeLineWidth',
+        'associativeLineActiveWidth',
+        'associativeLineActiveColor',
         'paddingX',
         'paddingY',
         'imgMaxWidth',
