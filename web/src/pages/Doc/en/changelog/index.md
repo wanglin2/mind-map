@@ -2,7 +2,7 @@
 
 ## 0.4.5
 
-New: Supports associative lines.
+New: 1.Supports associative lines. 2.You can also drag the canvas by holding down the root node.
 
 ## 0.4.4
 
