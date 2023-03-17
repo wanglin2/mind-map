@@ -440,6 +440,21 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>当注册了<code>RichText</code>插件时可用。当<code>svg</code>中存在<code>DOM</code>节点时，导出为图片时会将<code>DOM</code>节点转换为图片，转换过程中会触发该事件，可用通过该事件给用户提示，告知目前转换到的节点</td>
 <td>index（当前转换到的节点索引）、len（一共需要转换的节点数量）</td>
 </tr>
+<tr>
+<td>node_dragging（v0.4.5+）</td>
+<td>当某个节点被拖拽时触发</td>
+<td>node（当前被拖拽的节点）</td>
+</tr>
+<tr>
+<td>node_dragend（v0.4.5+）</td>
+<td>节点被拖拽结束时触发</td>
+<td></td>
+</tr>
+<tr>
+<td>associative_line_click（v0.4.5+）</td>
+<td>点击某条关联线时触发</td>
+<td>path（连接线节点）、clickPath（不可见的点击线节点）、node（起始节点）、toNode（目标节点）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>

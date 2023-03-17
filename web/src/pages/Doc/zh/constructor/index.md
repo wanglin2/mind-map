@@ -190,6 +190,9 @@ mindMap.setTheme('主题名称')
 | node_tree_render_end（v0.2.16+） | 节点树渲染完毕事件                         |                                                              |
 | rich_text_selection_change（v0.4.0+）         |  当注册了`RichText`插件时可用。当节点编辑时，文本选区发生改变时触发         |  hasRange（是否存在选区）、rectInfo（选区的尺寸和位置信息）、formatInfo（选区的文本格式化信息）            |
 | transforming-dom-to-images（v0.4.0+）         |  当注册了`RichText`插件时可用。当`svg`中存在`DOM`节点时，导出为图片时会将`DOM`节点转换为图片，转换过程中会触发该事件，可用通过该事件给用户提示，告知目前转换到的节点         |  index（当前转换到的节点索引）、len（一共需要转换的节点数量）            |
+| node_dragging（v0.4.5+）    | 当某个节点被拖拽时触发   |  node（当前被拖拽的节点）           |
+| node_dragend（v0.4.5+）    | 节点被拖拽结束时触发   |             |
+| associative_line_click（v0.4.5+）    |  点击某条关联线时触发  |  path（连接线节点）、clickPath（不可见的点击线节点）、node（起始节点）、toNode（目标节点）           |
 
 ### emit(event, ...args)
 
