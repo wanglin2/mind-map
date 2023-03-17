@@ -77,6 +77,7 @@ class Drag extends Base {
       if (!this.isMousedown) {
         return
       }
+      this.mindMap.emit('node_dragging', this.node)
       e.preventDefault()
       let { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
       this.mouseMoveX = x
@@ -136,6 +137,7 @@ class Drag extends Base {
       this.mindMap.render()
     }
     this.reset()
+    this.mindMap.emit('node_dragend')
   }
 
   //  创建克隆节点

@@ -26,6 +26,14 @@ export default {
   generalizationLineMargin: 0,
   // 概要节点距节点的距离
   generalizationNodeMargin: 20,
+  // 关联线默认状态的粗细
+  associativeLineWidth: 2,
+  // 关联线默认状态的颜色
+  associativeLineColor: 'rgb(51, 51, 51)',
+  // 关联线激活状态的粗细
+  associativeLineActiveWidth: 8,
+  // 关联线激活状态的颜色
+  associativeLineActiveColor: 'rgba(2, 167, 240, 1)',
   // 背景颜色
   backgroundColor: '#fafafa',
   // 背景图片
