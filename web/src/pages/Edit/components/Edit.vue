@@ -30,6 +30,7 @@ import Export from 'simple-mind-map/src/Export.js'
 import Drag from 'simple-mind-map/src/Drag.js'
 import Select from 'simple-mind-map/src/Select.js'
 import RichText from 'simple-mind-map/src/RichText.js'
+import AssociativeLine from 'simple-mind-map/src/AssociativeLine.js'
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -56,6 +57,7 @@ MindMap
   .usePlugin(KeyboardNavigation)
   .usePlugin(Export)
   .usePlugin(Select)
+  .usePlugin(AssociativeLine)
 
 // 注册自定义主题
 customThemeList.forEach((item) => {
@@ -120,6 +122,9 @@ export default {
     })
     this.$bus.$on('endTextEdit', () => {
       this.mindMap.renderer.endTextEdit()
+    })
+    this.$bus.$on('createAssociativeLine', () => {
+      this.mindMap.associativeLine.createLineFromActiveNode()
     })
     if (this.openTest) {
       setTimeout(() => {

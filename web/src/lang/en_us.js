@@ -38,7 +38,12 @@ export default {
     isEnableNodeRichText: 'Enable node rich text editing',
     mousewheelAction: 'Mouse wheel behavior',
     zoomView: 'Zoom view',
-    moveViewUpDown: 'Move view up and down'
+    moveViewUpDown: 'Move view up and down',
+    associativeLine: 'Associative line',
+    associativeLineWidth: 'Width',
+    associativeLineColor: 'Color',
+    associativeLineActiveWidth: 'Active width',
+    associativeLineActiveColor: 'Active color'
   },
   color: {
     moreColor: 'More color'
@@ -187,7 +192,8 @@ export default {
     saveAs: 'Save as',
     import: 'Import',
     export: 'Export',
-    shortcutKey: 'Shortcut key'
+    shortcutKey: 'Shortcut key',
+    associativeLine: 'Associative line',
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',

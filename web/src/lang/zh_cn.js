@@ -38,7 +38,12 @@ export default {
     isEnableNodeRichText: '是否开启节点富文本编辑',
     mousewheelAction: '鼠标滚轮行为',
     zoomView: '缩放视图',
-    moveViewUpDown: '上下移动视图'
+    moveViewUpDown: '上下移动视图',
+    associativeLine: '关联线',
+    associativeLineWidth: '粗细',
+    associativeLineColor: '颜色',
+    associativeLineActiveWidth: '激活粗细',
+    associativeLineActiveColor: '激活颜色'
   },
   color: {
     moreColor: '更多颜色'
@@ -187,7 +192,8 @@ export default {
     saveAs: '另存为',
     import: '导入',
     export: '导出',
-    shortcutKey: '快捷键'
+    shortcutKey: '快捷键',
+    associativeLine: '关联线',
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',
