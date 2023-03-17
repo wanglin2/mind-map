@@ -184,11 +184,11 @@ class AssociativeLine {
   checkOverlapNode(x, y) {
     this.overlapNode = null
     bfsWalk(this.mindMap.renderer.root, node => {
-      if (node === this.creatingStartNode || this.overlapNode) {
-        return
-      }
       if (node.nodeData.data.isActive) {
         this.mindMap.renderer.setNodeActive(node, false)
+      }
+      if (node === this.creatingStartNode || this.overlapNode) {
+        return
       }
       let { left, top, width, height } = node
       let right = left + width
