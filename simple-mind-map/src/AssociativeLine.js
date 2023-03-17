@@ -1,4 +1,4 @@
-import { walk, bfsWalk } from './utils/'
+import { walk, bfsWalk, throttle } from './utils/'
 import { v4 as uuid } from 'uuid'
 
 // 关联线类
@@ -20,6 +20,8 @@ class AssociativeLine {
     // 箭头图标
     this.markerPath = null
     this.marker = this.createMarker()
+    // 节流一下，不然很卡
+    this.checkOverlapNode = throttle(this.checkOverlapNode, 100, this)
     this.bindEvent()
   }
 
