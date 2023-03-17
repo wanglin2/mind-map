@@ -672,11 +672,15 @@ class Node {
       this.active(e)
     })
     this.group.on('mousedown', e => {
-      e.stopPropagation()
+      if (!this.isRoot) {
+        e.stopPropagation()
+      }
       this.mindMap.emit('node_mousedown', this, e)
     })
     this.group.on('mouseup', e => {
-      e.stopPropagation()
+      if (!this.isRoot) {
+        e.stopPropagation()
+      }
       this.mindMap.emit('node_mouseup', this, e)
     })
     this.group.on('mouseenter', e => {
