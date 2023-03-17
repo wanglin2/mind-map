@@ -26,6 +26,7 @@ let APIList = [
   'doExport',
   'miniMap',
   'watermark',
+  'associativeLine',
   'xmind',
   'utils'
 ]

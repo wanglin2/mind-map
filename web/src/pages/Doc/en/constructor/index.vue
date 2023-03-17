@@ -447,6 +447,21 @@ poor performance and should be used sparingly.</p>
 <td>Available when the <code>RichText</code> plugin is registered. When there is a <code>DOM</code> node in <code>svg</code>, the <code>DOM</code> node will be converted to an image when exporting to an image. This event will be triggered during the conversion process. You can use this event to prompt the user about the node to which you are currently converting</td>
 <td>index（Index of the node currently converted to）、len（Total number of nodes to be converted）</td>
 </tr>
+<tr>
+<td>node_dragging（v0.4.5+）</td>
+<td>Triggered when a node is dragged</td>
+<td>node(The currently dragged node)</td>
+</tr>
+<tr>
+<td>node_dragend（v0.4.5+）</td>
+<td>Triggered when the node is dragged and ends</td>
+<td></td>
+</tr>
+<tr>
+<td>associative_line_click（v0.4.5+）</td>
+<td>Triggered when an associated line is clicked</td>
+<td>path(Connector node)、clickPath(Invisible click line node)、node(Start node)、toNode(Target node)</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>

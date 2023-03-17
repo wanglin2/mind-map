@@ -193,6 +193,9 @@ Listen to an event. Event list:
 | node_tree_render_end（v0.2.16+） | Node tree render end event                                               |                                                                                                                 |
 | rich_text_selection_change（v0.4.0+）         |  Available when the `RichText` plugin is registered. Triggered when the text selection area changes when the node is edited         |  hasRange（Whether there is a selection）、rectInfo（Size and location information of the selected area）、formatInfo（Text formatting information of the selected area）            |
 | transforming-dom-to-images（v0.4.0+）         |  Available when the `RichText` plugin is registered. When there is a `DOM` node in `svg`, the `DOM` node will be converted to an image when exporting to an image. This event will be triggered during the conversion process. You can use this event to prompt the user about the node to which you are currently converting         |  index（Index of the node currently converted to）、len（Total number of nodes to be converted）            |
+| node_dragging（v0.4.5+）    | Triggered when a node is dragged   |  node(The currently dragged node)           |
+| node_dragend（v0.4.5+）    | Triggered when the node is dragged and ends   |             |
+| associative_line_click（v0.4.5+）    |  Triggered when an associated line is clicked  |  path(Connector node)、clickPath(Invisible click line node)、node(Start node)、toNode(Target node)          |
 
 ### emit(event, ...args)
 

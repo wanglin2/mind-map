@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.5
+
+New: Supports associative lines.
+
 ## 0.4.4
 
 New: Support horizontal scrolling in response to the mouse.

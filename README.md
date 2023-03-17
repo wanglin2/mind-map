@@ -26,6 +26,7 @@ Demo：[https://wanglin2.github.io/mind-map/](https://wanglin2.github.io/mind-ma
 - [x] 支持多种节点形状
 - [x] 支持导出为`json`、`png`、`svg`、`pdf`，支持从`json`、`xmind`导入
 - [x] 支持小地图
+- [x] 支持关联线
 
 # 安装
 

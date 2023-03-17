@@ -18,6 +18,7 @@
 - [x] Supports various node shapes
 - [x] Supports export to json, png, svg, pdf, and import from json, xmind
 - [x] Supports mini map、support watermark
+- [x] Supports associative lines
 
 ## Table of Contents
 
@@ -49,10 +50,6 @@ Provide document page service.
 3.`dist`
 
 The folder containing the packaged resources for the `web` folder.
-
-4.`docs`
-
-Documentation, etc.
 
 ## Related Articles
 
