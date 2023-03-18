@@ -79,14 +79,15 @@ class AssociativeLine {
       null,
       cur => {
         if (!cur) return
+        let data = cur.nodeData.data
         if (
-          cur.nodeData.data.associativeLineTargets &&
-          cur.nodeData.data.associativeLineTargets.length > 0
+          data.associativeLineTargets &&
+          data.associativeLineTargets.length > 0
         ) {
-          nodeToIds.set(cur, cur.nodeData.data.associativeLineTargets)
+          nodeToIds.set(cur, data.associativeLineTargets)
         }
-        if (cur.nodeData.data.id) {
-          idToNode.set(cur.nodeData.data.id, cur)
+        if (data.id) {
+          idToNode.set(data.id, cur)
         }
       },
       () => {},
@@ -106,7 +107,9 @@ class AssociativeLine {
   // 绘制连接线
   drawLine(startPoint, endPoint, node, toNode) {
     let { associativeLineWidth, associativeLineColor, associativeLineActiveWidth, associativeLineActiveColor } = this.mindMap.themeConfig
+    // 箭头
     this.markerPath.stroke({ color: associativeLineColor }).fill({ color: associativeLineColor })
+    // 路径
     let pathStr = this.cubicBezierPath(
       startPoint.x,
       startPoint.y,
@@ -153,12 +156,13 @@ class AssociativeLine {
 
   // 创建连接线
   createLine(fromNode) {
+    let { associativeLineWidth, associativeLineColor } = this.mindMap.themeConfig
     if (this.isCreatingLine || !fromNode) return
     this.isCreatingLine = true
     this.creatingStartNode = fromNode
     this.creatingLine = this.draw.path()
     this.creatingLine
-      .stroke({ width: 2, color: 'rgb(51, 51, 51)', dasharray: [6, 4] })
+      .stroke({ width: associativeLineWidth, color: associativeLineColor, dasharray: [6, 4] })
       .fill({ color: 'none' })
     this.creatingLine.marker('end', this.marker)
   }
@@ -233,16 +237,12 @@ class AssociativeLine {
     this.mindMap.execCommand('SET_NODE_DATA', fromNode, {
       associativeLineTargets: list
     })
-    let [startPoint, endPoint] = this.computeNodePoints(fromNode, toNode)
-    this.drawLine(startPoint, endPoint, fromNode, toNode)
   }
 
   // 删除连接线
   removeLine() {
     if (!this.activeLine) return
-    let [path, clickPath, node, toNode] = this.activeLine
-    path.remove()
-    clickPath.remove()
+    let [, , node, toNode] = this.activeLine
     let id = toNode.nodeData.data.id
     this.mindMap.execCommand('SET_NODE_DATA', node, {
       associativeLineTargets: node.nodeData.data.associativeLineTargets.filter(
