@@ -14360,6 +14360,8 @@ const copyRenderTree = (tree, root) => {
 //  复制节点树数据
 const copyNodeTree = (tree, root, removeActiveState = false) => {
   tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data);
+  // 去除节点id，因为节点id不能重复
+  if (tree.data.id) delete tree.data.id;
   if (removeActiveState) {
     tree.data.isActive = false;
   }
@@ -14413,12 +14415,12 @@ const downloadFile = (file, fileName) => {
 //  节流函数
 const throttle = (fn, time = 300, ctx) => {
   let timer = null;
-  return () => {
+  return (...args) => {
     if (timer) {
       return;
     }
     timer = setTimeout(() => {
-      fn.call(ctx);
+      fn.call(ctx, ...args);
       timer = null;
     }, time);
   };
@@ -22451,11 +22453,22 @@ class Node_Node {
       this.active(e);
     });
     this.group.on('mousedown', e => {
-      e.stopPropagation();
+      if (!this.isRoot) {
+        e.stopPropagation();
+      }
+      // 多选和取消多选
+      if (e.ctrlKey) {
+        let isActive = this.nodeData.data.isActive;
+        this.mindMap.renderer.setNodeActive(this, !isActive);
+        this.mindMap.renderer[isActive ? 'removeActiveNode' : 'addActiveNode'](this);
+        this.mindMap.emit('node_active', isActive ? null : this, this.mindMap.renderer.activeNodeList);
+      }
       this.mindMap.emit('node_mousedown', this, e);
     });
     this.group.on('mouseup', e => {
-      e.stopPropagation();
+      if (!this.isRoot) {
+        e.stopPropagation();
+      }
       this.mindMap.emit('node_mouseup', this, e);
     });
     this.group.on('mouseenter', e => {
@@ -22474,7 +22487,8 @@ class Node_Node {
     });
     // 右键菜单事件
     this.group.on('contextmenu', e => {
-      if (this.mindMap.opt.readonly || this.isGeneralization) {
+      // 按住ctrl键点击鼠标左键不知为何触发的是contextmenu事件
+      if (this.mindMap.opt.readonly || this.isGeneralization || e.ctrlKey) {
         return;
       }
       e.stopPropagation();
@@ -24539,6 +24553,14 @@ class TextEdit_TextEdit {
   generalizationLineMargin: 0,
   // 概要节点距节点的距离
   generalizationNodeMargin: 20,
+  // 关联线默认状态的粗细
+  associativeLineWidth: 2,
+  // 关联线默认状态的颜色
+  associativeLineColor: 'rgb(51, 51, 51)',
+  // 关联线激活状态的粗细
+  associativeLineActiveWidth: 8,
+  // 关联线激活状态的颜色
+  associativeLineActiveColor: 'rgba(2, 167, 240, 1)',
   // 背景颜色
   backgroundColor: '#fafafa',
   // 背景图片
@@ -28746,6 +28768,7 @@ class Drag_Drag extends layouts_Base {
       if (!this.isMousedown) {
         return;
       }
+      this.mindMap.emit('node_dragging', this.node);
       e.preventDefault();
       let {
         x,
@@ -28809,6 +28832,7 @@ class Drag_Drag extends layouts_Base {
       this.mindMap.render();
     }
     this.reset();
+    this.mindMap.emit('node_dragend');
   }
 
   //  创建克隆节点
