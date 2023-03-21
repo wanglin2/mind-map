@@ -355,7 +355,7 @@ class Render {
 
   //  插入同级节点，多个节点只会操作第一个节点
 
-  insertNode() {
+  insertNode(openEdit = true) {
     if (this.activeNodeList.length <= 0) {
       return
     }
@@ -369,7 +369,7 @@ class Render {
       }
       let index = this.getNodeIndex(first)
       first.parent.nodeData.children.splice(index + 1, 0, {
-        inserting: true,
+        inserting: openEdit,
         data: {
           text: text,
           expand: true
@@ -382,7 +382,7 @@ class Render {
 
   //  插入子节点
 
-  insertChildNode() {
+  insertChildNode(openEdit = true) {
     if (this.activeNodeList.length <= 0) {
       return
     }
@@ -392,7 +392,7 @@ class Render {
       }
       let text = node.isRoot ? '二级节点' : '分支主题'
       node.nodeData.children.push({
-        inserting: true,
+        inserting: openEdit,
         data: {
           text: text,
           expand: true
@@ -629,7 +629,7 @@ class Render {
     if (node.isRoot) {
       return
     }
-    let copyData = copyNodeTree({}, node)
+    let copyData = copyNodeTree({}, node, false, true)
     this.removeActiveNode(node)
     this.removeOneNode(node)
     this.mindMap.emit('node_active', null, this.activeNodeList)

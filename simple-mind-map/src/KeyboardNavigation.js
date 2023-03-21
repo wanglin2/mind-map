@@ -1,4 +1,3 @@
-import { isKey } from './utils/keyMap'
 import { bfsWalk } from './utils'
 
 //  键盘导航类
@@ -8,22 +7,29 @@ class KeyboardNavigation {
     this.opt = opt
     this.mindMap = opt.mindMap
     this.onKeyup = this.onKeyup.bind(this)
-    this.mindMap.on('keyup', this.onKeyup)
+    this.mindMap.keyCommand.addShortcut('Left', () => {
+      this.onKeyup('Left')
+    })
+    this.mindMap.keyCommand.addShortcut('Up', () => {
+      this.onKeyup('Up')
+    })
+    this.mindMap.keyCommand.addShortcut('Right', () => {
+      this.onKeyup('Right')
+    })
+    this.mindMap.keyCommand.addShortcut('Down', () => {
+      this.onKeyup('Down')
+    })
   }
 
   //  处理按键事件
-  onKeyup(e) {
-    ;['Left', 'Up', 'Right', 'Down'].forEach(dir => {
-      if (isKey(e, dir)) {
-        if (this.mindMap.renderer.activeNodeList.length > 0) {
-          this.focus(dir)
-        } else {
-          let root = this.mindMap.renderer.root
-          this.mindMap.renderer.moveNodeToCenter(root)
-          root.active()
-        }
-      }
-    })
+  onKeyup(dir) {
+    if (this.mindMap.renderer.activeNodeList.length > 0) {
+      this.focus(dir)
+    } else {
+      let root = this.mindMap.renderer.root
+      this.mindMap.renderer.moveNodeToCenter(root)
+      root.active()
+    }
   }
 
   //  聚焦到下一个节点

@@ -76,6 +76,10 @@ class Command {
       return
     }
     let data = this.getCopyData()
+    // 此次数据和上次一样则不重复添加
+    if (this.history.length > 0 && JSON.stringify(this.history[this.history.length - 1]) === JSON.stringify(data)) {
+      return
+    }
     this.history.push(simpleDeepClone(data))
     this.activeHistoryIndex = this.history.length - 1
     this.mindMap.emit('data_change', data)
