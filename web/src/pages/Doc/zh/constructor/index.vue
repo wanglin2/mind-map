@@ -521,12 +521,12 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>INSERT_NODE</td>
 <td>插入同级节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效</td>
-<td></td>
+<td>openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为<code>true</code>）</td>
 </tr>
 <tr>
 <td>INSERT_CHILD_NODE</td>
 <td>插入子节点，操作节点为当前激活的节点</td>
-<td></td>
+<td>openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为<code>true</code>）</td>
 </tr>
 <tr>
 <td>UP_NODE</td>

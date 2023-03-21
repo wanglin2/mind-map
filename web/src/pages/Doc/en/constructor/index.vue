@@ -531,12 +531,12 @@ redo. All commands are as follows:</p>
 <tr>
 <td>INSERT_NODE</td>
 <td>Insert a sibling node, the active node will be the operation node. If there are multiple active nodes, only the first one will be effective</td>
-<td></td>
+<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>）</td>
 </tr>
 <tr>
 <td>INSERT_CHILD_NODE</td>
 <td>Insert a child node, the active node will be the operation node</td>
-<td></td>
+<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>）</td>
 </tr>
 <tr>
 <td>UP_NODE</td>

@@ -35,7 +35,15 @@
 <p>复制渲染树数据，示例：</p>
 <pre class="hljs"><code>copyRenderTree({}, <span class="hljs-built_in">this</span>.mindMap.renderer.renderTree)
 </code></pre>
-<h4>copyNodeTree(tree, root)</h4>
+<h4>copyNodeTree(tree, root, removeActiveState, keepId)</h4>
+<ul>
+<li>
+<p><code>removeActiveState</code>：<code>Boolean</code>，默认为<code>false</code>，是否移除节点的激活状态</p>
+</li>
+<li>
+<p><code>keepId</code>：v0.4.6+，<code>Boolean</code>，默认为<code>false</code>，是否保留被复制节点的<code>id</code>，默认会删除<code>id</code>防止节点<code>id</code>重复，但是对于移动节点的场景，节点原<code>id</code>需要保留</p>
+</li>
+</ul>
 <p>复制节点树数据，主要是剔除其中的引用<code>node</code>实例的<code>_node</code>，然后复制<code>data</code>对象的数据，示例：</p>
 <pre class="hljs"><code>copyNodeTree({}, node)
 </code></pre>
