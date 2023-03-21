@@ -134,10 +134,10 @@ export const copyRenderTree = (tree, root) => {
 }
 
 //  复制节点树数据
-export const copyNodeTree = (tree, root, removeActiveState = false) => {
+export const copyNodeTree = (tree, root, removeActiveState = false, keepId = false) => {
   tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data)
   // 去除节点id，因为节点id不能重复
-  if (tree.data.id) delete tree.data.id
+  if (tree.data.id && !keepId) delete tree.data.id
   if (removeActiveState) {
     tree.data.isActive = false
   }
