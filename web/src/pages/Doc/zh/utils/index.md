@@ -68,7 +68,11 @@ walk(tree, null, () => {}, () => {}, false, 0, 0)
 copyRenderTree({}, this.mindMap.renderer.renderTree)
 ```
 
-#### copyNodeTree(tree, root)
+#### copyNodeTree(tree, root, removeActiveState, keepId)
+
+- `removeActiveState`：`Boolean`，默认为`false`，是否移除节点的激活状态
+
+- `keepId`：v0.4.6+，`Boolean`，默认为`false`，是否保留被复制节点的`id`，默认会删除`id`防止节点`id`重复，但是对于移动节点的场景，节点原`id`需要保留
 
 复制节点树数据，主要是剔除其中的引用`node`实例的`_node`，然后复制`data`对象的数据，示例：
 

@@ -39,7 +39,15 @@ basic data, otherwise it will throw an error</p>
 <p>Copy render tree data, example:</p>
 <pre class="hljs"><code>copyRenderTree({}, <span class="hljs-built_in">this</span>.mindMap.renderer.renderTree);
 </code></pre>
-<h4>copyNodeTree(tree, root)</h4>
+<h4>copyNodeTree(tree, root, removeActiveState, keepId)</h4>
+<ul>
+<li>
+<p><code>removeActiveState</code>: <code>Boolean</code>, default is <code>false</code>, Whether to remove the active state of the node</p>
+</li>
+<li>
+<p><code>keepId</code>: v0.4.6+, <code>Boolean</code>, default is <code>false</code>, Whether to retain the <code>id</code> of the replicated node will be deleted by default to prevent duplicate node <code>id</code>. However, for mobile node scenarios, the original <code>id</code> of the node needs to be retained</p>
+</li>
+</ul>
 <p>Copy node tree data, mainly eliminating the reference <code>node</code> instance <code>_node</code>
 and copying the <code>data</code> of the data object, example:</p>
 <pre class="hljs"><code>copyNodeTree({}, node);

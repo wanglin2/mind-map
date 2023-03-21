@@ -72,7 +72,11 @@ Copy render tree data, example:
 copyRenderTree({}, this.mindMap.renderer.renderTree);
 ```
 
-#### copyNodeTree(tree, root)
+#### copyNodeTree(tree, root, removeActiveState, keepId)
+
+- `removeActiveState`: `Boolean`, default is `false`, Whether to remove the active state of the node
+
+- `keepId`: v0.4.6+, `Boolean`, default is `false`, Whether to retain the `id` of the replicated node will be deleted by default to prevent duplicate node `id`. However, for mobile node scenarios, the original `id` of the node needs to be retained
 
 Copy node tree data, mainly eliminating the reference `node` instance `_node`
 and copying the `data` of the data object, example:
