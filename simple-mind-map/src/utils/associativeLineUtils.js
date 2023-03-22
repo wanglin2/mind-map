@@ -160,3 +160,23 @@ export const getNodeLinePath = (startPoint, endPoint, node, toNode) => {
     controlPoints
   }
 }
+
+// 获取默认的控制点差值
+export const getDefaultControlPointOffsets = (startPoint, endPoint) => {
+  let controlPoints = computeCubicBezierPathPoints(
+    startPoint.x,
+    startPoint.y,
+    endPoint.x,
+    endPoint.y
+  )
+  return [
+    {
+      x: controlPoints[0].x - startPoint.x,
+      y: controlPoints[0].y - startPoint.y
+    },
+    {
+      x: controlPoints[1].x - endPoint.x,
+      y: controlPoints[1].y - endPoint.y
+    }
+  ]
+}

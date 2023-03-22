@@ -7,7 +7,8 @@ import {
   cubicBezierPath,
   getNodePoint,
   computeNodePoints,
-  getNodeLinePath
+  getNodeLinePath,
+  getDefaultControlPointOffsets
 } from './utils/associativeLineUtils'
 
 // 关联线类
@@ -467,8 +468,14 @@ class AssociativeLine {
     this.controlPointMousemoveState.endPoint = endPoint
     let targetIndex = getAssociativeLineTargetIndex(node, toNode)
     this.controlPointMousemoveState.targetIndex = targetIndex
-    let offsets =
-      node.nodeData.data.associativeLineTargetControlOffsets[targetIndex]
+    let offsets = []
+    let associativeLineTargetControlOffsets = node.nodeData.data.associativeLineTargetControlOffsets
+    if (!associativeLineTargetControlOffsets) {
+      // 兼容0.4.5版本，没有associativeLineTargetControlOffsets的情况
+      offsets = getDefaultControlPointOffsets(startPoint, endPoint)
+    } else {
+      offsets = associativeLineTargetControlOffsets[targetIndex]
+    }
     let point1 = null
     let point2 = null
     // 拖拽的是控制点1
@@ -510,8 +517,14 @@ class AssociativeLine {
     let { pos, startPoint, endPoint, targetIndex } =
       this.controlPointMousemoveState
     let [, , node] = this.activeLine
-    let offsetList =
-      node.nodeData.data.associativeLineTargetControlOffsets || []
+    let offsetList = []
+    let associativeLineTargetControlOffsets = node.nodeData.data.associativeLineTargetControlOffsets
+    if (!associativeLineTargetControlOffsets) {
+      // 兼容0.4.5版本，没有associativeLineTargetControlOffsets的情况
+      offsetList[targetIndex] = getDefaultControlPointOffsets(startPoint, endPoint)
+    } else {  
+      offsetList = associativeLineTargetControlOffsets
+    }
     let offset1 = null
     let offset2 = null
     if (this.mousedownControlPointKey === 'controlPoint1') {
