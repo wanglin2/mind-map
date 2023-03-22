@@ -106,9 +106,16 @@ class AssociativeLine {
 
   // 绘制连接线
   drawLine(startPoint, endPoint, node, toNode) {
-    let { associativeLineWidth, associativeLineColor, associativeLineActiveWidth, associativeLineActiveColor } = this.mindMap.themeConfig
+    let {
+      associativeLineWidth,
+      associativeLineColor,
+      associativeLineActiveWidth,
+      associativeLineActiveColor
+    } = this.mindMap.themeConfig
     // 箭头
-    this.markerPath.stroke({ color: associativeLineColor }).fill({ color: associativeLineColor })
+    this.markerPath
+      .stroke({ color: associativeLineColor })
+      .fill({ color: associativeLineColor })
     // 路径
     let pathStr = this.cubicBezierPath(
       startPoint.x,
@@ -119,21 +126,36 @@ class AssociativeLine {
     // 虚线
     let path = this.draw.path()
     path
-      .stroke({ width: associativeLineWidth, color: associativeLineColor, dasharray: [6, 4] })
+      .stroke({
+        width: associativeLineWidth,
+        color: associativeLineColor,
+        dasharray: [6, 4]
+      })
       .fill({ color: 'none' })
     path.plot(pathStr)
     path.marker('end', this.marker)
     // 不可见的点击线
     let clickPath = this.draw.path()
-    clickPath.stroke({ width: associativeLineActiveWidth, color: 'transparent' }).fill({ color: 'none' })
+    clickPath
+      .stroke({ width: associativeLineActiveWidth, color: 'transparent' })
+      .fill({ color: 'none' })
     clickPath.plot(pathStr)
     clickPath.click(e => {
       e.stopPropagation()
-      this.clearActiveNodes()
-      this.clearActiveLine()
-      this.activeLine = [path, clickPath, node, toNode]
-      clickPath.stroke({ color: associativeLineActiveColor })
-      this.mindMap.emit('associative_line_click', path, clickPath, node, toNode)
+      if (this.mindMap.renderer.activeNodeList.length > 0) {
+        this.clearActiveNodes()
+      } else {
+        this.clearActiveLine()
+        this.activeLine = [path, clickPath, node, toNode]
+        clickPath.stroke({ color: associativeLineActiveColor })
+        this.mindMap.emit(
+          'associative_line_click',
+          path,
+          clickPath,
+          node,
+          toNode
+        )
+      }
     })
     this.lineList.push([path, clickPath, node, toNode])
   }
@@ -156,13 +178,18 @@ class AssociativeLine {
 
   // 创建连接线
   createLine(fromNode) {
-    let { associativeLineWidth, associativeLineColor } = this.mindMap.themeConfig
+    let { associativeLineWidth, associativeLineColor } =
+      this.mindMap.themeConfig
     if (this.isCreatingLine || !fromNode) return
     this.isCreatingLine = true
     this.creatingStartNode = fromNode
     this.creatingLine = this.draw.path()
     this.creatingLine
-      .stroke({ width: associativeLineWidth, color: associativeLineColor, dasharray: [6, 4] })
+      .stroke({
+        width: associativeLineWidth,
+        color: associativeLineColor,
+        dasharray: [6, 4]
+      })
       .fill({ color: 'none' })
     this.creatingLine.marker('end', this.marker)
   }
