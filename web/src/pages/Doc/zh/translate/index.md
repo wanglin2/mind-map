@@ -1,6 +1,6 @@
 # 参与翻译
 
-感谢[Emircan ERKUL](https://github.com/emircanerkul)提供的英文翻译。
+感谢[Emircan ERKUL](https://github.com/emircanerkul)提供的第一版英文翻译。
 
 如果你也想参与翻译本文档的话，可以先克隆本仓库。
 

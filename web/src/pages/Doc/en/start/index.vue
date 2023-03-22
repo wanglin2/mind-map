@@ -72,9 +72,10 @@ compile this dependency:</p>
 });
 </code></pre>
 <p>The non-packaged 'ES' module is introduced by default, and only contains core functions, not unregistered plugin content, which can effectively reduce the size. However, you need to configure the <code>babel</code> compilation <code>simple mind-map</code> in your project to prevent some newer <code>js</code> syntax some browsers not supporting it.</p>
-<p>If you need a file in the format of <code>umd</code> module, such as <code>CDN</code> in the browser, you can import it in the following way:</p>
-<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;simple-mind-map/dist/simpleMindMap.umd.min.js&quot;</span>;
+<p>If you need a file in the format of <code>umd</code> module, such as <code>CDN</code> in the browser, Then you can find the <code>simpleMindMap.umd.min.js</code> file in the <code>/simple-mind-map/dist/</code> directory, copy it to your project, and then import it into the page:</p>
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">scr</span>=<span class="hljs-string">&quot;simpleMindMap.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
+<p>A global variable <code>window.simpleMindMap</code> will be created.</p>
 <p>The disadvantage of this method is that it will contain all the content, including the plugins you have not registered, so the overall volume will be relatively large.</p>
 <h2>Problems</h2>
 <h3>Error when using in Vite, indicating xml-js dependency error</h3>

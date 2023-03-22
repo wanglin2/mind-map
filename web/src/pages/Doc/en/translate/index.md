@@ -1,6 +1,6 @@
 # Participate in translation
 
-Thanks for the English translation provided by [Emircan ERKUL](https://github.com/emircanerkul).
+Thanks for the first version English translation provided by [Emircan ERKUL](https://github.com/emircanerkul).
 
 If you want to participate in the translation of this document, you can clone this repository first.
 
