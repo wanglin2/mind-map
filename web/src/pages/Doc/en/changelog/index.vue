@@ -2,7 +2,8 @@
   <div>
     <h1>Changelog</h1>
 <h2>0.4.6</h2>
-<p>optimization: 1.When adding historical data, filter data that has not changed compared to the previous time</p>
+<p>New: 1.Associated lines support adjusting control points.</p>
+<p>optimization: 1.When adding historical data, filter data that has not changed compared to the previous time.</p>
 <p>Fix: 1.Fixed a conflict between the direction keys and the navigation function of the direction keys during node editing. 2.Fixed the issue of node id loss when dragging a mobile node, which can cause associated lines to be lost.</p>
 <h2>0.4.5</h2>
 <p>New: 1.Supports associative lines. 2.You can also drag the canvas by holding down the root node. 3. Hold down the ctrl key to adjust multiple selected nodes.</p>
