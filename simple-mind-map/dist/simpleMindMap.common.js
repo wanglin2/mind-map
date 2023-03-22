@@ -14349,10 +14349,10 @@ const copyRenderTree = (tree, root) => {
 };
 
 //  复制节点树数据
-const copyNodeTree = (tree, root, removeActiveState = false) => {
+const copyNodeTree = (tree, root, removeActiveState = false, keepId = false) => {
   tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data);
   // 去除节点id，因为节点id不能重复
-  if (tree.data.id) delete tree.data.id;
+  if (tree.data.id && !keepId) delete tree.data.id;
   if (removeActiveState) {
     tree.data.isActive = false;
   }
@@ -25002,7 +25002,7 @@ class Render_Render {
 
   //  插入同级节点，多个节点只会操作第一个节点
 
-  insertNode() {
+  insertNode(openEdit = true) {
     if (this.activeNodeList.length <= 0) {
       return;
     }
@@ -25016,7 +25016,7 @@ class Render_Render {
       }
       let index = this.getNodeIndex(first);
       first.parent.nodeData.children.splice(index + 1, 0, {
-        inserting: true,
+        inserting: openEdit,
         data: {
           text: text,
           expand: true
@@ -25029,7 +25029,7 @@ class Render_Render {
 
   //  插入子节点
 
-  insertChildNode() {
+  insertChildNode(openEdit = true) {
     if (this.activeNodeList.length <= 0) {
       return;
     }
@@ -25039,7 +25039,7 @@ class Render_Render {
       }
       let text = node.isRoot ? '二级节点' : '分支主题';
       node.nodeData.children.push({
-        inserting: true,
+        inserting: openEdit,
         data: {
           text: text,
           expand: true
@@ -25277,7 +25277,7 @@ class Render_Render {
     if (node.isRoot) {
       return;
     }
-    let copyData = copyNodeTree({}, node);
+    let copyData = copyNodeTree({}, node, false, true);
     this.removeActiveNode(node);
     this.removeOneNode(node);
     this.mindMap.emit('node_active', null, this.activeNodeList);
@@ -27067,6 +27067,10 @@ class Command_Command {
       return;
     }
     let data = this.getCopyData();
+    // 此次数据和上次一样则不重复添加
+    if (this.history.length > 0 && JSON.stringify(this.history[this.history.length - 1]) === JSON.stringify(data)) {
+      return;
+    }
     this.history.push(simpleDeepClone(data));
     this.activeHistoryIndex = this.history.length - 1;
     this.mindMap.emit('data_change', data);
@@ -27855,7 +27859,6 @@ Watermark_Watermark.instanceName = 'watermark';
 // CONCATENATED MODULE: ../simple-mind-map/src/KeyboardNavigation.js
 
 
-
 //  键盘导航类
 class KeyboardNavigation_KeyboardNavigation {
   //  构造函数
@@ -27863,23 +27866,29 @@ class KeyboardNavigation_KeyboardNavigation {
     this.opt = opt;
     this.mindMap = opt.mindMap;
     this.onKeyup = this.onKeyup.bind(this);
-    this.mindMap.on('keyup', this.onKeyup);
+    this.mindMap.keyCommand.addShortcut('Left', () => {
+      this.onKeyup('Left');
+    });
+    this.mindMap.keyCommand.addShortcut('Up', () => {
+      this.onKeyup('Up');
+    });
+    this.mindMap.keyCommand.addShortcut('Right', () => {
+      this.onKeyup('Right');
+    });
+    this.mindMap.keyCommand.addShortcut('Down', () => {
+      this.onKeyup('Down');
+    });
   }
 
   //  处理按键事件
-  onKeyup(e) {
-    ;
-    ['Left', 'Up', 'Right', 'Down'].forEach(dir => {
-      if (isKey(e, dir)) {
-        if (this.mindMap.renderer.activeNodeList.length > 0) {
-          this.focus(dir);
-        } else {
-          let root = this.mindMap.renderer.root;
-          this.mindMap.renderer.moveNodeToCenter(root);
-          root.active();
-        }
-      }
-    });
+  onKeyup(dir) {
+    if (this.mindMap.renderer.activeNodeList.length > 0) {
+      this.focus(dir);
+    } else {
+      let root = this.mindMap.renderer.root;
+      this.mindMap.renderer.moveNodeToCenter(root);
+      root.active();
+    }
   }
 
   //  聚焦到下一个节点
