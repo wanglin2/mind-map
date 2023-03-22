@@ -2,7 +2,9 @@
 
 ## 0.4.6
 
-optimization: 1.When adding historical data, filter data that has not changed compared to the previous time
+New: 1.Associated lines support adjusting control points.
+
+optimization: 1.When adding historical data, filter data that has not changed compared to the previous time.
 
 Fix: 1.Fixed a conflict between the direction keys and the navigation function of the direction keys during node editing. 2.Fixed the issue of node id loss when dragging a mobile node, which can cause associated lines to be lost.
 

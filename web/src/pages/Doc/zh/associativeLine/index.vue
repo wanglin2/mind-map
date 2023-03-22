@@ -4,8 +4,11 @@
 <blockquote>
 <p>v0.4.5+</p>
 </blockquote>
+<blockquote>
+<p>调整关联线控制点的功能从v0.4.6+开始支持</p>
+</blockquote>
 <p>该插件用于支持添加关联线。</p>
-<p>该插件目前功能比较简陋，不支持修改关联线的控制点，不支持在关联线上添加文字。</p>
+<p>该插件目前功能还不完善，不支持在关联线上添加文字。</p>
 <h2>注册</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
 <span class="hljs-keyword">import</span> AssociativeLine <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/AssociativeLine.js&#x27;</span>

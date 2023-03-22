@@ -4,8 +4,11 @@
 <blockquote>
 <p>v0.4.5+</p>
 </blockquote>
+<blockquote>
+<p>The function of adjusting associated line control points is supported from v0.4.6+</p>
+</blockquote>
 <p>This plugin is used to support the addition of associative lines.</p>
-<p>The plugin currently has relatively simple functions, and does not support modifying the control points of association lines or adding text to association lines.</p>
+<p>The plugin is currently not fully functional, and does not support adding text to association lines.</p>
 <h2>Register</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
 <span class="hljs-keyword">import</span> AssociativeLine <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/AssociativeLine.js&#x27;</span>
