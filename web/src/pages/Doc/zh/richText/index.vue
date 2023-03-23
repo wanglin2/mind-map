@@ -50,6 +50,11 @@ MindMap.usePlugin(RichText, opt?)
 <h2>方法</h2>
 <h3>selectAll()</h3>
 <p>选中全部。当节点正在编辑中可以通过该方法选中节点内的所有文本。</p>
+<h3>focus()</h3>
+<blockquote>
+<p>v0.4.7+</p>
+</blockquote>
+<p>聚焦。</p>
 <h3>formatText(config = {})</h3>
 <ul>
 <li><code>config</code>：对象，键为样式属性，值为样式值，完整的配置如下：</li>

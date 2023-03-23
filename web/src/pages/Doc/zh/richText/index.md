@@ -65,6 +65,12 @@ MindMap.usePlugin(RichText, opt?)
 
 选中全部。当节点正在编辑中可以通过该方法选中节点内的所有文本。
 
+### focus()
+
+> v0.4.7+
+
+聚焦。
+
 ### formatText(config = {})
 
 - `config`：对象，键为样式属性，值为样式值，完整的配置如下：
