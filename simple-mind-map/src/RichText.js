@@ -97,13 +97,16 @@ class RichText {
     this.mindMap.renderer.textEdit.registerTmpShortcut()
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div')
-      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;`
+      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;`
       document.body.appendChild(this.textEditNode)
     }
     // 原始宽高
     let g = node._textData.node
     let originWidth = g.attr('data-width')
     let originHeight = g.attr('data-height')
+    // 使用节点的填充色，否则如果节点颜色是白色的话编辑时看不见
+    let bgColor = node.style.merge('fillColor')
+    this.textEditNode.style.backgroundColor = bgColor === 'transparent' ? '#fff' : bgColor
     this.textEditNode.style.minWidth = originWidth + 'px'
     this.textEditNode.style.minHeight = originHeight + 'px'
     this.textEditNode.style.left =
@@ -126,7 +129,7 @@ class RichText {
     this.initQuillEditor()
     document.querySelector('.ql-editor').style.minHeight = originHeight + 'px'
     this.showTextEdit = true
-    this.selectAll()
+    this.focus()
     if (!node.nodeData.data.richText) {
       // 如果是非富文本的情况，需要手动应用文本样式
       this.setTextStyleIfNotRichText(node)
@@ -226,6 +229,12 @@ class RichText {
   // 选中全部
   selectAll() {
     this.quill.setSelection(0, this.quill.getLength())
+  }
+
+  // 聚焦
+  focus() {
+    let len = this.quill.getLength()
+    this.quill.setSelection(len, len)
   }
 
   // 格式化当前选中的文本
