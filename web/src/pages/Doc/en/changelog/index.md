@@ -4,6 +4,8 @@
 
 optimization: 1.During rich text editing, when initially focusing, all are no longer selected by default; 2.When editing rich text, use the node fill color as the background color to avoid being invisible when the node color is white.
 
+New: 1.Support for importing and exporting Markdown format files.
+
 ## 0.4.6
 
 New: 1.Associated lines support adjusting control points.

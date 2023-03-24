@@ -3,6 +3,7 @@
     <h1>Changelog</h1>
 <h2>0.4.7</h2>
 <p>optimization: 1.During rich text editing, when initially focusing, all are no longer selected by default; 2.When editing rich text, use the node fill color as the background color to avoid being invisible when the node color is white.</p>
+<p>New: 1.Support for importing and exporting Markdown format files.</p>
 <h2>0.4.6</h2>
 <p>New: 1.Associated lines support adjusting control points.</p>
 <p>optimization: 1.When adding historical data, filter data that has not changed compared to the previous time.</p>
