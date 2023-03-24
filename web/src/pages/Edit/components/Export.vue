@@ -30,26 +30,21 @@
           >{{ $t('export.domToImage') }}</el-checkbox
         >
       </div>
-      <el-radio-group v-model="exportType" size="mini">
-        <el-radio-button label="smm"
-          >{{ $t('export.dedicatedFile') }}（.smm）</el-radio-button
+      <div class="downloadTypeList">
+        <div 
+          class="downloadTypeItem" 
+          v-for="item in downTypeList" 
+          :key="item.type" 
+          :class="{active: exportType === item.type}" 
+          @click="exportType = item.type"
         >
-        <el-radio-button label="json"
-          >{{ $t('export.jsonFile') }}（.json）</el-radio-button
-        >
-        <el-radio-button label="png"
-          >{{ $t('export.imageFile') }}（.png）</el-radio-button
-        >
-        <el-radio-button label="svg"
-          >{{ $t('export.svgFile') }}（.svg）</el-radio-button
-        >
-        <el-radio-button label="pdf"
-          >{{ $t('export.pdfFile') }}（.pdf）</el-radio-button
-        >
-        <el-radio-button label="md"
-          >Markdown文件（.md）</el-radio-button
-        >
-      </el-radio-group>
+          <div class="icon iconfont" :class="[item.icon, item.type]"></div>
+          <div class="info">
+            <div class="name">{{ item.name }}</div>
+            <div class="desc">{{ item.desc }}</div>
+          </div>
+        </div>
+      </div>
       <div class="tip">{{ $t('export.tips') }}</div>
       <div class="tip warning" v-if="openNodeRichText && ['png', 'pdf'].includes(exportType)">{{ $t('export.pngTips') }}</div>
       <div class="tip warning" v-if="openNodeRichText && exportType === 'svg' && domToImage">{{ $t('export.svgTips') }}</div>
@@ -65,6 +60,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { downTypeList } from '@/config'
 
 /**
  * @Author: 王林
@@ -87,7 +83,11 @@ export default {
   computed: {
     ...mapState({
       openNodeRichText: state => state.localConfig.openNodeRichText,
-    })
+    }),
+
+    downTypeList() {
+      return downTypeList[this.$i18n.locale] || downTypeList.zh
+    },
   },
   created() {
     this.$bus.$on('showExport', () => {
@@ -151,6 +151,10 @@ export default {
 
 <style lang="less" scoped>
 .nodeDialog {
+  /deep/ .el-dialog__body {
+    background-color: #f2f4f7;
+  }
+
   .nameInputBox {
     margin-bottom: 20px;
 
@@ -164,6 +168,71 @@ export default {
 
     &.warning {
       color: #F56C6C;
+    }
+  }
+
+  .downloadTypeList {
+    display: flex;
+    flex-wrap: wrap;
+    .downloadTypeItem {
+      width: 200px;
+      height: 88px;
+      padding: 22px;
+      overflow: hidden;
+      margin: 10px;
+      border-radius: 11px;
+      box-shadow: 0 0 20px 0 rgba(0,0,0,.02);
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border: 2px solid transparent;
+
+      &.active {
+        border-color: #409eff;
+      }
+
+      .icon {
+        font-size: 30px;
+        margin-right: 10px;
+
+        &.png {
+          color: #ffc038;
+        }
+
+        &.pdf {
+          color: #ff6c4d;
+        }
+
+        &.md {
+          color: #2b2b2b;
+        }
+
+        &.json {
+          color: #12c87e;
+        }
+
+        &.svg {
+          color: #4380ff;
+        }
+
+        &.smm {
+          color: #409eff;
+        }
+      }
+
+      .info {
+        .name {
+          color: #1a1a1a;
+          font-size: 15px;
+          margin-bottom: 5px;
+        }
+
+        .desc {
+          color: #999;
+          font-size: 12px;
+        }
+      }
     }
   }
 }

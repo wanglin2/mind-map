@@ -88,6 +88,7 @@ export default {
     imageFile: '图片文件',
     svgFile: 'svg文件',
     pdfFile: 'pdf文件',
+    markdownFile: 'markdown文件',
     tips: 'tips：.smm和.json文件可用于导入',
     domToImage: '是否将svg中富文本节点转换成图片',
     pngTips: 'tips：富文本模式导出图片非常耗时，建议导出为svg格式',
@@ -103,7 +104,7 @@ export default {
   import: {
     title: '导入',
     selectFile: '选取文件',
-    supportFile: '支持.smm、.json、.xmind、.xlsx文件'
+    supportFile: '支持.smm、.json、.xmind、.xlsx、.md文件'
   },
   navigatorToolbar: {
     openMiniMap: '开启小地图',

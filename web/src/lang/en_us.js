@@ -88,6 +88,7 @@ export default {
     imageFile: 'Image file',
     svgFile: 'svg file',
     pdfFile: 'pdf file',
+    markdownFile: 'markdown file',
     tips: 'tips: .smm and .json file can be import',
     domToImage: 'Whether to convert rich text nodes in svg into pictures',
     pngTips: 'tips: Exporting pictures in rich text mode is time-consuming. It is recommended to export to svg format',
@@ -103,7 +104,7 @@ export default {
   import: {
     title: 'Import',
     selectFile: 'Select file',
-    supportFile: 'Support .smm、.json、.xmind、.xlsx file'
+    supportFile: 'Support .smm、.json、.xmind、.xlsx、.md file'
   },
   navigatorToolbar: {
     openMiniMap: 'Open mini map',
