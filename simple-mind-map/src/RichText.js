@@ -442,6 +442,8 @@ class RichText {
       0,
       0
     )
+    this.mindMap.command.clearHistory()
+    this.mindMap.command.addHistory()
     this.mindMap.reRender()
   }
 
