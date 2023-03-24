@@ -122,12 +122,15 @@ export const simpleDeepClone = data => {
 }
 
 //  复制渲染树数据
-export const copyRenderTree = (tree, root) => {
+export const copyRenderTree = (tree, root, removeActiveState = false) => {
   tree.data = simpleDeepClone(root.data)
+  if (removeActiveState) {
+    tree.data.isActive = false
+  }
   tree.children = []
   if (root.children && root.children.length > 0) {
     root.children.forEach((item, index) => {
-      tree.children[index] = copyRenderTree({}, item)
+      tree.children[index] = copyRenderTree({}, item, removeActiveState)
     })
   }
   return tree
@@ -267,4 +270,35 @@ export const measureText = (text, { italic, bold, fontSize, fontFamily }) => {
 // 拼接font字符串
 export const joinFontStr = ({ italic, bold, fontSize, fontFamily }) => {
   return `${italic ? 'italic ' : ''} ${bold ? 'bold ' : ''} ${fontSize}px ${fontFamily} `
+}
+
+//  在下一个事件循环里执行任务
+export const nextTick = function (fn, ctx) {
+  let pending = false
+  let timerFunc = null
+  let handle = () => {
+    pending = false
+    ctx ? fn.call(ctx) : fn()
+  }
+  // 支持MutationObserver接口的话使用MutationObserver
+  if (typeof MutationObserver !== 'undefined') {
+    let counter = 1
+    let observer = new MutationObserver(handle)
+    let textNode = document.createTextNode(counter)
+    observer.observe(textNode, {
+      characterData: true // 设为 true 表示监视指定目标节点或子节点树中节点所包含的字符数据的变化
+    })
+    timerFunc = function () {
+      counter = (counter + 1) % 2 // counter会在0和1两者循环变化
+      textNode.data = counter // 节点变化会触发回调handle，
+    }
+  } else {
+    // 否则使用定时器
+    timerFunc = setTimeout
+  }
+  return function () {
+    if (pending) return
+    pending = true
+    timerFunc(handle, 0)
+  }
 }
