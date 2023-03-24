@@ -353,17 +353,26 @@ class Render {
     }
   }
 
+  // 规范指定节点数据
+  formatAppointNodes(appointNodes) {
+    if (!appointNodes) return []
+    return Array.isArray(appointNodes) ? appointNodes: [appointNodes]
+  }
+
   //  插入同级节点，多个节点只会操作第一个节点
 
-  insertNode(openEdit = true) {
-    if (this.activeNodeList.length <= 0) {
+  insertNode(openEdit = true, appointNodes = [], appointData = null) {
+    appointNodes = this.formatAppointNodes(appointNodes)
+    if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return
     }
-    let first = this.activeNodeList[0]
+    let { defaultInsertSecondLevelNodeText, defaultInsertBelowSecondLevelNodeText } = this.mindMap.opt
+    let list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
+    let first = list[0]
     if (first.isRoot) {
-      this.insertChildNode()
+      this.insertChildNode(openEdit, appointNodes, appointData)
     } else {
-      let text = first.layerIndex === 1 ? '二级节点' : '分支主题'
+      let text = first.layerIndex === 1 ? defaultInsertSecondLevelNodeText : defaultInsertBelowSecondLevelNodeText
       if (first.layerIndex === 1) {
         first.parent.initRender = true
       }
@@ -372,7 +381,8 @@ class Render {
         inserting: openEdit,
         data: {
           text: text,
-          expand: true
+          expand: true,
+          ...(appointData || {})
         },
         children: []
       })
@@ -382,20 +392,24 @@ class Render {
 
   //  插入子节点
 
-  insertChildNode(openEdit = true) {
-    if (this.activeNodeList.length <= 0) {
+  insertChildNode(openEdit = true, appointNodes = [], appointData = null) {
+    appointNodes = this.formatAppointNodes(appointNodes)
+    if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return
     }
-    this.activeNodeList.forEach(node => {
+    let { defaultInsertSecondLevelNodeText, defaultInsertBelowSecondLevelNodeText } = this.mindMap.opt
+    let list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
+    list.forEach(node => {
       if (!node.nodeData.children) {
         node.nodeData.children = []
       }
-      let text = node.isRoot ? '二级节点' : '分支主题'
+      let text = node.isRoot ? defaultInsertSecondLevelNodeText : defaultInsertBelowSecondLevelNodeText
       node.nodeData.children.push({
         inserting: openEdit,
         data: {
           text: text,
-          expand: true
+          expand: true,
+          ...(appointData || {})
         },
         children: []
       })
@@ -548,11 +562,14 @@ class Render {
 
   //  移除节点
 
-  removeNode() {
-    if (this.activeNodeList.length <= 0) {
+  removeNode(appointNodes = []) {
+    appointNodes = this.formatAppointNodes(appointNodes)
+    if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return
     }
-    let root = this.activeNodeList.find((node) => {
+    let isAppointNodes = appointNodes.length > 0
+    let list = isAppointNodes ? appointNodes : this.activeNodeList
+    let root = list.find((node) => {
       return node.isRoot
     })
     if (root) {
@@ -563,8 +580,9 @@ class Render {
       root.children = []
       root.nodeData.children = []
     } else {
-      for (let i = 0; i < this.activeNodeList.length; i++) {
-        let node = this.activeNodeList[i]
+      for (let i = 0; i < list.length; i++) {
+        let node = list[i]
+        if (isAppointNodes) list.splice(i, 1)
         if (node.isGeneralization) {
           // 删除概要节点
           this.setNodeData(node.generalizationBelongNode, {
@@ -580,8 +598,7 @@ class Render {
         }
       }
     }
-    this.activeNodeList = []
-    this.mindMap.emit('node_active', null, [])
+    this.mindMap.emit('node_active', null, this.activeNodeList)
     this.mindMap.render()
   }
 
