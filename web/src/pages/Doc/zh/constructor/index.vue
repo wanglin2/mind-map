@@ -168,6 +168,20 @@
 <td>当<code>mousewheelAction</code>设为<code>move</code>时，可以通过该属性控制鼠标滚动一下视图移动的步长，单位<code>px</code></td>
 <td></td>
 </tr>
+<tr>
+<td>defaultInsertSecondLevelNodeText（v0.4.7+）</td>
+<td>String</td>
+<td>二级节点</td>
+<td>默认插入的二级节点的文字</td>
+<td></td>
+</tr>
+<tr>
+<td>defaultInsertBelowSecondLevelNodeText（v0.4.7+）</td>
+<td>String</td>
+<td>分支主题</td>
+<td>默认插入的二级以下节点的文字</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>水印配置</h3>
@@ -520,13 +534,13 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </tr>
 <tr>
 <td>INSERT_NODE</td>
-<td>插入同级节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效</td>
-<td>openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为<code>true</code>）</td>
+<td>插入同级节点，操作节点为当前激活的节点或指定节点，如果有多个激活节点，只会对第一个有效</td>
+<td>openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为<code>true</code>）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js</a>）</td>
 </tr>
 <tr>
 <td>INSERT_CHILD_NODE</td>
-<td>插入子节点，操作节点为当前激活的节点</td>
-<td>openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为<code>true</code>）</td>
+<td>插入子节点，操作节点为当前激活的节点或指定节点</td>
+<td>openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为<code>true</code>）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js</a>）</td>
 </tr>
 <tr>
 <td>UP_NODE</td>
@@ -540,8 +554,8 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </tr>
 <tr>
 <td>REMOVE_NODE</td>
-<td>删除节点，操作节点为当前激活的节点</td>
-<td></td>
+<td>删除节点，操作节点为当前激活的节点或指定节点</td>
+<td>appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）</td>
 </tr>
 <tr>
 <td>PASTE_NODE</td>
