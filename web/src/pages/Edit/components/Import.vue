@@ -33,6 +33,7 @@
 
 <script>
 import xmind from 'simple-mind-map/src/parse/xmind.js'
+import markdown from 'simple-mind-map/src/parse/markdown.js'
 import { fileToBuffer } from '@/utils'
 import { read, utils } from 'xlsx'
 
@@ -68,9 +69,9 @@ export default {
      * @Desc: 文件选择
      */
     onChange(file) {
-      let reg = /\.(smm|xmind|json|xlsx)$/
+      let reg = /\.(smm|xmind|json|xlsx|md)$/
       if (!reg.test(file.name)) {
-        this.$message.error('请选择.smm、.json、.xmind、.xlsx文件')
+        this.$message.error('请选择.smm、.json、.xmind、.xlsx、.md文件')
         this.fileList = []
       } else {
         this.fileList.push(file)
@@ -112,7 +113,9 @@ export default {
         this.handleXmind(file)
       } else if (/\.xlsx$/.test(file.name)) {
         this.handleExcel(file)
-      }
+      } else if (/\.md$/.test(file.name)) {
+        this.handleMd(file)
+      } 
       this.cancel()
     },
 
@@ -219,6 +222,22 @@ export default {
       } catch (error) {
         console.log(error)
         this.$message.error('文件解析失败')
+      }
+    },
+
+    // 处理markdown文件
+    async handleMd(file) {
+      let fileReader = new FileReader()
+      fileReader.readAsText(file.raw)
+      fileReader.onload = async evt => {
+        try {
+          let data = await markdown.transformMarkdownTo(evt.target.result)
+          this.$bus.$emit('setData', data)
+          this.$message.success('导入成功')
+        } catch (error) {
+          console.log(error)
+          this.$message.error('文件解析失败')
+        }
       }
     }
   }
