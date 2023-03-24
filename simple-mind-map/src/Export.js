@@ -41,8 +41,10 @@ class Export {
     let nodeWithDomToImg = null
     if (domToImage && this.mindMap.richText) {
       let res = await this.mindMap.richText.handleSvgDomElements(svg)
-      nodeWithDomToImg = res.svg
-      svgHTML = res.svgHTML
+      if (res) {
+        nodeWithDomToImg = res.svg
+        svgHTML = res.svgHTML
+      }
     }
     return {
       node: svg,

@@ -416,7 +416,11 @@ class RichText {
           reject(error)
         }
       }
-      if (len > 0) transform()
+      if (len > 0) {
+        transform()
+      } else {
+        resolve(null)
+      }
     })
   }
 
