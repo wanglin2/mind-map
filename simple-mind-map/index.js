@@ -68,7 +68,11 @@ const defaultOpt = {
   // 鼠标滚动的行为，如果customHandleMousewheel传了自定义函数，这个属性不生效
   mousewheelAction: 'zoom',// zoom（放大缩小）、move（上下移动）
   // 当mousewheelAction设为move时，可以通过该属性控制鼠标滚动一下视图移动的步长，单位px
-  mousewheelMoveStep: 100
+  mousewheelMoveStep: 100,
+  // 默认插入的二级节点的文字
+  defaultInsertSecondLevelNodeText: '二级节点',
+  // 默认插入的二级以下节点的文字
+  defaultInsertBelowSecondLevelNodeText: '分支主题'
 }
 
 //  思维导图

@@ -81,6 +81,8 @@ class Command {
     if (this.history.length > 0 && JSON.stringify(this.history[this.history.length - 1]) === JSON.stringify(data)) {
       return
     }
+    // 删除当前历史指针后面的数据
+    this.history = this.history.slice(0, this.activeHistoryIndex + 1)
     this.history.push(simpleDeepClone(data))
     this.activeHistoryIndex = this.history.length - 1
     this.mindMap.emit('data_change', data)
