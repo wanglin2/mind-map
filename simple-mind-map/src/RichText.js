@@ -442,6 +442,7 @@ class RichText {
       0,
       0
     )
+    // 清空历史数据，并且触发数据变化
     this.mindMap.command.clearHistory()
     this.mindMap.command.addHistory()
     this.mindMap.reRender()
