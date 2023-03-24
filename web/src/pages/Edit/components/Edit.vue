@@ -309,6 +309,20 @@ export default {
         })
       })
       this.bindSaveEvent()
+      // setTimeout(() => {
+        // 动态给指定节点添加子节点
+        // this.mindMap.execCommand('INSERT_CHILD_NODE', false, this.mindMap.renderer.root, {
+        //   text: '自定义内容'
+        // })
+
+        // 动态给指定节点添加同级节点
+        // this.mindMap.execCommand('INSERT_NODE', false, this.mindMap.renderer.root, {
+        //   text: '自定义内容'
+        // })
+
+        // 动态删除指定节点
+        // this.mindMap.execCommand('REMOVE_NODE', this.mindMap.renderer.root.children[0])
+      // }, 5000);
     },
 
     /**
