@@ -51,7 +51,6 @@ class Base {
         draw: this.draw,
         layerIndex
       })
-      newNode.getSize()
       // 数据关联实际节点
       data._node = newNode
       if (data.data.isActive) {
