@@ -5,13 +5,11 @@ import { walk, asyncRun } from '../utils'
 // 和逻辑结构图基本一样，只是方向变成向下生长，所以先计算节点的top，后计算节点的left、最后调整节点的left即可
 class OrganizationStructure extends Base {
   //  构造函数
-
   constructor(opt = {}) {
     super(opt)
   }
 
   //  布局
-
   doLayout(callback) {
     let task = [
       () => {
@@ -31,7 +29,6 @@ class OrganizationStructure extends Base {
   }
 
   //  遍历数据计算节点的left、width、height
-
   computedBaseValue() {
     walk(
       this.renderer.renderTree,
@@ -67,7 +64,6 @@ class OrganizationStructure extends Base {
   }
 
   //  遍历节点树计算节点的left
-
   computedLeftValue() {
     walk(
       this.root,
@@ -94,7 +90,6 @@ class OrganizationStructure extends Base {
   }
 
   //  调整节点left
-
   adjustLeftValue() {
     walk(
       this.root,
@@ -118,7 +113,6 @@ class OrganizationStructure extends Base {
   }
 
   //  更新兄弟节点的left
-
   updateBrothers(node, addWidth) {
     if (node.parent) {
       let childrenList = node.parent.children
@@ -150,7 +144,6 @@ class OrganizationStructure extends Base {
   }
 
   //  绘制连线，连接该节点到其子节点
-
   renderLine(node, lines, style, lineStyle) {
     if (lineStyle === 'direct') {
       this.renderLineDirect(node, lines, style)
@@ -160,7 +153,6 @@ class OrganizationStructure extends Base {
   }
 
   //  直连风格
-
   renderLineDirect(node, lines, style) {
     if (node.children.length <= 0) {
       return []
@@ -182,7 +174,6 @@ class OrganizationStructure extends Base {
   }
 
   //  直线风格连线
-
   renderLineStraight(node, lines, style) {
     if (node.children.length <= 0) {
       return []
@@ -232,7 +223,6 @@ class OrganizationStructure extends Base {
   }
 
   //  渲染按钮
-
   renderExpandBtn(node, btn) {
     let { width, height, expandBtnSize } = node
     let { translateX, translateY } = btn.transform()
@@ -243,7 +233,6 @@ class OrganizationStructure extends Base {
   }
 
   //  创建概要节点
-
   renderGeneralization(node, gLine, gNode) {
     let {
       bottom,

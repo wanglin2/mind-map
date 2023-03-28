@@ -5,7 +5,6 @@ import Base from './layouts/Base'
 
 class Drag extends Base {
   //  构造函数
-
   constructor({ mindMap }) {
     super(mindMap.renderer)
     this.mindMap = mindMap
@@ -14,7 +13,6 @@ class Drag extends Base {
   }
 
   //  复位
-
   reset() {
     // 当前拖拽节点
     this.node = null
@@ -48,7 +46,6 @@ class Drag extends Base {
   }
 
   //  绑定事件
-
   bindEvent() {
     this.checkOverlapNode = throttle(this.checkOverlapNode, 300, this)
     this.mindMap.on('node_mousedown', (node, e) => {
@@ -98,7 +95,6 @@ class Drag extends Base {
   }
 
   //  鼠标松开事件
-
   onMouseup(e) {
     if (!this.isMousedown) {
       return
@@ -141,7 +137,6 @@ class Drag extends Base {
   }
 
   //  创建克隆节点
-
   createCloneNode() {
     if (!this.clone) {
       // 节点
@@ -163,7 +158,6 @@ class Drag extends Base {
   }
 
   //  移除克隆节点
-
   removeCloneNode() {
     if (!this.clone) {
       return
@@ -174,7 +168,6 @@ class Drag extends Base {
   }
 
   //  拖动中
-
   onMove(x, y) {
     if (!this.isMousedown) {
       return
@@ -201,7 +194,6 @@ class Drag extends Base {
   }
 
   //  检测重叠节点
-
   checkOverlapNode() {
     if (!this.drawTransform) {
       return

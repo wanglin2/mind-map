@@ -1,14 +1,14 @@
 import Base from './Base'
 import { walk, asyncRun } from '../utils'
 
-//  目录组织图
+//  目录组织图
 class CatalogOrganization extends Base {
-  //  构造函数
+  //  构造函数
   constructor(opt = {}) {
     super(opt)
   }
 
-  //  布局
+  //  布局
   doLayout(callback) {
     let task = [
       () => {
@@ -27,7 +27,7 @@ class CatalogOrganization extends Base {
     asyncRun(task)
   }
 
-  //  遍历数据计算节点的left、width、height
+  //  遍历数据计算节点的left、width、height
   computedBaseValue() {
     walk(
       this.renderer.renderTree,
@@ -66,7 +66,7 @@ class CatalogOrganization extends Base {
     )
   }
 
-  //  遍历节点树计算节点的left、top
+  //  遍历节点树计算节点的left、top
   computedLeftTopValue() {
     walk(
       this.root,
@@ -101,7 +101,7 @@ class CatalogOrganization extends Base {
     )
   }
 
-  //  调整节点left、top
+  //  调整节点left、top
   adjustLeftTopValue() {
     walk(
       this.root,
@@ -136,7 +136,7 @@ class CatalogOrganization extends Base {
     )
   }
 
-  //  递归计算节点的宽度
+  //  递归计算节点的宽度
   getNodeAreaWidth(node) {
     let widthArr = []
     let loop = (node, width) => {
@@ -154,7 +154,7 @@ class CatalogOrganization extends Base {
     return Math.max(...widthArr)
   }
 
-  //  调整兄弟节点的left
+  //  调整兄弟节点的left
   updateBrothersLeft(node, addWidth) {
     if (node.parent) {
       let childrenList = node.parent.children
@@ -200,7 +200,7 @@ class CatalogOrganization extends Base {
     }
   }
 
-  //  调整兄弟节点的top
+  //  调整兄弟节点的top
   updateBrothersTop(node, addHeight) {
     if (node.parent && !node.parent.isRoot) {
       let childrenList = node.parent.children
@@ -228,7 +228,7 @@ class CatalogOrganization extends Base {
     }
   }
 
-  //  绘制连线，连接该节点到其子节点
+  //  绘制连线，连接该节点到其子节点
   renderLine(node, lines, style) {
     if (node.children.length <= 0) {
       return []
@@ -349,7 +349,7 @@ class CatalogOrganization extends Base {
     }
   }
 
-  //  渲染按钮
+  //  渲染按钮
   renderExpandBtn(node, btn) {
     let { width, height, expandBtnSize, isRoot } = node
     if (!isRoot) {
@@ -361,7 +361,7 @@ class CatalogOrganization extends Base {
     }
   }
 
-  //  创建概要节点
+  //  创建概要节点
   renderGeneralization(node, gLine, gNode) {
     let {
       top,
