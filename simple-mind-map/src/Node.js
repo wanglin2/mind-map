@@ -21,10 +21,8 @@ class Node {
     this.renderer = opt.renderer
     // 渲染器
     this.draw = opt.draw || null
-    // 主题配置
-    this.themeConfig = this.mindMap.themeConfig
     // 样式实例
-    this.style = new Style(this, this.themeConfig)
+    this.style = new Style(this)
     // 形状实例
     this.shapeInstance = new Shape(this)
     this.shapePadding = {
@@ -108,15 +106,6 @@ class Node {
 
   set top(val) {
     this._top = val
-  }
-
-  //  更新主题配置
-
-  updateThemeConfig() {
-    // 主题配置
-    this.themeConfig = this.mindMap.themeConfig
-    // 样式实例
-    this.style.updateThemeConfig(this.themeConfig)
   }
 
   //  复位部分布局时会重新设置的数据
@@ -342,8 +331,8 @@ class Node {
     return resizeImgSize(
       this.nodeData.data.imageSize.width,
       this.nodeData.data.imageSize.height,
-      this.themeConfig.imgMaxWidth,
-      this.themeConfig.imgMaxHeight
+      this.mindMap.themeConfig.imgMaxWidth,
+      this.mindMap.themeConfig.imgMaxHeight
     )
   }
 
@@ -354,7 +343,7 @@ class Node {
     if (!_data.icon || _data.icon.length <= 0) {
       return []
     }
-    let iconSize = this.themeConfig.iconSize
+    let iconSize = this.mindMap.themeConfig.iconSize
     return _data.icon.map(item => {
       return {
         node: SVG(iconsSvg.getNodeIconListIcon(item)).size(iconSize, iconSize),
@@ -458,7 +447,7 @@ class Node {
     if (!hyperlink) {
       return
     }
-    let iconSize = this.themeConfig.iconSize
+    let iconSize = this.mindMap.themeConfig.iconSize
     let node = new SVG()
     // 超链接节点
     let a = new A().to(hyperlink).target('_blank')
@@ -515,7 +504,7 @@ class Node {
     if (!this.nodeData.data.note) {
       return null
     }
-    let iconSize = this.themeConfig.iconSize
+    let iconSize = this.mindMap.themeConfig.iconSize
     let node = new SVG().attr('cursor', 'pointer')
     // 透明的层，用来作为鼠标区域
     node.add(new Rect().size(iconSize, iconSize).fill({ color: 'transparent' }))
@@ -571,7 +560,7 @@ class Node {
 
   getShape() {
     // 节点使用功能横线风格的话不支持设置形状，直接使用默认的矩形
-    return this.themeConfig.nodeUseLineStyle
+    return this.mindMap.themeConfig.nodeUseLineStyle
       ? 'rectangle'
       : this.style.getStyle('shape', false, false)
   }
@@ -754,7 +743,7 @@ class Node {
 
   //  更新节点
 
-  update(layout = false) {
+  update(isLayout = false) {
     if (!this.group) {
       return
     }
@@ -769,7 +758,7 @@ class Node {
     }
     this.renderGeneralization()
     let t = this.group.transform()
-    if (!layout) {
+    if (!isLayout) {
       this.group
         .animate(300)
         .translate(
