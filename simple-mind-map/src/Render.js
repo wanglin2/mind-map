@@ -515,7 +515,7 @@ class Render {
     this.mindMap.render(() => {
       if (nodeLayerChanged) {
         node.getSize()
-        node.renderNode()
+        node.layout()
       }
     })
   }
@@ -555,7 +555,7 @@ class Render {
     this.mindMap.render(() => {
       if (nodeLayerChanged) {
         node.getSize()
-        node.renderNode()
+        node.layout()
       }
     })
   }
@@ -964,7 +964,7 @@ class Render {
   setNodeDataRender(node, data) {
     this.setNodeData(node, data)
     let changed = node.getSize()
-    node.renderNode()
+    node.layout()
     if (changed) {
       if (node.isGeneralization) {
         // 概要节点
