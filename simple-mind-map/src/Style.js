@@ -21,34 +21,28 @@ class Style {
 
   //  构造函数
 
-  constructor(ctx, themeConfig) {
+  constructor(ctx) {
     this.ctx = ctx
-    this.themeConfig = themeConfig
-  }
-
-  //  更新主题配置
-
-  updateThemeConfig(themeConfig) {
-    this.themeConfig = themeConfig
   }
 
   //  合并样式
 
   merge(prop, root, isActive) {
+    let themeConfig = this.ctx.mindMap.themeConfig
     // 三级及以下节点
-    let defaultConfig = this.themeConfig.node
+    let defaultConfig = themeConfig.node
     if (root || rootProp.includes(prop)) {
       // 直接使用最外层样式
-      defaultConfig = this.themeConfig
+      defaultConfig = themeConfig
     } else if (this.ctx.isGeneralization) {
       // 概要节点
-      defaultConfig = this.themeConfig.generalization
+      defaultConfig = themeConfig.generalization
     } else if (this.ctx.layerIndex === 0) {
       // 根节点
-      defaultConfig = this.themeConfig.root
+      defaultConfig = themeConfig.root
     } else if (this.ctx.layerIndex === 1) {
       // 二级节点
-      defaultConfig = this.themeConfig.second
+      defaultConfig = themeConfig.second
     }
     // 激活状态
     if (isActive !== undefined ? isActive : this.ctx.nodeData.data.isActive) {
@@ -96,7 +90,7 @@ class Style {
     if (
       !this.ctx.isRoot &&
       !this.ctx.isGeneralization &&
-      this.themeConfig.nodeUseLineStyle &&
+      this.ctx.mindMap.themeConfig.nodeUseLineStyle &&
       !this.ctx.nodeData.data.isActive
     ) {
       return
