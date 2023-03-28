@@ -1,6 +1,16 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.5.0</h2>
+<p>modify: Starting from version 0.5.0, considering performance issues, the node activation state can only modify shape related styles:</p>
+<pre class="hljs"><code>[
+  <span class="hljs-string">&#x27;fillColor&#x27;</span>,
+  <span class="hljs-string">&#x27;borderColor&#x27;</span>,
+  <span class="hljs-string">&#x27;borderWidth&#x27;</span>,
+  <span class="hljs-string">&#x27;borderDasharray&#x27;</span>,
+  <span class="hljs-string">&#x27;borderRadius&#x27;</span>
+]
+</code></pre>
 <h2>0.4.7</h2>
 <p>optimization: 1.During rich text editing, when initially focusing, all are no longer selected by default; 2.When editing rich text, use the node fill color as the background color to avoid being invisible when the node color is white.  3.Node activation state switching no longer triggers history. 4.Triggering history multiple times in a short time will only add the last data. 5.Optimize the addition of historical records. When there is a rollback, delete the historical data after the current pointer when adding a new record again.</p>
 <p>New: 1.Support for importing and exporting Markdown format files. 2.Support for configuring initial text when inserting nodes. 3.Expand the commands for inserting and deleting nodes to support specifying nodes.</p>

@@ -305,7 +305,7 @@ class Render {
           node.nodeData.data.isActive = true
           this.addActiveNode(node)
           setTimeout(() => {
-            node.renderNode()
+            node.updateNodeShape()
           }, 0)
         }
       },
@@ -676,7 +676,7 @@ class Render {
     this.setNodeData(node, {
       isActive: active
     })
-    node.renderNode()
+    node.updateNodeShape()
   }
 
   //  设置节点是否展开
