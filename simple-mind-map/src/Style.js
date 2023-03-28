@@ -2,10 +2,8 @@ import { tagColorList } from './utils/constant'
 const rootProp = ['paddingX', 'paddingY']
 
 //  样式类
-
 class Style {
   //   设置背景样式
-
   static setBackgroundStyle(el, themeConfig) {
     let { backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition, backgroundSize } = themeConfig
     el.style.backgroundColor = backgroundColor
@@ -20,13 +18,11 @@ class Style {
   }
 
   //  构造函数
-
   constructor(ctx) {
     this.ctx = ctx
   }
 
   //  合并样式
-
   merge(prop, root, isActive) {
     let themeConfig = this.ctx.mindMap.themeConfig
     // 三级及以下节点
@@ -62,26 +58,22 @@ class Style {
   }
 
   //  获取某个样式值
-
   getStyle(prop, root, isActive) {
     return this.merge(prop, root, isActive)
   }
 
   //  获取自身自定义样式
-
   getSelfStyle(prop) {
     return this.ctx.nodeData.data[prop]
   }
 
   //  矩形
-
   rect(node) {
     this.shape(node)
     node.radius(this.merge('borderRadius'))
   }
 
   //   矩形外的其他形状
-
   shape(node) {
     node.fill({
       color: this.merge('fillColor')
@@ -103,7 +95,6 @@ class Style {
   }
 
   //  文字
-
   text(node) {
     node
       .fill({
@@ -129,7 +120,6 @@ class Style {
   }
 
   //  html文字节点
-
   domText(node, fontSizeScale = 1) {
     node.style.fontFamily = this.merge('fontFamily')
     node.style.fontSize = this.merge('fontSize') * fontSizeScale + 'px'
@@ -139,7 +129,6 @@ class Style {
   }
 
   //  标签文字
-
   tagText(node, index) {
     node
       .fill({
@@ -151,7 +140,6 @@ class Style {
   }
 
   //  标签矩形
-
   tagRect(node, index) {
     node.fill({
       color: tagColorList[index].background
@@ -159,7 +147,6 @@ class Style {
   }
 
   //  内置图标
-
   iconNode(node) {
     node.attr({
       fill: this.merge('color')
@@ -167,13 +154,11 @@ class Style {
   }
 
   //  连线
-
   line(node, { width, color, dasharray } = {}) {
     node.stroke({ width, color, dasharray }).fill({ color: 'none' })
   }
 
   //  概要连线
-
   generalizationLine(node) {
     node
       .stroke({
@@ -184,7 +169,6 @@ class Style {
   }
 
   //  按钮
-
   iconBtn(node, fillNode) {
     node.fill({ color: '#808080' })
     fillNode.fill({ color: '#fff' })
