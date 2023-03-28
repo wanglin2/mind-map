@@ -43,6 +43,11 @@ one</p>
 <p>Recursively render this node and all its child nodes. The first call will create
 the node content, subsequent calls will only update the node position. To
 re-render the content, set the <code>initRender</code> attribute to <code>true</code> first.</p>
+<h3>updateNodeShape()</h3>
+<blockquote>
+<p>v0.5.0+</p>
+</blockquote>
+<p>Update node shape nodes. For example, when the node status changes, call this method to display or deactivate the style.</p>
 <h3>remove()</h3>
 <p>Recursively delete this node and all its child nodes</p>
 <h3>renderLine()</h3>

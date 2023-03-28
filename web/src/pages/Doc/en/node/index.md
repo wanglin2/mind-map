@@ -76,6 +76,12 @@ Recursively render this node and all its child nodes. The first call will create
 the node content, subsequent calls will only update the node position. To
 re-render the content, set the `initRender` attribute to `true` first.
 
+### updateNodeShape()
+
+> v0.5.0+
+
+Update node shape nodes. For example, when the node status changes, call this method to display or deactivate the style.
+
 ### remove()
 
 Recursively delete this node and all its child nodes

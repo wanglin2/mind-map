@@ -39,6 +39,11 @@
 <p>渲染节点到画布，会移除旧的内容节点，创建新的</p>
 <h3>render()</h3>
 <p>递归渲染该节点及其所有子节点，第一次调用会创建节点内容，后续只会更新节点位置，想要重新渲染内容，可以先把<code>initRender</code>属性设为<code>true</code></p>
+<h3>updateNodeShape()</h3>
+<blockquote>
+<p>v0.5.0+</p>
+</blockquote>
+<p>更新节点形状节点。比如当节点状态改变后，调用该方法显示或取消激活样式。</p>
 <h3>remove()</h3>
 <p>递归删除该节点及其所有子节点</p>
 <h3>renderLine()</h3>

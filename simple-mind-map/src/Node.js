@@ -55,6 +55,7 @@ class Node {
     this.children = opt.children || []
     // 节点内容的容器
     this.group = null
+    this.shapeNode = null// 节点形状节点
     // 节点内容对象
     this._imgData = null
     this._iconData = null
@@ -426,7 +427,6 @@ class Node {
   }
 
   //  创建超链接节点
-
   createHyperlinkNode() {
     let { hyperlink, hyperlinkTitle } = this.nodeData.data
     if (!hyperlink) {
@@ -561,10 +561,8 @@ class Node {
     this.draw.add(this.group)
     this.update(true)
     // 节点形状
-    const shape = this.getShape()
-    this.style[shape === 'rectangle' ? 'rect' : 'shape'](
-      this.shapeInstance.createShape()
-    )
+    this.shapeNode = this.shapeInstance.createShape()
+    this.updateNodeShape()
     // 图片节点
     let imgHeight = 0
     if (this._imgData) {
@@ -749,6 +747,12 @@ class Node {
         this.top - t.translateY
       )
     }
+  }
+
+  // 更新节点形状样式
+  updateNodeShape() {
+    const shape = this.getShape()
+    this.style[shape === 'rectangle' ? 'rect' : 'shape'](this.shapeNode)
   }
 
   //  递归渲染
