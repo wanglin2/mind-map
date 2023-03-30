@@ -168,9 +168,10 @@ class Style {
       .fill({ color: 'none' })
   }
 
-  //  按钮
-  iconBtn(node, fillNode) {
+  //  展开收起按钮
+  iconBtn(node, node2, fillNode) {
     node.fill({ color: '#808080' })
+    node2.fill({ color: '#808080' })
     fillNode.fill({ color: '#fff' })
   }
 }

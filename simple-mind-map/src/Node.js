@@ -68,6 +68,9 @@ class Node {
     this._noteData = null
     this.noteEl = null
     this._expandBtn = null
+    this._openExpandNode = null
+    this._closeExpandNode = null
+    this._fillExpandNode = null
     this._lines = []
     this._generalizationLine = null
     this._generalizationNode = null
@@ -242,8 +245,6 @@ class Node {
     let { width, textContentItemMargin } = this
     let { paddingY } = this.getPaddingVale()
     paddingY += this.shapePadding.paddingY
-    // 展开收起按钮
-    this.renderExpandBtn()
     // 节点形状
     this.shapeNode = this.shapeInstance.createShape()
     this.group.add(this.shapeNode)
@@ -416,12 +417,9 @@ class Node {
     // 需要移除展开收缩按钮
     if (this._expandBtn && this.nodeData.children.length <= 0) {
       this.removeExpandBtn()
-    } else if (!this._expandBtn && this.nodeData.children.length > 0) {
-      // 需要添加展开收缩按钮
-      this.renderExpandBtn()
     } else {
       // 更新展开收起按钮
-      this.updateExpandBtnPos()
+      this.renderExpandBtn()
     }
     // 更新概要
     this.renderGeneralization()
@@ -530,6 +528,8 @@ class Node {
   destroy() {
     if (!this.group) return
     this.group.remove()
+    this.removeGeneralization()
+    this.removeLine()
     this.group = null
   }
 
