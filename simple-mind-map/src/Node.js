@@ -1,12 +1,14 @@
 import Style from './Style'
 import Shape from './Shape'
-import { resizeImgSize, asyncRun, measureText } from './utils'
-import { Image, SVG, Circle, A, G, Rect, Text, ForeignObject } from '@svgdotjs/svg.js'
-import btnsSvg from './svg/btns'
-import iconsSvg from './svg/icons'
+import { asyncRun } from './utils'
+import { G } from '@svgdotjs/svg.js'
+import nodeGeneralizationMethods from './utils/nodeGeneralization'
+import nodeExpandBtnMethods from './utils/nodeExpandBtn'
+import nodeCommandWrapsMethods from './utils/nodeCommandWraps'
+import nodeCreateContentsMethods from './utils/nodeCreateContents'
+
 
 //  节点类
-
 class Node {
   //  构造函数
   constructor(opt = {}) {
@@ -84,8 +86,26 @@ class Node {
     this.blockContentMargin = this.mindMap.opt.imgTextMargin
     // 展开收缩按钮尺寸
     this.expandBtnSize = this.mindMap.opt.expandBtnSize
-    // 初始渲染
-    this.initRender = true
+    // 是否是多选节点
+    this.isMultipleChoice = false
+    // 是否需要重新layout
+    this.needLayout = false
+    // 概要相关方法
+    Object.keys(nodeGeneralizationMethods).forEach((item) => {
+      this[item] = nodeGeneralizationMethods[item].bind(this)
+    })
+    // 展开收起按钮相关方法
+    Object.keys(nodeExpandBtnMethods).forEach((item) => {
+      this[item] = nodeExpandBtnMethods[item].bind(this)
+    })
+    // 命令的相关方法
+    Object.keys(nodeCommandWrapsMethods).forEach((item) => {
+      this[item] = nodeCommandWrapsMethods[item].bind(this)
+    })
+    // 创建节点内容的相关方法
+    Object.keys(nodeCreateContentsMethods).forEach((item) => {
+      this[item] = nodeCreateContentsMethods[item].bind(this)
+    })
     // 初始化
     this.getSize()
   }
@@ -125,28 +145,6 @@ class Node {
     return data
   }
 
-  //  检查节点是否存在自定义数据
-  hasCustomPosition() {
-    return this.customLeft !== undefined && this.customTop !== undefined
-  }
-
-  //  检查节点是否存在自定义位置的祖先节点
-  ancestorHasCustomPosition() {
-    let node = this
-    while (node) {
-      if (node.hasCustomPosition()) {
-        return true
-      }
-      node = node.parent
-    }
-    return false
-  }
-
-  //  添加子节点
-  addChildren(node) {
-    this.children.push(node)
-  }
-
   //  创建节点的各个内容对象数据
   createNodeData() {
     this._imgData = this.createImgNode()
@@ -155,68 +153,11 @@ class Node {
     this._hyperlinkData = this.createHyperlinkNode()
     this._tagData = this.createTagNode()
     this._noteData = this.createNoteNode()
-    this.createGeneralizationNode()
-  }
-
-  //  解绑所有事件
-  removeAllEvent() {
-    if (this._noteData) {
-      this._noteData.node.off(['mouseover', 'mouseout'])
-    }
-    if (this._expandBtn) {
-      this._expandBtn.off(['mouseover', 'mouseout', 'click'])
-    }
-    if (this.group) {
-      this.group.off([
-        'click',
-        'dblclick',
-        'contextmenu',
-        'mousedown',
-        'mouseup',
-        'mouseenter',
-        'mouseleave'
-      ])
-    }
-  }
-
-  //  移除节点内容
-  removeAllNode() {
-    // 节点内的内容
-    ;[
-      this._imgData,
-      this._iconData,
-      this._textData,
-      this._hyperlinkData,
-      this._tagData,
-      this._noteData
-    ].forEach(item => {
-      if (item && item.node) item.node.remove()
-    })
-    this._imgData = null
-    this._iconData = null
-    this._textData = null
-    this._hyperlinkData = null
-    this._tagData = null
-    this._noteData = null
-    // 展开收缩按钮
-    if (this._expandBtn) {
-      this._expandBtn.remove()
-      this._expandBtn = null
-    }
-    // 组
-    if (this.group) {
-      this.group.clear()
-      this.group.remove()
-      this.group = null
-    }
-    // 概要
-    this.removeGeneralization()
   }
 
   //  计算节点的宽高
   getSize() {
-    this.removeAllEvent()
-    this.removeAllNode()
+    this.updateGeneralization()
     this.createNodeData()
     let { width, height } = this.getNodeRect()
     // 判断节点尺寸是否有变化
@@ -293,276 +234,23 @@ class Node {
     }
   }
 
-  //  创建图片节点
-  createImgNode() {
-    let img = this.nodeData.data.image
-    if (!img) {
-      return
-    }
-    let imgSize = this.getImgShowSize()
-    let node = new Image().load(img).size(...imgSize)
-    if (this.nodeData.data.imageTitle) {
-      node.attr('title', this.nodeData.data.imageTitle)
-    }
-    node.on('dblclick', e => {
-      this.mindMap.emit('node_img_dblclick', this, e)
-    })
-    return {
-      node,
-      width: imgSize[0],
-      height: imgSize[1]
-    }
-  }
-
-  //  获取图片显示宽高
-  getImgShowSize() {
-    return resizeImgSize(
-      this.nodeData.data.imageSize.width,
-      this.nodeData.data.imageSize.height,
-      this.mindMap.themeConfig.imgMaxWidth,
-      this.mindMap.themeConfig.imgMaxHeight
-    )
-  }
-
-  //  创建icon节点
-  createIconNode() {
-    let _data = this.nodeData.data
-    if (!_data.icon || _data.icon.length <= 0) {
-      return []
-    }
-    let iconSize = this.mindMap.themeConfig.iconSize
-    return _data.icon.map(item => {
-      return {
-        node: SVG(iconsSvg.getNodeIconListIcon(item)).size(iconSize, iconSize),
-        width: iconSize,
-        height: iconSize
-      }
-    })
-  }
-
-  // 创建富文本节点
-  createRichTextNode() {
-    let g = new G()
-    let html = `<div>${this.nodeData.data.text}</div>`
-    let div = document.createElement('div')
-    div.innerHTML = html
-    div.style.cssText = `position: fixed; left: -999999px;`
-    let el = div.children[0]
-    el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
-    el.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + 'px'
-    this.mindMap.el.appendChild(div)
-    let { width, height } = el.getBoundingClientRect()
-    width = Math.ceil(width)
-    height = Math.ceil(height)
-    g.attr('data-width', width)
-    g.attr('data-height', height)
-    html = div.innerHTML
-    this.mindMap.el.removeChild(div)
-    let foreignObject = new ForeignObject()
-    foreignObject.width(width)
-    foreignObject.height(height)
-    foreignObject.add(SVG(html))
-    g.add(foreignObject)
-    return {
-      node: g,
-      width,
-      height
-    }
-  }
-
-  //  创建文本节点
-  createTextNode() {
-    if (this.nodeData.data.richText) {
-      return this.createRichTextNode()
-    }
-    let g = new G()
-    let fontSize = this.getStyle(
-      'fontSize',
-      false,
-      this.nodeData.data.isActive
-    )
-    let lineHeight = this.getStyle(
-      'lineHeight',
-      false,
-      this.nodeData.data.isActive
-    )
-    // 文本超长自动换行
-    let textStyle = this.style.getTextFontStyle()
-    let textArr = this.nodeData.data.text.split(/\n/gim)
-    let maxWidth = this.mindMap.opt.textAutoWrapWidth
-    textArr.forEach((item, index) => {
-      let arr = item.split('')
-      let lines = []
-      let line = []
-      while(arr.length) {
-        line.push(arr.shift())
-        let text = line.join('')
-        if (measureText(text, textStyle).width >= maxWidth) {
-          lines.push(text)
-          line = []
-        }
-      }
-      if (line.length > 0) {
-        lines.push(line.join(''))
-      }
-      textArr[index] = lines.join('\n')
-    })
-    textArr = textArr.join('\n').split(/\n/gim)
-    textArr.forEach((item, index) => {
-      let node = new Text().text(item)
-      this.style.text(node)
-      node.y(fontSize * lineHeight * index)
-      g.add(node)
-    })
-    let { width, height } = g.bbox()
-    width = Math.ceil(width)
-    height = Math.ceil(height)
-    g.attr('data-width', width)
-    g.attr('data-height', height)
-    return {
-      node: g,
-      width,
-      height
-    }
-  }
-
-  //  创建超链接节点
-  createHyperlinkNode() {
-    let { hyperlink, hyperlinkTitle } = this.nodeData.data
-    if (!hyperlink) {
-      return
-    }
-    let iconSize = this.mindMap.themeConfig.iconSize
-    let node = new SVG()
-    // 超链接节点
-    let a = new A().to(hyperlink).target('_blank')
-    a.node.addEventListener('click', e => {
-      e.stopPropagation()
-    })
-    if (hyperlinkTitle) {
-      a.attr('title', hyperlinkTitle)
-    }
-    // 添加一个透明的层，作为鼠标区域
-    a.rect(iconSize, iconSize).fill({ color: 'transparent' })
-    // 超链接图标
-    let iconNode = SVG(iconsSvg.hyperlink).size(iconSize, iconSize)
-    this.style.iconNode(iconNode)
-    a.add(iconNode)
-    node.add(a)
-    return {
-      node,
-      width: iconSize,
-      height: iconSize
-    }
-  }
-
-  //  创建标签节点
-  createTagNode() {
-    let tagData = this.nodeData.data.tag
-    if (!tagData || tagData.length <= 0) {
-      return []
-    }
-    let nodes = []
-    tagData.slice(0, this.mindMap.opt.maxTag).forEach((item, index) => {
-      let tag = new G()
-      // 标签文本
-      let text = new Text().text(item).x(8).cy(10)
-      this.style.tagText(text, index)
-      let { width } = text.bbox()
-      // 标签矩形
-      let rect = new Rect().size(width + 16, 20)
-      this.style.tagRect(rect, index)
-      tag.add(rect).add(text)
-      nodes.push({
-        node: tag,
-        width: width + 16,
-        height: 20
-      })
-    })
-    return nodes
-  }
-
-  //  创建备注节点
-  createNoteNode() {
-    if (!this.nodeData.data.note) {
-      return null
-    }
-    let iconSize = this.mindMap.themeConfig.iconSize
-    let node = new SVG().attr('cursor', 'pointer')
-    // 透明的层，用来作为鼠标区域
-    node.add(new Rect().size(iconSize, iconSize).fill({ color: 'transparent' }))
-    // 备注图标
-    let iconNode = SVG(iconsSvg.note).size(iconSize, iconSize)
-    this.style.iconNode(iconNode)
-    node.add(iconNode)
-    // 备注tooltip
-    if (!this.mindMap.opt.customNoteContentShow) {
-      if (!this.noteEl) {
-        this.noteEl = document.createElement('div')
-        this.noteEl.style.cssText = `
-                    position: absolute;
-                    padding: 10px;
-                    border-radius: 5px;
-                    box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
-                    display: none;
-                    background-color: #fff;
-                `
-        document.body.appendChild(this.noteEl)
-      }
-      this.noteEl.innerText = this.nodeData.data.note
-    }
-    node.on('mouseover', () => {
-      let { left, top } = node.node.getBoundingClientRect()
-      if (!this.mindMap.opt.customNoteContentShow) {
-        this.noteEl.style.left = left + 'px'
-        this.noteEl.style.top = top + iconSize + 'px'
-        this.noteEl.style.display = 'block'
-      } else {
-        this.mindMap.opt.customNoteContentShow.show(
-          this.nodeData.data.note,
-          left,
-          top + iconSize
-        )
-      }
-    })
-    node.on('mouseout', () => {
-      if (!this.mindMap.opt.customNoteContentShow) {
-        this.noteEl.style.display = 'none'
-      } else {
-        this.mindMap.opt.customNoteContentShow.hide()
-      }
-    })
-    return {
-      node,
-      width: iconSize,
-      height: iconSize
-    }
-  }
-
-  //  获取节点形状
-  getShape() {
-    // 节点使用功能横线风格的话不支持设置形状，直接使用默认的矩形
-    return this.mindMap.themeConfig.nodeUseLineStyle
-      ? 'rectangle'
-      : this.style.getStyle('shape', false, false)
-  }
-
   //  定位节点内容
   layout() {
+    // 清除之前的内容
+    this.group.clear()
     let { width, textContentItemMargin } = this
     let { paddingY } = this.getPaddingVale()
     paddingY += this.shapePadding.paddingY
-    // 创建组
-    this.group = new G()
+    // 展开收起按钮
+    this.renderExpandBtn()
+    // 节点形状
+    this.shapeNode = this.shapeInstance.createShape()
+    this.group.add(this.shapeNode)
+    this.updateNodeShape()
     // 概要节点添加一个带所属节点id的类名
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass('generalization_' + this.generalizationBelongNode.uid)
     }
-    this.draw.add(this.group)
-    this.update(true)
-    // 节点形状
-    this.shapeNode = this.shapeInstance.createShape()
-    this.updateNodeShape()
     // 图片节点
     let imgHeight = 0
     if (this._imgData) {
@@ -634,8 +322,17 @@ class Node {
           : 0)
     )
     this.group.add(textContentNested)
+  }
+
+  // 给节点绑定事件
+  bindGroupEvent() {
     // 单击事件，选中节点
     this.group.on('click', e => {
+      if (this.isMultipleChoice) {
+        e.stopPropagation()
+        this.isMultipleChoice = false
+        return
+      }
       this.mindMap.emit('node_click', this, e)
       this.active(e)
     })
@@ -645,8 +342,10 @@ class Node {
       }
       // 多选和取消多选
       if (e.ctrlKey) {
+        this.isMultipleChoice = true
         let isActive = this.nodeData.data.isActive
-        this.mindMap.renderer.setNodeActive(this, !isActive)
+        if (!isActive) this.mindMap.emit('before_node_active', this, this.renderer.activeNodeList)
+        this.mindMap.execCommand('SET_NODE_ACTIVE', this, !isActive)
         this.mindMap.renderer[isActive ? 'removeActiveNode' : 'addActiveNode'](this)
         this.mindMap.emit(
           'node_active',
@@ -708,16 +407,6 @@ class Node {
     this.mindMap.emit('node_active', this, this.renderer.activeNodeList)
   }
 
-  //  渲染节点到画布，会移除旧的，创建新的
-  renderNode() {
-    // 连线
-    this.renderLine()
-    this.removeAllEvent()
-    this.removeAllNode()
-    this.createNodeData()
-    this.layout()
-  }
-
   //  更新节点
   update(isLayout = false) {
     if (!this.group) {
@@ -730,9 +419,12 @@ class Node {
       // 需要添加展开收缩按钮
       this.renderExpandBtn()
     } else {
+      // 更新展开收起按钮
       this.updateExpandBtnPos()
     }
+    // 更新概要
     this.renderGeneralization()
+    // 更新节点位置
     let t = this.group.transform()
     if (!isLayout) {
       this.group
@@ -749,6 +441,14 @@ class Node {
     }
   }
 
+  // 重新渲染节点，即重新创建节点内容、计算节点大小、计算节点内容布局、更新展开收起按钮，概要及位置
+  reRender() {
+    let sizeChange = this.getSize()
+    this.layout()
+    this.update()
+    return sizeChange
+  }
+
   // 更新节点形状样式
   updateNodeShape() {
     const shape = this.getShape()
@@ -758,12 +458,21 @@ class Node {
   //  递归渲染
   render(callback = () => {}) {
     // 节点
-    if (this.initRender) {
-      this.initRender = false
-      this.renderNode()
+    // 重新渲染连线
+    this.renderLine()
+    if (!this.group) {
+      // 创建组
+      this.group = new G()
+      this.bindGroupEvent()
+      this.draw.add(this.group)
+      this.layout()
+      this.update(true)
     } else {
-      // 连线
-      this.renderLine()
+      this.draw.add(this.group)
+      if (this.needLayout) {
+        this.needLayout = false
+        this.layout()
+      }
       this.update()
     }
     // 子节点
@@ -798,11 +507,11 @@ class Node {
     }
   }
 
-  //  递归删除
+  //  递归删除，只是从画布删除，节点容器还在，后续还可以重新插回画布
   remove() {
-    this.initRender = true
-    this.removeAllEvent()
-    this.removeAllNode()
+    if (!this.group) return
+    this.group.remove()
+    this.removeGeneralization()
     this.removeLine()
     // 子节点
     if (this.children && this.children.length) {
@@ -814,6 +523,13 @@ class Node {
         })
       )
     }
+  }
+
+  // 销毁节点，不但会从画布删除，而且原节点直接置空，后续无法再插回画布
+  destroy() {
+    if (!this.group) return
+    this.group.remove()
+    this.group = null
   }
 
   //  隐藏节点
@@ -895,6 +611,36 @@ class Node {
     }
   }
 
+  //  获取节点形状
+  getShape() {
+    // 节点使用功能横线风格的话不支持设置形状，直接使用默认的矩形
+    return this.mindMap.themeConfig.nodeUseLineStyle
+      ? 'rectangle'
+      : this.style.getStyle('shape', false, false)
+  }
+
+  //  检查节点是否存在自定义数据
+  hasCustomPosition() {
+    return this.customLeft !== undefined && this.customTop !== undefined
+  }
+
+  //  检查节点是否存在自定义位置的祖先节点
+  ancestorHasCustomPosition() {
+    let node = this
+    while (node) {
+      if (node.hasCustomPosition()) {
+        return true
+      }
+      node = node.parent
+    }
+    return false
+  }
+
+  //  添加子节点
+  addChildren(node) {
+    this.children.push(node)
+  }
+
   //  设置连线样式
   styleLine(line, node) {
     let width =
@@ -917,184 +663,6 @@ class Node {
       line.remove()
     })
     this._lines = []
-  }
-
-  //  检查是否存在概要
-  checkHasGeneralization() {
-    return !!this.nodeData.data.generalization
-  }
-
-  //  创建概要节点
-  createGeneralizationNode() {
-    if (this.isGeneralization || !this.checkHasGeneralization()) {
-      return
-    }
-    if (!this._generalizationLine) {
-      this._generalizationLine = this.draw.path()
-    }
-    if (!this._generalizationNode) {
-      this._generalizationNode = new Node({
-        data: {
-          data: this.nodeData.data.generalization
-        },
-        uid: this.mindMap.uid++,
-        renderer: this.renderer,
-        mindMap: this.mindMap,
-        draw: this.draw,
-        isGeneralization: true
-      })
-      this._generalizationNodeWidth = this._generalizationNode.width
-      this._generalizationNodeHeight = this._generalizationNode.height
-      this._generalizationNode.generalizationBelongNode = this
-      if (this.nodeData.data.generalization.isActive) {
-        this.renderer.addActiveNode(this._generalizationNode)
-      }
-    }
-  }
-
-  //  更新概要节点
-  updateGeneralization() {
-    this.removeGeneralization()
-    this.createGeneralizationNode()
-  }
-
-  //  渲染概要节点
-  renderGeneralization() {
-    if (this.isGeneralization) {
-      return
-    }
-    if (!this.checkHasGeneralization()) {
-      this.removeGeneralization()
-      this._generalizationNodeWidth = 0
-      this._generalizationNodeHeight = 0
-      return
-    }
-    if (this.nodeData.data.expand === false) {
-      this.removeGeneralization()
-      return
-    }
-    this.createGeneralizationNode()
-    this.renderer.layout.renderGeneralization(
-      this,
-      this._generalizationLine,
-      this._generalizationNode
-    )
-    this.style.generalizationLine(this._generalizationLine)
-    this._generalizationNode.render()
-  }
-
-  //  删除概要节点
-  removeGeneralization() {
-    if (this._generalizationLine) {
-      this._generalizationLine.remove()
-      this._generalizationLine = null
-    }
-    if (this._generalizationNode) {
-      // 删除概要节点时要同步从激活节点里删除
-      this.renderer.removeActiveNode(this._generalizationNode)
-      this._generalizationNode.remove()
-      this._generalizationNode = null
-    }
-    // hack修复当激活一个节点时创建概要，然后立即激活创建的概要节点后会重复创建概要节点并且无法删除的问题
-    if (this.generalizationBelongNode) {
-      this.draw
-        .find('.generalization_' + this.generalizationBelongNode.uid)
-        .remove()
-    }
-  }
-
-  //  隐藏概要节点
-  hideGeneralization() {
-    if (this._generalizationLine) {
-      this._generalizationLine.hide()
-    }
-    if (this._generalizationNode) {
-      this._generalizationNode.hide()
-    }
-  }
-
-  //  显示概要节点
-  showGeneralization() {
-    if (this._generalizationLine) {
-      this._generalizationLine.show()
-    }
-    if (this._generalizationNode) {
-      this._generalizationNode.show()
-    }
-  }
-
-  //  创建或更新展开收缩按钮内容
-  updateExpandBtnNode() {
-    if (this._expandBtn) {
-      this._expandBtn.clear()
-    }
-    let iconSvg
-    if (this.nodeData.data.expand === false) {
-      iconSvg = btnsSvg.open
-    } else {
-      iconSvg = btnsSvg.close
-    }
-    let node = SVG(iconSvg).size(this.expandBtnSize, this.expandBtnSize)
-    let fillNode = new Circle().size(this.expandBtnSize)
-    node.x(0).y(-this.expandBtnSize / 2)
-    fillNode.x(0).y(-this.expandBtnSize / 2)
-    this.style.iconBtn(node, fillNode)
-    if (this._expandBtn) this._expandBtn.add(fillNode).add(node)
-  }
-
-  //  更新展开收缩按钮位置
-  updateExpandBtnPos() {
-    if (!this._expandBtn) {
-      return
-    }
-    this.renderer.layout.renderExpandBtn(this, this._expandBtn)
-  }
-
-  //  展开收缩按钮
-  renderExpandBtn() {
-    if (
-      !this.nodeData.children ||
-      this.nodeData.children.length <= 0 ||
-      this.isRoot
-    ) {
-      return
-    }
-    this._expandBtn = new G()
-    this.updateExpandBtnNode()
-    this._expandBtn.on('mouseover', e => {
-      e.stopPropagation()
-      this._expandBtn.css({
-        cursor: 'pointer'
-      })
-    })
-    this._expandBtn.on('mouseout', e => {
-      e.stopPropagation()
-      this._expandBtn.css({
-        cursor: 'auto'
-      })
-    })
-    this._expandBtn.on('click', e => {
-      e.stopPropagation()
-      // 展开收缩
-      this.mindMap.execCommand(
-        'SET_NODE_EXPAND',
-        this,
-        !this.nodeData.data.expand
-      )
-      this.mindMap.emit('expand_btn_click', this)
-    })
-    this.group.add(this._expandBtn)
-    this.updateExpandBtnPos()
-  }
-
-  //  移除展开收缩按钮
-  removeExpandBtn() {
-    if (this._expandBtn) {
-      this._expandBtn.off(['mouseover', 'mouseout', 'click'])
-      this._expandBtn.clear()
-      this._expandBtn.remove()
-      this._expandBtn = null
-    }
   }
 
   //  检测当前节点是否是某个节点的祖先节点
@@ -1159,54 +727,9 @@ class Node {
     ) // 父级
   }
 
-  //  修改某个样式
-  setStyle(prop, value, isActive) {
-    this.mindMap.execCommand('SET_NODE_STYLE', this, prop, value, isActive)
-  }
-
   //  获取数据
   getData(key) {
     return key ? this.nodeData.data[key] || '' : this.nodeData.data
-  }
-
-  //  设置数据
-  setData(data = {}) {
-    this.mindMap.execCommand('SET_NODE_DATA', this, data)
-  }
-
-  //  设置文本
-  setText(text, richText) {
-    this.mindMap.execCommand('SET_NODE_TEXT', this, text, richText)
-  }
-
-  //  设置图片
-  setImage(imgData) {
-    this.mindMap.execCommand('SET_NODE_IMAGE', this, imgData)
-  }
-
-  //  设置图标
-  setIcon(icons) {
-    this.mindMap.execCommand('SET_NODE_ICON', this, icons)
-  }
-
-  //  设置超链接
-  setHyperlink(link, title) {
-    this.mindMap.execCommand('SET_NODE_HYPERLINK', this, link, title)
-  }
-
-  //  设置备注
-  setNote(note) {
-    this.mindMap.execCommand('SET_NODE_NOTE', this, note)
-  }
-
-  //  设置标签
-  setTag(tag) {
-    this.mindMap.execCommand('SET_NODE_TAG', this, tag)
-  }
-
-  //  设置形状
-  setShape(shape) {
-    this.mindMap.execCommand('SET_NODE_SHAPE', this, shape)
   }
 }
 
