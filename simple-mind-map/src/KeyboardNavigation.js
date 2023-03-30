@@ -1,4 +1,5 @@
 import { bfsWalk } from './utils'
+import { CONSTANTS } from './utils/constant'
 
 //  键盘导航类
 class KeyboardNavigation {
@@ -7,17 +8,17 @@ class KeyboardNavigation {
     this.opt = opt
     this.mindMap = opt.mindMap
     this.onKeyup = this.onKeyup.bind(this)
-    this.mindMap.keyCommand.addShortcut('Left', () => {
-      this.onKeyup('Left')
+    this.mindMap.keyCommand.addShortcut(CONSTANTS.KEY_DIR.LEFT, () => {
+      this.onKeyup(CONSTANTS.KEY_DIR.LEFT)
     })
-    this.mindMap.keyCommand.addShortcut('Up', () => {
-      this.onKeyup('Up')
+    this.mindMap.keyCommand.addShortcut(CONSTANTS.KEY_DIR.UP, () => {
+      this.onKeyup(CONSTANTS.KEY_DIR.UP)
     })
-    this.mindMap.keyCommand.addShortcut('Right', () => {
-      this.onKeyup('Right')
+    this.mindMap.keyCommand.addShortcut(CONSTANTS.KEY_DIR.RIGHT, () => {
+      this.onKeyup(CONSTANTS.KEY_DIR.RIGHT)
     })
-    this.mindMap.keyCommand.addShortcut('Down', () => {
-      this.onKeyup('Down')
+    this.mindMap.keyCommand.addShortcut(CONSTANTS.KEY_DIR.DOWN, () => {
+      this.onKeyup(CONSTANTS.KEY_DIR.DOWN)
     })
   }
 
@@ -101,19 +102,19 @@ class KeyboardNavigation {
       let { left, top, right, bottom } = rect
       let match = false
       // 按下了左方向键
-      if (dir === 'Left') {
+      if (dir === CONSTANTS.KEY_DIR.LEFT) {
         // 判断节点是否在当前节点的左侧
         match = right <= currentActiveNodeRect.left
         // 按下了右方向键
-      } else if (dir === 'Right') {
+      } else if (dir === CONSTANTS.KEY_DIR.RIGHT) {
         // 判断节点是否在当前节点的右侧
         match = left >= currentActiveNodeRect.right
         // 按下了上方向键
-      } else if (dir === 'Up') {
+      } else if (dir === CONSTANTS.KEY_DIR.UP) {
         // 判断节点是否在当前节点的上面
         match = bottom <= currentActiveNodeRect.top
         // 按下了下方向键
-      } else if (dir === 'Down') {
+      } else if (dir === CONSTANTS.KEY_DIR.DOWN) {
         // 判断节点是否在当前节点的下面
         match = top >= currentActiveNodeRect.bottom
       }
@@ -136,22 +137,22 @@ class KeyboardNavigation {
       let rect = this.getNodeRect(node)
       let { left, top, right, bottom } = rect
       let match = false
-      if (dir === 'Left') {
+      if (dir === CONSTANTS.KEY_DIR.LEFT) {
         match =
           left < currentActiveNodeRect.left &&
           top < currentActiveNodeRect.bottom &&
           bottom > currentActiveNodeRect.top
-      } else if (dir === 'Right') {
+      } else if (dir === CONSTANTS.KEY_DIR.RIGHT) {
         match =
           right > currentActiveNodeRect.right &&
           top < currentActiveNodeRect.bottom &&
           bottom > currentActiveNodeRect.top
-      } else if (dir === 'Up') {
+      } else if (dir === CONSTANTS.KEY_DIR.UP) {
         match =
           top < currentActiveNodeRect.top &&
           left < currentActiveNodeRect.right &&
           right > currentActiveNodeRect.left
-      } else if (dir === 'Down') {
+      } else if (dir === CONSTANTS.KEY_DIR.DOWN) {
         match =
           bottom > currentActiveNodeRect.bottom &&
           left < currentActiveNodeRect.right &&
@@ -185,13 +186,13 @@ class KeyboardNavigation {
       let offsetY = ccY - cY
       if (offsetX === 0 && offsetY === 0) return
       let match = false
-      if (dir === 'Left') {
+      if (dir === CONSTANTS.KEY_DIR.LEFT) {
         match = offsetX <= 0 && offsetX <= offsetY && offsetX <= -offsetY
-      } else if (dir === 'Right') {
+      } else if (dir === CONSTANTS.KEY_DIR.RIGHT) {
         match = offsetX > 0 && offsetX >= -offsetY && offsetX >= offsetY
-      } else if (dir === 'Up') {
+      } else if (dir === CONSTANTS.KEY_DIR.UP) {
         match = offsetY <= 0 && offsetY < offsetX && offsetY < -offsetX
-      } else if (dir === 'Down') {
+      } else if (dir === CONSTANTS.KEY_DIR.DOWN) {
         match = offsetY > 0 && -offsetY < offsetX && offsetY > offsetX
       }
       if (match) {

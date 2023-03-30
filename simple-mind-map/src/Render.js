@@ -7,17 +7,18 @@ import TextEdit from './TextEdit'
 import { copyNodeTree, simpleDeepClone, walk } from './utils'
 import { shapeList } from './Shape'
 import { lineStyleProps } from './themes/default'
+import { CONSTANTS } from './utils/constant'
 
 // 布局列表
 const layouts = {
   // 逻辑结构图
-  logicalStructure: LogicalStructure,
+  [CONSTANTS.LAYOUT.LOGICAL_STRUCTURE]: LogicalStructure,
   // 思维导图
-  mindMap: MindMap,
+  [CONSTANTS.LAYOUT.MIND_MAP]: MindMap,
   // 目录组织图
-  catalogOrganization: CatalogOrganization,
+  [CONSTANTS.LAYOUT.CATALOG_ORGANIZATION]: CatalogOrganization,
   // 组织结构图
-  organizationStructure: OrganizationStructure
+  [CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE]: OrganizationStructure
 }
 
 //  渲染
@@ -56,7 +57,7 @@ class Render {
     this.layout = new (
       layouts[this.mindMap.opt.layout]
         ? layouts[this.mindMap.opt.layout]
-        : layouts.logicalStructure
+        : layouts[CONSTANTS.LAYOUT.LOGICAL_STRUCTURE]
     )(this)
   }
 
