@@ -1,4 +1,5 @@
 import { Rect, Polygon, Path } from '@svgdotjs/svg.js'
+import { CONSTANTS } from './utils/constant'
 
 //  节点形状类
 export default class Shape {
@@ -15,37 +16,37 @@ export default class Shape {
     const actHeight = height + paddingY * 2
     const actOffset = Math.abs(actWidth - actHeight)
     switch (shape) {
-      case 'roundedRectangle':
+      case CONSTANTS.SHAPE.ROUNDED_RECTANGLE:
         return {
           paddingX: height > width ? (height - width) / 2 : 0,
           paddingY: 0
         }
-      case 'diamond':
+      case CONSTANTS.SHAPE.DIAMOND:
         return {
           paddingX: width / 2,
           paddingY: height / 2
         }
-      case 'parallelogram':
+      case CONSTANTS.SHAPE.PARALLELOGRAM:
         return {
           paddingX: paddingX <= 0 ? defaultPaddingX : 0,
           paddingY: 0
         }
-      case 'outerTriangularRectangle':
+      case CONSTANTS.SHAPE.OUTER_TRIANGULAR_RECTANGLE:
         return {
           paddingX: paddingX <= 0 ? defaultPaddingX : 0,
           paddingY: 0
         }
-      case 'innerTriangularRectangle':
+      case CONSTANTS.SHAPE.INNER_TRIANGULAR_RECTANGLE:
         return {
           paddingX: paddingX <= 0 ? defaultPaddingX : 0,
           paddingY: 0
         }
-      case 'ellipse':
+      case CONSTANTS.SHAPE.ELLIPSE:
         return {
           paddingX: paddingX <= 0 ? defaultPaddingX : 0,
           paddingY: paddingY <= 0 ? defaultPaddingY : 0
         }
-      case 'circle':
+      case CONSTANTS.SHAPE.CIRCLE:
         return {
           paddingX: actHeight > actWidth ? actOffset / 2 : 0,
           paddingY: actHeight < actWidth ? actOffset / 2 : 0
@@ -64,30 +65,30 @@ export default class Shape {
     let { width, height } = this.node
     let node = null
     // 矩形
-    if (shape === 'rectangle') {
+    if (shape === CONSTANTS.SHAPE.RECTANGLE) {
       node = new Rect().size(width, height)
-    } else if (shape === 'diamond') {
+    } else if (shape === CONSTANTS.SHAPE.DIAMOND) {
       // 菱形
       node = this.createDiamond()
-    } else if (shape === 'parallelogram') {
+    } else if (shape === CONSTANTS.SHAPE.PARALLELOGRAM) {
       // 平行四边形
       node = this.createParallelogram()
-    } else if (shape === 'roundedRectangle') {
+    } else if (shape === CONSTANTS.SHAPE.ROUNDED_RECTANGLE) {
       // 圆角矩形
       node = this.createRoundedRectangle()
-    } else if (shape === 'octagonalRectangle') {
+    } else if (shape === CONSTANTS.SHAPE.OCTAGONAL_RECTANGLE) {
       // 八角矩形
       node = this.createOctagonalRectangle()
-    } else if (shape === 'outerTriangularRectangle') {
+    } else if (shape === CONSTANTS.SHAPE.OUTER_TRIANGULAR_RECTANGLE) {
       // 外三角矩形
       node = this.createOuterTriangularRectangle()
-    } else if (shape === 'innerTriangularRectangle') {
+    } else if (shape === CONSTANTS.SHAPE.INNER_TRIANGULAR_RECTANGLE) {
       // 内三角矩形
       node = this.createInnerTriangularRectangle()
-    } else if (shape === 'ellipse') {
+    } else if (shape === CONSTANTS.SHAPE.ELLIPSE) {
       // 椭圆
       node = this.createEllipse()
-    } else if (shape === 'circle') {
+    } else if (shape === CONSTANTS.SHAPE.CIRCLE) {
       // 圆
       node = this.createCircle()
     }
@@ -216,13 +217,13 @@ export default class Shape {
 
 // 形状列表
 export const shapeList = [
-  'rectangle',
-  'diamond',
-  'parallelogram',
-  'roundedRectangle',
-  'octagonalRectangle',
-  'outerTriangularRectangle',
-  'innerTriangularRectangle',
-  'ellipse',
-  'circle'
+  CONSTANTS.SHAPE.RECTANGLE,
+  CONSTANTS.SHAPE.DIAMOND,
+  CONSTANTS.SHAPE.PARALLELOGRAM,
+  CONSTANTS.SHAPE.ROUNDED_RECTANGLE,
+  CONSTANTS.SHAPE.OCTAGONAL_RECTANGLE,
+  CONSTANTS.SHAPE.OUTER_TRIANGULAR_RECTANGLE,
+  CONSTANTS.SHAPE.INNER_TRIANGULAR_RECTANGLE,
+  CONSTANTS.SHAPE.ELLIPSE,
+  CONSTANTS.SHAPE.CIRCLE
 ]

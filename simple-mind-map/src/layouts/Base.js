@@ -1,4 +1,5 @@
 import Node from '../Node'
+import { CONSTANTS } from '../utils/constant'
 
 //  布局基类
 class Base {
@@ -42,7 +43,7 @@ class Base {
       newNode.reset()
       newNode.layerIndex = layerIndex
       // 主题或主题配置改变了需要重新计算节点大小和布局
-      if (this.renderer.renderSource === 'changeTheme') {
+      if (this.renderer.renderSource === CONSTANTS.CHANGE_THEME) {
         newNode.getSize()
         newNode.needLayout = true
       }

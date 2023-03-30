@@ -22,32 +22,6 @@ export const tagColorList = [
   }
 ]
 
-//  布局结构列表
-export const layoutList = [
-  {
-    name: '逻辑结构图',
-    value: 'logicalStructure',
-  },
-  {
-    name: '思维导图',
-    value: 'mindMap',
-  },
-  {
-    name: '组织结构图',
-    value: 'organizationStructure',
-  },
-  {
-    name: '目录组织图',
-    value: 'catalogOrganization',
-  }
-]
-export const layoutValueList = [
-  'logicalStructure',
-  'mindMap',
-  'catalogOrganization',
-  'organizationStructure'
-]
-
 //  主题列表
 export const themeList = [
   {
@@ -138,4 +112,72 @@ export const themeList = [
     name: '浪漫紫',
     value: 'romanticPurple',
   }
+]
+
+// 常量
+export const CONSTANTS = {
+  CHANGE_THEME: 'changeTheme',
+  MODE: {
+    READONLY: 'readonly',
+    EDIT: 'edit'
+  },
+  LAYOUT: {
+    LOGICAL_STRUCTURE: 'logicalStructure',
+    MIND_MAP: 'mindMap',
+    ORGANIZATION_STRUCTURE: 'organizationStructure',
+    CATALOG_ORGANIZATION: 'catalogOrganization'
+  },
+  DIR: {
+    UP: 'up',
+    LEFT: 'left',
+    DOWN: 'down',
+    RIGHT: 'right'
+  },
+  KEY_DIR: {
+    LEFT: 'Left',
+    UP: 'Up',
+    RIGHT: 'Right',
+    DOWN: 'Down'
+  },
+  SHAPE: {
+    RECTANGLE: 'rectangle',
+    DIAMOND: 'diamond',
+    PARALLELOGRAM: 'parallelogram',
+    ROUNDED_RECTANGLE: 'roundedRectangle',
+    OCTAGONAL_RECTANGLE: 'octagonalRectangle',
+    OUTER_TRIANGULAR_RECTANGLE: 'outerTriangularRectangle',
+    INNER_TRIANGULAR_RECTANGLE: 'innerTriangularRectangle',
+    ELLIPSE: 'ellipse',
+    CIRCLE: 'circle'
+  },
+  MOUSE_WHEEL_ACTION: {
+    ZOOM: 'zoom',
+    MOVE: 'move'
+  }
+}
+
+//  布局结构列表
+export const layoutList = [
+  {
+    name: '逻辑结构图',
+    value: CONSTANTS.LAYOUT.LOGICAL_STRUCTURE,
+  },
+  {
+    name: '思维导图',
+    value: CONSTANTS.LAYOUT.MIND_MAP,
+  },
+  {
+    name: '组织结构图',
+    value: CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE,
+  },
+  {
+    name: '目录组织图',
+    value: CONSTANTS.LAYOUT.CATALOG_ORGANIZATION,
+  }
+]
+export const layoutValueList = [
+  CONSTANTS.LAYOUT.LOGICAL_STRUCTURE,
+  CONSTANTS.LAYOUT.MIND_MAP,
+  CONSTANTS.LAYOUT.CATALOG_ORGANIZATION,
+  CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE
 ]

@@ -6,6 +6,7 @@ import nodeGeneralizationMethods from './utils/nodeGeneralization'
 import nodeExpandBtnMethods from './utils/nodeExpandBtn'
 import nodeCommandWrapsMethods from './utils/nodeCommandWraps'
 import nodeCreateContentsMethods from './utils/nodeCreateContents'
+import { CONSTANTS } from './utils/constant'
 
 
 //  节点类
@@ -452,7 +453,7 @@ class Node {
   // 更新节点形状样式
   updateNodeShape() {
     const shape = this.getShape()
-    this.style[shape === 'rectangle' ? 'rect' : 'shape'](this.shapeNode)
+    this.style[shape === CONSTANTS.SHAPE.RECTANGLE ? 'rect' : 'shape'](this.shapeNode)
   }
 
   //  递归渲染
@@ -615,7 +616,7 @@ class Node {
   getShape() {
     // 节点使用功能横线风格的话不支持设置形状，直接使用默认的矩形
     return this.mindMap.themeConfig.nodeUseLineStyle
-      ? 'rectangle'
+      ? CONSTANTS.SHAPE.RECTANGLE
       : this.style.getStyle('shape', false, false)
   }
 
