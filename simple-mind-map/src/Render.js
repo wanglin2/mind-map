@@ -33,6 +33,8 @@ class Render {
     this.renderTree = merge({}, this.mindMap.opt.data || {})
     // 是否重新渲染
     this.reRender = false
+    // 触发render的来源
+    this.renderSource = ''
     // 当前激活的节点列表
     this.activeNodeList = []
     // 根节点
@@ -231,7 +233,8 @@ class Render {
   }
 
   //   渲染
-  render(callback = () => {}) {
+  render(callback = () => {}, source) {
+    this.renderSource = source
     if (this.reRender) {
       this.clearActive()
     }
@@ -239,7 +242,7 @@ class Render {
       this.root = root
       this.root.render(() => {
         this.mindMap.emit('node_tree_render_end')
-        callback()
+        callback && callback()
       })
     })
     this.mindMap.emit('node_active', null, this.activeNodeList)
@@ -356,7 +359,7 @@ class Render {
     } else {
       let text = first.layerIndex === 1 ? defaultInsertSecondLevelNodeText : defaultInsertBelowSecondLevelNodeText
       if (first.layerIndex === 1) {
-        first.parent.initRender = true
+        first.parent.destroy()
       }
       let index = this.getNodeIndex(first)
       first.parent.nodeData.children.splice(index + 1, 0, {
@@ -397,10 +400,7 @@ class Render {
       // 插入子节点时自动展开子节点
       node.nodeData.data.expand = true
       if (node.isRoot) {
-        node.initRender = true
-        // this.mindMap.batchExecution.push('renderNode' + index, () => {
-        //     node.renderNode()
-        // })
+        node.destroy()
       }
     })
     this.mindMap.render()
@@ -492,8 +492,7 @@ class Render {
     existParent.nodeData.children.splice(existIndex, 0, node.nodeData)
     this.mindMap.render(() => {
       if (nodeLayerChanged) {
-        node.getSize()
-        node.layout()
+        node.reRender()
       }
     })
   }
@@ -531,8 +530,7 @@ class Render {
     existParent.nodeData.children.splice(existIndex, 0, node.nodeData)
     this.mindMap.render(() => {
       if (nodeLayerChanged) {
-        node.getSize()
-        node.layout()
+        node.reRender()
       }
     })
   }
@@ -625,7 +623,7 @@ class Render {
     toNode.nodeData.children.push(copyData)
     this.mindMap.render()
     if (toNode.isRoot) {
-      toNode.renderNode()
+      toNode.destroy()
     }
   }
 
@@ -913,8 +911,7 @@ class Render {
   //  设置节点数据，并判断是否渲染
   setNodeDataRender(node, data) {
     this.setNodeData(node, data)
-    let changed = node.getSize()
-    node.layout()
+    let changed = node.reRender()
     if (changed) {
       if (node.isGeneralization) {
         // 概要节点

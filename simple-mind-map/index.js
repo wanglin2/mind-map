@@ -135,7 +135,7 @@ class MindMap {
     })
 
     // 初始渲染
-    this.reRender()
+    this.render()
     setTimeout(() => {
       this.command.addHistory()
     }, 0)
@@ -153,11 +153,11 @@ class MindMap {
   }
 
   //  渲染，部分渲染
-  render(callback) {
+  render(callback, source = '') {
     this.batchExecution.push('render', () => {
       this.initTheme()
       this.renderer.reRender = false
-      this.renderer.render(callback)
+      this.renderer.render(callback, source)
     })
   }
 
@@ -206,7 +206,7 @@ class MindMap {
   setTheme(theme) {
     this.renderer.clearAllActive()
     this.opt.theme = theme
-    this.reRender()
+    this.render(null, 'changeTheme')
   }
 
   //  获取当前主题
@@ -217,7 +217,7 @@ class MindMap {
   //  设置主题配置
   setThemeConfig(config) {
     this.opt.themeConfig = config
-    this.reRender()
+    this.render(null, 'changeTheme')
   }
 
   //  获取自定义主题配置

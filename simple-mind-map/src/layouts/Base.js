@@ -41,6 +41,11 @@ class Base {
       newNode = data._node
       newNode.reset()
       newNode.layerIndex = layerIndex
+      // 主题或主题配置改变了需要重新计算节点大小和布局
+      if (this.renderer.renderSource === 'changeTheme') {
+        newNode.getSize()
+        newNode.needLayout = true
+      }
     } else {
       // 创建新节点
       newNode = new Node({
