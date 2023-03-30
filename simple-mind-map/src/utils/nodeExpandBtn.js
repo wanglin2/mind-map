@@ -1,23 +1,47 @@
 import btnsSvg from '../svg/btns'
 import { SVG, Circle, G } from '@svgdotjs/svg.js'
 
+// 创建展开收起按钮的内容节点
+function createExpandNodeContent() {
+  if (this._openExpandNode) {
+    return
+  }
+  // 展开的节点
+  this._openExpandNode = SVG(btnsSvg.open).size(
+    this.expandBtnSize,
+    this.expandBtnSize
+  )
+  this._openExpandNode.x(0).y(-this.expandBtnSize / 2)
+  // 收起的节点
+  this._closeExpandNode = SVG(btnsSvg.close).size(
+    this.expandBtnSize,
+    this.expandBtnSize
+  )
+  this._closeExpandNode.x(0).y(-this.expandBtnSize / 2)
+  // 填充节点
+  this._fillExpandNode = new Circle().size(this.expandBtnSize)
+  this._fillExpandNode.x(0).y(-this.expandBtnSize / 2)
+  // 设置样式
+  this.style.iconBtn(
+    this._openExpandNode,
+    this._closeExpandNode,
+    this._fillExpandNode
+  )
+}
+
 //  创建或更新展开收缩按钮内容
 function updateExpandBtnNode() {
   if (this._expandBtn) {
     this._expandBtn.clear()
   }
-  let iconSvg
+  this.createExpandNodeContent()
+  let node
   if (this.nodeData.data.expand === false) {
-    iconSvg = btnsSvg.open
+    node = this._openExpandNode
   } else {
-    iconSvg = btnsSvg.close
+    node = this._closeExpandNode
   }
-  let node = SVG(iconSvg).size(this.expandBtnSize, this.expandBtnSize)
-  let fillNode = new Circle().size(this.expandBtnSize)
-  node.x(0).y(-this.expandBtnSize / 2)
-  fillNode.x(0).y(-this.expandBtnSize / 2)
-  this.style.iconBtn(node, fillNode)
-  if (this._expandBtn) this._expandBtn.add(fillNode).add(node)
+  if (this._expandBtn) this._expandBtn.add(this._fillExpandNode).add(node)
 }
 
 //  更新展开收缩按钮位置
@@ -77,8 +101,9 @@ function removeExpandBtn() {
 }
 
 export default {
-    updateExpandBtnNode,
-    updateExpandBtnPos,
-    renderExpandBtn,
-    removeExpandBtn
+  createExpandNodeContent,
+  updateExpandBtnNode,
+  updateExpandBtnPos,
+  renderExpandBtn,
+  removeExpandBtn
 }
