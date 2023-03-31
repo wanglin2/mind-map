@@ -95,7 +95,7 @@ class MindMap {
     this.draw = this.svg.group()
 
     // 节点id
-    this.uid = 0
+    this.uid = 1
 
     // 初始化主题
     this.initTheme()
