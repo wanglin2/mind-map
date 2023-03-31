@@ -34,6 +34,8 @@ class Render {
     this.renderTree = merge({}, this.mindMap.opt.data || {})
     // 是否重新渲染
     this.reRender = false
+    this.nodeCache = {}
+    this.lastNodeCache = {}
     // 触发render的来源
     this.renderSource = ''
     // 当前激活的节点列表
@@ -235,12 +237,29 @@ class Render {
 
   //   渲染
   render(callback = () => {}, source) {
+    // 触发当前重新渲染的来源
     this.renderSource = source
+    // 节点缓存
+    this.lastNodeCache = this.nodeCache
+    this.nodeCache = {}
+    // 重新渲染需要清除激活状态
     if (this.reRender) {
       this.clearActive()
     }
+    // 计算布局
     this.layout.doLayout(root => {
+      // 删除本次渲染时不再需要的节点
+      Object.keys(this.lastNodeCache).forEach((uid) => {
+        if (!this.nodeCache[uid]) {
+          this.lastNodeCache[uid].destroy()
+          if (this.lastNodeCache[uid].parent) {
+            this.lastNodeCache[uid].parent.removeLine()
+          }
+        }
+      })
+      // 更新根节点
       this.root = root
+      // 渲染节点
       this.root.render(() => {
         this.mindMap.emit('node_tree_render_end')
         callback && callback()
@@ -326,7 +345,7 @@ class Render {
     let data = this.mindMap.command.back(step)
     if (data) {
       this.renderTree = data
-      this.mindMap.reRender()
+      this.mindMap.render()
     }
   }
 
@@ -336,7 +355,7 @@ class Render {
     let data = this.mindMap.command.forward(step)
     if (data) {
       this.renderTree = data
-      this.mindMap.reRender()
+      this.mindMap.render()
     }
   }
 
@@ -656,12 +675,14 @@ class Render {
     }
     // 如果开启了富文本，则需要应用到富文本上
     if (this.mindMap.richText) {
-      this.mindMap.richText.showEditText(node)
       let config = this.mindMap.richText.normalStyleToRichTextStyle({
         [prop]: value
       })
-      this.mindMap.richText.formatAllText(config)
-      this.mindMap.richText.hideEditText()
+      if (Object.keys(config).length > 0) {
+        this.mindMap.richText.showEditText(node)
+        this.mindMap.richText.formatAllText(config)
+        this.mindMap.richText.hideEditText()
+      }
     }
     this.setNodeDataRender(node, data)
     // 更新了连线的样式
@@ -716,7 +737,7 @@ class Render {
       0,
       0
     )
-    this.mindMap.reRender()
+    this.mindMap.render()
   }
 
   //  收起所有
@@ -735,7 +756,7 @@ class Render {
       0,
       0
     )
-    this.mindMap.reRender()
+    this.mindMap.render()
   }
 
   //  展开到指定层级
@@ -752,7 +773,7 @@ class Render {
       0,
       0
     )
-    this.mindMap.reRender()
+    this.mindMap.render()
   }
 
   //  切换激活节点的展开状态
