@@ -87,6 +87,9 @@ function renderExpandBtn() {
       )
       this.mindMap.emit('expand_btn_click', this)
     })
+    this._expandBtn.on('dblclick', e => {
+      e.stopPropagation()
+    })
     this.group.add(this._expandBtn)
   }
   this.updateExpandBtnNode()
