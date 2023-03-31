@@ -23,7 +23,7 @@ export default class TextEdit {
       // 隐藏文本编辑框
       this.hideEditTextBox()
     })
-    this.mindMap.on('draw_mousedown', () => {
+    this.mindMap.on('svg_mousedown', () => {
       // 隐藏文本编辑框
       this.hideEditTextBox()
     })
