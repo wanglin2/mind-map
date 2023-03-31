@@ -44,6 +44,8 @@ const mindMap = new MindMap({
 | customHandleMousewheel（v0.4.3+）     | Function  | null | 自定义鼠标滚轮事件处理，可以传一个函数，回调参数为事件对象                 |          |
 | mousewheelAction（v0.4.3+）     | String  | zoom | 鼠标滚轮的行为，`zoom`（放大缩小）、`move`（上下移动）。如果`customHandleMousewheel`传了自定义函数，这个属性不生效                 |          |
 | mousewheelMoveStep（v0.4.3+）     | Number  | 100 | 当`mousewheelAction`设为`move`时，可以通过该属性控制鼠标滚动一下视图移动的步长，单位`px`               |          |
+| defaultInsertSecondLevelNodeText（v0.4.7+）     | String  | 二级节点 | 默认插入的二级节点的文字               |          |
+| defaultInsertBelowSecondLevelNodeText（v0.4.7+）     | String  | 分支主题 | 默认插入的二级以下节点的文字               |          |
 
 ### 水印配置
 
@@ -263,11 +265,11 @@ mindMap.updateConfig({
 | SELECT_ALL                          | 全选                                                         |                                                              |
 | BACK                                | 回退指定的步数                                               | step（要回退的步数，默认为1）                                |
 | FORWARD                             | 前进指定的步数                                               | step（要前进的步数，默认为1）                                |
-| INSERT_NODE                         | 插入同级节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效 | openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为`true`）                                                             |
-| INSERT_CHILD_NODE                   | 插入子节点，操作节点为当前激活的节点                         |   openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为`true`）                                                           |
+| INSERT_NODE                         | 插入同级节点，操作节点为当前激活的节点或指定节点，如果有多个激活节点，只会对第一个有效 | openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为`true`）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)）                                                             |
+| INSERT_CHILD_NODE                   | 插入子节点，操作节点为当前激活的节点或指定节点                         |   openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为`true`）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)）                                                           |
 | UP_NODE                             | 上移节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的第一个节点使用无效 |                                                              |
 | DOWN_NODE                           | 操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的最后一个节点使用无效 |                                                              |
-| REMOVE_NODE                         | 删除节点，操作节点为当前激活的节点                           |                                                              |
+| REMOVE_NODE                         | 删除节点，操作节点为当前激活的节点或指定节点                         |   appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）                                                           |
 | PASTE_NODE                          | 粘贴节点到节点，操作节点为当前激活的节点                     | data（要粘贴的节点数据，一般通过`renderer.copyNode()`方法和`renderer.cutNode()`方法获取） |
 | CUT_NODE                            | 剪切节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点使用无效 | callback(回调函数，剪切的节点数据会通过调用该函数并通过参数返回) |
 | SET_NODE_STYLE                      | 修改节点样式                                                 | node（要设置样式的节点）、prop（样式属性）、value（样式属性值）、isActive（布尔值，是否设置的是激活状态的样式） |

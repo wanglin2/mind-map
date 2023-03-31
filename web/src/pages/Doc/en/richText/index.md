@@ -65,6 +65,12 @@ Replace the built-in font size list during rich text editing. The built-in list 
 
 Select All. When the node is being edited, you can select all the text in the node through this method.
 
+### focus()
+
+> v0.4.7+
+
+Focus.
+
 ### formatText(config = {})
 
 - `config`：Object. The key is the style attribute and the value is the style value. The complete configuration is as follows:

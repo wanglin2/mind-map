@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.4.7</h2>
+<p>optimization: 1.During rich text editing, when initially focusing, all are no longer selected by default; 2.When editing rich text, use the node fill color as the background color to avoid being invisible when the node color is white.  3.Node activation state switching no longer triggers history. 4.Triggering history multiple times in a short time will only add the last data. 5.Optimize the addition of historical records. When there is a rollback, delete the historical data after the current pointer when adding a new record again.</p>
+<p>New: 1.Support for importing and exporting Markdown format files. 2.Support for configuring initial text when inserting nodes. 3.Expand the commands for inserting and deleting nodes to support specifying nodes.</p>
 <h2>0.4.6</h2>
 <p>New: 1.Associated lines support adjusting control points.</p>
 <p>optimization: 1.When adding historical data, filter data that has not changed compared to the previous time.</p>

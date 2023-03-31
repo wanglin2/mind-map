@@ -2,6 +2,7 @@ import { imgToDataUrl, downloadFile } from './utils'
 import JsPDF from 'jspdf'
 import { SVG } from '@svgdotjs/svg.js'
 import drawBackgroundImageToCanvas from './utils/simulateCSSBackgroundInCanvas'
+import { transformToMarkdown } from './parse/toMarkdown'
 const URL = window.URL || window.webkitURL || window
 
 //  导出类
@@ -40,8 +41,10 @@ class Export {
     let nodeWithDomToImg = null
     if (domToImage && this.mindMap.richText) {
       let res = await this.mindMap.richText.handleSvgDomElements(svg)
-      nodeWithDomToImg = res.svg
-      svgHTML = res.svgHTML
+      if (res) {
+        nodeWithDomToImg = res.svg
+        svgHTML = res.svgHTML
+      }
     }
     return {
       node: svg,
@@ -235,6 +238,14 @@ class Export {
   //  专有文件，其实就是json文件
   smm(name, withConfig) {
     return this.json(name, withConfig)
+  }
+
+  // markdown文件
+  md() {
+    let data = this.mindMap.getData()
+    let content = transformToMarkdown(data)
+    let blob = new Blob([content])
+    return URL.createObjectURL(blob)
   }
 }
 
