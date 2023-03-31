@@ -34,6 +34,11 @@ class Render {
     this.renderTree = merge({}, this.mindMap.opt.data || {})
     // 是否重新渲染
     this.reRender = false
+    // 是否正在渲染中
+    this.isRendering = false
+    // 是否存在等待渲染
+    this.hasWaitRendering = false
+    // 用于缓存节点
     this.nodeCache = {}
     this.lastNodeCache = {}
     // 触发render的来源
@@ -237,6 +242,13 @@ class Render {
 
   //   渲染
   render(callback = () => {}, source) {
+    // 如果当前还没有渲染完毕，不再触发渲染
+    if (this.isRendering) {
+      // 等待当前渲染完毕后再进行一次渲染
+      this.hasWaitRendering = true
+      return
+    }
+    this.isRendering = true
     // 触发当前重新渲染的来源
     this.renderSource = source
     // 节点缓存
@@ -261,8 +273,13 @@ class Render {
       this.root = root
       // 渲染节点
       this.root.render(() => {
+        this.isRendering = false
         this.mindMap.emit('node_tree_render_end')
         callback && callback()
+        if (this.hasWaitRendering) {
+          this.hasWaitRendering = false
+          this.render(callback, source)
+        }
       })
     })
     this.mindMap.emit('node_active', null, this.activeNodeList)
