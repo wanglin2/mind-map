@@ -4,6 +4,7 @@ import './css/quill.css'
 import html2canvas from 'html2canvas'
 import { Image as SvgImage } from '@svgdotjs/svg.js'
 import { walk } from './utils'
+import { CONSTANTS } from './utils/constant'
 
 let extended = false
 
@@ -97,7 +98,7 @@ class RichText {
     this.mindMap.renderer.textEdit.registerTmpShortcut()
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div')
-      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;`
+      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: 3px 5px;margin-left: -5px;margin-top: -3px;`
       document.body.appendChild(this.textEditNode)
     }
     // 原始宽高
@@ -147,7 +148,7 @@ class RichText {
       underline: node.style.merge('textDecoration') === 'underline',
       strike: node.style.merge('textDecoration') === 'line-through'
     }
-    this.formatText(style)
+    this.formatAllText(style)
   }
 
   // 隐藏文本编辑控件，即完成编辑
@@ -435,6 +436,7 @@ class RichText {
           node.data.richText = false
           div.innerHTML = node.data.text
           node.data.text = div.textContent
+          // delete node.data.uid
         }
       },
       null,
@@ -445,7 +447,7 @@ class RichText {
     // 清空历史数据，并且触发数据变化
     this.mindMap.command.clearHistory()
     this.mindMap.command.addHistory()
-    this.mindMap.reRender()
+    this.mindMap.render(null, CONSTANTS.TRANSFORM_TO_NORMAL_NODE)
   }
 
   // 插件被移除前做的事情

@@ -79,14 +79,14 @@ class Style {
       color: this.merge('fillColor')
     })
     // 节点使用横线样式，不需要渲染非激活状态的边框样式
-    if (
-      !this.ctx.isRoot &&
-      !this.ctx.isGeneralization &&
-      this.ctx.mindMap.themeConfig.nodeUseLineStyle &&
-      !this.ctx.nodeData.data.isActive
-    ) {
-      return
-    }
+    // if (
+    //   !this.ctx.isRoot &&
+    //   !this.ctx.isGeneralization &&
+    //   this.ctx.mindMap.themeConfig.nodeUseLineStyle &&
+    //   !this.ctx.nodeData.data.isActive
+    // ) {
+    //   return
+    // }
     node.stroke({
       color: this.merge('borderColor'),
       width: this.merge('borderWidth'),
@@ -120,11 +120,11 @@ class Style {
   }
 
   //  html文字节点
-  domText(node, fontSizeScale = 1) {
+  domText(node, fontSizeScale = 1, textLines) {
     node.style.fontFamily = this.merge('fontFamily')
     node.style.fontSize = this.merge('fontSize') * fontSizeScale + 'px'
     node.style.fontWeight = this.merge('fontWeight') || 'normal'
-    node.style.lineHeight = this.merge('lineHeight')
+    node.style.lineHeight = textLines === 1 ? 'normal' : this.merge('lineHeight')
     node.style.fontStyle = this.merge('fontStyle')
   }
 
