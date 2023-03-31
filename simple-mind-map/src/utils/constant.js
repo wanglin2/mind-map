@@ -117,6 +117,7 @@ export const themeList = [
 // 常量
 export const CONSTANTS = {
   CHANGE_THEME: 'changeTheme',
+  TRANSFORM_TO_NORMAL_NODE: 'transformAllNodesToNormalNode',
   MODE: {
     READONLY: 'readonly',
     EDIT: 'edit'

@@ -2,6 +2,7 @@
     overflow: hidden;
     padding: 0;
     height: auto;
+    line-height: normal;
 }
 
 .ql-container {

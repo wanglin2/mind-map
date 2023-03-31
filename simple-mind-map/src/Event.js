@@ -28,6 +28,7 @@ class Event extends EventEmitter {
   //  绑定函数上下文
   bindFn() {
     this.onDrawClick = this.onDrawClick.bind(this)
+    this.onDrawMousedown = this.onDrawMousedown.bind(this)
     this.onMousedown = this.onMousedown.bind(this)
     this.onMousemove = this.onMousemove.bind(this)
     this.onMouseup = this.onMouseup.bind(this)
@@ -40,6 +41,7 @@ class Event extends EventEmitter {
   //  绑定事件
   bind() {
     this.mindMap.svg.on('click', this.onDrawClick)
+    this.mindMap.svg.on('mousedown', this.onDrawMousedown)
     this.mindMap.el.addEventListener('mousedown', this.onMousedown)
     this.mindMap.svg.on('mousedown', this.onSvgMousedown)
     window.addEventListener('mousemove', this.onMousemove)
@@ -52,6 +54,7 @@ class Event extends EventEmitter {
   //  解绑事件
   unbind() {
     this.mindMap.svg.off('click', this.onDrawClick)
+    this.mindMap.svg.off('mousedown', this.onDrawMousedown)
     this.mindMap.el.removeEventListener('mousedown', this.onMousedown)
     window.removeEventListener('mousemove', this.onMousemove)
     window.removeEventListener('mouseup', this.onMouseup)
@@ -65,6 +68,11 @@ class Event extends EventEmitter {
     this.emit('draw_click', e)
   }
 
+  // 画布的鼠标按下事件
+  onDrawMousedown(e) {
+    this.emit('draw_mousedown', e)
+  }
+
   //   svg画布的鼠标按下事件
   onSvgMousedown(e) {
     this.emit('svg_mousedown', e)
@@ -72,7 +80,6 @@ class Event extends EventEmitter {
 
   //  鼠标按下事件
   onMousedown(e) {
-    // e.preventDefault()
     // 鼠标左键
     if (e.which === 1) {
       this.isLeftMousedown = true
@@ -84,13 +91,13 @@ class Event extends EventEmitter {
 
   //  鼠标移动事件
   onMousemove(e) {
-    // e.preventDefault()
     this.mousemovePos.x = e.clientX
     this.mousemovePos.y = e.clientY
     this.mousemoveOffset.x = e.clientX - this.mousedownPos.x
     this.mousemoveOffset.y = e.clientY - this.mousedownPos.y
     this.emit('mousemove', e, this)
     if (this.isLeftMousedown) {
+      e.preventDefault()
       this.emit('drag', e, this)
     }
   }

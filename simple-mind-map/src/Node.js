@@ -450,6 +450,7 @@ class Node {
 
   // 更新节点形状样式
   updateNodeShape() {
+    if (!this.shapeNode) return
     const shape = this.getShape()
     this.style[shape === CONSTANTS.SHAPE.RECTANGLE ? 'rect' : 'shape'](this.shapeNode)
   }
