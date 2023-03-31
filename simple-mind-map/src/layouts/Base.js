@@ -13,6 +13,7 @@ class Base {
     this.draw = this.mindMap.draw
     // 根节点
     this.root = null
+    // 保存所有uid和节点，用于复用
     this.nodePool = {}
   }
 
