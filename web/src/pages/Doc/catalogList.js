@@ -28,6 +28,7 @@ let APIList = [
   'watermark',
   'associativeLine',
   'xmind',
+  'markdown',
   'utils'
 ]
 

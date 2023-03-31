@@ -1,4 +1,4 @@
-import { copyRenderTree, simpleDeepClone } from './utils'
+import { copyRenderTree, simpleDeepClone, nextTick } from './utils'
 
 //  命令类
 class Command {
@@ -11,6 +11,7 @@ class Command {
     this.activeHistoryIndex = 0
     // 注册快捷键
     this.registerShortcutKeys()
+    this.addHistory = nextTick(this.addHistory, this)
   }
 
   //  清空历史数据
@@ -36,7 +37,7 @@ class Command {
       this.commands[name].forEach(fn => {
         fn(...args)
       })
-      if (name === 'BACK' || name === 'FORWARD') {
+      if (['BACK', 'FORWARD', 'SET_NODE_ACTIVE', 'CLEAR_ACTIVE_NODE'].includes(name)) {
         return
       }
       this.addHistory()
@@ -80,6 +81,8 @@ class Command {
     if (this.history.length > 0 && JSON.stringify(this.history[this.history.length - 1]) === JSON.stringify(data)) {
       return
     }
+    // 删除当前历史指针后面的数据
+    this.history = this.history.slice(0, this.activeHistoryIndex + 1)
     this.history.push(simpleDeepClone(data))
     this.activeHistoryIndex = this.history.length - 1
     this.mindMap.emit('data_change', data)
@@ -125,7 +128,7 @@ class Command {
 
   //  获取渲染树数据副本
   getCopyData() {
-    return copyRenderTree({}, this.mindMap.renderer.renderTree)
+    return copyRenderTree({}, this.mindMap.renderer.renderTree, true)
   }
 }
 

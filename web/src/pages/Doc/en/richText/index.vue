@@ -50,6 +50,11 @@ MindMap.usePlugin(RichText, opt?)
 <h2>Method</h2>
 <h3>selectAll()</h3>
 <p>Select All. When the node is being edited, you can select all the text in the node through this method.</p>
+<h3>focus()</h3>
+<blockquote>
+<p>v0.4.7+</p>
+</blockquote>
+<p>Focus.</p>
 <h3>formatText(config = {})</h3>
 <ul>
 <li><code>config</code>：Object. The key is the style attribute and the value is the style value. The complete configuration is as follows:</li>

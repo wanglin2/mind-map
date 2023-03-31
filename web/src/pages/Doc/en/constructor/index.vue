@@ -168,6 +168,20 @@
 <td>When the <code>mousewheelAction</code> is set to <code>move</code>, you can use this attribute to control the step length of the view movement when the mouse scrolls. The unit is <code>px</code></td>
 <td></td>
 </tr>
+<tr>
+<td>defaultInsertSecondLevelNodeText（v0.4.7+）</td>
+<td>String</td>
+<td>二级节点</td>
+<td>Text of the default inserted secondary node</td>
+<td></td>
+</tr>
+<tr>
+<td>defaultInsertBelowSecondLevelNodeText（v0.4.7+）</td>
+<td>String</td>
+<td>分支主题</td>
+<td>Text for nodes below the second level inserted by default</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
@@ -530,13 +544,13 @@ redo. All commands are as follows:</p>
 </tr>
 <tr>
 <td>INSERT_NODE</td>
-<td>Insert a sibling node, the active node will be the operation node. If there are multiple active nodes, only the first one will be effective</td>
-<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>）</td>
+<td>Insert a sibling node, the active node or appoint node will be the operation node. If there are multiple active nodes, only the first one will be effective</td>
+<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>） 、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js</a> ）</td>
 </tr>
 <tr>
 <td>INSERT_CHILD_NODE</td>
-<td>Insert a child node, the active node will be the operation node</td>
-<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>）</td>
+<td>Insert a child node, the active node or appoint node will be the operation node</td>
+<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>）、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js</a> ）</td>
 </tr>
 <tr>
 <td>UP_NODE</td>
@@ -550,8 +564,8 @@ redo. All commands are as follows:</p>
 </tr>
 <tr>
 <td>REMOVE_NODE</td>
-<td>Remove node, the active node will be the operation node</td>
-<td></td>
+<td>Remove node, the active node or appoint node will be the operation node</td>
+<td>appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）</td>
 </tr>
 <tr>
 <td>PASTE_NODE</td>
