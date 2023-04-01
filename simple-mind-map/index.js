@@ -275,6 +275,7 @@ class MindMap {
   setData(data) {
     this.execCommand('CLEAR_ACTIVE_NODE')
     this.command.clearHistory()
+    this.command.addHistory()
     this.renderer.renderTree = data
     this.reRender()
   }
