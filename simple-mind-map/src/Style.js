@@ -170,9 +170,13 @@ class Style {
 
   //  展开收起按钮
   iconBtn(node, node2, fillNode) {
-    node.fill({ color: '#808080' })
-    node2.fill({ color: '#808080' })
-    fillNode.fill({ color: '#fff' })
+    let { color, fill } = this.ctx.mindMap.opt.expandBtnStyle || {
+      color: '#808080',
+      fill: '#fff'
+    }
+    node.fill({ color: color })
+    node2.fill({ color: color })
+    fillNode.fill({ color: fill })
   }
 }
 

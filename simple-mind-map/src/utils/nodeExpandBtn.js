@@ -6,14 +6,15 @@ function createExpandNodeContent() {
   if (this._openExpandNode) {
     return
   }
+  let { open, close } = this.mindMap.opt.expandBtnIcon || {}
   // 展开的节点
-  this._openExpandNode = SVG(btnsSvg.open).size(
+  this._openExpandNode = SVG(open || btnsSvg.open).size(
     this.expandBtnSize,
     this.expandBtnSize
   )
   this._openExpandNode.x(0).y(-this.expandBtnSize / 2)
   // 收起的节点
-  this._closeExpandNode = SVG(btnsSvg.close).size(
+  this._closeExpandNode = SVG(close || btnsSvg.close).size(
     this.expandBtnSize,
     this.expandBtnSize
   )
