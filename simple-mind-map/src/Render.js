@@ -773,7 +773,9 @@ class Render {
       0,
       0
     )
-    this.mindMap.render()
+    this.mindMap.render(() => {
+      this.mindMap.view.reset()
+    })
   }
 
   //  展开到指定层级
