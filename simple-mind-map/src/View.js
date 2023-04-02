@@ -1,3 +1,5 @@
+import { CONSTANTS } from './utils/constant'
+
 //  视图操作类
 class View {
   //  构造函数
@@ -58,35 +60,35 @@ class View {
       if (this.mindMap.opt.customHandleMousewheel && typeof this.mindMap.opt.customHandleMousewheel === 'function') {
         return this.mindMap.opt.customHandleMousewheel(e)
       }
-      if (this.mindMap.opt.mousewheelAction === 'zoom') {
+      if (this.mindMap.opt.mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
         switch (dir) {
           // 鼠标滚轮，向上和向左，都是缩小
-          case 'up':
-          case 'left':
+          case CONSTANTS.DIR.UP:
+          case CONSTANTS.DIR.LEFT:
             this.narrow()
             break
           // 鼠标滚轮，向下和向右，都是放大
-          case 'down':
-          case 'right':
+          case CONSTANTS.DIR.DOWN:
+          case CONSTANTS.DIR.RIGHT:
             this.enlarge()
             break
         }
       } else {
         switch (dir){
           // 上移
-          case 'down':
+          case CONSTANTS.DIR.DOWN:
             this.translateY(-this.mindMap.opt.mousewheelMoveStep)
             break
           // 下移
-          case 'up':
+          case CONSTANTS.DIR.UP:
             this.translateY(this.mindMap.opt.mousewheelMoveStep)
             break
           // 右移
-          case 'left':
+          case CONSTANTS.DIR.LEFT:
             this.translateX(-this.mindMap.opt.mousewheelMoveStep)
             break
           // 左移
-          case 'right':
+          case CONSTANTS.DIR.RIGHT:
             this.translateX(this.mindMap.opt.mousewheelMoveStep)
             break
         }

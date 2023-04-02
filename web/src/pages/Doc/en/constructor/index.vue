@@ -182,6 +182,20 @@
 <td>Text for nodes below the second level inserted by default</td>
 <td></td>
 </tr>
+<tr>
+<td>expandBtnStyle（v0.5.0+）</td>
+<td>Object</td>
+<td>{ color: '#808080', fill: '#fff' }</td>
+<td>Expand the color of the stow button</td>
+<td></td>
+</tr>
+<tr>
+<td>expandBtnIcon（v0.5.0+）</td>
+<td>Object</td>
+<td>{ open: '', close: '' }</td>
+<td>Customize the icon of the expand/collapse button, and you can transfer the svg string of the icon</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>

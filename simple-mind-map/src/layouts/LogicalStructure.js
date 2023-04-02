@@ -2,16 +2,13 @@ import Base from './Base'
 import { walk, asyncRun } from '../utils'
 
 //  逻辑结构图
-
 class LogicalStructure extends Base {
   //  构造函数
-
   constructor(opt = {}) {
     super(opt)
   }
 
   //  布局
-
   doLayout(callback) {
     let task = [
       () => {
@@ -31,7 +28,6 @@ class LogicalStructure extends Base {
   }
 
   //  遍历数据计算节点的left、width、height
-
   computedBaseValue() {
     walk(
       this.renderer.renderTree,
@@ -67,7 +63,6 @@ class LogicalStructure extends Base {
   }
 
   //  遍历节点树计算节点的top
-
   computedTopValue() {
     walk(
       this.root,
@@ -94,7 +89,6 @@ class LogicalStructure extends Base {
   }
 
   //  调整节点top
-
   adjustTopValue() {
     walk(
       this.root,
@@ -118,7 +112,6 @@ class LogicalStructure extends Base {
   }
 
   //  更新兄弟节点的top
-
   updateBrothers(node, addHeight) {
     if (node.parent) {
       let childrenList = node.parent.children
@@ -150,7 +143,6 @@ class LogicalStructure extends Base {
   }
 
   //  绘制连线，连接该节点到其子节点
-
   renderLine(node, lines, style, lineStyle) {
     if (lineStyle === 'curve') {
       this.renderLineCurve(node, lines, style)
@@ -162,7 +154,6 @@ class LogicalStructure extends Base {
   }
 
   //  直线风格连线
-
   renderLineStraight(node, lines, style) {
     if (node.children.length <= 0) {
       return []
@@ -192,7 +183,6 @@ class LogicalStructure extends Base {
   }
 
   //  直连风格
-
   renderLineDirect(node, lines, style) {
     if (node.children.length <= 0) {
       return []
@@ -218,7 +208,6 @@ class LogicalStructure extends Base {
   }
 
   //  曲线风格连线
-
   renderLineCurve(node, lines, style) {
     if (node.children.length <= 0) {
       return []
@@ -249,7 +238,6 @@ class LogicalStructure extends Base {
   }
 
   //  渲染按钮
-
   renderExpandBtn(node, btn) {
     let { width, height } = node
     let { translateX, translateY } = btn.transform()
@@ -264,7 +252,6 @@ class LogicalStructure extends Base {
   }
 
   //  创建概要节点
-
   renderGeneralization(node, gLine, gNode) {
     let {
       top,

@@ -85,7 +85,7 @@ class Command {
     this.history = this.history.slice(0, this.activeHistoryIndex + 1)
     this.history.push(simpleDeepClone(data))
     this.activeHistoryIndex = this.history.length - 1
-    this.mindMap.emit('data_change', data)
+    this.mindMap.emit('data_change', this.removeDataUid(data))
     this.mindMap.emit(
       'back_forward',
       this.activeHistoryIndex,
@@ -106,7 +106,7 @@ class Command {
         this.history.length
       )
       let data = simpleDeepClone(this.history[this.activeHistoryIndex])
-      this.mindMap.emit('data_change', data)
+      this.mindMap.emit('data_change', this.removeDataUid(data))
       return data
     }
   }
@@ -119,9 +119,9 @@ class Command {
     let len = this.history.length
     if (this.activeHistoryIndex + step <= len - 1) {
       this.activeHistoryIndex += step
-      this.mindMap.emit('back_forward', this.activeHistoryIndex)
+      this.mindMap.emit('back_forward', this.activeHistoryIndex, this.history.length)
       let data = simpleDeepClone(this.history[this.activeHistoryIndex])
-      this.mindMap.emit('data_change', data)
+      this.mindMap.emit('data_change', this.removeDataUid(data))
       return data
     }
   }
@@ -129,6 +129,21 @@ class Command {
   //  获取渲染树数据副本
   getCopyData() {
     return copyRenderTree({}, this.mindMap.renderer.renderTree, true)
+  }
+
+  // 移除节点数据中的uid
+  removeDataUid(data) {
+    data = simpleDeepClone(data)
+    let walk = (root) => {
+      delete root.data.uid
+      if (root.children && root.children.length > 0) {
+        root.children.forEach((item) => {
+          walk(item)
+        })
+      }
+    }
+    walk(data)
+    return data
   }
 }
 

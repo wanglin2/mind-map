@@ -32688,9 +32688,157 @@ var es_array_push = __webpack_require__("9d9f");
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/core-js/modules/es.error.cause.js
 var es_error_cause = __webpack_require__("f8ac");
 
+// CONCATENATED MODULE: ../simple-mind-map/src/utils/constant.js
+//  标签颜色列表
+const tagColorList = [{
+  color: 'rgb(77, 65, 0)',
+  background: 'rgb(255, 244, 179)'
+}, {
+  color: 'rgb(0, 50, 77)',
+  background: 'rgb(179, 229, 255)'
+}, {
+  color: 'rgb(77, 0, 73)',
+  background: 'rgb(255, 179, 251)'
+}, {
+  color: 'rgb(57, 77, 0)',
+  background: 'rgb(236, 255, 179)'
+}, {
+  color: 'rgb(0, 77, 47)',
+  background: 'rgb(179, 255, 226)'
+}];
+
+//  主题列表
+const themeList = [{
+  name: '默认',
+  value: 'default'
+}, {
+  name: '脑图经典',
+  value: 'classic'
+}, {
+  name: '小黄人',
+  value: 'minions'
+}, {
+  name: '粉红葡萄',
+  value: 'pinkGrape'
+}, {
+  name: '薄荷',
+  value: 'mint'
+}, {
+  name: '金色vip',
+  value: 'gold'
+}, {
+  name: '活力橙',
+  value: 'vitalityOrange'
+}, {
+  name: '绿叶',
+  value: 'greenLeaf'
+}, {
+  name: '暗色2',
+  value: 'dark2'
+}, {
+  name: '天清绿',
+  value: 'skyGreen'
+}, {
+  name: '脑图经典2',
+  value: 'classic2'
+}, {
+  name: '脑图经典3',
+  value: 'classic3'
+}, {
+  name: '脑图经典4',
+  value: 'classic4'
+}, {
+  name: '经典绿',
+  value: 'classicGreen'
+}, {
+  name: '经典蓝',
+  value: 'classicBlue'
+}, {
+  name: '天空蓝',
+  value: 'blueSky'
+}, {
+  name: '脑残粉',
+  value: 'brainImpairedPink'
+}, {
+  name: '暗色',
+  value: 'dark'
+}, {
+  name: '泥土黄',
+  value: 'earthYellow'
+}, {
+  name: '清新绿',
+  value: 'freshGreen'
+}, {
+  name: '清新红',
+  value: 'freshRed'
+}, {
+  name: '浪漫紫',
+  value: 'romanticPurple'
+}];
+
+// 常量
+const CONSTANTS = {
+  CHANGE_THEME: 'changeTheme',
+  TRANSFORM_TO_NORMAL_NODE: 'transformAllNodesToNormalNode',
+  MODE: {
+    READONLY: 'readonly',
+    EDIT: 'edit'
+  },
+  LAYOUT: {
+    LOGICAL_STRUCTURE: 'logicalStructure',
+    MIND_MAP: 'mindMap',
+    ORGANIZATION_STRUCTURE: 'organizationStructure',
+    CATALOG_ORGANIZATION: 'catalogOrganization'
+  },
+  DIR: {
+    UP: 'up',
+    LEFT: 'left',
+    DOWN: 'down',
+    RIGHT: 'right'
+  },
+  KEY_DIR: {
+    LEFT: 'Left',
+    UP: 'Up',
+    RIGHT: 'Right',
+    DOWN: 'Down'
+  },
+  SHAPE: {
+    RECTANGLE: 'rectangle',
+    DIAMOND: 'diamond',
+    PARALLELOGRAM: 'parallelogram',
+    ROUNDED_RECTANGLE: 'roundedRectangle',
+    OCTAGONAL_RECTANGLE: 'octagonalRectangle',
+    OUTER_TRIANGULAR_RECTANGLE: 'outerTriangularRectangle',
+    INNER_TRIANGULAR_RECTANGLE: 'innerTriangularRectangle',
+    ELLIPSE: 'ellipse',
+    CIRCLE: 'circle'
+  },
+  MOUSE_WHEEL_ACTION: {
+    ZOOM: 'zoom',
+    MOVE: 'move'
+  }
+};
+
+//  布局结构列表
+const layoutList = [{
+  name: '逻辑结构图',
+  value: CONSTANTS.LAYOUT.LOGICAL_STRUCTURE
+}, {
+  name: '思维导图',
+  value: CONSTANTS.LAYOUT.MIND_MAP
+}, {
+  name: '组织结构图',
+  value: CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE
+}, {
+  name: '目录组织图',
+  value: CONSTANTS.LAYOUT.CATALOG_ORGANIZATION
+}];
+const layoutValueList = [CONSTANTS.LAYOUT.LOGICAL_STRUCTURE, CONSTANTS.LAYOUT.MIND_MAP, CONSTANTS.LAYOUT.CATALOG_ORGANIZATION, CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE];
 // CONCATENATED MODULE: ../simple-mind-map/src/View.js
+
+
 //  视图操作类
-class View {
+class View_View {
   //  构造函数
   constructor(opt = {}) {
     this.opt = opt;
@@ -32749,35 +32897,35 @@ class View {
       if (this.mindMap.opt.customHandleMousewheel && typeof this.mindMap.opt.customHandleMousewheel === 'function') {
         return this.mindMap.opt.customHandleMousewheel(e);
       }
-      if (this.mindMap.opt.mousewheelAction === 'zoom') {
+      if (this.mindMap.opt.mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
         switch (dir) {
           // 鼠标滚轮，向上和向左，都是缩小
-          case 'up':
-          case 'left':
+          case CONSTANTS.DIR.UP:
+          case CONSTANTS.DIR.LEFT:
             this.narrow();
             break;
           // 鼠标滚轮，向下和向右，都是放大
-          case 'down':
-          case 'right':
+          case CONSTANTS.DIR.DOWN:
+          case CONSTANTS.DIR.RIGHT:
             this.enlarge();
             break;
         }
       } else {
         switch (dir) {
           // 上移
-          case 'down':
+          case CONSTANTS.DIR.DOWN:
             this.translateY(-this.mindMap.opt.mousewheelMoveStep);
             break;
           // 下移
-          case 'up':
+          case CONSTANTS.DIR.UP:
             this.translateY(this.mindMap.opt.mousewheelMoveStep);
             break;
           // 右移
-          case 'left':
+          case CONSTANTS.DIR.LEFT:
             this.translateX(-this.mindMap.opt.mousewheelMoveStep);
             break;
           // 左移
-          case 'right':
+          case CONSTANTS.DIR.RIGHT:
             this.translateX(this.mindMap.opt.mousewheelMoveStep);
             break;
         }
@@ -32880,12 +33028,13 @@ class View {
     this.mindMap.emit('scale', this.scale);
   }
 }
-/* harmony default export */ var src_View = (View);
+/* harmony default export */ var src_View = (View_View);
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/eventemitter3/index.js
 var eventemitter3 = __webpack_require__("91d2");
 var eventemitter3_default = /*#__PURE__*/__webpack_require__.n(eventemitter3);
 
 // CONCATENATED MODULE: ../simple-mind-map/src/Event.js
+
 
 
 //  事件类
@@ -32959,7 +33108,6 @@ class Event_Event extends eventemitter3_default.a {
 
   //  鼠标按下事件
   onMousedown(e) {
-    // e.preventDefault()
     // 鼠标左键
     if (e.which === 1) {
       this.isLeftMousedown = true;
@@ -32971,13 +33119,13 @@ class Event_Event extends eventemitter3_default.a {
 
   //  鼠标移动事件
   onMousemove(e) {
-    // e.preventDefault()
     this.mousemovePos.x = e.clientX;
     this.mousemovePos.y = e.clientY;
     this.mousemoveOffset.x = e.clientX - this.mousedownPos.x;
     this.mousemoveOffset.y = e.clientY - this.mousedownPos.y;
     this.emit('mousemove', e, this);
     if (this.isLeftMousedown) {
+      e.preventDefault();
       this.emit('drag', e, this);
     }
   }
@@ -32995,15 +33143,15 @@ class Event_Event extends eventemitter3_default.a {
     let dir;
     // 解决mac触控板双指缩放方向相反的问题
     if (e.ctrlKey) {
-      if (e.deltaY > 0) dir = 'up';
-      if (e.deltaY < 0) dir = 'down';
-      if (e.deltaX > 0) dir = 'left';
-      if (e.deltaX < 0) dir = 'right';
+      if (e.deltaY > 0) dir = CONSTANTS.DIR.UP;
+      if (e.deltaY < 0) dir = CONSTANTS.DIR.DOWN;
+      if (e.deltaX > 0) dir = CONSTANTS.DIR.LEFT;
+      if (e.deltaX < 0) dir = CONSTANTS.DIR.RIGHT;
     } else {
-      if ((e.wheelDeltaY || e.detail) > 0) dir = 'up';
-      if ((e.wheelDeltaY || e.detail) < 0) dir = 'down';
-      if ((e.wheelDeltaX || e.detail) > 0) dir = 'left';
-      if ((e.wheelDeltaX || e.detail) < 0) dir = 'right';
+      if ((e.wheelDeltaY || e.detail) > 0) dir = CONSTANTS.DIR.UP;
+      if ((e.wheelDeltaY || e.detail) < 0) dir = CONSTANTS.DIR.DOWN;
+      if ((e.wheelDeltaX || e.detail) > 0) dir = CONSTANTS.DIR.LEFT;
+      if ((e.wheelDeltaX || e.detail) < 0) dir = CONSTANTS.DIR.RIGHT;
     }
     this.emit('mousewheel', e, dir, this);
   }
@@ -33027,118 +33175,13 @@ var cjs_default = /*#__PURE__*/__webpack_require__.n(cjs);
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/core-js/modules/es.array.reduce.js
 var es_array_reduce = __webpack_require__("293c");
 
-// CONCATENATED MODULE: ../simple-mind-map/src/utils/constant.js
-//  标签颜色列表
-const tagColorList = [{
-  color: 'rgb(77, 65, 0)',
-  background: 'rgb(255, 244, 179)'
-}, {
-  color: 'rgb(0, 50, 77)',
-  background: 'rgb(179, 229, 255)'
-}, {
-  color: 'rgb(77, 0, 73)',
-  background: 'rgb(255, 179, 251)'
-}, {
-  color: 'rgb(57, 77, 0)',
-  background: 'rgb(236, 255, 179)'
-}, {
-  color: 'rgb(0, 77, 47)',
-  background: 'rgb(179, 255, 226)'
-}];
-
-//  布局结构列表
-const layoutList = [{
-  name: '逻辑结构图',
-  value: 'logicalStructure'
-}, {
-  name: '思维导图',
-  value: 'mindMap'
-}, {
-  name: '组织结构图',
-  value: 'organizationStructure'
-}, {
-  name: '目录组织图',
-  value: 'catalogOrganization'
-}];
-const layoutValueList = ['logicalStructure', 'mindMap', 'catalogOrganization', 'organizationStructure'];
-
-//  主题列表
-const themeList = [{
-  name: '默认',
-  value: 'default'
-}, {
-  name: '脑图经典',
-  value: 'classic'
-}, {
-  name: '小黄人',
-  value: 'minions'
-}, {
-  name: '粉红葡萄',
-  value: 'pinkGrape'
-}, {
-  name: '薄荷',
-  value: 'mint'
-}, {
-  name: '金色vip',
-  value: 'gold'
-}, {
-  name: '活力橙',
-  value: 'vitalityOrange'
-}, {
-  name: '绿叶',
-  value: 'greenLeaf'
-}, {
-  name: '暗色2',
-  value: 'dark2'
-}, {
-  name: '天清绿',
-  value: 'skyGreen'
-}, {
-  name: '脑图经典2',
-  value: 'classic2'
-}, {
-  name: '脑图经典3',
-  value: 'classic3'
-}, {
-  name: '脑图经典4',
-  value: 'classic4'
-}, {
-  name: '经典绿',
-  value: 'classicGreen'
-}, {
-  name: '经典蓝',
-  value: 'classicBlue'
-}, {
-  name: '天空蓝',
-  value: 'blueSky'
-}, {
-  name: '脑残粉',
-  value: 'brainImpairedPink'
-}, {
-  name: '暗色',
-  value: 'dark'
-}, {
-  name: '泥土黄',
-  value: 'earthYellow'
-}, {
-  name: '清新绿',
-  value: 'freshGreen'
-}, {
-  name: '清新红',
-  value: 'freshRed'
-}, {
-  name: '浪漫紫',
-  value: 'romanticPurple'
-}];
 // CONCATENATED MODULE: ../simple-mind-map/src/Style.js
 
 const rootProp = ['paddingX', 'paddingY'];
 
 //  样式类
-
 class Style_Style {
   //   设置背景样式
-
   static setBackgroundStyle(el, themeConfig) {
     let {
       backgroundColor,
@@ -33159,35 +33202,27 @@ class Style_Style {
   }
 
   //  构造函数
-
-  constructor(ctx, themeConfig) {
+  constructor(ctx) {
     this.ctx = ctx;
-    this.themeConfig = themeConfig;
-  }
-
-  //  更新主题配置
-
-  updateThemeConfig(themeConfig) {
-    this.themeConfig = themeConfig;
   }
 
   //  合并样式
-
   merge(prop, root, isActive) {
+    let themeConfig = this.ctx.mindMap.themeConfig;
     // 三级及以下节点
-    let defaultConfig = this.themeConfig.node;
+    let defaultConfig = themeConfig.node;
     if (root || rootProp.includes(prop)) {
       // 直接使用最外层样式
-      defaultConfig = this.themeConfig;
+      defaultConfig = themeConfig;
     } else if (this.ctx.isGeneralization) {
       // 概要节点
-      defaultConfig = this.themeConfig.generalization;
+      defaultConfig = themeConfig.generalization;
     } else if (this.ctx.layerIndex === 0) {
       // 根节点
-      defaultConfig = this.themeConfig.root;
+      defaultConfig = themeConfig.root;
     } else if (this.ctx.layerIndex === 1) {
       // 二级节点
-      defaultConfig = this.themeConfig.second;
+      defaultConfig = themeConfig.second;
     }
     // 激活状态
     if (isActive !== undefined ? isActive : this.ctx.nodeData.data.isActive) {
@@ -33202,34 +33237,35 @@ class Style_Style {
   }
 
   //  获取某个样式值
-
   getStyle(prop, root, isActive) {
     return this.merge(prop, root, isActive);
   }
 
   //  获取自身自定义样式
-
   getSelfStyle(prop) {
     return this.ctx.nodeData.data[prop];
   }
 
   //  矩形
-
   rect(node) {
     this.shape(node);
     node.radius(this.merge('borderRadius'));
   }
 
   //   矩形外的其他形状
-
   shape(node) {
     node.fill({
       color: this.merge('fillColor')
     });
     // 节点使用横线样式，不需要渲染非激活状态的边框样式
-    if (!this.ctx.isRoot && !this.ctx.isGeneralization && this.themeConfig.nodeUseLineStyle && !this.ctx.nodeData.data.isActive) {
-      return;
-    }
+    // if (
+    //   !this.ctx.isRoot &&
+    //   !this.ctx.isGeneralization &&
+    //   this.ctx.mindMap.themeConfig.nodeUseLineStyle &&
+    //   !this.ctx.nodeData.data.isActive
+    // ) {
+    //   return
+    // }
     node.stroke({
       color: this.merge('borderColor'),
       width: this.merge('borderWidth'),
@@ -33238,7 +33274,6 @@ class Style_Style {
   }
 
   //  文字
-
   text(node) {
     node.fill({
       color: this.merge('color')
@@ -33262,17 +33297,15 @@ class Style_Style {
   }
 
   //  html文字节点
-
-  domText(node, fontSizeScale = 1) {
+  domText(node, fontSizeScale = 1, textLines) {
     node.style.fontFamily = this.merge('fontFamily');
     node.style.fontSize = this.merge('fontSize') * fontSizeScale + 'px';
     node.style.fontWeight = this.merge('fontWeight') || 'normal';
-    node.style.lineHeight = this.merge('lineHeight');
+    node.style.lineHeight = textLines === 1 ? 'normal' : this.merge('lineHeight');
     node.style.fontStyle = this.merge('fontStyle');
   }
 
   //  标签文字
-
   tagText(node, index) {
     node.fill({
       color: tagColorList[index].color
@@ -33282,7 +33315,6 @@ class Style_Style {
   }
 
   //  标签矩形
-
   tagRect(node, index) {
     node.fill({
       color: tagColorList[index].background
@@ -33290,7 +33322,6 @@ class Style_Style {
   }
 
   //  内置图标
-
   iconNode(node) {
     node.attr({
       fill: this.merge('color')
@@ -33298,7 +33329,6 @@ class Style_Style {
   }
 
   //  连线
-
   line(node, {
     width,
     color,
@@ -33314,7 +33344,6 @@ class Style_Style {
   }
 
   //  概要连线
-
   generalizationLine(node) {
     node.stroke({
       width: this.merge('generalizationLineWidth', true),
@@ -33324,563 +33353,27 @@ class Style_Style {
     });
   }
 
-  //  按钮
-
-  iconBtn(node, fillNode) {
+  //  展开收起按钮
+  iconBtn(node, node2, fillNode) {
+    let {
+      color,
+      fill
+    } = this.ctx.mindMap.opt.expandBtnStyle || {
+      color: '#808080',
+      fill: '#fff'
+    };
     node.fill({
-      color: '#808080'
+      color: color
+    });
+    node2.fill({
+      color: color
     });
     fillNode.fill({
-      color: '#fff'
+      color: fill
     });
   }
 }
 /* harmony default export */ var src_Style = (Style_Style);
-// CONCATENATED MODULE: ../simple-mind-map/src/Shape.js
-//  节点形状类
-class Shape {
-  constructor(node) {
-    this.node = node;
-  }
-
-  //  形状需要的padding
-  getShapePadding(width, height, paddingX, paddingY) {
-    const shape = this.node.getShape();
-    const defaultPaddingX = 15;
-    const defaultPaddingY = 5;
-    const actWidth = width + paddingX * 2;
-    const actHeight = height + paddingY * 2;
-    const actOffset = Math.abs(actWidth - actHeight);
-    switch (shape) {
-      case 'roundedRectangle':
-        return {
-          paddingX: height > width ? (height - width) / 2 : 0,
-          paddingY: 0
-        };
-      case 'diamond':
-        return {
-          paddingX: width / 2,
-          paddingY: height / 2
-        };
-      case 'parallelogram':
-        return {
-          paddingX: paddingX <= 0 ? defaultPaddingX : 0,
-          paddingY: 0
-        };
-      case 'outerTriangularRectangle':
-        return {
-          paddingX: paddingX <= 0 ? defaultPaddingX : 0,
-          paddingY: 0
-        };
-      case 'innerTriangularRectangle':
-        return {
-          paddingX: paddingX <= 0 ? defaultPaddingX : 0,
-          paddingY: 0
-        };
-      case 'ellipse':
-        return {
-          paddingX: paddingX <= 0 ? defaultPaddingX : 0,
-          paddingY: paddingY <= 0 ? defaultPaddingY : 0
-        };
-      case 'circle':
-        return {
-          paddingX: actHeight > actWidth ? actOffset / 2 : 0,
-          paddingY: actHeight < actWidth ? actOffset / 2 : 0
-        };
-      default:
-        return {
-          paddingX: 0,
-          paddingY: 0
-        };
-    }
-  }
-
-  //  创建形状节点
-  createShape() {
-    const shape = this.node.getShape();
-    let {
-      width,
-      height
-    } = this.node;
-    let node = null;
-    // 矩形
-    if (shape === 'rectangle') {
-      node = this.node.group.rect(width, height);
-    } else if (shape === 'diamond') {
-      // 菱形
-      node = this.createDiamond();
-    } else if (shape === 'parallelogram') {
-      // 平行四边形
-      node = this.createParallelogram();
-    } else if (shape === 'roundedRectangle') {
-      // 圆角矩形
-      node = this.createRoundedRectangle();
-    } else if (shape === 'octagonalRectangle') {
-      // 八角矩形
-      node = this.createOctagonalRectangle();
-    } else if (shape === 'outerTriangularRectangle') {
-      // 外三角矩形
-      node = this.createOuterTriangularRectangle();
-    } else if (shape === 'innerTriangularRectangle') {
-      // 内三角矩形
-      node = this.createInnerTriangularRectangle();
-    } else if (shape === 'ellipse') {
-      // 椭圆
-      node = this.createEllipse();
-    } else if (shape === 'circle') {
-      // 圆
-      node = this.createCircle();
-    }
-    return node;
-  }
-
-  //  创建菱形
-  createDiamond() {
-    let {
-      width,
-      height
-    } = this.node;
-    let halfWidth = width / 2;
-    let halfHeight = height / 2;
-    let topX = halfWidth;
-    let topY = 0;
-    let rightX = width;
-    let rightY = halfHeight;
-    let bottomX = halfWidth;
-    let bottomY = height;
-    let leftX = 0;
-    let leftY = halfHeight;
-    return this.node.group.polygon(`
-            ${topX}, ${topY}
-            ${rightX}, ${rightY}
-            ${bottomX}, ${bottomY}
-            ${leftX}, ${leftY}
-        `);
-  }
-
-  //  创建平行四边形
-  createParallelogram() {
-    let {
-      paddingX
-    } = this.node.getPaddingVale();
-    paddingX = paddingX || this.node.shapePadding.paddingX;
-    let {
-      width,
-      height
-    } = this.node;
-    return this.node.group.polygon(`
-            ${paddingX}, ${0}
-            ${width}, ${0}
-            ${width - paddingX}, ${height}
-            ${0}, ${height}
-        `);
-  }
-
-  //  创建圆角矩形
-  createRoundedRectangle() {
-    let {
-      width,
-      height
-    } = this.node;
-    let halfHeight = height / 2;
-    return this.node.group.path(`
-            M${halfHeight},0
-            L${width - halfHeight},0
-            A${height / 2},${height / 2} 0 0,1 ${width - halfHeight},${height} 
-            L${halfHeight},${height}
-            A${height / 2},${height / 2} 0 0,1 ${halfHeight},${0}
-        `);
-  }
-
-  //  创建八角矩形
-  createOctagonalRectangle() {
-    let w = 5;
-    let {
-      width,
-      height
-    } = this.node;
-    return this.node.group.polygon(`
-            ${0}, ${w}
-            ${w}, ${0}
-            ${width - w}, ${0}
-            ${width}, ${w}
-            ${width}, ${height - w}
-            ${width - w}, ${height}
-            ${w}, ${height}
-            ${0}, ${height - w}
-        `);
-  }
-
-  //  创建外三角矩形
-  createOuterTriangularRectangle() {
-    let {
-      paddingX
-    } = this.node.getPaddingVale();
-    paddingX = paddingX || this.node.shapePadding.paddingX;
-    let {
-      width,
-      height
-    } = this.node;
-    return this.node.group.polygon(`
-            ${paddingX}, ${0}
-            ${width - paddingX}, ${0}
-            ${width}, ${height / 2}
-            ${width - paddingX}, ${height}
-            ${paddingX}, ${height}
-            ${0}, ${height / 2}
-        `);
-  }
-
-  //  创建内三角矩形
-  createInnerTriangularRectangle() {
-    let {
-      paddingX
-    } = this.node.getPaddingVale();
-    paddingX = paddingX || this.node.shapePadding.paddingX;
-    let {
-      width,
-      height
-    } = this.node;
-    return this.node.group.polygon(`
-            ${0}, ${0}
-            ${width}, ${0}
-            ${width - paddingX / 2}, ${height / 2}
-            ${width}, ${height}
-            ${0}, ${height}
-            ${paddingX / 2}, ${height / 2}
-        `);
-  }
-
-  //  创建椭圆
-  createEllipse() {
-    let {
-      width,
-      height
-    } = this.node;
-    let halfWidth = width / 2;
-    let halfHeight = height / 2;
-    return this.node.group.path(`
-            M${halfWidth},0
-            A${halfWidth},${halfHeight} 0 0,1 ${halfWidth},${height} 
-            M${halfWidth},${height} 
-            A${halfWidth},${halfHeight} 0 0,1 ${halfWidth},${0} 
-        `);
-  }
-
-  //  创建圆
-  createCircle() {
-    let {
-      width,
-      height
-    } = this.node;
-    let halfWidth = width / 2;
-    let halfHeight = height / 2;
-    return this.node.group.path(`
-            M${halfWidth},0
-            A${halfWidth},${halfHeight} 0 0,1 ${halfWidth},${height} 
-            M${halfWidth},${height} 
-            A${halfWidth},${halfHeight} 0 0,1 ${halfWidth},${0} 
-        `);
-  }
-}
-
-// 形状列表
-const shapeList = ['rectangle', 'diamond', 'parallelogram', 'roundedRectangle', 'octagonalRectangle', 'outerTriangularRectangle', 'innerTriangularRectangle', 'ellipse', 'circle'];
-// CONCATENATED MODULE: ../simple-mind-map/src/utils/index.js
-
-//  深度优先遍历树
-const walk = (root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0) => {
-  let stop = false;
-  if (beforeCallback) {
-    stop = beforeCallback(root, parent, isRoot, layerIndex, index);
-  }
-  if (!stop && root.children && root.children.length > 0) {
-    let _layerIndex = layerIndex + 1;
-    root.children.forEach((node, nodeIndex) => {
-      walk(node, root, beforeCallback, afterCallback, false, _layerIndex, nodeIndex);
-    });
-  }
-  afterCallback && afterCallback(root, parent, isRoot, layerIndex, index);
-};
-
-//  广度优先遍历树
-const bfsWalk = (root, callback) => {
-  callback(root);
-  let stack = [root];
-  let isStop = false;
-  while (stack.length) {
-    if (isStop) {
-      break;
-    }
-    let cur = stack.shift();
-    if (cur.children && cur.children.length) {
-      cur.children.forEach(item => {
-        stack.push(item);
-        if (callback(item) === 'stop') {
-          isStop = true;
-        }
-      });
-    }
-  }
-};
-
-//  缩放图片尺寸
-const resizeImgSize = (width, height, maxWidth, maxHeight) => {
-  let nRatio = width / height;
-  let arr = [];
-  if (maxWidth && maxHeight) {
-    if (width <= maxWidth && height <= maxHeight) {
-      arr = [width, height];
-    } else {
-      let mRatio = maxWidth / maxHeight;
-      if (nRatio > mRatio) {
-        // 固定高度
-        arr = [nRatio * maxHeight, maxHeight];
-      } else {
-        // 固定宽度
-        arr = [maxWidth, maxWidth / nRatio];
-      }
-    }
-  } else if (maxWidth) {
-    if (width <= maxWidth) {
-      arr = [width, height];
-    } else {
-      arr = [maxWidth, maxWidth / nRatio];
-    }
-  } else if (maxHeight) {
-    if (height <= maxHeight) {
-      arr = [width, height];
-    } else {
-      arr = [nRatio * maxHeight, maxHeight];
-    }
-  }
-  return arr;
-};
-
-//  缩放图片
-const resizeImg = (imgUrl, maxWidth, maxHeight) => {
-  return new Promise((resolve, reject) => {
-    let img = new Image();
-    img.src = imgUrl;
-    img.onload = () => {
-      let arr = resizeImgSize(img.naturalWidth, img.naturalHeight, maxWidth, maxHeight);
-      resolve(arr);
-    };
-    img.onerror = e => {
-      reject(e);
-    };
-  });
-};
-
-//  从头html结构字符串里获取带换行符的字符串
-const getStrWithBrFromHtml = str => {
-  str = str.replace(/<br>/gim, '\n');
-  let el = document.createElement('div');
-  el.innerHTML = str;
-  str = el.textContent;
-  return str;
-};
-
-//  极简的深拷贝
-const simpleDeepClone = data => {
-  try {
-    return JSON.parse(JSON.stringify(data));
-  } catch (error) {
-    return null;
-  }
-};
-
-//  复制渲染树数据
-const copyRenderTree = (tree, root, removeActiveState = false) => {
-  tree.data = simpleDeepClone(root.data);
-  if (removeActiveState) {
-    tree.data.isActive = false;
-  }
-  tree.children = [];
-  if (root.children && root.children.length > 0) {
-    root.children.forEach((item, index) => {
-      tree.children[index] = copyRenderTree({}, item, removeActiveState);
-    });
-  }
-  return tree;
-};
-
-//  复制节点树数据
-const copyNodeTree = (tree, root, removeActiveState = false, keepId = false) => {
-  tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data);
-  // 去除节点id，因为节点id不能重复
-  if (tree.data.id && !keepId) delete tree.data.id;
-  if (removeActiveState) {
-    tree.data.isActive = false;
-  }
-  tree.children = [];
-  if (root.children && root.children.length > 0) {
-    root.children.forEach((item, index) => {
-      tree.children[index] = copyNodeTree({}, item, removeActiveState);
-    });
-  } else if (root.nodeData && root.nodeData.children && root.nodeData.children.length > 0) {
-    root.nodeData.children.forEach((item, index) => {
-      tree.children[index] = copyNodeTree({}, item, removeActiveState);
-    });
-  }
-  return tree;
-};
-
-//  图片转成dataURL
-const imgToDataUrl = src => {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    // 跨域图片需要添加这个属性，否则画布被污染了无法导出图片
-    img.setAttribute('crossOrigin', 'anonymous');
-    img.onload = () => {
-      try {
-        let canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        let ctx = canvas.getContext('2d');
-        // 图片绘制到canvas里
-        ctx.drawImage(img, 0, 0, img.width, img.height);
-        resolve(canvas.toDataURL());
-      } catch (e) {
-        reject(e);
-      }
-    };
-    img.onerror = e => {
-      reject(e);
-    };
-    img.src = src;
-  });
-};
-
-//  下载文件
-const downloadFile = (file, fileName) => {
-  let a = document.createElement('a');
-  a.href = file;
-  a.download = fileName;
-  a.click();
-};
-
-//  节流函数
-const throttle = (fn, time = 300, ctx) => {
-  let timer = null;
-  return (...args) => {
-    if (timer) {
-      return;
-    }
-    timer = setTimeout(() => {
-      fn.call(ctx, ...args);
-      timer = null;
-    }, time);
-  };
-};
-
-//  异步执行任务队列
-const asyncRun = (taskList, callback = () => {}) => {
-  let index = 0;
-  let len = taskList.length;
-  if (len <= 0) {
-    return callback();
-  }
-  let loop = () => {
-    if (index >= len) {
-      callback();
-      return;
-    }
-    taskList[index]();
-    setTimeout(() => {
-      index++;
-      loop();
-    }, 0);
-  };
-  loop();
-};
-
-// 角度转弧度
-const degToRad = deg => {
-  return deg * (Math.PI / 180);
-};
-
-// 驼峰转连字符 
-const camelCaseToHyphen = str => {
-  return str.replace(/([a-z])([A-Z])/g, (...args) => {
-    return args[1] + '-' + args[2].toLowerCase();
-  });
-};
-
-//计算节点的文本长宽
-let measureTextContext = null;
-const measureText = (text, {
-  italic,
-  bold,
-  fontSize,
-  fontFamily
-}) => {
-  const font = joinFontStr({
-    italic,
-    bold,
-    fontSize,
-    fontFamily
-  });
-  if (!measureTextContext) {
-    const canvas = document.createElement('canvas');
-    measureTextContext = canvas.getContext('2d');
-  }
-  measureTextContext.save();
-  measureTextContext.font = font;
-  const {
-    width,
-    actualBoundingBoxAscent,
-    actualBoundingBoxDescent
-  } = measureTextContext.measureText(text);
-  measureTextContext.restore();
-  const height = actualBoundingBoxAscent + actualBoundingBoxDescent;
-  return {
-    width,
-    height
-  };
-};
-
-// 拼接font字符串
-const joinFontStr = ({
-  italic,
-  bold,
-  fontSize,
-  fontFamily
-}) => {
-  return `${italic ? 'italic ' : ''} ${bold ? 'bold ' : ''} ${fontSize}px ${fontFamily} `;
-};
-
-//  在下一个事件循环里执行任务
-const nextTick = function (fn, ctx) {
-  let pending = false;
-  let timerFunc = null;
-  let handle = () => {
-    pending = false;
-    ctx ? fn.call(ctx) : fn();
-  };
-  // 支持MutationObserver接口的话使用MutationObserver
-  if (typeof MutationObserver !== 'undefined') {
-    let counter = 1;
-    let observer = new MutationObserver(handle);
-    let textNode = document.createTextNode(counter);
-    observer.observe(textNode, {
-      characterData: true // 设为 true 表示监视指定目标节点或子节点树中节点所包含的字符数据的变化
-    });
-
-    timerFunc = function () {
-      counter = (counter + 1) % 2; // counter会在0和1两者循环变化
-      textNode.data = counter; // 节点变化会触发回调handle，
-    };
-  } else {
-    // 否则使用定时器
-    timerFunc = setTimeout;
-  }
-  return function () {
-    if (pending) return;
-    pending = true;
-    timerFunc(handle, 0);
-  };
-};
 // CONCATENATED MODULE: ../simple-mind-map/node_modules/@svgdotjs/svg.js/dist/svg.esm.js
 /*!
 * @svgdotjs/svg.js - A lightweight library for manipulating and animating SVG.
@@ -40950,6 +40443,631 @@ makeMorphable();
 
 //# sourceMappingURL=svg.esm.js.map
 
+// CONCATENATED MODULE: ../simple-mind-map/src/Shape.js
+
+
+
+//  节点形状类
+class Shape_Shape {
+  constructor(node) {
+    this.node = node;
+  }
+
+  //  形状需要的padding
+  getShapePadding(width, height, paddingX, paddingY) {
+    const shape = this.node.getShape();
+    const defaultPaddingX = 15;
+    const defaultPaddingY = 5;
+    const actWidth = width + paddingX * 2;
+    const actHeight = height + paddingY * 2;
+    const actOffset = Math.abs(actWidth - actHeight);
+    switch (shape) {
+      case CONSTANTS.SHAPE.ROUNDED_RECTANGLE:
+        return {
+          paddingX: height > width ? (height - width) / 2 : 0,
+          paddingY: 0
+        };
+      case CONSTANTS.SHAPE.DIAMOND:
+        return {
+          paddingX: width / 2,
+          paddingY: height / 2
+        };
+      case CONSTANTS.SHAPE.PARALLELOGRAM:
+        return {
+          paddingX: paddingX <= 0 ? defaultPaddingX : 0,
+          paddingY: 0
+        };
+      case CONSTANTS.SHAPE.OUTER_TRIANGULAR_RECTANGLE:
+        return {
+          paddingX: paddingX <= 0 ? defaultPaddingX : 0,
+          paddingY: 0
+        };
+      case CONSTANTS.SHAPE.INNER_TRIANGULAR_RECTANGLE:
+        return {
+          paddingX: paddingX <= 0 ? defaultPaddingX : 0,
+          paddingY: 0
+        };
+      case CONSTANTS.SHAPE.ELLIPSE:
+        return {
+          paddingX: paddingX <= 0 ? defaultPaddingX : 0,
+          paddingY: paddingY <= 0 ? defaultPaddingY : 0
+        };
+      case CONSTANTS.SHAPE.CIRCLE:
+        return {
+          paddingX: actHeight > actWidth ? actOffset / 2 : 0,
+          paddingY: actHeight < actWidth ? actOffset / 2 : 0
+        };
+      default:
+        return {
+          paddingX: 0,
+          paddingY: 0
+        };
+    }
+  }
+
+  //  创建形状节点
+  createShape() {
+    const shape = this.node.getShape();
+    let {
+      width,
+      height
+    } = this.node;
+    let node = null;
+    // 矩形
+    if (shape === CONSTANTS.SHAPE.RECTANGLE) {
+      node = new Rect().size(width, height);
+    } else if (shape === CONSTANTS.SHAPE.DIAMOND) {
+      // 菱形
+      node = this.createDiamond();
+    } else if (shape === CONSTANTS.SHAPE.PARALLELOGRAM) {
+      // 平行四边形
+      node = this.createParallelogram();
+    } else if (shape === CONSTANTS.SHAPE.ROUNDED_RECTANGLE) {
+      // 圆角矩形
+      node = this.createRoundedRectangle();
+    } else if (shape === CONSTANTS.SHAPE.OCTAGONAL_RECTANGLE) {
+      // 八角矩形
+      node = this.createOctagonalRectangle();
+    } else if (shape === CONSTANTS.SHAPE.OUTER_TRIANGULAR_RECTANGLE) {
+      // 外三角矩形
+      node = this.createOuterTriangularRectangle();
+    } else if (shape === CONSTANTS.SHAPE.INNER_TRIANGULAR_RECTANGLE) {
+      // 内三角矩形
+      node = this.createInnerTriangularRectangle();
+    } else if (shape === CONSTANTS.SHAPE.ELLIPSE) {
+      // 椭圆
+      node = this.createEllipse();
+    } else if (shape === CONSTANTS.SHAPE.CIRCLE) {
+      // 圆
+      node = this.createCircle();
+    }
+    return node;
+  }
+
+  //  创建菱形
+  createDiamond() {
+    let {
+      width,
+      height
+    } = this.node;
+    let halfWidth = width / 2;
+    let halfHeight = height / 2;
+    let topX = halfWidth;
+    let topY = 0;
+    let rightX = width;
+    let rightY = halfHeight;
+    let bottomX = halfWidth;
+    let bottomY = height;
+    let leftX = 0;
+    let leftY = halfHeight;
+    return new Polygon().plot([[topX, topY], [rightX, rightY], [bottomX, bottomY], [leftX, leftY]]);
+  }
+
+  //  创建平行四边形
+  createParallelogram() {
+    let {
+      paddingX
+    } = this.node.getPaddingVale();
+    paddingX = paddingX || this.node.shapePadding.paddingX;
+    let {
+      width,
+      height
+    } = this.node;
+    return new Polygon().plot([[paddingX, 0], [width, 0], [width - paddingX, height], [0, height]]);
+  }
+
+  //  创建圆角矩形
+  createRoundedRectangle() {
+    let {
+      width,
+      height
+    } = this.node;
+    let halfHeight = height / 2;
+    return new Path().plot(`
+      M${halfHeight},0
+      L${width - halfHeight},0
+      A${height / 2},${height / 2} 0 0,1 ${width - halfHeight},${height} 
+      L${halfHeight},${height}
+      A${height / 2},${height / 2} 0 0,1 ${halfHeight},${0}
+    `);
+  }
+
+  //  创建八角矩形
+  createOctagonalRectangle() {
+    let w = 5;
+    let {
+      width,
+      height
+    } = this.node;
+    return new Polygon().plot([[0, w], [w, 0], [width - w, 0], [width, w], [width, height - w], [width - w, height], [w, height], [0, height - w]]);
+  }
+
+  //  创建外三角矩形
+  createOuterTriangularRectangle() {
+    let {
+      paddingX
+    } = this.node.getPaddingVale();
+    paddingX = paddingX || this.node.shapePadding.paddingX;
+    let {
+      width,
+      height
+    } = this.node;
+    return new Polygon().plot([[paddingX, 0], [width - paddingX, 0], [width, height / 2], [width - paddingX, height], [paddingX, height], [0, height / 2]]);
+  }
+
+  //  创建内三角矩形
+  createInnerTriangularRectangle() {
+    let {
+      paddingX
+    } = this.node.getPaddingVale();
+    paddingX = paddingX || this.node.shapePadding.paddingX;
+    let {
+      width,
+      height
+    } = this.node;
+    return new Polygon().plot([[0, 0], [width, 0], [width - paddingX / 2, height / 2], [width, height], [0, height], [paddingX / 2, height / 2]]);
+  }
+
+  //  创建椭圆
+  createEllipse() {
+    let {
+      width,
+      height
+    } = this.node;
+    let halfWidth = width / 2;
+    let halfHeight = height / 2;
+    return new Path().plot(`
+      M${halfWidth},0
+      A${halfWidth},${halfHeight} 0 0,1 ${halfWidth},${height} 
+      M${halfWidth},${height} 
+      A${halfWidth},${halfHeight} 0 0,1 ${halfWidth},${0} 
+    `);
+  }
+
+  //  创建圆
+  createCircle() {
+    let {
+      width,
+      height
+    } = this.node;
+    let halfWidth = width / 2;
+    let halfHeight = height / 2;
+    return new Path().plot(`
+      M${halfWidth},0
+      A${halfWidth},${halfHeight} 0 0,1 ${halfWidth},${height} 
+      M${halfWidth},${height} 
+      A${halfWidth},${halfHeight} 0 0,1 ${halfWidth},${0} 
+    `);
+  }
+}
+
+// 形状列表
+const shapeList = [CONSTANTS.SHAPE.RECTANGLE, CONSTANTS.SHAPE.DIAMOND, CONSTANTS.SHAPE.PARALLELOGRAM, CONSTANTS.SHAPE.ROUNDED_RECTANGLE, CONSTANTS.SHAPE.OCTAGONAL_RECTANGLE, CONSTANTS.SHAPE.OUTER_TRIANGULAR_RECTANGLE, CONSTANTS.SHAPE.INNER_TRIANGULAR_RECTANGLE, CONSTANTS.SHAPE.ELLIPSE, CONSTANTS.SHAPE.CIRCLE];
+// CONCATENATED MODULE: ../simple-mind-map/src/utils/index.js
+
+//  深度优先遍历树
+const utils_walk = (root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0) => {
+  let stop = false;
+  if (beforeCallback) {
+    stop = beforeCallback(root, parent, isRoot, layerIndex, index);
+  }
+  if (!stop && root.children && root.children.length > 0) {
+    let _layerIndex = layerIndex + 1;
+    root.children.forEach((node, nodeIndex) => {
+      utils_walk(node, root, beforeCallback, afterCallback, false, _layerIndex, nodeIndex);
+    });
+  }
+  afterCallback && afterCallback(root, parent, isRoot, layerIndex, index);
+};
+
+//  广度优先遍历树
+const bfsWalk = (root, callback) => {
+  callback(root);
+  let stack = [root];
+  let isStop = false;
+  while (stack.length) {
+    if (isStop) {
+      break;
+    }
+    let cur = stack.shift();
+    if (cur.children && cur.children.length) {
+      cur.children.forEach(item => {
+        stack.push(item);
+        if (callback(item) === 'stop') {
+          isStop = true;
+        }
+      });
+    }
+  }
+};
+
+//  缩放图片尺寸
+const resizeImgSize = (width, height, maxWidth, maxHeight) => {
+  let nRatio = width / height;
+  let arr = [];
+  if (maxWidth && maxHeight) {
+    if (width <= maxWidth && height <= maxHeight) {
+      arr = [width, height];
+    } else {
+      let mRatio = maxWidth / maxHeight;
+      if (nRatio > mRatio) {
+        // 固定高度
+        arr = [nRatio * maxHeight, maxHeight];
+      } else {
+        // 固定宽度
+        arr = [maxWidth, maxWidth / nRatio];
+      }
+    }
+  } else if (maxWidth) {
+    if (width <= maxWidth) {
+      arr = [width, height];
+    } else {
+      arr = [maxWidth, maxWidth / nRatio];
+    }
+  } else if (maxHeight) {
+    if (height <= maxHeight) {
+      arr = [width, height];
+    } else {
+      arr = [nRatio * maxHeight, maxHeight];
+    }
+  }
+  return arr;
+};
+
+//  缩放图片
+const resizeImg = (imgUrl, maxWidth, maxHeight) => {
+  return new Promise((resolve, reject) => {
+    let img = new Image();
+    img.src = imgUrl;
+    img.onload = () => {
+      let arr = resizeImgSize(img.naturalWidth, img.naturalHeight, maxWidth, maxHeight);
+      resolve(arr);
+    };
+    img.onerror = e => {
+      reject(e);
+    };
+  });
+};
+
+//  从头html结构字符串里获取带换行符的字符串
+const getStrWithBrFromHtml = str => {
+  str = str.replace(/<br>/gim, '\n');
+  let el = document.createElement('div');
+  el.innerHTML = str;
+  str = el.textContent;
+  return str;
+};
+
+//  极简的深拷贝
+const simpleDeepClone = data => {
+  try {
+    return JSON.parse(JSON.stringify(data));
+  } catch (error) {
+    return null;
+  }
+};
+
+//  复制渲染树数据
+const copyRenderTree = (tree, root, removeActiveState = false) => {
+  tree.data = simpleDeepClone(root.data);
+  if (removeActiveState) {
+    tree.data.isActive = false;
+  }
+  tree.children = [];
+  if (root.children && root.children.length > 0) {
+    root.children.forEach((item, index) => {
+      tree.children[index] = copyRenderTree({}, item, removeActiveState);
+    });
+  }
+  return tree;
+};
+
+//  复制节点树数据
+const copyNodeTree = (tree, root, removeActiveState = false, keepId = false) => {
+  tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data);
+  // 去除节点id，因为节点id不能重复
+  if (tree.data.id && !keepId) delete tree.data.id;
+  if (tree.data.uid) delete tree.data.uid;
+  if (removeActiveState) {
+    tree.data.isActive = false;
+  }
+  tree.children = [];
+  if (root.children && root.children.length > 0) {
+    root.children.forEach((item, index) => {
+      tree.children[index] = copyNodeTree({}, item, removeActiveState, keepId);
+    });
+  } else if (root.nodeData && root.nodeData.children && root.nodeData.children.length > 0) {
+    root.nodeData.children.forEach((item, index) => {
+      tree.children[index] = copyNodeTree({}, item, removeActiveState, keepId);
+    });
+  }
+  return tree;
+};
+
+//  图片转成dataURL
+const imgToDataUrl = src => {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    // 跨域图片需要添加这个属性，否则画布被污染了无法导出图片
+    img.setAttribute('crossOrigin', 'anonymous');
+    img.onload = () => {
+      try {
+        let canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        let ctx = canvas.getContext('2d');
+        // 图片绘制到canvas里
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+        resolve(canvas.toDataURL());
+      } catch (e) {
+        reject(e);
+      }
+    };
+    img.onerror = e => {
+      reject(e);
+    };
+    img.src = src;
+  });
+};
+
+//  下载文件
+const downloadFile = (file, fileName) => {
+  let a = document.createElement('a');
+  a.href = file;
+  a.download = fileName;
+  a.click();
+};
+
+//  节流函数
+const throttle = (fn, time = 300, ctx) => {
+  let timer = null;
+  return (...args) => {
+    if (timer) {
+      return;
+    }
+    timer = setTimeout(() => {
+      fn.call(ctx, ...args);
+      timer = null;
+    }, time);
+  };
+};
+
+//  异步执行任务队列
+const asyncRun = (taskList, callback = () => {}) => {
+  let index = 0;
+  let len = taskList.length;
+  if (len <= 0) {
+    return callback();
+  }
+  let loop = () => {
+    if (index >= len) {
+      callback();
+      return;
+    }
+    taskList[index]();
+    setTimeout(() => {
+      index++;
+      loop();
+    }, 0);
+  };
+  loop();
+};
+
+// 角度转弧度
+const degToRad = deg => {
+  return deg * (Math.PI / 180);
+};
+
+// 驼峰转连字符 
+const camelCaseToHyphen = str => {
+  return str.replace(/([a-z])([A-Z])/g, (...args) => {
+    return args[1] + '-' + args[2].toLowerCase();
+  });
+};
+
+//计算节点的文本长宽
+let measureTextContext = null;
+const measureText = (text, {
+  italic,
+  bold,
+  fontSize,
+  fontFamily
+}) => {
+  const font = joinFontStr({
+    italic,
+    bold,
+    fontSize,
+    fontFamily
+  });
+  if (!measureTextContext) {
+    const canvas = document.createElement('canvas');
+    measureTextContext = canvas.getContext('2d');
+  }
+  measureTextContext.save();
+  measureTextContext.font = font;
+  const {
+    width,
+    actualBoundingBoxAscent,
+    actualBoundingBoxDescent
+  } = measureTextContext.measureText(text);
+  measureTextContext.restore();
+  const height = actualBoundingBoxAscent + actualBoundingBoxDescent;
+  return {
+    width,
+    height
+  };
+};
+
+// 拼接font字符串
+const joinFontStr = ({
+  italic,
+  bold,
+  fontSize,
+  fontFamily
+}) => {
+  return `${italic ? 'italic ' : ''} ${bold ? 'bold ' : ''} ${fontSize}px ${fontFamily} `;
+};
+
+//  在下一个事件循环里执行任务
+const nextTick = function (fn, ctx) {
+  let pending = false;
+  let timerFunc = null;
+  let handle = () => {
+    pending = false;
+    ctx ? fn.call(ctx) : fn();
+  };
+  // 支持MutationObserver接口的话使用MutationObserver
+  if (typeof MutationObserver !== 'undefined') {
+    let counter = 1;
+    let observer = new MutationObserver(handle);
+    let textNode = document.createTextNode(counter);
+    observer.observe(textNode, {
+      characterData: true // 设为 true 表示监视指定目标节点或子节点树中节点所包含的字符数据的变化
+    });
+
+    timerFunc = function () {
+      counter = (counter + 1) % 2; // counter会在0和1两者循环变化
+      textNode.data = counter; // 节点变化会触发回调handle，
+    };
+  } else {
+    // 否则使用定时器
+    timerFunc = setTimeout;
+  }
+  return function () {
+    if (pending) return;
+    pending = true;
+    timerFunc(handle, 0);
+  };
+};
+// CONCATENATED MODULE: ../simple-mind-map/src/utils/nodeGeneralization.js
+
+
+//  检查是否存在概要
+function checkHasGeneralization() {
+  return !!this.nodeData.data.generalization;
+}
+
+//  创建概要节点
+function createGeneralizationNode() {
+  if (this.isGeneralization || !this.checkHasGeneralization()) {
+    return;
+  }
+  if (!this._generalizationLine) {
+    this._generalizationLine = this.draw.path();
+  }
+  if (!this._generalizationNode) {
+    this._generalizationNode = new src_Node({
+      data: {
+        data: this.nodeData.data.generalization
+      },
+      uid: this.mindMap.uid++,
+      renderer: this.renderer,
+      mindMap: this.mindMap,
+      draw: this.draw,
+      isGeneralization: true
+    });
+    this._generalizationNodeWidth = this._generalizationNode.width;
+    this._generalizationNodeHeight = this._generalizationNode.height;
+    this._generalizationNode.generalizationBelongNode = this;
+    if (this.nodeData.data.generalization.isActive) {
+      this.renderer.addActiveNode(this._generalizationNode);
+    }
+  }
+}
+
+//  更新概要节点
+function updateGeneralization() {
+  this.removeGeneralization();
+  this.createGeneralizationNode();
+}
+
+//  渲染概要节点
+function renderGeneralization() {
+  if (this.isGeneralization) {
+    return;
+  }
+  if (!this.checkHasGeneralization()) {
+    this.removeGeneralization();
+    this._generalizationNodeWidth = 0;
+    this._generalizationNodeHeight = 0;
+    return;
+  }
+  if (this.nodeData.data.expand === false) {
+    this.removeGeneralization();
+    return;
+  }
+  this.createGeneralizationNode();
+  this.renderer.layout.renderGeneralization(this, this._generalizationLine, this._generalizationNode);
+  this.style.generalizationLine(this._generalizationLine);
+  this._generalizationNode.render();
+}
+
+//  删除概要节点
+function removeGeneralization() {
+  if (this._generalizationLine) {
+    this._generalizationLine.remove();
+    this._generalizationLine = null;
+  }
+  if (this._generalizationNode) {
+    // 删除概要节点时要同步从激活节点里删除
+    this.renderer.removeActiveNode(this._generalizationNode);
+    this._generalizationNode.remove();
+    this._generalizationNode = null;
+  }
+  // hack修复当激活一个节点时创建概要，然后立即激活创建的概要节点后会重复创建概要节点并且无法删除的问题
+  if (this.generalizationBelongNode) {
+    this.draw.find('.generalization_' + this.generalizationBelongNode.uid).remove();
+  }
+}
+
+//  隐藏概要节点
+function hideGeneralization() {
+  if (this._generalizationLine) {
+    this._generalizationLine.hide();
+  }
+  if (this._generalizationNode) {
+    this._generalizationNode.hide();
+  }
+}
+
+//  显示概要节点
+function showGeneralization() {
+  if (this._generalizationLine) {
+    this._generalizationLine.show();
+  }
+  if (this._generalizationNode) {
+    this._generalizationNode.show();
+  }
+}
+/* harmony default export */ var nodeGeneralization = ({
+  checkHasGeneralization,
+  createGeneralizationNode,
+  updateGeneralization,
+  renderGeneralization,
+  removeGeneralization,
+  hideGeneralization,
+  showGeneralization
+});
 // CONCATENATED MODULE: ../simple-mind-map/src/svg/btns.js
 //  展开按钮
 const btns_open = `<svg t="1618141562310" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13476" width="200" height="200"><path d="M475.136 327.168v147.968h-147.968v74.24h147.968v147.968h74.24v-147.968h147.968v-74.24h-147.968v-147.968h-74.24z m36.864-222.208c225.28 0 407.04 181.76 407.04 407.04s-181.76 407.04-407.04 407.04-407.04-181.76-407.04-407.04 181.76-407.04 407.04-407.04z m0-74.24c-265.216 0-480.768 215.552-480.768 480.768s215.552 480.768 480.768 480.768 480.768-215.552 480.768-480.768-215.552-480.768-480.768-480.768z" p-id="13477"></path></svg>`;
@@ -40959,6 +41077,160 @@ const btns_close = `<svg t="1618141589243" class="icon" viewBox="0 0 1024 1024" 
 /* harmony default export */ var btns = ({
   open: btns_open,
   close: btns_close
+});
+// CONCATENATED MODULE: ../simple-mind-map/src/utils/nodeExpandBtn.js
+
+
+
+// 创建展开收起按钮的内容节点
+function createExpandNodeContent() {
+  if (this._openExpandNode) {
+    return;
+  }
+  let {
+    open,
+    close
+  } = this.mindMap.opt.expandBtnIcon || {};
+  // 展开的节点
+  this._openExpandNode = SVG(open || btns.open).size(this.expandBtnSize, this.expandBtnSize);
+  this._openExpandNode.x(0).y(-this.expandBtnSize / 2);
+  // 收起的节点
+  this._closeExpandNode = SVG(close || btns.close).size(this.expandBtnSize, this.expandBtnSize);
+  this._closeExpandNode.x(0).y(-this.expandBtnSize / 2);
+  // 填充节点
+  this._fillExpandNode = new Circle().size(this.expandBtnSize);
+  this._fillExpandNode.x(0).y(-this.expandBtnSize / 2);
+  // 设置样式
+  this.style.iconBtn(this._openExpandNode, this._closeExpandNode, this._fillExpandNode);
+}
+
+//  创建或更新展开收缩按钮内容
+function updateExpandBtnNode() {
+  if (this._expandBtn) {
+    this._expandBtn.clear();
+  }
+  this.createExpandNodeContent();
+  let node;
+  if (this.nodeData.data.expand === false) {
+    node = this._openExpandNode;
+  } else {
+    node = this._closeExpandNode;
+  }
+  if (this._expandBtn) this._expandBtn.add(this._fillExpandNode).add(node);
+}
+
+//  更新展开收缩按钮位置
+function updateExpandBtnPos() {
+  if (!this._expandBtn) {
+    return;
+  }
+  this.renderer.layout.renderExpandBtn(this, this._expandBtn);
+}
+
+//  创建展开收缩按钮
+function renderExpandBtn() {
+  if (!this.nodeData.children || this.nodeData.children.length <= 0 || this.isRoot) {
+    return;
+  }
+  if (this._expandBtn) {
+    this.group.add(this._expandBtn);
+  } else {
+    this._expandBtn = new G();
+    this._expandBtn.on('mouseover', e => {
+      e.stopPropagation();
+      this._expandBtn.css({
+        cursor: 'pointer'
+      });
+    });
+    this._expandBtn.on('mouseout', e => {
+      e.stopPropagation();
+      this._expandBtn.css({
+        cursor: 'auto'
+      });
+    });
+    this._expandBtn.on('click', e => {
+      e.stopPropagation();
+      // 展开收缩
+      this.mindMap.execCommand('SET_NODE_EXPAND', this, !this.nodeData.data.expand);
+      this.mindMap.emit('expand_btn_click', this);
+    });
+    this._expandBtn.on('dblclick', e => {
+      e.stopPropagation();
+    });
+    this.group.add(this._expandBtn);
+  }
+  this.updateExpandBtnNode();
+  this.updateExpandBtnPos();
+}
+
+//  移除展开收缩按钮
+function removeExpandBtn() {
+  if (this._expandBtn) {
+    this._expandBtn.remove();
+  }
+}
+/* harmony default export */ var nodeExpandBtn = ({
+  createExpandNodeContent,
+  updateExpandBtnNode,
+  updateExpandBtnPos,
+  renderExpandBtn,
+  removeExpandBtn
+});
+// CONCATENATED MODULE: ../simple-mind-map/src/utils/nodeCommandWraps.js
+//  设置数据
+function nodeCommandWraps_setData(data = {}) {
+  this.mindMap.execCommand('SET_NODE_DATA', this, data);
+}
+
+//  设置文本
+function setText(text, richText) {
+  this.mindMap.execCommand('SET_NODE_TEXT', this, text, richText);
+}
+
+//  设置图片
+function setImage(imgData) {
+  this.mindMap.execCommand('SET_NODE_IMAGE', this, imgData);
+}
+
+//  设置图标
+function setIcon(icons) {
+  this.mindMap.execCommand('SET_NODE_ICON', this, icons);
+}
+
+//  设置超链接
+function setHyperlink(link, title) {
+  this.mindMap.execCommand('SET_NODE_HYPERLINK', this, link, title);
+}
+
+//  设置备注
+function setNote(note) {
+  this.mindMap.execCommand('SET_NODE_NOTE', this, note);
+}
+
+//  设置标签
+function setTag(tag) {
+  this.mindMap.execCommand('SET_NODE_TAG', this, tag);
+}
+
+//  设置形状
+function setShape(shape) {
+  this.mindMap.execCommand('SET_NODE_SHAPE', this, shape);
+}
+
+//  修改某个样式
+function setStyle(prop, value, isActive) {
+  this.mindMap.execCommand('SET_NODE_STYLE', this, prop, value, isActive);
+}
+/* harmony default export */ var nodeCommandWraps = ({
+  setData: nodeCommandWraps_setData,
+  setText,
+  setImage,
+  setIcon,
+  setHyperlink,
+  setNote,
+  setTag,
+  setShape,
+  setStyle
 });
 // CONCATENATED MODULE: ../simple-mind-map/src/svg/icons.js
 // 超链接图标
@@ -41185,6 +41457,268 @@ const getNodeIconListIcon = name => {
   nodeIconList,
   getNodeIconListIcon
 });
+// CONCATENATED MODULE: ../simple-mind-map/src/utils/nodeCreateContents.js
+
+
+
+
+
+//  创建图片节点
+function createImgNode() {
+  let img = this.nodeData.data.image;
+  if (!img) {
+    return;
+  }
+  let imgSize = this.getImgShowSize();
+  let node = new svg_esm_Image().load(img).size(...imgSize);
+  if (this.nodeData.data.imageTitle) {
+    node.attr('title', this.nodeData.data.imageTitle);
+  }
+  node.on('dblclick', e => {
+    this.mindMap.emit('node_img_dblclick', this, e);
+  });
+  return {
+    node,
+    width: imgSize[0],
+    height: imgSize[1]
+  };
+}
+
+//  获取图片显示宽高
+function getImgShowSize() {
+  return resizeImgSize(this.nodeData.data.imageSize.width, this.nodeData.data.imageSize.height, this.mindMap.themeConfig.imgMaxWidth, this.mindMap.themeConfig.imgMaxHeight);
+}
+
+//  创建icon节点
+function createIconNode() {
+  let _data = this.nodeData.data;
+  if (!_data.icon || _data.icon.length <= 0) {
+    return [];
+  }
+  let iconSize = this.mindMap.themeConfig.iconSize;
+  return _data.icon.map(item => {
+    return {
+      node: SVG(icons.getNodeIconListIcon(item)).size(iconSize, iconSize),
+      width: iconSize,
+      height: iconSize
+    };
+  });
+}
+
+// 创建富文本节点
+function createRichTextNode() {
+  let g = new G();
+  let html = `<div>${this.nodeData.data.text}</div>`;
+  let div = document.createElement('div');
+  div.innerHTML = html;
+  div.style.cssText = `position: fixed; left: -999999px;`;
+  let el = div.children[0];
+  el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+  el.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + 'px';
+  this.mindMap.el.appendChild(div);
+  let {
+    width,
+    height
+  } = el.getBoundingClientRect();
+  width = Math.ceil(width);
+  height = Math.ceil(height);
+  g.attr('data-width', width);
+  g.attr('data-height', height);
+  html = div.innerHTML;
+  this.mindMap.el.removeChild(div);
+  let foreignObject = new ForeignObject();
+  foreignObject.width(width);
+  foreignObject.height(height);
+  foreignObject.add(SVG(html));
+  g.add(foreignObject);
+  return {
+    node: g,
+    width,
+    height
+  };
+}
+
+//  创建文本节点
+function createTextNode() {
+  if (this.nodeData.data.richText) {
+    return this.createRichTextNode();
+  }
+  let g = new G();
+  let fontSize = this.getStyle('fontSize', false, this.nodeData.data.isActive);
+  let lineHeight = this.getStyle('lineHeight', false, this.nodeData.data.isActive);
+  // 文本超长自动换行
+  let textStyle = this.style.getTextFontStyle();
+  let textArr = this.nodeData.data.text.split(/\n/gim);
+  let maxWidth = this.mindMap.opt.textAutoWrapWidth;
+  textArr.forEach((item, index) => {
+    let arr = item.split('');
+    let lines = [];
+    let line = [];
+    while (arr.length) {
+      line.push(arr.shift());
+      let text = line.join('');
+      if (measureText(text, textStyle).width >= maxWidth) {
+        lines.push(text);
+        line = [];
+      }
+    }
+    if (line.length > 0) {
+      lines.push(line.join(''));
+    }
+    textArr[index] = lines.join('\n');
+  });
+  textArr = textArr.join('\n').split(/\n/gim);
+  textArr.forEach((item, index) => {
+    let node = new Text().text(item);
+    this.style.text(node);
+    node.y(fontSize * lineHeight * index);
+    g.add(node);
+  });
+  let {
+    width,
+    height
+  } = g.bbox();
+  width = Math.ceil(width);
+  height = Math.ceil(height);
+  g.attr('data-width', width);
+  g.attr('data-height', height);
+  return {
+    node: g,
+    width,
+    height
+  };
+}
+
+//  创建超链接节点
+function createHyperlinkNode() {
+  let {
+    hyperlink,
+    hyperlinkTitle
+  } = this.nodeData.data;
+  if (!hyperlink) {
+    return;
+  }
+  let iconSize = this.mindMap.themeConfig.iconSize;
+  let node = new SVG();
+  // 超链接节点
+  let a = new A().to(hyperlink).target('_blank');
+  a.node.addEventListener('click', e => {
+    e.stopPropagation();
+  });
+  if (hyperlinkTitle) {
+    a.attr('title', hyperlinkTitle);
+  }
+  // 添加一个透明的层，作为鼠标区域
+  a.rect(iconSize, iconSize).fill({
+    color: 'transparent'
+  });
+  // 超链接图标
+  let iconNode = SVG(icons.hyperlink).size(iconSize, iconSize);
+  this.style.iconNode(iconNode);
+  a.add(iconNode);
+  node.add(a);
+  return {
+    node,
+    width: iconSize,
+    height: iconSize
+  };
+}
+
+//  创建标签节点
+function createTagNode() {
+  let tagData = this.nodeData.data.tag;
+  if (!tagData || tagData.length <= 0) {
+    return [];
+  }
+  let nodes = [];
+  tagData.slice(0, this.mindMap.opt.maxTag).forEach((item, index) => {
+    let tag = new G();
+    // 标签文本
+    let text = new Text().text(item).x(8).cy(10);
+    this.style.tagText(text, index);
+    let {
+      width
+    } = text.bbox();
+    // 标签矩形
+    let rect = new Rect().size(width + 16, 20);
+    this.style.tagRect(rect, index);
+    tag.add(rect).add(text);
+    nodes.push({
+      node: tag,
+      width: width + 16,
+      height: 20
+    });
+  });
+  return nodes;
+}
+
+//  创建备注节点
+function createNoteNode() {
+  if (!this.nodeData.data.note) {
+    return null;
+  }
+  let iconSize = this.mindMap.themeConfig.iconSize;
+  let node = new SVG().attr('cursor', 'pointer');
+  // 透明的层，用来作为鼠标区域
+  node.add(new Rect().size(iconSize, iconSize).fill({
+    color: 'transparent'
+  }));
+  // 备注图标
+  let iconNode = SVG(icons.note).size(iconSize, iconSize);
+  this.style.iconNode(iconNode);
+  node.add(iconNode);
+  // 备注tooltip
+  if (!this.mindMap.opt.customNoteContentShow) {
+    if (!this.noteEl) {
+      this.noteEl = document.createElement('div');
+      this.noteEl.style.cssText = `
+                    position: absolute;
+                    padding: 10px;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
+                    display: none;
+                    background-color: #fff;
+                `;
+      document.body.appendChild(this.noteEl);
+    }
+    this.noteEl.innerText = this.nodeData.data.note;
+  }
+  node.on('mouseover', () => {
+    let {
+      left,
+      top
+    } = node.node.getBoundingClientRect();
+    if (!this.mindMap.opt.customNoteContentShow) {
+      this.noteEl.style.left = left + 'px';
+      this.noteEl.style.top = top + iconSize + 'px';
+      this.noteEl.style.display = 'block';
+    } else {
+      this.mindMap.opt.customNoteContentShow.show(this.nodeData.data.note, left, top + iconSize);
+    }
+  });
+  node.on('mouseout', () => {
+    if (!this.mindMap.opt.customNoteContentShow) {
+      this.noteEl.style.display = 'none';
+    } else {
+      this.mindMap.opt.customNoteContentShow.hide();
+    }
+  });
+  return {
+    node,
+    width: iconSize,
+    height: iconSize
+  };
+}
+/* harmony default export */ var nodeCreateContents = ({
+  createImgNode,
+  getImgShowSize,
+  createIconNode,
+  createRichTextNode,
+  createTextNode,
+  createHyperlinkNode,
+  createTagNode,
+  createNoteNode
+});
 // CONCATENATED MODULE: ../simple-mind-map/src/Node.js
 
 
@@ -41195,11 +41729,12 @@ const getNodeIconListIcon = name => {
 
 
 
-//  节点类
 
+
+
+//  节点类
 class Node_Node {
   //  构造函数
-
   constructor(opt = {}) {
     // 节点数据
     this.nodeData = this.handleData(opt.data || {});
@@ -41211,12 +41746,10 @@ class Node_Node {
     this.renderer = opt.renderer;
     // 渲染器
     this.draw = opt.draw || null;
-    // 主题配置
-    this.themeConfig = this.mindMap.themeConfig;
     // 样式实例
-    this.style = new src_Style(this, this.themeConfig);
+    this.style = new src_Style(this);
     // 形状实例
-    this.shapeInstance = new Shape(this);
+    this.shapeInstance = new Shape_Shape(this);
     this.shapePadding = {
       paddingX: 0,
       paddingY: 0
@@ -41247,6 +41780,7 @@ class Node_Node {
     this.children = opt.children || [];
     // 节点内容的容器
     this.group = null;
+    this.shapeNode = null; // 节点形状节点
     // 节点内容对象
     this._imgData = null;
     this._iconData = null;
@@ -41256,6 +41790,9 @@ class Node_Node {
     this._noteData = null;
     this.noteEl = null;
     this._expandBtn = null;
+    this._openExpandNode = null;
+    this._closeExpandNode = null;
+    this._fillExpandNode = null;
     this._lines = [];
     this._generalizationLine = null;
     this._generalizationNode = null;
@@ -41275,10 +41812,27 @@ class Node_Node {
     this.blockContentMargin = this.mindMap.opt.imgTextMargin;
     // 展开收缩按钮尺寸
     this.expandBtnSize = this.mindMap.opt.expandBtnSize;
-    // 初始渲染
-    this.initRender = true;
+    // 是否是多选节点
+    this.isMultipleChoice = false;
+    // 是否需要重新layout
+    this.needLayout = false;
+    // 概要相关方法
+    Object.keys(nodeGeneralization).forEach(item => {
+      this[item] = nodeGeneralization[item].bind(this);
+    });
+    // 展开收起按钮相关方法
+    Object.keys(nodeExpandBtn).forEach(item => {
+      this[item] = nodeExpandBtn[item].bind(this);
+    });
+    // 命令的相关方法
+    Object.keys(nodeCommandWraps).forEach(item => {
+      this[item] = nodeCommandWraps[item].bind(this);
+    });
+    // 创建节点内容的相关方法
+    Object.keys(nodeCreateContents).forEach(item => {
+      this[item] = nodeCreateContents[item].bind(this);
+    });
     // 初始化
-    // this.createNodeData()
     this.getSize();
   }
 
@@ -41296,17 +41850,7 @@ class Node_Node {
     this._top = val;
   }
 
-  //  更新主题配置
-
-  updateThemeConfig() {
-    // 主题配置
-    this.themeConfig = this.mindMap.themeConfig;
-    // 样式实例
-    this.style.updateThemeConfig(this.themeConfig);
-  }
-
   //  复位部分布局时会重新设置的数据
-
   reset() {
     this.children = [];
     this.parent = null;
@@ -41317,7 +41861,6 @@ class Node_Node {
   }
 
   //  处理数据
-
   handleData(data) {
     data.data.expand = data.data.expand === false ? false : true;
     data.data.isActive = data.data.isActive === true ? true : false;
@@ -41325,33 +41868,7 @@ class Node_Node {
     return data;
   }
 
-  //  检查节点是否存在自定义数据
-
-  hasCustomPosition() {
-    return this.customLeft !== undefined && this.customTop !== undefined;
-  }
-
-  //  检查节点是否存在自定义位置的祖先节点
-
-  ancestorHasCustomPosition() {
-    let node = this;
-    while (node) {
-      if (node.hasCustomPosition()) {
-        return true;
-      }
-      node = node.parent;
-    }
-    return false;
-  }
-
-  //  添加子节点
-
-  addChildren(node) {
-    this.children.push(node);
-  }
-
   //  创建节点的各个内容对象数据
-
   createNodeData() {
     this._imgData = this.createImgNode();
     this._iconData = this.createIconNode();
@@ -41359,56 +41876,11 @@ class Node_Node {
     this._hyperlinkData = this.createHyperlinkNode();
     this._tagData = this.createTagNode();
     this._noteData = this.createNoteNode();
-    this.createGeneralizationNode();
-  }
-
-  //  解绑所有事件
-
-  removeAllEvent() {
-    if (this._noteData) {
-      this._noteData.node.off(['mouseover', 'mouseout']);
-    }
-    if (this._expandBtn) {
-      this._expandBtn.off(['mouseover', 'mouseout', 'click']);
-    }
-    if (this.group) {
-      this.group.off(['click', 'dblclick', 'contextmenu', 'mousedown', 'mouseup', 'mouseenter', 'mouseleave']);
-    }
-  }
-
-  //  移除节点内容
-
-  removeAllNode() {
-    // 节点内的内容
-    ;
-    [this._imgData, this._iconData, this._textData, this._hyperlinkData, this._tagData, this._noteData].forEach(item => {
-      if (item && item.node) item.node.remove();
-    });
-    this._imgData = null;
-    this._iconData = null;
-    this._textData = null;
-    this._hyperlinkData = null;
-    this._tagData = null;
-    this._noteData = null;
-    // 展开收缩按钮
-    if (this._expandBtn) {
-      this._expandBtn.remove();
-      this._expandBtn = null;
-    }
-    // 组
-    if (this.group) {
-      this.group.clear();
-      this.group.remove();
-      this.group = null;
-    }
-    // 概要
-    this.removeGeneralization();
   }
 
   //  计算节点的宽高
-
   getSize() {
-    this.removeAllNode();
+    this.updateGeneralization();
     this.createNodeData();
     let {
       width,
@@ -41422,7 +41894,6 @@ class Node_Node {
   }
 
   //  计算节点尺寸信息
-
   getNodeRect() {
     // 宽高
     let imgContentWidth = 0;
@@ -41488,270 +41959,10 @@ class Node_Node {
     };
   }
 
-  //  创建图片节点
-
-  createImgNode() {
-    let img = this.nodeData.data.image;
-    if (!img) {
-      return;
-    }
-    let imgSize = this.getImgShowSize();
-    let node = new svg_esm_Image().load(img).size(...imgSize);
-    if (this.nodeData.data.imageTitle) {
-      node.attr('title', this.nodeData.data.imageTitle);
-    }
-    node.on('dblclick', e => {
-      this.mindMap.emit('node_img_dblclick', this, e);
-    });
-    return {
-      node,
-      width: imgSize[0],
-      height: imgSize[1]
-    };
-  }
-
-  //  获取图片显示宽高
-
-  getImgShowSize() {
-    return resizeImgSize(this.nodeData.data.imageSize.width, this.nodeData.data.imageSize.height, this.themeConfig.imgMaxWidth, this.themeConfig.imgMaxHeight);
-  }
-
-  //  创建icon节点
-
-  createIconNode() {
-    let _data = this.nodeData.data;
-    if (!_data.icon || _data.icon.length <= 0) {
-      return [];
-    }
-    let iconSize = this.themeConfig.iconSize;
-    return _data.icon.map(item => {
-      return {
-        node: SVG(icons.getNodeIconListIcon(item)).size(iconSize, iconSize),
-        width: iconSize,
-        height: iconSize
-      };
-    });
-  }
-
-  // 创建富文本节点
-  createRichTextNode() {
-    let g = new G();
-    let html = `<div>${this.nodeData.data.text}</div>`;
-    let div = document.createElement('div');
-    div.innerHTML = html;
-    div.style.cssText = `position: fixed; left: -999999px;`;
-    let el = div.children[0];
-    el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
-    el.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + 'px';
-    this.mindMap.el.appendChild(div);
-    let {
-      width,
-      height
-    } = el.getBoundingClientRect();
-    width = Math.ceil(width);
-    height = Math.ceil(height);
-    g.attr('data-width', width);
-    g.attr('data-height', height);
-    html = div.innerHTML;
-    this.mindMap.el.removeChild(div);
-    let foreignObject = new ForeignObject();
-    foreignObject.width(width);
-    foreignObject.height(height);
-    foreignObject.add(SVG(html));
-    g.add(foreignObject);
-    return {
-      node: g,
-      width,
-      height
-    };
-  }
-
-  //  创建文本节点
-
-  createTextNode() {
-    if (this.nodeData.data.richText) {
-      return this.createRichTextNode();
-    }
-    let g = new G();
-    let fontSize = this.getStyle('fontSize', false, this.nodeData.data.isActive);
-    let lineHeight = this.getStyle('lineHeight', false, this.nodeData.data.isActive);
-    // 文本超长自动换行
-    let textStyle = this.style.getTextFontStyle();
-    let textArr = this.nodeData.data.text.split(/\n/gim);
-    let maxWidth = this.mindMap.opt.textAutoWrapWidth;
-    textArr.forEach((item, index) => {
-      let arr = item.split('');
-      let lines = [];
-      let line = [];
-      while (arr.length) {
-        line.push(arr.shift());
-        let text = line.join('');
-        if (measureText(text, textStyle).width >= maxWidth) {
-          lines.push(text);
-          line = [];
-        }
-      }
-      if (line.length > 0) {
-        lines.push(line.join(''));
-      }
-      textArr[index] = lines.join('\n');
-    });
-    textArr = textArr.join('\n').split(/\n/gim);
-    textArr.forEach((item, index) => {
-      let node = new Text().text(item);
-      this.style.text(node);
-      node.y(fontSize * lineHeight * index);
-      g.add(node);
-    });
-    let {
-      width,
-      height
-    } = g.bbox();
-    width = Math.ceil(width);
-    height = Math.ceil(height);
-    g.attr('data-width', width);
-    g.attr('data-height', height);
-    return {
-      node: g,
-      width,
-      height
-    };
-  }
-
-  //  创建超链接节点
-
-  createHyperlinkNode() {
-    let {
-      hyperlink,
-      hyperlinkTitle
-    } = this.nodeData.data;
-    if (!hyperlink) {
-      return;
-    }
-    let iconSize = this.themeConfig.iconSize;
-    let node = new SVG();
-    // 超链接节点
-    let a = new A().to(hyperlink).target('_blank');
-    a.node.addEventListener('click', e => {
-      e.stopPropagation();
-    });
-    if (hyperlinkTitle) {
-      a.attr('title', hyperlinkTitle);
-    }
-    // 添加一个透明的层，作为鼠标区域
-    a.rect(iconSize, iconSize).fill({
-      color: 'transparent'
-    });
-    // 超链接图标
-    let iconNode = SVG(icons.hyperlink).size(iconSize, iconSize);
-    this.style.iconNode(iconNode);
-    a.add(iconNode);
-    node.add(a);
-    return {
-      node,
-      width: iconSize,
-      height: iconSize
-    };
-  }
-
-  //  创建标签节点
-
-  createTagNode() {
-    let tagData = this.nodeData.data.tag;
-    if (!tagData || tagData.length <= 0) {
-      return [];
-    }
-    let nodes = [];
-    tagData.slice(0, this.mindMap.opt.maxTag).forEach((item, index) => {
-      let tag = new G();
-      // 标签文本
-      let text = new Text().text(item).x(8).cy(10);
-      this.style.tagText(text, index);
-      let {
-        width
-      } = text.bbox();
-      // 标签矩形
-      let rect = new Rect().size(width + 16, 20);
-      this.style.tagRect(rect, index);
-      tag.add(rect).add(text);
-      nodes.push({
-        node: tag,
-        width: width + 16,
-        height: 20
-      });
-    });
-    return nodes;
-  }
-
-  //  创建备注节点
-
-  createNoteNode() {
-    if (!this.nodeData.data.note) {
-      return null;
-    }
-    let iconSize = this.themeConfig.iconSize;
-    let node = new SVG().attr('cursor', 'pointer');
-    // 透明的层，用来作为鼠标区域
-    node.add(new Rect().size(iconSize, iconSize).fill({
-      color: 'transparent'
-    }));
-    // 备注图标
-    let iconNode = SVG(icons.note).size(iconSize, iconSize);
-    this.style.iconNode(iconNode);
-    node.add(iconNode);
-    // 备注tooltip
-    if (!this.mindMap.opt.customNoteContentShow) {
-      if (!this.noteEl) {
-        this.noteEl = document.createElement('div');
-        this.noteEl.style.cssText = `
-                    position: absolute;
-                    padding: 10px;
-                    border-radius: 5px;
-                    box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
-                    display: none;
-                    background-color: #fff;
-                `;
-        document.body.appendChild(this.noteEl);
-      }
-      this.noteEl.innerText = this.nodeData.data.note;
-    }
-    node.on('mouseover', () => {
-      let {
-        left,
-        top
-      } = node.node.getBoundingClientRect();
-      if (!this.mindMap.opt.customNoteContentShow) {
-        this.noteEl.style.left = left + 'px';
-        this.noteEl.style.top = top + iconSize + 'px';
-        this.noteEl.style.display = 'block';
-      } else {
-        this.mindMap.opt.customNoteContentShow.show(this.nodeData.data.note, left, top + iconSize);
-      }
-    });
-    node.on('mouseout', () => {
-      if (!this.mindMap.opt.customNoteContentShow) {
-        this.noteEl.style.display = 'none';
-      } else {
-        this.mindMap.opt.customNoteContentShow.hide();
-      }
-    });
-    return {
-      node,
-      width: iconSize,
-      height: iconSize
-    };
-  }
-
-  //  获取节点形状
-
-  getShape() {
-    // 节点使用功能横线风格的话不支持设置形状，直接使用默认的矩形
-    return this.themeConfig.nodeUseLineStyle ? 'rectangle' : this.style.getStyle('shape', false, false);
-  }
-
   //  定位节点内容
-
   layout() {
+    // 清除之前的内容
+    this.group.clear();
     let {
       width,
       textContentItemMargin
@@ -41760,17 +41971,14 @@ class Node_Node {
       paddingY
     } = this.getPaddingVale();
     paddingY += this.shapePadding.paddingY;
-    // 创建组
-    this.group = new G();
+    // 节点形状
+    this.shapeNode = this.shapeInstance.createShape();
+    this.group.add(this.shapeNode);
+    this.updateNodeShape();
     // 概要节点添加一个带所属节点id的类名
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass('generalization_' + this.generalizationBelongNode.uid);
     }
-    this.draw.add(this.group);
-    this.update(true);
-    // 节点形状
-    const shape = this.getShape();
-    this.style[shape === 'rectangle' ? 'rect' : 'shape'](this.shapeInstance.createShape());
     // 图片节点
     let imgHeight = 0;
     if (this._imgData) {
@@ -41827,8 +42035,17 @@ class Node_Node {
     // 文字内容整体
     textContentNested.translate(width / 2 - textContentNested.bbox().width / 2, imgHeight + paddingY + (imgHeight > 0 && this._rectInfo.textContentHeight > 0 ? this.blockContentMargin : 0));
     this.group.add(textContentNested);
+  }
+
+  // 给节点绑定事件
+  bindGroupEvent() {
     // 单击事件，选中节点
     this.group.on('click', e => {
+      if (this.isMultipleChoice) {
+        e.stopPropagation();
+        this.isMultipleChoice = false;
+        return;
+      }
       this.mindMap.emit('node_click', this, e);
       this.active(e);
     });
@@ -41838,8 +42055,10 @@ class Node_Node {
       }
       // 多选和取消多选
       if (e.ctrlKey) {
+        this.isMultipleChoice = true;
         let isActive = this.nodeData.data.isActive;
-        this.mindMap.renderer.setNodeActive(this, !isActive);
+        if (!isActive) this.mindMap.emit('before_node_active', this, this.renderer.activeNodeList);
+        this.mindMap.execCommand('SET_NODE_ACTIVE', this, !isActive);
         this.mindMap.renderer[isActive ? 'removeActiveNode' : 'addActiveNode'](this);
         this.mindMap.emit('node_active', isActive ? null : this, this.mindMap.renderer.activeNodeList);
       }
@@ -41882,7 +42101,6 @@ class Node_Node {
   }
 
   //  激活节点
-
   active(e) {
     if (this.mindMap.opt.readonly) {
       return;
@@ -41898,51 +42116,65 @@ class Node_Node {
     this.mindMap.emit('node_active', this, this.renderer.activeNodeList);
   }
 
-  //  渲染节点到画布，会移除旧的，创建新的
-
-  renderNode() {
-    // 连线
-    this.renderLine();
-    this.removeAllEvent();
-    this.removeAllNode();
-    this.createNodeData();
-    this.layout();
-  }
-
   //  更新节点
-
-  update(layout = false) {
+  update(isLayout = false) {
     if (!this.group) {
       return;
     }
     // 需要移除展开收缩按钮
     if (this._expandBtn && this.nodeData.children.length <= 0) {
       this.removeExpandBtn();
-    } else if (!this._expandBtn && this.nodeData.children.length > 0) {
-      // 需要添加展开收缩按钮
-      this.renderExpandBtn();
     } else {
-      this.updateExpandBtnPos();
+      // 更新展开收起按钮
+      this.renderExpandBtn();
     }
+    // 更新概要
     this.renderGeneralization();
+    // 更新节点位置
     let t = this.group.transform();
-    if (!layout) {
+    if (!isLayout) {
       this.group.animate(300).translate(this.left - t.translateX, this.top - t.translateY);
     } else {
       this.group.translate(this.left - t.translateX, this.top - t.translateY);
     }
   }
 
-  //  递归渲染
+  // 重新渲染节点，即重新创建节点内容、计算节点大小、计算节点内容布局、更新展开收起按钮，概要及位置
+  reRender() {
+    let sizeChange = this.getSize();
+    this.layout();
+    this.update();
+    return sizeChange;
+  }
 
+  // 更新节点形状样式
+  updateNodeShape() {
+    if (!this.shapeNode) return;
+    const shape = this.getShape();
+    this.style[shape === CONSTANTS.SHAPE.RECTANGLE ? 'rect' : 'shape'](this.shapeNode);
+  }
+
+  //  递归渲染
   render(callback = () => {}) {
     // 节点
-    if (this.initRender) {
-      this.initRender = false;
-      this.renderNode();
+    // 重新渲染连线
+    this.renderLine();
+    if (!this.group) {
+      // 创建组
+      this.group = new G();
+      this.group.css({
+        cursor: 'default'
+      });
+      this.bindGroupEvent();
+      this.draw.add(this.group);
+      this.layout();
+      this.update(true);
     } else {
-      // 连线
-      this.renderLine();
+      this.draw.add(this.group);
+      if (this.needLayout) {
+        this.needLayout = false;
+        this.layout();
+      }
       this.update();
     }
     // 子节点
@@ -41971,12 +42203,11 @@ class Node_Node {
     }
   }
 
-  //  递归删除
-
+  //  递归删除，只是从画布删除，节点容器还在，后续还可以重新插回画布
   remove() {
-    this.initRender = true;
-    this.removeAllEvent();
-    this.removeAllNode();
+    if (!this.group) return;
+    this.group.remove();
+    this.removeGeneralization();
     this.removeLine();
     // 子节点
     if (this.children && this.children.length) {
@@ -41988,8 +42219,16 @@ class Node_Node {
     }
   }
 
-  //  隐藏节点
+  // 销毁节点，不但会从画布删除，而且原节点直接置空，后续无法再插回画布
+  destroy() {
+    if (!this.group) return;
+    this.group.remove();
+    this.removeGeneralization();
+    this.removeLine();
+    this.group = null;
+  }
 
+  //  隐藏节点
   hide() {
     this.group.hide();
     this.hideGeneralization();
@@ -42008,7 +42247,6 @@ class Node_Node {
   }
 
   //  显示节点
-
   show() {
     if (!this.group) {
       return;
@@ -42030,7 +42268,6 @@ class Node_Node {
   }
 
   //  连线
-
   renderLine(deep = false) {
     if (this.nodeData.data.expand === false) {
       return;
@@ -42061,8 +42298,35 @@ class Node_Node {
     }
   }
 
-  //  设置连线样式
+  //  获取节点形状
+  getShape() {
+    // 节点使用功能横线风格的话不支持设置形状，直接使用默认的矩形
+    return this.mindMap.themeConfig.nodeUseLineStyle ? CONSTANTS.SHAPE.RECTANGLE : this.style.getStyle('shape', false, false);
+  }
 
+  //  检查节点是否存在自定义数据
+  hasCustomPosition() {
+    return this.customLeft !== undefined && this.customTop !== undefined;
+  }
+
+  //  检查节点是否存在自定义位置的祖先节点
+  ancestorHasCustomPosition() {
+    let node = this;
+    while (node) {
+      if (node.hasCustomPosition()) {
+        return true;
+      }
+      node = node.parent;
+    }
+    return false;
+  }
+
+  //  添加子节点
+  addChildren(node) {
+    this.children.push(node);
+  }
+
+  //  设置连线样式
   styleLine(line, node) {
     let width = node.getSelfInhertStyle('lineWidth') || node.getStyle('lineWidth', true);
     let color = node.getSelfInhertStyle('lineColor') || node.getStyle('lineColor', true);
@@ -42075,7 +42339,6 @@ class Node_Node {
   }
 
   //  移除连线
-
   removeLine() {
     this._lines.forEach(line => {
       line.remove();
@@ -42083,183 +42346,7 @@ class Node_Node {
     this._lines = [];
   }
 
-  //  检查是否存在概要
-
-  checkHasGeneralization() {
-    return !!this.nodeData.data.generalization;
-  }
-
-  //  创建概要节点
-
-  createGeneralizationNode() {
-    if (this.isGeneralization || !this.checkHasGeneralization()) {
-      return;
-    }
-    if (!this._generalizationLine) {
-      this._generalizationLine = this.draw.path();
-    }
-    if (!this._generalizationNode) {
-      this._generalizationNode = new Node_Node({
-        data: {
-          data: this.nodeData.data.generalization
-        },
-        uid: this.mindMap.uid++,
-        renderer: this.renderer,
-        mindMap: this.mindMap,
-        draw: this.draw,
-        isGeneralization: true
-      });
-      this._generalizationNodeWidth = this._generalizationNode.width;
-      this._generalizationNodeHeight = this._generalizationNode.height;
-      this._generalizationNode.generalizationBelongNode = this;
-      if (this.nodeData.data.generalization.isActive) {
-        this.renderer.addActiveNode(this._generalizationNode);
-      }
-    }
-  }
-
-  //  更新概要节点
-
-  updateGeneralization() {
-    this.removeGeneralization();
-    this.createGeneralizationNode();
-  }
-
-  //  渲染概要节点
-
-  renderGeneralization() {
-    if (this.isGeneralization) {
-      return;
-    }
-    if (!this.checkHasGeneralization()) {
-      this.removeGeneralization();
-      this._generalizationNodeWidth = 0;
-      this._generalizationNodeHeight = 0;
-      return;
-    }
-    if (this.nodeData.data.expand === false) {
-      this.removeGeneralization();
-      return;
-    }
-    this.createGeneralizationNode();
-    this.renderer.layout.renderGeneralization(this, this._generalizationLine, this._generalizationNode);
-    this.style.generalizationLine(this._generalizationLine);
-    this._generalizationNode.render();
-  }
-
-  //  删除概要节点
-
-  removeGeneralization() {
-    if (this._generalizationLine) {
-      this._generalizationLine.remove();
-      this._generalizationLine = null;
-    }
-    if (this._generalizationNode) {
-      // 删除概要节点时要同步从激活节点里删除
-      this.renderer.removeActiveNode(this._generalizationNode);
-      this._generalizationNode.remove();
-      this._generalizationNode = null;
-    }
-    // hack修复当激活一个节点时创建概要，然后立即激活创建的概要节点后会重复创建概要节点并且无法删除的问题
-    if (this.generalizationBelongNode) {
-      this.draw.find('.generalization_' + this.generalizationBelongNode.uid).remove();
-    }
-  }
-
-  //  隐藏概要节点
-
-  hideGeneralization() {
-    if (this._generalizationLine) {
-      this._generalizationLine.hide();
-    }
-    if (this._generalizationNode) {
-      this._generalizationNode.hide();
-    }
-  }
-
-  //  显示概要节点
-
-  showGeneralization() {
-    if (this._generalizationLine) {
-      this._generalizationLine.show();
-    }
-    if (this._generalizationNode) {
-      this._generalizationNode.show();
-    }
-  }
-
-  //  创建或更新展开收缩按钮内容
-
-  updateExpandBtnNode() {
-    if (this._expandBtn) {
-      this._expandBtn.clear();
-    }
-    let iconSvg;
-    if (this.nodeData.data.expand === false) {
-      iconSvg = btns.open;
-    } else {
-      iconSvg = btns.close;
-    }
-    let node = SVG(iconSvg).size(this.expandBtnSize, this.expandBtnSize);
-    let fillNode = new Circle().size(this.expandBtnSize);
-    node.x(0).y(-this.expandBtnSize / 2);
-    fillNode.x(0).y(-this.expandBtnSize / 2);
-    this.style.iconBtn(node, fillNode);
-    if (this._expandBtn) this._expandBtn.add(fillNode).add(node);
-  }
-
-  //  更新展开收缩按钮位置
-
-  updateExpandBtnPos() {
-    if (!this._expandBtn) {
-      return;
-    }
-    this.renderer.layout.renderExpandBtn(this, this._expandBtn);
-  }
-
-  //  展开收缩按钮
-
-  renderExpandBtn() {
-    if (!this.nodeData.children || this.nodeData.children.length <= 0 || this.isRoot) {
-      return;
-    }
-    this._expandBtn = new G();
-    this.updateExpandBtnNode();
-    this._expandBtn.on('mouseover', e => {
-      e.stopPropagation();
-      this._expandBtn.css({
-        cursor: 'pointer'
-      });
-    });
-    this._expandBtn.on('mouseout', e => {
-      e.stopPropagation();
-      this._expandBtn.css({
-        cursor: 'auto'
-      });
-    });
-    this._expandBtn.on('click', e => {
-      e.stopPropagation();
-      // 展开收缩
-      this.mindMap.execCommand('SET_NODE_EXPAND', this, !this.nodeData.data.expand);
-      this.mindMap.emit('expand_btn_click', this);
-    });
-    this.group.add(this._expandBtn);
-    this.updateExpandBtnPos();
-  }
-
-  //  移除展开收缩按钮
-
-  removeExpandBtn() {
-    if (this._expandBtn) {
-      this._expandBtn.off(['mouseover', 'mouseout', 'click']);
-      this._expandBtn.clear();
-      this._expandBtn.remove();
-      this._expandBtn = null;
-    }
-  }
-
   //  检测当前节点是否是某个节点的祖先节点
-
   isParent(node) {
     if (this === node) {
       return false;
@@ -42275,7 +42362,6 @@ class Node_Node {
   }
 
   //  检测当前节点是否是某个节点的兄弟节点
-
   isBrother(node) {
     if (!this.parent || this === node) {
       return false;
@@ -42286,7 +42372,6 @@ class Node_Node {
   }
 
   //  获取padding值
-
   getPaddingVale() {
     return {
       paddingX: this.getStyle('paddingX', true, this.nodeData.data.isActive),
@@ -42295,20 +42380,17 @@ class Node_Node {
   }
 
   //  获取某个样式
-
   getStyle(prop, root, isActive) {
     let v = this.style.merge(prop, root, isActive);
     return v === undefined ? '' : v;
   }
 
   //  获取自定义样式
-
   getSelfStyle(prop) {
     return this.style.getSelfStyle(prop);
   }
 
   //   获取最近一个存在自身自定义样式的祖先节点的自定义样式
-
   getParentSelfStyle(prop) {
     if (this.parent) {
       return this.parent.getSelfStyle(prop) || this.parent.getParentSelfStyle(prop);
@@ -42317,75 +42399,20 @@ class Node_Node {
   }
 
   //  获取自身可继承的自定义样式
-
   getSelfInhertStyle(prop) {
     return this.getSelfStyle(prop) ||
     // 自身
     this.getParentSelfStyle(prop); // 父级
   }
 
-  //  修改某个样式
-
-  setStyle(prop, value, isActive) {
-    this.mindMap.execCommand('SET_NODE_STYLE', this, prop, value, isActive);
-  }
-
   //  获取数据
-
   getData(key) {
     return key ? this.nodeData.data[key] || '' : this.nodeData.data;
-  }
-
-  //  设置数据
-
-  setData(data = {}) {
-    this.mindMap.execCommand('SET_NODE_DATA', this, data);
-  }
-
-  //  设置文本
-
-  setText(text, richText) {
-    this.mindMap.execCommand('SET_NODE_TEXT', this, text, richText);
-  }
-
-  //  设置图片
-
-  setImage(imgData) {
-    this.mindMap.execCommand('SET_NODE_IMAGE', this, imgData);
-  }
-
-  //  设置图标
-
-  setIcon(icons) {
-    this.mindMap.execCommand('SET_NODE_ICON', this, icons);
-  }
-
-  //  设置超链接
-
-  setHyperlink(link, title) {
-    this.mindMap.execCommand('SET_NODE_HYPERLINK', this, link, title);
-  }
-
-  //  设置备注
-
-  setNote(note) {
-    this.mindMap.execCommand('SET_NODE_NOTE', this, note);
-  }
-
-  //  设置标签
-
-  setTag(tag) {
-    this.mindMap.execCommand('SET_NODE_TAG', this, tag);
-  }
-
-  //  设置形状
-
-  setShape(shape) {
-    this.mindMap.execCommand('SET_NODE_SHAPE', this, shape);
   }
 }
 /* harmony default export */ var src_Node = (Node_Node);
 // CONCATENATED MODULE: ../simple-mind-map/src/layouts/Base.js
+
 
 
 
@@ -42401,6 +42428,8 @@ class Base_Base {
     this.draw = this.mindMap.draw;
     // 根节点
     this.root = null;
+    // 保存所有uid和节点，用于复用
+    this.nodePool = {};
   }
 
   //  计算节点位置
@@ -42421,26 +42450,70 @@ class Base_Base {
   //  概要节点
   renderGeneralization() {}
 
+  // 通过uid缓存节点
+  cacheNode(uid, node) {
+    // 记录本次渲染时的节点
+    this.renderer.nodeCache[uid] = node;
+    // 记录所有渲染时的节点
+    this.nodePool[uid] = node;
+    // 如果总缓存数量达到1000，直接清空
+    if (Object.keys(this.nodePool).length > 1000) {
+      this.nodePool = {};
+    }
+  }
+
+  // 检查当前来源是否需要重新计算节点大小
+  checkIsNeedResizeSources() {
+    return [CONSTANTS.CHANGE_THEME, CONSTANTS.TRANSFORM_TO_NORMAL_NODE].includes(this.renderer.renderSource);
+  }
+
   //  创建节点实例
   createNode(data, parent, isRoot, layerIndex) {
     // 创建节点
     let newNode = null;
-    // 复用节点
+    // 数据上保存了节点引用，那么直接复用节点
     if (data && data._node && !this.renderer.reRender) {
       newNode = data._node;
       newNode.reset();
       newNode.layerIndex = layerIndex;
+      this.cacheNode(data._node.uid, newNode);
+      // 主题或主题配置改变了需要重新计算节点大小和布局
+      if (this.checkIsNeedResizeSources()) {
+        newNode.getSize();
+        newNode.needLayout = true;
+      }
+    } else if (this.nodePool[data.data.uid]) {
+      // 数据上没有保存节点引用，但是通过uid找到了缓存的节点，也可以复用
+      newNode = this.nodePool[data.data.uid];
+      // 保存该节点上一次的数据
+      let lastData = JSON.stringify(newNode.nodeData.data);
+      newNode.reset();
+      newNode.nodeData = newNode.handleData(data || {});
+      newNode.layerIndex = layerIndex;
+      this.cacheNode(data.data.uid, newNode);
+      data._node = newNode;
+      // 主题或主题配置改变了需要重新计算节点大小和布局
+      let isResizeSource = this.checkIsNeedResizeSources();
+      // 节点数据改变了需要重新计算节点大小和布局
+      let isNodeDataChange = lastData !== JSON.stringify(data.data);
+      if (isResizeSource || isNodeDataChange) {
+        newNode.getSize();
+        newNode.needLayout = true;
+      }
     } else {
       // 创建新节点
+      let uid = this.mindMap.uid++;
       newNode = new src_Node({
         data,
-        uid: this.mindMap.uid++,
+        uid,
         renderer: this.renderer,
         mindMap: this.mindMap,
         draw: this.draw,
         layerIndex
       });
-      newNode.getSize();
+      // uid保存到数据上，为了节点复用
+      data.data.uid = uid;
+      this.cacheNode(uid, newNode);
       // 数据关联实际节点
       data._node = newNode;
       if (data.data.isActive) {
@@ -42589,16 +42662,13 @@ class Base_Base {
 
 
 //  逻辑结构图
-
 class LogicalStructure_LogicalStructure extends layouts_Base {
   //  构造函数
-
   constructor(opt = {}) {
     super(opt);
   }
 
   //  布局
-
   doLayout(callback) {
     let task = [() => {
       this.computedBaseValue();
@@ -42613,9 +42683,8 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
   }
 
   //  遍历数据计算节点的left、width、height
-
   computedBaseValue() {
-    walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
+    utils_walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
       let newNode = this.createNode(cur, parent, isRoot, layerIndex);
       // 根节点定位在画布中心位置
       if (isRoot) {
@@ -42638,9 +42707,8 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
   }
 
   //  遍历节点树计算节点的top
-
   computedTopValue() {
-    walk(this.root, null, (node, parent, isRoot, layerIndex) => {
+    utils_walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (node.nodeData.data.expand && node.children && node.children.length) {
         let marginY = this.getMarginY(layerIndex + 1);
         // 第一个子节点的top值 = 该节点中心的top值 - 子节点的高度之和的一半
@@ -42655,9 +42723,8 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
   }
 
   //  调整节点top
-
   adjustTopValue() {
-    walk(this.root, null, (node, parent, isRoot, layerIndex) => {
+    utils_walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (!node.nodeData.data.expand) {
         return;
       }
@@ -42670,7 +42737,6 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
   }
 
   //  更新兄弟节点的top
-
   updateBrothers(node, addHeight) {
     if (node.parent) {
       let childrenList = node.parent.children;
@@ -42702,7 +42768,6 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
   }
 
   //  绘制连线，连接该节点到其子节点
-
   renderLine(node, lines, style, lineStyle) {
     if (lineStyle === 'curve') {
       this.renderLineCurve(node, lines, style);
@@ -42714,7 +42779,6 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
   }
 
   //  直线风格连线
-
   renderLineStraight(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -42745,7 +42809,6 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
   }
 
   //  直连风格
-
   renderLineDirect(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -42774,7 +42837,6 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
   }
 
   //  曲线风格连线
-
   renderLineCurve(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -42808,7 +42870,6 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
   }
 
   //  渲染按钮
-
   renderExpandBtn(node, btn) {
     let {
       width,
@@ -42824,7 +42885,6 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
   }
 
   //  创建概要节点
-
   renderGeneralization(node, gLine, gNode) {
     let {
       top,
@@ -42851,7 +42911,6 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
 
 
 //  思维导图
-
 class MindMap_MindMap extends layouts_Base {
   //  构造函数
   // 在逻辑结构图的基础上增加一个变量来记录生长方向，向左还是向右，同时在计算left的时候根据方向来计算、调整top时只考虑同方向的节点即可
@@ -42860,7 +42919,6 @@ class MindMap_MindMap extends layouts_Base {
   }
 
   //  布局
-
   doLayout(callback) {
     let task = [() => {
       this.computedBaseValue();
@@ -42875,9 +42933,8 @@ class MindMap_MindMap extends layouts_Base {
   }
 
   //  遍历数据计算节点的left、width、height
-
   computedBaseValue() {
-    walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex, index) => {
+    utils_walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex, index) => {
       let newNode = this.createNode(cur, parent, isRoot, layerIndex);
       // 根节点定位在画布中心位置
       if (isRoot) {
@@ -42924,9 +42981,8 @@ class MindMap_MindMap extends layouts_Base {
   }
 
   //  遍历节点树计算节点的top
-
   computedTopValue() {
-    walk(this.root, null, (node, parent, isRoot, layerIndex) => {
+    utils_walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (node.nodeData.data.expand && node.children && node.children.length) {
         let marginY = this.getMarginY(layerIndex + 1);
         let baseTop = node.top + node.height / 2 + marginY;
@@ -42947,9 +43003,8 @@ class MindMap_MindMap extends layouts_Base {
   }
 
   //  调整节点top
-
   adjustTopValue() {
-    walk(this.root, null, (node, parent, isRoot, layerIndex) => {
+    utils_walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (!node.nodeData.data.expand) {
         return;
       }
@@ -42964,7 +43019,6 @@ class MindMap_MindMap extends layouts_Base {
   }
 
   //  更新兄弟节点的top
-
   updateBrothers(node, leftAddHeight, rightAddHeight) {
     if (node.parent) {
       // 过滤出和自己同方向的节点
@@ -43000,7 +43054,6 @@ class MindMap_MindMap extends layouts_Base {
   }
 
   //  绘制连线，连接该节点到其子节点
-
   renderLine(node, lines, style, lineStyle) {
     if (lineStyle === 'curve') {
       this.renderLineCurve(node, lines, style);
@@ -43012,7 +43065,6 @@ class MindMap_MindMap extends layouts_Base {
   }
 
   //  直线风格连线
-
   renderLineStraight(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -43052,7 +43104,6 @@ class MindMap_MindMap extends layouts_Base {
   }
 
   //  直连风格
-
   renderLineDirect(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -43088,7 +43139,6 @@ class MindMap_MindMap extends layouts_Base {
   }
 
   //  曲线风格连线
-
   renderLineCurve(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -43129,7 +43179,6 @@ class MindMap_MindMap extends layouts_Base {
   }
 
   //  渲染按钮
-
   renderExpandBtn(node, btn) {
     let {
       width,
@@ -43148,7 +43197,6 @@ class MindMap_MindMap extends layouts_Base {
   }
 
   //  创建概要节点
-
   renderGeneralization(node, gLine, gNode) {
     let isLeft = node.dir === 'left';
     let {
@@ -43180,16 +43228,13 @@ class MindMap_MindMap extends layouts_Base {
 
 
 //  目录组织图
-
 class CatalogOrganization_CatalogOrganization extends layouts_Base {
   //  构造函数
-
   constructor(opt = {}) {
     super(opt);
   }
 
   //  布局
-
   doLayout(callback) {
     let task = [() => {
       this.computedBaseValue();
@@ -43204,9 +43249,8 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
   }
 
   //  遍历数据计算节点的left、width、height
-
   computedBaseValue() {
-    walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
+    utils_walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
       let newNode = this.createNode(cur, parent, isRoot, layerIndex);
       // 根节点定位在画布中心位置
       if (isRoot) {
@@ -43231,9 +43275,8 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
   }
 
   //  遍历节点树计算节点的left、top
-
   computedLeftTopValue() {
-    walk(this.root, null, (node, parent, isRoot, layerIndex) => {
+    utils_walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (node.nodeData.data.expand && node.children && node.children.length) {
         let marginX = this.getMarginX(layerIndex + 1);
         let marginY = this.getMarginY(layerIndex + 1);
@@ -43257,9 +43300,8 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
   }
 
   //  调整节点left、top
-
   adjustLeftTopValue() {
-    walk(this.root, null, (node, parent, isRoot, layerIndex) => {
+    utils_walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (!node.nodeData.data.expand) {
         return;
       }
@@ -43284,7 +43326,6 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
   }
 
   //  递归计算节点的宽度
-
   getNodeAreaWidth(node) {
     let widthArr = [];
     let loop = (node, width) => {
@@ -43303,7 +43344,6 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
   }
 
   //  调整兄弟节点的left
-
   updateBrothersLeft(node, addWidth) {
     if (node.parent) {
       let childrenList = node.parent.children;
@@ -43343,7 +43383,6 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
   }
 
   //  调整兄弟节点的top
-
   updateBrothersTop(node, addHeight) {
     if (node.parent && !node.parent.isRoot) {
       let childrenList = node.parent.children;
@@ -43372,7 +43411,6 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
   }
 
   //  绘制连线，连接该节点到其子节点
-
   renderLine(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -43490,7 +43528,6 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
   }
 
   //  渲染按钮
-
   renderExpandBtn(node, btn) {
     let {
       width,
@@ -43508,7 +43545,6 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
   }
 
   //  创建概要节点
-
   renderGeneralization(node, gLine, gNode) {
     let {
       top,
@@ -43540,13 +43576,11 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
 // 和逻辑结构图基本一样，只是方向变成向下生长，所以先计算节点的top，后计算节点的left、最后调整节点的left即可
 class OrganizationStructure_OrganizationStructure extends layouts_Base {
   //  构造函数
-
   constructor(opt = {}) {
     super(opt);
   }
 
   //  布局
-
   doLayout(callback) {
     let task = [() => {
       this.computedBaseValue();
@@ -43561,9 +43595,8 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
   }
 
   //  遍历数据计算节点的left、width、height
-
   computedBaseValue() {
-    walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
+    utils_walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex) => {
       let newNode = this.createNode(cur, parent, isRoot, layerIndex);
       // 根节点定位在画布中心位置
       if (isRoot) {
@@ -43586,9 +43619,8 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
   }
 
   //  遍历节点树计算节点的left
-
   computedLeftValue() {
-    walk(this.root, null, (node, parent, isRoot, layerIndex) => {
+    utils_walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (node.nodeData.data.expand && node.children && node.children.length) {
         let marginX = this.getMarginY(layerIndex + 1);
         // 第一个子节点的left值 = 该节点中心的left值 - 子节点的宽度之和的一半
@@ -43603,9 +43635,8 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
   }
 
   //  调整节点left
-
   adjustLeftValue() {
-    walk(this.root, null, (node, parent, isRoot, layerIndex) => {
+    utils_walk(this.root, null, (node, parent, isRoot, layerIndex) => {
       if (!node.nodeData.data.expand) {
         return;
       }
@@ -43618,7 +43649,6 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
   }
 
   //  更新兄弟节点的left
-
   updateBrothers(node, addWidth) {
     if (node.parent) {
       let childrenList = node.parent.children;
@@ -43650,7 +43680,6 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
   }
 
   //  绘制连线，连接该节点到其子节点
-
   renderLine(node, lines, style, lineStyle) {
     if (lineStyle === 'direct') {
       this.renderLineDirect(node, lines, style);
@@ -43660,7 +43689,6 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
   }
 
   //  直连风格
-
   renderLineDirect(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -43685,7 +43713,6 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
   }
 
   //  直线风格连线
-
   renderLineStraight(node, lines, style) {
     if (node.children.length <= 0) {
       return [];
@@ -43740,7 +43767,6 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
   }
 
   //  渲染按钮
-
   renderExpandBtn(node, btn) {
     let {
       width,
@@ -43755,7 +43781,6 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
   }
 
   //  创建概要节点
-
   renderGeneralization(node, gLine, gNode) {
     let {
       bottom,
@@ -43800,6 +43825,10 @@ class TextEdit_TextEdit {
     this.mindMap.on('node_dblclick', this.show);
     // 点击事件
     this.mindMap.on('draw_click', () => {
+      // 隐藏文本编辑框
+      this.hideEditTextBox();
+    });
+    this.mindMap.on('svg_mousedown', () => {
       // 隐藏文本编辑框
       this.hideEditTextBox();
     });
@@ -43854,15 +43883,18 @@ class TextEdit_TextEdit {
     let scale = this.mindMap.view.scale;
     let lineHeight = node.style.merge('lineHeight');
     let fontSize = node.style.merge('fontSize');
-    node.style.domText(this.textEditNode, scale);
-    this.textEditNode.innerHTML = node.nodeData.data.text.split(/\n/gim).join('<br>');
+    let textLines = node.nodeData.data.text.split(/\n/gim);
+    node.style.domText(this.textEditNode, scale, textLines.length);
+    this.textEditNode.innerHTML = textLines.join('<br>');
     this.textEditNode.style.minWidth = rect.width + 10 + 'px';
     this.textEditNode.style.minHeight = rect.height + 6 + 'px';
     this.textEditNode.style.left = rect.left + 'px';
     this.textEditNode.style.top = rect.top + 'px';
     this.textEditNode.style.display = 'block';
     this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth * scale + 'px';
-    this.textEditNode.style.transform = `translateY(${-(lineHeight * fontSize - fontSize) / 2 * scale}px)`;
+    if (textLines.length > 1 && lineHeight !== 1) {
+      this.textEditNode.style.transform = `translateY(${-((lineHeight * fontSize - fontSize) / 2 - 2) * scale}px)`;
+    }
     this.showTextEdit = true;
     // 选中文本
     this.selectNodeText();
@@ -43900,6 +43932,7 @@ class TextEdit_TextEdit {
     this.textEditNode.style.fontFamily = 'inherit';
     this.textEditNode.style.fontSize = 'inherit';
     this.textEditNode.style.fontWeight = 'normal';
+    this.textEditNode.style.transform = 'translateY(0)';
     this.showTextEdit = false;
   }
 }
@@ -44047,9 +44080,10 @@ class TextEdit_TextEdit {
 
 // 支持激活样式的属性
 // 简单来说，会改变节点大小的都不支持在激活时设置，为了性能考虑，节点切换激活态时不会重新计算节点大小
-const supportActiveStyle = ['fillColor', 'color', 'fontWeight', 'fontStyle', 'borderColor', 'borderWidth', 'borderDasharray', 'borderRadius', 'textDecoration'];
+const supportActiveStyle = ['fillColor', 'borderColor', 'borderWidth', 'borderDasharray', 'borderRadius'];
 const lineStyleProps = ['lineColor', 'lineDasharray', 'lineWidth'];
 // CONCATENATED MODULE: ../simple-mind-map/src/Render.js
+
 
 
 
@@ -44064,20 +44098,19 @@ const lineStyleProps = ['lineColor', 'lineDasharray', 'lineWidth'];
 // 布局列表
 const layouts = {
   // 逻辑结构图
-  logicalStructure: layouts_LogicalStructure,
+  [CONSTANTS.LAYOUT.LOGICAL_STRUCTURE]: layouts_LogicalStructure,
   // 思维导图
-  mindMap: layouts_MindMap,
+  [CONSTANTS.LAYOUT.MIND_MAP]: layouts_MindMap,
   // 目录组织图
-  catalogOrganization: layouts_CatalogOrganization,
+  [CONSTANTS.LAYOUT.CATALOG_ORGANIZATION]: layouts_CatalogOrganization,
   // 组织结构图
-  organizationStructure: layouts_OrganizationStructure
+  [CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE]: layouts_OrganizationStructure
 };
 
 //  渲染
 
 class Render_Render {
   //  构造函数
-
   constructor(opt = {}) {
     this.opt = opt;
     this.mindMap = opt.mindMap;
@@ -44087,6 +44120,15 @@ class Render_Render {
     this.renderTree = cjs_default()({}, this.mindMap.opt.data || {});
     // 是否重新渲染
     this.reRender = false;
+    // 是否正在渲染中
+    this.isRendering = false;
+    // 是否存在等待渲染
+    this.hasWaitRendering = false;
+    // 用于缓存节点
+    this.nodeCache = {};
+    this.lastNodeCache = {};
+    // 触发render的来源
+    this.renderSource = '';
     // 当前激活的节点列表
     this.activeNodeList = [];
     // 根节点
@@ -44104,13 +44146,11 @@ class Render_Render {
   }
 
   //  设置布局结构
-
   setLayout() {
-    this.layout = new (layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts.logicalStructure)(this);
+    this.layout = new (layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts[CONSTANTS.LAYOUT.LOGICAL_STRUCTURE])(this);
   }
 
   //   绑定事件
-
   bindEvent() {
     // 点击事件
     this.mindMap.on('draw_click', () => {
@@ -44122,7 +44162,6 @@ class Render_Render {
   }
 
   //  注册命令
-
   registerCommands() {
     // 全选
     this.selectAll = this.selectAll.bind(this);
@@ -44221,7 +44260,6 @@ class Render_Render {
   }
 
   //  注册快捷键
-
   registerShortcutKeys() {
     // 插入下级节点
     this.mindMap.keyCommand.addShortcut('Tab', () => {
@@ -44266,7 +44304,6 @@ class Render_Render {
   }
 
   //  开启文字编辑，会禁用回车键和删除键相关快捷键防止冲突
-
   startTextEdit() {
     this.mindMap.keyCommand.save();
     // this.mindMap.keyCommand.removeShortcut('Del|Backspace')
@@ -44275,7 +44312,6 @@ class Render_Render {
   }
 
   //  结束文字编辑，会恢复回车键和删除键相关快捷键
-
   endTextEdit() {
     this.mindMap.keyCommand.restore();
     // this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNodeWrap)
@@ -44284,23 +44320,51 @@ class Render_Render {
   }
 
   //   渲染
-
-  render(callback = () => {}) {
+  render(callback = () => {}, source) {
+    // 如果当前还没有渲染完毕，不再触发渲染
+    if (this.isRendering) {
+      // 等待当前渲染完毕后再进行一次渲染
+      this.hasWaitRendering = true;
+      return;
+    }
+    this.isRendering = true;
+    // 触发当前重新渲染的来源
+    this.renderSource = source;
+    // 节点缓存
+    this.lastNodeCache = this.nodeCache;
+    this.nodeCache = {};
+    // 重新渲染需要清除激活状态
     if (this.reRender) {
       this.clearActive();
     }
+    // 计算布局
     this.layout.doLayout(root => {
+      // 删除本次渲染时不再需要的节点
+      Object.keys(this.lastNodeCache).forEach(uid => {
+        if (!this.nodeCache[uid]) {
+          this.lastNodeCache[uid].destroy();
+          if (this.lastNodeCache[uid].parent) {
+            this.lastNodeCache[uid].parent.removeLine();
+          }
+        }
+      });
+      // 更新根节点
       this.root = root;
+      // 渲染节点
       this.root.render(() => {
+        this.isRendering = false;
         this.mindMap.emit('node_tree_render_end');
-        callback();
+        callback && callback();
+        if (this.hasWaitRendering) {
+          this.hasWaitRendering = false;
+          this.render(callback, source);
+        }
       });
     });
     this.mindMap.emit('node_active', null, this.activeNodeList);
   }
 
   //  清除当前激活的节点
-
   clearActive() {
     this.activeNodeList.forEach(item => {
       this.setNodeActive(item, false);
@@ -44309,7 +44373,6 @@ class Render_Render {
   }
 
   //  清除当前所有激活节点，并会触发事件
-
   clearAllActive() {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -44319,7 +44382,6 @@ class Render_Render {
   }
 
   //   添加节点到激活列表里
-
   addActiveNode(node) {
     let index = this.findActiveNodeIndex(node);
     if (index === -1) {
@@ -44328,7 +44390,6 @@ class Render_Render {
   }
 
   //  在激活列表里移除某个节点
-
   removeActiveNode(node) {
     let index = this.findActiveNodeIndex(node);
     if (index === -1) {
@@ -44338,7 +44399,6 @@ class Render_Render {
   }
 
   //  检索某个节点在激活列表里的索引
-
   findActiveNodeIndex(node) {
     return this.activeNodeList.findIndex(item => {
       return item === node;
@@ -44346,7 +44406,6 @@ class Render_Render {
   }
 
   //  获取节点在同级里的索引位置
-
   getNodeIndex(node) {
     return node.parent ? node.parent.children.findIndex(item => {
       return item === node;
@@ -44354,38 +44413,35 @@ class Render_Render {
   }
 
   //  全选
-
   selectAll() {
-    walk(this.root, null, node => {
+    utils_walk(this.root, null, node => {
       if (!node.nodeData.data.isActive) {
         node.nodeData.data.isActive = true;
         this.addActiveNode(node);
         setTimeout(() => {
-          node.renderNode();
+          node.updateNodeShape();
         }, 0);
       }
     }, null, true, 0, 0);
   }
 
   //  回退
-
   back(step) {
     this.clearAllActive();
     let data = this.mindMap.command.back(step);
     if (data) {
       this.renderTree = data;
-      this.mindMap.reRender();
+      this.mindMap.render();
     }
   }
 
   //  前进
-
   forward(step) {
     this.clearAllActive();
     let data = this.mindMap.command.forward(step);
     if (data) {
       this.renderTree = data;
-      this.mindMap.reRender();
+      this.mindMap.render();
     }
   }
 
@@ -44396,7 +44452,6 @@ class Render_Render {
   }
 
   //  插入同级节点，多个节点只会操作第一个节点
-
   insertNode(openEdit = true, appointNodes = [], appointData = null) {
     appointNodes = this.formatAppointNodes(appointNodes);
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
@@ -44413,7 +44468,7 @@ class Render_Render {
     } else {
       let text = first.layerIndex === 1 ? defaultInsertSecondLevelNodeText : defaultInsertBelowSecondLevelNodeText;
       if (first.layerIndex === 1) {
-        first.parent.initRender = true;
+        first.parent.destroy();
       }
       let index = this.getNodeIndex(first);
       first.parent.nodeData.children.splice(index + 1, 0, {
@@ -44430,7 +44485,6 @@ class Render_Render {
   }
 
   //  插入子节点
-
   insertChildNode(openEdit = true, appointNodes = [], appointData = null) {
     appointNodes = this.formatAppointNodes(appointNodes);
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
@@ -44458,18 +44512,13 @@ class Render_Render {
       // 插入子节点时自动展开子节点
       node.nodeData.data.expand = true;
       if (node.isRoot) {
-        node.initRender = true;
-        // this.mindMap.batchExecution.push('renderNode' + index, () => {
-        //     node.renderNode()
-        // })
+        node.destroy();
       }
     });
-
     this.mindMap.render();
   }
 
   //  上移节点，多个节点只会操作第一个节点
-
   upNode() {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -44497,7 +44546,6 @@ class Render_Render {
   }
 
   //  下移节点，多个节点只会操作第一个节点
-
   downNode() {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -44525,7 +44573,6 @@ class Render_Render {
   }
 
   //  将节点移动到另一个节点的前面
-
   insertBefore(node, exist) {
     if (node.isRoot) {
       return;
@@ -44557,14 +44604,12 @@ class Render_Render {
     existParent.nodeData.children.splice(existIndex, 0, node.nodeData);
     this.mindMap.render(() => {
       if (nodeLayerChanged) {
-        node.getSize();
-        node.renderNode();
+        node.reRender();
       }
     });
   }
 
   //  将节点移动到另一个节点的后面
-
   insertAfter(node, exist) {
     if (node.isRoot) {
       return;
@@ -44597,14 +44642,12 @@ class Render_Render {
     existParent.nodeData.children.splice(existIndex, 0, node.nodeData);
     this.mindMap.render(() => {
       if (nodeLayerChanged) {
-        node.getSize();
-        node.renderNode();
+        node.reRender();
       }
     });
   }
 
   //  移除节点
-
   removeNode(appointNodes = []) {
     appointNodes = this.formatAppointNodes(appointNodes);
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
@@ -44646,7 +44689,6 @@ class Render_Render {
   }
 
   //  移除某个指定节点
-
   removeOneNode(node) {
     let index = this.getNodeIndex(node);
     node.remove();
@@ -44655,7 +44697,6 @@ class Render_Render {
   }
 
   //  复制节点，多个节点只会操作第一个节点
-
   copyNode() {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -44664,7 +44705,6 @@ class Render_Render {
   }
 
   //  剪切节点，多个节点只会操作第一个节点
-
   cutNode(callback) {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -44684,7 +44724,6 @@ class Render_Render {
   }
 
   //  移动一个节点作为另一个节点的子节点
-
   moveNodeTo(node, toNode) {
     if (node.isRoot) {
       return;
@@ -44696,12 +44735,11 @@ class Render_Render {
     toNode.nodeData.children.push(copyData);
     this.mindMap.render();
     if (toNode.isRoot) {
-      toNode.renderNode();
+      toNode.destroy();
     }
   }
 
   //   粘贴节点到节点
-
   pasteNode(data) {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -44713,7 +44751,6 @@ class Render_Render {
   }
 
   //  设置节点样式
-
   setNodeStyle(node, prop, value, isActive) {
     let data = {};
     if (isActive) {
@@ -44730,12 +44767,14 @@ class Render_Render {
     }
     // 如果开启了富文本，则需要应用到富文本上
     if (this.mindMap.richText) {
-      this.mindMap.richText.showEditText(node);
       let config = this.mindMap.richText.normalStyleToRichTextStyle({
         [prop]: value
       });
-      this.mindMap.richText.formatAllText(config);
-      this.mindMap.richText.hideEditText();
+      if (Object.keys(config).length > 0) {
+        this.mindMap.richText.showEditText(node);
+        this.mindMap.richText.formatAllText(config);
+        this.mindMap.richText.hideEditText();
+      }
     }
     this.setNodeDataRender(node, data);
     // 更新了连线的样式
@@ -44746,16 +44785,14 @@ class Render_Render {
   }
 
   //  设置节点是否激活
-
   setNodeActive(node, active) {
     this.setNodeData(node, {
       isActive: active
     });
-    node.renderNode();
+    node.updateNodeShape();
   }
 
   //  设置节点是否展开
-
   setNodeExpand(node, expand) {
     this.setNodeData(node, {
       expand
@@ -44779,40 +44816,38 @@ class Render_Render {
   }
 
   //  展开所有
-
   expandAllNode() {
-    walk(this.renderTree, null, node => {
+    utils_walk(this.renderTree, null, node => {
       if (!node.data.expand) {
         node.data.expand = true;
       }
     }, null, true, 0, 0);
-    this.mindMap.reRender();
+    this.mindMap.render();
   }
 
   //  收起所有
-
   unexpandAllNode() {
-    walk(this.renderTree, null, (node, parent, isRoot) => {
+    utils_walk(this.renderTree, null, (node, parent, isRoot) => {
       node._node = null;
       if (!isRoot) {
         node.data.expand = false;
       }
     }, null, true, 0, 0);
-    this.mindMap.reRender();
+    this.mindMap.render(() => {
+      this.mindMap.view.reset();
+    });
   }
 
   //  展开到指定层级
-
   expandToLevel(level) {
-    walk(this.renderTree, null, (node, parent, isRoot, layerIndex) => {
+    utils_walk(this.renderTree, null, (node, parent, isRoot, layerIndex) => {
       node._node = null;
       node.data.expand = layerIndex < level;
     }, null, true, 0, 0);
-    this.mindMap.reRender();
+    this.mindMap.render();
   }
 
   //  切换激活节点的展开状态
-
   toggleActiveExpand() {
     this.activeNodeList.forEach(node => {
       if (node.nodeData.children.length <= 0) {
@@ -44823,13 +44858,11 @@ class Render_Render {
   }
 
   //  切换节点展开状态
-
   toggleNodeExpand(node) {
     this.mindMap.execCommand('SET_NODE_EXPAND', node, !node.nodeData.data.expand);
   }
 
   //  设置节点文本
-
   setNodeText(node, text, richText) {
     this.setNodeDataRender(node, {
       text,
@@ -44838,7 +44871,6 @@ class Render_Render {
   }
 
   //  设置节点图片
-
   setNodeImage(node, {
     url,
     title,
@@ -44856,7 +44888,6 @@ class Render_Render {
   }
 
   //  设置节点图标
-
   setNodeIcon(node, icons) {
     this.setNodeDataRender(node, {
       icon: icons
@@ -44864,7 +44895,6 @@ class Render_Render {
   }
 
   //  设置节点超链接
-
   setNodeHyperlink(node, link, title = '') {
     this.setNodeDataRender(node, {
       hyperlink: link,
@@ -44873,7 +44903,6 @@ class Render_Render {
   }
 
   //  设置节点备注
-
   setNodeNote(node, note) {
     this.setNodeDataRender(node, {
       note
@@ -44881,7 +44910,6 @@ class Render_Render {
   }
 
   //  设置节点标签
-
   setNodeTag(node, tag) {
     this.setNodeDataRender(node, {
       tag
@@ -44889,7 +44917,6 @@ class Render_Render {
   }
 
   //  添加节点概要
-
   addGeneralization(data) {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -44909,7 +44936,6 @@ class Render_Render {
   }
 
   //  删除节点概要
-
   removeGeneralization() {
     if (this.activeNodeList.length <= 0) {
       return;
@@ -44927,7 +44953,6 @@ class Render_Render {
   }
 
   //  设置节点自定义位置
-
   setNodeCustomPosition(node, left = undefined, top = undefined) {
     let nodeList = [node] || false;
     nodeList.forEach(item => {
@@ -44939,9 +44964,8 @@ class Render_Render {
   }
 
   //  一键整理布局，即去除自定义位置
-
   resetLayout() {
-    walk(this.root, null, node => {
+    utils_walk(this.root, null, node => {
       node.customLeft = undefined;
       node.customTop = undefined;
       this.setNodeData(node, {
@@ -44953,7 +44977,6 @@ class Render_Render {
   }
 
   //  设置节点形状
-
   setNodeShape(node, shape) {
     if (!shape || !shapeList.includes(shape)) {
       return;
@@ -44965,7 +44988,6 @@ class Render_Render {
   }
 
   //  更新节点数据
-
   setNodeData(node, data) {
     Object.keys(data).forEach(key => {
       node.nodeData.data[key] = data[key];
@@ -44973,11 +44995,9 @@ class Render_Render {
   }
 
   //  设置节点数据，并判断是否渲染
-
   setNodeDataRender(node, data) {
     this.setNodeData(node, data);
-    let changed = node.getSize();
-    node.renderNode();
+    let changed = node.reRender();
     if (changed) {
       if (node.isGeneralization) {
         // 概要节点
@@ -44988,7 +45008,6 @@ class Render_Render {
   }
 
   //  移动节点到画布中心
-
   moveNodeToCenter(node) {
     let halfWidth = this.mindMap.width / 2;
     let halfHeight = this.mindMap.height / 2;
@@ -46488,7 +46507,7 @@ class Command_Command {
     this.history = this.history.slice(0, this.activeHistoryIndex + 1);
     this.history.push(simpleDeepClone(data));
     this.activeHistoryIndex = this.history.length - 1;
-    this.mindMap.emit('data_change', data);
+    this.mindMap.emit('data_change', this.removeDataUid(data));
     this.mindMap.emit('back_forward', this.activeHistoryIndex, this.history.length);
   }
 
@@ -46501,7 +46520,7 @@ class Command_Command {
       this.activeHistoryIndex -= step;
       this.mindMap.emit('back_forward', this.activeHistoryIndex, this.history.length);
       let data = simpleDeepClone(this.history[this.activeHistoryIndex]);
-      this.mindMap.emit('data_change', data);
+      this.mindMap.emit('data_change', this.removeDataUid(data));
       return data;
     }
   }
@@ -46514,9 +46533,9 @@ class Command_Command {
     let len = this.history.length;
     if (this.activeHistoryIndex + step <= len - 1) {
       this.activeHistoryIndex += step;
-      this.mindMap.emit('back_forward', this.activeHistoryIndex);
+      this.mindMap.emit('back_forward', this.activeHistoryIndex, this.history.length);
       let data = simpleDeepClone(this.history[this.activeHistoryIndex]);
-      this.mindMap.emit('data_change', data);
+      this.mindMap.emit('data_change', this.removeDataUid(data));
       return data;
     }
   }
@@ -46524,6 +46543,21 @@ class Command_Command {
   //  获取渲染树数据副本
   getCopyData() {
     return copyRenderTree({}, this.mindMap.renderer.renderTree, true);
+  }
+
+  // 移除节点数据中的uid
+  removeDataUid(data) {
+    data = simpleDeepClone(data);
+    let walk = root => {
+      delete root.data.uid;
+      if (root.children && root.children.length > 0) {
+        root.children.forEach(item => {
+          walk(item);
+        });
+      }
+    };
+    walk(data);
+    return data;
   }
 }
 /* harmony default export */ var src_Command = (Command_Command);
@@ -46589,7 +46623,7 @@ const defaultOpt = {
   // 是否只读
   readonly: false,
   // 布局
-  layout: 'logicalStructure',
+  layout: CONSTANTS.LAYOUT.LOGICAL_STRUCTURE,
   // 主题
   theme: 'default',
   // 内置主题：default（默认主题）
@@ -46639,14 +46673,25 @@ const defaultOpt = {
   // 可以传一个函数，回调参数为事件对象
   customHandleMousewheel: null,
   // 鼠标滚动的行为，如果customHandleMousewheel传了自定义函数，这个属性不生效
-  mousewheelAction: 'zoom',
+  mousewheelAction: CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM,
   // zoom（放大缩小）、move（上下移动）
   // 当mousewheelAction设为move时，可以通过该属性控制鼠标滚动一下视图移动的步长，单位px
   mousewheelMoveStep: 100,
   // 默认插入的二级节点的文字
   defaultInsertSecondLevelNodeText: '二级节点',
   // 默认插入的二级以下节点的文字
-  defaultInsertBelowSecondLevelNodeText: '分支主题'
+  defaultInsertBelowSecondLevelNodeText: '分支主题',
+  // 展开收起按钮的颜色
+  expandBtnStyle: {
+    color: '#808080',
+    fill: '#fff'
+  },
+  // 自定义展开收起按钮的图标
+  expandBtnIcon: {
+    open: '',
+    // svg字符串
+    close: ''
+  }
 };
 
 //  思维导图
@@ -46669,7 +46714,7 @@ class simple_mind_map_MindMap {
     this.draw = this.svg.group();
 
     // 节点id
-    this.uid = 0;
+    this.uid = 1;
 
     // 初始化主题
     this.initTheme();
@@ -46709,7 +46754,7 @@ class simple_mind_map_MindMap {
     });
 
     // 初始渲染
-    this.reRender();
+    this.render();
     setTimeout(() => {
       this.command.addHistory();
     }, 0);
@@ -46719,7 +46764,7 @@ class simple_mind_map_MindMap {
   handleOpt(opt) {
     // 检查布局配置
     if (!layoutValueList.includes(opt.layout)) {
-      opt.layout = 'logicalStructure';
+      opt.layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE;
     }
     // 检查主题配置
     opt.theme = opt.theme && themes[opt.theme] ? opt.theme : 'default';
@@ -46727,11 +46772,11 @@ class simple_mind_map_MindMap {
   }
 
   //  渲染，部分渲染
-  render(callback) {
+  render(callback, source = '') {
     this.batchExecution.push('render', () => {
       this.initTheme();
       this.renderer.reRender = false;
-      this.renderer.render(callback);
+      this.renderer.render(callback, source);
     });
   }
 
@@ -46780,7 +46825,7 @@ class simple_mind_map_MindMap {
   setTheme(theme) {
     this.renderer.clearAllActive();
     this.opt.theme = theme;
-    this.reRender();
+    this.render(null, CONSTANTS.CHANGE_THEME);
   }
 
   //  获取当前主题
@@ -46791,7 +46836,7 @@ class simple_mind_map_MindMap {
   //  设置主题配置
   setThemeConfig(config) {
     this.opt.themeConfig = config;
-    this.reRender();
+    this.render(null, CONSTANTS.CHANGE_THEME);
   }
 
   //  获取自定义主题配置
@@ -46823,7 +46868,7 @@ class simple_mind_map_MindMap {
   setLayout(layout) {
     // 检查布局配置
     if (!layoutValueList.includes(layout)) {
-      layout = 'logicalStructure';
+      layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE;
     }
     this.opt.layout = layout;
     this.renderer.setLayout();
@@ -46839,6 +46884,7 @@ class simple_mind_map_MindMap {
   setData(data) {
     this.execCommand('CLEAR_ACTIVE_NODE');
     this.command.clearHistory();
+    this.command.addHistory();
     this.renderer.renderTree = data;
     this.reRender();
   }
@@ -46900,10 +46946,10 @@ class simple_mind_map_MindMap {
 
   //  设置只读模式、编辑模式
   setMode(mode) {
-    if (!['readonly', 'edit'].includes(mode)) {
+    if (![CONSTANTS.MODE.READONLY, CONSTANTS.MODE.EDIT].includes(mode)) {
       return;
     }
-    this.opt.readonly = mode === 'readonly';
+    this.opt.readonly = mode === CONSTANTS.MODE.READONLY;
     if (this.opt.readonly) {
       // 取消当前激活的元素
       this.renderer.clearAllActive();
@@ -47248,6 +47294,7 @@ Watermark_Watermark.instanceName = 'watermark';
 // CONCATENATED MODULE: ../simple-mind-map/src/KeyboardNavigation.js
 
 
+
 //  键盘导航类
 class KeyboardNavigation_KeyboardNavigation {
   //  构造函数
@@ -47255,17 +47302,17 @@ class KeyboardNavigation_KeyboardNavigation {
     this.opt = opt;
     this.mindMap = opt.mindMap;
     this.onKeyup = this.onKeyup.bind(this);
-    this.mindMap.keyCommand.addShortcut('Left', () => {
-      this.onKeyup('Left');
+    this.mindMap.keyCommand.addShortcut(CONSTANTS.KEY_DIR.LEFT, () => {
+      this.onKeyup(CONSTANTS.KEY_DIR.LEFT);
     });
-    this.mindMap.keyCommand.addShortcut('Up', () => {
-      this.onKeyup('Up');
+    this.mindMap.keyCommand.addShortcut(CONSTANTS.KEY_DIR.UP, () => {
+      this.onKeyup(CONSTANTS.KEY_DIR.UP);
     });
-    this.mindMap.keyCommand.addShortcut('Right', () => {
-      this.onKeyup('Right');
+    this.mindMap.keyCommand.addShortcut(CONSTANTS.KEY_DIR.RIGHT, () => {
+      this.onKeyup(CONSTANTS.KEY_DIR.RIGHT);
     });
-    this.mindMap.keyCommand.addShortcut('Down', () => {
-      this.onKeyup('Down');
+    this.mindMap.keyCommand.addShortcut(CONSTANTS.KEY_DIR.DOWN, () => {
+      this.onKeyup(CONSTANTS.KEY_DIR.DOWN);
     });
   }
 
@@ -47354,19 +47401,19 @@ class KeyboardNavigation_KeyboardNavigation {
       } = rect;
       let match = false;
       // 按下了左方向键
-      if (dir === 'Left') {
+      if (dir === CONSTANTS.KEY_DIR.LEFT) {
         // 判断节点是否在当前节点的左侧
         match = right <= currentActiveNodeRect.left;
         // 按下了右方向键
-      } else if (dir === 'Right') {
+      } else if (dir === CONSTANTS.KEY_DIR.RIGHT) {
         // 判断节点是否在当前节点的右侧
         match = left >= currentActiveNodeRect.right;
         // 按下了上方向键
-      } else if (dir === 'Up') {
+      } else if (dir === CONSTANTS.KEY_DIR.UP) {
         // 判断节点是否在当前节点的上面
         match = bottom <= currentActiveNodeRect.top;
         // 按下了下方向键
-      } else if (dir === 'Down') {
+      } else if (dir === CONSTANTS.KEY_DIR.DOWN) {
         // 判断节点是否在当前节点的下面
         match = top >= currentActiveNodeRect.bottom;
       }
@@ -47394,13 +47441,13 @@ class KeyboardNavigation_KeyboardNavigation {
         bottom
       } = rect;
       let match = false;
-      if (dir === 'Left') {
+      if (dir === CONSTANTS.KEY_DIR.LEFT) {
         match = left < currentActiveNodeRect.left && top < currentActiveNodeRect.bottom && bottom > currentActiveNodeRect.top;
-      } else if (dir === 'Right') {
+      } else if (dir === CONSTANTS.KEY_DIR.RIGHT) {
         match = right > currentActiveNodeRect.right && top < currentActiveNodeRect.bottom && bottom > currentActiveNodeRect.top;
-      } else if (dir === 'Up') {
+      } else if (dir === CONSTANTS.KEY_DIR.UP) {
         match = top < currentActiveNodeRect.top && left < currentActiveNodeRect.right && right > currentActiveNodeRect.left;
-      } else if (dir === 'Down') {
+      } else if (dir === CONSTANTS.KEY_DIR.DOWN) {
         match = bottom > currentActiveNodeRect.bottom && left < currentActiveNodeRect.right && right > currentActiveNodeRect.left;
       }
       if (match) {
@@ -47436,13 +47483,13 @@ class KeyboardNavigation_KeyboardNavigation {
       let offsetY = ccY - cY;
       if (offsetX === 0 && offsetY === 0) return;
       let match = false;
-      if (dir === 'Left') {
+      if (dir === CONSTANTS.KEY_DIR.LEFT) {
         match = offsetX <= 0 && offsetX <= offsetY && offsetX <= -offsetY;
-      } else if (dir === 'Right') {
+      } else if (dir === CONSTANTS.KEY_DIR.RIGHT) {
         match = offsetX > 0 && offsetX >= -offsetY && offsetX >= offsetY;
-      } else if (dir === 'Up') {
+      } else if (dir === CONSTANTS.KEY_DIR.UP) {
         match = offsetY <= 0 && offsetY < offsetX && offsetY < -offsetX;
-      } else if (dir === 'Down') {
+      } else if (dir === CONSTANTS.KEY_DIR.DOWN) {
         match = offsetY > 0 && -offsetY < offsetX && offsetY > offsetX;
       }
       if (match) {
@@ -47847,7 +47894,7 @@ const getIndentMark = level => {
 // 转换成markdown格式
 const transformToMarkdown = root => {
   let content = '';
-  walk(root, null, (node, parent, isRoot, layerIndex) => {
+  utils_walk(root, null, (node, parent, isRoot, layerIndex) => {
     let level = layerIndex + 1;
     let text = node.data.richText ? getText(node.data.text) : node.data.text;
     if (level <= 6) {
@@ -48129,7 +48176,6 @@ Export_Export.instanceName = 'doExport';
 
 class Drag_Drag extends layouts_Base {
   //  构造函数
-
   constructor({
     mindMap
   }) {
@@ -48140,7 +48186,6 @@ class Drag_Drag extends layouts_Base {
   }
 
   //  复位
-
   reset() {
     // 当前拖拽节点
     this.node = null;
@@ -48171,10 +48216,11 @@ class Drag_Drag extends layouts_Base {
     this.mouseDownY = 0;
     this.mouseMoveX = 0;
     this.mouseMoveY = 0;
+    // 鼠标移动的距离距鼠标按下的位置距离多少以上才认为是拖动事件
+    this.checkDragOffset = 10;
   }
 
   //  绑定事件
-
   bindEvent() {
     this.checkOverlapNode = throttle(this.checkOverlapNode, 300, this);
     this.mindMap.on('node_mousedown', (node, e) => {
@@ -48219,7 +48265,7 @@ class Drag_Drag extends layouts_Base {
       } = this.mindMap.toPos(e.clientX, e.clientY);
       this.mouseMoveX = x;
       this.mouseMoveY = y;
-      if (Math.abs(x - this.mouseDownX) <= 10 && Math.abs(y - this.mouseDownY) <= 10 && !this.node.isDrag) {
+      if (Math.abs(x - this.mouseDownX) <= this.checkDragOffset && Math.abs(y - this.mouseDownY) <= this.checkDragOffset && !this.node.isDrag) {
         return;
       }
       this.mindMap.renderer.clearAllActive();
@@ -48231,7 +48277,6 @@ class Drag_Drag extends layouts_Base {
   }
 
   //  鼠标松开事件
-
   onMouseup(e) {
     if (!this.isMousedown) {
       return;
@@ -48279,7 +48324,6 @@ class Drag_Drag extends layouts_Base {
   }
 
   //  创建克隆节点
-
   createCloneNode() {
     if (!this.clone) {
       // 节点
@@ -48301,7 +48345,6 @@ class Drag_Drag extends layouts_Base {
   }
 
   //  移除克隆节点
-
   removeCloneNode() {
     if (!this.clone) {
       return;
@@ -48312,7 +48355,6 @@ class Drag_Drag extends layouts_Base {
   }
 
   //  拖动中
-
   onMove(x, y) {
     if (!this.isMousedown) {
       return;
@@ -48337,19 +48379,12 @@ class Drag_Drag extends layouts_Base {
   }
 
   //  检测重叠节点
-
   checkOverlapNode() {
     if (!this.drawTransform) {
       return;
     }
-    let {
-      scaleX,
-      scaleY,
-      translateX,
-      translateY
-    } = this.drawTransform;
-    let checkRight = this.cloneNodeLeft + this.node.width * scaleX;
-    let checkBottom = this.cloneNodeTop + this.node.height * scaleX;
+    let x = this.mouseMoveX;
+    let y = this.mouseMoveY;
     this.overlapNode = null;
     this.prevNode = null;
     this.nextNode = null;
@@ -48364,35 +48399,72 @@ class Drag_Drag extends layouts_Base {
       if (this.overlapNode || this.prevNode && this.nextNode) {
         return;
       }
-      let {
-        left,
-        top,
-        width,
-        height
-      } = node;
-      let _left = left;
-      let _top = top;
-      let _bottom = top + height;
-      let right = (left + width) * scaleX + translateX;
-      let bottom = (top + height) * scaleY + translateY;
-      left = left * scaleX + translateX;
-      top = top * scaleY + translateY;
-      // 检测是否重叠
-      if (!this.overlapNode) {
-        if (left <= checkRight && right >= this.cloneNodeLeft && top <= checkBottom && bottom >= this.cloneNodeTop) {
-          this.overlapNode = node;
+      let nodeRect = this.getNodeRect(node);
+      let oneFourthHeight = nodeRect.height / 4;
+      // 前一个和后一个节点
+      let checkList = node.parent ? node.parent.children.filter(item => {
+        return item !== this.node;
+      }) : [];
+      let index = checkList.findIndex(item => {
+        return item === node;
+      });
+      let prevBrother = null;
+      let nextBrother = null;
+      if (index !== -1) {
+        if (index - 1 >= 0) {
+          prevBrother = checkList[index - 1];
+        }
+        if (index + 1 <= checkList.length - 1) {
+          nextBrother = checkList[index + 1];
         }
       }
-      // 检测兄弟节点位置
-      if (!this.prevNode && !this.nextNode && !node.isRoot) {
-        // && this.node.isBrother(node)
-        if (left <= checkRight && right >= this.cloneNodeLeft) {
-          if (this.cloneNodeTop > bottom && this.cloneNodeTop <= bottom + 10) {
+      // 和前一个兄弟节点的距离
+      let prevBrotherOffset = 0;
+      if (prevBrother) {
+        let prevNodeRect = this.getNodeRect(prevBrother);
+        prevBrotherOffset = nodeRect.top - prevNodeRect.bottom;
+        // 间距小于10就当它不存在
+        prevBrotherOffset = prevBrotherOffset >= 10 ? prevBrotherOffset / 2 : 0;
+      } else {
+        // 没有前一个兄弟节点，那么假设和前一个节点的距离为20
+        prevBrotherOffset = 10;
+      }
+      // 和后一个兄弟节点的距离
+      let nextBrotherOffset = 0;
+      if (nextBrother) {
+        let nextNodeRect = this.getNodeRect(nextBrother);
+        nextBrotherOffset = nextNodeRect.top - nodeRect.bottom;
+        nextBrotherOffset = nextBrotherOffset >= 10 ? nextBrotherOffset / 2 : 0;
+      } else {
+        nextBrotherOffset = 10;
+      }
+      if (nodeRect.left <= x && nodeRect.right >= x) {
+        // 检测兄弟节点位置
+        if (!this.overlapNode && !this.prevNode && !this.nextNode && !node.isRoot) {
+          let checkIsPrevNode = nextBrotherOffset > 0 ?
+          // 距离下一个兄弟节点的距离大于0
+          y > nodeRect.bottom && y <= nodeRect.bottom + nextBrotherOffset :
+          // 那么在当前节点外底部判断
+          y >= nodeRect.bottom - oneFourthHeight && y <= nodeRect.bottom; // 否则在当前节点内底部1/4区间判断
+          let checkIsNextNode = prevBrotherOffset > 0 ?
+          // 距离上一个兄弟节点的距离大于0
+          y < nodeRect.top && y >= nodeRect.top - prevBrotherOffset :
+          // 那么在当前节点外底部判断
+          y >= nodeRect.top && y <= nodeRect.top + oneFourthHeight;
+          if (checkIsPrevNode) {
             this.prevNode = node;
-            this.placeholder.size(node.width, 10).move(_left, _bottom);
-          } else if (checkBottom < top && checkBottom >= top - 10) {
+            let size = nextBrotherOffset > 0 ? nextBrotherOffset : 5;
+            this.placeholder.size(node.width, size).move(nodeRect.originLeft, nodeRect.originBottom);
+          } else if (checkIsNextNode) {
             this.nextNode = node;
-            this.placeholder.size(node.width, 10).move(_left, _top - 10);
+            let size = prevBrotherOffset > 0 ? prevBrotherOffset : 5;
+            this.placeholder.size(node.width, size).move(nodeRect.originLeft, nodeRect.originTop - size);
+          }
+        }
+        // 检测是否重叠
+        if (!this.overlapNode && !this.prevNode && !this.nextNode) {
+          if (nodeRect.top + (prevBrotherOffset > 0 ? 0 : oneFourthHeight) <= y && nodeRect.bottom - (nextBrotherOffset > 0 ? 0 : oneFourthHeight) >= y) {
+            this.overlapNode = node;
           }
         }
       }
@@ -48400,6 +48472,40 @@ class Drag_Drag extends layouts_Base {
     if (this.overlapNode) {
       this.mindMap.renderer.setNodeActive(this.overlapNode, true);
     }
+  }
+
+  // 计算节点的位置尺寸信息
+  getNodeRect(node) {
+    let {
+      scaleX,
+      scaleY,
+      translateX,
+      translateY
+    } = this.drawTransform;
+    let {
+      left,
+      top,
+      width,
+      height
+    } = node;
+    let originLeft = left;
+    let originTop = top;
+    let originBottom = top + height;
+    let right = (left + width) * scaleX + translateX;
+    let bottom = (top + height) * scaleY + translateY;
+    left = left * scaleX + translateX;
+    top = top * scaleY + translateY;
+    return {
+      width,
+      height,
+      left,
+      top,
+      right,
+      bottom,
+      originLeft,
+      originTop,
+      originBottom
+    };
   }
 }
 Drag_Drag.instanceName = 'drag';
@@ -48944,7 +49050,7 @@ class AssociativeLine_AssociativeLine {
     if (!tree) return;
     let idToNode = new Map();
     let nodeToIds = new Map();
-    walk(tree, null, cur => {
+    utils_walk(tree, null, cur => {
       if (!cur) return;
       let data = cur.nodeData.data;
       if (data.associativeLineTargets && data.associativeLineTargets.length > 0) {
@@ -49461,6 +49567,7 @@ var html2canvas_default = /*#__PURE__*/__webpack_require__.n(html2canvas);
 
 
 
+
 let extended = false;
 
 // 扩展quill的字体列表
@@ -49534,7 +49641,7 @@ class RichText_RichText {
     this.mindMap.renderer.textEdit.registerTmpShortcut();
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div');
-      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;`;
+      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: 3px 5px;margin-left: -5px;margin-top: -3px;`;
       document.body.appendChild(this.textEditNode);
     }
     // 原始宽高
@@ -49580,7 +49687,7 @@ class RichText_RichText {
       underline: node.style.merge('textDecoration') === 'underline',
       strike: node.style.merge('textDecoration') === 'line-through'
     };
-    this.formatText(style);
+    this.formatAllText(style);
   }
 
   // 隐藏文本编辑控件，即完成编辑
@@ -49846,17 +49953,18 @@ class RichText_RichText {
   // 将所有节点转换成非富文本节点
   transformAllNodesToNormalNode() {
     let div = document.createElement('div');
-    walk(this.mindMap.renderer.renderTree, null, node => {
+    utils_walk(this.mindMap.renderer.renderTree, null, node => {
       if (node.data.richText) {
         node.data.richText = false;
         div.innerHTML = node.data.text;
         node.data.text = div.textContent;
+        // delete node.data.uid
       }
     }, null, true, 0, 0);
     // 清空历史数据，并且触发数据变化
     this.mindMap.command.clearHistory();
     this.mindMap.command.addHistory();
-    this.mindMap.reRender();
+    this.mindMap.render(null, CONSTANTS.TRANSFORM_TO_NORMAL_NODE);
   }
 
   // 插件被移除前做的事情

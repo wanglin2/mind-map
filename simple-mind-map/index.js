@@ -7,7 +7,7 @@ import Style from './src/Style'
 import KeyCommand from './src/KeyCommand'
 import Command from './src/Command'
 import BatchExecution from './src/BatchExecution'
-import { layoutValueList } from './src/utils/constant'
+import { layoutValueList, CONSTANTS } from './src/utils/constant'
 import { SVG } from '@svgdotjs/svg.js'
 import { simpleDeepClone } from './src/utils'
 import defaultTheme from './src/themes/default'
@@ -17,7 +17,7 @@ const defaultOpt = {
   // 是否只读
   readonly: false,
   // 布局
-  layout: 'logicalStructure',
+  layout: CONSTANTS.LAYOUT.LOGICAL_STRUCTURE,
   // 主题
   theme: 'default', // 内置主题：default（默认主题）
   // 主题配置，会和所选择的主题进行合并
@@ -66,13 +66,23 @@ const defaultOpt = {
   // 可以传一个函数，回调参数为事件对象
   customHandleMousewheel: null,
   // 鼠标滚动的行为，如果customHandleMousewheel传了自定义函数，这个属性不生效
-  mousewheelAction: 'zoom',// zoom（放大缩小）、move（上下移动）
+  mousewheelAction: CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM,// zoom（放大缩小）、move（上下移动）
   // 当mousewheelAction设为move时，可以通过该属性控制鼠标滚动一下视图移动的步长，单位px
   mousewheelMoveStep: 100,
   // 默认插入的二级节点的文字
   defaultInsertSecondLevelNodeText: '二级节点',
   // 默认插入的二级以下节点的文字
-  defaultInsertBelowSecondLevelNodeText: '分支主题'
+  defaultInsertBelowSecondLevelNodeText: '分支主题',
+  // 展开收起按钮的颜色
+  expandBtnStyle: {
+    color: '#808080',
+    fill: '#fff'
+  },
+  // 自定义展开收起按钮的图标
+  expandBtnIcon: {
+    open: '',// svg字符串
+    close: ''
+  }
 }
 
 //  思维导图
@@ -95,7 +105,7 @@ class MindMap {
     this.draw = this.svg.group()
 
     // 节点id
-    this.uid = 0
+    this.uid = 1
 
     // 初始化主题
     this.initTheme()
@@ -135,7 +145,7 @@ class MindMap {
     })
 
     // 初始渲染
-    this.reRender()
+    this.render()
     setTimeout(() => {
       this.command.addHistory()
     }, 0)
@@ -145,7 +155,7 @@ class MindMap {
   handleOpt(opt) {
     // 检查布局配置
     if (!layoutValueList.includes(opt.layout)) {
-      opt.layout = 'logicalStructure'
+      opt.layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE
     }
     // 检查主题配置
     opt.theme = opt.theme && theme[opt.theme] ? opt.theme : 'default'
@@ -153,11 +163,11 @@ class MindMap {
   }
 
   //  渲染，部分渲染
-  render(callback) {
+  render(callback, source = '') {
     this.batchExecution.push('render', () => {
       this.initTheme()
       this.renderer.reRender = false
-      this.renderer.render(callback)
+      this.renderer.render(callback, source)
     })
   }
 
@@ -206,7 +216,7 @@ class MindMap {
   setTheme(theme) {
     this.renderer.clearAllActive()
     this.opt.theme = theme
-    this.reRender()
+    this.render(null, CONSTANTS.CHANGE_THEME)
   }
 
   //  获取当前主题
@@ -217,7 +227,7 @@ class MindMap {
   //  设置主题配置
   setThemeConfig(config) {
     this.opt.themeConfig = config
-    this.reRender()
+    this.render(null, CONSTANTS.CHANGE_THEME)
   }
 
   //  获取自定义主题配置
@@ -249,7 +259,7 @@ class MindMap {
   setLayout(layout) {
     // 检查布局配置
     if (!layoutValueList.includes(layout)) {
-      layout = 'logicalStructure'
+      layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE
     }
     this.opt.layout = layout
     this.renderer.setLayout()
@@ -265,6 +275,7 @@ class MindMap {
   setData(data) {
     this.execCommand('CLEAR_ACTIVE_NODE')
     this.command.clearHistory()
+    this.command.addHistory()
     this.renderer.renderTree = data
     this.reRender()
   }
@@ -326,10 +337,10 @@ class MindMap {
 
   //  设置只读模式、编辑模式
   setMode(mode) {
-    if (!['readonly', 'edit'].includes(mode)) {
+    if (![CONSTANTS.MODE.READONLY, CONSTANTS.MODE.EDIT].includes(mode)) {
       return
     }
-    this.opt.readonly = mode === 'readonly'
+    this.opt.readonly = mode === CONSTANTS.MODE.READONLY
     if (this.opt.readonly) {
       // 取消当前激活的元素
       this.renderer.clearAllActive()

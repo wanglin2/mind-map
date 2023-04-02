@@ -1,4 +1,5 @@
 import EventEmitter from 'eventemitter3'
+import { CONSTANTS } from './utils/constant'
 
 //  事件类
 class Event extends EventEmitter {
@@ -71,7 +72,6 @@ class Event extends EventEmitter {
 
   //  鼠标按下事件
   onMousedown(e) {
-    // e.preventDefault()
     // 鼠标左键
     if (e.which === 1) {
       this.isLeftMousedown = true
@@ -83,13 +83,13 @@ class Event extends EventEmitter {
 
   //  鼠标移动事件
   onMousemove(e) {
-    // e.preventDefault()
     this.mousemovePos.x = e.clientX
     this.mousemovePos.y = e.clientY
     this.mousemoveOffset.x = e.clientX - this.mousedownPos.x
     this.mousemoveOffset.y = e.clientY - this.mousedownPos.y
     this.emit('mousemove', e, this)
     if (this.isLeftMousedown) {
+      e.preventDefault()
       this.emit('drag', e, this)
     }
   }
@@ -107,15 +107,15 @@ class Event extends EventEmitter {
     let dir
     // 解决mac触控板双指缩放方向相反的问题
     if (e.ctrlKey) {
-      if (e.deltaY > 0) dir = 'up'
-      if (e.deltaY < 0) dir = 'down'
-      if (e.deltaX > 0) dir = 'left'
-      if (e.deltaX < 0) dir = 'right'
+      if (e.deltaY > 0) dir = CONSTANTS.DIR.UP
+      if (e.deltaY < 0) dir = CONSTANTS.DIR.DOWN
+      if (e.deltaX > 0) dir = CONSTANTS.DIR.LEFT
+      if (e.deltaX < 0) dir = CONSTANTS.DIR.RIGHT
     } else {
-      if ((e.wheelDeltaY || e.detail) > 0) dir = 'up'
-      if ((e.wheelDeltaY || e.detail) < 0) dir = 'down'
-      if ((e.wheelDeltaX || e.detail) > 0) dir = 'left'
-      if ((e.wheelDeltaX || e.detail) < 0) dir = 'right'
+      if ((e.wheelDeltaY || e.detail) > 0) dir = CONSTANTS.DIR.UP
+      if ((e.wheelDeltaY || e.detail) < 0) dir = CONSTANTS.DIR.DOWN
+      if ((e.wheelDeltaX || e.detail) > 0) dir = CONSTANTS.DIR.LEFT
+      if ((e.wheelDeltaX || e.detail) < 0) dir = CONSTANTS.DIR.RIGHT
     }
     this.emit('mousewheel', e, dir, this)
   }
