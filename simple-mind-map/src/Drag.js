@@ -43,6 +43,8 @@ class Drag extends Base {
     this.mouseDownY = 0
     this.mouseMoveX = 0
     this.mouseMoveY = 0
+    // 鼠标移动的距离距鼠标按下的位置距离多少以上才认为是拖动事件
+    this.checkDragOffset = 10
   }
 
   //  绑定事件
@@ -80,8 +82,8 @@ class Drag extends Base {
       this.mouseMoveX = x
       this.mouseMoveY = y
       if (
-        Math.abs(x - this.mouseDownX) <= 10 &&
-        Math.abs(y - this.mouseDownY) <= 10 &&
+        Math.abs(x - this.mouseDownX) <= this.checkDragOffset &&
+        Math.abs(y - this.mouseDownY) <= this.checkDragOffset &&
         !this.node.isDrag
       ) {
         return
@@ -198,9 +200,8 @@ class Drag extends Base {
     if (!this.drawTransform) {
       return
     }
-    let { scaleX, scaleY, translateX, translateY } = this.drawTransform
-    let checkRight = this.cloneNodeLeft + this.node.width * scaleX
-    let checkBottom = this.cloneNodeTop + this.node.height * scaleX
+    let x = this.mouseMoveX
+    let y = this.mouseMoveY
     this.overlapNode = null
     this.prevNode = null
     this.nextNode = null
@@ -215,41 +216,101 @@ class Drag extends Base {
       if (this.overlapNode || (this.prevNode && this.nextNode)) {
         return
       }
-      let { left, top, width, height } = node
-      let _left = left
-      let _top = top
-      let _bottom = top + height
-      let right = (left + width) * scaleX + translateX
-      let bottom = (top + height) * scaleY + translateY
-      left = left * scaleX + translateX
-      top = top * scaleY + translateY
-      // 检测是否重叠
-      if (!this.overlapNode) {
-        if (
-          left <= checkRight &&
-          right >= this.cloneNodeLeft &&
-          top <= checkBottom &&
-          bottom >= this.cloneNodeTop
-        ) {
-          this.overlapNode = node
+      let nodeRect = this.getNodeRect(node)
+      let oneFourthHeight = nodeRect.height / 4
+      // 前一个和后一个节点
+      let checkList = node.parent ? node.parent.children.filter((item) => {
+        return item !== this.node
+      }) : []
+      let index = checkList.findIndex((item) => {
+        return item === node
+      })
+      let prevBrother = null
+      let nextBrother = null
+      if (index !== -1) {
+        if (index - 1 >= 0) {
+          prevBrother = checkList[index - 1]
+        }
+        if (index + 1 <= checkList.length - 1) {
+          nextBrother = checkList[index + 1]
         }
       }
-      // 检测兄弟节点位置
-      if (!this.prevNode && !this.nextNode && !node.isRoot) {
-        // && this.node.isBrother(node)
-        if (left <= checkRight && right >= this.cloneNodeLeft) {
-          if (this.cloneNodeTop > bottom && this.cloneNodeTop <= bottom + 10) {
+      // 和前一个兄弟节点的距离
+      let prevBrotherOffset = 0
+      if (prevBrother) {
+        let prevNodeRect = this.getNodeRect(prevBrother)  
+        prevBrotherOffset = nodeRect.top - prevNodeRect.bottom
+        // 间距小于10就当它不存在
+        prevBrotherOffset = prevBrotherOffset >= 10 ? prevBrotherOffset / 2 : 0
+      } else {
+        // 没有前一个兄弟节点，那么假设和前一个节点的距离为20
+        prevBrotherOffset = 10
+      }
+      // 和后一个兄弟节点的距离
+      let nextBrotherOffset = 0
+      if (nextBrother) {
+        let nextNodeRect = this.getNodeRect(nextBrother)
+        nextBrotherOffset = nextNodeRect.top - nodeRect.bottom
+        nextBrotherOffset = nextBrotherOffset >= 10 ? nextBrotherOffset / 2 : 0
+      } else {
+        nextBrotherOffset = 10
+      }
+      if (nodeRect.left <= x && nodeRect.right >= x) {
+        // 检测兄弟节点位置
+        if (!this.overlapNode && !this.prevNode && !this.nextNode && !node.isRoot) {
+          let checkIsPrevNode = nextBrotherOffset > 0 ? // 距离下一个兄弟节点的距离大于0
+            y > nodeRect.bottom && y <= (nodeRect.bottom + nextBrotherOffset) : // 那么在当前节点外底部判断
+            y >= nodeRect.bottom - oneFourthHeight && y <= nodeRect.bottom // 否则在当前节点内底部1/4区间判断
+          let checkIsNextNode = prevBrotherOffset > 0 ? // 距离上一个兄弟节点的距离大于0
+            y < nodeRect.top && y >= (nodeRect.top - prevBrotherOffset) : // 那么在当前节点外底部判断
+            y >= nodeRect.top && y <= nodeRect.top + oneFourthHeight
+          if (checkIsPrevNode) {
             this.prevNode = node
-            this.placeholder.size(node.width, 10).move(_left, _bottom)
-          } else if (checkBottom < top && checkBottom >= top - 10) {
+            let size = nextBrotherOffset > 0 ? nextBrotherOffset : 5
+            this.placeholder.size(node.width, size).move(nodeRect.originLeft, nodeRect.originBottom)
+          } else if (checkIsNextNode) {
             this.nextNode = node
-            this.placeholder.size(node.width, 10).move(_left, _top - 10)
+            let size = prevBrotherOffset > 0 ? prevBrotherOffset : 5
+            this.placeholder.size(node.width, size).move(nodeRect.originLeft, nodeRect.originTop - size)
+          }
+        }
+        // 检测是否重叠
+        if (!this.overlapNode && !this.prevNode && !this.nextNode) {
+          if (
+            nodeRect.top + (prevBrotherOffset > 0 ? 0 : oneFourthHeight) <= y &&
+            nodeRect.bottom - (nextBrotherOffset > 0 ? 0 : oneFourthHeight) >= y
+          ) {
+            this.overlapNode = node
           }
         }
       }
     })
     if (this.overlapNode) {
       this.mindMap.renderer.setNodeActive(this.overlapNode, true)
+    }
+  }
+
+  // 计算节点的位置尺寸信息
+  getNodeRect(node) {
+    let { scaleX, scaleY, translateX, translateY } = this.drawTransform
+    let { left, top, width, height } = node
+    let originLeft = left
+    let originTop = top
+    let originBottom = top + height
+    let right = (left + width) * scaleX + translateX
+    let bottom = (top + height) * scaleY + translateY
+    left = left * scaleX + translateX
+    top = top * scaleY + translateY
+    return {
+      width,
+      height,
+      left,
+      top,
+      right,
+      bottom,
+      originLeft,
+      originTop,
+      originBottom
     }
   }
 }

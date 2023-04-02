@@ -463,6 +463,9 @@ class Node {
     if (!this.group) {
       // 创建组
       this.group = new G()
+      this.group.css({
+        cursor: 'default'
+      })
       this.bindGroupEvent()
       this.draw.add(this.group)
       this.layout()
