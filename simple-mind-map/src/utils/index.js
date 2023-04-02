@@ -141,13 +141,14 @@ export const copyNodeTree = (tree, root, removeActiveState = false, keepId = fal
   tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data)
   // 去除节点id，因为节点id不能重复
   if (tree.data.id && !keepId) delete tree.data.id
+  if (tree.data.uid) delete tree.data.uid
   if (removeActiveState) {
     tree.data.isActive = false
   }
   tree.children = []
   if (root.children && root.children.length > 0) {
     root.children.forEach((item, index) => {
-      tree.children[index] = copyNodeTree({}, item, removeActiveState)
+      tree.children[index] = copyNodeTree({}, item, removeActiveState, keepId)
     })
   } else if (
     root.nodeData &&
@@ -155,7 +156,7 @@ export const copyNodeTree = (tree, root, removeActiveState = false, keepId = fal
     root.nodeData.children.length > 0
   ) {
     root.nodeData.children.forEach((item, index) => {
-      tree.children[index] = copyNodeTree({}, item, removeActiveState)
+      tree.children[index] = copyNodeTree({}, item, removeActiveState, keepId)
     })
   }
   return tree

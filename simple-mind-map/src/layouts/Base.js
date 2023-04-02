@@ -1,4 +1,5 @@
 import Node from '../Node'
+import { CONSTANTS } from '../utils/constant'
 
 //  布局基类
 class Base {
@@ -12,6 +13,8 @@ class Base {
     this.draw = this.mindMap.draw
     // 根节点
     this.root = null
+    // 保存所有uid和节点，用于复用
+    this.nodePool = {}
   }
 
   //  计算节点位置
@@ -32,26 +35,70 @@ class Base {
   //  概要节点
   renderGeneralization() {}
 
+  // 通过uid缓存节点
+  cacheNode(uid, node) {
+    // 记录本次渲染时的节点
+    this.renderer.nodeCache[uid] = node
+    // 记录所有渲染时的节点
+    this.nodePool[uid] = node
+    // 如果总缓存数量达到1000，直接清空
+    if (Object.keys(this.nodePool).length > 1000) {
+      this.nodePool = {}
+    }
+  }
+
+  // 检查当前来源是否需要重新计算节点大小
+  checkIsNeedResizeSources() {
+    return [CONSTANTS.CHANGE_THEME, CONSTANTS.TRANSFORM_TO_NORMAL_NODE].includes(this.renderer.renderSource)
+  }
+
   //  创建节点实例
   createNode(data, parent, isRoot, layerIndex) {
     // 创建节点
     let newNode = null
-    // 复用节点
+    // 数据上保存了节点引用，那么直接复用节点
     if (data && data._node && !this.renderer.reRender) {
       newNode = data._node
       newNode.reset()
       newNode.layerIndex = layerIndex
+      this.cacheNode(data._node.uid, newNode)
+      // 主题或主题配置改变了需要重新计算节点大小和布局
+      if (this.checkIsNeedResizeSources()) {
+        newNode.getSize()
+        newNode.needLayout = true
+      }
+    } else if (this.nodePool[data.data.uid]) {
+      // 数据上没有保存节点引用，但是通过uid找到了缓存的节点，也可以复用
+      newNode = this.nodePool[data.data.uid]
+      // 保存该节点上一次的数据
+      let lastData = JSON.stringify(newNode.nodeData.data)
+      newNode.reset()
+      newNode.nodeData = newNode.handleData(data || {})
+      newNode.layerIndex = layerIndex
+      this.cacheNode(data.data.uid, newNode)
+      data._node = newNode
+      // 主题或主题配置改变了需要重新计算节点大小和布局
+      let isResizeSource = this.checkIsNeedResizeSources()
+      // 节点数据改变了需要重新计算节点大小和布局
+      let isNodeDataChange = lastData !== JSON.stringify(data.data)
+      if (isResizeSource || isNodeDataChange) {
+        newNode.getSize()
+        newNode.needLayout = true
+      }
     } else {
       // 创建新节点
+      let uid = this.mindMap.uid++
       newNode = new Node({
         data,
-        uid: this.mindMap.uid++,
+        uid,
         renderer: this.renderer,
         mindMap: this.mindMap,
         draw: this.draw,
         layerIndex
       })
-      newNode.getSize()
+      // uid保存到数据上，为了节点复用
+      data.data.uid = uid
+      this.cacheNode(uid, newNode)
       // 数据关联实际节点
       data._node = newNode
       if (data.data.isActive) {

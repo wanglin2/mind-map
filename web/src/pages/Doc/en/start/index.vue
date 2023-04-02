@@ -57,6 +57,9 @@ compile this dependency:</p>
 <p>Other projects should modify the packaging configuration as needed.</p>
 </blockquote>
 <h2>Usage</h2>
+<blockquote>
+<p>The <code>web</code> directory of this repository provides a complete project based on <code>Vue2</code>. If you encounter any doubts about using it, you can refer to the implementation of this project.</p>
+</blockquote>
 <pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;mindMapContainer&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 </code></pre>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;simple-mind-map&quot;</span>;

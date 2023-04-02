@@ -56,29 +56,29 @@ Whether the node is currently being dragged
 
 ## Methods
 
-### addChildren(node)
-
-Add a child node
-
 ### getSize()
 
-Calculate the width and height of the node, return a boolean indicating whether
-the width and height have changed
-
-### renderNode()
-
-Render the node to the canvas, will remove the old content node and create a new
-one
+Update the width and height of the node by recreating the node content, and return a Boolean value indicating whether the width and height have changed
 
 ### render()
 
-Recursively render this node and all its child nodes. The first call will create
-the node content, subsequent calls will only update the node position. To
-re-render the content, set the `initRender` attribute to `true` first.
+Recursively render this node and all its child nodes
+
+### updateNodeShape()
+
+> v0.5.0+
+
+Update node shape nodes. For example, when the node status changes, call this method to display or deactivate the style.
 
 ### remove()
 
-Recursively delete this node and all its child nodes
+Recursive deletion, which is only deleted from the canvas. The node container is still present, and can be reinserted back into the canvas in the future
+
+### destroy()
+
+> v0.5.0+
+
+Destroying a node will not only delete it from the canvas, but also directly empty the original node, which cannot be inserted back into the canvas in the future
 
 ### renderLine()
 

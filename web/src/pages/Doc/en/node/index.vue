@@ -31,20 +31,22 @@
 </blockquote>
 <p>Whether the node is currently being dragged</p>
 <h2>Methods</h2>
-<h3>addChildren(node)</h3>
-<p>Add a child node</p>
 <h3>getSize()</h3>
-<p>Calculate the width and height of the node, return a boolean indicating whether
-the width and height have changed</p>
-<h3>renderNode()</h3>
-<p>Render the node to the canvas, will remove the old content node and create a new
-one</p>
+<p>Update the width and height of the node by recreating the node content, and return a Boolean value indicating whether the width and height have changed</p>
 <h3>render()</h3>
-<p>Recursively render this node and all its child nodes. The first call will create
-the node content, subsequent calls will only update the node position. To
-re-render the content, set the <code>initRender</code> attribute to <code>true</code> first.</p>
+<p>Recursively render this node and all its child nodes</p>
+<h3>updateNodeShape()</h3>
+<blockquote>
+<p>v0.5.0+</p>
+</blockquote>
+<p>Update node shape nodes. For example, when the node status changes, call this method to display or deactivate the style.</p>
 <h3>remove()</h3>
-<p>Recursively delete this node and all its child nodes</p>
+<p>Recursive deletion, which is only deleted from the canvas. The node container is still present, and can be reinserted back into the canvas in the future</p>
+<h3>destroy()</h3>
+<blockquote>
+<p>v0.5.0+</p>
+</blockquote>
+<p>Destroying a node will not only delete it from the canvas, but also directly empty the original node, which cannot be inserted back into the canvas in the future</p>
 <h3>renderLine()</h3>
 <p>Re-render the line from this node to its child nodes</p>
 <h3>removeLine()</h3>

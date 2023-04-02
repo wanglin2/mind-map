@@ -23,6 +23,10 @@ export default class TextEdit {
       // 隐藏文本编辑框
       this.hideEditTextBox()
     })
+    this.mindMap.on('svg_mousedown', () => {
+      // 隐藏文本编辑框
+      this.hideEditTextBox()
+    })
     // 展开收缩按钮点击事件
     this.mindMap.on('expand_btn_click', () => {
       this.hideEditTextBox()
@@ -74,17 +78,18 @@ export default class TextEdit {
     let scale = this.mindMap.view.scale
     let lineHeight = node.style.merge('lineHeight')
     let fontSize = node.style.merge('fontSize')
-    node.style.domText(this.textEditNode, scale)
-    this.textEditNode.innerHTML = node.nodeData.data.text
-      .split(/\n/gim)
-      .join('<br>')
+    let textLines = node.nodeData.data.text.split(/\n/gim)
+    node.style.domText(this.textEditNode, scale, textLines.length)
+    this.textEditNode.innerHTML = textLines.join('<br>')
     this.textEditNode.style.minWidth = rect.width + 10 + 'px'
     this.textEditNode.style.minHeight = rect.height + 6 + 'px'
     this.textEditNode.style.left = rect.left + 'px'
     this.textEditNode.style.top = rect.top + 'px'
     this.textEditNode.style.display = 'block'
     this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth * scale + 'px'
-    this.textEditNode.style.transform = `translateY(${-(lineHeight * fontSize - fontSize) / 2 * scale}px)`
+    if (textLines.length > 1 && lineHeight !== 1) {
+      this.textEditNode.style.transform = `translateY(${-((lineHeight * fontSize - fontSize) / 2 - 2) * scale}px)`
+    }
     this.showTextEdit = true
     // 选中文本
     this.selectNodeText()
@@ -126,6 +131,7 @@ export default class TextEdit {
     this.textEditNode.style.fontFamily = 'inherit'
     this.textEditNode.style.fontSize = 'inherit'
     this.textEditNode.style.fontWeight = 'normal'
+    this.textEditNode.style.transform = 'translateY(0)'
     this.showTextEdit = false
   }
 }
