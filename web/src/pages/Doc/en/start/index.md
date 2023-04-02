@@ -81,6 +81,8 @@ npm i simple-mind-map
 
 ## Usage
 
+> The `web` directory of this repository provides a complete project based on `Vue2`. If you encounter any doubts about using it, you can refer to the implementation of this project.
+
 ```html
 <div id="mindMapContainer"></div>
 ```

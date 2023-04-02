@@ -15,6 +15,7 @@ Demo：[https://wanglin2.github.io/mind-map/](https://wanglin2.github.io/mind-ma
 
 # 特性
 
+- [x] 插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小整体体积
 - [x] 支持逻辑结构图、思维导图、组织结构图、目录组织图四种结构
 - [x] 内置多种主题，允许高度自定义样式，支持注册新主题
 - [x] 支持快捷键
@@ -24,8 +25,8 @@ Demo：[https://wanglin2.github.io/mind-map/](https://wanglin2.github.io/mind-ma
 - [x] 支持右键和Ctrl+左键两种多选方式
 - [x] 支持节点自由拖拽、拖拽调整
 - [x] 支持多种节点形状
-- [x] 支持导出为`json`、`png`、`svg`、`pdf`，支持从`json`、`xmind`导入
-- [x] 支持小地图
+- [x] 支持导出为`json`、`png`、`svg`、`pdf`、`markdown`，支持从`json`、`xmind`、`markdown`导入
+- [x] 支持小地图、支持水印
 - [x] 支持关联线
 
 # 安装

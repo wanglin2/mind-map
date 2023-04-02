@@ -182,6 +182,20 @@
 <td>默认插入的二级以下节点的文字</td>
 <td></td>
 </tr>
+<tr>
+<td>expandBtnStyle（v0.5.0+）</td>
+<td>Object</td>
+<td>{ color: '#808080', fill: '#fff' }</td>
+<td>展开收起按钮的颜色</td>
+<td></td>
+</tr>
+<tr>
+<td>expandBtnIcon（v0.5.0+）</td>
+<td>Object</td>
+<td>{ open: '', close: '' }</td>
+<td>自定义展开收起按钮的图标，可以传图标的svg字符串</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>水印配置</h3>
