@@ -2,6 +2,22 @@
 
 ## 0.5.0
 
+This version is mainly about code level changes and optimization, with the core goal of improving rendering performance and reducing stuck issues.
+
+New: 1.Support custom expansion and collapse node icons and colors;
+
+optimization: 1.Optimize rendering logic, set the theme, move forward and backward, and other operations no longer require full rendering;
+
+     2.Optimize node drag logic, and fix the problem of being unable to drag between two nodes;
+
+     3.Collapse all nodes adds logic to return to the center point;
+
+     4.Fix the problem of nodes flying and scrambling caused by triggering rendering multiple times in a short time;
+
+     5.Optimize the experience of node editing;
+
+Fix: 1.Fix the issue where the setData method does not trigger history;
+
 modify: Starting from version 0.5.0, considering performance issues, the node activation state can only modify shape related styles:
 
 ```js

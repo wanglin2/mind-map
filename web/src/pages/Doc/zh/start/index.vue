@@ -47,6 +47,9 @@ npm run build
 <p>其他项目请自行修改打包配置。</p>
 </blockquote>
 <h2>使用</h2>
+<blockquote>
+<p>本仓库的<code>web</code>目录提供了一个基于<code>Vue2</code>的完整项目，如果你遇到了一些使用上的疑惑，可以参考该项目的实现。</p>
+</blockquote>
 <pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;mindMapContainer&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 </code></pre>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;simple-mind-map&quot;</span>;

@@ -1,6 +1,6 @@
 # Introduction
 
-`simple-mind-map` is a simple and powerful web mind map library, not dependent on any specific framework.
+`simple-mind-map` is a simple and powerful web mind map library, not dependent on any specific framework. Can help you quickly develop mind mapping products.
 
 ## Features
 
@@ -16,15 +16,15 @@
 - [x] Supports right-click and Ctrl + left-click to select multiple items
 - [x] Supports free dragging and dragging to adjust nodes
 - [x] Supports various node shapes
-- [x] Supports export to json, png, svg, pdf, and import from json, xmind
+- [x] Supports export to json, png, svg, pdf markdown, and import from json, xmind, markdown
 - [x] Supports mini map、support watermark
 - [x] Supports associative lines
 
-## Table of Contents
+## Repository Catalog Introduction
 
 1.`simple-mind-map`
 
-This is a mind map tool library that is framework-agnostic and can be used with
+This is a mind map library that is framework-agnostic and can be used with
 frameworks such as Vue and React, or without a framework.
 
 2.`web`
@@ -63,9 +63,11 @@ The folder containing the packaged resources for the `web` folder.
 
 ## Special Note
 
-This project is rough and has not been thoroughly tested, its features are not
-yet fully developed, and there are some performance issues, especially when the number of nodes is large. It is only for
-learning and reference purposes and please use it carefully for actual projects.
+This project can be used for learning and reference. Please deeply experience whether it can meet your needs when using it for actual projects.
+
+This project may not have fully tested every function point, so there may be bugs. In addition, when the number of nodes is very large, there may be some performance issues. Because everyone can accept different levels of congestion, you can test the maximum number of nodes yourself.
+
+If you have suggestions or find bugs, you can submit [issues](https://github.com/wanglin2/mind-map/issues) here.
 
 The built-in themes and icons in the project come from:
 

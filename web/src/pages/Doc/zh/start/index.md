@@ -72,6 +72,8 @@ npm i simple-mind-map
 
 ## 使用
 
+> 本仓库的`web`目录提供了一个基于`Vue2`的完整项目，如果你遇到了一些使用上的疑惑，可以参考该项目的实现。
+
 ```html
 <div id="mindMapContainer"></div>
 ```
