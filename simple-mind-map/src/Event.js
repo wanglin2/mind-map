@@ -35,6 +35,8 @@ class Event extends EventEmitter {
     this.onContextmenu = this.onContextmenu.bind(this)
     this.onSvgMousedown = this.onSvgMousedown.bind(this)
     this.onKeyup = this.onKeyup.bind(this)
+    this.onMouseenter = this.onMouseenter.bind(this)
+    this.onMouseleave = this.onMouseleave.bind(this)
   }
 
   //  绑定事件
@@ -46,6 +48,8 @@ class Event extends EventEmitter {
     window.addEventListener('mouseup', this.onMouseup)
     this.mindMap.el.addEventListener('wheel', this.onMousewheel)
     this.mindMap.svg.on('contextmenu', this.onContextmenu)
+    this.mindMap.svg.on('mouseenter', this.onMouseenter)
+    this.mindMap.svg.on('mouseleave', this.onMouseleave)
     window.addEventListener('keyup', this.onKeyup)
   }
 
@@ -57,6 +61,8 @@ class Event extends EventEmitter {
     window.removeEventListener('mouseup', this.onMouseup)
     this.mindMap.el.removeEventListener('wheel', this.onMousewheel)
     this.mindMap.svg.off('contextmenu', this.onContextmenu)
+    this.mindMap.svg.off('mouseenter', this.onMouseenter)
+    this.mindMap.svg.off('mouseleave', this.onMouseleave)
     window.removeEventListener('keyup', this.onKeyup)
   }
 
@@ -129,6 +135,16 @@ class Event extends EventEmitter {
   //  按键松开事件
   onKeyup(e) {
     this.emit('keyup', e)
+  }
+
+  // 进入
+  onMouseenter(e) {
+    this.emit('svg_mouseenter', e)
+  }
+
+  // 离开
+  onMouseleave(e) {
+    this.emit('svg_mouseleave', e)
   }
 }
 
