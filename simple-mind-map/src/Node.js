@@ -414,6 +414,7 @@ class Node {
     if (!this.group) {
       return
     }
+    let { enableNodeTransitionMove, nodeTransitionMoveDuration } = this.mindMap.opt
     // 需要移除展开收缩按钮
     if (this._expandBtn && this.nodeData.children.length <= 0) {
       this.removeExpandBtn()
@@ -425,9 +426,9 @@ class Node {
     this.renderGeneralization()
     // 更新节点位置
     let t = this.group.transform()
-    if (!isLayout) {
+    if (!isLayout && enableNodeTransitionMove) {
       this.group
-        .animate(300)
+        .animate(nodeTransitionMoveDuration)
         .translate(
           this.left - t.translateX,
           this.top - t.translateY
@@ -457,10 +458,13 @@ class Node {
 
   //  递归渲染
   render(callback = () => {}) {
+    let { enableNodeTransitionMove, nodeTransitionMoveDuration } = this.mindMap.opt
     // 节点
     // 重新渲染连线
     this.renderLine()
+    let isLayout = false
     if (!this.group) {
+      isLayout = true
       // 创建组
       this.group = new G()
       this.group.css({
@@ -469,7 +473,7 @@ class Node {
       this.bindGroupEvent()
       this.draw.add(this.group)
       this.layout()
-      this.update(true)
+      this.update(isLayout)
     } else {
       this.draw.add(this.group)
       if (this.needLayout) {
@@ -498,7 +502,13 @@ class Node {
         })
       )
     } else {
-      callback()
+      if (enableNodeTransitionMove && !isLayout) {
+        setTimeout(() => {
+          callback()
+        }, nodeTransitionMoveDuration)
+      } else {
+        callback()
+      }
     }
     // 手动插入的节点立即获得焦点并且开启编辑模式
     if (this.nodeData.inserting) {

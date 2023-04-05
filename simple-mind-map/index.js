@@ -82,7 +82,13 @@ const defaultOpt = {
   expandBtnIcon: {
     open: '',// svg字符串
     close: ''
-  }
+  },
+  // 是否只有当鼠标在画布内才响应快捷键事件
+  enableShortcutOnlyWhenMouseInSvg: true,
+  // 是否开启节点动画过渡
+  enableNodeTransitionMove: true,
+  // 如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms
+  nodeTransitionMoveDuration: 300
 }
 
 //  思维导图
