@@ -33071,6 +33071,8 @@ class Event_Event extends eventemitter3_default.a {
     this.onContextmenu = this.onContextmenu.bind(this);
     this.onSvgMousedown = this.onSvgMousedown.bind(this);
     this.onKeyup = this.onKeyup.bind(this);
+    this.onMouseenter = this.onMouseenter.bind(this);
+    this.onMouseleave = this.onMouseleave.bind(this);
   }
 
   //  绑定事件
@@ -33082,6 +33084,8 @@ class Event_Event extends eventemitter3_default.a {
     window.addEventListener('mouseup', this.onMouseup);
     this.mindMap.el.addEventListener('wheel', this.onMousewheel);
     this.mindMap.svg.on('contextmenu', this.onContextmenu);
+    this.mindMap.svg.on('mouseenter', this.onMouseenter);
+    this.mindMap.svg.on('mouseleave', this.onMouseleave);
     window.addEventListener('keyup', this.onKeyup);
   }
 
@@ -33093,6 +33097,8 @@ class Event_Event extends eventemitter3_default.a {
     window.removeEventListener('mouseup', this.onMouseup);
     this.mindMap.el.removeEventListener('wheel', this.onMousewheel);
     this.mindMap.svg.off('contextmenu', this.onContextmenu);
+    this.mindMap.svg.off('mouseenter', this.onMouseenter);
+    this.mindMap.svg.off('mouseleave', this.onMouseleave);
     window.removeEventListener('keyup', this.onKeyup);
   }
 
@@ -33165,6 +33171,16 @@ class Event_Event extends eventemitter3_default.a {
   //  按键松开事件
   onKeyup(e) {
     this.emit('keyup', e);
+  }
+
+  // 进入
+  onMouseenter(e) {
+    this.emit('svg_mouseenter', e);
+  }
+
+  // 离开
+  onMouseleave(e) {
+    this.emit('svg_mouseleave', e);
   }
 }
 /* harmony default export */ var src_Event = (Event_Event);
@@ -42121,6 +42137,10 @@ class Node_Node {
     if (!this.group) {
       return;
     }
+    let {
+      enableNodeTransitionMove,
+      nodeTransitionMoveDuration
+    } = this.mindMap.opt;
     // 需要移除展开收缩按钮
     if (this._expandBtn && this.nodeData.children.length <= 0) {
       this.removeExpandBtn();
@@ -42132,8 +42152,8 @@ class Node_Node {
     this.renderGeneralization();
     // 更新节点位置
     let t = this.group.transform();
-    if (!isLayout) {
-      this.group.animate(300).translate(this.left - t.translateX, this.top - t.translateY);
+    if (!isLayout && enableNodeTransitionMove) {
+      this.group.animate(nodeTransitionMoveDuration).translate(this.left - t.translateX, this.top - t.translateY);
     } else {
       this.group.translate(this.left - t.translateX, this.top - t.translateY);
     }
@@ -42156,10 +42176,16 @@ class Node_Node {
 
   //  递归渲染
   render(callback = () => {}) {
+    let {
+      enableNodeTransitionMove,
+      nodeTransitionMoveDuration
+    } = this.mindMap.opt;
     // 节点
     // 重新渲染连线
     this.renderLine();
+    let isLayout = false;
     if (!this.group) {
+      isLayout = true;
       // 创建组
       this.group = new G();
       this.group.css({
@@ -42168,7 +42194,7 @@ class Node_Node {
       this.bindGroupEvent();
       this.draw.add(this.group);
       this.layout();
-      this.update(true);
+      this.update(isLayout);
     } else {
       this.draw.add(this.group);
       if (this.needLayout) {
@@ -42191,7 +42217,13 @@ class Node_Node {
         };
       }));
     } else {
-      callback();
+      if (enableNodeTransitionMove && !isLayout) {
+        setTimeout(() => {
+          callback();
+        }, nodeTransitionMoveDuration);
+      } else {
+        callback();
+      }
     }
     // 手动插入的节点立即获得焦点并且开启编辑模式
     if (this.nodeData.inserting) {
@@ -42482,7 +42514,7 @@ class Base_Base {
         newNode.getSize();
         newNode.needLayout = true;
       }
-    } else if (this.nodePool[data.data.uid]) {
+    } else if (this.nodePool[data.data.uid] && !this.renderer.reRender) {
       // 数据上没有保存节点引用，但是通过uid找到了缓存的节点，也可以复用
       newNode = this.nodePool[data.data.uid];
       // 保存该节点上一次的数据
@@ -46283,6 +46315,7 @@ class KeyCommand_KeyCommand {
     };
     this.shortcutMapCache = {};
     this.isPause = false;
+    this.isInSvg = false;
     this.bindEvent();
   }
 
@@ -46310,8 +46343,21 @@ class KeyCommand_KeyCommand {
 
   //  绑定事件
   bindEvent() {
+    // 只有当鼠标在画布内才响应快捷键
+    this.mindMap.on('svg_mouseenter', () => {
+      this.isInSvg = true;
+    });
+    this.mindMap.on('svg_mouseleave', () => {
+      if (this.mindMap.richText && this.mindMap.richText.showTextEdit) {
+        return;
+      }
+      if (this.mindMap.renderer.textEdit.showTextEdit) {
+        return;
+      }
+      this.isInSvg = false;
+    });
     window.addEventListener('keydown', e => {
-      if (this.isPause) {
+      if (this.isPause || this.mindMap.opt.enableShortcutOnlyWhenMouseInSvg && !this.isInSvg) {
         return;
       }
       Object.keys(this.shortcutMap).forEach(key => {
@@ -46691,7 +46737,13 @@ const defaultOpt = {
     open: '',
     // svg字符串
     close: ''
-  }
+  },
+  // 是否只有当鼠标在画布内才响应快捷键事件
+  enableShortcutOnlyWhenMouseInSvg: true,
+  // 是否开启节点动画过渡
+  enableNodeTransitionMove: true,
+  // 如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms
+  nodeTransitionMoveDuration: 300
 };
 
 //  思维导图

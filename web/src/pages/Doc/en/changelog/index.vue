@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.5.1</h2>
+<p>optimization: 1.Only respond to shortcut key events when the mouse is inside the canvas</p>
+<p>Fix: 1.Fix the issue of incorrect node position during fast operation</p>
 <h2>0.5.0</h2>
 <p>This version is mainly about code level changes and optimization, with the core goal of improving rendering performance and reducing stuck issues.</p>
 <p>New: 1.Support custom expansion and collapse node icons and colors;</p>

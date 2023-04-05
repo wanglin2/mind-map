@@ -67,7 +67,7 @@ class Base {
         newNode.getSize()
         newNode.needLayout = true
       }
-    } else if (this.nodePool[data.data.uid]) {
+    } else if (this.nodePool[data.data.uid] && !this.renderer.reRender) {
       // 数据上没有保存节点引用，但是通过uid找到了缓存的节点，也可以复用
       newNode = this.nodePool[data.data.uid]
       // 保存该节点上一次的数据
