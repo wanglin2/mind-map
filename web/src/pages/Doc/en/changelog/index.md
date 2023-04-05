@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.1
+
+optimization: 1.Only respond to shortcut key events when the mouse is inside the canvas
+
+Fix: 1.Fix the issue of incorrect node position during fast operation
+
 ## 0.5.0
 
 This version is mainly about code level changes and optimization, with the core goal of improving rendering performance and reducing stuck issues.
