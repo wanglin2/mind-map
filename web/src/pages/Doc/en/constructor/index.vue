@@ -196,6 +196,27 @@
 <td>Customize the icon of the expand/collapse button, and you can transfer the svg string of the icon</td>
 <td></td>
 </tr>
+<tr>
+<td>enableShortcutOnlyWhenMouseInSvg（v0.5.1+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Only respond to shortcut key events when the mouse is inside the canvas</td>
+<td></td>
+</tr>
+<tr>
+<td>enableNodeTransitionMove（v0.5.1+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Whether to enable node animation transition</td>
+<td></td>
+</tr>
+<tr>
+<td>nodeTransitionMoveDuration（v0.5.1+）</td>
+<td>Number</td>
+<td>300</td>
+<td>If node animation transition is enabled, the transition time can be set using this attribute, in milliseconds</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
@@ -489,6 +510,16 @@ poor performance and should be used sparingly.</p>
 <td>associative_line_click（v0.4.5+）</td>
 <td>Triggered when an associated line is clicked</td>
 <td>path(Connector node)、clickPath(Invisible click line node)、node(Start node)、toNode(Target node)</td>
+</tr>
+<tr>
+<td>svg_mouseenter（v0.5.1+）</td>
+<td>Triggered when the mouse moves into the SVG canvas</td>
+<td>e（event object）</td>
+</tr>
+<tr>
+<td>svg_mouseleave（v0.5.1+）</td>
+<td>Triggered when the mouse moves out of the SVG canvas</td>
+<td>e（event object）</td>
 </tr>
 </tbody>
 </table>
