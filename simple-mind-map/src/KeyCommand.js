@@ -52,7 +52,7 @@ export default class KeyCommand {
       this.isInSvg = false
     })
     window.addEventListener('keydown', e => {
-      if (this.isPause || !this.isInSvg) {
+      if (this.isPause || (this.mindMap.opt.enableShortcutOnlyWhenMouseInSvg && !this.isInSvg)) {
         return
       }
       Object.keys(this.shortcutMap).forEach(key => {
