@@ -48,6 +48,9 @@ const mindMap = new MindMap({
 | defaultInsertBelowSecondLevelNodeText（v0.4.7+）     | String  | 分支主题 | Text for nodes below the second level inserted by default               |          |
 | expandBtnStyle（v0.5.0+）     | Object  | { color: '#808080', fill: '#fff' } | Expand the color of the stow button  |          |
 | expandBtnIcon（v0.5.0+）     | Object  | { open: '', close: '' } | Customize the icon of the expand/collapse button, and you can transfer the svg string of the icon  |          |
+| enableShortcutOnlyWhenMouseInSvg（v0.5.1+）     | Boolean  | true | Only respond to shortcut key events when the mouse is inside the canvas  |          |
+| enableNodeTransitionMove（v0.5.1+）     | Boolean  | true | Whether to enable node animation transition  |          |
+| nodeTransitionMoveDuration（v0.5.1+）     | Number  | 300 | If node animation transition is enabled, the transition time can be set using this attribute, in milliseconds  |          |
 
 ### Watermark config
 
@@ -200,6 +203,8 @@ Listen to an event. Event list:
 | node_dragging（v0.4.5+）    | Triggered when a node is dragged   |  node(The currently dragged node)           |
 | node_dragend（v0.4.5+）    | Triggered when the node is dragged and ends   |             |
 | associative_line_click（v0.4.5+）    |  Triggered when an associated line is clicked  |  path(Connector node)、clickPath(Invisible click line node)、node(Start node)、toNode(Target node)          |
+| svg_mouseenter（v0.5.1+）    | Triggered when the mouse moves into the SVG canvas   | e（event object）  |
+| svg_mouseleave（v0.5.1+）    | Triggered when the mouse moves out of the SVG canvas   | e（event object）  |
 
 ### emit(event, ...args)
 

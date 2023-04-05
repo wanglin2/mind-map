@@ -50,6 +50,7 @@ export default {
         }
       },
       notHandleDataChange: false,
+      isCreateNode: false
     }
   },
   computed: {
@@ -76,6 +77,10 @@ export default {
   },
   methods: {
     onBlur(e, node) {
+      if (this.isCreateNode) {
+        this.isCreateNode = false
+        return
+      }
       node.data._node.setText(e.target.innerText)
     },
 
@@ -97,12 +102,14 @@ export default {
     // 插入兄弟节点
     insertNode() {
       this.notHandleDataChange = false
+      this.isCreateNode = true
       this.mindMap.execCommand('INSERT_NODE', false)
     },
 
     // 插入下级节点
     insertChildNode() {
       this.notHandleDataChange = false
+      this.isCreateNode = true
       this.mindMap.execCommand('INSERT_CHILD_NODE', false)
     },
 
