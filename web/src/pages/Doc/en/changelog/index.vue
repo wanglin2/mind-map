@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.5.2</h2>
+<p>Fix: 1.Remove <code>uid</code> from exported <code>JSON</code> data; 2.Clear the node cache pool when re rendering.</p>
 <h2>0.5.1</h2>
 <p>optimization: 1.Only respond to shortcut key events when the mouse is inside the canvas</p>
 <p>Fix: 1.Fix the issue of incorrect node position during fast operation</p>
