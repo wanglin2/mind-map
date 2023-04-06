@@ -152,14 +152,15 @@ class RichText {
   }
 
   // 隐藏文本编辑控件，即完成编辑
-  hideEditText() {
+  hideEditText(nodes) {
     if (!this.showTextEdit) {
       return
     }
     let html = this.quill.container.firstChild.innerHTML
     // 去除最后的空行
     html = html.replace(/<p><br><\/p>$/, '')
-    this.mindMap.renderer.activeNodeList.forEach(node => {
+    let list = nodes && nodes.length > 0 ? nodes : this.mindMap.renderer.activeNodeList
+    list.forEach(node => {
       this.mindMap.execCommand('SET_NODE_TEXT', node, html, true)
       if (node.isGeneralization) {
         // 概要节点
@@ -170,7 +171,7 @@ class RichText {
     this.mindMap.emit(
       'hide_text_edit',
       this.textEditNode,
-      this.mindMap.renderer.activeNodeList
+      list
     )
     this.textEditNode.style.display = 'none'
     this.showTextEdit = false

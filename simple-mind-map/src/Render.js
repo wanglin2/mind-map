@@ -699,7 +699,7 @@ class Render {
       if (Object.keys(config).length > 0) {
         this.mindMap.richText.showEditText(node)
         this.mindMap.richText.formatAllText(config)
-        this.mindMap.richText.hideEditText()
+        this.mindMap.richText.hideEditText([node])
       }
     }
     this.setNodeDataRender(node, data)
