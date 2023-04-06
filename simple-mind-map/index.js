@@ -309,7 +309,7 @@ class MindMap {
 
   //  获取思维导图数据，节点树、主题、布局等
   getData(withConfig) {
-    let nodeData = this.command.getCopyData()
+    let nodeData = this.command.removeDataUid(this.command.getCopyData())
     let data = {}
     if (withConfig) {
       data = {

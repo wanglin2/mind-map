@@ -42490,8 +42490,13 @@ class Base_Base {
     this.nodePool[uid] = node;
     // 如果总缓存数量达到1000，直接清空
     if (Object.keys(this.nodePool).length > 1000) {
-      this.nodePool = {};
+      this.clearNodePool();
     }
+  }
+
+  // 清空节点存储池
+  clearNodePool() {
+    this.nodePool = {};
   }
 
   // 检查当前来源是否需要重新计算节点大小
@@ -44368,6 +44373,7 @@ class Render_Render {
     // 重新渲染需要清除激活状态
     if (this.reRender) {
       this.clearActive();
+      this.layout.clearNodePool();
     }
     // 计算布局
     this.layout.doLayout(root => {
@@ -46964,7 +46970,7 @@ class simple_mind_map_MindMap {
 
   //  获取思维导图数据，节点树、主题、布局等
   getData(withConfig) {
-    let nodeData = this.command.getCopyData();
+    let nodeData = this.command.removeDataUid(this.command.getCopyData());
     let data = {};
     if (withConfig) {
       data = {
