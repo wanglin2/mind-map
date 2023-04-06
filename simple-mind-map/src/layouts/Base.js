@@ -43,8 +43,13 @@ class Base {
     this.nodePool[uid] = node
     // 如果总缓存数量达到1000，直接清空
     if (Object.keys(this.nodePool).length > 1000) {
-      this.nodePool = {}
+      this.clearNodePool()
     }
+  }
+
+  // 清空节点存储池
+  clearNodePool() {
+    this.nodePool = {}
   }
 
   // 检查当前来源是否需要重新计算节点大小

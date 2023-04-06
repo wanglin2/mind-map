@@ -257,6 +257,7 @@ class Render {
     // 重新渲染需要清除激活状态
     if (this.reRender) {
       this.clearActive()
+      this.layout.clearNodePool()
     }
     // 计算布局
     this.layout.doLayout(root => {

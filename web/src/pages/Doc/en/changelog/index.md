@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.2
+
+Fix: 1.Remove `uid` from exported `JSON` data; 2.Clear the node cache pool when re rendering.
+
 ## 0.5.1
 
 optimization: 1.Only respond to shortcut key events when the mouse is inside the canvas
