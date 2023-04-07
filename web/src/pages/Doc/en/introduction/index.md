@@ -2,6 +2,8 @@
 
 `simple-mind-map` is a simple and powerful web mind map library, not dependent on any specific framework. Can help you quickly develop mind mapping products.
 
+> If you just want to use mind mapping, you can also use the demo of this project as a regular online mind mapping tool. Click on the 【Online Demo】 in the upper right corner to start using it.
+
 ## Features
 
 - [x] Plugin architecture. In addition to core functions, other functions are provided as plugins, which can be used as needed to reduce the overall volume
@@ -80,3 +82,13 @@ Respect the copyright, and do not use the theme and icons directly for commercia
 ## License
 
 [MIT](https://opensource.org/licenses/MIT)
+
+## Invite the author to a cup of coffee
+
+Open source is not easy. If this project is helpful to you, you can invite the author to have a cup of coffee~
+
+> Please note the 【mind map】 for transfer. Your avatar and name will appear below.
+
+<img src="../../../../assets/img/alipay.jpg" style="width: 300px" />
+
+<img src="../../../../assets/img/wechat.jpg" style="width: 300px" />
