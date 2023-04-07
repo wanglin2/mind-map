@@ -68,6 +68,25 @@
 
 尊重版权，主题和图标请勿直接用于商业项目。
 
+## 为什么不是？
+
+1.[知犀](https://www.zhixi.com/)
+
+知犀是一个免费的思维导图产品，支持多端同步，ui设计很漂亮，功能也很齐全，但是它并不开源，所以只能作为一个用户，而无法在你的项目中使用。
+
+类似知犀的其他在线思维导图产品还有很多，比如[GitMind](https://gitmind.cn/)、[MindLine](http://www.mindline.cn/)、[MinMeister](https://www.mindmeister.com/zh)、[幕布](https://mubu.com/)等等，搜索引擎上搜索一下非常多，但是这些产品或者是要收费，或者是小公司开发的，稳定性和持续性无法保证，当然最关键的就是它们都不开源。
+
+2.[kityminder-core](https://github.com/fex-team/kityminder-core)
+
+`kityminder-core`是百度开发的开源的脑图工具，功能很强大，性能也很好，但是它已经不维护了，所以代码比较陈旧，界面美观度也比较一般，另外bug只能自己修，功能只能自己开发，对前端开发能力要求比较高。
+
+3.[jsmind](https://github.com/hizzgdev/jsmind)、[Mind-elixir](https://github.com/ssshooter/mind-elixir-core)、[my-mind](https://github.com/ondras/my-mind)、[blink-mind](https://github.com/awehook/blink-mind)、[remind](https://github.com/luvsic3/remind)、[vue3-mindmap](https://github.com/hellowuxin/vue3-mindmap)、[ZMindMap](https://github.com/zyascend/ZMindMap)...
+
+这些开源的思维导图也都不错，各有各的特点，但是它们也都有一定缺点，比如停止更新、界面美观度一般、功能比较少、依赖某个框架等等。
+
+综上，在开源的思维导图中，你很难找到一个比`simple-mind-map`更好的选择。当然，`simple-mind-map`也远远谈不上最好，它也有很多不足，如你在前面的【特别说明】所看到的那样，不过`simple-mind-map`一直处于快速迭代中，欢迎你加入进来一起完善它。
+
+
 ## License
 
 [MIT](https://opensource.org/licenses/MIT)

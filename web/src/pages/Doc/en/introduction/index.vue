@@ -7,21 +7,21 @@
 </blockquote>
 <h2>Features</h2>
 <ul>
-<li><input type="checkbox" id="checkbox126" checked="true" /><label for="checkbox126">Plugin architecture. In addition to core functions, other functions are provided as plugins, which can be used as needed to reduce the overall volume</label></li>
-<li><input type="checkbox" id="checkbox127" checked="true" /><label for="checkbox127">Supports four types of structures: logical structure diagrams, mind maps,</label>
+<li><input type="checkbox" id="checkbox432" checked="true" /><label for="checkbox432">Plugin architecture. In addition to core functions, other functions are provided as plugins, which can be used as needed to reduce the overall volume</label></li>
+<li><input type="checkbox" id="checkbox433" checked="true" /><label for="checkbox433">Supports four types of structures: logical structure diagrams, mind maps,</label>
 organizational structure diagrams, and directory organization diagrams</li>
-<li><input type="checkbox" id="checkbox128" checked="true" /><label for="checkbox128">Built-in multiple themes and allows for highly customized styles, and support register new themes</label></li>
-<li><input type="checkbox" id="checkbox129" checked="true" /><label for="checkbox129">Supports shortcuts</label></li>
-<li><input type="checkbox" id="checkbox130" checked="true" /><label for="checkbox130">Node content supports images, icons, hyperlinks, notes, tags, and</label>
+<li><input type="checkbox" id="checkbox434" checked="true" /><label for="checkbox434">Built-in multiple themes and allows for highly customized styles, and support register new themes</label></li>
+<li><input type="checkbox" id="checkbox435" checked="true" /><label for="checkbox435">Supports shortcuts</label></li>
+<li><input type="checkbox" id="checkbox436" checked="true" /><label for="checkbox436">Node content supports images, icons, hyperlinks, notes, tags, and</label>
 summaries</li>
-<li><input type="checkbox" id="checkbox131" checked="true" /><label for="checkbox131">Supports forward and backward navigation</label></li>
-<li><input type="checkbox" id="checkbox132" checked="true" /><label for="checkbox132">Supports dragging and scaling</label></li>
-<li><input type="checkbox" id="checkbox133" checked="true" /><label for="checkbox133">Supports right-click and Ctrl + left-click to select multiple items</label></li>
-<li><input type="checkbox" id="checkbox134" checked="true" /><label for="checkbox134">Supports free dragging and dragging to adjust nodes</label></li>
-<li><input type="checkbox" id="checkbox135" checked="true" /><label for="checkbox135">Supports various node shapes</label></li>
-<li><input type="checkbox" id="checkbox136" checked="true" /><label for="checkbox136">Supports export to json, png, svg, pdf markdown, and import from json, xmind, markdown</label></li>
-<li><input type="checkbox" id="checkbox137" checked="true" /><label for="checkbox137">Supports mini map、support watermark</label></li>
-<li><input type="checkbox" id="checkbox138" checked="true" /><label for="checkbox138">Supports associative lines</label></li>
+<li><input type="checkbox" id="checkbox437" checked="true" /><label for="checkbox437">Supports forward and backward navigation</label></li>
+<li><input type="checkbox" id="checkbox438" checked="true" /><label for="checkbox438">Supports dragging and scaling</label></li>
+<li><input type="checkbox" id="checkbox439" checked="true" /><label for="checkbox439">Supports right-click and Ctrl + left-click to select multiple items</label></li>
+<li><input type="checkbox" id="checkbox440" checked="true" /><label for="checkbox440">Supports free dragging and dragging to adjust nodes</label></li>
+<li><input type="checkbox" id="checkbox441" checked="true" /><label for="checkbox441">Supports various node shapes</label></li>
+<li><input type="checkbox" id="checkbox442" checked="true" /><label for="checkbox442">Supports export to json, png, svg, pdf markdown, and import from json, xmind, markdown</label></li>
+<li><input type="checkbox" id="checkbox443" checked="true" /><label for="checkbox443">Supports mini map、support watermark</label></li>
+<li><input type="checkbox" id="checkbox444" checked="true" /><label for="checkbox444">Supports associative lines</label></li>
 </ul>
 <h2>Repository Catalog Introduction</h2>
 <p>1.<code>simple-mind-map</code></p>
@@ -31,16 +31,16 @@ frameworks such as Vue and React, or without a framework.</p>
 <p>This is an online mind map built using the <code>simple-mind-map</code> library and based
 on <code>Vue2.x</code> and <code>ElementUI</code>. Features include:</p>
 <ul>
-<li><input type="checkbox" id="checkbox139" checked="true" /><label for="checkbox139">Toolbar, which supports inserting and deleting nodes, and editing node</label>
+<li><input type="checkbox" id="checkbox445" checked="true" /><label for="checkbox445">Toolbar, which supports inserting and deleting nodes, and editing node</label>
 images, icons, hyperlinks, notes, tags, and summaries</li>
-<li><input type="checkbox" id="checkbox140" checked="true" /><label for="checkbox140">Sidebar, with panels for basic style settings, node style settings,</label>
+<li><input type="checkbox" id="checkbox446" checked="true" /><label for="checkbox446">Sidebar, with panels for basic style settings, node style settings,</label>
 outline, theme selection, and structure selection</li>
-<li><input type="checkbox" id="checkbox141" checked="true" /><label for="checkbox141">Import and export functionality; data is saved in the browser's local</label>
+<li><input type="checkbox" id="checkbox447" checked="true" /><label for="checkbox447">Import and export functionality; data is saved in the browser's local</label>
 storage by default, but it also supports creating, opening, and editing
 local files on the computer directly</li>
-<li><input type="checkbox" id="checkbox142" checked="true" /><label for="checkbox142">Right-click menu, which supports operations such as expanding, collapsing,</label>
+<li><input type="checkbox" id="checkbox448" checked="true" /><label for="checkbox448">Right-click menu, which supports operations such as expanding, collapsing,</label>
 and organizing layout</li>
-<li><input type="checkbox" id="checkbox143" checked="true" /><label for="checkbox143">Bottom bar, which supports node and word count statistics, switching</label>
+<li><input type="checkbox" id="checkbox449" checked="true" /><label for="checkbox449">Bottom bar, which supports node and word count statistics, switching</label>
 between edit and read-only modes, zooming in and out, and switching to
 full screen, support mini map</li>
 </ul>
@@ -60,6 +60,15 @@ full screen, support mini map</li>
 <p><a href="https://naotu.baidu.com/">Baidu Mind Map</a></p>
 <p><a href="https://www.zhixi.com/">Zhixi Mind Map</a></p>
 <p>Respect the copyright, and do not use the theme and icons directly for commercial projects.</p>
+<h2>Why not？</h2>
+<p>1.<a href="https://www.zhixi.com/">Zhixi</a></p>
+<p>Zhixi is a free mind mapping product that supports multi end synchronization. The UI design is beautiful and the features are complete, but it is not open source, so it can only be used as a user and cannot be used in your project.</p>
+<p>There are many other online mind mapping products similar to Zhixi, such as <a href="https://gitmind.cn/">GitMind</a>、<a href="http://www.mindline.cn/">MindLine</a>、<a href="https://www.mindmeister.com/zh">MinMeister</a>、<a href="https://mubu.com/">Mubu</a> and so on, There are many searches on search engines, but these products either require fees or are developed by small companies, and their stability and sustainability cannot be guaranteed. Of course, the most crucial thing is that they are not open-source.</p>
+<p>2.<a href="https://github.com/fex-team/kityminder-core">kityminder-core</a></p>
+<p><code>kityminder-core</code> is an open source brain mapping tool developed by Baidu. It has powerful functions and good performance, but it is no longer maintained. Therefore, the code is relatively old, and the interface beauty is relatively ordinary. In addition, bugs can only be fixed by yourself, and the functions can only be developed by yourself. It has high requirements for front-end development capabilities.</p>
+<p>3.<a href="https://github.com/hizzgdev/jsmind">jsmind</a>、<a href="https://github.com/ssshooter/mind-elixir-core">Mind-elixir</a>、<a href="https://github.com/ondras/my-mind">my-mind</a>、<a href="https://github.com/awehook/blink-mind">blink-mind</a>、<a href="https://github.com/luvsic3/remind">remind</a>、<a href="https://github.com/hellowuxin/vue3-mindmap">vue3-mindmap</a>、<a href="https://github.com/zyascend/ZMindMap">ZMindMap</a>...</p>
+<p>These open-source mind maps are also good, each with its own characteristics, but they also have certain drawbacks, such as stopping updates, average interface aesthetics, less functionality, relying on a certain framework, and so on.</p>
+<p>In summary, in open-source mind maps, it is difficult to find a better choice than <code>simple-mind-map</code>. Of course, <code>simple-mind-map</code> is far from being the best, and it also has many shortcomings, as you saw in the previous [special note]. However, <code>simple-mind-map</code> has always been in a fast iteration process, and we welcome you to join and improve it together.</p>
 <h2>License</h2>
 <p><a href="https://opensource.org/licenses/MIT">MIT</a></p>
 <h2>Invite the author to a cup of coffee</h2>
