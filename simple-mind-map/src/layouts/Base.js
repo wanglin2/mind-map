@@ -1,5 +1,5 @@
 import Node from '../Node'
-import { CONSTANTS } from '../utils/constant'
+import { CONSTANTS, initRootNodePositionMap } from '../utils/constant'
 
 //  布局基类
 class Base {
@@ -122,10 +122,28 @@ class Base {
     return newNode
   }
 
+  // 格式化节点位置
+  formatPosition(value, size, nodeSize) {
+    if (typeof value === 'number') {
+      return value
+    } else if (initRootNodePositionMap[value] !== undefined) {
+      return size * initRootNodePositionMap[value]
+    } else if (/^\d\d*%$/.test(value)) {
+      return Number.parseFloat(value) / 100 * size
+    } else {
+      return (size - nodeSize) / 2
+    }
+  }
+
   //  定位节点到画布中间
   setNodeCenter(node) {
-    node.left = (this.mindMap.width - node.width) / 2
-    node.top = (this.mindMap.height - node.height) / 2
+    let { initRootNodePosition } = this.mindMap.opt
+    let { CENTER }= CONSTANTS.INIT_ROOT_NODE_POSITION
+    if (!initRootNodePosition || !Array.isArray(initRootNodePosition) || initRootNodePosition.length < 2) {
+      initRootNodePosition = [CENTER, CENTER]
+    }
+    node.left = this.formatPosition(initRootNodePosition[0], this.mindMap.width, node.width)
+    node.top = this.formatPosition(initRootNodePosition[1], this.mindMap.height, node.height)
   }
 
   //  更新子节点属性

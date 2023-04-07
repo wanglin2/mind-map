@@ -154,7 +154,22 @@ export const CONSTANTS = {
   MOUSE_WHEEL_ACTION: {
     ZOOM: 'zoom',
     MOVE: 'move'
+  },
+  INIT_ROOT_NODE_POSITION: {
+    LEFT: 'left',
+    TOP: 'top',
+    RIGHT: 'right',
+    BOTTOM: 'bottom',
+    CENTER: 'center'
   }
+}
+
+export const initRootNodePositionMap = {
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.LEFT]: 0,
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.TOP]: 0,
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.RIGHT]: 1,
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.BOTTOM]: 1,
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.CENTER]: 0.5,
 }
 
 //  布局结构列表
