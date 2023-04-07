@@ -7,15 +7,15 @@
 [![GitHub forks](https://img.shields.io/github/forks/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/network/members)
 ![license](https://img.shields.io/npm/l/express.svg)
 
-> 一个简单&强大的Web思维导图库
+> 一个简单&强大的Web思维导图库，不依赖任何框架。
 
-Demo：[https://wanglin2.github.io/mind-map/](https://wanglin2.github.io/mind-map/)
+在线Demo：[https://wanglin2.github.io/mind-map/](https://wanglin2.github.io/mind-map/)
 
-文档：[https://wanglin2.github.io/mind-map/#/doc/zh/](https://wanglin2.github.io/mind-map/#/doc/zh/)
+开发文档：[https://wanglin2.github.io/mind-map/#/doc/zh/](https://wanglin2.github.io/mind-map/#/doc/zh/)
 
 # 特性
 
-- [x] 插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小整体体积
+- [x] 插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小打包体积
 - [x] 支持逻辑结构图、思维导图、组织结构图、目录组织图四种结构
 - [x] 内置多种主题，允许高度自定义样式，支持注册新主题
 - [x] 支持快捷键
@@ -37,9 +37,13 @@ npm i simple-mind-map
 
 # 使用
 
+提供一个宽高不为0的容器元素：
+
 ```html
 <div id="mindMapContainer"></div>
 ```
+
+然后创建一个实例：
 
 ```js
 import MindMap from "simple-mind-map";
@@ -54,6 +58,12 @@ const mindMap = new MindMap({
   }
 });
 ```
+
+即可得到一个思维导图。
+
+想要实现更多功能？可以查看[开发文档](https://wanglin2.github.io/mind-map/#/doc/zh/)。
+
+仓库内附带一个基于`Vue2.x`的全功能demo，可以解决你大部分功能实现上的困惑。
 
 # License
 

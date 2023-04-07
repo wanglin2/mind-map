@@ -1,7 +1,59 @@
 <template>
   <div>
     <h1>Start</h1>
+<h2>Installation</h2>
+<blockquote>
+<p>Things to note before version 0.2.0:</p>
+</blockquote>
+<pre class="hljs"><code>npm i simple-mind-map
+</code></pre>
+<p><code>0.2.0</code> Notes for previous versions:</p>
+<blockquote>
+<p>Note: This project is directly published in source code form and has not been
+packaged. If compilation fails, a Vue CLI-created project can add the
+following configuration to the vue.config.js file to allow babel-loader to
+compile this dependency:</p>
+<pre class="hljs"><code><span class="hljs-built_in">module</span>.exports = {
+  <span class="hljs-attr">transpileDependencies</span>: [<span class="hljs-string">&quot;simple-mind-map&quot;</span>],
+};
+</code></pre>
+<p>Other projects should modify the packaging configuration as needed.</p>
+</blockquote>
+<h2>Usage</h2>
+<blockquote>
+<p>The <code>web</code> directory of this repository provides a complete project based on <code>Vue2</code>. If you encounter any doubts about using it, you can refer to the implementation of this project.</p>
+</blockquote>
+<blockquote>
+<p>To learn about its use in other frameworks, you can refer to the following unofficial implementations:</p>
+<p>1.<a href="https://github.com/huangyuanyin/hyy-vue3-mindMap">https://github.com/huangyuanyin/hyy-vue3-mindMap</a>: A mind map based on Vue3.2+ElementPlus.</p>
+</blockquote>
+<p>Firstly, provide a container element with a width and height not equal to 0:</p>
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;mindMapContainer&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+</code></pre>
+<p>Then introduce the <code>simple-mind-map</code> library and create an instance:</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;simple-mind-map&quot;</span>;
+
+<span class="hljs-keyword">const</span> mindMap = <span class="hljs-keyword">new</span> MindMap({
+  <span class="hljs-attr">el</span>: <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;mindMapContainer&#x27;</span>),
+  <span class="hljs-attr">data</span>: {
+    <span class="hljs-string">&quot;data&quot;</span>: {
+        <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Root Node&quot;</span>
+    },
+    <span class="hljs-string">&quot;children&quot;</span>: []
+  }
+});
+</code></pre>
+<p>This will result in a mind map.</p>
+<p>If you want to implement a complete mind map, you usually need to develop some UI interfaces to achieve more functions through the interfaces provided by the <code>simple-mind-map</code> library.</p>
+<p><code>simple-mind-map</code> supports rich configurations, events, commands, and some additional plugin extensions. Read the subsequent documentation to learn more.</p>
+<p>The non-packaged 'ES' module is introduced by default, and only contains core functions, not unregistered plugin content, which can effectively reduce the size. However, you need to configure the <code>babel</code> compilation <code>simple mind-map</code> in your project to prevent some newer <code>js</code> syntax some browsers not supporting it.</p>
+<p>If you need a file in the format of <code>umd</code> module, such as <code>CDN</code> in the browser, Then you can find the <code>simpleMindMap.umd.min.js</code> file in the <code>/simple-mind-map/dist/</code> directory, copy it to your project, and then import it into the page:</p>
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">scr</span>=<span class="hljs-string">&quot;simpleMindMap.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+</code></pre>
+<p>A global variable <code>window.simpleMindMap</code> will be created.</p>
+<p>The disadvantage of this method is that it will contain all the content, including the plugins you have not registered, so the overall volume will be relatively large.</p>
 <h2>Development</h2>
+<p>If you only use library, you don't need to read this section.</p>
 <h3>Local Development</h3>
 <pre class="hljs"><code>git <span class="hljs-built_in">clone</span> https://github.com/wanglin2/mind-map.git
 <span class="hljs-built_in">cd</span> simple-mind-map
@@ -38,48 +90,6 @@ npm run buildDoc
 npm run build
 </code></pre>
 <p>The <code>index.html</code> file will be automatically moved to the root directory.</p>
-<h2>Installation</h2>
-<blockquote>
-<p>Things to note before version 0.2.0:</p>
-</blockquote>
-<pre class="hljs"><code>npm i simple-mind-map
-</code></pre>
-<p><code>0.2.0</code> Notes for previous versions:</p>
-<blockquote>
-<p>Note: This project is directly published in source code form and has not been
-packaged. If compilation fails, a Vue CLI-created project can add the
-following configuration to the vue.config.js file to allow babel-loader to
-compile this dependency:</p>
-<pre class="hljs"><code><span class="hljs-built_in">module</span>.exports = {
-  <span class="hljs-attr">transpileDependencies</span>: [<span class="hljs-string">&quot;simple-mind-map&quot;</span>],
-};
-</code></pre>
-<p>Other projects should modify the packaging configuration as needed.</p>
-</blockquote>
-<h2>Usage</h2>
-<blockquote>
-<p>The <code>web</code> directory of this repository provides a complete project based on <code>Vue2</code>. If you encounter any doubts about using it, you can refer to the implementation of this project.</p>
-</blockquote>
-<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;mindMapContainer&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-</code></pre>
-<pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;simple-mind-map&quot;</span>;
-
-<span class="hljs-keyword">const</span> mindMap = <span class="hljs-keyword">new</span> MindMap({
-  <span class="hljs-attr">el</span>: <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">&#x27;mindMapContainer&#x27;</span>),
-  <span class="hljs-attr">data</span>: {
-    <span class="hljs-string">&quot;data&quot;</span>: {
-        <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;Root Node&quot;</span>
-    },
-    <span class="hljs-string">&quot;children&quot;</span>: []
-  }
-});
-</code></pre>
-<p>The non-packaged 'ES' module is introduced by default, and only contains core functions, not unregistered plugin content, which can effectively reduce the size. However, you need to configure the <code>babel</code> compilation <code>simple mind-map</code> in your project to prevent some newer <code>js</code> syntax some browsers not supporting it.</p>
-<p>If you need a file in the format of <code>umd</code> module, such as <code>CDN</code> in the browser, Then you can find the <code>simpleMindMap.umd.min.js</code> file in the <code>/simple-mind-map/dist/</code> directory, copy it to your project, and then import it into the page:</p>
-<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">scr</span>=<span class="hljs-string">&quot;simpleMindMap.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
-</code></pre>
-<p>A global variable <code>window.simpleMindMap</code> will be created.</p>
-<p>The disadvantage of this method is that it will contain all the content, including the plugins you have not registered, so the overall volume will be relatively large.</p>
 <h2>Problems</h2>
 <h3>Error when using in Vite, indicating xml-js dependency error</h3>
 <p>Solution: use the following import method:</p>
