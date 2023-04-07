@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.3
+
+Fix: 1.Fixed the issue of setting the text style when multiple nodes were selected in rich text mode, which would change the text of all selected nodes to the text of the last selected node.
+
+New: 1.Support setting the position of the initial central node.
+
 ## 0.5.2
 
 Fix: 1.Remove `uid` from exported `JSON` data; 2.Clear the node cache pool when re rendering.

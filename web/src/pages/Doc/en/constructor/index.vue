@@ -217,6 +217,13 @@
 <td>If node animation transition is enabled, the transition time can be set using this attribute, in milliseconds</td>
 <td></td>
 </tr>
+<tr>
+<td>initRootNodePosition（v0.5.3+）</td>
+<td>Array</td>
+<td>['center', 'center']</td>
+<td>The position of the initial root node can be passed as an array, default is <code>['center', 'center']</code>, Represents the root node at the center of the canvas, In addition to <code>center</code>, keywords can also be set to <code>left</code>, <code>top</code>, <code>right</code>, and <code>bottom</code>, In addition to passing keywords, each item in the array can also pass a number representing a specific pixel, Can pass a percentage string, such as <code>['40%', '60%']</code>, Represents a horizontal position at <code>40%</code> of the canvas width, and a vertical position at <code>60%</code> of the canvas height</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
