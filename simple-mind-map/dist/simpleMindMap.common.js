@@ -32816,7 +32816,21 @@ const CONSTANTS = {
   MOUSE_WHEEL_ACTION: {
     ZOOM: 'zoom',
     MOVE: 'move'
+  },
+  INIT_ROOT_NODE_POSITION: {
+    LEFT: 'left',
+    TOP: 'top',
+    RIGHT: 'right',
+    BOTTOM: 'bottom',
+    CENTER: 'center'
   }
+};
+const initRootNodePositionMap = {
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.LEFT]: 0,
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.TOP]: 0,
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.RIGHT]: 1,
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.BOTTOM]: 1,
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.CENTER]: 0.5
 };
 
 //  布局结构列表
@@ -42569,10 +42583,32 @@ class Base_Base {
     return newNode;
   }
 
+  // 格式化节点位置
+  formatPosition(value, size, nodeSize) {
+    if (typeof value === 'number') {
+      return value;
+    } else if (initRootNodePositionMap[value] !== undefined) {
+      return size * initRootNodePositionMap[value];
+    } else if (/^\d\d*%$/.test(value)) {
+      return Number.parseFloat(value) / 100 * size;
+    } else {
+      return (size - nodeSize) / 2;
+    }
+  }
+
   //  定位节点到画布中间
   setNodeCenter(node) {
-    node.left = (this.mindMap.width - node.width) / 2;
-    node.top = (this.mindMap.height - node.height) / 2;
+    let {
+      initRootNodePosition
+    } = this.mindMap.opt;
+    let {
+      CENTER
+    } = CONSTANTS.INIT_ROOT_NODE_POSITION;
+    if (!initRootNodePosition || !Array.isArray(initRootNodePosition) || initRootNodePosition.length < 2) {
+      initRootNodePosition = [CENTER, CENTER];
+    }
+    node.left = this.formatPosition(initRootNodePosition[0], this.mindMap.width, node.width);
+    node.top = this.formatPosition(initRootNodePosition[1], this.mindMap.height, node.height);
   }
 
   //  更新子节点属性
@@ -44811,7 +44847,7 @@ class Render_Render {
       if (Object.keys(config).length > 0) {
         this.mindMap.richText.showEditText(node);
         this.mindMap.richText.formatAllText(config);
-        this.mindMap.richText.hideEditText();
+        this.mindMap.richText.hideEditText([node]);
       }
     }
     this.setNodeDataRender(node, data);
@@ -46749,7 +46785,9 @@ const defaultOpt = {
   // 是否开启节点动画过渡
   enableNodeTransitionMove: true,
   // 如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms
-  nodeTransitionMoveDuration: 300
+  nodeTransitionMoveDuration: 300,
+  // 初始根节点的位置
+  initRootNodePosition: [CONSTANTS.INIT_ROOT_NODE_POSITION.CENTER, CONSTANTS.INIT_ROOT_NODE_POSITION.CENTER]
 };
 
 //  思维导图
@@ -49749,14 +49787,15 @@ class RichText_RichText {
   }
 
   // 隐藏文本编辑控件，即完成编辑
-  hideEditText() {
+  hideEditText(nodes) {
     if (!this.showTextEdit) {
       return;
     }
     let html = this.quill.container.firstChild.innerHTML;
     // 去除最后的空行
     html = html.replace(/<p><br><\/p>$/, '');
-    this.mindMap.renderer.activeNodeList.forEach(node => {
+    let list = nodes && nodes.length > 0 ? nodes : this.mindMap.renderer.activeNodeList;
+    list.forEach(node => {
       this.mindMap.execCommand('SET_NODE_TEXT', node, html, true);
       if (node.isGeneralization) {
         // 概要节点
@@ -49764,7 +49803,7 @@ class RichText_RichText {
       }
       this.mindMap.render();
     });
-    this.mindMap.emit('hide_text_edit', this.textEditNode, this.mindMap.renderer.activeNodeList);
+    this.mindMap.emit('hide_text_edit', this.textEditNode, list);
     this.textEditNode.style.display = 'none';
     this.showTextEdit = false;
     this.mindMap.emit('rich_text_selection_change', false);
