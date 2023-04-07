@@ -2,6 +2,8 @@ const path = require('path')
 const fs = require('fs')
 const hljs = require('highlight.js')
 const md = require('markdown-it')({
+  html: true,
+  xhtmlOut: true,
   highlight: function(str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       try {
