@@ -32,6 +32,15 @@ npm i simple-mind-map
 <div id="mindMapContainer"></div>
 ```
 
+另外再设置一下`css`样式：
+
+```css
+#mindMapContainer * {
+  margin: 0;
+  padding: 0;
+}
+```
+
 然后引入`simple-mind-map`库，创建一个实例：
 
 ```js
@@ -56,15 +65,18 @@ const mindMap = new MindMap({
 
 默认引入的是未打包的`ES`模块，且只包含核心功能，不包含未注册的插件内容，能有效减小体积，不过你需要在你的项目中配置`babel`编译`simple-mind-map`，防止一些较新的`js`语法部分浏览器不支持。
 
-如果你需要`umd`模块格式的文件，比如以`CDN`的方式在浏览器上使用，那么你可以从`/simple-mind-map/dist/`目录中找到`simpleMindMap.umd.min.js`文件，复制到你的项目中，然后在页面中引入：
+如果你需要`umd`模块格式的文件，比如以`CDN`的方式在浏览器上使用，那么你可以从`/simple-mind-map/dist/`目录中找到`simpleMindMap.umd.min.js`文件和`simpleMindMap.css`文件，复制到你的项目中，然后在页面中引入：
 
 ```html
+<link rel="stylesheet" href="simpleMindMap.css">
 <script scr="simpleMindMap.umd.min.js"></script>
 ```
 
 会创建一个全局变量`window.simpleMindMap`。
 
 这种方式的缺点是会包含所有的内容，包括你没有注册的插件，所以整体体积会比较大。
+
+（v0.5.4+）如果你想直接在浏览器端通过`ES`模块的方式来使用，你可以在`/simple-mind-map/dist/`目录中找到`simpleMindMap.esm.js`和`simpleMindMap.esm.css`文件。
 
 ## 开发
 
