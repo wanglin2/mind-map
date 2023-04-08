@@ -43,6 +43,15 @@ npm i simple-mind-map
 <div id="mindMapContainer"></div>
 ```
 
+另外再设置一下`css`样式：
+
+```css
+#mindMapContainer * {
+  margin: 0;
+  padding: 0;
+}
+```
+
 然后创建一个实例：
 
 ```js

@@ -6,6 +6,10 @@ Fix: 1.Fixed the issue of setting the text style when multiple nodes were select
 
 New: 1.Support setting the position of the initial central node.
 
+### 0.5.3-fix.1
+
+Fix: 1.Fix the issue where setting the position of the initial central node does not take effect.
+
 ## 0.5.2
 
 Fix: 1.Remove `uid` from exported `JSON` data; 2.Clear the node cache pool when re rendering.
