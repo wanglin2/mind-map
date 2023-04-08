@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && node ../copy.js",
     "lint": "vue-cli-service lint",
-    "buildLibrary": "vue-cli-service build --target lib --name simpleMindMap ../simple-mind-map/full.js --dest ../simple-mind-map/dist",
+    "buildLibrary": "vue-cli-service build --target lib --name simpleMindMap ../simple-mind-map/full.js --dest ../simple-mind-map/dist && esbuild ../simple-mind-map/full.js --bundle --external:buffer --format=esm --outfile=../simple-mind-map/dist/simpleMindMap.esm.js",
     "format": "prettier --write src/* src/*/* src/*/*/* src/*/*/*/*",
     "buildDoc": "node ./scripts/buildDoc.js",
     "autoBuildDoc": "node ./scripts/autoBuildDoc.js"
@@ -29,6 +29,7 @@
     "@vue/cli-service": "^4.5.0",
     "babel-eslint": "^10.1.0",
     "chokidar": "^3.5.3",
+    "esbuild": "^0.17.15",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
     "less": "^3.12.2",
