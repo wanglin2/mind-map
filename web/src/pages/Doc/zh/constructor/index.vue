@@ -220,7 +220,7 @@
 <tr>
 <td>initRootNodePosition（v0.5.3+）</td>
 <td>Array</td>
-<td>['center', 'center']</td>
+<td>null</td>
 <td>初始根节点的位置，可传一个数组，默认为<code>['center', 'center']</code>，代表根节点处于画布中心位置，除了<code>center</code>，关键词还可以设置<code>left</code>、<code>top</code>、<code>right</code>、<code>bottom</code>，除了可以传关键词，数组的每项还可以传递一个数字，代表具体的像素，可以传递一个百分比字符串，比如<code>['40%', '60%']</code>，代表水平位置在画布宽度的<code>40%</code>的位置，垂直位置在画布高度的<code>60%</code>的位置</td>
 <td></td>
 </tr>
