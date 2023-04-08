@@ -48467,7 +48467,7 @@ var defaultOpt = {
   // 如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms
   nodeTransitionMoveDuration: 300,
   // 初始根节点的位置
-  initRootNodePosition: [CONSTANTS.INIT_ROOT_NODE_POSITION.CENTER, CONSTANTS.INIT_ROOT_NODE_POSITION.CENTER]
+  initRootNodePosition: null
 };
 var MindMap2 = class {
   //  构造函数
