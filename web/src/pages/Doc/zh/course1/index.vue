@@ -2,7 +2,9 @@
   <div>
     <h1>基本使用</h1>
 <blockquote>
-<p>重要说明：本教程中的在线编辑器中使用的是完整版的simple-mind-map，即包含所有插件，如果你是通过<code>npm</code>方式使用的话，需要自己手动注册相关插件。</p>
+<p>重要说明：</p>
+<p>1.本教程中的在线编辑器中使用的是完整版的simple-mind-map，即包含所有插件，如果你是通过<code>npm</code>方式使用的话，需要自己手动注册相关插件。</p>
+<p>2.本教程的代码示例基于Vue3.x，但是您不必担心，因为simple-mind-map本身是框架无关的，所以即使某些Vue3的语法您看不懂也不会影响对于逻辑的理解。</p>
 </blockquote>
 <p><code>simple-mind-map</code>的使用非常简单，提供一个宽高不为0的元素，然后创建一个实例即可：</p>
 <iframe style="width: 100%; height: 455px; border: none;" src="https://wanglin2.github.io/playground/#eNptUktu2zAQvcqARWG7sCUV6EqVjX7QRRc+QacLVZzYLKQRQdJxAkObLHuKXiMXanOMDEXZCJIIECS+mff4+Dgn9dna7PpAqlSVb5yxATyFg90gm872LsAJHF0toedtf+BAGga4cn0HM2HNLl1bw3pb21RC5QVuadUJuupqiwoZ+SIxny9gvYETMkDTsw8QGyN9DUzHs9h8bACgtgTdN4eOOGQ7Ct9air9fbr/r+Wxifu051IbJzRbLxNJ1qMu0R3xQRQDVEyjBgW5ChFH9+3v/8Ofu/919tJvKwyQWG5u9abUjjs0/fiZ8iJ9h8RF5WCBXeYpQwpNFIMmgDiQrgEqbazB6jeq5YVSbKpeqtFX5E44sfbhtE/3TFDOqLE/ZThll5Lus8R6VeBCX8r55vsP5xEejw76E90XxdmwG2JPZ7UMJH4rC3oyYHOh1jXdnla52O8MlFJOGrbU2vDsDIiAxjMbVUiXbcQSy375nmbJRBaeC2L7cByoZqHQRWS6/mZNZMR3FE65+uf7oyYkIqulKXhmyxH2ZT2RN3gY1PAJQKfo9" />
