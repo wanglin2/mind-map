@@ -10,6 +10,10 @@ New: 1.Support setting the position of the initial central node.
 
 Fix: 1.Fix the issue where setting the position of the initial central node does not take effect.
 
+### 0.5.3-fix.2
+
+Fix: 1.Fix the issue of not displaying images in nodes when exporting as images.
+
 ## 0.5.2
 
 Fix: 1.Remove `uid` from exported `JSON` data; 2.Clear the node cache pool when re rendering.
