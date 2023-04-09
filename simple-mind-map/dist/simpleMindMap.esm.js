@@ -58417,6 +58417,9 @@ var Export = class {
       item.attr("href", imgData);
     });
     await Promise.all(task);
+    if (imageList.length > 0) {
+      svgHTML = svg2.svg();
+    }
     let nodeWithDomToImg = null;
     if (domToImage && this.mindMap.richText) {
       let res = await this.mindMap.richText.handleSvgDomElements(svg2);
