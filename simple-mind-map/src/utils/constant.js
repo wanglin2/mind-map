@@ -111,6 +111,34 @@ export const themeList = [
   {
     name: '浪漫紫',
     value: 'romanticPurple',
+  },
+  {
+    name: '简约黑',
+    value: 'simpleBlack',
+  },
+  {
+    name: '课程绿',
+    value: 'courseGreen',
+  },
+  {
+    name: '咖啡',
+    value: 'coffee',
+  },
+  {
+    name: '红色精神',
+    value: 'redSpirit',
+  },
+  {
+    name: '黑色幽默',
+    value: 'blackHumour',
+  },
+  {
+    name: '深夜办公室',
+    value: 'lateNightOffice',
+  },
+  {
+    name: '黑金',
+    value: 'blackGold',
   }
 ]
 
