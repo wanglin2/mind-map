@@ -45,13 +45,13 @@ MindMap.usePlugin(MiniMap)
 
 3.在`container`内创建一个视口框元素`viewBoxContainer`，绝对定位，设置边框样式，过渡属性（可选）
 
-4.监听`data_change`和`view_data_change`事件，在该事件内调用`calculationMiniMap`方法获取计算数据，然后将`svgHTML`渲染到`miniMapContainer`元素内，并且设置它的样式：
+4.监听`data_change`和`view_data_change`事件，在该事件内调用`calculationMiniMap`方法获取计算数据，然后将`svgHTML`渲染到`miniMapContainer`元素内，并且设置`miniMapContainer`元素的样式：
 
 ```js
 :style="{
-    transform: `scale(${svgBoxScale})`,
-    left: svgBoxLeft + 'px',
-    top: svgBoxTop + 'px',
+    transform: `scale(${miniMapBoxScale})`,
+    left: miniMapBoxLeft + 'px',
+    top: miniMapBoxTop + 'px',
 }"
 ```
 

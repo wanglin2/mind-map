@@ -7,11 +7,17 @@
 [![GitHub forks](https://img.shields.io/github/forks/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/network/members)
 ![license](https://img.shields.io/npm/l/express.svg)
 
-> 一个简单&强大的Web思维导图库，不依赖任何框架。
+> 一个简单&强大的Web思维导图
 
-在线Demo：[https://wanglin2.github.io/mind-map/](https://wanglin2.github.io/mind-map/)
+本项目包含两部分：
+
+1.一个js思维导图库，不依赖任何框架，你可以使用它来快速完成Web思维导图产品的开发。
 
 开发文档：[https://wanglin2.github.io/mind-map/#/doc/zh/](https://wanglin2.github.io/mind-map/#/doc/zh/)
+
+2.一个Web思维导图，基于思维导图库、Vue2.x、ElementUI开发，可以操作电脑本地文件，所以你可以直接把它当做一个在线版思维导图应用使用，如果觉得github的响应速度慢，你也可以部署到你的服务器上。
+
+在线地址：[https://wanglin2.github.io/mind-map/](https://wanglin2.github.io/mind-map/)
 
 # 特性
 
@@ -71,8 +77,6 @@ const mindMap = new MindMap({
 即可得到一个思维导图。
 
 想要实现更多功能？可以查看[开发文档](https://wanglin2.github.io/mind-map/#/doc/zh/)。
-
-仓库内附带一个基于`Vue2.x`的全功能demo，可以解决你大部分功能实现上的困惑。
 
 # License
 
