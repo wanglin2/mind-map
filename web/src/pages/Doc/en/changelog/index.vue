@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.5.4</h2>
+<p>New: 1.Add new themes.</p>
 <h2>0.5.3</h2>
 <p>Fix: 1.Fixed the issue of setting the text style when multiple nodes were selected in rich text mode, which would change the text of all selected nodes to the text of the last selected node.</p>
 <p>New: 1.Support setting the position of the initial central node.</p>
