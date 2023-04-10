@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.4
+
+New: 1.Add new themes.
+
 ## 0.5.3
 
 Fix: 1.Fixed the issue of setting the text style when multiple nodes were selected in rich text mode, which would change the text of all selected nodes to the text of the last selected node.
