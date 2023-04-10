@@ -39,11 +39,11 @@ absolute positioning</p>
 positioning, set border style, transition property (optional)</p>
 <p>4.Listen for <code>data_change</code> and <code>view_data_change</code> events, and in this event call
 the <code>calculationMiniMap</code> method to get calculation data, then render <code>svgHTML</code>
-to the <code>miniMapContainer</code> element and set its style:</p>
+to the <code>miniMapContainer</code> element and set <code>miniMapContainer</code> element style:</p>
 <pre class="hljs"><code>:style=<span class="hljs-string">&quot;{
-    transform: `scale(${svgBoxScale})`,
-    left: svgBoxLeft + &#x27;px&#x27;,
-    top: svgBoxTop + &#x27;px&#x27;,
+    transform: `scale(${miniMapBoxScale})`,
+    left: miniMapBoxLeft + &#x27;px&#x27;,
+    top: miniMapBoxTop + &#x27;px&#x27;,
 }&quot;</span>
 </code></pre>
 <p>5.Set the <code>viewBoxStyle</code> object as the style of the <code>viewBoxContainer</code> element</p>
