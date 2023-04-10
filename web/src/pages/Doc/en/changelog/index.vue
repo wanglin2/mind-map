@@ -1,9 +1,15 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.5.4</h2>
+<p>New: 1.Add new themes.</p>
 <h2>0.5.3</h2>
 <p>Fix: 1.Fixed the issue of setting the text style when multiple nodes were selected in rich text mode, which would change the text of all selected nodes to the text of the last selected node.</p>
 <p>New: 1.Support setting the position of the initial central node.</p>
+<h3>0.5.3-fix.1</h3>
+<p>Fix: 1.Fix the issue where setting the position of the initial central node does not take effect.</p>
+<h3>0.5.3-fix.2</h3>
+<p>Fix: 1.Fix the issue of not displaying images in nodes when exporting as images.</p>
 <h2>0.5.2</h2>
 <p>Fix: 1.Remove <code>uid</code> from exported <code>JSON</code> data; 2.Clear the node cache pool when re rendering.</p>
 <h2>0.5.1</h2>
