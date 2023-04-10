@@ -54,13 +54,13 @@ positioning, set border style, transition property (optional)
 
 4.Listen for `data_change` and `view_data_change` events, and in this event call
 the `calculationMiniMap` method to get calculation data, then render `svgHTML`
-to the `miniMapContainer` element and set its style:
+to the `miniMapContainer` element and set `miniMapContainer` element style:
 
 ```js
 :style="{
-    transform: `scale(${svgBoxScale})`,
-    left: svgBoxLeft + 'px',
-    top: svgBoxTop + 'px',
+    transform: `scale(${miniMapBoxScale})`,
+    left: miniMapBoxLeft + 'px',
+    top: miniMapBoxTop + 'px',
 }"
 ```
 
