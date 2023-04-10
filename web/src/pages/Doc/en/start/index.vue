@@ -30,6 +30,12 @@ compile this dependency:</p>
 <p>Firstly, provide a container element with a width and height not equal to 0:</p>
 <pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;mindMapContainer&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
 </code></pre>
+<p>Also, set the <code>CSS</code> style again:</p>
+<pre class="hljs"><code><span class="hljs-selector-id">#mindMapContainer</span> * {
+  <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span>;
+}
+</code></pre>
 <p>Then introduce the <code>simple-mind-map</code> library and create an instance:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;simple-mind-map&quot;</span>;
 
@@ -47,11 +53,13 @@ compile this dependency:</p>
 <p>If you want to implement a complete mind map, you usually need to develop some UI interfaces to achieve more functions through the interfaces provided by the <code>simple-mind-map</code> library.</p>
 <p><code>simple-mind-map</code> supports rich configurations, events, commands, and some additional plugin extensions. Read the subsequent documentation to learn more.</p>
 <p>The non-packaged 'ES' module is introduced by default, and only contains core functions, not unregistered plugin content, which can effectively reduce the size. However, you need to configure the <code>babel</code> compilation <code>simple mind-map</code> in your project to prevent some newer <code>js</code> syntax some browsers not supporting it.</p>
-<p>If you need a file in the format of <code>umd</code> module, such as <code>CDN</code> in the browser, Then you can find the <code>simpleMindMap.umd.min.js</code> file in the <code>/simple-mind-map/dist/</code> directory, copy it to your project, and then import it into the page:</p>
-<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">scr</span>=<span class="hljs-string">&quot;simpleMindMap.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<p>If you need a file in the format of <code>umd</code> module, such as <code>CDN</code> in the browser, Then you can find the <code>simpleMindMap.umd.min.js</code> file and <code>simpleMindMap.css</code> file in the <code>/simple-mind-map/dist/</code> directory, copy it to your project, and then import it into the page:</p>
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;simpleMindMap.css&quot;</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">scr</span>=<span class="hljs-string">&quot;simpleMindMap.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
 <p>A global variable <code>window.simpleMindMap</code> will be created.</p>
 <p>The disadvantage of this method is that it will contain all the content, including the plugins you have not registered, so the overall volume will be relatively large.</p>
+<p>（v0.5.4+）If you want to use the <code>ES</code> module directly on the browser side, you can find the <code>simpleMindMap.esm.js</code> and <code>simpleMindMap.esm.css</code> files in the <code>/simple-mind-map/dist/</code> directory.</p>
 <h2>Development</h2>
 <p>If you only use library, you don't need to read this section.</p>
 <h3>Local Development</h3>

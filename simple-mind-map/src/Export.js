@@ -37,6 +37,9 @@ class Export {
       item.attr('href', imgData)
     })
     await Promise.all(task)
+    if (imageList.length > 0) {
+      svgHTML = svg.svg()
+    }
     // 如果开启了富文本编辑，需要把svg中的dom元素转换成图片
     let nodeWithDomToImg = null
     if (domToImage && this.mindMap.richText) {

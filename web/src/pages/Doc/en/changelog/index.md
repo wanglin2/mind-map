@@ -1,10 +1,22 @@
 # Changelog
 
+## 0.5.4
+
+New: 1.Add new themes.
+
 ## 0.5.3
 
 Fix: 1.Fixed the issue of setting the text style when multiple nodes were selected in rich text mode, which would change the text of all selected nodes to the text of the last selected node.
 
 New: 1.Support setting the position of the initial central node.
+
+### 0.5.3-fix.1
+
+Fix: 1.Fix the issue where setting the position of the initial central node does not take effect.
+
+### 0.5.3-fix.2
+
+Fix: 1.Fix the issue of not displaying images in nodes when exporting as images.
 
 ## 0.5.2
 

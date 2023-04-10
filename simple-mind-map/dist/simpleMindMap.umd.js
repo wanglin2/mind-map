@@ -46796,7 +46796,7 @@ const defaultOpt = {
   // 如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms
   nodeTransitionMoveDuration: 300,
   // 初始根节点的位置
-  initRootNodePosition: [CONSTANTS.INIT_ROOT_NODE_POSITION.CENTER, CONSTANTS.INIT_ROOT_NODE_POSITION.CENTER]
+  initRootNodePosition: null
 };
 
 //  思维导图
@@ -48065,6 +48065,9 @@ class Export_Export {
       item.attr('href', imgData);
     });
     await Promise.all(task);
+    if (imageList.length > 0) {
+      svgHTML = svg.svg();
+    }
     // 如果开启了富文本编辑，需要把svg中的dom元素转换成图片
     let nodeWithDomToImg = null;
     if (domToImage && this.mindMap.richText) {

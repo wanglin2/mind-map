@@ -42,7 +42,7 @@ export default {
   },
   data() {
     return {
-      themeList: [...themeList, ...customThemeList],
+      themeList: [...themeList],// ...customThemeList
       themeMap,
       theme: ''
     }

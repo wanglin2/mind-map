@@ -227,7 +227,7 @@ export default {
 <style lang="less" scoped>
 .richTextToolbar {
   position: fixed;
-  z-index: 99999;
+  z-index: 2000;
   height: 55px;
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.06);
