@@ -339,6 +339,9 @@ class Node {
       this.active(e)
     })
     this.group.on('mousedown', e => {
+      if (this.isRoot && e.which === 3) {
+        e.stopPropagation()
+      }
       if (!this.isRoot) {
         e.stopPropagation()
       }
