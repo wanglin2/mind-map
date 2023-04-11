@@ -272,7 +272,7 @@ export default {
       this.mindMap = new MindMap({
         el: this.$refs.mindMapContainer,
         data: root,
-        layout: 'timeline',
+        layout: layout,
         theme: theme.template,
         themeConfig: theme.config,
         viewData: view,
