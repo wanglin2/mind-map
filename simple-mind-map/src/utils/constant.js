@@ -154,7 +154,8 @@ export const CONSTANTS = {
     LOGICAL_STRUCTURE: 'logicalStructure',
     MIND_MAP: 'mindMap',
     ORGANIZATION_STRUCTURE: 'organizationStructure',
-    CATALOG_ORGANIZATION: 'catalogOrganization'
+    CATALOG_ORGANIZATION: 'catalogOrganization',
+    TIMELINE: 'timeline'
   },
   DIR: {
     UP: 'up',
@@ -217,11 +218,16 @@ export const layoutList = [
   {
     name: '目录组织图',
     value: CONSTANTS.LAYOUT.CATALOG_ORGANIZATION,
+  },
+  {
+    name: '时间轴',
+    value: CONSTANTS.LAYOUT.TIMELINE,
   }
 ]
 export const layoutValueList = [
   CONSTANTS.LAYOUT.LOGICAL_STRUCTURE,
   CONSTANTS.LAYOUT.MIND_MAP,
   CONSTANTS.LAYOUT.CATALOG_ORGANIZATION,
-  CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE
+  CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE,
+  CONSTANTS.LAYOUT.TIMELINE
 ]
