@@ -266,6 +266,11 @@ class Base {
       generalizationNodeMargin
     }
   }
+
+  // 获取节点实际存在几个子节点
+  getNodeActChildrenLength(node) {
+    return node.nodeData.children && node.nodeData.children.length
+  }
 }
 
 export default Base

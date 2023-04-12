@@ -1,11 +1,13 @@
 import Base from './Base'
 import { walk, asyncRun } from '../utils'
+import { CONSTANTS } from '../utils/constant'
 
 //  时间轴
 class CatalogOrganization extends Base {
   //  构造函数
-  constructor(opt = {}) {
+  constructor(opt = {}, layout) {
     super(opt)
+    this.layout = layout
   }
 
   //  布局
@@ -32,13 +34,28 @@ class CatalogOrganization extends Base {
     walk(
       this.renderer.renderTree,
       null,
-      (cur, parent, isRoot, layerIndex) => {
+      (cur, parent, isRoot, layerIndex, index) => {
         let newNode = this.createNode(cur, parent, isRoot, layerIndex)
         // 根节点定位在画布中心位置
         if (isRoot) {
           this.setNodeCenter(newNode)
         } else {
           // 非根节点
+          // 时间轴2类型需要交替显示
+          if (this.layout === CONSTANTS.LAYOUT.TIMELINE2) {
+            // 三级及以下节点以上级为准
+            if (parent._node.dir) {
+              newNode.dir = parent._node.dir
+            } else {
+              // 节点生长方向
+              newNode.dir =
+                index % 2 === 0
+                  ? CONSTANTS.TIMELINE_DIR.BOTTOM
+                  : CONSTANTS.TIMELINE_DIR.TOP
+            }
+          } else {
+            newNode.dir = ''
+          }
           if (parent._node.isRoot) {
             newNode.top =
               parent._node.top +
@@ -51,7 +68,7 @@ class CatalogOrganization extends Base {
           return true
         }
       },
-      (cur, parent, isRoot, layerIndex) => {},
+      null,
       true,
       0
     )
@@ -62,7 +79,7 @@ class CatalogOrganization extends Base {
     walk(
       this.root,
       null,
-      (node, parent, isRoot, layerIndex) => {
+      (node, parent, isRoot, layerIndex, index) => {
         if (
           node.nodeData.data.expand &&
           node.children &&
@@ -78,11 +95,18 @@ class CatalogOrganization extends Base {
               totalLeft += cur.width + marginX
             })
           } else {
-            let totalTop = node.top + node.height + marginY + node.expandBtnSize
+            let totalTop =
+              node.top +
+              node.height +
+              marginY +
+              (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
             node.children.forEach(cur => {
               cur.left = node.left + node.width * 0.5
               cur.top = totalTop
-              totalTop += cur.height + marginY + node.expandBtnSize
+              totalTop +=
+                cur.height +
+                marginY +
+                (this.getNodeActChildrenLength(cur) > 0 ? cur.expandBtnSize : 0)
             })
           }
         }
@@ -111,14 +135,34 @@ class CatalogOrganization extends Base {
           let marginY = this.getMarginY(layerIndex + 1)
           let totalHeight =
             node.children.reduce((h, item) => {
-              return h + item.height
+              return (
+                h +
+                item.height +
+                (this.getNodeActChildrenLength(item) > 0
+                  ? item.expandBtnSize
+                  : 0)
+              )
             }, 0) +
-            (len + 1) * marginY +
-            len * node.expandBtnSize
+            (len + 1) * marginY
           this.updateBrothersTop(node, totalHeight)
         }
       },
-      null,
+      (node, parent, isRoot, layerIndex) => {
+        if (
+          parent &&
+          parent.isRoot &&
+          node.dir === CONSTANTS.TIMELINE_DIR.TOP
+        ) {
+          // 遍历二级节点的子节点
+          node.children.forEach(item => {
+            let totalHeight = this.getNodeAreaHeight(item)
+            let _top = item.top
+            item.top =
+              node.top - (item.top - node.top) - totalHeight + node.height
+            this.updateChildren(item.children, 'top', item.top - _top)
+          })
+        }
+      },
       true
     )
   }
@@ -141,6 +185,24 @@ class CatalogOrganization extends Base {
     return Math.max(...widthArr)
   }
 
+  //  递归计算节点的宽度
+  getNodeAreaHeight(node) {
+    let totalHeight = 0
+    let loop = node => {
+      totalHeight +=
+        node.height +
+        (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0) +
+        this.getMarginY(node.layerIndex)
+      if (node.children.length) {
+        node.children.forEach(item => {
+          loop(item)
+        })
+      }
+    }
+    loop(node)
+    return totalHeight
+  }
+
   //  调整兄弟节点的left
   updateBrothersLeft(node) {
     let childrenList = node.children
@@ -150,7 +212,9 @@ class CatalogOrganization extends Base {
       if (item.children && item.children.length) {
         this.updateChildren(item.children, 'left', totalAddWidth)
       }
-      let areaWidth = this.getNodeAreaWidth(item)
+      // let areaWidth = this.getNodeAreaWidth(item)
+      let { left, right } = this.getNodeBoundaries(item, 'h')
+      let areaWidth = right - left
       let difference = areaWidth - item.width
       if (difference > 0) {
         totalAddWidth += difference
@@ -209,11 +273,15 @@ class CatalogOrganization extends Base {
     } else {
       // 当前节点为非根节点
       let maxy = -Infinity
+      let miny = Infinity
       let x = node.left + node.width * 0.3
       node.children.forEach((item, index) => {
         let y = item.top + item.height / 2
         if (y > maxy) {
           maxy = y
+        }
+        if (y < miny) {
+          miny = y
         }
         // 水平线
         let path = `M ${x},${y} L ${item.left},${y}`
@@ -224,7 +292,15 @@ class CatalogOrganization extends Base {
       if (len > 0) {
         let line = this.draw.path()
         expandBtnSize = len > 0 ? expandBtnSize : 0
-        line.plot(`M ${x},${top + height + expandBtnSize} L ${x},${maxy}`)
+        if (
+          node.parent &&
+          node.parent.isRoot &&
+          node.dir === CONSTANTS.TIMELINE_DIR.TOP
+        ) {
+          line.plot(`M ${x},${top} L ${x},${miny}`)
+        } else {
+          line.plot(`M ${x},${top + height + expandBtnSize} L ${x},${maxy}`)
+        }
         node.style.line(line)
         node._lines.push(line)
         style && style(line, node)
@@ -237,10 +313,21 @@ class CatalogOrganization extends Base {
     let { width, height, expandBtnSize, isRoot } = node
     if (!isRoot) {
       let { translateX, translateY } = btn.transform()
-      btn.translate(
-        width * 0.3 - expandBtnSize / 2 - translateX,
-        height + expandBtnSize / 2 - translateY
-      )
+      if (
+        node.parent &&
+        node.parent.isRoot &&
+        node.dir === CONSTANTS.TIMELINE_DIR.TOP
+      ) {
+        btn.translate(
+          width * 0.3 - expandBtnSize / 2 - translateX,
+          -expandBtnSize / 2 - translateY
+        )
+      } else {
+        btn.translate(
+          width * 0.3 - expandBtnSize / 2 - translateX,
+          height + expandBtnSize / 2 - translateY
+        )
+      }
     }
   }
 
