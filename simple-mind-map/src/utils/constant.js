@@ -155,7 +155,8 @@ export const CONSTANTS = {
     MIND_MAP: 'mindMap',
     ORGANIZATION_STRUCTURE: 'organizationStructure',
     CATALOG_ORGANIZATION: 'catalogOrganization',
-    TIMELINE: 'timeline'
+    TIMELINE: 'timeline',
+    TIMELINE2: 'timeline2'
   },
   DIR: {
     UP: 'up',
@@ -190,6 +191,10 @@ export const CONSTANTS = {
     RIGHT: 'right',
     BOTTOM: 'bottom',
     CENTER: 'center'
+  },
+  TIMELINE_DIR: {
+    TOP: 'top',
+    BOTTOM: 'bottom'
   }
 }
 
@@ -222,6 +227,10 @@ export const layoutList = [
   {
     name: '时间轴',
     value: CONSTANTS.LAYOUT.TIMELINE,
+  },
+  {
+    name: '时间轴2',
+    value: CONSTANTS.LAYOUT.TIMELINE2,
   }
 ]
 export const layoutValueList = [
@@ -229,5 +238,6 @@ export const layoutValueList = [
   CONSTANTS.LAYOUT.MIND_MAP,
   CONSTANTS.LAYOUT.CATALOG_ORGANIZATION,
   CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE,
-  CONSTANTS.LAYOUT.TIMELINE
+  CONSTANTS.LAYOUT.TIMELINE,
+  CONSTANTS.LAYOUT.TIMELINE2
 ]

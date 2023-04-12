@@ -21,7 +21,9 @@ const layouts = {
   // 组织结构图
   [CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE]: OrganizationStructure,
   // 时间轴
-  [CONSTANTS.LAYOUT.TIMELINE]: Timeline
+  [CONSTANTS.LAYOUT.TIMELINE]: Timeline,
+  // 时间轴2
+  [CONSTANTS.LAYOUT.TIMELINE2]: Timeline
 }
 
 //  渲染
@@ -68,7 +70,7 @@ class Render {
       layouts[this.mindMap.opt.layout]
         ? layouts[this.mindMap.opt.layout]
         : layouts[CONSTANTS.LAYOUT.LOGICAL_STRUCTURE]
-    )(this)
+    )(this, this.mindMap.opt.layout)
   }
 
   //   绑定事件
