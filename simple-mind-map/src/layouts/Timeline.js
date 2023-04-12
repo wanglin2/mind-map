@@ -194,89 +194,40 @@ class CatalogOrganization extends Base {
     let { left, top, width, height, expandBtnSize } = node
     let len = node.children.length
     if (node.isRoot) {
-      // 根节点
+      // 当前节点是根节点
       let prevBother = node
+      // 根节点的子节点是和根节点同一水平线排列
       node.children.forEach((item, index) => {
-        let y2 = item.top + item.height
-        // 节点使用横线风格，需要额外渲染横线
-        let nodeUseLineStylePath = this.mindMap.themeConfig.nodeUseLineStyle
-          ? ` L ${item.left},${y2} L ${item.left + item.width},${y2}`
-          : ''
-        let path =
-          `M ${prevBother.left + prevBother.width},${
-            node.top + node.height / 2
-          } L ${item.left},${node.top + node.height / 2}` + nodeUseLineStylePath
-        // 竖线
+        let x1 = prevBother.left + prevBother.width
+        let x2 = item.left
+        let y = node.top + node.height / 2
+        let path = `M ${x1},${y} L ${x2},${y}`
         lines[index].plot(path)
         style && style(lines[index], item)
         prevBother = item
       })
     } else {
-      // 非根节点
-      let y1 = top + height
+      // 当前节点为非根节点
       let maxy = -Infinity
-      let x2 = node.left + node.width * 0.3
+      let x = node.left + node.width * 0.3
       node.children.forEach((item, index) => {
-        // 为了适配自定义位置，下面做了各种位置的兼容
-        let y2 = item.top + item.height / 2
-        if (y2 > maxy) {
-          maxy = y2
+        let y = item.top + item.height / 2
+        if (y > maxy) {
+          maxy = y
         }
         // 水平线
-        let path = ''
-        let _left = item.left
-        let _isLeft = item.left + item.width < x2
-        let _isXCenter = false
-        if (_isLeft) {
-          // 水平位置在父节点左边
-          _left = item.left + item.width
-        } else if (item.left < x2 && item.left + item.width > x2) {
-          // 水平位置在父节点之间
-          _isXCenter = true
-          y2 = item.top
-          maxy = y2
-        }
-        if (y2 > top && y2 < y1) {
-          // 自定义位置的情况：垂直位置节点在父节点之间
-          path = `M ${
-            _isLeft ? node.left : node.left + node.width
-          },${y2} L ${_left},${y2}`
-        } else if (y2 < y1) {
-          // 自定义位置的情况：垂直位置节点在父节点上面
-          if (_isXCenter) {
-            y2 = item.top + item.height
-            _left = x2
-          }
-          path = `M ${x2},${top} L ${x2},${y2} L ${_left},${y2}`
-        } else {
-          if (_isXCenter) {
-            _left = x2
-          }
-          path = `M ${x2},${y2} L ${_left},${y2}`
-        }
-        // 节点使用横线风格，需要额外渲染横线
-        let nodeUseLineStylePath = this.mindMap.themeConfig.nodeUseLineStyle
-          ? ` L ${_left},${y2 - item.height / 2} L ${_left},${
-              y2 + item.height / 2
-            }`
-          : ''
-        path += nodeUseLineStylePath
+        let path = `M ${x},${y} L ${item.left},${y}`
         lines[index].plot(path)
         style && style(lines[index], item)
       })
       // 竖线
       if (len > 0) {
-        let lin2 = this.draw.path()
+        let line = this.draw.path()
         expandBtnSize = len > 0 ? expandBtnSize : 0
-        node.style.line(lin2)
-        if (maxy < y1 + expandBtnSize) {
-          lin2.hide()
-        } else {
-          lin2.plot(`M ${x2},${y1 + expandBtnSize} L ${x2},${maxy}`)
-          lin2.show()
-        }
-        node._lines.push(lin2)
-        style && style(lin2, node)
+        line.plot(`M ${x},${top + height + expandBtnSize} L ${x},${maxy}`)
+        node.style.line(line)
+        node._lines.push(line)
+        style && style(line, node)
       }
     }
   }
