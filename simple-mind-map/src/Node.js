@@ -557,6 +557,9 @@ class Node {
     if (this.parent) {
       let index = this.parent.children.indexOf(this)
       this.parent._lines[index].hide()
+      this._lines.forEach((item) => {
+        item.hide()
+      })
     }
     // 子节点
     if (this.children && this.children.length) {
@@ -580,6 +583,9 @@ class Node {
     if (this.parent) {
       let index = this.parent.children.indexOf(this)
       this.parent._lines[index] && this.parent._lines[index].show()
+      this._lines.forEach((item) => {
+        item.show()
+      })
     }
     // 子节点
     if (this.children && this.children.length) {
