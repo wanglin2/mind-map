@@ -4,14 +4,13 @@ import { CONSTANTS } from '../utils/constant'
 
 const degToRad = (deg) => {
   return Math.PI / 180 * deg
-} 
+}
 
-//  时间轴
-class CatalogOrganization extends Base {
+//  鱼骨图
+class Fishbone extends Base {
   //  构造函数
-  constructor(opt = {}, layout) {
+  constructor(opt = {}) {
     super(opt)
-    this.layout = layout
   }
 
   //  布局
@@ -45,21 +44,17 @@ class CatalogOrganization extends Base {
           this.setNodeCenter(newNode)
         } else {
           // 非根节点
-          // 时间轴2类型需要交替显示
-          if (this.layout === CONSTANTS.LAYOUT.TIMELINE2) {
-            // 三级及以下节点以上级为准
-            if (parent._node.dir) {
-              newNode.dir = parent._node.dir
-            } else {
-              // 节点生长方向
-              newNode.dir =
-                index % 2 === 0
-                  ? CONSTANTS.TIMELINE_DIR.BOTTOM
-                  : CONSTANTS.TIMELINE_DIR.TOP
-            }
+          // 三级及以下节点以上级为准
+          if (parent._node.dir) {
+            newNode.dir = parent._node.dir
           } else {
-            newNode.dir = ''
+            // 节点生长方向
+            newNode.dir =
+              index % 2 === 0
+                ? CONSTANTS.TIMELINE_DIR.BOTTOM
+                : CONSTANTS.TIMELINE_DIR.TOP
           }
+          // 计算二级节点的top值
           if (parent._node.isRoot) {
             newNode.top =
               parent._node.top +
@@ -89,35 +84,44 @@ class CatalogOrganization extends Base {
           node.children &&
           node.children.length
         ) {
-          let marginX = this.getMarginX(layerIndex + 1)
-          let marginY = this.getMarginY(layerIndex + 1)
           if (isRoot) {
-            let left = node.left + node.width + marginX
+            let left = node.left + node.width
             let topTotalLeft = left
             let bottomTotalLeft = left
             node.children.forEach((cur) => {
               if (cur.dir === 'top') {
                 cur.left = topTotalLeft
-                topTotalLeft += cur.width + marginX
+                topTotalLeft += cur.width
               } else {
                 cur.left = bottomTotalLeft
-                bottomTotalLeft += cur.width + marginX
+                bottomTotalLeft += cur.width
               }
             })
           } else {
-            let totalTop =
-              node.top +
-              node.height +
-              marginY +
-              (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
-            node.children.forEach(cur => {
-              cur.left = node.left + node.width * 0.5
-              cur.top = totalTop
-              totalTop +=
-                cur.height +
-                marginY +
-                (this.getNodeActChildrenLength(cur) > 0 ? cur.expandBtnSize : 0)
-            })
+            if (node.dir === 'top' || node.layerIndex < 2) {
+              let totalTop =
+                node.top +
+                node.height +
+                (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
+              node.children.forEach(cur => {
+                cur.left = node.left + node.width * 0.5
+                cur.top = totalTop
+                totalTop +=
+                  cur.height +
+                  (this.getNodeActChildrenLength(cur) > 0 ? cur.expandBtnSize : 0)
+              })
+            } else {
+              let totalTop =
+                node.top -
+                (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
+              node.children.forEach(cur => {
+                cur.left = node.left + node.width * 0.5
+                cur.top = totalTop - cur.height
+                totalTop -=
+                  cur.height +
+                  (this.getNodeActChildrenLength(cur) > 0 ? cur.expandBtnSize : 0)
+              })
+            }
           }
         }
       },
@@ -137,12 +141,11 @@ class CatalogOrganization extends Base {
         }
         // 调整left
         if (node.isRoot) {
-          // this.updateBrothersLeft(node)
+          this.updateBrothersLeft(node)
         }
         // 调整top
         let len = node.children.length
         if (parent && !parent.isRoot && len > 0) {
-          let marginY = this.getMarginY(layerIndex + 1)
           let totalHeight =
             node.children.reduce((h, item) => {
               return (
@@ -152,12 +155,11 @@ class CatalogOrganization extends Base {
                   ? item.expandBtnSize
                   : 0)
               )
-            }, 0) +
-            (len + 1) * marginY
-          this.updateBrothersTop(node, totalHeight)
+            }, 0)
+          this.updateBrothersTop(node, node.dir !== 'top' && node.layerIndex > 2 ? -totalHeight : totalHeight)
         }
       },
-      (node, parent, isRoot, layerIndex) => {
+      (node, parent) => {
         if (
           parent &&
           parent.isRoot &&
@@ -169,6 +171,19 @@ class CatalogOrganization extends Base {
             let _top = item.top
             item.top =
               node.top - (item.top - node.top) - totalHeight + node.height
+            this.updateChildren(item.children, 'top', item.top - _top)
+          })
+        }
+        if (
+          parent &&
+          parent.isRoot &&
+          node.dir === CONSTANTS.TIMELINE_DIR.BOTTOM
+        ) {
+          // 遍历二级节点的子节点
+          node.children.forEach(item => {
+            let totalHeight = this.getNodeAreaHeight(item)
+            let _top = item.top
+            item.top += totalHeight
             this.updateChildren(item.children, 'top', item.top - _top)
           })
         }
@@ -184,12 +199,10 @@ class CatalogOrganization extends Base {
         }
         // 调整left
         if (node.layerIndex === 1) {
-          let totalX = 0
           let totalHeight = 0
           node.children.forEach((item) => {
-            let h = this.getNodeAreaHeight(item) 
-            let x = (h+ totalHeight) / Math.tan(degToRad(45))
-            totalX += x
+            let h = this.getNodeAreaHeight(item)
+            let x = (h + totalHeight) / Math.tan(degToRad(45))
             totalHeight += h
             item.left += x
             this.updateChildren(item.children, 'left', x)
@@ -225,8 +238,7 @@ class CatalogOrganization extends Base {
     let loop = node => {
       totalHeight +=
         node.height +
-        (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0) +
-        this.getMarginY(node.layerIndex)
+        (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
       if (node.children.length) {
         node.children.forEach(item => {
           loop(item)
@@ -318,9 +330,11 @@ class CatalogOrganization extends Base {
           miny = y
         }
         // 水平线
-        let path = `M ${x},${y} L ${item.left},${y}`
-        lines[index].plot(path)
-        style && style(lines[index], item)
+        if (node.layerIndex > 1) {
+          let path = `M ${x},${y} L ${item.left},${y}`
+          lines[index].plot(path)
+          style && style(lines[index], item)
+        }
       })
       // 竖线
       if (len > 0) {
@@ -331,9 +345,13 @@ class CatalogOrganization extends Base {
           node.parent.isRoot &&
           node.dir === CONSTANTS.TIMELINE_DIR.TOP
         ) {
-          line.plot(`M ${x},${top} L ${x + 500},${top - Math.tan(degToRad(45)) * 500}`)
+          line.plot(`M ${x},${top} L ${x + 1000},${top - Math.tan(degToRad(45)) * 1000}`)
         } else {
-          line.plot(`M ${x},${top + height + expandBtnSize} L ${x},${maxy}`)
+          if (node.parent && node.parent.isRoot) {
+            line.plot(`M ${x},${top + height + expandBtnSize} L ${x + 1000},${top + Math.tan(degToRad(45)) * 1000}`)
+          } else {
+            line.plot(`M ${x},${top + height + expandBtnSize} L ${x},${maxy}`)
+          }
         }
         node.style.line(line)
         node._lines.push(line)
@@ -387,4 +405,4 @@ class CatalogOrganization extends Base {
   }
 }
 
-export default CatalogOrganization
+export default Fishbone

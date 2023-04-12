@@ -4,6 +4,7 @@ import MindMap from './layouts/MindMap'
 import CatalogOrganization from './layouts/CatalogOrganization'
 import OrganizationStructure from './layouts/OrganizationStructure'
 import Timeline from './layouts/Timeline'
+import Fishbone from './layouts/Fishbone'
 import TextEdit from './TextEdit'
 import { copyNodeTree, simpleDeepClone, walk } from './utils'
 import { shapeList } from './Shape'
@@ -23,7 +24,9 @@ const layouts = {
   // 时间轴
   [CONSTANTS.LAYOUT.TIMELINE]: Timeline,
   // 时间轴2
-  [CONSTANTS.LAYOUT.TIMELINE2]: Timeline
+  [CONSTANTS.LAYOUT.TIMELINE2]: Timeline,
+  // 鱼骨图
+  [CONSTANTS.LAYOUT.FISHBONE]: Fishbone,
 }
 
 //  渲染

@@ -3,7 +3,7 @@ import { walk, asyncRun } from '../utils'
 import { CONSTANTS } from '../utils/constant'
 
 //  时间轴
-class CatalogOrganization extends Base {
+class Timeline extends Base {
   //  构造函数
   constructor(opt = {}, layout) {
     super(opt)
@@ -353,4 +353,4 @@ class CatalogOrganization extends Base {
   }
 }
 
-export default CatalogOrganization
+export default Timeline
