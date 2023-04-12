@@ -156,7 +156,8 @@ export const CONSTANTS = {
     ORGANIZATION_STRUCTURE: 'organizationStructure',
     CATALOG_ORGANIZATION: 'catalogOrganization',
     TIMELINE: 'timeline',
-    TIMELINE2: 'timeline2'
+    TIMELINE2: 'timeline2',
+    FISHBONE: 'fishbone'
   },
   DIR: {
     UP: 'up',
@@ -231,6 +232,10 @@ export const layoutList = [
   {
     name: '时间轴2',
     value: CONSTANTS.LAYOUT.TIMELINE2,
+  },
+  {
+    name: '鱼骨图',
+    value: CONSTANTS.LAYOUT.FISHBONE,
   }
 ]
 export const layoutValueList = [
@@ -239,5 +244,6 @@ export const layoutValueList = [
   CONSTANTS.LAYOUT.CATALOG_ORGANIZATION,
   CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE,
   CONSTANTS.LAYOUT.TIMELINE,
-  CONSTANTS.LAYOUT.TIMELINE2
+  CONSTANTS.LAYOUT.TIMELINE2,
+  CONSTANTS.LAYOUT.FISHBONE
 ]
