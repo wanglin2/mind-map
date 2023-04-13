@@ -126,7 +126,7 @@ class CatalogOrganization extends Base {
             node.children.reduce((h, item) => {
               return h + item.height + (this.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
             }, 0) +
-            (len + 1) * marginY
+            len * marginY
           this.updateBrothersTop(node, totalHeight)
         }
       },
