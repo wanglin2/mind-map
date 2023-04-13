@@ -143,7 +143,7 @@ class Timeline extends Base {
                   : 0)
               )
             }, 0) +
-            (len + 1) * marginY
+            len * marginY
           this.updateBrothersTop(node, totalHeight)
         }
       },
