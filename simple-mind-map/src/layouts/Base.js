@@ -157,6 +157,19 @@ class Base {
     })
   }
 
+  //  更新子节点多个属性
+  updateChildrenPro(children, props) {
+    children.forEach(item => {
+      Object.keys(props).forEach((prop) => {
+        item[prop] += props[prop]
+      })
+      if (item.children && item.children.length && !item.hasCustomPosition()) {
+        // 适配自定义位置
+        this.updateChildrenPro(item.children, props)
+      }
+    })
+  }
+
   //  二次贝塞尔曲线
   quadraticCurvePath(x1, y1, x2, y2) {
     let cx = x1 + (x2 - x1) * 0.2
