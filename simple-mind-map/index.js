@@ -18,6 +18,8 @@ const defaultOpt = {
   readonly: false,
   // 布局
   layout: CONSTANTS.LAYOUT.LOGICAL_STRUCTURE,
+  // 如果结构为鱼骨图，那么可以通过该选项控制倾斜角度
+  fishboneDeg: 45,
   // 主题
   theme: 'default', // 内置主题：default（默认主题）
   // 主题配置，会和所选择的主题进行合并

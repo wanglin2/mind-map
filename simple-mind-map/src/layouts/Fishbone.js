@@ -54,11 +54,10 @@ class Fishbone extends Base {
           }
           // 计算二级节点的top值
           if (parent._node.isRoot) {
-            let marginY = this.getMarginY(layerIndex + 1)
             if (this.checkIsTop(newNode)) {
-              newNode.top = parent._node.top - newNode.height - marginY
+              newNode.top = parent._node.top - newNode.height
             } else {
-              newNode.top = parent._node.top + parent._node.height + marginY
+              newNode.top = parent._node.top + parent._node.height
             }
           }
         }
@@ -77,23 +76,21 @@ class Fishbone extends Base {
     walk(
       this.root,
       null,
-      (node, parent, isRoot, layerIndex, index) => {
-        let marginX = this.getMarginX(layerIndex + 1)
-        let marginY = this.getMarginY(layerIndex + 1)
+      (node, parent, isRoot, layerIndex) => {
         if (node.isRoot) {
-          let topTotalLeft = node.left + node.width + node.height + marginX
-          let bottomTotalLeft = node.left + node.width + node.height + marginX
+          let topTotalLeft = node.left + node.width + node.height
+          let bottomTotalLeft = node.left + node.width + node.height
           node.children.forEach(item => {
             if (this.checkIsTop(item)) {
               item.left = topTotalLeft
-              topTotalLeft += item.width + marginX
+              topTotalLeft += item.width
             } else {
               item.left = bottomTotalLeft + 20
-              bottomTotalLeft += item.width + marginX
+              bottomTotalLeft += item.width
             }
           })
         }
-        let params = { layerIndex, node, ctx: this, marginY }
+        let params = { layerIndex, node, ctx: this }
         if (this.checkIsTop(node)) {
           utils.top.computedLeftTopValue(params)
         } else {
@@ -114,17 +111,15 @@ class Fishbone extends Base {
         if (!node.nodeData.data.expand) {
           return
         }
-        let marginY = this.getMarginY(layerIndex + 1)
-        let params = { node, parent, layerIndex, ctx: this, marginY }
+        let params = { node, parent, layerIndex, ctx: this }
         if (this.checkIsTop(node)) {
           utils.top.adjustLeftTopValueBefore(params)
         } else {
           utils.bottom.adjustLeftTopValueBefore(params)
         }
       },
-      (node, parent, isRoot, layerIndex) => {
-        let marginY = this.getMarginY(layerIndex + 1)
-        let params = { parent, node, ctx: this, marginY }
+      (node, parent) => {
+        let params = { parent, node, ctx: this }
         if (this.checkIsTop(node)) {
           utils.top.adjustLeftTopValueAfter(params)
         } else {
@@ -159,8 +154,7 @@ class Fishbone extends Base {
     let loop = node => {
       totalHeight +=
         node.height +
-        (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0) +
-        this.getMarginY(node.layerIndex)
+        (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
       if (node.children.length) {
         node.children.forEach(item => {
           loop(item)
@@ -180,7 +174,6 @@ class Fishbone extends Base {
       if (item.children && item.children.length) {
         this.updateChildren(item.children, 'left', totalAddWidth)
       }
-      // let areaWidth = this.getNodeAreaWidth(item)
       let { left, right } = this.getNodeBoundaries(item, 'h')
       let areaWidth = right - left
       let difference = areaWidth - item.width
@@ -235,20 +228,20 @@ class Fishbone extends Base {
     if (node.layerIndex !== 1 && node.children.length <= 0) {
       return []
     }
-    let { left, top, width, height, expandBtnSize } = node
+    let { top, height, expandBtnSize } = node
     let len = node.children.length
     if (node.isRoot) {
       // 当前节点是根节点
       // 根节点的子节点是和根节点同一水平线排列
       let maxx = -Infinity
-      node.children.forEach((item, index) => {
+      node.children.forEach((item) => {
         if (item.left > maxx) {
           maxx = item.left
         }
         // 水平线段到二级节点的连线
         let nodeLineX = item.left + item.width * 0.3
-        let offset = item.height + node.height / 2 + this.getMarginY(item.layerIndex + 1)
-        let offsetX = offset / Math.tan(degToRad(45))
+        let offset = item.height + node.height / 2
+        let offsetX = offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg))
         let line = this.draw.path()
         if (this.checkIsTop(item)) {
           line.plot(
@@ -269,11 +262,11 @@ class Fishbone extends Base {
       })
       // 从根节点出发的水平线
       let nodeHalfTop = node.top + node.height / 2
-      let offset = node.height / 2 + this.getMarginY(node.layerIndex + 2)
+      let offset = node.height / 2
       let line = this.draw.path()
       line.plot(
         `M ${node.left + node.width},${nodeHalfTop} L ${
-          maxx - offset / Math.tan(degToRad(45))
+          maxx - offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg))
         },${nodeHalfTop}`
       )
       node.style.line(line)
@@ -318,7 +311,8 @@ class Fishbone extends Base {
           height,
           expandBtnSize,
           maxy,
-          miny
+          miny,
+          ctx: this
         }
         if (this.checkIsTop(node)) {
           utils.top.renderLine(params)

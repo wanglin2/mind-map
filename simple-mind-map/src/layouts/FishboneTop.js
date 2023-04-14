@@ -140,7 +140,7 @@ class Fishbone extends Base {
               node.top - (item.top - node.top) - nodeTotalHeight + node.height
             // 调整left
             let offsetLeft =
-              (nodeTotalHeight + totalHeight) / Math.tan(degToRad(45))
+              (nodeTotalHeight + totalHeight) / Math.tan(degToRad(this.mindMap.opt.fishboneDeg))
             item.left += offsetLeft
             totalHeight += nodeTotalHeight
             // 同步更新后代节点
@@ -285,14 +285,14 @@ class Fishbone extends Base {
         ) {
           line.plot(
             `M ${x},${top} L ${x + lineLength},${
-              top - Math.tan(degToRad(45)) * lineLength
+              top - Math.tan(degToRad(this.mindMap.opt.fishboneDeg)) * lineLength
             }`
           )
         } else {
           if (node.parent && node.parent.isRoot) {
             line.plot(
               `M ${x},${top} L ${x + lineLength},${
-                top - Math.tan(degToRad(45)) * lineLength
+                top - Math.tan(degToRad(this.mindMap.opt.fishboneDeg)) * lineLength
               }`
             )
           } else {

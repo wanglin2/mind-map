@@ -31,38 +31,37 @@ export default {
       lineLength,
       height,
       expandBtnSize,
-      maxy
+      maxy,
+      ctx
     }) {
       if (node.parent && node.parent.isRoot) {
         line.plot(
           `M ${x},${top} L ${x + lineLength},${
-            top - Math.tan(degToRad(45)) * lineLength
+            top - Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg)) * lineLength
           }`
         )
       } else {
         line.plot(`M ${x},${top + height + expandBtnSize} L ${x},${maxy}`)
       }
     },
-    computedLeftTopValue({ layerIndex, node, ctx, marginY }) {
+    computedLeftTopValue({ layerIndex, node, ctx }) {
       if (layerIndex >= 1 && node.children) {
         // 遍历三级及以下节点的子节点
         let startLeft = node.left + node.width * 0.5
         let totalTop =
           node.top +
           node.height +
-          marginY +
           (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
         node.children.forEach(item => {
           item.left = startLeft
           item.top += totalTop
           totalTop +=
             item.height +
-            marginY +
             (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
         })
       }
     },
-    adjustLeftTopValueBefore({ node, parent, ctx, marginY }) {
+    adjustLeftTopValueBefore({ node, parent, ctx }) {
       // 调整top
       let len = node.children.length
       // 调整三级及以下节点的top
@@ -73,11 +72,11 @@ export default {
             item.height +
             (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
           )
-        }, 0) + len * marginY
+        }, 0)
         ctx.updateBrothersTop(node, totalHeight)
       }
     },
-    adjustLeftTopValueAfter({ parent, node, ctx, marginY }) {
+    adjustLeftTopValueAfter({ parent, node, ctx }) {
       // 将二级节点的子节点移到上方
       if (parent && parent.isRoot) {
         // 遍历二级节点的子节点
@@ -87,10 +86,10 @@ export default {
           let nodeTotalHeight = ctx.getNodeAreaHeight(item)
           let _top = item.top
           item.top =
-            node.top - (item.top - node.top) - nodeTotalHeight + node.height + marginY
+            node.top - (item.top - node.top) - nodeTotalHeight + node.height
           // 调整left
           let offsetLeft =
-            (nodeTotalHeight + totalHeight) / Math.tan(degToRad(45))
+            (nodeTotalHeight + totalHeight) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg))
           item.left += offsetLeft
           totalHeight += nodeTotalHeight
           // 同步更新后代节点
@@ -124,25 +123,24 @@ export default {
         )
       }
     },
-    renderLine({ node, line, top, x, lineLength, height, miny }) {
+    renderLine({ node, line, top, x, lineLength, height, miny, ctx }) {
       if (node.parent && node.parent.isRoot) {
         line.plot(
           `M ${x},${top + height} L ${x + lineLength},${
-            top + height + Math.tan(degToRad(45)) * lineLength
+            top + height + Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg)) * lineLength
           }`
         )
       } else {
         line.plot(`M ${x},${top} L ${x},${miny}`)
       }
     },
-    computedLeftTopValue({ layerIndex, node, ctx, marginY }) {
+    computedLeftTopValue({ layerIndex, node, ctx }) {
       if (layerIndex === 1 && node.children) {
         // 遍历二级节点的子节点
         let startLeft = node.left + node.width * 0.5
         let totalTop =
           node.top +
           node.height +
-          marginY +
           (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
 
         node.children.forEach(item => {
@@ -152,7 +150,6 @@ export default {
             (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
           totalTop +=
             item.height +
-            marginY +
             (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
         })
       }
@@ -161,19 +158,17 @@ export default {
         let startLeft = node.left + node.width * 0.5
         let totalTop =
           node.top -
-          marginY -
           (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
         node.children.forEach(item => {
           item.left = startLeft
           item.top = totalTop - item.height
           totalTop -=
             item.height +
-            marginY +
             (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
         })
       }
     },
-    adjustLeftTopValueBefore({ node, ctx, layerIndex, marginY }) {
+    adjustLeftTopValueBefore({ node, ctx, layerIndex }) {
       // 调整top
       let len = node.children.length
       if (layerIndex > 2 && len > 0) {
@@ -183,12 +178,11 @@ export default {
             item.height +
             (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
           )
-        }, 0) + 
-        len * marginY
+        }, 0)
         ctx.updateBrothersTop(node, -totalHeight)
       }
     },
-    adjustLeftTopValueAfter({ parent, node, ctx, marginY }) {
+    adjustLeftTopValueAfter({ parent, node, ctx }) {
       // 将二级节点的子节点移到上方
       if (parent && parent.isRoot) {
         // 遍历二级节点的子节点
@@ -205,10 +199,10 @@ export default {
                 (hasChildren ? item.expandBtnSize : 0)
               : 0
           let _top = totalHeight + offset
-          item.top += _top - marginY
+          item.top += _top
           // 调整left
           let offsetLeft =
-            (totalHeight2 + nodeTotalHeight) / Math.tan(degToRad(45))
+            (totalHeight2 + nodeTotalHeight) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg))
           item.left += offsetLeft
           totalHeight += offset
           totalHeight2 += nodeTotalHeight
