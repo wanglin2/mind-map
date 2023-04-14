@@ -168,24 +168,6 @@ class Timeline extends Base {
   }
 
   //  递归计算节点的宽度
-  getNodeAreaWidth(node) {
-    let widthArr = []
-    let loop = (node, width) => {
-      if (node.children.length) {
-        width += node.width / 2
-        node.children.forEach(item => {
-          loop(item, width)
-        })
-      } else {
-        width += node.width
-        widthArr.push(width)
-      }
-    }
-    loop(node, 0)
-    return Math.max(...widthArr)
-  }
-
-  //  递归计算节点的宽度
   getNodeAreaHeight(node) {
     let totalHeight = 0
     let loop = node => {

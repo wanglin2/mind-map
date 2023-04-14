@@ -170,6 +170,24 @@ class Base {
     })
   }
 
+  //  递归计算节点的宽度
+  getNodeAreaWidth(node) {
+    let widthArr = []
+    let loop = (node, width) => {
+      if (node.children.length) {
+        width += node.width / 2
+        node.children.forEach(item => {
+          loop(item, width)
+        })
+      } else {
+        width += node.width
+        widthArr.push(width)
+      }
+    }
+    loop(node, 0)
+    return Math.max(...widthArr)
+  }
+
   //  二次贝塞尔曲线
   quadraticCurvePath(x1, y1, x2, y2) {
     let cx = x1 + (x2 - x1) * 0.2
