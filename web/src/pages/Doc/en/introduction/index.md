@@ -7,8 +7,8 @@
 ## Features
 
 - [x] Plugin architecture. In addition to core functions, other functions are provided as plugins, which can be used as needed to reduce the overall volume
-- [x] Supports four types of structures: logical structure diagrams, mind maps,
-      organizational structure diagrams, and directory organization diagrams
+- [x] Supports six types of structures: logical structure diagrams, mind maps,
+      organizational structure diagrams, directory organization diagrams, timeline, and fishbone diagrams
 - [x] Built-in multiple themes and allows for highly customized styles, and support register new themes
 - [x] Supports shortcuts
 - [x] Node content supports images, icons, hyperlinks, notes, tags, and

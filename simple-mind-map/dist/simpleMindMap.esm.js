@@ -36656,7 +36656,10 @@ var CONSTANTS = {
     LOGICAL_STRUCTURE: "logicalStructure",
     MIND_MAP: "mindMap",
     ORGANIZATION_STRUCTURE: "organizationStructure",
-    CATALOG_ORGANIZATION: "catalogOrganization"
+    CATALOG_ORGANIZATION: "catalogOrganization",
+    TIMELINE: "timeline",
+    TIMELINE2: "timeline2",
+    FISHBONE: "fishbone"
   },
   DIR: {
     UP: "up",
@@ -36691,6 +36694,10 @@ var CONSTANTS = {
     RIGHT: "right",
     BOTTOM: "bottom",
     CENTER: "center"
+  },
+  TIMELINE_DIR: {
+    TOP: "top",
+    BOTTOM: "bottom"
   }
 };
 var initRootNodePositionMap = {
@@ -36716,13 +36723,28 @@ var layoutList = [
   {
     name: "\u76EE\u5F55\u7EC4\u7EC7\u56FE",
     value: CONSTANTS.LAYOUT.CATALOG_ORGANIZATION
+  },
+  {
+    name: "\u65F6\u95F4\u8F74",
+    value: CONSTANTS.LAYOUT.TIMELINE
+  },
+  {
+    name: "\u65F6\u95F4\u8F742",
+    value: CONSTANTS.LAYOUT.TIMELINE2
+  },
+  {
+    name: "\u9C7C\u9AA8\u56FE",
+    value: CONSTANTS.LAYOUT.FISHBONE
   }
 ];
 var layoutValueList = [
   CONSTANTS.LAYOUT.LOGICAL_STRUCTURE,
   CONSTANTS.LAYOUT.MIND_MAP,
   CONSTANTS.LAYOUT.CATALOG_ORGANIZATION,
-  CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE
+  CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE,
+  CONSTANTS.LAYOUT.TIMELINE,
+  CONSTANTS.LAYOUT.TIMELINE2,
+  CONSTANTS.LAYOUT.FISHBONE
 ];
 
 // ../simple-mind-map/src/View.js
@@ -44212,6 +44234,9 @@ var Node2 = class {
       this.active(e2);
     });
     this.group.on("mousedown", (e2) => {
+      if (this.isRoot && e2.which === 3) {
+        e2.stopPropagation();
+      }
       if (!this.isRoot) {
         e2.stopPropagation();
       }
@@ -44219,9 +44244,15 @@ var Node2 = class {
         this.isMultipleChoice = true;
         let isActive = this.nodeData.data.isActive;
         if (!isActive)
-          this.mindMap.emit("before_node_active", this, this.renderer.activeNodeList);
+          this.mindMap.emit(
+            "before_node_active",
+            this,
+            this.renderer.activeNodeList
+          );
         this.mindMap.execCommand("SET_NODE_ACTIVE", this, !isActive);
-        this.mindMap.renderer[isActive ? "removeActiveNode" : "addActiveNode"](this);
+        this.mindMap.renderer[isActive ? "removeActiveNode" : "addActiveNode"](
+          this
+        );
         this.mindMap.emit(
           "node_active",
           isActive ? null : this,
@@ -44291,15 +44322,9 @@ var Node2 = class {
     this.renderGeneralization();
     let t3 = this.group.transform();
     if (!isLayout && enableNodeTransitionMove) {
-      this.group.animate(nodeTransitionMoveDuration).translate(
-        this.left - t3.translateX,
-        this.top - t3.translateY
-      );
+      this.group.animate(nodeTransitionMoveDuration).translate(this.left - t3.translateX, this.top - t3.translateY);
     } else {
-      this.group.translate(
-        this.left - t3.translateX,
-        this.top - t3.translateY
-      );
+      this.group.translate(this.left - t3.translateX, this.top - t3.translateY);
     }
   }
   // 重新渲染节点，即重新创建节点内容、计算节点大小、计算节点内容布局、更新展开收起按钮，概要及位置
@@ -44314,7 +44339,9 @@ var Node2 = class {
     if (!this.shapeNode)
       return;
     const shape = this.getShape();
-    this.style[shape === CONSTANTS.SHAPE.RECTANGLE ? "rect" : "shape"](this.shapeNode);
+    this.style[shape === CONSTANTS.SHAPE.RECTANGLE ? "rect" : "shape"](
+      this.shapeNode
+    );
   }
   //  递归渲染
   render(callback = () => {
@@ -44403,7 +44430,10 @@ var Node2 = class {
     this.hideGeneralization();
     if (this.parent) {
       let index3 = this.parent.children.indexOf(this);
-      this.parent._lines[index3].hide();
+      this.parent._lines[index3] && this.parent._lines[index3].hide();
+      this._lines.forEach((item) => {
+        item.hide();
+      });
     }
     if (this.children && this.children.length) {
       asyncRun(
@@ -44425,6 +44455,9 @@ var Node2 = class {
     if (this.parent) {
       let index3 = this.parent.children.indexOf(this);
       this.parent._lines[index3] && this.parent._lines[index3].show();
+      this._lines.forEach((item) => {
+        item.show();
+      });
     }
     if (this.children && this.children.length) {
       asyncRun(
@@ -44442,6 +44475,9 @@ var Node2 = class {
       return;
     }
     let childrenLen = this.nodeData.children.length;
+    if (this.mindMap.opt.layout === CONSTANTS.LAYOUT.FISHBONE && (this.isRoot || this.layerIndex === 1)) {
+      childrenLen = 0;
+    }
     if (childrenLen > this._lines.length) {
       new Array(childrenLen - this._lines.length).fill(0).forEach(() => {
         this._lines.push(this.draw.path());
@@ -44689,6 +44725,34 @@ var Base2 = class {
       }
     });
   }
+  //  更新子节点多个属性
+  updateChildrenPro(children, props) {
+    children.forEach((item) => {
+      Object.keys(props).forEach((prop) => {
+        item[prop] += props[prop];
+      });
+      if (item.children && item.children.length && !item.hasCustomPosition()) {
+        this.updateChildrenPro(item.children, props);
+      }
+    });
+  }
+  //  递归计算节点的宽度
+  getNodeAreaWidth(node3) {
+    let widthArr = [];
+    let loop = (node4, width2) => {
+      if (node4.children.length) {
+        width2 += node4.width / 2;
+        node4.children.forEach((item) => {
+          loop(item, width2);
+        });
+      } else {
+        width2 += node4.width;
+        widthArr.push(width2);
+      }
+    };
+    loop(node3, 0);
+    return Math.max(...widthArr);
+  }
   //  二次贝塞尔曲线
   quadraticCurvePath(x1, y1, x22, y22) {
     let cx2 = x1 + (x22 - x1) * 0.2;
@@ -44778,6 +44842,10 @@ var Base2 = class {
       generalizationLineMargin,
       generalizationNodeMargin
     };
+  }
+  // 获取节点实际存在几个子节点
+  getNodeActChildrenLength(node3) {
+    return node3.nodeData.children && node3.nodeData.children.length;
   }
 };
 var Base_default = Base2;
@@ -45357,11 +45425,11 @@ var CatalogOrganization = class extends Base_default {
               totalLeft += cur.width + marginX;
             });
           } else {
-            let totalTop = node3.top + node3.height + marginY + node3.expandBtnSize;
+            let totalTop = node3.top + node3.height + marginY + (this.getNodeActChildrenLength(node3) > 0 ? node3.expandBtnSize : 0);
             node3.children.forEach((cur) => {
               cur.left = node3.left + node3.width * 0.5;
               cur.top = totalTop;
-              totalTop += cur.height + marginY + node3.expandBtnSize;
+              totalTop += cur.height + marginY + (this.getNodeActChildrenLength(cur) > 0 ? cur.expandBtnSize : 0);
             });
           }
         }
@@ -45383,38 +45451,28 @@ var CatalogOrganization = class extends Base_default {
           let areaWidth = this.getNodeAreaWidth(node3);
           let difference2 = areaWidth - node3.width;
           if (difference2 > 0) {
-            this.updateBrothersLeft(node3, difference2 / 2);
+            this.updateBrothersLeft(node3, difference2);
           }
         }
         let len = node3.children.length;
         if (parent && !parent.isRoot && len > 0) {
           let marginY = this.getMarginY(layerIndex + 1);
           let totalHeight = node3.children.reduce((h3, item) => {
-            return h3 + item.height;
-          }, 0) + (len + 1) * marginY + len * node3.expandBtnSize;
+            return h3 + item.height + (this.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+          }, 0) + len * marginY;
           this.updateBrothersTop(node3, totalHeight);
         }
       },
-      null,
+      (node3, parent, isRoot) => {
+        if (isRoot) {
+          let { right, left } = this.getNodeBoundaries(node3, "h");
+          let childrenWidth = right - left;
+          let offset = node3.left - left - (childrenWidth - node3.width) / 2;
+          this.updateChildren(node3.children, "left", offset);
+        }
+      },
       true
     );
-  }
-  //  递归计算节点的宽度
-  getNodeAreaWidth(node3) {
-    let widthArr = [];
-    let loop = (node4, width2) => {
-      if (node4.children.length) {
-        width2 += node4.width / 2;
-        node4.children.forEach((item) => {
-          loop(item, width2);
-        });
-      } else {
-        width2 += node4.width;
-        widthArr.push(width2);
-      }
-    };
-    loop(node3, 0);
-    return Math.max(...widthArr);
   }
   //  调整兄弟节点的left
   updateBrothersLeft(node3, addWidth) {
@@ -45423,26 +45481,13 @@ var CatalogOrganization = class extends Base_default {
       let index3 = childrenList.findIndex((item) => {
         return item === node3;
       });
-      if ((index3 === 0 || index3 === childrenList.length - 1) && childrenList.length > 1) {
-        let _offset = index3 === 0 ? -addWidth : addWidth;
-        node3.left += _offset;
-        if (node3.children && node3.children.length && !node3.hasCustomPosition()) {
-          this.updateChildren(node3.children, "left", _offset);
-        }
-      }
       childrenList.forEach((item, _index) => {
-        if (item.hasCustomPosition()) {
+        if (item.hasCustomPosition() || _index <= index3) {
           return;
         }
-        let _offset = 0;
-        if (_index < index3) {
-          _offset = -addWidth;
-        } else if (_index > index3) {
-          _offset = addWidth;
-        }
-        item.left += _offset;
+        item.left += addWidth;
         if (item.children && item.children.length) {
-          this.updateChildren(item.children, "left", _offset);
+          this.updateChildren(item.children, "left", addWidth);
         }
       });
       this.updateBrothersLeft(node3.parent, addWidth);
@@ -45814,6 +45859,763 @@ var OrganizationStructure = class extends Base_default {
 };
 var OrganizationStructure_default = OrganizationStructure;
 
+// ../simple-mind-map/src/layouts/Timeline.js
+var Timeline2 = class extends Base_default {
+  //  构造函数
+  constructor(opt = {}, layout) {
+    super(opt);
+    this.layout = layout;
+  }
+  //  布局
+  doLayout(callback) {
+    let task = [
+      () => {
+        this.computedBaseValue();
+      },
+      () => {
+        this.computedLeftTopValue();
+      },
+      () => {
+        this.adjustLeftTopValue();
+      },
+      () => {
+        callback(this.root);
+      }
+    ];
+    asyncRun(task);
+  }
+  //  遍历数据创建节点、计算根节点的位置，计算根节点的子节点的top值
+  computedBaseValue() {
+    walk(
+      this.renderer.renderTree,
+      null,
+      (cur, parent, isRoot, layerIndex, index3) => {
+        let newNode = this.createNode(cur, parent, isRoot, layerIndex);
+        if (isRoot) {
+          this.setNodeCenter(newNode);
+        } else {
+          if (this.layout === CONSTANTS.LAYOUT.TIMELINE2) {
+            if (parent._node.dir) {
+              newNode.dir = parent._node.dir;
+            } else {
+              newNode.dir = index3 % 2 === 0 ? CONSTANTS.TIMELINE_DIR.BOTTOM : CONSTANTS.TIMELINE_DIR.TOP;
+            }
+          } else {
+            newNode.dir = "";
+          }
+          if (parent._node.isRoot) {
+            newNode.top = parent._node.top + (cur._node.height > parent._node.height ? -(cur._node.height - parent._node.height) / 2 : (parent._node.height - cur._node.height) / 2);
+          }
+        }
+        if (!cur.data.expand) {
+          return true;
+        }
+      },
+      null,
+      true,
+      0
+    );
+  }
+  //  遍历节点树计算节点的left、top
+  computedLeftTopValue() {
+    walk(
+      this.root,
+      null,
+      (node3, parent, isRoot, layerIndex, index3) => {
+        if (node3.nodeData.data.expand && node3.children && node3.children.length) {
+          let marginX = this.getMarginX(layerIndex + 1);
+          let marginY = this.getMarginY(layerIndex + 1);
+          if (isRoot) {
+            let left = node3.left + node3.width;
+            let totalLeft = left + marginX;
+            node3.children.forEach((cur) => {
+              cur.left = totalLeft;
+              totalLeft += cur.width + marginX;
+            });
+          } else {
+            let totalTop = node3.top + node3.height + marginY + (this.getNodeActChildrenLength(node3) > 0 ? node3.expandBtnSize : 0);
+            node3.children.forEach((cur) => {
+              cur.left = node3.left + node3.width * 0.5;
+              cur.top = totalTop;
+              totalTop += cur.height + marginY + (this.getNodeActChildrenLength(cur) > 0 ? cur.expandBtnSize : 0);
+            });
+          }
+        }
+      },
+      null,
+      true
+    );
+  }
+  //  调整节点left、top
+  adjustLeftTopValue() {
+    walk(
+      this.root,
+      null,
+      (node3, parent, isRoot, layerIndex) => {
+        if (!node3.nodeData.data.expand) {
+          return;
+        }
+        if (node3.isRoot) {
+          this.updateBrothersLeft(node3);
+        }
+        let len = node3.children.length;
+        if (parent && !parent.isRoot && len > 0) {
+          let marginY = this.getMarginY(layerIndex + 1);
+          let totalHeight = node3.children.reduce((h3, item) => {
+            return h3 + item.height + (this.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+          }, 0) + len * marginY;
+          this.updateBrothersTop(node3, totalHeight);
+        }
+      },
+      (node3, parent, isRoot, layerIndex) => {
+        if (parent && parent.isRoot && node3.dir === CONSTANTS.TIMELINE_DIR.TOP) {
+          node3.children.forEach((item) => {
+            let totalHeight = this.getNodeAreaHeight(item);
+            let _top = item.top;
+            item.top = node3.top - (item.top - node3.top) - totalHeight + node3.height;
+            this.updateChildren(item.children, "top", item.top - _top);
+          });
+        }
+      },
+      true
+    );
+  }
+  //  递归计算节点的宽度
+  getNodeAreaHeight(node3) {
+    let totalHeight = 0;
+    let loop = (node4) => {
+      totalHeight += node4.height + (this.getNodeActChildrenLength(node4) > 0 ? node4.expandBtnSize : 0) + this.getMarginY(node4.layerIndex);
+      if (node4.children.length) {
+        node4.children.forEach((item) => {
+          loop(item);
+        });
+      }
+    };
+    loop(node3);
+    return totalHeight;
+  }
+  //  调整兄弟节点的left
+  updateBrothersLeft(node3) {
+    let childrenList = node3.children;
+    let totalAddWidth = 0;
+    childrenList.forEach((item) => {
+      item.left += totalAddWidth;
+      if (item.children && item.children.length) {
+        this.updateChildren(item.children, "left", totalAddWidth);
+      }
+      let { left, right } = this.getNodeBoundaries(item, "h");
+      let areaWidth = right - left;
+      let difference2 = areaWidth - item.width;
+      if (difference2 > 0) {
+        totalAddWidth += difference2;
+      }
+    });
+  }
+  //  调整兄弟节点的top
+  updateBrothersTop(node3, addHeight) {
+    if (node3.parent && !node3.parent.isRoot) {
+      let childrenList = node3.parent.children;
+      let index3 = childrenList.findIndex((item) => {
+        return item === node3;
+      });
+      childrenList.forEach((item, _index) => {
+        if (item.hasCustomPosition()) {
+          return;
+        }
+        let _offset = 0;
+        if (_index > index3) {
+          _offset = addHeight;
+        }
+        item.top += _offset;
+        if (item.children && item.children.length) {
+          this.updateChildren(item.children, "top", _offset);
+        }
+      });
+      this.updateBrothersTop(node3.parent, addHeight);
+    }
+  }
+  //  绘制连线，连接该节点到其子节点
+  renderLine(node3, lines, style) {
+    if (node3.children.length <= 0) {
+      return [];
+    }
+    let { left, top, width: width2, height: height2, expandBtnSize } = node3;
+    let len = node3.children.length;
+    if (node3.isRoot) {
+      let prevBother = node3;
+      node3.children.forEach((item, index3) => {
+        let x1 = prevBother.left + prevBother.width;
+        let x22 = item.left;
+        let y4 = node3.top + node3.height / 2;
+        let path = `M ${x1},${y4} L ${x22},${y4}`;
+        lines[index3].plot(path);
+        style && style(lines[index3], item);
+        prevBother = item;
+      });
+    } else {
+      let maxy = -Infinity;
+      let miny = Infinity;
+      let x3 = node3.left + node3.width * 0.3;
+      node3.children.forEach((item, index3) => {
+        let y4 = item.top + item.height / 2;
+        if (y4 > maxy) {
+          maxy = y4;
+        }
+        if (y4 < miny) {
+          miny = y4;
+        }
+        let path = `M ${x3},${y4} L ${item.left},${y4}`;
+        lines[index3].plot(path);
+        style && style(lines[index3], item);
+      });
+      if (len > 0) {
+        let line = this.draw.path();
+        expandBtnSize = len > 0 ? expandBtnSize : 0;
+        if (node3.parent && node3.parent.isRoot && node3.dir === CONSTANTS.TIMELINE_DIR.TOP) {
+          line.plot(`M ${x3},${top} L ${x3},${miny}`);
+        } else {
+          line.plot(`M ${x3},${top + height2 + expandBtnSize} L ${x3},${maxy}`);
+        }
+        node3.style.line(line);
+        node3._lines.push(line);
+        style && style(line, node3);
+      }
+    }
+  }
+  //  渲染按钮
+  renderExpandBtn(node3, btn) {
+    let { width: width2, height: height2, expandBtnSize, isRoot } = node3;
+    if (!isRoot) {
+      let { translateX, translateY } = btn.transform();
+      if (node3.parent && node3.parent.isRoot && node3.dir === CONSTANTS.TIMELINE_DIR.TOP) {
+        btn.translate(
+          width2 * 0.3 - expandBtnSize / 2 - translateX,
+          -expandBtnSize / 2 - translateY
+        );
+      } else {
+        btn.translate(
+          width2 * 0.3 - expandBtnSize / 2 - translateX,
+          height2 + expandBtnSize / 2 - translateY
+        );
+      }
+    }
+  }
+  //  创建概要节点
+  renderGeneralization(node3, gLine, gNode) {
+    let {
+      top,
+      bottom,
+      right,
+      generalizationLineMargin,
+      generalizationNodeMargin
+    } = this.getNodeBoundaries(node3, "h");
+    let x1 = right + generalizationLineMargin;
+    let y1 = top;
+    let x22 = right + generalizationLineMargin;
+    let y22 = bottom;
+    let cx2 = x1 + 20;
+    let cy2 = y1 + (y22 - y1) / 2;
+    let path = `M ${x1},${y1} Q ${cx2},${cy2} ${x22},${y22}`;
+    gLine.plot(path);
+    gNode.left = right + generalizationNodeMargin;
+    gNode.top = top + (bottom - top - gNode.height) / 2;
+  }
+};
+var Timeline_default = Timeline2;
+
+// ../simple-mind-map/src/layouts/fishboneUtils.js
+var fishboneUtils_default = {
+  top: {
+    renderExpandBtn({
+      node: node3,
+      btn,
+      expandBtnSize,
+      translateX,
+      translateY,
+      width: width2,
+      height: height2
+    }) {
+      if (node3.parent && node3.parent.isRoot) {
+        btn.translate(
+          width2 * 0.3 - expandBtnSize / 2 - translateX,
+          -expandBtnSize / 2 - translateY
+        );
+      } else {
+        btn.translate(
+          width2 * 0.3 - expandBtnSize / 2 - translateX,
+          height2 + expandBtnSize / 2 - translateY
+        );
+      }
+    },
+    renderLine({
+      node: node3,
+      line,
+      top,
+      x: x3,
+      lineLength,
+      height: height2,
+      expandBtnSize,
+      maxy,
+      ctx
+    }) {
+      if (node3.parent && node3.parent.isRoot) {
+        line.plot(
+          `M ${x3},${top} L ${x3 + lineLength},${top - Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg)) * lineLength}`
+        );
+      } else {
+        line.plot(`M ${x3},${top + height2 + expandBtnSize} L ${x3},${maxy}`);
+      }
+    },
+    computedLeftTopValue({ layerIndex, node: node3, ctx }) {
+      if (layerIndex >= 1 && node3.children) {
+        let startLeft = node3.left + node3.width * 0.5;
+        let totalTop = node3.top + node3.height + (ctx.getNodeActChildrenLength(node3) > 0 ? node3.expandBtnSize : 0);
+        node3.children.forEach((item) => {
+          item.left = startLeft;
+          item.top += totalTop;
+          totalTop += item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+        });
+      }
+    },
+    adjustLeftTopValueBefore({ node: node3, parent, ctx }) {
+      let len = node3.children.length;
+      if (parent && !parent.isRoot && len > 0) {
+        let totalHeight = node3.children.reduce((h3, item) => {
+          return h3 + item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+        }, 0);
+        ctx.updateBrothersTop(node3, totalHeight);
+      }
+    },
+    adjustLeftTopValueAfter({ parent, node: node3, ctx }) {
+      if (parent && parent.isRoot) {
+        let totalHeight = 0;
+        node3.children.forEach((item) => {
+          let nodeTotalHeight = ctx.getNodeAreaHeight(item);
+          let _top = item.top;
+          item.top = node3.top - (item.top - node3.top) - nodeTotalHeight + node3.height;
+          let offsetLeft = (nodeTotalHeight + totalHeight) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg));
+          item.left += offsetLeft;
+          totalHeight += nodeTotalHeight;
+          ctx.updateChildrenPro(item.children, {
+            top: item.top - _top,
+            left: offsetLeft
+          });
+        });
+      }
+    }
+  },
+  bottom: {
+    renderExpandBtn({
+      node: node3,
+      btn,
+      expandBtnSize,
+      translateX,
+      translateY,
+      width: width2,
+      height: height2
+    }) {
+      if (node3.parent && node3.parent.isRoot) {
+        btn.translate(
+          width2 * 0.3 - expandBtnSize / 2 - translateX,
+          height2 + expandBtnSize / 2 - translateY
+        );
+      } else {
+        btn.translate(
+          width2 * 0.3 - expandBtnSize / 2 - translateX,
+          -expandBtnSize / 2 - translateY
+        );
+      }
+    },
+    renderLine({ node: node3, line, top, x: x3, lineLength, height: height2, miny, ctx }) {
+      if (node3.parent && node3.parent.isRoot) {
+        line.plot(
+          `M ${x3},${top + height2} L ${x3 + lineLength},${top + height2 + Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg)) * lineLength}`
+        );
+      } else {
+        line.plot(`M ${x3},${top} L ${x3},${miny}`);
+      }
+    },
+    computedLeftTopValue({ layerIndex, node: node3, ctx }) {
+      if (layerIndex === 1 && node3.children) {
+        let startLeft = node3.left + node3.width * 0.5;
+        let totalTop = node3.top + node3.height + (ctx.getNodeActChildrenLength(node3) > 0 ? node3.expandBtnSize : 0);
+        node3.children.forEach((item) => {
+          item.left = startLeft;
+          item.top = totalTop + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+          totalTop += item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+        });
+      }
+      if (layerIndex > 1 && node3.children) {
+        let startLeft = node3.left + node3.width * 0.5;
+        let totalTop = node3.top - (ctx.getNodeActChildrenLength(node3) > 0 ? node3.expandBtnSize : 0);
+        node3.children.forEach((item) => {
+          item.left = startLeft;
+          item.top = totalTop - item.height;
+          totalTop -= item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+        });
+      }
+    },
+    adjustLeftTopValueBefore({ node: node3, ctx, layerIndex }) {
+      let len = node3.children.length;
+      if (layerIndex > 2 && len > 0) {
+        let totalHeight = node3.children.reduce((h3, item) => {
+          return h3 + item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+        }, 0);
+        ctx.updateBrothersTop(node3, -totalHeight);
+      }
+    },
+    adjustLeftTopValueAfter({ parent, node: node3, ctx }) {
+      if (parent && parent.isRoot) {
+        let totalHeight = 0;
+        let totalHeight2 = 0;
+        node3.children.forEach((item) => {
+          let hasChildren = ctx.getNodeActChildrenLength(item) > 0;
+          let nodeTotalHeight = ctx.getNodeAreaHeight(item);
+          let offset = hasChildren > 0 ? nodeTotalHeight - item.height - (hasChildren ? item.expandBtnSize : 0) : 0;
+          let _top = totalHeight + offset;
+          item.top += _top;
+          let offsetLeft = (totalHeight2 + nodeTotalHeight) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg));
+          item.left += offsetLeft;
+          totalHeight += offset;
+          totalHeight2 += nodeTotalHeight;
+          ctx.updateChildrenPro(item.children, {
+            top: _top,
+            left: offsetLeft
+          });
+        });
+      }
+    }
+  }
+};
+
+// ../simple-mind-map/src/layouts/Fishbone.js
+var Fishbone = class extends Base_default {
+  //  构造函数
+  constructor(opt = {}) {
+    super(opt);
+  }
+  //  布局
+  doLayout(callback) {
+    let task = [
+      () => {
+        this.computedBaseValue();
+      },
+      () => {
+        this.computedLeftTopValue();
+      },
+      () => {
+        this.adjustLeftTopValue();
+      },
+      () => {
+        callback(this.root);
+      }
+    ];
+    asyncRun(task);
+  }
+  //  遍历数据创建节点、计算根节点的位置，计算根节点的子节点的top值
+  computedBaseValue() {
+    walk(
+      this.renderer.renderTree,
+      null,
+      (node3, parent, isRoot, layerIndex, index3) => {
+        let newNode = this.createNode(node3, parent, isRoot, layerIndex);
+        if (isRoot) {
+          this.setNodeCenter(newNode);
+        } else {
+          if (parent._node.dir) {
+            newNode.dir = parent._node.dir;
+          } else {
+            newNode.dir = index3 % 2 === 0 ? CONSTANTS.TIMELINE_DIR.TOP : CONSTANTS.TIMELINE_DIR.BOTTOM;
+          }
+          if (parent._node.isRoot) {
+            if (this.checkIsTop(newNode)) {
+              newNode.top = parent._node.top - newNode.height;
+            } else {
+              newNode.top = parent._node.top + parent._node.height;
+            }
+          }
+        }
+        if (!node3.data.expand) {
+          return true;
+        }
+      },
+      null,
+      true,
+      0
+    );
+  }
+  //  遍历节点树计算节点的left、top
+  computedLeftTopValue() {
+    walk(
+      this.root,
+      null,
+      (node3, parent, isRoot, layerIndex) => {
+        if (node3.isRoot) {
+          let topTotalLeft = node3.left + node3.width + node3.height;
+          let bottomTotalLeft = node3.left + node3.width + node3.height;
+          node3.children.forEach((item) => {
+            if (this.checkIsTop(item)) {
+              item.left = topTotalLeft;
+              topTotalLeft += item.width;
+            } else {
+              item.left = bottomTotalLeft + 20;
+              bottomTotalLeft += item.width;
+            }
+          });
+        }
+        let params = { layerIndex, node: node3, ctx: this };
+        if (this.checkIsTop(node3)) {
+          fishboneUtils_default.top.computedLeftTopValue(params);
+        } else {
+          fishboneUtils_default.bottom.computedLeftTopValue(params);
+        }
+      },
+      null,
+      true
+    );
+  }
+  //  调整节点left、top
+  adjustLeftTopValue() {
+    walk(
+      this.root,
+      null,
+      (node3, parent, isRoot, layerIndex) => {
+        if (!node3.nodeData.data.expand) {
+          return;
+        }
+        let params = { node: node3, parent, layerIndex, ctx: this };
+        if (this.checkIsTop(node3)) {
+          fishboneUtils_default.top.adjustLeftTopValueBefore(params);
+        } else {
+          fishboneUtils_default.bottom.adjustLeftTopValueBefore(params);
+        }
+      },
+      (node3, parent) => {
+        let params = { parent, node: node3, ctx: this };
+        if (this.checkIsTop(node3)) {
+          fishboneUtils_default.top.adjustLeftTopValueAfter(params);
+        } else {
+          fishboneUtils_default.bottom.adjustLeftTopValueAfter(params);
+        }
+        if (node3.isRoot) {
+          let topTotalLeft = 0;
+          let bottomTotalLeft = 0;
+          node3.children.forEach((item) => {
+            if (this.checkIsTop(item)) {
+              item.left += topTotalLeft;
+              this.updateChildren(item.children, "left", topTotalLeft);
+              let { left, right } = this.getNodeBoundaries(item, "h");
+              topTotalLeft += right - left;
+            } else {
+              item.left += bottomTotalLeft;
+              this.updateChildren(item.children, "left", bottomTotalLeft);
+              let { left, right } = this.getNodeBoundaries(item, "h");
+              bottomTotalLeft += right - left;
+            }
+          });
+        }
+      },
+      true
+    );
+  }
+  //  递归计算节点的宽度
+  getNodeAreaHeight(node3) {
+    let totalHeight = 0;
+    let loop = (node4) => {
+      totalHeight += node4.height + (this.getNodeActChildrenLength(node4) > 0 ? node4.expandBtnSize : 0);
+      if (node4.children.length) {
+        node4.children.forEach((item) => {
+          loop(item);
+        });
+      }
+    };
+    loop(node3);
+    return totalHeight;
+  }
+  //  调整兄弟节点的left
+  updateBrothersLeft(node3) {
+    let childrenList = node3.children;
+    let totalAddWidth = 0;
+    childrenList.forEach((item) => {
+      item.left += totalAddWidth;
+      if (item.children && item.children.length) {
+        this.updateChildren(item.children, "left", totalAddWidth);
+      }
+      let { left, right } = this.getNodeBoundaries(item, "h");
+      let areaWidth = right - left;
+      let difference2 = areaWidth - item.width;
+      if (difference2 > 0) {
+        totalAddWidth += difference2;
+      }
+    });
+  }
+  //  调整兄弟节点的top
+  updateBrothersTop(node3, addHeight) {
+    if (node3.parent && !node3.parent.isRoot) {
+      let childrenList = node3.parent.children;
+      let index3 = childrenList.findIndex((item) => {
+        return item === node3;
+      });
+      childrenList.forEach((item, _index) => {
+        if (item.hasCustomPosition()) {
+          return;
+        }
+        let _offset = 0;
+        if (_index > index3) {
+          _offset = addHeight;
+        }
+        item.top += _offset;
+        if (item.children && item.children.length) {
+          this.updateChildren(item.children, "top", _offset);
+        }
+      });
+      if (this.checkIsTop(node3)) {
+        this.updateBrothersTop(node3.parent, addHeight);
+      } else {
+        this.updateBrothersTop(
+          node3.parent,
+          node3.layerIndex === 3 ? 0 : addHeight
+        );
+      }
+    }
+  }
+  // 检查节点是否是上方节点
+  checkIsTop(node3) {
+    return node3.dir === CONSTANTS.TIMELINE_DIR.TOP;
+  }
+  //  绘制连线，连接该节点到其子节点
+  renderLine(node3, lines, style) {
+    if (node3.layerIndex !== 1 && node3.children.length <= 0) {
+      return [];
+    }
+    let { top, height: height2, expandBtnSize } = node3;
+    let len = node3.children.length;
+    if (node3.isRoot) {
+      let maxx = -Infinity;
+      node3.children.forEach((item) => {
+        if (item.left > maxx) {
+          maxx = item.left;
+        }
+        let nodeLineX = item.left + item.width * 0.3;
+        let offset2 = item.height + node3.height / 2;
+        let offsetX = offset2 / Math.tan(degToRad(this.mindMap.opt.fishboneDeg));
+        let line2 = this.draw.path();
+        if (this.checkIsTop(item)) {
+          line2.plot(
+            `M ${nodeLineX - offsetX},${item.top + offset2} L ${nodeLineX},${item.top}`
+          );
+        } else {
+          line2.plot(
+            `M ${nodeLineX - offsetX},${item.top + item.height - offset2} L ${nodeLineX},${item.top + item.height}`
+          );
+        }
+        node3.style.line(line2);
+        node3._lines.push(line2);
+        style && style(line2, node3);
+      });
+      let nodeHalfTop = node3.top + node3.height / 2;
+      let offset = node3.height / 2;
+      let line = this.draw.path();
+      line.plot(
+        `M ${node3.left + node3.width},${nodeHalfTop} L ${maxx - offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg))},${nodeHalfTop}`
+      );
+      node3.style.line(line);
+      node3._lines.push(line);
+      style && style(line, node3);
+    } else {
+      let maxy = -Infinity;
+      let miny = Infinity;
+      let maxx = -Infinity;
+      let x3 = node3.left + node3.width * 0.3;
+      node3.children.forEach((item, index3) => {
+        if (item.left > maxx) {
+          maxx = item.left;
+        }
+        let y4 = item.top + item.height / 2;
+        if (y4 > maxy) {
+          maxy = y4;
+        }
+        if (y4 < miny) {
+          miny = y4;
+        }
+        if (node3.layerIndex > 1) {
+          let path = `M ${x3},${y4} L ${item.left},${y4}`;
+          lines[index3].plot(path);
+          style && style(lines[index3], item);
+        }
+      });
+      if (len >= 0) {
+        let line = this.draw.path();
+        expandBtnSize = len > 0 ? expandBtnSize : 0;
+        let lineLength = maxx - node3.left - node3.width * 0.3;
+        lineLength = Math.max(lineLength, 0);
+        let params = {
+          node: node3,
+          line,
+          top,
+          x: x3,
+          lineLength,
+          height: height2,
+          expandBtnSize,
+          maxy,
+          miny,
+          ctx: this
+        };
+        if (this.checkIsTop(node3)) {
+          fishboneUtils_default.top.renderLine(params);
+        } else {
+          fishboneUtils_default.bottom.renderLine(params);
+        }
+        node3.style.line(line);
+        node3._lines.push(line);
+        style && style(line, node3);
+      }
+    }
+  }
+  //  渲染按钮
+  renderExpandBtn(node3, btn) {
+    let { width: width2, height: height2, expandBtnSize, isRoot } = node3;
+    if (!isRoot) {
+      let { translateX, translateY } = btn.transform();
+      let params = {
+        node: node3,
+        btn,
+        expandBtnSize,
+        translateX,
+        translateY,
+        width: width2,
+        height: height2
+      };
+      if (this.checkIsTop(node3)) {
+        fishboneUtils_default.top.renderExpandBtn(params);
+      } else {
+        fishboneUtils_default.bottom.renderExpandBtn(params);
+      }
+    }
+  }
+  //  创建概要节点
+  renderGeneralization(node3, gLine, gNode) {
+    let {
+      top,
+      bottom,
+      right,
+      generalizationLineMargin,
+      generalizationNodeMargin
+    } = this.getNodeBoundaries(node3, "h");
+    let x1 = right + generalizationLineMargin;
+    let y1 = top;
+    let x22 = right + generalizationLineMargin;
+    let y22 = bottom;
+    let cx2 = x1 + 20;
+    let cy2 = y1 + (y22 - y1) / 2;
+    let path = `M ${x1},${y1} Q ${cx2},${cy2} ${x22},${y22}`;
+    gLine.plot(path);
+    gNode.left = right + generalizationNodeMargin;
+    gNode.top = top + (bottom - top - gNode.height) / 2;
+  }
+};
+var Fishbone_default = Fishbone;
+
 // ../simple-mind-map/src/TextEdit.js
 var TextEdit = class {
   //  构造函数
@@ -46082,7 +46884,13 @@ var layouts = {
   // 目录组织图
   [CONSTANTS.LAYOUT.CATALOG_ORGANIZATION]: CatalogOrganization_default,
   // 组织结构图
-  [CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE]: OrganizationStructure_default
+  [CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE]: OrganizationStructure_default,
+  // 时间轴
+  [CONSTANTS.LAYOUT.TIMELINE]: Timeline_default,
+  // 时间轴2
+  [CONSTANTS.LAYOUT.TIMELINE2]: Timeline_default,
+  // 鱼骨图
+  [CONSTANTS.LAYOUT.FISHBONE]: Fishbone_default
 };
 var Render = class {
   //  构造函数
@@ -46108,7 +46916,7 @@ var Render = class {
   }
   //  设置布局结构
   setLayout() {
-    this.layout = new (layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts[CONSTANTS.LAYOUT.LOGICAL_STRUCTURE])(this);
+    this.layout = new (layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts[CONSTANTS.LAYOUT.LOGICAL_STRUCTURE])(this, this.mindMap.opt.layout);
   }
   //   绑定事件
   bindEvent() {
@@ -46901,7 +47709,7 @@ var Render = class {
 var Render_default = Render;
 
 // ../simple-mind-map/index.js
-var import_deepmerge23 = __toESM(require_cjs());
+var import_deepmerge30 = __toESM(require_cjs());
 
 // ../simple-mind-map/src/themes/freshGreen.js
 var import_deepmerge2 = __toESM(require_cjs());
@@ -47994,6 +48802,393 @@ var skyGreen_default = (0, import_deepmerge22.default)(default_default, {
   }
 });
 
+// ../simple-mind-map/src/themes/simpleBlack.js
+var import_deepmerge23 = __toESM(require_cjs());
+var simpleBlack_default = (0, import_deepmerge23.default)(default_default, {
+  // 连线的颜色
+  lineColor: "rgb(34, 34, 34)",
+  lineWidth: 4,
+  // 概要连线的粗细
+  generalizationLineWidth: 4,
+  // 概要连线的颜色
+  generalizationLineColor: "rgb(34, 34, 34)",
+  // 根节点样式
+  root: {
+    fillColor: "#fff",
+    color: "rgb(34, 34, 34)",
+    borderColor: "rgb(34, 34, 34)",
+    borderWidth: 3,
+    fontSize: 24,
+    active: {
+      borderColor: "#a13600"
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: "rgb(241, 246, 248)",
+    color: "rgb(34, 34, 34)",
+    borderColor: "rgb(34, 34, 34)",
+    borderWidth: 3,
+    fontSize: 18,
+    active: {
+      borderColor: "#a13600"
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: "rgb(34, 34, 34)",
+    active: {
+      borderColor: "#a13600"
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: "transparent",
+    borderColor: "rgb(34, 34, 34)",
+    borderWidth: 2,
+    color: "rgb(34, 34, 34)",
+    active: {
+      borderColor: "#a13600"
+    }
+  }
+});
+
+// ../simple-mind-map/src/themes/courseGreen.js
+var import_deepmerge24 = __toESM(require_cjs());
+var courseGreen_default = (0, import_deepmerge24.default)(default_default, {
+  // 连线的颜色
+  lineColor: "rgb(113, 195, 169)",
+  lineWidth: 3,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: "rgb(113, 195, 169)",
+  // 根节点样式
+  root: {
+    fillColor: "rgb(16, 160, 121)",
+    color: "#fff",
+    borderColor: "",
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: "rgb(173, 91, 12)",
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: "rgb(240, 252, 249)",
+    color: "rgb(50, 113, 96)",
+    borderColor: "rgb(113, 195, 169)",
+    borderWidth: 2,
+    fontSize: 18,
+    active: {
+      borderColor: "rgb(173, 91, 12)"
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: "rgb(10, 59, 43)",
+    active: {
+      borderColor: "rgb(173, 91, 12)"
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: "rgb(246, 238, 211)",
+    borderColor: "",
+    borderWidth: 0,
+    color: "rgb(173, 91, 12)",
+    active: {
+      borderColor: "rgb(113, 195, 169)"
+    }
+  }
+});
+
+// ../simple-mind-map/src/themes/coffee.js
+var import_deepmerge25 = __toESM(require_cjs());
+var coffee_default = (0, import_deepmerge25.default)(default_default, {
+  // 连线的颜色
+  lineColor: "rgb(173, 123, 91)",
+  lineWidth: 4,
+  // 概要连线的粗细
+  generalizationLineWidth: 4,
+  // 概要连线的颜色
+  generalizationLineColor: "rgb(173, 123, 91)",
+  // 根节点样式
+  root: {
+    fillColor: "rgb(202, 117, 79)",
+    color: "#fff",
+    borderColor: "",
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: "rgb(173, 123, 91)",
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: "rgb(245, 231, 216)",
+    color: "rgb(125, 86, 42)",
+    borderColor: "",
+    borderWidth: 0,
+    fontSize: 18,
+    active: {
+      borderColor: "rgb(173, 123, 91)"
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: "rgb(96, 71, 47)",
+    active: {
+      borderColor: "rgb(173, 123, 91)"
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: "rgb(255, 249, 239)",
+    borderColor: "rgb(173, 123, 91)",
+    borderWidth: 2,
+    color: "rgb(122, 83, 44)",
+    active: {
+      borderColor: "rgb(202, 117, 79)"
+    }
+  }
+});
+
+// ../simple-mind-map/src/themes/redSpirit.js
+var import_deepmerge26 = __toESM(require_cjs());
+var redSpirit_default = (0, import_deepmerge26.default)(default_default, {
+  // 背景颜色
+  backgroundColor: "rgb(255, 238, 228)",
+  // 连线的颜色
+  lineColor: "rgb(230, 138, 131)",
+  lineWidth: 3,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: "rgb(222, 101, 85)",
+  // 根节点样式
+  root: {
+    fillColor: "rgb(207, 44, 44)",
+    color: "rgb(255, 233, 157)",
+    borderColor: "",
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: "rgb(255, 233, 157)",
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: "rgb(255, 255, 255)",
+    color: "rgb(211, 58, 21)",
+    borderColor: "rgb(222, 101, 85)",
+    borderWidth: 2,
+    fontSize: 18,
+    active: {
+      borderColor: "rgb(255, 233, 157)"
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: "rgb(144, 71, 43)",
+    active: {
+      borderColor: "rgb(255, 233, 157)"
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: "rgb(255, 247, 211)",
+    borderColor: "rgb(255, 202, 162)",
+    borderWidth: 2,
+    color: "rgb(187, 101, 69)",
+    active: {
+      borderColor: "rgb(222, 101, 85)"
+    }
+  }
+});
+
+// ../simple-mind-map/src/themes/blackHumour.js
+var import_deepmerge27 = __toESM(require_cjs());
+var blackHumour_default = (0, import_deepmerge27.default)(default_default, {
+  // 背景颜色
+  backgroundColor: "rgb(27, 31, 34)",
+  // 连线的颜色
+  lineColor: "rgb(75, 81, 78)",
+  lineWidth: 3,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: "rgb(255, 119, 34)",
+  // 根节点样式
+  root: {
+    fillColor: "rgb(36, 179, 96)",
+    color: "#fff",
+    borderColor: "",
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: "rgb(254, 199, 13)",
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: "rgb(254, 199, 13)",
+    color: "rgb(0, 0, 0)",
+    borderColor: "",
+    borderWidth: 0,
+    fontSize: 18,
+    active: {
+      borderColor: "rgb(36, 179, 96)",
+      borderWidth: 3
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: "rgb(204, 204, 204)",
+    active: {
+      borderColor: "rgb(254, 199, 13)"
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: "rgb(27, 31, 34)",
+    borderColor: "rgb(255, 119, 34)",
+    borderWidth: 2,
+    color: "rgb(204, 204, 204)",
+    active: {
+      borderColor: "rgb(36, 179, 96)"
+    }
+  }
+});
+
+// ../simple-mind-map/src/themes/lateNightOffice.js
+var import_deepmerge28 = __toESM(require_cjs());
+var lateNightOffice_default = (0, import_deepmerge28.default)(default_default, {
+  // 背景颜色
+  backgroundColor: "rgb(32, 37, 49)",
+  // 连线的颜色
+  lineColor: "rgb(137, 167, 196)",
+  lineWidth: 3,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: "rgb(255, 119, 34)",
+  // 根节点样式
+  root: {
+    fillColor: "rgb(23, 153, 243)",
+    color: "rgb(255, 255, 255)",
+    borderColor: "",
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: "rgb(255, 119, 34)",
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: "rgb(70, 78, 94)",
+    color: "rgb(209, 210, 210)",
+    borderColor: "",
+    borderWidth: 0,
+    fontSize: 18,
+    active: {
+      borderColor: "rgb(255, 119, 34)",
+      borderWidth: 3
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: "rgb(204, 204, 204)",
+    active: {
+      borderColor: "rgb(255, 119, 34)"
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: "rgb(255, 119, 34)",
+    borderColor: "",
+    borderWidth: 2,
+    color: "#fff",
+    active: {
+      borderColor: "rgb(23, 153, 243)"
+    }
+  }
+});
+
+// ../simple-mind-map/src/themes/blackGold.js
+var import_deepmerge29 = __toESM(require_cjs());
+var blackGold_default = (0, import_deepmerge29.default)(default_default, {
+  // 背景颜色
+  backgroundColor: "rgb(18, 20, 20)",
+  // 连线的颜色
+  lineColor: "rgb(205, 186, 156)",
+  lineWidth: 3,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: "rgb(245, 224, 191)",
+  // 根节点样式
+  root: {
+    fillColor: "rgb(255, 208, 124)",
+    color: "rgb(111, 61, 6)",
+    borderColor: "",
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: "#fff",
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: "rgb(66, 57, 46)",
+    color: "rgb(225, 201, 158)",
+    borderColor: "rgb(245, 224, 191)",
+    borderWidth: 2,
+    fontSize: 18,
+    active: {
+      borderColor: "rgb(255, 208, 124)"
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: "rgb(231, 203, 155)",
+    active: {
+      borderColor: "rgb(255, 208, 124)"
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: "rgb(56, 45, 34)",
+    borderColor: "rgb(104, 84, 61)",
+    borderWidth: 2,
+    color: "rgb(242, 216, 176)",
+    active: {
+      borderColor: "rgb(255, 208, 124)"
+    }
+  }
+});
+
 // ../simple-mind-map/src/themes/index.js
 var themes_default = {
   default: default_default,
@@ -48017,7 +49212,14 @@ var themes_default = {
   vitalityOrange: vitalityOrange_default,
   greenLeaf: greenLeaf_default,
   dark2: dark2_default,
-  skyGreen: skyGreen_default
+  skyGreen: skyGreen_default,
+  simpleBlack: simpleBlack_default,
+  courseGreen: courseGreen_default,
+  coffee: coffee_default,
+  redSpirit: redSpirit_default,
+  blackHumour: blackHumour_default,
+  lateNightOffice: lateNightOffice_default,
+  blackGold: blackGold_default
 };
 
 // ../simple-mind-map/src/utils/keyMap.js
@@ -48392,6 +49594,8 @@ var defaultOpt = {
   readonly: false,
   // 布局
   layout: CONSTANTS.LAYOUT.LOGICAL_STRUCTURE,
+  // 如果结构为鱼骨图，那么可以通过该选项控制倾斜角度
+  fishboneDeg: 45,
   // 主题
   theme: "default",
   // 内置主题：default（默认主题）
@@ -48472,7 +49676,7 @@ var defaultOpt = {
 var MindMap2 = class {
   //  构造函数
   constructor(opt = {}) {
-    this.opt = this.handleOpt((0, import_deepmerge23.default)(defaultOpt, opt));
+    this.opt = this.handleOpt((0, import_deepmerge30.default)(defaultOpt, opt));
     this.el = this.opt.el;
     this.elRect = this.el.getBoundingClientRect();
     this.width = this.elRect.width;
@@ -48552,7 +49756,7 @@ var MindMap2 = class {
   }
   //  设置主题
   initTheme() {
-    this.themeConfig = (0, import_deepmerge23.default)(themes_default[this.opt.theme], this.opt.themeConfig);
+    this.themeConfig = (0, import_deepmerge30.default)(themes_default[this.opt.theme], this.opt.themeConfig);
     Style_default.setBackgroundStyle(this.el, this.themeConfig);
   }
   //  设置主题
@@ -48584,7 +49788,7 @@ var MindMap2 = class {
   }
   // 更新配置
   updateConfig(opt = {}) {
-    this.opt = this.handleOpt(import_deepmerge23.default.all([defaultOpt, this.opt, opt]));
+    this.opt = this.handleOpt(import_deepmerge30.default.all([defaultOpt, this.opt, opt]));
   }
   //  获取当前布局结构
   getLayout() {
@@ -48762,7 +49966,7 @@ MindMap2.defineTheme = (name, config = {}) => {
   if (themes_default[name]) {
     return new Error("\u8BE5\u4E3B\u9898\u540D\u79F0\u5DF2\u5B58\u5728");
   }
-  themes_default[name] = (0, import_deepmerge23.default)(default_default, config);
+  themes_default[name] = (0, import_deepmerge30.default)(default_default, config);
 };
 var simple_mind_map_default = MindMap2;
 
@@ -48862,7 +50066,7 @@ MiniMap.instanceName = "miniMap";
 var MiniMap_default = MiniMap;
 
 // ../simple-mind-map/src/Watermark.js
-var import_deepmerge24 = __toESM(require_cjs());
+var import_deepmerge31 = __toESM(require_cjs());
 var Watermark = class {
   constructor(opt = {}) {
     this.mindMap = opt.mindMap;
@@ -48956,7 +50160,7 @@ var Watermark = class {
   }
   // 更新水印
   updateWatermark(config) {
-    this.mindMap.opt.watermarkConfig = (0, import_deepmerge24.default)(this.mindMap.opt.watermarkConfig, config);
+    this.mindMap.opt.watermarkConfig = (0, import_deepmerge31.default)(this.mindMap.opt.watermarkConfig, config);
     this.handleConfig(config);
     this.draw();
   }
