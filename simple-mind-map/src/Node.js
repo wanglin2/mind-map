@@ -560,7 +560,7 @@ class Node {
     this.hideGeneralization()
     if (this.parent) {
       let index = this.parent.children.indexOf(this)
-      this.parent._lines[index].hide()
+      this.parent._lines[index] && this.parent._lines[index].hide()
       this._lines.forEach(item => {
         item.hide()
       })
