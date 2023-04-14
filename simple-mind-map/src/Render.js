@@ -3,6 +3,8 @@ import LogicalStructure from './layouts/LogicalStructure'
 import MindMap from './layouts/MindMap'
 import CatalogOrganization from './layouts/CatalogOrganization'
 import OrganizationStructure from './layouts/OrganizationStructure'
+import Timeline from './layouts/Timeline'
+import Fishbone from './layouts/Fishbone'
 import TextEdit from './TextEdit'
 import { copyNodeTree, simpleDeepClone, walk } from './utils'
 import { shapeList } from './Shape'
@@ -18,7 +20,13 @@ const layouts = {
   // 目录组织图
   [CONSTANTS.LAYOUT.CATALOG_ORGANIZATION]: CatalogOrganization,
   // 组织结构图
-  [CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE]: OrganizationStructure
+  [CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE]: OrganizationStructure,
+  // 时间轴
+  [CONSTANTS.LAYOUT.TIMELINE]: Timeline,
+  // 时间轴2
+  [CONSTANTS.LAYOUT.TIMELINE2]: Timeline,
+  // 鱼骨图
+  [CONSTANTS.LAYOUT.FISHBONE]: Fishbone,
 }
 
 //  渲染
@@ -65,7 +73,7 @@ class Render {
       layouts[this.mindMap.opt.layout]
         ? layouts[this.mindMap.opt.layout]
         : layouts[CONSTANTS.LAYOUT.LOGICAL_STRUCTURE]
-    )(this)
+    )(this, this.mindMap.opt.layout)
   }
 
   //   绑定事件

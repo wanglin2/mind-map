@@ -2,7 +2,11 @@
 
 ## 0.5.4
 
-New: 1.Add new themes.
+New: 1.Add new themes. 2.Added timeline and fishbone structure.
+
+Fix: 1.Fix the conflict issue between node right-click and canvas right-click. 2.Fix the bug that the line segment is not hidden when dragging nodes such as organizational chart and directory organization chart.
+
+optimization: 1.Optimize the layout of organizational chart. 2.Optimize the layout of the directory organization chart.
 
 ## 0.5.3
 

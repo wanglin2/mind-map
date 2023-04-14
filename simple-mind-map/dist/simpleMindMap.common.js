@@ -32774,6 +32774,27 @@ const themeList = [{
 }, {
   name: '浪漫紫',
   value: 'romanticPurple'
+}, {
+  name: '简约黑',
+  value: 'simpleBlack'
+}, {
+  name: '课程绿',
+  value: 'courseGreen'
+}, {
+  name: '咖啡',
+  value: 'coffee'
+}, {
+  name: '红色精神',
+  value: 'redSpirit'
+}, {
+  name: '黑色幽默',
+  value: 'blackHumour'
+}, {
+  name: '深夜办公室',
+  value: 'lateNightOffice'
+}, {
+  name: '黑金',
+  value: 'blackGold'
 }];
 
 // 常量
@@ -32788,7 +32809,10 @@ const CONSTANTS = {
     LOGICAL_STRUCTURE: 'logicalStructure',
     MIND_MAP: 'mindMap',
     ORGANIZATION_STRUCTURE: 'organizationStructure',
-    CATALOG_ORGANIZATION: 'catalogOrganization'
+    CATALOG_ORGANIZATION: 'catalogOrganization',
+    TIMELINE: 'timeline',
+    TIMELINE2: 'timeline2',
+    FISHBONE: 'fishbone'
   },
   DIR: {
     UP: 'up',
@@ -32823,6 +32847,10 @@ const CONSTANTS = {
     RIGHT: 'right',
     BOTTOM: 'bottom',
     CENTER: 'center'
+  },
+  TIMELINE_DIR: {
+    TOP: 'top',
+    BOTTOM: 'bottom'
   }
 };
 const initRootNodePositionMap = {
@@ -32846,8 +32874,17 @@ const layoutList = [{
 }, {
   name: '目录组织图',
   value: CONSTANTS.LAYOUT.CATALOG_ORGANIZATION
+}, {
+  name: '时间轴',
+  value: CONSTANTS.LAYOUT.TIMELINE
+}, {
+  name: '时间轴2',
+  value: CONSTANTS.LAYOUT.TIMELINE2
+}, {
+  name: '鱼骨图',
+  value: CONSTANTS.LAYOUT.FISHBONE
 }];
-const layoutValueList = [CONSTANTS.LAYOUT.LOGICAL_STRUCTURE, CONSTANTS.LAYOUT.MIND_MAP, CONSTANTS.LAYOUT.CATALOG_ORGANIZATION, CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE];
+const layoutValueList = [CONSTANTS.LAYOUT.LOGICAL_STRUCTURE, CONSTANTS.LAYOUT.MIND_MAP, CONSTANTS.LAYOUT.CATALOG_ORGANIZATION, CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE, CONSTANTS.LAYOUT.TIMELINE, CONSTANTS.LAYOUT.TIMELINE2, CONSTANTS.LAYOUT.FISHBONE];
 // CONCATENATED MODULE: ../simple-mind-map/src/View.js
 
 
@@ -38306,7 +38343,7 @@ const defaultSource = function () {
   return (w.performance || w.Date).now();
 };
 
-class Timeline extends EventTarget {
+class svg_esm_Timeline extends EventTarget {
   // Construct a new timeline on the given element
   constructor(timeSource = defaultSource) {
     super();
@@ -38604,7 +38641,7 @@ registerMethods({
   Element: {
     timeline: function (timeline) {
       if (timeline == null) {
-        this._timeline = this._timeline || new Timeline();
+        this._timeline = this._timeline || new svg_esm_Timeline();
         return this._timeline;
       } else {
         this._timeline = timeline;
@@ -38888,7 +38925,7 @@ class Runner extends EventTarget {
 
   schedule(timeline, delay, when) {
     // The user doesn't need to pass a timeline if we already have one
-    if (!(timeline instanceof Timeline)) {
+    if (!(timeline instanceof svg_esm_Timeline)) {
       when = delay;
       delay = timeline;
       timeline = this.timeline();
@@ -42080,6 +42117,9 @@ class Node_Node {
       this.active(e);
     });
     this.group.on('mousedown', e => {
+      if (this.isRoot && e.which === 3) {
+        e.stopPropagation();
+      }
       if (!this.isRoot) {
         e.stopPropagation();
       }
@@ -42280,7 +42320,10 @@ class Node_Node {
     this.hideGeneralization();
     if (this.parent) {
       let index = this.parent.children.indexOf(this);
-      this.parent._lines[index].hide();
+      this.parent._lines[index] && this.parent._lines[index].hide();
+      this._lines.forEach(item => {
+        item.hide();
+      });
     }
     // 子节点
     if (this.children && this.children.length) {
@@ -42302,6 +42345,9 @@ class Node_Node {
     if (this.parent) {
       let index = this.parent.children.indexOf(this);
       this.parent._lines[index] && this.parent._lines[index].show();
+      this._lines.forEach(item => {
+        item.show();
+      });
     }
     // 子节点
     if (this.children && this.children.length) {
@@ -42319,6 +42365,10 @@ class Node_Node {
       return;
     }
     let childrenLen = this.nodeData.children.length;
+    // 切换为鱼骨结构时，清空根节点和二级节点的连线
+    if (this.mindMap.opt.layout === CONSTANTS.LAYOUT.FISHBONE && (this.isRoot || this.layerIndex === 1)) {
+      childrenLen = 0;
+    }
     if (childrenLen > this._lines.length) {
       // 创建缺少的线
       new Array(childrenLen - this._lines.length).fill(0).forEach(() => {
@@ -42458,6 +42508,7 @@ class Node_Node {
 }
 /* harmony default export */ var src_Node = (Node_Node);
 // CONCATENATED MODULE: ../simple-mind-map/src/layouts/Base.js
+
 
 
 
@@ -42622,6 +42673,37 @@ class Base_Base {
     });
   }
 
+  //  更新子节点多个属性
+  updateChildrenPro(children, props) {
+    children.forEach(item => {
+      Object.keys(props).forEach(prop => {
+        item[prop] += props[prop];
+      });
+      if (item.children && item.children.length && !item.hasCustomPosition()) {
+        // 适配自定义位置
+        this.updateChildrenPro(item.children, props);
+      }
+    });
+  }
+
+  //  递归计算节点的宽度
+  getNodeAreaWidth(node) {
+    let widthArr = [];
+    let loop = (node, width) => {
+      if (node.children.length) {
+        width += node.width / 2;
+        node.children.forEach(item => {
+          loop(item, width);
+        });
+      } else {
+        width += node.width;
+        widthArr.push(width);
+      }
+    };
+    loop(node, 0);
+    return Math.max(...widthArr);
+  }
+
   //  二次贝塞尔曲线
   quadraticCurvePath(x1, y1, x2, y2) {
     let cx = x1 + (x2 - x1) * 0.2;
@@ -42726,6 +42808,11 @@ class Base_Base {
       generalizationLineMargin,
       generalizationNodeMargin
     };
+  }
+
+  // 获取节点实际存在几个子节点
+  getNodeActChildrenLength(node) {
+    return node.nodeData.children && node.nodeData.children.length;
   }
 }
 /* harmony default export */ var layouts_Base = (Base_Base);
@@ -43361,11 +43448,11 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
             totalLeft += cur.width + marginX;
           });
         } else {
-          let totalTop = node.top + node.height + marginY + node.expandBtnSize;
+          let totalTop = node.top + node.height + marginY + (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0);
           node.children.forEach(cur => {
             cur.left = node.left + node.width * 0.5;
             cur.top = totalTop;
-            totalTop += cur.height + marginY + node.expandBtnSize;
+            totalTop += cur.height + marginY + (this.getNodeActChildrenLength(cur) > 0 ? cur.expandBtnSize : 0);
           });
         }
       }
@@ -43383,7 +43470,7 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
         let areaWidth = this.getNodeAreaWidth(node);
         let difference = areaWidth - node.width;
         if (difference > 0) {
-          this.updateBrothersLeft(node, difference / 2);
+          this.updateBrothersLeft(node, difference);
         }
       }
       // 调整top
@@ -43391,29 +43478,21 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
       if (parent && !parent.isRoot && len > 0) {
         let marginY = this.getMarginY(layerIndex + 1);
         let totalHeight = node.children.reduce((h, item) => {
-          return h + item.height;
-        }, 0) + (len + 1) * marginY + len * node.expandBtnSize;
+          return h + item.height + (this.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+        }, 0) + len * marginY;
         this.updateBrothersTop(node, totalHeight);
       }
-    }, null, true);
-  }
-
-  //  递归计算节点的宽度
-  getNodeAreaWidth(node) {
-    let widthArr = [];
-    let loop = (node, width) => {
-      if (node.children.length) {
-        width += node.width / 2;
-        node.children.forEach(item => {
-          loop(item, width);
-        });
-      } else {
-        width += node.width;
-        widthArr.push(width);
+    }, (node, parent, isRoot) => {
+      if (isRoot) {
+        let {
+          right,
+          left
+        } = this.getNodeBoundaries(node, 'h');
+        let childrenWidth = right - left;
+        let offset = node.left - left - (childrenWidth - node.width) / 2;
+        this.updateChildren(node.children, 'left', offset);
       }
-    };
-    loop(node, 0);
-    return Math.max(...widthArr);
+    }, true);
   }
 
   //  调整兄弟节点的left
@@ -43423,31 +43502,15 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
       let index = childrenList.findIndex(item => {
         return item === node;
       });
-      // 存在大于一个节点时，第一个或最后一个节点自身也需要移动，否则两边不对称
-      if ((index === 0 || index === childrenList.length - 1) && childrenList.length > 1) {
-        let _offset = index === 0 ? -addWidth : addWidth;
-        node.left += _offset;
-        if (node.children && node.children.length && !node.hasCustomPosition()) {
-          this.updateChildren(node.children, 'left', _offset);
-        }
-      }
       childrenList.forEach((item, _index) => {
-        if (item.hasCustomPosition()) {
+        if (item.hasCustomPosition() || _index <= index) {
           // 适配自定义位置
           return;
         }
-        let _offset = 0;
-        if (_index < index) {
-          // 左边的节点往左移
-          _offset = -addWidth;
-        } else if (_index > index) {
-          // 右边的节点往右移
-          _offset = addWidth;
-        }
-        item.left += _offset;
+        item.left += addWidth;
         // 同步更新子节点的位置
         if (item.children && item.children.length) {
-          this.updateChildren(item.children, 'left', _offset);
+          this.updateChildren(item.children, 'left', addWidth);
         }
       });
       // 更新父节点的位置
@@ -43875,6 +43938,854 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
   }
 }
 /* harmony default export */ var layouts_OrganizationStructure = (OrganizationStructure_OrganizationStructure);
+// CONCATENATED MODULE: ../simple-mind-map/src/layouts/Timeline.js
+
+
+
+
+
+
+//  时间轴
+class Timeline_Timeline extends layouts_Base {
+  //  构造函数
+  constructor(opt = {}, layout) {
+    super(opt);
+    this.layout = layout;
+  }
+
+  //  布局
+  doLayout(callback) {
+    let task = [() => {
+      this.computedBaseValue();
+    }, () => {
+      this.computedLeftTopValue();
+    }, () => {
+      this.adjustLeftTopValue();
+    }, () => {
+      callback(this.root);
+    }];
+    asyncRun(task);
+  }
+
+  //  遍历数据创建节点、计算根节点的位置，计算根节点的子节点的top值
+  computedBaseValue() {
+    utils_walk(this.renderer.renderTree, null, (cur, parent, isRoot, layerIndex, index) => {
+      let newNode = this.createNode(cur, parent, isRoot, layerIndex);
+      // 根节点定位在画布中心位置
+      if (isRoot) {
+        this.setNodeCenter(newNode);
+      } else {
+        // 非根节点
+        // 时间轴2类型需要交替显示
+        if (this.layout === CONSTANTS.LAYOUT.TIMELINE2) {
+          // 三级及以下节点以上级为准
+          if (parent._node.dir) {
+            newNode.dir = parent._node.dir;
+          } else {
+            // 节点生长方向
+            newNode.dir = index % 2 === 0 ? CONSTANTS.TIMELINE_DIR.BOTTOM : CONSTANTS.TIMELINE_DIR.TOP;
+          }
+        } else {
+          newNode.dir = '';
+        }
+        if (parent._node.isRoot) {
+          newNode.top = parent._node.top + (cur._node.height > parent._node.height ? -(cur._node.height - parent._node.height) / 2 : (parent._node.height - cur._node.height) / 2);
+        }
+      }
+      if (!cur.data.expand) {
+        return true;
+      }
+    }, null, true, 0);
+  }
+
+  //  遍历节点树计算节点的left、top
+  computedLeftTopValue() {
+    utils_walk(this.root, null, (node, parent, isRoot, layerIndex, index) => {
+      if (node.nodeData.data.expand && node.children && node.children.length) {
+        let marginX = this.getMarginX(layerIndex + 1);
+        let marginY = this.getMarginY(layerIndex + 1);
+        if (isRoot) {
+          let left = node.left + node.width;
+          let totalLeft = left + marginX;
+          node.children.forEach(cur => {
+            cur.left = totalLeft;
+            totalLeft += cur.width + marginX;
+          });
+        } else {
+          let totalTop = node.top + node.height + marginY + (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0);
+          node.children.forEach(cur => {
+            cur.left = node.left + node.width * 0.5;
+            cur.top = totalTop;
+            totalTop += cur.height + marginY + (this.getNodeActChildrenLength(cur) > 0 ? cur.expandBtnSize : 0);
+          });
+        }
+      }
+    }, null, true);
+  }
+
+  //  调整节点left、top
+  adjustLeftTopValue() {
+    utils_walk(this.root, null, (node, parent, isRoot, layerIndex) => {
+      if (!node.nodeData.data.expand) {
+        return;
+      }
+      // 调整left
+      if (node.isRoot) {
+        this.updateBrothersLeft(node);
+      }
+      // 调整top
+      let len = node.children.length;
+      if (parent && !parent.isRoot && len > 0) {
+        let marginY = this.getMarginY(layerIndex + 1);
+        let totalHeight = node.children.reduce((h, item) => {
+          return h + item.height + (this.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+        }, 0) + len * marginY;
+        this.updateBrothersTop(node, totalHeight);
+      }
+    }, (node, parent, isRoot, layerIndex) => {
+      if (parent && parent.isRoot && node.dir === CONSTANTS.TIMELINE_DIR.TOP) {
+        // 遍历二级节点的子节点
+        node.children.forEach(item => {
+          let totalHeight = this.getNodeAreaHeight(item);
+          let _top = item.top;
+          item.top = node.top - (item.top - node.top) - totalHeight + node.height;
+          this.updateChildren(item.children, 'top', item.top - _top);
+        });
+      }
+    }, true);
+  }
+
+  //  递归计算节点的宽度
+  getNodeAreaHeight(node) {
+    let totalHeight = 0;
+    let loop = node => {
+      totalHeight += node.height + (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0) + this.getMarginY(node.layerIndex);
+      if (node.children.length) {
+        node.children.forEach(item => {
+          loop(item);
+        });
+      }
+    };
+    loop(node);
+    return totalHeight;
+  }
+
+  //  调整兄弟节点的left
+  updateBrothersLeft(node) {
+    let childrenList = node.children;
+    let totalAddWidth = 0;
+    childrenList.forEach(item => {
+      item.left += totalAddWidth;
+      if (item.children && item.children.length) {
+        this.updateChildren(item.children, 'left', totalAddWidth);
+      }
+      // let areaWidth = this.getNodeAreaWidth(item)
+      let {
+        left,
+        right
+      } = this.getNodeBoundaries(item, 'h');
+      let areaWidth = right - left;
+      let difference = areaWidth - item.width;
+      if (difference > 0) {
+        totalAddWidth += difference;
+      }
+    });
+  }
+
+  //  调整兄弟节点的top
+  updateBrothersTop(node, addHeight) {
+    if (node.parent && !node.parent.isRoot) {
+      let childrenList = node.parent.children;
+      let index = childrenList.findIndex(item => {
+        return item === node;
+      });
+      childrenList.forEach((item, _index) => {
+        if (item.hasCustomPosition()) {
+          // 适配自定义位置
+          return;
+        }
+        let _offset = 0;
+        // 下面的节点往下移
+        if (_index > index) {
+          _offset = addHeight;
+        }
+        item.top += _offset;
+        // 同步更新子节点的位置
+        if (item.children && item.children.length) {
+          this.updateChildren(item.children, 'top', _offset);
+        }
+      });
+      // 更新父节点的位置
+      this.updateBrothersTop(node.parent, addHeight);
+    }
+  }
+
+  //  绘制连线，连接该节点到其子节点
+  renderLine(node, lines, style) {
+    if (node.children.length <= 0) {
+      return [];
+    }
+    let {
+      left,
+      top,
+      width,
+      height,
+      expandBtnSize
+    } = node;
+    let len = node.children.length;
+    if (node.isRoot) {
+      // 当前节点是根节点
+      let prevBother = node;
+      // 根节点的子节点是和根节点同一水平线排列
+      node.children.forEach((item, index) => {
+        let x1 = prevBother.left + prevBother.width;
+        let x2 = item.left;
+        let y = node.top + node.height / 2;
+        let path = `M ${x1},${y} L ${x2},${y}`;
+        lines[index].plot(path);
+        style && style(lines[index], item);
+        prevBother = item;
+      });
+    } else {
+      // 当前节点为非根节点
+      let maxy = -Infinity;
+      let miny = Infinity;
+      let x = node.left + node.width * 0.3;
+      node.children.forEach((item, index) => {
+        let y = item.top + item.height / 2;
+        if (y > maxy) {
+          maxy = y;
+        }
+        if (y < miny) {
+          miny = y;
+        }
+        // 水平线
+        let path = `M ${x},${y} L ${item.left},${y}`;
+        lines[index].plot(path);
+        style && style(lines[index], item);
+      });
+      // 竖线
+      if (len > 0) {
+        let line = this.draw.path();
+        expandBtnSize = len > 0 ? expandBtnSize : 0;
+        if (node.parent && node.parent.isRoot && node.dir === CONSTANTS.TIMELINE_DIR.TOP) {
+          line.plot(`M ${x},${top} L ${x},${miny}`);
+        } else {
+          line.plot(`M ${x},${top + height + expandBtnSize} L ${x},${maxy}`);
+        }
+        node.style.line(line);
+        node._lines.push(line);
+        style && style(line, node);
+      }
+    }
+  }
+
+  //  渲染按钮
+  renderExpandBtn(node, btn) {
+    let {
+      width,
+      height,
+      expandBtnSize,
+      isRoot
+    } = node;
+    if (!isRoot) {
+      let {
+        translateX,
+        translateY
+      } = btn.transform();
+      if (node.parent && node.parent.isRoot && node.dir === CONSTANTS.TIMELINE_DIR.TOP) {
+        btn.translate(width * 0.3 - expandBtnSize / 2 - translateX, -expandBtnSize / 2 - translateY);
+      } else {
+        btn.translate(width * 0.3 - expandBtnSize / 2 - translateX, height + expandBtnSize / 2 - translateY);
+      }
+    }
+  }
+
+  //  创建概要节点
+  renderGeneralization(node, gLine, gNode) {
+    let {
+      top,
+      bottom,
+      right,
+      generalizationLineMargin,
+      generalizationNodeMargin
+    } = this.getNodeBoundaries(node, 'h');
+    let x1 = right + generalizationLineMargin;
+    let y1 = top;
+    let x2 = right + generalizationLineMargin;
+    let y2 = bottom;
+    let cx = x1 + 20;
+    let cy = y1 + (y2 - y1) / 2;
+    let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`;
+    gLine.plot(path);
+    gNode.left = right + generalizationNodeMargin;
+    gNode.top = top + (bottom - top - gNode.height) / 2;
+  }
+}
+/* harmony default export */ var layouts_Timeline = (Timeline_Timeline);
+// CONCATENATED MODULE: ../simple-mind-map/src/layouts/fishboneUtils.js
+
+
+/* harmony default export */ var fishboneUtils = ({
+  top: {
+    renderExpandBtn({
+      node,
+      btn,
+      expandBtnSize,
+      translateX,
+      translateY,
+      width,
+      height
+    }) {
+      if (node.parent && node.parent.isRoot) {
+        btn.translate(width * 0.3 - expandBtnSize / 2 - translateX, -expandBtnSize / 2 - translateY);
+      } else {
+        btn.translate(width * 0.3 - expandBtnSize / 2 - translateX, height + expandBtnSize / 2 - translateY);
+      }
+    },
+    renderLine({
+      node,
+      line,
+      top,
+      x,
+      lineLength,
+      height,
+      expandBtnSize,
+      maxy,
+      ctx
+    }) {
+      if (node.parent && node.parent.isRoot) {
+        line.plot(`M ${x},${top} L ${x + lineLength},${top - Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg)) * lineLength}`);
+      } else {
+        line.plot(`M ${x},${top + height + expandBtnSize} L ${x},${maxy}`);
+      }
+    },
+    computedLeftTopValue({
+      layerIndex,
+      node,
+      ctx
+    }) {
+      if (layerIndex >= 1 && node.children) {
+        // 遍历三级及以下节点的子节点
+        let startLeft = node.left + node.width * 0.5;
+        let totalTop = node.top + node.height + (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0);
+        node.children.forEach(item => {
+          item.left = startLeft;
+          item.top += totalTop;
+          totalTop += item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+        });
+      }
+    },
+    adjustLeftTopValueBefore({
+      node,
+      parent,
+      ctx
+    }) {
+      // 调整top
+      let len = node.children.length;
+      // 调整三级及以下节点的top
+      if (parent && !parent.isRoot && len > 0) {
+        let totalHeight = node.children.reduce((h, item) => {
+          return h + item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+        }, 0);
+        ctx.updateBrothersTop(node, totalHeight);
+      }
+    },
+    adjustLeftTopValueAfter({
+      parent,
+      node,
+      ctx
+    }) {
+      // 将二级节点的子节点移到上方
+      if (parent && parent.isRoot) {
+        // 遍历二级节点的子节点
+        let totalHeight = 0;
+        node.children.forEach(item => {
+          // 调整top
+          let nodeTotalHeight = ctx.getNodeAreaHeight(item);
+          let _top = item.top;
+          item.top = node.top - (item.top - node.top) - nodeTotalHeight + node.height;
+          // 调整left
+          let offsetLeft = (nodeTotalHeight + totalHeight) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg));
+          item.left += offsetLeft;
+          totalHeight += nodeTotalHeight;
+          // 同步更新后代节点
+          ctx.updateChildrenPro(item.children, {
+            top: item.top - _top,
+            left: offsetLeft
+          });
+        });
+      }
+    }
+  },
+  bottom: {
+    renderExpandBtn({
+      node,
+      btn,
+      expandBtnSize,
+      translateX,
+      translateY,
+      width,
+      height
+    }) {
+      if (node.parent && node.parent.isRoot) {
+        btn.translate(width * 0.3 - expandBtnSize / 2 - translateX, height + expandBtnSize / 2 - translateY);
+      } else {
+        btn.translate(width * 0.3 - expandBtnSize / 2 - translateX, -expandBtnSize / 2 - translateY);
+      }
+    },
+    renderLine({
+      node,
+      line,
+      top,
+      x,
+      lineLength,
+      height,
+      miny,
+      ctx
+    }) {
+      if (node.parent && node.parent.isRoot) {
+        line.plot(`M ${x},${top + height} L ${x + lineLength},${top + height + Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg)) * lineLength}`);
+      } else {
+        line.plot(`M ${x},${top} L ${x},${miny}`);
+      }
+    },
+    computedLeftTopValue({
+      layerIndex,
+      node,
+      ctx
+    }) {
+      if (layerIndex === 1 && node.children) {
+        // 遍历二级节点的子节点
+        let startLeft = node.left + node.width * 0.5;
+        let totalTop = node.top + node.height + (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0);
+        node.children.forEach(item => {
+          item.left = startLeft;
+          item.top = totalTop + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+          totalTop += item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+        });
+      }
+      if (layerIndex > 1 && node.children) {
+        // 遍历三级及以下节点的子节点
+        let startLeft = node.left + node.width * 0.5;
+        let totalTop = node.top - (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0);
+        node.children.forEach(item => {
+          item.left = startLeft;
+          item.top = totalTop - item.height;
+          totalTop -= item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+        });
+      }
+    },
+    adjustLeftTopValueBefore({
+      node,
+      ctx,
+      layerIndex
+    }) {
+      // 调整top
+      let len = node.children.length;
+      if (layerIndex > 2 && len > 0) {
+        let totalHeight = node.children.reduce((h, item) => {
+          return h + item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+        }, 0);
+        ctx.updateBrothersTop(node, -totalHeight);
+      }
+    },
+    adjustLeftTopValueAfter({
+      parent,
+      node,
+      ctx
+    }) {
+      // 将二级节点的子节点移到上方
+      if (parent && parent.isRoot) {
+        // 遍历二级节点的子节点
+        let totalHeight = 0;
+        let totalHeight2 = 0;
+        node.children.forEach(item => {
+          // 调整top
+          let hasChildren = ctx.getNodeActChildrenLength(item) > 0;
+          let nodeTotalHeight = ctx.getNodeAreaHeight(item);
+          let offset = hasChildren > 0 ? nodeTotalHeight - item.height - (hasChildren ? item.expandBtnSize : 0) : 0;
+          let _top = totalHeight + offset;
+          item.top += _top;
+          // 调整left
+          let offsetLeft = (totalHeight2 + nodeTotalHeight) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg));
+          item.left += offsetLeft;
+          totalHeight += offset;
+          totalHeight2 += nodeTotalHeight;
+          // 同步更新后代节点
+          ctx.updateChildrenPro(item.children, {
+            top: _top,
+            left: offsetLeft
+          });
+        });
+      }
+    }
+  }
+});
+// CONCATENATED MODULE: ../simple-mind-map/src/layouts/Fishbone.js
+
+
+
+
+
+
+//  鱼骨图
+class Fishbone_Fishbone extends layouts_Base {
+  //  构造函数
+  constructor(opt = {}) {
+    super(opt);
+  }
+
+  //  布局
+  doLayout(callback) {
+    let task = [() => {
+      this.computedBaseValue();
+    }, () => {
+      this.computedLeftTopValue();
+    }, () => {
+      this.adjustLeftTopValue();
+    }, () => {
+      callback(this.root);
+    }];
+    asyncRun(task);
+  }
+
+  //  遍历数据创建节点、计算根节点的位置，计算根节点的子节点的top值
+  computedBaseValue() {
+    utils_walk(this.renderer.renderTree, null, (node, parent, isRoot, layerIndex, index) => {
+      // 创建节点
+      let newNode = this.createNode(node, parent, isRoot, layerIndex);
+      // 根节点定位在画布中心位置
+      if (isRoot) {
+        this.setNodeCenter(newNode);
+      } else {
+        // 非根节点
+        // 三级及以下节点以上级方向为准
+        if (parent._node.dir) {
+          newNode.dir = parent._node.dir;
+        } else {
+          // 节点生长方向
+          newNode.dir = index % 2 === 0 ? CONSTANTS.TIMELINE_DIR.TOP : CONSTANTS.TIMELINE_DIR.BOTTOM;
+        }
+        // 计算二级节点的top值
+        if (parent._node.isRoot) {
+          if (this.checkIsTop(newNode)) {
+            newNode.top = parent._node.top - newNode.height;
+          } else {
+            newNode.top = parent._node.top + parent._node.height;
+          }
+        }
+      }
+      if (!node.data.expand) {
+        return true;
+      }
+    }, null, true, 0);
+  }
+
+  //  遍历节点树计算节点的left、top
+  computedLeftTopValue() {
+    utils_walk(this.root, null, (node, parent, isRoot, layerIndex) => {
+      if (node.isRoot) {
+        let topTotalLeft = node.left + node.width + node.height;
+        let bottomTotalLeft = node.left + node.width + node.height;
+        node.children.forEach(item => {
+          if (this.checkIsTop(item)) {
+            item.left = topTotalLeft;
+            topTotalLeft += item.width;
+          } else {
+            item.left = bottomTotalLeft + 20;
+            bottomTotalLeft += item.width;
+          }
+        });
+      }
+      let params = {
+        layerIndex,
+        node,
+        ctx: this
+      };
+      if (this.checkIsTop(node)) {
+        fishboneUtils.top.computedLeftTopValue(params);
+      } else {
+        fishboneUtils.bottom.computedLeftTopValue(params);
+      }
+    }, null, true);
+  }
+
+  //  调整节点left、top
+  adjustLeftTopValue() {
+    utils_walk(this.root, null, (node, parent, isRoot, layerIndex) => {
+      if (!node.nodeData.data.expand) {
+        return;
+      }
+      let params = {
+        node,
+        parent,
+        layerIndex,
+        ctx: this
+      };
+      if (this.checkIsTop(node)) {
+        fishboneUtils.top.adjustLeftTopValueBefore(params);
+      } else {
+        fishboneUtils.bottom.adjustLeftTopValueBefore(params);
+      }
+    }, (node, parent) => {
+      let params = {
+        parent,
+        node,
+        ctx: this
+      };
+      if (this.checkIsTop(node)) {
+        fishboneUtils.top.adjustLeftTopValueAfter(params);
+      } else {
+        fishboneUtils.bottom.adjustLeftTopValueAfter(params);
+      }
+      // 调整二级节点的子节点的left值
+      if (node.isRoot) {
+        let topTotalLeft = 0;
+        let bottomTotalLeft = 0;
+        node.children.forEach(item => {
+          if (this.checkIsTop(item)) {
+            item.left += topTotalLeft;
+            this.updateChildren(item.children, 'left', topTotalLeft);
+            let {
+              left,
+              right
+            } = this.getNodeBoundaries(item, 'h');
+            topTotalLeft += right - left;
+          } else {
+            item.left += bottomTotalLeft;
+            this.updateChildren(item.children, 'left', bottomTotalLeft);
+            let {
+              left,
+              right
+            } = this.getNodeBoundaries(item, 'h');
+            bottomTotalLeft += right - left;
+          }
+        });
+      }
+    }, true);
+  }
+
+  //  递归计算节点的宽度
+  getNodeAreaHeight(node) {
+    let totalHeight = 0;
+    let loop = node => {
+      totalHeight += node.height + (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0);
+      if (node.children.length) {
+        node.children.forEach(item => {
+          loop(item);
+        });
+      }
+    };
+    loop(node);
+    return totalHeight;
+  }
+
+  //  调整兄弟节点的left
+  updateBrothersLeft(node) {
+    let childrenList = node.children;
+    let totalAddWidth = 0;
+    childrenList.forEach(item => {
+      item.left += totalAddWidth;
+      if (item.children && item.children.length) {
+        this.updateChildren(item.children, 'left', totalAddWidth);
+      }
+      let {
+        left,
+        right
+      } = this.getNodeBoundaries(item, 'h');
+      let areaWidth = right - left;
+      let difference = areaWidth - item.width;
+      if (difference > 0) {
+        totalAddWidth += difference;
+      }
+    });
+  }
+
+  //  调整兄弟节点的top
+  updateBrothersTop(node, addHeight) {
+    if (node.parent && !node.parent.isRoot) {
+      let childrenList = node.parent.children;
+      let index = childrenList.findIndex(item => {
+        return item === node;
+      });
+      childrenList.forEach((item, _index) => {
+        if (item.hasCustomPosition()) {
+          // 适配自定义位置
+          return;
+        }
+        let _offset = 0;
+        // 下面的节点往下移
+        if (_index > index) {
+          _offset = addHeight;
+        }
+        item.top += _offset;
+        // 同步更新子节点的位置
+        if (item.children && item.children.length) {
+          this.updateChildren(item.children, 'top', _offset);
+        }
+      });
+      // 更新父节点的位置
+      if (this.checkIsTop(node)) {
+        this.updateBrothersTop(node.parent, addHeight);
+      } else {
+        this.updateBrothersTop(node.parent, node.layerIndex === 3 ? 0 : addHeight);
+      }
+    }
+  }
+
+  // 检查节点是否是上方节点
+  checkIsTop(node) {
+    return node.dir === CONSTANTS.TIMELINE_DIR.TOP;
+  }
+
+  //  绘制连线，连接该节点到其子节点
+  renderLine(node, lines, style) {
+    if (node.layerIndex !== 1 && node.children.length <= 0) {
+      return [];
+    }
+    let {
+      top,
+      height,
+      expandBtnSize
+    } = node;
+    let len = node.children.length;
+    if (node.isRoot) {
+      // 当前节点是根节点
+      // 根节点的子节点是和根节点同一水平线排列
+      let maxx = -Infinity;
+      node.children.forEach(item => {
+        if (item.left > maxx) {
+          maxx = item.left;
+        }
+        // 水平线段到二级节点的连线
+        let nodeLineX = item.left + item.width * 0.3;
+        let offset = item.height + node.height / 2;
+        let offsetX = offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg));
+        let line = this.draw.path();
+        if (this.checkIsTop(item)) {
+          line.plot(`M ${nodeLineX - offsetX},${item.top + offset} L ${nodeLineX},${item.top}`);
+        } else {
+          line.plot(`M ${nodeLineX - offsetX},${item.top + item.height - offset} L ${nodeLineX},${item.top + item.height}`);
+        }
+        node.style.line(line);
+        node._lines.push(line);
+        style && style(line, node);
+      });
+      // 从根节点出发的水平线
+      let nodeHalfTop = node.top + node.height / 2;
+      let offset = node.height / 2;
+      let line = this.draw.path();
+      line.plot(`M ${node.left + node.width},${nodeHalfTop} L ${maxx - offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg))},${nodeHalfTop}`);
+      node.style.line(line);
+      node._lines.push(line);
+      style && style(line, node);
+    } else {
+      // 当前节点为非根节点
+      let maxy = -Infinity;
+      let miny = Infinity;
+      let maxx = -Infinity;
+      let x = node.left + node.width * 0.3;
+      node.children.forEach((item, index) => {
+        if (item.left > maxx) {
+          maxx = item.left;
+        }
+        let y = item.top + item.height / 2;
+        if (y > maxy) {
+          maxy = y;
+        }
+        if (y < miny) {
+          miny = y;
+        }
+        // 水平线
+        if (node.layerIndex > 1) {
+          let path = `M ${x},${y} L ${item.left},${y}`;
+          lines[index].plot(path);
+          style && style(lines[index], item);
+        }
+      });
+      // 斜线
+      if (len >= 0) {
+        let line = this.draw.path();
+        expandBtnSize = len > 0 ? expandBtnSize : 0;
+        let lineLength = maxx - node.left - node.width * 0.3;
+        lineLength = Math.max(lineLength, 0);
+        let params = {
+          node,
+          line,
+          top,
+          x,
+          lineLength,
+          height,
+          expandBtnSize,
+          maxy,
+          miny,
+          ctx: this
+        };
+        if (this.checkIsTop(node)) {
+          fishboneUtils.top.renderLine(params);
+        } else {
+          fishboneUtils.bottom.renderLine(params);
+        }
+        node.style.line(line);
+        node._lines.push(line);
+        style && style(line, node);
+      }
+    }
+  }
+
+  //  渲染按钮
+  renderExpandBtn(node, btn) {
+    let {
+      width,
+      height,
+      expandBtnSize,
+      isRoot
+    } = node;
+    if (!isRoot) {
+      let {
+        translateX,
+        translateY
+      } = btn.transform();
+      let params = {
+        node,
+        btn,
+        expandBtnSize,
+        translateX,
+        translateY,
+        width,
+        height
+      };
+      if (this.checkIsTop(node)) {
+        fishboneUtils.top.renderExpandBtn(params);
+      } else {
+        fishboneUtils.bottom.renderExpandBtn(params);
+      }
+    }
+  }
+
+  //  创建概要节点
+  renderGeneralization(node, gLine, gNode) {
+    let {
+      top,
+      bottom,
+      right,
+      generalizationLineMargin,
+      generalizationNodeMargin
+    } = this.getNodeBoundaries(node, 'h');
+    let x1 = right + generalizationLineMargin;
+    let y1 = top;
+    let x2 = right + generalizationLineMargin;
+    let y2 = bottom;
+    let cx = x1 + 20;
+    let cy = y1 + (y2 - y1) / 2;
+    let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`;
+    gLine.plot(path);
+    gNode.left = right + generalizationNodeMargin;
+    gNode.top = top + (bottom - top - gNode.height) / 2;
+  }
+}
+/* harmony default export */ var layouts_Fishbone = (Fishbone_Fishbone);
 // CONCATENATED MODULE: ../simple-mind-map/src/TextEdit.js
 
 
@@ -44168,6 +45079,8 @@ const lineStyleProps = ['lineColor', 'lineDasharray', 'lineWidth'];
 
 
 
+
+
 // 布局列表
 const layouts = {
   // 逻辑结构图
@@ -44177,7 +45090,13 @@ const layouts = {
   // 目录组织图
   [CONSTANTS.LAYOUT.CATALOG_ORGANIZATION]: layouts_CatalogOrganization,
   // 组织结构图
-  [CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE]: layouts_OrganizationStructure
+  [CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE]: layouts_OrganizationStructure,
+  // 时间轴
+  [CONSTANTS.LAYOUT.TIMELINE]: layouts_Timeline,
+  // 时间轴2
+  [CONSTANTS.LAYOUT.TIMELINE2]: layouts_Timeline,
+  // 鱼骨图
+  [CONSTANTS.LAYOUT.FISHBONE]: layouts_Fishbone
 };
 
 //  渲染
@@ -44220,7 +45139,7 @@ class Render_Render {
 
   //  设置布局结构
   setLayout() {
-    this.layout = new (layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts[CONSTANTS.LAYOUT.LOGICAL_STRUCTURE])(this);
+    this.layout = new (layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts[CONSTANTS.LAYOUT.LOGICAL_STRUCTURE])(this, this.mindMap.opt.layout);
   }
 
   //   绑定事件
@@ -46239,7 +47158,415 @@ class Render_Render {
     }
   }
 }));
+// CONCATENATED MODULE: ../simple-mind-map/src/themes/simpleBlack.js
+
+
+
+// 简约黑
+/* harmony default export */ var simpleBlack = (cjs_default()(themes_default, {
+  // 连线的颜色
+  lineColor: 'rgb(34, 34, 34)',
+  lineWidth: 4,
+  // 概要连线的粗细
+  generalizationLineWidth: 4,
+  // 概要连线的颜色
+  generalizationLineColor: 'rgb(34, 34, 34)',
+  // 根节点样式
+  root: {
+    fillColor: '#fff',
+    color: 'rgb(34, 34, 34)',
+    borderColor: 'rgb(34, 34, 34)',
+    borderWidth: 3,
+    fontSize: 24,
+    active: {
+      borderColor: '#a13600'
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: 'rgb(241, 246, 248)',
+    color: 'rgb(34, 34, 34)',
+    borderColor: 'rgb(34, 34, 34)',
+    borderWidth: 3,
+    fontSize: 18,
+    active: {
+      borderColor: '#a13600'
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: 'rgb(34, 34, 34)',
+    active: {
+      borderColor: '#a13600'
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: 'transparent',
+    borderColor: 'rgb(34, 34, 34)',
+    borderWidth: 2,
+    color: 'rgb(34, 34, 34)',
+    active: {
+      borderColor: '#a13600'
+    }
+  }
+}));
+// CONCATENATED MODULE: ../simple-mind-map/src/themes/courseGreen.js
+
+
+
+// 课程绿
+/* harmony default export */ var courseGreen = (cjs_default()(themes_default, {
+  // 连线的颜色
+  lineColor: 'rgb(113, 195, 169)',
+  lineWidth: 3,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: 'rgb(113, 195, 169)',
+  // 根节点样式
+  root: {
+    fillColor: 'rgb(16, 160, 121)',
+    color: '#fff',
+    borderColor: '',
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: 'rgb(173, 91, 12)',
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: 'rgb(240, 252, 249)',
+    color: 'rgb(50, 113, 96)',
+    borderColor: 'rgb(113, 195, 169)',
+    borderWidth: 2,
+    fontSize: 18,
+    active: {
+      borderColor: 'rgb(173, 91, 12)'
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: 'rgb(10, 59, 43)',
+    active: {
+      borderColor: 'rgb(173, 91, 12)'
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: 'rgb(246, 238, 211)',
+    borderColor: '',
+    borderWidth: 0,
+    color: 'rgb(173, 91, 12)',
+    active: {
+      borderColor: 'rgb(113, 195, 169)'
+    }
+  }
+}));
+// CONCATENATED MODULE: ../simple-mind-map/src/themes/coffee.js
+
+
+
+// 咖啡
+/* harmony default export */ var coffee = (cjs_default()(themes_default, {
+  // 连线的颜色
+  lineColor: 'rgb(173, 123, 91)',
+  lineWidth: 4,
+  // 概要连线的粗细
+  generalizationLineWidth: 4,
+  // 概要连线的颜色
+  generalizationLineColor: 'rgb(173, 123, 91)',
+  // 根节点样式
+  root: {
+    fillColor: 'rgb(202, 117, 79)',
+    color: '#fff',
+    borderColor: '',
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: 'rgb(173, 123, 91)',
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: 'rgb(245, 231, 216)',
+    color: 'rgb(125, 86, 42)',
+    borderColor: '',
+    borderWidth: 0,
+    fontSize: 18,
+    active: {
+      borderColor: 'rgb(173, 123, 91)'
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: 'rgb(96, 71, 47)',
+    active: {
+      borderColor: 'rgb(173, 123, 91)'
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: 'rgb(255, 249, 239)',
+    borderColor: 'rgb(173, 123, 91)',
+    borderWidth: 2,
+    color: 'rgb(122, 83, 44)',
+    active: {
+      borderColor: 'rgb(202, 117, 79)'
+    }
+  }
+}));
+// CONCATENATED MODULE: ../simple-mind-map/src/themes/redSpirit.js
+
+
+
+// 红色精神
+/* harmony default export */ var redSpirit = (cjs_default()(themes_default, {
+  // 背景颜色
+  backgroundColor: 'rgb(255, 238, 228)',
+  // 连线的颜色
+  lineColor: 'rgb(230, 138, 131)',
+  lineWidth: 3,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: 'rgb(222, 101, 85)',
+  // 根节点样式
+  root: {
+    fillColor: 'rgb(207, 44, 44)',
+    color: 'rgb(255, 233, 157)',
+    borderColor: '',
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: 'rgb(255, 233, 157)',
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: 'rgb(255, 255, 255)',
+    color: 'rgb(211, 58, 21)',
+    borderColor: 'rgb(222, 101, 85)',
+    borderWidth: 2,
+    fontSize: 18,
+    active: {
+      borderColor: 'rgb(255, 233, 157)'
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: 'rgb(144, 71, 43)',
+    active: {
+      borderColor: 'rgb(255, 233, 157)'
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: 'rgb(255, 247, 211)',
+    borderColor: 'rgb(255, 202, 162)',
+    borderWidth: 2,
+    color: 'rgb(187, 101, 69)',
+    active: {
+      borderColor: 'rgb(222, 101, 85)'
+    }
+  }
+}));
+// CONCATENATED MODULE: ../simple-mind-map/src/themes/blackHumour.js
+
+
+
+// 黑色幽默
+/* harmony default export */ var blackHumour = (cjs_default()(themes_default, {
+  // 背景颜色
+  backgroundColor: 'rgb(27, 31, 34)',
+  // 连线的颜色
+  lineColor: 'rgb(75, 81, 78)',
+  lineWidth: 3,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: 'rgb(255, 119, 34)',
+  // 根节点样式
+  root: {
+    fillColor: 'rgb(36, 179, 96)',
+    color: '#fff',
+    borderColor: '',
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: 'rgb(254, 199, 13)',
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: 'rgb(254, 199, 13)',
+    color: 'rgb(0, 0, 0)',
+    borderColor: '',
+    borderWidth: 0,
+    fontSize: 18,
+    active: {
+      borderColor: 'rgb(36, 179, 96)',
+      borderWidth: 3
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: 'rgb(204, 204, 204)',
+    active: {
+      borderColor: 'rgb(254, 199, 13)'
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: 'rgb(27, 31, 34)',
+    borderColor: 'rgb(255, 119, 34)',
+    borderWidth: 2,
+    color: 'rgb(204, 204, 204)',
+    active: {
+      borderColor: 'rgb(36, 179, 96)'
+    }
+  }
+}));
+// CONCATENATED MODULE: ../simple-mind-map/src/themes/lateNightOffice.js
+
+
+
+// 深夜办公室
+/* harmony default export */ var lateNightOffice = (cjs_default()(themes_default, {
+  // 背景颜色
+  backgroundColor: 'rgb(32, 37, 49)',
+  // 连线的颜色
+  lineColor: 'rgb(137, 167, 196)',
+  lineWidth: 3,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: 'rgb(255, 119, 34)',
+  // 根节点样式
+  root: {
+    fillColor: 'rgb(23, 153, 243)',
+    color: 'rgb(255, 255, 255)',
+    borderColor: '',
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: 'rgb(255, 119, 34)',
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: 'rgb(70, 78, 94)',
+    color: 'rgb(209, 210, 210)',
+    borderColor: '',
+    borderWidth: 0,
+    fontSize: 18,
+    active: {
+      borderColor: 'rgb(255, 119, 34)',
+      borderWidth: 3
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: 'rgb(204, 204, 204)',
+    active: {
+      borderColor: 'rgb(255, 119, 34)'
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: 'rgb(255, 119, 34)',
+    borderColor: '',
+    borderWidth: 2,
+    color: '#fff',
+    active: {
+      borderColor: 'rgb(23, 153, 243)'
+    }
+  }
+}));
+// CONCATENATED MODULE: ../simple-mind-map/src/themes/blackGold.js
+
+
+
+// 黑金
+/* harmony default export */ var blackGold = (cjs_default()(themes_default, {
+  // 背景颜色
+  backgroundColor: 'rgb(18, 20, 20)',
+  // 连线的颜色
+  lineColor: 'rgb(205, 186, 156)',
+  lineWidth: 3,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: 'rgb(245, 224, 191)',
+  // 根节点样式
+  root: {
+    fillColor: 'rgb(255, 208, 124)',
+    color: 'rgb(111, 61, 6)',
+    borderColor: '',
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: '#fff',
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: 'rgb(66, 57, 46)',
+    color: 'rgb(225, 201, 158)',
+    borderColor: 'rgb(245, 224, 191)',
+    borderWidth: 2,
+    fontSize: 18,
+    active: {
+      borderColor: 'rgb(255, 208, 124)'
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: 'rgb(231, 203, 155)',
+    active: {
+      borderColor: 'rgb(255, 208, 124)'
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: 'rgb(56, 45, 34)',
+    borderColor: 'rgb(104, 84, 61)',
+    borderWidth: 2,
+    color: 'rgb(242, 216, 176)',
+    active: {
+      borderColor: 'rgb(255, 208, 124)'
+    }
+  }
+}));
 // CONCATENATED MODULE: ../simple-mind-map/src/themes/index.js
+
+
+
+
+
+
+
 
 
 
@@ -46284,7 +47611,14 @@ class Render_Render {
   vitalityOrange: vitalityOrange,
   greenLeaf: greenLeaf,
   dark2: dark2,
-  skyGreen: skyGreen
+  skyGreen: skyGreen,
+  simpleBlack: simpleBlack,
+  courseGreen: courseGreen,
+  coffee: coffee,
+  redSpirit: redSpirit,
+  blackHumour: blackHumour,
+  lateNightOffice: lateNightOffice,
+  blackGold: blackGold
 });
 // CONCATENATED MODULE: ../simple-mind-map/src/utils/keyMap.js
 const keyMap_map = {
@@ -46712,6 +48046,8 @@ const defaultOpt = {
   readonly: false,
   // 布局
   layout: CONSTANTS.LAYOUT.LOGICAL_STRUCTURE,
+  // 如果结构为鱼骨图，那么可以通过该选项控制倾斜角度
+  fishboneDeg: 45,
   // 主题
   theme: 'default',
   // 内置主题：default（默认主题）

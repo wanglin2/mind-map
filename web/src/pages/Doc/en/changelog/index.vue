@@ -2,7 +2,9 @@
   <div>
     <h1>Changelog</h1>
 <h2>0.5.4</h2>
-<p>New: 1.Add new themes.</p>
+<p>New: 1.Add new themes. 2.Added timeline and fishbone structure.</p>
+<p>Fix: 1.Fix the conflict issue between node right-click and canvas right-click. 2.Fix the bug that the line segment is not hidden when dragging nodes such as organizational chart and directory organization chart.</p>
+<p>optimization: 1.Optimize the layout of organizational chart. 2.Optimize the layout of the directory organization chart.</p>
 <h2>0.5.3</h2>
 <p>Fix: 1.Fixed the issue of setting the text style when multiple nodes were selected in rich text mode, which would change the text of all selected nodes to the text of the last selected node.</p>
 <p>New: 1.Support setting the position of the initial central node.</p>
