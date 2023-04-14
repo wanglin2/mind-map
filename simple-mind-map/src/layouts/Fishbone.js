@@ -54,7 +54,7 @@ class Fishbone extends Base {
           }
           // 计算二级节点的top值
           if (parent._node.isRoot) {
-            if (newNode.dir === 'top') {
+            if (this.checkIsTop(newNode)) {
               newNode.top = parent._node.top - newNode.height
             } else {
               newNode.top = parent._node.top + parent._node.height
@@ -81,7 +81,7 @@ class Fishbone extends Base {
           let topTotalLeft = node.left + node.width + node.height
           let bottomTotalLeft = node.left + node.width + node.height
           node.children.forEach(item => {
-            if (item.dir === 'top') {
+            if (this.checkIsTop(item)) {
               item.left = topTotalLeft
               topTotalLeft += item.width
             } else {
@@ -91,7 +91,7 @@ class Fishbone extends Base {
           })
         }
         let params = { layerIndex, node, ctx: this }
-        if (node.dir === 'top') {
+        if (this.checkIsTop(node)) {
           utils.top.computedLeftTopValue(params)
         } else {
           utils.bottom.computedLeftTopValue(params)
@@ -112,7 +112,7 @@ class Fishbone extends Base {
           return
         }
         let params = { node, parent, layerIndex, ctx: this }
-        if (node.dir === 'top') {
+        if (this.checkIsTop(node)) {
           utils.top.adjustLeftTopValueBefore(params)
         } else {
           utils.bottom.adjustLeftTopValueBefore(params)
@@ -120,7 +120,7 @@ class Fishbone extends Base {
       },
       (node, parent) => {
         let params = { parent, node, ctx: this }
-        if (node.dir === 'top') {
+        if (this.checkIsTop(node)) {
           utils.top.adjustLeftTopValueAfter(params)
         } else {
           utils.bottom.adjustLeftTopValueAfter(params)
@@ -130,7 +130,7 @@ class Fishbone extends Base {
           let topTotalLeft = 0
           let bottomTotalLeft = 0
           node.children.forEach(item => {
-            if (item.dir === 'top') {
+            if (this.checkIsTop(item)) {
               item.left += topTotalLeft
               this.updateChildren(item.children, 'left', topTotalLeft)
               let { left, right } = this.getNodeBoundaries(item, 'h')
@@ -146,24 +146,6 @@ class Fishbone extends Base {
       },
       true
     )
-  }
-
-  //  递归计算节点的宽度
-  getNodeAreaWidth(node) {
-    let widthArr = []
-    let loop = (node, width) => {
-      if (node.children.length) {
-        width += node.width / 2
-        node.children.forEach(item => {
-          loop(item, width)
-        })
-      } else {
-        width += node.width
-        widthArr.push(width)
-      }
-    }
-    loop(node, 0)
-    return Math.max(...widthArr)
   }
 
   //  递归计算节点的宽度
@@ -226,7 +208,7 @@ class Fishbone extends Base {
         }
       })
       // 更新父节点的位置
-      if (node.dir === 'top') {
+      if (this.checkIsTop(node)) {
         this.updateBrothersTop(node.parent, addHeight)
       } else {
         this.updateBrothersTop(
@@ -235,6 +217,11 @@ class Fishbone extends Base {
         )
       }
     }
+  }
+
+  // 检查节点是否是上方节点
+  checkIsTop(node) {
+    return node.dir === CONSTANTS.TIMELINE_DIR.TOP
   }
 
   //  绘制连线，连接该节点到其子节点
@@ -257,7 +244,7 @@ class Fishbone extends Base {
         let offset = item.height + node.height / 2
         let offsetX = offset / Math.tan(degToRad(45))
         let line = this.draw.path()
-        if (item.dir === 'top') {
+        if (this.checkIsTop(item)) {
           line.plot(
             `M ${nodeLineX - offsetX},${item.top + offset} L ${nodeLineX},${
               item.top
@@ -327,7 +314,7 @@ class Fishbone extends Base {
           maxy,
           miny
         }
-        if (node.dir === 'top') {
+        if (this.checkIsTop(node)) {
           utils.top.renderLine(params)
         } else {
           utils.bottom.renderLine(params)
@@ -353,7 +340,7 @@ class Fishbone extends Base {
         width,
         height
       }
-      if (node.dir === 'top') {
+      if (this.checkIsTop(node)) {
         utils.top.renderExpandBtn(params)
       } else {
         utils.bottom.renderExpandBtn(params)
