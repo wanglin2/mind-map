@@ -1,7 +1,10 @@
 import Base from './Base'
-import { walk, asyncRun, degToRad } from '../utils'
+import { walk, asyncRun } from '../utils'
 import { CONSTANTS } from '../utils/constant'
-import utils from './fishboneUtils'
+
+const degToRad = deg => {
+  return (Math.PI / 180) * deg
+}
 
 //  鱼骨图
 class Fishbone extends Base {
@@ -54,11 +57,7 @@ class Fishbone extends Base {
           }
           // 计算二级节点的top值
           if (parent._node.isRoot) {
-            if (newNode.dir === 'top') {
-              newNode.top = parent._node.top - newNode.height
-            } else {
-              newNode.top = parent._node.top + parent._node.height
-            }
+            newNode.top = parent._node.top - newNode.height
           }
         }
         if (!node.data.expand) {
@@ -78,23 +77,26 @@ class Fishbone extends Base {
       null,
       (node, parent, isRoot, layerIndex, index) => {
         if (node.isRoot) {
-          let topTotalLeft = node.left + node.width + node.height
-          let bottomTotalLeft = node.left + node.width + node.height
+          let totalLeft = node.left + node.width
           node.children.forEach(item => {
-            if (item.dir === 'top') {
-              item.left = topTotalLeft
-              topTotalLeft += item.width
-            } else {
-              item.left = bottomTotalLeft + 20
-              bottomTotalLeft += item.width
-            }
+            item.left = totalLeft
+            totalLeft += item.width
           })
         }
-        let params = { layerIndex, node, ctx: this }
-        if (node.dir === 'top') {
-          utils.top.computedLeftTopValue(params)
-        } else {
-          utils.bottom.computedLeftTopValue(params)
+        if (layerIndex >= 1 && node.children) {
+          // 遍历三级及以下节点的子节点
+          let startLeft = node.left + node.width * 0.5
+          let totalTop =
+            node.top +
+            node.height +
+            (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
+          node.children.forEach(item => {
+            item.left = startLeft
+            item.top += totalTop
+            totalTop +=
+              item.height +
+              (this.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
+          })
         }
       },
       null,
@@ -111,36 +113,51 @@ class Fishbone extends Base {
         if (!node.nodeData.data.expand) {
           return
         }
-        let params = { node, parent, layerIndex, ctx: this }
-        if (node.dir === 'top') {
-          utils.top.adjustLeftTopValueBefore(params)
-        } else {
-          utils.bottom.adjustLeftTopValueBefore(params)
+        // 调整top
+        let len = node.children.length
+        // 调整三级及以下节点的top
+        if (parent && !parent.isRoot && len > 0) {
+          let totalHeight = node.children.reduce((h, item) => {
+            return (
+              h +
+              item.height +
+              (this.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
+            )
+          }, 0)
+          this.updateBrothersTop(node, totalHeight)
         }
       },
       (node, parent) => {
-        let params = { parent, node, ctx: this }
-        if (node.dir === 'top') {
-          utils.top.adjustLeftTopValueAfter(params)
-        } else {
-          utils.bottom.adjustLeftTopValueAfter(params)
+        // 将二级节点的子节点移到上方
+        if (parent && parent.isRoot) {
+          // 遍历二级节点的子节点
+          let totalHeight = 0
+          node.children.forEach(item => {
+            // 调整top
+            let nodeTotalHeight = this.getNodeAreaHeight(item)
+            let _top = item.top
+            item.top =
+              node.top - (item.top - node.top) - nodeTotalHeight + node.height
+            // 调整left
+            let offsetLeft =
+              (nodeTotalHeight + totalHeight) / Math.tan(degToRad(45))
+            item.left += offsetLeft
+            totalHeight += nodeTotalHeight
+            // 同步更新后代节点
+            this.updateChildrenPro(item.children, {
+              top: item.top - _top,
+              left: offsetLeft
+            })
+          })
         }
         // 调整二级节点的子节点的left值
         if (node.isRoot) {
-          let topTotalLeft = 0
-          let bottomTotalLeft = 0
+          let totalLeft = 0
           node.children.forEach(item => {
-            if (item.dir === 'top') {
-              item.left += topTotalLeft
-              this.updateChildren(item.children, 'left', topTotalLeft)
-              let { left, right } = this.getNodeBoundaries(item, 'h')
-              topTotalLeft += right - left
-            } else {
-              item.left += bottomTotalLeft
-              this.updateChildren(item.children, 'left', bottomTotalLeft)
-              let { left, right } = this.getNodeBoundaries(item, 'h')
-              bottomTotalLeft += right - left
-            }
+            item.left += totalLeft
+            this.updateChildren(item.children, 'left', totalLeft)
+            let { left, right } = this.getNodeBoundaries(item, 'h')
+            totalLeft += right - left
           })
         }
       },
@@ -226,66 +243,30 @@ class Fishbone extends Base {
         }
       })
       // 更新父节点的位置
-      if (node.dir === 'top') {
-        this.updateBrothersTop(node.parent, addHeight)
-      } else {
-        this.updateBrothersTop(
-          node.parent,
-          node.layerIndex === 3 ? 0 : addHeight
-        )
-      }
+      this.updateBrothersTop(node.parent, addHeight)
     }
   }
 
   //  绘制连线，连接该节点到其子节点
   renderLine(node, lines, style) {
-    if (node.layerIndex !== 1 && node.children.length <= 0) {
+    if (node.children.length <= 0) {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
     let len = node.children.length
     if (node.isRoot) {
       // 当前节点是根节点
+      let prevBother = node
       // 根节点的子节点是和根节点同一水平线排列
-      let maxx = -Infinity
-      node.children.forEach(item => {
-        if (item.left > maxx) {
-          maxx = item.left
-        }
-        // 水平线段到二级节点的连线
-        let nodeLineX = item.left + item.width * 0.3
-        let offset = item.height + node.height / 2
-        let offsetX = offset / Math.tan(degToRad(45))
-        let line = this.draw.path()
-        if (item.dir === 'top') {
-          line.plot(
-            `M ${nodeLineX - offsetX},${item.top + offset} L ${nodeLineX},${
-              item.top
-            }`
-          )
-        } else {
-          line.plot(
-            `M ${nodeLineX - offsetX},${
-              item.top + item.height - offset
-            } L ${nodeLineX},${item.top + item.height}`
-          )
-        }
-        node.style.line(line)
-        node._lines.push(line)
-        style && style(line, node)
+      node.children.forEach((item, index) => {
+        let x1 = prevBother.left + prevBother.width
+        let x2 = item.left
+        let y = node.top + node.height / 2
+        let path = `M ${x1},${y} L ${x2},${y}`
+        lines[index].plot(path)
+        style && style(lines[index], item)
+        prevBother = item
       })
-      // 从根节点出发的水平线
-      let nodeHalfTop = node.top + node.height / 2
-      let offset = node.height / 2
-      let line = this.draw.path()
-      line.plot(
-        `M ${node.left + node.width},${nodeHalfTop} L ${
-          maxx - offset / Math.tan(degToRad(45))
-        },${nodeHalfTop}`
-      )
-      node.style.line(line)
-      node._lines.push(line)
-      style && style(line, node)
     } else {
       // 当前节点为非根节点
       let maxy = -Infinity
@@ -310,27 +291,31 @@ class Fishbone extends Base {
           style && style(lines[index], item)
         }
       })
-      // 斜线
-      if (len >= 0) {
+      // 竖线
+      if (len > 0) {
         let line = this.draw.path()
         expandBtnSize = len > 0 ? expandBtnSize : 0
         let lineLength = maxx - node.left - node.width * 0.3
-        lineLength = Math.max(lineLength, 0)
-        let params = {
-          node,
-          line,
-          top,
-          x,
-          lineLength,
-          height,
-          expandBtnSize,
-          maxy,
-          miny
-        }
-        if (node.dir === 'top') {
-          utils.top.renderLine(params)
+        if (
+          node.parent &&
+          node.parent.isRoot &&
+          node.dir === CONSTANTS.TIMELINE_DIR.TOP
+        ) {
+          line.plot(
+            `M ${x},${top} L ${x + lineLength},${
+              top - Math.tan(degToRad(45)) * lineLength
+            }`
+          )
         } else {
-          utils.bottom.renderLine(params)
+          if (node.parent && node.parent.isRoot) {
+            line.plot(
+              `M ${x},${top} L ${x + lineLength},${
+                top - Math.tan(degToRad(45)) * lineLength
+              }`
+            )
+          } else {
+            line.plot(`M ${x},${top + height + expandBtnSize} L ${x},${maxy}`)
+          }
         }
         node.style.line(line)
         node._lines.push(line)
@@ -344,19 +329,16 @@ class Fishbone extends Base {
     let { width, height, expandBtnSize, isRoot } = node
     if (!isRoot) {
       let { translateX, translateY } = btn.transform()
-      let params = {
-        node,
-        btn,
-        expandBtnSize,
-        translateX,
-        translateY,
-        width,
-        height
-      }
-      if (node.dir === 'top') {
-        utils.top.renderExpandBtn(params)
+      if (node.parent && node.parent.isRoot) {
+        btn.translate(
+          width * 0.3 - expandBtnSize / 2 - translateX,
+          -expandBtnSize / 2 - translateY
+        )
       } else {
-        utils.bottom.renderExpandBtn(params)
+        btn.translate(
+          width * 0.3 - expandBtnSize / 2 - translateX,
+          height + expandBtnSize / 2 - translateY
+        )
       }
     }
   }
