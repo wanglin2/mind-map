@@ -46,7 +46,14 @@
 <td>layout</td>
 <td>String</td>
 <td>logicalStructure</td>
-<td>布局类型，可选列表：logicalStructure（逻辑结构图）、mindMap（思维导图）、catalogOrganization（目录组织图）、organizationStructure（组织结构图）</td>
+<td>布局类型，可选列表：logicalStructure（逻辑结构图）、mindMap（思维导图）、catalogOrganization（目录组织图）、organizationStructure（组织结构图）、timeline（v0.5.4+，时间轴）、timeline2（v0.5.4+，上下交替型时间轴）、fishbone（v0.5.4+，鱼骨图）</td>
+<td></td>
+</tr>
+<tr>
+<td>fishboneDeg（v0.5.4+）</td>
+<td>Number</td>
+<td>45</td>
+<td>设置鱼骨结构图的斜线角度</td>
 <td></td>
 </tr>
 <tr>
