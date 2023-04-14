@@ -8,7 +8,7 @@
 <h2>特性</h2>
 <ul>
 <li><input type="checkbox" id="checkbox0" checked="true" /><label for="checkbox0">插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小整体体积</label></li>
-<li><input type="checkbox" id="checkbox1" checked="true" /><label for="checkbox1">支持逻辑结构图、思维导图、组织结构图、目录组织图四种结构</label></li>
+<li><input type="checkbox" id="checkbox1" checked="true" /><label for="checkbox1">支持逻辑结构图、思维导图、组织结构图、目录组织图、时间轴、鱼骨图六种结构</label></li>
 <li><input type="checkbox" id="checkbox2" checked="true" /><label for="checkbox2">内置多种主题，允许高度自定义样式，支持注册新主题</label></li>
 <li><input type="checkbox" id="checkbox3" checked="true" /><label for="checkbox3">支持快捷键</label></li>
 <li><input type="checkbox" id="checkbox4" checked="true" /><label for="checkbox4">节点内容支持图片、图标、超链接、备注、标签、概要</label></li>
