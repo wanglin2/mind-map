@@ -8,8 +8,8 @@
 <h2>Features</h2>
 <ul>
 <li><input type="checkbox" id="checkbox18" checked="true" /><label for="checkbox18">Plugin architecture. In addition to core functions, other functions are provided as plugins, which can be used as needed to reduce the overall volume</label></li>
-<li><input type="checkbox" id="checkbox19" checked="true" /><label for="checkbox19">Supports four types of structures: logical structure diagrams, mind maps,</label>
-organizational structure diagrams, and directory organization diagrams</li>
+<li><input type="checkbox" id="checkbox19" checked="true" /><label for="checkbox19">Supports six types of structures: logical structure diagrams, mind maps,</label>
+organizational structure diagrams, directory organization diagrams, timeline, and fishbone diagrams</li>
 <li><input type="checkbox" id="checkbox20" checked="true" /><label for="checkbox20">Built-in multiple themes and allows for highly customized styles, and support register new themes</label></li>
 <li><input type="checkbox" id="checkbox21" checked="true" /><label for="checkbox21">Supports shortcuts</label></li>
 <li><input type="checkbox" id="checkbox22" checked="true" /><label for="checkbox22">Node content supports images, icons, hyperlinks, notes, tags, and</label>

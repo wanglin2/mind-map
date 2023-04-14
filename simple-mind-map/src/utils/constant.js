@@ -154,7 +154,10 @@ export const CONSTANTS = {
     LOGICAL_STRUCTURE: 'logicalStructure',
     MIND_MAP: 'mindMap',
     ORGANIZATION_STRUCTURE: 'organizationStructure',
-    CATALOG_ORGANIZATION: 'catalogOrganization'
+    CATALOG_ORGANIZATION: 'catalogOrganization',
+    TIMELINE: 'timeline',
+    TIMELINE2: 'timeline2',
+    FISHBONE: 'fishbone'
   },
   DIR: {
     UP: 'up',
@@ -189,6 +192,10 @@ export const CONSTANTS = {
     RIGHT: 'right',
     BOTTOM: 'bottom',
     CENTER: 'center'
+  },
+  TIMELINE_DIR: {
+    TOP: 'top',
+    BOTTOM: 'bottom'
   }
 }
 
@@ -217,11 +224,26 @@ export const layoutList = [
   {
     name: '目录组织图',
     value: CONSTANTS.LAYOUT.CATALOG_ORGANIZATION,
+  },
+  {
+    name: '时间轴',
+    value: CONSTANTS.LAYOUT.TIMELINE,
+  },
+  {
+    name: '时间轴2',
+    value: CONSTANTS.LAYOUT.TIMELINE2,
+  },
+  {
+    name: '鱼骨图',
+    value: CONSTANTS.LAYOUT.FISHBONE,
   }
 ]
 export const layoutValueList = [
   CONSTANTS.LAYOUT.LOGICAL_STRUCTURE,
   CONSTANTS.LAYOUT.MIND_MAP,
   CONSTANTS.LAYOUT.CATALOG_ORGANIZATION,
-  CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE
+  CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE,
+  CONSTANTS.LAYOUT.TIMELINE,
+  CONSTANTS.LAYOUT.TIMELINE2,
+  CONSTANTS.LAYOUT.FISHBONE
 ]

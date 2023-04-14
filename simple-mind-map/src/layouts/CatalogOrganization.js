@@ -87,11 +87,11 @@ class CatalogOrganization extends Base {
               totalLeft += cur.width + marginX
             })
           } else {
-            let totalTop = node.top + node.height + marginY + node.expandBtnSize
+            let totalTop = node.top + node.height + marginY + (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
             node.children.forEach(cur => {
               cur.left = node.left + node.width * 0.5
               cur.top = totalTop
-              totalTop += cur.height + marginY + node.expandBtnSize
+              totalTop += cur.height + marginY + (this.getNodeActChildrenLength(cur) > 0 ? cur.expandBtnSize : 0)
             })
           }
         }
@@ -115,7 +115,7 @@ class CatalogOrganization extends Base {
           let areaWidth = this.getNodeAreaWidth(node)
           let difference = areaWidth - node.width
           if (difference > 0) {
-            this.updateBrothersLeft(node, difference / 2)
+            this.updateBrothersLeft(node, difference)
           }
         }
         // 调整top
@@ -124,34 +124,22 @@ class CatalogOrganization extends Base {
           let marginY = this.getMarginY(layerIndex + 1)
           let totalHeight =
             node.children.reduce((h, item) => {
-              return h + item.height
+              return h + item.height + (this.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
             }, 0) +
-            (len + 1) * marginY +
-            len * node.expandBtnSize
+            len * marginY
           this.updateBrothersTop(node, totalHeight)
         }
       },
-      null,
+      (node, parent, isRoot) => {
+        if (isRoot) {
+          let { right, left } = this.getNodeBoundaries(node, 'h')
+          let childrenWidth = right - left
+          let offset = (node.left - left) - (childrenWidth - node.width) / 2
+          this.updateChildren(node.children, 'left', offset)
+        }
+      },
       true
     )
-  }
-
-  //  递归计算节点的宽度
-  getNodeAreaWidth(node) {
-    let widthArr = []
-    let loop = (node, width) => {
-      if (node.children.length) {
-        width += node.width / 2
-        node.children.forEach(item => {
-          loop(item, width)
-        })
-      } else {
-        width += node.width
-        widthArr.push(width)
-      }
-    }
-    loop(node, 0)
-    return Math.max(...widthArr)
   }
 
   //  调整兄弟节点的left
@@ -161,38 +149,15 @@ class CatalogOrganization extends Base {
       let index = childrenList.findIndex(item => {
         return item === node
       })
-      // 存在大于一个节点时，第一个或最后一个节点自身也需要移动，否则两边不对称
-      if (
-        (index === 0 || index === childrenList.length - 1) &&
-        childrenList.length > 1
-      ) {
-        let _offset = index === 0 ? -addWidth : addWidth
-        node.left += _offset
-        if (
-          node.children &&
-          node.children.length &&
-          !node.hasCustomPosition()
-        ) {
-          this.updateChildren(node.children, 'left', _offset)
-        }
-      }
       childrenList.forEach((item, _index) => {
-        if (item.hasCustomPosition()) {
+        if (item.hasCustomPosition() || _index <= index) {
           // 适配自定义位置
           return
         }
-        let _offset = 0
-        if (_index < index) {
-          // 左边的节点往左移
-          _offset = -addWidth
-        } else if (_index > index) {
-          // 右边的节点往右移
-          _offset = addWidth
-        }
-        item.left += _offset
+        item.left += addWidth
         // 同步更新子节点的位置
         if (item.children && item.children.length) {
-          this.updateChildren(item.children, 'left', _offset)
+          this.updateChildren(item.children, 'left', addWidth)
         }
       })
       // 更新父节点的位置

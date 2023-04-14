@@ -8,7 +8,6 @@ import nodeCommandWrapsMethods from './utils/nodeCommandWraps'
 import nodeCreateContentsMethods from './utils/nodeCreateContents'
 import { CONSTANTS } from './utils/constant'
 
-
 //  节点类
 class Node {
   //  构造函数
@@ -58,7 +57,7 @@ class Node {
     this.children = opt.children || []
     // 节点内容的容器
     this.group = null
-    this.shapeNode = null// 节点形状节点
+    this.shapeNode = null // 节点形状节点
     // 节点内容对象
     this._imgData = null
     this._iconData = null
@@ -95,19 +94,19 @@ class Node {
     // 是否需要重新layout
     this.needLayout = false
     // 概要相关方法
-    Object.keys(nodeGeneralizationMethods).forEach((item) => {
+    Object.keys(nodeGeneralizationMethods).forEach(item => {
       this[item] = nodeGeneralizationMethods[item].bind(this)
     })
     // 展开收起按钮相关方法
-    Object.keys(nodeExpandBtnMethods).forEach((item) => {
+    Object.keys(nodeExpandBtnMethods).forEach(item => {
       this[item] = nodeExpandBtnMethods[item].bind(this)
     })
     // 命令的相关方法
-    Object.keys(nodeCommandWrapsMethods).forEach((item) => {
+    Object.keys(nodeCommandWrapsMethods).forEach(item => {
       this[item] = nodeCommandWrapsMethods[item].bind(this)
     })
     // 创建节点内容的相关方法
-    Object.keys(nodeCreateContentsMethods).forEach((item) => {
+    Object.keys(nodeCreateContentsMethods).forEach(item => {
       this[item] = nodeCreateContentsMethods[item].bind(this)
     })
     // 初始化
@@ -339,6 +338,9 @@ class Node {
       this.active(e)
     })
     this.group.on('mousedown', e => {
+      if (this.isRoot && e.which === 3) {
+        e.stopPropagation()
+      }
       if (!this.isRoot) {
         e.stopPropagation()
       }
@@ -346,9 +348,16 @@ class Node {
       if (e.ctrlKey) {
         this.isMultipleChoice = true
         let isActive = this.nodeData.data.isActive
-        if (!isActive) this.mindMap.emit('before_node_active', this, this.renderer.activeNodeList)
+        if (!isActive)
+          this.mindMap.emit(
+            'before_node_active',
+            this,
+            this.renderer.activeNodeList
+          )
         this.mindMap.execCommand('SET_NODE_ACTIVE', this, !isActive)
-        this.mindMap.renderer[isActive ? 'removeActiveNode' : 'addActiveNode'](this)
+        this.mindMap.renderer[isActive ? 'removeActiveNode' : 'addActiveNode'](
+          this
+        )
         this.mindMap.emit(
           'node_active',
           isActive ? null : this,
@@ -414,7 +423,8 @@ class Node {
     if (!this.group) {
       return
     }
-    let { enableNodeTransitionMove, nodeTransitionMoveDuration } = this.mindMap.opt
+    let { enableNodeTransitionMove, nodeTransitionMoveDuration } =
+      this.mindMap.opt
     // 需要移除展开收缩按钮
     if (this._expandBtn && this.nodeData.children.length <= 0) {
       this.removeExpandBtn()
@@ -429,15 +439,9 @@ class Node {
     if (!isLayout && enableNodeTransitionMove) {
       this.group
         .animate(nodeTransitionMoveDuration)
-        .translate(
-          this.left - t.translateX,
-          this.top - t.translateY
-        )
+        .translate(this.left - t.translateX, this.top - t.translateY)
     } else {
-      this.group.translate(
-        this.left - t.translateX,
-        this.top - t.translateY
-      )
+      this.group.translate(this.left - t.translateX, this.top - t.translateY)
     }
   }
 
@@ -453,12 +457,15 @@ class Node {
   updateNodeShape() {
     if (!this.shapeNode) return
     const shape = this.getShape()
-    this.style[shape === CONSTANTS.SHAPE.RECTANGLE ? 'rect' : 'shape'](this.shapeNode)
+    this.style[shape === CONSTANTS.SHAPE.RECTANGLE ? 'rect' : 'shape'](
+      this.shapeNode
+    )
   }
 
   //  递归渲染
   render(callback = () => {}) {
-    let { enableNodeTransitionMove, nodeTransitionMoveDuration } = this.mindMap.opt
+    let { enableNodeTransitionMove, nodeTransitionMoveDuration } =
+      this.mindMap.opt
     // 节点
     // 重新渲染连线
     this.renderLine()
@@ -553,7 +560,10 @@ class Node {
     this.hideGeneralization()
     if (this.parent) {
       let index = this.parent.children.indexOf(this)
-      this.parent._lines[index].hide()
+      this.parent._lines[index] && this.parent._lines[index].hide()
+      this._lines.forEach(item => {
+        item.hide()
+      })
     }
     // 子节点
     if (this.children && this.children.length) {
@@ -577,6 +587,9 @@ class Node {
     if (this.parent) {
       let index = this.parent.children.indexOf(this)
       this.parent._lines[index] && this.parent._lines[index].show()
+      this._lines.forEach(item => {
+        item.show()
+      })
     }
     // 子节点
     if (this.children && this.children.length) {
@@ -596,6 +609,13 @@ class Node {
       return
     }
     let childrenLen = this.nodeData.children.length
+    // 切换为鱼骨结构时，清空根节点和二级节点的连线
+    if (
+      this.mindMap.opt.layout === CONSTANTS.LAYOUT.FISHBONE &&
+      (this.isRoot || this.layerIndex === 1)
+    ) {
+      childrenLen = 0
+    }
     if (childrenLen > this._lines.length) {
       // 创建缺少的线
       new Array(childrenLen - this._lines.length).fill(0).forEach(() => {

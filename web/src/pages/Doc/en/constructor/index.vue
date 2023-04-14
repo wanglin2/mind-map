@@ -46,7 +46,14 @@
 <td>layout</td>
 <td>String</td>
 <td>logicalStructure</td>
-<td>Layout type, options: logicalStructure (logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)</td>
+<td>Layout type, options: logicalStructure (logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)、timeline（v0.5.4+, timeline）、timeline2（v0.5.4+, up down alternating timeline）、fishbone（v0.5.4+, fishbone diagram）</td>
+<td></td>
+</tr>
+<tr>
+<td>fishboneDeg（v0.5.4+）</td>
+<td>Number</td>
+<td>45</td>
+<td>Set the diagonal angle of the fishbone structure diagram</td>
 <td></td>
 </tr>
 <tr>
