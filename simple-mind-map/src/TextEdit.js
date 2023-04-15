@@ -27,6 +27,7 @@ export default class TextEdit {
       // 隐藏文本编辑框
       this.hideEditTextBox()
     })
+    
     // 展开收缩按钮点击事件
     this.mindMap.on('expand_btn_click', () => {
       this.hideEditTextBox()
@@ -86,6 +87,7 @@ export default class TextEdit {
     this.textEditNode.style.left = rect.left + 'px'
     this.textEditNode.style.top = rect.top + 'px'
     this.textEditNode.style.display = 'block'
+    this.textEditNode.style.zIndex = '99999'
     this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth * scale + 'px'
     if (textLines.length > 1 && lineHeight !== 1) {
       this.textEditNode.style.transform = `translateY(${-((lineHeight * fontSize - fontSize) / 2 - 2) * scale}px)`
