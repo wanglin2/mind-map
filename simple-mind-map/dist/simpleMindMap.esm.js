@@ -46168,7 +46168,7 @@ var fishboneUtils_default = {
     },
     computedLeftTopValue({ layerIndex, node: node3, ctx }) {
       if (layerIndex >= 1 && node3.children) {
-        let startLeft = node3.left + node3.width * 0.5;
+        let startLeft = node3.left + node3.width * ctx.childIndent;
         let totalTop = node3.top + node3.height + (ctx.getNodeActChildrenLength(node3) > 0 ? node3.expandBtnSize : 0);
         node3.children.forEach((item) => {
           item.left = startLeft;
@@ -46188,17 +46188,17 @@ var fishboneUtils_default = {
     },
     adjustLeftTopValueAfter({ parent, node: node3, ctx }) {
       if (parent && parent.isRoot) {
-        let totalHeight = 0;
+        let totalHeight = node3.expandBtnSize;
         node3.children.forEach((item) => {
           let nodeTotalHeight = ctx.getNodeAreaHeight(item);
           let _top = item.top;
+          let _left = item.left;
           item.top = node3.top - (item.top - node3.top) - nodeTotalHeight + node3.height;
-          let offsetLeft = (nodeTotalHeight + totalHeight) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg));
-          item.left += offsetLeft;
+          item.left = node3.left + node3.width * ctx.indent + (nodeTotalHeight + totalHeight) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg));
           totalHeight += nodeTotalHeight;
           ctx.updateChildrenPro(item.children, {
             top: item.top - _top,
-            left: offsetLeft
+            left: item.left - _left
           });
         });
       }
@@ -46237,7 +46237,7 @@ var fishboneUtils_default = {
     },
     computedLeftTopValue({ layerIndex, node: node3, ctx }) {
       if (layerIndex === 1 && node3.children) {
-        let startLeft = node3.left + node3.width * 0.5;
+        let startLeft = node3.left + node3.width * ctx.childIndent;
         let totalTop = node3.top + node3.height + (ctx.getNodeActChildrenLength(node3) > 0 ? node3.expandBtnSize : 0);
         node3.children.forEach((item) => {
           item.left = startLeft;
@@ -46246,7 +46246,7 @@ var fishboneUtils_default = {
         });
       }
       if (layerIndex > 1 && node3.children) {
-        let startLeft = node3.left + node3.width * 0.5;
+        let startLeft = node3.left + node3.width * ctx.childIndent;
         let totalTop = node3.top - (ctx.getNodeActChildrenLength(node3) > 0 ? node3.expandBtnSize : 0);
         node3.children.forEach((item) => {
           item.left = startLeft;
@@ -46267,20 +46267,20 @@ var fishboneUtils_default = {
     adjustLeftTopValueAfter({ parent, node: node3, ctx }) {
       if (parent && parent.isRoot) {
         let totalHeight = 0;
-        let totalHeight2 = 0;
+        let totalHeight2 = node3.expandBtnSize;
         node3.children.forEach((item) => {
           let hasChildren = ctx.getNodeActChildrenLength(item) > 0;
           let nodeTotalHeight = ctx.getNodeAreaHeight(item);
           let offset = hasChildren > 0 ? nodeTotalHeight - item.height - (hasChildren ? item.expandBtnSize : 0) : 0;
           let _top = totalHeight + offset;
+          let _left = item.left;
           item.top += _top;
-          let offsetLeft = (totalHeight2 + nodeTotalHeight) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg));
-          item.left += offsetLeft;
+          item.left = node3.left + node3.width * ctx.indent + (nodeTotalHeight + totalHeight2) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg));
           totalHeight += offset;
           totalHeight2 += nodeTotalHeight;
           ctx.updateChildrenPro(item.children, {
             top: _top,
-            left: offsetLeft
+            left: item.left - _left
           });
         });
       }
@@ -46293,6 +46293,8 @@ var Fishbone = class extends Base_default {
   //  构造函数
   constructor(opt = {}) {
     super(opt);
+    this.indent = 0.3;
+    this.childIndent = 0.5;
   }
   //  布局
   doLayout(callback) {
@@ -46496,17 +46498,17 @@ var Fishbone = class extends Base_default {
         if (item.left > maxx) {
           maxx = item.left;
         }
-        let nodeLineX = item.left + item.width * 0.3;
-        let offset2 = item.height + node3.height / 2;
+        let nodeLineX = item.left;
+        let offset2 = node3.height / 2;
         let offsetX = offset2 / Math.tan(degToRad(this.mindMap.opt.fishboneDeg));
         let line2 = this.draw.path();
         if (this.checkIsTop(item)) {
           line2.plot(
-            `M ${nodeLineX - offsetX},${item.top + offset2} L ${nodeLineX},${item.top}`
+            `M ${nodeLineX - offsetX},${item.top + item.height + offset2} L ${item.left},${item.top + item.height}`
           );
         } else {
           line2.plot(
-            `M ${nodeLineX - offsetX},${item.top + item.height - offset2} L ${nodeLineX},${item.top + item.height}`
+            `M ${nodeLineX - offsetX},${item.top - offset2} L ${nodeLineX},${item.top}`
           );
         }
         node3.style.line(line2);
@@ -46526,7 +46528,7 @@ var Fishbone = class extends Base_default {
       let maxy = -Infinity;
       let miny = Infinity;
       let maxx = -Infinity;
-      let x3 = node3.left + node3.width * 0.3;
+      let x3 = node3.left + node3.width * this.indent;
       node3.children.forEach((item, index3) => {
         if (item.left > maxx) {
           maxx = item.left;
@@ -46547,7 +46549,7 @@ var Fishbone = class extends Base_default {
       if (len >= 0) {
         let line = this.draw.path();
         expandBtnSize = len > 0 ? expandBtnSize : 0;
-        let lineLength = maxx - node3.left - node3.width * 0.3;
+        let lineLength = maxx - node3.left - node3.width * this.indent;
         lineLength = Math.max(lineLength, 0);
         let params = {
           node: node3,

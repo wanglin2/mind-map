@@ -44267,7 +44267,7 @@ class Timeline_Timeline extends layouts_Base {
     }) {
       if (layerIndex >= 1 && node.children) {
         // 遍历三级及以下节点的子节点
-        let startLeft = node.left + node.width * 0.5;
+        let startLeft = node.left + node.width * ctx.childIndent;
         let totalTop = node.top + node.height + (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0);
         node.children.forEach(item => {
           item.left = startLeft;
@@ -44299,20 +44299,20 @@ class Timeline_Timeline extends layouts_Base {
       // 将二级节点的子节点移到上方
       if (parent && parent.isRoot) {
         // 遍历二级节点的子节点
-        let totalHeight = 0;
+        let totalHeight = node.expandBtnSize;
         node.children.forEach(item => {
           // 调整top
           let nodeTotalHeight = ctx.getNodeAreaHeight(item);
           let _top = item.top;
+          let _left = item.left;
           item.top = node.top - (item.top - node.top) - nodeTotalHeight + node.height;
           // 调整left
-          let offsetLeft = (nodeTotalHeight + totalHeight) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg));
-          item.left += offsetLeft;
+          item.left = node.left + node.width * ctx.indent + (nodeTotalHeight + totalHeight) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg));
           totalHeight += nodeTotalHeight;
           // 同步更新后代节点
           ctx.updateChildrenPro(item.children, {
             top: item.top - _top,
-            left: offsetLeft
+            left: item.left - _left
           });
         });
       }
@@ -44357,7 +44357,7 @@ class Timeline_Timeline extends layouts_Base {
     }) {
       if (layerIndex === 1 && node.children) {
         // 遍历二级节点的子节点
-        let startLeft = node.left + node.width * 0.5;
+        let startLeft = node.left + node.width * ctx.childIndent;
         let totalTop = node.top + node.height + (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0);
         node.children.forEach(item => {
           item.left = startLeft;
@@ -44367,7 +44367,7 @@ class Timeline_Timeline extends layouts_Base {
       }
       if (layerIndex > 1 && node.children) {
         // 遍历三级及以下节点的子节点
-        let startLeft = node.left + node.width * 0.5;
+        let startLeft = node.left + node.width * ctx.childIndent;
         let totalTop = node.top - (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0);
         node.children.forEach(item => {
           item.left = startLeft;
@@ -44399,23 +44399,23 @@ class Timeline_Timeline extends layouts_Base {
       if (parent && parent.isRoot) {
         // 遍历二级节点的子节点
         let totalHeight = 0;
-        let totalHeight2 = 0;
+        let totalHeight2 = node.expandBtnSize;
         node.children.forEach(item => {
           // 调整top
           let hasChildren = ctx.getNodeActChildrenLength(item) > 0;
           let nodeTotalHeight = ctx.getNodeAreaHeight(item);
           let offset = hasChildren > 0 ? nodeTotalHeight - item.height - (hasChildren ? item.expandBtnSize : 0) : 0;
           let _top = totalHeight + offset;
+          let _left = item.left;
           item.top += _top;
           // 调整left
-          let offsetLeft = (totalHeight2 + nodeTotalHeight) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg));
-          item.left += offsetLeft;
+          item.left = node.left + node.width * ctx.indent + (nodeTotalHeight + totalHeight2) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg));
           totalHeight += offset;
           totalHeight2 += nodeTotalHeight;
           // 同步更新后代节点
           ctx.updateChildrenPro(item.children, {
             top: _top,
-            left: offsetLeft
+            left: item.left - _left
           });
         });
       }
@@ -44434,6 +44434,8 @@ class Fishbone_Fishbone extends layouts_Base {
   //  构造函数
   constructor(opt = {}) {
     super(opt);
+    this.indent = 0.3;
+    this.childIndent = 0.5;
   }
 
   //  布局
@@ -44659,14 +44661,14 @@ class Fishbone_Fishbone extends layouts_Base {
           maxx = item.left;
         }
         // 水平线段到二级节点的连线
-        let nodeLineX = item.left + item.width * 0.3;
-        let offset = item.height + node.height / 2;
+        let nodeLineX = item.left;
+        let offset = node.height / 2;
         let offsetX = offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg));
         let line = this.draw.path();
         if (this.checkIsTop(item)) {
-          line.plot(`M ${nodeLineX - offsetX},${item.top + offset} L ${nodeLineX},${item.top}`);
+          line.plot(`M ${nodeLineX - offsetX},${item.top + item.height + offset} L ${item.left},${item.top + item.height}`);
         } else {
-          line.plot(`M ${nodeLineX - offsetX},${item.top + item.height - offset} L ${nodeLineX},${item.top + item.height}`);
+          line.plot(`M ${nodeLineX - offsetX},${item.top - offset} L ${nodeLineX},${item.top}`);
         }
         node.style.line(line);
         node._lines.push(line);
@@ -44685,7 +44687,7 @@ class Fishbone_Fishbone extends layouts_Base {
       let maxy = -Infinity;
       let miny = Infinity;
       let maxx = -Infinity;
-      let x = node.left + node.width * 0.3;
+      let x = node.left + node.width * this.indent;
       node.children.forEach((item, index) => {
         if (item.left > maxx) {
           maxx = item.left;
@@ -44708,7 +44710,7 @@ class Fishbone_Fishbone extends layouts_Base {
       if (len >= 0) {
         let line = this.draw.path();
         expandBtnSize = len > 0 ? expandBtnSize : 0;
-        let lineLength = maxx - node.left - node.width * 0.3;
+        let lineLength = maxx - node.left - node.width * this.indent;
         lineLength = Math.max(lineLength, 0);
         let params = {
           node,
