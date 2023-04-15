@@ -8,6 +8,8 @@ class Fishbone extends Base {
   //  构造函数
   constructor(opt = {}) {
     super(opt)
+    this.indent = 0.3
+    this.childIndent = 0.5
   }
 
   //  布局
@@ -239,21 +241,21 @@ class Fishbone extends Base {
           maxx = item.left
         }
         // 水平线段到二级节点的连线
-        let nodeLineX = item.left + item.width * 0.3
-        let offset = item.height + node.height / 2
+        let nodeLineX = item.left
+        let offset = node.height / 2
         let offsetX = offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg))
         let line = this.draw.path()
         if (this.checkIsTop(item)) {
           line.plot(
-            `M ${nodeLineX - offsetX},${item.top + offset} L ${nodeLineX},${
-              item.top
+            `M ${nodeLineX - offsetX},${item.top + item.height + offset} L ${item.left},${
+              item.top + item.height
             }`
           )
         } else {
           line.plot(
             `M ${nodeLineX - offsetX},${
-              item.top + item.height - offset
-            } L ${nodeLineX},${item.top + item.height}`
+              item.top - offset
+            } L ${nodeLineX},${item.top}`
           )
         }
         node.style.line(line)
@@ -277,7 +279,7 @@ class Fishbone extends Base {
       let maxy = -Infinity
       let miny = Infinity
       let maxx = -Infinity
-      let x = node.left + node.width * 0.3
+      let x = node.left + node.width * this.indent
       node.children.forEach((item, index) => {
         if (item.left > maxx) {
           maxx = item.left
@@ -300,7 +302,7 @@ class Fishbone extends Base {
       if (len >= 0) {
         let line = this.draw.path()
         expandBtnSize = len > 0 ? expandBtnSize : 0
-        let lineLength = maxx - node.left - node.width * 0.3
+        let lineLength = maxx - node.left - node.width * this.indent
         lineLength = Math.max(lineLength, 0)
         let params = {
           node,
