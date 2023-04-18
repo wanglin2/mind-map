@@ -281,6 +281,7 @@ class MindMap {
       layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE
     }
     this.opt.layout = layout
+    this.view.reset()
     this.renderer.setLayout()
     this.render()
   }

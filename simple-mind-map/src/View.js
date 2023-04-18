@@ -167,10 +167,14 @@ class View {
 
   //  恢复
   reset() {
+    let scaleChange = this.scale !== 1
     this.scale = 1
     this.x = 0
     this.y = 0
     this.transform()
+    if (scaleChange) {
+      this.mindMap.emit('scale', this.scale)
+    }
   }
 
   //  缩小
