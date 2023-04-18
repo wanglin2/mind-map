@@ -277,6 +277,8 @@ export default {
         theme: theme.template,
         themeConfig: theme.config,
         viewData: view,
+        nodeTextEditZIndex: 1000,
+        nodeNoteTooltipZIndex: 1000,
         customNoteContentShow: {
           show: (content, left, top) => {
             this.$bus.$emit('showNoteContent', content, left, top)

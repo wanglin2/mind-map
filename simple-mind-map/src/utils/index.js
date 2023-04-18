@@ -303,3 +303,33 @@ export const nextTick = function (fn, ctx) {
     timerFunc(handle, 0)
   }
 }
+
+// 检查节点是否超出画布
+export const checkNodeOuter = (mindMap, node) => {
+  let elRect = mindMap.elRect
+  let { scaleX, scaleY, translateX, translateY } = mindMap.draw.transform()
+  let { left, top, width, height } = node
+  let right = (left + width) * scaleX + translateX
+  let bottom = (top + height) * scaleY + translateY
+  left = left * scaleX + translateX
+  top = top * scaleY + translateY
+  let offsetLeft = 0
+  let offsetTop = 0
+  if (left < 0) {
+    offsetLeft = -left
+  }
+  if (right > elRect.width) {
+    offsetLeft = -(right - elRect.width)
+  }
+  if (top < 0) {
+    offsetTop = -top
+  }
+  if (bottom > elRect.height) {
+    offsetTop = -(bottom - elRect.height)
+  }
+  return {
+    isOuter: offsetLeft !== 0 || offsetTop !== 0,
+    offsetLeft,
+    offsetTop
+  }
+}

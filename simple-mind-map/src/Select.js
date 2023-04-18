@@ -17,7 +17,7 @@ class Select {
 
   //  绑定事件
   bindEvent() {
-    this.checkInNodes = throttle(this.checkInNodes, 500, this)
+    this.checkInNodes = throttle(this.checkInNodes, 300, this)
     this.mindMap.on('mousedown', e => {
       if (this.mindMap.opt.readonly) {
         return
@@ -146,22 +146,26 @@ class Select {
       let bottom = (top + height) * scaleY + translateY
       left = left * scaleX + translateX
       top = top * scaleY + translateY
-      if (left >= minx && right <= maxx && top >= miny && bottom <= maxy) {
-        this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
+      if ((left >= minx && left <= maxx ||
+          right >= minx && right <= maxx) && 
+          (top >= miny && top <= maxy ||
+          bottom >= miny && bottom <= maxy)
+        ) {
+        // this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
           if (node.nodeData.data.isActive) {
             return
           }
           this.mindMap.renderer.setNodeActive(node, true)
           this.mindMap.renderer.addActiveNode(node)
-        })
+        // })
       } else if (node.nodeData.data.isActive) {
-        this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
+        // this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
           if (!node.nodeData.data.isActive) {
             return
           }
           this.mindMap.renderer.setNodeActive(node, false)
           this.mindMap.renderer.removeActiveNode(node)
-        })
+        // })
       }
     })
   }
