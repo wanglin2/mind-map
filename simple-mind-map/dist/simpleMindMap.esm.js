@@ -36943,6 +36943,7 @@ var Event2 = class extends import_eventemitter3.default {
   }
   //  绑定函数上下文
   bindFn() {
+    this.onBodyClick = this.onBodyClick.bind(this);
     this.onDrawClick = this.onDrawClick.bind(this);
     this.onMousedown = this.onMousedown.bind(this);
     this.onMousemove = this.onMousemove.bind(this);
@@ -36956,6 +36957,7 @@ var Event2 = class extends import_eventemitter3.default {
   }
   //  绑定事件
   bind() {
+    document.body.addEventListener("click", this.onBodyClick);
     this.mindMap.svg.on("click", this.onDrawClick);
     this.mindMap.el.addEventListener("mousedown", this.onMousedown);
     this.mindMap.svg.on("mousedown", this.onSvgMousedown);
@@ -36969,6 +36971,7 @@ var Event2 = class extends import_eventemitter3.default {
   }
   //  解绑事件
   unbind() {
+    document.body.removeEventListener("click", this.onBodyClick);
     this.mindMap.svg.off("click", this.onDrawClick);
     this.mindMap.el.removeEventListener("mousedown", this.onMousedown);
     window.removeEventListener("mousemove", this.onMousemove);
@@ -36982,6 +36985,10 @@ var Event2 = class extends import_eventemitter3.default {
   //   画布的单击事件
   onDrawClick(e2) {
     this.emit("draw_click", e2);
+  }
+  // 页面的单击事件
+  onBodyClick(e2) {
+    this.emit("body_click", e2);
   }
   //   svg画布的鼠标按下事件
   onSvgMousedown(e2) {
@@ -43939,13 +43946,14 @@ function createNoteNode() {
     if (!this.noteEl) {
       this.noteEl = document.createElement("div");
       this.noteEl.style.cssText = `
-                    position: absolute;
-                    padding: 10px;
-                    border-radius: 5px;
-                    box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
-                    display: none;
-                    background-color: #fff;
-                `;
+          position: absolute;
+          padding: 10px;
+          border-radius: 5px;
+          box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
+          display: none;
+          background-color: #fff;
+          z-index: ${this.mindMap.opt.nodeNoteTooltipZIndex}
+      `;
       document.body.appendChild(this.noteEl);
     }
     this.noteEl.innerText = this.nodeData.data.note;
@@ -46635,6 +46643,11 @@ var TextEdit = class {
     this.mindMap.on("draw_click", () => {
       this.hideEditTextBox();
     });
+    this.mindMap.on("body_click", () => {
+      if (this.mindMap.opt.isEndNodeTextEditOnClickOuter) {
+        this.hideEditTextBox();
+      }
+    });
     this.mindMap.on("svg_mousedown", () => {
       this.hideEditTextBox();
     });
@@ -46677,6 +46690,9 @@ var TextEdit = class {
       this.textEditNode.addEventListener("keyup", (e2) => {
         e2.stopPropagation();
       });
+      this.textEditNode.addEventListener("click", (e2) => {
+        e2.stopPropagation();
+      });
       document.body.appendChild(this.textEditNode);
     }
     let scale = this.mindMap.view.scale;
@@ -46684,6 +46700,7 @@ var TextEdit = class {
     let fontSize = node3.style.merge("fontSize");
     let textLines = node3.nodeData.data.text.split(/\n/gim);
     node3.style.domText(this.textEditNode, scale, textLines.length);
+    this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex;
     this.textEditNode.innerHTML = textLines.join("<br>");
     this.textEditNode.style.minWidth = rect.width + 10 + "px";
     this.textEditNode.style.minHeight = rect.height + 6 + "px";
@@ -49673,7 +49690,16 @@ var defaultOpt = {
   // 如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms
   nodeTransitionMoveDuration: 300,
   // 初始根节点的位置
-  initRootNodePosition: null
+  initRootNodePosition: null,
+  // 导出png、svg、pdf时的图形内边距
+  exportPaddingX: 10,
+  exportPaddingY: 10,
+  // 节点文本编辑框的z-index
+  nodeTextEditZIndex: 3e3,
+  // 节点备注浮层的z-index
+  nodeNoteTooltipZIndex: 3e3,
+  // 是否在点击了画布外的区域时结束节点文本的编辑状态
+  isEndNodeTextEditOnClickOuter: true
 };
 var MindMap2 = class {
   //  构造函数
@@ -49880,7 +49906,7 @@ var MindMap2 = class {
     this.emit("mode_change", mode);
   }
   // 获取svg数据
-  getSvgData() {
+  getSvgData({ paddingX = 0, paddingY = 0 }) {
     const svg2 = this.svg;
     const draw = this.draw;
     const origWidth = svg2.width();
@@ -49889,6 +49915,9 @@ var MindMap2 = class {
     const elRect = this.el.getBoundingClientRect();
     draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY);
     const rect = draw.rbox();
+    rect.width += paddingX;
+    rect.height += paddingY;
+    draw.translate(paddingX / 2, paddingY / 2);
     svg2.size(rect.width, rect.height);
     draw.translate(-rect.x + elRect.left, -rect.y + elRect.top);
     let clone = svg2.clone();
@@ -59615,7 +59644,11 @@ var Export = class {
   }
   //  获取svg数据
   async getSvgData(domToImage) {
-    let { svg: svg2, svgHTML } = this.mindMap.getSvgData();
+    let { exportPaddingX, exportPaddingY } = this.mindMap.opt;
+    let { svg: svg2, svgHTML } = this.mindMap.getSvgData({
+      paddingX: exportPaddingX,
+      paddingY: exportPaddingY
+    });
     let imageList = svg2.find("image");
     let task = imageList.map(async (item) => {
       let imgUlr = item.attr("href") || item.attr("xlink:href");
@@ -61047,12 +61080,16 @@ var RichText = class {
     if (!this.textEditNode) {
       this.textEditNode = document.createElement("div");
       this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: 3px 5px;margin-left: -5px;margin-top: -3px;`;
+      this.textEditNode.addEventListener("click", (e2) => {
+        e2.stopPropagation();
+      });
       document.body.appendChild(this.textEditNode);
     }
     let g2 = node3._textData.node;
     let originWidth = g2.attr("data-width");
     let originHeight = g2.attr("data-height");
     let bgColor = node3.style.merge("fillColor");
+    this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex;
     this.textEditNode.style.backgroundColor = bgColor === "transparent" ? "#fff" : bgColor;
     this.textEditNode.style.minWidth = originWidth + "px";
     this.textEditNode.style.minHeight = originHeight + "px";
