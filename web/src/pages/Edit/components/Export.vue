@@ -30,6 +30,22 @@
           >{{ $t('export.domToImage') }}</el-checkbox
         >
       </div>
+      <div class="paddingInputBox" v-show="['svg', 'png', 'pdf'].includes(exportType)">
+        <span class="name">{{ $t('export.paddingX') }}</span>
+        <el-input
+          style="width: 100px"
+          v-model="paddingX"
+          size="mini"
+          @change="onPaddingChange"
+        ></el-input>
+        <span class="name" style="margin-left: 10px;">{{ $t('export.paddingY') }}</span>
+        <el-input
+          style="width: 100px"
+          v-model="paddingY"
+          size="mini"
+          @change="onPaddingChange"
+        ></el-input>
+      </div>
       <div class="downloadTypeList">
         <div 
           class="downloadTypeItem" 
@@ -77,7 +93,9 @@ export default {
       widthConfig: true,
       domToImage: false,
       loading: false,
-      loadingText: ''
+      loadingText: '',
+      paddingX: 10,
+      paddingY: 10
     }
   },
   computed: {
@@ -102,6 +120,13 @@ export default {
     })
   },
   methods: {
+    onPaddingChange() {
+      this.$bus.$emit('paddingChange', {
+        exportPaddingX: Number(this.paddingX),
+        exportPaddingY: Number(this.paddingY)
+      })
+    },
+
     /**
      * @Author: 王林
      * @Date: 2021-06-22 22:08:11
@@ -157,6 +182,14 @@ export default {
 
   .nameInputBox {
     margin-bottom: 20px;
+
+    .name {
+      margin-right: 10px;
+    }
+  }
+
+  .paddingInputBox {
+    margin-bottom: 10px;
 
     .name {
       margin-right: 10px;

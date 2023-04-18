@@ -99,6 +99,9 @@ class RichText {
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div')
       this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: 3px 5px;margin-left: -5px;margin-top: -3px;`
+      this.textEditNode.addEventListener('click', e => {
+        e.stopPropagation()
+      })
       document.body.appendChild(this.textEditNode)
     }
     // 原始宽高
@@ -107,6 +110,7 @@ class RichText {
     let originHeight = g.attr('data-height')
     // 使用节点的填充色，否则如果节点颜色是白色的话编辑时看不见
     let bgColor = node.style.merge('fillColor')
+    this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex
     this.textEditNode.style.backgroundColor = bgColor === 'transparent' ? '#fff' : bgColor
     this.textEditNode.style.minWidth = originWidth + 'px'
     this.textEditNode.style.minHeight = originHeight + 'px'
