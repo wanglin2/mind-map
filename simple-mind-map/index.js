@@ -92,7 +92,10 @@ const defaultOpt = {
   // 如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms
   nodeTransitionMoveDuration: 300,
   // 初始根节点的位置
-  initRootNodePosition: null
+  initRootNodePosition: null,
+  // 导出png、svg、pdf时的图形内边距
+  exportPaddingX: 10,
+  exportPaddingY: 10
 }
 
 //  思维导图
@@ -359,7 +362,7 @@ class MindMap {
   }
 
   // 获取svg数据
-  getSvgData() {
+  getSvgData({ paddingX = 0, paddingY = 0 }) {
     const svg = this.svg
     const draw = this.draw
     // 保存原始信息
@@ -371,6 +374,10 @@ class MindMap {
     draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY)
     // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
     const rect = draw.rbox()
+    // 内边距
+    rect.width += paddingX
+    rect.height += paddingY
+    draw.translate(paddingX / 2, paddingY / 2)
     // 将svg设置为实际内容的宽高
     svg.size(rect.width, rect.height)
     // 把实际内容变换
