@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.5-fix.1
+
+Fix: 1.Fix the issue where the edit box is also outside the canvas when editing nodes outside the canvas. 2.After modifying the structure, reset the transformation to prevent the problem of sudden position changes during the first drag after switching the structure during scaling.
+
+optimization: 1.When multiple nodes are selected, as long as there is a cross between the node and the selection area, it is considered selected.
+
 ## 0.5.5
 
 New: 1.Supports configuring the padding when exporting to PNG, SVG, or PDF. 2.Support the configuration of z-index for node text editing boxes and node comment floating layer elements. 3.Support clicking on areas outside the canvas to end node editing status.

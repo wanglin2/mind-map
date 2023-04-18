@@ -33012,6 +33012,13 @@ class View_View {
     }
   }
 
+  //  平移x,y方向
+  translateXY(x, y) {
+    this.x += x;
+    this.y += y;
+    this.transform();
+  }
+
   //  平移x方向
   translateX(step) {
     this.x += step;
@@ -33048,10 +33055,14 @@ class View_View {
 
   //  恢复
   reset() {
+    let scaleChange = this.scale !== 1;
     this.scale = 1;
     this.x = 0;
     this.y = 0;
     this.transform();
+    if (scaleChange) {
+      this.mindMap.emit('scale', this.scale);
+    }
   }
 
   //  缩小
@@ -41034,6 +41045,46 @@ const nextTick = function (fn, ctx) {
     timerFunc(handle, 0);
   };
 };
+
+// 检查节点是否超出画布
+const checkNodeOuter = (mindMap, node) => {
+  let elRect = mindMap.elRect;
+  let {
+    scaleX,
+    scaleY,
+    translateX,
+    translateY
+  } = mindMap.draw.transform();
+  let {
+    left,
+    top,
+    width,
+    height
+  } = node;
+  let right = (left + width) * scaleX + translateX;
+  let bottom = (top + height) * scaleY + translateY;
+  left = left * scaleX + translateX;
+  top = top * scaleY + translateY;
+  let offsetLeft = 0;
+  let offsetTop = 0;
+  if (left < 0) {
+    offsetLeft = -left;
+  }
+  if (right > elRect.width) {
+    offsetLeft = -(right - elRect.width);
+  }
+  if (top < 0) {
+    offsetTop = -top;
+  }
+  if (bottom > elRect.height) {
+    offsetTop = -(bottom - elRect.height);
+  }
+  return {
+    isOuter: offsetLeft !== 0 || offsetTop !== 0,
+    offsetLeft,
+    offsetTop
+  };
+};
 // CONCATENATED MODULE: ../simple-mind-map/src/utils/nodeGeneralization.js
 
 
@@ -44860,6 +44911,11 @@ class TextEdit_TextEdit {
 
   //  显示文本编辑框
   show(node) {
+    let {
+      offsetLeft,
+      offsetTop
+    } = checkNodeOuter(this.mindMap, node);
+    this.mindMap.view.translateXY(offsetLeft, offsetTop);
     let rect = node._textData.node.node.getBoundingClientRect();
     if (this.mindMap.richText) {
       this.mindMap.richText.showEditText(node, rect);
@@ -48333,6 +48389,7 @@ class simple_mind_map_MindMap {
       layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE;
     }
     this.opt.layout = layout;
+    this.view.reset();
     this.renderer.setLayout();
     this.render();
   }
@@ -49992,7 +50049,6 @@ Drag_Drag.instanceName = 'drag';
 // CONCATENATED MODULE: ../simple-mind-map/src/Select.js
 
 
-
 //  选择节点类
 
 class Select_Select {
@@ -50012,7 +50068,7 @@ class Select_Select {
 
   //  绑定事件
   bindEvent() {
-    this.checkInNodes = throttle(this.checkInNodes, 500, this);
+    this.checkInNodes = throttle(this.checkInNodes, 300, this);
     this.mindMap.on('mousedown', e => {
       if (this.mindMap.opt.readonly) {
         return;
@@ -50140,26 +50196,27 @@ class Select_Select {
       let bottom = (top + height) * scaleY + translateY;
       left = left * scaleX + translateX;
       top = top * scaleY + translateY;
-      if (left >= minx && right <= maxx && top >= miny && bottom <= maxy) {
-        this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
-          if (node.nodeData.data.isActive) {
-            return;
-          }
-          this.mindMap.renderer.setNodeActive(node, true);
-          this.mindMap.renderer.addActiveNode(node);
-        });
+      if ((left >= minx && left <= maxx || right >= minx && right <= maxx) && (top >= miny && top <= maxy || bottom >= miny && bottom <= maxy)) {
+        // this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
+        if (node.nodeData.data.isActive) {
+          return;
+        }
+        this.mindMap.renderer.setNodeActive(node, true);
+        this.mindMap.renderer.addActiveNode(node);
+        // })
       } else if (node.nodeData.data.isActive) {
-        this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
-          if (!node.nodeData.data.isActive) {
-            return;
-          }
-          this.mindMap.renderer.setNodeActive(node, false);
-          this.mindMap.renderer.removeActiveNode(node);
-        });
+        // this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
+        if (!node.nodeData.data.isActive) {
+          return;
+        }
+        this.mindMap.renderer.setNodeActive(node, false);
+        this.mindMap.renderer.removeActiveNode(node);
+        // })
       }
     });
   }
 }
+
 Select_Select.instanceName = 'select';
 /* harmony default export */ var src_Select = (Select_Select);
 // CONCATENATED MODULE: ../simple-mind-map/node_modules/uuid/dist/esm-browser/native.js
