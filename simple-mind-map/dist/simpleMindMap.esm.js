@@ -36856,6 +36856,12 @@ var View = class {
       this.mindMap.emit("scale", this.scale);
     }
   }
+  //  平移x,y方向
+  translateXY(x3, y4) {
+    this.x += x3;
+    this.y += y4;
+    this.transform();
+  }
   //  平移x方向
   translateX(step) {
     this.x += step;
@@ -36887,10 +36893,14 @@ var View = class {
   }
   //  恢复
   reset() {
+    let scaleChange = this.scale !== 1;
     this.scale = 1;
     this.x = 0;
     this.y = 0;
     this.transform();
+    if (scaleChange) {
+      this.mindMap.emit("scale", this.scale);
+    }
   }
   //  缩小
   narrow() {
@@ -43237,6 +43247,34 @@ var nextTick = function(fn, ctx) {
     timerFunc(handle, 0);
   };
 };
+var checkNodeOuter = (mindMap, node3) => {
+  let elRect = mindMap.elRect;
+  let { scaleX, scaleY, translateX, translateY } = mindMap.draw.transform();
+  let { left, top, width: width2, height: height2 } = node3;
+  let right = (left + width2) * scaleX + translateX;
+  let bottom = (top + height2) * scaleY + translateY;
+  left = left * scaleX + translateX;
+  top = top * scaleY + translateY;
+  let offsetLeft = 0;
+  let offsetTop = 0;
+  if (left < 0) {
+    offsetLeft = -left;
+  }
+  if (right > elRect.width) {
+    offsetLeft = -(right - elRect.width);
+  }
+  if (top < 0) {
+    offsetTop = -top;
+  }
+  if (bottom > elRect.height) {
+    offsetTop = -(bottom - elRect.height);
+  }
+  return {
+    isOuter: offsetLeft !== 0 || offsetTop !== 0,
+    offsetLeft,
+    offsetTop
+  };
+};
 
 // ../simple-mind-map/src/utils/nodeGeneralization.js
 function checkHasGeneralization() {
@@ -46672,6 +46710,8 @@ var TextEdit = class {
   }
   //  显示文本编辑框
   show(node3) {
+    let { offsetLeft, offsetTop } = checkNodeOuter(this.mindMap, node3);
+    this.mindMap.view.translateXY(offsetLeft, offsetTop);
     let rect = node3._textData.node.node.getBoundingClientRect();
     if (this.mindMap.richText) {
       this.mindMap.richText.showEditText(node3, rect);
@@ -49828,6 +49868,7 @@ var MindMap2 = class {
       layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE;
     }
     this.opt.layout = layout;
+    this.view.reset();
     this.renderer.setLayout();
     this.render();
   }
@@ -60142,7 +60183,7 @@ var Select = class {
   }
   //  绑定事件
   bindEvent() {
-    this.checkInNodes = throttle(this.checkInNodes, 500, this);
+    this.checkInNodes = throttle(this.checkInNodes, 300, this);
     this.mindMap.on("mousedown", (e2) => {
       if (this.mindMap.opt.readonly) {
         return;
@@ -60254,22 +60295,18 @@ var Select = class {
       let bottom = (top + height2) * scaleY + translateY;
       left = left * scaleX + translateX;
       top = top * scaleY + translateY;
-      if (left >= minx && right <= maxx && top >= miny && bottom <= maxy) {
-        this.mindMap.batchExecution.push("activeNode" + node3.uid, () => {
-          if (node3.nodeData.data.isActive) {
-            return;
-          }
-          this.mindMap.renderer.setNodeActive(node3, true);
-          this.mindMap.renderer.addActiveNode(node3);
-        });
+      if ((left >= minx && left <= maxx || right >= minx && right <= maxx) && (top >= miny && top <= maxy || bottom >= miny && bottom <= maxy)) {
+        if (node3.nodeData.data.isActive) {
+          return;
+        }
+        this.mindMap.renderer.setNodeActive(node3, true);
+        this.mindMap.renderer.addActiveNode(node3);
       } else if (node3.nodeData.data.isActive) {
-        this.mindMap.batchExecution.push("activeNode" + node3.uid, () => {
-          if (!node3.nodeData.data.isActive) {
-            return;
-          }
-          this.mindMap.renderer.setNodeActive(node3, false);
-          this.mindMap.renderer.removeActiveNode(node3);
-        });
+        if (!node3.nodeData.data.isActive) {
+          return;
+        }
+        this.mindMap.renderer.setNodeActive(node3, false);
+        this.mindMap.renderer.removeActiveNode(node3);
       }
     });
   }

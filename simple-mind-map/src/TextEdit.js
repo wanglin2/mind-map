@@ -1,4 +1,4 @@
-import { getStrWithBrFromHtml } from './utils'
+import { getStrWithBrFromHtml, checkNodeOuter } from './utils'
 
 //  节点文字编辑类
 export default class TextEdit {
@@ -60,6 +60,8 @@ export default class TextEdit {
 
   //  显示文本编辑框
   show(node) {
+    let { offsetLeft, offsetTop } = checkNodeOuter(this.mindMap, node)
+    this.mindMap.view.translateXY(offsetLeft, offsetTop)
     let rect = node._textData.node.node.getBoundingClientRect()
     if (this.mindMap.richText) {
       this.mindMap.richText.showEditText(node, rect)
