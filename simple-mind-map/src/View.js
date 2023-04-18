@@ -124,6 +124,13 @@ class View {
     }
   }
 
+  //  平移x,y方向
+  translateXY(x, y) {
+    this.x += x
+    this.y += y
+    this.transform()
+  }
+
   //  平移x方向
   translateX(step) {
     this.x += step
