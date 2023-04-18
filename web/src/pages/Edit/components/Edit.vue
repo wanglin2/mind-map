@@ -115,6 +115,7 @@ export default {
     this.getData()
     this.init()
     this.$bus.$on('execCommand', this.execCommand)
+    this.$bus.$on('paddingChange', this.onPaddingChange)
     this.$bus.$on('export', this.export)
     this.$bus.$on('setData', this.setData)
     this.$bus.$on('startTextEdit', () => {
@@ -372,6 +373,11 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+
+    // 修改导出内边距
+    onPaddingChange(data) {
+      this.mindMap.updateConfig(data)
     },
 
     // 显示新特性提示

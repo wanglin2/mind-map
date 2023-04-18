@@ -28,7 +28,11 @@ class Export {
 
   //  获取svg数据
   async getSvgData(domToImage) {
-    let { svg, svgHTML } = this.mindMap.getSvgData()
+    let { exportPaddingX, exportPaddingY } = this.mindMap.opt
+    let { svg, svgHTML } = this.mindMap.getSvgData({
+      paddingX: exportPaddingX,
+      paddingY: exportPaddingY
+    })
     // 把图片的url转换成data:url类型，否则导出会丢失图片
     let imageList = svg.find('image')
     let task = imageList.map(async item => {

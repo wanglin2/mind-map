@@ -95,7 +95,9 @@ export default {
     svgTips: 'tips：富文本模式导出图片非常耗时',
     transformingDomToImages: '正在转换节点：',
     notifyTitle: '消息',
-    notifyMessage: '如果没有触发下载，请检查是否被浏览器拦截了'
+    notifyMessage: '如果没有触发下载，请检查是否被浏览器拦截了',
+    paddingX: '水平内边距',
+    paddingY: '垂直内边距'
   },
   fullscreen: {
     fullscreenShow: '全屏查看',
