@@ -2,7 +2,7 @@
   <div>
     <h1>Changelog</h1>
 <h2>0.5.5</h2>
-<p>New: 1.Supports configuring the padding when exporting to PNG, SVG, or PDF.</p>
+<p>New: 1.Supports configuring the padding when exporting to PNG, SVG, or PDF. 2.Support the configuration of z-index for node text editing boxes and node comment floating layer elements. 3.Support clicking on areas outside the canvas to end node editing status.</p>
 <h2>0.5.4</h2>
 <p>New: 1.Add new themes. 2.Added timeline and fishbone structure.</p>
 <p>Fix: 1.Fix the conflict issue between node right-click and canvas right-click. 2.Fix the bug that the line segment is not hidden when dragging nodes such as organizational chart and directory organization chart.</p>

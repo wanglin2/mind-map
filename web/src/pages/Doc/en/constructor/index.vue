@@ -245,6 +245,27 @@
 <td>Vertical padding of graphics when exporting PNG, SVG, and PDF</td>
 <td></td>
 </tr>
+<tr>
+<td>nodeTextEditZIndex（v0.5.5+）</td>
+<td>Number</td>
+<td>3000</td>
+<td></td>
+<td>z-index of node text edit box elements</td>
+</tr>
+<tr>
+<td>nodeNoteTooltipZIndex（v0.5.5+）</td>
+<td>Number</td>
+<td>3000</td>
+<td>z-index of floating layer elements in node comments</td>
+<td></td>
+</tr>
+<tr>
+<td>isEndNodeTextEditOnClickOuter（v0.5.5+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Whether to end the editing status of node text when clicking on an area outside the canvas</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
