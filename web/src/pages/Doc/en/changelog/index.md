@@ -2,7 +2,7 @@
 
 ## 0.5.5
 
-New: 1.Supports configuring the padding when exporting to PNG, SVG, or PDF.
+New: 1.Supports configuring the padding when exporting to PNG, SVG, or PDF. 2.Support the configuration of z-index for node text editing boxes and node comment floating layer elements. 3.Support clicking on areas outside the canvas to end node editing status.
 
 ## 0.5.4
 
