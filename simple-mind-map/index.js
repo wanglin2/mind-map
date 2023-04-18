@@ -95,7 +95,13 @@ const defaultOpt = {
   initRootNodePosition: null,
   // 导出png、svg、pdf时的图形内边距
   exportPaddingX: 10,
-  exportPaddingY: 10
+  exportPaddingY: 10,
+  // 节点文本编辑框的z-index
+  nodeTextEditZIndex: 3000,
+  // 节点备注浮层的z-index
+  nodeNoteTooltipZIndex: 3000,
+  // 是否在点击了画布外的区域时结束节点文本的编辑状态
+  isEndNodeTextEditOnClickOuter: true
 }
 
 //  思维导图
