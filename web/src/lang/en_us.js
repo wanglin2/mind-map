@@ -95,7 +95,9 @@ export default {
     svgTips: 'tips: Exporting pictures in rich text mode is time-consuming',
     transformingDomToImages: 'Converting nodes: ',
     notifyTitle: 'Info',
-    notifyMessage: 'If the download is not triggered, check whether it is blocked by the browser'
+    notifyMessage: 'If the download is not triggered, check whether it is blocked by the browser',
+    paddingX: 'Padding x',
+    paddingY: 'Padding y'
   },
   fullscreen: {
     fullscreenShow: 'Full screen show',

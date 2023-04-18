@@ -231,6 +231,41 @@
 <td>The position of the initial root node can be passed as an array, default is <code>['center', 'center']</code>, Represents the root node at the center of the canvas, In addition to <code>center</code>, keywords can also be set to <code>left</code>, <code>top</code>, <code>right</code>, and <code>bottom</code>, In addition to passing keywords, each item in the array can also pass a number representing a specific pixel, Can pass a percentage string, such as <code>['40%', '60%']</code>, Represents a horizontal position at <code>40%</code> of the canvas width, and a vertical position at <code>60%</code> of the canvas height</td>
 <td></td>
 </tr>
+<tr>
+<td>exportPaddingX（v0.5.5+）</td>
+<td>Number</td>
+<td>10</td>
+<td>Horizontal padding of graphics when exporting PNG, SVG, and PDF</td>
+<td></td>
+</tr>
+<tr>
+<td>exportPaddingY（v0.5.5+）</td>
+<td>Number</td>
+<td>10</td>
+<td>Vertical padding of graphics when exporting PNG, SVG, and PDF</td>
+<td></td>
+</tr>
+<tr>
+<td>nodeTextEditZIndex（v0.5.5+）</td>
+<td>Number</td>
+<td>3000</td>
+<td></td>
+<td>z-index of node text edit box elements</td>
+</tr>
+<tr>
+<td>nodeNoteTooltipZIndex（v0.5.5+）</td>
+<td>Number</td>
+<td>3000</td>
+<td>z-index of floating layer elements in node comments</td>
+<td></td>
+</tr>
+<tr>
+<td>isEndNodeTextEditOnClickOuter（v0.5.5+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Whether to end the editing status of node text when clicking on an area outside the canvas</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>

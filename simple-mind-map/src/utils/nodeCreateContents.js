@@ -205,13 +205,14 @@ function createNoteNode() {
     if (!this.noteEl) {
       this.noteEl = document.createElement('div')
       this.noteEl.style.cssText = `
-                    position: absolute;
-                    padding: 10px;
-                    border-radius: 5px;
-                    box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
-                    display: none;
-                    background-color: #fff;
-                `
+          position: absolute;
+          padding: 10px;
+          border-radius: 5px;
+          box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
+          display: none;
+          background-color: #fff;
+          z-index: ${ this.mindMap.opt.nodeNoteTooltipZIndex }
+      `
       document.body.appendChild(this.noteEl)
     }
     this.noteEl.innerText = this.nodeData.data.note

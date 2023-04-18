@@ -23,6 +23,12 @@ export default class TextEdit {
       // 隐藏文本编辑框
       this.hideEditTextBox()
     })
+    this.mindMap.on('body_click', () => {
+      // 隐藏文本编辑框
+      if (this.mindMap.opt.isEndNodeTextEditOnClickOuter) {
+        this.hideEditTextBox()
+      }
+    })
     this.mindMap.on('svg_mousedown', () => {
       // 隐藏文本编辑框
       this.hideEditTextBox()
@@ -73,6 +79,9 @@ export default class TextEdit {
       this.textEditNode.addEventListener('keyup', e => {
         e.stopPropagation()
       })
+      this.textEditNode.addEventListener('click', e => {
+        e.stopPropagation()
+      })
       document.body.appendChild(this.textEditNode)
     }
     let scale = this.mindMap.view.scale
@@ -80,6 +89,7 @@ export default class TextEdit {
     let fontSize = node.style.merge('fontSize')
     let textLines = node.nodeData.data.text.split(/\n/gim)
     node.style.domText(this.textEditNode, scale, textLines.length)
+    this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex
     this.textEditNode.innerHTML = textLines.join('<br>')
     this.textEditNode.style.minWidth = rect.width + 10 + 'px'
     this.textEditNode.style.minHeight = rect.height + 6 + 'px'
