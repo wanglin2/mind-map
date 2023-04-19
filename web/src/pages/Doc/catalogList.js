@@ -10,7 +10,7 @@ let langList = [
     path: 'en'
   }
 ]
-let StartList = ['introduction', 'start', 'translate', 'changelog']
+let StartList = ['introduction', 'start', 'deploy', 'translate', 'changelog']
 let CourseList = new Array(18).fill(0).map((_, index) => {
   return 'course' + (index + 1)
 })
