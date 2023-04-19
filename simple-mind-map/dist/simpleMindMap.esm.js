@@ -49947,7 +49947,7 @@ var MindMap2 = class {
     this.emit("mode_change", mode);
   }
   // 获取svg数据
-  getSvgData({ paddingX = 0, paddingY = 0 }) {
+  getSvgData({ paddingX = 0, paddingY = 0 } = {}) {
     const svg2 = this.svg;
     const draw = this.draw;
     const origWidth = svg2.width();

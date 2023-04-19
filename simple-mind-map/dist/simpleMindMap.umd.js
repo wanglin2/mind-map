@@ -48489,7 +48489,7 @@ class simple_mind_map_MindMap {
   getSvgData({
     paddingX = 0,
     paddingY = 0
-  }) {
+  } = {}) {
     const svg = this.svg;
     const draw = this.draw;
     // 保存原始信息
