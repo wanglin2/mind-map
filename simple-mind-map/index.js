@@ -369,7 +369,7 @@ class MindMap {
   }
 
   // 获取svg数据
-  getSvgData({ paddingX = 0, paddingY = 0 }) {
+  getSvgData({ paddingX = 0, paddingY = 0 } = {}) {
     const svg = this.svg
     const draw = this.draw
     // 保存原始信息
