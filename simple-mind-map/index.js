@@ -183,11 +183,11 @@ class MindMap {
 
   //  渲染，部分渲染
   render(callback, source = '') {
-    // this.batchExecution.push('render', () => {
+    this.batchExecution.push('render', () => {
       this.initTheme()
       this.renderer.reRender = false
       this.renderer.render(callback, source)
-    // })
+    })
   }
 
   //  重新渲染
