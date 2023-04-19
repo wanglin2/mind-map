@@ -251,7 +251,6 @@ class Render {
   //   渲染
   render(callback = () => {}, source) {
     // 如果当前还没有渲染完毕，不再触发渲染
-    console.log('this.isRendering', this.isRendering);
     if (this.isRendering) {
       // 等待当前渲染完毕后再进行一次渲染
       this.hasWaitRendering = true
