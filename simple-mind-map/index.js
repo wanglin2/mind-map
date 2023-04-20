@@ -101,7 +101,9 @@ const defaultOpt = {
   // 节点备注浮层的z-index
   nodeNoteTooltipZIndex: 3000,
   // 是否在点击了画布外的区域时结束节点文本的编辑状态
-  isEndNodeTextEditOnClickOuter: true
+  isEndNodeTextEditOnClickOuter: true,
+  // 最大历史记录数
+  maxHistoryCount: 1000
 }
 
 //  思维导图
