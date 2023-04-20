@@ -58,6 +58,7 @@ const mindMap = new MindMap({
 | nodeTextEditZIndex（v0.5.5+）     | Number  | 3000 | 节点文本编辑框元素的z-index  |          |
 | nodeNoteTooltipZIndex（v0.5.5+）     | Number  | 3000 | 节点备注浮层元素的z-index  |          |
 | isEndNodeTextEditOnClickOuter（v0.5.5+）     | Boolean  | true |  是否在点击了画布外的区域时结束节点文本的编辑状态 |          |
+| maxHistoryCount（v0.5.6+）     | Number  | 1000 | 最大历史记录数  |          |
 
 ### 水印配置
 

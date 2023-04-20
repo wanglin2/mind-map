@@ -266,6 +266,13 @@
 <td>是否在点击了画布外的区域时结束节点文本的编辑状态</td>
 <td></td>
 </tr>
+<tr>
+<td>maxHistoryCount（v0.5.6+）</td>
+<td>Number</td>
+<td>1000</td>
+<td>最大历史记录数</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>水印配置</h3>
