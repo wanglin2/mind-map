@@ -57,6 +57,7 @@ function createRichTextNode() {
   div.innerHTML = html
   div.style.cssText = `position: fixed; left: -999999px;`
   let el = div.children[0]
+  el.classList.add('smm-richtext-node-wrap')
   el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
   el.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + 'px'
   this.mindMap.el.appendChild(div)
@@ -100,11 +101,13 @@ function createTextNode() {
     let lines = []
     let line = []
     while (arr.length) {
-      line.push(arr.shift())
-      let text = line.join('')
-      if (measureText(text, textStyle).width >= maxWidth) {
-        lines.push(text)
-        line = []
+      let str = arr.shift()
+      let text = [...line, str].join('')
+      if (measureText(text, textStyle).width <= maxWidth) {
+        line.push(str)
+      } else {
+        lines.push(line.join(''))
+        line = [str]
       }
     }
     if (line.length > 0) {
