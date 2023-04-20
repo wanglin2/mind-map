@@ -41,6 +41,7 @@ class RichText {
     this.lastRange = null
     this.node = null
     this.styleEl = null
+    this.cacheEditingText = ''
     this.initOpt()
     this.extendQuill()
     this.appendCss()
@@ -160,9 +161,9 @@ class RichText {
       // 还不是富文本的情况
       let text = node.nodeData.data.text.split(/\n/gim).join('<br>')
       let html = `<p>${text}</p>`
-      this.textEditNode.innerHTML = html
+      this.textEditNode.innerHTML = this.cacheEditingText || html
     } else {
-      this.textEditNode.innerHTML = node.nodeData.data.text
+      this.textEditNode.innerHTML = this.cacheEditingText || node.nodeData.data.text
     }
     this.initQuillEditor()
     document.querySelector('.ql-editor').style.minHeight = originHeight + 'px'
@@ -172,6 +173,7 @@ class RichText {
       // 如果是非富文本的情况，需要手动应用文本样式
       this.setTextStyleIfNotRichText(node)
     }
+    this.cacheEditingText = ''
   }
 
   // 如果是非富文本的情况，需要手动应用文本样式
@@ -188,14 +190,19 @@ class RichText {
     this.formatAllText(style)
   }
 
+  // 获取当前正在编辑的内容
+  getEditText() {
+    let html = this.quill.container.firstChild.innerHTML
+    // 去除最后的空行
+    return html.replace(/<p><br><\/p>$/, '')
+  }
+
   // 隐藏文本编辑控件，即完成编辑
   hideEditText(nodes) {
     if (!this.showTextEdit) {
       return
     }
-    let html = this.quill.container.firstChild.innerHTML
-    // 去除最后的空行
-    html = html.replace(/<p><br><\/p>$/, '')
+    let html = this.getEditText()
     let list = nodes && nodes.length > 0 ? nodes : this.mindMap.renderer.activeNodeList
     list.forEach(node => {
       this.mindMap.execCommand('SET_NODE_TEXT', node, html, true)
