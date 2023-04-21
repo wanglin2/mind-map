@@ -111,7 +111,7 @@ export default {
     }
   },
   mounted() {
-    this.showNewFeatureInfo()
+    // this.showNewFeatureInfo()
     this.getData()
     this.init()
     this.$bus.$on('execCommand', this.execCommand)
