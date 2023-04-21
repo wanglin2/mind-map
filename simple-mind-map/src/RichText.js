@@ -61,15 +61,18 @@ class RichText {
         height: auto;
         font-size: inherit;
       }
-      
-      .smm-richtext-node-wrap p {
-        display: flex;
-      }
-      
-      .smm-richtext-node-edit-wrap p {
-        display: flex;
+
+      .ql-container.ql-snow {
+        border: none;
       }
     `
+    // .smm-richtext-node-wrap p {
+    //   display: flex;
+    // }
+    
+    // .smm-richtext-node-edit-wrap p {
+    //   display: flex;
+    // }
     this.styleEl = document.createElement('style')
     this.styleEl.type = 'text/css'
     this.styleEl.innerHTML = cssText
