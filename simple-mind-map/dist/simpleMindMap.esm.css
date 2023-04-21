@@ -957,18 +957,6 @@
 .ql-container.ql-snow {
   border: 1px solid #ccc;
 }
-
-/* ../simple-mind-map/src/css/quill.css */
-.ql-editor {
-  overflow: hidden;
-  padding: 0;
-  height: auto;
-  line-height: normal;
-}
-.ql-container {
-  height: auto;
-  font-size: inherit;
-}
 /*! Bundled license information:
 
 quill/dist/quill.snow.css:

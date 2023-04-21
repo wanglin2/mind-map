@@ -24,13 +24,13 @@ MindMap.xmind
 
 ### xmind.parseXmindFile(file)
 
-解析`.xmind`文件，返回解析后的数据，注意是完整的数据，包含节点树、主题、结构等，可以使用`mindMap.setFullData(data)`来将返回的数据渲染到画布上
+解析`.xmind`文件，返回解析后的数据，可以使用`mindMap.setData(data)`来将返回的数据渲染到画布上
 
 `file`：`File`对象
 
 ### xmind.transformXmind(content)
 
-转换`xmind`数据，`.xmind`文件本质上是一个压缩包，改成`zip`后缀可以解压缩，里面存在一个`content.json`文件，如果你自己解析出了这个文件，那么可以把这个文件内容传递给这个方法进行转换，转换后的数据，注意是完整的数据，包含节点树、主题、结构等，可以使用`mindMap.setFullData(data)`来将返回的数据渲染到画布上
+转换`xmind`数据，`.xmind`文件本质上是一个压缩包，改成`zip`后缀可以解压缩，里面存在一个`content.json`文件，如果你自己解析出了这个文件，那么可以把这个文件内容传递给这个方法进行转换，转换后的数据，可以使用`mindMap.setData(data)`来将返回的数据渲染到画布上
 
 `content`：`.xmind`压缩包内的`content.json`文件内容
 

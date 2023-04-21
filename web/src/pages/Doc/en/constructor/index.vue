@@ -266,6 +266,13 @@
 <td>Whether to end the editing status of node text when clicking on an area outside the canvas</td>
 <td></td>
 </tr>
+<tr>
+<td>maxHistoryCount（v0.5.6+）</td>
+<td>Number</td>
+<td>1000</td>
+<td></td>
+<td>Maximum number of history records</td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>

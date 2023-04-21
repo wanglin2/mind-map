@@ -13,7 +13,7 @@
         {{ $t('contextmenu.insertSiblingNode') }}
         <span class="desc">Enter</span>
       </div>
-      <div class="item" @click="exec('INSERT_CHILD_NODE')">
+      <div class="item" @click="exec('INSERT_CHILD_NODE')" :class="{ disabled: isGeneralization }">
         {{ $t('contextmenu.insertChildNode') }}
         <span class="desc">Tab</span>
       </div>
@@ -45,11 +45,11 @@
         {{ $t('contextmenu.deleteNode') }}
         <span class="desc">Delete</span>
       </div>
-      <div class="item" @click="exec('COPY_NODE')">
+      <div class="item" @click="exec('COPY_NODE')" :class="{ disabled: isGeneralization }">
         {{ $t('contextmenu.copyNode') }}
         <span class="desc">Ctrl + C</span>
       </div>
-      <div class="item" @click="exec('CUT_NODE')">
+      <div class="item" @click="exec('CUT_NODE')" :class="{ disabled: isGeneralization }">
         {{ $t('contextmenu.cutNode') }}
         <span class="desc">Ctrl + X</span>
       </div>
@@ -140,10 +140,10 @@ export default {
       ]
     },
     insertNodeBtnDisabled() {
-      return !this.node || this.node.isRoot
+      return !this.node || this.node.isRoot || this.node.isGeneralization
     },
     upNodeBtnDisabled() {
-      if (!this.node || this.node.isRoot) {
+      if (!this.node || this.node.isRoot || this.node.isGeneralization) {
         return true
       }
       let isFirst =
@@ -153,7 +153,7 @@ export default {
       return isFirst
     },
     downNodeBtnDisabled() {
-      if (!this.node || this.node.isRoot) {
+      if (!this.node || this.node.isRoot || this.node.isGeneralization) {
         return true
       }
       let children = this.node.parent.children
@@ -163,6 +163,9 @@ export default {
         }) ===
         children.length - 1
       return isLast
+    },
+    isGeneralization() {
+      return this.node.isGeneralization
     }
   },
   created() {

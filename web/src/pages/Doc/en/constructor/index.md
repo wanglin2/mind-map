@@ -58,6 +58,7 @@ const mindMap = new MindMap({
 | nodeTextEditZIndex（v0.5.5+）     | Number  | 3000 |   | z-index of node text edit box elements         |
 | nodeNoteTooltipZIndex（v0.5.5+）     | Number  | 3000 | z-index of floating layer elements in node comments  |          |
 | isEndNodeTextEditOnClickOuter（v0.5.5+）     | Boolean  | true | Whether to end the editing status of node text when clicking on an area outside the canvas  |          |
+| maxHistoryCount（v0.5.6+）     | Number  | 1000 |   | Maximum number of history records         |
 
 ### Watermark config
 

@@ -15,17 +15,15 @@
 </code></pre>
 <h2>Methods</h2>
 <h3>xmind.parseXmindFile(file)</h3>
-<p>Parsing the <code>.xmind</code> file and returning the parsed data. Note that this is
-complete data, including the node tree, theme, and structure. You can use
-<code>mindMap.setFullData(data)</code> to render the returned data to the canvas.</p>
+<p>Parsing the <code>.xmind</code> file and returning the parsed data. You can use
+<code>mindMap.setData(data)</code> to render the returned data to the canvas.</p>
 <p><code>file</code>: <code>File</code> object</p>
 <h3>xmind.transformXmind(content)</h3>
 <p>Convert <code>xmind</code> data. The <code>.xmind</code> file is essentially a <code>zip</code> file that can be
 decompressed by changing the suffix to zip. Inside, there is a <code>content.json</code>
 file. If you have parsed this file yourself, you can pass the contents of this
-file to this method for conversion. The converted data is the complete data,
-including the node tree, theme, structure, etc. You can use
-<code>mindMap.setFullData(data)</code> to render the returned data to the canvas.</p>
+file to this method for conversion. You can use
+<code>mindMap.setData(data)</code> to render the returned data to the canvas.</p>
 <p><code>content</code>: the contents of the <code>content.json</code> file within the <code>.xmind</code> zip
 package</p>
 <h3>xmind.transformOldXmind(content)</h3>
