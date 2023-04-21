@@ -15467,13 +15467,6 @@ function nextTick(fn, arg1, arg2, arg3) {
 
 /***/ }),
 
-/***/ "97be":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "9826":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -41648,6 +41641,7 @@ function createRichTextNode() {
   div.innerHTML = html;
   div.style.cssText = `position: fixed; left: -999999px;`;
   let el = div.children[0];
+  el.classList.add('smm-richtext-node-wrap');
   el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
   el.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + 'px';
   this.mindMap.el.appendChild(div);
@@ -41690,11 +41684,13 @@ function createTextNode() {
     let lines = [];
     let line = [];
     while (arr.length) {
-      line.push(arr.shift());
-      let text = line.join('');
-      if (measureText(text, textStyle).width >= maxWidth) {
-        lines.push(text);
-        line = [];
+      let str = arr.shift();
+      let text = [...line, str].join('');
+      if (measureText(text, textStyle).width <= maxWidth) {
+        line.push(str);
+      } else {
+        lines.push(line.join(''));
+        line = [str];
       }
     }
     if (line.length > 0) {
@@ -42226,7 +42222,8 @@ class Node_Node {
     // 右键菜单事件
     this.group.on('contextmenu', e => {
       // 按住ctrl键点击鼠标左键不知为何触发的是contextmenu事件
-      if (this.mindMap.opt.readonly || this.isGeneralization || e.ctrlKey) {
+      if (this.mindMap.opt.readonly || e.ctrlKey) {
+        // || this.isGeneralization
         return;
       }
       e.stopPropagation();
@@ -44866,16 +44863,21 @@ class TextEdit_TextEdit {
   constructor(renderer) {
     this.renderer = renderer;
     this.mindMap = renderer.mindMap;
+    // 当前编辑的节点
+    this.currentNode = null;
     // 文本编辑框
     this.textEditNode = null;
     // 文本编辑框是否显示
     this.showTextEdit = false;
+    // 如果编辑过程中缩放画布了，那么缓存当前编辑的内容
+    this.cacheEditingText = '';
     this.bindEvent();
   }
 
   //  事件
   bindEvent() {
     this.show = this.show.bind(this);
+    this.onScale = this.onScale.bind(this);
     // 节点双击事件
     this.mindMap.on('node_dblclick', this.show);
     // 点击事件
@@ -44908,6 +44910,7 @@ class TextEdit_TextEdit {
       }
       this.show(this.renderer.activeNodeList[0]);
     });
+    this.mindMap.on('scale', this.onScale);
   }
 
   //  注册临时快捷键
@@ -44920,6 +44923,7 @@ class TextEdit_TextEdit {
 
   //  显示文本编辑框
   show(node) {
+    this.currentNode = node;
     let {
       offsetLeft,
       offsetTop
@@ -44931,6 +44935,19 @@ class TextEdit_TextEdit {
       return;
     }
     this.showEditTextBox(node, rect);
+  }
+
+  // 处理画布缩放
+  onScale() {
+    if (!this.currentNode) return;
+    if (this.mindMap.richText) {
+      this.mindMap.richText.cacheEditingText = this.mindMap.richText.getEditText();
+      this.mindMap.richText.showTextEdit = false;
+    } else {
+      this.cacheEditingText = this.getEditText();
+      this.showTextEdit = false;
+    }
+    this.show(this.currentNode);
   }
 
   //  显示文本编辑框
@@ -44952,7 +44969,7 @@ class TextEdit_TextEdit {
     let scale = this.mindMap.view.scale;
     let lineHeight = node.style.merge('lineHeight');
     let fontSize = node.style.merge('fontSize');
-    let textLines = node.nodeData.data.text.split(/\n/gim);
+    let textLines = (this.cacheEditingText || node.nodeData.data.text).split(/\n/gim);
     node.style.domText(this.textEditNode, scale, textLines.length);
     this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex;
     this.textEditNode.innerHTML = textLines.join('<br>');
@@ -44967,7 +44984,10 @@ class TextEdit_TextEdit {
     }
     this.showTextEdit = true;
     // 选中文本
-    this.selectNodeText();
+    if (!this.cacheEditingText) {
+      this.selectNodeText();
+    }
+    this.cacheEditingText = '';
   }
 
   //  选中文本
@@ -44979,8 +44999,14 @@ class TextEdit_TextEdit {
     selection.addRange(range);
   }
 
+  // 获取当前正在编辑的内容
+  getEditText() {
+    return getStrWithBrFromHtml(this.textEditNode.innerHTML);
+  }
+
   //  隐藏文本编辑框
   hideEditTextBox() {
+    this.currentNode = null;
     if (this.mindMap.richText) {
       return this.mindMap.richText.hideEditText();
     }
@@ -44988,7 +45014,7 @@ class TextEdit_TextEdit {
       return;
     }
     this.renderer.activeNodeList.forEach(node => {
-      let str = getStrWithBrFromHtml(this.textEditNode.innerHTML);
+      let str = this.getEditText();
       this.mindMap.execCommand('SET_NODE_TEXT', node, str);
       if (node.isGeneralization) {
         // 概要节点
@@ -45399,6 +45425,7 @@ class Render_Render {
 
   //   渲染
   render(callback = () => {}, source) {
+    let t = Date.now();
     // 如果当前还没有渲染完毕，不再触发渲染
     if (this.isRendering) {
       // 等待当前渲染完毕后再进行一次渲染
@@ -45430,13 +45457,27 @@ class Render_Render {
       // 更新根节点
       this.root = root;
       // 渲染节点
-      this.root.render(() => {
+      const onEnd = () => {
         this.isRendering = false;
         this.mindMap.emit('node_tree_render_end');
         callback && callback();
         if (this.hasWaitRendering) {
           this.hasWaitRendering = false;
           this.render(callback, source);
+        }
+      };
+      let {
+        enableNodeTransitionMove,
+        nodeTransitionMoveDuration
+      } = this.mindMap.opt;
+      this.root.render(() => {
+        let dur = Date.now() - t;
+        if (enableNodeTransitionMove && dur <= nodeTransitionMoveDuration) {
+          setTimeout(() => {
+            onEnd();
+          }, nodeTransitionMoveDuration - dur);
+        } else {
+          onEnd();
         }
       });
     });
@@ -48014,6 +48055,10 @@ class Command_Command {
     // 删除当前历史指针后面的数据
     this.history = this.history.slice(0, this.activeHistoryIndex + 1);
     this.history.push(simpleDeepClone(data));
+    // 历史记录数超过最大数量
+    if (this.history.length > this.mindMap.opt.maxHistoryCount) {
+      this.history.shift();
+    }
     this.activeHistoryIndex = this.history.length - 1;
     this.mindMap.emit('data_change', this.removeDataUid(data));
     this.mindMap.emit('back_forward', this.activeHistoryIndex, this.history.length);
@@ -48218,7 +48263,9 @@ const defaultOpt = {
   // 节点备注浮层的z-index
   nodeNoteTooltipZIndex: 3000,
   // 是否在点击了画布外的区域时结束节点文本的编辑状态
-  isEndNodeTextEditOnClickOuter: true
+  isEndNodeTextEditOnClickOuter: true,
+  // 最大历史记录数
+  maxHistoryCount: 1000
 };
 
 //  思维导图
@@ -51098,15 +51145,11 @@ var quill_default = /*#__PURE__*/__webpack_require__.n(quill);
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/quill/dist/quill.snow.css
 var quill_snow = __webpack_require__("5ba9");
 
-// EXTERNAL MODULE: ../simple-mind-map/src/css/quill.css
-var css_quill = __webpack_require__("97be");
-
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/html2canvas/dist/html2canvas.js
 var html2canvas = __webpack_require__("c444");
 var html2canvas_default = /*#__PURE__*/__webpack_require__.n(html2canvas);
 
 // CONCATENATED MODULE: ../simple-mind-map/src/RichText.js
-
 
 
 
@@ -51137,8 +51180,43 @@ class RichText_RichText {
     this.range = null;
     this.lastRange = null;
     this.node = null;
+    this.styleEl = null;
+    this.cacheEditingText = '';
     this.initOpt();
     this.extendQuill();
+    this.appendCss();
+  }
+
+  // 插入样式
+  appendCss() {
+    let cssText = `
+      .ql-editor {
+        overflow: hidden;
+        padding: 0;
+        height: auto;
+        line-height: normal;
+      }
+      
+      .ql-container {
+        height: auto;
+        font-size: inherit;
+      }
+
+      .ql-container.ql-snow {
+        border: none;
+      }
+    `;
+    // .smm-richtext-node-wrap p {
+    //   display: flex;
+    // }
+
+    // .smm-richtext-node-edit-wrap p {
+    //   display: flex;
+    // }
+    this.styleEl = document.createElement('style');
+    this.styleEl.type = 'text/css';
+    this.styleEl.innerHTML = cssText;
+    document.head.appendChild(this.styleEl);
   }
 
   // 处理选项参数
@@ -51184,9 +51262,12 @@ class RichText_RichText {
     if (!rect) rect = node._textData.node.node.getBoundingClientRect();
     this.mindMap.emit('before_show_text_edit');
     this.mindMap.renderer.textEdit.registerTmpShortcut();
+    const paddingX = 5;
+    const paddingY = 3;
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div');
-      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: 3px 5px;margin-left: -5px;margin-top: -3px;`;
+      this.textEditNode.classList.add('smm-richtext-node-edit-wrap');
+      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: ${paddingY}px ${paddingX}px;margin-left: -${paddingX}px;margin-top: -${paddingY}px;`;
       this.textEditNode.addEventListener('click', e => {
         e.stopPropagation();
       });
@@ -51200,20 +51281,20 @@ class RichText_RichText {
     let bgColor = node.style.merge('fillColor');
     this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex;
     this.textEditNode.style.backgroundColor = bgColor === 'transparent' ? '#fff' : bgColor;
-    this.textEditNode.style.minWidth = originWidth + 'px';
+    this.textEditNode.style.minWidth = originWidth + paddingX * 2 + 'px';
     this.textEditNode.style.minHeight = originHeight + 'px';
     this.textEditNode.style.left = rect.left + (rect.width - originWidth) / 2 + 'px';
     this.textEditNode.style.top = rect.top + (rect.height - originHeight) / 2 + 'px';
     this.textEditNode.style.display = 'block';
-    this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + 'px';
+    this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + paddingX * 2 + 'px';
     this.textEditNode.style.transform = `scale(${rect.width / originWidth}, ${rect.height / originHeight})`;
     if (!node.nodeData.data.richText) {
       // 还不是富文本的情况
       let text = node.nodeData.data.text.split(/\n/gim).join('<br>');
       let html = `<p>${text}</p>`;
-      this.textEditNode.innerHTML = html;
+      this.textEditNode.innerHTML = this.cacheEditingText || html;
     } else {
-      this.textEditNode.innerHTML = node.nodeData.data.text;
+      this.textEditNode.innerHTML = this.cacheEditingText || node.nodeData.data.text;
     }
     this.initQuillEditor();
     document.querySelector('.ql-editor').style.minHeight = originHeight + 'px';
@@ -51223,6 +51304,7 @@ class RichText_RichText {
       // 如果是非富文本的情况，需要手动应用文本样式
       this.setTextStyleIfNotRichText(node);
     }
+    this.cacheEditingText = '';
   }
 
   // 如果是非富文本的情况，需要手动应用文本样式
@@ -51239,14 +51321,19 @@ class RichText_RichText {
     this.formatAllText(style);
   }
 
+  // 获取当前正在编辑的内容
+  getEditText() {
+    let html = this.quill.container.firstChild.innerHTML;
+    // 去除最后的空行
+    return html.replace(/<p><br><\/p>$/, '');
+  }
+
   // 隐藏文本编辑控件，即完成编辑
   hideEditText(nodes) {
     if (!this.showTextEdit) {
       return;
     }
-    let html = this.quill.container.firstChild.innerHTML;
-    // 去除最后的空行
-    html = html.replace(/<p><br><\/p>$/, '');
+    let html = this.getEditText();
     let list = nodes && nodes.length > 0 ? nodes : this.mindMap.renderer.activeNodeList;
     list.forEach(node => {
       this.mindMap.execCommand('SET_NODE_TEXT', node, html, true);
@@ -51520,6 +51607,7 @@ class RichText_RichText {
   // 插件被移除前做的事情
   beforePluginRemove() {
     this.transformAllNodesToNormalNode();
+    document.head.removeChild(this.styleEl);
   }
 }
 RichText_RichText.instanceName = 'richText';
