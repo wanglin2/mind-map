@@ -389,7 +389,7 @@ class Node {
     // 右键菜单事件
     this.group.on('contextmenu', e => {
       // 按住ctrl键点击鼠标左键不知为何触发的是contextmenu事件
-      if (this.mindMap.opt.readonly || this.isGeneralization || e.ctrlKey) {
+      if (this.mindMap.opt.readonly || e.ctrlKey) {// || this.isGeneralization
         return
       }
       e.stopPropagation()

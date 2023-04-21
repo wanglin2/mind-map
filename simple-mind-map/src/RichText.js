@@ -1,6 +1,5 @@
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
-import './css/quill.css'
 import html2canvas from 'html2canvas'
 import { Image as SvgImage } from '@svgdotjs/svg.js'
 import { walk } from './utils'
@@ -41,8 +40,43 @@ class RichText {
     this.range = null
     this.lastRange = null
     this.node = null
+    this.styleEl = null
+    this.cacheEditingText = ''
     this.initOpt()
     this.extendQuill()
+    this.appendCss()
+  }
+
+  // 插入样式
+  appendCss() {
+    let cssText = `
+      .ql-editor {
+        overflow: hidden;
+        padding: 0;
+        height: auto;
+        line-height: normal;
+      }
+      
+      .ql-container {
+        height: auto;
+        font-size: inherit;
+      }
+
+      .ql-container.ql-snow {
+        border: none;
+      }
+    `
+    // .smm-richtext-node-wrap p {
+    //   display: flex;
+    // }
+    
+    // .smm-richtext-node-edit-wrap p {
+    //   display: flex;
+    // }
+    this.styleEl = document.createElement('style')
+    this.styleEl.type = 'text/css'
+    this.styleEl.innerHTML = cssText
+    document.head.appendChild(this.styleEl)
   }
 
   // 处理选项参数
@@ -96,9 +130,12 @@ class RichText {
     if (!rect) rect = node._textData.node.node.getBoundingClientRect()
     this.mindMap.emit('before_show_text_edit')
     this.mindMap.renderer.textEdit.registerTmpShortcut()
+    const paddingX = 5
+    const paddingY = 3
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div')
-      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: 3px 5px;margin-left: -5px;margin-top: -3px;`
+      this.textEditNode.classList.add('smm-richtext-node-edit-wrap')
+      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: ${paddingY}px ${paddingX}px;margin-left: -${paddingX}px;margin-top: -${paddingY}px;`
       this.textEditNode.addEventListener('click', e => {
         e.stopPropagation()
       })
@@ -112,14 +149,14 @@ class RichText {
     let bgColor = node.style.merge('fillColor')
     this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex
     this.textEditNode.style.backgroundColor = bgColor === 'transparent' ? '#fff' : bgColor
-    this.textEditNode.style.minWidth = originWidth + 'px'
+    this.textEditNode.style.minWidth = originWidth + paddingX * 2 + 'px'
     this.textEditNode.style.minHeight = originHeight + 'px'
     this.textEditNode.style.left =
       rect.left + (rect.width - originWidth) / 2 + 'px'
     this.textEditNode.style.top =
       rect.top + (rect.height - originHeight) / 2 + 'px'
     this.textEditNode.style.display = 'block'
-    this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + 'px'
+    this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + paddingX * 2 + 'px'
     this.textEditNode.style.transform = `scale(${rect.width / originWidth}, ${
       rect.height / originHeight
     })`
@@ -127,9 +164,9 @@ class RichText {
       // 还不是富文本的情况
       let text = node.nodeData.data.text.split(/\n/gim).join('<br>')
       let html = `<p>${text}</p>`
-      this.textEditNode.innerHTML = html
+      this.textEditNode.innerHTML = this.cacheEditingText || html
     } else {
-      this.textEditNode.innerHTML = node.nodeData.data.text
+      this.textEditNode.innerHTML = this.cacheEditingText || node.nodeData.data.text
     }
     this.initQuillEditor()
     document.querySelector('.ql-editor').style.minHeight = originHeight + 'px'
@@ -139,6 +176,7 @@ class RichText {
       // 如果是非富文本的情况，需要手动应用文本样式
       this.setTextStyleIfNotRichText(node)
     }
+    this.cacheEditingText = ''
   }
 
   // 如果是非富文本的情况，需要手动应用文本样式
@@ -155,14 +193,19 @@ class RichText {
     this.formatAllText(style)
   }
 
+  // 获取当前正在编辑的内容
+  getEditText() {
+    let html = this.quill.container.firstChild.innerHTML
+    // 去除最后的空行
+    return html.replace(/<p><br><\/p>$/, '')
+  }
+
   // 隐藏文本编辑控件，即完成编辑
   hideEditText(nodes) {
     if (!this.showTextEdit) {
       return
     }
-    let html = this.quill.container.firstChild.innerHTML
-    // 去除最后的空行
-    html = html.replace(/<p><br><\/p>$/, '')
+    let html = this.getEditText()
     let list = nodes && nodes.length > 0 ? nodes : this.mindMap.renderer.activeNodeList
     list.forEach(node => {
       this.mindMap.execCommand('SET_NODE_TEXT', node, html, true)
@@ -458,6 +501,7 @@ class RichText {
   // 插件被移除前做的事情
   beforePluginRemove() {
     this.transformAllNodesToNormalNode()
+    document.head.removeChild(this.styleEl)
   }
 }
 

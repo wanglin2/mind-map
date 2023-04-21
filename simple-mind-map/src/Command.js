@@ -84,6 +84,10 @@ class Command {
     // 删除当前历史指针后面的数据
     this.history = this.history.slice(0, this.activeHistoryIndex + 1)
     this.history.push(simpleDeepClone(data))
+    // 历史记录数超过最大数量
+    if (this.history.length > this.mindMap.opt.maxHistoryCount) {
+      this.history.shift()
+    }
     this.activeHistoryIndex = this.history.length - 1
     this.mindMap.emit('data_change', this.removeDataUid(data))
     this.mindMap.emit(

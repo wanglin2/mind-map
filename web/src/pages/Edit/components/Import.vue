@@ -150,6 +150,7 @@ export default {
     async handleXmind(file) {
       try {
         let data = await xmind.parseXmindFile(file.raw)
+        console.log(data);
         this.$bus.$emit('setData', data)
         this.$message.success('导入成功')
       } catch (error) {

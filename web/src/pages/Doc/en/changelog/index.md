@@ -1,10 +1,20 @@
 # Changelog
 
+## 0.5.6
+
+Fix: 1.Fix the issue of node position disorder during fast and multiple renderings in a short period of time. 2.Fix the issue of dragging the canvas while the node is being edited, causing the edit box and node to separate.
+
+New: 1.Add a maximum history limit.
+
 ## 0.5.5-fix.1
 
 Fix: 1.Fix the issue where the edit box is also outside the canvas when editing nodes outside the canvas. 2.After modifying the structure, reset the transformation to prevent the problem of sudden position changes during the first drag after switching the structure during scaling.
 
 optimization: 1.When multiple nodes are selected, as long as there is a cross between the node and the selection area, it is considered selected.
+
+## 0.5.5-fix.2
+
+Fix: 1.Fix mini map error.
 
 ## 0.5.5
 
