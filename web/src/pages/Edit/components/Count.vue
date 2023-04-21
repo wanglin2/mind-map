@@ -17,11 +17,14 @@
  * @Date: 2021-06-24 22:53:10
  * @Desc: 字数及节点数量统计
  */
+
+let countEl = document.createElement('div')
 export default {
   name: 'Count',
   props: {},
   data() {
     return {
+      textStr: '',
       words: 0,
       num: 0
     }
@@ -39,9 +42,12 @@ export default {
      * @Desc: 监听数据变化
      */
     onDataChange(data) {
+      this.textStr = ''
       this.words = 0
       this.num = 0
       this.walk(data)
+      countEl.innerHTML = this.textStr
+      this.words = countEl.textContent.length
     },
 
     /**
@@ -51,7 +57,7 @@ export default {
      */
     walk(data) {
       this.num++
-      this.words += (String(data.data.text) || '').length
+      this.textStr += String(data.data.text) || ''
       if (data.children && data.children.length > 0) {
         data.children.forEach(item => {
           this.walk(item)
