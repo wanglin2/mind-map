@@ -65,14 +65,15 @@ class RichText {
       .ql-container.ql-snow {
         border: none;
       }
+
+      .smm-richtext-node-wrap p {
+        font-family: auto;
+      }
+
+      .smm-richtext-node-edit-wrap p {
+        font-family: auto;
+      }
     `
-    // .smm-richtext-node-wrap p {
-    //   display: flex;
-    // }
-    
-    // .smm-richtext-node-edit-wrap p {
-    //   display: flex;
-    // }
     this.styleEl = document.createElement('style')
     this.styleEl.type = 'text/css'
     this.styleEl.innerHTML = cssText
