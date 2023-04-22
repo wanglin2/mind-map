@@ -120,11 +120,11 @@ class Style {
   }
 
   //  html文字节点
-  domText(node, fontSizeScale = 1, textLines) {
+  domText(node, fontSizeScale = 1, isMultiLine) {
     node.style.fontFamily = this.merge('fontFamily')
     node.style.fontSize = this.merge('fontSize') * fontSizeScale + 'px'
     node.style.fontWeight = this.merge('fontWeight') || 'normal'
-    node.style.lineHeight = textLines === 1 ? 'normal' : this.merge('lineHeight')
+    node.style.lineHeight = !isMultiLine ? 'normal' : this.merge('lineHeight')
     node.style.fontStyle = this.merge('fontStyle')
   }
 
