@@ -1,8 +1,7 @@
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
 import html2canvas from 'html2canvas'
-import { Image as SvgImage } from '@svgdotjs/svg.js'
-import { walk } from './utils'
+import { walk, getTextFromHtml } from './utils'
 import { CONSTANTS } from './utils/constant'
 
 let extended = false
@@ -45,6 +44,11 @@ class RichText {
     this.initOpt()
     this.extendQuill()
     this.appendCss()
+
+    // 处理数据，转成富文本格式
+    if (this.mindMap.opt.data) {
+      this.mindMap.opt.data = this.handleSetData(this.mindMap.opt.data)
+    }
   }
 
   // 插入样式
@@ -427,15 +431,13 @@ class RichText {
 
   // 将所有节点转换成非富文本节点
   transformAllNodesToNormalNode() {
-    let div = document.createElement('div')
     walk(
       this.mindMap.renderer.renderTree,
       null,
       node => {
         if (node.data.richText) {
           node.data.richText = false
-          div.innerHTML = node.data.text
-          node.data.text = div.textContent
+          node.data.text = getTextFromHtml(node.data.text)
           // delete node.data.uid
         }
       },
@@ -453,7 +455,10 @@ class RichText {
   // 处理导入数据
   handleSetData(data) {
     let walk = (root) => {
-      root.data.richText = true
+      if (!root.data.richText) {
+        root.data.richText = true
+        root.data.resetRichText = true
+      }
       if (root.children && root.children.length > 0) {
         Array.from(root.children).forEach((item) => {
           walk(item)

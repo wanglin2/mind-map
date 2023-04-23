@@ -109,6 +109,18 @@ class Style {
       })
   }
 
+  // 生成内联样式
+  createStyleText() {
+    return `
+      color: ${this.merge('color')};
+      font-family: ${this.merge('fontFamily')};
+      font-size: ${this.merge('fontSize') + 'px'};
+      font-weight: ${this.merge('fontWeight')};
+      font-style: ${this.merge('fontStyle')};
+      text-decoration: ${this.merge('textDecoration')}
+    `
+  }
+
   // 获取文本样式
   getTextFontStyle() {
     return { 

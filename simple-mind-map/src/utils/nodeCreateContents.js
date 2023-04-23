@@ -1,6 +1,7 @@
-import { measureText, resizeImgSize } from '../utils'
+import { measureText, resizeImgSize, getTextFromHtml } from '../utils'
 import { Image, SVG, A, G, Rect, Text, ForeignObject } from '@svgdotjs/svg.js'
 import iconsSvg from '../svg/icons'
+import { CONSTANTS } from './constant'
 
 //  创建图片节点
 function createImgNode() {
@@ -52,6 +53,12 @@ function createIconNode() {
 // 创建富文本节点
 function createRichTextNode() {
   let g = new G()
+  // 重新设置富文本节点内容
+  if (this.nodeData.data.resetRichText || [CONSTANTS.CHANGE_THEME].includes(this.mindMap.renderer.renderSource)) {
+    delete this.nodeData.data.resetRichText
+    let text = getTextFromHtml(this.nodeData.data.text)
+    this.nodeData.data.text = `<p><span style="${this.style.createStyleText()}">${text}</span></p>`
+  }
   let html = `<div>${this.nodeData.data.text}</div>`
   let div = document.createElement('div')
   div.innerHTML = html
