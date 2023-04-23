@@ -27,7 +27,7 @@ class Export {
   }
 
   //  获取svg数据
-  async getSvgData(domToImage) {
+  async getSvgData() {
     let { exportPaddingX, exportPaddingY } = this.mindMap.opt
     let { svg, svgHTML } = this.mindMap.getSvgData({
       paddingX: exportPaddingX,
@@ -44,24 +44,14 @@ class Export {
     if (imageList.length > 0) {
       svgHTML = svg.svg()
     }
-    // 如果开启了富文本编辑，需要把svg中的dom元素转换成图片
-    let nodeWithDomToImg = null
-    if (domToImage && this.mindMap.richText) {
-      let res = await this.mindMap.richText.handleSvgDomElements(svg)
-      if (res) {
-        nodeWithDomToImg = res.svg
-        svgHTML = res.svgHTML
-      }
-    }
     return {
       node: svg,
-      str: svgHTML,
-      nodeWithDomToImg
+      str: svgHTML
     }
   }
 
   //   svg转png
-  svgToPng(svgSrc) {
+  svgToPng(svgSrc, transparent) {
     return new Promise((resolve, reject) => {
       const img = new Image()
       // 跨域图片需要添加这个属性，否则画布被污染了无法导出图片
@@ -73,7 +63,9 @@ class Export {
           canvas.height = img.height + this.exportPadding * 2
           let ctx = canvas.getContext('2d')
           // 绘制背景
-          await this.drawBackgroundToCanvas(ctx, canvas.width, canvas.height)
+          if (!transparent) {
+            await this.drawBackgroundToCanvas(ctx, canvas.width, canvas.height)
+          }
           // 图片绘制到canvas里
           ctx.drawImage(
             img,
@@ -140,8 +132,14 @@ class Export {
    * 方法1.把svg的图片都转化成data:url格式，再转换
    * 方法2.把svg的图片提取出来再挨个绘制到canvas里，最后一起转换
    */
-  async png() {
-    let { str } = await this.getSvgData(true)
+  async png(name, transparent = false) {
+    let { node, str } = await this.getSvgData()
+    // 如果开启了富文本，则使用htmltocanvas转换为图片
+    if (this.mindMap.richText) {
+      let res =  await this.mindMap.richText.handleExportPng(node.node)
+      let imgDataUrl = await this.svgToPng(res, transparent)
+      return imgDataUrl
+    }
     // 转换成blob数据
     let blob = new Blob([str], {
       type: 'image/svg+xml'
@@ -149,7 +147,7 @@ class Export {
     // 转换成data:url数据
     let svgUrl = URL.createObjectURL(blob)
     // 绘制到canvas上
-    let imgDataUrl = await this.svgToPng(svgUrl)
+    let imgDataUrl = await this.svgToPng(svgUrl, transparent)
     URL.revokeObjectURL(svgUrl)
     return imgDataUrl
   }
@@ -209,15 +207,12 @@ class Export {
   }
 
   //  导出为svg
-  // domToImage：是否将svg中的dom节点转换成图片的形式
   // plusCssText：附加的css样式，如果svg中存在dom节点，想要设置一些针对节点的样式可以通过这个参数传入
-  async svg(name, domToImage = false, plusCssText) {
-    let { node, nodeWithDomToImg } = await this.getSvgData(domToImage)
+  async svg(name, plusCssText) {
+    let { node } = await this.getSvgData()
     // 开启了节点富文本编辑
     if (this.mindMap.richText) {
-      if (domToImage) {
-        node = nodeWithDomToImg
-      } else if (plusCssText) {
+      if (plusCssText) {
         let foreignObjectList = node.find('foreignObject')
         if (foreignObjectList.length > 0) {
           foreignObjectList[0].add(SVG(`<style>${plusCssText}</style>`))

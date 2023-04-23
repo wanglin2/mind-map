@@ -90,7 +90,7 @@ export default {
     pdfFile: 'pdf file',
     markdownFile: 'markdown file',
     tips: 'tips: .smm and .json file can be import',
-    domToImage: 'Whether to convert rich text nodes in svg into pictures',
+    isTransparent: 'Background is transparent',
     pngTips: 'tips: Exporting pictures in rich text mode is time-consuming. It is recommended to export to svg format',
     svgTips: 'tips: Exporting pictures in rich text mode is time-consuming',
     transformingDomToImages: 'Converting nodes: ',

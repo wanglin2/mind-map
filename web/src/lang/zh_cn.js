@@ -90,7 +90,7 @@ export default {
     pdfFile: 'pdf文件',
     markdownFile: 'markdown文件',
     tips: 'tips：.smm和.json文件可用于导入',
-    domToImage: '是否将svg中富文本节点转换成图片',
+    isTransparent: '背景是否透明',
     pngTips: 'tips：富文本模式导出图片非常耗时，建议导出为svg格式',
     svgTips: 'tips：富文本模式导出图片非常耗时',
     transformingDomToImages: '正在转换节点：',
