@@ -344,6 +344,18 @@ mindMap.updateConfig({
 
 `fileName`：（v0.1.6+）导出文件的名称，默认为`思维导图`
 
+如果是导出为`png`，那么可以传递第四个参数：
+
+`transparent`：v0.5.7+, `Boolean`，默认为`false`，指定导出图片的背景是否是透明的
+
+如果是导出为`svg`，那么可以传递第四个参数：
+
+`plusCssText`：附加的`css`样式，如果`svg`中存在`dom`节点，想要设置一些针对节点的样式可以通过这个参数传入
+
+如果是导出为`json`或`smm`，那么可以传递第四个参数：
+
+`withConfig`：`Boolean`，默认为`true`，指定导出的数据中是否包含配置数据，否则只导出纯节点树数据
+
 ### toPos(x, y)
 
 > v0.1.5+

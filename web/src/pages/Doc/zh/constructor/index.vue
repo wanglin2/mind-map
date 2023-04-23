@@ -803,6 +803,12 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <p><code>type</code>：要导出的类型，可选值：png、svg、json、pdf（v0.2.1+）、smm（本质也是json）</p>
 <p><code>isDownload</code>：是否需要直接触发下载，布尔值，默认为<code>false</code></p>
 <p><code>fileName</code>：（v0.1.6+）导出文件的名称，默认为<code>思维导图</code></p>
+<p>如果是导出为<code>png</code>，那么可以传递第四个参数：</p>
+<p><code>transparent</code>：v0.5.7+, <code>Boolean</code>，默认为<code>false</code>，指定导出图片的背景是否是透明的</p>
+<p>如果是导出为<code>svg</code>，那么可以传递第四个参数：</p>
+<p><code>plusCssText</code>：附加的<code>css</code>样式，如果<code>svg</code>中存在<code>dom</code>节点，想要设置一些针对节点的样式可以通过这个参数传入</p>
+<p>如果是导出为<code>json</code>或<code>smm</code>，那么可以传递第四个参数：</p>
+<p><code>withConfig</code>：<code>Boolean</code>，默认为<code>true</code>，指定导出的数据中是否包含配置数据，否则只导出纯节点树数据</p>
 <h3>toPos(x, y)</h3>
 <blockquote>
 <p>v0.1.5+</p>
