@@ -131,36 +131,39 @@ class RichText {
     if (!rect) rect = node._textData.node.node.getBoundingClientRect()
     this.mindMap.emit('before_show_text_edit')
     this.mindMap.renderer.textEdit.registerTmpShortcut()
-    const paddingX = 5
-    const paddingY = 3
+    // 原始宽高
+    let g = node._textData.node
+    let originWidth = g.attr('data-width')
+    let originHeight = g.attr('data-height')
+    // 缩放值
+    let scaleX = rect.width / originWidth
+    let scaleY = rect.height / originHeight
+    // 内边距
+    const paddingX = 6
+    const paddingY = 4
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div')
       this.textEditNode.classList.add('smm-richtext-node-edit-wrap')
-      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: ${paddingY}px ${paddingX}px;margin-left: -${paddingX}px;margin-top: -${paddingY}px;`
+      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: ${paddingY}px ${paddingX}px;`
       this.textEditNode.addEventListener('click', e => {
         e.stopPropagation()
       })
       document.body.appendChild(this.textEditNode)
     }
-    // 原始宽高
-    let g = node._textData.node
-    let originWidth = g.attr('data-width')
-    let originHeight = g.attr('data-height')
     // 使用节点的填充色，否则如果节点颜色是白色的话编辑时看不见
     let bgColor = node.style.merge('fillColor')
+    this.textEditNode.style.marginLeft = `-${paddingX * scaleX}px`
+    this.textEditNode.style.marginTop = `-${paddingY * scaleY}px`
     this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex
     this.textEditNode.style.backgroundColor = bgColor === 'transparent' ? '#fff' : bgColor
     this.textEditNode.style.minWidth = originWidth + paddingX * 2 + 'px'
     this.textEditNode.style.minHeight = originHeight + 'px'
-    this.textEditNode.style.left =
-      rect.left + (rect.width - originWidth) / 2 + 'px'
-    this.textEditNode.style.top =
-      rect.top + (rect.height - originHeight) / 2 + 'px'
+    this.textEditNode.style.left = rect.left + 'px'
+    this.textEditNode.style.top = rect.top + 'px'
     this.textEditNode.style.display = 'block'
     this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + paddingX * 2 + 'px'
-    this.textEditNode.style.transform = `scale(${rect.width / originWidth}, ${
-      rect.height / originHeight
-    })`
+    this.textEditNode.style.transform = `scale(${scaleX}, ${scaleY})`
+    this.textEditNode.style.transformOrigin = 'left top'
     if (!node.nodeData.data.richText) {
       // 还不是富文本的情况
       let text = node.nodeData.data.text.split(/\n/gim).join('<br>')
