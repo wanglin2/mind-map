@@ -50,19 +50,15 @@ mindMap.export('png', true, '文件名')
 mindMap.export('pdf', true, '文件名')
 ```
 
-如果开启了节点富文本编辑，那么导出会非常慢，因为需要挨个转换节点，所以如果导出操作很频繁的话建议关闭节点非文本编辑功能。
-
 ### 导出为svg
 
 导出为`svg`可以传递的参数如下：
 
 ```js
-mindMap.export(type, isDownload, fileName, domToImage = false, plusCssText = '')
+mindMap.export(type, isDownload, fileName, plusCssText = '')
 ```
 
-如果开启了节点富文本编辑功能，那么可以通过`domToImage`参数控制导出的`svg`中是否保留`html`结构，还是转换成图片形式，同样，如果传了`true`，导出会非常耗时，建议导出为`svg`时`domToImage`传`false`。
-
-如果`domToImage`传的是`false`，也就是`svg`中会保留节点的`html`结构，这就又存在一个问题，因为浏览器对每个元素默认会设置一些样式，影响最大的就是`margin`和`padding`，这就有可能会导致节点中的文字错位，所以可以通过`plusCssText`参数传入`css`样式：
+如果开启了节点富文本编辑，也就是`svg`中会存在节点的`html`结构，这就又存在一个问题，因为浏览器对每个元素默认会设置一些样式，影响最大的就是`margin`和`padding`，这就有可能会导致节点中的文字错位，所以可以通过`plusCssText`参数传入`css`样式：
 
 ```js
 mindMap.export(

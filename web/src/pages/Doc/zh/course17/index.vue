@@ -33,13 +33,11 @@ mindMap.export(<span class="hljs-string">&#x27;json&#x27;</span>, <span class="h
 <pre class="hljs"><code>mindMap.export(<span class="hljs-string">&#x27;png&#x27;</span>, <span class="hljs-literal">true</span>, <span class="hljs-string">&#x27;文件名&#x27;</span>)
 mindMap.export(<span class="hljs-string">&#x27;pdf&#x27;</span>, <span class="hljs-literal">true</span>, <span class="hljs-string">&#x27;文件名&#x27;</span>)
 </code></pre>
-<p>如果开启了节点富文本编辑，那么导出会非常慢，因为需要挨个转换节点，所以如果导出操作很频繁的话建议关闭节点非文本编辑功能。</p>
 <h3>导出为svg</h3>
 <p>导出为<code>svg</code>可以传递的参数如下：</p>
-<pre class="hljs"><code>mindMap.export(type, isDownload, fileName, domToImage = <span class="hljs-literal">false</span>, plusCssText = <span class="hljs-string">&#x27;&#x27;</span>)
+<pre class="hljs"><code>mindMap.export(type, isDownload, fileName, plusCssText = <span class="hljs-string">&#x27;&#x27;</span>)
 </code></pre>
-<p>如果开启了节点富文本编辑功能，那么可以通过<code>domToImage</code>参数控制导出的<code>svg</code>中是否保留<code>html</code>结构，还是转换成图片形式，同样，如果传了<code>true</code>，导出会非常耗时，建议导出为<code>svg</code>时<code>domToImage</code>传<code>false</code>。</p>
-<p>如果<code>domToImage</code>传的是<code>false</code>，也就是<code>svg</code>中会保留节点的<code>html</code>结构，这就又存在一个问题，因为浏览器对每个元素默认会设置一些样式，影响最大的就是<code>margin</code>和<code>padding</code>，这就有可能会导致节点中的文字错位，所以可以通过<code>plusCssText</code>参数传入<code>css</code>样式：</p>
+<p>如果开启了节点富文本编辑，也就是<code>svg</code>中会存在节点的<code>html</code>结构，这就又存在一个问题，因为浏览器对每个元素默认会设置一些样式，影响最大的就是<code>margin</code>和<code>padding</code>，这就有可能会导致节点中的文字错位，所以可以通过<code>plusCssText</code>参数传入<code>css</code>样式：</p>
 <pre class="hljs"><code>mindMap.export(
     <span class="hljs-string">&#x27;svg&#x27;</span>, 
     <span class="hljs-literal">true</span>, 
