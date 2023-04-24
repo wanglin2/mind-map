@@ -32,6 +32,8 @@ function createExpandNodeContent() {
 
 //  创建或更新展开收缩按钮内容
 function updateExpandBtnNode() {
+  // 如果本次和上次的展开状态一样则返回
+  if (this.nodeData.data.expand === this._lastExpandBtnType) return
   if (this._expandBtn) {
     this._expandBtn.clear()
   }
@@ -39,8 +41,10 @@ function updateExpandBtnNode() {
   let node
   if (this.nodeData.data.expand === false) {
     node = this._openExpandNode
+    this._lastExpandBtnType = false
   } else {
     node = this._closeExpandNode
+    this._lastExpandBtnType = true
   }
   if (this._expandBtn) this._expandBtn.add(this._fillExpandNode).add(node)
 }
