@@ -110,7 +110,8 @@ export default class TextEdit {
     let lineHeight = node.style.merge('lineHeight')
     let fontSize = node.style.merge('fontSize')
     let textLines = (this.cacheEditingText || node.nodeData.data.text).split(/\n/gim)
-    node.style.domText(this.textEditNode, scale, textLines.length)
+    let isMultiLine = node._textData.node.attr('data-ismultiLine') === 'true'
+    node.style.domText(this.textEditNode, scale, isMultiLine)
     this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex
     this.textEditNode.innerHTML = textLines.join('<br>')
     this.textEditNode.style.minWidth = rect.width + 10 + 'px'
@@ -119,8 +120,8 @@ export default class TextEdit {
     this.textEditNode.style.top = rect.top + 'px'
     this.textEditNode.style.display = 'block'
     this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth * scale + 'px'
-    if (textLines.length > 1 && lineHeight !== 1) {
-      this.textEditNode.style.transform = `translateY(${-((lineHeight * fontSize - fontSize) / 2 - 2) * scale}px)`
+    if (isMultiLine && lineHeight !== 1) {
+      this.textEditNode.style.transform = `translateY(${-((lineHeight * fontSize - fontSize) / 2) * scale}px)`
     }
     this.showTextEdit = true
     // 选中文本

@@ -109,6 +109,18 @@ class Style {
       })
   }
 
+  // 生成内联样式
+  createStyleText() {
+    return `
+      color: ${this.merge('color')};
+      font-family: ${this.merge('fontFamily')};
+      font-size: ${this.merge('fontSize') + 'px'};
+      font-weight: ${this.merge('fontWeight')};
+      font-style: ${this.merge('fontStyle')};
+      text-decoration: ${this.merge('textDecoration')}
+    `
+  }
+
   // 获取文本样式
   getTextFontStyle() {
     return { 
@@ -120,11 +132,11 @@ class Style {
   }
 
   //  html文字节点
-  domText(node, fontSizeScale = 1, textLines) {
+  domText(node, fontSizeScale = 1, isMultiLine) {
     node.style.fontFamily = this.merge('fontFamily')
     node.style.fontSize = this.merge('fontSize') * fontSizeScale + 'px'
     node.style.fontWeight = this.merge('fontWeight') || 'normal'
-    node.style.lineHeight = textLines === 1 ? 'normal' : this.merge('lineHeight')
+    node.style.lineHeight = !isMultiLine ? 'normal' : this.merge('lineHeight')
     node.style.fontStyle = this.merge('fontStyle')
   }
 

@@ -15,15 +15,17 @@ MindMap.usePlugin(Export)
 
 ## 方法
 
-### png()
+### png(name, transparent = false)
+
+- `name`：名称，可不传
+
+- `transparent`：v0.5.7+，指定导出图片的背景是否是透明的
 
 导出为`png`，异步方法，返回图片数据，`data:url`数据，可以自行下载或显示
 
-### svg(name, domToImage = false, plusCssText)
+### svg(name, plusCssText)
 
 - `name`：`svg`标题
-
-- `domToImage`：v0.4.0+，当开启了节点富文本编辑，可以通过该参数指定是否将`svg`中的`dom`节点转换成图片的形式
 
 - `plusCssText`：v0.4.0+，当开启了节点富文本编辑，且`domToImage`传了`false`时，可以添加附加的`css`样式，如果`svg`中存在`dom`节点，想要设置一些针对节点的样式可以通过这个参数传入，比如：
 
@@ -41,9 +43,7 @@ svg(
 
 导出为`svg`，异步方法，返回`svg`数据，`data:url`数据，可以自行下载或显示
 
-### getSvgData(domToImage)
-
-- `domToImage`：v0.4.0+，如果开启了节点富文本，则可以通过该参数指定是否要将`svg`中嵌入的`DOM`节点转换为图片。
+### getSvgData()
 
 获取`svg`数据，异步方法，返回一个对象：
 
@@ -70,3 +70,9 @@ svg(
 `withConfig``：Boolean`, 默认为`true`，数据中是否包含配置，否则为纯思维导图节点数据
 
 返回`json`数据，`data:url`数据，可以自行下载
+
+### md()
+
+> v0.4.7+
+
+导出`markdown`文件，返回`data:url`数据，可以自行下载
