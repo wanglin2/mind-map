@@ -159,6 +159,9 @@ class LogicalStructure extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0
+    }
     let marginX = this.getMarginX(node.layerIndex + 1)
     let s1 = (marginX - expandBtnSize) * 0.6
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
@@ -188,6 +191,9 @@ class LogicalStructure extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0
+    }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
     node.children.forEach((item, index) => {
       let x1 =
@@ -213,6 +219,9 @@ class LogicalStructure extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0
+    }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
     node.children.forEach((item, index) => {
       let x1 =

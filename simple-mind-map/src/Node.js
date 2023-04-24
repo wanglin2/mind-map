@@ -1,7 +1,7 @@
 import Style from './Style'
 import Shape from './Shape'
 import { asyncRun } from './utils'
-import { G } from '@svgdotjs/svg.js'
+import { G, Rect } from '@svgdotjs/svg.js'
 import nodeGeneralizationMethods from './utils/nodeGeneralization'
 import nodeExpandBtnMethods from './utils/nodeExpandBtn'
 import nodeCommandWrapsMethods from './utils/nodeCommandWraps'
@@ -74,6 +74,7 @@ class Node {
     this._lines = []
     this._generalizationLine = null
     this._generalizationNode = null
+    this._unVisibleRectRegionNode = null
     // 尺寸信息
     this._rectInfo = {
       imgContentWidth: 0,
@@ -242,13 +243,23 @@ class Node {
   layout() {
     // 清除之前的内容
     this.group.clear()
-    let { width, textContentItemMargin } = this
+    let { width, height, textContentItemMargin } = this
     let { paddingY } = this.getPaddingVale()
     paddingY += this.shapePadding.paddingY
     // 节点形状
     this.shapeNode = this.shapeInstance.createShape()
     this.group.add(this.shapeNode)
     this.updateNodeShape()
+    // 渲染一个隐藏的矩形区域，用来触发展开收起按钮的显示
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      if (!this._unVisibleRectRegionNode) {
+        this._unVisibleRectRegionNode = new Rect()
+      }
+      this._unVisibleRectRegionNode.fill({
+        color: 'transparent'
+      }).size(this.expandBtnSize, height).x(width).y(0)
+      this.group.add(this._unVisibleRectRegionNode)
+    }
     // 概要节点添加一个带所属节点id的类名
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass('generalization_' + this.generalizationBelongNode.uid)
@@ -374,9 +385,12 @@ class Node {
       this.mindMap.emit('node_mouseup', this, e)
     })
     this.group.on('mouseenter', e => {
+      // 显示展开收起按钮
+      this.showExpandBtn()
       this.mindMap.emit('node_mouseenter', this, e)
     })
     this.group.on('mouseleave', e => {
+      this.hideExpandBtn()
       this.mindMap.emit('node_mouseleave', this, e)
     })
     // 双击事件
@@ -424,14 +438,21 @@ class Node {
     if (!this.group) {
       return
     }
-    let { enableNodeTransitionMove, nodeTransitionMoveDuration } =
+    let { enableNodeTransitionMove, nodeTransitionMoveDuration, alwaysShowExpandBtn } =
       this.mindMap.opt
-    // 需要移除展开收缩按钮
-    if (this._expandBtn && this.nodeData.children.length <= 0) {
-      this.removeExpandBtn()
+    if (alwaysShowExpandBtn) {
+      // 需要移除展开收缩按钮
+      if (this._expandBtn && this.nodeData.children.length <= 0) {
+        this.removeExpandBtn()
+      } else {
+        // 更新展开收起按钮
+        this.renderExpandBtn()
+      }
     } else {
-      // 更新展开收起按钮
-      this.renderExpandBtn()
+      // 如果是收起状态，那么显示展开收起按钮
+      if (!this.nodeData.data.expand) {
+        this.showExpandBtn()
+      }
     }
     // 更新概要
     this.renderGeneralization()
@@ -730,9 +751,10 @@ class Node {
 
   //  获取padding值
   getPaddingVale() {
+    let { isActive }= this.nodeData.data
     return {
-      paddingX: this.getStyle('paddingX', true, this.nodeData.data.isActive),
-      paddingY: this.getStyle('paddingY', true, this.nodeData.data.isActive)
+      paddingX: this.getStyle('paddingX', true, isActive),
+      paddingY: this.getStyle('paddingY', true, isActive)
     }
   }
 

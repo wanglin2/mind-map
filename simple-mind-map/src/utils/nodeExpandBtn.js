@@ -32,14 +32,15 @@ function createExpandNodeContent() {
 
 //  创建或更新展开收缩按钮内容
 function updateExpandBtnNode() {
+  let { expand } = this.nodeData.data
   // 如果本次和上次的展开状态一样则返回
-  if (this.nodeData.data.expand === this._lastExpandBtnType) return
+  if (expand === this._lastExpandBtnType) return
   if (this._expandBtn) {
     this._expandBtn.clear()
   }
   this.createExpandNodeContent()
   let node
-  if (this.nodeData.data.expand === false) {
+  if (expand === false) {
     node = this._openExpandNode
     this._lastExpandBtnType = false
   } else {
@@ -108,10 +109,32 @@ function removeExpandBtn() {
   }
 }
 
+// 显示展开收起按钮
+function showExpandBtn() {
+  if (this.mindMap.opt.alwaysShowExpandBtn) return
+  setTimeout(() => {
+    this.renderExpandBtn()
+  }, 0)
+}
+
+// 隐藏展开收起按钮
+function hideExpandBtn() {
+  if (this.mindMap.opt.alwaysShowExpandBtn) return
+  // 非激活状态且展开状态鼠标移出才隐藏按钮
+  let { isActive, expand } = this.nodeData.data
+  if (!isActive && expand) {
+    setTimeout(() => {
+      this.removeExpandBtn()
+    }, 0)
+  }
+}
+
 export default {
   createExpandNodeContent,
   updateExpandBtnNode,
   updateExpandBtnPos,
   renderExpandBtn,
-  removeExpandBtn
+  removeExpandBtn,
+  showExpandBtn,
+  hideExpandBtn
 }

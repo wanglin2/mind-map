@@ -198,6 +198,9 @@ class MindMap extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0
+    }
     let marginX = this.getMarginX(node.layerIndex + 1)
     let s1 = (marginX - expandBtnSize) * 0.6
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
@@ -235,6 +238,9 @@ class MindMap extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0
+    }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
     node.children.forEach((item, index) => {
       let x1 =
@@ -269,6 +275,9 @@ class MindMap extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0
+    }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
     node.children.forEach((item, index) => {
       let x1 =
@@ -276,7 +285,7 @@ class MindMap extends Base {
           ? left + width / 2
           : item.dir === 'left'
           ? left - expandBtnSize
-          : left + width + 20
+          : left + width + expandBtnSize
       let y1 = top + height / 2
       let x2 = item.dir === 'left' ? item.left + item.width : item.left
       let y2 = item.top + item.height / 2

@@ -231,6 +231,9 @@ class Fishbone extends Base {
       return []
     }
     let { top, height, expandBtnSize } = node
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0
+    }
     let len = node.children.length
     if (node.isRoot) {
       // 当前节点是根节点

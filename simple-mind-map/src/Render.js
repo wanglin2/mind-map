@@ -366,6 +366,8 @@ class Render {
         if (!node.nodeData.data.isActive) {
           node.nodeData.data.isActive = true
           this.addActiveNode(node)
+          // 激活节点需要显示展开收起按钮
+          node.showExpandBtn()
           setTimeout(() => {
             node.updateNodeShape()
           }, 0)
@@ -735,6 +737,12 @@ class Render {
     this.setNodeData(node, {
       isActive: active
     })
+    // 切换激活状态，需要切换展开收起按钮的显隐
+    if (active) {
+      node.showExpandBtn()
+    } else {
+      node.hideExpandBtn()
+    }
     node.updateNodeShape()
   }
 
