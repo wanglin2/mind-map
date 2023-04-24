@@ -23,12 +23,6 @@
           style="margin-left: 12px"
           >{{ $t('export.include') }}</el-checkbox
         >
-        <el-checkbox
-          v-show="['svg'].includes(exportType)"
-          v-model="domToImage"
-          style="margin-left: 12px"
-          >{{ $t('export.domToImage') }}</el-checkbox
-        >
       </div>
       <div class="paddingInputBox" v-show="['svg', 'png', 'pdf'].includes(exportType)">
         <span class="name">{{ $t('export.paddingX') }}</span>
@@ -45,6 +39,12 @@
           size="mini"
           @change="onPaddingChange"
         ></el-input>
+        <el-checkbox
+          v-show="['png'].includes(exportType)"
+          v-model="isTransparent"
+          style="margin-left: 12px"
+          >{{ $t('export.isTransparent') }}</el-checkbox
+        >
       </div>
       <div class="downloadTypeList">
         <div 
@@ -62,7 +62,6 @@
         </div>
       </div>
       <div class="tip">{{ $t('export.tips') }}</div>
-      <div class="tip warning" v-if="openNodeRichText && ['png', 'pdf'].includes(exportType)">{{ $t('export.pngTips') }}</div>
       <div class="tip warning" v-if="openNodeRichText && exportType === 'svg' && domToImage">{{ $t('export.svgTips') }}</div>
     </div>
     <span slot="footer" class="dialog-footer">
@@ -91,7 +90,7 @@ export default {
       exportType: 'smm',
       fileName: '思维导图',
       widthConfig: true,
-      domToImage: false,
+      isTransparent: false,
       loading: false,
       loadingText: '',
       paddingX: 10,
@@ -110,13 +109,6 @@ export default {
   created() {
     this.$bus.$on('showExport', () => {
       this.dialogVisible = true
-    })
-    this.$bus.$on('transforming-dom-to-images', (index, len) => {
-      this.loading = true
-      this.loadingText = `${this.$t('export.transformingDomToImages')}${index + 1}/${len}`
-      if (index >= len - 1) {
-        this.loading = false
-      }
     })
   },
   methods: {
@@ -148,20 +140,34 @@ export default {
           this.exportType,
           true,
           this.fileName,
-          this.domToImage,
           `* {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
           }`
         )
-      } else {
+      } else if (['smm', 'json'].includes(this.exportType)) {
         this.$bus.$emit(
           'export',
           this.exportType,
           true,
           this.fileName,
           this.widthConfig
+        )
+      } else if (this.exportType === 'png') {
+        this.$bus.$emit(
+          'export',
+          this.exportType,
+          true,
+          this.fileName,
+          this.isTransparent
+        )
+      } else {
+        this.$bus.$emit(
+          'export',
+          this.exportType,
+          true,
+          this.fileName
         )
       }
       this.$notify.info({

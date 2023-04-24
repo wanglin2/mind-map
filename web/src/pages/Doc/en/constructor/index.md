@@ -355,6 +355,18 @@ smm (essentially also json)
 `fileName`: (v0.1.6+) the name of the exported file, default is `思维导图` (mind
 map).
 
+If it is exported as `png`, the fourth parameter can be passed:
+
+`transparent`: v0.5.7+, `Boolean`, default is `false`, Specify whether the background of the exported image is transparent
+
+If it is exported as `svg`, the fourth parameter can be passed:
+
+`plusCssText`: Additional `CSS` style. If there is a `dom` node in `svg`, you can pass in some styles specific to the node through this parameter
+
+If it is exported as `json` or `smm`, the fourth parameter can be passed:
+
+`withConfig`: `Boolean`, default is `true`, Specify whether the exported data includes configuration data, otherwise only pure node tree data will be exported
+
 ### toPos(x, y)
 
 > v0.1.5+

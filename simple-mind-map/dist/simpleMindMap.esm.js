@@ -37157,6 +37157,17 @@ var Style = class {
       "text-decoration": this.merge("textDecoration")
     });
   }
+  // 生成内联样式
+  createStyleText() {
+    return `
+      color: ${this.merge("color")};
+      font-family: ${this.merge("fontFamily")};
+      font-size: ${this.merge("fontSize") + "px"};
+      font-weight: ${this.merge("fontWeight")};
+      font-style: ${this.merge("fontStyle")};
+      text-decoration: ${this.merge("textDecoration")}
+    `;
+  }
   // 获取文本样式
   getTextFontStyle() {
     return {
@@ -37167,11 +37178,11 @@ var Style = class {
     };
   }
   //  html文字节点
-  domText(node3, fontSizeScale = 1, textLines) {
+  domText(node3, fontSizeScale = 1, isMultiLine) {
     node3.style.fontFamily = this.merge("fontFamily");
     node3.style.fontSize = this.merge("fontSize") * fontSizeScale + "px";
     node3.style.fontWeight = this.merge("fontWeight") || "normal";
-    node3.style.lineHeight = textLines === 1 ? "normal" : this.merge("lineHeight");
+    node3.style.lineHeight = !isMultiLine ? "normal" : this.merge("lineHeight");
     node3.style.fontStyle = this.merge("fontStyle");
   }
   //  标签文字
@@ -43275,6 +43286,14 @@ var checkNodeOuter = (mindMap, node3) => {
     offsetTop
   };
 };
+var getTextFromHtmlEl = null;
+var getTextFromHtml = (html2) => {
+  if (!getTextFromHtmlEl) {
+    getTextFromHtmlEl = document.createElement("div");
+  }
+  getTextFromHtmlEl.innerHTML = html2;
+  return getTextFromHtmlEl.textContent;
+};
 
 // ../simple-mind-map/src/utils/nodeGeneralization.js
 function checkHasGeneralization() {
@@ -43848,6 +43867,11 @@ function createIconNode() {
 }
 function createRichTextNode() {
   let g2 = new G();
+  if (this.nodeData.data.resetRichText || [CONSTANTS.CHANGE_THEME].includes(this.mindMap.renderer.renderSource)) {
+    delete this.nodeData.data.resetRichText;
+    let text3 = getTextFromHtml(this.nodeData.data.text);
+    this.nodeData.data.text = `<p><span style="${this.style.createStyleText()}">${text3}</span></p>`;
+  }
   let html2 = `<div>${this.nodeData.data.text}</div>`;
   let div = document.createElement("div");
   div.innerHTML = html2;
@@ -43889,6 +43913,7 @@ function createTextNode() {
   let textStyle = this.style.getTextFontStyle();
   let textArr = this.nodeData.data.text.split(/\n/gim);
   let maxWidth = this.mindMap.opt.textAutoWrapWidth;
+  let isMultiLine = false;
   textArr.forEach((item, index3) => {
     let arr = item.split("");
     let lines = [];
@@ -43906,6 +43931,9 @@ function createTextNode() {
     if (line.length > 0) {
       lines.push(line.join(""));
     }
+    if (lines.length > 1) {
+      isMultiLine = true;
+    }
     textArr[index3] = lines.join("\n");
   });
   textArr = textArr.join("\n").split(/\n/gim);
@@ -43920,6 +43948,7 @@ function createTextNode() {
   height2 = Math.ceil(height2);
   g2.attr("data-width", width2);
   g2.attr("data-height", height2);
+  g2.attr("data-ismultiLine", isMultiLine || textArr.length > 1);
   return {
     node: g2,
     width: width2,
@@ -46760,7 +46789,8 @@ var TextEdit = class {
     let lineHeight = node3.style.merge("lineHeight");
     let fontSize = node3.style.merge("fontSize");
     let textLines = (this.cacheEditingText || node3.nodeData.data.text).split(/\n/gim);
-    node3.style.domText(this.textEditNode, scale, textLines.length);
+    let isMultiLine = node3._textData.node.attr("data-ismultiLine") === "true";
+    node3.style.domText(this.textEditNode, scale, isMultiLine);
     this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex;
     this.textEditNode.innerHTML = textLines.join("<br>");
     this.textEditNode.style.minWidth = rect.width + 10 + "px";
@@ -46769,8 +46799,8 @@ var TextEdit = class {
     this.textEditNode.style.top = rect.top + "px";
     this.textEditNode.style.display = "block";
     this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth * scale + "px";
-    if (textLines.length > 1 && lineHeight !== 1) {
-      this.textEditNode.style.transform = `translateY(${-((lineHeight * fontSize - fontSize) / 2 - 2) * scale}px)`;
+    if (isMultiLine && lineHeight !== 1) {
+      this.textEditNode.style.transform = `translateY(${-((lineHeight * fontSize - fontSize) / 2) * scale}px)`;
     }
     this.showTextEdit = true;
     if (!this.cacheEditingText) {
@@ -49927,7 +49957,11 @@ var MindMap2 = class {
     this.execCommand("CLEAR_ACTIVE_NODE");
     this.command.clearHistory();
     this.command.addHistory();
-    this.renderer.renderTree = data2;
+    if (this.richText) {
+      this.renderer.renderTree = this.richText.handleSetData(data2);
+    } else {
+      this.renderer.renderTree = data2;
+    }
     this.reRender();
   }
   //  动态设置思维导图数据，包括节点数据、布局、主题、视图
@@ -59730,7 +59764,7 @@ var Export = class {
     }
   }
   //  获取svg数据
-  async getSvgData(domToImage) {
+  async getSvgData() {
     let { exportPaddingX, exportPaddingY } = this.mindMap.opt;
     let { svg: svg2, svgHTML } = this.mindMap.getSvgData({
       paddingX: exportPaddingX,
@@ -59746,22 +59780,13 @@ var Export = class {
     if (imageList.length > 0) {
       svgHTML = svg2.svg();
     }
-    let nodeWithDomToImg = null;
-    if (domToImage && this.mindMap.richText) {
-      let res = await this.mindMap.richText.handleSvgDomElements(svg2);
-      if (res) {
-        nodeWithDomToImg = res.svg;
-        svgHTML = res.svgHTML;
-      }
-    }
     return {
       node: svg2,
-      str: svgHTML,
-      nodeWithDomToImg
+      str: svgHTML
     };
   }
   //   svg转png
-  svgToPng(svgSrc) {
+  svgToPng(svgSrc, transparent) {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.setAttribute("crossOrigin", "anonymous");
@@ -59771,7 +59796,9 @@ var Export = class {
           canvas.width = img.width + this.exportPadding * 2;
           canvas.height = img.height + this.exportPadding * 2;
           let ctx = canvas.getContext("2d");
-          await this.drawBackgroundToCanvas(ctx, canvas.width, canvas.height);
+          if (!transparent) {
+            await this.drawBackgroundToCanvas(ctx, canvas.width, canvas.height);
+          }
           ctx.drawImage(
             img,
             0,
@@ -59833,13 +59860,18 @@ var Export = class {
    * 方法1.把svg的图片都转化成data:url格式，再转换
    * 方法2.把svg的图片提取出来再挨个绘制到canvas里，最后一起转换
    */
-  async png() {
-    let { str } = await this.getSvgData(true);
+  async png(name, transparent = false) {
+    let { node: node3, str } = await this.getSvgData();
+    if (this.mindMap.richText) {
+      let res = await this.mindMap.richText.handleExportPng(node3.node);
+      let imgDataUrl2 = await this.svgToPng(res, transparent);
+      return imgDataUrl2;
+    }
     let blob = new Blob([str], {
       type: "image/svg+xml"
     });
     let svgUrl = URL2.createObjectURL(blob);
-    let imgDataUrl = await this.svgToPng(svgUrl);
+    let imgDataUrl = await this.svgToPng(svgUrl, transparent);
     URL2.revokeObjectURL(svgUrl);
     return imgDataUrl;
   }
@@ -59891,14 +59923,11 @@ var Export = class {
     });
   }
   //  导出为svg
-  // domToImage：是否将svg中的dom节点转换成图片的形式
   // plusCssText：附加的css样式，如果svg中存在dom节点，想要设置一些针对节点的样式可以通过这个参数传入
-  async svg(name, domToImage = false, plusCssText) {
-    let { node: node3, nodeWithDomToImg } = await this.getSvgData(domToImage);
+  async svg(name, plusCssText) {
+    let { node: node3 } = await this.getSvgData();
     if (this.mindMap.richText) {
-      if (domToImage) {
-        node3 = nodeWithDomToImg;
-      } else if (plusCssText) {
+      if (plusCssText) {
         let foreignObjectList = node3.find("foreignObject");
         if (foreignObjectList.length > 0) {
           foreignObjectList[0].add(SVG(`<style>${plusCssText}</style>`));
@@ -61124,6 +61153,9 @@ var RichText = class {
     this.initOpt();
     this.extendQuill();
     this.appendCss();
+    if (this.mindMap.opt.data) {
+      this.mindMap.opt.data = this.handleSetData(this.mindMap.opt.data);
+    }
   }
   // 插入样式
   appendCss() {
@@ -61142,6 +61174,14 @@ var RichText = class {
 
       .ql-container.ql-snow {
         border: none;
+      }
+
+      .smm-richtext-node-wrap p {
+        font-family: auto;
+      }
+
+      .smm-richtext-node-edit-wrap p {
+        font-family: auto;
       }
     `;
     this.styleEl = document.createElement("style");
@@ -61187,30 +61227,35 @@ var RichText = class {
       rect = node3._textData.node.node.getBoundingClientRect();
     this.mindMap.emit("before_show_text_edit");
     this.mindMap.renderer.textEdit.registerTmpShortcut();
-    const paddingX = 5;
-    const paddingY = 3;
+    let g2 = node3._textData.node;
+    let originWidth = g2.attr("data-width");
+    let originHeight = g2.attr("data-height");
+    let scaleX = rect.width / originWidth;
+    let scaleY = rect.height / originHeight;
+    const paddingX = 6;
+    const paddingY = 4;
     if (!this.textEditNode) {
       this.textEditNode = document.createElement("div");
       this.textEditNode.classList.add("smm-richtext-node-edit-wrap");
-      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: ${paddingY}px ${paddingX}px;margin-left: -${paddingX}px;margin-top: -${paddingY}px;`;
+      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: ${paddingY}px ${paddingX}px;`;
       this.textEditNode.addEventListener("click", (e2) => {
         e2.stopPropagation();
       });
       document.body.appendChild(this.textEditNode);
     }
-    let g2 = node3._textData.node;
-    let originWidth = g2.attr("data-width");
-    let originHeight = g2.attr("data-height");
     let bgColor = node3.style.merge("fillColor");
+    this.textEditNode.style.marginLeft = `-${paddingX * scaleX}px`;
+    this.textEditNode.style.marginTop = `-${paddingY * scaleY}px`;
     this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex;
     this.textEditNode.style.backgroundColor = bgColor === "transparent" ? "#fff" : bgColor;
     this.textEditNode.style.minWidth = originWidth + paddingX * 2 + "px";
     this.textEditNode.style.minHeight = originHeight + "px";
-    this.textEditNode.style.left = rect.left + (rect.width - originWidth) / 2 + "px";
-    this.textEditNode.style.top = rect.top + (rect.height - originHeight) / 2 + "px";
+    this.textEditNode.style.left = rect.left + "px";
+    this.textEditNode.style.top = rect.top + "px";
     this.textEditNode.style.display = "block";
     this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + paddingX * 2 + "px";
-    this.textEditNode.style.transform = `scale(${rect.width / originWidth}, ${rect.height / originHeight})`;
+    this.textEditNode.style.transform = `scale(${scaleX}, ${scaleY})`;
+    this.textEditNode.style.transformOrigin = "left top";
     if (!node3.nodeData.data.richText) {
       let text3 = node3.nodeData.data.text.split(/\n/gim).join("<br>");
       let html2 = `<p>${text3}</p>`;
@@ -61430,86 +61475,38 @@ var RichText = class {
     });
     return data2;
   }
-  // 将svg中嵌入的dom元素转换成图片
-  async _handleSvgDomElements(svg2) {
-    svg2 = svg2.clone();
-    let foreignObjectList = svg2.find("foreignObject");
-    let task = foreignObjectList.map(async (item) => {
-      let clone = item.first().node.cloneNode(true);
-      let div = document.createElement("div");
-      div.style.cssText = `position: fixed; left: -999999px;`;
-      div.appendChild(clone);
-      this.mindMap.el.appendChild(div);
-      let canvas = await (0, import_html2canvas.default)(clone, {
-        backgroundColor: null
-      });
-      this.mindMap.el.removeChild(div);
-      let imgNode = new Image2().load(canvas.toDataURL()).size(canvas.width, canvas.height);
-      item.replace(imgNode);
-    });
-    await Promise.all(task);
-    return {
-      svg: svg2,
-      svgHTML: svg2.svg()
-    };
-  }
-  // 将svg中嵌入的dom元素转换成图片
-  handleSvgDomElements(svg2) {
-    return new Promise((resolve, reject) => {
-      svg2 = svg2.clone();
-      let foreignObjectList = svg2.find("foreignObject");
-      let index3 = 0;
-      let len = foreignObjectList.length;
-      let transform2 = async () => {
-        this.mindMap.emit("transforming-dom-to-images", index3, len);
-        try {
-          let item = foreignObjectList[index3++];
-          let parent = item.parent();
-          let clone = item.first().node.cloneNode(true);
-          let div = document.createElement("div");
-          div.style.cssText = `position: fixed; left: -999999px;`;
-          div.appendChild(clone);
-          this.mindMap.el.appendChild(div);
-          let canvas = await (0, import_html2canvas.default)(clone, {
-            backgroundColor: null
-          });
-          let imgNodeWidth = parent.attr("data-width") || canvas.width;
-          let imgNodeHeight = parent.attr("data-height") || canvas.height;
-          this.mindMap.el.removeChild(div);
-          let imgNode = new Image2().load(canvas.toDataURL()).size(imgNodeWidth, imgNodeHeight).x((parent ? parent.attr("data-offsetx") : 0) || 0);
-          item.replace(imgNode);
-          if (index3 <= len - 1) {
-            setTimeout(() => {
-              transform2();
-            }, 0);
-          } else {
-            resolve({
-              svg: svg2,
-              svgHTML: svg2.svg()
-            });
-          }
-        } catch (error) {
-          reject(error);
-        }
-      };
-      if (len > 0) {
-        transform2();
-      } else {
-        resolve(null);
+  // 处理导出为图片
+  async handleExportPng(node3) {
+    let el2 = document.createElement("div");
+    el2.style.position = "absolute";
+    el2.style.left = "-9999999px";
+    el2.appendChild(node3);
+    this.mindMap.el.appendChild(el2);
+    let walk2 = (root2) => {
+      root2.style.margin = 0;
+      root2.style.padding = 0;
+      if (root2.hasChildNodes()) {
+        Array.from(root2.children).forEach((item) => {
+          walk2(item);
+        });
       }
+    };
+    walk2(node3);
+    let canvas = await (0, import_html2canvas.default)(el2, {
+      backgroundColor: null
     });
+    this.mindMap.el.removeChild(el2);
+    return canvas.toDataURL();
   }
   // 将所有节点转换成非富文本节点
   transformAllNodesToNormalNode() {
-    let div = document.createElement("div");
     walk(
       this.mindMap.renderer.renderTree,
       null,
       (node3) => {
         if (node3.data.richText) {
           node3.data.richText = false;
-          div.innerHTML = node3.data.text;
-          node3.data.text = div.textContent;
+          node3.data.text = getTextFromHtml(node3.data.text);
         }
       },
       null,
@@ -61520,6 +61517,22 @@ var RichText = class {
     this.mindMap.command.clearHistory();
     this.mindMap.command.addHistory();
     this.mindMap.render(null, CONSTANTS.TRANSFORM_TO_NORMAL_NODE);
+  }
+  // 处理导入数据
+  handleSetData(data2) {
+    let walk2 = (root2) => {
+      if (!root2.data.richText) {
+        root2.data.richText = true;
+        root2.data.resetRichText = true;
+      }
+      if (root2.children && root2.children.length > 0) {
+        Array.from(root2.children).forEach((item) => {
+          walk2(item);
+        });
+      }
+    };
+    walk2(data2);
+    return data2;
   }
   // 插件被移除前做的事情
   beforePluginRemove() {

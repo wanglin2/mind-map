@@ -333,3 +333,13 @@ export const checkNodeOuter = (mindMap, node) => {
     offsetTop
   }
 }
+
+// 提取html字符串里的纯文本
+let getTextFromHtmlEl = null
+export const getTextFromHtml = (html) => {
+  if (!getTextFromHtmlEl) {
+    getTextFromHtmlEl = document.createElement('div')
+  }
+  getTextFromHtmlEl.innerHTML = html
+  return getTextFromHtmlEl.textContent
+}
