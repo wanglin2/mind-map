@@ -199,6 +199,9 @@ class CatalogOrganization extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0
+    }
     let len = node.children.length
     let marginX = this.getMarginX(node.layerIndex + 1)
     if (node.isRoot) {

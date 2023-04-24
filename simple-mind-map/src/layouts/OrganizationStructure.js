@@ -179,6 +179,9 @@ class OrganizationStructure extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize, isRoot } = node
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0
+    }
     let x1 = left + width / 2
     let y1 = top + height
     let marginX = this.getMarginX(node.layerIndex + 1)
