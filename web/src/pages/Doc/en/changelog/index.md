@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.7
+
+Breaking change：In rich text mode, exporting png has been changed to using html2canvas to convert the entire svg, greatly improving the export speed. However, html2canvas has a bug where the text color inline with the dom node in the foreignObject element cannot be recognized. Therefore, the text color of the exported node is fixed. However, compared to the previously unavailable state of the export, it can at least be exported quickly and smoothly.
+
+optimization: Optimize the rich text node editing experience.
+
+New: In rich text mode, importing data, initializing data, and switching theme scene node styles support following theme changes.
+
 ## 0.5.6
 
 Fix: 1.Fix the issue of node position disorder during fast and multiple renderings in a short period of time. 2.Fix the issue of dragging the canvas while the node is being edited, causing the edit box and node to separate.
