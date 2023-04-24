@@ -98,14 +98,16 @@ function renderExpandBtn() {
     })
     this.group.add(this._expandBtn)
   }
+  this._showExpandBtn = true
   this.updateExpandBtnNode()
   this.updateExpandBtnPos()
 }
 
 //  移除展开收缩按钮
 function removeExpandBtn() {
-  if (this._expandBtn) {
+  if (this._expandBtn && this._showExpandBtn) {
     this._expandBtn.remove()
+    this._showExpandBtn = false
   }
 }
 
@@ -119,7 +121,7 @@ function showExpandBtn() {
 
 // 隐藏展开收起按钮
 function hideExpandBtn() {
-  if (this.mindMap.opt.alwaysShowExpandBtn) return
+  if (this.mindMap.opt.alwaysShowExpandBtn || this._isMouseenter) return
   // 非激活状态且展开状态鼠标移出才隐藏按钮
   let { isActive, expand } = this.nodeData.data
   if (!isActive && expand) {
