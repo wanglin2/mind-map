@@ -68,6 +68,7 @@ class Node {
     this.noteEl = null
     this._expandBtn = null
     this._lastExpandBtnType = null
+    this._showExpandBtn = false
     this._openExpandNode = null
     this._closeExpandNode = null
     this._fillExpandNode = null
@@ -75,6 +76,7 @@ class Node {
     this._generalizationLine = null
     this._generalizationNode = null
     this._unVisibleRectRegionNode = null
+    this._isMouseenter = false
     // 尺寸信息
     this._rectInfo = {
       imgContentWidth: 0,
@@ -385,11 +387,13 @@ class Node {
       this.mindMap.emit('node_mouseup', this, e)
     })
     this.group.on('mouseenter', e => {
+      this._isMouseenter = true
       // 显示展开收起按钮
       this.showExpandBtn()
       this.mindMap.emit('node_mouseenter', this, e)
     })
     this.group.on('mouseleave', e => {
+      this._isMouseenter = false
       this.hideExpandBtn()
       this.mindMap.emit('node_mouseleave', this, e)
     })
@@ -449,8 +453,11 @@ class Node {
         this.renderExpandBtn()
       }
     } else {
-      // 如果是收起状态，那么显示展开收起按钮
-      if (!this.nodeData.data.expand) {
+      let { isActive, expand } = this.nodeData.data
+      // 展开状态且非激活状态，且当前鼠标不在它上面，才隐藏
+      if (expand && !isActive && !this._isMouseenter) {
+        this.hideExpandBtn()
+      } else {
         this.showExpandBtn()
       }
     }

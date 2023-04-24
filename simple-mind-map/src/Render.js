@@ -757,14 +757,14 @@ class Render {
         item.render()
       })
       node.renderLine()
-      node.updateExpandBtnNode()
+      // node.updateExpandBtnNode()
     } else {
       // 收缩
       node.children.forEach(item => {
         item.remove()
       })
       node.removeLine()
-      node.updateExpandBtnNode()
+      // node.updateExpandBtnNode()
     }
     this.mindMap.render()
   }
