@@ -67,6 +67,7 @@ class Node {
     this._noteData = null
     this.noteEl = null
     this._expandBtn = null
+    this._lastExpandBtnType = null
     this._openExpandNode = null
     this._closeExpandNode = null
     this._fillExpandNode = null
@@ -436,6 +437,8 @@ class Node {
     this.renderGeneralization()
     // 更新节点位置
     let t = this.group.transform()
+    // 如果节点位置没有变化，则返回
+    if (this.left === t.translateX && this.top === t.translateY) return
     if (!isLayout && enableNodeTransitionMove) {
       this.group
         .animate(nodeTransitionMoveDuration)

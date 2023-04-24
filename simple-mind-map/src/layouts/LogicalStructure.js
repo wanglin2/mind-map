@@ -245,9 +245,15 @@ class LogicalStructure extends Base {
     let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle
       ? height / 2
       : 0
+    // 位置没有变化则返回
+    let _x = width
+    let _y = height / 2 + nodeUseLineStyleOffset
+    if (_x === translateX && _y === translateY) {
+      return
+    }
     btn.translate(
-      width - translateX,
-      height / 2 - translateY + nodeUseLineStyleOffset
+      _x - translateX,
+      _y - translateY
     )
   }
 
