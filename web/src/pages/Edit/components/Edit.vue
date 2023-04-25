@@ -48,6 +48,7 @@ import NodeImgPreview from './NodeImgPreview.vue'
 import SidebarTrigger from './SidebarTrigger.vue'
 import { mapState } from 'vuex'
 import customThemeList from '@/customThemes'
+import icon from '@/config/icon'
 
 // 注册插件
 MindMap
@@ -287,7 +288,8 @@ export default {
             // this.$bus.$emit('hideNoteContent')
           }
         },
-        ...(config || {})
+        ...(config || {}),
+        iconList: icon
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
