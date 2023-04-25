@@ -406,10 +406,12 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 </blockquote>
 <p>List of all currently registered plugins.</p>
 <h2>Instance methods</h2>
-<h3>getSvgData()</h3>
+<h3>getSvgData({ paddingX = 0, paddingY = 0 })</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
+<p><code>paddingX</code>: Padding x</p>
+<p><code>paddingY</code>: Padding y</p>
 <p>Get the <code>svg</code> data and return an object. The detailed structure is as follows:</p>
 <pre class="hljs"><code>{
   svg, <span class="hljs-comment">// Element, the overall svg element of the mind map graphics, including: svg (canvas container), g (actual mind map group)</span>
