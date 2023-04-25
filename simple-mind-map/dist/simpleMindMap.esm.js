@@ -43294,6 +43294,18 @@ var getTextFromHtml = (html2) => {
   getTextFromHtmlEl.innerHTML = html2;
   return getTextFromHtmlEl.textContent;
 };
+var readBlob = (blob) => {
+  return new Promise((resolve, reject) => {
+    let reader = new FileReader();
+    reader.onload = (evt) => {
+      resolve(evt.target.result);
+    };
+    reader.onerror = (err) => {
+      reject(err);
+    };
+    reader.readAsDataURL(blob);
+  });
+};
 
 // ../simple-mind-map/src/utils/nodeGeneralization.js
 function checkHasGeneralization() {
@@ -59977,6 +59989,25 @@ var Export = class {
       }
     });
   }
+  //  在svg上绘制思维导图背景
+  drawBackgroundToSvg(svg2) {
+    return new Promise(async (resolve) => {
+      let {
+        backgroundColor = "#fff",
+        backgroundImage,
+        backgroundRepeat = "repeat"
+      } = this.mindMap.themeConfig;
+      svg2.css("background-color", backgroundColor);
+      if (backgroundImage && backgroundImage !== "none") {
+        let imgDataUrl = await imgToDataUrl(backgroundImage);
+        svg2.css("background-image", `url(${imgDataUrl})`);
+        svg2.css("background-repeat", backgroundRepeat);
+        resolve();
+      } else {
+        resolve();
+      }
+    });
+  }
   //  导出为png
   /**
    * 方法1.把svg的图片都转化成data:url格式，再转换
@@ -59985,17 +60016,16 @@ var Export = class {
   async png(name, transparent = false) {
     let { node: node3, str } = await this.getSvgData();
     if (this.mindMap.richText) {
-      let res = await this.mindMap.richText.handleExportPng(node3.node);
-      let imgDataUrl2 = await this.svgToPng(res, transparent);
-      return imgDataUrl2;
+      let res2 = await this.mindMap.richText.handleExportPng(node3.node);
+      let imgDataUrl = await this.svgToPng(res2, transparent);
+      return imgDataUrl;
     }
     let blob = new Blob([str], {
       type: "image/svg+xml"
     });
-    let svgUrl = URL2.createObjectURL(blob);
-    let imgDataUrl = await this.svgToPng(svgUrl, transparent);
-    URL2.revokeObjectURL(svgUrl);
-    return imgDataUrl;
+    let svgUrl = await readBlob(blob);
+    let res = await this.svgToPng(svgUrl, transparent);
+    return res;
   }
   //  导出为pdf
   async pdf(name) {
@@ -60025,25 +60055,6 @@ var Export = class {
     };
     image.src = img;
   }
-  //  在svg上绘制思维导图背景
-  drawBackgroundToSvg(svg2) {
-    return new Promise(async (resolve) => {
-      let {
-        backgroundColor = "#fff",
-        backgroundImage,
-        backgroundRepeat = "repeat"
-      } = this.mindMap.themeConfig;
-      svg2.css("background-color", backgroundColor);
-      if (backgroundImage && backgroundImage !== "none") {
-        let imgDataUrl = await imgToDataUrl(backgroundImage);
-        svg2.css("background-image", `url(${imgDataUrl})`);
-        svg2.css("background-repeat", backgroundRepeat);
-        resolve();
-      } else {
-        resolve();
-      }
-    });
-  }
   //  导出为svg
   // plusCssText：附加的css样式，如果svg中存在dom节点，想要设置一些针对节点的样式可以通过这个参数传入
   async svg(name, plusCssText) {
@@ -60062,25 +60073,29 @@ var Export = class {
     let blob = new Blob([str], {
       type: "image/svg+xml"
     });
-    return URL2.createObjectURL(blob);
+    let res = await readBlob(blob);
+    return res;
   }
   //  导出为json
-  json(name, withConfig = true) {
+  async json(name, withConfig = true) {
     let data2 = this.mindMap.getData(withConfig);
     let str = JSON.stringify(data2);
     let blob = new Blob([str]);
-    return URL2.createObjectURL(blob);
+    let res = await readBlob(blob);
+    return res;
   }
   //  专有文件，其实就是json文件
-  smm(name, withConfig) {
-    return this.json(name, withConfig);
+  async smm(name, withConfig) {
+    let res = await this.json(name, withConfig);
+    return res;
   }
   // markdown文件
-  md() {
+  async md() {
     let data2 = this.mindMap.getData();
     let content3 = transformToMarkdown(data2);
     let blob = new Blob([content3]);
-    return URL2.createObjectURL(blob);
+    let res = await readBlob(blob);
+    return res;
   }
 };
 Export.instanceName = "doExport";
