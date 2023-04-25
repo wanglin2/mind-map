@@ -43425,15 +43425,20 @@ function createExpandNodeContent() {
   );
 }
 function updateExpandBtnNode() {
+  let { expand } = this.nodeData.data;
+  if (expand === this._lastExpandBtnType)
+    return;
   if (this._expandBtn) {
     this._expandBtn.clear();
   }
   this.createExpandNodeContent();
   let node3;
-  if (this.nodeData.data.expand === false) {
+  if (expand === false) {
     node3 = this._openExpandNode;
+    this._lastExpandBtnType = false;
   } else {
     node3 = this._closeExpandNode;
+    this._lastExpandBtnType = true;
   }
   if (this._expandBtn)
     this._expandBtn.add(this._fillExpandNode).add(node3);
@@ -43478,12 +43483,31 @@ function renderExpandBtn() {
     });
     this.group.add(this._expandBtn);
   }
+  this._showExpandBtn = true;
   this.updateExpandBtnNode();
   this.updateExpandBtnPos();
 }
 function removeExpandBtn() {
-  if (this._expandBtn) {
+  if (this._expandBtn && this._showExpandBtn) {
     this._expandBtn.remove();
+    this._showExpandBtn = false;
+  }
+}
+function showExpandBtn() {
+  if (this.mindMap.opt.alwaysShowExpandBtn)
+    return;
+  setTimeout(() => {
+    this.renderExpandBtn();
+  }, 0);
+}
+function hideExpandBtn() {
+  if (this.mindMap.opt.alwaysShowExpandBtn || this._isMouseenter)
+    return;
+  let { isActive, expand } = this.nodeData.data;
+  if (!isActive && expand) {
+    setTimeout(() => {
+      this.removeExpandBtn();
+    }, 0);
   }
 }
 var nodeExpandBtn_default = {
@@ -43491,7 +43515,9 @@ var nodeExpandBtn_default = {
   updateExpandBtnNode,
   updateExpandBtnPos,
   renderExpandBtn,
-  removeExpandBtn
+  removeExpandBtn,
+  showExpandBtn,
+  hideExpandBtn
 };
 
 // ../simple-mind-map/src/utils/nodeCommandWraps.js
@@ -43807,9 +43833,9 @@ var nodeIconList = [
     ]
   }
 ];
-var getNodeIconListIcon = (name) => {
+var getNodeIconListIcon = (name, extendIconList = []) => {
   let arr = name.split("_");
-  let typeData = nodeIconList.find((item) => {
+  let typeData = [...nodeIconList, ...extendIconList].find((item) => {
     return item.type === arr[0];
   });
   return typeData.list.find((item) => {
@@ -43858,8 +43884,16 @@ function createIconNode() {
   }
   let iconSize = this.mindMap.themeConfig.iconSize;
   return _data.icon.map((item) => {
+    let src = icons_default.getNodeIconListIcon(item, this.mindMap.opt.iconList || []);
+    let node3 = null;
+    if (/^<svg/.test(src)) {
+      node3 = SVG(src);
+    } else {
+      node3 = new Image2().load(src);
+    }
+    node3.size(iconSize, iconSize);
     return {
-      node: SVG(icons_default.getNodeIconListIcon(item)).size(iconSize, iconSize),
+      node: node3,
       width: iconSize,
       height: iconSize
     };
@@ -44104,12 +44138,16 @@ var Node2 = class {
     this._noteData = null;
     this.noteEl = null;
     this._expandBtn = null;
+    this._lastExpandBtnType = null;
+    this._showExpandBtn = false;
     this._openExpandNode = null;
     this._closeExpandNode = null;
     this._fillExpandNode = null;
     this._lines = [];
     this._generalizationLine = null;
     this._generalizationNode = null;
+    this._unVisibleRectRegionNode = null;
+    this._isMouseenter = false;
     this._rectInfo = {
       imgContentWidth: 0,
       imgContentHeight: 0,
@@ -44239,12 +44277,21 @@ var Node2 = class {
   //  定位节点内容
   layout() {
     this.group.clear();
-    let { width: width2, textContentItemMargin } = this;
+    let { width: width2, height: height2, textContentItemMargin } = this;
     let { paddingY } = this.getPaddingVale();
     paddingY += this.shapePadding.paddingY;
     this.shapeNode = this.shapeInstance.createShape();
     this.group.add(this.shapeNode);
     this.updateNodeShape();
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      if (!this._unVisibleRectRegionNode) {
+        this._unVisibleRectRegionNode = new Rect();
+      }
+      this._unVisibleRectRegionNode.fill({
+        color: "transparent"
+      }).size(this.expandBtnSize, height2).x(width2).y(0);
+      this.group.add(this._unVisibleRectRegionNode);
+    }
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass("generalization_" + this.generalizationBelongNode.uid);
     }
@@ -44346,9 +44393,13 @@ var Node2 = class {
       this.mindMap.emit("node_mouseup", this, e2);
     });
     this.group.on("mouseenter", (e2) => {
+      this._isMouseenter = true;
+      this.showExpandBtn();
       this.mindMap.emit("node_mouseenter", this, e2);
     });
     this.group.on("mouseleave", (e2) => {
+      this._isMouseenter = false;
+      this.hideExpandBtn();
       this.mindMap.emit("node_mouseleave", this, e2);
     });
     this.group.on("dblclick", (e2) => {
@@ -44391,14 +44442,25 @@ var Node2 = class {
     if (!this.group) {
       return;
     }
-    let { enableNodeTransitionMove, nodeTransitionMoveDuration } = this.mindMap.opt;
-    if (this._expandBtn && this.nodeData.children.length <= 0) {
-      this.removeExpandBtn();
+    let { enableNodeTransitionMove, nodeTransitionMoveDuration, alwaysShowExpandBtn } = this.mindMap.opt;
+    if (alwaysShowExpandBtn) {
+      if (this._expandBtn && this.nodeData.children.length <= 0) {
+        this.removeExpandBtn();
+      } else {
+        this.renderExpandBtn();
+      }
     } else {
-      this.renderExpandBtn();
+      let { isActive, expand } = this.nodeData.data;
+      if (expand && !isActive && !this._isMouseenter) {
+        this.hideExpandBtn();
+      } else {
+        this.showExpandBtn();
+      }
     }
     this.renderGeneralization();
     let t3 = this.group.transform();
+    if (this.left === t3.translateX && this.top === t3.translateY)
+      return;
     if (!isLayout && enableNodeTransitionMove) {
       this.group.animate(nodeTransitionMoveDuration).translate(this.left - t3.translateX, this.top - t3.translateY);
     } else {
@@ -44646,9 +44708,10 @@ var Node2 = class {
   }
   //  获取padding值
   getPaddingVale() {
+    let { isActive } = this.nodeData.data;
     return {
-      paddingX: this.getStyle("paddingX", true, this.nodeData.data.isActive),
-      paddingY: this.getStyle("paddingY", true, this.nodeData.data.isActive)
+      paddingX: this.getStyle("paddingX", true, isActive),
+      paddingY: this.getStyle("paddingY", true, isActive)
     };
   }
   //  获取某个样式
@@ -45057,6 +45120,9 @@ var LogicalStructure = class extends Base_default {
       return [];
     }
     let { left, top, width: width2, height: height2, expandBtnSize } = node3;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let marginX = this.getMarginX(node3.layerIndex + 1);
     let s1 = (marginX - expandBtnSize) * 0.6;
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
@@ -45079,6 +45145,9 @@ var LogicalStructure = class extends Base_default {
       return [];
     }
     let { left, top, width: width2, height: height2, expandBtnSize } = node3;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node3.children.forEach((item, index3) => {
       let x1 = node3.layerIndex === 0 ? left + width2 / 2 : left + width2 + expandBtnSize;
@@ -45099,6 +45168,9 @@ var LogicalStructure = class extends Base_default {
       return [];
     }
     let { left, top, width: width2, height: height2, expandBtnSize } = node3;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node3.children.forEach((item, index3) => {
       let x1 = node3.layerIndex === 0 ? left + width2 / 2 : left + width2 + expandBtnSize;
@@ -45123,9 +45195,14 @@ var LogicalStructure = class extends Base_default {
     let { width: width2, height: height2 } = node3;
     let { translateX, translateY } = btn.transform();
     let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle ? height2 / 2 : 0;
+    let _x = width2;
+    let _y = height2 / 2 + nodeUseLineStyleOffset;
+    if (_x === translateX && _y === translateY) {
+      return;
+    }
     btn.translate(
-      width2 - translateX,
-      height2 / 2 - translateY + nodeUseLineStyleOffset
+      _x - translateX,
+      _y - translateY
     );
   }
   //  创建概要节点
@@ -45313,6 +45390,9 @@ var MindMap = class extends Base_default {
       return [];
     }
     let { left, top, width: width2, height: height2, expandBtnSize } = node3;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let marginX = this.getMarginX(node3.layerIndex + 1);
     let s1 = (marginX - expandBtnSize) * 0.6;
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
@@ -45344,6 +45424,9 @@ var MindMap = class extends Base_default {
       return [];
     }
     let { left, top, width: width2, height: height2, expandBtnSize } = node3;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node3.children.forEach((item, index3) => {
       let x1 = node3.layerIndex === 0 ? left + width2 / 2 : item.dir === "left" ? left - expandBtnSize : left + width2 + expandBtnSize;
@@ -45371,9 +45454,12 @@ var MindMap = class extends Base_default {
       return [];
     }
     let { left, top, width: width2, height: height2, expandBtnSize } = node3;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node3.children.forEach((item, index3) => {
-      let x1 = node3.layerIndex === 0 ? left + width2 / 2 : item.dir === "left" ? left - expandBtnSize : left + width2 + 20;
+      let x1 = node3.layerIndex === 0 ? left + width2 / 2 : item.dir === "left" ? left - expandBtnSize : left + width2 + expandBtnSize;
       let y1 = top + height2 / 2;
       let x22 = item.dir === "left" ? item.left + item.width : item.left;
       let y22 = item.top + item.height / 2;
@@ -45402,8 +45488,13 @@ var MindMap = class extends Base_default {
     let { width: width2, height: height2, expandBtnSize } = node3;
     let { translateX, translateY } = btn.transform();
     let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle ? height2 / 2 : 0;
-    let x3 = (node3.dir === "left" ? 0 - expandBtnSize : width2) - translateX;
-    let y4 = height2 / 2 - translateY + nodeUseLineStyleOffset;
+    let _x = node3.dir === "left" ? 0 - expandBtnSize : width2;
+    let _y = height2 / 2 + nodeUseLineStyleOffset;
+    if (_x === translateX && _y === translateY) {
+      return;
+    }
+    let x3 = _x - translateX;
+    let y4 = _y - translateY;
     btn.translate(x3, y4);
   }
   //  创建概要节点
@@ -45600,6 +45691,9 @@ var CatalogOrganization = class extends Base_default {
       return [];
     }
     let { left, top, width: width2, height: height2, expandBtnSize } = node3;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let len = node3.children.length;
     let marginX = this.getMarginX(node3.layerIndex + 1);
     if (node3.isRoot) {
@@ -45868,6 +45962,9 @@ var OrganizationStructure = class extends Base_default {
       return [];
     }
     let { left, top, width: width2, height: height2, expandBtnSize, isRoot } = node3;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let x1 = left + width2 / 2;
     let y1 = top + height2;
     let marginX = this.getMarginX(node3.layerIndex + 1);
@@ -46118,6 +46215,9 @@ var Timeline2 = class extends Base_default {
       return [];
     }
     let { left, top, width: width2, height: height2, expandBtnSize } = node3;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let len = node3.children.length;
     if (node3.isRoot) {
       let prevBother = node3;
@@ -46569,6 +46669,9 @@ var Fishbone = class extends Base_default {
       return [];
     }
     let { top, height: height2, expandBtnSize } = node3;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let len = node3.children.length;
     if (node3.isRoot) {
       let maxx = -Infinity;
@@ -47254,6 +47357,7 @@ var Render = class {
         if (!node3.nodeData.data.isActive) {
           node3.nodeData.data.isActive = true;
           this.addActiveNode(node3);
+          node3.showExpandBtn();
           setTimeout(() => {
             node3.updateNodeShape();
           }, 0);
@@ -47593,6 +47697,11 @@ var Render = class {
     this.setNodeData(node3, {
       isActive: active
     });
+    if (active) {
+      node3.showExpandBtn();
+    } else {
+      node3.hideExpandBtn();
+    }
     node3.updateNodeShape();
   }
   //  设置节点是否展开
@@ -47605,13 +47714,11 @@ var Render = class {
         item.render();
       });
       node3.renderLine();
-      node3.updateExpandBtnNode();
     } else {
       node3.children.forEach((item) => {
         item.remove();
       });
       node3.removeLine();
-      node3.updateExpandBtnNode();
     }
     this.mindMap.render();
   }
@@ -49815,7 +49922,22 @@ var defaultOpt = {
   // 是否在点击了画布外的区域时结束节点文本的编辑状态
   isEndNodeTextEditOnClickOuter: true,
   // 最大历史记录数
-  maxHistoryCount: 1e3
+  maxHistoryCount: 1e3,
+  // 是否一直显示节点的展开收起按钮，默认为鼠标移上去和激活时才显示
+  alwaysShowExpandBtn: false,
+  // 扩展节点可插入的图标
+  iconList: [
+    // {
+    //   name: '',// 分组名称
+    //   type: '',// 分组的值
+    //   list: [// 分组下的图标列表
+    //     {
+    //       name: '',// 图标名称
+    //       icon:''// 图标，可以传svg或图片
+    //     }
+    //   ]
+    // }
+  ]
 };
 var MindMap2 = class {
   //  构造函数
@@ -66452,6 +66574,7 @@ var markdown_default = {
 // ../simple-mind-map/full.js
 simple_mind_map_default.xmind = xmind_default;
 simple_mind_map_default.markdown = markdown_default;
+simple_mind_map_default.iconList = icons_default.nodeIconList;
 simple_mind_map_default.usePlugin(MiniMap_default).usePlugin(Watermark_default).usePlugin(Drag_default).usePlugin(KeyboardNavigation_default).usePlugin(Export_default).usePlugin(Select_default).usePlugin(AssociativeLine_default).usePlugin(RichText_default);
 var full_default = simple_mind_map_default;
 export {

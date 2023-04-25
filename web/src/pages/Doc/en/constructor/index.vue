@@ -273,6 +273,20 @@
 <td></td>
 <td>Maximum number of history records</td>
 </tr>
+<tr>
+<td>alwaysShowExpandBtn（v0.5.8+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Whether to always display the expand and collapse buttons of nodes, which are only displayed when the mouse is moved up and activated by default</td>
+<td></td>
+</tr>
+<tr>
+<td>iconList（v0.5.8+）</td>
+<td>Array</td>
+<td>[]</td>
+<td>The icons that can be inserted into the extension node, and each item in the array is an object. Please refer to the &quot;Icon Configuration&quot; table below for the detailed structure of the object</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
@@ -315,6 +329,37 @@
 <td>Object</td>
 <td>{color: '#999', opacity: 0.5, fontSize: 14}</td>
 <td>Watermark text style</td>
+</tr>
+</tbody>
+</table>
+<h3>Icon Configuration</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>String</td>
+<td></td>
+<td>The name of the icon group</td>
+</tr>
+<tr>
+<td>type</td>
+<td>String</td>
+<td></td>
+<td>Values for icon grouping</td>
+</tr>
+<tr>
+<td>list</td>
+<td>Array</td>
+<td></td>
+<td>A list of icons under grouping, with each item in the array being an object, <code>{ name: '', icon: '' }</code>，<code>name</code>represents the name of the icon, <code>icon</code>represents the icon, Can be an <code>svg</code> icon, such as <code>&lt;svg ...&gt;&lt;path&gt;&lt;/path&gt;&lt;/svg&gt;</code>, also can be a image <code>url</code>, or <code>base64</code> icon, such as <code>data:image/png;base64,...</code></td>
 </tr>
 </tbody>
 </table>

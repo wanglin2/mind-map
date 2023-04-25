@@ -17,7 +17,7 @@ If you are using the file in the format of `umd`, you can obtain it in the follo
 ```
 
 ```js
-MindMap.markdown
+simpleMindMap.markdown
 ```
 
 ## Methods

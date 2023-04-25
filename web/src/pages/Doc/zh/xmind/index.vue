@@ -11,7 +11,7 @@
 <p>如果使用的是<code>umd</code>格式的文件，那么可以通过如下方式获取：</p>
 <pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;simple-mind-map/dist/simpleMindMap.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
-<pre class="hljs"><code>MindMap.xmind
+<pre class="hljs"><code>simpleMindMap.xmind
 </code></pre>
 <h2>方法</h2>
 <h3>xmind.parseXmindFile(file)</h3>

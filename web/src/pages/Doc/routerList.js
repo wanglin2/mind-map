@@ -25,6 +25,7 @@ export default [
       { path: 'course16', title: '如何渲染富文本的悬浮工具栏' },
       { path: 'course17', title: '导入和导出' },
       { path: 'course18', title: '如何持久化数据' },
+      { path: 'course19', title: '插入和扩展节点图标' },
       { path: 'doExport', title: 'Export 插件' },
       { path: 'drag', title: 'Drag插件' },
       { path: 'introduction', title: '简介' },

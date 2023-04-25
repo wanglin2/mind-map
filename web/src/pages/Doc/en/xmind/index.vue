@@ -11,7 +11,7 @@
 <p>If you are using the file in the format of <code>umd</code>, you can obtain it in the following way:</p>
 <pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">&quot;simple-mind-map/dist/simpleMindMap.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
-<pre class="hljs"><code>MindMap.xmind
+<pre class="hljs"><code>simpleMindMap.xmind
 </code></pre>
 <h2>Methods</h2>
 <h3>xmind.parseXmindFile(file)</h3>

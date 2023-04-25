@@ -32675,9 +32675,9 @@ if (typeof window !== 'undefined') {
   var currentScript = window.document.currentScript
   if (false) { var getCurrentScript; }
 
-  var src = currentScript && currentScript.src.match(/(.+\/)[^/]+\.js(\?.*)?$/)
-  if (src) {
-    __webpack_require__.p = src[1] // eslint-disable-line
+  var setPublicPath_src = currentScript && currentScript.src.match(/(.+\/)[^/]+\.js(\?.*)?$/)
+  if (setPublicPath_src) {
+    __webpack_require__.p = setPublicPath_src[1] // eslint-disable-line
   }
 }
 
@@ -41256,15 +41256,22 @@ function createExpandNodeContent() {
 
 //  创建或更新展开收缩按钮内容
 function updateExpandBtnNode() {
+  let {
+    expand
+  } = this.nodeData.data;
+  // 如果本次和上次的展开状态一样则返回
+  if (expand === this._lastExpandBtnType) return;
   if (this._expandBtn) {
     this._expandBtn.clear();
   }
   this.createExpandNodeContent();
   let node;
-  if (this.nodeData.data.expand === false) {
+  if (expand === false) {
     node = this._openExpandNode;
+    this._lastExpandBtnType = false;
   } else {
     node = this._closeExpandNode;
+    this._lastExpandBtnType = true;
   }
   if (this._expandBtn) this._expandBtn.add(this._fillExpandNode).add(node);
 }
@@ -41309,14 +41316,39 @@ function renderExpandBtn() {
     });
     this.group.add(this._expandBtn);
   }
+  this._showExpandBtn = true;
   this.updateExpandBtnNode();
   this.updateExpandBtnPos();
 }
 
 //  移除展开收缩按钮
 function removeExpandBtn() {
-  if (this._expandBtn) {
+  if (this._expandBtn && this._showExpandBtn) {
     this._expandBtn.remove();
+    this._showExpandBtn = false;
+  }
+}
+
+// 显示展开收起按钮
+function showExpandBtn() {
+  if (this.mindMap.opt.alwaysShowExpandBtn) return;
+  setTimeout(() => {
+    this.renderExpandBtn();
+  }, 0);
+}
+
+// 隐藏展开收起按钮
+function hideExpandBtn() {
+  if (this.mindMap.opt.alwaysShowExpandBtn || this._isMouseenter) return;
+  // 非激活状态且展开状态鼠标移出才隐藏按钮
+  let {
+    isActive,
+    expand
+  } = this.nodeData.data;
+  if (!isActive && expand) {
+    setTimeout(() => {
+      this.removeExpandBtn();
+    }, 0);
   }
 }
 /* harmony default export */ var nodeExpandBtn = ({
@@ -41324,7 +41356,9 @@ function removeExpandBtn() {
   updateExpandBtnNode,
   updateExpandBtnPos,
   renderExpandBtn,
-  removeExpandBtn
+  removeExpandBtn,
+  showExpandBtn,
+  hideExpandBtn
 });
 // CONCATENATED MODULE: ../simple-mind-map/src/utils/nodeCommandWraps.js
 //  设置数据
@@ -41592,9 +41626,9 @@ const nodeIconList = [{
 }];
 
 //  获取nodeIconList icon内容
-const getNodeIconListIcon = name => {
+const getNodeIconListIcon = (name, extendIconList = []) => {
   let arr = name.split('_');
-  let typeData = nodeIconList.find(item => {
+  let typeData = [...nodeIconList, ...extendIconList].find(item => {
     return item.type === arr[0];
   });
   return typeData.list.find(item => {
@@ -41648,8 +41682,18 @@ function createIconNode() {
   }
   let iconSize = this.mindMap.themeConfig.iconSize;
   return _data.icon.map(item => {
+    let src = icons.getNodeIconListIcon(item, this.mindMap.opt.iconList || []);
+    let node = null;
+    // svg图标
+    if (/^<svg/.test(src)) {
+      node = SVG(src);
+    } else {
+      // 图片图标
+      node = new svg_esm_Image().load(src);
+    }
+    node.size(iconSize, iconSize);
     return {
-      node: SVG(icons.getNodeIconListIcon(item)).size(iconSize, iconSize),
+      node,
       width: iconSize,
       height: iconSize
     };
@@ -41956,12 +42000,16 @@ class Node_Node {
     this._noteData = null;
     this.noteEl = null;
     this._expandBtn = null;
+    this._lastExpandBtnType = null;
+    this._showExpandBtn = false;
     this._openExpandNode = null;
     this._closeExpandNode = null;
     this._fillExpandNode = null;
     this._lines = [];
     this._generalizationLine = null;
     this._generalizationNode = null;
+    this._unVisibleRectRegionNode = null;
+    this._isMouseenter = false;
     // 尺寸信息
     this._rectInfo = {
       imgContentWidth: 0,
@@ -42131,6 +42179,7 @@ class Node_Node {
     this.group.clear();
     let {
       width,
+      height,
       textContentItemMargin
     } = this;
     let {
@@ -42141,6 +42190,16 @@ class Node_Node {
     this.shapeNode = this.shapeInstance.createShape();
     this.group.add(this.shapeNode);
     this.updateNodeShape();
+    // 渲染一个隐藏的矩形区域，用来触发展开收起按钮的显示
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      if (!this._unVisibleRectRegionNode) {
+        this._unVisibleRectRegionNode = new Rect();
+      }
+      this._unVisibleRectRegionNode.fill({
+        color: 'transparent'
+      }).size(this.expandBtnSize, height).x(width).y(0);
+      this.group.add(this._unVisibleRectRegionNode);
+    }
     // 概要节点添加一个带所属节点id的类名
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass('generalization_' + this.generalizationBelongNode.uid);
@@ -42240,9 +42299,14 @@ class Node_Node {
       this.mindMap.emit('node_mouseup', this, e);
     });
     this.group.on('mouseenter', e => {
+      this._isMouseenter = true;
+      // 显示展开收起按钮
+      this.showExpandBtn();
       this.mindMap.emit('node_mouseenter', this, e);
     });
     this.group.on('mouseleave', e => {
+      this._isMouseenter = false;
+      this.hideExpandBtn();
       this.mindMap.emit('node_mouseleave', this, e);
     });
     // 双击事件
@@ -42293,19 +42357,35 @@ class Node_Node {
     }
     let {
       enableNodeTransitionMove,
-      nodeTransitionMoveDuration
+      nodeTransitionMoveDuration,
+      alwaysShowExpandBtn
     } = this.mindMap.opt;
-    // 需要移除展开收缩按钮
-    if (this._expandBtn && this.nodeData.children.length <= 0) {
-      this.removeExpandBtn();
+    if (alwaysShowExpandBtn) {
+      // 需要移除展开收缩按钮
+      if (this._expandBtn && this.nodeData.children.length <= 0) {
+        this.removeExpandBtn();
+      } else {
+        // 更新展开收起按钮
+        this.renderExpandBtn();
+      }
     } else {
-      // 更新展开收起按钮
-      this.renderExpandBtn();
+      let {
+        isActive,
+        expand
+      } = this.nodeData.data;
+      // 展开状态且非激活状态，且当前鼠标不在它上面，才隐藏
+      if (expand && !isActive && !this._isMouseenter) {
+        this.hideExpandBtn();
+      } else {
+        this.showExpandBtn();
+      }
     }
     // 更新概要
     this.renderGeneralization();
     // 更新节点位置
     let t = this.group.transform();
+    // 如果节点位置没有变化，则返回
+    if (this.left === t.translateX && this.top === t.translateY) return;
     if (!isLayout && enableNodeTransitionMove) {
       this.group.animate(nodeTransitionMoveDuration).translate(this.left - t.translateX, this.top - t.translateY);
     } else {
@@ -42569,9 +42649,12 @@ class Node_Node {
 
   //  获取padding值
   getPaddingVale() {
+    let {
+      isActive
+    } = this.nodeData.data;
     return {
-      paddingX: this.getStyle('paddingX', true, this.nodeData.data.isActive),
-      paddingY: this.getStyle('paddingY', true, this.nodeData.data.isActive)
+      paddingX: this.getStyle('paddingX', true, isActive),
+      paddingY: this.getStyle('paddingY', true, isActive)
     };
   }
 
@@ -43050,6 +43133,9 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
       height,
       expandBtnSize
     } = node;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let marginX = this.getMarginX(node.layerIndex + 1);
     let s1 = (marginX - expandBtnSize) * 0.6;
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
@@ -43080,6 +43166,9 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
       height,
       expandBtnSize
     } = node;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node.children.forEach((item, index) => {
       let x1 = node.layerIndex === 0 ? left + width / 2 : left + width + expandBtnSize;
@@ -43108,6 +43197,9 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
       height,
       expandBtnSize
     } = node;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node.children.forEach((item, index) => {
       let x1 = node.layerIndex === 0 ? left + width / 2 : left + width + expandBtnSize;
@@ -43141,7 +43233,13 @@ class LogicalStructure_LogicalStructure extends layouts_Base {
     } = btn.transform();
     // 节点使用横线风格，需要调整展开收起按钮位置
     let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle ? height / 2 : 0;
-    btn.translate(width - translateX, height / 2 - translateY + nodeUseLineStyleOffset);
+    // 位置没有变化则返回
+    let _x = width;
+    let _y = height / 2 + nodeUseLineStyleOffset;
+    if (_x === translateX && _y === translateY) {
+      return;
+    }
+    btn.translate(_x - translateX, _y - translateY);
   }
 
   //  创建概要节点
@@ -43336,6 +43434,9 @@ class MindMap_MindMap extends layouts_Base {
       height,
       expandBtnSize
     } = node;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let marginX = this.getMarginX(node.layerIndex + 1);
     let s1 = (marginX - expandBtnSize) * 0.6;
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
@@ -43375,6 +43476,9 @@ class MindMap_MindMap extends layouts_Base {
       height,
       expandBtnSize
     } = node;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node.children.forEach((item, index) => {
       let x1 = node.layerIndex === 0 ? left + width / 2 : item.dir === 'left' ? left - expandBtnSize : left + width + expandBtnSize;
@@ -43410,9 +43514,12 @@ class MindMap_MindMap extends layouts_Base {
       height,
       expandBtnSize
     } = node;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node.children.forEach((item, index) => {
-      let x1 = node.layerIndex === 0 ? left + width / 2 : item.dir === 'left' ? left - expandBtnSize : left + width + 20;
+      let x1 = node.layerIndex === 0 ? left + width / 2 : item.dir === 'left' ? left - expandBtnSize : left + width + expandBtnSize;
       let y1 = top + height / 2;
       let x2 = item.dir === 'left' ? item.left + item.width : item.left;
       let y2 = item.top + item.height / 2;
@@ -43451,8 +43558,14 @@ class MindMap_MindMap extends layouts_Base {
     } = btn.transform();
     // 节点使用横线风格，需要调整展开收起按钮位置
     let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle ? height / 2 : 0;
-    let x = (node.dir === 'left' ? 0 - expandBtnSize : width) - translateX;
-    let y = height / 2 - translateY + nodeUseLineStyleOffset;
+    // 位置没有变化则返回
+    let _x = node.dir === 'left' ? 0 - expandBtnSize : width;
+    let _y = height / 2 + nodeUseLineStyleOffset;
+    if (_x === translateX && _y === translateY) {
+      return;
+    }
+    let x = _x - translateX;
+    let y = _y - translateY;
     btn.translate(x, y);
   }
 
@@ -43658,6 +43771,9 @@ class CatalogOrganization_CatalogOrganization extends layouts_Base {
       height,
       expandBtnSize
     } = node;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let len = node.children.length;
     let marginX = this.getMarginX(node.layerIndex + 1);
     if (node.isRoot) {
@@ -43961,6 +44077,9 @@ class OrganizationStructure_OrganizationStructure extends layouts_Base {
       expandBtnSize,
       isRoot
     } = node;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let x1 = left + width / 2;
     let y1 = top + height;
     let marginX = this.getMarginX(node.layerIndex + 1);
@@ -44232,6 +44351,9 @@ class Timeline_Timeline extends layouts_Base {
       height,
       expandBtnSize
     } = node;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let len = node.children.length;
     if (node.isRoot) {
       // 当前节点是根节点
@@ -44751,6 +44873,9 @@ class Fishbone_Fishbone extends layouts_Base {
       height,
       expandBtnSize
     } = node;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
     let len = node.children.length;
     if (node.isRoot) {
       // 当前节点是根节点
@@ -45573,6 +45698,8 @@ class Render_Render {
       if (!node.nodeData.data.isActive) {
         node.nodeData.data.isActive = true;
         this.addActiveNode(node);
+        // 激活节点需要显示展开收起按钮
+        node.showExpandBtn();
         setTimeout(() => {
           node.updateNodeShape();
         }, 0);
@@ -45944,6 +46071,12 @@ class Render_Render {
     this.setNodeData(node, {
       isActive: active
     });
+    // 切换激活状态，需要切换展开收起按钮的显隐
+    if (active) {
+      node.showExpandBtn();
+    } else {
+      node.hideExpandBtn();
+    }
     node.updateNodeShape();
   }
 
@@ -45958,15 +46091,16 @@ class Render_Render {
         item.render();
       });
       node.renderLine();
-      node.updateExpandBtnNode();
+      // node.updateExpandBtnNode()
     } else {
       // 收缩
       node.children.forEach(item => {
         item.remove();
       });
       node.removeLine();
-      node.updateExpandBtnNode();
+      // node.updateExpandBtnNode()
     }
+
     this.mindMap.render();
   }
 
@@ -48300,7 +48434,22 @@ const defaultOpt = {
   // 是否在点击了画布外的区域时结束节点文本的编辑状态
   isEndNodeTextEditOnClickOuter: true,
   // 最大历史记录数
-  maxHistoryCount: 1000
+  maxHistoryCount: 1000,
+  // 是否一直显示节点的展开收起按钮，默认为鼠标移上去和激活时才显示
+  alwaysShowExpandBtn: false,
+  // 扩展节点可插入的图标
+  iconList: [
+    // {
+    //   name: '',// 分组名称
+    //   type: '',// 分组的值
+    //   list: [// 分组下的图标列表
+    //     {
+    //       name: '',// 图标名称
+    //       icon:''// 图标，可以传svg或图片
+    //     }
+    //   ]
+    // }
+  ]
 };
 
 //  思维导图
@@ -62177,8 +62326,10 @@ const transformMarkdownTo = async md => {
 
 
 
+
 simple_mind_map.xmind = xmind;
 simple_mind_map.markdown = markdown;
+simple_mind_map.iconList = icons.nodeIconList;
 simple_mind_map.usePlugin(src_MiniMap).usePlugin(src_Watermark).usePlugin(src_Drag).usePlugin(src_KeyboardNavigation).usePlugin(src_Export).usePlugin(src_Select).usePlugin(src_AssociativeLine).usePlugin(src_RichText);
 /* harmony default export */ var full = (simple_mind_map);
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js

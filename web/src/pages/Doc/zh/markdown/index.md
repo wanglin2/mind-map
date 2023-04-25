@@ -17,7 +17,7 @@ import markdown from 'simple-mind-map/src/parse/markdown.js'
 ```
 
 ```js
-MindMap.markdown
+simpleMindMap.markdown
 ```
 
 ## 方法
