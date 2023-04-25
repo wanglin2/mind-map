@@ -10,6 +10,22 @@ MindMap.usePlugin(Export)
 </code></pre>
 <p>After registration and instantiation of <code>MindMap</code>, the instance can be obtained through <code>mindMap.doExport</code>.</p>
 <h2>Methods</h2>
+<p>All exported methods are asynchronous and return an instance of <code>Promise</code>. You can use the <code>then</code> method to obtain data, or use the <code>async await</code> function to obtain:</p>
+<pre class="hljs"><code>mindMap.doExport.png().then(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
+  <span class="hljs-comment">// ...</span>
+})
+
+<span class="hljs-keyword">const</span> <span class="hljs-keyword">export</span> = <span class="hljs-keyword">async</span> () =&gt; {
+  <span class="hljs-keyword">let</span> data = <span class="hljs-keyword">await</span> mindMap.doExport.png()
+  <span class="hljs-comment">// ...</span>
+}
+</code></pre>
+<p>The returned data is in the format of <code>data:URL</code>. You can create an <code>a</code> tag to trigger the download:</p>
+<pre class="hljs"><code><span class="hljs-keyword">let</span> a = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;a&#x27;</span>)
+a.href = <span class="hljs-string">&#x27;xxx.png&#x27;</span><span class="hljs-comment">// .png、.svg、.pdf、.md、.json、.smm</span>
+a.download = <span class="hljs-string">&#x27;xxx&#x27;</span>
+a.click()
+</code></pre>
 <h3>png(name, transparent = false)</h3>
 <ul>
 <li>
@@ -19,8 +35,7 @@ MindMap.usePlugin(Export)
 <p><code>transparent</code>: v0.5.7+, Specify whether the background of the exported image is transparent</p>
 </li>
 </ul>
-<p>Exports as <code>png</code>, an async method that returns image data, <code>data:url</code> data which
-can be downloaded or displayed.</p>
+<p>Exports as <code>png</code>.</p>
 <h3>svg(name, plusCssText)</h3>
 <ul>
 <li>
@@ -40,31 +55,29 @@ can be downloaded or displayed.</p>
   }`</span>
 )
 </code></pre>
-<p>Exports as <code>svg</code>, an async method that returns <code>svg</code> data, <code>data:url</code> data which
-can be downloaded or displayed.</p>
-<h3>getSvgData()</h3>
-<p>Gets <code>svg</code> data, an async method that returns an object:</p>
-<pre class="hljs"><code>{
-  node; <span class="hljs-comment">// svg object</span>
-  str; <span class="hljs-comment">// svg string, if rich text editing is enabled and domToImage is set to true, the dom node in the svg character returned by this value will be converted into the form of an image</span>
-  nodeWithDomToImg<span class="hljs-comment">// v0.4.0+，The svg object after the DOM node is converted to an image has a value only when rich text editing is enabled and domToImage is set to true, otherwise null</span>
-}
-</code></pre>
+<p>Exports as <code>svg</code>.</p>
 <h3>pdf(name)</h3>
 <blockquote>
 <p>v0.2.1+</p>
 </blockquote>
 <p><code>name</code>：File name</p>
-<p>Export as <code>pdf</code></p>
+<p>Export as <code>pdf</code>. Unlike other export methods, this method does not return data and directly triggers the download.</p>
 <h3>json(name, withConfig)</h3>
 <p><code>name</code>：It is temporarily useless, just pass an empty string</p>
 <p><code>withConfig``：Boolean</code>, default <code>true</code>, Whether the data contains configuration, otherwise it is pure mind map node data</p>
-<p>Return <code>json</code> data, <code>data:url</code> type, you can download it yourself</p>
+<p>Return <code>json</code> data.</p>
 <h3>md()</h3>
 <blockquote>
 <p>v0.4.7+</p>
 </blockquote>
-<p>Export as <code>markdown</code> file, Return <code>json</code> data, <code>data:url</code> type, you can download it yourself</p>
+<p>Export as <code>markdown</code> file.</p>
+<h3>getSvgData()</h3>
+<p>Gets <code>svg</code> data, an async method that returns an object:</p>
+<pre class="hljs"><code>{
+  node <span class="hljs-comment">// svg node</span>
+  str <span class="hljs-comment">// svg string</span>
+}
+</code></pre>
 
   </div>
 </template>

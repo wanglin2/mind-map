@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.9
+
+Change: Unified export method format, using `FileReader` instead of `URL.createObjectURL` to convert `blob` data.
+
 ## 0.5.8
 
 optimization: 1.The position setting is not triggered when the node position does not change. 2.The unfolding and folding status does not change and does not trigger button updates.

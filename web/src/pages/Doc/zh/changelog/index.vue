@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.5.9</h2>
+<p>修改：统一导出方法的格式，使用<code>FileReader</code>代替<code>URL.createObjectURL</code>转换<code>blob</code>数据。</p>
 <h2>0.5.8</h2>
 <p>优化：1.节点位置没有变化不触发位置设置。 2.展开收起状态没有变化不触发按钮更新。</p>
 <p>新增：1.默认改为鼠标移上节点才显示展开收起按钮。 2.支持扩展节点可插入的图标列表。</p>

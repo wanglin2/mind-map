@@ -129,6 +129,16 @@ Measure the width and height of the text, return value:
 { width, height }
 ```
 
+#### getTextFromHtml(html)
+
+Extract plain text content from an HTML string.
+
+#### readBlob(blob)
+
+> v0.5.9+
+
+Convert `blob` data to `data:url` data.
+
 ## Simulate CSS background in Canvas
 
 Import:

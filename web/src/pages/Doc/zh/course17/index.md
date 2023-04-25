@@ -8,7 +8,17 @@
 
 `.smm`是`simple-mind-map`自己定义的一种文件，其实就是`json`文件，换了一个扩展名而已。
 
-导出直接调用`export`方法即可。
+导出直接调用`export`方法即可：
+
+```js
+mindMap.export(type, isDownload, fileName, ...)
+```
+
+`type`：文件类型
+
+`isDownload`：传`true`会触发下载，`false`则不会，函数会返回导出文件的数据，`data:url`格式，你可以自行下载，`pdf`不支持该参数，默认会直接下载。
+
+`fileName`：下载的文件名称
 
 ### 导出为smm、json
 
