@@ -9,9 +9,11 @@ import AssociativeLine from './src/AssociativeLine'
 import RichText from './src/RichText'
 import xmind from './src/parse/xmind.js'
 import markdown from './src/parse/markdown.js'
+import icons from './src/svg/icons.js'
 
 MindMap.xmind = xmind
 MindMap.markdown = markdown
+MindMap.iconList = icons.nodeIconList
 
 MindMap
   .usePlugin(MiniMap)

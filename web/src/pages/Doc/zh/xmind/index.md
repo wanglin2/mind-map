@@ -17,7 +17,7 @@ import xmind from 'simple-mind-map/src/parse/xmind.js'
 ```
 
 ```js
-MindMap.xmind
+simpleMindMap.xmind
 ```
 
 ## 方法

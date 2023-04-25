@@ -59,6 +59,8 @@ const mindMap = new MindMap({
 | nodeNoteTooltipZIndex（v0.5.5+）     | Number  | 3000 | z-index of floating layer elements in node comments  |          |
 | isEndNodeTextEditOnClickOuter（v0.5.5+）     | Boolean  | true | Whether to end the editing status of node text when clicking on an area outside the canvas  |          |
 | maxHistoryCount（v0.5.6+）     | Number  | 1000 |   | Maximum number of history records         |
+| alwaysShowExpandBtn（v0.5.8+）     | Boolean  | false | Whether to always display the expand and collapse buttons of nodes, which are only displayed when the mouse is moved up and activated by default  |          |
+| iconList（v0.5.8+）     | Array  | [] | The icons that can be inserted into the extension node, and each item in the array is an object. Please refer to the "Icon Configuration" table below for the detailed structure of the object  |          |
 
 ### Watermark config
 
@@ -69,6 +71,14 @@ const mindMap = new MindMap({
 | textSpacing | Number | 100                                         | Spacing between watermarks in the same row                   |
 | angle       | Number | 30                                          | Tilt angle of watermark, range: [0, 90]                      |
 | textStyle   | Object | {color: '#999', opacity: 0.5, fontSize: 14} | Watermark text style                                         |
+
+### Icon Configuration
+
+| Field Name  | Type   | Default Value                               | Description                                                  |
+| ----------- | ------ | ------------------------------------------- | ------------------------------------------------------------ |
+| name        | String |                                           | The name of the icon group |
+| type        | String |                                           | Values for icon grouping |
+| list        | Array  |                                           | A list of icons under grouping, with each item in the array being an object, `{ name: '', icon: '' }`，`name`represents the name of the icon, `icon`represents the icon, Can be an `svg` icon, such as `<svg ...><path></path></svg>`, also can be a image `url`, or `base64` icon, such as `data:image/png;base64,...` |
 
 ## Static methods
 

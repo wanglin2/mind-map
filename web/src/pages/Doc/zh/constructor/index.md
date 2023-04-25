@@ -59,6 +59,8 @@ const mindMap = new MindMap({
 | nodeNoteTooltipZIndex（v0.5.5+）     | Number  | 3000 | 节点备注浮层元素的z-index  |          |
 | isEndNodeTextEditOnClickOuter（v0.5.5+）     | Boolean  | true |  是否在点击了画布外的区域时结束节点文本的编辑状态 |          |
 | maxHistoryCount（v0.5.6+）     | Number  | 1000 | 最大历史记录数  |          |
+| alwaysShowExpandBtn（v0.5.8+）     | Boolean  | false | 是否一直显示节点的展开收起按钮，默认为鼠标移上去和激活时才显示  |          |
+| iconList（v0.5.8+）     | Array  | [] | 扩展节点可插入的图标，数组的每一项为一个对象，对象详细结构请参考下方【图标配置】表格  |          |
 
 ### 水印配置
 
@@ -70,7 +72,13 @@ const mindMap = new MindMap({
 | angle       | Number | 30                                          | 水印的倾斜角度，范围：[0, 90]        |
 | textStyle   | Object | {color: '#999', opacity: 0.5, fontSize: 14} | 水印文字样式                         |
 
+### 图标配置
 
+| 字段名称    | 类型   | 默认值                                      | 描述                                 |
+| ----------- | ------ | ------------------------------------------- | ------------------------------------ |
+| name        | String |                                           | 图标分组的名称 |
+| type        | String |                                           | 图标分组的值 |
+| list        | Array  |                                           | 分组下的图标列表，数组的每一项为一个对象，`{ name: '', icon: '' }`，`name`代表图标的名称，`icon`代表图标，可以是`svg`图标，比如`<svg ...><path></path></svg>`，也可以是图片`url`，或者是`base64`图标，比如`data:image/png;base64,...` |
 
 ## 静态方法
 
