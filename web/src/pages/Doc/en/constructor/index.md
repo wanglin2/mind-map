@@ -139,9 +139,13 @@ List of all currently registered plugins.
 
 ## Instance methods
 
-### getSvgData()
+### getSvgData({ paddingX = 0, paddingY = 0 })
 
 > v0.3.0+
+
+`paddingX`: Padding x
+
+`paddingY`: Padding y
 
 Get the `svg` data and return an object. The detailed structure is as follows:
 

@@ -137,9 +137,13 @@ mindMap.setTheme('主题名称')
 
 ## 实例方法
 
-### getSvgData()
+### getSvgData({ paddingX = 0, paddingY = 0 })
 
 > v0.3.0+
+
+`paddingX`：水平内边距
+
+`paddingY`：垂直内边距
 
 获取`svg`数据，返回一个对象，详细结构如下：
 

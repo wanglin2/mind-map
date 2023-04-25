@@ -406,10 +406,12 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </blockquote>
 <p>当前注册的所有插件列表。</p>
 <h2>实例方法</h2>
-<h3>getSvgData()</h3>
+<h3>getSvgData({ paddingX = 0, paddingY = 0 })</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
+<p><code>paddingX</code>：水平内边距</p>
+<p><code>paddingY</code>：垂直内边距</p>
 <p>获取<code>svg</code>数据，返回一个对象，详细结构如下：</p>
 <pre class="hljs"><code>{
   svg, <span class="hljs-comment">// Element，思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）</span>
