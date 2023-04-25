@@ -12,7 +12,7 @@
           class="icon"
           v-for="icon in item.list"
           :key="icon.name"
-          v-html="icon.icon"
+          v-html="getHtml(icon.icon)"
           :class="{
             selected: iconList.includes(item.type + '_' + icon.name)
           }"
@@ -25,6 +25,7 @@
 
 <script>
 import { nodeIconList } from 'simple-mind-map/src/svg/icons'
+import icon from '@/config/icon'
 
 /**
  * @Author: 王林
@@ -35,7 +36,7 @@ export default {
   name: 'NodeIcon',
   data() {
     return {
-      nodeIconList,
+      nodeIconList: [...nodeIconList, ...icon],
       dialogVisible: false,
       iconList: [],
       activeNodes: []
@@ -56,6 +57,10 @@ export default {
     })
   },
   methods: {
+    getHtml(icon) {
+      return /^<svg/.test(icon) ? icon : `<img src="${icon}" />`
+    },  
+
     /**
      * @Author: 王林
      * @Date: 2021-06-23 23:16:56
@@ -118,6 +123,16 @@ export default {
         margin-bottom: 10px;
         cursor: pointer;
         position: relative;
+
+        /deep/ img {
+          width: 100%;
+          height: 100%;
+        }
+
+        /deep/ svg {
+          width: 100%;
+          height: 100%;
+        }
 
         &.selected {
           &::after {
