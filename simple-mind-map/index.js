@@ -105,7 +105,20 @@ const defaultOpt = {
   // 最大历史记录数
   maxHistoryCount: 1000,
   // 是否一直显示节点的展开收起按钮，默认为鼠标移上去和激活时才显示
-  alwaysShowExpandBtn: false
+  alwaysShowExpandBtn: false,
+  // 扩展节点可插入的图标
+  iconList: [
+    // {
+    //   name: '',// 分组名称
+    //   type: '',// 分组的值
+    //   list: [// 分组下的图标列表
+    //     {
+    //       name: '',// 图标名称
+    //       icon:''// 图标，可以传svg或图片
+    //     }
+    //   ]
+    // }
+  ]
 }
 
 //  思维导图

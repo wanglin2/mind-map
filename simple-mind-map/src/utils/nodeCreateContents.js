@@ -42,8 +42,18 @@ function createIconNode() {
   }
   let iconSize = this.mindMap.themeConfig.iconSize
   return _data.icon.map(item => {
+    let src = iconsSvg.getNodeIconListIcon(item, this.mindMap.opt.iconList || [])
+    let node = null
+    // svg图标
+    if (/^<svg/.test(src)) {
+      node = SVG(src)
+    } else {
+      // 图片图标
+      node = new Image().load(src)
+    }
+    node.size(iconSize, iconSize)
     return {
-      node: SVG(iconsSvg.getNodeIconListIcon(item)).size(iconSize, iconSize),
+      node,
       width: iconSize,
       height: iconSize
     }
