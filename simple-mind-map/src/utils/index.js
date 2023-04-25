@@ -343,3 +343,17 @@ export const getTextFromHtml = (html) => {
   getTextFromHtmlEl.innerHTML = html
   return getTextFromHtmlEl.textContent
 }
+
+// 将blob转成data:url
+export const readBlob = (blob) => {
+  return new Promise((resolve, reject) => {
+    let reader = new FileReader()
+    reader.onload = (evt) => {
+      resolve(evt.target.result)
+    }
+    reader.onerror = (err) => {
+      reject(err)
+    }
+    reader.readAsDataURL(blob)
+  })
+}

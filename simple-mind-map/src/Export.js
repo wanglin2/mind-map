@@ -1,4 +1,4 @@
-import { imgToDataUrl, downloadFile } from './utils'
+import { imgToDataUrl, downloadFile, readBlob } from './utils'
 import JsPDF from 'jspdf'
 import { SVG } from '@svgdotjs/svg.js'
 import drawBackgroundImageToCanvas from './utils/simulateCSSBackgroundInCanvas'
@@ -127,6 +127,28 @@ class Export {
     })
   }
 
+  //  在svg上绘制思维导图背景
+  drawBackgroundToSvg(svg) {
+    return new Promise(async resolve => {
+      let {
+        backgroundColor = '#fff',
+        backgroundImage,
+        backgroundRepeat = 'repeat'
+      } = this.mindMap.themeConfig
+      // 背景颜色
+      svg.css('background-color', backgroundColor)
+      // 背景图片
+      if (backgroundImage && backgroundImage !== 'none') {
+        let imgDataUrl = await imgToDataUrl(backgroundImage)
+        svg.css('background-image', `url(${imgDataUrl})`)
+        svg.css('background-repeat', backgroundRepeat)
+        resolve()
+      } else {
+        resolve()
+      }
+    })
+  }
+
   //  导出为png
   /**
    * 方法1.把svg的图片都转化成data:url格式，再转换
@@ -145,11 +167,10 @@ class Export {
       type: 'image/svg+xml'
     })
     // 转换成data:url数据
-    let svgUrl = URL.createObjectURL(blob)
+    let svgUrl = await readBlob(blob)
     // 绘制到canvas上
-    let imgDataUrl = await this.svgToPng(svgUrl, transparent)
-    URL.revokeObjectURL(svgUrl)
-    return imgDataUrl
+    let res = await this.svgToPng(svgUrl, transparent)
+    return res
   }
 
   //  导出为pdf
@@ -184,28 +205,6 @@ class Export {
     image.src = img
   }
 
-  //  在svg上绘制思维导图背景
-  drawBackgroundToSvg(svg) {
-    return new Promise(async resolve => {
-      let {
-        backgroundColor = '#fff',
-        backgroundImage,
-        backgroundRepeat = 'repeat'
-      } = this.mindMap.themeConfig
-      // 背景颜色
-      svg.css('background-color', backgroundColor)
-      // 背景图片
-      if (backgroundImage && backgroundImage !== 'none') {
-        let imgDataUrl = await imgToDataUrl(backgroundImage)
-        svg.css('background-image', `url(${imgDataUrl})`)
-        svg.css('background-repeat', backgroundRepeat)
-        resolve()
-      } else {
-        resolve()
-      }
-    })
-  }
-
   //  导出为svg
   // plusCssText：附加的css样式，如果svg中存在dom节点，想要设置一些针对节点的样式可以通过这个参数传入
   async svg(name, plusCssText) {
@@ -226,28 +225,32 @@ class Export {
     let blob = new Blob([str], {
       type: 'image/svg+xml'
     })
-    return URL.createObjectURL(blob)
+    let res = await readBlob(blob)
+    return res
   }
 
   //  导出为json
-  json(name, withConfig = true) {
+  async json(name, withConfig = true) {
     let data = this.mindMap.getData(withConfig)
     let str = JSON.stringify(data)
     let blob = new Blob([str])
-    return URL.createObjectURL(blob)
+    let res = await readBlob(blob)
+    return res
   }
 
   //  专有文件，其实就是json文件
-  smm(name, withConfig) {
-    return this.json(name, withConfig)
+  async smm(name, withConfig) {
+    let res = await this.json(name, withConfig)
+    return res
   }
 
   // markdown文件
-  md() {
+  async md() {
     let data = this.mindMap.getData()
     let content = transformToMarkdown(data)
     let blob = new Blob([content])
-    return URL.createObjectURL(blob)
+    let res = await readBlob(blob)
+    return res
   }
 }
 
