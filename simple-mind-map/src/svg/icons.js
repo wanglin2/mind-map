@@ -279,9 +279,9 @@ export const nodeIconList = [
 ]
 
 //  获取nodeIconList icon内容
-const getNodeIconListIcon = name => {
+const getNodeIconListIcon = (name, extendIconList = []) => {
   let arr = name.split('_')
-  let typeData = nodeIconList.find(item => {
+  let typeData = [...nodeIconList, ...extendIconList].find(item => {
     return item.type === arr[0]
   })
   return typeData.list.find(item => {
