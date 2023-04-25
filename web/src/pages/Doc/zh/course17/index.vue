@@ -7,7 +7,12 @@
 </blockquote>
 <p>目前支持导出为<code>.smm</code>、<code>.json</code>、<code>.svg</code>、<code>.png</code>、<code>.pdf</code>、<code>.md</code>文件。</p>
 <p><code>.smm</code>是<code>simple-mind-map</code>自己定义的一种文件，其实就是<code>json</code>文件，换了一个扩展名而已。</p>
-<p>导出直接调用<code>export</code>方法即可。</p>
+<p>导出直接调用<code>export</code>方法即可：</p>
+<pre class="hljs"><code>mindMap.export(type, isDownload, fileName, ...)
+</code></pre>
+<p><code>type</code>：文件类型</p>
+<p><code>isDownload</code>：传<code>true</code>会触发下载，<code>false</code>则不会，函数会返回导出文件的数据，<code>data:url</code>格式，你可以自行下载，<code>pdf</code>不支持该参数，默认会直接下载。</p>
+<p><code>fileName</code>：下载的文件名称</p>
 <h3>导出为smm、json</h3>
 <p>这两种文件的导出是一样的：</p>
 <pre class="hljs"><code>mindMap.export(type, isDownload, fileName, withConfig)

@@ -15,13 +15,35 @@ MindMap.usePlugin(Export)
 
 ## 方法
 
+所有导出的方法都是异步方法，返回一个`Promise`实例，你可以使用`then`方法获取数据，或者使用`async await`函数获取：
+
+```js
+mindMap.doExport.png().then((data) => {
+  // ...
+})
+
+const export = async () => {
+  let data = await mindMap.doExport.png()
+  // ...
+}
+```
+
+返回的数据为`data:url`格式的，你可以创建一个`a`标签来触发下载：
+
+```js
+let a = document.createElement('a')
+a.href = 'xxx.png'// .png、.svg、.pdf、.md、.json、.smm
+a.download = 'xxx'
+a.click()
+```
+
 ### png(name, transparent = false)
 
 - `name`：名称，可不传
 
 - `transparent`：v0.5.7+，指定导出图片的背景是否是透明的
 
-导出为`png`，异步方法，返回图片数据，`data:url`数据，可以自行下载或显示
+导出为`png`。
 
 ### svg(name, plusCssText)
 
@@ -41,19 +63,7 @@ svg(
 )
 ```
 
-导出为`svg`，异步方法，返回`svg`数据，`data:url`数据，可以自行下载或显示
-
-### getSvgData()
-
-获取`svg`数据，异步方法，返回一个对象：
-
-```js
-{
-  node// svg对象
-  str// svg字符串，如果开启了富文本编辑且domToImage设为true，那么该值返回的svg字符内的dom节点会被转换成图片的形式
-  nodeWithDomToImg// v0.4.0+，DOM节点转换为图片后的svg对象，只有当开启了富文本编辑且domToImage设为true才有值，否则为null
-}
-```
+导出为`svg`。
 
 ### pdf(name)
 
@@ -61,7 +71,7 @@ svg(
 
 `name`：文件名称
 
-导出为`pdf`
+导出为`pdf`，和其他导出方法不一样，这个方法不会返回数据，会直接触发下载。
 
 ### json(name, withConfig)
 
@@ -69,10 +79,25 @@ svg(
 
 `withConfig``：Boolean`, 默认为`true`，数据中是否包含配置，否则为纯思维导图节点数据
 
-返回`json`数据，`data:url`数据，可以自行下载
+返回`json`数据。
+
+### smm(name, withConfig)
+
+`simple-mind-map`自定义的文件格式，其实就是`json`，和`json`方法返回的数据一模一样。
 
 ### md()
 
 > v0.4.7+
 
-导出`markdown`文件，返回`data:url`数据，可以自行下载
+导出`markdown`文件。
+
+### getSvgData()
+
+获取`svg`数据，异步方法，返回一个对象：
+
+```js
+{
+  node// svg节点
+  str// svg字符串
+}
+```

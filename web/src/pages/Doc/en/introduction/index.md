@@ -97,6 +97,18 @@ These open-source mind maps are also good, each with its own characteristics, bu
 
 In summary, in open-source mind maps, it is difficult to find a better choice than `simple-mind-map`. Of course, `simple-mind-map` is far from being the best, and it also has many shortcomings, as you saw in the previous [special note]. However, `simple-mind-map` has always been in a fast iteration process, and we welcome you to join and improve it together.
 
+## Browser Compatibility
+
+We recommend using the latest version of the `Chrome` browser.
+
+Limited testing situation:
+
+Normal operation: `360` extreme speed browser（v13.5.2036.0）、`opera` browser（v71.0.3770.284）。
+
+Abnormal operation: `Firefox`（v98.0.2）, Node content cannot be displayed in rich text mode. If you want to support the `Firefox` browser, please use non rich text mode.
+
+Unsupported: `IE` browser.
+
 ## License
 
 [MIT](https://opensource.org/licenses/MIT)

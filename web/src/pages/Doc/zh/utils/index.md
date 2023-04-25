@@ -124,6 +124,16 @@ copyNodeTree({}, node)
 { width, height }
 ```
 
+#### getTextFromHtml(html)
+
+提取html字符串里的纯文本内容。
+
+#### readBlob(blob)
+
+> v0.5.9+
+
+将`blob`数据转成`data:url`数据。
+
 ## 在canvas中模拟css的背景属性
 
 引入：

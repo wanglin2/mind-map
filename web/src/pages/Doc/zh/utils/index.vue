@@ -77,6 +77,13 @@
 <p>测量文本的宽高，返回值：</p>
 <pre class="hljs"><code>{ width, height }
 </code></pre>
+<h4>getTextFromHtml(html)</h4>
+<p>提取html字符串里的纯文本内容。</p>
+<h4>readBlob(blob)</h4>
+<blockquote>
+<p>v0.5.9+</p>
+</blockquote>
+<p>将<code>blob</code>数据转成<code>data:url</code>数据。</p>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

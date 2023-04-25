@@ -7,21 +7,21 @@
 </blockquote>
 <h2>Features</h2>
 <ul>
-<li><input type="checkbox" id="checkbox18" checked="true" /><label for="checkbox18">Plugin architecture. In addition to core functions, other functions are provided as plugins, which can be used as needed to reduce the overall volume</label></li>
-<li><input type="checkbox" id="checkbox19" checked="true" /><label for="checkbox19">Supports six types of structures: logical structure diagrams, mind maps,</label>
+<li><input type="checkbox" id="checkbox216" checked="true" /><label for="checkbox216">Plugin architecture. In addition to core functions, other functions are provided as plugins, which can be used as needed to reduce the overall volume</label></li>
+<li><input type="checkbox" id="checkbox217" checked="true" /><label for="checkbox217">Supports six types of structures: logical structure diagrams, mind maps,</label>
 organizational structure diagrams, directory organization diagrams, timeline, and fishbone diagrams</li>
-<li><input type="checkbox" id="checkbox20" checked="true" /><label for="checkbox20">Built-in multiple themes and allows for highly customized styles, and support register new themes</label></li>
-<li><input type="checkbox" id="checkbox21" checked="true" /><label for="checkbox21">Supports shortcuts</label></li>
-<li><input type="checkbox" id="checkbox22" checked="true" /><label for="checkbox22">Node content supports images, icons, hyperlinks, notes, tags, and</label>
+<li><input type="checkbox" id="checkbox218" checked="true" /><label for="checkbox218">Built-in multiple themes and allows for highly customized styles, and support register new themes</label></li>
+<li><input type="checkbox" id="checkbox219" checked="true" /><label for="checkbox219">Supports shortcuts</label></li>
+<li><input type="checkbox" id="checkbox220" checked="true" /><label for="checkbox220">Node content supports images, icons, hyperlinks, notes, tags, and</label>
 summaries</li>
-<li><input type="checkbox" id="checkbox23" checked="true" /><label for="checkbox23">Supports forward and backward navigation</label></li>
-<li><input type="checkbox" id="checkbox24" checked="true" /><label for="checkbox24">Supports dragging and scaling</label></li>
-<li><input type="checkbox" id="checkbox25" checked="true" /><label for="checkbox25">Supports right-click and Ctrl + left-click to select multiple items</label></li>
-<li><input type="checkbox" id="checkbox26" checked="true" /><label for="checkbox26">Supports free dragging and dragging to adjust nodes</label></li>
-<li><input type="checkbox" id="checkbox27" checked="true" /><label for="checkbox27">Supports various node shapes</label></li>
-<li><input type="checkbox" id="checkbox28" checked="true" /><label for="checkbox28">Supports export to json, png, svg, pdf markdown, and import from json, xmind, markdown</label></li>
-<li><input type="checkbox" id="checkbox29" checked="true" /><label for="checkbox29">Supports mini map、support watermark</label></li>
-<li><input type="checkbox" id="checkbox30" checked="true" /><label for="checkbox30">Supports associative lines</label></li>
+<li><input type="checkbox" id="checkbox221" checked="true" /><label for="checkbox221">Supports forward and backward navigation</label></li>
+<li><input type="checkbox" id="checkbox222" checked="true" /><label for="checkbox222">Supports dragging and scaling</label></li>
+<li><input type="checkbox" id="checkbox223" checked="true" /><label for="checkbox223">Supports right-click and Ctrl + left-click to select multiple items</label></li>
+<li><input type="checkbox" id="checkbox224" checked="true" /><label for="checkbox224">Supports free dragging and dragging to adjust nodes</label></li>
+<li><input type="checkbox" id="checkbox225" checked="true" /><label for="checkbox225">Supports various node shapes</label></li>
+<li><input type="checkbox" id="checkbox226" checked="true" /><label for="checkbox226">Supports export to json, png, svg, pdf markdown, and import from json, xmind, markdown</label></li>
+<li><input type="checkbox" id="checkbox227" checked="true" /><label for="checkbox227">Supports mini map、support watermark</label></li>
+<li><input type="checkbox" id="checkbox228" checked="true" /><label for="checkbox228">Supports associative lines</label></li>
 </ul>
 <h2>Repository Catalog Introduction</h2>
 <p>1.<code>simple-mind-map</code></p>
@@ -31,16 +31,16 @@ frameworks such as Vue and React, or without a framework.</p>
 <p>This is an online mind map built using the <code>simple-mind-map</code> library and based
 on <code>Vue2.x</code> and <code>ElementUI</code>. Features include:</p>
 <ul>
-<li><input type="checkbox" id="checkbox31" checked="true" /><label for="checkbox31">Toolbar, which supports inserting and deleting nodes, and editing node</label>
+<li><input type="checkbox" id="checkbox229" checked="true" /><label for="checkbox229">Toolbar, which supports inserting and deleting nodes, and editing node</label>
 images, icons, hyperlinks, notes, tags, and summaries</li>
-<li><input type="checkbox" id="checkbox32" checked="true" /><label for="checkbox32">Sidebar, with panels for basic style settings, node style settings,</label>
+<li><input type="checkbox" id="checkbox230" checked="true" /><label for="checkbox230">Sidebar, with panels for basic style settings, node style settings,</label>
 outline, theme selection, and structure selection</li>
-<li><input type="checkbox" id="checkbox33" checked="true" /><label for="checkbox33">Import and export functionality; data is saved in the browser's local</label>
+<li><input type="checkbox" id="checkbox231" checked="true" /><label for="checkbox231">Import and export functionality; data is saved in the browser's local</label>
 storage by default, but it also supports creating, opening, and editing
 local files on the computer directly</li>
-<li><input type="checkbox" id="checkbox34" checked="true" /><label for="checkbox34">Right-click menu, which supports operations such as expanding, collapsing,</label>
+<li><input type="checkbox" id="checkbox232" checked="true" /><label for="checkbox232">Right-click menu, which supports operations such as expanding, collapsing,</label>
 and organizing layout</li>
-<li><input type="checkbox" id="checkbox35" checked="true" /><label for="checkbox35">Bottom bar, which supports node and word count statistics, switching</label>
+<li><input type="checkbox" id="checkbox233" checked="true" /><label for="checkbox233">Bottom bar, which supports node and word count statistics, switching</label>
 between edit and read-only modes, zooming in and out, and switching to
 full screen, support mini map</li>
 </ul>
@@ -69,6 +69,12 @@ full screen, support mini map</li>
 <p>3.<a href="https://github.com/hizzgdev/jsmind">jsmind</a>、<a href="https://github.com/ssshooter/mind-elixir-core">Mind-elixir</a>、<a href="https://github.com/ondras/my-mind">my-mind</a>、<a href="https://github.com/awehook/blink-mind">blink-mind</a>、<a href="https://github.com/luvsic3/remind">remind</a>、<a href="https://github.com/hellowuxin/vue3-mindmap">vue3-mindmap</a>、<a href="https://github.com/zyascend/ZMindMap">ZMindMap</a>...</p>
 <p>These open-source mind maps are also good, each with its own characteristics, but they also have certain drawbacks, such as stopping updates, average interface aesthetics, less functionality, relying on a certain framework, and so on.</p>
 <p>In summary, in open-source mind maps, it is difficult to find a better choice than <code>simple-mind-map</code>. Of course, <code>simple-mind-map</code> is far from being the best, and it also has many shortcomings, as you saw in the previous [special note]. However, <code>simple-mind-map</code> has always been in a fast iteration process, and we welcome you to join and improve it together.</p>
+<h2>Browser Compatibility</h2>
+<p>We recommend using the latest version of the <code>Chrome</code> browser.</p>
+<p>Limited testing situation:</p>
+<p>Normal operation: <code>360</code> extreme speed browser（v13.5.2036.0）、<code>opera</code> browser（v71.0.3770.284）。</p>
+<p>Abnormal operation: <code>Firefox</code>（v98.0.2）, Node content cannot be displayed in rich text mode. If you want to support the <code>Firefox</code> browser, please use non rich text mode.</p>
+<p>Unsupported: <code>IE</code> browser.</p>
 <h2>License</h2>
 <p><a href="https://opensource.org/licenses/MIT">MIT</a></p>
 <h2>Invite the author to a cup of coffee</h2>

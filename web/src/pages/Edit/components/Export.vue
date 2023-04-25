@@ -62,7 +62,6 @@
         </div>
       </div>
       <div class="tip">{{ $t('export.tips') }}</div>
-      <div class="tip warning" v-if="openNodeRichText && exportType === 'svg' && domToImage">{{ $t('export.svgTips') }}</div>
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>

@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.5.9</h2>
+<p>Change: Unified export method format, using <code>FileReader</code> instead of <code>URL.createObjectURL</code> to convert <code>blob</code> data.</p>
 <h2>0.5.8</h2>
 <p>optimization: 1.The position setting is not triggered when the node position does not change. 2.The unfolding and folding status does not change and does not trigger button updates.</p>
 <p>New: 1.The default setting is to move the mouse over the node to display the expand and collapse buttons. 2.Support the list of icons that can be inserted into extended nodes.</p>

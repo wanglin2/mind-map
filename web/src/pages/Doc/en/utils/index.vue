@@ -82,6 +82,13 @@ and copying the <code>data</code> of the data object, example:</p>
 <p>Measure the width and height of the text, return value:</p>
 <pre class="hljs"><code>{ width, height }
 </code></pre>
+<h4>getTextFromHtml(html)</h4>
+<p>Extract plain text content from an HTML string.</p>
+<h4>readBlob(blob)</h4>
+<blockquote>
+<p>v0.5.9+</p>
+</blockquote>
+<p>Convert <code>blob</code> data to <code>data:url</code> data.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>
