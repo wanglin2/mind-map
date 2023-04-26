@@ -29,34 +29,6 @@ export const themeList = [
     value: 'default',
   },
   {
-    name: '脑图经典',
-    value: 'classic',
-  },
-  {
-    name: '小黄人',
-    value: 'minions',
-  },
-  {
-    name: '粉红葡萄',
-    value: 'pinkGrape',
-  },
-  {
-    name: '薄荷',
-    value: 'mint',
-  },
-  {
-    name: '金色vip',
-    value: 'gold',
-  },
-  {
-    name: '活力橙',
-    value: 'vitalityOrange',
-  },
-  {
-    name: '绿叶',
-    value: 'greenLeaf',
-  },
-  {
     name: '暗色2',
     value: 'dark2',
   },
@@ -71,10 +43,6 @@ export const themeList = [
   {
     name: '脑图经典3',
     value: 'classic3',
-  },
-  {
-    name: '脑图经典4',
-    value: 'classic4',
   },
   {
     name: '经典绿',
@@ -113,6 +81,38 @@ export const themeList = [
     value: 'romanticPurple',
   },
   {
+    name: '粉红葡萄',
+    value: 'pinkGrape',
+  },
+  {
+    name: '薄荷',
+    value: 'mint',
+  },
+  {
+    name: '金色vip',
+    value: 'gold',
+  },
+  {
+    name: '活力橙',
+    value: 'vitalityOrange',
+  },
+  {
+    name: '绿叶',
+    value: 'greenLeaf',
+  },
+  {
+    name: '脑图经典',
+    value: 'classic',
+  },
+  {
+    name: '脑图经典4',
+    value: 'classic4',
+  },
+  {
+    name: '小黄人',
+    value: 'minions',
+  },
+  {
     name: '简约黑',
     value: 'simpleBlack',
   },
@@ -139,12 +139,25 @@ export const themeList = [
   {
     name: '黑金',
     value: 'blackGold',
+  },
+  {
+    name: '牛油果',
+    value: 'avocado',
+  },
+  {
+    name: '秋天',
+    value: 'autumn',
+  },
+  {
+    name: '橙汁',
+    value: 'orangeJuice',
   }
 ]
 
 // 常量
 export const CONSTANTS = {
   CHANGE_THEME: 'changeTheme',
+  SET_DATA: 'setData',
   TRANSFORM_TO_NORMAL_NODE: 'transformAllNodesToNormalNode',
   MODE: {
     READONLY: 'readonly',
