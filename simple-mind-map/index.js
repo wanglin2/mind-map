@@ -118,7 +118,9 @@ const defaultOpt = {
     //     }
     //   ]
     // }
-  ]
+  ],
+  // 节点最大缓存数量
+  maxNodeCacheCount: 1000
 }
 
 //  思维导图
