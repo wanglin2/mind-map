@@ -32714,27 +32714,6 @@ const themeList = [{
   name: '默认',
   value: 'default'
 }, {
-  name: '脑图经典',
-  value: 'classic'
-}, {
-  name: '小黄人',
-  value: 'minions'
-}, {
-  name: '粉红葡萄',
-  value: 'pinkGrape'
-}, {
-  name: '薄荷',
-  value: 'mint'
-}, {
-  name: '金色vip',
-  value: 'gold'
-}, {
-  name: '活力橙',
-  value: 'vitalityOrange'
-}, {
-  name: '绿叶',
-  value: 'greenLeaf'
-}, {
   name: '暗色2',
   value: 'dark2'
 }, {
@@ -32746,9 +32725,6 @@ const themeList = [{
 }, {
   name: '脑图经典3',
   value: 'classic3'
-}, {
-  name: '脑图经典4',
-  value: 'classic4'
 }, {
   name: '经典绿',
   value: 'classicGreen'
@@ -32777,6 +32753,30 @@ const themeList = [{
   name: '浪漫紫',
   value: 'romanticPurple'
 }, {
+  name: '粉红葡萄',
+  value: 'pinkGrape'
+}, {
+  name: '薄荷',
+  value: 'mint'
+}, {
+  name: '金色vip',
+  value: 'gold'
+}, {
+  name: '活力橙',
+  value: 'vitalityOrange'
+}, {
+  name: '绿叶',
+  value: 'greenLeaf'
+}, {
+  name: '脑图经典',
+  value: 'classic'
+}, {
+  name: '脑图经典4',
+  value: 'classic4'
+}, {
+  name: '小黄人',
+  value: 'minions'
+}, {
   name: '简约黑',
   value: 'simpleBlack'
 }, {
@@ -32797,11 +32797,21 @@ const themeList = [{
 }, {
   name: '黑金',
   value: 'blackGold'
+}, {
+  name: '牛油果',
+  value: 'avocado'
+}, {
+  name: '秋天',
+  value: 'autumn'
+}, {
+  name: '橙汁',
+  value: 'orangeJuice'
 }];
 
 // 常量
 const CONSTANTS = {
   CHANGE_THEME: 'changeTheme',
+  SET_DATA: 'setData',
   TRANSFORM_TO_NORMAL_NODE: 'transformAllNodesToNormalNode',
   MODE: {
     READONLY: 'readonly',
@@ -45663,6 +45673,11 @@ class Render_Render {
         if (this.hasWaitRendering) {
           this.hasWaitRendering = false;
           this.render(callback, source);
+        } else {
+          // 触发一次保存，因为修改了渲染树的数据
+          if (this.mindMap.richText && [CONSTANTS.CHANGE_THEME, CONSTANTS.SET_DATA].includes(source)) {
+            this.mindMap.command.addHistory();
+          }
         }
       };
       let {
@@ -47894,7 +47909,184 @@ class Render_Render {
     }
   }
 }));
+// CONCATENATED MODULE: ../simple-mind-map/src/themes/avocado.js
+
+
+
+// 牛油果
+/* harmony default export */ var avocado = (cjs_default()(themes_default, {
+  // 背景颜色
+  backgroundColor: '#e6f1de',
+  // 连线的颜色
+  lineColor: '#f5ffad',
+  lineWidth: 4,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: '#749336',
+  // 根节点样式
+  root: {
+    fillColor: '#94c143',
+    color: '#fff',
+    borderColor: '#94c143',
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: '#749336',
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: '#cee498',
+    color: '#749336',
+    borderColor: '#aec668',
+    borderWidth: 2,
+    fontSize: 18,
+    active: {
+      borderColor: '#749336'
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: '#749336',
+    active: {
+      borderColor: '#749336'
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: '#cee498',
+    borderColor: '#aec668',
+    borderWidth: 2,
+    color: '#749336',
+    active: {
+      borderColor: '#749336'
+    }
+  }
+}));
+// CONCATENATED MODULE: ../simple-mind-map/src/themes/autumn.js
+
+
+
+// 秋天
+/* harmony default export */ var autumn = (cjs_default()(themes_default, {
+  // 背景颜色
+  backgroundColor: '#fff2df',
+  // 连线的颜色
+  lineColor: '#b0bc47',
+  lineWidth: 3,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: '#b0bc47',
+  // 根节点样式
+  root: {
+    fillColor: '#e68112',
+    color: '#fff',
+    borderColor: '#e68112',
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: '#b0bc47',
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: '#ffd683',
+    color: '#8c5416',
+    borderColor: '#b0bc47',
+    borderWidth: 2,
+    fontSize: 18,
+    active: {
+      borderColor: '#e68112'
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: '#8c5416',
+    active: {
+      borderColor: '#b0bc47'
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: '#ffd683',
+    borderColor: '#b0bc47',
+    borderWidth: 2,
+    color: '#8c5416',
+    active: {
+      borderColor: '#e68112'
+    }
+  }
+}));
+// CONCATENATED MODULE: ../simple-mind-map/src/themes/orangeJuice.js
+
+
+
+// 橙汁
+/* harmony default export */ var orangeJuice = (cjs_default()(themes_default, {
+  // 背景颜色
+  backgroundColor: '#070616',
+  // 连线的颜色
+  lineColor: '#fff',
+  lineWidth: 3,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: '#fff',
+  // 根节点样式
+  root: {
+    fillColor: '#ff6811',
+    color: '#110501',
+    borderColor: '#ff6811',
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: '#a9a4a9',
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: '#070616',
+    color: '#a9a4a9',
+    borderColor: '#ff6811',
+    borderWidth: 2,
+    fontSize: 18,
+    active: {
+      borderColor: '#110501'
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: '#a9a4a9',
+    active: {
+      borderColor: '#ff6811'
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: '',
+    borderColor: '#ff6811',
+    borderWidth: 2,
+    color: '#a9a4a9',
+    active: {
+      borderColor: '#110501'
+    }
+  }
+}));
 // CONCATENATED MODULE: ../simple-mind-map/src/themes/index.js
+
+
+
 
 
 
@@ -47953,7 +48145,10 @@ class Render_Render {
   redSpirit: redSpirit,
   blackHumour: blackHumour,
   lateNightOffice: lateNightOffice,
-  blackGold: blackGold
+  blackGold: blackGold,
+  avocado: avocado,
+  autumn: autumn,
+  orangeJuice: orangeJuice
 });
 // CONCATENATED MODULE: ../simple-mind-map/src/utils/keyMap.js
 const keyMap_map = {
@@ -48580,12 +48775,12 @@ class simple_mind_map_MindMap {
   }
 
   //  重新渲染
-  reRender(callback) {
+  reRender(callback, source = '') {
     this.batchExecution.push('render', () => {
       this.draw.clear();
       this.initTheme();
       this.renderer.reRender = true;
-      this.renderer.render(callback);
+      this.renderer.render(callback, source);
     });
   }
 
@@ -48690,7 +48885,7 @@ class simple_mind_map_MindMap {
     } else {
       this.renderer.renderTree = data;
     }
-    this.reRender();
+    this.reRender(() => {}, CONSTANTS.SET_DATA);
   }
 
   //  动态设置思维导图数据，包括节点数据、布局、主题、视图

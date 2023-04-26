@@ -36647,6 +36647,7 @@ var tagColorList = [
 ];
 var CONSTANTS = {
   CHANGE_THEME: "changeTheme",
+  SET_DATA: "setData",
   TRANSFORM_TO_NORMAL_NODE: "transformAllNodesToNormalNode",
   MODE: {
     READONLY: "readonly",
@@ -47327,6 +47328,10 @@ var Render = class {
         if (this.hasWaitRendering) {
           this.hasWaitRendering = false;
           this.render(callback, source);
+        } else {
+          if (this.mindMap.richText && [CONSTANTS.CHANGE_THEME, CONSTANTS.SET_DATA].includes(source)) {
+            this.mindMap.command.addHistory();
+          }
         }
       };
       let { enableNodeTransitionMove, nodeTransitionMoveDuration } = this.mindMap.opt;
@@ -47983,7 +47988,7 @@ var Render = class {
 var Render_default = Render;
 
 // ../simple-mind-map/index.js
-var import_deepmerge30 = __toESM(require_cjs());
+var import_deepmerge33 = __toESM(require_cjs());
 
 // ../simple-mind-map/src/themes/freshGreen.js
 var import_deepmerge2 = __toESM(require_cjs());
@@ -49463,6 +49468,174 @@ var blackGold_default = (0, import_deepmerge29.default)(default_default, {
   }
 });
 
+// ../simple-mind-map/src/themes/avocado.js
+var import_deepmerge30 = __toESM(require_cjs());
+var avocado_default = (0, import_deepmerge30.default)(default_default, {
+  // 背景颜色
+  backgroundColor: "#e6f1de",
+  // 连线的颜色
+  lineColor: "#f5ffad",
+  lineWidth: 4,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: "#749336",
+  // 根节点样式
+  root: {
+    fillColor: "#94c143",
+    color: "#fff",
+    borderColor: "#94c143",
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: "#749336",
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: "#cee498",
+    color: "#749336",
+    borderColor: "#aec668",
+    borderWidth: 2,
+    fontSize: 18,
+    active: {
+      borderColor: "#749336"
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: "#749336",
+    active: {
+      borderColor: "#749336"
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: "#cee498",
+    borderColor: "#aec668",
+    borderWidth: 2,
+    color: "#749336",
+    active: {
+      borderColor: "#749336"
+    }
+  }
+});
+
+// ../simple-mind-map/src/themes/autumn.js
+var import_deepmerge31 = __toESM(require_cjs());
+var autumn_default = (0, import_deepmerge31.default)(default_default, {
+  // 背景颜色
+  backgroundColor: "#fff2df",
+  // 连线的颜色
+  lineColor: "#b0bc47",
+  lineWidth: 3,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: "#b0bc47",
+  // 根节点样式
+  root: {
+    fillColor: "#e68112",
+    color: "#fff",
+    borderColor: "#e68112",
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: "#b0bc47",
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: "#ffd683",
+    color: "#8c5416",
+    borderColor: "#b0bc47",
+    borderWidth: 2,
+    fontSize: 18,
+    active: {
+      borderColor: "#e68112"
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: "#8c5416",
+    active: {
+      borderColor: "#b0bc47"
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: "#ffd683",
+    borderColor: "#b0bc47",
+    borderWidth: 2,
+    color: "#8c5416",
+    active: {
+      borderColor: "#e68112"
+    }
+  }
+});
+
+// ../simple-mind-map/src/themes/orangeJuice.js
+var import_deepmerge32 = __toESM(require_cjs());
+var orangeJuice_default = (0, import_deepmerge32.default)(default_default, {
+  // 背景颜色
+  backgroundColor: "#070616",
+  // 连线的颜色
+  lineColor: "#fff",
+  lineWidth: 3,
+  // 概要连线的粗细
+  generalizationLineWidth: 3,
+  // 概要连线的颜色
+  generalizationLineColor: "#fff",
+  // 根节点样式
+  root: {
+    fillColor: "#ff6811",
+    color: "#110501",
+    borderColor: "#ff6811",
+    borderWidth: 0,
+    fontSize: 24,
+    active: {
+      borderColor: "#a9a4a9",
+      borderWidth: 3
+    }
+  },
+  // 二级节点样式
+  second: {
+    fillColor: "#070616",
+    color: "#a9a4a9",
+    borderColor: "#ff6811",
+    borderWidth: 2,
+    fontSize: 18,
+    active: {
+      borderColor: "#110501"
+    }
+  },
+  // 三级及以下节点样式
+  node: {
+    fontSize: 14,
+    color: "#a9a4a9",
+    active: {
+      borderColor: "#ff6811"
+    }
+  },
+  // 概要节点样式
+  generalization: {
+    fontSize: 14,
+    fillColor: "",
+    borderColor: "#ff6811",
+    borderWidth: 2,
+    color: "#a9a4a9",
+    active: {
+      borderColor: "#110501"
+    }
+  }
+});
+
 // ../simple-mind-map/src/themes/index.js
 var themes_default = {
   default: default_default,
@@ -49493,7 +49666,10 @@ var themes_default = {
   redSpirit: redSpirit_default,
   blackHumour: blackHumour_default,
   lateNightOffice: lateNightOffice_default,
-  blackGold: blackGold_default
+  blackGold: blackGold_default,
+  avocado: avocado_default,
+  autumn: autumn_default,
+  orangeJuice: orangeJuice_default
 };
 
 // ../simple-mind-map/src/utils/keyMap.js
@@ -49981,7 +50157,7 @@ var defaultOpt = {
 var MindMap2 = class {
   //  构造函数
   constructor(opt = {}) {
-    this.opt = this.handleOpt((0, import_deepmerge30.default)(defaultOpt, opt));
+    this.opt = this.handleOpt((0, import_deepmerge33.default)(defaultOpt, opt));
     this.el = this.opt.el;
     this.elRect = this.el.getBoundingClientRect();
     this.width = this.elRect.width;
@@ -50032,12 +50208,12 @@ var MindMap2 = class {
     });
   }
   //  重新渲染
-  reRender(callback) {
+  reRender(callback, source = "") {
     this.batchExecution.push("render", () => {
       this.draw.clear();
       this.initTheme();
       this.renderer.reRender = true;
-      this.renderer.render(callback);
+      this.renderer.render(callback, source);
     });
   }
   //  容器尺寸变化，调整尺寸
@@ -50061,7 +50237,7 @@ var MindMap2 = class {
   }
   //  设置主题
   initTheme() {
-    this.themeConfig = (0, import_deepmerge30.default)(themes_default[this.opt.theme], this.opt.themeConfig);
+    this.themeConfig = (0, import_deepmerge33.default)(themes_default[this.opt.theme], this.opt.themeConfig);
     Style_default.setBackgroundStyle(this.el, this.themeConfig);
   }
   //  设置主题
@@ -50093,7 +50269,7 @@ var MindMap2 = class {
   }
   // 更新配置
   updateConfig(opt = {}) {
-    this.opt = this.handleOpt(import_deepmerge30.default.all([defaultOpt, this.opt, opt]));
+    this.opt = this.handleOpt(import_deepmerge33.default.all([defaultOpt, this.opt, opt]));
   }
   //  获取当前布局结构
   getLayout() {
@@ -50123,7 +50299,8 @@ var MindMap2 = class {
     } else {
       this.renderer.renderTree = data2;
     }
-    this.reRender();
+    this.reRender(() => {
+    }, CONSTANTS.SET_DATA);
   }
   //  动态设置思维导图数据，包括节点数据、布局、主题、视图
   setFullData(data2) {
@@ -50279,7 +50456,7 @@ MindMap2.defineTheme = (name, config = {}) => {
   if (themes_default[name]) {
     return new Error("\u8BE5\u4E3B\u9898\u540D\u79F0\u5DF2\u5B58\u5728");
   }
-  themes_default[name] = (0, import_deepmerge30.default)(default_default, config);
+  themes_default[name] = (0, import_deepmerge33.default)(default_default, config);
 };
 var simple_mind_map_default = MindMap2;
 
@@ -50379,7 +50556,7 @@ MiniMap.instanceName = "miniMap";
 var MiniMap_default = MiniMap;
 
 // ../simple-mind-map/src/Watermark.js
-var import_deepmerge31 = __toESM(require_cjs());
+var import_deepmerge34 = __toESM(require_cjs());
 var Watermark = class {
   constructor(opt = {}) {
     this.mindMap = opt.mindMap;
@@ -50473,7 +50650,7 @@ var Watermark = class {
   }
   // 更新水印
   updateWatermark(config) {
-    this.mindMap.opt.watermarkConfig = (0, import_deepmerge31.default)(this.mindMap.opt.watermarkConfig, config);
+    this.mindMap.opt.watermarkConfig = (0, import_deepmerge34.default)(this.mindMap.opt.watermarkConfig, config);
     this.handleConfig(config);
     this.draw();
   }
