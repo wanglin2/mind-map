@@ -42695,7 +42695,43 @@ class Node_Node {
   }
 }
 /* harmony default export */ var src_Node = (Node_Node);
+// CONCATENATED MODULE: ../simple-mind-map/src/utils/Lru.js
+// LRU缓存类
+class CRU {
+  constructor(max) {
+    this.max = max || 1000;
+    this.size = 0;
+    this.pool = new Map();
+  }
+  add(key, value) {
+    // 如果该key是否已经存在，则先删除
+    this.delete(key);
+    this.pool.set(key, value);
+    this.size++;
+    // 如果数量超出最大值，则删除最早的
+    if (this.size > this.max) {
+      let keys = this.pool.keys();
+      let last = keys.next();
+      this.delete(last.value);
+    }
+  }
+  delete(key) {
+    if (this.pool.has(key)) {
+      this.pool.delete(key);
+      this.size--;
+    }
+  }
+  has(key) {
+    return this.pool.has(key);
+  }
+  get(key) {
+    if (this.pool.has(key)) {
+      return this.pool.get(key);
+    }
+  }
+}
 // CONCATENATED MODULE: ../simple-mind-map/src/layouts/Base.js
+
 
 
 
@@ -42713,8 +42749,7 @@ class Base_Base {
     this.draw = this.mindMap.draw;
     // 根节点
     this.root = null;
-    // 保存所有uid和节点，用于复用
-    this.nodePool = {};
+    this.lru = new CRU(this.mindMap.opt.maxNodeCacheCount);
   }
 
   //  计算节点位置
@@ -42740,16 +42775,7 @@ class Base_Base {
     // 记录本次渲染时的节点
     this.renderer.nodeCache[uid] = node;
     // 记录所有渲染时的节点
-    this.nodePool[uid] = node;
-    // 如果总缓存数量达到1000，直接清空
-    if (Object.keys(this.nodePool).length > 1000) {
-      this.clearNodePool();
-    }
-  }
-
-  // 清空节点存储池
-  clearNodePool() {
-    this.nodePool = {};
+    this.lru.add(uid, node);
   }
 
   // 检查当前来源是否需要重新计算节点大小
@@ -42772,9 +42798,9 @@ class Base_Base {
         newNode.getSize();
         newNode.needLayout = true;
       }
-    } else if (this.nodePool[data.data.uid] && !this.renderer.reRender) {
+    } else if (this.lru.has(data.data.uid) && !this.renderer.reRender) {
       // 数据上没有保存节点引用，但是通过uid找到了缓存的节点，也可以复用
-      newNode = this.nodePool[data.data.uid];
+      newNode = this.lru.get(data.data.uid);
       // 保存该节点上一次的数据
       let lastData = JSON.stringify(newNode.nodeData.data);
       newNode.reset();
@@ -48454,7 +48480,9 @@ const defaultOpt = {
     //     }
     //   ]
     // }
-  ]
+  ],
+  // 节点最大缓存数量
+  maxNodeCacheCount: 1000
 };
 
 //  思维导图

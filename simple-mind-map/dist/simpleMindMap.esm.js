@@ -44754,6 +44754,39 @@ var Node2 = class {
 };
 var Node_default = Node2;
 
+// ../simple-mind-map/src/utils/Lru.js
+var CRU = class {
+  constructor(max3) {
+    this.max = max3 || 1e3;
+    this.size = 0;
+    this.pool = /* @__PURE__ */ new Map();
+  }
+  add(key, value) {
+    this.delete(key);
+    this.pool.set(key, value);
+    this.size++;
+    if (this.size > this.max) {
+      let keys = this.pool.keys();
+      let last = keys.next();
+      this.delete(last.value);
+    }
+  }
+  delete(key) {
+    if (this.pool.has(key)) {
+      this.pool.delete(key);
+      this.size--;
+    }
+  }
+  has(key) {
+    return this.pool.has(key);
+  }
+  get(key) {
+    if (this.pool.has(key)) {
+      return this.pool.get(key);
+    }
+  }
+};
+
 // ../simple-mind-map/src/layouts/Base.js
 var Base2 = class {
   //  构造函数
@@ -44762,7 +44795,7 @@ var Base2 = class {
     this.mindMap = renderer.mindMap;
     this.draw = this.mindMap.draw;
     this.root = null;
-    this.nodePool = {};
+    this.lru = new CRU(this.mindMap.opt.maxNodeCacheCount);
   }
   //  计算节点位置
   doLayout() {
@@ -44782,14 +44815,7 @@ var Base2 = class {
   // 通过uid缓存节点
   cacheNode(uid, node3) {
     this.renderer.nodeCache[uid] = node3;
-    this.nodePool[uid] = node3;
-    if (Object.keys(this.nodePool).length > 1e3) {
-      this.clearNodePool();
-    }
-  }
-  // 清空节点存储池
-  clearNodePool() {
-    this.nodePool = {};
+    this.lru.add(uid, node3);
   }
   // 检查当前来源是否需要重新计算节点大小
   checkIsNeedResizeSources() {
@@ -44807,8 +44833,8 @@ var Base2 = class {
         newNode.getSize();
         newNode.needLayout = true;
       }
-    } else if (this.nodePool[data2.data.uid] && !this.renderer.reRender) {
-      newNode = this.nodePool[data2.data.uid];
+    } else if (this.lru.has(data2.data.uid) && !this.renderer.reRender) {
+      newNode = this.lru.get(data2.data.uid);
       let lastData = JSON.stringify(newNode.nodeData.data);
       newNode.reset();
       newNode.nodeData = newNode.handleData(data2 || {});
@@ -49949,7 +49975,9 @@ var defaultOpt = {
     //     }
     //   ]
     // }
-  ]
+  ],
+  // 节点最大缓存数量
+  maxNodeCacheCount: 1e3
 };
 var MindMap2 = class {
   //  构造函数
