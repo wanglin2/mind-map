@@ -4,6 +4,16 @@
 
 New: Optimize node reuse logic using LRU caching algorithm.
 
+## 0.5.10-fix.1
+
+Fix: Fix the issue of import errors.
+
+## 0.5.10-fix.2
+
+Fix: Fixed the issue of switching themes and importing data without triggering data changes in rich text mode.
+
+New: Add three new themes.
+
 ## 0.5.9
 
 Change: Unified export method format, using `FileReader` instead of `URL.createObjectURL` to convert `blob` data.

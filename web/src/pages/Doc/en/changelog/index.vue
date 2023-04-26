@@ -3,6 +3,11 @@
     <h1>Changelog</h1>
 <h2>0.5.10</h2>
 <p>New: Optimize node reuse logic using LRU caching algorithm.</p>
+<h2>0.5.10-fix.1</h2>
+<p>Fix: Fix the issue of import errors.</p>
+<h2>0.5.10-fix.2</h2>
+<p>Fix: Fixed the issue of switching themes and importing data without triggering data changes in rich text mode.</p>
+<p>New: Add three new themes.</p>
 <h2>0.5.9</h2>
 <p>Change: Unified export method format, using <code>FileReader</code> instead of <code>URL.createObjectURL</code> to convert <code>blob</code> data.</p>
 <h2>0.5.8</h2>
