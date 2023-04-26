@@ -1,5 +1,6 @@
 import Node from '../Node'
 import { CONSTANTS, initRootNodePositionMap } from '../utils/constant'
+import Lru from '../utils/Lru'
 
 //  布局基类
 class Base {
@@ -13,8 +14,7 @@ class Base {
     this.draw = this.mindMap.draw
     // 根节点
     this.root = null
-    // 保存所有uid和节点，用于复用
-    this.nodePool = {}
+    this.lru = new Lru(this.mindMap.opt.maxNodeCacheCount)
   }
 
   //  计算节点位置
@@ -40,16 +40,7 @@ class Base {
     // 记录本次渲染时的节点
     this.renderer.nodeCache[uid] = node
     // 记录所有渲染时的节点
-    this.nodePool[uid] = node
-    // 如果总缓存数量达到1000，直接清空
-    if (Object.keys(this.nodePool).length > 1000) {
-      this.clearNodePool()
-    }
-  }
-
-  // 清空节点存储池
-  clearNodePool() {
-    this.nodePool = {}
+    this.lru.add(uid, node)
   }
 
   // 检查当前来源是否需要重新计算节点大小
@@ -72,9 +63,9 @@ class Base {
         newNode.getSize()
         newNode.needLayout = true
       }
-    } else if (this.nodePool[data.data.uid] && !this.renderer.reRender) {
+    } else if (this.lru.has(data.data.uid) && !this.renderer.reRender) {
       // 数据上没有保存节点引用，但是通过uid找到了缓存的节点，也可以复用
-      newNode = this.nodePool[data.data.uid]
+      newNode = this.lru.get(data.data.uid)
       // 保存该节点上一次的数据
       let lastData = JSON.stringify(newNode.nodeData.data)
       newNode.reset()
