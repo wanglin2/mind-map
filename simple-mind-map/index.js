@@ -210,12 +210,12 @@ class MindMap {
   }
 
   //  重新渲染
-  reRender(callback) {
+  reRender(callback, source = '') {
     this.batchExecution.push('render', () => {
       this.draw.clear()
       this.initTheme()
       this.renderer.reRender = true
-      this.renderer.render(callback)
+      this.renderer.render(callback, source)
     })
   }
 
@@ -320,7 +320,7 @@ class MindMap {
     } else {
       this.renderer.renderTree = data
     }
-    this.reRender()
+    this.reRender(() => {}, CONSTANTS.SET_DATA)
   }
 
   //  动态设置思维导图数据，包括节点数据、布局、主题、视图
