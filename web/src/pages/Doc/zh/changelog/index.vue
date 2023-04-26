@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.5.10</h2>
+<p>新增：使用LRU缓存算法优化节点复用逻辑。</p>
 <h2>0.5.9</h2>
 <p>修改：统一导出方法的格式，使用<code>FileReader</code>代替<code>URL.createObjectURL</code>转换<code>blob</code>数据。</p>
 <h2>0.5.8</h2>

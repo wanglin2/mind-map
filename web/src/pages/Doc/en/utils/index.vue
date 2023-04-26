@@ -112,6 +112,31 @@ drawBackgroundImageToCanvas(ctx, width, height, img, {
   }
 })
 </code></pre>
+<h2>LRU cache class</h2>
+<blockquote>
+<p>v0.5.10+</p>
+</blockquote>
+<p>Import:</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> Lru <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/Lru.js&#x27;</span>
+</code></pre>
+<h3>Constructor</h3>
+<pre class="hljs"><code><span class="hljs-keyword">let</span> lru = <span class="hljs-keyword">new</span> Lru(max)
+</code></pre>
+<p><code>max</code>: Specify the maximum number of caches.</p>
+<h3>Instance properties</h3>
+<h4>size</h4>
+<p>The current number of caches.</p>
+<h4>pool</h4>
+<p>Get cache pool.</p>
+<h3>Instance methods</h3>
+<h4>add(key, value)</h4>
+<p>Add cache.</p>
+<h4>delete(key)</h4>
+<p>Delete cache.</p>
+<h4>has(key)</h4>
+<p>Check if a cache exists.</p>
+<h4>get(key)</h4>
+<p>Gets the value of a cache.</p>
 
   </div>
 </template>

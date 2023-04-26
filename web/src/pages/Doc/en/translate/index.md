@@ -1,6 +1,10 @@
 # Participate in translation
 
-Thanks for the first version English translation provided by [Emircan ERKUL](https://github.com/emircanerkul).
+> Thanks for the first version English translation provided by [Emircan ERKUL](https://github.com/emircanerkul).
+>
+> Due to limited energy, most translations currently use machine translation, so accuracy is inevitably problematic.
+>
+> At present, the 【Course】 section is not translated. If you are interested, please join us.
 
 If you want to participate in the translation of this document, you can clone this repository first.
 
