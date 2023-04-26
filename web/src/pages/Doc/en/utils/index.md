@@ -168,3 +168,49 @@ drawBackgroundImageToCanvas(ctx, width, height, img, {
   }
 })
 ```
+
+## LRU cache class
+
+> v0.5.10+
+
+Import:
+
+```js
+import Lru from 'simple-mind-map/src/utils/Lru.js'
+```
+
+### Constructor
+
+```js
+let lru = new Lru(max)
+```
+
+`max`: Specify the maximum number of caches.
+
+### Instance properties
+
+#### size
+
+The current number of caches.
+
+#### pool
+
+Get cache pool.
+
+### Instance methods
+
+#### add(key, value)
+
+Add cache.
+
+#### delete(key)
+
+Delete cache.
+
+#### has(key)
+
+Check if a cache exists.
+
+#### get(key)
+
+Gets the value of a cache.

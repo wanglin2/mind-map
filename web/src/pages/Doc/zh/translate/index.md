@@ -1,6 +1,10 @@
 # 参与翻译
 
-感谢[Emircan ERKUL](https://github.com/emircanerkul)提供的第一版英文翻译。
+> 感谢[Emircan ERKUL](https://github.com/emircanerkul)提供的第一版英文翻译。
+>
+>因为精力有限，目前大部分翻译都是使用机翻的，所以准确度难免有问题。
+>
+>目前【教程】部分是没有进行翻译的，如果你有兴趣，欢迎加入我们。
 
 如果你也想参与翻译本文档的话，可以先克隆本仓库。
 

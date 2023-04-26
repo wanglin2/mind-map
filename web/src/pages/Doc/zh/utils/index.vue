@@ -107,6 +107,31 @@ drawBackgroundImageToCanvas(ctx, width, height, img, {
   }
 })
 </code></pre>
+<h2>LRU缓存类</h2>
+<blockquote>
+<p>v0.5.10+</p>
+</blockquote>
+<p>引入：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> Lru <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/Lru.js&#x27;</span>
+</code></pre>
+<h3>构造函数</h3>
+<pre class="hljs"><code><span class="hljs-keyword">let</span> lru = <span class="hljs-keyword">new</span> Lru(max)
+</code></pre>
+<p><code>max</code>：指定最大缓存数量。</p>
+<h3>实例属性</h3>
+<h4>size</h4>
+<p>当前缓存的数量。</p>
+<h4>pool</h4>
+<p>获取缓存池。</p>
+<h3>实例方法</h3>
+<h4>add(key, value)</h4>
+<p>添加缓存。</p>
+<h4>delete(key)</h4>
+<p>删除指定缓存。</p>
+<h4>has(key)</h4>
+<p>检查某个缓存是否存在。</p>
+<h4>get(key)</h4>
+<p>获取某个缓存的值。</p>
 
   </div>
 </template>

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.10
+
+新增：使用LRU缓存算法优化节点复用逻辑。
+
 ## 0.5.9
 
 修改：统一导出方法的格式，使用`FileReader`代替`URL.createObjectURL`转换`blob`数据。

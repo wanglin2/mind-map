@@ -163,3 +163,49 @@ drawBackgroundImageToCanvas(ctx, width, height, img, {
   }
 })
 ```
+
+## LRU缓存类
+
+> v0.5.10+
+
+引入：
+
+```js
+import Lru from 'simple-mind-map/src/utils/Lru.js'
+```
+
+### 构造函数
+
+```js
+let lru = new Lru(max)
+```
+
+`max`：指定最大缓存数量。
+
+### 实例属性
+
+#### size
+
+当前缓存的数量。
+
+#### pool
+
+获取缓存池。
+
+### 实例方法
+
+#### add(key, value)
+
+添加缓存。
+
+#### delete(key)
+
+删除指定缓存。
+
+#### has(key)
+
+检查某个缓存是否存在。
+
+#### get(key)
+
+获取某个缓存的值。

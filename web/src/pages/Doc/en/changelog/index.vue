@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.5.10</h2>
+<p>New: Optimize node reuse logic using LRU caching algorithm.</p>
 <h2>0.5.9</h2>
 <p>Change: Unified export method format, using <code>FileReader</code> instead of <code>URL.createObjectURL</code> to convert <code>blob</code> data.</p>
 <h2>0.5.8</h2>

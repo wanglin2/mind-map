@@ -287,6 +287,13 @@
 <td>The icons that can be inserted into the extension node, and each item in the array is an object. Please refer to the &quot;Icon Configuration&quot; table below for the detailed structure of the object</td>
 <td></td>
 </tr>
+<tr>
+<td>maxNodeCacheCount（v0.5.10+）</td>
+<td>Number</td>
+<td>1000</td>
+<td>The maximum number of cached nodes. To optimize performance, an internal node cache pool is maintained to reuse nodes. This attribute allows you to specify the maximum number of caches in the pool</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
