@@ -288,6 +288,11 @@ class Render {
         if (this.hasWaitRendering) {
           this.hasWaitRendering = false
           this.render(callback, source)
+        } else {
+          // 触发一次保存，因为修改了渲染树的数据
+          if (this.mindMap.richText && [CONSTANTS.CHANGE_THEME, CONSTANTS.SET_DATA].includes(source)) {
+            this.mindMap.command.addHistory()
+          }
         }
       }
       let { enableNodeTransitionMove, nodeTransitionMoveDuration } =
