@@ -47309,7 +47309,6 @@ var Render = class {
     this.nodeCache = {};
     if (this.reRender) {
       this.clearActive();
-      this.layout.clearNodePool();
     }
     this.layout.doLayout((root2) => {
       Object.keys(this.lastNodeCache).forEach((uid) => {
