@@ -27,6 +27,9 @@ import redSpirit from './redSpirit'
 import blackHumour from './blackHumour'
 import lateNightOffice from './lateNightOffice'
 import blackGold from './blackGold'
+import avocado from './avocado'
+import autumn from './autumn'
+import orangeJuice from './orangeJuice'
 
 export default {
   default: defaultTheme,
@@ -57,5 +60,8 @@ export default {
   redSpirit,
   blackHumour,
   lateNightOffice,
-  blackGold
+  blackGold,
+  avocado,
+  autumn,
+  orangeJuice
 }
