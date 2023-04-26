@@ -60,7 +60,7 @@
 <td>theme</td>
 <td>String</td>
 <td>default</td>
-<td>主题，可选列表：default（默认）、classic（脑图经典）、minions（小黄人）、pinkGrape（粉红葡萄）、mint（薄荷）、gold（金色vip）、vitalityOrange（活力橙）、greenLeaf（绿叶）、dark2（暗色2）、skyGreen（天清绿）、classic2（脑图经典2）、classic3（脑图经典3）、classic4（脑图经典4，v0.2.0+）、classicGreen（经典绿）、classicBlue（经典蓝）、blueSky（天空蓝）、brainImpairedPink（脑残粉）、dark（暗色）、earthYellow（泥土黄）、freshGreen（清新绿）、freshRed（清新红）、romanticPurple（浪漫紫）、simpleBlack（v0.5.4+简约黑）、courseGreen（v0.5.4+课程绿）、coffee（v0.5.4+咖啡）、redSpirit（v0.5.4+红色精神）、blackHumour（v0.5.4+黑色幽默）、lateNightOffice（v0.5.4+深夜办公室）、blackGold（v0.5.4+黑金）</td>
+<td>主题，可选列表：default（默认）、classic（脑图经典）、minions（小黄人）、pinkGrape（粉红葡萄）、mint（薄荷）、gold（金色vip）、vitalityOrange（活力橙）、greenLeaf（绿叶）、dark2（暗色2）、skyGreen（天清绿）、classic2（脑图经典2）、classic3（脑图经典3）、classic4（脑图经典4，v0.2.0+）、classicGreen（经典绿）、classicBlue（经典蓝）、blueSky（天空蓝）、brainImpairedPink（脑残粉）、dark（暗色）、earthYellow（泥土黄）、freshGreen（清新绿）、freshRed（清新红）、romanticPurple（浪漫紫）、simpleBlack（v0.5.4+简约黑）、courseGreen（v0.5.4+课程绿）、coffee（v0.5.4+咖啡）、redSpirit（v0.5.4+红色精神）、blackHumour（v0.5.4+黑色幽默）、lateNightOffice（v0.5.4+深夜办公室）、blackGold（v0.5.4+黑金）、avocado（v.5.10-fix.2+牛油果）、autumn（v.5.10-fix.2+秋天）、orangeJuice（v.5.10-fix.2+橙汁）</td>
 <td></td>
 </tr>
 <tr>
