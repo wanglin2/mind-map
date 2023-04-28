@@ -84,4 +84,13 @@ MIT
 
 # 微信交流群
 
-![](./qrcode.jpg)
+<img src="./qrcode.jpg" style="width: 300px" />
+
+# 请作者喝杯咖啡
+
+> 厚椰乳一盒 + 纯牛奶半盒 + 冰块 + 咖啡液 = 生椰拿铁 yyds
+
+<p>
+  <img src="./web/src/assets/img/alipay.jpg" style="width: 300px" />
+  <img src="./web/src/assets/img/wechat.jpg" style="width: 300px" />
+</p>
