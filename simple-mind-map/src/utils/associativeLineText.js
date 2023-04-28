@@ -32,7 +32,7 @@ function showEditTextBox(g) {
   this.mindMap.keyCommand.addShortcut('Enter', () => {
     this.hideEditTextBox()
   })
-  let rect = g.node.getBoundingClientRect()
+  
   if (!this.textEditNode) {
     this.textEditNode = document.createElement('div')
     this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);padding: 3px 5px;margin-left: -5px;margin-top: -3px;outline: none; word-break: break-all;`
@@ -59,12 +59,18 @@ function showEditTextBox(g) {
   this.textEditNode.style.lineHeight = associativeLineTextLineHeight
   this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex
   this.textEditNode.innerHTML = textLines.join('<br>')
+  this.textEditNode.style.display = 'block'
+  this.updateTextEditBoxPos(g)
+  this.showTextEdit = true
+}
+
+// 更新文本编辑框位置
+function updateTextEditBoxPos(g) {
+  let rect = g.node.getBoundingClientRect()
   this.textEditNode.style.minWidth = rect.width + 10 + 'px'
   this.textEditNode.style.minHeight = rect.height + 6 + 'px'
   this.textEditNode.style.left = rect.left + 'px'
   this.textEditNode.style.top = rect.top + 'px'
-  this.textEditNode.style.display = 'block'
-  this.showTextEdit = true
 }
 
 //  隐藏文本编辑框
@@ -144,6 +150,7 @@ export default {
   styleText,
   showEditTextBox,
   hideEditTextBox,
+  updateTextEditBoxPos,
   renderText,
   updateTextPos
 }
