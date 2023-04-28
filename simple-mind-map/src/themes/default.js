@@ -156,4 +156,38 @@ export const supportActiveStyle = [
   'borderRadius'
 ]
 
+// 检测主题配置是否是节点大小无关的
+const nodeSizeIndependenceList = [
+  'lineWidth',
+  'lineColor',
+  'lineDasharray',
+  'lineStyle',
+  'generalizationLineWidth',
+  'generalizationLineColor',
+  'associativeLineWidth',
+  'associativeLineColor',
+  'associativeLineActiveWidth',
+  'associativeLineActiveColor',
+  'associativeLineTextColor',
+  'associativeLineTextFontSize',
+  'associativeLineTextLineHeight',
+  'associativeLineTextFontFamily',
+  'backgroundColor',
+  'backgroundImage',
+  'backgroundRepeat',
+  'backgroundPosition',
+  'backgroundSize'
+]
+export const checkIsNodeSizeIndependenceConfig = (config) => {
+  let keys = Object.keys(config)
+  for(let i = 0; i < keys.length; i++) {
+    if (!nodeSizeIndependenceList.find((item) => {
+      return item === keys[i]
+    })) {
+      return false
+    }
+  }
+  return true
+}
+
 export const lineStyleProps = ['lineColor', 'lineDasharray', 'lineWidth']
