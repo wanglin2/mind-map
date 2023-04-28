@@ -3,13 +3,13 @@ import { v4 as uuid } from 'uuid'
 import {
   getAssociativeLineTargetIndex,
   computeCubicBezierPathPoints,
-  joinCubicBezierPath,
   cubicBezierPath,
   getNodePoint,
   computeNodePoints,
-  getNodeLinePath,
-  getDefaultControlPointOffsets
+  getNodeLinePath
 } from './utils/associativeLineUtils'
+import associativeLineControlsMethods from './utils/associativeLineControls'
+import associativeLineTextMethods from './utils/associativeLineText'
 
 // 关联线类
 class AssociativeLine {
@@ -46,6 +46,14 @@ class AssociativeLine {
     }
     // 节流一下，不然很卡
     this.checkOverlapNode = throttle(this.checkOverlapNode, 100, this)
+    // 控制点相关方法
+    Object.keys(associativeLineControlsMethods).forEach(item => {
+      this[item] = associativeLineControlsMethods[item].bind(this)
+    })
+    // 关联线文字相关方法
+    Object.keys(associativeLineTextMethods).forEach(item => {
+      this[item] = associativeLineTextMethods[item].bind(this)
+    })
     this.bindEvent()
   }
 
@@ -177,36 +185,46 @@ class AssociativeLine {
       .stroke({ width: associativeLineActiveWidth, color: 'transparent' })
       .fill({ color: 'none' })
     clickPath.plot(pathStr)
+    // 文字
+    let text = this.createText({ path, clickPath, node, toNode, startPoint, endPoint, controlPoints })
     // 点击事件
     clickPath.click(e => {
       e.stopPropagation()
-      // 如果当前存在激活节点，那么取消激活节点
-      if (this.mindMap.renderer.activeNodeList.length > 0) {
-        this.clearActiveNodes()
-      } else {
-        // 否则清除当前的关联线的激活状态，如果有的话
-        this.clearActiveLine()
-        // 保存当前激活的关联线信息
-        this.activeLine = [path, clickPath, node, toNode]
-        // 让不可见的点击线显示
-        clickPath.stroke({ color: associativeLineActiveColor })
-        // 渲染控制点和连线
-        this.renderControls(
-          startPoint,
-          endPoint,
-          controlPoints[0],
-          controlPoints[1]
-        )
-        this.mindMap.emit(
-          'associative_line_click',
-          path,
-          clickPath,
-          node,
-          toNode
-        )
-      }
+      this.setActiveLine({ path, clickPath, text, node, toNode, startPoint, endPoint, controlPoints })
     })
-    this.lineList.push([path, clickPath, node, toNode])
+    // 渲染关联线文字
+    this.renderText(this.getText(node, toNode), path, text)
+    this.lineList.push([path, clickPath, text, node, toNode])
+  }
+
+  // 激活某根关联线
+  setActiveLine({ path, clickPath, text, node, toNode, startPoint, endPoint, controlPoints }) {
+    let {
+      associativeLineActiveColor
+    } = this.mindMap.themeConfig
+    // 如果当前存在激活节点，那么取消激活节点
+    if (this.mindMap.renderer.activeNodeList.length > 0) {
+      this.clearActiveNodes()
+    } else {
+      // 否则清除当前的关联线的激活状态，如果有的话
+      this.clearActiveLine()
+      // 保存当前激活的关联线信息
+      this.activeLine = [path, clickPath, text, node, toNode]
+      // 让不可见的点击线显示
+      clickPath.stroke({ color: associativeLineActiveColor })
+      // 如果没有输入过关联线文字，那么显示默认文字
+      if (!this.getText(node, toNode)) {
+        this.renderText(this.mindMap.opt.defaultAssociativeLineText, path, text)
+      }
+      // 渲染控制点和连线
+      this.renderControls(
+        startPoint,
+        endPoint,
+        controlPoints[0],
+        controlPoints[1]
+      )
+      this.mindMap.emit('associative_line_click', path, clickPath, node, toNode)
+    }
   }
 
   // 移除所有连接线
@@ -214,6 +232,7 @@ class AssociativeLine {
     this.lineList.forEach(line => {
       line[0].remove()
       line[1].remove()
+      line[2].remove()
     })
     this.lineList = []
   }
@@ -253,7 +272,8 @@ class AssociativeLine {
   updateCreatingLine(e) {
     let { x, y } = this.getTransformedEventPos(e)
     let startPoint = getNodePoint(this.creatingStartNode)
-    let pathStr = cubicBezierPath(startPoint.x, startPoint.y, x, y)
+    let offsetX = x > startPoint.x ? -10 : 10
+    let pathStr = cubicBezierPath(startPoint.x, startPoint.y, x + offsetX, y)
     this.creatingLine.plot(pathStr)
     this.checkOverlapNode(x, y)
   }
@@ -349,20 +369,33 @@ class AssociativeLine {
   // 删除连接线
   removeLine() {
     if (!this.activeLine) return
-    let [, , node, toNode] = this.activeLine
+    let [, , , node, toNode] = this.activeLine
     this.removeControls()
-    let { associativeLineTargets, associativeLineTargetControlOffsets } =
+    let { associativeLineTargets, associativeLineTargetControlOffsets, associativeLineText } =
       node.nodeData.data
     let targetIndex = getAssociativeLineTargetIndex(node, toNode)
+    // 更新关联线文本数据
+    let newAssociativeLineText = {}
+    if (associativeLineText) {
+      Object.keys(associativeLineText).forEach((item) => {
+        if (item !== toNode.nodeData.data.id) {
+          newAssociativeLineText[item] = associativeLineText[item]
+        }
+      })
+    }
     this.mindMap.execCommand('SET_NODE_DATA', node, {
+      // 目标
       associativeLineTargets: associativeLineTargets.filter((_, index) => {
         return index !== targetIndex
       }),
+      // 偏移量
       associativeLineTargetControlOffsets: associativeLineTargetControlOffsets
         ? associativeLineTargetControlOffsets.filter((_, index) => {
             return index !== targetIndex
           })
-        : []
+        : [],
+      // 文本
+      associativeLineText: newAssociativeLineText
     })
   }
 
@@ -376,9 +409,16 @@ class AssociativeLine {
   // 清除激活的线
   clearActiveLine() {
     if (this.activeLine) {
-      this.activeLine[1].stroke({
+      let [, clickPath, text, node, toNode] = this.activeLine
+      clickPath.stroke({
         color: 'transparent'
       })
+      // 隐藏关联线文本编辑框
+      this.hideEditTextBox()
+      // 如果当前关联线没有文字，则清空文字节点
+      if (!this.getText(node, toNode)) {
+        text.clear()
+      }
       this.activeLine = null
       this.removeControls()
     }
@@ -391,6 +431,7 @@ class AssociativeLine {
     this.lineList.forEach(line => {
       line[0].hide()
       line[1].hide()
+      line[2].hide()
     })
     this.hideControls()
   }
@@ -401,224 +442,10 @@ class AssociativeLine {
     this.lineList.forEach(line => {
       line[0].show()
       line[1].show()
+      line[2].show()
     })
     this.showControls()
     this.isNodeDragging = false
-  }
-
-  // 创建控制点、连线节点
-  createControlNodes() {
-    let { associativeLineActiveColor } = this.mindMap.themeConfig
-    // 连线
-    this.controlLine1 = this.draw
-      .line()
-      .stroke({ color: associativeLineActiveColor, width: 2 })
-    this.controlLine2 = this.draw
-      .line()
-      .stroke({ color: associativeLineActiveColor, width: 2 })
-    // 控制点
-    this.controlPoint1 = this.createOneControlNode('controlPoint1')
-    this.controlPoint2 = this.createOneControlNode('controlPoint2')
-  }
-
-  // 创建控制点
-  createOneControlNode(pointKey) {
-    let { associativeLineActiveColor } = this.mindMap.themeConfig
-    return this.draw
-      .circle(this.controlPointDiameter)
-      .stroke({ color: associativeLineActiveColor })
-      .fill({ color: '#fff' })
-      .click(e => {
-        e.stopPropagation()
-      })
-      .mousedown(e => {
-        this.onControlPointMousedown(e, pointKey)
-      })
-  }
-
-  // 控制点的鼠标按下事件
-  onControlPointMousedown(e, pointKey) {
-    e.stopPropagation()
-    this.isControlPointMousedown = true
-    this.mousedownControlPointKey = pointKey
-  }
-
-  // 控制点的鼠标移动事件
-  onControlPointMousemove(e) {
-    if (
-      !this.isControlPointMousedown ||
-      !this.mousedownControlPointKey ||
-      !this[this.mousedownControlPointKey]
-    )
-      return
-    e.stopPropagation()
-    e.preventDefault()
-    let radius = this.controlPointDiameter / 2
-    // 转换鼠标当前的位置
-    let { x, y } = this.getTransformedEventPos(e)
-    this.controlPointMousemoveState.pos = {
-      x,
-      y
-    }
-    // 更新当前拖拽的控制点的位置
-    this[this.mousedownControlPointKey].x(x - radius).y(y - radius)
-    let [path, clickPath, node, toNode] = this.activeLine
-    let [startPoint, endPoint] = computeNodePoints(node, toNode)
-    this.controlPointMousemoveState.startPoint = startPoint
-    this.controlPointMousemoveState.endPoint = endPoint
-    let targetIndex = getAssociativeLineTargetIndex(node, toNode)
-    this.controlPointMousemoveState.targetIndex = targetIndex
-    let offsets = []
-    let associativeLineTargetControlOffsets = node.nodeData.data.associativeLineTargetControlOffsets
-    if (!associativeLineTargetControlOffsets) {
-      // 兼容0.4.5版本，没有associativeLineTargetControlOffsets的情况
-      offsets = getDefaultControlPointOffsets(startPoint, endPoint)
-    } else {
-      offsets = associativeLineTargetControlOffsets[targetIndex]
-    }
-    let point1 = null
-    let point2 = null
-    // 拖拽的是控制点1
-    if (this.mousedownControlPointKey === 'controlPoint1') {
-      point1 = {
-        x,
-        y
-      }
-      point2 = {
-        x: endPoint.x + offsets[1].x,
-        y: endPoint.y + offsets[1].y
-      }
-      // 更新控制点1的连线
-      this.controlLine1.plot(startPoint.x, startPoint.y, point1.x, point1.y)
-    } else {
-      // 拖拽的是控制点2
-      point1 = {
-        x: startPoint.x + offsets[0].x,
-        y: startPoint.y + offsets[0].y
-      }
-      point2 = {
-        x,
-        y
-      }
-      // 更新控制点2的连线
-      this.controlLine2.plot(endPoint.x, endPoint.y, point2.x, point2.y)
-    }
-    // 更新关联线
-    let pathStr = joinCubicBezierPath(startPoint, endPoint, point1, point2)
-    path.plot(pathStr)
-    clickPath.plot(pathStr)
-  }
-
-  // 控制点的鼠标移动事件
-  onControlPointMouseup(e) {
-    if (!this.isControlPointMousedown) return
-    e.stopPropagation()
-    e.preventDefault()
-    let { pos, startPoint, endPoint, targetIndex } =
-      this.controlPointMousemoveState
-    let [, , node] = this.activeLine
-    let offsetList = []
-    let associativeLineTargetControlOffsets = node.nodeData.data.associativeLineTargetControlOffsets
-    if (!associativeLineTargetControlOffsets) {
-      // 兼容0.4.5版本，没有associativeLineTargetControlOffsets的情况
-      offsetList[targetIndex] = getDefaultControlPointOffsets(startPoint, endPoint)
-    } else {  
-      offsetList = associativeLineTargetControlOffsets
-    }
-    let offset1 = null
-    let offset2 = null
-    if (this.mousedownControlPointKey === 'controlPoint1') {
-      // 更新控制点1数据
-      offset1 = {
-        x: pos.x - startPoint.x,
-        y: pos.y - startPoint.y
-      }
-      offset2 = offsetList[targetIndex][1]
-    } else {
-      // 更新控制点2数据
-      offset1 = offsetList[targetIndex][0]
-      offset2 = {
-        x: pos.x - endPoint.x,
-        y: pos.y - endPoint.y
-      }
-    }
-    offsetList[targetIndex] = [offset1, offset2]
-    this.mindMap.execCommand('SET_NODE_DATA', node, {
-      associativeLineTargetControlOffsets: offsetList
-    })
-    // 这里要加个setTimeout0是因为draw_click事件比mouseup事件触发的晚，所以重置isControlPointMousedown需要等draw_click事件触发完以后
-    setTimeout(() => {
-      this.resetControlPoint()
-    }, 0)
-  }
-
-  // 复位控制点移动
-  resetControlPoint() {
-    this.isControlPointMousedown = false
-    this.mousedownControlPointKey = ''
-    this.controlPointMousemoveState = {
-      pos: null,
-      startPoint: null,
-      endPoint: null,
-      targetIndex: ''
-    }
-  }
-
-  // 渲染控制点
-  renderControls(startPoint, endPoint, point1, point2) {
-    if (!this.controlLine1) {
-      this.createControlNodes()
-    }
-    let radius = this.controlPointDiameter / 2
-    // 控制点和起终点的连线
-    this.controlLine1.plot(startPoint.x, startPoint.y, point1.x, point1.y)
-    this.controlLine2.plot(endPoint.x, endPoint.y, point2.x, point2.y)
-    // 控制点
-    this.controlPoint1.x(point1.x - radius).y(point1.y - radius)
-    this.controlPoint2.x(point2.x - radius).y(point2.y - radius)
-  }
-
-  // 删除控制点
-  removeControls() {
-    if (!this.controlLine1) return
-    ;[
-      this.controlLine1,
-      this.controlLine2,
-      this.controlPoint1,
-      this.controlPoint2
-    ].forEach(item => {
-      item.remove()
-    })
-    this.controlLine1 = null
-    this.controlLine2 = null
-    this.controlPoint1 = null
-    this.controlPoint2 = null
-  }
-
-  // 隐藏控制点
-  hideControls() {
-    if (!this.controlLine1) return
-    ;[
-      this.controlLine1,
-      this.controlLine2,
-      this.controlPoint1,
-      this.controlPoint2
-    ].forEach(item => {
-      item.hide()
-    })
-  }
-
-  // 显示控制点
-  showControls() {
-    if (!this.controlLine1) return
-    ;[
-      this.controlLine1,
-      this.controlLine2,
-      this.controlPoint1,
-      this.controlPoint2
-    ].forEach(item => {
-      item.show()
-    })
   }
 }
 
