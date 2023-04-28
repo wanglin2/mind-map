@@ -46,7 +46,7 @@ export default class KeyCommand {
       if (this.mindMap.richText && this.mindMap.richText.showTextEdit) {
         return
       }
-      if (this.mindMap.renderer.textEdit.showTextEdit) {
+      if (this.mindMap.renderer.textEdit.showTextEdit || (this.mindMap.associativeLine && this.mindMap.associativeLine.showTextEdit)) {
         return
       }
       this.isInSvg = false

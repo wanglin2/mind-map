@@ -120,7 +120,9 @@ const defaultOpt = {
     // }
   ],
   // 节点最大缓存数量
-  maxNodeCacheCount: 1000
+  maxNodeCacheCount: 1000,
+  // 关联线默认文字
+  defaultAssociativeLineText: '关联'
 }
 
 //  思维导图

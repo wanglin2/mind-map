@@ -34,6 +34,14 @@ export default {
   associativeLineActiveWidth: 8,
   // 关联线激活状态的颜色
   associativeLineActiveColor: 'rgba(2, 167, 240, 1)',
+  // 关联线文字颜色
+  associativeLineTextColor: 'rgb(51, 51, 51)',
+  // 关联线文字大小
+  associativeLineTextFontSize: 14,
+  // 关联线文字行高
+  associativeLineTextLineHeight: 1.2,
+  // 关联线文字字体
+  associativeLineTextFontFamily: '微软雅黑, Microsoft YaHei',
   // 背景颜色
   backgroundColor: '#fafafa',
   // 背景图片
