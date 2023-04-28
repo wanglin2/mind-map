@@ -4,11 +4,7 @@ import { getStrWithBrFromHtml } from './index'
 // 创建文字节点
 function createText(data) {
   let g = this.draw.group()
-  g.click(e => {
-    e.stopPropagation()
-  })
-  g.on('dblclick', e => {
-    e.stopPropagation()
+  const setActive = () => {
     if (
       !this.activeLine ||
       this.activeLine[3] !== data.node ||
@@ -19,6 +15,14 @@ function createText(data) {
         text: g
       })
     }
+  }
+  g.click(e => {
+    e.stopPropagation()
+    setActive()
+  })
+  g.on('dblclick', e => {
+    e.stopPropagation()
+    setActive()
     if (!this.activeLine) return
     this.showEditTextBox(g)
   })
@@ -50,18 +54,24 @@ function showEditTextBox(g) {
     associativeLineTextFontFamily,
     associativeLineTextLineHeight
   } = this.mindMap.themeConfig
+  let scale = this.mindMap.view.scale
   let [, , , node, toNode] = this.activeLine
   let textLines = (
     this.getText(node, toNode) || this.mindMap.opt.defaultAssociativeLineText
   ).split(/\n/gim)
   this.textEditNode.style.fontFamily = associativeLineTextFontFamily
-  this.textEditNode.style.fontSize = associativeLineTextFontSize + 'px'
-  this.textEditNode.style.lineHeight = associativeLineTextLineHeight
+  this.textEditNode.style.fontSize = associativeLineTextFontSize * scale + 'px'
+  this.textEditNode.style.lineHeight = textLines.length > 1 ? associativeLineTextLineHeight : 'normal'
   this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex
   this.textEditNode.innerHTML = textLines.join('<br>')
   this.textEditNode.style.display = 'block'
   this.updateTextEditBoxPos(g)
   this.showTextEdit = true
+}
+
+// 处理画布缩放
+function onScale() {
+  this.hideEditTextBox()
 }
 
 // 更新文本编辑框位置
@@ -148,6 +158,7 @@ export default {
   getText,
   createText,
   styleText,
+  onScale,
   showEditTextBox,
   hideEditTextBox,
   updateTextEditBoxPos,

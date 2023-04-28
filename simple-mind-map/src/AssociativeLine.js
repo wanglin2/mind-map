@@ -97,6 +97,8 @@ class AssociativeLine {
     window.addEventListener('mouseup', e => {
       this.onControlPointMouseup(e)
     })
+    // 缩放事件
+    this.mindMap.on('scale', this.onScale)
   }
 
   // 创建箭头
