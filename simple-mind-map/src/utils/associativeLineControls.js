@@ -108,6 +108,7 @@ function onControlPointMousemove(e) {
   path.plot(pathStr)
   clickPath.plot(pathStr)
   this.updateTextPos(path, text)
+  this.updateTextEditBoxPos(text)
 }
 
 // 控制点的鼠标移动事件
