@@ -45271,6 +45271,14 @@ class TextEdit_TextEdit {
   associativeLineActiveWidth: 8,
   // 关联线激活状态的颜色
   associativeLineActiveColor: 'rgba(2, 167, 240, 1)',
+  // 关联线文字颜色
+  associativeLineTextColor: 'rgb(51, 51, 51)',
+  // 关联线文字大小
+  associativeLineTextFontSize: 14,
+  // 关联线文字行高
+  associativeLineTextLineHeight: 1.2,
+  // 关联线文字字体
+  associativeLineTextFontFamily: '微软雅黑, Microsoft YaHei',
   // 背景颜色
   backgroundColor: '#fafafa',
   // 背景图片
@@ -45378,6 +45386,20 @@ class TextEdit_TextEdit {
 // 支持激活样式的属性
 // 简单来说，会改变节点大小的都不支持在激活时设置，为了性能考虑，节点切换激活态时不会重新计算节点大小
 const supportActiveStyle = ['fillColor', 'borderColor', 'borderWidth', 'borderDasharray', 'borderRadius'];
+
+// 检测主题配置是否是节点大小无关的
+const nodeSizeIndependenceList = ['lineWidth', 'lineColor', 'lineDasharray', 'lineStyle', 'generalizationLineWidth', 'generalizationLineColor', 'associativeLineWidth', 'associativeLineColor', 'associativeLineActiveWidth', 'associativeLineActiveColor', 'associativeLineTextColor', 'associativeLineTextFontSize', 'associativeLineTextLineHeight', 'associativeLineTextFontFamily', 'backgroundColor', 'backgroundImage', 'backgroundRepeat', 'backgroundPosition', 'backgroundSize'];
+const checkIsNodeSizeIndependenceConfig = config => {
+  let keys = Object.keys(config);
+  for (let i = 0; i < keys.length; i++) {
+    if (!nodeSizeIndependenceList.find(item => {
+      return item === keys[i];
+    })) {
+      return false;
+    }
+  }
+  return true;
+};
 const lineStyleProps = ['lineColor', 'lineDasharray', 'lineWidth'];
 // CONCATENATED MODULE: ../simple-mind-map/src/Render.js
 
@@ -48248,7 +48270,7 @@ class KeyCommand_KeyCommand {
       if (this.mindMap.richText && this.mindMap.richText.showTextEdit) {
         return;
       }
-      if (this.mindMap.renderer.textEdit.showTextEdit) {
+      if (this.mindMap.renderer.textEdit.showTextEdit || this.mindMap.associativeLine && this.mindMap.associativeLine.showTextEdit) {
         return;
       }
       this.isInSvg = false;
@@ -48676,7 +48698,9 @@ const defaultOpt = {
     // }
   ],
   // 节点最大缓存数量
-  maxNodeCacheCount: 1000
+  maxNodeCacheCount: 1000,
+  // 关联线默认文字
+  defaultAssociativeLineText: '关联'
 };
 
 //  思维导图
@@ -48821,7 +48845,9 @@ class simple_mind_map_MindMap {
   //  设置主题配置
   setThemeConfig(config) {
     this.opt.themeConfig = config;
-    this.render(null, CONSTANTS.CHANGE_THEME);
+    // 检查改变的是否是节点大小无关的主题属性
+    let res = checkIsNodeSizeIndependenceConfig(config);
+    this.render(null, res ? '' : CONSTANTS.CHANGE_THEME);
   }
 
   //  获取自定义主题配置
@@ -50952,7 +50978,395 @@ const getDefaultControlPointOffsets = (startPoint, endPoint) => {
     y: controlPoints[1].y - endPoint.y
   }];
 };
+// CONCATENATED MODULE: ../simple-mind-map/src/utils/associativeLineControls.js
+
+
+// 创建控制点、连线节点
+function createControlNodes() {
+  let {
+    associativeLineActiveColor
+  } = this.mindMap.themeConfig;
+  // 连线
+  this.controlLine1 = this.draw.line().stroke({
+    color: associativeLineActiveColor,
+    width: 2
+  });
+  this.controlLine2 = this.draw.line().stroke({
+    color: associativeLineActiveColor,
+    width: 2
+  });
+  // 控制点
+  this.controlPoint1 = this.createOneControlNode('controlPoint1');
+  this.controlPoint2 = this.createOneControlNode('controlPoint2');
+}
+
+// 创建控制点
+function createOneControlNode(pointKey) {
+  let {
+    associativeLineActiveColor
+  } = this.mindMap.themeConfig;
+  return this.draw.circle(this.controlPointDiameter).stroke({
+    color: associativeLineActiveColor
+  }).fill({
+    color: '#fff'
+  }).click(e => {
+    e.stopPropagation();
+  }).mousedown(e => {
+    this.onControlPointMousedown(e, pointKey);
+  });
+}
+
+// 控制点的鼠标按下事件
+function onControlPointMousedown(e, pointKey) {
+  e.stopPropagation();
+  this.isControlPointMousedown = true;
+  this.mousedownControlPointKey = pointKey;
+}
+
+// 控制点的鼠标移动事件
+function onControlPointMousemove(e) {
+  if (!this.isControlPointMousedown || !this.mousedownControlPointKey || !this[this.mousedownControlPointKey]) return;
+  e.stopPropagation();
+  e.preventDefault();
+  let radius = this.controlPointDiameter / 2;
+  // 转换鼠标当前的位置
+  let {
+    x,
+    y
+  } = this.getTransformedEventPos(e);
+  this.controlPointMousemoveState.pos = {
+    x,
+    y
+  };
+  // 更新当前拖拽的控制点的位置
+  this[this.mousedownControlPointKey].x(x - radius).y(y - radius);
+  let [path, clickPath, text, node, toNode] = this.activeLine;
+  let [startPoint, endPoint] = computeNodePoints(node, toNode);
+  this.controlPointMousemoveState.startPoint = startPoint;
+  this.controlPointMousemoveState.endPoint = endPoint;
+  let targetIndex = getAssociativeLineTargetIndex(node, toNode);
+  this.controlPointMousemoveState.targetIndex = targetIndex;
+  let offsets = [];
+  let associativeLineTargetControlOffsets = node.nodeData.data.associativeLineTargetControlOffsets;
+  if (!associativeLineTargetControlOffsets) {
+    // 兼容0.4.5版本，没有associativeLineTargetControlOffsets的情况
+    offsets = getDefaultControlPointOffsets(startPoint, endPoint);
+  } else {
+    offsets = associativeLineTargetControlOffsets[targetIndex];
+  }
+  let point1 = null;
+  let point2 = null;
+  // 拖拽的是控制点1
+  if (this.mousedownControlPointKey === 'controlPoint1') {
+    point1 = {
+      x,
+      y
+    };
+    point2 = {
+      x: endPoint.x + offsets[1].x,
+      y: endPoint.y + offsets[1].y
+    };
+    // 更新控制点1的连线
+    this.controlLine1.plot(startPoint.x, startPoint.y, point1.x, point1.y);
+  } else {
+    // 拖拽的是控制点2
+    point1 = {
+      x: startPoint.x + offsets[0].x,
+      y: startPoint.y + offsets[0].y
+    };
+    point2 = {
+      x,
+      y
+    };
+    // 更新控制点2的连线
+    this.controlLine2.plot(endPoint.x, endPoint.y, point2.x, point2.y);
+  }
+  // 更新关联线
+  let pathStr = joinCubicBezierPath(startPoint, endPoint, point1, point2);
+  path.plot(pathStr);
+  clickPath.plot(pathStr);
+  this.updateTextPos(path, text);
+  this.updateTextEditBoxPos(text);
+}
+
+// 控制点的鼠标移动事件
+function onControlPointMouseup(e) {
+  if (!this.isControlPointMousedown) return;
+  e.stopPropagation();
+  e.preventDefault();
+  let {
+    pos,
+    startPoint,
+    endPoint,
+    targetIndex
+  } = this.controlPointMousemoveState;
+  let [,,, node] = this.activeLine;
+  let offsetList = [];
+  let associativeLineTargetControlOffsets = node.nodeData.data.associativeLineTargetControlOffsets;
+  if (!associativeLineTargetControlOffsets) {
+    // 兼容0.4.5版本，没有associativeLineTargetControlOffsets的情况
+    offsetList[targetIndex] = getDefaultControlPointOffsets(startPoint, endPoint);
+  } else {
+    offsetList = associativeLineTargetControlOffsets;
+  }
+  let offset1 = null;
+  let offset2 = null;
+  if (this.mousedownControlPointKey === 'controlPoint1') {
+    // 更新控制点1数据
+    offset1 = {
+      x: pos.x - startPoint.x,
+      y: pos.y - startPoint.y
+    };
+    offset2 = offsetList[targetIndex][1];
+  } else {
+    // 更新控制点2数据
+    offset1 = offsetList[targetIndex][0];
+    offset2 = {
+      x: pos.x - endPoint.x,
+      y: pos.y - endPoint.y
+    };
+  }
+  offsetList[targetIndex] = [offset1, offset2];
+  this.mindMap.execCommand('SET_NODE_DATA', node, {
+    associativeLineTargetControlOffsets: offsetList
+  });
+  // 这里要加个setTimeout0是因为draw_click事件比mouseup事件触发的晚，所以重置isControlPointMousedown需要等draw_click事件触发完以后
+  setTimeout(() => {
+    this.resetControlPoint();
+  }, 0);
+}
+
+// 复位控制点移动
+function resetControlPoint() {
+  this.isControlPointMousedown = false;
+  this.mousedownControlPointKey = '';
+  this.controlPointMousemoveState = {
+    pos: null,
+    startPoint: null,
+    endPoint: null,
+    targetIndex: ''
+  };
+}
+
+// 渲染控制点
+function renderControls(startPoint, endPoint, point1, point2) {
+  if (!this.controlLine1) {
+    this.createControlNodes();
+  }
+  let radius = this.controlPointDiameter / 2;
+  // 控制点和起终点的连线
+  this.controlLine1.plot(startPoint.x, startPoint.y, point1.x, point1.y);
+  this.controlLine2.plot(endPoint.x, endPoint.y, point2.x, point2.y);
+  // 控制点
+  this.controlPoint1.x(point1.x - radius).y(point1.y - radius);
+  this.controlPoint2.x(point2.x - radius).y(point2.y - radius);
+}
+
+// 删除控制点
+function removeControls() {
+  if (!this.controlLine1) return;
+  [this.controlLine1, this.controlLine2, this.controlPoint1, this.controlPoint2].forEach(item => {
+    item.remove();
+  });
+  this.controlLine1 = null;
+  this.controlLine2 = null;
+  this.controlPoint1 = null;
+  this.controlPoint2 = null;
+}
+
+// 隐藏控制点
+function hideControls() {
+  if (!this.controlLine1) return;
+  [this.controlLine1, this.controlLine2, this.controlPoint1, this.controlPoint2].forEach(item => {
+    item.hide();
+  });
+}
+
+// 显示控制点
+function showControls() {
+  if (!this.controlLine1) return;
+  [this.controlLine1, this.controlLine2, this.controlPoint1, this.controlPoint2].forEach(item => {
+    item.show();
+  });
+}
+/* harmony default export */ var associativeLineControls = ({
+  createControlNodes,
+  createOneControlNode,
+  onControlPointMousedown,
+  onControlPointMousemove,
+  onControlPointMouseup,
+  resetControlPoint,
+  renderControls,
+  removeControls,
+  hideControls,
+  showControls
+});
+// CONCATENATED MODULE: ../simple-mind-map/src/utils/associativeLineText.js
+
+
+
+// 创建文字节点
+function createText(data) {
+  let g = this.draw.group();
+  const setActive = () => {
+    if (!this.activeLine || this.activeLine[3] !== data.node || this.activeLine[4] !== data.toNode) {
+      this.setActiveLine({
+        ...data,
+        text: g
+      });
+    }
+  };
+  g.click(e => {
+    e.stopPropagation();
+    setActive();
+  });
+  g.on('dblclick', e => {
+    e.stopPropagation();
+    setActive();
+    if (!this.activeLine) return;
+    this.showEditTextBox(g);
+  });
+  return g;
+}
+
+//  显示文本编辑框
+function showEditTextBox(g) {
+  this.mindMap.emit('before_show_text_edit');
+  // 注册回车快捷键
+  this.mindMap.keyCommand.addShortcut('Enter', () => {
+    this.hideEditTextBox();
+  });
+  if (!this.textEditNode) {
+    this.textEditNode = document.createElement('div');
+    this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);padding: 3px 5px;margin-left: -5px;margin-top: -3px;outline: none; word-break: break-all;`;
+    this.textEditNode.setAttribute('contenteditable', true);
+    this.textEditNode.addEventListener('keyup', e => {
+      e.stopPropagation();
+    });
+    this.textEditNode.addEventListener('click', e => {
+      e.stopPropagation();
+    });
+    document.body.appendChild(this.textEditNode);
+  }
+  let {
+    associativeLineTextFontSize,
+    associativeLineTextFontFamily,
+    associativeLineTextLineHeight
+  } = this.mindMap.themeConfig;
+  let scale = this.mindMap.view.scale;
+  let [,,, node, toNode] = this.activeLine;
+  let textLines = (this.getText(node, toNode) || this.mindMap.opt.defaultAssociativeLineText).split(/\n/gim);
+  this.textEditNode.style.fontFamily = associativeLineTextFontFamily;
+  this.textEditNode.style.fontSize = associativeLineTextFontSize * scale + 'px';
+  this.textEditNode.style.lineHeight = textLines.length > 1 ? associativeLineTextLineHeight : 'normal';
+  this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex;
+  this.textEditNode.innerHTML = textLines.join('<br>');
+  this.textEditNode.style.display = 'block';
+  this.updateTextEditBoxPos(g);
+  this.showTextEdit = true;
+}
+
+// 处理画布缩放
+function onScale() {
+  this.hideEditTextBox();
+}
+
+// 更新文本编辑框位置
+function updateTextEditBoxPos(g) {
+  let rect = g.node.getBoundingClientRect();
+  this.textEditNode.style.minWidth = rect.width + 10 + 'px';
+  this.textEditNode.style.minHeight = rect.height + 6 + 'px';
+  this.textEditNode.style.left = rect.left + 'px';
+  this.textEditNode.style.top = rect.top + 'px';
+}
+
+//  隐藏文本编辑框
+function hideEditTextBox() {
+  if (!this.showTextEdit) {
+    return;
+  }
+  let [path,, text, node, toNode] = this.activeLine;
+  let str = getStrWithBrFromHtml(this.textEditNode.innerHTML);
+  this.mindMap.execCommand('SET_NODE_DATA', node, {
+    associativeLineText: {
+      ...(node.nodeData.data.associativeLineText || {}),
+      [toNode.nodeData.data.id]: str
+    }
+  });
+  this.textEditNode.style.display = 'none';
+  this.textEditNode.innerHTML = '';
+  this.showTextEdit = false;
+  this.renderText(str, path, text);
+  this.mindMap.emit('hide_text_edit');
+}
+
+// 获取某根关联线的文字
+function associativeLineText_getText(node, toNode) {
+  let obj = node.nodeData.data.associativeLineText;
+  if (!obj) {
+    return '';
+  }
+  return obj[toNode.nodeData.data.id] || '';
+}
+
+// 渲染关联线文字
+function renderText(str, path, text) {
+  if (!str) return;
+  let {
+    associativeLineTextFontSize,
+    associativeLineTextLineHeight
+  } = this.mindMap.themeConfig;
+  text.clear();
+  let textArr = str.split(/\n/gim);
+  textArr.forEach((item, index) => {
+    let node = new Text().text(item);
+    node.y(associativeLineTextFontSize * associativeLineTextLineHeight * index);
+    this.styleText(node);
+    text.add(node);
+  });
+  updateTextPos(path, text);
+}
+
+// 给文本设置样式
+function styleText(node) {
+  let {
+    associativeLineTextColor,
+    associativeLineTextFontSize,
+    associativeLineTextFontFamily
+  } = this.mindMap.themeConfig;
+  node.fill({
+    color: associativeLineTextColor
+  }).css({
+    'font-family': associativeLineTextFontFamily,
+    'font-size': associativeLineTextFontSize
+  });
+}
+
+// 更新关联线文字位置
+function updateTextPos(path, text) {
+  let pathLength = path.length();
+  let centerPoint = path.pointAt(pathLength / 2);
+  let {
+    width: textWidth,
+    height: textHeight
+  } = text.bbox();
+  text.x(centerPoint.x - textWidth / 2);
+  text.y(centerPoint.y - textHeight / 2);
+}
+/* harmony default export */ var utils_associativeLineText = ({
+  getText: associativeLineText_getText,
+  createText,
+  styleText,
+  onScale,
+  showEditTextBox,
+  hideEditTextBox,
+  updateTextEditBoxPos,
+  renderText,
+  updateTextPos
+});
 // CONCATENATED MODULE: ../simple-mind-map/src/AssociativeLine.js
+
+
 
 
 
@@ -50993,6 +51407,14 @@ class AssociativeLine_AssociativeLine {
     };
     // 节流一下，不然很卡
     this.checkOverlapNode = throttle(this.checkOverlapNode, 100, this);
+    // 控制点相关方法
+    Object.keys(associativeLineControls).forEach(item => {
+      this[item] = associativeLineControls[item].bind(this);
+    });
+    // 关联线文字相关方法
+    Object.keys(utils_associativeLineText).forEach(item => {
+      this[item] = utils_associativeLineText[item].bind(this);
+    });
     this.bindEvent();
   }
 
@@ -51033,6 +51455,8 @@ class AssociativeLine_AssociativeLine {
     window.addEventListener('mouseup', e => {
       this.onControlPointMouseup(e);
     });
+    // 缩放事件
+    this.mindMap.on('scale', this.onScale);
   }
 
   // 创建箭头
@@ -51114,27 +51538,69 @@ class AssociativeLine_AssociativeLine {
       color: 'none'
     });
     clickPath.plot(pathStr);
+    // 文字
+    let text = this.createText({
+      path,
+      clickPath,
+      node,
+      toNode,
+      startPoint,
+      endPoint,
+      controlPoints
+    });
     // 点击事件
     clickPath.click(e => {
       e.stopPropagation();
-      // 如果当前存在激活节点，那么取消激活节点
-      if (this.mindMap.renderer.activeNodeList.length > 0) {
-        this.clearActiveNodes();
-      } else {
-        // 否则清除当前的关联线的激活状态，如果有的话
-        this.clearActiveLine();
-        // 保存当前激活的关联线信息
-        this.activeLine = [path, clickPath, node, toNode];
-        // 让不可见的点击线显示
-        clickPath.stroke({
-          color: associativeLineActiveColor
-        });
-        // 渲染控制点和连线
-        this.renderControls(startPoint, endPoint, controlPoints[0], controlPoints[1]);
-        this.mindMap.emit('associative_line_click', path, clickPath, node, toNode);
-      }
+      this.setActiveLine({
+        path,
+        clickPath,
+        text,
+        node,
+        toNode,
+        startPoint,
+        endPoint,
+        controlPoints
+      });
     });
-    this.lineList.push([path, clickPath, node, toNode]);
+    // 渲染关联线文字
+    this.renderText(this.getText(node, toNode), path, text);
+    this.lineList.push([path, clickPath, text, node, toNode]);
+  }
+
+  // 激活某根关联线
+  setActiveLine({
+    path,
+    clickPath,
+    text,
+    node,
+    toNode,
+    startPoint,
+    endPoint,
+    controlPoints
+  }) {
+    let {
+      associativeLineActiveColor
+    } = this.mindMap.themeConfig;
+    // 如果当前存在激活节点，那么取消激活节点
+    if (this.mindMap.renderer.activeNodeList.length > 0) {
+      this.clearActiveNodes();
+    } else {
+      // 否则清除当前的关联线的激活状态，如果有的话
+      this.clearActiveLine();
+      // 保存当前激活的关联线信息
+      this.activeLine = [path, clickPath, text, node, toNode];
+      // 让不可见的点击线显示
+      clickPath.stroke({
+        color: associativeLineActiveColor
+      });
+      // 如果没有输入过关联线文字，那么显示默认文字
+      if (!this.getText(node, toNode)) {
+        this.renderText(this.mindMap.opt.defaultAssociativeLineText, path, text);
+      }
+      // 渲染控制点和连线
+      this.renderControls(startPoint, endPoint, controlPoints[0], controlPoints[1]);
+      this.mindMap.emit('associative_line_click', path, clickPath, node, toNode);
+    }
   }
 
   // 移除所有连接线
@@ -51142,6 +51608,7 @@ class AssociativeLine_AssociativeLine {
     this.lineList.forEach(line => {
       line[0].remove();
       line[1].remove();
+      line[2].remove();
     });
     this.lineList = [];
   }
@@ -51186,7 +51653,8 @@ class AssociativeLine_AssociativeLine {
       y
     } = this.getTransformedEventPos(e);
     let startPoint = getNodePoint(this.creatingStartNode);
-    let pathStr = cubicBezierPath(startPoint.x, startPoint.y, x, y);
+    let offsetX = x > startPoint.x ? -10 : 10;
+    let pathStr = cubicBezierPath(startPoint.x, startPoint.y, x + offsetX, y);
     this.creatingLine.plot(pathStr);
     this.checkOverlapNode(x, y);
   }
@@ -51285,20 +51753,34 @@ class AssociativeLine_AssociativeLine {
   // 删除连接线
   removeLine() {
     if (!this.activeLine) return;
-    let [,, node, toNode] = this.activeLine;
+    let [,,, node, toNode] = this.activeLine;
     this.removeControls();
     let {
       associativeLineTargets,
-      associativeLineTargetControlOffsets
+      associativeLineTargetControlOffsets,
+      associativeLineText
     } = node.nodeData.data;
     let targetIndex = getAssociativeLineTargetIndex(node, toNode);
+    // 更新关联线文本数据
+    let newAssociativeLineText = {};
+    if (associativeLineText) {
+      Object.keys(associativeLineText).forEach(item => {
+        if (item !== toNode.nodeData.data.id) {
+          newAssociativeLineText[item] = associativeLineText[item];
+        }
+      });
+    }
     this.mindMap.execCommand('SET_NODE_DATA', node, {
+      // 目标
       associativeLineTargets: associativeLineTargets.filter((_, index) => {
         return index !== targetIndex;
       }),
+      // 偏移量
       associativeLineTargetControlOffsets: associativeLineTargetControlOffsets ? associativeLineTargetControlOffsets.filter((_, index) => {
         return index !== targetIndex;
-      }) : []
+      }) : [],
+      // 文本
+      associativeLineText: newAssociativeLineText
     });
   }
 
@@ -51312,9 +51794,16 @@ class AssociativeLine_AssociativeLine {
   // 清除激活的线
   clearActiveLine() {
     if (this.activeLine) {
-      this.activeLine[1].stroke({
+      let [, clickPath, text, node, toNode] = this.activeLine;
+      clickPath.stroke({
         color: 'transparent'
       });
+      // 隐藏关联线文本编辑框
+      this.hideEditTextBox();
+      // 如果当前关联线没有文字，则清空文字节点
+      if (!this.getText(node, toNode)) {
+        text.clear();
+      }
       this.activeLine = null;
       this.removeControls();
     }
@@ -51327,6 +51816,7 @@ class AssociativeLine_AssociativeLine {
     this.lineList.forEach(line => {
       line[0].hide();
       line[1].hide();
+      line[2].hide();
     });
     this.hideControls();
   }
@@ -51337,216 +51827,10 @@ class AssociativeLine_AssociativeLine {
     this.lineList.forEach(line => {
       line[0].show();
       line[1].show();
+      line[2].show();
     });
     this.showControls();
     this.isNodeDragging = false;
-  }
-
-  // 创建控制点、连线节点
-  createControlNodes() {
-    let {
-      associativeLineActiveColor
-    } = this.mindMap.themeConfig;
-    // 连线
-    this.controlLine1 = this.draw.line().stroke({
-      color: associativeLineActiveColor,
-      width: 2
-    });
-    this.controlLine2 = this.draw.line().stroke({
-      color: associativeLineActiveColor,
-      width: 2
-    });
-    // 控制点
-    this.controlPoint1 = this.createOneControlNode('controlPoint1');
-    this.controlPoint2 = this.createOneControlNode('controlPoint2');
-  }
-
-  // 创建控制点
-  createOneControlNode(pointKey) {
-    let {
-      associativeLineActiveColor
-    } = this.mindMap.themeConfig;
-    return this.draw.circle(this.controlPointDiameter).stroke({
-      color: associativeLineActiveColor
-    }).fill({
-      color: '#fff'
-    }).click(e => {
-      e.stopPropagation();
-    }).mousedown(e => {
-      this.onControlPointMousedown(e, pointKey);
-    });
-  }
-
-  // 控制点的鼠标按下事件
-  onControlPointMousedown(e, pointKey) {
-    e.stopPropagation();
-    this.isControlPointMousedown = true;
-    this.mousedownControlPointKey = pointKey;
-  }
-
-  // 控制点的鼠标移动事件
-  onControlPointMousemove(e) {
-    if (!this.isControlPointMousedown || !this.mousedownControlPointKey || !this[this.mousedownControlPointKey]) return;
-    e.stopPropagation();
-    e.preventDefault();
-    let radius = this.controlPointDiameter / 2;
-    // 转换鼠标当前的位置
-    let {
-      x,
-      y
-    } = this.getTransformedEventPos(e);
-    this.controlPointMousemoveState.pos = {
-      x,
-      y
-    };
-    // 更新当前拖拽的控制点的位置
-    this[this.mousedownControlPointKey].x(x - radius).y(y - radius);
-    let [path, clickPath, node, toNode] = this.activeLine;
-    let [startPoint, endPoint] = computeNodePoints(node, toNode);
-    this.controlPointMousemoveState.startPoint = startPoint;
-    this.controlPointMousemoveState.endPoint = endPoint;
-    let targetIndex = getAssociativeLineTargetIndex(node, toNode);
-    this.controlPointMousemoveState.targetIndex = targetIndex;
-    let offsets = [];
-    let associativeLineTargetControlOffsets = node.nodeData.data.associativeLineTargetControlOffsets;
-    if (!associativeLineTargetControlOffsets) {
-      // 兼容0.4.5版本，没有associativeLineTargetControlOffsets的情况
-      offsets = getDefaultControlPointOffsets(startPoint, endPoint);
-    } else {
-      offsets = associativeLineTargetControlOffsets[targetIndex];
-    }
-    let point1 = null;
-    let point2 = null;
-    // 拖拽的是控制点1
-    if (this.mousedownControlPointKey === 'controlPoint1') {
-      point1 = {
-        x,
-        y
-      };
-      point2 = {
-        x: endPoint.x + offsets[1].x,
-        y: endPoint.y + offsets[1].y
-      };
-      // 更新控制点1的连线
-      this.controlLine1.plot(startPoint.x, startPoint.y, point1.x, point1.y);
-    } else {
-      // 拖拽的是控制点2
-      point1 = {
-        x: startPoint.x + offsets[0].x,
-        y: startPoint.y + offsets[0].y
-      };
-      point2 = {
-        x,
-        y
-      };
-      // 更新控制点2的连线
-      this.controlLine2.plot(endPoint.x, endPoint.y, point2.x, point2.y);
-    }
-    // 更新关联线
-    let pathStr = joinCubicBezierPath(startPoint, endPoint, point1, point2);
-    path.plot(pathStr);
-    clickPath.plot(pathStr);
-  }
-
-  // 控制点的鼠标移动事件
-  onControlPointMouseup(e) {
-    if (!this.isControlPointMousedown) return;
-    e.stopPropagation();
-    e.preventDefault();
-    let {
-      pos,
-      startPoint,
-      endPoint,
-      targetIndex
-    } = this.controlPointMousemoveState;
-    let [,, node] = this.activeLine;
-    let offsetList = [];
-    let associativeLineTargetControlOffsets = node.nodeData.data.associativeLineTargetControlOffsets;
-    if (!associativeLineTargetControlOffsets) {
-      // 兼容0.4.5版本，没有associativeLineTargetControlOffsets的情况
-      offsetList[targetIndex] = getDefaultControlPointOffsets(startPoint, endPoint);
-    } else {
-      offsetList = associativeLineTargetControlOffsets;
-    }
-    let offset1 = null;
-    let offset2 = null;
-    if (this.mousedownControlPointKey === 'controlPoint1') {
-      // 更新控制点1数据
-      offset1 = {
-        x: pos.x - startPoint.x,
-        y: pos.y - startPoint.y
-      };
-      offset2 = offsetList[targetIndex][1];
-    } else {
-      // 更新控制点2数据
-      offset1 = offsetList[targetIndex][0];
-      offset2 = {
-        x: pos.x - endPoint.x,
-        y: pos.y - endPoint.y
-      };
-    }
-    offsetList[targetIndex] = [offset1, offset2];
-    this.mindMap.execCommand('SET_NODE_DATA', node, {
-      associativeLineTargetControlOffsets: offsetList
-    });
-    // 这里要加个setTimeout0是因为draw_click事件比mouseup事件触发的晚，所以重置isControlPointMousedown需要等draw_click事件触发完以后
-    setTimeout(() => {
-      this.resetControlPoint();
-    }, 0);
-  }
-
-  // 复位控制点移动
-  resetControlPoint() {
-    this.isControlPointMousedown = false;
-    this.mousedownControlPointKey = '';
-    this.controlPointMousemoveState = {
-      pos: null,
-      startPoint: null,
-      endPoint: null,
-      targetIndex: ''
-    };
-  }
-
-  // 渲染控制点
-  renderControls(startPoint, endPoint, point1, point2) {
-    if (!this.controlLine1) {
-      this.createControlNodes();
-    }
-    let radius = this.controlPointDiameter / 2;
-    // 控制点和起终点的连线
-    this.controlLine1.plot(startPoint.x, startPoint.y, point1.x, point1.y);
-    this.controlLine2.plot(endPoint.x, endPoint.y, point2.x, point2.y);
-    // 控制点
-    this.controlPoint1.x(point1.x - radius).y(point1.y - radius);
-    this.controlPoint2.x(point2.x - radius).y(point2.y - radius);
-  }
-
-  // 删除控制点
-  removeControls() {
-    if (!this.controlLine1) return;
-    [this.controlLine1, this.controlLine2, this.controlPoint1, this.controlPoint2].forEach(item => {
-      item.remove();
-    });
-    this.controlLine1 = null;
-    this.controlLine2 = null;
-    this.controlPoint1 = null;
-    this.controlPoint2 = null;
-  }
-
-  // 隐藏控制点
-  hideControls() {
-    if (!this.controlLine1) return;
-    [this.controlLine1, this.controlLine2, this.controlPoint1, this.controlPoint2].forEach(item => {
-      item.hide();
-    });
-  }
-
-  // 显示控制点
-  showControls() {
-    if (!this.controlLine1) return;
-    [this.controlLine1, this.controlLine2, this.controlPoint1, this.controlPoint2].forEach(item => {
-      item.show();
-    });
   }
 }
 AssociativeLine_AssociativeLine.instanceName = 'associativeLine';
