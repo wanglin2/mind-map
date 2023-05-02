@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.5.11</h2>
+<p>New: Supports associative text editing.</p>
+<p>optimization: Optimizing theme configuration updates, changing configurations that do not involve node size does not trigger node recalculation.</p>
 <h2>0.5.10</h2>
 <p>New: Optimize node reuse logic using LRU caching algorithm.</p>
 <h2>0.5.10-fix.1</h2>

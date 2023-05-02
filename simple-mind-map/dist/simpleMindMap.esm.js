@@ -17164,7 +17164,7 @@ var init_index_es = __esm({
           document: document4,
           parent
         } = this;
-        var renderText = this.getText();
+        var renderText2 = this.getText();
         var customFont = parent.getStyle("font-family").getDefinition();
         if (customFont) {
           var {
@@ -17174,7 +17174,7 @@ var init_index_es = __esm({
           var fontSize = parent.getStyle("font-size").getNumber(ctxFont.fontSize);
           var fontStyle = parent.getStyle("font-style").getString(ctxFont.fontStyle);
           var scale = fontSize / unitsPerEm;
-          var text3 = customFont.isRTL ? renderText.split("").reverse().join("") : renderText;
+          var text3 = customFont.isRTL ? renderText2.split("").reverse().join("") : renderText2;
           var dx2 = toNumbers(parent.getAttribute("dx").getString());
           var len = text3.length;
           for (var i3 = 0; i3 < len; i3++) {
@@ -17205,10 +17205,10 @@ var init_index_es = __esm({
           y: y4
         } = this;
         if (ctx.fillStyle) {
-          ctx.fillText(renderText, x3, y4);
+          ctx.fillText(renderText2, x3, y4);
         }
         if (ctx.strokeStyle) {
-          ctx.strokeText(renderText, x3, y4);
+          ctx.strokeText(renderText2, x3, y4);
         }
       }
       applyAnchoring() {
@@ -17344,8 +17344,8 @@ var init_index_es = __esm({
         if (~measureCache) {
           return measureCache;
         }
-        var renderText = this.getText();
-        var measure = this.measureTargetText(ctx, renderText);
+        var renderText2 = this.getText();
+        var measure = this.measureTargetText(ctx, renderText2);
         this.measureCache = measure;
         return measure;
       }
@@ -18463,9 +18463,9 @@ var init_index_es = __esm({
         if (this.glyphInfo) {
           return;
         }
-        var renderText = this.getText();
-        var chars = renderText.split("");
-        var spacesNumber = renderText.split(" ").length - 1;
+        var renderText2 = this.getText();
+        var chars = renderText2.split("");
+        var spacesNumber = renderText2.split(" ").length - 1;
         var dx2 = this.parent.getAttribute("dx").split().map((_3) => _3.getPixels("x"));
         var dy2 = this.parent.getAttribute("dy").getPixels("y");
         var anchor = this.parent.getStyle("text-anchor").getString("start");
@@ -18480,7 +18480,7 @@ var init_index_es = __esm({
           }
         }
         var letterSpacingCache = [];
-        var textLen = renderText.length;
+        var textLen = renderText2.length;
         this.letterSpacingCache = letterSpacingCache;
         for (var i3 = 0; i3 < textLen; i3++) {
           letterSpacingCache.push(typeof dx2[i3] !== "undefined" ? dx2[i3] : letterSpacing);
@@ -21023,7 +21023,7 @@ var require_quill = __commonJS({
                 }
               }, {
                 key: "getText",
-                value: function getText2() {
+                value: function getText3() {
                   var index3 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : 0;
                   var length2 = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : this.getLength() - index3;
                   var _overload9 = overload(index3, length2);
@@ -22337,7 +22337,7 @@ var require_quill = __commonJS({
                 }
               }, {
                 key: "getText",
-                value: function getText2(index3, length2) {
+                value: function getText3(index3, length2) {
                   return this.getContents(index3, length2).filter(function(op) {
                     return typeof op.insert === "string";
                   }).map(function(op) {
@@ -47030,6 +47030,14 @@ var default_default = {
   associativeLineActiveWidth: 8,
   // 关联线激活状态的颜色
   associativeLineActiveColor: "rgba(2, 167, 240, 1)",
+  // 关联线文字颜色
+  associativeLineTextColor: "rgb(51, 51, 51)",
+  // 关联线文字大小
+  associativeLineTextFontSize: 14,
+  // 关联线文字行高
+  associativeLineTextLineHeight: 1.2,
+  // 关联线文字字体
+  associativeLineTextFontFamily: "\u5FAE\u8F6F\u96C5\u9ED1, Microsoft YaHei",
   // 背景颜色
   backgroundColor: "#fafafa",
   // 背景图片
@@ -47132,6 +47140,38 @@ var default_default = {
       borderDasharray: "none"
     }
   }
+};
+var nodeSizeIndependenceList = [
+  "lineWidth",
+  "lineColor",
+  "lineDasharray",
+  "lineStyle",
+  "generalizationLineWidth",
+  "generalizationLineColor",
+  "associativeLineWidth",
+  "associativeLineColor",
+  "associativeLineActiveWidth",
+  "associativeLineActiveColor",
+  "associativeLineTextColor",
+  "associativeLineTextFontSize",
+  "associativeLineTextLineHeight",
+  "associativeLineTextFontFamily",
+  "backgroundColor",
+  "backgroundImage",
+  "backgroundRepeat",
+  "backgroundPosition",
+  "backgroundSize"
+];
+var checkIsNodeSizeIndependenceConfig = (config) => {
+  let keys = Object.keys(config);
+  for (let i3 = 0; i3 < keys.length; i3++) {
+    if (!nodeSizeIndependenceList.find((item) => {
+      return item === keys[i3];
+    })) {
+      return false;
+    }
+  }
+  return true;
 };
 var lineStyleProps = ["lineColor", "lineDasharray", "lineWidth"];
 
@@ -49763,7 +49803,7 @@ var KeyCommand = class {
       if (this.mindMap.richText && this.mindMap.richText.showTextEdit) {
         return;
       }
-      if (this.mindMap.renderer.textEdit.showTextEdit) {
+      if (this.mindMap.renderer.textEdit.showTextEdit || this.mindMap.associativeLine && this.mindMap.associativeLine.showTextEdit) {
         return;
       }
       this.isInSvg = false;
@@ -50152,7 +50192,9 @@ var defaultOpt = {
     // }
   ],
   // 节点最大缓存数量
-  maxNodeCacheCount: 1e3
+  maxNodeCacheCount: 1e3,
+  // 关联线默认文字
+  defaultAssociativeLineText: "\u5173\u8054"
 };
 var MindMap2 = class {
   //  构造函数
@@ -50253,7 +50295,8 @@ var MindMap2 = class {
   //  设置主题配置
   setThemeConfig(config) {
     this.opt.themeConfig = config;
-    this.render(null, CONSTANTS.CHANGE_THEME);
+    let res = checkIsNodeSizeIndependenceConfig(config);
+    this.render(null, res ? "" : CONSTANTS.CHANGE_THEME);
   }
   //  获取自定义主题配置
   getCustomThemeConfig() {
@@ -60933,6 +60976,333 @@ var getDefaultControlPointOffsets = (startPoint, endPoint) => {
   ];
 };
 
+// ../simple-mind-map/src/utils/associativeLineControls.js
+function createControlNodes() {
+  let { associativeLineActiveColor } = this.mindMap.themeConfig;
+  this.controlLine1 = this.draw.line().stroke({ color: associativeLineActiveColor, width: 2 });
+  this.controlLine2 = this.draw.line().stroke({ color: associativeLineActiveColor, width: 2 });
+  this.controlPoint1 = this.createOneControlNode("controlPoint1");
+  this.controlPoint2 = this.createOneControlNode("controlPoint2");
+}
+function createOneControlNode(pointKey) {
+  let { associativeLineActiveColor } = this.mindMap.themeConfig;
+  return this.draw.circle(this.controlPointDiameter).stroke({ color: associativeLineActiveColor }).fill({ color: "#fff" }).click((e2) => {
+    e2.stopPropagation();
+  }).mousedown((e2) => {
+    this.onControlPointMousedown(e2, pointKey);
+  });
+}
+function onControlPointMousedown(e2, pointKey) {
+  e2.stopPropagation();
+  this.isControlPointMousedown = true;
+  this.mousedownControlPointKey = pointKey;
+}
+function onControlPointMousemove(e2) {
+  if (!this.isControlPointMousedown || !this.mousedownControlPointKey || !this[this.mousedownControlPointKey])
+    return;
+  e2.stopPropagation();
+  e2.preventDefault();
+  let radius = this.controlPointDiameter / 2;
+  let { x: x3, y: y4 } = this.getTransformedEventPos(e2);
+  this.controlPointMousemoveState.pos = {
+    x: x3,
+    y: y4
+  };
+  this[this.mousedownControlPointKey].x(x3 - radius).y(y4 - radius);
+  let [path, clickPath, text3, node3, toNode] = this.activeLine;
+  let [startPoint, endPoint] = computeNodePoints(node3, toNode);
+  this.controlPointMousemoveState.startPoint = startPoint;
+  this.controlPointMousemoveState.endPoint = endPoint;
+  let targetIndex = getAssociativeLineTargetIndex(node3, toNode);
+  this.controlPointMousemoveState.targetIndex = targetIndex;
+  let offsets = [];
+  let associativeLineTargetControlOffsets = node3.nodeData.data.associativeLineTargetControlOffsets;
+  if (!associativeLineTargetControlOffsets) {
+    offsets = getDefaultControlPointOffsets(startPoint, endPoint);
+  } else {
+    offsets = associativeLineTargetControlOffsets[targetIndex];
+  }
+  let point1 = null;
+  let point22 = null;
+  if (this.mousedownControlPointKey === "controlPoint1") {
+    point1 = {
+      x: x3,
+      y: y4
+    };
+    point22 = {
+      x: endPoint.x + offsets[1].x,
+      y: endPoint.y + offsets[1].y
+    };
+    this.controlLine1.plot(startPoint.x, startPoint.y, point1.x, point1.y);
+  } else {
+    point1 = {
+      x: startPoint.x + offsets[0].x,
+      y: startPoint.y + offsets[0].y
+    };
+    point22 = {
+      x: x3,
+      y: y4
+    };
+    this.controlLine2.plot(endPoint.x, endPoint.y, point22.x, point22.y);
+  }
+  let pathStr = joinCubicBezierPath(startPoint, endPoint, point1, point22);
+  path.plot(pathStr);
+  clickPath.plot(pathStr);
+  this.updateTextPos(path, text3);
+  this.updateTextEditBoxPos(text3);
+}
+function onControlPointMouseup(e2) {
+  if (!this.isControlPointMousedown)
+    return;
+  e2.stopPropagation();
+  e2.preventDefault();
+  let { pos, startPoint, endPoint, targetIndex } = this.controlPointMousemoveState;
+  let [, , , node3] = this.activeLine;
+  let offsetList = [];
+  let associativeLineTargetControlOffsets = node3.nodeData.data.associativeLineTargetControlOffsets;
+  if (!associativeLineTargetControlOffsets) {
+    offsetList[targetIndex] = getDefaultControlPointOffsets(
+      startPoint,
+      endPoint
+    );
+  } else {
+    offsetList = associativeLineTargetControlOffsets;
+  }
+  let offset1 = null;
+  let offset2 = null;
+  if (this.mousedownControlPointKey === "controlPoint1") {
+    offset1 = {
+      x: pos.x - startPoint.x,
+      y: pos.y - startPoint.y
+    };
+    offset2 = offsetList[targetIndex][1];
+  } else {
+    offset1 = offsetList[targetIndex][0];
+    offset2 = {
+      x: pos.x - endPoint.x,
+      y: pos.y - endPoint.y
+    };
+  }
+  offsetList[targetIndex] = [offset1, offset2];
+  this.mindMap.execCommand("SET_NODE_DATA", node3, {
+    associativeLineTargetControlOffsets: offsetList
+  });
+  setTimeout(() => {
+    this.resetControlPoint();
+  }, 0);
+}
+function resetControlPoint() {
+  this.isControlPointMousedown = false;
+  this.mousedownControlPointKey = "";
+  this.controlPointMousemoveState = {
+    pos: null,
+    startPoint: null,
+    endPoint: null,
+    targetIndex: ""
+  };
+}
+function renderControls(startPoint, endPoint, point1, point22) {
+  if (!this.controlLine1) {
+    this.createControlNodes();
+  }
+  let radius = this.controlPointDiameter / 2;
+  this.controlLine1.plot(startPoint.x, startPoint.y, point1.x, point1.y);
+  this.controlLine2.plot(endPoint.x, endPoint.y, point22.x, point22.y);
+  this.controlPoint1.x(point1.x - radius).y(point1.y - radius);
+  this.controlPoint2.x(point22.x - radius).y(point22.y - radius);
+}
+function removeControls() {
+  if (!this.controlLine1)
+    return;
+  [
+    this.controlLine1,
+    this.controlLine2,
+    this.controlPoint1,
+    this.controlPoint2
+  ].forEach((item) => {
+    item.remove();
+  });
+  this.controlLine1 = null;
+  this.controlLine2 = null;
+  this.controlPoint1 = null;
+  this.controlPoint2 = null;
+}
+function hideControls() {
+  if (!this.controlLine1)
+    return;
+  [
+    this.controlLine1,
+    this.controlLine2,
+    this.controlPoint1,
+    this.controlPoint2
+  ].forEach((item) => {
+    item.hide();
+  });
+}
+function showControls() {
+  if (!this.controlLine1)
+    return;
+  [
+    this.controlLine1,
+    this.controlLine2,
+    this.controlPoint1,
+    this.controlPoint2
+  ].forEach((item) => {
+    item.show();
+  });
+}
+var associativeLineControls_default = {
+  createControlNodes,
+  createOneControlNode,
+  onControlPointMousedown,
+  onControlPointMousemove,
+  onControlPointMouseup,
+  resetControlPoint,
+  renderControls,
+  removeControls,
+  hideControls,
+  showControls
+};
+
+// ../simple-mind-map/src/utils/associativeLineText.js
+function createText(data2) {
+  let g2 = this.draw.group();
+  const setActive = () => {
+    if (!this.activeLine || this.activeLine[3] !== data2.node || this.activeLine[4] !== data2.toNode) {
+      this.setActiveLine({
+        ...data2,
+        text: g2
+      });
+    }
+  };
+  g2.click((e2) => {
+    e2.stopPropagation();
+    setActive();
+  });
+  g2.on("dblclick", (e2) => {
+    e2.stopPropagation();
+    setActive();
+    if (!this.activeLine)
+      return;
+    this.showEditTextBox(g2);
+  });
+  return g2;
+}
+function showEditTextBox(g2) {
+  this.mindMap.emit("before_show_text_edit");
+  this.mindMap.keyCommand.addShortcut("Enter", () => {
+    this.hideEditTextBox();
+  });
+  if (!this.textEditNode) {
+    this.textEditNode = document.createElement("div");
+    this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);padding: 3px 5px;margin-left: -5px;margin-top: -3px;outline: none; word-break: break-all;`;
+    this.textEditNode.setAttribute("contenteditable", true);
+    this.textEditNode.addEventListener("keyup", (e2) => {
+      e2.stopPropagation();
+    });
+    this.textEditNode.addEventListener("click", (e2) => {
+      e2.stopPropagation();
+    });
+    document.body.appendChild(this.textEditNode);
+  }
+  let {
+    associativeLineTextFontSize,
+    associativeLineTextFontFamily,
+    associativeLineTextLineHeight
+  } = this.mindMap.themeConfig;
+  let scale = this.mindMap.view.scale;
+  let [, , , node3, toNode] = this.activeLine;
+  let textLines = (this.getText(node3, toNode) || this.mindMap.opt.defaultAssociativeLineText).split(/\n/gim);
+  this.textEditNode.style.fontFamily = associativeLineTextFontFamily;
+  this.textEditNode.style.fontSize = associativeLineTextFontSize * scale + "px";
+  this.textEditNode.style.lineHeight = textLines.length > 1 ? associativeLineTextLineHeight : "normal";
+  this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex;
+  this.textEditNode.innerHTML = textLines.join("<br>");
+  this.textEditNode.style.display = "block";
+  this.updateTextEditBoxPos(g2);
+  this.showTextEdit = true;
+}
+function onScale() {
+  this.hideEditTextBox();
+}
+function updateTextEditBoxPos(g2) {
+  let rect = g2.node.getBoundingClientRect();
+  this.textEditNode.style.minWidth = rect.width + 10 + "px";
+  this.textEditNode.style.minHeight = rect.height + 6 + "px";
+  this.textEditNode.style.left = rect.left + "px";
+  this.textEditNode.style.top = rect.top + "px";
+}
+function hideEditTextBox() {
+  if (!this.showTextEdit) {
+    return;
+  }
+  let [path, , text3, node3, toNode] = this.activeLine;
+  let str = getStrWithBrFromHtml(this.textEditNode.innerHTML);
+  this.mindMap.execCommand("SET_NODE_DATA", node3, {
+    associativeLineText: {
+      ...node3.nodeData.data.associativeLineText || {},
+      [toNode.nodeData.data.id]: str
+    }
+  });
+  this.textEditNode.style.display = "none";
+  this.textEditNode.innerHTML = "";
+  this.showTextEdit = false;
+  this.renderText(str, path, text3);
+  this.mindMap.emit("hide_text_edit");
+}
+function getText2(node3, toNode) {
+  let obj = node3.nodeData.data.associativeLineText;
+  if (!obj) {
+    return "";
+  }
+  return obj[toNode.nodeData.data.id] || "";
+}
+function renderText(str, path, text3) {
+  if (!str)
+    return;
+  let { associativeLineTextFontSize, associativeLineTextLineHeight } = this.mindMap.themeConfig;
+  text3.clear();
+  let textArr = str.split(/\n/gim);
+  textArr.forEach((item, index3) => {
+    let node3 = new Text2().text(item);
+    node3.y(associativeLineTextFontSize * associativeLineTextLineHeight * index3);
+    this.styleText(node3);
+    text3.add(node3);
+  });
+  updateTextPos(path, text3);
+}
+function styleText(node3) {
+  let {
+    associativeLineTextColor,
+    associativeLineTextFontSize,
+    associativeLineTextFontFamily
+  } = this.mindMap.themeConfig;
+  node3.fill({
+    color: associativeLineTextColor
+  }).css({
+    "font-family": associativeLineTextFontFamily,
+    "font-size": associativeLineTextFontSize
+  });
+}
+function updateTextPos(path, text3) {
+  let pathLength = path.length();
+  let centerPoint = path.pointAt(pathLength / 2);
+  let { width: textWidth, height: textHeight } = text3.bbox();
+  text3.x(centerPoint.x - textWidth / 2);
+  text3.y(centerPoint.y - textHeight / 2);
+}
+var associativeLineText_default = {
+  getText: getText2,
+  createText,
+  styleText,
+  onScale,
+  showEditTextBox,
+  hideEditTextBox,
+  updateTextEditBoxPos,
+  renderText,
+  updateTextPos
+};
+
 // ../simple-mind-map/src/AssociativeLine.js
 var AssociativeLine = class {
   constructor(opt = {}) {
@@ -60961,6 +61331,12 @@ var AssociativeLine = class {
       targetIndex: ""
     };
     this.checkOverlapNode = throttle(this.checkOverlapNode, 100, this);
+    Object.keys(associativeLineControls_default).forEach((item) => {
+      this[item] = associativeLineControls_default[item].bind(this);
+    });
+    Object.keys(associativeLineText_default).forEach((item) => {
+      this[item] = associativeLineText_default[item].bind(this);
+    });
     this.bindEvent();
   }
   // 监听事件
@@ -60995,6 +61371,7 @@ var AssociativeLine = class {
     window.addEventListener("mouseup", (e2) => {
       this.onControlPointMouseup(e2);
     });
+    this.mindMap.on("scale", this.onScale);
   }
   // 创建箭头
   createMarker() {
@@ -61070,36 +61447,43 @@ var AssociativeLine = class {
     let clickPath = this.draw.path();
     clickPath.stroke({ width: associativeLineActiveWidth, color: "transparent" }).fill({ color: "none" });
     clickPath.plot(pathStr);
+    let text3 = this.createText({ path, clickPath, node: node3, toNode, startPoint, endPoint, controlPoints });
     clickPath.click((e2) => {
       e2.stopPropagation();
-      if (this.mindMap.renderer.activeNodeList.length > 0) {
-        this.clearActiveNodes();
-      } else {
-        this.clearActiveLine();
-        this.activeLine = [path, clickPath, node3, toNode];
-        clickPath.stroke({ color: associativeLineActiveColor });
-        this.renderControls(
-          startPoint,
-          endPoint,
-          controlPoints[0],
-          controlPoints[1]
-        );
-        this.mindMap.emit(
-          "associative_line_click",
-          path,
-          clickPath,
-          node3,
-          toNode
-        );
-      }
+      this.setActiveLine({ path, clickPath, text: text3, node: node3, toNode, startPoint, endPoint, controlPoints });
     });
-    this.lineList.push([path, clickPath, node3, toNode]);
+    this.renderText(this.getText(node3, toNode), path, text3);
+    this.lineList.push([path, clickPath, text3, node3, toNode]);
+  }
+  // 激活某根关联线
+  setActiveLine({ path, clickPath, text: text3, node: node3, toNode, startPoint, endPoint, controlPoints }) {
+    let {
+      associativeLineActiveColor
+    } = this.mindMap.themeConfig;
+    if (this.mindMap.renderer.activeNodeList.length > 0) {
+      this.clearActiveNodes();
+    } else {
+      this.clearActiveLine();
+      this.activeLine = [path, clickPath, text3, node3, toNode];
+      clickPath.stroke({ color: associativeLineActiveColor });
+      if (!this.getText(node3, toNode)) {
+        this.renderText(this.mindMap.opt.defaultAssociativeLineText, path, text3);
+      }
+      this.renderControls(
+        startPoint,
+        endPoint,
+        controlPoints[0],
+        controlPoints[1]
+      );
+      this.mindMap.emit("associative_line_click", path, clickPath, node3, toNode);
+    }
   }
   // 移除所有连接线
   removeAllLines() {
     this.lineList.forEach((line) => {
       line[0].remove();
       line[1].remove();
+      line[2].remove();
     });
     this.lineList = [];
   }
@@ -61135,7 +61519,8 @@ var AssociativeLine = class {
   updateCreatingLine(e2) {
     let { x: x3, y: y4 } = this.getTransformedEventPos(e2);
     let startPoint = getNodePoint(this.creatingStartNode);
-    let pathStr = cubicBezierPath(startPoint.x, startPoint.y, x3, y4);
+    let offsetX = x3 > startPoint.x ? -10 : 10;
+    let pathStr = cubicBezierPath(startPoint.x, startPoint.y, x3 + offsetX, y4);
     this.creatingLine.plot(pathStr);
     this.checkOverlapNode(x3, y4);
   }
@@ -61223,17 +61608,29 @@ var AssociativeLine = class {
   removeLine() {
     if (!this.activeLine)
       return;
-    let [, , node3, toNode] = this.activeLine;
+    let [, , , node3, toNode] = this.activeLine;
     this.removeControls();
-    let { associativeLineTargets, associativeLineTargetControlOffsets } = node3.nodeData.data;
+    let { associativeLineTargets, associativeLineTargetControlOffsets, associativeLineText } = node3.nodeData.data;
     let targetIndex = getAssociativeLineTargetIndex(node3, toNode);
+    let newAssociativeLineText = {};
+    if (associativeLineText) {
+      Object.keys(associativeLineText).forEach((item) => {
+        if (item !== toNode.nodeData.data.id) {
+          newAssociativeLineText[item] = associativeLineText[item];
+        }
+      });
+    }
     this.mindMap.execCommand("SET_NODE_DATA", node3, {
+      // 目标
       associativeLineTargets: associativeLineTargets.filter((_3, index3) => {
         return index3 !== targetIndex;
       }),
+      // 偏移量
       associativeLineTargetControlOffsets: associativeLineTargetControlOffsets ? associativeLineTargetControlOffsets.filter((_3, index3) => {
         return index3 !== targetIndex;
-      }) : []
+      }) : [],
+      // 文本
+      associativeLineText: newAssociativeLineText
     });
   }
   // 清除当前激活的节点
@@ -61245,9 +61642,14 @@ var AssociativeLine = class {
   // 清除激活的线
   clearActiveLine() {
     if (this.activeLine) {
-      this.activeLine[1].stroke({
+      let [, clickPath, text3, node3, toNode] = this.activeLine;
+      clickPath.stroke({
         color: "transparent"
       });
+      this.hideEditTextBox();
+      if (!this.getText(node3, toNode)) {
+        text3.clear();
+      }
       this.activeLine = null;
       this.removeControls();
     }
@@ -61260,6 +61662,7 @@ var AssociativeLine = class {
     this.lineList.forEach((line) => {
       line[0].hide();
       line[1].hide();
+      line[2].hide();
     });
     this.hideControls();
   }
@@ -61270,188 +61673,10 @@ var AssociativeLine = class {
     this.lineList.forEach((line) => {
       line[0].show();
       line[1].show();
+      line[2].show();
     });
     this.showControls();
     this.isNodeDragging = false;
-  }
-  // 创建控制点、连线节点
-  createControlNodes() {
-    let { associativeLineActiveColor } = this.mindMap.themeConfig;
-    this.controlLine1 = this.draw.line().stroke({ color: associativeLineActiveColor, width: 2 });
-    this.controlLine2 = this.draw.line().stroke({ color: associativeLineActiveColor, width: 2 });
-    this.controlPoint1 = this.createOneControlNode("controlPoint1");
-    this.controlPoint2 = this.createOneControlNode("controlPoint2");
-  }
-  // 创建控制点
-  createOneControlNode(pointKey) {
-    let { associativeLineActiveColor } = this.mindMap.themeConfig;
-    return this.draw.circle(this.controlPointDiameter).stroke({ color: associativeLineActiveColor }).fill({ color: "#fff" }).click((e2) => {
-      e2.stopPropagation();
-    }).mousedown((e2) => {
-      this.onControlPointMousedown(e2, pointKey);
-    });
-  }
-  // 控制点的鼠标按下事件
-  onControlPointMousedown(e2, pointKey) {
-    e2.stopPropagation();
-    this.isControlPointMousedown = true;
-    this.mousedownControlPointKey = pointKey;
-  }
-  // 控制点的鼠标移动事件
-  onControlPointMousemove(e2) {
-    if (!this.isControlPointMousedown || !this.mousedownControlPointKey || !this[this.mousedownControlPointKey])
-      return;
-    e2.stopPropagation();
-    e2.preventDefault();
-    let radius = this.controlPointDiameter / 2;
-    let { x: x3, y: y4 } = this.getTransformedEventPos(e2);
-    this.controlPointMousemoveState.pos = {
-      x: x3,
-      y: y4
-    };
-    this[this.mousedownControlPointKey].x(x3 - radius).y(y4 - radius);
-    let [path, clickPath, node3, toNode] = this.activeLine;
-    let [startPoint, endPoint] = computeNodePoints(node3, toNode);
-    this.controlPointMousemoveState.startPoint = startPoint;
-    this.controlPointMousemoveState.endPoint = endPoint;
-    let targetIndex = getAssociativeLineTargetIndex(node3, toNode);
-    this.controlPointMousemoveState.targetIndex = targetIndex;
-    let offsets = [];
-    let associativeLineTargetControlOffsets = node3.nodeData.data.associativeLineTargetControlOffsets;
-    if (!associativeLineTargetControlOffsets) {
-      offsets = getDefaultControlPointOffsets(startPoint, endPoint);
-    } else {
-      offsets = associativeLineTargetControlOffsets[targetIndex];
-    }
-    let point1 = null;
-    let point22 = null;
-    if (this.mousedownControlPointKey === "controlPoint1") {
-      point1 = {
-        x: x3,
-        y: y4
-      };
-      point22 = {
-        x: endPoint.x + offsets[1].x,
-        y: endPoint.y + offsets[1].y
-      };
-      this.controlLine1.plot(startPoint.x, startPoint.y, point1.x, point1.y);
-    } else {
-      point1 = {
-        x: startPoint.x + offsets[0].x,
-        y: startPoint.y + offsets[0].y
-      };
-      point22 = {
-        x: x3,
-        y: y4
-      };
-      this.controlLine2.plot(endPoint.x, endPoint.y, point22.x, point22.y);
-    }
-    let pathStr = joinCubicBezierPath(startPoint, endPoint, point1, point22);
-    path.plot(pathStr);
-    clickPath.plot(pathStr);
-  }
-  // 控制点的鼠标移动事件
-  onControlPointMouseup(e2) {
-    if (!this.isControlPointMousedown)
-      return;
-    e2.stopPropagation();
-    e2.preventDefault();
-    let { pos, startPoint, endPoint, targetIndex } = this.controlPointMousemoveState;
-    let [, , node3] = this.activeLine;
-    let offsetList = [];
-    let associativeLineTargetControlOffsets = node3.nodeData.data.associativeLineTargetControlOffsets;
-    if (!associativeLineTargetControlOffsets) {
-      offsetList[targetIndex] = getDefaultControlPointOffsets(startPoint, endPoint);
-    } else {
-      offsetList = associativeLineTargetControlOffsets;
-    }
-    let offset1 = null;
-    let offset2 = null;
-    if (this.mousedownControlPointKey === "controlPoint1") {
-      offset1 = {
-        x: pos.x - startPoint.x,
-        y: pos.y - startPoint.y
-      };
-      offset2 = offsetList[targetIndex][1];
-    } else {
-      offset1 = offsetList[targetIndex][0];
-      offset2 = {
-        x: pos.x - endPoint.x,
-        y: pos.y - endPoint.y
-      };
-    }
-    offsetList[targetIndex] = [offset1, offset2];
-    this.mindMap.execCommand("SET_NODE_DATA", node3, {
-      associativeLineTargetControlOffsets: offsetList
-    });
-    setTimeout(() => {
-      this.resetControlPoint();
-    }, 0);
-  }
-  // 复位控制点移动
-  resetControlPoint() {
-    this.isControlPointMousedown = false;
-    this.mousedownControlPointKey = "";
-    this.controlPointMousemoveState = {
-      pos: null,
-      startPoint: null,
-      endPoint: null,
-      targetIndex: ""
-    };
-  }
-  // 渲染控制点
-  renderControls(startPoint, endPoint, point1, point22) {
-    if (!this.controlLine1) {
-      this.createControlNodes();
-    }
-    let radius = this.controlPointDiameter / 2;
-    this.controlLine1.plot(startPoint.x, startPoint.y, point1.x, point1.y);
-    this.controlLine2.plot(endPoint.x, endPoint.y, point22.x, point22.y);
-    this.controlPoint1.x(point1.x - radius).y(point1.y - radius);
-    this.controlPoint2.x(point22.x - radius).y(point22.y - radius);
-  }
-  // 删除控制点
-  removeControls() {
-    if (!this.controlLine1)
-      return;
-    [
-      this.controlLine1,
-      this.controlLine2,
-      this.controlPoint1,
-      this.controlPoint2
-    ].forEach((item) => {
-      item.remove();
-    });
-    this.controlLine1 = null;
-    this.controlLine2 = null;
-    this.controlPoint1 = null;
-    this.controlPoint2 = null;
-  }
-  // 隐藏控制点
-  hideControls() {
-    if (!this.controlLine1)
-      return;
-    [
-      this.controlLine1,
-      this.controlLine2,
-      this.controlPoint1,
-      this.controlPoint2
-    ].forEach((item) => {
-      item.hide();
-    });
-  }
-  // 显示控制点
-  showControls() {
-    if (!this.controlLine1)
-      return;
-    [
-      this.controlLine1,
-      this.controlLine2,
-      this.controlPoint1,
-      this.controlPoint2
-    ].forEach((item) => {
-      item.show();
-    });
   }
 };
 AssociativeLine.instanceName = "associativeLine";

@@ -55,7 +55,7 @@
 }
 ```
 
-`icon`目前只能使用内置的图标，完整图标可以在[icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js)文件中查看。
+`icon`可以使用内置的图标，完整图标可以在[icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js)文件中查看。也可以扩展图标，参考[扩展图标](https://wanglin2.github.io/mind-map/#/doc/zh/course19/%E6%89%A9%E5%B1%95%E5%9B%BE%E6%A0%87)。
 
 创建实例时还支持传递其他很多选项参数，完整选项列表可以在[实例化选项](https://wanglin2.github.io/mind-map/#/doc/zh/constructor/%E5%AE%9E%E4%BE%8B%E5%8C%96%E9%80%89%E9%A1%B9)查看。
 
