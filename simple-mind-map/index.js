@@ -10,7 +10,7 @@ import BatchExecution from './src/BatchExecution'
 import { layoutValueList, CONSTANTS } from './src/utils/constant'
 import { SVG } from '@svgdotjs/svg.js'
 import { simpleDeepClone } from './src/utils'
-import defaultTheme from './src/themes/default'
+import defaultTheme, { checkIsNodeSizeIndependenceConfig } from './src/themes/default'
 
 // 默认选项配置
 const defaultOpt = {
@@ -120,7 +120,9 @@ const defaultOpt = {
     // }
   ],
   // 节点最大缓存数量
-  maxNodeCacheCount: 1000
+  maxNodeCacheCount: 1000,
+  // 关联线默认文字
+  defaultAssociativeLineText: '关联'
 }
 
 //  思维导图
@@ -265,7 +267,9 @@ class MindMap {
   //  设置主题配置
   setThemeConfig(config) {
     this.opt.themeConfig = config
-    this.render(null, CONSTANTS.CHANGE_THEME)
+    // 检查改变的是否是节点大小无关的主题属性
+    let res = checkIsNodeSizeIndependenceConfig(config)
+    this.render(null, res ? '' : CONSTANTS.CHANGE_THEME)
   }
 
   //  获取自定义主题配置
