@@ -4,9 +4,9 @@
 
 > The function of adjusting associated line control points is supported from v0.4.6+
 
-This plugin is used to support the addition of associative lines.
+> Relevance support for text editing starting from v0.5.11+
 
-The plugin is currently not fully functional, and does not support adding text to association lines.
+This plugin is used to support the addition of associative lines.
 
 ## Register
 

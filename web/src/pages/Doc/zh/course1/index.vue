@@ -46,7 +46,7 @@
     <span class="hljs-attr">children</span>: []<span class="hljs-comment">// 子节点</span>
 }
 </code></pre>
-<p><code>icon</code>目前只能使用内置的图标，完整图标可以在<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js">icons.js</a>文件中查看。</p>
+<p><code>icon</code>可以使用内置的图标，完整图标可以在<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js">icons.js</a>文件中查看。也可以扩展图标，参考<a href="https://wanglin2.github.io/mind-map/#/doc/zh/course19/%E6%89%A9%E5%B1%95%E5%9B%BE%E6%A0%87">扩展图标</a>。</p>
 <p>创建实例时还支持传递其他很多选项参数，完整选项列表可以在<a href="https://wanglin2.github.io/mind-map/#/doc/zh/constructor/%E5%AE%9E%E4%BE%8B%E5%8C%96%E9%80%89%E9%A1%B9">实例化选项</a>查看。</p>
 <p>这样得到的思维导图可以通过鼠标和快捷键进行操作，比如单击某个节点可以激活它，双击某个节点可以编辑节点文本，按下<code>Tab</code>键会给当前激活的节点添加一个子节点，按下<code>Enter</code>键会给当前激活的节点添加一个兄弟节点等等，完整的快捷键列表可以参考<a href="https://github.com/wanglin2/mind-map/blob/main/web/src/config/zh.js#L246">快捷键列表</a>。</p>
 <p>当然有些功能还是需要UI界面的，比如图标列表、编辑超链接等等，需要注意的是<code>simple-mind-map</code>库并不包含UI界面，所以需要你自己开发，然后通过<code>simple-mind-map</code>提供的相关API来操作，本教程的其他章节会向你介绍如何使用。</p>

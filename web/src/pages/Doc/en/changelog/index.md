@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.5.11
+
+New: Supports associative text editing.
+
+optimization: Optimizing theme configuration updates, changing configurations that do not involve node size does not trigger node recalculation.
+
 ## 0.5.10
 
 New: Optimize node reuse logic using LRU caching algorithm.
