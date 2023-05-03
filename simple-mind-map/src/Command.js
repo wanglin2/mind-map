@@ -1,4 +1,4 @@
-import { copyRenderTree, simpleDeepClone } from './utils'
+import { copyRenderTree, simpleDeepClone, nextTick } from './utils'
 
 //  命令类
 class Command {
@@ -11,6 +11,7 @@ class Command {
     this.activeHistoryIndex = 0
     // 注册快捷键
     this.registerShortcutKeys()
+    this.addHistory = nextTick(this.addHistory, this)
   }
 
   //  清空历史数据
@@ -36,7 +37,7 @@ class Command {
       this.commands[name].forEach(fn => {
         fn(...args)
       })
-      if (name === 'BACK' || name === 'FORWARD') {
+      if (['BACK', 'FORWARD', 'SET_NODE_ACTIVE', 'CLEAR_ACTIVE_NODE'].includes(name)) {
         return
       }
       this.addHistory()
@@ -76,9 +77,19 @@ class Command {
       return
     }
     let data = this.getCopyData()
+    // 此次数据和上次一样则不重复添加
+    if (this.history.length > 0 && JSON.stringify(this.history[this.history.length - 1]) === JSON.stringify(data)) {
+      return
+    }
+    // 删除当前历史指针后面的数据
+    this.history = this.history.slice(0, this.activeHistoryIndex + 1)
     this.history.push(simpleDeepClone(data))
+    // 历史记录数超过最大数量
+    if (this.history.length > this.mindMap.opt.maxHistoryCount) {
+      this.history.shift()
+    }
     this.activeHistoryIndex = this.history.length - 1
-    this.mindMap.emit('data_change', data)
+    this.mindMap.emit('data_change', this.removeDataUid(data))
     this.mindMap.emit(
       'back_forward',
       this.activeHistoryIndex,
@@ -98,7 +109,9 @@ class Command {
         this.activeHistoryIndex,
         this.history.length
       )
-      return simpleDeepClone(this.history[this.activeHistoryIndex])
+      let data = simpleDeepClone(this.history[this.activeHistoryIndex])
+      this.mindMap.emit('data_change', this.removeDataUid(data))
+      return data
     }
   }
 
@@ -110,14 +123,31 @@ class Command {
     let len = this.history.length
     if (this.activeHistoryIndex + step <= len - 1) {
       this.activeHistoryIndex += step
-      this.mindMap.emit('back_forward', this.activeHistoryIndex)
-      return simpleDeepClone(this.history[this.activeHistoryIndex])
+      this.mindMap.emit('back_forward', this.activeHistoryIndex, this.history.length)
+      let data = simpleDeepClone(this.history[this.activeHistoryIndex])
+      this.mindMap.emit('data_change', this.removeDataUid(data))
+      return data
     }
   }
 
   //  获取渲染树数据副本
   getCopyData() {
-    return copyRenderTree({}, this.mindMap.renderer.renderTree)
+    return copyRenderTree({}, this.mindMap.renderer.renderTree, true)
+  }
+
+  // 移除节点数据中的uid
+  removeDataUid(data) {
+    data = simpleDeepClone(data)
+    let walk = (root) => {
+      delete root.data.uid
+      if (root.children && root.children.length > 0) {
+        root.children.forEach((item) => {
+          walk(item)
+        })
+      }
+    }
+    walk(data)
+    return data
   }
 }
 

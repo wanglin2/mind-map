@@ -8,6 +8,25 @@ import WorkbencheHomePage from '@/pages/Workbenche/views/Home'
 import WorkbencheEditPage from '@/pages/Workbenche/views/Edit'
 import WorkbencheHomeLocalPage from '@/pages/Workbenche/views/Local'
 
+// 处理没有翻译的章节路由
+const handleRouterList = () => {
+  let zhList = routerList[0].children
+  for(let i = 1; i < routerList.length; i++) {
+    let list = routerList[i].children
+    zhList.forEach(item => {
+      if (!list.find((item2) => {
+        return item2.path === item.path
+      })) {
+        list.push({
+          ...item,
+          lang: 'zh'
+        })
+      }
+    })
+  }
+}
+handleRouterList()
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -54,7 +73,7 @@ const routes = [
       children: item.children.map((child) => {
         return {
           path: `${child.path}/:h?`,
-          component: () => import(`./pages/Doc/${item.lang}/${child.path}/index.vue`)
+          component: () => import(`./pages/Doc/${child.lang || item.lang}/${child.path}/index.vue`)
         }
       })
     }

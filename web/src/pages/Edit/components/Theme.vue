@@ -1,5 +1,5 @@
 <template>
-  <Sidebar ref="sidebar" :title="$t('style.title')">
+  <Sidebar ref="sidebar" :title="$t('theme.title')">
     <div class="themeList">
       <div
         class="themeItem"
@@ -42,7 +42,7 @@ export default {
   },
   data() {
     return {
-      themeList: [...themeList, ...customThemeList],
+      themeList: [...themeList].reverse(),// ...customThemeList
       themeMap,
       theme: ''
     }

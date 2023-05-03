@@ -1,3 +1,5 @@
+import { CONSTANTS } from './utils/constant'
+
 //  视图操作类
 class View {
   //  构造函数
@@ -55,12 +57,41 @@ class View {
     })
     // 放大缩小视图
     this.mindMap.event.on('mousewheel', (e, dir) => {
-      // // 放大
-      if (dir === 'down') {
-        this.enlarge()
+      if (this.mindMap.opt.customHandleMousewheel && typeof this.mindMap.opt.customHandleMousewheel === 'function') {
+        return this.mindMap.opt.customHandleMousewheel(e)
+      }
+      if (this.mindMap.opt.mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
+        switch (dir) {
+          // 鼠标滚轮，向上和向左，都是缩小
+          case CONSTANTS.DIR.UP:
+          case CONSTANTS.DIR.LEFT:
+            this.narrow()
+            break
+          // 鼠标滚轮，向下和向右，都是放大
+          case CONSTANTS.DIR.DOWN:
+          case CONSTANTS.DIR.RIGHT:
+            this.enlarge()
+            break
+        }
       } else {
-        // 缩小
-        this.narrow()
+        switch (dir){
+          // 上移
+          case CONSTANTS.DIR.DOWN:
+            this.translateY(-this.mindMap.opt.mousewheelMoveStep)
+            break
+          // 下移
+          case CONSTANTS.DIR.UP:
+            this.translateY(this.mindMap.opt.mousewheelMoveStep)
+            break
+          // 右移
+          case CONSTANTS.DIR.LEFT:
+            this.translateX(-this.mindMap.opt.mousewheelMoveStep)
+            break
+          // 左移
+          case CONSTANTS.DIR.RIGHT:
+            this.translateX(this.mindMap.opt.mousewheelMoveStep)
+            break
+        }
       }
     })
   }
@@ -91,6 +122,13 @@ class View {
       this.mindMap.emit('view_data_change', this.getTransformData())
       this.mindMap.emit('scale', this.scale)
     }
+  }
+
+  //  平移x,y方向
+  translateXY(x, y) {
+    this.x += x
+    this.y += y
+    this.transform()
   }
 
   //  平移x方向
@@ -129,10 +167,14 @@ class View {
 
   //  恢复
   reset() {
+    let scaleChange = this.scale !== 1
     this.scale = 1
     this.x = 0
     this.y = 0
     this.transform()
+    if (scaleChange) {
+      this.mindMap.emit('scale', this.scale)
+    }
   }
 
   //  缩小

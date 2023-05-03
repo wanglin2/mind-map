@@ -12,23 +12,25 @@ import xmind from 'simple-mind-map/src/parse/xmind.js'
 
 如果使用的是`umd`格式的文件，那么可以通过如下方式获取：
 
-```js
-import MindMap from "simple-mind-map/dist/simpleMindMap.umd.min"
+```html
+<script src="simple-mind-map/dist/simpleMindMap.umd.min.js"></script>
+```
 
-MindMap.xmind
+```js
+simpleMindMap.xmind
 ```
 
 ## 方法
 
 ### xmind.parseXmindFile(file)
 
-解析`.xmind`文件，返回解析后的数据，注意是完整的数据，包含节点树、主题、结构等，可以使用`mindMap.setFullData(data)`来将返回的数据渲染到画布上
+解析`.xmind`文件，返回解析后的数据，可以使用`mindMap.setData(data)`来将返回的数据渲染到画布上
 
 `file`：`File`对象
 
 ### xmind.transformXmind(content)
 
-转换`xmind`数据，`.xmind`文件本质上是一个压缩包，改成`zip`后缀可以解压缩，里面存在一个`content.json`文件，如果你自己解析出了这个文件，那么可以把这个文件内容传递给这个方法进行转换，转换后的数据，注意是完整的数据，包含节点树、主题、结构等，可以使用`mindMap.setFullData(data)`来将返回的数据渲染到画布上
+转换`xmind`数据，`.xmind`文件本质上是一个压缩包，改成`zip`后缀可以解压缩，里面存在一个`content.json`文件，如果你自己解析出了这个文件，那么可以把这个文件内容传递给这个方法进行转换，转换后的数据，可以使用`mindMap.setData(data)`来将返回的数据渲染到画布上
 
 `content`：`.xmind`压缩包内的`content.json`文件内容
 

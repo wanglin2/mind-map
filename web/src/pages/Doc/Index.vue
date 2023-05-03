@@ -92,6 +92,10 @@ export default {
         margin: 10px 0;
       }
 
+      h4 {
+        margin-bottom: 10px;
+      }
+
       p {
         margin-bottom: 20px;
       }

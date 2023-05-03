@@ -209,6 +209,153 @@
           </el-select>
         </div>
       </div>
+      <!-- 关联线 -->
+      <div class="title noTop">{{ $t('baseStyle.associativeLine') }}</div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.associativeLineColor') }}</span>
+          <span
+            class="block"
+            v-popover:popover4
+            :style="{ backgroundColor: style.associativeLineColor }"
+          ></span>
+          <el-popover ref="popover4" placement="bottom" trigger="click">
+            <Color
+              :color="style.associativeLineColor"
+              @change="
+                color => {
+                  update('associativeLineColor', color)
+                }
+              "
+            ></Color>
+          </el-popover>
+        </div>
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.associativeLineWidth') }}</span>
+          <el-select
+            size="mini"
+            style="width: 80px"
+            v-model="style.associativeLineWidth"
+            placeholder=""
+            @change="
+              value => {
+                update('associativeLineWidth', value)
+              }
+            "
+          >
+            <el-option
+              v-for="item in lineWidthList"
+              :key="item"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.associativeLineActiveColor') }}</span>
+          <span
+            class="block"
+            v-popover:popover5
+            :style="{ backgroundColor: style.associativeLineActiveColor }"
+          ></span>
+          <el-popover ref="popover5" placement="bottom" trigger="click">
+            <Color
+              :color="style.associativeLineActiveColor"
+              @change="
+                color => {
+                  update('associativeLineActiveColor', color)
+                }
+              "
+            ></Color>
+          </el-popover>
+        </div>
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.associativeLineActiveWidth') }}</span>
+          <el-select
+            size="mini"
+            style="width: 80px"
+            v-model="style.associativeLineActiveWidth"
+            placeholder=""
+            @change="
+              value => {
+                update('associativeLineActiveWidth', value)
+              }
+            "
+          >
+            <el-option
+              v-for="item in lineWidthList"
+              :key="item"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+      <!-- 关联线文字 -->
+      <div class="title noTop">关联线文字</div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">字体</span>
+          <el-select
+            size="mini"
+            v-model="style.associativeLineTextFontFamily"
+            placeholder=""
+            @change="update('associativeLineTextFontFamily', $event)"
+          >
+            <el-option
+              v-for="item in fontFamilyList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+              :style="{ fontFamily: item.value }"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">颜色</span>
+          <span
+            class="block"
+            v-popover:popover6
+            :style="{ backgroundColor: style.associativeLineTextColor }"
+          ></span>
+          <el-popover ref="popover6" placement="bottom" trigger="click">
+            <Color
+              :color="style.associativeLineTextColor"
+              @change="
+                color => {
+                  update('associativeLineTextColor', color)
+                }
+              "
+            ></Color>
+          </el-popover>
+        </div>
+        <div class="rowItem">
+          <span class="name">字号</span>
+          <el-select
+            size="mini"
+            style="width: 80px"
+            v-model="style.associativeLineTextFontSize"
+            placeholder=""
+            @change="update('associativeLineTextFontSize', $event)"
+          >
+            <el-option
+              v-for="item in fontSizeList"
+              :key="item"
+              :label="item"
+              :value="item"
+              :style="{ fontSize: item + 'px' }"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </div>
       <!-- 节点边框风格 -->
       <div class="title noTop">{{ $t('baseStyle.nodeBorderType') }}</div>
       <div class="row">
@@ -431,7 +578,26 @@
       </div>
       <div class="row">
         <div class="rowItem">
-          <el-checkbox v-model="enableNodeRichText" @change="enableNodeRichTextChange">{{ this.$t('baseStyle.isEnableNodeRichText') }}</el-checkbox>
+          <el-checkbox v-model="enableNodeRichText" @change="enableNodeRichTextChange">{{ $t('baseStyle.isEnableNodeRichText') }}</el-checkbox>
+        </div>
+      </div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.mousewheelAction') }}</span>
+          <el-select
+            size="mini"
+            style="width: 120px"
+            v-model="config.mousewheelAction"
+            placeholder=""
+            @change="
+              value => {
+                updateOtherConfig('mousewheelAction', value)
+              }
+            "
+          >
+            <el-option :label="$t('baseStyle.zoomView') " value="zoom"></el-option>
+            <el-option :label="$t('baseStyle.moveViewUpDown') " value="move"></el-option>
+          </el-select>
         </div>
       </div>
     </div>
@@ -441,7 +607,7 @@
 <script>
 import Sidebar from './Sidebar'
 import Color from './Color'
-import { lineWidthList, lineStyleList, backgroundRepeatList, backgroundPositionList, backgroundSizeList } from '@/config'
+import { lineWidthList, lineStyleList, backgroundRepeatList, backgroundPositionList, backgroundSizeList, fontFamilyList, fontSizeList } from '@/config'
 import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
 import { mapState, mapMutations } from 'vuex'
@@ -470,6 +636,7 @@ export default {
   data() {
     return {
       lineWidthList,
+      fontSizeList,
       activeTab: 'color',
       marginActiveTab: 'second',
       style: {
@@ -479,6 +646,13 @@ export default {
         lineStyle: '',
         generalizationLineWidth: '',
         generalizationLineColor: '',
+        associativeLineColor: '',
+        associativeLineWidth: 0,
+        associativeLineActiveWidth: 0,
+        associativeLineActiveColor: '',
+        associativeLineTextFontSize: 0,
+        associativeLineTextColor: '',
+        associativeLineTextFontFamily: '',
         paddingX: 0,
         paddingY: 0,
         imgMaxWidth: 0,
@@ -493,7 +667,8 @@ export default {
         nodeUseLineStyle: false
       },
       config: {
-        enableFreeDrag: false
+        enableFreeDrag: false,
+        mousewheelAction: 'zoom'
       },
       watermarkConfig: {
         show: false,
@@ -526,6 +701,9 @@ export default {
     backgroundSizeList() {
       return backgroundSizeList[this.$i18n.locale] || backgroundSizeList.zh
     },
+    fontFamilyList() {
+      return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
+    },
   },
   watch: {
     activeSidebar(val) {
@@ -541,6 +719,7 @@ export default {
   },
   created () {
     this.enableNodeRichText = this.localConfig.openNodeRichText
+    this.mousewheelAction = this.localConfig.mousewheelAction
   },
   methods: {
     ...mapMutations(['setLocalConfig']),
@@ -558,6 +737,13 @@ export default {
         'lineColor',
         'generalizationLineWidth',
         'generalizationLineColor',
+        'associativeLineColor',
+        'associativeLineWidth',
+        'associativeLineActiveWidth',
+        'associativeLineActiveColor',
+        'associativeLineTextFontSize',
+        'associativeLineTextColor',
+        'associativeLineTextFontFamily',
         'paddingX',
         'paddingY',
         'imgMaxWidth',
@@ -579,7 +765,7 @@ export default {
 
     // 初始化其他配置
     initConfig() {
-      ['enableFreeDrag'].forEach(key => {
+      ;['enableFreeDrag', 'mousewheelAction'].forEach(key => {
         this.config[key] = this.mindMap.getConfig(key)
       })
     },
@@ -686,7 +872,15 @@ export default {
       this.setLocalConfig({
         openNodeRichText: e
       })
-    }
+    },
+
+    // 切换鼠标滚轮的行为
+    mousewheelActionChange(e) {
+      this.setLocalConfig({
+        mousewheelAction: e
+      })
+      this.mindMap.updateConfig
+    },
   }
 }
 </script>

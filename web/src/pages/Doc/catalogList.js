@@ -10,7 +10,10 @@ let langList = [
     path: 'en'
   }
 ]
-let StartList = ['introduction', 'start', 'translate', 'changelog']
+let StartList = ['introduction', 'start', 'deploy', 'translate', 'changelog']
+let CourseList = new Array(19).fill(0).map((_, index) => {
+  return 'course' + (index + 1)
+})
 let APIList = [
   'constructor',
   'node',
@@ -26,7 +29,9 @@ let APIList = [
   'doExport',
   'miniMap',
   'watermark',
+  'associativeLine',
   'xmind',
+  'markdown',
   'utils'
 ]
 
@@ -58,6 +63,10 @@ export default {
       list: createList('zh', StartList)
     },
     {
+      groupName: '教程',
+      list: createList('zh', CourseList)
+    },
+    {
       groupName: 'API',
       list: createList('zh', APIList)
     }
@@ -66,6 +75,10 @@ export default {
     {
       groupName: 'Start',
       list: createList('en', StartList)
+    },
+    {
+      groupName: 'Course',
+      list: createList('zh', CourseList)
     },
     {
       groupName: 'API',

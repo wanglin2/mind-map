@@ -15,16 +15,39 @@ After registration and instantiation of `MindMap`, the instance can be obtained 
 
 ## Methods
 
-### png()
+All exported methods are asynchronous and return an instance of `Promise`. You can use the `then` method to obtain data, or use the `async await` function to obtain:
 
-Exports as `png`, an async method that returns image data, `data:url` data which
-can be downloaded or displayed.
+```js
+mindMap.doExport.png().then((data) => {
+  // ...
+})
 
-### svg(name, domToImage = false, plusCssText)
+const export = async () => {
+  let data = await mindMap.doExport.png()
+  // ...
+}
+```
+
+The returned data is in the format of `data:URL`. You can create an `a` tag to trigger the download:
+
+```js
+let a = document.createElement('a')
+a.href = 'xxx.png'// .png、.svg、.pdf、.md、.json、.smm
+a.download = 'xxx'
+a.click()
+```
+
+### png(name, transparent = false)
+
+- `name`: Name, optional
+
+- `transparent`: v0.5.7+, Specify whether the background of the exported image is transparent
+
+Exports as `png`.
+
+### svg(name, plusCssText)
 
 - `name`：`svg` title
-
-- `domToImage`：v0.4.0+, When node rich text editing is enabled, you can use this parameter to specify whether to convert the `dom` node in the `svg` into a picture
 
 - `plusCssText`：v0.4.0+, When node rich text editing is enabled and `domToImage` passes `false`, additional `css` styles can be added. If there is a `dom` node in `svg`, you can set some styles for the node through this parameter, such as:
 
@@ -40,22 +63,7 @@ svg(
 )
 ```
 
-Exports as `svg`, an async method that returns `svg` data, `data:url` data which
-can be downloaded or displayed.
-
-### getSvgData(domToImage)
-
-- `domToImage`：v0.4.0+, If node rich text is enabled, you can use this parameter to specify whether to convert the `DOM` node embedded in `svg` into a picture.
-
-Gets `svg` data, an async method that returns an object:
-
-```js
-{
-  node; // svg object
-  str; // svg string, if rich text editing is enabled and domToImage is set to true, the dom node in the svg character returned by this value will be converted into the form of an image
-  nodeWithDomToImg// v0.4.0+，The svg object after the DOM node is converted to an image has a value only when rich text editing is enabled and domToImage is set to true, otherwise null
-}
-```
+Exports as `svg`.
 
 ### pdf(name)
 
@@ -63,7 +71,7 @@ Gets `svg` data, an async method that returns an object:
 
 `name`：File name
 
-Export as `pdf`
+Export as `pdf`. Unlike other export methods, this method does not return data and directly triggers the download.
 
 ### json(name, withConfig)
 
@@ -71,4 +79,21 @@ Export as `pdf`
 
 `withConfig``：Boolean`, default `true`, Whether the data contains configuration, otherwise it is pure mind map node data
 
-Return `json` data, `data:url` type, you can download it yourself
+Return `json` data.
+
+### md()
+
+> v0.4.7+
+
+Export as `markdown` file.
+
+### getSvgData()
+
+Gets `svg` data, an async method that returns an object:
+
+```js
+{
+  node // svg node
+  str // svg string
+}
+```

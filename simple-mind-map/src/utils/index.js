@@ -122,27 +122,33 @@ export const simpleDeepClone = data => {
 }
 
 //  复制渲染树数据
-export const copyRenderTree = (tree, root) => {
+export const copyRenderTree = (tree, root, removeActiveState = false) => {
   tree.data = simpleDeepClone(root.data)
-  tree.children = []
-  if (root.children && root.children.length > 0) {
-    root.children.forEach((item, index) => {
-      tree.children[index] = copyRenderTree({}, item)
-    })
-  }
-  return tree
-}
-
-//  复制节点树数据
-export const copyNodeTree = (tree, root, removeActiveState = false) => {
-  tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data)
   if (removeActiveState) {
     tree.data.isActive = false
   }
   tree.children = []
   if (root.children && root.children.length > 0) {
     root.children.forEach((item, index) => {
-      tree.children[index] = copyNodeTree({}, item, removeActiveState)
+      tree.children[index] = copyRenderTree({}, item, removeActiveState)
+    })
+  }
+  return tree
+}
+
+//  复制节点树数据
+export const copyNodeTree = (tree, root, removeActiveState = false, keepId = false) => {
+  tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data)
+  // 去除节点id，因为节点id不能重复
+  if (tree.data.id && !keepId) delete tree.data.id
+  if (tree.data.uid) delete tree.data.uid
+  if (removeActiveState) {
+    tree.data.isActive = false
+  }
+  tree.children = []
+  if (root.children && root.children.length > 0) {
+    root.children.forEach((item, index) => {
+      tree.children[index] = copyNodeTree({}, item, removeActiveState, keepId)
     })
   } else if (
     root.nodeData &&
@@ -150,7 +156,7 @@ export const copyNodeTree = (tree, root, removeActiveState = false) => {
     root.nodeData.children.length > 0
   ) {
     root.nodeData.children.forEach((item, index) => {
-      tree.children[index] = copyNodeTree({}, item, removeActiveState)
+      tree.children[index] = copyNodeTree({}, item, removeActiveState, keepId)
     })
   }
   return tree
@@ -193,12 +199,12 @@ export const downloadFile = (file, fileName) => {
 //  节流函数
 export const throttle = (fn, time = 300, ctx) => {
   let timer = null
-  return () => {
+  return (...args) => {
     if (timer) {
       return
     }
     timer = setTimeout(() => {
-      fn.call(ctx)
+      fn.call(ctx, ...args)
       timer = null
     }, time)
   }
@@ -265,4 +271,89 @@ export const measureText = (text, { italic, bold, fontSize, fontFamily }) => {
 // 拼接font字符串
 export const joinFontStr = ({ italic, bold, fontSize, fontFamily }) => {
   return `${italic ? 'italic ' : ''} ${bold ? 'bold ' : ''} ${fontSize}px ${fontFamily} `
+}
+
+//  在下一个事件循环里执行任务
+export const nextTick = function (fn, ctx) {
+  let pending = false
+  let timerFunc = null
+  let handle = () => {
+    pending = false
+    ctx ? fn.call(ctx) : fn()
+  }
+  // 支持MutationObserver接口的话使用MutationObserver
+  if (typeof MutationObserver !== 'undefined') {
+    let counter = 1
+    let observer = new MutationObserver(handle)
+    let textNode = document.createTextNode(counter)
+    observer.observe(textNode, {
+      characterData: true // 设为 true 表示监视指定目标节点或子节点树中节点所包含的字符数据的变化
+    })
+    timerFunc = function () {
+      counter = (counter + 1) % 2 // counter会在0和1两者循环变化
+      textNode.data = counter // 节点变化会触发回调handle，
+    }
+  } else {
+    // 否则使用定时器
+    timerFunc = setTimeout
+  }
+  return function () {
+    if (pending) return
+    pending = true
+    timerFunc(handle, 0)
+  }
+}
+
+// 检查节点是否超出画布
+export const checkNodeOuter = (mindMap, node) => {
+  let elRect = mindMap.elRect
+  let { scaleX, scaleY, translateX, translateY } = mindMap.draw.transform()
+  let { left, top, width, height } = node
+  let right = (left + width) * scaleX + translateX
+  let bottom = (top + height) * scaleY + translateY
+  left = left * scaleX + translateX
+  top = top * scaleY + translateY
+  let offsetLeft = 0
+  let offsetTop = 0
+  if (left < 0) {
+    offsetLeft = -left
+  }
+  if (right > elRect.width) {
+    offsetLeft = -(right - elRect.width)
+  }
+  if (top < 0) {
+    offsetTop = -top
+  }
+  if (bottom > elRect.height) {
+    offsetTop = -(bottom - elRect.height)
+  }
+  return {
+    isOuter: offsetLeft !== 0 || offsetTop !== 0,
+    offsetLeft,
+    offsetTop
+  }
+}
+
+// 提取html字符串里的纯文本
+let getTextFromHtmlEl = null
+export const getTextFromHtml = (html) => {
+  if (!getTextFromHtmlEl) {
+    getTextFromHtmlEl = document.createElement('div')
+  }
+  getTextFromHtmlEl.innerHTML = html
+  return getTextFromHtmlEl.textContent
+}
+
+// 将blob转成data:url
+export const readBlob = (blob) => {
+  return new Promise((resolve, reject) => {
+    let reader = new FileReader()
+    reader.onload = (evt) => {
+      resolve(evt.target.result)
+    }
+    reader.onerror = (err) => {
+      reject(err)
+    }
+    reader.readAsDataURL(blob)
+  })
 }

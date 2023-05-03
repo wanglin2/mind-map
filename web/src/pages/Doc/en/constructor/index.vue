@@ -46,14 +46,21 @@
 <td>layout</td>
 <td>String</td>
 <td>logicalStructure</td>
-<td>Layout type, options: logicalStructure (logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)</td>
+<td>Layout type, options: logicalStructure (logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)、timeline（v0.5.4+, timeline）、timeline2（v0.5.4+, up down alternating timeline）、fishbone（v0.5.4+, fishbone diagram）</td>
+<td></td>
+</tr>
+<tr>
+<td>fishboneDeg（v0.5.4+）</td>
+<td>Number</td>
+<td>45</td>
+<td>Set the diagonal angle of the fishbone structure diagram</td>
 <td></td>
 </tr>
 <tr>
 <td>theme</td>
 <td>String</td>
 <td>default</td>
-<td>Theme, options: default, classic, minions, pinkGrape, mint, gold, vitalityOrange, greenLeaf, dark2, skyGreen, classic2, classic3, classic4 (v0.2.0+), classicGreen, classicBlue, blueSky, brainImpairedPink, dark, earthYellow, freshGreen, freshRed, romanticPurple</td>
+<td>Theme, options: default, classic, minions, pinkGrape, mint, gold, vitalityOrange, greenLeaf, dark2, skyGreen, classic2, classic3, classic4(v0.2.0+), classicGreen, classicBlue, blueSky, brainImpairedPink, dark, earthYellow, freshGreen, freshRed, romanticPurple, simpleBlack(v0.5.4+), courseGreen(v0.5.4+), coffee(v0.5.4+), redSpirit(v0.5.4+), blackHumour(v0.5.4+), lateNightOffice(v0.5.4+), blackGold(v0.5.4+)、、avocado(v.5.10-fix.2+)、autumn(v.5.10-fix.2+)、orangeJuice(v.5.10-fix.2+)</td>
 <td></td>
 </tr>
 <tr>
@@ -147,6 +154,146 @@
 <td>Each line of text in the node will wrap automatically when it reaches the width</td>
 <td></td>
 </tr>
+<tr>
+<td>customHandleMousewheel（v0.4.3+）</td>
+<td>Function</td>
+<td>null</td>
+<td>User-defined mouse wheel event processing can pass a function, and the callback parameter is the event object</td>
+<td></td>
+</tr>
+<tr>
+<td>mousewheelAction（v0.4.3+）</td>
+<td>String</td>
+<td>zoom</td>
+<td>The behavior of the mouse wheel, <code>zoom</code>(Zoom in and out)、<code>move</code>(Move up and down). If <code>customHandleMousewheel</code> passes a custom function, this property will not take effect</td>
+<td></td>
+</tr>
+<tr>
+<td>mousewheelMoveStep（v0.4.3+）</td>
+<td>Number</td>
+<td>100</td>
+<td>When the <code>mousewheelAction</code> is set to <code>move</code>, you can use this attribute to control the step length of the view movement when the mouse scrolls. The unit is <code>px</code></td>
+<td></td>
+</tr>
+<tr>
+<td>defaultInsertSecondLevelNodeText（v0.4.7+）</td>
+<td>String</td>
+<td>二级节点</td>
+<td>Text of the default inserted secondary node</td>
+<td></td>
+</tr>
+<tr>
+<td>defaultInsertBelowSecondLevelNodeText（v0.4.7+）</td>
+<td>String</td>
+<td>分支主题</td>
+<td>Text for nodes below the second level inserted by default</td>
+<td></td>
+</tr>
+<tr>
+<td>expandBtnStyle（v0.5.0+）</td>
+<td>Object</td>
+<td>{ color: '#808080', fill: '#fff' }</td>
+<td>Expand the color of the stow button</td>
+<td></td>
+</tr>
+<tr>
+<td>expandBtnIcon（v0.5.0+）</td>
+<td>Object</td>
+<td>{ open: '', close: '' }</td>
+<td>Customize the icon of the expand/collapse button, and you can transfer the svg string of the icon</td>
+<td></td>
+</tr>
+<tr>
+<td>enableShortcutOnlyWhenMouseInSvg（v0.5.1+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Only respond to shortcut key events when the mouse is inside the canvas</td>
+<td></td>
+</tr>
+<tr>
+<td>enableNodeTransitionMove（v0.5.1+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Whether to enable node animation transition</td>
+<td></td>
+</tr>
+<tr>
+<td>nodeTransitionMoveDuration（v0.5.1+）</td>
+<td>Number</td>
+<td>300</td>
+<td>If node animation transition is enabled, the transition time can be set using this attribute, in milliseconds</td>
+<td></td>
+</tr>
+<tr>
+<td>initRootNodePosition（v0.5.3+）</td>
+<td>Array</td>
+<td>null</td>
+<td>The position of the initial root node can be passed as an array, default is <code>['center', 'center']</code>, Represents the root node at the center of the canvas, In addition to <code>center</code>, keywords can also be set to <code>left</code>, <code>top</code>, <code>right</code>, and <code>bottom</code>, In addition to passing keywords, each item in the array can also pass a number representing a specific pixel, Can pass a percentage string, such as <code>['40%', '60%']</code>, Represents a horizontal position at <code>40%</code> of the canvas width, and a vertical position at <code>60%</code> of the canvas height</td>
+<td></td>
+</tr>
+<tr>
+<td>exportPaddingX（v0.5.5+）</td>
+<td>Number</td>
+<td>10</td>
+<td>Horizontal padding of graphics when exporting PNG, SVG, and PDF</td>
+<td></td>
+</tr>
+<tr>
+<td>exportPaddingY（v0.5.5+）</td>
+<td>Number</td>
+<td>10</td>
+<td>Vertical padding of graphics when exporting PNG, SVG, and PDF</td>
+<td></td>
+</tr>
+<tr>
+<td>nodeTextEditZIndex（v0.5.5+）</td>
+<td>Number</td>
+<td>3000</td>
+<td></td>
+<td>z-index of node text edit box elements</td>
+</tr>
+<tr>
+<td>nodeNoteTooltipZIndex（v0.5.5+）</td>
+<td>Number</td>
+<td>3000</td>
+<td>z-index of floating layer elements in node comments</td>
+<td></td>
+</tr>
+<tr>
+<td>isEndNodeTextEditOnClickOuter（v0.5.5+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Whether to end the editing status of node text when clicking on an area outside the canvas</td>
+<td></td>
+</tr>
+<tr>
+<td>maxHistoryCount（v0.5.6+）</td>
+<td>Number</td>
+<td>1000</td>
+<td></td>
+<td>Maximum number of history records</td>
+</tr>
+<tr>
+<td>alwaysShowExpandBtn（v0.5.8+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Whether to always display the expand and collapse buttons of nodes, which are only displayed when the mouse is moved up and activated by default</td>
+<td></td>
+</tr>
+<tr>
+<td>iconList（v0.5.8+）</td>
+<td>Array</td>
+<td>[]</td>
+<td>The icons that can be inserted into the extension node, and each item in the array is an object. Please refer to the &quot;Icon Configuration&quot; table below for the detailed structure of the object</td>
+<td></td>
+</tr>
+<tr>
+<td>maxNodeCacheCount（v0.5.10+）</td>
+<td>Number</td>
+<td>1000</td>
+<td>The maximum number of cached nodes. To optimize performance, an internal node cache pool is maintained to reuse nodes. This attribute allows you to specify the maximum number of caches in the pool</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
@@ -189,6 +336,37 @@
 <td>Object</td>
 <td>{color: '#999', opacity: 0.5, fontSize: 14}</td>
 <td>Watermark text style</td>
+</tr>
+</tbody>
+</table>
+<h3>Icon Configuration</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>String</td>
+<td></td>
+<td>The name of the icon group</td>
+</tr>
+<tr>
+<td>type</td>
+<td>String</td>
+<td></td>
+<td>Values for icon grouping</td>
+</tr>
+<tr>
+<td>list</td>
+<td>Array</td>
+<td></td>
+<td>A list of icons under grouping, with each item in the array being an object, <code>{ name: '', icon: '' }</code>，<code>name</code>represents the name of the icon, <code>icon</code>represents the icon, Can be an <code>svg</code> icon, such as <code>&lt;svg ...&gt;&lt;path&gt;&lt;/path&gt;&lt;/svg&gt;</code>, also can be a image <code>url</code>, or <code>base64</code> icon, such as <code>data:image/png;base64,...</code></td>
 </tr>
 </tbody>
 </table>
@@ -235,10 +413,12 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 </blockquote>
 <p>List of all currently registered plugins.</p>
 <h2>Instance methods</h2>
-<h3>getSvgData()</h3>
+<h3>getSvgData({ paddingX = 0, paddingY = 0 })</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
+<p><code>paddingX</code>: Padding x</p>
+<p><code>paddingY</code>: Padding y</p>
 <p>Get the <code>svg</code> data and return an object. The detailed structure is as follows:</p>
 <pre class="hljs"><code>{
   svg, <span class="hljs-comment">// Element, the overall svg element of the mind map graphics, including: svg (canvas container), g (actual mind map group)</span>
@@ -426,6 +606,31 @@ poor performance and should be used sparingly.</p>
 <td>Available when the <code>RichText</code> plugin is registered. When there is a <code>DOM</code> node in <code>svg</code>, the <code>DOM</code> node will be converted to an image when exporting to an image. This event will be triggered during the conversion process. You can use this event to prompt the user about the node to which you are currently converting</td>
 <td>index（Index of the node currently converted to）、len（Total number of nodes to be converted）</td>
 </tr>
+<tr>
+<td>node_dragging（v0.4.5+）</td>
+<td>Triggered when a node is dragged</td>
+<td>node(The currently dragged node)</td>
+</tr>
+<tr>
+<td>node_dragend（v0.4.5+）</td>
+<td>Triggered when the node is dragged and ends</td>
+<td></td>
+</tr>
+<tr>
+<td>associative_line_click（v0.4.5+）</td>
+<td>Triggered when an associated line is clicked</td>
+<td>path(Connector node)、clickPath(Invisible click line node)、node(Start node)、toNode(Target node)</td>
+</tr>
+<tr>
+<td>svg_mouseenter（v0.5.1+）</td>
+<td>Triggered when the mouse moves into the SVG canvas</td>
+<td>e（event object）</td>
+</tr>
+<tr>
+<td>svg_mouseleave（v0.5.1+）</td>
+<td>Triggered when the mouse moves out of the SVG canvas</td>
+<td>e（event object）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
@@ -494,13 +699,13 @@ redo. All commands are as follows:</p>
 </tr>
 <tr>
 <td>INSERT_NODE</td>
-<td>Insert a sibling node, the active node will be the operation node. If there are multiple active nodes, only the first one will be effective</td>
-<td></td>
+<td>Insert a sibling node, the active node or appoint node will be the operation node. If there are multiple active nodes, only the first one will be effective</td>
+<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>） 、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js</a> ）</td>
 </tr>
 <tr>
 <td>INSERT_CHILD_NODE</td>
-<td>Insert a child node, the active node will be the operation node</td>
-<td></td>
+<td>Insert a child node, the active node or appoint node will be the operation node</td>
+<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>）、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js</a> ）</td>
 </tr>
 <tr>
 <td>UP_NODE</td>
@@ -514,8 +719,8 @@ redo. All commands are as follows:</p>
 </tr>
 <tr>
 <td>REMOVE_NODE</td>
-<td>Remove node, the active node will be the operation node</td>
-<td></td>
+<td>Remove node, the active node or appoint node will be the operation node</td>
+<td>appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）</td>
 </tr>
 <tr>
 <td>PASTE_NODE</td>
@@ -663,6 +868,12 @@ smm (essentially also json)</p>
 <code>false</code></p>
 <p><code>fileName</code>: (v0.1.6+) the name of the exported file, default is <code>思维导图</code> (mind
 map).</p>
+<p>If it is exported as <code>png</code>, the fourth parameter can be passed:</p>
+<p><code>transparent</code>: v0.5.7+, <code>Boolean</code>, default is <code>false</code>, Specify whether the background of the exported image is transparent</p>
+<p>If it is exported as <code>svg</code>, the fourth parameter can be passed:</p>
+<p><code>plusCssText</code>: Additional <code>CSS</code> style. If there is a <code>dom</code> node in <code>svg</code>, you can pass in some styles specific to the node through this parameter</p>
+<p>If it is exported as <code>json</code> or <code>smm</code>, the fourth parameter can be passed:</p>
+<p><code>withConfig</code>: <code>Boolean</code>, default is <code>true</code>, Specify whether the exported data includes configuration data, otherwise only pure node tree data will be exported</p>
 <h3>toPos(x, y)</h3>
 <blockquote>
 <p>v0.1.5+</p>

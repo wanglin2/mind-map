@@ -20,6 +20,16 @@ import vitalityOrange from './vitalityOrange'
 import greenLeaf from './greenLeaf'
 import dark2 from './dark2'
 import skyGreen from './skyGreen'
+import simpleBlack from './simpleBlack'
+import courseGreen from './courseGreen'
+import coffee from './coffee'
+import redSpirit from './redSpirit'
+import blackHumour from './blackHumour'
+import lateNightOffice from './lateNightOffice'
+import blackGold from './blackGold'
+import avocado from './avocado'
+import autumn from './autumn'
+import orangeJuice from './orangeJuice'
 
 export default {
   default: defaultTheme,
@@ -43,5 +53,15 @@ export default {
   vitalityOrange,
   greenLeaf,
   dark2,
-  skyGreen
+  skyGreen,
+  simpleBlack,
+  courseGreen,
+  coffee,
+  redSpirit,
+  blackHumour,
+  lateNightOffice,
+  blackGold,
+  avocado,
+  autumn,
+  orangeJuice
 }

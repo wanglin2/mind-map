@@ -39,7 +39,15 @@ basic data, otherwise it will throw an error</p>
 <p>Copy render tree data, example:</p>
 <pre class="hljs"><code>copyRenderTree({}, <span class="hljs-built_in">this</span>.mindMap.renderer.renderTree);
 </code></pre>
-<h4>copyNodeTree(tree, root)</h4>
+<h4>copyNodeTree(tree, root, removeActiveState, keepId)</h4>
+<ul>
+<li>
+<p><code>removeActiveState</code>: <code>Boolean</code>, default is <code>false</code>, Whether to remove the active state of the node</p>
+</li>
+<li>
+<p><code>keepId</code>: v0.4.6+, <code>Boolean</code>, default is <code>false</code>, Whether to retain the <code>id</code> of the replicated node will be deleted by default to prevent duplicate node <code>id</code>. However, for mobile node scenarios, the original <code>id</code> of the node needs to be retained</p>
+</li>
+</ul>
 <p>Copy node tree data, mainly eliminating the reference <code>node</code> instance <code>_node</code>
 and copying the <code>data</code> of the data object, example:</p>
 <pre class="hljs"><code>copyNodeTree({}, node);
@@ -74,6 +82,13 @@ and copying the <code>data</code> of the data object, example:</p>
 <p>Measure the width and height of the text, return value:</p>
 <pre class="hljs"><code>{ width, height }
 </code></pre>
+<h4>getTextFromHtml(html)</h4>
+<p>Extract plain text content from an HTML string.</p>
+<h4>readBlob(blob)</h4>
+<blockquote>
+<p>v0.5.9+</p>
+</blockquote>
+<p>Convert <code>blob</code> data to <code>data:url</code> data.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>
@@ -97,6 +112,31 @@ drawBackgroundImageToCanvas(ctx, width, height, img, {
   }
 })
 </code></pre>
+<h2>LRU cache class</h2>
+<blockquote>
+<p>v0.5.10+</p>
+</blockquote>
+<p>Import:</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> Lru <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/Lru.js&#x27;</span>
+</code></pre>
+<h3>Constructor</h3>
+<pre class="hljs"><code><span class="hljs-keyword">let</span> lru = <span class="hljs-keyword">new</span> Lru(max)
+</code></pre>
+<p><code>max</code>: Specify the maximum number of caches.</p>
+<h3>Instance properties</h3>
+<h4>size</h4>
+<p>The current number of caches.</p>
+<h4>pool</h4>
+<p>Get cache pool.</p>
+<h3>Instance methods</h3>
+<h4>add(key, value)</h4>
+<p>Add cache.</p>
+<h4>delete(key)</h4>
+<p>Delete cache.</p>
+<h4>has(key)</h4>
+<p>Check if a cache exists.</p>
+<h4>get(key)</h4>
+<p>Gets the value of a cache.</p>
 
   </div>
 </template>

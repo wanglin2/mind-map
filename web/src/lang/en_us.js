@@ -35,7 +35,15 @@ export default {
     watermarkAngle: 'Angle',
     watermarkTextOpacity: 'Text opacity',
     watermarkTextFontSize: 'Font size',
-    isEnableNodeRichText: 'Enable node rich text editing'
+    isEnableNodeRichText: 'Enable node rich text editing',
+    mousewheelAction: 'Mouse wheel behavior',
+    zoomView: 'Zoom view',
+    moveViewUpDown: 'Move view up and down',
+    associativeLine: 'Associative line',
+    associativeLineWidth: 'Width',
+    associativeLineColor: 'Color',
+    associativeLineActiveWidth: 'Active width',
+    associativeLineActiveColor: 'Active color'
   },
   color: {
     moreColor: 'More color'
@@ -80,13 +88,16 @@ export default {
     imageFile: 'Image file',
     svgFile: 'svg file',
     pdfFile: 'pdf file',
+    markdownFile: 'markdown file',
     tips: 'tips: .smm and .json file can be import',
-    domToImage: 'Whether to convert rich text nodes in svg into pictures',
+    isTransparent: 'Background is transparent',
     pngTips: 'tips: Exporting pictures in rich text mode is time-consuming. It is recommended to export to svg format',
     svgTips: 'tips: Exporting pictures in rich text mode is time-consuming',
     transformingDomToImages: 'Converting nodes: ',
     notifyTitle: 'Info',
-    notifyMessage: 'If the download is not triggered, check whether it is blocked by the browser'
+    notifyMessage: 'If the download is not triggered, check whether it is blocked by the browser',
+    paddingX: 'Padding x',
+    paddingY: 'Padding y'
   },
   fullscreen: {
     fullscreenShow: 'Full screen show',
@@ -95,7 +106,7 @@ export default {
   import: {
     title: 'Import',
     selectFile: 'Select file',
-    supportFile: 'Support .smm、.json、.xmind、.xlsx file'
+    supportFile: 'Support .smm、.json、.xmind、.xlsx、.md file'
   },
   navigatorToolbar: {
     openMiniMap: 'Open mini map',
@@ -184,7 +195,8 @@ export default {
     saveAs: 'Save as',
     import: 'Import',
     export: 'Export',
-    shortcutKey: 'Shortcut key'
+    shortcutKey: 'Shortcut key',
+    associativeLine: 'Associative line',
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',

@@ -76,7 +76,7 @@
             {{ item }}px
           </div>
         </div>
-        <div class="btn" slot="reference" :style="{ color: formatInfo.color }">
+        <div class="btn" slot="reference">
           <span class="icon iconfont iconcase fontColor"></span>
         </div>
       </el-popover>
@@ -85,7 +85,7 @@
     <el-tooltip content="字体颜色" placement="top">
       <el-popover placement="bottom" trigger="hover">
         <Color :color="fontColor" @change="changeFontColor"></Color>
-        <div class="btn" slot="reference">
+        <div class="btn" slot="reference" :style="{ color: formatInfo.color }">
           <span class="icon iconfont iconzitiyanse"></span>
         </div>
       </el-popover>
@@ -227,7 +227,7 @@ export default {
 <style lang="less" scoped>
 .richTextToolbar {
   position: fixed;
-  z-index: 99999;
+  z-index: 2000;
   height: 55px;
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.06);

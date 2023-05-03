@@ -30,11 +30,11 @@ MindMap.usePlugin(MiniMap)
 <p>1.准备一个容器元素<code>container</code>，定位不为<code>static</code></p>
 <p>2.在<code>container</code>内创建一个小地图容器元素<code>miniMapContainer</code>，绝对定位</p>
 <p>3.在<code>container</code>内创建一个视口框元素<code>viewBoxContainer</code>，绝对定位，设置边框样式，过渡属性（可选）</p>
-<p>4.监听<code>data_change</code>和<code>view_data_change</code>事件，在该事件内调用<code>calculationMiniMap</code>方法获取计算数据，然后将<code>svgHTML</code>渲染到<code>miniMapContainer</code>元素内，并且设置它的样式：</p>
+<p>4.监听<code>data_change</code>和<code>view_data_change</code>事件，在该事件内调用<code>calculationMiniMap</code>方法获取计算数据，然后将<code>svgHTML</code>渲染到<code>miniMapContainer</code>元素内，并且设置<code>miniMapContainer</code>元素的样式：</p>
 <pre class="hljs"><code>:style=<span class="hljs-string">&quot;{
-    transform: `scale(${svgBoxScale})`,
-    left: svgBoxLeft + &#x27;px&#x27;,
-    top: svgBoxTop + &#x27;px&#x27;,
+    transform: `scale(${miniMapBoxScale})`,
+    left: miniMapBoxLeft + &#x27;px&#x27;,
+    top: miniMapBoxTop + &#x27;px&#x27;,
 }&quot;</span>
 </code></pre>
 <p>5.将<code>viewBoxStyle</code>对象设置为<code>viewBoxContainer</code>元素的样式</p>

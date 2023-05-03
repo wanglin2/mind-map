@@ -1,6 +1,89 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.5.11</h2>
+<p>New: Supports associative text editing.</p>
+<p>optimization: Optimizing theme configuration updates, changing configurations that do not involve node size does not trigger node recalculation.</p>
+<h2>0.5.10</h2>
+<p>New: Optimize node reuse logic using LRU caching algorithm.</p>
+<h2>0.5.10-fix.1</h2>
+<p>Fix: Fix the issue of import errors.</p>
+<h2>0.5.10-fix.2</h2>
+<p>Fix: Fixed the issue of switching themes and importing data without triggering data changes in rich text mode.</p>
+<p>New: Add three new themes.</p>
+<h2>0.5.9</h2>
+<p>Change: Unified export method format, using <code>FileReader</code> instead of <code>URL.createObjectURL</code> to convert <code>blob</code> data.</p>
+<h2>0.5.8</h2>
+<p>optimization: 1.The position setting is not triggered when the node position does not change. 2.The unfolding and folding status does not change and does not trigger button updates.</p>
+<p>New: 1.The default setting is to move the mouse over the node to display the expand and collapse buttons. 2.Support the list of icons that can be inserted into extended nodes.</p>
+<h2>0.5.7</h2>
+<p>Breaking change：In rich text mode, exporting png has been changed to using html2canvas to convert the entire svg, greatly improving the export speed. However, html2canvas has a bug where the text color inline with the dom node in the foreignObject element cannot be recognized. Therefore, the text color of the exported node is fixed. However, compared to the previously unavailable state of the export, it can at least be exported quickly and smoothly.</p>
+<p>optimization: Optimize the rich text node editing experience.</p>
+<p>New: In rich text mode, importing data, initializing data, and switching theme scene node styles support following theme changes.</p>
+<h2>0.5.6</h2>
+<p>Fix: 1.Fix the issue of node position disorder during fast and multiple renderings in a short period of time. 2.Fix the issue of dragging the canvas while the node is being edited, causing the edit box and node to separate.</p>
+<p>New: 1.Add a maximum history limit.</p>
+<h2>0.5.5-fix.1</h2>
+<p>Fix: 1.Fix the issue where the edit box is also outside the canvas when editing nodes outside the canvas. 2.After modifying the structure, reset the transformation to prevent the problem of sudden position changes during the first drag after switching the structure during scaling.</p>
+<p>optimization: 1.When multiple nodes are selected, as long as there is a cross between the node and the selection area, it is considered selected.</p>
+<h2>0.5.5-fix.2</h2>
+<p>Fix: 1.Fix mini map error.</p>
+<h2>0.5.5</h2>
+<p>New: 1.Supports configuring the padding when exporting to PNG, SVG, or PDF. 2.Support the configuration of z-index for node text editing boxes and node comment floating layer elements. 3.Support clicking on areas outside the canvas to end node editing status.</p>
+<h2>0.5.4</h2>
+<p>New: 1.Add new themes. 2.Added timeline and fishbone structure.</p>
+<p>Fix: 1.Fix the conflict issue between node right-click and canvas right-click. 2.Fix the bug that the line segment is not hidden when dragging nodes such as organizational chart and directory organization chart.</p>
+<p>optimization: 1.Optimize the layout of organizational chart. 2.Optimize the layout of the directory organization chart.</p>
+<h2>0.5.4-fix.1</h2>
+<p>optimization: 1.Optimize fishbone layout.</p>
+<h2>0.5.3</h2>
+<p>Fix: 1.Fixed the issue of setting the text style when multiple nodes were selected in rich text mode, which would change the text of all selected nodes to the text of the last selected node.</p>
+<p>New: 1.Support setting the position of the initial central node.</p>
+<h3>0.5.3-fix.1</h3>
+<p>Fix: 1.Fix the issue where setting the position of the initial central node does not take effect.</p>
+<h3>0.5.3-fix.2</h3>
+<p>Fix: 1.Fix the issue of not displaying images in nodes when exporting as images.</p>
+<h2>0.5.2</h2>
+<p>Fix: 1.Remove <code>uid</code> from exported <code>JSON</code> data; 2.Clear the node cache pool when re rendering.</p>
+<h2>0.5.1</h2>
+<p>optimization: 1.Only respond to shortcut key events when the mouse is inside the canvas</p>
+<p>Fix: 1.Fix the issue of incorrect node position during fast operation</p>
+<h2>0.5.0</h2>
+<p>This version is mainly about code level changes and optimization, with the core goal of improving rendering performance and reducing stuck issues.</p>
+<p>New: 1.Support custom expansion and collapse node icons and colors;</p>
+<p>optimization: 1.Optimize rendering logic, set the theme, move forward and backward, and other operations no longer require full rendering;</p>
+<pre><code> 2.Optimize node drag logic, and fix the problem of being unable to drag between two nodes;
+
+ 3.Collapse all nodes adds logic to return to the center point;
+
+ 4.Fix the problem of nodes flying and scrambling caused by triggering rendering multiple times in a short time;
+
+ 5.Optimize the experience of node editing;
+</code></pre>
+<p>Fix: 1.Fix the issue where the setData method does not trigger history;</p>
+<p>modify: Starting from version 0.5.0, considering performance issues, the node activation state can only modify shape related styles:</p>
+<pre class="hljs"><code>[
+  <span class="hljs-string">&#x27;fillColor&#x27;</span>,
+  <span class="hljs-string">&#x27;borderColor&#x27;</span>,
+  <span class="hljs-string">&#x27;borderWidth&#x27;</span>,
+  <span class="hljs-string">&#x27;borderDasharray&#x27;</span>,
+  <span class="hljs-string">&#x27;borderRadius&#x27;</span>
+]
+</code></pre>
+<h2>0.4.7</h2>
+<p>optimization: 1.During rich text editing, when initially focusing, all are no longer selected by default; 2.When editing rich text, use the node fill color as the background color to avoid being invisible when the node color is white.  3.Node activation state switching no longer triggers history. 4.Triggering history multiple times in a short time will only add the last data. 5.Optimize the addition of historical records. When there is a rollback, delete the historical data after the current pointer when adding a new record again.</p>
+<p>New: 1.Support for importing and exporting Markdown format files. 2.Support for configuring initial text when inserting nodes. 3.Expand the commands for inserting and deleting nodes to support specifying nodes.</p>
+<h2>0.4.6</h2>
+<p>New: 1.Associated lines support adjusting control points.</p>
+<p>optimization: 1.When adding historical data, filter data that has not changed compared to the previous time.</p>
+<p>Fix: 1.Fixed a conflict between the direction keys and the navigation function of the direction keys during node editing. 2.Fixed the issue of node id loss when dragging a mobile node, which can cause associated lines to be lost.</p>
+<h2>0.4.5</h2>
+<p>New: 1.Supports associative lines. 2.You can also drag the canvas by holding down the root node. 3. Hold down the ctrl key to adjust multiple selected nodes.</p>
+<h2>0.4.4</h2>
+<p>New: Support horizontal scrolling in response to the mouse.</p>
+<h2>0.4.3</h2>
+<p>Fix: No trigger after forward and backward <code>data_ Change</code> event.</p>
+<p>New: Support user-defined mouse wheel events; The mouse wheel is adjusted to support zooming and moving the view up and down.</p>
 <h2>0.4.2</h2>
 <p>New: The <code>setText</code> method of the Node class adds a second parameter to support setting rich text content.</p>
 <h2>0.4.1</h2>

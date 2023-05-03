@@ -35,7 +35,15 @@ export default {
     watermarkAngle: '旋转角度',
     watermarkTextOpacity: '文字透明度',
     watermarkTextFontSize: '文字字号',
-    isEnableNodeRichText: '是否开启节点富文本编辑'
+    isEnableNodeRichText: '是否开启节点富文本编辑',
+    mousewheelAction: '鼠标滚轮行为',
+    zoomView: '缩放视图',
+    moveViewUpDown: '上下移动视图',
+    associativeLine: '关联线',
+    associativeLineWidth: '粗细',
+    associativeLineColor: '颜色',
+    associativeLineActiveWidth: '激活粗细',
+    associativeLineActiveColor: '激活颜色'
   },
   color: {
     moreColor: '更多颜色'
@@ -80,13 +88,16 @@ export default {
     imageFile: '图片文件',
     svgFile: 'svg文件',
     pdfFile: 'pdf文件',
+    markdownFile: 'markdown文件',
     tips: 'tips：.smm和.json文件可用于导入',
-    domToImage: '是否将svg中富文本节点转换成图片',
+    isTransparent: '背景是否透明',
     pngTips: 'tips：富文本模式导出图片非常耗时，建议导出为svg格式',
     svgTips: 'tips：富文本模式导出图片非常耗时',
     transformingDomToImages: '正在转换节点：',
     notifyTitle: '消息',
-    notifyMessage: '如果没有触发下载，请检查是否被浏览器拦截了'
+    notifyMessage: '如果没有触发下载，请检查是否被浏览器拦截了',
+    paddingX: '水平内边距',
+    paddingY: '垂直内边距'
   },
   fullscreen: {
     fullscreenShow: '全屏查看',
@@ -95,7 +106,7 @@ export default {
   import: {
     title: '导入',
     selectFile: '选取文件',
-    supportFile: '支持.smm、.json、.xmind、.xlsx文件'
+    supportFile: '支持.smm、.json、.xmind、.xlsx、.md文件'
   },
   navigatorToolbar: {
     openMiniMap: '开启小地图',
@@ -184,7 +195,8 @@ export default {
     saveAs: '另存为',
     import: '导入',
     export: '导出',
-    shortcutKey: '快捷键'
+    shortcutKey: '快捷键',
+    associativeLine: '关联线',
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',

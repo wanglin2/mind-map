@@ -2,7 +2,6 @@ import Base from './Base'
 import { walk, asyncRun } from '../utils'
 
 //  思维导图
-
 class MindMap extends Base {
   //  构造函数
   // 在逻辑结构图的基础上增加一个变量来记录生长方向，向左还是向右，同时在计算left的时候根据方向来计算、调整top时只考虑同方向的节点即可
@@ -11,7 +10,6 @@ class MindMap extends Base {
   }
 
   //  布局
-
   doLayout(callback) {
     let task = [
       () => {
@@ -31,7 +29,6 @@ class MindMap extends Base {
   }
 
   //  遍历数据计算节点的left、width、height
-
   computedBaseValue() {
     walk(
       this.renderer.renderTree,
@@ -96,7 +93,6 @@ class MindMap extends Base {
   }
 
   //  遍历节点树计算节点的top
-
   computedTopValue() {
     walk(
       this.root,
@@ -129,7 +125,6 @@ class MindMap extends Base {
   }
 
   //  调整节点top
-
   adjustTopValue() {
     walk(
       this.root,
@@ -152,7 +147,6 @@ class MindMap extends Base {
   }
 
   //  更新兄弟节点的top
-
   updateBrothers(node, leftAddHeight, rightAddHeight) {
     if (node.parent) {
       // 过滤出和自己同方向的节点
@@ -188,7 +182,6 @@ class MindMap extends Base {
   }
 
   //  绘制连线，连接该节点到其子节点
-
   renderLine(node, lines, style, lineStyle) {
     if (lineStyle === 'curve') {
       this.renderLineCurve(node, lines, style)
@@ -200,12 +193,14 @@ class MindMap extends Base {
   }
 
   //  直线风格连线
-
   renderLineStraight(node, lines, style) {
     if (node.children.length <= 0) {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0
+    }
     let marginX = this.getMarginX(node.layerIndex + 1)
     let s1 = (marginX - expandBtnSize) * 0.6
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
@@ -238,12 +233,14 @@ class MindMap extends Base {
   }
 
   //  直连风格
-
   renderLineDirect(node, lines, style) {
     if (node.children.length <= 0) {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0
+    }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
     node.children.forEach((item, index) => {
       let x1 =
@@ -273,12 +270,14 @@ class MindMap extends Base {
   }
 
   //  曲线风格连线
-
   renderLineCurve(node, lines, style) {
     if (node.children.length <= 0) {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0
+    }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
     node.children.forEach((item, index) => {
       let x1 =
@@ -286,7 +285,7 @@ class MindMap extends Base {
           ? left + width / 2
           : item.dir === 'left'
           ? left - expandBtnSize
-          : left + width + 20
+          : left + width + expandBtnSize
       let y1 = top + height / 2
       let x2 = item.dir === 'left' ? item.left + item.width : item.left
       let y2 = item.top + item.height / 2
@@ -313,7 +312,6 @@ class MindMap extends Base {
   }
 
   //  渲染按钮
-
   renderExpandBtn(node, btn) {
     let { width, height, expandBtnSize } = node
     let { translateX, translateY } = btn.transform()
@@ -321,13 +319,18 @@ class MindMap extends Base {
     let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle
       ? height / 2
       : 0
-    let x = (node.dir === 'left' ? 0 - expandBtnSize : width) - translateX
-    let y = height / 2 - translateY + nodeUseLineStyleOffset
+    // 位置没有变化则返回
+    let _x = (node.dir === 'left' ? 0 - expandBtnSize : width)
+    let _y = height / 2 + nodeUseLineStyleOffset
+    if (_x === translateX && _y === translateY) {
+      return
+    }
+    let x = _x - translateX
+    let y = _y - translateY
     btn.translate(x, y)
   }
 
   //  创建概要节点
-
   renderGeneralization(node, gLine, gNode) {
     let isLeft = node.dir === 'left'
     let {

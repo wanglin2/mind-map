@@ -7,17 +7,19 @@ import Style from './src/Style'
 import KeyCommand from './src/KeyCommand'
 import Command from './src/Command'
 import BatchExecution from './src/BatchExecution'
-import { layoutValueList } from './src/utils/constant'
+import { layoutValueList, CONSTANTS } from './src/utils/constant'
 import { SVG } from '@svgdotjs/svg.js'
 import { simpleDeepClone } from './src/utils'
-import defaultTheme from './src/themes/default'
+import defaultTheme, { checkIsNodeSizeIndependenceConfig } from './src/themes/default'
 
 // 默认选项配置
 const defaultOpt = {
   // 是否只读
   readonly: false,
   // 布局
-  layout: 'logicalStructure',
+  layout: CONSTANTS.LAYOUT.LOGICAL_STRUCTURE,
+  // 如果结构为鱼骨图，那么可以通过该选项控制倾斜角度
+  fishboneDeg: 45,
   // 主题
   theme: 'default', // 内置主题：default（默认主题）
   // 主题配置，会和所选择的主题进行合并
@@ -61,7 +63,66 @@ const defaultOpt = {
     }
   },
   // 达到该宽度文本自动换行
-  textAutoWrapWidth: 500
+  textAutoWrapWidth: 500,
+  // 自定义鼠标滚轮事件处理
+  // 可以传一个函数，回调参数为事件对象
+  customHandleMousewheel: null,
+  // 鼠标滚动的行为，如果customHandleMousewheel传了自定义函数，这个属性不生效
+  mousewheelAction: CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM,// zoom（放大缩小）、move（上下移动）
+  // 当mousewheelAction设为move时，可以通过该属性控制鼠标滚动一下视图移动的步长，单位px
+  mousewheelMoveStep: 100,
+  // 默认插入的二级节点的文字
+  defaultInsertSecondLevelNodeText: '二级节点',
+  // 默认插入的二级以下节点的文字
+  defaultInsertBelowSecondLevelNodeText: '分支主题',
+  // 展开收起按钮的颜色
+  expandBtnStyle: {
+    color: '#808080',
+    fill: '#fff'
+  },
+  // 自定义展开收起按钮的图标
+  expandBtnIcon: {
+    open: '',// svg字符串
+    close: ''
+  },
+  // 是否只有当鼠标在画布内才响应快捷键事件
+  enableShortcutOnlyWhenMouseInSvg: true,
+  // 是否开启节点动画过渡
+  enableNodeTransitionMove: true,
+  // 如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms
+  nodeTransitionMoveDuration: 300,
+  // 初始根节点的位置
+  initRootNodePosition: null,
+  // 导出png、svg、pdf时的图形内边距
+  exportPaddingX: 10,
+  exportPaddingY: 10,
+  // 节点文本编辑框的z-index
+  nodeTextEditZIndex: 3000,
+  // 节点备注浮层的z-index
+  nodeNoteTooltipZIndex: 3000,
+  // 是否在点击了画布外的区域时结束节点文本的编辑状态
+  isEndNodeTextEditOnClickOuter: true,
+  // 最大历史记录数
+  maxHistoryCount: 1000,
+  // 是否一直显示节点的展开收起按钮，默认为鼠标移上去和激活时才显示
+  alwaysShowExpandBtn: false,
+  // 扩展节点可插入的图标
+  iconList: [
+    // {
+    //   name: '',// 分组名称
+    //   type: '',// 分组的值
+    //   list: [// 分组下的图标列表
+    //     {
+    //       name: '',// 图标名称
+    //       icon:''// 图标，可以传svg或图片
+    //     }
+    //   ]
+    // }
+  ],
+  // 节点最大缓存数量
+  maxNodeCacheCount: 1000,
+  // 关联线默认文字
+  defaultAssociativeLineText: '关联'
 }
 
 //  思维导图
@@ -84,7 +145,7 @@ class MindMap {
     this.draw = this.svg.group()
 
     // 节点id
-    this.uid = 0
+    this.uid = 1
 
     // 初始化主题
     this.initTheme()
@@ -124,7 +185,7 @@ class MindMap {
     })
 
     // 初始渲染
-    this.reRender()
+    this.render()
     setTimeout(() => {
       this.command.addHistory()
     }, 0)
@@ -134,7 +195,7 @@ class MindMap {
   handleOpt(opt) {
     // 检查布局配置
     if (!layoutValueList.includes(opt.layout)) {
-      opt.layout = 'logicalStructure'
+      opt.layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE
     }
     // 检查主题配置
     opt.theme = opt.theme && theme[opt.theme] ? opt.theme : 'default'
@@ -142,21 +203,21 @@ class MindMap {
   }
 
   //  渲染，部分渲染
-  render(callback) {
+  render(callback, source = '') {
     this.batchExecution.push('render', () => {
       this.initTheme()
       this.renderer.reRender = false
-      this.renderer.render(callback)
+      this.renderer.render(callback, source)
     })
   }
 
   //  重新渲染
-  reRender(callback) {
+  reRender(callback, source = '') {
     this.batchExecution.push('render', () => {
       this.draw.clear()
       this.initTheme()
       this.renderer.reRender = true
-      this.renderer.render(callback)
+      this.renderer.render(callback, source)
     })
   }
 
@@ -195,7 +256,7 @@ class MindMap {
   setTheme(theme) {
     this.renderer.clearAllActive()
     this.opt.theme = theme
-    this.reRender()
+    this.render(null, CONSTANTS.CHANGE_THEME)
   }
 
   //  获取当前主题
@@ -206,7 +267,9 @@ class MindMap {
   //  设置主题配置
   setThemeConfig(config) {
     this.opt.themeConfig = config
-    this.reRender()
+    // 检查改变的是否是节点大小无关的主题属性
+    let res = checkIsNodeSizeIndependenceConfig(config)
+    this.render(null, res ? '' : CONSTANTS.CHANGE_THEME)
   }
 
   //  获取自定义主题配置
@@ -238,9 +301,10 @@ class MindMap {
   setLayout(layout) {
     // 检查布局配置
     if (!layoutValueList.includes(layout)) {
-      layout = 'logicalStructure'
+      layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE
     }
     this.opt.layout = layout
+    this.view.reset()
     this.renderer.setLayout()
     this.render()
   }
@@ -254,8 +318,13 @@ class MindMap {
   setData(data) {
     this.execCommand('CLEAR_ACTIVE_NODE')
     this.command.clearHistory()
-    this.renderer.renderTree = data
-    this.reRender()
+    this.command.addHistory()
+    if (this.richText) {
+      this.renderer.renderTree = this.richText.handleSetData(data)
+    } else {
+      this.renderer.renderTree = data
+    }
+    this.reRender(() => {}, CONSTANTS.SET_DATA)
   }
 
   //  动态设置思维导图数据，包括节点数据、布局、主题、视图
@@ -281,7 +350,7 @@ class MindMap {
 
   //  获取思维导图数据，节点树、主题、布局等
   getData(withConfig) {
-    let nodeData = this.command.getCopyData()
+    let nodeData = this.command.removeDataUid(this.command.getCopyData())
     let data = {}
     if (withConfig) {
       data = {
@@ -315,10 +384,10 @@ class MindMap {
 
   //  设置只读模式、编辑模式
   setMode(mode) {
-    if (!['readonly', 'edit'].includes(mode)) {
+    if (![CONSTANTS.MODE.READONLY, CONSTANTS.MODE.EDIT].includes(mode)) {
       return
     }
-    this.opt.readonly = mode === 'readonly'
+    this.opt.readonly = mode === CONSTANTS.MODE.READONLY
     if (this.opt.readonly) {
       // 取消当前激活的元素
       this.renderer.clearAllActive()
@@ -327,7 +396,7 @@ class MindMap {
   }
 
   // 获取svg数据
-  getSvgData() {
+  getSvgData({ paddingX = 0, paddingY = 0 } = {}) {
     const svg = this.svg
     const draw = this.draw
     // 保存原始信息
@@ -339,6 +408,10 @@ class MindMap {
     draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY)
     // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
     const rect = draw.rbox()
+    // 内边距
+    rect.width += paddingX
+    rect.height += paddingY
+    draw.translate(paddingX / 2, paddingY / 2)
     // 将svg设置为实际内容的宽高
     svg.size(rect.width, rect.height)
     // 把实际内容变换

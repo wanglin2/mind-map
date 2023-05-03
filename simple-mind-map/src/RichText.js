@@ -1,9 +1,8 @@
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
-import './css/quill.css'
 import html2canvas from 'html2canvas'
-import { Image as SvgImage } from '@svgdotjs/svg.js'
-import { walk } from './utils'
+import { walk, getTextFromHtml } from './utils'
+import { CONSTANTS } from './utils/constant'
 
 let extended = false
 
@@ -40,8 +39,49 @@ class RichText {
     this.range = null
     this.lastRange = null
     this.node = null
+    this.styleEl = null
+    this.cacheEditingText = ''
     this.initOpt()
     this.extendQuill()
+    this.appendCss()
+
+    // 处理数据，转成富文本格式
+    if (this.mindMap.opt.data) {
+      this.mindMap.opt.data = this.handleSetData(this.mindMap.opt.data)
+    }
+  }
+
+  // 插入样式
+  appendCss() {
+    let cssText = `
+      .ql-editor {
+        overflow: hidden;
+        padding: 0;
+        height: auto;
+        line-height: normal;
+      }
+      
+      .ql-container {
+        height: auto;
+        font-size: inherit;
+      }
+
+      .ql-container.ql-snow {
+        border: none;
+      }
+
+      .smm-richtext-node-wrap p {
+        font-family: auto;
+      }
+
+      .smm-richtext-node-edit-wrap p {
+        font-family: auto;
+      }
+    `
+    this.styleEl = document.createElement('style')
+    this.styleEl.type = 'text/css'
+    this.styleEl.innerHTML = cssText
+    document.head.appendChild(this.styleEl)
   }
 
   // 处理选项参数
@@ -95,42 +135,56 @@ class RichText {
     if (!rect) rect = node._textData.node.node.getBoundingClientRect()
     this.mindMap.emit('before_show_text_edit')
     this.mindMap.renderer.textEdit.registerTmpShortcut()
-    if (!this.textEditNode) {
-      this.textEditNode = document.createElement('div')
-      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;`
-      document.body.appendChild(this.textEditNode)
-    }
     // 原始宽高
     let g = node._textData.node
     let originWidth = g.attr('data-width')
     let originHeight = g.attr('data-height')
-    this.textEditNode.style.minWidth = originWidth + 'px'
+    // 缩放值
+    let scaleX = rect.width / originWidth
+    let scaleY = rect.height / originHeight
+    // 内边距
+    const paddingX = 6
+    const paddingY = 4
+    if (!this.textEditNode) {
+      this.textEditNode = document.createElement('div')
+      this.textEditNode.classList.add('smm-richtext-node-edit-wrap')
+      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: ${paddingY}px ${paddingX}px;`
+      this.textEditNode.addEventListener('click', e => {
+        e.stopPropagation()
+      })
+      document.body.appendChild(this.textEditNode)
+    }
+    // 使用节点的填充色，否则如果节点颜色是白色的话编辑时看不见
+    let bgColor = node.style.merge('fillColor')
+    this.textEditNode.style.marginLeft = `-${paddingX * scaleX}px`
+    this.textEditNode.style.marginTop = `-${paddingY * scaleY}px`
+    this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex
+    this.textEditNode.style.backgroundColor = bgColor === 'transparent' ? '#fff' : bgColor
+    this.textEditNode.style.minWidth = originWidth + paddingX * 2 + 'px'
     this.textEditNode.style.minHeight = originHeight + 'px'
-    this.textEditNode.style.left =
-      rect.left + (rect.width - originWidth) / 2 + 'px'
-    this.textEditNode.style.top =
-      rect.top + (rect.height - originHeight) / 2 + 'px'
+    this.textEditNode.style.left = rect.left + 'px'
+    this.textEditNode.style.top = rect.top + 'px'
     this.textEditNode.style.display = 'block'
-    this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + 'px'
-    this.textEditNode.style.transform = `scale(${rect.width / originWidth}, ${
-      rect.height / originHeight
-    })`
+    this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + paddingX * 2 + 'px'
+    this.textEditNode.style.transform = `scale(${scaleX}, ${scaleY})`
+    this.textEditNode.style.transformOrigin = 'left top'
     if (!node.nodeData.data.richText) {
       // 还不是富文本的情况
       let text = node.nodeData.data.text.split(/\n/gim).join('<br>')
       let html = `<p>${text}</p>`
-      this.textEditNode.innerHTML = html
+      this.textEditNode.innerHTML = this.cacheEditingText || html
     } else {
-      this.textEditNode.innerHTML = node.nodeData.data.text
+      this.textEditNode.innerHTML = this.cacheEditingText || node.nodeData.data.text
     }
     this.initQuillEditor()
     document.querySelector('.ql-editor').style.minHeight = originHeight + 'px'
     this.showTextEdit = true
-    this.selectAll()
+    this.focus()
     if (!node.nodeData.data.richText) {
       // 如果是非富文本的情况，需要手动应用文本样式
       this.setTextStyleIfNotRichText(node)
     }
+    this.cacheEditingText = ''
   }
 
   // 如果是非富文本的情况，需要手动应用文本样式
@@ -144,18 +198,24 @@ class RichText {
       underline: node.style.merge('textDecoration') === 'underline',
       strike: node.style.merge('textDecoration') === 'line-through'
     }
-    this.formatText(style)
+    this.formatAllText(style)
+  }
+
+  // 获取当前正在编辑的内容
+  getEditText() {
+    let html = this.quill.container.firstChild.innerHTML
+    // 去除最后的空行
+    return html.replace(/<p><br><\/p>$/, '')
   }
 
   // 隐藏文本编辑控件，即完成编辑
-  hideEditText() {
+  hideEditText(nodes) {
     if (!this.showTextEdit) {
       return
     }
-    let html = this.quill.container.firstChild.innerHTML
-    // 去除最后的空行
-    html = html.replace(/<p><br><\/p>$/, '')
-    this.mindMap.renderer.activeNodeList.forEach(node => {
+    let html = this.getEditText()
+    let list = nodes && nodes.length > 0 ? nodes : this.mindMap.renderer.activeNodeList
+    list.forEach(node => {
       this.mindMap.execCommand('SET_NODE_TEXT', node, html, true)
       if (node.isGeneralization) {
         // 概要节点
@@ -166,7 +226,7 @@ class RichText {
     this.mindMap.emit(
       'hide_text_edit',
       this.textEditNode,
-      this.mindMap.renderer.activeNodeList
+      list
     )
     this.textEditNode.style.display = 'none'
     this.showTextEdit = false
@@ -226,6 +286,12 @@ class RichText {
   // 选中全部
   selectAll() {
     this.quill.setSelection(0, this.quill.getLength())
+  }
+
+  // 聚焦
+  focus() {
+    let len = this.quill.getLength()
+    this.quill.setSelection(len, len)
   }
 
   // 格式化当前选中的文本
@@ -338,90 +404,41 @@ class RichText {
     return data
   }
 
-  // 将svg中嵌入的dom元素转换成图片
-  async _handleSvgDomElements(svg) {
-    svg = svg.clone()
-    let foreignObjectList = svg.find('foreignObject')
-    let task = foreignObjectList.map(async item => {
-      let clone = item.first().node.cloneNode(true)
-      let div = document.createElement('div')
-      div.style.cssText = `position: fixed; left: -999999px;`
-      div.appendChild(clone)
-      this.mindMap.el.appendChild(div)
-      let canvas = await html2canvas(clone, {
-        backgroundColor: null
-      })
-      this.mindMap.el.removeChild(div)
-      let imgNode = new SvgImage()
-        .load(canvas.toDataURL())
-        .size(canvas.width, canvas.height)
-      item.replace(imgNode)
-    })
-    await Promise.all(task)
-    return {
-      svg: svg,
-      svgHTML: svg.svg()
-    }
-  }
-
-  // 将svg中嵌入的dom元素转换成图片
-  handleSvgDomElements(svg) {
-    return new Promise((resolve, reject) => {
-      svg = svg.clone()
-      let foreignObjectList = svg.find('foreignObject')
-      let index = 0
-      let len = foreignObjectList.length
-      let transform = async () => {
-        this.mindMap.emit('transforming-dom-to-images', index, len)
-        try {
-          let item = foreignObjectList[index++]
-          let parent = item.parent()
-          let clone = item.first().node.cloneNode(true)
-          let div = document.createElement('div')
-          div.style.cssText = `position: fixed; left: -999999px;`
-          div.appendChild(clone)
-          this.mindMap.el.appendChild(div)
-          let canvas = await html2canvas(clone, {
-            backgroundColor: null
-          })
-          // 优先使用原始宽高，因为当设备的window.devicePixelRatio不为1时，html2canvas输出的图片会更大
-          let imgNodeWidth = parent.attr('data-width') || canvas.width
-          let imgNodeHeight = parent.attr('data-height') || canvas.height
-          this.mindMap.el.removeChild(div)
-          let imgNode = new SvgImage()
-            .load(canvas.toDataURL())
-            .size(imgNodeWidth, imgNodeHeight)
-            .x((parent ? parent.attr('data-offsetx') : 0) || 0)
-          item.replace(imgNode)
-          if (index <= len - 1) {
-            setTimeout(() => {
-              transform()
-            }, 0)
-          } else {
-            resolve({
-              svg: svg,
-              svgHTML: svg.svg()
-            })
-          }
-        } catch (error) {
-          reject(error)
-        }
+  // 处理导出为图片
+  async handleExportPng(node) {
+    let el = document.createElement('div')
+    el.style.position = 'absolute'
+    el.style.left = '-9999999px'
+    el.appendChild(node)
+    this.mindMap.el.appendChild(el)
+    // 遍历所有节点，将它们的margin和padding设为0
+    let walk = (root) => {
+      root.style.margin = 0
+      root.style.padding = 0
+      if (root.hasChildNodes()) {
+        Array.from(root.children).forEach((item) => {
+          walk(item)
+        })
       }
-      if (len > 0) transform()
+    }
+    walk(node)
+    let canvas = await html2canvas(el, {
+      backgroundColor: null
     })
+    this.mindMap.el.removeChild(el)
+    return canvas.toDataURL()
   }
 
   // 将所有节点转换成非富文本节点
   transformAllNodesToNormalNode() {
-    let div = document.createElement('div')
     walk(
       this.mindMap.renderer.renderTree,
       null,
       node => {
         if (node.data.richText) {
           node.data.richText = false
-          div.innerHTML = node.data.text
-          node.data.text = div.textContent
+          node.data.text = getTextFromHtml(node.data.text)
+          // delete node.data.uid
         }
       },
       null,
@@ -429,12 +446,33 @@ class RichText {
       0,
       0
     )
-    this.mindMap.reRender()
+    // 清空历史数据，并且触发数据变化
+    this.mindMap.command.clearHistory()
+    this.mindMap.command.addHistory()
+    this.mindMap.render(null, CONSTANTS.TRANSFORM_TO_NORMAL_NODE)
+  }
+
+  // 处理导入数据
+  handleSetData(data) {
+    let walk = (root) => {
+      if (!root.data.richText) {
+        root.data.richText = true
+        root.data.resetRichText = true
+      }
+      if (root.children && root.children.length > 0) {
+        Array.from(root.children).forEach((item) => {
+          walk(item)
+        })
+      }
+    }
+    walk(data)
+    return data
   }
 
   // 插件被移除前做的事情
   beforePluginRemove() {
     this.transformAllNodesToNormalNode()
+    document.head.removeChild(this.styleEl)
   }
 }
 

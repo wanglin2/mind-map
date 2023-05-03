@@ -68,7 +68,11 @@ walk(tree, null, () => {}, () => {}, false, 0, 0)
 copyRenderTree({}, this.mindMap.renderer.renderTree)
 ```
 
-#### copyNodeTree(tree, root)
+#### copyNodeTree(tree, root, removeActiveState, keepId)
+
+- `removeActiveState`：`Boolean`，默认为`false`，是否移除节点的激活状态
+
+- `keepId`：v0.4.6+，`Boolean`，默认为`false`，是否保留被复制节点的`id`，默认会删除`id`防止节点`id`重复，但是对于移动节点的场景，节点原`id`需要保留
 
 复制节点树数据，主要是剔除其中的引用`node`实例的`_node`，然后复制`data`对象的数据，示例：
 
@@ -120,6 +124,16 @@ copyNodeTree({}, node)
 { width, height }
 ```
 
+#### getTextFromHtml(html)
+
+提取html字符串里的纯文本内容。
+
+#### readBlob(blob)
+
+> v0.5.9+
+
+将`blob`数据转成`data:url`数据。
+
 ## 在canvas中模拟css的背景属性
 
 引入：
@@ -149,3 +163,49 @@ drawBackgroundImageToCanvas(ctx, width, height, img, {
   }
 })
 ```
+
+## LRU缓存类
+
+> v0.5.10+
+
+引入：
+
+```js
+import Lru from 'simple-mind-map/src/utils/Lru.js'
+```
+
+### 构造函数
+
+```js
+let lru = new Lru(max)
+```
+
+`max`：指定最大缓存数量。
+
+### 实例属性
+
+#### size
+
+当前缓存的数量。
+
+#### pool
+
+获取缓存池。
+
+### 实例方法
+
+#### add(key, value)
+
+添加缓存。
+
+#### delete(key)
+
+删除指定缓存。
+
+#### has(key)
+
+检查某个缓存是否存在。
+
+#### get(key)
+
+获取某个缓存的值。

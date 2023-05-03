@@ -7,12 +7,12 @@
       :expand-on-click-node="false"
       default-expand-all
     >
-      <span class="customNode" slot-scope="{ node, data }">
+      <span class="customNode" slot-scope="{ node, data }" @click="onClick($event, node)">
         <span
           class="nodeEdit"
           :key="getKey()"
           contenteditable="true"
-          @keydown.stop
+          @keydown.stop="onKeydown($event, node)"
           @keyup.stop
           @blur="onBlur($event, node)"
           v-html="node.label"
@@ -48,7 +48,9 @@ export default {
         label(data) {
           return data.data.text.replaceAll(/\n/g, '</br>')
         }
-      }
+      },
+      notHandleDataChange: false,
+      isCreateNode: false
     }
   },
   computed: {
@@ -65,17 +67,60 @@ export default {
   },
   created() {
     this.$bus.$on('data_change', data => {
+      // 激活节点会让当前大纲失去焦点
+      if (this.notHandleDataChange) {
+        this.notHandleDataChange = false
+        return
+      }
       this.data = [this.mindMap.renderer.renderTree]
     })
   },
   methods: {
     onBlur(e, node) {
+      if (this.isCreateNode) {
+        this.isCreateNode = false
+        return
+      }
       node.data._node.setText(e.target.innerText)
     },
 
     getKey() {
       return Math.random()
-    }
+    },
+
+    onKeydown(e) {
+      if (e.keyCode === 13 && !e.shiftKey) {
+        e.preventDefault()
+        this.insertNode()
+      }
+      if (e.keyCode === 9) {
+        e.preventDefault()
+        this.insertChildNode()
+      }
+    },
+
+    // 插入兄弟节点
+    insertNode() {
+      this.notHandleDataChange = false
+      this.isCreateNode = true
+      this.mindMap.execCommand('INSERT_NODE', false)
+    },
+
+    // 插入下级节点
+    insertChildNode() {
+      this.notHandleDataChange = false
+      this.isCreateNode = true
+      this.mindMap.execCommand('INSERT_CHILD_NODE', false)
+    },
+
+    // 激活当前节点且移动当前节点到画布中间
+    onClick(e, data) {
+      this.notHandleDataChange = true
+      let node = data.data._node
+      if (node.nodeData.data.isActive) return
+      node.mindMap.renderer.moveNodeToCenter(node)
+      node.active()
+    },
   }
 }
 </script>

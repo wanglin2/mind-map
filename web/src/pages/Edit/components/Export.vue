@@ -23,33 +23,45 @@
           style="margin-left: 12px"
           >{{ $t('export.include') }}</el-checkbox
         >
+      </div>
+      <div class="paddingInputBox" v-show="['svg', 'png', 'pdf'].includes(exportType)">
+        <span class="name">{{ $t('export.paddingX') }}</span>
+        <el-input
+          style="width: 100px"
+          v-model="paddingX"
+          size="mini"
+          @change="onPaddingChange"
+        ></el-input>
+        <span class="name" style="margin-left: 10px;">{{ $t('export.paddingY') }}</span>
+        <el-input
+          style="width: 100px"
+          v-model="paddingY"
+          size="mini"
+          @change="onPaddingChange"
+        ></el-input>
         <el-checkbox
-          v-show="['svg'].includes(exportType)"
-          v-model="domToImage"
+          v-show="['png'].includes(exportType)"
+          v-model="isTransparent"
           style="margin-left: 12px"
-          >{{ $t('export.domToImage') }}</el-checkbox
+          >{{ $t('export.isTransparent') }}</el-checkbox
         >
       </div>
-      <el-radio-group v-model="exportType" size="mini">
-        <el-radio-button label="smm"
-          >{{ $t('export.dedicatedFile') }}（.smm）</el-radio-button
+      <div class="downloadTypeList">
+        <div 
+          class="downloadTypeItem" 
+          v-for="item in downTypeList" 
+          :key="item.type" 
+          :class="{active: exportType === item.type}" 
+          @click="exportType = item.type"
         >
-        <el-radio-button label="json"
-          >{{ $t('export.jsonFile') }}（.json）</el-radio-button
-        >
-        <el-radio-button label="png"
-          >{{ $t('export.imageFile') }}（.png）</el-radio-button
-        >
-        <el-radio-button label="svg"
-          >{{ $t('export.svgFile') }}（.svg）</el-radio-button
-        >
-        <el-radio-button label="pdf"
-          >{{ $t('export.pdfFile') }}（.pdf）</el-radio-button
-        >
-      </el-radio-group>
+          <div class="icon iconfont" :class="[item.icon, item.type]"></div>
+          <div class="info">
+            <div class="name">{{ item.name }}</div>
+            <div class="desc">{{ item.desc }}</div>
+          </div>
+        </div>
+      </div>
       <div class="tip">{{ $t('export.tips') }}</div>
-      <div class="tip warning" v-if="openNodeRichText && ['png', 'pdf'].includes(exportType)">{{ $t('export.pngTips') }}</div>
-      <div class="tip warning" v-if="openNodeRichText && exportType === 'svg' && domToImage">{{ $t('export.svgTips') }}</div>
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
@@ -62,6 +74,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { downTypeList } from '@/config'
 
 /**
  * @Author: 王林
@@ -76,29 +89,35 @@ export default {
       exportType: 'smm',
       fileName: '思维导图',
       widthConfig: true,
-      domToImage: false,
+      isTransparent: false,
       loading: false,
-      loadingText: ''
+      loadingText: '',
+      paddingX: 10,
+      paddingY: 10
     }
   },
   computed: {
     ...mapState({
       openNodeRichText: state => state.localConfig.openNodeRichText,
-    })
+    }),
+
+    downTypeList() {
+      return downTypeList[this.$i18n.locale] || downTypeList.zh
+    },
   },
   created() {
     this.$bus.$on('showExport', () => {
       this.dialogVisible = true
     })
-    this.$bus.$on('transforming-dom-to-images', (index, len) => {
-      this.loading = true
-      this.loadingText = `${this.$t('export.transformingDomToImages')}${index + 1}/${len}`
-      if (index >= len - 1) {
-        this.loading = false
-      }
-    })
   },
   methods: {
+    onPaddingChange() {
+      this.$bus.$emit('paddingChange', {
+        exportPaddingX: Number(this.paddingX),
+        exportPaddingY: Number(this.paddingY)
+      })
+    },
+
     /**
      * @Author: 王林
      * @Date: 2021-06-22 22:08:11
@@ -120,20 +139,34 @@ export default {
           this.exportType,
           true,
           this.fileName,
-          this.domToImage,
           `* {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
           }`
         )
-      } else {
+      } else if (['smm', 'json'].includes(this.exportType)) {
         this.$bus.$emit(
           'export',
           this.exportType,
           true,
           this.fileName,
           this.widthConfig
+        )
+      } else if (this.exportType === 'png') {
+        this.$bus.$emit(
+          'export',
+          this.exportType,
+          true,
+          this.fileName,
+          this.isTransparent
+        )
+      } else {
+        this.$bus.$emit(
+          'export',
+          this.exportType,
+          true,
+          this.fileName
         )
       }
       this.$notify.info({
@@ -148,8 +181,20 @@ export default {
 
 <style lang="less" scoped>
 .nodeDialog {
+  /deep/ .el-dialog__body {
+    background-color: #f2f4f7;
+  }
+
   .nameInputBox {
     margin-bottom: 20px;
+
+    .name {
+      margin-right: 10px;
+    }
+  }
+
+  .paddingInputBox {
+    margin-bottom: 10px;
 
     .name {
       margin-right: 10px;
@@ -161,6 +206,71 @@ export default {
 
     &.warning {
       color: #F56C6C;
+    }
+  }
+
+  .downloadTypeList {
+    display: flex;
+    flex-wrap: wrap;
+    .downloadTypeItem {
+      width: 200px;
+      height: 88px;
+      padding: 22px;
+      overflow: hidden;
+      margin: 10px;
+      border-radius: 11px;
+      box-shadow: 0 0 20px 0 rgba(0,0,0,.02);
+      background-color: #fff;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border: 2px solid transparent;
+
+      &.active {
+        border-color: #409eff;
+      }
+
+      .icon {
+        font-size: 30px;
+        margin-right: 10px;
+
+        &.png {
+          color: #ffc038;
+        }
+
+        &.pdf {
+          color: #ff6c4d;
+        }
+
+        &.md {
+          color: #2b2b2b;
+        }
+
+        &.json {
+          color: #12c87e;
+        }
+
+        &.svg {
+          color: #4380ff;
+        }
+
+        &.smm {
+          color: #409eff;
+        }
+      }
+
+      .info {
+        .name {
+          color: #1a1a1a;
+          font-size: 15px;
+          margin-bottom: 5px;
+        }
+
+        .desc {
+          color: #999;
+          font-size: 12px;
+        }
+      }
     }
   }
 }

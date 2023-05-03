@@ -72,7 +72,11 @@ Copy render tree data, example:
 copyRenderTree({}, this.mindMap.renderer.renderTree);
 ```
 
-#### copyNodeTree(tree, root)
+#### copyNodeTree(tree, root, removeActiveState, keepId)
+
+- `removeActiveState`: `Boolean`, default is `false`, Whether to remove the active state of the node
+
+- `keepId`: v0.4.6+, `Boolean`, default is `false`, Whether to retain the `id` of the replicated node will be deleted by default to prevent duplicate node `id`. However, for mobile node scenarios, the original `id` of the node needs to be retained
 
 Copy node tree data, mainly eliminating the reference `node` instance `_node`
 and copying the `data` of the data object, example:
@@ -125,6 +129,16 @@ Measure the width and height of the text, return value:
 { width, height }
 ```
 
+#### getTextFromHtml(html)
+
+Extract plain text content from an HTML string.
+
+#### readBlob(blob)
+
+> v0.5.9+
+
+Convert `blob` data to `data:url` data.
+
 ## Simulate CSS background in Canvas
 
 Import:
@@ -154,3 +168,49 @@ drawBackgroundImageToCanvas(ctx, width, height, img, {
   }
 })
 ```
+
+## LRU cache class
+
+> v0.5.10+
+
+Import:
+
+```js
+import Lru from 'simple-mind-map/src/utils/Lru.js'
+```
+
+### Constructor
+
+```js
+let lru = new Lru(max)
+```
+
+`max`: Specify the maximum number of caches.
+
+### Instance properties
+
+#### size
+
+The current number of caches.
+
+#### pool
+
+Get cache pool.
+
+### Instance methods
+
+#### add(key, value)
+
+Add cache.
+
+#### delete(key)
+
+Delete cache.
+
+#### has(key)
+
+Check if a cache exists.
+
+#### get(key)
+
+Gets the value of a cache.

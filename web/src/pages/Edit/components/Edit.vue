@@ -30,6 +30,7 @@ import Export from 'simple-mind-map/src/Export.js'
 import Drag from 'simple-mind-map/src/Drag.js'
 import Select from 'simple-mind-map/src/Select.js'
 import RichText from 'simple-mind-map/src/RichText.js'
+import AssociativeLine from 'simple-mind-map/src/AssociativeLine.js'
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -47,6 +48,7 @@ import NodeImgPreview from './NodeImgPreview.vue'
 import SidebarTrigger from './SidebarTrigger.vue'
 import { mapState } from 'vuex'
 import customThemeList from '@/customThemes'
+import icon from '@/config/icon'
 
 // 注册插件
 MindMap
@@ -56,11 +58,12 @@ MindMap
   .usePlugin(KeyboardNavigation)
   .usePlugin(Export)
   .usePlugin(Select)
+  .usePlugin(AssociativeLine)
 
 // 注册自定义主题
-customThemeList.forEach((item) => {
-  MindMap.defineTheme(item.value, item.theme)
-})
+// customThemeList.forEach((item) => {
+//   MindMap.defineTheme(item.value, item.theme)
+// })
 
 /**
  * @Author: 王林
@@ -109,10 +112,11 @@ export default {
     }
   },
   mounted() {
-    this.showNewFeatureInfo()
+    // this.showNewFeatureInfo()
     this.getData()
     this.init()
     this.$bus.$on('execCommand', this.execCommand)
+    this.$bus.$on('paddingChange', this.onPaddingChange)
     this.$bus.$on('export', this.export)
     this.$bus.$on('setData', this.setData)
     this.$bus.$on('startTextEdit', () => {
@@ -120,6 +124,12 @@ export default {
     })
     this.$bus.$on('endTextEdit', () => {
       this.mindMap.renderer.endTextEdit()
+    })
+    this.$bus.$on('createAssociativeLine', () => {
+      this.mindMap.associativeLine.createLineFromActiveNode()
+    })
+    window.addEventListener('resize', () => {
+      this.mindMap.resize()
     })
     if (this.openTest) {
       setTimeout(() => {
@@ -268,6 +278,8 @@ export default {
         theme: theme.template,
         themeConfig: theme.config,
         viewData: view,
+        nodeTextEditZIndex: 1000,
+        nodeNoteTooltipZIndex: 1000,
         customNoteContentShow: {
           show: (content, left, top) => {
             this.$bus.$emit('showNoteContent', content, left, top)
@@ -276,7 +288,8 @@ export default {
             // this.$bus.$emit('hideNoteContent')
           }
         },
-        ...(config || {})
+        ...(config || {}),
+        iconList: icon
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
@@ -297,13 +310,28 @@ export default {
         'mode_change',
         'node_tree_render_end',
         'rich_text_selection_change',
-        'transforming-dom-to-images'
+        'transforming-dom-to-images',
+        'generalization_node_contextmenu'
       ].forEach(event => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args)
         })
       })
       this.bindSaveEvent()
+      // setTimeout(() => {
+        // 动态给指定节点添加子节点
+        // this.mindMap.execCommand('INSERT_CHILD_NODE', false, this.mindMap.renderer.root, {
+        //   text: '自定义内容'
+        // })
+
+        // 动态给指定节点添加同级节点
+        // this.mindMap.execCommand('INSERT_NODE', false, this.mindMap.renderer.root, {
+        //   text: '自定义内容'
+        // })
+
+        // 动态删除指定节点
+        // this.mindMap.execCommand('REMOVE_NODE', this.mindMap.renderer.root.children[0])
+      // }, 5000);
     },
 
     /**
@@ -317,6 +345,7 @@ export default {
       } else {
         this.mindMap.setData(data)
       }
+      this.mindMap.view.reset()
       this.manualSave()
     },
 
@@ -349,6 +378,11 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+
+    // 修改导出内边距
+    onPaddingChange(data) {
+      this.mindMap.updateConfig(data)
     },
 
     // 显示新特性提示

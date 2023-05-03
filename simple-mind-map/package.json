@@ -1,6 +1,6 @@
 {
   "name": "simple-mind-map",
-  "version": "0.4.2",
+  "version": "0.5.11",
   "description": "一个简单的web在线思维导图",
   "authors": [
     {
@@ -31,7 +31,9 @@
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "jszip": "^3.10.1",
+    "mdast-util-from-markdown": "^1.3.0",
     "quill": "^1.3.6",
+    "uuid": "^9.0.0",
     "xml-js": "^1.6.11"
   },
   "keywords": [

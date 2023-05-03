@@ -10,9 +10,11 @@
 
 该插件的原理是使用[Quill](https://github.com/quilljs/quill)编辑器实现富文本编辑，然后把编辑后生成的`DOM`节点直接作为节点的文本数据，并且在渲染的时候通过`svg`的`foreignObject`标签嵌入`DOM`节点。
 
-这样也造成了一个问题，就是导出为图片的功能受到了影响，原本将`svg`导出为图片的原理很简单，获取到`svg`字符串，然后创建为`type=image/svg+xml`类型的`blob`数据，再使用`URL.createObjectURL`方法生成`data:url`数据，再创建一个`Image`标签，将`data:url`作为该图片的`src`，最后再将这个图片绘制到`canvas`对象上进行导出，但是经过测试，当`svg`中嵌入了`DOM`节点，这种方式导出会出错，并且尝试了多种方式后都无法实现完美的导出效果，目前的方式是遍历`svg`中的`foreignObject`节点，使用[html2canvas](https://github.com/niklasvh/html2canvas)将`foreignObject`节点内的`DOM`节点转换为图片再替换掉`foreignObject`节点，这种方式可以工作，但是非常耗时，因为`html2canvas`转换一次的时间很长，导致转换一个节点都需要耗时差不多2秒，这样导致节点越多，转换时间越慢，所以如果无法忍受长时间的导出的话推荐不要使用该插件。
+> v0.5.6即以前的版本存在以下提示：
+>
+> 这样也造成了一个问题，就是导出为图片的功能受到了影响，原本将`svg`导出为图片的原理很简单，获取到`svg`字符串，然后创建为`type=image/svg+xml`类型的`blob`数据，再使用`URL.createObjectURL`方法生成`data:url`数据，再创建一个`Image`标签，将`data:url`作为该图片的`src`，最后再将这个图片绘制到`canvas`对象上进行导出，但是经过测试，当`svg`中嵌入了`DOM`节点，这种方式导出会出错，并且尝试了多种方式后都无法实现完美的导出效果，目前的方式是遍历`svg`中的`foreignObject`节点，使用[html2canvas](https://github.com/niklasvh/html2canvas)将`foreignObject`节点内的`DOM`节点转换为图片再替换掉`foreignObject`节点，这种方式可以工作，但是非常耗时，因为`html2canvas`转换一次的时间很长，导致转换一个节点都需要耗时差不多2秒，这样导致节点越多，转换时间越慢，所以如果无法忍受长时间的导出的话推荐不要使用该插件。
 
-如果你有更好的方式也欢迎留言。
+`v0.5.7+`的版本直接使用`html2canvas`转换整个`svg`，速度不再是问题，但是目前存在一个`bug`，就是节点的颜色导出后不生效。
 
 ## 注册
 
@@ -64,6 +66,12 @@ MindMap.usePlugin(RichText, opt?)
 ### selectAll()
 
 选中全部。当节点正在编辑中可以通过该方法选中节点内的所有文本。
+
+### focus()
+
+> v0.4.7+
+
+聚焦。
 
 ### formatText(config = {})
 

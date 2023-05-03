@@ -10,8 +10,11 @@
 <p>This plugin provides the ability to edit rich text of nodes, and takes effect after registration.</p>
 <p>By default, node editing can only uniformly apply styles to all text in the node. This plugin can support rich text editing effects. Currently, it supports bold, italic, underline, strikethrough, font, font size, color, and backgroundColor. Underline and line height are not supported.</p>
 <p>The principle of this plugin is to use <a href="https://github.com/quilljs/quill">Quill</a> editor implements rich text editing, and then uses the edited <code>DOM</code> node directly as the text data of the node, and embeds the <code>DOM</code> node through the <code>svg</code> <code>foreignObject</code> tag during rendering.</p>
+<blockquote>
+<p>The following prompts exist in versions prior to v0.5.6:</p>
 <p>This also caused a problem, that is, the function of exporting as a picture was affected, The original principle of exporting <code>svg</code> as an image is very simple, Get the <code>svg</code> string, and then create the <code>blob</code> data of the <code>type=image/svg+xml</code> type. Then use the <code>URL.createObjectURL</code> method to generate the <code>data:url</code> data. Then create a <code>Image</code> tag, use the <code>data:url</code> as the <code>src</code> of the image, and finally draw the image on the <code>canvas</code> object for export, However, after testing, when the <code>DOM</code> node is embedded in the <code>svg</code>, this method of export will cause errors, and after trying many ways, the perfect export effect cannot be achieved, The current method is to traverse the <code>foreignObject</code> node in <code>svg</code>, using <a href="https://github.com/niklasvh/html2canvas">html2canvas</a> Convert the <code>DOM</code> node in the <code>foreignObject</code> node into an image and then replace the <code>foreignObject</code> node. This method can work, but it is very time-consuming. Because the <code>html2canvas</code> conversion takes a long time, it takes about 2 seconds to convert a node. This leads to the more nodes, the slower the conversion time. Therefore, it is recommended not to use this plugin if you cannot tolerate the long time of export.</p>
-<p>If you have a better way, please leave a message.</p>
+</blockquote>
+<p>The version of <code>v0.5.7+</code> directly uses <code>html2canvas</code> to convert the entire <code>svg</code>, which is no longer an issue with speed. However, there is currently a bug where the color of the node does not take effect after export.</p>
 <h2>Register</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
 <span class="hljs-keyword">import</span> RichText <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/RichText.js&#x27;</span>
@@ -50,6 +53,11 @@ MindMap.usePlugin(RichText, opt?)
 <h2>Method</h2>
 <h3>selectAll()</h3>
 <p>Select All. When the node is being edited, you can select all the text in the node through this method.</p>
+<h3>focus()</h3>
+<blockquote>
+<p>v0.4.7+</p>
+</blockquote>
+<p>Focus.</p>
 <h3>formatText(config = {})</h3>
 <ul>
 <li><code>config</code>：Object. The key is the style attribute and the value is the style value. The complete configuration is as follows:</li>

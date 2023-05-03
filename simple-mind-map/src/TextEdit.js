@@ -1,4 +1,4 @@
-import { getStrWithBrFromHtml } from './utils'
+import { getStrWithBrFromHtml, checkNodeOuter } from './utils'
 
 //  节点文字编辑类
 export default class TextEdit {
@@ -6,20 +6,35 @@ export default class TextEdit {
   constructor(renderer) {
     this.renderer = renderer
     this.mindMap = renderer.mindMap
+    // 当前编辑的节点
+    this.currentNode = null
     // 文本编辑框
     this.textEditNode = null
     // 文本编辑框是否显示
     this.showTextEdit = false
+    // 如果编辑过程中缩放画布了，那么缓存当前编辑的内容
+    this.cacheEditingText = ''
     this.bindEvent()
   }
 
   //  事件
   bindEvent() {
     this.show = this.show.bind(this)
+    this.onScale = this.onScale.bind(this)
     // 节点双击事件
     this.mindMap.on('node_dblclick', this.show)
     // 点击事件
     this.mindMap.on('draw_click', () => {
+      // 隐藏文本编辑框
+      this.hideEditTextBox()
+    })
+    this.mindMap.on('body_click', () => {
+      // 隐藏文本编辑框
+      if (this.mindMap.opt.isEndNodeTextEditOnClickOuter) {
+        this.hideEditTextBox()
+      }
+    })
+    this.mindMap.on('svg_mousedown', () => {
       // 隐藏文本编辑框
       this.hideEditTextBox()
     })
@@ -38,6 +53,7 @@ export default class TextEdit {
       }
       this.show(this.renderer.activeNodeList[0])
     })
+    this.mindMap.on('scale', this.onScale)
   }
 
   //  注册临时快捷键
@@ -50,12 +66,28 @@ export default class TextEdit {
 
   //  显示文本编辑框
   show(node) {
+    this.currentNode = node
+    let { offsetLeft, offsetTop } = checkNodeOuter(this.mindMap, node)
+    this.mindMap.view.translateXY(offsetLeft, offsetTop)
     let rect = node._textData.node.node.getBoundingClientRect()
     if (this.mindMap.richText) {
       this.mindMap.richText.showEditText(node, rect)
       return
     }
     this.showEditTextBox(node, rect)
+  }
+
+  // 处理画布缩放
+  onScale() {
+    if (!this.currentNode) return
+    if (this.mindMap.richText) {
+      this.mindMap.richText.cacheEditingText = this.mindMap.richText.getEditText()
+      this.mindMap.richText.showTextEdit = false
+    } else {
+      this.cacheEditingText = this.getEditText()
+      this.showTextEdit = false
+    }
+    this.show(this.currentNode)
   }
 
   //  显示文本编辑框
@@ -69,25 +101,34 @@ export default class TextEdit {
       this.textEditNode.addEventListener('keyup', e => {
         e.stopPropagation()
       })
+      this.textEditNode.addEventListener('click', e => {
+        e.stopPropagation()
+      })
       document.body.appendChild(this.textEditNode)
     }
     let scale = this.mindMap.view.scale
     let lineHeight = node.style.merge('lineHeight')
     let fontSize = node.style.merge('fontSize')
-    node.style.domText(this.textEditNode, scale)
-    this.textEditNode.innerHTML = node.nodeData.data.text
-      .split(/\n/gim)
-      .join('<br>')
+    let textLines = (this.cacheEditingText || node.nodeData.data.text).split(/\n/gim)
+    let isMultiLine = node._textData.node.attr('data-ismultiLine') === 'true'
+    node.style.domText(this.textEditNode, scale, isMultiLine)
+    this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex
+    this.textEditNode.innerHTML = textLines.join('<br>')
     this.textEditNode.style.minWidth = rect.width + 10 + 'px'
     this.textEditNode.style.minHeight = rect.height + 6 + 'px'
     this.textEditNode.style.left = rect.left + 'px'
     this.textEditNode.style.top = rect.top + 'px'
     this.textEditNode.style.display = 'block'
     this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth * scale + 'px'
-    this.textEditNode.style.transform = `translateY(${-(lineHeight * fontSize - fontSize) / 2 * scale}px)`
+    if (isMultiLine && lineHeight !== 1) {
+      this.textEditNode.style.transform = `translateY(${-((lineHeight * fontSize - fontSize) / 2) * scale}px)`
+    }
     this.showTextEdit = true
     // 选中文本
-    this.selectNodeText()
+    if (!this.cacheEditingText) {
+      this.selectNodeText()
+    }
+    this.cacheEditingText = ''
   }
 
   //  选中文本
@@ -99,8 +140,14 @@ export default class TextEdit {
     selection.addRange(range)
   }
 
+  // 获取当前正在编辑的内容
+  getEditText() {
+    return getStrWithBrFromHtml(this.textEditNode.innerHTML)
+  }
+
   //  隐藏文本编辑框
   hideEditTextBox() {
+    this.currentNode = null
     if (this.mindMap.richText) {
       return this.mindMap.richText.hideEditText()
     }
@@ -108,7 +155,7 @@ export default class TextEdit {
       return
     }
     this.renderer.activeNodeList.forEach(node => {
-      let str = getStrWithBrFromHtml(this.textEditNode.innerHTML)
+      let str = this.getEditText()
       this.mindMap.execCommand('SET_NODE_TEXT', node, str)
       if (node.isGeneralization) {
         // 概要节点
@@ -126,6 +173,7 @@ export default class TextEdit {
     this.textEditNode.style.fontFamily = 'inherit'
     this.textEditNode.style.fontSize = 'inherit'
     this.textEditNode.style.fontWeight = 'normal'
+    this.textEditNode.style.transform = 'translateY(0)'
     this.showTextEdit = false
   }
 }

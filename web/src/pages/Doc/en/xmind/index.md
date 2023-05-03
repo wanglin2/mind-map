@@ -12,19 +12,20 @@ import xmind from 'simple-mind-map/src/parse/xmind.js'
 
 If you are using the file in the format of `umd`, you can obtain it in the following way:
 
-```js
-import MindMap from "simple-mind-map/dist/simpleMindMap.umd.min"
+```html
+<script src="simple-mind-map/dist/simpleMindMap.umd.min.js"></script>
+```
 
-MindMap.xmind
+```js
+simpleMindMap.xmind
 ```
 
 ## Methods
 
 ### xmind.parseXmindFile(file)
 
-Parsing the `.xmind` file and returning the parsed data. Note that this is
-complete data, including the node tree, theme, and structure. You can use
-`mindMap.setFullData(data)` to render the returned data to the canvas.
+Parsing the `.xmind` file and returning the parsed data. You can use
+`mindMap.setData(data)` to render the returned data to the canvas.
 
 `file`: `File` object
 
@@ -33,9 +34,8 @@ complete data, including the node tree, theme, and structure. You can use
 Convert `xmind` data. The `.xmind` file is essentially a `zip` file that can be
 decompressed by changing the suffix to zip. Inside, there is a `content.json`
 file. If you have parsed this file yourself, you can pass the contents of this
-file to this method for conversion. The converted data is the complete data,
-including the node tree, theme, structure, etc. You can use
-`mindMap.setFullData(data)` to render the returned data to the canvas.
+file to this method for conversion. You can use
+`mindMap.setData(data)` to render the returned data to the canvas.
 
 `content`: the contents of the `content.json` file within the `.xmind` zip
 package

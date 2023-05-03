@@ -10,6 +10,7 @@ export default class KeyCommand {
     }
     this.shortcutMapCache = {}
     this.isPause = false
+    this.isInSvg = false
     this.bindEvent()
   }
 
@@ -37,8 +38,21 @@ export default class KeyCommand {
 
   //  绑定事件
   bindEvent() {
+    // 只有当鼠标在画布内才响应快捷键
+    this.mindMap.on('svg_mouseenter', () => {
+      this.isInSvg = true
+    })
+    this.mindMap.on('svg_mouseleave', () => {
+      if (this.mindMap.richText && this.mindMap.richText.showTextEdit) {
+        return
+      }
+      if (this.mindMap.renderer.textEdit.showTextEdit || (this.mindMap.associativeLine && this.mindMap.associativeLine.showTextEdit)) {
+        return
+      }
+      this.isInSvg = false
+    })
     window.addEventListener('keydown', e => {
-      if (this.isPause) {
+      if (this.isPause || (this.mindMap.opt.enableShortcutOnlyWhenMouseInSvg && !this.isInSvg)) {
         return
       }
       Object.keys(this.shortcutMap).forEach(key => {

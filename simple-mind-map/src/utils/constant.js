@@ -22,65 +22,11 @@ export const tagColorList = [
   }
 ]
 
-//  布局结构列表
-export const layoutList = [
-  {
-    name: '逻辑结构图',
-    value: 'logicalStructure',
-  },
-  {
-    name: '思维导图',
-    value: 'mindMap',
-  },
-  {
-    name: '组织结构图',
-    value: 'organizationStructure',
-  },
-  {
-    name: '目录组织图',
-    value: 'catalogOrganization',
-  }
-]
-export const layoutValueList = [
-  'logicalStructure',
-  'mindMap',
-  'catalogOrganization',
-  'organizationStructure'
-]
-
 //  主题列表
 export const themeList = [
   {
     name: '默认',
     value: 'default',
-  },
-  {
-    name: '脑图经典',
-    value: 'classic',
-  },
-  {
-    name: '小黄人',
-    value: 'minions',
-  },
-  {
-    name: '粉红葡萄',
-    value: 'pinkGrape',
-  },
-  {
-    name: '薄荷',
-    value: 'mint',
-  },
-  {
-    name: '金色vip',
-    value: 'gold',
-  },
-  {
-    name: '活力橙',
-    value: 'vitalityOrange',
-  },
-  {
-    name: '绿叶',
-    value: 'greenLeaf',
   },
   {
     name: '暗色2',
@@ -97,10 +43,6 @@ export const themeList = [
   {
     name: '脑图经典3',
     value: 'classic3',
-  },
-  {
-    name: '脑图经典4',
-    value: 'classic4',
   },
   {
     name: '经典绿',
@@ -137,5 +79,184 @@ export const themeList = [
   {
     name: '浪漫紫',
     value: 'romanticPurple',
+  },
+  {
+    name: '粉红葡萄',
+    value: 'pinkGrape',
+  },
+  {
+    name: '薄荷',
+    value: 'mint',
+  },
+  {
+    name: '金色vip',
+    value: 'gold',
+  },
+  {
+    name: '活力橙',
+    value: 'vitalityOrange',
+  },
+  {
+    name: '绿叶',
+    value: 'greenLeaf',
+  },
+  {
+    name: '脑图经典',
+    value: 'classic',
+  },
+  {
+    name: '脑图经典4',
+    value: 'classic4',
+  },
+  {
+    name: '小黄人',
+    value: 'minions',
+  },
+  {
+    name: '简约黑',
+    value: 'simpleBlack',
+  },
+  {
+    name: '课程绿',
+    value: 'courseGreen',
+  },
+  {
+    name: '咖啡',
+    value: 'coffee',
+  },
+  {
+    name: '红色精神',
+    value: 'redSpirit',
+  },
+  {
+    name: '黑色幽默',
+    value: 'blackHumour',
+  },
+  {
+    name: '深夜办公室',
+    value: 'lateNightOffice',
+  },
+  {
+    name: '黑金',
+    value: 'blackGold',
+  },
+  {
+    name: '牛油果',
+    value: 'avocado',
+  },
+  {
+    name: '秋天',
+    value: 'autumn',
+  },
+  {
+    name: '橙汁',
+    value: 'orangeJuice',
   }
+]
+
+// 常量
+export const CONSTANTS = {
+  CHANGE_THEME: 'changeTheme',
+  SET_DATA: 'setData',
+  TRANSFORM_TO_NORMAL_NODE: 'transformAllNodesToNormalNode',
+  MODE: {
+    READONLY: 'readonly',
+    EDIT: 'edit'
+  },
+  LAYOUT: {
+    LOGICAL_STRUCTURE: 'logicalStructure',
+    MIND_MAP: 'mindMap',
+    ORGANIZATION_STRUCTURE: 'organizationStructure',
+    CATALOG_ORGANIZATION: 'catalogOrganization',
+    TIMELINE: 'timeline',
+    TIMELINE2: 'timeline2',
+    FISHBONE: 'fishbone'
+  },
+  DIR: {
+    UP: 'up',
+    LEFT: 'left',
+    DOWN: 'down',
+    RIGHT: 'right'
+  },
+  KEY_DIR: {
+    LEFT: 'Left',
+    UP: 'Up',
+    RIGHT: 'Right',
+    DOWN: 'Down'
+  },
+  SHAPE: {
+    RECTANGLE: 'rectangle',
+    DIAMOND: 'diamond',
+    PARALLELOGRAM: 'parallelogram',
+    ROUNDED_RECTANGLE: 'roundedRectangle',
+    OCTAGONAL_RECTANGLE: 'octagonalRectangle',
+    OUTER_TRIANGULAR_RECTANGLE: 'outerTriangularRectangle',
+    INNER_TRIANGULAR_RECTANGLE: 'innerTriangularRectangle',
+    ELLIPSE: 'ellipse',
+    CIRCLE: 'circle'
+  },
+  MOUSE_WHEEL_ACTION: {
+    ZOOM: 'zoom',
+    MOVE: 'move'
+  },
+  INIT_ROOT_NODE_POSITION: {
+    LEFT: 'left',
+    TOP: 'top',
+    RIGHT: 'right',
+    BOTTOM: 'bottom',
+    CENTER: 'center'
+  },
+  TIMELINE_DIR: {
+    TOP: 'top',
+    BOTTOM: 'bottom'
+  }
+}
+
+export const initRootNodePositionMap = {
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.LEFT]: 0,
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.TOP]: 0,
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.RIGHT]: 1,
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.BOTTOM]: 1,
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.CENTER]: 0.5,
+}
+
+//  布局结构列表
+export const layoutList = [
+  {
+    name: '逻辑结构图',
+    value: CONSTANTS.LAYOUT.LOGICAL_STRUCTURE,
+  },
+  {
+    name: '思维导图',
+    value: CONSTANTS.LAYOUT.MIND_MAP,
+  },
+  {
+    name: '组织结构图',
+    value: CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE,
+  },
+  {
+    name: '目录组织图',
+    value: CONSTANTS.LAYOUT.CATALOG_ORGANIZATION,
+  },
+  {
+    name: '时间轴',
+    value: CONSTANTS.LAYOUT.TIMELINE,
+  },
+  {
+    name: '时间轴2',
+    value: CONSTANTS.LAYOUT.TIMELINE2,
+  },
+  {
+    name: '鱼骨图',
+    value: CONSTANTS.LAYOUT.FISHBONE,
+  }
+]
+export const layoutValueList = [
+  CONSTANTS.LAYOUT.LOGICAL_STRUCTURE,
+  CONSTANTS.LAYOUT.MIND_MAP,
+  CONSTANTS.LAYOUT.CATALOG_ORGANIZATION,
+  CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE,
+  CONSTANTS.LAYOUT.TIMELINE,
+  CONSTANTS.LAYOUT.TIMELINE2,
+  CONSTANTS.LAYOUT.FISHBONE
 ]

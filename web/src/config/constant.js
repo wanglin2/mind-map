@@ -3,7 +3,10 @@ export const layoutImgMap = {
     logicalStructure: require('../assets/img/logicalStructure.jpg'),
     mindMap: require('../assets/img/mindMap.jpg'),
     organizationStructure: require('../assets/img/organizationStructure.jpg'),
-    catalogOrganization: require('../assets/img/catalogOrganization.jpg')
+    catalogOrganization: require('../assets/img/catalogOrganization.jpg'),
+    timeline: require('../assets/img/timeline.jpg'),
+    timeline2: require('../assets/img/timeline2.jpg'),
+    fishbone: require('../assets/img/fishbone.jpg'),
 }
 
 //  主题图片映射
@@ -37,5 +40,8 @@ export const themeMap = {
     blackHumour: require('../assets/img/blackHumour.jpg'),
     lateNightOffice: require('../assets/img/lateNightOffice.jpg'),
     blackGold: require('../assets/img/blackGold.jpg'),
+    autumn: require('../assets/img/autumn.jpg'),
+    avocado: require('../assets/img/avocado.jpg'),
+    orangeJuice: require('../assets/img/orangeJuice.jpg'),
 }
   
