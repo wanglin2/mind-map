@@ -1,5 +1,5 @@
 <template>
-  <div class="editContainer">
+  <div class="editContainer" :style="{top: IS_ELECTRON ? '40px' : 0}">
     <div class="mindMapContainer" ref="mindMapContainer"></div>
     <Count v-if="!isZenMode"></Count>
     <Navigator :mindMap="mindMap"></Navigator>
@@ -135,6 +135,9 @@ export default {
       setTimeout(() => {
         this.test()
       }, 5000)
+    }
+    if (window.IS_ELECTRON) {
+      this.mindMap.keyCommand.addShortcut('Control+s', this.saveToLocal)
     }
   },
   methods: {
@@ -409,6 +412,13 @@ export default {
     // 移除节点富文本编辑插件
     removeRichTextPlugin() {
       this.mindMap.removePlugin(RichText)
+    },
+
+    saveToLocal() {
+      let id = this.$route.params.id
+      let data = this.mindMap.getData(true)
+      console.log('保存', id, data)
+      window.electronAPI.save(id, JSON.stringify(data))
     }
   }
 }

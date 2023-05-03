@@ -20,6 +20,7 @@
     "@toast-ui/editor": "^3.1.5",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.1",
+    "fs-extra": "^7.0.1",
     "highlight.js": "^10.7.3",
     "uuid": "^3.4.0",
     "v-viewer": "^1.6.4",

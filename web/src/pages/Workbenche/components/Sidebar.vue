@@ -1,75 +1,86 @@
-
 <template>
-    <div class="workbencheHomeSidebarContainer">
-        <div class="workbencheMenuList">
-            <div class="workbencheMenuItem" v-for="item in menuList" :key="item.name"
-                :class="{ active: $route.name === item.routerName }" @click="toMenu(item.rou
-                )">
-                <span class="icon iconfont" :class="[item.icon]"></span>
-                <span class="text">{{ item.name }}</span>
-            </div>
-        </div>
+  <div class="workbencheSidebarContainer">
+    <div class="createBtn" @click="create">开始新建</div>
+    <div class="line"></div>
+    <div class="btn">
+      <span class="icon iconfont icondakai"></span>
+      <span class="text">打开本地文件</span>
     </div>
+    <div class="btn active">
+      <span class="icon iconfont iconzuijinliulan"></span>
+      <span class="text">最近文件</span>
+    </div>
+  </div>
 </template>
 
 <script>
+import { create } from '../utils'
+
 export default {
-    data() {
-        return {
-            menuList: [
-                {
-                    name: '本地',
-                    icon: 'iconbendi1x',
-                    routerName: 'WorkbencheHomeLocal'
-                }
-            ]
-        }
-    },
-    methods: {
-        toMenu(routerName) {
-            this.$router.push(routerName)
-        }
-    }
+  methods: {
+    create
+  }
 }
 </script>
 
 <style lang="less" scoped>
-.workbencheHomeSidebarContainer {
-    width: 80px;
-    background-color: #fff;
-    height: 100%;
-    flex-shrink: 0;
-    padding: 20px 0;
+.workbencheSidebarContainer {
+  flex-shrink: 0;
+  width: 200px;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-right: 20px;
+  padding: 15px 20px;
 
-    .workbencheMenuList {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+  .createBtn {
+    width: 100%;
+    height: 30px;
+    background-color: #409eff;
+    border-radius: 5px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    user-select: none;
 
-        .workbencheMenuItem {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #000;
-            width: 60px;
-            height: 60px;
-            border-radius: 5px;
-            cursor: pointer;
-
-            &.active {
-                background-color: #f3fbf4;
-                color: #56b74b;
-            }
-
-            .icon {
-                margin-bottom: 5px;
-            }
-
-            .text {
-                font-size: 14px;
-            }
-        }
+    &:hover {
+      opacity: 0.9;
     }
+  }
+
+  .line {
+    width: 100%;
+    height: 1px;
+    background-color: #e4e7ed;
+    margin: 20px 0;
+  }
+
+  .btn {
+    width: 100%;
+    height: 30px;
+    background-color: #fff;
+    border-radius: 5px;
+    color: #000;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+    user-select: none;
+    padding: 0 10px;
+    margin-bottom: 10px;
+
+    &.active,
+    &:hover {
+      background-color: rgba(64, 158, 255, 0.3);
+      color: rgba(64, 158, 255, 1);
+    }
+
+    .icon {
+      margin-right: 10px;
+    }
+  }
 }
 </style>
