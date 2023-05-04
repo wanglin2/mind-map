@@ -2,7 +2,7 @@
   <div class="workbencheSidebarContainer">
     <div class="createBtn" @click="create">开始新建</div>
     <div class="line"></div>
-    <div class="btn">
+    <div class="btn" @click="openLocalFile">
       <span class="icon iconfont icondakai"></span>
       <span class="text">打开本地文件</span>
     </div>
@@ -18,7 +18,11 @@ import { create } from '../utils'
 
 export default {
   methods: {
-    create
+    create,
+
+    openLocalFile() {
+      window.electronAPI.selectOpenFile()
+    }
   }
 }
 </script>

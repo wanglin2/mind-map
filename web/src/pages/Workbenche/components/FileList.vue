@@ -1,6 +1,9 @@
 <template>
   <div class="workbencheFileListContainer">
-    <div class="title">最近</div>
+    <div class="title">
+      <span>最近</span>
+      <span class="clearBtn" @click="clear">清空</span>
+    </div>
     <div class="fileListBox">
       <Empty v-if="list.length <= 0"></Empty>
       <el-table v-else :data="list" style="width: 100%">
@@ -8,25 +11,11 @@
         <el-table-column prop="url" label="文件路径"> </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button icon="el-icon-edit" circle size="mini"></el-button>
-            <el-button
-              icon="el-icon-document-copy"
-              circle
-              size="mini"
-            ></el-button>
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              circle
-              size="mini"
-              @click="deleteFile(scope.row.url, scope.$index)"
-            ></el-button>
-            <el-button
-              icon="el-icon-folder-opened"
-              circle
-              size="mini"
-              @click="openFileInDir(scope.row.url)"
-            ></el-button>
+            <el-button icon="el-icon-edit" circle size="mini" @click="openFile(scope.row.url)"></el-button>
+            <el-button icon="el-icon-document-copy" circle size="mini"></el-button>
+            <el-button type="danger" icon="el-icon-delete" circle size="mini"
+              @click="deleteFile(scope.row.url, scope.$index)"></el-button>
+            <el-button icon="el-icon-folder-opened" circle size="mini" @click="openFileInDir(scope.row.url)"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -48,28 +37,54 @@ export default {
   },
   created() {
     this.getRecentFileList()
-    window.electronAPI.onRefreshRecentFileList((_event, value) => {
-      console.log(1);
+    window.electronAPI.onRefreshRecentFileList(() => {
       this.getRecentFileList()
     })
   },
   methods: {
     async getRecentFileList() {
-      this.list = await window.electronAPI.getRecentFileList()
-      console.log(this.list)
+      let list = await window.electronAPI.getRecentFileList()
+      this.list = list.reverse()
     },
 
     openFileInDir(file) {
       window.electronAPI.openFileInDir(file)
     },
 
-    async deleteFile(file, index) {
-      let res = await window.electronAPI.deleteFile(file)
-      console.log(res)
-      if (res) {
-      } else {
-        this.list.splice(index, 1)
-      }
+    deleteFile(file, index) {
+      this.$confirm('确定删除该文件？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        let res = await window.electronAPI.deleteFile(file)
+        if (res) {
+          this.$message.error('删除失败')
+        } else {
+          this.list.splice(index, 1)
+          this.$message.success('删除成功');
+        }
+      }).catch(() => { });
+    },
+
+    openFile(file) {
+      window.electronAPI.openFile(file)
+    },
+
+    clear() {
+      this.$confirm('确定清空最近文件？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        let res = await window.electronAPI.clearRecentFileList()
+        if (res) {
+          this.$message.error('清空失败')
+        } else {
+          this.list = []
+          this.$message.success('清空成功');
+        }
+      }).catch(() => { });
     }
   }
 }
@@ -91,8 +106,16 @@ export default {
     font-size: 18px;
     border-bottom: 1px solid #e4e7ed;
     height: 65px;
-    line-height: 65px;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .clearBtn {
+      cursor: pointer;
+      font-size: 14px;
+      color: #409eff;
+    }
   }
 
   .fileListBox {

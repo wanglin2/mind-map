@@ -93,7 +93,8 @@ export default {
       mindMap: null,
       mindMapData: null,
       prevImg: '',
-      openTest: false
+      openTest: false,
+      isFirst: true
     }
   },
   computed: {
@@ -112,9 +113,9 @@ export default {
       }
     }
   },
-  mounted() {
+  async mounted() {
     // this.showNewFeatureInfo()
-    this.getData()
+    await this.getData()
     this.init()
     this.$bus.$on('execCommand', this.execCommand)
     this.$bus.$on('paddingChange', this.onPaddingChange)
@@ -233,8 +234,15 @@ export default {
      * @Date: 2021-07-03 22:11:37
      * @Desc: 获取思维导图数据，实际应该调接口获取
      */
-    getData() {
-      let storeData = getData()
+    async getData() {
+      let data = await window.electronAPI.getFileContent(this.$route.params.id)
+      let storeData = null
+      if (data) {
+        this.setFileName(data.name)
+        storeData = data.content
+      } else {
+        storeData = getData()
+      }
       this.mindMapData = storeData
     },
 
@@ -248,10 +256,15 @@ export default {
         return
       }
       this.$bus.$on('data_change', data => {
-        this.setIsUnSave(true)
+        if (!this.isFirst) {
+          this.setIsUnSave(true)
+        } else {
+          this.isFirst = false
+        }
         storeData(data)
       })
       this.$bus.$on('view_data_change', data => {
+        console.log(2);
         this.setIsUnSave(true)
         storeConfig({
           view: data

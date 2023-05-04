@@ -26,27 +26,54 @@ export default {
     MacControl,
     WinControl
   },
-  data () {
+  data() {
     return {
       name: ''
     }
   },
   computed: {
     ...mapState(['fileName', 'isUnSave'])
-  },  
+  },
   watch: {
     fileName(val) {
       this.name = val
     },
     name(val) {
       if (!val.trim()) return
-      this.setFileName(val)
-      let id = this.$route.params.id
-      window.electronAPI.rename(id, val.trim())
+      this.setFileName(val.trim())
+      // let id = this.$route.params.id
+      // window.electronAPI.rename(id, val.trim())
     }
   },
+  created() {
+    // window.onbeforeunload = async (e) => {
+    //   e.returnValue = false
+    //   if (!this.isUnSave) {
+    //     window.electronAPI.close()
+    //   } else {
+    //     try {
+    //       await this.checkIsClose()
+    //       window.electronAPI.close()
+    //     } catch (error) {}
+    //   }
+    // }
+  },
   methods: {
-    ...mapMutations(['setFileName'])
+    ...mapMutations(['setFileName']),
+
+    checkIsClose() {
+      return new Promise((resolve, reject) => {
+        this.$confirm('有操作尚未保存，是否确认关闭？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(async () => {
+          resolve()
+        }).catch(() => {
+          reject()
+        });
+      })
+    }
   }
 }
 </script>
