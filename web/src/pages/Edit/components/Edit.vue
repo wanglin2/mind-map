@@ -46,7 +46,7 @@ import { getData, storeData, storeConfig } from '@/api'
 import Navigator from './Navigator.vue'
 import NodeImgPreview from './NodeImgPreview.vue'
 import SidebarTrigger from './SidebarTrigger.vue'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import customThemeList from '@/customThemes'
 import icon from '@/config/icon'
 
@@ -98,6 +98,7 @@ export default {
   },
   computed: {
     ...mapState({
+      fileName: state => state.fileName,
       isZenMode: state => state.localConfig.isZenMode,
       openNodeRichText: state => state.localConfig.openNodeRichText,
     })
@@ -141,6 +142,8 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setFileName', 'setIsUnSave']),
+
     /**
      * @Author: 王林25
      * @Date: 2021-11-22 19:39:28
@@ -245,9 +248,11 @@ export default {
         return
       }
       this.$bus.$on('data_change', data => {
+        this.setIsUnSave(true)
         storeData(data)
       })
       this.$bus.$on('view_data_change', data => {
+        this.setIsUnSave(true)
         storeConfig({
           view: data
         })
@@ -295,9 +300,9 @@ export default {
         iconList: icon
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
-      this.mindMap.keyCommand.addShortcut('Control+s', () => {
-        this.manualSave()
-      })
+      // this.mindMap.keyCommand.addShortcut('Control+s', () => {
+      //   this.manualSave()
+      // })
       // 转发事件
       ;[
         'node_active',
@@ -414,11 +419,16 @@ export default {
       this.mindMap.removePlugin(RichText)
     },
 
-    saveToLocal() {
+    // 保存到本地文件
+    async saveToLocal() {
       let id = this.$route.params.id
       let data = this.mindMap.getData(true)
       console.log('保存', id, data)
-      window.electronAPI.save(id, JSON.stringify(data))
+      let res = await window.electronAPI.save(id, JSON.stringify(data))
+      if (res) {
+        this.setFileName(res)
+      }
+      this.setIsUnSave(false)
     }
   }
 }

@@ -7,6 +7,8 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
+    fileName: '',// 本地的文件名
+    isUnSave: false,// 当前操作是否未保存
     mindMapData: null, // 思维导图数据
     isHandleLocalFile: false, // 是否操作的是本地文件
     localConfig: {
@@ -19,6 +21,16 @@ const store = new Vuex.Store({
     localEditList: []// 客户端中正在编辑的思维导图列表
   },
   mutations: {
+    // 设置本地文件名
+    setFileName(state, data) {
+      state.fileName = data
+    },
+
+    // 设置当前操作是否未保存
+    setIsUnSave(state, data) {
+      state.isUnSave = data
+    },
+
     /**
      * @Author: 王林
      * @Date: 2021-04-10 14:50:01

@@ -2,6 +2,12 @@
   "name": "thoughts",
   "version": "0.1.0",
   "private": true,
+  "description": "一个简洁的思维导图",
+  "author": "街角小林<1013335014@qq.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wanglin2/mind-map"
+  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && node ../copy.js",
@@ -19,9 +25,11 @@
   "dependencies": {
     "@toast-ui/editor": "^3.1.5",
     "core-js": "^3.6.5",
+    "electron-json-storage": "^4.6.0",
     "element-ui": "^2.15.1",
     "fs-extra": "^7.0.1",
     "highlight.js": "^10.7.3",
+    "open": "^6.4.0",
     "uuid": "^3.4.0",
     "v-viewer": "^1.6.4",
     "vue": "^2.6.11",

@@ -93,7 +93,7 @@
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("const { contextBridge, ipcRenderer } = __webpack_require__(/*! electron */ \"electron\")\n\ncontextBridge.exposeInMainWorld('platform', process.platform)\ncontextBridge.exposeInMainWorld('IS_ELECTRON', true)\n\ncontextBridge.exposeInMainWorld('electronAPI', {\n    minimize: () => ipcRenderer.send('minimize'),\n    maximize: () => ipcRenderer.send('maximize'),\n    unmaximize: () => ipcRenderer.send('unmaximize'),\n    close: () => ipcRenderer.send('close'),\n    create: (id) => ipcRenderer.send('create', id),\n    save: (id, data) => ipcRenderer.send('save', id, data),\n})\n\n//# sourceURL=webpack:///./src/electron/preload.js?");
+eval("const { contextBridge, ipcRenderer } = __webpack_require__(/*! electron */ \"electron\")\r\n\r\ncontextBridge.exposeInMainWorld('platform', process.platform)\r\ncontextBridge.exposeInMainWorld('IS_ELECTRON', true)\r\n\r\ncontextBridge.exposeInMainWorld('electronAPI', {\r\n    minimize: () => ipcRenderer.send('minimize'),\r\n    maximize: () => ipcRenderer.send('maximize'),\r\n    unmaximize: () => ipcRenderer.send('unmaximize'),\r\n    close: () => ipcRenderer.send('close'),\r\n    create: (id) => ipcRenderer.send('create', id),\r\n    save: (id, data) => ipcRenderer.invoke('save', id, data),\r\n    rename: (id, name) => ipcRenderer.invoke('rename', id, name),\r\n    openUrl: (url) => ipcRenderer.send('openUrl', url),\r\n    getRecentFileList: () => ipcRenderer.invoke('getRecentFileList'),\r\n    openFileInDir: (file) => ipcRenderer.send('openFileInDir', file),\r\n    deleteFile: (file) => ipcRenderer.invoke('deleteFile', file),\r\n    onRefreshRecentFileList: (callback) => ipcRenderer.on('refreshRecentFileList', callback)\r\n})\n\n//# sourceURL=webpack:///./src/electron/preload.js?");
 
 /***/ }),
 
@@ -104,7 +104,7 @@ eval("const { contextBridge, ipcRenderer } = __webpack_require__(/*! electron */
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("module.exports = __webpack_require__(/*! /Users/lisa/wanglin/github/mind-map/web/src/electron/preload.js */\"./src/electron/preload.js\");\n\n\n//# sourceURL=webpack:///multi_./src/electron/preload.js?");
+eval("module.exports = __webpack_require__(/*! E:\\wanglin\\mind-map\\web\\src\\electron\\preload.js */\"./src/electron/preload.js\");\n\n\n//# sourceURL=webpack:///multi_./src/electron/preload.js?");
 
 /***/ }),
 

@@ -36,9 +36,7 @@
       <Fullscreen :mindMap="mindMap"></Fullscreen>
     </div>
     <div class="item">
-      <a href="https://github.com/wanglin2/mind-map" target="_blank">
-        <span class="iconfont icongithub"></span>
-      </a>
+      <span class="iconfont icongithub" @click="openGithub"></span>
     </div>
   </div>
 </template>
@@ -89,6 +87,10 @@ export default {
     onLangChange(lang) {
       i18n.locale = lang
       storeLang(lang)
+    },
+
+    openGithub() {
+      window.electronAPI.openUrl('https://github.com/wanglin2/mind-map')
     }
   }
 }
