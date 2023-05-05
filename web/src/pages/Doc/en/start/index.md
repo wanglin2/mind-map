@@ -91,6 +91,7 @@ If you only use library, you don't need to read this section.
 
 ```bash
 git clone https://github.com/wanglin2/mind-map.git
+cd mind-map
 cd simple-mind-map
 npm i
 npm link
