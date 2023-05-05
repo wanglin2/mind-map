@@ -58,6 +58,7 @@
 <p>如果你只是使用库的话可以不用阅读此小节。</p>
 <h3>本地开发</h3>
 <pre class="hljs"><code>git <span class="hljs-built_in">clone</span> https://github.com/wanglin2/mind-map.git
+<span class="hljs-built_in">cd</span> mind-map
 <span class="hljs-built_in">cd</span> simple-mind-map
 npm i
 npm link

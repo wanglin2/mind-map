@@ -3,6 +3,8 @@
 `simple-mind-map` is a simple and powerful web mind map library, not dependent on any specific framework. Can help you quickly develop mind mapping products.
 
 > If you just want to use mind mapping, you can also use the demo of this project as a regular online mind mapping tool. Click on the 【Online Demo】 in the upper right corner to start using it.
+>
+> Additionally, a client is provided for download, support `Windows`、`Mac` and `Linux`, [Click here to learn more](/mind-map/#/doc/zh/client)。
 
 ## Features
 
