@@ -35,7 +35,7 @@ async function createMainWindow() {
     await mainWindow.loadURL(
       process.env.WEBPACK_DEV_SERVER_URL + '/#/workbenche'
     )
-    if (!process.env.IS_TEST) mainWindow.webContents.openDevTools()
+    // if (!process.env.IS_TEST) mainWindow.webContents.openDevTools()
   } else {
     createProtocol('app')
     // 非开发环境时加载index.html

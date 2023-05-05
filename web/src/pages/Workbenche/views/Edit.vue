@@ -43,6 +43,7 @@ export default {
   watch: {
     fileName(val) {
       this.name = val
+      document.title = val
     },
     name(val) {
       if (!val.trim()) return

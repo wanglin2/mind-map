@@ -9,6 +9,9 @@
 <script>
 export default {
     name: 'Workbenche',
+    created () {
+        document.title = '思绪思维导图'
+    }
 }
 </script>
 

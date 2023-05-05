@@ -9,11 +9,20 @@
     <div class="workbencheHomeHeader">
       <MacControl></MacControl>
       <WinControl></WinControl>
+      <div class="rightBar">
+        <el-dropdown @command="handleCommand">
+          <span class="settingBtn el-icon-setting"></span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item command="about">关于软件</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </div>
     <div class="workbencheHomeContent">
       <Sidebar></Sidebar>
       <FileList></FileList>
     </div>
+    <AboutDialog v-model="showAboutDialog"></AboutDialog>
   </div>
 </template>
 
@@ -22,15 +31,32 @@ import WinControl from '../components/WinControl.vue'
 import MacControl from '../components/MacControl.vue'
 import Sidebar from '../components/Sidebar.vue'
 import FileList from '../components/FileList.vue'
+import AboutDialog from '../components/AboutDialog.vue'
 
 export default {
   components: {
     WinControl,
     MacControl,
     Sidebar,
-    FileList
+    FileList,
+    AboutDialog
+  },
+  data() {
+    return {
+      showAboutDialog: false
+    }
   },
   methods: {
+    handleCommand(command) {
+      switch (command) {
+        case 'about':
+          this.showAboutDialog = true
+          break
+        default:
+          break
+      }
+    },
+
     onDrop(e) {
       e.preventDefault()
       e.stopPropagation()
@@ -54,9 +80,11 @@ export default {
         window.electronAPI.openFile(dropFiles[0].path)
       } else if (dropFiles.length > 1) {
         // 否则添加到最近文件列表
-        window.electronAPI.addRecentFileList(dropFiles.map((file) => {
-          return file.path
-        }))
+        window.electronAPI.addRecentFileList(
+          dropFiles.map(file => {
+            return file.path
+          })
+        )
       }
     },
 
@@ -87,6 +115,7 @@ export default {
   flex-direction: column;
 
   .workbencheHomeHeader {
+    position: relative;
     width: 100%;
     height: 40px;
     background-color: #ebeef1;
@@ -94,6 +123,21 @@ export default {
     display: flex;
     align-items: center;
     flex-shrink: 0;
+
+    .rightBar {
+      -webkit-app-region: no-drag;
+      position: absolute;
+      right: 20px;
+      top: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
+
+      .settingBtn {
+        font-size: 20px;
+        cursor: pointer;
+      }
+    }
   }
 
   .workbencheHomeContent {
