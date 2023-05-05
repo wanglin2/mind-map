@@ -1,5 +1,11 @@
 <template>
-  <div class="workbencheHomeContainer">
+  <div
+    class="workbencheHomeContainer"
+    @drop="onDrop"
+    @dragenter="onDragenter"
+    @dragover="onDragover"
+    @dragleave="onDragleave"
+  >
     <div class="workbencheHomeHeader">
       <MacControl></MacControl>
       <WinControl></WinControl>
@@ -23,6 +29,51 @@ export default {
     MacControl,
     Sidebar,
     FileList
+  },
+  methods: {
+    onDrop(e) {
+      e.preventDefault()
+      e.stopPropagation()
+
+      let df = e.dataTransfer
+      let dropFiles = []
+
+      if (df.items !== undefined) {
+        for (let i = 0; i < df.items.length; i++) {
+          let item = df.items[i]
+          if (item.kind === 'file' && item.webkitGetAsEntry().isFile) {
+            let file = item.getAsFile()
+            if (/\.smm$/.test(file.name)) {
+              dropFiles.push(file)
+            }
+          }
+        }
+      }
+      if (dropFiles.length === 1) {
+        // 如果只有一个文件，直接打开编辑
+        window.electronAPI.openFile(dropFiles[0].path)
+      } else if (dropFiles.length > 1) {
+        // 否则添加到最近文件列表
+        window.electronAPI.addRecentFileList(dropFiles.map((file) => {
+          return file.path
+        }))
+      }
+    },
+
+    onDragenter(e) {
+      e.preventDefault()
+      e.stopPropagation()
+    },
+
+    onDragover(e) {
+      e.preventDefault()
+      e.stopPropagation()
+    },
+
+    onDragleave(e) {
+      e.preventDefault()
+      e.stopPropagation()
+    }
   }
 }
 </script>

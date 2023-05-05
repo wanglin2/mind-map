@@ -1,18 +1,14 @@
 'use strict'
 
-import {
-  app,
-  protocol,
-  BrowserWindow,
-} from 'electron'
+import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import path from 'path'
 import { bindFileHandleEvent } from './electron/fileHandle'
-import { bindOtherHandleEvent } from './electron/otherHandle';
+import { bindOtherHandleEvent } from './electron/otherHandle'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
-// Scheme must be registered before the app is ready
+// 在应用程序准备就绪之前，必须注册方案
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
@@ -35,12 +31,14 @@ async function createMainWindow() {
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    // Load the url of the dev server if in development mode
-    await mainWindow.loadURL(process.env.WEBPACK_DEV_SERVER_URL + '/#/workbenche')
-    // if (!process.env.IS_TEST) mainWindow.webContents.openDevTools()
+    // 如果处于开发模式，则加载开发服务器的url
+    await mainWindow.loadURL(
+      process.env.WEBPACK_DEV_SERVER_URL + '/#/workbenche'
+    )
+    if (!process.env.IS_TEST) mainWindow.webContents.openDevTools()
   } else {
     createProtocol('app')
-    // Load the index.html when not in development
+    // 非开发环境时加载index.html
     mainWindow.loadURL('app://./index.html/#/workbenche')
   }
 }
@@ -53,19 +51,17 @@ const bindEvent = () => {
 
 // 关闭所有窗口后退出
 app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
+  // 在macOS上，应用程序及其菜单栏通常保持活动状态，直到用户使用Cmd+Q明确退出
   if (process.platform !== 'darwin') {
     app.quit()
   }
 })
 
 app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
+  // 在macOS上，当点击dock图标且没有其他窗口打开时，通常会在应用程序中重新创建一个窗口。
   if (BrowserWindow.getAllWindows().length === 0) {
     createMainWindow()
-    bindEvent()
+    // bindEvent()
   }
 })
 
@@ -74,7 +70,7 @@ app.on('ready', async () => {
   bindEvent()
 })
 
-// Exit cleanly on request from parent process in development mode.
+// 在开发模式下，应父进程的请求干净地退出。
 if (isDevelopment) {
   if (process.platform === 'win32') {
     process.on('message', data => {

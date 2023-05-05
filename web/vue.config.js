@@ -17,10 +17,14 @@ module.exports = {
     electronBuilder: {
       preload: 'src/electron/preload.js',
       builderOptions: {
-        productName: 'SimpleMindMap',
-        copyright: 'Copyright © SimpleMindMap',
+        productName: '思绪思维导图',
+        copyright: 'Copyright © 思绪思维导图',
         // compression: "maximum", // 机器好的可以打开，配置压缩，开启后会让 .AppImage 格式的客户端启动缓慢
         asar: true,
+        fileAssociations: {
+          ext: 'smm',
+          icon: './build/icons/icon.ico'
+        },
         publish: [
           {
             provider: 'github',
@@ -55,7 +59,7 @@ module.exports = {
               arch: ['x64'],
             },
           ],
-          publisherName: 'SimpleMindMap',
+          publisherName: '思绪思维导图',
           icon: 'build/icons/icon.ico',
           publish: ['github'],
         },

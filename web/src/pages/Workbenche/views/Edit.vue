@@ -4,7 +4,13 @@
       <MacControl></MacControl>
       <WinControl></WinControl>
       <div class="inputBox">
-        <el-input v-model="name" size="mini" placeholder=""></el-input>
+        <el-input
+          v-model="name"
+          size="mini"
+          placeholder=""
+          @blur="rename"
+          @keyup.enter="rename"
+        ></el-input>
         <div class="modifyDotBox">
           <div class="modifyDot" v-show="isUnSave"></div>
         </div>
@@ -41,37 +47,46 @@ export default {
     name(val) {
       if (!val.trim()) return
       this.setFileName(val.trim())
-      // let id = this.$route.params.id
-      // window.electronAPI.rename(id, val.trim())
     }
   },
   created() {
-    // window.onbeforeunload = async (e) => {
-    //   e.returnValue = false
-    //   if (!this.isUnSave) {
-    //     window.electronAPI.close()
-    //   } else {
-    //     try {
-    //       await this.checkIsClose()
-    //       window.electronAPI.close()
-    //     } catch (error) {}
-    //   }
-    // }
+    window.onbeforeunload = async e => {
+      e.returnValue = false
+      // 没有未保存内容直接关闭
+      if (!this.isUnSave) {
+        window.electronAPI.destroy()
+      } else {
+        try {
+          // 否则询问用户是否关闭
+          await this.checkIsClose()
+          window.electronAPI.destroy()
+        } catch (error) {}
+      }
+    }
   },
   methods: {
     ...mapMutations(['setFileName']),
 
+    // 重命名文件
+    rename() {
+      let id = this.$route.params.id
+      window.electronAPI.rename(id, this.name.trim())
+    },
+
+    // 询问是否关闭页面
     checkIsClose() {
       return new Promise((resolve, reject) => {
         this.$confirm('有操作尚未保存，是否确认关闭？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(async () => {
-          resolve()
-        }).catch(() => {
-          reject()
-        });
+        })
+          .then(async () => {
+            resolve()
+          })
+          .catch(() => {
+            reject()
+          })
       })
     }
   }

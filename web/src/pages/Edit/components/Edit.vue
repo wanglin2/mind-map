@@ -241,6 +241,7 @@ export default {
         this.setFileName(data.name)
         storeData = data.content
       } else {
+        this.setFileName('未命名')
         storeData = getData()
       }
       this.mindMapData = storeData
@@ -264,7 +265,6 @@ export default {
         storeData(data)
       })
       this.$bus.$on('view_data_change', data => {
-        console.log(2);
         this.setIsUnSave(true)
         storeConfig({
           view: data
@@ -437,7 +437,7 @@ export default {
       let id = this.$route.params.id
       let data = this.mindMap.getData(true)
       console.log('保存', id, data)
-      let res = await window.electronAPI.save(id, JSON.stringify(data))
+      let res = await window.electronAPI.save(id, JSON.stringify(data), this.fileName)
       if (res) {
         this.setFileName(res)
       }
