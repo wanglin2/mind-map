@@ -4,24 +4,25 @@
 <p><code>simple-mind-map</code> is a simple and powerful web mind map library, not dependent on any specific framework. Can help you quickly develop mind mapping products.</p>
 <blockquote>
 <p>If you just want to use mind mapping, you can also use the demo of this project as a regular online mind mapping tool. Click on the 【Online Demo】 in the upper right corner to start using it.</p>
+<p>Additionally, a client is provided for download, support <code>Windows</code>、<code>Mac</code> and <code>Linux</code>, <a href="/mind-map/#/doc/zh/client">Click here to learn more</a>。</p>
 </blockquote>
 <h2>Features</h2>
 <ul>
-<li><input type="checkbox" id="checkbox216" checked="true" /><label for="checkbox216">Plugin architecture. In addition to core functions, other functions are provided as plugins, which can be used as needed to reduce the overall volume</label></li>
-<li><input type="checkbox" id="checkbox217" checked="true" /><label for="checkbox217">Supports six types of structures: logical structure diagrams, mind maps,</label>
+<li><input type="checkbox" id="checkbox90" checked="true" /><label for="checkbox90">Plugin architecture. In addition to core functions, other functions are provided as plugins, which can be used as needed to reduce the overall volume</label></li>
+<li><input type="checkbox" id="checkbox91" checked="true" /><label for="checkbox91">Supports six types of structures: logical structure diagrams, mind maps,</label>
 organizational structure diagrams, directory organization diagrams, timeline, and fishbone diagrams</li>
-<li><input type="checkbox" id="checkbox218" checked="true" /><label for="checkbox218">Built-in multiple themes and allows for highly customized styles, and support register new themes</label></li>
-<li><input type="checkbox" id="checkbox219" checked="true" /><label for="checkbox219">Supports shortcuts</label></li>
-<li><input type="checkbox" id="checkbox220" checked="true" /><label for="checkbox220">Node content supports images, icons, hyperlinks, notes, tags, and</label>
+<li><input type="checkbox" id="checkbox92" checked="true" /><label for="checkbox92">Built-in multiple themes and allows for highly customized styles, and support register new themes</label></li>
+<li><input type="checkbox" id="checkbox93" checked="true" /><label for="checkbox93">Supports shortcuts</label></li>
+<li><input type="checkbox" id="checkbox94" checked="true" /><label for="checkbox94">Node content supports images, icons, hyperlinks, notes, tags, and</label>
 summaries</li>
-<li><input type="checkbox" id="checkbox221" checked="true" /><label for="checkbox221">Supports forward and backward navigation</label></li>
-<li><input type="checkbox" id="checkbox222" checked="true" /><label for="checkbox222">Supports dragging and scaling</label></li>
-<li><input type="checkbox" id="checkbox223" checked="true" /><label for="checkbox223">Supports right-click and Ctrl + left-click to select multiple items</label></li>
-<li><input type="checkbox" id="checkbox224" checked="true" /><label for="checkbox224">Supports free dragging and dragging to adjust nodes</label></li>
-<li><input type="checkbox" id="checkbox225" checked="true" /><label for="checkbox225">Supports various node shapes</label></li>
-<li><input type="checkbox" id="checkbox226" checked="true" /><label for="checkbox226">Supports export to json, png, svg, pdf markdown, and import from json, xmind, markdown</label></li>
-<li><input type="checkbox" id="checkbox227" checked="true" /><label for="checkbox227">Supports mini map、support watermark</label></li>
-<li><input type="checkbox" id="checkbox228" checked="true" /><label for="checkbox228">Supports associative lines</label></li>
+<li><input type="checkbox" id="checkbox95" checked="true" /><label for="checkbox95">Supports forward and backward navigation</label></li>
+<li><input type="checkbox" id="checkbox96" checked="true" /><label for="checkbox96">Supports dragging and scaling</label></li>
+<li><input type="checkbox" id="checkbox97" checked="true" /><label for="checkbox97">Supports right-click and Ctrl + left-click to select multiple items</label></li>
+<li><input type="checkbox" id="checkbox98" checked="true" /><label for="checkbox98">Supports free dragging and dragging to adjust nodes</label></li>
+<li><input type="checkbox" id="checkbox99" checked="true" /><label for="checkbox99">Supports various node shapes</label></li>
+<li><input type="checkbox" id="checkbox100" checked="true" /><label for="checkbox100">Supports export to json, png, svg, pdf markdown, and import from json, xmind, markdown</label></li>
+<li><input type="checkbox" id="checkbox101" checked="true" /><label for="checkbox101">Supports mini map、support watermark</label></li>
+<li><input type="checkbox" id="checkbox102" checked="true" /><label for="checkbox102">Supports associative lines</label></li>
 </ul>
 <h2>Repository Catalog Introduction</h2>
 <p>1.<code>simple-mind-map</code></p>
@@ -31,16 +32,16 @@ frameworks such as Vue and React, or without a framework.</p>
 <p>This is an online mind map built using the <code>simple-mind-map</code> library and based
 on <code>Vue2.x</code> and <code>ElementUI</code>. Features include:</p>
 <ul>
-<li><input type="checkbox" id="checkbox229" checked="true" /><label for="checkbox229">Toolbar, which supports inserting and deleting nodes, and editing node</label>
+<li><input type="checkbox" id="checkbox103" checked="true" /><label for="checkbox103">Toolbar, which supports inserting and deleting nodes, and editing node</label>
 images, icons, hyperlinks, notes, tags, and summaries</li>
-<li><input type="checkbox" id="checkbox230" checked="true" /><label for="checkbox230">Sidebar, with panels for basic style settings, node style settings,</label>
+<li><input type="checkbox" id="checkbox104" checked="true" /><label for="checkbox104">Sidebar, with panels for basic style settings, node style settings,</label>
 outline, theme selection, and structure selection</li>
-<li><input type="checkbox" id="checkbox231" checked="true" /><label for="checkbox231">Import and export functionality; data is saved in the browser's local</label>
+<li><input type="checkbox" id="checkbox105" checked="true" /><label for="checkbox105">Import and export functionality; data is saved in the browser's local</label>
 storage by default, but it also supports creating, opening, and editing
 local files on the computer directly</li>
-<li><input type="checkbox" id="checkbox232" checked="true" /><label for="checkbox232">Right-click menu, which supports operations such as expanding, collapsing,</label>
+<li><input type="checkbox" id="checkbox106" checked="true" /><label for="checkbox106">Right-click menu, which supports operations such as expanding, collapsing,</label>
 and organizing layout</li>
-<li><input type="checkbox" id="checkbox233" checked="true" /><label for="checkbox233">Bottom bar, which supports node and word count statistics, switching</label>
+<li><input type="checkbox" id="checkbox107" checked="true" /><label for="checkbox107">Bottom bar, which supports node and word count statistics, switching</label>
 between edit and read-only modes, zooming in and out, and switching to
 full screen, support mini map</li>
 </ul>

@@ -4,22 +4,23 @@
 <p><code>simple-mind-map</code>是一个简单&amp;强大的Web思维导图库，不依赖任何特定框架。可以帮助你快速开发思维导图产品。</p>
 <blockquote>
 <p>如果你只是想使用思维导图，你也完全可以把本项目的demo作为一个普通的在线思维导图工具使用。点击右上角的【在线示例】开始使用吧。</p>
+<p>另外也提供了客户端可供下载，支持<code>Windows</code>、<code>Mac</code>及<code>Linux</code>，<a href="/mind-map/#/doc/zh/client">点此了解更多</a>。</p>
 </blockquote>
 <h2>特性</h2>
 <ul>
-<li><input type="checkbox" id="checkbox180" checked="true" /><label for="checkbox180">插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小整体体积</label></li>
-<li><input type="checkbox" id="checkbox181" checked="true" /><label for="checkbox181">支持逻辑结构图、思维导图、组织结构图、目录组织图、时间轴、鱼骨图六种结构</label></li>
-<li><input type="checkbox" id="checkbox182" checked="true" /><label for="checkbox182">内置多种主题，允许高度自定义样式，支持注册新主题</label></li>
-<li><input type="checkbox" id="checkbox183" checked="true" /><label for="checkbox183">支持快捷键</label></li>
-<li><input type="checkbox" id="checkbox184" checked="true" /><label for="checkbox184">节点内容支持图片、图标、超链接、备注、标签、概要</label></li>
-<li><input type="checkbox" id="checkbox185" checked="true" /><label for="checkbox185">支持前进后退</label></li>
-<li><input type="checkbox" id="checkbox186" checked="true" /><label for="checkbox186">支持拖动、缩放</label></li>
-<li><input type="checkbox" id="checkbox187" checked="true" /><label for="checkbox187">支持右键和Ctrl+左键两种多选方式</label></li>
-<li><input type="checkbox" id="checkbox188" checked="true" /><label for="checkbox188">支持节点自由拖拽、拖拽调整</label></li>
-<li><input type="checkbox" id="checkbox189" checked="true" /><label for="checkbox189">支持多种节点形状</label></li>
-<li><input type="checkbox" id="checkbox190" checked="true" /><label for="checkbox190">支持导出为</label><code>json</code>、<code>png</code>、<code>svg</code>、<code>pdf</code>、<code>markdown</code>，支持从<code>json</code>、<code>xmind</code>、<code>markdown</code>导入</li>
-<li><input type="checkbox" id="checkbox191" checked="true" /><label for="checkbox191">支持小地图、支持水印</label></li>
-<li><input type="checkbox" id="checkbox192" checked="true" /><label for="checkbox192">支持关联线</label></li>
+<li><input type="checkbox" id="checkbox72" checked="true" /><label for="checkbox72">插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小整体体积</label></li>
+<li><input type="checkbox" id="checkbox73" checked="true" /><label for="checkbox73">支持逻辑结构图、思维导图、组织结构图、目录组织图、时间轴、鱼骨图六种结构</label></li>
+<li><input type="checkbox" id="checkbox74" checked="true" /><label for="checkbox74">内置多种主题，允许高度自定义样式，支持注册新主题</label></li>
+<li><input type="checkbox" id="checkbox75" checked="true" /><label for="checkbox75">支持快捷键</label></li>
+<li><input type="checkbox" id="checkbox76" checked="true" /><label for="checkbox76">节点内容支持图片、图标、超链接、备注、标签、概要</label></li>
+<li><input type="checkbox" id="checkbox77" checked="true" /><label for="checkbox77">支持前进后退</label></li>
+<li><input type="checkbox" id="checkbox78" checked="true" /><label for="checkbox78">支持拖动、缩放</label></li>
+<li><input type="checkbox" id="checkbox79" checked="true" /><label for="checkbox79">支持右键和Ctrl+左键两种多选方式</label></li>
+<li><input type="checkbox" id="checkbox80" checked="true" /><label for="checkbox80">支持节点自由拖拽、拖拽调整</label></li>
+<li><input type="checkbox" id="checkbox81" checked="true" /><label for="checkbox81">支持多种节点形状</label></li>
+<li><input type="checkbox" id="checkbox82" checked="true" /><label for="checkbox82">支持导出为</label><code>json</code>、<code>png</code>、<code>svg</code>、<code>pdf</code>、<code>markdown</code>，支持从<code>json</code>、<code>xmind</code>、<code>markdown</code>导入</li>
+<li><input type="checkbox" id="checkbox83" checked="true" /><label for="checkbox83">支持小地图、支持水印</label></li>
+<li><input type="checkbox" id="checkbox84" checked="true" /><label for="checkbox84">支持关联线</label></li>
 </ul>
 <h2>仓库目录介绍</h2>
 <p>1.<code>simple-mind-map</code></p>
@@ -27,11 +28,11 @@
 <p>2.<code>web</code></p>
 <p>使用<code>simple-mind-map</code>库，基于<code>vue2.x</code>、<code>ElementUI</code>搭建的在线思维导图。特性：</p>
 <ul>
-<li><input type="checkbox" id="checkbox193" checked="true" /><label for="checkbox193">工具栏，支持插入节点、删除节点；编辑节点图片、图标、超链接、备注、标签、概要</label></li>
-<li><input type="checkbox" id="checkbox194" checked="true" /><label for="checkbox194">侧边栏，基础样式设置面板、节点样式设置面板、大纲面板、主题选择面板、结构选择面板</label></li>
-<li><input type="checkbox" id="checkbox195" checked="true" /><label for="checkbox195">导入导出功能；数据默认保存在浏览器本地存储，也支持直接创建、打开、编辑电脑本地文件</label></li>
-<li><input type="checkbox" id="checkbox196" checked="true" /><label for="checkbox196">右键菜单，支持展开、收起、整理布局等操作</label></li>
-<li><input type="checkbox" id="checkbox197" checked="true" /><label for="checkbox197">底部栏，支持节点数量、字数统计；支持切换编辑和只读模式；支持放大缩小；支持全屏切换；支持小地图</label></li>
+<li><input type="checkbox" id="checkbox85" checked="true" /><label for="checkbox85">工具栏，支持插入节点、删除节点；编辑节点图片、图标、超链接、备注、标签、概要</label></li>
+<li><input type="checkbox" id="checkbox86" checked="true" /><label for="checkbox86">侧边栏，基础样式设置面板、节点样式设置面板、大纲面板、主题选择面板、结构选择面板</label></li>
+<li><input type="checkbox" id="checkbox87" checked="true" /><label for="checkbox87">导入导出功能；数据默认保存在浏览器本地存储，也支持直接创建、打开、编辑电脑本地文件</label></li>
+<li><input type="checkbox" id="checkbox88" checked="true" /><label for="checkbox88">右键菜单，支持展开、收起、整理布局等操作</label></li>
+<li><input type="checkbox" id="checkbox89" checked="true" /><label for="checkbox89">底部栏，支持节点数量、字数统计；支持切换编辑和只读模式；支持放大缩小；支持全屏切换；支持小地图</label></li>
 </ul>
 <p>提供文档页面服务。</p>
 <p>3.<code>dist</code></p>

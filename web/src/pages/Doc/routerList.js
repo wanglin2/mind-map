@@ -43,7 +43,8 @@ export default [
       { path: 'view', title: 'View实例' },
       { path: 'watermark', title: 'Watermark插件' },
       { path: 'xmind', title: 'XMind解析' },
-      { path: 'deploy', title: '部署' }
+      { path: 'deploy', title: '部署' },
+      { path: 'client', title: '客户端' }
     ]
   },
   {
