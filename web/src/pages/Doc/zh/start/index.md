@@ -86,6 +86,7 @@ const mindMap = new MindMap({
 
 ```bash
 git clone https://github.com/wanglin2/mind-map.git
+cd mind-map
 cd simple-mind-map
 npm i
 npm link
