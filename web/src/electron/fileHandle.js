@@ -248,4 +248,8 @@ export const bindFileHandleEvent = ({ mainWindow, initOpenFileQueue }) => {
   initOpenFileQueue.forEach((file) => {
     openFile(null, file)
   })
+
+  return {
+    openFile
+  }
 }

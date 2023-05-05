@@ -44,8 +44,10 @@ async function createMainWindow() {
 }
 
 // 绑定事件
+let openFile = null
 const bindEvent = () => {
-  bindFileHandleEvent({ mainWindow, initOpenFileQueue })
+  let res = bindFileHandleEvent({ mainWindow, initOpenFileQueue })
+  openFile = res.openFile
   bindOtherHandleEvent()
 }
 
@@ -86,7 +88,7 @@ app.on('will-finish-launching', () => {
       if (app.isReady() === false) {
         initOpenFileQueue.push(file)
       } else {
-        console.log(file)
+        openFile(null, file)
       }
       event.preventDefault()
     })
