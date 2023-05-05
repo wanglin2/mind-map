@@ -21,86 +21,91 @@ module.exports = {
         copyright: 'Copyright © 思绪思维导图',
         // compression: "maximum", // 机器好的可以打开，配置压缩，开启后会让 .AppImage 格式的客户端启动缓慢
         asar: true,
-        fileAssociations: {
-          ext: 'smm',
-          icon: './build/icons/icon.ico'
-        },
+        fileAssociations: [
+          {
+            ext: 'smm',
+            name: 'mind map file',
+            role: 'Editor',
+            icon: './build/icons/icon.ico'
+          }
+        ],
         publish: [
           {
             provider: 'github',
             owner: 'wanglin2',
             repo: 'mind-map',
             vPrefixedTagName: true,
-            releaseType: 'draft',
-          },
+            releaseType: 'draft'
+          }
         ],
         directories: {
-          output: 'dist_electron',
+          output: 'dist_electron'
         },
         mac: {
           target: [
             {
               target: 'dmg',
-              arch: ['x64', 'arm64', 'universal'],
-            },
+              arch: ['x64', 'arm64', 'universal']
+            }
           ],
           artifactName: '${productName}-${os}-${version}-${arch}.${ext}',
           category: 'public.app-category.utilities',
-          darkModeSupport: true,
+          darkModeSupport: true
         },
         win: {
           target: [
             {
               target: 'portable',
-              arch: ['x64'],
+              arch: ['x64']
             },
             {
               target: 'nsis',
-              arch: ['x64'],
-            },
+              arch: ['x64']
+            }
           ],
           publisherName: '思绪思维导图',
           icon: 'build/icons/icon.ico',
-          publish: ['github'],
+          publish: ['github']
         },
         linux: {
           target: [
             {
               target: 'AppImage',
-              arch: ['x64'],
+              arch: ['x64']
             },
             {
               target: 'tar.gz',
-              arch: ['x64', 'arm64'],
+              arch: ['x64', 'arm64']
             },
             {
               target: 'deb',
-              arch: ['x64', 'armv7l', 'arm64'],
+              arch: ['x64', 'armv7l', 'arm64']
             },
             {
               target: 'rpm',
-              arch: ['x64'],
+              arch: ['x64']
             },
             {
               target: 'snap',
-              arch: ['x64'],
+              arch: ['x64']
             },
             {
               target: 'pacman',
-              arch: ['x64'],
-            },
+              arch: ['x64']
+            }
           ],
           category: 'Utilities',
-          icon: './build/icon.icns',
+          icon: './build/icon.icns'
         },
         dmg: {
-          icon: 'build/icons/icon.icns',
+          icon: 'build/icons/icon.icns'
         },
         nsis: {
-          oneClick: true,
+          oneClick: false,
+          allowToChangeInstallationDirectory: true,
           perMachine: true,
-          deleteAppDataOnUninstall: true,
-        },
+          deleteAppDataOnUninstall: true
+        }
       },
       // 渲染线程的配置文件
       chainWebpackRendererProcess: config => {

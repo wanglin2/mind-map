@@ -65,6 +65,34 @@ app.on('activate', () => {
   }
 })
 
+// Attempt to bind file opening #2
+// https://stackoverflow.com/questions/62420427/how-do-i-make-my-electron-app-the-default-for-opening-files
+// https://github.com/rchrd2/example-electron-file-association
+// https://www.jianshu.com/p/a32542277b83
+const initOpenFileQueue = []
+app.on('will-finish-launching', () => {
+  // Event fired When someone drags files onto the icon while your app is running
+  if (process.platform == 'win32') {
+    const argv = process.argv
+    if (argv) {
+      argv.forEach(filePath => {
+        if (filePath.indexOf('.apk') >= 0) {
+          initOpenFileQueue.push(filePath)
+        }
+      })
+    }
+  } else {
+    app.on('open-file', (event, file) => {
+      if (app.isReady() === false) {
+        initOpenFileQueue.push(file)
+      } else {
+        console.log(file)
+      }
+      event.preventDefault()
+    })
+  }
+})
+
 app.on('ready', async () => {
   createMainWindow()
   bindEvent()
