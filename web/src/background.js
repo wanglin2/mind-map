@@ -45,7 +45,7 @@ async function createMainWindow() {
 
 // 绑定事件
 const bindEvent = () => {
-  bindFileHandleEvent({ mainWindow })
+  bindFileHandleEvent({ mainWindow, initOpenFileQueue })
   bindOtherHandleEvent()
 }
 
@@ -76,7 +76,7 @@ app.on('will-finish-launching', () => {
     const argv = process.argv
     if (argv) {
       argv.forEach(filePath => {
-        if (filePath.indexOf('.apk') >= 0) {
+        if (filePath.indexOf('.smm') >= 0) {
           initOpenFileQueue.push(filePath)
         }
       })

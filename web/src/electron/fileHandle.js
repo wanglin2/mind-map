@@ -11,7 +11,7 @@ import {
 } from './storage'
 import { v4 as uuid } from 'uuid'
 
-export const bindFileHandleEvent = ({ mainWindow }) => {
+export const bindFileHandleEvent = ({ mainWindow, initOpenFileQueue }) => {
   // 通知主页面刷新最近文件列表
   const notifyMainWindowRefreshRecentFileList = () => {
     mainWindow.webContents.send('refreshRecentFileList')
@@ -242,5 +242,10 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
         }
       })
     })
+  })
+
+  // 直接双击文件打开应用时，需要直接打开该文件编辑
+  initOpenFileQueue.forEach((file) => {
+    openFile(null, file)
   })
 }
