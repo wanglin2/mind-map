@@ -50,7 +50,7 @@ module.exports = {
           ],
           artifactName: '${productName}-${os}-${version}-${arch}.${ext}',
           category: 'public.app-category.utilities',
-          darkModeSupport: true
+          darkModeSupport: false
         },
         win: {
           target: [

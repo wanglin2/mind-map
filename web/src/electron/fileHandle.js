@@ -171,7 +171,6 @@ export const bindFileHandleEvent = ({ mainWindow, initOpenFileQueue }) => {
   // 添加到最近文件列表
   ipcMain.handle('addRecentFileList', async (event, fileList) => {
     try {
-        console.log(fileList);
         await saveFileListToRecent(fileList)
         notifyMainWindowRefreshRecentFileList()
     } catch (error) {

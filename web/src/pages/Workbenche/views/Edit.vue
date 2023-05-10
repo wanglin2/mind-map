@@ -52,7 +52,8 @@ export default {
   },
   created() {
     window.onbeforeunload = async e => {
-      e.returnValue = false
+      e.preventDefault()
+      e.returnValue = ''
       // 没有未保存内容直接关闭
       if (!this.isUnSave) {
         window.electronAPI.destroy()

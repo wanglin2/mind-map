@@ -83,10 +83,13 @@ app.on('will-finish-launching', () => {
     }
   } else {
     app.on('open-file', (event, file) => {
-      if (app.isReady() === false) {
-        initOpenFileQueue.push(file)
-      } else {
-        console.log(file)
+      if (file.indexOf('.smm') >= 0) {
+        if (app.isReady() === false) {
+          initOpenFileQueue.push(file)
+        } else {
+          console.log(file)
+          // TODO:
+        }
       }
       event.preventDefault()
     })
