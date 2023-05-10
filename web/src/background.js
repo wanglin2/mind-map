@@ -44,8 +44,10 @@ async function createMainWindow() {
 }
 
 // 绑定事件
+let openFile = null
 const bindEvent = () => {
-  bindFileHandleEvent({ mainWindow, initOpenFileQueue })
+  let res = bindFileHandleEvent({ mainWindow, initOpenFileQueue })
+  openFile = res.openFile
   bindOtherHandleEvent()
 }
 
@@ -83,13 +85,10 @@ app.on('will-finish-launching', () => {
     }
   } else {
     app.on('open-file', (event, file) => {
-      if (file.indexOf('.smm') >= 0) {
-        if (app.isReady() === false) {
-          initOpenFileQueue.push(file)
-        } else {
-          console.log(file)
-          // TODO:
-        }
+      if (app.isReady() === false) {
+        initOpenFileQueue.push(file)
+      } else {
+        openFile(null, file)
       }
       event.preventDefault()
     })

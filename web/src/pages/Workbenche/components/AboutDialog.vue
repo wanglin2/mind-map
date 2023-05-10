@@ -11,14 +11,12 @@
       <h2>思绪思维导图</h2>
       <p>版本：{{ version }}</p>
       <p>
-        获取源码：<a href="https://github.com/wanglin2/mind-map/tree/electron"
-          >mind-map</a
-        >
+        获取源码：
+        <span @click="open('mind-map')">mind-map</span>
       </p>
       <p>
-        下载最新版本：<a href="https://github.com/wanglin2/mind-map/releases"
-          >releases</a
-        >
+        下载最新版本：
+        <span @click="open('releases')">releases</span>
       </p>
     </div>
   </el-dialog>
@@ -52,6 +50,21 @@ export default {
   methods: {
     onClose() {
       this.$emit('change', false)
+    },
+
+    open(type) {
+      let url = ''
+      switch (type) {
+        case 'mind-map':
+          url = 'https://github.com/wanglin2/mind-map/tree/electron'
+          break;
+        case 'releases':
+          url = 'https://github.com/wanglin2/mind-map/releases'
+          break
+        default:
+          break;
+      }
+      window.electronAPI.openUrl(url)
     }
   }
 }
@@ -83,8 +96,8 @@ export default {
   p {
     margin-bottom: 10px;
 
-    a {
-      text-decoration: none;
+    span {
+      cursor: pointer;
       color: #409eff;
     }
   }
