@@ -3,6 +3,11 @@
     <h1>View实例</h1>
 <p><code>view</code>实例负责视图操作，可通过<code>mindMap.view</code>获取到该实例</p>
 <h2>方法</h2>
+<h3>fit()</h3>
+<blockquote>
+<p>v0.6.0+</p>
+</blockquote>
+<p>缩放思维导图至适应画布。</p>
 <h3>translateX(step)</h3>
 <p><code>x</code>方向进行平移，<code>step</code>：要平移的像素</p>
 <h3>translateY(step)</h3>

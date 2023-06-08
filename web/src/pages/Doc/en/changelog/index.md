@@ -2,7 +2,9 @@
 
 ## 0.6.0
 
-optimization: Optimize the directory structure of simple-mind-map source code
+optimization: Optimize the directory structure of simple-mind-map source code.
+
+New: 1.Supports one click zoom to fit the canvas function.
 
 ## 0.5.11
 

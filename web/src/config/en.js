@@ -291,6 +291,11 @@ export const shortcutKeyList = [
         icon: 'icondingwei',
         name: 'Reset',
         value: 'Ctrl + Enter'
+      },
+      {
+        icon: 'iconquanping1',
+        name: 'fit canvas',
+        value: 'Ctrl + i'
       }
     ]
   }
