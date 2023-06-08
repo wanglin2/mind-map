@@ -17,7 +17,8 @@
 <p><code>v0.5.7+</code>的版本直接使用<code>html2canvas</code>转换整个<code>svg</code>，速度不再是问题，但是目前存在一个<code>bug</code>，就是节点的颜色导出后不生效。</p>
 <h2>注册</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
-<span class="hljs-keyword">import</span> RichText <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/RichText.js&#x27;</span>
+<span class="hljs-keyword">import</span> RichText <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/RichText.js&#x27;</span>
+<span class="hljs-comment">// import RichText from &#x27;simple-mind-map/src/RichText.js&#x27; v0.6.0以下版本使用该路径</span>
 
 MindMap.usePlugin(RichText, opt?)
 </code></pre>

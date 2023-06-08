@@ -1,4 +1,4 @@
-import Node from '../Node'
+import Node from './Node'
 
 //  检查是否存在概要
 function checkHasGeneralization () {

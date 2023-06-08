@@ -1,4 +1,4 @@
-import { tagColorList } from './utils/constant'
+import { tagColorList } from '../../../constants/constant'
 const rootProp = ['paddingX', 'paddingY']
 
 //  样式类

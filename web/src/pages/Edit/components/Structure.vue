@@ -19,7 +19,7 @@
 
 <script>
 import Sidebar from './Sidebar'
-import { layoutList } from 'simple-mind-map/src/utils/constant'
+import { layoutList } from 'simple-mind-map/src/constants/constant'
 import { storeConfig } from '@/api'
 import { mapState } from 'vuex'
 import { layoutImgMap } from '@/config/constant.js'

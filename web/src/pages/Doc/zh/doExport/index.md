@@ -6,7 +6,8 @@
 
 ```js
 import MindMap from 'simple-mind-map'
-import Export from 'simple-mind-map/src/Export.js'
+import Export from 'simple-mind-map/src/plugins/Export.js'
+// import Export from 'simple-mind-map/src/Export.js' v0.6.0以下版本使用该路径
 
 MindMap.usePlugin(Export)
 ```

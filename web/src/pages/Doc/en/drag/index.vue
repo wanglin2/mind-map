@@ -7,7 +7,8 @@
 <p>Please refer to the <a href="/mind-map/#/doc/zh/constructor">Instantiation Options</a> of the <code>MindMap</code> class for configuration.</p>
 <h2>Register</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
-<span class="hljs-keyword">import</span> Drag <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/Drag.js&#x27;</span>
+<span class="hljs-keyword">import</span> Drag <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/Drag.js&#x27;</span>
+<span class="hljs-comment">// import Drag from &#x27;simple-mind-map/src/Drag.js&#x27; Use this path for versions below v0.6.0</span>
 
 MindMap.usePlugin(Drag)
 </code></pre>

@@ -8,7 +8,8 @@
 <p>Please refer to the <a href="/mind-map/#/doc/zh/constructor">Instantiation Options</a> of the <code>MindMap</code> class for configuration.</p>
 <h2>Register</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
-<span class="hljs-keyword">import</span> Watermark <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/Watermark.js&#x27;</span>
+<span class="hljs-keyword">import</span> Watermark <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/Watermark.js&#x27;</span>
+<span class="hljs-comment">// import Watermark from &#x27;simple-mind-map/src/Watermark.js&#x27; Use this path for versions below v0.6.0</span>
 
 MindMap.usePlugin(Watermark)
 </code></pre>

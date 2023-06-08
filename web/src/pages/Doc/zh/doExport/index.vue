@@ -4,7 +4,8 @@
 <p><code>Export</code>插件提供导出的功能。</p>
 <h2>注册</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
-<span class="hljs-keyword">import</span> Export <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/Export.js&#x27;</span>
+<span class="hljs-keyword">import</span> Export <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/Export.js&#x27;</span>
+<span class="hljs-comment">// import Export from &#x27;simple-mind-map/src/Export.js&#x27; v0.6.0以下版本使用该路径</span>
 
 MindMap.usePlugin(Export)
 </code></pre>

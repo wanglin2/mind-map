@@ -1,7 +1,7 @@
-import { measureText, resizeImgSize, getTextFromHtml } from '../utils'
+import { measureText, resizeImgSize, getTextFromHtml } from '../../../utils'
 import { Image, SVG, A, G, Rect, Text, ForeignObject } from '@svgdotjs/svg.js'
-import iconsSvg from '../svg/icons'
-import { CONSTANTS } from './constant'
+import iconsSvg from '../../../svg/icons'
+import { CONSTANTS } from '../../../constants/constant'
 
 //  创建图片节点
 function createImgNode() {

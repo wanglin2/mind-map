@@ -8,7 +8,8 @@
 <p>配置请参考<code>MindMap</code>类的<a href="/mind-map/#/doc/zh/constructor">实例化选项</a>。</p>
 <h2>注册</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
-<span class="hljs-keyword">import</span> Watermark <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/Watermark.js&#x27;</span>
+<span class="hljs-keyword">import</span> Watermark <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/Watermark.js&#x27;</span>
+<span class="hljs-comment">// import Watermark from &#x27;simple-mind-map/src/Watermark.js&#x27; v0.6.0以下版本使用该路径</span>
 
 MindMap.usePlugin(Watermark)
 </code></pre>

@@ -1,6 +1,6 @@
 import Base from './Base'
 import { walk, asyncRun } from '../utils'
-import { CONSTANTS } from '../utils/constant'
+import { CONSTANTS } from '../constants/constant'
 
 //  时间轴
 class Timeline extends Base {

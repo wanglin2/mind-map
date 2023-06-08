@@ -8,7 +8,7 @@ includes some built-in shortcuts and can also be added manually. The
 <h3>addShortcut(key, fn)</h3>
 <p>Add a shortcut</p>
 <p><code>key</code>: Shortcut key, key values can be viewed at
-<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/keyMap.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/keyMap.js</a>
+<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/command/keyMap.js">keyMap.js</a>
 Example:</p>
 <pre class="hljs"><code><span class="hljs-comment">// Single key</span>
 mindMap.keyCommand.addShortcut(<span class="hljs-string">&quot;Enter&quot;</span>, <span class="hljs-function">() =&gt;</span> {});

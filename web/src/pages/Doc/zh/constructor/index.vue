@@ -39,7 +39,7 @@
 <td>data</td>
 <td>Object</td>
 <td>{}</td>
-<td>思维导图数据，可参考：<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js</a></td>
+<td>思维导图数据，可参考：<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a></td>
 <td></td>
 </tr>
 <tr>
@@ -67,7 +67,7 @@
 <td>themeConfig</td>
 <td>Object</td>
 <td>{}</td>
-<td>主题配置，会和所选择的主题进行合并，可用字段可参考：<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js</a></td>
+<td>主题配置，会和所选择的主题进行合并，可用字段可参考：<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js">default.js</a></td>
 <td></td>
 </tr>
 <tr>
@@ -690,12 +690,12 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>INSERT_NODE</td>
 <td>插入同级节点，操作节点为当前激活的节点或指定节点，如果有多个激活节点，只会对第一个有效</td>
-<td>openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为<code>true</code>）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js</a>）</td>
+<td>openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为<code>true</code>）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a>）</td>
 </tr>
 <tr>
 <td>INSERT_CHILD_NODE</td>
 <td>插入子节点，操作节点为当前激活的节点或指定节点</td>
-<td>openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为<code>true</code>）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js</a>）</td>
+<td>openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为<code>true</code>）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a>）</td>
 </tr>
 <tr>
 <td>UP_NODE</td>
@@ -775,7 +775,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>SET_NODE_ICON</td>
 <td>设置节点图标</td>
-<td>node（要设置的节点）、icons（数组，预定义的图片名称组成的数组，可用图标可在<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js</a>文件里的<code>nodeIconList</code>列表里获取到，图标名称为<code>type_name</code>，如<code>['priority_1']</code>）</td>
+<td>node（要设置的节点）、icons（数组，预定义的图片名称组成的数组，可用图标可在<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js">icons.js</a>文件里的<code>nodeIconList</code>列表里获取到，图标名称为<code>type_name</code>，如<code>['priority_1']</code>）</td>
 </tr>
 <tr>
 <td>SET_NODE_HYPERLINK</td>
@@ -790,7 +790,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>SET_NODE_TAG</td>
 <td>设置节点标签</td>
-<td>node（要设置的节点）、tag（字符串数组，内置颜色信息可在<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js</a>里获取到）</td>
+<td>node（要设置的节点）、tag（字符串数组，内置颜色信息可在<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/constants/constant.js">constant.js</a>里获取到）</td>
 </tr>
 <tr>
 <td>INSERT_AFTER（v0.1.5+）</td>
@@ -830,7 +830,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>SET_NODE_SHAPE（v0.2.4+）</td>
 <td>设置节点形状</td>
-<td>node（要设置的节点）、shape（形状，全部形状：https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/Shape.js）</td>
+<td>node（要设置的节点）、shape（形状，全部形状：<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/render/node/Shape.js">Shape.js</a>）</td>
 </tr>
 </tbody>
 </table>
