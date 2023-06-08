@@ -124,7 +124,9 @@ const defaultOpt = {
   // 关联线默认文字
   defaultAssociativeLineText: '关联',
   // 思维导图适应画布大小时的内边距
-  fitPadding: 50
+  fitPadding: 50,
+  // 是否开启按住ctrl键多选节点功能
+  enableCtrlKeyNodeSelection: true
 }
 
 //  思维导图

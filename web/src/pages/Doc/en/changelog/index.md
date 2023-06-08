@@ -4,7 +4,7 @@
 
 optimization: Optimize the directory structure of simple-mind-map source code.
 
-New: 1.Supports one click zoom to fit the canvas function.
+New: 1.Supports one click zoom to fit the canvas function. 2.Press and hold the Ctrl key to activate the multi selection function on demand through configuration.
 
 ## 0.5.11
 
