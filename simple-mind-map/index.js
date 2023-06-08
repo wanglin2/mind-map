@@ -122,7 +122,9 @@ const defaultOpt = {
   // 节点最大缓存数量
   maxNodeCacheCount: 1000,
   // 关联线默认文字
-  defaultAssociativeLineText: '关联'
+  defaultAssociativeLineText: '关联',
+  // 思维导图适应画布大小时的内边距
+  fitPadding: 50
 }
 
 //  思维导图

@@ -5,6 +5,12 @@ through `mindMap.view`
 
 ## Methods
 
+### fit()
+
+> v0.6.0+
+
+Zoom the mind map to fit the canvas.
+
 ### translateX(step)
 
 Translate in the `x` direction, `step`: number of pixels to translate

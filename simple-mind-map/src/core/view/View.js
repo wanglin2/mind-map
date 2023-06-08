@@ -28,6 +28,9 @@ class View {
     this.mindMap.keyCommand.addShortcut('Control+Enter', () => {
       this.reset()
     })
+    this.mindMap.keyCommand.addShortcut('Control+i', () => {
+      this.fit()
+    })
     this.mindMap.svg.on('dblclick', () => {
       this.reset()
     })
@@ -57,10 +60,15 @@ class View {
     })
     // 放大缩小视图
     this.mindMap.event.on('mousewheel', (e, dir) => {
-      if (this.mindMap.opt.customHandleMousewheel && typeof this.mindMap.opt.customHandleMousewheel === 'function') {
+      if (
+        this.mindMap.opt.customHandleMousewheel &&
+        typeof this.mindMap.opt.customHandleMousewheel === 'function'
+      ) {
         return this.mindMap.opt.customHandleMousewheel(e)
       }
-      if (this.mindMap.opt.mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
+      if (
+        this.mindMap.opt.mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM
+      ) {
         switch (dir) {
           // 鼠标滚轮，向上和向左，都是缩小
           case CONSTANTS.DIR.UP:
@@ -74,7 +82,7 @@ class View {
             break
         }
       } else {
-        switch (dir){
+        switch (dir) {
           // 上移
           case CONSTANTS.DIR.DOWN:
             this.translateY(-this.mindMap.opt.mousewheelMoveStep)
@@ -200,6 +208,56 @@ class View {
     this.scale = scale
     this.transform()
     this.mindMap.emit('scale', this.scale)
+  }
+
+  // 适应画布大小
+  fit() {
+    let { fitPadding } = this.mindMap.opt
+    let draw = this.mindMap.draw
+    let origTransform = draw.transform()
+    let rect = draw.rbox()
+    let drawWidth = rect.width / origTransform.scaleX
+    let drawHeight = rect.height / origTransform.scaleY
+    let drawRatio = drawWidth / drawHeight
+    let { width: elWidth, height: elHeight } =
+      this.mindMap.el.getBoundingClientRect()
+    elWidth = elWidth - fitPadding * 2
+    elHeight = elHeight - fitPadding * 2
+    let elRatio = elWidth / elHeight
+    let newScale = 0
+    let flag = ''
+    if (drawWidth <= elWidth && drawHeight <= elHeight) {
+      newScale = 1
+      flag = 1
+    } else {
+      let newWidth = 0
+      let newHeight = 0
+      if (drawRatio > elRatio) {
+        newWidth = elWidth
+        newHeight = elWidth / drawRatio
+        flag = 2
+      } else {
+        newHeight = elHeight
+        newWidth = elHeight * drawRatio
+        flag = 3
+      }
+      newScale = newWidth / drawWidth
+    }
+    this.setScale(newScale)
+    let newRect = draw.rbox()
+    let newX = 0
+    let newY = 0
+    if (flag === 1) {
+      newX = -newRect.x + fitPadding + (elWidth - newRect.width) / 2
+      newY = -newRect.y + fitPadding + (elHeight - newRect.height) / 2
+    } else if (flag === 2) {
+      newX = -newRect.x + fitPadding
+      newY = -newRect.y + fitPadding + (elHeight - newRect.height) / 2
+    } else if (flag === 3) {
+      newX = -newRect.x + fitPadding + (elWidth - newRect.width) / 2
+      newY = -newRect.y + fitPadding
+    }
+    this.translateXY(newX, newY)
   }
 }
 

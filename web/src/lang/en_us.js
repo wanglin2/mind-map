@@ -69,7 +69,8 @@ export default {
     level4: 'Level4',
     level5: 'Level5',
     level6: 'Level6',
-    zenMode: 'Zen mode'
+    zenMode: 'Zen mode',
+    fitCanvas: 'Fit canvas'
   },
   count: {
     words: 'Words',

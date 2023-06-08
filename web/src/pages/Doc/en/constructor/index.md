@@ -62,6 +62,8 @@ const mindMap = new MindMap({
 | alwaysShowExpandBtn（v0.5.8+）     | Boolean  | false | Whether to always display the expand and collapse buttons of nodes, which are only displayed when the mouse is moved up and activated by default  |          |
 | iconList（v0.5.8+）     | Array  | [] | The icons that can be inserted into the extension node, and each item in the array is an object. Please refer to the "Icon Configuration" table below for the detailed structure of the object  |          |
 | maxNodeCacheCount（v0.5.10+）     |  Number | 1000 | The maximum number of cached nodes. To optimize performance, an internal node cache pool is maintained to reuse nodes. This attribute allows you to specify the maximum number of caches in the pool  |          |
+| defaultAssociativeLineText（v0.5.11+）     |  String | 关联 | Association Line Default Text  |          |
+| fitPadding（v0.6.0+）     |  Number | 50 |  The padding of mind mapping when adapting to canvas size, Unit: px |          |
 
 ### Watermark config
 

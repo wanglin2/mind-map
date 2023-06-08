@@ -62,6 +62,8 @@ const mindMap = new MindMap({
 | alwaysShowExpandBtn（v0.5.8+）     | Boolean  | false | 是否一直显示节点的展开收起按钮，默认为鼠标移上去和激活时才显示  |          |
 | iconList（v0.5.8+）     | Array  | [] | 扩展节点可插入的图标，数组的每一项为一个对象，对象详细结构请参考下方【图标配置】表格  |          |
 | maxNodeCacheCount（v0.5.10+）     |  Number | 1000 | 节点最大缓存数量。为了优化性能，内部会维护一个节点缓存池，用来复用节点，通过该属性可以指定池的最大缓存数量  |          |
+| defaultAssociativeLineText（v0.5.11+）     |  String | 关联 |  关联线默认文字 |          |
+| fitPadding（v0.6.0+）     |  Number | 50 |  思维导图适应画布大小时的内边距，单位：px |          |
 
 ### 水印配置
 

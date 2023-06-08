@@ -294,6 +294,20 @@
 <td>The maximum number of cached nodes. To optimize performance, an internal node cache pool is maintained to reuse nodes. This attribute allows you to specify the maximum number of caches in the pool</td>
 <td></td>
 </tr>
+<tr>
+<td>defaultAssociativeLineText（v0.5.11+）</td>
+<td>String</td>
+<td>关联</td>
+<td>Association Line Default Text</td>
+<td></td>
+</tr>
+<tr>
+<td>fitPadding（v0.6.0+）</td>
+<td>Number</td>
+<td>50</td>
+<td>The padding of mind mapping when adapting to canvas size, Unit: px</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
