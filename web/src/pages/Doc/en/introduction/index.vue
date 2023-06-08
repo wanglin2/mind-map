@@ -8,21 +8,21 @@
 </blockquote>
 <h2>Features</h2>
 <ul>
-<li><input type="checkbox" id="checkbox90" checked="true" /><label for="checkbox90">Plugin architecture. In addition to core functions, other functions are provided as plugins, which can be used as needed to reduce the overall volume</label></li>
-<li><input type="checkbox" id="checkbox91" checked="true" /><label for="checkbox91">Supports six types of structures: logical structure diagrams, mind maps,</label>
+<li><input type="checkbox" id="checkbox18" checked="true" /><label for="checkbox18">Plugin architecture. In addition to core functions, other functions are provided as plugins, which can be used as needed to reduce the overall volume</label></li>
+<li><input type="checkbox" id="checkbox19" checked="true" /><label for="checkbox19">Supports six types of structures: logical structure diagrams, mind maps,</label>
 organizational structure diagrams, directory organization diagrams, timeline, and fishbone diagrams</li>
-<li><input type="checkbox" id="checkbox92" checked="true" /><label for="checkbox92">Built-in multiple themes and allows for highly customized styles, and support register new themes</label></li>
-<li><input type="checkbox" id="checkbox93" checked="true" /><label for="checkbox93">Supports shortcuts</label></li>
-<li><input type="checkbox" id="checkbox94" checked="true" /><label for="checkbox94">Node content supports images, icons, hyperlinks, notes, tags, and</label>
+<li><input type="checkbox" id="checkbox20" checked="true" /><label for="checkbox20">Built-in multiple themes and allows for highly customized styles, and support register new themes</label></li>
+<li><input type="checkbox" id="checkbox21" checked="true" /><label for="checkbox21">Supports shortcuts</label></li>
+<li><input type="checkbox" id="checkbox22" checked="true" /><label for="checkbox22">Node content supports images, icons, hyperlinks, notes, tags, and</label>
 summaries</li>
-<li><input type="checkbox" id="checkbox95" checked="true" /><label for="checkbox95">Supports forward and backward navigation</label></li>
-<li><input type="checkbox" id="checkbox96" checked="true" /><label for="checkbox96">Supports dragging and scaling</label></li>
-<li><input type="checkbox" id="checkbox97" checked="true" /><label for="checkbox97">Supports right-click and Ctrl + left-click to select multiple items</label></li>
-<li><input type="checkbox" id="checkbox98" checked="true" /><label for="checkbox98">Supports free dragging and dragging to adjust nodes</label></li>
-<li><input type="checkbox" id="checkbox99" checked="true" /><label for="checkbox99">Supports various node shapes</label></li>
-<li><input type="checkbox" id="checkbox100" checked="true" /><label for="checkbox100">Supports export to json, png, svg, pdf markdown, and import from json, xmind, markdown</label></li>
-<li><input type="checkbox" id="checkbox101" checked="true" /><label for="checkbox101">Supports mini map、support watermark</label></li>
-<li><input type="checkbox" id="checkbox102" checked="true" /><label for="checkbox102">Supports associative lines</label></li>
+<li><input type="checkbox" id="checkbox23" checked="true" /><label for="checkbox23">Supports forward and backward navigation</label></li>
+<li><input type="checkbox" id="checkbox24" checked="true" /><label for="checkbox24">Supports dragging and scaling</label></li>
+<li><input type="checkbox" id="checkbox25" checked="true" /><label for="checkbox25">Supports right-click and Ctrl + left-click to select multiple items</label></li>
+<li><input type="checkbox" id="checkbox26" checked="true" /><label for="checkbox26">Supports free dragging and dragging to adjust nodes</label></li>
+<li><input type="checkbox" id="checkbox27" checked="true" /><label for="checkbox27">Supports various node shapes</label></li>
+<li><input type="checkbox" id="checkbox28" checked="true" /><label for="checkbox28">Supports export to json, png, svg, pdf markdown, and import from json, xmind, markdown</label></li>
+<li><input type="checkbox" id="checkbox29" checked="true" /><label for="checkbox29">Supports mini map、support watermark</label></li>
+<li><input type="checkbox" id="checkbox30" checked="true" /><label for="checkbox30">Supports associative lines</label></li>
 </ul>
 <h2>Repository Catalog Introduction</h2>
 <p>1.<code>simple-mind-map</code></p>
@@ -32,7 +32,6 @@ frameworks such as Vue and React, or without a framework.</p>
 <p>This is an online mind map built using the <code>simple-mind-map</code> library and based
 on <code>Vue2.x</code> and <code>ElementUI</code>. Features include:</p>
 <ul>
-<<<<<<< HEAD
 <li><input type="checkbox" id="checkbox31" checked="true" /><label for="checkbox31">Toolbar, which supports inserting and deleting nodes, and editing node</label>
 images, icons, hyperlinks, notes, tags, and summaries</li>
 <li><input type="checkbox" id="checkbox32" checked="true" /><label for="checkbox32">Sidebar, with panels for basic style settings, node style settings,</label>
@@ -43,18 +42,6 @@ local files on the computer directly</li>
 <li><input type="checkbox" id="checkbox34" checked="true" /><label for="checkbox34">Right-click menu, which supports operations such as expanding, collapsing,</label>
 and organizing layout</li>
 <li><input type="checkbox" id="checkbox35" checked="true" /><label for="checkbox35">Bottom bar, which supports node and word count statistics, switching</label>
-=======
-<li><input type="checkbox" id="checkbox103" checked="true" /><label for="checkbox103">Toolbar, which supports inserting and deleting nodes, and editing node</label>
-images, icons, hyperlinks, notes, tags, and summaries</li>
-<li><input type="checkbox" id="checkbox104" checked="true" /><label for="checkbox104">Sidebar, with panels for basic style settings, node style settings,</label>
-outline, theme selection, and structure selection</li>
-<li><input type="checkbox" id="checkbox105" checked="true" /><label for="checkbox105">Import and export functionality; data is saved in the browser's local</label>
-storage by default, but it also supports creating, opening, and editing
-local files on the computer directly</li>
-<li><input type="checkbox" id="checkbox106" checked="true" /><label for="checkbox106">Right-click menu, which supports operations such as expanding, collapsing,</label>
-and organizing layout</li>
-<li><input type="checkbox" id="checkbox107" checked="true" /><label for="checkbox107">Bottom bar, which supports node and word count statistics, switching</label>
->>>>>>> 1838328deff6b37875d1105f4294a9b87c483d10
 between edit and read-only modes, zooming in and out, and switching to
 full screen, support mini map</li>
 </ul>
