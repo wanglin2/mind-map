@@ -19,6 +19,12 @@
 
 在线地址：[https://wanglin2.github.io/mind-map/](https://wanglin2.github.io/mind-map/)
 
+另外也提供了客户端可供下载使用，支持`Windows`、`Mac`及`Linux`，下载地址：
+
+Github：[releases](https://github.com/wanglin2/mind-map/releases)。
+
+百度云盘：[地址](https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3)。
+
 # 特性
 
 - [x] 插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小打包体积
