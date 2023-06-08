@@ -39,7 +39,7 @@
 <td>data</td>
 <td>Object</td>
 <td>{}</td>
-<td>Mind map data, refer to: https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js</td>
+<td>Mind map data, refer to: <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a></td>
 <td></td>
 </tr>
 <tr>
@@ -67,7 +67,7 @@
 <td>themeConfig</td>
 <td>Object</td>
 <td>{}</td>
-<td>Theme configuration, will be merged with the selected theme, available fields refer to: https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js</td>
+<td>Theme configuration, will be merged with the selected theme, available fields refer to: <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js">default.js</a></td>
 <td></td>
 </tr>
 <tr>
@@ -700,12 +700,12 @@ redo. All commands are as follows:</p>
 <tr>
 <td>INSERT_NODE</td>
 <td>Insert a sibling node, the active node or appoint node will be the operation node. If there are multiple active nodes, only the first one will be effective</td>
-<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>） 、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js</a> ）</td>
+<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>） 、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a> ）</td>
 </tr>
 <tr>
 <td>INSERT_CHILD_NODE</td>
 <td>Insert a child node, the active node or appoint node will be the operation node</td>
-<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>）、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js</a> ）</td>
+<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>）、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a> ）</td>
 </tr>
 <tr>
 <td>UP_NODE</td>
@@ -780,7 +780,7 @@ redo. All commands are as follows:</p>
 <tr>
 <td>SET_NODE_ICON</td>
 <td>Set Node Icon</td>
-<td>node (node to set), icons (array, predefined image names array, available icons can be obtained in the nodeIconList list in the <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js</a> file, icon name is type_name, such as ['priority_1'])</td>
+<td>node (node to set), icons (array, predefined image names array, available icons can be obtained in the nodeIconList list in the <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js">icons.js</a> file, icon name is type_name, such as ['priority_1'])</td>
 </tr>
 <tr>
 <td>SET_NODE_HYPERLINK</td>
@@ -795,7 +795,7 @@ redo. All commands are as follows:</p>
 <tr>
 <td>SET_NODE_TAG</td>
 <td>Set Node Tag</td>
-<td>node (node to set), tag (string array, built-in color information can be obtained in <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js</a>)</td>
+<td>node (node to set), tag (string array, built-in color information can be obtained in <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/constants/constant.js">constant.js</a>)</td>
 </tr>
 <tr>
 <td>INSERT_AFTER (v0.1.5+)</td>
@@ -835,7 +835,7 @@ redo. All commands are as follows:</p>
 <tr>
 <td>SET_NODE_SHAPE (v0.2.4+)</td>
 <td>Set the shape of a node</td>
-<td>node (the node to set), shape (the shape, all shapes: https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/Shape.js)</td>
+<td>node (the node to set), shape (the shape, all shapes: <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/render/node/Shape.js">Shape.js</a>)</td>
 </tr>
 </tbody>
 </table>

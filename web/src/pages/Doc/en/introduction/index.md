@@ -63,6 +63,8 @@ The folder containing the packaged resources for the `web` folder.
 
 [How to simulate the background image style of css in canvas](https://juejin.cn/post/7204854015463538744)
 
+[My first Electron application](https://juejin.cn/post/7233012756314701884)
+
 ## Special Note
 
 This project can be used for learning and reference. Please deeply experience whether it can meet your needs when using it for actual projects.

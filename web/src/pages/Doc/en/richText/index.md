@@ -20,7 +20,8 @@ The version of `v0.5.7+` directly uses `html2canvas` to convert the entire `svg`
 
 ```js
 import MindMap from 'simple-mind-map'
-import RichText from 'simple-mind-map/src/RichText.js'
+import RichText from 'simple-mind-map/src/plugins/RichText.js'
+// import RichText from 'simple-mind-map/src/RichText.js' Use this path for versions below v0.6.0
 
 MindMap.usePlugin(RichText, opt?)
 ```

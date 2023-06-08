@@ -1,5 +1,5 @@
 import { Rect, Polygon, Path } from '@svgdotjs/svg.js'
-import { CONSTANTS } from './utils/constant'
+import { CONSTANTS } from '../../../constants/constant'
 
 //  节点形状类
 export default class Shape {

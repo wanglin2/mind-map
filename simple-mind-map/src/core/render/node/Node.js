@@ -1,12 +1,12 @@
 import Style from './Style'
 import Shape from './Shape'
-import { asyncRun } from './utils'
+import { asyncRun } from '../../../utils'
 import { G, Rect } from '@svgdotjs/svg.js'
-import nodeGeneralizationMethods from './utils/nodeGeneralization'
-import nodeExpandBtnMethods from './utils/nodeExpandBtn'
-import nodeCommandWrapsMethods from './utils/nodeCommandWraps'
-import nodeCreateContentsMethods from './utils/nodeCreateContents'
-import { CONSTANTS } from './utils/constant'
+import nodeGeneralizationMethods from './nodeGeneralization'
+import nodeExpandBtnMethods from './nodeExpandBtn'
+import nodeCommandWrapsMethods from './nodeCommandWraps'
+import nodeCreateContentsMethods from './nodeCreateContents'
+import { CONSTANTS } from '../../../constants/constant'
 
 //  节点类
 class Node {

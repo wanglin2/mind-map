@@ -6,7 +6,8 @@ The `Export` plugin provides the export function.
 
 ```js
 import MindMap from 'simple-mind-map'
-import Export from 'simple-mind-map/src/Export.js'
+import Export from 'simple-mind-map/src/plugins/Export.js'
+// import Export from 'simple-mind-map/src/Export.js' Use this path for versions below v0.6.0
 
 MindMap.usePlugin(Export)
 ```

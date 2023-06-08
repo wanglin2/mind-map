@@ -1,4 +1,4 @@
-import btnsSvg from '../svg/btns'
+import btnsSvg from '../../../svg/btns'
 import { SVG, Circle, G } from '@svgdotjs/svg.js'
 
 // 创建展开收起按钮的内容节点

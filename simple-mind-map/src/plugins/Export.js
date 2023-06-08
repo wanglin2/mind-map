@@ -1,8 +1,8 @@
-import { imgToDataUrl, downloadFile, readBlob } from './utils'
+import { imgToDataUrl, downloadFile, readBlob } from '../utils'
 import JsPDF from 'jspdf'
 import { SVG } from '@svgdotjs/svg.js'
-import drawBackgroundImageToCanvas from './utils/simulateCSSBackgroundInCanvas'
-import { transformToMarkdown } from './parse/toMarkdown'
+import drawBackgroundImageToCanvas from '../utils/simulateCSSBackgroundInCanvas'
+import { transformToMarkdown } from '../parse/toMarkdown'
 const URL = window.URL || window.webkitURL || window
 
 //  导出类

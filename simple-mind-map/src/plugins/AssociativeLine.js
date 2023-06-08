@@ -1,4 +1,4 @@
-import { walk, bfsWalk, throttle } from './utils/'
+import { walk, bfsWalk, throttle } from '../utils'
 import { v4 as uuid } from 'uuid'
 import {
   getAssociativeLineTargetIndex,
@@ -7,9 +7,9 @@ import {
   getNodePoint,
   computeNodePoints,
   getNodeLinePath
-} from './utils/associativeLineUtils'
-import associativeLineControlsMethods from './utils/associativeLineControls'
-import associativeLineTextMethods from './utils/associativeLineText'
+} from './associativeLine/associativeLineUtils'
+import associativeLineControlsMethods from './associativeLine/associativeLineControls'
+import associativeLineTextMethods from './associativeLine/associativeLineText'
 
 // 关联线类
 class AssociativeLine {

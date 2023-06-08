@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.0
+
+optimization: Optimize the directory structure of simple-mind-map source code
+
 ## 0.5.11
 
 New: Supports associative text editing.

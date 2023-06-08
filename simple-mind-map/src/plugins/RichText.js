@@ -1,8 +1,8 @@
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
 import html2canvas from 'html2canvas'
-import { walk, getTextFromHtml } from './utils'
-import { CONSTANTS } from './utils/constant'
+import { walk, getTextFromHtml } from '../utils'
+import { CONSTANTS } from '../constants/constant'
 
 let extended = false
 

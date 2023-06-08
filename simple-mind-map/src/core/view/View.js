@@ -1,4 +1,4 @@
-import { CONSTANTS } from './utils/constant'
+import { CONSTANTS } from '../../constants/constant'
 
 //  视图操作类
 class View {

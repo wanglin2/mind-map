@@ -8,7 +8,8 @@
 
 ```js
 import MindMap from 'simple-mind-map'
-import RichText from 'simple-mind-map/src/RichText.js'
+import RichText from 'simple-mind-map/src/plugins/RichText.js'
+// import RichText from 'simple-mind-map/src/RichText.js' v0.6.0以下版本使用该路径
 
 // 动态开启富文本编辑
 mindMap.addPlugin(RichText)

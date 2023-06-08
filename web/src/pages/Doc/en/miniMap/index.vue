@@ -11,7 +11,8 @@ part of the mind map content. The viewport frame can be used to view the current
 viewport location, and can be quickly positioned by dragging on the small map.</p>
 <h2>Register</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
-<span class="hljs-keyword">import</span> MiniMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/MiniMap.js&#x27;</span>
+<span class="hljs-keyword">import</span> MiniMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/MiniMap.js&#x27;</span>
+<span class="hljs-comment">// import MiniMap from &#x27;simple-mind-map/src/MiniMap.js&#x27; Use this path for versions below v0.6.0</span>
 
 MindMap.usePlugin(MiniMap)
 </code></pre>

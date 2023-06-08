@@ -1,4 +1,4 @@
-import { getStrWithBrFromHtml, checkNodeOuter } from './utils'
+import { getStrWithBrFromHtml, checkNodeOuter } from '../../utils'
 
 //  节点文字编辑类
 export default class TextEdit {

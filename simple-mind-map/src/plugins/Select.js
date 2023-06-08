@@ -1,4 +1,4 @@
-import { bfsWalk, throttle } from './utils'
+import { bfsWalk, throttle } from '../utils'
 
 //  选择节点类
 

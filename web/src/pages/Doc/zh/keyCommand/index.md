@@ -8,7 +8,7 @@
 
 添加快捷键
 
-`key`：快捷键按键，按键值可以通过[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/keyMap.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/keyMap.js)查看。示例：
+`key`：快捷键按键，按键值可以通过[keyMap.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/command/keyMap.js)查看。示例：
 
 ```js
 // 单个按键

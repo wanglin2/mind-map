@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3'
-import { CONSTANTS } from './utils/constant'
+import { CONSTANTS } from '../../constants/constant'
 
 //  事件类
 class Event extends EventEmitter {

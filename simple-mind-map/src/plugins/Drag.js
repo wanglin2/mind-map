@@ -1,5 +1,5 @@
-import { bfsWalk, throttle } from './utils'
-import Base from './layouts/Base'
+import { bfsWalk, throttle } from '../utils'
+import Base from '../layouts/Base'
 
 //  节点拖动类
 
