@@ -64,6 +64,7 @@ const mindMap = new MindMap({
 | maxNodeCacheCount（v0.5.10+）     |  Number | 1000 | The maximum number of cached nodes. To optimize performance, an internal node cache pool is maintained to reuse nodes. This attribute allows you to specify the maximum number of caches in the pool  |          |
 | defaultAssociativeLineText（v0.5.11+）     |  String | 关联 | Association Line Default Text  |          |
 | fitPadding（v0.6.0+）     |  Number | 50 |  The padding of mind mapping when adapting to canvas size, Unit: px |          |
+| enableCtrlKeyNodeSelection（v0.6.0+）     | Boolean  | true |  Whether to enable the function of holding down the Ctrl key to select multiple nodes |          |
 
 ### Watermark config
 

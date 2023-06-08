@@ -359,7 +359,7 @@ class Node {
         e.stopPropagation()
       }
       // 多选和取消多选
-      if (e.ctrlKey) {
+      if (e.ctrlKey && this.mindMap.opt.enableCtrlKeyNodeSelection) {
         this.isMultipleChoice = true
         let isActive = this.nodeData.data.isActive
         if (!isActive)

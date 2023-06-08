@@ -64,6 +64,7 @@ const mindMap = new MindMap({
 | maxNodeCacheCount（v0.5.10+）     |  Number | 1000 | 节点最大缓存数量。为了优化性能，内部会维护一个节点缓存池，用来复用节点，通过该属性可以指定池的最大缓存数量  |          |
 | defaultAssociativeLineText（v0.5.11+）     |  String | 关联 |  关联线默认文字 |          |
 | fitPadding（v0.6.0+）     |  Number | 50 |  思维导图适应画布大小时的内边距，单位：px |          |
+| enableCtrlKeyNodeSelection（v0.6.0+）     | Boolean  | true | 是否开启按住ctrl键多选节点的功能  |          |
 
 ### 水印配置
 

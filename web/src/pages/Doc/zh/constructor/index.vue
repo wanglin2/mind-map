@@ -308,6 +308,13 @@
 <td>思维导图适应画布大小时的内边距，单位：px</td>
 <td></td>
 </tr>
+<tr>
+<td>enableCtrlKeyNodeSelection（v0.6.0+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>是否开启按住ctrl键多选节点的功能</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>水印配置</h3>

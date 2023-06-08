@@ -3,7 +3,7 @@
     <h1>Changelog</h1>
 <h2>0.6.0</h2>
 <p>optimization: Optimize the directory structure of simple-mind-map source code.</p>
-<p>New: 1.Supports one click zoom to fit the canvas function.</p>
+<p>New: 1.Supports one click zoom to fit the canvas function. 2.Press and hold the Ctrl key to activate the multi selection function on demand through configuration.</p>
 <h2>0.5.11</h2>
 <p>New: Supports associative text editing.</p>
 <p>optimization: Optimizing theme configuration updates, changing configurations that do not involve node size does not trigger node recalculation.</p>

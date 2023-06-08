@@ -308,6 +308,13 @@
 <td>The padding of mind mapping when adapting to canvas size, Unit: px</td>
 <td></td>
 </tr>
+<tr>
+<td>enableCtrlKeyNodeSelection（v0.6.0+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Whether to enable the function of holding down the Ctrl key to select multiple nodes</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
