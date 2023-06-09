@@ -322,6 +322,13 @@
 <td>设置为左键多选节点，右键拖动画布</td>
 <td></td>
 </tr>
+<tr>
+<td>beforeTextEdit（v0.6.0+）</td>
+<td>Function/null</td>
+<td>null</td>
+<td>节点即将进入编辑前的回调方法，如果该方法返回true以外的值，那么将取消编辑，函数可以返回一个值，或一个Promise，回调参数为节点实例</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>水印配置</h3>

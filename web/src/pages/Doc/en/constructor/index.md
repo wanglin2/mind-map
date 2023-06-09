@@ -66,6 +66,7 @@ const mindMap = new MindMap({
 | fitPadding（v0.6.0+）     |  Number | 50 |  The padding of mind mapping when adapting to canvas size, Unit: px |          |
 | enableCtrlKeyNodeSelection（v0.6.0+）     | Boolean  | true |  Whether to enable the function of holding down the Ctrl key to select multiple nodes |          |
 | useLeftKeySelectionRightKeyDrag（v0.6.0+）     | Boolean  | false | Setting to left click to select multiple nodes and right click to drag the canvas.  |          |
+| beforeTextEdit（v0.6.0+）     |  Function/null | null | The callback method before the node is about to enter editing. If the method returns a value other than true, the editing will be canceled. The function can return a value or a promise, and the callback parameter is the node instance  |          |
 
 ### Watermark config
 

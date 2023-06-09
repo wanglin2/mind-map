@@ -322,6 +322,13 @@
 <td>Setting to left click to select multiple nodes and right click to drag the canvas.</td>
 <td></td>
 </tr>
+<tr>
+<td>beforeTextEdit（v0.6.0+）</td>
+<td>Function/null</td>
+<td>null</td>
+<td>The callback method before the node is about to enter editing. If the method returns a value other than true, the editing will be canceled. The function can return a value or a promise, and the callback parameter is the node instance</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
