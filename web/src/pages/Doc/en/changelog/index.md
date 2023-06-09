@@ -6,6 +6,8 @@ optimization: Optimize the directory structure of simple-mind-map source code.
 
 New: 1.Supports one click zoom to fit the canvas function. 2.Press and hold the Ctrl key to activate the multi selection function on demand through configuration.
 
+Fix: 1.Fix the issue where holding down the Ctrl key to select multiple nodes does not trigger the click event for the node.
+
 ## 0.5.11
 
 New: Supports associative text editing.
