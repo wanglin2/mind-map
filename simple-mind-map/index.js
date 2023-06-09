@@ -128,7 +128,9 @@ const defaultOpt = {
   // 是否开启按住ctrl键多选节点功能
   enableCtrlKeyNodeSelection: true,
   // 设置为左键多选节点，右键拖动画布
-  useLeftKeySelectionRightKeyDrag: false
+  useLeftKeySelectionRightKeyDrag: false,
+  // 节点即将进入编辑前的回调方法，如果该方法返回true以外的值，那么将取消编辑，函数可以返回一个值，或一个Promise，回调参数为节点实例
+  beforeTextEdit: null
 }
 
 //  思维导图
