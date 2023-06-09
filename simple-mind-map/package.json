@@ -25,7 +25,6 @@
   "__main": "./dist/simpleMindMap.umd.min.js",
   "dependencies": {
     "@svgdotjs/svg.js": "^3.0.16",
-    "canvg": "^3.0.7",
     "deepmerge": "^1.5.2",
     "eventemitter3": "^4.0.7",
     "html2canvas": "^1.4.1",

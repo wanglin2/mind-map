@@ -343,12 +343,12 @@ class Node {
   bindGroupEvent() {
     // 单击事件，选中节点
     this.group.on('click', e => {
+      this.mindMap.emit('node_click', this, e)
       if (this.isMultipleChoice) {
         e.stopPropagation()
         this.isMultipleChoice = false
         return
       }
-      this.mindMap.emit('node_click', this, e)
       this.active(e)
     })
     this.group.on('mousedown', e => {
