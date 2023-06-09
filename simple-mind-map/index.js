@@ -126,7 +126,9 @@ const defaultOpt = {
   // 思维导图适应画布大小时的内边距
   fitPadding: 50,
   // 是否开启按住ctrl键多选节点功能
-  enableCtrlKeyNodeSelection: true
+  enableCtrlKeyNodeSelection: true,
+  // 设置为左键多选节点，右键拖动画布
+  useLeftKeySelectionRightKeyDrag: false
 }
 
 //  思维导图

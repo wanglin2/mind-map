@@ -65,6 +65,7 @@ const mindMap = new MindMap({
 | defaultAssociativeLineText（v0.5.11+）     |  String | 关联 | Association Line Default Text  |          |
 | fitPadding（v0.6.0+）     |  Number | 50 |  The padding of mind mapping when adapting to canvas size, Unit: px |          |
 | enableCtrlKeyNodeSelection（v0.6.0+）     | Boolean  | true |  Whether to enable the function of holding down the Ctrl key to select multiple nodes |          |
+| useLeftKeySelectionRightKeyDrag（v0.6.0+）     | Boolean  | false | Setting to left click to select multiple nodes and right click to drag the canvas.  |          |
 
 ### Watermark config
 

@@ -202,5 +202,9 @@ export default {
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',
     newFeatureNoticeMessage: 'This update supports node rich text editing, But there are some defects, The most important impact is that the time to export the image is proportional to the number of nodes, Therefore, if you are more dependent on export requirements, you can use【Base style】-【Other config】-【Enable node rich text editing】Set to turn off rich text editing mode.'
+  },
+  mouseAction: {
+    tip1: 'Current: Left click to drag the canvas, right click to box select nodes',
+    tip2: 'Current: Left click to box select nodes, right click to drag the canvas',
   }
 }
