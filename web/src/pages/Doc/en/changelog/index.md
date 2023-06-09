@@ -2,9 +2,9 @@
 
 ## 0.6.0
 
-optimization: Optimize the directory structure of simple-mind-map source code.
+Breaking change: Adjusted the directory structure of the simple-mind-map source code, Main impact: 1. The introduction path of the plugin needs to be modified. The constant file path needs to be modified.
 
-New: 1.Supports one click zoom to fit the canvas function. 2.Press and hold the Ctrl key to activate the multi selection function on demand through configuration.
+New: 1.Supports one click zoom to fit the canvas function. 2.Press and hold the Ctrl key to activate the multi selection function on demand through configuration. 3.Support setting to left click to select multiple nodes and right click to drag the canvas.
 
 Fix: 1.Fix the issue where holding down the Ctrl key to select multiple nodes does not trigger the click event for the node.
 

@@ -315,6 +315,13 @@
 <td>Whether to enable the function of holding down the Ctrl key to select multiple nodes</td>
 <td></td>
 </tr>
+<tr>
+<td>useLeftKeySelectionRightKeyDrag（v0.6.0+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Setting to left click to select multiple nodes and right click to drag the canvas.</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>

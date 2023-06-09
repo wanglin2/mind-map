@@ -65,6 +65,7 @@ const mindMap = new MindMap({
 | defaultAssociativeLineText（v0.5.11+）     |  String | 关联 |  关联线默认文字 |          |
 | fitPadding（v0.6.0+）     |  Number | 50 |  思维导图适应画布大小时的内边距，单位：px |          |
 | enableCtrlKeyNodeSelection（v0.6.0+）     | Boolean  | true | 是否开启按住ctrl键多选节点的功能  |          |
+| useLeftKeySelectionRightKeyDrag（v0.6.0+）     | Boolean  | false | 设置为左键多选节点，右键拖动画布  |          |
 
 ### 水印配置
 

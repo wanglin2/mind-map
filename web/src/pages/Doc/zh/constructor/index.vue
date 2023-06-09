@@ -315,6 +315,13 @@
 <td>是否开启按住ctrl键多选节点的功能</td>
 <td></td>
 </tr>
+<tr>
+<td>useLeftKeySelectionRightKeyDrag（v0.6.0+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>设置为左键多选节点，右键拖动画布</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>水印配置</h3>
