@@ -41,6 +41,7 @@ class RichText {
     this.node = null
     this.styleEl = null
     this.cacheEditingText = ''
+    this.lostStyle = false
     this.initOpt()
     this.extendQuill()
     this.appendCss()
@@ -279,6 +280,20 @@ class RichText {
           rectInfo,
           formatInfo
         )
+      }
+    })
+    this.quill.on('text-change', () => {
+      let contents = this.quill.getContents()
+      let len = contents.ops.length
+      // 如果编辑过程中删除所有字符，那么会丢失主题的样式
+      if (len <= 0 || (len === 1 && contents.ops[0].insert === '\n')) {
+        this.lostStyle = true
+        // 需要删除节点的样式数据
+        this.syncFormatToNodeConfig(null, true)
+      } else if (this.lostStyle) {
+        // 如果处于样式丢失状态，那么需要进行格式化加回样式
+        this.setTextStyleIfNotRichText(this.node)
+        this.lostStyle = false
       }
     })
   }
