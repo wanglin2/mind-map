@@ -74,6 +74,13 @@ svg(
 
 导出为`pdf`，和其他导出方法不一样，这个方法不会返回数据，会直接触发下载。
 
+> v0.6.0版本以后，需要额外注册一个ExportPDF插件
+
+```js
+import ExportPDF from 'simple-mind-map/src/plugins/ExportPDF.js'
+MindMap.usePlugin(ExportPDF)
+```
+
 ### json(name, withConfig)
 
 `name`：暂时没有用处，传空字符串即可

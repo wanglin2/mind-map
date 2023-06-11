@@ -74,6 +74,13 @@ Exports as `svg`.
 
 Export as `pdf`. Unlike other export methods, this method does not return data and directly triggers the download.
 
+> After v0.6.0, an additional ExportPDF plugin needs to be registered
+
+```js
+import ExportPDF from 'simple-mind-map/src/plugins/ExportPDF.js'
+MindMap.usePlugin(ExportPDF)
+```
+
 ### json(name, withConfig)
 
 `name`：It is temporarily useless, just pass an empty string

@@ -2,6 +2,7 @@ import MindMap from './index'
 import MiniMap from './src/plugins/MiniMap.js'
 import Watermark from './src/plugins/Watermark.js'
 import KeyboardNavigation from './src/plugins/KeyboardNavigation.js'
+import ExportPDF from './src/plugins/ExportPDF.js'
 import Export from './src/plugins/Export.js'
 import Drag from './src/plugins/Drag.js'
 import Select from './src/plugins/Select.js'
@@ -20,6 +21,7 @@ MindMap
   .usePlugin(Watermark)
   .usePlugin(Drag)
   .usePlugin(KeyboardNavigation)
+  .usePlugin(ExportPDF)
   .usePlugin(Export)
   .usePlugin(Select)
   .usePlugin(AssociativeLine)

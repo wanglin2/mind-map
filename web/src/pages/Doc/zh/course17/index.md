@@ -60,6 +60,8 @@ mindMap.export('png', true, '文件名')
 mindMap.export('pdf', true, '文件名')
 ```
 
+> 从v0.6.0+，要导出pdf，需要额外注册一个ExportPDF插件。
+
 ### 导出为svg
 
 导出为`svg`可以传递的参数如下：
