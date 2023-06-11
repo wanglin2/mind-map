@@ -63,6 +63,12 @@ a.click()
 </blockquote>
 <p><code>name</code>：File name</p>
 <p>Export as <code>pdf</code>. Unlike other export methods, this method does not return data and directly triggers the download.</p>
+<blockquote>
+<p>After v0.6.0, an additional ExportPDF plugin needs to be registered</p>
+</blockquote>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> ExportPDF <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/ExportPDF.js&#x27;</span>
+MindMap.usePlugin(ExportPDF)
+</code></pre>
 <h3>json(name, withConfig)</h3>
 <p><code>name</code>：It is temporarily useless, just pass an empty string</p>
 <p><code>withConfig``：Boolean</code>, default <code>true</code>, Whether the data contains configuration, otherwise it is pure mind map node data</p>
