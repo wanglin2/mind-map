@@ -484,6 +484,21 @@ class MindMap {
       pluginOpt: plugin.pluginOpt
     })
   }
+
+  // 销毁
+  destroy() {
+    // 移除插件
+    [...MindMap.pluginList].forEach((plugin) => {
+      this[plugin.instanceName] = null
+    })
+    // 解绑事件
+    this.event.unbind()
+    // 移除画布节点
+    this.svg.remove()
+    // 去除给容器元素设置的背景样式
+    Style.removeBackgroundStyle(this.el)
+    this.el = null
+  }
 }
 
 // 插件列表

@@ -448,6 +448,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 </blockquote>
 <p>List of all currently registered plugins.</p>
 <h2>Instance methods</h2>
+<h3>destroy()</h3>
+<blockquote>
+<p>v0.6.0+</p>
+</blockquote>
+<p>Destroy mind maps. It will remove registered plugins, remove listening events, and delete all nodes on the canvas.</p>
 <h3>getSvgData({ paddingX = 0, paddingY = 0 })</h3>
 <blockquote>
 <p>v0.3.0+</p>
