@@ -143,6 +143,12 @@ mindMap.setTheme('主题名称')
 
 ## 实例方法
 
+### destroy()
+
+> v0.6.0+
+
+销毁思维导图。会移除注册的插件、移除监听的事件、删除画布的所有节点。
+
 ### getSvgData({ paddingX = 0, paddingY = 0 })
 
 > v0.3.0+

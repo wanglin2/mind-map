@@ -145,6 +145,12 @@ List of all currently registered plugins.
 
 ## Instance methods
 
+### destroy()
+
+> v0.6.0+
+
+Destroy mind maps. It will remove registered plugins, remove listening events, and delete all nodes on the canvas.
+
 ### getSvgData({ paddingX = 0, paddingY = 0 })
 
 > v0.3.0+

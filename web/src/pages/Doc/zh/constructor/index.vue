@@ -448,6 +448,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </blockquote>
 <p>当前注册的所有插件列表。</p>
 <h2>实例方法</h2>
+<h3>destroy()</h3>
+<blockquote>
+<p>v0.6.0+</p>
+</blockquote>
+<p>销毁思维导图。会移除注册的插件、移除监听的事件、删除画布的所有节点。</p>
 <h3>getSvgData({ paddingX = 0, paddingY = 0 })</h3>
 <blockquote>
 <p>v0.3.0+</p>
