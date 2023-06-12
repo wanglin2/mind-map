@@ -12,7 +12,8 @@
 
 ```js
 import MindMap from 'simple-mind-map'
-import Drag from 'simple-mind-map/src/Drag.js'
+import Drag from 'simple-mind-map/src/plugins/Drag.js'
+// import Drag from 'simple-mind-map/src/Drag.js' v0.6.0以下版本使用该路径
 
 MindMap.usePlugin(Drag)
 ```

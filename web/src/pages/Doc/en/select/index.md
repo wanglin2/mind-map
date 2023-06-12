@@ -6,7 +6,8 @@ The `Select` plugin provides the function of right-clicking to select multiple n
 
 ```js
 import MindMap from 'simple-mind-map'
-import Select from 'simple-mind-map/src/Select.js'
+import Select from 'simple-mind-map/src/plugins/Select.js'
+// import Select from 'simple-mind-map/src/Select.js' Use this path for versions below v0.6.0
 
 MindMap.usePlugin(Select)
 ```

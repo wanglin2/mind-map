@@ -23,14 +23,15 @@
 
 <script>
 import MindMap from 'simple-mind-map'
-import MiniMap from 'simple-mind-map/src/MiniMap.js'
-import Watermark from 'simple-mind-map/src/Watermark.js'
-import KeyboardNavigation from 'simple-mind-map/src/KeyboardNavigation.js'
-import Export from 'simple-mind-map/src/Export.js'
-import Drag from 'simple-mind-map/src/Drag.js'
-import Select from 'simple-mind-map/src/Select.js'
-import RichText from 'simple-mind-map/src/RichText.js'
-import AssociativeLine from 'simple-mind-map/src/AssociativeLine.js'
+import MiniMap from 'simple-mind-map/src/plugins/MiniMap.js'
+import Watermark from 'simple-mind-map/src/plugins/Watermark.js'
+import KeyboardNavigation from 'simple-mind-map/src/plugins/KeyboardNavigation.js'
+import ExportPDF from 'simple-mind-map/src/plugins/ExportPDF.js'
+import Export from 'simple-mind-map/src/plugins/Export.js'
+import Drag from 'simple-mind-map/src/plugins/Drag.js'
+import Select from 'simple-mind-map/src/plugins/Select.js'
+import RichText from 'simple-mind-map/src/plugins/RichText.js'
+import AssociativeLine from 'simple-mind-map/src/plugins/AssociativeLine.js'
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -56,6 +57,7 @@ MindMap
   .usePlugin(Watermark)
   .usePlugin(Drag)
   .usePlugin(KeyboardNavigation)
+  .usePlugin(ExportPDF)
   .usePlugin(Export)
   .usePlugin(Select)
   .usePlugin(AssociativeLine)
@@ -100,6 +102,7 @@ export default {
     ...mapState({
       isZenMode: state => state.localConfig.isZenMode,
       openNodeRichText: state => state.localConfig.openNodeRichText,
+      useLeftKeySelectionRightKeyDrag: state => state.localConfig.useLeftKeySelectionRightKeyDrag,
     })
   },
   watch: {
@@ -289,7 +292,8 @@ export default {
           }
         },
         ...(config || {}),
-        iconList: icon
+        iconList: icon,
+        useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
       this.mindMap.keyCommand.addShortcut('Control+s', () => {

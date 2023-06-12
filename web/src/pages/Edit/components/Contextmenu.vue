@@ -65,6 +65,7 @@
     <template v-if="type === 'svg'">
       <div class="item" @click="exec('RETURN_CENTER')">
         {{ $t('contextmenu.backCenter') }}
+        <span class="desc">Ctrl + Enter</span>
       </div>
       <div class="item" @click="exec('EXPAND_ALL')">
         {{ $t('contextmenu.expandAll') }}
@@ -88,6 +89,10 @@
       <div class="item" @click="exec('RESET_LAYOUT')">
         {{ $t('contextmenu.arrangeLayout') }}
         <span class="desc">Ctrl + L</span>
+      </div>
+      <div class="item" @click="exec('FIT_CANVAS')">
+        {{ $t('contextmenu.fitCanvas') }}
+        <span class="desc">Ctrl + i</span>
       </div>
       <div class="item" @click="exec('TOGGLE_ZEN_MODE')">
         {{ $t('contextmenu.zenMode') }}
@@ -294,6 +299,9 @@ export default {
           this.setLocalConfig({
             isZenMode: !this.isZenMode
           })
+          break
+        case 'FIT_CANVAS':
+          this.mindMap.view.fit()
           break
         default:
           this.$bus.$emit('execCommand', key, ...args)

@@ -1,6 +1,6 @@
 import Base from './Base'
 import { walk, asyncRun, degToRad } from '../utils'
-import { CONSTANTS } from '../utils/constant'
+import { CONSTANTS } from '../constants/constant'
 import utils from './fishboneUtils'
 
 //  鱼骨图

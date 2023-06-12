@@ -36622,7 +36622,7 @@ var require_lib = __commonJS({
   }
 });
 
-// ../simple-mind-map/src/utils/constant.js
+// ../simple-mind-map/src/constants/constant.js
 var tagColorList = [
   {
     color: "rgb(77, 65, 0)",
@@ -36748,7 +36748,7 @@ var layoutValueList = [
   CONSTANTS.LAYOUT.FISHBONE
 ];
 
-// ../simple-mind-map/src/View.js
+// ../simple-mind-map/src/core/view/View.js
 var View = class {
   //  构造函数
   constructor(opt = {}) {
@@ -36773,6 +36773,9 @@ var View = class {
     });
     this.mindMap.keyCommand.addShortcut("Control+Enter", () => {
       this.reset();
+    });
+    this.mindMap.keyCommand.addShortcut("Control+i", () => {
+      this.fit();
     });
     this.mindMap.svg.on("dblclick", () => {
       this.reset();
@@ -36925,10 +36928,58 @@ var View = class {
     this.transform();
     this.mindMap.emit("scale", this.scale);
   }
+  // 适应画布大小
+  fit() {
+    let { fitPadding } = this.mindMap.opt;
+    let draw = this.mindMap.draw;
+    let origTransform = draw.transform();
+    let rect = draw.rbox();
+    let drawWidth = rect.width / origTransform.scaleX;
+    let drawHeight = rect.height / origTransform.scaleY;
+    let drawRatio = drawWidth / drawHeight;
+    let { width: elWidth, height: elHeight } = this.mindMap.el.getBoundingClientRect();
+    elWidth = elWidth - fitPadding * 2;
+    elHeight = elHeight - fitPadding * 2;
+    let elRatio = elWidth / elHeight;
+    let newScale = 0;
+    let flag = "";
+    if (drawWidth <= elWidth && drawHeight <= elHeight) {
+      newScale = 1;
+      flag = 1;
+    } else {
+      let newWidth = 0;
+      let newHeight = 0;
+      if (drawRatio > elRatio) {
+        newWidth = elWidth;
+        newHeight = elWidth / drawRatio;
+        flag = 2;
+      } else {
+        newHeight = elHeight;
+        newWidth = elHeight * drawRatio;
+        flag = 3;
+      }
+      newScale = newWidth / drawWidth;
+    }
+    this.setScale(newScale);
+    let newRect = draw.rbox();
+    let newX = 0;
+    let newY = 0;
+    if (flag === 1) {
+      newX = -newRect.x + fitPadding + (elWidth - newRect.width) / 2;
+      newY = -newRect.y + fitPadding + (elHeight - newRect.height) / 2;
+    } else if (flag === 2) {
+      newX = -newRect.x + fitPadding;
+      newY = -newRect.y + fitPadding + (elHeight - newRect.height) / 2;
+    } else if (flag === 3) {
+      newX = -newRect.x + fitPadding + (elWidth - newRect.width) / 2;
+      newY = -newRect.y + fitPadding;
+    }
+    this.translateXY(newX, newY);
+  }
 };
 var View_default = View;
 
-// ../simple-mind-map/src/Event.js
+// ../simple-mind-map/src/core/event/Event.js
 var import_eventemitter3 = __toESM(require_eventemitter3());
 var Event2 = class extends import_eventemitter3.default {
   //  构造函数
@@ -36937,6 +36988,7 @@ var Event2 = class extends import_eventemitter3.default {
     this.opt = opt;
     this.mindMap = opt.mindMap;
     this.isLeftMousedown = false;
+    this.isRightMousedown = false;
     this.mousedownPos = {
       x: 0,
       y: 0
@@ -37009,6 +37061,8 @@ var Event2 = class extends import_eventemitter3.default {
   onMousedown(e2) {
     if (e2.which === 1) {
       this.isLeftMousedown = true;
+    } else if (e2.which === 3) {
+      this.isRightMousedown = true;
     }
     this.mousedownPos.x = e2.clientX;
     this.mousedownPos.y = e2.clientY;
@@ -37016,12 +37070,13 @@ var Event2 = class extends import_eventemitter3.default {
   }
   //  鼠标移动事件
   onMousemove(e2) {
+    let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt;
     this.mousemovePos.x = e2.clientX;
     this.mousemovePos.y = e2.clientY;
     this.mousemoveOffset.x = e2.clientX - this.mousedownPos.x;
     this.mousemoveOffset.y = e2.clientY - this.mousedownPos.y;
     this.emit("mousemove", e2, this);
-    if (this.isLeftMousedown) {
+    if (useLeftKeySelectionRightKeyDrag ? this.isRightMousedown : this.isLeftMousedown) {
       e2.preventDefault();
       this.emit("drag", e2, this);
     }
@@ -37029,6 +37084,7 @@ var Event2 = class extends import_eventemitter3.default {
   //  鼠标松开事件
   onMouseup(e2) {
     this.isLeftMousedown = false;
+    this.isRightMousedown = false;
     this.emit("mouseup", e2, this);
   }
   //  鼠标滚动
@@ -37077,14 +37133,22 @@ var Event2 = class extends import_eventemitter3.default {
 };
 var Event_default = Event2;
 
-// ../simple-mind-map/src/Render.js
+// ../simple-mind-map/src/core/render/Render.js
 var import_deepmerge = __toESM(require_cjs());
 
-// ../simple-mind-map/src/Style.js
+// ../simple-mind-map/src/core/render/node/Style.js
 var rootProp = ["paddingX", "paddingY"];
+var backgroundStyleProps = ["backgroundColor", "backgroundImage", "backgroundRepeat", "backgroundPosition", "backgroundSize"];
 var Style = class {
   //   设置背景样式
   static setBackgroundStyle(el2, themeConfig) {
+    if (!Style.cacheStyle) {
+      Style.cacheStyle = {};
+      let style = window.getComputedStyle(el2);
+      backgroundStyleProps.forEach((prop) => {
+        Style.cacheStyle[prop] = style[prop];
+      });
+    }
     let { backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition, backgroundSize } = themeConfig;
     el2.style.backgroundColor = backgroundColor;
     if (backgroundImage) {
@@ -37095,6 +37159,13 @@ var Style = class {
     } else {
       el2.style.backgroundImage = "none";
     }
+  }
+  // 移除背景样式
+  static removeBackgroundStyle(el2) {
+    backgroundStyleProps.forEach((prop) => {
+      el2.style[prop] = Style.cacheStyle[prop];
+    });
+    Style.cacheStyle = null;
   }
   //  构造函数
   constructor(ctx) {
@@ -37228,6 +37299,7 @@ var Style = class {
     fillNode.fill({ color: fill });
   }
 };
+Style.cacheStyle = null;
 var Style_default = Style;
 
 // ../simple-mind-map/node_modules/@svgdotjs/svg.js/dist/svg.esm.js
@@ -42812,7 +42884,7 @@ List.extend(getMethodNames());
 registerMorphableType([SVGNumber, Color, Box, Matrix, SVGArray, PointArray, PathArray, Point]);
 makeMorphable();
 
-// ../simple-mind-map/src/Shape.js
+// ../simple-mind-map/src/core/render/node/Shape.js
 var Shape2 = class {
   constructor(node3) {
     this.node = node3;
@@ -43308,7 +43380,7 @@ var readBlob = (blob) => {
   });
 };
 
-// ../simple-mind-map/src/utils/nodeGeneralization.js
+// ../simple-mind-map/src/core/render/node/nodeGeneralization.js
 function checkHasGeneralization() {
   return !!this.nodeData.data.generalization;
 }
@@ -43413,7 +43485,7 @@ var btns_default = {
   close
 };
 
-// ../simple-mind-map/src/utils/nodeExpandBtn.js
+// ../simple-mind-map/src/core/render/node/nodeExpandBtn.js
 function createExpandNodeContent() {
   if (this._openExpandNode) {
     return;
@@ -43533,7 +43605,7 @@ var nodeExpandBtn_default = {
   hideExpandBtn
 };
 
-// ../simple-mind-map/src/utils/nodeCommandWraps.js
+// ../simple-mind-map/src/core/render/node/nodeCommandWraps.js
 function setData(data2 = {}) {
   this.mindMap.execCommand("SET_NODE_DATA", this, data2);
 }
@@ -43862,7 +43934,7 @@ var icons_default = {
   getNodeIconListIcon
 };
 
-// ../simple-mind-map/src/utils/nodeCreateContents.js
+// ../simple-mind-map/src/core/render/node/nodeCreateContents.js
 function createImgNode() {
   let img = this.nodeData.data.image;
   if (!img) {
@@ -44113,7 +44185,7 @@ var nodeCreateContents_default = {
   createNoteNode
 };
 
-// ../simple-mind-map/src/Node.js
+// ../simple-mind-map/src/core/render/node/Node.js
 var Node2 = class {
   //  构造函数
   constructor(opt = {}) {
@@ -44363,12 +44435,12 @@ var Node2 = class {
   // 给节点绑定事件
   bindGroupEvent() {
     this.group.on("click", (e2) => {
+      this.mindMap.emit("node_click", this, e2);
       if (this.isMultipleChoice) {
         e2.stopPropagation();
         this.isMultipleChoice = false;
         return;
       }
-      this.mindMap.emit("node_click", this, e2);
       this.active(e2);
     });
     this.group.on("mousedown", (e2) => {
@@ -44378,7 +44450,7 @@ var Node2 = class {
       if (!this.isRoot) {
         e2.stopPropagation();
       }
-      if (e2.ctrlKey) {
+      if (e2.ctrlKey && this.mindMap.opt.enableCtrlKeyNodeSelection) {
         this.isMultipleChoice = true;
         let isActive = this.nodeData.data.isActive;
         if (!isActive)
@@ -46838,7 +46910,7 @@ var Fishbone = class extends Base_default {
 };
 var Fishbone_default = Fishbone;
 
-// ../simple-mind-map/src/TextEdit.js
+// ../simple-mind-map/src/core/render/TextEdit.js
 var TextEdit = class {
   //  构造函数
   constructor(renderer) {
@@ -46887,7 +46959,17 @@ var TextEdit = class {
     });
   }
   //  显示文本编辑框
-  show(node3) {
+  async show(node3) {
+    if (typeof this.mindMap.opt.beforeTextEdit === "function") {
+      let isShow = false;
+      try {
+        isShow = await this.mindMap.opt.beforeTextEdit(node3);
+      } catch (error) {
+        isShow = false;
+      }
+      if (!isShow)
+        return;
+    }
     this.currentNode = node3;
     let { offsetLeft, offsetTop } = checkNodeOuter(this.mindMap, node3);
     this.mindMap.view.translateXY(offsetLeft, offsetTop);
@@ -47175,7 +47257,7 @@ var checkIsNodeSizeIndependenceConfig = (config) => {
 };
 var lineStyleProps = ["lineColor", "lineDasharray", "lineWidth"];
 
-// ../simple-mind-map/src/Render.js
+// ../simple-mind-map/src/core/render/Render.js
 var layouts = {
   // 逻辑结构图
   [CONSTANTS.LAYOUT.LOGICAL_STRUCTURE]: LogicalStructure_default,
@@ -47220,8 +47302,14 @@ var Render = class {
   }
   //   绑定事件
   bindEvent() {
-    this.mindMap.on("draw_click", () => {
-      if (this.activeNodeList.length > 0) {
+    this.mindMap.on("draw_click", (e2) => {
+      let isTrueClick = true;
+      let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt;
+      if (useLeftKeySelectionRightKeyDrag) {
+        let mousedownPos = this.mindMap.event.mousedownPos;
+        isTrueClick = Math.abs(e2.clientX - mousedownPos.x) <= 5 && Math.abs(e2.clientY - mousedownPos.y) <= 5;
+      }
+      if (isTrueClick && this.activeNodeList.length > 0) {
         this.mindMap.execCommand("CLEAR_ACTIVE_NODE");
       }
     });
@@ -49712,7 +49800,7 @@ var themes_default = {
   orangeJuice: orangeJuice_default
 };
 
-// ../simple-mind-map/src/utils/keyMap.js
+// ../simple-mind-map/src/core/command/keyMap.js
 var map2 = {
   Backspace: 8,
   Tab: 9,
@@ -49762,7 +49850,7 @@ for (let i3 = 0; i3 <= 9; i3++) {
 });
 var keyMap = map2;
 
-// ../simple-mind-map/src/KeyCommand.js
+// ../simple-mind-map/src/core/command/KeyCommand.js
 var KeyCommand = class {
   //  构造函数
   constructor(opt) {
@@ -49911,7 +49999,7 @@ var KeyCommand = class {
   }
 };
 
-// ../simple-mind-map/src/Command.js
+// ../simple-mind-map/src/core/command/Command.js
 var Command = class {
   //  构造函数
   constructor(opt = {}) {
@@ -50049,7 +50137,7 @@ var Command = class {
 };
 var Command_default = Command;
 
-// ../simple-mind-map/src/BatchExecution.js
+// ../simple-mind-map/src/utils/BatchExecution.js
 var BatchExecution = class {
   //  构造函数
   constructor() {
@@ -50194,7 +50282,15 @@ var defaultOpt = {
   // 节点最大缓存数量
   maxNodeCacheCount: 1e3,
   // 关联线默认文字
-  defaultAssociativeLineText: "\u5173\u8054"
+  defaultAssociativeLineText: "\u5173\u8054",
+  // 思维导图适应画布大小时的内边距
+  fitPadding: 50,
+  // 是否开启按住ctrl键多选节点功能
+  enableCtrlKeyNodeSelection: true,
+  // 设置为左键多选节点，右键拖动画布
+  useLeftKeySelectionRightKeyDrag: false,
+  // 节点即将进入编辑前的回调方法，如果该方法返回true以外的值，那么将取消编辑，函数可以返回一个值，或一个Promise，回调参数为节点实例
+  beforeTextEdit: null
 };
 var MindMap2 = class {
   //  构造函数
@@ -50483,6 +50579,16 @@ var MindMap2 = class {
       pluginOpt: plugin.pluginOpt
     });
   }
+  // 销毁
+  destroy() {
+    [...MindMap2.pluginList].forEach((plugin) => {
+      this[plugin.instanceName] = null;
+    });
+    this.event.unbind();
+    this.svg.remove();
+    Style_default.removeBackgroundStyle(this.el);
+    this.el = null;
+  }
 };
 MindMap2.pluginList = [];
 MindMap2.usePlugin = (plugin, opt = {}) => {
@@ -50503,7 +50609,7 @@ MindMap2.defineTheme = (name, config = {}) => {
 };
 var simple_mind_map_default = MindMap2;
 
-// ../simple-mind-map/src/MiniMap.js
+// ../simple-mind-map/src/plugins/MiniMap.js
 var MiniMap = class {
   //  构造函数
   constructor(opt) {
@@ -50598,7 +50704,7 @@ var MiniMap = class {
 MiniMap.instanceName = "miniMap";
 var MiniMap_default = MiniMap;
 
-// ../simple-mind-map/src/Watermark.js
+// ../simple-mind-map/src/plugins/Watermark.js
 var import_deepmerge34 = __toESM(require_cjs());
 var Watermark = class {
   constructor(opt = {}) {
@@ -50701,7 +50807,7 @@ var Watermark = class {
 Watermark.instanceName = "watermark";
 var Watermark_default = Watermark;
 
-// ../simple-mind-map/src/KeyboardNavigation.js
+// ../simple-mind-map/src/plugins/KeyboardNavigation.js
 var KeyboardNavigation = class {
   //  构造函数
   constructor(opt) {
@@ -59809,6 +59915,43 @@ E.API.PDFObject = function() {
 }();
 var jspdf_es_min_default = E;
 
+// ../simple-mind-map/src/plugins/ExportPDF.js
+var ExportPDF = class {
+  //  构造函数
+  constructor(opt) {
+    this.mindMap = opt.mindMap;
+  }
+  //  导出为pdf
+  pdf(name, img) {
+    let pdf = new jspdf_es_min_default("", "pt", "a4");
+    let a4Width = 595;
+    let a4Height = 841;
+    let a4Ratio = a4Width / a4Height;
+    let image = new Image();
+    image.onload = () => {
+      let imageWidth = image.width;
+      let imageHeight = image.height;
+      let imageRatio = imageWidth / imageHeight;
+      let w2, h3;
+      if (imageWidth <= a4Width && imageHeight <= a4Height) {
+        w2 = imageWidth;
+        h3 = imageHeight;
+      } else if (a4Ratio > imageRatio) {
+        w2 = imageRatio * a4Height;
+        h3 = a4Height;
+      } else {
+        w2 = a4Width;
+        h3 = a4Width / imageRatio;
+      }
+      pdf.addImage(img, "PNG", (a4Width - w2) / 2, (a4Height - h3) / 2, w2, h3);
+      pdf.save(name);
+    };
+    image.src = img;
+  }
+};
+ExportPDF.instanceName = "doExportPDF";
+var ExportPDF_default = ExportPDF;
+
 // ../simple-mind-map/src/utils/simulateCSSBackgroundInCanvas.js
 var getNumberValueFromStr = (value) => {
   let arr = String(value).split(/\s+/);
@@ -60124,8 +60267,7 @@ var transformToMarkdown = (root2) => {
   return content3;
 };
 
-// ../simple-mind-map/src/Export.js
-var URL2 = window.URL || window.webkitURL || window;
+// ../simple-mind-map/src/plugins/Export.js
 var Export = class {
   //  构造函数
   constructor(opt) {
@@ -60276,31 +60418,11 @@ var Export = class {
   }
   //  导出为pdf
   async pdf(name) {
+    if (!this.mindMap.doExportPDF) {
+      throw new Error("\u8BF7\u6CE8\u518CExportPDF\u63D2\u4EF6");
+    }
     let img = await this.png();
-    let pdf = new jspdf_es_min_default("", "pt", "a4");
-    let a4Width = 595;
-    let a4Height = 841;
-    let a4Ratio = a4Width / a4Height;
-    let image = new Image();
-    image.onload = () => {
-      let imageWidth = image.width;
-      let imageHeight = image.height;
-      let imageRatio = imageWidth / imageHeight;
-      let w2, h3;
-      if (imageWidth <= a4Width && imageHeight <= a4Height) {
-        w2 = imageWidth;
-        h3 = imageHeight;
-      } else if (a4Ratio > imageRatio) {
-        w2 = imageRatio * a4Height;
-        h3 = a4Height;
-      } else {
-        w2 = a4Width;
-        h3 = a4Width / imageRatio;
-      }
-      pdf.addImage(img, "PNG", (a4Width - w2) / 2, (a4Height - h3) / 2, w2, h3);
-      pdf.save(name);
-    };
-    image.src = img;
+    this.mindMap.doExportPDF.pdf(name, img);
   }
   //  导出为svg
   // plusCssText：附加的css样式，如果svg中存在dom节点，想要设置一些针对节点的样式可以通过这个参数传入
@@ -60348,7 +60470,7 @@ var Export = class {
 Export.instanceName = "doExport";
 var Export_default = Export;
 
-// ../simple-mind-map/src/Drag.js
+// ../simple-mind-map/src/plugins/Drag.js
 var Drag = class extends Base_default {
   //  构造函数
   constructor({ mindMap }) {
@@ -60627,7 +60749,7 @@ var Drag = class extends Base_default {
 Drag.instanceName = "drag";
 var Drag_default = Drag;
 
-// ../simple-mind-map/src/Select.js
+// ../simple-mind-map/src/plugins/Select.js
 var Select = class {
   //  构造函数
   constructor({ mindMap }) {
@@ -60647,9 +60769,11 @@ var Select = class {
       if (this.mindMap.opt.readonly) {
         return;
       }
-      if (!e2.ctrlKey && e2.which !== 3) {
+      let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt;
+      if (!e2.ctrlKey && (useLeftKeySelectionRightKeyDrag ? e2.which !== 1 : e2.which !== 3)) {
         return;
       }
+      e2.preventDefault();
       this.isMousedown = true;
       let { x: x3, y: y4 } = this.mindMap.toPos(e2.clientX, e2.clientY);
       this.mouseDownX = x3;
@@ -60821,7 +60945,7 @@ function v4(options, buf, offset) {
 }
 var v4_default = v4;
 
-// ../simple-mind-map/src/utils/associativeLineUtils.js
+// ../simple-mind-map/src/plugins/associativeLine/associativeLineUtils.js
 var getAssociativeLineTargetIndex = (node3, toNode) => {
   return node3.nodeData.data.associativeLineTargets.findIndex((item) => {
     return item === toNode.nodeData.data.id;
@@ -60976,7 +61100,7 @@ var getDefaultControlPointOffsets = (startPoint, endPoint) => {
   ];
 };
 
-// ../simple-mind-map/src/utils/associativeLineControls.js
+// ../simple-mind-map/src/plugins/associativeLine/associativeLineControls.js
 function createControlNodes() {
   let { associativeLineActiveColor } = this.mindMap.themeConfig;
   this.controlLine1 = this.draw.line().stroke({ color: associativeLineActiveColor, width: 2 });
@@ -61164,7 +61288,7 @@ var associativeLineControls_default = {
   showControls
 };
 
-// ../simple-mind-map/src/utils/associativeLineText.js
+// ../simple-mind-map/src/plugins/associativeLine/associativeLineText.js
 function createText(data2) {
   let g2 = this.draw.group();
   const setActive = () => {
@@ -61303,7 +61427,7 @@ var associativeLineText_default = {
   updateTextPos
 };
 
-// ../simple-mind-map/src/AssociativeLine.js
+// ../simple-mind-map/src/plugins/AssociativeLine.js
 var AssociativeLine = class {
   constructor(opt = {}) {
     this.mindMap = opt.mindMap;
@@ -61365,12 +61489,7 @@ var AssociativeLine = class {
     this.mindMap.on("mousemove", this.onMousemove.bind(this));
     this.mindMap.on("node_dragging", this.onNodeDragging.bind(this));
     this.mindMap.on("node_dragend", this.onNodeDragend.bind(this));
-    window.addEventListener("mousemove", (e2) => {
-      this.onControlPointMousemove(e2);
-    });
-    window.addEventListener("mouseup", (e2) => {
-      this.onControlPointMouseup(e2);
-    });
+    this.mindMap.on("mouseup", this.onControlPointMouseup.bind(this));
     this.mindMap.on("scale", this.onScale);
   }
   // 创建箭头
@@ -61511,12 +61630,13 @@ var AssociativeLine = class {
   }
   // 鼠标移动事件
   onMousemove(e2) {
-    if (!this.isCreatingLine)
-      return;
+    this.onControlPointMousemove(e2);
     this.updateCreatingLine(e2);
   }
   // 更新创建过程中的连接线
   updateCreatingLine(e2) {
+    if (!this.isCreatingLine)
+      return;
     let { x: x3, y: y4 } = this.getTransformedEventPos(e2);
     let startPoint = getNodePoint(this.creatingStartNode);
     let offsetX = x3 > startPoint.x ? -10 : 10;
@@ -61682,7 +61802,7 @@ var AssociativeLine = class {
 AssociativeLine.instanceName = "associativeLine";
 var AssociativeLine_default = AssociativeLine;
 
-// ../simple-mind-map/src/RichText.js
+// ../simple-mind-map/src/plugins/RichText.js
 var import_quill = __toESM(require_quill());
 var import_html2canvas = __toESM(require_html2canvas());
 var extended = false;
@@ -61716,6 +61836,7 @@ var RichText = class {
     this.node = null;
     this.styleEl = null;
     this.cacheEditingText = "";
+    this.lostStyle = false;
     this.initOpt();
     this.extendQuill();
     this.appendCss();
@@ -61731,6 +61852,7 @@ var RichText = class {
         padding: 0;
         height: auto;
         line-height: normal;
+        -webkit-user-select: text;
       }
       
       .ql-container {
@@ -61924,6 +62046,17 @@ var RichText = class {
           rectInfo,
           formatInfo
         );
+      }
+    });
+    this.quill.on("text-change", () => {
+      let contents = this.quill.getContents();
+      let len = contents.ops.length;
+      if (len <= 0 || len === 1 && contents.ops[0].insert === "\n") {
+        this.lostStyle = true;
+        this.syncFormatToNodeConfig(null, true);
+      } else if (this.lostStyle) {
+        this.setTextStyleIfNotRichText(this.node);
+        this.lostStyle = false;
       }
     });
   }
@@ -67019,7 +67152,7 @@ var markdown_default = {
 simple_mind_map_default.xmind = xmind_default;
 simple_mind_map_default.markdown = markdown_default;
 simple_mind_map_default.iconList = icons_default.nodeIconList;
-simple_mind_map_default.usePlugin(MiniMap_default).usePlugin(Watermark_default).usePlugin(Drag_default).usePlugin(KeyboardNavigation_default).usePlugin(Export_default).usePlugin(Select_default).usePlugin(AssociativeLine_default).usePlugin(RichText_default);
+simple_mind_map_default.usePlugin(MiniMap_default).usePlugin(Watermark_default).usePlugin(Drag_default).usePlugin(KeyboardNavigation_default).usePlugin(ExportPDF_default).usePlugin(Export_default).usePlugin(Select_default).usePlugin(AssociativeLine_default).usePlugin(RichText_default);
 var full_default = simple_mind_map_default;
 export {
   full_default as default

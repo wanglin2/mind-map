@@ -1,5 +1,5 @@
-import Node from '../Node'
-import { CONSTANTS, initRootNodePositionMap } from '../utils/constant'
+import Node from '../core/render/node/Node'
+import { CONSTANTS, initRootNodePositionMap } from '../constants/constant'
 import Lru from '../utils/Lru'
 
 //  布局基类

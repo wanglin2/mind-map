@@ -12,7 +12,8 @@ viewport location, and can be quickly positioned by dragging on the small map.
 
 ```js
 import MindMap from 'simple-mind-map'
-import MiniMap from 'simple-mind-map/src/MiniMap.js'
+import MiniMap from 'simple-mind-map/src/plugins/MiniMap.js'
+// import MiniMap from 'simple-mind-map/src/MiniMap.js' Use this path for versions below v0.6.0
 
 MindMap.usePlugin(MiniMap)
 ```

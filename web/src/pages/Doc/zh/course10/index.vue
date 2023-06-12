@@ -3,7 +3,8 @@
     <h1>主题</h1>
 <h2>使用和切换主题</h2>
 <p><code>simple-mind-map</code>内置了很多主题，可以通过如下方式获取到所有的内置主题列表：</p>
-<pre class="hljs"><code><span class="hljs-keyword">import</span> { themeList } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/constant&#x27;</span>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { themeList } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/constants/constant&#x27;</span>
+<span class="hljs-comment">// import { themeList } from &#x27;simple-mind-map/src/utils/constant&#x27; v0.6.0以下版本使用该路径</span>
 </code></pre>
 <p>可以在实例化<code>simple-mind-map</code>时指定使用的主题：</p>
 <pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({

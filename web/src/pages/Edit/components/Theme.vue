@@ -19,7 +19,7 @@
 
 <script>
 import Sidebar from './Sidebar'
-import { themeList } from 'simple-mind-map/src/utils/constant'
+import { themeList } from 'simple-mind-map/src/constants/constant'
 import { storeConfig } from '@/api'
 import { mapState } from 'vuex'
 import { themeMap } from '@/config/constant.js'
