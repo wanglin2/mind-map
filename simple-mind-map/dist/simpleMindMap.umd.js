@@ -32690,7 +32690,7 @@ var es_array_push = __webpack_require__("9d9f");
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/core-js/modules/es.error.cause.js
 var es_error_cause = __webpack_require__("f8ac");
 
-// CONCATENATED MODULE: ../simple-mind-map/src/utils/constant.js
+// CONCATENATED MODULE: ../simple-mind-map/src/constants/constant.js
 //  标签颜色列表
 const tagColorList = [{
   color: 'rgb(77, 65, 0)',
@@ -32897,7 +32897,7 @@ const layoutList = [{
   value: CONSTANTS.LAYOUT.FISHBONE
 }];
 const layoutValueList = [CONSTANTS.LAYOUT.LOGICAL_STRUCTURE, CONSTANTS.LAYOUT.MIND_MAP, CONSTANTS.LAYOUT.CATALOG_ORGANIZATION, CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE, CONSTANTS.LAYOUT.TIMELINE, CONSTANTS.LAYOUT.TIMELINE2, CONSTANTS.LAYOUT.FISHBONE];
-// CONCATENATED MODULE: ../simple-mind-map/src/View.js
+// CONCATENATED MODULE: ../simple-mind-map/src/core/view/View.js
 
 
 //  视图操作类
@@ -32927,6 +32927,9 @@ class View_View {
     });
     this.mindMap.keyCommand.addShortcut('Control+Enter', () => {
       this.reset();
+    });
+    this.mindMap.keyCommand.addShortcut('Control+i', () => {
+      this.fit();
     });
     this.mindMap.svg.on('dblclick', () => {
       this.reset();
@@ -33101,13 +33104,67 @@ class View_View {
     this.transform();
     this.mindMap.emit('scale', this.scale);
   }
+
+  // 适应画布大小
+  fit() {
+    let {
+      fitPadding
+    } = this.mindMap.opt;
+    let draw = this.mindMap.draw;
+    let origTransform = draw.transform();
+    let rect = draw.rbox();
+    let drawWidth = rect.width / origTransform.scaleX;
+    let drawHeight = rect.height / origTransform.scaleY;
+    let drawRatio = drawWidth / drawHeight;
+    let {
+      width: elWidth,
+      height: elHeight
+    } = this.mindMap.el.getBoundingClientRect();
+    elWidth = elWidth - fitPadding * 2;
+    elHeight = elHeight - fitPadding * 2;
+    let elRatio = elWidth / elHeight;
+    let newScale = 0;
+    let flag = '';
+    if (drawWidth <= elWidth && drawHeight <= elHeight) {
+      newScale = 1;
+      flag = 1;
+    } else {
+      let newWidth = 0;
+      let newHeight = 0;
+      if (drawRatio > elRatio) {
+        newWidth = elWidth;
+        newHeight = elWidth / drawRatio;
+        flag = 2;
+      } else {
+        newHeight = elHeight;
+        newWidth = elHeight * drawRatio;
+        flag = 3;
+      }
+      newScale = newWidth / drawWidth;
+    }
+    this.setScale(newScale);
+    let newRect = draw.rbox();
+    let newX = 0;
+    let newY = 0;
+    if (flag === 1) {
+      newX = -newRect.x + fitPadding + (elWidth - newRect.width) / 2;
+      newY = -newRect.y + fitPadding + (elHeight - newRect.height) / 2;
+    } else if (flag === 2) {
+      newX = -newRect.x + fitPadding;
+      newY = -newRect.y + fitPadding + (elHeight - newRect.height) / 2;
+    } else if (flag === 3) {
+      newX = -newRect.x + fitPadding + (elWidth - newRect.width) / 2;
+      newY = -newRect.y + fitPadding;
+    }
+    this.translateXY(newX, newY);
+  }
 }
-/* harmony default export */ var src_View = (View_View);
+/* harmony default export */ var view_View = (View_View);
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/eventemitter3/index.js
 var eventemitter3 = __webpack_require__("91d2");
 var eventemitter3_default = /*#__PURE__*/__webpack_require__.n(eventemitter3);
 
-// CONCATENATED MODULE: ../simple-mind-map/src/Event.js
+// CONCATENATED MODULE: ../simple-mind-map/src/core/event/Event.js
 
 
 
@@ -33119,6 +33176,7 @@ class Event_Event extends eventemitter3_default.a {
     this.opt = opt;
     this.mindMap = opt.mindMap;
     this.isLeftMousedown = false;
+    this.isRightMousedown = false;
     this.mousedownPos = {
       x: 0,
       y: 0
@@ -33199,6 +33257,8 @@ class Event_Event extends eventemitter3_default.a {
     // 鼠标左键
     if (e.which === 1) {
       this.isLeftMousedown = true;
+    } else if (e.which === 3) {
+      this.isRightMousedown = true;
     }
     this.mousedownPos.x = e.clientX;
     this.mousedownPos.y = e.clientY;
@@ -33207,12 +33267,15 @@ class Event_Event extends eventemitter3_default.a {
 
   //  鼠标移动事件
   onMousemove(e) {
+    let {
+      useLeftKeySelectionRightKeyDrag
+    } = this.mindMap.opt;
     this.mousemovePos.x = e.clientX;
     this.mousemovePos.y = e.clientY;
     this.mousemoveOffset.x = e.clientX - this.mousedownPos.x;
     this.mousemoveOffset.y = e.clientY - this.mousedownPos.y;
     this.emit('mousemove', e, this);
-    if (this.isLeftMousedown) {
+    if (useLeftKeySelectionRightKeyDrag ? this.isRightMousedown : this.isLeftMousedown) {
       e.preventDefault();
       this.emit('drag', e, this);
     }
@@ -33221,6 +33284,7 @@ class Event_Event extends eventemitter3_default.a {
   //  鼠标松开事件
   onMouseup(e) {
     this.isLeftMousedown = false;
+    this.isRightMousedown = false;
     this.emit('mouseup', e, this);
   }
 
@@ -33265,7 +33329,7 @@ class Event_Event extends eventemitter3_default.a {
     this.emit('svg_mouseleave', e);
   }
 }
-/* harmony default export */ var src_Event = (Event_Event);
+/* harmony default export */ var event_Event = (Event_Event);
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/deepmerge/dist/cjs.js
 var cjs = __webpack_require__("682c");
 var cjs_default = /*#__PURE__*/__webpack_require__.n(cjs);
@@ -33273,14 +33337,24 @@ var cjs_default = /*#__PURE__*/__webpack_require__.n(cjs);
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/core-js/modules/es.array.reduce.js
 var es_array_reduce = __webpack_require__("293c");
 
-// CONCATENATED MODULE: ../simple-mind-map/src/Style.js
+// CONCATENATED MODULE: ../simple-mind-map/src/core/render/node/Style.js
 
 const rootProp = ['paddingX', 'paddingY'];
+const backgroundStyleProps = ['backgroundColor', 'backgroundImage', 'backgroundRepeat', 'backgroundPosition', 'backgroundSize'];
 
 //  样式类
 class Style_Style {
   //   设置背景样式
   static setBackgroundStyle(el, themeConfig) {
+    // 缓存容器元素原本的样式
+    if (!Style_Style.cacheStyle) {
+      Style_Style.cacheStyle = {};
+      let style = window.getComputedStyle(el);
+      backgroundStyleProps.forEach(prop => {
+        Style_Style.cacheStyle[prop] = style[prop];
+      });
+    }
+    // 设置新样式
     let {
       backgroundColor,
       backgroundImage,
@@ -33297,6 +33371,14 @@ class Style_Style {
     } else {
       el.style.backgroundImage = 'none';
     }
+  }
+
+  // 移除背景样式
+  static removeBackgroundStyle(el) {
+    backgroundStyleProps.forEach(prop => {
+      el.style[prop] = Style_Style.cacheStyle[prop];
+    });
+    Style_Style.cacheStyle = null;
   }
 
   //  构造函数
@@ -33483,7 +33565,8 @@ class Style_Style {
     });
   }
 }
-/* harmony default export */ var src_Style = (Style_Style);
+Style_Style.cacheStyle = null;
+/* harmony default export */ var node_Style = (Style_Style);
 // CONCATENATED MODULE: ../simple-mind-map/node_modules/@svgdotjs/svg.js/dist/svg.esm.js
 /*!
 * @svgdotjs/svg.js - A lightweight library for manipulating and animating SVG.
@@ -40553,7 +40636,7 @@ makeMorphable();
 
 //# sourceMappingURL=svg.esm.js.map
 
-// CONCATENATED MODULE: ../simple-mind-map/src/Shape.js
+// CONCATENATED MODULE: ../simple-mind-map/src/core/render/node/Shape.js
 
 
 
@@ -41133,7 +41216,7 @@ const readBlob = blob => {
     reader.readAsDataURL(blob);
   });
 };
-// CONCATENATED MODULE: ../simple-mind-map/src/utils/nodeGeneralization.js
+// CONCATENATED MODULE: ../simple-mind-map/src/core/render/node/nodeGeneralization.js
 
 
 //  检查是否存在概要
@@ -41150,7 +41233,7 @@ function createGeneralizationNode() {
     this._generalizationLine = this.draw.path();
   }
   if (!this._generalizationNode) {
-    this._generalizationNode = new src_Node({
+    this._generalizationNode = new node_Node({
       data: {
         data: this.nodeData.data.generalization
       },
@@ -41252,7 +41335,7 @@ const btns_close = `<svg t="1618141589243" class="icon" viewBox="0 0 1024 1024" 
   open: btns_open,
   close: btns_close
 });
-// CONCATENATED MODULE: ../simple-mind-map/src/utils/nodeExpandBtn.js
+// CONCATENATED MODULE: ../simple-mind-map/src/core/render/node/nodeExpandBtn.js
 
 
 
@@ -41384,7 +41467,7 @@ function hideExpandBtn() {
   showExpandBtn,
   hideExpandBtn
 });
-// CONCATENATED MODULE: ../simple-mind-map/src/utils/nodeCommandWraps.js
+// CONCATENATED MODULE: ../simple-mind-map/src/core/render/node/nodeCommandWraps.js
 //  设置数据
 function nodeCommandWraps_setData(data = {}) {
   this.mindMap.execCommand('SET_NODE_DATA', this, data);
@@ -41665,7 +41748,7 @@ const getNodeIconListIcon = (name, extendIconList = []) => {
   nodeIconList,
   getNodeIconListIcon
 });
-// CONCATENATED MODULE: ../simple-mind-map/src/utils/nodeCreateContents.js
+// CONCATENATED MODULE: ../simple-mind-map/src/core/render/node/nodeCreateContents.js
 
 
 
@@ -41953,7 +42036,7 @@ function createNoteNode() {
   createTagNode,
   createNoteNode
 });
-// CONCATENATED MODULE: ../simple-mind-map/src/Node.js
+// CONCATENATED MODULE: ../simple-mind-map/src/core/render/node/Node.js
 
 
 
@@ -41981,7 +42064,7 @@ class Node_Node {
     // 渲染器
     this.draw = opt.draw || null;
     // 样式实例
-    this.style = new src_Style(this);
+    this.style = new node_Style(this);
     // 形状实例
     this.shapeInstance = new Shape_Shape(this);
     this.shapePadding = {
@@ -42290,12 +42373,12 @@ class Node_Node {
   bindGroupEvent() {
     // 单击事件，选中节点
     this.group.on('click', e => {
+      this.mindMap.emit('node_click', this, e);
       if (this.isMultipleChoice) {
         e.stopPropagation();
         this.isMultipleChoice = false;
         return;
       }
-      this.mindMap.emit('node_click', this, e);
       this.active(e);
     });
     this.group.on('mousedown', e => {
@@ -42306,7 +42389,7 @@ class Node_Node {
         e.stopPropagation();
       }
       // 多选和取消多选
-      if (e.ctrlKey) {
+      if (e.ctrlKey && this.mindMap.opt.enableCtrlKeyNodeSelection) {
         this.isMultipleChoice = true;
         let isActive = this.nodeData.data.isActive;
         if (!isActive) this.mindMap.emit('before_node_active', this, this.renderer.activeNodeList);
@@ -42713,7 +42796,7 @@ class Node_Node {
     return key ? this.nodeData.data[key] || '' : this.nodeData.data;
   }
 }
-/* harmony default export */ var src_Node = (Node_Node);
+/* harmony default export */ var node_Node = (Node_Node);
 // CONCATENATED MODULE: ../simple-mind-map/src/utils/Lru.js
 // LRU缓存类
 class CRU {
@@ -42838,7 +42921,7 @@ class Base_Base {
     } else {
       // 创建新节点
       let uid = this.mindMap.uid++;
-      newNode = new src_Node({
+      newNode = new node_Node({
         data,
         uid,
         renderer: this.renderer,
@@ -45063,7 +45146,7 @@ class Fishbone_Fishbone extends layouts_Base {
   }
 }
 /* harmony default export */ var layouts_Fishbone = (Fishbone_Fishbone);
-// CONCATENATED MODULE: ../simple-mind-map/src/TextEdit.js
+// CONCATENATED MODULE: ../simple-mind-map/src/core/render/TextEdit.js
 
 
 //  节点文字编辑类
@@ -45131,7 +45214,16 @@ class TextEdit_TextEdit {
   }
 
   //  显示文本编辑框
-  show(node) {
+  async show(node) {
+    if (typeof this.mindMap.opt.beforeTextEdit === 'function') {
+      let isShow = false;
+      try {
+        isShow = await this.mindMap.opt.beforeTextEdit(node);
+      } catch (error) {
+        isShow = false;
+      }
+      if (!isShow) return;
+    }
     this.currentNode = node;
     let {
       offsetLeft,
@@ -45410,7 +45502,7 @@ const checkIsNodeSizeIndependenceConfig = config => {
   return true;
 };
 const lineStyleProps = ['lineColor', 'lineDasharray', 'lineWidth'];
-// CONCATENATED MODULE: ../simple-mind-map/src/Render.js
+// CONCATENATED MODULE: ../simple-mind-map/src/core/render/Render.js
 
 
 
@@ -45489,9 +45581,17 @@ class Render_Render {
   //   绑定事件
   bindEvent() {
     // 点击事件
-    this.mindMap.on('draw_click', () => {
+    this.mindMap.on('draw_click', e => {
       // 清除激活状态
-      if (this.activeNodeList.length > 0) {
+      let isTrueClick = true;
+      let {
+        useLeftKeySelectionRightKeyDrag
+      } = this.mindMap.opt;
+      if (useLeftKeySelectionRightKeyDrag) {
+        let mousedownPos = this.mindMap.event.mousedownPos;
+        isTrueClick = Math.abs(e.clientX - mousedownPos.x) <= 5 && Math.abs(e.clientY - mousedownPos.y) <= 5;
+      }
+      if (isTrueClick && this.activeNodeList.length > 0) {
         this.mindMap.execCommand('CLEAR_ACTIVE_NODE');
       }
     });
@@ -46396,7 +46496,7 @@ class Render_Render {
     this.mindMap.view.setScale(1);
   }
 }
-/* harmony default export */ var src_Render = (Render_Render);
+/* harmony default export */ var render_Render = (Render_Render);
 // CONCATENATED MODULE: ../simple-mind-map/src/themes/freshGreen.js
 
 
@@ -48172,7 +48272,7 @@ class Render_Render {
   autumn: autumn,
   orangeJuice: orangeJuice
 });
-// CONCATENATED MODULE: ../simple-mind-map/src/utils/keyMap.js
+// CONCATENATED MODULE: ../simple-mind-map/src/core/command/keyMap.js
 const keyMap_map = {
   Backspace: 8,
   Tab: 9,
@@ -48229,7 +48329,7 @@ const isKey = (e, key) => {
   let code = typeof e === 'object' ? e.keyCode : e;
   return keyMap_map[key] === code;
 };
-// CONCATENATED MODULE: ../simple-mind-map/src/KeyCommand.js
+// CONCATENATED MODULE: ../simple-mind-map/src/core/command/KeyCommand.js
 
 
 //  快捷按键、命令处理类
@@ -48392,7 +48492,7 @@ class KeyCommand_KeyCommand {
     return res;
   }
 }
-// CONCATENATED MODULE: ../simple-mind-map/src/Command.js
+// CONCATENATED MODULE: ../simple-mind-map/src/core/command/Command.js
 
 
 
@@ -48538,8 +48638,8 @@ class Command_Command {
     return data;
   }
 }
-/* harmony default export */ var src_Command = (Command_Command);
-// CONCATENATED MODULE: ../simple-mind-map/src/BatchExecution.js
+/* harmony default export */ var command_Command = (Command_Command);
+// CONCATENATED MODULE: ../simple-mind-map/src/utils/BatchExecution.js
 
 
 
@@ -48578,7 +48678,7 @@ class BatchExecution_BatchExecution {
     });
   }
 }
-/* harmony default export */ var src_BatchExecution = (BatchExecution_BatchExecution);
+/* harmony default export */ var utils_BatchExecution = (BatchExecution_BatchExecution);
 // CONCATENATED MODULE: ../simple-mind-map/index.js
 
 
@@ -48709,7 +48809,15 @@ const defaultOpt = {
   // 节点最大缓存数量
   maxNodeCacheCount: 1000,
   // 关联线默认文字
-  defaultAssociativeLineText: '关联'
+  defaultAssociativeLineText: '关联',
+  // 思维导图适应画布大小时的内边距
+  fitPadding: 50,
+  // 是否开启按住ctrl键多选节点功能
+  enableCtrlKeyNodeSelection: true,
+  // 设置为左键多选节点，右键拖动画布
+  useLeftKeySelectionRightKeyDrag: false,
+  // 节点即将进入编辑前的回调方法，如果该方法返回true以外的值，那么将取消编辑，函数可以返回一个值，或一个Promise，回调参数为节点实例
+  beforeTextEdit: null
 };
 
 //  思维导图
@@ -48738,7 +48846,7 @@ class simple_mind_map_MindMap {
     this.initTheme();
 
     // 事件类
-    this.event = new src_Event({
+    this.event = new event_Event({
       mindMap: this
     });
 
@@ -48748,23 +48856,23 @@ class simple_mind_map_MindMap {
     });
 
     // 命令类
-    this.command = new src_Command({
+    this.command = new command_Command({
       mindMap: this
     });
 
     // 渲染类
-    this.renderer = new src_Render({
+    this.renderer = new render_Render({
       mindMap: this
     });
 
     // 视图操作类
-    this.view = new src_View({
+    this.view = new view_View({
       mindMap: this,
       draw: this.draw
     });
 
     // 批量执行类
-    this.batchExecution = new src_BatchExecution();
+    this.batchExecution = new utils_BatchExecution();
 
     // 注册插件
     simple_mind_map_MindMap.pluginList.forEach(plugin => {
@@ -48836,7 +48944,7 @@ class simple_mind_map_MindMap {
     // 合并主题配置
     this.themeConfig = cjs_default()(themes[this.opt.theme], this.opt.themeConfig);
     // 设置背景样式
-    src_Style.setBackgroundStyle(this.el, this.themeConfig);
+    node_Style.setBackgroundStyle(this.el, this.themeConfig);
   }
 
   //  设置主题
@@ -49072,6 +49180,21 @@ class simple_mind_map_MindMap {
       pluginOpt: plugin.pluginOpt
     });
   }
+
+  // 销毁
+  destroy() {
+    // 移除插件
+    [...simple_mind_map_MindMap.pluginList].forEach(plugin => {
+      this[plugin.instanceName] = null;
+    });
+    // 解绑事件
+    this.event.unbind();
+    // 移除画布节点
+    this.svg.remove();
+    // 去除给容器元素设置的背景样式
+    node_Style.removeBackgroundStyle(this.el);
+    this.el = null;
+  }
 }
 
 // 插件列表
@@ -49095,7 +49218,7 @@ simple_mind_map_MindMap.defineTheme = (name, config = {}) => {
   themes[name] = cjs_default()(themes_default, config);
 };
 /* harmony default export */ var simple_mind_map = (simple_mind_map_MindMap);
-// CONCATENATED MODULE: ../simple-mind-map/src/MiniMap.js
+// CONCATENATED MODULE: ../simple-mind-map/src/plugins/MiniMap.js
 // 小地图类
 class MiniMap {
   //  构造函数
@@ -49206,8 +49329,8 @@ class MiniMap {
   }
 }
 MiniMap.instanceName = 'miniMap';
-/* harmony default export */ var src_MiniMap = (MiniMap);
-// CONCATENATED MODULE: ../simple-mind-map/src/Watermark.js
+/* harmony default export */ var plugins_MiniMap = (MiniMap);
+// CONCATENATED MODULE: ../simple-mind-map/src/plugins/Watermark.js
 
 
 
@@ -49322,8 +49445,8 @@ class Watermark_Watermark {
   }
 }
 Watermark_Watermark.instanceName = 'watermark';
-/* harmony default export */ var src_Watermark = (Watermark_Watermark);
-// CONCATENATED MODULE: ../simple-mind-map/src/KeyboardNavigation.js
+/* harmony default export */ var plugins_Watermark = (Watermark_Watermark);
+// CONCATENATED MODULE: ../simple-mind-map/src/plugins/KeyboardNavigation.js
 
 
 
@@ -49573,10 +49696,53 @@ class KeyboardNavigation_KeyboardNavigation {
   }
 }
 KeyboardNavigation_KeyboardNavigation.instanceName = 'keyboardNavigation';
-/* harmony default export */ var src_KeyboardNavigation = (KeyboardNavigation_KeyboardNavigation);
+/* harmony default export */ var plugins_KeyboardNavigation = (KeyboardNavigation_KeyboardNavigation);
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/jspdf/dist/jspdf.es.min.js
 var jspdf_es_min = __webpack_require__("77ee");
 
+// CONCATENATED MODULE: ../simple-mind-map/src/plugins/ExportPDF.js
+
+
+//  导出PDF类，需要通过Export插件使用
+class ExportPDF_ExportPDF {
+  //  构造函数
+  constructor(opt) {
+    this.mindMap = opt.mindMap;
+  }
+
+  //  导出为pdf
+  pdf(name, img) {
+    let pdf = new jspdf_es_min["a" /* default */]('', 'pt', 'a4');
+    let a4Width = 595;
+    let a4Height = 841;
+    let a4Ratio = a4Width / a4Height;
+    let image = new Image();
+    image.onload = () => {
+      let imageWidth = image.width;
+      let imageHeight = image.height;
+      let imageRatio = imageWidth / imageHeight;
+      let w, h;
+      if (imageWidth <= a4Width && imageHeight <= a4Height) {
+        // 使用图片原始宽高
+        w = imageWidth;
+        h = imageHeight;
+      } else if (a4Ratio > imageRatio) {
+        // 以a4Height为高度，缩放图片宽度
+        w = imageRatio * a4Height;
+        h = a4Height;
+      } else {
+        // 以a4Width为宽度，缩放图片高度
+        w = a4Width;
+        h = a4Width / imageRatio;
+      }
+      pdf.addImage(img, 'PNG', (a4Width - w) / 2, (a4Height - h) / 2, w, h);
+      pdf.save(name);
+    };
+    image.src = img;
+  }
+}
+ExportPDF_ExportPDF.instanceName = 'doExportPDF';
+/* harmony default export */ var plugins_ExportPDF = (ExportPDF_ExportPDF);
 // CONCATENATED MODULE: ../simple-mind-map/src/utils/simulateCSSBackgroundInCanvas.js
 
 // 将以空格分隔的字符串值转换成成数字/单位/值数组
@@ -49949,13 +50115,12 @@ const transformToMarkdown = root => {
   }, () => {}, true);
   return content;
 };
-// CONCATENATED MODULE: ../simple-mind-map/src/Export.js
+// CONCATENATED MODULE: ../simple-mind-map/src/plugins/Export.js
 
 
 
 
 
-const URL = window.URL || window.webkitURL || window;
 
 //  导出类
 class Export_Export {
@@ -50126,34 +50291,11 @@ class Export_Export {
 
   //  导出为pdf
   async pdf(name) {
+    if (!this.mindMap.doExportPDF) {
+      throw new Error('请注册ExportPDF插件');
+    }
     let img = await this.png();
-    let pdf = new jspdf_es_min["a" /* default */]('', 'pt', 'a4');
-    let a4Width = 595;
-    let a4Height = 841;
-    let a4Ratio = a4Width / a4Height;
-    let image = new Image();
-    image.onload = () => {
-      let imageWidth = image.width;
-      let imageHeight = image.height;
-      let imageRatio = imageWidth / imageHeight;
-      let w, h;
-      if (imageWidth <= a4Width && imageHeight <= a4Height) {
-        // 使用图片原始宽高
-        w = imageWidth;
-        h = imageHeight;
-      } else if (a4Ratio > imageRatio) {
-        // 以a4Height为高度，缩放图片宽度
-        w = imageRatio * a4Height;
-        h = a4Height;
-      } else {
-        // 以a4Width为宽度，缩放图片高度
-        w = a4Width;
-        h = a4Width / imageRatio;
-      }
-      pdf.addImage(img, 'PNG', (a4Width - w) / 2, (a4Height - h) / 2, w, h);
-      pdf.save(name);
-    };
-    image.src = img;
+    this.mindMap.doExportPDF.pdf(name, img);
   }
 
   //  导出为svg
@@ -50207,8 +50349,8 @@ class Export_Export {
   }
 }
 Export_Export.instanceName = 'doExport';
-/* harmony default export */ var src_Export = (Export_Export);
-// CONCATENATED MODULE: ../simple-mind-map/src/Drag.js
+/* harmony default export */ var plugins_Export = (Export_Export);
+// CONCATENATED MODULE: ../simple-mind-map/src/plugins/Drag.js
 
 
 
@@ -50549,8 +50691,8 @@ class Drag_Drag extends layouts_Base {
   }
 }
 Drag_Drag.instanceName = 'drag';
-/* harmony default export */ var src_Drag = (Drag_Drag);
-// CONCATENATED MODULE: ../simple-mind-map/src/Select.js
+/* harmony default export */ var plugins_Drag = (Drag_Drag);
+// CONCATENATED MODULE: ../simple-mind-map/src/plugins/Select.js
 
 
 //  选择节点类
@@ -50577,9 +50719,13 @@ class Select_Select {
       if (this.mindMap.opt.readonly) {
         return;
       }
-      if (!e.ctrlKey && e.which !== 3) {
+      let {
+        useLeftKeySelectionRightKeyDrag
+      } = this.mindMap.opt;
+      if (!e.ctrlKey && (useLeftKeySelectionRightKeyDrag ? e.which !== 1 : e.which !== 3)) {
         return;
       }
+      e.preventDefault();
       this.isMousedown = true;
       let {
         x,
@@ -50722,7 +50868,7 @@ class Select_Select {
 }
 
 Select_Select.instanceName = 'select';
-/* harmony default export */ var src_Select = (Select_Select);
+/* harmony default export */ var plugins_Select = (Select_Select);
 // CONCATENATED MODULE: ../simple-mind-map/node_modules/uuid/dist/esm-browser/native.js
 const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
 /* harmony default export */ var esm_browser_native = ({
@@ -50821,7 +50967,7 @@ function v4(options, buf, offset) {
 }
 
 /* harmony default export */ var esm_browser_v4 = (v4);
-// CONCATENATED MODULE: ../simple-mind-map/src/utils/associativeLineUtils.js
+// CONCATENATED MODULE: ../simple-mind-map/src/plugins/associativeLine/associativeLineUtils.js
 // 获取目标节点在起始节点的目标数组中的索引
 const getAssociativeLineTargetIndex = (node, toNode) => {
   return node.nodeData.data.associativeLineTargets.findIndex(item => {
@@ -50987,7 +51133,7 @@ const getDefaultControlPointOffsets = (startPoint, endPoint) => {
     y: controlPoints[1].y - endPoint.y
   }];
 };
-// CONCATENATED MODULE: ../simple-mind-map/src/utils/associativeLineControls.js
+// CONCATENATED MODULE: ../simple-mind-map/src/plugins/associativeLine/associativeLineControls.js
 
 
 // 创建控制点、连线节点
@@ -51210,7 +51356,7 @@ function showControls() {
   hideControls,
   showControls
 });
-// CONCATENATED MODULE: ../simple-mind-map/src/utils/associativeLineText.js
+// CONCATENATED MODULE: ../simple-mind-map/src/plugins/associativeLine/associativeLineText.js
 
 
 
@@ -51362,7 +51508,7 @@ function updateTextPos(path, text) {
   text.x(centerPoint.x - textWidth / 2);
   text.y(centerPoint.y - textHeight / 2);
 }
-/* harmony default export */ var utils_associativeLineText = ({
+/* harmony default export */ var associativeLine_associativeLineText = ({
   getText: associativeLineText_getText,
   createText,
   styleText,
@@ -51373,7 +51519,7 @@ function updateTextPos(path, text) {
   renderText,
   updateTextPos
 });
-// CONCATENATED MODULE: ../simple-mind-map/src/AssociativeLine.js
+// CONCATENATED MODULE: ../simple-mind-map/src/plugins/AssociativeLine.js
 
 
 
@@ -51421,8 +51567,8 @@ class AssociativeLine_AssociativeLine {
       this[item] = associativeLineControls[item].bind(this);
     });
     // 关联线文字相关方法
-    Object.keys(utils_associativeLineText).forEach(item => {
-      this[item] = utils_associativeLineText[item].bind(this);
+    Object.keys(associativeLine_associativeLineText).forEach(item => {
+      this[item] = associativeLine_associativeLineText[item].bind(this);
     });
     this.bindEvent();
   }
@@ -51458,12 +51604,7 @@ class AssociativeLine_AssociativeLine {
     this.mindMap.on('node_dragging', this.onNodeDragging.bind(this));
     this.mindMap.on('node_dragend', this.onNodeDragend.bind(this));
     // 拖拽控制点
-    window.addEventListener('mousemove', e => {
-      this.onControlPointMousemove(e);
-    });
-    window.addEventListener('mouseup', e => {
-      this.onControlPointMouseup(e);
-    });
+    this.mindMap.on('mouseup', this.onControlPointMouseup.bind(this));
     // 缩放事件
     this.mindMap.on('scale', this.onScale);
   }
@@ -51651,12 +51792,13 @@ class AssociativeLine_AssociativeLine {
 
   // 鼠标移动事件
   onMousemove(e) {
-    if (!this.isCreatingLine) return;
+    this.onControlPointMousemove(e);
     this.updateCreatingLine(e);
   }
 
   // 更新创建过程中的连接线
   updateCreatingLine(e) {
+    if (!this.isCreatingLine) return;
     let {
       x,
       y
@@ -51843,7 +51985,7 @@ class AssociativeLine_AssociativeLine {
   }
 }
 AssociativeLine_AssociativeLine.instanceName = 'associativeLine';
-/* harmony default export */ var src_AssociativeLine = (AssociativeLine_AssociativeLine);
+/* harmony default export */ var plugins_AssociativeLine = (AssociativeLine_AssociativeLine);
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/quill/dist/quill.js
 var quill = __webpack_require__("4f98");
 var quill_default = /*#__PURE__*/__webpack_require__.n(quill);
@@ -51855,7 +51997,7 @@ var quill_snow = __webpack_require__("5ba9");
 var html2canvas = __webpack_require__("c444");
 var html2canvas_default = /*#__PURE__*/__webpack_require__.n(html2canvas);
 
-// CONCATENATED MODULE: ../simple-mind-map/src/RichText.js
+// CONCATENATED MODULE: ../simple-mind-map/src/plugins/RichText.js
 
 
 
@@ -51887,6 +52029,7 @@ class RichText_RichText {
     this.node = null;
     this.styleEl = null;
     this.cacheEditingText = '';
+    this.lostStyle = false;
     this.initOpt();
     this.extendQuill();
     this.appendCss();
@@ -51905,6 +52048,7 @@ class RichText_RichText {
         padding: 0;
         height: auto;
         line-height: normal;
+        -webkit-user-select: text;
       }
       
       .ql-container {
@@ -52110,6 +52254,20 @@ class RichText_RichText {
         this.mindMap.emit('rich_text_selection_change', hasRange, rectInfo, formatInfo);
       }
     });
+    this.quill.on('text-change', () => {
+      let contents = this.quill.getContents();
+      let len = contents.ops.length;
+      // 如果编辑过程中删除所有字符，那么会丢失主题的样式
+      if (len <= 0 || len === 1 && contents.ops[0].insert === '\n') {
+        this.lostStyle = true;
+        // 需要删除节点的样式数据
+        this.syncFormatToNodeConfig(null, true);
+      } else if (this.lostStyle) {
+        // 如果处于样式丢失状态，那么需要进行格式化加回样式
+        this.setTextStyleIfNotRichText(this.node);
+        this.lostStyle = false;
+      }
+    });
   }
 
   // 选中全部
@@ -52297,7 +52455,7 @@ class RichText_RichText {
   }
 }
 RichText_RichText.instanceName = 'richText';
-/* harmony default export */ var src_RichText = (RichText_RichText);
+/* harmony default export */ var plugins_RichText = (RichText_RichText);
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/jszip/dist/jszip.min.js
 var jszip_min = __webpack_require__("5e89");
 var jszip_min_default = /*#__PURE__*/__webpack_require__.n(jszip_min);
@@ -62850,10 +63008,11 @@ const transformMarkdownTo = async md => {
 
 
 
+
 simple_mind_map.xmind = xmind;
 simple_mind_map.markdown = markdown;
 simple_mind_map.iconList = icons.nodeIconList;
-simple_mind_map.usePlugin(src_MiniMap).usePlugin(src_Watermark).usePlugin(src_Drag).usePlugin(src_KeyboardNavigation).usePlugin(src_Export).usePlugin(src_Select).usePlugin(src_AssociativeLine).usePlugin(src_RichText);
+simple_mind_map.usePlugin(plugins_MiniMap).usePlugin(plugins_Watermark).usePlugin(plugins_Drag).usePlugin(plugins_KeyboardNavigation).usePlugin(plugins_ExportPDF).usePlugin(plugins_Export).usePlugin(plugins_Select).usePlugin(plugins_AssociativeLine).usePlugin(plugins_RichText);
 /* harmony default export */ var full = (simple_mind_map);
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js
 
