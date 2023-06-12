@@ -60,6 +60,7 @@ class RichText {
         padding: 0;
         height: auto;
         line-height: normal;
+        -webkit-user-select: text;
       }
       
       .ql-container {
