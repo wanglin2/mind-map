@@ -44,7 +44,8 @@ export default [
       { path: 'watermark', title: 'Watermark插件' },
       { path: 'xmind', title: 'XMind解析' },
       { path: 'deploy', title: '部署' },
-      { path: 'client', title: '客户端' }
+      { path: 'client', title: '客户端' },
+      { path: 'touchEvent', title: 'TouchEvent插件' }
     ]
   },
   {
@@ -72,7 +73,8 @@ export default [
       { path: 'view', title: 'View instance' },
       { path: 'watermark', title: 'Watermark plugin' },
       { path: 'xmind', title: 'XMind parse' },
-      { path: 'deploy', title: 'Deploy' }
+      { path: 'deploy', title: 'Deploy' },
+      { path: 'touchEvent', title: 'TouchEvent plugin' }
     ]
   }
 ]

@@ -17,7 +17,8 @@
 <p>The version of <code>v0.5.7+</code> directly uses <code>html2canvas</code> to convert the entire <code>svg</code>, which is no longer an issue with speed. However, there is currently a bug where the color of the node does not take effect after export.</p>
 <h2>Register</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
-<span class="hljs-keyword">import</span> RichText <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/RichText.js&#x27;</span>
+<span class="hljs-keyword">import</span> RichText <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/RichText.js&#x27;</span>
+<span class="hljs-comment">// import RichText from &#x27;simple-mind-map/src/RichText.js&#x27; Use this path for versions below v0.6.0</span>
 
 MindMap.usePlugin(RichText, opt?)
 </code></pre>

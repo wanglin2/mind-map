@@ -5,7 +5,7 @@
 <h2>方法</h2>
 <h3>addShortcut(key, fn)</h3>
 <p>添加快捷键</p>
-<p><code>key</code>：快捷键按键，按键值可以通过<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/keyMap.js">https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/keyMap.js</a>查看。示例：</p>
+<p><code>key</code>：快捷键按键，按键值可以通过<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/command/keyMap.js">keyMap.js</a>查看。示例：</p>
 <pre class="hljs"><code><span class="hljs-comment">// 单个按键</span>
 mindMap.keyCommand.addShortcut(<span class="hljs-string">&#x27;Enter&#x27;</span>, <span class="hljs-function">() =&gt;</span> {})
 <span class="hljs-comment">// 或</span>

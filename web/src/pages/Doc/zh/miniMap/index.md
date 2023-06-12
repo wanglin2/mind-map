@@ -8,7 +8,8 @@
 
 ```js
 import MindMap from 'simple-mind-map'
-import MiniMap from 'simple-mind-map/src/MiniMap.js'
+import MiniMap from 'simple-mind-map/src/plugins/MiniMap.js'
+// import MiniMap from 'simple-mind-map/src/MiniMap.js' v0.6.0以下版本使用该路径
 
 MindMap.usePlugin(MiniMap)
 ```

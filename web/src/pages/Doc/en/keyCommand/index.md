@@ -11,7 +11,7 @@ includes some built-in shortcuts and can also be added manually. The
 Add a shortcut
 
 `key`: Shortcut key, key values can be viewed at
-[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/keyMap.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/keyMap.js)
+[keyMap.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/command/keyMap.js)
 Example:
 
 ```js

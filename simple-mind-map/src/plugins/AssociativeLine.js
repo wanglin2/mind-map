@@ -1,4 +1,4 @@
-import { walk, bfsWalk, throttle } from './utils/'
+import { walk, bfsWalk, throttle } from '../utils'
 import { v4 as uuid } from 'uuid'
 import {
   getAssociativeLineTargetIndex,
@@ -7,9 +7,9 @@ import {
   getNodePoint,
   computeNodePoints,
   getNodeLinePath
-} from './utils/associativeLineUtils'
-import associativeLineControlsMethods from './utils/associativeLineControls'
-import associativeLineTextMethods from './utils/associativeLineText'
+} from './associativeLine/associativeLineUtils'
+import associativeLineControlsMethods from './associativeLine/associativeLineControls'
+import associativeLineTextMethods from './associativeLine/associativeLineText'
 
 // 关联线类
 class AssociativeLine {
@@ -91,12 +91,7 @@ class AssociativeLine {
     this.mindMap.on('node_dragging', this.onNodeDragging.bind(this))
     this.mindMap.on('node_dragend', this.onNodeDragend.bind(this))
     // 拖拽控制点
-    window.addEventListener('mousemove', e => {
-      this.onControlPointMousemove(e)
-    })
-    window.addEventListener('mouseup', e => {
-      this.onControlPointMouseup(e)
-    })
+    this.mindMap.on('mouseup', this.onControlPointMouseup.bind(this))
     // 缩放事件
     this.mindMap.on('scale', this.onScale)
   }
@@ -266,12 +261,13 @@ class AssociativeLine {
 
   // 鼠标移动事件
   onMousemove(e) {
-    if (!this.isCreatingLine) return
+    this.onControlPointMousemove(e)
     this.updateCreatingLine(e)
   }
 
   // 更新创建过程中的连接线
   updateCreatingLine(e) {
+    if (!this.isCreatingLine) return
     let { x, y } = this.getTransformedEventPos(e)
     let startPoint = getNodePoint(this.creatingStartNode)
     let offsetX = x > startPoint.x ? -10 : 10

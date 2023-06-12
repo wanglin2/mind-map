@@ -7,7 +7,8 @@
 <p>用于帮助快速开发小地图功能，小地图由两部分组成，一个是当前的画布内容，一个是视口框，当缩放、移动、元素过多时画布上可能只显示了思维导图的部分内容，可以通过视口框来查看当前视口所在位置，以及可以通过在小地图上拖动来快速定位。</p>
 <h2>注册</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
-<span class="hljs-keyword">import</span> MiniMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/MiniMap.js&#x27;</span>
+<span class="hljs-keyword">import</span> MiniMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/MiniMap.js&#x27;</span>
+<span class="hljs-comment">// import MiniMap from &#x27;simple-mind-map/src/MiniMap.js&#x27; v0.6.0以下版本使用该路径</span>
 
 MindMap.usePlugin(MiniMap)
 </code></pre>

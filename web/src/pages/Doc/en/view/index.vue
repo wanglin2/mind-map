@@ -4,6 +4,11 @@
 <p>The <code>view</code> instance is responsible for view operations, and can be obtained
 through <code>mindMap.view</code></p>
 <h2>Methods</h2>
+<h3>fit()</h3>
+<blockquote>
+<p>v0.6.0+</p>
+</blockquote>
+<p>Zoom the mind map to fit the canvas.</p>
 <h3>translateX(step)</h3>
 <p>Translate in the <code>x</code> direction, <code>step</code>: number of pixels to translate</p>
 <h3>translateY(step)</h3>

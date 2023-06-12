@@ -1,13 +1,13 @@
-import View from './src/View'
-import Event from './src/Event'
-import Render from './src/Render'
+import View from './src/core/view/View'
+import Event from './src/core/event/Event'
+import Render from './src/core/render/Render'
 import merge from 'deepmerge'
 import theme from './src/themes'
-import Style from './src/Style'
-import KeyCommand from './src/KeyCommand'
-import Command from './src/Command'
-import BatchExecution from './src/BatchExecution'
-import { layoutValueList, CONSTANTS } from './src/utils/constant'
+import Style from './src/core/render/node/Style'
+import KeyCommand from './src/core/command/KeyCommand'
+import Command from './src/core/command/Command'
+import BatchExecution from './src/utils/BatchExecution'
+import { layoutValueList, CONSTANTS } from './src/constants/constant'
 import { SVG } from '@svgdotjs/svg.js'
 import { simpleDeepClone } from './src/utils'
 import defaultTheme, { checkIsNodeSizeIndependenceConfig } from './src/themes/default'
@@ -122,7 +122,15 @@ const defaultOpt = {
   // 节点最大缓存数量
   maxNodeCacheCount: 1000,
   // 关联线默认文字
-  defaultAssociativeLineText: '关联'
+  defaultAssociativeLineText: '关联',
+  // 思维导图适应画布大小时的内边距
+  fitPadding: 50,
+  // 是否开启按住ctrl键多选节点功能
+  enableCtrlKeyNodeSelection: true,
+  // 设置为左键多选节点，右键拖动画布
+  useLeftKeySelectionRightKeyDrag: false,
+  // 节点即将进入编辑前的回调方法，如果该方法返回true以外的值，那么将取消编辑，函数可以返回一个值，或一个Promise，回调参数为节点实例
+  beforeTextEdit: null
 }
 
 //  思维导图
@@ -475,6 +483,21 @@ class MindMap {
       mindMap: this,
       pluginOpt: plugin.pluginOpt
     })
+  }
+
+  // 销毁
+  destroy() {
+    // 移除插件
+    [...MindMap.pluginList].forEach((plugin) => {
+      this[plugin.instanceName] = null
+    })
+    // 解绑事件
+    this.event.unbind()
+    // 移除画布节点
+    this.svg.remove()
+    // 去除给容器元素设置的背景样式
+    Style.removeBackgroundStyle(this.el)
+    this.el = null
   }
 }
 

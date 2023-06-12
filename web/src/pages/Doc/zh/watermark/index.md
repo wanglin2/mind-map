@@ -10,7 +10,8 @@
 
 ```js
 import MindMap from 'simple-mind-map'
-import Watermark from 'simple-mind-map/src/Watermark.js'
+import Watermark from 'simple-mind-map/src/plugins/Watermark.js'
+// import Watermark from 'simple-mind-map/src/Watermark.js' v0.6.0以下版本使用该路径
 
 MindMap.usePlugin(Watermark)
 ```

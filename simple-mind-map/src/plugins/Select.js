@@ -1,4 +1,4 @@
-import { bfsWalk, throttle } from './utils'
+import { bfsWalk, throttle } from '../utils'
 
 //  选择节点类
 
@@ -22,9 +22,14 @@ class Select {
       if (this.mindMap.opt.readonly) {
         return
       }
-      if (!e.ctrlKey && e.which !== 3) {
+      let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
+      if (
+        !e.ctrlKey &&
+        (useLeftKeySelectionRightKeyDrag ? e.which !== 1 : e.which !== 3)
+      ) {
         return
       }
+      e.preventDefault()
       this.isMousedown = true
       let { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
       this.mouseDownX = x
@@ -146,25 +151,24 @@ class Select {
       let bottom = (top + height) * scaleY + translateY
       left = left * scaleX + translateX
       top = top * scaleY + translateY
-      if ((left >= minx && left <= maxx ||
-          right >= minx && right <= maxx) && 
-          (top >= miny && top <= maxy ||
-          bottom >= miny && bottom <= maxy)
-        ) {
+      if (
+        ((left >= minx && left <= maxx) || (right >= minx && right <= maxx)) &&
+        ((top >= miny && top <= maxy) || (bottom >= miny && bottom <= maxy))
+      ) {
         // this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
-          if (node.nodeData.data.isActive) {
-            return
-          }
-          this.mindMap.renderer.setNodeActive(node, true)
-          this.mindMap.renderer.addActiveNode(node)
+        if (node.nodeData.data.isActive) {
+          return
+        }
+        this.mindMap.renderer.setNodeActive(node, true)
+        this.mindMap.renderer.addActiveNode(node)
         // })
       } else if (node.nodeData.data.isActive) {
         // this.mindMap.batchExecution.push('activeNode' + node.uid, () => {
-          if (!node.nodeData.data.isActive) {
-            return
-          }
-          this.mindMap.renderer.setNodeActive(node, false)
-          this.mindMap.renderer.removeActiveNode(node)
+        if (!node.nodeData.data.isActive) {
+          return
+        }
+        this.mindMap.renderer.setNodeActive(node, false)
+        this.mindMap.renderer.removeActiveNode(node)
         // })
       }
     })

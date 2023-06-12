@@ -7,7 +7,8 @@
 <p><code>KeyboardNavigation</code>插件提供键盘导航的功能，也就是当你按下方向键时会自动寻找下一个节点并激活</p>
 <h2>注册</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
-<span class="hljs-keyword">import</span> KeyboardNavigation <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/KeyboardNavigation.js&#x27;</span>
+<span class="hljs-keyword">import</span> KeyboardNavigation <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/KeyboardNavigation.js&#x27;</span>
+<span class="hljs-comment">// import KeyboardNavigation from &#x27;simple-mind-map/src/KeyboardNavigation.js&#x27; v0.6.0以下版本使用该路径</span>
 
 MindMap.usePlugin(KeyboardNavigation)
 </code></pre>

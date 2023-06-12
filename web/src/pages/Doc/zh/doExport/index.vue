@@ -4,7 +4,8 @@
 <p><code>Export</code>插件提供导出的功能。</p>
 <h2>注册</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
-<span class="hljs-keyword">import</span> Export <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/Export.js&#x27;</span>
+<span class="hljs-keyword">import</span> Export <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/Export.js&#x27;</span>
+<span class="hljs-comment">// import Export from &#x27;simple-mind-map/src/Export.js&#x27; v0.6.0以下版本使用该路径</span>
 
 MindMap.usePlugin(Export)
 </code></pre>
@@ -62,6 +63,12 @@ a.click()
 </blockquote>
 <p><code>name</code>：文件名称</p>
 <p>导出为<code>pdf</code>，和其他导出方法不一样，这个方法不会返回数据，会直接触发下载。</p>
+<blockquote>
+<p>v0.6.0版本以后，需要额外注册一个ExportPDF插件</p>
+</blockquote>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> ExportPDF <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/ExportPDF.js&#x27;</span>
+MindMap.usePlugin(ExportPDF)
+</code></pre>
 <h3>json(name, withConfig)</h3>
 <p><code>name</code>：暂时没有用处，传空字符串即可</p>
 <p><code>withConfig``：Boolean</code>, 默认为<code>true</code>，数据中是否包含配置，否则为纯思维导图节点数据</p>

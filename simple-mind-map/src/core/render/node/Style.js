@@ -1,10 +1,20 @@
-import { tagColorList } from './utils/constant'
+import { tagColorList } from '../../../constants/constant'
 const rootProp = ['paddingX', 'paddingY']
+const backgroundStyleProps = ['backgroundColor', 'backgroundImage', 'backgroundRepeat', 'backgroundPosition', 'backgroundSize']
 
 //  样式类
 class Style {
   //   设置背景样式
   static setBackgroundStyle(el, themeConfig) {
+    // 缓存容器元素原本的样式
+    if (!Style.cacheStyle) {
+      Style.cacheStyle = {}
+      let style = window.getComputedStyle(el)
+      backgroundStyleProps.forEach((prop) => {
+        Style.cacheStyle[prop] = style[prop]
+      })
+    }
+    // 设置新样式
     let { backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition, backgroundSize } = themeConfig
     el.style.backgroundColor = backgroundColor
     if (backgroundImage) {
@@ -15,6 +25,14 @@ class Style {
     } else {
       el.style.backgroundImage = 'none'
     }
+  }
+
+  // 移除背景样式
+  static removeBackgroundStyle(el) {
+    backgroundStyleProps.forEach((prop) => {
+      el.style[prop] = Style.cacheStyle[prop]
+    })
+    Style.cacheStyle = null
   }
 
   //  构造函数
@@ -191,5 +209,7 @@ class Style {
     fillNode.fill({ color: fill })
   }
 }
+
+Style.cacheStyle = null
 
 export default Style

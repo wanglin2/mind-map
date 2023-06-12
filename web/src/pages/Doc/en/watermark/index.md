@@ -10,7 +10,8 @@ Please refer to the [Instantiation Options](/mind-map/#/doc/zh/constructor) of t
 
 ```js
 import MindMap from 'simple-mind-map'
-import Watermark from 'simple-mind-map/src/Watermark.js'
+import Watermark from 'simple-mind-map/src/plugins/Watermark.js'
+// import Watermark from 'simple-mind-map/src/Watermark.js' Use this path for versions below v0.6.0
 
 MindMap.usePlugin(Watermark)
 ```

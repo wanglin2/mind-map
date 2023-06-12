@@ -7,7 +7,8 @@
 <p><code>KeyboardNavigation</code> plugin provides keyboard navigation function, that is, when you press the direction key, it will automatically find the next node and activate it.</p>
 <h2>Register</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
-<span class="hljs-keyword">import</span> KeyboardNavigation <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/KeyboardNavigation.js&#x27;</span>
+<span class="hljs-keyword">import</span> KeyboardNavigation <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/KeyboardNavigation.js&#x27;</span>
+<span class="hljs-comment">// import KeyboardNavigation from &#x27;simple-mind-map/src/KeyboardNavigation.js&#x27; Use this path for versions below v0.6.0</span>
 
 MindMap.usePlugin(KeyboardNavigation)
 </code></pre>

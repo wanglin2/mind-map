@@ -1,5 +1,5 @@
-import { bfsWalk } from './utils'
-import { CONSTANTS } from './utils/constant'
+import { bfsWalk } from '../utils'
+import { CONSTANTS } from '../constants/constant'
 
 //  键盘导航类
 class KeyboardNavigation {
