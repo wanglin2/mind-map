@@ -52030,14 +52030,30 @@ class RichText_RichText {
     this.styleEl = null;
     this.cacheEditingText = '';
     this.lostStyle = false;
+    this.isCompositing = false;
     this.initOpt();
     this.extendQuill();
     this.appendCss();
+    this.bindEvent();
 
     // 处理数据，转成富文本格式
     if (this.mindMap.opt.data) {
       this.mindMap.opt.data = this.handleSetData(this.mindMap.opt.data);
     }
+  }
+
+  // 绑定事件
+  bindEvent() {
+    this.onCompositionStart = this.onCompositionStart.bind(this);
+    this.onCompositionEnd = this.onCompositionEnd.bind(this);
+    window.addEventListener('compositionstart', this.onCompositionStart);
+    window.addEventListener('compositionend', this.onCompositionEnd);
+  }
+
+  // 解绑事件
+  unbindEvent() {
+    window.removeEventListener('compositionstart', this.onCompositionStart);
+    window.removeEventListener('compositionend', this.onCompositionEnd);
   }
 
   // 插入样式
@@ -52262,12 +52278,29 @@ class RichText_RichText {
         this.lostStyle = true;
         // 需要删除节点的样式数据
         this.syncFormatToNodeConfig(null, true);
-      } else if (this.lostStyle) {
+      } else if (this.lostStyle && !this.isCompositing) {
         // 如果处于样式丢失状态，那么需要进行格式化加回样式
         this.setTextStyleIfNotRichText(this.node);
         this.lostStyle = false;
       }
     });
+  }
+
+  // 正则输入中文
+  onCompositionStart() {
+    if (!this.showTextEdit) {
+      return;
+    }
+    this.isCompositing = true;
+  }
+
+  // 中文输入结束
+  onCompositionEnd() {
+    if (!this.showTextEdit) {
+      return;
+    }
+    this.isCompositing = false;
+    this.setTextStyleIfNotRichText(this.node);
   }
 
   // 选中全部
@@ -52316,6 +52349,7 @@ class RichText_RichText {
     if (!this.node) return;
     if (clear) {
       // 清除文本样式
+      ;
       ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'textDecoration', 'color'].forEach(prop => {
         delete this.node.nodeData.data[prop];
       });
