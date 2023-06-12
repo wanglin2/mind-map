@@ -42,14 +42,30 @@ class RichText {
     this.styleEl = null
     this.cacheEditingText = ''
     this.lostStyle = false
+    this.isCompositing = false
     this.initOpt()
     this.extendQuill()
     this.appendCss()
+    this.bindEvent()
 
     // 处理数据，转成富文本格式
     if (this.mindMap.opt.data) {
       this.mindMap.opt.data = this.handleSetData(this.mindMap.opt.data)
     }
+  }
+
+  // 绑定事件
+  bindEvent() {
+    this.onCompositionStart = this.onCompositionStart.bind(this)
+    this.onCompositionEnd = this.onCompositionEnd.bind(this)
+    window.addEventListener('compositionstart', this.onCompositionStart)
+    window.addEventListener('compositionend', this.onCompositionEnd)
+  }
+
+  // 解绑事件
+  unbindEvent() {
+    window.removeEventListener('compositionstart', this.onCompositionStart)
+    window.removeEventListener('compositionend', this.onCompositionEnd)
   }
 
   // 插入样式
@@ -161,13 +177,15 @@ class RichText {
     this.textEditNode.style.marginLeft = `-${paddingX * scaleX}px`
     this.textEditNode.style.marginTop = `-${paddingY * scaleY}px`
     this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex
-    this.textEditNode.style.backgroundColor = bgColor === 'transparent' ? '#fff' : bgColor
+    this.textEditNode.style.backgroundColor =
+      bgColor === 'transparent' ? '#fff' : bgColor
     this.textEditNode.style.minWidth = originWidth + paddingX * 2 + 'px'
     this.textEditNode.style.minHeight = originHeight + 'px'
     this.textEditNode.style.left = rect.left + 'px'
     this.textEditNode.style.top = rect.top + 'px'
     this.textEditNode.style.display = 'block'
-    this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + paddingX * 2 + 'px'
+    this.textEditNode.style.maxWidth =
+      this.mindMap.opt.textAutoWrapWidth + paddingX * 2 + 'px'
     this.textEditNode.style.transform = `scale(${scaleX}, ${scaleY})`
     this.textEditNode.style.transformOrigin = 'left top'
     if (!node.nodeData.data.richText) {
@@ -176,7 +194,8 @@ class RichText {
       let html = `<p>${text}</p>`
       this.textEditNode.innerHTML = this.cacheEditingText || html
     } else {
-      this.textEditNode.innerHTML = this.cacheEditingText || node.nodeData.data.text
+      this.textEditNode.innerHTML =
+        this.cacheEditingText || node.nodeData.data.text
     }
     this.initQuillEditor()
     document.querySelector('.ql-editor').style.minHeight = originHeight + 'px'
@@ -216,7 +235,8 @@ class RichText {
       return
     }
     let html = this.getEditText()
-    let list = nodes && nodes.length > 0 ? nodes : this.mindMap.renderer.activeNodeList
+    let list =
+      nodes && nodes.length > 0 ? nodes : this.mindMap.renderer.activeNodeList
     list.forEach(node => {
       this.mindMap.execCommand('SET_NODE_TEXT', node, html, true)
       if (node.isGeneralization) {
@@ -225,11 +245,7 @@ class RichText {
       }
       this.mindMap.render()
     })
-    this.mindMap.emit(
-      'hide_text_edit',
-      this.textEditNode,
-      list
-    )
+    this.mindMap.emit('hide_text_edit', this.textEditNode, list)
     this.textEditNode.style.display = 'none'
     this.showTextEdit = false
     this.mindMap.emit('rich_text_selection_change', false)
@@ -291,12 +307,29 @@ class RichText {
         this.lostStyle = true
         // 需要删除节点的样式数据
         this.syncFormatToNodeConfig(null, true)
-      } else if (this.lostStyle) {
+      } else if (this.lostStyle && !this.isCompositing) {
         // 如果处于样式丢失状态，那么需要进行格式化加回样式
         this.setTextStyleIfNotRichText(this.node)
         this.lostStyle = false
       }
     })
+  }
+
+  // 正则输入中文
+  onCompositionStart() {
+    if (!this.showTextEdit) {
+      return
+    }
+    this.isCompositing = true
+  }
+
+  // 中文输入结束
+  onCompositionEnd() {
+    if (!this.showTextEdit) {
+      return
+    }
+    this.isCompositing = false
+    this.setTextStyleIfNotRichText(this.node)
   }
 
   // 选中全部
@@ -316,7 +349,9 @@ class RichText {
     this.syncFormatToNodeConfig(config, clear)
     let rangeLost = !this.range
     let range = rangeLost ? this.lastRange : this.range
-    clear ? this.quill.removeFormat(range.index, range.length) : this.quill.formatText(range.index, range.length, config)
+    clear
+      ? this.quill.removeFormat(range.index, range.length)
+      : this.quill.formatText(range.index, range.length, config)
     if (rangeLost) {
       this.quill.setSelection(this.lastRange.index, this.lastRange.length)
     }
@@ -345,7 +380,14 @@ class RichText {
     if (!this.node) return
     if (clear) {
       // 清除文本样式
-      ['fontFamily', 'fontSize', 'fontWeight', 'fontStyle', 'textDecoration', 'color'].forEach((prop) => {
+      ;[
+        'fontFamily',
+        'fontSize',
+        'fontWeight',
+        'fontStyle',
+        'textDecoration',
+        'color'
+      ].forEach(prop => {
         delete this.node.nodeData.data[prop]
       })
     } else {
@@ -428,11 +470,11 @@ class RichText {
     el.appendChild(node)
     this.mindMap.el.appendChild(el)
     // 遍历所有节点，将它们的margin和padding设为0
-    let walk = (root) => {
+    let walk = root => {
       root.style.margin = 0
       root.style.padding = 0
       if (root.hasChildNodes()) {
-        Array.from(root.children).forEach((item) => {
+        Array.from(root.children).forEach(item => {
           walk(item)
         })
       }
@@ -470,13 +512,13 @@ class RichText {
 
   // 处理导入数据
   handleSetData(data) {
-    let walk = (root) => {
+    let walk = root => {
       if (!root.data.richText) {
         root.data.richText = true
         root.data.resetRichText = true
       }
       if (root.children && root.children.length > 0) {
-        Array.from(root.children).forEach((item) => {
+        Array.from(root.children).forEach(item => {
           walk(item)
         })
       }
