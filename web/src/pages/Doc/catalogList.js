@@ -30,6 +30,7 @@ let APIList = [
   'miniMap',
   'watermark',
   'associativeLine',
+  'touchEvent',
   'xmind',
   'markdown',
   'utils'
