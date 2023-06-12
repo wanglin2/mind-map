@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.0-fix.1
+
+1.Fixed the issue of destroying mind maps without setting a background style and reporting errors.
+
 ## 0.6.0
 
 Breaking change: Adjusted the directory structure of the simple-mind-map source code, Main impact: 1. The introduction path of the plugin needs to be modified. The constant file path needs to be modified.
