@@ -37162,6 +37162,8 @@ var Style = class {
   }
   // 移除背景样式
   static removeBackgroundStyle(el2) {
+    if (!Style.cacheStyle)
+      return;
     backgroundStyleProps.forEach((prop) => {
       el2.style[prop] = Style.cacheStyle[prop];
     });
