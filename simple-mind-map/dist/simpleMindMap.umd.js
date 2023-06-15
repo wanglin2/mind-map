@@ -33375,6 +33375,7 @@ class Style_Style {
 
   // 移除背景样式
   static removeBackgroundStyle(el) {
+    if (!Style_Style.cacheStyle) return;
     backgroundStyleProps.forEach(prop => {
       el.style[prop] = Style_Style.cacheStyle[prop];
     });
