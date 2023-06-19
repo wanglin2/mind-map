@@ -32950,7 +32950,7 @@ class View_View {
       this.firstDrag = true;
     });
     // 放大缩小视图
-    this.mindMap.event.on('mousewheel', (e, dir) => {
+    this.mindMap.event.on('mousewheel', (e, dir, event, isTouchPad) => {
       if (this.mindMap.opt.customHandleMousewheel && typeof this.mindMap.opt.customHandleMousewheel === 'function') {
         return this.mindMap.opt.customHandleMousewheel(e);
       }
@@ -32968,22 +32968,26 @@ class View_View {
             break;
         }
       } else {
+        let step = this.mindMap.opt.mousewheelMoveStep;
+        if (isTouchPad) {
+          step = 5;
+        }
         switch (dir) {
           // 上移
           case CONSTANTS.DIR.DOWN:
-            this.translateY(-this.mindMap.opt.mousewheelMoveStep);
+            this.translateY(-step);
             break;
           // 下移
           case CONSTANTS.DIR.UP:
-            this.translateY(this.mindMap.opt.mousewheelMoveStep);
+            this.translateY(step);
             break;
           // 右移
           case CONSTANTS.DIR.LEFT:
-            this.translateX(-this.mindMap.opt.mousewheelMoveStep);
+            this.translateX(-step);
             break;
           // 左移
           case CONSTANTS.DIR.RIGHT:
-            this.translateX(this.mindMap.opt.mousewheelMoveStep);
+            this.translateX(step);
             break;
         }
       }
@@ -33296,7 +33300,13 @@ class Event_Event extends eventemitter3_default.a {
       if ((e.wheelDeltaX || e.detail) > 0) dir = CONSTANTS.DIR.LEFT;
       if ((e.wheelDeltaX || e.detail) < 0) dir = CONSTANTS.DIR.RIGHT;
     }
-    this.emit('mousewheel', e, dir, this);
+    // 判断是否是触控板
+    let isTouchPad = false;
+    // mac、windows
+    if (e.wheelDeltaY === e.deltaY * -3 || Math.abs(e.wheelDeltaY) <= 10) {
+      isTouchPad = true;
+    }
+    this.emit('mousewheel', e, dir, this, isTouchPad);
   }
 
   //  鼠标右键菜单事件

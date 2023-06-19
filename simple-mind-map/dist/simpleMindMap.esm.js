@@ -36801,7 +36801,7 @@ var View = class {
     this.mindMap.event.on("mouseup", () => {
       this.firstDrag = true;
     });
-    this.mindMap.event.on("mousewheel", (e2, dir) => {
+    this.mindMap.event.on("mousewheel", (e2, dir, event, isTouchPad) => {
       if (this.mindMap.opt.customHandleMousewheel && typeof this.mindMap.opt.customHandleMousewheel === "function") {
         return this.mindMap.opt.customHandleMousewheel(e2);
       }
@@ -36817,18 +36817,22 @@ var View = class {
             break;
         }
       } else {
+        let step = this.mindMap.opt.mousewheelMoveStep;
+        if (isTouchPad) {
+          step = 5;
+        }
         switch (dir) {
           case CONSTANTS.DIR.DOWN:
-            this.translateY(-this.mindMap.opt.mousewheelMoveStep);
+            this.translateY(-step);
             break;
           case CONSTANTS.DIR.UP:
-            this.translateY(this.mindMap.opt.mousewheelMoveStep);
+            this.translateY(step);
             break;
           case CONSTANTS.DIR.LEFT:
-            this.translateX(-this.mindMap.opt.mousewheelMoveStep);
+            this.translateX(-step);
             break;
           case CONSTANTS.DIR.RIGHT:
-            this.translateX(this.mindMap.opt.mousewheelMoveStep);
+            this.translateX(step);
             break;
         }
       }
@@ -37111,7 +37115,11 @@ var Event2 = class extends import_eventemitter3.default {
       if ((e2.wheelDeltaX || e2.detail) < 0)
         dir = CONSTANTS.DIR.RIGHT;
     }
-    this.emit("mousewheel", e2, dir, this);
+    let isTouchPad = false;
+    if (e2.wheelDeltaY === e2.deltaY * -3 || Math.abs(e2.wheelDeltaY) <= 10) {
+      isTouchPad = true;
+    }
+    this.emit("mousewheel", e2, dir, this, isTouchPad);
   }
   //  鼠标右键菜单事件
   onContextmenu(e2) {
