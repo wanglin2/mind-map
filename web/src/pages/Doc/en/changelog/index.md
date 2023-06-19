@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.6.1
+
+Fix: 1.Fixed the issue of high movement sensitivity when using the touchpad when changing mouse scrolling to moving the canvas behavior.
+
 ## 0.6.0-fix.1
 
-1.Fixed the issue of destroying mind maps without setting a background style and reporting errors.
+Fix: 1.Fixed the issue of destroying mind maps without setting a background style and reporting errors.
 
 ## 0.6.0
 
