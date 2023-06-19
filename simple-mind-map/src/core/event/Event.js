@@ -140,7 +140,13 @@ class Event extends EventEmitter {
       if ((e.wheelDeltaX || e.detail) > 0) dir = CONSTANTS.DIR.LEFT
       if ((e.wheelDeltaX || e.detail) < 0) dir = CONSTANTS.DIR.RIGHT
     }
-    this.emit('mousewheel', e, dir, this)
+    // 判断是否是触控板
+    let isTouchPad = false
+    // mac、windows
+    if (e.wheelDeltaY === e.deltaY * -3 || Math.abs(e.wheelDeltaY) <= 10) {
+      isTouchPad = true
+    }
+    this.emit('mousewheel', e, dir, this, isTouchPad)
   }
 
   //  鼠标右键菜单事件
