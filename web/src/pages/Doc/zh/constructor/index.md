@@ -210,7 +210,7 @@ mindMap.setTheme('主题名称')
 | mousemove                        | el元素的鼠标移动事件                       | e（事件对象）、this（Event事件类实例）                       |
 | drag                             | 如果是按住左键拖动的话会触发拖动事件       | e（事件对象）、this（Event事件类实例）                       |
 | mouseup                          | el元素的鼠标松开事件                       | e（事件对象）、this（Event事件类实例）                       |
-| mousewheel                       | 鼠标滚动事件                               | e（事件对象）、dir（向上up还是向下down滚动）、this（Event事件类实例） |
+| mousewheel                       | 鼠标滚动事件                               | e（事件对象）、dir（向上up还是向下down滚动）、this（Event事件类实例）、isTouchPad（v0.6.1+，是否是触控板触发的事件） |
 | contextmenu                      | svg画布的鼠标右键菜单事件                  | e（事件对象）                                                |
 | node_click                       | 节点的单击事件                             | this（节点实例）、e（事件对象）                              |
 | node_mousedown                   | 节点的鼠标按下事件                         | this（节点实例）、e（事件对象）                              |

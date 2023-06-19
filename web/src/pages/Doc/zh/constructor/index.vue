@@ -547,7 +547,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>mousewheel</td>
 <td>鼠标滚动事件</td>
-<td>e（事件对象）、dir（向上up还是向下down滚动）、this（Event事件类实例）</td>
+<td>e（事件对象）、dir（向上up还是向下down滚动）、this（Event事件类实例）、isTouchPad（v0.6.1+，是否是触控板触发的事件）</td>
 </tr>
 <tr>
 <td>contextmenu</td>

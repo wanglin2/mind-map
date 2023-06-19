@@ -59,7 +59,7 @@ class View {
       this.firstDrag = true
     })
     // 放大缩小视图
-    this.mindMap.event.on('mousewheel', (e, dir) => {
+    this.mindMap.event.on('mousewheel', (e, dir, event, isTouchPad) => {
       if (
         this.mindMap.opt.customHandleMousewheel &&
         typeof this.mindMap.opt.customHandleMousewheel === 'function'
@@ -82,22 +82,26 @@ class View {
             break
         }
       } else {
+        let step = this.mindMap.opt.mousewheelMoveStep
+        if (isTouchPad) {
+          step = 5
+        }
         switch (dir) {
           // 上移
           case CONSTANTS.DIR.DOWN:
-            this.translateY(-this.mindMap.opt.mousewheelMoveStep)
+            this.translateY(-step)
             break
           // 下移
           case CONSTANTS.DIR.UP:
-            this.translateY(this.mindMap.opt.mousewheelMoveStep)
+            this.translateY(step)
             break
           // 右移
           case CONSTANTS.DIR.LEFT:
-            this.translateX(-this.mindMap.opt.mousewheelMoveStep)
+            this.translateX(-step)
             break
           // 左移
           case CONSTANTS.DIR.RIGHT:
-            this.translateX(this.mindMap.opt.mousewheelMoveStep)
+            this.translateX(step)
             break
         }
       }
