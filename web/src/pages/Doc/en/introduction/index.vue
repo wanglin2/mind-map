@@ -86,6 +86,16 @@ full screen, support mini map</li>
 </blockquote>
 <img src="../../../../assets/img/alipay.jpg" style="width: 300px" />
 <img src="../../../../assets/img/wechat.jpg" style="width: 300px" />
+<div  style="display: flex;">
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/Think.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>Think</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/志斌.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>志斌</p>
+    </div>
+</div>
   </div>
 </template>
 
