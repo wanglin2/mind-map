@@ -260,3 +260,23 @@ export const layoutValueList = [
   CONSTANTS.LAYOUT.TIMELINE2,
   CONSTANTS.LAYOUT.FISHBONE
 ]
+
+// 节点数据中非样式的字段
+export const nodeDataNoStylePropList = [
+  'text',
+  'image',
+  'imageTitle',
+  'imageSize',
+  'icon',
+  'tag',
+  'hyperlink',
+  'hyperlinkTitle',
+  'note',
+  'expand',
+  'isActive',
+  'generalization',
+  'richText',
+  'resetRichText',
+  'uid',
+  'activeStyle'
+]
