@@ -31,6 +31,11 @@
 </blockquote>
 <p>Whether the node is currently being dragged</p>
 <h2>Methods</h2>
+<h3>hasCustomStyle()</h3>
+<blockquote>
+<p>v0.6.2+</p>
+</blockquote>
+<p>Gets whether a custom style has been set.</p>
 <h3>getSize()</h3>
 <p>Update the width and height of the node by recreating the node content, and return a Boolean value indicating whether the width and height have changed</p>
 <h3>render()</h3>
