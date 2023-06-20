@@ -32888,6 +32888,9 @@ const layoutList = [{
   value: CONSTANTS.LAYOUT.FISHBONE
 }];
 const layoutValueList = [CONSTANTS.LAYOUT.LOGICAL_STRUCTURE, CONSTANTS.LAYOUT.MIND_MAP, CONSTANTS.LAYOUT.CATALOG_ORGANIZATION, CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE, CONSTANTS.LAYOUT.TIMELINE, CONSTANTS.LAYOUT.TIMELINE2, CONSTANTS.LAYOUT.FISHBONE];
+
+// 节点数据中非样式的字段
+const nodeDataNoStylePropList = ['text', 'image', 'imageTitle', 'imageSize', 'icon', 'tag', 'hyperlink', 'hyperlinkTitle', 'note', 'expand', 'isActive', 'generalization', 'richText', 'resetRichText', 'uid', 'activeStyle'];
 // CONCATENATED MODULE: ../simple-mind-map/src/core/view/View.js
 
 
@@ -33565,6 +33568,17 @@ class Style_Style {
     fillNode.fill({
       color: fill
     });
+  }
+
+  // 是否设置了自定义的样式
+  hasCustomStyle() {
+    let res = false;
+    Object.keys(this.ctx.nodeData.data).forEach(item => {
+      if (!nodeDataNoStylePropList.includes(item)) {
+        res = true;
+      }
+    });
+    return res;
   }
 }
 Style_Style.cacheStyle = null;
@@ -41813,8 +41827,18 @@ function createIconNode() {
 function createRichTextNode() {
   let g = new G();
   // 重新设置富文本节点内容
-  if (this.nodeData.data.resetRichText || [CONSTANTS.CHANGE_THEME].includes(this.mindMap.renderer.renderSource)) {
+  let recoverText = false;
+  if (this.nodeData.data.resetRichText) {
     delete this.nodeData.data.resetRichText;
+    recoverText = true;
+  }
+  if ([CONSTANTS.CHANGE_THEME].includes(this.mindMap.renderer.renderSource)) {
+    // 如果自定义过样式则不允许覆盖
+    if (!this.hasCustomStyle()) {
+      recoverText = true;
+    }
+  }
+  if (recoverText) {
     let text = getTextFromHtml(this.nodeData.data.text);
     this.nodeData.data.text = `<p><span style="${this.style.createStyleText()}">${text}</span></p>`;
   }
@@ -42796,6 +42820,11 @@ class Node_Node {
   //  获取数据
   getData(key) {
     return key ? this.nodeData.data[key] || '' : this.nodeData.data;
+  }
+
+  // 是否存在自定义样式
+  hasCustomStyle() {
+    return this.style.hasCustomStyle();
   }
 }
 /* harmony default export */ var node_Node = (Node_Node);
@@ -52198,7 +52227,7 @@ class RichText_RichText {
       underline: node.style.merge('textDecoration') === 'underline',
       strike: node.style.merge('textDecoration') === 'line-through'
     };
-    this.formatAllText(style);
+    this.pureFormatAllText(style);
   }
 
   // 获取当前正在编辑的内容
@@ -52298,7 +52327,7 @@ class RichText_RichText {
 
   // 中文输入结束
   onCompositionEnd() {
-    if (!this.showTextEdit) {
+    if (!this.showTextEdit || !this.lostStyle) {
       return;
     }
     this.isCompositing = false;
@@ -52343,6 +52372,11 @@ class RichText_RichText {
   // 格式化所有文本
   formatAllText(config = {}) {
     this.syncFormatToNodeConfig(config);
+    this.pureFormatAllText(config);
+  }
+
+  // 纯粹的格式化所有文本
+  pureFormatAllText(config = {}) {
     this.quill.formatText(0, this.quill.getLength(), config);
   }
 
