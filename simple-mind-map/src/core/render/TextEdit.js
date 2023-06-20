@@ -1,4 +1,4 @@
-import { getStrWithBrFromHtml, checkNodeOuter } from './utils'
+import { getStrWithBrFromHtml, checkNodeOuter } from '../../utils'
 
 //  节点文字编辑类
 export default class TextEdit {
@@ -65,7 +65,16 @@ export default class TextEdit {
   }
 
   //  显示文本编辑框
-  show(node) {
+  async show(node) {
+    if (typeof this.mindMap.opt.beforeTextEdit === 'function') {
+      let isShow = false
+      try {
+        isShow = await this.mindMap.opt.beforeTextEdit(node)
+      } catch (error) {
+        isShow = false
+      }
+      if (!isShow) return
+    }
     this.currentNode = node
     let { offsetLeft, offsetTop } = checkNodeOuter(this.mindMap, node)
     this.mindMap.view.translateXY(offsetLeft, offsetTop)

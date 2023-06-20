@@ -10,7 +10,7 @@ let langList = [
     path: 'en'
   }
 ]
-let StartList = ['introduction', 'start', 'deploy', 'translate', 'changelog']
+let StartList = ['introduction', 'start', 'deploy', 'client', 'translate', 'changelog']
 let CourseList = new Array(19).fill(0).map((_, index) => {
   return 'course' + (index + 1)
 })
@@ -30,6 +30,7 @@ let APIList = [
   'miniMap',
   'watermark',
   'associativeLine',
+  'touchEvent',
   'xmind',
   'markdown',
   'utils'

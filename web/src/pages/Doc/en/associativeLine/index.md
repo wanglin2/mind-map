@@ -12,7 +12,8 @@ This plugin is used to support the addition of associative lines.
 
 ```js
 import MindMap from 'simple-mind-map'
-import AssociativeLine from 'simple-mind-map/src/AssociativeLine.js'
+import AssociativeLine from 'simple-mind-map/src/plugins/AssociativeLine.js'
+// import AssociativeLine from 'simple-mind-map/src/AssociativeLine.js' Use this path for versions below v0.6.0
 
 MindMap.usePlugin(AssociativeLine)
 ```

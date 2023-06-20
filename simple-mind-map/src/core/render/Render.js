@@ -1,15 +1,15 @@
 import merge from 'deepmerge'
-import LogicalStructure from './layouts/LogicalStructure'
-import MindMap from './layouts/MindMap'
-import CatalogOrganization from './layouts/CatalogOrganization'
-import OrganizationStructure from './layouts/OrganizationStructure'
-import Timeline from './layouts/Timeline'
-import Fishbone from './layouts/Fishbone'
+import LogicalStructure from '../../layouts/LogicalStructure'
+import MindMap from '../../layouts/MindMap'
+import CatalogOrganization from '../../layouts/CatalogOrganization'
+import OrganizationStructure from '../../layouts/OrganizationStructure'
+import Timeline from '../../layouts/Timeline'
+import Fishbone from '../../layouts/Fishbone'
 import TextEdit from './TextEdit'
-import { copyNodeTree, simpleDeepClone, walk } from './utils'
-import { shapeList } from './Shape'
-import { lineStyleProps } from './themes/default'
-import { CONSTANTS } from './utils/constant'
+import { copyNodeTree, simpleDeepClone, walk } from '../../utils'
+import { shapeList } from './node/Shape'
+import { lineStyleProps } from '../../themes/default'
+import { CONSTANTS } from '../../constants/constant'
 
 // 布局列表
 const layouts = {
@@ -79,9 +79,15 @@ class Render {
   //   绑定事件
   bindEvent() {
     // 点击事件
-    this.mindMap.on('draw_click', () => {
+    this.mindMap.on('draw_click', (e) => {
       // 清除激活状态
-      if (this.activeNodeList.length > 0) {
+      let isTrueClick = true
+      let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
+      if (useLeftKeySelectionRightKeyDrag) {
+        let mousedownPos = this.mindMap.event.mousedownPos
+        isTrueClick = Math.abs(e.clientX - mousedownPos.x) <= 5 && Math.abs(e.clientY - mousedownPos.y) <= 5
+      }
+      if (isTrueClick && this.activeNodeList.length > 0) {
         this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
       }
     })

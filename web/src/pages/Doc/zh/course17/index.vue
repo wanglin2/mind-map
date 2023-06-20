@@ -38,6 +38,9 @@ mindMap.export(<span class="hljs-string">&#x27;json&#x27;</span>, <span class="h
 <pre class="hljs"><code>mindMap.export(<span class="hljs-string">&#x27;png&#x27;</span>, <span class="hljs-literal">true</span>, <span class="hljs-string">&#x27;文件名&#x27;</span>)
 mindMap.export(<span class="hljs-string">&#x27;pdf&#x27;</span>, <span class="hljs-literal">true</span>, <span class="hljs-string">&#x27;文件名&#x27;</span>)
 </code></pre>
+<blockquote>
+<p>从v0.6.0+，要导出pdf，需要额外注册一个ExportPDF插件。</p>
+</blockquote>
 <h3>导出为svg</h3>
 <p>导出为<code>svg</code>可以传递的参数如下：</p>
 <pre class="hljs"><code>mindMap.export(type, isDownload, fileName, plusCssText = <span class="hljs-string">&#x27;&#x27;</span>)

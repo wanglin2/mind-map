@@ -351,6 +351,11 @@ export const shortcutKeyList = [
         icon: 'icondingwei',
         name: '恢复默认',
         value: 'Ctrl + Enter'
+      },
+      {
+        icon: 'iconquanping1',
+        name: '适应画布',
+        value: 'Ctrl + i'
       }
     ]
   }

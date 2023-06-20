@@ -1,4 +1,4 @@
-import { nextTick } from './utils'
+import { nextTick } from '.'
 
 //  批量执行
 class BatchExecution {

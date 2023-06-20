@@ -1,12 +1,12 @@
 import Style from './Style'
 import Shape from './Shape'
-import { asyncRun } from './utils'
+import { asyncRun } from '../../../utils'
 import { G, Rect } from '@svgdotjs/svg.js'
-import nodeGeneralizationMethods from './utils/nodeGeneralization'
-import nodeExpandBtnMethods from './utils/nodeExpandBtn'
-import nodeCommandWrapsMethods from './utils/nodeCommandWraps'
-import nodeCreateContentsMethods from './utils/nodeCreateContents'
-import { CONSTANTS } from './utils/constant'
+import nodeGeneralizationMethods from './nodeGeneralization'
+import nodeExpandBtnMethods from './nodeExpandBtn'
+import nodeCommandWrapsMethods from './nodeCommandWraps'
+import nodeCreateContentsMethods from './nodeCreateContents'
+import { CONSTANTS } from '../../../constants/constant'
 
 //  节点类
 class Node {
@@ -343,12 +343,12 @@ class Node {
   bindGroupEvent() {
     // 单击事件，选中节点
     this.group.on('click', e => {
+      this.mindMap.emit('node_click', this, e)
       if (this.isMultipleChoice) {
         e.stopPropagation()
         this.isMultipleChoice = false
         return
       }
-      this.mindMap.emit('node_click', this, e)
       this.active(e)
     })
     this.group.on('mousedown', e => {
@@ -359,7 +359,7 @@ class Node {
         e.stopPropagation()
       }
       // 多选和取消多选
-      if (e.ctrlKey) {
+      if (e.ctrlKey && this.mindMap.opt.enableCtrlKeyNodeSelection) {
         this.isMultipleChoice = true
         let isActive = this.nodeData.data.isActive
         if (!isActive)
@@ -797,6 +797,11 @@ class Node {
   //  获取数据
   getData(key) {
     return key ? this.nodeData.data[key] || '' : this.nodeData.data
+  }
+
+  // 是否存在自定义样式
+  hasCustomStyle() {
+    return this.style.hasCustomStyle()
   }
 }
 

@@ -56,6 +56,12 @@ Whether the node is currently being dragged
 
 ## Methods
 
+### hasCustomStyle()
+
+> v0.6.2+
+
+Gets whether a custom style has been set.
+
 ### getSize()
 
 Update the width and height of the node by recreating the node content, and return a Boolean value indicating whether the width and height have changed

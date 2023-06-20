@@ -6,7 +6,8 @@ The `Export` plugin provides the export function.
 
 ```js
 import MindMap from 'simple-mind-map'
-import Export from 'simple-mind-map/src/Export.js'
+import Export from 'simple-mind-map/src/plugins/Export.js'
+// import Export from 'simple-mind-map/src/Export.js' Use this path for versions below v0.6.0
 
 MindMap.usePlugin(Export)
 ```
@@ -72,6 +73,13 @@ Exports as `svg`.
 `name`：File name
 
 Export as `pdf`. Unlike other export methods, this method does not return data and directly triggers the download.
+
+> After v0.6.0, an additional ExportPDF plugin needs to be registered
+
+```js
+import ExportPDF from 'simple-mind-map/src/plugins/ExportPDF.js'
+MindMap.usePlugin(ExportPDF)
+```
 
 ### json(name, withConfig)
 

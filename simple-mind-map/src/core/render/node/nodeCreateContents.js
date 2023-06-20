@@ -1,7 +1,7 @@
-import { measureText, resizeImgSize, getTextFromHtml } from '../utils'
+import { measureText, resizeImgSize, getTextFromHtml } from '../../../utils'
 import { Image, SVG, A, G, Rect, Text, ForeignObject } from '@svgdotjs/svg.js'
-import iconsSvg from '../svg/icons'
-import { CONSTANTS } from './constant'
+import iconsSvg from '../../../svg/icons'
+import { CONSTANTS } from '../../../constants/constant'
 
 //  创建图片节点
 function createImgNode() {
@@ -64,8 +64,18 @@ function createIconNode() {
 function createRichTextNode() {
   let g = new G()
   // 重新设置富文本节点内容
-  if (this.nodeData.data.resetRichText || [CONSTANTS.CHANGE_THEME].includes(this.mindMap.renderer.renderSource)) {
+  let recoverText = false
+  if (this.nodeData.data.resetRichText) {
     delete this.nodeData.data.resetRichText
+    recoverText = true
+  }
+  if ([CONSTANTS.CHANGE_THEME].includes(this.mindMap.renderer.renderSource)) {
+    // 如果自定义过样式则不允许覆盖
+    if (!this.hasCustomStyle()) {
+      recoverText = true
+    }
+  }
+  if (recoverText) {
     let text = getTextFromHtml(this.nodeData.data.text)
     this.nodeData.data.text = `<p><span style="${this.style.createStyleText()}">${text}</span></p>`
   }

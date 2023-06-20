@@ -16,6 +16,9 @@
       </el-select>
     </div>
     <div class="item">
+      <MouseAction :mindMap="mindMap"></MouseAction>
+    </div>
+    <div class="item">
       <el-checkbox v-model="openMiniMap" @change="toggleMiniMap">{{
         $t('navigatorToolbar.openMiniMap')
       }}</el-checkbox>
@@ -44,6 +47,7 @@
 <script>
 import Scale from './Scale'
 import Fullscreen from './Fullscreen'
+import MouseAction from './MouseAction.vue'
 import { langList } from '@/config'
 import i18n from '@/i18n'
 import { storeLang, getLang } from '@/api'
@@ -57,7 +61,8 @@ export default {
   name: 'NavigatorToolbar',
   components: {
     Scale,
-    Fullscreen
+    Fullscreen,
+    MouseAction
   },
   props: {
     mindMap: {

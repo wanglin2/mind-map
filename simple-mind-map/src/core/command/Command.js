@@ -1,4 +1,4 @@
-import { copyRenderTree, simpleDeepClone, nextTick } from './utils'
+import { copyRenderTree, simpleDeepClone, nextTick } from '../../utils'
 
 //  命令类
 class Command {

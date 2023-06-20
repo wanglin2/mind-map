@@ -1,4 +1,4 @@
-import { keyMap } from './utils/keyMap'
+import { keyMap } from './keyMap'
 //  快捷按键、命令处理类
 export default class KeyCommand {
   //  构造函数

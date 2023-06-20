@@ -1,5 +1,5 @@
 import { Text } from '@svgdotjs/svg.js'
-import { getStrWithBrFromHtml } from './index'
+import { getStrWithBrFromHtml } from '../../utils/index'
 
 // 创建文字节点
 function createText(data) {

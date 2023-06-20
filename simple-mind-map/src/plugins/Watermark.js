@@ -1,5 +1,5 @@
 import { Text, G } from '@svgdotjs/svg.js'
-import { degToRad, camelCaseToHyphen } from './utils'
+import { degToRad, camelCaseToHyphen } from '../utils'
 import merge from 'deepmerge'
 
 // 水印类

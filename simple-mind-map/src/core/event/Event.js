@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3'
-import { CONSTANTS } from './utils/constant'
+import { CONSTANTS } from '../../constants/constant'
 
 //  事件类
 class Event extends EventEmitter {
@@ -9,6 +9,7 @@ class Event extends EventEmitter {
     this.opt = opt
     this.mindMap = opt.mindMap
     this.isLeftMousedown = false
+    this.isRightMousedown = false
     this.mousedownPos = {
       x: 0,
       y: 0
@@ -89,6 +90,8 @@ class Event extends EventEmitter {
     // 鼠标左键
     if (e.which === 1) {
       this.isLeftMousedown = true
+    } else if (e.which === 3) {
+      this.isRightMousedown = true
     }
     this.mousedownPos.x = e.clientX
     this.mousedownPos.y = e.clientY
@@ -97,12 +100,17 @@ class Event extends EventEmitter {
 
   //  鼠标移动事件
   onMousemove(e) {
+    let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
     this.mousemovePos.x = e.clientX
     this.mousemovePos.y = e.clientY
     this.mousemoveOffset.x = e.clientX - this.mousedownPos.x
     this.mousemoveOffset.y = e.clientY - this.mousedownPos.y
     this.emit('mousemove', e, this)
-    if (this.isLeftMousedown) {
+    if (
+      useLeftKeySelectionRightKeyDrag
+        ? this.isRightMousedown
+        : this.isLeftMousedown
+    ) {
       e.preventDefault()
       this.emit('drag', e, this)
     }
@@ -111,6 +119,7 @@ class Event extends EventEmitter {
   //  鼠标松开事件
   onMouseup(e) {
     this.isLeftMousedown = false
+    this.isRightMousedown = false
     this.emit('mouseup', e, this)
   }
 
@@ -131,7 +140,13 @@ class Event extends EventEmitter {
       if ((e.wheelDeltaX || e.detail) > 0) dir = CONSTANTS.DIR.LEFT
       if ((e.wheelDeltaX || e.detail) < 0) dir = CONSTANTS.DIR.RIGHT
     }
-    this.emit('mousewheel', e, dir, this)
+    // 判断是否是触控板
+    let isTouchPad = false
+    // mac、windows
+    if (e.wheelDeltaY === e.deltaY * -3 || Math.abs(e.wheelDeltaY) <= 10) {
+      isTouchPad = true
+    }
+    this.emit('mousewheel', e, dir, this, isTouchPad)
   }
 
   //  鼠标右键菜单事件

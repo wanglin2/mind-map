@@ -25,11 +25,11 @@ const mindMap = new MindMap({
 | 字段名称                         | 类型    | 默认值           | 描述                                                         | 是否必填 |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ | -------- |
 | el                               | Element |                  | 容器元素，必须为DOM元素                                      | 是       |
-| data                             | Object  | {}               | 思维导图数据，可参考：[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js) |          |
+| data                             | Object  | {}               | 思维导图数据，可参考：[exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js) |          |
 | layout                           | String  | logicalStructure | 布局类型，可选列表：logicalStructure（逻辑结构图）、mindMap（思维导图）、catalogOrganization（目录组织图）、organizationStructure（组织结构图）、timeline（v0.5.4+，时间轴）、timeline2（v0.5.4+，上下交替型时间轴）、fishbone（v0.5.4+，鱼骨图） |          |
 | fishboneDeg（v0.5.4+）                      | Number |  45          |  设置鱼骨结构图的斜线角度               |        |
 | theme                            | String  | default          | 主题，可选列表：default（默认）、classic（脑图经典）、minions（小黄人）、pinkGrape（粉红葡萄）、mint（薄荷）、gold（金色vip）、vitalityOrange（活力橙）、greenLeaf（绿叶）、dark2（暗色2）、skyGreen（天清绿）、classic2（脑图经典2）、classic3（脑图经典3）、classic4（脑图经典4，v0.2.0+）、classicGreen（经典绿）、classicBlue（经典蓝）、blueSky（天空蓝）、brainImpairedPink（脑残粉）、dark（暗色）、earthYellow（泥土黄）、freshGreen（清新绿）、freshRed（清新红）、romanticPurple（浪漫紫）、simpleBlack（v0.5.4+简约黑）、courseGreen（v0.5.4+课程绿）、coffee（v0.5.4+咖啡）、redSpirit（v0.5.4+红色精神）、blackHumour（v0.5.4+黑色幽默）、lateNightOffice（v0.5.4+深夜办公室）、blackGold（v0.5.4+黑金）、avocado（v.5.10-fix.2+牛油果）、autumn（v.5.10-fix.2+秋天）、orangeJuice（v.5.10-fix.2+橙汁） |          |
-| themeConfig                      | Object  | {}               | 主题配置，会和所选择的主题进行合并，可用字段可参考：[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js) |          |
+| themeConfig                      | Object  | {}               | 主题配置，会和所选择的主题进行合并，可用字段可参考：[default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js) |          |
 | scaleRatio                       | Number  | 0.1              | 放大缩小的增量比例                                           |          |
 | maxTag                           | Number  | 5                | 节点里最多显示的标签数量，多余的会被丢弃                     |          |
 | exportPadding                    | Number  | 20               | 导出图片时的内边距                                           |          |
@@ -62,6 +62,11 @@ const mindMap = new MindMap({
 | alwaysShowExpandBtn（v0.5.8+）     | Boolean  | false | 是否一直显示节点的展开收起按钮，默认为鼠标移上去和激活时才显示  |          |
 | iconList（v0.5.8+）     | Array  | [] | 扩展节点可插入的图标，数组的每一项为一个对象，对象详细结构请参考下方【图标配置】表格  |          |
 | maxNodeCacheCount（v0.5.10+）     |  Number | 1000 | 节点最大缓存数量。为了优化性能，内部会维护一个节点缓存池，用来复用节点，通过该属性可以指定池的最大缓存数量  |          |
+| defaultAssociativeLineText（v0.5.11+）     |  String | 关联 |  关联线默认文字 |          |
+| fitPadding（v0.6.0+）     |  Number | 50 |  思维导图适应画布大小时的内边距，单位：px |          |
+| enableCtrlKeyNodeSelection（v0.6.0+）     | Boolean  | true | 是否开启按住ctrl键多选节点的功能  |          |
+| useLeftKeySelectionRightKeyDrag（v0.6.0+）     | Boolean  | false | 设置为左键多选节点，右键拖动画布  |          |
+| beforeTextEdit（v0.6.0+）     |  Function/null | null | 节点即将进入编辑前的回调方法，如果该方法返回true以外的值，那么将取消编辑，函数可以返回一个值，或一个Promise，回调参数为节点实例  |          |
 
 ### 水印配置
 
@@ -138,6 +143,12 @@ mindMap.setTheme('主题名称')
 
 ## 实例方法
 
+### destroy()
+
+> v0.6.0+
+
+销毁思维导图。会移除注册的插件、移除监听的事件、删除画布的所有节点。
+
 ### getSvgData({ paddingX = 0, paddingY = 0 })
 
 > v0.3.0+
@@ -199,7 +210,7 @@ mindMap.setTheme('主题名称')
 | mousemove                        | el元素的鼠标移动事件                       | e（事件对象）、this（Event事件类实例）                       |
 | drag                             | 如果是按住左键拖动的话会触发拖动事件       | e（事件对象）、this（Event事件类实例）                       |
 | mouseup                          | el元素的鼠标松开事件                       | e（事件对象）、this（Event事件类实例）                       |
-| mousewheel                       | 鼠标滚动事件                               | e（事件对象）、dir（向上up还是向下down滚动）、this（Event事件类实例） |
+| mousewheel                       | 鼠标滚动事件                               | e（事件对象）、dir（向上up还是向下down滚动）、this（Event事件类实例）、isTouchPad（v0.6.1+，是否是触控板触发的事件） |
 | contextmenu                      | svg画布的鼠标右键菜单事件                  | e（事件对象）                                                |
 | node_click                       | 节点的单击事件                             | this（节点实例）、e（事件对象）                              |
 | node_mousedown                   | 节点的鼠标按下事件                         | this（节点实例）、e（事件对象）                              |
@@ -293,8 +304,8 @@ mindMap.updateConfig({
 | SELECT_ALL                          | 全选                                                         |                                                              |
 | BACK                                | 回退指定的步数                                               | step（要回退的步数，默认为1）                                |
 | FORWARD                             | 前进指定的步数                                               | step（要前进的步数，默认为1）                                |
-| INSERT_NODE                         | 插入同级节点，操作节点为当前激活的节点或指定节点，如果有多个激活节点，只会对第一个有效 | openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为`true`）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)）                                                             |
-| INSERT_CHILD_NODE                   | 插入子节点，操作节点为当前激活的节点或指定节点                         |   openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为`true`）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)）                                                           |
+| INSERT_NODE                         | 插入同级节点，操作节点为当前激活的节点或指定节点，如果有多个激活节点，只会对第一个有效 | openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为`true`）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考[exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)）                                                             |
+| INSERT_CHILD_NODE                   | 插入子节点，操作节点为当前激活的节点或指定节点                         |   openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为`true`）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考[exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)）                                                           |
 | UP_NODE                             | 上移节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的第一个节点使用无效 |                                                              |
 | DOWN_NODE                           | 操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的最后一个节点使用无效 |                                                              |
 | REMOVE_NODE                         | 删除节点，操作节点为当前激活的节点或指定节点                         |   appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）                                                           |
@@ -310,10 +321,10 @@ mindMap.updateConfig({
 | SET_NODE_DATA                       | 更新节点数据，即更新节点数据对象里`data`对象的数据           | node（要设置的节点）、data（对象，要更新的数据，如`{expand: true}`） |
 | SET_NODE_TEXT                       | 设置节点文本                                                 | node（要设置的节点）、text（要设置的文本字符串，换行可以使用`\n`）、richText（v0.4.0+，如果要设置的是富文本字符，需要设为`true`） |
 | SET_NODE_IMAGE                      | 设置节点图片                                                 | node（要设置的节点）、imgData（对象，图片信息，结构为：`{url, title, width, height}`，图片的宽高必须要传） |
-| SET_NODE_ICON                       | 设置节点图标                                                 | node（要设置的节点）、icons（数组，预定义的图片名称组成的数组，可用图标可在[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js)文件里的`nodeIconList`列表里获取到，图标名称为`type_name`，如`['priority_1']`） |
+| SET_NODE_ICON                       | 设置节点图标                                                 | node（要设置的节点）、icons（数组，预定义的图片名称组成的数组，可用图标可在[icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js)文件里的`nodeIconList`列表里获取到，图标名称为`type_name`，如`['priority_1']`） |
 | SET_NODE_HYPERLINK                  | 设置节点超链接                                               | node（要设置的节点）、link（超链接地址）、title（超链接名称，可选） |
 | SET_NODE_NOTE                       | 设置节点备注                                                 | node（要设置的节点）、note（备注文字）                       |
-| SET_NODE_TAG                        | 设置节点标签                                                 | node（要设置的节点）、tag（字符串数组，内置颜色信息可在[https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/utils/constant.js)里获取到） |
+| SET_NODE_TAG                        | 设置节点标签                                                 | node（要设置的节点）、tag（字符串数组，内置颜色信息可在[constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/constants/constant.js)里获取到） |
 | INSERT_AFTER（v0.1.5+）             | 将节点移动到另一个节点的后面                                 | node（要移动的节点）、 exist（目标节点）                     |
 | INSERT_BEFORE（v0.1.5+）            | 将节点移动到另一个节点的前面                                 | node（要移动的节点）、 exist（目标节点）                     |
 | MOVE_NODE_TO（v0.1.5+）             | 移动一个节点作为另一个节点的子节点                           | node（要移动的节点）、 toNode（目标节点）                    |
@@ -321,7 +332,7 @@ mindMap.updateConfig({
 | REMOVE_GENERALIZATION（v0.2.0+）    | 删除节点概要                                                 |                                                              |
 | SET_NODE_CUSTOM_POSITION（v0.2.0+） | 设置节点自定义位置                                           | node（要设置的节点）、 left（自定义的x坐标，默认为undefined）、 top（自定义的y坐标，默认为undefined） |
 | RESET_LAYOUT（v0.2.0+）             | 一键整理布局                                                 |                                                              |
-| SET_NODE_SHAPE（v0.2.4+）           | 设置节点形状                                                 | node（要设置的节点）、shape（形状，全部形状：https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/Shape.js） |
+| SET_NODE_SHAPE（v0.2.4+）           | 设置节点形状                                                 | node（要设置的节点）、shape（形状，全部形状：[Shape.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/render/node/Shape.js)） |
 
 ### setData(data)
 

@@ -6,7 +6,8 @@
 
 ```js
 import MindMap from 'simple-mind-map'
-import Export from 'simple-mind-map/src/Export.js'
+import Export from 'simple-mind-map/src/plugins/Export.js'
+// import Export from 'simple-mind-map/src/Export.js' v0.6.0以下版本使用该路径
 
 MindMap.usePlugin(Export)
 ```
@@ -72,6 +73,13 @@ svg(
 `name`：文件名称
 
 导出为`pdf`，和其他导出方法不一样，这个方法不会返回数据，会直接触发下载。
+
+> v0.6.0版本以后，需要额外注册一个ExportPDF插件
+
+```js
+import ExportPDF from 'simple-mind-map/src/plugins/ExportPDF.js'
+MindMap.usePlugin(ExportPDF)
+```
 
 ### json(name, withConfig)
 

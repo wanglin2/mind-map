@@ -3,6 +3,8 @@
 `simple-mind-map`是一个简单&强大的Web思维导图库，不依赖任何特定框架。可以帮助你快速开发思维导图产品。
 
 > 如果你只是想使用思维导图，你也完全可以把本项目的demo作为一个普通的在线思维导图工具使用。点击右上角的【在线示例】开始使用吧。
+>
+> 另外也提供了客户端可供下载，支持`Windows`、`Mac`及`Linux`，[点此了解更多](/mind-map/#/doc/zh/client)。
 
 ## 特性
 
@@ -51,6 +53,8 @@
 [当你按下方向键，电视是如何寻找下一个焦点的](https://juejin.cn/post/7199666255883927612)
 
 [如何在canvas中模拟css的背景图片样式](https://juejin.cn/post/7204854015463538744)
+
+[我的第一个Electron应用](https://juejin.cn/post/7233012756314701884)
 
 ## 特别说明
 
@@ -116,5 +120,9 @@
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/Think.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>Think</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/志斌.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>志斌</p>
     </div>
 </div>

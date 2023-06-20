@@ -15,7 +15,9 @@ const store = new Vuex.Store({
       // 本地配置
       isZenMode: false, // 是否是禅模式
       // 是否开启节点富文本
-      openNodeRichText: true
+      openNodeRichText: true,
+      // 鼠标行为
+      useLeftKeySelectionRightKeyDrag: false
     },
     activeSidebar: '', // 当前显示的侧边栏
     localEditList: []// 客户端中正在编辑的思维导图列表
