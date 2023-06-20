@@ -798,6 +798,11 @@ class Node {
   getData(key) {
     return key ? this.nodeData.data[key] || '' : this.nodeData.data
   }
+
+  // 是否存在自定义样式
+  hasCustomStyle() {
+    return this.style.hasCustomStyle()
+  }
 }
 
 export default Node
