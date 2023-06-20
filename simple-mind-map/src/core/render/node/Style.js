@@ -1,4 +1,4 @@
-import { tagColorList } from '../../../constants/constant'
+import { tagColorList, nodeDataNoStylePropList } from '../../../constants/constant'
 const rootProp = ['paddingX', 'paddingY']
 const backgroundStyleProps = ['backgroundColor', 'backgroundImage', 'backgroundRepeat', 'backgroundPosition', 'backgroundSize']
 
@@ -208,6 +208,17 @@ class Style {
     node.fill({ color: color })
     node2.fill({ color: color })
     fillNode.fill({ color: fill })
+  }
+
+  // 是否设置了自定义的样式
+  hasCustomStyle() {
+    let res = false
+    Object.keys(this.ctx.nodeData.data).forEach((item) => {
+      if (!nodeDataNoStylePropList.includes(item)) {
+        res = true
+      }
+    })
+    return res
   }
 }
 

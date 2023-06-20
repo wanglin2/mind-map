@@ -31,6 +31,11 @@
 </blockquote>
 <p>节点是否正在拖拽中</p>
 <h2>方法</h2>
+<h3>hasCustomStyle()</h3>
+<blockquote>
+<p>v0.6.2+</p>
+</blockquote>
+<p>获取是否设置了自定义样式。</p>
 <h3>getSize()</h3>
 <p>通过重新创建节点内容更新节点的宽高，返回一个布尔值，代表是否宽高发生了变化</p>
 <h3>render()</h3>

@@ -219,7 +219,7 @@ class RichText {
       underline: node.style.merge('textDecoration') === 'underline',
       strike: node.style.merge('textDecoration') === 'line-through'
     }
-    this.formatAllText(style)
+    this.pureFormatAllText(style)
   }
 
   // 获取当前正在编辑的内容
@@ -325,7 +325,7 @@ class RichText {
 
   // 中文输入结束
   onCompositionEnd() {
-    if (!this.showTextEdit) {
+    if (!this.showTextEdit || !this.lostStyle) {
       return
     }
     this.isCompositing = false
@@ -372,6 +372,11 @@ class RichText {
   // 格式化所有文本
   formatAllText(config = {}) {
     this.syncFormatToNodeConfig(config)
+    this.pureFormatAllText(config)
+  }
+
+  // 纯粹的格式化所有文本
+  pureFormatAllText(config = {}) {
     this.quill.formatText(0, this.quill.getLength(), config)
   }
 
