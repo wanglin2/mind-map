@@ -96,6 +96,8 @@ MIT
 
 > 厚椰乳一盒 + 纯牛奶半盒 + 冰块 + 咖啡液 = 生椰拿铁 yyds
 
+> 转账请备注哦~你的头像和名称会出现在[文档页面](https://wanglin2.github.io/mind-map/#/doc/zh/introduction/%E8%AF%B7%E4%BD%9C%E8%80%85%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1)
+
 <p>
   <img src="./web/src/assets/img/alipay.jpg" style="width: 300px" />
   <img src="./web/src/assets/img/wechat.jpg" style="width: 300px" />
