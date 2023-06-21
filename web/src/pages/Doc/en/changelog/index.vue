@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.6.3</h2>
+<p>Fix: 1.Fix the issue where the summary node will respond to inserting node shortcuts.</p>
+<p>New: 1.Support custom node content.</p>
 <h2>0.6.2</h2>
 <p>Fix: 1.Fixed the problem that the new node does not change with the theme in rich Text mode.</p>
 <h2>0.6.1</h2>
