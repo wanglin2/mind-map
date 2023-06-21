@@ -357,3 +357,14 @@ export const readBlob = (blob) => {
     reader.readAsDataURL(blob)
   })
 }
+
+// 将dom节点转换成html字符串
+let nodeToHTMLWrapEl = null
+export const nodeToHTML = (node) => {
+  if (!nodeToHTMLWrapEl) {
+    nodeToHTMLWrapEl = document.createElement('div')
+  }
+  nodeToHTMLWrapEl.innerHTML = ''
+  nodeToHTMLWrapEl.appendChild(node)
+  return nodeToHTMLWrapEl.innerHTML
+}
