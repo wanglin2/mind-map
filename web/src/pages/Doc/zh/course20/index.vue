@@ -28,7 +28,7 @@
             &lt;h1&gt;我是自定义节点&lt;/h1&gt;
             <span class="hljs-subst">${ node.nodeData.text }</span>
         `</span>
-        <span class="hljs-keyword">return</span> dev
+        <span class="hljs-keyword">return</span> div
     }
 }
 </code></pre>
@@ -78,6 +78,20 @@
 }
 </code></pre>
 <h2>示例3：渲染Vue3组件</h2>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { createApp } <span class="hljs-keyword">from</span> <span class="hljs-string">&quot;vue&quot;</span>
+<span class="hljs-keyword">import</span> CustomNodeContent <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;./CustomNodeContent.vue&#x27;</span>
+
+{
+    <span class="hljs-attr">customCreateNodeContent</span>: <span class="hljs-function">(<span class="hljs-params">node</span>) =&gt;</span> {
+        <span class="hljs-keyword">let</span> el = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>)
+        <span class="hljs-keyword">const</span> app = createApp(CustomNodeContent, {<span class="hljs-comment">// props</span>
+            <span class="hljs-attr">html</span>: node.nodeData.data.text
+        })
+        app.mount(el)
+        <span class="hljs-keyword">return</span> el
+    }
+}
+</code></pre>
 
   </div>
 </template>
