@@ -44221,6 +44221,28 @@ function createNoteNode() {
     height: iconSize
   };
 }
+var warpEl = null;
+function measureCustomNodeContentSize(content3) {
+  if (!warpEl) {
+    warpEl = document.createElement("div");
+    warpEl.style.cssText = `
+      position: fixed;
+      left: -99999px;
+      top: -99999px;
+    `;
+    this.mindMap.el.appendChild(warpEl);
+  }
+  warpEl.innerHTML = "";
+  warpEl.appendChild(content3);
+  let rect = warpEl.getBoundingClientRect();
+  return {
+    width: rect.width,
+    height: rect.height
+  };
+}
+function isUseCustomNodeContent() {
+  return !!this._customNodeContent;
+}
 var nodeCreateContents_default = {
   createImgNode,
   getImgShowSize,
@@ -44229,7 +44251,9 @@ var nodeCreateContents_default = {
   createTextNode,
   createHyperlinkNode,
   createTagNode,
-  createNoteNode
+  createNoteNode,
+  measureCustomNodeContentSize,
+  isUseCustomNodeContent
 };
 
 // ../simple-mind-map/src/core/render/node/Node.js
@@ -44262,6 +44286,7 @@ var Node2 = class {
     this.children = opt.children || [];
     this.group = null;
     this.shapeNode = null;
+    this._customNodeContent = null;
     this._imgData = null;
     this._iconData = null;
     this._textData = null;
@@ -44338,6 +44363,12 @@ var Node2 = class {
   }
   //  创建节点的各个内容对象数据
   createNodeData() {
+    let { isUseCustomNodeContent: isUseCustomNodeContent2, customCreateNodeContent } = this.mindMap.opt;
+    if (isUseCustomNodeContent2 && customCreateNodeContent) {
+      this._customNodeContent = customCreateNodeContent(this);
+    }
+    if (this._customNodeContent)
+      return;
     this._imgData = this.createImgNode();
     this._iconData = this.createIconNode();
     this._textData = this.createTextNode();
@@ -44357,6 +44388,13 @@ var Node2 = class {
   }
   //  计算节点尺寸信息
   getNodeRect() {
+    if (this.isUseCustomNodeContent()) {
+      let rect = this.measureCustomNodeContentSize(this._customNodeContent);
+      return {
+        width: rect.width,
+        height: rect.height
+      };
+    }
     let imgContentWidth = 0;
     let imgContentHeight = 0;
     let textContentWidth = 0;
@@ -44426,6 +44464,14 @@ var Node2 = class {
     }
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass("generalization_" + this.generalizationBelongNode.uid);
+    }
+    if (this.isUseCustomNodeContent()) {
+      let foreignObject = new ForeignObject();
+      foreignObject.width(width2);
+      foreignObject.height(height2);
+      foreignObject.add(SVG(this._customNodeContent));
+      this.group.add(foreignObject);
+      return;
     }
     let imgHeight = 0;
     if (this._imgData) {
@@ -47011,10 +47057,14 @@ var TextEdit = class {
   }
   //  显示文本编辑框
   async show(node3) {
-    if (typeof this.mindMap.opt.beforeTextEdit === "function") {
+    if (node3.isUseCustomNodeContent()) {
+      return;
+    }
+    let { beforeTextEdit } = this.mindMap.opt;
+    if (typeof beforeTextEdit === "function") {
       let isShow = false;
       try {
-        isShow = await this.mindMap.opt.beforeTextEdit(node3);
+        isShow = await beforeTextEdit(node3);
       } catch (error) {
         isShow = false;
       }
@@ -47623,6 +47673,9 @@ var Render = class {
     let { defaultInsertSecondLevelNodeText, defaultInsertBelowSecondLevelNodeText } = this.mindMap.opt;
     let list2 = appointNodes.length > 0 ? appointNodes : this.activeNodeList;
     let first = list2[0];
+    if (first.isGeneralization) {
+      return;
+    }
     if (first.isRoot) {
       this.insertChildNode(openEdit, appointNodes, appointData);
     } else {
@@ -47652,6 +47705,9 @@ var Render = class {
     let { defaultInsertSecondLevelNodeText, defaultInsertBelowSecondLevelNodeText } = this.mindMap.opt;
     let list2 = appointNodes.length > 0 ? appointNodes : this.activeNodeList;
     list2.forEach((node3) => {
+      if (node3.isGeneralization) {
+        return;
+      }
       if (!node3.nodeData.children) {
         node3.nodeData.children = [];
       }
@@ -50220,7 +50276,7 @@ var BatchExecution = class {
 };
 var BatchExecution_default = BatchExecution;
 
-// ../simple-mind-map/index.js
+// ../simple-mind-map/src/constants/defaultOptions.js
 var defaultOpt = {
   // 是否只读
   readonly: false,
@@ -50252,11 +50308,11 @@ var defaultOpt = {
   // 自定义节点备注内容显示
   customNoteContentShow: null,
   /*
-        {
-            show(){},
-            hide(){}
-        }
-    */
+          {
+              show(){},
+              hide(){}
+          }
+      */
   // 是否开启节点自由拖拽
   enableFreeDrag: false,
   // 水印配置
@@ -50341,8 +50397,14 @@ var defaultOpt = {
   // 设置为左键多选节点，右键拖动画布
   useLeftKeySelectionRightKeyDrag: false,
   // 节点即将进入编辑前的回调方法，如果该方法返回true以外的值，那么将取消编辑，函数可以返回一个值，或一个Promise，回调参数为节点实例
-  beforeTextEdit: null
+  beforeTextEdit: null,
+  // 是否开启自定义节点内容
+  isUseCustomNodeContent: false,
+  // 自定义返回节点内容的方法
+  customCreateNodeContent: null
 };
+
+// ../simple-mind-map/index.js
 var MindMap2 = class {
   //  构造函数
   constructor(opt = {}) {

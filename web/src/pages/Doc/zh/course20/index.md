@@ -37,7 +37,7 @@ node.nodeData.data
             <h1>我是自定义节点</h1>
             ${ node.nodeData.text }
         `
-        return dev
+        return div
     }
 }
 ```
@@ -95,4 +95,20 @@ import i18n from './i18n'
 ```
 
 ## 示例3：渲染Vue3组件
+
+```js
+import { createApp } from "vue"
+import CustomNodeContent from './CustomNodeContent.vue'
+
+{
+    customCreateNodeContent: (node) => {
+        let el = document.createElement('div')
+        const app = createApp(CustomNodeContent, {// props
+            html: node.nodeData.data.text
+        })
+        app.mount(el)
+        return el
+    }
+}
+```
 
