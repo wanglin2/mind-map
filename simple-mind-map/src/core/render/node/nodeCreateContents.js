@@ -280,6 +280,32 @@ function createNoteNode() {
   }
 }
 
+// 测量自定义节点内容元素的宽高
+let warpEl = null
+function measureCustomNodeContentSize (content) {
+  if (!warpEl) {
+    warpEl = document.createElement('div')
+    warpEl.style.cssText = `
+      position: fixed;
+      left: -99999px;
+      top: -99999px;
+    `
+    this.mindMap.el.appendChild(warpEl)
+  }
+  warpEl.innerHTML = ''
+  warpEl.appendChild(content)
+  let rect = warpEl.getBoundingClientRect()
+  return {
+    width: rect.width,
+    height: rect.height
+  }
+}
+
+// 是否使用的是自定义节点内容
+function isUseCustomNodeContent()  {
+  return !!this._customNodeContent
+}
+
 export default {
     createImgNode,
     getImgShowSize,
@@ -288,5 +314,7 @@ export default {
     createTextNode,
     createHyperlinkNode,
     createTagNode,
-    createNoteNode
+    createNoteNode,
+    measureCustomNodeContentSize,
+    isUseCustomNodeContent
 }
