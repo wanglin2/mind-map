@@ -66,10 +66,15 @@ export default class TextEdit {
 
   //  显示文本编辑框
   async show(node) {
-    if (typeof this.mindMap.opt.beforeTextEdit === 'function') {
+    // 使用了自定义节点内容那么不响应编辑事件
+    if (node.isUseCustomNodeContent()) {
+      return
+    }
+    let { beforeTextEdit } = this.mindMap.opt
+    if (typeof beforeTextEdit === 'function') {
       let isShow = false
       try {
-        isShow = await this.mindMap.opt.beforeTextEdit(node)
+        isShow = await beforeTextEdit(node)
       } catch (error) {
         isShow = false
       }

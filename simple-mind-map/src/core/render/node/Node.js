@@ -1,7 +1,7 @@
 import Style from './Style'
 import Shape from './Shape'
-import { asyncRun } from '../../../utils'
-import { G, Rect } from '@svgdotjs/svg.js'
+import { asyncRun, nodeToHTML } from '../../../utils'
+import { G, Rect, ForeignObject, SVG } from '@svgdotjs/svg.js'
 import nodeGeneralizationMethods from './nodeGeneralization'
 import nodeExpandBtnMethods from './nodeExpandBtn'
 import nodeCommandWrapsMethods from './nodeCommandWraps'
@@ -59,6 +59,7 @@ class Node {
     this.group = null
     this.shapeNode = null // 节点形状节点
     // 节点内容对象
+    this._customNodeContent = null
     this._imgData = null
     this._iconData = null
     this._textData = null
@@ -154,6 +155,13 @@ class Node {
 
   //  创建节点的各个内容对象数据
   createNodeData() {
+    // 自定义节点内容
+    let { isUseCustomNodeContent, customCreateNodeContent } = this.mindMap.opt
+    if (isUseCustomNodeContent && customCreateNodeContent) {
+      this._customNodeContent = customCreateNodeContent(this)
+    }
+    // 如果没有返回内容，那么还是使用内置的节点内容
+    if (this._customNodeContent) return
     this._imgData = this.createImgNode()
     this._iconData = this.createIconNode()
     this._textData = this.createTextNode()
@@ -176,6 +184,14 @@ class Node {
 
   //  计算节点尺寸信息
   getNodeRect() {
+    // 自定义节点内容
+    if (this.isUseCustomNodeContent()) {
+      let rect = this.measureCustomNodeContentSize(this._customNodeContent)
+      return {
+        width: rect.width,
+        height: rect.height
+      }
+    }
     // 宽高
     let imgContentWidth = 0
     let imgContentHeight = 0
@@ -265,6 +281,15 @@ class Node {
     // 概要节点添加一个带所属节点id的类名
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass('generalization_' + this.generalizationBelongNode.uid)
+    }
+    // 如果存在自定义节点内容，那么使用自定义节点内容
+    if (this.isUseCustomNodeContent()) {
+      let foreignObject = new ForeignObject()
+      foreignObject.width(width)
+      foreignObject.height(height)
+      foreignObject.add(SVG(this._customNodeContent))
+      this.group.add(foreignObject)
+      return 
     }
     // 图片节点
     let imgHeight = 0
