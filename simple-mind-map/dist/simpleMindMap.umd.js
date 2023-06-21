@@ -41241,6 +41241,17 @@ const readBlob = blob => {
     reader.readAsDataURL(blob);
   });
 };
+
+// 将dom节点转换成html字符串
+let nodeToHTMLWrapEl = null;
+const nodeToHTML = node => {
+  if (!nodeToHTMLWrapEl) {
+    nodeToHTMLWrapEl = document.createElement('div');
+  }
+  nodeToHTMLWrapEl.innerHTML = '';
+  nodeToHTMLWrapEl.appendChild(node);
+  return nodeToHTMLWrapEl.innerHTML;
+};
 // CONCATENATED MODULE: ../simple-mind-map/src/core/render/node/nodeGeneralization.js
 
 
@@ -42061,6 +42072,32 @@ function createNoteNode() {
     height: iconSize
   };
 }
+
+// 测量自定义节点内容元素的宽高
+let warpEl = null;
+function measureCustomNodeContentSize(content) {
+  if (!warpEl) {
+    warpEl = document.createElement('div');
+    warpEl.style.cssText = `
+      position: fixed;
+      left: -99999px;
+      top: -99999px;
+    `;
+    this.mindMap.el.appendChild(warpEl);
+  }
+  warpEl.innerHTML = '';
+  warpEl.appendChild(content);
+  let rect = warpEl.getBoundingClientRect();
+  return {
+    width: rect.width,
+    height: rect.height
+  };
+}
+
+// 是否使用的是自定义节点内容
+function isUseCustomNodeContent() {
+  return !!this._customNodeContent;
+}
 /* harmony default export */ var nodeCreateContents = ({
   createImgNode,
   getImgShowSize,
@@ -42069,7 +42106,9 @@ function createNoteNode() {
   createTextNode,
   createHyperlinkNode,
   createTagNode,
-  createNoteNode
+  createNoteNode,
+  measureCustomNodeContentSize,
+  isUseCustomNodeContent
 });
 // CONCATENATED MODULE: ../simple-mind-map/src/core/render/node/Node.js
 
@@ -42134,6 +42173,7 @@ class Node_Node {
     this.group = null;
     this.shapeNode = null; // 节点形状节点
     // 节点内容对象
+    this._customNodeContent = null;
     this._imgData = null;
     this._iconData = null;
     this._textData = null;
@@ -42226,6 +42266,16 @@ class Node_Node {
 
   //  创建节点的各个内容对象数据
   createNodeData() {
+    // 自定义节点内容
+    let {
+      isUseCustomNodeContent,
+      customCreateNodeContent
+    } = this.mindMap.opt;
+    if (isUseCustomNodeContent && customCreateNodeContent) {
+      this._customNodeContent = customCreateNodeContent(this);
+    }
+    // 如果没有返回内容，那么还是使用内置的节点内容
+    if (this._customNodeContent) return;
     this._imgData = this.createImgNode();
     this._iconData = this.createIconNode();
     this._textData = this.createTextNode();
@@ -42251,6 +42301,14 @@ class Node_Node {
 
   //  计算节点尺寸信息
   getNodeRect() {
+    // 自定义节点内容
+    if (this.isUseCustomNodeContent()) {
+      let rect = this.measureCustomNodeContentSize(this._customNodeContent);
+      return {
+        width: rect.width,
+        height: rect.height
+      };
+    }
     // 宽高
     let imgContentWidth = 0;
     let imgContentHeight = 0;
@@ -42345,6 +42403,15 @@ class Node_Node {
     // 概要节点添加一个带所属节点id的类名
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass('generalization_' + this.generalizationBelongNode.uid);
+    }
+    // 如果存在自定义节点内容，那么使用自定义节点内容
+    if (this.isUseCustomNodeContent()) {
+      let foreignObject = new ForeignObject();
+      foreignObject.width(width);
+      foreignObject.height(height);
+      foreignObject.add(SVG(this._customNodeContent));
+      this.group.add(foreignObject);
+      return;
     }
     // 图片节点
     let imgHeight = 0;
@@ -45255,10 +45322,17 @@ class TextEdit_TextEdit {
 
   //  显示文本编辑框
   async show(node) {
-    if (typeof this.mindMap.opt.beforeTextEdit === 'function') {
+    // 使用了自定义节点内容那么不响应编辑事件
+    if (node.isUseCustomNodeContent()) {
+      return;
+    }
+    let {
+      beforeTextEdit
+    } = this.mindMap.opt;
+    if (typeof beforeTextEdit === 'function') {
       let isShow = false;
       try {
-        isShow = await this.mindMap.opt.beforeTextEdit(node);
+        isShow = await beforeTextEdit(node);
       } catch (error) {
         isShow = false;
       }
@@ -45961,6 +46035,9 @@ class Render_Render {
     } = this.mindMap.opt;
     let list = appointNodes.length > 0 ? appointNodes : this.activeNodeList;
     let first = list[0];
+    if (first.isGeneralization) {
+      return;
+    }
     if (first.isRoot) {
       this.insertChildNode(openEdit, appointNodes, appointData);
     } else {
@@ -45994,6 +46071,9 @@ class Render_Render {
     } = this.mindMap.opt;
     let list = appointNodes.length > 0 ? appointNodes : this.activeNodeList;
     list.forEach(node => {
+      if (node.isGeneralization) {
+        return;
+      }
       if (!node.nodeData.children) {
         node.nodeData.children = [];
       }
@@ -48719,21 +48799,7 @@ class BatchExecution_BatchExecution {
   }
 }
 /* harmony default export */ var utils_BatchExecution = (BatchExecution_BatchExecution);
-// CONCATENATED MODULE: ../simple-mind-map/index.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// CONCATENATED MODULE: ../simple-mind-map/src/constants/defaultOptions.js
 
 
 // 默认选项配置
@@ -48768,11 +48834,11 @@ const defaultOpt = {
   // 自定义节点备注内容显示
   customNoteContentShow: null,
   /*
-        {
-            show(){},
-            hide(){}
-        }
-    */
+          {
+              show(){},
+              hide(){}
+          }
+      */
   // 是否开启节点自由拖拽
   enableFreeDrag: false,
   // 水印配置
@@ -48857,8 +48923,29 @@ const defaultOpt = {
   // 设置为左键多选节点，右键拖动画布
   useLeftKeySelectionRightKeyDrag: false,
   // 节点即将进入编辑前的回调方法，如果该方法返回true以外的值，那么将取消编辑，函数可以返回一个值，或一个Promise，回调参数为节点实例
-  beforeTextEdit: null
+  beforeTextEdit: null,
+  // 是否开启自定义节点内容
+  isUseCustomNodeContent: false,
+  // 自定义返回节点内容的方法
+  customCreateNodeContent: null
 };
+// CONCATENATED MODULE: ../simple-mind-map/index.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //  思维导图
 class simple_mind_map_MindMap {

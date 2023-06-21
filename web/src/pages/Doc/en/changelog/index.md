@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.3
+
+Fix: 1.Fix the issue where the summary node will respond to inserting node shortcuts.
+
+New: 1.Support custom node content.
+
 ## 0.6.2
 
 Fix: 1.Fixed the problem that the new node does not change with the theme in rich Text mode.

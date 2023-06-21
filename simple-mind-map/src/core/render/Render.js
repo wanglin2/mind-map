@@ -425,6 +425,9 @@ class Render {
     let { defaultInsertSecondLevelNodeText, defaultInsertBelowSecondLevelNodeText } = this.mindMap.opt
     let list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     let first = list[0]
+    if (first.isGeneralization) {
+      return
+    }
     if (first.isRoot) {
       this.insertChildNode(openEdit, appointNodes, appointData)
     } else {
@@ -455,6 +458,9 @@ class Render {
     let { defaultInsertSecondLevelNodeText, defaultInsertBelowSecondLevelNodeText } = this.mindMap.opt
     let list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     list.forEach(node => {
+      if (node.isGeneralization) {
+        return
+      }
       if (!node.nodeData.children) {
         node.nodeData.children = []
       }

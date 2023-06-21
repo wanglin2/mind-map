@@ -26,6 +26,7 @@ export default [
       { path: 'course17', title: '导入和导出' },
       { path: 'course18', title: '如何持久化数据' },
       { path: 'course19', title: '插入和扩展节点图标' },
+      { path: 'course20', title: '如何自定义节点内容' },
       { path: 'doExport', title: 'Export 插件' },
       { path: 'drag', title: 'Drag插件' },
       { path: 'introduction', title: '简介' },
