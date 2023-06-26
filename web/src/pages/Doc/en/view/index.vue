@@ -25,9 +25,25 @@ through <code>mindMap.view</code></p>
 <p>Translate the <code>y</code> direction to a specific position</p>
 <h3>reset()</h3>
 <p>Revert to the default transformation</p>
-<h3>narrow()</h3>
+<h3>narrow(cx, cy)</h3>
+<ul>
+<li>
+<p><code>cx</code>:（v0.6.4+）Zoom to the specified position on the canvas, default to the center point of the canvas</p>
+</li>
+<li>
+<p><code>cy</code>:（v0.6.4+）Zoom to the specified position on the canvas, default to the center point of the canvas</p>
+</li>
+</ul>
 <p>Zoom out</p>
-<h3>enlarge()</h3>
+<h3>enlarge(cx, cy)</h3>
+<ul>
+<li>
+<p><code>cx</code>:（v0.6.4+）Zoom to the specified position on the canvas, default to the center point of the canvas</p>
+</li>
+<li>
+<p><code>cy</code>:（v0.6.4+）Zoom to the specified position on the canvas, default to the center point of the canvas</p>
+</li>
+</ul>
 <p>Zoom in</p>
 <h3>getTransformData()</h3>
 <blockquote>
@@ -40,10 +56,18 @@ through <code>mindMap.view</code></p>
 </blockquote>
 <p>Dynamically set transform data, transform data can be obtained through the
 getTransformData method&quot;</p>
-<h3>setScale(scale)</h3>
+<h3>setScale(scale, cx, cy)</h3>
 <blockquote>
 <p>v0.2.17+</p>
 </blockquote>
+<ul>
+<li>
+<p><code>cx</code>:（v0.6.4+）Zoom to the specified position on the canvas, default to the center point of the canvas</p>
+</li>
+<li>
+<p><code>cy</code>:（v0.6.4+）Zoom to the specified position on the canvas, default to the center point of the canvas</p>
+</li>
+</ul>
 <p>Setting Zoom</p>
 
   </div>

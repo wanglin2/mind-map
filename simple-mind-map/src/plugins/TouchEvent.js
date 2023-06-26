@@ -53,8 +53,11 @@ class TouchEvent {
       let ox = touch1.clientX - touch2.clientX
       let oy = touch1.clientY - touch2.clientY
       let distance = Math.sqrt(Math.pow(ox, 2) + Math.pow(oy, 2))
-      let cx = (touch1.clientX + touch2.clientX) / 2
-      let cy = (touch1.clientY + touch2.clientY) / 2
+      // 以两指中心点进行缩放
+      let { x: touch1ClientX, y: touch1ClientY } = this.mindMap.toPos(touch1.clientX, touch1.clientY)
+      let { x: touch2ClientX, y: touch2ClientY } = this.mindMap.toPos(touch2.clientX, touch2.clientY)
+      let cx = (touch1ClientX + touch2ClientX) / 2
+      let cy = (touch1ClientY + touch2ClientY) / 2
       if (distance > this.doubleTouchmoveDistance) {
         // 放大
         this.mindMap.view.enlarge(cx, cy)

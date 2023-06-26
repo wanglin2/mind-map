@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.4
+
+New: 1.The default is to scale at the center point of the canvas. 2.Optimize the scaling of both fingers on the mobile end, with the center position of the two fingers as the center point for scaling.
+
 ## 0.6.3
 
 Fix: 1.Fix the issue where the summary node will respond to inserting node shortcuts.
