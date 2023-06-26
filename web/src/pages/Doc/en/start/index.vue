@@ -57,7 +57,7 @@ compile this dependency:</p>
 <pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;simpleMindMap.css&quot;</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">scr</span>=<span class="hljs-string">&quot;simpleMindMap.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
-<p>A global variable <code>window.simpleMindMap</code> will be created.</p>
+<p>A global variable <code>window.simpleMindMap</code> will be created. you can get <code>MindMap</code> constructor by <code>window.simpleMindMap.default</code>, for more detail info you can log <code>window.simpleMindMap</code>.</p>
 <p>The disadvantage of this method is that it will contain all the content, including the plugins you have not registered, so the overall volume will be relatively large.</p>
 <p>（v0.5.4+）If you want to use the <code>ES</code> module directly on the browser side, you can find the <code>simpleMindMap.esm.js</code> and <code>simpleMindMap.esm.css</code> files in the <code>/simple-mind-map/dist/</code> directory.</p>
 <h2>Development</h2>
