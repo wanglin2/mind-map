@@ -36911,8 +36911,8 @@ var View = class {
   //   应用变换
   transform() {
     this.mindMap.draw.transform({
+      origin: [0, 0],
       scale: this.scale,
-      // origin: 'center center',
       translate: [this.x, this.y]
     });
     this.mindMap.emit("view_data_change", this.getTransformData());
@@ -36929,24 +36929,41 @@ var View = class {
     }
   }
   //  缩小
-  narrow() {
+  narrow(cx2 = this.mindMap.width / 2, cy2 = this.mindMap.height / 2) {
+    let scale;
     if (this.scale - this.mindMap.opt.scaleRatio > 0.1) {
-      this.scale -= this.mindMap.opt.scaleRatio;
+      scale = this.scale - this.mindMap.opt.scaleRatio;
     } else {
-      this.scale = 0.1;
+      scale = 0.1;
     }
+    this.scaleInCenter(cx2, cy2, scale);
     this.transform();
     this.mindMap.emit("scale", this.scale);
   }
   //  放大
-  enlarge() {
-    this.scale += this.mindMap.opt.scaleRatio;
+  enlarge(cx2 = this.mindMap.width / 2, cy2 = this.mindMap.height / 2) {
+    const scale = this.scale + this.mindMap.opt.scaleRatio;
+    this.scaleInCenter(cx2, cy2, scale);
     this.transform();
     this.mindMap.emit("scale", this.scale);
   }
-  //  设置缩放
-  setScale(scale) {
+  // 基于画布中心进行缩放
+  scaleInCenter(cx2, cy2, scale) {
+    const prevScale = this.scale;
+    const ratio = 1 - scale / prevScale;
+    const dx2 = (cx2 - this.x) * ratio;
+    const dy2 = (cy2 - this.y) * ratio;
+    this.x += dx2;
+    this.y += dy2;
     this.scale = scale;
+  }
+  //  设置缩放
+  setScale(scale, cx2, cy2) {
+    if (cx2 !== void 0 && cy2 !== void 0) {
+      this.scaleInCenter(cx2, cy2, scale);
+    } else {
+      this.scale = scale;
+    }
     this.transform();
     this.mindMap.emit("scale", this.scale);
   }
