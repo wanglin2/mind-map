@@ -77,7 +77,7 @@ If you need a file in the format of `umd` module, such as `CDN` in the browser, 
 <script scr="simpleMindMap.umd.min.js"></script>
 ```
 
-A global variable `window.simpleMindMap` will be created.
+A global variable `window.simpleMindMap` will be created. you can get `MindMap` constructor by `window.simpleMindMap.default`, for more detail info you can log `window.simpleMindMap`.
 
 The disadvantage of this method is that it will contain all the content, including the plugins you have not registered, so the overall volume will be relatively large.
 

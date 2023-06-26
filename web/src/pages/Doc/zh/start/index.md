@@ -72,7 +72,7 @@ const mindMap = new MindMap({
 <script scr="simpleMindMap.umd.min.js"></script>
 ```
 
-会创建一个全局变量`window.simpleMindMap`。
+会创建一个全局变量`window.simpleMindMap`，可以通过`window.simpleMindMap.default`获取到`MindMap`构造函数，详细信息可以把`window.simpleMindMap`打印出来看一下。
 
 这种方式的缺点是会包含所有的内容，包括你没有注册的插件，所以整体体积会比较大。
 
