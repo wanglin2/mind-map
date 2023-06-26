@@ -24,9 +24,25 @@
 <p>平移<code>y</code>方向到指定位置</p>
 <h3>reset()</h3>
 <p>恢复到默认的变换</p>
-<h3>narrow()</h3>
+<h3>narrow(cx, cy)</h3>
+<ul>
+<li>
+<p><code>cx</code>：（v0.6.4+）以画布指定位置进行缩放，默认为画布中心点</p>
+</li>
+<li>
+<p><code>cy</code>：（v0.6.4+）以画布指定位置进行缩放，默认为画布中心点</p>
+</li>
+</ul>
 <p>缩小</p>
-<h3>enlarge()</h3>
+<h3>enlarge(cx, cy)</h3>
+<ul>
+<li>
+<p><code>cx</code>：（v0.6.4+）以画布指定位置进行缩放，默认为画布中心点</p>
+</li>
+<li>
+<p><code>cy</code>：（v0.6.4+）以画布指定位置进行缩放，默认为画布中心点</p>
+</li>
+</ul>
 <p>放大</p>
 <h3>getTransformData()</h3>
 <blockquote>
@@ -38,10 +54,18 @@
 <p>v0.1.1+</p>
 </blockquote>
 <p>动态设置变换数据，可以通过getTransformData方法获取变换数据</p>
-<h3>setScale(scale)</h3>
+<h3>setScale(scale, cx, cy)</h3>
 <blockquote>
 <p>v0.2.17+</p>
 </blockquote>
+<ul>
+<li>
+<p><code>cx</code>：（v0.6.4+）以画布指定位置进行缩放，默认为画布中心点</p>
+</li>
+<li>
+<p><code>cy</code>：（v0.6.4+）以画布指定位置进行缩放，默认为画布中心点</p>
+</li>
+</ul>
 <p>设置缩放</p>
 
   </div>

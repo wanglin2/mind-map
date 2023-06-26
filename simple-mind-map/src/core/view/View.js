@@ -222,8 +222,12 @@ class View {
   }
 
   //  设置缩放
-  setScale(scale) {
-    this.scale = scale
+  setScale(scale, cx, cy) {
+    if (cx !== undefined && cy !== undefined) {
+      this.scaleInCenter(cx, cy, scale)
+    } else {
+      this.scale = scale
+    }
     this.transform()
     this.mindMap.emit('scale', this.scale)
   }
