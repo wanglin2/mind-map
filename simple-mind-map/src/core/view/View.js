@@ -190,22 +190,22 @@ class View {
   }
 
   //  缩小
-  narrow() {
+  narrow(cx = this.mindMap.width / 2, cy = this.mindMap.height / 2) {
     let scale
     if (this.scale - this.mindMap.opt.scaleRatio > 0.1) {
       scale = this.scale - this.mindMap.opt.scaleRatio
     } else {
       scale = 0.1
     }
-    this.scaleInCenter(this.mindMap.width / 2, this.mindMap.height / 2, scale)
+    this.scaleInCenter(cx, cy, scale)
     this.transform()
     this.mindMap.emit('scale', this.scale)
   }
 
   //  放大
-  enlarge() {
+  enlarge(cx = this.mindMap.width / 2, cy = this.mindMap.height / 2) {
     const scale = this.scale + this.mindMap.opt.scaleRatio
-    this.scaleInCenter(this.mindMap.width / 2, this.mindMap.height / 2, scale)
+    this.scaleInCenter(cx, cy, scale)
     this.transform()
     this.mindMap.emit('scale', this.scale)
   }
@@ -213,11 +213,11 @@ class View {
   // 基于画布中心进行缩放
   scaleInCenter(cx, cy, scale) {
     const prevScale = this.scale
-    const dx = (cx - this.x) * (1 - scale / prevScale)
-    const dy = (cy - this.y) * (1 - scale / prevScale)
-
-    this.x += dx;
-    this.y += dy;
+    const ratio = 1 - scale / prevScale
+    const dx = (cx - this.x) * ratio
+    const dy = (cy - this.y) * ratio
+    this.x += dx
+    this.y += dy
     this.scale = scale
   }
 

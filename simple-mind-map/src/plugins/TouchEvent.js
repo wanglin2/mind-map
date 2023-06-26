@@ -50,16 +50,17 @@ class TouchEvent {
     } else if (len === 2) {
       let touch1 = e.touches[0]
       let touch2 = e.touches[1]
-      let distance = Math.sqrt(
-        Math.pow(touch1.clientX - touch2.clientX, 2) +
-          Math.pow(touch1.clientY - touch2.clientY, 2)
-      )
+      let ox = touch1.clientX - touch2.clientX
+      let oy = touch1.clientY - touch2.clientY
+      let distance = Math.sqrt(Math.pow(ox, 2) + Math.pow(oy, 2))
+      let cx = (touch1.clientX + touch2.clientX) / 2
+      let cy = (touch1.clientY + touch2.clientY) / 2
       if (distance > this.doubleTouchmoveDistance) {
         // 放大
-        this.mindMap.view.enlarge()
+        this.mindMap.view.enlarge(cx, cy)
       } else {
         // 缩小
-        this.mindMap.view.narrow()
+        this.mindMap.view.narrow(cx, cy)
       }
       this.doubleTouchmoveDistance = distance
     }
