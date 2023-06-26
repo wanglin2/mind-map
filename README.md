@@ -92,6 +92,8 @@ MIT
 
 <img src="./qrcode.jpg" style="width: 300px" />
 
+如果已过期，可以微信添加`wanglinguanfang`拉你入群。
+
 # 请作者喝杯咖啡
 
 > 厚椰乳一盒 + 纯牛奶半盒 + 冰块 + 咖啡液 = 生椰拿铁 yyds
