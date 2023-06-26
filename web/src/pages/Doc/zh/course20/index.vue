@@ -4,7 +4,7 @@
 <blockquote>
 <p>该特性v0.6.3+版本支持</p>
 </blockquote>
-<p>如果你想自定义节点的内容，那么可以在实例化<code>simple-mind-map</code>时传入一下选项：</p>
+<p>如果你想自定义节点的内容，那么可以在实例化<code>simple-mind-map</code>时传入以下选项：</p>
 <pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({
     <span class="hljs-attr">isUseCustomNodeContent</span>: <span class="hljs-literal">true</span>,
     <span class="hljs-attr">customCreateNodeContent</span>: <span class="hljs-function">(<span class="hljs-params">node</span>) =&gt;</span> {
@@ -17,6 +17,7 @@
 </code></pre>
 <p>其他节点实例属性你可以自行打印出来看看。</p>
 <p><code>customCreateNodeContent</code>方法需要返回<code>DOM</code>节点，如果某个节点你不想自定义，那么可以返回<code>null</code>，那么还是会走内置的节点渲染逻辑。</p>
+<p>返回的<code>DOM</code>节点的宽高需要是确定的，如果是动态的那么会导致宽高获取错误，最终导致节点定位错误和发生重叠等问题。</p>
 <p>如果使用了自定义节点内容，那么内置的插入节点内容的相关方法你都不应该再使用，因为相当于整个节点内容都由你自己控制，另外，节点样式设置也不会再生效，切换主题也只会切换非节点内容的样式，最后，双击节点也不会再进入编辑，所以这个功能一般用于展示性的需求。</p>
 <h2>示例1：渲染自定义DOM节点</h2>
 <pre class="hljs"><code>{
@@ -92,6 +93,8 @@
     }
 }
 </code></pre>
+<h2>示例4：渲染react组件</h2>
+<p>如果你成功渲染了<code>react</code>组件，欢迎<a href="https://github.com/wanglin2/mind-map/issues/new">提交</a>示例代码给我~</p>
 
   </div>
 </template>
