@@ -73,12 +73,12 @@ class View {
           // 鼠标滚轮，向上和向左，都是缩小
           case CONSTANTS.DIR.UP:
           case CONSTANTS.DIR.LEFT:
-            this.narrow()
+            this.narrow(e.clientX, e.clientY)
             break
           // 鼠标滚轮，向下和向右，都是放大
           case CONSTANTS.DIR.DOWN:
           case CONSTANTS.DIR.RIGHT:
-            this.enlarge()
+            this.enlarge(e.clientX, e.clientY)
             break
         }
       } else {
@@ -190,28 +190,27 @@ class View {
   }
 
   //  缩小
-  narrow(cx = this.mindMap.width / 2, cy = this.mindMap.height / 2) {
-    let scale
-    if (this.scale - this.mindMap.opt.scaleRatio > 0.1) {
-      scale = this.scale - this.mindMap.opt.scaleRatio
-    } else {
-      scale = 0.1
-    }
-    this.scaleInCenter(cx, cy, scale)
+  narrow(cx, cy) {
+    const scale = Math.max(this.scale - this.mindMap.opt.scaleRatio, 0.1)
+    this.scaleInCenter(scale, cx, cy)
     this.transform()
     this.mindMap.emit('scale', this.scale)
   }
 
   //  放大
-  enlarge(cx = this.mindMap.width / 2, cy = this.mindMap.height / 2) {
+  enlarge(cx, cy) {
     const scale = this.scale + this.mindMap.opt.scaleRatio
-    this.scaleInCenter(cx, cy, scale)
+    this.scaleInCenter(scale, cx, cy)
     this.transform()
     this.mindMap.emit('scale', this.scale)
   }
 
-  // 基于画布中心进行缩放
-  scaleInCenter(cx, cy, scale) {
+  // 基于指定中心进行缩放，cx，cy 可不指定，此时会使用画布中心点
+  scaleInCenter(scale, cx, cy) {
+    if (cx === undefined || cy === undefined) {
+      cx = this.mindMap.width / 2
+      cy = this.mindMap.height / 2
+    }
     const prevScale = this.scale
     const ratio = 1 - scale / prevScale
     const dx = (cx - this.x) * ratio
@@ -224,7 +223,7 @@ class View {
   //  设置缩放
   setScale(scale, cx, cy) {
     if (cx !== undefined && cy !== undefined) {
-      this.scaleInCenter(cx, cy, scale)
+      this.scaleInCenter(scale, cx, cy)
     } else {
       this.scale = scale
     }
