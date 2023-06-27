@@ -64,7 +64,8 @@ class View {
         customHandleMousewheel,
         mousewheelAction,
         mouseScaleCenterUseMousePosition,
-        mousewheelMoveStep
+        mousewheelMoveStep,
+        mousewheelZoomActionReverse
       } = this.mindMap.opt
       // 是否自定义鼠标滚轮事件
       if (
@@ -81,12 +82,12 @@ class View {
           // 鼠标滚轮，向上和向左，都是缩小
           case CONSTANTS.DIR.UP:
           case CONSTANTS.DIR.LEFT:
-            this.narrow(cx, cy)
+            mousewheelZoomActionReverse ? this.enlarge(cx, cy) : this.narrow(cx, cy)
             break
           // 鼠标滚轮，向下和向右，都是放大
           case CONSTANTS.DIR.DOWN:
           case CONSTANTS.DIR.RIGHT:
-            this.enlarge(cx, cy)
+            mousewheelZoomActionReverse ? this.narrow(cx, cy) : this.enlarge(cx, cy)
             break
         }
       } else {// 鼠标滚轮事件控制画布移动
