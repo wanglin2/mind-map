@@ -343,6 +343,13 @@
 <td>If <code>isUseCustomNodeContent</code> is set to <code>true</code>, then this option needs to be used to pass in a method that receives the node instance <code>node</code> as a parameter (if you want to obtain data for that node, you can use <code>node.nodeData.data</code>). You need to return the custom node content element, which is the DOM node. If a node does not require customization, you can return <code>null</code></td>
 <td></td>
 </tr>
+<tr>
+<td>mouseScaleCenterUseMousePosition（v0.6.4-fix.1+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Is the mouse zoom centered around the current position of the mouse, otherwise centered around the canvas</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>

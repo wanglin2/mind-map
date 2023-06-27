@@ -69,6 +69,7 @@ const mindMap = new MindMap({
 | beforeTextEdit（v0.6.0+）     |  Function/null | null | The callback method before the node is about to enter editing. If the method returns a value other than true, the editing will be canceled. The function can return a value or a promise, and the callback parameter is the node instance  |          |
 | isUseCustomNodeContent（v0.6.3+）     |  Boolean | false |  Whether to customize node content |          |
 | customCreateNodeContent（v0.6.3+）     |  Function/null | null | If `isUseCustomNodeContent` is set to `true`, then this option needs to be used to pass in a method that receives the node instance `node` as a parameter (if you want to obtain data for that node, you can use `node.nodeData.data`). You need to return the custom node content element, which is the DOM node. If a node does not require customization, you can return `null` |          |
+| mouseScaleCenterUseMousePosition（v0.6.4-fix.1+）     | Boolean  | true | Is the mouse zoom centered around the current position of the mouse, otherwise centered around the canvas |          |
 
 ### Watermark config
 

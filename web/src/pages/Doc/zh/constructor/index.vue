@@ -343,6 +343,13 @@
 <td>如果<code>isUseCustomNodeContent</code>设为<code>true</code>，那么需要使用该选项传入一个方法，接收节点实例<code>node</code>为参数（如果要获取该节点的数据，可以通过<code>node.nodeData.data</code>），需要返回自定义节点内容元素，也就是DOM节点，如果某个节点不需要自定义，那么返回<code>null</code>即可</td>
 <td></td>
 </tr>
+<tr>
+<td>mouseScaleCenterUseMousePosition（v0.6.4-fix.1+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>鼠标缩放是否以鼠标当前位置为中心点，否则以画布中心点</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>水印配置</h3>
