@@ -36820,22 +36820,30 @@ var View = class {
       this.firstDrag = true;
     });
     this.mindMap.event.on("mousewheel", (e2, dir, event, isTouchPad) => {
-      if (this.mindMap.opt.customHandleMousewheel && typeof this.mindMap.opt.customHandleMousewheel === "function") {
-        return this.mindMap.opt.customHandleMousewheel(e2);
+      let {
+        customHandleMousewheel,
+        mousewheelAction,
+        mouseScaleCenterUseMousePosition,
+        mousewheelMoveStep
+      } = this.mindMap.opt;
+      if (customHandleMousewheel && typeof customHandleMousewheel === "function") {
+        return customHandleMousewheel(e2);
       }
-      if (this.mindMap.opt.mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
+      if (mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
+        let cx2 = mouseScaleCenterUseMousePosition ? e2.clientX : void 0;
+        let cy2 = mouseScaleCenterUseMousePosition ? e2.clientY : void 0;
         switch (dir) {
           case CONSTANTS.DIR.UP:
           case CONSTANTS.DIR.LEFT:
-            this.narrow();
+            this.narrow(cx2, cy2);
             break;
           case CONSTANTS.DIR.DOWN:
           case CONSTANTS.DIR.RIGHT:
-            this.enlarge();
+            this.enlarge(cx2, cy2);
             break;
         }
       } else {
-        let step = this.mindMap.opt.mousewheelMoveStep;
+        let step = mousewheelMoveStep;
         if (isTouchPad) {
           step = 5;
         }
@@ -36929,26 +36937,25 @@ var View = class {
     }
   }
   //  缩小
-  narrow(cx2 = this.mindMap.width / 2, cy2 = this.mindMap.height / 2) {
-    let scale;
-    if (this.scale - this.mindMap.opt.scaleRatio > 0.1) {
-      scale = this.scale - this.mindMap.opt.scaleRatio;
-    } else {
-      scale = 0.1;
-    }
-    this.scaleInCenter(cx2, cy2, scale);
+  narrow(cx2, cy2) {
+    const scale = Math.max(this.scale - this.mindMap.opt.scaleRatio, 0.1);
+    this.scaleInCenter(scale, cx2, cy2);
     this.transform();
     this.mindMap.emit("scale", this.scale);
   }
   //  放大
-  enlarge(cx2 = this.mindMap.width / 2, cy2 = this.mindMap.height / 2) {
+  enlarge(cx2, cy2) {
     const scale = this.scale + this.mindMap.opt.scaleRatio;
-    this.scaleInCenter(cx2, cy2, scale);
+    this.scaleInCenter(scale, cx2, cy2);
     this.transform();
     this.mindMap.emit("scale", this.scale);
   }
-  // 基于画布中心进行缩放
-  scaleInCenter(cx2, cy2, scale) {
+  // 基于指定中心进行缩放，cx，cy 可不指定，此时会使用画布中心点
+  scaleInCenter(scale, cx2, cy2) {
+    if (cx2 === void 0 || cy2 === void 0) {
+      cx2 = this.mindMap.width / 2;
+      cy2 = this.mindMap.height / 2;
+    }
     const prevScale = this.scale;
     const ratio = 1 - scale / prevScale;
     const dx2 = (cx2 - this.x) * ratio;
@@ -36960,7 +36967,7 @@ var View = class {
   //  设置缩放
   setScale(scale, cx2, cy2) {
     if (cx2 !== void 0 && cy2 !== void 0) {
-      this.scaleInCenter(cx2, cy2, scale);
+      this.scaleInCenter(scale, cx2, cy2);
     } else {
       this.scale = scale;
     }
@@ -50307,7 +50314,9 @@ var defaultOpt = {
   // 主题配置，会和所选择的主题进行合并
   themeConfig: {},
   // 放大缩小的增量比例
-  scaleRatio: 0.1,
+  scaleRatio: 0.2,
+  // 鼠标缩放是否以鼠标当前位置为中心点，否则以画布中心点
+  mouseScaleCenterUseMousePosition: true,
   // 最多显示几个标签
   maxTag: 5,
   // 导出图片时的内边距

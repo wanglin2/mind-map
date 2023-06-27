@@ -32963,24 +32963,35 @@ class View_View {
     });
     // 放大缩小视图
     this.mindMap.event.on('mousewheel', (e, dir, event, isTouchPad) => {
-      if (this.mindMap.opt.customHandleMousewheel && typeof this.mindMap.opt.customHandleMousewheel === 'function') {
-        return this.mindMap.opt.customHandleMousewheel(e);
+      let {
+        customHandleMousewheel,
+        mousewheelAction,
+        mouseScaleCenterUseMousePosition,
+        mousewheelMoveStep
+      } = this.mindMap.opt;
+      // 是否自定义鼠标滚轮事件
+      if (customHandleMousewheel && typeof customHandleMousewheel === 'function') {
+        return customHandleMousewheel(e);
       }
-      if (this.mindMap.opt.mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
+      // 鼠标滚轮事件控制缩放
+      if (mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
+        let cx = mouseScaleCenterUseMousePosition ? e.clientX : undefined;
+        let cy = mouseScaleCenterUseMousePosition ? e.clientY : undefined;
         switch (dir) {
           // 鼠标滚轮，向上和向左，都是缩小
           case CONSTANTS.DIR.UP:
           case CONSTANTS.DIR.LEFT:
-            this.narrow();
+            this.narrow(cx, cy);
             break;
           // 鼠标滚轮，向下和向右，都是放大
           case CONSTANTS.DIR.DOWN:
           case CONSTANTS.DIR.RIGHT:
-            this.enlarge();
+            this.enlarge(cx, cy);
             break;
         }
       } else {
-        let step = this.mindMap.opt.mousewheelMoveStep;
+        // 鼠标滚轮事件控制画布移动
+        let step = mousewheelMoveStep;
         if (isTouchPad) {
           step = 5;
         }
@@ -33088,28 +33099,27 @@ class View_View {
   }
 
   //  缩小
-  narrow(cx = this.mindMap.width / 2, cy = this.mindMap.height / 2) {
-    let scale;
-    if (this.scale - this.mindMap.opt.scaleRatio > 0.1) {
-      scale = this.scale - this.mindMap.opt.scaleRatio;
-    } else {
-      scale = 0.1;
-    }
-    this.scaleInCenter(cx, cy, scale);
+  narrow(cx, cy) {
+    const scale = Math.max(this.scale - this.mindMap.opt.scaleRatio, 0.1);
+    this.scaleInCenter(scale, cx, cy);
     this.transform();
     this.mindMap.emit('scale', this.scale);
   }
 
   //  放大
-  enlarge(cx = this.mindMap.width / 2, cy = this.mindMap.height / 2) {
+  enlarge(cx, cy) {
     const scale = this.scale + this.mindMap.opt.scaleRatio;
-    this.scaleInCenter(cx, cy, scale);
+    this.scaleInCenter(scale, cx, cy);
     this.transform();
     this.mindMap.emit('scale', this.scale);
   }
 
-  // 基于画布中心进行缩放
-  scaleInCenter(cx, cy, scale) {
+  // 基于指定中心进行缩放，cx，cy 可不指定，此时会使用画布中心点
+  scaleInCenter(scale, cx, cy) {
+    if (cx === undefined || cy === undefined) {
+      cx = this.mindMap.width / 2;
+      cy = this.mindMap.height / 2;
+    }
     const prevScale = this.scale;
     const ratio = 1 - scale / prevScale;
     const dx = (cx - this.x) * ratio;
@@ -33122,7 +33132,7 @@ class View_View {
   //  设置缩放
   setScale(scale, cx, cy) {
     if (cx !== undefined && cy !== undefined) {
-      this.scaleInCenter(cx, cy, scale);
+      this.scaleInCenter(scale, cx, cy);
     } else {
       this.scale = scale;
     }
@@ -39891,7 +39901,7 @@ function move$1(x, y, box = this.bbox()) {
   return this.x(x, box).y(y, box);
 } // Move center over x-axis
 
-function cx(x, box = this.bbox()) {
+function svg_esm_cx(x, box = this.bbox()) {
   if (x == null) {
     return box.cx;
   }
@@ -39899,7 +39909,7 @@ function cx(x, box = this.bbox()) {
   return this.attr('x', this.attr('x') + x - box.cx);
 } // Move center over y-axis
 
-function cy(y, box = this.bbox()) {
+function svg_esm_cy(y, box = this.bbox()) {
   if (y == null) {
     return box.cy;
   }
@@ -39931,8 +39941,8 @@ var textable = {
   x: x$1,
   y: y$1,
   move: move$1,
-  cx: cx,
-  cy: cy,
+  cx: svg_esm_cx,
+  cy: svg_esm_cy,
   center: center,
   ax: ax,
   ay: ay,
@@ -48834,7 +48844,9 @@ const defaultOpt = {
   // 主题配置，会和所选择的主题进行合并
   themeConfig: {},
   // 放大缩小的增量比例
-  scaleRatio: 0.1,
+  scaleRatio: 0.2,
+  // 鼠标缩放是否以鼠标当前位置为中心点，否则以画布中心点
+  mouseScaleCenterUseMousePosition: true,
   // 最多显示几个标签
   maxTag: 5,
   // 导出图片时的内边距
