@@ -11,10 +11,16 @@ import RichText from './src/plugins/RichText'
 import xmind from './src/parse/xmind.js'
 import markdown from './src/parse/markdown.js'
 import icons from './src/svg/icons.js'
+import * as constants from './src/constants/constant.js'
+import themes from './src/themes/index.js'
+import * as defaultTheme from './src/themes/default.js'
 
 MindMap.xmind = xmind
 MindMap.markdown = markdown
 MindMap.iconList = icons.nodeIconList
+MindMap.constants = constants
+MindMap.themes = themes
+MindMap.defaultTheme = defaultTheme
 
 MindMap
   .usePlugin(MiniMap)
