@@ -14,6 +14,8 @@ export const defaultOpt = {
   themeConfig: {},
   // 放大缩小的增量比例
   scaleRatio: 0.2,
+  // 鼠标缩放是否以鼠标当前位置为中心点，否则以画布中心点
+  mouseScaleCenterUseMousePosition: true,
   // 最多显示几个标签
   maxTag: 5,
   // 导出图片时的内边距
