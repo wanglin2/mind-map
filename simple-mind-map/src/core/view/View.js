@@ -60,29 +60,37 @@ class View {
     })
     // 放大缩小视图
     this.mindMap.event.on('mousewheel', (e, dir, event, isTouchPad) => {
+      let {
+        customHandleMousewheel,
+        mousewheelAction,
+        mouseScaleCenterUseMousePosition,
+        mousewheelMoveStep
+      } = this.mindMap.opt
+      // 是否自定义鼠标滚轮事件
       if (
-        this.mindMap.opt.customHandleMousewheel &&
-        typeof this.mindMap.opt.customHandleMousewheel === 'function'
+        customHandleMousewheel &&
+        typeof customHandleMousewheel === 'function'
       ) {
-        return this.mindMap.opt.customHandleMousewheel(e)
+        return customHandleMousewheel(e)
       }
-      if (
-        this.mindMap.opt.mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM
-      ) {
+      // 鼠标滚轮事件控制缩放
+      if (mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
+        let cx = mouseScaleCenterUseMousePosition ? e.clientX : undefined
+        let cy = mouseScaleCenterUseMousePosition ? e.clientY : undefined
         switch (dir) {
           // 鼠标滚轮，向上和向左，都是缩小
           case CONSTANTS.DIR.UP:
           case CONSTANTS.DIR.LEFT:
-            this.narrow(e.clientX, e.clientY)
+            this.narrow(cx, cy)
             break
           // 鼠标滚轮，向下和向右，都是放大
           case CONSTANTS.DIR.DOWN:
           case CONSTANTS.DIR.RIGHT:
-            this.enlarge(e.clientX, e.clientY)
+            this.enlarge(cx, cy)
             break
         }
-      } else {
-        let step = this.mindMap.opt.mousewheelMoveStep
+      } else {// 鼠标滚轮事件控制画布移动
+        let step = mousewheelMoveStep
         if (isTouchPad) {
           step = 5
         }
