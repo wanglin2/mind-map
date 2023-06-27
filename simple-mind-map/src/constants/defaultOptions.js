@@ -13,7 +13,7 @@ export const defaultOpt = {
   // 主题配置，会和所选择的主题进行合并
   themeConfig: {},
   // 放大缩小的增量比例
-  scaleRatio: 0.1,
+  scaleRatio: 0.2,
   // 最多显示几个标签
   maxTag: 5,
   // 导出图片时的内边距
