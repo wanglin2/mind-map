@@ -44,7 +44,8 @@ const transformXmind = content => {
     }
     // 节点备注
     if (node.notes) {
-      newNode.data.note = (node.notes.realHTML || node.notes.plain).content
+      let notesData = node.notes.realHTML || node.notes.plain
+      newNode.data.note = notesData ? notesData.content || '' : ''
     }
     // 超链接
     if (node.href && /^https?:\/\//.test(node.href)) {
