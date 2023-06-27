@@ -69,6 +69,7 @@ const mindMap = new MindMap({
 | beforeTextEdit（v0.6.0+）     |  Function/null | null | 节点即将进入编辑前的回调方法，如果该方法返回true以外的值，那么将取消编辑，函数可以返回一个值，或一个Promise，回调参数为节点实例  |          |
 | isUseCustomNodeContent（v0.6.3+）     |  Boolean | false | 是否自定义节点内容  |          |
 | customCreateNodeContent（v0.6.3+）     |  Function/null | null | 如果`isUseCustomNodeContent`设为`true`，那么需要使用该选项传入一个方法，接收节点实例`node`为参数（如果要获取该节点的数据，可以通过`node.nodeData.data`），需要返回自定义节点内容元素，也就是DOM节点，如果某个节点不需要自定义，那么返回`null`即可 |          |
+| mouseScaleCenterUseMousePosition（v0.6.4-fix.1+）     | Boolean  | true | 鼠标缩放是否以鼠标当前位置为中心点，否则以画布中心点 |          |
 
 ### 水印配置
 

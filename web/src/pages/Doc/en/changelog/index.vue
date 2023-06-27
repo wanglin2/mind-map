@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.6.4-fix.1</h2>
+<p>New: 1.When zooming with the mouse wheel, the default zoom is centered around the current position of the mouse, which can be turned off by configuring.</p>
+<p>Fix: 1.Fixed an issue where the default value of the zoom center point was not updated after changing the canvas size.</p>
 <h2>0.6.4</h2>
 <p>New: 1.The default is to scale at the center point of the canvas. 2.Optimize the scaling of both fingers on the mobile end, with the center position of the two fingers as the center point for scaling.</p>
 <h2>0.6.3</h2>
