@@ -869,13 +869,14 @@ class Render {
   }
 
   //  设置节点图片
-  setNodeImage(node, { url, title, width, height }) {
+  setNodeImage(node, { url, title, width, height, custom = false }) {
     this.setNodeDataRender(node, {
       image: url,
       imageTitle: title || '',
       imageSize: {
         width,
-        height
+        height,
+        custom
       }
     })
   }

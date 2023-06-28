@@ -8,6 +8,8 @@ import Drag from './src/plugins/Drag.js'
 import Select from './src/plugins/Select.js'
 import AssociativeLine from './src/plugins/AssociativeLine'
 import RichText from './src/plugins/RichText'
+import NodeImgAdjust from './src/plugins/NodeImgAdjust.js'
+import TouchEvent from './src/plugins/TouchEvent.js'
 import xmind from './src/parse/xmind.js'
 import markdown from './src/parse/markdown.js'
 import icons from './src/svg/icons.js'
@@ -32,5 +34,7 @@ MindMap
   .usePlugin(Select)
   .usePlugin(AssociativeLine)
   .usePlugin(RichText)
+  .usePlugin(TouchEvent)
+  .usePlugin(NodeImgAdjust)
 
 export default MindMap
