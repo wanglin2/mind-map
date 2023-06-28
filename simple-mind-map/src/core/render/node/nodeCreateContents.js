@@ -17,6 +17,15 @@ function createImgNode() {
   node.on('dblclick', e => {
     this.mindMap.emit('node_img_dblclick', this, e)
   })
+  node.on('mouseenter', e => {
+    this.mindMap.emit('node_img_mouseenter', this, node, e)
+  })
+  node.on('mouseleave', e => {
+    this.mindMap.emit('node_img_mouseleave', this, node, e)
+  })
+  node.on('mousemove', e => {
+    this.mindMap.emit('node_img_mousemove', this, node, e)
+  })
   return {
     node,
     width: imgSize[0],
@@ -26,9 +35,12 @@ function createImgNode() {
 
 //  获取图片显示宽高
 function getImgShowSize() {
+  const { custom, width, height } = this.nodeData.data.imageSize
+  // 如果是自定义了图片的宽高，那么不受最大宽高限制
+  if (custom) return [width, height]
   return resizeImgSize(
-    this.nodeData.data.imageSize.width,
-    this.nodeData.data.imageSize.height,
+    width,
+    height,
     this.mindMap.themeConfig.imgMaxWidth,
     this.mindMap.themeConfig.imgMaxHeight
   )
