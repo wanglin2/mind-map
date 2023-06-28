@@ -62770,11 +62770,12 @@ var NodeImgAdjust = class {
     this.showNodeImage();
     this.hideHandleEl();
     let { image, imageTitle } = this.node.nodeData.data;
+    let { scaleX, scaleY } = this.mindMap.draw.transform();
     this.mindMap.execCommand("SET_NODE_IMAGE", this.node, {
       url: image,
       title: imageTitle,
-      width: this.currentImgWidth,
-      height: this.currentImgHeight,
+      width: this.currentImgWidth / scaleX,
+      height: this.currentImgHeight / scaleY,
       custom: true
       // 代表自定义了图片大小
     });

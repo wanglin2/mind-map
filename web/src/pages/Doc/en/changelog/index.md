@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.5-fix.1
+
+Fix: 1.Fix the issue of adjusting the image size incorrectly while zooming.
+
 ## 0.6.5
 
 Fix: 1.Fix the issue of xmind file import errors. 2.Fixed a rare issue where line breaks occur when the width of the node text is decimal.
