@@ -80,6 +80,7 @@ simple-mind-map. This uses the same packaging tool as the sample project web.</p
 <pre class="hljs"><code><span class="hljs-built_in">cd</span> web
 npm run buildLibrary
 </code></pre>
+<p>The packaging entry is <code>simple-mind-map/full.js</code>, which will introduce all plugins by default. If you don't need all plugins, you can modify the file to only introduce the plugins you need, which can reduce the size of the packaged file.</p>
 <p>The <code>package.json</code> file in the <code>simple-mind-map</code> library provides two export
 fields:</p>
 <pre class="hljs"><code>{

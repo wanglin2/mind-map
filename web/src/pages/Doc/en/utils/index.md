@@ -10,6 +10,20 @@ import {walk, ...} from 'simple-mind-map/src/utils'
 
 ### Methods
 
+#### resizeImgSizeByOriginRatio(width, height, newWidth, newHeight)
+
+> v0.6.5+
+
+`width`: The original width of the image
+
+`height`：The original height of the image
+
+`newWidth`：Width to zoom in to
+
+`newHeight`：Height to zoom in to
+
+Scale the image proportionally. Zoom to the specified size of `newWidth` and `newHeight` while maintaining the original aspect ratio of the image.
+
 #### walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)
 
 Depth-first traversal of a tree

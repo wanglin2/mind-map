@@ -73,6 +73,7 @@ npm run serve
 <pre class="hljs"><code><span class="hljs-built_in">cd</span> web
 npm run buildLibrary
 </code></pre>
+<p>打包入口为<code>simple-mind-map/full.js</code>，默认会引入所有插件，如果你不需要所有插件的话，那么可以修改该文件，只引入你需要的插件，这样可以减少打包后的文件体积。</p>
 <p><code>simple-mind-map</code>库的<code>package.json</code>文件提供了两个导出字段：</p>
 <pre class="hljs"><code>{
   <span class="hljs-attr">&quot;module&quot;</span>: <span class="hljs-string">&quot;index.js&quot;</span>,

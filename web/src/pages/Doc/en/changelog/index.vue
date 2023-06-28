@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.6.5</h2>
+<p>Fix: 1.Fix the issue of xmind file import errors.</p>
+<p>New: 1.The packaged library supports obtaining built-in constants, themes, and other data. 2.Supports configuring the zoom behavior corresponding to the direction of the mouse wheel. 3.Node images support dragging and resizing.</p>
 <h2>0.6.4-fix.1</h2>
 <p>New: 1.When zooming with the mouse wheel, the default zoom is centered around the current position of the mouse, which can be turned off by configuring.</p>
 <p>Fix: 1.Fixed an issue where the default value of the zoom center point was not updated after changing the canvas size.</p>
