@@ -194,11 +194,12 @@ class NodeImgAdjust {
     this.hideHandleEl()
     // 更新节点图片为新的大小
     let { image, imageTitle } = this.node.nodeData.data
+    let { scaleX, scaleY } = this.mindMap.draw.transform()
     this.mindMap.execCommand('SET_NODE_IMAGE', this.node, {
       url: image,
       title: imageTitle,
-      width: this.currentImgWidth,
-      height: this.currentImgHeight,
+      width: this.currentImgWidth / scaleX,
+      height: this.currentImgHeight / scaleY,
       custom: true // 代表自定义了图片大小
     })
     this.isAdjusted = true
