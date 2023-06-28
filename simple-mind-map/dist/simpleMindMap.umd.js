@@ -32655,6 +32655,25 @@ function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
+// NAMESPACE OBJECT: ../simple-mind-map/src/constants/constant.js
+var constant_namespaceObject = {};
+__webpack_require__.r(constant_namespaceObject);
+__webpack_require__.d(constant_namespaceObject, "tagColorList", function() { return tagColorList; });
+__webpack_require__.d(constant_namespaceObject, "themeList", function() { return themeList; });
+__webpack_require__.d(constant_namespaceObject, "CONSTANTS", function() { return CONSTANTS; });
+__webpack_require__.d(constant_namespaceObject, "initRootNodePositionMap", function() { return initRootNodePositionMap; });
+__webpack_require__.d(constant_namespaceObject, "layoutList", function() { return layoutList; });
+__webpack_require__.d(constant_namespaceObject, "layoutValueList", function() { return layoutValueList; });
+__webpack_require__.d(constant_namespaceObject, "nodeDataNoStylePropList", function() { return nodeDataNoStylePropList; });
+
+// NAMESPACE OBJECT: ../simple-mind-map/src/themes/default.js
+var default_namespaceObject = {};
+__webpack_require__.r(default_namespaceObject);
+__webpack_require__.d(default_namespaceObject, "default", function() { return themes_default; });
+__webpack_require__.d(default_namespaceObject, "supportActiveStyle", function() { return supportActiveStyle; });
+__webpack_require__.d(default_namespaceObject, "checkIsNodeSizeIndependenceConfig", function() { return checkIsNodeSizeIndependenceConfig; });
+__webpack_require__.d(default_namespaceObject, "lineStyleProps", function() { return lineStyleProps; });
+
 // NAMESPACE OBJECT: ../simple-mind-map/node_modules/micromark/lib/constructs.js
 var constructs_namespaceObject = {};
 __webpack_require__.r(constructs_namespaceObject);
@@ -32967,7 +32986,8 @@ class View_View {
         customHandleMousewheel,
         mousewheelAction,
         mouseScaleCenterUseMousePosition,
-        mousewheelMoveStep
+        mousewheelMoveStep,
+        mousewheelZoomActionReverse
       } = this.mindMap.opt;
       // 是否自定义鼠标滚轮事件
       if (customHandleMousewheel && typeof customHandleMousewheel === 'function') {
@@ -32981,12 +33001,12 @@ class View_View {
           // 鼠标滚轮，向上和向左，都是缩小
           case CONSTANTS.DIR.UP:
           case CONSTANTS.DIR.LEFT:
-            this.narrow(cx, cy);
+            mousewheelZoomActionReverse ? this.enlarge(cx, cy) : this.narrow(cx, cy);
             break;
           // 鼠标滚轮，向下和向右，都是放大
           case CONSTANTS.DIR.DOWN:
           case CONSTANTS.DIR.RIGHT:
-            this.enlarge(cx, cy);
+            mousewheelZoomActionReverse ? this.narrow(cx, cy) : this.enlarge(cx, cy);
             break;
         }
       } else {
@@ -40947,6 +40967,21 @@ const bfsWalk = (root, callback) => {
   }
 };
 
+// 按原比例缩放图片
+const resizeImgSizeByOriginRatio = (width, height, newWidth, newHeight) => {
+  let arr = [];
+  let nRatio = width / height;
+  let mRatio = newWidth / newHeight;
+  if (nRatio > mRatio) {
+    // 固定高度
+    arr = [nRatio * newHeight, newHeight];
+  } else {
+    // 固定宽度
+    arr = [newWidth, newWidth / nRatio];
+  }
+  return arr;
+};
+
 //  缩放图片尺寸
 const resizeImgSize = (width, height, maxWidth, maxHeight) => {
   let nRatio = width / height;
@@ -41124,7 +41159,7 @@ const degToRad = deg => {
   return deg * (Math.PI / 180);
 };
 
-// 驼峰转连字符 
+// 驼峰转连字符
 const camelCaseToHyphen = str => {
   return str.replace(/([a-z])([A-Z])/g, (...args) => {
     return args[1] + '-' + args[2].toLowerCase();
@@ -41395,9 +41430,13 @@ const btns_open = `<svg t="1618141562310" class="icon" viewBox="0 0 1024 1024" v
 
 //  收缩按钮
 const btns_close = `<svg t="1618141589243" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13611" width="200" height="200"><path d="M512 105.472c225.28 0 407.04 181.76 407.04 407.04s-181.76 407.04-407.04 407.04-407.04-181.76-407.04-407.04 181.76-407.04 407.04-407.04z m0-74.24c-265.216 0-480.768 215.552-480.768 480.768s215.552 480.768 480.768 480.768 480.768-215.552 480.768-480.768-215.552-480.768-480.768-480.768z" p-id="13612"></path><path d="M252.928 474.624h518.144v74.24h-518.144z" p-id="13613"></path></svg>`;
+
+// 图片调整按钮
+const imgAdjust = `<svg width="12px" height="12px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path fill="#ffffff" d="M1008.128 614.4a25.6 25.6 0 0 0-27.648 5.632l-142.848 142.848L259.072 186.88 401.92 43.52A25.6 25.6 0 0 0 384 0h-358.4a25.6 25.6 0 0 0-25.6 25.6v358.4a25.6 25.6 0 0 0 43.52 17.92l143.36-142.848 578.048 578.048-142.848 142.848a25.6 25.6 0 0 0 17.92 43.52h358.4a25.6 25.6 0 0 0 25.6-25.6v-358.4a25.6 25.6 0 0 0-15.872-25.088z"  /></svg>`;
 /* harmony default export */ var btns = ({
   open: btns_open,
-  close: btns_close
+  close: btns_close,
+  imgAdjust
 });
 // CONCATENATED MODULE: ../simple-mind-map/src/core/render/node/nodeExpandBtn.js
 
@@ -41833,6 +41872,15 @@ function createImgNode() {
   node.on('dblclick', e => {
     this.mindMap.emit('node_img_dblclick', this, e);
   });
+  node.on('mouseenter', e => {
+    this.mindMap.emit('node_img_mouseenter', this, node, e);
+  });
+  node.on('mouseleave', e => {
+    this.mindMap.emit('node_img_mouseleave', this, node, e);
+  });
+  node.on('mousemove', e => {
+    this.mindMap.emit('node_img_mousemove', this, node, e);
+  });
   return {
     node,
     width: imgSize[0],
@@ -41842,7 +41890,14 @@ function createImgNode() {
 
 //  获取图片显示宽高
 function getImgShowSize() {
-  return resizeImgSize(this.nodeData.data.imageSize.width, this.nodeData.data.imageSize.height, this.mindMap.themeConfig.imgMaxWidth, this.mindMap.themeConfig.imgMaxHeight);
+  const {
+    custom,
+    width,
+    height
+  } = this.nodeData.data.imageSize;
+  // 如果是自定义了图片的宽高，那么不受最大宽高限制
+  if (custom) return [width, height];
+  return resizeImgSize(width, height, this.mindMap.themeConfig.imgMaxWidth, this.mindMap.themeConfig.imgMaxHeight);
 }
 
 //  创建icon节点
@@ -41903,7 +41958,7 @@ function createRichTextNode() {
     width,
     height
   } = el.getBoundingClientRect();
-  width = Math.ceil(width);
+  width = Math.ceil(width) + 1; // 修复getBoundingClientRect方法对实际宽度是小数的元素获取到的值是整数，导致宽度不够文本发生换行的问题
   height = Math.ceil(height);
   g.attr('data-width', width);
   g.attr('data-height', height);
@@ -46488,14 +46543,16 @@ class Render_Render {
     url,
     title,
     width,
-    height
+    height,
+    custom = false
   }) {
     this.setNodeDataRender(node, {
       image: url,
       imageTitle: title || '',
       imageSize: {
         width,
-        height
+        height,
+        custom
       }
     });
   }
@@ -48893,6 +48950,8 @@ const defaultOpt = {
   // zoom（放大缩小）、move（上下移动）
   // 当mousewheelAction设为move时，可以通过该属性控制鼠标滚动一下视图移动的步长，单位px
   mousewheelMoveStep: 100,
+  // 当mousewheelAction设为zoom时，默认向前滚动是缩小，向后滚动是放大，如果该属性设为true，那么会反过来
+  mousewheelZoomActionReverse: false,
   // 默认插入的二级节点的文字
   defaultInsertSecondLevelNodeText: '二级节点',
   // 默认插入的二级以下节点的文字
@@ -52652,6 +52711,367 @@ class RichText_RichText {
 }
 RichText_RichText.instanceName = 'richText';
 /* harmony default export */ var plugins_RichText = (RichText_RichText);
+// CONCATENATED MODULE: ../simple-mind-map/src/plugins/NodeImgAdjust.js
+// 节点图片大小调整插件
+
+
+class NodeImgAdjust_NodeImgAdjust {
+  //  构造函数
+  constructor({
+    mindMap
+  }) {
+    this.mindMap = mindMap;
+    this.resizeBtnSize = 26; // 调整按钮的大小
+    this.handleEl = null; // 自定义元素，用来渲染临时图片、调整按钮
+    this.isShowHandleEl = false; // 自定义元素是否在显示中
+    this.node = null; // 当前节点实例
+    this.img = null; // 当前节点的图片节点
+    this.rect = null; // 当前图片节点的尺寸信息
+    this.isMousedown = false; // 当前是否是按住调整按钮状态
+    this.currentImgWidth = 0; // 当前拖拽实时图片的大小
+    this.currentImgHeight = 0;
+    this.isAdjusted = false; // 是否是拖拽结束后的渲染期间
+    this.bindEvent();
+  }
+
+  // 监听事件
+  bindEvent() {
+    this.onNodeImgMouseleave = this.onNodeImgMouseleave.bind(this);
+    this.onNodeImgMousemove = this.onNodeImgMousemove.bind(this);
+    this.onMousemove = this.onMousemove.bind(this);
+    this.onMouseup = this.onMouseup.bind(this);
+    this.onRenderEnd = this.onRenderEnd.bind(this);
+    this.mindMap.on('node_img_mouseleave', this.onNodeImgMouseleave);
+    this.mindMap.on('node_img_mousemove', this.onNodeImgMousemove);
+    this.mindMap.on('mousemove', this.onMousemove);
+    this.mindMap.on('mouseup', this.onMouseup);
+    this.mindMap.on('node_mouseup', this.onMouseup);
+    this.mindMap.on('node_tree_render_end', this.onRenderEnd);
+  }
+
+  // 解绑事件
+  unBindEvent() {
+    this.mindMap.off('node_img_mouseleave', this.onNodeImgMouseleave);
+    this.mindMap.off('node_img_mousemove', this.onNodeImgMousemove);
+    this.mindMap.off('mousemove', this.onMousemove);
+    this.mindMap.off('mouseup', this.onMouseup);
+    this.mindMap.off('node_mouseup', this.onMouseup);
+    this.mindMap.off('node_tree_render_end', this.onRenderEnd);
+  }
+
+  // 节点图片鼠标移动事件
+  onNodeImgMousemove(node, img) {
+    // 如果当前正在拖动调整中那么直接返回
+    if (this.isMousedown || this.isAdjusted) return;
+    // 如果在当前节点内移动，以及自定义元素已经是显示状态，那么直接返回
+    if (this.node === node && this.isShowHandleEl) return;
+    // 更新当前节点信息
+    this.node = node;
+    this.img = img;
+    this.rect = this.img.rbox();
+    // 显示自定义元素
+    this.showHandleEl();
+  }
+
+  // 节点图片鼠标移出事件
+  onNodeImgMouseleave() {
+    if (this.isMousedown) return;
+    this.hideHandleEl();
+  }
+
+  // 隐藏节点实际的图片
+  hideNodeImage() {
+    if (!this.img) return;
+    this.img.hide();
+  }
+
+  // 显示节点实际的图片
+  showNodeImage() {
+    if (!this.img) return;
+    this.img.show();
+  }
+
+  // 显示自定义元素
+  showHandleEl() {
+    if (!this.handleEl) {
+      this.createResizeBtnEl();
+    }
+    this.setHandleElRect();
+    document.body.appendChild(this.handleEl);
+    this.isShowHandleEl = true;
+  }
+
+  // 隐藏自定义元素
+  hideHandleEl() {
+    if (!this.isShowHandleEl) return;
+    this.isShowHandleEl = false;
+    document.body.removeChild(this.handleEl);
+    this.handleEl.style.backgroundImage = ``;
+    this.handleEl.style.width = 0;
+    this.handleEl.style.height = 0;
+    this.handleEl.style.left = 0;
+    this.handleEl.style.top = 0;
+  }
+
+  // 设置自定义元素尺寸位置信息
+  setHandleElRect() {
+    let {
+      width,
+      height,
+      x,
+      y
+    } = this.rect;
+    this.handleEl.style.left = `${x}px`;
+    this.handleEl.style.top = `${y}px`;
+    this.currentImgWidth = width;
+    this.currentImgHeight = height;
+    this.updateHandleElSize();
+  }
+
+  // 更新自定义元素宽高
+  updateHandleElSize() {
+    this.handleEl.style.width = `${this.currentImgWidth}px`;
+    this.handleEl.style.height = `${this.currentImgHeight}px`;
+  }
+
+  // 创建调整按钮元素
+  createResizeBtnEl() {
+    // 容器元素
+    this.handleEl = document.createElement('div');
+    this.handleEl.style.cssText = `
+      pointer-events: none;
+      position: fixed;
+      background-size: cover;
+    `;
+    // 调整按钮元素
+    const btnEl = document.createElement('div');
+    btnEl.innerHTML = btns.imgAdjust;
+    btnEl.style.cssText = `
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      pointer-events: auto;
+      background-color: rgba(0, 0, 0, 0.3);
+      width: ${this.resizeBtnSize}px;
+      height: ${this.resizeBtnSize}px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: nwse-resize;
+    `;
+    this.handleEl.appendChild(btnEl);
+    // 给按钮元素绑定事件
+    btnEl.addEventListener('mouseenter', () => {
+      // 移入按钮，会触发节点图片的移出事件，所以需要再次显示按钮
+      this.showHandleEl();
+    });
+    btnEl.addEventListener('mouseleave', () => {
+      // 移除按钮，需要隐藏按钮
+      if (this.isMousedown) return;
+      this.hideHandleEl();
+    });
+    btnEl.addEventListener('mousedown', e => {
+      this.onMousedown(e);
+    });
+  }
+
+  // 鼠标按钮按下事件
+  onMousedown() {
+    this.isMousedown = true;
+    // 隐藏节点实际图片
+    this.hideNodeImage();
+    // 将节点图片渲染到自定义元素上
+    this.handleEl.style.backgroundImage = `url(${this.node.nodeData.data.image})`;
+  }
+
+  // 鼠标移动
+  onMousemove(e) {
+    if (!this.isMousedown) return;
+    e.preventDefault();
+    // 计算当前拖拽位置对应的图片的实时大小
+    let {
+      width: imageOriginWidth,
+      height: imageOriginHeight
+    } = this.node.nodeData.data.imageSize;
+    let newWidth = e.clientX - this.rect.x;
+    let newHeight = e.clientY - this.rect.y;
+    if (newWidth <= 0 || newHeight <= 0) return;
+    let [actWidth, actHeight] = resizeImgSizeByOriginRatio(imageOriginWidth, imageOriginHeight, newWidth, newHeight);
+    this.currentImgWidth = actWidth;
+    this.currentImgHeight = actHeight;
+    this.updateHandleElSize();
+  }
+
+  // 鼠标松开
+  onMouseup() {
+    if (!this.isMousedown) return;
+    // 显示节点实际图片
+    this.showNodeImage();
+    // 隐藏自定义元素
+    this.hideHandleEl();
+    // 更新节点图片为新的大小
+    let {
+      image,
+      imageTitle
+    } = this.node.nodeData.data;
+    this.mindMap.execCommand('SET_NODE_IMAGE', this.node, {
+      url: image,
+      title: imageTitle,
+      width: this.currentImgWidth,
+      height: this.currentImgHeight,
+      custom: true // 代表自定义了图片大小
+    });
+
+    this.isAdjusted = true;
+    this.isMousedown = false;
+  }
+
+  // 渲染完成事件
+  onRenderEnd() {
+    if (!this.isAdjusted) return;
+    this.isAdjusted = false;
+  }
+
+  // 插件被移除前做的事情
+  beforePluginRemove() {
+    this.unBindEvent();
+  }
+}
+NodeImgAdjust_NodeImgAdjust.instanceName = 'nodeImgAdjust';
+/* harmony default export */ var plugins_NodeImgAdjust = (NodeImgAdjust_NodeImgAdjust);
+// CONCATENATED MODULE: ../simple-mind-map/src/plugins/TouchEvent.js
+// 手势事件支持类
+
+class TouchEvent {
+  //  构造函数
+  constructor({
+    mindMap
+  }) {
+    this.mindMap = mindMap;
+    this.touchesNum = 0;
+    this.singleTouchstartEvent = null;
+    this.clickNum = 0;
+    this.doubleTouchmoveDistance = 0;
+    this.bindEvent();
+  }
+
+  // 绑定事件
+  bindEvent() {
+    this.onTouchstart = this.onTouchstart.bind(this);
+    this.onTouchmove = this.onTouchmove.bind(this);
+    this.onTouchcancel = this.onTouchcancel.bind(this);
+    this.onTouchend = this.onTouchend.bind(this);
+    window.addEventListener('touchstart', this.onTouchstart);
+    window.addEventListener('touchmove', this.onTouchmove);
+    window.addEventListener('touchcancel', this.onTouchcancel);
+    window.addEventListener('touchend', this.onTouchend);
+  }
+
+  // 解绑事件
+  unBindEvent() {
+    window.removeEventListener('touchstart', this.onTouchstart);
+    window.removeEventListener('touchmove', this.onTouchmove);
+    window.removeEventListener('touchcancel', this.onTouchcancel);
+    window.removeEventListener('touchend', this.onTouchend);
+  }
+
+  // 手指按下事件
+  onTouchstart(e) {
+    this.touchesNum = e.touches.length;
+    if (this.touchesNum === 1) {
+      let touch = e.touches[0];
+      this.singleTouchstartEvent = touch;
+      this.dispatchMouseEvent('mousedown', touch.target, touch);
+    }
+  }
+
+  // 手指移动事件
+  onTouchmove(e) {
+    let len = e.touches.length;
+    if (len === 1) {
+      let touch = e.touches[0];
+      this.dispatchMouseEvent('mousemove', touch.target, touch);
+    } else if (len === 2) {
+      let touch1 = e.touches[0];
+      let touch2 = e.touches[1];
+      let ox = touch1.clientX - touch2.clientX;
+      let oy = touch1.clientY - touch2.clientY;
+      let distance = Math.sqrt(Math.pow(ox, 2) + Math.pow(oy, 2));
+      // 以两指中心点进行缩放
+      let {
+        x: touch1ClientX,
+        y: touch1ClientY
+      } = this.mindMap.toPos(touch1.clientX, touch1.clientY);
+      let {
+        x: touch2ClientX,
+        y: touch2ClientY
+      } = this.mindMap.toPos(touch2.clientX, touch2.clientY);
+      let cx = (touch1ClientX + touch2ClientX) / 2;
+      let cy = (touch1ClientY + touch2ClientY) / 2;
+      if (distance > this.doubleTouchmoveDistance) {
+        // 放大
+        this.mindMap.view.enlarge(cx, cy);
+      } else {
+        // 缩小
+        this.mindMap.view.narrow(cx, cy);
+      }
+      this.doubleTouchmoveDistance = distance;
+    }
+  }
+
+  // 手指取消事件
+  onTouchcancel(e) {}
+
+  // 手指松开事件
+  onTouchend(e) {
+    this.dispatchMouseEvent('mouseup', e.target);
+    if (this.touchesNum === 1) {
+      // 模拟双击事件
+      this.clickNum++;
+      setTimeout(() => {
+        this.clickNum = 0;
+      }, 300);
+      let ev = this.singleTouchstartEvent;
+      if (this.clickNum > 1) {
+        this.clickNum = 0;
+        this.dispatchMouseEvent('dblclick', ev.target, ev);
+      } else {
+        this.dispatchMouseEvent('click', ev.target, ev);
+      }
+    }
+    this.touchesNum = 0;
+    this.singleTouchstartEvent = null;
+    this.doubleTouchmoveDistance = 0;
+  }
+
+  // 发送鼠标事件
+  dispatchMouseEvent(eventName, target, e) {
+    let opt = {};
+    if (e) {
+      opt = {
+        screenX: e.screenX,
+        screenY: e.screenY,
+        clientX: e.clientX,
+        clientY: e.clientY,
+        which: 1
+      };
+    }
+    let event = new MouseEvent(eventName, {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+      ...opt
+    });
+    target.dispatchEvent(event);
+  }
+
+  // 插件被移除前做的事情
+  beforePluginRemove() {
+    this.unBindEvent();
+  }
+}
+TouchEvent.instanceName = 'touchEvent';
+/* harmony default export */ var plugins_TouchEvent = (TouchEvent);
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/jszip/dist/jszip.min.js
 var jszip_min = __webpack_require__("5e89");
 var jszip_min_default = /*#__PURE__*/__webpack_require__.n(jszip_min);
@@ -52706,7 +53126,8 @@ const transformXmind = content => {
     };
     // 节点备注
     if (node.notes) {
-      newNode.data.note = (node.notes.realHTML || node.notes.plain).content;
+      let notesData = node.notes.realHTML || node.notes.plain;
+      newNode.data.note = notesData ? notesData.content || '' : '';
     }
     // 超链接
     if (node.href && /^https?:\/\//.test(node.href)) {
@@ -63205,10 +63626,18 @@ const transformMarkdownTo = async md => {
 
 
 
+
+
+
+
+
 simple_mind_map.xmind = xmind;
 simple_mind_map.markdown = markdown;
 simple_mind_map.iconList = icons.nodeIconList;
-simple_mind_map.usePlugin(plugins_MiniMap).usePlugin(plugins_Watermark).usePlugin(plugins_Drag).usePlugin(plugins_KeyboardNavigation).usePlugin(plugins_ExportPDF).usePlugin(plugins_Export).usePlugin(plugins_Select).usePlugin(plugins_AssociativeLine).usePlugin(plugins_RichText);
+simple_mind_map.constants = constant_namespaceObject;
+simple_mind_map.themes = themes;
+simple_mind_map.defaultTheme = default_namespaceObject;
+simple_mind_map.usePlugin(plugins_MiniMap).usePlugin(plugins_Watermark).usePlugin(plugins_Drag).usePlugin(plugins_KeyboardNavigation).usePlugin(plugins_ExportPDF).usePlugin(plugins_Export).usePlugin(plugins_Select).usePlugin(plugins_AssociativeLine).usePlugin(plugins_RichText).usePlugin(plugins_TouchEvent).usePlugin(plugins_NodeImgAdjust);
 /* harmony default export */ var full = (simple_mind_map);
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js
 

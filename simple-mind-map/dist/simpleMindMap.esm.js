@@ -36623,6 +36623,16 @@ var require_lib = __commonJS({
 });
 
 // ../simple-mind-map/src/constants/constant.js
+var constant_exports = {};
+__export(constant_exports, {
+  CONSTANTS: () => CONSTANTS,
+  initRootNodePositionMap: () => initRootNodePositionMap,
+  layoutList: () => layoutList,
+  layoutValueList: () => layoutValueList,
+  nodeDataNoStylePropList: () => nodeDataNoStylePropList,
+  tagColorList: () => tagColorList,
+  themeList: () => themeList
+});
 var tagColorList = [
   {
     color: "rgb(77, 65, 0)",
@@ -36643,6 +36653,136 @@ var tagColorList = [
   {
     color: "rgb(0, 77, 47)",
     background: "rgb(179, 255, 226)"
+  }
+];
+var themeList = [
+  {
+    name: "\u9ED8\u8BA4",
+    value: "default"
+  },
+  {
+    name: "\u6697\u82722",
+    value: "dark2"
+  },
+  {
+    name: "\u5929\u6E05\u7EFF",
+    value: "skyGreen"
+  },
+  {
+    name: "\u8111\u56FE\u7ECF\u51782",
+    value: "classic2"
+  },
+  {
+    name: "\u8111\u56FE\u7ECF\u51783",
+    value: "classic3"
+  },
+  {
+    name: "\u7ECF\u5178\u7EFF",
+    value: "classicGreen"
+  },
+  {
+    name: "\u7ECF\u5178\u84DD",
+    value: "classicBlue"
+  },
+  {
+    name: "\u5929\u7A7A\u84DD",
+    value: "blueSky"
+  },
+  {
+    name: "\u8111\u6B8B\u7C89",
+    value: "brainImpairedPink"
+  },
+  {
+    name: "\u6697\u8272",
+    value: "dark"
+  },
+  {
+    name: "\u6CE5\u571F\u9EC4",
+    value: "earthYellow"
+  },
+  {
+    name: "\u6E05\u65B0\u7EFF",
+    value: "freshGreen"
+  },
+  {
+    name: "\u6E05\u65B0\u7EA2",
+    value: "freshRed"
+  },
+  {
+    name: "\u6D6A\u6F2B\u7D2B",
+    value: "romanticPurple"
+  },
+  {
+    name: "\u7C89\u7EA2\u8461\u8404",
+    value: "pinkGrape"
+  },
+  {
+    name: "\u8584\u8377",
+    value: "mint"
+  },
+  {
+    name: "\u91D1\u8272vip",
+    value: "gold"
+  },
+  {
+    name: "\u6D3B\u529B\u6A59",
+    value: "vitalityOrange"
+  },
+  {
+    name: "\u7EFF\u53F6",
+    value: "greenLeaf"
+  },
+  {
+    name: "\u8111\u56FE\u7ECF\u5178",
+    value: "classic"
+  },
+  {
+    name: "\u8111\u56FE\u7ECF\u51784",
+    value: "classic4"
+  },
+  {
+    name: "\u5C0F\u9EC4\u4EBA",
+    value: "minions"
+  },
+  {
+    name: "\u7B80\u7EA6\u9ED1",
+    value: "simpleBlack"
+  },
+  {
+    name: "\u8BFE\u7A0B\u7EFF",
+    value: "courseGreen"
+  },
+  {
+    name: "\u5496\u5561",
+    value: "coffee"
+  },
+  {
+    name: "\u7EA2\u8272\u7CBE\u795E",
+    value: "redSpirit"
+  },
+  {
+    name: "\u9ED1\u8272\u5E7D\u9ED8",
+    value: "blackHumour"
+  },
+  {
+    name: "\u6DF1\u591C\u529E\u516C\u5BA4",
+    value: "lateNightOffice"
+  },
+  {
+    name: "\u9ED1\u91D1",
+    value: "blackGold"
+  },
+  {
+    name: "\u725B\u6CB9\u679C",
+    value: "avocado"
+  },
+  {
+    name: "\u79CB\u5929",
+    value: "autumn"
+  },
+  {
+    name: "\u6A59\u6C41",
+    value: "orangeJuice"
   }
 ];
 var CONSTANTS = {
@@ -36824,7 +36964,8 @@ var View = class {
         customHandleMousewheel,
         mousewheelAction,
         mouseScaleCenterUseMousePosition,
-        mousewheelMoveStep
+        mousewheelMoveStep,
+        mousewheelZoomActionReverse
       } = this.mindMap.opt;
       if (customHandleMousewheel && typeof customHandleMousewheel === "function") {
         return customHandleMousewheel(e2);
@@ -36835,11 +36976,11 @@ var View = class {
         switch (dir) {
           case CONSTANTS.DIR.UP:
           case CONSTANTS.DIR.LEFT:
-            this.narrow(cx2, cy2);
+            mousewheelZoomActionReverse ? this.enlarge(cx2, cy2) : this.narrow(cx2, cy2);
             break;
           case CONSTANTS.DIR.DOWN:
           case CONSTANTS.DIR.RIGHT:
-            this.enlarge(cx2, cy2);
+            mousewheelZoomActionReverse ? this.narrow(cx2, cy2) : this.enlarge(cx2, cy2);
             break;
         }
       } else {
@@ -43193,6 +43334,17 @@ var bfsWalk = (root2, callback) => {
     }
   }
 };
+var resizeImgSizeByOriginRatio = (width2, height2, newWidth, newHeight) => {
+  let arr = [];
+  let nRatio = width2 / height2;
+  let mRatio = newWidth / newHeight;
+  if (nRatio > mRatio) {
+    arr = [nRatio * newHeight, newHeight];
+  } else {
+    arr = [newWidth, newWidth / nRatio];
+  }
+  return arr;
+};
 var resizeImgSize = (width2, height2, maxWidth, maxHeight) => {
   let nRatio = width2 / height2;
   let arr = [];
@@ -43352,11 +43504,7 @@ var measureText = (text3, { italic, bold, fontSize, fontFamily }) => {
   }
   measureTextContext.save();
   measureTextContext.font = font;
-  const {
-    width: width2,
-    actualBoundingBoxAscent,
-    actualBoundingBoxDescent
-  } = measureTextContext.measureText(text3);
+  const { width: width2, actualBoundingBoxAscent, actualBoundingBoxDescent } = measureTextContext.measureText(text3);
   measureTextContext.restore();
   const height2 = actualBoundingBoxAscent + actualBoundingBoxDescent;
   return { width: width2, height: height2 };
@@ -43542,9 +43690,11 @@ var nodeGeneralization_default = {
 // ../simple-mind-map/src/svg/btns.js
 var open2 = `<svg t="1618141562310" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13476" width="200" height="200"><path d="M475.136 327.168v147.968h-147.968v74.24h147.968v147.968h74.24v-147.968h147.968v-74.24h-147.968v-147.968h-74.24z m36.864-222.208c225.28 0 407.04 181.76 407.04 407.04s-181.76 407.04-407.04 407.04-407.04-181.76-407.04-407.04 181.76-407.04 407.04-407.04z m0-74.24c-265.216 0-480.768 215.552-480.768 480.768s215.552 480.768 480.768 480.768 480.768-215.552 480.768-480.768-215.552-480.768-480.768-480.768z" p-id="13477"></path></svg>`;
 var close = `<svg t="1618141589243" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="13611" width="200" height="200"><path d="M512 105.472c225.28 0 407.04 181.76 407.04 407.04s-181.76 407.04-407.04 407.04-407.04-181.76-407.04-407.04 181.76-407.04 407.04-407.04z m0-74.24c-265.216 0-480.768 215.552-480.768 480.768s215.552 480.768 480.768 480.768 480.768-215.552 480.768-480.768-215.552-480.768-480.768-480.768z" p-id="13612"></path><path d="M252.928 474.624h518.144v74.24h-518.144z" p-id="13613"></path></svg>`;
+var imgAdjust = `<svg width="12px" height="12px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"><path fill="#ffffff" d="M1008.128 614.4a25.6 25.6 0 0 0-27.648 5.632l-142.848 142.848L259.072 186.88 401.92 43.52A25.6 25.6 0 0 0 384 0h-358.4a25.6 25.6 0 0 0-25.6 25.6v358.4a25.6 25.6 0 0 0 43.52 17.92l143.36-142.848 578.048 578.048-142.848 142.848a25.6 25.6 0 0 0 17.92 43.52h358.4a25.6 25.6 0 0 0 25.6-25.6v-358.4a25.6 25.6 0 0 0-15.872-25.088z"  /></svg>`;
 var btns_default = {
   open: open2,
-  close
+  close,
+  imgAdjust
 };
 
 // ../simple-mind-map/src/core/render/node/nodeExpandBtn.js
@@ -44010,6 +44160,15 @@ function createImgNode() {
   node3.on("dblclick", (e2) => {
     this.mindMap.emit("node_img_dblclick", this, e2);
   });
+  node3.on("mouseenter", (e2) => {
+    this.mindMap.emit("node_img_mouseenter", this, node3, e2);
+  });
+  node3.on("mouseleave", (e2) => {
+    this.mindMap.emit("node_img_mouseleave", this, node3, e2);
+  });
+  node3.on("mousemove", (e2) => {
+    this.mindMap.emit("node_img_mousemove", this, node3, e2);
+  });
   return {
     node: node3,
     width: imgSize[0],
@@ -44017,9 +44176,12 @@ function createImgNode() {
   };
 }
 function getImgShowSize() {
+  const { custom, width: width2, height: height2 } = this.nodeData.data.imageSize;
+  if (custom)
+    return [width2, height2];
   return resizeImgSize(
-    this.nodeData.data.imageSize.width,
-    this.nodeData.data.imageSize.height,
+    width2,
+    height2,
     this.mindMap.themeConfig.imgMaxWidth,
     this.mindMap.themeConfig.imgMaxHeight
   );
@@ -44072,7 +44234,7 @@ function createRichTextNode() {
   el2.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + "px";
   this.mindMap.el.appendChild(div);
   let { width: width2, height: height2 } = el2.getBoundingClientRect();
-  width2 = Math.ceil(width2);
+  width2 = Math.ceil(width2) + 1;
   height2 = Math.ceil(height2);
   g2.attr("data-width", width2);
   g2.attr("data-height", height2);
@@ -47202,6 +47364,13 @@ var TextEdit = class {
 };
 
 // ../simple-mind-map/src/themes/default.js
+var default_exports = {};
+__export(default_exports, {
+  checkIsNodeSizeIndependenceConfig: () => checkIsNodeSizeIndependenceConfig,
+  default: () => default_default,
+  lineStyleProps: () => lineStyleProps,
+  supportActiveStyle: () => supportActiveStyle
+});
 var default_default = {
   // 节点内边距
   paddingX: 15,
@@ -47348,6 +47517,13 @@ var default_default = {
     }
   }
 };
+var supportActiveStyle = [
+  "fillColor",
+  "borderColor",
+  "borderWidth",
+  "borderDasharray",
+  "borderRadius"
+];
 var nodeSizeIndependenceList = [
   "lineWidth",
   "lineColor",
@@ -48101,13 +48277,14 @@ var Render = class {
     });
   }
   //  设置节点图片
-  setNodeImage(node3, { url, title, width: width2, height: height2 }) {
+  setNodeImage(node3, { url, title, width: width2, height: height2, custom = false }) {
     this.setNodeDataRender(node3, {
       image: url,
       imageTitle: title || "",
       imageSize: {
         width: width2,
-        height: height2
+        height: height2,
+        custom
       }
     });
   }
@@ -50363,6 +50540,8 @@ var defaultOpt = {
   // zoom（放大缩小）、move（上下移动）
   // 当mousewheelAction设为move时，可以通过该属性控制鼠标滚动一下视图移动的步长，单位px
   mousewheelMoveStep: 100,
+  // 当mousewheelAction设为zoom时，默认向前滚动是缩小，向后滚动是放大，如果该属性设为true，那么会反过来
+  mousewheelZoomActionReverse: false,
   // 默认插入的二级节点的文字
   defaultInsertSecondLevelNodeText: "\u4E8C\u7EA7\u8282\u70B9",
   // 默认插入的二级以下节点的文字
@@ -62418,6 +62597,317 @@ var RichText = class {
 RichText.instanceName = "richText";
 var RichText_default = RichText;
 
+// ../simple-mind-map/src/plugins/NodeImgAdjust.js
+var NodeImgAdjust = class {
+  //  构造函数
+  constructor({ mindMap }) {
+    this.mindMap = mindMap;
+    this.resizeBtnSize = 26;
+    this.handleEl = null;
+    this.isShowHandleEl = false;
+    this.node = null;
+    this.img = null;
+    this.rect = null;
+    this.isMousedown = false;
+    this.currentImgWidth = 0;
+    this.currentImgHeight = 0;
+    this.isAdjusted = false;
+    this.bindEvent();
+  }
+  // 监听事件
+  bindEvent() {
+    this.onNodeImgMouseleave = this.onNodeImgMouseleave.bind(this);
+    this.onNodeImgMousemove = this.onNodeImgMousemove.bind(this);
+    this.onMousemove = this.onMousemove.bind(this);
+    this.onMouseup = this.onMouseup.bind(this);
+    this.onRenderEnd = this.onRenderEnd.bind(this);
+    this.mindMap.on("node_img_mouseleave", this.onNodeImgMouseleave);
+    this.mindMap.on("node_img_mousemove", this.onNodeImgMousemove);
+    this.mindMap.on("mousemove", this.onMousemove);
+    this.mindMap.on("mouseup", this.onMouseup);
+    this.mindMap.on("node_mouseup", this.onMouseup);
+    this.mindMap.on("node_tree_render_end", this.onRenderEnd);
+  }
+  // 解绑事件
+  unBindEvent() {
+    this.mindMap.off("node_img_mouseleave", this.onNodeImgMouseleave);
+    this.mindMap.off("node_img_mousemove", this.onNodeImgMousemove);
+    this.mindMap.off("mousemove", this.onMousemove);
+    this.mindMap.off("mouseup", this.onMouseup);
+    this.mindMap.off("node_mouseup", this.onMouseup);
+    this.mindMap.off("node_tree_render_end", this.onRenderEnd);
+  }
+  // 节点图片鼠标移动事件
+  onNodeImgMousemove(node3, img) {
+    if (this.isMousedown || this.isAdjusted)
+      return;
+    if (this.node === node3 && this.isShowHandleEl)
+      return;
+    this.node = node3;
+    this.img = img;
+    this.rect = this.img.rbox();
+    this.showHandleEl();
+  }
+  // 节点图片鼠标移出事件
+  onNodeImgMouseleave() {
+    if (this.isMousedown)
+      return;
+    this.hideHandleEl();
+  }
+  // 隐藏节点实际的图片
+  hideNodeImage() {
+    if (!this.img)
+      return;
+    this.img.hide();
+  }
+  // 显示节点实际的图片
+  showNodeImage() {
+    if (!this.img)
+      return;
+    this.img.show();
+  }
+  // 显示自定义元素
+  showHandleEl() {
+    if (!this.handleEl) {
+      this.createResizeBtnEl();
+    }
+    this.setHandleElRect();
+    document.body.appendChild(this.handleEl);
+    this.isShowHandleEl = true;
+  }
+  // 隐藏自定义元素
+  hideHandleEl() {
+    if (!this.isShowHandleEl)
+      return;
+    this.isShowHandleEl = false;
+    document.body.removeChild(this.handleEl);
+    this.handleEl.style.backgroundImage = ``;
+    this.handleEl.style.width = 0;
+    this.handleEl.style.height = 0;
+    this.handleEl.style.left = 0;
+    this.handleEl.style.top = 0;
+  }
+  // 设置自定义元素尺寸位置信息
+  setHandleElRect() {
+    let { width: width2, height: height2, x: x3, y: y4 } = this.rect;
+    this.handleEl.style.left = `${x3}px`;
+    this.handleEl.style.top = `${y4}px`;
+    this.currentImgWidth = width2;
+    this.currentImgHeight = height2;
+    this.updateHandleElSize();
+  }
+  // 更新自定义元素宽高
+  updateHandleElSize() {
+    this.handleEl.style.width = `${this.currentImgWidth}px`;
+    this.handleEl.style.height = `${this.currentImgHeight}px`;
+  }
+  // 创建调整按钮元素
+  createResizeBtnEl() {
+    this.handleEl = document.createElement("div");
+    this.handleEl.style.cssText = `
+      pointer-events: none;
+      position: fixed;
+      background-size: cover;
+    `;
+    const btnEl = document.createElement("div");
+    btnEl.innerHTML = btns_default.imgAdjust;
+    btnEl.style.cssText = `
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      pointer-events: auto;
+      background-color: rgba(0, 0, 0, 0.3);
+      width: ${this.resizeBtnSize}px;
+      height: ${this.resizeBtnSize}px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: nwse-resize;
+    `;
+    this.handleEl.appendChild(btnEl);
+    btnEl.addEventListener("mouseenter", () => {
+      this.showHandleEl();
+    });
+    btnEl.addEventListener("mouseleave", () => {
+      if (this.isMousedown)
+        return;
+      this.hideHandleEl();
+    });
+    btnEl.addEventListener("mousedown", (e2) => {
+      this.onMousedown(e2);
+    });
+  }
+  // 鼠标按钮按下事件
+  onMousedown() {
+    this.isMousedown = true;
+    this.hideNodeImage();
+    this.handleEl.style.backgroundImage = `url(${this.node.nodeData.data.image})`;
+  }
+  // 鼠标移动
+  onMousemove(e2) {
+    if (!this.isMousedown)
+      return;
+    e2.preventDefault();
+    let { width: imageOriginWidth, height: imageOriginHeight } = this.node.nodeData.data.imageSize;
+    let newWidth = e2.clientX - this.rect.x;
+    let newHeight = e2.clientY - this.rect.y;
+    if (newWidth <= 0 || newHeight <= 0)
+      return;
+    let [actWidth, actHeight] = resizeImgSizeByOriginRatio(
+      imageOriginWidth,
+      imageOriginHeight,
+      newWidth,
+      newHeight
+    );
+    this.currentImgWidth = actWidth;
+    this.currentImgHeight = actHeight;
+    this.updateHandleElSize();
+  }
+  // 鼠标松开
+  onMouseup() {
+    if (!this.isMousedown)
+      return;
+    this.showNodeImage();
+    this.hideHandleEl();
+    let { image, imageTitle } = this.node.nodeData.data;
+    this.mindMap.execCommand("SET_NODE_IMAGE", this.node, {
+      url: image,
+      title: imageTitle,
+      width: this.currentImgWidth,
+      height: this.currentImgHeight,
+      custom: true
+      // 代表自定义了图片大小
+    });
+    this.isAdjusted = true;
+    this.isMousedown = false;
+  }
+  // 渲染完成事件
+  onRenderEnd() {
+    if (!this.isAdjusted)
+      return;
+    this.isAdjusted = false;
+  }
+  // 插件被移除前做的事情
+  beforePluginRemove() {
+    this.unBindEvent();
+  }
+};
+NodeImgAdjust.instanceName = "nodeImgAdjust";
+var NodeImgAdjust_default = NodeImgAdjust;
+
+// ../simple-mind-map/src/plugins/TouchEvent.js
+var TouchEvent = class {
+  //  构造函数
+  constructor({ mindMap }) {
+    this.mindMap = mindMap;
+    this.touchesNum = 0;
+    this.singleTouchstartEvent = null;
+    this.clickNum = 0;
+    this.doubleTouchmoveDistance = 0;
+    this.bindEvent();
+  }
+  // 绑定事件
+  bindEvent() {
+    this.onTouchstart = this.onTouchstart.bind(this);
+    this.onTouchmove = this.onTouchmove.bind(this);
+    this.onTouchcancel = this.onTouchcancel.bind(this);
+    this.onTouchend = this.onTouchend.bind(this);
+    window.addEventListener("touchstart", this.onTouchstart);
+    window.addEventListener("touchmove", this.onTouchmove);
+    window.addEventListener("touchcancel", this.onTouchcancel);
+    window.addEventListener("touchend", this.onTouchend);
+  }
+  // 解绑事件
+  unBindEvent() {
+    window.removeEventListener("touchstart", this.onTouchstart);
+    window.removeEventListener("touchmove", this.onTouchmove);
+    window.removeEventListener("touchcancel", this.onTouchcancel);
+    window.removeEventListener("touchend", this.onTouchend);
+  }
+  // 手指按下事件
+  onTouchstart(e2) {
+    this.touchesNum = e2.touches.length;
+    if (this.touchesNum === 1) {
+      let touch = e2.touches[0];
+      this.singleTouchstartEvent = touch;
+      this.dispatchMouseEvent("mousedown", touch.target, touch);
+    }
+  }
+  // 手指移动事件
+  onTouchmove(e2) {
+    let len = e2.touches.length;
+    if (len === 1) {
+      let touch = e2.touches[0];
+      this.dispatchMouseEvent("mousemove", touch.target, touch);
+    } else if (len === 2) {
+      let touch1 = e2.touches[0];
+      let touch2 = e2.touches[1];
+      let ox = touch1.clientX - touch2.clientX;
+      let oy = touch1.clientY - touch2.clientY;
+      let distance = Math.sqrt(Math.pow(ox, 2) + Math.pow(oy, 2));
+      let { x: touch1ClientX, y: touch1ClientY } = this.mindMap.toPos(touch1.clientX, touch1.clientY);
+      let { x: touch2ClientX, y: touch2ClientY } = this.mindMap.toPos(touch2.clientX, touch2.clientY);
+      let cx2 = (touch1ClientX + touch2ClientX) / 2;
+      let cy2 = (touch1ClientY + touch2ClientY) / 2;
+      if (distance > this.doubleTouchmoveDistance) {
+        this.mindMap.view.enlarge(cx2, cy2);
+      } else {
+        this.mindMap.view.narrow(cx2, cy2);
+      }
+      this.doubleTouchmoveDistance = distance;
+    }
+  }
+  // 手指取消事件
+  onTouchcancel(e2) {
+  }
+  // 手指松开事件
+  onTouchend(e2) {
+    this.dispatchMouseEvent("mouseup", e2.target);
+    if (this.touchesNum === 1) {
+      this.clickNum++;
+      setTimeout(() => {
+        this.clickNum = 0;
+      }, 300);
+      let ev = this.singleTouchstartEvent;
+      if (this.clickNum > 1) {
+        this.clickNum = 0;
+        this.dispatchMouseEvent("dblclick", ev.target, ev);
+      } else {
+        this.dispatchMouseEvent("click", ev.target, ev);
+      }
+    }
+    this.touchesNum = 0;
+    this.singleTouchstartEvent = null;
+    this.doubleTouchmoveDistance = 0;
+  }
+  // 发送鼠标事件
+  dispatchMouseEvent(eventName, target, e2) {
+    let opt = {};
+    if (e2) {
+      opt = {
+        screenX: e2.screenX,
+        screenY: e2.screenY,
+        clientX: e2.clientX,
+        clientY: e2.clientY,
+        which: 1
+      };
+    }
+    let event = new MouseEvent(eventName, {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+      ...opt
+    });
+    target.dispatchEvent(event);
+  }
+  // 插件被移除前做的事情
+  beforePluginRemove() {
+    this.unBindEvent();
+  }
+};
+TouchEvent.instanceName = "touchEvent";
+var TouchEvent_default = TouchEvent;
+
 // ../simple-mind-map/src/parse/xmind.js
 var import_jszip = __toESM(require_jszip_min());
 var import_xml_js = __toESM(require_lib());
@@ -62460,7 +62950,8 @@ var transformXmind = (content3) => {
       text: node3.title
     };
     if (node3.notes) {
-      newNode.data.note = (node3.notes.realHTML || node3.notes.plain).content;
+      let notesData = node3.notes.realHTML || node3.notes.plain;
+      newNode.data.note = notesData ? notesData.content || "" : "";
     }
     if (node3.href && /^https?:\/\//.test(node3.href)) {
       newNode.data.hyperlink = node3.href;
@@ -67328,7 +67819,10 @@ var markdown_default = {
 simple_mind_map_default.xmind = xmind_default;
 simple_mind_map_default.markdown = markdown_default;
 simple_mind_map_default.iconList = icons_default.nodeIconList;
-simple_mind_map_default.usePlugin(MiniMap_default).usePlugin(Watermark_default).usePlugin(Drag_default).usePlugin(KeyboardNavigation_default).usePlugin(ExportPDF_default).usePlugin(Export_default).usePlugin(Select_default).usePlugin(AssociativeLine_default).usePlugin(RichText_default);
+simple_mind_map_default.constants = constant_exports;
+simple_mind_map_default.themes = themes_default;
+simple_mind_map_default.defaultTheme = default_exports;
+simple_mind_map_default.usePlugin(MiniMap_default).usePlugin(Watermark_default).usePlugin(Drag_default).usePlugin(KeyboardNavigation_default).usePlugin(ExportPDF_default).usePlugin(Export_default).usePlugin(Select_default).usePlugin(AssociativeLine_default).usePlugin(RichText_default).usePlugin(TouchEvent_default).usePlugin(NodeImgAdjust_default);
 var full_default = simple_mind_map_default;
 export {
   full_default as default
