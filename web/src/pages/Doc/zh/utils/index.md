@@ -10,6 +10,20 @@ import {walk, ...} from 'simple-mind-map/src/utils'
 
 ### 方法
 
+#### resizeImgSizeByOriginRatio(width, height, newWidth, newHeight)
+
+> v0.6.5+
+
+`width`: 图片原始的宽度
+
+`height`：图片原始的高度
+
+`newWidth`：要缩放到的宽度
+
+`newHeight`：要缩放到的高度
+
+按比例缩放图片。在保持图片原始宽高比的情况下缩放到指定的`newWidth`、`newHeight`大小。
+
 #### walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)
 
 深度优先遍历树

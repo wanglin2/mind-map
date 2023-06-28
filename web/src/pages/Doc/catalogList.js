@@ -31,6 +31,7 @@ let APIList = [
   'watermark',
   'associativeLine',
   'touchEvent',
+  'nodeImgAdjust',
   'xmind',
   'markdown',
   'utils'

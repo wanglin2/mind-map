@@ -46,7 +46,8 @@ export default [
       { path: 'xmind', title: 'XMind解析' },
       { path: 'deploy', title: '部署' },
       { path: 'client', title: '客户端' },
-      { path: 'touchEvent', title: 'TouchEvent插件' }
+      { path: 'touchEvent', title: 'TouchEvent插件' },
+      { path: 'nodeImgAdjust', title: 'NodeImgAdjust插件' }
     ]
   },
   {
@@ -75,7 +76,8 @@ export default [
       { path: 'watermark', title: 'Watermark plugin' },
       { path: 'xmind', title: 'XMind parse' },
       { path: 'deploy', title: 'Deploy' },
-      { path: 'touchEvent', title: 'TouchEvent plugin' }
+      { path: 'touchEvent', title: 'TouchEvent plugin' },
+      { path: 'nodeImgAdjust', title: 'NodeImgAdjust plugin' }
     ]
   }
 ]

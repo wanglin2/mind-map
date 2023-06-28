@@ -106,6 +106,8 @@ cd web
 npm run buildLibrary
 ```
 
+打包入口为`simple-mind-map/full.js`，默认会引入所有插件，如果你不需要所有插件的话，那么可以修改该文件，只引入你需要的插件，这样可以减少打包后的文件体积。
+
 `simple-mind-map`库的`package.json`文件提供了两个导出字段：
 
 ```json

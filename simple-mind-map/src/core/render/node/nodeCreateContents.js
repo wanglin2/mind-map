@@ -101,7 +101,7 @@ function createRichTextNode() {
   el.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + 'px'
   this.mindMap.el.appendChild(div)
   let { width, height } = el.getBoundingClientRect()
-  width = Math.ceil(width)
+  width = Math.ceil(width) + 1// 修复getBoundingClientRect方法对实际宽度是小数的元素获取到的值是整数，导致宽度不够文本发生换行的问题
   height = Math.ceil(height)
   g.attr('data-width', width)
   g.attr('data-height', height)

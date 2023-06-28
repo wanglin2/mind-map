@@ -6,6 +6,15 @@
 <pre class="hljs"><code><span class="hljs-keyword">import</span> {walk, ...} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils&#x27;</span>
 </code></pre>
 <h3>Methods</h3>
+<h4>resizeImgSizeByOriginRatio(width, height, newWidth, newHeight)</h4>
+<blockquote>
+<p>v0.6.5+</p>
+</blockquote>
+<p><code>width</code>: The original width of the image</p>
+<p><code>height</code>：The original height of the image</p>
+<p><code>newWidth</code>：Width to zoom in to</p>
+<p><code>newHeight</code>：Height to zoom in to</p>
+<p>Scale the image proportionally. Zoom to the specified size of <code>newWidth</code> and <code>newHeight</code> while maintaining the original aspect ratio of the image.</p>
 <h4>walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)</h4>
 <p>Depth-first traversal of a tree</p>
 <p><code>root</code>: the root node of the tree to be traversed</p>

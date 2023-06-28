@@ -112,6 +112,8 @@ cd web
 npm run buildLibrary
 ```
 
+The packaging entry is `simple-mind-map/full.js`, which will introduce all plugins by default. If you don't need all plugins, you can modify the file to only introduce the plugins you need, which can reduce the size of the packaged file.
+
 The `package.json` file in the `simple-mind-map` library provides two export
 fields:
 

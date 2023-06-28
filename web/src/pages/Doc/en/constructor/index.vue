@@ -176,6 +176,13 @@
 <td></td>
 </tr>
 <tr>
+<td>mousewheelZoomActionReverse（v0.6.5+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>When <code>mousewheelAction</code> is set to <code>zoom</code>, the default scrolling forward is to zoom out, and scrolling backward is to zoom in. If this property is set to true, it will be reversed</td>
+<td></td>
+</tr>
+<tr>
 <td>defaultInsertSecondLevelNodeText（v0.4.7+）</td>
 <td>String</td>
 <td>二级节点</td>
@@ -651,6 +658,21 @@ poor performance and should be used sparingly.</p>
 <td>node_img_dblclick（v0.2.15+）</td>
 <td>Node image double-click event</td>
 <td>this (node instance), e (event object)</td>
+</tr>
+<tr>
+<td>node_img_mouseenter（v0.6.5+）</td>
+<td>Node image mouseenter event</td>
+<td>this（node instance）、imgNode（img node）、e（event object）</td>
+</tr>
+<tr>
+<td>node_img_mouseleave（v0.6.5+）</td>
+<td>Node image mouseleave event</td>
+<td>this（node instance）、imgNode（img node）、e（event object）</td>
+</tr>
+<tr>
+<td>node_img_mousemove（v0.6.5+）</td>
+<td>Node image mousemove event</td>
+<td>this（node instance）、imgNode（img node）、e（event object）</td>
 </tr>
 <tr>
 <td>node_tree_render_end（v0.2.16+）</td>
