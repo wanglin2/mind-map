@@ -82,12 +82,12 @@ class View {
           // 鼠标滚轮，向上和向左，都是缩小
           case CONSTANTS.DIR.UP:
           case CONSTANTS.DIR.LEFT:
-            mousewheelZoomActionReverse ? this.enlarge(cx, cy) : this.narrow(cx, cy)
+            mousewheelZoomActionReverse ? this.enlarge(cx, cy, isTouchPad) : this.narrow(cx, cy, isTouchPad)
             break
           // 鼠标滚轮，向下和向右，都是放大
           case CONSTANTS.DIR.DOWN:
           case CONSTANTS.DIR.RIGHT:
-            mousewheelZoomActionReverse ? this.narrow(cx, cy) : this.enlarge(cx, cy)
+            mousewheelZoomActionReverse ? this.narrow(cx, cy, isTouchPad) : this.enlarge(cx, cy, isTouchPad)
             break
         }
       } else {// 鼠标滚轮事件控制画布移动
@@ -199,16 +199,18 @@ class View {
   }
 
   //  缩小
-  narrow(cx, cy) {
-    const scale = Math.max(this.scale - this.mindMap.opt.scaleRatio, 0.1)
+  narrow(cx, cy, isTouchPad) {
+    const scaleRatio = this.mindMap.opt.scaleRatio / (isTouchPad ? 5 : 1)
+    const scale = Math.max(this.scale - scaleRatio, 0.1)
     this.scaleInCenter(scale, cx, cy)
     this.transform()
     this.mindMap.emit('scale', this.scale)
   }
 
   //  放大
-  enlarge(cx, cy) {
-    const scale = this.scale + this.mindMap.opt.scaleRatio
+  enlarge(cx, cy, isTouchPad) {
+    const scaleRatio = this.mindMap.opt.scaleRatio / (isTouchPad ? 5 : 1)
+    const scale = this.scale + scaleRatio
     this.scaleInCenter(scale, cx, cy)
     this.transform()
     this.mindMap.emit('scale', this.scale)
