@@ -86,7 +86,8 @@ class TouchEvent {
         this.clickNum = 0
         this.dispatchMouseEvent('dblclick', ev.target, ev)
       } else {
-        this.dispatchMouseEvent('click', ev.target, ev)
+        // 点击事件应该不用模拟
+        // this.dispatchMouseEvent('click', ev.target, ev)
       }
     }
     this.touchesNum = 0
