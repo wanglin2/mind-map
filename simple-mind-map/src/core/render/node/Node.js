@@ -578,7 +578,7 @@ class Node {
       delete this.nodeData.inserting
       this.active()
       setTimeout(() => {
-        this.mindMap.emit('node_dblclick', this)
+        this.mindMap.emit('node_dblclick', this, null, true)
       }, 0)
     }
   }
