@@ -693,11 +693,11 @@ class Render {
     if (node.isRoot) {
       return
     }
-    let copyData = copyNodeTree({}, node, false, true)
+    // let copyData = copyNodeTree({}, node, false, true)
     this.removeActiveNode(node)
     this.removeOneNode(node)
     this.mindMap.emit('node_active', null, this.activeNodeList)
-    toNode.nodeData.children.push(copyData)
+    toNode.nodeData.children.push(node.nodeData)
     this.mindMap.render()
     if (toNode.isRoot) {
       toNode.destroy()
