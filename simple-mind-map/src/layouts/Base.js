@@ -48,6 +48,13 @@ class Base {
     return [CONSTANTS.CHANGE_THEME, CONSTANTS.TRANSFORM_TO_NORMAL_NODE].includes(this.renderer.renderSource)
   }
 
+  // 层级类型改变
+  checkIsLayerTypeChange(oldIndex, newIndex) {
+    if (oldIndex >= 2 && newIndex >= 2) return false
+    if (oldIndex >= 2 && newIndex < 2) return true
+    if (oldIndex < 2 && newIndex >= 2) return true
+  }
+
   //  创建节点实例
   createNode(data, parent, isRoot, layerIndex) {
     // 创建节点
@@ -55,11 +62,12 @@ class Base {
     // 数据上保存了节点引用，那么直接复用节点
     if (data && data._node && !this.renderer.reRender) {
       newNode = data._node
+      let isLayerTypeChange = this.checkIsLayerTypeChange(newNode.layerIndex, layerIndex)
       newNode.reset()
       newNode.layerIndex = layerIndex
       this.cacheNode(data._node.uid, newNode)
       // 主题或主题配置改变了需要重新计算节点大小和布局
-      if (this.checkIsNeedResizeSources()) {
+      if (this.checkIsNeedResizeSources() || isLayerTypeChange) {
         newNode.getSize()
         newNode.needLayout = true
       }
@@ -68,6 +76,7 @@ class Base {
       newNode = this.lru.get(data.data.uid)
       // 保存该节点上一次的数据
       let lastData = JSON.stringify(newNode.nodeData.data)
+      let isLayerTypeChange = this.checkIsLayerTypeChange(newNode.layerIndex, layerIndex)
       newNode.reset()
       newNode.nodeData = newNode.handleData(data || {})
       newNode.layerIndex = layerIndex
@@ -77,7 +86,7 @@ class Base {
       let isResizeSource = this.checkIsNeedResizeSources()
       // 节点数据改变了需要重新计算节点大小和布局
       let isNodeDataChange = lastData !== JSON.stringify(data.data)
-      if (isResizeSource || isNodeDataChange) {
+      if (isResizeSource || isNodeDataChange || isLayerTypeChange) {
         newNode.getSize()
         newNode.needLayout = true
       }
