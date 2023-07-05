@@ -412,5 +412,11 @@ export const downTypeList = [
     type: 'md',
     icon: 'iconmarkdown',
     desc: 'Easy for other software to open'
+  },
+  {
+    name: 'XMind',
+    type: 'xmind',
+    icon: 'iconxmind',
+    desc: 'XMind file'
   }
 ]
