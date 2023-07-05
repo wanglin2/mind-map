@@ -51,8 +51,8 @@ class Fishbone extends Base {
             // 节点生长方向
             newNode.dir =
               index % 2 === 0
-                ? CONSTANTS.TIMELINE_DIR.TOP
-                : CONSTANTS.TIMELINE_DIR.BOTTOM
+                ? CONSTANTS.LAYOUT_GROW_DIR.TOP
+                : CONSTANTS.LAYOUT_GROW_DIR.BOTTOM
           }
           // 计算二级节点的top值
           if (parent._node.isRoot) {
@@ -222,7 +222,7 @@ class Fishbone extends Base {
 
   // 检查节点是否是上方节点
   checkIsTop(node) {
-    return node.dir === CONSTANTS.TIMELINE_DIR.TOP
+    return node.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP
   }
 
   //  绘制连线，连接该节点到其子节点
