@@ -180,6 +180,17 @@ class Export {
     this.mindMap.doExportPDF.pdf(name, img)
   }
 
+  // 导出为xmind
+  async xmind(name) {
+    if (!this.mindMap.doExportXMind) {
+      throw new Error('请注册ExportXMind插件')
+    }
+    const data = this.mindMap.getData()
+    const blob = await this.mindMap.doExportXMind.xmind(data, name)
+    const res = await readBlob(blob)
+    return res
+  }
+
   //  导出为svg
   // plusCssText：附加的css样式，如果svg中存在dom节点，想要设置一些针对节点的样式可以通过这个参数传入
   async svg(name, plusCssText) {
