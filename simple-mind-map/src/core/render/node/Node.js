@@ -269,16 +269,7 @@ class Node {
     this.group.add(this.shapeNode)
     this.updateNodeShape()
     // 渲染一个隐藏的矩形区域，用来触发展开收起按钮的显示
-    if (!this.mindMap.opt.alwaysShowExpandBtn) {
-      if (!this._unVisibleRectRegionNode) {
-        this._unVisibleRectRegionNode = new Rect()
-      }
-      this._unVisibleRectRegionNode.fill({
-        color: 'transparent'
-      })
-      this.renderer.layout.renderExpandBtnRect(this._unVisibleRectRegionNode, this.expandBtnSize, width, height, this)
-      this.group.add(this._unVisibleRectRegionNode)
-    }
+    this.renderExpandBtnPlaceholderRect()
     // 概要节点添加一个带所属节点id的类名
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass('generalization_' + this.generalizationBelongNode.uid)
@@ -363,6 +354,21 @@ class Node {
           : 0)
     )
     this.group.add(textContentNested)
+  }
+
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnPlaceholderRect() {
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      let { width, height } = this
+      if (!this._unVisibleRectRegionNode) {
+        this._unVisibleRectRegionNode = new Rect()
+        this._unVisibleRectRegionNode.fill({
+          color: 'transparent'
+        })
+        this.group.add(this._unVisibleRectRegionNode)
+      }
+      this.renderer.layout.renderExpandBtnRect(this._unVisibleRectRegionNode, this.expandBtnSize, width, height, this)
+    }
   }
 
   // 给节点绑定事件
@@ -547,6 +553,10 @@ class Node {
       if (this.needLayout) {
         this.needLayout = false
         this.layout()
+      }
+      if (this.needRerenderExpandBtnPlaceholderRect) {
+        this.needRerenderExpandBtnPlaceholderRect = false
+        this.renderExpandBtnPlaceholderRect()
       }
       this.update()
     }

@@ -55,6 +55,13 @@ class Base {
     if (oldIndex < 2 && newIndex >= 2) return true
   }
 
+  // 检查是否是结构布局改变重新渲染展开收起按钮占位元素
+  checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(node) {
+    if (this.renderer.renderSource === CONSTANTS.CHANGE_LAYOUT) {
+      node.needRerenderExpandBtnPlaceholderRect = true
+    }
+  }
+
   //  创建节点实例
   createNode(data, parent, isRoot, layerIndex) {
     // 创建节点
@@ -66,6 +73,7 @@ class Base {
       newNode.reset()
       newNode.layerIndex = layerIndex
       this.cacheNode(data._node.uid, newNode)
+      this.checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(newNode)
       // 主题或主题配置改变了需要重新计算节点大小和布局
       if (this.checkIsNeedResizeSources() || isLayerTypeChange) {
         newNode.getSize()
@@ -81,6 +89,7 @@ class Base {
       newNode.nodeData = newNode.handleData(data || {})
       newNode.layerIndex = layerIndex
       this.cacheNode(data.data.uid, newNode)
+      this.checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(newNode)
       data._node = newNode
       // 主题或主题配置改变了需要重新计算节点大小和布局
       let isResizeSource = this.checkIsNeedResizeSources()

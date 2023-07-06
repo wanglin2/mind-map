@@ -157,6 +157,7 @@ export const themeList = [
 // 常量
 export const CONSTANTS = {
   CHANGE_THEME: 'changeTheme',
+  CHANGE_LAYOUT: 'changeLayout',
   SET_DATA: 'setData',
   TRANSFORM_TO_NORMAL_NODE: 'transformAllNodesToNormalNode',
   MODE: {
