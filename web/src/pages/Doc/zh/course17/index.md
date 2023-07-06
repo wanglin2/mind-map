@@ -4,7 +4,7 @@
 
 > 要使用导出功能需要使用导出插件。
 
-目前支持导出为`.smm`、`.json`、`.svg`、`.png`、`.pdf`、`.md`文件。
+目前支持导出为`.smm`、`.json`、`.svg`、`.png`、`.pdf`、`.md`、`.xmind`文件。
 
 `.smm`是`simple-mind-map`自己定义的一种文件，其实就是`json`文件，换了一个扩展名而已。
 
@@ -92,6 +92,18 @@ mindMap.export(
 
 ```js
 mindMap.export('md', true, '文件名')
+```
+
+### 导出为xmind
+
+> v0.6.6+
+
+> 需要注册`ExportXMind`插件
+
+导出为`Xmind`新版文件。
+
+```js
+mindMap.export('xmind', '文件名')
 ```
 
 ## 导入

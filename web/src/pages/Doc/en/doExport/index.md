@@ -105,3 +105,14 @@ Gets `svg` data, an async method that returns an object:
   str // svg string
 }
 ```
+
+### xmind(name)
+
+> v0.6.6+, an additional ExportXMind plugin needs to be registered
+
+```js
+import ExportXMind from 'simple-mind-map/src/plugins/ExportXMind.js'
+MindMap.usePlugin(ExportXMind)
+```
+
+Export as an `xmind` file type, asynchronous method, returns a `Promise` instance, and the returned data is the `data:url` data of a `zip` compressed package, which can be directly downloaded.

@@ -2,7 +2,7 @@
 
 > v0.2.7+
 
-提供导入`XMind`文件的方法。
+提供导入和导出`XMind`文件的方法。
 
 ## 引入
 
@@ -30,6 +30,8 @@ simpleMindMap.xmind
 
 ### xmind.transformXmind(content)
 
+> v0.6.6+版本该方法改为异步方法，返回一个Promise实例
+
 转换`xmind`数据，`.xmind`文件本质上是一个压缩包，改成`zip`后缀可以解压缩，里面存在一个`content.json`文件，如果你自己解析出了这个文件，那么可以把这个文件内容传递给这个方法进行转换，转换后的数据，可以使用`mindMap.setData(data)`来将返回的数据渲染到画布上
 
 `content`：`.xmind`压缩包内的`content.json`文件内容
@@ -41,3 +43,13 @@ simpleMindMap.xmind
 针对`xmind8`版本的数据解析，因为该版本的`.xmind`文件内没有`content.json`，对应的是`content.xml`。
 
 `content`：`.xmind`压缩包内的`content.xml`文件内容
+
+### transformToXmind(data, name)
+
+> v0.6.6+
+
+- `data`：`simple-mind-map`思维导图数据，可以通过`mindMap.getData()`方法获取。
+
+- `name`：要导出的文件名。
+
+将`simple-mind-map`数据转为`xmind`文件。该方法为异步方法，返回一个`Promise`实例，返回的数据是一个`blob`类型的`zip`压缩包数据，你可以自行下载为文件。

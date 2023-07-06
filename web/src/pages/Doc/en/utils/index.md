@@ -153,6 +153,34 @@ Extract plain text content from an HTML string.
 
 Convert `blob` data to `data:url` data.
 
+#### parseDataUrl(data)
+
+> v0.6.6+
+
+Parse `data:url` data, return:
+
+```js
+{
+  type,// file type of data
+  base64// base64 data
+}
+```
+
+#### getImageSize(src)
+
+> v0.6.6+
+
+- `src`: The url of img
+
+Get the size of image, return:
+
+```js
+{
+  width,
+  height
+}
+```
+
 ## Simulate CSS background in Canvas
 
 Import:
