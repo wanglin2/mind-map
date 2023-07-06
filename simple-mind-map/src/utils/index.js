@@ -213,6 +213,18 @@ export const imgToDataUrl = src => {
   })
 }
 
+// 解析dataUrl
+export const parseDataUrl = data => {
+  if (!/^data:/.test(data)) return data
+  let [typeStr, base64] = data.split(',')
+  let res = /^data:[^/]+\/([^;]+);/.exec(typeStr)
+  let type = res[1]
+  return {
+    type,
+    base64
+  }
+}
+
 //  下载文件
 export const downloadFile = (file, fileName) => {
   let a = document.createElement('a')
@@ -391,4 +403,24 @@ export const nodeToHTML = node => {
   nodeToHTMLWrapEl.innerHTML = ''
   nodeToHTMLWrapEl.appendChild(node)
   return nodeToHTMLWrapEl.innerHTML
+}
+
+// 获取图片大小
+export const getImageSize = src => {
+  return new Promise(resolve => {
+    let img = new Image()
+    img.src = src
+    img.onload = () => {
+      resolve({
+        width: img.width,
+        height: img.height
+      })
+    }
+    img.onerror = () => {
+      resolve({
+        width: 0,
+        height: 0
+      })
+    }
+  })
 }

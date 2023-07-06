@@ -109,3 +109,14 @@ MindMap.usePlugin(ExportPDF)
   str// svg字符串
 }
 ```
+
+### xmind(name)
+
+> v0.6.6+，需要额外注册一个ExportXMind插件
+
+```js
+import ExportXMind from 'simple-mind-map/src/plugins/ExportXMind.js'
+MindMap.usePlugin(ExportXMind)
+```
+
+导出为`xmind`文件类型，异步方法，返回一个`Promise`实例，返回的数据为一个`zip`压缩包的`data:url`数据，可以直接下载。

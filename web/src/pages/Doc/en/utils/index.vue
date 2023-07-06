@@ -98,6 +98,29 @@ and copying the <code>data</code> of the data object, example:</p>
 <p>v0.5.9+</p>
 </blockquote>
 <p>Convert <code>blob</code> data to <code>data:url</code> data.</p>
+<h4>parseDataUrl(data)</h4>
+<blockquote>
+<p>v0.6.6+</p>
+</blockquote>
+<p>Parse <code>data:url</code> data, return:</p>
+<pre class="hljs"><code>{
+  type,<span class="hljs-comment">// file type of data</span>
+  base64<span class="hljs-comment">// base64 data</span>
+}
+</code></pre>
+<h4>getImageSize(src)</h4>
+<blockquote>
+<p>v0.6.6+</p>
+</blockquote>
+<ul>
+<li><code>src</code>: The url of img</li>
+</ul>
+<p>Get the size of image, return:</p>
+<pre class="hljs"><code>{
+  width,
+  height
+}
+</code></pre>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

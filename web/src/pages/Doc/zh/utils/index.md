@@ -148,6 +148,34 @@ copyNodeTree({}, node)
 
 将`blob`数据转成`data:url`数据。
 
+#### parseDataUrl(data)
+
+> v0.6.6+
+
+解析`data:url`数据，返回：
+
+```js
+{
+  type,// 数据的文件类型
+  base64// base64数据
+}
+```
+
+#### getImageSize(src)
+
+> v0.6.6+
+
+- `src`：图片的url
+
+获取图片的大小。返回：
+
+```js
+{
+  width,
+  height
+}
+```
+
 ## 在canvas中模拟css的背景属性
 
 引入：

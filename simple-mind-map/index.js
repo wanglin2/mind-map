@@ -194,7 +194,7 @@ class MindMap {
     this.opt.layout = layout
     this.view.reset()
     this.renderer.setLayout()
-    this.render()
+    this.render(null, CONSTANTS.CHANGE_LAYOUT)
   }
 
   //  执行命令
