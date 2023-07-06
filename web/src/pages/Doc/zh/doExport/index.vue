@@ -87,6 +87,14 @@ MindMap.usePlugin(ExportPDF)
   str<span class="hljs-comment">// svg字符串</span>
 }
 </code></pre>
+<h3>xmind(name)</h3>
+<blockquote>
+<p>v0.6.6+，需要额外注册一个ExportXMind插件</p>
+</blockquote>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> ExportXMind <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/ExportXMind.js&#x27;</span>
+MindMap.usePlugin(ExportXMind)
+</code></pre>
+<p>导出为<code>xmind</code>文件类型，异步方法，返回一个<code>Promise</code>实例，返回的数据为一个<code>zip</code>压缩包的<code>data:url</code>数据，可以直接下载。</p>
 
   </div>
 </template>

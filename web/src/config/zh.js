@@ -484,5 +484,11 @@ export const downTypeList = [
     type: 'md',
     icon: 'iconmarkdown',
     desc: '便于其他软件打开'
+  },
+  {
+    name: 'XMind',
+    type: 'xmind',
+    icon: 'iconxmind',
+    desc: 'XMind格式'
   }
 ]

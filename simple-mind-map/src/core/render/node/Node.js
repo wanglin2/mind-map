@@ -269,15 +269,7 @@ class Node {
     this.group.add(this.shapeNode)
     this.updateNodeShape()
     // 渲染一个隐藏的矩形区域，用来触发展开收起按钮的显示
-    if (!this.mindMap.opt.alwaysShowExpandBtn) {
-      if (!this._unVisibleRectRegionNode) {
-        this._unVisibleRectRegionNode = new Rect()
-      }
-      this._unVisibleRectRegionNode.fill({
-        color: 'transparent'
-      }).size(this.expandBtnSize, height).x(width).y(0)
-      this.group.add(this._unVisibleRectRegionNode)
-    }
+    this.renderExpandBtnPlaceholderRect()
     // 概要节点添加一个带所属节点id的类名
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass('generalization_' + this.generalizationBelongNode.uid)
@@ -289,7 +281,7 @@ class Node {
       foreignObject.height(height)
       foreignObject.add(SVG(this._customNodeContent))
       this.group.add(foreignObject)
-      return 
+      return
     }
     // 图片节点
     let imgHeight = 0
@@ -364,6 +356,21 @@ class Node {
     this.group.add(textContentNested)
   }
 
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnPlaceholderRect() {
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      let { width, height } = this
+      if (!this._unVisibleRectRegionNode) {
+        this._unVisibleRectRegionNode = new Rect()
+        this._unVisibleRectRegionNode.fill({
+          color: 'transparent'
+        })
+        this.group.add(this._unVisibleRectRegionNode)
+      }
+      this.renderer.layout.renderExpandBtnRect(this._unVisibleRectRegionNode, this.expandBtnSize, width, height, this)
+    }
+  }
+
   // 给节点绑定事件
   bindGroupEvent() {
     // 单击事件，选中节点
@@ -433,7 +440,8 @@ class Node {
     // 右键菜单事件
     this.group.on('contextmenu', e => {
       // 按住ctrl键点击鼠标左键不知为何触发的是contextmenu事件
-      if (this.mindMap.opt.readonly || e.ctrlKey) {// || this.isGeneralization
+      if (this.mindMap.opt.readonly || e.ctrlKey) {
+        // || this.isGeneralization
         return
       }
       e.stopPropagation()
@@ -467,8 +475,11 @@ class Node {
     if (!this.group) {
       return
     }
-    let { enableNodeTransitionMove, nodeTransitionMoveDuration, alwaysShowExpandBtn } =
-      this.mindMap.opt
+    let {
+      enableNodeTransitionMove,
+      nodeTransitionMoveDuration,
+      alwaysShowExpandBtn
+    } = this.mindMap.opt
     if (alwaysShowExpandBtn) {
       // 需要移除展开收缩按钮
       if (this._expandBtn && this.nodeData.children.length <= 0) {
@@ -543,6 +554,10 @@ class Node {
         this.needLayout = false
         this.layout()
       }
+      if (this.needRerenderExpandBtnPlaceholderRect) {
+        this.needRerenderExpandBtnPlaceholderRect = false
+        this.renderExpandBtnPlaceholderRect()
+      }
       this.update()
     }
     // 子节点
@@ -578,7 +593,7 @@ class Node {
       delete this.nodeData.inserting
       this.active()
       setTimeout(() => {
-        this.mindMap.emit('node_dblclick', this)
+        this.mindMap.emit('node_dblclick', this, null, true)
       }, 0)
     }
   }
@@ -783,7 +798,7 @@ class Node {
 
   //  获取padding值
   getPaddingVale() {
-    let { isActive }= this.nodeData.data
+    let { isActive } = this.nodeData.data
     return {
       paddingX: this.getStyle('paddingX', true, isActive),
       paddingY: this.getStyle('paddingY', true, isActive)

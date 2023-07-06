@@ -39,6 +39,7 @@ class RichText {
     this.range = null
     this.lastRange = null
     this.node = null
+    this.isInserting = false
     this.styleEl = null
     this.cacheEditingText = ''
     this.lostStyle = false
@@ -145,11 +146,12 @@ class RichText {
   }
 
   // 显示文本编辑控件
-  showEditText(node, rect) {
+  showEditText(node, rect, isInserting) {
     if (this.showTextEdit) {
       return
     }
     this.node = node
+    this.isInserting = isInserting
     if (!rect) rect = node._textData.node.node.getBoundingClientRect()
     this.mindMap.emit('before_show_text_edit')
     this.mindMap.renderer.textEdit.registerTmpShortcut()
@@ -200,7 +202,8 @@ class RichText {
     this.initQuillEditor()
     document.querySelector('.ql-editor').style.minHeight = originHeight + 'px'
     this.showTextEdit = true
-    this.focus()
+    // 如果是刚创建的节点，那么默认全选，否则普通激活不全选
+    this.focus(isInserting ? 0 : null)
     if (!node.nodeData.data.richText) {
       // 如果是非富文本的情况，需要手动应用文本样式
       this.setTextStyleIfNotRichText(node)
@@ -250,6 +253,7 @@ class RichText {
     this.showTextEdit = false
     this.mindMap.emit('rich_text_selection_change', false)
     this.node = null
+    this.isInserting = false
   }
 
   // 初始化Quill富文本编辑器
@@ -271,6 +275,8 @@ class RichText {
       theme: 'snow'
     })
     this.quill.on('selection-change', range => {
+      // 刚创建的节点全选不需要显示操作条
+      if (this.isInserting) return
       this.lastRange = this.range
       this.range = null
       if (range) {
@@ -338,9 +344,9 @@ class RichText {
   }
 
   // 聚焦
-  focus() {
+  focus(start) {
     let len = this.quill.getLength()
-    this.quill.setSelection(len, len)
+    this.quill.setSelection(typeof start === 'number' ? start : len, len)
   }
 
   // 格式化当前选中的文本

@@ -50,8 +50,8 @@ class Timeline extends Base {
               // 节点生长方向
               newNode.dir =
                 index % 2 === 0
-                  ? CONSTANTS.TIMELINE_DIR.BOTTOM
-                  : CONSTANTS.TIMELINE_DIR.TOP
+                  ? CONSTANTS.LAYOUT_GROW_DIR.BOTTOM
+                  : CONSTANTS.LAYOUT_GROW_DIR.TOP
             }
           } else {
             newNode.dir = ''
@@ -151,7 +151,7 @@ class Timeline extends Base {
         if (
           parent &&
           parent.isRoot &&
-          node.dir === CONSTANTS.TIMELINE_DIR.TOP
+          node.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP
         ) {
           // 遍历二级节点的子节点
           node.children.forEach(item => {
@@ -280,7 +280,7 @@ class Timeline extends Base {
         if (
           node.parent &&
           node.parent.isRoot &&
-          node.dir === CONSTANTS.TIMELINE_DIR.TOP
+          node.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP
         ) {
           line.plot(`M ${x},${top} L ${x},${miny}`)
         } else {
@@ -301,7 +301,7 @@ class Timeline extends Base {
       if (
         node.parent &&
         node.parent.isRoot &&
-        node.dir === CONSTANTS.TIMELINE_DIR.TOP
+        node.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP
       ) {
         btn.translate(
           width * 0.3 - expandBtnSize / 2 - translateX,
@@ -335,6 +335,28 @@ class Timeline extends Base {
     gLine.plot(path)
     gNode.left = right + generalizationNodeMargin
     gNode.top = top + (bottom - top - gNode.height) / 2
+  }
+
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnRect(rect, expandBtnSize, width, height, node) {
+    if (this.layout === CONSTANTS.LAYOUT.TIMELINE) {
+      rect.size(width, expandBtnSize).x(0).y(height)
+    } else {
+      let dir = ''
+      if (node.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP) {
+        dir =
+          node.layerIndex === 1
+            ? CONSTANTS.LAYOUT_GROW_DIR.TOP
+            : CONSTANTS.LAYOUT_GROW_DIR.BOTTOM
+      } else {
+        dir = CONSTANTS.LAYOUT_GROW_DIR.BOTTOM
+      }
+      if (dir === CONSTANTS.LAYOUT_GROW_DIR.TOP) {
+        rect.size(width, expandBtnSize).x(0).y(-expandBtnSize)
+      } else {
+        rect.size(width, expandBtnSize).x(0).y(height)
+      }
+    }
   }
 }
 

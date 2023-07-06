@@ -65,7 +65,8 @@ export default class TextEdit {
   }
 
   //  显示文本编辑框
-  async show(node) {
+  // isInserting：是否是刚创建的节点
+  async show(node, e, isInserting = false) {
     // 使用了自定义节点内容那么不响应编辑事件
     if (node.isUseCustomNodeContent()) {
       return
@@ -74,7 +75,7 @@ export default class TextEdit {
     if (typeof beforeTextEdit === 'function') {
       let isShow = false
       try {
-        isShow = await beforeTextEdit(node)
+        isShow = await beforeTextEdit(node, isInserting)
       } catch (error) {
         isShow = false
       }
@@ -85,7 +86,7 @@ export default class TextEdit {
     this.mindMap.view.translateXY(offsetLeft, offsetTop)
     let rect = node._textData.node.node.getBoundingClientRect()
     if (this.mindMap.richText) {
-      this.mindMap.richText.showEditText(node, rect)
+      this.mindMap.richText.showEditText(node, rect, isInserting)
       return
     }
     this.showEditTextBox(node, rect)

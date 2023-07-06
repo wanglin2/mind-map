@@ -356,11 +356,11 @@ var require_html2canvas = __commonJS({
       };
       function __awaiter(thisArg, _arguments, P2, generator) {
         function adopt2(value) {
-          return value instanceof P2 ? value : new P2(function(resolve) {
-            resolve(value);
+          return value instanceof P2 ? value : new P2(function(resolve2) {
+            resolve2(value);
           });
         }
-        return new (P2 || (P2 = Promise))(function(resolve, reject) {
+        return new (P2 || (P2 = Promise))(function(resolve2, reject) {
           function fulfilled(value) {
             try {
               step(generator.next(value));
@@ -376,7 +376,7 @@ var require_html2canvas = __commonJS({
             }
           }
           function step(result) {
-            result.done ? resolve(result.value) : adopt2(result.value).then(fulfilled, rejected);
+            result.done ? resolve2(result.value) : adopt2(result.value).then(fulfilled, rejected);
           }
           step((generator = generator.apply(thisArg, _arguments || [])).next());
         });
@@ -4513,10 +4513,10 @@ var require_html2canvas = __commonJS({
         return svg2;
       };
       var loadSerializedSVG$1 = function(svg2) {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve2, reject) {
           var img = new Image();
           img.onload = function() {
-            return resolve(img);
+            return resolve2(img);
           };
           img.onerror = reject;
           img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(svg2));
@@ -5881,24 +5881,24 @@ var require_html2canvas = __commonJS({
         return cloneIframeContainer;
       };
       var imageReady = function(img) {
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve2) {
           if (img.complete) {
-            resolve();
+            resolve2();
             return;
           }
           if (!img.src) {
-            resolve();
+            resolve2();
             return;
           }
-          img.onload = resolve;
-          img.onerror = resolve;
+          img.onload = resolve2;
+          img.onerror = resolve2;
         });
       };
       var imagesReady = function(document4) {
         return Promise.all([].slice.call(document4.images, 0).map(imageReady));
       };
       var iframeLoader = function(iframe) {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve2, reject) {
           var cloneWindow = iframe.contentWindow;
           if (!cloneWindow) {
             return reject("No window assigned for iframe");
@@ -5909,7 +5909,7 @@ var require_html2canvas = __commonJS({
             var interval = setInterval(function() {
               if (documentClone.body.childNodes.length > 0 && documentClone.readyState === "complete") {
                 clearInterval(interval);
-                resolve(iframe);
+                resolve2(iframe);
               }
             }, 50);
           };
@@ -6049,10 +6049,10 @@ var require_html2canvas = __commonJS({
                     _a2.label = 2;
                   case 2:
                     this.context.logger.debug("Added image " + key.substring(0, 256));
-                    return [4, new Promise(function(resolve, reject) {
+                    return [4, new Promise(function(resolve2, reject) {
                       var img = new Image();
                       img.onload = function() {
-                        return resolve(img);
+                        return resolve2(img);
                       };
                       img.onerror = reject;
                       if (isInlineBase64Image(src) || useCORS) {
@@ -6061,7 +6061,7 @@ var require_html2canvas = __commonJS({
                       img.src = src;
                       if (img.complete === true) {
                         setTimeout(function() {
-                          return resolve(img);
+                          return resolve2(img);
                         }, 500);
                       }
                       if (_this._options.imageTimeout > 0) {
@@ -6089,17 +6089,17 @@ var require_html2canvas = __commonJS({
               throw new Error("No proxy defined");
             }
             var key = src.substring(0, 256);
-            return new Promise(function(resolve, reject) {
+            return new Promise(function(resolve2, reject) {
               var responseType = FEATURES.SUPPORT_RESPONSE_TYPE ? "blob" : "text";
               var xhr = new XMLHttpRequest();
               xhr.onload = function() {
                 if (xhr.status === 200) {
                   if (responseType === "text") {
-                    resolve(xhr.response);
+                    resolve2(xhr.response);
                   } else {
                     var reader_1 = new FileReader();
                     reader_1.addEventListener("load", function() {
-                      return resolve(reader_1.result);
+                      return resolve2(reader_1.result);
                     }, false);
                     reader_1.addEventListener("error", function(e3) {
                       return reject(e3);
@@ -7939,10 +7939,10 @@ var require_html2canvas = __commonJS({
         }(Renderer)
       );
       var loadSerializedSVG = function(svg2) {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve2, reject) {
           var img = new Image();
           img.onload = function() {
-            resolve(img);
+            resolve2(img);
           };
           img.onerror = reject;
           img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(new XMLSerializer().serializeToString(svg2));
@@ -10885,8 +10885,8 @@ var require_promise_constructor_detection = __commonJS({
       if (IS_PURE3 && !(NativePromisePrototype["catch"] && NativePromisePrototype["finally"]))
         return true;
       if (!V8_VERSION || V8_VERSION < 51 || !/native code/.test(PROMISE_CONSTRUCTOR_SOURCE)) {
-        var promise = new NativePromiseConstructor(function(resolve) {
-          resolve(1);
+        var promise = new NativePromiseConstructor(function(resolve2) {
+          resolve2(1);
         });
         var FakePromise = function(exec2) {
           exec2(function() {
@@ -10917,14 +10917,14 @@ var require_new_promise_capability = __commonJS({
     var aCallable = require_a_callable();
     var $TypeError = TypeError;
     var PromiseCapability = function(C2) {
-      var resolve, reject;
+      var resolve2, reject;
       this.promise = new C2(function($$resolve, $$reject) {
-        if (resolve !== void 0 || reject !== void 0)
+        if (resolve2 !== void 0 || reject !== void 0)
           throw $TypeError("Bad Promise constructor");
-        resolve = $$resolve;
+        resolve2 = $$resolve;
         reject = $$reject;
       });
-      this.resolve = aCallable(resolve);
+      this.resolve = aCallable(resolve2);
       this.reject = aCallable(reject);
     };
     module.exports.f = function(C2) {
@@ -10994,7 +10994,7 @@ var require_es_promise_constructor = __commonJS({
       var value = state.value;
       var ok = state.state == FULFILLED;
       var handler = ok ? reaction.ok : reaction.fail;
-      var resolve = reaction.resolve;
+      var resolve2 = reaction.resolve;
       var reject = reaction.reject;
       var domain = reaction.domain;
       var result, then, exited;
@@ -11019,9 +11019,9 @@ var require_es_promise_constructor = __commonJS({
           if (result === reaction.promise) {
             reject(TypeError2("Promise-chain cycle"));
           } else if (then = isThenable(result)) {
-            call4(then, result, resolve, reject);
+            call4(then, result, resolve2, reject);
           } else
-            resolve(result);
+            resolve2(result);
         } else
           reject(value);
       } catch (error) {
@@ -11194,8 +11194,8 @@ var require_es_promise_constructor = __commonJS({
         if (!NATIVE_PROMISE_SUBCLASSING) {
           defineBuiltIn2(NativePromisePrototype, "then", function then(onFulfilled, onRejected) {
             var that = this;
-            return new PromiseConstructor(function(resolve, reject) {
-              call4(nativeThen, that, resolve, reject);
+            return new PromiseConstructor(function(resolve2, reject) {
+              call4(nativeThen, that, resolve2, reject);
             }).then(onFulfilled, onRejected);
           }, { unsafe: true });
         }
@@ -11448,7 +11448,7 @@ var require_es_promise_all = __commonJS({
       all: function all2(iterable) {
         var C2 = this;
         var capability = newPromiseCapabilityModule.f(C2);
-        var resolve = capability.resolve;
+        var resolve2 = capability.resolve;
         var reject = capability.reject;
         var result = perform(function() {
           var $promiseResolve = aCallable(C2.resolve);
@@ -11464,10 +11464,10 @@ var require_es_promise_all = __commonJS({
                 return;
               alreadyCalled = true;
               values[index3] = value;
-              --remaining || resolve(values);
+              --remaining || resolve2(values);
             }, reject);
           });
-          --remaining || resolve(values);
+          --remaining || resolve2(values);
         });
         if (result.error)
           reject(result.value);
@@ -11563,8 +11563,8 @@ var require_promise_resolve = __commonJS({
       if (isObject(x3) && x3.constructor === C2)
         return x3;
       var promiseCapability = newPromiseCapability.f(C2);
-      var resolve = promiseCapability.resolve;
-      resolve(x3);
+      var resolve2 = promiseCapability.resolve;
+      resolve2(x3);
       return promiseCapability.promise;
     };
   }
@@ -11583,7 +11583,7 @@ var require_es_promise_resolve = __commonJS({
     var PromiseConstructorWrapper = getBuiltIn("Promise");
     var CHECK_WRAPPER = IS_PURE3 && !FORCED_PROMISE_CONSTRUCTOR;
     $9({ target: "Promise", stat: true, forced: IS_PURE3 || FORCED_PROMISE_CONSTRUCTOR }, {
-      resolve: function resolve(x3) {
+      resolve: function resolve2(x3) {
         return promiseResolve(CHECK_WRAPPER && this === PromiseConstructorWrapper ? NativePromiseConstructor : this, x3);
       }
     });
@@ -11603,7 +11603,7 @@ var init_es_promise = __esm({
 });
 
 // ../simple-mind-map/node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
+function asyncGeneratorStep(gen, resolve2, reject, _next, _throw, key, arg) {
   try {
     var info = gen[key](arg);
     var value = info.value;
@@ -11612,7 +11612,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     return;
   }
   if (info.done) {
-    resolve(value);
+    resolve2(value);
   } else {
     Promise.resolve(value).then(_next, _throw);
   }
@@ -11620,13 +11620,13 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
 function _asyncToGenerator(fn) {
   return function() {
     var self2 = this, args = arguments;
-    return new Promise(function(resolve, reject) {
+    return new Promise(function(resolve2, reject) {
       var gen = fn.apply(self2, args);
       function _next(value) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
+        asyncGeneratorStep(gen, resolve2, reject, _next, _throw, "next", value);
       }
       function _throw(err) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
+        asyncGeneratorStep(gen, resolve2, reject, _next, _throw, "throw", err);
       }
       _next(void 0);
     });
@@ -14731,9 +14731,9 @@ function _createImage() {
     if (anonymousCrossOrigin) {
       image.crossOrigin = "Anonymous";
     }
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve2, reject) => {
       image.onload = () => {
-        resolve(image);
+        resolve2(image);
       };
       image.onerror = (_event, _source, _lineno, _colno, error) => {
         reject(error);
@@ -15448,8 +15448,8 @@ var init_index_es = __esm({
         } = this;
         var frameDuration = 1e3 / FRAMERATE;
         this.frameDuration = frameDuration;
-        this.readyPromise = new Promise((resolve) => {
-          this.resolveReady = resolve;
+        this.readyPromise = new Promise((resolve2) => {
+          this.resolveReady = resolve2;
         });
         if (this.isReady()) {
           this.render(element2, ignoreDimensions, ignoreClear, scaleWidth, scaleHeight, offsetX, offsetY);
@@ -23657,9 +23657,9 @@ var require_quill = __commonJS({
                   } else if (_instanceof(parent2, nativeSet)) {
                     child = new nativeSet();
                   } else if (_instanceof(parent2, nativePromise)) {
-                    child = new nativePromise(function(resolve, reject) {
+                    child = new nativePromise(function(resolve2, reject) {
                       parent2.then(function(value) {
-                        resolve(_clone(value, depth2 - 1));
+                        resolve2(_clone(value, depth2 - 1));
                       }, function(err) {
                         reject(_clone(err, depth2 - 1));
                       });
@@ -36787,6 +36787,7 @@ var themeList = [
 ];
 var CONSTANTS = {
   CHANGE_THEME: "changeTheme",
+  CHANGE_LAYOUT: "changeLayout",
   SET_DATA: "setData",
   TRANSFORM_TO_NORMAL_NODE: "transformAllNodesToNormalNode",
   MODE: {
@@ -36800,7 +36801,8 @@ var CONSTANTS = {
     CATALOG_ORGANIZATION: "catalogOrganization",
     TIMELINE: "timeline",
     TIMELINE2: "timeline2",
-    FISHBONE: "fishbone"
+    FISHBONE: "fishbone",
+    VERTICAL_TIMELINE: "verticalTimeline"
   },
   DIR: {
     UP: "up",
@@ -36836,8 +36838,10 @@ var CONSTANTS = {
     BOTTOM: "bottom",
     CENTER: "center"
   },
-  TIMELINE_DIR: {
+  LAYOUT_GROW_DIR: {
+    LEFT: "left",
     TOP: "top",
+    RIGHT: "right",
     BOTTOM: "bottom"
   }
 };
@@ -36874,6 +36878,10 @@ var layoutList = [
     value: CONSTANTS.LAYOUT.TIMELINE2
   },
   {
+    name: "\u7AD6\u5411\u65F6\u95F4\u8F74",
+    value: CONSTANTS.LAYOUT.VERTICAL_TIMELINE
+  },
+  {
     name: "\u9C7C\u9AA8\u56FE",
     value: CONSTANTS.LAYOUT.FISHBONE
   }
@@ -36885,6 +36893,7 @@ var layoutValueList = [
   CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE,
   CONSTANTS.LAYOUT.TIMELINE,
   CONSTANTS.LAYOUT.TIMELINE2,
+  CONSTANTS.LAYOUT.VERTICAL_TIMELINE,
   CONSTANTS.LAYOUT.FISHBONE
 ];
 var nodeDataNoStylePropList = [
@@ -36976,11 +36985,11 @@ var View = class {
         switch (dir) {
           case CONSTANTS.DIR.UP:
           case CONSTANTS.DIR.LEFT:
-            mousewheelZoomActionReverse ? this.enlarge(cx2, cy2) : this.narrow(cx2, cy2);
+            mousewheelZoomActionReverse ? this.enlarge(cx2, cy2, isTouchPad) : this.narrow(cx2, cy2, isTouchPad);
             break;
           case CONSTANTS.DIR.DOWN:
           case CONSTANTS.DIR.RIGHT:
-            mousewheelZoomActionReverse ? this.narrow(cx2, cy2) : this.enlarge(cx2, cy2);
+            mousewheelZoomActionReverse ? this.narrow(cx2, cy2, isTouchPad) : this.enlarge(cx2, cy2, isTouchPad);
             break;
         }
       } else {
@@ -37078,15 +37087,17 @@ var View = class {
     }
   }
   //  缩小
-  narrow(cx2, cy2) {
-    const scale = Math.max(this.scale - this.mindMap.opt.scaleRatio, 0.1);
+  narrow(cx2, cy2, isTouchPad) {
+    const scaleRatio = this.mindMap.opt.scaleRatio / (isTouchPad ? 5 : 1);
+    const scale = Math.max(this.scale - scaleRatio, 0.1);
     this.scaleInCenter(scale, cx2, cy2);
     this.transform();
     this.mindMap.emit("scale", this.scale);
   }
   //  放大
-  enlarge(cx2, cy2) {
-    const scale = this.scale + this.mindMap.opt.scaleRatio;
+  enlarge(cx2, cy2, isTouchPad) {
+    const scaleRatio = this.mindMap.opt.scaleRatio / (isTouchPad ? 5 : 1);
+    const scale = this.scale + scaleRatio;
     this.scaleInCenter(scale, cx2, cy2);
     this.transform();
     this.mindMap.emit("scale", this.scale);
@@ -43423,7 +43434,7 @@ var copyNodeTree = (tree, root2, removeActiveState = false, keepId = false) => {
   return tree;
 };
 var imgToDataUrl = (src) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve2, reject) => {
     const img = new Image();
     img.setAttribute("crossOrigin", "anonymous");
     img.onload = () => {
@@ -43433,7 +43444,7 @@ var imgToDataUrl = (src) => {
         canvas.height = img.height;
         let ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, img.width, img.height);
-        resolve(canvas.toDataURL());
+        resolve2(canvas.toDataURL());
       } catch (e2) {
         reject(e2);
       }
@@ -43443,6 +43454,17 @@ var imgToDataUrl = (src) => {
     };
     img.src = src;
   });
+};
+var parseDataUrl = (data2) => {
+  if (!/^data:/.test(data2))
+    return data2;
+  let [typeStr, base64] = data2.split(",");
+  let res = /^data:[^/]+\/([^;]+);/.exec(typeStr);
+  let type = res[1];
+  return {
+    type,
+    base64
+  };
 };
 var downloadFile = (file, fileName) => {
   let a3 = document.createElement("a");
@@ -43578,15 +43600,33 @@ var getTextFromHtml = (html2) => {
   return getTextFromHtmlEl.textContent;
 };
 var readBlob = (blob) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve2, reject) => {
     let reader = new FileReader();
     reader.onload = (evt) => {
-      resolve(evt.target.result);
+      resolve2(evt.target.result);
     };
     reader.onerror = (err) => {
       reject(err);
     };
     reader.readAsDataURL(blob);
+  });
+};
+var getImageSize = (src) => {
+  return new Promise((resolve2) => {
+    let img = new Image();
+    img.src = src;
+    img.onload = () => {
+      resolve2({
+        width: img.width,
+        height: img.height
+      });
+    };
+    img.onerror = () => {
+      resolve2({
+        width: 0,
+        height: 0
+      });
+    };
   });
 };
 
@@ -44639,15 +44679,7 @@ var Node2 = class {
     this.shapeNode = this.shapeInstance.createShape();
     this.group.add(this.shapeNode);
     this.updateNodeShape();
-    if (!this.mindMap.opt.alwaysShowExpandBtn) {
-      if (!this._unVisibleRectRegionNode) {
-        this._unVisibleRectRegionNode = new Rect();
-      }
-      this._unVisibleRectRegionNode.fill({
-        color: "transparent"
-      }).size(this.expandBtnSize, height2).x(width2).y(0);
-      this.group.add(this._unVisibleRectRegionNode);
-    }
+    this.renderExpandBtnPlaceholderRect();
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass("generalization_" + this.generalizationBelongNode.uid);
     }
@@ -44710,6 +44742,20 @@ var Node2 = class {
       imgHeight + paddingY + (imgHeight > 0 && this._rectInfo.textContentHeight > 0 ? this.blockContentMargin : 0)
     );
     this.group.add(textContentNested);
+  }
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnPlaceholderRect() {
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      let { width: width2, height: height2 } = this;
+      if (!this._unVisibleRectRegionNode) {
+        this._unVisibleRectRegionNode = new Rect();
+        this._unVisibleRectRegionNode.fill({
+          color: "transparent"
+        });
+        this.group.add(this._unVisibleRectRegionNode);
+      }
+      this.renderer.layout.renderExpandBtnRect(this._unVisibleRectRegionNode, this.expandBtnSize, width2, height2, this);
+    }
   }
   // 给节点绑定事件
   bindGroupEvent() {
@@ -44806,7 +44852,11 @@ var Node2 = class {
     if (!this.group) {
       return;
     }
-    let { enableNodeTransitionMove, nodeTransitionMoveDuration, alwaysShowExpandBtn } = this.mindMap.opt;
+    let {
+      enableNodeTransitionMove,
+      nodeTransitionMoveDuration,
+      alwaysShowExpandBtn
+    } = this.mindMap.opt;
     if (alwaysShowExpandBtn) {
       if (this._expandBtn && this.nodeData.children.length <= 0) {
         this.removeExpandBtn();
@@ -44869,6 +44919,10 @@ var Node2 = class {
         this.needLayout = false;
         this.layout();
       }
+      if (this.needRerenderExpandBtnPlaceholderRect) {
+        this.needRerenderExpandBtnPlaceholderRect = false;
+        this.renderExpandBtnPlaceholderRect();
+      }
       this.update();
     }
     if (this.children && this.children.length && this.nodeData.data.expand !== false) {
@@ -44898,7 +44952,7 @@ var Node2 = class {
       delete this.nodeData.inserting;
       this.active();
       setTimeout(() => {
-        this.mindMap.emit("node_dblclick", this);
+        this.mindMap.emit("node_dblclick", this, null, true);
       }, 0);
     }
   }
@@ -45177,29 +45231,48 @@ var Base2 = class {
   checkIsNeedResizeSources() {
     return [CONSTANTS.CHANGE_THEME, CONSTANTS.TRANSFORM_TO_NORMAL_NODE].includes(this.renderer.renderSource);
   }
+  // 层级类型改变
+  checkIsLayerTypeChange(oldIndex, newIndex) {
+    if (oldIndex >= 2 && newIndex >= 2)
+      return false;
+    if (oldIndex >= 2 && newIndex < 2)
+      return true;
+    if (oldIndex < 2 && newIndex >= 2)
+      return true;
+  }
+  // 检查是否是结构布局改变重新渲染展开收起按钮占位元素
+  checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(node3) {
+    if (this.renderer.renderSource === CONSTANTS.CHANGE_LAYOUT) {
+      node3.needRerenderExpandBtnPlaceholderRect = true;
+    }
+  }
   //  创建节点实例
   createNode(data2, parent, isRoot, layerIndex) {
     let newNode = null;
     if (data2 && data2._node && !this.renderer.reRender) {
       newNode = data2._node;
+      let isLayerTypeChange = this.checkIsLayerTypeChange(newNode.layerIndex, layerIndex);
       newNode.reset();
       newNode.layerIndex = layerIndex;
       this.cacheNode(data2._node.uid, newNode);
-      if (this.checkIsNeedResizeSources()) {
+      this.checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(newNode);
+      if (this.checkIsNeedResizeSources() || isLayerTypeChange) {
         newNode.getSize();
         newNode.needLayout = true;
       }
     } else if (this.lru.has(data2.data.uid) && !this.renderer.reRender) {
       newNode = this.lru.get(data2.data.uid);
       let lastData = JSON.stringify(newNode.nodeData.data);
+      let isLayerTypeChange = this.checkIsLayerTypeChange(newNode.layerIndex, layerIndex);
       newNode.reset();
       newNode.nodeData = newNode.handleData(data2 || {});
       newNode.layerIndex = layerIndex;
       this.cacheNode(data2.data.uid, newNode);
+      this.checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(newNode);
       data2._node = newNode;
       let isResizeSource = this.checkIsNeedResizeSources();
       let isNodeDataChange = lastData !== JSON.stringify(data2.data);
-      if (isResizeSource || isNodeDataChange) {
+      if (isResizeSource || isNodeDataChange || isLayerTypeChange) {
         newNode.getSize();
         newNode.needLayout = true;
       }
@@ -45594,10 +45667,7 @@ var LogicalStructure = class extends Base_default {
     if (_x === translateX && _y === translateY) {
       return;
     }
-    btn.translate(
-      _x - translateX,
-      _y - translateY
-    );
+    btn.translate(_x - translateX, _y - translateY);
   }
   //  创建概要节点
   renderGeneralization(node3, gLine, gNode) {
@@ -45618,6 +45688,10 @@ var LogicalStructure = class extends Base_default {
     gLine.plot(path);
     gNode.left = right + generalizationNodeMargin;
     gNode.top = top + (bottom - top - gNode.height) / 2;
+  }
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnRect(rect, expandBtnSize, width2, height2, node3) {
+    rect.size(expandBtnSize, height2).x(width2).y(0);
   }
 };
 var LogicalStructure_default = LogicalStructure;
@@ -45660,9 +45734,9 @@ var MindMap = class extends Base_default {
           if (parent._node.dir) {
             newNode.dir = parent._node.dir;
           } else {
-            newNode.dir = index3 % 2 === 0 ? "right" : "left";
+            newNode.dir = index3 % 2 === 0 ? CONSTANTS.LAYOUT_GROW_DIR.RIGHT : CONSTANTS.LAYOUT_GROW_DIR.LEFT;
           }
-          newNode.left = newNode.dir === "right" ? parent._node.left + parent._node.width + this.getMarginX(layerIndex) : parent._node.left - this.getMarginX(layerIndex) - newNode.width;
+          newNode.left = newNode.dir === CONSTANTS.LAYOUT_GROW_DIR.RIGHT ? parent._node.left + parent._node.width + this.getMarginX(layerIndex) : parent._node.left - this.getMarginX(layerIndex) - newNode.width;
         }
         if (!cur.data.expand) {
           return true;
@@ -45679,7 +45753,7 @@ var MindMap = class extends Base_default {
         let leftChildrenAreaHeight = 0;
         let rightChildrenAreaHeight = 0;
         cur._node.children.forEach((item) => {
-          if (item.dir === "left") {
+          if (item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT) {
             leftLen++;
             leftChildrenAreaHeight += item.height;
           } else {
@@ -45706,7 +45780,7 @@ var MindMap = class extends Base_default {
           let leftTotalTop = baseTop - node3.leftChildrenAreaHeight / 2;
           let rightTotalTop = baseTop - node3.rightChildrenAreaHeight / 2;
           node3.children.forEach((cur) => {
-            if (cur.dir === "left") {
+            if (cur.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT) {
               cur.top = leftTotalTop;
               leftTotalTop += cur.height + marginY;
             } else {
@@ -45754,7 +45828,7 @@ var MindMap = class extends Base_default {
           return;
         }
         let _offset = 0;
-        let addHeight = item.dir === "left" ? leftAddHeight : rightAddHeight;
+        let addHeight = item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT ? leftAddHeight : rightAddHeight;
         if (_index < index3) {
           _offset = -addHeight;
         } else if (_index > index3) {
@@ -45794,7 +45868,7 @@ var MindMap = class extends Base_default {
       let x1 = 0;
       let _s = 0;
       let nodeUseLineStyleOffset = nodeUseLineStyle ? item.width : 0;
-      if (item.dir === "left") {
+      if (item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT) {
         _s = -s1;
         x1 = node3.layerIndex === 0 ? left : left - expandBtnSize;
         nodeUseLineStyleOffset = -nodeUseLineStyleOffset;
@@ -45803,7 +45877,7 @@ var MindMap = class extends Base_default {
         x1 = node3.layerIndex === 0 ? left + width2 : left + width2 + expandBtnSize;
       }
       let y1 = top + height2 / 2;
-      let x22 = item.dir === "left" ? item.left + item.width : item.left;
+      let x22 = item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT ? item.left + item.width : item.left;
       let y22 = item.top + item.height / 2;
       y1 = nodeUseLineStyle && !node3.isRoot ? y1 + height2 / 2 : y1;
       y22 = nodeUseLineStyle ? y22 + item.height / 2 : y22;
@@ -45823,15 +45897,15 @@ var MindMap = class extends Base_default {
     }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node3.children.forEach((item, index3) => {
-      let x1 = node3.layerIndex === 0 ? left + width2 / 2 : item.dir === "left" ? left - expandBtnSize : left + width2 + expandBtnSize;
+      let x1 = node3.layerIndex === 0 ? left + width2 / 2 : item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT ? left - expandBtnSize : left + width2 + expandBtnSize;
       let y1 = top + height2 / 2;
-      let x22 = item.dir === "left" ? item.left + item.width : item.left;
+      let x22 = item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT ? item.left + item.width : item.left;
       let y22 = item.top + item.height / 2;
       y1 = nodeUseLineStyle && !node3.isRoot ? y1 + height2 / 2 : y1;
       y22 = nodeUseLineStyle ? y22 + item.height / 2 : y22;
       let nodeUseLineStylePath = "";
       if (nodeUseLineStyle) {
-        if (item.dir === "left") {
+        if (item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT) {
           nodeUseLineStylePath = ` L ${item.left},${y22}`;
         } else {
           nodeUseLineStylePath = ` L ${item.left + item.width},${y22}`;
@@ -45853,16 +45927,16 @@ var MindMap = class extends Base_default {
     }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle;
     node3.children.forEach((item, index3) => {
-      let x1 = node3.layerIndex === 0 ? left + width2 / 2 : item.dir === "left" ? left - expandBtnSize : left + width2 + expandBtnSize;
+      let x1 = node3.layerIndex === 0 ? left + width2 / 2 : item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT ? left - expandBtnSize : left + width2 + expandBtnSize;
       let y1 = top + height2 / 2;
-      let x22 = item.dir === "left" ? item.left + item.width : item.left;
+      let x22 = item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT ? item.left + item.width : item.left;
       let y22 = item.top + item.height / 2;
       let path = "";
       y1 = nodeUseLineStyle && !node3.isRoot ? y1 + height2 / 2 : y1;
       y22 = nodeUseLineStyle ? y22 + item.height / 2 : y22;
       let nodeUseLineStylePath = "";
       if (this.mindMap.themeConfig.nodeUseLineStyle) {
-        if (item.dir === "left") {
+        if (item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT) {
           nodeUseLineStylePath = ` L ${item.left},${y22}`;
         } else {
           nodeUseLineStylePath = ` L ${item.left + item.width},${y22}`;
@@ -45882,7 +45956,7 @@ var MindMap = class extends Base_default {
     let { width: width2, height: height2, expandBtnSize } = node3;
     let { translateX, translateY } = btn.transform();
     let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle ? height2 / 2 : 0;
-    let _x = node3.dir === "left" ? 0 - expandBtnSize : width2;
+    let _x = node3.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT ? 0 - expandBtnSize : width2;
     let _y = height2 / 2 + nodeUseLineStyleOffset;
     if (_x === translateX && _y === translateY) {
       return;
@@ -45893,7 +45967,7 @@ var MindMap = class extends Base_default {
   }
   //  创建概要节点
   renderGeneralization(node3, gLine, gNode) {
-    let isLeft = node3.dir === "left";
+    let isLeft = node3.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT;
     let {
       top,
       bottom,
@@ -45913,6 +45987,14 @@ var MindMap = class extends Base_default {
     gLine.plot(path);
     gNode.left = x3 + (isLeft ? -generalizationNodeMargin : generalizationNodeMargin) - (isLeft ? gNode.width : 0);
     gNode.top = top + (bottom - top - gNode.height) / 2;
+  }
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnRect(rect, expandBtnSize, width2, height2, node3) {
+    if (node3.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT) {
+      rect.size(expandBtnSize, height2).x(-expandBtnSize).y(0);
+    } else {
+      rect.size(expandBtnSize, height2).x(width2).y(0);
+    }
   }
 };
 var MindMap_default = MindMap;
@@ -46209,6 +46291,10 @@ var CatalogOrganization = class extends Base_default {
     gNode.left = right + generalizationNodeMargin;
     gNode.top = top + (bottom - top - gNode.height) / 2;
   }
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnRect(rect, expandBtnSize, width2, height2, node3) {
+    rect.size(width2, expandBtnSize).x(0).y(height2);
+  }
 };
 var CatalogOrganization_default = CatalogOrganization;
 
@@ -46425,6 +46511,10 @@ var OrganizationStructure = class extends Base_default {
     gNode.top = bottom + generalizationNodeMargin;
     gNode.left = left + (right - left - gNode.width) / 2;
   }
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnRect(rect, expandBtnSize, width2, height2, node3) {
+    rect.size(width2, expandBtnSize).x(0).y(height2);
+  }
 };
 var OrganizationStructure_default = OrganizationStructure;
 
@@ -46467,7 +46557,7 @@ var Timeline2 = class extends Base_default {
             if (parent._node.dir) {
               newNode.dir = parent._node.dir;
             } else {
-              newNode.dir = index3 % 2 === 0 ? CONSTANTS.TIMELINE_DIR.BOTTOM : CONSTANTS.TIMELINE_DIR.TOP;
+              newNode.dir = index3 % 2 === 0 ? CONSTANTS.LAYOUT_GROW_DIR.BOTTOM : CONSTANTS.LAYOUT_GROW_DIR.TOP;
             }
           } else {
             newNode.dir = "";
@@ -46537,7 +46627,7 @@ var Timeline2 = class extends Base_default {
         }
       },
       (node3, parent, isRoot, layerIndex) => {
-        if (parent && parent.isRoot && node3.dir === CONSTANTS.TIMELINE_DIR.TOP) {
+        if (parent && parent.isRoot && node3.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP) {
           node3.children.forEach((item) => {
             let totalHeight = this.getNodeAreaHeight(item);
             let _top = item.top;
@@ -46643,7 +46733,7 @@ var Timeline2 = class extends Base_default {
       if (len > 0) {
         let line = this.draw.path();
         expandBtnSize = len > 0 ? expandBtnSize : 0;
-        if (node3.parent && node3.parent.isRoot && node3.dir === CONSTANTS.TIMELINE_DIR.TOP) {
+        if (node3.parent && node3.parent.isRoot && node3.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP) {
           line.plot(`M ${x3},${top} L ${x3},${miny}`);
         } else {
           line.plot(`M ${x3},${top + height2 + expandBtnSize} L ${x3},${maxy}`);
@@ -46659,7 +46749,7 @@ var Timeline2 = class extends Base_default {
     let { width: width2, height: height2, expandBtnSize, isRoot } = node3;
     if (!isRoot) {
       let { translateX, translateY } = btn.transform();
-      if (node3.parent && node3.parent.isRoot && node3.dir === CONSTANTS.TIMELINE_DIR.TOP) {
+      if (node3.parent && node3.parent.isRoot && node3.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP) {
         btn.translate(
           width2 * 0.3 - expandBtnSize / 2 - translateX,
           -expandBtnSize / 2 - translateY
@@ -46692,8 +46782,375 @@ var Timeline2 = class extends Base_default {
     gNode.left = right + generalizationNodeMargin;
     gNode.top = top + (bottom - top - gNode.height) / 2;
   }
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnRect(rect, expandBtnSize, width2, height2, node3) {
+    if (this.layout === CONSTANTS.LAYOUT.TIMELINE) {
+      rect.size(width2, expandBtnSize).x(0).y(height2);
+    } else {
+      let dir = "";
+      if (node3.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP) {
+        dir = node3.layerIndex === 1 ? CONSTANTS.LAYOUT_GROW_DIR.TOP : CONSTANTS.LAYOUT_GROW_DIR.BOTTOM;
+      } else {
+        dir = CONSTANTS.LAYOUT_GROW_DIR.BOTTOM;
+      }
+      if (dir === CONSTANTS.LAYOUT_GROW_DIR.TOP) {
+        rect.size(width2, expandBtnSize).x(0).y(-expandBtnSize);
+      } else {
+        rect.size(width2, expandBtnSize).x(0).y(height2);
+      }
+    }
+  }
 };
 var Timeline_default = Timeline2;
+
+// ../simple-mind-map/src/layouts/VerticalTimeline.js
+var VerticalTimeline = class extends Base_default {
+  //  构造函数
+  constructor(opt = {}, layout) {
+    super(opt);
+    this.layout = layout;
+  }
+  //  布局
+  doLayout(callback) {
+    let task = [
+      () => {
+        this.computedBaseValue();
+      },
+      () => {
+        this.computedTopValue();
+      },
+      () => {
+        this.adjustLeftTopValue();
+      },
+      () => {
+        callback(this.root);
+      }
+    ];
+    asyncRun(task);
+  }
+  //  遍历数据创建节点、计算根节点的位置，计算根节点的子节点的top值
+  computedBaseValue() {
+    walk(
+      this.renderer.renderTree,
+      null,
+      (cur, parent, isRoot, layerIndex, index3) => {
+        let newNode = this.createNode(cur, parent, isRoot, layerIndex);
+        if (isRoot) {
+          this.setNodeCenter(newNode);
+        } else {
+          if (parent._node.dir) {
+            newNode.dir = parent._node.dir;
+          } else {
+            newNode.dir = index3 % 2 === 0 ? CONSTANTS.LAYOUT_GROW_DIR.RIGHT : CONSTANTS.LAYOUT_GROW_DIR.LEFT;
+          }
+          if (parent._node.isRoot) {
+            newNode.left = parent._node.left + (cur._node.width > parent._node.width ? -(cur._node.width - parent._node.width) / 2 : (parent._node.width - cur._node.width) / 2);
+          } else {
+            newNode.left = newNode.dir === CONSTANTS.LAYOUT_GROW_DIR.RIGHT ? parent._node.left + parent._node.width + this.getMarginX(layerIndex) : parent._node.left - this.getMarginX(layerIndex) - newNode.width;
+          }
+        }
+        if (!cur.data.expand) {
+          return true;
+        }
+      },
+      (cur, parent, isRoot, layerIndex) => {
+        if (isRoot) {
+          return;
+        }
+        let len = cur.data.expand === false ? 0 : cur._node.children.length;
+        cur._node.childrenAreaHeight = len ? cur._node.children.reduce((h3, item) => {
+          return h3 + item.height;
+        }, 0) + (len + 1) * this.getMarginY(layerIndex + 1) : 0;
+      },
+      true,
+      0
+    );
+  }
+  //  遍历节点树计算节点的top
+  computedTopValue() {
+    walk(
+      this.root,
+      null,
+      (node3, parent, isRoot, layerIndex, index3) => {
+        if (node3.nodeData.data.expand && node3.children && node3.children.length) {
+          let marginY = this.getMarginY(layerIndex + 1);
+          if (isRoot) {
+            let top = node3.top + node3.height;
+            let totalTop = top + marginY;
+            node3.children.forEach((cur) => {
+              cur.top = totalTop;
+              totalTop += cur.height + marginY;
+            });
+          } else {
+            let marginY2 = this.getMarginY(layerIndex + 1);
+            let baseTop = node3.top + node3.height / 2 + marginY2;
+            let totalTop = baseTop - node3.childrenAreaHeight / 2;
+            node3.children.forEach((cur) => {
+              cur.top = totalTop;
+              totalTop += cur.height + marginY2;
+            });
+          }
+        }
+      },
+      null,
+      true
+    );
+  }
+  //  调整节点left、top
+  adjustLeftTopValue() {
+    walk(
+      this.root,
+      null,
+      (node3, parent, isRoot, layerIndex) => {
+        if (!node3.nodeData.data.expand) {
+          return;
+        }
+        if (isRoot)
+          return;
+        let base = this.getMarginY(layerIndex + 1) * 2 + node3.height;
+        let difference2 = node3.childrenAreaHeight - base;
+        if (difference2 > 0) {
+          this.updateBrothers(node3, difference2 / 2);
+        }
+      },
+      null,
+      true
+    );
+  }
+  //  更新兄弟节点的top
+  updateBrothers(node3, addHeight) {
+    if (node3.parent) {
+      let childrenList = node3.parent.children;
+      let index3 = childrenList.findIndex((item) => {
+        return item === node3;
+      });
+      childrenList.forEach((item, _index) => {
+        if (item.hasCustomPosition())
+          return;
+        if (!node3.parent.isRoot && item === node3)
+          return;
+        let _offset = 0;
+        if (node3.parent.isRoot) {
+          if (_index < index3) {
+            _offset = 0;
+          } else if (_index > index3) {
+            _offset = addHeight * 2;
+          } else {
+            _offset = addHeight;
+          }
+        } else {
+          if (_index < index3) {
+            _offset = -addHeight;
+          } else if (_index > index3) {
+            _offset = addHeight;
+          }
+        }
+        item.top += _offset;
+        if (item.children && item.children.length) {
+          this.updateChildren(item.children, "top", _offset);
+        }
+      });
+      this.updateBrothers(node3.parent, addHeight);
+    }
+  }
+  //  调整兄弟节点的top
+  updateBrothersTop(node3, addHeight) {
+    if (node3.parent && !node3.parent.isRoot) {
+      let childrenList = node3.parent.children;
+      let index3 = childrenList.findIndex((item) => {
+        return item === node3;
+      });
+      childrenList.forEach((item, _index) => {
+        if (item.hasCustomPosition()) {
+          return;
+        }
+        let _offset = 0;
+        if (_index > index3) {
+          _offset = addHeight;
+        }
+        item.top += _offset;
+        if (item.children && item.children.length) {
+          this.updateChildren(item.children, "top", _offset);
+        }
+      });
+      this.updateBrothersTop(node3.parent, addHeight);
+    }
+  }
+  //  绘制连线，连接该节点到其子节点
+  renderLine(node3, lines, style, lineStyle) {
+    if (lineStyle === "curve") {
+      this.renderLineCurve(node3, lines, style);
+    } else if (lineStyle === "direct") {
+      this.renderLineDirect(node3, lines, style);
+    } else {
+      this.renderLineStraight(node3, lines, style);
+    }
+  }
+  // 直线连接
+  renderLineStraight(node3, lines, style) {
+    if (node3.children.length <= 0) {
+      return [];
+    }
+    let { expandBtnSize } = node3;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
+    if (node3.isRoot) {
+      let prevBother = node3;
+      node3.children.forEach((item, index3) => {
+        let y1 = prevBother.top + prevBother.height;
+        let y22 = item.top;
+        let x3 = node3.left + node3.width / 2;
+        let path = `M ${x3},${y1} L ${x3},${y22}`;
+        lines[index3].plot(path);
+        style && style(lines[index3], item);
+        prevBother = item;
+      });
+    } else {
+      if (node3.dir === CONSTANTS.LAYOUT_GROW_DIR.RIGHT) {
+        let nodeRight = node3.left + node3.width;
+        let nodeYCenter = node3.top + node3.height / 2;
+        let marginX = this.getMarginX(node3.layerIndex + 1);
+        let offset = (marginX - expandBtnSize) * 0.6;
+        node3.children.forEach((item, index3) => {
+          let itemLeft = item.left;
+          let itemYCenter = item.top + item.height / 2;
+          let path = `
+            M ${nodeRight},${nodeYCenter} 
+            L ${nodeRight + offset},${nodeYCenter} 
+            L ${nodeRight + offset},${itemYCenter} 
+            L ${itemLeft},${itemYCenter}`;
+          lines[index3].plot(path);
+          style && style(lines[index3], item);
+        });
+      } else {
+        let nodeLeft = node3.left;
+        let nodeYCenter = node3.top + node3.height / 2;
+        let marginX = this.getMarginX(node3.layerIndex + 1);
+        let offset = (marginX - expandBtnSize) * 0.6;
+        node3.children.forEach((item, index3) => {
+          let itemRight = item.left + item.width;
+          let itemYCenter = item.top + item.height / 2;
+          let path = `
+            M ${nodeLeft},${nodeYCenter} 
+            L ${nodeLeft - offset},${nodeYCenter} 
+            L ${nodeLeft - offset},${itemYCenter} 
+            L ${itemRight},${itemYCenter}`;
+          lines[index3].plot(path);
+          style && style(lines[index3], item);
+        });
+      }
+    }
+  }
+  // 直连
+  renderLineDirect(node3, lines, style) {
+    if (node3.children.length <= 0) {
+      return [];
+    }
+    let { left, top, width: width2, height: height2, expandBtnSize } = node3;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
+    node3.children.forEach((item, index3) => {
+      if (node3.isRoot) {
+        let prevBother = node3;
+        node3.children.forEach((item2, index4) => {
+          let y1 = prevBother.top + prevBother.height;
+          let y22 = item2.top;
+          let x3 = node3.left + node3.width / 2;
+          let path = `M ${x3},${y1} L ${x3},${y22}`;
+          lines[index4].plot(path);
+          style && style(lines[index4], item2);
+          prevBother = item2;
+        });
+      } else {
+        let x1 = item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT ? left - expandBtnSize : left + width2 + expandBtnSize;
+        let y1 = top + height2 / 2;
+        let x22 = item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT ? item.left + item.width : item.left;
+        let y22 = item.top + item.height / 2;
+        let path = `M ${x1},${y1} L ${x22},${y22}`;
+        lines[index3].plot(path);
+        style && style(lines[index3], item);
+      }
+    });
+  }
+  //  曲线风格连线
+  renderLineCurve(node3, lines, style) {
+    if (node3.children.length <= 0) {
+      return [];
+    }
+    let { left, top, width: width2, height: height2, expandBtnSize } = node3;
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      expandBtnSize = 0;
+    }
+    node3.children.forEach((item, index3) => {
+      if (node3.isRoot) {
+        let prevBother = node3;
+        node3.children.forEach((item2, index4) => {
+          let y1 = prevBother.top + prevBother.height;
+          let y22 = item2.top;
+          let x3 = node3.left + node3.width / 2;
+          let path = `M ${x3},${y1} L ${x3},${y22}`;
+          lines[index4].plot(path);
+          style && style(lines[index4], item2);
+          prevBother = item2;
+        });
+      } else {
+        let x1 = item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT ? left - expandBtnSize : left + width2 + expandBtnSize;
+        let y1 = top + height2 / 2;
+        let x22 = item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT ? item.left + item.width : item.left;
+        let y22 = item.top + item.height / 2;
+        let path = this.cubicBezierPath(x1, y1, x22, y22);
+        lines[index3].plot(path);
+        style && style(lines[index3], item);
+      }
+    });
+  }
+  //  渲染按钮
+  renderExpandBtn(node3, btn) {
+    let { width: width2, height: height2, expandBtnSize, isRoot } = node3;
+    if (!isRoot) {
+      let { translateX, translateY } = btn.transform();
+      if (node3.dir === CONSTANTS.LAYOUT_GROW_DIR.RIGHT) {
+        btn.translate(width2 - translateX, height2 / 2 - translateY);
+      } else {
+        btn.translate(-expandBtnSize - translateX, height2 / 2 - translateY);
+      }
+    }
+  }
+  //  创建概要节点
+  renderGeneralization(node3, gLine, gNode) {
+    let isLeft = node3.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT;
+    let {
+      top,
+      bottom,
+      left,
+      right,
+      generalizationLineMargin,
+      generalizationNodeMargin
+    } = this.getNodeBoundaries(node3, "h", isLeft);
+    let x3 = isLeft ? left - generalizationLineMargin : right + generalizationLineMargin;
+    let x1 = x3;
+    let y1 = top;
+    let x22 = x3;
+    let y22 = bottom;
+    let cx2 = x1 + (isLeft ? -20 : 20);
+    let cy2 = y1 + (y22 - y1) / 2;
+    let path = `M ${x1},${y1} Q ${cx2},${cy2} ${x22},${y22}`;
+    gLine.plot(path);
+    gNode.left = x3 + (isLeft ? -generalizationNodeMargin : generalizationNodeMargin) - (isLeft ? gNode.width : 0);
+    gNode.top = top + (bottom - top - gNode.height) / 2;
+  }
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnRect(rect, expandBtnSize, width2, height2, node3) {
+    if (node3.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT) {
+      rect.size(expandBtnSize, height2).x(-expandBtnSize).y(0);
+    } else {
+      rect.size(expandBtnSize, height2).x(width2).y(0);
+    }
+  }
+};
+var VerticalTimeline_default = VerticalTimeline;
 
 // ../simple-mind-map/src/layouts/fishboneUtils.js
 var fishboneUtils_default = {
@@ -46899,7 +47356,7 @@ var Fishbone = class extends Base_default {
           if (parent._node.dir) {
             newNode.dir = parent._node.dir;
           } else {
-            newNode.dir = index3 % 2 === 0 ? CONSTANTS.TIMELINE_DIR.TOP : CONSTANTS.TIMELINE_DIR.BOTTOM;
+            newNode.dir = index3 % 2 === 0 ? CONSTANTS.LAYOUT_GROW_DIR.TOP : CONSTANTS.LAYOUT_GROW_DIR.BOTTOM;
           }
           if (parent._node.isRoot) {
             if (this.checkIsTop(newNode)) {
@@ -47055,7 +47512,7 @@ var Fishbone = class extends Base_default {
   }
   // 检查节点是否是上方节点
   checkIsTop(node3) {
-    return node3.dir === CONSTANTS.TIMELINE_DIR.TOP;
+    return node3.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP;
   }
   //  绘制连线，连接该节点到其子节点
   renderLine(node3, lines, style) {
@@ -47190,6 +47647,20 @@ var Fishbone = class extends Base_default {
     gNode.left = right + generalizationNodeMargin;
     gNode.top = top + (bottom - top - gNode.height) / 2;
   }
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnRect(rect, expandBtnSize, width2, height2, node3) {
+    let dir = "";
+    if (node3.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP) {
+      dir = node3.layerIndex === 1 ? CONSTANTS.LAYOUT_GROW_DIR.TOP : CONSTANTS.LAYOUT_GROW_DIR.BOTTOM;
+    } else {
+      dir = node3.layerIndex === 1 ? CONSTANTS.LAYOUT_GROW_DIR.BOTTOM : CONSTANTS.LAYOUT_GROW_DIR.TOP;
+    }
+    if (dir === CONSTANTS.LAYOUT_GROW_DIR.TOP) {
+      rect.size(width2, expandBtnSize).x(0).y(-expandBtnSize);
+    } else {
+      rect.size(width2, expandBtnSize).x(0).y(height2);
+    }
+  }
 };
 var Fishbone_default = Fishbone;
 
@@ -47242,7 +47713,8 @@ var TextEdit = class {
     });
   }
   //  显示文本编辑框
-  async show(node3) {
+  // isInserting：是否是刚创建的节点
+  async show(node3, e2, isInserting = false) {
     if (node3.isUseCustomNodeContent()) {
       return;
     }
@@ -47250,7 +47722,7 @@ var TextEdit = class {
     if (typeof beforeTextEdit === "function") {
       let isShow = false;
       try {
-        isShow = await beforeTextEdit(node3);
+        isShow = await beforeTextEdit(node3, isInserting);
       } catch (error) {
         isShow = false;
       }
@@ -47262,7 +47734,7 @@ var TextEdit = class {
     this.mindMap.view.translateXY(offsetLeft, offsetTop);
     let rect = node3._textData.node.node.getBoundingClientRect();
     if (this.mindMap.richText) {
-      this.mindMap.richText.showEditText(node3, rect);
+      this.mindMap.richText.showEditText(node3, rect, isInserting);
       return;
     }
     this.showEditTextBox(node3, rect);
@@ -47572,6 +48044,8 @@ var layouts = {
   [CONSTANTS.LAYOUT.TIMELINE]: Timeline_default,
   // 时间轴2
   [CONSTANTS.LAYOUT.TIMELINE2]: Timeline_default,
+  // 竖向时间轴
+  [CONSTANTS.LAYOUT.VERTICAL_TIMELINE]: VerticalTimeline_default,
   // 鱼骨图
   [CONSTANTS.LAYOUT.FISHBONE]: Fishbone_default
 };
@@ -48118,11 +48592,10 @@ var Render = class {
     if (node3.isRoot) {
       return;
     }
-    let copyData = copyNodeTree({}, node3, false, true);
     this.removeActiveNode(node3);
     this.removeOneNode(node3);
     this.mindMap.emit("node_active", null, this.activeNodeList);
-    toNode.nodeData.children.push(copyData);
+    toNode.nodeData.children.push(node3.nodeData);
     this.mindMap.render();
     if (toNode.isRoot) {
       toNode.destroy();
@@ -50740,7 +51213,7 @@ var MindMap2 = class {
     this.opt.layout = layout;
     this.view.reset();
     this.renderer.setLayout();
-    this.render();
+    this.render(null, CONSTANTS.CHANGE_LAYOUT);
   }
   //  执行命令
   execCommand(...args) {
@@ -60628,7 +61101,7 @@ var Export = class {
   }
   //   svg转png
   svgToPng(svgSrc, transparent) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve2, reject) => {
       const img = new Image();
       img.setAttribute("crossOrigin", "anonymous");
       img.onload = async () => {
@@ -60651,7 +61124,7 @@ var Export = class {
             img.width,
             img.height
           );
-          resolve(canvas.toDataURL());
+          resolve2(canvas.toDataURL());
         } catch (error) {
           reject(error);
         }
@@ -60664,7 +61137,7 @@ var Export = class {
   }
   //  在canvas上绘制思维导图背景
   drawBackgroundToCanvas(ctx, width2, height2) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve2, reject) => {
       let {
         backgroundColor = "#fff",
         backgroundImage,
@@ -60687,18 +61160,18 @@ var Export = class {
           if (err) {
             reject(err);
           } else {
-            resolve();
+            resolve2();
           }
           ctx.restore();
         });
       } else {
-        resolve();
+        resolve2();
       }
     });
   }
   //  在svg上绘制思维导图背景
   drawBackgroundToSvg(svg2) {
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve2) => {
       let {
         backgroundColor = "#fff",
         backgroundImage,
@@ -60709,9 +61182,9 @@ var Export = class {
         let imgDataUrl = await imgToDataUrl(backgroundImage);
         svg2.css("background-image", `url(${imgDataUrl})`);
         svg2.css("background-repeat", backgroundRepeat);
-        resolve();
+        resolve2();
       } else {
-        resolve();
+        resolve2();
       }
     });
   }
@@ -60741,6 +61214,16 @@ var Export = class {
     }
     let img = await this.png();
     this.mindMap.doExportPDF.pdf(name, img);
+  }
+  // 导出为xmind
+  async xmind(name) {
+    if (!this.mindMap.doExportXMind) {
+      throw new Error("\u8BF7\u6CE8\u518CExportXMind\u63D2\u4EF6");
+    }
+    const data2 = this.mindMap.getData();
+    const blob = await this.mindMap.doExportXMind.xmind(data2, name);
+    const res = await readBlob(blob);
+    return res;
   }
   //  导出为svg
   // plusCssText：附加的css样式，如果svg中存在dom节点，想要设置一些针对节点的样式可以通过这个参数传入
@@ -62152,6 +62635,7 @@ var RichText = class {
     this.range = null;
     this.lastRange = null;
     this.node = null;
+    this.isInserting = false;
     this.styleEl = null;
     this.cacheEditingText = "";
     this.lostStyle = false;
@@ -62238,11 +62722,12 @@ var RichText = class {
     import_quill.default.register(SizeStyle, true);
   }
   // 显示文本编辑控件
-  showEditText(node3, rect) {
+  showEditText(node3, rect, isInserting) {
     if (this.showTextEdit) {
       return;
     }
     this.node = node3;
+    this.isInserting = isInserting;
     if (!rect)
       rect = node3._textData.node.node.getBoundingClientRect();
     this.mindMap.emit("before_show_text_edit");
@@ -62286,7 +62771,7 @@ var RichText = class {
     this.initQuillEditor();
     document.querySelector(".ql-editor").style.minHeight = originHeight + "px";
     this.showTextEdit = true;
-    this.focus();
+    this.focus(isInserting ? 0 : null);
     if (!node3.nodeData.data.richText) {
       this.setTextStyleIfNotRichText(node3);
     }
@@ -62329,6 +62814,7 @@ var RichText = class {
     this.showTextEdit = false;
     this.mindMap.emit("rich_text_selection_change", false);
     this.node = null;
+    this.isInserting = false;
   }
   // 初始化Quill富文本编辑器
   initQuillEditor() {
@@ -62348,6 +62834,8 @@ var RichText = class {
       theme: "snow"
     });
     this.quill.on("selection-change", (range) => {
+      if (this.isInserting)
+        return;
       this.lastRange = this.range;
       this.range = null;
       if (range) {
@@ -62408,9 +62896,9 @@ var RichText = class {
     this.quill.setSelection(0, this.quill.getLength());
   }
   // 聚焦
-  focus() {
+  focus(start) {
     let len = this.quill.getLength();
-    this.quill.setSelection(len, len);
+    this.quill.setSelection(typeof start === "number" ? start : len, len);
   }
   // 格式化当前选中的文本
   formatText(config = {}, clear2 = false) {
@@ -62874,7 +63362,6 @@ var TouchEvent = class {
         this.clickNum = 0;
         this.dispatchMouseEvent("dblclick", ev.target, ev);
       } else {
-        this.dispatchMouseEvent("click", ev.target, ev);
       }
     }
     this.touchesNum = 0;
@@ -62913,21 +63400,21 @@ var TouchEvent_default = TouchEvent;
 var import_jszip = __toESM(require_jszip_min());
 var import_xml_js = __toESM(require_lib());
 var parseXmindFile = (file) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve2, reject) => {
     import_jszip.default.loadAsync(file).then(
       async (zip) => {
         try {
           let content3 = "";
           if (zip.files["content.json"]) {
             let json = await zip.files["content.json"].async("string");
-            content3 = transformXmind(json);
+            content3 = await transformXmind(json, zip.files);
           } else if (zip.files["content.xml"]) {
             let xml = await zip.files["content.xml"].async("string");
             let json = import_xml_js.default.xml2json(xml);
             content3 = transformOldXmind(json);
           }
           if (content3) {
-            resolve(content3);
+            resolve2(content3);
           } else {
             reject(new Error("\u89E3\u6790\u5931\u8D25"));
           }
@@ -62941,11 +63428,12 @@ var parseXmindFile = (file) => {
     );
   });
 };
-var transformXmind = (content3) => {
+var transformXmind = async (content3, files) => {
   let data2 = JSON.parse(content3)[0];
   let nodeTree = data2.rootTopic;
   let newTree = {};
-  let walk2 = (node3, newNode) => {
+  let waitLoadImageList = [];
+  let walk2 = async (node3, newNode) => {
     newNode.data = {
       // 节点内容
       text: node3.title
@@ -62960,6 +63448,36 @@ var transformXmind = (content3) => {
     if (node3.labels && node3.labels.length > 0) {
       newNode.data.tag = node3.labels;
     }
+    if (node3.image && /\.(jpg|jpeg|png|gif|webp)$/.test(node3.image.src)) {
+      try {
+        let resolve2 = null;
+        let promise = new Promise((_resolve) => {
+          resolve2 = _resolve;
+        });
+        waitLoadImageList.push(promise);
+        let imageType = /\.([^.]+)$/.exec(node3.image.src)[1];
+        let imageBase64 = `data:image/${imageType};base64,` + await files["resources/" + node3.image.src.split("/")[1]].async(
+          "base64"
+        );
+        newNode.data.image = imageBase64;
+        if (!node3.image.width && !node3.image.height) {
+          let imageSize = await getImageSize(imageBase64);
+          newNode.data.imageSize = {
+            width: imageSize.width,
+            height: imageSize.height
+          };
+        } else {
+          newNode.data.imageSize = {
+            width: node3.image.width,
+            height: node3.image.height
+          };
+        }
+        resolve2();
+      } catch (error) {
+        console.log(error);
+        resolve();
+      }
+    }
     newNode.children = [];
     if (node3.children && node3.children.attached && node3.children.attached.length > 0) {
       node3.children.attached.forEach((item) => {
@@ -62970,6 +63488,7 @@ var transformXmind = (content3) => {
     }
   };
   walk2(nodeTree, newTree);
+  await Promise.all(waitLoadImageList);
   return newTree;
 };
 var transformOldXmind = (content3) => {
@@ -63046,10 +63565,116 @@ var transformOldXmind = (content3) => {
   walk2(root2, newTree);
   return newTree;
 };
+var transformToXmind = async (data2, name) => {
+  const id = "simpleMindMap_" + Date.now();
+  const imageList = [];
+  let newTree = {};
+  let waitLoadImageList = [];
+  let walk2 = async (node3, newNode, isRoot) => {
+    let newData = {
+      structureClass: "org.xmind.ui.logic.right",
+      title: getTextFromHtml(node3.data.text),
+      // 节点文本
+      children: {
+        attached: []
+      }
+    };
+    if (node3.data.note !== void 0) {
+      newData.notes = {
+        realHTML: {
+          content: node3.data.note
+        },
+        plain: {
+          content: node3.data.note
+        }
+      };
+    }
+    if (node3.data.hyperlink !== void 0) {
+      newData.href = node3.data.hyperlink;
+    }
+    if (node3.data.tag !== void 0) {
+      newData.labels = node3.data.tag || [];
+    }
+    if (node3.data.image) {
+      try {
+        let resolve2 = null;
+        let promise = new Promise((_resolve) => {
+          resolve2 = _resolve;
+        });
+        waitLoadImageList.push(promise);
+        let imgName = "";
+        let imgData = node3.data.image;
+        if (/^https?:\/\//.test(node3.data.image)) {
+          imgData = await imgToDataUrl(node3.data.image);
+        }
+        let dataUrlRes = parseDataUrl(imgData);
+        imgName = "image_" + imageList.length + "." + dataUrlRes.type;
+        imageList.push({
+          name: imgName,
+          data: dataUrlRes.base64
+        });
+        newData.image = {
+          src: "xap:resources/" + imgName,
+          width: node3.data.imageSize.width,
+          height: node3.data.imageSize.height
+        };
+        resolve2();
+      } catch (error) {
+        console.log(error);
+        resolve();
+      }
+    }
+    if (isRoot) {
+      newData.class = "topic";
+      newNode.id = id;
+      newNode.class = "sheet";
+      newNode.title = name;
+      newNode.extensions = [];
+      newNode.topicPositioning = "fixed";
+      newNode.topicOverlapping = "overlap";
+      newNode.coreVersion = "2.100.0";
+      newNode.rootTopic = newData;
+    } else {
+      Object.keys(newData).forEach((key) => {
+        newNode[key] = newData[key];
+      });
+    }
+    if (node3.children && node3.children.length > 0) {
+      node3.children.forEach((child) => {
+        let newChild = {};
+        walk2(child, newChild);
+        newData.children.attached.push(newChild);
+      });
+    }
+  };
+  walk2(data2, newTree, true);
+  await Promise.all(waitLoadImageList);
+  const contentData = [newTree];
+  const zip = new import_jszip.default();
+  zip.file("content.json", JSON.stringify(contentData));
+  zip.file(
+    "metadata.json",
+    `{"modifier":"","dataStructureVersion":"1","layoutEngineVersion":"2","activeSheetId":"${id}"}`
+  );
+  const manifestData = {
+    "file-entries": { "content.json": {}, "metadata.json": {} }
+  };
+  if (imageList.length > 0) {
+    imageList.forEach((item) => {
+      manifestData["file-entries"]["resources/" + item.name] = {};
+      const img = zip.folder("resources");
+      img.file(item.name, item.data, { base64: true });
+    });
+  }
+  zip.file("manifest.json", JSON.stringify(manifestData));
+  const zipData = await zip.generateAsync({ type: "blob" });
+  return zipData;
+};
 var xmind_default = {
   parseXmindFile,
   transformXmind,
-  transformOldXmind
+  transformOldXmind,
+  transformToXmind
 };
 
 // ../simple-mind-map/node_modules/mdast-util-to-string/lib/index.js
@@ -63486,10 +64111,10 @@ function resolveAll(constructs2, events, context) {
   const called = [];
   let index3 = -1;
   while (++index3 < constructs2.length) {
-    const resolve = constructs2[index3].resolveAll;
-    if (resolve && !called.includes(resolve)) {
-      events = resolve(events, context);
-      called.push(resolve);
+    const resolve2 = constructs2[index3].resolveAll;
+    if (resolve2 && !called.includes(resolve2)) {
+      events = resolve2(events, context);
+      called.push(resolve2);
     }
   }
   return events;

@@ -1,5 +1,6 @@
 import Base from './Base'
 import { walk, asyncRun } from '../utils'
+import { CONSTANTS } from '../constants/constant'
 
 //  思维导图
 class MindMap extends Base {
@@ -45,11 +46,14 @@ class MindMap extends Base {
             newNode.dir = parent._node.dir
           } else {
             // 节点生长方向
-            newNode.dir = index % 2 === 0 ? 'right' : 'left'
+            newNode.dir =
+              index % 2 === 0
+                ? CONSTANTS.LAYOUT_GROW_DIR.RIGHT
+                : CONSTANTS.LAYOUT_GROW_DIR.LEFT
           }
           // 根据生长方向定位到父节点的左侧或右侧
           newNode.left =
-            newNode.dir === 'right'
+            newNode.dir === CONSTANTS.LAYOUT_GROW_DIR.RIGHT
               ? parent._node.left +
                 parent._node.width +
                 this.getMarginX(layerIndex)
@@ -72,7 +76,7 @@ class MindMap extends Base {
         let leftChildrenAreaHeight = 0
         let rightChildrenAreaHeight = 0
         cur._node.children.forEach(item => {
-          if (item.dir === 'left') {
+          if (item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT) {
             leftLen++
             leftChildrenAreaHeight += item.height
           } else {
@@ -109,7 +113,7 @@ class MindMap extends Base {
           let leftTotalTop = baseTop - node.leftChildrenAreaHeight / 2
           let rightTotalTop = baseTop - node.rightChildrenAreaHeight / 2
           node.children.forEach(cur => {
-            if (cur.dir === 'left') {
+            if (cur.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT) {
               cur.top = leftTotalTop
               leftTotalTop += cur.height + marginY
             } else {
@@ -162,7 +166,10 @@ class MindMap extends Base {
           return
         }
         let _offset = 0
-        let addHeight = item.dir === 'left' ? leftAddHeight : rightAddHeight
+        let addHeight =
+          item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
+            ? leftAddHeight
+            : rightAddHeight
         // 上面的节点往上移
         if (_index < index) {
           _offset = -addHeight
@@ -208,10 +215,8 @@ class MindMap extends Base {
       let x1 = 0
       let _s = 0
       // 节点使用横线风格，需要额外渲染横线
-      let nodeUseLineStyleOffset = nodeUseLineStyle
-        ? item.width
-        : 0
-      if (item.dir === 'left') {
+      let nodeUseLineStyleOffset = nodeUseLineStyle ? item.width : 0
+      if (item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT) {
         _s = -s1
         x1 = node.layerIndex === 0 ? left : left - expandBtnSize
         nodeUseLineStyleOffset = -nodeUseLineStyleOffset
@@ -220,7 +225,10 @@ class MindMap extends Base {
         x1 = node.layerIndex === 0 ? left + width : left + width + expandBtnSize
       }
       let y1 = top + height / 2
-      let x2 = item.dir === 'left' ? item.left + item.width : item.left
+      let x2 =
+        item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
+          ? item.left + item.width
+          : item.left
       let y2 = item.top + item.height / 2
       y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
@@ -246,18 +254,21 @@ class MindMap extends Base {
       let x1 =
         node.layerIndex === 0
           ? left + width / 2
-          : item.dir === 'left'
+          : item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
           ? left - expandBtnSize
           : left + width + expandBtnSize
       let y1 = top + height / 2
-      let x2 = item.dir === 'left' ? item.left + item.width : item.left
+      let x2 =
+        item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
+          ? item.left + item.width
+          : item.left
       let y2 = item.top + item.height / 2
       y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       // 节点使用横线风格，需要额外渲染横线
       let nodeUseLineStylePath = ''
       if (nodeUseLineStyle) {
-        if (item.dir === 'left') {
+        if (item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT) {
           nodeUseLineStylePath = ` L ${item.left},${y2}`
         } else {
           nodeUseLineStylePath = ` L ${item.left + item.width},${y2}`
@@ -283,11 +294,14 @@ class MindMap extends Base {
       let x1 =
         node.layerIndex === 0
           ? left + width / 2
-          : item.dir === 'left'
+          : item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
           ? left - expandBtnSize
           : left + width + expandBtnSize
       let y1 = top + height / 2
-      let x2 = item.dir === 'left' ? item.left + item.width : item.left
+      let x2 =
+        item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
+          ? item.left + item.width
+          : item.left
       let y2 = item.top + item.height / 2
       let path = ''
       y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
@@ -295,7 +309,7 @@ class MindMap extends Base {
       // 节点使用横线风格，需要额外渲染横线
       let nodeUseLineStylePath = ''
       if (this.mindMap.themeConfig.nodeUseLineStyle) {
-        if (item.dir === 'left') {
+        if (item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT) {
           nodeUseLineStylePath = ` L ${item.left},${y2}`
         } else {
           nodeUseLineStylePath = ` L ${item.left + item.width},${y2}`
@@ -320,7 +334,8 @@ class MindMap extends Base {
       ? height / 2
       : 0
     // 位置没有变化则返回
-    let _x = (node.dir === 'left' ? 0 - expandBtnSize : width)
+    let _x =
+      node.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT ? 0 - expandBtnSize : width
     let _y = height / 2 + nodeUseLineStyleOffset
     if (_x === translateX && _y === translateY) {
       return
@@ -332,7 +347,7 @@ class MindMap extends Base {
 
   //  创建概要节点
   renderGeneralization(node, gLine, gNode) {
-    let isLeft = node.dir === 'left'
+    let isLeft = node.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
     let {
       top,
       bottom,
@@ -357,6 +372,15 @@ class MindMap extends Base {
       (isLeft ? -generalizationNodeMargin : generalizationNodeMargin) -
       (isLeft ? gNode.width : 0)
     gNode.top = top + (bottom - top - gNode.height) / 2
+  }
+
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnRect(rect, expandBtnSize, width, height, node) {
+    if (node.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT) {
+      rect.size(expandBtnSize, height).x(-expandBtnSize).y(0)
+    } else {
+      rect.size(expandBtnSize, height).x(width).y(0)
+    }
   }
 }
 
