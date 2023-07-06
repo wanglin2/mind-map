@@ -349,6 +349,11 @@ class CatalogOrganization extends Base {
     gNode.left = right + generalizationNodeMargin
     gNode.top = top + (bottom - top - gNode.height) / 2
   }
+
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnRect(rect, expandBtnSize, width, height, node) {
+    rect.size(width, expandBtnSize).x(0).y(height)
+  }
 }
 
 export default CatalogOrganization

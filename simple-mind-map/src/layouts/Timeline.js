@@ -336,6 +336,28 @@ class Timeline extends Base {
     gNode.left = right + generalizationNodeMargin
     gNode.top = top + (bottom - top - gNode.height) / 2
   }
+
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnRect(rect, expandBtnSize, width, height, node) {
+    if (this.layout === CONSTANTS.LAYOUT.TIMELINE) {
+      rect.size(width, expandBtnSize).x(0).y(height)
+    } else {
+      let dir = ''
+      if (node.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP) {
+        dir =
+          node.layerIndex === 1
+            ? CONSTANTS.LAYOUT_GROW_DIR.TOP
+            : CONSTANTS.LAYOUT_GROW_DIR.BOTTOM
+      } else {
+        dir = CONSTANTS.LAYOUT_GROW_DIR.BOTTOM
+      }
+      if (dir === CONSTANTS.LAYOUT_GROW_DIR.TOP) {
+        rect.size(width, expandBtnSize).x(0).y(-expandBtnSize)
+      } else {
+        rect.size(width, expandBtnSize).x(0).y(height)
+      }
+    }
+  }
 }
 
 export default Timeline

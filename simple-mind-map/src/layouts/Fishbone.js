@@ -239,7 +239,7 @@ class Fishbone extends Base {
       // 当前节点是根节点
       // 根节点的子节点是和根节点同一水平线排列
       let maxx = -Infinity
-      node.children.forEach((item) => {
+      node.children.forEach(item => {
         if (item.left > maxx) {
           maxx = item.left
         }
@@ -250,15 +250,15 @@ class Fishbone extends Base {
         let line = this.draw.path()
         if (this.checkIsTop(item)) {
           line.plot(
-            `M ${nodeLineX - offsetX},${item.top + item.height + offset} L ${item.left},${
-              item.top + item.height
-            }`
+            `M ${nodeLineX - offsetX},${item.top + item.height + offset} L ${
+              item.left
+            },${item.top + item.height}`
           )
         } else {
           line.plot(
-            `M ${nodeLineX - offsetX},${
-              item.top - offset
-            } L ${nodeLineX},${item.top}`
+            `M ${nodeLineX - offsetX},${item.top - offset} L ${nodeLineX},${
+              item.top
+            }`
           )
         }
         node.style.line(line)
@@ -372,6 +372,27 @@ class Fishbone extends Base {
     gLine.plot(path)
     gNode.left = right + generalizationNodeMargin
     gNode.top = top + (bottom - top - gNode.height) / 2
+  }
+
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnRect(rect, expandBtnSize, width, height, node) {
+    let dir = ''
+    if (node.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP) {
+      dir =
+        node.layerIndex === 1
+          ? CONSTANTS.LAYOUT_GROW_DIR.TOP
+          : CONSTANTS.LAYOUT_GROW_DIR.BOTTOM
+    } else {
+      dir =
+        node.layerIndex === 1
+          ? CONSTANTS.LAYOUT_GROW_DIR.BOTTOM
+          : CONSTANTS.LAYOUT_GROW_DIR.TOP
+    }
+    if (dir === CONSTANTS.LAYOUT_GROW_DIR.TOP) {
+      rect.size(width, expandBtnSize).x(0).y(-expandBtnSize)
+    } else {
+      rect.size(width, expandBtnSize).x(0).y(height)
+    }
   }
 }
 
