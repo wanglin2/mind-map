@@ -2,7 +2,7 @@
 
 > v0.2.7+
 
-Provides methods for importing `XMind` files.
+Provides methods for importing and export `XMind` files.
 
 ## Import
 
@@ -31,6 +31,8 @@ Parsing the `.xmind` file and returning the parsed data. You can use
 
 ### xmind.transformXmind(content)
 
+> V0.6.6+version changes the method to asynchronous and returns a Promise instance
+
 Convert `xmind` data. The `.xmind` file is essentially a `zip` file that can be
 decompressed by changing the suffix to zip. Inside, there is a `content.json`
 file. If you have parsed this file yourself, you can pass the contents of this
@@ -49,3 +51,13 @@ version does not have a `content.json`, it corresponds to `content.xml`.
 
 `content`: the contents of the `content.xml` file within the `.xmind` zip
 package
+
+### transformToXmind(data, name)
+
+> v0.6.6+
+
+- `data`: `simple-mind-map` data, you can get it by `mindMap.getData()` method.
+
+- `name`: The file name to export.
+
+Convert the `simple mind map` data to an `xmind` file. This method is asynchronous and returns an instance of `Promise`. The returned data is a `blob` type `zip` compressed package data, which you can download as a file yourself.

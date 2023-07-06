@@ -93,6 +93,29 @@
 <p>v0.5.9+</p>
 </blockquote>
 <p>将<code>blob</code>数据转成<code>data:url</code>数据。</p>
+<h4>parseDataUrl(data)</h4>
+<blockquote>
+<p>v0.6.6+</p>
+</blockquote>
+<p>解析<code>data:url</code>数据，返回：</p>
+<pre class="hljs"><code>{
+  type,<span class="hljs-comment">// 数据的文件类型</span>
+  base64<span class="hljs-comment">// base64数据</span>
+}
+</code></pre>
+<h4>getImageSize(src)</h4>
+<blockquote>
+<p>v0.6.6+</p>
+</blockquote>
+<ul>
+<li><code>src</code>：图片的url</li>
+</ul>
+<p>获取图片的大小。返回：</p>
+<pre class="hljs"><code>{
+  width,
+  height
+}
+</code></pre>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>
