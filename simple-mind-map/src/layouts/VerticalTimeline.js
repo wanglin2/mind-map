@@ -46,7 +46,10 @@ class VerticalTimeline extends Base {
           if (parent._node.dir) {
             newNode.dir = parent._node.dir
           } else {
-            newNode.dir = index % 2 === 0 ? CONSTANTS.LAYOUT_GROW_DIR.RIGHT : CONSTANTS.LAYOUT_GROW_DIR.LEFT
+            newNode.dir =
+              index % 2 === 0
+                ? CONSTANTS.LAYOUT_GROW_DIR.RIGHT
+                : CONSTANTS.LAYOUT_GROW_DIR.LEFT
           }
           // 定位二级节点的left
           if (parent._node.isRoot) {
@@ -321,7 +324,10 @@ class VerticalTimeline extends Base {
             ? left - expandBtnSize
             : left + width + expandBtnSize
         let y1 = top + height / 2
-        let x2 = item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT ? item.left + item.width : item.left
+        let x2 =
+          item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
+            ? item.left + item.width
+            : item.left
         let y2 = item.top + item.height / 2
         let path = `M ${x1},${y1} L ${x2},${y2}`
         lines[index].plot(path)
@@ -358,7 +364,10 @@ class VerticalTimeline extends Base {
             ? left - expandBtnSize
             : left + width + expandBtnSize
         let y1 = top + height / 2
-        let x2 = item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT ? item.left + item.width : item.left
+        let x2 =
+          item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
+            ? item.left + item.width
+            : item.left
         let y2 = item.top + item.height / 2
         let path = this.cubicBezierPath(x1, y1, x2, y2)
         lines[index].plot(path)
@@ -407,6 +416,15 @@ class VerticalTimeline extends Base {
       (isLeft ? -generalizationNodeMargin : generalizationNodeMargin) -
       (isLeft ? gNode.width : 0)
     gNode.top = top + (bottom - top - gNode.height) / 2
+  }
+
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnRect(rect, expandBtnSize, width, height, node) {
+    if (node.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT) {
+      rect.size(expandBtnSize, height).x(-expandBtnSize).y(0)
+    } else {
+      rect.size(expandBtnSize, height).x(width).y(0)
+    }
   }
 }
 
