@@ -17,6 +17,15 @@ function createImgNode() {
   node.on('dblclick', e => {
     this.mindMap.emit('node_img_dblclick', this, e)
   })
+  node.on('mouseenter', e => {
+    this.mindMap.emit('node_img_mouseenter', this, node, e)
+  })
+  node.on('mouseleave', e => {
+    this.mindMap.emit('node_img_mouseleave', this, node, e)
+  })
+  node.on('mousemove', e => {
+    this.mindMap.emit('node_img_mousemove', this, node, e)
+  })
   return {
     node,
     width: imgSize[0],
@@ -26,9 +35,12 @@ function createImgNode() {
 
 //  获取图片显示宽高
 function getImgShowSize() {
+  const { custom, width, height } = this.nodeData.data.imageSize
+  // 如果是自定义了图片的宽高，那么不受最大宽高限制
+  if (custom) return [width, height]
   return resizeImgSize(
-    this.nodeData.data.imageSize.width,
-    this.nodeData.data.imageSize.height,
+    width,
+    height,
     this.mindMap.themeConfig.imgMaxWidth,
     this.mindMap.themeConfig.imgMaxHeight
   )
@@ -89,7 +101,7 @@ function createRichTextNode() {
   el.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + 'px'
   this.mindMap.el.appendChild(div)
   let { width, height } = el.getBoundingClientRect()
-  width = Math.ceil(width)
+  width = Math.ceil(width) + 1// 修复getBoundingClientRect方法对实际宽度是小数的元素获取到的值是整数，导致宽度不够文本发生换行的问题
   height = Math.ceil(height)
   g.attr('data-width', width)
   g.attr('data-height', height)
@@ -280,6 +292,32 @@ function createNoteNode() {
   }
 }
 
+// 测量自定义节点内容元素的宽高
+let warpEl = null
+function measureCustomNodeContentSize (content) {
+  if (!warpEl) {
+    warpEl = document.createElement('div')
+    warpEl.style.cssText = `
+      position: fixed;
+      left: -99999px;
+      top: -99999px;
+    `
+    this.mindMap.el.appendChild(warpEl)
+  }
+  warpEl.innerHTML = ''
+  warpEl.appendChild(content)
+  let rect = warpEl.getBoundingClientRect()
+  return {
+    width: rect.width,
+    height: rect.height
+  }
+}
+
+// 是否使用的是自定义节点内容
+function isUseCustomNodeContent()  {
+  return !!this._customNodeContent
+}
+
 export default {
     createImgNode,
     getImgShowSize,
@@ -288,5 +326,7 @@ export default {
     createTextNode,
     createHyperlinkNode,
     createTagNode,
-    createNoteNode
+    createNoteNode,
+    measureCustomNodeContentSize,
+    isUseCustomNodeContent
 }

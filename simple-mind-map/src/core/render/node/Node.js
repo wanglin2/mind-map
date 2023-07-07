@@ -1,7 +1,7 @@
 import Style from './Style'
 import Shape from './Shape'
-import { asyncRun } from '../../../utils'
-import { G, Rect } from '@svgdotjs/svg.js'
+import { asyncRun, nodeToHTML } from '../../../utils'
+import { G, Rect, ForeignObject, SVG } from '@svgdotjs/svg.js'
 import nodeGeneralizationMethods from './nodeGeneralization'
 import nodeExpandBtnMethods from './nodeExpandBtn'
 import nodeCommandWrapsMethods from './nodeCommandWraps'
@@ -59,6 +59,7 @@ class Node {
     this.group = null
     this.shapeNode = null // 节点形状节点
     // 节点内容对象
+    this._customNodeContent = null
     this._imgData = null
     this._iconData = null
     this._textData = null
@@ -154,6 +155,13 @@ class Node {
 
   //  创建节点的各个内容对象数据
   createNodeData() {
+    // 自定义节点内容
+    let { isUseCustomNodeContent, customCreateNodeContent } = this.mindMap.opt
+    if (isUseCustomNodeContent && customCreateNodeContent) {
+      this._customNodeContent = customCreateNodeContent(this)
+    }
+    // 如果没有返回内容，那么还是使用内置的节点内容
+    if (this._customNodeContent) return
     this._imgData = this.createImgNode()
     this._iconData = this.createIconNode()
     this._textData = this.createTextNode()
@@ -176,6 +184,14 @@ class Node {
 
   //  计算节点尺寸信息
   getNodeRect() {
+    // 自定义节点内容
+    if (this.isUseCustomNodeContent()) {
+      let rect = this.measureCustomNodeContentSize(this._customNodeContent)
+      return {
+        width: rect.width,
+        height: rect.height
+      }
+    }
     // 宽高
     let imgContentWidth = 0
     let imgContentHeight = 0
@@ -253,18 +269,19 @@ class Node {
     this.group.add(this.shapeNode)
     this.updateNodeShape()
     // 渲染一个隐藏的矩形区域，用来触发展开收起按钮的显示
-    if (!this.mindMap.opt.alwaysShowExpandBtn) {
-      if (!this._unVisibleRectRegionNode) {
-        this._unVisibleRectRegionNode = new Rect()
-      }
-      this._unVisibleRectRegionNode.fill({
-        color: 'transparent'
-      }).size(this.expandBtnSize, height).x(width).y(0)
-      this.group.add(this._unVisibleRectRegionNode)
-    }
+    this.renderExpandBtnPlaceholderRect()
     // 概要节点添加一个带所属节点id的类名
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass('generalization_' + this.generalizationBelongNode.uid)
+    }
+    // 如果存在自定义节点内容，那么使用自定义节点内容
+    if (this.isUseCustomNodeContent()) {
+      let foreignObject = new ForeignObject()
+      foreignObject.width(width)
+      foreignObject.height(height)
+      foreignObject.add(SVG(this._customNodeContent))
+      this.group.add(foreignObject)
+      return
     }
     // 图片节点
     let imgHeight = 0
@@ -339,6 +356,21 @@ class Node {
     this.group.add(textContentNested)
   }
 
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnPlaceholderRect() {
+    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+      let { width, height } = this
+      if (!this._unVisibleRectRegionNode) {
+        this._unVisibleRectRegionNode = new Rect()
+        this._unVisibleRectRegionNode.fill({
+          color: 'transparent'
+        })
+        this.group.add(this._unVisibleRectRegionNode)
+      }
+      this.renderer.layout.renderExpandBtnRect(this._unVisibleRectRegionNode, this.expandBtnSize, width, height, this)
+    }
+  }
+
   // 给节点绑定事件
   bindGroupEvent() {
     // 单击事件，选中节点
@@ -408,7 +440,8 @@ class Node {
     // 右键菜单事件
     this.group.on('contextmenu', e => {
       // 按住ctrl键点击鼠标左键不知为何触发的是contextmenu事件
-      if (this.mindMap.opt.readonly || e.ctrlKey) {// || this.isGeneralization
+      if (this.mindMap.opt.readonly || e.ctrlKey) {
+        // || this.isGeneralization
         return
       }
       e.stopPropagation()
@@ -442,8 +475,11 @@ class Node {
     if (!this.group) {
       return
     }
-    let { enableNodeTransitionMove, nodeTransitionMoveDuration, alwaysShowExpandBtn } =
-      this.mindMap.opt
+    let {
+      enableNodeTransitionMove,
+      nodeTransitionMoveDuration,
+      alwaysShowExpandBtn
+    } = this.mindMap.opt
     if (alwaysShowExpandBtn) {
       // 需要移除展开收缩按钮
       if (this._expandBtn && this.nodeData.children.length <= 0) {
@@ -518,6 +554,10 @@ class Node {
         this.needLayout = false
         this.layout()
       }
+      if (this.needRerenderExpandBtnPlaceholderRect) {
+        this.needRerenderExpandBtnPlaceholderRect = false
+        this.renderExpandBtnPlaceholderRect()
+      }
       this.update()
     }
     // 子节点
@@ -553,7 +593,7 @@ class Node {
       delete this.nodeData.inserting
       this.active()
       setTimeout(() => {
-        this.mindMap.emit('node_dblclick', this)
+        this.mindMap.emit('node_dblclick', this, null, true)
       }, 0)
     }
   }
@@ -758,7 +798,7 @@ class Node {
 
   //  获取padding值
   getPaddingVale() {
-    let { isActive }= this.nodeData.data
+    let { isActive } = this.nodeData.data
     return {
       paddingX: this.getStyle('paddingX', true, isActive),
       paddingY: this.getStyle('paddingY', true, isActive)

@@ -567,6 +567,7 @@
       </template>
       <!-- 其他配置 -->
       <div class="title noTop">{{ $t('baseStyle.otherConfig') }}</div>
+      <!-- 配置开启自由拖拽 -->
       <div class="row">
         <div class="rowItem">
           <el-checkbox v-model="config.enableFreeDrag" @change="
@@ -576,11 +577,13 @@
             ">{{ $t('baseStyle.enableFreeDrag') }}</el-checkbox>
         </div>
       </div>
+      <!-- 配置是否启用富文本编辑 -->
       <div class="row">
         <div class="rowItem">
           <el-checkbox v-model="enableNodeRichText" @change="enableNodeRichTextChange">{{ $t('baseStyle.isEnableNodeRichText') }}</el-checkbox>
         </div>
       </div>
+      <!-- 配置鼠标滚轮行为 -->
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.mousewheelAction') }}</span>
@@ -597,6 +600,26 @@
           >
             <el-option :label="$t('baseStyle.zoomView') " value="zoom"></el-option>
             <el-option :label="$t('baseStyle.moveViewUpDown') " value="move"></el-option>
+          </el-select>
+        </div>
+      </div>
+      <!-- 配置鼠标缩放行为 -->
+      <div class="row" v-if="config.mousewheelAction === 'zoom'">
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.mousewheelZoomActionReverse') }}</span>
+          <el-select
+            size="mini"
+            style="width: 120px"
+            v-model="config.mousewheelZoomActionReverse"
+            placeholder=""
+            @change="
+              value => {
+                updateOtherConfig('mousewheelZoomActionReverse', value)
+              }
+            "
+          >
+            <el-option :label="$t('baseStyle.mousewheelZoomActionReverse1') " :value="false"></el-option>
+            <el-option :label="$t('baseStyle.mousewheelZoomActionReverse2') " :value="true"></el-option>
           </el-select>
         </div>
       </div>
@@ -668,7 +691,8 @@ export default {
       },
       config: {
         enableFreeDrag: false,
-        mousewheelAction: 'zoom'
+        mousewheelAction: 'zoom',
+        mousewheelZoomActionReverse: false
       },
       watermarkConfig: {
         show: false,
@@ -720,6 +744,7 @@ export default {
   created () {
     this.enableNodeRichText = this.localConfig.openNodeRichText
     this.mousewheelAction = this.localConfig.mousewheelAction
+    this.mousewheelZoomActionReverse = this.localConfig.mousewheelZoomActionReverse
   },
   methods: {
     ...mapMutations(['setLocalConfig']),
@@ -765,7 +790,7 @@ export default {
 
     // 初始化其他配置
     initConfig() {
-      ;['enableFreeDrag', 'mousewheelAction'].forEach(key => {
+      ;['enableFreeDrag', 'mousewheelAction', 'mousewheelZoomActionReverse'].forEach(key => {
         this.config[key] = this.mindMap.getConfig(key)
       })
     },

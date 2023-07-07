@@ -27,11 +27,14 @@ import MiniMap from 'simple-mind-map/src/plugins/MiniMap.js'
 import Watermark from 'simple-mind-map/src/plugins/Watermark.js'
 import KeyboardNavigation from 'simple-mind-map/src/plugins/KeyboardNavigation.js'
 import ExportPDF from 'simple-mind-map/src/plugins/ExportPDF.js'
+import ExportXMind from 'simple-mind-map/src/plugins/ExportXMind.js'
 import Export from 'simple-mind-map/src/plugins/Export.js'
 import Drag from 'simple-mind-map/src/plugins/Drag.js'
 import Select from 'simple-mind-map/src/plugins/Select.js'
 import RichText from 'simple-mind-map/src/plugins/RichText.js'
 import AssociativeLine from 'simple-mind-map/src/plugins/AssociativeLine.js'
+import TouchEvent from 'simple-mind-map/src/plugins/TouchEvent.js'
+import NodeImgAdjust from 'simple-mind-map/src/plugins/NodeImgAdjust.js'
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -50,6 +53,13 @@ import SidebarTrigger from './SidebarTrigger.vue'
 import { mapState, mapMutations } from 'vuex'
 import customThemeList from '@/customThemes'
 import icon from '@/config/icon'
+import customThemeList from '@/customThemes'
+import CustomNodeContent from './CustomNodeContent.vue'
+import Color from './Color.vue'
+import Vue from 'vue'
+import router from '../../../router'
+import store from '../../../store'
+import i18n from '../../../i18n'
 
 // 注册插件
 MindMap
@@ -58,9 +68,12 @@ MindMap
   .usePlugin(Drag)
   .usePlugin(KeyboardNavigation)
   .usePlugin(ExportPDF)
+  .usePlugin(ExportXMind)
   .usePlugin(Export)
   .usePlugin(Select)
   .usePlugin(AssociativeLine)
+  .usePlugin(NodeImgAdjust)
+  .usePlugin(TouchEvent)
 
 // 注册自定义主题
 // customThemeList.forEach((item) => {
@@ -314,7 +327,32 @@ export default {
         },
         ...(config || {}),
         iconList: icon,
-        useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag
+        useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag,
+        // isUseCustomNodeContent: true,
+        // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
+        // customCreateNodeContent: (node) => {
+        //   let el = document.createElement('div')
+        //   let Comp = Vue.extend(Color)
+        //   let comp = new Comp({
+        //     router,
+        //     store,
+        //     i18n
+        //   })
+        //   comp.$mount(el)
+        //   return comp.$el
+        // },
+        // 示例2：组件里没有用到示例1的东西
+        // customCreateNodeContent: (node) => {
+        //   let el = document.createElement('div')
+        //   let Comp = Vue.extend(CustomNodeContent)
+        //   let comp = new Comp({
+        //     propsData: {
+        //       html: node.nodeData.data.text
+        //     }
+        //   })
+        //   comp.$mount(el)
+        //   return comp.$el
+        // }
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
       // this.mindMap.keyCommand.addShortcut('Control+s', () => {

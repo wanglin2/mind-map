@@ -10,6 +10,20 @@ import {walk, ...} from 'simple-mind-map/src/utils'
 
 ### 方法
 
+#### resizeImgSizeByOriginRatio(width, height, newWidth, newHeight)
+
+> v0.6.5+
+
+`width`: 图片原始的宽度
+
+`height`：图片原始的高度
+
+`newWidth`：要缩放到的宽度
+
+`newHeight`：要缩放到的高度
+
+按比例缩放图片。在保持图片原始宽高比的情况下缩放到指定的`newWidth`、`newHeight`大小。
+
 #### walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)
 
 深度优先遍历树
@@ -133,6 +147,34 @@ copyNodeTree({}, node)
 > v0.5.9+
 
 将`blob`数据转成`data:url`数据。
+
+#### parseDataUrl(data)
+
+> v0.6.6+
+
+解析`data:url`数据，返回：
+
+```js
+{
+  type,// 数据的文件类型
+  base64// base64数据
+}
+```
+
+#### getImageSize(src)
+
+> v0.6.6+
+
+- `src`：图片的url
+
+获取图片的大小。返回：
+
+```js
+{
+  width,
+  height
+}
+```
 
 ## 在canvas中模拟css的背景属性
 

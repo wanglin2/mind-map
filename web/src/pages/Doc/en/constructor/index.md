@@ -45,6 +45,7 @@ const mindMap = new MindMap({
 | customHandleMousewheel（v0.4.3+）     | Function  | null | User-defined mouse wheel event processing can pass a function, and the callback parameter is the event object |          |
 | mousewheelAction（v0.4.3+）     | String  | zoom | The behavior of the mouse wheel, `zoom`(Zoom in and out)、`move`(Move up and down). If `customHandleMousewheel` passes a custom function, this property will not take effect                 |          |
 | mousewheelMoveStep（v0.4.3+）     | Number  | 100 | When the `mousewheelAction` is set to `move`, you can use this attribute to control the step length of the view movement when the mouse scrolls. The unit is `px`  |          |
+| mousewheelZoomActionReverse（v0.6.5+）     | Boolean  | false | When `mousewheelAction` is set to `zoom`, the default scrolling forward is to zoom out, and scrolling backward is to zoom in. If this property is set to true, it will be reversed   |          |
 | defaultInsertSecondLevelNodeText（v0.4.7+）     | String  | 二级节点 | Text of the default inserted secondary node               |          |
 | defaultInsertBelowSecondLevelNodeText（v0.4.7+）     | String  | 分支主题 | Text for nodes below the second level inserted by default               |          |
 | expandBtnStyle（v0.5.0+）     | Object  | { color: '#808080', fill: '#fff' } | Expand the color of the stow button  |          |
@@ -67,6 +68,9 @@ const mindMap = new MindMap({
 | enableCtrlKeyNodeSelection（v0.6.0+）     | Boolean  | true |  Whether to enable the function of holding down the Ctrl key to select multiple nodes |          |
 | useLeftKeySelectionRightKeyDrag（v0.6.0+）     | Boolean  | false | Setting to left click to select multiple nodes and right click to drag the canvas.  |          |
 | beforeTextEdit（v0.6.0+）     |  Function/null | null | The callback method before the node is about to enter editing. If the method returns a value other than true, the editing will be canceled. The function can return a value or a promise, and the callback parameter is the node instance  |          |
+| isUseCustomNodeContent（v0.6.3+）     |  Boolean | false |  Whether to customize node content |          |
+| customCreateNodeContent（v0.6.3+）     |  Function/null | null | If `isUseCustomNodeContent` is set to `true`, then this option needs to be used to pass in a method that receives the node instance `node` as a parameter (if you want to obtain data for that node, you can use `node.nodeData.data`). You need to return the custom node content element, which is the DOM node. If a node does not require customization, you can return `null` |          |
+| mouseScaleCenterUseMousePosition（v0.6.4-fix.1+）     | Boolean  | true | Is the mouse zoom centered around the current position of the mouse, otherwise centered around the canvas |          |
 
 ### Watermark config
 
@@ -231,6 +235,9 @@ Listen to an event. Event list:
 | hide_text_edit                   | Node text edit box close event                                           | textEditNode (text edit box DOM node), activeNodeList (current list of active nodes)                            |
 | scale                            | Zoom event                                                               | scale (zoom ratio)                                                                                              |
 | node_img_dblclick（v0.2.15+）    | Node image double-click event                                            | this (node instance), e (event object)                                                                          |
+| node_img_mouseenter（v0.6.5+）    |  Node image mouseenter event                    | this（node instance）、imgNode（img node）、e（event object）                              |
+| node_img_mouseleave（v0.6.5+）    |  Node image mouseleave event                    | this（node instance）、imgNode（img node）、e（event object）                              |
+| node_img_mousemove（v0.6.5+）    |  Node image mousemove event                      | this（node instance）、imgNode（img node）、e（event object）                              |
 | node_tree_render_end（v0.2.16+） | Node tree render end event                                               |                                                                                                                 |
 | rich_text_selection_change（v0.4.0+）         |  Available when the `RichText` plugin is registered. Triggered when the text selection area changes when the node is edited         |  hasRange（Whether there is a selection）、rectInfo（Size and location information of the selected area）、formatInfo（Text formatting information of the selected area）            |
 | transforming-dom-to-images（v0.4.0+）         |  Available when the `RichText` plugin is registered. When there is a `DOM` node in `svg`, the `DOM` node will be converted to an image when exporting to an image. This event will be triggered during the conversion process. You can use this event to prompt the user about the node to which you are currently converting         |  index（Index of the node currently converted to）、len（Total number of nodes to be converted）            |

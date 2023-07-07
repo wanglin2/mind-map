@@ -157,6 +157,7 @@ export const themeList = [
 // 常量
 export const CONSTANTS = {
   CHANGE_THEME: 'changeTheme',
+  CHANGE_LAYOUT: 'changeLayout',
   SET_DATA: 'setData',
   TRANSFORM_TO_NORMAL_NODE: 'transformAllNodesToNormalNode',
   MODE: {
@@ -170,7 +171,8 @@ export const CONSTANTS = {
     CATALOG_ORGANIZATION: 'catalogOrganization',
     TIMELINE: 'timeline',
     TIMELINE2: 'timeline2',
-    FISHBONE: 'fishbone'
+    FISHBONE: 'fishbone',
+    VERTICAL_TIMELINE: 'verticalTimeline'
   },
   DIR: {
     UP: 'up',
@@ -206,8 +208,10 @@ export const CONSTANTS = {
     BOTTOM: 'bottom',
     CENTER: 'center'
   },
-  TIMELINE_DIR: {
+  LAYOUT_GROW_DIR: {
+    LEFT: 'left',
     TOP: 'top',
+    RIGHT: 'right',
     BOTTOM: 'bottom'
   }
 }
@@ -247,6 +251,10 @@ export const layoutList = [
     value: CONSTANTS.LAYOUT.TIMELINE2,
   },
   {
+    name: '竖向时间轴',
+    value: CONSTANTS.LAYOUT.VERTICAL_TIMELINE,
+  },
+  {
     name: '鱼骨图',
     value: CONSTANTS.LAYOUT.FISHBONE,
   }
@@ -258,6 +266,7 @@ export const layoutValueList = [
   CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE,
   CONSTANTS.LAYOUT.TIMELINE,
   CONSTANTS.LAYOUT.TIMELINE2,
+  CONSTANTS.LAYOUT.VERTICAL_TIMELINE,
   CONSTANTS.LAYOUT.FISHBONE
 ]
 

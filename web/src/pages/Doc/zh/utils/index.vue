@@ -6,6 +6,15 @@
 <pre class="hljs"><code><span class="hljs-keyword">import</span> {walk, ...} <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils&#x27;</span>
 </code></pre>
 <h3>方法</h3>
+<h4>resizeImgSizeByOriginRatio(width, height, newWidth, newHeight)</h4>
+<blockquote>
+<p>v0.6.5+</p>
+</blockquote>
+<p><code>width</code>: 图片原始的宽度</p>
+<p><code>height</code>：图片原始的高度</p>
+<p><code>newWidth</code>：要缩放到的宽度</p>
+<p><code>newHeight</code>：要缩放到的高度</p>
+<p>按比例缩放图片。在保持图片原始宽高比的情况下缩放到指定的<code>newWidth</code>、<code>newHeight</code>大小。</p>
 <h4>walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)</h4>
 <p>深度优先遍历树</p>
 <p><code>root</code>：要遍历的树的根节点</p>
@@ -84,6 +93,29 @@
 <p>v0.5.9+</p>
 </blockquote>
 <p>将<code>blob</code>数据转成<code>data:url</code>数据。</p>
+<h4>parseDataUrl(data)</h4>
+<blockquote>
+<p>v0.6.6+</p>
+</blockquote>
+<p>解析<code>data:url</code>数据，返回：</p>
+<pre class="hljs"><code>{
+  type,<span class="hljs-comment">// 数据的文件类型</span>
+  base64<span class="hljs-comment">// base64数据</span>
+}
+</code></pre>
+<h4>getImageSize(src)</h4>
+<blockquote>
+<p>v0.6.6+</p>
+</blockquote>
+<ul>
+<li><code>src</code>：图片的url</li>
+</ul>
+<p>获取图片的大小。返回：</p>
+<pre class="hljs"><code>{
+  width,
+  height
+}
+</code></pre>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

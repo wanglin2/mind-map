@@ -77,7 +77,7 @@ If you need a file in the format of `umd` module, such as `CDN` in the browser, 
 <script scr="simpleMindMap.umd.min.js"></script>
 ```
 
-A global variable `window.simpleMindMap` will be created.
+A global variable `window.simpleMindMap` will be created. you can get `MindMap` constructor by `window.simpleMindMap.default`, for more detail info you can log `window.simpleMindMap`.
 
 The disadvantage of this method is that it will contain all the content, including the plugins you have not registered, so the overall volume will be relatively large.
 
@@ -111,6 +111,8 @@ simple-mind-map. This uses the same packaging tool as the sample project web.
 cd web
 npm run buildLibrary
 ```
+
+The packaging entry is `simple-mind-map/full.js`, which will introduce all plugins by default. If you don't need all plugins, you can modify the file to only introduce the plugins you need, which can reduce the size of the packaged file.
 
 The `package.json` file in the `simple-mind-map` library provides two export
 fields:

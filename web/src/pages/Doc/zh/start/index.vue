@@ -51,7 +51,7 @@
 <pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;simpleMindMap.css&quot;</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">scr</span>=<span class="hljs-string">&quot;simpleMindMap.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
-<p>会创建一个全局变量<code>window.simpleMindMap</code>。</p>
+<p>会创建一个全局变量<code>window.simpleMindMap</code>，可以通过<code>window.simpleMindMap.default</code>获取到<code>MindMap</code>构造函数，详细信息可以把<code>window.simpleMindMap</code>打印出来看一下。</p>
 <p>这种方式的缺点是会包含所有的内容，包括你没有注册的插件，所以整体体积会比较大。</p>
 <p>（v0.5.4+）如果你想直接在浏览器端通过<code>ES</code>模块的方式来使用，你可以在<code>/simple-mind-map/dist/</code>目录中找到<code>simpleMindMap.esm.js</code>和<code>simpleMindMap.esm.css</code>文件。</p>
 <h2>开发</h2>
@@ -73,6 +73,7 @@ npm run serve
 <pre class="hljs"><code><span class="hljs-built_in">cd</span> web
 npm run buildLibrary
 </code></pre>
+<p>打包入口为<code>simple-mind-map/full.js</code>，默认会引入所有插件，如果你不需要所有插件的话，那么可以修改该文件，只引入你需要的插件，这样可以减少打包后的文件体积。</p>
 <p><code>simple-mind-map</code>库的<code>package.json</code>文件提供了两个导出字段：</p>
 <pre class="hljs"><code>{
   <span class="hljs-attr">&quot;module&quot;</span>: <span class="hljs-string">&quot;index.js&quot;</span>,

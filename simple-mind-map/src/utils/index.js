@@ -50,6 +50,26 @@ export const bfsWalk = (root, callback) => {
   }
 }
 
+// 按原比例缩放图片
+export const resizeImgSizeByOriginRatio = (
+  width,
+  height,
+  newWidth,
+  newHeight
+) => {
+  let arr = []
+  let nRatio = width / height
+  let mRatio = newWidth / newHeight
+  if (nRatio > mRatio) {
+    // 固定高度
+    arr = [nRatio * newHeight, newHeight]
+  } else {
+    // 固定宽度
+    arr = [newWidth, newWidth / nRatio]
+  }
+  return arr
+}
+
 //  缩放图片尺寸
 export const resizeImgSize = (width, height, maxWidth, maxHeight) => {
   let nRatio = width / height
@@ -137,7 +157,12 @@ export const copyRenderTree = (tree, root, removeActiveState = false) => {
 }
 
 //  复制节点树数据
-export const copyNodeTree = (tree, root, removeActiveState = false, keepId = false) => {
+export const copyNodeTree = (
+  tree,
+  root,
+  removeActiveState = false,
+  keepId = false
+) => {
   tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data)
   // 去除节点id，因为节点id不能重复
   if (tree.data.id && !keepId) delete tree.data.id
@@ -188,6 +213,18 @@ export const imgToDataUrl = src => {
   })
 }
 
+// 解析dataUrl
+export const parseDataUrl = data => {
+  if (!/^data:/.test(data)) return data
+  let [typeStr, base64] = data.split(',')
+  let res = /^data:[^/]+\/([^;]+);/.exec(typeStr)
+  let type = res[1]
+  return {
+    type,
+    base64
+  }
+}
+
 //  下载文件
 export const downloadFile = (file, fileName) => {
   let a = document.createElement('a')
@@ -236,8 +273,8 @@ export const degToRad = deg => {
   return deg * (Math.PI / 180)
 }
 
-// 驼峰转连字符 
-export const camelCaseToHyphen = (str) => {
+// 驼峰转连字符
+export const camelCaseToHyphen = str => {
   return str.replace(/([a-z])([A-Z])/g, (...args) => {
     return args[1] + '-' + args[2].toLowerCase()
   })
@@ -258,11 +295,8 @@ export const measureText = (text, { italic, bold, fontSize, fontFamily }) => {
   }
   measureTextContext.save()
   measureTextContext.font = font
-  const {
-    width,
-    actualBoundingBoxAscent,
-    actualBoundingBoxDescent
-  } = measureTextContext.measureText(text)
+  const { width, actualBoundingBoxAscent, actualBoundingBoxDescent } =
+    measureTextContext.measureText(text)
   measureTextContext.restore()
   const height = actualBoundingBoxAscent + actualBoundingBoxDescent
   return { width, height }
@@ -270,7 +304,9 @@ export const measureText = (text, { italic, bold, fontSize, fontFamily }) => {
 
 // 拼接font字符串
 export const joinFontStr = ({ italic, bold, fontSize, fontFamily }) => {
-  return `${italic ? 'italic ' : ''} ${bold ? 'bold ' : ''} ${fontSize}px ${fontFamily} `
+  return `${italic ? 'italic ' : ''} ${
+    bold ? 'bold ' : ''
+  } ${fontSize}px ${fontFamily} `
 }
 
 //  在下一个事件循环里执行任务
@@ -336,7 +372,7 @@ export const checkNodeOuter = (mindMap, node) => {
 
 // 提取html字符串里的纯文本
 let getTextFromHtmlEl = null
-export const getTextFromHtml = (html) => {
+export const getTextFromHtml = html => {
   if (!getTextFromHtmlEl) {
     getTextFromHtmlEl = document.createElement('div')
   }
@@ -345,15 +381,46 @@ export const getTextFromHtml = (html) => {
 }
 
 // 将blob转成data:url
-export const readBlob = (blob) => {
+export const readBlob = blob => {
   return new Promise((resolve, reject) => {
     let reader = new FileReader()
-    reader.onload = (evt) => {
+    reader.onload = evt => {
       resolve(evt.target.result)
     }
-    reader.onerror = (err) => {
+    reader.onerror = err => {
       reject(err)
     }
     reader.readAsDataURL(blob)
+  })
+}
+
+// 将dom节点转换成html字符串
+let nodeToHTMLWrapEl = null
+export const nodeToHTML = node => {
+  if (!nodeToHTMLWrapEl) {
+    nodeToHTMLWrapEl = document.createElement('div')
+  }
+  nodeToHTMLWrapEl.innerHTML = ''
+  nodeToHTMLWrapEl.appendChild(node)
+  return nodeToHTMLWrapEl.innerHTML
+}
+
+// 获取图片大小
+export const getImageSize = src => {
+  return new Promise(resolve => {
+    let img = new Image()
+    img.src = src
+    img.onload = () => {
+      resolve({
+        width: img.width,
+        height: img.height
+      })
+    }
+    img.onerror = () => {
+      resolve({
+        width: 0,
+        height: 0
+      })
+    }
   })
 }

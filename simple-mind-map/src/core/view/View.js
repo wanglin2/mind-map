@@ -60,29 +60,38 @@ class View {
     })
     // 放大缩小视图
     this.mindMap.event.on('mousewheel', (e, dir, event, isTouchPad) => {
+      let {
+        customHandleMousewheel,
+        mousewheelAction,
+        mouseScaleCenterUseMousePosition,
+        mousewheelMoveStep,
+        mousewheelZoomActionReverse
+      } = this.mindMap.opt
+      // 是否自定义鼠标滚轮事件
       if (
-        this.mindMap.opt.customHandleMousewheel &&
-        typeof this.mindMap.opt.customHandleMousewheel === 'function'
+        customHandleMousewheel &&
+        typeof customHandleMousewheel === 'function'
       ) {
-        return this.mindMap.opt.customHandleMousewheel(e)
+        return customHandleMousewheel(e)
       }
-      if (
-        this.mindMap.opt.mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM
-      ) {
+      // 鼠标滚轮事件控制缩放
+      if (mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
+        let cx = mouseScaleCenterUseMousePosition ? e.clientX : undefined
+        let cy = mouseScaleCenterUseMousePosition ? e.clientY : undefined
         switch (dir) {
           // 鼠标滚轮，向上和向左，都是缩小
           case CONSTANTS.DIR.UP:
           case CONSTANTS.DIR.LEFT:
-            this.narrow()
+            mousewheelZoomActionReverse ? this.enlarge(cx, cy, isTouchPad) : this.narrow(cx, cy, isTouchPad)
             break
           // 鼠标滚轮，向下和向右，都是放大
           case CONSTANTS.DIR.DOWN:
           case CONSTANTS.DIR.RIGHT:
-            this.enlarge()
+            mousewheelZoomActionReverse ? this.narrow(cx, cy, isTouchPad) : this.enlarge(cx, cy, isTouchPad)
             break
         }
-      } else {
-        let step = this.mindMap.opt.mousewheelMoveStep
+      } else {// 鼠标滚轮事件控制画布移动
+        let step = mousewheelMoveStep
         if (isTouchPad) {
           step = 5
         }
@@ -170,8 +179,8 @@ class View {
   //   应用变换
   transform() {
     this.mindMap.draw.transform({
+      origin: [0, 0],
       scale: this.scale,
-      // origin: 'center center',
       translate: [this.x, this.y]
     })
     this.mindMap.emit('view_data_change', this.getTransformData())
@@ -190,26 +199,45 @@ class View {
   }
 
   //  缩小
-  narrow() {
-    if (this.scale - this.mindMap.opt.scaleRatio > 0.1) {
-      this.scale -= this.mindMap.opt.scaleRatio
-    } else {
-      this.scale = 0.1
-    }
+  narrow(cx, cy, isTouchPad) {
+    const scaleRatio = this.mindMap.opt.scaleRatio / (isTouchPad ? 5 : 1)
+    const scale = Math.max(this.scale - scaleRatio, 0.1)
+    this.scaleInCenter(scale, cx, cy)
     this.transform()
     this.mindMap.emit('scale', this.scale)
   }
 
   //  放大
-  enlarge() {
-    this.scale += this.mindMap.opt.scaleRatio
+  enlarge(cx, cy, isTouchPad) {
+    const scaleRatio = this.mindMap.opt.scaleRatio / (isTouchPad ? 5 : 1)
+    const scale = this.scale + scaleRatio
+    this.scaleInCenter(scale, cx, cy)
     this.transform()
     this.mindMap.emit('scale', this.scale)
   }
 
-  //  设置缩放
-  setScale(scale) {
+  // 基于指定中心进行缩放，cx，cy 可不指定，此时会使用画布中心点
+  scaleInCenter(scale, cx, cy) {
+    if (cx === undefined || cy === undefined) {
+      cx = this.mindMap.width / 2
+      cy = this.mindMap.height / 2
+    }
+    const prevScale = this.scale
+    const ratio = 1 - scale / prevScale
+    const dx = (cx - this.x) * ratio
+    const dy = (cy - this.y) * ratio
+    this.x += dx
+    this.y += dy
     this.scale = scale
+  }
+
+  //  设置缩放
+  setScale(scale, cx, cy) {
+    if (cx !== undefined && cy !== undefined) {
+      this.scaleInCenter(scale, cx, cy)
+    } else {
+      this.scale = scale
+    }
     this.transform()
     this.mindMap.emit('scale', this.scale)
   }

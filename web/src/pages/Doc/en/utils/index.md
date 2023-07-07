@@ -10,6 +10,20 @@ import {walk, ...} from 'simple-mind-map/src/utils'
 
 ### Methods
 
+#### resizeImgSizeByOriginRatio(width, height, newWidth, newHeight)
+
+> v0.6.5+
+
+`width`: The original width of the image
+
+`height`：The original height of the image
+
+`newWidth`：Width to zoom in to
+
+`newHeight`：Height to zoom in to
+
+Scale the image proportionally. Zoom to the specified size of `newWidth` and `newHeight` while maintaining the original aspect ratio of the image.
+
 #### walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)
 
 Depth-first traversal of a tree
@@ -138,6 +152,34 @@ Extract plain text content from an HTML string.
 > v0.5.9+
 
 Convert `blob` data to `data:url` data.
+
+#### parseDataUrl(data)
+
+> v0.6.6+
+
+Parse `data:url` data, return:
+
+```js
+{
+  type,// file type of data
+  base64// base64 data
+}
+```
+
+#### getImageSize(src)
+
+> v0.6.6+
+
+- `src`: The url of img
+
+Get the size of image, return:
+
+```js
+{
+  width,
+  height
+}
+```
 
 ## Simulate CSS background in Canvas
 

@@ -1,6 +1,23 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.6.6</h2>
+<p>New: 1.Support exporting to Xmind new version files. 2.Importing the new version of Xmind file supports importing images from nodes. 3.Add a vertical timeline structure.</p>
+<p>Fix: 1.The TouchEvent plugin no longer sends click events, solving the problem of two windows opening when clicking on a hyperlink on the mobile end.  2.Fix the issue of dragging and moving a node to become a child node of another node, where the parent node of that node points to not being updated.  3.Fixed an issue where the node border style was not updated when dragging a second level node into a third level node.  4.Fix the issue where the mouse will not trigger the button display when moving into the unfolded or retracted button position, except for the structure growing to the right.</p>
+<p>optimization: 1.The issue of excessive amplitude when optimizing the touchpad to scale the canvas. 2.The newly created node defaults to selecting all for easy deletion of default text.</p>
+<h2>0.6.5-fix.1</h2>
+<p>Fix: 1.Fix the issue of adjusting the image size incorrectly while zooming.</p>
+<h2>0.6.5</h2>
+<p>Fix: 1.Fix the issue of xmind file import errors. 2.Fixed a rare issue where line breaks occur when the width of the node text is decimal.</p>
+<p>New: 1.The packaged library supports obtaining built-in constants, themes, and other data. 2.Supports configuring the zoom behavior corresponding to the direction of the mouse wheel. 3.Node images support dragging and resizing.</p>
+<h2>0.6.4-fix.1</h2>
+<p>New: 1.When zooming with the mouse wheel, the default zoom is centered around the current position of the mouse, which can be turned off by configuring.</p>
+<p>Fix: 1.Fixed an issue where the default value of the zoom center point was not updated after changing the canvas size.</p>
+<h2>0.6.4</h2>
+<p>New: 1.The default is to scale at the center point of the canvas. 2.Optimize the scaling of both fingers on the mobile end, with the center position of the two fingers as the center point for scaling.</p>
+<h2>0.6.3</h2>
+<p>Fix: 1.Fix the issue where the summary node will respond to inserting node shortcuts.</p>
+<p>New: 1.Support custom node content.</p>
 <h2>0.6.2</h2>
 <p>Fix: 1.Fixed the problem that the new node does not change with the theme in rich Text mode.</p>
 <h2>0.6.1</h2>

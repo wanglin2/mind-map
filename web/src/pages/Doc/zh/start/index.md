@@ -72,7 +72,7 @@ const mindMap = new MindMap({
 <script scr="simpleMindMap.umd.min.js"></script>
 ```
 
-会创建一个全局变量`window.simpleMindMap`。
+会创建一个全局变量`window.simpleMindMap`，可以通过`window.simpleMindMap.default`获取到`MindMap`构造函数，详细信息可以把`window.simpleMindMap`打印出来看一下。
 
 这种方式的缺点是会包含所有的内容，包括你没有注册的插件，所以整体体积会比较大。
 
@@ -105,6 +105,8 @@ npm run serve
 cd web
 npm run buildLibrary
 ```
+
+打包入口为`simple-mind-map/full.js`，默认会引入所有插件，如果你不需要所有插件的话，那么可以修改该文件，只引入你需要的插件，这样可以减少打包后的文件体积。
 
 `simple-mind-map`库的`package.json`文件提供了两个导出字段：
 

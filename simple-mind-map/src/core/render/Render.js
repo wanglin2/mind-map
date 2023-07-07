@@ -4,6 +4,7 @@ import MindMap from '../../layouts/MindMap'
 import CatalogOrganization from '../../layouts/CatalogOrganization'
 import OrganizationStructure from '../../layouts/OrganizationStructure'
 import Timeline from '../../layouts/Timeline'
+import VerticalTimeline from '../../layouts/VerticalTimeline'
 import Fishbone from '../../layouts/Fishbone'
 import TextEdit from './TextEdit'
 import { copyNodeTree, simpleDeepClone, walk } from '../../utils'
@@ -25,6 +26,8 @@ const layouts = {
   [CONSTANTS.LAYOUT.TIMELINE]: Timeline,
   // 时间轴2
   [CONSTANTS.LAYOUT.TIMELINE2]: Timeline,
+  // 竖向时间轴
+  [CONSTANTS.LAYOUT.VERTICAL_TIMELINE]: VerticalTimeline,
   // 鱼骨图
   [CONSTANTS.LAYOUT.FISHBONE]: Fishbone,
 }
@@ -425,6 +428,9 @@ class Render {
     let { defaultInsertSecondLevelNodeText, defaultInsertBelowSecondLevelNodeText } = this.mindMap.opt
     let list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     let first = list[0]
+    if (first.isGeneralization) {
+      return
+    }
     if (first.isRoot) {
       this.insertChildNode(openEdit, appointNodes, appointData)
     } else {
@@ -455,6 +461,9 @@ class Render {
     let { defaultInsertSecondLevelNodeText, defaultInsertBelowSecondLevelNodeText } = this.mindMap.opt
     let list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     list.forEach(node => {
+      if (node.isGeneralization) {
+        return
+      }
       if (!node.nodeData.children) {
         node.nodeData.children = []
       }
@@ -687,11 +696,11 @@ class Render {
     if (node.isRoot) {
       return
     }
-    let copyData = copyNodeTree({}, node, false, true)
+    // let copyData = copyNodeTree({}, node, false, true)
     this.removeActiveNode(node)
     this.removeOneNode(node)
     this.mindMap.emit('node_active', null, this.activeNodeList)
-    toNode.nodeData.children.push(copyData)
+    toNode.nodeData.children.push(node.nodeData)
     this.mindMap.render()
     if (toNode.isRoot) {
       toNode.destroy()
@@ -863,13 +872,14 @@ class Render {
   }
 
   //  设置节点图片
-  setNodeImage(node, { url, title, width, height }) {
+  setNodeImage(node, { url, title, width, height, custom = false }) {
     this.setNodeDataRender(node, {
       image: url,
       imageTitle: title || '',
       imageSize: {
         width,
-        height
+        height,
+        custom
       }
     })
   }

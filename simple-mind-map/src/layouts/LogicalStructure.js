@@ -172,9 +172,7 @@ class LogicalStructure extends Base {
       let x2 = item.left
       let y2 = item.top + item.height / 2
       // 节点使用横线风格，需要额外渲染横线
-      let nodeUseLineStyleOffset = nodeUseLineStyle
-        ? item.width
-        : 0
+      let nodeUseLineStyleOffset = nodeUseLineStyle ? item.width : 0
       y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       let path = `M ${x1},${y1} L ${x1 + s1},${y1} L ${x1 + s1},${y2} L ${
@@ -260,10 +258,7 @@ class LogicalStructure extends Base {
     if (_x === translateX && _y === translateY) {
       return
     }
-    btn.translate(
-      _x - translateX,
-      _y - translateY
-    )
+    btn.translate(_x - translateX, _y - translateY)
   }
 
   //  创建概要节点
@@ -285,6 +280,11 @@ class LogicalStructure extends Base {
     gLine.plot(path)
     gNode.left = right + generalizationNodeMargin
     gNode.top = top + (bottom - top - gNode.height) / 2
+  }
+
+  // 渲染展开收起按钮的隐藏占位元素
+  renderExpandBtnRect(rect, expandBtnSize, width, height, node) {
+    rect.size(expandBtnSize, height).x(width).y(0)
   }
 }
 

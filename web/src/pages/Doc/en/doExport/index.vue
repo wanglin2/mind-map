@@ -85,6 +85,14 @@ MindMap.usePlugin(ExportPDF)
   str <span class="hljs-comment">// svg string</span>
 }
 </code></pre>
+<h3>xmind(name)</h3>
+<blockquote>
+<p>v0.6.6+, an additional ExportXMind plugin needs to be registered</p>
+</blockquote>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> ExportXMind <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/ExportXMind.js&#x27;</span>
+MindMap.usePlugin(ExportXMind)
+</code></pre>
+<p>Export as an <code>xmind</code> file type, asynchronous method, returns a <code>Promise</code> instance, and the returned data is the <code>data:url</code> data of a <code>zip</code> compressed package, which can be directly downloaded.</p>
 
   </div>
 </template>

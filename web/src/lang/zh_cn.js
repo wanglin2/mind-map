@@ -43,7 +43,10 @@ export default {
     associativeLineWidth: '粗细',
     associativeLineColor: '颜色',
     associativeLineActiveWidth: '激活粗细',
-    associativeLineActiveColor: '激活颜色'
+    associativeLineActiveColor: '激活颜色',
+    mousewheelZoomActionReverse: '鼠标滚轮缩放',
+    mousewheelZoomActionReverse1: '向前缩小向后放大',
+    mousewheelZoomActionReverse2: '向前放大向后缩小'
   },
   color: {
     moreColor: '更多颜色'

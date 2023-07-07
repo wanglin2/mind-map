@@ -50,16 +50,20 @@ class TouchEvent {
     } else if (len === 2) {
       let touch1 = e.touches[0]
       let touch2 = e.touches[1]
-      let distance = Math.sqrt(
-        Math.pow(touch1.clientX - touch2.clientX, 2) +
-          Math.pow(touch1.clientY - touch2.clientY, 2)
-      )
+      let ox = touch1.clientX - touch2.clientX
+      let oy = touch1.clientY - touch2.clientY
+      let distance = Math.sqrt(Math.pow(ox, 2) + Math.pow(oy, 2))
+      // 以两指中心点进行缩放
+      let { x: touch1ClientX, y: touch1ClientY } = this.mindMap.toPos(touch1.clientX, touch1.clientY)
+      let { x: touch2ClientX, y: touch2ClientY } = this.mindMap.toPos(touch2.clientX, touch2.clientY)
+      let cx = (touch1ClientX + touch2ClientX) / 2
+      let cy = (touch1ClientY + touch2ClientY) / 2
       if (distance > this.doubleTouchmoveDistance) {
         // 放大
-        this.mindMap.view.enlarge()
+        this.mindMap.view.enlarge(cx, cy)
       } else {
         // 缩小
-        this.mindMap.view.narrow()
+        this.mindMap.view.narrow(cx, cy)
       }
       this.doubleTouchmoveDistance = distance
     }
@@ -82,7 +86,8 @@ class TouchEvent {
         this.clickNum = 0
         this.dispatchMouseEvent('dblclick', ev.target, ev)
       } else {
-        this.dispatchMouseEvent('click', ev.target, ev)
+        // 点击事件应该不用模拟
+        // this.dispatchMouseEvent('click', ev.target, ev)
       }
     }
     this.touchesNum = 0

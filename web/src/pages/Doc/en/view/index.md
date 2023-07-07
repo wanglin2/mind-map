@@ -35,11 +35,19 @@ Translate the `y` direction to a specific position
 
 Revert to the default transformation
 
-### narrow()
+### narrow(cx, cy)
+
+- `cx`:（v0.6.4+）Zoom to the specified position on the canvas, default to the center point of the canvas
+
+- `cy`:（v0.6.4+）Zoom to the specified position on the canvas, default to the center point of the canvas
 
 Zoom out
 
-### enlarge()
+### enlarge(cx, cy)
+
+- `cx`:（v0.6.4+）Zoom to the specified position on the canvas, default to the center point of the canvas
+
+- `cy`:（v0.6.4+）Zoom to the specified position on the canvas, default to the center point of the canvas
 
 Zoom in
 
@@ -56,8 +64,12 @@ Get the current transform data, can be used for display
 Dynamically set transform data, transform data can be obtained through the
 getTransformData method"
 
-### setScale(scale)
+### setScale(scale, cx, cy)
 
 > v0.2.17+
+
+- `cx`:（v0.6.4+）Zoom to the specified position on the canvas, default to the center point of the canvas
+
+- `cy`:（v0.6.4+）Zoom to the specified position on the canvas, default to the center point of the canvas
 
 Setting Zoom
