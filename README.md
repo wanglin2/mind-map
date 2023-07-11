@@ -86,7 +86,7 @@ const mindMap = new MindMap({
 
 # License
 
-MIT
+[MIT](./LICENSE)
 
 # 微信交流群
 
@@ -96,11 +96,40 @@ MIT
 
 # 请作者喝杯咖啡
 
+开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡哟~
+
 > 厚椰乳一盒 + 纯牛奶半盒 + 冰块 + 咖啡液 = 生椰拿铁 yyds
 
-> 转账请备注哦~你的头像和名称会出现在[文档页面](https://wanglin2.github.io/mind-map/#/doc/zh/introduction/%E8%AF%B7%E4%BD%9C%E8%80%85%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1)
+> 转账请备注【思维导图】。你的头像和名字将会出现在下面和[文档页面](https://wanglin2.github.io/mind-map/#/doc/zh/introduction/%E8%AF%B7%E4%BD%9C%E8%80%85%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1)
 
 <p>
   <img src="./web/src/assets/img/alipay.jpg" style="width: 300px" />
   <img src="./web/src/assets/img/wechat.jpg" style="width: 300px" />
 </p>
+
+<div  style="display: flex;">
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="./web/src/assets/avatar/Think.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>Think</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="./web/src/assets/avatar/志斌.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>志斌</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="./web/src/assets/avatar/小土渣的宇宙.jpeg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>小土渣的宇宙</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="./web/src/assets/avatar/qp.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>qp</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="./web/src/assets/avatar/ZXR.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>ZXR</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="./web/src/assets/avatar/花儿朵朵.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>花儿朵朵</p>
+    </div>
+</div>
