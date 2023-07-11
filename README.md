@@ -132,4 +132,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/花儿朵朵.jpg" style="width: 50px;height: 50px;" />
         <span>花儿朵朵</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/suka.jpg" style="width: 50px;height: 50px;" />
+        <span>suka</span>
+    </span>
 </p>
