@@ -107,29 +107,29 @@ const mindMap = new MindMap({
   <img src="./web/src/assets/img/wechat.jpg" style="width: 300px" />
 </p>
 
-<div  style="display: flex;">
-    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
-        <img src="./web/src/assets/avatar/Think.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
-        <p>Think</p>
-    </div>
-    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
-        <img src="./web/src/assets/avatar/志斌.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
-        <p>志斌</p>
-    </div>
-    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
-        <img src="./web/src/assets/avatar/小土渣的宇宙.jpeg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
-        <p>小土渣的宇宙</p>
-    </div>
-    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
-        <img src="./web/src/assets/avatar/qp.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
-        <p>qp</p>
-    </div>
-    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
-        <img src="./web/src/assets/avatar/ZXR.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
-        <p>ZXR</p>
-    </div>
-    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
-        <img src="./web/src/assets/avatar/花儿朵朵.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
-        <p>花儿朵朵</p>
-    </div>
-</div>
+<p>
+    <span>
+        <img src="./web/src/assets/avatar/Think.jpg" style="width: 50px;height: 50px;" />
+        <span>Think</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/志斌.jpg" style="width: 50px;height: 50px;" />
+        <span>志斌</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/小土渣的宇宙.jpeg" style="width: 50px;height: 50px;" />
+        <span>小土渣的宇宙</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/qp.jpg" style="width: 50px;height: 50px;" />
+        <span>qp</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/ZXR.jpg" style="width: 50px;height: 50px;" />
+        <span>ZXR</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/花儿朵朵.jpg" style="width: 50px;height: 50px;" />
+        <span>花儿朵朵</span>
+    </span>
+</p>
