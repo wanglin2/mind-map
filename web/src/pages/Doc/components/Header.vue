@@ -2,7 +2,7 @@
   <div class="headerContainer">
     <div class="left">
       <div class="title">
-        <img src="../../../assets/img/logo.png" alt="">
+        <img src="../../../assets/img/logo2.png" alt="">
         SimpleMindMap
       </div>
     </div>
@@ -130,7 +130,7 @@ export default {
       font-size: 14px;
 
       &:hover {
-        color: #42b883;
+        color: #1ea59a;
       }
     }
 
