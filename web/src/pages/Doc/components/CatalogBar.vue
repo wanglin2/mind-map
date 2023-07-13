@@ -225,7 +225,7 @@ export default {
       left: -10px;
       width: 4px;
       height: 20px;
-      background-color: #42b883;
+      background-color: #1ea59a;
       border-radius: 4px;
       transition: top 0.25s cubic-bezier(0, 1, 0.5, 1), opacity 0.25s,
         background-color 0.5s;
