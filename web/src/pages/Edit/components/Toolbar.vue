@@ -520,4 +520,17 @@ export default {
     }
   }
 }
+
+@media screen and (max-width: 1040px) {
+  
+  .toolbarContainer {
+    .toolbar {
+      left: 20px;
+      right: 20px;
+      transform: translateX(0);
+      width: auto;
+      max-width: none;
+    }
+  }
+}
 </style>

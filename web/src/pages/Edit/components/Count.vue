@@ -95,4 +95,10 @@ export default {
     }
   }
 }
+
+@media screen and (max-width: 635px) {
+  .countContainer {
+    display: none;
+  }
+}
 </style>

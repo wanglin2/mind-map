@@ -114,8 +114,9 @@ export default {
   },
   navigatorToolbar: {
     openMiniMap: 'Open mini map',
-    readonly: 'Readonly',
-    edit: 'Edit'
+    closeMiniMap: 'Close mini map',
+    readonly: 'Change to eadonly',
+    edit: 'Change to edit'
   },
   nodeHyperlink: {
     title: 'Link',

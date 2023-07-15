@@ -2,8 +2,11 @@
   <div
     class="sidebarTriggerContainer"
     @click.stop
-    :class="{ show: activeSidebar }"
+    :class="{ hasActive: show && activeSidebar, show: show }"
   >
+    <div class="toggleShowBtn" :class="{hide: !show}" @click="show = !show">
+      <span class="iconfont iconjiantouyou"></span>
+    </div>
     <div class="trigger">
       <div
         class="triggerItem"
@@ -32,7 +35,7 @@ export default {
   name: 'SidebarTrigger',
   data() {
     return {
-      show: false
+      show: true
     }
   },
   computed: {
@@ -55,17 +58,57 @@ export default {
 <style lang="less" scoped>
 .sidebarTriggerContainer {
   position: fixed;
-  right: 0px;
+  right: -60px;
   margin-top: 110px;
   transition: all 0.3s;
   top: 50%;
   transform: translateY(-50%);
 
   &.show {
+    right: 0;
+  }
+
+  &.hasActive {
     right: 305px;
   }
 
+  .toggleShowBtn {
+    position: absolute;
+    left: -6px;
+    width: 35px;
+    height: 60px;
+    background: #409eff;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    transition: left .1s linear;
+    z-index: 0;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding-left: 4px;
+
+    &.hide {
+      left: -8px;
+
+      span {
+        transform: rotateZ(180deg);
+      }
+    }
+
+    &:hover {
+      left: -18px;
+    }
+
+    span {
+      color: #fff;
+      transition: all 0.1s;
+    }
+  }
+
   .trigger {
+    position: relative;
     width: 60px;
     border-color: #eee;
     background-color: #fff;
