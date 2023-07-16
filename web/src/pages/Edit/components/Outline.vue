@@ -46,7 +46,7 @@ export default {
       data: [],
       defaultProps: {
         label(data) {
-          return data.data.text.replaceAll(/\n/g, '</br>')
+          return data.data.richText ? data.data.text : data.data.text.replaceAll(/\n/g, '</br>')
         }
       },
       notHandleDataChange: false,
@@ -77,11 +77,16 @@ export default {
   },
   methods: {
     onBlur(e, node) {
-      if (this.isCreateNode) {
-        this.isCreateNode = false
-        return
+      // if (this.isCreateNode) {
+      //   this.isCreateNode = false
+      //   return
+      // }
+      const richText = node.data.data.richText
+      if (richText) {
+        node.data._node.setText(e.target.innerHTML, true)
+      } else {
+        node.data._node.setText(e.target.innerText)
       }
-      node.data._node.setText(e.target.innerText)
     },
 
     getKey() {
