@@ -89,7 +89,7 @@ class Command {
       this.history.shift()
     }
     this.activeHistoryIndex = this.history.length - 1
-    this.mindMap.emit('data_change', this.removeDataUid(data))
+    this.mindMap.emit('data_change', data)
     this.mindMap.emit(
       'back_forward',
       this.activeHistoryIndex,
@@ -110,7 +110,7 @@ class Command {
         this.history.length
       )
       let data = simpleDeepClone(this.history[this.activeHistoryIndex])
-      this.mindMap.emit('data_change', this.removeDataUid(data))
+      this.mindMap.emit('data_change', data)
       return data
     }
   }
@@ -125,7 +125,7 @@ class Command {
       this.activeHistoryIndex += step
       this.mindMap.emit('back_forward', this.activeHistoryIndex, this.history.length)
       let data = simpleDeepClone(this.history[this.activeHistoryIndex])
-      this.mindMap.emit('data_change', this.removeDataUid(data))
+      this.mindMap.emit('data_change', data)
       return data
     }
   }
