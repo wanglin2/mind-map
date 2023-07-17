@@ -51,8 +51,8 @@ const mindMap = new MindMap({
 | expandBtnStyle（v0.5.0+）     | Object  | { color: '#808080', fill: '#fff' } | Expand the color of the stow button  |          |
 | expandBtnIcon（v0.5.0+）     | Object  | { open: '', close: '' } | Customize the icon of the expand/collapse button, and you can transfer the svg string of the icon  |          |
 | enableShortcutOnlyWhenMouseInSvg（v0.5.1+）     | Boolean  | true | Only respond to shortcut key events when the mouse is inside the canvas  |          |
-| enableNodeTransitionMove（v0.5.1+）     | Boolean  | true | Whether to enable node animation transition  |          |
-| nodeTransitionMoveDuration（v0.5.1+）     | Number  | 300 | If node animation transition is enabled, the transition time can be set using this attribute, in milliseconds  |          |
+| enableNodeTransitionMove（v0.5.1+）（v0.6.7+ is remove this feature）     | Boolean  | true | Whether to enable node animation transition  |          |
+| nodeTransitionMoveDuration（v0.5.1+）（v0.6.7+ is remove this feature）     | Number  | 300 | If node animation transition is enabled, the transition time can be set using this attribute, in milliseconds  |          |
 | initRootNodePosition（v0.5.3+）     | Array  | null | The position of the initial root node can be passed as an array, default is `['center', 'center']`, Represents the root node at the center of the canvas, In addition to `center`, keywords can also be set to `left`, `top`, `right`, and `bottom`, In addition to passing keywords, each item in the array can also pass a number representing a specific pixel, Can pass a percentage string, such as `['40%', '60%']`, Represents a horizontal position at `40%` of the canvas width, and a vertical position at `60%` of the canvas height   |          |
 | exportPaddingX（v0.5.5+）     |  Number | 10 | Horizontal padding of graphics when exporting PNG, SVG, and PDF  |          |
 | exportPaddingY（v0.5.5+）     | Number  | 10 | Vertical padding of graphics when exporting PNG, SVG, and PDF  |          |

@@ -259,7 +259,6 @@ class Render {
 
   //   渲染
   render(callback = () => {}, source) {
-    let t = Date.now()
     // 如果当前还没有渲染完毕，不再触发渲染
     if (this.isRendering) {
       // 等待当前渲染完毕后再进行一次渲染
@@ -290,7 +289,7 @@ class Render {
       // 更新根节点
       this.root = root
       // 渲染节点
-      const onEnd = () => {
+      this.root.render(() => {
         this.isRendering = false
         this.mindMap.emit('node_tree_render_end')
         callback && callback()
@@ -302,18 +301,6 @@ class Render {
           if (this.mindMap.richText && [CONSTANTS.CHANGE_THEME, CONSTANTS.SET_DATA].includes(source)) {
             this.mindMap.command.addHistory()
           }
-        }
-      }
-      let { enableNodeTransitionMove, nodeTransitionMoveDuration } =
-      this.mindMap.opt
-      this.root.render(() => {
-        let dur = Date.now() - t
-        if (enableNodeTransitionMove && dur <= nodeTransitionMoveDuration) {
-          setTimeout(() => {
-            onEnd()
-          }, nodeTransitionMoveDuration - dur);
-        } else {
-          onEnd()
         }
       })
     })
