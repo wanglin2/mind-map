@@ -1,6 +1,7 @@
 import Node from '../core/render/node/Node'
 import { CONSTANTS, initRootNodePositionMap } from '../constants/constant'
 import Lru from '../utils/Lru'
+import { createUid } from '../utils/index'
 
 //  布局基类
 class Base {
@@ -101,7 +102,7 @@ class Base {
       }
     } else {
       // 创建新节点
-      let uid = this.mindMap.uid++
+      let uid = createUid()
       newNode = new Node({
         data,
         uid,

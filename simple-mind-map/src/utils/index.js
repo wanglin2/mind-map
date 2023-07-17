@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 //  深度优先遍历树
 export const walk = (
   root,
@@ -423,4 +425,9 @@ export const getImageSize = src => {
       })
     }
   })
+}
+
+// 创建节点唯一的id
+export const createUid = () => {
+  return uuidv4()
 }

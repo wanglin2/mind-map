@@ -1,4 +1,5 @@
 import Node from './Node'
+import { createUid } from '../../../utils/index'
 
 //  检查是否存在概要
 function checkHasGeneralization () {
@@ -18,7 +19,7 @@ function createGeneralizationNode () {
       data: {
         data: this.nodeData.data.generalization
       },
-      uid: this.mindMap.uid++,
+      uid: createUid(),
       renderer: this.renderer,
       mindMap: this.mindMap,
       draw: this.draw,
