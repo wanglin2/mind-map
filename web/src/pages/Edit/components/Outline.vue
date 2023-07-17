@@ -49,8 +49,7 @@ export default {
           return data.data.richText ? data.data.text : data.data.text.replaceAll(/\n/g, '</br>')
         }
       },
-      notHandleDataChange: false,
-      isCreateNode: false
+      notHandleDataChange: false
     }
   },
   computed: {
@@ -77,10 +76,6 @@ export default {
   },
   methods: {
     onBlur(e, node) {
-      // if (this.isCreateNode) {
-      //   this.isCreateNode = false
-      //   return
-      // }
       const richText = node.data.data.richText
       if (richText) {
         node.data._node.setText(e.target.innerHTML, true)
@@ -107,14 +102,12 @@ export default {
     // 插入兄弟节点
     insertNode() {
       this.notHandleDataChange = false
-      this.isCreateNode = true
       this.mindMap.execCommand('INSERT_NODE', false)
     },
 
     // 插入下级节点
     insertChildNode() {
       this.notHandleDataChange = false
-      this.isCreateNode = true
       this.mindMap.execCommand('INSERT_CHILD_NODE', false)
     },
 

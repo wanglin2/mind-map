@@ -426,11 +426,14 @@ class Render {
         first.parent.destroy()
       }
       let index = this.getNodeIndex(first)
+      let isRichText = !!this.mindMap.richText
       first.parent.nodeData.children.splice(index + 1, 0, {
         inserting: openEdit,
         data: {
           text: text,
           expand: true,
+          richText: isRichText,
+          resetRichText: isRichText,
           ...(appointData || {})
         },
         children: []
@@ -455,11 +458,14 @@ class Render {
         node.nodeData.children = []
       }
       let text = node.isRoot ? defaultInsertSecondLevelNodeText : defaultInsertBelowSecondLevelNodeText
+      let isRichText = !!this.mindMap.richText
       node.nodeData.children.push({
         inserting: openEdit,
         data: {
           text: text,
           expand: true,
+          richText: isRichText,
+          resetRichText: isRichText,
           ...(appointData || {})
         },
         children: []
