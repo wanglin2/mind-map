@@ -51,8 +51,8 @@ const mindMap = new MindMap({
 | expandBtnStyle（v0.5.0+）     | Object  | { color: '#808080', fill: '#fff' } | 展开收起按钮的颜色  |          |
 | expandBtnIcon（v0.5.0+）     | Object  | { open: '', close: '' } | 自定义展开收起按钮的图标，可以传图标的svg字符串  |          |
 | enableShortcutOnlyWhenMouseInSvg（v0.5.1+）     | Boolean  | true | 是否只有当鼠标在画布内才响应快捷键事件  |          |
-| enableNodeTransitionMove（v0.5.1+）     | Boolean  | true | 是否开启节点动画过渡  |          |
-| nodeTransitionMoveDuration（v0.5.1+）     | Number  | 300 | 如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms  |          |
+| enableNodeTransitionMove（v0.5.1+）（v0.6.7+已去除该特性）     | Boolean  | true | 是否开启节点动画过渡  |          |
+| nodeTransitionMoveDuration（v0.5.1+）（v0.6.7+已去除该特性）     | Number  | 300 | 如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms  |          |
 | initRootNodePosition（v0.5.3+）     | Array  | null | 初始根节点的位置，可传一个数组，默认为`['center', 'center']`，代表根节点处于画布中心位置，除了`center`，关键词还可以设置`left`、`top`、`right`、`bottom`，除了可以传关键词，数组的每项还可以传递一个数字，代表具体的像素，可以传递一个百分比字符串，比如`['40%', '60%']`，代表水平位置在画布宽度的`40%`的位置，垂直位置在画布高度的`60%`的位置  |          |
 | exportPaddingX（v0.5.5+）     |  Number | 10 | 导出png、svg、pdf时的图形水平内边距  |          |
 | exportPaddingY（v0.5.5+）     | Number  | 10 | 导出png、svg、pdf时的图形垂直内边距  |          |

@@ -218,14 +218,14 @@
 <td></td>
 </tr>
 <tr>
-<td>enableNodeTransitionMove（v0.5.1+）</td>
+<td>enableNodeTransitionMove（v0.5.1+）（v0.6.7+ is remove this feature）</td>
 <td>Boolean</td>
 <td>true</td>
 <td>Whether to enable node animation transition</td>
 <td></td>
 </tr>
 <tr>
-<td>nodeTransitionMoveDuration（v0.5.1+）</td>
+<td>nodeTransitionMoveDuration（v0.5.1+）（v0.6.7+ is remove this feature）</td>
 <td>Number</td>
 <td>300</td>
 <td>If node animation transition is enabled, the transition time can be set using this attribute, in milliseconds</td>

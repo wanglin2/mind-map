@@ -218,14 +218,14 @@
 <td></td>
 </tr>
 <tr>
-<td>enableNodeTransitionMove（v0.5.1+）</td>
+<td>enableNodeTransitionMove（v0.5.1+）（v0.6.7+已去除该特性）</td>
 <td>Boolean</td>
 <td>true</td>
 <td>是否开启节点动画过渡</td>
 <td></td>
 </tr>
 <tr>
-<td>nodeTransitionMoveDuration（v0.5.1+）</td>
+<td>nodeTransitionMoveDuration（v0.5.1+）（v0.6.7+已去除该特性）</td>
 <td>Number</td>
 <td>300</td>
 <td>如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms</td>
