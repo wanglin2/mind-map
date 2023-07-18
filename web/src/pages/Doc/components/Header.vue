@@ -1,7 +1,7 @@
 <template>
   <div class="headerContainer">
     <div class="left">
-      <div class="title">
+      <div class="title" @click="toIndex">
         <img src="../../../assets/img/logo2.png" alt="">
         SimpleMindMap
       </div>
@@ -74,6 +74,10 @@ export default {
       }
     },
 
+    toIndex() {
+      this.$router.push('/index')
+    },
+
     toDemo() {
       this.$router.push('/')
     },
@@ -108,6 +112,7 @@ export default {
       font-weight: bold;
       display: flex;
       align-items: center;
+      cursor: pointer;
 
       img {
         width: 30px;
