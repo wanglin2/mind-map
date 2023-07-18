@@ -121,6 +121,7 @@ export default {
         width: 10px;
         height: 10px;
         margin-left: 10px;
+        flex-shrink: 0;
 
         .modifyDot {
           width: 100%;

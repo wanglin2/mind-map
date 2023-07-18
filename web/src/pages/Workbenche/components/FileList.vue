@@ -7,35 +7,51 @@
     <div class="fileListBox">
       <Empty v-if="list.length <= 0"></Empty>
       <el-table v-else :data="list" style="width: 100%">
-        <el-table-column prop="name" label="名称"> </el-table-column>
+        <el-table-column label="名称">
+          <template slot-scope="scope">
+            <span class="textBtn" @click="openFile(scope.row.url)">{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="url" label="文件路径"> </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button
-              icon="el-icon-edit"
-              circle
-              size="mini"
-              @click="openFile(scope.row.url)"
-            ></el-button>
-            <el-button
-              icon="el-icon-document-copy"
-              circle
-              size="mini"
-              @click="copyFile(scope.row.url)"
-            ></el-button>
-            <el-button
-              type="danger"
-              icon="el-icon-delete"
-              circle
-              size="mini"
-              @click="deleteFile(scope.row.url, scope.$index)"
-            ></el-button>
-            <el-button
-              icon="el-icon-folder-opened"
-              circle
-              size="mini"
-              @click="openFileInDir(scope.row.url)"
-            ></el-button>
+            <el-tooltip effect="light" content="编辑" placement="top">
+              <el-button
+                icon="el-icon-edit"
+                circle
+                size="mini"
+                @click="openFile(scope.row.url)"
+              ></el-button>
+            </el-tooltip>
+            <el-tooltip effect="light" content="复制" placement="top">
+              <el-button
+                icon="el-icon-document-copy"
+                circle
+                size="mini"
+                @click="copyFile(scope.row.url)"
+              ></el-button>
+            </el-tooltip>
+            <el-tooltip effect="light" content="删除" placement="top">
+              <el-button
+                type="danger"
+                icon="el-icon-delete"
+                circle
+                size="mini"
+                @click="deleteFile(scope.row.url, scope.$index)"
+              ></el-button>
+            </el-tooltip>
+            <el-tooltip
+              effect="light"
+              content="打开文件所在目录"
+              placement="top"
+            >
+              <el-button
+                icon="el-icon-folder-opened"
+                circle
+                size="mini"
+                @click="openFileInDir(scope.row.url)"
+              ></el-button>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -160,6 +176,10 @@ export default {
   .fileListBox {
     flex-grow: 1;
     overflow: hidden;
+
+    .textBtn {
+      cursor: pointer;
+    }
   }
 }
 </style>

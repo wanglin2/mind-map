@@ -28,8 +28,7 @@ class KeyboardNavigation {
       this.focus(dir)
     } else {
       let root = this.mindMap.renderer.root
-      this.mindMap.renderer.moveNodeToCenter(root)
-      root.active()
+      this.mindMap.execCommand('GO_TARGET_NODE', root)
     }
   }
 
@@ -81,8 +80,7 @@ class KeyboardNavigation {
 
     // 找到了则让目标节点聚焦
     if (targetNode) {
-      this.mindMap.renderer.moveNodeToCenter(targetNode)
-      targetNode.active()
+      this.mindMap.execCommand('GO_TARGET_NODE', targetNode)
     }
   }
 

@@ -69,7 +69,10 @@
 <h2>License</h2>
 <p><a href="https://opensource.org/licenses/MIT">MIT</a></p>
 <h2>请作者喝杯咖啡</h2>
-<p>开源不易，如果本项目有帮助到你的话，可以请作者喝杯咖啡哟~</p>
+<p>开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡哟~</p>
+<blockquote>
+<p>厚椰乳一盒 + 纯牛奶半盒 + 冰块 + 咖啡液 = 生椰拿铁 yyds</p>
+</blockquote>
 <blockquote>
 <p>转账请备注【思维导图】。你的头像和名字将会出现在下面。</p>
 </blockquote>
@@ -95,6 +98,18 @@
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/ZXR.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>ZXR</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/花儿朵朵.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>花儿朵朵</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/suka.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>suka</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/Chris.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>Chris</p>
     </div>
 </div>
   </div>

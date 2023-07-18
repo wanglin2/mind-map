@@ -32,9 +32,6 @@ class MindMap {
     this.svg = SVG().addTo(this.el).size(this.width, this.height)
     this.draw = this.svg.group()
 
-    // 节点id
-    this.uid = 1
-
     // 初始化主题
     this.initTheme()
 
@@ -238,7 +235,7 @@ class MindMap {
 
   //  获取思维导图数据，节点树、主题、布局等
   getData(withConfig) {
-    let nodeData = this.command.removeDataUid(this.command.getCopyData())
+    let nodeData = this.command.getCopyData()
     let data = {}
     if (withConfig) {
       data = {

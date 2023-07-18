@@ -7,7 +7,7 @@ import Timeline from '../../layouts/Timeline'
 import VerticalTimeline from '../../layouts/VerticalTimeline'
 import Fishbone from '../../layouts/Fishbone'
 import TextEdit from './TextEdit'
-import { copyNodeTree, simpleDeepClone, walk } from '../../utils'
+import { copyNodeTree, simpleDeepClone, walk, bfsWalk } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
 import { CONSTANTS } from '../../constants/constant'
@@ -195,6 +195,9 @@ class Render {
     // 设置节点形状
     this.setNodeShape = this.setNodeShape.bind(this)
     this.mindMap.command.add('SET_NODE_SHAPE', this.setNodeShape)
+    // 定位节点
+    this.goTargetNode = this.goTargetNode.bind(this)
+    this.mindMap.command.add('GO_TARGET_NODE', this.goTargetNode)
   }
 
   //  注册快捷键
@@ -259,7 +262,6 @@ class Render {
 
   //   渲染
   render(callback = () => {}, source) {
-    let t = Date.now()
     // 如果当前还没有渲染完毕，不再触发渲染
     if (this.isRendering) {
       // 等待当前渲染完毕后再进行一次渲染
@@ -290,7 +292,7 @@ class Render {
       // 更新根节点
       this.root = root
       // 渲染节点
-      const onEnd = () => {
+      this.root.render(() => {
         this.isRendering = false
         this.mindMap.emit('node_tree_render_end')
         callback && callback()
@@ -302,18 +304,6 @@ class Render {
           if (this.mindMap.richText && [CONSTANTS.CHANGE_THEME, CONSTANTS.SET_DATA].includes(source)) {
             this.mindMap.command.addHistory()
           }
-        }
-      }
-      let { enableNodeTransitionMove, nodeTransitionMoveDuration } =
-      this.mindMap.opt
-      this.root.render(() => {
-        let dur = Date.now() - t
-        if (enableNodeTransitionMove && dur <= nodeTransitionMoveDuration) {
-          setTimeout(() => {
-            onEnd()
-          }, nodeTransitionMoveDuration - dur);
-        } else {
-          onEnd()
         }
       })
     })
@@ -439,11 +429,14 @@ class Render {
         first.parent.destroy()
       }
       let index = this.getNodeIndex(first)
+      let isRichText = !!this.mindMap.richText
       first.parent.nodeData.children.splice(index + 1, 0, {
         inserting: openEdit,
         data: {
           text: text,
           expand: true,
+          richText: isRichText,
+          resetRichText: isRichText,
           ...(appointData || {})
         },
         children: []
@@ -468,11 +461,14 @@ class Render {
         node.nodeData.children = []
       }
       let text = node.isRoot ? defaultInsertSecondLevelNodeText : defaultInsertBelowSecondLevelNodeText
+      let isRichText = !!this.mindMap.richText
       node.nodeData.children.push({
         inserting: openEdit,
         data: {
           text: text,
           expand: true,
+          richText: isRichText,
+          resetRichText: isRichText,
           ...(appointData || {})
         },
         children: []
@@ -992,6 +988,19 @@ class Render {
     })
   }
 
+  // 定位到指定节点
+  goTargetNode(node) {
+    let uid = typeof node === 'string' ? node : node.nodeData.data.uid
+    if (!uid) return
+    this.expandToNodeUid(uid, () => {
+      let targetNode = this.findNodeByUid(uid)
+      if (targetNode) {
+        targetNode.active()
+        this.moveNodeToCenter(targetNode)
+      } 
+    })
+  }
+
   //  更新节点数据
   setNodeData(node, data) {
     Object.keys(data).forEach(key => {
@@ -1027,6 +1036,44 @@ class Render {
     this.mindMap.view.translateX(offsetX)
     this.mindMap.view.translateY(offsetY)
     this.mindMap.view.setScale(1)
+  }
+
+  // 展开到指定uid的节点 
+  expandToNodeUid(uid, callback = () => {}) {
+    let parentsList = []
+    const cache = {}
+    bfsWalk(this.renderTree, (node, parent) => {
+      if (node.data.uid === uid) {
+        parentsList = parent ? [...cache[parent.data.uid], parent] : []
+        return 'stop'
+      } else {
+        cache[node.data.uid] = parent ? [...cache[parent.data.uid], parent]: []
+      }
+    })
+    let needRender = false
+    parentsList.forEach((node) => {
+      if (!node.data.expand) {
+        needRender = true
+        node.data.expand = true
+      }
+    })
+    if (needRender) {
+      this.mindMap.render(callback)
+    } else {
+      callback()
+    }
+  }
+
+  // 根据uid找到对应的节点实例
+  findNodeByUid(uid) {
+    let res = null
+    walk(this.root, null, (node) => {
+      if (node.nodeData.data.uid === uid) {
+        res = node
+        return true
+      } 
+    })
+    return res
   }
 }
 

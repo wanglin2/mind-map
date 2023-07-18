@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2479351 */
-  src: url('iconfont.woff2?t=1688536767282') format('woff2'),
-       url('iconfont.woff?t=1688536767282') format('woff'),
-       url('iconfont.ttf?t=1688536767282') format('truetype');
+  src: url('iconfont.woff2?t=1689407546912') format('woff2'),
+       url('iconfont.woff?t=1689407546912') format('woff'),
+       url('iconfont.ttf?t=1689407546912') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,54 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.iconjiantouyou:before {
+  content: "\e62d";
+}
+
+.iconbianji1:before {
+  content: "\e60a";
+}
+
+.icondaohang1:before {
+  content: "\e632";
+}
+
+.iconyanjing:before {
+  content: "\e8bf";
+}
+
+.iconwangzhan:before {
+  content: "\e628";
+}
+
+.iconcsdn:before {
+  content: "\e608";
+}
+
+.iconshejiaotubiao-10:before {
+  content: "\e644";
+}
+
+.iconstar:before {
+  content: "\e7df";
+}
+
+.iconfork:before {
+  content: "\e641";
+}
+
+.iconxiazai:before {
+  content: "\e613";
+}
+
+.iconteamwork:before {
+  content: "\e870";
+}
+
+.iconshuiyin:before {
+  content: "\e67a";
 }
 
 .iconxmind:before {

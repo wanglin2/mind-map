@@ -14,6 +14,9 @@
           <span class="settingBtn el-icon-setting"></span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="about">关于软件</el-dropdown-item>
+            <el-dropdown-item command="sponsor">友情赞助</el-dropdown-item>
+            <el-dropdown-item command="help">使用帮助</el-dropdown-item>
+            <el-dropdown-item command="doc">开发文档</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -23,6 +26,7 @@
       <FileList></FileList>
     </div>
     <AboutDialog v-model="showAboutDialog"></AboutDialog>
+    <SponsorDialog v-model="showSponsorDialog"></SponsorDialog>
   </div>
 </template>
 
@@ -32,6 +36,7 @@ import MacControl from '../components/MacControl.vue'
 import Sidebar from '../components/Sidebar.vue'
 import FileList from '../components/FileList.vue'
 import AboutDialog from '../components/AboutDialog.vue'
+import SponsorDialog from '../components/SponsorDialog.vue'
 
 export default {
   components: {
@@ -39,11 +44,13 @@ export default {
     MacControl,
     Sidebar,
     FileList,
-    AboutDialog
+    AboutDialog,
+    SponsorDialog
   },
   data() {
     return {
-      showAboutDialog: false
+      showAboutDialog: false,
+      showSponsorDialog: false
     }
   },
   methods: {
@@ -51,6 +58,15 @@ export default {
       switch (command) {
         case 'about':
           this.showAboutDialog = true
+          break
+        case 'sponsor':
+          this.showSponsorDialog = true
+          break
+        case 'help':
+          window.electronAPI.openUrl('https://wanglin2.github.io/mind-map/#/help/')
+          break
+        case 'doc':
+          window.electronAPI.openUrl('https://wanglin2.github.io/mind-map/#/doc/zh/')
           break
         default:
           break

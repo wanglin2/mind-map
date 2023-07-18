@@ -11,11 +11,16 @@
       <h2>思绪思维导图</h2>
       <p>版本：{{ version }}</p>
       <p>
+        官网：
+        <span @click="open('homepage')">思绪思维导图</span>
+      </p>
+      <p>
         获取源码：
         <span @click="open('mind-map')">mind-map</span>
       </p>
       <p>
         下载最新版本：
+        <span @click="open('baiduNet')">百度云</span>
         <span @click="open('releases')">releases</span>
       </p>
     </div>
@@ -55,14 +60,20 @@ export default {
     open(type) {
       let url = ''
       switch (type) {
+        case 'homepage':
+          url = 'https://wanglin2.github.io/mind-map/#/index'
+          break
         case 'mind-map':
           url = 'https://github.com/wanglin2/mind-map/tree/electron'
-          break;
+          break
+        case 'baiduNet':
+          url = 'https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3'
+          break
         case 'releases':
           url = 'https://github.com/wanglin2/mind-map/releases'
           break
         default:
-          break;
+          break
       }
       window.electronAPI.openUrl(url)
     }
@@ -72,9 +83,9 @@ export default {
 
 <style lang="less" scoped>
 .aboutDialog {
-    /deep/ .el-dialog__body {
-        padding: 0;
-    }
+  /deep/ .el-dialog__body {
+    padding: 0;
+  }
 }
 
 .aboutBox {
@@ -99,6 +110,11 @@ export default {
     span {
       cursor: pointer;
       color: #409eff;
+      margin-right: 10px;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
     }
   }
 }

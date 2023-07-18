@@ -15,7 +15,8 @@
 import Header from './components/Header.vue'
 import Sidebar from './components/Sidebar.vue'
 import CatalogBar from './components/CatalogBar.vue'
-import 'highlight.js/styles/atom-one-dark.css'
+// import 'highlight.js/styles/atom-one-dark.css'
+import 'highlight.js/styles/github.css'
 
 export default {
   components: {
@@ -103,7 +104,7 @@ export default {
       a {
         font-weight: 500;
         text-decoration: none;
-        color: #42b883;
+        color: #1ea59a;
         transition: color 0.25s;
 
         &:hover {

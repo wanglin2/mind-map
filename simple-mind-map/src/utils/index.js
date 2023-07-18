@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid'
+
 //  深度优先遍历树
 export const walk = (
   root,
@@ -31,9 +33,11 @@ export const walk = (
 
 //  广度优先遍历树
 export const bfsWalk = (root, callback) => {
-  callback(root)
   let stack = [root]
   let isStop = false
+  if (callback(root, null) === 'stop') {
+    isStop = true
+  }
   while (stack.length) {
     if (isStop) {
       break
@@ -41,8 +45,9 @@ export const bfsWalk = (root, callback) => {
     let cur = stack.shift()
     if (cur.children && cur.children.length) {
       cur.children.forEach(item => {
+        if (isStop) return
         stack.push(item)
-        if (callback(item) === 'stop') {
+        if (callback(item, cur) === 'stop') {
           isStop = true
         }
       })
@@ -423,4 +428,9 @@ export const getImageSize = src => {
       })
     }
   })
+}
+
+// 创建节点唯一的id
+export const createUid = () => {
+  return uuidv4()
 }

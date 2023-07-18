@@ -114,8 +114,9 @@ export default {
   },
   navigatorToolbar: {
     openMiniMap: '开启小地图',
-    readonly: '只读模式',
-    edit: '编辑模式'
+    closeMiniMap: '关闭小地图',
+    readonly: '切换为只读模式',
+    edit: '切换为编辑模式'
   },
   nodeHyperlink: {
     title: '超链接',

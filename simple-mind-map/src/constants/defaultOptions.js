@@ -79,10 +79,6 @@ export const defaultOpt = {
   },
   // 是否只有当鼠标在画布内才响应快捷键事件
   enableShortcutOnlyWhenMouseInSvg: true,
-  // 是否开启节点动画过渡
-  enableNodeTransitionMove: true,
-  // 如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms
-  nodeTransitionMoveDuration: 300,
   // 初始根节点的位置
   initRootNodePosition: null,
   // 导出png、svg、pdf时的图形内边距
