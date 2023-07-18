@@ -102,7 +102,7 @@ class Base {
       }
     } else {
       // 创建新节点
-      let uid = createUid()
+      let uid = data.data.uid || createUid()
       newNode = new Node({
         data,
         uid,

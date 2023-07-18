@@ -7,7 +7,7 @@ import Timeline from '../../layouts/Timeline'
 import VerticalTimeline from '../../layouts/VerticalTimeline'
 import Fishbone from '../../layouts/Fishbone'
 import TextEdit from './TextEdit'
-import { copyNodeTree, simpleDeepClone, walk } from '../../utils'
+import { copyNodeTree, simpleDeepClone, walk, bfsWalk } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
 import { CONSTANTS } from '../../constants/constant'
@@ -195,6 +195,9 @@ class Render {
     // 设置节点形状
     this.setNodeShape = this.setNodeShape.bind(this)
     this.mindMap.command.add('SET_NODE_SHAPE', this.setNodeShape)
+    // 定位节点
+    this.goTargetNode = this.goTargetNode.bind(this)
+    this.mindMap.command.add('GO_TARGET_NODE', this.goTargetNode)
   }
 
   //  注册快捷键
@@ -985,6 +988,19 @@ class Render {
     })
   }
 
+  // 定位到指定节点
+  goTargetNode(node) {
+    let uid = typeof node === 'string' ? node : node.nodeData.data.uid
+    if (!uid) return
+    this.expandToNodeUid(uid, () => {
+      let targetNode = this.findNodeByUid(uid)
+      if (targetNode) {
+        targetNode.active()
+        this.moveNodeToCenter(targetNode)
+      } 
+    })
+  }
+
   //  更新节点数据
   setNodeData(node, data) {
     Object.keys(data).forEach(key => {
@@ -1020,6 +1036,44 @@ class Render {
     this.mindMap.view.translateX(offsetX)
     this.mindMap.view.translateY(offsetY)
     this.mindMap.view.setScale(1)
+  }
+
+  // 展开到指定uid的节点 
+  expandToNodeUid(uid, callback = () => {}) {
+    let parentsList = []
+    const cache = {}
+    bfsWalk(this.renderTree, (node, parent) => {
+      if (node.data.uid === uid) {
+        parentsList = parent ? [...cache[parent.data.uid], parent] : []
+        return 'stop'
+      } else {
+        cache[node.data.uid] = parent ? [...cache[parent.data.uid], parent]: []
+      }
+    })
+    let needRender = false
+    parentsList.forEach((node) => {
+      if (!node.data.expand) {
+        needRender = true
+        node.data.expand = true
+      }
+    })
+    if (needRender) {
+      this.mindMap.render(callback)
+    } else {
+      callback()
+    }
+  }
+
+  // 根据uid找到对应的节点实例
+  findNodeByUid(uid) {
+    let res = null
+    walk(this.root, null, (node) => {
+      if (node.nodeData.data.uid === uid) {
+        res = node
+        return true
+      } 
+    })
+    return res
   }
 }
 
