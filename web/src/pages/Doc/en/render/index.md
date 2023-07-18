@@ -92,3 +92,21 @@ Move a node behind another node
 Move a node to the center of the canvas.
 
 Currently, if there is zoom, returning to the center will reset the zoom.
+
+### expandToNodeUid(uid, callback)
+
+> v0.6.7+
+
+- `uid`: uid of node
+
+- `callback`: Expand completed callback function
+
+Expand to the node of the specified uid.
+
+### findNodeByUid(uid)
+
+> v0.6.7+
+
+- `uid`: uid of node
+
+Find the corresponding node instance based on the uid.

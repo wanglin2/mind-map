@@ -51,6 +51,27 @@
 </blockquote>
 <p>移动节点到画布中心。</p>
 <p>目前如果是存在缩放的情况下回到中心会重置缩放。</p>
+<h3>expandToNodeUid(uid, callback)</h3>
+<blockquote>
+<p>v0.6.7+</p>
+</blockquote>
+<ul>
+<li>
+<p><code>uid</code>：节点uid</p>
+</li>
+<li>
+<p><code>callback</code>：展开完成的回调函数</p>
+</li>
+</ul>
+<p>展开到指定uid的节点。</p>
+<h3>findNodeByUid(uid)</h3>
+<blockquote>
+<p>v0.6.7+</p>
+</blockquote>
+<ul>
+<li><code>uid</code>：节点uid</li>
+</ul>
+<p>根据uid找到对应的节点实例。</p>
 
   </div>
 </template>

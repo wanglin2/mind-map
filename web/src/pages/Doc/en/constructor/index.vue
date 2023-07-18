@@ -920,6 +920,11 @@ redo. All commands are as follows:</p>
 <td>Set the shape of a node</td>
 <td>node (the node to set), shape (the shape, all shapes: <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/render/node/Shape.js">Shape.js</a>)</td>
 </tr>
+<tr>
+<td>GO_TARGET_NODE（v0.6.7+）</td>
+<td>Navigate to a node, and if the node is collapsed, it will automatically expand to that node</td>
+<td>node（Node instance or node uid to locate）</td>
+</tr>
 </tbody>
 </table>
 <h3>setData(data)</h3>
