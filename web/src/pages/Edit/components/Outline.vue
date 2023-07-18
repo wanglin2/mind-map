@@ -112,12 +112,11 @@ export default {
     },
 
     // 激活当前节点且移动当前节点到画布中间
-    onClick(e, data) {
+    onClick(e, node) {
       this.notHandleDataChange = true
-      let node = data.data._node
-      if (node.nodeData.data.isActive) return
-      node.mindMap.renderer.moveNodeToCenter(node)
-      node.active()
+      let targetNode = node.data._node
+      if (targetNode && targetNode.nodeData.data.isActive) return
+      this.mindMap.execCommand('GO_TARGET_NODE', node.data.data.uid)
     },
   }
 }

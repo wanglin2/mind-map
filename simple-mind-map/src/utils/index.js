@@ -33,9 +33,11 @@ export const walk = (
 
 //  广度优先遍历树
 export const bfsWalk = (root, callback) => {
-  callback(root)
   let stack = [root]
   let isStop = false
+  if (callback(root, null) === 'stop') {
+    isStop = true
+  }
   while (stack.length) {
     if (isStop) {
       break
@@ -43,8 +45,9 @@ export const bfsWalk = (root, callback) => {
     let cur = stack.shift()
     if (cur.children && cur.children.length) {
       cur.children.forEach(item => {
+        if (isStop) return
         stack.push(item)
-        if (callback(item) === 'stop') {
+        if (callback(item, cur) === 'stop') {
           isStop = true
         }
       })
