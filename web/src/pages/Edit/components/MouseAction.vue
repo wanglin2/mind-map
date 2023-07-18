@@ -74,6 +74,7 @@ export default {
 
   .btn {
     cursor: pointer;
+    font-size: 18px;
   }
 }
 </style>

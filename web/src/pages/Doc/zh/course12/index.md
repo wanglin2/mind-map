@@ -18,6 +18,9 @@ mindMap.on('data_change', (data) => {
 const node = data._node
 mindMap.renderer.moveNodeToCenter(node)
 node.active()
+
+// 在v0.6.7+版本可以这么做：
+mindMap.execCommand('GO_TARGET_NODE', node)// 或者传节点的uid
 ```
 
 当在大纲树上编辑了某个节点的内容，需要同步到思维导图树上：
