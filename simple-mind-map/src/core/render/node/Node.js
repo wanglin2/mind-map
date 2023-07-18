@@ -365,8 +365,8 @@ class Node {
         this._unVisibleRectRegionNode.fill({
           color: 'transparent'
         })
-        this.group.add(this._unVisibleRectRegionNode)
       }
+      this.group.add(this._unVisibleRectRegionNode)
       this.renderer.layout.renderExpandBtnRect(this._unVisibleRectRegionNode, this.expandBtnSize, width, height, this)
     }
   }
