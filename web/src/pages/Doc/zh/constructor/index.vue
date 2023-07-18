@@ -915,6 +915,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>设置节点形状</td>
 <td>node（要设置的节点）、shape（形状，全部形状：<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/render/node/Shape.js">Shape.js</a>）</td>
 </tr>
+<tr>
+<td>GO_TARGET_NODE（v0.6.7+）</td>
+<td>定位到某个节点，如果该节点被收起，那么会自动展开到该节点</td>
+<td>node（要定位到的节点实例或节点uid）</td>
+</tr>
 </tbody>
 </table>
 <h3>setData(data)</h3>

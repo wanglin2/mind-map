@@ -83,3 +83,21 @@
 移动节点到画布中心。
 
 目前如果是存在缩放的情况下回到中心会重置缩放。
+
+### expandToNodeUid(uid, callback)
+
+> v0.6.7+
+
+- `uid`：节点uid
+
+- `callback`：展开完成的回调函数
+
+展开到指定uid的节点。
+
+### findNodeByUid(uid)
+
+> v0.6.7+
+
+- `uid`：节点uid
+
+根据uid找到对应的节点实例。

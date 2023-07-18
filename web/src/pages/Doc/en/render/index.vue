@@ -62,6 +62,27 @@ is an object, e.g. <code>{text: 'I am new text'}</code></p>
 </blockquote>
 <p>Move a node to the center of the canvas.</p>
 <p>Currently, if there is zoom, returning to the center will reset the zoom.</p>
+<h3>expandToNodeUid(uid, callback)</h3>
+<blockquote>
+<p>v0.6.7+</p>
+</blockquote>
+<ul>
+<li>
+<p><code>uid</code>: uid of node</p>
+</li>
+<li>
+<p><code>callback</code>: Expand completed callback function</p>
+</li>
+</ul>
+<p>Expand to the node of the specified uid.</p>
+<h3>findNodeByUid(uid)</h3>
+<blockquote>
+<p>v0.6.7+</p>
+</blockquote>
+<ul>
+<li><code>uid</code>: uid of node</li>
+</ul>
+<p>Find the corresponding node instance based on the uid.</p>
 
   </div>
 </template>

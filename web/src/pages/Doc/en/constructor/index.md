@@ -347,6 +347,7 @@ redo. All commands are as follows:
 | SET_NODE_CUSTOM_POSITION (v0.2.0+) | Set a custom position for a node                             | node (the node to set), left (custom x coordinate, default is undefined), top (custom y coordinate, default is undefined) |
 | RESET_LAYOUT (v0.2.0+)             | Arrange layout with one click                                |                                                              |
 | SET_NODE_SHAPE (v0.2.4+)           | Set the shape of a node                                      | node (the node to set), shape (the shape, all shapes: [Shape.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/render/node/Shape.js)) |
+| GO_TARGET_NODE（v0.6.7+）           |  Navigate to a node, and if the node is collapsed, it will automatically expand to that node   | node（Node instance or node uid to locate） |
 
 ### setData(data)
 
