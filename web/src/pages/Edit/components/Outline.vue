@@ -46,11 +46,10 @@ export default {
       data: [],
       defaultProps: {
         label(data) {
-          return data.data.text.replaceAll(/\n/g, '</br>')
+          return data.data.richText ? data.data.text : data.data.text.replaceAll(/\n/g, '</br>')
         }
       },
-      notHandleDataChange: false,
-      isCreateNode: false
+      notHandleDataChange: false
     }
   },
   computed: {
@@ -77,11 +76,12 @@ export default {
   },
   methods: {
     onBlur(e, node) {
-      if (this.isCreateNode) {
-        this.isCreateNode = false
-        return
+      const richText = node.data.data.richText
+      if (richText) {
+        node.data._node.setText(e.target.innerHTML, true)
+      } else {
+        node.data._node.setText(e.target.innerText)
       }
-      node.data._node.setText(e.target.innerText)
     },
 
     getKey() {
@@ -102,24 +102,21 @@ export default {
     // 插入兄弟节点
     insertNode() {
       this.notHandleDataChange = false
-      this.isCreateNode = true
       this.mindMap.execCommand('INSERT_NODE', false)
     },
 
     // 插入下级节点
     insertChildNode() {
       this.notHandleDataChange = false
-      this.isCreateNode = true
       this.mindMap.execCommand('INSERT_CHILD_NODE', false)
     },
 
     // 激活当前节点且移动当前节点到画布中间
-    onClick(e, data) {
+    onClick(e, node) {
       this.notHandleDataChange = true
-      let node = data.data._node
-      if (node.nodeData.data.isActive) return
-      node.mindMap.renderer.moveNodeToCenter(node)
-      node.active()
+      let targetNode = node.data._node
+      if (targetNode && targetNode.nodeData.data.isActive) return
+      this.mindMap.execCommand('GO_TARGET_NODE', node.data.data.uid)
     },
   }
 }

@@ -218,14 +218,14 @@
 <td></td>
 </tr>
 <tr>
-<td>enableNodeTransitionMove（v0.5.1+）</td>
+<td>enableNodeTransitionMove（v0.5.1+）（v0.6.7+ is remove this feature）</td>
 <td>Boolean</td>
 <td>true</td>
 <td>Whether to enable node animation transition</td>
 <td></td>
 </tr>
 <tr>
-<td>nodeTransitionMoveDuration（v0.5.1+）</td>
+<td>nodeTransitionMoveDuration（v0.5.1+）（v0.6.7+ is remove this feature）</td>
 <td>Number</td>
 <td>300</td>
 <td>If node animation transition is enabled, the transition time can be set using this attribute, in milliseconds</td>
@@ -919,6 +919,11 @@ redo. All commands are as follows:</p>
 <td>SET_NODE_SHAPE (v0.2.4+)</td>
 <td>Set the shape of a node</td>
 <td>node (the node to set), shape (the shape, all shapes: <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/render/node/Shape.js">Shape.js</a>)</td>
+</tr>
+<tr>
+<td>GO_TARGET_NODE（v0.6.7+）</td>
+<td>Navigate to a node, and if the node is collapsed, it will automatically expand to that node</td>
+<td>node（Node instance or node uid to locate）</td>
 </tr>
 </tbody>
 </table>

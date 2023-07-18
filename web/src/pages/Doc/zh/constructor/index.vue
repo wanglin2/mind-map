@@ -218,14 +218,14 @@
 <td></td>
 </tr>
 <tr>
-<td>enableNodeTransitionMove（v0.5.1+）</td>
+<td>enableNodeTransitionMove（v0.5.1+）（v0.6.7+已去除该特性）</td>
 <td>Boolean</td>
 <td>true</td>
 <td>是否开启节点动画过渡</td>
 <td></td>
 </tr>
 <tr>
-<td>nodeTransitionMoveDuration（v0.5.1+）</td>
+<td>nodeTransitionMoveDuration（v0.5.1+）（v0.6.7+已去除该特性）</td>
 <td>Number</td>
 <td>300</td>
 <td>如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms</td>
@@ -914,6 +914,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>SET_NODE_SHAPE（v0.2.4+）</td>
 <td>设置节点形状</td>
 <td>node（要设置的节点）、shape（形状，全部形状：<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/render/node/Shape.js">Shape.js</a>）</td>
+</tr>
+<tr>
+<td>GO_TARGET_NODE（v0.6.7+）</td>
+<td>定位到某个节点，如果该节点被收起，那么会自动展开到该节点</td>
+<td>node（要定位到的节点实例或节点uid）</td>
 </tr>
 </tbody>
 </table>

@@ -19,24 +19,50 @@
       <MouseAction :mindMap="mindMap"></MouseAction>
     </div>
     <div class="item">
-      <el-checkbox v-model="openMiniMap" @change="toggleMiniMap">{{
-        $t('navigatorToolbar.openMiniMap')
-      }}</el-checkbox>
+      <el-tooltip
+        effect="dark"
+        :content="
+          openMiniMap
+            ? $t('navigatorToolbar.closeMiniMap')
+            : $t('navigatorToolbar.openMiniMap')
+        "
+        placement="top"
+      >
+        <div
+          class="btn iconfont icondaohang1"
+          @click="toggleMiniMap"
+        ></div>
+      </el-tooltip>
     </div>
     <div class="item">
-      <el-switch
+      <!-- <el-switch
         v-model="isReadonly"
         :active-text="$t('navigatorToolbar.readonly')"
         :inactive-text="$t('navigatorToolbar.edit')"
         @change="readonlyChange"
       >
-      </el-switch>
-    </div>
-    <div class="item">
-      <Scale :mindMap="mindMap"></Scale>
+      </el-switch> -->
+      <el-tooltip
+        effect="dark"
+        :content="
+          isReadonly
+            ? $t('navigatorToolbar.edit')
+            : $t('navigatorToolbar.readonly')
+        "
+        placement="top"
+      >
+        <div
+          class="btn iconfont"
+          :class="[isReadonly ? 'iconyanjing' : 'iconbianji1']"
+          @click="readonlyChange"
+        ></div>
+      </el-tooltip>
     </div>
     <div class="item">
       <Fullscreen :mindMap="mindMap"></Fullscreen>
+    </div>
+    <div class="item">
+      <Scale :mindMap="mindMap"></Scale>
     </div>
     <div class="item">
       <a href="https://github.com/wanglin2/mind-map" target="_blank">
@@ -79,16 +105,15 @@ export default {
       openMiniMap: false
     }
   },
-  mounted() {
-    this.toggleMiniMap(this.openMiniMap)
-  },
   methods: {
-    readonlyChange(value) {
-      this.mindMap.setMode(value ? 'readonly' : 'edit')
+    readonlyChange() {
+      this.isReadonly = !this.isReadonly
+      this.mindMap.setMode(this.isReadonly ? 'readonly' : 'edit')
     },
 
-    toggleMiniMap(show) {
-      this.$bus.$emit('toggle_mini_map', show)
+    toggleMiniMap() {
+      this.openMiniMap = !this.openMiniMap
+      this.$bus.$emit('toggle_mini_map', this.openMiniMap)
     },
 
     onLangChange(lang) {
@@ -124,6 +149,18 @@ export default {
       color: #303133;
       text-decoration: none;
     }
+
+    .btn {
+      cursor: pointer;
+      font-size: 18px;
+    }
+  }
+}
+
+@media screen and (max-width: 502px) {
+  .navigatorContainer {
+    left: 20px;
+    overflow-x: auto;
   }
 }
 </style>

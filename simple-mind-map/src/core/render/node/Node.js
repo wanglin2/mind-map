@@ -365,8 +365,8 @@ class Node {
         this._unVisibleRectRegionNode.fill({
           color: 'transparent'
         })
-        this.group.add(this._unVisibleRectRegionNode)
       }
+      this.group.add(this._unVisibleRectRegionNode)
       this.renderer.layout.renderExpandBtnRect(this._unVisibleRectRegionNode, this.expandBtnSize, width, height, this)
     }
   }
@@ -476,8 +476,6 @@ class Node {
       return
     }
     let {
-      enableNodeTransitionMove,
-      nodeTransitionMoveDuration,
       alwaysShowExpandBtn
     } = this.mindMap.opt
     if (alwaysShowExpandBtn) {
@@ -503,13 +501,7 @@ class Node {
     let t = this.group.transform()
     // 如果节点位置没有变化，则返回
     if (this.left === t.translateX && this.top === t.translateY) return
-    if (!isLayout && enableNodeTransitionMove) {
-      this.group
-        .animate(nodeTransitionMoveDuration)
-        .translate(this.left - t.translateX, this.top - t.translateY)
-    } else {
-      this.group.translate(this.left - t.translateX, this.top - t.translateY)
-    }
+    this.group.translate(this.left - t.translateX, this.top - t.translateY)
   }
 
   // 重新渲染节点，即重新创建节点内容、计算节点大小、计算节点内容布局、更新展开收起按钮，概要及位置
@@ -531,8 +523,6 @@ class Node {
 
   //  递归渲染
   render(callback = () => {}) {
-    let { enableNodeTransitionMove, nodeTransitionMoveDuration } =
-      this.mindMap.opt
     // 节点
     // 重新渲染连线
     this.renderLine()
@@ -580,13 +570,7 @@ class Node {
         })
       )
     } else {
-      if (enableNodeTransitionMove && !isLayout) {
-        setTimeout(() => {
-          callback()
-        }, nodeTransitionMoveDuration)
-      } else {
-        callback()
-      }
+      callback()
     }
     // 手动插入的节点立即获得焦点并且开启编辑模式
     if (this.nodeData.inserting) {
