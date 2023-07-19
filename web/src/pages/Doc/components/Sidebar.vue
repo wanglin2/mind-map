@@ -31,7 +31,8 @@ export default {
     return {
       groupList: [],
       lang: '',
-      currentPath: ''
+      currentPath: '',
+      type: ''// doc、help
     }
   },
   created() {
@@ -47,20 +48,24 @@ export default {
       if (item.path === this.currentPath) {
         return
       }
-      this.$router.push(`/doc/${this.lang}/${item.path}`)
+      this.$router.push(`/${this.type}/${this.lang}/${item.path}`)
     },
 
     initCatalog() {
       // 目录列表
-      let lang = /^\/doc\/([^\/]+)\//.exec(this.$route.path)
-      if (lang && lang[1]) {
-        this.lang = lang[1]
-        this.groupList = catalogList[this.lang]
+      let lang = /^\/(doc|help)\/([^\/]+)\//.exec(this.$route.path)
+      if (lang && lang[2]) {
+        this.type = lang[1]// 判断是开发文档还是帮助文档
+        this.lang = lang[2]
+        // 过滤出对应文档的章节
+        this.groupList = catalogList[this.lang].filter((item) => {
+          return item.type === this.type
+        })
       }
       // 当前所在路径
-      let path = /^\/doc\/[^\/]+\/([^\/]+)(\/|$)/.exec(this.$route.path)
-      if (path && path[1]) {
-        this.currentPath = path[1]
+      let path = /^\/(doc|help)\/[^\/]+\/([^\/]+)(\/|$)/.exec(this.$route.path)
+      if (path && path[2]) {
+        this.currentPath = path[2]
       }
     }
   }

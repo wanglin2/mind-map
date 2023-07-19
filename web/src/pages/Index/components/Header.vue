@@ -25,6 +25,7 @@
         >
           客户端
         </div>
+        <div class="navItem" @click="jumpHelp">使用文档</div>
         <div class="navItem" @click="jumpDoc">开发文档</div>
         <div class="navItem">
           <a href="https://github.com/wanglin2/mind-map" target="_blank"
@@ -70,6 +71,10 @@ export default {
 
     useOnline() {
       this.$router.push('/')
+    },
+
+    jumpHelp() {
+      this.$router.push('/help/zh/')
     },
 
     jumpDoc() {
