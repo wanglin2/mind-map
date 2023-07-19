@@ -66,18 +66,18 @@ export default {
   methods: {
     // 获取当前语言
     initLang() {
-      let lang = /^\/doc\/([^\/]+)\//.exec(this.$route.path)
-      if (lang && lang[1]) {
-        this.lang = lang[1]
+      let lang = /^\/(doc|help)\/([^\/]+)\//.exec(this.$route.path)
+      if (lang && lang[2]) {
+        this.lang = lang[2]
       }
     },
 
     // 初始化二级标题目录
     initCatalogList(newPath, oldPath) {
-      let newPathRes = /^\/doc\/[^\/]+\/([^\/]+)/.exec(newPath)
-      let oldPathRes = /^\/doc\/[^\/]+\/([^\/]+)/.exec(oldPath)
+      let newPathRes = /^\/(doc|help)\/[^\/]+\/([^\/]+)/.exec(newPath)
+      let oldPathRes = /^\/(doc|help)\/[^\/]+\/([^\/]+)/.exec(oldPath)
       // 语言变了、章节变了，需要重新获取二级标题目录
-      if ((!newPath && !oldPath) || newPathRes[1] !== oldPathRes[1]) {
+      if ((!newPath && !oldPath) || newPathRes[2] !== oldPathRes[2]) {
         this.$emit('scroll', 0)
         this.resetActive()
         let container = document.getElementById('doc')
@@ -93,9 +93,9 @@ export default {
 
     // 如果url中存在二级标题，那么滚动到该标题所在位置
     scrollToCatalog() {
-      let url = /^\/doc\/[^\/]+\/[^\/]+\/([^\/]+)($|\/)/.exec(this.$route.path)
-      if (url && url[1]) {
-        let h = decodeURIComponent(url[1])
+      let url = /^\/(doc|help)\/[^\/]+\/[^\/]+\/([^\/]+)($|\/)/.exec(this.$route.path)
+      if (url && url[2]) {
+        let h = decodeURIComponent(url[2])
         let item = this.list.find(item => {
           return item.title === h
         })
@@ -126,15 +126,15 @@ export default {
       let path = this.$route.path
       let url = ''
       if (!title) {
-        url = path.replace(/^(\/doc\/[^\/]+\/[^\/]+)($|\/|.*)$/, '$1')
-      } else if (/^\/doc\/[^\/]+\/[^\/]+($|\/)$/.test(path)) {
+        url = path.replace(/^(\/(doc|help)\/[^\/]+\/[^\/]+)($|\/|.*)$/, '$1')
+      } else if (/^\/(doc|help)\/[^\/]+\/[^\/]+($|\/)$/.test(path)) {
         url = path.replace(
-          /^(\/doc\/[^\/]+\/[^\/]+)($|\/)$/,
+          /^(\/(doc|help)\/[^\/]+\/[^\/]+)($|\/)$/,
           '$1/' + encodeURIComponent(title)
         )
       } else {
         url = path.replace(
-          /^(\/doc\/[^\/]+\/[^\/]+\/)([^\/]+)($|\/)/,
+          /^(\/(doc|help)\/[^\/]+\/[^\/]+\/)([^\/]+)($|\/)/,
           (...args) => {
             return args[1] + encodeURIComponent(title)
           }

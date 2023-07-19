@@ -47,7 +47,8 @@ export default [
       { path: 'deploy', title: '部署' },
       { path: 'client', title: '客户端' },
       { path: 'touchEvent', title: 'TouchEvent插件' },
-      { path: 'nodeImgAdjust', title: 'NodeImgAdjust插件' }
+      { path: 'nodeImgAdjust', title: 'NodeImgAdjust插件' },
+      { path: 'help1', title: '概要/关联线' }
     ]
   },
   {

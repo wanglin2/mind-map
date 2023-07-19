@@ -36,6 +36,9 @@ let APIList = [
   'markdown',
   'utils'
 ]
+let helpList = new Array(1).fill(0).map((_, index) => {
+  return 'help' + (index + 1)
+})
 
 const createList = (lang, list) => {
   let langRouter = routerList.find(item => {
@@ -62,28 +65,39 @@ export default {
   zh: [
     {
       groupName: '开始',
+      type: 'doc',
       list: createList('zh', StartList)
     },
     {
       groupName: '教程',
+      type: 'doc',
       list: createList('zh', CourseList)
     },
     {
       groupName: 'API',
+      type: 'doc',
       list: createList('zh', APIList)
+    },
+    {
+      groupName: '使用帮助',
+      type: 'help',
+      list: createList('zh', helpList)
     }
   ],
   en: [
     {
       groupName: 'Start',
+      type: 'doc',
       list: createList('en', StartList)
     },
     {
       groupName: 'Course',
+      type: 'doc',
       list: createList('zh', CourseList)
     },
     {
       groupName: 'API',
+      type: 'doc',
       list: createList('en', APIList)
     }
   ]
