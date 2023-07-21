@@ -210,7 +210,7 @@ export const shortcutKeyList = [
       {
         icon: 'icongaikuozonglan',
         name: 'Insert summary',
-        value: 'Ctrl + S'
+        value: 'Ctrl + G'
       },
       {
         icon: 'iconzhankai',

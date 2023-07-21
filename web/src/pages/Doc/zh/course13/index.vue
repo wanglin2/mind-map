@@ -24,7 +24,7 @@
       },
       {
         <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;插入概要&#x27;</span>,
-        <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;Ctrl + S&#x27;</span>
+        <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;Ctrl + S&#x27;</span><span class="hljs-comment">// v0.6.8+改为Ctrl + G</span>
       },
       {
         <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;展开/收起节点&#x27;</span>,
