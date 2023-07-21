@@ -215,7 +215,7 @@ class Render {
     }
     this.mindMap.keyCommand.addShortcut('Enter', this.insertNodeWrap)
     // 插入概要
-    this.mindMap.keyCommand.addShortcut('Control+s', this.addGeneralization)
+    this.mindMap.keyCommand.addShortcut('Control+g', this.addGeneralization)
     // 展开/收起节点
     this.toggleActiveExpand = this.toggleActiveExpand.bind(this)
     this.mindMap.keyCommand.addShortcut('/', this.toggleActiveExpand)
