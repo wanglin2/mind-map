@@ -879,6 +879,12 @@ export default {
       }
       this.data.theme.config[this.marginActiveTab][type] = value
       this.mindMap.setThemeConfig(this.data.theme.config)
+      storeConfig({
+        theme: {
+          template: this.mindMap.getTheme(),
+          config: this.data.theme.config
+        }
+      })
     },
 
     // 切换显示水印与否
