@@ -434,3 +434,22 @@ export const getImageSize = src => {
 export const createUid = () => {
   return uuidv4()
 }
+
+// 加载图片文件
+export const loadImage = imgFile => {
+  return new Promise((resolve, reject) => {
+    let fr = new FileReader()
+    fr.readAsDataURL(imgFile)
+    fr.onload = async e => {
+      let url = e.target.result
+      let size = await getImageSize(url)
+      resolve({
+        url,
+        size
+      })
+    }
+    fr.onerror = error => {
+      reject(error)
+    }
+  })
+}

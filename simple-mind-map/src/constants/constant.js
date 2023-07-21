@@ -213,6 +213,10 @@ export const CONSTANTS = {
     TOP: 'top',
     RIGHT: 'right',
     BOTTOM: 'bottom'
+  },
+  PASTE_TYPE: {
+    CLIP_BOARD: 'clipBoard',
+    CANVAS: 'canvas'
   }
 }
 
