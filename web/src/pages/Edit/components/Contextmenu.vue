@@ -55,7 +55,6 @@
       </div>
       <div
         class="item"
-        :class="{ disabled: copyData === null }"
         @click="exec('PASTE_NODE')"
       >
         {{ $t('contextmenu.pasteNode') }}
@@ -123,7 +122,6 @@ export default {
       left: 0,
       top: 0,
       node: null,
-      copyData: null,
       type: '',
       isMousedown: false,
       mosuedownX: 0,
@@ -180,10 +178,6 @@ export default {
     this.$bus.$on('expand_btn_click', this.hide)
     this.$bus.$on('svg_mousedown', this.onMousedown)
     this.$bus.$on('mouseup', this.onMouseup)
-    // 注册快捷键
-    this.mindMap.keyCommand.addShortcut('Control+c', this.copy)
-    this.mindMap.keyCommand.addShortcut('Control+v', this.paste)
-    this.mindMap.keyCommand.addShortcut('Control+x', this.cut)
   },
   beforeDestroy() {
     this.$bus.$off('node_contextmenu', this.show)
@@ -192,10 +186,6 @@ export default {
     this.$bus.$off('expand_btn_click', this.hide)
     this.$bus.$on('svg_mousedown', this.onMousedown)
     this.$bus.$on('mouseup', this.onMouseup)
-    // 移除快捷键
-    this.mindMap.keyCommand.removeShortcut('Control+c', this.copy)
-    this.mindMap.keyCommand.removeShortcut('Control+v', this.paste)
-    this.mindMap.keyCommand.removeShortcut('Control+x', this.cut)
   },
   methods: {
     ...mapMutations(['setLocalConfig']),
@@ -282,15 +272,13 @@ export default {
       }
       switch (key) {
         case 'COPY_NODE':
-          this.copyData = this.mindMap.renderer.copyNode()
+          this.mindMap.renderer.copy()
           break
         case 'CUT_NODE':
-          this.$bus.$emit('execCommand', key, copyData => {
-            this.copyData = copyData
-          })
+          this.mindMap.renderer.cut()
           break
         case 'PASTE_NODE':
-          this.$bus.$emit('execCommand', key, this.copyData)
+          this.mindMap.renderer.paste()
           break
         case 'RETURN_CENTER':
           this.mindMap.view.reset()
@@ -308,33 +296,6 @@ export default {
           break
       }
       this.hide()
-    },
-
-    /**
-     * @Author: 王林25
-     * @Date: 2022-08-04 14:25:45
-     * @Desc: 复制
-     */
-    copy() {
-      this.exec('COPY_NODE')
-    },
-
-    /**
-     * @Author: 王林25
-     * @Date: 2022-08-04 14:26:43
-     * @Desc: 粘贴
-     */
-    paste() {
-      this.exec('PASTE_NODE')
-    },
-
-    /**
-     * @Author: 王林25
-     * @Date: 2022-08-04 14:27:32
-     * @Desc: 剪切
-     */
-    cut() {
-      this.exec('CUT_NODE')
     }
   }
 }

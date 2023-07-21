@@ -7,7 +7,13 @@ import Timeline from '../../layouts/Timeline'
 import VerticalTimeline from '../../layouts/VerticalTimeline'
 import Fishbone from '../../layouts/Fishbone'
 import TextEdit from './TextEdit'
-import { copyNodeTree, simpleDeepClone, walk, bfsWalk } from '../../utils'
+import {
+  copyNodeTree,
+  simpleDeepClone,
+  walk,
+  bfsWalk,
+  loadImage
+} from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
 import { CONSTANTS } from '../../constants/constant'
@@ -29,7 +35,7 @@ const layouts = {
   // 竖向时间轴
   [CONSTANTS.LAYOUT.VERTICAL_TIMELINE]: VerticalTimeline,
   // 鱼骨图
-  [CONSTANTS.LAYOUT.FISHBONE]: Fishbone,
+  [CONSTANTS.LAYOUT.FISHBONE]: Fishbone
 }
 
 //  渲染
@@ -60,6 +66,12 @@ class Render {
     this.root = null
     // 文本编辑框，需要再bindEvent之前实例化，否则单击事件只能触发隐藏文本编辑框，而无法保存文本修改
     this.textEdit = new TextEdit(this)
+    // 当前复制的数据
+    this.lastBeingCopyData = null
+    this.beingCopyData = null
+    this.beingPasteText = ''
+    this.beingPasteImgSize = 0
+    this.currentBeingPasteType = ''
     // 布局
     this.setLayout()
     // 绑定事件
@@ -82,17 +94,23 @@ class Render {
   //   绑定事件
   bindEvent() {
     // 点击事件
-    this.mindMap.on('draw_click', (e) => {
+    this.mindMap.on('draw_click', e => {
       // 清除激活状态
       let isTrueClick = true
       let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
       if (useLeftKeySelectionRightKeyDrag) {
         let mousedownPos = this.mindMap.event.mousedownPos
-        isTrueClick = Math.abs(e.clientX - mousedownPos.x) <= 5 && Math.abs(e.clientY - mousedownPos.y) <= 5
+        isTrueClick =
+          Math.abs(e.clientX - mousedownPos.x) <= 5 &&
+          Math.abs(e.clientY - mousedownPos.y) <= 5
       }
       if (isTrueClick && this.activeNodeList.length > 0) {
         this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
       }
+    })
+    // 粘贴事件
+    this.mindMap.on('paste', data => {
+      this.onPaste(data)
     })
   }
 
@@ -242,6 +260,14 @@ class Render {
     // 下移节点
     this.mindMap.keyCommand.addShortcut('Control+Down', this.downNode)
     // 复制节点、剪切节点、粘贴节点的快捷键需开发者自行注册实现，可参考demo
+    this.copy = this.copy.bind(this)
+    this.mindMap.keyCommand.addShortcut('Control+c', this.copy)
+    this.mindMap.keyCommand.addShortcut('Control+v', () => {
+      // 隐藏输入框可能会失去焦点，所以要重新聚焦
+      this.textEdit.focusHiddenInput()
+    })
+    this.cut = this.cut.bind(this)
+    this.mindMap.keyCommand.addShortcut('Control+x', this.cut)
   }
 
   //  开启文字编辑，会禁用回车键和删除键相关快捷键防止冲突
@@ -281,7 +307,7 @@ class Render {
     // 计算布局
     this.layout.doLayout(root => {
       // 删除本次渲染时不再需要的节点
-      Object.keys(this.lastNodeCache).forEach((uid) => {
+      Object.keys(this.lastNodeCache).forEach(uid => {
         if (!this.nodeCache[uid]) {
           this.lastNodeCache[uid].destroy()
           if (this.lastNodeCache[uid].parent) {
@@ -301,7 +327,10 @@ class Render {
           this.render(callback, source)
         } else {
           // 触发一次保存，因为修改了渲染树的数据
-          if (this.mindMap.richText && [CONSTANTS.CHANGE_THEME, CONSTANTS.SET_DATA].includes(source)) {
+          if (
+            this.mindMap.richText &&
+            [CONSTANTS.CHANGE_THEME, CONSTANTS.SET_DATA].includes(source)
+          ) {
             this.mindMap.command.addHistory()
           }
         }
@@ -406,7 +435,7 @@ class Render {
   // 规范指定节点数据
   formatAppointNodes(appointNodes) {
     if (!appointNodes) return []
-    return Array.isArray(appointNodes) ? appointNodes: [appointNodes]
+    return Array.isArray(appointNodes) ? appointNodes : [appointNodes]
   }
 
   //  插入同级节点，多个节点只会操作第一个节点
@@ -415,7 +444,10 @@ class Render {
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return
     }
-    let { defaultInsertSecondLevelNodeText, defaultInsertBelowSecondLevelNodeText } = this.mindMap.opt
+    let {
+      defaultInsertSecondLevelNodeText,
+      defaultInsertBelowSecondLevelNodeText
+    } = this.mindMap.opt
     let list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     let first = list[0]
     if (first.isGeneralization) {
@@ -424,7 +456,10 @@ class Render {
     if (first.isRoot) {
       this.insertChildNode(openEdit, appointNodes, appointData)
     } else {
-      let text = first.layerIndex === 1 ? defaultInsertSecondLevelNodeText : defaultInsertBelowSecondLevelNodeText
+      let text =
+        first.layerIndex === 1
+          ? defaultInsertSecondLevelNodeText
+          : defaultInsertBelowSecondLevelNodeText
       if (first.layerIndex === 1) {
         first.parent.destroy()
       }
@@ -451,7 +486,10 @@ class Render {
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return
     }
-    let { defaultInsertSecondLevelNodeText, defaultInsertBelowSecondLevelNodeText } = this.mindMap.opt
+    let {
+      defaultInsertSecondLevelNodeText,
+      defaultInsertBelowSecondLevelNodeText
+    } = this.mindMap.opt
     let list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     list.forEach(node => {
       if (node.isGeneralization) {
@@ -460,7 +498,9 @@ class Render {
       if (!node.nodeData.children) {
         node.nodeData.children = []
       }
-      let text = node.isRoot ? defaultInsertSecondLevelNodeText : defaultInsertBelowSecondLevelNodeText
+      let text = node.isRoot
+        ? defaultInsertSecondLevelNodeText
+        : defaultInsertBelowSecondLevelNodeText
       let isRichText = !!this.mindMap.richText
       node.nodeData.children.push({
         inserting: openEdit,
@@ -536,13 +576,81 @@ class Render {
     this.mindMap.render()
   }
 
+  // 复制节点
+  copy() {
+    this.beingCopyData = this.copyNode()
+  }
+
+  // 剪切节点
+  cut() {
+    this.mindMap.execCommand('CUT_NODE', copyData => {
+      this.beingCopyData = copyData
+    })
+  }
+
+  // 粘贴节点
+  paste() {
+    if (this.beingCopyData) {
+      this.mindMap.execCommand('PASTE_NODE', this.beingCopyData)
+    }
+  }
+
+  // 粘贴事件
+  async onPaste({ text, img }) {
+    // 检查剪切板数据是否有变化
+    // 通过图片大小来判断图片是否发生变化，可能是不准确的，但是目前没有其他好方法
+    const imgSize = img ? img.size : 0
+    if (this.beingPasteText !== text || this.beingPasteImgSize !== imgSize) {
+      this.currentBeingPasteType = CONSTANTS.PASTE_TYPE.CLIP_BOARD
+      this.beingPasteText = text
+      this.beingPasteImgSize = imgSize
+    }
+    // 检查要粘贴的节点数据是否有变化，节点优先级高于剪切板
+    if (this.lastBeingCopyData !== this.beingCopyData) {
+      this.lastBeingCopyData = this.beingCopyData
+      this.currentBeingPasteType = CONSTANTS.PASTE_TYPE.CANVAS
+    }
+    // 粘贴剪切板的数据
+    if (this.currentBeingPasteType === CONSTANTS.PASTE_TYPE.CLIP_BOARD) {
+      // 存在文本，则创建子节点
+      if (text) {
+        this.mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
+          text
+        })
+      }
+      // 存在图片，则添加到当前激活节点
+      if (img) {
+        try {
+          let imgData = await loadImage(img)
+          if (this.activeNodeList.length > 0) {
+            this.activeNodeList.forEach(node => {
+              this.mindMap.execCommand('SET_NODE_IMAGE', node, {
+                url: imgData.url,
+                title: '',
+                width: imgData.size.width,
+                height: imgData.size.height
+              })
+            })
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    } else {
+      // 粘贴节点数据
+      this.paste()
+    }
+  }
+
   //  将节点移动到另一个节点的前面
   insertBefore(node, exist) {
     if (node.isRoot) {
       return
     }
     // 如果是二级节点变成了下级节点，或是下级节点变成了二级节点，节点样式需要更新
-    let nodeLayerChanged = (node.layerIndex === 1 && exist.layerIndex !== 1) || (node.layerIndex !== 1 && exist.layerIndex === 1)
+    let nodeLayerChanged =
+      (node.layerIndex === 1 && exist.layerIndex !== 1) ||
+      (node.layerIndex !== 1 && exist.layerIndex === 1)
     // 移动节点
     let nodeParent = node.parent
     let nodeBorthers = nodeParent.children
@@ -579,7 +687,9 @@ class Render {
       return
     }
     // 如果是二级节点变成了下级节点，或是下级节点变成了二级节点，节点样式需要更新
-    let nodeLayerChanged = (node.layerIndex === 1 && exist.layerIndex !== 1) || (node.layerIndex !== 1 && exist.layerIndex === 1)
+    let nodeLayerChanged =
+      (node.layerIndex === 1 && exist.layerIndex !== 1) ||
+      (node.layerIndex !== 1 && exist.layerIndex === 1)
     // 移动节点
     let nodeParent = node.parent
     let nodeBorthers = nodeParent.children
@@ -619,7 +729,7 @@ class Render {
     }
     let isAppointNodes = appointNodes.length > 0
     let list = isAppointNodes ? appointNodes : this.activeNodeList
-    let root = list.find((node) => {
+    let root = list.find(node => {
       return node.isRoot
     })
     if (root) {
@@ -705,7 +815,7 @@ class Render {
 
   //   粘贴节点到节点
   pasteNode(data) {
-    if (this.activeNodeList.length <= 0) {
+    if (this.activeNodeList.length <= 0 || !data) {
       return
     }
     this.activeNodeList.forEach(item => {
@@ -997,7 +1107,7 @@ class Render {
       if (targetNode) {
         targetNode.active()
         this.moveNodeToCenter(targetNode)
-      } 
+      }
     })
   }
 
@@ -1038,7 +1148,7 @@ class Render {
     this.mindMap.view.setScale(1)
   }
 
-  // 展开到指定uid的节点 
+  // 展开到指定uid的节点
   expandToNodeUid(uid, callback = () => {}) {
     let parentsList = []
     const cache = {}
@@ -1047,11 +1157,11 @@ class Render {
         parentsList = parent ? [...cache[parent.data.uid], parent] : []
         return 'stop'
       } else {
-        cache[node.data.uid] = parent ? [...cache[parent.data.uid], parent]: []
+        cache[node.data.uid] = parent ? [...cache[parent.data.uid], parent] : []
       }
     })
     let needRender = false
-    parentsList.forEach((node) => {
+    parentsList.forEach(node => {
       if (!node.data.expand) {
         needRender = true
         node.data.expand = true
@@ -1067,11 +1177,11 @@ class Render {
   // 根据uid找到对应的节点实例
   findNodeByUid(uid) {
     let res = null
-    walk(this.root, null, (node) => {
+    walk(this.root, null, node => {
       if (node.nodeData.data.uid === uid) {
         res = node
         return true
-      } 
+      }
     })
     return res
   }
