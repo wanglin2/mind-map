@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.8
+
+Fix: 1.Change the shortcut key for inserting a summary to Ctrl+G to avoid conflicts with the save shortcut key. 2.Fix the issue of abnormal switching between rich text editing configuration input boxes while nodes are being edited.
+
+New: 1.Modify the copy, cut, and paste logic, and support pasting data from the clipboard.
+
+Demo: 1.Fix the issue of not saving the outer margin of the basic style setting node. 2.Supports automatic switching to dark mode based on the theme.
+
 ## 0.6.7
 
 Fix: 1.Fixed the issue of missing placeholder elements for the expand and collapse button after node collapse and expansion. 2.Fixed the issue of being able to scale images in read-only mode.

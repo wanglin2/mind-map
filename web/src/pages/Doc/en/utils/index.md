@@ -181,6 +181,21 @@ Get the size of image, return:
 }
 ```
 
+#### loadImage(imgFile)
+
+> v0.6.8+
+
+- `imgFile`: File object of image type
+
+Load image, return:
+
+```js
+{
+  url,// DataUrl
+  size// { width, height } width and height of image
+}
+```
+
 ## Simulate CSS background in Canvas
 
 Import:

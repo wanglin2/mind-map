@@ -9,6 +9,8 @@ import { themeList } from 'simple-mind-map/src/constants/constant'
 // import { themeList } from 'simple-mind-map/src/utils/constant' v0.6.0以下版本使用该路径
 ```
 
+> v0.6.8+，主题列表增加了代表是否是暗黑主题的字段dark，你可以根据这个字段来将界面切换为暗黑模式。
+
 可以在实例化`simple-mind-map`时指定使用的主题：
 
 ```js

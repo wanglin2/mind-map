@@ -110,3 +110,21 @@ Expand to the node of the specified uid.
 - `uid`: uid of node
 
 Find the corresponding node instance based on the uid.
+
+### copy()
+
+> v0.6.8+
+
+Copy nodes. After calling this method, the current activated node data will be stored. Multiple activated nodes will only operate on the first node, and subsequent calls to the 'paste()' method can be pasted.
+
+### cut()
+
+> v0.6.8+
+
+Cut a node. After calling this method, the currently active node will be cut and the node data will be stored. Multiple nodes will only operate on the first node, and subsequent calls to the 'paste()' method can be pasted.
+
+### paste()
+
+> v0.6.8+
+
+Pasting nodes can be done by calling the 'copy()' or 'cut()' method after calling it. This method does not support pasting data from the user's clipboard. Please use the built-in 'Ctrl+v' shortcut key.

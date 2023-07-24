@@ -121,6 +121,19 @@ and copying the <code>data</code> of the data object, example:</p>
   height
 }
 </code></pre>
+<h4>loadImage(imgFile)</h4>
+<blockquote>
+<p>v0.6.8+</p>
+</blockquote>
+<ul>
+<li><code>imgFile</code>: File object of image type</li>
+</ul>
+<p>Load image, return:</p>
+<pre class="hljs"><code>{
+  url,<span class="hljs-comment">// DataUrl</span>
+  size<span class="hljs-comment">// { width, height } width and height of image</span>
+}
+</code></pre>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>
