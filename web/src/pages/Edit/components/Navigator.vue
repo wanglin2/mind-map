@@ -2,6 +2,7 @@
   <div
     v-if="showMiniMap"
     class="navigatorBox"
+    :class="{ isDark: isDark }"
     ref="navigatorBox"
     @mousedown="onMousedown"
     @mousemove="onMousemove"
@@ -21,6 +22,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   props: {
     mindMap: {
@@ -43,6 +46,9 @@ export default {
         right: 0
       }
     }
+  },
+  computed: {
+    ...mapState(['isDark']),
   },
   mounted() {
     this.$bus.$on('toggle_mini_map', this.toggle_mini_map)
@@ -127,6 +133,10 @@ export default {
   border: 1px solid #eee;
   cursor: pointer;
   user-select: none;
+
+  &.isDark {
+    background-color: #262a2e;
+  }
 
   .svgBox {
     position: absolute;
