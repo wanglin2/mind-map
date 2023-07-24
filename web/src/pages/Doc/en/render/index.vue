@@ -83,6 +83,21 @@ is an object, e.g. <code>{text: 'I am new text'}</code></p>
 <li><code>uid</code>: uid of node</li>
 </ul>
 <p>Find the corresponding node instance based on the uid.</p>
+<h3>copy()</h3>
+<blockquote>
+<p>v0.6.8+</p>
+</blockquote>
+<p>Copy nodes. After calling this method, the current activated node data will be stored. Multiple activated nodes will only operate on the first node, and subsequent calls to the 'paste()' method can be pasted.</p>
+<h3>cut()</h3>
+<blockquote>
+<p>v0.6.8+</p>
+</blockquote>
+<p>Cut a node. After calling this method, the currently active node will be cut and the node data will be stored. Multiple nodes will only operate on the first node, and subsequent calls to the 'paste()' method can be pasted.</p>
+<h3>paste()</h3>
+<blockquote>
+<p>v0.6.8+</p>
+</blockquote>
+<p>Pasting nodes can be done by calling the 'copy()' or 'cut()' method after calling it. This method does not support pasting data from the user's clipboard. Please use the built-in 'Ctrl+v' shortcut key.</p>
 
   </div>
 </template>

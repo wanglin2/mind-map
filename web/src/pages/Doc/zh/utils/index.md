@@ -176,6 +176,21 @@ copyNodeTree({}, node)
 }
 ```
 
+#### loadImage(imgFile)
+
+> v0.6.8+
+
+- `imgFile`：图片类型的File对象
+
+加载图片，返回：
+
+```js
+{
+  url,// DataUrl
+  size// { width, height } 图片宽高
+}
+```
+
 ## 在canvas中模拟css的背景属性
 
 引入：

@@ -116,6 +116,19 @@
   height
 }
 </code></pre>
+<h4>loadImage(imgFile)</h4>
+<blockquote>
+<p>v0.6.8+</p>
+</blockquote>
+<ul>
+<li><code>imgFile</code>：图片类型的File对象</li>
+</ul>
+<p>加载图片，返回：</p>
+<pre class="hljs"><code>{
+  url,<span class="hljs-comment">// DataUrl</span>
+  size<span class="hljs-comment">// { width, height } 图片宽高</span>
+}
+</code></pre>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

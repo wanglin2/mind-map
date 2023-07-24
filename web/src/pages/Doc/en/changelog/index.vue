@@ -1,6 +1,10 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.6.8</h2>
+<p>Fix: 1.Change the shortcut key for inserting a summary to Ctrl+G to avoid conflicts with the save shortcut key. 2.Fix the issue of abnormal switching between rich text editing configuration input boxes while nodes are being edited.</p>
+<p>New: 1.Modify the copy, cut, and paste logic, and support pasting data from the clipboard.</p>
+<p>Demo: 1.Fix the issue of not saving the outer margin of the basic style setting node. 2.Supports automatic switching to dark mode based on the theme.</p>
 <h2>0.6.7</h2>
 <p>Fix: 1.Fixed the issue of missing placeholder elements for the expand and collapse button after node collapse and expansion. 2.Fixed the issue of being able to scale images in read-only mode.</p>
 <p>New: 1.Support locating to a node based on node instance or node uid. 2.Modify the creation method of node uids and export data to add node uids.</p>

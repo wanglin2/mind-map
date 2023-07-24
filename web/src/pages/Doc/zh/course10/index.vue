@@ -6,6 +6,9 @@
 <pre class="hljs"><code><span class="hljs-keyword">import</span> { themeList } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/constants/constant&#x27;</span>
 <span class="hljs-comment">// import { themeList } from &#x27;simple-mind-map/src/utils/constant&#x27; v0.6.0以下版本使用该路径</span>
 </code></pre>
+<blockquote>
+<p>v0.6.8+，主题列表增加了代表是否是暗黑主题的字段dark，你可以根据这个字段来将界面切换为暗黑模式。</p>
+</blockquote>
 <p>可以在实例化<code>simple-mind-map</code>时指定使用的主题：</p>
 <pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({
     <span class="hljs-attr">theme</span>: <span class="hljs-string">&#x27;minions&#x27;</span>

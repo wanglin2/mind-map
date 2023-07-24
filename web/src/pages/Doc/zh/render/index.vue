@@ -72,6 +72,21 @@
 <li><code>uid</code>：节点uid</li>
 </ul>
 <p>根据uid找到对应的节点实例。</p>
+<h3>copy()</h3>
+<blockquote>
+<p>v0.6.8+</p>
+</blockquote>
+<p>复制节点，调用该方法后会存储当前激活的节点数据，多个激活节点只会操作第一个节点，后续调用<code>paste()</code>方法时可以进行粘贴。</p>
+<h3>cut()</h3>
+<blockquote>
+<p>v0.6.8+</p>
+</blockquote>
+<p>剪切节点，调用该方法后会剪切当前激活的节点，并且存储该节点数据，多个节点只会操作第一个节点，后续调用<code>paste()</code>方法时可以进行粘贴。</p>
+<h3>paste()</h3>
+<blockquote>
+<p>v0.6.8+</p>
+</blockquote>
+<p>粘贴节点，在调用了<code>copy()</code>或<code>cut()</code>方法后可以调用该方法进行粘贴节点。该方法不支持粘贴用户剪贴板中的数据，请使用内置的<code>Ctrl+v</code>快捷键。</p>
 
   </div>
 </template>
