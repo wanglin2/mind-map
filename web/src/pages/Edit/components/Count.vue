@@ -1,5 +1,5 @@
 <template>
-  <div class="countContainer">
+  <div class="countContainer" :class="{ isDark: isDark }">
     <div class="item">
       <span class="name">{{ $t('count.words') }}</span>
       <span class="value">{{ words }}</span>
@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 /**
  * @Author: 王林
  * @Date: 2021-06-24 22:53:10
@@ -28,6 +30,9 @@ export default {
       words: 0,
       num: 0
     }
+  },
+  computed: {
+    ...mapState(['isDark']),
   },
   created() {
     this.$bus.$on('data_change', this.onDataChange)
@@ -81,6 +86,14 @@ export default {
   line-height: 22px;
   font-size: 12px;
   display: flex;
+
+  &.isDark {
+    background: #262a2e;
+
+    .item {
+      color: hsla(0,0%,100%,.6);
+    }
+  }
 
   .item {
     color: #555;

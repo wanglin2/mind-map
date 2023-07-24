@@ -2,6 +2,7 @@
   <Sidebar ref="sidebar" :title="$t('outline.title')">
     <el-tree
       class="outlineTree"
+      :class="{ isDark: isDark }"
       :data="data"
       :props="defaultProps"
       :expand-on-click-node="false"
@@ -53,7 +54,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeSidebar'])
+    ...mapState(['activeSidebar', 'isDark'])
   },
   watch: {
     activeSidebar(val) {
@@ -150,6 +151,10 @@ export default {
 }
 
 .outlineTree {
+
+  &.isDark {
+    background-color: #262a2e;
+  }
   /deep/ .el-tree-node__content {
     height: auto;
     margin: 5px 0;

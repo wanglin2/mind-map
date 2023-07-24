@@ -1,5 +1,5 @@
 <template>
-  <div class="toolbarContainer">
+  <div class="toolbarContainer" :class="{ isDark: isDark }">
     <div class="toolbar">
       <!-- 节点操作 -->
       <div class="toolbarBlock">
@@ -199,7 +199,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isHandleLocalFile']),
+    ...mapState(['isHandleLocalFile', 'isDark']),
     hasRoot() {
       return (
         this.activeNodes.findIndex(node => {
@@ -447,6 +447,33 @@ export default {
 
 <style lang="less" scoped>
 .toolbarContainer {
+  &.isDark {
+    .toolbar {
+      color: hsla(0,0%,100%,.9);
+      .toolbarBlock {
+        background-color: #262a2e;
+      }
+
+      .toolbarBtn {
+        .icon {
+          background: transparent;
+          border-color: transparent;
+        }
+
+        &:hover {
+          &:not(.disabled) {
+            .icon {
+              background: hsla(0,0%,100%,.05);
+            }
+          }
+        }
+
+        &.disabled {
+          color: #54595f;
+        }
+      }
+    }
+  }
   .toolbar {
     position: fixed;
     left: 50%;
@@ -522,7 +549,6 @@ export default {
 }
 
 @media screen and (max-width: 1040px) {
-  
   .toolbarContainer {
     .toolbar {
       left: 20px;

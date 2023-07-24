@@ -1,6 +1,6 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('baseStyle.title')">
-    <div class="sidebarContent" v-if="data">
+    <div class="sidebarContent" :class="{ isDark: isDark }" v-if="data">
       <!-- 背景 -->
       <div class="title noTop">{{ $t('baseStyle.background') }}</div>
       <div class="row">
@@ -711,7 +711,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeSidebar', 'localConfig']),
+    ...mapState(['activeSidebar', 'localConfig', 'isDark']),
 
     lineStyleList() {
       return lineStyleList[this.$i18n.locale] || lineStyleList.zh
@@ -921,6 +921,20 @@ export default {
 .sidebarContent {
   padding: 20px;
   padding-top: 10px;
+
+  &.isDark {
+    .title {
+      color: #fff;
+    }
+
+    .row {
+      .rowItem {
+        .name {
+          color: hsla(0,0%,100%,.6);
+        }
+      }
+    }
+  }
 
   .title {
     font-size: 16px;

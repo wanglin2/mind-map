@@ -1,6 +1,6 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('strusture.title')">
-    <div class="layoutList">
+    <div class="layoutList" :class="{ isDark: isDark }">
       <div
         class="layoutItem"
         v-for="item in layoutList"
@@ -47,7 +47,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeSidebar'])
+    ...mapState(['activeSidebar', 'isDark'])
   },
   watch: {
     activeSidebar(val) {
@@ -79,6 +79,12 @@ export default {
 <style lang="less" scoped>
 .layoutList {
   padding: 20px;
+
+  &.isDark {
+    .name {
+      color: #fff;
+    }
+  }
 
   .layoutItem {
     width: 100%;
