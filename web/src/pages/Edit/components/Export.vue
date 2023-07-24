@@ -9,7 +9,7 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
   >
-    <div>
+    <div class="exportContainer" :class="{ isDark: isDark }">
       <div class="nameInputBox">
         <span class="name">{{ $t('export.filename') }}</span>
         <el-input
@@ -99,6 +99,7 @@ export default {
   computed: {
     ...mapState({
       openNodeRichText: state => state.localConfig.openNodeRichText,
+      isDark: state => state.isDark
     }),
 
     downTypeList() {
@@ -180,6 +181,22 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.exportContainer {
+  &.isDark {
+    .downloadTypeList {
+      .downloadTypeItem {
+        background-color: #363b3f;
+
+        .info {
+          .name {
+            color: hsla(0,0%,100%,.9);
+          }
+        }
+      }
+    }
+  }
+}
+
 .nodeDialog {
   /deep/ .el-dialog__body {
     background-color: #f2f4f7;
