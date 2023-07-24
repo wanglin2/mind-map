@@ -21,7 +21,7 @@
 import Sidebar from './Sidebar'
 import { themeList } from 'simple-mind-map/src/constants/constant'
 import { storeConfig } from '@/api'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { themeMap } from '@/config/constant.js'
 import customThemeList from '@/customThemes'
 
@@ -54,13 +54,20 @@ export default {
     activeSidebar(val) {
       if (val === 'theme') {
         this.theme = this.mindMap.getTheme()
+        this.handleDark()
         this.$refs.sidebar.show = true
       } else {
         this.$refs.sidebar.show = false
       }
     }
   },
+  created () {
+    this.theme = this.mindMap.getTheme()
+    this.handleDark()
+  },
   methods: {
+    ...mapMutations(['setIsDark']),
+
     /**
      * @Author: 王林
      * @Date: 2021-06-24 23:04:38
@@ -68,6 +75,7 @@ export default {
      */
     useTheme(theme) {
       this.theme = theme.value
+      this.handleDark()
       this.mindMap.setTheme(theme.value)
       storeConfig({
         theme: {
@@ -75,6 +83,13 @@ export default {
           config: this.mindMap.getCustomThemeConfig()
         }
       })
+    },
+
+    handleDark() {
+      let target = themeList.find((item) => {
+        return item.value === this.theme
+      })
+      this.setIsDark(target.dark)
     }
   }
 }
