@@ -900,6 +900,7 @@ export default {
 
     // 切换是否开启节点富文本编辑
     enableNodeRichTextChange(e) {
+      this.mindMap.renderer.textEdit.hideEditTextBox()
       this.setLocalConfig({
         openNodeRichText: e
       })
