@@ -1,5 +1,5 @@
 <template>
-  <div class="navigatorContainer">
+  <div class="navigatorContainer" :class="{ isDark: isDark }">
     <div class="item">
       <el-select
         v-model="lang"
@@ -16,7 +16,7 @@
       </el-select>
     </div>
     <div class="item">
-      <MouseAction :mindMap="mindMap"></MouseAction>
+      <MouseAction :isDark="isDark" :mindMap="mindMap"></MouseAction>
     </div>
     <div class="item">
       <el-tooltip
@@ -59,10 +59,10 @@
       </el-tooltip>
     </div>
     <div class="item">
-      <Fullscreen :mindMap="mindMap"></Fullscreen>
+      <Fullscreen :isDark="isDark" :mindMap="mindMap"></Fullscreen>
     </div>
     <div class="item">
-      <Scale :mindMap="mindMap"></Scale>
+      <Scale :isDark="isDark" :mindMap="mindMap"></Scale>
     </div>
     <div class="item">
       <a href="https://github.com/wanglin2/mind-map" target="_blank">
@@ -79,6 +79,7 @@ import MouseAction from './MouseAction.vue'
 import { langList } from '@/config'
 import i18n from '@/i18n'
 import { storeLang, getLang } from '@/api'
+import { mapState } from 'vuex'
 
 /**
  * @Author: 王林
@@ -104,6 +105,9 @@ export default {
       isReadonly: false,
       openMiniMap: false
     }
+  },
+  computed: {
+    ...mapState(['isDark']),
   },
   methods: {
     readonlyChange() {
@@ -137,6 +141,20 @@ export default {
   font-size: 12px;
   display: flex;
   align-items: center;
+
+  &.isDark {
+    background: #262a2e;
+
+    .item {
+      a {
+        color: hsla(0,0%,100%,.6);
+      }
+
+      .btn {
+        color: hsla(0,0%,100%,.6);
+      }
+    }
+  }
 
   .item {
     margin-right: 20px;

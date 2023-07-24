@@ -17,7 +17,8 @@ const store = new Vuex.Store({
       // 鼠标行为
       useLeftKeySelectionRightKeyDrag: false
     },
-    activeSidebar: '' // 当前显示的侧边栏
+    activeSidebar: '', // 当前显示的侧边栏
+    isDark: false,// 是否是暗黑模式
   },
   mutations: {
     /**
@@ -61,6 +62,11 @@ const store = new Vuex.Store({
      */
     setActiveSidebar(state, data) {
       state.activeSidebar = data
+    },
+
+    // 设置暗黑模式
+    setIsDark(state, data) {
+      state.isDark = data
     }
   },
   actions: {

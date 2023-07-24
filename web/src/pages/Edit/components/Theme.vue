@@ -1,6 +1,6 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('theme.title')">
-    <div class="themeList">
+    <div class="themeList" :class="{ isDark: isDark }">
       <div
         class="themeItem"
         v-for="item in themeList"
@@ -48,7 +48,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeSidebar'])
+    ...mapState(['activeSidebar', 'isDark'])
   },
   watch: {
     activeSidebar(val) {
@@ -83,6 +83,12 @@ export default {
 <style lang="less" scoped>
 .themeList {
   padding: 20px;
+
+  &.isDark {
+    .name {
+      color: #fff;
+    }
+  }
 
   .themeItem {
     width: 100%;
