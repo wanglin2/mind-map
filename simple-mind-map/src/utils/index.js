@@ -453,3 +453,11 @@ export const loadImage = imgFile => {
     }
   })
 }
+
+// 移除字符串中的html实体
+export const removeHTMLEntities = (str) => {
+  [['&nbsp;', '&#160;']].forEach((item) => {
+    str = str.replaceAll(item[0], item[1])
+  })
+  return str
+}
