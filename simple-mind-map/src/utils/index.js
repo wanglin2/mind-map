@@ -461,3 +461,8 @@ export const removeHTMLEntities = (str) => {
   })
   return str
 }
+
+// 获取一个数据的类型
+export const getType = (data) => {
+  return Object.prototype.toString.call(data).slice(7, -1)
+}
