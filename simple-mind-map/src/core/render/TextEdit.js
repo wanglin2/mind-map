@@ -106,6 +106,9 @@ export default class TextEdit {
     this.mindMap.keyCommand.addShortcut('Enter', () => {
       this.hideEditTextBox()
     })
+    this.mindMap.keyCommand.addShortcut('Tab', () => {
+      this.hideEditTextBox()
+    })
   }
 
   //  显示文本编辑框

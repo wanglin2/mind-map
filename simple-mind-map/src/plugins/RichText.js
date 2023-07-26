@@ -268,6 +268,12 @@ class RichText {
               handler: function () {
                 // 覆盖默认的回车键换行
               }
+            },
+            tab: {
+              key: 9,
+              handler: function () {
+                // 覆盖默认的tab键
+              }
             }
           }
         }
