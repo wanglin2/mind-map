@@ -444,6 +444,7 @@ class Render {
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return
     }
+    this.textEdit.hideEditTextBox()
     let {
       defaultInsertSecondLevelNodeText,
       defaultInsertBelowSecondLevelNodeText
@@ -486,6 +487,7 @@ class Render {
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return
     }
+    this.textEdit.hideEditTextBox()
     let {
       defaultInsertSecondLevelNodeText,
       defaultInsertBelowSecondLevelNodeText
