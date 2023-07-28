@@ -32,6 +32,7 @@ let APIList = [
   'associativeLine',
   'touchEvent',
   'nodeImgAdjust',
+  'search',
   'xmind',
   'markdown',
   'utils'

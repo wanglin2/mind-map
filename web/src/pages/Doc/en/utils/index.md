@@ -196,6 +196,12 @@ Load image, return:
 }
 ```
 
+#### getType(data)
+
+> v0.6.9+
+
+Get the type of a data, such as `Boolean`、`Array`.
+
 ## Simulate CSS background in Canvas
 
 Import:

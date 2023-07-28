@@ -325,3 +325,8 @@ export const nodeDataNoStylePropList = [
   'uid',
   'activeStyle'
 ]
+
+// 数据缓存
+export const commonCaches = {
+  measureCustomNodeContentSizeEl: null
+}

@@ -1,9 +1,9 @@
-import { imgToDataUrl, downloadFile, readBlob } from '../utils'
+import { imgToDataUrl, downloadFile, readBlob, removeHTMLEntities } from '../utils'
 import { SVG } from '@svgdotjs/svg.js'
 import drawBackgroundImageToCanvas from '../utils/simulateCSSBackgroundInCanvas'
 import { transformToMarkdown } from '../parse/toMarkdown'
 
-//  导出类
+//  导出插件
 class Export {
   //  构造函数
   constructor(opt) {
@@ -154,6 +154,7 @@ class Export {
    */
   async png(name, transparent = false) {
     let { node, str } = await this.getSvgData()
+    str = removeHTMLEntities(str)
     // 如果开启了富文本，则使用htmltocanvas转换为图片
     if (this.mindMap.richText) {
       let res =  await this.mindMap.richText.handleExportPng(node.node)
@@ -207,6 +208,7 @@ class Export {
     node.first().before(SVG(`<title>${name}</title>`))
     await this.drawBackgroundToSvg(node)
     let str = node.svg()
+    str = removeHTMLEntities(str)
     // 转换成blob数据
     let blob = new Blob([str], {
       type: 'image/svg+xml'

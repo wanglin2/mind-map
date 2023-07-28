@@ -271,6 +271,11 @@ export const shortcutKeyList = [
         icon: 'iconzhengli',
         name: 'Arrange layout',
         value: 'Ctrl + L'
+      },
+      {
+        icon: 'iconsousuo',
+        name: 'Search and Replace',
+        value: 'Ctrl + F'
       }
     ]
   },

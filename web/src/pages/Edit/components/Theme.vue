@@ -42,7 +42,7 @@ export default {
   },
   data() {
     return {
-      themeList: [...themeList].reverse(),// ...customThemeList
+      themeList: [...themeList].reverse(), // ...customThemeList
       themeMap,
       theme: ''
     }
@@ -61,32 +61,48 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     this.theme = this.mindMap.getTheme()
     this.handleDark()
   },
   methods: {
     ...mapMutations(['setIsDark']),
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-06-24 23:04:38
-     * @Desc: 使用主题
-     */
     useTheme(theme) {
       this.theme = theme.value
       this.handleDark()
+      const customThemeConfig = this.mindMap.getCustomThemeConfig()
+      const hasCustomThemeConfig = Object.keys(customThemeConfig).length > 0
+      if (hasCustomThemeConfig) {
+        this.$confirm('你当前自定义过基础样式，是否覆盖？', '提示', {
+          confirmButtonText: '覆盖',
+          cancelButtonText: '保留',
+          type: 'warning'
+        })
+          .then(() => {
+            this.mindMap.setThemeConfig({})
+            this.changeTheme(theme, {})
+          })
+          .catch(() => {
+            this.changeTheme(theme, customThemeConfig)
+          })
+      } else {
+        this.changeTheme(theme, customThemeConfig)
+      }
+    },
+
+    changeTheme(theme, config) {
       this.mindMap.setTheme(theme.value)
       storeConfig({
         theme: {
           template: theme.value,
-          config: this.mindMap.getCustomThemeConfig()
+          config
         }
       })
     },
 
     handleDark() {
-      let target = themeList.find((item) => {
+      let target = themeList.find(item => {
         return item.value === this.theme
       })
       this.setIsDark(target.dark)
