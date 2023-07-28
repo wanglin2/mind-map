@@ -13,15 +13,18 @@ class Search {
     this.matchNodeList = []
     // 当前所在的节点列表索引
     this.currentIndex = -1
-    // 是否正在跳转中
-    this.isJumping = false
+    // 不要复位搜索文本
+    this.notResetSearchText = false
     this.onDataChange = this.onDataChange.bind(this)
     this.mindMap.on('data_change', this.onDataChange)
   }
 
   // 节点数据改变了，需要重新搜索
   onDataChange() {
-    if (this.isJumping) return
+    if (this.notResetSearchText) {
+      this.notResetSearchText = false
+      return
+    }
     this.searchText = ''
   }
 
@@ -48,7 +51,7 @@ class Search {
     this.searchText = ''
     this.matchNodeList = []
     this.currentIndex = -1
-    this.isJumping = false
+    this.notResetSearchText = false
     this.isSearching = false
     this.emitEvent()
   }
@@ -77,9 +80,8 @@ class Search {
       this.currentIndex = 0
     }
     let currentNode = this.matchNodeList[this.currentIndex]
-    this.isJumping = true
+    this.notResetSearchText = true
     this.mindMap.execCommand('GO_TARGET_NODE', currentNode, () => {
-      this.isJumping = false
       callback()
     })
   }
@@ -92,10 +94,16 @@ class Search {
     let currentNode = this.matchNodeList[this.currentIndex]
     if (!currentNode) return
     let text = this.getReplacedText(currentNode, this.searchText, replaceText)
+    this.notResetSearchText = true
     currentNode.setText(text, currentNode.nodeData.data.richText)
     this.matchNodeList = this.matchNodeList.filter(node => {
       return currentNode !== node
     })
+    if (this.currentIndex > this.matchNodeList.length - 1) {
+      this.currentIndex = -1
+    } else {
+      this.currentIndex--
+    }
     this.emitEvent()
   }
 
