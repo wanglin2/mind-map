@@ -28,7 +28,7 @@ let fontSizeList = new Array(100).fill(0).map((_, index) => {
   return index + 'px'
 })
 
-// 节点支持富文本编辑功能
+// 富文本编辑插件
 class RichText {
   constructor({ mindMap, pluginOpt }) {
     this.mindMap = mindMap

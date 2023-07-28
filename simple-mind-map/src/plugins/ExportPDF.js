@@ -1,6 +1,6 @@
 import JsPDF from 'jspdf'
 
-//  导出PDF类，需要通过Export插件使用
+//  导出PDF插件，需要通过Export插件使用
 class ExportPDF {
   //  构造函数
   constructor(opt) {

@@ -1,4 +1,4 @@
-// 小地图类
+// 小地图插件
 class MiniMap {
   //  构造函数
   constructor(opt) {
