@@ -48,7 +48,7 @@ class Render {
     this.themeConfig = this.mindMap.themeConfig
     this.draw = this.mindMap.draw
     // 渲染树，操作过程中修改的都是这里的数据
-    this.renderTree = merge({}, this.mindMap.opt.data || {})
+    this.renderTree = merge({}, simpleDeepClone(this.mindMap.opt.data) || {})
     // 是否重新渲染
     this.reRender = false
     // 是否正在渲染中

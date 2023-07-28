@@ -48216,7 +48216,7 @@ var Render = class {
     this.mindMap = opt.mindMap;
     this.themeConfig = this.mindMap.themeConfig;
     this.draw = this.mindMap.draw;
-    this.renderTree = (0, import_deepmerge.default)({}, this.mindMap.opt.data || {});
+    this.renderTree = (0, import_deepmerge.default)({}, simpleDeepClone(this.mindMap.opt.data) || {});
     this.reRender = false;
     this.isRendering = false;
     this.hasWaitRendering = false;
@@ -63664,14 +63664,16 @@ var Search = class {
     this.searchText = "";
     this.matchNodeList = [];
     this.currentIndex = -1;
-    this.isJumping = false;
+    this.notResetSearchText = false;
     this.onDataChange = this.onDataChange.bind(this);
     this.mindMap.on("data_change", this.onDataChange);
   }
   // 节点数据改变了，需要重新搜索
   onDataChange() {
-    if (this.isJumping)
+    if (this.notResetSearchText) {
+      this.notResetSearchText = false;
       return;
+    }
     this.searchText = "";
   }
   // 搜索
@@ -63696,7 +63698,7 @@ var Search = class {
     this.searchText = "";
     this.matchNodeList = [];
     this.currentIndex = -1;
-    this.isJumping = false;
+    this.notResetSearchText = false;
     this.isSearching = false;
     this.emitEvent();
   }
@@ -63724,9 +63726,8 @@ var Search = class {
       this.currentIndex = 0;
     }
     let currentNode = this.matchNodeList[this.currentIndex];
-    this.isJumping = true;
+    this.notResetSearchText = true;
     this.mindMap.execCommand("GO_TARGET_NODE", currentNode, () => {
-      this.isJumping = false;
       callback();
     });
   }
@@ -63739,10 +63740,16 @@ var Search = class {
     if (!currentNode)
       return;
     let text3 = this.getReplacedText(currentNode, this.searchText, replaceText);
+    this.notResetSearchText = true;
     currentNode.setText(text3, currentNode.nodeData.data.richText);
     this.matchNodeList = this.matchNodeList.filter((node3) => {
       return currentNode !== node3;
     });
+    if (this.currentIndex > this.matchNodeList.length - 1) {
+      this.currentIndex = -1;
+    } else {
+      this.currentIndex--;
+    }
     this.emitEvent();
   }
   // 替换所有
