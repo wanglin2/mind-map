@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.9-fix.1
+
+Fix: 1.Fix the issue of incorrect replacement after a single search.
+
+New: 1.We will no longer directly modify the incoming data object, but will make a deep copy internally.
+
 ## 0.6.9
 
 Fix: 1.Fixed an issue where setting styles to summary nodes would cause summary nodes to disappear. 2.Fixed the issue of node content not rendering when creating a root instance again when customizing node content. 3.Fix the issue of losing focus when adding a new node while the node is in editing. 2.Fix the issue of continuously pressing the tab key not being able to continuously create child nodes.
