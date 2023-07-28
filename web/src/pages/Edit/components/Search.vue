@@ -6,7 +6,7 @@
     <div class="searchInputBox">
       <el-input
         ref="input"
-        placeholder="请输入查找内容"
+        :placeholder="$t('search.searchPlaceholder')"
         size="small"
         v-model="searchText"
         @keyup.native.enter.stop="onSearchNext"
@@ -17,7 +17,7 @@
           slot="append"
           v-if="!!searchText.trim()"
           @click="showReplaceInput = true"
-          >替换</el-button
+          >{{ $t('search.replace') }}</el-button
         >
       </el-input>
       <div class="searchInfo" v-if="showSearchInfo">
@@ -26,19 +26,23 @@
     </div>
     <el-input
       v-if="showReplaceInput"
-      placeholder="请输入替换内容"
+      :placeholder="$t('search.replacePlaceholder')"
       size="small"
       v-model="replaceText"
       style="margin: 12px 0;"
     >
       <i slot="prefix" class="el-input__icon el-icon-edit"></i>
-      <el-button size="small" slot="append" @click="hideReplaceInput"
-        >取消</el-button
-      >
+      <el-button size="small" slot="append" @click="hideReplaceInput">{{
+        $t('search.cancel')
+      }}</el-button>
     </el-input>
     <div class="btnList" v-if="showReplaceInput">
-      <el-button size="small" @click="replace">替换</el-button>
-      <el-button size="small" @click="replaceAll">全部替换</el-button>
+      <el-button size="small" @click="replace">{{
+        $t('search.replace')
+      }}</el-button>
+      <el-button size="small" @click="replaceAll">{{
+        $t('search.replaceAll')
+      }}</el-button>
     </div>
   </div>
 </template>

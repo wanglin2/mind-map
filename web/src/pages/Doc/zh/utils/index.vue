@@ -129,6 +129,11 @@
   size<span class="hljs-comment">// { width, height } 图片宽高</span>
 }
 </code></pre>
+<h4>getType(data)</h4>
+<blockquote>
+<p>v0.6.9+</p>
+</blockquote>
+<p>获取一个数据的类型，比如<code>Boolean</code>、<code>Array</code>等。</p>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

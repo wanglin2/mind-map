@@ -134,6 +134,11 @@ and copying the <code>data</code> of the data object, example:</p>
   size<span class="hljs-comment">// { width, height } width and height of image</span>
 }
 </code></pre>
+<h4>getType(data)</h4>
+<blockquote>
+<p>v0.6.9+</p>
+</blockquote>
+<p>Get the type of a data, such as <code>Boolean</code>、<code>Array</code>.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

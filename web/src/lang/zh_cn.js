@@ -210,5 +210,12 @@ export default {
   mouseAction: {
     tip1: '当前：左键拖动画布，右键框选节点',
     tip2: '当前：左键框选节点，右键拖动画布',
+  },
+  search: {
+    searchPlaceholder: '请输入查找内容',
+    replacePlaceholder: '请输入替换内容',
+    replace: '替换',
+    replaceAll: '全部替换',
+    cancel: '取消'
   }
 }

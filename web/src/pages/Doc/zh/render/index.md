@@ -54,7 +54,9 @@
 
 复制节点，操作节点为当前激活节点，有多个激活节点只会操作第一个节点
 
-### setNodeDataRender(node, data)
+### setNodeDataRender(node, data, notRender)
+
+- `notRender`：v0.6.9+，`Boolean`，默认为`false`，是否不要触发渲染。
 
 设置节点数据，即`data`字段的数据，并会根据节点大小是否变化来判断是否需要重新渲染该节点，`data`为对象，如：`{text: '我是新文本'}`
 
