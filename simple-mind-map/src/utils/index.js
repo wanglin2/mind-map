@@ -466,3 +466,8 @@ export const removeHTMLEntities = (str) => {
 export const getType = (data) => {
   return Object.prototype.toString.call(data).slice(7, -1)
 }
+
+// 判断一个数据是否是null和undefined和空字符串
+export const isUndef = (data) => {
+  return data === null || data === undefined || data === ''
+}

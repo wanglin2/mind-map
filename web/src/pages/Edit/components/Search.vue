@@ -15,7 +15,7 @@
         <el-button
           size="small"
           slot="append"
-          v-if="!!searchText.trim()"
+          v-if="!isUndef(searchText)"
           @click="showReplaceInput = true"
           >{{ $t('search.replace') }}</el-button
         >
@@ -49,6 +49,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { isUndef } from 'simple-mind-map/src/utils/index'
 
 // 搜索替换
 export default {
@@ -74,7 +75,7 @@ export default {
   },
   watch: {
     searchText() {
-      if (!this.searchText.trim()) {
+      if (isUndef(this.searchText)) {
         this.currentIndex = 0
         this.total = 0
         this.showSearchInfo = false
@@ -94,6 +95,8 @@ export default {
     })
   },
   methods: {
+    isUndef,
+    
     hideReplaceInput() {
       this.showReplaceInput = false
       this.replaceText = ''
