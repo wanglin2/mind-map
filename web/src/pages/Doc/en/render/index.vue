@@ -37,7 +37,10 @@ disable the enter key and delete key related shortcuts to prevent conflicts</p>
 <h3>copyNode()</h3>
 <p>Copy a node, the active node is the node to be operated on, if there are
 multiple active nodes, only the first node will be operated on</p>
-<h3>setNodeDataRender(node, data)</h3>
+<h3>setNodeDataRender(node, data, notRender)</h3>
+<ul>
+<li><code>notRender</code>: v0.6.9+, <code>Boolean</code>, Default is <code>false</code>, Do not trigger rendering.</li>
+</ul>
 <p>Set node <code>data</code>, i.e. the data in the data field, and will determine whether the
 node needs to be re-rendered based on whether the node size has changed, <code>data</code>
 is an object, e.g. <code>{text: 'I am new text'}</code></p>

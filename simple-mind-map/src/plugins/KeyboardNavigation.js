@@ -1,7 +1,7 @@
 import { bfsWalk } from '../utils'
 import { CONSTANTS } from '../constants/constant'
 
-//  键盘导航类
+//  键盘导航插件
 class KeyboardNavigation {
   //  构造函数
   constructor(opt) {

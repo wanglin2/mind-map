@@ -444,6 +444,7 @@ class Render {
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return
     }
+    this.textEdit.hideEditTextBox()
     let {
       defaultInsertSecondLevelNodeText,
       defaultInsertBelowSecondLevelNodeText
@@ -486,6 +487,7 @@ class Render {
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return
     }
+    this.textEdit.hideEditTextBox()
     let {
       defaultInsertSecondLevelNodeText,
       defaultInsertBelowSecondLevelNodeText
@@ -973,7 +975,8 @@ class Render {
   setNodeText(node, text, richText) {
     this.setNodeDataRender(node, {
       text,
-      richText
+      richText,
+      resetRichText: richText
     })
   }
 
@@ -1099,7 +1102,7 @@ class Render {
   }
 
   // 定位到指定节点
-  goTargetNode(node) {
+  goTargetNode(node, callback = () => {}) {
     let uid = typeof node === 'string' ? node : node.nodeData.data.uid
     if (!uid) return
     this.expandToNodeUid(uid, () => {
@@ -1107,6 +1110,7 @@ class Render {
       if (targetNode) {
         targetNode.active()
         this.moveNodeToCenter(targetNode)
+        callback()
       }
     })
   }
@@ -1119,7 +1123,7 @@ class Render {
   }
 
   //  设置节点数据，并判断是否渲染
-  setNodeDataRender(node, data) {
+  setNodeDataRender(node, data, notRender = false) {
     this.setNodeData(node, data)
     let changed = node.reRender()
     if (changed) {
@@ -1127,7 +1131,7 @@ class Render {
         // 概要节点
         node.generalizationBelongNode.updateGeneralization()
       }
-      this.mindMap.render()
+      if (!notRender) this.mindMap.render()
     }
   }
 

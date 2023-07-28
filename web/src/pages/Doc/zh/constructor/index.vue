@@ -918,7 +918,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>GO_TARGET_NODE（v0.6.7+）</td>
 <td>定位到某个节点，如果该节点被收起，那么会自动展开到该节点</td>
-<td>node（要定位到的节点实例或节点uid）</td>
+<td>node（要定位到的节点实例或节点uid）、callback（v0.6.9+，定位完成后的回调函数）</td>
 </tr>
 </tbody>
 </table>

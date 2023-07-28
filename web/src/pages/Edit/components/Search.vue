@@ -1,0 +1,192 @@
+<template>
+  <div class="searchContainer" :class="{ isDark: isDark, show: show }">
+    <div class="closeBtnBox">
+      <span class="closeBtn el-icon-close" @click="close"></span>
+    </div>
+    <div class="searchInputBox">
+      <el-input
+        ref="input"
+        :placeholder="$t('search.searchPlaceholder')"
+        size="small"
+        v-model="searchText"
+        @keyup.native.enter.stop="onSearchNext"
+      >
+        <i slot="prefix" class="el-input__icon el-icon-search"></i>
+        <el-button
+          size="small"
+          slot="append"
+          v-if="!!searchText.trim()"
+          @click="showReplaceInput = true"
+          >{{ $t('search.replace') }}</el-button
+        >
+      </el-input>
+      <div class="searchInfo" v-if="showSearchInfo">
+        {{ currentIndex }} / {{ total }}
+      </div>
+    </div>
+    <el-input
+      v-if="showReplaceInput"
+      :placeholder="$t('search.replacePlaceholder')"
+      size="small"
+      v-model="replaceText"
+      style="margin: 12px 0;"
+    >
+      <i slot="prefix" class="el-input__icon el-icon-edit"></i>
+      <el-button size="small" slot="append" @click="hideReplaceInput">{{
+        $t('search.cancel')
+      }}</el-button>
+    </el-input>
+    <div class="btnList" v-if="showReplaceInput">
+      <el-button size="small" @click="replace">{{
+        $t('search.replace')
+      }}</el-button>
+      <el-button size="small" @click="replaceAll">{{
+        $t('search.replaceAll')
+      }}</el-button>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapState } from 'vuex'
+
+// 搜索替换
+export default {
+  name: 'Search',
+  props: {
+    mindMap: {
+      type: Object
+    }
+  },
+  data() {
+    return {
+      show: false,
+      searchText: '',
+      replaceText: '',
+      showReplaceInput: false,
+      currentIndex: 0,
+      total: 0,
+      showSearchInfo: false
+    }
+  },
+  computed: {
+    ...mapState(['isDark'])
+  },
+  watch: {
+    searchText() {
+      if (!this.searchText.trim()) {
+        this.currentIndex = 0
+        this.total = 0
+        this.showSearchInfo = false
+      }
+    }
+  },
+  created() {
+    this.mindMap.on('search_info_change', data => {
+      this.currentIndex = data.currentIndex + 1
+      this.total = data.total
+      this.showSearchInfo = true
+    })
+    this.mindMap.keyCommand.addShortcut('Control+f', () => {
+      this.$bus.$emit('closeSideBar')
+      this.show = true
+      this.$refs.input.focus()
+    })
+  },
+  methods: {
+    hideReplaceInput() {
+      this.showReplaceInput = false
+      this.replaceText = ''
+    },
+
+    onSearchNext() {
+      this.mindMap.search.search(this.searchText, () => {
+        this.$refs.input.focus()
+      })
+    },
+
+    replace() {
+      this.mindMap.search.replace(this.replaceText)
+    },
+
+    replaceAll() {
+      this.mindMap.search.replaceAll(this.replaceText)
+    },
+
+    close() {
+      this.show = false
+      this.showSearchInfo = false
+      this.total = 0
+      this.currentIndex = 0
+      this.searchText = ''
+      this.hideReplaceInput()
+      this.mindMap.search.endSearch()
+    }
+  }
+}
+</script>
+
+<style lang="less" scoped>
+.searchContainer {
+  position: relative;
+  background-color: #fff;
+  padding: 16px;
+  width: 296px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 110px;
+  right: -296px;
+  transition: all 0.3s;
+
+  &.isDark {
+    background-color: #363b3f;
+
+    .closeBtnBox {
+      color: #fff;
+      background-color: #363b3f;
+    }
+  }
+
+  &.show {
+    right: 20px;
+  }
+
+  .btnList {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .closeBtnBox {
+    position: absolute;
+    right: -5px;
+    top: -5px;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
+
+    .closeBtn {
+      font-size: 16px;
+    }
+  }
+
+  .searchInputBox {
+    position: relative;
+
+    .searchInfo {
+      position: absolute;
+      right: 70px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #909090;
+      font-size: 14px;
+    }
+  }
+}
+</style>

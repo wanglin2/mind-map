@@ -8444,32 +8444,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "44c1":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var anObject = __webpack_require__("cf4b");
-
-// `RegExp.prototype.flags` getter implementation
-// https://tc39.es/ecma262/#sec-get-regexp.prototype.flags
-module.exports = function () {
-  var that = anObject(this);
-  var result = '';
-  if (that.hasIndices) result += 'd';
-  if (that.global) result += 'g';
-  if (that.ignoreCase) result += 'i';
-  if (that.multiline) result += 'm';
-  if (that.dotAll) result += 's';
-  if (that.unicode) result += 'u';
-  if (that.unicodeSets) result += 'v';
-  if (that.sticky) result += 'y';
-  return result;
-};
-
-
-/***/ }),
-
 /***/ "4c92":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9668,25 +9642,6 @@ module.exports = function (iterable, unboundFunction, options) {
 
 /***/ }),
 
-/***/ "9e3a":
-/***/ (function(module, exports, __webpack_require__) {
-
-var call = __webpack_require__("6632");
-var hasOwn = __webpack_require__("4d80");
-var isPrototypeOf = __webpack_require__("1a33");
-var regExpFlags = __webpack_require__("44c1");
-
-var RegExpPrototype = RegExp.prototype;
-
-module.exports = function (R) {
-  var flags = R.flags;
-  return flags === undefined && !('flags' in RegExpPrototype) && !hasOwn(R, 'flags') && isPrototypeOf(RegExpPrototype, R)
-    ? call(regExpFlags, R) : flags;
-};
-
-
-/***/ }),
-
 /***/ "a1db":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10655,25 +10610,6 @@ module.exports = Queue;
 
 /***/ }),
 
-/***/ "d12a":
-/***/ (function(module, exports, __webpack_require__) {
-
-var isObject = __webpack_require__("feb8");
-var classof = __webpack_require__("424c");
-var wellKnownSymbol = __webpack_require__("6053");
-
-var MATCH = wellKnownSymbol('match');
-
-// `IsRegExp` abstract operation
-// https://tc39.es/ecma262/#sec-isregexp
-module.exports = function (it) {
-  var isRegExp;
-  return isObject(it) && ((isRegExp = it[MATCH]) !== undefined ? !!isRegExp : classof(it) == 'RegExp');
-};
-
-
-/***/ }),
-
 /***/ "d530":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10802,57 +10738,6 @@ module.exports = {
   // `String.prototype.at` method
   // https://github.com/mathiasbynens/String.prototype.at
   charAt: createMethod(true)
-};
-
-
-/***/ }),
-
-/***/ "e2d9":
-/***/ (function(module, exports, __webpack_require__) {
-
-var uncurryThis = __webpack_require__("46ab");
-var toObject = __webpack_require__("8300");
-
-var floor = Math.floor;
-var charAt = uncurryThis(''.charAt);
-var replace = uncurryThis(''.replace);
-var stringSlice = uncurryThis(''.slice);
-var SUBSTITUTION_SYMBOLS = /\$([$&'`]|\d{1,2}|<[^>]*>)/g;
-var SUBSTITUTION_SYMBOLS_NO_NAMED = /\$([$&'`]|\d{1,2})/g;
-
-// `GetSubstitution` abstract operation
-// https://tc39.es/ecma262/#sec-getsubstitution
-module.exports = function (matched, str, position, captures, namedCaptures, replacement) {
-  var tailPos = position + matched.length;
-  var m = captures.length;
-  var symbols = SUBSTITUTION_SYMBOLS_NO_NAMED;
-  if (namedCaptures !== undefined) {
-    namedCaptures = toObject(namedCaptures);
-    symbols = SUBSTITUTION_SYMBOLS;
-  }
-  return replace(replacement, symbols, function (match, ch) {
-    var capture;
-    switch (charAt(ch, 0)) {
-      case '$': return '$';
-      case '&': return matched;
-      case '`': return stringSlice(str, 0, position);
-      case "'": return stringSlice(str, tailPos);
-      case '<':
-        capture = namedCaptures[stringSlice(ch, 1, -1)];
-        break;
-      default: // \d\d?
-        var n = +ch;
-        if (n === 0) return match;
-        if (n > m) {
-          var f = floor(n / 10);
-          if (f === 0) return match;
-          if (f <= m) return captures[f - 1] === undefined ? charAt(ch, 1) : captures[f - 1] + charAt(ch, 1);
-          return match;
-        }
-        capture = captures[n - 1];
-    }
-    return capture === undefined ? '' : capture;
-  });
 };
 
 

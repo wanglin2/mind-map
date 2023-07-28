@@ -28,7 +28,10 @@
 <p>删除某个指定节点</p>
 <h3>copyNode()</h3>
 <p>复制节点，操作节点为当前激活节点，有多个激活节点只会操作第一个节点</p>
-<h3>setNodeDataRender(node, data)</h3>
+<h3>setNodeDataRender(node, data, notRender)</h3>
+<ul>
+<li><code>notRender</code>：v0.6.9+，<code>Boolean</code>，默认为<code>false</code>，是否不要触发渲染。</li>
+</ul>
 <p>设置节点数据，即<code>data</code>字段的数据，并会根据节点大小是否变化来判断是否需要重新渲染该节点，<code>data</code>为对象，如：<code>{text: '我是新文本'}</code></p>
 <h3>moveNodeTo(node, toNode)</h3>
 <blockquote>

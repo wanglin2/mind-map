@@ -11,7 +11,7 @@ import {
 import associativeLineControlsMethods from './associativeLine/associativeLineControls'
 import associativeLineTextMethods from './associativeLine/associativeLineText'
 
-// 关联线类
+// 关联线插件
 class AssociativeLine {
   constructor(opt = {}) {
     this.mindMap = opt.mindMap

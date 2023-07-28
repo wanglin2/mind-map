@@ -1,7 +1,7 @@
 import { measureText, resizeImgSize, getTextFromHtml } from '../../../utils'
 import { Image, SVG, A, G, Rect, Text, ForeignObject } from '@svgdotjs/svg.js'
 import iconsSvg from '../../../svg/icons'
-import { CONSTANTS } from '../../../constants/constant'
+import { CONSTANTS, commonCaches } from '../../../constants/constant'
 
 //  创建图片节点
 function createImgNode() {
@@ -293,20 +293,19 @@ function createNoteNode() {
 }
 
 // 测量自定义节点内容元素的宽高
-let warpEl = null
 function measureCustomNodeContentSize (content) {
-  if (!warpEl) {
-    warpEl = document.createElement('div')
-    warpEl.style.cssText = `
+  if (!commonCaches.measureCustomNodeContentSizeEl) {
+    commonCaches.measureCustomNodeContentSizeEl = document.createElement('div')
+    commonCaches.measureCustomNodeContentSizeEl.style.cssText = `
       position: fixed;
       left: -99999px;
       top: -99999px;
     `
-    this.mindMap.el.appendChild(warpEl)
+    this.mindMap.el.appendChild(commonCaches.measureCustomNodeContentSizeEl)
   }
-  warpEl.innerHTML = ''
-  warpEl.appendChild(content)
-  let rect = warpEl.getBoundingClientRect()
+  commonCaches.measureCustomNodeContentSizeEl.innerHTML = ''
+  commonCaches.measureCustomNodeContentSizeEl.appendChild(content)
+  let rect = commonCaches.measureCustomNodeContentSizeEl.getBoundingClientRect()
   return {
     width: rect.width,
     height: rect.height

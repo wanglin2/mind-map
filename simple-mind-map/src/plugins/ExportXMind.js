@@ -1,6 +1,6 @@
 import xmind from '../parse/xmind'
 
-//  导出XMind类，需要通过Export插件使用
+//  导出XMind插件，需要通过Export插件使用
 class ExportXMind {
   //  构造函数
   constructor(opt) {
