@@ -923,7 +923,7 @@ redo. All commands are as follows:</p>
 <tr>
 <td>GO_TARGET_NODE（v0.6.7+）</td>
 <td>Navigate to a node, and if the node is collapsed, it will automatically expand to that node</td>
-<td>node（Node instance or node uid to locate）</td>
+<td>node（Node instance or node uid to locate）、callback（v0.6.9+, Callback function after positioning completion）</td>
 </tr>
 </tbody>
 </table>

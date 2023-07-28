@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.9
+
+Fix: 1.Fixed an issue where setting styles to summary nodes would cause summary nodes to disappear. 2.Fixed the issue of node content not rendering when creating a root instance again when customizing node content. 3.Fix the issue of losing focus when adding a new node while the node is in editing. 2.Fix the issue of continuously pressing the tab key not being able to continuously create child nodes.
+
+New: 1.Replace existing `&nbsp;` in SVG when exporting Characters to avoid exporting SVG errors. 2.Support for search and replace.
+
+Demo: 1.When switching themes, it is supported to choose whether to overwrite the set basic style.
+
 ## 0.6.8
 
 Fix: 1.Change the shortcut key for inserting a summary to Ctrl+G to avoid conflicts with the save shortcut key. 2.Fix the issue of abnormal switching between rich text editing configuration input boxes while nodes are being edited.

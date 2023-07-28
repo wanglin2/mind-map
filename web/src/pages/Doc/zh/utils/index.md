@@ -191,6 +191,12 @@ copyNodeTree({}, node)
 }
 ```
 
+#### getType(data)
+
+> v0.6.9+
+
+获取一个数据的类型，比如`Boolean`、`Array`等。
+
 ## 在canvas中模拟css的背景属性
 
 引入：

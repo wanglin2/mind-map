@@ -61,7 +61,9 @@ Delete a specific node
 Copy a node, the active node is the node to be operated on, if there are
 multiple active nodes, only the first node will be operated on
 
-### setNodeDataRender(node, data)
+### setNodeDataRender(node, data, notRender)
+
+- `notRender`: v0.6.9+, `Boolean`, Default is `false`, Do not trigger rendering.
 
 Set node `data`, i.e. the data in the data field, and will determine whether the
 node needs to be re-rendered based on whether the node size has changed, `data`
