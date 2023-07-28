@@ -83,20 +83,23 @@ export default {
     }
   },
   created() {
+    this.$bus.$on('show_search', this.showSearch)
     this.mindMap.on('search_info_change', data => {
       this.currentIndex = data.currentIndex + 1
       this.total = data.total
       this.showSearchInfo = true
     })
-    this.mindMap.keyCommand.addShortcut('Control+f', () => {
-      this.$bus.$emit('closeSideBar')
-      this.show = true
-      this.$refs.input.focus()
-    })
+    this.mindMap.keyCommand.addShortcut('Control+f', this.showSearch)
   },
   methods: {
     isUndef,
-    
+
+    showSearch() {
+      this.$bus.$emit('closeSideBar')
+      this.show = true
+      this.$refs.input.focus()
+    },
+
     hideReplaceInput() {
       this.showReplaceInput = false
       this.replaceText = ''
