@@ -3,7 +3,7 @@ import { SVG } from '@svgdotjs/svg.js'
 import drawBackgroundImageToCanvas from '../utils/simulateCSSBackgroundInCanvas'
 import { transformToMarkdown } from '../parse/toMarkdown'
 
-//  导出类
+//  导出插件
 class Export {
   //  构造函数
   constructor(opt) {

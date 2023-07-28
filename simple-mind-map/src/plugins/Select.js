@@ -1,7 +1,6 @@
 import { bfsWalk, throttle } from '../utils'
 
-//  选择节点类
-
+// 节点选择插件
 class Select {
   //  构造函数
   constructor({ mindMap }) {
