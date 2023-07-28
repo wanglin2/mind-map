@@ -79,6 +79,14 @@ export default {
 
 body {
   &.isDark {
+    /* el-button */
+    .el-button {
+      background-color: #363b3f;
+      color: hsla(0,0%,100%,.9);
+      border-color: hsla(0, 0%, 100%, 0.1);
+    }
+
+    /* el-input */
     .el-input__inner {
       background-color: #363b3f;
       border-color: hsla(0, 0%, 100%, 0.1);
@@ -89,6 +97,15 @@ body {
       background-color: #363b3f;
       border-color: hsla(0, 0%, 100%, 0.1);
       color: hsla(0,0%,100%,.3);
+    }
+
+    .el-input-group__append, .el-input-group__prepend {
+      background-color: #363b3f;
+      border-color: hsla(0, 0%, 100%, 0.1);
+    }
+
+    .el-input-group__append button.el-button {
+      color: hsla(0, 0%, 100%, 0.9);
     }
 
     /* el-select */
