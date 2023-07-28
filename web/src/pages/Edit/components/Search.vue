@@ -1,11 +1,15 @@
 <template>
-  <div class="searchContainer" :class="{ isDark: isDark, show: show }">
+  <div 
+    class="searchContainer" 
+    :class="{ isDark: isDark, show: show }" 
+    @mouseleave="onMouseleave"
+  >
     <div class="closeBtnBox">
       <span class="closeBtn el-icon-close" @click="close"></span>
     </div>
     <div class="searchInputBox">
       <el-input
-        ref="input"
+        ref="searchInputRef"
         :placeholder="$t('search.searchPlaceholder')"
         size="small"
         v-model="searchText"
@@ -26,6 +30,7 @@
     </div>
     <el-input
       v-if="showReplaceInput"
+      ref="replaceInputRef"
       :placeholder="$t('search.replacePlaceholder')"
       size="small"
       v-model="replaceText"
@@ -97,7 +102,7 @@ export default {
     showSearch() {
       this.$bus.$emit('closeSideBar')
       this.show = true
-      this.$refs.input.focus()
+      // this.$refs.input.focus()
     },
 
     hideReplaceInput() {
@@ -127,6 +132,15 @@ export default {
       this.searchText = ''
       this.hideReplaceInput()
       this.mindMap.search.endSearch()
+    },
+
+    onMouseleave() {
+      if (this.$refs.searchInputRef) {
+        this.$refs.searchInputRef.blur()
+      }
+      if (this.$refs.replaceInputRef) {
+        this.$refs.replaceInputRef.blur()
+      }
     }
   }
 }
