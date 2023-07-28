@@ -82,6 +82,7 @@ class Search {
     let currentNode = this.matchNodeList[this.currentIndex]
     this.notResetSearchText = true
     this.mindMap.execCommand('GO_TARGET_NODE', currentNode, () => {
+      this.notResetSearchText = false
       callback()
     })
   }
