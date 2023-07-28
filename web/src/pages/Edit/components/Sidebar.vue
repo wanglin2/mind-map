@@ -39,7 +39,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isDark']),
+    ...mapState(['isDark'])
   },
   watch: {
     show(val, oldVal) {
@@ -47,6 +47,11 @@ export default {
         this.zIndex = store.sidebarZIndex++
       }
     }
+  },
+  created() {
+    this.$bus.$on('closeSideBar', () => {
+      this.close()
+    })
   },
   methods: {
     ...mapMutations(['setActiveSidebar']),
@@ -74,10 +79,10 @@ export default {
 
   &.isDark {
     background-color: #262a2e;
-    border-left-color: hsla(0,0%,100%,.1);
+    border-left-color: hsla(0, 0%, 100%, 0.1);
 
     .sidebarHeader {
-      border-bottom-color: hsla(0,0%,100%,.1);
+      border-bottom-color: hsla(0, 0%, 100%, 0.1);
       color: #fff;
     }
 
