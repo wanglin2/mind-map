@@ -36626,6 +36626,7 @@ var require_lib = __commonJS({
 var constant_exports = {};
 __export(constant_exports, {
   CONSTANTS: () => CONSTANTS,
+  commonCaches: () => commonCaches,
   initRootNodePositionMap: () => initRootNodePositionMap,
   layoutList: () => layoutList,
   layoutValueList: () => layoutValueList,
@@ -36950,6 +36951,9 @@ var nodeDataNoStylePropList = [
   "uid",
   "activeStyle"
 ];
+var commonCaches = {
+  measureCustomNodeContentSizeEl: null
+};
 
 // ../simple-mind-map/src/core/view/View.js
 var View = class {
@@ -43737,6 +43741,15 @@ var loadImage = (imgFile) => {
     };
   });
 };
+var removeHTMLEntities = (str) => {
+  [["&nbsp;", "&#160;"]].forEach((item) => {
+    str = str.replaceAll(item[0], item[1]);
+  });
+  return str;
+};
+var getType = (data2) => {
+  return Object.prototype.toString.call(data2).slice(7, -1);
+};
 
 // ../simple-mind-map/src/core/render/node/nodeGeneralization.js
 function checkHasGeneralization() {
@@ -43769,13 +43782,14 @@ function createGeneralizationNode() {
   }
 }
 function updateGeneralization() {
+  if (this.isGeneralization)
+    return;
   this.removeGeneralization();
   this.createGeneralizationNode();
 }
 function renderGeneralization() {
-  if (this.isGeneralization) {
+  if (this.isGeneralization)
     return;
-  }
   if (!this.checkHasGeneralization()) {
     this.removeGeneralization();
     this._generalizationNodeWidth = 0;
@@ -43796,6 +43810,8 @@ function renderGeneralization() {
   this._generalizationNode.render();
 }
 function removeGeneralization() {
+  if (this.isGeneralization)
+    return;
   if (this._generalizationLine) {
     this._generalizationLine.remove();
     this._generalizationLine = null;
@@ -43810,6 +43826,8 @@ function removeGeneralization() {
   }
 }
 function hideGeneralization() {
+  if (this.isGeneralization)
+    return;
   if (this._generalizationLine) {
     this._generalizationLine.hide();
   }
@@ -43818,6 +43836,8 @@ function hideGeneralization() {
   }
 }
 function showGeneralization() {
+  if (this.isGeneralization)
+    return;
   if (this._generalizationLine) {
     this._generalizationLine.show();
   }
@@ -44555,20 +44575,19 @@ function createNoteNode() {
     height: iconSize
   };
 }
-var warpEl = null;
 function measureCustomNodeContentSize(content3) {
-  if (!warpEl) {
-    warpEl = document.createElement("div");
-    warpEl.style.cssText = `
+  if (!commonCaches.measureCustomNodeContentSizeEl) {
+    commonCaches.measureCustomNodeContentSizeEl = document.createElement("div");
+    commonCaches.measureCustomNodeContentSizeEl.style.cssText = `
       position: fixed;
       left: -99999px;
       top: -99999px;
     `;
-    this.mindMap.el.appendChild(warpEl);
+    this.mindMap.el.appendChild(commonCaches.measureCustomNodeContentSizeEl);
   }
-  warpEl.innerHTML = "";
-  warpEl.appendChild(content3);
-  let rect = warpEl.getBoundingClientRect();
+  commonCaches.measureCustomNodeContentSizeEl.innerHTML = "";
+  commonCaches.measureCustomNodeContentSizeEl.appendChild(content3);
+  let rect = commonCaches.measureCustomNodeContentSizeEl.getBoundingClientRect();
   return {
     width: rect.width,
     height: rect.height
@@ -47847,6 +47866,9 @@ var TextEdit = class {
     this.mindMap.keyCommand.addShortcut("Enter", () => {
       this.hideEditTextBox();
     });
+    this.mindMap.keyCommand.addShortcut("Tab", () => {
+      this.hideEditTextBox();
+    });
   }
   //  显示文本编辑框
   // isInserting：是否是刚创建的节点
@@ -48487,6 +48509,7 @@ var Render = class {
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return;
     }
+    this.textEdit.hideEditTextBox();
     let {
       defaultInsertSecondLevelNodeText,
       defaultInsertBelowSecondLevelNodeText
@@ -48525,6 +48548,7 @@ var Render = class {
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return;
     }
+    this.textEdit.hideEditTextBox();
     let {
       defaultInsertSecondLevelNodeText,
       defaultInsertBelowSecondLevelNodeText
@@ -48956,7 +48980,8 @@ var Render = class {
   setNodeText(node3, text3, richText) {
     this.setNodeDataRender(node3, {
       text: text3,
-      richText
+      richText,
+      resetRichText: richText
     });
   }
   //  设置节点图片
@@ -49071,7 +49096,8 @@ var Render = class {
     });
   }
   // 定位到指定节点
-  goTargetNode(node3) {
+  goTargetNode(node3, callback = () => {
+  }) {
     let uid = typeof node3 === "string" ? node3 : node3.nodeData.data.uid;
     if (!uid)
       return;
@@ -49080,6 +49106,7 @@ var Render = class {
       if (targetNode) {
         targetNode.active();
         this.moveNodeToCenter(targetNode);
+        callback();
       }
     });
   }
@@ -49090,14 +49117,15 @@ var Render = class {
     });
   }
   //  设置节点数据，并判断是否渲染
-  setNodeDataRender(node3, data2) {
+  setNodeDataRender(node3, data2, notRender = false) {
     this.setNodeData(node3, data2);
     let changed = node3.reRender();
     if (changed) {
       if (node3.isGeneralization) {
         node3.generalizationBelongNode.updateGeneralization();
       }
-      this.mindMap.render();
+      if (!notRender)
+        this.mindMap.render();
     }
   }
   //  移动节点到画布中心
@@ -51352,6 +51380,7 @@ var MindMap2 = class {
     this.svg = SVG().addTo(this.el).size(this.width, this.height);
     this.draw = this.svg.group();
     this.initTheme();
+    this.initCache();
     this.event = new Event_default({
       mindMap: this
     });
@@ -51420,6 +51449,22 @@ var MindMap2 = class {
   //  解绑事件
   off(event, fn) {
     this.event.off(event, fn);
+  }
+  // 初始化缓存数据
+  initCache() {
+    Object.keys(commonCaches).forEach((key) => {
+      let type = getType(commonCaches[key]);
+      let value = "";
+      switch (type) {
+        case "Boolean":
+          value = false;
+          break;
+        default:
+          value = null;
+          break;
+      }
+      commonCaches[key] = value;
+    });
   }
   //  设置主题
   initTheme() {
@@ -61450,6 +61495,7 @@ var Export = class {
    */
   async png(name, transparent = false) {
     let { node: node3, str } = await this.getSvgData();
+    str = removeHTMLEntities(str);
     if (this.mindMap.richText) {
       let res2 = await this.mindMap.richText.handleExportPng(node3.node);
       let imgDataUrl = await this.svgToPng(res2, transparent);
@@ -61495,6 +61541,7 @@ var Export = class {
     node3.first().before(SVG(`<title>${name}</title>`));
     await this.drawBackgroundToSvg(node3);
     let str = node3.svg();
+    str = removeHTMLEntities(str);
     let blob = new Blob([str], {
       type: "image/svg+xml"
     });
@@ -63034,6 +63081,11 @@ var RichText = class {
               key: 13,
               handler: function() {
               }
+            },
+            tab: {
+              key: 9,
+              handler: function() {
+              }
             }
           }
         }
@@ -63602,6 +63654,135 @@ var TouchEvent = class {
 };
 TouchEvent.instanceName = "touchEvent";
 var TouchEvent_default = TouchEvent;
+
+// ../simple-mind-map/src/plugins/Search.js
+var Search = class {
+  //  构造函数
+  constructor({ mindMap }) {
+    this.mindMap = mindMap;
+    this.isSearching = false;
+    this.searchText = "";
+    this.matchNodeList = [];
+    this.currentIndex = -1;
+    this.isJumping = false;
+    this.onDataChange = this.onDataChange.bind(this);
+    this.mindMap.on("data_change", this.onDataChange);
+  }
+  // 节点数据改变了，需要重新搜索
+  onDataChange() {
+    if (this.isJumping)
+      return;
+    this.searchText = "";
+  }
+  // 搜索
+  search(text3, callback) {
+    text3 = String(text3).trim();
+    if (!text3)
+      return this.endSearch();
+    this.isSearching = true;
+    if (this.searchText === text3) {
+      this.searchNext(callback);
+    } else {
+      this.searchText = text3;
+      this.doSearch();
+      this.searchNext(callback);
+    }
+    this.emitEvent();
+  }
+  // 结束搜索
+  endSearch() {
+    if (!this.isSearching)
+      return;
+    this.searchText = "";
+    this.matchNodeList = [];
+    this.currentIndex = -1;
+    this.isJumping = false;
+    this.isSearching = false;
+    this.emitEvent();
+  }
+  // 搜索匹配的节点
+  doSearch() {
+    this.matchNodeList = [];
+    this.currentIndex = -1;
+    bfsWalk(this.mindMap.renderer.root, (node3) => {
+      let { richText, text: text3 } = node3.nodeData.data;
+      if (richText) {
+        text3 = getTextFromHtml(text3);
+      }
+      if (text3.includes(this.searchText)) {
+        this.matchNodeList.push(node3);
+      }
+    });
+  }
+  // 搜索下一个，定位到下一个匹配节点
+  searchNext(callback) {
+    if (!this.isSearching || this.matchNodeList.length <= 0)
+      return;
+    if (this.currentIndex < this.matchNodeList.length - 1) {
+      this.currentIndex++;
+    } else {
+      this.currentIndex = 0;
+    }
+    let currentNode = this.matchNodeList[this.currentIndex];
+    this.isJumping = true;
+    this.mindMap.execCommand("GO_TARGET_NODE", currentNode, () => {
+      this.isJumping = false;
+      callback();
+    });
+  }
+  // 替换当前节点
+  replace(replaceText) {
+    replaceText = String(replaceText).trim();
+    if (!replaceText || !this.isSearching || this.matchNodeList.length <= 0)
+      return;
+    let currentNode = this.matchNodeList[this.currentIndex];
+    if (!currentNode)
+      return;
+    let text3 = this.getReplacedText(currentNode, this.searchText, replaceText);
+    currentNode.setText(text3, currentNode.nodeData.data.richText);
+    this.matchNodeList = this.matchNodeList.filter((node3) => {
+      return currentNode !== node3;
+    });
+    this.emitEvent();
+  }
+  // 替换所有
+  replaceAll(replaceText) {
+    replaceText = String(replaceText).trim();
+    if (!replaceText || !this.isSearching || this.matchNodeList.length <= 0)
+      return;
+    this.matchNodeList.forEach((node3) => {
+      let text3 = this.getReplacedText(node3, this.searchText, replaceText);
+      this.mindMap.renderer.setNodeDataRender(
+        node3,
+        {
+          text: text3,
+          resetRichText: !!node3.nodeData.data.richText
+        },
+        true
+      );
+    });
+    this.mindMap.render();
+    this.mindMap.command.addHistory();
+    this.endSearch();
+  }
+  // 获取某个节点替换后的文本
+  getReplacedText(node3, searchText, replaceText) {
+    let { richText, text: text3 } = node3.nodeData.data;
+    if (richText) {
+      text3 = getTextFromHtml(text3);
+    }
+    return text3.replaceAll(searchText, replaceText);
+  }
+  // 发送事件
+  emitEvent() {
+    this.mindMap.emit("search_info_change", {
+      currentIndex: this.currentIndex,
+      total: this.matchNodeList.length
+    });
+  }
+};
+Search.instanceName = "search";
+var Search_default = Search;
 
 // ../simple-mind-map/src/parse/xmind.js
 var import_jszip = __toESM(require_jszip_min());
@@ -68655,7 +68836,7 @@ simple_mind_map_default.iconList = icons_default.nodeIconList;
 simple_mind_map_default.constants = constant_exports;
 simple_mind_map_default.themes = themes_default;
 simple_mind_map_default.defaultTheme = default_exports;
-simple_mind_map_default.usePlugin(MiniMap_default).usePlugin(Watermark_default).usePlugin(Drag_default).usePlugin(KeyboardNavigation_default).usePlugin(ExportPDF_default).usePlugin(Export_default).usePlugin(Select_default).usePlugin(AssociativeLine_default).usePlugin(RichText_default).usePlugin(TouchEvent_default).usePlugin(NodeImgAdjust_default);
+simple_mind_map_default.usePlugin(MiniMap_default).usePlugin(Watermark_default).usePlugin(Drag_default).usePlugin(KeyboardNavigation_default).usePlugin(ExportPDF_default).usePlugin(Export_default).usePlugin(Select_default).usePlugin(AssociativeLine_default).usePlugin(RichText_default).usePlugin(TouchEvent_default).usePlugin(NodeImgAdjust_default).usePlugin(Search_default);
 var full_default = simple_mind_map_default;
 export {
   full_default as default

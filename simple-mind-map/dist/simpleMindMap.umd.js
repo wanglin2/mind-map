@@ -1792,6 +1792,32 @@ module.exports = function (target, source, exceptions) {
 
 /***/ }),
 
+/***/ "44c1":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var anObject = __webpack_require__("cf4b");
+
+// `RegExp.prototype.flags` getter implementation
+// https://tc39.es/ecma262/#sec-get-regexp.prototype.flags
+module.exports = function () {
+  var that = anObject(this);
+  var result = '';
+  if (that.hasIndices) result += 'd';
+  if (that.global) result += 'g';
+  if (that.ignoreCase) result += 'i';
+  if (that.multiline) result += 'm';
+  if (that.dotAll) result += 's';
+  if (that.unicode) result += 'u';
+  if (that.unicodeSets) result += 'v';
+  if (that.sticky) result += 'y';
+  return result;
+};
+
+
+/***/ }),
+
 /***/ "44c7":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13502,6 +13528,85 @@ module.exports = DESCRIPTORS && fails(function () {
 
 /***/ }),
 
+/***/ "532c":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $ = __webpack_require__("3475");
+var call = __webpack_require__("6632");
+var uncurryThis = __webpack_require__("46ab");
+var requireObjectCoercible = __webpack_require__("601e");
+var isCallable = __webpack_require__("5e8c");
+var isNullOrUndefined = __webpack_require__("443d");
+var isRegExp = __webpack_require__("d12a");
+var toString = __webpack_require__("b2d1");
+var getMethod = __webpack_require__("4eb4");
+var getRegExpFlags = __webpack_require__("9e3a");
+var getSubstitution = __webpack_require__("e2d9");
+var wellKnownSymbol = __webpack_require__("6053");
+var IS_PURE = __webpack_require__("ec82");
+
+var REPLACE = wellKnownSymbol('replace');
+var $TypeError = TypeError;
+var indexOf = uncurryThis(''.indexOf);
+var replace = uncurryThis(''.replace);
+var stringSlice = uncurryThis(''.slice);
+var max = Math.max;
+
+var stringIndexOf = function (string, searchValue, fromIndex) {
+  if (fromIndex > string.length) return -1;
+  if (searchValue === '') return fromIndex;
+  return indexOf(string, searchValue, fromIndex);
+};
+
+// `String.prototype.replaceAll` method
+// https://tc39.es/ecma262/#sec-string.prototype.replaceall
+$({ target: 'String', proto: true }, {
+  replaceAll: function replaceAll(searchValue, replaceValue) {
+    var O = requireObjectCoercible(this);
+    var IS_REG_EXP, flags, replacer, string, searchString, functionalReplace, searchLength, advanceBy, replacement;
+    var position = 0;
+    var endOfLastMatch = 0;
+    var result = '';
+    if (!isNullOrUndefined(searchValue)) {
+      IS_REG_EXP = isRegExp(searchValue);
+      if (IS_REG_EXP) {
+        flags = toString(requireObjectCoercible(getRegExpFlags(searchValue)));
+        if (!~indexOf(flags, 'g')) throw $TypeError('`.replaceAll` does not allow non-global regexes');
+      }
+      replacer = getMethod(searchValue, REPLACE);
+      if (replacer) {
+        return call(replacer, searchValue, O, replaceValue);
+      } else if (IS_PURE && IS_REG_EXP) {
+        return replace(toString(O), searchValue, replaceValue);
+      }
+    }
+    string = toString(O);
+    searchString = toString(searchValue);
+    functionalReplace = isCallable(replaceValue);
+    if (!functionalReplace) replaceValue = toString(replaceValue);
+    searchLength = searchString.length;
+    advanceBy = max(1, searchLength);
+    position = stringIndexOf(string, searchString, 0);
+    while (position !== -1) {
+      replacement = functionalReplace
+        ? toString(replaceValue(searchString, position, string))
+        : getSubstitution(searchString, string, position, [], undefined, replaceValue);
+      result += stringSlice(string, endOfLastMatch, position) + replacement;
+      endOfLastMatch = position + searchLength;
+      position = stringIndexOf(string, searchString, position + advanceBy);
+    }
+    if (endOfLastMatch < string.length) {
+      result += stringSlice(string, endOfLastMatch);
+    }
+    return result;
+  }
+});
+
+
+/***/ }),
+
 /***/ "54be":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -15856,6 +15961,25 @@ $({ target: 'Array', proto: true, arity: 1, forced: INCORRECT_TO_LENGTH || SILEN
     return len;
   }
 });
+
+
+/***/ }),
+
+/***/ "9e3a":
+/***/ (function(module, exports, __webpack_require__) {
+
+var call = __webpack_require__("6632");
+var hasOwn = __webpack_require__("4d80");
+var isPrototypeOf = __webpack_require__("1a33");
+var regExpFlags = __webpack_require__("44c1");
+
+var RegExpPrototype = RegExp.prototype;
+
+module.exports = function (R) {
+  var flags = R.flags;
+  return flags === undefined && !('flags' in RegExpPrototype) && !hasOwn(R, 'flags') && isPrototypeOf(RegExpPrototype, R)
+    ? call(regExpFlags, R) : flags;
+};
 
 
 /***/ }),
@@ -28756,6 +28880,25 @@ module.exports = [
 
 /***/ }),
 
+/***/ "d12a":
+/***/ (function(module, exports, __webpack_require__) {
+
+var isObject = __webpack_require__("feb8");
+var classof = __webpack_require__("424c");
+var wellKnownSymbol = __webpack_require__("6053");
+
+var MATCH = wellKnownSymbol('match');
+
+// `IsRegExp` abstract operation
+// https://tc39.es/ecma262/#sec-isregexp
+module.exports = function (it) {
+  var isRegExp;
+  return isObject(it) && ((isRegExp = it[MATCH]) !== undefined ? !!isRegExp : classof(it) == 'RegExp');
+};
+
+
+/***/ }),
+
 /***/ "d17b":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -31872,6 +32015,57 @@ module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
 
 /***/ }),
 
+/***/ "e2d9":
+/***/ (function(module, exports, __webpack_require__) {
+
+var uncurryThis = __webpack_require__("46ab");
+var toObject = __webpack_require__("8300");
+
+var floor = Math.floor;
+var charAt = uncurryThis(''.charAt);
+var replace = uncurryThis(''.replace);
+var stringSlice = uncurryThis(''.slice);
+var SUBSTITUTION_SYMBOLS = /\$([$&'`]|\d{1,2}|<[^>]*>)/g;
+var SUBSTITUTION_SYMBOLS_NO_NAMED = /\$([$&'`]|\d{1,2})/g;
+
+// `GetSubstitution` abstract operation
+// https://tc39.es/ecma262/#sec-getsubstitution
+module.exports = function (matched, str, position, captures, namedCaptures, replacement) {
+  var tailPos = position + matched.length;
+  var m = captures.length;
+  var symbols = SUBSTITUTION_SYMBOLS_NO_NAMED;
+  if (namedCaptures !== undefined) {
+    namedCaptures = toObject(namedCaptures);
+    symbols = SUBSTITUTION_SYMBOLS;
+  }
+  return replace(replacement, symbols, function (match, ch) {
+    var capture;
+    switch (charAt(ch, 0)) {
+      case '$': return '$';
+      case '&': return matched;
+      case '`': return stringSlice(str, 0, position);
+      case "'": return stringSlice(str, tailPos);
+      case '<':
+        capture = namedCaptures[stringSlice(ch, 1, -1)];
+        break;
+      default: // \d\d?
+        var n = +ch;
+        if (n === 0) return match;
+        if (n > m) {
+          var f = floor(n / 10);
+          if (f === 0) return match;
+          if (f <= m) return captures[f - 1] === undefined ? charAt(ch, 1) : captures[f - 1] + charAt(ch, 1);
+          return match;
+        }
+        capture = captures[n - 1];
+    }
+    return capture === undefined ? '' : capture;
+  });
+};
+
+
+/***/ }),
+
 /***/ "e372":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -32665,6 +32859,7 @@ __webpack_require__.d(constant_namespaceObject, "initRootNodePositionMap", funct
 __webpack_require__.d(constant_namespaceObject, "layoutList", function() { return layoutList; });
 __webpack_require__.d(constant_namespaceObject, "layoutValueList", function() { return layoutValueList; });
 __webpack_require__.d(constant_namespaceObject, "nodeDataNoStylePropList", function() { return nodeDataNoStylePropList; });
+__webpack_require__.d(constant_namespaceObject, "commonCaches", function() { return commonCaches; });
 
 // NAMESPACE OBJECT: ../simple-mind-map/src/themes/default.js
 var default_namespaceObject = {};
@@ -32962,6 +33157,11 @@ const layoutValueList = [CONSTANTS.LAYOUT.LOGICAL_STRUCTURE, CONSTANTS.LAYOUT.MI
 
 // 节点数据中非样式的字段
 const nodeDataNoStylePropList = ['text', 'image', 'imageTitle', 'imageSize', 'icon', 'tag', 'hyperlink', 'hyperlinkTitle', 'note', 'expand', 'isActive', 'generalization', 'richText', 'resetRichText', 'uid', 'activeStyle'];
+
+// 数据缓存
+const commonCaches = {
+  measureCustomNodeContentSizeEl: null
+};
 // CONCATENATED MODULE: ../simple-mind-map/src/core/view/View.js
 
 
@@ -40974,6 +41174,9 @@ class Shape_Shape {
 
 // 形状列表
 const shapeList = [CONSTANTS.SHAPE.RECTANGLE, CONSTANTS.SHAPE.DIAMOND, CONSTANTS.SHAPE.PARALLELOGRAM, CONSTANTS.SHAPE.ROUNDED_RECTANGLE, CONSTANTS.SHAPE.OCTAGONAL_RECTANGLE, CONSTANTS.SHAPE.OUTER_TRIANGULAR_RECTANGLE, CONSTANTS.SHAPE.INNER_TRIANGULAR_RECTANGLE, CONSTANTS.SHAPE.ELLIPSE, CONSTANTS.SHAPE.CIRCLE];
+// EXTERNAL MODULE: ../simple-mind-map/node_modules/core-js/modules/es.string.replace-all.js
+var es_string_replace_all = __webpack_require__("532c");
+
 // CONCATENATED MODULE: ../simple-mind-map/node_modules/uuid/dist/esm-browser/native.js
 const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
 /* harmony default export */ var esm_browser_native = ({
@@ -41073,6 +41276,7 @@ function v4(options, buf, offset) {
 
 /* harmony default export */ var esm_browser_v4 = (v4);
 // CONCATENATED MODULE: ../simple-mind-map/src/utils/index.js
+
 
 
 
@@ -41519,6 +41723,19 @@ const loadImage = imgFile => {
     };
   });
 };
+
+// 移除字符串中的html实体
+const removeHTMLEntities = str => {
+  [['&nbsp;', '&#160;']].forEach(item => {
+    str = str.replaceAll(item[0], item[1]);
+  });
+  return str;
+};
+
+// 获取一个数据的类型
+const getType = data => {
+  return Object.prototype.toString.call(data).slice(7, -1);
+};
 // CONCATENATED MODULE: ../simple-mind-map/src/core/render/node/nodeGeneralization.js
 
 
@@ -41558,15 +41775,14 @@ function createGeneralizationNode() {
 
 //  更新概要节点
 function updateGeneralization() {
+  if (this.isGeneralization) return;
   this.removeGeneralization();
   this.createGeneralizationNode();
 }
 
 //  渲染概要节点
 function renderGeneralization() {
-  if (this.isGeneralization) {
-    return;
-  }
+  if (this.isGeneralization) return;
   if (!this.checkHasGeneralization()) {
     this.removeGeneralization();
     this._generalizationNodeWidth = 0;
@@ -41585,6 +41801,7 @@ function renderGeneralization() {
 
 //  删除概要节点
 function removeGeneralization() {
+  if (this.isGeneralization) return;
   if (this._generalizationLine) {
     this._generalizationLine.remove();
     this._generalizationLine = null;
@@ -41603,6 +41820,7 @@ function removeGeneralization() {
 
 //  隐藏概要节点
 function hideGeneralization() {
+  if (this.isGeneralization) return;
   if (this._generalizationLine) {
     this._generalizationLine.hide();
   }
@@ -41613,6 +41831,7 @@ function hideGeneralization() {
 
 //  显示概要节点
 function showGeneralization() {
+  if (this.isGeneralization) return;
   if (this._generalizationLine) {
     this._generalizationLine.show();
   }
@@ -42362,20 +42581,19 @@ function createNoteNode() {
 }
 
 // 测量自定义节点内容元素的宽高
-let warpEl = null;
 function measureCustomNodeContentSize(content) {
-  if (!warpEl) {
-    warpEl = document.createElement('div');
-    warpEl.style.cssText = `
+  if (!commonCaches.measureCustomNodeContentSizeEl) {
+    commonCaches.measureCustomNodeContentSizeEl = document.createElement('div');
+    commonCaches.measureCustomNodeContentSizeEl.style.cssText = `
       position: fixed;
       left: -99999px;
       top: -99999px;
     `;
-    this.mindMap.el.appendChild(warpEl);
+    this.mindMap.el.appendChild(commonCaches.measureCustomNodeContentSizeEl);
   }
-  warpEl.innerHTML = '';
-  warpEl.appendChild(content);
-  let rect = warpEl.getBoundingClientRect();
+  commonCaches.measureCustomNodeContentSizeEl.innerHTML = '';
+  commonCaches.measureCustomNodeContentSizeEl.appendChild(content);
+  let rect = commonCaches.measureCustomNodeContentSizeEl.getBoundingClientRect();
   return {
     width: rect.width,
     height: rect.height
@@ -46118,6 +46336,9 @@ class TextEdit_TextEdit {
     this.mindMap.keyCommand.addShortcut('Enter', () => {
       this.hideEditTextBox();
     });
+    this.mindMap.keyCommand.addShortcut('Tab', () => {
+      this.hideEditTextBox();
+    });
   }
 
   //  显示文本编辑框
@@ -46839,6 +47060,7 @@ class Render_Render {
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return;
     }
+    this.textEdit.hideEditTextBox();
     let {
       defaultInsertSecondLevelNodeText,
       defaultInsertBelowSecondLevelNodeText
@@ -46878,6 +47100,7 @@ class Render_Render {
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return;
     }
+    this.textEdit.hideEditTextBox();
     let {
       defaultInsertSecondLevelNodeText,
       defaultInsertBelowSecondLevelNodeText
@@ -47336,7 +47559,8 @@ class Render_Render {
   setNodeText(node, text, richText) {
     this.setNodeDataRender(node, {
       text,
-      richText
+      richText,
+      resetRichText: richText
     });
   }
 
@@ -47460,7 +47684,7 @@ class Render_Render {
   }
 
   // 定位到指定节点
-  goTargetNode(node) {
+  goTargetNode(node, callback = () => {}) {
     let uid = typeof node === 'string' ? node : node.nodeData.data.uid;
     if (!uid) return;
     this.expandToNodeUid(uid, () => {
@@ -47468,6 +47692,7 @@ class Render_Render {
       if (targetNode) {
         targetNode.active();
         this.moveNodeToCenter(targetNode);
+        callback();
       }
     });
   }
@@ -47480,7 +47705,7 @@ class Render_Render {
   }
 
   //  设置节点数据，并判断是否渲染
-  setNodeDataRender(node, data) {
+  setNodeDataRender(node, data, notRender = false) {
     this.setNodeData(node, data);
     let changed = node.reRender();
     if (changed) {
@@ -47488,7 +47713,7 @@ class Render_Render {
         // 概要节点
         node.generalizationBelongNode.updateGeneralization();
       }
-      this.mindMap.render();
+      if (!notRender) this.mindMap.render();
     }
   }
 
@@ -49910,6 +50135,9 @@ class simple_mind_map_MindMap {
     // 初始化主题
     this.initTheme();
 
+    // 初始化缓存数据
+    this.initCache();
+
     // 事件类
     this.event = new event_Event({
       mindMap: this
@@ -50002,6 +50230,23 @@ class simple_mind_map_MindMap {
   //  解绑事件
   off(event, fn) {
     this.event.off(event, fn);
+  }
+
+  // 初始化缓存数据
+  initCache() {
+    Object.keys(commonCaches).forEach(key => {
+      let type = getType(commonCaches[key]);
+      let value = '';
+      switch (type) {
+        case 'Boolean':
+          value = false;
+          break;
+        default:
+          value = null;
+          break;
+      }
+      commonCaches[key] = value;
+    });
   }
 
   //  设置主题
@@ -50284,7 +50529,7 @@ simple_mind_map_MindMap.defineTheme = (name, config = {}) => {
 };
 /* harmony default export */ var simple_mind_map = (simple_mind_map_MindMap);
 // CONCATENATED MODULE: ../simple-mind-map/src/plugins/MiniMap.js
-// 小地图类
+// 小地图插件
 class MiniMap {
   //  构造函数
   constructor(opt) {
@@ -50400,7 +50645,7 @@ MiniMap.instanceName = 'miniMap';
 
 
 
-// 水印类
+// 水印插件
 class Watermark_Watermark {
   constructor(opt = {}) {
     this.mindMap = opt.mindMap;
@@ -50515,7 +50760,7 @@ Watermark_Watermark.instanceName = 'watermark';
 
 
 
-//  键盘导航类
+//  键盘导航插件
 class KeyboardNavigation_KeyboardNavigation {
   //  构造函数
   constructor(opt) {
@@ -50766,7 +51011,7 @@ var jspdf_es_min = __webpack_require__("77ee");
 // CONCATENATED MODULE: ../simple-mind-map/src/plugins/ExportPDF.js
 
 
-//  导出PDF类，需要通过Export插件使用
+//  导出PDF插件，需要通过Export插件使用
 class ExportPDF_ExportPDF {
   //  构造函数
   constructor(opt) {
@@ -51185,7 +51430,7 @@ const transformToMarkdown = root => {
 
 
 
-//  导出类
+//  导出插件
 class Export_Export {
   //  构造函数
   constructor(opt) {
@@ -51335,6 +51580,7 @@ class Export_Export {
       node,
       str
     } = await this.getSvgData();
+    str = removeHTMLEntities(str);
     // 如果开启了富文本，则使用htmltocanvas转换为图片
     if (this.mindMap.richText) {
       let res = await this.mindMap.richText.handleExportPng(node.node);
@@ -51390,6 +51636,7 @@ class Export_Export {
     node.first().before(SVG(`<title>${name}</title>`));
     await this.drawBackgroundToSvg(node);
     let str = node.svg();
+    str = removeHTMLEntities(str);
     // 转换成blob数据
     let blob = new Blob([str], {
       type: 'image/svg+xml'
@@ -51428,8 +51675,7 @@ Export_Export.instanceName = 'doExport';
 
 
 
-//  节点拖动类
-
+// 节点拖动插件
 class Drag_Drag extends layouts_Base {
   //  构造函数
   constructor({
@@ -51769,8 +52015,7 @@ Drag_Drag.instanceName = 'drag';
 // CONCATENATED MODULE: ../simple-mind-map/src/plugins/Select.js
 
 
-//  选择节点类
-
+// 节点选择插件
 class Select_Select {
   //  构造函数
   constructor({
@@ -52503,7 +52748,7 @@ function updateTextPos(path, text) {
 
 
 
-// 关联线类
+// 关联线插件
 class AssociativeLine_AssociativeLine {
   constructor(opt = {}) {
     this.mindMap = opt.mindMap;
@@ -52989,7 +53234,7 @@ let fontSizeList = new Array(100).fill(0).map((_, index) => {
   return index + 'px';
 });
 
-// 节点支持富文本编辑功能
+// 富文本编辑插件
 class RichText_RichText {
   constructor({
     mindMap,
@@ -53219,6 +53464,12 @@ class RichText_RichText {
               key: 13,
               handler: function () {
                 // 覆盖默认的回车键换行
+              }
+            },
+            tab: {
+              key: 9,
+              handler: function () {
+                // 覆盖默认的tab键
               }
             }
           }
@@ -53710,8 +53961,7 @@ class NodeImgAdjust_NodeImgAdjust {
 NodeImgAdjust_NodeImgAdjust.instanceName = 'nodeImgAdjust';
 /* harmony default export */ var plugins_NodeImgAdjust = (NodeImgAdjust_NodeImgAdjust);
 // CONCATENATED MODULE: ../simple-mind-map/src/plugins/TouchEvent.js
-// 手势事件支持类
-
+// 手势事件支持插件
 class TouchEvent {
   //  构造函数
   constructor({
@@ -53843,6 +54093,152 @@ class TouchEvent {
 }
 TouchEvent.instanceName = 'touchEvent';
 /* harmony default export */ var plugins_TouchEvent = (TouchEvent);
+// CONCATENATED MODULE: ../simple-mind-map/src/plugins/Search.js
+
+
+
+
+// 搜索插件
+class Search_Search {
+  //  构造函数
+  constructor({
+    mindMap
+  }) {
+    this.mindMap = mindMap;
+    // 是否正在搜索
+    this.isSearching = false;
+    // 搜索文本
+    this.searchText = '';
+    // 匹配的节点列表
+    this.matchNodeList = [];
+    // 当前所在的节点列表索引
+    this.currentIndex = -1;
+    // 是否正在跳转中
+    this.isJumping = false;
+    this.onDataChange = this.onDataChange.bind(this);
+    this.mindMap.on('data_change', this.onDataChange);
+  }
+
+  // 节点数据改变了，需要重新搜索
+  onDataChange() {
+    if (this.isJumping) return;
+    this.searchText = '';
+  }
+
+  // 搜索
+  search(text, callback) {
+    text = String(text).trim();
+    if (!text) return this.endSearch();
+    this.isSearching = true;
+    if (this.searchText === text) {
+      // 和上一次搜索文本一样，那么搜索下一个
+      this.searchNext(callback);
+    } else {
+      // 和上次搜索文本不一样，那么重新开始
+      this.searchText = text;
+      this.doSearch();
+      this.searchNext(callback);
+    }
+    this.emitEvent();
+  }
+
+  // 结束搜索
+  endSearch() {
+    if (!this.isSearching) return;
+    this.searchText = '';
+    this.matchNodeList = [];
+    this.currentIndex = -1;
+    this.isJumping = false;
+    this.isSearching = false;
+    this.emitEvent();
+  }
+
+  // 搜索匹配的节点
+  doSearch() {
+    this.matchNodeList = [];
+    this.currentIndex = -1;
+    bfsWalk(this.mindMap.renderer.root, node => {
+      let {
+        richText,
+        text
+      } = node.nodeData.data;
+      if (richText) {
+        text = getTextFromHtml(text);
+      }
+      if (text.includes(this.searchText)) {
+        this.matchNodeList.push(node);
+      }
+    });
+  }
+
+  // 搜索下一个，定位到下一个匹配节点
+  searchNext(callback) {
+    if (!this.isSearching || this.matchNodeList.length <= 0) return;
+    if (this.currentIndex < this.matchNodeList.length - 1) {
+      this.currentIndex++;
+    } else {
+      this.currentIndex = 0;
+    }
+    let currentNode = this.matchNodeList[this.currentIndex];
+    this.isJumping = true;
+    this.mindMap.execCommand('GO_TARGET_NODE', currentNode, () => {
+      this.isJumping = false;
+      callback();
+    });
+  }
+
+  // 替换当前节点
+  replace(replaceText) {
+    replaceText = String(replaceText).trim();
+    if (!replaceText || !this.isSearching || this.matchNodeList.length <= 0) return;
+    let currentNode = this.matchNodeList[this.currentIndex];
+    if (!currentNode) return;
+    let text = this.getReplacedText(currentNode, this.searchText, replaceText);
+    currentNode.setText(text, currentNode.nodeData.data.richText);
+    this.matchNodeList = this.matchNodeList.filter(node => {
+      return currentNode !== node;
+    });
+    this.emitEvent();
+  }
+
+  // 替换所有
+  replaceAll(replaceText) {
+    replaceText = String(replaceText).trim();
+    if (!replaceText || !this.isSearching || this.matchNodeList.length <= 0) return;
+    this.matchNodeList.forEach(node => {
+      let text = this.getReplacedText(node, this.searchText, replaceText);
+      this.mindMap.renderer.setNodeDataRender(node, {
+        text,
+        resetRichText: !!node.nodeData.data.richText
+      }, true);
+    });
+    this.mindMap.render();
+    this.mindMap.command.addHistory();
+    this.endSearch();
+  }
+
+  // 获取某个节点替换后的文本
+  getReplacedText(node, searchText, replaceText) {
+    let {
+      richText,
+      text
+    } = node.nodeData.data;
+    if (richText) {
+      text = getTextFromHtml(text);
+    }
+    return text.replaceAll(searchText, replaceText);
+  }
+
+  // 发送事件
+  emitEvent() {
+    this.mindMap.emit('search_info_change', {
+      currentIndex: this.currentIndex,
+      total: this.matchNodeList.length
+    });
+  }
+}
+Search_Search.instanceName = 'search';
+/* harmony default export */ var plugins_Search = (Search_Search);
 // EXTERNAL MODULE: ../simple-mind-map/node_modules/jszip/dist/jszip.min.js
 var jszip_min = __webpack_require__("5e89");
 var jszip_min_default = /*#__PURE__*/__webpack_require__.n(jszip_min);
@@ -64561,13 +64957,14 @@ const transformMarkdownTo = async md => {
 
 
 
+
 simple_mind_map.xmind = xmind;
 simple_mind_map.markdown = markdown;
 simple_mind_map.iconList = icons.nodeIconList;
 simple_mind_map.constants = constant_namespaceObject;
 simple_mind_map.themes = themes;
 simple_mind_map.defaultTheme = default_namespaceObject;
-simple_mind_map.usePlugin(plugins_MiniMap).usePlugin(plugins_Watermark).usePlugin(plugins_Drag).usePlugin(plugins_KeyboardNavigation).usePlugin(plugins_ExportPDF).usePlugin(plugins_Export).usePlugin(plugins_Select).usePlugin(plugins_AssociativeLine).usePlugin(plugins_RichText).usePlugin(plugins_TouchEvent).usePlugin(plugins_NodeImgAdjust);
+simple_mind_map.usePlugin(plugins_MiniMap).usePlugin(plugins_Watermark).usePlugin(plugins_Drag).usePlugin(plugins_KeyboardNavigation).usePlugin(plugins_ExportPDF).usePlugin(plugins_Export).usePlugin(plugins_Select).usePlugin(plugins_AssociativeLine).usePlugin(plugins_RichText).usePlugin(plugins_TouchEvent).usePlugin(plugins_NodeImgAdjust).usePlugin(plugins_Search);
 /* harmony default export */ var full = (simple_mind_map);
 // CONCATENATED MODULE: ./node_modules/@vue/cli-service/lib/commands/build/entry-lib.js
 
