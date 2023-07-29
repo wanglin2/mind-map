@@ -495,3 +495,24 @@ export const checkIsRichText = (str) => {
   }
   return false
 }
+
+// 搜索和替换html字符串中指定的文本
+let replaceHtmlTextEl = null
+export const replaceHtmlText = (html, searchText, replaceText) => {
+  if (!replaceHtmlTextEl) {
+    replaceHtmlTextEl = document.createElement('div')
+  }
+  replaceHtmlTextEl.innerHTML = html
+  let walk = (root) => {
+    let childNodes = root.childNodes
+    childNodes.forEach((node) => {
+      if (node.nodeType === 1) {// 元素节点
+        walk(node)
+      } else if (node.nodeType === 3) {// 文本节点
+        root.replaceChild(document.createTextNode(node.nodeValue.replaceAll(searchText, replaceText)), node)
+      }
+    })
+  }
+  walk(replaceHtmlTextEl)
+  return replaceHtmlTextEl.innerHTML
+}

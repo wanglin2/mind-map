@@ -43750,6 +43750,28 @@ var removeHTMLEntities = (str) => {
 var getType = (data2) => {
   return Object.prototype.toString.call(data2).slice(7, -1);
 };
+var isUndef = (data2) => {
+  return data2 === null || data2 === void 0 || data2 === "";
+};
+var removeHtmlStyle = (html2) => {
+  return html2.replaceAll(/(<[^\s]+)\s+style=["'][^'"]+["']\s*(>)/g, "$1$2");
+};
+var addHtmlStyle = (html2, tag, style) => {
+  const reg = new RegExp(`(<${tag}[^>]*)(>[^<>]*</${tag}>)`, "g");
+  return html2.replaceAll(reg, `$1 style="${style}"$2`);
+};
+var checkIsRichTextEl = null;
+var checkIsRichText = (str) => {
+  if (!checkIsRichTextEl) {
+    checkIsRichTextEl = document.createElement("div");
+  }
+  checkIsRichTextEl.innerHTML = str;
+  for (let c4 = checkIsRichTextEl.childNodes, i3 = c4.length; i3--; ) {
+    if (c4[i3].nodeType == 1)
+      return true;
+  }
+  return false;
+};
 
 // ../simple-mind-map/src/core/render/node/nodeGeneralization.js
 function checkHasGeneralization() {
@@ -43989,8 +44011,8 @@ var nodeExpandBtn_default = {
 function setData(data2 = {}) {
   this.mindMap.execCommand("SET_NODE_DATA", this, data2);
 }
-function setText(text3, richText) {
-  this.mindMap.execCommand("SET_NODE_TEXT", this, text3, richText);
+function setText(text3, richText, resetRichText) {
+  this.mindMap.execCommand("SET_NODE_TEXT", this, text3, richText, resetRichText);
 }
 function setImage(imgData) {
   this.mindMap.execCommand("SET_NODE_IMAGE", this, imgData);
@@ -44369,6 +44391,9 @@ function createIconNode() {
       node3 = new Image2().load(src);
     }
     node3.size(iconSize, iconSize);
+    node3.on("click", (e2) => {
+      this.mindMap.emit("node_icon_click", this, item, e2);
+    });
     return {
       node: node3,
       width: iconSize,
@@ -44389,8 +44414,16 @@ function createRichTextNode() {
     }
   }
   if (recoverText) {
-    let text3 = getTextFromHtml(this.nodeData.data.text);
-    this.nodeData.data.text = `<p><span style="${this.style.createStyleText()}">${text3}</span></p>`;
+    let text3 = this.nodeData.data.text;
+    let isRichText = checkIsRichText(text3);
+    let style = this.style.createStyleText();
+    if (isRichText) {
+      text3 = removeHtmlStyle(text3);
+      text3 = addHtmlStyle(text3, "span", style);
+    } else {
+      text3 = `<p><span style="${style}">${text3}</span></p>`;
+    }
+    this.nodeData.data.text = text3;
   }
   let html2 = `<div>${this.nodeData.data.text}</div>`;
   let div = document.createElement("div");
@@ -48216,7 +48249,7 @@ var Render = class {
     this.mindMap = opt.mindMap;
     this.themeConfig = this.mindMap.themeConfig;
     this.draw = this.mindMap.draw;
-    this.renderTree = (0, import_deepmerge.default)({}, simpleDeepClone(this.mindMap.opt.data) || {});
+    this.renderTree = (0, import_deepmerge.default)({}, this.mindMap.opt.data || {});
     this.reRender = false;
     this.isRendering = false;
     this.hasWaitRendering = false;
@@ -48977,11 +49010,11 @@ var Render = class {
     );
   }
   //  设置节点文本
-  setNodeText(node3, text3, richText) {
+  setNodeText(node3, text3, richText, resetRichText) {
     this.setNodeDataRender(node3, {
       text: text3,
       richText,
-      resetRichText: richText
+      resetRichText
     });
   }
   //  设置节点图片
@@ -51408,6 +51441,7 @@ var MindMap2 = class {
   }
   //  配置参数处理
   handleOpt(opt) {
+    opt.data = simpleDeepClone(opt.data || {});
     if (!layoutValueList.includes(opt.layout)) {
       opt.layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE;
     }
@@ -63531,8 +63565,10 @@ var NodeImgAdjust = class {
   }
   // 渲染完成事件
   onRenderEnd() {
-    if (!this.isAdjusted)
+    if (!this.isAdjusted) {
+      this.hideHandleEl();
       return;
+    }
     this.isAdjusted = false;
   }
   // 插件被移除前做的事情
@@ -63678,9 +63714,9 @@ var Search = class {
   }
   // 搜索
   search(text3, callback) {
-    text3 = String(text3).trim();
-    if (!text3)
+    if (isUndef(text3))
       return this.endSearch();
+    text3 = String(text3);
     this.isSearching = true;
     if (this.searchText === text3) {
       this.searchNext(callback);
@@ -63728,20 +63764,21 @@ var Search = class {
     let currentNode = this.matchNodeList[this.currentIndex];
     this.notResetSearchText = true;
     this.mindMap.execCommand("GO_TARGET_NODE", currentNode, () => {
+      this.notResetSearchText = false;
       callback();
     });
   }
   // 替换当前节点
   replace(replaceText) {
-    replaceText = String(replaceText).trim();
-    if (!replaceText || !this.isSearching || this.matchNodeList.length <= 0)
+    if (isUndef(replaceText) || !this.isSearching || this.matchNodeList.length <= 0)
       return;
+    replaceText = String(replaceText);
     let currentNode = this.matchNodeList[this.currentIndex];
     if (!currentNode)
       return;
     let text3 = this.getReplacedText(currentNode, this.searchText, replaceText);
     this.notResetSearchText = true;
-    currentNode.setText(text3, currentNode.nodeData.data.richText);
+    currentNode.setText(text3, currentNode.nodeData.data.richText, true);
     this.matchNodeList = this.matchNodeList.filter((node3) => {
       return currentNode !== node3;
     });
@@ -63754,9 +63791,9 @@ var Search = class {
   }
   // 替换所有
   replaceAll(replaceText) {
-    replaceText = String(replaceText).trim();
-    if (!replaceText || !this.isSearching || this.matchNodeList.length <= 0)
+    if (isUndef(replaceText) || !this.isSearching || this.matchNodeList.length <= 0)
       return;
+    replaceText = String(replaceText);
     this.matchNodeList.forEach((node3) => {
       let text3 = this.getReplacedText(node3, this.searchText, replaceText);
       this.mindMap.renderer.setNodeDataRender(
