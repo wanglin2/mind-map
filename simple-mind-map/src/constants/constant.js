@@ -137,7 +137,7 @@ export const themeList = [
   {
     name: '简约黑',
     value: 'simpleBlack',
-    dark: true
+    dark: false
   },
   {
     name: '课程绿',
