@@ -16,6 +16,9 @@
       </el-select>
     </div>
     <div class="item">
+      <div class="btn iconfont iconsousuo" @click="showSearch"></div>
+    </div>
+    <div class="item">
       <MouseAction :isDark="isDark" :mindMap="mindMap"></MouseAction>
     </div>
     <div class="item">
@@ -28,10 +31,7 @@
         "
         placement="top"
       >
-        <div
-          class="btn iconfont icondaohang1"
-          @click="toggleMiniMap"
-        ></div>
+        <div class="btn iconfont icondaohang1" @click="toggleMiniMap"></div>
       </el-tooltip>
     </div>
     <div class="item">
@@ -65,6 +65,13 @@
       <Scale :isDark="isDark" :mindMap="mindMap"></Scale>
     </div>
     <div class="item">
+      <div
+        class="btn iconfont"
+        :class="[isDark ? 'iconmoon_line' : 'iconlieri']"
+        @click="toggleDark"
+      ></div>
+    </div>
+    <div class="item">
       <a href="https://github.com/wanglin2/mind-map" target="_blank">
         <span class="iconfont icongithub"></span>
       </a>
@@ -79,7 +86,7 @@ import MouseAction from './MouseAction.vue'
 import { langList } from '@/config'
 import i18n from '@/i18n'
 import { storeLang, getLang } from '@/api'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 /**
  * @Author: 王林
@@ -107,9 +114,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isDark']),
+    ...mapState(['isDark'])
   },
   methods: {
+    ...mapMutations(['setIsDark']),
+
     readonlyChange() {
       this.isReadonly = !this.isReadonly
       this.mindMap.setMode(this.isReadonly ? 'readonly' : 'edit')
@@ -123,6 +132,14 @@ export default {
     onLangChange(lang) {
       i18n.locale = lang
       storeLang(lang)
+    },
+
+    showSearch() {
+      this.$bus.$emit('show_search')
+    },
+
+    toggleDark() {
+      this.setIsDark(!this.isDark)
     }
   }
 }
@@ -147,11 +164,11 @@ export default {
 
     .item {
       a {
-        color: hsla(0,0%,100%,.6);
+        color: hsla(0, 0%, 100%, 0.6);
       }
 
       .btn {
-        color: hsla(0,0%,100%,.6);
+        color: hsla(0, 0%, 100%, 0.6);
       }
     }
   }

@@ -1,11 +1,15 @@
 <template>
-  <div class="searchContainer" :class="{ isDark: isDark, show: show }">
+  <div 
+    class="searchContainer" 
+    :class="{ isDark: isDark, show: show }" 
+    @mouseleave="onMouseleave"
+  >
     <div class="closeBtnBox">
       <span class="closeBtn el-icon-close" @click="close"></span>
     </div>
     <div class="searchInputBox">
       <el-input
-        ref="input"
+        ref="searchInputRef"
         :placeholder="$t('search.searchPlaceholder')"
         size="small"
         v-model="searchText"
@@ -15,7 +19,7 @@
         <el-button
           size="small"
           slot="append"
-          v-if="!!searchText.trim()"
+          v-if="!isUndef(searchText)"
           @click="showReplaceInput = true"
           >{{ $t('search.replace') }}</el-button
         >
@@ -26,6 +30,7 @@
     </div>
     <el-input
       v-if="showReplaceInput"
+      ref="replaceInputRef"
       :placeholder="$t('search.replacePlaceholder')"
       size="small"
       v-model="replaceText"
@@ -49,6 +54,7 @@
 
 <script>
 import { mapState } from 'vuex'
+import { isUndef } from 'simple-mind-map/src/utils/index'
 
 // 搜索替换
 export default {
@@ -74,7 +80,7 @@ export default {
   },
   watch: {
     searchText() {
-      if (!this.searchText.trim()) {
+      if (isUndef(this.searchText)) {
         this.currentIndex = 0
         this.total = 0
         this.showSearchInfo = false
@@ -82,18 +88,23 @@ export default {
     }
   },
   created() {
+    this.$bus.$on('show_search', this.showSearch)
     this.mindMap.on('search_info_change', data => {
       this.currentIndex = data.currentIndex + 1
       this.total = data.total
       this.showSearchInfo = true
     })
-    this.mindMap.keyCommand.addShortcut('Control+f', () => {
-      this.$bus.$emit('closeSideBar')
-      this.show = true
-      this.$refs.input.focus()
-    })
+    this.mindMap.keyCommand.addShortcut('Control+f', this.showSearch)
   },
   methods: {
+    isUndef,
+
+    showSearch() {
+      this.$bus.$emit('closeSideBar')
+      this.show = true
+      // this.$refs.searchInputRef.focus()
+    },
+
     hideReplaceInput() {
       this.showReplaceInput = false
       this.replaceText = ''
@@ -101,7 +112,7 @@ export default {
 
     onSearchNext() {
       this.mindMap.search.search(this.searchText, () => {
-        this.$refs.input.focus()
+        this.$refs.searchInputRef.focus()
       })
     },
 
@@ -121,6 +132,15 @@ export default {
       this.searchText = ''
       this.hideReplaceInput()
       this.mindMap.search.endSearch()
+    },
+
+    onMouseleave() {
+      if (this.$refs.searchInputRef) {
+        this.$refs.searchInputRef.blur()
+      }
+      if (this.$refs.replaceInputRef) {
+        this.$refs.replaceInputRef.blur()
+      }
     }
   }
 }

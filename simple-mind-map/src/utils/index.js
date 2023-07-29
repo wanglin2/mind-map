@@ -466,3 +466,53 @@ export const removeHTMLEntities = (str) => {
 export const getType = (data) => {
   return Object.prototype.toString.call(data).slice(7, -1)
 }
+
+// 判断一个数据是否是null和undefined和空字符串
+export const isUndef = (data) => {
+  return data === null || data === undefined || data === ''
+}
+
+// 移除html字符串中节点的内联样式
+export const removeHtmlStyle = (html) => {
+  return html.replaceAll(/(<[^\s]+)\s+style=["'][^'"]+["']\s*(>)/g, '$1$2')
+}
+
+// 给html标签中指定的标签添加内联样式
+export const addHtmlStyle = (html, tag, style) => {
+  const reg = new RegExp(`(<${tag}[^>]*)(>[^<>]*</${tag}>)`, 'g')
+  return html.replaceAll(reg, `$1 style="${style}"$2`)
+}
+
+// 检查一个字符串是否是富文本字符
+let checkIsRichTextEl = null
+export const checkIsRichText = (str) => {
+  if (!checkIsRichTextEl) {
+    checkIsRichTextEl = document.createElement('div')
+  }
+  checkIsRichTextEl.innerHTML = str
+  for (let c = checkIsRichTextEl.childNodes, i = c.length; i--;) {
+    if (c[i].nodeType == 1) return true
+  }
+  return false
+}
+
+// 搜索和替换html字符串中指定的文本
+let replaceHtmlTextEl = null
+export const replaceHtmlText = (html, searchText, replaceText) => {
+  if (!replaceHtmlTextEl) {
+    replaceHtmlTextEl = document.createElement('div')
+  }
+  replaceHtmlTextEl.innerHTML = html
+  let walk = (root) => {
+    let childNodes = root.childNodes
+    childNodes.forEach((node) => {
+      if (node.nodeType === 1) {// 元素节点
+        walk(node)
+      } else if (node.nodeType === 3) {// 文本节点
+        root.replaceChild(document.createTextNode(node.nodeValue.replaceAll(searchText, replaceText)), node)
+      }
+    })
+  }
+  walk(replaceHtmlTextEl)
+  return replaceHtmlTextEl.innerHTML
+}
