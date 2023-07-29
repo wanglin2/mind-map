@@ -1,0 +1,247 @@
+<template>
+    <Sidebar ref="sidebar" title="图标/贴纸">
+        <div class="box" :class="{ isDark: isDark }">
+            <el-tabs v-model="activeName">
+                <el-tab-pane label="图标" name="icon"></el-tab-pane>
+                <el-tab-pane label="贴纸" name="image"></el-tab-pane>
+            </el-tabs>
+            <div class="boxContent">
+                <!-- 图标 -->
+                <div class="iconBox" v-if="activeName === 'icon'">
+                    <div class="item" v-for="item in nodeIconList" :key="item.name">
+                        <div class="title">{{ item.name }}</div>
+                        <div class="list">
+                            <div class="icon" v-for="icon in item.list" :key="icon.name" v-html="getHtml(icon.icon)" :class="{
+                                selected: iconList.includes(item.type + '_' + icon.name)
+                            }" @click="setIcon(item.type, icon.name)"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 贴纸 -->
+                <div class="imageBox" v-if="activeName === 'image'">
+                    <div class="item" v-for="item in nodeImageList" :key="item.name">
+                        <div class="title">{{ item.name }}</div>
+                        <div class="list">
+                            <div class="icon" v-for="image in item.list" :key="image.url" :class="{
+                                selected: nodeImage === image.url
+                            }" @click="setImage(image)">
+                                <img :src="image.url" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Sidebar>
+</template>
+  
+<script>
+import Sidebar from './Sidebar'
+import { shortcutKeyList } from '@/config'
+import { mapState } from 'vuex'
+import { nodeIconList } from 'simple-mind-map/src/svg/icons'
+import icon from '@/config/icon'
+import image from '@/config/image'
+
+export default {
+    name: 'ShortcutKey',
+    components: {
+        Sidebar
+    },
+    data() {
+        return {
+            activeName: 'icon',
+            nodeIconList: [...nodeIconList, ...icon],
+            nodeImageList: [...image],
+            iconList: [],
+            nodeImage: '',
+            activeNodes: []
+        }
+    },
+    computed: {
+        ...mapState(['activeSidebar', 'isDark']),
+    },
+    watch: {
+        activeSidebar(val) {
+            if (val === 'nodeIconSidebar') {
+                this.$refs.sidebar.show = true
+            } else {
+                this.$refs.sidebar.show = false
+            }
+        }
+    },
+    created() {
+        this.$bus.$on('node_active', (...args) => {
+            this.activeNodes = args[1]
+            if (this.activeNodes.length > 0) {
+                let firstNode = this.activeNodes[0]
+                this.nodeImage = firstNode.getData('image')
+                this.iconList = firstNode.getData('icon') || []// 回显图标
+            } else {
+                this.iconList = []
+                this.nodeImage = ''
+            }
+        })
+        this.$bus.$on('showNodeIcon', () => {
+            this.dialogVisible = true
+        })
+    },
+    methods: {
+        // 获取图标渲染方式
+        getHtml(icon) {
+            return /^<svg/.test(icon) ? icon : `<img src="${icon}" />`
+        },
+
+        // 设置icon
+        setIcon(type, name) {
+            let key = type + '_' + name
+            let index = this.iconList.findIndex(item => {
+                return item === key
+            })
+            // 删除icon
+            if (index !== -1) {
+                this.iconList.splice(index, 1)
+            } else {
+                let typeIndex = this.iconList.findIndex(item => {
+                    return item.split('_')[0] === type
+                })
+                // 替换icon
+                if (typeIndex !== -1) {
+                    this.iconList.splice(typeIndex, 1, key)
+                } else {
+                    // 增加icon
+                    this.iconList.push(key)
+                }
+            }
+            this.activeNodes.forEach(node => {
+                node.setIcon([...this.iconList])
+
+            })
+        },
+
+        // 设置贴纸
+        setImage(image) {
+            this.activeNodes.forEach(node => {
+                this.nodeImage = image.url
+                node.setImage({
+                    ...image
+                })
+            })
+
+        }
+    }
+}
+</script>
+  
+<style lang="less" scoped>
+.box {
+    padding: 0 20px;
+
+    &.isDark {
+        .title {
+            color: #fff;
+        }
+
+
+    }
+
+    .title {
+        font-size: 16px;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .boxContent {
+        .iconBox {
+            .item {
+                margin-bottom: 20px;
+                font-weight: bold;
+
+                .title {
+                    margin-bottom: 10px;
+                }
+
+                .list {
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    .icon {
+                        width: 24px;
+                        height: 24px;
+                        margin-right: 10px;
+                        margin-bottom: 10px;
+                        cursor: pointer;
+                        position: relative;
+
+                        /deep/ img {
+                            width: 100%;
+                            height: 100%;
+                        }
+
+                        /deep/ svg {
+                            width: 100%;
+                            height: 100%;
+                        }
+
+                        &.selected {
+                            &::after {
+                                content: '';
+                                position: absolute;
+                                left: -4px;
+                                top: -4px;
+                                width: 28px;
+                                height: 28px;
+                                border-radius: 50%;
+                                border: 2px solid #409eff;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .imageBox {
+            margin-bottom: 20px;
+            font-weight: bold;
+
+            .title {
+                margin-bottom: 10px;
+            }
+
+            .list {
+                display: flex;
+                flex-wrap: wrap;
+
+                .icon {
+                    width: 50px;
+                    height: 50px;
+                    margin-right: 10px;
+                    margin-bottom: 10px;
+                    cursor: pointer;
+                    position: relative;
+
+                    /deep/ img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                    }
+
+                    &.selected {
+                        &::after {
+                            content: '';
+                            position: absolute;
+                            left: -4px;
+                            top: -4px;
+                            width: 54px;
+                            height: 54px;
+                            border: 2px solid #409eff;
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+}
+</style>
+  

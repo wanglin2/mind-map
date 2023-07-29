@@ -19,6 +19,7 @@
     <NodeImgPreview v-if="mindMap" :mindMap="mindMap"></NodeImgPreview>
     <SidebarTrigger v-if="!isZenMode"></SidebarTrigger>
     <Search v-if="mindMap" :mindMap="mindMap"></Search>
+    <NodeIconSidebar></NodeIconSidebar>
   </div>
 </template>
 
@@ -62,6 +63,7 @@ import router from '../../../router'
 import store from '../../../store'
 import i18n from '../../../i18n'
 import Search from './Search.vue'
+import NodeIconSidebar from './NodeIconSidebar.vue'
 
 // 注册插件
 MindMap
@@ -105,7 +107,8 @@ export default {
     Navigator,
     NodeImgPreview,
     SidebarTrigger,
-    Search
+    Search,
+    NodeIconSidebar
   },
   data() {
     return {
