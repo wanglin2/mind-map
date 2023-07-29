@@ -131,6 +131,8 @@ nodeData, `SET_NODE_DATA` command's shortcut method
 
 - `richText`: v0.4.2+，`Boolean`, If you want to set rich text content, that is, `html` character, `richText` needs to be passed `true`
 
+- `resetRichText`: v0.6.10+, `Boolean`, whether to reset rich text, The default is 'false'. If 'true' is passed, the style of the rich text node will be reset
+
 Setting the node text, a shortcut for the `SET_NODE_TEXT` command
 
 ### setImage(imgData)

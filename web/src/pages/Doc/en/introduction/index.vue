@@ -127,6 +127,10 @@ full screen, support mini map</li>
         <img src="../../../../assets/avatar/仓鼠.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>仓鼠</p>
     </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/千帆.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>千帆</p>
+    </div>
 </div>
   </div>
 </template>
