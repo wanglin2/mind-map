@@ -208,7 +208,10 @@ class NodeImgAdjust {
 
   // 渲染完成事件
   onRenderEnd() {
-    if (!this.isAdjusted) return
+    if (!this.isAdjusted) {
+      this.hideHandleEl()
+      return
+    }
     this.isAdjusted = false
   }
 
