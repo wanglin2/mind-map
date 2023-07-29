@@ -1,17 +1,17 @@
-// 简约黑
+// 奥利奥
 export default {
   // 连线的颜色
-  lineColor: 'rgb(34, 34, 34)',
-  lineWidth: 4,
+  lineColor: 'rgb(51, 51, 51)',
+  lineWidth: 3,
   // 概要连线的粗细
-  generalizationLineWidth: 4,
+  generalizationLineWidth: 3,
   // 概要连线的颜色
-  generalizationLineColor: 'rgb(34, 34, 34)',
+  generalizationLineColor: 'rgb(51, 51, 51)',
   // 根节点样式
   root: {
-    fillColor: '#fff',
-    color: 'rgb(34, 34, 34)',
-    borderColor: 'rgb(34, 34, 34)',
+    fillColor: 'rgb(22, 22, 22)',
+    color: '#fff',
+    borderColor: 'rgb(22, 22, 22)',
     borderWidth: 3,
     fontSize: 24,
     active: {
@@ -20,21 +20,22 @@ export default {
   },
   // 二级节点样式
   second: {
-    fillColor: 'rgb(241, 246, 248)',
-    color: 'rgb(34, 34, 34)',
-    borderColor: 'rgb(34, 34, 34)',
+    fillColor: 'rgb(244, 246, 253)',
+    color: 'rgb(0, 0, 0)',
+    borderColor: '',
     borderWidth: 3,
     fontSize: 18,
+    shape: 'roundedRectangle',
     active: {
-      borderColor: '#a13600',
+      borderColor: 'rgb(22, 22, 22)',
     }
   },
   // 三级及以下节点样式
   node: {
     fontSize: 14,
-    color: 'rgb(34, 34, 34)',
+    color: 'rgb(0, 0, 0)',
     active: {
-      borderColor: '#a13600'
+      borderColor: 'rgb(22, 22, 22)'
     }
   },
   // 概要节点样式

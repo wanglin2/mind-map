@@ -83,9 +83,9 @@ MindMap
   .usePlugin(SearchPlugin)
 
 // 注册自定义主题
-// customThemeList.forEach((item) => {
-//   MindMap.defineTheme(item.value, item.theme)
-// })
+customThemeList.forEach((item) => {
+  MindMap.defineTheme(item.value, item.theme)
+})
 
 /**
  * @Author: 王林

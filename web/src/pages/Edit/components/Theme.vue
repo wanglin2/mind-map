@@ -1,9 +1,12 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('theme.title')">
     <div class="themeList" :class="{ isDark: isDark }">
+      <el-tabs v-model="activeName">
+          <el-tab-pane v-for="group in groupList" :key="group.name" :label="group.name" :name="group.name"></el-tab-pane>
+      </el-tabs>
       <div
         class="themeItem"
-        v-for="item in themeList"
+        v-for="item in currentList"
         :key="item.value"
         @click="useTheme(item)"
         :class="{ active: item.value === theme }"
@@ -42,13 +45,21 @@ export default {
   },
   data() {
     return {
-      themeList: [...themeList].reverse(), // ...customThemeList
+      themeList: [...themeList, ...customThemeList].reverse(),
       themeMap,
-      theme: ''
+      theme: '',
+      activeName: '',
+      groupList: []
     }
   },
   computed: {
-    ...mapState(['activeSidebar', 'isDark'])
+    ...mapState(['activeSidebar', 'isDark']),
+
+    currentList() {
+      return this.groupList.find((item) => {
+        return item.name === this.activeName
+      }).list
+    }
   },
   watch: {
     activeSidebar(val) {
@@ -62,11 +73,42 @@ export default {
     }
   },
   created() {
+    this.initGroup()
     this.theme = this.mindMap.getTheme()
     this.handleDark()
   },
   methods: {
     ...mapMutations(['setIsDark']),
+
+    initGroup() {
+      let baiduThemes = ['default', 'skyGreen', 'classic2', 'classic3', 'classicGreen', 'classicBlue', 'blueSky', 'brainImpairedPink', 'earthYellow', 'freshGreen', 'freshRed', 'romanticPurple', 'pinkGrape', 'mint']
+      let baiduList = []
+      let classicsList = []
+      this.themeList.forEach((item) => {
+        if (baiduThemes.includes(item.value)) {
+          baiduList.push(item)
+        } else if (!item.dark) {
+          classicsList.push(item)
+        }
+      })
+      this.groupList = [
+        {
+          name: '经典',
+          list: classicsList
+        },
+        {
+          name: '深色',
+          list: this.themeList.filter((item) => {
+            return item.dark
+          })
+        },
+        {
+          name: '朴素',
+          list: baiduList
+        }
+      ]
+      this.activeName = this.groupList[0].name
+    },
 
     useTheme(theme) {
       this.theme = theme.value
@@ -102,7 +144,7 @@ export default {
     },
 
     handleDark() {
-      let target = themeList.find(item => {
+      let target = this.themeList.find(item => {
         return item.value === this.theme
       })
       this.setIsDark(target.dark)
@@ -114,6 +156,7 @@ export default {
 <style lang="less" scoped>
 .themeList {
   padding: 20px;
+  padding-top: 0;
 
   &.isDark {
     .name {
