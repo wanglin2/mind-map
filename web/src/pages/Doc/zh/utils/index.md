@@ -197,6 +197,24 @@ copyNodeTree({}, node)
 
 获取一个数据的类型，比如`Boolean`、`Array`等。
 
+#### removeHtmlStyle(html)
+
+> v0.6.10+
+
+移除html字符串中节点的内联样式。
+
+#### addHtmlStyle(html, tag, style)
+
+> v0.6.10+
+
+给html标签中指定的标签添加内联样式。
+
+#### checkIsRichText(str)
+
+> v0.6.10+
+
+检查一个字符串是否是富文本字符。
+
 ## 在canvas中模拟css的背景属性
 
 引入：

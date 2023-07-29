@@ -202,6 +202,24 @@ Load image, return:
 
 Get the type of a data, such as `Boolean`、`Array`.
 
+#### removeHtmlStyle(html)
+
+> v0.6.10+
+
+Remove the inline style of nodes in the HTML string.
+
+#### addHtmlStyle(html, tag, style)
+
+> v0.6.10+
+
+Add inline styles to the specified tags in the HTML tag.
+
+#### checkIsRichText(str)
+
+> v0.6.10+
+
+Check if a string is a rich text character.
+
 ## Simulate CSS background in Canvas
 
 Import:

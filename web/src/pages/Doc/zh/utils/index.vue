@@ -134,6 +134,21 @@
 <p>v0.6.9+</p>
 </blockquote>
 <p>获取一个数据的类型，比如<code>Boolean</code>、<code>Array</code>等。</p>
+<h4>removeHtmlStyle(html)</h4>
+<blockquote>
+<p>v0.6.10+</p>
+</blockquote>
+<p>移除html字符串中节点的内联样式。</p>
+<h4>addHtmlStyle(html, tag, style)</h4>
+<blockquote>
+<p>v0.6.10+</p>
+</blockquote>
+<p>给html标签中指定的标签添加内联样式。</p>
+<h4>checkIsRichText(str)</h4>
+<blockquote>
+<p>v0.6.10+</p>
+</blockquote>
+<p>检查一个字符串是否是富文本字符。</p>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>
