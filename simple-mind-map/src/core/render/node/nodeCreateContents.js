@@ -65,7 +65,7 @@ function createIconNode() {
     }
     node.size(iconSize, iconSize)
     node.on('click', e => {
-      this.mindMap.emit('node_icon_click', this, e)
+      this.mindMap.emit('node_icon_click', this, item, e)
     })
     return {
       node,
