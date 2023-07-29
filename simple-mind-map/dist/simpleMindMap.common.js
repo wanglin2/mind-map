@@ -41727,6 +41727,58 @@ const removeHTMLEntities = str => {
 const getType = data => {
   return Object.prototype.toString.call(data).slice(7, -1);
 };
+
+// 判断一个数据是否是null和undefined和空字符串
+const isUndef = data => {
+  return data === null || data === undefined || data === '';
+};
+
+// 移除html字符串中节点的内联样式
+const removeHtmlStyle = html => {
+  return html.replaceAll(/(<[^\s]+)\s+style=["'][^'"]+["']\s*(>)/g, '$1$2');
+};
+
+// 给html标签中指定的标签添加内联样式
+const addHtmlStyle = (html, tag, style) => {
+  const reg = new RegExp(`(<${tag}[^>]*)(>[^<>]*</${tag}>)`, 'g');
+  return html.replaceAll(reg, `$1 style="${style}"$2`);
+};
+
+// 检查一个字符串是否是富文本字符
+let checkIsRichTextEl = null;
+const checkIsRichText = str => {
+  if (!checkIsRichTextEl) {
+    checkIsRichTextEl = document.createElement('div');
+  }
+  checkIsRichTextEl.innerHTML = str;
+  for (let c = checkIsRichTextEl.childNodes, i = c.length; i--;) {
+    if (c[i].nodeType == 1) return true;
+  }
+  return false;
+};
+
+// 搜索和替换html字符串中指定的文本
+let replaceHtmlTextEl = null;
+const replaceHtmlText = (html, searchText, replaceText) => {
+  if (!replaceHtmlTextEl) {
+    replaceHtmlTextEl = document.createElement('div');
+  }
+  replaceHtmlTextEl.innerHTML = html;
+  let walk = root => {
+    let childNodes = root.childNodes;
+    childNodes.forEach(node => {
+      if (node.nodeType === 1) {
+        // 元素节点
+        walk(node);
+      } else if (node.nodeType === 3) {
+        // 文本节点
+        root.replaceChild(document.createTextNode(node.nodeValue.replaceAll(searchText, replaceText)), node);
+      }
+    });
+  };
+  walk(replaceHtmlTextEl);
+  return replaceHtmlTextEl.innerHTML;
+};
 // CONCATENATED MODULE: ../simple-mind-map/src/core/render/node/nodeGeneralization.js
 
 
@@ -41992,8 +42044,8 @@ function nodeCommandWraps_setData(data = {}) {
 }
 
 //  设置文本
-function setText(text, richText) {
-  this.mindMap.execCommand('SET_NODE_TEXT', this, text, richText);
+function setText(text, richText, resetRichText) {
+  this.mindMap.execCommand('SET_NODE_TEXT', this, text, richText, resetRichText);
 }
 
 //  设置图片
@@ -42333,6 +42385,9 @@ function createIconNode() {
       node = new svg_esm_Image().load(src);
     }
     node.size(iconSize, iconSize);
+    node.on('click', e => {
+      this.mindMap.emit('node_icon_click', this, item, e);
+    });
     return {
       node,
       width: iconSize,
@@ -42357,8 +42412,21 @@ function createRichTextNode() {
     }
   }
   if (recoverText) {
-    let text = getTextFromHtml(this.nodeData.data.text);
-    this.nodeData.data.text = `<p><span style="${this.style.createStyleText()}">${text}</span></p>`;
+    let text = this.nodeData.data.text;
+    // 判断节点内容是否是富文本
+    let isRichText = checkIsRichText(text);
+    // 样式字符串
+    let style = this.style.createStyleText();
+    if (isRichText) {
+      // 如果是富文本那么线移除内联样式
+      text = removeHtmlStyle(text);
+      // 再添加新的内联样式
+      text = addHtmlStyle(text, 'span', style);
+    } else {
+      // 非富文本
+      text = `<p><span style="${style}">${text}</span></p>`;
+    }
+    this.nodeData.data.text = text;
   }
   let html = `<div>${this.nodeData.data.text}</div>`;
   let div = document.createElement('div');
@@ -46675,7 +46743,7 @@ class Render_Render {
     this.themeConfig = this.mindMap.themeConfig;
     this.draw = this.mindMap.draw;
     // 渲染树，操作过程中修改的都是这里的数据
-    this.renderTree = cjs_default()({}, simpleDeepClone(this.mindMap.opt.data) || {});
+    this.renderTree = cjs_default()({}, this.mindMap.opt.data || {});
     // 是否重新渲染
     this.reRender = false;
     // 是否正在渲染中
@@ -47547,11 +47615,11 @@ class Render_Render {
   }
 
   //  设置节点文本
-  setNodeText(node, text, richText) {
+  setNodeText(node, text, richText, resetRichText) {
     this.setNodeDataRender(node, {
       text,
       richText,
-      resetRichText: richText
+      resetRichText
     });
   }
 
@@ -50172,6 +50240,8 @@ class simple_mind_map_MindMap {
 
   //  配置参数处理
   handleOpt(opt) {
+    // 深拷贝一份节点数据
+    opt.data = simpleDeepClone(opt.data || {});
     // 检查布局配置
     if (!layoutValueList.includes(opt.layout)) {
       opt.layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE;
@@ -53940,7 +54010,10 @@ class NodeImgAdjust_NodeImgAdjust {
 
   // 渲染完成事件
   onRenderEnd() {
-    if (!this.isAdjusted) return;
+    if (!this.isAdjusted) {
+      this.hideHandleEl();
+      return;
+    }
     this.isAdjusted = false;
   }
 
@@ -54121,8 +54194,8 @@ class Search_Search {
 
   // 搜索
   search(text, callback) {
-    text = String(text).trim();
-    if (!text) return this.endSearch();
+    if (isUndef(text)) return this.endSearch();
+    text = String(text);
     this.isSearching = true;
     if (this.searchText === text) {
       // 和上一次搜索文本一样，那么搜索下一个
@@ -54176,19 +54249,20 @@ class Search_Search {
     let currentNode = this.matchNodeList[this.currentIndex];
     this.notResetSearchText = true;
     this.mindMap.execCommand('GO_TARGET_NODE', currentNode, () => {
+      this.notResetSearchText = false;
       callback();
     });
   }
 
   // 替换当前节点
   replace(replaceText) {
-    replaceText = String(replaceText).trim();
-    if (!replaceText || !this.isSearching || this.matchNodeList.length <= 0) return;
+    if (isUndef(replaceText) || !this.isSearching || this.matchNodeList.length <= 0) return;
+    replaceText = String(replaceText);
     let currentNode = this.matchNodeList[this.currentIndex];
     if (!currentNode) return;
     let text = this.getReplacedText(currentNode, this.searchText, replaceText);
     this.notResetSearchText = true;
-    currentNode.setText(text, currentNode.nodeData.data.richText);
+    currentNode.setText(text, currentNode.nodeData.data.richText, true);
     this.matchNodeList = this.matchNodeList.filter(node => {
       return currentNode !== node;
     });
@@ -54202,8 +54276,8 @@ class Search_Search {
 
   // 替换所有
   replaceAll(replaceText) {
-    replaceText = String(replaceText).trim();
-    if (!replaceText || !this.isSearching || this.matchNodeList.length <= 0) return;
+    if (isUndef(replaceText) || !this.isSearching || this.matchNodeList.length <= 0) return;
+    replaceText = String(replaceText);
     this.matchNodeList.forEach(node => {
       let text = this.getReplacedText(node, this.searchText, replaceText);
       this.mindMap.renderer.setNodeDataRender(node, {

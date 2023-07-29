@@ -48,7 +48,7 @@ class Render {
     this.themeConfig = this.mindMap.themeConfig
     this.draw = this.mindMap.draw
     // 渲染树，操作过程中修改的都是这里的数据
-    this.renderTree = merge({}, simpleDeepClone(this.mindMap.opt.data) || {})
+    this.renderTree = merge({},this.mindMap.opt.data || {})
     // 是否重新渲染
     this.reRender = false
     // 是否正在渲染中
@@ -972,11 +972,11 @@ class Render {
   }
 
   //  设置节点文本
-  setNodeText(node, text, richText) {
+  setNodeText(node, text, richText, resetRichText) {
     this.setNodeDataRender(node, {
       text,
       richText,
-      resetRichText: richText
+      resetRichText
     })
   }
 

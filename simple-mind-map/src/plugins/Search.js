@@ -1,4 +1,4 @@
-import { bfsWalk, getTextFromHtml } from '../utils/index'
+import { bfsWalk, getTextFromHtml, isUndef } from '../utils/index'
 
 // 搜索插件
 class Search {
@@ -30,8 +30,8 @@ class Search {
 
   // 搜索
   search(text, callback) {
-    text = String(text).trim()
-    if (!text) return this.endSearch()
+    if (isUndef(text)) return this.endSearch()
+    text = String(text)
     this.isSearching = true
     if (this.searchText === text) {
       // 和上一次搜索文本一样，那么搜索下一个
@@ -82,20 +82,25 @@ class Search {
     let currentNode = this.matchNodeList[this.currentIndex]
     this.notResetSearchText = true
     this.mindMap.execCommand('GO_TARGET_NODE', currentNode, () => {
+      this.notResetSearchText = false
       callback()
     })
   }
 
   // 替换当前节点
   replace(replaceText) {
-    replaceText = String(replaceText).trim()
-    if (!replaceText || !this.isSearching || this.matchNodeList.length <= 0)
+    if (
+      isUndef(replaceText) ||
+      !this.isSearching ||
+      this.matchNodeList.length <= 0
+    )
       return
+    replaceText = String(replaceText)
     let currentNode = this.matchNodeList[this.currentIndex]
     if (!currentNode) return
     let text = this.getReplacedText(currentNode, this.searchText, replaceText)
     this.notResetSearchText = true
-    currentNode.setText(text, currentNode.nodeData.data.richText)
+    currentNode.setText(text, currentNode.nodeData.data.richText, true)
     this.matchNodeList = this.matchNodeList.filter(node => {
       return currentNode !== node
     })
@@ -109,9 +114,13 @@ class Search {
 
   // 替换所有
   replaceAll(replaceText) {
-    replaceText = String(replaceText).trim()
-    if (!replaceText || !this.isSearching || this.matchNodeList.length <= 0)
+    if (
+      isUndef(replaceText) ||
+      !this.isSearching ||
+      this.matchNodeList.length <= 0
+    )
       return
+    replaceText = String(replaceText)
     this.matchNodeList.forEach(node => {
       let text = this.getReplacedText(node, this.searchText, replaceText)
       this.mindMap.renderer.setNodeDataRender(
