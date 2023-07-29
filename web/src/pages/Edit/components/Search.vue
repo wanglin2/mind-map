@@ -102,7 +102,7 @@ export default {
     showSearch() {
       this.$bus.$emit('closeSideBar')
       this.show = true
-      // this.$refs.input.focus()
+      // this.$refs.searchInputRef.focus()
     },
 
     hideReplaceInput() {
@@ -112,7 +112,7 @@ export default {
 
     onSearchNext() {
       this.mindMap.search.search(this.searchText, () => {
-        this.$refs.input.focus()
+        this.$refs.searchInputRef.focus()
       })
     },
 
