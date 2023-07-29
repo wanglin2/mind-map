@@ -239,6 +239,7 @@ export default {
 
     showNodeIcon() {
       // this.$bus.$emit('showNodeIcon')
+      this.$bus.$emit('close_node_icon_toolbar')
       this.setActiveSidebar('nodeIconSidebar')
     },
 

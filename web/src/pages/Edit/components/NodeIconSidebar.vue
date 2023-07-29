@@ -37,14 +37,13 @@
   
 <script>
 import Sidebar from './Sidebar'
-import { shortcutKeyList } from '@/config'
 import { mapState } from 'vuex'
 import { nodeIconList } from 'simple-mind-map/src/svg/icons'
 import icon from '@/config/icon'
 import image from '@/config/image'
 
 export default {
-    name: 'ShortcutKey',
+    name: 'NodeIconSidebar',
     components: {
         Sidebar
     },
