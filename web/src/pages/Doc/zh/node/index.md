@@ -124,9 +124,11 @@
 
 设置节点数据，`SET_NODE_DATA`命令的快捷方法
 
-### setText(text, richText)
+### setText(text, richText, resetRichText)
 
 - `richText`：v0.4.2+，`Boolean`，如果要设置的是富文本内容，也就是`html`字符，`richText`需要传`true`
+
+- `resetRichText`：v0.6.10+，`Boolean`，是否要复位富文本，默认为`false`，如果传`true`那么会重置富文本节点的样式
 
 设置节点文本，`SET_NODE_TEXT`命令的快捷方法
 

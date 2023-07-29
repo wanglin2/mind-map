@@ -139,6 +139,21 @@ and copying the <code>data</code> of the data object, example:</p>
 <p>v0.6.9+</p>
 </blockquote>
 <p>Get the type of a data, such as <code>Boolean</code>、<code>Array</code>.</p>
+<h4>removeHtmlStyle(html)</h4>
+<blockquote>
+<p>v0.6.10+</p>
+</blockquote>
+<p>Remove the inline style of nodes in the HTML string.</p>
+<h4>addHtmlStyle(html, tag, style)</h4>
+<blockquote>
+<p>v0.6.10+</p>
+</blockquote>
+<p>Add inline styles to the specified tags in the HTML tag.</p>
+<h4>checkIsRichText(str)</h4>
+<blockquote>
+<p>v0.6.10+</p>
+</blockquote>
+<p>Check if a string is a rich text character.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

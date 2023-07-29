@@ -714,6 +714,11 @@ poor performance and should be used sparingly.</p>
 <td>Triggered when the mouse moves out of the SVG canvas</td>
 <td>e（event object）</td>
 </tr>
+<tr>
+<td>node_icon_click（v0.6.10+）</td>
+<td>Triggered when clicking on an icon within a node</td>
+<td>this（node instance）、item（Click on the icon name）、e（event object）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
@@ -853,7 +858,7 @@ redo. All commands are as follows:</p>
 <tr>
 <td>SET_NODE_TEXT</td>
 <td>Set node text</td>
-<td>node (the node to set), text (the new text for the node), richText（v0.4.0+, If you want to set a rich text character, you need to set it to <code>true</code>）</td>
+<td>node (the node to set), text (the new text for the node), richText（v0.4.0+, If you want to set a rich text character, you need to set it to <code>true</code>）、resetRichText（v0.6.10+Do you want to reset rich text? The default is false. If true is passed, the style of the rich text node will be reset）</td>
 </tr>
 <tr>
 <td>SET_NODE_IMAGE</td>

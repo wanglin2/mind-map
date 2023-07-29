@@ -76,7 +76,12 @@ if <code>key</code> is not passed, return the <code>data</code> object</p>
 nodeData, <code>SET_NODE_DATA</code> command's shortcut method</p>
 <h3>setText(text, richText)</h3>
 <ul>
-<li><code>richText</code>: v0.4.2+，<code>Boolean</code>, If you want to set rich text content, that is, <code>html</code> character, <code>richText</code> needs to be passed <code>true</code></li>
+<li>
+<p><code>richText</code>: v0.4.2+，<code>Boolean</code>, If you want to set rich text content, that is, <code>html</code> character, <code>richText</code> needs to be passed <code>true</code></p>
+</li>
+<li>
+<p><code>resetRichText</code>: v0.6.10+, <code>Boolean</code>, whether to reset rich text, The default is 'false'. If 'true' is passed, the style of the rich text node will be reset</p>
+</li>
 </ul>
 <p>Setting the node text, a shortcut for the <code>SET_NODE_TEXT</code> command</p>
 <h3>setImage(imgData)</h3>
