@@ -1,4 +1,4 @@
-import { measureText, resizeImgSize, getTextFromHtml } from '../../../utils'
+import { measureText, resizeImgSize, removeHtmlStyle, addHtmlStyle, checkIsRichText } from '../../../utils'
 import { Image, SVG, A, G, Rect, Text, ForeignObject } from '@svgdotjs/svg.js'
 import iconsSvg from '../../../svg/icons'
 import { CONSTANTS, commonCaches } from '../../../constants/constant'
@@ -64,6 +64,9 @@ function createIconNode() {
       node = new Image().load(src)
     }
     node.size(iconSize, iconSize)
+    node.on('click', e => {
+      this.mindMap.emit('node_icon_click', this, e)
+    })
     return {
       node,
       width: iconSize,
@@ -88,8 +91,21 @@ function createRichTextNode() {
     }
   }
   if (recoverText) {
-    let text = getTextFromHtml(this.nodeData.data.text)
-    this.nodeData.data.text = `<p><span style="${this.style.createStyleText()}">${text}</span></p>`
+    let text = this.nodeData.data.text
+    // 判断节点内容是否是富文本
+    let isRichText = checkIsRichText(text)
+    // 样式字符串
+    let style = this.style.createStyleText()
+    if (isRichText) {
+      // 如果是富文本那么线移除内联样式
+      text = removeHtmlStyle(text)
+      // 再添加新的内联样式
+      text = addHtmlStyle(text, 'span', style)
+    } else {
+      // 非富文本
+      text = `<p><span style="${style}">${text}</span></p>`
+    }
+    this.nodeData.data.text = text
   }
   let html = `<div>${this.nodeData.data.text}</div>`
   let div = document.createElement('div')

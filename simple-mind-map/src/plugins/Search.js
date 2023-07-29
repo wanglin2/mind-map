@@ -100,7 +100,7 @@ class Search {
     if (!currentNode) return
     let text = this.getReplacedText(currentNode, this.searchText, replaceText)
     this.notResetSearchText = true
-    currentNode.setText(text, currentNode.nodeData.data.richText)
+    currentNode.setText(text, currentNode.nodeData.data.richText, true)
     this.matchNodeList = this.matchNodeList.filter(node => {
       return currentNode !== node
     })

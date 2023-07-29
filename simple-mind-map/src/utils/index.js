@@ -471,3 +471,27 @@ export const getType = (data) => {
 export const isUndef = (data) => {
   return data === null || data === undefined || data === ''
 }
+
+// 移除html字符串中节点的内联样式
+export const removeHtmlStyle = (html) => {
+  return html.replaceAll(/(<[^\s]+)\s+style=["'][^'"]+["']\s*(>)/g, '$1$2')
+}
+
+// 给html标签中指定的标签添加内联样式
+export const addHtmlStyle = (html, tag, style) => {
+  const reg = new RegExp(`(<${tag}[^>]*)(>[^<>]*</${tag}>)`, 'g')
+  return html.replaceAll(reg, `$1 style="${style}"$2`)
+}
+
+// 检查一个字符串是否是富文本字符
+let checkIsRichTextEl = null
+export const checkIsRichText = (str) => {
+  if (!checkIsRichTextEl) {
+    checkIsRichTextEl = document.createElement('div')
+  }
+  checkIsRichTextEl.innerHTML = str
+  for (let c = checkIsRichTextEl.childNodes, i = c.length; i--;) {
+    if (c[i].nodeType == 1) return true
+  }
+  return false
+}

@@ -4,8 +4,8 @@ function setData(data = {}) {
 }
 
 //  设置文本
-function setText(text, richText) {
-  this.mindMap.execCommand('SET_NODE_TEXT', this, text, richText)
+function setText(text, richText, resetRichText) {
+  this.mindMap.execCommand('SET_NODE_TEXT', this, text, richText, resetRichText)
 }
 
 //  设置图片

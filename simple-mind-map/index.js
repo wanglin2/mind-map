@@ -81,6 +81,8 @@ class MindMap {
 
   //  配置参数处理
   handleOpt(opt) {
+    // 深拷贝一份节点数据
+    opt.data = simpleDeepClone(opt.data || {})
     // 检查布局配置
     if (!layoutValueList.includes(opt.layout)) {
       opt.layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE
