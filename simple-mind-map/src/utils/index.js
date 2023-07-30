@@ -528,3 +528,15 @@ export const isTransparent = (color) => {
   color = String(color).replaceAll(/\s+/g, '')
   return ['', 'transparent'].includes(color) || /rgba\(\d+,\d+,\d+,0\)/.test(color)
 }
+
+// 从当前主题里获取一个非透明非白色的颜色
+export const getVisibleColorFromTheme = (themeConfig) => {
+  let { lineColor, root, second, node } = themeConfig
+  let list = [lineColor, root.fillColor, root.color, second.fillColor, second.color, node.fillColor, node.color, root.borderColor, second.borderColor, node.borderColor]
+  for(let i = 0; i < list.length; i++) {
+    let color = list[i]
+    if (!isTransparent(color) && !isWhite(color)) {
+      return color
+    }
+  }
+}

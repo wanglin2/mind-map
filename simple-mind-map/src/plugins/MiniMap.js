@@ -1,4 +1,4 @@
-import { isWhite, isTransparent } from '../utils/index'
+import { isWhite, isTransparent, getVisibleColorFromTheme } from '../utils/index'
 
 // 小地图插件
 class MiniMap {
@@ -84,7 +84,7 @@ class MiniMap {
       let shape = svg.findOne('.smm-node-shape')
       let fill = shape.attr('fill')
       if (isWhite(fill) || isTransparent(fill)) {
-        shape.attr('fill', this.getDefaultFill())
+        shape.attr('fill', getVisibleColorFromTheme(this.mindMap.themeConfig))
       }
       svg.clear()
       svg.add(shape)
@@ -95,18 +95,6 @@ class MiniMap {
       children.forEach((node) => {
         this.removeNodeContent(node)
       })
-    }
-  }
-
-  // 计算默认的填充颜色
-  getDefaultFill() {
-    let { lineColor, root, second, node } = this.mindMap.themeConfig
-    let list = [lineColor, root.fillColor, root.color, second.fillColor, second.color, node.fillColor, node.color, root.borderColor, second.borderColor, node.borderColor]
-    for(let i = 0; i < list.length; i++) {
-      let color = list[i]
-      if (!isTransparent(color) && !isWhite(color)) {
-        return color
-      }
     }
   }
 
