@@ -220,6 +220,16 @@ Add inline styles to the specified tags in the HTML tag.
 
 Check if a string is a rich text character.
 
+#### isWhite(color)
+
+> v0.6.11+
+
+Determine whether a color is white.
+
+#### isTransparent(color)
+
+Determine whether a color is transparent.
+
 ## Simulate CSS background in Canvas
 
 Import:
