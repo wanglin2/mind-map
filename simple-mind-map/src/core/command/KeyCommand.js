@@ -57,8 +57,11 @@ export default class KeyCommand {
       }
       Object.keys(this.shortcutMap).forEach(key => {
         if (this.checkKey(e, key)) {
-          e.stopPropagation()
-          e.preventDefault()
+          // 粘贴事件不组织，因为要监听paste事件
+          if (!this.checkKey(e, 'Control+v')) {
+            e.stopPropagation()
+            e.preventDefault()
+          }
           this.shortcutMap[key].forEach(fn => {
             fn()
           })

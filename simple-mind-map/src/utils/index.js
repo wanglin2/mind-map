@@ -434,3 +434,97 @@ export const getImageSize = src => {
 export const createUid = () => {
   return uuidv4()
 }
+
+// 加载图片文件
+export const loadImage = imgFile => {
+  return new Promise((resolve, reject) => {
+    let fr = new FileReader()
+    fr.readAsDataURL(imgFile)
+    fr.onload = async e => {
+      let url = e.target.result
+      let size = await getImageSize(url)
+      resolve({
+        url,
+        size
+      })
+    }
+    fr.onerror = error => {
+      reject(error)
+    }
+  })
+}
+
+// 移除字符串中的html实体
+export const removeHTMLEntities = (str) => {
+  [['&nbsp;', '&#160;']].forEach((item) => {
+    str = str.replaceAll(item[0], item[1])
+  })
+  return str
+}
+
+// 获取一个数据的类型
+export const getType = (data) => {
+  return Object.prototype.toString.call(data).slice(7, -1)
+}
+
+// 判断一个数据是否是null和undefined和空字符串
+export const isUndef = (data) => {
+  return data === null || data === undefined || data === ''
+}
+
+// 移除html字符串中节点的内联样式
+export const removeHtmlStyle = (html) => {
+  return html.replaceAll(/(<[^\s]+)\s+style=["'][^'"]+["']\s*(>)/g, '$1$2')
+}
+
+// 给html标签中指定的标签添加内联样式
+export const addHtmlStyle = (html, tag, style) => {
+  const reg = new RegExp(`(<${tag}[^>]*)(>[^<>]*</${tag}>)`, 'g')
+  return html.replaceAll(reg, `$1 style="${style}"$2`)
+}
+
+// 检查一个字符串是否是富文本字符
+let checkIsRichTextEl = null
+export const checkIsRichText = (str) => {
+  if (!checkIsRichTextEl) {
+    checkIsRichTextEl = document.createElement('div')
+  }
+  checkIsRichTextEl.innerHTML = str
+  for (let c = checkIsRichTextEl.childNodes, i = c.length; i--;) {
+    if (c[i].nodeType == 1) return true
+  }
+  return false
+}
+
+// 搜索和替换html字符串中指定的文本
+let replaceHtmlTextEl = null
+export const replaceHtmlText = (html, searchText, replaceText) => {
+  if (!replaceHtmlTextEl) {
+    replaceHtmlTextEl = document.createElement('div')
+  }
+  replaceHtmlTextEl.innerHTML = html
+  let walk = (root) => {
+    let childNodes = root.childNodes
+    childNodes.forEach((node) => {
+      if (node.nodeType === 1) {// 元素节点
+        walk(node)
+      } else if (node.nodeType === 3) {// 文本节点
+        root.replaceChild(document.createTextNode(node.nodeValue.replaceAll(searchText, replaceText)), node)
+      }
+    })
+  }
+  walk(replaceHtmlTextEl)
+  return replaceHtmlTextEl.innerHTML
+}
+
+// 判断一个颜色是否是白色
+export const isWhite = (color) => {
+  color = String(color).replaceAll(/\s+/g, '')
+  return ['#fff', '#ffffff', '#FFF', '#FFFFFF', 'rgb(255,255,255)'].includes(color) || /rgba\(255,255,255,[^)]+\)/.test(color)
+}
+
+// 判断一个颜色是否是透明
+export const isTransparent = (color) => {
+  color = String(color).replaceAll(/\s+/g, '')
+  return ['', 'transparent'].includes(color) || /rgba\(\d+,\d+,\d+,0\)/.test(color)
+}

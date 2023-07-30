@@ -1,6 +1,6 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('baseStyle.title')">
-    <div class="sidebarContent" v-if="data">
+    <div class="sidebarContent" :class="{ isDark: isDark }" v-if="data">
       <!-- 背景 -->
       <div class="title noTop">{{ $t('baseStyle.background') }}</div>
       <div class="row">
@@ -711,7 +711,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeSidebar', 'localConfig']),
+    ...mapState(['activeSidebar', 'localConfig', 'isDark']),
 
     lineStyleList() {
       return lineStyleList[this.$i18n.locale] || lineStyleList.zh
@@ -879,6 +879,12 @@ export default {
       }
       this.data.theme.config[this.marginActiveTab][type] = value
       this.mindMap.setThemeConfig(this.data.theme.config)
+      storeConfig({
+        theme: {
+          template: this.mindMap.getTheme(),
+          config: this.data.theme.config
+        }
+      })
     },
 
     // 切换显示水印与否
@@ -894,6 +900,7 @@ export default {
 
     // 切换是否开启节点富文本编辑
     enableNodeRichTextChange(e) {
+      this.mindMap.renderer.textEdit.hideEditTextBox()
       this.setLocalConfig({
         openNodeRichText: e
       })
@@ -914,6 +921,20 @@ export default {
 .sidebarContent {
   padding: 20px;
   padding-top: 10px;
+
+  &.isDark {
+    .title {
+      color: #fff;
+    }
+
+    .row {
+      .rowItem {
+        .name {
+          color: hsla(0,0%,100%,.6);
+        }
+      }
+    }
+  }
 
   .title {
     font-size: 16px;

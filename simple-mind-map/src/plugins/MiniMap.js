@@ -1,4 +1,6 @@
-// 小地图类
+import { isWhite, isTransparent } from '../utils/index'
+
+// 小地图插件
 class MiniMap {
   //  构造函数
   constructor(opt) {
@@ -20,7 +22,7 @@ class MiniMap {
    * boxHeight：小地图容器的高度
    */
   calculationMiniMap(boxWidth, boxHeight) {
-    let { svgHTML, rect, origWidth, origHeight, scaleX, scaleY } =
+    let { svg, rect, origWidth, origHeight, scaleX, scaleY } =
       this.mindMap.getSvgData()
     // 计算数据
     let boxRatio = boxWidth / boxHeight
@@ -65,12 +67,46 @@ class MiniMap {
       Math.max(0, ((_rectY2 - origHeight) / _rectHeight) * actHeight) +
       miniMapBoxTop +
       'px'
+    
+    this.removeNodeContent(svg)
     return {
-      svgHTML, // 小地图html
+      svgHTML: svg.svg(), // 小地图html
       viewBoxStyle, // 视图框的位置信息
       miniMapBoxScale, // 视图框的缩放值
       miniMapBoxLeft, // 视图框的left值
       miniMapBoxTop // 视图框的top值
+    }
+  }
+
+  // 移除节点的内容
+  removeNodeContent(svg) {
+    if (svg.hasClass('smm-node')) {
+      let shape = svg.findOne('.smm-node-shape')
+      let fill = shape.attr('fill')
+      if (isWhite(fill) || isTransparent(fill)) {
+        shape.attr('fill', this.getDefaultFill())
+      }
+      svg.clear()
+      svg.add(shape)
+      return
+    }
+    let children = svg.children()
+    if (children && children.length > 0) {
+      children.forEach((node) => {
+        this.removeNodeContent(node)
+      })
+    }
+  }
+
+  // 计算默认的填充颜色
+  getDefaultFill() {
+    let { lineColor, root, second, node } = this.mindMap.themeConfig
+    let list = [lineColor, root.fillColor, root.color, second.fillColor, second.color, node.fillColor, node.color, root.borderColor, second.borderColor, node.borderColor]
+    for(let i = 0; i < list.length; i++) {
+      let color = list[i]
+      if (!isTransparent(color) && !isWhite(color)) {
+        return color
+      }
     }
   }
 

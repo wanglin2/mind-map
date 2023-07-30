@@ -140,4 +140,16 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/Chris.jpg" style="width: 50px;height: 50px;" />
         <span>Chris</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/水车.jpg" style="width: 50px;height: 50px;" />
+        <span>水车</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/仓鼠.jpg" style="width: 50px;height: 50px;" />
+        <span>仓鼠</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/千帆.jpg" style="width: 50px;height: 50px;" />
+        <span>千帆</span>
+    </span>
 </p>

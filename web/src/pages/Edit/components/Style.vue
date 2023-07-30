@@ -1,6 +1,6 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('style.title')">
-    <div class="styleBox" v-if="activeNodes.length > 0">
+    <div class="styleBox" :class="{ isDark: isDark }" v-if="activeNodes.length > 0">
       <el-tabs class="tab" v-model="activeTab" @tab-click="handleTabClick">
         <el-tab-pane :label="$t('style.normal')" name="normal"></el-tab-pane>
         <el-tab-pane :label="$t('style.active')" name="active"></el-tab-pane>
@@ -435,7 +435,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeSidebar']),
+    ...mapState(['activeSidebar', 'isDark']),
 
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
@@ -622,6 +622,28 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+
+  &.isDark {
+    .sidebarContent {
+      .title {
+        color: #fff;
+      }
+
+      .row {
+        .rowItem {
+          .name {
+            color: hsla(0,0%,100%,.6);
+          }
+        }
+
+        .styleBtn {
+          background-color: #363b3f;
+          color: hsla(0, 0%, 100%, 0.6);
+          border-color: hsla(0, 0%, 100%, 0.1);
+        }
+      }
+    }
+  }
 
   .tab {
     flex-grow: 0;

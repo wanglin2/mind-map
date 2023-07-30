@@ -1,6 +1,24 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.6.11</h2>
+<p>New: 1.Optimize the mini map, remove node content within the mini map, and optimize performance.</p>
+<p>Demo: 1.Add a new topic and add tab differentiation to the topic list. 2.Node image upload supports inputting network image addresses. 3.Node image upload supports inputting network images.</p>
+<h2>0.6.10</h2>
+<p>Fix: 1.Fix the issue of deleting a node after searching for it and not updating the search results when searching again.  2.Fixed an issue where the button for adjusting image size did not update after node operation.  3.Fix the issue of incorrect internal data deep copy location.  4.Fix the issue of ineffective line wrapping in rich text nodes.  5. Fix the issue of node swapping and loss when switching themes and other scenarios.</p>
+<p>New: 1.Search supports searching for white space characters and replacing them with white space characters.</p>
+<p>Demo: 1.Support calling up search through icon buttons.  2.Support for switching to dark mode through icon buttons.  3.Optimize search: The mouse is not in the search area and not focused, solving the problem of not being able to delete input text when the mouse is not in the search area.  4.Adjust the interface UI for adding node icons and add a series of node icons.  5.Add a sticker list.  6.Fixed the issue of missing focus in the input box after entering the search box.  7.Support clicking on the icon within the node to display an icon for quick replacement and deletion of the floating panel.</p>
+<h2>0.6.9-fix.1</h2>
+<p>Fix: 1.Fix the issue of incorrect replacement after a single search.</p>
+<p>New: 1.We will no longer directly modify the incoming data object, but will make a deep copy internally.</p>
+<h2>0.6.9</h2>
+<p>Fix: 1.Fixed an issue where setting styles to summary nodes would cause summary nodes to disappear. 2.Fixed the issue of node content not rendering when creating a root instance again when customizing node content. 3.Fix the issue of losing focus when adding a new node while the node is in editing. 2.Fix the issue of continuously pressing the tab key not being able to continuously create child nodes.</p>
+<p>New: 1.Replace existing <code>&amp;nbsp;</code> in SVG when exporting Characters to avoid exporting SVG errors. 2.Support for search and replace.</p>
+<p>Demo: 1.When switching themes, it is supported to choose whether to overwrite the set basic style.</p>
+<h2>0.6.8</h2>
+<p>Fix: 1.Change the shortcut key for inserting a summary to Ctrl+G to avoid conflicts with the save shortcut key. 2.Fix the issue of abnormal switching between rich text editing configuration input boxes while nodes are being edited.</p>
+<p>New: 1.Modify the copy, cut, and paste logic, and support pasting data from the clipboard.</p>
+<p>Demo: 1.Fix the issue of not saving the outer margin of the basic style setting node. 2.Supports automatic switching to dark mode based on the theme.</p>
 <h2>0.6.7</h2>
 <p>Fix: 1.Fixed the issue of missing placeholder elements for the expand and collapse button after node collapse and expansion. 2.Fixed the issue of being able to scale images in read-only mode.</p>
 <p>New: 1.Support locating to a node based on node instance or node uid. 2.Modify the creation method of node uids and export data to add node uids.</p>

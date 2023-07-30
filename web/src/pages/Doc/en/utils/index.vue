@@ -121,6 +121,46 @@ and copying the <code>data</code> of the data object, example:</p>
   height
 }
 </code></pre>
+<h4>loadImage(imgFile)</h4>
+<blockquote>
+<p>v0.6.8+</p>
+</blockquote>
+<ul>
+<li><code>imgFile</code>: File object of image type</li>
+</ul>
+<p>Load image, return:</p>
+<pre class="hljs"><code>{
+  url,<span class="hljs-comment">// DataUrl</span>
+  size<span class="hljs-comment">// { width, height } width and height of image</span>
+}
+</code></pre>
+<h4>getType(data)</h4>
+<blockquote>
+<p>v0.6.9+</p>
+</blockquote>
+<p>Get the type of a data, such as <code>Boolean</code>、<code>Array</code>.</p>
+<h4>removeHtmlStyle(html)</h4>
+<blockquote>
+<p>v0.6.10+</p>
+</blockquote>
+<p>Remove the inline style of nodes in the HTML string.</p>
+<h4>addHtmlStyle(html, tag, style)</h4>
+<blockquote>
+<p>v0.6.10+</p>
+</blockquote>
+<p>Add inline styles to the specified tags in the HTML tag.</p>
+<h4>checkIsRichText(str)</h4>
+<blockquote>
+<p>v0.6.10+</p>
+</blockquote>
+<p>Check if a string is a rich text character.</p>
+<h4>isWhite(color)</h4>
+<blockquote>
+<p>v0.6.11+</p>
+</blockquote>
+<p>Determine whether a color is white.</p>
+<h4>isTransparent(color)</h4>
+<p>Determine whether a color is transparent.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

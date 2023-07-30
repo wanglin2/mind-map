@@ -1,9 +1,12 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('theme.title')">
-    <div class="themeList">
+    <div class="themeList" :class="{ isDark: isDark }">
+      <el-tabs v-model="activeName">
+          <el-tab-pane v-for="group in groupList" :key="group.name" :label="group.name" :name="group.name"></el-tab-pane>
+      </el-tabs>
       <div
         class="themeItem"
-        v-for="item in themeList"
+        v-for="item in currentList"
         :key="item.value"
         @click="useTheme(item)"
         :class="{ active: item.value === theme }"
@@ -21,7 +24,7 @@
 import Sidebar from './Sidebar'
 import { themeList } from 'simple-mind-map/src/constants/constant'
 import { storeConfig } from '@/api'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { themeMap } from '@/config/constant.js'
 import customThemeList from '@/customThemes'
 
@@ -42,39 +45,109 @@ export default {
   },
   data() {
     return {
-      themeList: [...themeList].reverse(),// ...customThemeList
+      themeList: [...themeList, ...customThemeList].reverse(),
       themeMap,
-      theme: ''
+      theme: '',
+      activeName: '',
+      groupList: []
     }
   },
   computed: {
-    ...mapState(['activeSidebar'])
+    ...mapState(['activeSidebar', 'isDark']),
+
+    currentList() {
+      return this.groupList.find((item) => {
+        return item.name === this.activeName
+      }).list
+    }
   },
   watch: {
     activeSidebar(val) {
       if (val === 'theme') {
         this.theme = this.mindMap.getTheme()
+        this.handleDark()
         this.$refs.sidebar.show = true
       } else {
         this.$refs.sidebar.show = false
       }
     }
   },
+  created() {
+    this.initGroup()
+    this.theme = this.mindMap.getTheme()
+    this.handleDark()
+  },
   methods: {
-    /**
-     * @Author: 王林
-     * @Date: 2021-06-24 23:04:38
-     * @Desc: 使用主题
-     */
+    ...mapMutations(['setIsDark']),
+
+    initGroup() {
+      let baiduThemes = ['default', 'skyGreen', 'classic2', 'classic3', 'classicGreen', 'classicBlue', 'blueSky', 'brainImpairedPink', 'earthYellow', 'freshGreen', 'freshRed', 'romanticPurple', 'pinkGrape', 'mint']
+      let baiduList = []
+      let classicsList = []
+      this.themeList.forEach((item) => {
+        if (baiduThemes.includes(item.value)) {
+          baiduList.push(item)
+        } else if (!item.dark) {
+          classicsList.push(item)
+        }
+      })
+      this.groupList = [
+        {
+          name: '经典',
+          list: classicsList
+        },
+        {
+          name: '深色',
+          list: this.themeList.filter((item) => {
+            return item.dark
+          })
+        },
+        {
+          name: '朴素',
+          list: baiduList
+        }
+      ]
+      this.activeName = this.groupList[0].name
+    },
+
     useTheme(theme) {
       this.theme = theme.value
+      this.handleDark()
+      const customThemeConfig = this.mindMap.getCustomThemeConfig()
+      const hasCustomThemeConfig = Object.keys(customThemeConfig).length > 0
+      if (hasCustomThemeConfig) {
+        this.$confirm('你当前自定义过基础样式，是否覆盖？', '提示', {
+          confirmButtonText: '覆盖',
+          cancelButtonText: '保留',
+          type: 'warning'
+        })
+          .then(() => {
+            this.mindMap.setThemeConfig({})
+            this.changeTheme(theme, {})
+          })
+          .catch(() => {
+            this.changeTheme(theme, customThemeConfig)
+          })
+      } else {
+        this.changeTheme(theme, customThemeConfig)
+      }
+    },
+
+    changeTheme(theme, config) {
       this.mindMap.setTheme(theme.value)
       storeConfig({
         theme: {
           template: theme.value,
-          config: this.mindMap.getCustomThemeConfig()
+          config
         }
       })
+    },
+
+    handleDark() {
+      let target = this.themeList.find(item => {
+        return item.value === this.theme
+      })
+      this.setIsDark(target.dark)
     }
   }
 }
@@ -83,6 +156,13 @@ export default {
 <style lang="less" scoped>
 .themeList {
   padding: 20px;
+  padding-top: 0;
+
+  &.isDark {
+    .name {
+      color: #fff;
+    }
+  }
 
   .themeItem {
     width: 100%;

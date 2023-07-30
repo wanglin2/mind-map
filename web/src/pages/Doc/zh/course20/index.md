@@ -116,4 +116,20 @@ import CustomNodeContent from './CustomNodeContent.vue'
 
 ## 示例4：渲染react组件
 
-如果你成功渲染了`react`组件，欢迎[提交](https://github.com/wanglin2/mind-map/issues/new)示例代码给我~
+```js
+import { createRoot } from 'react-dom/client'
+
+{
+    customCreateNodeContent: (node) => {
+        const el = document.createElement('div')
+        el.style.width = '227px'
+        el.style.height = '60px'
+        const currentNode = node.nodeData.data
+        const root = createRoot(el)
+        root.render({currentNode.text})
+        return el
+    }
+}
+```
+
+> 感谢[h5chenhang](https://github.com/h5chenhang)贡献的[示例代码](https://github.com/wanglin2/mind-map/issues/192)。

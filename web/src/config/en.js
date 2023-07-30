@@ -210,7 +210,7 @@ export const shortcutKeyList = [
       {
         icon: 'icongaikuozonglan',
         name: 'Insert summary',
-        value: 'Ctrl + S'
+        value: 'Ctrl + G'
       },
       {
         icon: 'iconzhankai',
@@ -271,6 +271,11 @@ export const shortcutKeyList = [
         icon: 'iconzhengli',
         name: 'Arrange layout',
         value: 'Ctrl + L'
+      },
+      {
+        icon: 'iconsousuo',
+        name: 'Search and Replace',
+        value: 'Ctrl + F'
       }
     ]
   },

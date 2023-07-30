@@ -1,5 +1,5 @@
 <template>
-  <div class="navigatorContainer">
+  <div class="navigatorContainer" :class="{ isDark: isDark }">
     <div class="item">
       <el-select
         v-model="lang"
@@ -16,7 +16,10 @@
       </el-select>
     </div>
     <div class="item">
-      <MouseAction :mindMap="mindMap"></MouseAction>
+      <div class="btn iconfont iconsousuo" @click="showSearch"></div>
+    </div>
+    <div class="item">
+      <MouseAction :isDark="isDark" :mindMap="mindMap"></MouseAction>
     </div>
     <div class="item">
       <el-tooltip
@@ -28,10 +31,7 @@
         "
         placement="top"
       >
-        <div
-          class="btn iconfont icondaohang1"
-          @click="toggleMiniMap"
-        ></div>
+        <div class="btn iconfont icondaohang1" @click="toggleMiniMap"></div>
       </el-tooltip>
     </div>
     <div class="item">
@@ -59,10 +59,17 @@
       </el-tooltip>
     </div>
     <div class="item">
-      <Fullscreen :mindMap="mindMap"></Fullscreen>
+      <Fullscreen :isDark="isDark" :mindMap="mindMap"></Fullscreen>
     </div>
     <div class="item">
-      <Scale :mindMap="mindMap"></Scale>
+      <Scale :isDark="isDark" :mindMap="mindMap"></Scale>
+    </div>
+    <div class="item">
+      <div
+        class="btn iconfont"
+        :class="[isDark ? 'iconmoon_line' : 'iconlieri']"
+        @click="toggleDark"
+      ></div>
     </div>
     <div class="item">
       <span class="iconfont icongithub" @click="openGithub"></span>
@@ -77,6 +84,7 @@ import MouseAction from './MouseAction.vue'
 import { langList } from '@/config'
 import i18n from '@/i18n'
 import { storeLang, getLang } from '@/api'
+import { mapState, mapMutations } from 'vuex'
 
 /**
  * @Author: 王林
@@ -103,7 +111,12 @@ export default {
       openMiniMap: false
     }
   },
+  computed: {
+    ...mapState(['isDark'])
+  },
   methods: {
+    ...mapMutations(['setIsDark']),
+
     readonlyChange() {
       this.isReadonly = !this.isReadonly
       this.mindMap.setMode(this.isReadonly ? 'readonly' : 'edit')
@@ -121,6 +134,14 @@ export default {
 
     openGithub() {
       window.electronAPI.openUrl('https://github.com/wanglin2/mind-map')
+    },
+    
+    showSearch() {
+      this.$bus.$emit('show_search')
+    },
+
+    toggleDark() {
+      this.setIsDark(!this.isDark)
     }
   }
 }
@@ -139,6 +160,20 @@ export default {
   font-size: 12px;
   display: flex;
   align-items: center;
+
+  &.isDark {
+    background: #262a2e;
+
+    .item {
+      a {
+        color: hsla(0, 0%, 100%, 0.6);
+      }
+
+      .btn {
+        color: hsla(0, 0%, 100%, 0.6);
+      }
+    }
+  }
 
   .item {
     margin-right: 20px;

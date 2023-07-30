@@ -36,15 +36,14 @@ function createGeneralizationNode () {
 
 //  更新概要节点
 function updateGeneralization () {
+  if (this.isGeneralization) return
   this.removeGeneralization()
   this.createGeneralizationNode()
 }
 
 //  渲染概要节点
 function renderGeneralization () {
-  if (this.isGeneralization) {
-    return
-  }
+  if (this.isGeneralization) return
   if (!this.checkHasGeneralization()) {
     this.removeGeneralization()
     this._generalizationNodeWidth = 0
@@ -67,6 +66,7 @@ function renderGeneralization () {
 
 //  删除概要节点
 function removeGeneralization () {
+  if (this.isGeneralization) return
   if (this._generalizationLine) {
     this._generalizationLine.remove()
     this._generalizationLine = null
@@ -87,6 +87,7 @@ function removeGeneralization () {
 
 //  隐藏概要节点
 function hideGeneralization () {
+  if (this.isGeneralization) return
   if (this._generalizationLine) {
     this._generalizationLine.hide()
   }
@@ -97,6 +98,7 @@ function hideGeneralization () {
 
 //  显示概要节点
 function showGeneralization () {
+  if (this.isGeneralization) return
   if (this._generalizationLine) {
     this._generalizationLine.show()
   }

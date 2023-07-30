@@ -7,9 +7,9 @@ import Style from './src/core/render/node/Style'
 import KeyCommand from './src/core/command/KeyCommand'
 import Command from './src/core/command/Command'
 import BatchExecution from './src/utils/BatchExecution'
-import { layoutValueList, CONSTANTS } from './src/constants/constant'
+import { layoutValueList, CONSTANTS, commonCaches } from './src/constants/constant'
 import { SVG } from '@svgdotjs/svg.js'
-import { simpleDeepClone } from './src/utils'
+import { simpleDeepClone, getType } from './src/utils'
 import defaultTheme, { checkIsNodeSizeIndependenceConfig } from './src/themes/default'
 import { defaultOpt } from './src/constants/defaultOptions'
 
@@ -34,6 +34,9 @@ class MindMap {
 
     // 初始化主题
     this.initTheme()
+
+    // 初始化缓存数据
+    this.initCache()
 
     // 事件类
     this.event = new Event({
@@ -78,6 +81,8 @@ class MindMap {
 
   //  配置参数处理
   handleOpt(opt) {
+    // 深拷贝一份节点数据
+    opt.data = simpleDeepClone(opt.data || {})
     // 检查布局配置
     if (!layoutValueList.includes(opt.layout)) {
       opt.layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE
@@ -127,6 +132,23 @@ class MindMap {
   //  解绑事件
   off(event, fn) {
     this.event.off(event, fn)
+  }
+
+  // 初始化缓存数据
+  initCache() {
+    Object.keys(commonCaches).forEach((key) => {
+      let type = getType(commonCaches[key])
+      let value = ''
+      switch(type) {
+        case 'Boolean':
+          value = false
+          break
+        default:
+          value = null
+          break
+      }
+      commonCaches[key] = value
+    })
   }
 
   //  设置主题

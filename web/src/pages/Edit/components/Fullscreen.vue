@@ -1,5 +1,5 @@
 <template>
-  <div class="fullscreenContainer">
+  <div class="fullscreenContainer" :class="{ isDark: isDark }">
     <el-tooltip
       class="item"
       effect="dark"
@@ -32,6 +32,9 @@ export default {
   props: {
     mindMap: {
       type: Object
+    },
+    isDark: {
+      type: Boolean
     }
   },
   data() {
@@ -62,6 +65,12 @@ export default {
 .fullscreenContainer {
   display: flex;
   align-items: center;
+
+  &.isDark {
+    .btn {
+      color: hsla(0,0%,100%,.6);
+    }
+  }
 
   .item {
     margin-right: 12px;

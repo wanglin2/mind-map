@@ -1,6 +1,6 @@
 <template>
   <div class="toolbarContainer">
-    <div class="toolbar" :style="{top: IS_ELECTRON ? '40px' : 0}">
+    <div class="toolbar" :style="{top: IS_ELECTRON ? '40px' : 0}" :class="{ isDark: isDark }">
       <!-- 节点操作 -->
       <div class="toolbarBlock">
         <div
@@ -68,7 +68,7 @@
           :class="{
             disabled: activeNodes.length <= 0
           }"
-          @click="$bus.$emit('showNodeIcon')"
+          @click="showNodeIcon"
         >
           <span class="icon iconfont iconxiaolian"></span>
           <span class="text">{{ $t('toolbar.icon') }}</span>
@@ -166,7 +166,7 @@ import NodeNote from './NodeNote'
 import NodeTag from './NodeTag'
 import Export from './Export'
 import Import from './Import'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { Notification } from 'element-ui'
 import exampleData from 'simple-mind-map/example/exampleData'
 import { getData } from '../../../api'
@@ -199,7 +199,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isHandleLocalFile']),
+    ...mapState(['isHandleLocalFile', 'isDark']),
     hasRoot() {
       return (
         this.activeNodes.findIndex(node => {
@@ -235,6 +235,14 @@ export default {
     this.$bus.$off('write_local_file', this.onWriteLocalFile)
   },
   methods: {
+    ...mapMutations(['setActiveSidebar']),
+
+    showNodeIcon() {
+      // this.$bus.$emit('showNodeIcon')
+      this.$bus.$emit('close_node_icon_toolbar')
+      this.setActiveSidebar('nodeIconSidebar')
+    },
+
     /**
      * @Author: 王林25
      * @Date: 2022-11-14 19:17:40
@@ -447,6 +455,33 @@ export default {
 
 <style lang="less" scoped>
 .toolbarContainer {
+  &.isDark {
+    .toolbar {
+      color: hsla(0,0%,100%,.9);
+      .toolbarBlock {
+        background-color: #262a2e;
+      }
+
+      .toolbarBtn {
+        .icon {
+          background: transparent;
+          border-color: transparent;
+        }
+
+        &:hover {
+          &:not(.disabled) {
+            .icon {
+              background: hsla(0,0%,100%,.05);
+            }
+          }
+        }
+
+        &.disabled {
+          color: #54595f;
+        }
+      }
+    }
+  }
   .toolbar {
     position: fixed;
     left: 50%;
@@ -522,7 +557,6 @@ export default {
 }
 
 @media screen and (max-width: 1040px) {
-  
   .toolbarContainer {
     .toolbar {
       left: 20px;

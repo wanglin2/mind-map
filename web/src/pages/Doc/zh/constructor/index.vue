@@ -707,6 +707,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>鼠标移出svg画布时触发</td>
 <td>e（事件对象）</td>
 </tr>
+<tr>
+<td>node_icon_click（v0.6.10+）</td>
+<td>点击节点内的图标时触发</td>
+<td>this（节点实例）、item（点击的图标名称）、e（事件对象）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
@@ -848,7 +853,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>SET_NODE_TEXT</td>
 <td>设置节点文本</td>
-<td>node（要设置的节点）、text（要设置的文本字符串，换行可以使用<code>\n</code>）、richText（v0.4.0+，如果要设置的是富文本字符，需要设为<code>true</code>）</td>
+<td>node（要设置的节点）、text（要设置的文本字符串，换行可以使用<code>\n</code>）、richText（v0.4.0+，如果要设置的是富文本字符，需要设为<code>true</code>）、resetRichText（v0.6.10+是否要复位富文本，默认为false，如果传true那么会重置富文本节点的样式）</td>
 </tr>
 <tr>
 <td>SET_NODE_IMAGE</td>
@@ -918,7 +923,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>GO_TARGET_NODE（v0.6.7+）</td>
 <td>定位到某个节点，如果该节点被收起，那么会自动展开到该节点</td>
-<td>node（要定位到的节点实例或节点uid）</td>
+<td>node（要定位到的节点实例或节点uid）、callback（v0.6.9+，定位完成后的回调函数）</td>
 </tr>
 </tbody>
 </table>

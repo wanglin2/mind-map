@@ -94,7 +94,23 @@
 }
 </code></pre>
 <h2>示例4：渲染react组件</h2>
-<p>如果你成功渲染了<code>react</code>组件，欢迎<a href="https://github.com/wanglin2/mind-map/issues/new">提交</a>示例代码给我~</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { createRoot } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-dom/client&#x27;</span>
+
+{
+    <span class="hljs-attr">customCreateNodeContent</span>: <span class="hljs-function">(<span class="hljs-params">node</span>) =&gt;</span> {
+        <span class="hljs-keyword">const</span> el = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>)
+        el.style.width = <span class="hljs-string">&#x27;227px&#x27;</span>
+        el.style.height = <span class="hljs-string">&#x27;60px&#x27;</span>
+        <span class="hljs-keyword">const</span> currentNode = node.nodeData.data
+        <span class="hljs-keyword">const</span> root = createRoot(el)
+        root.render({currentNode.text})
+        <span class="hljs-keyword">return</span> el
+    }
+}
+</code></pre>
+<blockquote>
+<p>感谢<a href="https://github.com/h5chenhang">h5chenhang</a>贡献的<a href="https://github.com/wanglin2/mind-map/issues/192">示例代码</a>。</p>
+</blockquote>
 
   </div>
 </template>

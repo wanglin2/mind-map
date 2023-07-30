@@ -20,7 +20,8 @@ const store = new Vuex.Store({
       useLeftKeySelectionRightKeyDrag: false
     },
     activeSidebar: '', // 当前显示的侧边栏
-    localEditList: []// 客户端中正在编辑的思维导图列表
+    localEditList: [],// 客户端中正在编辑的思维导图列表
+    isDark: false,// 是否是暗黑模式
   },
   mutations: {
     // 设置本地文件名
@@ -79,6 +80,11 @@ const store = new Vuex.Store({
     // 设置客户端中当前正在编辑的思维导图列表
     setLocalEditList(state, list) {
       state.localEditList = list
+    },
+    
+    // 设置暗黑模式
+    setIsDark(state, data) {
+      state.isDark = data
     }
   },
   actions: {

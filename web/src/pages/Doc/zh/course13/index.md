@@ -25,7 +25,7 @@
       },
       {
         name: '插入概要',
-        value: 'Ctrl + S'
+        value: 'Ctrl + S'// v0.6.8+改为Ctrl + G
       },
       {
         name: '展开/收起节点',

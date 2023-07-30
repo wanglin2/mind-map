@@ -5,9 +5,16 @@
     :visible.sync="dialogVisible"
     width="500"
   >
-    <ImgUpload ref="ImgUpload" v-model="img"></ImgUpload>
-    <div class="imgTitleBox">
-      <span class="title">{{ $t('nodeImage.imgTitle') }}</span>
+    <div class="title">方式一</div>
+    <ImgUpload ref="ImgUpload" v-model="img" style="margin-bottom: 12px;"></ImgUpload>
+    <div class="title">方式二</div>
+    <div class="inputBox">
+      <span class="label">请输入图片地址</span>
+      <el-input v-model="imgUrl" size="mini" placeholder="http://xxx.com/xx.jpg"></el-input>
+    </div>
+    <div class="title">可选</div>
+    <div class="inputBox">
+      <span class="label">{{ $t('nodeImage.imgTitle') }}</span>
       <el-input v-model="imgTitle" size="mini"></el-input>
     </div>
     <span slot="footer" class="dialog-footer">
@@ -21,6 +28,7 @@
 
 <script>
 import ImgUpload from '@/components/ImgUpload'
+import { getImageSize } from 'simple-mind-map/src/utils/index'
 
 /**
  * @Author: 王林
@@ -36,6 +44,7 @@ export default {
     return {
       dialogVisible: false,
       img: '',
+      imgUrl: '',
       imgTitle: '',
       activeNodes: null
     }
@@ -43,43 +52,54 @@ export default {
   created() {
     this.$bus.$on('node_active', (...args) => {
       this.activeNodes = args[1]
-      if (this.activeNodes.length > 0) {
-        let firstNode = this.activeNodes[0]
-        this.img = firstNode.getData('image')
-        this.imgTitle = firstNode.getData('imageTitle')
-      } else {
-        this.img = ''
-        this.imgTitle = ''
-      }
     })
     this.$bus.$on('showNodeImage', () => {
+      this.reset()
+      if (this.activeNodes.length > 0) {
+        let firstNode = this.activeNodes[0]
+        let img = firstNode.getData('image')
+        if (img) {
+          if (/^https?:\/\//.test(img)) {
+            this.imgUrl = img
+          } else {
+            this.img = img
+          }
+        }
+        this.imgTitle = firstNode.getData('imageTitle')
+      }
       this.dialogVisible = true
     })
   },
   methods: {
-    /**
-     * @Author: 王林
-     * @Date: 2021-06-22 22:08:11
-     * @Desc: 取消
-     */
     cancel() {
       this.dialogVisible = false
+      this.reset()
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-06-06 22:28:20
-     * @Desc:  确定
-     */
+    reset() {
+      this.img = ''
+      this.imgTitle = ''
+      this.imgUrl = ''
+    },
+
     async confirm() {
       try {
-        let { width, height } = await this.$refs.ImgUpload.getSize()
+        if (!this.img && !this.imgUrl) return
+        let res = null
+        let img = ''
+        if (this.img) {
+          img = this.img
+          res = await this.$refs.ImgUpload.getSize()
+        } else if (this.imgUrl) {
+          img = this.imgUrl
+          res = await getImageSize(img)
+        }
         this.activeNodes.forEach(node => {
           node.setImage({
-            url: this.img || 'none',
+            url: img || 'none',
             title: this.imgTitle,
-            width,
-            height
+            width: res.width,
+            height: res.height
           })
         })
         this.cancel()
@@ -93,13 +113,18 @@ export default {
 
 <style lang="less" scoped>
 .nodeDialog {
-  .imgTitleBox {
+  .title {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .inputBox {
     display: flex;
     align-items: center;
-    margin-top: 10px;
+    margin-bottom: 10px;
 
-    .title {
-      width: 100px;
+    .label {
+      width: 150px;
     }
   }
 }

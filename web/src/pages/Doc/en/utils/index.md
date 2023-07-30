@@ -181,6 +181,55 @@ Get the size of image, return:
 }
 ```
 
+#### loadImage(imgFile)
+
+> v0.6.8+
+
+- `imgFile`: File object of image type
+
+Load image, return:
+
+```js
+{
+  url,// DataUrl
+  size// { width, height } width and height of image
+}
+```
+
+#### getType(data)
+
+> v0.6.9+
+
+Get the type of a data, such as `Boolean`、`Array`.
+
+#### removeHtmlStyle(html)
+
+> v0.6.10+
+
+Remove the inline style of nodes in the HTML string.
+
+#### addHtmlStyle(html, tag, style)
+
+> v0.6.10+
+
+Add inline styles to the specified tags in the HTML tag.
+
+#### checkIsRichText(str)
+
+> v0.6.10+
+
+Check if a string is a rich text character.
+
+#### isWhite(color)
+
+> v0.6.11+
+
+Determine whether a color is white.
+
+#### isTransparent(color)
+
+Determine whether a color is transparent.
+
 ## Simulate CSS background in Canvas
 
 Import:

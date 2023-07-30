@@ -37,7 +37,10 @@ disable the enter key and delete key related shortcuts to prevent conflicts</p>
 <h3>copyNode()</h3>
 <p>Copy a node, the active node is the node to be operated on, if there are
 multiple active nodes, only the first node will be operated on</p>
-<h3>setNodeDataRender(node, data)</h3>
+<h3>setNodeDataRender(node, data, notRender)</h3>
+<ul>
+<li><code>notRender</code>: v0.6.9+, <code>Boolean</code>, Default is <code>false</code>, Do not trigger rendering.</li>
+</ul>
 <p>Set node <code>data</code>, i.e. the data in the data field, and will determine whether the
 node needs to be re-rendered based on whether the node size has changed, <code>data</code>
 is an object, e.g. <code>{text: 'I am new text'}</code></p>
@@ -83,6 +86,21 @@ is an object, e.g. <code>{text: 'I am new text'}</code></p>
 <li><code>uid</code>: uid of node</li>
 </ul>
 <p>Find the corresponding node instance based on the uid.</p>
+<h3>copy()</h3>
+<blockquote>
+<p>v0.6.8+</p>
+</blockquote>
+<p>Copy nodes. After calling this method, the current activated node data will be stored. Multiple activated nodes will only operate on the first node, and subsequent calls to the 'paste()' method can be pasted.</p>
+<h3>cut()</h3>
+<blockquote>
+<p>v0.6.8+</p>
+</blockquote>
+<p>Cut a node. After calling this method, the currently active node will be cut and the node data will be stored. Multiple nodes will only operate on the first node, and subsequent calls to the 'paste()' method can be pasted.</p>
+<h3>paste()</h3>
+<blockquote>
+<p>v0.6.8+</p>
+</blockquote>
+<p>Pasting nodes can be done by calling the 'copy()' or 'cut()' method after calling it. This method does not support pasting data from the user's clipboard. Please use the built-in 'Ctrl+v' shortcut key.</p>
 
   </div>
 </template>

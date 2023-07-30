@@ -10,6 +10,7 @@ import AssociativeLine from './src/plugins/AssociativeLine'
 import RichText from './src/plugins/RichText'
 import NodeImgAdjust from './src/plugins/NodeImgAdjust.js'
 import TouchEvent from './src/plugins/TouchEvent.js'
+import Search from './src/plugins/Search.js'
 import xmind from './src/parse/xmind.js'
 import markdown from './src/parse/markdown.js'
 import icons from './src/svg/icons.js'
@@ -36,5 +37,6 @@ MindMap
   .usePlugin(RichText)
   .usePlugin(TouchEvent)
   .usePlugin(NodeImgAdjust)
+  .usePlugin(Search)
 
 export default MindMap

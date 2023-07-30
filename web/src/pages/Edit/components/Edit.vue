@@ -7,7 +7,7 @@
     <Outline :mindMap="mindMap"></Outline>
     <Style v-if="!isZenMode"></Style>
     <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
-    <Theme :mindMap="mindMap"></Theme>
+    <Theme v-if="mindMap" :mindMap="mindMap"></Theme>
     <Structure :mindMap="mindMap"></Structure>
     <ShortcutKey></ShortcutKey>
     <Contextmenu v-if="mindMap" :mindMap="mindMap"></Contextmenu>
@@ -18,6 +18,9 @@
     ></NodeNoteContentShow>
     <NodeImgPreview v-if="mindMap" :mindMap="mindMap"></NodeImgPreview>
     <SidebarTrigger v-if="!isZenMode"></SidebarTrigger>
+    <Search v-if="mindMap" :mindMap="mindMap"></Search>
+    <NodeIconSidebar v-if="mindMap" :mindMap="mindMap"></NodeIconSidebar>
+    <NodeIconToolbar v-if="mindMap" :mindMap="mindMap"></NodeIconToolbar>
   </div>
 </template>
 
@@ -35,6 +38,7 @@ import RichText from 'simple-mind-map/src/plugins/RichText.js'
 import AssociativeLine from 'simple-mind-map/src/plugins/AssociativeLine.js'
 import TouchEvent from 'simple-mind-map/src/plugins/TouchEvent.js'
 import NodeImgAdjust from 'simple-mind-map/src/plugins/NodeImgAdjust.js'
+import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -59,6 +63,9 @@ import Vue from 'vue'
 import router from '../../../router'
 import store from '../../../store'
 import i18n from '../../../i18n'
+import Search from './Search.vue'
+import NodeIconSidebar from './NodeIconSidebar.vue'
+import NodeIconToolbar from './NodeIconToolbar.vue'
 
 // 注册插件
 MindMap
@@ -73,11 +80,12 @@ MindMap
   .usePlugin(AssociativeLine)
   .usePlugin(NodeImgAdjust)
   .usePlugin(TouchEvent)
+  .usePlugin(SearchPlugin)
 
 // 注册自定义主题
-// customThemeList.forEach((item) => {
-//   MindMap.defineTheme(item.value, item.theme)
-// })
+customThemeList.forEach((item) => {
+  MindMap.defineTheme(item.value, item.theme)
+})
 
 /**
  * @Author: 王林
@@ -100,7 +108,10 @@ export default {
     NodeNoteContentShow,
     Navigator,
     NodeImgPreview,
-    SidebarTrigger
+    SidebarTrigger,
+    Search,
+    NodeIconSidebar,
+    NodeIconToolbar
   },
   data() {
     return {

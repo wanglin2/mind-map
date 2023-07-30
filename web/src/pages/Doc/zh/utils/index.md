@@ -176,6 +176,57 @@ copyNodeTree({}, node)
 }
 ```
 
+#### loadImage(imgFile)
+
+> v0.6.8+
+
+- `imgFile`：图片类型的File对象
+
+加载图片，返回：
+
+```js
+{
+  url,// DataUrl
+  size// { width, height } 图片宽高
+}
+```
+
+#### getType(data)
+
+> v0.6.9+
+
+获取一个数据的类型，比如`Boolean`、`Array`等。
+
+#### removeHtmlStyle(html)
+
+> v0.6.10+
+
+移除html字符串中节点的内联样式。
+
+#### addHtmlStyle(html, tag, style)
+
+> v0.6.10+
+
+给html标签中指定的标签添加内联样式。
+
+#### checkIsRichText(str)
+
+> v0.6.10+
+
+检查一个字符串是否是富文本字符。
+
+#### isWhite(color)
+
+> v0.6.11+
+
+判断一个颜色是否是白色。
+
+#### isTransparent(color)
+
+判断一个颜色是否是透明。
+
+> v0.6.11+
+
 ## 在canvas中模拟css的背景属性
 
 引入：

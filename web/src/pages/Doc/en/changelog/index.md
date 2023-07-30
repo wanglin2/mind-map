@@ -1,5 +1,41 @@
 # Changelog
 
+## 0.6.11
+
+New: 1.Optimize the mini map, remove node content within the mini map, and optimize performance.
+
+Demo: 1.Add a new topic and add tab differentiation to the topic list. 2.Node image upload supports inputting network image addresses. 3.Node image upload supports inputting network images.
+
+## 0.6.10
+
+Fix: 1.Fix the issue of deleting a node after searching for it and not updating the search results when searching again.  2.Fixed an issue where the button for adjusting image size did not update after node operation.  3.Fix the issue of incorrect internal data deep copy location.  4.Fix the issue of ineffective line wrapping in rich text nodes.  5. Fix the issue of node swapping and loss when switching themes and other scenarios.
+
+New: 1.Search supports searching for white space characters and replacing them with white space characters.
+
+Demo: 1.Support calling up search through icon buttons.  2.Support for switching to dark mode through icon buttons.  3.Optimize search: The mouse is not in the search area and not focused, solving the problem of not being able to delete input text when the mouse is not in the search area.  4.Adjust the interface UI for adding node icons and add a series of node icons.  5.Add a sticker list.  6.Fixed the issue of missing focus in the input box after entering the search box.  7.Support clicking on the icon within the node to display an icon for quick replacement and deletion of the floating panel. 
+
+## 0.6.9-fix.1
+
+Fix: 1.Fix the issue of incorrect replacement after a single search.
+
+New: 1.We will no longer directly modify the incoming data object, but will make a deep copy internally.
+
+## 0.6.9
+
+Fix: 1.Fixed an issue where setting styles to summary nodes would cause summary nodes to disappear. 2.Fixed the issue of node content not rendering when creating a root instance again when customizing node content. 3.Fix the issue of losing focus when adding a new node while the node is in editing. 2.Fix the issue of continuously pressing the tab key not being able to continuously create child nodes.
+
+New: 1.Replace existing `&nbsp;` in SVG when exporting Characters to avoid exporting SVG errors. 2.Support for search and replace.
+
+Demo: 1.When switching themes, it is supported to choose whether to overwrite the set basic style.
+
+## 0.6.8
+
+Fix: 1.Change the shortcut key for inserting a summary to Ctrl+G to avoid conflicts with the save shortcut key. 2.Fix the issue of abnormal switching between rich text editing configuration input boxes while nodes are being edited.
+
+New: 1.Modify the copy, cut, and paste logic, and support pasting data from the clipboard.
+
+Demo: 1.Fix the issue of not saving the outer margin of the basic style setting node. 2.Supports automatic switching to dark mode based on the theme.
+
 ## 0.6.7
 
 Fix: 1.Fixed the issue of missing placeholder elements for the expand and collapse button after node collapse and expansion. 2.Fixed the issue of being able to scale images in read-only mode.

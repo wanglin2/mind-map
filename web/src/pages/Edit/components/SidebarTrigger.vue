@@ -2,7 +2,7 @@
   <div
     class="sidebarTriggerContainer"
     @click.stop
-    :class="{ hasActive: show && activeSidebar, show: show }"
+    :class="{ hasActive: show && activeSidebar, show: show, isDark: isDark }"
   >
     <div class="toggleShowBtn" :class="{hide: !show}" @click="show = !show">
       <span class="iconfont iconjiantouyou"></span>
@@ -39,7 +39,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeSidebar']),
+    ...mapState(['activeSidebar', 'isDark']),
 
     triggerList() {
       return sidebarTriggerList[this.$i18n.locale] || sidebarTriggerList.zh
@@ -63,6 +63,20 @@ export default {
   transition: all 0.3s;
   top: 50%;
   transform: translateY(-50%);
+
+  &.isDark {
+    .trigger {
+      background-color: #262a2e;
+
+      .triggerItem {
+        color: hsla(0,0%,100%,.6);
+
+        &:hover {
+          background-color: hsla(0,0%,100%,.05);
+        }
+      }
+    }
+  }
 
   &.show {
     right: 0;

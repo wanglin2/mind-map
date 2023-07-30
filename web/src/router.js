@@ -27,6 +27,30 @@ const handleRouterList = () => {
 }
 handleRouterList()
 
+// 创建路由列表
+const createTypeRouterList = (type, redirectPath) => {
+  return [
+    ...routerList.map((item) => {
+      return { 
+        path: `/${type}/${item.lang}/`, 
+        redirect: `/${type}/${item.lang}/${redirectPath}/`
+      }
+    }),
+    ...routerList.map((item) => {
+      return { 
+        path: `/${type}/${item.lang}/`, 
+        component: DocPage, 
+        children: item.children.map((child) => {
+          return {
+            path: `${child.path}/:h?`,
+            component: () => import(`./pages/Doc/${child.lang || item.lang}/${child.path}/index.vue`)
+          }
+        })
+      }
+    })
+  ]
+}
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -63,24 +87,10 @@ const routes = [
     name: 'Edit', 
     component: EditPage 
   },
-  ...routerList.map((item) => {
-    return {
-      path: `/doc/${item.lang}/`,
-      redirect: `/doc/${item.lang}/introduction/`
-    }
-  }),
-  ...routerList.map((item) => {
-    return {
-      path: `/doc/${item.lang}/`,
-      component: DocPage,
-      children: item.children.map((child) => {
-        return {
-          path: `${child.path}/:h?`,
-          component: () => import(`./pages/Doc/${child.lang || item.lang}/${child.path}/index.vue`)
-        }
-      })
-    }
-  })
+  // 开发文档
+  ...createTypeRouterList('doc', 'introduction'),
+  // 帮助文档
+  ...createTypeRouterList('help', 'help1')
 ]
 
 const router = new VueRouter({

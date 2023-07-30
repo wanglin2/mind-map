@@ -1,6 +1,6 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('shortcutKey.title')">
-    <div class="box">
+    <div class="box" :class="{ isDark: isDark }">
       <div v-for="item in shortcutKeyList" :key="item.type">
         <div class="title">{{ item.type }}</div>
         <div class="list" v-for="item2 in item.list" :key="item2.value">
@@ -38,7 +38,7 @@ export default {
     return {}
   },
   computed: {
-    ...mapState(['activeSidebar']),
+    ...mapState(['activeSidebar', 'isDark']),
 
     shortcutKeyList() {
       return shortcutKeyList[this.$i18n.locale] || shortcutKeyList.zh
@@ -59,6 +59,28 @@ export default {
 <style lang="less" scoped>
 .box {
   padding: 0 20px;
+
+  &.isDark {
+    .title {
+      color: #fff;
+    }
+
+    .list {
+      .item {
+
+        .icon {
+          color: hsla(0,0%,100%,.6);
+        }
+        .name {
+          color: hsla(0,0%,100%,.6);
+        }
+        
+        .value {
+          color: hsla(0,0%,100%,.3);
+        }
+      }
+    }
+  }
 
   .title {
     font-size: 16px;

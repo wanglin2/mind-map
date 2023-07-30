@@ -241,6 +241,7 @@ mindMap.setTheme('主题名称')
 | associative_line_click（v0.4.5+）    |  点击某条关联线时触发  |  path（连接线节点）、clickPath（不可见的点击线节点）、node（起始节点）、toNode（目标节点）           |
 | svg_mouseenter（v0.5.1+）    | 鼠标移入svg画布时触发   | e（事件对象）  |
 | svg_mouseleave（v0.5.1+）    | 鼠标移出svg画布时触发   | e（事件对象）  |
+| node_icon_click（v0.6.10+）    | 点击节点内的图标时触发   | this（节点实例）、item（点击的图标名称）、e（事件对象）  |
 
 ### emit(event, ...args)
 
@@ -326,7 +327,7 @@ mindMap.updateConfig({
 | UNEXPAND_ALL                        | 收起所有节点                                                 |                                                              |
 | UNEXPAND_TO_LEVEL（v0.2.8+）        | 展开到指定层级                                               | level（要展开到的层级，1、2、3...）                          |
 | SET_NODE_DATA                       | 更新节点数据，即更新节点数据对象里`data`对象的数据           | node（要设置的节点）、data（对象，要更新的数据，如`{expand: true}`） |
-| SET_NODE_TEXT                       | 设置节点文本                                                 | node（要设置的节点）、text（要设置的文本字符串，换行可以使用`\n`）、richText（v0.4.0+，如果要设置的是富文本字符，需要设为`true`） |
+| SET_NODE_TEXT                       | 设置节点文本                                                 | node（要设置的节点）、text（要设置的文本字符串，换行可以使用`\n`）、richText（v0.4.0+，如果要设置的是富文本字符，需要设为`true`）、resetRichText（v0.6.10+是否要复位富文本，默认为false，如果传true那么会重置富文本节点的样式） |
 | SET_NODE_IMAGE                      | 设置节点图片                                                 | node（要设置的节点）、imgData（对象，图片信息，结构为：`{url, title, width, height}`，图片的宽高必须要传） |
 | SET_NODE_ICON                       | 设置节点图标                                                 | node（要设置的节点）、icons（数组，预定义的图片名称组成的数组，可用图标可在[icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js)文件里的`nodeIconList`列表里获取到，图标名称为`type_name`，如`['priority_1']`） |
 | SET_NODE_HYPERLINK                  | 设置节点超链接                                               | node（要设置的节点）、link（超链接地址）、title（超链接名称，可选） |
@@ -340,7 +341,7 @@ mindMap.updateConfig({
 | SET_NODE_CUSTOM_POSITION（v0.2.0+） | 设置节点自定义位置                                           | node（要设置的节点）、 left（自定义的x坐标，默认为undefined）、 top（自定义的y坐标，默认为undefined） |
 | RESET_LAYOUT（v0.2.0+）             | 一键整理布局                                                 |                                                              |
 | SET_NODE_SHAPE（v0.2.4+）           | 设置节点形状                                                 | node（要设置的节点）、shape（形状，全部形状：[Shape.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/render/node/Shape.js)） |
-| GO_TARGET_NODE（v0.6.7+）           |  定位到某个节点，如果该节点被收起，那么会自动展开到该节点   | node（要定位到的节点实例或节点uid） |
+| GO_TARGET_NODE（v0.6.7+）           |  定位到某个节点，如果该节点被收起，那么会自动展开到该节点   | node（要定位到的节点实例或节点uid）、callback（v0.6.9+，定位完成后的回调函数） |
 
 ### setData(data)
 

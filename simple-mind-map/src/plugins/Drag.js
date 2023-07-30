@@ -1,8 +1,7 @@
 import { bfsWalk, throttle } from '../utils'
 import Base from '../layouts/Base'
 
-//  节点拖动类
-
+// 节点拖动插件
 class Drag extends Base {
   //  构造函数
   constructor({ mindMap }) {

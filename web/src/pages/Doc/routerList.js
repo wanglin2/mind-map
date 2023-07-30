@@ -27,6 +27,7 @@ export default [
       { path: 'course18', title: '如何持久化数据' },
       { path: 'course19', title: '插入和扩展节点图标' },
       { path: 'course20', title: '如何自定义节点内容' },
+      { path: 'course21', title: '如何复制、剪切、粘贴' },
       { path: 'doExport', title: 'Export 插件' },
       { path: 'drag', title: 'Drag插件' },
       { path: 'introduction', title: '简介' },
@@ -47,7 +48,10 @@ export default [
       { path: 'deploy', title: '部署' },
       { path: 'client', title: '客户端' },
       { path: 'touchEvent', title: 'TouchEvent插件' },
-      { path: 'nodeImgAdjust', title: 'NodeImgAdjust插件' }
+      { path: 'nodeImgAdjust', title: 'NodeImgAdjust插件' },
+      { path: 'search', title: 'Search插件' },
+      { path: 'help1', title: '概要/关联线' },
+      { path: 'help2', title: '客户端' }
     ]
   },
   {
@@ -77,7 +81,8 @@ export default [
       { path: 'xmind', title: 'XMind parse' },
       { path: 'deploy', title: 'Deploy' },
       { path: 'touchEvent', title: 'TouchEvent plugin' },
-      { path: 'nodeImgAdjust', title: 'NodeImgAdjust plugin' }
+      { path: 'nodeImgAdjust', title: 'NodeImgAdjust plugin' },
+      { path: 'search', title: 'Search plugin' }
     ]
   }
 ]

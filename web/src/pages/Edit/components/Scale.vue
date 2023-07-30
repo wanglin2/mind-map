@@ -1,5 +1,5 @@
 <template>
-  <div class="scaleContainer">
+  <div class="scaleContainer" :class="{ isDark: isDark }">
     <el-tooltip
       class="item"
       effect="dark"
@@ -31,6 +31,9 @@ export default {
   props: {
     mindMap: {
       type: Object
+    },
+    isDark: {
+      type: Boolean
     }
   },
   data() {
@@ -83,6 +86,16 @@ export default {
 .scaleContainer {
   display: flex;
   align-items: center;
+
+  &.isDark {
+    .btn {
+      color: hsla(0,0%,100%,.6);
+    }
+
+    .scaleInfo {
+      color: hsla(0,0%,100%,.6);
+    }
+  }
 
   .btn {
     cursor: pointer;

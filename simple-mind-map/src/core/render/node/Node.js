@@ -266,6 +266,7 @@ class Node {
     paddingY += this.shapePadding.paddingY
     // 节点形状
     this.shapeNode = this.shapeInstance.createShape()
+    this.shapeNode.addClass('smm-node-shape')
     this.group.add(this.shapeNode)
     this.updateNodeShape()
     // 渲染一个隐藏的矩形区域，用来触发展开收起按钮的显示
@@ -531,6 +532,7 @@ class Node {
       isLayout = true
       // 创建组
       this.group = new G()
+      this.group.addClass('smm-node')
       this.group.css({
         cursor: 'default'
       })
