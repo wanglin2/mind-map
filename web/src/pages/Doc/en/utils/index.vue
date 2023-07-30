@@ -154,6 +154,13 @@ and copying the <code>data</code> of the data object, example:</p>
 <p>v0.6.10+</p>
 </blockquote>
 <p>Check if a string is a rich text character.</p>
+<h4>isWhite(color)</h4>
+<blockquote>
+<p>v0.6.11+</p>
+</blockquote>
+<p>Determine whether a color is white.</p>
+<h4>isTransparent(color)</h4>
+<p>Determine whether a color is transparent.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

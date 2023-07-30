@@ -215,6 +215,18 @@ copyNodeTree({}, node)
 
 检查一个字符串是否是富文本字符。
 
+#### isWhite(color)
+
+> v0.6.11+
+
+判断一个颜色是否是白色。
+
+#### isTransparent(color)
+
+判断一个颜色是否是透明。
+
+> v0.6.11+
+
 ## 在canvas中模拟css的背景属性
 
 引入：

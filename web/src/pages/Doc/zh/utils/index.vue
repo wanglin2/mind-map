@@ -149,6 +149,16 @@
 <p>v0.6.10+</p>
 </blockquote>
 <p>检查一个字符串是否是富文本字符。</p>
+<h4>isWhite(color)</h4>
+<blockquote>
+<p>v0.6.11+</p>
+</blockquote>
+<p>判断一个颜色是否是白色。</p>
+<h4>isTransparent(color)</h4>
+<p>判断一个颜色是否是透明。</p>
+<blockquote>
+<p>v0.6.11+</p>
+</blockquote>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>
