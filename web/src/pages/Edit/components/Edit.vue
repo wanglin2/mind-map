@@ -119,7 +119,8 @@ export default {
       mindMapData: null,
       prevImg: '',
       openTest: false,
-      isFirst: true
+      isFirst: true,
+      autoSaveTimer: null
     }
   },
   computed: {
@@ -127,7 +128,7 @@ export default {
       fileName: state => state.fileName,
       isZenMode: state => state.localConfig.isZenMode,
       openNodeRichText: state => state.localConfig.openNodeRichText,
-      useLeftKeySelectionRightKeyDrag: state => state.localConfig.useLeftKeySelectionRightKeyDrag,
+      useLeftKeySelectionRightKeyDrag: state => state.localConfig.useLeftKeySelectionRightKeyDrag
     })
   },
   watch: {
@@ -285,6 +286,7 @@ export default {
       }
       this.$bus.$on('data_change', data => {
         if (!this.isFirst) {
+          this.autoSave()
           this.setIsUnSave(true)
         } else {
           this.isFirst = false
@@ -292,11 +294,20 @@ export default {
         storeData(data)
       })
       this.$bus.$on('view_data_change', data => {
+        this.autoSave()
         this.setIsUnSave(true)
         storeConfig({
           view: data
         })
       })
+    },
+
+    // 自动保存
+    autoSave() {
+      clearTimeout(this.autoSaveTimer)
+      this.autoSaveTimer = setTimeout(() => {
+        this.saveToLocal()
+      }, 5000)
     },
 
     /**
