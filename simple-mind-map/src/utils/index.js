@@ -516,3 +516,15 @@ export const replaceHtmlText = (html, searchText, replaceText) => {
   walk(replaceHtmlTextEl)
   return replaceHtmlTextEl.innerHTML
 }
+
+// 判断一个颜色是否是白色
+export const isWhite = (color) => {
+  color = String(color).replaceAll(/\s+/g, '')
+  return ['#fff', '#ffffff', '#FFF', '#FFFFFF', 'rgb(255,255,255)'].includes(color) || /rgba\(255,255,255,[^)]+\)/.test(color)
+}
+
+// 判断一个颜色是否是透明
+export const isTransparent = (color) => {
+  color = String(color).replaceAll(/\s+/g, '')
+  return ['', 'transparent'].includes(color) || /rgba\(\d+,\d+,\d+,0\)/.test(color)
+}
