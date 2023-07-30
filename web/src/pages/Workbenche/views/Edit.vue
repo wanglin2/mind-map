@@ -2,7 +2,6 @@
   <div class="workbencheEditContainer" :class="{ isDark: isDark }">
     <div class="workbencheEditHeader">
       <MacControl></MacControl>
-      <WinControl></WinControl>
       <div class="inputBox">
         <el-input
           v-model="name"
@@ -14,6 +13,9 @@
         <div class="modifyDotBox">
           <div class="modifyDot" v-show="isUnSave"></div>
         </div>
+      </div>
+      <div class="rightBar">
+        <WinControl></WinControl>
       </div>
     </div>
     <Edit></Edit>
@@ -137,6 +139,16 @@ export default {
           background-color: #409eff;
         }
       }
+    }
+
+    .rightBar {
+      -webkit-app-region: no-drag;
+      position: absolute;
+      right: 0px;
+      top: 0;
+      height: 100%;
+      display: flex;
+      align-items: center;
     }
   }
 }

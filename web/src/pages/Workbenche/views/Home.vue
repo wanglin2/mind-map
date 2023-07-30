@@ -8,9 +8,8 @@
   >
     <div class="workbencheHomeHeader">
       <MacControl></MacControl>
-      <WinControl></WinControl>
       <div class="rightBar">
-        <el-dropdown @command="handleCommand">
+        <el-dropdown @command="handleCommand" style="margin-right: 12px;">
           <span class="settingBtn el-icon-setting"></span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="about">关于软件</el-dropdown-item>
@@ -19,6 +18,7 @@
             <el-dropdown-item command="doc">开发文档</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
+        <WinControl></WinControl>
       </div>
     </div>
     <div class="workbencheHomeContent">
@@ -143,7 +143,7 @@ export default {
     .rightBar {
       -webkit-app-region: no-drag;
       position: absolute;
-      right: 20px;
+      right: 0px;
       top: 0;
       height: 100%;
       display: flex;
