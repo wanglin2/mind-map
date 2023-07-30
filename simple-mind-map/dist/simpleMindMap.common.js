@@ -33006,7 +33006,7 @@ const themeList = [{
 }, {
   name: '简约黑',
   value: 'simpleBlack',
-  dark: true
+  dark: false
 }, {
   name: '课程绿',
   value: 'courseGreen',
@@ -41779,6 +41779,18 @@ const replaceHtmlText = (html, searchText, replaceText) => {
   walk(replaceHtmlTextEl);
   return replaceHtmlTextEl.innerHTML;
 };
+
+// 判断一个颜色是否是白色
+const isWhite = color => {
+  color = String(color).replaceAll(/\s+/g, '');
+  return ['#fff', '#ffffff', '#FFF', '#FFFFFF', 'rgb(255,255,255)'].includes(color) || /rgba\(255,255,255,[^)]+\)/.test(color);
+};
+
+// 判断一个颜色是否是透明
+const isTransparent = color => {
+  color = String(color).replaceAll(/\s+/g, '');
+  return ['', 'transparent'].includes(color) || /rgba\(\d+,\d+,\d+,0\)/.test(color);
+};
 // CONCATENATED MODULE: ../simple-mind-map/src/core/render/node/nodeGeneralization.js
 
 
@@ -42953,6 +42965,7 @@ class Node_Node {
     paddingY += this.shapePadding.paddingY;
     // 节点形状
     this.shapeNode = this.shapeInstance.createShape();
+    this.shapeNode.addClass('smm-node-shape');
     this.group.add(this.shapeNode);
     this.updateNodeShape();
     // 渲染一个隐藏的矩形区域，用来触发展开收起按钮的显示
@@ -43196,6 +43209,7 @@ class Node_Node {
       isLayout = true;
       // 创建组
       this.group = new G();
+      this.group.addClass('smm-node');
       this.group.css({
         cursor: 'default'
       });
@@ -50590,8 +50604,10 @@ simple_mind_map_MindMap.defineTheme = (name, config = {}) => {
 };
 /* harmony default export */ var simple_mind_map = (simple_mind_map_MindMap);
 // CONCATENATED MODULE: ../simple-mind-map/src/plugins/MiniMap.js
+
+
 // 小地图插件
-class MiniMap {
+class MiniMap_MiniMap {
   //  构造函数
   constructor(opt) {
     this.mindMap = opt.mindMap;
@@ -50613,7 +50629,7 @@ class MiniMap {
    */
   calculationMiniMap(boxWidth, boxHeight) {
     let {
-      svgHTML,
+      svg,
       rect,
       origWidth,
       origHeight,
@@ -50654,8 +50670,9 @@ class MiniMap {
     viewBoxStyle.right = Math.max(0, (_rectX2 - origWidth) / _rectWidth * actWidth) + miniMapBoxLeft + 'px';
     viewBoxStyle.top = Math.max(0, -_rectY / _rectHeight * actHeight) + miniMapBoxTop + 'px';
     viewBoxStyle.bottom = Math.max(0, (_rectY2 - origHeight) / _rectHeight * actHeight) + miniMapBoxTop + 'px';
+    this.removeNodeContent(svg);
     return {
-      svgHTML,
+      svgHTML: svg.svg(),
       // 小地图html
       viewBoxStyle,
       // 视图框的位置信息
@@ -50665,6 +50682,43 @@ class MiniMap {
       // 视图框的left值
       miniMapBoxTop // 视图框的top值
     };
+  }
+
+  // 移除节点的内容
+  removeNodeContent(svg) {
+    if (svg.hasClass('smm-node')) {
+      let shape = svg.findOne('.smm-node-shape');
+      let fill = shape.attr('fill');
+      if (isWhite(fill) || isTransparent(fill)) {
+        shape.attr('fill', this.getDefaultFill());
+      }
+      svg.clear();
+      svg.add(shape);
+      return;
+    }
+    let children = svg.children();
+    if (children && children.length > 0) {
+      children.forEach(node => {
+        this.removeNodeContent(node);
+      });
+    }
+  }
+
+  // 计算默认的填充颜色
+  getDefaultFill() {
+    let {
+      lineColor,
+      root,
+      second,
+      node
+    } = this.mindMap.themeConfig;
+    let list = [lineColor, root.fillColor, root.color, second.fillColor, second.color, node.fillColor, node.color, root.borderColor, second.borderColor, node.borderColor];
+    for (let i = 0; i < list.length; i++) {
+      let color = list[i];
+      if (!isTransparent(color) && !isWhite(color)) {
+        return color;
+      }
+    }
   }
 
   //  小地图鼠标按下事件
@@ -50699,8 +50753,8 @@ class MiniMap {
     this.isMousedown = false;
   }
 }
-MiniMap.instanceName = 'miniMap';
-/* harmony default export */ var plugins_MiniMap = (MiniMap);
+MiniMap_MiniMap.instanceName = 'miniMap';
+/* harmony default export */ var plugins_MiniMap = (MiniMap_MiniMap);
 // CONCATENATED MODULE: ../simple-mind-map/src/plugins/Watermark.js
 
 

@@ -2042,7 +2042,7 @@ var require_html2canvas = __commonJS({
           return COLORS.TRANSPARENT;
         }
       };
-      var isTransparent = function(color2) {
+      var isTransparent2 = function(color2) {
         return (255 & color2) === 0;
       };
       var asString = function(color2) {
@@ -3950,7 +3950,7 @@ var require_html2canvas = __commonJS({
             return this.display > 0 && this.opacity > 0 && this.visibility === 0;
           };
           CSSParsedDeclaration2.prototype.isTransparent = function() {
-            return isTransparent(this.backgroundColor);
+            return isTransparent2(this.backgroundColor);
           };
           CSSParsedDeclaration2.prototype.isTransformed = function() {
             return this.transform !== null;
@@ -4898,7 +4898,7 @@ var require_html2canvas = __commonJS({
                 _this.tree = parseTree(context, iframe.contentWindow.document.documentElement);
                 var documentBackgroundColor = iframe.contentWindow.document.documentElement ? parseColor(context, getComputedStyle(iframe.contentWindow.document.documentElement).backgroundColor) : COLORS.TRANSPARENT;
                 var bodyBackgroundColor = iframe.contentWindow.document.body ? parseColor(context, getComputedStyle(iframe.contentWindow.document.body).backgroundColor) : COLORS.TRANSPARENT;
-                _this.backgroundColor = isTransparent(documentBackgroundColor) ? isTransparent(bodyBackgroundColor) ? _this.styles.backgroundColor : bodyBackgroundColor : documentBackgroundColor;
+                _this.backgroundColor = isTransparent2(documentBackgroundColor) ? isTransparent2(bodyBackgroundColor) ? _this.styles.backgroundColor : bodyBackgroundColor : documentBackgroundColor;
               }
             } catch (e3) {
             }
@@ -7633,7 +7633,7 @@ var require_html2canvas = __commonJS({
                       /* BACKGROUND_BORDERS */
                     ));
                     styles = paint.container.styles;
-                    hasBackground = !isTransparent(styles.backgroundColor) || styles.backgroundImage.length;
+                    hasBackground = !isTransparent2(styles.backgroundColor) || styles.backgroundImage.length;
                     borders = [
                       { style: styles.borderTopStyle, color: styles.borderTopColor, width: styles.borderTopWidth },
                       { style: styles.borderRightStyle, color: styles.borderRightColor, width: styles.borderRightWidth },
@@ -7646,7 +7646,7 @@ var require_html2canvas = __commonJS({
                     this.ctx.save();
                     this.path(backgroundPaintingArea);
                     this.ctx.clip();
-                    if (!isTransparent(styles.backgroundColor)) {
+                    if (!isTransparent2(styles.backgroundColor)) {
                       this.ctx.fillStyle = asString(styles.backgroundColor);
                       this.ctx.fill();
                     }
@@ -7685,7 +7685,7 @@ var require_html2canvas = __commonJS({
                     if (!(_i < borders_1.length))
                       return [3, 13];
                     border = borders_1[_i];
-                    if (!(border.style !== 0 && !isTransparent(border.color) && border.width > 0))
+                    if (!(border.style !== 0 && !isTransparent2(border.color) && border.width > 0))
                       return [3, 11];
                     if (!(border.style === 2))
                       return [3, 5];
@@ -8136,7 +8136,7 @@ var require_html2canvas = __commonJS({
         var documentBackgroundColor = ownerDocument.documentElement ? parseColor(context, getComputedStyle(ownerDocument.documentElement).backgroundColor) : COLORS.TRANSPARENT;
         var bodyBackgroundColor = ownerDocument.body ? parseColor(context, getComputedStyle(ownerDocument.body).backgroundColor) : COLORS.TRANSPARENT;
         var defaultBackgroundColor = typeof backgroundColorOverride === "string" ? parseColor(context, backgroundColorOverride) : backgroundColorOverride === null ? COLORS.TRANSPARENT : 4294967295;
-        return element2 === ownerDocument.documentElement ? isTransparent(documentBackgroundColor) ? isTransparent(bodyBackgroundColor) ? defaultBackgroundColor : bodyBackgroundColor : documentBackgroundColor : defaultBackgroundColor;
+        return element2 === ownerDocument.documentElement ? isTransparent2(documentBackgroundColor) ? isTransparent2(bodyBackgroundColor) ? defaultBackgroundColor : bodyBackgroundColor : documentBackgroundColor : defaultBackgroundColor;
       };
       return html2canvas2;
     });
@@ -36770,7 +36770,7 @@ var themeList = [
   {
     name: "\u7B80\u7EA6\u9ED1",
     value: "simpleBlack",
-    dark: true
+    dark: false
   },
   {
     name: "\u8BFE\u7A0B\u7EFF",
@@ -43772,6 +43772,14 @@ var checkIsRichText = (str) => {
   }
   return false;
 };
+var isWhite = (color) => {
+  color = String(color).replaceAll(/\s+/g, "");
+  return ["#fff", "#ffffff", "#FFF", "#FFFFFF", "rgb(255,255,255)"].includes(color) || /rgba\(255,255,255,[^)]+\)/.test(color);
+};
+var isTransparent = (color) => {
+  color = String(color).replaceAll(/\s+/g, "");
+  return ["", "transparent"].includes(color) || /rgba\(\d+,\d+,\d+,0\)/.test(color);
+};
 
 // ../simple-mind-map/src/core/render/node/nodeGeneralization.js
 function checkHasGeneralization() {
@@ -44837,6 +44845,7 @@ var Node2 = class {
     let { paddingY } = this.getPaddingVale();
     paddingY += this.shapePadding.paddingY;
     this.shapeNode = this.shapeInstance.createShape();
+    this.shapeNode.addClass("smm-node-shape");
     this.group.add(this.shapeNode);
     this.updateNodeShape();
     this.renderExpandBtnPlaceholderRect();
@@ -45059,6 +45068,7 @@ var Node2 = class {
     if (!this.group) {
       isLayout = true;
       this.group = new G();
+      this.group.addClass("smm-node");
       this.group.css({
         cursor: "default"
       });
@@ -51757,7 +51767,7 @@ var MiniMap = class {
    * boxHeight：小地图容器的高度
    */
   calculationMiniMap(boxWidth, boxHeight) {
-    let { svgHTML, rect, origWidth, origHeight, scaleX, scaleY } = this.mindMap.getSvgData();
+    let { svg: svg2, rect, origWidth, origHeight, scaleX, scaleY } = this.mindMap.getSvgData();
     let boxRatio = boxWidth / boxHeight;
     let actWidth = 0;
     let actHeight = 0;
@@ -51787,8 +51797,9 @@ var MiniMap = class {
     viewBoxStyle.right = Math.max(0, (_rectX2 - origWidth) / _rectWidth * actWidth) + miniMapBoxLeft + "px";
     viewBoxStyle.top = Math.max(0, -_rectY / _rectHeight * actHeight) + miniMapBoxTop + "px";
     viewBoxStyle.bottom = Math.max(0, (_rectY2 - origHeight) / _rectHeight * actHeight) + miniMapBoxTop + "px";
+    this.removeNodeContent(svg2);
     return {
-      svgHTML,
+      svgHTML: svg2.svg(),
       // 小地图html
       viewBoxStyle,
       // 视图框的位置信息
@@ -51799,6 +51810,36 @@ var MiniMap = class {
       miniMapBoxTop
       // 视图框的top值
     };
+  }
+  // 移除节点的内容
+  removeNodeContent(svg2) {
+    if (svg2.hasClass("smm-node")) {
+      let shape = svg2.findOne(".smm-node-shape");
+      let fill = shape.attr("fill");
+      if (isWhite(fill) || isTransparent(fill)) {
+        shape.attr("fill", this.getDefaultFill());
+      }
+      svg2.clear();
+      svg2.add(shape);
+      return;
+    }
+    let children = svg2.children();
+    if (children && children.length > 0) {
+      children.forEach((node3) => {
+        this.removeNodeContent(node3);
+      });
+    }
+  }
+  // 计算默认的填充颜色
+  getDefaultFill() {
+    let { lineColor, root: root2, second, node: node3 } = this.mindMap.themeConfig;
+    let list2 = [lineColor, root2.fillColor, root2.color, second.fillColor, second.color, node3.fillColor, node3.color, root2.borderColor, second.borderColor, node3.borderColor];
+    for (let i3 = 0; i3 < list2.length; i3++) {
+      let color = list2[i3];
+      if (!isTransparent(color) && !isWhite(color)) {
+        return color;
+      }
+    }
   }
   //  小地图鼠标按下事件
   onMousedown(e2) {
