@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.6.11</h2>
+<p>New: 1.Optimize the mini map, remove node content within the mini map, and optimize performance.</p>
+<p>Demo: 1.Add a new topic and add tab differentiation to the topic list. 2.Node image upload supports inputting network image addresses. 3.Node image upload supports inputting network images.</p>
 <h2>0.6.10</h2>
 <p>Fix: 1.Fix the issue of deleting a node after searching for it and not updating the search results when searching again.  2.Fixed an issue where the button for adjusting image size did not update after node operation.  3.Fix the issue of incorrect internal data deep copy location.  4.Fix the issue of ineffective line wrapping in rich text nodes.  5. Fix the issue of node swapping and loss when switching themes and other scenarios.</p>
 <p>New: 1.Search supports searching for white space characters and replacing them with white space characters.</p>
