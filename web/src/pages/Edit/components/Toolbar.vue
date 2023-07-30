@@ -1,6 +1,6 @@
 <template>
-  <div class="toolbarContainer">
-    <div class="toolbar" :style="{top: IS_ELECTRON ? '40px' : 0}" :class="{ isDark: isDark }">
+  <div class="toolbarContainer" :class="{ isDark: isDark }">
+    <div class="toolbar" :style="{top: IS_ELECTRON ? '40px' : 0}">
       <!-- 节点操作 -->
       <div class="toolbarBlock">
         <div

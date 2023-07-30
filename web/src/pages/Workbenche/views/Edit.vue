@@ -1,5 +1,5 @@
 <template>
-  <div class="workbencheEditContainer">
+  <div class="workbencheEditContainer" :class="{ isDark: isDark }">
     <div class="workbencheEditHeader">
       <MacControl></MacControl>
       <WinControl></WinControl>
@@ -38,7 +38,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['fileName', 'isUnSave'])
+    ...mapState(['fileName', 'isUnSave', 'isDark'])
   },
   watch: {
     fileName(val) {
@@ -97,6 +97,13 @@ export default {
 
 <style lang="less" scoped>
 .workbencheEditContainer {
+
+  &.isDark {
+    .workbencheEditHeader {
+      background-color: #262a2e;
+    }
+  }
+
   .workbencheEditHeader {
     position: relative;
     width: 100%;
