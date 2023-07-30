@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.11-fix.1
+
+Fix: 1.Fixed the issue of invisible editing when node text is white.
+
 ## 0.6.11
 
 New: 1.Optimize the mini map, remove node content within the mini map, and optimize performance.
