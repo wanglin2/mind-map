@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.6.11-fix.1</h2>
+<p>Fix: 1.Fixed the issue of invisible editing when node text is white.</p>
 <h2>0.6.11</h2>
 <p>New: 1.Optimize the mini map, remove node content within the mini map, and optimize performance.</p>
 <p>Demo: 1.Add a new topic and add tab differentiation to the topic list. 2.Node image upload supports inputting network image addresses. 3.Node image upload supports inputting network images.</p>
