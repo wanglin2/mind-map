@@ -1,7 +1,7 @@
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
 import html2canvas from 'html2canvas'
-import { walk, getTextFromHtml } from '../utils'
+import { walk, getTextFromHtml, isWhite, getVisibleColorFromTheme } from '../utils'
 import { CONSTANTS } from '../constants/constant'
 
 let extended = false
@@ -176,11 +176,12 @@ class RichText {
     }
     // 使用节点的填充色，否则如果节点颜色是白色的话编辑时看不见
     let bgColor = node.style.merge('fillColor')
+    let color = node.style.merge('color')
     this.textEditNode.style.marginLeft = `-${paddingX * scaleX}px`
     this.textEditNode.style.marginTop = `-${paddingY * scaleY}px`
     this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex
     this.textEditNode.style.backgroundColor =
-      bgColor === 'transparent' ? '#fff' : bgColor
+      bgColor === 'transparent' ? isWhite(color) ? getVisibleColorFromTheme(this.mindMap.themeConfig) : '#fff' : bgColor
     this.textEditNode.style.minWidth = originWidth + paddingX * 2 + 'px'
     this.textEditNode.style.minHeight = originHeight + 'px'
     this.textEditNode.style.left = rect.left + 'px'
