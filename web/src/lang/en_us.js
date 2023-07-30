@@ -73,7 +73,8 @@ export default {
     level5: 'Level5',
     level6: 'Level6',
     zenMode: 'Zen mode',
-    fitCanvas: 'Fit canvas'
+    fitCanvas: 'Fit canvas',
+    create: 'Create new file'
   },
   count: {
     words: 'Words',
@@ -202,6 +203,7 @@ export default {
     export: 'Export',
     shortcutKey: 'Shortcut key',
     associativeLine: 'Associative line',
+    save: 'Save'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',

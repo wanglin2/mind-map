@@ -97,12 +97,16 @@
         {{ $t('contextmenu.zenMode') }}
         {{ isZenMode ? '√' : '' }}
       </div>
+      <div class="item" @click="createNewFile" v-if="IS_ELECTRON">
+        {{ $t('contextmenu.create') }}
+      </div>
     </template>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import { create } from '../../Workbenche/utils'
 
 /**
  * @Author: 王林
@@ -296,6 +300,11 @@ export default {
           break
       }
       this.hide()
+    },
+
+    // 新建文件
+    createNewFile() {
+      create()
     }
   }
 }

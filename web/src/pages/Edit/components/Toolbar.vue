@@ -147,6 +147,12 @@
           <span class="text">{{ $t('toolbar.export') }}</span>
         </div>
       </div>
+      <div class="toolbarBlock" v-if="IS_ELECTRON">
+        <div class="toolbarBtn" @click="$bus.$emit('saveToLocal')">
+          <span class="icon iconfont iconlingcunwei"></span>
+          <span class="text">{{ $t('toolbar.save') }}</span>
+        </div>
+      </div>
     </div>
     <NodeImage></NodeImage>
     <NodeHyperlink></NodeHyperlink>

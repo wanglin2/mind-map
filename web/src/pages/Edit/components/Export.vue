@@ -99,7 +99,8 @@ export default {
   computed: {
     ...mapState({
       openNodeRichText: state => state.localConfig.openNodeRichText,
-      isDark: state => state.isDark
+      isDark: state => state.isDark,
+      localFileName: state => state.fileName
     }),
 
     downTypeList() {
@@ -108,6 +109,7 @@ export default {
   },
   created() {
     this.$bus.$on('showExport', () => {
+      this.fileName = this.localFileName || '思维导图'
       this.dialogVisible = true
     })
   },

@@ -73,7 +73,8 @@ export default {
     level5: '五级主题',
     level6: '六级主题',
     zenMode: '禅模式',
-    fitCanvas: '适应画布'
+    fitCanvas: '适应画布',
+    create: '新建文件'
   },
   count: {
     words: '字数',
@@ -202,6 +203,7 @@ export default {
     export: '导出',
     shortcutKey: '快捷键',
     associativeLine: '关联线',
+    save: '保存'
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',

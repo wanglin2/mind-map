@@ -166,6 +166,7 @@ export default {
     }
     if (window.IS_ELECTRON) {
       this.mindMap.keyCommand.addShortcut('Control+s', this.saveToLocal)
+      this.$bus.$on('saveToLocal', this.saveToLocal)
     }
   },
   methods: {
