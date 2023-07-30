@@ -43780,6 +43780,16 @@ var isTransparent = (color) => {
   color = String(color).replaceAll(/\s+/g, "");
   return ["", "transparent"].includes(color) || /rgba\(\d+,\d+,\d+,0\)/.test(color);
 };
+var getVisibleColorFromTheme = (themeConfig) => {
+  let { lineColor, root: root2, second, node: node3 } = themeConfig;
+  let list2 = [lineColor, root2.fillColor, root2.color, second.fillColor, second.color, node3.fillColor, node3.color, root2.borderColor, second.borderColor, node3.borderColor];
+  for (let i3 = 0; i3 < list2.length; i3++) {
+    let color = list2[i3];
+    if (!isTransparent(color) && !isWhite(color)) {
+      return color;
+    }
+  }
+};
 
 // ../simple-mind-map/src/core/render/node/nodeGeneralization.js
 function checkHasGeneralization() {
@@ -51817,7 +51827,7 @@ var MiniMap = class {
       let shape = svg2.findOne(".smm-node-shape");
       let fill = shape.attr("fill");
       if (isWhite(fill) || isTransparent(fill)) {
-        shape.attr("fill", this.getDefaultFill());
+        shape.attr("fill", getVisibleColorFromTheme(this.mindMap.themeConfig));
       }
       svg2.clear();
       svg2.add(shape);
@@ -51828,17 +51838,6 @@ var MiniMap = class {
       children.forEach((node3) => {
         this.removeNodeContent(node3);
       });
-    }
-  }
-  // 计算默认的填充颜色
-  getDefaultFill() {
-    let { lineColor, root: root2, second, node: node3 } = this.mindMap.themeConfig;
-    let list2 = [lineColor, root2.fillColor, root2.color, second.fillColor, second.color, node3.fillColor, node3.color, root2.borderColor, second.borderColor, node3.borderColor];
-    for (let i3 = 0; i3 < list2.length; i3++) {
-      let color = list2[i3];
-      if (!isTransparent(color) && !isWhite(color)) {
-        return color;
-      }
     }
   }
   //  小地图鼠标按下事件
@@ -63078,10 +63077,11 @@ var RichText = class {
       document.body.appendChild(this.textEditNode);
     }
     let bgColor = node3.style.merge("fillColor");
+    let color = node3.style.merge("color");
     this.textEditNode.style.marginLeft = `-${paddingX * scaleX}px`;
     this.textEditNode.style.marginTop = `-${paddingY * scaleY}px`;
     this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex;
-    this.textEditNode.style.backgroundColor = bgColor === "transparent" ? "#fff" : bgColor;
+    this.textEditNode.style.backgroundColor = bgColor === "transparent" ? isWhite(color) ? getVisibleColorFromTheme(this.mindMap.themeConfig) : "#fff" : bgColor;
     this.textEditNode.style.minWidth = originWidth + paddingX * 2 + "px";
     this.textEditNode.style.minHeight = originHeight + "px";
     this.textEditNode.style.left = rect.left + "px";
