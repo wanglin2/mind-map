@@ -8,21 +8,16 @@
 
 ## Features
 
-- [x] Plugin architecture. In addition to core functions, other functions are provided as plugins, which can be used as needed to reduce the overall volume
-- [x] Supports six types of structures: logical structure diagrams, mind maps,
-      organizational structure diagrams, directory organization diagrams, timeline, and fishbone diagrams
-- [x] Built-in multiple themes and allows for highly customized styles, and support register new themes
-- [x] Supports shortcuts
-- [x] Node content supports images, icons, hyperlinks, notes, tags, and
-      summaries
-- [x] Supports forward and backward navigation
-- [x] Supports dragging and scaling
-- [x] Supports right-click and Ctrl + left-click to select multiple items
-- [x] Supports free dragging and dragging to adjust nodes
-- [x] Supports various node shapes
-- [x] Supports export to json, png, svg, pdf markdown, and import from json, xmind, markdown
-- [x] Supports mini map、support watermark
-- [x] Supports associative lines
+- [x] Pluggable architecture, in addition to core functions, other functions are provided as plugins, which can be used as needed to reduce packaging volume
+- [x] Support logical structure chart, mind map, Organizational chart, directory organization chart, timeline (horizontal and vertical), fishbone chart and other structures
+- [x] Built-in multiple themes, allowing for highly customizable styles, and supporting registration of new themes
+- [x] Node content supports text (regular text, rich text), images, icons, hyperlinks, notes, labels, and summaries
+- [x] Nodes support drag and drop (drag and move, freely adjust), multiple node shapes, and fully customize node content using DDM
+- [x] Support canvas dragging and scaling
+- [x] Supports two multi node selection methods: mouse button drag selection and Ctrl+left button selection
+- [x] Supoorts to export as `json`、`png`、`svg`、`pdf`、`markdown`、`xmind`, support import from `json`、`xmind`、`markdown`
+- [x] Support shortcut keys, forward and backward, correlation lines, search and replacement, small maps, and watermarks
+- [x] Provide rich configurations to meet various scenarios and usage habits
 
 ## Repository Catalog Introduction
 

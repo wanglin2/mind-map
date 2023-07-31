@@ -34,6 +34,12 @@ MindMap.usePlugin(MiniMap)
 </code></pre>
 <p>Small map idea:</p>
 <p>1.Prepare a container element <code>container</code>, position is not <code>static</code></p>
+<p>If using rich text editing mode, it is best to remove the default style from the elements inside the 'container', otherwise there may be text offset issues within nodes:</p>
+<pre class="hljs"><code><span class="hljs-selector-class">.container</span> * {
+  <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span>;
+}
+</code></pre>
 <p>2.In <code>container</code>, create a small map container element <code>miniMapContainer</code>,
 absolute positioning</p>
 <p>3.In <code>container</code>, create a view box element <code>viewBoxContainer</code>, absolute

@@ -47,6 +47,15 @@ Small map idea:
 
 1.Prepare a container element `container`, position is not `static`
 
+If using rich text editing mode, it is best to remove the default style from the elements inside the 'container', otherwise there may be text offset issues within nodes:
+
+```css
+.container * {
+  margin: 0;
+  padding: 0;
+}
+```
+
 2.In `container`, create a small map container element `miniMapContainer`,
 absolute positioning
 
