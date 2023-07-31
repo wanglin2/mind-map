@@ -29,6 +29,12 @@ MindMap.usePlugin(MiniMap)
 </code></pre>
 <p>小地图思路：</p>
 <p>1.准备一个容器元素<code>container</code>，定位不为<code>static</code></p>
+<p>如果使用的是富文本编辑模式，那么最好给<code>container</code>内部的元素去除一下默认样式，否则可能会出现节点内文本偏移的问题：</p>
+<pre class="hljs"><code><span class="hljs-selector-class">.container</span> * {
+  <span class="hljs-attribute">margin</span>: <span class="hljs-number">0</span>;
+  <span class="hljs-attribute">padding</span>: <span class="hljs-number">0</span>;
+}
+</code></pre>
 <p>2.在<code>container</code>内创建一个小地图容器元素<code>miniMapContainer</code>，绝对定位</p>
 <p>3.在<code>container</code>内创建一个视口框元素<code>viewBoxContainer</code>，绝对定位，设置边框样式，过渡属性（可选）</p>
 <p>4.监听<code>data_change</code>和<code>view_data_change</code>事件，在该事件内调用<code>calculationMiniMap</code>方法获取计算数据，然后将<code>svgHTML</code>渲染到<code>miniMapContainer</code>元素内，并且设置<code>miniMapContainer</code>元素的样式：</p>
