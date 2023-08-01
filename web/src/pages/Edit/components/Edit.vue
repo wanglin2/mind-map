@@ -384,6 +384,10 @@ export default {
         // 动态删除指定节点
         // this.mindMap.execCommand('REMOVE_NODE', this.mindMap.renderer.root.children[0])
       // }, 5000);
+      // 如果应用被接管，那么抛出事件传递思维导图实例
+      if (window.takeOverApp) {
+        this.$bus.$emit('app_inited', this.mindMap)
+      }
     },
 
     /**

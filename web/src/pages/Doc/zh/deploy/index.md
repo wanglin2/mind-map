@@ -63,4 +63,128 @@ const router = new VueRouter({
 
 ## Docker
 
-编写中。。。
+> 非常感谢[水车](https://github.com/shuiche-it)，本小节由他编写，对应的 Docker 包也由他维护。
+
+直接从 Docker hup 中安装：
+
+```
+docker run -d -p 8081:8080 shuiche/mind-map:latest
+```
+
+mind-map在容器中启动了8080端口作为web服务入口，通过docker运行容器时，需要指定本地映射端口，上面案例中，我们通过本地的8081端口映射到容器端口8080。
+
+安装完成后，通过 `docker ps` 查看容器运行状态。
+
+浏览器打开 127.0.0.1:8081 即可使用Web 思维导图功能。
+
+## 对接自己的存储服务
+
+应用数据默认存储在浏览器本地，浏览器本地存储容量是比较小的，所以当在思维导图中插入更多图片后很容易触发限制，所以更好的选择是对接你自己的存储服务，这通常有两种方式：
+
+### 第一种
+
+直接clone本仓库代码，然后修改`web/src/api/index.js`内的相关方法即可实现从你的数据库里获取数据，以及存储到你的数据中。
+
+### 第二种
+
+很多时候，你可能想始终使用本仓库的最新代码，那么第一种方式就不太方便，因为你要手动去合并代码，所以提供了第二种方式。
+
+具体操作步骤：
+
+1.复制web应用打包后的资源
+
+包括：`dist`目录和`index.html`文件。
+
+2.修改复制后的`index.html`文件
+
+首先在`head`标签里插入如下代码：
+
+```js
+<script>
+  window.takeOverApp = true
+</script>
+```
+
+这行代码会提示应用不要初始化应用`即：new Vue()`，而是把控制权交给你，接下来再在`body`的最后插入你自己的`js`代码，内联或则外链都可以，内联示例如下：
+
+```js
+<script>
+  // 你自己的请求数据的方法
+  const getDataFromBackend = () => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve({
+          // 思维导图数据
+          mindMapData: {
+            root: {
+              "data": {
+                  "text": "根节点"
+              },
+              "children": []
+            },
+            theme: { "template":"avocado","config":{} },
+            layout: "logicalStructure",
+            config: {},
+            view: {}
+          },
+          // 页面语言，支持中文（zh）、英文（en）
+          lang: 'zh',
+          // 页面部分配置
+          localConfig: null
+        })
+      }, 200)
+    })
+  }
+  // 注册全局方法
+  const setTakeOverAppMethods = (data) => {
+    window.takeOverAppMethods = {}
+    // 获取思维导图数据的函数
+    window.takeOverAppMethods.getMindMapData = () => {
+      return data.mindMapData
+    } 
+    // 保存思维导图数据的函数
+    window.takeOverAppMethods.saveMindMapData = (data) => {
+      console.log(data)
+      // 该函数触发频率可能会很高，所以你应该做一下节流或防抖
+    }
+    // 获取语言的函数
+    window.takeOverAppMethods.getLanguage = () => {
+      return data.lang
+    }
+    // 保存语言的函数
+    window.takeOverAppMethods.saveLanguage = (lang) => {
+      console.log(lang)
+    }
+    // 获取本地配置的函数
+    window.takeOverAppMethods.getLocalConfig = () => {
+      return data.localConfig
+    }
+    // 保存本地配置的函数
+    window.takeOverAppMethods.saveLocalConfig = (config) => {
+      console.log(config)
+    }
+  }
+  window.onload = async () => {
+    if (!window.takeOverApp) return
+    // 请求数据
+    const data = await getDataFromBackend()
+    // 设置全局的方法
+    setTakeOverAppMethods(data)
+    // 思维导图实例创建完成事件
+    window.$bus.$on('app_inited', (mindMap) => {
+      console.log(mindMap)
+    })
+    // 可以通过window.$bus.$on()来监听应用的一些事件
+    // 实例化页面
+    window.initApp()
+  }
+</script>
+```
+
+如上所示，当你设置了`window.takeOverApp = true`标志，应用不再主动进行实例化，而是会将实例化的方法暴露出来由你调用，那么你可以先从后端请求思维导图的数据，然后再注册相关的方法，应用内部会在合适的时机进行调用，从而达到回显和保存的目的。
+
+这样做的好处是，每当本仓库代码更新了，你可以简单的复制打包后的文件到你自己的服务器，只要稍微修改一下`index.html`页面即可达到同步更新且使用自己的存储服务的目的。
+
+当然，目前也有一定限制，因为`Vue CLI`不支持`webpack`的`__webpack_public_path__`变量，所以无法实现运行时设置静态资源路径的需求，默认的`publicPath`为`dist`，所以你应该将`dist`目录和`index.html`文件放在服务器的同一层级。
+
+如果你想修改`publicPath`，比如想把静态资源放到`cdn`，那么你只能`clone`本仓库的代码，然后修改一下`web/vue.config.js`的`publicPath`配置，后续当本仓库的代码更新后，你需要重新拉取，用你修改过的配置进行打包，再进行前面的`index.html`文件的修改操作，推荐写一个`Node.js`脚本来完成该任务。
