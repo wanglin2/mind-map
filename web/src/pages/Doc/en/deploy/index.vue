@@ -25,7 +25,7 @@ npm link simple-mind-map
 <p>If you do not have any code modification requirements, it is also possible to directly copy these files from this repository.</p>
 <p>If you want to package 'index.html' into the 'dist' directory as well, you can modify the 'scripts.build' command in the 'web/package.json' file to delete '&amp;&amp; node ../copy.js' from 'vue-cli-service build &amp;&amp; node ../copy.js'.</p>
 <p>If you want to modify the directory for packaging output, you can modify the 'outputDir' configuration of the 'web/vue.config.js' file to the path you want to output.</p>
-<p>If you want to modify the path of the 'index. html' file referencing static resources, you can modify the 'publicPath' configuration of the 'web/vue.config.js' file.</p>
+<p>If you want to modify the path of the 'index. html' file referencing static resources, you can modify the 'publicPath' configuration of the 'web/vue.config.js' file. And the <code>window.externalPublicPath</code> config in <code>web/public/index.html</code> file.</p>
 <p>In addition, the default route used is 'hash ', which means that there will be '#'in the path. If you want to use the 'history' route, you can modify the 'web/src/router.js' file to:</p>
 <pre class="hljs"><code><span class="hljs-keyword">const</span> router = <span class="hljs-keyword">new</span> VueRouter({
   routes
@@ -143,8 +143,34 @@ npm link simple-mind-map
 </code></pre>
 <p>As shown above, when you set the 'window.takeOverApp=true' flag, the application will no longer actively instantiate, but will expose the instantiated methods for you to call. You can first request the data of the mind map from the backend, and then register the relevant methods. The application will call internally at the appropriate time to achieve the purpose of echo and save.</p>
 <p>The advantage of doing this is that whenever the code in this repository is updated, you can simply copy the packaged files to your own server. With a slight modification of the 'index. html' page, you can achieve synchronous updates and use your own storage service.</p>
-<p>Of course, there are also certain limitations at present, as' Vue CLI 'does not support' webpack '<code>__ Webpack_ Public_ Path__</code> Variable, so it is not possible to meet the requirement of setting static resource paths at runtime. The default 'publicPath' is 'dist', so you should place the 'dist' directory and the 'index.html' file at the same level as the server.</p>
-<p>If you want to modify the 'publicPath', such as placing static resources in the 'cdn', you can only 'clone' the code of this repository and modify the 'publicPath' configuration of 'web/vue.config.js'. After the code of this repository is updated, you need to pull it again, package it with the modified configuration, and then perform the modification operation of the ' index.html' file earlier. It is recommended to write a 'Node.js' script to complete this task.</p>
+<h2>Modifying Static Resource Paths</h2>
+<p>If you want to maintain synchronous updates with the code in this repository as in the previous section, but also want to modify the storage location of static resources, for example, the default hierarchical relationship is:</p>
+<pre class="hljs"><code>-dist
+--css
+--fonts
+--img
+--js
+-logo.ico
+
+-index.html
+</code></pre>
+<p>And you want to adjust it to this:</p>
+<pre class="hljs"><code>-assets
+--dist
+---css
+---fonts
+---img
+---js
+-logo.ico
+
+-index.html
+</code></pre>
+<p>So you can configure the 'window.externalPublicPath' in 'index.html' as the default <code>./dist/</code> is modified to:</p>
+<pre class="hljs"><code><span class="hljs-built_in">window</span>.externalPublicPath = <span class="hljs-string">&#x27;./assets/dist/&#x27;</span>
+</code></pre>
+<p>At the same time, the paths of the inline '.ico', '.js', and '.css' resources in 'index.html' need to be manually modified by you.</p>
+<p>It should be noted that it is best not to adjust the directory hierarchy within the 'dist' directory, otherwise exceptions may occur.</p>
+<p>If you want to replace some of the static resources, such as the theme image and structure image, with your own designed image, you can directly overwrite it with the same name.</p>
 
   </div>
 </template>
