@@ -63,4 +63,130 @@ However, this requires backend support, as our application is a single page clie
 
 ## Docker
 
-In writing...
+## Docker
+
+> Thank you very much [水车](https://github.com/shuiche-it), This section is written by him, and the corresponding Docker package is also maintained by him.
+
+Install directly from Docker Hub:
+
+```
+docker run -d -p 8081:8080 shuiche/mind-map:latest
+```
+
+Mindmap has activated port 8080 as the web service entry point in the container. When running the container through Docker, it is necessary to specify a local mapping port. In the above case, we mapped the local port 8081 to the container port 8080.
+
+After the installation is completed, check the container's running status through 'Docker PS'.
+
+Open 127.0.0.1:8081 in the browser to use the Web mind map function.
+
+## Docking with one's own storage services
+
+The application data is stored locally in the browser by default, and the local storage capacity of the browser is relatively small, so it is easy to trigger restrictions when inserting more images in the mind map. Therefore, a better choice is to dock with your own storage service, which usually has two ways:
+
+### The first
+
+Simply clone the warehouse code and modify the relevant methods in 'web/src/API/index.js' to obtain data from your database and store it in your data.
+
+### The second
+
+Many times, you may want to always use the latest code from this repository, so the first method is not very convenient because you need to manually merge the code, so the second method is provided.
+
+Specific operating steps:
+
+1. Copy the packaged resources of the web application
+
+This includes the 'dist' directory and the 'index.html' file.
+
+2. Modify the copied 'index.html' file
+
+Firstly, insert the following code into the 'head' tag:
+
+```js
+<script>
+  window.takeOverApp = true
+</script>
+```
+
+This line of code will prompt the application not to initialize the application 'i.e.: new Vue()', but to give control to you. Next, insert your own 'js' code at the end of the 'body', either inline or out of chain. The inline example is as follows:
+
+```js
+<script>
+  // Your own method of requesting data
+  const getDataFromBackend = () => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve({
+          // MindMap data
+          mindMapData: {
+            root: {
+              "data": {
+                  "text": "根节点"
+              },
+              "children": []
+            },
+            theme: { "template":"avocado","config":{} },
+            layout: "logicalStructure",
+            config: {},
+            view: {}
+          },
+          // Page language, supporting Chinese (zh) and English (en)
+          lang: 'zh',
+          // Page Section Configuration
+          localConfig: null
+        })
+      }, 200)
+    })
+  }
+  // Register Global Method
+  const setTakeOverAppMethods = (data) => {
+    window.takeOverAppMethods = {}
+    // Function for obtaining mind map data
+    window.takeOverAppMethods.getMindMapData = () => {
+      return data.mindMapData
+    } 
+    // Functions for Saving Mind Map Data
+    window.takeOverAppMethods.saveMindMapData = (data) => {
+      console.log(data)
+      // The trigger frequency of this function may be high, so you should do throttling or anti shaking measures
+    }
+    // Function to obtain language
+    window.takeOverAppMethods.getLanguage = () => {
+      return data.lang
+    }
+    // Functions for Saving Languages
+    window.takeOverAppMethods.saveLanguage = (lang) => {
+      console.log(lang)
+    }
+    // Get locally configured functions
+    window.takeOverAppMethods.getLocalConfig = () => {
+      return data.localConfig
+    }
+    // Save locally configured functions
+    window.takeOverAppMethods.saveLocalConfig = (config) => {
+      console.log(config)
+    }
+  }
+  window.onload = async () => {
+    if (!window.takeOverApp) return
+    // request data
+    const data = await getDataFromBackend()
+    // Method for setting global
+    setTakeOverAppMethods(data)
+    // Mind Map Instance Creation Completion Event
+    window.$bus.$on('app_inited', (mindMap) => {
+      console.log(mindMap)
+    })
+    // You can use window$ Bus$ On() to listen for some events in the application
+    // Instantiate Page
+    window.initApp()
+  }
+</script>
+```
+
+As shown above, when you set the 'window.takeOverApp=true' flag, the application will no longer actively instantiate, but will expose the instantiated methods for you to call. You can first request the data of the mind map from the backend, and then register the relevant methods. The application will call internally at the appropriate time to achieve the purpose of echo and save.
+
+The advantage of doing this is that whenever the code in this repository is updated, you can simply copy the packaged files to your own server. With a slight modification of the 'index. html' page, you can achieve synchronous updates and use your own storage service.
+
+Of course, there are also certain limitations at present, as' Vue CLI 'does not support' webpack '`__ Webpack_ Public_ Path__` Variable, so it is not possible to meet the requirement of setting static resource paths at runtime. The default 'publicPath' is 'dist', so you should place the 'dist' directory and the 'index.html' file at the same level as the server.
+
+If you want to modify the 'publicPath', such as placing static resources in the 'cdn', you can only 'clone' the code of this repository and modify the 'publicPath' configuration of 'web/vue.config.js'. After the code of this repository is updated, you need to pull it again, package it with the modified configuration, and then perform the modification operation of the ' index.html' file earlier. It is recommended to write a 'Node.js' script to complete this task.
