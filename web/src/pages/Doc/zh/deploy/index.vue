@@ -39,7 +39,107 @@ npm link simple-mind-map
 </code></pre>
 <p>不过这需要后台支持，因为我们的应用是个单页客户端应用，如果后台没有正确的配置，当用户在浏览器直接访问子路由时会返回404，所以呢你要在服务端增加一个覆盖所有情况的候选资源：如果<code>URL</code>匹配不到任何静态资源，则应该返回同一个<code>index.html</code>页面。</p>
 <h2>Docker</h2>
-<p>编写中。。。</p>
+<blockquote>
+<p>非常感谢<a href="https://github.com/shuiche-it">水车</a>，本小节由他编写，对应的 Docker 包也由他维护。</p>
+</blockquote>
+<p>直接从 Docker hup 中安装：</p>
+<pre class="hljs"><code>docker run -d -p 8081:8080 shuiche/mind-map:latest
+</code></pre>
+<p>mind-map在容器中启动了8080端口作为web服务入口，通过docker运行容器时，需要指定本地映射端口，上面案例中，我们通过本地的8081端口映射到容器端口8080。</p>
+<p>安装完成后，通过 <code>docker ps</code> 查看容器运行状态。</p>
+<p>浏览器打开 127.0.0.1:8081 即可使用Web 思维导图功能。</p>
+<h2>对接自己的存储服务</h2>
+<p>应用数据默认存储在浏览器本地，浏览器本地存储容量是比较小的，所以当在思维导图中插入更多图片后很容易触发限制，所以更好的选择是对接你自己的存储服务，这通常有两种方式：</p>
+<h3>第一种</h3>
+<p>直接clone本仓库代码，然后修改<code>web/src/api/index.js</code>内的相关方法即可实现从你的数据库里获取数据，以及存储到你的数据中。</p>
+<h3>第二种</h3>
+<p>很多时候，你可能想始终使用本仓库的最新代码，那么第一种方式就不太方便，因为你要手动去合并代码，所以提供了第二种方式。</p>
+<p>具体操作步骤：</p>
+<p>1.复制web应用打包后的资源</p>
+<p>包括：<code>dist</code>目录和<code>index.html</code>文件。</p>
+<p>2.修改复制后的<code>index.html</code>文件</p>
+<p>首先在<code>head</code>标签里插入如下代码：</p>
+<pre class="hljs"><code>&lt;script&gt;
+  <span class="hljs-built_in">window</span>.takeOverApp = <span class="hljs-literal">true</span>
+&lt;/script&gt;
+</code></pre>
+<p>这行代码会提示应用不要初始化应用<code>即：new Vue()</code>，而是把控制权交给你，接下来再在<code>body</code>的最后插入你自己的<code>js</code>代码，内联或则外链都可以，内联示例如下：</p>
+<pre class="hljs"><code>&lt;script&gt;
+  <span class="hljs-comment">// 你自己的请求数据的方法</span>
+  <span class="hljs-keyword">const</span> getDataFromBackend = <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+      <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> {
+        resolve({
+          <span class="hljs-comment">// 思维导图数据</span>
+          <span class="hljs-attr">mindMapData</span>: {
+            <span class="hljs-attr">root</span>: {
+              <span class="hljs-string">&quot;data&quot;</span>: {
+                  <span class="hljs-string">&quot;text&quot;</span>: <span class="hljs-string">&quot;根节点&quot;</span>
+              },
+              <span class="hljs-string">&quot;children&quot;</span>: []
+            },
+            <span class="hljs-attr">theme</span>: { <span class="hljs-string">&quot;template&quot;</span>:<span class="hljs-string">&quot;avocado&quot;</span>,<span class="hljs-string">&quot;config&quot;</span>:{} },
+            <span class="hljs-attr">layout</span>: <span class="hljs-string">&quot;logicalStructure&quot;</span>,
+            <span class="hljs-attr">config</span>: {},
+            <span class="hljs-attr">view</span>: {}
+          },
+          <span class="hljs-comment">// 页面语言，支持中文（zh）、英文（en）</span>
+          <span class="hljs-attr">lang</span>: <span class="hljs-string">&#x27;zh&#x27;</span>,
+          <span class="hljs-comment">// 页面部分配置</span>
+          <span class="hljs-attr">localConfig</span>: <span class="hljs-literal">null</span>
+        })
+      }, <span class="hljs-number">200</span>)
+    })
+  }
+  <span class="hljs-comment">// 注册全局方法</span>
+  <span class="hljs-keyword">const</span> setTakeOverAppMethods = <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
+    <span class="hljs-built_in">window</span>.takeOverAppMethods = {}
+    <span class="hljs-comment">// 获取思维导图数据的函数</span>
+    <span class="hljs-built_in">window</span>.takeOverAppMethods.getMindMapData = <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-keyword">return</span> data.mindMapData
+    } 
+    <span class="hljs-comment">// 保存思维导图数据的函数</span>
+    <span class="hljs-built_in">window</span>.takeOverAppMethods.saveMindMapData = <span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> {
+      <span class="hljs-built_in">console</span>.log(data)
+      <span class="hljs-comment">// 该函数触发频率可能会很高，所以你应该做一下节流或防抖</span>
+    }
+    <span class="hljs-comment">// 获取语言的函数</span>
+    <span class="hljs-built_in">window</span>.takeOverAppMethods.getLanguage = <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-keyword">return</span> data.lang
+    }
+    <span class="hljs-comment">// 保存语言的函数</span>
+    <span class="hljs-built_in">window</span>.takeOverAppMethods.saveLanguage = <span class="hljs-function">(<span class="hljs-params">lang</span>) =&gt;</span> {
+      <span class="hljs-built_in">console</span>.log(lang)
+    }
+    <span class="hljs-comment">// 获取本地配置的函数</span>
+    <span class="hljs-built_in">window</span>.takeOverAppMethods.getLocalConfig = <span class="hljs-function">() =&gt;</span> {
+      <span class="hljs-keyword">return</span> data.localConfig
+    }
+    <span class="hljs-comment">// 保存本地配置的函数</span>
+    <span class="hljs-built_in">window</span>.takeOverAppMethods.saveLocalConfig = <span class="hljs-function">(<span class="hljs-params">config</span>) =&gt;</span> {
+      <span class="hljs-built_in">console</span>.log(config)
+    }
+  }
+  <span class="hljs-built_in">window</span>.onload = <span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">window</span>.takeOverApp) <span class="hljs-keyword">return</span>
+    <span class="hljs-comment">// 请求数据</span>
+    <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> getDataFromBackend()
+    <span class="hljs-comment">// 设置全局的方法</span>
+    setTakeOverAppMethods(data)
+    <span class="hljs-comment">// 思维导图实例创建完成事件</span>
+    <span class="hljs-built_in">window</span>.$bus.$on(<span class="hljs-string">&#x27;app_inited&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">mindMap</span>) =&gt;</span> {
+      <span class="hljs-built_in">console</span>.log(mindMap)
+    })
+    <span class="hljs-comment">// 可以通过window.$bus.$on()来监听应用的一些事件</span>
+    <span class="hljs-comment">// 实例化页面</span>
+    <span class="hljs-built_in">window</span>.initApp()
+  }
+&lt;/script&gt;
+</code></pre>
+<p>如上所示，当你设置了<code>window.takeOverApp = true</code>标志，应用不再主动进行实例化，而是会将实例化的方法暴露出来由你调用，那么你可以先从后端请求思维导图的数据，然后再注册相关的方法，应用内部会在合适的时机进行调用，从而达到回显和保存的目的。</p>
+<p>这样做的好处是，每当本仓库代码更新了，你可以简单的复制打包后的文件到你自己的服务器，只要稍微修改一下<code>index.html</code>页面即可达到同步更新且使用自己的存储服务的目的。</p>
+<p>当然，目前也有一定限制，因为<code>Vue CLI</code>不支持<code>webpack</code>的<code>__webpack_public_path__</code>变量，所以无法实现运行时设置静态资源路径的需求，默认的<code>publicPath</code>为<code>dist</code>，所以你应该将<code>dist</code>目录和<code>index.html</code>文件放在服务器的同一层级。</p>
+<p>如果你想修改<code>publicPath</code>，比如想把静态资源放到<code>cdn</code>，那么你只能<code>clone</code>本仓库的代码，然后修改一下<code>web/vue.config.js</code>的<code>publicPath</code>配置，后续当本仓库的代码更新后，你需要重新拉取，用你修改过的配置进行打包，再进行前面的<code>index.html</code>文件的修改操作，推荐写一个<code>Node.js</code>脚本来完成该任务。</p>
 
   </div>
 </template>
