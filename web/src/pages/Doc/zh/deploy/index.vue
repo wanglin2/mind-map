@@ -25,7 +25,7 @@ npm link simple-mind-map
 <p>如果你没有代码修改需求的话，直接从本仓库复制这些文件也是可以的。</p>
 <p>如果你想把<code>index.html</code>也打包进<code>dist</code>目录，可以修改<code>web/package.json</code>文件的<code>scripts.build</code>命令，把<code>vue-cli-service build &amp;&amp; node ../copy.js</code>中的<code> &amp;&amp; node ../copy.js</code>删除即可。</p>
 <p>如果你想修改打包输出的目录，可以修改<code>web/vue.config.js</code>文件的<code>outputDir</code>配置，改成你想要输出的路径即可。</p>
-<p>如果你想修改<code>index.html</code>文件引用静态资源的路径的话可以修改<code>web/vue.config.js</code>文件的<code>publicPath</code>配置。</p>
+<p>如果你想修改<code>index.html</code>文件引用静态资源的路径的话可以修改<code>web/vue.config.js</code>文件的<code>publicPath</code>配置。以及<code>web/public/index.html</code>文件的<code>window.externalPublicPath</code>配置。</p>
 <p>另外默认使用的是<code>hash</code>路由，也就是路径中会在<code>#</code>，如果你想使用<code>history</code>路由，可以修改<code>web/src/router.js</code>文件，将：</p>
 <pre class="hljs"><code><span class="hljs-keyword">const</span> router = <span class="hljs-keyword">new</span> VueRouter({
   routes
@@ -138,8 +138,34 @@ npm link simple-mind-map
 </code></pre>
 <p>如上所示，当你设置了<code>window.takeOverApp = true</code>标志，应用不再主动进行实例化，而是会将实例化的方法暴露出来由你调用，那么你可以先从后端请求思维导图的数据，然后再注册相关的方法，应用内部会在合适的时机进行调用，从而达到回显和保存的目的。</p>
 <p>这样做的好处是，每当本仓库代码更新了，你可以简单的复制打包后的文件到你自己的服务器，只要稍微修改一下<code>index.html</code>页面即可达到同步更新且使用自己的存储服务的目的。</p>
-<p>当然，目前也有一定限制，因为<code>Vue CLI</code>不支持<code>webpack</code>的<code>__webpack_public_path__</code>变量，所以无法实现运行时设置静态资源路径的需求，默认的<code>publicPath</code>为<code>dist</code>，所以你应该将<code>dist</code>目录和<code>index.html</code>文件放在服务器的同一层级。</p>
-<p>如果你想修改<code>publicPath</code>，比如想把静态资源放到<code>cdn</code>，那么你只能<code>clone</code>本仓库的代码，然后修改一下<code>web/vue.config.js</code>的<code>publicPath</code>配置，后续当本仓库的代码更新后，你需要重新拉取，用你修改过的配置进行打包，再进行前面的<code>index.html</code>文件的修改操作，推荐写一个<code>Node.js</code>脚本来完成该任务。</p>
+<h2>修改静态资源路径</h2>
+<p>如果你想和上一节一样保持和本仓库代码的同步更新，但是又想修改静态资源的存放位置，比如默认的层级关系为：</p>
+<pre class="hljs"><code>-dist
+--css
+--fonts
+--img
+--js
+-logo.ico
+
+-index.html
+</code></pre>
+<p>而你想调整成这样：</p>
+<pre class="hljs"><code>-assets
+--dist
+---css
+---fonts
+---img
+---js
+-logo.ico
+
+-index.html
+</code></pre>
+<p>那么你可以将<code>index.html</code>中的<code>window.externalPublicPath</code>配置由默认的<code>./dist/</code>修改为：</p>
+<pre class="hljs"><code><span class="hljs-built_in">window</span>.externalPublicPath = <span class="hljs-string">&#x27;./assets/dist/&#x27;</span>
+</code></pre>
+<p>同时<code>index.html</code>中内联的<code>.ico</code>、<code>.js</code>、<code>.css</code>资源的路径需要你手动修改。</p>
+<p>需要注意的是，<code>dist</code>目录内的目录层级关系最好不要调整，否则可能会出现异常。</p>
+<p>如果你想替换其中的一些静态资源，比如你想将主题图片和结构的图片替换成你自己设计的图片，那么可以直接同名覆盖。</p>
 
   </div>
 </template>
