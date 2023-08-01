@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 import EditPage from '@/pages/Edit/Index'
 import DocPage from '@/pages/Doc/Index'
 import routerList from '@/pages/Doc/routerList'
-import IndexPage from '@/pages/Index/Index'
 
 // 处理没有翻译的章节路由
 const handleRouterList = () => {
@@ -54,7 +53,7 @@ const routes = [
   {
     path: '/index', 
     name: 'Index', 
-    component: IndexPage 
+    component: () => import(`./pages/Index/Index.vue`)
   },
   { 
     path: '/', 

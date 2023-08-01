@@ -40,7 +40,7 @@ npm run build
 
 如果你想修改打包输出的目录，可以修改`web/vue.config.js`文件的`outputDir`配置，改成你想要输出的路径即可。
 
-如果你想修改`index.html`文件引用静态资源的路径的话可以修改`web/vue.config.js`文件的`publicPath`配置。
+如果你想修改`index.html`文件引用静态资源的路径的话可以修改`web/vue.config.js`文件的`publicPath`配置。以及`web/public/index.html`文件的`window.externalPublicPath`配置。
 
 另外默认使用的是`hash`路由，也就是路径中会在`#`，如果你想使用`history`路由，可以修改`web/src/router.js`文件，将：
 
@@ -185,6 +185,43 @@ mind-map在容器中启动了8080端口作为web服务入口，通过docker运�
 
 这样做的好处是，每当本仓库代码更新了，你可以简单的复制打包后的文件到你自己的服务器，只要稍微修改一下`index.html`页面即可达到同步更新且使用自己的存储服务的目的。
 
-当然，目前也有一定限制，因为`Vue CLI`不支持`webpack`的`__webpack_public_path__`变量，所以无法实现运行时设置静态资源路径的需求，默认的`publicPath`为`dist`，所以你应该将`dist`目录和`index.html`文件放在服务器的同一层级。
+## 修改静态资源路径
 
-如果你想修改`publicPath`，比如想把静态资源放到`cdn`，那么你只能`clone`本仓库的代码，然后修改一下`web/vue.config.js`的`publicPath`配置，后续当本仓库的代码更新后，你需要重新拉取，用你修改过的配置进行打包，再进行前面的`index.html`文件的修改操作，推荐写一个`Node.js`脚本来完成该任务。
+如果你想和上一节一样保持和本仓库代码的同步更新，但是又想修改静态资源的存放位置，比如默认的层级关系为：
+
+```
+-dist
+--css
+--fonts
+--img
+--js
+-logo.ico
+
+-index.html
+```
+
+而你想调整成这样：
+
+```
+-assets
+--dist
+---css
+---fonts
+---img
+---js
+-logo.ico
+
+-index.html
+```
+
+那么你可以将`index.html`中的`window.externalPublicPath`配置由默认的`./dist/`修改为：
+
+```js
+window.externalPublicPath = './assets/dist/'
+```
+
+同时`index.html`中内联的`.ico`、`.js`、`.css`资源的路径需要你手动修改。
+
+需要注意的是，`dist`目录内的目录层级关系最好不要调整，否则可能会出现异常。
+
+如果你想替换其中的一些静态资源，比如你想将主题图片和结构的图片替换成你自己设计的图片，那么可以直接同名覆盖。
