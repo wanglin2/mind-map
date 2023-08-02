@@ -50,7 +50,7 @@ import ShortcutKey from './ShortcutKey'
 import Contextmenu from './Contextmenu'
 import RichTextToolbar from './RichTextToolbar'
 import NodeNoteContentShow from './NodeNoteContentShow.vue'
-import { getData, storeData, storeConfig } from '@/api'
+import { getData, storeData, storeConfig, getConfig } from '@/api'
 import Navigator from './Navigator.vue'
 import NodeImgPreview from './NodeImgPreview.vue'
 import SidebarTrigger from './SidebarTrigger.vue'
@@ -272,6 +272,7 @@ export default {
         this.setFileName('未命名')
         storeData = getData()
       }
+      storeData.config = getConfig()
       this.mindMapData = storeData
     },
 

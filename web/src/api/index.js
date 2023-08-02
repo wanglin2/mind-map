@@ -5,6 +5,7 @@ import Vue from 'vue'
 const SIMPLE_MIND_MAP_DATA = 'SIMPLE_MIND_MAP_DATA'
 const SIMPLE_MIND_MAP_LANG = 'SIMPLE_MIND_MAP_LANG'
 const SIMPLE_MIND_MAP_LOCAL_CONFIG = 'SIMPLE_MIND_MAP_LOCAL_CONFIG'
+const SIMPLE_MIND_MAP_CONFIG = 'SIMPLE_MIND_MAP_CONFIG'
 
 let mindMapData = null
 
@@ -64,6 +65,9 @@ export const getData = () => {
  */
 export const storeData = data => {
   try {
+    if (window.IS_ELECTRON) {
+      return
+    }
     let originData = null
     if (window.takeOverApp) {
       originData = mindMapData
@@ -91,6 +95,12 @@ export const storeData = data => {
  */
 export const storeConfig = config => {
   try {
+    if (window.IS_ELECTRON) {
+      if (!config.config) return
+      let dataStr = JSON.stringify(config.config)
+      localStorage.setItem(SIMPLE_MIND_MAP_CONFIG, dataStr)
+      return
+    }
     let originData = null
     if (window.takeOverApp) {
       originData = mindMapData
@@ -111,6 +121,20 @@ export const storeConfig = config => {
     localStorage.setItem(SIMPLE_MIND_MAP_DATA, dataStr)
   } catch (error) {
     console.log(error)
+  }
+}
+
+export const getConfig = () => {
+  let config = localStorage.getItem(SIMPLE_MIND_MAP_CONFIG)
+  if (config === null) {
+    return {}
+  } else {
+    try {
+      let parsedData = JSON.parse(config)
+      return parsedData
+    } catch (error) {
+      return {}
+    }
   }
 }
 
