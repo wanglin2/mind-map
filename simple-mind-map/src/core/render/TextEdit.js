@@ -167,7 +167,11 @@ export default class TextEdit {
       this.textEditNode.addEventListener('click', e => {
         e.stopPropagation()
       })
-      document.body.appendChild(this.textEditNode)
+      this.textEditNode.addEventListener('mousedown', (e) => {
+        e.stopPropagation()
+      })
+      const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
+      targetNode.appendChild(this.textEditNode)
     }
     let scale = this.mindMap.view.scale
     let lineHeight = node.style.merge('lineHeight')

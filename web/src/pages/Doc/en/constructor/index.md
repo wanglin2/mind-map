@@ -71,6 +71,7 @@ const mindMap = new MindMap({
 | isUseCustomNodeContent（v0.6.3+）     |  Boolean | false |  Whether to customize node content |          |
 | customCreateNodeContent（v0.6.3+）     |  Function/null | null | If `isUseCustomNodeContent` is set to `true`, then this option needs to be used to pass in a method that receives the node instance `node` as a parameter (if you want to obtain data for that node, you can use `node.nodeData.data`). You need to return the custom node content element, which is the DOM node. If a node does not require customization, you can return `null` |          |
 | mouseScaleCenterUseMousePosition（v0.6.4-fix.1+）     | Boolean  | true | Is the mouse zoom centered around the current position of the mouse, otherwise centered around the canvas |          |
+| customInnerElsAppendTo（v0.6.12+）     | null/HTMLElement  | null | Specify the location where some internal elements (node text editing element, node note display element, associated line text editing element, node image adjustment button element) are added, and default to document.body |          |
 
 ### Watermark config
 
