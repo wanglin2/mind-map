@@ -120,7 +120,8 @@ export default {
       prevImg: '',
       openTest: false,
       isFirst: true,
-      autoSaveTimer: null
+      autoSaveTimer: null,
+      isNewFile: false
     }
   },
   computed: {
@@ -269,6 +270,7 @@ export default {
         this.setFileName(data.name)
         storeData = data.content
       } else {
+        this.isNewFile = true
         this.setFileName('未命名')
         storeData = getData()
       }
@@ -307,6 +309,7 @@ export default {
     autoSave() {
       clearTimeout(this.autoSaveTimer)
       this.autoSaveTimer = setTimeout(() => {
+        if (this.isNewFile) return
         this.saveToLocal()
       }, 5000)
     },
@@ -505,9 +508,9 @@ export default {
     async saveToLocal() {
       let id = this.$route.params.id
       let data = this.mindMap.getData(true)
-      console.log('保存', id, data)
       let res = await window.electronAPI.save(id, JSON.stringify(data), this.fileName)
       if (res) {
+        this.isNewFile = false
         this.setFileName(res)
       }
       this.setIsUnSave(false)
