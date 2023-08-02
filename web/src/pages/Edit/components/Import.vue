@@ -34,7 +34,7 @@
 <script>
 import xmind from 'simple-mind-map/src/parse/xmind.js'
 import markdown from 'simple-mind-map/src/parse/markdown.js'
-import { fileToBuffer } from '@/utils'
+import { fileToBuffer, addMindMapNodeStickerProtocol } from '@/utils'
 import { read, utils } from 'xlsx'
 
 /**
@@ -133,6 +133,7 @@ export default {
           if (typeof data !== 'object') {
             throw new Error('文件内容有误')
           }
+          addMindMapNodeStickerProtocol(data.root ? data.root : data)
           this.$bus.$emit('setData', data)
           this.$message.success('导入成功')
         } catch (error) {

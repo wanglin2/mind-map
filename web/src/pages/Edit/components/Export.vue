@@ -135,7 +135,7 @@ export default {
      * @Date: 2021-06-06 22:28:20
      * @Desc:  确定
      */
-    confirm() {
+    async confirm() {
       if (this.exportType === 'svg') {
         this.$bus.$emit(
           'export',
@@ -150,7 +150,7 @@ export default {
         )
       } else if (['smm', 'json'].includes(this.exportType)) {
         this.$bus.$emit(
-          'export',
+          'exportJson',
           this.exportType,
           true,
           this.fileName,

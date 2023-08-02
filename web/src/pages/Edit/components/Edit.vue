@@ -39,6 +39,7 @@ import AssociativeLine from 'simple-mind-map/src/plugins/AssociativeLine.js'
 import TouchEvent from 'simple-mind-map/src/plugins/TouchEvent.js'
 import NodeImgAdjust from 'simple-mind-map/src/plugins/NodeImgAdjust.js'
 import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
+import { downloadFile, readBlob } from 'simple-mind-map/src/utils/index'
 import Outline from './Outline'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -66,6 +67,7 @@ import i18n from '../../../i18n'
 import Search from './Search.vue'
 import NodeIconSidebar from './NodeIconSidebar.vue'
 import NodeIconToolbar from './NodeIconToolbar.vue'
+import { removeMindMapNodeStickerProtocol, addMindMapNodeStickerProtocol } from '@/utils'
 
 // 注册插件
 MindMap
@@ -148,6 +150,7 @@ export default {
     this.$bus.$on('execCommand', this.execCommand)
     this.$bus.$on('paddingChange', this.onPaddingChange)
     this.$bus.$on('export', this.export)
+    this.$bus.$on('exportJson', this.exportJson)
     this.$bus.$on('setData', this.setData)
     this.$bus.$on('startTextEdit', () => {
       this.mindMap.renderer.startTextEdit()
@@ -267,6 +270,7 @@ export default {
       let data = await window.electronAPI.getFileContent(this.$route.params.id)
       let storeData = null
       if (data) {
+        addMindMapNodeStickerProtocol(data.content.root)
         this.setFileName(data.name)
         storeData = data.content
       } else {
@@ -473,6 +477,17 @@ export default {
       }
     },
 
+    async exportJson(type, isDownload = true, name = '思维导图', withConfig) {
+      let data = this.mindMap.getData(withConfig)
+      removeMindMapNodeStickerProtocol(data.root ? data.root : data)
+      let str = JSON.stringify(data)
+      let blob = new Blob([str])
+      let res = await readBlob(blob)
+      if (isDownload) {
+        downloadFile(res, name + '.' + type)
+      }
+    },
+
     // 修改导出内边距
     onPaddingChange(data) {
       this.mindMap.updateConfig(data)
@@ -508,6 +523,7 @@ export default {
     async saveToLocal() {
       let id = this.$route.params.id
       let data = this.mindMap.getData(true)
+      removeMindMapNodeStickerProtocol(data.root)
       let res = await window.electronAPI.save(id, JSON.stringify(data), this.fileName)
       if (res) {
         this.isNewFile = false
