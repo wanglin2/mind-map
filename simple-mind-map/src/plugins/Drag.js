@@ -105,6 +105,9 @@ class Drag extends Base {
     this.node.isDrag = false
     this.node.show()
     this.removeCloneNode()
+    let overlapNodeUid = this.overlapNode ? this.overlapNode.nodeData.data.uid : ''
+    let prevNodeUid = this.prevNode ? this.prevNode.nodeData.data.uid : ''
+    let nextNodeUid = this.nextNode ? this.nextNode.nodeData.data.uid : ''
     // 存在重叠子节点，则移动作为其子节点
     if (this.overlapNode) {
       this.mindMap.renderer.setNodeActive(this.overlapNode, false)
@@ -134,7 +137,11 @@ class Drag extends Base {
       this.mindMap.render()
     }
     this.reset()
-    this.mindMap.emit('node_dragend')
+    this.mindMap.emit('node_dragend', {
+      overlapNodeUid,
+      prevNodeUid,
+      nextNodeUid
+    })
   }
 
   //  创建克隆节点

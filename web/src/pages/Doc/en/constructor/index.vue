@@ -697,7 +697,7 @@ poor performance and should be used sparingly.</p>
 <tr>
 <td>node_dragend（v0.4.5+）</td>
 <td>Triggered when the node is dragged and ends</td>
-<td></td>
+<td>{ overlapNodeUid, prevNodeUid, nextNodeUid }（v0.6.12+，The node uid to which the node is moved this time, for example, if it is moved to node A, then the overlayNodeUid is the uid of node A. If it is moved to the front of node B, then the nextNodeUid is the uid of node B. You can obtain the node instance through the mindMap. extender.findNodeByUid(uid) method）</td>
 </tr>
 <tr>
 <td>associative_line_click（v0.4.5+）</td>
