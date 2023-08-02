@@ -57,7 +57,7 @@ const checkIsHttpOrDataUrl = (url) => {
 // 客户端开发版：        img/a-7-xinzang.svg
 // 客户端线上版：app://./img/a-shuben2.svg
 // web线上版：   ./dist/img/-_1.svg
-// web本地版：
+// web本地版：          img/a-7-xinzang.svg
 export const removeMindMapNodeStickerProtocol = (data) => {
   let walk = (root) => {
     let image = root.data.image
