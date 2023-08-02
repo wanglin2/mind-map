@@ -268,7 +268,7 @@ function createNoteNode() {
     if (!this.noteEl) {
       this.noteEl = document.createElement('div')
       this.noteEl.style.cssText = `
-          position: absolute;
+          position: fixed;
           padding: 10px;
           border-radius: 5px;
           box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
@@ -276,7 +276,8 @@ function createNoteNode() {
           background-color: #fff;
           z-index: ${ this.mindMap.opt.nodeNoteTooltipZIndex }
       `
-      document.body.appendChild(this.noteEl)
+      const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
+      targetNode.appendChild(this.noteEl)
     }
     this.noteEl.innerText = this.nodeData.data.note
   }

@@ -71,6 +71,7 @@ const mindMap = new MindMap({
 | isUseCustomNodeContent（v0.6.3+）     |  Boolean | false | 是否自定义节点内容  |          |
 | customCreateNodeContent（v0.6.3+）     |  Function/null | null | 如果`isUseCustomNodeContent`设为`true`，那么需要使用该选项传入一个方法，接收节点实例`node`为参数（如果要获取该节点的数据，可以通过`node.nodeData.data`），需要返回自定义节点内容元素，也就是DOM节点，如果某个节点不需要自定义，那么返回`null`即可 |          |
 | mouseScaleCenterUseMousePosition（v0.6.4-fix.1+）     | Boolean  | true | 鼠标缩放是否以鼠标当前位置为中心点，否则以画布中心点 |          |
+| customInnerElsAppendTo（v0.6.12+）     | null/HTMLElement  | null | 指定内部一些元素（节点文本编辑元素、节点备注显示元素、关联线文本编辑元素、节点图片调整按钮元素）添加到的位置，默认添加到document.body下 |          |
 
 ### 水印配置
 

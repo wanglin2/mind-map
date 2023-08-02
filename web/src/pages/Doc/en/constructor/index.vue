@@ -357,6 +357,13 @@
 <td>Is the mouse zoom centered around the current position of the mouse, otherwise centered around the canvas</td>
 <td></td>
 </tr>
+<tr>
+<td>customInnerElsAppendTo（v0.6.12+）</td>
+<td>null/HTMLElement</td>
+<td>null</td>
+<td>Specify the location where some internal elements (node text editing element, node note display element, associated line text editing element, node image adjustment button element) are added, and default to document.body</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
