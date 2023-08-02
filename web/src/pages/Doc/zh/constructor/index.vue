@@ -690,7 +690,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>node_dragend（v0.4.5+）</td>
 <td>节点被拖拽结束时触发</td>
-<td></td>
+<td>{ overlapNodeUid, prevNodeUid, nextNodeUid }（v0.6.12+，本次节点移动到的节点uid，比如本次移动到了节点A上，那么overlapNodeUid就是节点A的uid，如果移动到了B节点的前面，那么nextNodeUid就是节点B的uid，你可以通过mindMap.renderer.findNodeByUid(uid)方法来获取节点实例）</td>
 </tr>
 <tr>
 <td>associative_line_click（v0.4.5+）</td>
