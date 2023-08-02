@@ -6,7 +6,6 @@ import routerList from '@/pages/Doc/routerList'
 import WorkbenchePage from '@/pages/Workbenche/Index'
 import WorkbencheHomePage from '@/pages/Workbenche/views/Home'
 import WorkbencheEditPage from '@/pages/Workbenche/views/Edit'
-import IndexPage from '@/pages/Index/Index'
 
 // 处理没有翻译的章节路由
 const handleRouterList = () => {
@@ -80,7 +79,7 @@ const routes = [
   {
     path: '/index', 
     name: 'Index', 
-    component: IndexPage 
+    component: () => import(`./pages/Index/Index.vue`)
   },
   { 
     path: '/', 

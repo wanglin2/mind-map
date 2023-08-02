@@ -106,13 +106,16 @@ export default {
   data() {
     return {
       langList,
-      lang: getLang(),
+      lang: '',
       isReadonly: false,
       openMiniMap: false
     }
   },
   computed: {
     ...mapState(['isDark'])
+  },
+  created () {
+    this.lang = getLang()
   },
   methods: {
     ...mapMutations(['setIsDark']),

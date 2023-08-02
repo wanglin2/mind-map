@@ -42,6 +42,15 @@ MindMap.usePlugin(MiniMap)
 
 1.准备一个容器元素`container`，定位不为`static`
 
+如果使用的是富文本编辑模式，那么最好给`container`内部的元素去除一下默认样式，否则可能会出现节点内文本偏移的问题：
+
+```css
+.container * {
+  margin: 0;
+  padding: 0;
+}
+```
+
 2.在`container`内创建一个小地图容器元素`miniMapContainer`，绝对定位
 
 3.在`container`内创建一个视口框元素`viewBoxContainer`，绝对定位，设置边框样式，过渡属性（可选）

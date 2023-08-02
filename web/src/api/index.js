@@ -6,6 +6,8 @@ const SIMPLE_MIND_MAP_DATA = 'SIMPLE_MIND_MAP_DATA'
 const SIMPLE_MIND_MAP_LANG = 'SIMPLE_MIND_MAP_LANG'
 const SIMPLE_MIND_MAP_LOCAL_CONFIG = 'SIMPLE_MIND_MAP_LOCAL_CONFIG'
 
+let mindMapData = null
+
 /**
  * @Author: 王林
  * @Date: 2021-08-02 22:36:48
@@ -29,6 +31,10 @@ const copyMindMapTreeData = (tree, root) => {
  * @Desc: 获取缓存的思维导图数据
  */
 export const getData = () => {
+  if (window.takeOverApp) {
+    mindMapData = window.takeOverAppMethods.getMindMapData()
+    return mindMapData
+  }
   let store = localStorage.getItem(SIMPLE_MIND_MAP_DATA)
   if (store === null) {
     return simpleDeepClone(exampleData)
@@ -58,8 +64,18 @@ export const getData = () => {
  */
 export const storeData = data => {
   try {
-    let originData = getData()
+    let originData = null
+    if (window.takeOverApp) {
+      originData = mindMapData
+    } else {
+      originData = getData()
+    }
     originData.root = copyMindMapTreeData({}, data)
+    if (window.takeOverApp) {
+      mindMapData = originData
+      window.takeOverAppMethods.saveMindMapData(originData)
+      return
+    }
     Vue.prototype.$bus.$emit('write_local_file', originData)
     let dataStr = JSON.stringify(originData)
     localStorage.setItem(SIMPLE_MIND_MAP_DATA, dataStr)
@@ -75,10 +91,20 @@ export const storeData = data => {
  */
 export const storeConfig = config => {
   try {
-    let originData = getData()
+    let originData = null
+    if (window.takeOverApp) {
+      originData = mindMapData
+    } else {
+      originData = getData()
+    }
     originData = {
       ...originData,
       ...config
+    }
+    if (window.takeOverApp) {
+      mindMapData = originData
+      window.takeOverAppMethods.saveMindMapData(originData)
+      return
     }
     Vue.prototype.$bus.$emit('write_local_file', originData)
     let dataStr = JSON.stringify(originData)
@@ -95,6 +121,10 @@ export const storeConfig = config => {
  * @Desc: 存储语言
  */
 export const storeLang = lang => {
+  if (window.takeOverApp) {
+    window.takeOverAppMethods.saveLanguage(lang)
+    return
+  }
   localStorage.setItem(SIMPLE_MIND_MAP_LANG, lang)
 }
 
@@ -105,6 +135,9 @@ export const storeLang = lang => {
  * @Desc: 获取存储的语言
  */
 export const getLang = () => {
+  if (window.takeOverApp) {
+    return window.takeOverAppMethods.getLanguage() || 'zh'
+  }
   let lang = localStorage.getItem(SIMPLE_MIND_MAP_LANG)
   if (lang) {
     return lang
@@ -120,6 +153,9 @@ export const getLang = () => {
  * @Desc: 存储本地配置
  */
 export const storeLocalConfig = config => {
+  if (window.takeOverApp) {
+    return window.takeOverAppMethods.saveLocalConfig(config)
+  }
   localStorage.setItem(SIMPLE_MIND_MAP_LOCAL_CONFIG, JSON.stringify(config))
 }
 
@@ -130,6 +166,9 @@ export const storeLocalConfig = config => {
  * @Desc: 获取本地配置
  */
 export const getLocalConfig = () => {
+  if (window.takeOverApp) {
+    return window.takeOverAppMethods.getLocalConfig()
+  }
   let config = localStorage.getItem(SIMPLE_MIND_MAP_LOCAL_CONFIG)
   if (config) {
     return JSON.parse(config)
