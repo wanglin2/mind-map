@@ -202,6 +202,7 @@ export default {
     export: '导出',
     shortcutKey: '快捷键',
     associativeLine: '关联线',
+    painter: '格式刷'
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',

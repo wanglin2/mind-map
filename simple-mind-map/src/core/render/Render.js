@@ -153,9 +153,12 @@ class Render {
     // 剪切节点
     this.cutNode = this.cutNode.bind(this)
     this.mindMap.command.add('CUT_NODE', this.cutNode)
-    // 修改节点样式
+    // 修改节点单个样式
     this.setNodeStyle = this.setNodeStyle.bind(this)
     this.mindMap.command.add('SET_NODE_STYLE', this.setNodeStyle)
+    // 修改节点多个样式
+    this.setNodeStyles = this.setNodeStyles.bind(this)
+    this.mindMap.command.add('SET_NODE_STYLES', this.setNodeStyles)
     // 切换节点是否激活
     this.setNodeActive = this.setNodeActive.bind(this)
     this.mindMap.command.add('SET_NODE_ACTIVE', this.setNodeActive)
@@ -855,6 +858,42 @@ class Render {
     this.setNodeDataRender(node, data)
     // 更新了连线的样式
     if (lineStyleProps.includes(prop)) {
+      ;(node.parent || node).renderLine(true)
+    }
+  }
+
+  //  设置节点多个样式
+  setNodeStyles(node, style, isActive) {
+    let data = {}
+    if (isActive) {
+      data = {
+        activeStyle: {
+          ...(node.nodeData.data.activeStyle || {}),
+          ...style
+        }
+      }
+    } else {
+      data = style
+    }
+    // 如果开启了富文本，则需要应用到富文本上
+    if (this.mindMap.richText) {
+      let config = this.mindMap.richText.normalStyleToRichTextStyle(style)
+      if (Object.keys(config).length > 0) {
+        this.mindMap.richText.showEditText(node)
+        this.mindMap.richText.formatAllText(config)
+        this.mindMap.richText.hideEditText([node])
+      }
+    }
+    this.setNodeDataRender(node, data)
+    // 更新了连线的样式
+    let props = Object.keys(style)
+    let hasLineStyleProps = false
+    props.forEach((key) => {
+      if (lineStyleProps.includes(key)) {
+        hasLineStyleProps = true
+      }
+    })
+    if (hasLineStyleProps) {
       ;(node.parent || node).renderLine(true)
     }
   }
