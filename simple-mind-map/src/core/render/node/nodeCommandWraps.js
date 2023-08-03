@@ -43,6 +43,11 @@ function setStyle(prop, value, isActive) {
   this.mindMap.execCommand('SET_NODE_STYLE', this, prop, value, isActive)
 }
 
+//  修改多个样式
+function setStyles(style, isActive) {
+  this.mindMap.execCommand('SET_NODE_STYLES', this, style, isActive)
+}
+
 export default {
   setData,
   setText,
@@ -52,5 +57,6 @@ export default {
   setNote,
   setTag,
   setShape,
-  setStyle
+  setStyle,
+  setStyles
 }
