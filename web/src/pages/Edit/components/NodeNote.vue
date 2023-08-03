@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    class="nodeDialog"
+    class="nodeNoteDialog"
     :title="$t('nodeNote.title')"
     :visible.sync="dialogVisible"
     width="500"
@@ -105,7 +105,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeNoteDialog {
   .tip {
     margin-top: 5px;
     color: #dcdfe6;

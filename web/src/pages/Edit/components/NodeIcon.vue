@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    class="nodeDialog"
+    class="nodeIconDialog"
     :title="$t('nodeIcon.title')"
     :visible.sync="dialogVisible"
     width="500"
@@ -95,7 +95,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeIconDialog {
   /deep/ .el-dialog__body {
     padding: 0 20px;
   }
