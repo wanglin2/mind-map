@@ -25,6 +25,11 @@ class MiniMap {
     let { svg, rect, origWidth, origHeight, scaleX, scaleY } =
       this.mindMap.getSvgData()
     // 计算数据
+    const elRect = this.mindMap.elRect
+    rect.x -= elRect.left
+    rect.x2 -= elRect.left
+    rect.y -= elRect.top
+    rect.y2 -= elRect.top
     let boxRatio = boxWidth / boxHeight
     let actWidth = 0
     let actHeight = 0
