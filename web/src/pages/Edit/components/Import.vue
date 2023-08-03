@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    class="nodeDialog"
+    class="nodeImportDialog"
     :title="$t('import.title')"
     :visible.sync="dialogVisible"
     width="300px"
@@ -245,6 +245,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeImportDialog {
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    class="nodeDialog"
+    class="nodeImageDialog"
     :title="$t('nodeImage.title')"
     :visible.sync="dialogVisible"
     width="500"
@@ -112,7 +112,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeImageDialog {
   .title {
     font-size: 18px;
     margin-bottom: 12px;
