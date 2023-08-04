@@ -117,7 +117,10 @@ export default {
       this.notHandleDataChange = true
       let targetNode = node.data._node
       if (targetNode && targetNode.nodeData.data.isActive) return
-      this.mindMap.execCommand('GO_TARGET_NODE', node.data.data.uid)
+      this.mindMap.renderer.textEdit.stopFocusOnNodeActive()
+      this.mindMap.execCommand('GO_TARGET_NODE', node.data.data.uid, () => {
+        this.mindMap.renderer.textEdit.openFocusOnNodeActive()
+      })
     },
   }
 }
