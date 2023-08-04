@@ -1,4 +1,4 @@
-import { bfsWalk, getTextFromHtml, isUndef } from '../utils/index'
+import { bfsWalk, getTextFromHtml, isUndef, replaceHtmlText } from '../utils/index'
 
 // 搜索插件
 class Search {
@@ -152,9 +152,10 @@ class Search {
   getReplacedText(node, searchText, replaceText) {
     let { richText, text } = node.nodeData.data
     if (richText) {
-      text = getTextFromHtml(text)
+      return replaceHtmlText(text, searchText, replaceText)
+    } else {
+      return text.replaceAll(searchText, replaceText)
     }
-    return text.replaceAll(searchText, replaceText)
   }
 
   // 发送事件
