@@ -90,7 +90,8 @@ class Search {
   // 替换当前节点
   replace(replaceText) {
     if (
-      isUndef(replaceText) ||
+      replaceText === null ||
+      replaceText === undefined ||
       !this.isSearching ||
       this.matchNodeList.length <= 0
     )
@@ -115,7 +116,8 @@ class Search {
   // 替换所有
   replaceAll(replaceText) {
     if (
-      isUndef(replaceText) ||
+      replaceText === null ||
+      replaceText === undefined ||
       !this.isSearching ||
       this.matchNodeList.length <= 0
     )
