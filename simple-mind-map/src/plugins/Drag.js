@@ -44,6 +44,7 @@ class Drag extends Base {
     this.mouseMoveY = 0
     // 鼠标移动的距离距鼠标按下的位置距离多少以上才认为是拖动事件
     this.checkDragOffset = 10
+    this.minOffset = 10
   }
 
   //  绑定事件
@@ -206,6 +207,7 @@ class Drag extends Base {
     if (!this.drawTransform) {
       return
     }
+    const { nodeDragPlaceholderMaxSize } = this.mindMap.opt 
     let x = this.mouseMoveX
     let y = this.mouseMoveY
     this.overlapNode = null
@@ -247,19 +249,19 @@ class Drag extends Base {
         let prevNodeRect = this.getNodeRect(prevBrother)  
         prevBrotherOffset = nodeRect.top - prevNodeRect.bottom
         // 间距小于10就当它不存在
-        prevBrotherOffset = prevBrotherOffset >= 10 ? prevBrotherOffset / 2 : 0
+        prevBrotherOffset = prevBrotherOffset >= this.minOffset ? prevBrotherOffset / 2 : 0
       } else {
         // 没有前一个兄弟节点，那么假设和前一个节点的距离为20
-        prevBrotherOffset = 10
+        prevBrotherOffset = this.minOffset
       }
       // 和后一个兄弟节点的距离
       let nextBrotherOffset = 0
       if (nextBrother) {
         let nextNodeRect = this.getNodeRect(nextBrother)
         nextBrotherOffset = nextNodeRect.top - nodeRect.bottom
-        nextBrotherOffset = nextBrotherOffset >= 10 ? nextBrotherOffset / 2 : 0
+        nextBrotherOffset = nextBrotherOffset >= this.minOffset ? nextBrotherOffset / 2 : 0
       } else {
-        nextBrotherOffset = 10
+        nextBrotherOffset = this.minOffset
       }
       if (nodeRect.left <= x && nodeRect.right >= x) {
         // 检测兄弟节点位置
@@ -272,11 +274,11 @@ class Drag extends Base {
             y >= nodeRect.top && y <= nodeRect.top + oneFourthHeight
           if (checkIsPrevNode) {
             this.prevNode = node
-            let size = nextBrotherOffset > 0 ? nextBrotherOffset : 5
+            let size = nextBrotherOffset > 0 ? Math.min(nextBrotherOffset, nodeDragPlaceholderMaxSize) : 5
             this.placeholder.size(node.width, size).move(nodeRect.originLeft, nodeRect.originBottom)
           } else if (checkIsNextNode) {
             this.nextNode = node
-            let size = prevBrotherOffset > 0 ? prevBrotherOffset : 5
+            let size = prevBrotherOffset > 0 ? Math.min(prevBrotherOffset, nodeDragPlaceholderMaxSize) : 5
             this.placeholder.size(node.width, size).move(nodeRect.originLeft, nodeRect.originTop - size)
           }
         }
