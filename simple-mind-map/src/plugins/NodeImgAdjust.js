@@ -82,7 +82,7 @@ class NodeImgAdjust {
       this.createResizeBtnEl()
     }
     this.setHandleElRect()
-    document.body.appendChild(this.handleEl)
+    this.handleEl.style.display = 'block';// document.body.appendChild(this.handleEl)
     this.isShowHandleEl = true
   }
 
@@ -90,12 +90,12 @@ class NodeImgAdjust {
   hideHandleEl() {
     if (!this.isShowHandleEl) return
     this.isShowHandleEl = false
-    document.body.removeChild(this.handleEl)
+	this.handleEl.style.display = 'none';//document.body.removeChild(this.handleEl)
     this.handleEl.style.backgroundImage = ``
     this.handleEl.style.width = 0
     this.handleEl.style.height = 0
     this.handleEl.style.left = 0
-    this.handleEl.style.top = 0
+    this.handleEl.style.top = 0	
   }
 
   // 设置自定义元素尺寸位置信息
@@ -121,6 +121,7 @@ class NodeImgAdjust {
     this.handleEl.style.cssText = `
       pointer-events: none;
       position: fixed;
+	  display:none;
       background-size: cover;
     `
     // 调整按钮元素
@@ -153,6 +154,43 @@ class NodeImgAdjust {
     btnEl.addEventListener('mousedown', e => {
       this.onMousedown(e)
     })
+	btnEl.addEventListener('mouseup', e => {
+		setTimeout(() => { //点击后直接松开异常处理; 其他事件响应之后处理
+			this.hideHandleEl()
+			this.isAdjusted = false;
+		},0);
+	})
+	
+	
+	document.body.appendChild(this.handleEl);
+	this.handleEl.className = 'node-img-handle';
+	btnEl.className = 'node-image-resize';
+	
+	const btnRemove = document.createElement('div');
+	this.handleEl.prepend(btnRemove);
+	btnRemove.className = 'node-image-remove';
+	btnRemove.innerHTML = btnsSvg.remove;//'<span class="image-remove el-icon-close"></span>';
+	btnRemove.style.cssText = `
+	position: absolute;
+	right: 0;top:0;color:#fff;
+	pointer-events: auto;
+	background-color: rgba(0, 0, 0, 0.3);
+	width: ${this.resizeBtnSize}px;
+	height: ${this.resizeBtnSize}px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;`;
+	btnRemove.addEventListener('mouseenter', e => {
+		this.showHandleEl()
+	})
+	btnRemove.addEventListener('mouseleave', e => {
+		if (this.isMousedown) return
+		this.hideHandleEl()
+	})
+	btnRemove.addEventListener('click', e => {
+		this.mindMap.execCommand('SET_NODE_IMAGE',this.node,{url:null});
+	});
   }
 
   // 鼠标按钮按下事件
