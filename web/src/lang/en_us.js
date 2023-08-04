@@ -46,7 +46,8 @@ export default {
     associativeLineActiveColor: 'Active color',
     mousewheelZoomActionReverse: 'Mouse Wheel Zoom',
     mousewheelZoomActionReverse1: 'Zoom out forward and zoom in back',
-    mousewheelZoomActionReverse2: 'Zoom in forward and zoom out back'
+    mousewheelZoomActionReverse2: 'Zoom in forward and zoom out back',
+    rootStyle: 'Root Node'
   },
   color: {
     moreColor: 'More color'

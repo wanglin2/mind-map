@@ -157,6 +157,18 @@ export const lineStyleList = [
   }
 ]
 
+// 曲线风格中，根节点样式是否和其他节点保持一致
+export const rootLineKeepSameInCurveList = [
+  {
+    name: '括号',
+    value: false
+  },
+  {
+    name: '大括号',
+    value: true
+  }
+]
+
 // 图片重复方式
 export const backgroundRepeatList = [
   {

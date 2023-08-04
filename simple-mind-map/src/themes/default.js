@@ -18,6 +18,8 @@ export default {
   lineDasharray: 'none',
   // 连线风格
   lineStyle: 'straight', // 针对logicalStructure、mindMap两种结构。曲线（curve）、直线（straight）、直连（direct）
+  // 曲线连接时，根节点和其他节点的连接线样式保持统一，默认根节点为 ( 型，其他节点为 { 型，设为true后，都为 { 型
+  rootLineKeepSameInCurve: true,
   // 概要连线的粗细
   generalizationLineWidth: 1,
   // 概要连线的颜色
