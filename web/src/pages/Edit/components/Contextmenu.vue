@@ -184,8 +184,8 @@ export default {
     this.$bus.$off('node_click', this.hide)
     this.$bus.$off('draw_click', this.hide)
     this.$bus.$off('expand_btn_click', this.hide)
-    this.$bus.$on('svg_mousedown', this.onMousedown)
-    this.$bus.$on('mouseup', this.onMouseup)
+    this.$bus.$off('svg_mousedown', this.onMousedown)
+    this.$bus.$off('mouseup', this.onMouseup)
   },
   methods: {
     ...mapMutations(['setLocalConfig']),
