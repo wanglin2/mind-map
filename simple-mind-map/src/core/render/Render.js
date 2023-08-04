@@ -1171,6 +1171,8 @@ class Render {
         node.generalizationBelongNode.updateGeneralization()
       }
       if (!notRender) this.mindMap.render()
+    } else {
+      this.mindMap.emit('node_tree_render_end')
     }
   }
 

@@ -15,12 +15,19 @@ class Search {
     this.currentIndex = -1
     // 不要复位搜索文本
     this.notResetSearchText = false
+    // 是否自动跳转下一个匹配节点
+    this.isJumpNext = false
     this.onDataChange = this.onDataChange.bind(this)
     this.mindMap.on('data_change', this.onDataChange)
   }
 
   // 节点数据改变了，需要重新搜索
   onDataChange() {
+    if (this.isJumpNext) {
+      this.isJumpNext = false
+      this.search(this.searchText)
+      return
+    }
     if (this.notResetSearchText) {
       this.notResetSearchText = false
       return
@@ -29,7 +36,7 @@ class Search {
   }
 
   // 搜索
-  search(text, callback) {
+  search(text, callback = () => {}) {
     if (isUndef(text)) return this.endSearch()
     text = String(text)
     this.isSearching = true
@@ -88,7 +95,7 @@ class Search {
   }
 
   // 替换当前节点
-  replace(replaceText) {
+  replace(replaceText, jumpNext = false) {
     if (
       replaceText === null ||
       replaceText === undefined ||
@@ -96,6 +103,8 @@ class Search {
       this.matchNodeList.length <= 0
     )
       return
+    // 自动跳转下一个匹配节点
+    this.isJumpNext = jumpNext
     replaceText = String(replaceText)
     let currentNode = this.matchNodeList[this.currentIndex]
     if (!currentNode) return
