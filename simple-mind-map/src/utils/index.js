@@ -540,3 +540,58 @@ export const getVisibleColorFromTheme = (themeConfig) => {
     }
   }
 }
+
+// 将<p><span></span><p>形式的节点富文本内容转换成<br>换行的文本
+let nodeRichTextToTextWithWrapEl = null
+export const nodeRichTextToTextWithWrap = (html) => {
+  if (!nodeRichTextToTextWithWrapEl) {
+    nodeRichTextToTextWithWrapEl = document.createElement('div')
+  }
+  nodeRichTextToTextWithWrapEl.innerHTML = html
+  const childNodes = nodeRichTextToTextWithWrapEl.childNodes
+  let res = ''
+  for(let i = 0; i < childNodes.length; i++) {
+    const node = childNodes[i]
+    if (node.nodeType === 1) {// 元素节点
+      if (node.tagName.toLowerCase() === 'p') {
+        res += node.textContent + '\n'
+      } else {
+        res += node.textContent
+      }
+    } else if (node.nodeType === 3) {// 文本节点
+      res += node.nodeValue
+    }
+  }
+  return res.replace(/\n$/, '')
+}
+
+// 将<br>换行的文本转换成<p><span></span><p>形式的节点富文本内容
+let textToNodeRichTextWithWrapEl = null
+export const textToNodeRichTextWithWrap = (html) => {
+  if (!textToNodeRichTextWithWrapEl) {
+    textToNodeRichTextWithWrapEl = document.createElement('div')
+  }
+  textToNodeRichTextWithWrapEl.innerHTML = html
+  const childNodes = textToNodeRichTextWithWrapEl.childNodes
+  let list = []
+  let str = ''
+  for(let i = 0; i < childNodes.length; i++) {
+    const node = childNodes[i]
+    if (node.nodeType === 1) {// 元素节点
+      if (node.tagName.toLowerCase() === 'br') {
+        list.push(str)
+        str = ''
+      } else {
+        str += node.textContent
+      }
+    } else if (node.nodeType === 3) {// 文本节点
+      str += node.nodeValue
+    }
+  }
+  if (str) {
+    list.push(str)
+  }
+  return list.map((item) => {
+    return `<p><span>${item}</span></p>`
+  }).join('')
+}

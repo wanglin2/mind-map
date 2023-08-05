@@ -8,7 +8,11 @@
       :expand-on-click-node="false"
       default-expand-all
     >
-      <span class="customNode" slot-scope="{ node, data }" @click="onClick($event, node)">
+      <span
+        class="customNode"
+        slot-scope="{ node, data }"
+        @click="onClick($event, node)"
+      >
         <span
           class="nodeEdit"
           :key="getKey()"
@@ -16,6 +20,7 @@
           @keydown.stop="onKeydown($event, node)"
           @keyup.stop
           @blur="onBlur($event, node)"
+          @paste="onPaste($event, node)"
           v-html="node.label"
         ></span>
       </span>
@@ -26,6 +31,11 @@
 <script>
 import Sidebar from './Sidebar'
 import { mapState } from 'vuex'
+import {
+  nodeRichTextToTextWithWrap,
+  textToNodeRichTextWithWrap,
+  getTextFromHtml
+} from 'simple-mind-map/src/utils'
 
 /**
  * @Author: 王林
@@ -47,7 +57,12 @@ export default {
       data: [],
       defaultProps: {
         label(data) {
-          return data.data.richText ? data.data.text : data.data.text.replaceAll(/\n/g, '</br>')
+          const text = (data.data.richText
+            ? nodeRichTextToTextWithWrap(data.data.text)
+            : data.data.text
+          ).replaceAll(/\n/g, '<br>')
+          data.data.textCache = text
+          return text
         }
       },
       notHandleDataChange: false
@@ -77,12 +92,33 @@ export default {
   },
   methods: {
     onBlur(e, node) {
-      const richText = node.data.data.richText
-      if (richText) {
-        node.data._node.setText(e.target.innerHTML, true)
-      } else {
-        node.data._node.setText(e.target.innerText)
+      if (node.data.data.textCache === e.target.innerHTML) {
+        return
       }
+      delete node.data.data.textCache
+      const richText = node.data.data.richText
+      const text = richText ? e.target.innerHTML : e.target.innerText
+      if (richText) {
+        node.data._node.setText(textToNodeRichTextWithWrap(text), true, true)
+      } else {
+        node.data._node.setText(text)
+      }
+    },
+
+    // 拦截粘贴事件
+    onPaste(e) {
+      e.preventDefault()
+      const selection = window.getSelection()
+      if (!selection.rangeCount) return
+      selection.deleteFromDocument()
+      let text = (e.clipboardData || window.clipboardData).getData('text')
+      // 去除格式
+      text = getTextFromHtml(text)
+      // 去除换行
+      text = text.replaceAll(/\n/g, '')
+      const node = document.createTextNode(text)
+      selection.getRangeAt(0).insertNode(node)
+      selection.collapseToEnd()
     },
 
     getKey() {
@@ -121,7 +157,7 @@ export default {
       this.mindMap.execCommand('GO_TARGET_NODE', node.data.data.uid, () => {
         this.mindMap.renderer.textEdit.openFocusOnNodeActive()
       })
-    },
+    }
   }
 }
 </script>
@@ -129,7 +165,8 @@ export default {
 <style lang="less" scoped>
 .customNode {
   width: 100%;
-  overflow-x: auto;
+  color: rgba(0, 0, 0, 0.85);
+  font-weight: bold;
 
   &::-webkit-scrollbar {
     width: 7px;
@@ -154,27 +191,36 @@ export default {
 }
 
 .outlineTree {
-
   &.isDark {
     background-color: #262a2e;
   }
+
+  /deep/ .el-tree-node > .el-tree-node__children {
+    overflow: inherit;
+  }
+
   /deep/ .el-tree-node__content {
     height: auto;
     margin: 5px 0;
 
-    .el-tree-node__expand-icon.is-leaf {
-      position: relative;
+    .el-tree-node__expand-icon {
+      color: #262a2e;
 
-      &::after {
-        position: absolute;
-        content: '';
-        width: 5px;
-        height: 5px;
-        border-radius: 50%;
-        background-color: #c0c4cc;
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
+      &.is-leaf {
+        color: transparent;
+        position: relative;
+
+        &::after {
+          background-color: #262a2e;
+          position: absolute;
+          content: '';
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          left: 10px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
       }
     }
   }
