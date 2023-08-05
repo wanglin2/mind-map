@@ -1,35 +1,32 @@
 <template>
-  <Sidebar ref="sidebar" :title="$t('outline.title')">
-    <el-tree
-      class="outlineTree"
-      :class="{ isDark: isDark }"
-      :data="data"
-      :props="defaultProps"
-      :expand-on-click-node="false"
-      default-expand-all
+  <el-tree
+    class="outlineTree"
+    :class="{ isDark: isDark }"
+    :data="data"
+    :props="defaultProps"
+    :expand-on-click-node="false"
+    default-expand-all
+  >
+    <span
+      class="customNode"
+      slot-scope="{ node, data }"
+      @click="onClick($event, node)"
     >
       <span
-        class="customNode"
-        slot-scope="{ node, data }"
-        @click="onClick($event, node)"
-      >
-        <span
-          class="nodeEdit"
-          :key="getKey()"
-          contenteditable="true"
-          @keydown.stop="onKeydown($event, node)"
-          @keyup.stop
-          @blur="onBlur($event, node)"
-          @paste="onPaste($event, node)"
-          v-html="node.label"
-        ></span>
-      </span>
-    </el-tree>
-  </Sidebar>
+        class="nodeEdit"
+        :key="getKey()"
+        contenteditable="true"
+        @keydown.stop="onKeydown($event, node)"
+        @keyup.stop
+        @blur="onBlur($event, node)"
+        @paste="onPaste($event, node)"
+        v-html="node.label"
+      ></span>
+    </span>
+  </el-tree>
 </template>
 
 <script>
-import Sidebar from './Sidebar'
 import { mapState } from 'vuex'
 import {
   nodeRichTextToTextWithWrap,
@@ -37,16 +34,9 @@ import {
   getTextFromHtml
 } from 'simple-mind-map/src/utils'
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:54:14
- * @Desc: 大纲内容
- */
+// 大纲树
 export default {
   name: 'Outline',
-  components: {
-    Sidebar
-  },
   props: {
     mindMap: {
       type: Object
@@ -69,16 +59,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeSidebar', 'isDark'])
-  },
-  watch: {
-    activeSidebar(val) {
-      if (val === 'outline') {
-        this.$refs.sidebar.show = true
-      } else {
-        this.$refs.sidebar.show = false
-      }
-    }
+    ...mapState(['isDark','isOutlineEdit'])
   },
   created() {
     this.$bus.$on('data_change', data => {
@@ -91,6 +72,10 @@ export default {
     })
   },
   methods: {
+    refresh() {
+      this.data = [this.mindMap.renderer.renderTree]
+    },
+
     onBlur(e, node) {
       if (node.data.data.textCache === e.target.innerHTML) {
         return
@@ -187,6 +172,7 @@ export default {
 
   .nodeEdit {
     outline: none;
+    white-space: normal;
   }
 }
 
