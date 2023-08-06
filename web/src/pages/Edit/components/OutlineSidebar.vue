@@ -3,7 +3,11 @@
     <div class="changeBtn" @click="onChangeToOutlineEdit">
       <span class="icon iconfont iconquanping1"></span>
     </div>
-    <Outline :mindMap="mindMap"></Outline>
+    <Outline
+      :mindMap="mindMap"
+      v-if="activeSidebar === 'outline'"
+      @scrollTo="onScrollTo"
+    ></Outline>
   </Sidebar>
 </template>
 
@@ -37,10 +41,20 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setIsOutlineEdit']),
+    ...mapMutations(['setIsOutlineEdit', 'setActiveSidebar']),
 
     onChangeToOutlineEdit() {
+      this.setActiveSidebar('')
       this.setIsOutlineEdit(true)
+    },
+
+    onScrollTo(y) {
+      let container = this.$refs.sidebar.getEl()
+      let height = container.offsetHeight
+      let top = container.scrollTop
+      if (y > top + height) {
+        container.scrollTo(0, y - height / 2)
+      }
     }
   }
 }

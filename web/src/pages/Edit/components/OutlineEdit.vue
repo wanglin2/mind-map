@@ -8,7 +8,7 @@
       <span class="icon iconfont iconguanbi"></span>
     </div>
     <div class="outlineEdit">
-      <Outline :mindMap="mindMap" ref="outline"></Outline>
+      <Outline :mindMap="mindMap" @scrollTo="onScrollTo"></Outline>
     </div>
   </div>
 </template>
@@ -35,7 +35,6 @@ export default {
     isOutlineEdit(val) {
         if (val) {
             this.$nextTick(() => {
-                this.$refs.outline.refresh()
                 document.body.appendChild(this.$refs.outlineEditContainer)
             })
         }
@@ -46,6 +45,16 @@ export default {
 
     onClose() {
       this.setIsOutlineEdit(false)
+    },
+
+    onScrollTo(y) {
+      let container = this.$refs.outlineEditContainer
+      let height = container.offsetHeight
+      let top = container.scrollTop
+      y += 50
+      if (y > top + height) {
+        container.scrollTo(0, y - height / 2)
+      }
     }
   }
 }
@@ -63,7 +72,6 @@ export default {
   justify-content: center;
   background-color: #fff;
   overflow-y: auto;
-  padding: 50px 0;
 
   .closeBtn {
     position: absolute;
@@ -80,6 +88,7 @@ export default {
     width: 1000px;
     height: max-content;
     overflow: hidden;
+    padding: 50px 0;
 
     /deep/ .customNode {
       .nodeEdit {
