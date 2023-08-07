@@ -47,7 +47,10 @@ export default {
     mousewheelZoomActionReverse: '鼠标滚轮缩放',
     mousewheelZoomActionReverse1: '向前缩小向后放大',
     mousewheelZoomActionReverse2: '向前放大向后缩小',
-    rootStyle: '根节点'
+    rootStyle: '根节点',
+    associativeLineText: '关联线文字',
+    fontFamily: '字体',
+    fontSize: '字号'
   },
   color: {
     moreColor: '更多颜色'

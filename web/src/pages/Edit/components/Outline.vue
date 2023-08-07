@@ -321,6 +321,32 @@ export default {
 .outlineTree {
   &.isDark {
     background-color: #262a2e;
+
+    .customNode {
+      color: #fff;
+    }
+
+    &.el-tree--highlight-current {
+      /deep/ .el-tree-node.is-current > .el-tree-node__content {
+        background-color: hsla(0, 0%, 100%, 0.05) !important;
+      }
+    }
+
+    /deep/ .el-tree-node__content:hover, .el-upload-list__item:hover {
+      background-color: hsla(0, 0%, 100%, 0.02) !important;
+    }
+
+    /deep/ .el-tree-node__content {
+      .el-tree-node__expand-icon {
+        color: #fff;
+
+        &.is-leaf {
+          &::after {
+            background-color: #fff;
+          }
+        }
+      }
+    }
   }
 
   /deep/ .el-tree-node > .el-tree-node__children {
