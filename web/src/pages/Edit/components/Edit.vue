@@ -4,7 +4,7 @@
     <Count v-if="!isZenMode"></Count>
     <Navigator :mindMap="mindMap"></Navigator>
     <NavigatorToolbar :mindMap="mindMap" v-if="!isZenMode"></NavigatorToolbar>
-    <Outline :mindMap="mindMap"></Outline>
+    <OutlineSidebar :mindMap="mindMap"></OutlineSidebar>
     <Style v-if="!isZenMode"></Style>
     <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
     <Theme v-if="mindMap" :mindMap="mindMap"></Theme>
@@ -21,6 +21,7 @@
     <Search v-if="mindMap" :mindMap="mindMap"></Search>
     <NodeIconSidebar v-if="mindMap" :mindMap="mindMap"></NodeIconSidebar>
     <NodeIconToolbar v-if="mindMap" :mindMap="mindMap"></NodeIconToolbar>
+    <OutlineEdit v-if="mindMap" :mindMap="mindMap"></OutlineEdit>
   </div>
 </template>
 
@@ -39,7 +40,8 @@ import AssociativeLine from 'simple-mind-map/src/plugins/AssociativeLine.js'
 import TouchEvent from 'simple-mind-map/src/plugins/TouchEvent.js'
 import NodeImgAdjust from 'simple-mind-map/src/plugins/NodeImgAdjust.js'
 import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
-import Outline from './Outline'
+import Painter from 'simple-mind-map/src/plugins/Painter.js'
+import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
 import Theme from './Theme'
@@ -66,6 +68,7 @@ import i18n from '../../../i18n'
 import Search from './Search.vue'
 import NodeIconSidebar from './NodeIconSidebar.vue'
 import NodeIconToolbar from './NodeIconToolbar.vue'
+import OutlineEdit from './OutlineEdit.vue'
 
 // 注册插件
 MindMap
@@ -81,6 +84,7 @@ MindMap
   .usePlugin(NodeImgAdjust)
   .usePlugin(TouchEvent)
   .usePlugin(SearchPlugin)
+  .usePlugin(Painter)
 
 // 注册自定义主题
 customThemeList.forEach((item) => {
@@ -95,7 +99,7 @@ customThemeList.forEach((item) => {
 export default {
   name: 'Edit',
   components: {
-    Outline,
+    OutlineSidebar,
     Style,
     BaseStyle,
     Theme,
@@ -111,14 +115,14 @@ export default {
     SidebarTrigger,
     Search,
     NodeIconSidebar,
-    NodeIconToolbar
+    NodeIconToolbar,
+    OutlineEdit
   },
   data() {
     return {
       mindMap: null,
       mindMapData: null,
-      prevImg: '',
-      openTest: false
+      prevImg: ''
     }
   },
   computed: {
@@ -154,100 +158,14 @@ export default {
     this.$bus.$on('createAssociativeLine', () => {
       this.mindMap.associativeLine.createLineFromActiveNode()
     })
+    this.$bus.$on('startPainter', () => {
+      this.mindMap.painter.startPainter()
+    })
     window.addEventListener('resize', () => {
       this.mindMap.resize()
     })
-    if (this.openTest) {
-      setTimeout(() => {
-        this.test()
-      }, 5000)
-    }
   },
   methods: {
-    /**
-     * @Author: 王林25
-     * @Date: 2021-11-22 19:39:28
-     * @Desc: 数据更改测试
-     */
-    test() {
-      let nodeData = {
-        data: { text: '根节点', expand: true, isActive: false },
-        children: []
-      }
-      setTimeout(() => {
-        nodeData.data.text = '理想青年实验室'
-        this.mindMap.setData(JSON.parse(JSON.stringify(nodeData)))
-
-        setTimeout(() => {
-          nodeData.children.push({
-            data: { text: '网站', expand: true, isActive: false },
-            children: []
-          })
-          this.mindMap.setData(JSON.parse(JSON.stringify(nodeData)))
-
-          setTimeout(() => {
-            nodeData.children.push({
-              data: { text: '博客', expand: true, isActive: false },
-              children: []
-            })
-            this.mindMap.setData(JSON.parse(JSON.stringify(nodeData)))
-
-            setTimeout(() => {
-              let viewData = {
-                transform: {
-                  scaleX: 1,
-                  scaleY: 1,
-                  shear: 0,
-                  rotate: 0,
-                  translateX: 179,
-                  translateY: 0,
-                  originX: 0,
-                  originY: 0,
-                  a: 1,
-                  b: 0,
-                  c: 0,
-                  d: 1,
-                  e: 179,
-                  f: 0
-                },
-                state: { scale: 1, x: 179, y: 0, sx: 0, sy: 0 }
-              }
-              this.mindMap.view.setTransformData(viewData)
-
-              setTimeout(() => {
-                let viewData = {
-                  transform: {
-                    scaleX: 1.6000000000000005,
-                    scaleY: 1.6000000000000005,
-                    shear: 0,
-                    rotate: 0,
-                    translateX: -373.3000000000004,
-                    translateY: -281.10000000000025,
-                    originX: 0,
-                    originY: 0,
-                    a: 1.6000000000000005,
-                    b: 0,
-                    c: 0,
-                    d: 1.6000000000000005,
-                    e: -373.3000000000004,
-                    f: -281.10000000000025
-                  },
-                  state: {
-                    scale: 1.6000000000000005,
-                    x: 179,
-                    y: 0,
-                    sx: 0,
-                    sy: 0
-                  }
-                }
-                this.mindMap.view.setTransformData(viewData)
-              }, 1000)
-            }, 1000)
-          }, 1000)
-        }, 1000)
-      }, 1000)
-    },
-
     /**
      * @Author: 王林
      * @Date: 2021-07-03 22:11:37
@@ -264,9 +182,6 @@ export default {
      * @Desc: 存储数据当数据有变时
      */
     bindSaveEvent() {
-      if (this.openTest) {
-        return
-      }
       this.$bus.$on('data_change', data => {
         storeData(data)
       })
@@ -283,9 +198,6 @@ export default {
      * @Desc: 手动保存
      */
     manualSave() {
-      if (this.openTest) {
-        return
-      }
       let data = this.mindMap.getData(true)
       storeConfig(data)
     },
@@ -317,6 +229,7 @@ export default {
         ...(config || {}),
         iconList: icon,
         useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag,
+        customInnerElsAppendTo: null,
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
         // customCreateNodeContent: (node) => {
@@ -363,7 +276,9 @@ export default {
         'node_tree_render_end',
         'rich_text_selection_change',
         'transforming-dom-to-images',
-        'generalization_node_contextmenu'
+        'generalization_node_contextmenu',
+        'painter_start',
+        'painter_end'
       ].forEach(event => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args)

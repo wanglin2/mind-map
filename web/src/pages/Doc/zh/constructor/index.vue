@@ -357,6 +357,13 @@
 <td>鼠标缩放是否以鼠标当前位置为中心点，否则以画布中心点</td>
 <td></td>
 </tr>
+<tr>
+<td>customInnerElsAppendTo（v0.6.12+）</td>
+<td>null/HTMLElement</td>
+<td>null</td>
+<td>指定内部一些元素（节点文本编辑元素、节点备注显示元素、关联线文本编辑元素、节点图片调整按钮元素）添加到的位置，默认添加到document.body下</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>水印配置</h3>
@@ -690,7 +697,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>node_dragend（v0.4.5+）</td>
 <td>节点被拖拽结束时触发</td>
-<td></td>
+<td>{ overlapNodeUid, prevNodeUid, nextNodeUid }（v0.6.12+，本次节点移动到的节点uid，比如本次移动到了节点A上，那么overlapNodeUid就是节点A的uid，如果移动到了B节点的前面，那么nextNodeUid就是节点B的uid，你可以通过mindMap.renderer.findNodeByUid(uid)方法来获取节点实例）</td>
 </tr>
 <tr>
 <td>associative_line_click（v0.4.5+）</td>

@@ -191,6 +191,12 @@ class NodeImgAdjust {
 	btnRemove.addEventListener('click', e => {
 		this.mindMap.execCommand('SET_NODE_IMAGE',this.node,{url:null});
 	});
+    btnEl.addEventListener('click', e => {
+      e.stopPropagation()
+    })
+    btnEl.addEventListener('mousedown', (e) => {
+      e.stopPropagation()
+    })
   }
 
   // 鼠标按钮按下事件

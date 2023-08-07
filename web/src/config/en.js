@@ -102,6 +102,18 @@ export const lineStyleList = [
   }
 ]
 
+// 曲线风格中，根节点样式是否和其他节点保持一致
+export const rootLineKeepSameInCurveList = [
+  {
+    name: 'Bracket',
+    value: false
+  },
+  {
+    name: 'Brace',
+    value: true
+  }
+]
+
 // 图片重复方式
 export const backgroundRepeatList = [
   {

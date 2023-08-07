@@ -315,7 +315,7 @@ class MindMap extends Base {
           nodeUseLineStylePath = ` L ${item.left + item.width},${y2}`
         }
       }
-      if (node.isRoot) {
+      if (node.isRoot && !this.mindMap.themeConfig.rootLineKeepSameInCurve) {
         path = this.quadraticCurvePath(x1, y1, x2, y2) + nodeUseLineStylePath
       } else {
         path = this.cubicBezierPath(x1, y1, x2, y2) + nodeUseLineStylePath

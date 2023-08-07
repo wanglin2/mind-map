@@ -12,6 +12,8 @@ export default class TextEdit {
     this.textEditNode = null
     // 隐藏的文本输入框
     this.hiddenInputEl = null
+    // 节点激活时默认聚焦到隐藏输入框
+    this.enableFocus = true
     // 文本编辑框是否显示
     this.showTextEdit = false
     // 如果编辑过程中缩放画布了，那么缓存当前编辑的内容
@@ -97,7 +99,17 @@ export default class TextEdit {
 
   // 让隐藏的文本输入框聚焦
   focusHiddenInput() {
-    if (this.hiddenInputEl) this.hiddenInputEl.focus()
+    if (this.hiddenInputEl && this.enableFocus) this.hiddenInputEl.focus()
+  }
+
+  // 关闭默认聚焦
+  stopFocusOnNodeActive() {
+    this.enableFocus = false
+  }
+  
+  // 开启默认聚焦
+  openFocusOnNodeActive() {
+    this.enableFocus = true
   }
 
   //  注册临时快捷键
@@ -167,7 +179,11 @@ export default class TextEdit {
       this.textEditNode.addEventListener('click', e => {
         e.stopPropagation()
       })
-      document.body.appendChild(this.textEditNode)
+      this.textEditNode.addEventListener('mousedown', (e) => {
+        e.stopPropagation()
+      })
+      const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
+      targetNode.appendChild(this.textEditNode)
     }
     let scale = this.mindMap.view.scale
     let lineHeight = node.style.merge('lineHeight')

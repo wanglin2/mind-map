@@ -47,7 +47,8 @@ function showEditTextBox(g) {
     this.textEditNode.addEventListener('click', e => {
       e.stopPropagation()
     })
-    document.body.appendChild(this.textEditNode)
+    const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
+    targetNode.appendChild(this.textEditNode)
   }
   let {
     associativeLineTextFontSize,

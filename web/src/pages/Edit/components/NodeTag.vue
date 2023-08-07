@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    class="nodeDialog"
+    class="nodeTagDialog"
     :title="$t('nodeTag.title')"
     :visible.sync="dialogVisible"
     width="500"
@@ -120,7 +120,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeTagDialog {
   .tagList {
     display: flex;
     flex-wrap: wrap;
