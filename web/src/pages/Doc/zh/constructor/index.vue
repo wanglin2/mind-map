@@ -364,6 +364,13 @@
 <td>指定内部一些元素（节点文本编辑元素、节点备注显示元素、关联线文本编辑元素、节点图片调整按钮元素）添加到的位置，默认添加到document.body下</td>
 <td></td>
 </tr>
+<tr>
+<td>nodeDragPlaceholderMaxSize（v0.6.12+）</td>
+<td>Number</td>
+<td>20</td>
+<td>拖拽元素时，指示元素新位置的块的最大高度</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>水印配置</h3>
@@ -719,6 +726,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>点击节点内的图标时触发</td>
 <td>this（节点实例）、item（点击的图标名称）、e（事件对象）</td>
 </tr>
+<tr>
+<td>view_theme_change（v0.6.12+）</td>
+<td>调用了setTheme方法设置主题后触发</td>
+<td>theme（设置的新主题名称）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
@@ -819,8 +831,13 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </tr>
 <tr>
 <td>SET_NODE_STYLE</td>
-<td>修改节点样式</td>
-<td>node（要设置样式的节点）、prop（样式属性）、value（样式属性值）、isActive（布尔值，是否设置的是激活状态的样式）</td>
+<td>修改节点单个样式</td>
+<td>node（要设置样式的节点）、style（样式属性）、value（样式属性值）、isActive（布尔值，是否设置的是激活状态的样式）</td>
+</tr>
+<tr>
+<td>SET_NODE_STYLEs（v0.6.12+）</td>
+<td>修改节点多个样式</td>
+<td>node（要设置样式的节点）、style（样式对象，key为样式属性，value为样式值）、isActive（布尔值，是否设置的是激活状态的样式）</td>
 </tr>
 <tr>
 <td>SET_NODE_ACTIVE</td>

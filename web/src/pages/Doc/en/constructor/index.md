@@ -72,6 +72,7 @@ const mindMap = new MindMap({
 | customCreateNodeContent（v0.6.3+）     |  Function/null | null | If `isUseCustomNodeContent` is set to `true`, then this option needs to be used to pass in a method that receives the node instance `node` as a parameter (if you want to obtain data for that node, you can use `node.nodeData.data`). You need to return the custom node content element, which is the DOM node. If a node does not require customization, you can return `null` |          |
 | mouseScaleCenterUseMousePosition（v0.6.4-fix.1+）     | Boolean  | true | Is the mouse zoom centered around the current position of the mouse, otherwise centered around the canvas |          |
 | customInnerElsAppendTo（v0.6.12+）     | null/HTMLElement  | null | Specify the location where some internal elements (node text editing element, node note display element, associated line text editing element, node image adjustment button element) are added, and default to document.body |          |
+| nodeDragPlaceholderMaxSize（v0.6.12+）     | Number  | 20 | When dragging an element, the maximum height of the block indicating the new position of the element |          |
 
 ### Watermark config
 
@@ -248,6 +249,7 @@ Listen to an event. Event list:
 | svg_mouseenter（v0.5.1+）    | Triggered when the mouse moves into the SVG canvas   | e（event object）  |
 | svg_mouseleave（v0.5.1+）    | Triggered when the mouse moves out of the SVG canvas   | e（event object）  |
 | node_icon_click（v0.6.10+）    | Triggered when clicking on an icon within a node   | this（node instance）、item（Click on the icon name）、e（event object）  |
+| view_theme_change（v0.6.12+）    | Triggered after calling the setTheme method to set the theme   | theme（theme name）  |
 
 ### emit(event, ...args)
 
@@ -327,7 +329,8 @@ redo. All commands are as follows:
 | DOWN_NODE                          | Move node down, the active node will be the operation node. If there are multiple active nodes, only the first one will be effective. Using this command on the root node or the last node in the list will be invalid |                                                              |
 | REMOVE_NODE                        | Remove node, the active node or appoint node will be the operation node      |  appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）                                                            |
 | PASTE_NODE                         | Paste node to a node, the active node will be the operation node | data (the node data to paste, usually obtained through the renderer.copyNode() and renderer.cutNode() methods) |
-| SET_NODE_STYLE                     | Modify node style                                            | node (the node to set the style of), prop (style property), value (style property value), isActive (boolean, whether the style being set is for the active state) |
+| SET_NODE_STYLE                     | Modify node single style                                            | node (the node to set the style of), prop (style property), value (style property value), isActive (boolean, whether the style being set is for the active state) |
+| SET_NODE_STYLEs（v0.6.12+）       |  Modify multiple styles of nodes   | node（the node to set the style of）、style（Style object，key is style prop，value is style value）、isActive（boolean, whether the style being set is for the active state） |
 | SET_NODE_ACTIVE                    | Set whether the node is active                               | node (the node to set), active (boolean, whether to activate) |
 | CLEAR_ACTIVE_NODE                  | Clear the active state of the currently active node(s), the active node will be the operation node |                                                              |
 | SET_NODE_EXPAND                    | Set whether the node is expanded                             | node (the node to set), expand (boolean, whether to expand)  |

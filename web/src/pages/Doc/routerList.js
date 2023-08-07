@@ -50,6 +50,7 @@ export default [
       { path: 'touchEvent', title: 'TouchEvent插件' },
       { path: 'nodeImgAdjust', title: 'NodeImgAdjust插件' },
       { path: 'search', title: 'Search插件' },
+      { path: 'painter', title: 'Painter插件' },
       { path: 'help1', title: '概要/关联线' },
       { path: 'help2', title: '客户端' }
     ]
@@ -82,7 +83,8 @@ export default [
       { path: 'deploy', title: 'Deploy' },
       { path: 'touchEvent', title: 'TouchEvent plugin' },
       { path: 'nodeImgAdjust', title: 'NodeImgAdjust plugin' },
-      { path: 'search', title: 'Search plugin' }
+      { path: 'search', title: 'Search plugin' },
+      { path: 'painter', title: 'Painter plugin' }
     ]
   }
 ]

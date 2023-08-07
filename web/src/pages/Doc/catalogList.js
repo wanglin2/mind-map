@@ -33,6 +33,7 @@ let APIList = [
   'touchEvent',
   'nodeImgAdjust',
   'search',
+  'painter',
   'xmind',
   'markdown',
   'utils'

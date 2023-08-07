@@ -68,6 +68,11 @@
 default <code>false</code></p>
 <h3>setStyle(prop, value, isActive)</h3>
 <p>Modify a style of the node, a shortcut method for the <code>SET_NODE_STYLE</code> command</p>
+<h3>setStyles(style, isActive)</h3>
+<blockquote>
+<p>v0.6.12+</p>
+</blockquote>
+<p>Modify multiple styles of nodes, a shortcut method for the <code>SET_NODE_STYLES</code> command</p>
 <h3>getData(key)</h3>
 <p>Get the specified value in the <code>data</code> object of the node's real data <code>nodeData</code>,
 if <code>key</code> is not passed, return the <code>data</code> object</p>

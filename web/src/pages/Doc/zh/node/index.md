@@ -116,6 +116,12 @@
 
 修改节点的某个样式，`SET_NODE_STYLE`命令的快捷方法
 
+### setStyles(style, isActive)
+
+> v0.6.12+
+
+修改节点多个样式，`SET_NODE_STYLES`命令的快捷方法
+
 ### getData(key)
 
 获取该节点真实数据`nodeData`的`data`对象里的指定值，`key`不传返回这个`data`对象

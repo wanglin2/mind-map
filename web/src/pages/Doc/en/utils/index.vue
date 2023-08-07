@@ -160,7 +160,20 @@ and copying the <code>data</code> of the data object, example:</p>
 </blockquote>
 <p>Determine whether a color is white.</p>
 <h4>isTransparent(color)</h4>
+<blockquote>
+<p>v0.6.11+</p>
+</blockquote>
 <p>Determine whether a color is transparent.</p>
+<h4>nodeRichTextToTextWithWrap(html)</h4>
+<blockquote>
+<p>v0.6.12+</p>
+</blockquote>
+<p>Convert the rich text content of nodes in the form of <code>&lt;p&gt;&lt;span&gt;&lt;/span&gt;&lt;p&gt;</code> into text wrapped in <code>&lt;br&gt;</code>.</p>
+<h4>textToNodeRichTextWithWrap(html)</h4>
+<blockquote>
+<p>v0.6.12+</p>
+</blockquote>
+<p>Convert the wrapped text of <code>&lt;br&gt;</code> into node rich text content in the form of <code>&lt;p&gt;&lt;span&gt;&lt;/span&gt;&lt;p&gt;</code>.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

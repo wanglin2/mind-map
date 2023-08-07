@@ -36,9 +36,14 @@ MindMap.usePlugin(Search)
 <p>搜索节点内容，可以重复调用，每调一次，会搜索和定位到下一个匹配的节点。如果搜索文本改变了，那么会重新搜索。</p>
 <h3>endSearch()</h3>
 <p>结束搜索。</p>
-<h3>replace(replaceText)</h3>
+<h3>replace(replaceText, jumpNext = false)</h3>
 <ul>
-<li><code>replaceText</code>：要进行替换的文本</li>
+<li>
+<p><code>replaceText</code>：要进行替换的文本</p>
+</li>
+<li>
+<p><code>jumpNext</code>：v0.6.12+，是否自动跳转到下一个匹配节点</p>
+</li>
 </ul>
 <p>替换当前节点内容，要在调用了<code>search</code>方法之后调用，会替换当前定位到的匹配节点内容。</p>
 <h3>replaceAll(replaceText)</h3>
