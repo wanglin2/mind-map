@@ -82,7 +82,8 @@ class NodeImgAdjust {
       this.createResizeBtnEl()
     }
     this.setHandleElRect()
-    document.body.appendChild(this.handleEl)
+    const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
+    targetNode.appendChild(this.handleEl)
     this.isShowHandleEl = true
   }
 
@@ -90,7 +91,8 @@ class NodeImgAdjust {
   hideHandleEl() {
     if (!this.isShowHandleEl) return
     this.isShowHandleEl = false
-    document.body.removeChild(this.handleEl)
+    const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
+    targetNode.removeChild(this.handleEl)
     this.handleEl.style.backgroundImage = ``
     this.handleEl.style.width = 0
     this.handleEl.style.height = 0
@@ -152,6 +154,12 @@ class NodeImgAdjust {
     })
     btnEl.addEventListener('mousedown', e => {
       this.onMousedown(e)
+    })
+    btnEl.addEventListener('click', e => {
+      e.stopPropagation()
+    })
+    btnEl.addEventListener('mousedown', (e) => {
+      e.stopPropagation()
     })
   }
 

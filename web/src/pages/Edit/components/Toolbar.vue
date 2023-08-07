@@ -26,6 +26,17 @@
         <div
           class="toolbarBtn"
           :class="{
+            disabled: activeNodes.length <= 0 || hasGeneralization,
+            active: isInPainter
+          }"
+          @click="$bus.$emit('startPainter')"
+        >
+          <span class="icon iconfont iconjiedian"></span>
+          <span class="text">{{ $t('toolbar.painter') }}</span>
+        </div>
+        <div
+          class="toolbarBtn"
+          :class="{
             disabled: activeNodes.length <= 0 || hasRoot || hasGeneralization
           }"
           @click="$bus.$emit('execCommand', 'INSERT_NODE')"
@@ -195,7 +206,8 @@ export default {
       forwardEnd: true,
       readonly: false,
       isFullDataFile: false,
-      timer: null
+      timer: null,
+      isInPainter: false
     }
   },
   computed: {
@@ -227,12 +239,16 @@ export default {
     this.$bus.$on('node_active', this.onNodeActive)
     this.$bus.$on('back_forward', this.onBackForward)
     this.$bus.$on('write_local_file', this.onWriteLocalFile)
+    this.$bus.$on('painter_start', this.onPainterStart)
+    this.$bus.$on('painter_end', this.onPainterEnd)
   },
   beforeDestroy() {
     this.$bus.$off('mode_change', this.onModeChange)
     this.$bus.$off('node_active', this.onNodeActive)
     this.$bus.$off('back_forward', this.onBackForward)
     this.$bus.$off('write_local_file', this.onWriteLocalFile)
+    this.$bus.$on('painter_start', this.onPainterStart)
+    this.$bus.$off('painter_end', this.onPainterEnd)
   },
   methods: {
     ...mapMutations(['setActiveSidebar']),
@@ -448,6 +464,14 @@ export default {
           '你的浏览器可能不支持，建议使用最新版本的Chrome浏览器'
         )
       }
+    },
+
+    onPainterStart() {
+      this.isInPainter = true
+    },
+
+    onPainterEnd() {
+      this.isInPainter = false
     }
   }
 }
@@ -528,6 +552,12 @@ export default {
           .icon {
             background: #f5f5f5;
           }
+        }
+      }
+
+      &.active {
+        .icon {
+          background: #f5f5f5;
         }
       }
 

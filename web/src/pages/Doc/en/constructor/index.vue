@@ -357,6 +357,13 @@
 <td>Is the mouse zoom centered around the current position of the mouse, otherwise centered around the canvas</td>
 <td></td>
 </tr>
+<tr>
+<td>customInnerElsAppendTo（v0.6.12+）</td>
+<td>null/HTMLElement</td>
+<td>null</td>
+<td>Specify the location where some internal elements (node text editing element, node note display element, associated line text editing element, node image adjustment button element) are added, and default to document.body</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
@@ -697,7 +704,7 @@ poor performance and should be used sparingly.</p>
 <tr>
 <td>node_dragend（v0.4.5+）</td>
 <td>Triggered when the node is dragged and ends</td>
-<td></td>
+<td>{ overlapNodeUid, prevNodeUid, nextNodeUid }（v0.6.12+，The node uid to which the node is moved this time, for example, if it is moved to node A, then the overlayNodeUid is the uid of node A. If it is moved to the front of node B, then the nextNodeUid is the uid of node B. You can obtain the node instance through the mindMap. extender.findNodeByUid(uid) method）</td>
 </tr>
 <tr>
 <td>associative_line_click（v0.4.5+）</td>

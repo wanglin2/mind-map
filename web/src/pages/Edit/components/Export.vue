@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    class="nodeDialog"
+    class="nodeExportDialog"
     :title="$t('export.title')"
     :visible.sync="dialogVisible"
     width="700px"
@@ -197,7 +197,7 @@ export default {
   }
 }
 
-.nodeDialog {
+.nodeExportDialog {
   /deep/ .el-dialog__body {
     background-color: #f2f4f7;
   }

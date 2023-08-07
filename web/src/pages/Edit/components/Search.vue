@@ -117,7 +117,7 @@ export default {
     },
 
     replace() {
-      this.mindMap.search.replace(this.replaceText)
+      this.mindMap.search.replace(this.replaceText, true)
     },
 
     replaceAll() {
