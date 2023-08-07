@@ -36,9 +36,14 @@ MindMap.usePlugin(Search)
 <p>Search for node content, which can be called repeatedly. Each call will search and locate to the next matching node. If the search text changes, it will be searched again.</p>
 <h3>endSearch()</h3>
 <p>End search.</p>
-<h3>replace(replaceText)</h3>
+<h3>replace(replaceText, jumpNext = false)</h3>
 <ul>
-<li><code>replaceText</code>: Text to be replaced</li>
+<li>
+<p><code>replaceText</code>: Text to be replaced</p>
+</li>
+<li>
+<p><code>jumpNext</code>: v0.6.12+, Whether to automatically jump to the next matching node</p>
+</li>
 </ul>
 <p>To replace the content of the current node, call the 'search' method after calling it to replace the content of the currently located matching node.</p>
 <h3>replaceAll(replaceText)</h3>

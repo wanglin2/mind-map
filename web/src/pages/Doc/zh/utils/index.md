@@ -223,9 +223,21 @@ copyNodeTree({}, node)
 
 #### isTransparent(color)
 
+> v0.6.11+
+
 判断一个颜色是否是透明。
 
-> v0.6.11+
+#### nodeRichTextToTextWithWrap(html)
+
+> v0.6.12+
+
+将`<p><span></span><p>`形式的节点富文本内容转换成`<br>`换行的文本。
+
+#### textToNodeRichTextWithWrap(html)
+
+> v0.6.12+
+
+将`<br>`换行的文本转换成`<p><span></span><p>`形式的节点富文本内容。
 
 ## 在canvas中模拟css的背景属性
 

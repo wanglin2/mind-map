@@ -117,6 +117,12 @@ default `false`
 
 Modify a style of the node, a shortcut method for the `SET_NODE_STYLE` command
 
+### setStyles(style, isActive)
+
+> v0.6.12+
+
+Modify multiple styles of nodes, a shortcut method for the `SET_NODE_STYLES` command
+
 ### getData(key)
 
 Get the specified value in the `data` object of the node's real data `nodeData`,

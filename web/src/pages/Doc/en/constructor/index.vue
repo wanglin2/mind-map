@@ -364,6 +364,13 @@
 <td>Specify the location where some internal elements (node text editing element, node note display element, associated line text editing element, node image adjustment button element) are added, and default to document.body</td>
 <td></td>
 </tr>
+<tr>
+<td>nodeDragPlaceholderMaxSize（v0.6.12+）</td>
+<td>Number</td>
+<td>20</td>
+<td>When dragging an element, the maximum height of the block indicating the new position of the element</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
@@ -726,6 +733,11 @@ poor performance and should be used sparingly.</p>
 <td>Triggered when clicking on an icon within a node</td>
 <td>this（node instance）、item（Click on the icon name）、e（event object）</td>
 </tr>
+<tr>
+<td>view_theme_change（v0.6.12+）</td>
+<td>Triggered after calling the setTheme method to set the theme</td>
+<td>theme（theme name）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
@@ -824,8 +836,13 @@ redo. All commands are as follows:</p>
 </tr>
 <tr>
 <td>SET_NODE_STYLE</td>
-<td>Modify node style</td>
+<td>Modify node single style</td>
 <td>node (the node to set the style of), prop (style property), value (style property value), isActive (boolean, whether the style being set is for the active state)</td>
+</tr>
+<tr>
+<td>SET_NODE_STYLEs（v0.6.12+）</td>
+<td>Modify multiple styles of nodes</td>
+<td>node（the node to set the style of）、style（Style object，key is style prop，value is style value）、isActive（boolean, whether the style being set is for the active state）</td>
 </tr>
 <tr>
 <td>SET_NODE_ACTIVE</td>

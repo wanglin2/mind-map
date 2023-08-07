@@ -72,6 +72,7 @@ const mindMap = new MindMap({
 | customCreateNodeContent（v0.6.3+）     |  Function/null | null | 如果`isUseCustomNodeContent`设为`true`，那么需要使用该选项传入一个方法，接收节点实例`node`为参数（如果要获取该节点的数据，可以通过`node.nodeData.data`），需要返回自定义节点内容元素，也就是DOM节点，如果某个节点不需要自定义，那么返回`null`即可 |          |
 | mouseScaleCenterUseMousePosition（v0.6.4-fix.1+）     | Boolean  | true | 鼠标缩放是否以鼠标当前位置为中心点，否则以画布中心点 |          |
 | customInnerElsAppendTo（v0.6.12+）     | null/HTMLElement  | null | 指定内部一些元素（节点文本编辑元素、节点备注显示元素、关联线文本编辑元素、节点图片调整按钮元素）添加到的位置，默认添加到document.body下 |          |
+| nodeDragPlaceholderMaxSize（v0.6.12+）     | Number  | 20 | 拖拽元素时，指示元素新位置的块的最大高度 |          |
 
 ### 水印配置
 
@@ -243,6 +244,7 @@ mindMap.setTheme('主题名称')
 | svg_mouseenter（v0.5.1+）    | 鼠标移入svg画布时触发   | e（事件对象）  |
 | svg_mouseleave（v0.5.1+）    | 鼠标移出svg画布时触发   | e（事件对象）  |
 | node_icon_click（v0.6.10+）    | 点击节点内的图标时触发   | this（节点实例）、item（点击的图标名称）、e（事件对象）  |
+| view_theme_change（v0.6.12+）    | 调用了setTheme方法设置主题后触发   | theme（设置的新主题名称）  |
 
 ### emit(event, ...args)
 
@@ -320,7 +322,8 @@ mindMap.updateConfig({
 | REMOVE_NODE                         | 删除节点，操作节点为当前激活的节点或指定节点                         |   appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）                                                           |
 | PASTE_NODE                          | 粘贴节点到节点，操作节点为当前激活的节点                     | data（要粘贴的节点数据，一般通过`renderer.copyNode()`方法和`renderer.cutNode()`方法获取） |
 | CUT_NODE                            | 剪切节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点使用无效 | callback(回调函数，剪切的节点数据会通过调用该函数并通过参数返回) |
-| SET_NODE_STYLE                      | 修改节点样式                                                 | node（要设置样式的节点）、prop（样式属性）、value（样式属性值）、isActive（布尔值，是否设置的是激活状态的样式） |
+| SET_NODE_STYLE                      | 修改节点单个样式                                                 | node（要设置样式的节点）、style（样式属性）、value（样式属性值）、isActive（布尔值，是否设置的是激活状态的样式） |
+| SET_NODE_STYLEs（v0.6.12+）                      | 修改节点多个样式                                                 | node（要设置样式的节点）、style（样式对象，key为样式属性，value为样式值）、isActive（布尔值，是否设置的是激活状态的样式） |
 | SET_NODE_ACTIVE                     | 设置节点是否激活                                             | node（要设置的节点）、active（布尔值，是否激活）             |
 | CLEAR_ACTIVE_NODE                   | 清除当前已激活节点的激活状态，操作节点为当前激活的节点       |                                                              |
 | SET_NODE_EXPAND                     | 设置节点是否展开                                             | node（要设置的节点）、expand（布尔值，是否展开）             |
