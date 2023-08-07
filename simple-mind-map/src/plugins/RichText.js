@@ -172,7 +172,11 @@ class RichText {
       this.textEditNode.addEventListener('click', e => {
         e.stopPropagation()
       })
-      document.body.appendChild(this.textEditNode)
+      this.textEditNode.addEventListener('mousedown', (e) => {
+        e.stopPropagation()
+      })
+      const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
+      targetNode.appendChild(this.textEditNode)
     }
     // 使用节点的填充色，否则如果节点颜色是白色的话编辑时看不见
     let bgColor = node.style.merge('fillColor')

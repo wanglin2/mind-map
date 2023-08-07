@@ -19,6 +19,7 @@ const store = new Vuex.Store({
     },
     activeSidebar: '', // 当前显示的侧边栏
     isDark: false,// 是否是暗黑模式
+    isOutlineEdit: false// 是否是大纲编辑模式
   },
   mutations: {
     /**
@@ -67,6 +68,11 @@ const store = new Vuex.Store({
     // 设置暗黑模式
     setIsDark(state, data) {
       state.isDark = data
+    },
+
+    // 设置大纲编辑模式
+    setIsOutlineEdit(state, data) {
+      state.isOutlineEdit = data
     }
   },
   actions: {
