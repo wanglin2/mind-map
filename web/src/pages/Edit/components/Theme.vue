@@ -76,6 +76,12 @@ export default {
     this.initGroup()
     this.theme = this.mindMap.getTheme()
     this.handleDark()
+  
+    var self = this;
+    this.mindMap.on('view_theme_change',function(){
+      self.theme = self.mindMap.getTheme()
+      self.handleDark()
+    });
   },
   methods: {
     ...mapMutations(['setIsDark']),
