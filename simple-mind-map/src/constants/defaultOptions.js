@@ -122,5 +122,9 @@ export const defaultOpt = {
   // 是否开启自定义节点内容
   isUseCustomNodeContent: false,
   // 自定义返回节点内容的方法
-  customCreateNodeContent: null
+  customCreateNodeContent: null,
+  // 指定内部一些元素（节点文本编辑元素、节点备注显示元素、关联线文本编辑元素、节点图片调整按钮元素）添加到的位置，默认添加到document.body下
+  customInnerElsAppendTo: null,
+  // 拖拽元素时，指示元素新位置的块的最大高度
+  nodeDragPlaceholderMaxSize: 20
 }

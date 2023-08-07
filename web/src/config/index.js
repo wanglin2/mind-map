@@ -10,6 +10,7 @@ import {
   fontFamilyList as fontFamilyListZh,
   borderDasharrayList as borderDasharrayListZh,
   lineStyleList as lineStyleListZh,
+  rootLineKeepSameInCurveList as rootLineKeepSameInCurveListZh,
   backgroundRepeatList as backgroundRepeatListZh,
   backgroundPositionList as backgroundPositionListZh,
   shortcutKeyList as shortcutKeyListZh,
@@ -22,6 +23,7 @@ import {
   fontFamilyList as fontFamilyListEn,
   borderDasharrayList as borderDasharrayListEn,
   lineStyleList as lineStyleListEn,
+  rootLineKeepSameInCurveList as rootLineKeepSameInCurveListEn,
   backgroundRepeatList as backgroundRepeatListEn,
   backgroundPositionList as backgroundPositionListEn,
   shortcutKeyList as shortcutKeyListEn,
@@ -44,6 +46,11 @@ const borderDasharrayList = {
 const lineStyleList = {
   zh: lineStyleListZh,
   en: lineStyleListEn
+}
+
+const rootLineKeepSameInCurveList = {
+  zh: rootLineKeepSameInCurveListZh,
+  en: rootLineKeepSameInCurveListEn
 }
 
 const backgroundRepeatList = {
@@ -93,6 +100,7 @@ export {
   fontFamilyList,
   borderDasharrayList,
   lineStyleList,
+  rootLineKeepSameInCurveList,
   backgroundRepeatList,
   backgroundPositionList,
   backgroundSizeList,
