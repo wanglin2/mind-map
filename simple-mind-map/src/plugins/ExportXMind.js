@@ -12,8 +12,10 @@ class ExportXMind {
     const zipData = await xmind.transformToXmind(data, name)
     return zipData
   }
-  getXmind(){
-	return xmind;
+
+  // 获取解析器
+  getXmind() {
+    return xmind
   }
 }
 

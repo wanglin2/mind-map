@@ -2,7 +2,12 @@
   <Sidebar ref="sidebar" :title="$t('theme.title')">
     <div class="themeList" :class="{ isDark: isDark }">
       <el-tabs v-model="activeName">
-          <el-tab-pane v-for="group in groupList" :key="group.name" :label="group.name" :name="group.name"></el-tab-pane>
+        <el-tab-pane
+          v-for="group in groupList"
+          :key="group.name"
+          :label="group.name"
+          :name="group.name"
+        ></el-tab-pane>
       </el-tabs>
       <div
         class="themeItem"
@@ -56,7 +61,7 @@ export default {
     ...mapState(['activeSidebar', 'isDark']),
 
     currentList() {
-      return this.groupList.find((item) => {
+      return this.groupList.find(item => {
         return item.name === this.activeName
       }).list
     }
@@ -76,21 +81,35 @@ export default {
     this.initGroup()
     this.theme = this.mindMap.getTheme()
     this.handleDark()
-  
-    var self = this;
-    this.mindMap.on('view_theme_change',function(){
-      self.theme = self.mindMap.getTheme()
-      self.handleDark()
-    });
+
+    this.mindMap.on('view_theme_change', () => {
+      this.theme = this.mindMap.getTheme()
+      this.handleDark()
+    })
   },
   methods: {
     ...mapMutations(['setIsDark']),
 
     initGroup() {
-      let baiduThemes = ['default', 'skyGreen', 'classic2', 'classic3', 'classicGreen', 'classicBlue', 'blueSky', 'brainImpairedPink', 'earthYellow', 'freshGreen', 'freshRed', 'romanticPurple', 'pinkGrape', 'mint']
+      let baiduThemes = [
+        'default',
+        'skyGreen',
+        'classic2',
+        'classic3',
+        'classicGreen',
+        'classicBlue',
+        'blueSky',
+        'brainImpairedPink',
+        'earthYellow',
+        'freshGreen',
+        'freshRed',
+        'romanticPurple',
+        'pinkGrape',
+        'mint'
+      ]
       let baiduList = []
       let classicsList = []
-      this.themeList.forEach((item) => {
+      this.themeList.forEach(item => {
         if (baiduThemes.includes(item.value)) {
           baiduList.push(item)
         } else if (!item.dark) {
@@ -104,7 +123,7 @@ export default {
         },
         {
           name: '深色',
-          list: this.themeList.filter((item) => {
+          list: this.themeList.filter(item => {
             return item.dark
           })
         },

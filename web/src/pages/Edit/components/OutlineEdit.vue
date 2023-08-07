@@ -1,6 +1,7 @@
 <template>
   <div
     class="outlineEditContainer"
+    :class="{ isDark: isDark }"
     ref="outlineEditContainer"
     v-if="isOutlineEdit"
   >
@@ -31,7 +32,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isOutlineEdit'])
+    ...mapState(['isOutlineEdit', 'isDark'])
   },
   watch: {
     isOutlineEdit(val) {
@@ -72,6 +73,16 @@ export default {
   z-index: 9999;
   background-color: #fff;
   overflow: hidden;
+
+  &.isDark {
+    background-color: #262a2e;
+
+    .closeBtn {
+      .icon {
+        color: #fff;
+      }
+    }
+  }
 
   .closeBtn {
     position: absolute;

@@ -318,10 +318,10 @@
         </div>
       </div>
       <!-- 关联线文字 -->
-      <div class="title noTop">关联线文字</div>
+      <div class="title noTop">{{ $t('baseStyle.associativeLineText') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">字体</span>
+          <span class="name">{{ $t('baseStyle.fontFamily') }}</span>
           <el-select
             size="mini"
             v-model="style.associativeLineTextFontFamily"
@@ -341,7 +341,7 @@
       </div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">颜色</span>
+          <span class="name">{{ $t('baseStyle.color') }}</span>
           <span
             class="block"
             v-popover:popover6
@@ -359,7 +359,7 @@
           </el-popover>
         </div>
         <div class="rowItem">
-          <span class="name">字号</span>
+          <span class="name">{{ $t('baseStyle.fontSize') }}</span>
           <el-select
             size="mini"
             style="width: 80px"
