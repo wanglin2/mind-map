@@ -7,8 +7,10 @@
     <div class="closeBtn" @click="onClose">
       <span class="icon iconfont iconguanbi"></span>
     </div>
-    <div class="outlineEdit">
-      <Outline :mindMap="mindMap" @scrollTo="onScrollTo"></Outline>
+    <div class="outlineEditBox" ref="outlineEditBox">
+      <div class="outlineEdit">
+        <Outline :mindMap="mindMap" @scrollTo="onScrollTo"></Outline>
+      </div>
     </div>
   </div>
 </template>
@@ -33,11 +35,11 @@ export default {
   },
   watch: {
     isOutlineEdit(val) {
-        if (val) {
-            this.$nextTick(() => {
-                document.body.appendChild(this.$refs.outlineEditContainer)
-            })
-        }
+      if (val) {
+        this.$nextTick(() => {
+          document.body.appendChild(this.$refs.outlineEditContainer)
+        })
+      }
     }
   },
   methods: {
@@ -48,7 +50,7 @@ export default {
     },
 
     onScrollTo(y) {
-      let container = this.$refs.outlineEditContainer
+      let container = this.$refs.outlineEditBox
       let height = container.offsetHeight
       let top = container.scrollTop
       y += 50
@@ -68,14 +70,12 @@ export default {
   width: 100%;
   height: 100%;
   z-index: 9999;
-  display: flex;
-  justify-content: center;
   background-color: #fff;
-  overflow-y: auto;
+  overflow: hidden;
 
   .closeBtn {
     position: absolute;
-    right: 20px;
+    right: 40px;
     top: 20px;
     cursor: pointer;
 
@@ -84,15 +84,22 @@ export default {
     }
   }
 
-  .outlineEdit {
-    width: 1000px;
-    height: max-content;
-    overflow: hidden;
+  .outlineEditBox {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
     padding: 50px 0;
 
-    /deep/ .customNode {
-      .nodeEdit {
-        max-width: 800px;
+    .outlineEdit {
+      width: 1000px;
+      height: 100%;
+      height: max-content;
+      margin: 0 auto;
+
+      /deep/ .customNode {
+        .nodeEdit {
+          max-width: 800px;
+        }
       }
     }
   }
