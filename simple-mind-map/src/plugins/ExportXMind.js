@@ -12,6 +12,9 @@ class ExportXMind {
     const zipData = await xmind.transformToXmind(data, name)
     return zipData
   }
+  getXmind(){
+	return xmind;
+  }
 }
 
 ExportXMind.instanceName = 'doExportXMind'

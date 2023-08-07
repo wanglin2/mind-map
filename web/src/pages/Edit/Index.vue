@@ -1,5 +1,5 @@
 <template>
-  <div class="container" :class="{ isDark: isDark }">
+  <div class="container" :class="{ isDark: isDark,activeSidebar:activeSidebar}">
     <template v-if="show">
       <Toolbar v-if="!isZenMode"></Toolbar>
       <Edit></Edit>
@@ -27,7 +27,8 @@ export default {
   computed: {
     ...mapState({
       isZenMode: state => state.localConfig.isZenMode,
-      isDark: state => state.isDark
+      isDark: state => state.isDark,
+	  activeSidebar: state => state.activeSidebar
     })
   },
   watch: {

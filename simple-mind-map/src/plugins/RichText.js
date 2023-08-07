@@ -163,12 +163,12 @@ class RichText {
     let scaleX = rect.width / originWidth
     let scaleY = rect.height / originHeight
     // 内边距
-    const paddingX = 6
+    const paddingX = 14;// 6=>14
     const paddingY = 4
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div')
       this.textEditNode.classList.add('smm-richtext-node-edit-wrap')
-      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: ${paddingY}px ${paddingX}px;`
+      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;outline: none; word-break: break-all;padding: ${paddingY}px ${paddingX}px;`
       this.textEditNode.addEventListener('click', e => {
         e.stopPropagation()
       })
@@ -194,7 +194,12 @@ class RichText {
     this.textEditNode.style.maxWidth =
       this.mindMap.opt.textAutoWrapWidth + paddingX * 2 + 'px'
     this.textEditNode.style.transform = `scale(${scaleX}, ${scaleY})`
-    this.textEditNode.style.transformOrigin = 'left top'
+    this.textEditNode.style.transformOrigin = 'left top'	
+	this.textEditNode.style.borderRadius = (node.style.merge('borderRadius') || 5) + 'px'
+	if(node.style.merge('shape') == 'roundedRectangle'){
+		this.textEditNode.style.borderRadius = '50px';
+	}
+	
     if (!node.nodeData.data.richText) {
       // 还不是富文本的情况
       let text = node.nodeData.data.text.split(/\n/gim).join('<br>')
@@ -205,6 +210,7 @@ class RichText {
         this.cacheEditingText || node.nodeData.data.text
     }
     this.initQuillEditor()
+	setTimeout(() => {this.selectAll();}, 0); // 双击选中
     document.querySelector('.ql-editor').style.minHeight = originHeight + 'px'
     this.showTextEdit = true
     // 如果是刚创建的节点，那么默认全选，否则普通激活不全选
