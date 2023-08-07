@@ -2,7 +2,7 @@ import MindMap from './index'
 import MiniMap from './src/plugins/MiniMap.js'
 import Watermark from './src/plugins/Watermark.js'
 import KeyboardNavigation from './src/plugins/KeyboardNavigation.js'
-import ExortXMind from './src/plugins/ExortXMind.js'
+import ExportXMind from './src/plugins/ExportXMind.js'
 import ExportPDF from './src/plugins/ExportPDF.js'
 import Export from './src/plugins/Export.js'
 import Drag from './src/plugins/Drag.js'
@@ -32,7 +32,7 @@ MindMap
   .usePlugin(Watermark)
   .usePlugin(Drag)
   .usePlugin(KeyboardNavigation)
-  .usePlugin(ExortXMind)
+  .usePlugin(ExportXMind)
   .usePlugin(ExportPDF)
   .usePlugin(Export)
   .usePlugin(Select)
