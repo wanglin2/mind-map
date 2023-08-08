@@ -388,7 +388,7 @@ class Node {
       if (this.isRoot && e.which === 3 && !this.mindMap.opt.readonly) {
         e.stopPropagation()
       }
-      if (!this.isRoot && !this.mindMap.opt.readonly) {
+      if (!this.isRoot && e.which !== 2 && !this.mindMap.opt.readonly) {
         e.stopPropagation()
       }
       // 多选和取消多选
@@ -414,7 +414,7 @@ class Node {
       this.mindMap.emit('node_mousedown', this, e)
     })
     this.group.on('mouseup', e => {
-      if (!this.isRoot && !this.mindMap.opt.readonly) {
+      if (!this.isRoot && e.which !== 2 && !this.mindMap.opt.readonly) {
         e.stopPropagation()
       }
       this.mindMap.emit('node_mouseup', this, e)
