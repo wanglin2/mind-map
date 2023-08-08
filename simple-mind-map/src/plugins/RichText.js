@@ -163,7 +163,7 @@ class RichText {
     let scaleX = rect.width / originWidth
     let scaleY = rect.height / originHeight
     // 内边距
-    const paddingX = 6
+    const paddingX = 14
     const paddingY = 4
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div')
@@ -195,6 +195,11 @@ class RichText {
       this.mindMap.opt.textAutoWrapWidth + paddingX * 2 + 'px'
     this.textEditNode.style.transform = `scale(${scaleX}, ${scaleY})`
     this.textEditNode.style.transformOrigin = 'left top'
+    this.textEditNode.style.borderRadius = (node.style.merge('borderRadius') || 5) + 'px'
+    if(node.style.merge('shape') == 'roundedRectangle'){
+      this.textEditNode.style.borderRadius = '50px';
+    }
+	
     if (!node.nodeData.data.richText) {
       // 还不是富文本的情况
       let text = node.nodeData.data.text.split(/\n/gim).join('<br>')
