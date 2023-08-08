@@ -231,7 +231,7 @@ copyNodeTree({}, node)
 
 > v0.6.12+
 
-将`<p><span></span><p>`形式的节点富文本内容转换成`<br>`换行的文本。
+将`<p><span></span><p>`形式的节点富文本内容转换成`\n`换行的文本。
 
 #### textToNodeRichTextWithWrap(html)
 

@@ -163,7 +163,7 @@
 <blockquote>
 <p>v0.6.12+</p>
 </blockquote>
-<p>将<code>&lt;p&gt;&lt;span&gt;&lt;/span&gt;&lt;p&gt;</code>形式的节点富文本内容转换成<code>&lt;br&gt;</code>换行的文本。</p>
+<p>将<code>&lt;p&gt;&lt;span&gt;&lt;/span&gt;&lt;p&gt;</code>形式的节点富文本内容转换成<code>\n</code>换行的文本。</p>
 <h4>textToNodeRichTextWithWrap(html)</h4>
 <blockquote>
 <p>v0.6.12+</p>

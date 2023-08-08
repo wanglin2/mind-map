@@ -28,6 +28,7 @@ export default [
       { path: 'course19', title: '插入和扩展节点图标' },
       { path: 'course20', title: '如何自定义节点内容' },
       { path: 'course21', title: '如何复制、剪切、粘贴' },
+      { path: 'course22', title: '如何实现搜索、替换' },
       { path: 'doExport', title: 'Export 插件' },
       { path: 'drag', title: 'Drag插件' },
       { path: 'introduction', title: '简介' },
