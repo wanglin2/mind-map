@@ -236,7 +236,7 @@ Determine whether a color is transparent.
 
 > v0.6.12+
 
-Convert the rich text content of nodes in the form of `<p><span></span><p>` into text wrapped in `<br>`.
+Convert the rich text content of nodes in the form of `<p><span></span><p>` into text wrapped in `\n`.
 
 #### textToNodeRichTextWithWrap(html)
 

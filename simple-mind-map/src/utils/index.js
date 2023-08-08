@@ -541,7 +541,7 @@ export const getVisibleColorFromTheme = (themeConfig) => {
   }
 }
 
-// 将<p><span></span><p>形式的节点富文本内容转换成<br>换行的文本
+// 将<p><span></span><p>形式的节点富文本内容转换成\n换行的文本
 let nodeRichTextToTextWithWrapEl = null
 export const nodeRichTextToTextWithWrap = (html) => {
   if (!nodeRichTextToTextWithWrapEl) {

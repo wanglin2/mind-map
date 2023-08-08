@@ -168,7 +168,7 @@ and copying the <code>data</code> of the data object, example:</p>
 <blockquote>
 <p>v0.6.12+</p>
 </blockquote>
-<p>Convert the rich text content of nodes in the form of <code>&lt;p&gt;&lt;span&gt;&lt;/span&gt;&lt;p&gt;</code> into text wrapped in <code>&lt;br&gt;</code>.</p>
+<p>Convert the rich text content of nodes in the form of <code>&lt;p&gt;&lt;span&gt;&lt;/span&gt;&lt;p&gt;</code> into text wrapped in <code>\n</code>.</p>
 <h4>textToNodeRichTextWithWrap(html)</h4>
 <blockquote>
 <p>v0.6.12+</p>
