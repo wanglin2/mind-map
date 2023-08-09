@@ -24,7 +24,10 @@
           >{{ $t('export.include') }}</el-checkbox
         >
       </div>
-      <div class="paddingInputBox" v-show="['svg', 'png', 'pdf'].includes(exportType)">
+      <div
+        class="paddingInputBox"
+        v-show="['svg', 'png', 'pdf'].includes(exportType)"
+      >
         <span class="name">{{ $t('export.paddingX') }}</span>
         <el-input
           style="width: 100px"
@@ -32,7 +35,9 @@
           size="mini"
           @change="onPaddingChange"
         ></el-input>
-        <span class="name" style="margin-left: 10px;">{{ $t('export.paddingY') }}</span>
+        <span class="name" style="margin-left: 10px;">{{
+          $t('export.paddingY')
+        }}</span>
         <el-input
           style="width: 100px"
           v-model="paddingY"
@@ -47,11 +52,11 @@
         >
       </div>
       <div class="downloadTypeList">
-        <div 
-          class="downloadTypeItem" 
-          v-for="item in downTypeList" 
-          :key="item.type" 
-          :class="{active: exportType === item.type}" 
+        <div
+          class="downloadTypeItem"
+          v-for="item in downTypeList"
+          :key="item.type"
+          :class="{ active: exportType === item.type }"
           @click="exportType = item.type"
         >
           <div class="icon iconfont" :class="[item.icon, item.type]"></div>
@@ -104,14 +109,19 @@ export default {
 
     downTypeList() {
       return downTypeList[this.$i18n.locale] || downTypeList.zh
-    },
+    }
   },
   created() {
-    this.$bus.$on('showExport', () => {
-      this.dialogVisible = true
-    })
+    this.$bus.$on('showExport', this.handleShowExport)
+  },
+  beforeDestroy() {
+    this.$bus.$off('showExport', this.handleShowExport)
   },
   methods: {
+    handleShowExport() {
+      this.dialogVisible = true
+    },
+
     onPaddingChange() {
       this.$bus.$emit('paddingChange', {
         exportPaddingX: Number(this.paddingX),
@@ -163,12 +173,7 @@ export default {
           this.isTransparent
         )
       } else {
-        this.$bus.$emit(
-          'export',
-          this.exportType,
-          true,
-          this.fileName
-        )
+        this.$bus.$emit('export', this.exportType, true, this.fileName)
       }
       this.$notify.info({
         title: this.$t('export.notifyTitle'),
@@ -189,7 +194,7 @@ export default {
 
         .info {
           .name {
-            color: hsla(0,0%,100%,.9);
+            color: hsla(0, 0%, 100%, 0.9);
           }
         }
       }
@@ -222,7 +227,7 @@ export default {
     margin-top: 10px;
 
     &.warning {
-      color: #F56C6C;
+      color: #f56c6c;
     }
   }
 
@@ -236,7 +241,7 @@ export default {
       overflow: hidden;
       margin: 10px;
       border-radius: 11px;
-      box-shadow: 0 0 20px 0 rgba(0,0,0,.02);
+      box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.02);
       background-color: #fff;
       display: flex;
       align-items: center;

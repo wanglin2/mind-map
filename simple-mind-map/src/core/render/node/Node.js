@@ -1,6 +1,5 @@
 import Style from './Style'
 import Shape from './Shape'
-import { asyncRun, nodeToHTML } from '../../../utils'
 import { G, Rect, ForeignObject, SVG } from '@svgdotjs/svg.js'
 import nodeGeneralizationMethods from './nodeGeneralization'
 import nodeExpandBtnMethods from './nodeExpandBtn'
@@ -559,18 +558,14 @@ class Node {
       this.nodeData.data.expand !== false
     ) {
       let index = 0
-      asyncRun(
-        this.children.map(item => {
-          return () => {
-            item.render(() => {
-              index++
-              if (index >= this.children.length) {
-                callback()
-              }
-            })
+      this.children.forEach(item => {
+        item.render(() => {
+          index++
+          if (index >= this.children.length) {
+            callback()
           }
         })
-      )
+      })
     } else {
       callback()
     }
@@ -592,13 +587,9 @@ class Node {
     this.removeLine()
     // 子节点
     if (this.children && this.children.length) {
-      asyncRun(
-        this.children.map(item => {
-          return () => {
-            item.remove()
-          }
-        })
-      )
+      this.children.forEach(item => {
+        item.remove()
+      })
     }
   }
 
@@ -624,13 +615,9 @@ class Node {
     }
     // 子节点
     if (this.children && this.children.length) {
-      asyncRun(
-        this.children.map(item => {
-          return () => {
-            item.hide()
-          }
-        })
-      )
+      this.children.forEach(item => {
+        item.hide()
+      })
     }
   }
 
@@ -650,13 +637,9 @@ class Node {
     }
     // 子节点
     if (this.children && this.children.length) {
-      asyncRun(
-        this.children.map(item => {
-          return () => {
-            item.show()
-          }
-        })
-      )
+      this.children.forEach(item => {
+        item.show()
+      })
     }
   }
 
