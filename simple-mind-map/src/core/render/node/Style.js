@@ -17,7 +17,7 @@ class Style {
     // 设置新样式
     let { backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition, backgroundSize } = themeConfig
     el.style.backgroundColor = backgroundColor
-    if (backgroundImage) {
+    if (backgroundImage && backgroundImage !== 'none') {
       el.style.backgroundImage = `url(${backgroundImage})`
       el.style.backgroundRepeat = backgroundRepeat
       el.style.backgroundPosition = backgroundPosition
