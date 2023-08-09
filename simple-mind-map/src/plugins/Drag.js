@@ -204,7 +204,7 @@ class Drag extends Base {
 
   //  检测重叠节点
   checkOverlapNode() {
-    if (!this.drawTransform) {
+    if (!this.drawTransform || !this.placeholder) {
       return
     }
     const { nodeDragPlaceholderMaxSize } = this.mindMap.opt 
