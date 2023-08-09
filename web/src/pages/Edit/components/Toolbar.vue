@@ -247,7 +247,7 @@ export default {
     this.$bus.$off('node_active', this.onNodeActive)
     this.$bus.$off('back_forward', this.onBackForward)
     this.$bus.$off('write_local_file', this.onWriteLocalFile)
-    this.$bus.$on('painter_start', this.onPainterStart)
+    this.$bus.$off('painter_start', this.onPainterStart)
     this.$bus.$off('painter_end', this.onPainterEnd)
   },
   methods: {

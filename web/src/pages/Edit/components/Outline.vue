@@ -73,7 +73,19 @@ export default {
   },
   created() {
     window.addEventListener('keydown', this.onKeyDown)
-    this.$bus.$on('data_change', () => {
+    this.$bus.$on('data_change', this.handleDataChange)
+    this.$bus.$on('node_tree_render_end', this.handleNodeTreeRenderEnd)
+  },
+  mounted() {
+    this.refresh()
+  },
+  beforeDestroy() {
+    window.removeEventListener('keydown', this.onKeyDown)
+    this.$bus.$off('data_change', this.handleDataChange)
+    this.$bus.$off('node_tree_render_end', this.handleNodeTreeRenderEnd)
+  },
+  methods: {
+    handleDataChange() {
       // 在大纲里操作节点时不要响应该事件，否则会重新刷新树
       if (this.notHandleDataChange) {
         this.notHandleDataChange = false
@@ -84,8 +96,9 @@ export default {
         return
       }
       this.refresh()
-    })
-    this.$bus.$on('node_tree_render_end', () => {
+    },
+
+    handleNodeTreeRenderEnd() {
       // 当前存在未完成的节点插入操作
       if (this.insertType) {
         this[this.insertType]()
@@ -100,15 +113,8 @@ export default {
           this.afterCreateNewNode()
         })
       }
-    })
-  },
-  mounted() {
-    this.refresh()
-  },
-  beforeDestroy() {
-    window.removeEventListener('keydown', this.onKeyDown)
-  },
-  methods: {
+    },
+
     // 刷新树数据
     refresh() {
       let data = this.mindMap.getData()
@@ -332,7 +338,8 @@ export default {
       }
     }
 
-    /deep/ .el-tree-node__content:hover, .el-upload-list__item:hover {
+    /deep/ .el-tree-node__content:hover,
+    .el-upload-list__item:hover {
       background-color: hsla(0, 0%, 100%, 0.02) !important;
     }
 
