@@ -49,12 +49,17 @@ export default {
     }
   },
   created() {
-    this.$bus.$on('closeSideBar', () => {
-      this.close()
-    })
+    this.$bus.$on('closeSideBar', this.handleCloseSidebar)
+  },
+  beforeDestroy() {
+    this.$bus.$off('closeSideBar', this.handleCloseSidebar)
   },
   methods: {
     ...mapMutations(['setActiveSidebar']),
+
+    handleCloseSidebar() {
+      this.close()
+    },
 
     close() {
       this.show = false

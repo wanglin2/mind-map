@@ -43,7 +43,15 @@ export default {
     }
   },
   created() {
-    this.$bus.$on('node_active', (...args) => {
+    this.$bus.$on('node_active', this.handleNodeActive)
+    this.$bus.$on('showNodeIcon', this.handleShowNodeIcon)
+  },
+  beforeDestroy() {
+    this.$bus.$off('node_active', this.handleNodeActive)
+    this.$bus.$off('showNodeIcon', this.handleShowNodeIcon)
+  },
+  methods: {
+    handleNodeActive(...args) {
       this.activeNodes = args[1]
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
@@ -51,15 +59,15 @@ export default {
       } else {
         this.iconList = []
       }
-    })
-    this.$bus.$on('showNodeIcon', () => {
+    },
+
+    handleShowNodeIcon() {
       this.dialogVisible = true
-    })
-  },
-  methods: {
+    },
+
     getHtml(icon) {
       return /^<svg/.test(icon) ? icon : `<img src="${icon}" />`
-    },  
+    },
 
     /**
      * @Author: 王林

@@ -69,10 +69,10 @@ import Search from './Search.vue'
 import NodeIconSidebar from './NodeIconSidebar.vue'
 import NodeIconToolbar from './NodeIconToolbar.vue'
 import OutlineEdit from './OutlineEdit.vue'
+import { showLoading, hideLoading } from '@/utils/loading'
 
 // 注册插件
-MindMap
-  .usePlugin(MiniMap)
+MindMap.usePlugin(MiniMap)
   .usePlugin(Watermark)
   .usePlugin(Drag)
   .usePlugin(KeyboardNavigation)
@@ -87,7 +87,7 @@ MindMap
   .usePlugin(Painter)
 
 // 注册自定义主题
-customThemeList.forEach((item) => {
+customThemeList.forEach(item => {
   MindMap.defineTheme(item.value, item.theme)
 })
 
@@ -120,6 +120,7 @@ export default {
   },
   data() {
     return {
+      enableShowLoading: true,
       mindMap: null,
       mindMapData: null,
       prevImg: '',
@@ -130,7 +131,8 @@ export default {
     ...mapState({
       isZenMode: state => state.localConfig.isZenMode,
       openNodeRichText: state => state.localConfig.openNodeRichText,
-      useLeftKeySelectionRightKeyDrag: state => state.localConfig.useLeftKeySelectionRightKeyDrag,
+      useLeftKeySelectionRightKeyDrag: state =>
+        state.localConfig.useLeftKeySelectionRightKeyDrag
     })
   },
   watch: {
@@ -143,6 +145,7 @@ export default {
     }
   },
   mounted() {
+    showLoading()
     // this.showNewFeatureInfo()
     this.getData()
     this.init()
@@ -150,23 +153,62 @@ export default {
     this.$bus.$on('paddingChange', this.onPaddingChange)
     this.$bus.$on('export', this.export)
     this.$bus.$on('setData', this.setData)
-    this.$bus.$on('startTextEdit', () => {
-      this.mindMap.renderer.startTextEdit()
-    })
-    this.$bus.$on('endTextEdit', () => {
-      this.mindMap.renderer.endTextEdit()
-    })
-    this.$bus.$on('createAssociativeLine', () => {
-      this.mindMap.associativeLine.createLineFromActiveNode()
-    })
-    this.$bus.$on('startPainter', () => {
-      this.mindMap.painter.startPainter()
-    })
-    window.addEventListener('resize', () => {
-      this.mindMap.resize()
-    })
+    this.$bus.$on('startTextEdit', this.handleStartTextEdit)
+    this.$bus.$on('endTextEdit', this.handleEndTextEdit)
+    this.$bus.$on('createAssociativeLine', this.handleCreateLineFromActiveNode)
+    this.$bus.$on('startPainter', this.handleStartPainter)
+    this.$bus.$on('node_tree_render_end', this.handleHideLoading)
+    this.$bus.$on('showLoading', this.handleShowLoading)
+    window.addEventListener('resize', this.handleResize)
+  },
+  beforeDestroy() {
+    this.$bus.$off('execCommand', this.execCommand)
+    this.$bus.$off('paddingChange', this.onPaddingChange)
+    this.$bus.$off('export', this.export)
+    this.$bus.$off('setData', this.setData)
+    this.$bus.$off('startTextEdit', this.handleStartTextEdit)
+    this.$bus.$off('endTextEdit', this.handleEndTextEdit)
+    this.$bus.$off('createAssociativeLine', this.handleCreateLineFromActiveNode)
+    this.$bus.$off('startPainter', this.handleStartPainter)
+    this.$bus.$off('node_tree_render_end', this.handleHideLoading)
+    this.$bus.$off('showLoading', this.handleShowLoading)
+    window.removeEventListener('resize', this.handleResize)
   },
   methods: {
+    handleStartTextEdit() {
+      this.mindMap.renderer.startTextEdit()
+    },
+
+    handleEndTextEdit() {
+      this.mindMap.renderer.endTextEdit()
+    },
+
+    handleCreateLineFromActiveNode() {
+      this.mindMap.associativeLine.createLineFromActiveNode()
+    },
+
+    handleStartPainter() {
+      this.mindMap.painter.startPainter()
+    },
+
+    handleResize() {
+      this.mindMap.resize()
+    },
+
+    // 显示loading
+    handleShowLoading() {
+      this.enableShowLoading = true
+      showLoading()
+    },
+
+    // 渲染结束后关闭loading
+    handleHideLoading() {
+      if (this.enableShowLoading) {
+        this.enableShowLoading = false
+        hideLoading()
+      }
+    },
+
     /**
      * @Author: 王林
      * @Date: 2021-07-03 22:11:37
@@ -233,7 +275,7 @@ export default {
         ...(config || {}),
         iconList: icon,
         useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag,
-        customInnerElsAppendTo: null,
+        customInnerElsAppendTo: null
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
         // customCreateNodeContent: (node) => {
@@ -290,18 +332,18 @@ export default {
       })
       this.bindSaveEvent()
       // setTimeout(() => {
-        // 动态给指定节点添加子节点
-        // this.mindMap.execCommand('INSERT_CHILD_NODE', false, this.mindMap.renderer.root, {
-        //   text: '自定义内容'
-        // })
+      // 动态给指定节点添加子节点
+      // this.mindMap.execCommand('INSERT_CHILD_NODE', false, this.mindMap.renderer.root, {
+      //   text: '自定义内容'
+      // })
 
-        // 动态给指定节点添加同级节点
-        // this.mindMap.execCommand('INSERT_NODE', false, this.mindMap.renderer.root, {
-        //   text: '自定义内容'
-        // })
+      // 动态给指定节点添加同级节点
+      // this.mindMap.execCommand('INSERT_NODE', false, this.mindMap.renderer.root, {
+      //   text: '自定义内容'
+      // })
 
-        // 动态删除指定节点
-        // this.mindMap.execCommand('REMOVE_NODE', this.mindMap.renderer.root.children[0])
+      // 动态删除指定节点
+      // this.mindMap.execCommand('REMOVE_NODE', this.mindMap.renderer.root.children[0])
       // }, 5000);
       // 如果应用被接管，那么抛出事件传递思维导图实例
       if (window.takeOverApp) {
@@ -315,6 +357,7 @@ export default {
      * @Desc: 动态设置思维导图数据
      */
     setData(data) {
+      this.handleShowLoading()
       if (data.root) {
         this.mindMap.setFullData(data)
       } else {
@@ -366,7 +409,7 @@ export default {
       if (!showed) {
         this.$notify.info({
           title: this.$t('edit.newFeatureNoticeTitle'),
-          message: this.$t('edit.newFeatureNoticeMessage'), 
+          message: this.$t('edit.newFeatureNoticeMessage'),
           duration: 0,
           onClose: () => {
             localStorage.setItem('SIMPLE_MIND_MAP_NEW_FEATURE_TIP_1', true)

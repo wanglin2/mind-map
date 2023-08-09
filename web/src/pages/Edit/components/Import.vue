@@ -58,11 +58,16 @@ export default {
     }
   },
   created() {
-    this.$bus.$on('showImport', () => {
-      this.dialogVisible = true
-    })
+    this.$bus.$on('showImport', this.handleShowImport)
+  },
+  beforeDestroy() {
+    this.$bus.$off('showImport', this.handleShowImport)
   },
   methods: {
+    handleShowImport() {
+      this.dialogVisible = true
+    },
+
     /**
      * @Author: 王林
      * @Date: 2021-08-03 22:48:42
