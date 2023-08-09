@@ -7,6 +7,7 @@ class TouchEvent {
     this.singleTouchstartEvent = null
     this.clickNum = 0
     this.doubleTouchmoveDistance = 0
+    this.mindMap.renderer.textEdit.stopFocusOnNodeActive()
     this.bindEvent()
   }
 
