@@ -67,7 +67,9 @@ export default class TextEdit {
 
   // 创建一个隐藏的文本输入框
   createHiddenInput() {
-    if (this.hiddenInputEl || isMobile()) return
+    const { enableCreateHiddenInput, enableAutoEnterTextEditWhenKeydown } =
+      this.mindMap.opt
+    if (this.hiddenInputEl || isMobile() || !enableCreateHiddenInput) return
     this.hiddenInputEl = document.createElement('input')
     this.hiddenInputEl.type = 'text'
     this.hiddenInputEl.style.cssText = `
@@ -75,6 +77,25 @@ export default class TextEdit {
       left: -99999px;
       top: -99999px;
     `
+    // 监听按键事件
+    if (enableAutoEnterTextEditWhenKeydown) {
+      this.hiddenInputEl.addEventListener('keydown', e => {
+        const activeNodeList = this.mindMap.renderer.activeNodeList
+        if (activeNodeList.length <= 0 || activeNodeList.length > 1) return
+        const node = activeNodeList[0]
+        // 当正在输入中文或英文或数字时，如果没有按下组合键，那么自动进入文本编辑模式
+        const keyCode = e.keyCode
+        if (
+          node &&
+          (keyCode === 229 ||
+            (keyCode >= 65 && keyCode <= 90) ||
+            (keyCode >= 48 && keyCode <= 57)) &&
+          !this.mindMap.keyCommand.hasCombinationKey(e)
+        ) {
+          this.show(node)
+        }
+      })
+    }
     // 监听粘贴事件
     this.hiddenInputEl.addEventListener('paste', async event => {
       event.preventDefault()
@@ -106,7 +127,7 @@ export default class TextEdit {
   stopFocusOnNodeActive() {
     this.enableFocus = false
   }
-  
+
   // 开启默认聚焦
   openFocusOnNodeActive() {
     this.enableFocus = true
@@ -148,7 +169,7 @@ export default class TextEdit {
       this.mindMap.richText.showEditText(node, rect, isInserting)
       return
     }
-    this.showEditTextBox(node, rect)
+    this.showEditTextBox(node, rect, isInserting)
   }
 
   // 处理画布缩放
@@ -166,7 +187,7 @@ export default class TextEdit {
   }
 
   //  显示文本编辑框
-  showEditTextBox(node, rect) {
+  showEditTextBox(node, rect, isInserting) {
     this.mindMap.emit('before_show_text_edit')
     this.registerTmpShortcut()
     if (!this.textEditNode) {
@@ -179,10 +200,11 @@ export default class TextEdit {
       this.textEditNode.addEventListener('click', e => {
         e.stopPropagation()
       })
-      this.textEditNode.addEventListener('mousedown', (e) => {
+      this.textEditNode.addEventListener('mousedown', e => {
         e.stopPropagation()
       })
-      const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
+      const targetNode =
+        this.mindMap.opt.customInnerElsAppendTo || document.body
       targetNode.appendChild(this.textEditNode)
     }
     let scale = this.mindMap.view.scale
@@ -209,10 +231,25 @@ export default class TextEdit {
     }
     this.showTextEdit = true
     // 选中文本
-    if (!this.cacheEditingText) {
+    // if (!this.cacheEditingText) {
+    //   this.selectNodeText()
+    // }
+    if (isInserting) {
       this.selectNodeText()
+    } else {
+      this.focus()
     }
     this.cacheEditingText = ''
+  }
+
+  // 聚焦
+  focus() {
+    let selection = window.getSelection()
+    let range = document.createRange()
+    range.selectNodeContents(this.textEditNode)
+    range.collapse()
+    selection.removeAllRanges()
+    selection.addRange(range)
   }
 
   //  选中文本
