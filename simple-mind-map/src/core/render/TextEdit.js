@@ -1,4 +1,4 @@
-import { getStrWithBrFromHtml, checkNodeOuter } from '../../utils'
+import { getStrWithBrFromHtml, checkNodeOuter, isMobile } from '../../utils'
 
 //  节点文字编辑类
 export default class TextEdit {
@@ -67,7 +67,7 @@ export default class TextEdit {
 
   // 创建一个隐藏的文本输入框
   createHiddenInput() {
-    if (this.hiddenInputEl) return
+    if (this.hiddenInputEl || isMobile()) return
     this.hiddenInputEl = document.createElement('input')
     this.hiddenInputEl.type = 'text'
     this.hiddenInputEl.style.cssText = `
