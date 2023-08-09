@@ -81,14 +81,18 @@ export default {
     this.initGroup()
     this.theme = this.mindMap.getTheme()
     this.handleDark()
-
-    this.mindMap.on('view_theme_change', () => {
-      this.theme = this.mindMap.getTheme()
-      this.handleDark()
-    })
+    this.mindMap.on('view_theme_change', this.handleViewThemeChange)
+  },
+  beforeDestroy() {
+    this.mindMap.off('view_theme_change', this.handleViewThemeChange)
   },
   methods: {
     ...mapMutations(['setIsDark']),
+
+    handleViewThemeChange() {
+      this.theme = this.mindMap.getTheme()
+      this.handleDark()
+    },
 
     initGroup() {
       let baiduThemes = [
@@ -136,6 +140,7 @@ export default {
     },
 
     useTheme(theme) {
+      if (theme.value === this.theme) return
       this.theme = theme.value
       this.handleDark()
       const customThemeConfig = this.mindMap.getCustomThemeConfig()
@@ -159,6 +164,7 @@ export default {
     },
 
     changeTheme(theme, config) {
+      this.$bus.$emit('showLoading')
       this.mindMap.setTheme(theme.value)
       storeConfig({
         theme: {

@@ -59,7 +59,15 @@ export default {
     }
   },
   created() {
-    this.$bus.$on('node_active', (...args) => {
+    this.$bus.$on('node_active', this.handleNodeActive)
+    this.$bus.$on('showNodeTag', this.handleShowNodeTag)
+  },
+  beforeDestroy() {
+    this.$bus.$off('node_active', this.handleNodeActive)
+    this.$bus.$off('showNodeTag', this.handleShowNodeTag)
+  },
+  methods: {
+    handleNodeActive(...args) {
       this.activeNodes = args[1]
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
@@ -68,13 +76,13 @@ export default {
         this.tagArr = []
         this.tag = ''
       }
-    })
-    this.$bus.$on('showNodeTag', () => {
+    },
+
+    handleShowNodeTag() {
       this.$bus.$emit('startTextEdit')
       this.dialogVisible = true
-    })
-  },
-  methods: {
+    },
+
     /**
      * @Author: 王林
      * @Date: 2021-06-24 21:48:14
