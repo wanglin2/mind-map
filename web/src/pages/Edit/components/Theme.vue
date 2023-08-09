@@ -136,6 +136,7 @@ export default {
     },
 
     useTheme(theme) {
+      if (theme.value === this.theme) return
       this.theme = theme.value
       this.handleDark()
       const customThemeConfig = this.mindMap.getCustomThemeConfig()
@@ -159,6 +160,7 @@ export default {
     },
 
     changeTheme(theme, config) {
+      this.$bus.$emit('showLoading')
       this.mindMap.setTheme(theme.value)
       storeConfig({
         theme: {
