@@ -69,6 +69,7 @@ import Search from './Search.vue'
 import NodeIconSidebar from './NodeIconSidebar.vue'
 import NodeIconToolbar from './NodeIconToolbar.vue'
 import OutlineEdit from './OutlineEdit.vue'
+import { showLoading, hideLoading } from '@/utils/loading'
 
 // 注册插件
 MindMap
@@ -120,6 +121,7 @@ export default {
   },
   data() {
     return {
+      enableShowLoading: true,
       mindMap: null,
       mindMapData: null,
       prevImg: '',
@@ -143,6 +145,7 @@ export default {
     }
   },
   mounted() {
+    showLoading()
     // this.showNewFeatureInfo()
     this.getData()
     this.init()
@@ -162,11 +165,27 @@ export default {
     this.$bus.$on('startPainter', () => {
       this.mindMap.painter.startPainter()
     })
+    this.$bus.$on('node_tree_render_end', this.handleHideLoading)
+    this.$bus.$on('showLoading', this.handleShowLoading)
     window.addEventListener('resize', () => {
       this.mindMap.resize()
     })
   },
   methods: {
+    // 显示loading
+    handleShowLoading() {
+      this.enableShowLoading = true
+      showLoading()
+    },
+
+    // 渲染结束后关闭loading
+    handleHideLoading() {
+      if (this.enableShowLoading) {
+        this.enableShowLoading = false
+        hideLoading()
+      }
+    },
+
     /**
      * @Author: 王林
      * @Date: 2021-07-03 22:11:37
@@ -315,6 +334,7 @@ export default {
      * @Desc: 动态设置思维导图数据
      */
     setData(data) {
+      this.handleShowLoading()
       if (data.root) {
         this.mindMap.setFullData(data)
       } else {
