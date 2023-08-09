@@ -81,14 +81,18 @@ export default {
     this.initGroup()
     this.theme = this.mindMap.getTheme()
     this.handleDark()
-
-    this.mindMap.on('view_theme_change', () => {
-      this.theme = this.mindMap.getTheme()
-      this.handleDark()
-    })
+    this.mindMap.on('view_theme_change', this.handleViewThemeChange)
+  },
+  beforeDestroy() {
+    this.mindMap.off('view_theme_change', this.handleViewThemeChange)
   },
   methods: {
     ...mapMutations(['setIsDark']),
+
+    handleViewThemeChange() {
+      this.theme = this.mindMap.getTheme()
+      this.handleDark()
+    },
 
     initGroup() {
       let baiduThemes = [
