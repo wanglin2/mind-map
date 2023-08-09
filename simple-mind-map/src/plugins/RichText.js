@@ -1,7 +1,12 @@
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
-import html2canvas from 'html2canvas'
-import { walk, getTextFromHtml, isWhite, getVisibleColorFromTheme } from '../utils'
+import domtoimage from 'dom-to-image-more'
+import {
+  walk,
+  getTextFromHtml,
+  isWhite,
+  getVisibleColorFromTheme
+} from '../utils'
 import { CONSTANTS } from '../constants/constant'
 
 let extended = false
@@ -172,10 +177,11 @@ class RichText {
       this.textEditNode.addEventListener('click', e => {
         e.stopPropagation()
       })
-      this.textEditNode.addEventListener('mousedown', (e) => {
+      this.textEditNode.addEventListener('mousedown', e => {
         e.stopPropagation()
       })
-      const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
+      const targetNode =
+        this.mindMap.opt.customInnerElsAppendTo || document.body
       targetNode.appendChild(this.textEditNode)
     }
     // 使用节点的填充色，否则如果节点颜色是白色的话编辑时看不见
@@ -185,7 +191,11 @@ class RichText {
     this.textEditNode.style.marginTop = `-${paddingY * scaleY}px`
     this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex
     this.textEditNode.style.backgroundColor =
-      bgColor === 'transparent' ? isWhite(color) ? getVisibleColorFromTheme(this.mindMap.themeConfig) : '#fff' : bgColor
+      bgColor === 'transparent'
+        ? isWhite(color)
+          ? getVisibleColorFromTheme(this.mindMap.themeConfig)
+          : '#fff'
+        : bgColor
     this.textEditNode.style.minWidth = originWidth + paddingX * 2 + 'px'
     this.textEditNode.style.minHeight = originHeight + 'px'
     this.textEditNode.style.left = rect.left + 'px'
@@ -502,11 +512,16 @@ class RichText {
       }
     }
     walk(node)
-    let canvas = await html2canvas(el, {
-      backgroundColor: null
-    })
+
+    // 如果使用html2canvas
+    // let canvas = await html2canvas(el, {
+    //   backgroundColor: null
+    // })
+    // return canvas.toDataURL()
+
+    const res = await domtoimage.toPng(el)
     this.mindMap.el.removeChild(el)
-    return canvas.toDataURL()
+    return res
   }
 
   // 将所有节点转换成非富文本节点
