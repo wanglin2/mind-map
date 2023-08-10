@@ -6,7 +6,7 @@ class TouchEvent {
     this.touchesNum = 0
     this.singleTouchstartEvent = null
     this.clickNum = 0
-    this.doubleTouchmoveDistance = 0
+    this.touchStartScaleView = null
     this.bindEvent()
   }
 
@@ -33,7 +33,7 @@ class TouchEvent {
   // 手指按下事件
   onTouchstart(e) {
     this.touchesNum = e.touches.length
-    this.touchScaleViewBefore = false;
+    this.touchStartScaleView = null
     if (this.touchesNum === 1) {
       let touch = e.touches[0]
       this.singleTouchstartEvent = touch
@@ -54,26 +54,46 @@ class TouchEvent {
       let oy = touch1.clientY - touch2.clientY
       let distance = Math.sqrt(Math.pow(ox, 2) + Math.pow(oy, 2))
       // 以两指中心点进行缩放
-      let { x: touch1ClientX, y: touch1ClientY } = this.mindMap.toPos(touch1.clientX, touch1.clientY)
-      let { x: touch2ClientX, y: touch2ClientY } = this.mindMap.toPos(touch2.clientX, touch2.clientY)
+      let { x: touch1ClientX, y: touch1ClientY } = this.mindMap.toPos(
+        touch1.clientX,
+        touch1.clientY
+      )
+      let { x: touch2ClientX, y: touch2ClientY } = this.mindMap.toPos(
+        touch2.clientX,
+        touch2.clientY
+      )
       let cx = (touch1ClientX + touch2ClientX) / 2
       let cy = (touch1ClientY + touch2ClientY) / 2
       // 手势缩放,基于最开始的位置进行缩放(基于前一个位置缩放不是线性关系); 缩放同时支持位置拖动
-      var view = this.mindMap.view;
-      if(!this.touchScaleViewBefore){
-        this.touchScaleViewBefore = {distance:distance,scale:view.scale,x:view.x,y:view.y,cx:cx,cy:cy};
-        return;
+      const view = this.mindMap.view
+      if (!this.touchStartScaleView) {
+        this.touchStartScaleView = {
+          distance: distance,
+          scale: view.scale,
+          x: view.x,
+          y: view.y,
+          cx: cx,
+          cy: cy
+        }
+        return
       }
-	  
-	  var viewBefore = this.touchScaleViewBefore;
-      var scale = viewBefore.scale * (distance / viewBefore.distance);
-      if(Math.abs(distance - viewBefore.distance) <= 10){scale = viewBefore.scale;}
-      var ratio = (1 - scale / viewBefore.scale);
-      view.scale = scale < 0.1 ? 0.1 : scale;
-      view.x = viewBefore.x + (cx - viewBefore.x) * ratio + (cx - viewBefore.cx)*scale;
-      view.y = viewBefore.y + (cy - viewBefore.y) * ratio + (cy - viewBefore.cy)*scale;
-      view.transform();
-      this.mindMap.emit('scale',scale);
+      const viewBefore = this.touchStartScaleView
+      const scale = viewBefore.scale * (distance / viewBefore.distance)
+      if (Math.abs(distance - viewBefore.distance) <= 10) {
+        scale = viewBefore.scale
+      }
+      const ratio = 1 - scale / viewBefore.scale
+      view.scale = scale < 0.1 ? 0.1 : scale
+      view.x =
+        viewBefore.x +
+        (cx - viewBefore.x) * ratio +
+        (cx - viewBefore.cx) * scale
+      view.y =
+        viewBefore.y +
+        (cy - viewBefore.y) * ratio +
+        (cy - viewBefore.cy) * scale
+      view.transform()
+      this.mindMap.emit('scale', scale)
     }
   }
 
@@ -100,8 +120,7 @@ class TouchEvent {
     }
     this.touchesNum = 0
     this.singleTouchstartEvent = null
-    this.doubleTouchmoveDistance = 0
-    this.touchScaleViewBefore = null;
+    this.touchStartScaleView = null
   }
 
   // 发送鼠标事件
