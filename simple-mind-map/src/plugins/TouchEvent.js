@@ -57,7 +57,10 @@ class TouchEvent {
       let { x: touch2ClientX, y: touch2ClientY } = this.mindMap.toPos(touch2.clientX, touch2.clientY)
       let cx = (touch1ClientX + touch2ClientX) / 2
       let cy = (touch1ClientY + touch2ClientY) / 2
-      if (distance > this.doubleTouchmoveDistance) {
+      if (this.doubleTouchmoveDistance === 0) {
+        this.doubleTouchmoveDistance = distance
+        return;
+      } else if (distance > this.doubleTouchmoveDistance) {
         // 放大
         this.mindMap.view.enlarge(cx, cy, true)
       } else {
