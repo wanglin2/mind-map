@@ -4,7 +4,7 @@
 
 `simple-mind-map`内置了一些图标：
 
-<img src="../../../../assets/img/iconList.jpg" />
+<img src="../../../../assets/img/docs/iconList.jpg" />
 
 你可以通过如下方式获取：
 
