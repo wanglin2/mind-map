@@ -3,7 +3,7 @@
     <h1>插入和扩展节点图标</h1>
 <h2>插入图标</h2>
 <p><code>simple-mind-map</code>内置了一些图标：</p>
-<img src="../../../../assets/img/iconList.jpg" />
+<img src="../../../../assets/img/docs/iconList.jpg" />
 <p>你可以通过如下方式获取：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> { nodeIconList } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/svg/icons&#x27;</span>
 </code></pre>

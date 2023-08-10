@@ -45,7 +45,7 @@ export default {
     .picBox {
       width: 500px;
       height: 500px;
-      background-image: url('../../../assets/img/block3.png');
+      background-image: url('../../../assets/img/index/block3.png');
       flex-shrink: 0;
     }
 

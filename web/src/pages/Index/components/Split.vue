@@ -10,7 +10,7 @@ export default {}
 .splitContainer {
   width: 122px;
   height: 15px;
-  background-image: url('../../../assets/img/split.png');
+  background-image: url('../../../assets/img/index/split.png');
   background-size: cover;
 }
 </style>
