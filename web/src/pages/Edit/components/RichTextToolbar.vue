@@ -3,6 +3,7 @@
     class="richTextToolbar"
     ref="richTextToolbar"
     :style="style"
+    :class="{ isDark: isDark }"
     @click.stop.passive
     v-show="showRichTextToolbar"
   >
@@ -44,7 +45,7 @@
 
     <el-tooltip content="字体" placement="top">
       <el-popover placement="bottom" trigger="hover">
-        <div class="fontOptionsList">
+        <div class="fontOptionsList" :class="{ isDark: isDark }">
           <div
             class="fontOptionItem"
             v-for="item in fontFamilyList"
@@ -64,7 +65,7 @@
 
     <el-tooltip content="字号" placement="top">
       <el-popover placement="bottom" trigger="hover">
-        <div class="fontOptionsList">
+        <div class="fontOptionsList" :class="{ isDark: isDark }">
           <div
             class="fontOptionItem"
             v-for="item in fontSizeList"
@@ -93,17 +94,18 @@
 
     <el-tooltip content="背景颜色" placement="top">
       <el-popover placement="bottom" trigger="hover">
-        <Color :color="fontBackgroundColor" @change="changeFontBackgroundColor"></Color>
+        <Color
+          :color="fontBackgroundColor"
+          @change="changeFontBackgroundColor"
+        ></Color>
         <div class="btn" slot="reference">
           <span class="icon iconfont iconbeijingyanse"></span>
         </div>
       </el-popover>
     </el-tooltip>
-    
+
     <el-tooltip content="清除样式" placement="top">
-      <div
-        class="btn" @click="removeFormat"
-      >
+      <div class="btn" @click="removeFormat">
         <span class="icon iconfont iconqingchu"></span>
       </div>
     </el-tooltip>
@@ -113,6 +115,7 @@
 <script>
 import { fontFamilyList, fontSizeList } from '@/config'
 import Color from './Color'
+import { mapState } from 'vuex'
 
 export default {
   name: 'RichTextToolbar',
@@ -138,6 +141,8 @@ export default {
     }
   },
   computed: {
+    ...mapState(['isDark']),
+
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
     }
@@ -211,7 +216,7 @@ export default {
     },
 
     changeFontBackgroundColor(background) {
-      this.formatInfo.background  = background
+      this.formatInfo.background = background
       this.mindMap.richText.formatText({
         background
       })
@@ -236,6 +241,18 @@ export default {
   display: flex;
   align-items: center;
   transform: translateX(-50%);
+
+  &.isDark {
+    background: #363b3f;
+
+    .btn {
+      color: #fff;
+
+      &:hover {
+        background: hsla(0, 0%, 100%, 0.05);
+      }
+    }
+  }
 
   .btn {
     width: 55px;
@@ -265,6 +282,16 @@ export default {
 
 .fontOptionsList {
   width: 150px;
+
+  &.isDark {
+    .fontOptionItem {
+      color: #fff;
+
+      &:hover {
+        background-color: hsla(0, 0%, 100%, 0.05);
+      }
+    }
+  }
 
   .fontOptionItem {
     height: 30px;
