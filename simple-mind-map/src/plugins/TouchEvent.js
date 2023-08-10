@@ -58,7 +58,6 @@ class TouchEvent {
       let { x: touch2ClientX, y: touch2ClientY } = this.mindMap.toPos(touch2.clientX, touch2.clientY)
       let cx = (touch1ClientX + touch2ClientX) / 2
       let cy = (touch1ClientY + touch2ClientY) / 2
-      
       // 手势缩放,基于最开始的位置进行缩放(基于前一个位置缩放不是线性关系); 缩放同时支持位置拖动
       var view = this.mindMap.view;
       if(!this.touchScaleViewBefore){

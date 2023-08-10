@@ -455,25 +455,25 @@ export const loadImage = imgFile => {
 }
 
 // 移除字符串中的html实体
-export const removeHTMLEntities = (str) => {
-  [['&nbsp;', '&#160;']].forEach((item) => {
+export const removeHTMLEntities = str => {
+  ;[['&nbsp;', '&#160;']].forEach(item => {
     str = str.replaceAll(item[0], item[1])
   })
   return str
 }
 
 // 获取一个数据的类型
-export const getType = (data) => {
+export const getType = data => {
   return Object.prototype.toString.call(data).slice(7, -1)
 }
 
 // 判断一个数据是否是null和undefined和空字符串
-export const isUndef = (data) => {
+export const isUndef = data => {
   return data === null || data === undefined || data === ''
 }
 
 // 移除html字符串中节点的内联样式
-export const removeHtmlStyle = (html) => {
+export const removeHtmlStyle = html => {
   return html.replaceAll(/(<[^\s]+)\s+style=["'][^'"]+["']\s*(>)/g, '$1$2')
 }
 
@@ -485,12 +485,12 @@ export const addHtmlStyle = (html, tag, style) => {
 
 // 检查一个字符串是否是富文本字符
 let checkIsRichTextEl = null
-export const checkIsRichText = (str) => {
+export const checkIsRichText = str => {
   if (!checkIsRichTextEl) {
     checkIsRichTextEl = document.createElement('div')
   }
   checkIsRichTextEl.innerHTML = str
-  for (let c = checkIsRichTextEl.childNodes, i = c.length; i--;) {
+  for (let c = checkIsRichTextEl.childNodes, i = c.length; i--; ) {
     if (c[i].nodeType == 1) return true
   }
   return false
@@ -503,13 +503,20 @@ export const replaceHtmlText = (html, searchText, replaceText) => {
     replaceHtmlTextEl = document.createElement('div')
   }
   replaceHtmlTextEl.innerHTML = html
-  let walk = (root) => {
+  let walk = root => {
     let childNodes = root.childNodes
-    childNodes.forEach((node) => {
-      if (node.nodeType === 1) {// 元素节点
+    childNodes.forEach(node => {
+      if (node.nodeType === 1) {
+        // 元素节点
         walk(node)
-      } else if (node.nodeType === 3) {// 文本节点
-        root.replaceChild(document.createTextNode(node.nodeValue.replaceAll(searchText, replaceText)), node)
+      } else if (node.nodeType === 3) {
+        // 文本节点
+        root.replaceChild(
+          document.createTextNode(
+            node.nodeValue.replaceAll(searchText, replaceText)
+          ),
+          node
+        )
       }
     })
   }
@@ -518,22 +525,39 @@ export const replaceHtmlText = (html, searchText, replaceText) => {
 }
 
 // 判断一个颜色是否是白色
-export const isWhite = (color) => {
+export const isWhite = color => {
   color = String(color).replaceAll(/\s+/g, '')
-  return ['#fff', '#ffffff', '#FFF', '#FFFFFF', 'rgb(255,255,255)'].includes(color) || /rgba\(255,255,255,[^)]+\)/.test(color)
+  return (
+    ['#fff', '#ffffff', '#FFF', '#FFFFFF', 'rgb(255,255,255)'].includes(
+      color
+    ) || /rgba\(255,255,255,[^)]+\)/.test(color)
+  )
 }
 
 // 判断一个颜色是否是透明
-export const isTransparent = (color) => {
+export const isTransparent = color => {
   color = String(color).replaceAll(/\s+/g, '')
-  return ['', 'transparent'].includes(color) || /rgba\(\d+,\d+,\d+,0\)/.test(color)
+  return (
+    ['', 'transparent'].includes(color) || /rgba\(\d+,\d+,\d+,0\)/.test(color)
+  )
 }
 
 // 从当前主题里获取一个非透明非白色的颜色
-export const getVisibleColorFromTheme = (themeConfig) => {
+export const getVisibleColorFromTheme = themeConfig => {
   let { lineColor, root, second, node } = themeConfig
-  let list = [lineColor, root.fillColor, root.color, second.fillColor, second.color, node.fillColor, node.color, root.borderColor, second.borderColor, node.borderColor]
-  for(let i = 0; i < list.length; i++) {
+  let list = [
+    lineColor,
+    root.fillColor,
+    root.color,
+    second.fillColor,
+    second.color,
+    node.fillColor,
+    node.color,
+    root.borderColor,
+    second.borderColor,
+    node.borderColor
+  ]
+  for (let i = 0; i < list.length; i++) {
     let color = list[i]
     if (!isTransparent(color) && !isWhite(color)) {
       return color
@@ -543,22 +567,24 @@ export const getVisibleColorFromTheme = (themeConfig) => {
 
 // 将<p><span></span><p>形式的节点富文本内容转换成\n换行的文本
 let nodeRichTextToTextWithWrapEl = null
-export const nodeRichTextToTextWithWrap = (html) => {
+export const nodeRichTextToTextWithWrap = html => {
   if (!nodeRichTextToTextWithWrapEl) {
     nodeRichTextToTextWithWrapEl = document.createElement('div')
   }
   nodeRichTextToTextWithWrapEl.innerHTML = html
   const childNodes = nodeRichTextToTextWithWrapEl.childNodes
   let res = ''
-  for(let i = 0; i < childNodes.length; i++) {
+  for (let i = 0; i < childNodes.length; i++) {
     const node = childNodes[i]
-    if (node.nodeType === 1) {// 元素节点
+    if (node.nodeType === 1) {
+      // 元素节点
       if (node.tagName.toLowerCase() === 'p') {
         res += node.textContent + '\n'
       } else {
         res += node.textContent
       }
-    } else if (node.nodeType === 3) {// 文本节点
+    } else if (node.nodeType === 3) {
+      // 文本节点
       res += node.nodeValue
     }
   }
@@ -567,7 +593,7 @@ export const nodeRichTextToTextWithWrap = (html) => {
 
 // 将<br>换行的文本转换成<p><span></span><p>形式的节点富文本内容
 let textToNodeRichTextWithWrapEl = null
-export const textToNodeRichTextWithWrap = (html) => {
+export const textToNodeRichTextWithWrap = html => {
   if (!textToNodeRichTextWithWrapEl) {
     textToNodeRichTextWithWrapEl = document.createElement('div')
   }
@@ -575,23 +601,34 @@ export const textToNodeRichTextWithWrap = (html) => {
   const childNodes = textToNodeRichTextWithWrapEl.childNodes
   let list = []
   let str = ''
-  for(let i = 0; i < childNodes.length; i++) {
+  for (let i = 0; i < childNodes.length; i++) {
     const node = childNodes[i]
-    if (node.nodeType === 1) {// 元素节点
+    if (node.nodeType === 1) {
+      // 元素节点
       if (node.tagName.toLowerCase() === 'br') {
         list.push(str)
         str = ''
       } else {
         str += node.textContent
       }
-    } else if (node.nodeType === 3) {// 文本节点
+    } else if (node.nodeType === 3) {
+      // 文本节点
       str += node.nodeValue
     }
   }
   if (str) {
     list.push(str)
   }
-  return list.map((item) => {
-    return `<p><span>${item}</span></p>`
-  }).join('')
+  return list
+    .map(item => {
+      return `<p><span>${item}</span></p>`
+    })
+    .join('')
+}
+
+// 判断是否是移动端环境
+export const isMobile = () => {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    navigator.userAgent
+  )
 }

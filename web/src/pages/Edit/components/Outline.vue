@@ -61,7 +61,7 @@ export default {
       },
       currentData: null,
       notHandleDataChange: false,
-      handleNodeTreeRenderEnd: false,
+      isHandleNodeTreeRenderEnd: false,
       beInsertNodeUid: '',
       insertType: '',
       isInTreArea: false,
@@ -106,8 +106,8 @@ export default {
         return
       }
       // 插入了新节点后需要做一些操作
-      if (this.handleNodeTreeRenderEnd) {
-        this.handleNodeTreeRenderEnd = false
+      if (this.isHandleNodeTreeRenderEnd) {
+        this.isHandleNodeTreeRenderEnd = false
         this.refresh()
         this.$nextTick(() => {
           this.afterCreateNewNode()
@@ -236,7 +236,7 @@ export default {
     // 插入兄弟节点
     insertNode() {
       this.notHandleDataChange = true
-      this.handleNodeTreeRenderEnd = true
+      this.isHandleNodeTreeRenderEnd = true
       this.beInsertNodeUid = createUid()
       this.mindMap.execCommand('INSERT_NODE', false, [], {
         uid: this.beInsertNodeUid
@@ -246,7 +246,7 @@ export default {
     // 插入下级节点
     insertChildNode() {
       this.notHandleDataChange = true
-      this.handleNodeTreeRenderEnd = true
+      this.isHandleNodeTreeRenderEnd = true
       this.beInsertNodeUid = createUid()
       this.mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
         uid: this.beInsertNodeUid
