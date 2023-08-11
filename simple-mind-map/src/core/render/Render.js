@@ -108,10 +108,6 @@ class Render {
         this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
       }
     })
-    // 粘贴事件
-    this.mindMap.on('paste', data => {
-      this.onPaste(data)
-    })
     // let timer = null
     // this.mindMap.on('view_data_change', () => {
     //   clearTimeout(timer)
@@ -273,8 +269,7 @@ class Render {
     this.copy = this.copy.bind(this)
     this.mindMap.keyCommand.addShortcut('Control+c', this.copy)
     this.mindMap.keyCommand.addShortcut('Control+v', () => {
-      // 隐藏输入框可能会失去焦点，所以要重新聚焦
-      this.textEdit.focusHiddenInput()
+      this.onPaste()
     })
     this.cut = this.cut.bind(this)
     this.mindMap.keyCommand.addShortcut('Control+x', this.cut)
@@ -608,7 +603,28 @@ class Render {
   }
 
   // 粘贴事件
-  async onPaste({ text, img }) {
+  async onPaste() {
+    // 读取剪贴板的文字和图片
+    let text = null
+    let img = null
+    if (navigator.clipboard) {
+      try {
+        text = await navigator.clipboard.readText()
+        const items = await navigator.clipboard.read()
+        if (items && items.length > 0) {
+          for (const clipboardItem of items) {
+            for (const type of clipboardItem.types) {
+              if (/^image\//.test(type)) {
+                img = await clipboardItem.getType(type)
+                break
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
     // 检查剪切板数据是否有变化
     // 通过图片大小来判断图片是否发生变化，可能是不准确的，但是目前没有其他好方法
     const imgSize = img ? img.size : 0

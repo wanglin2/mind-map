@@ -127,10 +127,7 @@ export const defaultOpt = {
   customInnerElsAppendTo: null,
   // 拖拽元素时，指示元素新位置的块的最大高度
   nodeDragPlaceholderMaxSize: 20,
-  // 是否允许创建一个隐藏的输入框，该输入框会在节点激活时聚焦，用于粘贴数据和自动进入文本编辑状态
-  enableCreateHiddenInput: true,
   // 是否在存在一个激活节点时，当按下中文、英文、数字按键时自动进入文本编辑模式
-  // 该配置在enableCreateHiddenInput设为true时生效
   enableAutoEnterTextEditWhenKeydown: true,
   // 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果
   // 需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果
