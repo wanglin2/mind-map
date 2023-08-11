@@ -14,7 +14,9 @@ The principle of this plugin is to use [Quill](https://github.com/quilljs/quill)
 >
 > This also caused a problem, that is, the function of exporting as a picture was affected, The original principle of exporting `svg` as an image is very simple, Get the `svg` string, and then create the `blob` data of the `type=image/svg+xml` type. Then use the `URL.createObjectURL` method to generate the `data:url` data. Then create a `Image` tag, use the `data:url` as the `src` of the image, and finally draw the image on the `canvas` object for export, However, after testing, when the `DOM` node is embedded in the `svg`, this method of export will cause errors, and after trying many ways, the perfect export effect cannot be achieved, The current method is to traverse the `foreignObject` node in `svg`, using [html2canvas](https://github.com/niklasvh/html2canvas) Convert the `DOM` node in the `foreignObject` node into an image and then replace the `foreignObject` node. This method can work, but it is very time-consuming. Because the `html2canvas` conversion takes a long time, it takes about 2 seconds to convert a node. This leads to the more nodes, the slower the conversion time. Therefore, it is recommended not to use this plugin if you cannot tolerate the long time of export.
 
-The version of `v0.5.7+` directly uses `html2canvas` to convert the entire `svg`, which is no longer an issue with speed. However, there is currently a bug where the color of the node does not take effect after export.
+> The version of `v0.5.7+` directly uses `html2canvas` to convert the entire `svg`, which is no longer an issue with speed. However, there is currently a bug where the color of the node does not take effect after export.
+
+`V0.6.13+` version uses [dom-to-image-more](https://github.com/1904labs/dom-to-image-more) Replaced 'html2canvas' to address the issue of ineffective color export for nodes.
 
 ## Register
 

@@ -41,6 +41,14 @@ mindMap.keyCommand.addShortcut(<span class="hljs-string">&#x27;Control+Enter&#x2
 <p>v0.2.3+</p>
 </blockquote>
 <p>恢复保存的快捷键数据，然后清空缓存数据</p>
+<h3>hasCombinationKey(e)</h3>
+<blockquote>
+<p>v0.6.13+</p>
+</blockquote>
+<ul>
+<li><code>e</code>：事件对象。</li>
+</ul>
+<p>判断是否按下了组合键。</p>
 
   </div>
 </template>

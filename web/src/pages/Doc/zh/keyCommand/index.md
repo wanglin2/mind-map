@@ -54,3 +54,11 @@ mindMap.keyCommand.addShortcut('Control+Enter', () => {})
 > v0.2.3+
 
 恢复保存的快捷键数据，然后清空缓存数据
+
+### hasCombinationKey(e)
+
+> v0.6.13+
+
+- `e`：事件对象。
+
+判断是否按下了组合键。

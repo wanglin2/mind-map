@@ -169,6 +169,11 @@
 <p>v0.6.12+</p>
 </blockquote>
 <p>将<code>&lt;br&gt;</code>换行的文本转换成<code>&lt;p&gt;&lt;span&gt;&lt;/span&gt;&lt;p&gt;</code>形式的节点富文本内容。</p>
+<h4>isMobile()</h4>
+<blockquote>
+<p>v0.6.13+</p>
+</blockquote>
+<p>判断是否是移动端环境。</p>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

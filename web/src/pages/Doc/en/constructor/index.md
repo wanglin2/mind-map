@@ -73,6 +73,9 @@ const mindMap = new MindMap({
 | mouseScaleCenterUseMousePosition（v0.6.4-fix.1+）     | Boolean  | true | Is the mouse zoom centered around the current position of the mouse, otherwise centered around the canvas |          |
 | customInnerElsAppendTo（v0.6.12+）     | null/HTMLElement  | null | Specify the location where some internal elements (node text editing element, node note display element, associated line text editing element, node image adjustment button element) are added, and default to document.body |          |
 | nodeDragPlaceholderMaxSize（v0.6.12+）     | Number  | 20 | When dragging an element, the maximum height of the block indicating the new position of the element |          |
+| enableCreateHiddenInput（v0.6.13+）     | Boolean  | true | Is it allowed to create a hidden input box that will be focused when the node is activated for pasting data and automatically entering the text editing state |          |
+| enableAutoEnterTextEditWhenKeydown（v0.6.13+）     | Boolean  | true | Does it automatically enter text editing mode when pressing the Chinese, English, or numeric buttons when there is an activation node? This configuration takes effect when enableCreateHiddenInput is set to true |          |
+| richTextEditFakeInPlace（v0.6.13+）     | Boolean  | false | Set the rich text node edit box to match the size of the node, creating a pseudo in place editing effect. It should be noted that only when there is only text within the node and the shape is rectangular, can the effect be better |          |
 
 ### Watermark config
 
