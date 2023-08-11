@@ -59,3 +59,11 @@ Save the current registered shortcut data, then clear the shortcut data
 > v0.2.3+
 
 Restore saved shortcut data, then clear the cache data
+
+### hasCombinationKey(e)
+
+> v0.6.13+
+
+- `e`: Event object.
+
+Determine if the combination key has been pressed.

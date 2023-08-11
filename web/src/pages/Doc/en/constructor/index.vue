@@ -357,6 +357,41 @@
 <td>Is the mouse zoom centered around the current position of the mouse, otherwise centered around the canvas</td>
 <td></td>
 </tr>
+<tr>
+<td>customInnerElsAppendTo（v0.6.12+）</td>
+<td>null/HTMLElement</td>
+<td>null</td>
+<td>Specify the location where some internal elements (node text editing element, node note display element, associated line text editing element, node image adjustment button element) are added, and default to document.body</td>
+<td></td>
+</tr>
+<tr>
+<td>nodeDragPlaceholderMaxSize（v0.6.12+）</td>
+<td>Number</td>
+<td>20</td>
+<td>When dragging an element, the maximum height of the block indicating the new position of the element</td>
+<td></td>
+</tr>
+<tr>
+<td>enableCreateHiddenInput（v0.6.13+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Is it allowed to create a hidden input box that will be focused when the node is activated for pasting data and automatically entering the text editing state</td>
+<td></td>
+</tr>
+<tr>
+<td>enableAutoEnterTextEditWhenKeydown（v0.6.13+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Does it automatically enter text editing mode when pressing the Chinese, English, or numeric buttons when there is an activation node? This configuration takes effect when enableCreateHiddenInput is set to true</td>
+<td></td>
+</tr>
+<tr>
+<td>richTextEditFakeInPlace（v0.6.13+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Set the rich text node edit box to match the size of the node, creating a pseudo in place editing effect. It should be noted that only when there is only text within the node and the shape is rectangular, can the effect be better</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
@@ -697,7 +732,7 @@ poor performance and should be used sparingly.</p>
 <tr>
 <td>node_dragend（v0.4.5+）</td>
 <td>Triggered when the node is dragged and ends</td>
-<td></td>
+<td>{ overlapNodeUid, prevNodeUid, nextNodeUid }（v0.6.12+，The node uid to which the node is moved this time, for example, if it is moved to node A, then the overlayNodeUid is the uid of node A. If it is moved to the front of node B, then the nextNodeUid is the uid of node B. You can obtain the node instance through the mindMap. extender.findNodeByUid(uid) method）</td>
 </tr>
 <tr>
 <td>associative_line_click（v0.4.5+）</td>
@@ -718,6 +753,11 @@ poor performance and should be used sparingly.</p>
 <td>node_icon_click（v0.6.10+）</td>
 <td>Triggered when clicking on an icon within a node</td>
 <td>this（node instance）、item（Click on the icon name）、e（event object）</td>
+</tr>
+<tr>
+<td>view_theme_change（v0.6.12+）</td>
+<td>Triggered after calling the setTheme method to set the theme</td>
+<td>theme（theme name）</td>
 </tr>
 </tbody>
 </table>
@@ -817,8 +857,13 @@ redo. All commands are as follows:</p>
 </tr>
 <tr>
 <td>SET_NODE_STYLE</td>
-<td>Modify node style</td>
+<td>Modify node single style</td>
 <td>node (the node to set the style of), prop (style property), value (style property value), isActive (boolean, whether the style being set is for the active state)</td>
+</tr>
+<tr>
+<td>SET_NODE_STYLEs（v0.6.12+）</td>
+<td>Modify multiple styles of nodes</td>
+<td>node（the node to set the style of）、style（Style object，key is style prop，value is style value）、isActive（boolean, whether the style being set is for the active state）</td>
 </tr>
 <tr>
 <td>SET_NODE_ACTIVE</td>

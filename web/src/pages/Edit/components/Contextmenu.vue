@@ -3,6 +3,7 @@
     class="contextmenuContainer listBox"
     v-if="isShow"
     :style="{ left: left + 'px', top: top + 'px' }"
+    :class="{ isDark: isDark }"
   >
     <template v-if="type === 'node'">
       <div
@@ -13,7 +14,11 @@
         {{ $t('contextmenu.insertSiblingNode') }}
         <span class="desc">Enter</span>
       </div>
-      <div class="item" @click="exec('INSERT_CHILD_NODE')" :class="{ disabled: isGeneralization }">
+      <div
+        class="item"
+        @click="exec('INSERT_CHILD_NODE')"
+        :class="{ disabled: isGeneralization }"
+      >
         {{ $t('contextmenu.insertChildNode') }}
         <span class="desc">Tab</span>
       </div>
@@ -45,18 +50,23 @@
         {{ $t('contextmenu.deleteNode') }}
         <span class="desc">Delete</span>
       </div>
-      <div class="item" @click="exec('COPY_NODE')" :class="{ disabled: isGeneralization }">
+      <div
+        class="item"
+        @click="exec('COPY_NODE')"
+        :class="{ disabled: isGeneralization }"
+      >
         {{ $t('contextmenu.copyNode') }}
         <span class="desc">Ctrl + C</span>
       </div>
-      <div class="item" @click="exec('CUT_NODE')" :class="{ disabled: isGeneralization }">
+      <div
+        class="item"
+        @click="exec('CUT_NODE')"
+        :class="{ disabled: isGeneralization }"
+      >
         {{ $t('contextmenu.cutNode') }}
         <span class="desc">Ctrl + X</span>
       </div>
-      <div
-        class="item"
-        @click="exec('PASTE_NODE')"
-      >
+      <div class="item" @click="exec('PASTE_NODE')">
         {{ $t('contextmenu.pasteNode') }}
         <span class="desc">Ctrl + V</span>
       </div>
@@ -74,7 +84,7 @@
       </div>
       <div class="item">
         {{ $t('contextmenu.expandTo') }}
-        <div class="subItems listBox">
+        <div class="subItems listBox" :class="{ isDark: isDark }">
           <div
             class="item"
             v-for="(item, index) in expandList"
@@ -134,7 +144,8 @@ export default {
   },
   computed: {
     ...mapState({
-      isZenMode: state => state.localConfig.isZenMode
+      isZenMode: state => state.localConfig.isZenMode,
+      isDark: state => state.isDark
     }),
     expandList() {
       return [
@@ -188,8 +199,8 @@ export default {
     this.$bus.$off('node_click', this.hide)
     this.$bus.$off('draw_click', this.hide)
     this.$bus.$off('expand_btn_click', this.hide)
-    this.$bus.$on('svg_mousedown', this.onMousedown)
-    this.$bus.$on('mouseup', this.onMouseup)
+    this.$bus.$off('svg_mousedown', this.onMousedown)
+    this.$bus.$off('mouseup', this.onMouseup)
   },
   methods: {
     ...mapMutations(['setLocalConfig']),
@@ -318,6 +329,10 @@ export default {
   border-radius: 4px;
   padding-top: 16px;
   padding-bottom: 16px;
+
+  &.isDark {
+    background: #363b3f;
+  }
 }
 .contextmenuContainer {
   position: fixed;
@@ -325,6 +340,16 @@ export default {
   font-family: PingFangSC-Regular, PingFang SC;
   font-weight: 400;
   color: #1a1a1a;
+
+  &.isDark {
+    color: #fff;
+
+    .item {
+      &:hover {
+        background: hsla(0, 0%, 100%, 0.05);
+      }
+    }
+  }
 
   .item {
     position: relative;

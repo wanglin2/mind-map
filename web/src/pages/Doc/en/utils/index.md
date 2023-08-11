@@ -228,7 +228,27 @@ Determine whether a color is white.
 
 #### isTransparent(color)
 
+> v0.6.11+
+
 Determine whether a color is transparent.
+
+#### nodeRichTextToTextWithWrap(html)
+
+> v0.6.12+
+
+Convert the rich text content of nodes in the form of `<p><span></span><p>` into text wrapped in `\n`.
+
+#### textToNodeRichTextWithWrap(html)
+
+> v0.6.12+
+
+Convert the wrapped text of `<br>` into node rich text content in the form of `<p><span></span><p>`.
+
+#### isMobile()
+
+> v0.6.13+
+
+Determine if it is a mobile environment.
 
 ## Simulate CSS background in Canvas
 

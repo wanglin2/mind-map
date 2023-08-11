@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    class="nodeDialog"
+    class="nodeHyperlinkDialog"
     :title="$t('nodeHyperlink.title')"
     :visible.sync="dialogVisible"
     width="500"
@@ -44,7 +44,15 @@ export default {
     }
   },
   created() {
-    this.$bus.$on('node_active', (...args) => {
+    this.$bus.$on('node_active', this.handleNodeActive)
+    this.$bus.$on('showNodeLink', this.handleShowNodeLink)
+  },
+  beforeDestroy() {
+    this.$bus.$off('node_active', this.handleNodeActive)
+    this.$bus.$off('showNodeLink', this.handleShowNodeLink)
+  },
+  methods: {
+    handleNodeActive(...args) {
       this.activeNodes = args[1]
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
@@ -54,14 +62,14 @@ export default {
         this.link = ''
         this.linkTitle = ''
       }
-    })
-    this.$bus.$on('showNodeLink', () => {
+    },
+
+    handleShowNodeLink() {
       this.activeNodes[0].mindMap.keyCommand.pause()
       this.$bus.$emit('startTextEdit')
       this.dialogVisible = true
-    })
-  },
-  methods: {
+    },
+
     /**
      * @Author: 王林
      * @Date: 2021-06-22 22:08:11
@@ -89,7 +97,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeHyperlinkDialog {
   .item {
     display: flex;
     align-items: center;

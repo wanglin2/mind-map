@@ -1,7 +1,12 @@
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
-import html2canvas from 'html2canvas'
-import { walk, getTextFromHtml, isWhite, getVisibleColorFromTheme } from '../utils'
+import domtoimage from 'dom-to-image-more'
+import {
+  walk,
+  getTextFromHtml,
+  isWhite,
+  getVisibleColorFromTheme
+} from '../utils'
 import { CONSTANTS } from '../constants/constant'
 
 let extended = false
@@ -150,6 +155,12 @@ class RichText {
     if (this.showTextEdit) {
       return
     }
+    const {
+      richTextEditFakeInPlace,
+      customInnerElsAppendTo,
+      nodeTextEditZIndex,
+      textAutoWrapWidth
+    } = this.mindMap.opt
     this.node = node
     this.isInserting = isInserting
     if (!rect) rect = node._textData.node.node.getBoundingClientRect()
@@ -163,34 +174,60 @@ class RichText {
     let scaleX = rect.width / originWidth
     let scaleY = rect.height / originHeight
     // 内边距
-    const paddingX = 6
-    const paddingY = 4
+    let paddingX = 6
+    let paddingY = 4
+    if (richTextEditFakeInPlace) {
+      let paddingValue = node.getPaddingVale()
+      paddingX = paddingValue.paddingX
+      paddingY = paddingValue.paddingY
+    }
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div')
       this.textEditNode.classList.add('smm-richtext-node-edit-wrap')
-      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: ${paddingY}px ${paddingX}px;`
+      this.textEditNode.style.cssText = `
+        position:fixed; 
+        box-sizing: border-box; 
+        box-shadow: 0 0 20px rgba(0,0,0,.5);
+        outline: none; 
+        word-break: 
+        break-all;padding: ${paddingY}px ${paddingX}px;
+      `
       this.textEditNode.addEventListener('click', e => {
         e.stopPropagation()
       })
-      document.body.appendChild(this.textEditNode)
+      this.textEditNode.addEventListener('mousedown', e => {
+        e.stopPropagation()
+      })
+      const targetNode = customInnerElsAppendTo || document.body
+      targetNode.appendChild(this.textEditNode)
     }
     // 使用节点的填充色，否则如果节点颜色是白色的话编辑时看不见
     let bgColor = node.style.merge('fillColor')
     let color = node.style.merge('color')
     this.textEditNode.style.marginLeft = `-${paddingX * scaleX}px`
     this.textEditNode.style.marginTop = `-${paddingY * scaleY}px`
-    this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex
+    this.textEditNode.style.zIndex = nodeTextEditZIndex
     this.textEditNode.style.backgroundColor =
-      bgColor === 'transparent' ? isWhite(color) ? getVisibleColorFromTheme(this.mindMap.themeConfig) : '#fff' : bgColor
+      bgColor === 'transparent'
+        ? isWhite(color)
+          ? getVisibleColorFromTheme(this.mindMap.themeConfig)
+          : '#fff'
+        : bgColor
     this.textEditNode.style.minWidth = originWidth + paddingX * 2 + 'px'
     this.textEditNode.style.minHeight = originHeight + 'px'
     this.textEditNode.style.left = rect.left + 'px'
     this.textEditNode.style.top = rect.top + 'px'
     this.textEditNode.style.display = 'block'
-    this.textEditNode.style.maxWidth =
-      this.mindMap.opt.textAutoWrapWidth + paddingX * 2 + 'px'
+    this.textEditNode.style.maxWidth = textAutoWrapWidth + paddingX * 2 + 'px'
     this.textEditNode.style.transform = `scale(${scaleX}, ${scaleY})`
     this.textEditNode.style.transformOrigin = 'left top'
+    if (richTextEditFakeInPlace) {
+      this.textEditNode.style.borderRadius =
+        (node.style.merge('borderRadius') || 5) + 'px'
+      if (node.style.merge('shape') == 'roundedRectangle') {
+        this.textEditNode.style.borderRadius = (node.height || 50) + 'px'
+      }
+    }
     if (!node.nodeData.data.richText) {
       // 还不是富文本的情况
       let text = node.nodeData.data.text.split(/\n/gim).join('<br>')
@@ -498,11 +535,16 @@ class RichText {
       }
     }
     walk(node)
-    let canvas = await html2canvas(el, {
-      backgroundColor: null
-    })
+
+    // 如果使用html2canvas
+    // let canvas = await html2canvas(el, {
+    //   backgroundColor: null
+    // })
+    // return canvas.toDataURL()
+
+    const res = await domtoimage.toPng(el)
     this.mindMap.el.removeChild(el)
-    return canvas.toDataURL()
+    return res
   }
 
   // 将所有节点转换成非富文本节点

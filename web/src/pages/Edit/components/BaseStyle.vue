@@ -164,6 +164,28 @@
             </el-option>
           </el-select>
         </div>
+        <div class="rowItem" v-if="style.lineStyle === 'curve'">
+          <span class="name">{{ $t('baseStyle.rootStyle') }}</span>
+          <el-select
+            size="mini"
+            style="width: 80px"
+            v-model="style.rootLineKeepSameInCurve"
+            placeholder=""
+            @change="
+              value => {
+                update('rootLineKeepSameInCurve', value)
+              }
+            "
+          >
+            <el-option
+              v-for="item in rootLineKeepSameInCurveList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </div>
       </div>
       <!-- 概要连线 -->
       <div class="title noTop">{{ $t('baseStyle.lineOfOutline') }}</div>
@@ -296,10 +318,10 @@
         </div>
       </div>
       <!-- 关联线文字 -->
-      <div class="title noTop">关联线文字</div>
+      <div class="title noTop">{{ $t('baseStyle.associativeLineText') }}</div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">字体</span>
+          <span class="name">{{ $t('baseStyle.fontFamily') }}</span>
           <el-select
             size="mini"
             v-model="style.associativeLineTextFontFamily"
@@ -319,7 +341,7 @@
       </div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">颜色</span>
+          <span class="name">{{ $t('baseStyle.color') }}</span>
           <span
             class="block"
             v-popover:popover6
@@ -337,7 +359,7 @@
           </el-popover>
         </div>
         <div class="rowItem">
-          <span class="name">字号</span>
+          <span class="name">{{ $t('baseStyle.fontSize') }}</span>
           <el-select
             size="mini"
             style="width: 80px"
@@ -630,7 +652,7 @@
 <script>
 import Sidebar from './Sidebar'
 import Color from './Color'
-import { lineWidthList, lineStyleList, backgroundRepeatList, backgroundPositionList, backgroundSizeList, fontFamilyList, fontSizeList } from '@/config'
+import { lineWidthList, lineStyleList, backgroundRepeatList, backgroundPositionList, backgroundSizeList, fontFamilyList, fontSizeList, rootLineKeepSameInCurveList } from '@/config'
 import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
 import { mapState, mapMutations } from 'vuex'
@@ -667,6 +689,7 @@ export default {
         lineColor: '',
         lineWidth: '',
         lineStyle: '',
+        rootLineKeepSameInCurve: '',
         generalizationLineWidth: '',
         generalizationLineColor: '',
         associativeLineColor: '',
@@ -716,6 +739,9 @@ export default {
     lineStyleList() {
       return lineStyleList[this.$i18n.locale] || lineStyleList.zh
     },
+    rootLineKeepSameInCurveList() {
+      return rootLineKeepSameInCurveList[this.$i18n.locale] || rootLineKeepSameInCurveList.zh
+    },
     backgroundRepeatList() {
       return backgroundRepeatList[this.$i18n.locale] || backgroundRepeatList.zh
     },
@@ -759,6 +785,7 @@ export default {
         'backgroundColor',
         'lineWidth',
         'lineStyle',
+        'rootLineKeepSameInCurve',
         'lineColor',
         'generalizationLineWidth',
         'generalizationLineColor',
@@ -830,6 +857,7 @@ export default {
         this.style[key] = value
       }
       this.data.theme.config[key] = value
+      this.$bus.$emit('showLoading')
       this.mindMap.setThemeConfig(this.data.theme.config)
       storeConfig({
         theme: {

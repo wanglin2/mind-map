@@ -67,6 +67,11 @@
 <p><code>isActive</code>：获取的是否是激活状态的样式值，默认<code>false</code></p>
 <h3>setStyle(prop, value, isActive)</h3>
 <p>修改节点的某个样式，<code>SET_NODE_STYLE</code>命令的快捷方法</p>
+<h3>setStyles(style, isActive)</h3>
+<blockquote>
+<p>v0.6.12+</p>
+</blockquote>
+<p>修改节点多个样式，<code>SET_NODE_STYLES</code>命令的快捷方法</p>
 <h3>getData(key)</h3>
 <p>获取该节点真实数据<code>nodeData</code>的<code>data</code>对象里的指定值，<code>key</code>不传返回这个<code>data</code>对象</p>
 <h3>setData(data)</h3>

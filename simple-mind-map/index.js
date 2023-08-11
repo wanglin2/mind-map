@@ -164,6 +164,7 @@ class MindMap {
     this.renderer.clearAllActive()
     this.opt.theme = theme
     this.render(null, CONSTANTS.CHANGE_THEME)
+	this.emit('view_theme_change', theme)
   }
 
   //  获取当前主题

@@ -1,5 +1,8 @@
 <template>
-  <div class="container" :class="{ isDark: isDark }">
+  <div
+    class="container"
+    :class="{ isDark: isDark, activeSidebar: activeSidebar }"
+  >
     <template v-if="show">
       <Toolbar v-if="!isZenMode"></Toolbar>
       <Edit></Edit>
@@ -27,7 +30,8 @@ export default {
   computed: {
     ...mapState({
       isZenMode: state => state.localConfig.isZenMode,
-      isDark: state => state.isDark
+      isDark: state => state.isDark,
+      activeSidebar: state => state.activeSidebar
     })
   },
   watch: {
@@ -75,14 +79,15 @@ export default {
 </script>
 
 <style lang="less">
-.container {}
+.container {
+}
 
 body {
   &.isDark {
     /* el-button */
     .el-button {
       background-color: #363b3f;
-      color: hsla(0,0%,100%,.9);
+      color: hsla(0, 0%, 100%, 0.9);
       border-color: hsla(0, 0%, 100%, 0.1);
     }
 
@@ -96,10 +101,11 @@ body {
     .el-input.is-disabled .el-input__inner {
       background-color: #363b3f;
       border-color: hsla(0, 0%, 100%, 0.1);
-      color: hsla(0,0%,100%,.3);
+      color: hsla(0, 0%, 100%, 0.3);
     }
 
-    .el-input-group__append, .el-input-group__prepend {
+    .el-input-group__append,
+    .el-input-group__prepend {
       background-color: #363b3f;
       border-color: hsla(0, 0%, 100%, 0.1);
     }
@@ -145,11 +151,11 @@ body {
       border-bottom-color: #36393d;
     }
 
-    .el-popper[x-placement^=top] .popper__arrow {
+    .el-popper[x-placement^='top'] .popper__arrow {
       background-color: #36393d;
     }
 
-    .el-popper[x-placement^=top] .popper__arrow::after {
+    .el-popper[x-placement^='top'] .popper__arrow::after {
       border-top-color: #36393d;
     }
 
@@ -159,7 +165,7 @@ body {
 
       &:hover,
       &.is-active {
-        color: #409EFF;
+        color: #409eff;
       }
     }
 
@@ -179,9 +185,9 @@ body {
         color: hsla(0, 0%, 100%, 0.6);
       }
 
-      .el-radio-button__orig-radio:checked+.el-radio-button__inner {
-        color: #FFF;
-        background-color: #409EFF;
+      .el-radio-button__orig-radio:checked + .el-radio-button__inner {
+        color: #fff;
+        background-color: #409eff;
       }
     }
 
@@ -190,11 +196,11 @@ body {
       background-color: #262a2e;
 
       .el-dialog__header {
-        border-bottom: 1px solid hsla(0,0%,100%,.1);
+        border-bottom: 1px solid hsla(0, 0%, 100%, 0.1);
       }
 
       .el-dialog__title {
-        color: hsla(0,0%,100%,.9);
+        color: hsla(0, 0%, 100%, 0.9);
       }
 
       .el-dialog__body {
@@ -202,7 +208,7 @@ body {
       }
 
       .el-dialog__footer {
-        border-top: 1px solid hsla(0,0%,100%,.1);
+        border-top: 1px solid hsla(0, 0%, 100%, 0.1);
       }
     }
 

@@ -45,9 +45,11 @@ mindMap.on('search_info_change', (data) => {
 
 结束搜索。
 
-### replace(replaceText)
+### replace(replaceText, jumpNext = false)
 
 - `replaceText`：要进行替换的文本
+
+- `jumpNext`：v0.6.12+，是否自动跳转到下一个匹配节点
 
 替换当前节点内容，要在调用了`search`方法之后调用，会替换当前定位到的匹配节点内容。
 

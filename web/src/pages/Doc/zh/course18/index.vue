@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1>如何持久化数据</h1>
+<blockquote>
+<p>目前提供了一种新方式，可以参考<a href="https://wanglin2.github.io/mind-map/#/doc/zh/deploy/%E5%AF%B9%E6%8E%A5%E8%87%AA%E5%B7%B1%E7%9A%84%E5%AD%98%E5%82%A8%E6%9C%8D%E5%8A%A1">对接自己的存储服务</a>。</p>
+</blockquote>
 <p>在线<code>demo</code>的数据是存储在电脑本地的，也就是<code>localStorage</code>里，当然，你也可以存储到数据库中。</p>
 <h2>保存数据</h2>
 <p>保存数据，一般有两种做法，一是让用户手动保存，二是当画布上的数据改变后自动保存，显然，第二中体验更好一点。</p>

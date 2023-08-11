@@ -45,9 +45,11 @@ Search for node content, which can be called repeatedly. Each call will search a
 
 End search.
 
-### replace(replaceText)
+### replace(replaceText, jumpNext = false)
 
 - `replaceText`: Text to be replaced
+
+- `jumpNext`: v0.6.12+, Whether to automatically jump to the next matching node
 
 To replace the content of the current node, call the 'search' method after calling it to replace the content of the currently located matching node.
 

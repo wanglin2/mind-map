@@ -50,7 +50,7 @@ export const bindFileHandleEvent = ({ mainWindow, initOpenFileQueue }) => {
       win.loadURL(
         process.env.WEBPACK_DEV_SERVER_URL + '/#/workbenche/edit/' + id
       )
-      if (!process.env.IS_TEST) win.webContents.openDevTools()
+      // if (!process.env.IS_TEST) win.webContents.openDevTools()
     } else {
       // Load the index.html when not in development
       win.loadURL('app://./index.html/#/workbenche/edit/' + id)

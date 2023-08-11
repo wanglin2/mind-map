@@ -108,6 +108,11 @@ export default class KeyCommand {
     return arr
   }
 
+  // 判断是否按下了组合键
+  hasCombinationKey(e) {
+    return e.ctrlKey || e.metaKey || e.altKey || e.shiftKey
+  }
+
   //  获取快捷键对应的键值数组
   getKeyCodeArr(key) {
     let keyArr = key.split(/\s*\+\s*/)

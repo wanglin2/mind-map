@@ -1,6 +1,5 @@
 import Style from './Style'
 import Shape from './Shape'
-import { asyncRun, nodeToHTML } from '../../../utils'
 import { G, Rect, ForeignObject, SVG } from '@svgdotjs/svg.js'
 import nodeGeneralizationMethods from './nodeGeneralization'
 import nodeExpandBtnMethods from './nodeExpandBtn'
@@ -98,6 +97,8 @@ class Node {
     this.isMultipleChoice = false
     // 是否需要重新layout
     this.needLayout = false
+    // 当前是否是隐藏状态
+    this.isHide = false
     // 概要相关方法
     Object.keys(nodeGeneralizationMethods).forEach(item => {
       this[item] = nodeGeneralizationMethods[item].bind(this)
@@ -368,7 +369,13 @@ class Node {
         })
       }
       this.group.add(this._unVisibleRectRegionNode)
-      this.renderer.layout.renderExpandBtnRect(this._unVisibleRectRegionNode, this.expandBtnSize, width, height, this)
+      this.renderer.layout.renderExpandBtnRect(
+        this._unVisibleRectRegionNode,
+        this.expandBtnSize,
+        width,
+        height,
+        this
+      )
     }
   }
 
@@ -385,10 +392,10 @@ class Node {
       this.active(e)
     })
     this.group.on('mousedown', e => {
-      if (this.isRoot && e.which === 3) {
+      if (this.isRoot && e.which === 3 && !this.mindMap.opt.readonly) {
         e.stopPropagation()
       }
-      if (!this.isRoot) {
+      if (!this.isRoot && e.which !== 2 && !this.mindMap.opt.readonly) {
         e.stopPropagation()
       }
       // 多选和取消多选
@@ -414,7 +421,7 @@ class Node {
       this.mindMap.emit('node_mousedown', this, e)
     })
     this.group.on('mouseup', e => {
-      if (!this.isRoot) {
+      if (!this.isRoot && e.which !== 2 && !this.mindMap.opt.readonly) {
         e.stopPropagation()
       }
       this.mindMap.emit('node_mouseup', this, e)
@@ -476,9 +483,7 @@ class Node {
     if (!this.group) {
       return
     }
-    let {
-      alwaysShowExpandBtn
-    } = this.mindMap.opt
+    let { alwaysShowExpandBtn } = this.mindMap.opt
     if (alwaysShowExpandBtn) {
       // 需要移除展开收缩按钮
       if (this._expandBtn && this.nodeData.children.length <= 0) {
@@ -500,9 +505,46 @@ class Node {
     this.renderGeneralization()
     // 更新节点位置
     let t = this.group.transform()
+    // // 如果上次不在可视区内，且本次也不在，那么直接返回
+    // let { left: ox, top: oy } = this.getNodePosInClient(
+    //   t.translateX,
+    //   t.translateY
+    // )
+    // let oldIsInClient =
+    //   ox > 0 && oy > 0 && ox < this.mindMap.width && oy < this.mindMap.height
+    // let { left: nx, top: ny } = this.getNodePosInClient(this.left, this.top)
+    // let newIsNotInClient =
+    //   nx + this.width < 0 ||
+    //   ny + this.height < 0 ||
+    //   nx > this.mindMap.width ||
+    //   ny > this.mindMap.height
+    // if (!oldIsInClient && newIsNotInClient) {
+    //   if (!this.isHide) {
+    //     this.isHide = true
+    //     this.group.hide()
+    //   }
+    //   return
+    // }
+    // // 如果当前是隐藏状态，那么先显示
+    // if (this.isHide) {
+    //   this.isHide = false
+    //   this.group.show()
+    // }
     // 如果节点位置没有变化，则返回
     if (this.left === t.translateX && this.top === t.translateY) return
     this.group.translate(this.left - t.translateX, this.top - t.translateY)
+  }
+
+  // 获取节点相当于画布的位置
+  getNodePosInClient(_left, _top) {
+    let drawTransform = this.mindMap.draw.transform()
+    let { scaleX, scaleY, translateX, translateY } = drawTransform
+    let left = _left * scaleX + translateX
+    let top = _top * scaleY + translateY
+    return {
+      left,
+      top
+    }
   }
 
   // 重新渲染节点，即重新创建节点内容、计算节点大小、计算节点内容布局、更新展开收起按钮，概要及位置
@@ -559,18 +601,14 @@ class Node {
       this.nodeData.data.expand !== false
     ) {
       let index = 0
-      asyncRun(
-        this.children.map(item => {
-          return () => {
-            item.render(() => {
-              index++
-              if (index >= this.children.length) {
-                callback()
-              }
-            })
+      this.children.forEach(item => {
+        item.render(() => {
+          index++
+          if (index >= this.children.length) {
+            callback()
           }
         })
-      )
+      })
     } else {
       callback()
     }
@@ -592,13 +630,9 @@ class Node {
     this.removeLine()
     // 子节点
     if (this.children && this.children.length) {
-      asyncRun(
-        this.children.map(item => {
-          return () => {
-            item.remove()
-          }
-        })
-      )
+      this.children.forEach(item => {
+        item.remove()
+      })
     }
   }
 
@@ -624,13 +658,9 @@ class Node {
     }
     // 子节点
     if (this.children && this.children.length) {
-      asyncRun(
-        this.children.map(item => {
-          return () => {
-            item.hide()
-          }
-        })
-      )
+      this.children.forEach(item => {
+        item.hide()
+      })
     }
   }
 
@@ -650,13 +680,9 @@ class Node {
     }
     // 子节点
     if (this.children && this.children.length) {
-      asyncRun(
-        this.children.map(item => {
-          return () => {
-            item.show()
-          }
-        })
-      )
+      this.children.forEach(item => {
+        item.show()
+      })
     }
   }
 

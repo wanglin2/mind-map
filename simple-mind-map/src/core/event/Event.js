@@ -10,6 +10,7 @@ class Event extends EventEmitter {
     this.mindMap = opt.mindMap
     this.isLeftMousedown = false
     this.isRightMousedown = false
+    this.isMiddleMousedown = false
     this.mousedownPos = {
       x: 0,
       y: 0
@@ -92,6 +93,8 @@ class Event extends EventEmitter {
       this.isLeftMousedown = true
     } else if (e.which === 3) {
       this.isRightMousedown = true
+    } else if (e.which === 2) {
+      this.isMiddleMousedown = true
     }
     this.mousedownPos.x = e.clientX
     this.mousedownPos.y = e.clientY
@@ -107,9 +110,10 @@ class Event extends EventEmitter {
     this.mousemoveOffset.y = e.clientY - this.mousedownPos.y
     this.emit('mousemove', e, this)
     if (
-      useLeftKeySelectionRightKeyDrag
+      this.isMiddleMousedown ||
+      (useLeftKeySelectionRightKeyDrag
         ? this.isRightMousedown
-        : this.isLeftMousedown
+        : this.isLeftMousedown) 		
     ) {
       e.preventDefault()
       this.emit('drag', e, this)
@@ -120,6 +124,7 @@ class Event extends EventEmitter {
   onMouseup(e) {
     this.isLeftMousedown = false
     this.isRightMousedown = false
+    this.isMiddleMousedown = false
     this.emit('mouseup', e, this)
   }
 

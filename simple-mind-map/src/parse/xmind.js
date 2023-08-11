@@ -123,6 +123,7 @@ const transformOldXmind = content => {
   let elements = data.elements
   let root = null
   let getRoot = arr => {
+    if (!arr) return
     for (let i = 0; i < arr.length; i++) {
       if (!root && arr[i].name === 'topic') {
         root = arr[i]
@@ -142,9 +143,10 @@ const transformOldXmind = content => {
   }
   let walk = (node, newNode) => {
     let nodeElements = node.elements
+    let nodeTitle = getItemByName(nodeElements, 'title')
     newNode.data = {
       // 节点内容
-      text: getItemByName(nodeElements, 'title').elements[0].text
+      text: nodeTitle && nodeTitle.elements && nodeTitle.elements[0].text
     }
     try {
       // 节点备注

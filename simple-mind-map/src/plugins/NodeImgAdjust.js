@@ -82,7 +82,7 @@ class NodeImgAdjust {
       this.createResizeBtnEl()
     }
     this.setHandleElRect()
-    document.body.appendChild(this.handleEl)
+    this.handleEl.style.display = 'block'
     this.isShowHandleEl = true
   }
 
@@ -90,7 +90,7 @@ class NodeImgAdjust {
   hideHandleEl() {
     if (!this.isShowHandleEl) return
     this.isShowHandleEl = false
-    document.body.removeChild(this.handleEl)
+    this.handleEl.style.display = 'none'
     this.handleEl.style.backgroundImage = ``
     this.handleEl.style.width = 0
     this.handleEl.style.height = 0
@@ -121,8 +121,10 @@ class NodeImgAdjust {
     this.handleEl.style.cssText = `
       pointer-events: none;
       position: fixed;
+	    display:none;
       background-size: cover;
     `
+    this.handleEl.className = 'node-img-handle'
     // 调整按钮元素
     const btnEl = document.createElement('div')
     btnEl.innerHTML = btnsSvg.imgAdjust
@@ -139,7 +141,7 @@ class NodeImgAdjust {
       align-items: center;
       cursor: nwse-resize;
     `
-    this.handleEl.appendChild(btnEl)
+    btnEl.className = 'node-image-resize'
     // 给按钮元素绑定事件
     btnEl.addEventListener('mouseenter', () => {
       // 移入按钮，会触发节点图片的移出事件，所以需要再次显示按钮
@@ -151,8 +153,50 @@ class NodeImgAdjust {
       this.hideHandleEl()
     })
     btnEl.addEventListener('mousedown', e => {
+      e.stopPropagation()
       this.onMousedown(e)
     })
+    btnEl.addEventListener('mouseup', e => {
+      setTimeout(() => {
+        //点击后直接松开异常处理; 其他事件响应之后处理
+        this.hideHandleEl()
+        this.isAdjusted = false
+      }, 0)
+    })
+    btnEl.addEventListener('click', e => {
+      e.stopPropagation()
+    })
+    this.handleEl.appendChild(btnEl)
+    // 删除按钮
+    const btnRemove = document.createElement('div')
+    this.handleEl.prepend(btnRemove)
+    btnRemove.className = 'node-image-remove'
+    btnRemove.innerHTML = btnsSvg.remove
+    btnRemove.style.cssText = `
+      position: absolute;
+      right: 0;top:0;color:#fff;
+      pointer-events: auto;
+      background-color: rgba(0, 0, 0, 0.3);
+      width: ${this.resizeBtnSize}px;
+      height: ${this.resizeBtnSize}px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    `
+    btnRemove.addEventListener('mouseenter', e => {
+      this.showHandleEl()
+    })
+    btnRemove.addEventListener('mouseleave', e => {
+      if (this.isMousedown) return
+      this.hideHandleEl()
+    })
+    btnRemove.addEventListener('click', e => {
+      this.mindMap.execCommand('SET_NODE_IMAGE', this.node, { url: null })
+    })
+    // 添加元素到页面
+    const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
+    targetNode.appendChild(this.handleEl)
   }
 
   // 鼠标按钮按下事件

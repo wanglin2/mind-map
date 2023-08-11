@@ -46,7 +46,11 @@ export default {
     associativeLineActiveColor: '激活颜色',
     mousewheelZoomActionReverse: '鼠标滚轮缩放',
     mousewheelZoomActionReverse1: '向前缩小向后放大',
-    mousewheelZoomActionReverse2: '向前放大向后缩小'
+    mousewheelZoomActionReverse2: '向前放大向后缩小',
+    rootStyle: '根节点',
+    associativeLineText: '关联线文字',
+    fontFamily: '字体',
+    fontSize: '字号'
   },
   color: {
     moreColor: '更多颜色'
@@ -203,7 +207,8 @@ export default {
     export: '导出',
     shortcutKey: '快捷键',
     associativeLine: '关联线',
-    save: '保存'
+    save: '保存',
+    painter: '格式刷'
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',

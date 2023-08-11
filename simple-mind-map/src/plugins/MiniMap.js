@@ -25,6 +25,11 @@ class MiniMap {
     let { svg, rect, origWidth, origHeight, scaleX, scaleY } =
       this.mindMap.getSvgData()
     // 计算数据
+    const elRect = this.mindMap.elRect
+    rect.x -= elRect.left
+    rect.x2 -= elRect.left
+    rect.y -= elRect.top
+    rect.y2 -= elRect.top
     let boxRatio = boxWidth / boxHeight
     let actWidth = 0
     let actHeight = 0
@@ -55,19 +60,28 @@ class MiniMap {
       bottom: 0
     }
     viewBoxStyle.left =
-      Math.max(0, (-_rectX / _rectWidth) * actWidth) + miniMapBoxLeft + 'px'
+      Math.max(0, (-_rectX / _rectWidth) * actWidth) + miniMapBoxLeft
     viewBoxStyle.right =
       Math.max(0, ((_rectX2 - origWidth) / _rectWidth) * actWidth) +
-      miniMapBoxLeft +
-      'px'
+      miniMapBoxLeft
 
     viewBoxStyle.top =
-      Math.max(0, (-_rectY / _rectHeight) * actHeight) + miniMapBoxTop + 'px'
+      Math.max(0, (-_rectY / _rectHeight) * actHeight) + miniMapBoxTop
     viewBoxStyle.bottom =
       Math.max(0, ((_rectY2 - origHeight) / _rectHeight) * actHeight) +
-      miniMapBoxTop +
-      'px'
-    
+      miniMapBoxTop
+
+    if (viewBoxStyle.top > miniMapBoxTop + actHeight) {
+      viewBoxStyle.top = miniMapBoxTop + actHeight
+    }
+    if (viewBoxStyle.left > miniMapBoxLeft + actWidth) {
+      viewBoxStyle.left = miniMapBoxLeft + actWidth
+    }
+
+    Object.keys(viewBoxStyle).forEach((key) => {
+      viewBoxStyle[key] = viewBoxStyle[key] + 'px'
+    })
+
     this.removeNodeContent(svg)
     return {
       svgHTML: svg.svg(), // 小地图html

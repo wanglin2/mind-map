@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    class="nodeDialog"
+    class="nodeNoteDialog"
     :title="$t('nodeNote.title')"
     :visible.sync="dialogVisible"
     width="500"
@@ -43,7 +43,15 @@ export default {
     }
   },
   created() {
-    this.$bus.$on('node_active', (...args) => {
+    this.$bus.$on('node_active', this.handleNodeActive)
+    this.$bus.$on('showNodeNote', this.handleShowNodeNote)
+  },
+  beforeDestroy() {
+    this.$bus.$off('node_active', this.handleNodeActive)
+    this.$bus.$off('showNodeNote', this.handleShowNodeNote)
+  },
+  methods: {
+    handleNodeActive(...args) {
       this.activeNodes = args[1]
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
@@ -51,16 +59,16 @@ export default {
       } else {
         this.note = ''
       }
-    })
-    this.$bus.$on('showNodeNote', () => {
+    },
+
+    handleShowNodeNote() {
       this.$bus.$emit('startTextEdit')
       this.dialogVisible = true
       this.$nextTick(() => {
         this.initEditor()
       })
-    })
-  },
-  methods: {
+    },
+
     /**
      * @Author: 王林25
      * @Date: 2022-05-09 11:37:05
@@ -105,7 +113,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeNoteDialog {
   .tip {
     margin-top: 5px;
     color: #dcdfe6;

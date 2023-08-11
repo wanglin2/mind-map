@@ -1,16 +1,24 @@
 <template>
   <el-dialog
-    class="nodeDialog"
+    class="nodeImageDialog"
     :title="$t('nodeImage.title')"
     :visible.sync="dialogVisible"
     width="500"
   >
     <div class="title">方式一</div>
-    <ImgUpload ref="ImgUpload" v-model="img" style="margin-bottom: 12px;"></ImgUpload>
+    <ImgUpload
+      ref="ImgUpload"
+      v-model="img"
+      style="margin-bottom: 12px;"
+    ></ImgUpload>
     <div class="title">方式二</div>
     <div class="inputBox">
       <span class="label">请输入图片地址</span>
-      <el-input v-model="imgUrl" size="mini" placeholder="http://xxx.com/xx.jpg"></el-input>
+      <el-input
+        v-model="imgUrl"
+        size="mini"
+        placeholder="http://xxx.com/xx.jpg"
+      ></el-input>
     </div>
     <div class="title">可选</div>
     <div class="inputBox">
@@ -50,10 +58,19 @@ export default {
     }
   },
   created() {
-    this.$bus.$on('node_active', (...args) => {
+    this.$bus.$on('node_active', this.handleNodeActive)
+    this.$bus.$on('showNodeImage', this.handleShowNodeImage)
+  },
+  beforeDestroy() {
+    this.$bus.$off('node_active', this.handleNodeActive)
+    this.$bus.$off('showNodeImage', this.handleShowNodeImage)
+  },
+  methods: {
+    handleNodeActive(...args) {
       this.activeNodes = args[1]
-    })
-    this.$bus.$on('showNodeImage', () => {
+    },
+
+    handleShowNodeImage() {
       this.reset()
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
@@ -68,9 +85,8 @@ export default {
         this.imgTitle = firstNode.getData('imageTitle')
       }
       this.dialogVisible = true
-    })
-  },
-  methods: {
+    },
+
     cancel() {
       this.dialogVisible = false
       this.reset()
@@ -112,7 +128,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.nodeDialog {
+.nodeImageDialog {
   .title {
     font-size: 18px;
     margin-bottom: 12px;

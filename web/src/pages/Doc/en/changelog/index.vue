@@ -1,6 +1,56 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.6.13</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue of the inability to drag the canvas while holding down the middle mouse button on a node in read-only mode.</p>
+<p>2.Fixed the issue of probabilistic error reporting after quickly dragging nodes several times.</p>
+<p>3.Fix the issue of pulling up the input method during operations such as activating nodes on the mobile end, expanding and collapsing.</p>
+<p>4.Fix the issue where an exception request is initiated when the background image in the theme configuration is none.</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Mobile gesture scaling optimization: Scale according to a linear relationship, and adjust the canvas position with double finger displacement.</p>
+<p>2.Remove the logic of asynchronous rendering nodes and improve the speed of creating new nodes.</p>
+<p>3.The export of images has been changed from the html2canvas library to the dom to image more library to address the issue of missing text styles in exporting rich text nodes.</p>
+<p>4.When a non rich text input box enters the editing state, it is deselected by default.</p>
+<p>5.When there is an activation node, it supports automatically entering text editing mode when pressing the Chinese, numeric, or English buttons.</p>
+</blockquote>
+<p>Demo：</p>
+<blockquote>
+<p>1.Add anti shake operations when saving view data to optimize performance.</p>
+<p>2.Some time-consuming operations add loading effects.</p>
+<p>3.Improve the dark mode of right-click menus and rich text toolbars.</p>
+</blockquote>
+<h2>0.6.12</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue where the indicator in the mini map will also move out of the mini map area when the mind map is completely moved out of the visible area.</p>
+<p>2.Fix the issue of overly sensitive dual finger scaling on the mobile end.</p>
+<p>3.Fix the issue of holding down nodes while dragging the canvas in read-only mode.</p>
+<p>4.Fix the issue of incorrect rendering of the mini map when the distance between the mind map and the top left corner of the browser window is not 0.</p>
+<p>5.Fix the issue of the prompt block being too large for the new location when moving nodes.</p>
+<p>6.Fix the issue where search cannot be replaced with empty characters.</p>
+<p>7.Fixed the issue of missing line breaks after searching and replacing in rich text mode.</p>
+<p>8.Fixed the issue of missing focus in the input box when clicking on text editing in the outline.</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Adding a callback parameter to the node move end event (node_drag) can obtain the uid of the move to the node.</p>
+<p>2.Support specifying the location to which internal elements are added through configuration.</p>
+<p>3.Support the format brush function.</p>
+<p>4.Under the curve style, the connection line style of the root node supports consistency with other nodes.</p>
+<p>5.Search supports continuous replacement.</p>
+<p>6.Add and delete button for node image.</p>
+<p>7.Support dragging the canvas while holding down the middle mouse button.</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.Provide an application takeover mode to facilitate docking with one's own storage services; Supports setting static resource paths at runtime.</p>
+<p>2.Refactoring outline: 1. No longer use the text style that comes with the node; 2. Support full screen editing of the outline; 3. The outline supports dragging and moving nodes; 4. The outline supports deleting nodes.</p>
+<p>3.Fix the issue of interface dark mode not updating in the scenario of importing data.</p>
+</blockquote>
 <h2>0.6.11-fix.1</h2>
 <p>Fix: 1.Fixed the issue of invisible editing when node text is white.</p>
 <h2>0.6.11</h2>
