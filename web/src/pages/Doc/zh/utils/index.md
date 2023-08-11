@@ -239,6 +239,12 @@ copyNodeTree({}, node)
 
 将`<br>`换行的文本转换成`<p><span></span><p>`形式的节点富文本内容。
 
+#### isMobile()
+
+> v0.6.13+
+
+判断是否是移动端环境。
+
 ## 在canvas中模拟css的背景属性
 
 引入：

@@ -1,6 +1,28 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.6.13</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue of the inability to drag the canvas while holding down the middle mouse button on a node in read-only mode.</p>
+<p>2.Fixed the issue of probabilistic error reporting after quickly dragging nodes several times.</p>
+<p>3.Fix the issue of pulling up the input method during operations such as activating nodes on the mobile end, expanding and collapsing.</p>
+<p>4.Fix the issue where an exception request is initiated when the background image in the theme configuration is none.</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Mobile gesture scaling optimization: Scale according to a linear relationship, and adjust the canvas position with double finger displacement.</p>
+<p>2.Remove the logic of asynchronous rendering nodes and improve the speed of creating new nodes.</p>
+<p>3.The export of images has been changed from the html2canvas library to the dom to image more library to address the issue of missing text styles in exporting rich text nodes.</p>
+<p>4.When a non rich text input box enters the editing state, it is deselected by default.</p>
+<p>5.When there is an activation node, it supports automatically entering text editing mode when pressing the Chinese, numeric, or English buttons.</p>
+</blockquote>
+<p>Demo：</p>
+<blockquote>
+<p>1.Add anti shake operations when saving view data to optimize performance.</p>
+<p>2.Some time-consuming operations add loading effects.</p>
+<p>3.Improve the dark mode of right-click menus and rich text toolbars.</p>
+</blockquote>
 <h2>0.6.12</h2>
 <p>Fix:</p>
 <blockquote>

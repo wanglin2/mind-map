@@ -174,6 +174,11 @@ and copying the <code>data</code> of the data object, example:</p>
 <p>v0.6.12+</p>
 </blockquote>
 <p>Convert the wrapped text of <code>&lt;br&gt;</code> into node rich text content in the form of <code>&lt;p&gt;&lt;span&gt;&lt;/span&gt;&lt;p&gt;</code>.</p>
+<h4>isMobile()</h4>
+<blockquote>
+<p>v0.6.13+</p>
+</blockquote>
+<p>Determine if it is a mobile environment.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

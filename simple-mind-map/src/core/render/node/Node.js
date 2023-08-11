@@ -97,6 +97,8 @@ class Node {
     this.isMultipleChoice = false
     // 是否需要重新layout
     this.needLayout = false
+    // 当前是否是隐藏状态
+    this.isHide = false
     // 概要相关方法
     Object.keys(nodeGeneralizationMethods).forEach(item => {
       this[item] = nodeGeneralizationMethods[item].bind(this)
@@ -367,7 +369,13 @@ class Node {
         })
       }
       this.group.add(this._unVisibleRectRegionNode)
-      this.renderer.layout.renderExpandBtnRect(this._unVisibleRectRegionNode, this.expandBtnSize, width, height, this)
+      this.renderer.layout.renderExpandBtnRect(
+        this._unVisibleRectRegionNode,
+        this.expandBtnSize,
+        width,
+        height,
+        this
+      )
     }
   }
 
@@ -475,9 +483,7 @@ class Node {
     if (!this.group) {
       return
     }
-    let {
-      alwaysShowExpandBtn
-    } = this.mindMap.opt
+    let { alwaysShowExpandBtn } = this.mindMap.opt
     if (alwaysShowExpandBtn) {
       // 需要移除展开收缩按钮
       if (this._expandBtn && this.nodeData.children.length <= 0) {
@@ -499,9 +505,46 @@ class Node {
     this.renderGeneralization()
     // 更新节点位置
     let t = this.group.transform()
+    // // 如果上次不在可视区内，且本次也不在，那么直接返回
+    // let { left: ox, top: oy } = this.getNodePosInClient(
+    //   t.translateX,
+    //   t.translateY
+    // )
+    // let oldIsInClient =
+    //   ox > 0 && oy > 0 && ox < this.mindMap.width && oy < this.mindMap.height
+    // let { left: nx, top: ny } = this.getNodePosInClient(this.left, this.top)
+    // let newIsNotInClient =
+    //   nx + this.width < 0 ||
+    //   ny + this.height < 0 ||
+    //   nx > this.mindMap.width ||
+    //   ny > this.mindMap.height
+    // if (!oldIsInClient && newIsNotInClient) {
+    //   if (!this.isHide) {
+    //     this.isHide = true
+    //     this.group.hide()
+    //   }
+    //   return
+    // }
+    // // 如果当前是隐藏状态，那么先显示
+    // if (this.isHide) {
+    //   this.isHide = false
+    //   this.group.show()
+    // }
     // 如果节点位置没有变化，则返回
     if (this.left === t.translateX && this.top === t.translateY) return
     this.group.translate(this.left - t.translateX, this.top - t.translateY)
+  }
+
+  // 获取节点相当于画布的位置
+  getNodePosInClient(_left, _top) {
+    let drawTransform = this.mindMap.draw.transform()
+    let { scaleX, scaleY, translateX, translateY } = drawTransform
+    let left = _left * scaleX + translateX
+    let top = _top * scaleY + translateY
+    return {
+      left,
+      top
+    }
   }
 
   // 重新渲染节点，即重新创建节点内容、计算节点大小、计算节点内容布局、更新展开收起按钮，概要及位置

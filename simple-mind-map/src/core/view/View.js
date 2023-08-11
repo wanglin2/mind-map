@@ -82,15 +82,20 @@ class View {
           // 鼠标滚轮，向上和向左，都是缩小
           case CONSTANTS.DIR.UP:
           case CONSTANTS.DIR.LEFT:
-            mousewheelZoomActionReverse ? this.enlarge(cx, cy, isTouchPad) : this.narrow(cx, cy, isTouchPad)
+            mousewheelZoomActionReverse
+              ? this.enlarge(cx, cy, isTouchPad)
+              : this.narrow(cx, cy, isTouchPad)
             break
           // 鼠标滚轮，向下和向右，都是放大
           case CONSTANTS.DIR.DOWN:
           case CONSTANTS.DIR.RIGHT:
-            mousewheelZoomActionReverse ? this.narrow(cx, cy, isTouchPad) : this.enlarge(cx, cy, isTouchPad)
+            mousewheelZoomActionReverse
+              ? this.narrow(cx, cy, isTouchPad)
+              : this.enlarge(cx, cy, isTouchPad)
             break
         }
-      } else {// 鼠标滚轮事件控制画布移动
+      } else {
+        // 鼠标滚轮事件控制画布移动
         let step = mousewheelMoveStep
         if (isTouchPad) {
           step = 5
@@ -147,6 +152,7 @@ class View {
 
   //  平移x,y方向
   translateXY(x, y) {
+    if (x === 0 && y === 0) return
     this.x += x
     this.y += y
     this.transform()
@@ -154,24 +160,28 @@ class View {
 
   //  平移x方向
   translateX(step) {
+    if (step === 0) return
     this.x += step
     this.transform()
   }
 
   //  平移x方式到
   translateXTo(x) {
+    if (x === 0) return
     this.x = x
     this.transform()
   }
 
   //  平移y方向
   translateY(step) {
+    if (step === 0) return
     this.y += step
     this.transform()
   }
 
   //  平移y方向到
   translateYTo(y) {
+    if (y === 0) return
     this.y = y
     this.transform()
   }

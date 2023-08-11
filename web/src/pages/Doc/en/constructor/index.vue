@@ -371,6 +371,27 @@
 <td>When dragging an element, the maximum height of the block indicating the new position of the element</td>
 <td></td>
 </tr>
+<tr>
+<td>enableCreateHiddenInput（v0.6.13+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Is it allowed to create a hidden input box that will be focused when the node is activated for pasting data and automatically entering the text editing state</td>
+<td></td>
+</tr>
+<tr>
+<td>enableAutoEnterTextEditWhenKeydown（v0.6.13+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Does it automatically enter text editing mode when pressing the Chinese, English, or numeric buttons when there is an activation node? This configuration takes effect when enableCreateHiddenInput is set to true</td>
+<td></td>
+</tr>
+<tr>
+<td>richTextEditFakeInPlace（v0.6.13+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Set the rich text node edit box to match the size of the node, creating a pseudo in place editing effect. It should be noted that only when there is only text within the node and the shape is rectangular, can the effect be better</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>

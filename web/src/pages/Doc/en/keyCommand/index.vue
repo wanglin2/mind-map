@@ -46,6 +46,14 @@ the shortcut will be removed</p>
 <p>v0.2.3+</p>
 </blockquote>
 <p>Restore saved shortcut data, then clear the cache data</p>
+<h3>hasCombinationKey(e)</h3>
+<blockquote>
+<p>v0.6.13+</p>
+</blockquote>
+<ul>
+<li><code>e</code>: Event object.</li>
+</ul>
+<p>Determine if the combination key has been pressed.</p>
 
   </div>
 </template>
