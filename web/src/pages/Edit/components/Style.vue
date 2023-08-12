@@ -142,6 +142,9 @@
               v-model="style.textDecoration"
               @change="update('textDecoration')"
             >
+              <el-radio-button label="none">{{
+                $t('style.none')
+              }}</el-radio-button>
               <el-radio-button label="underline">{{
                 $t('style.underline')
               }}</el-radio-button>
