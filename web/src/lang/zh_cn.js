@@ -166,6 +166,7 @@ export default {
     addFontWeight: '加粗',
     italic: '斜体',
     textDecoration: '划线',
+    none: '无',
     underline: '下划线',
     lineThrough: '中划线',
     overline: '上划线',
