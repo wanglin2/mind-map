@@ -275,7 +275,8 @@ export default {
         ...(config || {}),
         iconList: icon,
         useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag,
-        customInnerElsAppendTo: null
+        customInnerElsAppendTo: null,
+        enableAutoEnterTextEditWhenKeydown: true,
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
         // customCreateNodeContent: (node) => {

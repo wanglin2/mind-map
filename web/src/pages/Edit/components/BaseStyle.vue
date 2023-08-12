@@ -277,7 +277,9 @@
       </div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">{{ $t('baseStyle.associativeLineActiveColor') }}</span>
+          <span class="name">{{
+            $t('baseStyle.associativeLineActiveColor')
+          }}</span>
           <span
             class="block"
             v-popover:popover5
@@ -295,7 +297,9 @@
           </el-popover>
         </div>
         <div class="rowItem">
-          <span class="name">{{ $t('baseStyle.associativeLineActiveWidth') }}</span>
+          <span class="name">{{
+            $t('baseStyle.associativeLineActiveWidth')
+          }}</span>
           <el-select
             size="mini"
             style="width: 80px"
@@ -382,11 +386,15 @@
       <div class="title noTop">{{ $t('baseStyle.nodeBorderType') }}</div>
       <div class="row">
         <div class="rowItem">
-          <el-checkbox v-model="style.nodeUseLineStyle" @change="
+          <el-checkbox
+            v-model="style.nodeUseLineStyle"
+            @change="
               value => {
                 update('nodeUseLineStyle', value)
               }
-            ">{{ $t('baseStyle.nodeUseLineStyle') }}</el-checkbox>
+            "
+            >{{ $t('baseStyle.nodeUseLineStyle') }}</el-checkbox
+          >
         </div>
       </div>
       <!-- 内边距 -->
@@ -520,7 +528,11 @@
       <div class="row">
         <!-- 是否显示水印 -->
         <div class="rowItem">
-          <el-checkbox v-model="watermarkConfig.show" @change="watermarkShowChange">{{ $t('baseStyle.showWatermark') }}</el-checkbox>
+          <el-checkbox
+            v-model="watermarkConfig.show"
+            @change="watermarkShowChange"
+            >{{ $t('baseStyle.showWatermark') }}</el-checkbox
+          >
         </div>
       </div>
       <template v-if="watermarkConfig.show">
@@ -528,7 +540,12 @@
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('baseStyle.watermarkText') }}</span>
-            <el-input v-model="watermarkConfig.text" size="small" @change="updateWatermarkConfig"></el-input>
+            <el-input
+              v-model="watermarkConfig.text"
+              size="small"
+              @change="updateWatermarkConfig"
+              @keydown.native.stop
+            ></el-input>
           </div>
         </div>
         <!-- 水印文字颜色 -->
@@ -543,10 +560,12 @@
             <el-popover ref="popover3" placement="bottom" trigger="click">
               <Color
                 :color="watermarkConfig.textStyle.color"
-                @change="(value) => {
-                  watermarkConfig.textStyle.color = value
-                  updateWatermarkConfig()
-                }"
+                @change="
+                  value => {
+                    watermarkConfig.textStyle.color = value
+                    updateWatermarkConfig()
+                  }
+                "
               ></Color>
             </el-popover>
           </div>
@@ -555,35 +574,72 @@
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('baseStyle.watermarkTextOpacity') }}</span>
-            <el-slider v-model="watermarkConfig.textStyle.opacity" style="width: 170px" :min="0" :max="1" :step="0.1" @change="updateWatermarkConfig"></el-slider>
+            <el-slider
+              v-model="watermarkConfig.textStyle.opacity"
+              style="width: 170px"
+              :min="0"
+              :max="1"
+              :step="0.1"
+              @change="updateWatermarkConfig"
+            ></el-slider>
           </div>
         </div>
         <!-- 水印文字字号 -->
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('baseStyle.watermarkTextFontSize') }}</span>
-            <el-input-number v-model="watermarkConfig.textStyle.fontSize" size="small" :min="0" :max="50" :step="1" @change="updateWatermarkConfig"></el-input-number>
+            <span class="name">{{
+              $t('baseStyle.watermarkTextFontSize')
+            }}</span>
+            <el-input-number
+              v-model="watermarkConfig.textStyle.fontSize"
+              size="small"
+              :min="0"
+              :max="50"
+              :step="1"
+              @change="updateWatermarkConfig"
+              @keydown.native.stop
+            ></el-input-number>
           </div>
         </div>
         <!-- 旋转角度 -->
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('baseStyle.watermarkAngle') }}</span>
-            <el-input-number v-model="watermarkConfig.angle" size="small" :min="0" :max="90" :step="10" @change="updateWatermarkConfig"></el-input-number>
+            <el-input-number
+              v-model="watermarkConfig.angle"
+              size="small"
+              :min="0"
+              :max="90"
+              :step="10"
+              @change="updateWatermarkConfig"
+              @keydown.native.stop
+            ></el-input-number>
           </div>
         </div>
         <!-- 水印行间距 -->
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('baseStyle.watermarkLineSpacing') }}</span>
-            <el-input-number v-model="watermarkConfig.lineSpacing" size="small" :step="10" @change="updateWatermarkConfig"></el-input-number>
+            <el-input-number
+              v-model="watermarkConfig.lineSpacing"
+              size="small"
+              :step="10"
+              @change="updateWatermarkConfig"
+              @keydown.native.stop
+            ></el-input-number>
           </div>
         </div>
         <!-- 水印文字间距 -->
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('baseStyle.watermarkTextSpacing') }}</span>
-            <el-input-number v-model="watermarkConfig.textSpacing" size="small" :step="10" @change="updateWatermarkConfig"></el-input-number>
+            <el-input-number
+              v-model="watermarkConfig.textSpacing"
+              size="small"
+              :step="10"
+              @change="updateWatermarkConfig"
+              @keydown.native.stop
+            ></el-input-number>
           </div>
         </div>
       </template>
@@ -592,17 +648,25 @@
       <!-- 配置开启自由拖拽 -->
       <div class="row">
         <div class="rowItem">
-          <el-checkbox v-model="config.enableFreeDrag" @change="
+          <el-checkbox
+            v-model="config.enableFreeDrag"
+            @change="
               value => {
                 updateOtherConfig('enableFreeDrag', value)
               }
-            ">{{ $t('baseStyle.enableFreeDrag') }}</el-checkbox>
+            "
+            >{{ $t('baseStyle.enableFreeDrag') }}</el-checkbox
+          >
         </div>
       </div>
       <!-- 配置是否启用富文本编辑 -->
       <div class="row">
         <div class="rowItem">
-          <el-checkbox v-model="enableNodeRichText" @change="enableNodeRichTextChange">{{ $t('baseStyle.isEnableNodeRichText') }}</el-checkbox>
+          <el-checkbox
+            v-model="enableNodeRichText"
+            @change="enableNodeRichTextChange"
+            >{{ $t('baseStyle.isEnableNodeRichText') }}</el-checkbox
+          >
         </div>
       </div>
       <!-- 配置鼠标滚轮行为 -->
@@ -620,15 +684,23 @@
               }
             "
           >
-            <el-option :label="$t('baseStyle.zoomView') " value="zoom"></el-option>
-            <el-option :label="$t('baseStyle.moveViewUpDown') " value="move"></el-option>
+            <el-option
+              :label="$t('baseStyle.zoomView')"
+              value="zoom"
+            ></el-option>
+            <el-option
+              :label="$t('baseStyle.moveViewUpDown')"
+              value="move"
+            ></el-option>
           </el-select>
         </div>
       </div>
       <!-- 配置鼠标缩放行为 -->
       <div class="row" v-if="config.mousewheelAction === 'zoom'">
         <div class="rowItem">
-          <span class="name">{{ $t('baseStyle.mousewheelZoomActionReverse') }}</span>
+          <span class="name">{{
+            $t('baseStyle.mousewheelZoomActionReverse')
+          }}</span>
           <el-select
             size="mini"
             style="width: 120px"
@@ -640,8 +712,14 @@
               }
             "
           >
-            <el-option :label="$t('baseStyle.mousewheelZoomActionReverse1') " :value="false"></el-option>
-            <el-option :label="$t('baseStyle.mousewheelZoomActionReverse2') " :value="true"></el-option>
+            <el-option
+              :label="$t('baseStyle.mousewheelZoomActionReverse1')"
+              :value="false"
+            ></el-option>
+            <el-option
+              :label="$t('baseStyle.mousewheelZoomActionReverse2')"
+              :value="true"
+            ></el-option>
           </el-select>
         </div>
       </div>
@@ -652,7 +730,16 @@
 <script>
 import Sidebar from './Sidebar'
 import Color from './Color'
-import { lineWidthList, lineStyleList, backgroundRepeatList, backgroundPositionList, backgroundSizeList, fontFamilyList, fontSizeList, rootLineKeepSameInCurveList } from '@/config'
+import {
+  lineWidthList,
+  lineStyleList,
+  backgroundRepeatList,
+  backgroundPositionList,
+  backgroundSizeList,
+  fontFamilyList,
+  fontSizeList,
+  rootLineKeepSameInCurveList
+} from '@/config'
 import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
 import { mapState, mapMutations } from 'vuex'
@@ -740,20 +827,25 @@ export default {
       return lineStyleList[this.$i18n.locale] || lineStyleList.zh
     },
     rootLineKeepSameInCurveList() {
-      return rootLineKeepSameInCurveList[this.$i18n.locale] || rootLineKeepSameInCurveList.zh
+      return (
+        rootLineKeepSameInCurveList[this.$i18n.locale] ||
+        rootLineKeepSameInCurveList.zh
+      )
     },
     backgroundRepeatList() {
       return backgroundRepeatList[this.$i18n.locale] || backgroundRepeatList.zh
     },
     backgroundPositionList() {
-      return backgroundPositionList[this.$i18n.locale] || backgroundPositionList.zh
+      return (
+        backgroundPositionList[this.$i18n.locale] || backgroundPositionList.zh
+      )
     },
     backgroundSizeList() {
       return backgroundSizeList[this.$i18n.locale] || backgroundSizeList.zh
     },
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
-    },
+    }
   },
   watch: {
     activeSidebar(val) {
@@ -767,7 +859,7 @@ export default {
       }
     }
   },
-  created () {
+  created() {
     this.enableNodeRichText = this.localConfig.openNodeRichText
     this.mousewheelAction = this.localConfig.mousewheelAction
     this.mousewheelZoomActionReverse = this.localConfig.mousewheelZoomActionReverse
@@ -817,7 +909,11 @@ export default {
 
     // 初始化其他配置
     initConfig() {
-      ;['enableFreeDrag', 'mousewheelAction', 'mousewheelZoomActionReverse'].forEach(key => {
+      ;[
+        'enableFreeDrag',
+        'mousewheelAction',
+        'mousewheelZoomActionReverse'
+      ].forEach(key => {
         this.config[key] = this.mindMap.getConfig(key)
       })
     },
@@ -825,7 +921,7 @@ export default {
     // 初始化水印配置
     initWatermark() {
       let config = this.mindMap.getConfig('watermarkConfig')
-      ;['text', 'lineSpacing', 'textSpacing', 'angle'].forEach((key) => {
+      ;['text', 'lineSpacing', 'textSpacing', 'angle'].forEach(key => {
         this.watermarkConfig[key] = config[key]
       })
       this.watermarkConfig.show = !!config.text
@@ -883,16 +979,18 @@ export default {
     updateWatermarkConfig() {
       clearTimeout(this.updateWatermarkTimer)
       this.updateWatermarkTimer = setTimeout(() => {
-        let {show, ...config} = this.watermarkConfig
+        let { show, ...config } = this.watermarkConfig
         this.mindMap.watermark.updateWatermark({
           ...config
         })
         this.data.config = this.data.config || {}
-        this.data.config.watermarkConfig = this.mindMap.getConfig('watermarkConfig')
+        this.data.config.watermarkConfig = this.mindMap.getConfig(
+          'watermarkConfig'
+        )
         storeConfig({
           config: this.data.config
         })
-      }, 300);
+      }, 300)
     },
 
     /**
@@ -918,7 +1016,8 @@ export default {
     // 切换显示水印与否
     watermarkShowChange(value) {
       if (value) {
-        let text = this.watermarkConfig.text || this.$t('baseStyle.watermarkDefaultText')
+        let text =
+          this.watermarkConfig.text || this.$t('baseStyle.watermarkDefaultText')
         this.watermarkConfig.text = text
       } else {
         this.watermarkConfig.text = ''
@@ -940,7 +1039,7 @@ export default {
         mousewheelAction: e
       })
       this.mindMap.updateConfig
-    },
+    }
   }
 }
 </script>
@@ -958,7 +1057,7 @@ export default {
     .row {
       .rowItem {
         .name {
-          color: hsla(0,0%,100%,.6);
+          color: hsla(0, 0%, 100%, 0.6);
         }
       }
     }
