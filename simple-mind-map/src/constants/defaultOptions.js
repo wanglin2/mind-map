@@ -128,7 +128,8 @@ export const defaultOpt = {
   // 拖拽元素时，指示元素新位置的块的最大高度
   nodeDragPlaceholderMaxSize: 20,
   // 是否在存在一个激活节点时，当按下中文、英文、数字按键时自动进入文本编辑模式
-  enableAutoEnterTextEditWhenKeydown: true,
+  // 开启该特性后，需要给你的输入框绑定keydown事件，并禁止冒泡
+  enableAutoEnterTextEditWhenKeydown: false,
   // 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果
   // 需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果
   richTextEditFakeInPlace: false

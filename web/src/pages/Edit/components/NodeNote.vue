@@ -12,7 +12,7 @@
       v-model="note"
     >
     </el-input> -->
-    <div class="noteEditor" ref="noteEditor" @keyup.stop></div>
+    <div class="noteEditor" ref="noteEditor" @keyup.stop @keydown.stop></div>
     <!-- <div class="tip">换行请使用：Enter+Shift</div> -->
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
