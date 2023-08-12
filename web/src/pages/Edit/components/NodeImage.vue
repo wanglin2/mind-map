@@ -101,7 +101,19 @@ export default {
 
     async confirm() {
       try {
-        if (!this.img && !this.imgUrl) return
+        // 删除图片
+        if (!this.img && !this.imgUrl) {
+          this.cancel()
+          this.activeNodes.forEach(node => {
+            node.setImage({
+              url: '',
+              title: '',
+              width: 0,
+              height: 0
+            })
+          })
+          return
+        }
         let res = null
         let img = ''
         if (this.img) {
