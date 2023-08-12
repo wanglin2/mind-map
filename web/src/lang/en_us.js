@@ -77,7 +77,10 @@ export default {
     level5: 'Level5',
     level6: 'Level6',
     zenMode: 'Zen mode',
-    fitCanvas: 'Fit canvas'
+    fitCanvas: 'Fit canvas',
+    removeImage: 'Remove image',
+    removeHyperlink: 'Remove hyperlink',
+    removeNote: 'Remove note'
   },
   count: {
     words: 'Words',

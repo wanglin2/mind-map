@@ -77,7 +77,10 @@ export default {
     level5: '五级主题',
     level6: '六级主题',
     zenMode: '禅模式',
-    fitCanvas: '适应画布'
+    fitCanvas: '适应画布',
+    removeImage: '移除图片',
+    removeHyperlink: '移除超链接',
+    removeNote: '移除备注'
   },
   count: {
     words: '字数',
