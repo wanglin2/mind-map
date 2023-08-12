@@ -105,12 +105,7 @@ export default {
         if (!this.img && !this.imgUrl) {
           this.cancel()
           this.activeNodes.forEach(node => {
-            node.setImage({
-              url: '',
-              title: '',
-              width: 0,
-              height: 0
-            })
+            node.setImage(null)
           })
           return
         }
