@@ -863,9 +863,20 @@ export default {
     this.enableNodeRichText = this.localConfig.openNodeRichText
     this.mousewheelAction = this.localConfig.mousewheelAction
     this.mousewheelZoomActionReverse = this.localConfig.mousewheelZoomActionReverse
+    this.$bus.$on('setData', this.onSetData)
+  },
+  beforeDestroy() {
+    this.$bus.$off('setData', this.onSetData)
   },
   methods: {
     ...mapMutations(['setLocalConfig']),
+
+    onSetData() {
+      if (this.activeSidebar !== 'baseStyle') return
+      setTimeout(() => {
+        this.initStyle()
+      }, 0)
+    },
 
     /**
      * @Author: 王林
