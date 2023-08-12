@@ -97,7 +97,8 @@ export const colorList = [
   '#0C797D',
   '#0062B1',
   '#653294',
-  '#AB149E'
+  '#AB149E',
+  'transparent'
 ]
 
 // 边框宽度
