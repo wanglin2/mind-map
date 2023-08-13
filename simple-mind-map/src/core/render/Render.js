@@ -668,12 +668,21 @@ class Render {
       if (text) {
         // 判断粘贴的是否是simple-mind-map的数据
         let smmData = null
-        try {
-          const parsedData = JSON.parse(text)
-          if (parsedData && parsedData.simpleMindMap) {
-            smmData = parsedData.data
+        if (this.mindMap.opt.customHandleClipboardText) {
+          const res = this.mindMap.opt.customHandleClipboardText(text)
+          if (typeof res === 'object' && res.simpleMindMap) {
+            smmData = res.data
+          } else {
+            text = String(res)
           }
-        } catch (error) {}
+        } else {
+          try {
+            const parsedData = JSON.parse(text)
+            if (parsedData && parsedData.simpleMindMap) {
+              smmData = parsedData.data
+            }
+          } catch (error) {}
+        }
         if (smmData) {
           this.mindMap.execCommand(
             'INSERT_CHILD_NODE',

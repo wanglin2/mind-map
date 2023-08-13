@@ -132,5 +132,23 @@ export const defaultOpt = {
   enableAutoEnterTextEditWhenKeydown: false,
   // 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果
   // 需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果
-  richTextEditFakeInPlace: false
+  richTextEditFakeInPlace: false,
+  // 自定义对剪贴板文本的处理。当按ctrl+v粘贴时会读取用户剪贴板中的文本和图片，默认只会判断文本是否是普通文本和simple-mind-map格式的节点数据，如果你想处理其他思维导图的数据，比如processon、zhixi等，那么可以传递一个函数，接受当前剪贴板中的文本为参数，返回处理后的数据，可以返回两种类型：
+  /*
+    1.返回一个纯文本，那么会直接以该文本创建一个子节点
+
+    2.返回一个节点对象，格式如下：
+      {
+        // 代表是simple-mind-map格式的数据
+        simpleMindMap: true,
+        // 节点数据，同simple-mind-map节点数据格式
+        data: {
+          data: {
+            text: ''
+          },
+          children: []
+        }
+      }
+  */
+  customHandleClipboardText: null
 }
