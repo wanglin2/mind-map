@@ -1,7 +1,7 @@
 <template>
   <div class="editContainer" :style="{top: IS_ELECTRON ? '40px' : 0}">
     <div class="mindMapContainer" ref="mindMapContainer"></div>
-    <Count v-if="!isZenMode"></Count>
+    <Count :mindMap="mindMap" v-if="!isZenMode"></Count>
     <Navigator :mindMap="mindMap"></Navigator>
     <NavigatorToolbar :mindMap="mindMap" v-if="!isZenMode"></NavigatorToolbar>
     <OutlineSidebar :mindMap="mindMap"></OutlineSidebar>
@@ -72,6 +72,7 @@ import NodeIconToolbar from './NodeIconToolbar.vue'
 import { removeMindMapNodeStickerProtocol, addMindMapNodeStickerProtocol } from '@/utils'
 import OutlineEdit from './OutlineEdit.vue'
 import { showLoading, hideLoading } from '@/utils/loading'
+import handleClipboardText from '@/utils/handleClipboardText'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -317,6 +318,8 @@ export default {
         iconList: icon,
         useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag,
         customInnerElsAppendTo: null
+        enableAutoEnterTextEditWhenKeydown: true,
+        customHandleClipboardText: handleClipboardText,
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
         // customCreateNodeContent: (node) => {

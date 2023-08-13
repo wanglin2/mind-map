@@ -16,6 +16,7 @@
           style="width: 300px"
           v-model="fileName"
           size="mini"
+          @keydown.native.stop
         ></el-input>
         <el-checkbox
           v-show="['smm', 'json'].includes(exportType)"
@@ -34,6 +35,7 @@
           v-model="paddingX"
           size="mini"
           @change="onPaddingChange"
+          @keydown.native.stop
         ></el-input>
         <span class="name" style="margin-left: 10px;">{{
           $t('export.paddingY')
@@ -43,6 +45,7 @@
           v-model="paddingY"
           size="mini"
           @change="onPaddingChange"
+          @keydown.native.stop
         ></el-input>
         <el-checkbox
           v-show="['png'].includes(exportType)"

@@ -9,6 +9,7 @@
       v-model="tag"
       @keyup.native.enter="add"
       @keyup.native.stop
+      @keydown.native.stop
       :disabled="tagArr.length >= max"
       :placeholder="$t('nodeTag.addTip')"
     >

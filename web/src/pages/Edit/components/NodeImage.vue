@@ -18,12 +18,13 @@
         v-model="imgUrl"
         size="mini"
         placeholder="http://xxx.com/xx.jpg"
+        @keydown.native.stop
       ></el-input>
     </div>
     <div class="title">可选</div>
     <div class="inputBox">
       <span class="label">{{ $t('nodeImage.imgTitle') }}</span>
-      <el-input v-model="imgTitle" size="mini"></el-input>
+      <el-input v-model="imgTitle" size="mini" @keydown.native.stop></el-input>
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
@@ -100,7 +101,14 @@ export default {
 
     async confirm() {
       try {
-        if (!this.img && !this.imgUrl) return
+        // 删除图片
+        if (!this.img && !this.imgUrl) {
+          this.cancel()
+          this.activeNodes.forEach(node => {
+            node.setImage(null)
+          })
+          return
+        }
         let res = null
         let img = ''
         if (this.img) {

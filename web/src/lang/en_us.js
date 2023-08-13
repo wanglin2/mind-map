@@ -78,7 +78,10 @@ export default {
     level6: 'Level6',
     zenMode: 'Zen mode',
     fitCanvas: 'Fit canvas',
-    create: 'Create new file'
+    create: 'Create new file',
+    removeImage: 'Remove image',
+    removeHyperlink: 'Remove hyperlink',
+    removeNote: 'Remove note'
   },
   count: {
     words: 'Words',
@@ -168,6 +171,7 @@ export default {
     italic: 'Italic',
     textDecoration: 'Text decoration',
     underline: 'Underline',
+    none: 'None',
     lineThrough: 'Line through',
     overline: 'Overline',
     border: 'Border',

@@ -198,6 +198,11 @@ class RichText {
       this.textEditNode.addEventListener('mousedown', e => {
         e.stopPropagation()
       })
+      this.textEditNode.addEventListener('keydown', e => {
+        if (this.mindMap.renderer.textEdit.checkIsAutoEnterTextEditKey(e)) {
+          e.stopPropagation()
+        }
+      })
       const targetNode = customInnerElsAppendTo || document.body
       targetNode.appendChild(this.textEditNode)
     }

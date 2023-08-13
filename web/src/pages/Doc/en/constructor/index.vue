@@ -372,7 +372,7 @@
 <td></td>
 </tr>
 <tr>
-<td>enableCreateHiddenInput（v0.6.13+）</td>
+<td>enableCreateHiddenInput（v0.6.13+）（v0.6.14+ remove this feature）</td>
 <td>Boolean</td>
 <td>true</td>
 <td>Is it allowed to create a hidden input box that will be focused when the node is activated for pasting data and automatically entering the text editing state</td>
@@ -382,7 +382,7 @@
 <td>enableAutoEnterTextEditWhenKeydown（v0.6.13+）</td>
 <td>Boolean</td>
 <td>true</td>
-<td>Does it automatically enter text editing mode when pressing the Chinese, English, or numeric buttons when there is an activation node? This configuration takes effect when enableCreateHiddenInput is set to true</td>
+<td>Does it automatically enter text editing mode when pressing the Chinese, English, or numeric buttons when there is an activation node?</td>
 <td></td>
 </tr>
 <tr>
@@ -392,10 +392,14 @@
 <td>Set the rich text node edit box to match the size of the node, creating a pseudo in place editing effect. It should be noted that only when there is only text within the node and the shape is rectangular, can the effect be better</td>
 <td></td>
 </tr>
+<tr>
+<td>customHandleClipboardText（v0.6.14+）</td>
+<td>Customize the processing of clipboard text. When pressing ctrl+v to paste, it will read the text and images from the user's clipboard. By default, it will only determine whether the text is regular text and node data in simple mind map format. If you want to process data from other mind maps, such as process, zhixi, etc., you can pass a function that takes the text from the current clipboard as a parameter and returns the processed data, which can be of two types: 1.If a pure text is returned, a child node will be directly created with that text; 2.Returns a node object in the following format: { simpleMindMap: true, data: { data: { text: '' }, children: [] } }, The representative is data in simple bind map format, and the node data is in the same format as the simple bind map node data. If your processing logic has asynchronous logic, you can also return a promise</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
-<table>
 <thead>
 <tr>
 <th>Field Name</th>
@@ -828,12 +832,12 @@ redo. All commands are as follows:</p>
 <tr>
 <td>INSERT_NODE</td>
 <td>Insert a sibling node, the active node or appoint node will be the operation node. If there are multiple active nodes, only the first one will be effective</td>
-<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>） 、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a> ）</td>
+<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>） 、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a> ）、 appointChildren（v0.6.14+, Optional, Specify the child nodes of the newly created node, array type）</td>
 </tr>
 <tr>
 <td>INSERT_CHILD_NODE</td>
 <td>Insert a child node, the active node or appoint node will be the operation node</td>
-<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>）、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a> ）</td>
+<td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>）、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a> ）、 appointChildren（v0.6.14+, Optional, Specify the child nodes of the newly created node, array type）</td>
 </tr>
 <tr>
 <td>UP_NODE</td>

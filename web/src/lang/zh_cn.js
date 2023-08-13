@@ -78,7 +78,10 @@ export default {
     level6: '六级主题',
     zenMode: '禅模式',
     fitCanvas: '适应画布',
-    create: '新建文件'
+    create: '新建文件',
+    removeImage: '移除图片',
+    removeHyperlink: '移除超链接',
+    removeNote: '移除备注'
   },
   count: {
     words: '字数',
@@ -167,6 +170,7 @@ export default {
     addFontWeight: '加粗',
     italic: '斜体',
     textDecoration: '划线',
+    none: '无',
     underline: '下划线',
     lineThrough: '中划线',
     overline: '上划线',

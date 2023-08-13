@@ -10,16 +10,11 @@ export default class TextEdit {
     this.currentNode = null
     // 文本编辑框
     this.textEditNode = null
-    // 隐藏的文本输入框
-    this.hiddenInputEl = null
-    // 节点激活时默认聚焦到隐藏输入框
-    this.enableFocus = true
     // 文本编辑框是否显示
     this.showTextEdit = false
     // 如果编辑过程中缩放画布了，那么缓存当前编辑的内容
     this.cacheEditingText = ''
     this.bindEvent()
-    this.createHiddenInput()
   }
 
   //  事件
@@ -51,10 +46,6 @@ export default class TextEdit {
     this.mindMap.on('before_node_active', () => {
       this.hideEditTextBox()
     })
-    // 节点激活事件
-    this.mindMap.on('node_active', () => {
-      this.focusHiddenInput()
-    })
     // 注册编辑快捷键
     this.mindMap.keyCommand.addShortcut('F2', () => {
       if (this.renderer.activeNodeList.length <= 0) {
@@ -63,74 +54,29 @@ export default class TextEdit {
       this.show(this.renderer.activeNodeList[0])
     })
     this.mindMap.on('scale', this.onScale)
-  }
-
-  // 创建一个隐藏的文本输入框
-  createHiddenInput() {
-    const { enableCreateHiddenInput, enableAutoEnterTextEditWhenKeydown } =
-      this.mindMap.opt
-    if (this.hiddenInputEl || isMobile() || !enableCreateHiddenInput) return
-    this.hiddenInputEl = document.createElement('input')
-    this.hiddenInputEl.type = 'text'
-    this.hiddenInputEl.style.cssText = `
-      position: fixed;
-      left: -99999px;
-      top: -99999px;
-    `
-    // 监听按键事件
-    if (enableAutoEnterTextEditWhenKeydown) {
-      this.hiddenInputEl.addEventListener('keydown', e => {
+    // // 监听按键事件，判断是否自动进入文本编辑模式
+    if (this.mindMap.opt.enableAutoEnterTextEditWhenKeydown) {
+      window.addEventListener('keydown', e => {
         const activeNodeList = this.mindMap.renderer.activeNodeList
         if (activeNodeList.length <= 0 || activeNodeList.length > 1) return
         const node = activeNodeList[0]
         // 当正在输入中文或英文或数字时，如果没有按下组合键，那么自动进入文本编辑模式
-        const keyCode = e.keyCode
-        if (
-          node &&
-          (keyCode === 229 ||
-            (keyCode >= 65 && keyCode <= 90) ||
-            (keyCode >= 48 && keyCode <= 57)) &&
-          !this.mindMap.keyCommand.hasCombinationKey(e)
-        ) {
+        if (node && this.checkIsAutoEnterTextEditKey(e)) {
           this.show(node)
         }
       })
     }
-    // 监听粘贴事件
-    this.hiddenInputEl.addEventListener('paste', async event => {
-      event.preventDefault()
-      const text = (event.clipboardData || window.clipboardData).getData('text')
-      const files = event.clipboardData.files
-      let img = null
-      if (files.length > 0) {
-        for (let i = 0; i < files.length; i++) {
-          if (/^image\//.test(files[i].type)) {
-            img = files[i]
-            break
-          }
-        }
-      }
-      this.mindMap.emit('paste', {
-        text,
-        img
-      })
-    })
-    document.body.appendChild(this.hiddenInputEl)
   }
 
-  // 让隐藏的文本输入框聚焦
-  focusHiddenInput() {
-    if (this.hiddenInputEl && this.enableFocus) this.hiddenInputEl.focus()
-  }
-
-  // 关闭默认聚焦
-  stopFocusOnNodeActive() {
-    this.enableFocus = false
-  }
-
-  // 开启默认聚焦
-  openFocusOnNodeActive() {
-    this.enableFocus = true
+  // 判断是否是自动进入文本编模式的按钮
+  checkIsAutoEnterTextEditKey(e) {
+    const keyCode = e.keyCode
+    return (
+      (keyCode === 229 ||
+        (keyCode >= 65 && keyCode <= 90) ||
+        (keyCode >= 48 && keyCode <= 57)) &&
+      !this.mindMap.keyCommand.hasCombinationKey(e)
+    )
   }
 
   //  注册临时快捷键
@@ -188,6 +134,7 @@ export default class TextEdit {
 
   //  显示文本编辑框
   showEditTextBox(node, rect, isInserting) {
+    if (this.showTextEdit) return
     this.mindMap.emit('before_show_text_edit')
     this.registerTmpShortcut()
     if (!this.textEditNode) {
@@ -202,6 +149,11 @@ export default class TextEdit {
       })
       this.textEditNode.addEventListener('mousedown', e => {
         e.stopPropagation()
+      })
+      this.textEditNode.addEventListener('keydown', e => {
+        if (this.checkIsAutoEnterTextEditKey(e)) {
+          e.stopPropagation()
+        }
       })
       const targetNode =
         this.mindMap.opt.customInnerElsAppendTo || document.body
