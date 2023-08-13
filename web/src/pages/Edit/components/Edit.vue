@@ -317,7 +317,7 @@ export default {
         ...(config || {}),
         iconList: icon,
         useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag,
-        customInnerElsAppendTo: null
+        customInnerElsAppendTo: null,
         enableAutoEnterTextEditWhenKeydown: true,
         customHandleClipboardText: handleClipboardText,
         // isUseCustomNodeContent: true,
