@@ -70,6 +70,7 @@ import NodeIconSidebar from './NodeIconSidebar.vue'
 import NodeIconToolbar from './NodeIconToolbar.vue'
 import OutlineEdit from './OutlineEdit.vue'
 import { showLoading, hideLoading } from '@/utils/loading'
+import handleClipboardText from '@/utils/handleClipboardText'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -277,6 +278,7 @@ export default {
         useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag,
         customInnerElsAppendTo: null,
         enableAutoEnterTextEditWhenKeydown: true,
+        customHandleClipboardText: handleClipboardText,
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
         // customCreateNodeContent: (node) => {
