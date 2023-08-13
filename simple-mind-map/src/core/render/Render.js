@@ -12,7 +12,8 @@ import {
   simpleDeepClone,
   walk,
   bfsWalk,
-  loadImage
+  loadImage,
+  isUndef
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -668,14 +669,23 @@ class Render {
       if (text) {
         // 判断粘贴的是否是simple-mind-map的数据
         let smmData = null
+        let useDefault = true
+        // 用户自定义处理
         if (this.mindMap.opt.customHandleClipboardText) {
-          const res = this.mindMap.opt.customHandleClipboardText(text)
-          if (typeof res === 'object' && res.simpleMindMap) {
-            smmData = res.data
-          } else {
-            text = String(res)
-          }
-        } else {
+          try {
+            const res = await this.mindMap.opt.customHandleClipboardText(text)
+            if (!isUndef(res)) {
+              useDefault = false
+              if (typeof res === 'object' && res.simpleMindMap) {
+                smmData = res.data
+              } else {
+                text = String(res)
+              }
+            }
+          } catch (error) {}
+        }
+        // 默认处理
+        if (useDefault) {
           try {
             const parsedData = JSON.parse(text)
             if (parsedData && parsedData.simpleMindMap) {
