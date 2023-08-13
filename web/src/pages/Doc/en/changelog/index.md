@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.6.14
+
+New:
+
+> 1.Remove and create hidden input boxes, and copy and paste them through navigator. clipboard; Support cross browser pasting of mind map node data; Support custom processing of text data in the clipboard.
+
+Demo:
+
+> 1.Fix the issue of enabling input to automatically enter text editing mode and conflicting with other input boxes.
+>
+> 2.Fix the issue of not being able to delete node images in the node image pop-up window.
+>
+> 3.Fixed an issue where the text decoration line style of nodes cannot be removed in the node style sidebar.
+>
+> 4.The color selector supports selecting transparent colors.
+>
+> 5.Fix the issue of importing mind map data without updating the sidebar data when the basic style sidebar is open.
+>
+> 6.Fixed the issue of not focusing when modifying the text of one node in the outline and then clicking on other nodes.
+>
+> 7.Fixed an issue where the node and word count statistics in the bottom left corner were not updated after exiting Zen mode.
+>
+> 8.Support deleting hyperlinks and notes of nodes from the right-click menu.
+>
+> 9.Support pasting node data of Zhixi Mind Map.
+
 ## 0.6.13
 
 Fix: 
