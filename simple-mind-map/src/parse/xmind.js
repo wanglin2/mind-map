@@ -64,13 +64,13 @@ const transformXmind = async (content, files) => {
     }
     // 图片
     if (node.image && /\.(jpg|jpeg|png|gif|webp)$/.test(node.image.src)) {
+      // 处理异步逻辑
+      let resolve = null
+      let promise = new Promise(_resolve => {
+        resolve = _resolve
+      })
+      waitLoadImageList.push(promise)
       try {
-        // 处理异步逻辑
-        let resolve = null
-        let promise = new Promise(_resolve => {
-          resolve = _resolve
-        })
-        waitLoadImageList.push(promise)
         // 读取图片
         let imageType = /\.([^.]+)$/.exec(node.image.src)[1]
         let imageBase64 =

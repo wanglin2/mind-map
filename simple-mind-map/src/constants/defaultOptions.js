@@ -150,5 +150,6 @@ export const defaultOpt = {
         }
       }
   */
+  // 如果你的处理逻辑存在异步逻辑，也可以返回一个promise
   customHandleClipboardText: null
 }
