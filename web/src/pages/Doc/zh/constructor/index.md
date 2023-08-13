@@ -73,9 +73,10 @@ const mindMap = new MindMap({
 | mouseScaleCenterUseMousePosition（v0.6.4-fix.1+）     | Boolean  | true | 鼠标缩放是否以鼠标当前位置为中心点，否则以画布中心点 |          |
 | customInnerElsAppendTo（v0.6.12+）     | null/HTMLElement  | null | 指定内部一些元素（节点文本编辑元素、节点备注显示元素、关联线文本编辑元素、节点图片调整按钮元素）添加到的位置，默认添加到document.body下 |          |
 | nodeDragPlaceholderMaxSize（v0.6.12+）     | Number  | 20 | 拖拽元素时，指示元素新位置的块的最大高度 |          |
-| enableCreateHiddenInput（v0.6.13+）     | Boolean  | true | 是否允许创建一个隐藏的输入框，该输入框会在节点激活时聚焦，用于粘贴数据和自动进入文本编辑状态 |          |
-| enableAutoEnterTextEditWhenKeydown（v0.6.13+）     | Boolean  | true | 是否在存在一个激活节点时，当按下中文、英文、数字按键时自动进入文本编辑模式，该配置在enableCreateHiddenInput设为true时生效 |          |
+| enableCreateHiddenInput（v0.6.13+）（v0.6.14+版本已去除该特性）     | Boolean  | true | 是否允许创建一个隐藏的输入框，该输入框会在节点激活时聚焦，用于粘贴数据和自动进入文本编辑状态 |          |
+| enableAutoEnterTextEditWhenKeydown（v0.6.13+）     | Boolean  | true | 是否在存在一个激活节点时，当按下中文、英文、数字按键时自动进入文本编辑模式 |          |
 | richTextEditFakeInPlace（v0.6.13+）     | Boolean  | false | 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果，需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果 |          |
+| customHandleClipboardText（v0.6.14+）     | Function  | null | 自定义对剪贴板文本的处理。当按ctrl+v粘贴时会读取用户剪贴板中的文本和图片，默认只会判断文本是否是普通文本和simple-mind-map格式的节点数据，如果你想处理其他思维导图的数据，比如processon、zhixi等，那么可以传递一个函数，接受当前剪贴板中的文本为参数，返回处理后的数据，可以返回两种类型：1.返回一个纯文本，那么会直接以该文本创建一个子节点；2.返回一个节点对象，格式如下：{ simpleMindMap: true, data: { data: { text: '' }, children: [] } }，代表是simple-mind-map格式的数据，节点数据同simple-mind-map节点数据格式，如果你的处理逻辑存在异步逻辑，也可以返回一个promise |          |
 
 ### 水印配置
 
@@ -318,8 +319,8 @@ mindMap.updateConfig({
 | SELECT_ALL                          | 全选                                                         |                                                              |
 | BACK                                | 回退指定的步数                                               | step（要回退的步数，默认为1）                                |
 | FORWARD                             | 前进指定的步数                                               | step（要前进的步数，默认为1）                                |
-| INSERT_NODE                         | 插入同级节点，操作节点为当前激活的节点或指定节点，如果有多个激活节点，只会对第一个有效 | openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为`true`）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考[exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)）                                                             |
-| INSERT_CHILD_NODE                   | 插入子节点，操作节点为当前激活的节点或指定节点                         |   openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为`true`）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考[exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)）                                                           |
+| INSERT_NODE                         | 插入同级节点，操作节点为当前激活的节点或指定节点，如果有多个激活节点，只会对第一个有效 | openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为`true`）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考[exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)）、 appointChildren（v0.6.14+，可选，指定新创建节点的子节点，数组类型）     |
+| INSERT_CHILD_NODE                   | 插入子节点，操作节点为当前激活的节点或指定节点                         |   openEdit（v0.4.6+，是否激活新插入的节点并进入编辑模式，默认为`true`）、 appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考[exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)）、 appointChildren（v0.6.14+，可选，指定新创建节点的子节点，数组类型）                                                          |
 | UP_NODE                             | 上移节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的第一个节点使用无效 |                                                              |
 | DOWN_NODE                           | 操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点或在列表里的最后一个节点使用无效 |                                                              |
 | REMOVE_NODE                         | 删除节点，操作节点为当前激活的节点或指定节点                         |   appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）                                                           |

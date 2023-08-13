@@ -12,7 +12,8 @@ import {
   simpleDeepClone,
   walk,
   bfsWalk,
-  loadImage
+  loadImage,
+  isUndef
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -107,10 +108,6 @@ class Render {
       if (isTrueClick && this.activeNodeList.length > 0) {
         this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
       }
-    })
-    // 粘贴事件
-    this.mindMap.on('paste', data => {
-      this.onPaste(data)
     })
     // let timer = null
     // this.mindMap.on('view_data_change', () => {
@@ -273,8 +270,7 @@ class Render {
     this.copy = this.copy.bind(this)
     this.mindMap.keyCommand.addShortcut('Control+c', this.copy)
     this.mindMap.keyCommand.addShortcut('Control+v', () => {
-      // 隐藏输入框可能会失去焦点，所以要重新聚焦
-      this.textEdit.focusHiddenInput()
+      this.onPaste()
     })
     this.cut = this.cut.bind(this)
     this.mindMap.keyCommand.addShortcut('Control+x', this.cut)
@@ -449,7 +445,12 @@ class Render {
   }
 
   //  插入同级节点，多个节点只会操作第一个节点
-  insertNode(openEdit = true, appointNodes = [], appointData = null) {
+  insertNode(
+    openEdit = true,
+    appointNodes = [],
+    appointData = null,
+    appointChildren = []
+  ) {
     appointNodes = this.formatAppointNodes(appointNodes)
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return
@@ -485,14 +486,19 @@ class Render {
           resetRichText: isRichText,
           ...(appointData || {})
         },
-        children: []
+        children: [...appointChildren]
       })
       this.mindMap.render()
     }
   }
 
   //  插入子节点
-  insertChildNode(openEdit = true, appointNodes = [], appointData = null) {
+  insertChildNode(
+    openEdit = true,
+    appointNodes = [],
+    appointData = null,
+    appointChildren = []
+  ) {
     appointNodes = this.formatAppointNodes(appointNodes)
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return
@@ -523,7 +529,7 @@ class Render {
           resetRichText: isRichText,
           ...(appointData || {})
         },
-        children: []
+        children: [...appointChildren]
       })
       // 插入子节点时自动展开子节点
       node.nodeData.data.expand = true
@@ -591,13 +597,27 @@ class Render {
   // 复制节点
   copy() {
     this.beingCopyData = this.copyNode()
+    this.setCoptyDataToClipboard(this.beingCopyData)
   }
 
   // 剪切节点
   cut() {
     this.mindMap.execCommand('CUT_NODE', copyData => {
       this.beingCopyData = copyData
+      this.setCoptyDataToClipboard(copyData)
     })
+  }
+
+  // 将粘贴或剪切的数据设置到用户剪切板中
+  setCoptyDataToClipboard(data) {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(
+        JSON.stringify({
+          simpleMindMap: true,
+          data
+        })
+      )
+    }
   }
 
   // 粘贴节点
@@ -608,7 +628,28 @@ class Render {
   }
 
   // 粘贴事件
-  async onPaste({ text, img }) {
+  async onPaste() {
+    // 读取剪贴板的文字和图片
+    let text = null
+    let img = null
+    if (navigator.clipboard) {
+      try {
+        text = await navigator.clipboard.readText()
+        const items = await navigator.clipboard.read()
+        if (items && items.length > 0) {
+          for (const clipboardItem of items) {
+            for (const type of clipboardItem.types) {
+              if (/^image\//.test(type)) {
+                img = await clipboardItem.getType(type)
+                break
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
     // 检查剪切板数据是否有变化
     // 通过图片大小来判断图片是否发生变化，可能是不准确的，但是目前没有其他好方法
     const imgSize = img ? img.size : 0
@@ -626,9 +667,47 @@ class Render {
     if (this.currentBeingPasteType === CONSTANTS.PASTE_TYPE.CLIP_BOARD) {
       // 存在文本，则创建子节点
       if (text) {
-        this.mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
-          text
-        })
+        // 判断粘贴的是否是simple-mind-map的数据
+        let smmData = null
+        let useDefault = true
+        // 用户自定义处理
+        if (this.mindMap.opt.customHandleClipboardText) {
+          try {
+            const res = await this.mindMap.opt.customHandleClipboardText(text)
+            if (!isUndef(res)) {
+              useDefault = false
+              if (typeof res === 'object' && res.simpleMindMap) {
+                smmData = res.data
+              } else {
+                text = String(res)
+              }
+            }
+          } catch (error) {}
+        }
+        // 默认处理
+        if (useDefault) {
+          try {
+            const parsedData = JSON.parse(text)
+            if (parsedData && parsedData.simpleMindMap) {
+              smmData = parsedData.data
+            }
+          } catch (error) {}
+        }
+        if (smmData) {
+          this.mindMap.execCommand(
+            'INSERT_CHILD_NODE',
+            false,
+            [],
+            {
+              ...smmData.data
+            },
+            [...smmData.children]
+          )
+        } else {
+          this.mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
+            text
+          })
+        }
       }
       // 存在图片，则添加到当前激活节点
       if (img) {
@@ -1027,7 +1106,8 @@ class Render {
   }
 
   //  设置节点图片
-  setNodeImage(node, { url, title, width, height, custom = false }) {
+  setNodeImage(node, data) {
+    const { url, title, width, height, custom = false } = data || { url: '', title: '', width: 0, height: 0, custom: false }
     this.setNodeDataRender(node, {
       image: url,
       imageTitle: title || '',
