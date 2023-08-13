@@ -75,6 +75,7 @@ export default {
     window.addEventListener('keydown', this.onKeyDown)
     this.$bus.$on('data_change', this.handleDataChange)
     this.$bus.$on('node_tree_render_end', this.handleNodeTreeRenderEnd)
+    this.$bus.$on('hide_text_edit', this.handleHideTextEdit)
   },
   mounted() {
     this.refresh()
@@ -83,8 +84,16 @@ export default {
     window.removeEventListener('keydown', this.onKeyDown)
     this.$bus.$off('data_change', this.handleDataChange)
     this.$bus.$off('node_tree_render_end', this.handleNodeTreeRenderEnd)
+    this.$bus.$off('hide_text_edit', this.handleHideTextEdit)
   },
   methods: {
+    handleHideTextEdit() {
+      if (this.notHandleDataChange) {
+        this.notHandleDataChange = false
+        this.refresh()
+      }
+    },
+
     handleDataChange() {
       // 在大纲里操作节点时不要响应该事件，否则会重新刷新树
       if (this.notHandleDataChange) {
@@ -191,6 +200,7 @@ export default {
       const text = richText ? e.target.innerHTML : e.target.innerText
       const targetNode = this.mindMap.renderer.findNodeByUid(node.data.uid)
       if (!targetNode) return
+      this.notHandleDataChange = true
       if (richText) {
         targetNode.setText(textToNodeRichTextWithWrap(text), true, true)
       } else {
@@ -258,9 +268,7 @@ export default {
       this.notHandleDataChange = true
       const targetNode = this.mindMap.renderer.findNodeByUid(data.uid)
       if (targetNode && targetNode.nodeData.data.isActive) return
-      this.mindMap.renderer.textEdit.stopFocusOnNodeActive()
       this.mindMap.execCommand('GO_TARGET_NODE', data.uid, () => {
-        this.mindMap.renderer.textEdit.openFocusOnNodeActive()
         this.notHandleDataChange = false
       })
     },

@@ -14,6 +14,7 @@
         size="small"
         v-model="searchText"
         @keyup.native.enter.stop="onSearchNext"
+        @keydown.native.stop
       >
         <i slot="prefix" class="el-input__icon el-icon-search"></i>
         <el-button
@@ -35,6 +36,7 @@
       size="small"
       v-model="replaceText"
       style="margin: 12px 0;"
+      @keydown.native.stop
     >
       <i slot="prefix" class="el-input__icon el-icon-edit"></i>
       <el-button size="small" slot="append" @click="hideReplaceInput">{{

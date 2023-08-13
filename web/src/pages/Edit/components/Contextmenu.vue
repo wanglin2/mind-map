@@ -70,6 +70,12 @@
         {{ $t('contextmenu.pasteNode') }}
         <span class="desc">Ctrl + V</span>
       </div>
+      <div class="item" @click="exec('REMOVE_HYPERLINK')" v-if="hasHyperlink">
+        {{ $t('contextmenu.removeHyperlink') }}
+      </div>
+      <div class="item" @click="exec('REMOVE_NOTE')" v-if="hasNote">
+        {{ $t('contextmenu.removeNote') }}
+      </div>
     </template>
     <template v-if="type === 'svg'">
       <div class="item" @click="exec('RETURN_CENTER')">
@@ -180,6 +186,12 @@ export default {
     },
     isGeneralization() {
       return this.node.isGeneralization
+    },
+    hasHyperlink() {
+      return !!this.node.getData('hyperlink')
+    },
+    hasNote() {
+      return !!this.node.getData('note')
     }
   },
   created() {
@@ -301,6 +313,12 @@ export default {
           break
         case 'FIT_CANVAS':
           this.mindMap.view.fit()
+          break
+        case 'REMOVE_HYPERLINK':
+          this.node.setHyperlink('', '')
+          break
+        case 'REMOVE_NOTE':
+          this.node.setNote('')
           break
         default:
           this.$bus.$emit('execCommand', key, ...args)
