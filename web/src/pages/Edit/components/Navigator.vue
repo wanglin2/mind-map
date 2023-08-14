@@ -127,7 +127,7 @@ export default {
   height: 220px;
   background-color: #fff;
   bottom: 80px;
-  right: 20px;
+  right: 70px;
   box-shadow: 0 0 16px #989898;
   border-radius: 4px;
   border: 1px solid #eee;
