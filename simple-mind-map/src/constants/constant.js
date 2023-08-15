@@ -330,5 +330,6 @@ export const nodeDataNoStylePropList = [
 
 // 数据缓存
 export const commonCaches = {
-  measureCustomNodeContentSizeEl: null
+  measureCustomNodeContentSizeEl: null,
+  measureRichtextNodeTextSizeEl: null
 }
