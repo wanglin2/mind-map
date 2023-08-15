@@ -78,7 +78,7 @@ class TouchEvent {
         return
       }
       const viewBefore = this.touchStartScaleView
-      const scale = viewBefore.scale * (distance / viewBefore.distance)
+      let scale = viewBefore.scale * (distance / viewBefore.distance)
       if (Math.abs(distance - viewBefore.distance) <= 10) {
         scale = viewBefore.scale
       }
