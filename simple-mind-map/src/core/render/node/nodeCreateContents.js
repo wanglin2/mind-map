@@ -1,4 +1,10 @@
-import { measureText, resizeImgSize, removeHtmlStyle, addHtmlStyle, checkIsRichText } from '../../../utils'
+import {
+  measureText,
+  resizeImgSize,
+  removeHtmlStyle,
+  addHtmlStyle,
+  checkIsRichText
+} from '../../../utils'
 import { Image, SVG, A, G, Rect, Text, ForeignObject } from '@svgdotjs/svg.js'
 import iconsSvg from '../../../svg/icons'
 import { CONSTANTS, commonCaches } from '../../../constants/constant'
@@ -54,7 +60,10 @@ function createIconNode() {
   }
   let iconSize = this.mindMap.themeConfig.iconSize
   return _data.icon.map(item => {
-    let src = iconsSvg.getNodeIconListIcon(item, this.mindMap.opt.iconList || [])
+    let src = iconsSvg.getNodeIconListIcon(
+      item,
+      this.mindMap.opt.iconList || []
+    )
     let node = null
     // svg图标
     if (/^<svg/.test(src)) {
@@ -108,7 +117,10 @@ function createRichTextNode() {
     this.nodeData.data.text = text
   }
   let html = `<div>${this.nodeData.data.text}</div>`
-  let div = document.createElement('div')
+  if (!commonCaches.measureRichtextNodeTextSizeEl) {
+    commonCaches.measureRichtextNodeTextSizeEl = document.createElement('div')
+  }
+  let div = commonCaches.measureRichtextNodeTextSizeEl
   div.innerHTML = html
   div.style.cssText = `position: fixed; left: -999999px;`
   let el = div.children[0]
@@ -117,12 +129,18 @@ function createRichTextNode() {
   el.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + 'px'
   this.mindMap.el.appendChild(div)
   let { width, height } = el.getBoundingClientRect()
-  width = Math.ceil(width) + 1// 修复getBoundingClientRect方法对实际宽度是小数的元素获取到的值是整数，导致宽度不够文本发生换行的问题
+  // 如果文本为空，那么需要计算一个默认高度
+  if (height <= 0) {
+    div.innerHTML = '<p>abc123我和你</p>'
+    let elTmp = div.children[0]
+    elTmp.classList.add('smm-richtext-node-wrap')
+    height = elTmp.getBoundingClientRect().height
+  }
+  width = Math.ceil(width) + 1 // 修复getBoundingClientRect方法对实际宽度是小数的元素获取到的值是整数，导致宽度不够文本发生换行的问题
   height = Math.ceil(height)
   g.attr('data-width', width)
   g.attr('data-height', height)
   html = div.innerHTML
-  this.mindMap.el.removeChild(div)
   let foreignObject = new ForeignObject()
   foreignObject.width(width)
   foreignObject.height(height)
@@ -274,9 +292,10 @@ function createNoteNode() {
           box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
           display: none;
           background-color: #fff;
-          z-index: ${ this.mindMap.opt.nodeNoteTooltipZIndex }
+          z-index: ${this.mindMap.opt.nodeNoteTooltipZIndex}
       `
-      const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
+      const targetNode =
+        this.mindMap.opt.customInnerElsAppendTo || document.body
       targetNode.appendChild(this.noteEl)
     }
     this.noteEl.innerText = this.nodeData.data.note
@@ -310,7 +329,7 @@ function createNoteNode() {
 }
 
 // 测量自定义节点内容元素的宽高
-function measureCustomNodeContentSize (content) {
+function measureCustomNodeContentSize(content) {
   if (!commonCaches.measureCustomNodeContentSizeEl) {
     commonCaches.measureCustomNodeContentSizeEl = document.createElement('div')
     commonCaches.measureCustomNodeContentSizeEl.style.cssText = `
@@ -330,19 +349,19 @@ function measureCustomNodeContentSize (content) {
 }
 
 // 是否使用的是自定义节点内容
-function isUseCustomNodeContent()  {
+function isUseCustomNodeContent() {
   return !!this._customNodeContent
 }
 
 export default {
-    createImgNode,
-    getImgShowSize,
-    createIconNode,
-    createRichTextNode,
-    createTextNode,
-    createHyperlinkNode,
-    createTagNode,
-    createNoteNode,
-    measureCustomNodeContentSize,
-    isUseCustomNodeContent
+  createImgNode,
+  getImgShowSize,
+  createIconNode,
+  createRichTextNode,
+  createTextNode,
+  createHyperlinkNode,
+  createTagNode,
+  createNoteNode,
+  measureCustomNodeContentSize,
+  isUseCustomNodeContent
 }
