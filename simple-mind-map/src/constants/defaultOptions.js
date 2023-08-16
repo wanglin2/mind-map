@@ -18,8 +18,6 @@ export const defaultOpt = {
   mouseScaleCenterUseMousePosition: true,
   // 最多显示几个标签
   maxTag: 5,
-  // 导出图片时的内边距
-  exportPadding: 20,
   // 展开收缩按钮尺寸
   expandBtnSize: 20,
   // 节点里图片和文字的间距
@@ -81,7 +79,7 @@ export const defaultOpt = {
   enableShortcutOnlyWhenMouseInSvg: true,
   // 初始根节点的位置
   initRootNodePosition: null,
-  // 导出png、svg、pdf时的图形内边距
+  // 导出png、svg、pdf时的图形内边距，注意是单侧内边距
   exportPaddingX: 10,
   exportPaddingY: 10,
   // 节点文本编辑框的z-index
