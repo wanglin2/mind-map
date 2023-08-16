@@ -8,7 +8,6 @@ class Export {
   //  构造函数
   constructor(opt) {
     this.mindMap = opt.mindMap
-    this.exportPadding = this.mindMap.opt.exportPadding
   }
 
   //  导出
@@ -51,14 +50,17 @@ class Export {
   //   svg转png
   svgToPng(svgSrc, transparent) {
     return new Promise((resolve, reject) => {
+      // const { exportPaddingX, exportPaddingY } = this.mindMap.opt
+      let exportPaddingX = 0
+      let exportPaddingY = 0
       const img = new Image()
       // 跨域图片需要添加这个属性，否则画布被污染了无法导出图片
       img.setAttribute('crossOrigin', 'anonymous')
       img.onload = async () => {
         try {
           let canvas = document.createElement('canvas')
-          canvas.width = img.width + this.exportPadding * 2
-          canvas.height = img.height + this.exportPadding * 2
+          canvas.width = img.width + exportPaddingX * 2
+          canvas.height = img.height + exportPaddingY * 2
           let ctx = canvas.getContext('2d')
           // 绘制背景
           if (!transparent) {
@@ -71,8 +73,8 @@ class Export {
             0,
             img.width,
             img.height,
-            this.exportPadding,
-            this.exportPadding,
+            exportPaddingX,
+            exportPaddingY,
             img.width,
             img.height
           )
