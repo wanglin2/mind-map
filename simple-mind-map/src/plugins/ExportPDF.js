@@ -8,7 +8,16 @@ class ExportPDF {
   }
 
   //  导出为pdf
-  pdf(name, img) {
+  pdf(name, img, useMultiPageExport = false) {
+    if (useMultiPageExport) {
+      this.multiPageExport(name, img)
+    } else {
+      this.onePageExport(name, img)
+    }
+  }
+
+  // 单页导出
+  onePageExport(name, img) {
     let pdf = new JsPDF('', 'pt', 'a4')
     let a4Width = 595
     let a4Height = 841
@@ -33,6 +42,52 @@ class ExportPDF {
         h = a4Width / imageRatio
       }
       pdf.addImage(img, 'PNG', (a4Width - w) / 2, (a4Height - h) / 2, w, h)
+      pdf.save(name)
+    }
+    image.src = img
+  }
+
+  // 多页导出
+  multiPageExport(name, img) {
+    let image = new Image()
+    const a4Width = 592.28
+    const a4Height = 841.89
+    image.onload = () => {
+      let imageWidth = image.width
+      let imageHeight = image.height
+      // 一页pdf显示高度
+      let pageHeight = (imageWidth / a4Width) * a4Height
+      // 未生成pdf的高度
+      let leftHeight = imageHeight
+      // 偏移
+      let position = 0
+      // a4纸的尺寸[595.28,841.89]，图片在pdf中图片的宽高
+      let imgWidth = a4Width
+      let imgHeight = (a4Width / imageWidth) * imageHeight
+      let pdf = new JsPDF('', 'pt', 'a4')
+      // 有两个高度需要区分，一个是图片的实际高度，和生成pdf的页面高度(841.89)
+      // 当内容未超过pdf一页显示的范围，无需分页
+      if (leftHeight < pageHeight) {
+        pdf.addImage(
+          img,
+          'PNG',
+          (a4Width - imgWidth) / 2,
+          (a4Height - imgHeight) / 2,
+          imgWidth,
+          imgHeight
+        )
+      } else {
+        // 分页
+        while (leftHeight > 0) {
+          pdf.addImage(img, 'PNG', 0, position, imgWidth, imgHeight)
+          leftHeight -= pageHeight
+          position -= a4Height
+          // 避免添加空白页
+          if (leftHeight > 0) {
+            pdf.addPage()
+          }
+        }
+      }
       pdf.save(name)
     }
     image.src = img

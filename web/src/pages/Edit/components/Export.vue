@@ -53,6 +53,12 @@
           style="margin-left: 12px"
           >{{ $t('export.isTransparent') }}</el-checkbox
         >
+        <el-checkbox
+          v-show="['pdf'].includes(exportType)"
+          v-model="useMultiPageExport"
+          style="margin-left: 12px"
+          >{{ $t('export.useMultiPageExport') }}</el-checkbox
+        >
       </div>
       <div class="downloadTypeList">
         <div
@@ -101,7 +107,8 @@ export default {
       loading: false,
       loadingText: '',
       paddingX: 10,
-      paddingY: 10
+      paddingY: 10,
+      useMultiPageExport: false
     }
   },
   computed: {
@@ -175,6 +182,8 @@ export default {
           this.fileName,
           this.isTransparent
         )
+      } else if (this.exportType === 'pdf') {
+        this.$bus.$emit('export', this.exportType, true, this.fileName, this.useMultiPageExport)
       } else {
         this.$bus.$emit('export', this.exportType, true, this.fileName)
       }

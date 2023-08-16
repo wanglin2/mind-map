@@ -175,12 +175,12 @@ class Export {
   }
 
   //  导出为pdf
-  async pdf(name) {
+  async pdf(name, useMultiPageExport) {
     if (!this.mindMap.doExportPDF) {
       throw new Error('请注册ExportPDF插件')
     }
     let img = await this.png()
-    this.mindMap.doExportPDF.pdf(name, img)
+    this.mindMap.doExportPDF.pdf(name, img, useMultiPageExport)
   }
 
   // 导出为xmind
