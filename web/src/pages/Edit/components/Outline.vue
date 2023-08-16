@@ -69,7 +69,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isDark', 'isOutlineEdit'])
+    ...mapState(['isDark'])
   },
   created() {
     window.addEventListener('keydown', this.onKeyDown)
