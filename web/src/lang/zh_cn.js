@@ -108,7 +108,8 @@ export default {
     notifyTitle: '消息',
     notifyMessage: '如果没有触发下载，请检查是否被浏览器拦截了',
     paddingX: '水平内边距',
-    paddingY: '垂直内边距'
+    paddingY: '垂直内边距',
+    useMultiPageExport: '是否多页导出'
   },
   fullscreen: {
     fullscreenShow: '全屏查看',
