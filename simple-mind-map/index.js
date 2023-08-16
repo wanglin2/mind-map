@@ -317,9 +317,9 @@ class MindMap {
     // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
     const rect = draw.rbox()
     // 内边距
-    rect.width += paddingX
-    rect.height += paddingY
-    draw.translate(paddingX / 2, paddingY / 2)
+    rect.width += paddingX * 2
+    rect.height += paddingY * 2
+    draw.translate(paddingX, paddingY)
     // 将svg设置为实际内容的宽高
     svg.size(rect.width, rect.height)
     // 把实际内容变换
