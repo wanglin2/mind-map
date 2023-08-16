@@ -145,7 +145,8 @@ export default {
     addTip: '请按回车键添加'
   },
   outline: {
-    title: '大纲'
+    title: '大纲',
+    nodeDefaultText: '分支节点'
   },
   scale: {
     zoomIn: '放大',
