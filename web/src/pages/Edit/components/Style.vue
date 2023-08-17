@@ -1,6 +1,10 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('style.title')">
-    <div class="styleBox" :class="{ isDark: isDark }" v-if="activeNodes.length > 0">
+    <div
+      class="styleBox"
+      :class="{ isDark: isDark }"
+      v-if="activeNodes.length > 0"
+    >
       <el-tabs class="tab" v-model="activeTab" @tab-click="handleTabClick">
         <el-tab-pane :label="$t('style.normal')" name="normal"></el-tab-pane>
         <el-tab-pane :label="$t('style.active')" name="active"></el-tab-pane>
@@ -196,6 +200,17 @@
                 :label="item.name"
                 :value="item.value"
               >
+                <svg width="120" height="34">
+                  <line
+                    x1="10"
+                    y1="17"
+                    x2="110"
+                    y2="17"
+                    stroke-width="2"
+                    :stroke="style.borderDasharray === item.value ? '#409eff' : isDark ? '#fff' : '#000'"
+                    :stroke-dasharray="item.value"
+                  ></line>
+                </svg>
               </el-option>
             </el-select>
           </div>
@@ -217,6 +232,12 @@
                 :label="item"
                 :value="item"
               >
+                <span
+                  v-if="item > 0"
+                  class="borderLine"
+                  :class="{ isDark: isDark }"
+                  :style="{ height: item + 'px' }"
+                ></span>
               </el-option>
             </el-select>
           </div>
@@ -280,6 +301,14 @@
                 :label="item.name"
                 :value="item.value"
               >
+                <svg width="60" height="26" style="margin-top: 5px">
+                  <path
+                    :d="shapeListMap[item.value]"
+                    fill="none"
+                    :stroke="style.shape === item.value ? '#409eff' : isDark ? '#fff' : '#000'"
+                    stroke-width="2"
+                  ></path>
+                </svg>
               </el-option>
             </el-select>
           </div>
@@ -320,6 +349,17 @@
                 :label="item.name"
                 :value="item.value"
               >
+                <svg width="120" height="34">
+                  <line
+                    x1="10"
+                    y1="17"
+                    x2="110"
+                    y2="17"
+                    stroke-width="2"
+                    :stroke="style.lineDasharray === item.value ? '#409eff' : isDark ? '#fff' : '#000'"
+                    :stroke-dasharray="item.value"
+                  ></line>
+                </svg>
               </el-option>
             </el-select>
           </div>
@@ -341,6 +381,12 @@
                 :label="item"
                 :value="item"
               >
+                <span
+                  v-if="item > 0"
+                  class="borderLine"
+                  :class="{ isDark: isDark }"
+                  :style="{ height: item + 'px' }"
+                ></span>
               </el-option>
             </el-select>
           </div>
@@ -388,7 +434,8 @@ import {
   borderDasharrayList,
   borderRadiusList,
   lineHeightList,
-  shapeList
+  shapeList,
+  shapeListMap
 } from '@/config'
 import { supportActiveStyle } from 'simple-mind-map/src/themes/default'
 import { mapState } from 'vuex'
@@ -407,10 +454,8 @@ export default {
   data() {
     return {
       supportActiveStyle,
-
       fontSizeList,
       borderWidthList,
-
       borderRadiusList,
       lineHeightList,
       activeNodes: [],
@@ -448,7 +493,10 @@ export default {
     },
     shapeList() {
       return shapeList[this.$i18n.locale] || shapeList.zh
-    }
+    },
+    shapeListMap() {
+      return shapeListMap[this.$i18n.locale] || shapeListMap.zh
+    },
   },
   watch: {
     activeSidebar(val) {
@@ -635,7 +683,7 @@ export default {
       .row {
         .rowItem {
           .name {
-            color: hsla(0,0%,100%,.6);
+            color: hsla(0, 0%, 100%, 0.6);
           }
         }
 
@@ -762,6 +810,23 @@ export default {
         height: 2px;
       }
     }
+  }
+}
+
+.borderLine {
+  display: inline-block;
+  width: 100%;
+  background-color: #000;
+
+  &.isDark {
+    background-color: #fff;
+  }
+}
+</style>
+<style lang="less">
+.el-select-dropdown__item.selected {
+  .borderLine {
+    background-color: #409eff;
   }
 }
 </style>
