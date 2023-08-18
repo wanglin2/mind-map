@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Changelog</h1>
-<h2>0.6.15</h2>
+<h2>0.6.15-fix.1</h2>
 <p>新增：</p>
 <blockquote>
 <p>1.导出pdf支持根据图片大小分页导出。</p>
