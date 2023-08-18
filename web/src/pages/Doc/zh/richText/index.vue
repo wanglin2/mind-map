@@ -18,6 +18,9 @@
 <p><code>v0.5.7+</code>的版本直接使用<code>html2canvas</code>转换整个<code>svg</code>，速度不再是问题，但是目前存在一个<code>bug</code>，就是节点的颜色导出后不生效。</p>
 </blockquote>
 <p><code>v0.6.13+</code>版本使用<a href="https://github.com/1904labs/dom-to-image-more">dom-to-image-more</a>替换了<code>html2canvas</code>，解决了节点的颜色导出后不生效的问题。</p>
+<blockquote>
+<p>dom-to-image-more兼容性比较差，在很多浏览器上导出图片都是空的，所以可以根据你自己的需求替换成html2canvas。</p>
+</blockquote>
 <h2>注册</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
 <span class="hljs-keyword">import</span> RichText <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/RichText.js&#x27;</span>
