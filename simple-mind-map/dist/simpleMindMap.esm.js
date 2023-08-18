@@ -13277,7 +13277,7 @@ var require_html2canvas = __commonJS({
           return Context2;
         }()
       );
-      var html2canvas2 = function(element2, options) {
+      var html2canvas = function(element2, options) {
         if (options === void 0) {
           options = {};
         }
@@ -13387,7 +13387,7 @@ var require_html2canvas = __commonJS({
         var defaultBackgroundColor = typeof backgroundColorOverride === "string" ? parseColor(context, backgroundColorOverride) : backgroundColorOverride === null ? COLORS.TRANSPARENT : 4294967295;
         return element2 === ownerDocument.documentElement ? isTransparent2(documentBackgroundColor) ? isTransparent2(bodyBackgroundColor) ? defaultBackgroundColor : bodyBackgroundColor : documentBackgroundColor : defaultBackgroundColor;
       };
-      return html2canvas2;
+      return html2canvas;
     });
   }
 });
@@ -36622,10 +36622,505 @@ var require_quill = __commonJS({
   }
 });
 
+// ../simple-mind-map/node_modules/dom-to-image-more/dist/dom-to-image-more.min.js
+var require_dom_to_image_more_min = __commonJS({
+  "../simple-mind-map/node_modules/dom-to-image-more/dist/dom-to-image-more.min.js"(exports, module) {
+    !function(u3) {
+      "use strict";
+      const f3 = function() {
+        let e3 = 0;
+        return { escape: function(e4) {
+          return e4.replace(/([.*+?^${}()|[]\/\\])/g, "\\$1");
+        }, isDataUrl: function(e4) {
+          return -1 !== e4.search(/^(data:)/);
+        }, canvasToBlob: function(t5) {
+          if (t5.toBlob)
+            return new Promise(function(e4) {
+              t5.toBlob(e4);
+            });
+          return function(r4) {
+            return new Promise(function(e4) {
+              var t6 = s3(r4.toDataURL().split(",")[1]), n5 = t6.length, o5 = new Uint8Array(n5);
+              for (let e5 = 0; e5 < n5; e5++)
+                o5[e5] = t6.charCodeAt(e5);
+              e4(new Blob([o5], { type: "image/png" }));
+            });
+          }(t5);
+        }, resolveUrl: function(e4, t5) {
+          var n5 = document.implementation.createHTMLDocument(), o5 = n5.createElement("base"), r4 = (n5.head.appendChild(o5), n5.createElement("a"));
+          return n5.body.appendChild(r4), o5.href = t5, r4.href = e4, r4.href;
+        }, getAndEncode: function(u4) {
+          let e4 = c4.impl.urlCache.find(function(e5) {
+            return e5.url === u4;
+          });
+          e4 || (e4 = { url: u4, promise: null }, c4.impl.urlCache.push(e4));
+          null === e4.promise && (c4.impl.options.cacheBust && (u4 += (/\?/.test(u4) ? "&" : "?") + (/* @__PURE__ */ new Date()).getTime()), e4.promise = new Promise(function(t5) {
+            const e5 = c4.impl.options.httpTimeout, n5 = new XMLHttpRequest();
+            n5.onreadystatechange = function() {
+              if (4 === n5.readyState)
+                if (200 !== n5.status)
+                  o5 ? t5(o5) : i5(`cannot fetch resource: ${u4}, status: ` + n5.status);
+                else {
+                  const e6 = new FileReader();
+                  e6.onloadend = function() {
+                    t5(e6.result);
+                  }, e6.readAsDataURL(n5.response);
+                }
+            }, n5.ontimeout = function() {
+              o5 ? t5(o5) : i5(`timeout of ${e5}ms occured while fetching resource: ` + u4);
+            }, n5.responseType = "blob", n5.timeout = e5, c4.impl.options.useCredentials && (n5.withCredentials = true), n5.open("GET", u4, true), n5.send();
+            let o5;
+            var r4;
+            function i5(e6) {
+              console.error(e6), t5("");
+            }
+            c4.impl.options.imagePlaceholder && (r4 = c4.impl.options.imagePlaceholder.split(/,/)) && r4[1] && (o5 = r4[1]);
+          }));
+          return e4.promise;
+        }, uid: function() {
+          return "u" + ("0000" + (Math.random() * Math.pow(36, 4) << 0).toString(36)).slice(-4) + e3++;
+        }, delay: function(n5) {
+          return function(t5) {
+            return new Promise(function(e4) {
+              setTimeout(function() {
+                e4(t5);
+              }, n5);
+            });
+          };
+        }, asArray: function(t5) {
+          var n5 = [], o5 = t5.length;
+          for (let e4 = 0; e4 < o5; e4++)
+            n5.push(t5[e4]);
+          return n5;
+        }, escapeXhtml: function(e4) {
+          return e4.replace(/%/g, "%25").replace(/#/g, "%23").replace(/\n/g, "%0A");
+        }, makeImage: function(o5) {
+          return "data:," !== o5 ? new Promise(function(e4, t5) {
+            const n5 = new Image();
+            c4.impl.options.useCredentials && (n5.crossOrigin = "use-credentials"), n5.onload = function() {
+              window && window.requestAnimationFrame ? window.requestAnimationFrame(function() {
+                e4(n5);
+              }) : e4(n5);
+            }, n5.onerror = t5, n5.src = o5;
+          }) : Promise.resolve();
+        }, width: function(e4) {
+          var t5 = i4(e4, "width");
+          if (!isNaN(t5))
+            return t5;
+          var t5 = i4(e4, "border-left-width"), n5 = i4(e4, "border-right-width");
+          return e4.scrollWidth + t5 + n5;
+        }, height: function(e4) {
+          var t5 = i4(e4, "height");
+          if (!isNaN(t5))
+            return t5;
+          var t5 = i4(e4, "border-top-width"), n5 = i4(e4, "border-bottom-width");
+          return e4.scrollHeight + t5 + n5;
+        }, getWindow: t4, isElement: r3, isElementHostForOpenShadowRoot: function(e4) {
+          return r3(e4) && null !== e4.shadowRoot;
+        }, isShadowRoot: n4, isInShadowRoot: o4, isHTMLElement: function(e4) {
+          return e4 instanceof t4(e4).HTMLElement;
+        }, isHTMLCanvasElement: function(e4) {
+          return e4 instanceof t4(e4).HTMLCanvasElement;
+        }, isHTMLInputElement: function(e4) {
+          return e4 instanceof t4(e4).HTMLInputElement;
+        }, isHTMLImageElement: function(e4) {
+          return e4 instanceof t4(e4).HTMLImageElement;
+        }, isHTMLLinkElement: function(e4) {
+          return e4 instanceof t4(e4).HTMLLinkElement;
+        }, isHTMLScriptElement: function(e4) {
+          return e4 instanceof t4(e4).HTMLScriptElement;
+        }, isHTMLStyleElement: function(e4) {
+          return e4 instanceof t4(e4).HTMLStyleElement;
+        }, isHTMLTextAreaElement: function(e4) {
+          return e4 instanceof t4(e4).HTMLTextAreaElement;
+        }, isShadowSlotElement: function(e4) {
+          return o4(e4) && e4 instanceof t4(e4).HTMLSlotElement;
+        }, isSVGElement: function(e4) {
+          return e4 instanceof t4(e4).SVGElement;
+        }, isSVGRectElement: function(e4) {
+          return e4 instanceof t4(e4).SVGRectElement;
+        }, isDimensionMissing: function(e4) {
+          return isNaN(e4) || e4 <= 0;
+        } };
+        function t4(e4) {
+          e4 = e4 ? e4.ownerDocument : void 0;
+          return (e4 ? e4.defaultView : void 0) || u3 || window;
+        }
+        function n4(e4) {
+          return e4 instanceof t4(e4).ShadowRoot;
+        }
+        function o4(e4) {
+          return null !== e4 && Object.prototype.hasOwnProperty.call(e4, "getRootNode") && n4(e4.getRootNode());
+        }
+        function r3(e4) {
+          return e4 instanceof t4(e4).Element;
+        }
+        function i4(t5, n5) {
+          if (t5.nodeType === a3) {
+            let e4 = h3(t5).getPropertyValue(n5);
+            if ("px" === e4.slice(-2))
+              return e4 = e4.slice(0, -2), parseFloat(e4);
+          }
+          return NaN;
+        }
+      }(), r2 = function() {
+        const o4 = /url\(['"]?([^'"]+?)['"]?\)/g;
+        return { inlineAll: function(t4, o5, r3) {
+          if (!e3(t4))
+            return Promise.resolve(t4);
+          return Promise.resolve(t4).then(n4).then(function(e4) {
+            let n5 = Promise.resolve(t4);
+            return e4.forEach(function(t5) {
+              n5 = n5.then(function(e5) {
+                return i4(e5, t5, o5, r3);
+              });
+            }), n5;
+          });
+        }, shouldProcess: e3, impl: { readUrls: n4, inline: i4 } };
+        function e3(e4) {
+          return -1 !== e4.search(o4);
+        }
+        function n4(e4) {
+          for (var t4, n5 = []; null !== (t4 = o4.exec(e4)); )
+            n5.push(t4[1]);
+          return n5.filter(function(e5) {
+            return !f3.isDataUrl(e5);
+          });
+        }
+        function i4(n5, o5, t4, e4) {
+          return Promise.resolve(o5).then(function(e5) {
+            return t4 ? f3.resolveUrl(e5, t4) : e5;
+          }).then(e4 || f3.getAndEncode).then(function(e5) {
+            return n5.replace((t5 = o5, new RegExp(`(url\\(['"]?)(${f3.escape(t5)})(['"]?\\))`, "g")), `$1${e5}$3`);
+            var t5;
+          });
+        }
+      }(), e2 = { resolveAll: function() {
+        return t3().then(function(e3) {
+          return Promise.all(e3.map(function(e4) {
+            return e4.resolve();
+          }));
+        }).then(function(e3) {
+          return e3.join("\n");
+        });
+      }, impl: { readAll: t3 } };
+      function t3() {
+        return Promise.resolve(f3.asArray(document.styleSheets)).then(function(e3) {
+          const n4 = [];
+          return e3.forEach(function(t5) {
+            if (Object.prototype.hasOwnProperty.call(Object.getPrototypeOf(t5), "cssRules"))
+              try {
+                f3.asArray(t5.cssRules || []).forEach(n4.push.bind(n4));
+              } catch (e4) {
+                console.error("domtoimage: Error while reading CSS rules from " + t5.href, e4.toString());
+              }
+          }), n4;
+        }).then(function(e3) {
+          return e3.filter(function(e4) {
+            return e4.type === CSSRule.FONT_FACE_RULE;
+          }).filter(function(e4) {
+            return r2.shouldProcess(e4.style.getPropertyValue("src"));
+          });
+        }).then(function(e3) {
+          return e3.map(t4);
+        });
+        function t4(t5) {
+          return { resolve: function() {
+            var e3 = (t5.parentStyleSheet || {}).href;
+            return r2.inlineAll(t5.cssText, e3);
+          }, src: function() {
+            return t5.style.getPropertyValue("src");
+          } };
+        }
+      }
+      const n3 = { inlineAll: function t4(e3) {
+        if (!f3.isElement(e3))
+          return Promise.resolve(e3);
+        return n4(e3).then(function() {
+          return f3.isHTMLImageElement(e3) ? o3(e3).inline() : Promise.all(f3.asArray(e3.childNodes).map(function(e4) {
+            return t4(e4);
+          }));
+        });
+        function n4(o4) {
+          const e4 = ["background", "background-image"], t5 = e4.map(function(t6) {
+            const e5 = o4.style.getPropertyValue(t6), n5 = o4.style.getPropertyPriority(t6);
+            return e5 ? r2.inlineAll(e5).then(function(e6) {
+              o4.style.setProperty(t6, e6, n5);
+            }) : Promise.resolve();
+          });
+          return Promise.all(t5).then(function() {
+            return o4;
+          });
+        }
+      }, impl: { newImage: o3 } };
+      function o3(n4) {
+        return { inline: function(e3) {
+          if (f3.isDataUrl(n4.src))
+            return Promise.resolve();
+          return Promise.resolve(n4.src).then(e3 || f3.getAndEncode).then(function(t4) {
+            return new Promise(function(e4) {
+              n4.onload = e4, n4.onerror = e4, n4.src = t4;
+            });
+          });
+        } };
+      }
+      const l3 = { copyDefaultStyles: true, imagePlaceholder: void 0, cacheBust: false, useCredentials: false, httpTimeout: 3e4, styleCaching: "strict" }, c4 = { toSvg: m4, toPng: function(e3, t4) {
+        return i3(e3, t4).then(function(e4) {
+          return e4.toDataURL();
+        });
+      }, toJpeg: function(e3, t4) {
+        return i3(e3, t4).then(function(e4) {
+          return e4.toDataURL("image/jpeg", (t4 ? t4.quality : void 0) || 1);
+        });
+      }, toBlob: function(e3, t4) {
+        return i3(e3, t4).then(f3.canvasToBlob);
+      }, toPixelData: function(t4, e3) {
+        return i3(t4, e3).then(function(e4) {
+          return e4.getContext("2d").getImageData(0, 0, f3.width(t4), f3.height(t4)).data;
+        });
+      }, toCanvas: i3, impl: { fontFaces: e2, images: n3, util: f3, inliner: r2, urlCache: [], options: {} } }, a3 = ("object" == typeof exports && "object" == typeof module ? module.exports = c4 : u3.domtoimage = c4, ("undefined" != typeof Node ? Node.ELEMENT_NODE : void 0) || 1), h3 = (void 0 !== u3 ? u3.getComputedStyle : void 0) || ("undefined" != typeof window ? window.getComputedStyle : void 0) || globalThis.getComputedStyle, s3 = (void 0 !== u3 ? u3.atob : void 0) || ("undefined" != typeof window ? window.atob : void 0) || globalThis.atob;
+      function m4(e3, r3) {
+        const t4 = c4.impl.util.getWindow(e3);
+        var n4 = r3 = r3 || {};
+        void 0 === n4.copyDefaultStyles ? c4.impl.options.copyDefaultStyles = l3.copyDefaultStyles : c4.impl.options.copyDefaultStyles = n4.copyDefaultStyles, void 0 === n4.imagePlaceholder ? c4.impl.options.imagePlaceholder = l3.imagePlaceholder : c4.impl.options.imagePlaceholder = n4.imagePlaceholder, void 0 === n4.cacheBust ? c4.impl.options.cacheBust = l3.cacheBust : c4.impl.options.cacheBust = n4.cacheBust, void 0 === n4.useCredentials ? c4.impl.options.useCredentials = l3.useCredentials : c4.impl.options.useCredentials = n4.useCredentials, void 0 === n4.httpTimeout ? c4.impl.options.httpTimeout = l3.httpTimeout : c4.impl.options.httpTimeout = n4.httpTimeout, void 0 === n4.styleCaching ? c4.impl.options.styleCaching = l3.styleCaching : c4.impl.options.styleCaching = n4.styleCaching;
+        let i4 = [];
+        return Promise.resolve(e3).then(function(e4) {
+          if (e4.nodeType === a3)
+            return e4;
+          var t5 = e4, n5 = e4.parentNode, o4 = document.createElement("span");
+          return n5.replaceChild(o4, t5), o4.append(e4), i4.push({ parent: n5, child: t5, wrapper: o4 }), o4;
+        }).then(function(e4) {
+          return function l4(t5, a4, r4, s4) {
+            const e5 = a4.filter;
+            if (t5 === d2 || f3.isHTMLScriptElement(t5) || f3.isHTMLStyleElement(t5) || f3.isHTMLLinkElement(t5) || null !== r4 && e5 && !e5(t5))
+              return Promise.resolve();
+            return Promise.resolve(t5).then(n5).then(function(e6) {
+              return i5(e6, o4(t5));
+            }).then(function(e6) {
+              return u4(e6, t5);
+            });
+            function n5(e6) {
+              return f3.isHTMLCanvasElement(e6) ? f3.makeImage(e6.toDataURL()) : e6.cloneNode(false);
+            }
+            function o4(e6) {
+              return f3.isElementHostForOpenShadowRoot(e6) ? e6.shadowRoot : e6;
+            }
+            function i5(t6, e6) {
+              const n6 = i6(e6);
+              let o5 = Promise.resolve();
+              if (0 !== n6.length) {
+                const u5 = h3(r5(e6));
+                f3.asArray(n6).forEach(function(e7) {
+                  o5 = o5.then(function() {
+                    return l4(e7, a4, u5, s4).then(function(e8) {
+                      e8 && t6.appendChild(e8);
+                    });
+                  });
+                });
+              }
+              return o5.then(function() {
+                return t6;
+              });
+              function r5(e7) {
+                return f3.isShadowRoot(e7) ? e7.host : e7;
+              }
+              function i6(e7) {
+                return f3.isShadowSlotElement(e7) ? e7.assignedNodes() : e7.childNodes;
+              }
+            }
+            function u4(s5, c5) {
+              return !f3.isElement(s5) || f3.isShadowSlotElement(c5) ? Promise.resolve(s5) : Promise.resolve().then(e6).then(t6).then(n6).then(o5).then(function() {
+                return s5;
+              });
+              function e6() {
+                function o6(e8, t7) {
+                  t7.font = e8.font, t7.fontFamily = e8.fontFamily, t7.fontFeatureSettings = e8.fontFeatureSettings, t7.fontKerning = e8.fontKerning, t7.fontSize = e8.fontSize, t7.fontStretch = e8.fontStretch, t7.fontStyle = e8.fontStyle, t7.fontVariant = e8.fontVariant, t7.fontVariantCaps = e8.fontVariantCaps, t7.fontVariantEastAsian = e8.fontVariantEastAsian, t7.fontVariantLigatures = e8.fontVariantLigatures, t7.fontVariantNumeric = e8.fontVariantNumeric, t7.fontVariationSettings = e8.fontVariationSettings, t7.fontWeight = e8.fontWeight;
+                }
+                function e7(e8, t7) {
+                  const n7 = h3(e8);
+                  n7.cssText ? (t7.style.cssText = n7.cssText, o6(n7, t7.style)) : (y4(a4, e8, n7, r4, t7), null === r4 && (["inset-block", "inset-block-start", "inset-block-end"].forEach((e9) => t7.style.removeProperty(e9)), ["left", "right", "top", "bottom"].forEach((e9) => {
+                    t7.style.getPropertyValue(e9) && t7.style.setProperty(e9, "0px");
+                  })));
+                }
+                e7(c5, s5);
+              }
+              function t6() {
+                const l5 = f3.uid();
+                function t7(r5) {
+                  const i6 = h3(c5, r5), u5 = i6.getPropertyValue("content");
+                  if ("" !== u5 && "none" !== u5) {
+                    let e7 = function() {
+                      const e8 = `.${l5}:` + r5, t9 = (i6.cssText ? n8 : o6)();
+                      return document.createTextNode(e8 + `{${t9}}`);
+                      function n8() {
+                        return `${i6.cssText} content: ${u5};`;
+                      }
+                      function o6() {
+                        const e9 = f3.asArray(i6).map(t10).join("; ");
+                        return e9 + ";";
+                        function t10(e10) {
+                          const t11 = i6.getPropertyValue(e10), n9 = i6.getPropertyPriority(e10) ? " !important" : "";
+                          return e10 + ": " + t11 + n9;
+                        }
+                      }
+                    };
+                    const t8 = s5.getAttribute("class") || "", n7 = (s5.setAttribute("class", t8 + " " + l5), document.createElement("style"));
+                    n7.appendChild(e7()), s5.appendChild(n7);
+                  }
+                }
+                [":before", ":after"].forEach(function(e7) {
+                  t7(e7);
+                });
+              }
+              function n6() {
+                f3.isHTMLTextAreaElement(c5) && (s5.innerHTML = c5.value), f3.isHTMLInputElement(c5) && s5.setAttribute("value", c5.value);
+              }
+              function o5() {
+                f3.isSVGElement(s5) && (s5.setAttribute("xmlns", "http://www.w3.org/2000/svg"), f3.isSVGRectElement(s5)) && ["width", "height"].forEach(function(e7) {
+                  const t7 = s5.getAttribute(e7);
+                  t7 && s5.style.setProperty(e7, t7);
+                });
+              }
+            }
+          }(e4, r3, null, t4);
+        }).then(p3).then(g2).then(function(t5) {
+          r3.bgcolor && (t5.style.backgroundColor = r3.bgcolor);
+          r3.width && (t5.style.width = r3.width + "px");
+          r3.height && (t5.style.height = r3.height + "px");
+          r3.style && Object.keys(r3.style).forEach(function(e5) {
+            t5.style[e5] = r3.style[e5];
+          });
+          let e4 = null;
+          "function" == typeof r3.onclone && (e4 = r3.onclone(t5));
+          return Promise.resolve(e4).then(function() {
+            return t5;
+          });
+        }).then(function(e4) {
+          let n5 = r3.width || f3.width(e4), o4 = r3.height || f3.height(e4);
+          return Promise.resolve(e4).then(function(e5) {
+            return e5.setAttribute("xmlns", "http://www.w3.org/1999/xhtml"), new XMLSerializer().serializeToString(e5);
+          }).then(f3.escapeXhtml).then(function(e5) {
+            var t5 = (f3.isDimensionMissing(n5) ? ' width="100%"' : ` width="${n5}"`) + (f3.isDimensionMissing(o4) ? ' height="100%"' : ` height="${o4}"`);
+            return `<svg xmlns="http://www.w3.org/2000/svg"${(f3.isDimensionMissing(n5) ? "" : ` width="${n5}"`) + (f3.isDimensionMissing(o4) ? "" : ` height="${o4}"`)}><foreignObject${t5}>${e5}</foreignObject></svg>`;
+          }).then(function(e5) {
+            return "data:image/svg+xml;charset=utf-8," + e5;
+          });
+        }).then(function(e4) {
+          for (; 0 < i4.length; ) {
+            var t5 = i4.pop();
+            t5.parent.replaceChild(t5.child, t5.wrapper);
+          }
+          return e4;
+        }).then(function(e4) {
+          return c4.impl.urlCache = [], function() {
+            d2 && (document.body.removeChild(d2), d2 = null);
+            w2 && clearTimeout(w2);
+            w2 = setTimeout(() => {
+              w2 = null, E2 = {};
+            }, 2e4);
+          }(), e4;
+        });
+      }
+      function i3(r3, i4) {
+        return m4(r3, i4 = i4 || {}).then(f3.makeImage).then(function(e3) {
+          var t4 = "number" != typeof i4.scale ? 1 : i4.scale, n4 = function(e4, t5) {
+            let n5 = i4.width || f3.width(e4), o5 = i4.height || f3.height(e4);
+            f3.isDimensionMissing(n5) && (n5 = f3.isDimensionMissing(o5) ? 300 : 2 * o5);
+            f3.isDimensionMissing(o5) && (o5 = n5 / 2);
+            e4 = document.createElement("canvas");
+            e4.width = n5 * t5, e4.height = o5 * t5, i4.bgcolor && ((t5 = e4.getContext("2d")).fillStyle = i4.bgcolor, t5.fillRect(0, 0, e4.width, e4.height));
+            return e4;
+          }(r3, t4), o4 = n4.getContext("2d");
+          return o4.msImageSmoothingEnabled = false, o4.imageSmoothingEnabled = false, e3 && (o4.scale(t4, t4), o4.drawImage(e3, 0, 0)), n4;
+        });
+      }
+      let d2 = null;
+      function p3(n4) {
+        return e2.resolveAll().then(function(e3) {
+          var t4;
+          return "" !== e3 && (t4 = document.createElement("style"), n4.appendChild(t4), t4.appendChild(document.createTextNode(e3))), n4;
+        });
+      }
+      function g2(e3) {
+        return n3.inlineAll(e3).then(function() {
+          return e3;
+        });
+      }
+      function y4(e3, t4, i4, u4, n4) {
+        const l4 = c4.impl.options.copyDefaultStyles ? function(t5, e4) {
+          var e4 = function(e5) {
+            var t6 = [];
+            do {
+              if (e5.nodeType === a3) {
+                var n6 = e5.tagName;
+                if (t6.push(n6), v3.includes(n6))
+                  break;
+              }
+            } while (e5 = e5.parentNode, e5);
+            return t6;
+          }(e4), n5 = function(e5) {
+            return ("relaxed" !== t5.styleCaching ? e5 : e5.filter((e6, t6, n6) => 0 === t6 || t6 === n6.length - 1)).join(">");
+          }(e4);
+          if (E2[n5])
+            return E2[n5];
+          var o4 = function() {
+            if (d2)
+              return d2.contentWindow;
+            var e5 = document.characterSet || "UTF-8", t6 = document.doctype, t6 = t6 ? (`<!DOCTYPE ${n6(t6.name)} ${n6(t6.publicId)} ` + n6(t6.systemId)).trim() + ">" : "";
+            return (d2 = document.createElement("iframe")).id = "domtoimage-sandbox-" + f3.uid(), d2.style.visibility = "hidden", d2.style.position = "fixed", document.body.appendChild(d2), function(e6, t7, n7, o5) {
+              try {
+                return e6.contentWindow.document.write(t7 + `<html><head><meta charset='${n7}'><title>${o5}</title></head><body></body></html>`), e6.contentWindow;
+              } catch (e7) {
+              }
+              var r3 = document.createElement("meta");
+              r3.setAttribute("charset", n7);
+              try {
+                var i5 = document.implementation.createHTMLDocument(o5), u5 = (i5.head.appendChild(r3), t7 + i5.documentElement.outerHTML);
+                return e6.setAttribute("srcdoc", u5), e6.contentWindow;
+              } catch (e7) {
+              }
+              return e6.contentDocument.head.appendChild(r3), e6.contentDocument.title = o5, e6.contentWindow;
+            }(d2, t6, e5, "domtoimage-sandbox");
+            function n6(e6) {
+              var t7;
+              return e6 ? ((t7 = document.createElement("div")).innerText = e6, t7.innerHTML) : "";
+            }
+          }(), e4 = function(e5, t6) {
+            let n6 = e5.body;
+            do {
+              var o5 = t6.pop(), o5 = e5.createElement(o5);
+              n6.appendChild(o5), n6 = o5;
+            } while (0 < t6.length);
+            return n6.textContent = "\u200B", n6;
+          }(o4.document, e4), o4 = function(e5, t6) {
+            const n6 = {}, o5 = e5.getComputedStyle(t6);
+            return f3.asArray(o5).forEach(function(e6) {
+              n6[e6] = "width" === e6 || "height" === e6 ? "auto" : o5.getPropertyValue(e6);
+            }), n6;
+          }(o4, e4);
+          return function(e5) {
+            do {
+              var t6 = e5.parentElement;
+              null !== t6 && t6.removeChild(e5), e5 = t6;
+            } while (e5 && "BODY" !== e5.tagName);
+          }(e4), E2[n5] = o4;
+        }(e3, t4) : {}, s4 = n4.style;
+        f3.asArray(i4).forEach(function(e4) {
+          var t5, n5 = i4.getPropertyValue(e4), o4 = l4[e4], r3 = u4 ? u4.getPropertyValue(e4) : void 0;
+          (n5 !== o4 || u4 && n5 !== r3) && (o4 = i4.getPropertyPriority(e4), r3 = s4, n5 = n5, o4 = o4, t5 = 0 <= ["background-clip"].indexOf(e4 = e4), o4 ? (r3.setProperty(e4, n5, o4), t5 && r3.setProperty("-webkit-" + e4, n5, o4)) : (r3.setProperty(e4, n5), t5 && r3.setProperty("-webkit-" + e4, n5)));
+        });
+      }
+      let w2 = null, E2 = {};
+      const v3 = ["ADDRESS", "ARTICLE", "ASIDE", "BLOCKQUOTE", "DETAILS", "DIALOG", "DD", "DIV", "DL", "DT", "FIELDSET", "FIGCAPTION", "FIGURE", "FOOTER", "FORM", "H1", "H2", "H3", "H4", "H5", "H6", "HEADER", "HGROUP", "HR", "LI", "MAIN", "NAV", "OL", "P", "PRE", "SECTION", "SVG", "TABLE", "UL", "math", "svg", "BODY", "HEAD", "HTML"];
+    }(exports);
+  }
+});
+
 // ../simple-mind-map/src/constants/constant.js
 var constant_exports = {};
 __export(constant_exports, {
   CONSTANTS: () => CONSTANTS,
+  ERROR_TYPES: () => ERROR_TYPES,
   commonCaches: () => commonCaches,
   initRootNodePositionMap: () => initRootNodePositionMap,
   layoutList: () => layoutList,
@@ -36954,7 +37449,16 @@ var nodeDataNoStylePropList = [
   "associativeLineTargetControlOffsets"
 ];
 var commonCaches = {
-  measureCustomNodeContentSizeEl: null
+  measureCustomNodeContentSizeEl: null,
+  measureRichtextNodeTextSizeEl: null
+};
+var ERROR_TYPES = {
+  READ_CLIPBOARD_ERROR: "read_clipboard_error",
+  PARSE_PASTE_DATA_ERROR: "parse_paste_data_error",
+  CUSTOM_HANDLE_CLIPBOARD_TEXT_ERROR: "custom_handle_clipboard_text_error",
+  LOAD_CLIPBOARD_IMAGE_ERROR: "load_clipboard_image_error",
+  BEFORE_TEXT_EDIT_ERROR: "before_text_edit_error",
+  EXPORT_ERROR: "export_error"
 };
 
 // ../simple-mind-map/src/core/view/View.js
@@ -37016,14 +37520,18 @@ var View = class {
         mousewheelAction,
         mouseScaleCenterUseMousePosition,
         mousewheelMoveStep,
-        mousewheelZoomActionReverse
+        mousewheelZoomActionReverse,
+        disableMouseWheelZoom
       } = this.mindMap.opt;
       if (customHandleMousewheel && typeof customHandleMousewheel === "function") {
         return customHandleMousewheel(e2);
       }
       if (mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
-        let cx2 = mouseScaleCenterUseMousePosition ? e2.clientX : void 0;
-        let cy2 = mouseScaleCenterUseMousePosition ? e2.clientY : void 0;
+        if (disableMouseWheelZoom)
+          return;
+        const { x: clientX, y: clientY } = this.mindMap.toPos(e2.clientX, e2.clientY);
+        let cx2 = mouseScaleCenterUseMousePosition ? clientX : void 0;
+        let cy2 = mouseScaleCenterUseMousePosition ? clientY : void 0;
         switch (dir) {
           case CONSTANTS.DIR.UP:
           case CONSTANTS.DIR.LEFT:
@@ -37084,27 +37592,37 @@ var View = class {
   }
   //  平移x,y方向
   translateXY(x3, y4) {
+    if (x3 === 0 && y4 === 0)
+      return;
     this.x += x3;
     this.y += y4;
     this.transform();
   }
   //  平移x方向
   translateX(step) {
+    if (step === 0)
+      return;
     this.x += step;
     this.transform();
   }
   //  平移x方式到
   translateXTo(x3) {
+    if (x3 === 0)
+      return;
     this.x = x3;
     this.transform();
   }
   //  平移y方向
   translateY(step) {
+    if (step === 0)
+      return;
     this.y += step;
     this.transform();
   }
   //  平移y方向到
   translateYTo(y4) {
+    if (y4 === 0)
+      return;
     this.y = y4;
     this.transform();
   }
@@ -37399,7 +37917,7 @@ var Style = class {
     }
     let { backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition, backgroundSize } = themeConfig;
     el2.style.backgroundColor = backgroundColor;
-    if (backgroundImage) {
+    if (backgroundImage && backgroundImage !== "none") {
       el2.style.backgroundImage = `url(${backgroundImage})`;
       el2.style.backgroundRepeat = backgroundRepeat;
       el2.style.backgroundPosition = backgroundPosition;
@@ -43203,7 +43721,10 @@ var Shape2 = class {
   //  创建形状节点
   createShape() {
     const shape = this.node.getShape();
+    const borderWidth = this.node.getBorderWidth();
     let { width: width2, height: height2 } = this.node;
+    width2 -= borderWidth;
+    height2 -= borderWidth;
     let node3 = null;
     if (shape === CONSTANTS.SHAPE.RECTANGLE) {
       node3 = new Rect().size(width2, height2);
@@ -43748,6 +44269,7 @@ var loadImage = (imgFile) => {
   });
 };
 var removeHTMLEntities = (str) => {
+  ;
   [["&nbsp;", "&#160;"]].forEach((item) => {
     str = str.replaceAll(item[0], item[1]);
   });
@@ -43790,7 +44312,12 @@ var replaceHtmlText = (html2, searchText, replaceText) => {
       if (node3.nodeType === 1) {
         walk2(node3);
       } else if (node3.nodeType === 3) {
-        root2.replaceChild(document.createTextNode(node3.nodeValue.replaceAll(searchText, replaceText)), node3);
+        root2.replaceChild(
+          document.createTextNode(
+            node3.nodeValue.replaceAll(searchText, replaceText)
+          ),
+          node3
+        );
       }
     });
   };
@@ -43799,7 +44326,9 @@ var replaceHtmlText = (html2, searchText, replaceText) => {
 };
 var isWhite = (color) => {
   color = String(color).replaceAll(/\s+/g, "");
-  return ["#fff", "#ffffff", "#FFF", "#FFFFFF", "rgb(255,255,255)"].includes(color) || /rgba\(255,255,255,[^)]+\)/.test(color);
+  return ["#fff", "#ffffff", "#FFF", "#FFFFFF", "rgb(255,255,255)"].includes(
+    color
+  ) || /rgba\(255,255,255,[^)]+\)/.test(color);
 };
 var isTransparent = (color) => {
   color = String(color).replaceAll(/\s+/g, "");
@@ -43807,7 +44336,18 @@ var isTransparent = (color) => {
 };
 var getVisibleColorFromTheme = (themeConfig) => {
   let { lineColor, root: root2, second, node: node3 } = themeConfig;
-  let list2 = [lineColor, root2.fillColor, root2.color, second.fillColor, second.color, node3.fillColor, node3.color, root2.borderColor, second.borderColor, node3.borderColor];
+  let list2 = [
+    lineColor,
+    root2.fillColor,
+    root2.color,
+    second.fillColor,
+    second.color,
+    node3.fillColor,
+    node3.color,
+    root2.borderColor,
+    second.borderColor,
+    node3.borderColor
+  ];
   for (let i3 = 0; i3 < list2.length; i3++) {
     let color = list2[i3];
     if (!isTransparent(color) && !isWhite(color)) {
@@ -44432,7 +44972,10 @@ function createIconNode() {
   }
   let iconSize = this.mindMap.themeConfig.iconSize;
   return _data.icon.map((item) => {
-    let src = icons_default.getNodeIconListIcon(item, this.mindMap.opt.iconList || []);
+    let src = icons_default.getNodeIconListIcon(
+      item,
+      this.mindMap.opt.iconList || []
+    );
     let node3 = null;
     if (/^<svg/.test(src)) {
       node3 = SVG(src);
@@ -44475,7 +45018,10 @@ function createRichTextNode() {
     this.nodeData.data.text = text3;
   }
   let html2 = `<div>${this.nodeData.data.text}</div>`;
-  let div = document.createElement("div");
+  if (!commonCaches.measureRichtextNodeTextSizeEl) {
+    commonCaches.measureRichtextNodeTextSizeEl = document.createElement("div");
+  }
+  let div = commonCaches.measureRichtextNodeTextSizeEl;
   div.innerHTML = html2;
   div.style.cssText = `position: fixed; left: -999999px;`;
   let el2 = div.children[0];
@@ -44484,12 +45030,17 @@ function createRichTextNode() {
   el2.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + "px";
   this.mindMap.el.appendChild(div);
   let { width: width2, height: height2 } = el2.getBoundingClientRect();
+  if (height2 <= 0) {
+    div.innerHTML = "<p>abc123\u6211\u548C\u4F60</p>";
+    let elTmp = div.children[0];
+    elTmp.classList.add("smm-richtext-node-wrap");
+    height2 = elTmp.getBoundingClientRect().height;
+  }
   width2 = Math.ceil(width2) + 1;
   height2 = Math.ceil(height2);
   g2.attr("data-width", width2);
   g2.attr("data-height", height2);
   html2 = div.innerHTML;
-  this.mindMap.el.removeChild(div);
   let foreignObject = new ForeignObject();
   foreignObject.width(width2);
   foreignObject.height(height2);
@@ -44692,6 +45243,57 @@ var nodeCreateContents_default = {
   isUseCustomNodeContent
 };
 
+// ../simple-mind-map/src/core/render/node/nodeExpandBtnPlaceholderRect.js
+function renderExpandBtnPlaceholderRect() {
+  if (!this.nodeData.children || this.nodeData.children.length <= 0 || this.isRoot) {
+    return;
+  }
+  if (!this.mindMap.opt.alwaysShowExpandBtn) {
+    let { width: width2, height: height2 } = this;
+    if (!this._unVisibleRectRegionNode) {
+      this._unVisibleRectRegionNode = new Rect();
+      this._unVisibleRectRegionNode.fill({
+        color: "transparent"
+      });
+    }
+    this.group.add(this._unVisibleRectRegionNode);
+    this.renderer.layout.renderExpandBtnRect(
+      this._unVisibleRectRegionNode,
+      this.expandBtnSize,
+      width2,
+      height2,
+      this
+    );
+  }
+}
+function clearExpandBtnPlaceholderRect() {
+  if (!this._unVisibleRectRegionNode) {
+    return;
+  }
+  this._unVisibleRectRegionNode.remove();
+  this._unVisibleRectRegionNode = null;
+}
+function updateExpandBtnPlaceholderRect() {
+  if (this.needRerenderExpandBtnPlaceholderRect) {
+    this.needRerenderExpandBtnPlaceholderRect = false;
+    this.renderExpandBtnPlaceholderRect();
+  }
+  if (this.nodeData.children && this.nodeData.children.length > 0) {
+    if (!this._unVisibleRectRegionNode) {
+      this.renderExpandBtnPlaceholderRect();
+    }
+  } else {
+    if (this._unVisibleRectRegionNode) {
+      this.clearExpandBtnPlaceholderRect();
+    }
+  }
+}
+var nodeExpandBtnPlaceholderRect_default = {
+  renderExpandBtnPlaceholderRect,
+  clearExpandBtnPlaceholderRect,
+  updateExpandBtnPlaceholderRect
+};
+
 // ../simple-mind-map/src/core/render/node/Node.js
 var Node2 = class {
   //  构造函数
@@ -44754,11 +45356,15 @@ var Node2 = class {
     this.expandBtnSize = this.mindMap.opt.expandBtnSize;
     this.isMultipleChoice = false;
     this.needLayout = false;
+    this.isHide = false;
     Object.keys(nodeGeneralization_default).forEach((item) => {
       this[item] = nodeGeneralization_default[item].bind(this);
     });
     Object.keys(nodeExpandBtn_default).forEach((item) => {
       this[item] = nodeExpandBtn_default[item].bind(this);
+    });
+    Object.keys(nodeExpandBtnPlaceholderRect_default).forEach((item) => {
+      this[item] = nodeExpandBtnPlaceholderRect_default[item].bind(this);
     });
     Object.keys(nodeCommandWraps_default).forEach((item) => {
       this[item] = nodeCommandWraps_default[item].bind(this);
@@ -44875,9 +45481,10 @@ var Node2 = class {
     let { paddingX: shapePaddingX, paddingY: shapePaddingY } = this.shapeInstance.getShapePadding(_width, _height, paddingX, paddingY);
     this.shapePadding.paddingX = shapePaddingX;
     this.shapePadding.paddingY = shapePaddingY;
+    const borderWidth = this.getBorderWidth();
     return {
-      width: _width + paddingX * 2 + shapePaddingX * 2,
-      height: _height + paddingY * 2 + margin + shapePaddingY * 2
+      width: _width + paddingX * 2 + shapePaddingX * 2 + borderWidth,
+      height: _height + paddingY * 2 + margin + shapePaddingY * 2 + borderWidth
     };
   }
   //  定位节点内容
@@ -44885,9 +45492,11 @@ var Node2 = class {
     this.group.clear();
     let { width: width2, height: height2, textContentItemMargin } = this;
     let { paddingY } = this.getPaddingVale();
-    paddingY += this.shapePadding.paddingY;
+    const halfBorderWidth = this.getBorderWidth() / 2;
+    paddingY += this.shapePadding.paddingY + halfBorderWidth;
     this.shapeNode = this.shapeInstance.createShape();
     this.shapeNode.addClass("smm-node-shape");
+    this.shapeNode.translate(halfBorderWidth, halfBorderWidth);
     this.group.add(this.shapeNode);
     this.updateNodeShape();
     this.renderExpandBtnPlaceholderRect();
@@ -44954,20 +45563,6 @@ var Node2 = class {
     );
     this.group.add(textContentNested);
   }
-  // 渲染展开收起按钮的隐藏占位元素
-  renderExpandBtnPlaceholderRect() {
-    if (!this.mindMap.opt.alwaysShowExpandBtn) {
-      let { width: width2, height: height2 } = this;
-      if (!this._unVisibleRectRegionNode) {
-        this._unVisibleRectRegionNode = new Rect();
-        this._unVisibleRectRegionNode.fill({
-          color: "transparent"
-        });
-      }
-      this.group.add(this._unVisibleRectRegionNode);
-      this.renderer.layout.renderExpandBtnRect(this._unVisibleRectRegionNode, this.expandBtnSize, width2, height2, this);
-    }
-  }
   // 给节点绑定事件
   bindGroupEvent() {
     this.group.on("click", (e2) => {
@@ -44983,7 +45578,7 @@ var Node2 = class {
       if (this.isRoot && e2.which === 3 && !this.mindMap.opt.readonly) {
         e2.stopPropagation();
       }
-      if (!this.isRoot && !this.mindMap.opt.readonly) {
+      if (!this.isRoot && e2.which !== 2 && !this.mindMap.opt.readonly) {
         e2.stopPropagation();
       }
       if (e2.ctrlKey && this.mindMap.opt.enableCtrlKeyNodeSelection) {
@@ -45008,7 +45603,7 @@ var Node2 = class {
       this.mindMap.emit("node_mousedown", this, e2);
     });
     this.group.on("mouseup", (e2) => {
-      if (!this.isRoot && !this.mindMap.opt.readonly) {
+      if (!this.isRoot && e2.which !== 2 && !this.mindMap.opt.readonly) {
         e2.stopPropagation();
       }
       this.mindMap.emit("node_mouseup", this, e2);
@@ -45063,9 +45658,7 @@ var Node2 = class {
     if (!this.group) {
       return;
     }
-    let {
-      alwaysShowExpandBtn
-    } = this.mindMap.opt;
+    let { alwaysShowExpandBtn } = this.mindMap.opt;
     if (alwaysShowExpandBtn) {
       if (this._expandBtn && this.nodeData.children.length <= 0) {
         this.removeExpandBtn();
@@ -45085,6 +45678,17 @@ var Node2 = class {
     if (this.left === t3.translateX && this.top === t3.translateY)
       return;
     this.group.translate(this.left - t3.translateX, this.top - t3.translateY);
+  }
+  // 获取节点相当于画布的位置
+  getNodePosInClient(_left, _top) {
+    let drawTransform = this.mindMap.draw.transform();
+    let { scaleX, scaleY, translateX, translateY } = drawTransform;
+    let left = _left * scaleX + translateX;
+    let top = _top * scaleY + translateY;
+    return {
+      left,
+      top
+    };
   }
   // 重新渲染节点，即重新创建节点内容、计算节点大小、计算节点内容布局、更新展开收起按钮，概要及位置
   reRender() {
@@ -45124,26 +45728,19 @@ var Node2 = class {
         this.needLayout = false;
         this.layout();
       }
-      if (this.needRerenderExpandBtnPlaceholderRect) {
-        this.needRerenderExpandBtnPlaceholderRect = false;
-        this.renderExpandBtnPlaceholderRect();
-      }
+      this.updateExpandBtnPlaceholderRect();
       this.update();
     }
     if (this.children && this.children.length && this.nodeData.data.expand !== false) {
       let index3 = 0;
-      asyncRun(
-        this.children.map((item) => {
-          return () => {
-            item.render(() => {
-              index3++;
-              if (index3 >= this.children.length) {
-                callback();
-              }
-            });
-          };
-        })
-      );
+      this.children.forEach((item) => {
+        item.render(() => {
+          index3++;
+          if (index3 >= this.children.length) {
+            callback();
+          }
+        });
+      });
     } else {
       callback();
     }
@@ -45163,13 +45760,9 @@ var Node2 = class {
     this.removeGeneralization();
     this.removeLine();
     if (this.children && this.children.length) {
-      asyncRun(
-        this.children.map((item) => {
-          return () => {
-            item.remove();
-          };
-        })
-      );
+      this.children.forEach((item) => {
+        item.remove();
+      });
     }
   }
   // 销毁节点，不但会从画布删除，而且原节点直接置空，后续无法再插回画布
@@ -45193,13 +45786,9 @@ var Node2 = class {
       });
     }
     if (this.children && this.children.length) {
-      asyncRun(
-        this.children.map((item) => {
-          return () => {
-            item.hide();
-          };
-        })
-      );
+      this.children.forEach((item) => {
+        item.hide();
+      });
     }
   }
   //  显示节点
@@ -45217,13 +45806,9 @@ var Node2 = class {
       });
     }
     if (this.children && this.children.length) {
-      asyncRun(
-        this.children.map((item) => {
-          return () => {
-            item.show();
-          };
-        })
-      );
+      this.children.forEach((item) => {
+        item.show();
+      });
     }
   }
   //  连线
@@ -45351,6 +45936,10 @@ var Node2 = class {
   getSelfInhertStyle(prop) {
     return this.getSelfStyle(prop) || // 自身
     this.getParentSelfStyle(prop);
+  }
+  // 获取节点非节点状态的边框大小
+  getBorderWidth() {
+    return this.style.merge("borderWidth", false, false) || 0;
   }
   //  获取数据
   getData(key) {
@@ -47871,12 +48460,9 @@ var TextEdit = class {
     this.mindMap = renderer.mindMap;
     this.currentNode = null;
     this.textEditNode = null;
-    this.hiddenInputEl = null;
-    this.enableFocus = true;
     this.showTextEdit = false;
     this.cacheEditingText = "";
     this.bindEvent();
-    this.createHiddenInput();
   }
   //  事件
   bindEvent() {
@@ -47900,9 +48486,6 @@ var TextEdit = class {
     this.mindMap.on("before_node_active", () => {
       this.hideEditTextBox();
     });
-    this.mindMap.on("node_active", () => {
-      this.focusHiddenInput();
-    });
     this.mindMap.keyCommand.addShortcut("F2", () => {
       if (this.renderer.activeNodeList.length <= 0) {
         return;
@@ -47910,50 +48493,22 @@ var TextEdit = class {
       this.show(this.renderer.activeNodeList[0]);
     });
     this.mindMap.on("scale", this.onScale);
-  }
-  // 创建一个隐藏的文本输入框
-  createHiddenInput() {
-    if (this.hiddenInputEl)
-      return;
-    this.hiddenInputEl = document.createElement("input");
-    this.hiddenInputEl.type = "text";
-    this.hiddenInputEl.style.cssText = `
-      position: fixed;
-      left: -99999px;
-      top: -99999px;
-    `;
-    this.hiddenInputEl.addEventListener("paste", async (event) => {
-      event.preventDefault();
-      const text3 = (event.clipboardData || window.clipboardData).getData("text");
-      const files = event.clipboardData.files;
-      let img = null;
-      if (files.length > 0) {
-        for (let i3 = 0; i3 < files.length; i3++) {
-          if (/^image\//.test(files[i3].type)) {
-            img = files[i3];
-            break;
-          }
+    if (this.mindMap.opt.enableAutoEnterTextEditWhenKeydown) {
+      window.addEventListener("keydown", (e2) => {
+        const activeNodeList = this.mindMap.renderer.activeNodeList;
+        if (activeNodeList.length <= 0 || activeNodeList.length > 1)
+          return;
+        const node3 = activeNodeList[0];
+        if (node3 && this.checkIsAutoEnterTextEditKey(e2)) {
+          this.show(node3);
         }
-      }
-      this.mindMap.emit("paste", {
-        text: text3,
-        img
       });
-    });
-    document.body.appendChild(this.hiddenInputEl);
+    }
   }
-  // 让隐藏的文本输入框聚焦
-  focusHiddenInput() {
-    if (this.hiddenInputEl && this.enableFocus)
-      this.hiddenInputEl.focus();
-  }
-  // 关闭默认聚焦
-  stopFocusOnNodeActive() {
-    this.enableFocus = false;
-  }
-  // 开启默认聚焦
-  openFocusOnNodeActive() {
-    this.enableFocus = true;
+  // 判断是否是自动进入文本编模式的按钮
+  checkIsAutoEnterTextEditKey(e2) {
+    const keyCode = e2.keyCode;
+    return (keyCode === 229 || keyCode >= 65 && keyCode <= 90 || keyCode >= 48 && keyCode <= 57) && !this.mindMap.keyCommand.hasCombinationKey(e2);
   }
   //  注册临时快捷键
   registerTmpShortcut() {
@@ -47977,6 +48532,7 @@ var TextEdit = class {
         isShow = await beforeTextEdit(node3, isInserting);
       } catch (error) {
         isShow = false;
+        this.mindMap.opt.errorHandler(ERROR_TYPES.BEFORE_TEXT_EDIT_ERROR, error);
       }
       if (!isShow)
         return;
@@ -47989,7 +48545,7 @@ var TextEdit = class {
       this.mindMap.richText.showEditText(node3, rect, isInserting);
       return;
     }
-    this.showEditTextBox(node3, rect);
+    this.showEditTextBox(node3, rect, isInserting);
   }
   // 处理画布缩放
   onScale() {
@@ -48005,7 +48561,9 @@ var TextEdit = class {
     this.show(this.currentNode);
   }
   //  显示文本编辑框
-  showEditTextBox(node3, rect) {
+  showEditTextBox(node3, rect, isInserting) {
+    if (this.showTextEdit)
+      return;
     this.mindMap.emit("before_show_text_edit");
     this.registerTmpShortcut();
     if (!this.textEditNode) {
@@ -48020,6 +48578,11 @@ var TextEdit = class {
       });
       this.textEditNode.addEventListener("mousedown", (e2) => {
         e2.stopPropagation();
+      });
+      this.textEditNode.addEventListener("keydown", (e2) => {
+        if (this.checkIsAutoEnterTextEditKey(e2)) {
+          e2.stopPropagation();
+        }
       });
       const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body;
       targetNode.appendChild(this.textEditNode);
@@ -48044,10 +48607,21 @@ var TextEdit = class {
       this.textEditNode.style.transform = `translateY(${-((lineHeight * fontSize - fontSize) / 2) * scale}px)`;
     }
     this.showTextEdit = true;
-    if (!this.cacheEditingText) {
+    if (isInserting) {
       this.selectNodeText();
+    } else {
+      this.focus();
     }
     this.cacheEditingText = "";
+  }
+  // 聚焦
+  focus() {
+    let selection = window.getSelection();
+    let range = document.createRange();
+    range.selectNodeContents(this.textEditNode);
+    range.collapse();
+    selection.removeAllRanges();
+    selection.addRange(range);
   }
   //  选中文本
   selectNodeText() {
@@ -48353,9 +48927,6 @@ var Render = class {
         this.mindMap.execCommand("CLEAR_ACTIVE_NODE");
       }
     });
-    this.mindMap.on("paste", (data2) => {
-      this.onPaste(data2);
-    });
   }
   //  注册命令
   registerCommands() {
@@ -48465,7 +49036,7 @@ var Render = class {
     this.copy = this.copy.bind(this);
     this.mindMap.keyCommand.addShortcut("Control+c", this.copy);
     this.mindMap.keyCommand.addShortcut("Control+v", () => {
-      this.textEdit.focusHiddenInput();
+      this.onPaste();
     });
     this.cut = this.cut.bind(this);
     this.mindMap.keyCommand.addShortcut("Control+x", this.cut);
@@ -48606,7 +49177,7 @@ var Render = class {
     return Array.isArray(appointNodes) ? appointNodes : [appointNodes];
   }
   //  插入同级节点，多个节点只会操作第一个节点
-  insertNode(openEdit = true, appointNodes = [], appointData = null) {
+  insertNode(openEdit = true, appointNodes = [], appointData = null, appointChildren = []) {
     appointNodes = this.formatAppointNodes(appointNodes);
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return;
@@ -48639,13 +49210,13 @@ var Render = class {
           resetRichText: isRichText,
           ...appointData || {}
         },
-        children: []
+        children: [...appointChildren]
       });
       this.mindMap.render();
     }
   }
   //  插入子节点
-  insertChildNode(openEdit = true, appointNodes = [], appointData = null) {
+  insertChildNode(openEdit = true, appointNodes = [], appointData = null, appointChildren = []) {
     appointNodes = this.formatAppointNodes(appointNodes);
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return;
@@ -48674,7 +49245,7 @@ var Render = class {
           resetRichText: isRichText,
           ...appointData || {}
         },
-        children: []
+        children: [...appointChildren]
       });
       node3.nodeData.data.expand = true;
       if (node3.isRoot) {
@@ -48734,12 +49305,25 @@ var Render = class {
   // 复制节点
   copy() {
     this.beingCopyData = this.copyNode();
+    this.setCoptyDataToClipboard(this.beingCopyData);
   }
   // 剪切节点
   cut() {
     this.mindMap.execCommand("CUT_NODE", (copyData) => {
       this.beingCopyData = copyData;
+      this.setCoptyDataToClipboard(copyData);
     });
+  }
+  // 将粘贴或剪切的数据设置到用户剪切板中
+  setCoptyDataToClipboard(data2) {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(
+        JSON.stringify({
+          simpleMindMap: true,
+          data: data2
+        })
+      );
+    }
   }
   // 粘贴节点
   paste() {
@@ -48748,7 +49332,28 @@ var Render = class {
     }
   }
   // 粘贴事件
-  async onPaste({ text: text3, img }) {
+  async onPaste() {
+    const { errorHandler } = this.mindMap.opt;
+    let text3 = null;
+    let img = null;
+    if (navigator.clipboard) {
+      try {
+        text3 = await navigator.clipboard.readText();
+        const items = await navigator.clipboard.read();
+        if (items && items.length > 0) {
+          for (const clipboardItem of items) {
+            for (const type of clipboardItem.types) {
+              if (/^image\//.test(type)) {
+                img = await clipboardItem.getType(type);
+                break;
+              }
+            }
+          }
+        }
+      } catch (error) {
+        errorHandler(ERROR_TYPES.READ_CLIPBOARD_ERROR, error);
+      }
+    }
     const imgSize = img ? img.size : 0;
     if (this.beingPasteText !== text3 || this.beingPasteImgSize !== imgSize) {
       this.currentBeingPasteType = CONSTANTS.PASTE_TYPE.CLIP_BOARD;
@@ -48761,9 +49366,48 @@ var Render = class {
     }
     if (this.currentBeingPasteType === CONSTANTS.PASTE_TYPE.CLIP_BOARD) {
       if (text3) {
-        this.mindMap.execCommand("INSERT_CHILD_NODE", false, [], {
-          text: text3
-        });
+        let smmData = null;
+        let useDefault = true;
+        if (this.mindMap.opt.customHandleClipboardText) {
+          try {
+            const res = await this.mindMap.opt.customHandleClipboardText(text3);
+            if (!isUndef(res)) {
+              useDefault = false;
+              if (typeof res === "object" && res.simpleMindMap) {
+                smmData = res.data;
+              } else {
+                text3 = String(res);
+              }
+            }
+          } catch (error) {
+            errorHandler(ERROR_TYPES.CUSTOM_HANDLE_CLIPBOARD_TEXT_ERROR, error);
+          }
+        }
+        if (useDefault) {
+          try {
+            const parsedData = JSON.parse(text3);
+            if (parsedData && parsedData.simpleMindMap) {
+              smmData = parsedData.data;
+            }
+          } catch (error) {
+            errorHandler(ERROR_TYPES.PARSE_PASTE_DATA_ERROR, error);
+          }
+        }
+        if (smmData) {
+          this.mindMap.execCommand(
+            "INSERT_CHILD_NODE",
+            false,
+            [],
+            {
+              ...smmData.data
+            },
+            [...smmData.children]
+          );
+        } else {
+          this.mindMap.execCommand("INSERT_CHILD_NODE", false, [], {
+            text: text3
+          });
+        }
       }
       if (img) {
         try {
@@ -48779,7 +49423,7 @@ var Render = class {
             });
           }
         } catch (error) {
-          console.log(error);
+          errorHandler(ERROR_TYPES.LOAD_CLIPBOARD_IMAGE_ERROR, error);
         }
       }
     } else {
@@ -49121,7 +49765,8 @@ var Render = class {
     });
   }
   //  设置节点图片
-  setNodeImage(node3, { url, title, width: width2, height: height2, custom = false }) {
+  setNodeImage(node3, data2) {
+    const { url, title, width: width2, height: height2, custom = false } = data2 || { url: "", title: "", width: 0, height: 0, custom: false };
     this.setNodeDataRender(node3, {
       image: url,
       imageTitle: title || "",
@@ -51156,6 +51801,10 @@ var KeyCommand = class {
     }
     return arr;
   }
+  // 判断是否按下了组合键
+  hasCombinationKey(e2) {
+    return e2.ctrlKey || e2.metaKey || e2.altKey || e2.shiftKey;
+  }
   //  获取快捷键对应的键值数组
   getKeyCodeArr(key) {
     let keyArr = key.split(/\s*\+\s*/);
@@ -51397,8 +52046,6 @@ var defaultOpt = {
   mouseScaleCenterUseMousePosition: true,
   // 最多显示几个标签
   maxTag: 5,
-  // 导出图片时的内边距
-  exportPadding: 20,
   // 展开收缩按钮尺寸
   expandBtnSize: 20,
   // 节点里图片和文字的间距
@@ -51462,7 +52109,7 @@ var defaultOpt = {
   enableShortcutOnlyWhenMouseInSvg: true,
   // 初始根节点的位置
   initRootNodePosition: null,
-  // 导出png、svg、pdf时的图形内边距
+  // 导出png、svg、pdf时的图形内边距，注意是单侧内边距
   exportPaddingX: 10,
   exportPaddingY: 10,
   // 节点文本编辑框的z-index
@@ -51507,7 +52154,38 @@ var defaultOpt = {
   // 指定内部一些元素（节点文本编辑元素、节点备注显示元素、关联线文本编辑元素、节点图片调整按钮元素）添加到的位置，默认添加到document.body下
   customInnerElsAppendTo: null,
   // 拖拽元素时，指示元素新位置的块的最大高度
-  nodeDragPlaceholderMaxSize: 20
+  nodeDragPlaceholderMaxSize: 20,
+  // 是否在存在一个激活节点时，当按下中文、英文、数字按键时自动进入文本编辑模式
+  // 开启该特性后，需要给你的输入框绑定keydown事件，并禁止冒泡
+  enableAutoEnterTextEditWhenKeydown: false,
+  // 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果
+  // 需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果
+  richTextEditFakeInPlace: false,
+  // 自定义对剪贴板文本的处理。当按ctrl+v粘贴时会读取用户剪贴板中的文本和图片，默认只会判断文本是否是普通文本和simple-mind-map格式的节点数据，如果你想处理其他思维导图的数据，比如processon、zhixi等，那么可以传递一个函数，接受当前剪贴板中的文本为参数，返回处理后的数据，可以返回两种类型：
+  /*
+      1.返回一个纯文本，那么会直接以该文本创建一个子节点
+  
+      2.返回一个节点对象，格式如下：
+        {
+          // 代表是simple-mind-map格式的数据
+          simpleMindMap: true,
+          // 节点数据，同simple-mind-map节点数据格式
+          data: {
+            data: {
+              text: ''
+            },
+            children: []
+          }
+        }
+    */
+  // 如果你的处理逻辑存在异步逻辑，也可以返回一个promise
+  customHandleClipboardText: null,
+  // 禁止鼠标滚轮缩放，你仍旧可以使用api进行缩放
+  disableMouseWheelZoom: false,
+  // 错误处理函数
+  errorHandler: (code, error) => {
+    console.error(code, error);
+  }
 };
 
 // ../simple-mind-map/index.js
@@ -51516,9 +52194,13 @@ var MindMap2 = class {
   constructor(opt = {}) {
     this.opt = this.handleOpt((0, import_deepmerge33.default)(defaultOpt, opt));
     this.el = this.opt.el;
+    if (!this.el)
+      throw new Error("\u7F3A\u5C11\u5BB9\u5668\u5143\u7D20el");
     this.elRect = this.el.getBoundingClientRect();
     this.width = this.elRect.width;
     this.height = this.elRect.height;
+    if (this.width <= 0 || this.height <= 0)
+      throw new Error("\u5BB9\u5668\u5143\u7D20el\u7684\u5BBD\u9AD8\u4E0D\u80FD\u4E3A0");
     this.svg = SVG().addTo(this.el).size(this.width, this.height);
     this.draw = this.svg.group();
     this.initTheme();
@@ -51719,8 +52401,12 @@ var MindMap2 = class {
   }
   //  导出
   async export(...args) {
-    let result = await this.doExport.export(...args);
-    return result;
+    try {
+      let result = await this.doExport.export(...args);
+      return result;
+    } catch (error) {
+      this.mindMap.opt.errorHandler(ERROR_TYPES.EXPORT_ERROR, error);
+    }
   }
   //  转换位置
   toPos(x3, y4) {
@@ -51750,9 +52436,9 @@ var MindMap2 = class {
     const elRect = this.el.getBoundingClientRect();
     draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY);
     const rect = draw.rbox();
-    rect.width += paddingX;
-    rect.height += paddingY;
-    draw.translate(paddingX / 2, paddingY / 2);
+    rect.width += paddingX * 2;
+    rect.height += paddingY * 2;
+    draw.translate(paddingX, paddingY);
     svg2.size(rect.width, rect.height);
     draw.translate(-rect.x + elRect.left, -rect.y + elRect.top);
     let clone = svg2.clone();
@@ -51818,6 +52504,7 @@ var MindMap2 = class {
   }
   // 销毁
   destroy() {
+    ;
     [...MindMap2.pluginList].forEach((plugin) => {
       this[plugin.instanceName] = null;
     });
@@ -52318,12 +53005,12 @@ var transformXmind = async (content3, files) => {
       newNode.data.tag = node3.labels;
     }
     if (node3.image && /\.(jpg|jpeg|png|gif|webp)$/.test(node3.image.src)) {
+      let resolve2 = null;
+      let promise = new Promise((_resolve) => {
+        resolve2 = _resolve;
+      });
+      waitLoadImageList.push(promise);
       try {
-        let resolve2 = null;
-        let promise = new Promise((_resolve) => {
-          resolve2 = _resolve;
-        });
-        waitLoadImageList.push(promise);
         let imageType = /\.([^.]+)$/.exec(node3.image.src)[1];
         let imageBase64 = `data:image/${imageType};base64,` + await files["resources/" + node3.image.src.split("/")[1]].async(
           "base64"
@@ -52344,7 +53031,7 @@ var transformXmind = async (content3, files) => {
         resolve2();
       } catch (error) {
         console.log(error);
-        resolve();
+        resolve2();
       }
     }
     newNode.children = [];
@@ -61494,7 +62181,15 @@ var ExportPDF = class {
     this.mindMap = opt.mindMap;
   }
   //  导出为pdf
-  pdf(name, img) {
+  pdf(name, img, useMultiPageExport = false) {
+    if (useMultiPageExport) {
+      this.multiPageExport(name, img);
+    } else {
+      this.onePageExport(name, img);
+    }
+  }
+  // 单页导出
+  onePageExport(name, img) {
     let pdf = new jspdf_es_min_default("", "pt", "a4");
     let a4Width = 595;
     let a4Height = 841;
@@ -61516,6 +62211,43 @@ var ExportPDF = class {
         h3 = a4Width / imageRatio;
       }
       pdf.addImage(img, "PNG", (a4Width - w2) / 2, (a4Height - h3) / 2, w2, h3);
+      pdf.save(name);
+    };
+    image.src = img;
+  }
+  // 多页导出
+  multiPageExport(name, img) {
+    let image = new Image();
+    const a4Width = 592.28;
+    const a4Height = 841.89;
+    image.onload = () => {
+      let imageWidth = image.width;
+      let imageHeight = image.height;
+      let pageHeight = imageWidth / a4Width * a4Height;
+      let leftHeight = imageHeight;
+      let position3 = 0;
+      let imgWidth = a4Width;
+      let imgHeight = a4Width / imageWidth * imageHeight;
+      let pdf = new jspdf_es_min_default("", "pt", "a4");
+      if (leftHeight < pageHeight) {
+        pdf.addImage(
+          img,
+          "PNG",
+          (a4Width - imgWidth) / 2,
+          (a4Height - imgHeight) / 2,
+          imgWidth,
+          imgHeight
+        );
+      } else {
+        while (leftHeight > 0) {
+          pdf.addImage(img, "PNG", 0, position3, imgWidth, imgHeight);
+          leftHeight -= pageHeight;
+          position3 -= a4Height;
+          if (leftHeight > 0) {
+            pdf.addPage();
+          }
+        }
+      }
       pdf.save(name);
     };
     image.src = img;
@@ -61844,7 +62576,6 @@ var Export = class {
   //  构造函数
   constructor(opt) {
     this.mindMap = opt.mindMap;
-    this.exportPadding = this.mindMap.opt.exportPadding;
   }
   //  导出
   async export(type, isDownload = true, name = "\u601D\u7EF4\u5BFC\u56FE", ...args) {
@@ -61881,18 +62612,28 @@ var Export = class {
     };
   }
   //   svg转png
-  svgToPng(svgSrc, transparent) {
+  svgToPng(svgSrc, transparent, rotateWhenWidthLongerThenHeight = false) {
     return new Promise((resolve2, reject) => {
       const img = new Image();
       img.setAttribute("crossOrigin", "anonymous");
       img.onload = async () => {
         try {
           let canvas = document.createElement("canvas");
-          canvas.width = img.width + this.exportPadding * 2;
-          canvas.height = img.height + this.exportPadding * 2;
+          let needRotate = rotateWhenWidthLongerThenHeight && img.width / img.height > 1;
+          if (needRotate) {
+            canvas.width = img.height;
+            canvas.height = img.width;
+          } else {
+            canvas.width = img.width;
+            canvas.height = img.height;
+          }
           let ctx = canvas.getContext("2d");
+          if (needRotate) {
+            ctx.rotate(0.5 * Math.PI);
+            ctx.translate(0, -img.height);
+          }
           if (!transparent) {
-            await this.drawBackgroundToCanvas(ctx, canvas.width, canvas.height);
+            await this.drawBackgroundToCanvas(ctx, img.width, img.height);
           }
           ctx.drawImage(
             img,
@@ -61900,8 +62641,8 @@ var Export = class {
             0,
             img.width,
             img.height,
-            this.exportPadding,
-            this.exportPadding,
+            0,
+            0,
             img.width,
             img.height
           );
@@ -61933,18 +62674,25 @@ var Export = class {
       ctx.restore();
       if (backgroundImage && backgroundImage !== "none") {
         ctx.save();
-        simulateCSSBackgroundInCanvas_default(ctx, width2, height2, backgroundImage, {
-          backgroundRepeat,
-          backgroundPosition,
-          backgroundSize
-        }, (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve2();
+        simulateCSSBackgroundInCanvas_default(
+          ctx,
+          width2,
+          height2,
+          backgroundImage,
+          {
+            backgroundRepeat,
+            backgroundPosition,
+            backgroundSize
+          },
+          (err) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve2();
+            }
+            ctx.restore();
           }
-          ctx.restore();
-        });
+        );
       } else {
         resolve2();
       }
@@ -61974,28 +62722,36 @@ var Export = class {
    * 方法1.把svg的图片都转化成data:url格式，再转换
    * 方法2.把svg的图片提取出来再挨个绘制到canvas里，最后一起转换
    */
-  async png(name, transparent = false) {
+  async png(name, transparent = false, rotateWhenWidthLongerThenHeight) {
     let { node: node3, str } = await this.getSvgData();
     str = removeHTMLEntities(str);
     if (this.mindMap.richText) {
       let res2 = await this.mindMap.richText.handleExportPng(node3.node);
-      let imgDataUrl = await this.svgToPng(res2, transparent);
+      let imgDataUrl = await this.svgToPng(
+        res2,
+        transparent,
+        rotateWhenWidthLongerThenHeight
+      );
       return imgDataUrl;
     }
     let blob = new Blob([str], {
       type: "image/svg+xml"
     });
     let svgUrl = await readBlob(blob);
-    let res = await this.svgToPng(svgUrl, transparent);
+    let res = await this.svgToPng(
+      svgUrl,
+      transparent,
+      rotateWhenWidthLongerThenHeight
+    );
     return res;
   }
   //  导出为pdf
-  async pdf(name) {
+  async pdf(name, useMultiPageExport) {
     if (!this.mindMap.doExportPDF) {
       throw new Error("\u8BF7\u6CE8\u518CExportPDF\u63D2\u4EF6");
     }
-    let img = await this.png();
-    this.mindMap.doExportPDF.pdf(name, img);
+    let img = await this.png("", false, true);
+    this.mindMap.doExportPDF.pdf(name, img, useMultiPageExport);
   }
   // 导出为xmind
   async xmind(name) {
@@ -62224,7 +62980,7 @@ var Drag = class extends Base_default {
   }
   //  检测重叠节点
   checkOverlapNode() {
-    if (!this.drawTransform) {
+    if (!this.drawTransform || !this.placeholder) {
       return;
     }
     const { nodeDragPlaceholderMaxSize } = this.mindMap.opt;
@@ -63350,7 +64106,7 @@ var AssociativeLine_default = AssociativeLine;
 
 // ../simple-mind-map/src/plugins/RichText.js
 var import_quill = __toESM(require_quill());
-var import_html2canvas = __toESM(require_html2canvas());
+var import_dom_to_image_more = __toESM(require_dom_to_image_more_min());
 var extended = false;
 var fontFamilyList = [
   "\u5B8B\u4F53, SimSun, Songti SC",
@@ -63471,6 +64227,12 @@ var RichText = class {
     if (this.showTextEdit) {
       return;
     }
+    const {
+      richTextEditFakeInPlace,
+      customInnerElsAppendTo,
+      nodeTextEditZIndex,
+      textAutoWrapWidth
+    } = this.mindMap.opt;
     this.node = node3;
     this.isInserting = isInserting;
     if (!rect)
@@ -63482,35 +64244,58 @@ var RichText = class {
     let originHeight = g2.attr("data-height");
     let scaleX = rect.width / originWidth;
     let scaleY = rect.height / originHeight;
-    const paddingX = 6;
-    const paddingY = 4;
+    let paddingX = 6;
+    let paddingY = 4;
+    if (richTextEditFakeInPlace) {
+      let paddingValue = node3.getPaddingVale();
+      paddingX = paddingValue.paddingX;
+      paddingY = paddingValue.paddingY;
+    }
     if (!this.textEditNode) {
       this.textEditNode = document.createElement("div");
       this.textEditNode.classList.add("smm-richtext-node-edit-wrap");
-      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;box-shadow: 0 0 20px rgba(0,0,0,.5);outline: none; word-break: break-all;padding: ${paddingY}px ${paddingX}px;`;
+      this.textEditNode.style.cssText = `
+        position:fixed; 
+        box-sizing: border-box; 
+        box-shadow: 0 0 20px rgba(0,0,0,.5);
+        outline: none; 
+        word-break: 
+        break-all;padding: ${paddingY}px ${paddingX}px;
+      `;
       this.textEditNode.addEventListener("click", (e2) => {
         e2.stopPropagation();
       });
       this.textEditNode.addEventListener("mousedown", (e2) => {
         e2.stopPropagation();
       });
-      const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body;
+      this.textEditNode.addEventListener("keydown", (e2) => {
+        if (this.mindMap.renderer.textEdit.checkIsAutoEnterTextEditKey(e2)) {
+          e2.stopPropagation();
+        }
+      });
+      const targetNode = customInnerElsAppendTo || document.body;
       targetNode.appendChild(this.textEditNode);
     }
     let bgColor = node3.style.merge("fillColor");
     let color = node3.style.merge("color");
     this.textEditNode.style.marginLeft = `-${paddingX * scaleX}px`;
     this.textEditNode.style.marginTop = `-${paddingY * scaleY}px`;
-    this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex;
+    this.textEditNode.style.zIndex = nodeTextEditZIndex;
     this.textEditNode.style.backgroundColor = bgColor === "transparent" ? isWhite(color) ? getVisibleColorFromTheme(this.mindMap.themeConfig) : "#fff" : bgColor;
     this.textEditNode.style.minWidth = originWidth + paddingX * 2 + "px";
     this.textEditNode.style.minHeight = originHeight + "px";
     this.textEditNode.style.left = rect.left + "px";
     this.textEditNode.style.top = rect.top + "px";
     this.textEditNode.style.display = "block";
-    this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + paddingX * 2 + "px";
+    this.textEditNode.style.maxWidth = textAutoWrapWidth + paddingX * 2 + "px";
     this.textEditNode.style.transform = `scale(${scaleX}, ${scaleY})`;
     this.textEditNode.style.transformOrigin = "left top";
+    if (richTextEditFakeInPlace) {
+      this.textEditNode.style.borderRadius = (node3.style.merge("borderRadius") || 5) + "px";
+      if (node3.style.merge("shape") == "roundedRectangle") {
+        this.textEditNode.style.borderRadius = (node3.height || 50) + "px";
+      }
+    }
     if (!node3.nodeData.data.richText) {
       let text3 = node3.nodeData.data.text.split(/\n/gim).join("<br>");
       let html2 = `<p>${text3}</p>`;
@@ -63789,11 +64574,9 @@ var RichText = class {
       }
     };
     walk2(node3);
-    let canvas = await (0, import_html2canvas.default)(el2, {
-      backgroundColor: null
-    });
+    const res = await import_dom_to_image_more.default.toPng(el2);
     this.mindMap.el.removeChild(el2);
-    return canvas.toDataURL();
+    return res;
   }
   // 将所有节点转换成非富文本节点
   transformAllNodesToNormalNode() {
@@ -64091,7 +64874,7 @@ var TouchEvent = class {
     this.touchesNum = 0;
     this.singleTouchstartEvent = null;
     this.clickNum = 0;
-    this.doubleTouchmoveDistance = 0;
+    this.touchStartScaleView = null;
     this.bindEvent();
   }
   // 绑定事件
@@ -64115,6 +64898,7 @@ var TouchEvent = class {
   // 手指按下事件
   onTouchstart(e2) {
     this.touchesNum = e2.touches.length;
+    this.touchStartScaleView = null;
     if (this.touchesNum === 1) {
       let touch = e2.touches[0];
       this.singleTouchstartEvent = touch;
@@ -64133,16 +64917,39 @@ var TouchEvent = class {
       let ox = touch1.clientX - touch2.clientX;
       let oy = touch1.clientY - touch2.clientY;
       let distance = Math.sqrt(Math.pow(ox, 2) + Math.pow(oy, 2));
-      let { x: touch1ClientX, y: touch1ClientY } = this.mindMap.toPos(touch1.clientX, touch1.clientY);
-      let { x: touch2ClientX, y: touch2ClientY } = this.mindMap.toPos(touch2.clientX, touch2.clientY);
+      let { x: touch1ClientX, y: touch1ClientY } = this.mindMap.toPos(
+        touch1.clientX,
+        touch1.clientY
+      );
+      let { x: touch2ClientX, y: touch2ClientY } = this.mindMap.toPos(
+        touch2.clientX,
+        touch2.clientY
+      );
       let cx2 = (touch1ClientX + touch2ClientX) / 2;
       let cy2 = (touch1ClientY + touch2ClientY) / 2;
-      if (distance > this.doubleTouchmoveDistance) {
-        this.mindMap.view.enlarge(cx2, cy2, true);
-      } else {
-        this.mindMap.view.narrow(cx2, cy2, true);
+      const view = this.mindMap.view;
+      if (!this.touchStartScaleView) {
+        this.touchStartScaleView = {
+          distance,
+          scale: view.scale,
+          x: view.x,
+          y: view.y,
+          cx: cx2,
+          cy: cy2
+        };
+        return;
       }
-      this.doubleTouchmoveDistance = distance;
+      const viewBefore = this.touchStartScaleView;
+      let scale = viewBefore.scale * (distance / viewBefore.distance);
+      if (Math.abs(distance - viewBefore.distance) <= 10) {
+        scale = viewBefore.scale;
+      }
+      const ratio = 1 - scale / viewBefore.scale;
+      view.scale = scale < 0.1 ? 0.1 : scale;
+      view.x = viewBefore.x + (cx2 - viewBefore.x) * ratio + (cx2 - viewBefore.cx) * scale;
+      view.y = viewBefore.y + (cy2 - viewBefore.y) * ratio + (cy2 - viewBefore.cy) * scale;
+      view.transform();
+      this.mindMap.emit("scale", scale);
     }
   }
   // 手指取消事件
@@ -64165,7 +64972,7 @@ var TouchEvent = class {
     }
     this.touchesNum = 0;
     this.singleTouchstartEvent = null;
-    this.doubleTouchmoveDistance = 0;
+    this.touchStartScaleView = null;
   }
   // 发送鼠标事件
   dispatchMouseEvent(eventName, target, e2) {
@@ -69102,7 +69909,7 @@ var handleList = (node3) => {
   walk2(node3.children, list2);
   return list2;
 };
-var transformMarkdownTo = async (md) => {
+var transformMarkdownTo = (md) => {
   const tree = fromMarkdown(md);
   let root2 = {
     children: []
@@ -69244,6 +70051,9 @@ quill/dist/quill.js:
    * Copyright (c) 2014, Jason Chen
    * Copyright (c) 2013, salesforce.com
    *)
+
+dom-to-image-more/dist/dom-to-image-more.min.js:
+  (*! dom-to-image-more 26-04-2023 *)
 
 @svgdotjs/svg.js/dist/svg.esm.js:
   (*!
