@@ -45040,11 +45040,10 @@ function createRichTextNode() {
   height2 = Math.ceil(height2);
   g2.attr("data-width", width2);
   g2.attr("data-height", height2);
-  html2 = div.innerHTML;
   let foreignObject = new ForeignObject();
   foreignObject.width(width2);
   foreignObject.height(height2);
-  foreignObject.add(SVG(html2));
+  foreignObject.add(div.children[0]);
   g2.add(foreignObject);
   return {
     node: g2,

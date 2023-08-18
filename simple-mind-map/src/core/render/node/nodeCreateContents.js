@@ -140,11 +140,10 @@ function createRichTextNode() {
   height = Math.ceil(height)
   g.attr('data-width', width)
   g.attr('data-height', height)
-  html = div.innerHTML
   let foreignObject = new ForeignObject()
   foreignObject.width(width)
   foreignObject.height(height)
-  foreignObject.add(SVG(html))
+  foreignObject.add(div.children[0])
   g.add(foreignObject)
   return {
     node: g,

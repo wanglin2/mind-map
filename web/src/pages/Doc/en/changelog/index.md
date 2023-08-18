@@ -1,8 +1,12 @@
 # Changelog
 
+## 0.6.15-fix.2
+
+Fix: Fixed an issue where rich text nodes cannot be displayed in Firefox browser.
+
 ## 0.6.15-fix.1
 
-新增：
+New:
 
 > 1.Export PDF supports pagination export based on image size.
 >
@@ -14,7 +18,7 @@
 >
 > 5.Supports passing error handling functions.
 
-修复：
+Fix:
 
 > 1.Fix the issue of displaying exceptions when node text is empty.
 >
