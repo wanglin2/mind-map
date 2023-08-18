@@ -65,7 +65,8 @@ class View {
         mousewheelAction,
         mouseScaleCenterUseMousePosition,
         mousewheelMoveStep,
-        mousewheelZoomActionReverse
+        mousewheelZoomActionReverse,
+        disableMouseWheelZoom
       } = this.mindMap.opt
       // 是否自定义鼠标滚轮事件
       if (
@@ -76,6 +77,7 @@ class View {
       }
       // 鼠标滚轮事件控制缩放
       if (mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
+        if (disableMouseWheelZoom) return
         let cx = mouseScaleCenterUseMousePosition ? e.clientX : undefined
         let cy = mouseScaleCenterUseMousePosition ? e.clientY : undefined
         switch (dir) {
