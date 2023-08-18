@@ -1,4 +1,5 @@
 import { getStrWithBrFromHtml, checkNodeOuter } from '../../utils'
+import { ERROR_TYPES } from '../../constants/constant'
 
 //  节点文字编辑类
 export default class TextEdit {
@@ -104,6 +105,7 @@ export default class TextEdit {
         isShow = await beforeTextEdit(node, isInserting)
       } catch (error) {
         isShow = false
+        this.mindMap.opt.errorHandler(ERROR_TYPES.BEFORE_TEXT_EDIT_ERROR, error)
       }
       if (!isShow) return
     }
