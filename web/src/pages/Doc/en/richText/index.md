@@ -18,6 +18,8 @@ The principle of this plugin is to use [Quill](https://github.com/quilljs/quill)
 
 `V0.6.13+` version uses [dom-to-image-more](https://github.com/1904labs/dom-to-image-more) Replaced 'html2canvas' to address the issue of ineffective color export for nodes.
 
+> The compatibility of dom to image more is relatively poor, and exported images are empty on many browsers, so you can replace them with html2canvas according to your own needs.
+
 ## Register
 
 ```js

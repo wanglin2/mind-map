@@ -27,13 +27,16 @@ a.href = <span class="hljs-string">&#x27;xxx.png&#x27;</span><span class="hljs-c
 a.download = <span class="hljs-string">&#x27;xxx&#x27;</span>
 a.click()
 </code></pre>
-<h3>png(name, transparent = false)</h3>
+<h3>png(name, transparent = false, rotateWhenWidthLongerThenHeight)</h3>
 <ul>
 <li>
 <p><code>name</code>: Name, optional</p>
 </li>
 <li>
 <p><code>transparent</code>: v0.5.7+, Specify whether the background of the exported image is transparent</p>
+</li>
+<li>
+<p><code>rotateWhenWidthLongerThenHeight</code>: v0.6.15+，Boolean, false, Automatically rotate 90 degrees when the image has a width to height ratio</p>
 </li>
 </ul>
 <p>Exports as <code>png</code>.</p>
@@ -57,11 +60,18 @@ a.click()
 )
 </code></pre>
 <p>Exports as <code>svg</code>.</p>
-<h3>pdf(name)</h3>
+<h3>pdf(name, useMultiPageExport)</h3>
 <blockquote>
 <p>v0.2.1+</p>
 </blockquote>
+<ul>
+<li>
 <p><code>name</code>：File name</p>
+</li>
+<li>
+<p><code>useMultiPageExport</code>: v0.6.15+, Boolean, false, Whether to export multiple pages, default to single page</p>
+</li>
+</ul>
 <p>Export as <code>pdf</code>. Unlike other export methods, this method does not return data and directly triggers the download.</p>
 <blockquote>
 <p>After v0.6.0, an additional ExportPDF plugin needs to be registered</p>

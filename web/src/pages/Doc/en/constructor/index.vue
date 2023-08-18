@@ -399,6 +399,20 @@
 <td>Customize the processing of clipboard text. When pressing ctrl+v to paste, it will read the text and images from the user's clipboard. By default, it will only determine whether the text is regular text and node data in simple mind map format. If you want to process data from other mind maps, such as process, zhixi, etc., you can pass a function that takes the text from the current clipboard as a parameter and returns the processed data, which can be of two types: 1.If a pure text is returned, a child node will be directly created with that text; 2.Returns a node object in the following format: { simpleMindMap: true, data: { data: { text: '' }, children: [] } }, The representative is data in simple bind map format, and the node data is in the same format as the simple bind map node data. If your processing logic has asynchronous logic, you can also return a promise</td>
 <td></td>
 </tr>
+<tr>
+<td>errorHandler（v0.6.15+）</td>
+<td>Function</td>
+<td></td>
+<td>Custom error handling functions currently only throw some asynchronous logic errors. Can pass a function that takes two parameters, the first being the wrong type and the second being the wrong object</td>
+<td></td>
+</tr>
+<tr>
+<td>disableMouseWheelZoom（v0.6.15+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Prohibit mouse wheel scaling, you can still use the API for scaling</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>

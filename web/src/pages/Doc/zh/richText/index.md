@@ -18,6 +18,8 @@
 
 `v0.6.13+`版本使用[dom-to-image-more](https://github.com/1904labs/dom-to-image-more)替换了`html2canvas`，解决了节点的颜色导出后不生效的问题。
 
+> dom-to-image-more兼容性比较差，在很多浏览器上导出图片都是空的，所以可以根据你自己的需求替换成html2canvas。
+
 ## 注册
 
 ```js

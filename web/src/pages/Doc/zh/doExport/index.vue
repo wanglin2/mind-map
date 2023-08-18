@@ -27,13 +27,16 @@ a.href = <span class="hljs-string">&#x27;xxx.png&#x27;</span><span class="hljs-c
 a.download = <span class="hljs-string">&#x27;xxx&#x27;</span>
 a.click()
 </code></pre>
-<h3>png(name, transparent = false)</h3>
+<h3>png(name, transparent = false, rotateWhenWidthLongerThenHeight)</h3>
 <ul>
 <li>
 <p><code>name</code>：名称，可不传</p>
 </li>
 <li>
 <p><code>transparent</code>：v0.5.7+，指定导出图片的背景是否是透明的</p>
+</li>
+<li>
+<p><code>rotateWhenWidthLongerThenHeight</code>: v0.6.15+，Boolean, false, 是否在图片宽比高长时自动旋转90度</p>
 </li>
 </ul>
 <p>导出为<code>png</code>。</p>
@@ -57,11 +60,18 @@ a.click()
 )
 </code></pre>
 <p>导出为<code>svg</code>。</p>
-<h3>pdf(name)</h3>
+<h3>pdf(name, useMultiPageExport)</h3>
 <blockquote>
 <p>v0.2.1+</p>
 </blockquote>
+<ul>
+<li>
 <p><code>name</code>：文件名称</p>
+</li>
+<li>
+<p><code>useMultiPageExport</code>: v0.6.15+，Boolean, false, 是否多页导出，默认为单页</p>
+</li>
+</ul>
 <p>导出为<code>pdf</code>，和其他导出方法不一样，这个方法不会返回数据，会直接触发下载。</p>
 <blockquote>
 <p>v0.6.0版本以后，需要额外注册一个ExportPDF插件</p>
