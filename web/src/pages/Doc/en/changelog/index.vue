@@ -1,8 +1,10 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.6.15-fix.2</h2>
+<p>Fix: Fixed an issue where rich text nodes cannot be displayed in Firefox browser.</p>
 <h2>0.6.15-fix.1</h2>
-<p>新增：</p>
+<p>New:</p>
 <blockquote>
 <p>1.Export PDF supports pagination export based on image size.</p>
 <p>2.Exporting PDF supports automatic direction adjustment based on aspect ratio.</p>
@@ -10,7 +12,7 @@
 <p>4.Add a configuration that prohibits mouse wheel scaling.</p>
 <p>5.Supports passing error handling functions.</p>
 </blockquote>
-<p>修复：</p>
+<p>Fix:</p>
 <blockquote>
 <p>1.Fix the issue of displaying exceptions when node text is empty.</p>
 <p>2.Change the paddingX and paddingY of exported SVG graphics to single sided padding.</p>
