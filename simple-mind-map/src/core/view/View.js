@@ -78,8 +78,9 @@ class View {
       // 鼠标滚轮事件控制缩放
       if (mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
         if (disableMouseWheelZoom) return
-        let cx = mouseScaleCenterUseMousePosition ? e.clientX : undefined
-        let cy = mouseScaleCenterUseMousePosition ? e.clientY : undefined
+        const { x: clientX, y: clientY } = this.mindMap.toPos(e.clientX, e.clientY)
+        let cx = mouseScaleCenterUseMousePosition ? clientX : undefined
+        let cy = mouseScaleCenterUseMousePosition ? clientY : undefined
         switch (dir) {
           // 鼠标滚轮，向上和向左，都是缩小
           case CONSTANTS.DIR.UP:
