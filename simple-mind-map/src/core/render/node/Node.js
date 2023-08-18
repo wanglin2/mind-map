@@ -1,10 +1,11 @@
 import Style from './Style'
 import Shape from './Shape'
-import { G, Rect, ForeignObject, SVG } from '@svgdotjs/svg.js'
+import { G, ForeignObject, SVG } from '@svgdotjs/svg.js'
 import nodeGeneralizationMethods from './nodeGeneralization'
 import nodeExpandBtnMethods from './nodeExpandBtn'
 import nodeCommandWrapsMethods from './nodeCommandWraps'
 import nodeCreateContentsMethods from './nodeCreateContents'
+import nodeExpandBtnPlaceholderRectMethods from './nodeExpandBtnPlaceholderRect'
 import { CONSTANTS } from '../../../constants/constant'
 
 //  节点类
@@ -106,6 +107,10 @@ class Node {
     // 展开收起按钮相关方法
     Object.keys(nodeExpandBtnMethods).forEach(item => {
       this[item] = nodeExpandBtnMethods[item].bind(this)
+    })
+    // 展开收起按钮占位元素相关方法
+    Object.keys(nodeExpandBtnPlaceholderRectMethods).forEach(item => {
+      this[item] = nodeExpandBtnPlaceholderRectMethods[item].bind(this)
     })
     // 命令的相关方法
     Object.keys(nodeCommandWrapsMethods).forEach(item => {
@@ -358,27 +363,6 @@ class Node {
     this.group.add(textContentNested)
   }
 
-  // 渲染展开收起按钮的隐藏占位元素
-  renderExpandBtnPlaceholderRect() {
-    if (!this.mindMap.opt.alwaysShowExpandBtn) {
-      let { width, height } = this
-      if (!this._unVisibleRectRegionNode) {
-        this._unVisibleRectRegionNode = new Rect()
-        this._unVisibleRectRegionNode.fill({
-          color: 'transparent'
-        })
-      }
-      this.group.add(this._unVisibleRectRegionNode)
-      this.renderer.layout.renderExpandBtnRect(
-        this._unVisibleRectRegionNode,
-        this.expandBtnSize,
-        width,
-        height,
-        this
-      )
-    }
-  }
-
   // 给节点绑定事件
   bindGroupEvent() {
     // 单击事件，选中节点
@@ -588,10 +572,7 @@ class Node {
         this.needLayout = false
         this.layout()
       }
-      if (this.needRerenderExpandBtnPlaceholderRect) {
-        this.needRerenderExpandBtnPlaceholderRect = false
-        this.renderExpandBtnPlaceholderRect()
-      }
+      this.updateExpandBtnPlaceholderRect()
       this.update()
     }
     // 子节点
