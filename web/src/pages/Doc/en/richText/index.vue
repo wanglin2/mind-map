@@ -18,6 +18,9 @@
 <p>The version of <code>v0.5.7+</code> directly uses <code>html2canvas</code> to convert the entire <code>svg</code>, which is no longer an issue with speed. However, there is currently a bug where the color of the node does not take effect after export.</p>
 </blockquote>
 <p><code>V0.6.13+</code> version uses <a href="https://github.com/1904labs/dom-to-image-more">dom-to-image-more</a> Replaced 'html2canvas' to address the issue of ineffective color export for nodes.</p>
+<blockquote>
+<p>The compatibility of dom to image more is relatively poor, and exported images are empty on many browsers, so you can replace them with html2canvas according to your own needs.</p>
+</blockquote>
 <h2>Register</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
 <span class="hljs-keyword">import</span> RichText <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/RichText.js&#x27;</span>
