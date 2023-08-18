@@ -151,5 +151,9 @@ export const defaultOpt = {
   // 如果你的处理逻辑存在异步逻辑，也可以返回一个promise
   customHandleClipboardText: null,
   // 禁止鼠标滚轮缩放，你仍旧可以使用api进行缩放
-  disableMouseWheelZoom: false
+  disableMouseWheelZoom: false,
+  // 错误处理函数
+  errorHandler: (code, error) => {
+    console.error(code, error)
+  }
 }

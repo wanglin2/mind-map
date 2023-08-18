@@ -7,10 +7,17 @@ import Style from './src/core/render/node/Style'
 import KeyCommand from './src/core/command/KeyCommand'
 import Command from './src/core/command/Command'
 import BatchExecution from './src/utils/BatchExecution'
-import { layoutValueList, CONSTANTS, commonCaches } from './src/constants/constant'
+import {
+  layoutValueList,
+  CONSTANTS,
+  commonCaches,
+  ERROR_TYPES
+} from './src/constants/constant'
 import { SVG } from '@svgdotjs/svg.js'
 import { simpleDeepClone, getType } from './src/utils'
-import defaultTheme, { checkIsNodeSizeIndependenceConfig } from './src/themes/default'
+import defaultTheme, {
+  checkIsNodeSizeIndependenceConfig
+} from './src/themes/default'
 import { defaultOpt } from './src/constants/defaultOptions'
 
 //  思维导图
@@ -22,11 +29,13 @@ class MindMap {
 
     // 容器元素
     this.el = this.opt.el
+    if (!this.el) throw new Error('缺少容器元素el')
     this.elRect = this.el.getBoundingClientRect()
 
     // 画布宽高
     this.width = this.elRect.width
     this.height = this.elRect.height
+    if (this.width <= 0 || this.height <= 0) throw new Error('容器元素el的宽高不能为0')
 
     // 画布
     this.svg = SVG().addTo(this.el).size(this.width, this.height)
@@ -68,7 +77,7 @@ class MindMap {
     this.batchExecution = new BatchExecution()
 
     // 注册插件
-    MindMap.pluginList.forEach((plugin) => {
+    MindMap.pluginList.forEach(plugin => {
       this.initPlugin(plugin)
     })
 
@@ -136,10 +145,10 @@ class MindMap {
 
   // 初始化缓存数据
   initCache() {
-    Object.keys(commonCaches).forEach((key) => {
+    Object.keys(commonCaches).forEach(key => {
       let type = getType(commonCaches[key])
       let value = ''
-      switch(type) {
+      switch (type) {
         case 'Boolean':
           value = false
           break
@@ -164,7 +173,7 @@ class MindMap {
     this.renderer.clearAllActive()
     this.opt.theme = theme
     this.render(null, CONSTANTS.CHANGE_THEME)
-	this.emit('view_theme_change', theme)
+    this.emit('view_theme_change', theme)
   }
 
   //  获取当前主题
@@ -278,8 +287,12 @@ class MindMap {
 
   //  导出
   async export(...args) {
-    let result = await this.doExport.export(...args)
-    return result
+    try {
+      let result = await this.doExport.export(...args)
+      return result
+    } catch (error) {
+      this.mindMap.opt.errorHandler(ERROR_TYPES.EXPORT_ERROR, error)
+    }
   }
 
   //  转换位置
@@ -327,7 +340,11 @@ class MindMap {
     // 克隆一份数据
     let clone = svg.clone()
     // 如果实际图形宽高超出了屏幕宽高，且存在水印的话需要重新绘制水印，否则会出现超出部分没有水印的问题
-    if ((rect.width > origWidth || rect.height >  origHeight) && this.watermark && this.watermark.hasWatermark()) {
+    if (
+      (rect.width > origWidth || rect.height > origHeight) &&
+      this.watermark &&
+      this.watermark.hasWatermark()
+    ) {
       this.width = rect.width
       this.height = rect.height
       this.watermark.draw()
@@ -388,7 +405,7 @@ class MindMap {
   // 销毁
   destroy() {
     // 移除插件
-    [...MindMap.pluginList].forEach((plugin) => {
+    ;[...MindMap.pluginList].forEach(plugin => {
       this[plugin.instanceName] = null
     })
     // 解绑事件
@@ -408,8 +425,8 @@ MindMap.usePlugin = (plugin, opt = {}) => {
   MindMap.pluginList.push(plugin)
   return MindMap
 }
-MindMap.hasPlugin = (plugin) => {
-  return MindMap.pluginList.findIndex((item) => {
+MindMap.hasPlugin = plugin => {
+  return MindMap.pluginList.findIndex(item => {
     return item === plugin
   })
 }
