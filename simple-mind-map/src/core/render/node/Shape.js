@@ -62,7 +62,10 @@ export default class Shape {
   //  创建形状节点
   createShape() {
     const shape = this.node.getShape()
+    const borderWidth = this.node.getBorderWidth()
     let { width, height } = this.node
+    width -= borderWidth
+    height -= borderWidth
     let node = null
     // 矩形
     if (shape === CONSTANTS.SHAPE.RECTANGLE) {

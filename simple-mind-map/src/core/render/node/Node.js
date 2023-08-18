@@ -257,9 +257,11 @@ class Node {
       this.shapeInstance.getShapePadding(_width, _height, paddingX, paddingY)
     this.shapePadding.paddingX = shapePaddingX
     this.shapePadding.paddingY = shapePaddingY
+    // 边框宽度，因为边框是以中线向两端发散，所以边框会超出节点
+    const borderWidth = this.getBorderWidth()
     return {
-      width: _width + paddingX * 2 + shapePaddingX * 2,
-      height: _height + paddingY * 2 + margin + shapePaddingY * 2
+      width: _width + paddingX * 2 + shapePaddingX * 2 + borderWidth,
+      height: _height + paddingY * 2 + margin + shapePaddingY * 2 + borderWidth
     }
   }
 
@@ -269,10 +271,12 @@ class Node {
     this.group.clear()
     let { width, height, textContentItemMargin } = this
     let { paddingY } = this.getPaddingVale()
-    paddingY += this.shapePadding.paddingY
+    const halfBorderWidth = this.getBorderWidth() / 2
+    paddingY += this.shapePadding.paddingY + halfBorderWidth
     // 节点形状
     this.shapeNode = this.shapeInstance.createShape()
     this.shapeNode.addClass('smm-node-shape')
+    this.shapeNode.translate(halfBorderWidth, halfBorderWidth)
     this.group.add(this.shapeNode)
     this.updateNodeShape()
     // 渲染一个隐藏的矩形区域，用来触发展开收起按钮的显示
@@ -825,6 +829,11 @@ class Node {
       this.getSelfStyle(prop) || // 自身
       this.getParentSelfStyle(prop)
     ) // 父级
+  }
+
+  // 获取节点非节点状态的边框大小
+  getBorderWidth() {
+    return this.style.merge('borderWidth', false, false) || 0
   }
 
   //  获取数据
