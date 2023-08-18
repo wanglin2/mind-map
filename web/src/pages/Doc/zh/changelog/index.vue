@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.6.15-fix.2</h2>
+<p>修复：修复在Firefox浏览器中富文本节点无法显示的问题。</p>
 <h2>0.6.15-fix.1</h2>
 <p>新增：</p>
 <blockquote>
