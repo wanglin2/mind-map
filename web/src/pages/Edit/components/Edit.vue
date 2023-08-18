@@ -303,7 +303,24 @@ export default {
         //   })
         //   comp.$mount(el)
         //   return comp.$el
-        // }
+        // },
+        // 示例3：普通元素
+        // customCreateNodeContent: (node) => {
+        //   let el = document.createElement('div')
+        //   el.style.cssText = `
+        //     width: 203px;
+        //     height: 78px;
+        //     opacity: 0.8;
+        //     background-image: linear-gradient(0deg, rgba(53,130,172,0.06) 0%, rgba(24,75,116,0.06) 100%);
+        //     box-shadow: inset 0 1px 15px 0 rgba(119,196,255,0.40);
+        //     border-radius: 2px;
+        //     display: flex;
+        //     justify-content: center;
+        //     align-items: center;
+        //   `
+        //   el.innerHTML = node.nodeData.data.text
+        //   return el
+        // },
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
