@@ -38,11 +38,13 @@ a.download = 'xxx'
 a.click()
 ```
 
-### png(name, transparent = false)
+### png(name, transparent = false, rotateWhenWidthLongerThenHeight)
 
 - `name`：名称，可不传
 
 - `transparent`：v0.5.7+，指定导出图片的背景是否是透明的
+
+- `rotateWhenWidthLongerThenHeight`: v0.6.15+，Boolean, false, 是否在图片宽比高长时自动旋转90度
 
 导出为`png`。
 
@@ -66,11 +68,13 @@ svg(
 
 导出为`svg`。
 
-### pdf(name)
+### pdf(name, useMultiPageExport)
 
 > v0.2.1+
 
-`name`：文件名称
+- `name`：文件名称
+
+- `useMultiPageExport`: v0.6.15+，Boolean, false, 是否多页导出，默认为单页
 
 导出为`pdf`，和其他导出方法不一样，这个方法不会返回数据，会直接触发下载。
 

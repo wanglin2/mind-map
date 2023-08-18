@@ -1,6 +1,30 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.6.15</h2>
+<p>新增：</p>
+<blockquote>
+<p>1.Export PDF supports pagination export based on image size.</p>
+<p>2.Exporting PDF supports automatic direction adjustment based on aspect ratio.</p>
+<p>3.Optimize the placeholder elements of the expand and collapse buttons: 1. Nodes without child nodes do not render this element; 2. Dynamically update the element based on the existence of child nodes.</p>
+<p>4.Add a configuration that prohibits mouse wheel scaling.</p>
+<p>5.Supports passing error handling functions.</p>
+</blockquote>
+<p>修复：</p>
+<blockquote>
+<p>1.Fix the issue of displaying exceptions when node text is empty.</p>
+<p>2.Change the paddingX and paddingY of exported SVG graphics to single sided padding.</p>
+<p>3.Fixed an issue where the mouse is not centered when zooming when the canvas is not 0 from the top left corner of the browser window.</p>
+<p>4.Fix the issue of overlapping node borders.</p>
+</blockquote>
+<p>Demo：</p>
+<blockquote>
+<p>1.The bottom right corner supports jumping to related links.</p>
+<p>2.Adjust the position of the mini map to solve the problem of being blocked by side buttons.</p>
+<p>3.Fix the issue where the prompt in the upper right corner of the open local file cannot be closed.</p>
+<p>4.Editing the outline separately is no longer linked to the canvas, optimizing the editing experience under large data volume.</p>
+<p>5.The sidebar involves graphical options to increase visualization effects.</p>
+</blockquote>
 <h2>0.6.14</h2>
 <p>New:</p>
 <blockquote>

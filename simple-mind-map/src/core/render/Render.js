@@ -17,7 +17,7 @@ import {
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
-import { CONSTANTS } from '../../constants/constant'
+import { CONSTANTS, ERROR_TYPES } from '../../constants/constant'
 
 // 布局列表
 const layouts = {
@@ -629,6 +629,7 @@ class Render {
 
   // 粘贴事件
   async onPaste() {
+    const { errorHandler } = this.mindMap.opt
     // 读取剪贴板的文字和图片
     let text = null
     let img = null
@@ -647,7 +648,7 @@ class Render {
           }
         }
       } catch (error) {
-        console.log(error)
+        errorHandler(ERROR_TYPES.READ_CLIPBOARD_ERROR, error)
       }
     }
     // 检查剪切板数据是否有变化
@@ -682,7 +683,9 @@ class Render {
                 text = String(res)
               }
             }
-          } catch (error) {}
+          } catch (error) {
+            errorHandler(ERROR_TYPES.CUSTOM_HANDLE_CLIPBOARD_TEXT_ERROR, error)
+          }
         }
         // 默认处理
         if (useDefault) {
@@ -691,7 +694,9 @@ class Render {
             if (parsedData && parsedData.simpleMindMap) {
               smmData = parsedData.data
             }
-          } catch (error) {}
+          } catch (error) {
+            errorHandler(ERROR_TYPES.PARSE_PASTE_DATA_ERROR, error)
+          }
         }
         if (smmData) {
           this.mindMap.execCommand(
@@ -724,7 +729,7 @@ class Render {
             })
           }
         } catch (error) {
-          console.log(error)
+          errorHandler(ERROR_TYPES.LOAD_CLIPBOARD_IMAGE_ERROR, error)
         }
       }
     } else {

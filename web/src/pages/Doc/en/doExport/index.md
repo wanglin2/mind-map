@@ -38,11 +38,13 @@ a.download = 'xxx'
 a.click()
 ```
 
-### png(name, transparent = false)
+### png(name, transparent = false, rotateWhenWidthLongerThenHeight)
 
 - `name`: Name, optional
 
 - `transparent`: v0.5.7+, Specify whether the background of the exported image is transparent
+
+- `rotateWhenWidthLongerThenHeight`: v0.6.15+，Boolean, false, Automatically rotate 90 degrees when the image has a width to height ratio
 
 Exports as `png`.
 
@@ -66,11 +68,13 @@ svg(
 
 Exports as `svg`.
 
-### pdf(name)
+### pdf(name, useMultiPageExport)
 
 > v0.2.1+
 
-`name`：File name
+- `name`：File name
+
+- `useMultiPageExport`: v0.6.15+, Boolean, false, Whether to export multiple pages, default to single page
 
 Export as `pdf`. Unlike other export methods, this method does not return data and directly triggers the download.
 
