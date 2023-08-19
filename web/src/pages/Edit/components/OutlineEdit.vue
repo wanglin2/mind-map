@@ -169,6 +169,9 @@ export default {
       }
       if (e.keyCode === 13 && !e.shiftKey) {
         e.preventDefault()
+        if (node.data.root) {
+          return
+        }
         this.$refs.tree.insertAfter(data, node)
       }
       if (e.keyCode === 9) {
