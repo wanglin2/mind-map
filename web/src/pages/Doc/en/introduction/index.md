@@ -102,9 +102,7 @@ We recommend using the latest version of the `Chrome` browser.
 
 Limited testing situation:
 
-Normal operation: `360` extreme speed browser（v13.5.2036.0）、`opera` browser（v71.0.3770.284）。
-
-Abnormal operation: `Firefox`（v98.0.2）, Node content cannot be displayed in rich text mode. If you want to support the `Firefox` browser, please use non rich text mode.
+Normal operation: `360` extreme speed browser（v13.5.2036.0）、`opera` browser（v71.0.3770.284）、`Firefox`（v98.0.2）.
 
 Unsupported: `IE` browser.
 
