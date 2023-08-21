@@ -1,6 +1,6 @@
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
-import domtoimage from 'dom-to-image-more'
+// import domtoimage from 'dom-to-image-more'
 import {
   walk,
   getTextFromHtml,
