@@ -184,13 +184,20 @@ class Export {
     str = removeHTMLEntities(str)
     // 如果开启了富文本，则使用htmltocanvas转换为图片
     if (this.mindMap.richText) {
-      let res = await this.mindMap.richText.handleExportPng(node.node)
-      let imgDataUrl = await this.svgToPng(
-        res,
-        transparent,
-        rotateWhenWidthLongerThenHeight
-      )
-      return imgDataUrl
+      // 覆盖html默认的样式
+      let foreignObjectList = node.find('foreignObject')
+      if (foreignObjectList.length > 0) {
+        foreignObjectList[0].add(SVG(`<style>${ this.mindMap.opt.resetCss }</style>`))
+      }
+      str = node.svg()
+      // 使用其他库（html2canvas、dom-to-image-more等）来完成导出
+      // let res = await this.mindMap.richText.handleExportPng(node.node)
+      // let imgDataUrl = await this.svgToPng(
+      //   res,
+      //   transparent,
+      //   rotateWhenWidthLongerThenHeight
+      // )
+      // return imgDataUrl
     }
     // 转换成blob数据
     let blob = new Blob([str], {
@@ -229,15 +236,13 @@ class Export {
 
   //  导出为svg
   // plusCssText：附加的css样式，如果svg中存在dom节点，想要设置一些针对节点的样式可以通过这个参数传入
-  async svg(name, plusCssText) {
+  async svg(name) {
     let { node } = await this.getSvgData()
     // 开启了节点富文本编辑
     if (this.mindMap.richText) {
-      if (plusCssText) {
-        let foreignObjectList = node.find('foreignObject')
-        if (foreignObjectList.length > 0) {
-          foreignObjectList[0].add(SVG(`<style>${plusCssText}</style>`))
-        }
+      let foreignObjectList = node.find('foreignObject')
+      if (foreignObjectList.length > 0) {
+        foreignObjectList[0].add(SVG(`<style>${ this.mindMap.opt.resetCss }</style>`))
       }
     }
     node.first().before(SVG(`<title>${name}</title>`))
