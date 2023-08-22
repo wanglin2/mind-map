@@ -52,7 +52,7 @@ Exports as `png`.
 
 - `name`：`svg` title
 
-- `plusCssText`：v0.4.0+, When node rich text editing is enabled and `domToImage` passes `false`, additional `css` styles can be added. If there is a `dom` node in `svg`, you can set some styles for the node through this parameter, such as:
+- `plusCssText`：v0.4.0+, （v0.6.16+This parameter has been removed and instead passed in through the `resetCss` configuration during instantiation）, When node rich text editing is enabled and `domToImage` passes `false`, additional `css` styles can be added. If there is a `dom` node in `svg`, you can set some styles for the node through this parameter, such as:
 
 ```js
 svg(

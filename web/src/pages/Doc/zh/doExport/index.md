@@ -52,7 +52,7 @@ a.click()
 
 - `name`：`svg`标题
 
-- `plusCssText`：v0.4.0+，当开启了节点富文本编辑，且`domToImage`传了`false`时，可以添加附加的`css`样式，如果`svg`中存在`dom`节点，想要设置一些针对节点的样式可以通过这个参数传入，比如：
+- `plusCssText`：v0.4.0+，（v0.6.16+已去除该参数，改为在实例化时通过`resetCss`配置传入），当开启了节点富文本编辑，且`domToImage`传了`false`时，可以添加附加的`css`样式，如果`svg`中存在`dom`节点，想要设置一些针对节点的样式可以通过这个参数传入，比如：
 
 ```js
 svg(

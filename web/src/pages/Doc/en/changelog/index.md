@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.6.16
+
+Fix:
+
+> 1.Optimize the logic of rich text measurement elements, remove duplicate settings for styles, and add duplicate nodes
+>
+> 2.Optimize the export image logic, and when traversing the node to convert the URL of the image, if it is already in the form of data: URL, do not handle it repeatedly.
+
+New:
+
+> 1.Remove the second parameter of the exported SVG method and configure it through instantiation instead.
+>
+> 2.Export images without using external libraries.
+
+Demo:
+
+> 1.Fixed a bug where siblings can be added to the root node when editing the outline separately.
+
 ## 0.6.15-fix.2
 
 Fix: Fixed an issue where rich text nodes cannot be displayed in Firefox browser.
