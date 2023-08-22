@@ -86,6 +86,7 @@ function createIconNode() {
 
 // 创建富文本节点
 function createRichTextNode() {
+  const { textAutoWrapWidth } = this.mindMap.opt
   let g = new G()
   // 重新设置富文本节点内容
   let recoverText = false
@@ -119,15 +120,16 @@ function createRichTextNode() {
   let html = `<div>${this.nodeData.data.text}</div>`
   if (!commonCaches.measureRichtextNodeTextSizeEl) {
     commonCaches.measureRichtextNodeTextSizeEl = document.createElement('div')
+    commonCaches.measureRichtextNodeTextSizeEl.style.position = 'fixed'
+    commonCaches.measureRichtextNodeTextSizeEl.style.left = '-999999px'
+    this.mindMap.el.appendChild(commonCaches.measureRichtextNodeTextSizeEl)
   }
   let div = commonCaches.measureRichtextNodeTextSizeEl
   div.innerHTML = html
-  div.style.cssText = `position: fixed; left: -999999px;`
   let el = div.children[0]
   el.classList.add('smm-richtext-node-wrap')
   el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
-  el.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + 'px'
-  this.mindMap.el.appendChild(div)
+  el.style.maxWidth = textAutoWrapWidth + 'px'
   let { width, height } = el.getBoundingClientRect()
   // 如果文本为空，那么需要计算一个默认高度
   if (height <= 0) {

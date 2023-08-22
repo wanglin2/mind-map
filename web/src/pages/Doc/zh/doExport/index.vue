@@ -46,7 +46,7 @@ a.click()
 <p><code>name</code>：<code>svg</code>标题</p>
 </li>
 <li>
-<p><code>plusCssText</code>：v0.4.0+，当开启了节点富文本编辑，且<code>domToImage</code>传了<code>false</code>时，可以添加附加的<code>css</code>样式，如果<code>svg</code>中存在<code>dom</code>节点，想要设置一些针对节点的样式可以通过这个参数传入，比如：</p>
+<p><code>plusCssText</code>：v0.4.0+，（v0.6.16+已去除该参数，改为在实例化时通过<code>resetCss</code>配置传入），当开启了节点富文本编辑，且<code>domToImage</code>传了<code>false</code>时，可以添加附加的<code>css</code>样式，如果<code>svg</code>中存在<code>dom</code>节点，想要设置一些针对节点的样式可以通过这个参数传入，比如：</p>
 </li>
 </ul>
 <pre class="hljs"><code>svg(

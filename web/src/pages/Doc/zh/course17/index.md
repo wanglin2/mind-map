@@ -72,6 +72,8 @@ mindMap.export(type, isDownload, fileName, plusCssText = '')
 
 如果开启了节点富文本编辑，也就是`svg`中会存在节点的`html`结构，这就又存在一个问题，因为浏览器对每个元素默认会设置一些样式，影响最大的就是`margin`和`padding`，这就有可能会导致节点中的文字错位，所以可以通过`plusCssText`参数传入`css`样式：
 
+> 在v0.6.16+版本后，plusCssText参数已被删除，改为在实例化时通过`resetCss`配置传入。
+
 ```js
 mindMap.export(
     'svg', 

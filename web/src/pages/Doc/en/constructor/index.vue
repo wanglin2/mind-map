@@ -413,6 +413,13 @@
 <td>Prohibit mouse wheel scaling, you can still use the API for scaling</td>
 <td></td>
 </tr>
+<tr>
+<td>resetCss（v0.6.16+）</td>
+<td>String</td>
+<td>* { margin: 0; padding: 0; box-sizing: border-box; }</td>
+<td>When exporting images and SVGs, the default style overlay for rich text node content, which is embedded in HTML nodes in SVGs, will occur. If not overlaid, the node content will be offset</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>

@@ -153,4 +153,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/才镇.jpg" style="width: 50px;height: 50px;" />
         <span>才镇</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/小米.jpg" style="width: 50px;height: 50px;" />
+        <span>小米bbᯤ²ᴳ</span>
+    </span>
 </p>
