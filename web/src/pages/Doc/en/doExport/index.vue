@@ -46,7 +46,7 @@ a.click()
 <p><code>name</code>：<code>svg</code> title</p>
 </li>
 <li>
-<p><code>plusCssText</code>：v0.4.0+, When node rich text editing is enabled and <code>domToImage</code> passes <code>false</code>, additional <code>css</code> styles can be added. If there is a <code>dom</code> node in <code>svg</code>, you can set some styles for the node through this parameter, such as:</p>
+<p><code>plusCssText</code>：v0.4.0+, （v0.6.16+This parameter has been removed and instead passed in through the <code>resetCss</code> configuration during instantiation）, When node rich text editing is enabled and <code>domToImage</code> passes <code>false</code>, additional <code>css</code> styles can be added. If there is a <code>dom</code> node in <code>svg</code>, you can set some styles for the node through this parameter, such as:</p>
 </li>
 </ul>
 <pre class="hljs"><code>svg(

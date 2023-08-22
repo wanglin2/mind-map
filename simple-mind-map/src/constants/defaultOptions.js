@@ -155,5 +155,14 @@ export const defaultOpt = {
   // 错误处理函数
   errorHandler: (code, error) => {
     console.error(code, error)
-  }
+  },
+  // 设置导出图片和svg时，针对富文本节点内容，也就是嵌入到svg中的html节点的默认样式覆盖
+  // 如果不覆盖，会发生偏移问题
+  resetCss: `
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  `
 }
