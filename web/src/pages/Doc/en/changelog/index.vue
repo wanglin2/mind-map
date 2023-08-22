@@ -1,6 +1,21 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.6.16</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Optimize the logic of rich text measurement elements, remove duplicate settings for styles, and add duplicate nodes</p>
+<p>2.Optimize the export image logic, and when traversing the node to convert the URL of the image, if it is already in the form of data: URL, do not handle it repeatedly.</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Remove the second parameter of the exported SVG method and configure it through instantiation instead.</p>
+<p>2.Export images without using external libraries.</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.Fixed a bug where siblings can be added to the root node when editing the outline separately.</p>
+</blockquote>
 <h2>0.6.15-fix.2</h2>
 <p>Fix: Fixed an issue where rich text nodes cannot be displayed in Firefox browser.</p>
 <h2>0.6.15-fix.1</h2>

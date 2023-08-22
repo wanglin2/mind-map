@@ -413,6 +413,13 @@
 <td>禁止鼠标滚轮缩放，你仍旧可以使用api进行缩放</td>
 <td></td>
 </tr>
+<tr>
+<td>resetCss（v0.6.16+）</td>
+<td>String</td>
+<td>* { margin: 0; padding: 0; box-sizing: border-box; }</td>
+<td>设置导出图片和svg时，针对富文本节点内容，也就是嵌入到svg中的html节点的默认样式覆盖，如果不覆盖，节点内容会发生偏移</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>水印配置</h3>
