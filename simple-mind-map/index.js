@@ -291,7 +291,7 @@ class MindMap {
       let result = await this.doExport.export(...args)
       return result
     } catch (error) {
-      this.mindMap.opt.errorHandler(ERROR_TYPES.EXPORT_ERROR, error)
+      this.opt.errorHandler(ERROR_TYPES.EXPORT_ERROR, error)
     }
   }
 
