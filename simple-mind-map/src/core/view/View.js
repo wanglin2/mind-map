@@ -32,6 +32,7 @@ class View {
       this.fit()
     })
     this.mindMap.svg.on('dblclick', () => {
+      if (!this.mindMap.opt.enableDblclickReset) return
       this.reset()
     })
     // 拖动视图

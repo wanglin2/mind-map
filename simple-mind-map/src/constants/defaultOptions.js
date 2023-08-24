@@ -164,5 +164,7 @@ export const defaultOpt = {
       padding: 0;
       box-sizing: border-box;
     }
-  `
+  `,
+  // 开启鼠标双击复位思维导图位置及缩放
+  enableDblclickReset: true
 }
