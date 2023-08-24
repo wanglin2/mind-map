@@ -14,11 +14,13 @@ const parseXmindFile = file => {
       async zip => {
         try {
           let content = ''
-          if (zip.files['content.json']) {
-            let json = await zip.files['content.json'].async('string')
+          let jsonFile = zip.files['content.json']
+          let xmlFile = zip.files['content.xml'] || zip.files['/content.xml']
+          if (jsonFile) {
+            let json = await jsonFile.async('string')
             content = await transformXmind(json, zip.files)
-          } else if (zip.files['content.xml']) {
-            let xml = await zip.files['content.xml'].async('string')
+          } else if (xmlFile) {
+            let xml = await xmlFile.async('string')
             let json = xmlConvert.xml2json(xml)
             content = transformOldXmind(json)
           }
@@ -187,7 +189,7 @@ const transformOldXmind = content => {
     if (_children && _children.elements && _children.elements.length > 0) {
       _children.elements.forEach(item => {
         if (item.name === 'topics') {
-          item.elements.forEach(item2 => {
+          (item.elements || []).forEach(item2 => {
             let newChild = {}
             newNode.children.push(newChild)
             walk(item2, newChild)
