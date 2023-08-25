@@ -80,6 +80,7 @@ const mindMap = new MindMap({
 | errorHandler（v0.6.15+）     | Function  |  | Custom error handling functions currently only throw some asynchronous logic errors. Can pass a function that takes two parameters, the first being the wrong type and the second being the wrong object |          |
 | disableMouseWheelZoom（v0.6.15+）     | Boolean  | false | Prohibit mouse wheel scaling, you can still use the API for scaling |          |
 | resetCss（v0.6.16+）     | String  |  * { margin: 0; padding: 0; box-sizing: border-box; } | When exporting images and SVGs, the default style overlay for rich text node content, which is embedded in HTML nodes in SVGs, will occur. If not overlaid, the node content will be offset |          |
+| enableDblclickReset（v0.6.17+）     | Boolean  | true  | Turn on the mouse and double-click to reset the position and zoom of the mind map |          |
 
 ### Watermark config
 

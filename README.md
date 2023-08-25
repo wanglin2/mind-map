@@ -97,7 +97,7 @@ const mindMap = new MindMap({
 
 > 厚椰乳一盒 + 纯牛奶半盒 + 冰块 + 咖啡液 = 生椰拿铁 yyds
 
-> 转账请备注【思维导图】。你的头像和名字将会出现在下面和[文档页面](https://wanglin2.github.io/mind-map/#/doc/zh/introduction/%E8%AF%B7%E4%BD%9C%E8%80%85%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1)
+> 推荐使用支付宝，微信获取不到头像。转账请备注【思维导图】。你的头像和名字将会出现在下面和[文档页面](https://wanglin2.github.io/mind-map/#/doc/zh/introduction/%E8%AF%B7%E4%BD%9C%E8%80%85%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1)
 
 <p>
   <img src="./web/src/assets/img/alipay.jpg" style="width: 300px" />
@@ -156,5 +156,13 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/小米.jpg" style="width: 50px;height: 50px;" />
         <span>小米bbᯤ²ᴳ</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/棐.jpg" style="width: 50px;height: 50px;" />
+        <span>*棐</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>Luke</span>
     </span>
 </p>

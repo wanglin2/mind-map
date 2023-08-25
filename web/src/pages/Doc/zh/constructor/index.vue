@@ -420,6 +420,13 @@
 <td>设置导出图片和svg时，针对富文本节点内容，也就是嵌入到svg中的html节点的默认样式覆盖，如果不覆盖，节点内容会发生偏移</td>
 <td></td>
 </tr>
+<tr>
+<td>enableDblclickReset（v0.6.17+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>开启鼠标双击复位思维导图位置及缩放</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>水印配置</h3>
