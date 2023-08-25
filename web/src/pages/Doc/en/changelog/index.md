@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.6.17
+
+Fix:
+
+> 1.Fix the issue of error reporting in the xmind file exported from Baidu Brain Map.
+>
+> 2.Fix the mindMap. export method code error.
+
+New:
+
+> 1.Create index.d.ts file。
+>
+> 2.Support configuration to enable double click reset mind map.
+>
+> 3.Intercept paste operations during rich text editing, remove formatting, and only allow pasting pure text.
+
 ## 0.6.16
 
 Fix:

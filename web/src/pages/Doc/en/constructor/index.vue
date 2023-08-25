@@ -420,6 +420,13 @@
 <td>When exporting images and SVGs, the default style overlay for rich text node content, which is embedded in HTML nodes in SVGs, will occur. If not overlaid, the node content will be offset</td>
 <td></td>
 </tr>
+<tr>
+<td>enableDblclickReset（v0.6.17+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Turn on the mouse and double-click to reset the position and zoom of the mind map</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>

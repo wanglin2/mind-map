@@ -80,6 +80,7 @@ const mindMap = new MindMap({
 | errorHandler（v0.6.15+）     | Function  |  | 自定义错误处理函数，目前只会抛出一些异步逻辑出错的情况。可以传递一个函数，会接收两个参数，第一个为错误的类型，第二个为错误对象 |          |
 | disableMouseWheelZoom（v0.6.15+）     | Boolean  | false | 禁止鼠标滚轮缩放，你仍旧可以使用api进行缩放 |          |
 | resetCss（v0.6.16+）     | String  |  * { margin: 0; padding: 0; box-sizing: border-box; } | 设置导出图片和svg时，针对富文本节点内容，也就是嵌入到svg中的html节点的默认样式覆盖，如果不覆盖，节点内容会发生偏移 |          |
+| enableDblclickReset（v0.6.17+）     | Boolean  | true  | 开启鼠标双击复位思维导图位置及缩放 |          |
 
 ### 水印配置
 

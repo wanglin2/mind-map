@@ -107,13 +107,13 @@
 
 > 厚椰乳一盒 + 纯牛奶半盒 + 冰块 + 咖啡液 = 生椰拿铁 yyds
 
-> 转账请备注【思维导图】。你的头像和名字将会出现在下面。
+> 推荐使用支付宝，微信获取不到头像。转账请备注【思维导图】。你的头像和名字将会出现在下面。
 
 <img src="../../../../assets/img/alipay.jpg" style="width: 300px" />
 
 <img src="../../../../assets/img/wechat.jpg" style="width: 300px" />
 
-<div  style="display: flex;">
+<div style="display: flex;">
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/Think.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>Think</p>
@@ -165,5 +165,16 @@
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/小米.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>小米bbᯤ²ᴳ</p>
+    </div>
+</div>
+
+<div style="display: flex;">
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/棐.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>*棐</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/default.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>Luke</p>
     </div>
 </div>

@@ -1,6 +1,18 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.6.17</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue of error reporting in the xmind file exported from Baidu Brain Map.</p>
+<p>2.Fix the mindMap. export method code error.</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Create index.d.ts file。</p>
+<p>2.Support configuration to enable double click reset mind map.</p>
+<p>3.Intercept paste operations during rich text editing, remove formatting, and only allow pasting pure text.</p>
+</blockquote>
 <h2>0.6.16</h2>
 <p>Fix:</p>
 <blockquote>
