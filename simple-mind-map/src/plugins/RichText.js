@@ -1,6 +1,6 @@
 import Quill from 'quill'
+import Delta from 'quill-delta'
 import 'quill/dist/quill.snow.css'
-// import domtoimage from 'dom-to-image-more'
 import {
   walk,
   getTextFromHtml,
@@ -43,6 +43,7 @@ class RichText {
     this.quill = null
     this.range = null
     this.lastRange = null
+    this.pasteUseRange = null
     this.node = null
     this.isInserting = false
     this.styleEl = null
@@ -329,6 +330,7 @@ class RichText {
       this.lastRange = this.range
       this.range = null
       if (range) {
+        this.pasteUseRange = range
         let bounds = this.quill.getBounds(range.index, range.length)
         let rect = this.textEditNode.getBoundingClientRect()
         let rectInfo = {
@@ -368,6 +370,38 @@ class RichText {
         this.lostStyle = false
       }
     })
+    // 拦截粘贴，只允许粘贴纯文本
+    this.quill.clipboard.addMatcher(Node.TEXT_NODE, (node) => {
+      let style = this.getPasteTextStyle()
+      return new Delta().insert(node.data, style)
+    })
+    this.quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
+      let ops = []
+      let style = this.getPasteTextStyle()
+      delta.ops.forEach(op => {
+        // 过滤出文本内容，过滤掉换行
+        if (op.insert && typeof op.insert === 'string' && op.insert !== '\n') {
+          ops.push({
+            attributes: { ...style },
+            insert: op.insert
+          })
+        }
+      })
+      delta.ops = ops
+      return delta
+    })
+  }
+
+  // 获取粘贴的文本的样式
+  getPasteTextStyle() {
+    // 粘贴的数据使用当前光标位置处的文本样式
+    if (this.pasteUseRange) {
+      return this.quill.getFormat(
+        this.pasteUseRange.index,
+        this.pasteUseRange.length
+      )
+    }
+    return {}
   }
 
   // 正则输入中文
