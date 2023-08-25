@@ -15073,8 +15073,8 @@ var require_weak_map_basic_detection = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/weak-map-basic-detection.js"(exports, module) {
     var global3 = require_global();
     var isCallable2 = require_is_callable();
-    var WeakMap = global3.WeakMap;
-    module.exports = isCallable2(WeakMap) && /native code/.test(String(WeakMap));
+    var WeakMap2 = global3.WeakMap;
+    module.exports = isCallable2(WeakMap2) && /native code/.test(String(WeakMap2));
   }
 });
 
@@ -15110,7 +15110,7 @@ var require_internal_state = __commonJS({
     var hiddenKeys = require_hidden_keys();
     var OBJECT_ALREADY_INITIALIZED = "Object already initialized";
     var TypeError2 = global3.TypeError;
-    var WeakMap = global3.WeakMap;
+    var WeakMap2 = global3.WeakMap;
     var set;
     var get;
     var has;
@@ -15127,7 +15127,7 @@ var require_internal_state = __commonJS({
       };
     };
     if (NATIVE_WEAK_MAP || shared.state) {
-      store = shared.state || (shared.state = new WeakMap());
+      store = shared.state || (shared.state = new WeakMap2());
       store.get = store.get;
       store.has = store.has;
       store.set = store.set;
@@ -25239,7 +25239,7 @@ var require_quill = __commonJS({
             var extend2 = __webpack_require__(3);
             var op = __webpack_require__(20);
             var NULL_CHARACTER = String.fromCharCode(0);
-            var Delta = function(ops) {
+            var Delta2 = function(ops) {
               if (Array.isArray(ops)) {
                 this.ops = ops;
               } else if (ops != null && Array.isArray(ops.ops)) {
@@ -25248,7 +25248,7 @@ var require_quill = __commonJS({
                 this.ops = [];
               }
             };
-            Delta.prototype.insert = function(text3, attributes) {
+            Delta2.prototype.insert = function(text3, attributes) {
               var newOp = {};
               if (text3.length === 0)
                 return this;
@@ -25258,12 +25258,12 @@ var require_quill = __commonJS({
               }
               return this.push(newOp);
             };
-            Delta.prototype["delete"] = function(length2) {
+            Delta2.prototype["delete"] = function(length2) {
               if (length2 <= 0)
                 return this;
               return this.push({ "delete": length2 });
             };
-            Delta.prototype.retain = function(length2, attributes) {
+            Delta2.prototype.retain = function(length2, attributes) {
               if (length2 <= 0)
                 return this;
               var newOp = { retain: length2 };
@@ -25272,7 +25272,7 @@ var require_quill = __commonJS({
               }
               return this.push(newOp);
             };
-            Delta.prototype.push = function(newOp) {
+            Delta2.prototype.push = function(newOp) {
               var index3 = this.ops.length;
               var lastOp = this.ops[index3 - 1];
               newOp = extend2(true, {}, newOp);
@@ -25310,23 +25310,23 @@ var require_quill = __commonJS({
               }
               return this;
             };
-            Delta.prototype.chop = function() {
+            Delta2.prototype.chop = function() {
               var lastOp = this.ops[this.ops.length - 1];
               if (lastOp && lastOp.retain && !lastOp.attributes) {
                 this.ops.pop();
               }
               return this;
             };
-            Delta.prototype.filter = function(predicate) {
+            Delta2.prototype.filter = function(predicate) {
               return this.ops.filter(predicate);
             };
-            Delta.prototype.forEach = function(predicate) {
+            Delta2.prototype.forEach = function(predicate) {
               this.ops.forEach(predicate);
             };
-            Delta.prototype.map = function(predicate) {
+            Delta2.prototype.map = function(predicate) {
               return this.ops.map(predicate);
             };
-            Delta.prototype.partition = function(predicate) {
+            Delta2.prototype.partition = function(predicate) {
               var passed = [], failed = [];
               this.forEach(function(op2) {
                 var target = predicate(op2) ? passed : failed;
@@ -25334,10 +25334,10 @@ var require_quill = __commonJS({
               });
               return [passed, failed];
             };
-            Delta.prototype.reduce = function(predicate, initial) {
+            Delta2.prototype.reduce = function(predicate, initial) {
               return this.ops.reduce(predicate, initial);
             };
-            Delta.prototype.changeLength = function() {
+            Delta2.prototype.changeLength = function() {
               return this.reduce(function(length2, elem) {
                 if (elem.insert) {
                   return length2 + op.length(elem);
@@ -25347,12 +25347,12 @@ var require_quill = __commonJS({
                 return length2;
               }, 0);
             };
-            Delta.prototype.length = function() {
+            Delta2.prototype.length = function() {
               return this.reduce(function(length2, elem) {
                 return length2 + op.length(elem);
               }, 0);
             };
-            Delta.prototype.slice = function(start, end) {
+            Delta2.prototype.slice = function(start, end) {
               start = start || 0;
               if (typeof end !== "number")
                 end = Infinity;
@@ -25369,12 +25369,12 @@ var require_quill = __commonJS({
                 }
                 index3 += op.length(nextOp);
               }
-              return new Delta(ops);
+              return new Delta2(ops);
             };
-            Delta.prototype.compose = function(other) {
+            Delta2.prototype.compose = function(other) {
               var thisIter = op.iterator(this.ops);
               var otherIter = op.iterator(other.ops);
-              var delta = new Delta();
+              var delta = new Delta2();
               while (thisIter.hasNext() || otherIter.hasNext()) {
                 if (otherIter.peekType() === "insert") {
                   delta.push(otherIter.next());
@@ -25402,17 +25402,17 @@ var require_quill = __commonJS({
               }
               return delta.chop();
             };
-            Delta.prototype.concat = function(other) {
-              var delta = new Delta(this.ops.slice());
+            Delta2.prototype.concat = function(other) {
+              var delta = new Delta2(this.ops.slice());
               if (other.ops.length > 0) {
                 delta.push(other.ops[0]);
                 delta.ops = delta.ops.concat(other.ops.slice(1));
               }
               return delta;
             };
-            Delta.prototype.diff = function(other, index3) {
+            Delta2.prototype.diff = function(other, index3) {
               if (this.ops === other.ops) {
-                return new Delta();
+                return new Delta2();
               }
               var strings = [this, other].map(function(delta2) {
                 return delta2.map(function(op2) {
@@ -25423,7 +25423,7 @@ var require_quill = __commonJS({
                   throw new Error("diff() called " + prep + " non-document");
                 }).join("");
               });
-              var delta = new Delta();
+              var delta = new Delta2();
               var diffResult = diff(strings[0], strings[1], index3);
               var thisIter = op.iterator(this.ops);
               var otherIter = op.iterator(other.ops);
@@ -25457,10 +25457,10 @@ var require_quill = __commonJS({
               });
               return delta.chop();
             };
-            Delta.prototype.eachLine = function(predicate, newline) {
+            Delta2.prototype.eachLine = function(predicate, newline) {
               newline = newline || "\n";
               var iter = op.iterator(this.ops);
-              var line = new Delta();
+              var line = new Delta2();
               var i3 = 0;
               while (iter.hasNext()) {
                 if (iter.peekType() !== "insert")
@@ -25477,21 +25477,21 @@ var require_quill = __commonJS({
                     return;
                   }
                   i3 += 1;
-                  line = new Delta();
+                  line = new Delta2();
                 }
               }
               if (line.length() > 0) {
                 predicate(line, {}, i3);
               }
             };
-            Delta.prototype.transform = function(other, priority) {
+            Delta2.prototype.transform = function(other, priority) {
               priority = !!priority;
               if (typeof other === "number") {
                 return this.transformPosition(other, priority);
               }
               var thisIter = op.iterator(this.ops);
               var otherIter = op.iterator(other.ops);
-              var delta = new Delta();
+              var delta = new Delta2();
               while (thisIter.hasNext() || otherIter.hasNext()) {
                 if (thisIter.peekType() === "insert" && (priority || otherIter.peekType() !== "insert")) {
                   delta.retain(op.length(thisIter.next()));
@@ -25512,7 +25512,7 @@ var require_quill = __commonJS({
               }
               return delta.chop();
             };
-            Delta.prototype.transformPosition = function(index3, priority) {
+            Delta2.prototype.transformPosition = function(index3, priority) {
               priority = !!priority;
               var thisIter = op.iterator(this.ops);
               var offset = 0;
@@ -25530,7 +25530,7 @@ var require_quill = __commonJS({
               }
               return index3;
             };
-            module2.exports = Delta;
+            module2.exports = Delta2;
           },
           /* 3 */
           /***/
@@ -36622,6 +36622,2268 @@ var require_quill = __commonJS({
   }
 });
 
+// ../simple-mind-map/node_modules/fast-diff/diff.js
+var require_diff = __commonJS({
+  "../simple-mind-map/node_modules/fast-diff/diff.js"(exports, module) {
+    var DIFF_DELETE = -1;
+    var DIFF_INSERT = 1;
+    var DIFF_EQUAL = 0;
+    function diff_main(text1, text22, cursor_pos) {
+      if (text1 == text22) {
+        if (text1) {
+          return [[DIFF_EQUAL, text1]];
+        }
+        return [];
+      }
+      if (cursor_pos < 0 || text1.length < cursor_pos) {
+        cursor_pos = null;
+      }
+      var commonlength = diff_commonPrefix(text1, text22);
+      var commonprefix = text1.substring(0, commonlength);
+      text1 = text1.substring(commonlength);
+      text22 = text22.substring(commonlength);
+      commonlength = diff_commonSuffix(text1, text22);
+      var commonsuffix = text1.substring(text1.length - commonlength);
+      text1 = text1.substring(0, text1.length - commonlength);
+      text22 = text22.substring(0, text22.length - commonlength);
+      var diffs = diff_compute_(text1, text22);
+      if (commonprefix) {
+        diffs.unshift([DIFF_EQUAL, commonprefix]);
+      }
+      if (commonsuffix) {
+        diffs.push([DIFF_EQUAL, commonsuffix]);
+      }
+      diff_cleanupMerge(diffs);
+      if (cursor_pos != null) {
+        diffs = fix_cursor(diffs, cursor_pos);
+      }
+      diffs = fix_emoji(diffs);
+      return diffs;
+    }
+    function diff_compute_(text1, text22) {
+      var diffs;
+      if (!text1) {
+        return [[DIFF_INSERT, text22]];
+      }
+      if (!text22) {
+        return [[DIFF_DELETE, text1]];
+      }
+      var longtext = text1.length > text22.length ? text1 : text22;
+      var shorttext = text1.length > text22.length ? text22 : text1;
+      var i3 = longtext.indexOf(shorttext);
+      if (i3 != -1) {
+        diffs = [
+          [DIFF_INSERT, longtext.substring(0, i3)],
+          [DIFF_EQUAL, shorttext],
+          [DIFF_INSERT, longtext.substring(i3 + shorttext.length)]
+        ];
+        if (text1.length > text22.length) {
+          diffs[0][0] = diffs[2][0] = DIFF_DELETE;
+        }
+        return diffs;
+      }
+      if (shorttext.length == 1) {
+        return [[DIFF_DELETE, text1], [DIFF_INSERT, text22]];
+      }
+      var hm = diff_halfMatch_(text1, text22);
+      if (hm) {
+        var text1_a = hm[0];
+        var text1_b = hm[1];
+        var text2_a = hm[2];
+        var text2_b = hm[3];
+        var mid_common = hm[4];
+        var diffs_a = diff_main(text1_a, text2_a);
+        var diffs_b = diff_main(text1_b, text2_b);
+        return diffs_a.concat([[DIFF_EQUAL, mid_common]], diffs_b);
+      }
+      return diff_bisect_(text1, text22);
+    }
+    function diff_bisect_(text1, text22) {
+      var text1_length = text1.length;
+      var text2_length = text22.length;
+      var max_d = Math.ceil((text1_length + text2_length) / 2);
+      var v_offset = max_d;
+      var v_length = 2 * max_d;
+      var v1 = new Array(v_length);
+      var v22 = new Array(v_length);
+      for (var x3 = 0; x3 < v_length; x3++) {
+        v1[x3] = -1;
+        v22[x3] = -1;
+      }
+      v1[v_offset + 1] = 0;
+      v22[v_offset + 1] = 0;
+      var delta = text1_length - text2_length;
+      var front2 = delta % 2 != 0;
+      var k1start = 0;
+      var k1end = 0;
+      var k2start = 0;
+      var k2end = 0;
+      for (var d2 = 0; d2 < max_d; d2++) {
+        for (var k1 = -d2 + k1start; k1 <= d2 - k1end; k1 += 2) {
+          var k1_offset = v_offset + k1;
+          var x1;
+          if (k1 == -d2 || k1 != d2 && v1[k1_offset - 1] < v1[k1_offset + 1]) {
+            x1 = v1[k1_offset + 1];
+          } else {
+            x1 = v1[k1_offset - 1] + 1;
+          }
+          var y1 = x1 - k1;
+          while (x1 < text1_length && y1 < text2_length && text1.charAt(x1) == text22.charAt(y1)) {
+            x1++;
+            y1++;
+          }
+          v1[k1_offset] = x1;
+          if (x1 > text1_length) {
+            k1end += 2;
+          } else if (y1 > text2_length) {
+            k1start += 2;
+          } else if (front2) {
+            var k2_offset = v_offset + delta - k1;
+            if (k2_offset >= 0 && k2_offset < v_length && v22[k2_offset] != -1) {
+              var x22 = text1_length - v22[k2_offset];
+              if (x1 >= x22) {
+                return diff_bisectSplit_(text1, text22, x1, y1);
+              }
+            }
+          }
+        }
+        for (var k2 = -d2 + k2start; k2 <= d2 - k2end; k2 += 2) {
+          var k2_offset = v_offset + k2;
+          var x22;
+          if (k2 == -d2 || k2 != d2 && v22[k2_offset - 1] < v22[k2_offset + 1]) {
+            x22 = v22[k2_offset + 1];
+          } else {
+            x22 = v22[k2_offset - 1] + 1;
+          }
+          var y22 = x22 - k2;
+          while (x22 < text1_length && y22 < text2_length && text1.charAt(text1_length - x22 - 1) == text22.charAt(text2_length - y22 - 1)) {
+            x22++;
+            y22++;
+          }
+          v22[k2_offset] = x22;
+          if (x22 > text1_length) {
+            k2end += 2;
+          } else if (y22 > text2_length) {
+            k2start += 2;
+          } else if (!front2) {
+            var k1_offset = v_offset + delta - k2;
+            if (k1_offset >= 0 && k1_offset < v_length && v1[k1_offset] != -1) {
+              var x1 = v1[k1_offset];
+              var y1 = v_offset + x1 - k1_offset;
+              x22 = text1_length - x22;
+              if (x1 >= x22) {
+                return diff_bisectSplit_(text1, text22, x1, y1);
+              }
+            }
+          }
+        }
+      }
+      return [[DIFF_DELETE, text1], [DIFF_INSERT, text22]];
+    }
+    function diff_bisectSplit_(text1, text22, x3, y4) {
+      var text1a = text1.substring(0, x3);
+      var text2a = text22.substring(0, y4);
+      var text1b = text1.substring(x3);
+      var text2b = text22.substring(y4);
+      var diffs = diff_main(text1a, text2a);
+      var diffsb = diff_main(text1b, text2b);
+      return diffs.concat(diffsb);
+    }
+    function diff_commonPrefix(text1, text22) {
+      if (!text1 || !text22 || text1.charAt(0) != text22.charAt(0)) {
+        return 0;
+      }
+      var pointermin = 0;
+      var pointermax = Math.min(text1.length, text22.length);
+      var pointermid = pointermax;
+      var pointerstart = 0;
+      while (pointermin < pointermid) {
+        if (text1.substring(pointerstart, pointermid) == text22.substring(pointerstart, pointermid)) {
+          pointermin = pointermid;
+          pointerstart = pointermin;
+        } else {
+          pointermax = pointermid;
+        }
+        pointermid = Math.floor((pointermax - pointermin) / 2 + pointermin);
+      }
+      return pointermid;
+    }
+    function diff_commonSuffix(text1, text22) {
+      if (!text1 || !text22 || text1.charAt(text1.length - 1) != text22.charAt(text22.length - 1)) {
+        return 0;
+      }
+      var pointermin = 0;
+      var pointermax = Math.min(text1.length, text22.length);
+      var pointermid = pointermax;
+      var pointerend = 0;
+      while (pointermin < pointermid) {
+        if (text1.substring(text1.length - pointermid, text1.length - pointerend) == text22.substring(text22.length - pointermid, text22.length - pointerend)) {
+          pointermin = pointermid;
+          pointerend = pointermin;
+        } else {
+          pointermax = pointermid;
+        }
+        pointermid = Math.floor((pointermax - pointermin) / 2 + pointermin);
+      }
+      return pointermid;
+    }
+    function diff_halfMatch_(text1, text22) {
+      var longtext = text1.length > text22.length ? text1 : text22;
+      var shorttext = text1.length > text22.length ? text22 : text1;
+      if (longtext.length < 4 || shorttext.length * 2 < longtext.length) {
+        return null;
+      }
+      function diff_halfMatchI_(longtext2, shorttext2, i3) {
+        var seed = longtext2.substring(i3, i3 + Math.floor(longtext2.length / 4));
+        var j2 = -1;
+        var best_common = "";
+        var best_longtext_a, best_longtext_b, best_shorttext_a, best_shorttext_b;
+        while ((j2 = shorttext2.indexOf(seed, j2 + 1)) != -1) {
+          var prefixLength = diff_commonPrefix(
+            longtext2.substring(i3),
+            shorttext2.substring(j2)
+          );
+          var suffixLength = diff_commonSuffix(
+            longtext2.substring(0, i3),
+            shorttext2.substring(0, j2)
+          );
+          if (best_common.length < suffixLength + prefixLength) {
+            best_common = shorttext2.substring(j2 - suffixLength, j2) + shorttext2.substring(j2, j2 + prefixLength);
+            best_longtext_a = longtext2.substring(0, i3 - suffixLength);
+            best_longtext_b = longtext2.substring(i3 + prefixLength);
+            best_shorttext_a = shorttext2.substring(0, j2 - suffixLength);
+            best_shorttext_b = shorttext2.substring(j2 + prefixLength);
+          }
+        }
+        if (best_common.length * 2 >= longtext2.length) {
+          return [
+            best_longtext_a,
+            best_longtext_b,
+            best_shorttext_a,
+            best_shorttext_b,
+            best_common
+          ];
+        } else {
+          return null;
+        }
+      }
+      var hm1 = diff_halfMatchI_(
+        longtext,
+        shorttext,
+        Math.ceil(longtext.length / 4)
+      );
+      var hm2 = diff_halfMatchI_(
+        longtext,
+        shorttext,
+        Math.ceil(longtext.length / 2)
+      );
+      var hm;
+      if (!hm1 && !hm2) {
+        return null;
+      } else if (!hm2) {
+        hm = hm1;
+      } else if (!hm1) {
+        hm = hm2;
+      } else {
+        hm = hm1[4].length > hm2[4].length ? hm1 : hm2;
+      }
+      var text1_a, text1_b, text2_a, text2_b;
+      if (text1.length > text22.length) {
+        text1_a = hm[0];
+        text1_b = hm[1];
+        text2_a = hm[2];
+        text2_b = hm[3];
+      } else {
+        text2_a = hm[0];
+        text2_b = hm[1];
+        text1_a = hm[2];
+        text1_b = hm[3];
+      }
+      var mid_common = hm[4];
+      return [text1_a, text1_b, text2_a, text2_b, mid_common];
+    }
+    function diff_cleanupMerge(diffs) {
+      diffs.push([DIFF_EQUAL, ""]);
+      var pointer = 0;
+      var count_delete = 0;
+      var count_insert = 0;
+      var text_delete = "";
+      var text_insert = "";
+      var commonlength;
+      while (pointer < diffs.length) {
+        switch (diffs[pointer][0]) {
+          case DIFF_INSERT:
+            count_insert++;
+            text_insert += diffs[pointer][1];
+            pointer++;
+            break;
+          case DIFF_DELETE:
+            count_delete++;
+            text_delete += diffs[pointer][1];
+            pointer++;
+            break;
+          case DIFF_EQUAL:
+            if (count_delete + count_insert > 1) {
+              if (count_delete !== 0 && count_insert !== 0) {
+                commonlength = diff_commonPrefix(text_insert, text_delete);
+                if (commonlength !== 0) {
+                  if (pointer - count_delete - count_insert > 0 && diffs[pointer - count_delete - count_insert - 1][0] == DIFF_EQUAL) {
+                    diffs[pointer - count_delete - count_insert - 1][1] += text_insert.substring(0, commonlength);
+                  } else {
+                    diffs.splice(0, 0, [
+                      DIFF_EQUAL,
+                      text_insert.substring(0, commonlength)
+                    ]);
+                    pointer++;
+                  }
+                  text_insert = text_insert.substring(commonlength);
+                  text_delete = text_delete.substring(commonlength);
+                }
+                commonlength = diff_commonSuffix(text_insert, text_delete);
+                if (commonlength !== 0) {
+                  diffs[pointer][1] = text_insert.substring(text_insert.length - commonlength) + diffs[pointer][1];
+                  text_insert = text_insert.substring(0, text_insert.length - commonlength);
+                  text_delete = text_delete.substring(0, text_delete.length - commonlength);
+                }
+              }
+              if (count_delete === 0) {
+                diffs.splice(
+                  pointer - count_insert,
+                  count_delete + count_insert,
+                  [DIFF_INSERT, text_insert]
+                );
+              } else if (count_insert === 0) {
+                diffs.splice(
+                  pointer - count_delete,
+                  count_delete + count_insert,
+                  [DIFF_DELETE, text_delete]
+                );
+              } else {
+                diffs.splice(
+                  pointer - count_delete - count_insert,
+                  count_delete + count_insert,
+                  [DIFF_DELETE, text_delete],
+                  [DIFF_INSERT, text_insert]
+                );
+              }
+              pointer = pointer - count_delete - count_insert + (count_delete ? 1 : 0) + (count_insert ? 1 : 0) + 1;
+            } else if (pointer !== 0 && diffs[pointer - 1][0] == DIFF_EQUAL) {
+              diffs[pointer - 1][1] += diffs[pointer][1];
+              diffs.splice(pointer, 1);
+            } else {
+              pointer++;
+            }
+            count_insert = 0;
+            count_delete = 0;
+            text_delete = "";
+            text_insert = "";
+            break;
+        }
+      }
+      if (diffs[diffs.length - 1][1] === "") {
+        diffs.pop();
+      }
+      var changes = false;
+      pointer = 1;
+      while (pointer < diffs.length - 1) {
+        if (diffs[pointer - 1][0] == DIFF_EQUAL && diffs[pointer + 1][0] == DIFF_EQUAL) {
+          if (diffs[pointer][1].substring(diffs[pointer][1].length - diffs[pointer - 1][1].length) == diffs[pointer - 1][1]) {
+            diffs[pointer][1] = diffs[pointer - 1][1] + diffs[pointer][1].substring(0, diffs[pointer][1].length - diffs[pointer - 1][1].length);
+            diffs[pointer + 1][1] = diffs[pointer - 1][1] + diffs[pointer + 1][1];
+            diffs.splice(pointer - 1, 1);
+            changes = true;
+          } else if (diffs[pointer][1].substring(0, diffs[pointer + 1][1].length) == diffs[pointer + 1][1]) {
+            diffs[pointer - 1][1] += diffs[pointer + 1][1];
+            diffs[pointer][1] = diffs[pointer][1].substring(diffs[pointer + 1][1].length) + diffs[pointer + 1][1];
+            diffs.splice(pointer + 1, 1);
+            changes = true;
+          }
+        }
+        pointer++;
+      }
+      if (changes) {
+        diff_cleanupMerge(diffs);
+      }
+    }
+    var diff = diff_main;
+    diff.INSERT = DIFF_INSERT;
+    diff.DELETE = DIFF_DELETE;
+    diff.EQUAL = DIFF_EQUAL;
+    module.exports = diff;
+    function cursor_normalize_diff(diffs, cursor_pos) {
+      if (cursor_pos === 0) {
+        return [DIFF_EQUAL, diffs];
+      }
+      for (var current_pos = 0, i3 = 0; i3 < diffs.length; i3++) {
+        var d2 = diffs[i3];
+        if (d2[0] === DIFF_DELETE || d2[0] === DIFF_EQUAL) {
+          var next_pos = current_pos + d2[1].length;
+          if (cursor_pos === next_pos) {
+            return [i3 + 1, diffs];
+          } else if (cursor_pos < next_pos) {
+            diffs = diffs.slice();
+            var split_pos = cursor_pos - current_pos;
+            var d_left = [d2[0], d2[1].slice(0, split_pos)];
+            var d_right = [d2[0], d2[1].slice(split_pos)];
+            diffs.splice(i3, 1, d_left, d_right);
+            return [i3 + 1, diffs];
+          } else {
+            current_pos = next_pos;
+          }
+        }
+      }
+      throw new Error("cursor_pos is out of bounds!");
+    }
+    function fix_cursor(diffs, cursor_pos) {
+      var norm = cursor_normalize_diff(diffs, cursor_pos);
+      var ndiffs = norm[1];
+      var cursor_pointer = norm[0];
+      var d2 = ndiffs[cursor_pointer];
+      var d_next = ndiffs[cursor_pointer + 1];
+      if (d2 == null) {
+        return diffs;
+      } else if (d2[0] !== DIFF_EQUAL) {
+        return diffs;
+      } else {
+        if (d_next != null && d2[1] + d_next[1] === d_next[1] + d2[1]) {
+          ndiffs.splice(cursor_pointer, 2, d_next, d2);
+          return merge_tuples(ndiffs, cursor_pointer, 2);
+        } else if (d_next != null && d_next[1].indexOf(d2[1]) === 0) {
+          ndiffs.splice(cursor_pointer, 2, [d_next[0], d2[1]], [0, d2[1]]);
+          var suffix = d_next[1].slice(d2[1].length);
+          if (suffix.length > 0) {
+            ndiffs.splice(cursor_pointer + 2, 0, [d_next[0], suffix]);
+          }
+          return merge_tuples(ndiffs, cursor_pointer, 3);
+        } else {
+          return diffs;
+        }
+      }
+    }
+    function fix_emoji(diffs) {
+      var compact = false;
+      var starts_with_pair_end = function(str) {
+        return str.charCodeAt(0) >= 56320 && str.charCodeAt(0) <= 57343;
+      };
+      var ends_with_pair_start = function(str) {
+        return str.charCodeAt(str.length - 1) >= 55296 && str.charCodeAt(str.length - 1) <= 56319;
+      };
+      for (var i3 = 2; i3 < diffs.length; i3 += 1) {
+        if (diffs[i3 - 2][0] === DIFF_EQUAL && ends_with_pair_start(diffs[i3 - 2][1]) && diffs[i3 - 1][0] === DIFF_DELETE && starts_with_pair_end(diffs[i3 - 1][1]) && diffs[i3][0] === DIFF_INSERT && starts_with_pair_end(diffs[i3][1])) {
+          compact = true;
+          diffs[i3 - 1][1] = diffs[i3 - 2][1].slice(-1) + diffs[i3 - 1][1];
+          diffs[i3][1] = diffs[i3 - 2][1].slice(-1) + diffs[i3][1];
+          diffs[i3 - 2][1] = diffs[i3 - 2][1].slice(0, -1);
+        }
+      }
+      if (!compact) {
+        return diffs;
+      }
+      var fixed_diffs = [];
+      for (var i3 = 0; i3 < diffs.length; i3 += 1) {
+        if (diffs[i3][1].length > 0) {
+          fixed_diffs.push(diffs[i3]);
+        }
+      }
+      return fixed_diffs;
+    }
+    function merge_tuples(diffs, start, length2) {
+      for (var i3 = start + length2 - 1; i3 >= 0 && i3 >= start - 1; i3--) {
+        if (i3 + 1 < diffs.length) {
+          var left_d = diffs[i3];
+          var right_d = diffs[i3 + 1];
+          if (left_d[0] === right_d[1]) {
+            diffs.splice(i3, 2, [left_d[0], left_d[1] + right_d[1]]);
+          }
+        }
+      }
+      return diffs;
+    }
+  }
+});
+
+// ../simple-mind-map/node_modules/object-keys/isArguments.js
+var require_isArguments = __commonJS({
+  "../simple-mind-map/node_modules/object-keys/isArguments.js"(exports, module) {
+    "use strict";
+    var toStr = Object.prototype.toString;
+    module.exports = function isArguments(value) {
+      var str = toStr.call(value);
+      var isArgs = str === "[object Arguments]";
+      if (!isArgs) {
+        isArgs = str !== "[object Array]" && value !== null && typeof value === "object" && typeof value.length === "number" && value.length >= 0 && toStr.call(value.callee) === "[object Function]";
+      }
+      return isArgs;
+    };
+  }
+});
+
+// ../simple-mind-map/node_modules/object-keys/implementation.js
+var require_implementation = __commonJS({
+  "../simple-mind-map/node_modules/object-keys/implementation.js"(exports, module) {
+    "use strict";
+    var keysShim;
+    if (!Object.keys) {
+      has = Object.prototype.hasOwnProperty;
+      toStr = Object.prototype.toString;
+      isArgs = require_isArguments();
+      isEnumerable = Object.prototype.propertyIsEnumerable;
+      hasDontEnumBug = !isEnumerable.call({ toString: null }, "toString");
+      hasProtoEnumBug = isEnumerable.call(function() {
+      }, "prototype");
+      dontEnums = [
+        "toString",
+        "toLocaleString",
+        "valueOf",
+        "hasOwnProperty",
+        "isPrototypeOf",
+        "propertyIsEnumerable",
+        "constructor"
+      ];
+      equalsConstructorPrototype = function(o3) {
+        var ctor = o3.constructor;
+        return ctor && ctor.prototype === o3;
+      };
+      excludedKeys = {
+        $applicationCache: true,
+        $console: true,
+        $external: true,
+        $frame: true,
+        $frameElement: true,
+        $frames: true,
+        $innerHeight: true,
+        $innerWidth: true,
+        $onmozfullscreenchange: true,
+        $onmozfullscreenerror: true,
+        $outerHeight: true,
+        $outerWidth: true,
+        $pageXOffset: true,
+        $pageYOffset: true,
+        $parent: true,
+        $scrollLeft: true,
+        $scrollTop: true,
+        $scrollX: true,
+        $scrollY: true,
+        $self: true,
+        $webkitIndexedDB: true,
+        $webkitStorageInfo: true,
+        $window: true
+      };
+      hasAutomationEqualityBug = function() {
+        if (typeof window === "undefined") {
+          return false;
+        }
+        for (var k2 in window) {
+          try {
+            if (!excludedKeys["$" + k2] && has.call(window, k2) && window[k2] !== null && typeof window[k2] === "object") {
+              try {
+                equalsConstructorPrototype(window[k2]);
+              } catch (e2) {
+                return true;
+              }
+            }
+          } catch (e2) {
+            return true;
+          }
+        }
+        return false;
+      }();
+      equalsConstructorPrototypeIfNotBuggy = function(o3) {
+        if (typeof window === "undefined" || !hasAutomationEqualityBug) {
+          return equalsConstructorPrototype(o3);
+        }
+        try {
+          return equalsConstructorPrototype(o3);
+        } catch (e2) {
+          return false;
+        }
+      };
+      keysShim = function keys(object) {
+        var isObject = object !== null && typeof object === "object";
+        var isFunction = toStr.call(object) === "[object Function]";
+        var isArguments = isArgs(object);
+        var isString = isObject && toStr.call(object) === "[object String]";
+        var theKeys = [];
+        if (!isObject && !isFunction && !isArguments) {
+          throw new TypeError("Object.keys called on a non-object");
+        }
+        var skipProto = hasProtoEnumBug && isFunction;
+        if (isString && object.length > 0 && !has.call(object, 0)) {
+          for (var i3 = 0; i3 < object.length; ++i3) {
+            theKeys.push(String(i3));
+          }
+        }
+        if (isArguments && object.length > 0) {
+          for (var j2 = 0; j2 < object.length; ++j2) {
+            theKeys.push(String(j2));
+          }
+        } else {
+          for (var name in object) {
+            if (!(skipProto && name === "prototype") && has.call(object, name)) {
+              theKeys.push(String(name));
+            }
+          }
+        }
+        if (hasDontEnumBug) {
+          var skipConstructor = equalsConstructorPrototypeIfNotBuggy(object);
+          for (var k2 = 0; k2 < dontEnums.length; ++k2) {
+            if (!(skipConstructor && dontEnums[k2] === "constructor") && has.call(object, dontEnums[k2])) {
+              theKeys.push(dontEnums[k2]);
+            }
+          }
+        }
+        return theKeys;
+      };
+    }
+    var has;
+    var toStr;
+    var isArgs;
+    var isEnumerable;
+    var hasDontEnumBug;
+    var hasProtoEnumBug;
+    var dontEnums;
+    var equalsConstructorPrototype;
+    var excludedKeys;
+    var hasAutomationEqualityBug;
+    var equalsConstructorPrototypeIfNotBuggy;
+    module.exports = keysShim;
+  }
+});
+
+// ../simple-mind-map/node_modules/object-keys/index.js
+var require_object_keys2 = __commonJS({
+  "../simple-mind-map/node_modules/object-keys/index.js"(exports, module) {
+    "use strict";
+    var slice2 = Array.prototype.slice;
+    var isArgs = require_isArguments();
+    var origKeys = Object.keys;
+    var keysShim = origKeys ? function keys(o3) {
+      return origKeys(o3);
+    } : require_implementation();
+    var originalKeys = Object.keys;
+    keysShim.shim = function shimObjectKeys() {
+      if (Object.keys) {
+        var keysWorksWithArguments = function() {
+          var args = Object.keys(arguments);
+          return args && args.length === arguments.length;
+        }(1, 2);
+        if (!keysWorksWithArguments) {
+          Object.keys = function keys(object) {
+            if (isArgs(object)) {
+              return originalKeys(slice2.call(object));
+            }
+            return originalKeys(object);
+          };
+        }
+      } else {
+        Object.keys = keysShim;
+      }
+      return Object.keys || keysShim;
+    };
+    module.exports = keysShim;
+  }
+});
+
+// ../simple-mind-map/node_modules/has-symbols/shams.js
+var require_shams = __commonJS({
+  "../simple-mind-map/node_modules/has-symbols/shams.js"(exports, module) {
+    "use strict";
+    module.exports = function hasSymbols() {
+      if (typeof Symbol !== "function" || typeof Object.getOwnPropertySymbols !== "function") {
+        return false;
+      }
+      if (typeof Symbol.iterator === "symbol") {
+        return true;
+      }
+      var obj = {};
+      var sym = Symbol("test");
+      var symObj = Object(sym);
+      if (typeof sym === "string") {
+        return false;
+      }
+      if (Object.prototype.toString.call(sym) !== "[object Symbol]") {
+        return false;
+      }
+      if (Object.prototype.toString.call(symObj) !== "[object Symbol]") {
+        return false;
+      }
+      var symVal = 42;
+      obj[sym] = symVal;
+      for (sym in obj) {
+        return false;
+      }
+      if (typeof Object.keys === "function" && Object.keys(obj).length !== 0) {
+        return false;
+      }
+      if (typeof Object.getOwnPropertyNames === "function" && Object.getOwnPropertyNames(obj).length !== 0) {
+        return false;
+      }
+      var syms = Object.getOwnPropertySymbols(obj);
+      if (syms.length !== 1 || syms[0] !== sym) {
+        return false;
+      }
+      if (!Object.prototype.propertyIsEnumerable.call(obj, sym)) {
+        return false;
+      }
+      if (typeof Object.getOwnPropertyDescriptor === "function") {
+        var descriptor = Object.getOwnPropertyDescriptor(obj, sym);
+        if (descriptor.value !== symVal || descriptor.enumerable !== true) {
+          return false;
+        }
+      }
+      return true;
+    };
+  }
+});
+
+// ../simple-mind-map/node_modules/has-tostringtag/shams.js
+var require_shams2 = __commonJS({
+  "../simple-mind-map/node_modules/has-tostringtag/shams.js"(exports, module) {
+    "use strict";
+    var hasSymbols = require_shams();
+    module.exports = function hasToStringTagShams() {
+      return hasSymbols() && !!Symbol.toStringTag;
+    };
+  }
+});
+
+// ../simple-mind-map/node_modules/has-symbols/index.js
+var require_has_symbols = __commonJS({
+  "../simple-mind-map/node_modules/has-symbols/index.js"(exports, module) {
+    "use strict";
+    var origSymbol = typeof Symbol !== "undefined" && Symbol;
+    var hasSymbolSham = require_shams();
+    module.exports = function hasNativeSymbols() {
+      if (typeof origSymbol !== "function") {
+        return false;
+      }
+      if (typeof Symbol !== "function") {
+        return false;
+      }
+      if (typeof origSymbol("foo") !== "symbol") {
+        return false;
+      }
+      if (typeof Symbol("bar") !== "symbol") {
+        return false;
+      }
+      return hasSymbolSham();
+    };
+  }
+});
+
+// ../simple-mind-map/node_modules/function-bind/implementation.js
+var require_implementation2 = __commonJS({
+  "../simple-mind-map/node_modules/function-bind/implementation.js"(exports, module) {
+    "use strict";
+    var ERROR_MESSAGE = "Function.prototype.bind called on incompatible ";
+    var slice2 = Array.prototype.slice;
+    var toStr = Object.prototype.toString;
+    var funcType = "[object Function]";
+    module.exports = function bind(that) {
+      var target = this;
+      if (typeof target !== "function" || toStr.call(target) !== funcType) {
+        throw new TypeError(ERROR_MESSAGE + target);
+      }
+      var args = slice2.call(arguments, 1);
+      var bound;
+      var binder = function() {
+        if (this instanceof bound) {
+          var result = target.apply(
+            this,
+            args.concat(slice2.call(arguments))
+          );
+          if (Object(result) === result) {
+            return result;
+          }
+          return this;
+        } else {
+          return target.apply(
+            that,
+            args.concat(slice2.call(arguments))
+          );
+        }
+      };
+      var boundLength = Math.max(0, target.length - args.length);
+      var boundArgs = [];
+      for (var i3 = 0; i3 < boundLength; i3++) {
+        boundArgs.push("$" + i3);
+      }
+      bound = Function("binder", "return function (" + boundArgs.join(",") + "){ return binder.apply(this,arguments); }")(binder);
+      if (target.prototype) {
+        var Empty = function Empty2() {
+        };
+        Empty.prototype = target.prototype;
+        bound.prototype = new Empty();
+        Empty.prototype = null;
+      }
+      return bound;
+    };
+  }
+});
+
+// ../simple-mind-map/node_modules/function-bind/index.js
+var require_function_bind = __commonJS({
+  "../simple-mind-map/node_modules/function-bind/index.js"(exports, module) {
+    "use strict";
+    var implementation = require_implementation2();
+    module.exports = Function.prototype.bind || implementation;
+  }
+});
+
+// ../simple-mind-map/node_modules/has/src/index.js
+var require_src = __commonJS({
+  "../simple-mind-map/node_modules/has/src/index.js"(exports, module) {
+    "use strict";
+    var bind = require_function_bind();
+    module.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
+  }
+});
+
+// ../simple-mind-map/node_modules/get-intrinsic/index.js
+var require_get_intrinsic = __commonJS({
+  "../simple-mind-map/node_modules/get-intrinsic/index.js"(exports, module) {
+    "use strict";
+    var undefined2;
+    var $SyntaxError = SyntaxError;
+    var $Function = Function;
+    var $TypeError = TypeError;
+    var getEvalledConstructor = function(expressionSyntax) {
+      try {
+        return $Function('"use strict"; return (' + expressionSyntax + ").constructor;")();
+      } catch (e2) {
+      }
+    };
+    var $gOPD = Object.getOwnPropertyDescriptor;
+    if ($gOPD) {
+      try {
+        $gOPD({}, "");
+      } catch (e2) {
+        $gOPD = null;
+      }
+    }
+    var throwTypeError = function() {
+      throw new $TypeError();
+    };
+    var ThrowTypeError = $gOPD ? function() {
+      try {
+        arguments.callee;
+        return throwTypeError;
+      } catch (calleeThrows) {
+        try {
+          return $gOPD(arguments, "callee").get;
+        } catch (gOPDthrows) {
+          return throwTypeError;
+        }
+      }
+    }() : throwTypeError;
+    var hasSymbols = require_has_symbols()();
+    var getProto = Object.getPrototypeOf || function(x3) {
+      return x3.__proto__;
+    };
+    var needsEval = {};
+    var TypedArray = typeof Uint8Array === "undefined" ? undefined2 : getProto(Uint8Array);
+    var INTRINSICS = {
+      "%AggregateError%": typeof AggregateError === "undefined" ? undefined2 : AggregateError,
+      "%Array%": Array,
+      "%ArrayBuffer%": typeof ArrayBuffer === "undefined" ? undefined2 : ArrayBuffer,
+      "%ArrayIteratorPrototype%": hasSymbols ? getProto([][Symbol.iterator]()) : undefined2,
+      "%AsyncFromSyncIteratorPrototype%": undefined2,
+      "%AsyncFunction%": needsEval,
+      "%AsyncGenerator%": needsEval,
+      "%AsyncGeneratorFunction%": needsEval,
+      "%AsyncIteratorPrototype%": needsEval,
+      "%Atomics%": typeof Atomics === "undefined" ? undefined2 : Atomics,
+      "%BigInt%": typeof BigInt === "undefined" ? undefined2 : BigInt,
+      "%BigInt64Array%": typeof BigInt64Array === "undefined" ? undefined2 : BigInt64Array,
+      "%BigUint64Array%": typeof BigUint64Array === "undefined" ? undefined2 : BigUint64Array,
+      "%Boolean%": Boolean,
+      "%DataView%": typeof DataView === "undefined" ? undefined2 : DataView,
+      "%Date%": Date,
+      "%decodeURI%": decodeURI,
+      "%decodeURIComponent%": decodeURIComponent,
+      "%encodeURI%": encodeURI,
+      "%encodeURIComponent%": encodeURIComponent,
+      "%Error%": Error,
+      "%eval%": eval,
+      // eslint-disable-line no-eval
+      "%EvalError%": EvalError,
+      "%Float32Array%": typeof Float32Array === "undefined" ? undefined2 : Float32Array,
+      "%Float64Array%": typeof Float64Array === "undefined" ? undefined2 : Float64Array,
+      "%FinalizationRegistry%": typeof FinalizationRegistry === "undefined" ? undefined2 : FinalizationRegistry,
+      "%Function%": $Function,
+      "%GeneratorFunction%": needsEval,
+      "%Int8Array%": typeof Int8Array === "undefined" ? undefined2 : Int8Array,
+      "%Int16Array%": typeof Int16Array === "undefined" ? undefined2 : Int16Array,
+      "%Int32Array%": typeof Int32Array === "undefined" ? undefined2 : Int32Array,
+      "%isFinite%": isFinite,
+      "%isNaN%": isNaN,
+      "%IteratorPrototype%": hasSymbols ? getProto(getProto([][Symbol.iterator]())) : undefined2,
+      "%JSON%": typeof JSON === "object" ? JSON : undefined2,
+      "%Map%": typeof Map === "undefined" ? undefined2 : Map,
+      "%MapIteratorPrototype%": typeof Map === "undefined" || !hasSymbols ? undefined2 : getProto((/* @__PURE__ */ new Map())[Symbol.iterator]()),
+      "%Math%": Math,
+      "%Number%": Number,
+      "%Object%": Object,
+      "%parseFloat%": parseFloat,
+      "%parseInt%": parseInt,
+      "%Promise%": typeof Promise === "undefined" ? undefined2 : Promise,
+      "%Proxy%": typeof Proxy === "undefined" ? undefined2 : Proxy,
+      "%RangeError%": RangeError,
+      "%ReferenceError%": ReferenceError,
+      "%Reflect%": typeof Reflect === "undefined" ? undefined2 : Reflect,
+      "%RegExp%": RegExp,
+      "%Set%": typeof Set === "undefined" ? undefined2 : Set,
+      "%SetIteratorPrototype%": typeof Set === "undefined" || !hasSymbols ? undefined2 : getProto((/* @__PURE__ */ new Set())[Symbol.iterator]()),
+      "%SharedArrayBuffer%": typeof SharedArrayBuffer === "undefined" ? undefined2 : SharedArrayBuffer,
+      "%String%": String,
+      "%StringIteratorPrototype%": hasSymbols ? getProto(""[Symbol.iterator]()) : undefined2,
+      "%Symbol%": hasSymbols ? Symbol : undefined2,
+      "%SyntaxError%": $SyntaxError,
+      "%ThrowTypeError%": ThrowTypeError,
+      "%TypedArray%": TypedArray,
+      "%TypeError%": $TypeError,
+      "%Uint8Array%": typeof Uint8Array === "undefined" ? undefined2 : Uint8Array,
+      "%Uint8ClampedArray%": typeof Uint8ClampedArray === "undefined" ? undefined2 : Uint8ClampedArray,
+      "%Uint16Array%": typeof Uint16Array === "undefined" ? undefined2 : Uint16Array,
+      "%Uint32Array%": typeof Uint32Array === "undefined" ? undefined2 : Uint32Array,
+      "%URIError%": URIError,
+      "%WeakMap%": typeof WeakMap === "undefined" ? undefined2 : WeakMap,
+      "%WeakRef%": typeof WeakRef === "undefined" ? undefined2 : WeakRef,
+      "%WeakSet%": typeof WeakSet === "undefined" ? undefined2 : WeakSet
+    };
+    try {
+      null.error;
+    } catch (e2) {
+      errorProto = getProto(getProto(e2));
+      INTRINSICS["%Error.prototype%"] = errorProto;
+    }
+    var errorProto;
+    var doEval = function doEval2(name) {
+      var value;
+      if (name === "%AsyncFunction%") {
+        value = getEvalledConstructor("async function () {}");
+      } else if (name === "%GeneratorFunction%") {
+        value = getEvalledConstructor("function* () {}");
+      } else if (name === "%AsyncGeneratorFunction%") {
+        value = getEvalledConstructor("async function* () {}");
+      } else if (name === "%AsyncGenerator%") {
+        var fn = doEval2("%AsyncGeneratorFunction%");
+        if (fn) {
+          value = fn.prototype;
+        }
+      } else if (name === "%AsyncIteratorPrototype%") {
+        var gen = doEval2("%AsyncGenerator%");
+        if (gen) {
+          value = getProto(gen.prototype);
+        }
+      }
+      INTRINSICS[name] = value;
+      return value;
+    };
+    var LEGACY_ALIASES = {
+      "%ArrayBufferPrototype%": ["ArrayBuffer", "prototype"],
+      "%ArrayPrototype%": ["Array", "prototype"],
+      "%ArrayProto_entries%": ["Array", "prototype", "entries"],
+      "%ArrayProto_forEach%": ["Array", "prototype", "forEach"],
+      "%ArrayProto_keys%": ["Array", "prototype", "keys"],
+      "%ArrayProto_values%": ["Array", "prototype", "values"],
+      "%AsyncFunctionPrototype%": ["AsyncFunction", "prototype"],
+      "%AsyncGenerator%": ["AsyncGeneratorFunction", "prototype"],
+      "%AsyncGeneratorPrototype%": ["AsyncGeneratorFunction", "prototype", "prototype"],
+      "%BooleanPrototype%": ["Boolean", "prototype"],
+      "%DataViewPrototype%": ["DataView", "prototype"],
+      "%DatePrototype%": ["Date", "prototype"],
+      "%ErrorPrototype%": ["Error", "prototype"],
+      "%EvalErrorPrototype%": ["EvalError", "prototype"],
+      "%Float32ArrayPrototype%": ["Float32Array", "prototype"],
+      "%Float64ArrayPrototype%": ["Float64Array", "prototype"],
+      "%FunctionPrototype%": ["Function", "prototype"],
+      "%Generator%": ["GeneratorFunction", "prototype"],
+      "%GeneratorPrototype%": ["GeneratorFunction", "prototype", "prototype"],
+      "%Int8ArrayPrototype%": ["Int8Array", "prototype"],
+      "%Int16ArrayPrototype%": ["Int16Array", "prototype"],
+      "%Int32ArrayPrototype%": ["Int32Array", "prototype"],
+      "%JSONParse%": ["JSON", "parse"],
+      "%JSONStringify%": ["JSON", "stringify"],
+      "%MapPrototype%": ["Map", "prototype"],
+      "%NumberPrototype%": ["Number", "prototype"],
+      "%ObjectPrototype%": ["Object", "prototype"],
+      "%ObjProto_toString%": ["Object", "prototype", "toString"],
+      "%ObjProto_valueOf%": ["Object", "prototype", "valueOf"],
+      "%PromisePrototype%": ["Promise", "prototype"],
+      "%PromiseProto_then%": ["Promise", "prototype", "then"],
+      "%Promise_all%": ["Promise", "all"],
+      "%Promise_reject%": ["Promise", "reject"],
+      "%Promise_resolve%": ["Promise", "resolve"],
+      "%RangeErrorPrototype%": ["RangeError", "prototype"],
+      "%ReferenceErrorPrototype%": ["ReferenceError", "prototype"],
+      "%RegExpPrototype%": ["RegExp", "prototype"],
+      "%SetPrototype%": ["Set", "prototype"],
+      "%SharedArrayBufferPrototype%": ["SharedArrayBuffer", "prototype"],
+      "%StringPrototype%": ["String", "prototype"],
+      "%SymbolPrototype%": ["Symbol", "prototype"],
+      "%SyntaxErrorPrototype%": ["SyntaxError", "prototype"],
+      "%TypedArrayPrototype%": ["TypedArray", "prototype"],
+      "%TypeErrorPrototype%": ["TypeError", "prototype"],
+      "%Uint8ArrayPrototype%": ["Uint8Array", "prototype"],
+      "%Uint8ClampedArrayPrototype%": ["Uint8ClampedArray", "prototype"],
+      "%Uint16ArrayPrototype%": ["Uint16Array", "prototype"],
+      "%Uint32ArrayPrototype%": ["Uint32Array", "prototype"],
+      "%URIErrorPrototype%": ["URIError", "prototype"],
+      "%WeakMapPrototype%": ["WeakMap", "prototype"],
+      "%WeakSetPrototype%": ["WeakSet", "prototype"]
+    };
+    var bind = require_function_bind();
+    var hasOwn = require_src();
+    var $concat = bind.call(Function.call, Array.prototype.concat);
+    var $spliceApply = bind.call(Function.apply, Array.prototype.splice);
+    var $replace = bind.call(Function.call, String.prototype.replace);
+    var $strSlice = bind.call(Function.call, String.prototype.slice);
+    var $exec = bind.call(Function.call, RegExp.prototype.exec);
+    var rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g;
+    var reEscapeChar = /\\(\\)?/g;
+    var stringToPath = function stringToPath2(string3) {
+      var first = $strSlice(string3, 0, 1);
+      var last = $strSlice(string3, -1);
+      if (first === "%" && last !== "%") {
+        throw new $SyntaxError("invalid intrinsic syntax, expected closing `%`");
+      } else if (last === "%" && first !== "%") {
+        throw new $SyntaxError("invalid intrinsic syntax, expected opening `%`");
+      }
+      var result = [];
+      $replace(string3, rePropName, function(match, number, quote, subString) {
+        result[result.length] = quote ? $replace(subString, reEscapeChar, "$1") : number || match;
+      });
+      return result;
+    };
+    var getBaseIntrinsic = function getBaseIntrinsic2(name, allowMissing) {
+      var intrinsicName = name;
+      var alias;
+      if (hasOwn(LEGACY_ALIASES, intrinsicName)) {
+        alias = LEGACY_ALIASES[intrinsicName];
+        intrinsicName = "%" + alias[0] + "%";
+      }
+      if (hasOwn(INTRINSICS, intrinsicName)) {
+        var value = INTRINSICS[intrinsicName];
+        if (value === needsEval) {
+          value = doEval(intrinsicName);
+        }
+        if (typeof value === "undefined" && !allowMissing) {
+          throw new $TypeError("intrinsic " + name + " exists, but is not available. Please file an issue!");
+        }
+        return {
+          alias,
+          name: intrinsicName,
+          value
+        };
+      }
+      throw new $SyntaxError("intrinsic " + name + " does not exist!");
+    };
+    module.exports = function GetIntrinsic(name, allowMissing) {
+      if (typeof name !== "string" || name.length === 0) {
+        throw new $TypeError("intrinsic name must be a non-empty string");
+      }
+      if (arguments.length > 1 && typeof allowMissing !== "boolean") {
+        throw new $TypeError('"allowMissing" argument must be a boolean');
+      }
+      if ($exec(/^%?[^%]*%?$/, name) === null) {
+        throw new $SyntaxError("`%` may not be present anywhere but at the beginning and end of the intrinsic name");
+      }
+      var parts = stringToPath(name);
+      var intrinsicBaseName = parts.length > 0 ? parts[0] : "";
+      var intrinsic = getBaseIntrinsic("%" + intrinsicBaseName + "%", allowMissing);
+      var intrinsicRealName = intrinsic.name;
+      var value = intrinsic.value;
+      var skipFurtherCaching = false;
+      var alias = intrinsic.alias;
+      if (alias) {
+        intrinsicBaseName = alias[0];
+        $spliceApply(parts, $concat([0, 1], alias));
+      }
+      for (var i3 = 1, isOwn = true; i3 < parts.length; i3 += 1) {
+        var part = parts[i3];
+        var first = $strSlice(part, 0, 1);
+        var last = $strSlice(part, -1);
+        if ((first === '"' || first === "'" || first === "`" || (last === '"' || last === "'" || last === "`")) && first !== last) {
+          throw new $SyntaxError("property names with quotes must have matching quotes");
+        }
+        if (part === "constructor" || !isOwn) {
+          skipFurtherCaching = true;
+        }
+        intrinsicBaseName += "." + part;
+        intrinsicRealName = "%" + intrinsicBaseName + "%";
+        if (hasOwn(INTRINSICS, intrinsicRealName)) {
+          value = INTRINSICS[intrinsicRealName];
+        } else if (value != null) {
+          if (!(part in value)) {
+            if (!allowMissing) {
+              throw new $TypeError("base intrinsic for " + name + " exists, but the property is not available.");
+            }
+            return void 0;
+          }
+          if ($gOPD && i3 + 1 >= parts.length) {
+            var desc = $gOPD(value, part);
+            isOwn = !!desc;
+            if (isOwn && "get" in desc && !("originalValue" in desc.get)) {
+              value = desc.get;
+            } else {
+              value = value[part];
+            }
+          } else {
+            isOwn = hasOwn(value, part);
+            value = value[part];
+          }
+          if (isOwn && !skipFurtherCaching) {
+            INTRINSICS[intrinsicRealName] = value;
+          }
+        }
+      }
+      return value;
+    };
+  }
+});
+
+// ../simple-mind-map/node_modules/call-bind/index.js
+var require_call_bind = __commonJS({
+  "../simple-mind-map/node_modules/call-bind/index.js"(exports, module) {
+    "use strict";
+    var bind = require_function_bind();
+    var GetIntrinsic = require_get_intrinsic();
+    var $apply = GetIntrinsic("%Function.prototype.apply%");
+    var $call = GetIntrinsic("%Function.prototype.call%");
+    var $reflectApply = GetIntrinsic("%Reflect.apply%", true) || bind.call($call, $apply);
+    var $gOPD = GetIntrinsic("%Object.getOwnPropertyDescriptor%", true);
+    var $defineProperty = GetIntrinsic("%Object.defineProperty%", true);
+    var $max = GetIntrinsic("%Math.max%");
+    if ($defineProperty) {
+      try {
+        $defineProperty({}, "a", { value: 1 });
+      } catch (e2) {
+        $defineProperty = null;
+      }
+    }
+    module.exports = function callBind(originalFunction) {
+      var func = $reflectApply(bind, $call, arguments);
+      if ($gOPD && $defineProperty) {
+        var desc = $gOPD(func, "length");
+        if (desc.configurable) {
+          $defineProperty(
+            func,
+            "length",
+            { value: 1 + $max(0, originalFunction.length - (arguments.length - 1)) }
+          );
+        }
+      }
+      return func;
+    };
+    var applyBind = function applyBind2() {
+      return $reflectApply(bind, $apply, arguments);
+    };
+    if ($defineProperty) {
+      $defineProperty(module.exports, "apply", { value: applyBind });
+    } else {
+      module.exports.apply = applyBind;
+    }
+  }
+});
+
+// ../simple-mind-map/node_modules/call-bind/callBound.js
+var require_callBound = __commonJS({
+  "../simple-mind-map/node_modules/call-bind/callBound.js"(exports, module) {
+    "use strict";
+    var GetIntrinsic = require_get_intrinsic();
+    var callBind = require_call_bind();
+    var $indexOf2 = callBind(GetIntrinsic("String.prototype.indexOf"));
+    module.exports = function callBoundIntrinsic(name, allowMissing) {
+      var intrinsic = GetIntrinsic(name, !!allowMissing);
+      if (typeof intrinsic === "function" && $indexOf2(name, ".prototype.") > -1) {
+        return callBind(intrinsic);
+      }
+      return intrinsic;
+    };
+  }
+});
+
+// ../simple-mind-map/node_modules/is-arguments/index.js
+var require_is_arguments = __commonJS({
+  "../simple-mind-map/node_modules/is-arguments/index.js"(exports, module) {
+    "use strict";
+    var hasToStringTag = require_shams2()();
+    var callBound = require_callBound();
+    var $toString2 = callBound("Object.prototype.toString");
+    var isStandardArguments = function isArguments(value) {
+      if (hasToStringTag && value && typeof value === "object" && Symbol.toStringTag in value) {
+        return false;
+      }
+      return $toString2(value) === "[object Arguments]";
+    };
+    var isLegacyArguments = function isArguments(value) {
+      if (isStandardArguments(value)) {
+        return true;
+      }
+      return value !== null && typeof value === "object" && typeof value.length === "number" && value.length >= 0 && $toString2(value) !== "[object Array]" && $toString2(value.callee) === "[object Function]";
+    };
+    var supportsStandardArguments = function() {
+      return isStandardArguments(arguments);
+    }();
+    isStandardArguments.isLegacyArguments = isLegacyArguments;
+    module.exports = supportsStandardArguments ? isStandardArguments : isLegacyArguments;
+  }
+});
+
+// ../simple-mind-map/node_modules/has-property-descriptors/index.js
+var require_has_property_descriptors = __commonJS({
+  "../simple-mind-map/node_modules/has-property-descriptors/index.js"(exports, module) {
+    "use strict";
+    var GetIntrinsic = require_get_intrinsic();
+    var $defineProperty = GetIntrinsic("%Object.defineProperty%", true);
+    var hasPropertyDescriptors = function hasPropertyDescriptors2() {
+      if ($defineProperty) {
+        try {
+          $defineProperty({}, "a", { value: 1 });
+          return true;
+        } catch (e2) {
+          return false;
+        }
+      }
+      return false;
+    };
+    hasPropertyDescriptors.hasArrayLengthDefineBug = function hasArrayLengthDefineBug() {
+      if (!hasPropertyDescriptors()) {
+        return null;
+      }
+      try {
+        return $defineProperty([], "length", { value: 1 }).length !== 1;
+      } catch (e2) {
+        return true;
+      }
+    };
+    module.exports = hasPropertyDescriptors;
+  }
+});
+
+// ../simple-mind-map/node_modules/define-properties/index.js
+var require_define_properties = __commonJS({
+  "../simple-mind-map/node_modules/define-properties/index.js"(exports, module) {
+    "use strict";
+    var keys = require_object_keys2();
+    var hasSymbols = typeof Symbol === "function" && typeof Symbol("foo") === "symbol";
+    var toStr = Object.prototype.toString;
+    var concat2 = Array.prototype.concat;
+    var origDefineProperty = Object.defineProperty;
+    var isFunction = function(fn) {
+      return typeof fn === "function" && toStr.call(fn) === "[object Function]";
+    };
+    var hasPropertyDescriptors = require_has_property_descriptors()();
+    var supportsDescriptors = origDefineProperty && hasPropertyDescriptors;
+    var defineProperty = function(object, name, value, predicate) {
+      if (name in object) {
+        if (predicate === true) {
+          if (object[name] === value) {
+            return;
+          }
+        } else if (!isFunction(predicate) || !predicate()) {
+          return;
+        }
+      }
+      if (supportsDescriptors) {
+        origDefineProperty(object, name, {
+          configurable: true,
+          enumerable: false,
+          value,
+          writable: true
+        });
+      } else {
+        object[name] = value;
+      }
+    };
+    var defineProperties = function(object, map3) {
+      var predicates = arguments.length > 2 ? arguments[2] : {};
+      var props = keys(map3);
+      if (hasSymbols) {
+        props = concat2.call(props, Object.getOwnPropertySymbols(map3));
+      }
+      for (var i3 = 0; i3 < props.length; i3 += 1) {
+        defineProperty(object, props[i3], map3[props[i3]], predicates[props[i3]]);
+      }
+    };
+    defineProperties.supportsDescriptors = !!supportsDescriptors;
+    module.exports = defineProperties;
+  }
+});
+
+// ../simple-mind-map/node_modules/object-is/implementation.js
+var require_implementation3 = __commonJS({
+  "../simple-mind-map/node_modules/object-is/implementation.js"(exports, module) {
+    "use strict";
+    var numberIsNaN = function(value) {
+      return value !== value;
+    };
+    module.exports = function is2(a3, b2) {
+      if (a3 === 0 && b2 === 0) {
+        return 1 / a3 === 1 / b2;
+      }
+      if (a3 === b2) {
+        return true;
+      }
+      if (numberIsNaN(a3) && numberIsNaN(b2)) {
+        return true;
+      }
+      return false;
+    };
+  }
+});
+
+// ../simple-mind-map/node_modules/object-is/polyfill.js
+var require_polyfill = __commonJS({
+  "../simple-mind-map/node_modules/object-is/polyfill.js"(exports, module) {
+    "use strict";
+    var implementation = require_implementation3();
+    module.exports = function getPolyfill() {
+      return typeof Object.is === "function" ? Object.is : implementation;
+    };
+  }
+});
+
+// ../simple-mind-map/node_modules/object-is/shim.js
+var require_shim = __commonJS({
+  "../simple-mind-map/node_modules/object-is/shim.js"(exports, module) {
+    "use strict";
+    var getPolyfill = require_polyfill();
+    var define2 = require_define_properties();
+    module.exports = function shimObjectIs() {
+      var polyfill = getPolyfill();
+      define2(Object, { is: polyfill }, {
+        is: function testObjectIs() {
+          return Object.is !== polyfill;
+        }
+      });
+      return polyfill;
+    };
+  }
+});
+
+// ../simple-mind-map/node_modules/object-is/index.js
+var require_object_is = __commonJS({
+  "../simple-mind-map/node_modules/object-is/index.js"(exports, module) {
+    "use strict";
+    var define2 = require_define_properties();
+    var callBind = require_call_bind();
+    var implementation = require_implementation3();
+    var getPolyfill = require_polyfill();
+    var shim = require_shim();
+    var polyfill = callBind(getPolyfill(), Object);
+    define2(polyfill, {
+      getPolyfill,
+      implementation,
+      shim
+    });
+    module.exports = polyfill;
+  }
+});
+
+// ../simple-mind-map/node_modules/is-regex/index.js
+var require_is_regex = __commonJS({
+  "../simple-mind-map/node_modules/is-regex/index.js"(exports, module) {
+    "use strict";
+    var callBound = require_callBound();
+    var hasToStringTag = require_shams2()();
+    var has;
+    var $exec;
+    var isRegexMarker;
+    var badStringifier;
+    if (hasToStringTag) {
+      has = callBound("Object.prototype.hasOwnProperty");
+      $exec = callBound("RegExp.prototype.exec");
+      isRegexMarker = {};
+      throwRegexMarker = function() {
+        throw isRegexMarker;
+      };
+      badStringifier = {
+        toString: throwRegexMarker,
+        valueOf: throwRegexMarker
+      };
+      if (typeof Symbol.toPrimitive === "symbol") {
+        badStringifier[Symbol.toPrimitive] = throwRegexMarker;
+      }
+    }
+    var throwRegexMarker;
+    var $toString2 = callBound("Object.prototype.toString");
+    var gOPD = Object.getOwnPropertyDescriptor;
+    var regexClass = "[object RegExp]";
+    module.exports = hasToStringTag ? function isRegex(value) {
+      if (!value || typeof value !== "object") {
+        return false;
+      }
+      var descriptor = gOPD(value, "lastIndex");
+      var hasLastIndexDataProperty = descriptor && has(descriptor, "value");
+      if (!hasLastIndexDataProperty) {
+        return false;
+      }
+      try {
+        $exec(value, badStringifier);
+      } catch (e2) {
+        return e2 === isRegexMarker;
+      }
+    } : function isRegex(value) {
+      if (!value || typeof value !== "object" && typeof value !== "function") {
+        return false;
+      }
+      return $toString2(value) === regexClass;
+    };
+  }
+});
+
+// ../simple-mind-map/node_modules/functions-have-names/index.js
+var require_functions_have_names = __commonJS({
+  "../simple-mind-map/node_modules/functions-have-names/index.js"(exports, module) {
+    "use strict";
+    var functionsHaveNames = function functionsHaveNames2() {
+      return typeof function f3() {
+      }.name === "string";
+    };
+    var gOPD = Object.getOwnPropertyDescriptor;
+    if (gOPD) {
+      try {
+        gOPD([], "length");
+      } catch (e2) {
+        gOPD = null;
+      }
+    }
+    functionsHaveNames.functionsHaveConfigurableNames = function functionsHaveConfigurableNames() {
+      if (!functionsHaveNames() || !gOPD) {
+        return false;
+      }
+      var desc = gOPD(function() {
+      }, "name");
+      return !!desc && !!desc.configurable;
+    };
+    var $bind = Function.prototype.bind;
+    functionsHaveNames.boundFunctionsHaveNames = function boundFunctionsHaveNames() {
+      return functionsHaveNames() && typeof $bind === "function" && function f3() {
+      }.bind().name !== "";
+    };
+    module.exports = functionsHaveNames;
+  }
+});
+
+// ../simple-mind-map/node_modules/regexp.prototype.flags/implementation.js
+var require_implementation4 = __commonJS({
+  "../simple-mind-map/node_modules/regexp.prototype.flags/implementation.js"(exports, module) {
+    "use strict";
+    var functionsHaveConfigurableNames = require_functions_have_names().functionsHaveConfigurableNames();
+    var $Object = Object;
+    var $TypeError = TypeError;
+    module.exports = function flags() {
+      if (this != null && this !== $Object(this)) {
+        throw new $TypeError("RegExp.prototype.flags getter called on non-object");
+      }
+      var result = "";
+      if (this.hasIndices) {
+        result += "d";
+      }
+      if (this.global) {
+        result += "g";
+      }
+      if (this.ignoreCase) {
+        result += "i";
+      }
+      if (this.multiline) {
+        result += "m";
+      }
+      if (this.dotAll) {
+        result += "s";
+      }
+      if (this.unicode) {
+        result += "u";
+      }
+      if (this.sticky) {
+        result += "y";
+      }
+      return result;
+    };
+    if (functionsHaveConfigurableNames && Object.defineProperty) {
+      Object.defineProperty(module.exports, "name", { value: "get flags" });
+    }
+  }
+});
+
+// ../simple-mind-map/node_modules/regexp.prototype.flags/polyfill.js
+var require_polyfill2 = __commonJS({
+  "../simple-mind-map/node_modules/regexp.prototype.flags/polyfill.js"(exports, module) {
+    "use strict";
+    var implementation = require_implementation4();
+    var supportsDescriptors = require_define_properties().supportsDescriptors;
+    var $gOPD = Object.getOwnPropertyDescriptor;
+    module.exports = function getPolyfill() {
+      if (supportsDescriptors && /a/mig.flags === "gim") {
+        var descriptor = $gOPD(RegExp.prototype, "flags");
+        if (descriptor && typeof descriptor.get === "function" && typeof RegExp.prototype.dotAll === "boolean" && typeof RegExp.prototype.hasIndices === "boolean") {
+          var calls = "";
+          var o3 = {};
+          Object.defineProperty(o3, "hasIndices", {
+            get: function() {
+              calls += "d";
+            }
+          });
+          Object.defineProperty(o3, "sticky", {
+            get: function() {
+              calls += "y";
+            }
+          });
+          if (calls === "dy") {
+            return descriptor.get;
+          }
+        }
+      }
+      return implementation;
+    };
+  }
+});
+
+// ../simple-mind-map/node_modules/regexp.prototype.flags/shim.js
+var require_shim2 = __commonJS({
+  "../simple-mind-map/node_modules/regexp.prototype.flags/shim.js"(exports, module) {
+    "use strict";
+    var supportsDescriptors = require_define_properties().supportsDescriptors;
+    var getPolyfill = require_polyfill2();
+    var gOPD = Object.getOwnPropertyDescriptor;
+    var defineProperty = Object.defineProperty;
+    var TypeErr = TypeError;
+    var getProto = Object.getPrototypeOf;
+    var regex = /a/;
+    module.exports = function shimFlags() {
+      if (!supportsDescriptors || !getProto) {
+        throw new TypeErr("RegExp.prototype.flags requires a true ES5 environment that supports property descriptors");
+      }
+      var polyfill = getPolyfill();
+      var proto = getProto(regex);
+      var descriptor = gOPD(proto, "flags");
+      if (!descriptor || descriptor.get !== polyfill) {
+        defineProperty(proto, "flags", {
+          configurable: true,
+          enumerable: false,
+          get: polyfill
+        });
+      }
+      return polyfill;
+    };
+  }
+});
+
+// ../simple-mind-map/node_modules/regexp.prototype.flags/index.js
+var require_regexp_prototype = __commonJS({
+  "../simple-mind-map/node_modules/regexp.prototype.flags/index.js"(exports, module) {
+    "use strict";
+    var define2 = require_define_properties();
+    var callBind = require_call_bind();
+    var implementation = require_implementation4();
+    var getPolyfill = require_polyfill2();
+    var shim = require_shim2();
+    var flagsBound = callBind(getPolyfill());
+    define2(flagsBound, {
+      getPolyfill,
+      implementation,
+      shim
+    });
+    module.exports = flagsBound;
+  }
+});
+
+// ../simple-mind-map/node_modules/is-date-object/index.js
+var require_is_date_object = __commonJS({
+  "../simple-mind-map/node_modules/is-date-object/index.js"(exports, module) {
+    "use strict";
+    var getDay = Date.prototype.getDay;
+    var tryDateObject = function tryDateGetDayCall(value) {
+      try {
+        getDay.call(value);
+        return true;
+      } catch (e2) {
+        return false;
+      }
+    };
+    var toStr = Object.prototype.toString;
+    var dateClass = "[object Date]";
+    var hasToStringTag = require_shams2()();
+    module.exports = function isDateObject(value) {
+      if (typeof value !== "object" || value === null) {
+        return false;
+      }
+      return hasToStringTag ? tryDateObject(value) : toStr.call(value) === dateClass;
+    };
+  }
+});
+
+// ../simple-mind-map/node_modules/deep-equal/index.js
+var require_deep_equal = __commonJS({
+  "../simple-mind-map/node_modules/deep-equal/index.js"(exports, module) {
+    var objectKeys = require_object_keys2();
+    var isArguments = require_is_arguments();
+    var is2 = require_object_is();
+    var isRegex = require_is_regex();
+    var flags = require_regexp_prototype();
+    var isDate = require_is_date_object();
+    var getTime = Date.prototype.getTime;
+    function deepEqual(actual, expected, options) {
+      var opts = options || {};
+      if (opts.strict ? is2(actual, expected) : actual === expected) {
+        return true;
+      }
+      if (!actual || !expected || typeof actual !== "object" && typeof expected !== "object") {
+        return opts.strict ? is2(actual, expected) : actual == expected;
+      }
+      return objEquiv(actual, expected, opts);
+    }
+    function isUndefinedOrNull(value) {
+      return value === null || value === void 0;
+    }
+    function isBuffer(x3) {
+      if (!x3 || typeof x3 !== "object" || typeof x3.length !== "number") {
+        return false;
+      }
+      if (typeof x3.copy !== "function" || typeof x3.slice !== "function") {
+        return false;
+      }
+      if (x3.length > 0 && typeof x3[0] !== "number") {
+        return false;
+      }
+      return true;
+    }
+    function objEquiv(a3, b2, opts) {
+      var i3, key;
+      if (typeof a3 !== typeof b2) {
+        return false;
+      }
+      if (isUndefinedOrNull(a3) || isUndefinedOrNull(b2)) {
+        return false;
+      }
+      if (a3.prototype !== b2.prototype) {
+        return false;
+      }
+      if (isArguments(a3) !== isArguments(b2)) {
+        return false;
+      }
+      var aIsRegex = isRegex(a3);
+      var bIsRegex = isRegex(b2);
+      if (aIsRegex !== bIsRegex) {
+        return false;
+      }
+      if (aIsRegex || bIsRegex) {
+        return a3.source === b2.source && flags(a3) === flags(b2);
+      }
+      if (isDate(a3) && isDate(b2)) {
+        return getTime.call(a3) === getTime.call(b2);
+      }
+      var aIsBuffer = isBuffer(a3);
+      var bIsBuffer = isBuffer(b2);
+      if (aIsBuffer !== bIsBuffer) {
+        return false;
+      }
+      if (aIsBuffer || bIsBuffer) {
+        if (a3.length !== b2.length) {
+          return false;
+        }
+        for (i3 = 0; i3 < a3.length; i3++) {
+          if (a3[i3] !== b2[i3]) {
+            return false;
+          }
+        }
+        return true;
+      }
+      if (typeof a3 !== typeof b2) {
+        return false;
+      }
+      try {
+        var ka = objectKeys(a3);
+        var kb = objectKeys(b2);
+      } catch (e2) {
+        return false;
+      }
+      if (ka.length !== kb.length) {
+        return false;
+      }
+      ka.sort();
+      kb.sort();
+      for (i3 = ka.length - 1; i3 >= 0; i3--) {
+        if (ka[i3] != kb[i3]) {
+          return false;
+        }
+      }
+      for (i3 = ka.length - 1; i3 >= 0; i3--) {
+        key = ka[i3];
+        if (!deepEqual(a3[key], b2[key], opts)) {
+          return false;
+        }
+      }
+      return true;
+    }
+    module.exports = deepEqual;
+  }
+});
+
+// ../simple-mind-map/node_modules/extend/index.js
+var require_extend = __commonJS({
+  "../simple-mind-map/node_modules/extend/index.js"(exports, module) {
+    "use strict";
+    var hasOwn = Object.prototype.hasOwnProperty;
+    var toStr = Object.prototype.toString;
+    var defineProperty = Object.defineProperty;
+    var gOPD = Object.getOwnPropertyDescriptor;
+    var isArray2 = function isArray3(arr) {
+      if (typeof Array.isArray === "function") {
+        return Array.isArray(arr);
+      }
+      return toStr.call(arr) === "[object Array]";
+    };
+    var isPlainObject = function isPlainObject2(obj) {
+      if (!obj || toStr.call(obj) !== "[object Object]") {
+        return false;
+      }
+      var hasOwnConstructor = hasOwn.call(obj, "constructor");
+      var hasIsPrototypeOf = obj.constructor && obj.constructor.prototype && hasOwn.call(obj.constructor.prototype, "isPrototypeOf");
+      if (obj.constructor && !hasOwnConstructor && !hasIsPrototypeOf) {
+        return false;
+      }
+      var key;
+      for (key in obj) {
+      }
+      return typeof key === "undefined" || hasOwn.call(obj, key);
+    };
+    var setProperty = function setProperty2(target, options) {
+      if (defineProperty && options.name === "__proto__") {
+        defineProperty(target, options.name, {
+          enumerable: true,
+          configurable: true,
+          value: options.newValue,
+          writable: true
+        });
+      } else {
+        target[options.name] = options.newValue;
+      }
+    };
+    var getProperty = function getProperty2(obj, name) {
+      if (name === "__proto__") {
+        if (!hasOwn.call(obj, name)) {
+          return void 0;
+        } else if (gOPD) {
+          return gOPD(obj, name).value;
+        }
+      }
+      return obj[name];
+    };
+    module.exports = function extend2() {
+      var options, name, src, copy, copyIsArray, clone;
+      var target = arguments[0];
+      var i3 = 1;
+      var length2 = arguments.length;
+      var deep = false;
+      if (typeof target === "boolean") {
+        deep = target;
+        target = arguments[1] || {};
+        i3 = 2;
+      }
+      if (target == null || typeof target !== "object" && typeof target !== "function") {
+        target = {};
+      }
+      for (; i3 < length2; ++i3) {
+        options = arguments[i3];
+        if (options != null) {
+          for (name in options) {
+            src = getProperty(target, name);
+            copy = getProperty(options, name);
+            if (target !== copy) {
+              if (deep && copy && (isPlainObject(copy) || (copyIsArray = isArray2(copy)))) {
+                if (copyIsArray) {
+                  copyIsArray = false;
+                  clone = src && isArray2(src) ? src : [];
+                } else {
+                  clone = src && isPlainObject(src) ? src : {};
+                }
+                setProperty(target, { name, newValue: extend2(deep, clone, copy) });
+              } else if (typeof copy !== "undefined") {
+                setProperty(target, { name, newValue: copy });
+              }
+            }
+          }
+        }
+      }
+      return target;
+    };
+  }
+});
+
+// ../simple-mind-map/node_modules/quill-delta/lib/op.js
+var require_op = __commonJS({
+  "../simple-mind-map/node_modules/quill-delta/lib/op.js"(exports, module) {
+    var equal = require_deep_equal();
+    var extend2 = require_extend();
+    var lib = {
+      attributes: {
+        compose: function(a3, b2, keepNull) {
+          if (typeof a3 !== "object")
+            a3 = {};
+          if (typeof b2 !== "object")
+            b2 = {};
+          var attributes = extend2(true, {}, b2);
+          if (!keepNull) {
+            attributes = Object.keys(attributes).reduce(function(copy, key2) {
+              if (attributes[key2] != null) {
+                copy[key2] = attributes[key2];
+              }
+              return copy;
+            }, {});
+          }
+          for (var key in a3) {
+            if (a3[key] !== void 0 && b2[key] === void 0) {
+              attributes[key] = a3[key];
+            }
+          }
+          return Object.keys(attributes).length > 0 ? attributes : void 0;
+        },
+        diff: function(a3, b2) {
+          if (typeof a3 !== "object")
+            a3 = {};
+          if (typeof b2 !== "object")
+            b2 = {};
+          var attributes = Object.keys(a3).concat(Object.keys(b2)).reduce(function(attributes2, key) {
+            if (!equal(a3[key], b2[key])) {
+              attributes2[key] = b2[key] === void 0 ? null : b2[key];
+            }
+            return attributes2;
+          }, {});
+          return Object.keys(attributes).length > 0 ? attributes : void 0;
+        },
+        transform: function(a3, b2, priority) {
+          if (typeof a3 !== "object")
+            return b2;
+          if (typeof b2 !== "object")
+            return void 0;
+          if (!priority)
+            return b2;
+          var attributes = Object.keys(b2).reduce(function(attributes2, key) {
+            if (a3[key] === void 0)
+              attributes2[key] = b2[key];
+            return attributes2;
+          }, {});
+          return Object.keys(attributes).length > 0 ? attributes : void 0;
+        }
+      },
+      iterator: function(ops) {
+        return new Iterator(ops);
+      },
+      length: function(op) {
+        if (typeof op["delete"] === "number") {
+          return op["delete"];
+        } else if (typeof op.retain === "number") {
+          return op.retain;
+        } else {
+          return typeof op.insert === "string" ? op.insert.length : 1;
+        }
+      }
+    };
+    function Iterator(ops) {
+      this.ops = ops;
+      this.index = 0;
+      this.offset = 0;
+    }
+    Iterator.prototype.hasNext = function() {
+      return this.peekLength() < Infinity;
+    };
+    Iterator.prototype.next = function(length2) {
+      if (!length2)
+        length2 = Infinity;
+      var nextOp = this.ops[this.index];
+      if (nextOp) {
+        var offset = this.offset;
+        var opLength = lib.length(nextOp);
+        if (length2 >= opLength - offset) {
+          length2 = opLength - offset;
+          this.index += 1;
+          this.offset = 0;
+        } else {
+          this.offset += length2;
+        }
+        if (typeof nextOp["delete"] === "number") {
+          return { "delete": length2 };
+        } else {
+          var retOp = {};
+          if (nextOp.attributes) {
+            retOp.attributes = nextOp.attributes;
+          }
+          if (typeof nextOp.retain === "number") {
+            retOp.retain = length2;
+          } else if (typeof nextOp.insert === "string") {
+            retOp.insert = nextOp.insert.substr(offset, length2);
+          } else {
+            retOp.insert = nextOp.insert;
+          }
+          return retOp;
+        }
+      } else {
+        return { retain: Infinity };
+      }
+    };
+    Iterator.prototype.peek = function() {
+      return this.ops[this.index];
+    };
+    Iterator.prototype.peekLength = function() {
+      if (this.ops[this.index]) {
+        return lib.length(this.ops[this.index]) - this.offset;
+      } else {
+        return Infinity;
+      }
+    };
+    Iterator.prototype.peekType = function() {
+      if (this.ops[this.index]) {
+        if (typeof this.ops[this.index]["delete"] === "number") {
+          return "delete";
+        } else if (typeof this.ops[this.index].retain === "number") {
+          return "retain";
+        } else {
+          return "insert";
+        }
+      }
+      return "retain";
+    };
+    Iterator.prototype.rest = function() {
+      if (!this.hasNext()) {
+        return [];
+      } else if (this.offset === 0) {
+        return this.ops.slice(this.index);
+      } else {
+        var offset = this.offset;
+        var index3 = this.index;
+        var next2 = this.next();
+        var rest = this.ops.slice(this.index);
+        this.offset = offset;
+        this.index = index3;
+        return [next2].concat(rest);
+      }
+    };
+    module.exports = lib;
+  }
+});
+
+// ../simple-mind-map/node_modules/quill-delta/lib/delta.js
+var require_delta = __commonJS({
+  "../simple-mind-map/node_modules/quill-delta/lib/delta.js"(exports, module) {
+    var diff = require_diff();
+    var equal = require_deep_equal();
+    var extend2 = require_extend();
+    var op = require_op();
+    var NULL_CHARACTER = String.fromCharCode(0);
+    var Delta2 = function(ops) {
+      if (Array.isArray(ops)) {
+        this.ops = ops;
+      } else if (ops != null && Array.isArray(ops.ops)) {
+        this.ops = ops.ops;
+      } else {
+        this.ops = [];
+      }
+    };
+    Delta2.prototype.insert = function(text3, attributes) {
+      var newOp = {};
+      if (text3.length === 0)
+        return this;
+      newOp.insert = text3;
+      if (attributes != null && typeof attributes === "object" && Object.keys(attributes).length > 0) {
+        newOp.attributes = attributes;
+      }
+      return this.push(newOp);
+    };
+    Delta2.prototype["delete"] = function(length2) {
+      if (length2 <= 0)
+        return this;
+      return this.push({ "delete": length2 });
+    };
+    Delta2.prototype.retain = function(length2, attributes) {
+      if (length2 <= 0)
+        return this;
+      var newOp = { retain: length2 };
+      if (attributes != null && typeof attributes === "object" && Object.keys(attributes).length > 0) {
+        newOp.attributes = attributes;
+      }
+      return this.push(newOp);
+    };
+    Delta2.prototype.push = function(newOp) {
+      var index3 = this.ops.length;
+      var lastOp = this.ops[index3 - 1];
+      newOp = extend2(true, {}, newOp);
+      if (typeof lastOp === "object") {
+        if (typeof newOp["delete"] === "number" && typeof lastOp["delete"] === "number") {
+          this.ops[index3 - 1] = { "delete": lastOp["delete"] + newOp["delete"] };
+          return this;
+        }
+        if (typeof lastOp["delete"] === "number" && newOp.insert != null) {
+          index3 -= 1;
+          lastOp = this.ops[index3 - 1];
+          if (typeof lastOp !== "object") {
+            this.ops.unshift(newOp);
+            return this;
+          }
+        }
+        if (equal(newOp.attributes, lastOp.attributes)) {
+          if (typeof newOp.insert === "string" && typeof lastOp.insert === "string") {
+            this.ops[index3 - 1] = { insert: lastOp.insert + newOp.insert };
+            if (typeof newOp.attributes === "object")
+              this.ops[index3 - 1].attributes = newOp.attributes;
+            return this;
+          } else if (typeof newOp.retain === "number" && typeof lastOp.retain === "number") {
+            this.ops[index3 - 1] = { retain: lastOp.retain + newOp.retain };
+            if (typeof newOp.attributes === "object")
+              this.ops[index3 - 1].attributes = newOp.attributes;
+            return this;
+          }
+        }
+      }
+      if (index3 === this.ops.length) {
+        this.ops.push(newOp);
+      } else {
+        this.ops.splice(index3, 0, newOp);
+      }
+      return this;
+    };
+    Delta2.prototype.chop = function() {
+      var lastOp = this.ops[this.ops.length - 1];
+      if (lastOp && lastOp.retain && !lastOp.attributes) {
+        this.ops.pop();
+      }
+      return this;
+    };
+    Delta2.prototype.filter = function(predicate) {
+      return this.ops.filter(predicate);
+    };
+    Delta2.prototype.forEach = function(predicate) {
+      this.ops.forEach(predicate);
+    };
+    Delta2.prototype.map = function(predicate) {
+      return this.ops.map(predicate);
+    };
+    Delta2.prototype.partition = function(predicate) {
+      var passed = [], failed = [];
+      this.forEach(function(op2) {
+        var target = predicate(op2) ? passed : failed;
+        target.push(op2);
+      });
+      return [passed, failed];
+    };
+    Delta2.prototype.reduce = function(predicate, initial) {
+      return this.ops.reduce(predicate, initial);
+    };
+    Delta2.prototype.changeLength = function() {
+      return this.reduce(function(length2, elem) {
+        if (elem.insert) {
+          return length2 + op.length(elem);
+        } else if (elem.delete) {
+          return length2 - elem.delete;
+        }
+        return length2;
+      }, 0);
+    };
+    Delta2.prototype.length = function() {
+      return this.reduce(function(length2, elem) {
+        return length2 + op.length(elem);
+      }, 0);
+    };
+    Delta2.prototype.slice = function(start, end) {
+      start = start || 0;
+      if (typeof end !== "number")
+        end = Infinity;
+      var ops = [];
+      var iter = op.iterator(this.ops);
+      var index3 = 0;
+      while (index3 < end && iter.hasNext()) {
+        var nextOp;
+        if (index3 < start) {
+          nextOp = iter.next(start - index3);
+        } else {
+          nextOp = iter.next(end - index3);
+          ops.push(nextOp);
+        }
+        index3 += op.length(nextOp);
+      }
+      return new Delta2(ops);
+    };
+    Delta2.prototype.compose = function(other) {
+      var thisIter = op.iterator(this.ops);
+      var otherIter = op.iterator(other.ops);
+      var ops = [];
+      var firstOther = otherIter.peek();
+      if (firstOther != null && typeof firstOther.retain === "number" && firstOther.attributes == null) {
+        var firstLeft = firstOther.retain;
+        while (thisIter.peekType() === "insert" && thisIter.peekLength() <= firstLeft) {
+          firstLeft -= thisIter.peekLength();
+          ops.push(thisIter.next());
+        }
+        if (firstOther.retain - firstLeft > 0) {
+          otherIter.next(firstOther.retain - firstLeft);
+        }
+      }
+      var delta = new Delta2(ops);
+      while (thisIter.hasNext() || otherIter.hasNext()) {
+        if (otherIter.peekType() === "insert") {
+          delta.push(otherIter.next());
+        } else if (thisIter.peekType() === "delete") {
+          delta.push(thisIter.next());
+        } else {
+          var length2 = Math.min(thisIter.peekLength(), otherIter.peekLength());
+          var thisOp = thisIter.next(length2);
+          var otherOp = otherIter.next(length2);
+          if (typeof otherOp.retain === "number") {
+            var newOp = {};
+            if (typeof thisOp.retain === "number") {
+              newOp.retain = length2;
+            } else {
+              newOp.insert = thisOp.insert;
+            }
+            var attributes = op.attributes.compose(thisOp.attributes, otherOp.attributes, typeof thisOp.retain === "number");
+            if (attributes)
+              newOp.attributes = attributes;
+            delta.push(newOp);
+            if (!otherIter.hasNext() && equal(delta.ops[delta.ops.length - 1], newOp)) {
+              var rest = new Delta2(thisIter.rest());
+              return delta.concat(rest).chop();
+            }
+          } else if (typeof otherOp["delete"] === "number" && typeof thisOp.retain === "number") {
+            delta.push(otherOp);
+          }
+        }
+      }
+      return delta.chop();
+    };
+    Delta2.prototype.concat = function(other) {
+      var delta = new Delta2(this.ops.slice());
+      if (other.ops.length > 0) {
+        delta.push(other.ops[0]);
+        delta.ops = delta.ops.concat(other.ops.slice(1));
+      }
+      return delta;
+    };
+    Delta2.prototype.diff = function(other, index3) {
+      if (this.ops === other.ops) {
+        return new Delta2();
+      }
+      var strings = [this, other].map(function(delta2) {
+        return delta2.map(function(op2) {
+          if (op2.insert != null) {
+            return typeof op2.insert === "string" ? op2.insert : NULL_CHARACTER;
+          }
+          var prep = delta2 === other ? "on" : "with";
+          throw new Error("diff() called " + prep + " non-document");
+        }).join("");
+      });
+      var delta = new Delta2();
+      var diffResult = diff(strings[0], strings[1], index3);
+      var thisIter = op.iterator(this.ops);
+      var otherIter = op.iterator(other.ops);
+      diffResult.forEach(function(component) {
+        var length2 = component[1].length;
+        while (length2 > 0) {
+          var opLength = 0;
+          switch (component[0]) {
+            case diff.INSERT:
+              opLength = Math.min(otherIter.peekLength(), length2);
+              delta.push(otherIter.next(opLength));
+              break;
+            case diff.DELETE:
+              opLength = Math.min(length2, thisIter.peekLength());
+              thisIter.next(opLength);
+              delta["delete"](opLength);
+              break;
+            case diff.EQUAL:
+              opLength = Math.min(thisIter.peekLength(), otherIter.peekLength(), length2);
+              var thisOp = thisIter.next(opLength);
+              var otherOp = otherIter.next(opLength);
+              if (equal(thisOp.insert, otherOp.insert)) {
+                delta.retain(opLength, op.attributes.diff(thisOp.attributes, otherOp.attributes));
+              } else {
+                delta.push(otherOp)["delete"](opLength);
+              }
+              break;
+          }
+          length2 -= opLength;
+        }
+      });
+      return delta.chop();
+    };
+    Delta2.prototype.eachLine = function(predicate, newline) {
+      newline = newline || "\n";
+      var iter = op.iterator(this.ops);
+      var line = new Delta2();
+      var i3 = 0;
+      while (iter.hasNext()) {
+        if (iter.peekType() !== "insert")
+          return;
+        var thisOp = iter.peek();
+        var start = op.length(thisOp) - iter.peekLength();
+        var index3 = typeof thisOp.insert === "string" ? thisOp.insert.indexOf(newline, start) - start : -1;
+        if (index3 < 0) {
+          line.push(iter.next());
+        } else if (index3 > 0) {
+          line.push(iter.next(index3));
+        } else {
+          if (predicate(line, iter.next(1).attributes || {}, i3) === false) {
+            return;
+          }
+          i3 += 1;
+          line = new Delta2();
+        }
+      }
+      if (line.length() > 0) {
+        predicate(line, {}, i3);
+      }
+    };
+    Delta2.prototype.transform = function(other, priority) {
+      priority = !!priority;
+      if (typeof other === "number") {
+        return this.transformPosition(other, priority);
+      }
+      var thisIter = op.iterator(this.ops);
+      var otherIter = op.iterator(other.ops);
+      var delta = new Delta2();
+      while (thisIter.hasNext() || otherIter.hasNext()) {
+        if (thisIter.peekType() === "insert" && (priority || otherIter.peekType() !== "insert")) {
+          delta.retain(op.length(thisIter.next()));
+        } else if (otherIter.peekType() === "insert") {
+          delta.push(otherIter.next());
+        } else {
+          var length2 = Math.min(thisIter.peekLength(), otherIter.peekLength());
+          var thisOp = thisIter.next(length2);
+          var otherOp = otherIter.next(length2);
+          if (thisOp["delete"]) {
+            continue;
+          } else if (otherOp["delete"]) {
+            delta.push(otherOp);
+          } else {
+            delta.retain(length2, op.attributes.transform(thisOp.attributes, otherOp.attributes, priority));
+          }
+        }
+      }
+      return delta.chop();
+    };
+    Delta2.prototype.transformPosition = function(index3, priority) {
+      priority = !!priority;
+      var thisIter = op.iterator(this.ops);
+      var offset = 0;
+      while (thisIter.hasNext() && offset <= index3) {
+        var length2 = thisIter.peekLength();
+        var nextType = thisIter.peekType();
+        thisIter.next();
+        if (nextType === "delete") {
+          index3 -= Math.min(length2, index3 - offset);
+          continue;
+        } else if (nextType === "insert" && (offset < index3 || !priority)) {
+          index3 += length2;
+        }
+        offset += length2;
+      }
+      return index3;
+    };
+    module.exports = Delta2;
+  }
+});
+
 // ../simple-mind-map/src/constants/constant.js
 var constant_exports = {};
 __export(constant_exports, {
@@ -36997,6 +39259,8 @@ var View = class {
       this.fit();
     });
     this.mindMap.svg.on("dblclick", () => {
+      if (!this.mindMap.opt.enableDblclickReset)
+        return;
       this.reset();
     });
     this.mindMap.event.on("mousedown", () => {
@@ -51701,7 +53965,9 @@ var defaultOpt = {
       padding: 0;
       box-sizing: border-box;
     }
-  `
+  `,
+  // 开启鼠标双击复位思维导图位置及缩放
+  enableDblclickReset: true
 };
 
 // ../simple-mind-map/index.js
@@ -51921,7 +54187,7 @@ var MindMap2 = class {
       let result = await this.doExport.export(...args);
       return result;
     } catch (error) {
-      this.mindMap.opt.errorHandler(ERROR_TYPES.EXPORT_ERROR, error);
+      this.opt.errorHandler(ERROR_TYPES.EXPORT_ERROR, error);
     }
   }
   //  转换位置
@@ -52477,11 +54743,13 @@ var parseXmindFile = (file) => {
       async (zip) => {
         try {
           let content3 = "";
-          if (zip.files["content.json"]) {
-            let json = await zip.files["content.json"].async("string");
+          let jsonFile = zip.files["content.json"];
+          let xmlFile = zip.files["content.xml"] || zip.files["/content.xml"];
+          if (jsonFile) {
+            let json = await jsonFile.async("string");
             content3 = await transformXmind(json, zip.files);
-          } else if (zip.files["content.xml"]) {
-            let xml = await zip.files["content.xml"].async("string");
+          } else if (xmlFile) {
+            let xml = await xmlFile.async("string");
             let json = import_xml_js.default.xml2json(xml);
             content3 = transformOldXmind(json);
           }
@@ -52624,7 +54892,7 @@ var transformOldXmind = (content3) => {
     if (_children && _children.elements && _children.elements.length > 0) {
       _children.elements.forEach((item) => {
         if (item.name === "topics") {
-          item.elements.forEach((item2) => {
+          (item.elements || []).forEach((item2) => {
             let newChild = {};
             newNode.children.push(newChild);
             walk2(item2, newChild);
@@ -63621,6 +65889,7 @@ var AssociativeLine_default = AssociativeLine;
 
 // ../simple-mind-map/src/plugins/RichText.js
 var import_quill = __toESM(require_quill());
+var import_quill_delta = __toESM(require_delta());
 var extended = false;
 var fontFamilyList = [
   "\u5B8B\u4F53, SimSun, Songti SC",
@@ -63649,6 +65918,7 @@ var RichText = class {
     this.quill = null;
     this.range = null;
     this.lastRange = null;
+    this.pasteUseRange = null;
     this.node = null;
     this.isInserting = false;
     this.styleEl = null;
@@ -63893,6 +66163,7 @@ var RichText = class {
       this.lastRange = this.range;
       this.range = null;
       if (range) {
+        this.pasteUseRange = range;
         let bounds = this.quill.getBounds(range.index, range.length);
         let rect = this.textEditNode.getBoundingClientRect();
         let rectInfo = {
@@ -63929,6 +66200,34 @@ var RichText = class {
         this.lostStyle = false;
       }
     });
+    this.quill.clipboard.addMatcher(Node.TEXT_NODE, (node3) => {
+      let style = this.getPasteTextStyle();
+      return new import_quill_delta.default().insert(node3.data, style);
+    });
+    this.quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node3, delta) => {
+      let ops = [];
+      let style = this.getPasteTextStyle();
+      delta.ops.forEach((op) => {
+        if (op.insert && typeof op.insert === "string" && op.insert !== "\n") {
+          ops.push({
+            attributes: { ...style },
+            insert: op.insert
+          });
+        }
+      });
+      delta.ops = ops;
+      return delta;
+    });
+  }
+  // 获取粘贴的文本的样式
+  getPasteTextStyle() {
+    if (this.pasteUseRange) {
+      return this.quill.getFormat(
+        this.pasteUseRange.index,
+        this.pasteUseRange.length
+      );
+    }
+    return {};
   }
   // 正则输入中文
   onCompositionStart() {
