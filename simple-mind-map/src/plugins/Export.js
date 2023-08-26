@@ -7,6 +7,7 @@ import {
 import { SVG } from '@svgdotjs/svg.js'
 import drawBackgroundImageToCanvas from '../utils/simulateCSSBackgroundInCanvas'
 import { transformToMarkdown } from '../parse/toMarkdown'
+import { a4Size } from '../constants/constant'
 
 //  导出插件
 class Export {
@@ -57,7 +58,7 @@ class Export {
   }
 
   //   svg转png
-  svgToPng(svgSrc, transparent, rotateWhenWidthLongerThenHeight = false) {
+  svgToPng(svgSrc, transparent, checkRotate = () => { return false }) {
     return new Promise((resolve, reject) => {
       const img = new Image()
       // 跨域图片需要添加这个属性，否则画布被污染了无法导出图片
@@ -66,8 +67,7 @@ class Export {
         try {
           let canvas = document.createElement('canvas')
           // 如果宽比高长，那么旋转90度
-          let needRotate =
-            rotateWhenWidthLongerThenHeight && img.width / img.height > 1
+          let needRotate = checkRotate(img.width, img.height)
           if (needRotate) {
             canvas.width = img.height
             canvas.height = img.width
@@ -179,7 +179,7 @@ class Export {
    * 方法1.把svg的图片都转化成data:url格式，再转换
    * 方法2.把svg的图片提取出来再挨个绘制到canvas里，最后一起转换
    */
-  async png(name, transparent = false, rotateWhenWidthLongerThenHeight) {
+  async png(name, transparent = false, checkRotate) {
     let { node, str } = await this.getSvgData()
     str = removeHTMLEntities(str)
     // 如果开启了富文本，则使用htmltocanvas转换为图片
@@ -195,7 +195,7 @@ class Export {
       // let imgDataUrl = await this.svgToPng(
       //   res,
       //   transparent,
-      //   rotateWhenWidthLongerThenHeight
+      //   checkRotate
       // )
       // return imgDataUrl
     }
@@ -209,7 +209,7 @@ class Export {
     let res = await this.svgToPng(
       svgUrl,
       transparent,
-      rotateWhenWidthLongerThenHeight
+      checkRotate
     )
     return res
   }
@@ -219,7 +219,10 @@ class Export {
     if (!this.mindMap.doExportPDF) {
       throw new Error('请注册ExportPDF插件')
     }
-    let img = await this.png('', false, true)
+    let img = await this.png('', false, (width, height) => {
+      if (width <= a4Size.width && height && a4Size.height) return false
+      return (width / height) > 1
+    })
     this.mindMap.doExportPDF.pdf(name, img, useMultiPageExport)
   }
 

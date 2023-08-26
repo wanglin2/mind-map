@@ -343,3 +343,9 @@ export const ERROR_TYPES = {
   BEFORE_TEXT_EDIT_ERROR: 'before_text_edit_error',
   EXPORT_ERROR: 'export_error'
 }
+
+// a4纸的宽高
+export const a4Size = {
+  width: 592.28,
+  height: 841.89
+}
