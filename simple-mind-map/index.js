@@ -11,7 +11,8 @@ import {
   layoutValueList,
   CONSTANTS,
   commonCaches,
-  ERROR_TYPES
+  ERROR_TYPES,
+  cssContent
 } from './src/constants/constant'
 import { SVG } from '@svgdotjs/svg.js'
 import { simpleDeepClone, getType } from './src/utils'
@@ -36,6 +37,10 @@ class MindMap {
     this.width = this.elRect.width
     this.height = this.elRect.height
     if (this.width <= 0 || this.height <= 0) throw new Error('容器元素el的宽高不能为0')
+
+    // 添加css
+    this.cssEl = null
+    this.addCss()
 
     // 画布
     this.svg = SVG().addTo(this.el).size(this.width, this.height)
@@ -99,6 +104,19 @@ class MindMap {
     // 检查主题配置
     opt.theme = opt.theme && theme[opt.theme] ? opt.theme : 'default'
     return opt
+  }
+
+  // 添加css到页面
+  addCss() {
+    this.cssEl = document.createElement('style')
+    this.cssEl.type = 'text/css'
+    this.cssEl.innerHTML = cssContent
+    document.head.appendChild(this.cssEl)
+  }
+
+  // 移除css
+  removeCss() {
+    document.head.removeChild(this.cssEl)
   }
 
   //  渲染，部分渲染
@@ -419,6 +437,7 @@ class MindMap {
     Style.removeBackgroundStyle(this.el)
     this.el.innerHTML = ''
     this.el = null
+    this.removeCss()
   }
 }
 

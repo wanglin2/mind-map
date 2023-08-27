@@ -69,7 +69,8 @@ export default class Shape {
     let node = null
     // 矩形
     if (shape === CONSTANTS.SHAPE.RECTANGLE) {
-      node = new Rect().size(width, height)
+      // node = new Rect().size(width, height)
+      node = this.createRect()
     } else if (shape === CONSTANTS.SHAPE.DIAMOND) {
       // 菱形
       node = this.createDiamond()
@@ -96,6 +97,19 @@ export default class Shape {
       node = this.createCircle()
     }
     return node
+  }
+
+  // 创建矩形TODO
+  createRect() {
+    let { width, height } = this.node
+    let borderRadius = this.node.style.merge('borderRadius')
+    return new Path().plot(`
+      M${0},0
+      L${width},0
+      L${width},${height}
+      L${0},${height}
+      L${0},${0}
+    `)
   }
 
   //  创建菱形

@@ -407,7 +407,7 @@ class Render {
           // 激活节点需要显示展开收起按钮
           node.showExpandBtn()
           setTimeout(() => {
-            node.updateNodeShape()
+            node.updateNodeActive()
           }, 0)
         }
       },
@@ -1000,7 +1000,7 @@ class Render {
     } else {
       node.hideExpandBtn()
     }
-    node.updateNodeShape()
+    node.updateNodeActive()
   }
 
   //  设置节点是否展开
