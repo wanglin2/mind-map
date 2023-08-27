@@ -65,37 +65,35 @@ class Export {
       img.setAttribute('crossOrigin', 'anonymous')
       img.onload = async () => {
         try {
-          let canvas = document.createElement('canvas')
+          const canvas = document.createElement('canvas')
+          const dpr = Math.max(window.devicePixelRatio, this.mindMap.opt.minExportImgCanvasScale)
+          const imgWidth = img.width
+          const imgHeight = img.height
           // 如果宽比高长，那么旋转90度
-          let needRotate = checkRotate(img.width, img.height)
+          const needRotate = checkRotate(imgWidth, imgHeight)
           if (needRotate) {
-            canvas.width = img.height
-            canvas.height = img.width
+            canvas.width = imgHeight * dpr
+            canvas.height = imgWidth * dpr
+            canvas.style.width = imgHeight + 'px'
+            canvas.style.height = imgWidth + 'px'
           } else {
-            canvas.width = img.width
-            canvas.height = img.height
+            canvas.width = imgWidth * dpr
+            canvas.height = imgHeight * dpr
+            canvas.style.width = imgWidth + 'px'
+            canvas.style.height = imgHeight + 'px'
           }
-          let ctx = canvas.getContext('2d')
+          const ctx = canvas.getContext('2d')
+          ctx.scale(dpr, dpr)
           if (needRotate) {
             ctx.rotate(0.5 * Math.PI)
-            ctx.translate(0, -img.height)
+            ctx.translate(0, -imgHeight)
           }
           // 绘制背景
           if (!transparent) {
-            await this.drawBackgroundToCanvas(ctx, img.width, img.height)
+            await this.drawBackgroundToCanvas(ctx, imgWidth, imgHeight)
           }
           // 图片绘制到canvas里
-          ctx.drawImage(
-            img,
-            0,
-            0,
-            img.width,
-            img.height,
-            0,
-            0,
-            img.width,
-            img.height
-          )
+          ctx.drawImage(img, 0, 0, imgWidth, imgHeight)
           resolve(canvas.toDataURL())
         } catch (error) {
           reject(error)
