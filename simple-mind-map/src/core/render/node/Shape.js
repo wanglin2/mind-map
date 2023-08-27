@@ -104,11 +104,18 @@ export default class Shape {
     let { width, height } = this.node
     let borderRadius = this.node.style.merge('borderRadius')
     return new Path().plot(`
-      M${0},0
-      L${width},0
-      L${width},${height}
-      L${0},${height}
-      L${0},${0}
+      M${borderRadius},0
+      L${width - borderRadius},0
+      C${width - borderRadius},0 ${width},${0} ${width},${borderRadius}
+      L${width},${height - borderRadius}
+      C${width},${height - borderRadius} ${width},${height} ${
+      width - borderRadius
+    },${height}
+      L${borderRadius},${height}
+      C${borderRadius},${height} ${0},${height} ${0},${height - borderRadius}
+      L${0},${borderRadius}
+      C${0},${borderRadius} ${0},${0} ${borderRadius},${0}
+      Z
     `)
   }
 
