@@ -42,7 +42,7 @@ class Style {
   }
 
   //  合并样式
-  merge(prop, root, isActive) {
+  merge(prop, root) {
     let themeConfig = this.ctx.mindMap.themeConfig
     // 三级及以下节点
     let defaultConfig = themeConfig.node
@@ -59,17 +59,6 @@ class Style {
       // 二级节点
       defaultConfig = themeConfig.second
     }
-    // 激活状态
-    if (isActive !== undefined ? isActive : this.ctx.nodeData.data.isActive) {
-      if (
-        this.ctx.nodeData.data.activeStyle &&
-        this.ctx.nodeData.data.activeStyle[prop] !== undefined
-      ) {
-        return this.ctx.nodeData.data.activeStyle[prop]
-      } else if (defaultConfig.active && defaultConfig.active[prop]) {
-        return defaultConfig.active[prop]
-      }
-    }
     // 优先使用节点本身的样式
     return this.getSelfStyle(prop) !== undefined
       ? this.getSelfStyle(prop)
@@ -77,8 +66,8 @@ class Style {
   }
 
   //  获取某个样式值
-  getStyle(prop, root, isActive) {
-    return this.merge(prop, root, isActive)
+  getStyle(prop, root) {
+    return this.merge(prop, root)
   }
 
   //  获取自身自定义样式
@@ -219,6 +208,20 @@ class Style {
       }
     })
     return res
+  }
+
+  // hover和激活节点
+  hoverNode(node, width, height) {
+    const { hoverRectColor } = this.ctx.mindMap.opt
+    node
+      .size(width + 0, height + 0)
+      .x(-0)
+      .y(-0)
+      .radius(5)
+      .fill('none')
+      .stroke({
+        color: hoverRectColor
+      })
   }
 }
 
