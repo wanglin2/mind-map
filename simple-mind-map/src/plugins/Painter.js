@@ -69,6 +69,11 @@ class Painter {
   beforePluginRemove() {
     this.unBindEvent()
   }
+
+  // 插件被卸载前做的事情
+  beforePluginDestroy() {
+    this.unBindEvent()
+  }
 }
 
 Painter.instanceName = 'painter'
