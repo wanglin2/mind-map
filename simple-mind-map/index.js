@@ -406,6 +406,9 @@ class MindMap {
   destroy() {
     // 移除插件
     ;[...MindMap.pluginList].forEach(plugin => {
+      if (this[plugin.instanceName].beforePluginDestroy) {
+        this[plugin.instanceName].beforePluginDestroy()
+      }
       this[plugin.instanceName] = null
     })
     // 解绑事件
@@ -414,6 +417,7 @@ class MindMap {
     this.svg.remove()
     // 去除给容器元素设置的背景样式
     Style.removeBackgroundStyle(this.el)
+    this.el.innerHTML = ''
     this.el = null
   }
 }
