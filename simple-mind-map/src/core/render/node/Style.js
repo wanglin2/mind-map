@@ -211,12 +211,9 @@ class Style {
   }
 
   // hover和激活节点
-  hoverNode(node, width, height) {
+  hoverNode(node) {
     const { hoverRectColor } = this.ctx.mindMap.opt
     node
-      .size(width + 0, height + 0)
-      .x(-0)
-      .y(-0)
       .radius(5)
       .fill('none')
       .stroke({
