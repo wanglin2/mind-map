@@ -158,7 +158,8 @@ const nodeSizeIndependenceList = [
   'backgroundImage',
   'backgroundRepeat',
   'backgroundPosition',
-  'backgroundSize'
+  'backgroundSize',
+  'rootLineKeepSameInCurve'
 ]
 export const checkIsNodeSizeIndependenceConfig = (config) => {
   let keys = Object.keys(config)
