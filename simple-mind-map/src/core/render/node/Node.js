@@ -260,11 +260,9 @@ class Node {
     this.shapePadding.paddingY = shapePaddingY
     // 边框宽度，因为边框是以中线向两端发散，所以边框会超出节点
     const borderWidth = this.getBorderWidth()
-    const { hoverRectPadding } = this.mindMap.opt
     return {
-      width: _width + paddingX * 2 + shapePaddingX * 2 + borderWidth + hoverRectPadding * 2,
-      height:
-        _height + paddingY * 2 + margin + shapePaddingY * 2 + borderWidth + hoverRectPadding * 2
+      width: _width + paddingX * 2 + shapePaddingX * 2 + borderWidth,
+      height: _height + paddingY * 2 + margin + shapePaddingY * 2 + borderWidth
     }
   }
 
@@ -276,11 +274,11 @@ class Node {
     let { width, height, textContentItemMargin } = this
     let { paddingY } = this.getPaddingVale()
     const halfBorderWidth = this.getBorderWidth() / 2
-    paddingY += this.shapePadding.paddingY + halfBorderWidth + hoverRectPadding
+    paddingY += this.shapePadding.paddingY + halfBorderWidth
     // 节点形状
     this.shapeNode = this.shapeInstance.createShape()
     this.shapeNode.addClass('smm-node-shape')
-    this.shapeNode.translate(halfBorderWidth + hoverRectPadding, halfBorderWidth + hoverRectPadding)
+    this.shapeNode.translate(halfBorderWidth, halfBorderWidth)
     this.style.shape(this.shapeNode)
     this.group.add(this.shapeNode)
     // 渲染一个隐藏的矩形区域，用来触发展开收起按钮的显示
@@ -370,7 +368,10 @@ class Node {
     )
     this.group.add(textContentNested)
     // 激活hover和激活边框
-    this.hoverNode = new Rect().size(width, height).x(0).y(0)
+    this.hoverNode = new Rect()
+      .size(width + hoverRectPadding * 2, height + hoverRectPadding * 2)
+      .x(-hoverRectPadding)
+      .y(-hoverRectPadding)
     this.hoverNode.addClass('smm-hover-node')
     this.style.hoverNode(this.hoverNode, width, height)
     this.group.add(this.hoverNode)
