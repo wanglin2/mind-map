@@ -106,7 +106,7 @@ class MindMap {
     return opt
   }
 
-  // 添加css到页面
+  // 添加必要的css样式到页面
   addCss() {
     this.cssEl = document.createElement('style')
     this.cssEl.type = 'text/css'
@@ -357,6 +357,8 @@ class MindMap {
     draw.translate(-rect.x + elRect.left, -rect.y + elRect.top)
     // 克隆一份数据
     let clone = svg.clone()
+    // 添加必要的样式
+    clone.add(SVG(`<style>${ cssContent }</style>`))
     // 如果实际图形宽高超出了屏幕宽高，且存在水印的话需要重新绘制水印，否则会出现超出部分没有水印的问题
     if (
       (rect.width > origWidth || rect.height > origHeight) &&
