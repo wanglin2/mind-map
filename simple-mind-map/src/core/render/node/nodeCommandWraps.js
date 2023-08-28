@@ -39,13 +39,13 @@ function setShape(shape) {
 }
 
 //  修改某个样式
-function setStyle(prop, value, isActive) {
-  this.mindMap.execCommand('SET_NODE_STYLE', this, prop, value, isActive)
+function setStyle(prop, value) {
+  this.mindMap.execCommand('SET_NODE_STYLE', this, prop, value)
 }
 
 //  修改多个样式
-function setStyles(style, isActive) {
-  this.mindMap.execCommand('SET_NODE_STYLES', this, style, isActive)
+function setStyles(style) {
+  this.mindMap.execCommand('SET_NODE_STYLES', this, style)
 }
 
 export default {

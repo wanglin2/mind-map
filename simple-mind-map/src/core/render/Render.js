@@ -921,19 +921,9 @@ class Render {
   }
 
   //  设置节点样式
-  setNodeStyle(node, prop, value, isActive) {
-    let data = {}
-    if (isActive) {
-      data = {
-        activeStyle: {
-          ...(node.nodeData.data.activeStyle || {}),
-          [prop]: value
-        }
-      }
-    } else {
-      data = {
-        [prop]: value
-      }
+  setNodeStyle(node, prop, value) {
+    let data = {
+      [prop]: value
     }
     // 如果开启了富文本，则需要应用到富文本上
     if (this.mindMap.richText) {
@@ -954,18 +944,8 @@ class Render {
   }
 
   //  设置节点多个样式
-  setNodeStyles(node, style, isActive) {
-    let data = {}
-    if (isActive) {
-      data = {
-        activeStyle: {
-          ...(node.nodeData.data.activeStyle || {}),
-          ...style
-        }
-      }
-    } else {
-      data = style
-    }
+  setNodeStyles(node, style) {
+    let data = { ...style }
     // 如果开启了富文本，则需要应用到富文本上
     if (this.mindMap.richText) {
       let config = this.mindMap.richText.normalStyleToRichTextStyle(style)
