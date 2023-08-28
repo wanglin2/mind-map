@@ -98,9 +98,8 @@ export default class Shape {
   getNodeSize() {
     const borderWidth = this.node.getBorderWidth()
     let { width, height } = this.node
-    const { hoverRectPadding } = this.node.mindMap.opt
-    width -= borderWidth + hoverRectPadding * 2
-    height -= borderWidth + hoverRectPadding * 2
+    width -= borderWidth
+    height -= borderWidth
     return {
       width,
       height
