@@ -94,12 +94,13 @@ export default class Shape {
     return node
   }
 
-  // 获取节点减去边框宽度的尺寸
+  // 获取节点减去节点边框宽度、hover节点边框宽度后的尺寸
   getNodeSize() {
     const borderWidth = this.node.getBorderWidth()
     let { width, height } = this.node
-    width -= borderWidth
-    height -= borderWidth
+    const { hoverRectPadding } = this.node.mindMap.opt
+    width -= borderWidth + hoverRectPadding * 2
+    height -= borderWidth + hoverRectPadding * 2
     return {
       width,
       height

@@ -169,6 +169,8 @@ export const defaultOpt = {
   enableDblclickReset: true,
   // 导出图片时canvas的缩放倍数，该配置会和window.devicePixelRatio值取最大值
   minExportImgCanvasScale: 2,
-  // 节点鼠标hover和激活时显示的矩形边框颜色
-  hoverRectColor: 'rgb(94, 200, 248)'
+  // 节点鼠标hover和激活时显示的矩形边框的颜色
+  hoverRectColor: 'rgb(94, 200, 248)',
+  // 节点鼠标hover和激活时显示的矩形边框距节点内容的距离
+  hoverRectPadding: 2
 }
