@@ -287,13 +287,24 @@ class Node {
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass('generalization_' + this.generalizationBelongNode.uid)
     }
+    // 激活hover和激活边框
+    const addHoverNode = () => {
+      this.hoverNode = new Rect()
+        .size(width + hoverRectPadding * 2, height + hoverRectPadding * 2)
+        .x(-hoverRectPadding)
+        .y(-hoverRectPadding)
+      this.hoverNode.addClass('smm-hover-node')
+      this.style.hoverNode(this.hoverNode, width, height)
+      this.group.add(this.hoverNode)
+    }
     // 如果存在自定义节点内容，那么使用自定义节点内容
     if (this.isUseCustomNodeContent()) {
       let foreignObject = new ForeignObject()
       foreignObject.width(width)
       foreignObject.height(height)
-      foreignObject.add(SVG(this._customNodeContent))
+      foreignObject.add(this._customNodeContent)
       this.group.add(foreignObject)
+      addHoverNode()
       return
     }
     // 图片节点
@@ -367,14 +378,7 @@ class Node {
           : 0)
     )
     this.group.add(textContentNested)
-    // 激活hover和激活边框
-    this.hoverNode = new Rect()
-      .size(width + hoverRectPadding * 2, height + hoverRectPadding * 2)
-      .x(-hoverRectPadding)
-      .y(-hoverRectPadding)
-    this.hoverNode.addClass('smm-hover-node')
-    this.style.hoverNode(this.hoverNode, width, height)
-    this.group.add(this.hoverNode)
+    addHoverNode()
   }
 
   // 给节点绑定事件
