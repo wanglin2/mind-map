@@ -15,7 +15,7 @@ import {
   cssContent
 } from './src/constants/constant'
 import { SVG } from '@svgdotjs/svg.js'
-import { simpleDeepClone, getType } from './src/utils'
+import { simpleDeepClone, getType, getObjectChangedProps } from './src/utils'
 import defaultTheme, {
   checkIsNodeSizeIndependenceConfig
 } from './src/themes/default'
@@ -201,9 +201,11 @@ class MindMap {
 
   //  设置主题配置
   setThemeConfig(config) {
+    // 计算改变了的配置
+    const changedConfig = getObjectChangedProps(this.themeConfig, config)
     this.opt.themeConfig = config
     // 检查改变的是否是节点大小无关的主题属性
-    let res = checkIsNodeSizeIndependenceConfig(config)
+    let res = checkIsNodeSizeIndependenceConfig(changedConfig)
     this.render(null, res ? '' : CONSTANTS.CHANGE_THEME)
   }
 
