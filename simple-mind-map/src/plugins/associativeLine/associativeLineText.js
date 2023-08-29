@@ -78,10 +78,12 @@ function onScale() {
 // 更新文本编辑框位置
 function updateTextEditBoxPos(g) {
   let rect = g.node.getBoundingClientRect()
-  this.textEditNode.style.minWidth = rect.width + 10 + 'px'
-  this.textEditNode.style.minHeight = rect.height + 6 + 'px'
-  this.textEditNode.style.left = rect.left + 'px'
-  this.textEditNode.style.top = rect.top + 'px'
+  if (this.textEditNode) {
+    this.textEditNode.style.minWidth = `${rect.width + 10}px`
+    this.textEditNode.style.minHeight = `${rect.height + 6}px`
+    this.textEditNode.style.left = `${rect.left}px`
+    this.textEditNode.style.top = `${rect.top}px`
+  }
 }
 
 //  隐藏文本编辑框

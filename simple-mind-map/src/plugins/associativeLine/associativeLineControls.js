@@ -1,7 +1,7 @@
 import {
   getAssociativeLineTargetIndex,
   joinCubicBezierPath,
-  computeNodePoints,
+  getNodePoint,
   getDefaultControlPointOffsets
 } from './associativeLineUtils'
 
@@ -62,14 +62,18 @@ function onControlPointMousemove(e) {
   // 更新当前拖拽的控制点的位置
   this[this.mousedownControlPointKey].x(x - radius).y(y - radius)
   let [path, clickPath, text, node, toNode] = this.activeLine
-  let [startPoint, endPoint] = computeNodePoints(node, toNode)
+  let targetIndex = getAssociativeLineTargetIndex(node, toNode)
+  const { associativeLineTargets, associativeLineTargetControlOffsets } =
+      node.nodeData.data
+  let [startPoint, endPoint] = this.updateAllLinesPos(
+      node,
+      toNode,
+      associativeLineTargets[targetIndex]
+  )
   this.controlPointMousemoveState.startPoint = startPoint
   this.controlPointMousemoveState.endPoint = endPoint
-  let targetIndex = getAssociativeLineTargetIndex(node, toNode)
   this.controlPointMousemoveState.targetIndex = targetIndex
   let offsets = []
-  let associativeLineTargetControlOffsets =
-    node.nodeData.data.associativeLineTargetControlOffsets
   if (!associativeLineTargetControlOffsets) {
     // 兼容0.4.5版本，没有associativeLineTargetControlOffsets的情况
     offsets = getDefaultControlPointOffsets(startPoint, endPoint)
@@ -80,6 +84,7 @@ function onControlPointMousemove(e) {
   let point2 = null
   // 拖拽的是控制点1
   if (this.mousedownControlPointKey === 'controlPoint1') {
+    startPoint = getNodePoint(node, '', 0, e)
     point1 = {
       x,
       y
@@ -88,10 +93,22 @@ function onControlPointMousemove(e) {
       x: endPoint.x + offsets[1].x,
       y: endPoint.y + offsets[1].y
     }
-    // 更新控制点1的连线
-    this.controlLine1.plot(startPoint.x, startPoint.y, point1.x, point1.y)
+    if (startPoint) {
+      // 保存更新后的坐标
+      associativeLineTargets[targetIndex].startPoint = startPoint
+      this.controlPointMousemoveState.startPoint = startPoint
+      // 更新控制点1的连线
+      this.controlLine1.plot(startPoint.x, startPoint.y, point1.x, point1.y)
+      // 更新关联线
+      const pathStr = joinCubicBezierPath(startPoint, endPoint, point1, point2)
+      path.plot(pathStr)
+      clickPath.plot(pathStr)
+      this.updateTextPos(path, text)
+      this.updateTextEditBoxPos(text)
+    }
   } else {
     // 拖拽的是控制点2
+    endPoint = getNodePoint(toNode, '', 0, e)
     point1 = {
       x: startPoint.x + offsets[0].x,
       y: startPoint.y + offsets[0].y
@@ -100,15 +117,20 @@ function onControlPointMousemove(e) {
       x,
       y
     }
-    // 更新控制点2的连线
-    this.controlLine2.plot(endPoint.x, endPoint.y, point2.x, point2.y)
+    if (endPoint) {
+      // 保存更新后结束节点的坐标
+      associativeLineTargets[targetIndex].endPoint = endPoint
+      this.controlPointMousemoveState.endPoint = endPoint
+      // 更新控制点2的连线
+      this.controlLine2.plot(endPoint.x, endPoint.y, point2.x, point2.y)
+      // 更新关联线
+      const pathStr = joinCubicBezierPath(startPoint, endPoint, point1, point2)
+      path.plot(pathStr)
+      clickPath.plot(pathStr)
+      this.updateTextPos(path, text)
+      this.updateTextEditBoxPos(text)
+    }
   }
-  // 更新关联线
-  let pathStr = joinCubicBezierPath(startPoint, endPoint, point1, point2)
-  path.plot(pathStr)
-  clickPath.plot(pathStr)
-  this.updateTextPos(path, text)
-  this.updateTextEditBoxPos(text)
 }
 
 // 控制点的鼠标移动事件
@@ -120,8 +142,8 @@ function onControlPointMouseup(e) {
     this.controlPointMousemoveState
   let [, , , node] = this.activeLine
   let offsetList = []
-  let associativeLineTargetControlOffsets =
-    node.nodeData.data.associativeLineTargetControlOffsets
+  const { associativeLineTargets, associativeLineTargetControlOffsets } =
+      node.nodeData.data
   if (!associativeLineTargetControlOffsets) {
     // 兼容0.4.5版本，没有associativeLineTargetControlOffsets的情况
     offsetList[targetIndex] = getDefaultControlPointOffsets(
@@ -150,7 +172,8 @@ function onControlPointMouseup(e) {
   }
   offsetList[targetIndex] = [offset1, offset2]
   this.mindMap.execCommand('SET_NODE_DATA', node, {
-    associativeLineTargetControlOffsets: offsetList
+    associativeLineTargetControlOffsets: offsetList,
+    associativeLineTargets
   })
   // 这里要加个setTimeout0是因为draw_click事件比mouseup事件触发的晚，所以重置isControlPointMousedown需要等draw_click事件触发完以后
   setTimeout(() => {
