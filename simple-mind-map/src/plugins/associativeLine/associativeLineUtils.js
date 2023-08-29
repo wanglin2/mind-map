@@ -1,7 +1,7 @@
 // 获取目标节点在起始节点的目标数组中的索引
 export const getAssociativeLineTargetIndex = (node, toNode) => {
   return node.nodeData.data.associativeLineTargets.findIndex(item => {
-    return item === toNode.nodeData.data.id
+    return item.id === toNode.nodeData.data.id
   })
 }
 
@@ -54,28 +54,137 @@ export const cubicBezierPath = (x1, y1, x2, y2) => {
   )
 }
 
+// 计算关联线起始|结束坐标
+export const calcPoint = (node, e) => {
+  const { left, top, translateLeft, translateTop, width, height } = node
+  const clientX = e.clientX
+  const clientY = e.clientY
+  // 中心点的坐标
+  const centerX = translateLeft + width / 2
+  const centerY = translateTop + height / 2
+  const translateCenterX = left + width / 2
+  const translateCenterY = top + height / 2
+  const theta = Math.atan(height / width)
+  // 矩形左上角坐标
+  const deltaX = clientX - centerX
+  const deltaY = centerY - clientY
+  // 方向值
+  const direction = Math.atan2(deltaY, deltaX)
+  // 默认坐标
+  let x = left + width
+  let y = top + height
+  if (direction < theta && direction >= -theta) {
+    // 右边
+    // 正切值 = 对边/邻边，对边 = 正切值*邻边
+    const range = direction * (width / 2)
+    if (direction < theta && direction >= 0) {
+      // 中心点上边
+      y = translateCenterY - range
+    } else if (direction >= -theta && direction < 0) {
+      //  中心点下方
+      y = translateCenterY - range
+    }
+    return {
+      x,
+      y,
+      dir: 'right',
+      range
+    }
+  } else if (direction >= theta && direction < Math.PI - theta) {
+    // 上边
+    y = top
+    let range = 0
+    if (direction < Math.PI / 2 - theta && direction >= theta) {
+      // 正切值 = 对边/邻边，邻边 = 对边/正切值
+      const side = height / 2 / direction
+      range = -side
+      // 中心点右侧
+      x = translateCenterX + side
+    } else if (
+      direction >= Math.PI / 2 - theta &&
+      direction < Math.PI - theta
+    ) {
+      // 中心点左侧
+      const tanValue = (centerX - clientX) / (centerY - clientY)
+      const side = (height / 2) * tanValue
+      range = side
+      x = translateCenterX - side
+    }
+    return {
+      x,
+      y,
+      dir: 'top',
+      range
+    }
+  } else if (direction < -theta && direction >= theta - Math.PI) {
+    // 下边
+    let range = 0
+    if (direction >= theta - Math.PI / 2 && direction < -theta) {
+      // 中心点右侧
+      // 正切值 = 对边/邻边，邻边 = 对边/正切值
+      const side = height / 2 / direction
+      range = side
+      x = translateCenterX - side
+    } else if (
+      direction < theta - Math.PI / 2 &&
+      direction >= theta - Math.PI
+    ) {
+      // 中心点左侧
+      const tanValue = (centerX - clientX) / (centerY - clientY)
+      const side = (height / 2) * tanValue
+      range = -side
+      x = translateCenterX + side
+    }
+    return {
+      x,
+      y,
+      dir: 'bottom',
+      range
+    }
+  }
+  // 左边
+  x = left
+  const tanValue = (centerY - clientY) / (centerX - clientX)
+  const range = tanValue * (width / 2)
+  if (direction >= -Math.PI && direction < theta - Math.PI) {
+    // 中心点右侧
+    y = translateCenterY - range
+  } else if (direction < Math.PI && direction >= Math.PI - theta) {
+    //  中心点左侧
+    y = translateCenterY - range
+  }
+  return {
+    x,
+    y,
+    dir: 'left',
+    range
+  }
+}
 // 获取节点的连接点
-export const getNodePoint = (node, dir = 'right') => {
+export const getNodePoint = (node, dir = 'right', range = 0, e = null) => {
   let { left, top, width, height } = node
+  if (e) {
+    return calcPoint(node, e)
+  }
   switch (dir) {
     case 'left':
       return {
         x: left,
-        y: top + height / 2
+        y: top + height / 2 - range
       }
     case 'right':
       return {
         x: left + width,
-        y: top + height / 2
+        y: top + height / 2 - range
       }
     case 'top':
       return {
-        x: left + width / 2,
+        x: left + width / 2 - range,
         y: top
       }
     case 'bottom':
       return {
-        x: left + width / 2,
+        x: left + width / 2 - range,
         y: top + height
       }
     default:
