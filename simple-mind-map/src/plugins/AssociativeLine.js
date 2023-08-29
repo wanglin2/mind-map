@@ -99,11 +99,31 @@ class AssociativeLine {
   // 创建箭头
   createMarker() {
     return this.draw.marker(20, 20, add => {
-      add.ref(2, 5)
+      add.ref(12, 5)
       add.size(10, 10)
       add.attr('orient', 'auto-start-reverse')
       this.markerPath = add.path('M0,0 L2,5 L0,10 L10,5 Z')
     })
+  }
+  // 判断关联线坐标是否变更，有变更则使用变化后的坐标，无则默认坐标
+  updateAllLinesPos(node, toNode, associativeLineTargets) {
+    let startPoint = {}
+    let endPoint = {}
+    let nodeRange = 0
+    let nodeDir = 'right'
+    let toNodeRange = 0
+    let toNodeDir = 'right'
+    if (associativeLineTargets.startPoint && associativeLineTargets.endPoint) {
+      nodeRange = associativeLineTargets.startPoint.range || 0
+      nodeDir = associativeLineTargets.startPoint.dir || 'right'
+      startPoint = getNodePoint(node, nodeDir, nodeRange)
+      toNodeRange = associativeLineTargets.endPoint.range || 0
+      toNodeDir = associativeLineTargets.endPoint.dir || 'right'
+      endPoint = getNodePoint(toNode, toNodeDir, toNodeRange)
+    } else {
+      ;[startPoint, endPoint] = computeNodePoints(node, toNode)
+    }
+    return [startPoint, endPoint]
   }
 
   // 渲染所有连线
@@ -137,10 +157,17 @@ class AssociativeLine {
       0
     )
     nodeToIds.forEach((ids, node) => {
-      ids.forEach(id => {
-        let toNode = idToNode.get(id)
+      ids.forEach((id,index) => {
+        let toNode = idToNode.get(id.id)
         if (!node || !toNode) return
-        let [startPoint, endPoint] = computeNodePoints(node, toNode)
+        const associativeLineTargets =
+            node.nodeData.data.associativeLineTargets[index] || {}
+        // 切换结构和布局，都会更新坐标
+        const [startPoint, endPoint] = this.updateAllLinesPos(
+            node,
+            toNode,
+            associativeLineTargets
+        )
         this.drawLine(startPoint, endPoint, node, toNode)
       })
     })
@@ -336,7 +363,12 @@ class AssociativeLine {
     }
     // 将目标节点id保存起来
     let list = fromNode.nodeData.data.associativeLineTargets || []
-    list.push(id)
+    // 连线节点是否存在相同的id,存在则阻止添加关联线
+    const sameLine = list.some(item => item.id === id)
+    if (sameLine) {
+      return
+    }
+    list.push({id})
     // 保存控制点
     let [startPoint, endPoint] = computeNodePoints(fromNode, toNode)
     let controlPoints = computeCubicBezierPathPoints(
