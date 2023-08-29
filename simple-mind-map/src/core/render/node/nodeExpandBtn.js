@@ -11,15 +11,14 @@ function createExpandNodeContent() {
   // 计算子节点数量
   const count = this.sumNode(this.nodeData.children)
   // 生成按钮
-  const node = SVG().text(count).font({ family: 'Inconsolata' })
+  const node = SVG()
+    .text(count)
+    .font({ family: 'Inconsolata' })
   node.attr('font-size', 14)
   // 展开的节点
-  this._openExpandNode = node.size(
-    this.expandBtnSize,
-    this.expandBtnSize
-  )
+  this._openExpandNode = node.size(this.expandBtnSize, this.expandBtnSize)
   // 数字不同偏移量大小处理
-  if (count<10) {
+  if (count < 10) {
     this._openExpandNode.x(6).y(-this.expandBtnSize / 2)
   } else if (count >= 10 && count < 100) {
     this._openExpandNode.x(1).y(-this.expandBtnSize / 2)
@@ -44,10 +43,10 @@ function createExpandNodeContent() {
     this._fillExpandNode
   )
 }
-function sumNode(data=[]){
+function sumNode(data = []) {
   return data.reduce(
-      (total, cur) => total + this.sumNode(cur.children || []),
-      data.length
+    (total, cur) => total + this.sumNode(cur.children || []),
+    data.length
   )
 }
 //  创建或更新展开收缩按钮内容
@@ -70,7 +69,7 @@ function updateExpandBtnNode() {
 
   if (this._expandBtn) {
     // 如果是收起按钮加上边框
-    if(!expand){
+    if (!expand) {
       this._fillExpandNode.stroke({
         color: '#333333'
       })
