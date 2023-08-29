@@ -449,13 +449,17 @@ class Node {
     })
     // 右键菜单事件
     this.group.on('contextmenu', e => {
+      const { readonly, useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
       // 按住ctrl键点击鼠标左键不知为何触发的是contextmenu事件
-      if (this.mindMap.opt.readonly || e.ctrlKey) {
-        // || this.isGeneralization
+      if (readonly || e.ctrlKey) {
         return
       }
       e.stopPropagation()
       e.preventDefault()
+      // 如果是多选节点结束，那么不要触发右键菜单事件
+      if(!useLeftKeySelectionRightKeyDrag && this.mindMap.select.hasSelectRange()) {
+        return
+      }
       if (this.nodeData.data.isActive) {
         this.renderer.clearActive()
       }

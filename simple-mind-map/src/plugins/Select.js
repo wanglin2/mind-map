@@ -11,6 +11,7 @@ class Select {
     this.mouseDownY = 0
     this.mouseMoveX = 0
     this.mouseMoveY = 0
+    this.isSelecting = false
     this.bindEvent()
   }
 
@@ -70,11 +71,15 @@ class Select {
       this.isMousedown = false
       if (this.rect) this.rect.remove()
       this.rect = null
+      setTimeout(() => {
+        this.isSelecting = false
+      }, 0)
     })
   }
 
   //  鼠标移动事件
   onMove(x, y) {
+    this.isSelecting = true
     // 绘制矩形
     this.rect.plot([
       [this.mouseDownX, this.mouseDownY],
@@ -171,6 +176,11 @@ class Select {
         // })
       }
     })
+  }
+
+  // 是否存在选区
+  hasSelectRange() {
+    return this.isSelecting
   }
 }
 
