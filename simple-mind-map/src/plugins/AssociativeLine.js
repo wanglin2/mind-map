@@ -99,7 +99,7 @@ class AssociativeLine {
   // 创建箭头
   createMarker() {
     return this.draw.marker(20, 20, add => {
-      add.ref(2, 5)
+      add.ref(12, 5)
       add.size(10, 10)
       add.attr('orient', 'auto-start-reverse')
       this.markerPath = add.path('M0,0 L2,5 L0,10 L10,5 Z')
