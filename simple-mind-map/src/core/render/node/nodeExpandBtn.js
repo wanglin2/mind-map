@@ -3,16 +3,29 @@ import { SVG, Circle, G } from '@svgdotjs/svg.js'
 
 // 创建展开收起按钮的内容节点
 function createExpandNodeContent() {
-  if (this._openExpandNode) {
-    return
-  }
-  let { open, close } = this.mindMap.opt.expandBtnIcon || {}
+  // 实时更新收起节点数字
+  // if (this._openExpandNode) {
+  //   return
+  // }
+  let { close } = this.mindMap.opt.expandBtnIcon || {}
+  // 计算子节点数量
+  const count = this.sumNode(this.nodeData.children)
+  // 生成按钮
+  const node = SVG()
+    .text(count)
+    .font({ family: 'Inconsolata' })
+  node.attr('font-size', 14)
   // 展开的节点
-  this._openExpandNode = SVG(open || btnsSvg.open).size(
-    this.expandBtnSize,
-    this.expandBtnSize
-  )
-  this._openExpandNode.x(0).y(-this.expandBtnSize / 2)
+  this._openExpandNode = node.size(this.expandBtnSize, this.expandBtnSize)
+  // 数字不同偏移量大小处理
+  if (count < 10) {
+    this._openExpandNode.x(6).y(-this.expandBtnSize / 2)
+  } else if (count >= 10 && count < 100) {
+    this._openExpandNode.x(1).y(-this.expandBtnSize / 2)
+  } else {
+    this._openExpandNode.x(0).y(-this.expandBtnSize / 2)
+    node.attr('font-size', 12)
+  }
   // 收起的节点
   this._closeExpandNode = SVG(close || btnsSvg.close).size(
     this.expandBtnSize,
@@ -22,6 +35,7 @@ function createExpandNodeContent() {
   // 填充节点
   this._fillExpandNode = new Circle().size(this.expandBtnSize)
   this._fillExpandNode.x(0).y(-this.expandBtnSize / 2)
+
   // 设置样式
   this.style.iconBtn(
     this._openExpandNode,
@@ -30,6 +44,13 @@ function createExpandNodeContent() {
   )
 }
 
+// 统计折叠的子节点数量
+function sumNode(data = []) {
+  return data.reduce(
+    (total, cur) => total + this.sumNode(cur.children || []),
+    data.length
+  )
+}
 //  创建或更新展开收缩按钮内容
 function updateExpandBtnNode() {
   let { expand } = this.nodeData.data
@@ -47,7 +68,16 @@ function updateExpandBtnNode() {
     node = this._closeExpandNode
     this._lastExpandBtnType = true
   }
-  if (this._expandBtn) this._expandBtn.add(this._fillExpandNode).add(node)
+
+  if (this._expandBtn) {
+    // 如果是收起按钮加上边框
+    if (!expand) {
+      this._fillExpandNode.stroke({
+        color: '#333333'
+      })
+    }
+    this._expandBtn.add(this._fillExpandNode).add(node)
+  }
 }
 
 //  更新展开收缩按钮位置
@@ -138,5 +168,6 @@ export default {
   renderExpandBtn,
   removeExpandBtn,
   showExpandBtn,
-  hideExpandBtn
+  hideExpandBtn,
+  sumNode
 }
