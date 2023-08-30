@@ -68,13 +68,21 @@ export const defaultOpt = {
   // 展开收起按钮的颜色
   expandBtnStyle: {
     color: '#808080',
-    fill: '#fff'
+    fill: '#fff',
+    fontSize: 13,
+    strokeColor: '#333333'
   },
   // 自定义展开收起按钮的图标
   expandBtnIcon: {
     open: '', // svg字符串
     close: ''
   },
+  // 处理收起节点数量
+  expandBtnNumHandler: num => {
+    return num
+  },
+  // 是否显示带数量的收起按钮
+  isShowExpandNum: true,
   // 是否只有当鼠标在画布内才响应快捷键事件
   enableShortcutOnlyWhenMouseInSvg: true,
   // 初始根节点的位置
