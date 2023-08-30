@@ -201,13 +201,19 @@ class Style {
 
   //  展开收起按钮
   iconBtn(node, node2, fillNode) {
-    let { color, fill } = this.ctx.mindMap.opt.expandBtnStyle || {
+    let { color, fill,fontSize ,fontColor} = this.ctx.mindMap.opt.expandBtnStyle || {
       color: '#808080',
-      fill: '#fff'
+      fill: '#fff',
+      fontSize: 12,
+      strokeColor:'#333333',
+      fontColor: '#333333'
     }
     node.fill({ color: color })
     node2.fill({ color: color })
     fillNode.fill({ color: fill })
+    if(this.ctx.mindMap.opt.isShowExpandNum){
+      node.attr({'font-size': fontSize,'font-color':fontColor})
+    }
   }
 
   // 是否设置了自定义的样式

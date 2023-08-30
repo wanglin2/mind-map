@@ -68,7 +68,10 @@ export const defaultOpt = {
   // 展开收起按钮的颜色
   expandBtnStyle: {
     color: '#808080',
-    fill: '#fff'
+    fill: '#fff',
+    fontSize: 13,
+    strokeColor:'#333333',
+    fontColor: '#333333'
   },
   // 自定义展开收起按钮的图标
   expandBtnIcon: {
@@ -156,6 +159,12 @@ export const defaultOpt = {
   errorHandler: (code, error) => {
     console.error(code, error)
   },
+  // 处理收起节点数量
+  numberHandler: (num) => {
+    return num
+  },
+  // 是否显示带数量的收起按钮
+  isShowExpandNum: true,
   // 设置导出图片和svg时，针对富文本节点内容，也就是嵌入到svg中的html节点的默认样式覆盖
   // 如果不覆盖，会发生偏移问题
   resetCss: `
