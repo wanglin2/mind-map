@@ -6,7 +6,8 @@ import {
   cubicBezierPath,
   getNodePoint,
   computeNodePoints,
-  getNodeLinePath
+  getNodeLinePath,
+  getDefaultControlPointOffsets
 } from './associativeLine/associativeLineUtils'
 import associativeLineControlsMethods from './associativeLine/associativeLineControls'
 import associativeLineTextMethods from './associativeLine/associativeLineText'
@@ -106,22 +107,21 @@ class AssociativeLine {
     })
   }
   // 判断关联线坐标是否变更，有变更则使用变化后的坐标，无则默认坐标
-  updateAllLinesPos(node, toNode, associativeLineTargets) {
-    let startPoint = {}
-    let endPoint = {}
+  updateAllLinesPos(node, toNode, associativeLinePoint) {
+    let [startPoint, endPoint] = computeNodePoints(node, toNode)
     let nodeRange = 0
     let nodeDir = 'right'
     let toNodeRange = 0
     let toNodeDir = 'right'
-    if (associativeLineTargets.startPoint && associativeLineTargets.endPoint) {
-      nodeRange = associativeLineTargets.startPoint.range || 0
-      nodeDir = associativeLineTargets.startPoint.dir || 'right'
+    if (associativeLinePoint.startPoint) {
+      nodeRange = associativeLinePoint.startPoint.range || 0
+      nodeDir = associativeLinePoint.startPoint.dir || 'right'
       startPoint = getNodePoint(node, nodeDir, nodeRange)
-      toNodeRange = associativeLineTargets.endPoint.range || 0
-      toNodeDir = associativeLineTargets.endPoint.dir || 'right'
+    }
+    if (associativeLinePoint.endPoint) {
+      toNodeRange = associativeLinePoint.endPoint.range || 0
+      toNodeDir = associativeLinePoint.endPoint.dir || 'right'
       endPoint = getNodePoint(toNode, toNodeDir, toNodeRange)
-    } else {
-      ;[startPoint, endPoint] = computeNodePoints(node, toNode)
     }
     return [startPoint, endPoint]
   }
@@ -158,15 +158,15 @@ class AssociativeLine {
     )
     nodeToIds.forEach((ids, node) => {
       ids.forEach((id, index) => {
-        let toNode = idToNode.get(id.id)
+        let toNode = idToNode.get(id)
         if (!node || !toNode) return
-        const associativeLineTargets =
-          node.nodeData.data.associativeLineTargets[index] || {}
+        const associativeLinePoint =
+          node.nodeData.data.associativeLinePoint[index] || {}
         // 切换结构和布局，都会更新坐标
         const [startPoint, endPoint] = this.updateAllLinesPos(
           node,
           toNode,
-          associativeLineTargets
+          associativeLinePoint
         )
         this.drawLine(startPoint, endPoint, node, toNode)
       })
@@ -346,10 +346,15 @@ class AssociativeLine {
 
   // 计算节点偏移位置
   getNodePos(node) {
-    const { translateX, translateY } = this.mindMap.draw.transform()
+    const {
+      scaleX,
+      scaleY,
+      translateX,
+      translateY
+    } = this.mindMap.draw.transform()
     const { left, top, width, height } = node
-    let translateLeft = left + translateX
-    let translateTop = top + translateY
+    let translateLeft = left * scaleX + translateX
+    let translateTop = top * scaleY + translateY
     return {
       left,
       top,
@@ -409,11 +414,11 @@ class AssociativeLine {
     // 将目标节点id保存起来
     let list = fromNode.nodeData.data.associativeLineTargets || []
     // 连线节点是否存在相同的id,存在则阻止添加关联线
-    const sameLine = list.some(item => item.id === id)
+    const sameLine = list.some(item => item === id)
     if (sameLine) {
       return
     }
-    list.push({ id })
+    list.push(id)
     // 保存控制点
     let [startPoint, endPoint] = computeNodePoints(fromNode, toNode)
     let controlPoints = computeCubicBezierPathPoints(
@@ -435,9 +440,13 @@ class AssociativeLine {
         y: controlPoints[1].y - endPoint.y
       }
     ]
+    let associativeLinePoint = fromNode.nodeData.data.associativeLinePoint || []
+    // 记录关联的起始|结束坐标
+    associativeLinePoint[list.length - 1] = [{ startPoint, endPoint }]
     this.mindMap.execCommand('SET_NODE_DATA', fromNode, {
       associativeLineTargets: list,
-      associativeLineTargetControlOffsets: offsetList
+      associativeLineTargetControlOffsets: offsetList,
+      associativeLinePoint
     })
   }
 
@@ -448,6 +457,7 @@ class AssociativeLine {
     this.removeControls()
     let {
       associativeLineTargets,
+      associativeLinePoint,
       associativeLineTargetControlOffsets,
       associativeLineText
     } = node.nodeData.data
@@ -464,6 +474,10 @@ class AssociativeLine {
     this.mindMap.execCommand('SET_NODE_DATA', node, {
       // 目标
       associativeLineTargets: associativeLineTargets.filter((_, index) => {
+        return index !== targetIndex
+      }),
+      // 连接线坐标
+      associativeLinePoint: associativeLinePoint.filter((_, index) => {
         return index !== targetIndex
       }),
       // 偏移量

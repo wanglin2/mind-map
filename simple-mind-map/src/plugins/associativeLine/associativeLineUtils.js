@@ -1,7 +1,7 @@
 // 获取目标节点在起始节点的目标数组中的索引
 export const getAssociativeLineTargetIndex = (node, toNode) => {
   return node.nodeData.data.associativeLineTargets.findIndex(item => {
-    return item.id === toNode.nodeData.data.id
+    return item === toNode.nodeData.data.id
   })
 }
 
@@ -54,7 +54,6 @@ export const cubicBezierPath = (x1, y1, x2, y2) => {
   )
 }
 
-// 计算关联线起始|结束坐标
 export const calcPoint = (node, e) => {
   const { left, top, translateLeft, translateTop, width, height } = node
   const clientX = e.clientX
@@ -220,8 +219,8 @@ export const computeNodePoints = (fromNode, toNode) => {
     toDir = 'bottom'
   } else if (offsetY > 0 && -offsetY < offsetX && offsetY > offsetX) {
     // down
-    fromDir = 'bottom'
-    toDir = 'top'
+    fromDir = 'right'
+    toDir = 'right'
   }
   return [getNodePoint(fromNode, fromDir), getNodePoint(toNode, toDir)]
 }
