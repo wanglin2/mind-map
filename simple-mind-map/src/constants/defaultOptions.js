@@ -70,7 +70,8 @@ export const defaultOpt = {
     color: '#808080',
     fill: '#fff',
     fontSize: 13,
-    strokeColor: '#333333'
+    strokeColor: '#333333',
+    fontColor: '#333333'
   },
   // 自定义展开收起按钮的图标
   expandBtnIcon: {
