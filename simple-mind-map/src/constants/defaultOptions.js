@@ -70,14 +70,19 @@ export const defaultOpt = {
     color: '#808080',
     fill: '#fff',
     fontSize: 13,
-    strokeColor:'#333333',
-    fontColor: '#333333'
+    strokeColor: '#333333'
   },
   // 自定义展开收起按钮的图标
   expandBtnIcon: {
     open: '', // svg字符串
     close: ''
   },
+  // 处理收起节点数量
+  expandBtnNumHandler: num => {
+    return num
+  },
+  // 是否显示带数量的收起按钮
+  isShowExpandNum: true,
   // 是否只有当鼠标在画布内才响应快捷键事件
   enableShortcutOnlyWhenMouseInSvg: true,
   // 初始根节点的位置
@@ -159,12 +164,6 @@ export const defaultOpt = {
   errorHandler: (code, error) => {
     console.error(code, error)
   },
-  // 处理收起节点数量
-  numberHandler: (num) => {
-    return num
-  },
-  // 是否显示带数量的收起按钮
-  isShowExpandNum: true,
   // 设置导出图片和svg时，针对富文本节点内容，也就是嵌入到svg中的html节点的默认样式覆盖
   // 如果不覆盖，会发生偏移问题
   resetCss: `

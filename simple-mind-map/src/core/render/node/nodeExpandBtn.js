@@ -3,26 +3,30 @@ import { SVG, Circle, G } from '@svgdotjs/svg.js'
 
 // 创建展开收起按钮的内容节点
 function createExpandNodeContent() {
-  if (this._openExpandNode&&!this.mindMap.opt.isShowExpandNum) {
+  if (this._openExpandNode && !this.mindMap.opt.isShowExpandNum) {
     return
   }
-  let { close,open} = this.mindMap.opt.expandBtnIcon || {}
+  let { close, open } = this.mindMap.opt.expandBtnIcon || {}
   // 根据配置判断是否显示数量按钮
-  if(this.mindMap.opt.isShowExpandNum){
+  if (this.mindMap.opt.isShowExpandNum) {
     // 计算子节点数量
     let count = this.sumNode(this.nodeData.children)
-    count = this.mindMap.opt.numberHandler(count)
+    count = this.mindMap.opt.expandBtnNumHandler(count)
     // 展开的节点
-    this._openExpandNode = SVG().text(count).size(
-        this.expandBtnSize,
-        this.expandBtnSize
-    )
+    this._openExpandNode = SVG()
+      .text(count)
+      .size(this.expandBtnSize, this.expandBtnSize)
     // 文本垂直居中
-    this._openExpandNode.attr({'text-anchor':'middle','dominant-baseline':'middle','x': this.expandBtnSize/2,'y': 2})
-  }else{
+    this._openExpandNode.attr({
+      'text-anchor': 'middle',
+      'dominant-baseline': 'middle',
+      x: this.expandBtnSize / 2,
+      y: 2
+    })
+  } else {
     this._openExpandNode = SVG(open || btnsSvg.open).size(
-        this.expandBtnSize,
-        this.expandBtnSize
+      this.expandBtnSize,
+      this.expandBtnSize
     )
     this._openExpandNode.x(0).y(-this.expandBtnSize / 2)
   }
@@ -43,10 +47,10 @@ function createExpandNodeContent() {
     this._fillExpandNode
   )
 }
-function sumNode(data=[]){
+function sumNode(data = []) {
   return data.reduce(
-      (total, cur) => total + this.sumNode(cur.children || []),
-      data.length
+    (total, cur) => total + this.sumNode(cur.children || []),
+    data.length
   )
 }
 //  创建或更新展开收缩按钮内容
@@ -70,7 +74,7 @@ function updateExpandBtnNode() {
   if (this._expandBtn) {
     // 如果是收起按钮加上边框
     let opt = this.mindMap.opt
-    if(!expand&&opt.isShowExpandNum){
+    if (!expand && opt.isShowExpandNum) {
       // 数字按钮添加边框
       this._fillExpandNode.stroke({
         color: opt.expandBtnStyle.strokeColor
