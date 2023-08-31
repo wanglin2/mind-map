@@ -63,10 +63,9 @@ function onControlPointMousemove(e) {
   this[this.mousedownControlPointKey].x(x - radius).y(y - radius)
   let [, , , node, toNode] = this.activeLine
   let targetIndex = getAssociativeLineTargetIndex(node, toNode)
-  const {
-    associativeLinePoint,
-    associativeLineTargetControlOffsets
-  } = node.nodeData.data
+  let { associativeLinePoint, associativeLineTargetControlOffsets } =
+    node.nodeData.data
+  associativeLinePoint = associativeLinePoint || []
   const nodePos = this.getNodePos(node)
   const toNodePos = this.getNodePos(toNode)
   let [startPoint, endPoint] = this.updateAllLinesPos(
@@ -86,9 +85,14 @@ function onControlPointMousemove(e) {
   }
   let point1 = null
   let point2 = null
+  const { x: clientX, y: clientY } = this.mindMap.toPos(e.clientX, e.clientY)
+  const _e = {
+    clientX,
+    clientY
+  }
   // 拖拽的是控制点1
   if (this.mousedownControlPointKey === 'controlPoint1') {
-    startPoint = getNodePoint(nodePos, '', 0, e)
+    startPoint = getNodePoint(nodePos, '', 0, _e)
     point1 = {
       x,
       y
@@ -99,14 +103,13 @@ function onControlPointMousemove(e) {
     }
     if (startPoint) {
       // 保存更新后的坐标
-      associativeLinePoint[targetIndex].startPoint = startPoint
       this.controlPointMousemoveState.startPoint = startPoint
       // 更新控制点1的连线
       this.controlLine1.plot(startPoint.x, startPoint.y, point1.x, point1.y)
     }
   } else {
     // 拖拽的是控制点2
-    endPoint = getNodePoint(toNodePos, '', 0, e)
+    endPoint = getNodePoint(toNodePos, '', 0, _e)
     point1 = {
       x: startPoint.x + offsets[0].x,
       y: startPoint.y + offsets[0].y
@@ -117,7 +120,6 @@ function onControlPointMousemove(e) {
     }
     if (endPoint) {
       // 保存更新后结束节点的坐标
-      associativeLinePoint[targetIndex].endPoint = endPoint
       this.controlPointMousemoveState.endPoint = endPoint
       // 更新控制点2的连线
       this.controlLine2.plot(endPoint.x, endPoint.y, point2.x, point2.y)
@@ -148,23 +150,24 @@ function updataAassociativeLine(
   this.updateTextEditBoxPos(text)
 }
 
-// 控制点的鼠标移动事件
+// 控制点的鼠标松开事件
 function onControlPointMouseup(e) {
   if (!this.isControlPointMousedown) return
   e.stopPropagation()
   e.preventDefault()
-  let {
-    pos,
-    startPoint,
-    endPoint,
-    targetIndex
-  } = this.controlPointMousemoveState
+  let { pos, startPoint, endPoint, targetIndex } =
+    this.controlPointMousemoveState
   let [, , , node] = this.activeLine
   let offsetList = []
-  const {
-    associativeLinePoint,
-    associativeLineTargetControlOffsets
-  } = node.nodeData.data
+  let { associativeLinePoint, associativeLineTargetControlOffsets } =
+    node.nodeData.data
+  if (!associativeLinePoint) {
+    associativeLinePoint = []
+  }
+  associativeLinePoint[targetIndex] = associativeLinePoint[targetIndex] || {
+    startPoint,
+    endPoint
+  }
   if (!associativeLineTargetControlOffsets) {
     // 兼容0.4.5版本，没有associativeLineTargetControlOffsets的情况
     offsetList[targetIndex] = getDefaultControlPointOffsets(
@@ -183,6 +186,7 @@ function onControlPointMouseup(e) {
       y: pos.y - startPoint.y
     }
     offset2 = offsetList[targetIndex][1]
+    associativeLinePoint[targetIndex].startPoint = startPoint
   } else {
     // 更新控制点2数据
     offset1 = offsetList[targetIndex][0]
@@ -190,6 +194,7 @@ function onControlPointMouseup(e) {
       x: pos.x - endPoint.x,
       y: pos.y - endPoint.y
     }
+    associativeLinePoint[targetIndex].endPoint = endPoint
   }
   offsetList[targetIndex] = [offset1, offset2]
   this.mindMap.execCommand('SET_NODE_DATA', node, {

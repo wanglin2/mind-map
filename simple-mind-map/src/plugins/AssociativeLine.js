@@ -6,8 +6,7 @@ import {
   cubicBezierPath,
   getNodePoint,
   computeNodePoints,
-  getNodeLinePath,
-  getDefaultControlPointOffsets
+  getNodeLinePath
 } from './associativeLine/associativeLineUtils'
 import associativeLineControlsMethods from './associativeLine/associativeLineControls'
 import associativeLineTextMethods from './associativeLine/associativeLineText'
@@ -106,13 +105,15 @@ class AssociativeLine {
       this.markerPath = add.path('M0,0 L2,5 L0,10 L10,5 Z')
     })
   }
+  
   // 判断关联线坐标是否变更，有变更则使用变化后的坐标，无则默认坐标
   updateAllLinesPos(node, toNode, associativeLinePoint) {
+    associativeLinePoint = associativeLinePoint || {}
     let [startPoint, endPoint] = computeNodePoints(node, toNode)
     let nodeRange = 0
-    let nodeDir = 'right'
+    let nodeDir = ''
     let toNodeRange = 0
-    let toNodeDir = 'right'
+    let toNodeDir = ''
     if (associativeLinePoint.startPoint) {
       nodeRange = associativeLinePoint.startPoint.range || 0
       nodeDir = associativeLinePoint.startPoint.dir || 'right'
@@ -160,8 +161,8 @@ class AssociativeLine {
       ids.forEach((id, index) => {
         let toNode = idToNode.get(id)
         if (!node || !toNode) return
-        const associativeLinePoint =
-          node.nodeData.data.associativeLinePoint[index] || {}
+        const associativeLinePoint = (node.nodeData.data.associativeLinePoint ||
+          [])[index]
         // 切换结构和布局，都会更新坐标
         const [startPoint, endPoint] = this.updateAllLinesPos(
           node,
@@ -294,10 +295,8 @@ class AssociativeLine {
 
   // 创建连接线
   createLine(fromNode) {
-    let {
-      associativeLineWidth,
-      associativeLineColor
-    } = this.mindMap.themeConfig
+    let { associativeLineWidth, associativeLineColor } =
+      this.mindMap.themeConfig
     if (this.isCreatingLine || !fromNode) return
     this.isCreatingLine = true
     this.creatingStartNode = fromNode
@@ -332,12 +331,8 @@ class AssociativeLine {
   // 获取转换后的鼠标事件对象的坐标
   getTransformedEventPos(e) {
     let { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
-    let {
-      scaleX,
-      scaleY,
-      translateX,
-      translateY
-    } = this.mindMap.draw.transform()
+    let { scaleX, scaleY, translateX, translateY } =
+      this.mindMap.draw.transform()
     return {
       x: (x - translateX) / scaleX,
       y: (y - translateY) / scaleY
@@ -346,12 +341,8 @@ class AssociativeLine {
 
   // 计算节点偏移位置
   getNodePos(node) {
-    const {
-      scaleX,
-      scaleY,
-      translateX,
-      translateY
-    } = this.mindMap.draw.transform()
+    const { scaleX, scaleY, translateX, translateY } =
+      this.mindMap.draw.transform()
     const { left, top, width, height } = node
     let translateLeft = left * scaleX + translateX
     let translateTop = top * scaleY + translateY
@@ -461,6 +452,7 @@ class AssociativeLine {
       associativeLineTargetControlOffsets,
       associativeLineText
     } = node.nodeData.data
+    associativeLinePoint = associativeLinePoint || []
     let targetIndex = getAssociativeLineTargetIndex(node, toNode)
     // 更新关联线文本数据
     let newAssociativeLineText = {}
