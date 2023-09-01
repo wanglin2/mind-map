@@ -22,6 +22,7 @@
     <NodeIconSidebar v-if="mindMap" :mindMap="mindMap"></NodeIconSidebar>
     <NodeIconToolbar v-if="mindMap" :mindMap="mindMap"></NodeIconToolbar>
     <OutlineEdit v-if="mindMap" :mindMap="mindMap"></OutlineEdit>
+    <!-- <Scrollbar v-if="mindMap" :mindMap="mindMap"></Scrollbar> -->
   </div>
 </template>
 
@@ -41,6 +42,7 @@ import TouchEvent from 'simple-mind-map/src/plugins/TouchEvent.js'
 import NodeImgAdjust from 'simple-mind-map/src/plugins/NodeImgAdjust.js'
 import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
 import Painter from 'simple-mind-map/src/plugins/Painter.js'
+import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -71,6 +73,7 @@ import NodeIconToolbar from './NodeIconToolbar.vue'
 import OutlineEdit from './OutlineEdit.vue'
 import { showLoading, hideLoading } from '@/utils/loading'
 import handleClipboardText from '@/utils/handleClipboardText'
+import Scrollbar from './Scrollbar.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -86,6 +89,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(TouchEvent)
   .usePlugin(SearchPlugin)
   .usePlugin(Painter)
+  .usePlugin(ScrollbarPlugin)
 
 // 注册自定义主题
 customThemeList.forEach(item => {
@@ -117,7 +121,8 @@ export default {
     Search,
     NodeIconSidebar,
     NodeIconToolbar,
-    OutlineEdit
+    OutlineEdit,
+    Scrollbar
   },
   data() {
     return {
@@ -235,7 +240,7 @@ export default {
           storeConfig({
             view: data
           })
-        }, 1000)
+        }, 300)
       })
     },
 
@@ -344,7 +349,8 @@ export default {
         'transforming-dom-to-images',
         'generalization_node_contextmenu',
         'painter_start',
-        'painter_end'
+        'painter_end',
+        'scrollbar_change'
       ].forEach(event => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args)
