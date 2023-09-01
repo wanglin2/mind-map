@@ -87,9 +87,7 @@ const mindMap = new MindMap({
 
 # 微信交流群
 
-<img src="./qrcode.jpg" style="width: 300px" />
-
-如果已过期，可以微信添加`wanglinguanfang`拉你入群。
+群聊人数较多，无法通过二维码入群，可以微信添加`wanglinguanfang`拉你入群。
 
 # 请作者喝杯咖啡
 
@@ -164,5 +162,9 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
         <span>Luke</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/布林.jpg" style="width: 50px;height: 50px;" />
+        <span>布林</span>
     </span>
 </p>
