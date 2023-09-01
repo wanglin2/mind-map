@@ -5,7 +5,7 @@
       :class="{ isDark: isDark }"
       v-if="activeNodes.length > 0"
     >
-      <div class="sidebarContent" v-if="activeNodes.length > 0">
+      <div class="sidebarContent">
         <!-- 文字 -->
         <div class="title noTop">{{ $t('style.text') }}</div>
         <div class="row">
@@ -486,7 +486,7 @@ export default {
      */
     onNodeActive(...args) {
       this.$nextTick(() => {
-        this.activeNodes = args[1]
+        this.activeNodes = [...args[1]]
         this.initNodeStyle()
       })
     },
