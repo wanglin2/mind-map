@@ -417,7 +417,7 @@ class Node {
         this.mindMap.emit(
           'node_active',
           isActive ? null : this,
-          this.mindMap.renderer.activeNodeList
+          [...this.mindMap.renderer.activeNodeList]
         )
       }
       this.mindMap.emit('node_mousedown', this, e)
@@ -481,7 +481,7 @@ class Node {
     this.renderer.clearActive()
     this.mindMap.execCommand('SET_NODE_ACTIVE', this, true)
     this.renderer.addActiveNode(this)
-    this.mindMap.emit('node_active', this, this.renderer.activeNodeList)
+    this.mindMap.emit('node_active', this, [...this.renderer.activeNodeList])
   }
 
   //  更新节点
