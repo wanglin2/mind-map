@@ -342,7 +342,7 @@ class Render {
         }
       })
     })
-    this.mindMap.emit('node_active', null, this.activeNodeList)
+    this.mindMap.emit('node_active', null, [...this.activeNodeList])
   }
 
   //  清除当前激活的节点
@@ -854,7 +854,7 @@ class Render {
         }
       }
     }
-    this.mindMap.emit('node_active', null, this.activeNodeList)
+    this.mindMap.emit('node_active', null, [...this.activeNodeList])
     this.mindMap.render()
   }
 
@@ -886,7 +886,7 @@ class Render {
     let copyData = copyNodeTree({}, node, true)
     this.removeActiveNode(node)
     this.removeOneNode(node)
-    this.mindMap.emit('node_active', null, this.activeNodeList)
+    this.mindMap.emit('node_active', null, [...this.activeNodeList])
     this.mindMap.render()
     if (callback && typeof callback === 'function') {
       callback(copyData)
@@ -901,7 +901,7 @@ class Render {
     // let copyData = copyNodeTree({}, node, false, true)
     this.removeActiveNode(node)
     this.removeOneNode(node)
-    this.mindMap.emit('node_active', null, this.activeNodeList)
+    this.mindMap.emit('node_active', null, [...this.activeNodeList])
     toNode.nodeData.children.push(node.nodeData)
     this.mindMap.render()
     if (toNode.isRoot) {

@@ -95,7 +95,7 @@ class Select {
       this.mindMap.emit(
         'node_active',
         null,
-        this.mindMap.renderer.activeNodeList
+        [...this.mindMap.renderer.activeNodeList]
       )
     }
   }
