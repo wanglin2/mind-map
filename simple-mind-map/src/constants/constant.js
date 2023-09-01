@@ -325,7 +325,9 @@ export const nodeDataNoStylePropList = [
   'uid',
   'activeStyle',
   'associativeLineTargets',
-  'associativeLineTargetControlOffsets'
+  'associativeLineTargetControlOffsets',
+  'associativeLinePoint',
+  'associativeLineText'
 ]
 
 // 数据缓存
