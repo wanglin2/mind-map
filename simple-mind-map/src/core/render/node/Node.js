@@ -394,14 +394,23 @@ class Node {
       this.active(e)
     })
     this.group.on('mousedown', e => {
-      if (this.isRoot && e.which === 3 && !this.mindMap.opt.readonly) {
-        e.stopPropagation()
-      }
-      if (!this.isRoot && e.which !== 2 && !this.mindMap.opt.readonly) {
-        e.stopPropagation()
+      const { readonly, enableCtrlKeyNodeSelection, useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
+      // 只读模式不需要阻止冒泡
+      if (!readonly) {
+        if (this.isRoot) {
+          // 根节点，右键拖拽画布模式下不需要阻止冒泡
+          if (e.which === 3 && !useLeftKeySelectionRightKeyDrag) {
+            e.stopPropagation()
+          }
+        } else {
+          // 非根节点，且按下的是非鼠标中键，需要阻止事件冒泡
+          if (e.which !== 2) {
+            e.stopPropagation()
+          }
+        }
       }
       // 多选和取消多选
-      if (e.ctrlKey && this.mindMap.opt.enableCtrlKeyNodeSelection) {
+      if (e.ctrlKey && enableCtrlKeyNodeSelection) {
         this.isMultipleChoice = true
         let isActive = this.nodeData.data.isActive
         if (!isActive)
