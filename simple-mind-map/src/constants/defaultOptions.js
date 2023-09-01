@@ -182,5 +182,9 @@ export const defaultOpt = {
   // 节点鼠标hover和激活时显示的矩形边框距节点内容的距离
   hoverRectPadding: 2,
   // 双击节点进入节点文本编辑时是否默认选中文本，默认只在创建新节点时会选中
-  selectTextOnEnterEditText: false
+  selectTextOnEnterEditText: false,
+  // 拖拽模式
+  // default：按住画布、根节点都可拖拽画布
+  // noCanvas：按住根节点和
+  dragMode: ''
 }
