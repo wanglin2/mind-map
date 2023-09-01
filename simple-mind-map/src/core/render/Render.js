@@ -416,6 +416,7 @@ class Render {
       0,
       0
     )
+    this.mindMap.emit('node_active', null, [...this.activeNodeList])
   }
 
   //  回退
