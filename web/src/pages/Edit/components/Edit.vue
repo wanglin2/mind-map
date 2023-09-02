@@ -22,7 +22,7 @@
     <NodeIconSidebar v-if="mindMap" :mindMap="mindMap"></NodeIconSidebar>
     <NodeIconToolbar v-if="mindMap" :mindMap="mindMap"></NodeIconToolbar>
     <OutlineEdit v-if="mindMap" :mindMap="mindMap"></OutlineEdit>
-    <!-- <Scrollbar v-if="mindMap" :mindMap="mindMap"></Scrollbar> -->
+    <Scrollbar v-if="isShowScrollbar && mindMap" :mindMap="mindMap"></Scrollbar>
   </div>
 </template>
 
@@ -138,7 +138,8 @@ export default {
       isZenMode: state => state.localConfig.isZenMode,
       openNodeRichText: state => state.localConfig.openNodeRichText,
       useLeftKeySelectionRightKeyDrag: state =>
-        state.localConfig.useLeftKeySelectionRightKeyDrag
+        state.localConfig.useLeftKeySelectionRightKeyDrag,
+      isShowScrollbar: state => state.localConfig.isShowScrollbar
     })
   },
   watch: {
