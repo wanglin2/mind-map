@@ -110,15 +110,19 @@
 
 `root`：是否是根节点，默认`false`
 
-`isActive`：获取的是否是激活状态的样式值，默认`false`
+`isActive`：v0.7.0+已废弃，获取的是否是激活状态的样式值，默认`false`
 
 ### setStyle(prop, value, isActive)
+
+`isActive`：v0.7.0+已废弃
 
 修改节点的某个样式，`SET_NODE_STYLE`命令的快捷方法
 
 ### setStyles(style, isActive)
 
 > v0.6.12+
+
+`isActive`：v0.7.0+已废弃
 
 修改节点多个样式，`SET_NODE_STYLES`命令的快捷方法
 

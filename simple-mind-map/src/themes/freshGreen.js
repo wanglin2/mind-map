@@ -26,11 +26,6 @@ export default merge(defaultTheme, {
   generalization: {
     fillColor: '#fff',
     borderColor: '#333',
-    color: '#333',
-    active: {
-      borderColor: 'rgb(57, 80, 96)',
-      borderWidth: 3,
-      borderDasharray: 'none'
-    }
+    color: '#333'
   }
 })

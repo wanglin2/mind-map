@@ -46,6 +46,9 @@ mindMap.export(<span class="hljs-string">&#x27;pdf&#x27;</span>, <span class="hl
 <pre class="hljs"><code>mindMap.export(type, isDownload, fileName, plusCssText = <span class="hljs-string">&#x27;&#x27;</span>)
 </code></pre>
 <p>如果开启了节点富文本编辑，也就是<code>svg</code>中会存在节点的<code>html</code>结构，这就又存在一个问题，因为浏览器对每个元素默认会设置一些样式，影响最大的就是<code>margin</code>和<code>padding</code>，这就有可能会导致节点中的文字错位，所以可以通过<code>plusCssText</code>参数传入<code>css</code>样式：</p>
+<blockquote>
+<p>在v0.6.16+版本后，plusCssText参数已被删除，改为在实例化时通过<code>resetCss</code>配置传入。</p>
+</blockquote>
 <pre class="hljs"><code>mindMap.export(
     <span class="hljs-string">&#x27;svg&#x27;</span>, 
     <span class="hljs-literal">true</span>, 

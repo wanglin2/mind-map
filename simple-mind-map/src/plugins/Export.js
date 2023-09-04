@@ -1,14 +1,19 @@
-import { imgToDataUrl, downloadFile, readBlob, removeHTMLEntities } from '../utils'
+import {
+  imgToDataUrl,
+  downloadFile,
+  readBlob,
+  removeHTMLEntities
+} from '../utils'
 import { SVG } from '@svgdotjs/svg.js'
 import drawBackgroundImageToCanvas from '../utils/simulateCSSBackgroundInCanvas'
 import { transformToMarkdown } from '../parse/toMarkdown'
+import { a4Size } from '../constants/constant'
 
 //  导出插件
 class Export {
   //  构造函数
   constructor(opt) {
     this.mindMap = opt.mindMap
-    this.exportPadding = this.mindMap.opt.exportPadding
   }
 
   //  导出
@@ -35,6 +40,10 @@ class Export {
     let imageList = svg.find('image')
     let task = imageList.map(async item => {
       let imgUlr = item.attr('href') || item.attr('xlink:href')
+      // 已经是data:URL形式不用转换
+      if (/^data:/.test(imgUlr)) {
+        return
+      }
       let imgData = await imgToDataUrl(imgUlr)
       item.attr('href', imgData)
     })
@@ -49,33 +58,42 @@ class Export {
   }
 
   //   svg转png
-  svgToPng(svgSrc, transparent) {
+  svgToPng(svgSrc, transparent, checkRotate = () => { return false }) {
     return new Promise((resolve, reject) => {
       const img = new Image()
       // 跨域图片需要添加这个属性，否则画布被污染了无法导出图片
       img.setAttribute('crossOrigin', 'anonymous')
       img.onload = async () => {
         try {
-          let canvas = document.createElement('canvas')
-          canvas.width = img.width + this.exportPadding * 2
-          canvas.height = img.height + this.exportPadding * 2
-          let ctx = canvas.getContext('2d')
+          const canvas = document.createElement('canvas')
+          const dpr = Math.max(window.devicePixelRatio, this.mindMap.opt.minExportImgCanvasScale)
+          const imgWidth = img.width
+          const imgHeight = img.height
+          // 如果宽比高长，那么旋转90度
+          const needRotate = checkRotate(imgWidth, imgHeight)
+          if (needRotate) {
+            canvas.width = imgHeight * dpr
+            canvas.height = imgWidth * dpr
+            canvas.style.width = imgHeight + 'px'
+            canvas.style.height = imgWidth + 'px'
+          } else {
+            canvas.width = imgWidth * dpr
+            canvas.height = imgHeight * dpr
+            canvas.style.width = imgWidth + 'px'
+            canvas.style.height = imgHeight + 'px'
+          }
+          const ctx = canvas.getContext('2d')
+          ctx.scale(dpr, dpr)
+          if (needRotate) {
+            ctx.rotate(0.5 * Math.PI)
+            ctx.translate(0, -imgHeight)
+          }
           // 绘制背景
           if (!transparent) {
-            await this.drawBackgroundToCanvas(ctx, canvas.width, canvas.height)
+            await this.drawBackgroundToCanvas(ctx, imgWidth, imgHeight)
           }
           // 图片绘制到canvas里
-          ctx.drawImage(
-            img,
-            0,
-            0,
-            img.width,
-            img.height,
-            this.exportPadding,
-            this.exportPadding,
-            img.width,
-            img.height
-          )
+          ctx.drawImage(img, 0, 0, imgWidth, imgHeight)
           resolve(canvas.toDataURL())
         } catch (error) {
           reject(error)
@@ -96,7 +114,7 @@ class Export {
         backgroundImage,
         backgroundRepeat = 'no-repeat',
         backgroundPosition = 'center center',
-        backgroundSize = 'cover',
+        backgroundSize = 'cover'
       } = this.mindMap.themeConfig
       // 背景颜色
       ctx.save()
@@ -107,18 +125,25 @@ class Export {
       // 背景图片
       if (backgroundImage && backgroundImage !== 'none') {
         ctx.save()
-        drawBackgroundImageToCanvas(ctx, width, height, backgroundImage, {
-          backgroundRepeat,
-          backgroundPosition,
-          backgroundSize
-        }, (err) => {
-          if (err) {
-            reject(err)
-          } else {
-            resolve()
+        drawBackgroundImageToCanvas(
+          ctx,
+          width,
+          height,
+          backgroundImage,
+          {
+            backgroundRepeat,
+            backgroundPosition,
+            backgroundSize
+          },
+          err => {
+            if (err) {
+              reject(err)
+            } else {
+              resolve()
+            }
+            ctx.restore()
           }
-          ctx.restore()
-        })
+        )
       } else {
         resolve()
       }
@@ -152,14 +177,25 @@ class Export {
    * 方法1.把svg的图片都转化成data:url格式，再转换
    * 方法2.把svg的图片提取出来再挨个绘制到canvas里，最后一起转换
    */
-  async png(name, transparent = false) {
+  async png(name, transparent = false, checkRotate) {
     let { node, str } = await this.getSvgData()
     str = removeHTMLEntities(str)
     // 如果开启了富文本，则使用htmltocanvas转换为图片
     if (this.mindMap.richText) {
-      let res =  await this.mindMap.richText.handleExportPng(node.node)
-      let imgDataUrl = await this.svgToPng(res, transparent)
-      return imgDataUrl
+      // 覆盖html默认的样式
+      let foreignObjectList = node.find('foreignObject')
+      if (foreignObjectList.length > 0) {
+        foreignObjectList[0].add(SVG(`<style>${ this.mindMap.opt.resetCss }</style>`))
+      }
+      str = node.svg()
+      // 使用其他库（html2canvas、dom-to-image-more等）来完成导出
+      // let res = await this.mindMap.richText.handleExportPng(node.node)
+      // let imgDataUrl = await this.svgToPng(
+      //   res,
+      //   transparent,
+      //   checkRotate
+      // )
+      // return imgDataUrl
     }
     // 转换成blob数据
     let blob = new Blob([str], {
@@ -168,17 +204,24 @@ class Export {
     // 转换成data:url数据
     let svgUrl = await readBlob(blob)
     // 绘制到canvas上
-    let res = await this.svgToPng(svgUrl, transparent)
+    let res = await this.svgToPng(
+      svgUrl,
+      transparent,
+      checkRotate
+    )
     return res
   }
 
   //  导出为pdf
-  async pdf(name) {
+  async pdf(name, useMultiPageExport) {
     if (!this.mindMap.doExportPDF) {
       throw new Error('请注册ExportPDF插件')
     }
-    let img = await this.png()
-    this.mindMap.doExportPDF.pdf(name, img)
+    let img = await this.png('', false, (width, height) => {
+      if (width <= a4Size.width && height && a4Size.height) return false
+      return (width / height) > 1
+    })
+    this.mindMap.doExportPDF.pdf(name, img, useMultiPageExport)
   }
 
   // 导出为xmind
@@ -194,15 +237,13 @@ class Export {
 
   //  导出为svg
   // plusCssText：附加的css样式，如果svg中存在dom节点，想要设置一些针对节点的样式可以通过这个参数传入
-  async svg(name, plusCssText) {
+  async svg(name) {
     let { node } = await this.getSvgData()
     // 开启了节点富文本编辑
     if (this.mindMap.richText) {
-      if (plusCssText) {
-        let foreignObjectList = node.find('foreignObject')
-        if (foreignObjectList.length > 0) {
-          foreignObjectList[0].add(SVG(`<style>${plusCssText}</style>`))
-        }
+      let foreignObjectList = node.find('foreignObject')
+      if (foreignObjectList.length > 0) {
+        foreignObjectList[0].add(SVG(`<style>${ this.mindMap.opt.resetCss }</style>`))
       }
     }
     node.first().before(SVG(`<title>${name}</title>`))

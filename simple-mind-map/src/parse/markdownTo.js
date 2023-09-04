@@ -28,7 +28,7 @@ const handleList = node => {
 }
 
 // 将markdown转换成节点树
-export const transformMarkdownTo = async md => {
+export const transformMarkdownTo = md => {
   const tree = fromMarkdown(md)
   let root = {
     children: []

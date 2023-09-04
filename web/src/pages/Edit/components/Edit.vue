@@ -22,6 +22,7 @@
     <NodeIconSidebar v-if="mindMap" :mindMap="mindMap"></NodeIconSidebar>
     <NodeIconToolbar v-if="mindMap" :mindMap="mindMap"></NodeIconToolbar>
     <OutlineEdit v-if="mindMap" :mindMap="mindMap"></OutlineEdit>
+    <Scrollbar v-if="isShowScrollbar && mindMap" :mindMap="mindMap"></Scrollbar>
   </div>
 </template>
 
@@ -42,6 +43,7 @@ import NodeImgAdjust from 'simple-mind-map/src/plugins/NodeImgAdjust.js'
 import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
 import { downloadFile, readBlob } from 'simple-mind-map/src/utils/index'
 import Painter from 'simple-mind-map/src/plugins/Painter.js'
+import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -73,6 +75,8 @@ import { removeMindMapNodeStickerProtocol, addMindMapNodeStickerProtocol } from 
 import OutlineEdit from './OutlineEdit.vue'
 import { showLoading, hideLoading } from '@/utils/loading'
 import handleClipboardText from '@/utils/handleClipboardText'
+import Scrollbar from './Scrollbar.vue'
+import exampleData from 'simple-mind-map/example/exampleData'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -88,6 +92,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(TouchEvent)
   .usePlugin(SearchPlugin)
   .usePlugin(Painter)
+  .usePlugin(ScrollbarPlugin)
 
 // 注册自定义主题
 customThemeList.forEach(item => {
@@ -119,7 +124,8 @@ export default {
     Search,
     NodeIconSidebar,
     NodeIconToolbar,
-    OutlineEdit
+    OutlineEdit,
+    Scrollbar
   },
   data() {
     return {
@@ -139,7 +145,8 @@ export default {
       isZenMode: state => state.localConfig.isZenMode,
       openNodeRichText: state => state.localConfig.openNodeRichText,
       useLeftKeySelectionRightKeyDrag: state =>
-        state.localConfig.useLeftKeySelectionRightKeyDrag
+        state.localConfig.useLeftKeySelectionRightKeyDrag,
+      isShowScrollbar: state => state.localConfig.isShowScrollbar
     })
   },
   watch: {
@@ -267,7 +274,7 @@ export default {
           storeConfig({
             view: data
           })
-        }, 1000)
+        }, 300)
       })
     },
 
@@ -296,7 +303,20 @@ export default {
      * @Desc: 初始化
      */
     init() {
+      let hasFileURL = this.hasFileURL()
       let { root, layout, theme, view, config } = this.mindMapData
+      // 如果url中存在要打开的文件，那么思维导图数据、主题、布局都使用默认的
+      if (hasFileURL) {
+        root = {
+          "data": {
+              "text": "根节点"
+          },
+          "children": []
+        }
+        layout = exampleData.layout
+        theme = exampleData.theme
+        view = null
+      }
       this.mindMap = new MindMap({
         el: this.$refs.mindMapContainer,
         data: root,
@@ -344,7 +364,24 @@ export default {
         //   })
         //   comp.$mount(el)
         //   return comp.$el
-        // }
+        // },
+        // 示例3：普通元素
+        // customCreateNodeContent: (node) => {
+        //   let el = document.createElement('div')
+        //   el.style.cssText = `
+        //     width: 203px;
+        //     height: 78px;
+        //     opacity: 0.8;
+        //     background-image: linear-gradient(0deg, rgba(53,130,172,0.06) 0%, rgba(24,75,116,0.06) 100%);
+        //     box-shadow: inset 0 1px 15px 0 rgba(119,196,255,0.40);
+        //     border-radius: 2px;
+        //     display: flex;
+        //     justify-content: center;
+        //     align-items: center;
+        //   `
+        //   el.innerHTML = node.nodeData.data.text
+        //   return el
+        // },
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
       // this.mindMap.keyCommand.addShortcut('Control+s', () => {
@@ -368,7 +405,8 @@ export default {
         'transforming-dom-to-images',
         'generalization_node_contextmenu',
         'painter_start',
-        'painter_end'
+        'painter_end',
+        'scrollbar_change'
       ].forEach(event => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args)
@@ -393,6 +431,17 @@ export default {
       if (window.takeOverApp) {
         this.$bus.$emit('app_inited', this.mindMap)
       }
+      // 解析url中的文件
+      if (hasFileURL) {
+        this.$bus.$emit('handle_file_url')
+      }
+    },
+
+    // url中是否存在要打开的文件
+    hasFileURL() {
+      const fileURL = this.$route.query.fileURL
+      if (!fileURL) return false
+      return /\.(smm|json|xmind|md|xlsx)$/.test(fileURL)
     },
 
     /**

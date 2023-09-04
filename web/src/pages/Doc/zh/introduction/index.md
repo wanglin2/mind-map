@@ -93,9 +93,7 @@
 
 有限测试情况：
 
-正常运行：`360`极速浏览器（v13.5.2036.0）、`opera`浏览器（v71.0.3770.284）。
-
-非正常运行：`Firefox`（v98.0.2），富文本模式下节点内容无法显示，如果要支持`Firefox`浏览器，请使用非富文本模式。
+正常运行：`360`极速浏览器（v13.5.2036.0）、`opera`浏览器（v71.0.3770.284）、`Firefox`（v98.0.2）。
 
 不支持：`IE`浏览器。
 
@@ -109,13 +107,13 @@
 
 > 厚椰乳一盒 + 纯牛奶半盒 + 冰块 + 咖啡液 = 生椰拿铁 yyds
 
-> 转账请备注【思维导图】。你的头像和名字将会出现在下面。
+> 推荐使用支付宝，微信获取不到头像。转账请备注【思维导图】。你的头像和名字将会出现在下面。
 
 <img src="../../../../assets/img/alipay.jpg" style="width: 300px" />
 
 <img src="../../../../assets/img/wechat.jpg" style="width: 300px" />
 
-<div  style="display: flex;">
+<div style="display: flex;">
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/Think.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>Think</p>
@@ -163,5 +161,28 @@
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/才镇.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>才镇</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/小米.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>小米bbᯤ²ᴳ</p>
+    </div>
+</div>
+
+<div style="display: flex;">
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/棐.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>*棐</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/default.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>Luke</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/布林.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>布林</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/南风.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>南风</p>
     </div>
 </div>

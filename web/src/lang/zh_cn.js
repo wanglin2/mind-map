@@ -50,7 +50,8 @@ export default {
     rootStyle: '根节点',
     associativeLineText: '关联线文字',
     fontFamily: '字体',
-    fontSize: '字号'
+    fontSize: '字号',
+    isShowScrollbar: '是否显示滚动条'
   },
   color: {
     moreColor: '更多颜色'
@@ -109,7 +110,8 @@ export default {
     notifyTitle: '消息',
     notifyMessage: '如果没有触发下载，请检查是否被浏览器拦截了',
     paddingX: '水平内边距',
-    paddingY: '垂直内边距'
+    paddingY: '垂直内边距',
+    useMultiPageExport: '是否多页导出'
   },
   fullscreen: {
     fullscreenShow: '全屏查看',
@@ -146,7 +148,8 @@ export default {
     addTip: '请按回车键添加'
   },
   outline: {
-    title: '大纲'
+    title: '大纲',
+    nodeDefaultText: '分支节点'
   },
   scale: {
     zoomIn: '放大',

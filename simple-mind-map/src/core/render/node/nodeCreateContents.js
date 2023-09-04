@@ -1,4 +1,10 @@
-import { measureText, resizeImgSize, removeHtmlStyle, addHtmlStyle, checkIsRichText } from '../../../utils'
+import {
+  measureText,
+  resizeImgSize,
+  removeHtmlStyle,
+  addHtmlStyle,
+  checkIsRichText
+} from '../../../utils'
 import { Image, SVG, A, G, Rect, Text, ForeignObject } from '@svgdotjs/svg.js'
 import iconsSvg from '../../../svg/icons'
 import { CONSTANTS, commonCaches } from '../../../constants/constant'
@@ -54,7 +60,10 @@ function createIconNode() {
   }
   let iconSize = this.mindMap.themeConfig.iconSize
   return _data.icon.map(item => {
-    let src = iconsSvg.getNodeIconListIcon(item, this.mindMap.opt.iconList || [])
+    let src = iconsSvg.getNodeIconListIcon(
+      item,
+      this.mindMap.opt.iconList || []
+    )
     let node = null
     // svg图标
     if (/^<svg/.test(src)) {
@@ -77,6 +86,7 @@ function createIconNode() {
 
 // 创建富文本节点
 function createRichTextNode() {
+  const { textAutoWrapWidth } = this.mindMap.opt
   let g = new G()
   // 重新设置富文本节点内容
   let recoverText = false
@@ -108,25 +118,34 @@ function createRichTextNode() {
     this.nodeData.data.text = text
   }
   let html = `<div>${this.nodeData.data.text}</div>`
-  let div = document.createElement('div')
+  if (!commonCaches.measureRichtextNodeTextSizeEl) {
+    commonCaches.measureRichtextNodeTextSizeEl = document.createElement('div')
+    commonCaches.measureRichtextNodeTextSizeEl.style.position = 'fixed'
+    commonCaches.measureRichtextNodeTextSizeEl.style.left = '-999999px'
+    this.mindMap.el.appendChild(commonCaches.measureRichtextNodeTextSizeEl)
+  }
+  let div = commonCaches.measureRichtextNodeTextSizeEl
   div.innerHTML = html
-  div.style.cssText = `position: fixed; left: -999999px;`
   let el = div.children[0]
   el.classList.add('smm-richtext-node-wrap')
   el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
-  el.style.maxWidth = this.mindMap.opt.textAutoWrapWidth + 'px'
-  this.mindMap.el.appendChild(div)
+  el.style.maxWidth = textAutoWrapWidth + 'px'
   let { width, height } = el.getBoundingClientRect()
-  width = Math.ceil(width) + 1// 修复getBoundingClientRect方法对实际宽度是小数的元素获取到的值是整数，导致宽度不够文本发生换行的问题
+  // 如果文本为空，那么需要计算一个默认高度
+  if (height <= 0) {
+    div.innerHTML = '<p>abc123我和你</p>'
+    let elTmp = div.children[0]
+    elTmp.classList.add('smm-richtext-node-wrap')
+    height = elTmp.getBoundingClientRect().height
+  }
+  width = Math.ceil(width) + 1 // 修复getBoundingClientRect方法对实际宽度是小数的元素获取到的值是整数，导致宽度不够文本发生换行的问题
   height = Math.ceil(height)
   g.attr('data-width', width)
   g.attr('data-height', height)
-  html = div.innerHTML
-  this.mindMap.el.removeChild(div)
   let foreignObject = new ForeignObject()
   foreignObject.width(width)
   foreignObject.height(height)
-  foreignObject.add(SVG(html))
+  foreignObject.add(div.children[0])
   g.add(foreignObject)
   return {
     node: g,
@@ -141,12 +160,8 @@ function createTextNode() {
     return this.createRichTextNode()
   }
   let g = new G()
-  let fontSize = this.getStyle('fontSize', false, this.nodeData.data.isActive)
-  let lineHeight = this.getStyle(
-    'lineHeight',
-    false,
-    this.nodeData.data.isActive
-  )
+  let fontSize = this.getStyle('fontSize', false)
+  let lineHeight = this.getStyle('lineHeight', false)
   // 文本超长自动换行
   let textStyle = this.style.getTextFontStyle()
   let textArr = this.nodeData.data.text.split(/\n/gim)
@@ -274,9 +289,10 @@ function createNoteNode() {
           box-shadow: 0 2px 5px rgb(0 0 0 / 10%);
           display: none;
           background-color: #fff;
-          z-index: ${ this.mindMap.opt.nodeNoteTooltipZIndex }
+          z-index: ${this.mindMap.opt.nodeNoteTooltipZIndex}
       `
-      const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
+      const targetNode =
+        this.mindMap.opt.customInnerElsAppendTo || document.body
       targetNode.appendChild(this.noteEl)
     }
     this.noteEl.innerText = this.nodeData.data.note
@@ -310,7 +326,7 @@ function createNoteNode() {
 }
 
 // 测量自定义节点内容元素的宽高
-function measureCustomNodeContentSize (content) {
+function measureCustomNodeContentSize(content) {
   if (!commonCaches.measureCustomNodeContentSizeEl) {
     commonCaches.measureCustomNodeContentSizeEl = document.createElement('div')
     commonCaches.measureCustomNodeContentSizeEl.style.cssText = `
@@ -330,19 +346,19 @@ function measureCustomNodeContentSize (content) {
 }
 
 // 是否使用的是自定义节点内容
-function isUseCustomNodeContent()  {
+function isUseCustomNodeContent() {
   return !!this._customNodeContent
 }
 
 export default {
-    createImgNode,
-    getImgShowSize,
-    createIconNode,
-    createRichTextNode,
-    createTextNode,
-    createHyperlinkNode,
-    createTagNode,
-    createNoteNode,
-    measureCustomNodeContentSize,
-    isUseCustomNodeContent
+  createImgNode,
+  getImgShowSize,
+  createIconNode,
+  createRichTextNode,
+  createTextNode,
+  createHyperlinkNode,
+  createTagNode,
+  createNoteNode,
+  measureCustomNodeContentSize,
+  isUseCustomNodeContent
 }

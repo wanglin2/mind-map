@@ -47,30 +47,32 @@ export default {
     computedLeftTopValue({ layerIndex, node, ctx }) {
       if (layerIndex >= 1 && node.children) {
         // 遍历三级及以下节点的子节点
+        let marginY = ctx.getMarginY(layerIndex + 1)
         let startLeft = node.left + node.width * ctx.childIndent
         let totalTop =
           node.top +
           node.height +
-          (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
+          (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0) + marginY
         node.children.forEach(item => {
           item.left = startLeft
           item.top += totalTop
           totalTop +=
             item.height +
-            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
+            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) + marginY
         })
       }
     },
-    adjustLeftTopValueBefore({ node, parent, ctx }) {
+    adjustLeftTopValueBefore({ node, parent, ctx, layerIndex }) {
       // 调整top
       let len = node.children.length
+      let marginY = ctx.getMarginY(layerIndex + 1)
       // 调整三级及以下节点的top
       if (parent && !parent.isRoot && len > 0) {
         let totalHeight = node.children.reduce((h, item) => {
           return (
             h +
             item.height +
-            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
+            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) + marginY
           )
         }, 0)
         ctx.updateBrothersTop(node, totalHeight)
@@ -80,7 +82,8 @@ export default {
       // 将二级节点的子节点移到上方
       if (parent && parent.isRoot) {
         // 遍历二级节点的子节点
-        let totalHeight = node.expandBtnSize
+        let marginY = ctx.getMarginY(node.layerIndex + 1)
+        let totalHeight = node.expandBtnSize + marginY
         node.children.forEach(item => {
           // 调整top
           let nodeTotalHeight = ctx.getNodeAreaHeight(item)
@@ -134,13 +137,14 @@ export default {
       }
     },
     computedLeftTopValue({ layerIndex, node, ctx }) {
+      let marginY = ctx.getMarginY(layerIndex + 1)
       if (layerIndex === 1 && node.children) {
         // 遍历二级节点的子节点
         let startLeft = node.left + node.width * ctx.childIndent
         let totalTop =
           node.top +
           node.height +
-          (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
+          (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0) + marginY
 
         node.children.forEach(item => {
           item.left = startLeft
@@ -149,7 +153,7 @@ export default {
             (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
           totalTop +=
             item.height +
-            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
+            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) + marginY
         })
       }
       if (layerIndex > 1 && node.children) {
@@ -157,25 +161,26 @@ export default {
         let startLeft = node.left + node.width * ctx.childIndent
         let totalTop =
           node.top -
-          (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
+          (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0) - marginY
         node.children.forEach(item => {
           item.left = startLeft
           item.top = totalTop - item.height
           totalTop -=
             item.height +
-            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
+            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) + marginY
         })
       }
     },
     adjustLeftTopValueBefore({ node, ctx, layerIndex }) {
       // 调整top
+      let marginY = ctx.getMarginY(layerIndex + 1)
       let len = node.children.length
       if (layerIndex > 2 && len > 0) {
         let totalHeight = node.children.reduce((h, item) => {
           return (
             h +
             item.height +
-            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
+            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) + marginY
           )
         }, 0)
         ctx.updateBrothersTop(node, -totalHeight)
@@ -185,6 +190,7 @@ export default {
       // 将二级节点的子节点移到上方
       if (parent && parent.isRoot) {
         // 遍历二级节点的子节点
+        let marginY = ctx.getMarginY(node.layerIndex + 1)
         let totalHeight = 0
         let totalHeight2 = node.expandBtnSize
         node.children.forEach(item => {
@@ -192,11 +198,12 @@ export default {
           let hasChildren = ctx.getNodeActChildrenLength(item) > 0
           let nodeTotalHeight = ctx.getNodeAreaHeight(item)
           let offset =
-            hasChildren > 0
+            hasChildren
               ? nodeTotalHeight -
                 item.height -
                 (hasChildren ? item.expandBtnSize : 0)
               : 0
+          offset -= (hasChildren ?  marginY : 0)
           let _top = totalHeight + offset
           let _left = item.left
           item.top += _top

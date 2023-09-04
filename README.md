@@ -87,9 +87,7 @@ const mindMap = new MindMap({
 
 # 微信交流群
 
-<img src="./qrcode.jpg" style="width: 300px" />
-
-如果已过期，可以微信添加`wanglinguanfang`拉你入群。
+群聊人数较多，无法通过二维码入群，可以微信添加`wanglinguanfang`拉你入群。
 
 # 请作者喝杯咖啡
 
@@ -97,7 +95,7 @@ const mindMap = new MindMap({
 
 > 厚椰乳一盒 + 纯牛奶半盒 + 冰块 + 咖啡液 = 生椰拿铁 yyds
 
-> 转账请备注【思维导图】。你的头像和名字将会出现在下面和[文档页面](https://wanglin2.github.io/mind-map/#/doc/zh/introduction/%E8%AF%B7%E4%BD%9C%E8%80%85%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1)
+> 推荐使用支付宝，微信获取不到头像。转账请备注【思维导图】。你的头像和名字将会出现在下面和[文档页面](https://wanglin2.github.io/mind-map/#/doc/zh/introduction/%E8%AF%B7%E4%BD%9C%E8%80%85%E5%96%9D%E6%9D%AF%E5%92%96%E5%95%A1)
 
 <p>
   <img src="./web/src/assets/img/alipay.jpg" style="width: 300px" />
@@ -152,5 +150,25 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/才镇.jpg" style="width: 50px;height: 50px;" />
         <span>才镇</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/小米.jpg" style="width: 50px;height: 50px;" />
+        <span>小米bbᯤ²ᴳ</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/棐.jpg" style="width: 50px;height: 50px;" />
+        <span>*棐</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>Luke</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/布林.jpg" style="width: 50px;height: 50px;" />
+        <span>布林</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/南风.jpg" style="width: 50px;height: 50px;" />
+        <span>南风</span>
     </span>
 </p>

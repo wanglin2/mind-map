@@ -1,6 +1,15 @@
-import { tagColorList, nodeDataNoStylePropList } from '../../../constants/constant'
+import {
+  tagColorList,
+  nodeDataNoStylePropList
+} from '../../../constants/constant'
 const rootProp = ['paddingX', 'paddingY']
-const backgroundStyleProps = ['backgroundColor', 'backgroundImage', 'backgroundRepeat', 'backgroundPosition', 'backgroundSize']
+const backgroundStyleProps = [
+  'backgroundColor',
+  'backgroundImage',
+  'backgroundRepeat',
+  'backgroundPosition',
+  'backgroundSize'
+]
 
 //  样式类
 class Style {
@@ -10,12 +19,18 @@ class Style {
     if (!Style.cacheStyle) {
       Style.cacheStyle = {}
       let style = window.getComputedStyle(el)
-      backgroundStyleProps.forEach((prop) => {
+      backgroundStyleProps.forEach(prop => {
         Style.cacheStyle[prop] = style[prop]
       })
     }
     // 设置新样式
-    let { backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition, backgroundSize } = themeConfig
+    let {
+      backgroundColor,
+      backgroundImage,
+      backgroundRepeat,
+      backgroundPosition,
+      backgroundSize
+    } = themeConfig
     el.style.backgroundColor = backgroundColor
     if (backgroundImage && backgroundImage !== 'none') {
       el.style.backgroundImage = `url(${backgroundImage})`
@@ -30,7 +45,7 @@ class Style {
   // 移除背景样式
   static removeBackgroundStyle(el) {
     if (!Style.cacheStyle) return
-    backgroundStyleProps.forEach((prop) => {
+    backgroundStyleProps.forEach(prop => {
       el.style[prop] = Style.cacheStyle[prop]
     })
     Style.cacheStyle = null
@@ -42,7 +57,7 @@ class Style {
   }
 
   //  合并样式
-  merge(prop, root, isActive) {
+  merge(prop, root) {
     let themeConfig = this.ctx.mindMap.themeConfig
     // 三级及以下节点
     let defaultConfig = themeConfig.node
@@ -59,17 +74,6 @@ class Style {
       // 二级节点
       defaultConfig = themeConfig.second
     }
-    // 激活状态
-    if (isActive !== undefined ? isActive : this.ctx.nodeData.data.isActive) {
-      if (
-        this.ctx.nodeData.data.activeStyle &&
-        this.ctx.nodeData.data.activeStyle[prop] !== undefined
-      ) {
-        return this.ctx.nodeData.data.activeStyle[prop]
-      } else if (defaultConfig.active && defaultConfig.active[prop]) {
-        return defaultConfig.active[prop]
-      }
-    }
     // 优先使用节点本身的样式
     return this.getSelfStyle(prop) !== undefined
       ? this.getSelfStyle(prop)
@@ -77,8 +81,8 @@ class Style {
   }
 
   //  获取某个样式值
-  getStyle(prop, root, isActive) {
-    return this.merge(prop, root, isActive)
+  getStyle(prop, root) {
+    return this.merge(prop, root)
   }
 
   //  获取自身自定义样式
@@ -142,10 +146,10 @@ class Style {
 
   // 获取文本样式
   getTextFontStyle() {
-    return { 
-      italic: this.merge('fontStyle') === 'italic', 
-      bold: this.merge('fontWeight'), 
-      fontSize: this.merge('fontSize'), 
+    return {
+      italic: this.merge('fontStyle') === 'italic',
+      bold: this.merge('fontWeight'),
+      fontSize: this.merge('fontSize'),
       fontFamily: this.merge('fontFamily')
     }
   }
@@ -201,24 +205,42 @@ class Style {
 
   //  展开收起按钮
   iconBtn(node, node2, fillNode) {
-    let { color, fill } = this.ctx.mindMap.opt.expandBtnStyle || {
+    let { color, fill, fontSize, fontColor } = this.ctx.mindMap.opt
+      .expandBtnStyle || {
       color: '#808080',
-      fill: '#fff'
+      fill: '#fff',
+      fontSize: 12,
+      strokeColor: '#333333',
+      fontColor: '#333333'
     }
     node.fill({ color: color })
     node2.fill({ color: color })
     fillNode.fill({ color: fill })
+    if (this.ctx.mindMap.opt.isShowExpandNum) {
+      node.attr({ 'font-size': fontSize, 'font-color': fontColor })
+    }
   }
 
   // 是否设置了自定义的样式
   hasCustomStyle() {
     let res = false
-    Object.keys(this.ctx.nodeData.data).forEach((item) => {
+    Object.keys(this.ctx.nodeData.data).forEach(item => {
       if (!nodeDataNoStylePropList.includes(item)) {
         res = true
       }
     })
     return res
+  }
+
+  // hover和激活节点
+  hoverNode(node) {
+    const { hoverRectColor } = this.ctx.mindMap.opt
+    node
+      .radius(5)
+      .fill('none')
+      .stroke({
+        color: hoverRectColor
+      })
   }
 }
 

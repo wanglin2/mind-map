@@ -10,7 +10,7 @@
 <span class="hljs-keyword">import</span> Search <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/Search.js&#x27;</span>
 MindMap.usePlugin(Search)
 </code></pre>
-<p>After registration and instantiation of <code>MindMap</code>, the instance can be obtained through <code>mindMap.Search</code>.</p>
+<p>After registration and instantiation of <code>MindMap</code>, the instance can be obtained through <code>mindMap.search</code>.</p>
 <h2>Event</h2>
 <h3>search_info_change</h3>
 <p>You can listen to 'search_info_change' event to get the number of current search results and the index currently located.</p>

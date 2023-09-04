@@ -142,6 +142,12 @@ export const borderRadiusList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 // 线宽
 export const lineWidthList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
+export const lineStyleMap = {
+  straight: `<svg width="60" height="26"><path d="M18,14L30,14L30,5L42,5" fill="none" stroke="#000" stroke-width="2"></path><path d="M18,14L30,14L30,23L42,23" fill="none" stroke="#000" stroke-width="2"></path></svg>`,
+  curve: `<svg width="60" height="26"><path d="M18,14L30,14A12,-9 0 0 1 42,5" fill="none" stroke="#000" stroke-width="2"></path><path d="M18,14L30,14A12,9 0 0 0 42,23" fill="none" stroke="#000" stroke-width="2"></path></svg>`,
+  direct: `<svg width="60" height="26"><path d="M18,14L30,14L42,5" fill="none" stroke="#000" stroke-width="2"></path><path d="M18,14L30,14L42,23" fill="none" stroke="#000" stroke-width="2"></path></svg>`
+}
+
 // 连线风格
 export const lineStyleList = [
   {
@@ -378,6 +384,22 @@ export const shortcutKeyList = [
     ]
   }
 ]
+
+export const shapeListMap = {
+  rectangle: 'M 4 12 L 4 3 L 56 3 L 56 21 L 4 21 L 4 12 Z',
+  diamond: 'M 4 12 L 30 3 L 56 12 L 30 21 L 4 12 Z',
+  parallelogram: 'M 10 3 L 56 3 L 50 21 L 4 21 L 10 3 Z',
+  roundedRectangle:
+    'M 13 3 L 47 3 A 9 9 0, 0 1 47 21 L 13 21 A 9 9 0, 0 1 13 3 Z',
+  octagonalRectangle:
+    'M 4 12 L 4 9 L 10 3 L 50 3 L 56 9 L 56 15 L 50 21 L 10 21 L 4 15 L 4 12 Z',
+  outerTriangularRectangle:
+    'M 4 12 L 10 3 L 50 3 L 56 12 L 50 21 L 10 21 L 4 12 Z',
+  innerTriangularRectangle:
+    'M 10 12 L 4 3 L 56 3 L 50 12 L 56 21 L 4 21 L 10 12 Z',
+  ellipse: 'M 4 12 A 26 9 0, 1, 0 30 3 A 26 9 0, 0, 0 4 12 Z',
+  circle: 'M 21 12 A 9 9 0, 1, 0 30 3 A 9 9 0, 0, 0 21 12 Z'
+}
 
 // 形状列表
 export const shapeList = [

@@ -2,9 +2,9 @@
   <div class="block5Container">
     <div class="blockContent">
       <div class="infoBox">
-        <div class="infoTitle">街角小林出品</div>
+        <div class="infoTitle">理想青年实验室</div>
         <div class="infoDesc">
-          男，90后，六年+前端开发工程师，热爱前端、写作、开源。
+          专注前端、写作、开源。
         </div>
         <div class="linkBtnList">
           <div class="linkBtn">
@@ -52,7 +52,12 @@
         <div class="linkTitle">更多作品</div>
         <div class="linkList">
           <div class="linkItem" v-for="item in linkList" :key="item.name">
-            <a :href="item.url" target="_blank">{{ item.name }}</a>
+            <el-tooltip
+              :content="item.desc"
+              placement="top"
+            >
+              <a :href="item.url" target="_blank">{{ item.name }}</a>
+            </el-tooltip>
           </div>
         </div>
       </div>
@@ -67,51 +72,63 @@ export default {
       linkList: [
         {
           name: 'CodeRun',
-          url: 'https://github.com/wanglin2/code-run'
+          url: 'https://github.com/wanglin2/code-run',
+          desc: '一个代码在线编辑预览工具，类似codepen、jsbin、jsfiddle等'
         },
         {
           name: 'TinyWhiteboard',
-          url: 'https://github.com/wanglin2/tiny_whiteboard'
+          url: 'https://github.com/wanglin2/tiny_whiteboard',
+          desc: '一个在线小白板，类似excalidraw'
         },
         {
           name: 'Mark.js',
-          url: 'https://github.com/wanglin2/markjs'
+          url: 'https://github.com/wanglin2/markjs',
+          desc: '一个插件化的多边形标注库'
         },
         {
           name: 'WebMapEngine',
-          url: 'https://github.com/wanglin2/web_map_demo'
+          url: 'https://github.com/wanglin2/web_map_demo',
+          desc: '一个简单的2D地图加载器'
         },
         {
           name: 'SimpleNoviceGuide',
-          url: 'https://github.com/wanglin2/simple-novice-guide'
+          url: 'https://github.com/wanglin2/simple-novice-guide',
+          desc: ' 一个简洁的新手引导库'
         },
         {
           name: 'CanvasEditor',
-          url: 'https://github.com/wanglin2/canvas-editor-demo'
+          url: 'https://github.com/wanglin2/canvas-editor-demo',
+          desc: '一个用Canvas做的富文本编辑器Demo'
         },
         {
           name: 'JsonTreeView',
-          url: 'https://github.com/wanglin2/json-tree-view'
+          url: 'https://github.com/wanglin2/json-tree-view',
+          desc: '一个简洁的json格式化插件'
         },
         {
           name: 'SimpleFlowChart',
-          url: 'https://github.com/wanglin2/simple-flow-chart'
+          url: 'https://github.com/wanglin2/simple-flow-chart',
+          desc: '一个用flex布局做的流程设计器'
         },
         {
           name: 'VideoTimeLine',
-          url: 'https://github.com/wanglin2/VideoTimeLine'
+          url: 'https://github.com/wanglin2/VideoTimeLine',
+          desc: '一个基于Vue2的视频时间轴组件'
         },
         {
           name: 'MarkdownEditor',
-          url: 'https://github.com/wanglin2/markdown_editor_sync_scroll_demo'
+          url: 'https://github.com/wanglin2/markdown_editor_sync_scroll_demo',
+          desc: '一个能精确同步滚动的Markdown编辑器'
         },
         {
           name: 'AssociationLine',
-          url: 'https://github.com/wanglin2/AssociationLineDemo'
+          url: 'https://github.com/wanglin2/AssociationLineDemo',
+          desc: '关联线探究，如何连接流程图的两个节点'
         },
         {
           name: 'HandPaintedStyle',
-          url: 'https://github.com/wanglin2/handPaintedStyle'
+          url: 'https://github.com/wanglin2/handPaintedStyle',
+          desc: '手绘风格图形的简单实现'
         }
       ]
     }

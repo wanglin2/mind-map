@@ -1,11 +1,11 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('style.title')">
-    <div class="styleBox" :class="{ isDark: isDark }" v-if="activeNodes.length > 0">
-      <el-tabs class="tab" v-model="activeTab" @tab-click="handleTabClick">
-        <el-tab-pane :label="$t('style.normal')" name="normal"></el-tab-pane>
-        <el-tab-pane :label="$t('style.active')" name="active"></el-tab-pane>
-      </el-tabs>
-      <div class="sidebarContent" v-if="activeNodes.length > 0">
+    <div
+      class="styleBox"
+      :class="{ isDark: isDark }"
+      v-if="activeNodes.length > 0"
+    >
+      <div class="sidebarContent">
         <!-- 文字 -->
         <div class="title noTop">{{ $t('style.text') }}</div>
         <div class="row">
@@ -15,7 +15,6 @@
               size="mini"
               v-model="style.fontFamily"
               placeholder=""
-              :disabled="checkDisabled('fontFamily')"
               @change="update('fontFamily')"
             >
               <el-option
@@ -37,7 +36,6 @@
               style="width: 80px"
               v-model="style.fontSize"
               placeholder=""
-              :disabled="checkDisabled('fontSize')"
               @change="update('fontSize')"
             >
               <el-option
@@ -57,7 +55,6 @@
               style="width: 80px"
               v-model="style.lineHeight"
               placeholder=""
-              :disabled="checkDisabled('lineHeight')"
               @change="update('lineHeight')"
             >
               <el-option
@@ -73,11 +70,7 @@
         <div class="row">
           <div class="btnGroup">
             <el-tooltip :content="$t('style.color')" placement="bottom">
-              <div
-                class="styleBtn"
-                v-popover:popover
-                :class="{ disabled: checkDisabled('color') }"
-              >
+              <div class="styleBtn" v-popover:popover>
                 A
                 <span
                   class="colorShow"
@@ -89,8 +82,7 @@
               <div
                 class="styleBtn"
                 :class="{
-                  actived: style.fontWeight === 'bold',
-                  disabled: checkDisabled('fontWeight')
+                  actived: style.fontWeight === 'bold'
                 }"
                 @click="toggleFontWeight"
               >
@@ -101,8 +93,7 @@
               <div
                 class="styleBtn i"
                 :class="{
-                  actived: style.fontStyle === 'italic',
-                  disabled: checkDisabled('fontStyle')
+                  actived: style.fontStyle === 'italic'
                 }"
                 @click="toggleFontStyle"
               >
@@ -116,27 +107,16 @@
               <div
                 class="styleBtn u"
                 :style="{ textDecoration: style.textDecoration || 'none' }"
-                :class="{ disabled: checkDisabled('textDecoration') }"
                 v-popover:popover2
               >
                 U
               </div>
             </el-tooltip>
           </div>
-          <el-popover
-            ref="popover"
-            placement="bottom"
-            trigger="hover"
-            :disabled="checkDisabled('color')"
-          >
+          <el-popover ref="popover" placement="bottom" trigger="hover">
             <Color :color="style.color" @change="changeFontColor"></Color>
           </el-popover>
-          <el-popover
-            ref="popover2"
-            placement="bottom"
-            trigger="hover"
-            :disabled="checkDisabled('textDecoration')"
-          >
+          <el-popover ref="popover2" placement="bottom" trigger="hover">
             <el-radio-group
               size="mini"
               v-model="style.textDecoration"
@@ -166,14 +146,8 @@
               class="block"
               v-popover:popover3
               :style="{ width: '80px', backgroundColor: style.borderColor }"
-              :class="{ disabled: checkDisabled('borderColor') }"
             ></span>
-            <el-popover
-              ref="popover3"
-              placement="bottom"
-              trigger="hover"
-              :disabled="checkDisabled('borderColor')"
-            >
+            <el-popover ref="popover3" placement="bottom" trigger="hover">
               <Color
                 :color="style.borderColor"
                 @change="changeBorderColor"
@@ -187,7 +161,6 @@
               style="width: 80px"
               v-model="style.borderDasharray"
               placeholder=""
-              :disabled="checkDisabled('borderDasharray')"
               @change="update('borderDasharray')"
             >
               <el-option
@@ -196,6 +169,23 @@
                 :label="item.name"
                 :value="item.value"
               >
+                <svg width="120" height="34">
+                  <line
+                    x1="10"
+                    y1="17"
+                    x2="110"
+                    y2="17"
+                    stroke-width="2"
+                    :stroke="
+                      style.borderDasharray === item.value
+                        ? '#409eff'
+                        : isDark
+                        ? '#fff'
+                        : '#000'
+                    "
+                    :stroke-dasharray="item.value"
+                  ></line>
+                </svg>
               </el-option>
             </el-select>
           </div>
@@ -208,7 +198,6 @@
               style="width: 80px"
               v-model="style.borderWidth"
               placeholder=""
-              :disabled="checkDisabled('borderWidth')"
               @change="update('borderWidth')"
             >
               <el-option
@@ -217,17 +206,22 @@
                 :label="item"
                 :value="item"
               >
+                <span
+                  v-if="item > 0"
+                  class="borderLine"
+                  :class="{ isDark: isDark }"
+                  :style="{ height: item + 'px' }"
+                ></span>
               </el-option>
             </el-select>
           </div>
-          <div class="rowItem">
+          <div class="rowItem" v-show="style.shape === 'rectangle'">
             <span class="name">{{ $t('style.borderRadius') }}</span>
             <el-select
               size="mini"
               style="width: 80px"
               v-model="style.borderRadius"
               placeholder=""
-              :disabled="checkDisabled('borderRadius')"
               @change="update('borderRadius')"
             >
               <el-option
@@ -249,14 +243,8 @@
               class="block"
               v-popover:popover4
               :style="{ backgroundColor: style.fillColor }"
-              :class="{ disabled: checkDisabled('fillColor') }"
             ></span>
-            <el-popover
-              ref="popover4"
-              placement="bottom"
-              trigger="hover"
-              :disabled="checkDisabled('fillColor')"
-            >
+            <el-popover ref="popover4" placement="bottom" trigger="hover">
               <Color :color="style.fillColor" @change="changeFillColor"></Color>
             </el-popover>
           </div>
@@ -271,7 +259,6 @@
               style="width: 120px"
               v-model="style.shape"
               placeholder=""
-              :disabled="checkDisabled('shape')"
               @change="update('shape')"
             >
               <el-option
@@ -280,6 +267,20 @@
                 :label="item.name"
                 :value="item.value"
               >
+                <svg width="60" height="26" style="margin-top: 5px">
+                  <path
+                    :d="shapeListMap[item.value]"
+                    fill="none"
+                    :stroke="
+                      style.shape === item.value
+                        ? '#409eff'
+                        : isDark
+                        ? '#fff'
+                        : '#000'
+                    "
+                    stroke-width="2"
+                  ></path>
+                </svg>
               </el-option>
             </el-select>
           </div>
@@ -293,14 +294,8 @@
               class="block"
               v-popover:popover5
               :style="{ width: '80px', backgroundColor: style.lineColor }"
-              :class="{ disabled: checkDisabled('lineColor') }"
             ></span>
-            <el-popover
-              ref="popover5"
-              placement="bottom"
-              trigger="hover"
-              :disabled="checkDisabled('lineColor')"
-            >
+            <el-popover ref="popover5" placement="bottom" trigger="hover">
               <Color :color="style.lineColor" @change="changeLineColor"></Color>
             </el-popover>
           </div>
@@ -311,7 +306,6 @@
               style="width: 80px"
               v-model="style.lineDasharray"
               placeholder=""
-              :disabled="checkDisabled('lineDasharray')"
               @change="update('lineDasharray')"
             >
               <el-option
@@ -320,6 +314,23 @@
                 :label="item.name"
                 :value="item.value"
               >
+                <svg width="120" height="34">
+                  <line
+                    x1="10"
+                    y1="17"
+                    x2="110"
+                    y2="17"
+                    stroke-width="2"
+                    :stroke="
+                      style.lineDasharray === item.value
+                        ? '#409eff'
+                        : isDark
+                        ? '#fff'
+                        : '#000'
+                    "
+                    :stroke-dasharray="item.value"
+                  ></line>
+                </svg>
               </el-option>
             </el-select>
           </div>
@@ -332,7 +343,6 @@
               style="width: 80px"
               v-model="style.lineWidth"
               placeholder=""
-              :disabled="checkDisabled('lineWidth')"
               @change="update('lineWidth')"
             >
               <el-option
@@ -341,6 +351,12 @@
                 :label="item"
                 :value="item"
               >
+                <span
+                  v-if="item > 0"
+                  class="borderLine"
+                  :class="{ isDark: isDark }"
+                  :style="{ height: item + 'px' }"
+                ></span>
               </el-option>
             </el-select>
           </div>
@@ -353,7 +369,6 @@
             <el-slider
               style="width: 200px"
               v-model="style.paddingX"
-              :disabled="checkDisabled('paddingX')"
               @change="update('paddingX')"
             ></el-slider>
           </div>
@@ -364,7 +379,6 @@
             <el-slider
               style="width: 200px"
               v-model="style.paddingY"
-              :disabled="checkDisabled('paddingY')"
               @change="update('paddingY')"
             ></el-slider>
           </div>
@@ -388,9 +402,9 @@ import {
   borderDasharrayList,
   borderRadiusList,
   lineHeightList,
-  shapeList
+  shapeList,
+  shapeListMap
 } from '@/config'
-import { supportActiveStyle } from 'simple-mind-map/src/themes/default'
 import { mapState } from 'vuex'
 
 /**
@@ -406,15 +420,11 @@ export default {
   },
   data() {
     return {
-      supportActiveStyle,
-
       fontSizeList,
       borderWidthList,
-
       borderRadiusList,
       lineHeightList,
       activeNodes: [],
-      activeTab: 'normal',
       style: {
         shape: '',
         paddingX: 0,
@@ -448,6 +458,9 @@ export default {
     },
     shapeList() {
       return shapeList[this.$i18n.locale] || shapeList.zh
+    },
+    shapeListMap() {
+      return shapeListMap[this.$i18n.locale] || shapeListMap.zh
     }
   },
   watch: {
@@ -473,32 +486,11 @@ export default {
      */
     onNodeActive(...args) {
       this.$nextTick(() => {
-        this.activeTab = 'normal'
-        this.activeNodes = args[1]
+        this.activeNodes = [...args[1]]
         this.initNodeStyle()
       })
     },
-
-    /**
-     * @Author: 王林
-     * @Date: 2021-05-05 11:42:32
-     * @Desc: tab切换
-     */
-    handleTabClick() {
-      this.initNodeStyle()
-    },
-
-    /**
-     * @Author: 王林
-     * @Date: 2022-09-12 22:16:56
-     * @Desc: 检查是否禁用
-     */
-    checkDisabled(prop) {
-      return (
-        this.activeTab === 'active' && !this.supportActiveStyle.includes(prop)
-      )
-    },
-
+    
     /**
      * @Author: 王林
      * @Date: 2021-05-05 09:48:52
@@ -506,7 +498,6 @@ export default {
      */
     initNodeStyle() {
       if (this.activeNodes.length <= 0) {
-        this.activeTab = 'normal'
         return
       }
       [
@@ -529,11 +520,7 @@ export default {
         'lineDasharray',
         'lineWidth'
       ].forEach(item => {
-        this.style[item] = this.activeNodes[0].getStyle(
-          item,
-          false,
-          this.activeTab === 'active'
-        )
+        this.style[item] = this.activeNodes[0].getStyle(item, false)
       })
     },
 
@@ -544,7 +531,7 @@ export default {
      */
     update(prop) {
       this.activeNodes.forEach(node => {
-        node.setStyle(prop, this.style[prop], this.activeTab === 'active')
+        node.setStyle(prop, this.style[prop])
       })
     },
 
@@ -635,7 +622,7 @@ export default {
       .row {
         .rowItem {
           .name {
-            color: hsla(0,0%,100%,.6);
+            color: hsla(0, 0%, 100%, 0.6);
           }
         }
 
@@ -762,6 +749,23 @@ export default {
         height: 2px;
       }
     }
+  }
+}
+
+.borderLine {
+  display: inline-block;
+  width: 100%;
+  background-color: #000;
+
+  &.isDark {
+    background-color: #fff;
+  }
+}
+</style>
+<style lang="less">
+.el-select-dropdown__item.selected {
+  .borderLine {
+    background-color: #409eff;
   }
 }
 </style>

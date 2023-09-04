@@ -32,6 +32,7 @@ class View {
       this.fit()
     })
     this.mindMap.svg.on('dblclick', () => {
+      if (!this.mindMap.opt.enableDblclickReset) return
       this.reset()
     })
     // 拖动视图
@@ -65,7 +66,8 @@ class View {
         mousewheelAction,
         mouseScaleCenterUseMousePosition,
         mousewheelMoveStep,
-        mousewheelZoomActionReverse
+        mousewheelZoomActionReverse,
+        disableMouseWheelZoom
       } = this.mindMap.opt
       // 是否自定义鼠标滚轮事件
       if (
@@ -76,8 +78,10 @@ class View {
       }
       // 鼠标滚轮事件控制缩放
       if (mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
-        let cx = mouseScaleCenterUseMousePosition ? e.clientX : undefined
-        let cy = mouseScaleCenterUseMousePosition ? e.clientY : undefined
+        if (disableMouseWheelZoom) return
+        const { x: clientX, y: clientY } = this.mindMap.toPos(e.clientX, e.clientY)
+        let cx = mouseScaleCenterUseMousePosition ? clientX : undefined
+        let cy = mouseScaleCenterUseMousePosition ? clientY : undefined
         switch (dir) {
           // 鼠标滚轮，向上和向左，都是缩小
           case CONSTANTS.DIR.UP:

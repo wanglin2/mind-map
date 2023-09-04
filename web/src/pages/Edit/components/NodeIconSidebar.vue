@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     handleNodeActive(...args) {
-      this.activeNodes = args[1]
+      this.activeNodes = [...args[1]]
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
         this.nodeImage = firstNode.getData('image')

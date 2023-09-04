@@ -50,7 +50,8 @@ export default {
     rootStyle: 'Root Node',
     associativeLineText: 'Associative line text',
     fontFamily: 'Font family',
-    fontSize: 'Font size'
+    fontSize: 'Font size',
+    isShowScrollbar: 'Is show scrollbar'
   },
   color: {
     moreColor: 'More color'
@@ -109,7 +110,8 @@ export default {
     notifyTitle: 'Info',
     notifyMessage: 'If the download is not triggered, check whether it is blocked by the browser',
     paddingX: 'Padding x',
-    paddingY: 'Padding y'
+    paddingY: 'Padding y',
+    useMultiPageExport: 'Export multi page'
   },
   fullscreen: {
     fullscreenShow: 'Full screen show',
@@ -146,7 +148,8 @@ export default {
     addTip: 'Press Enter to add'
   },
   outline: {
-    title: 'Outline'
+    title: 'Outline',
+    nodeDefaultText: 'Branch node'
   },
   scale: {
     zoomIn: 'Zoom in',

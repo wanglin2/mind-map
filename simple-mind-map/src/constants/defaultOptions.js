@@ -18,8 +18,6 @@ export const defaultOpt = {
   mouseScaleCenterUseMousePosition: true,
   // 最多显示几个标签
   maxTag: 5,
-  // 导出图片时的内边距
-  exportPadding: 20,
   // 展开收缩按钮尺寸
   expandBtnSize: 20,
   // 节点里图片和文字的间距
@@ -70,18 +68,26 @@ export const defaultOpt = {
   // 展开收起按钮的颜色
   expandBtnStyle: {
     color: '#808080',
-    fill: '#fff'
+    fill: '#fff',
+    fontSize: 13,
+    strokeColor: '#333333'
   },
   // 自定义展开收起按钮的图标
   expandBtnIcon: {
     open: '', // svg字符串
     close: ''
   },
+  // 处理收起节点数量
+  expandBtnNumHandler: num => {
+    return num
+  },
+  // 是否显示带数量的收起按钮
+  isShowExpandNum: true,
   // 是否只有当鼠标在画布内才响应快捷键事件
   enableShortcutOnlyWhenMouseInSvg: true,
   // 初始根节点的位置
   initRootNodePosition: null,
-  // 导出png、svg、pdf时的图形内边距
+  // 导出png、svg、pdf时的图形内边距，注意是单侧内边距
   exportPaddingX: 10,
   exportPaddingY: 10,
   // 节点文本编辑框的z-index
@@ -151,5 +157,30 @@ export const defaultOpt = {
       }
   */
   // 如果你的处理逻辑存在异步逻辑，也可以返回一个promise
-  customHandleClipboardText: null
+  customHandleClipboardText: null,
+  // 禁止鼠标滚轮缩放，你仍旧可以使用api进行缩放
+  disableMouseWheelZoom: false,
+  // 错误处理函数
+  errorHandler: (code, error) => {
+    console.error(code, error)
+  },
+  // 设置导出图片和svg时，针对富文本节点内容，也就是嵌入到svg中的html节点的默认样式覆盖
+  // 如果不覆盖，会发生偏移问题
+  resetCss: `
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  `,
+  // 开启鼠标双击复位思维导图位置及缩放
+  enableDblclickReset: false,
+  // 导出图片时canvas的缩放倍数，该配置会和window.devicePixelRatio值取最大值
+  minExportImgCanvasScale: 2,
+  // 节点鼠标hover和激活时显示的矩形边框的颜色
+  hoverRectColor: 'rgb(94, 200, 248)',
+  // 节点鼠标hover和激活时显示的矩形边框距节点内容的距离
+  hoverRectPadding: 2,
+  // 双击节点进入节点文本编辑时是否默认选中文本，默认只在创建新节点时会选中
+  selectTextOnEnterEditText: false
 }

@@ -72,7 +72,16 @@
       ></div>
     </div>
     <div class="item">
-      <span class="iconfont icongithub" @click="openGithub"></span>
+      <el-dropdown @command="handleCommand">
+        <div class="btn iconfont iconbangzhu"></div>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="github">Github</el-dropdown-item>
+          <el-dropdown-item command="helpDoc">使用文档</el-dropdown-item>
+          <el-dropdown-item command="devDoc">开发文档</el-dropdown-item>
+          <el-dropdown-item command="site">官方网站</el-dropdown-item>
+          <el-dropdown-item command="issue">意见反馈</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </div>
   </div>
 </template>
@@ -114,7 +123,7 @@ export default {
   computed: {
     ...mapState(['isDark'])
   },
-  created () {
+  created() {
     this.lang = getLang()
   },
   methods: {
@@ -145,6 +154,33 @@ export default {
 
     toggleDark() {
       this.setIsDark(!this.isDark)
+    },
+
+    handleCommand(command) {
+      let url = ''
+      switch (command) {
+        case 'github':
+          url = 'https://github.com/wanglin2/mind-map'
+          break
+        case 'helpDoc':
+          url = 'https://wanglin2.github.io/mind-map/#/help/zh/'
+          break
+        case 'devDoc':
+          url = 'https://wanglin2.github.io/mind-map/#/doc/zh/introduction/'
+          break
+        case 'site':
+          url = 'https://wanglin2.github.io/mind-map/#/index'
+          break
+        case 'issue':
+          url = 'https://github.com/wanglin2/mind-map/issues/new'
+          break
+        default:
+          break
+      }
+      const a = document.createElement('a')
+      a.href = url
+      a.target = '_blank'
+      a.click()
     }
   }
 }

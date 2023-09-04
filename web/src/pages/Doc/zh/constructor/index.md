@@ -48,8 +48,10 @@ const mindMap = new MindMap({
 | mousewheelZoomActionReverse（v0.6.5+）     | Boolean  | false |  当mousewheelAction设为zoom时，默认向前滚动是缩小，向后滚动是放大，如果该属性设为true，那么会反过来  |          |
 | defaultInsertSecondLevelNodeText（v0.4.7+）     | String  | 二级节点 | 默认插入的二级节点的文字               |          |
 | defaultInsertBelowSecondLevelNodeText（v0.4.7+）     | String  | 分支主题 | 默认插入的二级以下节点的文字               |          |
-| expandBtnStyle（v0.5.0+）     | Object  | { color: '#808080', fill: '#fff' } | 展开收起按钮的颜色  |          |
+| expandBtnStyle（v0.5.0+）     | Object  | { color: '#808080', fill: '#fff', fontSize: 13, strokeColor: '#333333' } | 展开收起按钮的颜色，（fontSize及strokeColor字段为0.7.0+版本新增的，用于设置收起时显示节点数量的文字样式）  |          |
 | expandBtnIcon（v0.5.0+）     | Object  | { open: '', close: '' } | 自定义展开收起按钮的图标，可以传图标的svg字符串  |          |
+| expandBtnNumHandler（v0.7.0+）     | Function  |  | 用于自定义收起时显示节点数量的内容，接收一个参数，代表收起的节点实例，需要返回一个数字或字符串，代表最终显示的内容，比如你可以当数量大于99时，显示99+  |          |
+| isShowExpandNum（v0.7.0+）     | Boolean  | true | 节点收起时是否显示收起的数量  |          |
 | enableShortcutOnlyWhenMouseInSvg（v0.5.1+）     | Boolean  | true | 是否只有当鼠标在画布内才响应快捷键事件  |          |
 | enableNodeTransitionMove（v0.5.1+）（v0.6.7+已去除该特性）     | Boolean  | true | 是否开启节点动画过渡  |          |
 | nodeTransitionMoveDuration（v0.5.1+）（v0.6.7+已去除该特性）     | Number  | 300 | 如果开启节点动画过渡，可以通过该属性设置过渡的时间，单位ms  |          |
@@ -77,6 +79,14 @@ const mindMap = new MindMap({
 | enableAutoEnterTextEditWhenKeydown（v0.6.13+）     | Boolean  | true | 是否在存在一个激活节点时，当按下中文、英文、数字按键时自动进入文本编辑模式 |          |
 | richTextEditFakeInPlace（v0.6.13+）     | Boolean  | false | 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果，需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果 |          |
 | customHandleClipboardText（v0.6.14+）     | Function  | null | 自定义对剪贴板文本的处理。当按ctrl+v粘贴时会读取用户剪贴板中的文本和图片，默认只会判断文本是否是普通文本和simple-mind-map格式的节点数据，如果你想处理其他思维导图的数据，比如processon、zhixi等，那么可以传递一个函数，接受当前剪贴板中的文本为参数，返回处理后的数据，可以返回两种类型：1.返回一个纯文本，那么会直接以该文本创建一个子节点；2.返回一个节点对象，格式如下：{ simpleMindMap: true, data: { data: { text: '' }, children: [] } }，代表是simple-mind-map格式的数据，节点数据同simple-mind-map节点数据格式，如果你的处理逻辑存在异步逻辑，也可以返回一个promise |          |
+| errorHandler（v0.6.15+）     | Function  |  | 自定义错误处理函数，目前只会抛出一些异步逻辑出错的情况。可以传递一个函数，会接收两个参数，第一个为错误的类型，第二个为错误对象 |          |
+| disableMouseWheelZoom（v0.6.15+）     | Boolean  | false | 禁止鼠标滚轮缩放，你仍旧可以使用api进行缩放 |          |
+| resetCss（v0.6.16+）     | String  |  * { margin: 0; padding: 0; box-sizing: border-box; } | 设置导出图片和svg时，针对富文本节点内容，也就是嵌入到svg中的html节点的默认样式覆盖，如果不覆盖，节点内容会发生偏移 |          |
+| enableDblclickReset（v0.6.17+）     | Boolean  | true（v0.7.0+改为false）  | 开启鼠标双击复位思维导图位置及缩放 |          |
+| minExportImgCanvasScale（v0.7.0+）     | Number  | 2  | 导出图片和pdf时canvas的缩放倍数，该配置会和window.devicePixelRatio值取最大值，用于提升图片清晰度 |          |
+| hoverRectColor（v0.7.0+）     | String  | rgb(94, 200, 248)  | 节点鼠标hover和激活时显示的矩形边框颜色，hover时会添加0.6的透明度 |          |
+| hoverRectPadding（v0.7.0+）     | Number  | 2  | 节点鼠标hover和激活时显示的矩形边框距节点内容的距离 |          |
+| selectTextOnEnterEditText（v0.7.0+）     | Boolean  | true  | 双击节点进入节点文本编辑时是否默认选中文本，默认只在创建新节点时会选中 |          |
 
 ### 水印配置
 
@@ -326,8 +336,8 @@ mindMap.updateConfig({
 | REMOVE_NODE                         | 删除节点，操作节点为当前激活的节点或指定节点                         |   appointNodes（v0.4.7+，可选，指定节点，指定多个节点可以传一个数组）                                                           |
 | PASTE_NODE                          | 粘贴节点到节点，操作节点为当前激活的节点                     | data（要粘贴的节点数据，一般通过`renderer.copyNode()`方法和`renderer.cutNode()`方法获取） |
 | CUT_NODE                            | 剪切节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点使用无效 | callback(回调函数，剪切的节点数据会通过调用该函数并通过参数返回) |
-| SET_NODE_STYLE                      | 修改节点单个样式                                                 | node（要设置样式的节点）、style（样式属性）、value（样式属性值）、isActive（布尔值，是否设置的是激活状态的样式） |
-| SET_NODE_STYLEs（v0.6.12+）                      | 修改节点多个样式                                                 | node（要设置样式的节点）、style（样式对象，key为样式属性，value为样式值）、isActive（布尔值，是否设置的是激活状态的样式） |
+| SET_NODE_STYLE                      | 修改节点单个样式                                                 | node（要设置样式的节点）、style（样式属性）、value（样式属性值）、isActive（v0.7.0+已废弃，布尔值，是否设置的是激活状态的样式） |
+| SET_NODE_STYLEs（v0.6.12+）                      | 修改节点多个样式                                                 | node（要设置样式的节点）、style（样式对象，key为样式属性，value为样式值）、isActive（v0.7.0+已废弃，布尔值，是否设置的是激活状态的样式） |
 | SET_NODE_ACTIVE                     | 设置节点是否激活                                             | node（要设置的节点）、active（布尔值，是否激活）             |
 | CLEAR_ACTIVE_NODE                   | 清除当前已激活节点的激活状态，操作节点为当前激活的节点       |                                                              |
 | SET_NODE_EXPAND                     | 设置节点是否展开                                             | node（要设置的节点）、expand（布尔值，是否展开）             |

@@ -280,7 +280,7 @@ export default {
      * @Desc: 监听节点激活
      */
     onNodeActive(...args) {
-      this.activeNodes = args[1]
+      this.activeNodes = [...args[1]]
     },
 
     /**
@@ -360,7 +360,7 @@ export default {
           title: '提示',
           message: `当前正在编辑你本机的【${file.name}】文件`,
           duration: 0,
-          showClose: false
+          showClose: true
         })
       }
       fileReader.readAsText(file)

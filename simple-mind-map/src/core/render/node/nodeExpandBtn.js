@@ -6,13 +6,27 @@ function createExpandNodeContent() {
   if (this._openExpandNode) {
     return
   }
-  let { open, close } = this.mindMap.opt.expandBtnIcon || {}
-  // 展开的节点
-  this._openExpandNode = SVG(open || btnsSvg.open).size(
-    this.expandBtnSize,
-    this.expandBtnSize
-  )
-  this._openExpandNode.x(0).y(-this.expandBtnSize / 2)
+  let { close, open } = this.mindMap.opt.expandBtnIcon || {}
+  // 根据配置判断是否显示数量按钮
+  if (this.mindMap.opt.isShowExpandNum) {
+    // 展开的节点
+    this._openExpandNode = SVG()
+      .text()
+      .size(this.expandBtnSize, this.expandBtnSize)
+    // 文本垂直居中
+    this._openExpandNode.attr({
+      'text-anchor': 'middle',
+      'dominant-baseline': 'middle',
+      x: this.expandBtnSize / 2,
+      y: 2
+    })
+  } else {
+    this._openExpandNode = SVG(open || btnsSvg.open).size(
+      this.expandBtnSize,
+      this.expandBtnSize
+    )
+    this._openExpandNode.x(0).y(-this.expandBtnSize / 2)
+  }
   // 收起的节点
   this._closeExpandNode = SVG(close || btnsSvg.close).size(
     this.expandBtnSize,
@@ -22,6 +36,7 @@ function createExpandNodeContent() {
   // 填充节点
   this._fillExpandNode = new Circle().size(this.expandBtnSize)
   this._fillExpandNode.x(0).y(-this.expandBtnSize / 2)
+
   // 设置样式
   this.style.iconBtn(
     this._openExpandNode,
@@ -29,7 +44,12 @@ function createExpandNodeContent() {
     this._fillExpandNode
   )
 }
-
+function sumNode(data = []) {
+  return data.reduce(
+    (total, cur) => total + this.sumNode(cur.children || []),
+    data.length
+  )
+}
 //  创建或更新展开收缩按钮内容
 function updateExpandBtnNode() {
   let { expand } = this.nodeData.data
@@ -47,7 +67,26 @@ function updateExpandBtnNode() {
     node = this._closeExpandNode
     this._lastExpandBtnType = true
   }
-  if (this._expandBtn) this._expandBtn.add(this._fillExpandNode).add(node)
+
+  if (this._expandBtn) {
+    // 如果是收起按钮加上边框
+    let { isShowExpandNum, expandBtnStyle, expandBtnNumHandler } = this.mindMap.opt
+    if (isShowExpandNum) {
+      if (!expand) {
+        // 数字按钮添加边框
+        this._fillExpandNode.stroke({
+          color: expandBtnStyle.strokeColor
+        })
+        // 计算子节点数量
+        let count = this.sumNode(this.nodeData.children)
+        count = expandBtnNumHandler(count)
+        node.text(count)
+      } else {
+        this._fillExpandNode.stroke('none')
+      }
+    }
+    this._expandBtn.add(this._fillExpandNode).add(node)
+  }
 }
 
 //  更新展开收缩按钮位置
@@ -138,5 +177,6 @@ export default {
   renderExpandBtn,
   removeExpandBtn,
   showExpandBtn,
-  hideExpandBtn
+  hideExpandBtn,
+  sumNode
 }

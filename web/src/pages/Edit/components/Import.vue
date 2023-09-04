@@ -59,13 +59,44 @@ export default {
   },
   created() {
     this.$bus.$on('showImport', this.handleShowImport)
+    this.$bus.$on('handle_file_url', this.handleFileURL)
   },
   beforeDestroy() {
     this.$bus.$off('showImport', this.handleShowImport)
+    this.$bus.$off('handle_file_url', this.handleFileURL)
   },
   methods: {
     handleShowImport() {
       this.dialogVisible = true
+    },
+
+    // 检查url中是否操作需要打开的文件
+    async handleFileURL() {
+      try {
+        const fileURL = this.$route.query.fileURL
+        if (!fileURL) return
+        const macth = /\.(smm|json|xmind|md|xlsx)$/.exec(fileURL)
+        if (!macth) {
+          return
+        }
+        const type = macth[1]
+        const res = await fetch(fileURL)
+        const file = await res.blob()
+        const data = {
+          raw: file
+        }
+        if (type === 'smm' || type === 'json') {
+          this.handleSmm(data)
+        } else if (type === 'xmind') {
+          this.handleXmind(data)
+        } else if (type === 'xlsx') {
+          this.handleExcel(data)
+        } else if (type === 'md') {
+          this.handleMd(data)
+        }
+      } catch (error) {
+        console.log(error)
+      }
     },
 
     /**

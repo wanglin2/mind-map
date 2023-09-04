@@ -325,10 +325,49 @@ export const nodeDataNoStylePropList = [
   'uid',
   'activeStyle',
   'associativeLineTargets',
-  'associativeLineTargetControlOffsets'
+  'associativeLineTargetControlOffsets',
+  'associativeLinePoint',
+  'associativeLineText'
 ]
 
 // 数据缓存
 export const commonCaches = {
-  measureCustomNodeContentSizeEl: null
+  measureCustomNodeContentSizeEl: null,
+  measureRichtextNodeTextSizeEl: null
 }
+
+// 错误类型
+export const ERROR_TYPES = {
+  READ_CLIPBOARD_ERROR: 'read_clipboard_error',
+  PARSE_PASTE_DATA_ERROR: 'parse_paste_data_error',
+  CUSTOM_HANDLE_CLIPBOARD_TEXT_ERROR: 'custom_handle_clipboard_text_error',
+  LOAD_CLIPBOARD_IMAGE_ERROR: 'load_clipboard_image_error',
+  BEFORE_TEXT_EDIT_ERROR: 'before_text_edit_error',
+  EXPORT_ERROR: 'export_error'
+}
+
+// a4纸的宽高
+export const a4Size = {
+  width: 592.28,
+  height: 841.89
+}
+
+// css
+export const cssContent = `
+  /* 鼠标hover和激活时渲染的矩形 */
+  .smm-hover-node{
+    display: none;
+    opacity: 0.6;
+    stroke-width: 1;
+  }
+
+  .smm-node:hover .smm-hover-node{
+    display: block;
+  }
+
+  .smm-node.active .smm-hover-node{
+    display: block;
+    opacity: 1;
+    stroke-width: 2;
+  }
+`

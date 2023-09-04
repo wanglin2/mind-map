@@ -137,6 +137,12 @@
               :label="item"
               :value="item"
             >
+              <span
+                v-if="item > 0"
+                class="borderLine"
+                :class="{ isDark: isDark }"
+                :style="{ height: item + 'px' }"
+              ></span>
             </el-option>
           </el-select>
         </div>
@@ -160,6 +166,12 @@
               :key="item.value"
               :label="item.name"
               :value="item.value"
+              class="lineStyleOption"
+              :class="{
+                isDark: isDark,
+                isSelected: style.lineStyle === item.value
+              }"
+              v-html="lineStyleMap[item.value]"
             >
             </el-option>
           </el-select>
@@ -227,6 +239,12 @@
               :label="item"
               :value="item"
             >
+              <span
+                v-if="item > 0"
+                class="borderLine"
+                :class="{ isDark: isDark }"
+                :style="{ height: item + 'px' }"
+              ></span>
             </el-option>
           </el-select>
         </div>
@@ -271,6 +289,12 @@
               :label="item"
               :value="item"
             >
+              <span
+                v-if="item > 0"
+                class="borderLine"
+                :class="{ isDark: isDark }"
+                :style="{ height: item + 'px' }"
+              ></span>
             </el-option>
           </el-select>
         </div>
@@ -317,6 +341,12 @@
               :label="item"
               :value="item"
             >
+              <span
+                v-if="item > 0"
+                class="borderLine"
+                :class="{ isDark: isDark }"
+                :style="{ height: item + 'px' }"
+              ></span>
             </el-option>
           </el-select>
         </div>
@@ -723,6 +753,16 @@
           </el-select>
         </div>
       </div>
+      <!-- 是否显示滚动条 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="localConfigs.isShowScrollbar"
+            @change="updateLocalConfig('isShowScrollbar', $event)"
+            >{{ $t('baseStyle.isShowScrollbar') }}</el-checkbox
+          >
+        </div>
+      </div>
     </div>
   </Sidebar>
 </template>
@@ -738,7 +778,8 @@ import {
   backgroundSizeList,
   fontFamilyList,
   fontSizeList,
-  rootLineKeepSameInCurveList
+  rootLineKeepSameInCurveList,
+  lineStyleMap
 } from '@/config'
 import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
@@ -817,7 +858,10 @@ export default {
         }
       },
       updateWatermarkTimer: null,
-      enableNodeRichText: true
+      enableNodeRichText: true,
+      localConfigs: {
+        isShowScrollbar: false
+      }
     }
   },
   computed: {
@@ -845,6 +889,9 @@ export default {
     },
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
+    },
+    lineStyleMap() {
+      return lineStyleMap[this.$i18n.locale] || lineStyleMap.zh
     }
   },
   watch: {
@@ -860,9 +907,7 @@ export default {
     }
   },
   created() {
-    this.enableNodeRichText = this.localConfig.openNodeRichText
-    this.mousewheelAction = this.localConfig.mousewheelAction
-    this.mousewheelZoomActionReverse = this.localConfig.mousewheelZoomActionReverse
+    this.initLoacalConfig()
     this.$bus.$on('setData', this.onSetData)
   },
   beforeDestroy() {
@@ -926,6 +971,18 @@ export default {
         'mousewheelZoomActionReverse'
       ].forEach(key => {
         this.config[key] = this.mindMap.getConfig(key)
+      })
+    },
+
+    // 初始化本地配置
+    initLoacalConfig() {
+      this.enableNodeRichText = this.localConfig.openNodeRichText
+      this.mousewheelAction = this.localConfig.mousewheelAction
+      this.mousewheelZoomActionReverse = this.localConfig.mousewheelZoomActionReverse
+      ;[
+        'isShowScrollbar'
+      ].forEach(key => {
+        this.localConfigs[key] = this.localConfig[key]
       })
     },
 
@@ -1004,11 +1061,7 @@ export default {
       }, 300)
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-07-03 22:08:12
-     * @Desc: 设置margin
-     */
+    // 设置margin
     updateMargin(type, value) {
       this.style[type] = value
       if (!this.data.theme.config[this.marginActiveTab]) {
@@ -1044,12 +1097,11 @@ export default {
       })
     },
 
-    // 切换鼠标滚轮的行为
-    mousewheelActionChange(e) {
+    // 本地配置
+    updateLocalConfig(key, value) {
       this.setLocalConfig({
-        mousewheelAction: e
+        [key]: value
       })
-      this.mindMap.updateConfig
     }
   }
 }
@@ -1155,6 +1207,49 @@ export default {
         bottom: 0;
         height: 2px;
       }
+    }
+  }
+}
+
+.borderLine {
+  display: inline-block;
+  width: 100%;
+  background-color: #000;
+
+  &.isDark {
+    background-color: #fff;
+  }
+}
+</style>
+<style lang="less">
+.el-select-dropdown__item.selected {
+  .borderLine {
+    background-color: #409eff;
+  }
+}
+
+.lineStyleOption {
+  &.isDark {
+    svg {
+      path {
+        stroke: #fff;
+      }
+    }
+  }
+
+  &.isSelected {
+    svg {
+      path {
+        stroke: #409eff;
+      }
+    }
+  }
+
+  svg {
+    margin-top: 4px;
+
+    path {
+      stroke: #000;
     }
   }
 }

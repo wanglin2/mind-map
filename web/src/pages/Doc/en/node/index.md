@@ -110,16 +110,20 @@ Get the final style value applied to this node
 
 `root`: whether it is the root node, default `false`
 
-`isActive`: whether the value being fetched is the active state style value,
+`isActive`: v0.7.0+has been abandoned, whether the value being fetched is the active state style value,
 default `false`
 
 ### setStyle(prop, value, isActive)
+
+- `isActive`: v0.7.0+has been abandoned
 
 Modify a style of the node, a shortcut method for the `SET_NODE_STYLE` command
 
 ### setStyles(style, isActive)
 
 > v0.6.12+
+
+- `isActive`: v0.7.0+has been abandoned
 
 Modify multiple styles of nodes, a shortcut method for the `SET_NODE_STYLES` command
 

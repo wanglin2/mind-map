@@ -46,7 +46,10 @@ class Base {
 
   // 检查当前来源是否需要重新计算节点大小
   checkIsNeedResizeSources() {
-    return [CONSTANTS.CHANGE_THEME, CONSTANTS.TRANSFORM_TO_NORMAL_NODE].includes(this.renderer.renderSource)
+    return [
+      CONSTANTS.CHANGE_THEME,
+      CONSTANTS.TRANSFORM_TO_NORMAL_NODE
+    ].includes(this.renderer.renderSource)
   }
 
   // 层级类型改变
@@ -70,7 +73,10 @@ class Base {
     // 数据上保存了节点引用，那么直接复用节点
     if (data && data._node && !this.renderer.reRender) {
       newNode = data._node
-      let isLayerTypeChange = this.checkIsLayerTypeChange(newNode.layerIndex, layerIndex)
+      let isLayerTypeChange = this.checkIsLayerTypeChange(
+        newNode.layerIndex,
+        layerIndex
+      )
       newNode.reset()
       newNode.layerIndex = layerIndex
       this.cacheNode(data._node.uid, newNode)
@@ -85,7 +91,10 @@ class Base {
       newNode = this.lru.get(data.data.uid)
       // 保存该节点上一次的数据
       let lastData = JSON.stringify(newNode.nodeData.data)
-      let isLayerTypeChange = this.checkIsLayerTypeChange(newNode.layerIndex, layerIndex)
+      let isLayerTypeChange = this.checkIsLayerTypeChange(
+        newNode.layerIndex,
+        layerIndex
+      )
       newNode.reset()
       newNode.nodeData = newNode.handleData(data || {})
       newNode.layerIndex = layerIndex
@@ -139,7 +148,7 @@ class Base {
     } else if (initRootNodePositionMap[value] !== undefined) {
       return size * initRootNodePositionMap[value]
     } else if (/^\d\d*%$/.test(value)) {
-      return Number.parseFloat(value) / 100 * size
+      return (Number.parseFloat(value) / 100) * size
     } else {
       return (size - nodeSize) / 2
     }
@@ -148,12 +157,24 @@ class Base {
   //  定位节点到画布中间
   setNodeCenter(node) {
     let { initRootNodePosition } = this.mindMap.opt
-    let { CENTER }= CONSTANTS.INIT_ROOT_NODE_POSITION
-    if (!initRootNodePosition || !Array.isArray(initRootNodePosition) || initRootNodePosition.length < 2) {
+    let { CENTER } = CONSTANTS.INIT_ROOT_NODE_POSITION
+    if (
+      !initRootNodePosition ||
+      !Array.isArray(initRootNodePosition) ||
+      initRootNodePosition.length < 2
+    ) {
       initRootNodePosition = [CENTER, CENTER]
     }
-    node.left = this.formatPosition(initRootNodePosition[0], this.mindMap.width, node.width)
-    node.top = this.formatPosition(initRootNodePosition[1], this.mindMap.height, node.height)
+    node.left = this.formatPosition(
+      initRootNodePosition[0],
+      this.mindMap.width,
+      node.width
+    )
+    node.top = this.formatPosition(
+      initRootNodePosition[1],
+      this.mindMap.height,
+      node.height
+    )
   }
 
   //  更新子节点属性
@@ -170,7 +191,7 @@ class Base {
   //  更新子节点多个属性
   updateChildrenPro(children, props) {
     children.forEach(item => {
-      Object.keys(props).forEach((prop) => {
+      Object.keys(props).forEach(prop => {
         item[prop] += props[prop]
       })
       if (item.children && item.children.length && !item.hasCustomPosition()) {
@@ -216,16 +237,22 @@ class Base {
 
   //   获取节点的marginX
   getMarginX(layerIndex) {
+    const { themeConfig, opt } = this.mindMap
+    const { second, node } = themeConfig
+    const hoverRectPadding = opt.hoverRectPadding * 2
     return layerIndex === 1
-      ? this.mindMap.themeConfig.second.marginX
-      : this.mindMap.themeConfig.node.marginX
+      ? second.marginX + hoverRectPadding
+      : node.marginX + hoverRectPadding
   }
 
   //  获取节点的marginY
   getMarginY(layerIndex) {
+    const { themeConfig, opt } = this.mindMap
+    const { second, node } = themeConfig
+    const hoverRectPadding = opt.hoverRectPadding * 2
     return layerIndex === 1
-      ? this.mindMap.themeConfig.second.marginY
-      : this.mindMap.themeConfig.node.marginY
+      ? second.marginY + hoverRectPadding
+      : node.marginY + hoverRectPadding
   }
 
   //  获取节点包括概要在内的宽度

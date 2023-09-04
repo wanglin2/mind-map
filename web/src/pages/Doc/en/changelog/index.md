@@ -1,5 +1,129 @@
 # Changelog
 
+## 0.7.0
+
+Breaking change: Removed the section of node activation style in the theme file, Setting the activation style of nodes is no longer supported, and the activation effect has been changed to a unified node outer border style, while also supporting the mouse hover effect.
+
+Fix:
+
+> 1.Fix rendering anomalies when the node border size is relatively large.
+>
+> 2.Fixed an issue where the node style of the associated line will not be updated when switching themes.
+>
+> 3.Fix that selecting all did not trigger node_ The issue with active events.
+
+新增：
+
+> 1.When folding nodes, displays the number of collapsed nodes.
+>
+> 2.Support the position of the endpoint of the associated line to follow mouse drag changes.
+>
+> 3.Add a scrollbar plugin.
+>
+> 4.Support opening specified online files through fileURL query parameters in URLs.
+>
+> 5.The fishbone diagram supports setting node margins.
+>
+> 6.By default, double-click to reset the canvas.
+>
+> 7.Modify the parameters of the export image method, and when exporting PDF, if the size of the mind map is smaller than A4 paper, do not rotate the direction.
+>
+> 8.Improve the clarity of exported images and PDFs on high-definition screens.
+> 
+> 9.Add a pre destruction lifecycle function to the plugin to address the issue of some side effects that were not cleared during the destruction of the mind map.
+>
+> 10.Optimize the settings of the basic style and do not trigger full rendering when modifying theme attributes that do not affect size.
+>
+> 11.Prohibit triggering node right-click menu events when multiple node selections are completed, to avoid triggering the right-click menu display.
+>
+> 12.Optimize the Select plugin so that if multiple selected nodes do not change, the activation event is not triggered.
+>
+> 13.The activation node list thrown by event node_active no longer directly references the internal activation list.
+>
+> 14.Optimize the logic of mouse button down node events, and support dragging the canvas by holding down the root node with the right mouse button in the right-click drag and drop canvas mode.
+
+Demo：
+
+> 1.Do not directly reference the internal activation node list to optimize performance.
+> 
+> 2.Support configuring whether to display scrollbars.
+>
+> 3.Delete the active node configuration in the sidebar node style configuration section.
+
+## 0.6.17
+
+Fix:
+
+> 1.Fix the issue of error reporting in the xmind file exported from Baidu Brain Map.
+>
+> 2.Fix the mindMap. export method code error.
+
+New:
+
+> 1.Create index.d.ts file。
+>
+> 2.Support configuration to enable double click reset mind map.
+>
+> 3.Intercept paste operations during rich text editing, remove formatting, and only allow pasting pure text.
+
+## 0.6.16
+
+Fix:
+
+> 1.Optimize the logic of rich text measurement elements, remove duplicate settings for styles, and add duplicate nodes
+>
+> 2.Optimize the export image logic, and when traversing the node to convert the URL of the image, if it is already in the form of data: URL, do not handle it repeatedly.
+
+New:
+
+> 1.Remove the second parameter of the exported SVG method and configure it through instantiation instead.
+>
+> 2.Export images without using external libraries.
+
+Demo:
+
+> 1.Fixed a bug where siblings can be added to the root node when editing the outline separately.
+
+## 0.6.15-fix.2
+
+Fix: Fixed an issue where rich text nodes cannot be displayed in Firefox browser.
+
+## 0.6.15-fix.1
+
+New:
+
+> 1.Export PDF supports pagination export based on image size.
+>
+> 2.Exporting PDF supports automatic direction adjustment based on aspect ratio.
+>
+> 3.Optimize the placeholder elements of the expand and collapse buttons: 1. Nodes without child nodes do not render this element; 2. Dynamically update the element based on the existence of child nodes.
+>
+> 4.Add a configuration that prohibits mouse wheel scaling.
+>
+> 5.Supports passing error handling functions.
+
+Fix:
+
+> 1.Fix the issue of displaying exceptions when node text is empty.
+>
+> 2.Change the paddingX and paddingY of exported SVG graphics to single sided padding.
+>
+> 3.Fixed an issue where the mouse is not centered when zooming when the canvas is not 0 from the top left corner of the browser window.
+>
+> 4.Fix the issue of overlapping node borders.
+
+Demo：
+
+> 1.The bottom right corner supports jumping to related links.
+>
+> 2.Adjust the position of the mini map to solve the problem of being blocked by side buttons.
+>
+> 3.Fix the issue where the prompt in the upper right corner of the open local file cannot be closed.
+>
+> 4.Editing the outline separately is no longer linked to the canvas, optimizing the editing experience under large data volume.
+>
+> 5.The sidebar involves graphical options to increase visualization effects.
+
 ## 0.6.14
 
 New:

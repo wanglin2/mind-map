@@ -17,7 +17,7 @@ import {
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
-import { CONSTANTS } from '../../constants/constant'
+import { CONSTANTS, ERROR_TYPES } from '../../constants/constant'
 
 // 布局列表
 const layouts = {
@@ -342,7 +342,7 @@ class Render {
         }
       })
     })
-    this.mindMap.emit('node_active', null, this.activeNodeList)
+    this.mindMap.emit('node_active', null, [...this.activeNodeList])
   }
 
   //  清除当前激活的节点
@@ -407,7 +407,7 @@ class Render {
           // 激活节点需要显示展开收起按钮
           node.showExpandBtn()
           setTimeout(() => {
-            node.updateNodeShape()
+            node.updateNodeActive()
           }, 0)
         }
       },
@@ -416,6 +416,7 @@ class Render {
       0,
       0
     )
+    this.mindMap.emit('node_active', null, [...this.activeNodeList])
   }
 
   //  回退
@@ -629,6 +630,7 @@ class Render {
 
   // 粘贴事件
   async onPaste() {
+    const { errorHandler } = this.mindMap.opt
     // 读取剪贴板的文字和图片
     let text = null
     let img = null
@@ -647,7 +649,7 @@ class Render {
           }
         }
       } catch (error) {
-        console.log(error)
+        errorHandler(ERROR_TYPES.READ_CLIPBOARD_ERROR, error)
       }
     }
     // 检查剪切板数据是否有变化
@@ -682,7 +684,9 @@ class Render {
                 text = String(res)
               }
             }
-          } catch (error) {}
+          } catch (error) {
+            errorHandler(ERROR_TYPES.CUSTOM_HANDLE_CLIPBOARD_TEXT_ERROR, error)
+          }
         }
         // 默认处理
         if (useDefault) {
@@ -691,7 +695,9 @@ class Render {
             if (parsedData && parsedData.simpleMindMap) {
               smmData = parsedData.data
             }
-          } catch (error) {}
+          } catch (error) {
+            errorHandler(ERROR_TYPES.PARSE_PASTE_DATA_ERROR, error)
+          }
         }
         if (smmData) {
           this.mindMap.execCommand(
@@ -724,7 +730,7 @@ class Render {
             })
           }
         } catch (error) {
-          console.log(error)
+          errorHandler(ERROR_TYPES.LOAD_CLIPBOARD_IMAGE_ERROR, error)
         }
       }
     } else {
@@ -849,7 +855,7 @@ class Render {
         }
       }
     }
-    this.mindMap.emit('node_active', null, this.activeNodeList)
+    this.mindMap.emit('node_active', null, [...this.activeNodeList])
     this.mindMap.render()
   }
 
@@ -881,7 +887,7 @@ class Render {
     let copyData = copyNodeTree({}, node, true)
     this.removeActiveNode(node)
     this.removeOneNode(node)
-    this.mindMap.emit('node_active', null, this.activeNodeList)
+    this.mindMap.emit('node_active', null, [...this.activeNodeList])
     this.mindMap.render()
     if (callback && typeof callback === 'function') {
       callback(copyData)
@@ -896,7 +902,7 @@ class Render {
     // let copyData = copyNodeTree({}, node, false, true)
     this.removeActiveNode(node)
     this.removeOneNode(node)
-    this.mindMap.emit('node_active', null, this.activeNodeList)
+    this.mindMap.emit('node_active', null, [...this.activeNodeList])
     toNode.nodeData.children.push(node.nodeData)
     this.mindMap.render()
     if (toNode.isRoot) {
@@ -916,19 +922,9 @@ class Render {
   }
 
   //  设置节点样式
-  setNodeStyle(node, prop, value, isActive) {
-    let data = {}
-    if (isActive) {
-      data = {
-        activeStyle: {
-          ...(node.nodeData.data.activeStyle || {}),
-          [prop]: value
-        }
-      }
-    } else {
-      data = {
-        [prop]: value
-      }
+  setNodeStyle(node, prop, value) {
+    let data = {
+      [prop]: value
     }
     // 如果开启了富文本，则需要应用到富文本上
     if (this.mindMap.richText) {
@@ -949,18 +945,8 @@ class Render {
   }
 
   //  设置节点多个样式
-  setNodeStyles(node, style, isActive) {
-    let data = {}
-    if (isActive) {
-      data = {
-        activeStyle: {
-          ...(node.nodeData.data.activeStyle || {}),
-          ...style
-        }
-      }
-    } else {
-      data = style
-    }
+  setNodeStyles(node, style) {
+    let data = { ...style }
     // 如果开启了富文本，则需要应用到富文本上
     if (this.mindMap.richText) {
       let config = this.mindMap.richText.normalStyleToRichTextStyle(style)
@@ -995,7 +981,7 @@ class Render {
     } else {
       node.hideExpandBtn()
     }
-    node.updateNodeShape()
+    node.updateNodeActive()
   }
 
   //  设置节点是否展开

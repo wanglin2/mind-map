@@ -38,11 +38,17 @@ a.download = 'xxx'
 a.click()
 ```
 
-### png(name, transparent = false)
+### png(name, transparent = false, checkRotate)
+
+> Versions below v0.7.0 are: png(name, transparent = false, rotateWhenWidthLongerThenHeight)
 
 - `name`: Name, optional
 
 - `transparent`: v0.5.7+, Specify whether the background of the exported image is transparent
+
+- `rotateWhenWidthLongerThenHeight`: v0.6.15+, V0.7.0+abandoned, Boolean, false, Automatically rotate 90 degrees when the image has a width to height ratio
+
+- `checkRotate`: v0.7.0+, Function, You can pass a function that takes two parameters, the width and height of the image, and returns true or false. True represents that the image needs to be rotated by 90 degrees.
 
 Exports as `png`.
 
@@ -50,7 +56,7 @@ Exports as `png`.
 
 - `name`：`svg` title
 
-- `plusCssText`：v0.4.0+, When node rich text editing is enabled and `domToImage` passes `false`, additional `css` styles can be added. If there is a `dom` node in `svg`, you can set some styles for the node through this parameter, such as:
+- `plusCssText`：v0.4.0+, （v0.6.16+This parameter has been removed and instead passed in through the `resetCss` configuration during instantiation）, When node rich text editing is enabled and `domToImage` passes `false`, additional `css` styles can be added. If there is a `dom` node in `svg`, you can set some styles for the node through this parameter, such as:
 
 ```js
 svg(
@@ -66,11 +72,13 @@ svg(
 
 Exports as `svg`.
 
-### pdf(name)
+### pdf(name, useMultiPageExport)
 
 > v0.2.1+
 
-`name`：File name
+- `name`：File name
+
+- `useMultiPageExport`: v0.6.15+, Boolean, false, Whether to export multiple pages, default to single page
 
 Export as `pdf`. Unlike other export methods, this method does not return data and directly triggers the download.
 
