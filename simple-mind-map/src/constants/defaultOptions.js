@@ -68,13 +68,21 @@ export const defaultOpt = {
   // 展开收起按钮的颜色
   expandBtnStyle: {
     color: '#808080',
-    fill: '#fff'
+    fill: '#fff',
+    fontSize: 13,
+    strokeColor: '#333333'
   },
   // 自定义展开收起按钮的图标
   expandBtnIcon: {
     open: '', // svg字符串
     close: ''
   },
+  // 处理收起节点数量
+  expandBtnNumHandler: num => {
+    return num
+  },
+  // 是否显示带数量的收起按钮
+  isShowExpandNum: true,
   // 是否只有当鼠标在画布内才响应快捷键事件
   enableShortcutOnlyWhenMouseInSvg: true,
   // 初始根节点的位置
@@ -166,5 +174,13 @@ export const defaultOpt = {
     }
   `,
   // 开启鼠标双击复位思维导图位置及缩放
-  enableDblclickReset: true
+  enableDblclickReset: false,
+  // 导出图片时canvas的缩放倍数，该配置会和window.devicePixelRatio值取最大值
+  minExportImgCanvasScale: 2,
+  // 节点鼠标hover和激活时显示的矩形边框的颜色
+  hoverRectColor: 'rgb(94, 200, 248)',
+  // 节点鼠标hover和激活时显示的矩形边框距节点内容的距离
+  hoverRectPadding: 2,
+  // 双击节点进入节点文本编辑时是否默认选中文本，默认只在创建新节点时会选中
+  selectTextOnEnterEditText: false
 }

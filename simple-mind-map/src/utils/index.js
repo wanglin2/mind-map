@@ -632,3 +632,28 @@ export const isMobile = () => {
     navigator.userAgent
   )
 }
+
+// 获取对象改变了的的属性
+export const getObjectChangedProps = (oldObject, newObject) => {
+  const res = {}
+  Object.keys(newObject).forEach((prop) => {
+    const oldVal = oldObject[prop]
+    const newVal = newObject[prop]
+    if (getType(oldVal) !== getType(newVal)) {
+      res[prop] = newVal
+      return
+    }
+    if (getType(oldVal) === 'Object') {
+      if (JSON.stringify(oldVal) !== JSON.stringify(newVal)) {
+        res[prop] = newVal
+        return
+      }
+    } else {
+      if (oldVal !== newVal) {
+        res[prop] = newVal
+        return
+      }
+    }
+  })
+  return res
+}

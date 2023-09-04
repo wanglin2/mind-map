@@ -167,4 +167,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/布林.jpg" style="width: 50px;height: 50px;" />
         <span>布林</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/南风.jpg" style="width: 50px;height: 50px;" />
+        <span>南风</span>
+    </span>
 </p>
