@@ -12,7 +12,7 @@ import Search from 'simple-mind-map/src/plugins/Search.js'
 MindMap.usePlugin(Search)
 ```
 
-After registration and instantiation of `MindMap`, the instance can be obtained through `mindMap.Search`.
+After registration and instantiation of `MindMap`, the instance can be obtained through `mindMap.search`.
 
 ## Event
 
