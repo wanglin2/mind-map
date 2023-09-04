@@ -27,7 +27,10 @@ a.href = <span class="hljs-string">&#x27;xxx.png&#x27;</span><span class="hljs-c
 a.download = <span class="hljs-string">&#x27;xxx&#x27;</span>
 a.click()
 </code></pre>
-<h3>png(name, transparent = false, rotateWhenWidthLongerThenHeight)</h3>
+<h3>png(name, transparent = false, checkRotate)</h3>
+<blockquote>
+<p>v0.7.0以下版本为： png(name, transparent = false, rotateWhenWidthLongerThenHeight)</p>
+</blockquote>
 <ul>
 <li>
 <p><code>name</code>：名称，可不传</p>
@@ -36,7 +39,10 @@ a.click()
 <p><code>transparent</code>：v0.5.7+，指定导出图片的背景是否是透明的</p>
 </li>
 <li>
-<p><code>rotateWhenWidthLongerThenHeight</code>: v0.6.15+，Boolean, false, 是否在图片宽比高长时自动旋转90度</p>
+<p><code>rotateWhenWidthLongerThenHeight</code>: v0.6.15+，v0.7.0+已废弃，Boolean, false, 是否在图片宽比高长时自动旋转90度</p>
+</li>
+<li>
+<p><code>checkRotate</code>：v0.7.0+，Function，可以传递一个函数，接收图片的宽度和高度两个参数，返回true或false，true代表图片需要旋转90度。</p>
 </li>
 </ul>
 <p>导出为<code>png</code>。</p>

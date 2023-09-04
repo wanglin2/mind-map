@@ -8,6 +8,21 @@
 </code></pre>
 <p>这样就会在当前激活节点（如果存在多个激活节点，默认会操作第一个激活节点）下添加一个子节点。</p>
 <p><code>INSERT_CHILD_NODE</code>命令还支持传入几个参数，详细详细请阅读【API】-【构造函数】-【execCommand方法】。</p>
+<p>如果你想获取插入节点的实例，可以这样操作：</p>
+<p>1.需要指定新插入节点的<code>id</code>，比如：</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> { createUid } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils&#x27;</span>
+
+<span class="hljs-keyword">let</span> uid = createUid()
+mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_CHILD_NODE&#x27;</span>, <span class="hljs-literal">false</span>, [], {
+    uid
+})
+</code></pre>
+<p>2.然后在<code>node_tree_render_end</code>事件里通过该<code>id</code>来获取实例：</p>
+<pre class="hljs"><code>mindMap.on(<span class="hljs-string">&#x27;node_tree_render_end&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-comment">// 调用renderer实例的findNodeByUid方法获取到节点的实例对象</span>
+    <span class="hljs-keyword">const</span> node = mindMap.renderer.findNodeByUid(uid)
+})
+</code></pre>
 <h2>插入兄弟节点</h2>
 <p>插入兄弟节点和插入子节点方式完全一致：</p>
 <pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_NODE&#x27;</span>)

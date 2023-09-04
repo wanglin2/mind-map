@@ -38,13 +38,17 @@ a.download = 'xxx'
 a.click()
 ```
 
-### png(name, transparent = false, rotateWhenWidthLongerThenHeight)
+### png(name, transparent = false, checkRotate)
+
+> v0.7.0以下版本为： png(name, transparent = false, rotateWhenWidthLongerThenHeight)
 
 - `name`：名称，可不传
 
 - `transparent`：v0.5.7+，指定导出图片的背景是否是透明的
 
-- `rotateWhenWidthLongerThenHeight`: v0.6.15+，Boolean, false, 是否在图片宽比高长时自动旋转90度
+- `rotateWhenWidthLongerThenHeight`: v0.6.15+，v0.7.0+已废弃，Boolean, false, 是否在图片宽比高长时自动旋转90度
+
+- `checkRotate`：v0.7.0+，Function，可以传递一个函数，接收图片的宽度和高度两个参数，返回true或false，true代表图片需要旋转90度。
 
 导出为`png`。
 

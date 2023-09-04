@@ -14,6 +14,28 @@ mindMap.execCommand('INSERT_CHILD_NODE')
 
 `INSERT_CHILD_NODE`命令还支持传入几个参数，详细详细请阅读【API】-【构造函数】-【execCommand方法】。
 
+如果你想获取插入节点的实例，可以这样操作：
+
+1.需要指定新插入节点的`id`，比如：
+
+```js
+import { createUid } from 'simple-mind-map/src/utils'
+
+let uid = createUid()
+mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
+    uid
+})
+```
+
+2.然后在`node_tree_render_end`事件里通过该`id`来获取实例：
+
+```js
+mindMap.on('node_tree_render_end', () => {
+    // 调用renderer实例的findNodeByUid方法获取到节点的实例对象
+    const node = mindMap.renderer.findNodeByUid(uid)
+})
+```
+
 ## 插入兄弟节点
 
 插入兄弟节点和插入子节点方式完全一致：
