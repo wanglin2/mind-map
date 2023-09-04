@@ -27,7 +27,10 @@ a.href = <span class="hljs-string">&#x27;xxx.png&#x27;</span><span class="hljs-c
 a.download = <span class="hljs-string">&#x27;xxx&#x27;</span>
 a.click()
 </code></pre>
-<h3>png(name, transparent = false, rotateWhenWidthLongerThenHeight)</h3>
+<h3>png(name, transparent = false, checkRotate)</h3>
+<blockquote>
+<p>Versions below v0.7.0 are: png(name, transparent = false, rotateWhenWidthLongerThenHeight)</p>
+</blockquote>
 <ul>
 <li>
 <p><code>name</code>: Name, optional</p>
@@ -36,7 +39,10 @@ a.click()
 <p><code>transparent</code>: v0.5.7+, Specify whether the background of the exported image is transparent</p>
 </li>
 <li>
-<p><code>rotateWhenWidthLongerThenHeight</code>: v0.6.15+，Boolean, false, Automatically rotate 90 degrees when the image has a width to height ratio</p>
+<p><code>rotateWhenWidthLongerThenHeight</code>: v0.6.15+, V0.7.0+abandoned, Boolean, false, Automatically rotate 90 degrees when the image has a width to height ratio</p>
+</li>
+<li>
+<p><code>checkRotate</code>: v0.7.0+, Function, You can pass a function that takes two parameters, the width and height of the image, and returns true or false. True represents that the image needs to be rotated by 90 degrees.</p>
 </li>
 </ul>
 <p>Exports as <code>png</code>.</p>

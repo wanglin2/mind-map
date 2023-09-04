@@ -36,7 +36,7 @@ function showEditTextBox(g) {
   this.mindMap.keyCommand.addShortcut('Enter', () => {
     this.hideEditTextBox()
   })
-  
+
   if (!this.textEditNode) {
     this.textEditNode = document.createElement('div')
     this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);padding: 3px 5px;margin-left: -5px;margin-top: -3px;outline: none; word-break: break-all;`
@@ -62,7 +62,8 @@ function showEditTextBox(g) {
   ).split(/\n/gim)
   this.textEditNode.style.fontFamily = associativeLineTextFontFamily
   this.textEditNode.style.fontSize = associativeLineTextFontSize * scale + 'px'
-  this.textEditNode.style.lineHeight = textLines.length > 1 ? associativeLineTextLineHeight : 'normal'
+  this.textEditNode.style.lineHeight =
+    textLines.length > 1 ? associativeLineTextLineHeight : 'normal'
   this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex
   this.textEditNode.innerHTML = textLines.join('<br>')
   this.textEditNode.style.display = 'block'
@@ -78,10 +79,12 @@ function onScale() {
 // 更新文本编辑框位置
 function updateTextEditBoxPos(g) {
   let rect = g.node.getBoundingClientRect()
-  this.textEditNode.style.minWidth = rect.width + 10 + 'px'
-  this.textEditNode.style.minHeight = rect.height + 6 + 'px'
-  this.textEditNode.style.left = rect.left + 'px'
-  this.textEditNode.style.top = rect.top + 'px'
+  if (this.textEditNode) {
+    this.textEditNode.style.minWidth = `${rect.width + 10}px`
+    this.textEditNode.style.minHeight = `${rect.height + 6}px`
+    this.textEditNode.style.left = `${rect.left}px`
+    this.textEditNode.style.top = `${rect.top}px`
+  }
 }
 
 //  隐藏文本编辑框
@@ -116,8 +119,10 @@ function getText(node, toNode) {
 // 渲染关联线文字
 function renderText(str, path, text) {
   if (!str) return
-  let { associativeLineTextFontSize, associativeLineTextLineHeight } =
-    this.mindMap.themeConfig
+  let {
+    associativeLineTextFontSize,
+    associativeLineTextLineHeight
+  } = this.mindMap.themeConfig
   text.clear()
   let textArr = str.split(/\n/gim)
   textArr.forEach((item, index) => {

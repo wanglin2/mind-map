@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     handleNodeActive(...args) {
-      this.activeNodes = args[1]
+      this.activeNodes = [...args[1]]
     },
 
     handleShowNodeImage() {

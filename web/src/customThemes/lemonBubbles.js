@@ -15,10 +15,7 @@ export default {
       borderColor: 'rgb(26, 26, 26)',
       borderWidth: 3,
       fontSize: 24,
-      shape: 'roundedRectangle',
-      active: {
-        borderColor: 'rgb(235, 255, 187)',
-      }
+      shape: 'roundedRectangle'
     },
     // 二级节点样式
     second: {
@@ -27,18 +24,12 @@ export default {
       borderColor: 'rgb(51, 51, 51)',
       borderWidth: 3,
       fontSize: 18,
-      shape: 'roundedRectangle',
-      active: {
-        borderColor: 'rgb(39, 222, 232)',
-      }
+      shape: 'roundedRectangle'
     },
     // 三级及以下节点样式
     node: {
       fontSize: 14,
-      color: 'rgb(0, 0, 0)',
-      active: {
-        borderColor: 'rgb(39, 222, 232)'
-      }
+      color: 'rgb(0, 0, 0)'
     },
     // 概要节点样式
     generalization: {
@@ -46,10 +37,7 @@ export default {
       fillColor: '#fff',
       borderColor: 'rgb(26, 26, 26)',
       borderWidth: 2,
-      color: 'rgb(26, 26, 26)',
-      active: {
-        borderColor: 'rgb(39, 222, 232)'
-      }
+      color: 'rgb(26, 26, 26)'
     }
   }
   

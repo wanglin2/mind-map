@@ -64,14 +64,20 @@
 <p>Get the final style value applied to this node</p>
 <p><code>prop</code>: the style property to get</p>
 <p><code>root</code>: whether it is the root node, default <code>false</code></p>
-<p><code>isActive</code>: whether the value being fetched is the active state style value,
+<p><code>isActive</code>: v0.7.0+has been abandoned, whether the value being fetched is the active state style value,
 default <code>false</code></p>
 <h3>setStyle(prop, value, isActive)</h3>
+<ul>
+<li><code>isActive</code>: v0.7.0+has been abandoned</li>
+</ul>
 <p>Modify a style of the node, a shortcut method for the <code>SET_NODE_STYLE</code> command</p>
 <h3>setStyles(style, isActive)</h3>
 <blockquote>
 <p>v0.6.12+</p>
 </blockquote>
+<ul>
+<li><code>isActive</code>: v0.7.0+has been abandoned</li>
+</ul>
 <p>Modify multiple styles of nodes, a shortcut method for the <code>SET_NODE_STYLES</code> command</p>
 <h3>getData(key)</h3>
 <p>Get the specified value in the <code>data</code> object of the node's real data <code>nodeData</code>,

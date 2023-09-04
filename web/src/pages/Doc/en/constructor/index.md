@@ -48,8 +48,10 @@ const mindMap = new MindMap({
 | mousewheelZoomActionReverse（v0.6.5+）     | Boolean  | false | When `mousewheelAction` is set to `zoom`, the default scrolling forward is to zoom out, and scrolling backward is to zoom in. If this property is set to true, it will be reversed   |          |
 | defaultInsertSecondLevelNodeText（v0.4.7+）     | String  | 二级节点 | Text of the default inserted secondary node               |          |
 | defaultInsertBelowSecondLevelNodeText（v0.4.7+）     | String  | 分支主题 | Text for nodes below the second level inserted by default               |          |
-| expandBtnStyle（v0.5.0+）     | Object  | { color: '#808080', fill: '#fff' } | Expand the color of the stow button  |          |
+| expandBtnStyle（v0.5.0+）     | Object  | { color: '#808080', fill: '#fff', fontSize: 13, strokeColor: '#333333' } | Expand the color of the stow button, (The fontSize and strokeColor fields were added in version 0.7.0+to set the text style for displaying the number of nodes when folded) |          |
 | expandBtnIcon（v0.5.0+）     | Object  | { open: '', close: '' } | Customize the icon of the expand/collapse button, and you can transfer the svg string of the icon  |          |
+| expandBtnNumHandler（v0.7.0+）     | Function  |  | Used to customize the content of displaying the number of nodes when folding, receiving a parameter that represents the instance of the folding node, and returning a number or string that represents the final displayed content. For example, when the number is greater than 99, 99 can be displayed+  |          |
+| isShowExpandNum（v0.7.0+）     | Boolean  | true | Display the number of folded nodes when they are folded up  |          |
 | enableShortcutOnlyWhenMouseInSvg（v0.5.1+）     | Boolean  | true | Only respond to shortcut key events when the mouse is inside the canvas  |          |
 | enableNodeTransitionMove（v0.5.1+）（v0.6.7+ is remove this feature）     | Boolean  | true | Whether to enable node animation transition  |          |
 | nodeTransitionMoveDuration（v0.5.1+）（v0.6.7+ is remove this feature）     | Number  | 300 | If node animation transition is enabled, the transition time can be set using this attribute, in milliseconds  |          |
@@ -80,7 +82,11 @@ const mindMap = new MindMap({
 | errorHandler（v0.6.15+）     | Function  |  | Custom error handling functions currently only throw some asynchronous logic errors. Can pass a function that takes two parameters, the first being the wrong type and the second being the wrong object |          |
 | disableMouseWheelZoom（v0.6.15+）     | Boolean  | false | Prohibit mouse wheel scaling, you can still use the API for scaling |          |
 | resetCss（v0.6.16+）     | String  |  * { margin: 0; padding: 0; box-sizing: border-box; } | When exporting images and SVGs, the default style overlay for rich text node content, which is embedded in HTML nodes in SVGs, will occur. If not overlaid, the node content will be offset |          |
-| enableDblclickReset（v0.6.17+）     | Boolean  | true  | Turn on the mouse and double-click to reset the position and zoom of the mind map |          |
+| enableDblclickReset（v0.6.17+）     | Boolean  | true(v0.7.0+changed to false)  | Turn on the mouse and double-click to reset the position and zoom of the mind map |          |
+| minExportImgCanvasScale（v0.7.0+）     | Number  | 2  | The scaling factor of canvas when exporting images and PDFs, which is set to the maximum value of window.devicePixelRatio to improve image clarity |          |
+| hoverRectColor（v0.7.0+）     | String  | rgb(94, 200, 248)  | The node mouse hover and the rectangular border color displayed when activated will add a transparency of 0.6 when hovering |          |
+| hoverRectPadding（v0.7.0+）     | Number  | 2  | The distance between the node mouse hover and the displayed rectangular border when activated and the node content |          |
+| selectTextOnEnterEditText（v0.7.0+）     | Boolean  | true  | Is the text selected by default when double-clicking a node to enter node text editing? By default, it will only be selected when creating a new node |          |
 
 ### Watermark config
 
@@ -337,8 +343,8 @@ redo. All commands are as follows:
 | DOWN_NODE                          | Move node down, the active node will be the operation node. If there are multiple active nodes, only the first one will be effective. Using this command on the root node or the last node in the list will be invalid |                                                              |
 | REMOVE_NODE                        | Remove node, the active node or appoint node will be the operation node      |  appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）                                                            |
 | PASTE_NODE                         | Paste node to a node, the active node will be the operation node | data (the node data to paste, usually obtained through the renderer.copyNode() and renderer.cutNode() methods) |
-| SET_NODE_STYLE                     | Modify node single style                                            | node (the node to set the style of), prop (style property), value (style property value), isActive (boolean, whether the style being set is for the active state) |
-| SET_NODE_STYLEs（v0.6.12+）       |  Modify multiple styles of nodes   | node（the node to set the style of）、style（Style object，key is style prop，value is style value）、isActive（boolean, whether the style being set is for the active state） |
+| SET_NODE_STYLE                     | Modify node single style                                            | node (the node to set the style of), prop (style property), value (style property value), isActive (v0.7.0+has been abandoned, boolean, whether the style being set is for the active state) |
+| SET_NODE_STYLEs（v0.6.12+）       |  Modify multiple styles of nodes   | node（the node to set the style of）、style（Style object，key is style prop，value is style value）、isActive（v0.7.0+has been abandoned, boolean, whether the style being set is for the active state） |
 | SET_NODE_ACTIVE                    | Set whether the node is active                               | node (the node to set), active (boolean, whether to activate) |
 | CLEAR_ACTIVE_NODE                  | Clear the active state of the currently active node(s), the active node will be the operation node |                                                              |
 | SET_NODE_EXPAND                    | Set whether the node is expanded                             | node (the node to set), expand (boolean, whether to expand)  |

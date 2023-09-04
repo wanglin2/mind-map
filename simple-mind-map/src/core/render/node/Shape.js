@@ -62,14 +62,10 @@ export default class Shape {
   //  创建形状节点
   createShape() {
     const shape = this.node.getShape()
-    const borderWidth = this.node.getBorderWidth()
-    let { width, height } = this.node
-    width -= borderWidth
-    height -= borderWidth
     let node = null
     // 矩形
     if (shape === CONSTANTS.SHAPE.RECTANGLE) {
-      node = new Rect().size(width, height)
+      node = this.createRect()
     } else if (shape === CONSTANTS.SHAPE.DIAMOND) {
       // 菱形
       node = this.createDiamond()
@@ -98,9 +94,41 @@ export default class Shape {
     return node
   }
 
+  // 获取节点减去节点边框宽度、hover节点边框宽度后的尺寸
+  getNodeSize() {
+    const borderWidth = this.node.getBorderWidth()
+    let { width, height } = this.node
+    width -= borderWidth
+    height -= borderWidth
+    return {
+      width,
+      height
+    }
+  }
+
+  // 创建矩形
+  createRect() {
+    let { width, height } = this.getNodeSize()
+    let borderRadius = this.node.style.merge('borderRadius')
+    return new Path().plot(`
+      M${borderRadius},0
+      L${width - borderRadius},0
+      C${width - borderRadius},0 ${width},${0} ${width},${borderRadius}
+      L${width},${height - borderRadius}
+      C${width},${height - borderRadius} ${width},${height} ${
+      width - borderRadius
+    },${height}
+      L${borderRadius},${height}
+      C${borderRadius},${height} ${0},${height} ${0},${height - borderRadius}
+      L${0},${borderRadius}
+      C${0},${borderRadius} ${0},${0} ${borderRadius},${0}
+      Z
+    `)
+  }
+
   //  创建菱形
   createDiamond() {
-    let { width, height } = this.node
+    let { width, height } = this.getNodeSize()
     let halfWidth = width / 2
     let halfHeight = height / 2
     let topX = halfWidth
@@ -123,7 +151,7 @@ export default class Shape {
   createParallelogram() {
     let { paddingX } = this.node.getPaddingVale()
     paddingX = paddingX || this.node.shapePadding.paddingX
-    let { width, height } = this.node
+    let { width, height } = this.getNodeSize()
     return new Polygon().plot([
       [paddingX, 0],
       [width, 0],
@@ -134,7 +162,7 @@ export default class Shape {
 
   //  创建圆角矩形
   createRoundedRectangle() {
-    let { width, height } = this.node
+    let { width, height } = this.getNodeSize()
     let halfHeight = height / 2
     return new Path().plot(`
       M${halfHeight},0
@@ -148,7 +176,7 @@ export default class Shape {
   //  创建八角矩形
   createOctagonalRectangle() {
     let w = 5
-    let { width, height } = this.node
+    let { width, height } = this.getNodeSize()
     return new Polygon().plot([
       [0, w],
       [w, 0],
@@ -165,7 +193,7 @@ export default class Shape {
   createOuterTriangularRectangle() {
     let { paddingX } = this.node.getPaddingVale()
     paddingX = paddingX || this.node.shapePadding.paddingX
-    let { width, height } = this.node
+    let { width, height } = this.getNodeSize()
     return new Polygon().plot([
       [paddingX, 0],
       [width - paddingX, 0],
@@ -180,7 +208,7 @@ export default class Shape {
   createInnerTriangularRectangle() {
     let { paddingX } = this.node.getPaddingVale()
     paddingX = paddingX || this.node.shapePadding.paddingX
-    let { width, height } = this.node
+    let { width, height } = this.getNodeSize()
     return new Polygon().plot([
       [0, 0],
       [width, 0],
@@ -193,7 +221,7 @@ export default class Shape {
 
   //  创建椭圆
   createEllipse() {
-    let { width, height } = this.node
+    let { width, height } = this.getNodeSize()
     let halfWidth = width / 2
     let halfHeight = height / 2
     return new Path().plot(`
@@ -206,7 +234,7 @@ export default class Shape {
 
   //  创建圆
   createCircle() {
-    let { width, height } = this.node
+    let { width, height } = this.getNodeSize()
     let halfWidth = width / 2
     let halfHeight = height / 2
     return new Path().plot(`

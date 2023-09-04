@@ -50,7 +50,8 @@ export default {
     rootStyle: '根节点',
     associativeLineText: '关联线文字',
     fontFamily: '字体',
-    fontSize: '字号'
+    fontSize: '字号',
+    isShowScrollbar: '是否显示滚动条'
   },
   color: {
     moreColor: '更多颜色'

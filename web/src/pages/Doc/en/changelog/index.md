@@ -1,5 +1,55 @@
 # Changelog
 
+## 0.7.0
+
+Breaking change: Removed the section of node activation style in the theme file, Setting the activation style of nodes is no longer supported, and the activation effect has been changed to a unified node outer border style, while also supporting the mouse hover effect.
+
+Fix:
+
+> 1.Fix rendering anomalies when the node border size is relatively large.
+>
+> 2.Fixed an issue where the node style of the associated line will not be updated when switching themes.
+>
+> 3.Fix that selecting all did not trigger node_ The issue with active events.
+
+新增：
+
+> 1.When folding nodes, displays the number of collapsed nodes.
+>
+> 2.Support the position of the endpoint of the associated line to follow mouse drag changes.
+>
+> 3.Add a scrollbar plugin.
+>
+> 4.Support opening specified online files through fileURL query parameters in URLs.
+>
+> 5.The fishbone diagram supports setting node margins.
+>
+> 6.By default, double-click to reset the canvas.
+>
+> 7.Modify the parameters of the export image method, and when exporting PDF, if the size of the mind map is smaller than A4 paper, do not rotate the direction.
+>
+> 8.Improve the clarity of exported images and PDFs on high-definition screens.
+> 
+> 9.Add a pre destruction lifecycle function to the plugin to address the issue of some side effects that were not cleared during the destruction of the mind map.
+>
+> 10.Optimize the settings of the basic style and do not trigger full rendering when modifying theme attributes that do not affect size.
+>
+> 11.Prohibit triggering node right-click menu events when multiple node selections are completed, to avoid triggering the right-click menu display.
+>
+> 12.Optimize the Select plugin so that if multiple selected nodes do not change, the activation event is not triggered.
+>
+> 13.The activation node list thrown by event node_active no longer directly references the internal activation list.
+>
+> 14.Optimize the logic of mouse button down node events, and support dragging the canvas by holding down the root node with the right mouse button in the right-click drag and drop canvas mode.
+
+Demo：
+
+> 1.Do not directly reference the internal activation node list to optimize performance.
+> 
+> 2.Support configuring whether to display scrollbars.
+>
+> 3.Delete the active node configuration in the sidebar node style configuration section.
+
 ## 0.6.17
 
 Fix:
