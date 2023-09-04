@@ -52,5 +52,9 @@ export const themeMap = {
     neonLamp: require('../assets/img/themes/neonLamp.jpg'),
     darkNightLceBlade: require('../assets/img/themes/darkNightLceBlade.jpg'),
     morandi: require('../assets/img/themes/morandi.jpg'),
+    classic5: require('../assets/img/themes/classic5.jpg'),
+    dark3: require('../assets/img/themes/dark3.jpg'),
+    dark4: require('../assets/img/themes/dark4.jpg'),
+    cactus: require('../assets/img/themes/cactus.jpg'),
 }
   
