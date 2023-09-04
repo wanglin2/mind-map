@@ -38889,7 +38889,9 @@ var constant_exports = {};
 __export(constant_exports, {
   CONSTANTS: () => CONSTANTS,
   ERROR_TYPES: () => ERROR_TYPES,
+  a4Size: () => a4Size,
   commonCaches: () => commonCaches,
+  cssContent: () => cssContent,
   initRootNodePositionMap: () => initRootNodePositionMap,
   layoutList: () => layoutList,
   layoutValueList: () => layoutValueList,
@@ -39214,7 +39216,9 @@ var nodeDataNoStylePropList = [
   "uid",
   "activeStyle",
   "associativeLineTargets",
-  "associativeLineTargetControlOffsets"
+  "associativeLineTargetControlOffsets",
+  "associativeLinePoint",
+  "associativeLineText"
 ];
 var commonCaches = {
   measureCustomNodeContentSizeEl: null,
@@ -39228,6 +39232,28 @@ var ERROR_TYPES = {
   BEFORE_TEXT_EDIT_ERROR: "before_text_edit_error",
   EXPORT_ERROR: "export_error"
 };
+var a4Size = {
+  width: 592.28,
+  height: 841.89
+};
+var cssContent = `
+  /* \u9F20\u6807hover\u548C\u6FC0\u6D3B\u65F6\u6E32\u67D3\u7684\u77E9\u5F62 */
+  .smm-hover-node{
+    display: none;
+    opacity: 0.6;
+    stroke-width: 1;
+  }
+
+  .smm-node:hover .smm-hover-node{
+    display: block;
+  }
+
+  .smm-node.active .smm-hover-node{
+    display: block;
+    opacity: 1;
+    stroke-width: 2;
+  }
+`;
 
 // ../simple-mind-map/src/core/view/View.js
 var View = class {
@@ -39674,7 +39700,13 @@ var import_deepmerge = __toESM(require_cjs());
 
 // ../simple-mind-map/src/core/render/node/Style.js
 var rootProp = ["paddingX", "paddingY"];
-var backgroundStyleProps = ["backgroundColor", "backgroundImage", "backgroundRepeat", "backgroundPosition", "backgroundSize"];
+var backgroundStyleProps = [
+  "backgroundColor",
+  "backgroundImage",
+  "backgroundRepeat",
+  "backgroundPosition",
+  "backgroundSize"
+];
 var Style = class {
   //   设置背景样式
   static setBackgroundStyle(el2, themeConfig) {
@@ -39685,7 +39717,13 @@ var Style = class {
         Style.cacheStyle[prop] = style[prop];
       });
     }
-    let { backgroundColor, backgroundImage, backgroundRepeat, backgroundPosition, backgroundSize } = themeConfig;
+    let {
+      backgroundColor,
+      backgroundImage,
+      backgroundRepeat,
+      backgroundPosition,
+      backgroundSize
+    } = themeConfig;
     el2.style.backgroundColor = backgroundColor;
     if (backgroundImage && backgroundImage !== "none") {
       el2.style.backgroundImage = `url(${backgroundImage})`;
@@ -39710,7 +39748,7 @@ var Style = class {
     this.ctx = ctx;
   }
   //  合并样式
-  merge(prop, root2, isActive) {
+  merge(prop, root2) {
     let themeConfig = this.ctx.mindMap.themeConfig;
     let defaultConfig = themeConfig.node;
     if (root2 || rootProp.includes(prop)) {
@@ -39722,18 +39760,11 @@ var Style = class {
     } else if (this.ctx.layerIndex === 1) {
       defaultConfig = themeConfig.second;
     }
-    if (isActive !== void 0 ? isActive : this.ctx.nodeData.data.isActive) {
-      if (this.ctx.nodeData.data.activeStyle && this.ctx.nodeData.data.activeStyle[prop] !== void 0) {
-        return this.ctx.nodeData.data.activeStyle[prop];
-      } else if (defaultConfig.active && defaultConfig.active[prop]) {
-        return defaultConfig.active[prop];
-      }
-    }
     return this.getSelfStyle(prop) !== void 0 ? this.getSelfStyle(prop) : defaultConfig[prop];
   }
   //  获取某个样式值
-  getStyle(prop, root2, isActive) {
-    return this.merge(prop, root2, isActive);
+  getStyle(prop, root2) {
+    return this.merge(prop, root2);
   }
   //  获取自身自定义样式
   getSelfStyle(prop) {
@@ -39828,13 +39859,19 @@ var Style = class {
   }
   //  展开收起按钮
   iconBtn(node3, node22, fillNode) {
-    let { color, fill } = this.ctx.mindMap.opt.expandBtnStyle || {
+    let { color, fill, fontSize, fontColor } = this.ctx.mindMap.opt.expandBtnStyle || {
       color: "#808080",
-      fill: "#fff"
+      fill: "#fff",
+      fontSize: 12,
+      strokeColor: "#333333",
+      fontColor: "#333333"
     };
     node3.fill({ color });
     node22.fill({ color });
     fillNode.fill({ color: fill });
+    if (this.ctx.mindMap.opt.isShowExpandNum) {
+      node3.attr({ "font-size": fontSize, "font-color": fontColor });
+    }
   }
   // 是否设置了自定义的样式
   hasCustomStyle() {
@@ -39845,6 +39882,13 @@ var Style = class {
       }
     });
     return res;
+  }
+  // hover和激活节点
+  hoverNode(node3) {
+    const { hoverRectColor } = this.ctx.mindMap.opt;
+    node3.radius(5).fill("none").stroke({
+      color: hoverRectColor
+    });
   }
 };
 Style.cacheStyle = null;
@@ -45491,13 +45535,9 @@ var Shape2 = class {
   //  创建形状节点
   createShape() {
     const shape = this.node.getShape();
-    const borderWidth = this.node.getBorderWidth();
-    let { width: width2, height: height2 } = this.node;
-    width2 -= borderWidth;
-    height2 -= borderWidth;
     let node3 = null;
     if (shape === CONSTANTS.SHAPE.RECTANGLE) {
-      node3 = new Rect().size(width2, height2);
+      node3 = this.createRect();
     } else if (shape === CONSTANTS.SHAPE.DIAMOND) {
       node3 = this.createDiamond();
     } else if (shape === CONSTANTS.SHAPE.PARALLELOGRAM) {
@@ -45517,9 +45557,37 @@ var Shape2 = class {
     }
     return node3;
   }
+  // 获取节点减去节点边框宽度、hover节点边框宽度后的尺寸
+  getNodeSize() {
+    const borderWidth = this.node.getBorderWidth();
+    let { width: width2, height: height2 } = this.node;
+    width2 -= borderWidth;
+    height2 -= borderWidth;
+    return {
+      width: width2,
+      height: height2
+    };
+  }
+  // 创建矩形
+  createRect() {
+    let { width: width2, height: height2 } = this.getNodeSize();
+    let borderRadius = this.node.style.merge("borderRadius");
+    return new Path().plot(`
+      M${borderRadius},0
+      L${width2 - borderRadius},0
+      C${width2 - borderRadius},0 ${width2},${0} ${width2},${borderRadius}
+      L${width2},${height2 - borderRadius}
+      C${width2},${height2 - borderRadius} ${width2},${height2} ${width2 - borderRadius},${height2}
+      L${borderRadius},${height2}
+      C${borderRadius},${height2} ${0},${height2} ${0},${height2 - borderRadius}
+      L${0},${borderRadius}
+      C${0},${borderRadius} ${0},${0} ${borderRadius},${0}
+      Z
+    `);
+  }
   //  创建菱形
   createDiamond() {
-    let { width: width2, height: height2 } = this.node;
+    let { width: width2, height: height2 } = this.getNodeSize();
     let halfWidth = width2 / 2;
     let halfHeight = height2 / 2;
     let topX = halfWidth;
@@ -45541,7 +45609,7 @@ var Shape2 = class {
   createParallelogram() {
     let { paddingX } = this.node.getPaddingVale();
     paddingX = paddingX || this.node.shapePadding.paddingX;
-    let { width: width2, height: height2 } = this.node;
+    let { width: width2, height: height2 } = this.getNodeSize();
     return new Polygon().plot([
       [paddingX, 0],
       [width2, 0],
@@ -45551,7 +45619,7 @@ var Shape2 = class {
   }
   //  创建圆角矩形
   createRoundedRectangle() {
-    let { width: width2, height: height2 } = this.node;
+    let { width: width2, height: height2 } = this.getNodeSize();
     let halfHeight = height2 / 2;
     return new Path().plot(`
       M${halfHeight},0
@@ -45564,7 +45632,7 @@ var Shape2 = class {
   //  创建八角矩形
   createOctagonalRectangle() {
     let w2 = 5;
-    let { width: width2, height: height2 } = this.node;
+    let { width: width2, height: height2 } = this.getNodeSize();
     return new Polygon().plot([
       [0, w2],
       [w2, 0],
@@ -45580,7 +45648,7 @@ var Shape2 = class {
   createOuterTriangularRectangle() {
     let { paddingX } = this.node.getPaddingVale();
     paddingX = paddingX || this.node.shapePadding.paddingX;
-    let { width: width2, height: height2 } = this.node;
+    let { width: width2, height: height2 } = this.getNodeSize();
     return new Polygon().plot([
       [paddingX, 0],
       [width2 - paddingX, 0],
@@ -45594,7 +45662,7 @@ var Shape2 = class {
   createInnerTriangularRectangle() {
     let { paddingX } = this.node.getPaddingVale();
     paddingX = paddingX || this.node.shapePadding.paddingX;
-    let { width: width2, height: height2 } = this.node;
+    let { width: width2, height: height2 } = this.getNodeSize();
     return new Polygon().plot([
       [0, 0],
       [width2, 0],
@@ -45606,7 +45674,7 @@ var Shape2 = class {
   }
   //  创建椭圆
   createEllipse() {
-    let { width: width2, height: height2 } = this.node;
+    let { width: width2, height: height2 } = this.getNodeSize();
     let halfWidth = width2 / 2;
     let halfHeight = height2 / 2;
     return new Path().plot(`
@@ -45618,7 +45686,7 @@ var Shape2 = class {
   }
   //  创建圆
   createCircle() {
-    let { width: width2, height: height2 } = this.node;
+    let { width: width2, height: height2 } = this.getNodeSize();
     let halfWidth = width2 / 2;
     let halfHeight = height2 / 2;
     return new Path().plot(`
@@ -46125,6 +46193,29 @@ var getVisibleColorFromTheme = (themeConfig) => {
     }
   }
 };
+var getObjectChangedProps = (oldObject, newObject) => {
+  const res = {};
+  Object.keys(newObject).forEach((prop) => {
+    const oldVal = oldObject[prop];
+    const newVal = newObject[prop];
+    if (getType(oldVal) !== getType(newVal)) {
+      res[prop] = newVal;
+      return;
+    }
+    if (getType(oldVal) === "Object") {
+      if (JSON.stringify(oldVal) !== JSON.stringify(newVal)) {
+        res[prop] = newVal;
+        return;
+      }
+    } else {
+      if (oldVal !== newVal) {
+        res[prop] = newVal;
+        return;
+      }
+    }
+  });
+  return res;
+};
 
 // ../simple-mind-map/src/core/render/node/nodeGeneralization.js
 function checkHasGeneralization() {
@@ -46247,12 +46338,22 @@ function createExpandNodeContent() {
   if (this._openExpandNode) {
     return;
   }
-  let { open: open3, close: close2 } = this.mindMap.opt.expandBtnIcon || {};
-  this._openExpandNode = SVG(open3 || btns_default.open).size(
-    this.expandBtnSize,
-    this.expandBtnSize
-  );
-  this._openExpandNode.x(0).y(-this.expandBtnSize / 2);
+  let { close: close2, open: open3 } = this.mindMap.opt.expandBtnIcon || {};
+  if (this.mindMap.opt.isShowExpandNum) {
+    this._openExpandNode = SVG().text().size(this.expandBtnSize, this.expandBtnSize);
+    this._openExpandNode.attr({
+      "text-anchor": "middle",
+      "dominant-baseline": "middle",
+      x: this.expandBtnSize / 2,
+      y: 2
+    });
+  } else {
+    this._openExpandNode = SVG(open3 || btns_default.open).size(
+      this.expandBtnSize,
+      this.expandBtnSize
+    );
+    this._openExpandNode.x(0).y(-this.expandBtnSize / 2);
+  }
   this._closeExpandNode = SVG(close2 || btns_default.close).size(
     this.expandBtnSize,
     this.expandBtnSize
@@ -46264,6 +46365,12 @@ function createExpandNodeContent() {
     this._openExpandNode,
     this._closeExpandNode,
     this._fillExpandNode
+  );
+}
+function sumNode(data2 = []) {
+  return data2.reduce(
+    (total, cur) => total + this.sumNode(cur.children || []),
+    data2.length
   );
 }
 function updateExpandBtnNode() {
@@ -46282,8 +46389,22 @@ function updateExpandBtnNode() {
     node3 = this._closeExpandNode;
     this._lastExpandBtnType = true;
   }
-  if (this._expandBtn)
+  if (this._expandBtn) {
+    let { isShowExpandNum, expandBtnStyle, expandBtnNumHandler } = this.mindMap.opt;
+    if (isShowExpandNum) {
+      if (!expand) {
+        this._fillExpandNode.stroke({
+          color: expandBtnStyle.strokeColor
+        });
+        let count = this.sumNode(this.nodeData.children);
+        count = expandBtnNumHandler(count);
+        node3.text(count);
+      } else {
+        this._fillExpandNode.stroke("none");
+      }
+    }
     this._expandBtn.add(this._fillExpandNode).add(node3);
+  }
 }
 function updateExpandBtnPos() {
   if (!this._expandBtn) {
@@ -46359,7 +46480,8 @@ var nodeExpandBtn_default = {
   renderExpandBtn,
   removeExpandBtn,
   showExpandBtn,
-  hideExpandBtn
+  hideExpandBtn,
+  sumNode
 };
 
 // ../simple-mind-map/src/core/render/node/nodeCommandWraps.js
@@ -46387,11 +46509,11 @@ function setTag(tag) {
 function setShape(shape) {
   this.mindMap.execCommand("SET_NODE_SHAPE", this, shape);
 }
-function setStyle(prop, value, isActive) {
-  this.mindMap.execCommand("SET_NODE_STYLE", this, prop, value, isActive);
+function setStyle(prop, value) {
+  this.mindMap.execCommand("SET_NODE_STYLE", this, prop, value);
 }
-function setStyles(style, isActive) {
-  this.mindMap.execCommand("SET_NODE_STYLES", this, style, isActive);
+function setStyles(style) {
+  this.mindMap.execCommand("SET_NODE_STYLES", this, style);
 }
 var nodeCommandWraps_default = {
   setData,
@@ -46828,12 +46950,8 @@ function createTextNode() {
     return this.createRichTextNode();
   }
   let g2 = new G();
-  let fontSize = this.getStyle("fontSize", false, this.nodeData.data.isActive);
-  let lineHeight = this.getStyle(
-    "lineHeight",
-    false,
-    this.nodeData.data.isActive
-  );
+  let fontSize = this.getStyle("fontSize", false);
+  let lineHeight = this.getStyle("lineHeight", false);
   let textStyle = this.style.getTextFontStyle();
   let textArr = this.nodeData.data.text.split(/\n/gim);
   let maxWidth = this.mindMap.opt.textAutoWrapWidth;
@@ -47095,6 +47213,7 @@ var Node2 = class {
     this.children = opt.children || [];
     this.group = null;
     this.shapeNode = null;
+    this.hoverNode = null;
     this._customNodeContent = null;
     this._imgData = null;
     this._iconData = null;
@@ -47261,6 +47380,7 @@ var Node2 = class {
   //  定位节点内容
   layout() {
     this.group.clear();
+    const { hoverRectPadding } = this.mindMap.opt;
     let { width: width2, height: height2, textContentItemMargin } = this;
     let { paddingY } = this.getPaddingVale();
     const halfBorderWidth = this.getBorderWidth() / 2;
@@ -47268,18 +47388,25 @@ var Node2 = class {
     this.shapeNode = this.shapeInstance.createShape();
     this.shapeNode.addClass("smm-node-shape");
     this.shapeNode.translate(halfBorderWidth, halfBorderWidth);
+    this.style.shape(this.shapeNode);
     this.group.add(this.shapeNode);
-    this.updateNodeShape();
     this.renderExpandBtnPlaceholderRect();
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass("generalization_" + this.generalizationBelongNode.uid);
     }
+    const addHoverNode = () => {
+      this.hoverNode = new Rect().size(width2 + hoverRectPadding * 2, height2 + hoverRectPadding * 2).x(-hoverRectPadding).y(-hoverRectPadding);
+      this.hoverNode.addClass("smm-hover-node");
+      this.style.hoverNode(this.hoverNode, width2, height2);
+      this.group.add(this.hoverNode);
+    };
     if (this.isUseCustomNodeContent()) {
       let foreignObject = new ForeignObject();
       foreignObject.width(width2);
       foreignObject.height(height2);
-      foreignObject.add(SVG(this._customNodeContent));
+      foreignObject.add(this._customNodeContent);
       this.group.add(foreignObject);
+      addHoverNode();
       return;
     }
     let imgHeight = 0;
@@ -47333,6 +47460,7 @@ var Node2 = class {
       imgHeight + paddingY + (imgHeight > 0 && this._rectInfo.textContentHeight > 0 ? this.blockContentMargin : 0)
     );
     this.group.add(textContentNested);
+    addHoverNode();
   }
   // 给节点绑定事件
   bindGroupEvent() {
@@ -47346,13 +47474,19 @@ var Node2 = class {
       this.active(e2);
     });
     this.group.on("mousedown", (e2) => {
-      if (this.isRoot && e2.which === 3 && !this.mindMap.opt.readonly) {
-        e2.stopPropagation();
+      const { readonly, enableCtrlKeyNodeSelection, useLeftKeySelectionRightKeyDrag } = this.mindMap.opt;
+      if (!readonly) {
+        if (this.isRoot) {
+          if (e2.which === 3 && !useLeftKeySelectionRightKeyDrag) {
+            e2.stopPropagation();
+          }
+        } else {
+          if (e2.which !== 2) {
+            e2.stopPropagation();
+          }
+        }
       }
-      if (!this.isRoot && e2.which !== 2 && !this.mindMap.opt.readonly) {
-        e2.stopPropagation();
-      }
-      if (e2.ctrlKey && this.mindMap.opt.enableCtrlKeyNodeSelection) {
+      if (e2.ctrlKey && enableCtrlKeyNodeSelection) {
         this.isMultipleChoice = true;
         let isActive = this.nodeData.data.isActive;
         if (!isActive)
@@ -47368,7 +47502,7 @@ var Node2 = class {
         this.mindMap.emit(
           "node_active",
           isActive ? null : this,
-          this.mindMap.renderer.activeNodeList
+          [...this.mindMap.renderer.activeNodeList]
         );
       }
       this.mindMap.emit("node_mousedown", this, e2);
@@ -47397,11 +47531,15 @@ var Node2 = class {
       this.mindMap.emit("node_dblclick", this, e2);
     });
     this.group.on("contextmenu", (e2) => {
-      if (this.mindMap.opt.readonly || e2.ctrlKey) {
+      const { readonly, useLeftKeySelectionRightKeyDrag } = this.mindMap.opt;
+      if (readonly || e2.ctrlKey) {
         return;
       }
       e2.stopPropagation();
       e2.preventDefault();
+      if (!useLeftKeySelectionRightKeyDrag && this.mindMap.select.hasSelectRange()) {
+        return;
+      }
       if (this.nodeData.data.isActive) {
         this.renderer.clearActive();
       }
@@ -47422,13 +47560,14 @@ var Node2 = class {
     this.renderer.clearActive();
     this.mindMap.execCommand("SET_NODE_ACTIVE", this, true);
     this.renderer.addActiveNode(this);
-    this.mindMap.emit("node_active", this, this.renderer.activeNodeList);
+    this.mindMap.emit("node_active", this, [...this.renderer.activeNodeList]);
   }
   //  更新节点
-  update(isLayout = false) {
+  update() {
     if (!this.group) {
       return;
     }
+    this.updateNodeActive();
     let { alwaysShowExpandBtn } = this.mindMap.opt;
     if (alwaysShowExpandBtn) {
       if (this._expandBtn && this.nodeData.children.length <= 0) {
@@ -47468,22 +47607,18 @@ var Node2 = class {
     this.update();
     return sizeChange;
   }
-  // 更新节点形状样式
-  updateNodeShape() {
-    if (!this.shapeNode)
+  // 更新节点激活状态
+  updateNodeActive() {
+    if (!this.group)
       return;
-    const shape = this.getShape();
-    this.style[shape === CONSTANTS.SHAPE.RECTANGLE ? "rect" : "shape"](
-      this.shapeNode
-    );
+    const isActive = this.nodeData.data.isActive;
+    this.group[isActive ? "addClass" : "removeClass"]("active");
   }
   //  递归渲染
   render(callback = () => {
   }) {
     this.renderLine();
-    let isLayout = false;
     if (!this.group) {
-      isLayout = true;
       this.group = new G();
       this.group.addClass("smm-node");
       this.group.css({
@@ -47492,7 +47627,7 @@ var Node2 = class {
       this.bindGroupEvent();
       this.draw.add(this.group);
       this.layout();
-      this.update(isLayout);
+      this.update();
     } else {
       this.draw.add(this.group);
       if (this.needLayout) {
@@ -47688,8 +47823,8 @@ var Node2 = class {
     };
   }
   //  获取某个样式
-  getStyle(prop, root2, isActive) {
-    let v3 = this.style.merge(prop, root2, isActive);
+  getStyle(prop, root2) {
+    let v3 = this.style.merge(prop, root2);
     return v3 === void 0 ? "" : v3;
   }
   //  获取自定义样式
@@ -47710,7 +47845,7 @@ var Node2 = class {
   }
   // 获取节点非节点状态的边框大小
   getBorderWidth() {
-    return this.style.merge("borderWidth", false, false) || 0;
+    return this.style.merge("borderWidth", false) || 0;
   }
   //  获取数据
   getData(key) {
@@ -47788,7 +47923,10 @@ var Base2 = class {
   }
   // 检查当前来源是否需要重新计算节点大小
   checkIsNeedResizeSources() {
-    return [CONSTANTS.CHANGE_THEME, CONSTANTS.TRANSFORM_TO_NORMAL_NODE].includes(this.renderer.renderSource);
+    return [
+      CONSTANTS.CHANGE_THEME,
+      CONSTANTS.TRANSFORM_TO_NORMAL_NODE
+    ].includes(this.renderer.renderSource);
   }
   // 层级类型改变
   checkIsLayerTypeChange(oldIndex, newIndex) {
@@ -47810,7 +47948,10 @@ var Base2 = class {
     let newNode = null;
     if (data2 && data2._node && !this.renderer.reRender) {
       newNode = data2._node;
-      let isLayerTypeChange = this.checkIsLayerTypeChange(newNode.layerIndex, layerIndex);
+      let isLayerTypeChange = this.checkIsLayerTypeChange(
+        newNode.layerIndex,
+        layerIndex
+      );
       newNode.reset();
       newNode.layerIndex = layerIndex;
       this.cacheNode(data2._node.uid, newNode);
@@ -47822,7 +47963,10 @@ var Base2 = class {
     } else if (this.lru.has(data2.data.uid) && !this.renderer.reRender) {
       newNode = this.lru.get(data2.data.uid);
       let lastData = JSON.stringify(newNode.nodeData.data);
-      let isLayerTypeChange = this.checkIsLayerTypeChange(newNode.layerIndex, layerIndex);
+      let isLayerTypeChange = this.checkIsLayerTypeChange(
+        newNode.layerIndex,
+        layerIndex
+      );
       newNode.reset();
       newNode.nodeData = newNode.handleData(data2 || {});
       newNode.layerIndex = layerIndex;
@@ -47880,8 +48024,16 @@ var Base2 = class {
     if (!initRootNodePosition || !Array.isArray(initRootNodePosition) || initRootNodePosition.length < 2) {
       initRootNodePosition = [CENTER, CENTER];
     }
-    node3.left = this.formatPosition(initRootNodePosition[0], this.mindMap.width, node3.width);
-    node3.top = this.formatPosition(initRootNodePosition[1], this.mindMap.height, node3.height);
+    node3.left = this.formatPosition(
+      initRootNodePosition[0],
+      this.mindMap.width,
+      node3.width
+    );
+    node3.top = this.formatPosition(
+      initRootNodePosition[1],
+      this.mindMap.height,
+      node3.height
+    );
   }
   //  更新子节点属性
   updateChildren(children, prop, offset) {
@@ -47936,11 +48088,17 @@ var Base2 = class {
   }
   //   获取节点的marginX
   getMarginX(layerIndex) {
-    return layerIndex === 1 ? this.mindMap.themeConfig.second.marginX : this.mindMap.themeConfig.node.marginX;
+    const { themeConfig, opt } = this.mindMap;
+    const { second, node: node3 } = themeConfig;
+    const hoverRectPadding = opt.hoverRectPadding * 2;
+    return layerIndex === 1 ? second.marginX + hoverRectPadding : node3.marginX + hoverRectPadding;
   }
   //  获取节点的marginY
   getMarginY(layerIndex) {
-    return layerIndex === 1 ? this.mindMap.themeConfig.second.marginY : this.mindMap.themeConfig.node.marginY;
+    const { themeConfig, opt } = this.mindMap;
+    const { second, node: node3 } = themeConfig;
+    const hoverRectPadding = opt.hoverRectPadding * 2;
+    return layerIndex === 1 ? second.marginY + hoverRectPadding : node3.marginY + hoverRectPadding;
   }
   //  获取节点包括概要在内的宽度
   getNodeWidthWithGeneralization(node3) {
@@ -49756,27 +49914,30 @@ var fishboneUtils_default = {
     },
     computedLeftTopValue({ layerIndex, node: node3, ctx }) {
       if (layerIndex >= 1 && node3.children) {
+        let marginY = ctx.getMarginY(layerIndex + 1);
         let startLeft = node3.left + node3.width * ctx.childIndent;
-        let totalTop = node3.top + node3.height + (ctx.getNodeActChildrenLength(node3) > 0 ? node3.expandBtnSize : 0);
+        let totalTop = node3.top + node3.height + (ctx.getNodeActChildrenLength(node3) > 0 ? node3.expandBtnSize : 0) + marginY;
         node3.children.forEach((item) => {
           item.left = startLeft;
           item.top += totalTop;
-          totalTop += item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+          totalTop += item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) + marginY;
         });
       }
     },
-    adjustLeftTopValueBefore({ node: node3, parent, ctx }) {
+    adjustLeftTopValueBefore({ node: node3, parent, ctx, layerIndex }) {
       let len = node3.children.length;
+      let marginY = ctx.getMarginY(layerIndex + 1);
       if (parent && !parent.isRoot && len > 0) {
         let totalHeight = node3.children.reduce((h3, item) => {
-          return h3 + item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+          return h3 + item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) + marginY;
         }, 0);
         ctx.updateBrothersTop(node3, totalHeight);
       }
     },
     adjustLeftTopValueAfter({ parent, node: node3, ctx }) {
       if (parent && parent.isRoot) {
-        let totalHeight = node3.expandBtnSize;
+        let marginY = ctx.getMarginY(node3.layerIndex + 1);
+        let totalHeight = node3.expandBtnSize + marginY;
         node3.children.forEach((item) => {
           let nodeTotalHeight = ctx.getNodeAreaHeight(item);
           let _top = item.top;
@@ -49824,42 +49985,46 @@ var fishboneUtils_default = {
       }
     },
     computedLeftTopValue({ layerIndex, node: node3, ctx }) {
+      let marginY = ctx.getMarginY(layerIndex + 1);
       if (layerIndex === 1 && node3.children) {
         let startLeft = node3.left + node3.width * ctx.childIndent;
-        let totalTop = node3.top + node3.height + (ctx.getNodeActChildrenLength(node3) > 0 ? node3.expandBtnSize : 0);
+        let totalTop = node3.top + node3.height + (ctx.getNodeActChildrenLength(node3) > 0 ? node3.expandBtnSize : 0) + marginY;
         node3.children.forEach((item) => {
           item.left = startLeft;
           item.top = totalTop + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
-          totalTop += item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+          totalTop += item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) + marginY;
         });
       }
       if (layerIndex > 1 && node3.children) {
         let startLeft = node3.left + node3.width * ctx.childIndent;
-        let totalTop = node3.top - (ctx.getNodeActChildrenLength(node3) > 0 ? node3.expandBtnSize : 0);
+        let totalTop = node3.top - (ctx.getNodeActChildrenLength(node3) > 0 ? node3.expandBtnSize : 0) - marginY;
         node3.children.forEach((item) => {
           item.left = startLeft;
           item.top = totalTop - item.height;
-          totalTop -= item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+          totalTop -= item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) + marginY;
         });
       }
     },
     adjustLeftTopValueBefore({ node: node3, ctx, layerIndex }) {
+      let marginY = ctx.getMarginY(layerIndex + 1);
       let len = node3.children.length;
       if (layerIndex > 2 && len > 0) {
         let totalHeight = node3.children.reduce((h3, item) => {
-          return h3 + item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0);
+          return h3 + item.height + (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) + marginY;
         }, 0);
         ctx.updateBrothersTop(node3, -totalHeight);
       }
     },
     adjustLeftTopValueAfter({ parent, node: node3, ctx }) {
       if (parent && parent.isRoot) {
+        let marginY = ctx.getMarginY(node3.layerIndex + 1);
         let totalHeight = 0;
         let totalHeight2 = node3.expandBtnSize;
         node3.children.forEach((item) => {
           let hasChildren = ctx.getNodeActChildrenLength(item) > 0;
           let nodeTotalHeight = ctx.getNodeAreaHeight(item);
-          let offset = hasChildren > 0 ? nodeTotalHeight - item.height - (hasChildren ? item.expandBtnSize : 0) : 0;
+          let offset = hasChildren ? nodeTotalHeight - item.height - (hasChildren ? item.expandBtnSize : 0) : 0;
+          offset -= hasChildren ? marginY : 0;
           let _top = totalHeight + offset;
           let _left = item.left;
           item.top += _top;
@@ -49918,10 +50083,11 @@ var Fishbone = class extends Base_default {
             newNode.dir = index3 % 2 === 0 ? CONSTANTS.LAYOUT_GROW_DIR.TOP : CONSTANTS.LAYOUT_GROW_DIR.BOTTOM;
           }
           if (parent._node.isRoot) {
+            let marginY = this.getMarginY(layerIndex);
             if (this.checkIsTop(newNode)) {
-              newNode.top = parent._node.top - newNode.height;
+              newNode.top = parent._node.top - newNode.height - marginY;
             } else {
-              newNode.top = parent._node.top + parent._node.height;
+              newNode.top = parent._node.top + parent._node.height + marginY;
             }
           }
         }
@@ -49941,15 +50107,16 @@ var Fishbone = class extends Base_default {
       null,
       (node3, parent, isRoot, layerIndex) => {
         if (node3.isRoot) {
-          let topTotalLeft = node3.left + node3.width + node3.height;
-          let bottomTotalLeft = node3.left + node3.width + node3.height;
+          let marginX = this.getMarginX(layerIndex + 1);
+          let topTotalLeft = node3.left + node3.width + node3.height + marginX;
+          let bottomTotalLeft = node3.left + node3.width + node3.height + marginX;
           node3.children.forEach((item) => {
             if (this.checkIsTop(item)) {
               item.left = topTotalLeft;
-              topTotalLeft += item.width;
+              topTotalLeft += item.width + marginX;
             } else {
               item.left = bottomTotalLeft + 20;
-              bottomTotalLeft += item.width;
+              bottomTotalLeft += item.width + marginX;
             }
           });
         }
@@ -50012,7 +50179,8 @@ var Fishbone = class extends Base_default {
   getNodeAreaHeight(node3) {
     let totalHeight = 0;
     let loop = (node4) => {
-      totalHeight += node4.height + (this.getNodeActChildrenLength(node4) > 0 ? node4.expandBtnSize : 0);
+      let marginY = this.getMarginY(node4.layerIndex);
+      totalHeight += node4.height + (this.getNodeActChildrenLength(node4) > 0 ? node4.expandBtnSize : 0) + marginY;
       if (node4.children.length) {
         node4.children.forEach((item) => {
           loop(item);
@@ -50089,8 +50257,9 @@ var Fishbone = class extends Base_default {
         if (item.left > maxx) {
           maxx = item.left;
         }
+        let marginY = this.getMarginY(item.layerIndex);
         let nodeLineX = item.left;
-        let offset2 = node3.height / 2;
+        let offset2 = node3.height / 2 + marginY;
         let offsetX = offset2 / Math.tan(degToRad(this.mindMap.opt.fishboneDeg));
         let line2 = this.draw.path();
         if (this.checkIsTop(item)) {
@@ -50107,7 +50276,7 @@ var Fishbone = class extends Base_default {
         style && style(line2, node3);
       });
       let nodeHalfTop = node3.top + node3.height / 2;
-      let offset = node3.height / 2;
+      let offset = node3.height / 2 + this.getMarginY(node3.layerIndex + 1);
       let line = this.draw.path();
       line.plot(
         `M ${node3.left + node3.width},${nodeHalfTop} L ${maxx - offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg))},${nodeHalfTop}`
@@ -50271,7 +50440,7 @@ var TextEdit = class {
           return;
         const node3 = activeNodeList[0];
         if (node3 && this.checkIsAutoEnterTextEditKey(e2)) {
-          this.show(node3);
+          this.show(node3, e2, false, true);
         }
       });
     }
@@ -50292,7 +50461,8 @@ var TextEdit = class {
   }
   //  显示文本编辑框
   // isInserting：是否是刚创建的节点
-  async show(node3, e2, isInserting = false) {
+  // isFromKeyDown：是否是在按键事件进入的编辑
+  async show(node3, e2, isInserting = false, isFromKeyDown = false) {
     if (node3.isUseCustomNodeContent()) {
       return;
     }
@@ -50313,10 +50483,10 @@ var TextEdit = class {
     this.mindMap.view.translateXY(offsetLeft, offsetTop);
     let rect = node3._textData.node.node.getBoundingClientRect();
     if (this.mindMap.richText) {
-      this.mindMap.richText.showEditText(node3, rect, isInserting);
+      this.mindMap.richText.showEditText(node3, rect, isInserting, isFromKeyDown);
       return;
     }
-    this.showEditTextBox(node3, rect, isInserting);
+    this.showEditTextBox(node3, rect, isInserting, isFromKeyDown);
   }
   // 处理画布缩放
   onScale() {
@@ -50332,9 +50502,10 @@ var TextEdit = class {
     this.show(this.currentNode);
   }
   //  显示文本编辑框
-  showEditTextBox(node3, rect, isInserting) {
+  showEditTextBox(node3, rect, isInserting, isFromKeyDown) {
     if (this.showTextEdit)
       return;
+    const { nodeTextEditZIndex, textAutoWrapWidth, selectTextOnEnterEditText } = this.mindMap.opt;
     this.mindMap.emit("before_show_text_edit");
     this.registerTmpShortcut();
     if (!this.textEditNode) {
@@ -50366,19 +50537,19 @@ var TextEdit = class {
     );
     let isMultiLine = node3._textData.node.attr("data-ismultiLine") === "true";
     node3.style.domText(this.textEditNode, scale, isMultiLine);
-    this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex;
+    this.textEditNode.style.zIndex = nodeTextEditZIndex;
     this.textEditNode.innerHTML = textLines.join("<br>");
     this.textEditNode.style.minWidth = rect.width + 10 + "px";
     this.textEditNode.style.minHeight = rect.height + 6 + "px";
     this.textEditNode.style.left = rect.left + "px";
     this.textEditNode.style.top = rect.top + "px";
     this.textEditNode.style.display = "block";
-    this.textEditNode.style.maxWidth = this.mindMap.opt.textAutoWrapWidth * scale + "px";
+    this.textEditNode.style.maxWidth = textAutoWrapWidth * scale + "px";
     if (isMultiLine && lineHeight !== 1) {
       this.textEditNode.style.transform = `translateY(${-((lineHeight * fontSize - fontSize) / 2) * scale}px)`;
     }
     this.showTextEdit = true;
-    if (isInserting) {
+    if (isInserting || selectTextOnEnterEditText && !isFromKeyDown) {
       this.selectNodeText();
     } else {
       this.focus();
@@ -50517,12 +50688,7 @@ var default_default = {
     borderWidth: 0,
     borderDasharray: "none",
     borderRadius: 5,
-    textDecoration: "none",
-    active: {
-      borderColor: "rgb(57, 80, 96)",
-      borderWidth: 3,
-      borderDasharray: "none"
-    }
+    textDecoration: "none"
   },
   // 二级节点样式
   second: {
@@ -50540,12 +50706,7 @@ var default_default = {
     borderWidth: 1,
     borderDasharray: "none",
     borderRadius: 5,
-    textDecoration: "none",
-    active: {
-      borderColor: "rgb(57, 80, 96)",
-      borderWidth: 3,
-      borderDasharray: "none"
-    }
+    textDecoration: "none"
   },
   // 三级及以下节点样式
   node: {
@@ -50563,12 +50724,7 @@ var default_default = {
     borderWidth: 0,
     borderRadius: 5,
     borderDasharray: "none",
-    textDecoration: "none",
-    active: {
-      borderColor: "rgb(57, 80, 96)",
-      borderWidth: 3,
-      borderDasharray: "none"
-    }
+    textDecoration: "none"
   },
   // 概要节点样式
   generalization: {
@@ -50586,12 +50742,7 @@ var default_default = {
     borderWidth: 1,
     borderDasharray: "none",
     borderRadius: 5,
-    textDecoration: "none",
-    active: {
-      borderColor: "rgb(57, 80, 96)",
-      borderWidth: 3,
-      borderDasharray: "none"
-    }
+    textDecoration: "none"
   }
 };
 var supportActiveStyle = [
@@ -50620,7 +50771,8 @@ var nodeSizeIndependenceList = [
   "backgroundImage",
   "backgroundRepeat",
   "backgroundPosition",
-  "backgroundSize"
+  "backgroundSize",
+  "rootLineKeepSameInCurve"
 ];
 var checkIsNodeSizeIndependenceConfig = (config) => {
   let keys = Object.keys(config);
@@ -50858,7 +51010,7 @@ var Render = class {
         }
       });
     });
-    this.mindMap.emit("node_active", null, this.activeNodeList);
+    this.mindMap.emit("node_active", null, [...this.activeNodeList]);
   }
   //  清除当前激活的节点
   clearActive() {
@@ -50913,7 +51065,7 @@ var Render = class {
           this.addActiveNode(node3);
           node3.showExpandBtn();
           setTimeout(() => {
-            node3.updateNodeShape();
+            node3.updateNodeActive();
           }, 0);
         }
       },
@@ -50922,6 +51074,7 @@ var Render = class {
       0,
       0
     );
+    this.mindMap.emit("node_active", null, [...this.activeNodeList]);
   }
   //  回退
   back(step) {
@@ -51303,7 +51456,7 @@ var Render = class {
         }
       }
     }
-    this.mindMap.emit("node_active", null, this.activeNodeList);
+    this.mindMap.emit("node_active", null, [...this.activeNodeList]);
     this.mindMap.render();
   }
   //  移除某个指定节点
@@ -51332,7 +51485,7 @@ var Render = class {
     let copyData = copyNodeTree({}, node3, true);
     this.removeActiveNode(node3);
     this.removeOneNode(node3);
-    this.mindMap.emit("node_active", null, this.activeNodeList);
+    this.mindMap.emit("node_active", null, [...this.activeNodeList]);
     this.mindMap.render();
     if (callback && typeof callback === "function") {
       callback(copyData);
@@ -51345,7 +51498,7 @@ var Render = class {
     }
     this.removeActiveNode(node3);
     this.removeOneNode(node3);
-    this.mindMap.emit("node_active", null, this.activeNodeList);
+    this.mindMap.emit("node_active", null, [...this.activeNodeList]);
     toNode.nodeData.children.push(node3.nodeData);
     this.mindMap.render();
     if (toNode.isRoot) {
@@ -51363,20 +51516,10 @@ var Render = class {
     this.mindMap.render();
   }
   //  设置节点样式
-  setNodeStyle(node3, prop, value, isActive) {
-    let data2 = {};
-    if (isActive) {
-      data2 = {
-        activeStyle: {
-          ...node3.nodeData.data.activeStyle || {},
-          [prop]: value
-        }
-      };
-    } else {
-      data2 = {
-        [prop]: value
-      };
-    }
+  setNodeStyle(node3, prop, value) {
+    let data2 = {
+      [prop]: value
+    };
     if (this.mindMap.richText) {
       let config = this.mindMap.richText.normalStyleToRichTextStyle({
         [prop]: value
@@ -51394,18 +51537,8 @@ var Render = class {
     }
   }
   //  设置节点多个样式
-  setNodeStyles(node3, style, isActive) {
-    let data2 = {};
-    if (isActive) {
-      data2 = {
-        activeStyle: {
-          ...node3.nodeData.data.activeStyle || {},
-          ...style
-        }
-      };
-    } else {
-      data2 = style;
-    }
+  setNodeStyles(node3, style) {
+    let data2 = { ...style };
     if (this.mindMap.richText) {
       let config = this.mindMap.richText.normalStyleToRichTextStyle(style);
       if (Object.keys(config).length > 0) {
@@ -51437,7 +51570,7 @@ var Render = class {
     } else {
       node3.hideExpandBtn();
     }
-    node3.updateNodeShape();
+    node3.updateNodeActive();
   }
   //  设置节点是否展开
   setNodeExpand(node3, expand) {
@@ -51767,12 +51900,7 @@ var freshGreen_default = (0, import_deepmerge2.default)(default_default, {
   generalization: {
     fillColor: "#fff",
     borderColor: "#333",
-    color: "#333",
-    active: {
-      borderColor: "rgb(57, 80, 96)",
-      borderWidth: 3,
-      borderDasharray: "none"
-    }
+    color: "#333"
   }
 });
 
@@ -51789,10 +51917,7 @@ var blueSky_default = (0, import_deepmerge3.default)(default_default, {
   generalizationLineColor: "#333",
   // 根节点样式
   root: {
-    fillColor: "rgb(115, 161, 191)",
-    active: {
-      borderColor: "rgb(57, 80, 96)"
-    }
+    fillColor: "rgb(115, 161, 191)"
   },
   // 二级节点样式
   second: {
@@ -51800,27 +51925,18 @@ var blueSky_default = (0, import_deepmerge3.default)(default_default, {
     color: "#333",
     borderColor: "rgb(115, 161, 191)",
     borderWidth: 1,
-    fontSize: 14,
-    active: {
-      borderColor: "rgb(57, 80, 96)"
-    }
+    fontSize: 14
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
-    color: "#333",
-    active: {
-      borderColor: "rgb(57, 80, 96)"
-    }
+    color: "#333"
   },
   // 概要节点样式
   generalization: {
     fillColor: "#fff",
     borderColor: "#333",
-    color: "#333",
-    active: {
-      borderColor: "rgb(57, 80, 96)"
-    }
+    color: "#333"
   }
 });
 
@@ -51837,10 +51953,7 @@ var brainImpairedPink_default = (0, import_deepmerge4.default)(default_default, 
   generalizationLineColor: "#333",
   // 根节点样式
   root: {
-    fillColor: "rgb(191, 115, 148)",
-    active: {
-      borderColor: "rgb(96, 57, 74)"
-    }
+    fillColor: "rgb(191, 115, 148)"
   },
   // 二级节点样式
   second: {
@@ -51848,27 +51961,18 @@ var brainImpairedPink_default = (0, import_deepmerge4.default)(default_default, 
     color: "#333",
     borderColor: "rgb(191, 115, 148)",
     borderWidth: 1,
-    fontSize: 14,
-    active: {
-      borderColor: "rgb(96, 57, 74)"
-    }
+    fontSize: 14
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
-    color: "#333",
-    active: {
-      borderColor: "rgb(96, 57, 74)"
-    }
+    color: "#333"
   },
   // 概要节点样式
   generalization: {
     fillColor: "#fff",
     borderColor: "#333",
-    color: "#333",
-    active: {
-      borderColor: "rgb(96, 57, 74)"
-    }
+    color: "#333"
   }
 });
 
@@ -51885,10 +51989,7 @@ var romanticPurple_default = (0, import_deepmerge5.default)(default_default, {
   generalizationLineColor: "#333",
   // 根节点样式
   root: {
-    fillColor: "rgb(123, 115, 191)",
-    active: {
-      borderColor: "rgb(61, 57, 96)"
-    }
+    fillColor: "rgb(123, 115, 191)"
   },
   // 二级节点样式
   second: {
@@ -51896,27 +51997,18 @@ var romanticPurple_default = (0, import_deepmerge5.default)(default_default, {
     color: "#333",
     borderColor: "rgb(123, 115, 191)",
     borderWidth: 1,
-    fontSize: 14,
-    active: {
-      borderColor: "rgb(61, 57, 96)"
-    }
+    fontSize: 14
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
-    color: "#333",
-    active: {
-      borderColor: "rgb(61, 57, 96)"
-    }
+    color: "#333"
   },
   // 概要节点样式
   generalization: {
     fillColor: "#fff",
     borderColor: "#333",
-    color: "#333",
-    active: {
-      borderColor: "rgb(61, 57, 96)"
-    }
+    color: "#333"
   }
 });
 
@@ -51933,10 +52025,7 @@ var freshRed_default = (0, import_deepmerge6.default)(default_default, {
   generalizationLineColor: "#333",
   // 根节点样式
   root: {
-    fillColor: "rgb(191, 115, 115)",
-    active: {
-      borderColor: "rgb(96, 57, 57)"
-    }
+    fillColor: "rgb(191, 115, 115)"
   },
   // 二级节点样式
   second: {
@@ -51944,27 +52033,18 @@ var freshRed_default = (0, import_deepmerge6.default)(default_default, {
     color: "#333",
     borderColor: "rgb(191, 115, 115)",
     borderWidth: 1,
-    fontSize: 14,
-    active: {
-      borderColor: "rgb(96, 57, 57)"
-    }
+    fontSize: 14
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
-    color: "#333",
-    active: {
-      borderColor: "rgb(96, 57, 57)"
-    }
+    color: "#333"
   },
   // 概要节点样式
   generalization: {
     fillColor: "#fff",
     borderColor: "#333",
-    color: "#333",
-    active: {
-      borderColor: "rgb(96, 57, 57)"
-    }
+    color: "#333"
   }
 });
 
@@ -51981,10 +52061,7 @@ var earthYellow_default = (0, import_deepmerge7.default)(default_default, {
   generalizationLineColor: "#333",
   // 根节点样式
   root: {
-    fillColor: "rgb(191, 147, 115)",
-    active: {
-      borderColor: "rgb(96, 73, 57)"
-    }
+    fillColor: "rgb(191, 147, 115)"
   },
   // 二级节点样式
   second: {
@@ -51992,27 +52069,18 @@ var earthYellow_default = (0, import_deepmerge7.default)(default_default, {
     color: "#333",
     borderColor: "rgb(191, 147, 115)",
     borderWidth: 1,
-    fontSize: 14,
-    active: {
-      borderColor: "rgb(96, 73, 57)"
-    }
+    fontSize: 14
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
-    color: "#333",
-    active: {
-      borderColor: "rgb(96, 73, 57)"
-    }
+    color: "#333"
   },
   // 概要节点样式
   generalization: {
     fillColor: "#fff",
     borderColor: "#333",
-    color: "#333",
-    active: {
-      borderColor: "rgb(96, 73, 57)"
-    }
+    color: "#333"
   }
 });
 
@@ -52033,16 +52101,13 @@ var classic_default = (0, import_deepmerge8.default)(default_default, {
   backgroundImage: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAIAAAACDbGyAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDowQzg5QTQ0NDhENzgxMUUzOENGREE4QTg0RDgzRTZDNyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDowQzg5QTQ0NThENzgxMUUzOENGREE4QTg0RDgzRTZDNyI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkMwOEQ1NDRGOEQ3NzExRTM4Q0ZEQThBODREODNFNkM3IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOkMwOEQ1NDUwOEQ3NzExRTM4Q0ZEQThBODREODNFNkM3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+e9P33AAAACVJREFUeNpisXJ0YUACTAyoAMr/+eM7EGGRZ4FQ7BycEAZAgAEAHbEGtkoQm/wAAAAASUVORK5CYII=",
   // 背景重复
   backgroundRepeat: "repeat",
+  backgroundSize: "auto",
   // 根节点样式
   root: {
     fillColor: "rgb(233, 223, 152)",
     color: "#333",
     fontSize: 24,
-    borderRadius: 21,
-    active: {
-      fillColor: "rgb(254, 219, 0)",
-      borderColor: "transparent"
-    }
+    borderRadius: 21
   },
   // 二级节点样式
   second: {
@@ -52050,31 +52115,19 @@ var classic_default = (0, import_deepmerge8.default)(default_default, {
     borderColor: "transparent",
     color: "#333",
     fontSize: 16,
-    borderRadius: 10,
-    active: {
-      fillColor: "rgb(254, 219, 0)",
-      borderColor: "transparent"
-    }
+    borderRadius: 10
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
     color: "#fff",
-    fontWeight: "bold",
-    active: {
-      fillColor: "rgb(254, 219, 0)",
-      borderColor: "transparent"
-    }
+    fontWeight: "bold"
   },
   // 概要节点样式
   generalization: {
     fillColor: "#fff",
     borderColor: "transparent",
-    color: "#333",
-    active: {
-      fillColor: "rgb(254, 219, 0)",
-      borderColor: "transparent"
-    }
+    color: "#333"
   }
 });
 
@@ -52096,10 +52149,7 @@ var classic2_default = (0, import_deepmerge9.default)(default_default, {
     fillColor: "rgb(18, 187, 55)",
     color: "#fff",
     fontSize: 24,
-    borderRadius: 10,
-    active: {
-      borderColor: "rgb(51, 51, 51)"
-    }
+    borderRadius: 10
   },
   // 二级节点样式
   second: {
@@ -52107,28 +52157,19 @@ var classic2_default = (0, import_deepmerge9.default)(default_default, {
     borderColor: "transparent",
     color: "#1a1a1a",
     fontSize: 18,
-    borderRadius: 10,
-    active: {
-      borderColor: "rgb(51, 51, 51)"
-    }
+    borderRadius: 10
   },
   // 三级及以下节点样式
   node: {
     fontSize: 14,
-    color: "#1a1a1a",
-    active: {
-      borderColor: "rgb(51, 51, 51)"
-    }
+    color: "#1a1a1a"
   },
   // 概要节点样式
   generalization: {
     fillColor: "#fff",
     borderColor: "rgb(51, 51, 51)",
     borderWidth: 2,
-    color: "#1a1a1a",
-    active: {
-      borderColor: "rgb(18, 187, 55)"
-    }
+    color: "#1a1a1a"
   }
 });
 
@@ -52152,10 +52193,7 @@ var classic3_default = (0, import_deepmerge10.default)(default_default, {
     fontSize: 24,
     borderRadius: 10,
     borderColor: "rgb(249, 199, 84)",
-    borderWidth: 1,
-    active: {
-      borderColor: "rgb(94, 202, 110)"
-    }
+    borderWidth: 1
   },
   // 二级节点样式
   second: {
@@ -52164,28 +52202,19 @@ var classic3_default = (0, import_deepmerge10.default)(default_default, {
     borderWidth: 1,
     color: "#1a1a1a",
     fontSize: 18,
-    borderRadius: 10,
-    active: {
-      borderColor: "rgb(94, 202, 110)"
-    }
+    borderRadius: 10
   },
   // 三级及以下节点样式
   node: {
     fontSize: 14,
-    color: "#1a1a1a",
-    active: {
-      borderColor: "rgb(94, 202, 110)"
-    }
+    color: "#1a1a1a"
   },
   // 概要节点样式
   generalization: {
     fillColor: "#fff",
     borderColor: "#1a1a1a",
     color: "#1a1a1a",
-    borderWidth: 2,
-    active: {
-      borderColor: "rgb(94, 202, 110)"
-    }
+    borderWidth: 2
   }
 });
 
@@ -52209,10 +52238,7 @@ var classic4_default = (0, import_deepmerge11.default)(default_default, {
     fontSize: 24,
     borderRadius: 10,
     borderColor: "rgb(189, 197, 201)",
-    borderWidth: 2,
-    active: {
-      borderColor: "rgb(169, 218, 218)"
-    }
+    borderWidth: 2
   },
   // 二级节点样式
   second: {
@@ -52221,10 +52247,7 @@ var classic4_default = (0, import_deepmerge11.default)(default_default, {
     borderWidth: 2,
     color: "#fff",
     fontSize: 18,
-    borderRadius: 10,
-    active: {
-      borderColor: "rgb(56, 123, 233)"
-    }
+    borderRadius: 10
   },
   // 三级及以下节点样式
   node: {
@@ -52232,20 +52255,14 @@ var classic4_default = (0, import_deepmerge11.default)(default_default, {
     color: "rgb(30, 53, 86)",
     borderColor: "rgb(30, 53, 86)",
     borderWidth: 1,
-    marginY: 20,
-    active: {
-      borderColor: "rgb(169, 218, 218)"
-    }
+    marginY: 20
   },
   // 概要节点样式
   generalization: {
     fillColor: "rgb(56, 123, 233)",
     borderColor: "rgb(56, 123, 233)",
     color: "#fff",
-    borderWidth: 0,
-    active: {
-      borderColor: "rgb(169, 218, 218)"
-    }
+    borderWidth: 0
   }
 });
 
@@ -52267,10 +52284,7 @@ var dark_default = (0, import_deepmerge12.default)(default_default, {
     fillColor: "rgb(28, 178, 43)",
     color: "#fff",
     fontSize: 24,
-    borderRadius: 10,
-    active: {
-      borderColor: "rgb(17, 68, 23)"
-    }
+    borderRadius: 10
   },
   // 二级节点样式
   second: {
@@ -52278,27 +52292,18 @@ var dark_default = (0, import_deepmerge12.default)(default_default, {
     color: "rgb(147,148,149)",
     fontSize: 18,
     borderRadius: 10,
-    borderWidth: 0,
-    active: {
-      borderColor: "rgb(17, 68, 23)"
-    }
+    borderWidth: 0
   },
   // 三级及以下节点样式
   node: {
     fontSize: 14,
-    color: "rgb(147, 148, 149)",
-    active: {
-      borderColor: "rgb(17, 68, 23)"
-    }
+    color: "rgb(147, 148, 149)"
   },
   // 概要节点样式
   generalization: {
     fillColor: "#fff",
     borderColor: "transparent",
-    color: "#333",
-    active: {
-      borderColor: "rgb(17, 68, 23)"
-    }
+    color: "#333"
   }
 });
 
@@ -52316,10 +52321,7 @@ var classicGreen_default = (0, import_deepmerge13.default)(default_default, {
   // 根节点样式
   root: {
     fillColor: "rgb(253, 244, 217)",
-    color: "#222",
-    active: {
-      borderColor: "rgb(94, 199, 248)"
-    }
+    color: "#222"
   },
   // 二级节点样式
   second: {
@@ -52327,28 +52329,19 @@ var classicGreen_default = (0, import_deepmerge13.default)(default_default, {
     color: "#222",
     borderColor: "rgb(242, 200, 104)",
     borderWidth: 1,
-    fontSize: 14,
-    active: {
-      borderColor: "rgb(94, 199, 248)"
-    }
+    fontSize: 14
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
-    color: "#333",
-    active: {
-      borderColor: "rgb(94, 199, 248)"
-    }
+    color: "#333"
   },
   // 概要节点样式
   generalization: {
     fillColor: "rgb(123, 199, 120)",
     borderColor: "transparent",
     borderWidth: 2,
-    color: "#fff",
-    active: {
-      borderColor: "rgb(94, 199, 248)"
-    }
+    color: "#fff"
   }
 });
 
@@ -52368,10 +52361,7 @@ var classicBlue_default = (0, import_deepmerge14.default)(default_default, {
   // 根节点样式
   root: {
     fillColor: "rgb(255, 255, 255)",
-    color: "#222",
-    active: {
-      borderColor: "rgb(94, 199, 248)"
-    }
+    color: "#222"
   },
   // 二级节点样式
   second: {
@@ -52379,27 +52369,18 @@ var classicBlue_default = (0, import_deepmerge14.default)(default_default, {
     color: "#222",
     borderColor: "rgb(255, 255, 255)",
     borderWidth: 1,
-    fontSize: 14,
-    active: {
-      borderColor: "rgb(94, 199, 248)"
-    }
+    fontSize: 14
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
-    color: "#333",
-    active: {
-      borderColor: "rgb(94, 199, 248)"
-    }
+    color: "#333"
   },
   // 概要节点样式
   generalization: {
     fillColor: "#fff",
     borderColor: "rgb(51, 51, 51)",
-    color: "#333",
-    active: {
-      borderColor: "rgb(94, 199, 248)"
-    }
+    color: "#333"
   }
 });
 
@@ -52419,10 +52400,7 @@ var minions_default = (0, import_deepmerge15.default)(default_default, {
   root: {
     fillColor: "rgb(55, 165, 255)",
     borderColor: "rgb(51, 51, 51)",
-    borderWidth: 3,
-    active: {
-      borderColor: "rgb(255, 160, 36)"
-    }
+    borderWidth: 3
   },
   // 二级节点样式
   second: {
@@ -52430,27 +52408,18 @@ var minions_default = (0, import_deepmerge15.default)(default_default, {
     color: "#222",
     borderColor: "rgb(51, 51, 51)",
     borderWidth: 3,
-    fontSize: 14,
-    active: {
-      borderColor: "rgb(55, 165, 255)"
-    }
+    fontSize: 14
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
-    color: "#222",
-    active: {
-      borderColor: "rgb(55, 165, 255)"
-    }
+    color: "#222"
   },
   // 概要节点样式
   generalization: {
     borderColor: "#222",
     borderWidth: 3,
-    color: "#222",
-    active: {
-      borderColor: "rgb(55, 165, 255)"
-    }
+    color: "#222"
   }
 });
 
@@ -52470,11 +52439,7 @@ var pinkGrape_default = (0, import_deepmerge16.default)(default_default, {
   root: {
     fillColor: "rgb(139, 109, 225)",
     borderColor: "",
-    borderWidth: 0,
-    active: {
-      borderColor: "rgb(243, 104, 138)",
-      borderWidth: 2
-    }
+    borderWidth: 0
   },
   // 二级节点样式
   second: {
@@ -52482,29 +52447,18 @@ var pinkGrape_default = (0, import_deepmerge16.default)(default_default, {
     color: "#fff",
     borderColor: "",
     borderWidth: 0,
-    fontSize: 14,
-    active: {
-      borderColor: "rgb(139, 109, 225)",
-      borderWidth: 2
-    }
+    fontSize: 14
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
-    color: "#222",
-    active: {
-      borderColor: "rgb(139, 109, 225)"
-    }
+    color: "#222"
   },
   // 概要节点样式
   generalization: {
     fillColor: "#fff",
     borderColor: "transparent",
-    color: "#222",
-    active: {
-      borderColor: "rgb(139, 109, 225)",
-      borderWidth: 2
-    }
+    color: "#222"
   }
 });
 
@@ -52524,11 +52478,7 @@ var mint_default = (0, import_deepmerge17.default)(default_default, {
   root: {
     fillColor: "rgb(0, 192, 184)",
     borderColor: "",
-    borderWidth: 0,
-    active: {
-      borderColor: "rgb(255, 160, 36)",
-      borderWidth: 3
-    }
+    borderWidth: 0
   },
   // 二级节点样式
   second: {
@@ -52536,27 +52486,18 @@ var mint_default = (0, import_deepmerge17.default)(default_default, {
     color: "#222",
     borderColor: "rgb(184, 235, 233)",
     borderWidth: 2,
-    fontSize: 14,
-    active: {
-      borderColor: "rgb(0, 192, 184)"
-    }
+    fontSize: 14
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
-    color: "#222",
-    active: {
-      borderColor: "rgb(0, 192, 184)"
-    }
+    color: "#222"
   },
   // 概要节点样式
   generalization: {
     fillColor: "rgb(90, 206, 241)",
     borderColor: "transparent",
-    color: "#fff",
-    active: {
-      borderColor: "rgb(0, 192, 184)"
-    }
+    color: "#fff"
   }
 });
 
@@ -52577,11 +52518,7 @@ var gold_default = (0, import_deepmerge18.default)(default_default, {
     fillColor: "rgb(51, 56, 62)",
     color: "rgb(247, 208, 160)",
     borderColor: "",
-    borderWidth: 0,
-    active: {
-      borderColor: "rgb(247, 208, 160)",
-      borderWidth: 3
-    }
+    borderWidth: 0
   },
   // 二级节点样式
   second: {
@@ -52589,28 +52526,18 @@ var gold_default = (0, import_deepmerge18.default)(default_default, {
     color: "rgb(81, 58, 42)",
     borderColor: "",
     borderWidth: 0,
-    fontSize: 14,
-    active: {
-      borderColor: "rgb(51, 56, 62)",
-      borderWidth: 2
-    }
+    fontSize: 14
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
-    color: "#222",
-    active: {
-      borderColor: "rgb(0, 192, 184)"
-    }
+    color: "#222"
   },
   // 概要节点样式
   generalization: {
     fillColor: "rgb(127, 93, 64)",
     borderColor: "transparent",
-    color: "rgb(255, 214, 175)",
-    active: {
-      borderColor: "rgb(51, 56, 62)"
-    }
+    color: "rgb(255, 214, 175)"
   }
 });
 
@@ -52631,11 +52558,7 @@ var vitalityOrange_default = (0, import_deepmerge19.default)(default_default, {
     fillColor: "rgb(255, 112, 52)",
     color: "#fff",
     borderColor: "",
-    borderWidth: 0,
-    active: {
-      borderColor: "rgb(51, 51, 51)",
-      borderWidth: 3
-    }
+    borderWidth: 0
   },
   // 二级节点样式
   second: {
@@ -52643,28 +52566,18 @@ var vitalityOrange_default = (0, import_deepmerge19.default)(default_default, {
     color: "rgb(51, 51, 51)",
     borderColor: "",
     borderWidth: 0,
-    fontSize: 14,
-    active: {
-      borderColor: "rgb(255, 112, 52)",
-      borderWidth: 2
-    }
+    fontSize: 14
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
-    color: "#222",
-    active: {
-      borderColor: "rgb(255, 112, 52)"
-    }
+    color: "#222"
   },
   // 概要节点样式
   generalization: {
     fillColor: "rgb(255, 222, 69)",
     borderColor: "transparent",
-    color: "rgb(51, 51, 51)",
-    active: {
-      borderColor: "rgb(255, 112, 52)"
-    }
+    color: "rgb(51, 51, 51)"
   }
 });
 
@@ -52685,11 +52598,7 @@ var greenLeaf_default = (0, import_deepmerge20.default)(default_default, {
     fillColor: "rgb(25, 193, 73)",
     color: "#fff",
     borderColor: "",
-    borderWidth: 0,
-    active: {
-      borderColor: "#222",
-      borderWidth: 3
-    }
+    borderWidth: 0
   },
   // 二级节点样式
   second: {
@@ -52697,29 +52606,19 @@ var greenLeaf_default = (0, import_deepmerge20.default)(default_default, {
     color: "rgb(69, 149, 96)",
     borderColor: "",
     borderWidth: 0,
-    fontSize: 14,
-    active: {
-      borderColor: "rgb(25, 193, 73)",
-      borderWidth: 2
-    }
+    fontSize: 14
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
-    color: "#222",
-    active: {
-      borderColor: "rgb(25, 193, 73)"
-    }
+    color: "#222"
   },
   // 概要节点样式
   generalization: {
     fillColor: "#fff",
     borderColor: "rgb(251, 158, 0)",
     borderWidth: 2,
-    color: "rgb(51, 51, 51)",
-    active: {
-      borderColor: "rgb(25, 193, 73)"
-    }
+    color: "rgb(51, 51, 51)"
   }
 });
 
@@ -52740,11 +52639,7 @@ var dark2_default = (0, import_deepmerge21.default)(default_default, {
     fillColor: "rgb(36, 179, 96)",
     color: "#fff",
     borderColor: "",
-    borderWidth: 0,
-    active: {
-      borderColor: "rgb(254, 199, 13)",
-      borderWidth: 3
-    }
+    borderWidth: 0
   },
   // 二级节点样式
   second: {
@@ -52752,29 +52647,19 @@ var dark2_default = (0, import_deepmerge21.default)(default_default, {
     color: "rgb(0, 0, 0)",
     borderColor: "",
     borderWidth: 0,
-    fontSize: 14,
-    active: {
-      borderColor: "rgb(36, 179, 96)",
-      borderWidth: 2
-    }
+    fontSize: 14
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
-    color: "rgb(204, 204, 204)",
-    active: {
-      borderColor: "rgb(254, 199, 13)"
-    }
+    color: "rgb(204, 204, 204)"
   },
   // 概要节点样式
   generalization: {
     fillColor: "transparent",
     borderColor: "rgb(255, 119, 34)",
     borderWidth: 2,
-    color: "rgb(204, 204, 204)",
-    active: {
-      borderColor: "rgb(254, 199, 13)"
-    }
+    color: "rgb(204, 204, 204)"
   }
 });
 
@@ -52795,11 +52680,7 @@ var skyGreen_default = (0, import_deepmerge22.default)(default_default, {
     fillColor: "#fff",
     borderColor: "",
     borderWidth: 0,
-    color: "rgb(65, 89, 158)",
-    active: {
-      borderColor: "rgb(251, 227, 188)",
-      borderWidth: 3
-    }
+    color: "rgb(65, 89, 158)"
   },
   // 二级节点样式
   second: {
@@ -52807,28 +52688,18 @@ var skyGreen_default = (0, import_deepmerge22.default)(default_default, {
     color: "rgb(65, 89, 158)",
     borderColor: "",
     borderWidth: 0,
-    fontSize: 14,
-    active: {
-      borderColor: "#fff",
-      borderWidth: 2
-    }
+    fontSize: 14
   },
   // 三级及以下节点样式
   node: {
     fontSize: 12,
-    color: "rgb(65, 89, 158)",
-    active: {
-      borderColor: "rgb(251, 227, 188)"
-    }
+    color: "rgb(65, 89, 158)"
   },
   // 概要节点样式
   generalization: {
     fillColor: "#fff",
     borderColor: "transparent",
-    color: "rgb(65, 89, 158)",
-    active: {
-      borderColor: "rgb(251, 227, 188)"
-    }
+    color: "rgb(65, 89, 158)"
   }
 });
 
@@ -52848,10 +52719,7 @@ var simpleBlack_default = (0, import_deepmerge23.default)(default_default, {
     color: "rgb(34, 34, 34)",
     borderColor: "rgb(34, 34, 34)",
     borderWidth: 3,
-    fontSize: 24,
-    active: {
-      borderColor: "#a13600"
-    }
+    fontSize: 24
   },
   // 二级节点样式
   second: {
@@ -52859,18 +52727,12 @@ var simpleBlack_default = (0, import_deepmerge23.default)(default_default, {
     color: "rgb(34, 34, 34)",
     borderColor: "rgb(34, 34, 34)",
     borderWidth: 3,
-    fontSize: 18,
-    active: {
-      borderColor: "#a13600"
-    }
+    fontSize: 18
   },
   // 三级及以下节点样式
   node: {
     fontSize: 14,
-    color: "rgb(34, 34, 34)",
-    active: {
-      borderColor: "#a13600"
-    }
+    color: "rgb(34, 34, 34)"
   },
   // 概要节点样式
   generalization: {
@@ -52878,10 +52740,7 @@ var simpleBlack_default = (0, import_deepmerge23.default)(default_default, {
     fillColor: "transparent",
     borderColor: "rgb(34, 34, 34)",
     borderWidth: 2,
-    color: "rgb(34, 34, 34)",
-    active: {
-      borderColor: "#a13600"
-    }
+    color: "rgb(34, 34, 34)"
   }
 });
 
@@ -52901,11 +52760,7 @@ var courseGreen_default = (0, import_deepmerge24.default)(default_default, {
     color: "#fff",
     borderColor: "",
     borderWidth: 0,
-    fontSize: 24,
-    active: {
-      borderColor: "rgb(173, 91, 12)",
-      borderWidth: 3
-    }
+    fontSize: 24
   },
   // 二级节点样式
   second: {
@@ -52913,18 +52768,12 @@ var courseGreen_default = (0, import_deepmerge24.default)(default_default, {
     color: "rgb(50, 113, 96)",
     borderColor: "rgb(113, 195, 169)",
     borderWidth: 2,
-    fontSize: 18,
-    active: {
-      borderColor: "rgb(173, 91, 12)"
-    }
+    fontSize: 18
   },
   // 三级及以下节点样式
   node: {
     fontSize: 14,
-    color: "rgb(10, 59, 43)",
-    active: {
-      borderColor: "rgb(173, 91, 12)"
-    }
+    color: "rgb(10, 59, 43)"
   },
   // 概要节点样式
   generalization: {
@@ -52932,10 +52781,7 @@ var courseGreen_default = (0, import_deepmerge24.default)(default_default, {
     fillColor: "rgb(246, 238, 211)",
     borderColor: "",
     borderWidth: 0,
-    color: "rgb(173, 91, 12)",
-    active: {
-      borderColor: "rgb(113, 195, 169)"
-    }
+    color: "rgb(173, 91, 12)"
   }
 });
 
@@ -52955,11 +52801,7 @@ var coffee_default = (0, import_deepmerge25.default)(default_default, {
     color: "#fff",
     borderColor: "",
     borderWidth: 0,
-    fontSize: 24,
-    active: {
-      borderColor: "rgb(173, 123, 91)",
-      borderWidth: 3
-    }
+    fontSize: 24
   },
   // 二级节点样式
   second: {
@@ -52967,18 +52809,12 @@ var coffee_default = (0, import_deepmerge25.default)(default_default, {
     color: "rgb(125, 86, 42)",
     borderColor: "",
     borderWidth: 0,
-    fontSize: 18,
-    active: {
-      borderColor: "rgb(173, 123, 91)"
-    }
+    fontSize: 18
   },
   // 三级及以下节点样式
   node: {
     fontSize: 14,
-    color: "rgb(96, 71, 47)",
-    active: {
-      borderColor: "rgb(173, 123, 91)"
-    }
+    color: "rgb(96, 71, 47)"
   },
   // 概要节点样式
   generalization: {
@@ -52986,10 +52822,7 @@ var coffee_default = (0, import_deepmerge25.default)(default_default, {
     fillColor: "rgb(255, 249, 239)",
     borderColor: "rgb(173, 123, 91)",
     borderWidth: 2,
-    color: "rgb(122, 83, 44)",
-    active: {
-      borderColor: "rgb(202, 117, 79)"
-    }
+    color: "rgb(122, 83, 44)"
   }
 });
 
@@ -53011,11 +52844,7 @@ var redSpirit_default = (0, import_deepmerge26.default)(default_default, {
     color: "rgb(255, 233, 157)",
     borderColor: "",
     borderWidth: 0,
-    fontSize: 24,
-    active: {
-      borderColor: "rgb(255, 233, 157)",
-      borderWidth: 3
-    }
+    fontSize: 24
   },
   // 二级节点样式
   second: {
@@ -53023,18 +52852,12 @@ var redSpirit_default = (0, import_deepmerge26.default)(default_default, {
     color: "rgb(211, 58, 21)",
     borderColor: "rgb(222, 101, 85)",
     borderWidth: 2,
-    fontSize: 18,
-    active: {
-      borderColor: "rgb(255, 233, 157)"
-    }
+    fontSize: 18
   },
   // 三级及以下节点样式
   node: {
     fontSize: 14,
-    color: "rgb(144, 71, 43)",
-    active: {
-      borderColor: "rgb(255, 233, 157)"
-    }
+    color: "rgb(144, 71, 43)"
   },
   // 概要节点样式
   generalization: {
@@ -53042,10 +52865,7 @@ var redSpirit_default = (0, import_deepmerge26.default)(default_default, {
     fillColor: "rgb(255, 247, 211)",
     borderColor: "rgb(255, 202, 162)",
     borderWidth: 2,
-    color: "rgb(187, 101, 69)",
-    active: {
-      borderColor: "rgb(222, 101, 85)"
-    }
+    color: "rgb(187, 101, 69)"
   }
 });
 
@@ -53067,11 +52887,7 @@ var blackHumour_default = (0, import_deepmerge27.default)(default_default, {
     color: "#fff",
     borderColor: "",
     borderWidth: 0,
-    fontSize: 24,
-    active: {
-      borderColor: "rgb(254, 199, 13)",
-      borderWidth: 3
-    }
+    fontSize: 24
   },
   // 二级节点样式
   second: {
@@ -53079,19 +52895,12 @@ var blackHumour_default = (0, import_deepmerge27.default)(default_default, {
     color: "rgb(0, 0, 0)",
     borderColor: "",
     borderWidth: 0,
-    fontSize: 18,
-    active: {
-      borderColor: "rgb(36, 179, 96)",
-      borderWidth: 3
-    }
+    fontSize: 18
   },
   // 三级及以下节点样式
   node: {
     fontSize: 14,
-    color: "rgb(204, 204, 204)",
-    active: {
-      borderColor: "rgb(254, 199, 13)"
-    }
+    color: "rgb(204, 204, 204)"
   },
   // 概要节点样式
   generalization: {
@@ -53099,10 +52908,7 @@ var blackHumour_default = (0, import_deepmerge27.default)(default_default, {
     fillColor: "rgb(27, 31, 34)",
     borderColor: "rgb(255, 119, 34)",
     borderWidth: 2,
-    color: "rgb(204, 204, 204)",
-    active: {
-      borderColor: "rgb(36, 179, 96)"
-    }
+    color: "rgb(204, 204, 204)"
   }
 });
 
@@ -53124,11 +52930,7 @@ var lateNightOffice_default = (0, import_deepmerge28.default)(default_default, {
     color: "rgb(255, 255, 255)",
     borderColor: "",
     borderWidth: 0,
-    fontSize: 24,
-    active: {
-      borderColor: "rgb(255, 119, 34)",
-      borderWidth: 3
-    }
+    fontSize: 24
   },
   // 二级节点样式
   second: {
@@ -53136,19 +52938,12 @@ var lateNightOffice_default = (0, import_deepmerge28.default)(default_default, {
     color: "rgb(209, 210, 210)",
     borderColor: "",
     borderWidth: 0,
-    fontSize: 18,
-    active: {
-      borderColor: "rgb(255, 119, 34)",
-      borderWidth: 3
-    }
+    fontSize: 18
   },
   // 三级及以下节点样式
   node: {
     fontSize: 14,
-    color: "rgb(204, 204, 204)",
-    active: {
-      borderColor: "rgb(255, 119, 34)"
-    }
+    color: "rgb(204, 204, 204)"
   },
   // 概要节点样式
   generalization: {
@@ -53156,10 +52951,7 @@ var lateNightOffice_default = (0, import_deepmerge28.default)(default_default, {
     fillColor: "rgb(255, 119, 34)",
     borderColor: "",
     borderWidth: 2,
-    color: "#fff",
-    active: {
-      borderColor: "rgb(23, 153, 243)"
-    }
+    color: "#fff"
   }
 });
 
@@ -53181,11 +52973,7 @@ var blackGold_default = (0, import_deepmerge29.default)(default_default, {
     color: "rgb(111, 61, 6)",
     borderColor: "",
     borderWidth: 0,
-    fontSize: 24,
-    active: {
-      borderColor: "#fff",
-      borderWidth: 3
-    }
+    fontSize: 24
   },
   // 二级节点样式
   second: {
@@ -53193,18 +52981,12 @@ var blackGold_default = (0, import_deepmerge29.default)(default_default, {
     color: "rgb(225, 201, 158)",
     borderColor: "rgb(245, 224, 191)",
     borderWidth: 2,
-    fontSize: 18,
-    active: {
-      borderColor: "rgb(255, 208, 124)"
-    }
+    fontSize: 18
   },
   // 三级及以下节点样式
   node: {
     fontSize: 14,
-    color: "rgb(231, 203, 155)",
-    active: {
-      borderColor: "rgb(255, 208, 124)"
-    }
+    color: "rgb(231, 203, 155)"
   },
   // 概要节点样式
   generalization: {
@@ -53212,10 +52994,7 @@ var blackGold_default = (0, import_deepmerge29.default)(default_default, {
     fillColor: "rgb(56, 45, 34)",
     borderColor: "rgb(104, 84, 61)",
     borderWidth: 2,
-    color: "rgb(242, 216, 176)",
-    active: {
-      borderColor: "rgb(255, 208, 124)"
-    }
+    color: "rgb(242, 216, 176)"
   }
 });
 
@@ -53237,11 +53016,7 @@ var avocado_default = (0, import_deepmerge30.default)(default_default, {
     color: "#fff",
     borderColor: "#94c143",
     borderWidth: 0,
-    fontSize: 24,
-    active: {
-      borderColor: "#749336",
-      borderWidth: 3
-    }
+    fontSize: 24
   },
   // 二级节点样式
   second: {
@@ -53249,18 +53024,12 @@ var avocado_default = (0, import_deepmerge30.default)(default_default, {
     color: "#749336",
     borderColor: "#aec668",
     borderWidth: 2,
-    fontSize: 18,
-    active: {
-      borderColor: "#749336"
-    }
+    fontSize: 18
   },
   // 三级及以下节点样式
   node: {
     fontSize: 14,
-    color: "#749336",
-    active: {
-      borderColor: "#749336"
-    }
+    color: "#749336"
   },
   // 概要节点样式
   generalization: {
@@ -53268,10 +53037,7 @@ var avocado_default = (0, import_deepmerge30.default)(default_default, {
     fillColor: "#cee498",
     borderColor: "#aec668",
     borderWidth: 2,
-    color: "#749336",
-    active: {
-      borderColor: "#749336"
-    }
+    color: "#749336"
   }
 });
 
@@ -53293,11 +53059,7 @@ var autumn_default = (0, import_deepmerge31.default)(default_default, {
     color: "#fff",
     borderColor: "#e68112",
     borderWidth: 0,
-    fontSize: 24,
-    active: {
-      borderColor: "#b0bc47",
-      borderWidth: 3
-    }
+    fontSize: 24
   },
   // 二级节点样式
   second: {
@@ -53305,18 +53067,12 @@ var autumn_default = (0, import_deepmerge31.default)(default_default, {
     color: "#8c5416",
     borderColor: "#b0bc47",
     borderWidth: 2,
-    fontSize: 18,
-    active: {
-      borderColor: "#e68112"
-    }
+    fontSize: 18
   },
   // 三级及以下节点样式
   node: {
     fontSize: 14,
-    color: "#8c5416",
-    active: {
-      borderColor: "#b0bc47"
-    }
+    color: "#8c5416"
   },
   // 概要节点样式
   generalization: {
@@ -53324,10 +53080,7 @@ var autumn_default = (0, import_deepmerge31.default)(default_default, {
     fillColor: "#ffd683",
     borderColor: "#b0bc47",
     borderWidth: 2,
-    color: "#8c5416",
-    active: {
-      borderColor: "#e68112"
-    }
+    color: "#8c5416"
   }
 });
 
@@ -53349,11 +53102,7 @@ var orangeJuice_default = (0, import_deepmerge32.default)(default_default, {
     color: "#110501",
     borderColor: "#ff6811",
     borderWidth: 0,
-    fontSize: 24,
-    active: {
-      borderColor: "#a9a4a9",
-      borderWidth: 3
-    }
+    fontSize: 24
   },
   // 二级节点样式
   second: {
@@ -53361,18 +53110,12 @@ var orangeJuice_default = (0, import_deepmerge32.default)(default_default, {
     color: "#a9a4a9",
     borderColor: "#ff6811",
     borderWidth: 2,
-    fontSize: 18,
-    active: {
-      borderColor: "#110501"
-    }
+    fontSize: 18
   },
   // 三级及以下节点样式
   node: {
     fontSize: 14,
-    color: "#a9a4a9",
-    active: {
-      borderColor: "#ff6811"
-    }
+    color: "#a9a4a9"
   },
   // 概要节点样式
   generalization: {
@@ -53380,10 +53123,7 @@ var orangeJuice_default = (0, import_deepmerge32.default)(default_default, {
     fillColor: "",
     borderColor: "#ff6811",
     borderWidth: 2,
-    color: "#a9a4a9",
-    active: {
-      borderColor: "#110501"
-    }
+    color: "#a9a4a9"
   }
 });
 
@@ -53868,7 +53608,9 @@ var defaultOpt = {
   // 展开收起按钮的颜色
   expandBtnStyle: {
     color: "#808080",
-    fill: "#fff"
+    fill: "#fff",
+    fontSize: 13,
+    strokeColor: "#333333"
   },
   // 自定义展开收起按钮的图标
   expandBtnIcon: {
@@ -53876,6 +53618,12 @@ var defaultOpt = {
     // svg字符串
     close: ""
   },
+  // 处理收起节点数量
+  expandBtnNumHandler: (num) => {
+    return num;
+  },
+  // 是否显示带数量的收起按钮
+  isShowExpandNum: true,
   // 是否只有当鼠标在画布内才响应快捷键事件
   enableShortcutOnlyWhenMouseInSvg: true,
   // 初始根节点的位置
@@ -53967,7 +53715,15 @@ var defaultOpt = {
     }
   `,
   // 开启鼠标双击复位思维导图位置及缩放
-  enableDblclickReset: true
+  enableDblclickReset: false,
+  // 导出图片时canvas的缩放倍数，该配置会和window.devicePixelRatio值取最大值
+  minExportImgCanvasScale: 2,
+  // 节点鼠标hover和激活时显示的矩形边框的颜色
+  hoverRectColor: "rgb(94, 200, 248)",
+  // 节点鼠标hover和激活时显示的矩形边框距节点内容的距离
+  hoverRectPadding: 2,
+  // 双击节点进入节点文本编辑时是否默认选中文本，默认只在创建新节点时会选中
+  selectTextOnEnterEditText: false
 };
 
 // ../simple-mind-map/index.js
@@ -53983,6 +53739,8 @@ var MindMap2 = class {
     this.height = this.elRect.height;
     if (this.width <= 0 || this.height <= 0)
       throw new Error("\u5BB9\u5668\u5143\u7D20el\u7684\u5BBD\u9AD8\u4E0D\u80FD\u4E3A0");
+    this.cssEl = null;
+    this.addCss();
     this.svg = SVG().addTo(this.el).size(this.width, this.height);
     this.draw = this.svg.group();
     this.initTheme();
@@ -54020,6 +53778,17 @@ var MindMap2 = class {
     }
     opt.theme = opt.theme && themes_default[opt.theme] ? opt.theme : "default";
     return opt;
+  }
+  // 添加必要的css样式到页面
+  addCss() {
+    this.cssEl = document.createElement("style");
+    this.cssEl.type = "text/css";
+    this.cssEl.innerHTML = cssContent;
+    document.head.appendChild(this.cssEl);
+  }
+  // 移除css
+  removeCss() {
+    document.head.removeChild(this.cssEl);
   }
   //  渲染，部分渲染
   render(callback, source = "") {
@@ -54091,8 +53860,9 @@ var MindMap2 = class {
   }
   //  设置主题配置
   setThemeConfig(config) {
+    const changedConfig = getObjectChangedProps(this.themeConfig, config);
     this.opt.themeConfig = config;
-    let res = checkIsNodeSizeIndependenceConfig(config);
+    let res = checkIsNodeSizeIndependenceConfig(changedConfig);
     this.render(null, res ? "" : CONSTANTS.CHANGE_THEME);
   }
   //  获取自定义主题配置
@@ -54224,6 +53994,7 @@ var MindMap2 = class {
     svg2.size(rect.width, rect.height);
     draw.translate(-rect.x + elRect.left, -rect.y + elRect.top);
     let clone = svg2.clone();
+    clone.add(SVG(`<style>${cssContent}</style>`));
     if ((rect.width > origWidth || rect.height > origHeight) && this.watermark && this.watermark.hasWatermark()) {
       this.width = rect.width;
       this.height = rect.height;
@@ -54288,12 +54059,17 @@ var MindMap2 = class {
   destroy() {
     ;
     [...MindMap2.pluginList].forEach((plugin) => {
+      if (this[plugin.instanceName].beforePluginDestroy) {
+        this[plugin.instanceName].beforePluginDestroy();
+      }
       this[plugin.instanceName] = null;
     });
     this.event.unbind();
     this.svg.remove();
     Style_default.removeBackgroundStyle(this.el);
+    this.el.innerHTML = "";
     this.el = null;
+    this.removeCss();
   }
 };
 MindMap2.pluginList = [];
@@ -63975,26 +63751,24 @@ var ExportPDF = class {
   // 单页导出
   onePageExport(name, img) {
     let pdf = new jspdf_es_min_default("", "pt", "a4");
-    let a4Width = 595;
-    let a4Height = 841;
-    let a4Ratio = a4Width / a4Height;
+    let a4Ratio = a4Size.width / a4Size.height;
     let image = new Image();
     image.onload = () => {
       let imageWidth = image.width;
       let imageHeight = image.height;
       let imageRatio = imageWidth / imageHeight;
       let w2, h3;
-      if (imageWidth <= a4Width && imageHeight <= a4Height) {
+      if (imageWidth <= a4Size.width && imageHeight <= a4Size.height) {
         w2 = imageWidth;
         h3 = imageHeight;
       } else if (a4Ratio > imageRatio) {
-        w2 = imageRatio * a4Height;
-        h3 = a4Height;
+        w2 = imageRatio * a4Size.height;
+        h3 = a4Size.height;
       } else {
-        w2 = a4Width;
-        h3 = a4Width / imageRatio;
+        w2 = a4Size.width;
+        h3 = a4Size.width / imageRatio;
       }
-      pdf.addImage(img, "PNG", (a4Width - w2) / 2, (a4Height - h3) / 2, w2, h3);
+      pdf.addImage(img, "PNG", (a4Size.width - w2) / 2, (a4Size.height - h3) / 2, w2, h3);
       pdf.save(name);
     };
     image.src = img;
@@ -64002,23 +63776,21 @@ var ExportPDF = class {
   // 多页导出
   multiPageExport(name, img) {
     let image = new Image();
-    const a4Width = 592.28;
-    const a4Height = 841.89;
     image.onload = () => {
       let imageWidth = image.width;
       let imageHeight = image.height;
-      let pageHeight = imageWidth / a4Width * a4Height;
+      let pageHeight = imageWidth / a4Size.width * a4Size.height;
       let leftHeight = imageHeight;
       let position3 = 0;
-      let imgWidth = a4Width;
-      let imgHeight = a4Width / imageWidth * imageHeight;
+      let imgWidth = a4Size.width;
+      let imgHeight = a4Size.width / imageWidth * imageHeight;
       let pdf = new jspdf_es_min_default("", "pt", "a4");
       if (leftHeight < pageHeight) {
         pdf.addImage(
           img,
           "PNG",
-          (a4Width - imgWidth) / 2,
-          (a4Height - imgHeight) / 2,
+          (a4Size.width - imgWidth) / 2,
+          (a4Size.height - imgHeight) / 2,
           imgWidth,
           imgHeight
         );
@@ -64026,7 +63798,7 @@ var ExportPDF = class {
         while (leftHeight > 0) {
           pdf.addImage(img, "PNG", 0, position3, imgWidth, imgHeight);
           leftHeight -= pageHeight;
-          position3 -= a4Height;
+          position3 -= a4Size.height;
           if (leftHeight > 0) {
             pdf.addPage();
           }
@@ -64399,40 +64171,40 @@ var Export = class {
     };
   }
   //   svg转png
-  svgToPng(svgSrc, transparent, rotateWhenWidthLongerThenHeight = false) {
+  svgToPng(svgSrc, transparent, checkRotate = () => {
+    return false;
+  }) {
     return new Promise((resolve2, reject) => {
       const img = new Image();
       img.setAttribute("crossOrigin", "anonymous");
       img.onload = async () => {
         try {
-          let canvas = document.createElement("canvas");
-          let needRotate = rotateWhenWidthLongerThenHeight && img.width / img.height > 1;
+          const canvas = document.createElement("canvas");
+          const dpr = Math.max(window.devicePixelRatio, this.mindMap.opt.minExportImgCanvasScale);
+          const imgWidth = img.width;
+          const imgHeight = img.height;
+          const needRotate = checkRotate(imgWidth, imgHeight);
           if (needRotate) {
-            canvas.width = img.height;
-            canvas.height = img.width;
+            canvas.width = imgHeight * dpr;
+            canvas.height = imgWidth * dpr;
+            canvas.style.width = imgHeight + "px";
+            canvas.style.height = imgWidth + "px";
           } else {
-            canvas.width = img.width;
-            canvas.height = img.height;
+            canvas.width = imgWidth * dpr;
+            canvas.height = imgHeight * dpr;
+            canvas.style.width = imgWidth + "px";
+            canvas.style.height = imgHeight + "px";
           }
-          let ctx = canvas.getContext("2d");
+          const ctx = canvas.getContext("2d");
+          ctx.scale(dpr, dpr);
           if (needRotate) {
             ctx.rotate(0.5 * Math.PI);
-            ctx.translate(0, -img.height);
+            ctx.translate(0, -imgHeight);
           }
           if (!transparent) {
-            await this.drawBackgroundToCanvas(ctx, img.width, img.height);
+            await this.drawBackgroundToCanvas(ctx, imgWidth, imgHeight);
           }
-          ctx.drawImage(
-            img,
-            0,
-            0,
-            img.width,
-            img.height,
-            0,
-            0,
-            img.width,
-            img.height
-          );
+          ctx.drawImage(img, 0, 0, imgWidth, imgHeight);
           resolve2(canvas.toDataURL());
         } catch (error) {
           reject(error);
@@ -64509,7 +64281,7 @@ var Export = class {
    * 方法1.把svg的图片都转化成data:url格式，再转换
    * 方法2.把svg的图片提取出来再挨个绘制到canvas里，最后一起转换
    */
-  async png(name, transparent = false, rotateWhenWidthLongerThenHeight) {
+  async png(name, transparent = false, checkRotate) {
     let { node: node3, str } = await this.getSvgData();
     str = removeHTMLEntities(str);
     if (this.mindMap.richText) {
@@ -64526,7 +64298,7 @@ var Export = class {
     let res = await this.svgToPng(
       svgUrl,
       transparent,
-      rotateWhenWidthLongerThenHeight
+      checkRotate
     );
     return res;
   }
@@ -64535,7 +64307,11 @@ var Export = class {
     if (!this.mindMap.doExportPDF) {
       throw new Error("\u8BF7\u6CE8\u518CExportPDF\u63D2\u4EF6");
     }
-    let img = await this.png("", false, true);
+    let img = await this.png("", false, (width2, height2) => {
+      if (width2 <= a4Size.width && height2 && a4Size.height)
+        return false;
+      return width2 / height2 > 1;
+    });
     this.mindMap.doExportPDF.pdf(name, img, useMultiPageExport);
   }
   // 导出为xmind
@@ -64892,6 +64668,8 @@ var Select = class {
     this.mouseDownY = 0;
     this.mouseMoveX = 0;
     this.mouseMoveY = 0;
+    this.isSelecting = false;
+    this.cacheActiveList = [];
     this.bindEvent();
   }
   //  绑定事件
@@ -64907,6 +64685,7 @@ var Select = class {
       }
       e2.preventDefault();
       this.isMousedown = true;
+      this.cacheActiveList = [...this.mindMap.renderer.activeNodeList];
       let { x: x3, y: y4 } = this.mindMap.toPos(e2.clientX, e2.clientY);
       this.mouseDownX = x3;
       this.mouseDownY = y4;
@@ -64935,20 +64714,44 @@ var Select = class {
       if (!this.isMousedown) {
         return;
       }
-      this.mindMap.emit(
-        "node_active",
-        null,
-        this.mindMap.renderer.activeNodeList
-      );
+      this.checkTriggerNodeActiveEvent();
       clearTimeout(this.autoMoveTimer);
       this.isMousedown = false;
+      this.cacheActiveList = [];
       if (this.rect)
         this.rect.remove();
       this.rect = null;
+      setTimeout(() => {
+        this.isSelecting = false;
+      }, 0);
     });
+  }
+  // 如果激活节点改变了，那么触发事件
+  checkTriggerNodeActiveEvent() {
+    let isNumChange = this.cacheActiveList.length !== this.mindMap.renderer.activeNodeList.length;
+    let isNodeChange = false;
+    if (!isNumChange) {
+      for (let i3 = 0; i3 < this.cacheActiveList.length; i3++) {
+        let cur = this.cacheActiveList[i3];
+        if (!this.mindMap.renderer.activeNodeList.find((item) => {
+          return item.nodeData.data.uid === cur.nodeData.data.uid;
+        })) {
+          isNodeChange = true;
+          break;
+        }
+      }
+    }
+    if (isNumChange || isNodeChange) {
+      this.mindMap.emit(
+        "node_active",
+        null,
+        [...this.mindMap.renderer.activeNodeList]
+      );
+    }
   }
   //  鼠标移动事件
   onMove(x3, y4) {
+    this.isSelecting = true;
     this.rect.plot([
       [this.mouseDownX, this.mouseDownY],
       [this.mouseMoveX, this.mouseDownY],
@@ -65025,6 +64828,10 @@ var Select = class {
       }
     });
   }
+  // 是否存在选区
+  hasSelectRange() {
+    return this.isSelecting;
+  }
 };
 Select.instanceName = "select";
 var Select_default = Select;
@@ -65076,27 +64883,110 @@ var cubicBezierPath = (x1, y1, x22, y22) => {
     points[1]
   );
 };
-var getNodePoint = (node3, dir = "right") => {
+var calcPoint = (node3, e2) => {
+  const { left, top, translateLeft, translateTop, width: width2, height: height2 } = node3;
+  const clientX = e2.clientX;
+  const clientY = e2.clientY;
+  const centerX = translateLeft + width2 / 2;
+  const centerY = translateTop + height2 / 2;
+  const translateCenterX = left + width2 / 2;
+  const translateCenterY = top + height2 / 2;
+  const theta = Math.atan(height2 / width2);
+  const deltaX = clientX - centerX;
+  const deltaY = centerY - clientY;
+  const direction = Math.atan2(deltaY, deltaX);
+  let x3 = left + width2;
+  let y4 = top + height2;
+  if (direction < theta && direction >= -theta) {
+    const range2 = direction * (width2 / 2);
+    if (direction < theta && direction >= 0) {
+      y4 = translateCenterY - range2;
+    } else if (direction >= -theta && direction < 0) {
+      y4 = translateCenterY - range2;
+    }
+    return {
+      x: x3,
+      y: y4,
+      dir: "right",
+      range: range2
+    };
+  } else if (direction >= theta && direction < Math.PI - theta) {
+    y4 = top;
+    let range2 = 0;
+    if (direction < Math.PI / 2 - theta && direction >= theta) {
+      const side = height2 / 2 / direction;
+      range2 = -side;
+      x3 = translateCenterX + side;
+    } else if (direction >= Math.PI / 2 - theta && direction < Math.PI - theta) {
+      const tanValue2 = (centerX - clientX) / (centerY - clientY);
+      const side = height2 / 2 * tanValue2;
+      range2 = side;
+      x3 = translateCenterX - side;
+    }
+    return {
+      x: x3,
+      y: y4,
+      dir: "top",
+      range: range2
+    };
+  } else if (direction < -theta && direction >= theta - Math.PI) {
+    let range2 = 0;
+    if (direction >= theta - Math.PI / 2 && direction < -theta) {
+      const side = height2 / 2 / direction;
+      range2 = side;
+      x3 = translateCenterX - side;
+    } else if (direction < theta - Math.PI / 2 && direction >= theta - Math.PI) {
+      const tanValue2 = (centerX - clientX) / (centerY - clientY);
+      const side = height2 / 2 * tanValue2;
+      range2 = -side;
+      x3 = translateCenterX + side;
+    }
+    return {
+      x: x3,
+      y: y4,
+      dir: "bottom",
+      range: range2
+    };
+  }
+  x3 = left;
+  const tanValue = (centerY - clientY) / (centerX - clientX);
+  const range = tanValue * (width2 / 2);
+  if (direction >= -Math.PI && direction < theta - Math.PI) {
+    y4 = translateCenterY - range;
+  } else if (direction < Math.PI && direction >= Math.PI - theta) {
+    y4 = translateCenterY - range;
+  }
+  return {
+    x: x3,
+    y: y4,
+    dir: "left",
+    range
+  };
+};
+var getNodePoint = (node3, dir = "right", range = 0, e2 = null) => {
   let { left, top, width: width2, height: height2 } = node3;
+  if (e2) {
+    return calcPoint(node3, e2);
+  }
   switch (dir) {
     case "left":
       return {
         x: left,
-        y: top + height2 / 2
+        y: top + height2 / 2 - range
       };
     case "right":
       return {
         x: left + width2,
-        y: top + height2 / 2
+        y: top + height2 / 2 - range
       };
     case "top":
       return {
-        x: left + width2 / 2,
+        x: left + width2 / 2 - range,
         y: top
       };
     case "bottom":
       return {
-        x: left + width2 / 2,
+        x: left + width2 / 2 - range,
         y: top + height2
       };
     default:
@@ -65126,8 +65016,8 @@ var computeNodePoints = (fromNode, toNode) => {
     fromDir = "top";
     toDir = "bottom";
   } else if (offsetY > 0 && -offsetY < offsetX && offsetY > offsetX) {
-    fromDir = "bottom";
-    toDir = "top";
+    fromDir = "right";
+    toDir = "right";
   }
   return [getNodePoint(fromNode, fromDir), getNodePoint(toNode, toDir)];
 };
@@ -65217,14 +65107,21 @@ function onControlPointMousemove(e2) {
     y: y4
   };
   this[this.mousedownControlPointKey].x(x3 - radius).y(y4 - radius);
-  let [path, clickPath, text3, node3, toNode] = this.activeLine;
-  let [startPoint, endPoint] = computeNodePoints(node3, toNode);
+  let [, , , node3, toNode] = this.activeLine;
+  let targetIndex = getAssociativeLineTargetIndex(node3, toNode);
+  let { associativeLinePoint, associativeLineTargetControlOffsets } = node3.nodeData.data;
+  associativeLinePoint = associativeLinePoint || [];
+  const nodePos = this.getNodePos(node3);
+  const toNodePos = this.getNodePos(toNode);
+  let [startPoint, endPoint] = this.updateAllLinesPos(
+    node3,
+    toNode,
+    associativeLinePoint[targetIndex]
+  );
   this.controlPointMousemoveState.startPoint = startPoint;
   this.controlPointMousemoveState.endPoint = endPoint;
-  let targetIndex = getAssociativeLineTargetIndex(node3, toNode);
   this.controlPointMousemoveState.targetIndex = targetIndex;
   let offsets = [];
-  let associativeLineTargetControlOffsets = node3.nodeData.data.associativeLineTargetControlOffsets;
   if (!associativeLineTargetControlOffsets) {
     offsets = getDefaultControlPointOffsets(startPoint, endPoint);
   } else {
@@ -65232,7 +65129,13 @@ function onControlPointMousemove(e2) {
   }
   let point1 = null;
   let point22 = null;
+  const { x: clientX, y: clientY } = this.mindMap.toPos(e2.clientX, e2.clientY);
+  const _e = {
+    clientX,
+    clientY
+  };
   if (this.mousedownControlPointKey === "controlPoint1") {
+    startPoint = getNodePoint(nodePos, "", 0, _e);
     point1 = {
       x: x3,
       y: y4
@@ -65241,8 +65144,12 @@ function onControlPointMousemove(e2) {
       x: endPoint.x + offsets[1].x,
       y: endPoint.y + offsets[1].y
     };
-    this.controlLine1.plot(startPoint.x, startPoint.y, point1.x, point1.y);
+    if (startPoint) {
+      this.controlPointMousemoveState.startPoint = startPoint;
+      this.controlLine1.plot(startPoint.x, startPoint.y, point1.x, point1.y);
+    }
   } else {
+    endPoint = getNodePoint(toNodePos, "", 0, _e);
     point1 = {
       x: startPoint.x + offsets[0].x,
       y: startPoint.y + offsets[0].y
@@ -65251,9 +65158,22 @@ function onControlPointMousemove(e2) {
       x: x3,
       y: y4
     };
-    this.controlLine2.plot(endPoint.x, endPoint.y, point22.x, point22.y);
+    if (endPoint) {
+      this.controlPointMousemoveState.endPoint = endPoint;
+      this.controlLine2.plot(endPoint.x, endPoint.y, point22.x, point22.y);
+    }
   }
-  let pathStr = joinCubicBezierPath(startPoint, endPoint, point1, point22);
+  this.updataAassociativeLine(
+    startPoint,
+    endPoint,
+    point1,
+    point22,
+    this.activeLine
+  );
+}
+function updataAassociativeLine(startPoint, endPoint, point1, point22, activeLine) {
+  const [path, clickPath, text3] = activeLine;
+  const pathStr = joinCubicBezierPath(startPoint, endPoint, point1, point22);
   path.plot(pathStr);
   clickPath.plot(pathStr);
   this.updateTextPos(path, text3);
@@ -65267,7 +65187,14 @@ function onControlPointMouseup(e2) {
   let { pos, startPoint, endPoint, targetIndex } = this.controlPointMousemoveState;
   let [, , , node3] = this.activeLine;
   let offsetList = [];
-  let associativeLineTargetControlOffsets = node3.nodeData.data.associativeLineTargetControlOffsets;
+  let { associativeLinePoint, associativeLineTargetControlOffsets } = node3.nodeData.data;
+  if (!associativeLinePoint) {
+    associativeLinePoint = [];
+  }
+  associativeLinePoint[targetIndex] = associativeLinePoint[targetIndex] || {
+    startPoint,
+    endPoint
+  };
   if (!associativeLineTargetControlOffsets) {
     offsetList[targetIndex] = getDefaultControlPointOffsets(
       startPoint,
@@ -65284,16 +65211,19 @@ function onControlPointMouseup(e2) {
       y: pos.y - startPoint.y
     };
     offset2 = offsetList[targetIndex][1];
+    associativeLinePoint[targetIndex].startPoint = startPoint;
   } else {
     offset1 = offsetList[targetIndex][0];
     offset2 = {
       x: pos.x - endPoint.x,
       y: pos.y - endPoint.y
     };
+    associativeLinePoint[targetIndex].endPoint = endPoint;
   }
   offsetList[targetIndex] = [offset1, offset2];
   this.mindMap.execCommand("SET_NODE_DATA", node3, {
-    associativeLineTargetControlOffsets: offsetList
+    associativeLineTargetControlOffsets: offsetList,
+    associativeLinePoint
   });
   setTimeout(() => {
     this.resetControlPoint();
@@ -65369,7 +65299,8 @@ var associativeLineControls_default = {
   renderControls,
   removeControls,
   hideControls,
-  showControls
+  showControls,
+  updataAassociativeLine
 };
 
 // ../simple-mind-map/src/plugins/associativeLine/associativeLineText.js
@@ -65436,10 +65367,12 @@ function onScale() {
 }
 function updateTextEditBoxPos(g2) {
   let rect = g2.node.getBoundingClientRect();
-  this.textEditNode.style.minWidth = rect.width + 10 + "px";
-  this.textEditNode.style.minHeight = rect.height + 6 + "px";
-  this.textEditNode.style.left = rect.left + "px";
-  this.textEditNode.style.top = rect.top + "px";
+  if (this.textEditNode) {
+    this.textEditNode.style.minWidth = `${rect.width + 10}px`;
+    this.textEditNode.style.minHeight = `${rect.height + 6}px`;
+    this.textEditNode.style.left = `${rect.left}px`;
+    this.textEditNode.style.top = `${rect.top}px`;
+  }
 }
 function hideEditTextBox() {
   if (!this.showTextEdit) {
@@ -65469,7 +65402,10 @@ function getText2(node3, toNode) {
 function renderText(str, path, text3) {
   if (!str)
     return;
-  let { associativeLineTextFontSize, associativeLineTextLineHeight } = this.mindMap.themeConfig;
+  let {
+    associativeLineTextFontSize,
+    associativeLineTextLineHeight
+  } = this.mindMap.themeConfig;
   text3.clear();
   let textArr = str.split(/\n/gim);
   textArr.forEach((item, index3) => {
@@ -65580,11 +65516,31 @@ var AssociativeLine = class {
   // 创建箭头
   createMarker() {
     return this.draw.marker(20, 20, (add) => {
-      add.ref(2, 5);
+      add.ref(12, 5);
       add.size(10, 10);
       add.attr("orient", "auto-start-reverse");
       this.markerPath = add.path("M0,0 L2,5 L0,10 L10,5 Z");
     });
+  }
+  // 判断关联线坐标是否变更，有变更则使用变化后的坐标，无则默认坐标
+  updateAllLinesPos(node3, toNode, associativeLinePoint) {
+    associativeLinePoint = associativeLinePoint || {};
+    let [startPoint, endPoint] = computeNodePoints(node3, toNode);
+    let nodeRange = 0;
+    let nodeDir = "";
+    let toNodeRange = 0;
+    let toNodeDir = "";
+    if (associativeLinePoint.startPoint) {
+      nodeRange = associativeLinePoint.startPoint.range || 0;
+      nodeDir = associativeLinePoint.startPoint.dir || "right";
+      startPoint = getNodePoint(node3, nodeDir, nodeRange);
+    }
+    if (associativeLinePoint.endPoint) {
+      toNodeRange = associativeLinePoint.endPoint.range || 0;
+      toNodeDir = associativeLinePoint.endPoint.dir || "right";
+      endPoint = getNodePoint(toNode, toNodeDir, toNodeRange);
+    }
+    return [startPoint, endPoint];
   }
   // 渲染所有连线
   renderAllLines() {
@@ -65616,11 +65572,16 @@ var AssociativeLine = class {
       0
     );
     nodeToIds.forEach((ids, node3) => {
-      ids.forEach((id) => {
+      ids.forEach((id, index3) => {
         let toNode = idToNode.get(id);
         if (!node3 || !toNode)
           return;
-        let [startPoint, endPoint] = computeNodePoints(node3, toNode);
+        const associativeLinePoint = (node3.nodeData.data.associativeLinePoint || [])[index3];
+        const [startPoint, endPoint] = this.updateAllLinesPos(
+          node3,
+          toNode,
+          associativeLinePoint
+        );
         this.drawLine(startPoint, endPoint, node3, toNode);
       });
     });
@@ -65651,19 +65612,43 @@ var AssociativeLine = class {
     let clickPath = this.draw.path();
     clickPath.stroke({ width: associativeLineActiveWidth, color: "transparent" }).fill({ color: "none" });
     clickPath.plot(pathStr);
-    let text3 = this.createText({ path, clickPath, node: node3, toNode, startPoint, endPoint, controlPoints });
+    let text3 = this.createText({
+      path,
+      clickPath,
+      node: node3,
+      toNode,
+      startPoint,
+      endPoint,
+      controlPoints
+    });
     clickPath.click((e2) => {
       e2.stopPropagation();
-      this.setActiveLine({ path, clickPath, text: text3, node: node3, toNode, startPoint, endPoint, controlPoints });
+      this.setActiveLine({
+        path,
+        clickPath,
+        text: text3,
+        node: node3,
+        toNode,
+        startPoint,
+        endPoint,
+        controlPoints
+      });
     });
     this.renderText(this.getText(node3, toNode), path, text3);
     this.lineList.push([path, clickPath, text3, node3, toNode]);
   }
   // 激活某根关联线
-  setActiveLine({ path, clickPath, text: text3, node: node3, toNode, startPoint, endPoint, controlPoints }) {
-    let {
-      associativeLineActiveColor
-    } = this.mindMap.themeConfig;
+  setActiveLine({
+    path,
+    clickPath,
+    text: text3,
+    node: node3,
+    toNode,
+    startPoint,
+    endPoint,
+    controlPoints
+  }) {
+    let { associativeLineActiveColor } = this.mindMap.themeConfig;
     if (this.mindMap.renderer.activeNodeList.length > 0) {
       this.clearActiveNodes();
     } else {
@@ -65738,6 +65723,21 @@ var AssociativeLine = class {
       y: (y4 - translateY) / scaleY
     };
   }
+  // 计算节点偏移位置
+  getNodePos(node3) {
+    const { scaleX, scaleY, translateX, translateY } = this.mindMap.draw.transform();
+    const { left, top, width: width2, height: height2 } = node3;
+    let translateLeft = left * scaleX + translateX;
+    let translateTop = top * scaleY + translateY;
+    return {
+      left,
+      top,
+      translateLeft,
+      translateTop,
+      width: width2,
+      height: height2
+    };
+  }
   // 检测当前移动到的目标节点
   checkOverlapNode(x3, y4) {
     this.overlapNode = null;
@@ -65785,6 +65785,10 @@ var AssociativeLine = class {
       });
     }
     let list2 = fromNode.nodeData.data.associativeLineTargets || [];
+    const sameLine = list2.some((item) => item === id);
+    if (sameLine) {
+      return;
+    }
     list2.push(id);
     let [startPoint, endPoint] = computeNodePoints(fromNode, toNode);
     let controlPoints = computeCubicBezierPathPoints(
@@ -65804,9 +65808,12 @@ var AssociativeLine = class {
         y: controlPoints[1].y - endPoint.y
       }
     ];
+    let associativeLinePoint = fromNode.nodeData.data.associativeLinePoint || [];
+    associativeLinePoint[list2.length - 1] = [{ startPoint, endPoint }];
     this.mindMap.execCommand("SET_NODE_DATA", fromNode, {
       associativeLineTargets: list2,
-      associativeLineTargetControlOffsets: offsetList
+      associativeLineTargetControlOffsets: offsetList,
+      associativeLinePoint
     });
   }
   // 删除连接线
@@ -65815,7 +65822,13 @@ var AssociativeLine = class {
       return;
     let [, , , node3, toNode] = this.activeLine;
     this.removeControls();
-    let { associativeLineTargets, associativeLineTargetControlOffsets, associativeLineText } = node3.nodeData.data;
+    let {
+      associativeLineTargets,
+      associativeLinePoint,
+      associativeLineTargetControlOffsets,
+      associativeLineText
+    } = node3.nodeData.data;
+    associativeLinePoint = associativeLinePoint || [];
     let targetIndex = getAssociativeLineTargetIndex(node3, toNode);
     let newAssociativeLineText = {};
     if (associativeLineText) {
@@ -65828,6 +65841,10 @@ var AssociativeLine = class {
     this.mindMap.execCommand("SET_NODE_DATA", node3, {
       // 目标
       associativeLineTargets: associativeLineTargets.filter((_3, index3) => {
+        return index3 !== targetIndex;
+      }),
+      // 连接线坐标
+      associativeLinePoint: associativeLinePoint.filter((_3, index3) => {
         return index3 !== targetIndex;
       }),
       // 偏移量
@@ -66007,7 +66024,7 @@ var RichText = class {
     import_quill.default.register(SizeStyle, true);
   }
   // 显示文本编辑控件
-  showEditText(node3, rect, isInserting) {
+  showEditText(node3, rect, isInserting, isFromKeyDown) {
     if (this.showTextEdit) {
       return;
     }
@@ -66015,7 +66032,8 @@ var RichText = class {
       richTextEditFakeInPlace,
       customInnerElsAppendTo,
       nodeTextEditZIndex,
-      textAutoWrapWidth
+      textAutoWrapWidth,
+      selectTextOnEnterEditText
     } = this.mindMap.opt;
     this.node = node3;
     this.isInserting = isInserting;
@@ -66090,7 +66108,7 @@ var RichText = class {
     this.initQuillEditor();
     document.querySelector(".ql-editor").style.minHeight = originHeight + "px";
     this.showTextEdit = true;
-    this.focus(isInserting ? 0 : null);
+    this.focus(isInserting || selectTextOnEnterEditText && !isFromKeyDown ? 0 : null);
     if (!node3.nodeData.data.richText) {
       this.setTextStyleIfNotRichText(node3);
     }
@@ -66432,6 +66450,10 @@ var RichText = class {
     this.transformAllNodesToNormalNode();
     document.head.removeChild(this.styleEl);
   }
+  // 插件被卸载前做的事情
+  beforePluginDestroy() {
+    document.head.removeChild(this.styleEl);
+  }
 };
 RichText.instanceName = "richText";
 var RichText_default = RichText;
@@ -66675,6 +66697,10 @@ var NodeImgAdjust = class {
   beforePluginRemove() {
     this.unBindEvent();
   }
+  // 插件被卸载前做的事情
+  beforePluginDestroy() {
+    this.unBindEvent();
+  }
 };
 NodeImgAdjust.instanceName = "nodeImgAdjust";
 var NodeImgAdjust_default = NodeImgAdjust;
@@ -66809,6 +66835,10 @@ var TouchEvent = class {
   }
   // 插件被移除前做的事情
   beforePluginRemove() {
+    this.unBindEvent();
+  }
+  // 插件被卸载前做的事情
+  beforePluginDestroy() {
     this.unBindEvent();
   }
 };
@@ -67019,9 +67049,167 @@ var Painter = class {
   beforePluginRemove() {
     this.unBindEvent();
   }
+  // 插件被卸载前做的事情
+  beforePluginDestroy() {
+    this.unBindEvent();
+  }
 };
 Painter.instanceName = "painter";
 var Painter_default = Painter;
+
+// ../simple-mind-map/src/plugins/Scrollbar.js
+var Scrollbar = class {
+  //  构造函数
+  constructor(opt) {
+    this.mindMap = opt.mindMap;
+    this.scrollbarWrapSize = {
+      width: 0,
+      // 水平滚动条的容器宽度
+      height: 0
+      // 垂直滚动条的容器高度
+    };
+    this.reset();
+    this.bindEvent();
+  }
+  // 绑定事件
+  bindEvent() {
+    this.onMousemove = this.onMousemove.bind(this);
+    this.onMouseup = this.onMouseup.bind(this);
+    this.onNodeTreeRenderEnd = this.onNodeTreeRenderEnd.bind(this);
+    this.onViewDataChange = throttle(this.onViewDataChange, 16, this);
+    this.mindMap.on("mousemove", this.onMousemove);
+    this.mindMap.on("mouseup", this.onMouseup);
+    this.mindMap.on("node_tree_render_end", this.onNodeTreeRenderEnd);
+    this.mindMap.on("view_data_change", this.onViewDataChange);
+  }
+  // 解绑事件
+  unBindEvent() {
+    this.mindMap.off("mousemove", this.onMousemove);
+    this.mindMap.off("mouseup", this.onMouseup);
+    this.mindMap.off("node_tree_render_end", this.onNodeTreeRenderEnd);
+    this.mindMap.off("view_data_change", this.onViewDataChange);
+  }
+  // 每次渲染后需要更新滚动条
+  onNodeTreeRenderEnd() {
+    this.emitEvent();
+  }
+  // 思维导图视图数据改变需要更新滚动条
+  onViewDataChange() {
+    this.emitEvent();
+  }
+  // 发送滚动条改变事件
+  emitEvent() {
+    this.mindMap.emit("scrollbar_change");
+  }
+  // 复位数据
+  reset() {
+    this.currentScrollType = "";
+    this.isMousedown = false;
+    this.mousedownPos = {
+      x: 0,
+      y: 0
+    };
+    this.startViewPos = {
+      x: 0,
+      y: 0
+    };
+    this.chartHeight = 0;
+    this.chartWidth = 0;
+  }
+  // 设置滚动条容器的大小，指滚动条容器的大小，对于水平滚动条，即宽度，对于垂直滚动条，即高度
+  setScrollBarWrapSize(width2, height2) {
+    this.scrollbarWrapSize.width = width2;
+    this.scrollbarWrapSize.height = height2;
+  }
+  // 计算滚动条大小和位置
+  calculationScrollbar() {
+    const rect = this.mindMap.draw.rbox();
+    const elRect = this.mindMap.elRect;
+    rect.x -= elRect.left;
+    rect.x2 -= elRect.left;
+    rect.y -= elRect.top;
+    rect.y2 -= elRect.top;
+    const canvasHeight = this.mindMap.height;
+    const paddingY = canvasHeight / 2;
+    const chartHeight = rect.height + paddingY * 2;
+    this.chartHeight = chartHeight;
+    const chartTop = rect.y - paddingY;
+    const height2 = Math.min(canvasHeight / chartHeight * 100, 100);
+    let top = -chartTop / chartHeight * 100;
+    if (top < 0) {
+      top = 0;
+    }
+    if (top > 100 - height2) {
+      top = 100 - height2;
+    }
+    const canvasWidth = this.mindMap.width;
+    const paddingX = canvasWidth / 2;
+    const chartWidth = rect.width + paddingX * 2;
+    this.chartWidth = chartWidth;
+    const chartLeft = rect.x - paddingX;
+    const width2 = Math.min(canvasWidth / chartWidth * 100, 100);
+    let left = -chartLeft / chartWidth * 100;
+    if (left < 0) {
+      left = 0;
+    }
+    if (left > 100 - width2) {
+      left = 100 - width2;
+    }
+    const res = {
+      // 垂直滚动条
+      vertical: {
+        top,
+        height: height2
+      },
+      // 水平滚动条
+      horizontal: {
+        left,
+        width: width2
+      }
+    };
+    return res;
+  }
+  onMousedown(e2, type) {
+    e2.preventDefault();
+    this.currentScrollType = type;
+    this.isMousedown = true;
+    this.mousedownPos = {
+      x: e2.clientX,
+      y: e2.clientY
+    };
+    let transformData = this.mindMap.view.getTransformData();
+    this.startViewPos = {
+      x: transformData.state.x,
+      y: transformData.state.y
+    };
+  }
+  onMousemove(e2) {
+    if (!this.isMousedown) {
+      return;
+    }
+    if (this.currentScrollType === "vertical") {
+      const oy = e2.clientY - this.mousedownPos.y;
+      const oyPercentage = -oy / this.scrollbarWrapSize.height;
+      const oyPx = oyPercentage * this.chartHeight;
+      this.mindMap.view.translateYTo(oyPx + this.startViewPos.y);
+    } else {
+      const ox = e2.clientX - this.mousedownPos.x;
+      const oxPercentage = -ox / this.scrollbarWrapSize.width;
+      const oxPx = oxPercentage * this.chartWidth;
+      this.mindMap.view.translateXTo(oxPx + this.startViewPos.x);
+    }
+  }
+  onMouseup() {
+    this.isMousedown = false;
+    this.reset();
+  }
+  // 插件被卸载前做的事情
+  beforePluginDestroy() {
+    this.unBindEvent();
+  }
+};
+Scrollbar.instanceName = "scrollbar";
+var Scrollbar_default = Scrollbar;
 
 // ../simple-mind-map/node_modules/mdast-util-to-string/lib/index.js
 function toString7(value, options) {
@@ -71794,7 +71982,7 @@ simple_mind_map_default.iconList = icons_default.nodeIconList;
 simple_mind_map_default.constants = constant_exports;
 simple_mind_map_default.themes = themes_default;
 simple_mind_map_default.defaultTheme = default_exports;
-simple_mind_map_default.usePlugin(MiniMap_default).usePlugin(Watermark_default).usePlugin(Drag_default).usePlugin(KeyboardNavigation_default).usePlugin(ExportXMind_default).usePlugin(ExportPDF_default).usePlugin(Export_default).usePlugin(Select_default).usePlugin(AssociativeLine_default).usePlugin(RichText_default).usePlugin(TouchEvent_default).usePlugin(NodeImgAdjust_default).usePlugin(Search_default).usePlugin(Painter_default);
+simple_mind_map_default.usePlugin(MiniMap_default).usePlugin(Watermark_default).usePlugin(Drag_default).usePlugin(KeyboardNavigation_default).usePlugin(ExportXMind_default).usePlugin(ExportPDF_default).usePlugin(Export_default).usePlugin(Select_default).usePlugin(AssociativeLine_default).usePlugin(RichText_default).usePlugin(TouchEvent_default).usePlugin(NodeImgAdjust_default).usePlugin(Search_default).usePlugin(Painter_default).usePlugin(Scrollbar_default);
 var full_default = simple_mind_map_default;
 export {
   full_default as default
