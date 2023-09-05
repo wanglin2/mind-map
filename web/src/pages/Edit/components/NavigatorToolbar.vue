@@ -177,10 +177,14 @@ export default {
         default:
           break
       }
-      const a = document.createElement('a')
-      a.href = url
-      a.target = '_blank'
-      a.click()
+      if (window.IS_ELECTRON) {
+        window.electronAPI.openUrl(url)
+      } else {
+        const a = document.createElement('a')
+        a.href = url
+        a.target = '_blank'
+        a.click()
+      }
     }
   }
 }
