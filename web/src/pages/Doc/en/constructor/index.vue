@@ -199,8 +199,8 @@
 <tr>
 <td>expandBtnStyle（v0.5.0+）</td>
 <td>Object</td>
-<td>{ color: '#808080', fill: '#fff' }</td>
-<td>Expand the color of the stow button</td>
+<td>{ color: '#808080', fill: '#fff', fontSize: 13, strokeColor: '#333333' }</td>
+<td>Expand the color of the stow button, (The fontSize and strokeColor fields were added in version 0.7.0+to set the text style for displaying the number of nodes when folded)</td>
 <td></td>
 </tr>
 <tr>
@@ -208,6 +208,20 @@
 <td>Object</td>
 <td>{ open: '', close: '' }</td>
 <td>Customize the icon of the expand/collapse button, and you can transfer the svg string of the icon</td>
+<td></td>
+</tr>
+<tr>
+<td>expandBtnNumHandler（v0.7.0+）</td>
+<td>Function</td>
+<td></td>
+<td>Used to customize the content of displaying the number of nodes when folding, receiving a parameter that represents the instance of the folding node, and returning a number or string that represents the final displayed content. For example, when the number is greater than 99, 99 can be displayed+</td>
+<td></td>
+</tr>
+<tr>
+<td>isShowExpandNum（v0.7.0+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Display the number of folded nodes when they are folded up</td>
 <td></td>
 </tr>
 <tr>
@@ -394,12 +408,71 @@
 </tr>
 <tr>
 <td>customHandleClipboardText（v0.6.14+）</td>
+<td>Function</td>
+<td>null</td>
 <td>Customize the processing of clipboard text. When pressing ctrl+v to paste, it will read the text and images from the user's clipboard. By default, it will only determine whether the text is regular text and node data in simple mind map format. If you want to process data from other mind maps, such as process, zhixi, etc., you can pass a function that takes the text from the current clipboard as a parameter and returns the processed data, which can be of two types: 1.If a pure text is returned, a child node will be directly created with that text; 2.Returns a node object in the following format: { simpleMindMap: true, data: { data: { text: '' }, children: [] } }, The representative is data in simple bind map format, and the node data is in the same format as the simple bind map node data. If your processing logic has asynchronous logic, you can also return a promise</td>
+<td></td>
+</tr>
+<tr>
+<td>errorHandler（v0.6.15+）</td>
+<td>Function</td>
+<td></td>
+<td>Custom error handling functions currently only throw some asynchronous logic errors. Can pass a function that takes two parameters, the first being the wrong type and the second being the wrong object</td>
+<td></td>
+</tr>
+<tr>
+<td>disableMouseWheelZoom（v0.6.15+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Prohibit mouse wheel scaling, you can still use the API for scaling</td>
+<td></td>
+</tr>
+<tr>
+<td>resetCss（v0.6.16+）</td>
+<td>String</td>
+<td>* { margin: 0; padding: 0; box-sizing: border-box; }</td>
+<td>When exporting images and SVGs, the default style overlay for rich text node content, which is embedded in HTML nodes in SVGs, will occur. If not overlaid, the node content will be offset</td>
+<td></td>
+</tr>
+<tr>
+<td>enableDblclickReset（v0.6.17+）</td>
+<td>Boolean</td>
+<td>true(v0.7.0+changed to false)</td>
+<td>Turn on the mouse and double-click to reset the position and zoom of the mind map</td>
+<td></td>
+</tr>
+<tr>
+<td>minExportImgCanvasScale（v0.7.0+）</td>
+<td>Number</td>
+<td>2</td>
+<td>The scaling factor of canvas when exporting images and PDFs, which is set to the maximum value of window.devicePixelRatio to improve image clarity</td>
+<td></td>
+</tr>
+<tr>
+<td>hoverRectColor（v0.7.0+）</td>
+<td>String</td>
+<td>rgb(94, 200, 248)</td>
+<td>The node mouse hover and the rectangular border color displayed when activated will add a transparency of 0.6 when hovering</td>
+<td></td>
+</tr>
+<tr>
+<td>hoverRectPadding（v0.7.0+）</td>
+<td>Number</td>
+<td>2</td>
+<td>The distance between the node mouse hover and the displayed rectangular border when activated and the node content</td>
+<td></td>
+</tr>
+<tr>
+<td>selectTextOnEnterEditText（v0.7.0+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Is the text selected by default when double-clicking a node to enter node text editing? By default, it will only be selected when creating a new node</td>
 <td></td>
 </tr>
 </tbody>
 </table>
 <h3>Watermark config</h3>
+<table>
 <thead>
 <tr>
 <th>Field Name</th>
@@ -862,12 +935,12 @@ redo. All commands are as follows:</p>
 <tr>
 <td>SET_NODE_STYLE</td>
 <td>Modify node single style</td>
-<td>node (the node to set the style of), prop (style property), value (style property value), isActive (boolean, whether the style being set is for the active state)</td>
+<td>node (the node to set the style of), prop (style property), value (style property value), isActive (v0.7.0+has been abandoned, boolean, whether the style being set is for the active state)</td>
 </tr>
 <tr>
 <td>SET_NODE_STYLEs（v0.6.12+）</td>
 <td>Modify multiple styles of nodes</td>
-<td>node（the node to set the style of）、style（Style object，key is style prop，value is style value）、isActive（boolean, whether the style being set is for the active state）</td>
+<td>node（the node to set the style of）、style（Style object，key is style prop，value is style value）、isActive（v0.7.0+has been abandoned, boolean, whether the style being set is for the active state）</td>
 </tr>
 <tr>
 <td>SET_NODE_ACTIVE</td>

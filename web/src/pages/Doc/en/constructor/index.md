@@ -1,6 +1,6 @@
 # Constructor
 
-## Basic use
+## Basic use 
 
 ```html
 <div id="mindMapContainer"></div>
