@@ -56,7 +56,9 @@ export default [
       { path: 'painter', title: 'Painter插件' },
       { path: 'painter', title: 'Painter插件' },
       { path: 'scrollbar', title: 'Scrollbar插件' },
-      { path: 'help2', title: '客户端' }
+      { path: 'help1', title: '概要/关联线' },
+      { path: 'help2', title: '客户端' },
+      { path: 'help3', title: '打开预览在线文件' }
     ]
   },
   {
