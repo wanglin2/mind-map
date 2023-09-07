@@ -433,7 +433,7 @@ class AssociativeLine {
     ]
     let associativeLinePoint = fromNode.nodeData.data.associativeLinePoint || []
     // 记录关联的起始|结束坐标
-    associativeLinePoint[list.length - 1] = [{ startPoint, endPoint }]
+    associativeLinePoint[list.length - 1] = { startPoint, endPoint }
     this.mindMap.execCommand('SET_NODE_DATA', fromNode, {
       associativeLineTargets: list,
       associativeLineTargetControlOffsets: offsetList,
