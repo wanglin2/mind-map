@@ -151,6 +151,10 @@ full screen, support mini map</li>
         <img src="../../../../assets/avatar/南风.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>南风</p>
     </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/蜉蝣撼大叔.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>蜉蝣撼大叔</p>
+    </div>
 </div>
   </div>
 </template>
