@@ -58,7 +58,8 @@ export default [
       { path: 'scrollbar', title: 'Scrollbar插件' },
       { path: 'help1', title: '概要/关联线' },
       { path: 'help2', title: '客户端' },
-      { path: 'help3', title: '打开预览在线文件' }
+      { path: 'help3', title: '打开预览在线文件' },
+      { path: 'help4', title: '复制粘贴' }
     ]
   },
   {

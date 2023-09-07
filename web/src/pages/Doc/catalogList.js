@@ -39,7 +39,7 @@ let APIList = [
   'markdown',
   'utils'
 ]
-let helpList = new Array(3).fill(0).map((_, index) => {
+let helpList = new Array(4).fill(0).map((_, index) => {
   return 'help' + (index + 1)
 })
 

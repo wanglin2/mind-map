@@ -168,3 +168,13 @@ module. If you need it, you can try using other libraries to parse `xml` to
 ### Error `Getting bbox of element "text" is not possible: TypeError: Cannot read properties of undefined (reading 'apply')`
 
 The reason is that the installed version of `@svgdotjs/svg.js` is too high. You can manually reduce it to the version of `3.0.16`.
+
+### TypeError: Cannot read properties of undefined (reading 'prototype') at sax.js:222:46 
+
+The following configurations can be added to the packaging configuration file:
+
+```js
+resolve: { alias: { stream: "stream-browserify" } }
+```
+
+Different packaging tools may have different specific configurations, with the principle of excluding 'stream' dependencies.
