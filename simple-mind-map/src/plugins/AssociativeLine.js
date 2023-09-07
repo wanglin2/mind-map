@@ -362,7 +362,7 @@ class AssociativeLine {
       if (node.nodeData.data.isActive) {
         this.mindMap.renderer.setNodeActive(node, false)
       }
-      if (node === this.creatingStartNode || this.overlapNode) {
+      if (node.uid === this.creatingStartNode.uid || this.overlapNode) {
         return
       }
       let { left, top, width, height } = node
@@ -379,7 +379,7 @@ class AssociativeLine {
 
   // 完成创建连接线
   completeCreateLine(node) {
-    if (this.creatingStartNode === node) return
+    if (this.creatingStartNode.uid === node.uid) return
     this.addLine(this.creatingStartNode, node)
     if (this.overlapNode && this.overlapNode.nodeData.data.isActive) {
       this.mindMap.renderer.setNodeActive(this.overlapNode, false)

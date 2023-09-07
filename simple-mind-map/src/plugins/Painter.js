@@ -49,7 +49,7 @@ class Painter {
       !this.isInPainter ||
       !this.painterNode ||
       !node ||
-      node === this.painterNode
+      node.uid === this.painterNode.uid
     )
       return
     const style = {}
