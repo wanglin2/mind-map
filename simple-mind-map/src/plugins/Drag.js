@@ -218,7 +218,7 @@ class Drag extends Base {
       if (node.nodeData.data.isActive) {
         this.mindMap.renderer.setNodeActive(node, false)
       }
-      if (node === this.node || this.node.isParent(node)) {
+      if (node.uid === this.node.uid) {
         return
       }
       if (this.overlapNode || (this.prevNode && this.nextNode)) {
@@ -231,7 +231,7 @@ class Drag extends Base {
         return item !== this.node
       }) : []
       let index = checkList.findIndex((item) => {
-        return item === node
+        return item.uid === node.uid
       })
       let prevBrother = null
       let nextBrother = null

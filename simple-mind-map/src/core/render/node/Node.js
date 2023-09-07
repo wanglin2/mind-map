@@ -794,12 +794,12 @@ class Node {
 
   //  检测当前节点是否是某个节点的祖先节点
   isParent(node) {
-    if (this === node) {
+    if (this.uid === node.uid) {
       return false
     }
     let parent = node.parent
     while (parent) {
-      if (this === parent) {
+      if (this.uid === parent.uid) {
         return true
       }
       parent = parent.parent
@@ -809,11 +809,11 @@ class Node {
 
   //  检测当前节点是否是某个节点的兄弟节点
   isBrother(node) {
-    if (!this.parent || this === node) {
+    if (!this.parent || this.uid === node.uid) {
       return false
     }
     return this.parent.children.find(item => {
-      return item === node
+      return item.uid === node.uid
     })
   }
 

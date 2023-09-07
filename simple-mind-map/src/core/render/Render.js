@@ -382,7 +382,7 @@ class Render {
   //  检索某个节点在激活列表里的索引
   findActiveNodeIndex(node) {
     return this.activeNodeList.findIndex(item => {
-      return item === node
+      return item.uid === node.uid
     })
   }
 
@@ -390,7 +390,7 @@ class Render {
   getNodeIndex(node) {
     return node.parent
       ? node.parent.children.findIndex(item => {
-          return item === node
+          return item.uid === node.uid
         })
       : 0
   }
@@ -553,7 +553,7 @@ class Render {
     let parent = node.parent
     let childList = parent.children
     let index = childList.findIndex(item => {
-      return item === node
+      return item.uid === node.uid
     })
     if (index === -1 || index === 0) {
       return
@@ -580,7 +580,7 @@ class Render {
     let parent = node.parent
     let childList = parent.children
     let index = childList.findIndex(item => {
-      return item === node
+      return item.uid === node.uid
     })
     if (index === -1 || index === childList.length - 1) {
       return
@@ -752,7 +752,7 @@ class Render {
     let nodeParent = node.parent
     let nodeBorthers = nodeParent.children
     let nodeIndex = nodeBorthers.findIndex(item => {
-      return item === node
+      return item.uid === node.uid
     })
     if (nodeIndex === -1) {
       return
@@ -764,7 +764,7 @@ class Render {
     let existParent = exist.parent
     let existBorthers = existParent.children
     let existIndex = existBorthers.findIndex(item => {
-      return item === exist
+      return item.uid === exist.uid
     })
     if (existIndex === -1) {
       return
@@ -791,7 +791,7 @@ class Render {
     let nodeParent = node.parent
     let nodeBorthers = nodeParent.children
     let nodeIndex = nodeBorthers.findIndex(item => {
-      return item === node
+      return item.uid === node.uid
     })
     if (nodeIndex === -1) {
       return
@@ -803,7 +803,7 @@ class Render {
     let existParent = exist.parent
     let existBorthers = existParent.children
     let existIndex = existBorthers.findIndex(item => {
-      return item === exist
+      return item.uid === exist.uid
     })
     if (existIndex === -1) {
       return
