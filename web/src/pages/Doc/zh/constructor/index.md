@@ -25,7 +25,7 @@ const mindMap = new MindMap({
 | 字段名称                         | 类型    | 默认值           | 描述                                                         | 是否必填 |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ | -------- |
 | el                               | Element |                  | 容器元素，必须为DOM元素                                      | 是       |
-| data                             | Object  | {}               | 思维导图数据，可参考：[exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js) |          |
+| data                             | Object  | {}               | 思维导图数据，可参考下方【数据结构】介绍 |          |
 | layout                           | String  | logicalStructure | 布局类型，可选列表：logicalStructure（逻辑结构图）、mindMap（思维导图）、catalogOrganization（目录组织图）、organizationStructure（组织结构图）、timeline（v0.5.4+，时间轴）、timeline2（v0.5.4+，上下交替型时间轴）、fishbone（v0.5.4+，鱼骨图） |          |
 | fishboneDeg（v0.5.4+）                      | Number |  45          |  设置鱼骨结构图的斜线角度               |        |
 | theme                            | String  | default          | 主题，可选列表：default（默认）、classic（脑图经典）、minions（小黄人）、pinkGrape（粉红葡萄）、mint（薄荷）、gold（金色vip）、vitalityOrange（活力橙）、greenLeaf（绿叶）、dark2（暗色2）、skyGreen（天清绿）、classic2（脑图经典2）、classic3（脑图经典3）、classic4（脑图经典4，v0.2.0+）、classicGreen（经典绿）、classicBlue（经典蓝）、blueSky（天空蓝）、brainImpairedPink（脑残粉）、dark（暗色）、earthYellow（泥土黄）、freshGreen（清新绿）、freshRed（清新红）、romanticPurple（浪漫紫）、simpleBlack（v0.5.4+简约黑）、courseGreen（v0.5.4+课程绿）、coffee（v0.5.4+咖啡）、redSpirit（v0.5.4+红色精神）、blackHumour（v0.5.4+黑色幽默）、lateNightOffice（v0.5.4+深夜办公室）、blackGold（v0.5.4+黑金）、avocado（v.5.10-fix.2+牛油果）、autumn（v.5.10-fix.2+秋天）、orangeJuice（v.5.10-fix.2+橙汁） |          |
@@ -87,6 +87,47 @@ const mindMap = new MindMap({
 | hoverRectColor（v0.7.0+）     | String  | rgb(94, 200, 248)  | 节点鼠标hover和激活时显示的矩形边框颜色，hover时会添加0.6的透明度 |          |
 | hoverRectPadding（v0.7.0+）     | Number  | 2  | 节点鼠标hover和激活时显示的矩形边框距节点内容的距离 |          |
 | selectTextOnEnterEditText（v0.7.0+）     | Boolean  | true  | 双击节点进入节点文本编辑时是否默认选中文本，默认只在创建新节点时会选中 |          |
+
+### 数据结构
+
+基本的数据结构如下：
+
+```js
+{
+  data: {
+    text: '', // 节点的文本，可以是富文本，也就是html格式的，此时richText要设为true
+    richText: false, // 节点的文本是否是富文本模式
+    expand: true, // 节点是否展开
+    uid: '',// 节点唯一的id，可不传，内部会生成
+    icon: [], // 图标，格式可参考教程里的【插入和扩展节点图标】章节
+    image: '', // 图片的url
+    imageTitle: '', // 图片的标题，可为空
+    imageSize: { // 图片的尺寸
+      width: 100, // 图片的宽度，必传
+      height: 100, // 图片的高度，必传
+      custom: false // 如果设为true，图片的显示大小不受主题控制，以imageSize.width和imageSize.height为准
+    },
+    hyperlink: '', // 超链接地址
+    hyperlinkTitle: '', // 超链接的标题
+    note: '', // 备注的内容
+    tag: [], // 标签列表
+    generalization: {// 节点的概要，如果没有概要generalization设为null即可
+      text: ''// 概要的文本
+    },
+    associativeLineTargets: [''],// 如果存在关联线，那么为目标节点的uid列表
+    associativeLineText: '',// 关联线文本
+    // ...其他样式字段，可以参考主题
+  },
+  children [// 子节点，结构和根节点一致
+    {
+      data: {},
+      children: []
+    }
+  ]
+}
+```
+
+如果你要添加自定义的字段，可以添加到`data`、`children`同级，如果你要添加到`data`对象里，那么请使用`_`开头来命名你的自定义字段，内部会通过这个来判断是否是自定义字段。
 
 ### 水印配置
 
