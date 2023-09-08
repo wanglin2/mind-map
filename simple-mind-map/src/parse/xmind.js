@@ -4,7 +4,8 @@ import {
   getTextFromHtml,
   imgToDataUrl,
   parseDataUrl,
-  getImageSize
+  getImageSize,
+  isUndef
 } from '../utils/index'
 
 //  解析.xmind文件
@@ -49,7 +50,7 @@ const transformXmind = async (content, files) => {
   let walk = async (node, newNode) => {
     newNode.data = {
       // 节点内容
-      text: node.title
+      text: isUndef(node.title) ? '' : node.title
     }
     // 节点备注
     if (node.notes) {
@@ -146,9 +147,10 @@ const transformOldXmind = content => {
   let walk = (node, newNode) => {
     let nodeElements = node.elements
     let nodeTitle = getItemByName(nodeElements, 'title')
+    nodeTitle = nodeTitle && nodeTitle.elements && nodeTitle.elements[0].text
     newNode.data = {
       // 节点内容
-      text: nodeTitle && nodeTitle.elements && nodeTitle.elements[0].text
+      text: isUndef(nodeTitle) ? '' : nodeTitle
     }
     try {
       // 节点备注
