@@ -13,6 +13,8 @@ class Drag extends Base {
 
   //  复位
   reset() {
+    // 当前画布节点列表
+    this.nodeList = []
     // 当前拖拽节点
     this.node = null
     // 当前重叠节点
@@ -68,6 +70,7 @@ class Drag extends Base {
       this.isMousedown = true
       this.mouseDownX = x
       this.mouseDownY = y
+      this.nodeTreeToList()
     })
     this.mindMap.on('mousemove', e => {
       if (this.mindMap.opt.readonly) {
@@ -106,7 +109,9 @@ class Drag extends Base {
     this.node.isDrag = false
     this.node.show()
     this.removeCloneNode()
-    let overlapNodeUid = this.overlapNode ? this.overlapNode.nodeData.data.uid : ''
+    let overlapNodeUid = this.overlapNode
+      ? this.overlapNode.nodeData.data.uid
+      : ''
     let prevNodeUid = this.prevNode ? this.prevNode.nodeData.data.uid : ''
     let nextNodeUid = this.nextNode ? this.nextNode.nodeData.data.uid : ''
     // 存在重叠子节点，则移动作为其子节点
@@ -207,14 +212,14 @@ class Drag extends Base {
     if (!this.drawTransform || !this.placeholder) {
       return
     }
-    const { nodeDragPlaceholderMaxSize } = this.mindMap.opt 
+    const { nodeDragPlaceholderMaxSize } = this.mindMap.opt
     let x = this.mouseMoveX
     let y = this.mouseMoveY
     this.overlapNode = null
     this.prevNode = null
     this.nextNode = null
     this.placeholder.size(0, 0)
-    bfsWalk(this.mindMap.renderer.root, node => {
+    this.nodeList.forEach(node => {
       if (node.nodeData.data.isActive) {
         this.mindMap.renderer.setNodeActive(node, false)
       }
@@ -227,10 +232,12 @@ class Drag extends Base {
       let nodeRect = this.getNodeRect(node)
       let oneFourthHeight = nodeRect.height / 4
       // 前一个和后一个节点
-      let checkList = node.parent ? node.parent.children.filter((item) => {
-        return item !== this.node
-      }) : []
-      let index = checkList.findIndex((item) => {
+      let checkList = node.parent
+        ? node.parent.children.filter(item => {
+            return item !== this.node
+          })
+        : []
+      let index = checkList.findIndex(item => {
         return item.uid === node.uid
       })
       let prevBrother = null
@@ -246,10 +253,11 @@ class Drag extends Base {
       // 和前一个兄弟节点的距离
       let prevBrotherOffset = 0
       if (prevBrother) {
-        let prevNodeRect = this.getNodeRect(prevBrother)  
+        let prevNodeRect = this.getNodeRect(prevBrother)
         prevBrotherOffset = nodeRect.top - prevNodeRect.bottom
         // 间距小于10就当它不存在
-        prevBrotherOffset = prevBrotherOffset >= this.minOffset ? prevBrotherOffset / 2 : 0
+        prevBrotherOffset =
+          prevBrotherOffset >= this.minOffset ? prevBrotherOffset / 2 : 0
       } else {
         // 没有前一个兄弟节点，那么假设和前一个节点的距离为20
         prevBrotherOffset = this.minOffset
@@ -259,27 +267,45 @@ class Drag extends Base {
       if (nextBrother) {
         let nextNodeRect = this.getNodeRect(nextBrother)
         nextBrotherOffset = nextNodeRect.top - nodeRect.bottom
-        nextBrotherOffset = nextBrotherOffset >= this.minOffset ? nextBrotherOffset / 2 : 0
+        nextBrotherOffset =
+          nextBrotherOffset >= this.minOffset ? nextBrotherOffset / 2 : 0
       } else {
         nextBrotherOffset = this.minOffset
       }
       if (nodeRect.left <= x && nodeRect.right >= x) {
         // 检测兄弟节点位置
-        if (!this.overlapNode && !this.prevNode && !this.nextNode && !node.isRoot) {
-          let checkIsPrevNode = nextBrotherOffset > 0 ? // 距离下一个兄弟节点的距离大于0
-            y > nodeRect.bottom && y <= (nodeRect.bottom + nextBrotherOffset) : // 那么在当前节点外底部判断
-            y >= nodeRect.bottom - oneFourthHeight && y <= nodeRect.bottom // 否则在当前节点内底部1/4区间判断
-          let checkIsNextNode = prevBrotherOffset > 0 ? // 距离上一个兄弟节点的距离大于0
-            y < nodeRect.top && y >= (nodeRect.top - prevBrotherOffset) : // 那么在当前节点外底部判断
-            y >= nodeRect.top && y <= nodeRect.top + oneFourthHeight
+        if (
+          !this.overlapNode &&
+          !this.prevNode &&
+          !this.nextNode &&
+          !node.isRoot
+        ) {
+          let checkIsPrevNode =
+            nextBrotherOffset > 0 // 距离下一个兄弟节点的距离大于0
+              ? y > nodeRect.bottom && y <= nodeRect.bottom + nextBrotherOffset // 那么在当前节点外底部判断
+              : y >= nodeRect.bottom - oneFourthHeight && y <= nodeRect.bottom // 否则在当前节点内底部1/4区间判断
+          let checkIsNextNode =
+            prevBrotherOffset > 0 // 距离上一个兄弟节点的距离大于0
+              ? y < nodeRect.top && y >= nodeRect.top - prevBrotherOffset // 那么在当前节点外底部判断
+              : y >= nodeRect.top && y <= nodeRect.top + oneFourthHeight
           if (checkIsPrevNode) {
             this.prevNode = node
-            let size = nextBrotherOffset > 0 ? Math.min(nextBrotherOffset, nodeDragPlaceholderMaxSize) : 5
-            this.placeholder.size(node.width, size).move(nodeRect.originLeft, nodeRect.originBottom)
+            let size =
+              nextBrotherOffset > 0
+                ? Math.min(nextBrotherOffset, nodeDragPlaceholderMaxSize)
+                : 5
+            this.placeholder
+              .size(node.width, size)
+              .move(nodeRect.originLeft, nodeRect.originBottom)
           } else if (checkIsNextNode) {
             this.nextNode = node
-            let size = prevBrotherOffset > 0 ? Math.min(prevBrotherOffset, nodeDragPlaceholderMaxSize) : 5
-            this.placeholder.size(node.width, size).move(nodeRect.originLeft, nodeRect.originTop - size)
+            let size =
+              prevBrotherOffset > 0
+                ? Math.min(prevBrotherOffset, nodeDragPlaceholderMaxSize)
+                : 5
+            this.placeholder
+              .size(node.width, size)
+              .move(nodeRect.originLeft, nodeRect.originTop - size)
           }
         }
         // 检测是否重叠
@@ -320,6 +346,20 @@ class Drag extends Base {
       originTop,
       originBottom
     }
+  }
+
+  // 节点由树转换成数组，从子节点到根节点
+  nodeTreeToList() {
+    const list = []
+    bfsWalk(this.mindMap.renderer.root, node => {
+      if (!list[node.layerIndex]) {
+        list[node.layerIndex] = []
+      }
+      list[node.layerIndex].push(node)
+    })
+    this.nodeList = list.reduceRight((res, cur) => {
+      return [...res, ...cur]
+    }, [])
   }
 }
 
