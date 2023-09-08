@@ -217,6 +217,7 @@ const transformToXmind = async (data, name) => {
   let waitLoadImageList = []
   let walk = async (node, newNode, isRoot) => {
     let newData = {
+      id: node.data.uid,
       structureClass: 'org.xmind.ui.logic.right',
       title: getTextFromHtml(node.data.text), // 节点文本
       children: {
@@ -244,13 +245,13 @@ const transformToXmind = async (data, name) => {
     }
     // 图片
     if (node.data.image) {
+      // 处理异步逻辑
+      let resolve = null
+      let promise = new Promise(_resolve => {
+        resolve = _resolve
+      })
+      waitLoadImageList.push(promise)
       try {
-        // 处理异步逻辑
-        let resolve = null
-        let promise = new Promise(_resolve => {
-          resolve = _resolve
-        })
-        waitLoadImageList.push(promise)
         let imgName = ''
         let imgData = node.data.image
         // 网络图片要先转换成data:url
