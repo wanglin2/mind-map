@@ -254,11 +254,11 @@ const transformToXmind = async (data, name) => {
       try {
         let imgName = ''
         let imgData = node.data.image
-        // 网络图片要先转换成data:url
-        if (/^https?:\/\//.test(node.data.image)) {
+        // base64之外的其他图片要先转换成data:url
+        if (!/^data:/.test(node.data.image)) {
           imgData = await imgToDataUrl(node.data.image)
         }
-        // 从data:url中解析出图片类型和base64
+        // 从data:url中解析出图片类型和ase64
         let dataUrlRes = parseDataUrl(imgData)
         imgName = 'image_' + imageList.length + '.' + dataUrlRes.type
         imageList.push({
