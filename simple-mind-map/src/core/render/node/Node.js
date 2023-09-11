@@ -466,7 +466,7 @@ class Node {
       e.stopPropagation()
       e.preventDefault()
       // 如果是多选节点结束，那么不要触发右键菜单事件
-      if(!useLeftKeySelectionRightKeyDrag && this.mindMap.select.hasSelectRange()) {
+      if(this.mindMap.select && !useLeftKeySelectionRightKeyDrag && this.mindMap.select.hasSelectRange()) {
         return
       }
       if (this.nodeData.data.isActive) {
