@@ -212,9 +212,6 @@ class Drag extends Base {
     if (!this.drawTransform || !this.placeholder) {
       return
     }
-    const { nodeDragPlaceholderMaxSize } = this.mindMap.opt
-    let x = this.mouseMoveX
-    let y = this.mouseMoveY
     this.overlapNode = null
     this.prevNode = null
     this.nextNode = null
@@ -229,99 +226,331 @@ class Drag extends Base {
       if (this.overlapNode || (this.prevNode && this.nextNode)) {
         return
       }
-      let nodeRect = this.getNodeRect(node)
-      let oneFourthHeight = nodeRect.height / 4
-      // 前一个和后一个节点
-      let checkList = node.parent
-        ? node.parent.children.filter(item => {
-            return item !== this.node
-          })
-        : []
-      let index = checkList.findIndex(item => {
-        return item.uid === node.uid
-      })
-      let prevBrother = null
-      let nextBrother = null
-      if (index !== -1) {
-        if (index - 1 >= 0) {
-          prevBrother = checkList[index - 1]
-        }
-        if (index + 1 <= checkList.length - 1) {
-          nextBrother = checkList[index + 1]
-        }
-      }
-      // 和前一个兄弟节点的距离
-      let prevBrotherOffset = 0
-      if (prevBrother) {
-        let prevNodeRect = this.getNodeRect(prevBrother)
-        prevBrotherOffset = nodeRect.top - prevNodeRect.bottom
-        // 间距小于10就当它不存在
-        prevBrotherOffset =
-          prevBrotherOffset >= this.minOffset ? prevBrotherOffset / 2 : 0
-      } else {
-        // 没有前一个兄弟节点，那么假设和前一个节点的距离为20
-        prevBrotherOffset = this.minOffset
-      }
-      // 和后一个兄弟节点的距离
-      let nextBrotherOffset = 0
-      if (nextBrother) {
-        let nextNodeRect = this.getNodeRect(nextBrother)
-        nextBrotherOffset = nextNodeRect.top - nodeRect.bottom
-        nextBrotherOffset =
-          nextBrotherOffset >= this.minOffset ? nextBrotherOffset / 2 : 0
-      } else {
-        nextBrotherOffset = this.minOffset
-      }
-      if (nodeRect.left <= x && nodeRect.right >= x) {
-        // 检测兄弟节点位置
-        if (
-          !this.overlapNode &&
-          !this.prevNode &&
-          !this.nextNode &&
-          !node.isRoot
-        ) {
-          let checkIsPrevNode =
-            nextBrotherOffset > 0 // 距离下一个兄弟节点的距离大于0
-              ? y > nodeRect.bottom && y <= nodeRect.bottom + nextBrotherOffset // 那么在当前节点外底部判断
-              : y >= nodeRect.bottom - oneFourthHeight && y <= nodeRect.bottom // 否则在当前节点内底部1/4区间判断
-          let checkIsNextNode =
-            prevBrotherOffset > 0 // 距离上一个兄弟节点的距离大于0
-              ? y < nodeRect.top && y >= nodeRect.top - prevBrotherOffset // 那么在当前节点外底部判断
-              : y >= nodeRect.top && y <= nodeRect.top + oneFourthHeight
-          if (checkIsPrevNode) {
-            this.prevNode = node
-            let size =
-              nextBrotherOffset > 0
-                ? Math.min(nextBrotherOffset, nodeDragPlaceholderMaxSize)
-                : 5
-            this.placeholder
-              .size(node.width, size)
-              .move(nodeRect.originLeft, nodeRect.originBottom)
-          } else if (checkIsNextNode) {
-            this.nextNode = node
-            let size =
-              prevBrotherOffset > 0
-                ? Math.min(prevBrotherOffset, nodeDragPlaceholderMaxSize)
-                : 5
-            this.placeholder
-              .size(node.width, size)
-              .move(nodeRect.originLeft, nodeRect.originTop - size)
-          }
-        }
-        // 检测是否重叠
-        if (!this.overlapNode && !this.prevNode && !this.nextNode) {
-          if (
-            nodeRect.top + (prevBrotherOffset > 0 ? 0 : oneFourthHeight) <= y &&
-            nodeRect.bottom - (nextBrotherOffset > 0 ? 0 : oneFourthHeight) >= y
-          ) {
-            this.overlapNode = node
-          }
-        }
+      switch (this.mindMap.opt.layout) {
+        case 'logicalStructure':
+          this.handleLogicalStructure(node)
+          break
+        case 'mindMap':
+          this.handleMindMap(node)
+          break
+        case 'organizationStructure':
+          this.handleOrganizationStructure(node)
+          break
+        case 'catalogOrganization':
+          this.handleCatalogOrganization(node)
+          break
+        case 'timeline':
+          this.handleTimeLine(node)
+          break
+        case 'timeline2':
+          this.handleTimeLine2(node)
+          break
+        case 'verticalTimeline':
+          this.handleLogicalStructure(node)
+          break
+        case 'fishbone':
+          this.handleFishbone(node)
+          break
+        default:
+          this.handleLogicalStructure(node)
       }
     })
     if (this.overlapNode) {
       this.mindMap.renderer.setNodeActive(this.overlapNode, true)
     }
+  }
+
+  // 垂直方向比较
+  // isReverse：是否反向
+  handleVerticalCheck(node, checkList, isReverse = false) {
+    let x = this.mouseMoveX
+    let y = this.mouseMoveY
+    let nodeRect = this.getNodeRect(node)
+    if (isReverse) {
+      checkList = checkList.reverse()
+    }
+    let oneFourthHeight = nodeRect.height / 4
+    let { prevBrotherOffset, nextBrotherOffset } =
+      this.getNodeDistanceToSiblingNode(checkList, node, nodeRect, 'v')
+    if (nodeRect.left <= x && nodeRect.right >= x) {
+      // 检测兄弟节点位置
+      if (
+        !this.overlapNode &&
+        !this.prevNode &&
+        !this.nextNode &&
+        !node.isRoot
+      ) {
+        let checkIsPrevNode =
+          nextBrotherOffset > 0 // 距离下一个兄弟节点的距离大于0
+            ? y > nodeRect.bottom && y <= nodeRect.bottom + nextBrotherOffset // 那么在当前节点外底部判断
+            : y >= nodeRect.bottom - oneFourthHeight && y <= nodeRect.bottom // 否则在当前节点内底部1/4区间判断
+        let checkIsNextNode =
+          prevBrotherOffset > 0 // 距离上一个兄弟节点的距离大于0
+            ? y < nodeRect.top && y >= nodeRect.top - prevBrotherOffset // 那么在当前节点外底部判断
+            : y >= nodeRect.top && y <= nodeRect.top + oneFourthHeight
+        if (checkIsPrevNode) {
+          if (isReverse) {
+            this.nextNode = node
+          } else {
+            this.prevNode = node
+          }
+          let size = this.formatPlaceholderSize(nextBrotherOffset)
+          this.setPlaceholderRect(
+            node.width,
+            size,
+            nodeRect.originLeft,
+            nodeRect.originBottom
+          )
+        } else if (checkIsNextNode) {
+          if (isReverse) {
+            this.prevNode = node
+          } else {
+            this.nextNode = node
+          }
+          let size = this.formatPlaceholderSize(prevBrotherOffset)
+          this.setPlaceholderRect(
+            node.width,
+            size,
+            nodeRect.originLeft,
+            nodeRect.originTop - size
+          )
+        }
+      }
+      // 检测是否重叠
+      this.checkIsOverlap({
+        node,
+        dir: 'v',
+        prevBrotherOffset,
+        nextBrotherOffset,
+        size: oneFourthHeight,
+        pos: y,
+        nodeRect
+      })
+    }
+  }
+
+  // 水平方向比较
+  handleHorizontalCheck(node, checkList) {
+    let x = this.mouseMoveX
+    let y = this.mouseMoveY
+    let nodeRect = this.getNodeRect(node)
+    let oneFourthWidth = nodeRect.width / 4
+    let { prevBrotherOffset, nextBrotherOffset } =
+      this.getNodeDistanceToSiblingNode(checkList, node, nodeRect, 'h')
+    if (nodeRect.top <= y && nodeRect.bottom >= y) {
+      // 检测兄弟节点位置
+      if (
+        !this.overlapNode &&
+        !this.prevNode &&
+        !this.nextNode &&
+        !node.isRoot
+      ) {
+        let checkIsPrevNode =
+          nextBrotherOffset > 0 // 距离下一个兄弟节点的距离大于0
+            ? x < nodeRect.right + nextBrotherOffset && x >= nodeRect.right // 那么在当前节点外底部判断
+            : x <= nodeRect.right && x >= nodeRect.right - oneFourthWidth // 否则在当前节点内底部1/4区间判断
+        let checkIsNextNode =
+          prevBrotherOffset > 0 // 距离上一个兄弟节点的距离大于0
+            ? x > nodeRect.left - prevBrotherOffset && x <= nodeRect.left // 那么在当前节点外底部判断
+            : x <= nodeRect.left + oneFourthWidth && x >= nodeRect.left
+        if (checkIsPrevNode) {
+          this.prevNode = node
+          let size = this.formatPlaceholderSize(nextBrotherOffset)
+          this.setPlaceholderRect(
+            size,
+            node.height,
+            nodeRect.originRight,
+            nodeRect.originTop
+          )
+        } else if (checkIsNextNode) {
+          this.nextNode = node
+          let size = this.formatPlaceholderSize(prevBrotherOffset)
+          this.setPlaceholderRect(
+            size,
+            node.height,
+            nodeRect.originLeft - size,
+            nodeRect.originTop
+          )
+        }
+      }
+      // 检测是否重叠
+      this.checkIsOverlap({
+        node,
+        dir: 'h',
+        prevBrotherOffset,
+        nextBrotherOffset,
+        size: oneFourthWidth,
+        pos: x,
+        nodeRect
+      })
+    }
+  }
+
+  // 获取节点距前一个和后一个节点的距离
+  getNodeDistanceToSiblingNode(checkList, node, nodeRect, dir) {
+    let dir1 = dir === 'v' ? 'top' : 'left'
+    let dir2 = dir === 'v' ? 'bottom' : 'right'
+    let index = checkList.findIndex(item => {
+      return item.uid === node.uid
+    })
+    let prevBrother = null
+    let nextBrother = null
+    if (index !== -1) {
+      if (index - 1 >= 0) {
+        prevBrother = checkList[index - 1]
+      }
+      if (index + 1 <= checkList.length - 1) {
+        nextBrother = checkList[index + 1]
+      }
+    }
+    // 和前一个兄弟节点的距离
+    let prevBrotherOffset = 0
+    if (prevBrother) {
+      let prevNodeRect = this.getNodeRect(prevBrother)
+      prevBrotherOffset = nodeRect[dir1] - prevNodeRect[dir2]
+      // 间距小于10就当它不存在
+      prevBrotherOffset =
+        prevBrotherOffset >= this.minOffset ? prevBrotherOffset / 2 : 0
+    } else {
+      // 没有前一个兄弟节点，那么假设和前一个节点的距离为20
+      prevBrotherOffset = this.minOffset
+    }
+    // 和后一个兄弟节点的距离
+    let nextBrotherOffset = 0
+    if (nextBrother) {
+      let nextNodeRect = this.getNodeRect(nextBrother)
+      nextBrotherOffset = nextNodeRect[dir1] - nodeRect[dir2]
+      nextBrotherOffset =
+        nextBrotherOffset >= this.minOffset ? nextBrotherOffset / 2 : 0
+    } else {
+      nextBrotherOffset = this.minOffset
+    }
+    return {
+      prevBrotherOffset,
+      nextBrotherOffset
+    }
+  }
+
+  // 处理提示元素的大小
+  formatPlaceholderSize(size) {
+    const { nodeDragPlaceholderMaxSize } = this.mindMap.opt
+    return size > 0 ? Math.min(size, nodeDragPlaceholderMaxSize) : 5
+  }
+
+  // 设置提示元素的大小和位置
+  setPlaceholderRect(w, h, x, y) {
+    this.placeholder.size(w, h).move(x, y)
+  }
+
+  // 检测是否重叠
+  checkIsOverlap({
+    node,
+    dir,
+    prevBrotherOffset,
+    nextBrotherOffset,
+    size,
+    pos,
+    nodeRect
+  }) {
+    let dir1 = dir === 'v' ? 'top' : 'left'
+    let dir2 = dir === 'v' ? 'bottom' : 'right'
+    if (!this.overlapNode && !this.prevNode && !this.nextNode) {
+      if (
+        nodeRect[dir1] + (prevBrotherOffset > 0 ? 0 : size) <= pos &&
+        nodeRect[dir2] - (nextBrotherOffset > 0 ? 0 : size) >= pos
+      ) {
+        this.overlapNode = node
+      }
+    }
+  }
+
+  // 处理逻辑结构图
+  handleLogicalStructure(node) {
+    const checkList = this.commonGetNodeCheckList(node)
+    this.handleVerticalCheck(node, checkList)
+  }
+
+  // 处理思维导图
+  handleMindMap(node) {
+    const checkList = node.parent
+      ? node.parent.children.filter(item => {
+          let sameDir = true
+          if (node.layerIndex === 1) {
+            sameDir = item.dir === node.dir
+          }
+          return item !== this.node && sameDir
+        })
+      : []
+    this.handleVerticalCheck(node, checkList)
+  }
+
+  // 处理组织结构图
+  handleOrganizationStructure(node) {
+    const checkList = this.commonGetNodeCheckList(node)
+    this.handleHorizontalCheck(node, checkList)
+  }
+
+  // 处理目录组织图
+  handleCatalogOrganization(node) {
+    const checkList = this.commonGetNodeCheckList(node)
+    if (node.layerIndex === 1) {
+      this.handleHorizontalCheck(node, checkList)
+    } else {
+      this.handleVerticalCheck(node, checkList)
+    }
+  }
+
+  // 处理时间轴
+  handleTimeLine(node) {
+    let checkList = this.commonGetNodeCheckList(node)
+    if (node.layerIndex === 1) {
+      this.handleHorizontalCheck(node, checkList)
+    } else {
+      this.handleVerticalCheck(node, checkList)
+    }
+  }
+
+  // 处理时间轴2
+  handleTimeLine2(node) {
+    let checkList = this.commonGetNodeCheckList(node)
+    if (node.layerIndex === 1) {
+      this.handleHorizontalCheck(node, checkList)
+    } else {
+      // 处于上方的三级节点需要特殊处理，因为节点排列方向反向了
+      if (node.dir === 'top' && node.layerIndex === 2) {
+        this.handleVerticalCheck(node, checkList, true)
+      } else {
+        this.handleVerticalCheck(node, checkList)
+      }
+    }
+  }
+
+  // 处理鱼骨图
+  handleFishbone(node) {
+    let checkList = node.parent
+      ? node.parent.children.filter(item => {
+          return item !== this.node && item.layerIndex > 1
+        })
+      : []
+    if (node.layerIndex === 1) {
+      this.handleHorizontalCheck(node, checkList)
+    } else {
+      // 处于上方的三级节点需要特殊处理，因为节点排列方向反向了
+      if (node.dir === 'top' && node.layerIndex === 2) {
+        this.handleVerticalCheck(node, checkList, true)
+      } else {
+        this.handleVerticalCheck(node, checkList)
+      }
+    }
+  }
+
+  // 获取节点的兄弟节点列表通用方法
+  commonGetNodeCheckList(node) {
+    return node.parent
+      ? node.parent.children.filter(item => {
+          return item !== this.node
+        })
+      : []
   }
 
   // 计算节点的位置尺寸信息
@@ -331,6 +560,7 @@ class Drag extends Base {
     let originLeft = left
     let originTop = top
     let originBottom = top + height
+    let originRight = left + width
     let right = (left + width) * scaleX + translateX
     let bottom = (top + height) * scaleY + translateY
     left = left * scaleX + translateX
@@ -344,7 +574,8 @@ class Drag extends Base {
       bottom,
       originLeft,
       originTop,
-      originBottom
+      originBottom,
+      originRight
     }
   }
 
