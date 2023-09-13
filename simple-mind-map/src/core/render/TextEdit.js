@@ -141,7 +141,7 @@ export default class TextEdit {
     this.registerTmpShortcut()
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div')
-      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);padding: 3px 5px;margin-left: -5px;margin-top: -3px;outline: none; word-break: break-all;`
+      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;padding: 3px 5px;margin-left: -5px;margin-top: -3px;outline: none; word-break: break-all;`
       this.textEditNode.setAttribute('contenteditable', true)
       this.textEditNode.addEventListener('keyup', e => {
         e.stopPropagation()
@@ -183,6 +183,15 @@ export default class TextEdit {
         -((lineHeight * fontSize - fontSize) / 2) * scale
       }px)`
     }
+    // 将文本编辑框背景色设为节点背景色
+    if (node.style.merge('fillColor') === 'transparent') {
+      this.textEditNode.style.backgroundColor =
+          node.style.themeConfig.backgroundColor
+    } else {
+      this.textEditNode.style.backgroundColor = node.style.merge('fillColor')
+    }
+    // 设置编辑时文字颜色
+    this.textEditNode.style.color = node.style.merge('color')
     this.showTextEdit = true
     // 选中文本
     // if (!this.cacheEditingText) {
@@ -194,8 +203,39 @@ export default class TextEdit {
       this.focus()
     }
     this.cacheEditingText = ''
+    this.textEditNode.addEventListener('input', this.textChange.bind(this))
   }
-
+// 计算节点外框的宽高
+  textChange() {
+    if(!this.showTextEdit){
+      return
+    }
+    const node = this.currentNode
+    const el = this.textEditNode
+    // 获取节点标签
+    const rect = node.group.find('.smm-node-shape')
+    // 计算除文字以外内容的宽度和高度
+    const otherWidth =
+        node._rectInfo.textContentWidth -
+        node._textData.node.node.getBoundingClientRect().width
+    const otherHeight = node.height - node._rectInfo.textContentHeight
+    const maxContentWidth = Math.max(
+        otherWidth + el.clientWidth,
+    )
+    let paddingX
+    if (node.nodeData.data.paddingX !== undefined) {
+      paddingX = node.nodeData.data.paddingX
+    } else {
+      paddingX = this.mindMap.themeConfig.paddingX
+    }
+    // 更新节点宽高
+    if (maxContentWidth+paddingX * 2 > node.width) {
+      rect.width(maxContentWidth + paddingX * 2)
+    }
+    if (otherHeight + el.clientHeight > node.height) {
+      rect.height(otherHeight + el.clientHeight)
+    }
+  }
   // 聚焦
   focus() {
     let selection = window.getSelection()

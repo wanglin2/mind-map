@@ -111,12 +111,12 @@ export default class Shape {
     let bottomY = height
     let leftX = 0
     let leftY = halfHeight
-    return new Polygon().plot([
-      [topX, topY],
-      [rightX, rightY],
-      [bottomX, bottomY],
-      [leftX, leftY]
-    ])
+    return this.node.group.polygon(`
+            ${topX}, ${topY}
+            ${rightX}, ${rightY}
+            ${bottomX}, ${bottomY}
+            ${leftX}, ${leftY}
+        `)
   }
 
   //  创建平行四边形
@@ -124,19 +124,19 @@ export default class Shape {
     let { paddingX } = this.node.getPaddingVale()
     paddingX = paddingX || this.node.shapePadding.paddingX
     let { width, height } = this.node
-    return new Polygon().plot([
-      [paddingX, 0],
-      [width, 0],
-      [width - paddingX, height],
-      [0, height]
-    ])
+    return this.node.group.polygon(`
+            ${paddingX}, ${0}
+            ${width}, ${0}
+            ${width - paddingX}, ${height}
+            ${0}, ${height}
+        `)
   }
 
   //  创建圆角矩形
   createRoundedRectangle() {
     let { width, height } = this.node
     let halfHeight = height / 2
-    return new Path().plot(`
+    return this.node.group.path(`
       M${halfHeight},0
       L${width - halfHeight},0
       A${height / 2},${height / 2} 0 0,1 ${width - halfHeight},${height} 
@@ -149,16 +149,16 @@ export default class Shape {
   createOctagonalRectangle() {
     let w = 5
     let { width, height } = this.node
-    return new Polygon().plot([
-      [0, w],
-      [w, 0],
-      [width - w, 0],
-      [width, w],
-      [width, height - w],
-      [width - w, height],
-      [w, height],
-      [0, height - w]
-    ])
+    return this.node.group.polygon(`
+            ${0}, ${w}
+            ${w}, ${0}
+            ${width - w}, ${0}
+            ${width}, ${w}
+            ${width}, ${height - w}
+            ${width - w}, ${height}
+            ${w}, ${height}
+            ${0}, ${height - w}
+        `)
   }
 
   //  创建外三角矩形
@@ -166,14 +166,14 @@ export default class Shape {
     let { paddingX } = this.node.getPaddingVale()
     paddingX = paddingX || this.node.shapePadding.paddingX
     let { width, height } = this.node
-    return new Polygon().plot([
-      [paddingX, 0],
-      [width - paddingX, 0],
-      [width, height / 2],
-      [width - paddingX, height],
-      [paddingX, height],
-      [0, height / 2]
-    ])
+    return this.node.group.polygon(`
+            ${paddingX}, ${0}
+            ${width - paddingX}, ${0}
+            ${width}, ${height / 2}
+            ${width - paddingX}, ${height}
+            ${paddingX}, ${height}
+            ${0}, ${height / 2}
+        `)
   }
 
   //  创建内三角矩形
@@ -181,14 +181,14 @@ export default class Shape {
     let { paddingX } = this.node.getPaddingVale()
     paddingX = paddingX || this.node.shapePadding.paddingX
     let { width, height } = this.node
-    return new Polygon().plot([
-      [0, 0],
-      [width, 0],
-      [width - paddingX / 2, height / 2],
-      [width, height],
-      [0, height],
-      [paddingX / 2, height / 2]
-    ])
+    return this.node.group.polygon(`
+            ${0}, ${0}
+            ${width}, ${0}
+            ${width - paddingX / 2}, ${height / 2}
+            ${width}, ${height}
+            ${0}, ${height}
+            ${paddingX / 2}, ${height / 2}
+        `)
   }
 
   //  创建椭圆
@@ -196,7 +196,7 @@ export default class Shape {
     let { width, height } = this.node
     let halfWidth = width / 2
     let halfHeight = height / 2
-    return new Path().plot(`
+    return this.node.group.path(`
       M${halfWidth},0
       A${halfWidth},${halfHeight} 0 0,1 ${halfWidth},${height} 
       M${halfWidth},${height} 
@@ -209,7 +209,7 @@ export default class Shape {
     let { width, height } = this.node
     let halfWidth = width / 2
     let halfHeight = height / 2
-    return new Path().plot(`
+    return this.node.group.path(`
       M${halfWidth},0
       A${halfWidth},${halfHeight} 0 0,1 ${halfWidth},${height} 
       M${halfWidth},${height} 
