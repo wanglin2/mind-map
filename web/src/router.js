@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import EditPage from '@/pages/Edit/Index'
 import DocPage from '@/pages/Doc/Index'
 import routerList from '@/pages/Doc/routerList'
 
@@ -58,7 +57,7 @@ const routes = [
   { 
     path: '/', 
     name: 'Edit', 
-    component: EditPage 
+    component: () => import(`./pages/Edit/Index.vue`) 
   },
   // 开发文档
   ...createTypeRouterList('doc', 'introduction'),
