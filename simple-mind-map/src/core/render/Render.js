@@ -841,8 +841,9 @@ class Render {
     } else {
       // 如果只选中了一个节点，删除后激活其兄弟节点或者父节点
       if (
-          this.activeNodeList.length === 1 &&
-          !this.activeNodeList[0].isGeneralization&&this.mindMap.opt.deleteNodeActive
+        this.activeNodeList.length === 1 &&
+        !this.activeNodeList[0].isGeneralization &&
+        this.mindMap.opt.deleteNodeActive
       ) {
         const node = this.activeNodeList[0]
         const broList = node.parent.children
@@ -1123,7 +1124,13 @@ class Render {
 
   //  设置节点图片
   setNodeImage(node, data) {
-    const { url, title, width, height, custom = false } = data || { url: '', title: '', width: 0, height: 0, custom: false }
+    const {
+      url,
+      title,
+      width,
+      height,
+      custom = false
+    } = data || { url: '', title: '', width: 0, height: 0, custom: false }
     this.setNodeDataRender(node, {
       image: url,
       imageTitle: title || '',
