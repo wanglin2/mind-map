@@ -186,6 +186,8 @@ class Drag extends Base {
     if (!this.isMousedown) {
       return
     }
+    let originX = x
+    let originY = y
     this.createCloneNode()
     let { scaleX, scaleY, translateX, translateY } = this.drawTransform
     this.cloneNodeLeft = x - this.offsetX
@@ -205,6 +207,12 @@ class Drag extends Base {
       )
     )
     this.checkOverlapNode()
+    // 如果注册了多选节点插件，那么复用它的边缘自动移动画布功能
+    if (this.mindMap.opt.autoMoveWhenMouseInEdgeOnDrag && this.mindMap.select) {
+      this.drawTransform = this.mindMap.draw.transform()
+      this.mindMap.select.clearAutoMoveTimer()
+      this.mindMap.select.onMove(originX, originY)
+    }
   }
 
   //  检测重叠节点

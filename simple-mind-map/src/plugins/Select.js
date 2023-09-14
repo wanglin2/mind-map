@@ -54,8 +54,40 @@ class Select {
       ) {
         return
       }
-      clearTimeout(this.autoMoveTimer)
-      this.onMove(e.clientX, e.clientY)
+      this.clearAutoMoveTimer()
+      this.onMove(
+        e.clientX,
+        e.clientY,
+        () => {
+          this.isSelecting = true
+          // 绘制矩形
+          this.rect.plot([
+            [this.mouseDownX, this.mouseDownY],
+            [this.mouseMoveX, this.mouseDownY],
+            [this.mouseMoveX, this.mouseMoveY],
+            [this.mouseDownX, this.mouseMoveY]
+          ])
+          this.checkInNodes()
+        },
+        (dir, step) => {
+          switch (dir) {
+            case 'left':
+              this.mouseDownX += step
+              break
+            case 'top':
+              this.mouseDownY += step
+              break
+            case 'right':
+              this.mouseDownX -= step
+              break
+            case 'bottom':
+              this.mouseDownY -= step
+              break
+            default:
+              break
+          }
+        }
+      )
     })
     this.mindMap.on('mouseup', () => {
       if (this.mindMap.opt.readonly) {
@@ -78,77 +110,76 @@ class Select {
 
   // 如果激活节点改变了，那么触发事件
   checkTriggerNodeActiveEvent() {
-    let isNumChange = this.cacheActiveList.length !== this.mindMap.renderer.activeNodeList.length
+    let isNumChange =
+      this.cacheActiveList.length !==
+      this.mindMap.renderer.activeNodeList.length
     let isNodeChange = false
     if (!isNumChange) {
-      for(let i = 0; i < this.cacheActiveList.length; i++) {
+      for (let i = 0; i < this.cacheActiveList.length; i++) {
         let cur = this.cacheActiveList[i]
-        if (!this.mindMap.renderer.activeNodeList.find((item) => {
-          return item.nodeData.data.uid === cur.nodeData.data.uid
-        })){
+        if (
+          !this.mindMap.renderer.activeNodeList.find(item => {
+            return item.nodeData.data.uid === cur.nodeData.data.uid
+          })
+        ) {
           isNodeChange = true
           break
         }
       }
     }
     if (isNumChange || isNodeChange) {
-      this.mindMap.emit(
-        'node_active',
-        null,
-        [...this.mindMap.renderer.activeNodeList]
-      )
+      this.mindMap.emit('node_active', null, [
+        ...this.mindMap.renderer.activeNodeList
+      ])
     }
   }
 
   //  鼠标移动事件
-  onMove(x, y) {
-    this.isSelecting = true
-    // 绘制矩形
-    this.rect.plot([
-      [this.mouseDownX, this.mouseDownY],
-      [this.mouseMoveX, this.mouseDownY],
-      [this.mouseMoveX, this.mouseMoveY],
-      [this.mouseDownX, this.mouseMoveY]
-    ])
-    this.checkInNodes()
+  onMove(x, y, callback = () => {}, handle = () => {}) {
+    callback()
     // 检测边缘移动
     let step = this.mindMap.opt.selectTranslateStep
     let limit = this.mindMap.opt.selectTranslateLimit
     let count = 0
     // 左边缘
     if (x <= this.mindMap.elRect.left + limit) {
-      this.mouseDownX += step
+      handle('left', step)
       this.mindMap.view.translateX(step)
       count++
     }
     // 右边缘
     if (x >= this.mindMap.elRect.right - limit) {
-      this.mouseDownX -= step
+      handle('right', step)
       this.mindMap.view.translateX(-step)
       count++
     }
     // 上边缘
     if (y <= this.mindMap.elRect.top + limit) {
-      this.mouseDownY += step
+      handle('top', step)
       this.mindMap.view.translateY(step)
       count++
     }
     // 下边缘
     if (y >= this.mindMap.elRect.bottom - limit) {
-      this.mouseDownY -= step
+      handle('bottom', step)
       this.mindMap.view.translateY(-step)
       count++
     }
     if (count > 0) {
-      this.startAutoMove(x, y)
+      this.startAutoMove(x, y, callback, handle)
     }
   }
 
   //  开启自动移动
-  startAutoMove(x, y) {
+  startAutoMove(x, y, callback, handle) {
     this.autoMoveTimer = setTimeout(() => {
-      this.onMove(x, y)
+      this.onMove(x, y, callback, handle)
     }, 20)
+  }
+
+  // 清除自动移动定时器
+  clearAutoMoveTimer() {
+    clearTimeout(this.autoMoveTimer)
   }
 
   //  创建矩形
