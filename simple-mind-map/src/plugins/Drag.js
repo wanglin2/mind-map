@@ -92,7 +92,7 @@ class Drag extends Base {
         return
       }
       this.mindMap.renderer.clearAllActive()
-      this.onMove(x, y)
+      this.onMove(x, y, e)
     })
     this.onMouseup = this.onMouseup.bind(this)
     this.mindMap.on('node_mouseup', this.onMouseup)
@@ -182,12 +182,10 @@ class Drag extends Base {
   }
 
   //  拖动中
-  onMove(x, y) {
+  onMove(x, y, e) {
     if (!this.isMousedown) {
       return
     }
-    let originX = x
-    let originY = y
     this.createCloneNode()
     let { scaleX, scaleY, translateX, translateY } = this.drawTransform
     this.cloneNodeLeft = x - this.offsetX
@@ -211,7 +209,7 @@ class Drag extends Base {
     if (this.mindMap.opt.autoMoveWhenMouseInEdgeOnDrag && this.mindMap.select) {
       this.drawTransform = this.mindMap.draw.transform()
       this.mindMap.select.clearAutoMoveTimer()
-      this.mindMap.select.onMove(originX, originY)
+      this.mindMap.select.onMove(e.clientX, e.clientY)
     }
   }
 
