@@ -25,7 +25,7 @@ const mindMap = new MindMap({
 | Field Name                       | Type    | Default Value    | Description                                                  | Required |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ | -------- |
 | el                               | Element |                  | Container element, must be a DOM element                     | Yes      |
-| data                             | Object  | {}               | Mind map data, refer to: [exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js) |          |
+| data                             | Object  | {}               | Mind map data, Please refer to the introduction of 【Data structure】 below |          |
 | layout                           | String  | logicalStructure | Layout type, options: logicalStructure (logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)、timeline（v0.5.4+, timeline）、timeline2（v0.5.4+, up down alternating timeline）、fishbone（v0.5.4+, fishbone diagram） |          |
 | fishboneDeg（v0.5.4+）                      | Number |  45          |    Set the diagonal angle of the fishbone structure diagram        |        |
 | theme                            | String  | default          | Theme, options: default, classic, minions, pinkGrape, mint, gold, vitalityOrange, greenLeaf, dark2, skyGreen, classic2, classic3, classic4(v0.2.0+), classicGreen, classicBlue, blueSky, brainImpairedPink, dark, earthYellow, freshGreen, freshRed, romanticPurple, simpleBlack(v0.5.4+), courseGreen(v0.5.4+), coffee(v0.5.4+), redSpirit(v0.5.4+), blackHumour(v0.5.4+), lateNightOffice(v0.5.4+), blackGold(v0.5.4+)、、avocado(v.5.10-fix.2+)、autumn(v.5.10-fix.2+)、orangeJuice(v.5.10-fix.2+) |          |
@@ -87,6 +87,47 @@ const mindMap = new MindMap({
 | hoverRectColor（v0.7.0+）     | String  | rgb(94, 200, 248)  | The node mouse hover and the rectangular border color displayed when activated will add a transparency of 0.6 when hovering |          |
 | hoverRectPadding（v0.7.0+）     | Number  | 2  | The distance between the node mouse hover and the displayed rectangular border when activated and the node content |          |
 | selectTextOnEnterEditText（v0.7.0+）     | Boolean  | true  | Is the text selected by default when double-clicking a node to enter node text editing? By default, it will only be selected when creating a new node |          |
+
+### Data structure
+
+The basic data structure is as follows:
+
+```js
+{
+  data: {
+    text: '', // The text of the node can be rich text, which is in HTML format. In this case, richText should be set to true
+    richText: false, // Is the text of the node in rich text mode
+    expand: true, // Whether the node is expanded
+    uid: '',// The unique ID of the node, which may not be passed, will be generated internally
+    icon: [], // The format of the icon can be found in the "插入和扩展节点图标" section of the tutorial
+    image: '', // URL of the image
+    imageTitle: '', // The title of the image can be blank
+    imageSize: { // The size of the image
+      width: 100, // The width of the image, mandatory
+      height: 100, // The height of the image is mandatory
+      custom: false // If set to true, the display size of the image is not controlled by the theme, and is based on imageSize.width and imageSize.height
+    },
+    hyperlink: '', // Hyperlink address
+    hyperlinkTitle: '', // Title of hyperlink
+    note: '', // Content of remarks
+    tag: [], // Tag list
+    generalization: {// The summary of the node, if there is no summary, the generalization can be set to null
+      text: ''// Summary Text
+    },
+    associativeLineTargets: [''],// If there are associated lines, then it is the uid list of the target node
+    associativeLineText: '',// Association Line Text
+    // ...For other style fields, please refer to the topic
+  },
+  children [// Child nodes, with consistent structure and root nodes
+    {
+      data: {},
+      children: []
+    }
+  ]
+}
+```
+
+If you want to add custom fields, you can add them to the same level as 'data' and 'children'. If you want to add them to the 'data' object, please use the `_` Name your custom field at the beginning, and it will be used internally to determine whether it is a custom field.
 
 ### Watermark config
 

@@ -55,7 +55,7 @@ class Select {
         return
       }
       clearTimeout(this.autoMoveTimer)
-      this.onMove(x, y)
+      this.onMove(e.clientX, e.clientY)
     })
     this.mindMap.on('mouseup', () => {
       if (this.mindMap.opt.readonly) {

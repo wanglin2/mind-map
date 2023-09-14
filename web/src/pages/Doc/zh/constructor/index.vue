@@ -39,7 +39,7 @@
 <td>data</td>
 <td>Object</td>
 <td>{}</td>
-<td>思维导图数据，可参考：<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a></td>
+<td>思维导图数据，可参考下方【数据结构】介绍</td>
 <td></td>
 </tr>
 <tr>
@@ -471,6 +471,42 @@
 </tr>
 </tbody>
 </table>
+<h3>数据结构</h3>
+<p>基本的数据结构如下：</p>
+<pre class="hljs"><code>{
+  <span class="hljs-attr">data</span>: {
+    <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 节点的文本，可以是富文本，也就是html格式的，此时richText要设为true</span>
+    <span class="hljs-attr">richText</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// 节点的文本是否是富文本模式</span>
+    <span class="hljs-attr">expand</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">// 节点是否展开</span>
+    <span class="hljs-attr">uid</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// 节点唯一的id，可不传，内部会生成</span>
+    <span class="hljs-attr">icon</span>: [], <span class="hljs-comment">// 图标，格式可参考教程里的【插入和扩展节点图标】章节</span>
+    <span class="hljs-attr">image</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 图片的url</span>
+    <span class="hljs-attr">imageTitle</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 图片的标题，可为空</span>
+    <span class="hljs-attr">imageSize</span>: { <span class="hljs-comment">// 图片的尺寸</span>
+      <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-comment">// 图片的宽度，必传</span>
+      <span class="hljs-attr">height</span>: <span class="hljs-number">100</span>, <span class="hljs-comment">// 图片的高度，必传</span>
+      <span class="hljs-attr">custom</span>: <span class="hljs-literal">false</span> <span class="hljs-comment">// 如果设为true，图片的显示大小不受主题控制，以imageSize.width和imageSize.height为准</span>
+    },
+    <span class="hljs-attr">hyperlink</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 超链接地址</span>
+    <span class="hljs-attr">hyperlinkTitle</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 超链接的标题</span>
+    <span class="hljs-attr">note</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 备注的内容</span>
+    <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// 标签列表</span>
+    <span class="hljs-attr">generalization</span>: {<span class="hljs-comment">// 节点的概要，如果没有概要generalization设为null即可</span>
+      <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span><span class="hljs-comment">// 概要的文本</span>
+    },
+    <span class="hljs-attr">associativeLineTargets</span>: [<span class="hljs-string">&#x27;&#x27;</span>],<span class="hljs-comment">// 如果存在关联线，那么为目标节点的uid列表</span>
+    <span class="hljs-attr">associativeLineText</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// 关联线文本</span>
+    <span class="hljs-comment">// ...其他样式字段，可以参考主题</span>
+  },
+  children [<span class="hljs-comment">// 子节点，结构和根节点一致</span>
+    {
+      <span class="hljs-attr">data</span>: {},
+      <span class="hljs-attr">children</span>: []
+    }
+  ]
+}
+</code></pre>
+<p>如果你要添加自定义的字段，可以添加到<code>data</code>、<code>children</code>同级，如果你要添加到<code>data</code>对象里，那么请使用<code>_</code>开头来命名你的自定义字段，内部会通过这个来判断是否是自定义字段。</p>
 <h3>水印配置</h3>
 <table>
 <thead>

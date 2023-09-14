@@ -116,6 +116,11 @@ module. If you need it, you can try using other libraries to parse <code>xml</co
 <code>json</code>.</p>
 <h3>Error <code>Getting bbox of element &quot;text&quot; is not possible: TypeError: Cannot read properties of undefined (reading 'apply')</code></h3>
 <p>The reason is that the installed version of <code>@svgdotjs/svg.js</code> is too high. You can manually reduce it to the version of <code>3.0.16</code>.</p>
+<h3>TypeError: Cannot read properties of undefined (reading 'prototype') at sax.js:222:46</h3>
+<p>The following configurations can be added to the packaging configuration file:</p>
+<pre class="hljs"><code>resolve: { <span class="hljs-attr">alias</span>: { <span class="hljs-attr">stream</span>: <span class="hljs-string">&quot;stream-browserify&quot;</span> } }
+</code></pre>
+<p>Different packaging tools may have different specific configurations, with the principle of excluding 'stream' dependencies.</p>
 
   </div>
 </template>

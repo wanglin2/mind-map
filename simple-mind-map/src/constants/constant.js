@@ -249,6 +249,10 @@ export const CONSTANTS = {
   PASTE_TYPE: {
     CLIP_BOARD: 'clipBoard',
     CANVAS: 'canvas'
+  },
+  SCROLL_BAR_DIR: {
+    VERTICAL: 'vertical',
+    HORIZONTAL: 'horizontal'
   }
 }
 

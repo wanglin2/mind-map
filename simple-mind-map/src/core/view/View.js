@@ -171,7 +171,6 @@ class View {
 
   //  平移x方式到
   translateXTo(x) {
-    if (x === 0) return
     this.x = x
     this.transform()
   }
@@ -185,7 +184,6 @@ class View {
 
   //  平移y方向到
   translateYTo(y) {
-    if (y === 0) return
     this.y = y
     this.transform()
   }
