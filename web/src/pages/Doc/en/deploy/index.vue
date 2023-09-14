@@ -39,7 +39,6 @@ npm link simple-mind-map
 </code></pre>
 <p>However, this requires backend support, as our application is a single page client application. If the backend is not properly configured, users will return 404 when accessing sub routes directly in the browser. Therefore, you need to add a candidate resource on the server that covers all situations: if the 'URL' cannot match any static resources, the same 'index. html' page should be returned.</p>
 <h2>Docker</h2>
-<h2>Docker</h2>
 <blockquote>
 <p>Thank you very much <a href="https://github.com/shuiche-it">水车</a>, This section is written by him, and the corresponding Docker package is also maintained by him.</p>
 </blockquote>
@@ -49,6 +48,7 @@ npm link simple-mind-map
 <p>Mindmap has activated port 8080 as the web service entry point in the container. When running the container through Docker, it is necessary to specify a local mapping port. In the above case, we mapped the local port 8081 to the container port 8080.</p>
 <p>After the installation is completed, check the container's running status through 'Docker PS'.</p>
 <p>Open 127.0.0.1:8081 in the browser to use the Web mind map function.</p>
+<p><a href="https://laosu.gq/2023/09/02/%E5%BC%BA%E5%A4%A7%E7%9A%84%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE%E5%BA%93SimpleMindMap/">在群晖上以 Docker 方式安装</a></p>
 <h2>Docking with one's own storage services</h2>
 <p>The application data is stored locally in the browser by default, and the local storage capacity of the browser is relatively small, so it is easy to trigger restrictions when inserting more images in the mind map. Therefore, a better choice is to dock with your own storage service, which usually has two ways:</p>
 <h3>The first</h3>

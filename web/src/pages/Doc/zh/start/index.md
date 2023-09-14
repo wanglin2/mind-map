@@ -152,3 +152,13 @@ import MindMap from "simple-mind-map/dist/simpleMindMap.umd.min"
 ### 2.报错`Getting bbox of element "text" is not possible: TypeError: Cannot read properties of undefined (reading 'apply')`
 
 原因为安装的`@svgdotjs/svg.js`版本太高，手动降到`3.0.16`版本即可。
+
+### 3.TypeError: Cannot read properties of undefined (reading 'prototype') at sax.js:222:46 
+
+可以在打包配置文件中增加如下配置：
+
+```js
+resolve: { alias: { stream: "stream-browserify" } }
+```
+
+不同的打包工具可能具体配置不一样，原理就是排除`stream`依赖。

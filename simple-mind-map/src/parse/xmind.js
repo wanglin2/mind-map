@@ -4,7 +4,8 @@ import {
   getTextFromHtml,
   imgToDataUrl,
   parseDataUrl,
-  getImageSize
+  getImageSize,
+  isUndef
 } from '../utils/index'
 
 //  解析.xmind文件
@@ -49,7 +50,7 @@ const transformXmind = async (content, files) => {
   let walk = async (node, newNode) => {
     newNode.data = {
       // 节点内容
-      text: node.title
+      text: isUndef(node.title) ? '' : node.title
     }
     // 节点备注
     if (node.notes) {
@@ -146,9 +147,10 @@ const transformOldXmind = content => {
   let walk = (node, newNode) => {
     let nodeElements = node.elements
     let nodeTitle = getItemByName(nodeElements, 'title')
+    nodeTitle = nodeTitle && nodeTitle.elements && nodeTitle.elements[0].text
     newNode.data = {
       // 节点内容
-      text: nodeTitle && nodeTitle.elements && nodeTitle.elements[0].text
+      text: isUndef(nodeTitle) ? '' : nodeTitle
     }
     try {
       // 节点备注
@@ -215,6 +217,7 @@ const transformToXmind = async (data, name) => {
   let waitLoadImageList = []
   let walk = async (node, newNode, isRoot) => {
     let newData = {
+      id: node.data.uid,
       structureClass: 'org.xmind.ui.logic.right',
       title: getTextFromHtml(node.data.text), // 节点文本
       children: {
@@ -242,20 +245,20 @@ const transformToXmind = async (data, name) => {
     }
     // 图片
     if (node.data.image) {
+      // 处理异步逻辑
+      let resolve = null
+      let promise = new Promise(_resolve => {
+        resolve = _resolve
+      })
+      waitLoadImageList.push(promise)
       try {
-        // 处理异步逻辑
-        let resolve = null
-        let promise = new Promise(_resolve => {
-          resolve = _resolve
-        })
-        waitLoadImageList.push(promise)
         let imgName = ''
         let imgData = node.data.image
-        // 网络图片要先转换成data:url
-        if (/^https?:\/\//.test(node.data.image)) {
+        // base64之外的其他图片要先转换成data:url
+        if (!/^data:/.test(node.data.image)) {
           imgData = await imgToDataUrl(node.data.image)
         }
-        // 从data:url中解析出图片类型和base64
+        // 从data:url中解析出图片类型和ase64
         let dataUrlRes = parseDataUrl(imgData)
         imgName = 'image_' + imageList.length + '.' + dataUrlRes.type
         imageList.push({

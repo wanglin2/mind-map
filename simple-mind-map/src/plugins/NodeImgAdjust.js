@@ -49,7 +49,7 @@ class NodeImgAdjust {
     // 如果当前正在拖动调整中那么直接返回
     if (this.isMousedown || this.isAdjusted || this.mindMap.opt.readonly) return
     // 如果在当前节点内移动，以及自定义元素已经是显示状态，那么直接返回
-    if (this.node === node && this.isShowHandleEl) return
+    if ((this.node && this.node.uid === node.uid) && this.isShowHandleEl) return
     // 更新当前节点信息
     this.node = node
     this.img = img

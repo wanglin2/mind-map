@@ -99,6 +99,11 @@ npm run build
 <p>如果需要二次开发，也就是必须要使用未打包代码的话，如果你不需要解析<code>xmind</code>文件的话，可以去除<code>xmind</code>模块，如果需要的话那么可以尝试换成其他的解析<code>xml</code>为<code>json</code>的库。</p>
 <h3>2.报错<code>Getting bbox of element &quot;text&quot; is not possible: TypeError: Cannot read properties of undefined (reading 'apply')</code></h3>
 <p>原因为安装的<code>@svgdotjs/svg.js</code>版本太高，手动降到<code>3.0.16</code>版本即可。</p>
+<h3>3.TypeError: Cannot read properties of undefined (reading 'prototype') at sax.js:222:46</h3>
+<p>可以在打包配置文件中增加如下配置：</p>
+<pre class="hljs"><code>resolve: { <span class="hljs-attr">alias</span>: { <span class="hljs-attr">stream</span>: <span class="hljs-string">&quot;stream-browserify&quot;</span> } }
+</code></pre>
+<p>不同的打包工具可能具体配置不一样，原理就是排除<code>stream</code>依赖。</p>
 
   </div>
 </template>

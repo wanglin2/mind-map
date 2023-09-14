@@ -1,7 +1,6 @@
-import {
-  tagColorList,
-  nodeDataNoStylePropList
-} from '../../../constants/constant'
+import { tagColorList } from '../../../constants/constant'
+import { checkIsNodeStyleDataKey } from '../../../utils/index'
+
 const rootProp = ['paddingX', 'paddingY']
 const backgroundStyleProps = [
   'backgroundColor',
@@ -225,7 +224,7 @@ class Style {
   hasCustomStyle() {
     let res = false
     Object.keys(this.ctx.nodeData.data).forEach(item => {
-      if (!nodeDataNoStylePropList.includes(item)) {
+      if (checkIsNodeStyleDataKey(item)) {
         res = true
       }
     })

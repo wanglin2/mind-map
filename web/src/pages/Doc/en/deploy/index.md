@@ -63,8 +63,6 @@ However, this requires backend support, as our application is a single page clie
 
 ## Docker
 
-## Docker
-
 > Thank you very much [水车](https://github.com/shuiche-it), This section is written by him, and the corresponding Docker package is also maintained by him.
 
 Install directly from Docker Hub:
@@ -78,6 +76,8 @@ Mindmap has activated port 8080 as the web service entry point in the container.
 After the installation is completed, check the container's running status through 'Docker PS'.
 
 Open 127.0.0.1:8081 in the browser to use the Web mind map function.
+
+[在群晖上以 Docker 方式安装](https://laosu.gq/2023/09/02/%E5%BC%BA%E5%A4%A7%E7%9A%84%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE%E5%BA%93SimpleMindMap/)
 
 ## Docking with one's own storage services
 

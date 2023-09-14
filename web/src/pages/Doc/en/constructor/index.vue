@@ -39,7 +39,7 @@
 <td>data</td>
 <td>Object</td>
 <td>{}</td>
-<td>Mind map data, refer to: <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a></td>
+<td>Mind map data, Please refer to the introduction of 【Data structure】 below</td>
 <td></td>
 </tr>
 <tr>
@@ -471,6 +471,42 @@
 </tr>
 </tbody>
 </table>
+<h3>Data structure</h3>
+<p>The basic data structure is as follows:</p>
+<pre class="hljs"><code>{
+  <span class="hljs-attr">data</span>: {
+    <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// The text of the node can be rich text, which is in HTML format. In this case, richText should be set to true</span>
+    <span class="hljs-attr">richText</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// Is the text of the node in rich text mode</span>
+    <span class="hljs-attr">expand</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">// Whether the node is expanded</span>
+    <span class="hljs-attr">uid</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// The unique ID of the node, which may not be passed, will be generated internally</span>
+    <span class="hljs-attr">icon</span>: [], <span class="hljs-comment">// The format of the icon can be found in the &quot;插入和扩展节点图标&quot; section of the tutorial</span>
+    <span class="hljs-attr">image</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// URL of the image</span>
+    <span class="hljs-attr">imageTitle</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// The title of the image can be blank</span>
+    <span class="hljs-attr">imageSize</span>: { <span class="hljs-comment">// The size of the image</span>
+      <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-comment">// The width of the image, mandatory</span>
+      <span class="hljs-attr">height</span>: <span class="hljs-number">100</span>, <span class="hljs-comment">// The height of the image is mandatory</span>
+      <span class="hljs-attr">custom</span>: <span class="hljs-literal">false</span> <span class="hljs-comment">// If set to true, the display size of the image is not controlled by the theme, and is based on imageSize.width and imageSize.height</span>
+    },
+    <span class="hljs-attr">hyperlink</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Hyperlink address</span>
+    <span class="hljs-attr">hyperlinkTitle</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Title of hyperlink</span>
+    <span class="hljs-attr">note</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Content of remarks</span>
+    <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// Tag list</span>
+    <span class="hljs-attr">generalization</span>: {<span class="hljs-comment">// The summary of the node, if there is no summary, the generalization can be set to null</span>
+      <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span><span class="hljs-comment">// Summary Text</span>
+    },
+    <span class="hljs-attr">associativeLineTargets</span>: [<span class="hljs-string">&#x27;&#x27;</span>],<span class="hljs-comment">// If there are associated lines, then it is the uid list of the target node</span>
+    <span class="hljs-attr">associativeLineText</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// Association Line Text</span>
+    <span class="hljs-comment">// ...For other style fields, please refer to the topic</span>
+  },
+  children [<span class="hljs-comment">// Child nodes, with consistent structure and root nodes</span>
+    {
+      <span class="hljs-attr">data</span>: {},
+      <span class="hljs-attr">children</span>: []
+    }
+  ]
+}
+</code></pre>
+<p>If you want to add custom fields, you can add them to the same level as 'data' and 'children'. If you want to add them to the 'data' object, please use the <code>_</code> Name your custom field at the beginning, and it will be used internally to determine whether it is a custom field.</p>
 <h3>Watermark config</h3>
 <table>
 <thead>
