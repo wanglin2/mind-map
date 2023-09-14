@@ -824,6 +824,8 @@ class Render {
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return
     }
+    // 删除节点后需要激活的节点
+    let needActiveNode = null
     let isAppointNodes = appointNodes.length > 0
     let list = isAppointNodes ? appointNodes : this.activeNodeList
     let root = list.find(node => {
@@ -837,6 +839,27 @@ class Render {
       root.children = []
       root.nodeData.children = []
     } else {
+      // 如果只选中了一个节点，删除后激活其兄弟节点或者父节点
+      if (
+          this.activeNodeList.length === 1 &&
+          !this.activeNodeList[0].isGeneralization&&this.mindMap.opt.deleteNodeActive
+      ) {
+        const node = this.activeNodeList[0]
+        const broList = node.parent.children
+        const nodeIndex = broList.findIndex(item => item.uid === node.uid)
+        // 如果后面有兄弟节点
+        if (nodeIndex < broList.length - 1) {
+          needActiveNode = broList[nodeIndex + 1]
+        } else {
+          // 如果前面有兄弟节点
+          if (nodeIndex > 0) {
+            needActiveNode = broList[nodeIndex - 1]
+          } else {
+            // 没有兄弟节点
+            needActiveNode = node.parent
+          }
+        }
+      }
       for (let i = 0; i < list.length; i++) {
         let node = list[i]
         if (isAppointNodes) list.splice(i, 1)
@@ -854,6 +877,13 @@ class Render {
           i--
         }
       }
+    }
+    this.activeNodeList = []
+    // 激活被删除节点的兄弟节点或父节点
+    if (needActiveNode) {
+      this.activeNodeList.push(needActiveNode)
+      this.setNodeActive(needActiveNode, true)
+      needActiveNode = null
     }
     this.mindMap.emit('node_active', null, [...this.activeNodeList])
     this.mindMap.render()
