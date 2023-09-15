@@ -226,7 +226,7 @@ class Drag extends Base {
       if (node.nodeData.data.isActive) {
         this.mindMap.renderer.setNodeActive(node, false)
       }
-      if (node.uid === this.node.uid) {
+      if (node.uid === this.node.uid || this.node.isParent(node)) {
         return
       }
       if (this.overlapNode || (this.prevNode && this.nextNode)) {
