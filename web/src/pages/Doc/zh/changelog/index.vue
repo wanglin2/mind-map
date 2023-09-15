@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.7.1-fix.1</h2>
+<p>修复：修复拖拽节点时没有排除被拖拽节点的下级节点的问题。</p>
 <h2>0.7.1</h2>
 <p>修复：</p>
 <blockquote>

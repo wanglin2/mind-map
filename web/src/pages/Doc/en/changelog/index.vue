@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.7.1-fix.1</h2>
+<p>Fix: Fixed the issue of dragging nodes without excluding the child nodes of the dragged nodes.</p>
 <h2>0.7.1</h2>
 <p>Fix:</p>
 <blockquote>

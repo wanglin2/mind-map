@@ -64611,7 +64611,7 @@ var Drag = class extends Base_default {
       if (node3.nodeData.data.isActive) {
         this.mindMap.renderer.setNodeActive(node3, false);
       }
-      if (node3.uid === this.node.uid) {
+      if (node3.uid === this.node.uid || this.node.isParent(node3)) {
         return;
       }
       if (this.overlapNode || this.prevNode && this.nextNode) {
