@@ -193,4 +193,8 @@
         <img src="../../../../assets/avatar/乙.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>乙</p>
     </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/敏.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>敏</p>
+    </div>
 </div>

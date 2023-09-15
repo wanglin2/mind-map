@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.1-fix.1
+
+Fix: Fixed the issue of dragging nodes without excluding the child nodes of the dragged nodes.
+
 ## 0.7.1
 
 Fix:
