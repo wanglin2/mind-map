@@ -469,6 +469,20 @@
 <td>Is the text selected by default when double-clicking a node to enter node text editing? By default, it will only be selected when creating a new node</td>
 <td></td>
 </tr>
+<tr>
+<td>deleteNodeActive（v0.7.1+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Enable the function of automatically activating adjacent nodes or parent nodes after deleting nodes</td>
+<td></td>
+</tr>
+<tr>
+<td>autoMoveWhenMouseInEdgeOnDrag（v0.7.1+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Whether to enable automatic canvas movement when the mouse moves to the edge of the canvas while dragging nodes</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Data structure</h3>
