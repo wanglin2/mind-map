@@ -87,6 +87,8 @@ const mindMap = new MindMap({
 | hoverRectColor（v0.7.0+）     | String  | rgb(94, 200, 248)  | The node mouse hover and the rectangular border color displayed when activated will add a transparency of 0.6 when hovering |          |
 | hoverRectPadding（v0.7.0+）     | Number  | 2  | The distance between the node mouse hover and the displayed rectangular border when activated and the node content |          |
 | selectTextOnEnterEditText（v0.7.0+）     | Boolean  | true  | Is the text selected by default when double-clicking a node to enter node text editing? By default, it will only be selected when creating a new node |          |
+| deleteNodeActive（v0.7.1+）     | Boolean  | true  | Enable the function of automatically activating adjacent nodes or parent nodes after deleting nodes |          |
+| autoMoveWhenMouseInEdgeOnDrag（v0.7.1+）     | Boolean  | true  | Whether to enable automatic canvas movement when the mouse moves to the edge of the canvas while dragging nodes |          |
 
 ### Data structure
 

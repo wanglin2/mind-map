@@ -1,5 +1,39 @@
 # Changelog
 
+## 0.7.1
+
+Fix:
+
+> 1.Fix the issue of unsaved associated line endpoints after changes.
+>
+> 2.Fix the issue of abnormal canvas scrolling when moving the mouse to the edge of multiple selected nodes when the distance from the top left corner of the canvas to the browser window is not 0.
+>
+> 3.Fix the issue of importing xmind file errors for nodes with empty titles.
+>
+> 4.Fix the issue where the exported xmind file prompts for corruption when opened on the latest version of xmind software.
+>
+> 5.Fix the issue where stickers cannot be displayed when exporting data with stickers in xmind format.
+>
+> 6.Fix the issue of node right-click event reporting errors when the select plugin is not registered.
+>
+> 7.There is no issue with removing duplicates in the method of registering plugins.
+
+New:
+
+> 1.Reconstruct node drag and drop logic: optimize drag and drop difficulties in some situations, adapt to various structures, and automatically move the canvas when the mouse moves to the edge of the canvas during drag and drop.
+>
+> 2.Reconstruct the scrollbar plugin to optimize the user experience.
+>
+> 3.Imperfect resolution of conflicts between logical structure diagrams, mind maps, directory organization diagrams, organization chart summaries, and nodes (the summaries should be rewritten or deleted later).
+>
+> 4.Activate adjacent nodes after deleting them.
+>
+> 5.In node data_ The starting field is considered a custom field.
+
+Demo:
+
+> 1.The page will display the current core library version number.
+
 ## 0.7.0
 
 Breaking change: Removed the section of node activation style in the theme file, Setting the activation style of nodes is no longer supported, and the activation effect has been changed to a unified node outer border style, while also supporting the mouse hover effect.

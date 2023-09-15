@@ -1,8 +1,10 @@
 # Scrollbar 插件
 
 > v0.7.0+
+>
+> v0.7.1+进行了重构，下面的文档为新文档。
 
-该插件用于帮助开发水平和垂直滚动条的功能。
+该插件用于帮助开发水平和垂直滚动条的功能。详细使用方式请参考教程。
 
 ## 注册
 
@@ -16,9 +18,26 @@ MindMap.usePlugin(Scrollbar)
 
 ## 事件
 
-#### scrollbar_change
+#### scrollbar_change(data)
 
-当滚动条数据发生改变时触发，你可以监听该事件来更新滚动条位置和大小。
+- `data`：滚动条数据，格式如下：
+
+```js
+{
+    // 垂直滚动条
+    vertical: {
+        top,// 垂直滚动条的top值，百分比数值
+        height// 垂直滚动条的高度，百分比数值
+    },
+    // 水平滚动条
+    horizontal: {
+        left,// 水平滚动条的left值，百分比数值
+        width// 水平滚动条的宽度，百分比数值
+    }
+}
+```
+
+当滚动条数据发生改变时触发，你可以监听该事件来更新滚动条位置和大小。接收一个参数，代表当前最新的滚动条位置和大小信息，你可以使用它来更新滚动条元素的样式。
 
 ## 方法
 
@@ -32,9 +51,9 @@ MindMap.usePlugin(Scrollbar)
 
 ### calculationScrollbar()
 
-> 需要先调用setScrollBarWrapSize方法设置滚动条容器元素的宽高。
+> 通常你不需要调用该方法，如果初次渲染滚动条时滚动条没有更新，那么可以手动调用该方法获取滚动条数据。
 >
-> 一般需要监听scrollbar_change事件，然后调用该方法更新滚动条。
+> 需要先调用setScrollBarWrapSize方法设置滚动条容器元素的宽高。
 
 返回值：
 
@@ -53,7 +72,7 @@ MindMap.usePlugin(Scrollbar)
 }
 ```
 
-获取滚动条大小和位置，你可以根据返回值来设置到滚动条元素上，达到渲染和关心滚动条的效果。
+获取滚动条大小和位置。
 
 ### onMousedown(e, type)
 
@@ -62,3 +81,11 @@ MindMap.usePlugin(Scrollbar)
 - `type`：按下的滚动条类型，vertical（垂直滚动条）、horizontal（水平滚动条）。
 
 滚动条元素的鼠标按下事件时需要调用该方法。
+
+### onClick(e, type)
+
+- `e`：鼠标点击事件的事件对象。
+
+- `type`：鼠标点击的滚动条类型，vertical（垂直滚动条）、horizontal（水平滚动条）。
+
+滚动条元素的的点击事件时需要调用该方法。
