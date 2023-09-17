@@ -161,12 +161,14 @@ const nodeSizeIndependenceList = [
   'backgroundSize',
   'rootLineKeepSameInCurve'
 ]
-export const checkIsNodeSizeIndependenceConfig = (config) => {
+export const checkIsNodeSizeIndependenceConfig = config => {
   let keys = Object.keys(config)
-  for(let i = 0; i < keys.length; i++) {
-    if (!nodeSizeIndependenceList.find((item) => {
-      return item === keys[i]
-    })) {
+  for (let i = 0; i < keys.length; i++) {
+    if (
+      !nodeSizeIndependenceList.find(item => {
+        return item === keys[i]
+      })
+    ) {
       return false
     }
   }
