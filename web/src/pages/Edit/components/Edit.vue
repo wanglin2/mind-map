@@ -12,10 +12,7 @@
     <ShortcutKey></ShortcutKey>
     <Contextmenu v-if="mindMap" :mindMap="mindMap"></Contextmenu>
     <RichTextToolbar v-if="mindMap" :mindMap="mindMap"></RichTextToolbar>
-    <NodeNoteContentShow
-      v-if="mindMap"
-      :mindMap="mindMap"
-    ></NodeNoteContentShow>
+    <NodeNoteContentShow v-if="mindMap" :mindMap="mindMap"></NodeNoteContentShow>
     <NodeImgPreview v-if="mindMap" :mindMap="mindMap"></NodeImgPreview>
     <SidebarTrigger v-if="!isZenMode"></SidebarTrigger>
     <Search v-if="mindMap" :mindMap="mindMap"></Search>
@@ -268,7 +265,7 @@ export default {
       if (hasFileURL) {
         root = {
           "data": {
-              "text": "根节点"
+            "text": "根节点"
           },
           "children": []
         }
@@ -279,6 +276,7 @@ export default {
       this.mindMap = new MindMap({
         el: this.$refs.mindMapContainer,
         data: root,
+        fit: true,
         layout: layout,
         theme: theme.template,
         themeConfig: theme.config,
@@ -346,31 +344,31 @@ export default {
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
         this.manualSave()
       })
-      // 转发事件
-      ;[
-        'node_active',
-        'data_change',
-        'view_data_change',
-        'back_forward',
-        'node_contextmenu',
-        'node_click',
-        'draw_click',
-        'expand_btn_click',
-        'svg_mousedown',
-        'mouseup',
-        'mode_change',
-        'node_tree_render_end',
-        'rich_text_selection_change',
-        'transforming-dom-to-images',
-        'generalization_node_contextmenu',
-        'painter_start',
-        'painter_end',
-        'scrollbar_change'
-      ].forEach(event => {
-        this.mindMap.on(event, (...args) => {
-          this.$bus.$emit(event, ...args)
+        // 转发事件
+        ;[
+          'node_active',
+          'data_change',
+          'view_data_change',
+          'back_forward',
+          'node_contextmenu',
+          'node_click',
+          'draw_click',
+          'expand_btn_click',
+          'svg_mousedown',
+          'mouseup',
+          'mode_change',
+          'node_tree_render_end',
+          'rich_text_selection_change',
+          'transforming-dom-to-images',
+          'generalization_node_contextmenu',
+          'painter_start',
+          'painter_end',
+          'scrollbar_change'
+        ].forEach(event => {
+          this.mindMap.on(event, (...args) => {
+            this.$bus.$emit(event, ...args)
+          })
         })
-      })
       this.bindSaveEvent()
       // setTimeout(() => {
       // 动态给指定节点添加子节点
