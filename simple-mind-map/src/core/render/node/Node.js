@@ -394,7 +394,11 @@ class Node {
       this.active(e)
     })
     this.group.on('mousedown', e => {
-      const { readonly, enableCtrlKeyNodeSelection, useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
+      const {
+        readonly,
+        enableCtrlKeyNodeSelection,
+        useLeftKeySelectionRightKeyDrag
+      } = this.mindMap.opt
       // 只读模式不需要阻止冒泡
       if (!readonly) {
         if (this.isRoot) {
@@ -423,11 +427,9 @@ class Node {
         this.mindMap.renderer[isActive ? 'removeActiveNode' : 'addActiveNode'](
           this
         )
-        this.mindMap.emit(
-          'node_active',
-          isActive ? null : this,
-          [...this.mindMap.renderer.activeNodeList]
-        )
+        this.mindMap.emit('node_active', isActive ? null : this, [
+          ...this.mindMap.renderer.activeNodeList
+        ])
       }
       this.mindMap.emit('node_mousedown', this, e)
     })
@@ -466,7 +468,11 @@ class Node {
       e.stopPropagation()
       e.preventDefault()
       // 如果是多选节点结束，那么不要触发右键菜单事件
-      if(this.mindMap.select && !useLeftKeySelectionRightKeyDrag && this.mindMap.select.hasSelectRange()) {
+      if (
+        this.mindMap.select &&
+        !useLeftKeySelectionRightKeyDrag &&
+        this.mindMap.select.hasSelectRange()
+      ) {
         return
       }
       if (this.nodeData.data.isActive) {

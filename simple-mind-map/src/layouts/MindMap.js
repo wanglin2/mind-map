@@ -92,9 +92,18 @@ class MindMap extends Base {
           (rightLen + 1) * this.getMarginY(layerIndex + 1)
 
         // 如果存在概要，则和概要的高度取最大值
-        let generalizationNodeHeight = cur._node.checkHasGeneralization() ? cur._node._generalizationNodeHeight + this.getMarginY(layerIndex + 1) : 0
-        cur._node.leftChildrenAreaHeight2 = Math.max(cur._node.leftChildrenAreaHeight, generalizationNodeHeight)
-        cur._node.rightChildrenAreaHeight2 = Math.max(cur._node.rightChildrenAreaHeight, generalizationNodeHeight)
+        let generalizationNodeHeight = cur._node.checkHasGeneralization()
+          ? cur._node._generalizationNodeHeight +
+            this.getMarginY(layerIndex + 1)
+          : 0
+        cur._node.leftChildrenAreaHeight2 = Math.max(
+          cur._node.leftChildrenAreaHeight,
+          generalizationNodeHeight
+        )
+        cur._node.rightChildrenAreaHeight2 = Math.max(
+          cur._node.rightChildrenAreaHeight,
+          generalizationNodeHeight
+        )
       },
       true,
       0

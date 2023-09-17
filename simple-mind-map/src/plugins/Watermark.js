@@ -109,7 +109,10 @@ class Watermark {
 
   // 更新水印
   updateWatermark(config) {
-    this.mindMap.opt.watermarkConfig = merge(this.mindMap.opt.watermarkConfig, config)
+    this.mindMap.opt.watermarkConfig = merge(
+      this.mindMap.opt.watermarkConfig,
+      config
+    )
     this.handleConfig(config)
     this.draw()
   }

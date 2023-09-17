@@ -1,0 +1,67 @@
+declare namespace _default {
+  export { defaultTheme as default }
+  export { freshGreen }
+  export { blueSky }
+  export { brainImpairedPink }
+  export { romanticPurple }
+  export { freshRed }
+  export { earthYellow }
+  export { classic }
+  export { classic2 }
+  export { classic3 }
+  export { classic4 }
+  export { dark }
+  export { classicGreen }
+  export { classicBlue }
+  export { minions }
+  export { pinkGrape }
+  export { mint }
+  export { gold }
+  export { vitalityOrange }
+  export { greenLeaf }
+  export { dark2 }
+  export { skyGreen }
+  export { simpleBlack }
+  export { courseGreen }
+  export { coffee }
+  export { redSpirit }
+  export { blackHumour }
+  export { lateNightOffice }
+  export { blackGold }
+  export { avocado }
+  export { autumn }
+  export { orangeJuice }
+}
+export default _default
+import defaultTheme from './default'
+import freshGreen from './freshGreen'
+import blueSky from './blueSky'
+import brainImpairedPink from './brainImpairedPink'
+import romanticPurple from './romanticPurple'
+import freshRed from './freshRed'
+import earthYellow from './earthYellow'
+import classic from './classic'
+import classic2 from './classic2'
+import classic3 from './classic3'
+import classic4 from './classic4'
+import dark from './dark'
+import classicGreen from './classicGreen'
+import classicBlue from './classicBlue'
+import minions from './minions'
+import pinkGrape from './pinkGrape'
+import mint from './mint'
+import gold from './gold'
+import vitalityOrange from './vitalityOrange'
+import greenLeaf from './greenLeaf'
+import dark2 from './dark2'
+import skyGreen from './skyGreen'
+import simpleBlack from './simpleBlack'
+import courseGreen from './courseGreen'
+import coffee from './coffee'
+import redSpirit from './redSpirit'
+import blackHumour from './blackHumour'
+import lateNightOffice from './lateNightOffice'
+import blackGold from './blackGold'
+import avocado from './avocado'
+import autumn from './autumn'
+import orangeJuice from './orangeJuice'

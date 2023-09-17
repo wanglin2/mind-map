@@ -191,7 +191,7 @@ const transformOldXmind = content => {
     if (_children && _children.elements && _children.elements.length > 0) {
       _children.elements.forEach(item => {
         if (item.name === 'topics') {
-          (item.elements || []).forEach(item2 => {
+          ;(item.elements || []).forEach(item2 => {
             let newChild = {}
             newNode.children.push(newChild)
             walk(item2, newChild)

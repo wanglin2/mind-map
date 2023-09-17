@@ -105,7 +105,7 @@ class AssociativeLine {
       this.markerPath = add.path('M0,0 L2,5 L0,10 L10,5 Z')
     })
   }
-  
+
   // 判断关联线坐标是否变更，有变更则使用变化后的坐标，无则默认坐标
   updateAllLinesPos(node, toNode, associativeLinePoint) {
     associativeLinePoint = associativeLinePoint || {}

@@ -40,7 +40,14 @@ class ExportPDF {
         w = a4Size.width
         h = a4Size.width / imageRatio
       }
-      pdf.addImage(img, 'PNG', (a4Size.width - w) / 2, (a4Size.height - h) / 2, w, h)
+      pdf.addImage(
+        img,
+        'PNG',
+        (a4Size.width - w) / 2,
+        (a4Size.height - h) / 2,
+        w,
+        h
+      )
       pdf.save(name)
     }
     image.src = img

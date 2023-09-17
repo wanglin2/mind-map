@@ -46,13 +46,20 @@ export default class KeyCommand {
       if (this.mindMap.richText && this.mindMap.richText.showTextEdit) {
         return
       }
-      if (this.mindMap.renderer.textEdit.showTextEdit || (this.mindMap.associativeLine && this.mindMap.associativeLine.showTextEdit)) {
+      if (
+        this.mindMap.renderer.textEdit.showTextEdit ||
+        (this.mindMap.associativeLine &&
+          this.mindMap.associativeLine.showTextEdit)
+      ) {
         return
       }
       this.isInSvg = false
     })
     window.addEventListener('keydown', e => {
-      if (this.isPause || (this.mindMap.opt.enableShortcutOnlyWhenMouseInSvg && !this.isInSvg)) {
+      if (
+        this.isPause ||
+        (this.mindMap.opt.enableShortcutOnlyWhenMouseInSvg && !this.isInSvg)
+      ) {
         return
       }
       Object.keys(this.shortcutMap).forEach(key => {

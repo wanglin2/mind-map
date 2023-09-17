@@ -37,7 +37,11 @@ class Command {
       this.commands[name].forEach(fn => {
         fn(...args)
       })
-      if (['BACK', 'FORWARD', 'SET_NODE_ACTIVE', 'CLEAR_ACTIVE_NODE'].includes(name)) {
+      if (
+        ['BACK', 'FORWARD', 'SET_NODE_ACTIVE', 'CLEAR_ACTIVE_NODE'].includes(
+          name
+        )
+      ) {
         return
       }
       this.addHistory()
@@ -78,7 +82,11 @@ class Command {
     }
     let data = this.getCopyData()
     // 此次数据和上次一样则不重复添加
-    if (this.history.length > 0 && JSON.stringify(this.history[this.history.length - 1]) === JSON.stringify(data)) {
+    if (
+      this.history.length > 0 &&
+      JSON.stringify(this.history[this.history.length - 1]) ===
+        JSON.stringify(data)
+    ) {
       return
     }
     // 删除当前历史指针后面的数据
@@ -123,7 +131,11 @@ class Command {
     let len = this.history.length
     if (this.activeHistoryIndex + step <= len - 1) {
       this.activeHistoryIndex += step
-      this.mindMap.emit('back_forward', this.activeHistoryIndex, this.history.length)
+      this.mindMap.emit(
+        'back_forward',
+        this.activeHistoryIndex,
+        this.history.length
+      )
       let data = simpleDeepClone(this.history[this.activeHistoryIndex])
       this.mindMap.emit('data_change', data)
       return data
@@ -138,10 +150,10 @@ class Command {
   // 移除节点数据中的uid
   removeDataUid(data) {
     data = simpleDeepClone(data)
-    let walk = (root) => {
+    let walk = root => {
       delete root.data.uid
       if (root.children && root.children.length > 0) {
-        root.children.forEach((item) => {
+        root.children.forEach(item => {
           walk(item)
         })
       }

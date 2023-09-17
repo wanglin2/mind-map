@@ -24,6 +24,10 @@ import { defaultOpt } from './src/constants/defaultOptions'
 //  思维导图
 class MindMap {
   //  构造函数
+  /**
+   *
+   * @param {defaultOpt} opt
+   */
   constructor(opt = {}) {
     // 合并选项
     this.opt = this.handleOpt(merge(defaultOpt, opt))
@@ -36,7 +40,8 @@ class MindMap {
     // 画布宽高
     this.width = this.elRect.width
     this.height = this.elRect.height
-    if (this.width <= 0 || this.height <= 0) throw new Error('容器元素el的宽高不能为0')
+    if (this.width <= 0 || this.height <= 0)
+      throw new Error('容器元素el的宽高不能为0')
 
     // 添加css
     this.cssEl = null
@@ -360,7 +365,7 @@ class MindMap {
     // 克隆一份数据
     let clone = svg.clone()
     // 添加必要的样式
-    clone.add(SVG(`<style>${ cssContent }</style>`))
+    clone.add(SVG(`<style>${cssContent}</style>`))
     // 如果实际图形宽高超出了屏幕宽高，且存在水印的话需要重新绘制水印，否则会出现超出部分没有水印的问题
     if (
       (rect.width > origWidth || rect.height > origHeight) &&
