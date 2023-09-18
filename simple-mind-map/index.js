@@ -453,7 +453,7 @@ class MindMap {
 // 插件列表
 MindMap.pluginList = []
 MindMap.usePlugin = (plugin, opt = {}) => {
-  if (MindMap.hasPlugin(plugin) !== -1) return
+  if (MindMap.hasPlugin(plugin) !== -1) return MindMap
   plugin.pluginOpt = opt
   MindMap.pluginList.push(plugin)
   return MindMap
