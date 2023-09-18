@@ -484,7 +484,7 @@
 <td></td>
 </tr>
 <tr>
-<td>fit（v0.7.2+）</td>
+<td>fit（v0.7.1-fix.2+）</td>
 <td>Boolean</td>
 <td>false</td>
 <td>首次渲染时是否缩放至适应画布大小</td>

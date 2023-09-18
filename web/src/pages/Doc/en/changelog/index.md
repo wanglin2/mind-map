@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.1-fix.2
+
+Fix: 1.Fix the issue of plugin registration method chain call reporting errors.
+
+New:
+
+> 1.Add a configuration option to adapt to the canvas size when the mind map is first loaded.
+>
+> 2.Add a command to automatically generate dts declaration files.
+
 ## 0.7.1-fix.1
 
 Fix: Fixed the issue of dragging nodes without excluding the child nodes of the dragged nodes.

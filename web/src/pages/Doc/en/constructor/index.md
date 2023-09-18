@@ -89,7 +89,7 @@ const mindMap = new MindMap({
 | selectTextOnEnterEditText（v0.7.0+）     | Boolean  | true  | Is the text selected by default when double-clicking a node to enter node text editing? By default, it will only be selected when creating a new node |          |
 | deleteNodeActive（v0.7.1+）     | Boolean  | true  | Enable the function of automatically activating adjacent nodes or parent nodes after deleting nodes |          |
 | autoMoveWhenMouseInEdgeOnDrag（v0.7.1+）     | Boolean  | true  | Whether to enable automatic canvas movement when the mouse moves to the edge of the canvas while dragging nodes |          |
-| fit（v0.7.2+）     | Boolean  | false  | Is the first rendering scaled to fit the canvas size |          |
+| fit（v0.7.1-fix.2+）     | Boolean  | false  | Is the first rendering scaled to fit the canvas size |          |
 
 ### Data structure
 
