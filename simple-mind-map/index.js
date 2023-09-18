@@ -92,7 +92,7 @@ class MindMap {
     })
 
     // 初始渲染
-    this.render()
+    this.render(this.opt.fit ? () => this.view.fit() : () => {})
     setTimeout(() => {
       this.command.addHistory()
     }, 0)
