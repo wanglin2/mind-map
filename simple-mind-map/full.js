@@ -28,8 +28,7 @@ MindMap.constants = constants
 MindMap.themes = themes
 MindMap.defaultTheme = defaultTheme
 
-MindMap
-  .usePlugin(MiniMap)
+MindMap.usePlugin(MiniMap)
   .usePlugin(Watermark)
   .usePlugin(Drag)
   .usePlugin(KeyboardNavigation)

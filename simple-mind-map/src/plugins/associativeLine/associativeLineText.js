@@ -119,10 +119,8 @@ function getText(node, toNode) {
 // 渲染关联线文字
 function renderText(str, path, text) {
   if (!str) return
-  let {
-    associativeLineTextFontSize,
-    associativeLineTextLineHeight
-  } = this.mindMap.themeConfig
+  let { associativeLineTextFontSize, associativeLineTextLineHeight } =
+    this.mindMap.themeConfig
   text.clear()
   let textArr = str.split(/\n/gim)
   textArr.forEach((item, index) => {

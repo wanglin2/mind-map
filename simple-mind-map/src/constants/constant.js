@@ -261,42 +261,42 @@ export const initRootNodePositionMap = {
   [CONSTANTS.INIT_ROOT_NODE_POSITION.TOP]: 0,
   [CONSTANTS.INIT_ROOT_NODE_POSITION.RIGHT]: 1,
   [CONSTANTS.INIT_ROOT_NODE_POSITION.BOTTOM]: 1,
-  [CONSTANTS.INIT_ROOT_NODE_POSITION.CENTER]: 0.5,
+  [CONSTANTS.INIT_ROOT_NODE_POSITION.CENTER]: 0.5
 }
 
 //  布局结构列表
 export const layoutList = [
   {
     name: '逻辑结构图',
-    value: CONSTANTS.LAYOUT.LOGICAL_STRUCTURE,
+    value: CONSTANTS.LAYOUT.LOGICAL_STRUCTURE
   },
   {
     name: '思维导图',
-    value: CONSTANTS.LAYOUT.MIND_MAP,
+    value: CONSTANTS.LAYOUT.MIND_MAP
   },
   {
     name: '组织结构图',
-    value: CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE,
+    value: CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE
   },
   {
     name: '目录组织图',
-    value: CONSTANTS.LAYOUT.CATALOG_ORGANIZATION,
+    value: CONSTANTS.LAYOUT.CATALOG_ORGANIZATION
   },
   {
     name: '时间轴',
-    value: CONSTANTS.LAYOUT.TIMELINE,
+    value: CONSTANTS.LAYOUT.TIMELINE
   },
   {
     name: '时间轴2',
-    value: CONSTANTS.LAYOUT.TIMELINE2,
+    value: CONSTANTS.LAYOUT.TIMELINE2
   },
   {
     name: '竖向时间轴',
-    value: CONSTANTS.LAYOUT.VERTICAL_TIMELINE,
+    value: CONSTANTS.LAYOUT.VERTICAL_TIMELINE
   },
   {
     name: '鱼骨图',
-    value: CONSTANTS.LAYOUT.FISHBONE,
+    value: CONSTANTS.LAYOUT.FISHBONE
   }
 ]
 export const layoutValueList = [

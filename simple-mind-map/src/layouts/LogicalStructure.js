@@ -57,8 +57,14 @@ class LogicalStructure extends Base {
             (len + 1) * this.getMarginY(layerIndex + 1)
           : 0
         // 如果存在概要，则和概要的高度取最大值
-        let generalizationNodeHeight = cur._node.checkHasGeneralization() ? cur._node._generalizationNodeHeight + this.getMarginY(layerIndex + 1) : 0
-        cur._node.childrenAreaHeight2 = Math.max(cur._node.childrenAreaHeight, generalizationNodeHeight)
+        let generalizationNodeHeight = cur._node.checkHasGeneralization()
+          ? cur._node._generalizationNodeHeight +
+            this.getMarginY(layerIndex + 1)
+          : 0
+        cur._node.childrenAreaHeight2 = Math.max(
+          cur._node.childrenAreaHeight,
+          generalizationNodeHeight
+        )
       },
       true,
       0
@@ -103,7 +109,8 @@ class LogicalStructure extends Base {
         // 判断子节点所占的高度之和是否大于该节点自身，大于则需要调整位置
         let difference =
           node.childrenAreaHeight2 -
-          this.getMarginY(layerIndex + 1) * 2 - node.height
+          this.getMarginY(layerIndex + 1) * 2 -
+          node.height
         if (difference > 0) {
           this.updateBrothers(node, difference / 2)
         }

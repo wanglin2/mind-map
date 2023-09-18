@@ -249,7 +249,9 @@ class RichText {
     this.showTextEdit = true
     // 如果是刚创建的节点，那么默认全选，否则普通激活不全选，除非selectTextOnEnterEditText配置为true
     // 在selectTextOnEnterEditText时，如果是在keydown事件进入的节点编辑，也不需要全选
-    this.focus(isInserting || (selectTextOnEnterEditText && !isFromKeyDown) ? 0 : null)
+    this.focus(
+      isInserting || (selectTextOnEnterEditText && !isFromKeyDown) ? 0 : null
+    )
     if (!node.nodeData.data.richText) {
       // 如果是非富文本的情况，需要手动应用文本样式
       this.setTextStyleIfNotRichText(node)
@@ -373,7 +375,7 @@ class RichText {
       }
     })
     // 拦截粘贴，只允许粘贴纯文本
-    this.quill.clipboard.addMatcher(Node.TEXT_NODE, (node) => {
+    this.quill.clipboard.addMatcher(Node.TEXT_NODE, node => {
       let style = this.getPasteTextStyle()
       return new Delta().insert(node.data, style)
     })
