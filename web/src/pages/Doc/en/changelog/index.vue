@@ -1,6 +1,13 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.7.1-fix.2</h2>
+<p>Fix: 1.Fix the issue of plugin registration method chain call reporting errors.</p>
+<p>New:</p>
+<blockquote>
+<p>1.Add a configuration option to adapt to the canvas size when the mind map is first loaded.</p>
+<p>2.Add a command to automatically generate dts declaration files.</p>
+</blockquote>
 <h2>0.7.1-fix.1</h2>
 <p>Fix: Fixed the issue of dragging nodes without excluding the child nodes of the dragged nodes.</p>
 <h2>0.7.1</h2>

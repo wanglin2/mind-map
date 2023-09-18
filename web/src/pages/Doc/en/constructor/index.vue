@@ -484,7 +484,7 @@
 <td></td>
 </tr>
 <tr>
-<td>fit（v0.7.2+）</td>
+<td>fit（v0.7.1-fix.2+）</td>
 <td>Boolean</td>
 <td>false</td>
 <td>Is the first rendering scaled to fit the canvas size</td>

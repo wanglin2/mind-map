@@ -89,7 +89,7 @@ const mindMap = new MindMap({
 | selectTextOnEnterEditText（v0.7.0+）     | Boolean  | true  | 双击节点进入节点文本编辑时是否默认选中文本，默认只在创建新节点时会选中 |          |
 | deleteNodeActive（v0.7.1+）     | Boolean  | true  | 是否开启删除节点后自动激活节点相邻节点或父节点的功能 |          |
 | autoMoveWhenMouseInEdgeOnDrag（v0.7.1+）     | Boolean  | true  | 拖拽节点时鼠标移动到画布边缘是否开启画布自动移动 |          |
-| fit（v0.7.2+）     | Boolean  | false  | 首次渲染时是否缩放至适应画布大小 |          |
+| fit（v0.7.1-fix.2+）     | Boolean  | false  | 首次渲染时是否缩放至适应画布大小 |          |
 
 ### 数据结构
 
