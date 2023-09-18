@@ -172,7 +172,7 @@ class MindMap extends Base {
         return item.dir === node.dir
       })
       let index = childrenList.findIndex(item => {
-        return item === node
+        return item.uid === node.uid
       })
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {

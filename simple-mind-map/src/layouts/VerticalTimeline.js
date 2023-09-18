@@ -156,13 +156,13 @@ class VerticalTimeline extends Base {
     if (node.parent) {
       let childrenList = node.parent.children
       let index = childrenList.findIndex(item => {
-        return item === node
+        return item.uid === node.uid
       })
       childrenList.forEach((item, _index) => {
         // 自定义节点位置
         if (item.hasCustomPosition()) return
         // 三级或三级以下节点自身位置不需要动
-        if (!node.parent.isRoot && item === node) return
+        if (!node.parent.isRoot && item.uid === node.uid) return
         let _offset = 0
         // 二级节点上面的兄弟节点不需要移动，自身需要往下移动
         if (node.parent.isRoot) {
@@ -202,7 +202,7 @@ class VerticalTimeline extends Base {
     if (node.parent && !node.parent.isRoot) {
       let childrenList = node.parent.children
       let index = childrenList.findIndex(item => {
-        return item === node
+        return item.uid === node.uid
       })
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
