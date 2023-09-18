@@ -276,7 +276,7 @@ export default {
       this.mindMap = new MindMap({
         el: this.$refs.mindMapContainer,
         data: root,
-        fit: true,
+        fit: false,
         layout: layout,
         theme: theme.template,
         themeConfig: theme.config,
