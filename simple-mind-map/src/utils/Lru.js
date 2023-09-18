@@ -1,5 +1,5 @@
 // LRU缓存类
-export default class CRU {
+export default class Lru {
   constructor(max) {
     this.max = max || 1000
     this.size = 0
