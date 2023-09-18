@@ -39329,7 +39329,10 @@ var View = class {
       if (mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
         if (disableMouseWheelZoom)
           return;
-        const { x: clientX, y: clientY } = this.mindMap.toPos(e2.clientX, e2.clientY);
+        const { x: clientX, y: clientY } = this.mindMap.toPos(
+          e2.clientX,
+          e2.clientY
+        );
         let cx2 = mouseScaleCenterUseMousePosition ? clientX : void 0;
         let cy2 = mouseScaleCenterUseMousePosition ? clientY : void 0;
         switch (dir) {
@@ -47482,7 +47485,11 @@ var Node2 = class {
       this.active(e2);
     });
     this.group.on("mousedown", (e2) => {
-      const { readonly, enableCtrlKeyNodeSelection, useLeftKeySelectionRightKeyDrag } = this.mindMap.opt;
+      const {
+        readonly,
+        enableCtrlKeyNodeSelection,
+        useLeftKeySelectionRightKeyDrag
+      } = this.mindMap.opt;
       if (!readonly) {
         if (this.isRoot) {
           if (e2.which === 3 && !useLeftKeySelectionRightKeyDrag) {
@@ -47507,11 +47514,9 @@ var Node2 = class {
         this.mindMap.renderer[isActive ? "removeActiveNode" : "addActiveNode"](
           this
         );
-        this.mindMap.emit(
-          "node_active",
-          isActive ? null : this,
-          [...this.mindMap.renderer.activeNodeList]
-        );
+        this.mindMap.emit("node_active", isActive ? null : this, [
+          ...this.mindMap.renderer.activeNodeList
+        ]);
       }
       this.mindMap.emit("node_mousedown", this, e2);
     });
@@ -47867,7 +47872,7 @@ var Node2 = class {
 var Node_default = Node2;
 
 // ../simple-mind-map/src/utils/Lru.js
-var CRU = class {
+var Lru = class {
   constructor(max3) {
     this.max = max3 || 1e3;
     this.size = 0;
@@ -47907,7 +47912,7 @@ var Base2 = class {
     this.mindMap = renderer.mindMap;
     this.draw = this.mindMap.draw;
     this.root = null;
-    this.lru = new CRU(this.mindMap.opt.maxNodeCacheCount);
+    this.lru = new Lru(this.mindMap.opt.maxNodeCacheCount);
   }
   //  计算节点位置
   doLayout() {
@@ -48233,7 +48238,10 @@ var LogicalStructure = class extends Base_default {
           return h3 + item.height;
         }, 0) + (len + 1) * this.getMarginY(layerIndex + 1) : 0;
         let generalizationNodeHeight = cur._node.checkHasGeneralization() ? cur._node._generalizationNodeHeight + this.getMarginY(layerIndex + 1) : 0;
-        cur._node.childrenAreaHeight2 = Math.max(cur._node.childrenAreaHeight, generalizationNodeHeight);
+        cur._node.childrenAreaHeight2 = Math.max(
+          cur._node.childrenAreaHeight,
+          generalizationNodeHeight
+        );
       },
       true,
       0
@@ -48282,10 +48290,10 @@ var LogicalStructure = class extends Base_default {
     if (node3.parent) {
       let childrenList = node3.parent.children;
       let index3 = childrenList.findIndex((item) => {
-        return item === node3;
+        return item.uid === node3.uid;
       });
       childrenList.forEach((item, _index) => {
-        if (item === node3 || item.hasCustomPosition()) {
+        if (item.uid === node3.uid || item.hasCustomPosition()) {
           return;
         }
         let _offset = 0;
@@ -48495,8 +48503,14 @@ var MindMap = class extends Base_default {
         cur._node.leftChildrenAreaHeight = leftChildrenAreaHeight + (leftLen + 1) * this.getMarginY(layerIndex + 1);
         cur._node.rightChildrenAreaHeight = rightChildrenAreaHeight + (rightLen + 1) * this.getMarginY(layerIndex + 1);
         let generalizationNodeHeight = cur._node.checkHasGeneralization() ? cur._node._generalizationNodeHeight + this.getMarginY(layerIndex + 1) : 0;
-        cur._node.leftChildrenAreaHeight2 = Math.max(cur._node.leftChildrenAreaHeight, generalizationNodeHeight);
-        cur._node.rightChildrenAreaHeight2 = Math.max(cur._node.rightChildrenAreaHeight, generalizationNodeHeight);
+        cur._node.leftChildrenAreaHeight2 = Math.max(
+          cur._node.leftChildrenAreaHeight,
+          generalizationNodeHeight
+        );
+        cur._node.rightChildrenAreaHeight2 = Math.max(
+          cur._node.rightChildrenAreaHeight,
+          generalizationNodeHeight
+        );
       },
       true,
       0
@@ -48555,7 +48569,7 @@ var MindMap = class extends Base_default {
         return item.dir === node3.dir;
       });
       let index3 = childrenList.findIndex((item) => {
-        return item === node3;
+        return item.uid === node3.uid;
       });
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
@@ -48858,7 +48872,7 @@ var CatalogOrganization = class extends Base_default {
     if (node3.parent) {
       let childrenList = node3.parent.children;
       let index3 = childrenList.findIndex((item) => {
-        return item === node3;
+        return item.uid === node3.uid;
       });
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition() || _index <= index3) {
@@ -48877,7 +48891,7 @@ var CatalogOrganization = class extends Base_default {
     if (node3.parent && !node3.parent.isRoot) {
       let childrenList = node3.parent.children;
       let index3 = childrenList.findIndex((item) => {
-        return item === node3;
+        return item.uid === node3.uid;
       });
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
@@ -49078,7 +49092,10 @@ var OrganizationStructure = class extends Base_default {
           return h3 + item.width;
         }, 0) + (len + 1) * this.getMarginY(layerIndex + 1) : 0;
         let generalizationNodeWidth = cur._node.checkHasGeneralization() ? cur._node._generalizationNodeWidth + this.getMarginY(layerIndex + 1) : 0;
-        cur._node.childrenAreaWidth2 = Math.max(cur._node.childrenAreaWidth, generalizationNodeWidth);
+        cur._node.childrenAreaWidth2 = Math.max(
+          cur._node.childrenAreaWidth,
+          generalizationNodeWidth
+        );
       },
       true,
       0
@@ -49127,7 +49144,7 @@ var OrganizationStructure = class extends Base_default {
     if (node3.parent) {
       let childrenList = node3.parent.children;
       let index3 = childrenList.findIndex((item) => {
-        return item === node3;
+        return item.uid === node3.uid;
       });
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
@@ -49411,7 +49428,7 @@ var Timeline2 = class extends Base_default {
     if (node3.parent && !node3.parent.isRoot) {
       let childrenList = node3.parent.children;
       let index3 = childrenList.findIndex((item) => {
-        return item === node3;
+        return item.uid === node3.uid;
       });
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
@@ -49658,12 +49675,12 @@ var VerticalTimeline = class extends Base_default {
     if (node3.parent) {
       let childrenList = node3.parent.children;
       let index3 = childrenList.findIndex((item) => {
-        return item === node3;
+        return item.uid === node3.uid;
       });
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition())
           return;
-        if (!node3.parent.isRoot && item === node3)
+        if (!node3.parent.isRoot && item.uid === node3.uid)
           return;
         let _offset = 0;
         if (node3.parent.isRoot) {
@@ -49694,7 +49711,7 @@ var VerticalTimeline = class extends Base_default {
     if (node3.parent && !node3.parent.isRoot) {
       let childrenList = node3.parent.children;
       let index3 = childrenList.findIndex((item) => {
-        return item === node3;
+        return item.uid === node3.uid;
       });
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
@@ -50231,7 +50248,7 @@ var Fishbone = class extends Base_default {
     if (node3.parent && !node3.parent.isRoot) {
       let childrenList = node3.parent.children;
       let index3 = childrenList.findIndex((item) => {
-        return item === node3;
+        return item.uid === node3.uid;
       });
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
@@ -53447,7 +53464,9 @@ var Command = class {
       this.commands[name].forEach((fn) => {
         fn(...args);
       });
-      if (["BACK", "FORWARD", "SET_NODE_ACTIVE", "CLEAR_ACTIVE_NODE"].includes(name)) {
+      if (["BACK", "FORWARD", "SET_NODE_ACTIVE", "CLEAR_ACTIVE_NODE"].includes(
+        name
+      )) {
         return;
       }
       this.addHistory();
@@ -53525,7 +53544,11 @@ var Command = class {
     let len = this.history.length;
     if (this.activeHistoryIndex + step <= len - 1) {
       this.activeHistoryIndex += step;
-      this.mindMap.emit("back_forward", this.activeHistoryIndex, this.history.length);
+      this.mindMap.emit(
+        "back_forward",
+        this.activeHistoryIndex,
+        this.history.length
+      );
       let data2 = simpleDeepClone(this.history[this.activeHistoryIndex]);
       this.mindMap.emit("data_change", data2);
       return data2;
@@ -53773,12 +53796,18 @@ var defaultOpt = {
   // 删除节点后激活相邻节点
   deleteNodeActive: true,
   // 拖拽节点时鼠标移动到画布边缘是否开启画布自动移动
-  autoMoveWhenMouseInEdgeOnDrag: true
+  autoMoveWhenMouseInEdgeOnDrag: true,
+  // 是否首次加载fit view
+  fit: false
 };
 
 // ../simple-mind-map/index.js
 var MindMap2 = class {
   //  构造函数
+  /**
+   *
+   * @param {defaultOpt} opt
+   */
   constructor(opt = {}) {
     this.opt = this.handleOpt((0, import_deepmerge33.default)(defaultOpt, opt));
     this.el = this.opt.el;
@@ -53815,7 +53844,8 @@ var MindMap2 = class {
     MindMap2.pluginList.forEach((plugin) => {
       this.initPlugin(plugin);
     });
-    this.render();
+    this.render(this.opt.fit ? () => this.view.fit() : () => {
+    });
     setTimeout(() => {
       this.command.addHistory();
     }, 0);
@@ -54125,7 +54155,7 @@ var MindMap2 = class {
 MindMap2.pluginList = [];
 MindMap2.usePlugin = (plugin, opt = {}) => {
   if (MindMap2.hasPlugin(plugin) !== -1)
-    return;
+    return MindMap2;
   plugin.pluginOpt = opt;
   MindMap2.pluginList.push(plugin);
   return MindMap2;
@@ -54367,7 +54397,10 @@ var Watermark = class {
   }
   // 更新水印
   updateWatermark(config) {
-    this.mindMap.opt.watermarkConfig = (0, import_deepmerge34.default)(this.mindMap.opt.watermarkConfig, config);
+    this.mindMap.opt.watermarkConfig = (0, import_deepmerge34.default)(
+      this.mindMap.opt.watermarkConfig,
+      config
+    );
     this.handleConfig(config);
     this.draw();
   }
@@ -54721,6 +54754,7 @@ var transformOldXmind = (content3) => {
     if (_children && _children.elements && _children.elements.length > 0) {
       _children.elements.forEach((item) => {
         if (item.name === "topics") {
+          ;
           (item.elements || []).forEach((item2) => {
             let newChild = {};
             newNode.children.push(newChild);
@@ -63822,7 +63856,14 @@ var ExportPDF = class {
         w2 = a4Size.width;
         h3 = a4Size.width / imageRatio;
       }
-      pdf.addImage(img, "PNG", (a4Size.width - w2) / 2, (a4Size.height - h3) / 2, w2, h3);
+      pdf.addImage(
+        img,
+        "PNG",
+        (a4Size.width - w2) / 2,
+        (a4Size.height - h3) / 2,
+        w2,
+        h3
+      );
       pdf.save(name);
     };
     image.src = img;
@@ -64234,7 +64275,10 @@ var Export = class {
       img.onload = async () => {
         try {
           const canvas = document.createElement("canvas");
-          const dpr = Math.max(window.devicePixelRatio, this.mindMap.opt.minExportImgCanvasScale);
+          const dpr = Math.max(
+            window.devicePixelRatio,
+            this.mindMap.opt.minExportImgCanvasScale
+          );
           const imgWidth = img.width;
           const imgHeight = img.height;
           const needRotate = checkRotate(imgWidth, imgHeight);
@@ -64341,7 +64385,9 @@ var Export = class {
     if (this.mindMap.richText) {
       let foreignObjectList = node3.find("foreignObject");
       if (foreignObjectList.length > 0) {
-        foreignObjectList[0].add(SVG(`<style>${this.mindMap.opt.resetCss}</style>`));
+        foreignObjectList[0].add(
+          SVG(`<style>${this.mindMap.opt.resetCss}</style>`)
+        );
       }
       str = node3.svg();
     }
@@ -64349,11 +64395,7 @@ var Export = class {
       type: "image/svg+xml"
     });
     let svgUrl = await readBlob(blob);
-    let res = await this.svgToPng(
-      svgUrl,
-      transparent,
-      checkRotate
-    );
+    let res = await this.svgToPng(svgUrl, transparent, checkRotate);
     return res;
   }
   //  导出为pdf
@@ -64385,7 +64427,9 @@ var Export = class {
     if (this.mindMap.richText) {
       let foreignObjectList = node3.find("foreignObject");
       if (foreignObjectList.length > 0) {
-        foreignObjectList[0].add(SVG(`<style>${this.mindMap.opt.resetCss}</style>`));
+        foreignObjectList[0].add(
+          SVG(`<style>${this.mindMap.opt.resetCss}</style>`)
+        );
       }
     }
     node3.first().before(SVG(`<title>${name}</title>`));
@@ -65699,10 +65743,7 @@ function getText2(node3, toNode) {
 function renderText(str, path, text3) {
   if (!str)
     return;
-  let {
-    associativeLineTextFontSize,
-    associativeLineTextLineHeight
-  } = this.mindMap.themeConfig;
+  let { associativeLineTextFontSize, associativeLineTextLineHeight } = this.mindMap.themeConfig;
   text3.clear();
   let textArr = str.split(/\n/gim);
   textArr.forEach((item, index3) => {
@@ -66405,7 +66446,9 @@ var RichText = class {
     this.initQuillEditor();
     document.querySelector(".ql-editor").style.minHeight = originHeight + "px";
     this.showTextEdit = true;
-    this.focus(isInserting || selectTextOnEnterEditText && !isFromKeyDown ? 0 : null);
+    this.focus(
+      isInserting || selectTextOnEnterEditText && !isFromKeyDown ? 0 : null
+    );
     if (!node3.nodeData.data.richText) {
       this.setTextStyleIfNotRichText(node3);
     }
