@@ -125,10 +125,10 @@ class LogicalStructure extends Base {
     if (node.parent) {
       let childrenList = node.parent.children
       let index = childrenList.findIndex(item => {
-        return item === node
+        return item.uid === node.uid
       })
       childrenList.forEach((item, _index) => {
-        if (item === node || item.hasCustomPosition()) {
+        if (item.uid === node.uid || item.hasCustomPosition()) {
           // 适配自定义位置
           return
         }

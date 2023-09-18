@@ -126,7 +126,7 @@ class OrganizationStructure extends Base {
     if (node.parent) {
       let childrenList = node.parent.children
       let index = childrenList.findIndex(item => {
-        return item === node
+        return item.uid === node.uid
       })
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
