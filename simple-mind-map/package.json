@@ -24,7 +24,7 @@
     "types": "npx -p typescript tsc index.js --declaration --allowJs --emitDeclarationOnly --outDir types --target es2017"
   },
   "module": "index.js",
-  "__main": "./dist/simpleMindMap.umd.min.js",
+  "main": "./dist/simpleMindMap.umd.min.js",
   "dependencies": {
     "@svgdotjs/svg.js": "^3.0.16",
     "deepmerge": "^1.5.2",
