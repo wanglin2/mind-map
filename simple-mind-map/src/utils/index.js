@@ -637,7 +637,7 @@ export const isMobile = () => {
 // 获取对象改变了的的属性
 export const getObjectChangedProps = (oldObject, newObject) => {
   const res = {}
-  Object.keys(newObject).forEach((prop) => {
+  Object.keys(newObject).forEach(prop => {
     const oldVal = oldObject[prop]
     const newVal = newObject[prop]
     if (getType(oldVal) !== getType(newVal)) {
@@ -660,7 +660,7 @@ export const getObjectChangedProps = (oldObject, newObject) => {
 }
 
 // 判断一个字段是否是节点数据中的样式字段
-export const checkIsNodeStyleDataKey = (key) => {
+export const checkIsNodeStyleDataKey = key => {
   // 用户自定义字段
   if (/^_/.test(key)) return false
   // 不在节点非样式字段列表里，那么就是样式字段

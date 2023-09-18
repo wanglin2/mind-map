@@ -70,7 +70,8 @@ function updateExpandBtnNode() {
 
   if (this._expandBtn) {
     // 如果是收起按钮加上边框
-    let { isShowExpandNum, expandBtnStyle, expandBtnNumHandler } = this.mindMap.opt
+    let { isShowExpandNum, expandBtnStyle, expandBtnNumHandler } =
+      this.mindMap.opt
     if (isShowExpandNum) {
       if (!expand) {
         // 数字按钮添加边框

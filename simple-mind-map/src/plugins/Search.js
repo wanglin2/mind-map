@@ -1,4 +1,9 @@
-import { bfsWalk, getTextFromHtml, isUndef, replaceHtmlText } from '../utils/index'
+import {
+  bfsWalk,
+  getTextFromHtml,
+  isUndef,
+  replaceHtmlText
+} from '../utils/index'
 
 // 搜索插件
 class Search {

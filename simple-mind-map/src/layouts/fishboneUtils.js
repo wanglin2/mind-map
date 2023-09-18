@@ -52,13 +52,15 @@ export default {
         let totalTop =
           node.top +
           node.height +
-          (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0) + marginY
+          (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0) +
+          marginY
         node.children.forEach(item => {
           item.left = startLeft
           item.top += totalTop
           totalTop +=
             item.height +
-            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) + marginY
+            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) +
+            marginY
         })
       }
     },
@@ -72,7 +74,8 @@ export default {
           return (
             h +
             item.height +
-            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) + marginY
+            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) +
+            marginY
           )
         }, 0)
         ctx.updateBrothersTop(node, totalHeight)
@@ -92,7 +95,11 @@ export default {
           item.top =
             node.top - (item.top - node.top) - nodeTotalHeight + node.height
           // 调整left
-          item.left = node.left + node.width * ctx.indent + (nodeTotalHeight + totalHeight) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg))
+          item.left =
+            node.left +
+            node.width * ctx.indent +
+            (nodeTotalHeight + totalHeight) /
+              Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg))
           totalHeight += nodeTotalHeight
           // 同步更新后代节点
           ctx.updateChildrenPro(item.children, {
@@ -129,7 +136,9 @@ export default {
       if (node.parent && node.parent.isRoot) {
         line.plot(
           `M ${x},${top + height} L ${x + lineLength},${
-            top + height + Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg)) * lineLength
+            top +
+            height +
+            Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg)) * lineLength
           }`
         )
       } else {
@@ -144,7 +153,8 @@ export default {
         let totalTop =
           node.top +
           node.height +
-          (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0) + marginY
+          (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0) +
+          marginY
 
         node.children.forEach(item => {
           item.left = startLeft
@@ -153,7 +163,8 @@ export default {
             (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
           totalTop +=
             item.height +
-            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) + marginY
+            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) +
+            marginY
         })
       }
       if (layerIndex > 1 && node.children) {
@@ -161,13 +172,15 @@ export default {
         let startLeft = node.left + node.width * ctx.childIndent
         let totalTop =
           node.top -
-          (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0) - marginY
+          (ctx.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0) -
+          marginY
         node.children.forEach(item => {
           item.left = startLeft
           item.top = totalTop - item.height
           totalTop -=
             item.height +
-            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) + marginY
+            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) +
+            marginY
         })
       }
     },
@@ -180,7 +193,8 @@ export default {
           return (
             h +
             item.height +
-            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) + marginY
+            (ctx.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0) +
+            marginY
           )
         }, 0)
         ctx.updateBrothersTop(node, -totalHeight)
@@ -197,18 +211,21 @@ export default {
           // 调整top
           let hasChildren = ctx.getNodeActChildrenLength(item) > 0
           let nodeTotalHeight = ctx.getNodeAreaHeight(item)
-          let offset =
-            hasChildren
-              ? nodeTotalHeight -
-                item.height -
-                (hasChildren ? item.expandBtnSize : 0)
-              : 0
-          offset -= (hasChildren ?  marginY : 0)
+          let offset = hasChildren
+            ? nodeTotalHeight -
+              item.height -
+              (hasChildren ? item.expandBtnSize : 0)
+            : 0
+          offset -= hasChildren ? marginY : 0
           let _top = totalHeight + offset
           let _left = item.left
           item.top += _top
           // 调整left
-          item.left = node.left + node.width * ctx.indent + (nodeTotalHeight + totalHeight2) / Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg))
+          item.left =
+            node.left +
+            node.width * ctx.indent +
+            (nodeTotalHeight + totalHeight2) /
+              Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg))
           totalHeight += offset
           totalHeight2 += nodeTotalHeight
           // 同步更新后代节点

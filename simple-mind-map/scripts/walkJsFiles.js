@@ -17,7 +17,7 @@ const transform = dir => {
 }
 
 const transformFile = file => {
-  console.log(file);
+  console.log(file)
   let content = fs.readFileSync(file, 'utf-8')
   countCodeLines(content)
   // transformComments(file, content)
@@ -25,7 +25,7 @@ const transformFile = file => {
 
 // 统计代码行数
 let totalLines = 0
-const countCodeLines = (content) => {
+const countCodeLines = content => {
   totalLines += content.split(/\n/).length
 }
 
@@ -43,4 +43,4 @@ const transformComments = (file, content) => {
 
 transform(entryPath)
 transformFile(path.join(__dirname, '../index.js'))
-console.log(totalLines);
+console.log(totalLines)
