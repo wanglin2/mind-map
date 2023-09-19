@@ -13,6 +13,7 @@
     }
   ],
   "types": "./types/index.d.ts",
+  "typings": "./types/index.d.ts",
   "license": "MIT",
   "repository": {
     "type": "git",
