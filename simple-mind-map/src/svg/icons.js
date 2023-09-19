@@ -1,3 +1,5 @@
+import { mergerIconListBy } from '../utils'
+
 // 超链接图标
 const hyperlink =
   '<svg t="1624174958075" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7982" ><path d="M435.484444 251.733333v68.892445L295.822222 320.682667a168.504889 168.504889 0 0 0-2.844444 336.952889h142.506666v68.892444H295.822222a237.397333 237.397333 0 0 1 0-474.794667h139.662222z m248.945778 0a237.397333 237.397333 0 0 1 0 474.851556H544.654222v-69.006222l139.776 0.056889a168.504889 168.504889 0 0 0 2.844445-336.952889H544.597333V251.676444h139.776z m-25.827555 203.946667a34.474667 34.474667 0 0 1 0 68.892444H321.649778a34.474667 34.474667 0 0 1 0-68.892444h336.952889z" p-id="7983"></path></svg>'
@@ -281,12 +283,23 @@ export const nodeIconList = [
 //  获取nodeIconList icon内容
 const getNodeIconListIcon = (name, extendIconList = []) => {
   let arr = name.split('_')
-  let typeData = [...nodeIconList, ...extendIconList].find(item => {
+  const iconList = mergerIconListBy(
+    [...nodeIconList, ...extendIconList],
+    'type',
+    'name'
+  )
+
+  let typeData = iconList.find(item => {
     return item.type === arr[0]
   })
-  return typeData.list.find(item => {
-    return item.name === arr[1]
-  }).icon
+
+  if (typeData) {
+    return typeData.list.find(item => {
+      return item.name === arr[1]
+    }).icon
+  } else {
+    return ''
+  }
 }
 
 export default {
