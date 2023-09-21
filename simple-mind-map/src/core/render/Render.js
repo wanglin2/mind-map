@@ -510,6 +510,7 @@ class Render {
       defaultInsertBelowSecondLevelNodeText
     } = this.mindMap.opt
     let list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
+    let handleMultiNodes = list.length > 1
     list.forEach(node => {
       if (node.isGeneralization) {
         return
@@ -522,12 +523,13 @@ class Render {
         : defaultInsertBelowSecondLevelNodeText
       let isRichText = !!this.mindMap.richText
       node.nodeData.children.push({
-        inserting: openEdit,
+        inserting: handleMultiNodes ? false : openEdit,// 如果同时对多个节点插入子节点，那么无需进入编辑模式
         data: {
           text: text,
           expand: true,
           richText: isRichText,
           resetRichText: isRichText,
+          isActive: handleMultiNodes || !openEdit,// 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
           ...(appointData || {})
         },
         children: [...appointChildren]
@@ -538,6 +540,10 @@ class Render {
         node.destroy()
       }
     })
+    // 如果同时对多个节点插入子节点，需要清除原来激活的节点
+    if (handleMultiNodes || !openEdit) {
+      this.clearActive()
+    }
     this.mindMap.render()
   }
 
