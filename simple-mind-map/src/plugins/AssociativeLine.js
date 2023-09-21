@@ -257,28 +257,25 @@ class AssociativeLine {
   }) {
     let { associativeLineActiveColor } = this.mindMap.themeConfig
     // 如果当前存在激活节点，那么取消激活节点
-    if (this.mindMap.renderer.activeNodeList.length > 0) {
-      this.clearActiveNodes()
-    } else {
-      // 否则清除当前的关联线的激活状态，如果有的话
-      this.clearActiveLine()
-      // 保存当前激活的关联线信息
-      this.activeLine = [path, clickPath, text, node, toNode]
-      // 让不可见的点击线显示
-      clickPath.stroke({ color: associativeLineActiveColor })
-      // 如果没有输入过关联线文字，那么显示默认文字
-      if (!this.getText(node, toNode)) {
-        this.renderText(this.mindMap.opt.defaultAssociativeLineText, path, text)
-      }
-      // 渲染控制点和连线
-      this.renderControls(
-        startPoint,
-        endPoint,
-        controlPoints[0],
-        controlPoints[1]
-      )
-      this.mindMap.emit('associative_line_click', path, clickPath, node, toNode)
+    this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
+    // 否则清除当前的关联线的激活状态，如果有的话
+    this.clearActiveLine()
+    // 保存当前激活的关联线信息
+    this.activeLine = [path, clickPath, text, node, toNode]
+    // 让不可见的点击线显示
+    clickPath.stroke({ color: associativeLineActiveColor })
+    // 如果没有输入过关联线文字，那么显示默认文字
+    if (!this.getText(node, toNode)) {
+      this.renderText(this.mindMap.opt.defaultAssociativeLineText, path, text)
     }
+    // 渲染控制点和连线
+    this.renderControls(
+      startPoint,
+      endPoint,
+      controlPoints[0],
+      controlPoints[1]
+    )
+    this.mindMap.emit('associative_line_click', path, clickPath, node, toNode)
   }
 
   // 移除所有连接线
@@ -486,13 +483,6 @@ class AssociativeLine {
       // 文本
       associativeLineText: newAssociativeLineText
     })
-  }
-
-  // 清除当前激活的节点
-  clearActiveNodes() {
-    if (this.mindMap.renderer.activeNodeList.length > 0) {
-      this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
-    }
   }
 
   // 清除激活的线
