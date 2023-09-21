@@ -1,5 +1,9 @@
 import { Text } from '@svgdotjs/svg.js'
-import { getStrWithBrFromHtml } from '../../utils/index'
+import {
+  getStrWithBrFromHtml,
+  focusInput,
+  selectAllInput
+} from '../../utils/index'
 
 // 创建文字节点
 function createText(data) {
@@ -36,7 +40,7 @@ function showEditTextBox(g) {
   this.mindMap.keyCommand.addShortcut('Enter', () => {
     this.hideEditTextBox()
   })
-
+  // 输入框元素没有创建过，则先创建
   if (!this.textEditNode) {
     this.textEditNode = document.createElement('div')
     this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);padding: 3px 5px;margin-left: -5px;margin-top: -3px;outline: none; word-break: break-all;`
@@ -55,20 +59,27 @@ function showEditTextBox(g) {
     associativeLineTextFontFamily,
     associativeLineTextLineHeight
   } = this.mindMap.themeConfig
+  let { defaultAssociativeLineText, nodeTextEditZIndex } = this.mindMap.opt
   let scale = this.mindMap.view.scale
   let [, , , node, toNode] = this.activeLine
-  let textLines = (
-    this.getText(node, toNode) || this.mindMap.opt.defaultAssociativeLineText
-  ).split(/\n/gim)
+  let text = this.getText(node, toNode)
+  let textLines = (text || defaultAssociativeLineText).split(/\n/gim)
   this.textEditNode.style.fontFamily = associativeLineTextFontFamily
   this.textEditNode.style.fontSize = associativeLineTextFontSize * scale + 'px'
   this.textEditNode.style.lineHeight =
     textLines.length > 1 ? associativeLineTextLineHeight : 'normal'
-  this.textEditNode.style.zIndex = this.mindMap.opt.nodeTextEditZIndex
+  this.textEditNode.style.zIndex = nodeTextEditZIndex
   this.textEditNode.innerHTML = textLines.join('<br>')
   this.textEditNode.style.display = 'block'
   this.updateTextEditBoxPos(g)
   this.showTextEdit = true
+  // 如果是默认文本要全选输入框
+  if (text === '' || text === defaultAssociativeLineText) {
+    selectAllInput(this.textEditNode)
+  } else {
+    // 否则聚焦即可
+    focusInput(this.textEditNode)
+  }
 }
 
 // 处理画布缩放
@@ -94,6 +105,9 @@ function hideEditTextBox() {
   }
   let [path, , text, node, toNode] = this.activeLine
   let str = getStrWithBrFromHtml(this.textEditNode.innerHTML)
+  // 如果是默认文本，那么不保存
+  let isDefaultText = str === this.mindMap.opt.defaultAssociativeLineText
+  str = isDefaultText ? '' : str
   this.mindMap.execCommand('SET_NODE_DATA', node, {
     associativeLineText: {
       ...(node.nodeData.data.associativeLineText || {}),

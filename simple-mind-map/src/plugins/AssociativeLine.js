@@ -234,6 +234,11 @@ class AssociativeLine {
         controlPoints
       })
     })
+    // 双击进入关联线文本编辑状态
+    clickPath.dblclick(() => {
+      if (!this.activeLine) return
+      this.showEditTextBox(text)
+    })
     // 渲染关联线文字
     this.renderText(this.getText(node, toNode), path, text)
     this.lineList.push([path, clickPath, text, node, toNode])
