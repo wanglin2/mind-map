@@ -741,81 +741,65 @@ class Render {
 
   //  将节点移动到另一个节点的前面
   insertBefore(node, exist) {
-    if (node.isRoot) {
-      return
-    }
-    // 如果是二级节点变成了下级节点，或是下级节点变成了二级节点，节点样式需要更新
-    let nodeLayerChanged =
-      (node.layerIndex === 1 && exist.layerIndex !== 1) ||
-      (node.layerIndex !== 1 && exist.layerIndex === 1)
-    // 移动节点
-    let nodeParent = node.parent
-    let nodeBorthers = nodeParent.children
-    let nodeIndex = nodeBorthers.findIndex(item => {
-      return item.uid === node.uid
-    })
-    if (nodeIndex === -1) {
-      return
-    }
-    nodeBorthers.splice(nodeIndex, 1)
-    nodeParent.nodeData.children.splice(nodeIndex, 1)
-
-    // 目标节点
-    let existParent = exist.parent
-    let existBorthers = existParent.children
-    let existIndex = existBorthers.findIndex(item => {
-      return item.uid === exist.uid
-    })
-    if (existIndex === -1) {
-      return
-    }
-    existBorthers.splice(existIndex, 0, node)
-    existParent.nodeData.children.splice(existIndex, 0, node.nodeData)
-    this.mindMap.render(() => {
-      if (nodeLayerChanged) {
-        node.reRender()
-      }
-    })
+    this.insertTo(node, exist, 'before')
   }
 
   //  将节点移动到另一个节点的后面
   insertAfter(node, exist) {
-    if (node.isRoot) {
-      return
-    }
-    // 如果是二级节点变成了下级节点，或是下级节点变成了二级节点，节点样式需要更新
-    let nodeLayerChanged =
-      (node.layerIndex === 1 && exist.layerIndex !== 1) ||
-      (node.layerIndex !== 1 && exist.layerIndex === 1)
-    // 移动节点
-    let nodeParent = node.parent
-    let nodeBorthers = nodeParent.children
-    let nodeIndex = nodeBorthers.findIndex(item => {
-      return item.uid === node.uid
-    })
-    if (nodeIndex === -1) {
-      return
-    }
-    nodeBorthers.splice(nodeIndex, 1)
-    nodeParent.nodeData.children.splice(nodeIndex, 1)
+    this.insertTo(node, exist, 'after')
+  }
 
-    // 目标节点
-    let existParent = exist.parent
-    let existBorthers = existParent.children
-    let existIndex = existBorthers.findIndex(item => {
-      return item.uid === exist.uid
+  // 将节点移动到另一个节点的前面或后面
+  insertTo(node, exist, dir = 'before') {
+    let nodeList = this.formatAppointNodes(node)
+    nodeList = nodeList.filter(item => {
+      return !item.isRoot
     })
-    if (existIndex === -1) {
-      return
+    if (dir === 'after') {
+      nodeList.reverse()
     }
-    existIndex++
-    existBorthers.splice(existIndex, 0, node)
-    existParent.nodeData.children.splice(existIndex, 0, node.nodeData)
-    this.mindMap.render(() => {
-      if (nodeLayerChanged) {
-        node.reRender()
+    nodeList.forEach(item => {
+      this.checkNodeLayerChange(item, exist)
+      // 移动节点
+      let nodeParent = item.parent
+      let nodeBorthers = nodeParent.children
+      let nodeIndex = nodeBorthers.findIndex(item2 => {
+        return item.uid === item2.uid
+      })
+      if (nodeIndex === -1) {
+        return
       }
+      nodeBorthers.splice(nodeIndex, 1)
+      nodeParent.nodeData.children.splice(nodeIndex, 1)
+
+      // 目标节点
+      let existParent = exist.parent
+      let existBorthers = existParent.children
+      let existIndex = existBorthers.findIndex(item2 => {
+        return item2.uid === exist.uid
+      })
+      if (existIndex === -1) {
+        return
+      }
+      if (dir === 'after') {
+        existIndex++
+      }
+      existBorthers.splice(existIndex, 0, item)
+      existParent.nodeData.children.splice(existIndex, 0, item.nodeData)
     })
+    this.mindMap.render()
+  }
+
+  // 如果是富文本模式，那么某些层级变化需要更新样式
+  checkNodeLayerChange(node, toNode) {
+    if (this.mindMap.richText) {
+      let nodeLayerChanged =
+        (node.layerIndex === 1 && toNode.layerIndex !== 1) ||
+        (node.layerIndex !== 1 && toNode.layerIndex === 1)
+      if (nodeLayerChanged) {
+        node.nodeData.data.resetRichText = true
+      }
+    }
   }
 
   //  移除节点
@@ -927,14 +911,17 @@ class Render {
 
   //  移动一个节点作为另一个节点的子节点
   moveNodeTo(node, toNode) {
-    if (node.isRoot) {
-      return
-    }
-    // let copyData = copyNodeTree({}, node, false, true)
-    this.removeActiveNode(node)
-    this.removeOneNode(node)
+    let nodeList = this.formatAppointNodes(node)
+    nodeList = nodeList.filter(item => {
+      return !item.isRoot
+    })
+    nodeList.forEach(item => {
+      this.checkNodeLayerChange(item, toNode)
+      this.removeActiveNode(item)
+      this.removeOneNode(item)
+      toNode.nodeData.children.push(item.nodeData)
+    })
     this.mindMap.emit('node_active', null, [...this.activeNodeList])
-    toNode.nodeData.children.push(node.nodeData)
     this.mindMap.render()
     if (toNode.isRoot) {
       toNode.destroy()
