@@ -365,7 +365,7 @@ export const cssContent = `
     stroke-width: 1;
   }
 
-  .smm-node:hover .smm-hover-node{
+  .smm-node:not(.smm-node-dragging):hover .smm-hover-node{
     display: block;
   }
 

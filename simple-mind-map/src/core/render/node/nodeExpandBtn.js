@@ -136,6 +136,7 @@ function renderExpandBtn() {
     this._expandBtn.on('dblclick', e => {
       e.stopPropagation()
     })
+    this._expandBtn.addClass('smm-expand-btn')
     this.group.add(this._expandBtn)
   }
   this._showExpandBtn = true

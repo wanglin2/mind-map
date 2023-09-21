@@ -1,4 +1,4 @@
-import { bfsWalk, throttle } from '../utils'
+import { bfsWalk, throttle, getTopAncestorsFomNodeList } from '../utils'
 import Base from '../layouts/Base'
 
 // 节点拖动插件
@@ -13,10 +13,14 @@ class Drag extends Base {
 
   //  复位
   reset() {
+    // 是否正在跳转中
+    this.isDragging = false
+    // 鼠标按下的节点
+    this.mousedownNode = null
+    // 被拖拽中的节点列表
+    this.beingDragNodeList = []
     // 当前画布节点列表
     this.nodeList = []
-    // 当前拖拽节点
-    this.node = null
     // 当前重叠节点
     this.overlapNode = null
     // 当前上一个同级节点
@@ -27,16 +31,11 @@ class Drag extends Base {
     this.drawTransform = null
     // 克隆节点
     this.clone = null
-    // 连接线
-    this.line = null
     // 同级位置占位符
     this.placeholder = null
     // 鼠标按下位置和节点左上角的偏移量
     this.offsetX = 0
     this.offsetY = 0
-    // 克隆节点左上角的坐标
-    this.cloneNodeLeft = 0
-    this.cloneNodeTop = 0
     // 当前鼠标是否按下
     this.isMousedown = false
     // 拖拽的鼠标位置变量
@@ -53,45 +52,42 @@ class Drag extends Base {
   bindEvent() {
     this.checkOverlapNode = throttle(this.checkOverlapNode, 300, this)
     this.mindMap.on('node_mousedown', (node, e) => {
-      if (this.mindMap.opt.readonly || node.isGeneralization) {
-        return
-      }
-      if (e.which !== 1 || node.isRoot) {
-        return
-      }
-      e.preventDefault()
-      // 计算鼠标按下的位置距离节点左上角的距离
-      this.drawTransform = this.mindMap.draw.transform()
-      let { scaleX, scaleY, translateX, translateY } = this.drawTransform
-      let { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
-      this.offsetX = x - (node.left * scaleX + translateX)
-      this.offsetY = y - (node.top * scaleY + translateY)
-      this.node = node
-      this.isMousedown = true
-      this.mouseDownX = x
-      this.mouseDownY = y
-      this.nodeTreeToList()
-    })
-    this.mindMap.on('mousemove', e => {
-      if (this.mindMap.opt.readonly) {
-        return
-      }
-      if (!this.isMousedown) {
-        return
-      }
-      this.mindMap.emit('node_dragging', this.node)
-      e.preventDefault()
-      let { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
-      this.mouseMoveX = x
-      this.mouseMoveY = y
+      // 只读模式、不是鼠标左键按下、按下的是概要节点或根节点直接返回
       if (
-        Math.abs(x - this.mouseDownX) <= this.checkDragOffset &&
-        Math.abs(y - this.mouseDownY) <= this.checkDragOffset &&
-        !this.node.isDrag
+        this.mindMap.opt.readonly ||
+        e.which !== 1 ||
+        node.isGeneralization ||
+        node.isRoot
       ) {
         return
       }
-      this.mindMap.renderer.clearAllActive()
+      e.preventDefault()
+      this.isMousedown = true
+      // 记录鼠标按下时的节点
+      this.mousedownNode = node
+      // 记录鼠标按下的坐标
+      const { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
+      this.mouseDownX = x
+      this.mouseDownY = y
+    })
+    this.mindMap.on('mousemove', e => {
+      if (this.mindMap.opt.readonly || !this.isMousedown) {
+        return
+      }
+      e.preventDefault()
+      const { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
+      this.mouseMoveX = x
+      this.mouseMoveY = y
+      // 还没开始移动时鼠标位移过小不认为是拖拽
+      if (
+        !this.isDragging &&
+        Math.abs(x - this.mouseDownX) <= this.checkDragOffset &&
+        Math.abs(y - this.mouseDownY) <= this.checkDragOffset
+      ) {
+        return
+      }
+      this.mindMap.emit('node_dragging')
+      this.handleStartMove()
       this.onMove(x, y, e)
     })
     this.onMouseup = this.onMouseup.bind(this)
@@ -105,9 +101,12 @@ class Drag extends Base {
       return
     }
     this.isMousedown = false
-    let _nodeIsDrag = this.node.isDrag
-    this.node.isDrag = false
-    this.node.show()
+    // 恢复被拖拽节点的临时设置
+    this.beingDragNodeList.forEach(node => {
+      node.setOpacity(1)
+      node.showChildren()
+      node.endDrag()
+    })
     this.removeCloneNode()
     let overlapNodeUid = this.overlapNode
       ? this.overlapNode.nodeData.data.uid
@@ -117,17 +116,33 @@ class Drag extends Base {
     // 存在重叠子节点，则移动作为其子节点
     if (this.overlapNode) {
       this.mindMap.renderer.setNodeActive(this.overlapNode, false)
-      this.mindMap.execCommand('MOVE_NODE_TO', this.node, this.overlapNode)
+      this.mindMap.execCommand(
+        'MOVE_NODE_TO',
+        this.beingDragNodeList,
+        this.overlapNode
+      )
     } else if (this.prevNode) {
       // 存在前一个相邻节点，作为其下一个兄弟节点
       this.mindMap.renderer.setNodeActive(this.prevNode, false)
-      this.mindMap.execCommand('INSERT_AFTER', this.node, this.prevNode)
+      this.mindMap.execCommand(
+        'INSERT_AFTER',
+        this.beingDragNodeList,
+        this.prevNode
+      )
     } else if (this.nextNode) {
       // 存在下一个相邻节点，作为其前一个兄弟节点
       this.mindMap.renderer.setNodeActive(this.nextNode, false)
-      this.mindMap.execCommand('INSERT_BEFORE', this.node, this.nextNode)
-    } else if (_nodeIsDrag && this.mindMap.opt.enableFreeDrag) {
-      // 自定义位置
+      this.mindMap.execCommand(
+        'INSERT_BEFORE',
+        this.beingDragNodeList,
+        this.nextNode
+      )
+    } else if (
+      this.clone &&
+      this.mindMap.opt.enableFreeDrag &&
+      this.beingDragNodeList.length === 1
+    ) {
+      // 如果只拖拽了一个节点，那么设置自定义位置
       let { x, y } = this.mindMap.toPos(
         e.clientX - this.offsetX,
         e.clientY - this.offsetY
@@ -135,11 +150,16 @@ class Drag extends Base {
       let { scaleX, scaleY, translateX, translateY } = this.drawTransform
       x = (x - translateX) / scaleX
       y = (y - translateY) / scaleY
-      this.node.left = x
-      this.node.top = y
-      this.node.customLeft = x
-      this.node.customTop = y
-      this.mindMap.execCommand('SET_NODE_CUSTOM_POSITION', this.node, x, y)
+      this.mousedownNode.left = x
+      this.mousedownNode.top = y
+      this.mousedownNode.customLeft = x
+      this.mousedownNode.customTop = y
+      this.mindMap.execCommand(
+        'SET_NODE_CUSTOM_POSITION',
+        this.mousedownNode,
+        x,
+        y
+      )
       this.mindMap.render()
     }
     this.reset()
@@ -150,24 +170,131 @@ class Drag extends Base {
     })
   }
 
+  //  拖动中
+  onMove(x, y, e) {
+    if (!this.isMousedown) {
+      return
+    }
+    // 更新克隆节点的位置
+    let { scaleX, scaleY, translateX, translateY } = this.drawTransform
+    let cloneNodeLeft = x - this.offsetX
+    let cloneNodeTop = y - this.offsetY
+    x = (cloneNodeLeft - translateX) / scaleX
+    y = (cloneNodeTop - translateY) / scaleY
+    let t = this.clone.transform()
+    this.clone.translate(x - t.translateX, y - t.translateY)
+    // 检测新位置
+    this.checkOverlapNode()
+    // 如果注册了多选节点插件，那么复用它的边缘自动移动画布功能
+    if (this.mindMap.opt.autoMoveWhenMouseInEdgeOnDrag && this.mindMap.select) {
+      this.drawTransform = this.mindMap.draw.transform()
+      this.mindMap.select.clearAutoMoveTimer()
+      this.mindMap.select.onMove(e.clientX, e.clientY)
+    }
+  }
+
+  // 开始拖拽时初始化一些数据
+  handleStartMove() {
+    if (!this.isDragging) {
+      this.isDragging = true
+      // 鼠标按下的节点
+      let node = this.mousedownNode
+      // 计算鼠标按下的位置距离节点左上角的距离
+      this.drawTransform = this.mindMap.draw.transform()
+      let { scaleX, scaleY, translateX, translateY } = this.drawTransform
+      this.offsetX = this.mouseDownX - (node.left * scaleX + translateX)
+      this.offsetY = this.mouseDownY - (node.top * scaleY + translateY)
+      // 如果鼠标按下的节点是激活节点，那么保存当前所有激活的节点
+      if (node.nodeData.data.isActive) {
+        // 找出这些激活节点中的最顶层节点
+        this.beingDragNodeList = getTopAncestorsFomNodeList(
+          // 过滤掉根节点和概要节点
+          this.mindMap.renderer.activeNodeList.filter(item => {
+            return !item.isRoot && !item.isGeneralization
+          })
+        )
+      } else {
+        // 否则只拖拽按下的节点
+        this.beingDragNodeList = [node]
+      }
+      // 将节点树转为节点数组
+      this.nodeTreeToList()
+      // 创建克隆节点
+      this.createCloneNode()
+      // 清除当前所有激活的节点
+      this.mindMap.renderer.clearAllActive()
+    }
+  }
+
+  // 节点由树转换成数组，从子节点到根节点
+  nodeTreeToList() {
+    const list = []
+    bfsWalk(this.mindMap.renderer.root, node => {
+      // 过滤掉当前被拖拽的节点
+      if (this.checkIsInBeingDragNodeList(node)) {
+        return
+      }
+      if (!list[node.layerIndex]) {
+        list[node.layerIndex] = []
+      }
+      list[node.layerIndex].push(node)
+    })
+    this.nodeList = list.reduceRight((res, cur) => {
+      return [...res, ...cur]
+    }, [])
+  }
+
   //  创建克隆节点
   createCloneNode() {
     if (!this.clone) {
-      // 节点
-      this.clone = this.node.group.clone()
-      this.clone.opacity(0.5)
+      const {
+        dragMultiNodeRectConfig,
+        dragPlaceholderRectFill,
+        dragOpacityConfig
+      } = this.mindMap.opt
+      const {
+        width: rectWidth,
+        height: rectHeight,
+        fill: rectFill
+      } = dragMultiNodeRectConfig
+      const node = this.beingDragNodeList[0]
+      const lineColor = node.style.merge('lineColor', true)
+      // 如果当前被拖拽的节点数量大于1，那么创建一个矩形示意
+      if (this.beingDragNodeList.length > 1) {
+        this.clone = this.draw
+          .rect()
+          .size(rectWidth, rectHeight)
+          .radius(rectHeight / 2)
+          .fill({
+            color: rectFill || lineColor
+          })
+        this.offsetX = rectWidth / 2
+        this.offsetY = rectHeight / 2
+      } else {
+        // 否则克隆当前的节点
+        this.clone = node.group.clone()
+        // 删除展开收起按钮元素
+        const expandEl = this.clone.findOne('.smm-expand-btn')
+        if (expandEl) {
+          expandEl.remove()
+        }
+        this.mindMap.draw.add(this.clone)
+      }
+      this.clone.opacity(dragOpacityConfig.cloneNodeOpacity)
       this.clone.css('z-index', 99999)
-      this.node.isDrag = true
-      this.node.hide()
-      // 连接线
-      this.line = this.draw.path()
-      this.line.opacity(0.5)
-      this.node.styleLine(this.line, this.node)
-      // 同级位置占位符
+      // 同级位置提示元素
       this.placeholder = this.draw.rect().fill({
-        color: this.node.style.merge('lineColor', true)
+        color: dragPlaceholderRectFill || lineColor
       })
-      this.mindMap.draw.add(this.clone)
+      // 当前被拖拽的节点的临时设置
+      this.beingDragNodeList.forEach(node => {
+        // 降低透明度
+        node.setOpacity(dragOpacityConfig.beingDragNodeOpacity)
+        // 隐藏连线及下级节点
+        node.hideChildren()
+        // 设置拖拽状态
+        node.startDrag()
+      })
     }
   }
 
@@ -177,40 +304,7 @@ class Drag extends Base {
       return
     }
     this.clone.remove()
-    this.line.remove()
     this.placeholder.remove()
-  }
-
-  //  拖动中
-  onMove(x, y, e) {
-    if (!this.isMousedown) {
-      return
-    }
-    this.createCloneNode()
-    let { scaleX, scaleY, translateX, translateY } = this.drawTransform
-    this.cloneNodeLeft = x - this.offsetX
-    this.cloneNodeTop = y - this.offsetY
-    x = (this.cloneNodeLeft - translateX) / scaleX
-    y = (this.cloneNodeTop - translateY) / scaleY
-    let t = this.clone.transform()
-    this.clone.translate(x - t.translateX, y - t.translateY)
-    // 连接线
-    let parent = this.node.parent
-    this.line.plot(
-      this.quadraticCurvePath(
-        parent.left + parent.width / 2,
-        parent.top + parent.height / 2,
-        x + this.node.width / 2,
-        y + this.node.height / 2
-      )
-    )
-    this.checkOverlapNode()
-    // 如果注册了多选节点插件，那么复用它的边缘自动移动画布功能
-    if (this.mindMap.opt.autoMoveWhenMouseInEdgeOnDrag && this.mindMap.select) {
-      this.drawTransform = this.mindMap.draw.transform()
-      this.mindMap.select.clearAutoMoveTimer()
-      this.mindMap.select.onMove(e.clientX, e.clientY)
-    }
   }
 
   //  检测重叠节点
@@ -225,9 +319,6 @@ class Drag extends Base {
     this.nodeList.forEach(node => {
       if (node.nodeData.data.isActive) {
         this.mindMap.renderer.setNodeActive(node, false)
-      }
-      if (node.uid === this.node.uid || this.node.isParent(node)) {
-        return
       }
       if (this.overlapNode || (this.prevNode && this.nextNode)) {
         return
@@ -484,7 +575,7 @@ class Drag extends Base {
           if (node.layerIndex === 1) {
             sameDir = item.dir === node.dir
           }
-          return item !== this.node && sameDir
+          return sameDir && !this.checkIsInBeingDragNodeList(item)
         })
       : []
     this.handleVerticalCheck(node, checkList)
@@ -535,7 +626,7 @@ class Drag extends Base {
   handleFishbone(node) {
     let checkList = node.parent
       ? node.parent.children.filter(item => {
-          return item !== this.node && item.layerIndex > 1
+          return item.layerIndex > 1 && !this.checkIsInBeingDragNodeList(item)
         })
       : []
     if (node.layerIndex === 1) {
@@ -553,8 +644,8 @@ class Drag extends Base {
   // 获取节点的兄弟节点列表通用方法
   commonGetNodeCheckList(node) {
     return node.parent
-      ? node.parent.children.filter(item => {
-          return item !== this.node
+      ? [...node.parent.children].filter(item => {
+          return !this.checkIsInBeingDragNodeList(item)
         })
       : []
   }
@@ -585,18 +676,11 @@ class Drag extends Base {
     }
   }
 
-  // 节点由树转换成数组，从子节点到根节点
-  nodeTreeToList() {
-    const list = []
-    bfsWalk(this.mindMap.renderer.root, node => {
-      if (!list[node.layerIndex]) {
-        list[node.layerIndex] = []
-      }
-      list[node.layerIndex].push(node)
+  // 检查某个节点是否在被拖拽节点内
+  checkIsInBeingDragNodeList(node) {
+    return !!this.beingDragNodeList.find(item => {
+      return item.uid === node.uid || item.isParent(node)
     })
-    this.nodeList = list.reduceRight((res, cur) => {
-      return [...res, ...cur]
-    }, [])
   }
 }
 
