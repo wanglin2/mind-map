@@ -669,3 +669,32 @@ export const checkIsNodeStyleDataKey = key => {
   }
   return false
 }
+
+// 从节点实例列表里找出顶层的节点
+export const getTopAncestorsFomNodeList = list => {
+  let res = []
+  list.forEach(node => {
+    if (
+      !list.find(item => {
+        return item.uid !== node.uid && item.isParent(node)
+      })
+    ) {
+      res.push(node)
+    }
+  })
+  return res
+}
+
+// 判断两个矩形是否重叠
+export const checkTwoRectIsOverlap = (
+  minx1,
+  maxx1,
+  miny1,
+  maxy1,
+  minx2,
+  maxx2,
+  miny2,
+  maxy2
+) => {
+  return maxx1 > minx2 && maxx2 > minx1 && maxy1 > miny2 && maxy2 > miny1
+}
