@@ -462,35 +462,48 @@ class Render {
       defaultInsertBelowSecondLevelNodeText
     } = this.mindMap.opt
     let list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
-    let first = list[0]
-    if (first.isGeneralization) {
-      return
-    }
-    if (first.isRoot) {
-      this.insertChildNode(openEdit, appointNodes, appointData)
-    } else {
-      let text =
-        first.layerIndex === 1
-          ? defaultInsertSecondLevelNodeText
-          : defaultInsertBelowSecondLevelNodeText
-      if (first.layerIndex === 1) {
-        first.parent.destroy()
+    let handleMultiNodes = list.length > 1
+    let needDestroyNodeList = {}
+    list.forEach(node => {
+      if (node.isGeneralization || node.isRoot) {
+        return
       }
-      let index = this.getNodeIndex(first)
+      const parent = node.parent
+      const isOneLayer = node.layerIndex === 1
+      // 插入二级节点时根节点需要重新渲染
+      if (isOneLayer && !needDestroyNodeList[parent.uid]) {
+        needDestroyNodeList[parent.uid] = parent
+      }
+      // 新插入节点的默认文本
+      let text = isOneLayer
+        ? defaultInsertSecondLevelNodeText
+        : defaultInsertBelowSecondLevelNodeText
+      // 计算插入位置
+      let index = parent.nodeData.children.findIndex(item => {
+        return item.data.uid === node.uid
+      })
       let isRichText = !!this.mindMap.richText
-      first.parent.nodeData.children.splice(index + 1, 0, {
-        inserting: openEdit,
+      parent.nodeData.children.splice(index + 1, 0, {
+        inserting: handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式,
         data: {
           text: text,
           expand: true,
           richText: isRichText,
           resetRichText: isRichText,
+          isActive: handleMultiNodes || !openEdit, // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
           ...(appointData || {})
         },
         children: [...appointChildren]
       })
-      this.mindMap.render()
+    })
+    Object.keys(needDestroyNodeList).forEach(key => {
+      needDestroyNodeList[key].destroy()
+    })
+    // 如果同时对多个节点插入子节点，需要清除原来激活的节点
+    if (handleMultiNodes || !openEdit) {
+      this.clearActive()
     }
+    this.mindMap.render()
   }
 
   //  插入子节点
@@ -523,13 +536,13 @@ class Render {
         : defaultInsertBelowSecondLevelNodeText
       let isRichText = !!this.mindMap.richText
       node.nodeData.children.push({
-        inserting: handleMultiNodes ? false : openEdit,// 如果同时对多个节点插入子节点，那么无需进入编辑模式
+        inserting: handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式
         data: {
           text: text,
           expand: true,
           richText: isRichText,
           resetRichText: isRichText,
-          isActive: handleMultiNodes || !openEdit,// 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
+          isActive: handleMultiNodes || !openEdit, // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
           ...(appointData || {})
         },
         children: [...appointChildren]
