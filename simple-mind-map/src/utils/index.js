@@ -698,3 +698,22 @@ export const checkTwoRectIsOverlap = (
 ) => {
   return maxx1 > minx2 && maxx2 > minx1 && maxy1 > miny2 && maxy2 > miny1
 }
+
+// 聚焦指定输入框
+export const focusInput = el => {
+  let selection = window.getSelection()
+  let range = document.createRange()
+  range.selectNodeContents(el)
+  range.collapse()
+  selection.removeAllRanges()
+  selection.addRange(range)
+}
+
+// 聚焦全选指定输入框
+export const selectAllInput = el => {
+  let selection = window.getSelection()
+  let range = document.createRange()
+  range.selectNodeContents(el)
+  selection.removeAllRanges()
+  selection.addRange(range)
+}
