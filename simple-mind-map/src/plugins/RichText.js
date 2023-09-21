@@ -237,7 +237,14 @@ class RichText {
     }
     if (!node.nodeData.data.richText) {
       // 还不是富文本的情况
-      let text = node.nodeData.data.text.split(/\n/gim).join('<br>')
+      let text = ''
+      if (
+        node.nodeData.data.text &&
+        typeof node.nodeData.data.text === 'string'
+      ) {
+        text = node.nodeData.data.text.split(/\n/gim).join('<br>')
+      }
+
       let html = `<p>${text}</p>`
       this.textEditNode.innerHTML = this.cacheEditingText || html
     } else {
