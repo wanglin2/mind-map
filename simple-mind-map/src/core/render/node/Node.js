@@ -14,7 +14,7 @@ class Node {
   constructor(opt = {}) {
     // 节点数据
     this.nodeData = this.handleData(opt.data || {})
-    // id
+    // uid
     this.uid = opt.uid
     // 控制实例
     this.mindMap = opt.mindMap

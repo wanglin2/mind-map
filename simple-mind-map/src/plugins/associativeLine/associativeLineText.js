@@ -111,7 +111,7 @@ function hideEditTextBox() {
   this.mindMap.execCommand('SET_NODE_DATA', node, {
     associativeLineText: {
       ...(node.nodeData.data.associativeLineText || {}),
-      [toNode.nodeData.data.id]: str
+      [toNode.nodeData.data.uid]: str
     }
   })
   this.textEditNode.style.display = 'none'
@@ -127,7 +127,7 @@ function getText(node, toNode) {
   if (!obj) {
     return ''
   }
-  return obj[toNode.nodeData.data.id] || ''
+  return obj[toNode.nodeData.data.uid] || ''
 }
 
 // 渲染关联线文字

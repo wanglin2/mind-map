@@ -149,8 +149,8 @@ class AssociativeLine {
         ) {
           nodeToIds.set(cur, data.associativeLineTargets)
         }
-        if (data.id) {
-          idToNode.set(data.id, cur)
+        if (data.uid) {
+          idToNode.set(data.uid, cur)
         }
       },
       () => {},
@@ -158,8 +158,8 @@ class AssociativeLine {
       0
     )
     nodeToIds.forEach((ids, node) => {
-      ids.forEach((id, index) => {
-        let toNode = idToNode.get(id)
+      ids.forEach((uid, index) => {
+        let toNode = idToNode.get(uid)
         if (!node || !toNode) return
         const associativeLinePoint = (node.nodeData.data.associativeLinePoint ||
           [])[index]
@@ -397,21 +397,21 @@ class AssociativeLine {
   addLine(fromNode, toNode) {
     if (!fromNode || !toNode) return
     // 目标节点如果没有id，则生成一个id
-    let id = toNode.nodeData.data.id
-    if (!id) {
-      id = uuid()
+    let uid = toNode.nodeData.data.uid
+    if (!uid) {
+      uid = uuid()
       this.mindMap.execCommand('SET_NODE_DATA', toNode, {
-        id
+        uid
       })
     }
     // 将目标节点id保存起来
     let list = fromNode.nodeData.data.associativeLineTargets || []
     // 连线节点是否存在相同的id,存在则阻止添加关联线
-    const sameLine = list.some(item => item === id)
+    const sameLine = list.some(item => item === uid)
     if (sameLine) {
       return
     }
-    list.push(id)
+    list.push(uid)
     // 保存控制点
     let [startPoint, endPoint] = computeNodePoints(fromNode, toNode)
     let controlPoints = computeCubicBezierPathPoints(
@@ -460,7 +460,7 @@ class AssociativeLine {
     let newAssociativeLineText = {}
     if (associativeLineText) {
       Object.keys(associativeLineText).forEach(item => {
-        if (item !== toNode.nodeData.data.id) {
+        if (item !== toNode.nodeData.data.uid) {
           newAssociativeLineText[item] = associativeLineText[item]
         }
       })
