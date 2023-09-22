@@ -1,7 +1,7 @@
 // 获取目标节点在起始节点的目标数组中的索引
 export const getAssociativeLineTargetIndex = (node, toNode) => {
   return node.nodeData.data.associativeLineTargets.findIndex(item => {
-    return item === toNode.nodeData.data.id
+    return item === toNode.nodeData.data.uid
   })
 }
 
