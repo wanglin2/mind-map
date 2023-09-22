@@ -201,5 +201,10 @@ export const defaultOpt = {
   dragOpacityConfig: {
     cloneNodeOpacity: 0.5, // 跟随鼠标移动的克隆节点或矩形的透明度
     beingDragNodeOpacity: 0.3 // 被拖拽节点的透明度
+  },
+  // 自定义标签的颜色
+  // {pass: 'green, unpass: 'red'}
+  tagsColorMap: {
+    pass: 'green'
   }
 }

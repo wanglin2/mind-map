@@ -258,7 +258,13 @@ function createTagNode() {
     let { width } = text.bbox()
     // 标签矩形
     let rect = new Rect().size(width + 16, 20)
-    this.style.tagRect(rect, index)
+    // 先从自定义的颜色中获取颜色，没有的话就按照内容生成
+
+    const tagsColorList = this.mindMap.opt.tagsColorMap || {}
+
+    const color = tagsColorList[text.node.textContent]
+
+    this.style.tagRect(rect, text, color)
     tag.add(rect).add(text)
     nodes.push({
       node: tag,
