@@ -5552,13 +5552,13 @@ var require_lib = __commonJS({
 });
 
 // ../simple-mind-map/node_modules/@babel/runtime/helpers/esm/typeof.js
-function _typeof(obj) {
+function _typeof(o3) {
   "@babel/helpers - typeof";
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj2) {
-    return typeof obj2;
-  } : function(obj2) {
-    return obj2 && "function" == typeof Symbol && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
-  }, _typeof(obj);
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(o4) {
+    return typeof o4;
+  } : function(o4) {
+    return o4 && "function" == typeof Symbol && o4.constructor === Symbol && o4 !== Symbol.prototype ? "symbol" : typeof o4;
+  }, _typeof(o3);
 }
 var init_typeof = __esm({
   "../simple-mind-map/node_modules/@babel/runtime/helpers/esm/typeof.js"() {
@@ -13530,7 +13530,8 @@ var require_purify = __commonJS({
         };
       }
       function addToSet(set, array2, transformCaseFunc) {
-        transformCaseFunc = transformCaseFunc ? transformCaseFunc : stringToLowerCase;
+        var _transformCaseFunc;
+        transformCaseFunc = (_transformCaseFunc = transformCaseFunc) !== null && _transformCaseFunc !== void 0 ? _transformCaseFunc : stringToLowerCase;
         if (setPrototypeOf) {
           setPrototypeOf(set, null);
         }
@@ -13554,7 +13555,7 @@ var require_purify = __commonJS({
         var newObject = create2(null);
         var property;
         for (property in object) {
-          if (apply3(hasOwnProperty2, object, [property])) {
+          if (apply3(hasOwnProperty2, object, [property]) === true) {
             newObject[property] = object[property];
           }
         }
@@ -13637,7 +13638,7 @@ var require_purify = __commonJS({
         var DOMPurify = function DOMPurify2(root2) {
           return createDOMPurify(root2);
         };
-        DOMPurify.version = "2.4.1";
+        DOMPurify.version = "2.4.7";
         DOMPurify.removed = [];
         if (!window2 || !window2.document || window2.document.nodeType !== 9) {
           DOMPurify.isSupported = false;
@@ -13667,7 +13668,7 @@ var require_purify = __commonJS({
         } catch (_3) {
         }
         var hooks2 = {};
-        DOMPurify.isSupported = typeof getParentNode === "function" && implementation && typeof implementation.createHTMLDocument !== "undefined" && documentMode !== 9;
+        DOMPurify.isSupported = typeof getParentNode === "function" && implementation && implementation.createHTMLDocument !== void 0 && documentMode !== 9;
         var MUSTACHE_EXPR$1 = MUSTACHE_EXPR, ERB_EXPR$1 = ERB_EXPR, TMPLIT_EXPR$1 = TMPLIT_EXPR, DATA_ATTR$1 = DATA_ATTR, ARIA_ATTR$1 = ARIA_ATTR, IS_SCRIPT_OR_DATA$1 = IS_SCRIPT_OR_DATA, ATTR_WHITESPACE$1 = ATTR_WHITESPACE;
         var IS_ALLOWED_URI$1 = IS_ALLOWED_URI;
         var ALLOWED_TAGS = null;
@@ -13699,6 +13700,7 @@ var require_purify = __commonJS({
         var ALLOW_ARIA_ATTR = true;
         var ALLOW_DATA_ATTR = true;
         var ALLOW_UNKNOWN_PROTOCOLS = false;
+        var ALLOW_SELF_CLOSE_IN_ATTR = true;
         var SAFE_FOR_TEMPLATES = false;
         var WHOLE_DOCUMENT = false;
         var SET_CONFIG = false;
@@ -13771,6 +13773,7 @@ var require_purify = __commonJS({
           ALLOW_ARIA_ATTR = cfg.ALLOW_ARIA_ATTR !== false;
           ALLOW_DATA_ATTR = cfg.ALLOW_DATA_ATTR !== false;
           ALLOW_UNKNOWN_PROTOCOLS = cfg.ALLOW_UNKNOWN_PROTOCOLS || false;
+          ALLOW_SELF_CLOSE_IN_ATTR = cfg.ALLOW_SELF_CLOSE_IN_ATTR !== false;
           SAFE_FOR_TEMPLATES = cfg.SAFE_FOR_TEMPLATES || false;
           WHOLE_DOCUMENT = cfg.WHOLE_DOCUMENT || false;
           RETURN_DOM = cfg.RETURN_DOM || false;
@@ -13783,6 +13786,7 @@ var require_purify = __commonJS({
           IN_PLACE = cfg.IN_PLACE || false;
           IS_ALLOWED_URI$1 = cfg.ALLOWED_URI_REGEXP || IS_ALLOWED_URI$1;
           NAMESPACE = cfg.NAMESPACE || HTML_NAMESPACE;
+          CUSTOM_ELEMENT_HANDLING = cfg.CUSTOM_ELEMENT_HANDLING || {};
           if (cfg.CUSTOM_ELEMENT_HANDLING && isRegexOrFunction(cfg.CUSTOM_ELEMENT_HANDLING.tagNameCheck)) {
             CUSTOM_ELEMENT_HANDLING.tagNameCheck = cfg.CUSTOM_ELEMENT_HANDLING.tagNameCheck;
           }
@@ -13973,7 +13977,7 @@ var require_purify = __commonJS({
           if (!doc || !doc.documentElement) {
             doc = implementation.createDocument(NAMESPACE, "template", null);
             try {
-              doc.documentElement.innerHTML = IS_EMPTY_INPUT ? "" : dirtyPayload;
+              doc.documentElement.innerHTML = IS_EMPTY_INPUT ? emptyHTML : dirtyPayload;
             } catch (_3) {
             }
           }
@@ -14058,7 +14062,7 @@ var require_purify = __commonJS({
             _forceRemove(currentNode);
             return true;
           }
-          if ((tagName === "noscript" || tagName === "noembed") && regExpTest(/<\/no(script|embed)/i, currentNode.innerHTML)) {
+          if ((tagName === "noscript" || tagName === "noembed" || tagName === "noframes") && regExpTest(/<\/no(script|embed|frames)/i, currentNode.innerHTML)) {
             _forceRemove(currentNode);
             return true;
           }
@@ -14106,11 +14110,10 @@ var require_purify = __commonJS({
             ;
           else if (ALLOW_UNKNOWN_PROTOCOLS && !regExpTest(IS_SCRIPT_OR_DATA$1, stringReplace(value, ATTR_WHITESPACE$1, "")))
             ;
-          else if (!value)
-            ;
-          else {
+          else if (value) {
             return false;
-          }
+          } else
+            ;
           return true;
         };
         var _basicCustomElementTest = function _basicCustomElementTest2(tagName) {
@@ -14151,7 +14154,7 @@ var require_purify = __commonJS({
             if (!hookEvent.keepAttr) {
               continue;
             }
-            if (regExpTest(/\/>/i, value)) {
+            if (!ALLOW_SELF_CLOSE_IN_ATTR && regExpTest(/\/>/i, value)) {
               _removeAttribute(name, currentNode);
               continue;
             }
@@ -14173,12 +14176,14 @@ var require_purify = __commonJS({
                 ;
               else {
                 switch (trustedTypes.getAttributeType(lcTag, lcName)) {
-                  case "TrustedHTML":
+                  case "TrustedHTML": {
                     value = trustedTypesPolicy.createHTML(value);
                     break;
-                  case "TrustedScriptURL":
+                  }
+                  case "TrustedScriptURL": {
                     value = trustedTypesPolicy.createScriptURL(value);
                     break;
+                  }
                 }
               }
             }
@@ -14222,13 +14227,13 @@ var require_purify = __commonJS({
             dirty = "<!-->";
           }
           if (typeof dirty !== "string" && !_isNode(dirty)) {
-            if (typeof dirty.toString !== "function") {
-              throw typeErrorCreate("toString is not a function");
-            } else {
+            if (typeof dirty.toString === "function") {
               dirty = dirty.toString();
               if (typeof dirty !== "string") {
                 throw typeErrorCreate("dirty is not a string, aborting");
               }
+            } else {
+              throw typeErrorCreate("toString is not a function");
             }
           }
           if (!DOMPurify.isSupported) {
@@ -14306,7 +14311,7 @@ var require_purify = __commonJS({
             } else {
               returnNode = body;
             }
-            if (ALLOWED_ATTR.shadowroot) {
+            if (ALLOWED_ATTR.shadowroot || ALLOWED_ATTR.shadowrootmod) {
               returnNode = importNode.call(originalDocument, returnNode, true);
             }
             return returnNode;
@@ -14369,21 +14374,23 @@ var require_purify = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/global.js
 var require_global = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/global.js"(exports, module) {
+    "use strict";
     var check = function(it2) {
-      return it2 && it2.Math == Math && it2;
+      return it2 && it2.Math === Math && it2;
     };
     module.exports = // eslint-disable-next-line es/no-global-this -- safe
     check(typeof globalThis == "object" && globalThis) || check(typeof window == "object" && window) || // eslint-disable-next-line no-restricted-globals -- safe
     check(typeof self == "object" && self) || check(typeof global == "object" && global) || // eslint-disable-next-line no-new-func -- fallback
     function() {
       return this;
-    }() || Function("return this")();
+    }() || exports || Function("return this")();
   }
 });
 
 // ../simple-mind-map/node_modules/core-js/internals/fails.js
 var require_fails = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/fails.js"(exports, module) {
+    "use strict";
     module.exports = function(exec2) {
       try {
         return !!exec2();
@@ -14397,11 +14404,12 @@ var require_fails = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/descriptors.js
 var require_descriptors = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/descriptors.js"(exports, module) {
+    "use strict";
     var fails4 = require_fails();
     module.exports = !fails4(function() {
       return Object.defineProperty({}, 1, { get: function() {
         return 7;
-      } })[1] != 7;
+      } })[1] !== 7;
     });
   }
 });
@@ -14409,6 +14417,7 @@ var require_descriptors = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/function-bind-native.js
 var require_function_bind_native = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/function-bind-native.js"(exports, module) {
+    "use strict";
     var fails4 = require_fails();
     module.exports = !fails4(function() {
       var test2 = function() {
@@ -14421,6 +14430,7 @@ var require_function_bind_native = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/function-call.js
 var require_function_call = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/function-call.js"(exports, module) {
+    "use strict";
     var NATIVE_BIND = require_function_bind_native();
     var call4 = Function.prototype.call;
     module.exports = NATIVE_BIND ? call4.bind(call4) : function() {
@@ -14446,6 +14456,7 @@ var require_object_property_is_enumerable = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/create-property-descriptor.js
 var require_create_property_descriptor = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/create-property-descriptor.js"(exports, module) {
+    "use strict";
     module.exports = function(bitmap, value) {
       return {
         enumerable: !(bitmap & 1),
@@ -14460,6 +14471,7 @@ var require_create_property_descriptor = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/function-uncurry-this.js
 var require_function_uncurry_this = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/function-uncurry-this.js"(exports, module) {
+    "use strict";
     var NATIVE_BIND = require_function_bind_native();
     var FunctionPrototype = Function.prototype;
     var call4 = FunctionPrototype.call;
@@ -14475,6 +14487,7 @@ var require_function_uncurry_this = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/classof-raw.js
 var require_classof_raw = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/classof-raw.js"(exports, module) {
+    "use strict";
     var uncurryThis8 = require_function_uncurry_this();
     var toString8 = uncurryThis8({}.toString);
     var stringSlice4 = uncurryThis8("".slice);
@@ -14487,6 +14500,7 @@ var require_classof_raw = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/indexed-object.js
 var require_indexed_object = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/indexed-object.js"(exports, module) {
+    "use strict";
     var uncurryThis8 = require_function_uncurry_this();
     var fails4 = require_fails();
     var classof = require_classof_raw();
@@ -14495,7 +14509,7 @@ var require_indexed_object = __commonJS({
     module.exports = fails4(function() {
       return !$Object("z").propertyIsEnumerable(0);
     }) ? function(it2) {
-      return classof(it2) == "String" ? split(it2, "") : $Object(it2);
+      return classof(it2) === "String" ? split(it2, "") : $Object(it2);
     } : $Object;
   }
 });
@@ -14503,6 +14517,7 @@ var require_indexed_object = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/is-null-or-undefined.js
 var require_is_null_or_undefined = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/is-null-or-undefined.js"(exports, module) {
+    "use strict";
     module.exports = function(it2) {
       return it2 === null || it2 === void 0;
     };
@@ -14512,6 +14527,7 @@ var require_is_null_or_undefined = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/require-object-coercible.js
 var require_require_object_coercible = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/require-object-coercible.js"(exports, module) {
+    "use strict";
     var isNullOrUndefined4 = require_is_null_or_undefined();
     var $TypeError = TypeError;
     module.exports = function(it2) {
@@ -14525,6 +14541,7 @@ var require_require_object_coercible = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/to-indexed-object.js
 var require_to_indexed_object = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/to-indexed-object.js"(exports, module) {
+    "use strict";
     var IndexedObject = require_indexed_object();
     var requireObjectCoercible7 = require_require_object_coercible();
     module.exports = function(it2) {
@@ -14536,6 +14553,7 @@ var require_to_indexed_object = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/document-all.js
 var require_document_all = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/document-all.js"(exports, module) {
+    "use strict";
     var documentAll = typeof document == "object" && document.all;
     var IS_HTMLDDA = typeof documentAll == "undefined" && documentAll !== void 0;
     module.exports = {
@@ -14548,6 +14566,7 @@ var require_document_all = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/is-callable.js
 var require_is_callable = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/is-callable.js"(exports, module) {
+    "use strict";
     var $documentAll = require_document_all();
     var documentAll = $documentAll.all;
     module.exports = $documentAll.IS_HTMLDDA ? function(argument) {
@@ -14561,6 +14580,7 @@ var require_is_callable = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/is-object.js
 var require_is_object = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/is-object.js"(exports, module) {
+    "use strict";
     var isCallable2 = require_is_callable();
     var $documentAll = require_document_all();
     var documentAll = $documentAll.all;
@@ -14575,6 +14595,7 @@ var require_is_object = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/get-built-in.js
 var require_get_built_in = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/get-built-in.js"(exports, module) {
+    "use strict";
     var global3 = require_global();
     var isCallable2 = require_is_callable();
     var aFunction = function(argument) {
@@ -14589,6 +14610,7 @@ var require_get_built_in = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/object-is-prototype-of.js
 var require_object_is_prototype_of = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/object-is-prototype-of.js"(exports, module) {
+    "use strict";
     var uncurryThis8 = require_function_uncurry_this();
     module.exports = uncurryThis8({}.isPrototypeOf);
   }
@@ -14597,14 +14619,15 @@ var require_object_is_prototype_of = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/engine-user-agent.js
 var require_engine_user_agent = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/engine-user-agent.js"(exports, module) {
-    var getBuiltIn = require_get_built_in();
-    module.exports = getBuiltIn("navigator", "userAgent") || "";
+    "use strict";
+    module.exports = typeof navigator != "undefined" && String(navigator.userAgent) || "";
   }
 });
 
 // ../simple-mind-map/node_modules/core-js/internals/engine-v8-version.js
 var require_engine_v8_version = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/engine-v8-version.js"(exports, module) {
+    "use strict";
     var global3 = require_global();
     var userAgent = require_engine_user_agent();
     var process2 = global3.process;
@@ -14632,11 +14655,14 @@ var require_engine_v8_version = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/symbol-constructor-detection.js
 var require_symbol_constructor_detection = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/symbol-constructor-detection.js"(exports, module) {
+    "use strict";
     var V8_VERSION = require_engine_v8_version();
     var fails4 = require_fails();
+    var global3 = require_global();
+    var $String = global3.String;
     module.exports = !!Object.getOwnPropertySymbols && !fails4(function() {
-      var symbol = Symbol();
-      return !String(symbol) || !(Object(symbol) instanceof Symbol) || // Chrome 38-40 symbols are not inherited from DOM collections prototypes to instances
+      var symbol = Symbol("symbol detection");
+      return !$String(symbol) || !(Object(symbol) instanceof Symbol) || // Chrome 38-40 symbols are not inherited from DOM collections prototypes to instances
       !Symbol.sham && V8_VERSION && V8_VERSION < 41;
     });
   }
@@ -14645,6 +14671,7 @@ var require_symbol_constructor_detection = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/use-symbol-as-uid.js
 var require_use_symbol_as_uid = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/use-symbol-as-uid.js"(exports, module) {
+    "use strict";
     var NATIVE_SYMBOL = require_symbol_constructor_detection();
     module.exports = NATIVE_SYMBOL && !Symbol.sham && typeof Symbol.iterator == "symbol";
   }
@@ -14653,6 +14680,7 @@ var require_use_symbol_as_uid = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/is-symbol.js
 var require_is_symbol = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/is-symbol.js"(exports, module) {
+    "use strict";
     var getBuiltIn = require_get_built_in();
     var isCallable2 = require_is_callable();
     var isPrototypeOf = require_object_is_prototype_of();
@@ -14670,6 +14698,7 @@ var require_is_symbol = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/try-to-string.js
 var require_try_to_string = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/try-to-string.js"(exports, module) {
+    "use strict";
     var $String = String;
     module.exports = function(argument) {
       try {
@@ -14684,6 +14713,7 @@ var require_try_to_string = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/a-callable.js
 var require_a_callable = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/a-callable.js"(exports, module) {
+    "use strict";
     var isCallable2 = require_is_callable();
     var tryToString = require_try_to_string();
     var $TypeError = TypeError;
@@ -14698,6 +14728,7 @@ var require_a_callable = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/get-method.js
 var require_get_method = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/get-method.js"(exports, module) {
+    "use strict";
     var aCallable = require_a_callable();
     var isNullOrUndefined4 = require_is_null_or_undefined();
     module.exports = function(V2, P2) {
@@ -14710,6 +14741,7 @@ var require_get_method = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/ordinary-to-primitive.js
 var require_ordinary_to_primitive = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/ordinary-to-primitive.js"(exports, module) {
+    "use strict";
     var call4 = require_function_call();
     var isCallable2 = require_is_callable();
     var isObject = require_is_object();
@@ -14730,6 +14762,7 @@ var require_ordinary_to_primitive = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/is-pure.js
 var require_is_pure = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/is-pure.js"(exports, module) {
+    "use strict";
     module.exports = false;
   }
 });
@@ -14737,6 +14770,7 @@ var require_is_pure = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/define-global-property.js
 var require_define_global_property = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/define-global-property.js"(exports, module) {
+    "use strict";
     var global3 = require_global();
     var defineProperty = Object.defineProperty;
     module.exports = function(key, value) {
@@ -14753,6 +14787,7 @@ var require_define_global_property = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/shared-store.js
 var require_shared_store = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/shared-store.js"(exports, module) {
+    "use strict";
     var global3 = require_global();
     var defineGlobalProperty = require_define_global_property();
     var SHARED = "__core-js_shared__";
@@ -14764,15 +14799,16 @@ var require_shared_store = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/shared.js
 var require_shared = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/shared.js"(exports, module) {
+    "use strict";
     var IS_PURE3 = require_is_pure();
     var store = require_shared_store();
     (module.exports = function(key, value) {
       return store[key] || (store[key] = value !== void 0 ? value : {});
     })("versions", []).push({
-      version: "3.27.1",
+      version: "3.32.2",
       mode: IS_PURE3 ? "pure" : "global",
-      copyright: "\xA9 2014-2022 Denis Pushkarev (zloirock.ru)",
-      license: "https://github.com/zloirock/core-js/blob/v3.27.1/LICENSE",
+      copyright: "\xA9 2014-2023 Denis Pushkarev (zloirock.ru)",
+      license: "https://github.com/zloirock/core-js/blob/v3.32.2/LICENSE",
       source: "https://github.com/zloirock/core-js"
     });
   }
@@ -14781,6 +14817,7 @@ var require_shared = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/to-object.js
 var require_to_object = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/to-object.js"(exports, module) {
+    "use strict";
     var requireObjectCoercible7 = require_require_object_coercible();
     var $Object = Object;
     module.exports = function(argument) {
@@ -14792,6 +14829,7 @@ var require_to_object = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/has-own-property.js
 var require_has_own_property = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/has-own-property.js"(exports, module) {
+    "use strict";
     var uncurryThis8 = require_function_uncurry_this();
     var toObject = require_to_object();
     var hasOwnProperty2 = uncurryThis8({}.hasOwnProperty);
@@ -14804,6 +14842,7 @@ var require_has_own_property = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/uid.js
 var require_uid = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/uid.js"(exports, module) {
+    "use strict";
     var uncurryThis8 = require_function_uncurry_this();
     var id = 0;
     var postfix = Math.random();
@@ -14817,26 +14856,19 @@ var require_uid = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/well-known-symbol.js
 var require_well_known_symbol = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/well-known-symbol.js"(exports, module) {
+    "use strict";
     var global3 = require_global();
     var shared = require_shared();
     var hasOwn = require_has_own_property();
     var uid = require_uid();
     var NATIVE_SYMBOL = require_symbol_constructor_detection();
     var USE_SYMBOL_AS_UID = require_use_symbol_as_uid();
-    var WellKnownSymbolsStore = shared("wks");
     var Symbol3 = global3.Symbol;
-    var symbolFor = Symbol3 && Symbol3["for"];
-    var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol3 : Symbol3 && Symbol3.withoutSetter || uid;
+    var WellKnownSymbolsStore = shared("wks");
+    var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol3["for"] || Symbol3 : Symbol3 && Symbol3.withoutSetter || uid;
     module.exports = function(name) {
-      if (!hasOwn(WellKnownSymbolsStore, name) || !(NATIVE_SYMBOL || typeof WellKnownSymbolsStore[name] == "string")) {
-        var description = "Symbol." + name;
-        if (NATIVE_SYMBOL && hasOwn(Symbol3, name)) {
-          WellKnownSymbolsStore[name] = Symbol3[name];
-        } else if (USE_SYMBOL_AS_UID && symbolFor) {
-          WellKnownSymbolsStore[name] = symbolFor(description);
-        } else {
-          WellKnownSymbolsStore[name] = createWellKnownSymbol(description);
-        }
+      if (!hasOwn(WellKnownSymbolsStore, name)) {
+        WellKnownSymbolsStore[name] = NATIVE_SYMBOL && hasOwn(Symbol3, name) ? Symbol3[name] : createWellKnownSymbol("Symbol." + name);
       }
       return WellKnownSymbolsStore[name];
     };
@@ -14846,6 +14878,7 @@ var require_well_known_symbol = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/to-primitive.js
 var require_to_primitive = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/to-primitive.js"(exports, module) {
+    "use strict";
     var call4 = require_function_call();
     var isObject = require_is_object();
     var isSymbol = require_is_symbol();
@@ -14877,6 +14910,7 @@ var require_to_primitive = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/to-property-key.js
 var require_to_property_key = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/to-property-key.js"(exports, module) {
+    "use strict";
     var toPrimitive = require_to_primitive();
     var isSymbol = require_is_symbol();
     module.exports = function(argument) {
@@ -14889,6 +14923,7 @@ var require_to_property_key = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/document-create-element.js
 var require_document_create_element = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/document-create-element.js"(exports, module) {
+    "use strict";
     var global3 = require_global();
     var isObject = require_is_object();
     var document4 = global3.document;
@@ -14902,6 +14937,7 @@ var require_document_create_element = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/ie8-dom-define.js
 var require_ie8_dom_define = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/ie8-dom-define.js"(exports, module) {
+    "use strict";
     var DESCRIPTORS = require_descriptors();
     var fails4 = require_fails();
     var createElement = require_document_create_element();
@@ -14910,7 +14946,7 @@ var require_ie8_dom_define = __commonJS({
         get: function() {
           return 7;
         }
-      }).a != 7;
+      }).a !== 7;
     });
   }
 });
@@ -14918,6 +14954,7 @@ var require_ie8_dom_define = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/object-get-own-property-descriptor.js
 var require_object_get_own_property_descriptor = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/object-get-own-property-descriptor.js"(exports) {
+    "use strict";
     var DESCRIPTORS = require_descriptors();
     var call4 = require_function_call();
     var propertyIsEnumerableModule = require_object_property_is_enumerable();
@@ -14944,6 +14981,7 @@ var require_object_get_own_property_descriptor = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/v8-prototype-define-bug.js
 var require_v8_prototype_define_bug = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/v8-prototype-define-bug.js"(exports, module) {
+    "use strict";
     var DESCRIPTORS = require_descriptors();
     var fails4 = require_fails();
     module.exports = DESCRIPTORS && fails4(function() {
@@ -14951,7 +14989,7 @@ var require_v8_prototype_define_bug = __commonJS({
       }, "prototype", {
         value: 42,
         writable: false
-      }).prototype != 42;
+      }).prototype !== 42;
     });
   }
 });
@@ -14959,6 +14997,7 @@ var require_v8_prototype_define_bug = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/an-object.js
 var require_an_object = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/an-object.js"(exports, module) {
+    "use strict";
     var isObject = require_is_object();
     var $String = String;
     var $TypeError = TypeError;
@@ -14973,6 +15012,7 @@ var require_an_object = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/object-define-property.js
 var require_object_define_property = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/object-define-property.js"(exports) {
+    "use strict";
     var DESCRIPTORS = require_descriptors();
     var IE8_DOM_DEFINE = require_ie8_dom_define();
     var V8_PROTOTYPE_DEFINE_BUG = require_v8_prototype_define_bug();
@@ -15021,6 +15061,7 @@ var require_object_define_property = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/create-non-enumerable-property.js
 var require_create_non_enumerable_property = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/create-non-enumerable-property.js"(exports, module) {
+    "use strict";
     var DESCRIPTORS = require_descriptors();
     var definePropertyModule = require_object_define_property();
     var createPropertyDescriptor = require_create_property_descriptor();
@@ -15036,6 +15077,7 @@ var require_create_non_enumerable_property = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/function-name.js
 var require_function_name = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/function-name.js"(exports, module) {
+    "use strict";
     var DESCRIPTORS = require_descriptors();
     var hasOwn = require_has_own_property();
     var FunctionPrototype = Function.prototype;
@@ -15055,6 +15097,7 @@ var require_function_name = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/inspect-source.js
 var require_inspect_source = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/inspect-source.js"(exports, module) {
+    "use strict";
     var uncurryThis8 = require_function_uncurry_this();
     var isCallable2 = require_is_callable();
     var store = require_shared_store();
@@ -15071,6 +15114,7 @@ var require_inspect_source = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/weak-map-basic-detection.js
 var require_weak_map_basic_detection = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/weak-map-basic-detection.js"(exports, module) {
+    "use strict";
     var global3 = require_global();
     var isCallable2 = require_is_callable();
     var WeakMap2 = global3.WeakMap;
@@ -15081,6 +15125,7 @@ var require_weak_map_basic_detection = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/shared-key.js
 var require_shared_key = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/shared-key.js"(exports, module) {
+    "use strict";
     var shared = require_shared();
     var uid = require_uid();
     var keys = shared("keys");
@@ -15093,6 +15138,7 @@ var require_shared_key = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/hidden-keys.js
 var require_hidden_keys = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/hidden-keys.js"(exports, module) {
+    "use strict";
     module.exports = {};
   }
 });
@@ -15100,6 +15146,7 @@ var require_hidden_keys = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/internal-state.js
 var require_internal_state = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/internal-state.js"(exports, module) {
+    "use strict";
     var NATIVE_WEAK_MAP = require_weak_map_basic_detection();
     var global3 = require_global();
     var isObject = require_is_object();
@@ -15176,6 +15223,8 @@ var require_internal_state = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/make-built-in.js
 var require_make_built_in = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/make-built-in.js"(exports, module) {
+    "use strict";
+    var uncurryThis8 = require_function_uncurry_this();
     var fails4 = require_fails();
     var isCallable2 = require_is_callable();
     var hasOwn = require_has_own_property();
@@ -15185,15 +15234,19 @@ var require_make_built_in = __commonJS({
     var InternalStateModule = require_internal_state();
     var enforceInternalState = InternalStateModule.enforce;
     var getInternalState = InternalStateModule.get;
+    var $String = String;
     var defineProperty = Object.defineProperty;
+    var stringSlice4 = uncurryThis8("".slice);
+    var replace = uncurryThis8("".replace);
+    var join = uncurryThis8([].join);
     var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails4(function() {
       return defineProperty(function() {
       }, "length", { value: 8 }).length !== 8;
     });
     var TEMPLATE = String(String).split("String");
     var makeBuiltIn = module.exports = function(value, name, options) {
-      if (String(name).slice(0, 7) === "Symbol(") {
-        name = "[" + String(name).replace(/^Symbol\(([^)]*)\)/, "$1") + "]";
+      if (stringSlice4($String(name), 0, 7) === "Symbol(") {
+        name = "[" + replace($String(name), /^Symbol\(([^)]*)\)/, "$1") + "]";
       }
       if (options && options.getter)
         name = "get " + name;
@@ -15218,7 +15271,7 @@ var require_make_built_in = __commonJS({
       }
       var state = enforceInternalState(value);
       if (!hasOwn(state, "source")) {
-        state.source = TEMPLATE.join(typeof name == "string" ? name : "");
+        state.source = join(TEMPLATE, typeof name == "string" ? name : "");
       }
       return value;
     };
@@ -15231,6 +15284,7 @@ var require_make_built_in = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/define-built-in.js
 var require_define_built_in = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/define-built-in.js"(exports, module) {
+    "use strict";
     var isCallable2 = require_is_callable();
     var definePropertyModule = require_object_define_property();
     var makeBuiltIn = require_make_built_in();
@@ -15273,6 +15327,7 @@ var require_define_built_in = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/math-trunc.js
 var require_math_trunc = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/math-trunc.js"(exports, module) {
+    "use strict";
     var ceil = Math.ceil;
     var floor = Math.floor;
     module.exports = Math.trunc || function trunc(x3) {
@@ -15285,6 +15340,7 @@ var require_math_trunc = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/to-integer-or-infinity.js
 var require_to_integer_or_infinity = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/to-integer-or-infinity.js"(exports, module) {
+    "use strict";
     var trunc = require_math_trunc();
     module.exports = function(argument) {
       var number = +argument;
@@ -15296,6 +15352,7 @@ var require_to_integer_or_infinity = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/to-absolute-index.js
 var require_to_absolute_index = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/to-absolute-index.js"(exports, module) {
+    "use strict";
     var toIntegerOrInfinity2 = require_to_integer_or_infinity();
     var max3 = Math.max;
     var min5 = Math.min;
@@ -15309,6 +15366,7 @@ var require_to_absolute_index = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/to-length.js
 var require_to_length = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/to-length.js"(exports, module) {
+    "use strict";
     var toIntegerOrInfinity2 = require_to_integer_or_infinity();
     var min5 = Math.min;
     module.exports = function(argument) {
@@ -15320,6 +15378,7 @@ var require_to_length = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/length-of-array-like.js
 var require_length_of_array_like = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/length-of-array-like.js"(exports, module) {
+    "use strict";
     var toLength6 = require_to_length();
     module.exports = function(obj) {
       return toLength6(obj.length);
@@ -15330,6 +15389,7 @@ var require_length_of_array_like = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/array-includes.js
 var require_array_includes = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/array-includes.js"(exports, module) {
+    "use strict";
     var toIndexedObject = require_to_indexed_object();
     var toAbsoluteIndex = require_to_absolute_index();
     var lengthOfArrayLike = require_length_of_array_like();
@@ -15339,10 +15399,10 @@ var require_array_includes = __commonJS({
         var length2 = lengthOfArrayLike(O3);
         var index3 = toAbsoluteIndex(fromIndex, length2);
         var value;
-        if (IS_INCLUDES && el2 != el2)
+        if (IS_INCLUDES && el2 !== el2)
           while (length2 > index3) {
             value = O3[index3++];
-            if (value != value)
+            if (value !== value)
               return true;
           }
         else
@@ -15367,6 +15427,7 @@ var require_array_includes = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/object-keys-internal.js
 var require_object_keys_internal = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/object-keys-internal.js"(exports, module) {
+    "use strict";
     var uncurryThis8 = require_function_uncurry_this();
     var hasOwn = require_has_own_property();
     var toIndexedObject = require_to_indexed_object();
@@ -15392,6 +15453,7 @@ var require_object_keys_internal = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/enum-bug-keys.js
 var require_enum_bug_keys = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/enum-bug-keys.js"(exports, module) {
+    "use strict";
     module.exports = [
       "constructor",
       "hasOwnProperty",
@@ -15407,6 +15469,7 @@ var require_enum_bug_keys = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/object-get-own-property-names.js
 var require_object_get_own_property_names = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/object-get-own-property-names.js"(exports) {
+    "use strict";
     var internalObjectKeys = require_object_keys_internal();
     var enumBugKeys = require_enum_bug_keys();
     var hiddenKeys = enumBugKeys.concat("length", "prototype");
@@ -15419,6 +15482,7 @@ var require_object_get_own_property_names = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/object-get-own-property-symbols.js
 var require_object_get_own_property_symbols = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/object-get-own-property-symbols.js"(exports) {
+    "use strict";
     exports.f = Object.getOwnPropertySymbols;
   }
 });
@@ -15426,6 +15490,7 @@ var require_object_get_own_property_symbols = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/own-keys.js
 var require_own_keys = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/own-keys.js"(exports, module) {
+    "use strict";
     var getBuiltIn = require_get_built_in();
     var uncurryThis8 = require_function_uncurry_this();
     var getOwnPropertyNamesModule = require_object_get_own_property_names();
@@ -15443,6 +15508,7 @@ var require_own_keys = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/copy-constructor-properties.js
 var require_copy_constructor_properties = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/copy-constructor-properties.js"(exports, module) {
+    "use strict";
     var hasOwn = require_has_own_property();
     var ownKeys2 = require_own_keys();
     var getOwnPropertyDescriptorModule = require_object_get_own_property_descriptor();
@@ -15464,12 +15530,13 @@ var require_copy_constructor_properties = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/is-forced.js
 var require_is_forced = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/is-forced.js"(exports, module) {
+    "use strict";
     var fails4 = require_fails();
     var isCallable2 = require_is_callable();
     var replacement = /#|\.prototype\./;
     var isForced = function(feature, detection) {
       var value = data2[normalize(feature)];
-      return value == POLYFILL ? true : value == NATIVE ? false : isCallable2(detection) ? fails4(detection) : !!detection;
+      return value === POLYFILL ? true : value === NATIVE ? false : isCallable2(detection) ? fails4(detection) : !!detection;
     };
     var normalize = isForced.normalize = function(string3) {
       return String(string3).replace(replacement, ".").toLowerCase();
@@ -15484,6 +15551,7 @@ var require_is_forced = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/export.js
 var require_export = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/export.js"(exports, module) {
+    "use strict";
     var global3 = require_global();
     var getOwnPropertyDescriptor3 = require_object_get_own_property_descriptor().f;
     var createNonEnumerableProperty2 = require_create_non_enumerable_property();
@@ -15495,7 +15563,7 @@ var require_export = __commonJS({
       var TARGET = options.target;
       var GLOBAL = options.global;
       var STATIC = options.stat;
-      var FORCED, target, key, targetProperty, sourceProperty, descriptor;
+      var FORCED3, target, key, targetProperty, sourceProperty, descriptor;
       if (GLOBAL) {
         target = global3;
       } else if (STATIC) {
@@ -15511,8 +15579,8 @@ var require_export = __commonJS({
             targetProperty = descriptor && descriptor.value;
           } else
             targetProperty = target[key];
-          FORCED = isForced(GLOBAL ? key : TARGET + (STATIC ? "." : "#") + key, options.forced);
-          if (!FORCED && targetProperty !== void 0) {
+          FORCED3 = isForced(GLOBAL ? key : TARGET + (STATIC ? "." : "#") + key, options.forced);
+          if (!FORCED3 && targetProperty !== void 0) {
             if (typeof sourceProperty == typeof targetProperty)
               continue;
             copyConstructorProperties(sourceProperty, targetProperty);
@@ -15529,15 +15597,32 @@ var require_export = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/engine-is-node.js
 var require_engine_is_node = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/engine-is-node.js"(exports, module) {
-    var classof = require_classof_raw();
+    "use strict";
     var global3 = require_global();
-    module.exports = classof(global3.process) == "process";
+    var classof = require_classof_raw();
+    module.exports = classof(global3.process) === "process";
+  }
+});
+
+// ../simple-mind-map/node_modules/core-js/internals/function-uncurry-this-accessor.js
+var require_function_uncurry_this_accessor = __commonJS({
+  "../simple-mind-map/node_modules/core-js/internals/function-uncurry-this-accessor.js"(exports, module) {
+    "use strict";
+    var uncurryThis8 = require_function_uncurry_this();
+    var aCallable = require_a_callable();
+    module.exports = function(object, key, method) {
+      try {
+        return uncurryThis8(aCallable(Object.getOwnPropertyDescriptor(object, key)[method]));
+      } catch (error) {
+      }
+    };
   }
 });
 
 // ../simple-mind-map/node_modules/core-js/internals/a-possible-prototype.js
 var require_a_possible_prototype = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/a-possible-prototype.js"(exports, module) {
+    "use strict";
     var isCallable2 = require_is_callable();
     var $String = String;
     var $TypeError = TypeError;
@@ -15552,7 +15637,8 @@ var require_a_possible_prototype = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/object-set-prototype-of.js
 var require_object_set_prototype_of = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/object-set-prototype-of.js"(exports, module) {
-    var uncurryThis8 = require_function_uncurry_this();
+    "use strict";
+    var uncurryThisAccessor = require_function_uncurry_this_accessor();
     var anObject5 = require_an_object();
     var aPossiblePrototype = require_a_possible_prototype();
     module.exports = Object.setPrototypeOf || ("__proto__" in {} ? function() {
@@ -15560,7 +15646,7 @@ var require_object_set_prototype_of = __commonJS({
       var test2 = {};
       var setter;
       try {
-        setter = uncurryThis8(Object.getOwnPropertyDescriptor(Object.prototype, "__proto__").set);
+        setter = uncurryThisAccessor(Object.prototype, "__proto__", "set");
         setter(test2, []);
         CORRECT_SETTER = test2 instanceof Array;
       } catch (error) {
@@ -15581,6 +15667,7 @@ var require_object_set_prototype_of = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/set-to-string-tag.js
 var require_set_to_string_tag = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/set-to-string-tag.js"(exports, module) {
+    "use strict";
     var defineProperty = require_object_define_property().f;
     var hasOwn = require_has_own_property();
     var wellKnownSymbol3 = require_well_known_symbol();
@@ -15595,20 +15682,35 @@ var require_set_to_string_tag = __commonJS({
   }
 });
 
+// ../simple-mind-map/node_modules/core-js/internals/define-built-in-accessor.js
+var require_define_built_in_accessor = __commonJS({
+  "../simple-mind-map/node_modules/core-js/internals/define-built-in-accessor.js"(exports, module) {
+    "use strict";
+    var makeBuiltIn = require_make_built_in();
+    var defineProperty = require_object_define_property();
+    module.exports = function(target, name, descriptor) {
+      if (descriptor.get)
+        makeBuiltIn(descriptor.get, name, { getter: true });
+      if (descriptor.set)
+        makeBuiltIn(descriptor.set, name, { setter: true });
+      return defineProperty.f(target, name, descriptor);
+    };
+  }
+});
+
 // ../simple-mind-map/node_modules/core-js/internals/set-species.js
 var require_set_species = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/set-species.js"(exports, module) {
     "use strict";
     var getBuiltIn = require_get_built_in();
-    var definePropertyModule = require_object_define_property();
+    var defineBuiltInAccessor = require_define_built_in_accessor();
     var wellKnownSymbol3 = require_well_known_symbol();
     var DESCRIPTORS = require_descriptors();
     var SPECIES = wellKnownSymbol3("species");
     module.exports = function(CONSTRUCTOR_NAME) {
       var Constructor = getBuiltIn(CONSTRUCTOR_NAME);
-      var defineProperty = definePropertyModule.f;
       if (DESCRIPTORS && Constructor && !Constructor[SPECIES]) {
-        defineProperty(Constructor, SPECIES, {
+        defineBuiltInAccessor(Constructor, SPECIES, {
           configurable: true,
           get: function() {
             return this;
@@ -15622,6 +15724,7 @@ var require_set_species = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/an-instance.js
 var require_an_instance = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/an-instance.js"(exports, module) {
+    "use strict";
     var isPrototypeOf = require_object_is_prototype_of();
     var $TypeError = TypeError;
     module.exports = function(it2, Prototype) {
@@ -15635,6 +15738,7 @@ var require_an_instance = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/to-string-tag-support.js
 var require_to_string_tag_support = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/to-string-tag-support.js"(exports, module) {
+    "use strict";
     var wellKnownSymbol3 = require_well_known_symbol();
     var TO_STRING_TAG2 = wellKnownSymbol3("toStringTag");
     var test2 = {};
@@ -15646,6 +15750,7 @@ var require_to_string_tag_support = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/classof.js
 var require_classof = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/classof.js"(exports, module) {
+    "use strict";
     var TO_STRING_TAG_SUPPORT = require_to_string_tag_support();
     var isCallable2 = require_is_callable();
     var classofRaw = require_classof_raw();
@@ -15654,7 +15759,7 @@ var require_classof = __commonJS({
     var $Object = Object;
     var CORRECT_ARGUMENTS = classofRaw(function() {
       return arguments;
-    }()) == "Arguments";
+    }()) === "Arguments";
     var tryGet = function(it2, key) {
       try {
         return it2[key];
@@ -15663,7 +15768,7 @@ var require_classof = __commonJS({
     };
     module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function(it2) {
       var O3, tag, result;
-      return it2 === void 0 ? "Undefined" : it2 === null ? "Null" : typeof (tag = tryGet(O3 = $Object(it2), TO_STRING_TAG2)) == "string" ? tag : CORRECT_ARGUMENTS ? classofRaw(O3) : (result = classofRaw(O3)) == "Object" && isCallable2(O3.callee) ? "Arguments" : result;
+      return it2 === void 0 ? "Undefined" : it2 === null ? "Null" : typeof (tag = tryGet(O3 = $Object(it2), TO_STRING_TAG2)) == "string" ? tag : CORRECT_ARGUMENTS ? classofRaw(O3) : (result = classofRaw(O3)) === "Object" && isCallable2(O3.callee) ? "Arguments" : result;
     };
   }
 });
@@ -15671,6 +15776,7 @@ var require_classof = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/is-constructor.js
 var require_is_constructor = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/is-constructor.js"(exports, module) {
+    "use strict";
     var uncurryThis8 = require_function_uncurry_this();
     var fails4 = require_fails();
     var isCallable2 = require_is_callable();
@@ -15722,6 +15828,7 @@ var require_is_constructor = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/a-constructor.js
 var require_a_constructor = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/a-constructor.js"(exports, module) {
+    "use strict";
     var isConstructor = require_is_constructor();
     var tryToString = require_try_to_string();
     var $TypeError = TypeError;
@@ -15736,6 +15843,7 @@ var require_a_constructor = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/species-constructor.js
 var require_species_constructor = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/species-constructor.js"(exports, module) {
+    "use strict";
     var anObject5 = require_an_object();
     var aConstructor = require_a_constructor();
     var isNullOrUndefined4 = require_is_null_or_undefined();
@@ -15752,6 +15860,7 @@ var require_species_constructor = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/function-apply.js
 var require_function_apply = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/function-apply.js"(exports, module) {
+    "use strict";
     var NATIVE_BIND = require_function_bind_native();
     var FunctionPrototype = Function.prototype;
     var apply3 = FunctionPrototype.apply;
@@ -15765,6 +15874,7 @@ var require_function_apply = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/function-uncurry-this-clause.js
 var require_function_uncurry_this_clause = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/function-uncurry-this-clause.js"(exports, module) {
+    "use strict";
     var classofRaw = require_classof_raw();
     var uncurryThis8 = require_function_uncurry_this();
     module.exports = function(fn) {
@@ -15777,6 +15887,7 @@ var require_function_uncurry_this_clause = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/function-bind-context.js
 var require_function_bind_context = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/function-bind-context.js"(exports, module) {
+    "use strict";
     var uncurryThis8 = require_function_uncurry_this_clause();
     var aCallable = require_a_callable();
     var NATIVE_BIND = require_function_bind_native();
@@ -15793,6 +15904,7 @@ var require_function_bind_context = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/html.js
 var require_html = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/html.js"(exports, module) {
+    "use strict";
     var getBuiltIn = require_get_built_in();
     module.exports = getBuiltIn("document", "documentElement");
   }
@@ -15801,6 +15913,7 @@ var require_html = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/array-slice.js
 var require_array_slice = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/array-slice.js"(exports, module) {
+    "use strict";
     var uncurryThis8 = require_function_uncurry_this();
     module.exports = uncurryThis8([].slice);
   }
@@ -15809,6 +15922,7 @@ var require_array_slice = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/validate-arguments-length.js
 var require_validate_arguments_length = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/validate-arguments-length.js"(exports, module) {
+    "use strict";
     var $TypeError = TypeError;
     module.exports = function(passed, required) {
       if (passed < required)
@@ -15821,6 +15935,7 @@ var require_validate_arguments_length = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/engine-is-ios.js
 var require_engine_is_ios = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/engine-is-ios.js"(exports, module) {
+    "use strict";
     var userAgent = require_engine_user_agent();
     module.exports = /(?:ipad|iphone|ipod).*applewebkit/i.test(userAgent);
   }
@@ -15829,6 +15944,7 @@ var require_engine_is_ios = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/task.js
 var require_task = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/task.js"(exports, module) {
+    "use strict";
     var global3 = require_global();
     var apply3 = require_function_apply();
     var bind = require_function_bind_context();
@@ -15855,10 +15971,9 @@ var require_task = __commonJS({
     var defer;
     var channel;
     var port;
-    try {
+    fails4(function() {
       $location = global3.location;
-    } catch (error) {
-    }
+    });
     var run = function(id) {
       if (hasOwn(queue, id)) {
         var fn = queue[id];
@@ -15871,10 +15986,10 @@ var require_task = __commonJS({
         run(id);
       };
     };
-    var listener = function(event) {
+    var eventListener = function(event) {
       run(event.data);
     };
-    var post = function(id) {
+    var globalPostMessageDefer = function(id) {
       global3.postMessage(String2(id), $location.protocol + "//" + $location.host);
     };
     if (!set || !clear2) {
@@ -15902,11 +16017,11 @@ var require_task = __commonJS({
       } else if (MessageChannel2 && !IS_IOS) {
         channel = new MessageChannel2();
         port = channel.port2;
-        channel.port1.onmessage = listener;
+        channel.port1.onmessage = eventListener;
         defer = bind(port.postMessage, port);
-      } else if (global3.addEventListener && isCallable2(global3.postMessage) && !global3.importScripts && $location && $location.protocol !== "file:" && !fails4(post)) {
-        defer = post;
-        global3.addEventListener("message", listener, false);
+      } else if (global3.addEventListener && isCallable2(global3.postMessage) && !global3.importScripts && $location && $location.protocol !== "file:" && !fails4(globalPostMessageDefer)) {
+        defer = globalPostMessageDefer;
+        global3.addEventListener("message", eventListener, false);
       } else if (ONREADYSTATECHANGE in createElement("script")) {
         defer = function(id) {
           html2.appendChild(createElement("script"))[ONREADYSTATECHANGE] = function() {
@@ -15927,18 +16042,51 @@ var require_task = __commonJS({
   }
 });
 
+// ../simple-mind-map/node_modules/core-js/internals/queue.js
+var require_queue = __commonJS({
+  "../simple-mind-map/node_modules/core-js/internals/queue.js"(exports, module) {
+    "use strict";
+    var Queue2 = function() {
+      this.head = null;
+      this.tail = null;
+    };
+    Queue2.prototype = {
+      add: function(item) {
+        var entry = { item, next: null };
+        var tail = this.tail;
+        if (tail)
+          tail.next = entry;
+        else
+          this.head = entry;
+        this.tail = entry;
+      },
+      get: function() {
+        var entry = this.head;
+        if (entry) {
+          var next2 = this.head = entry.next;
+          if (next2 === null)
+            this.tail = null;
+          return entry.item;
+        }
+      }
+    };
+    module.exports = Queue2;
+  }
+});
+
 // ../simple-mind-map/node_modules/core-js/internals/engine-is-ios-pebble.js
 var require_engine_is_ios_pebble = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/engine-is-ios-pebble.js"(exports, module) {
+    "use strict";
     var userAgent = require_engine_user_agent();
-    var global3 = require_global();
-    module.exports = /ipad|iphone|ipod/i.test(userAgent) && global3.Pebble !== void 0;
+    module.exports = /ipad|iphone|ipod/i.test(userAgent) && typeof Pebble != "undefined";
   }
 });
 
 // ../simple-mind-map/node_modules/core-js/internals/engine-is-webos-webkit.js
 var require_engine_is_webos_webkit = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/engine-is-webos-webkit.js"(exports, module) {
+    "use strict";
     var userAgent = require_engine_user_agent();
     module.exports = /web0s(?!.*chrome)/i.test(userAgent);
   }
@@ -15947,10 +16095,12 @@ var require_engine_is_webos_webkit = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/microtask.js
 var require_microtask = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/microtask.js"(exports, module) {
+    "use strict";
     var global3 = require_global();
     var bind = require_function_bind_context();
     var getOwnPropertyDescriptor3 = require_object_get_own_property_descriptor().f;
     var macrotask = require_task().set;
+    var Queue2 = require_queue();
     var IS_IOS = require_engine_is_ios();
     var IS_IOS_PEBBLE = require_engine_is_ios_pebble();
     var IS_WEBOS_WEBKIT = require_engine_is_webos_webkit();
@@ -15960,34 +16110,26 @@ var require_microtask = __commonJS({
     var process2 = global3.process;
     var Promise2 = global3.Promise;
     var queueMicrotaskDescriptor = getOwnPropertyDescriptor3(global3, "queueMicrotask");
-    var queueMicrotask = queueMicrotaskDescriptor && queueMicrotaskDescriptor.value;
-    var flush;
-    var head;
-    var last;
+    var microtask = queueMicrotaskDescriptor && queueMicrotaskDescriptor.value;
     var notify;
     var toggle;
     var node3;
     var promise;
     var then;
-    if (!queueMicrotask) {
+    if (!microtask) {
+      queue = new Queue2();
       flush = function() {
         var parent, fn;
         if (IS_NODE2 && (parent = process2.domain))
           parent.exit();
-        while (head) {
-          fn = head.fn;
-          head = head.next;
+        while (fn = queue.get())
           try {
             fn();
           } catch (error) {
-            if (head)
+            if (queue.head)
               notify();
-            else
-              last = void 0;
             throw error;
           }
-        }
-        last = void 0;
         if (parent)
           parent.enter();
       };
@@ -16015,28 +16157,26 @@ var require_microtask = __commonJS({
           macrotask(flush);
         };
       }
+      microtask = function(fn) {
+        if (!queue.head)
+          notify();
+        queue.add(fn);
+      };
     }
-    module.exports = queueMicrotask || function(fn) {
-      var task = { fn, next: void 0 };
-      if (last)
-        last.next = task;
-      if (!head) {
-        head = task;
-        notify();
-      }
-      last = task;
-    };
+    var queue;
+    var flush;
+    module.exports = microtask;
   }
 });
 
 // ../simple-mind-map/node_modules/core-js/internals/host-report-errors.js
 var require_host_report_errors = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/host-report-errors.js"(exports, module) {
-    var global3 = require_global();
+    "use strict";
     module.exports = function(a3, b2) {
-      var console2 = global3.console;
-      if (console2 && console2.error) {
-        arguments.length == 1 ? console2.error(a3) : console2.error(a3, b2);
+      try {
+        arguments.length === 1 ? console.error(a3) : console.error(a3, b2);
+      } catch (error) {
       }
     };
   }
@@ -16045,6 +16185,7 @@ var require_host_report_errors = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/perform.js
 var require_perform = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/perform.js"(exports, module) {
+    "use strict";
     module.exports = function(exec2) {
       try {
         return { error: false, value: exec2() };
@@ -16055,39 +16196,10 @@ var require_perform = __commonJS({
   }
 });
 
-// ../simple-mind-map/node_modules/core-js/internals/queue.js
-var require_queue = __commonJS({
-  "../simple-mind-map/node_modules/core-js/internals/queue.js"(exports, module) {
-    var Queue2 = function() {
-      this.head = null;
-      this.tail = null;
-    };
-    Queue2.prototype = {
-      add: function(item) {
-        var entry = { item, next: null };
-        if (this.head)
-          this.tail.next = entry;
-        else
-          this.head = entry;
-        this.tail = entry;
-      },
-      get: function() {
-        var entry = this.head;
-        if (entry) {
-          this.head = entry.next;
-          if (this.tail === entry)
-            this.tail = null;
-          return entry.item;
-        }
-      }
-    };
-    module.exports = Queue2;
-  }
-});
-
 // ../simple-mind-map/node_modules/core-js/internals/promise-native-constructor.js
 var require_promise_native_constructor = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/promise-native-constructor.js"(exports, module) {
+    "use strict";
     var global3 = require_global();
     module.exports = global3.Promise;
   }
@@ -16096,6 +16208,7 @@ var require_promise_native_constructor = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/engine-is-deno.js
 var require_engine_is_deno = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/engine-is-deno.js"(exports, module) {
+    "use strict";
     module.exports = typeof Deno == "object" && Deno && typeof Deno.version == "object";
   }
 });
@@ -16103,6 +16216,7 @@ var require_engine_is_deno = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/engine-is-browser.js
 var require_engine_is_browser = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/engine-is-browser.js"(exports, module) {
+    "use strict";
     var IS_DENO = require_engine_is_deno();
     var IS_NODE2 = require_engine_is_node();
     module.exports = !IS_DENO && !IS_NODE2 && typeof window == "object" && typeof document == "object";
@@ -16112,6 +16226,7 @@ var require_engine_is_browser = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/promise-constructor-detection.js
 var require_promise_constructor_detection = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/promise-constructor-detection.js"(exports, module) {
+    "use strict";
     var global3 = require_global();
     var NativePromiseConstructor = require_promise_native_constructor();
     var isCallable2 = require_is_callable();
@@ -16241,7 +16356,7 @@ var require_es_promise_constructor = __commonJS({
     };
     var callReaction = function(reaction, state) {
       var value = state.value;
-      var ok = state.state == FULFILLED;
+      var ok = state.state === FULFILLED;
       var handler = ok ? reaction.ok : reaction.fail;
       var resolve = reaction.resolve;
       var reject = reaction.reject;
@@ -16420,7 +16535,7 @@ var require_es_promise_constructor = __commonJS({
         reaction.ok = isCallable2(onFulfilled) ? onFulfilled : true;
         reaction.fail = isCallable2(onRejected) && onRejected;
         reaction.domain = IS_NODE2 ? process2.domain : void 0;
-        if (state.state == PENDING)
+        if (state.state === PENDING)
           state.reactions.add(reaction);
         else
           microtask(function() {
@@ -16468,6 +16583,7 @@ var require_es_promise_constructor = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/iterators.js
 var require_iterators = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/iterators.js"(exports, module) {
+    "use strict";
     module.exports = {};
   }
 });
@@ -16475,6 +16591,7 @@ var require_iterators = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/is-array-iterator-method.js
 var require_is_array_iterator_method = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/is-array-iterator-method.js"(exports, module) {
+    "use strict";
     var wellKnownSymbol3 = require_well_known_symbol();
     var Iterators = require_iterators();
     var ITERATOR2 = wellKnownSymbol3("iterator");
@@ -16488,6 +16605,7 @@ var require_is_array_iterator_method = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/get-iterator-method.js
 var require_get_iterator_method = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/get-iterator-method.js"(exports, module) {
+    "use strict";
     var classof = require_classof();
     var getMethod4 = require_get_method();
     var isNullOrUndefined4 = require_is_null_or_undefined();
@@ -16504,6 +16622,7 @@ var require_get_iterator_method = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/get-iterator.js
 var require_get_iterator = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/get-iterator.js"(exports, module) {
+    "use strict";
     var call4 = require_function_call();
     var aCallable = require_a_callable();
     var anObject5 = require_an_object();
@@ -16522,6 +16641,7 @@ var require_get_iterator = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/iterator-close.js
 var require_iterator_close = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/iterator-close.js"(exports, module) {
+    "use strict";
     var call4 = require_function_call();
     var anObject5 = require_an_object();
     var getMethod4 = require_get_method();
@@ -16553,6 +16673,7 @@ var require_iterator_close = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/iterate.js
 var require_iterate = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/iterate.js"(exports, module) {
+    "use strict";
     var bind = require_function_bind_context();
     var call4 = require_function_call();
     var anObject5 = require_an_object();
@@ -16625,6 +16746,7 @@ var require_iterate = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/check-correctness-of-iteration.js
 var require_check_correctness_of_iteration = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/check-correctness-of-iteration.js"(exports, module) {
+    "use strict";
     var wellKnownSymbol3 = require_well_known_symbol();
     var ITERATOR2 = wellKnownSymbol3("iterator");
     var SAFE_CLOSING = false;
@@ -16649,8 +16771,12 @@ var require_check_correctness_of_iteration = __commonJS({
     var called;
     var iteratorWithReturn;
     module.exports = function(exec2, SKIP_CLOSING) {
-      if (!SKIP_CLOSING && !SAFE_CLOSING)
+      try {
+        if (!SKIP_CLOSING && !SAFE_CLOSING)
+          return false;
+      } catch (error) {
         return false;
+      }
       var ITERATION_SUPPORT = false;
       try {
         var object = {};
@@ -16672,6 +16798,7 @@ var require_check_correctness_of_iteration = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/promise-statics-incorrect-iteration.js
 var require_promise_statics_incorrect_iteration = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/promise-statics-incorrect-iteration.js"(exports, module) {
+    "use strict";
     var NativePromiseConstructor = require_promise_native_constructor();
     var checkCorrectnessOfIteration = require_check_correctness_of_iteration();
     var FORCED_PROMISE_CONSTRUCTOR = require_promise_constructor_detection().CONSTRUCTOR;
@@ -16804,6 +16931,7 @@ var require_es_promise_reject = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/promise-resolve.js
 var require_promise_resolve = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/promise-resolve.js"(exports, module) {
+    "use strict";
     var anObject5 = require_an_object();
     var isObject = require_is_object();
     var newPromiseCapability = require_new_promise_capability();
@@ -16842,6 +16970,7 @@ var require_es_promise_resolve = __commonJS({
 // ../simple-mind-map/node_modules/core-js/modules/es.promise.js
 var init_es_promise = __esm({
   "../simple-mind-map/node_modules/core-js/modules/es.promise.js"() {
+    "use strict";
     require_es_promise_constructor();
     require_es_promise_all();
     require_es_promise_catch();
@@ -16889,6 +17018,7 @@ var init_asyncToGenerator = __esm({
 // ../simple-mind-map/node_modules/core-js/internals/to-string.js
 var require_to_string = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/to-string.js"(exports, module) {
+    "use strict";
     var classof = require_classof();
     var $String = String;
     module.exports = function(argument) {
@@ -16931,13 +17061,14 @@ var require_regexp_flags = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/regexp-sticky-helpers.js
 var require_regexp_sticky_helpers = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/regexp-sticky-helpers.js"(exports, module) {
+    "use strict";
     var fails4 = require_fails();
     var global3 = require_global();
     var $RegExp = global3.RegExp;
     var UNSUPPORTED_Y2 = fails4(function() {
       var re2 = $RegExp("a", "y");
       re2.lastIndex = 2;
-      return re2.exec("abcd") != null;
+      return re2.exec("abcd") !== null;
     });
     var MISSED_STICKY = UNSUPPORTED_Y2 || fails4(function() {
       return !$RegExp("a", "y").sticky;
@@ -16945,7 +17076,7 @@ var require_regexp_sticky_helpers = __commonJS({
     var BROKEN_CARET = UNSUPPORTED_Y2 || fails4(function() {
       var re2 = $RegExp("^r", "gy");
       re2.lastIndex = 2;
-      return re2.exec("str") != null;
+      return re2.exec("str") !== null;
     });
     module.exports = {
       BROKEN_CARET,
@@ -16958,6 +17089,7 @@ var require_regexp_sticky_helpers = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/object-keys.js
 var require_object_keys = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/object-keys.js"(exports, module) {
+    "use strict";
     var internalObjectKeys = require_object_keys_internal();
     var enumBugKeys = require_enum_bug_keys();
     module.exports = Object.keys || function keys(O3) {
@@ -16969,6 +17101,7 @@ var require_object_keys = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/object-define-properties.js
 var require_object_define_properties = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/object-define-properties.js"(exports) {
+    "use strict";
     var DESCRIPTORS = require_descriptors();
     var V8_PROTOTYPE_DEFINE_BUG = require_v8_prototype_define_bug();
     var definePropertyModule = require_object_define_property();
@@ -16992,6 +17125,7 @@ var require_object_define_properties = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/object-create.js
 var require_object_create = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/object-create.js"(exports, module) {
+    "use strict";
     var anObject5 = require_an_object();
     var definePropertiesModule = require_object_define_properties();
     var enumBugKeys = require_enum_bug_keys();
@@ -17059,6 +17193,7 @@ var require_object_create = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/regexp-unsupported-dot-all.js
 var require_regexp_unsupported_dot_all = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/regexp-unsupported-dot-all.js"(exports, module) {
+    "use strict";
     var fails4 = require_fails();
     var global3 = require_global();
     var $RegExp = global3.RegExp;
@@ -17072,6 +17207,7 @@ var require_regexp_unsupported_dot_all = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/regexp-unsupported-ncg.js
 var require_regexp_unsupported_ncg = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/regexp-unsupported-ncg.js"(exports, module) {
+    "use strict";
     var fails4 = require_fails();
     var global3 = require_global();
     var $RegExp = global3.RegExp;
@@ -17209,14 +17345,14 @@ var require_fix_regexp_well_known_symbol_logic = __commonJS({
     var createNonEnumerableProperty2 = require_create_non_enumerable_property();
     var SPECIES = wellKnownSymbol3("species");
     var RegExpPrototype2 = RegExp.prototype;
-    module.exports = function(KEY, exec2, FORCED, SHAM) {
+    module.exports = function(KEY, exec2, FORCED3, SHAM) {
       var SYMBOL = wellKnownSymbol3(KEY);
       var DELEGATES_TO_SYMBOL = !fails4(function() {
         var O3 = {};
         O3[SYMBOL] = function() {
           return 7;
         };
-        return ""[KEY](O3) != 7;
+        return ""[KEY](O3) !== 7;
       });
       var DELEGATES_TO_EXEC = DELEGATES_TO_SYMBOL && !fails4(function() {
         var execCalled = false;
@@ -17237,7 +17373,7 @@ var require_fix_regexp_well_known_symbol_logic = __commonJS({
         re2[SYMBOL]("");
         return !execCalled;
       });
-      if (!DELEGATES_TO_SYMBOL || !DELEGATES_TO_EXEC || FORCED) {
+      if (!DELEGATES_TO_SYMBOL || !DELEGATES_TO_EXEC || FORCED3) {
         var uncurriedNativeRegExpMethod = uncurryThis8(/./[SYMBOL]);
         var methods2 = exec2(SYMBOL, ""[KEY], function(nativeMethod, regexp, str, arg2, forceStringMethod) {
           var uncurriedNativeMethod = uncurryThis8(nativeMethod);
@@ -17262,6 +17398,7 @@ var require_fix_regexp_well_known_symbol_logic = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/string-multibyte.js
 var require_string_multibyte = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/string-multibyte.js"(exports, module) {
+    "use strict";
     var uncurryThis8 = require_function_uncurry_this();
     var toIntegerOrInfinity2 = require_to_integer_or_infinity();
     var toString8 = require_to_string();
@@ -17306,6 +17443,7 @@ var require_advance_string_index = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/regexp-exec-abstract.js
 var require_regexp_exec_abstract = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/regexp-exec-abstract.js"(exports, module) {
+    "use strict";
     var call4 = require_function_call();
     var anObject5 = require_an_object();
     var isCallable2 = require_is_callable();
@@ -17383,6 +17521,7 @@ var init_es_string_match = __esm({
 // ../simple-mind-map/node_modules/core-js/internals/get-substitution.js
 var require_get_substitution = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/get-substitution.js"(exports, module) {
+    "use strict";
     var uncurryThis8 = require_function_uncurry_this();
     var toObject = require_to_object();
     var floor = Math.floor;
@@ -17507,13 +17646,15 @@ var init_es_string_replace = __esm({
           if (!functionalReplace)
             replaceValue = toString2(replaceValue);
           var global3 = rx2.global;
+          var fullUnicode;
           if (global3) {
-            var fullUnicode = rx2.unicode;
+            fullUnicode = rx2.unicode;
             rx2.lastIndex = 0;
           }
           var results = [];
+          var result;
           while (true) {
-            var result = regExpExec2(rx2, S2);
+            result = regExpExec2(rx2, S2);
             if (result === null)
               break;
             push(results, result);
@@ -17530,6 +17671,7 @@ var init_es_string_replace = __esm({
             var matched = toString2(result[0]);
             var position3 = max2(min(toIntegerOrInfinity(result.index), S2.length), 0);
             var captures = [];
+            var replacement;
             for (var j2 = 1; j2 < result.length; j2++)
               push(captures, maybeToString(result[j2]));
             var namedCaptures = result.groups;
@@ -17537,7 +17679,7 @@ var init_es_string_replace = __esm({
               var replacerArgs = concat([matched], captures, position3, S2);
               if (namedCaptures !== void 0)
                 push(replacerArgs, namedCaptures);
-              var replacement = toString2(apply(replaceValue, void 0, replacerArgs));
+              replacement = toString2(apply(replaceValue, void 0, replacerArgs));
             } else {
               replacement = getSubstitution(matched, S2, position3, captures, namedCaptures, replaceValue);
             }
@@ -17556,13 +17698,14 @@ var init_es_string_replace = __esm({
 // ../simple-mind-map/node_modules/core-js/internals/is-regexp.js
 var require_is_regexp = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/is-regexp.js"(exports, module) {
+    "use strict";
     var isObject = require_is_object();
     var classof = require_classof_raw();
     var wellKnownSymbol3 = require_well_known_symbol();
     var MATCH = wellKnownSymbol3("match");
     module.exports = function(it2) {
       var isRegExp2;
-      return isObject(it2) && ((isRegExp2 = it2[MATCH]) !== void 0 ? !!isRegExp2 : classof(it2) == "RegExp");
+      return isObject(it2) && ((isRegExp2 = it2[MATCH]) !== void 0 ? !!isRegExp2 : classof(it2) === "RegExp");
     };
   }
 });
@@ -17570,6 +17713,7 @@ var require_is_regexp = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/not-a-regexp.js
 var require_not_a_regexp = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/not-a-regexp.js"(exports, module) {
+    "use strict";
     var isRegExp2 = require_is_regexp();
     var $TypeError = TypeError;
     module.exports = function(it2) {
@@ -17584,6 +17728,7 @@ var require_not_a_regexp = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/correct-is-regexp-logic.js
 var require_correct_is_regexp_logic = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/correct-is-regexp-logic.js"(exports, module) {
+    "use strict";
     var wellKnownSymbol3 = require_well_known_symbol();
     var MATCH = wellKnownSymbol3("match");
     module.exports = function(METHOD_NAME) {
@@ -17639,12 +17784,13 @@ var init_es_string_starts_with = __esm({
 // ../simple-mind-map/node_modules/core-js/internals/add-to-unscopables.js
 var require_add_to_unscopables = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/add-to-unscopables.js"(exports, module) {
+    "use strict";
     var wellKnownSymbol3 = require_well_known_symbol();
     var create2 = require_object_create();
     var defineProperty = require_object_define_property().f;
     var UNSCOPABLES = wellKnownSymbol3("unscopables");
     var ArrayPrototype = Array.prototype;
-    if (ArrayPrototype[UNSCOPABLES] == void 0) {
+    if (ArrayPrototype[UNSCOPABLES] === void 0) {
       defineProperty(ArrayPrototype, UNSCOPABLES, {
         configurable: true,
         value: create2(null)
@@ -17659,6 +17805,7 @@ var require_add_to_unscopables = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/correct-prototype-getter.js
 var require_correct_prototype_getter = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/correct-prototype-getter.js"(exports, module) {
+    "use strict";
     var fails4 = require_fails();
     module.exports = !fails4(function() {
       function F2() {
@@ -17672,6 +17819,7 @@ var require_correct_prototype_getter = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/object-get-prototype-of.js
 var require_object_get_prototype_of = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/object-get-prototype-of.js"(exports, module) {
+    "use strict";
     var hasOwn = require_has_own_property();
     var isCallable2 = require_is_callable();
     var toObject = require_to_object();
@@ -17791,12 +17939,12 @@ var require_iterator_define = __commonJS({
     var returnThis = function() {
       return this;
     };
-    module.exports = function(Iterable, NAME, IteratorConstructor, next2, DEFAULT, IS_SET, FORCED) {
+    module.exports = function(Iterable, NAME, IteratorConstructor, next2, DEFAULT, IS_SET, FORCED3) {
       createIteratorConstructor(IteratorConstructor, NAME, next2);
       var getIterationMethod = function(KIND) {
         if (KIND === DEFAULT && defaultIterator)
           return defaultIterator;
-        if (!BUGGY_SAFARI_ITERATORS && KIND in IterablePrototype)
+        if (!BUGGY_SAFARI_ITERATORS && KIND && KIND in IterablePrototype)
           return IterablePrototype[KIND];
         switch (KIND) {
           case KEYS:
@@ -17821,7 +17969,7 @@ var require_iterator_define = __commonJS({
       var IterablePrototype = Iterable.prototype;
       var nativeIterator = IterablePrototype[ITERATOR2] || IterablePrototype["@@iterator"] || DEFAULT && IterablePrototype[DEFAULT];
       var defaultIterator = !BUGGY_SAFARI_ITERATORS && nativeIterator || getIterationMethod(DEFAULT);
-      var anyNativeIterator = NAME == "Array" ? IterablePrototype.entries || nativeIterator : nativeIterator;
+      var anyNativeIterator = NAME === "Array" ? IterablePrototype.entries || nativeIterator : nativeIterator;
       var CurrentIteratorPrototype, methods2, KEY;
       if (anyNativeIterator) {
         CurrentIteratorPrototype = getPrototypeOf(anyNativeIterator.call(new Iterable()));
@@ -17838,7 +17986,7 @@ var require_iterator_define = __commonJS({
             Iterators[TO_STRING_TAG2] = returnThis;
         }
       }
-      if (PROPER_FUNCTION_NAME2 && DEFAULT == VALUES && nativeIterator && nativeIterator.name !== VALUES) {
+      if (PROPER_FUNCTION_NAME2 && DEFAULT === VALUES && nativeIterator && nativeIterator.name !== VALUES) {
         if (!IS_PURE3 && CONFIGURABLE_FUNCTION_NAME) {
           createNonEnumerableProperty2(IterablePrototype, "name", VALUES);
         } else {
@@ -17854,7 +18002,7 @@ var require_iterator_define = __commonJS({
           keys: IS_SET ? defaultIterator : getIterationMethod(KEYS),
           entries: getIterationMethod(ENTRIES)
         };
-        if (FORCED)
+        if (FORCED3)
           for (KEY in methods2) {
             if (BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME || !(KEY in IterablePrototype)) {
               defineBuiltIn2(IterablePrototype, KEY, methods2[KEY]);
@@ -17863,7 +18011,7 @@ var require_iterator_define = __commonJS({
         else
           $9({ target: NAME, proto: true, forced: BUGGY_SAFARI_ITERATORS || INCORRECT_VALUES_NAME }, methods2);
       }
-      if ((!IS_PURE3 || FORCED) && IterablePrototype[ITERATOR2] !== defaultIterator) {
+      if ((!IS_PURE3 || FORCED3) && IterablePrototype[ITERATOR2] !== defaultIterator) {
         defineBuiltIn2(IterablePrototype, ITERATOR2, defaultIterator, { name: DEFAULT });
       }
       Iterators[NAME] = defaultIterator;
@@ -17875,6 +18023,7 @@ var require_iterator_define = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/create-iter-result-object.js
 var require_create_iter_result_object = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/create-iter-result-object.js"(exports, module) {
+    "use strict";
     module.exports = function(value, done) {
       return { value, done };
     };
@@ -17916,10 +18065,12 @@ var require_es_array_iterator = __commonJS({
         state.target = void 0;
         return createIterResultObject(void 0, true);
       }
-      if (kind == "keys")
-        return createIterResultObject(index3, false);
-      if (kind == "values")
-        return createIterResultObject(target[index3], false);
+      switch (kind) {
+        case "keys":
+          return createIterResultObject(index3, false);
+        case "values":
+          return createIterResultObject(target[index3], false);
+      }
       return createIterResultObject([index3, target[index3]], false);
     }, "values");
     var values = Iterators.Arguments = Iterators.Array;
@@ -17937,6 +18088,7 @@ var require_es_array_iterator = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/dom-iterables.js
 var require_dom_iterables = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/dom-iterables.js"(exports, module) {
+    "use strict";
     module.exports = {
       CSSRuleList: 0,
       CSSStyleDeclaration: 0,
@@ -17976,6 +18128,7 @@ var require_dom_iterables = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/dom-token-list-prototype.js
 var require_dom_token_list_prototype = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/dom-token-list-prototype.js"(exports, module) {
+    "use strict";
     var documentCreateElement = require_document_create_element();
     var classList = documentCreateElement("span").classList;
     var DOMTokenListPrototype2 = classList && classList.constructor && classList.constructor.prototype;
@@ -17987,6 +18140,7 @@ var require_dom_token_list_prototype = __commonJS({
 var global2, DOMIterables, DOMTokenListPrototype, ArrayIteratorMethods, createNonEnumerableProperty, wellKnownSymbol2, ITERATOR, TO_STRING_TAG, ArrayValues, handlePrototype, COLLECTION_NAME;
 var init_web_dom_collections_iterator = __esm({
   "../simple-mind-map/node_modules/core-js/modules/web.dom-collections.iterator.js"() {
+    "use strict";
     global2 = require_global();
     DOMIterables = require_dom_iterables();
     DOMTokenListPrototype = require_dom_token_list_prototype();
@@ -18080,6 +18234,7 @@ var init_defineProperty = __esm({
 // ../simple-mind-map/node_modules/core-js/internals/array-reduce.js
 var require_array_reduce = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/array-reduce.js"(exports, module) {
+    "use strict";
     var aCallable = require_a_callable();
     var toObject = require_to_object();
     var IndexedObject = require_indexed_object();
@@ -18140,7 +18295,7 @@ var require_array_method_is_strict = __commonJS({
 });
 
 // ../simple-mind-map/node_modules/core-js/modules/es.array.reduce.js
-var $2, $reduce, arrayMethodIsStrict, CHROME_VERSION, IS_NODE, STRICT_METHOD, CHROME_BUG;
+var $2, $reduce, arrayMethodIsStrict, CHROME_VERSION, IS_NODE, CHROME_BUG, FORCED;
 var init_es_array_reduce = __esm({
   "../simple-mind-map/node_modules/core-js/modules/es.array.reduce.js"() {
     "use strict";
@@ -18149,9 +18304,9 @@ var init_es_array_reduce = __esm({
     arrayMethodIsStrict = require_array_method_is_strict();
     CHROME_VERSION = require_engine_v8_version();
     IS_NODE = require_engine_is_node();
-    STRICT_METHOD = arrayMethodIsStrict("reduce");
     CHROME_BUG = !IS_NODE && CHROME_VERSION > 79 && CHROME_VERSION < 83;
-    $2({ target: "Array", proto: true, forced: !STRICT_METHOD || CHROME_BUG }, {
+    FORCED = CHROME_BUG || !arrayMethodIsStrict("reduce");
+    $2({ target: "Array", proto: true, forced: FORCED }, {
       reduce: function reduce(callbackfn) {
         var length2 = arguments.length;
         return $reduce(this, callbackfn, length2, length2 > 1 ? arguments[1] : void 0);
@@ -18216,6 +18371,7 @@ var require_create_property = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/array-slice-simple.js
 var require_array_slice_simple = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/array-slice-simple.js"(exports, module) {
+    "use strict";
     var toAbsoluteIndex = require_to_absolute_index();
     var lengthOfArrayLike = require_length_of_array_like();
     var createProperty = require_create_property();
@@ -18226,7 +18382,8 @@ var require_array_slice_simple = __commonJS({
       var k2 = toAbsoluteIndex(start, length2);
       var fin = toAbsoluteIndex(end === void 0 ? length2 : end, length2);
       var result = $Array(max3(fin - k2, 0));
-      for (var n3 = 0; k2 < fin; k2++, n3++)
+      var n3 = 0;
+      for (; k2 < fin; k2++, n3++)
         createProperty(result, n3, O3[k2]);
       result.length = n3;
       return result;
@@ -18275,8 +18432,8 @@ var init_es_string_split = __esm({
     });
     fixRegExpWellKnownSymbolLogic3("split", function(SPLIT, nativeSplit, maybeCallNative) {
       var internalSplit;
-      if ("abbc".split(/(b)*/)[1] == "c" || // eslint-disable-next-line regexp/no-empty-group -- required for testing
-      "test".split(/(?:)/, -1).length != 4 || "ab".split(/(?:ab)*/).length != 2 || ".".split(/(.?)(.?)/).length != 4 || // eslint-disable-next-line regexp/no-empty-capturing-group, regexp/no-empty-group -- required for testing
+      if ("abbc".split(/(b)*/)[1] === "c" || // eslint-disable-next-line regexp/no-empty-group -- required for testing
+      "test".split(/(?:)/, -1).length !== 4 || "ab".split(/(?:ab)*/).length !== 2 || ".".split(/(.?)(.?)/).length !== 4 || // eslint-disable-next-line regexp/no-empty-capturing-group, regexp/no-empty-group -- required for testing
       ".".split(/()()/).length > 1 || "".split(/.?/).length) {
         internalSplit = function(separator, limit) {
           var string3 = toString5(requireObjectCoercible5(this));
@@ -18488,6 +18645,7 @@ var require_raf = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/whitespaces.js
 var require_whitespaces = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/whitespaces.js"(exports, module) {
+    "use strict";
     module.exports = "	\n\v\f\r \xA0\u1680\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF";
   }
 });
@@ -18495,21 +18653,21 @@ var require_whitespaces = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/string-trim.js
 var require_string_trim = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/string-trim.js"(exports, module) {
+    "use strict";
     var uncurryThis8 = require_function_uncurry_this();
     var requireObjectCoercible7 = require_require_object_coercible();
     var toString8 = require_to_string();
     var whitespaces = require_whitespaces();
     var replace = uncurryThis8("".replace);
-    var whitespace2 = "[" + whitespaces + "]";
-    var ltrim = RegExp("^" + whitespace2 + whitespace2 + "*");
-    var rtrim = RegExp(whitespace2 + whitespace2 + "*$");
+    var ltrim = RegExp("^[" + whitespaces + "]+");
+    var rtrim = RegExp("(^|[^" + whitespaces + "])[" + whitespaces + "]+$");
     var createMethod = function(TYPE) {
       return function($this) {
         var string3 = toString8(requireObjectCoercible7($this));
         if (TYPE & 1)
           string3 = replace(string3, ltrim, "");
         if (TYPE & 2)
-          string3 = replace(string3, rtrim, "");
+          string3 = replace(string3, rtrim, "$1");
         return string3;
       };
     };
@@ -18530,6 +18688,7 @@ var require_string_trim = __commonJS({
 // ../simple-mind-map/node_modules/core-js/internals/string-trim-forced.js
 var require_string_trim_forced = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/string-trim-forced.js"(exports, module) {
+    "use strict";
     var PROPER_FUNCTION_NAME2 = require_function_name().PROPER;
     var fails4 = require_fails();
     var whitespaces = require_whitespaces();
@@ -18836,7 +18995,7 @@ var require_rgbcolor = __commonJS({
 });
 
 // ../simple-mind-map/node_modules/core-js/modules/es.array.index-of.js
-var $5, uncurryThis5, $indexOf, arrayMethodIsStrict2, nativeIndexOf, NEGATIVE_ZERO, STRICT_METHOD2;
+var $5, uncurryThis5, $indexOf, arrayMethodIsStrict2, nativeIndexOf, NEGATIVE_ZERO, FORCED2;
 var init_es_array_index_of = __esm({
   "../simple-mind-map/node_modules/core-js/modules/es.array.index-of.js"() {
     "use strict";
@@ -18846,8 +19005,8 @@ var init_es_array_index_of = __esm({
     arrayMethodIsStrict2 = require_array_method_is_strict();
     nativeIndexOf = uncurryThis5([].indexOf);
     NEGATIVE_ZERO = !!nativeIndexOf && 1 / nativeIndexOf([1], 1, -0) < 0;
-    STRICT_METHOD2 = arrayMethodIsStrict2("indexOf");
-    $5({ target: "Array", proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD2 }, {
+    FORCED2 = NEGATIVE_ZERO || !arrayMethodIsStrict2("indexOf");
+    $5({ target: "Array", proto: true, forced: FORCED2 }, {
       indexOf: function indexOf(searchElement) {
         var fromIndex = arguments.length > 1 ? arguments[1] : void 0;
         return NEGATIVE_ZERO ? nativeIndexOf(this, searchElement, fromIndex) || 0 : $indexOf(this, searchElement, fromIndex);
@@ -18883,9 +19042,10 @@ var init_es_string_includes = __esm({
 // ../simple-mind-map/node_modules/core-js/internals/is-array.js
 var require_is_array = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/is-array.js"(exports, module) {
+    "use strict";
     var classof = require_classof_raw();
     module.exports = Array.isArray || function isArray2(argument) {
-      return classof(argument) == "Array";
+      return classof(argument) === "Array";
     };
   }
 });
@@ -19351,6 +19511,7 @@ var init_SVGPathData_module = __esm({
 // ../simple-mind-map/node_modules/core-js/internals/regexp-get-flags.js
 var require_regexp_get_flags = __commonJS({
   "../simple-mind-map/node_modules/core-js/internals/regexp-get-flags.js"(exports, module) {
+    "use strict";
     var call4 = require_function_call();
     var hasOwn = require_has_own_property();
     var isPrototypeOf = require_object_is_prototype_of();
@@ -19378,9 +19539,9 @@ var init_es_regexp_to_string = __esm({
     RegExpPrototype = RegExp.prototype;
     nativeToString = RegExpPrototype[TO_STRING];
     NOT_GENERIC = fails3(function() {
-      return nativeToString.call({ source: "a", flags: "b" }) != "/a/b";
+      return nativeToString.call({ source: "a", flags: "b" }) !== "/a/b";
     });
-    INCORRECT_NAME = PROPER_FUNCTION_NAME && nativeToString.name != TO_STRING;
+    INCORRECT_NAME = PROPER_FUNCTION_NAME && nativeToString.name !== TO_STRING;
     if (NOT_GENERIC || INCORRECT_NAME) {
       defineBuiltIn(RegExp.prototype, TO_STRING, function toString8() {
         var R2 = anObject4(this);
@@ -25374,7 +25535,19 @@ var require_quill = __commonJS({
             Delta2.prototype.compose = function(other) {
               var thisIter = op.iterator(this.ops);
               var otherIter = op.iterator(other.ops);
-              var delta = new Delta2();
+              var ops = [];
+              var firstOther = otherIter.peek();
+              if (firstOther != null && typeof firstOther.retain === "number" && firstOther.attributes == null) {
+                var firstLeft = firstOther.retain;
+                while (thisIter.peekType() === "insert" && thisIter.peekLength() <= firstLeft) {
+                  firstLeft -= thisIter.peekLength();
+                  ops.push(thisIter.next());
+                }
+                if (firstOther.retain - firstLeft > 0) {
+                  otherIter.next(firstOther.retain - firstLeft);
+                }
+              }
+              var delta = new Delta2(ops);
               while (thisIter.hasNext() || otherIter.hasNext()) {
                 if (otherIter.peekType() === "insert") {
                   delta.push(otherIter.next());
@@ -25395,6 +25568,10 @@ var require_quill = __commonJS({
                     if (attributes)
                       newOp.attributes = attributes;
                     delta.push(newOp);
+                    if (!otherIter.hasNext() && equal(delta.ops[delta.ops.length - 1], newOp)) {
+                      var rest = new Delta2(thisIter.rest());
+                      return delta.concat(rest).chop();
+                    }
                   } else if (typeof otherOp["delete"] === "number" && typeof thisOp.retain === "number") {
                     delta.push(otherOp);
                   }
@@ -25538,6 +25715,8 @@ var require_quill = __commonJS({
             "use strict";
             var hasOwn = Object.prototype.hasOwnProperty;
             var toStr = Object.prototype.toString;
+            var defineProperty = Object.defineProperty;
+            var gOPD = Object.getOwnPropertyDescriptor;
             var isArray2 = function isArray3(arr) {
               if (typeof Array.isArray === "function") {
                 return Array.isArray(arr);
@@ -25558,6 +25737,28 @@ var require_quill = __commonJS({
               }
               return typeof key === "undefined" || hasOwn.call(obj, key);
             };
+            var setProperty = function setProperty2(target, options) {
+              if (defineProperty && options.name === "__proto__") {
+                defineProperty(target, options.name, {
+                  enumerable: true,
+                  configurable: true,
+                  value: options.newValue,
+                  writable: true
+                });
+              } else {
+                target[options.name] = options.newValue;
+              }
+            };
+            var getProperty = function getProperty2(obj, name) {
+              if (name === "__proto__") {
+                if (!hasOwn.call(obj, name)) {
+                  return void 0;
+                } else if (gOPD) {
+                  return gOPD(obj, name).value;
+                }
+              }
+              return obj[name];
+            };
             module2.exports = function extend2() {
               var options, name, src, copy, copyIsArray, clone;
               var target = arguments[0];
@@ -25576,8 +25777,8 @@ var require_quill = __commonJS({
                 options = arguments[i3];
                 if (options != null) {
                   for (name in options) {
-                    src = target[name];
-                    copy = options[name];
+                    src = getProperty(target, name);
+                    copy = getProperty(options, name);
                     if (target !== copy) {
                       if (deep && copy && (isPlainObject(copy) || (copyIsArray = isArray2(copy)))) {
                         if (copyIsArray) {
@@ -25586,9 +25787,9 @@ var require_quill = __commonJS({
                         } else {
                           clone = src && isPlainObject(src) ? src : {};
                         }
-                        target[name] = extend2(deep, clone, copy);
+                        setProperty(target, { name, newValue: extend2(deep, clone, copy) });
                       } else if (typeof copy !== "undefined") {
-                        target[name] = copy;
+                        setProperty(target, { name, newValue: copy });
                       }
                     }
                   }
@@ -26428,7 +26629,7 @@ var require_quill = __commonJS({
             };
             Quill2.events = _emitter4.default.events;
             Quill2.sources = _emitter4.default.sources;
-            Quill2.version = false ? "dev" : "1.3.6";
+            Quill2.version = false ? "dev" : "1.3.7";
             Quill2.imports = {
               "delta": _quillDelta2.default,
               "parchment": _parchment2.default,
@@ -28703,8 +28904,8 @@ var require_quill = __commonJS({
                   return [this.parent.domNode, offset];
                 };
                 LeafBlot2.prototype.value = function() {
-                  return _a2 = {}, _a2[this.statics.blotName] = this.statics.value(this.domNode) || true, _a2;
                   var _a2;
+                  return _a2 = {}, _a2[this.statics.blotName] = this.statics.value(this.domNode) || true, _a2;
                 };
                 LeafBlot2.scope = Registry.Scope.INLINE_BLOT;
                 return LeafBlot2;
@@ -28846,6 +29047,21 @@ var require_quill = __commonJS({
               }
               return "retain";
             };
+            Iterator.prototype.rest = function() {
+              if (!this.hasNext()) {
+                return [];
+              } else if (this.offset === 0) {
+                return this.ops.slice(this.index);
+              } else {
+                var offset = this.offset;
+                var index3 = this.index;
+                var next2 = this.next();
+                var rest = this.ops.slice(this.index);
+                this.offset = offset;
+                this.index = index3;
+                return [next2].concat(rest);
+              }
+            };
             module2.exports = lib;
           },
           /* 21 */
@@ -28922,7 +29138,11 @@ var require_quill = __commonJS({
                   } else if (clone2.__isDate(parent2)) {
                     child = new Date(parent2.getTime());
                   } else if (useBuffer && Buffer.isBuffer(parent2)) {
-                    child = new Buffer(parent2.length);
+                    if (Buffer.allocUnsafe) {
+                      child = Buffer.allocUnsafe(parent2.length);
+                    } else {
+                      child = new Buffer(parent2.length);
+                    }
                     parent2.copy(child);
                     return child;
                   } else if (_instanceof(parent2, Error)) {
@@ -30427,6 +30647,7 @@ var require_quill = __commonJS({
                   var node3 = _get(Link2.__proto__ || Object.getPrototypeOf(Link2), "create", this).call(this, value);
                   value = this.sanitize(value);
                   node3.setAttribute("href", value);
+                  node3.setAttribute("rel", "noopener noreferrer");
                   node3.setAttribute("target", "_blank");
                   return node3;
                 }
@@ -34903,7 +35124,7 @@ var require_quill = __commonJS({
               }]);
               return SnowTooltip2;
             }(_base.BaseTooltip);
-            SnowTooltip.TEMPLATE = ['<a class="ql-preview" target="_blank" href="about:blank"></a>', '<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '<a class="ql-action"></a>', '<a class="ql-remove"></a>'].join("");
+            SnowTooltip.TEMPLATE = ['<a class="ql-preview" rel="noopener noreferrer" target="_blank" href="about:blank"></a>', '<input type="text" data-formula="e=mc^2" data-link="https://quilljs.com" data-video="Embed URL">', '<a class="ql-action"></a>', '<a class="ql-remove"></a>'].join("");
             exports2.default = SnowTheme;
           },
           /* 63 */
@@ -37371,6 +37592,20 @@ var require_has_symbols = __commonJS({
   }
 });
 
+// ../simple-mind-map/node_modules/has-proto/index.js
+var require_has_proto = __commonJS({
+  "../simple-mind-map/node_modules/has-proto/index.js"(exports, module) {
+    "use strict";
+    var test2 = {
+      foo: {}
+    };
+    var $Object = Object;
+    module.exports = function hasProto() {
+      return { __proto__: test2 }.foo === test2.foo && !({ __proto__: null } instanceof $Object);
+    };
+  }
+});
+
 // ../simple-mind-map/node_modules/function-bind/implementation.js
 var require_implementation2 = __commonJS({
   "../simple-mind-map/node_modules/function-bind/implementation.js"(exports, module) {
@@ -37477,16 +37712,17 @@ var require_get_intrinsic = __commonJS({
       }
     }() : throwTypeError;
     var hasSymbols = require_has_symbols()();
-    var getProto = Object.getPrototypeOf || function(x3) {
+    var hasProto = require_has_proto()();
+    var getProto = Object.getPrototypeOf || (hasProto ? function(x3) {
       return x3.__proto__;
-    };
+    } : null);
     var needsEval = {};
-    var TypedArray = typeof Uint8Array === "undefined" ? undefined2 : getProto(Uint8Array);
+    var TypedArray = typeof Uint8Array === "undefined" || !getProto ? undefined2 : getProto(Uint8Array);
     var INTRINSICS = {
       "%AggregateError%": typeof AggregateError === "undefined" ? undefined2 : AggregateError,
       "%Array%": Array,
       "%ArrayBuffer%": typeof ArrayBuffer === "undefined" ? undefined2 : ArrayBuffer,
-      "%ArrayIteratorPrototype%": hasSymbols ? getProto([][Symbol.iterator]()) : undefined2,
+      "%ArrayIteratorPrototype%": hasSymbols && getProto ? getProto([][Symbol.iterator]()) : undefined2,
       "%AsyncFromSyncIteratorPrototype%": undefined2,
       "%AsyncFunction%": needsEval,
       "%AsyncGenerator%": needsEval,
@@ -37517,10 +37753,10 @@ var require_get_intrinsic = __commonJS({
       "%Int32Array%": typeof Int32Array === "undefined" ? undefined2 : Int32Array,
       "%isFinite%": isFinite,
       "%isNaN%": isNaN,
-      "%IteratorPrototype%": hasSymbols ? getProto(getProto([][Symbol.iterator]())) : undefined2,
+      "%IteratorPrototype%": hasSymbols && getProto ? getProto(getProto([][Symbol.iterator]())) : undefined2,
       "%JSON%": typeof JSON === "object" ? JSON : undefined2,
       "%Map%": typeof Map === "undefined" ? undefined2 : Map,
-      "%MapIteratorPrototype%": typeof Map === "undefined" || !hasSymbols ? undefined2 : getProto((/* @__PURE__ */ new Map())[Symbol.iterator]()),
+      "%MapIteratorPrototype%": typeof Map === "undefined" || !hasSymbols || !getProto ? undefined2 : getProto((/* @__PURE__ */ new Map())[Symbol.iterator]()),
       "%Math%": Math,
       "%Number%": Number,
       "%Object%": Object,
@@ -37533,10 +37769,10 @@ var require_get_intrinsic = __commonJS({
       "%Reflect%": typeof Reflect === "undefined" ? undefined2 : Reflect,
       "%RegExp%": RegExp,
       "%Set%": typeof Set === "undefined" ? undefined2 : Set,
-      "%SetIteratorPrototype%": typeof Set === "undefined" || !hasSymbols ? undefined2 : getProto((/* @__PURE__ */ new Set())[Symbol.iterator]()),
+      "%SetIteratorPrototype%": typeof Set === "undefined" || !hasSymbols || !getProto ? undefined2 : getProto((/* @__PURE__ */ new Set())[Symbol.iterator]()),
       "%SharedArrayBuffer%": typeof SharedArrayBuffer === "undefined" ? undefined2 : SharedArrayBuffer,
       "%String%": String,
-      "%StringIteratorPrototype%": hasSymbols ? getProto(""[Symbol.iterator]()) : undefined2,
+      "%StringIteratorPrototype%": hasSymbols && getProto ? getProto(""[Symbol.iterator]()) : undefined2,
       "%Symbol%": hasSymbols ? Symbol : undefined2,
       "%SyntaxError%": $SyntaxError,
       "%ThrowTypeError%": ThrowTypeError,
@@ -37551,11 +37787,13 @@ var require_get_intrinsic = __commonJS({
       "%WeakRef%": typeof WeakRef === "undefined" ? undefined2 : WeakRef,
       "%WeakSet%": typeof WeakSet === "undefined" ? undefined2 : WeakSet
     };
-    try {
-      null.error;
-    } catch (e2) {
-      errorProto = getProto(getProto(e2));
-      INTRINSICS["%Error.prototype%"] = errorProto;
+    if (getProto) {
+      try {
+        null.error;
+      } catch (e2) {
+        errorProto = getProto(getProto(e2));
+        INTRINSICS["%Error.prototype%"] = errorProto;
+      }
     }
     var errorProto;
     var doEval = function doEval2(name) {
@@ -37573,7 +37811,7 @@ var require_get_intrinsic = __commonJS({
         }
       } else if (name === "%AsyncIteratorPrototype%") {
         var gen = doEval2("%AsyncGenerator%");
-        if (gen) {
+        if (gen && getProto) {
           value = getProto(gen.prototype);
         }
       }
@@ -37862,6 +38100,73 @@ var require_has_property_descriptors = __commonJS({
   }
 });
 
+// ../simple-mind-map/node_modules/gopd/index.js
+var require_gopd = __commonJS({
+  "../simple-mind-map/node_modules/gopd/index.js"(exports, module) {
+    "use strict";
+    var GetIntrinsic = require_get_intrinsic();
+    var $gOPD = GetIntrinsic("%Object.getOwnPropertyDescriptor%", true);
+    if ($gOPD) {
+      try {
+        $gOPD([], "length");
+      } catch (e2) {
+        $gOPD = null;
+      }
+    }
+    module.exports = $gOPD;
+  }
+});
+
+// ../simple-mind-map/node_modules/define-data-property/index.js
+var require_define_data_property = __commonJS({
+  "../simple-mind-map/node_modules/define-data-property/index.js"(exports, module) {
+    "use strict";
+    var hasPropertyDescriptors = require_has_property_descriptors()();
+    var GetIntrinsic = require_get_intrinsic();
+    var $defineProperty = hasPropertyDescriptors && GetIntrinsic("%Object.defineProperty%", true);
+    var $SyntaxError = GetIntrinsic("%SyntaxError%");
+    var $TypeError = GetIntrinsic("%TypeError%");
+    var gopd = require_gopd();
+    module.exports = function defineDataProperty(obj, property, value) {
+      if (!obj || typeof obj !== "object" && typeof obj !== "function") {
+        throw new $TypeError("`obj` must be an object or a function`");
+      }
+      if (typeof property !== "string" && typeof property !== "symbol") {
+        throw new $TypeError("`property` must be a string or a symbol`");
+      }
+      if (arguments.length > 3 && typeof arguments[3] !== "boolean" && arguments[3] !== null) {
+        throw new $TypeError("`nonEnumerable`, if provided, must be a boolean or null");
+      }
+      if (arguments.length > 4 && typeof arguments[4] !== "boolean" && arguments[4] !== null) {
+        throw new $TypeError("`nonWritable`, if provided, must be a boolean or null");
+      }
+      if (arguments.length > 5 && typeof arguments[5] !== "boolean" && arguments[5] !== null) {
+        throw new $TypeError("`nonConfigurable`, if provided, must be a boolean or null");
+      }
+      if (arguments.length > 6 && typeof arguments[6] !== "boolean") {
+        throw new $TypeError("`loose`, if provided, must be a boolean");
+      }
+      var nonEnumerable = arguments.length > 3 ? arguments[3] : null;
+      var nonWritable = arguments.length > 4 ? arguments[4] : null;
+      var nonConfigurable = arguments.length > 5 ? arguments[5] : null;
+      var loose = arguments.length > 6 ? arguments[6] : false;
+      var desc = !!gopd && gopd(obj, property);
+      if ($defineProperty) {
+        $defineProperty(obj, property, {
+          configurable: nonConfigurable === null && desc ? desc.configurable : !nonConfigurable,
+          enumerable: nonEnumerable === null && desc ? desc.enumerable : !nonEnumerable,
+          value,
+          writable: nonWritable === null && desc ? desc.writable : !nonWritable
+        });
+      } else if (loose || !nonEnumerable && !nonWritable && !nonConfigurable) {
+        obj[property] = value;
+      } else {
+        throw new $SyntaxError("This environment does not support defining a property as non-configurable, non-writable, or non-enumerable.");
+      }
+    };
+  }
+});
+
 // ../simple-mind-map/node_modules/define-properties/index.js
 var require_define_properties = __commonJS({
   "../simple-mind-map/node_modules/define-properties/index.js"(exports, module) {
@@ -37870,12 +38175,11 @@ var require_define_properties = __commonJS({
     var hasSymbols = typeof Symbol === "function" && typeof Symbol("foo") === "symbol";
     var toStr = Object.prototype.toString;
     var concat2 = Array.prototype.concat;
-    var origDefineProperty = Object.defineProperty;
+    var defineDataProperty = require_define_data_property();
     var isFunction = function(fn) {
       return typeof fn === "function" && toStr.call(fn) === "[object Function]";
     };
-    var hasPropertyDescriptors = require_has_property_descriptors()();
-    var supportsDescriptors = origDefineProperty && hasPropertyDescriptors;
+    var supportsDescriptors = require_has_property_descriptors()();
     var defineProperty = function(object, name, value, predicate) {
       if (name in object) {
         if (predicate === true) {
@@ -37887,14 +38191,9 @@ var require_define_properties = __commonJS({
         }
       }
       if (supportsDescriptors) {
-        origDefineProperty(object, name, {
-          configurable: true,
-          enumerable: false,
-          value,
-          writable: true
-        });
+        defineDataProperty(object, name, value, true);
       } else {
-        object[name] = value;
+        defineDataProperty(object, name, value);
       }
     };
     var defineProperties = function(object, map3) {
@@ -38067,14 +38366,39 @@ var require_functions_have_names = __commonJS({
   }
 });
 
+// ../simple-mind-map/node_modules/set-function-name/index.js
+var require_set_function_name = __commonJS({
+  "../simple-mind-map/node_modules/set-function-name/index.js"(exports, module) {
+    "use strict";
+    var define2 = require_define_data_property();
+    var hasDescriptors = require_has_property_descriptors()();
+    var functionsHaveConfigurableNames = require_functions_have_names().functionsHaveConfigurableNames();
+    var $TypeError = TypeError;
+    module.exports = function setFunctionName(fn, name) {
+      if (typeof fn !== "function") {
+        throw new $TypeError("`fn` is not a function");
+      }
+      var loose = arguments.length > 2 && !!arguments[2];
+      if (!loose || functionsHaveConfigurableNames) {
+        if (hasDescriptors) {
+          define2(fn, "name", name, true, true);
+        } else {
+          define2(fn, "name", name);
+        }
+      }
+      return fn;
+    };
+  }
+});
+
 // ../simple-mind-map/node_modules/regexp.prototype.flags/implementation.js
 var require_implementation4 = __commonJS({
   "../simple-mind-map/node_modules/regexp.prototype.flags/implementation.js"(exports, module) {
     "use strict";
-    var functionsHaveConfigurableNames = require_functions_have_names().functionsHaveConfigurableNames();
+    var setFunctionName = require_set_function_name();
     var $Object = Object;
     var $TypeError = TypeError;
-    module.exports = function flags() {
+    module.exports = setFunctionName(function flags() {
       if (this != null && this !== $Object(this)) {
         throw new $TypeError("RegExp.prototype.flags getter called on non-object");
       }
@@ -38097,14 +38421,14 @@ var require_implementation4 = __commonJS({
       if (this.unicode) {
         result += "u";
       }
+      if (this.unicodeSets) {
+        result += "v";
+      }
       if (this.sticky) {
         result += "y";
       }
       return result;
-    };
-    if (functionsHaveConfigurableNames && Object.defineProperty) {
-      Object.defineProperty(module.exports, "name", { value: "get flags" });
-    }
+    }, "get flags", true);
   }
 });
 
@@ -39720,7 +40044,7 @@ for (let i3 = 0; i3 < 256; ++i3) {
   byteToHex.push((i3 + 256).toString(16).slice(1));
 }
 function unsafeStringify(arr, offset = 0) {
-  return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
+  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
 }
 
 // ../simple-mind-map/node_modules/uuid/dist/esm-browser/native.js
@@ -40215,6 +40539,26 @@ var checkIsNodeStyleDataKey = (key) => {
     return true;
   }
   return false;
+};
+var mergerIconListBy = (arrList, key, name) => {
+  return arrList.reduce((result, item) => {
+    const existingItem = result.find((x3) => x3[key] === item[key]);
+    if (existingItem) {
+      item.list.forEach((newObj) => {
+        const existingObj = existingItem.list.find(
+          (x3) => x3[name] === newObj[name]
+        );
+        if (existingObj) {
+          existingObj.icon = newObj.icon;
+        } else {
+          existingItem.list.push(newObj);
+        }
+      });
+    } else {
+      result.push({ ...item });
+    }
+    return result;
+  }, []);
 };
 
 // ../simple-mind-map/src/core/render/node/Style.js
@@ -41340,7 +41684,7 @@ var Point = class {
   }
 };
 function point(x3, y4) {
-  return new Point(x3, y4).transform(this.screenCTM().inverse());
+  return new Point(x3, y4).transformO(this.screenCTM().inverseO());
 }
 function closeEnough(a3, b2, threshold) {
   return Math.abs(b2 - a3) < (threshold || 1e-6);
@@ -42300,9 +42644,13 @@ var Dom = class extends EventTarget {
     return this;
   }
   // Clone element
-  clone(deep = true) {
+  clone(deep = true, assignNewIds = true) {
     this.writeDataToDom();
-    return new this.constructor(assignNewId(this.node.cloneNode(deep)));
+    let nodeClone = this.node.cloneNode(deep);
+    if (assignNewIds) {
+      nodeClone = assignNewId(nodeClone);
+    }
+    return new this.constructor(nodeClone);
   }
   // Iterates over all children and invokes a given block
   each(block, deep) {
@@ -42950,7 +43298,7 @@ var Gradient = class extends Container {
     return new Box();
   }
   targets() {
-    return baseFind('svg [fill*="' + this.id() + '"]');
+    return baseFind("svg [fill*=" + this.id() + "]");
   }
   // Alias string conversion to fill
   toString() {
@@ -42966,7 +43314,7 @@ var Gradient = class extends Container {
   }
   // Return the fill id
   url() {
-    return 'url("#' + this.id() + '")';
+    return "url(#" + this.id() + ")";
   }
 };
 extend(Gradient, gradiented);
@@ -43000,7 +43348,7 @@ var Pattern = class extends Container {
     return new Box();
   }
   targets() {
-    return baseFind('svg [fill*="' + this.id() + '"]');
+    return baseFind("svg [fill*=" + this.id() + "]");
   }
   // Alias string conversion to fill
   toString() {
@@ -43016,7 +43364,7 @@ var Pattern = class extends Container {
   }
   // Return the fill id
   url() {
-    return 'url("#' + this.id() + '")';
+    return "url(#" + this.id() + ")";
   }
 };
 registerMethods({
@@ -44963,7 +45311,7 @@ registerMethods({
     },
     // this function searches for all runners on the element and deletes the ones
     // which run before the current one. This is because absolute transformations
-    // overwfrite anything anyway so there is no need to waste time computing
+    // overwrite anything anyway so there is no need to waste time computing
     // other runners
     _clearTransformRunnersBefore(currentRunner) {
       this._transformationRunners.clearBefore(currentRunner.id);
@@ -45598,7 +45946,7 @@ var ClipPath = class extends Container {
     return super.remove();
   }
   targets() {
-    return baseFind('svg [clip-path*="' + this.id() + '"]');
+    return baseFind("svg [clip-path*=" + this.id() + "]");
   }
 };
 registerMethods({
@@ -45615,7 +45963,7 @@ registerMethods({
     },
     clipWith(element2) {
       const clipper = element2 instanceof ClipPath ? element2 : this.parent().clip().add(element2);
-      return this.attr("clip-path", 'url("#' + clipper.id() + '")');
+      return this.attr("clip-path", "url(#" + clipper.id() + ")");
     },
     // Unclip element
     unclip() {
@@ -45791,7 +46139,7 @@ var Mask = class extends Container {
     return super.remove();
   }
   targets() {
-    return baseFind('svg [mask*="' + this.id() + '"]');
+    return baseFind("svg [mask*=" + this.id() + "]");
   }
 };
 registerMethods({
@@ -45807,7 +46155,7 @@ registerMethods({
     },
     maskWith(element2) {
       const masker = element2 instanceof Mask ? element2 : this.parent().mask().add(element2);
-      return this.attr("mask", 'url("#' + masker.id() + '")');
+      return this.attr("mask", "url(#" + masker.id() + ")");
     },
     // Unmask element
     unmask() {
@@ -46814,12 +47162,21 @@ var nodeIconList = [
 ];
 var getNodeIconListIcon = (name, extendIconList = []) => {
   let arr = name.split("_");
-  let typeData = [...nodeIconList, ...extendIconList].find((item) => {
+  const iconList = mergerIconListBy(
+    [...nodeIconList, ...extendIconList],
+    "type",
+    "name"
+  );
+  let typeData = iconList.find((item) => {
     return item.type === arr[0];
   });
-  return typeData.list.find((item) => {
-    return item.name === arr[1];
-  }).icon;
+  if (typeData) {
+    return typeData.list.find((item) => {
+      return item.name === arr[1];
+    }).icon;
+  } else {
+    return "";
+  }
 };
 var icons_default = {
   hyperlink,
@@ -46964,7 +47321,10 @@ function createTextNode() {
   let fontSize = this.getStyle("fontSize", false);
   let lineHeight = this.getStyle("lineHeight", false);
   let textStyle = this.style.getTextFontStyle();
-  let textArr = this.nodeData.data.text.split(/\n/gim);
+  let textArr = [];
+  if (this.nodeData.data.text && typeof this.nodeData.data.text === "string") {
+    textArr = this.nodeData.data.text.split(/\n/gim);
+  }
   let maxWidth = this.mindMap.opt.textAutoWrapWidth;
   let isMultiLine = false;
   textArr.forEach((item, index3) => {
@@ -66437,7 +66797,10 @@ var RichText = class {
       }
     }
     if (!node3.nodeData.data.richText) {
-      let text3 = node3.nodeData.data.text.split(/\n/gim).join("<br>");
+      let text3 = "";
+      if (node3.nodeData.data.text && typeof node3.nodeData.data.text === "string") {
+        text3 = node3.nodeData.data.text.split(/\n/gim).join("<br>");
+      }
       let html2 = `<p>${text3}</p>`;
       this.textEditNode.innerHTML = this.cacheEditingText || html2;
     } else {
@@ -67611,21 +67974,35 @@ Scrollbar.instanceName = "scrollbar";
 var Scrollbar_default = Scrollbar;
 
 // ../simple-mind-map/node_modules/mdast-util-to-string/lib/index.js
+var emptyOptions = {};
 function toString7(value, options) {
-  const includeImageAlt = (options || {}).includeImageAlt;
-  return one(
-    value,
-    typeof includeImageAlt === "boolean" ? includeImageAlt : true
-  );
+  const settings = options || emptyOptions;
+  const includeImageAlt = typeof settings.includeImageAlt === "boolean" ? settings.includeImageAlt : true;
+  const includeHtml = typeof settings.includeHtml === "boolean" ? settings.includeHtml : true;
+  return one(value, includeImageAlt, includeHtml);
 }
-function one(value, includeImageAlt) {
-  return node2(value) && ("value" in value && value.value || includeImageAlt && "alt" in value && value.alt || "children" in value && all(value.children, includeImageAlt)) || Array.isArray(value) && all(value, includeImageAlt) || "";
+function one(value, includeImageAlt, includeHtml) {
+  if (node2(value)) {
+    if ("value" in value) {
+      return value.type === "html" && !includeHtml ? "" : value.value;
+    }
+    if (includeImageAlt && "alt" in value && value.alt) {
+      return value.alt;
+    }
+    if ("children" in value) {
+      return all(value.children, includeImageAlt, includeHtml);
+    }
+  }
+  if (Array.isArray(value)) {
+    return all(value, includeImageAlt, includeHtml);
+  }
+  return "";
 }
-function all(values, includeImageAlt) {
+function all(values, includeImageAlt, includeHtml) {
   const result = [];
   let index3 = -1;
   while (++index3 < values.length) {
-    result[index3] = one(values[index3], includeImageAlt);
+    result[index3] = one(values[index3], includeImageAlt, includeHtml);
   }
   return result.join("");
 }
@@ -67647,14 +68024,14 @@ function splice(list2, start, remove2, items) {
   if (items.length < 1e4) {
     parameters = Array.from(items);
     parameters.unshift(start, remove2);
-    [].splice.apply(list2, parameters);
+    list2.splice(...parameters);
   } else {
     if (remove2)
-      [].splice.apply(list2, [start, remove2]);
+      list2.splice(start, remove2);
     while (chunkStart < items.length) {
       parameters = items.slice(chunkStart, chunkStart + 1e4);
       parameters.unshift(start, 0);
-      [].splice.apply(list2, parameters);
+      list2.splice(...parameters);
       chunkStart += 1e4;
       start += 1e4;
     }
@@ -67685,15 +68062,17 @@ function syntaxExtension(all2, extension2) {
     const left = maybe || (all2[hook] = {});
     const right = extension2[hook];
     let code;
-    for (code in right) {
-      if (!hasOwnProperty.call(left, code))
-        left[code] = [];
-      const value = right[code];
-      constructs(
-        // @ts-expect-error Looks like a list.
-        left[code],
-        Array.isArray(value) ? value : value ? [value] : []
-      );
+    if (right) {
+      for (code in right) {
+        if (!hasOwnProperty.call(left, code))
+          left[code] = [];
+        const value = right[code];
+        constructs(
+          // @ts-expect-error Looks like a list.
+          left[code],
+          Array.isArray(value) ? value : value ? [value] : []
+        );
+      }
     }
   }
 }
@@ -67708,14 +68087,11 @@ function constructs(existing, list2) {
 }
 
 // ../simple-mind-map/node_modules/micromark-util-character/lib/unicode-punctuation-regex.js
-var unicodePunctuationRegex = /[!-/:-@[-`{-~\u00A1\u00A7\u00AB\u00B6\u00B7\u00BB\u00BF\u037E\u0387\u055A-\u055F\u0589\u058A\u05BE\u05C0\u05C3\u05C6\u05F3\u05F4\u0609\u060A\u060C\u060D\u061B\u061E\u061F\u066A-\u066D\u06D4\u0700-\u070D\u07F7-\u07F9\u0830-\u083E\u085E\u0964\u0965\u0970\u09FD\u0A76\u0AF0\u0C77\u0C84\u0DF4\u0E4F\u0E5A\u0E5B\u0F04-\u0F12\u0F14\u0F3A-\u0F3D\u0F85\u0FD0-\u0FD4\u0FD9\u0FDA\u104A-\u104F\u10FB\u1360-\u1368\u1400\u166E\u169B\u169C\u16EB-\u16ED\u1735\u1736\u17D4-\u17D6\u17D8-\u17DA\u1800-\u180A\u1944\u1945\u1A1E\u1A1F\u1AA0-\u1AA6\u1AA8-\u1AAD\u1B5A-\u1B60\u1BFC-\u1BFF\u1C3B-\u1C3F\u1C7E\u1C7F\u1CC0-\u1CC7\u1CD3\u2010-\u2027\u2030-\u2043\u2045-\u2051\u2053-\u205E\u207D\u207E\u208D\u208E\u2308-\u230B\u2329\u232A\u2768-\u2775\u27C5\u27C6\u27E6-\u27EF\u2983-\u2998\u29D8-\u29DB\u29FC\u29FD\u2CF9-\u2CFC\u2CFE\u2CFF\u2D70\u2E00-\u2E2E\u2E30-\u2E4F\u2E52\u3001-\u3003\u3008-\u3011\u3014-\u301F\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF\uA60D-\uA60F\uA673\uA67E\uA6F2-\uA6F7\uA874-\uA877\uA8CE\uA8CF\uA8F8-\uA8FA\uA8FC\uA92E\uA92F\uA95F\uA9C1-\uA9CD\uA9DE\uA9DF\uAA5C-\uAA5F\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F\uFE10-\uFE19\uFE30-\uFE52\uFE54-\uFE61\uFE63\uFE68\uFE6A\uFE6B\uFF01-\uFF03\uFF05-\uFF0A\uFF0C-\uFF0F\uFF1A\uFF1B\uFF1F\uFF20\uFF3B-\uFF3D\uFF3F\uFF5B\uFF5D\uFF5F-\uFF65]/;
+var unicodePunctuationRegex = /[!-\/:-@\[-`\{-~\xA1\xA7\xAB\xB6\xB7\xBB\xBF\u037E\u0387\u055A-\u055F\u0589\u058A\u05BE\u05C0\u05C3\u05C6\u05F3\u05F4\u0609\u060A\u060C\u060D\u061B\u061D-\u061F\u066A-\u066D\u06D4\u0700-\u070D\u07F7-\u07F9\u0830-\u083E\u085E\u0964\u0965\u0970\u09FD\u0A76\u0AF0\u0C77\u0C84\u0DF4\u0E4F\u0E5A\u0E5B\u0F04-\u0F12\u0F14\u0F3A-\u0F3D\u0F85\u0FD0-\u0FD4\u0FD9\u0FDA\u104A-\u104F\u10FB\u1360-\u1368\u1400\u166E\u169B\u169C\u16EB-\u16ED\u1735\u1736\u17D4-\u17D6\u17D8-\u17DA\u1800-\u180A\u1944\u1945\u1A1E\u1A1F\u1AA0-\u1AA6\u1AA8-\u1AAD\u1B5A-\u1B60\u1B7D\u1B7E\u1BFC-\u1BFF\u1C3B-\u1C3F\u1C7E\u1C7F\u1CC0-\u1CC7\u1CD3\u2010-\u2027\u2030-\u2043\u2045-\u2051\u2053-\u205E\u207D\u207E\u208D\u208E\u2308-\u230B\u2329\u232A\u2768-\u2775\u27C5\u27C6\u27E6-\u27EF\u2983-\u2998\u29D8-\u29DB\u29FC\u29FD\u2CF9-\u2CFC\u2CFE\u2CFF\u2D70\u2E00-\u2E2E\u2E30-\u2E4F\u2E52-\u2E5D\u3001-\u3003\u3008-\u3011\u3014-\u301F\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF\uA60D-\uA60F\uA673\uA67E\uA6F2-\uA6F7\uA874-\uA877\uA8CE\uA8CF\uA8F8-\uA8FA\uA8FC\uA92E\uA92F\uA95F\uA9C1-\uA9CD\uA9DE\uA9DF\uAA5C-\uAA5F\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F\uFE10-\uFE19\uFE30-\uFE52\uFE54-\uFE61\uFE63\uFE68\uFE6A\uFE6B\uFF01-\uFF03\uFF05-\uFF0A\uFF0C-\uFF0F\uFF1A\uFF1B\uFF1F\uFF20\uFF3B-\uFF3D\uFF3F\uFF5B\uFF5D\uFF5F-\uFF65]/;
 
 // ../simple-mind-map/node_modules/micromark-util-character/index.js
 var asciiAlpha = regexCheck(/[A-Za-z]/);
-var asciiDigit = regexCheck(/\d/);
-var asciiHexDigit = regexCheck(/[\dA-Fa-f]/);
 var asciiAlphanumeric = regexCheck(/[\dA-Za-z]/);
-var asciiPunctuation = regexCheck(/[!-/:-@[-`{-~]/);
 var asciiAtext = regexCheck(/[#-'*+\--9=?A-Z^-~]/);
 function asciiControl(code) {
   return (
@@ -67724,17 +68100,20 @@ function asciiControl(code) {
     code !== null && (code < 32 || code === 127)
   );
 }
-function markdownLineEndingOrSpace(code) {
-  return code !== null && (code < 0 || code === 32);
-}
+var asciiDigit = regexCheck(/\d/);
+var asciiHexDigit = regexCheck(/[\dA-Fa-f]/);
+var asciiPunctuation = regexCheck(/[!-/:-@[-`{-~]/);
 function markdownLineEnding(code) {
   return code !== null && code < -2;
+}
+function markdownLineEndingOrSpace(code) {
+  return code !== null && (code < 0 || code === 32);
 }
 function markdownSpace(code) {
   return code === -2 || code === -1 || code === 32;
 }
-var unicodeWhitespace = regexCheck(/\s/);
 var unicodePunctuation = regexCheck(unicodePunctuationRegex);
+var unicodeWhitespace = regexCheck(/\s/);
 function regexCheck(regex) {
   return check;
   function check(code) {
@@ -68163,14 +68542,14 @@ function tokenizeAttention(effects, ok) {
   let marker;
   return start;
   function start(code) {
-    effects.enter("attentionSequence");
     marker = code;
-    return sequence(code);
+    effects.enter("attentionSequence");
+    return inside2(code);
   }
-  function sequence(code) {
+  function inside2(code) {
     if (code === marker) {
       effects.consume(code);
-      return sequence;
+      return inside2;
     }
     const token = effects.exit("attentionSequence");
     const after2 = classifyCharacter(code);
@@ -68193,7 +68572,7 @@ var autolink = {
   tokenize: tokenizeAutolink
 };
 function tokenizeAutolink(effects, ok, nok) {
-  let size2 = 1;
+  let size2 = 0;
   return start;
   function start(code) {
     effects.enter("autolink");
@@ -68208,26 +68587,36 @@ function tokenizeAutolink(effects, ok, nok) {
       effects.consume(code);
       return schemeOrEmailAtext;
     }
-    return asciiAtext(code) ? emailAtext(code) : nok(code);
+    return emailAtext(code);
   }
   function schemeOrEmailAtext(code) {
-    return code === 43 || code === 45 || code === 46 || asciiAlphanumeric(code) ? schemeInsideOrEmailAtext(code) : emailAtext(code);
+    if (code === 43 || code === 45 || code === 46 || asciiAlphanumeric(code)) {
+      size2 = 1;
+      return schemeInsideOrEmailAtext(code);
+    }
+    return emailAtext(code);
   }
   function schemeInsideOrEmailAtext(code) {
     if (code === 58) {
       effects.consume(code);
+      size2 = 0;
       return urlInside;
     }
     if ((code === 43 || code === 45 || code === 46 || asciiAlphanumeric(code)) && size2++ < 32) {
       effects.consume(code);
       return schemeInsideOrEmailAtext;
     }
+    size2 = 0;
     return emailAtext(code);
   }
   function urlInside(code) {
     if (code === 62) {
       effects.exit("autolinkProtocol");
-      return end(code);
+      effects.enter("autolinkMarker");
+      effects.consume(code);
+      effects.exit("autolinkMarker");
+      effects.exit("autolink");
+      return ok;
     }
     if (code === null || code === 32 || code === 60 || asciiControl(code)) {
       return nok(code);
@@ -68238,7 +68627,6 @@ function tokenizeAutolink(effects, ok, nok) {
   function emailAtext(code) {
     if (code === 64) {
       effects.consume(code);
-      size2 = 0;
       return emailAtSignOrDot;
     }
     if (asciiAtext(code)) {
@@ -68258,23 +68646,21 @@ function tokenizeAutolink(effects, ok, nok) {
     }
     if (code === 62) {
       effects.exit("autolinkProtocol").type = "autolinkEmail";
-      return end(code);
+      effects.enter("autolinkMarker");
+      effects.consume(code);
+      effects.exit("autolinkMarker");
+      effects.exit("autolink");
+      return ok;
     }
     return emailValue(code);
   }
   function emailValue(code) {
     if ((code === 45 || asciiAlphanumeric(code)) && size2++ < 63) {
+      const next2 = code === 45 ? emailValue : emailLabel;
       effects.consume(code);
-      return code === 45 ? emailValue : emailLabel;
+      return next2;
     }
     return nok(code);
-  }
-  function end(code) {
-    effects.enter("autolinkMarker");
-    effects.consume(code);
-    effects.exit("autolinkMarker");
-    effects.exit("autolink");
-    return ok;
   }
 }
 
@@ -68284,8 +68670,11 @@ var blankLine = {
   partial: true
 };
 function tokenizeBlankLine(effects, ok, nok) {
-  return factorySpace(effects, afterWhitespace, "linePrefix");
-  function afterWhitespace(code) {
+  return start;
+  function start(code) {
+    return markdownSpace(code) ? factorySpace(effects, after2, "linePrefix")(code) : after2(code);
+  }
+  function after2(code) {
     return code === null || markdownLineEnding(code) ? ok(code) : nok(code);
   }
 }
@@ -68332,12 +68721,22 @@ function tokenizeBlockQuoteStart(effects, ok, nok) {
   }
 }
 function tokenizeBlockQuoteContinuation(effects, ok, nok) {
-  return factorySpace(
-    effects,
-    effects.attempt(blockQuote, ok, nok),
-    "linePrefix",
-    this.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4
-  );
+  const self2 = this;
+  return contStart;
+  function contStart(code) {
+    if (markdownSpace(code)) {
+      return factorySpace(
+        effects,
+        contBefore,
+        "linePrefix",
+        self2.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4
+      )(code);
+    }
+    return contBefore(code);
+  }
+  function contBefore(code) {
+    return effects.attempt(blockQuote, ok, nok)(code);
+  }
 }
 function exit(effects) {
   effects.exit("blockQuote");
@@ -68355,9 +68754,9 @@ function tokenizeCharacterEscape(effects, ok, nok) {
     effects.enter("escapeMarker");
     effects.consume(code);
     effects.exit("escapeMarker");
-    return open3;
+    return inside2;
   }
-  function open3(code) {
+  function inside2(code) {
     if (asciiPunctuation(code)) {
       effects.enter("characterEscapeValue");
       effects.consume(code);
@@ -68427,9 +68826,8 @@ function tokenizeCharacterReference(effects, ok, nok) {
     return value(code);
   }
   function value(code) {
-    let token;
     if (code === 59 && size2) {
-      token = effects.exit("characterReferenceValue");
+      const token = effects.exit("characterReferenceValue");
       if (test2 === asciiAlphanumeric && !decodeNamedCharacterReference(self2.sliceSerialize(token))) {
         return nok(code);
       }
@@ -68448,6 +68846,10 @@ function tokenizeCharacterReference(effects, ok, nok) {
 }
 
 // ../simple-mind-map/node_modules/micromark-core-commonmark/lib/code-fenced.js
+var nonLazyContinuation = {
+  tokenize: tokenizeNonLazyContinuation,
+  partial: true
+};
 var codeFenced = {
   name: "codeFenced",
   tokenize: tokenizeCodeFenced,
@@ -68455,38 +68857,42 @@ var codeFenced = {
 };
 function tokenizeCodeFenced(effects, ok, nok) {
   const self2 = this;
-  const closingFenceConstruct = {
-    tokenize: tokenizeClosingFence,
+  const closeStart = {
+    tokenize: tokenizeCloseStart,
     partial: true
   };
-  const nonLazyLine = {
-    tokenize: tokenizeNonLazyLine,
-    partial: true
-  };
-  const tail = this.events[this.events.length - 1];
-  const initialPrefix = tail && tail[1].type === "linePrefix" ? tail[2].sliceSerialize(tail[1], true).length : 0;
+  let initialPrefix = 0;
   let sizeOpen = 0;
   let marker;
   return start;
   function start(code) {
+    return beforeSequenceOpen(code);
+  }
+  function beforeSequenceOpen(code) {
+    const tail = self2.events[self2.events.length - 1];
+    initialPrefix = tail && tail[1].type === "linePrefix" ? tail[2].sliceSerialize(tail[1], true).length : 0;
+    marker = code;
     effects.enter("codeFenced");
     effects.enter("codeFencedFence");
     effects.enter("codeFencedFenceSequence");
-    marker = code;
     return sequenceOpen(code);
   }
   function sequenceOpen(code) {
     if (code === marker) {
-      effects.consume(code);
       sizeOpen++;
+      effects.consume(code);
       return sequenceOpen;
     }
+    if (sizeOpen < 3) {
+      return nok(code);
+    }
     effects.exit("codeFencedFenceSequence");
-    return sizeOpen < 3 ? nok(code) : factorySpace(effects, infoOpen, "whitespace")(code);
+    return markdownSpace(code) ? factorySpace(effects, infoBefore, "whitespace")(code) : infoBefore(code);
   }
-  function infoOpen(code) {
+  function infoBefore(code) {
     if (code === null || markdownLineEnding(code)) {
-      return openAfter(code);
+      effects.exit("codeFencedFence");
+      return self2.interrupt ? ok(code) : effects.check(nonLazyContinuation, atNonLazyBreak, after2)(code);
     }
     effects.enter("codeFencedFenceInfo");
     effects.enter("chunkString", {
@@ -68495,19 +68901,25 @@ function tokenizeCodeFenced(effects, ok, nok) {
     return info(code);
   }
   function info(code) {
-    if (code === null || markdownLineEndingOrSpace(code)) {
+    if (code === null || markdownLineEnding(code)) {
       effects.exit("chunkString");
       effects.exit("codeFencedFenceInfo");
-      return factorySpace(effects, infoAfter, "whitespace")(code);
+      return infoBefore(code);
     }
-    if (code === 96 && code === marker)
+    if (markdownSpace(code)) {
+      effects.exit("chunkString");
+      effects.exit("codeFencedFenceInfo");
+      return factorySpace(effects, metaBefore, "whitespace")(code);
+    }
+    if (code === 96 && code === marker) {
       return nok(code);
+    }
     effects.consume(code);
     return info;
   }
-  function infoAfter(code) {
+  function metaBefore(code) {
     if (code === null || markdownLineEnding(code)) {
-      return openAfter(code);
+      return infoBefore(code);
     }
     effects.enter("codeFencedFenceMeta");
     effects.enter("chunkString", {
@@ -68519,90 +68931,88 @@ function tokenizeCodeFenced(effects, ok, nok) {
     if (code === null || markdownLineEnding(code)) {
       effects.exit("chunkString");
       effects.exit("codeFencedFenceMeta");
-      return openAfter(code);
+      return infoBefore(code);
     }
-    if (code === 96 && code === marker)
+    if (code === 96 && code === marker) {
       return nok(code);
+    }
     effects.consume(code);
     return meta;
   }
-  function openAfter(code) {
-    effects.exit("codeFencedFence");
-    return self2.interrupt ? ok(code) : contentStart(code);
+  function atNonLazyBreak(code) {
+    return effects.attempt(closeStart, after2, contentBefore)(code);
+  }
+  function contentBefore(code) {
+    effects.enter("lineEnding");
+    effects.consume(code);
+    effects.exit("lineEnding");
+    return contentStart;
   }
   function contentStart(code) {
-    if (code === null) {
-      return after2(code);
-    }
-    if (markdownLineEnding(code)) {
-      return effects.attempt(
-        nonLazyLine,
-        effects.attempt(
-          closingFenceConstruct,
-          after2,
-          initialPrefix ? factorySpace(
-            effects,
-            contentStart,
-            "linePrefix",
-            initialPrefix + 1
-          ) : contentStart
-        ),
-        after2
-      )(code);
+    return initialPrefix > 0 && markdownSpace(code) ? factorySpace(
+      effects,
+      beforeContentChunk,
+      "linePrefix",
+      initialPrefix + 1
+    )(code) : beforeContentChunk(code);
+  }
+  function beforeContentChunk(code) {
+    if (code === null || markdownLineEnding(code)) {
+      return effects.check(nonLazyContinuation, atNonLazyBreak, after2)(code);
     }
     effects.enter("codeFlowValue");
-    return contentContinue(code);
+    return contentChunk(code);
   }
-  function contentContinue(code) {
+  function contentChunk(code) {
     if (code === null || markdownLineEnding(code)) {
       effects.exit("codeFlowValue");
-      return contentStart(code);
+      return beforeContentChunk(code);
     }
     effects.consume(code);
-    return contentContinue;
+    return contentChunk;
   }
   function after2(code) {
     effects.exit("codeFenced");
     return ok(code);
   }
-  function tokenizeNonLazyLine(effects2, ok2, nok2) {
-    const self3 = this;
-    return start2;
-    function start2(code) {
+  function tokenizeCloseStart(effects2, ok2, nok2) {
+    let size2 = 0;
+    return startBefore;
+    function startBefore(code) {
       effects2.enter("lineEnding");
       effects2.consume(code);
       effects2.exit("lineEnding");
-      return lineStart;
+      return start2;
     }
-    function lineStart(code) {
-      return self3.parser.lazy[self3.now().line] ? nok2(code) : ok2(code);
-    }
-  }
-  function tokenizeClosingFence(effects2, ok2, nok2) {
-    let size2 = 0;
-    return factorySpace(
-      effects2,
-      closingSequenceStart,
-      "linePrefix",
-      this.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4
-    );
-    function closingSequenceStart(code) {
+    function start2(code) {
       effects2.enter("codeFencedFence");
-      effects2.enter("codeFencedFenceSequence");
-      return closingSequence(code);
+      return markdownSpace(code) ? factorySpace(
+        effects2,
+        beforeSequenceClose,
+        "linePrefix",
+        self2.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4
+      )(code) : beforeSequenceClose(code);
     }
-    function closingSequence(code) {
+    function beforeSequenceClose(code) {
       if (code === marker) {
-        effects2.consume(code);
-        size2++;
-        return closingSequence;
+        effects2.enter("codeFencedFenceSequence");
+        return sequenceClose(code);
       }
-      if (size2 < sizeOpen)
-        return nok2(code);
-      effects2.exit("codeFencedFenceSequence");
-      return factorySpace(effects2, closingSequenceEnd, "whitespace")(code);
+      return nok2(code);
     }
-    function closingSequenceEnd(code) {
+    function sequenceClose(code) {
+      if (code === marker) {
+        size2++;
+        effects2.consume(code);
+        return sequenceClose;
+      }
+      if (size2 >= sizeOpen) {
+        effects2.exit("codeFencedFenceSequence");
+        return markdownSpace(code) ? factorySpace(effects2, sequenceCloseAfter, "whitespace")(code) : sequenceCloseAfter(code);
+      }
+      return nok2(code);
+    }
+    function sequenceCloseAfter(code) {
       if (code === null || markdownLineEnding(code)) {
         effects2.exit("codeFencedFence");
         return ok2(code);
@@ -68611,14 +69021,30 @@ function tokenizeCodeFenced(effects, ok, nok) {
     }
   }
 }
+function tokenizeNonLazyContinuation(effects, ok, nok) {
+  const self2 = this;
+  return start;
+  function start(code) {
+    if (code === null) {
+      return nok(code);
+    }
+    effects.enter("lineEnding");
+    effects.consume(code);
+    effects.exit("lineEnding");
+    return lineStart;
+  }
+  function lineStart(code) {
+    return self2.parser.lazy[self2.now().line] ? nok(code) : ok(code);
+  }
+}
 
 // ../simple-mind-map/node_modules/micromark-core-commonmark/lib/code-indented.js
 var codeIndented = {
   name: "codeIndented",
   tokenize: tokenizeCodeIndented
 };
-var indentedContent = {
-  tokenize: tokenizeIndentedContent,
+var furtherStart = {
+  tokenize: tokenizeFurtherStart,
   partial: true
 };
 function tokenizeCodeIndented(effects, ok, nok) {
@@ -68626,39 +69052,39 @@ function tokenizeCodeIndented(effects, ok, nok) {
   return start;
   function start(code) {
     effects.enter("codeIndented");
-    return factorySpace(effects, afterStartPrefix, "linePrefix", 4 + 1)(code);
-  }
-  function afterStartPrefix(code) {
-    const tail = self2.events[self2.events.length - 1];
-    return tail && tail[1].type === "linePrefix" && tail[2].sliceSerialize(tail[1], true).length >= 4 ? afterPrefix(code) : nok(code);
+    return factorySpace(effects, afterPrefix, "linePrefix", 4 + 1)(code);
   }
   function afterPrefix(code) {
+    const tail = self2.events[self2.events.length - 1];
+    return tail && tail[1].type === "linePrefix" && tail[2].sliceSerialize(tail[1], true).length >= 4 ? atBreak(code) : nok(code);
+  }
+  function atBreak(code) {
     if (code === null) {
       return after2(code);
     }
     if (markdownLineEnding(code)) {
-      return effects.attempt(indentedContent, afterPrefix, after2)(code);
+      return effects.attempt(furtherStart, atBreak, after2)(code);
     }
     effects.enter("codeFlowValue");
-    return content3(code);
+    return inside2(code);
   }
-  function content3(code) {
+  function inside2(code) {
     if (code === null || markdownLineEnding(code)) {
       effects.exit("codeFlowValue");
-      return afterPrefix(code);
+      return atBreak(code);
     }
     effects.consume(code);
-    return content3;
+    return inside2;
   }
   function after2(code) {
     effects.exit("codeIndented");
     return ok(code);
   }
 }
-function tokenizeIndentedContent(effects, ok, nok) {
+function tokenizeFurtherStart(effects, ok, nok) {
   const self2 = this;
-  return start;
-  function start(code) {
+  return furtherStart2;
+  function furtherStart2(code) {
     if (self2.parser.lazy[self2.now().line]) {
       return nok(code);
     }
@@ -68666,13 +69092,13 @@ function tokenizeIndentedContent(effects, ok, nok) {
       effects.enter("lineEnding");
       effects.consume(code);
       effects.exit("lineEnding");
-      return start;
+      return furtherStart2;
     }
     return factorySpace(effects, afterPrefix, "linePrefix", 4 + 1)(code);
   }
   function afterPrefix(code) {
     const tail = self2.events[self2.events.length - 1];
-    return tail && tail[1].type === "linePrefix" && tail[2].sliceSerialize(tail[1], true).length >= 4 ? ok(code) : markdownLineEnding(code) ? start(code) : nok(code);
+    return tail && tail[1].type === "linePrefix" && tail[2].sliceSerialize(tail[1], true).length >= 4 ? ok(code) : markdownLineEnding(code) ? furtherStart2(code) : nok(code);
   }
 }
 
@@ -68732,37 +69158,37 @@ function tokenizeCodeText(effects, ok, nok) {
   function start(code) {
     effects.enter("codeText");
     effects.enter("codeTextSequence");
-    return openingSequence(code);
+    return sequenceOpen(code);
   }
-  function openingSequence(code) {
+  function sequenceOpen(code) {
     if (code === 96) {
       effects.consume(code);
       sizeOpen++;
-      return openingSequence;
+      return sequenceOpen;
     }
     effects.exit("codeTextSequence");
-    return gap(code);
+    return between(code);
   }
-  function gap(code) {
+  function between(code) {
     if (code === null) {
       return nok(code);
-    }
-    if (code === 96) {
-      token = effects.enter("codeTextSequence");
-      size2 = 0;
-      return closingSequence(code);
     }
     if (code === 32) {
       effects.enter("space");
       effects.consume(code);
       effects.exit("space");
-      return gap;
+      return between;
+    }
+    if (code === 96) {
+      token = effects.enter("codeTextSequence");
+      size2 = 0;
+      return sequenceClose(code);
     }
     if (markdownLineEnding(code)) {
       effects.enter("lineEnding");
       effects.consume(code);
       effects.exit("lineEnding");
-      return gap;
+      return between;
     }
     effects.enter("codeTextData");
     return data2(code);
@@ -68770,16 +69196,16 @@ function tokenizeCodeText(effects, ok, nok) {
   function data2(code) {
     if (code === null || code === 32 || code === 96 || markdownLineEnding(code)) {
       effects.exit("codeTextData");
-      return gap(code);
+      return between(code);
     }
     effects.consume(code);
     return data2;
   }
-  function closingSequence(code) {
+  function sequenceClose(code) {
     if (code === 96) {
       effects.consume(code);
       size2++;
-      return closingSequence;
+      return sequenceClose;
     }
     if (size2 === sizeOpen) {
       effects.exit("codeTextSequence");
@@ -68947,15 +69373,15 @@ function resolveContent(events) {
 }
 function tokenizeContent(effects, ok) {
   let previous2;
-  return start;
-  function start(code) {
+  return chunkStart;
+  function chunkStart(code) {
     effects.enter("content");
     previous2 = effects.enter("chunkContent", {
       contentType: "content"
     });
-    return data2(code);
+    return chunkInside(code);
   }
-  function data2(code) {
+  function chunkInside(code) {
     if (code === null) {
       return contentEnd(code);
     }
@@ -68967,7 +69393,7 @@ function tokenizeContent(effects, ok) {
       )(code);
     }
     effects.consume(code);
-    return data2;
+    return chunkInside;
   }
   function contentEnd(code) {
     effects.exit("chunkContent");
@@ -68982,7 +69408,7 @@ function tokenizeContent(effects, ok) {
       previous: previous2
     });
     previous2 = previous2.next;
-    return data2;
+    return chunkInside;
   }
 }
 function tokenizeContinuation(effects, ok, nok) {
@@ -69019,9 +69445,9 @@ function factoryDestination(effects, ok, nok, type, literalType, literalMarkerTy
       effects.enter(literalMarkerType);
       effects.consume(code);
       effects.exit(literalMarkerType);
-      return destinationEnclosedBefore;
+      return enclosedBefore;
     }
-    if (code === null || code === 41 || asciiControl(code)) {
+    if (code === null || code === 32 || code === 41 || asciiControl(code)) {
       return nok(code);
     }
     effects.enter(type);
@@ -69030,9 +69456,9 @@ function factoryDestination(effects, ok, nok, type, literalType, literalMarkerTy
     effects.enter("chunkString", {
       contentType: "string"
     });
-    return destinationRaw(code);
+    return raw(code);
   }
-  function destinationEnclosedBefore(code) {
+  function enclosedBefore(code) {
     if (code === 62) {
       effects.enter(literalMarkerType);
       effects.consume(code);
@@ -69045,65 +69471,57 @@ function factoryDestination(effects, ok, nok, type, literalType, literalMarkerTy
     effects.enter("chunkString", {
       contentType: "string"
     });
-    return destinationEnclosed(code);
+    return enclosed(code);
   }
-  function destinationEnclosed(code) {
+  function enclosed(code) {
     if (code === 62) {
       effects.exit("chunkString");
       effects.exit(stringType);
-      return destinationEnclosedBefore(code);
+      return enclosedBefore(code);
     }
     if (code === null || code === 60 || markdownLineEnding(code)) {
       return nok(code);
     }
     effects.consume(code);
-    return code === 92 ? destinationEnclosedEscape : destinationEnclosed;
+    return code === 92 ? enclosedEscape : enclosed;
   }
-  function destinationEnclosedEscape(code) {
+  function enclosedEscape(code) {
     if (code === 60 || code === 62 || code === 92) {
       effects.consume(code);
-      return destinationEnclosed;
+      return enclosed;
     }
-    return destinationEnclosed(code);
+    return enclosed(code);
   }
-  function destinationRaw(code) {
-    if (code === 40) {
-      if (++balance > limit)
-        return nok(code);
-      effects.consume(code);
-      return destinationRaw;
-    }
-    if (code === 41) {
-      if (!balance--) {
-        effects.exit("chunkString");
-        effects.exit(stringType);
-        effects.exit(rawType);
-        effects.exit(type);
-        return ok(code);
-      }
-      effects.consume(code);
-      return destinationRaw;
-    }
-    if (code === null || markdownLineEndingOrSpace(code)) {
-      if (balance)
-        return nok(code);
+  function raw(code) {
+    if (!balance && (code === null || code === 41 || markdownLineEndingOrSpace(code))) {
       effects.exit("chunkString");
       effects.exit(stringType);
       effects.exit(rawType);
       effects.exit(type);
       return ok(code);
     }
-    if (asciiControl(code))
+    if (balance < limit && code === 40) {
+      effects.consume(code);
+      balance++;
+      return raw;
+    }
+    if (code === 41) {
+      effects.consume(code);
+      balance--;
+      return raw;
+    }
+    if (code === null || code === 32 || code === 40 || asciiControl(code)) {
       return nok(code);
+    }
     effects.consume(code);
-    return code === 92 ? destinationRawEscape : destinationRaw;
+    return code === 92 ? rawEscape : raw;
   }
-  function destinationRawEscape(code) {
+  function rawEscape(code) {
     if (code === 40 || code === 41 || code === 92) {
       effects.consume(code);
-      return destinationRaw;
+      return raw;
     }
-    return destinationRaw(code);
+    return raw(code);
   }
 }
 
@@ -69111,7 +69529,7 @@ function factoryDestination(effects, ok, nok, type, literalType, literalMarkerTy
 function factoryLabel(effects, ok, nok, type, markerType, stringType) {
   const self2 = this;
   let size2 = 0;
-  let data2;
+  let seen;
   return start;
   function start(code) {
     effects.enter(type);
@@ -69122,12 +69540,12 @@ function factoryLabel(effects, ok, nok, type, markerType, stringType) {
     return atBreak;
   }
   function atBreak(code) {
-    if (code === null || code === 91 || code === 93 && !data2 || /* To do: remove in the future once we’ve switched from
-     * `micromark-extension-footnote` to `micromark-extension-gfm-footnote`,
-     * which doesn’t need this */
-    /* Hidden footnotes hook */
+    if (size2 > 999 || code === null || code === 91 || code === 93 && !seen || // To do: remove in the future once we’ve switched from
+    // `micromark-extension-footnote` to `micromark-extension-gfm-footnote`,
+    // which doesn’t need this.
+    // Hidden footnotes hook.
     /* c8 ignore next 3 */
-    code === 94 && !size2 && "_hiddenFootnoteSupport" in self2.parser.constructs || size2 > 999) {
+    code === 94 && !size2 && "_hiddenFootnoteSupport" in self2.parser.constructs) {
       return nok(code);
     }
     if (code === 93) {
@@ -69147,24 +69565,25 @@ function factoryLabel(effects, ok, nok, type, markerType, stringType) {
     effects.enter("chunkString", {
       contentType: "string"
     });
-    return label(code);
+    return labelInside(code);
   }
-  function label(code) {
+  function labelInside(code) {
     if (code === null || code === 91 || code === 93 || markdownLineEnding(code) || size2++ > 999) {
       effects.exit("chunkString");
       return atBreak(code);
     }
     effects.consume(code);
-    data2 = data2 || !markdownSpace(code);
-    return code === 92 ? labelEscape : label;
+    if (!seen)
+      seen = !markdownSpace(code);
+    return code === 92 ? labelEscape : labelInside;
   }
   function labelEscape(code) {
     if (code === 91 || code === 92 || code === 93) {
       effects.consume(code);
       size2++;
-      return label;
+      return labelInside;
     }
-    return label(code);
+    return labelInside(code);
   }
 }
 
@@ -69173,14 +69592,17 @@ function factoryTitle(effects, ok, nok, type, markerType, stringType) {
   let marker;
   return start;
   function start(code) {
-    effects.enter(type);
-    effects.enter(markerType);
-    effects.consume(code);
-    effects.exit(markerType);
-    marker = code === 40 ? 41 : code;
-    return atFirstTitleBreak;
+    if (code === 34 || code === 39 || code === 40) {
+      effects.enter(type);
+      effects.enter(markerType);
+      effects.consume(code);
+      effects.exit(markerType);
+      marker = code === 40 ? 41 : code;
+      return begin;
+    }
+    return nok(code);
   }
-  function atFirstTitleBreak(code) {
+  function begin(code) {
     if (code === marker) {
       effects.enter(markerType);
       effects.consume(code);
@@ -69189,12 +69611,12 @@ function factoryTitle(effects, ok, nok, type, markerType, stringType) {
       return ok;
     }
     effects.enter(stringType);
-    return atTitleBreak(code);
+    return atBreak(code);
   }
-  function atTitleBreak(code) {
+  function atBreak(code) {
     if (code === marker) {
       effects.exit(stringType);
-      return atFirstTitleBreak(marker);
+      return begin(marker);
     }
     if (code === null) {
       return nok(code);
@@ -69203,27 +69625,27 @@ function factoryTitle(effects, ok, nok, type, markerType, stringType) {
       effects.enter("lineEnding");
       effects.consume(code);
       effects.exit("lineEnding");
-      return factorySpace(effects, atTitleBreak, "linePrefix");
+      return factorySpace(effects, atBreak, "linePrefix");
     }
     effects.enter("chunkString", {
       contentType: "string"
     });
-    return title(code);
+    return inside2(code);
   }
-  function title(code) {
+  function inside2(code) {
     if (code === marker || code === null || markdownLineEnding(code)) {
       effects.exit("chunkString");
-      return atTitleBreak(code);
+      return atBreak(code);
     }
     effects.consume(code);
-    return code === 92 ? titleEscape : title;
+    return code === 92 ? escape : inside2;
   }
-  function titleEscape(code) {
+  function escape(code) {
     if (code === marker || code === 92) {
       effects.consume(code);
-      return title;
+      return inside2;
     }
-    return title(code);
+    return inside2(code);
   }
 }
 
@@ -69260,8 +69682,8 @@ var definition = {
   name: "definition",
   tokenize: tokenizeDefinition
 };
-var titleConstruct = {
-  tokenize: tokenizeTitle,
+var titleBefore = {
+  tokenize: tokenizeTitleBefore,
   partial: true
 };
 function tokenizeDefinition(effects, ok, nok) {
@@ -69270,10 +69692,14 @@ function tokenizeDefinition(effects, ok, nok) {
   return start;
   function start(code) {
     effects.enter("definition");
+    return before2(code);
+  }
+  function before2(code) {
     return factoryLabel.call(
       self2,
       effects,
       labelAfter,
+      // Note: we don’t need to reset the way `markdown-rs` does.
       nok,
       "definitionLabel",
       "definitionLabelMarker",
@@ -69288,56 +69714,60 @@ function tokenizeDefinition(effects, ok, nok) {
       effects.enter("definitionMarker");
       effects.consume(code);
       effects.exit("definitionMarker");
-      return factoryWhitespace(
-        effects,
-        factoryDestination(
-          effects,
-          effects.attempt(
-            titleConstruct,
-            factorySpace(effects, after2, "whitespace"),
-            factorySpace(effects, after2, "whitespace")
-          ),
-          nok,
-          "definitionDestination",
-          "definitionDestinationLiteral",
-          "definitionDestinationLiteralMarker",
-          "definitionDestinationRaw",
-          "definitionDestinationString"
-        )
-      );
+      return markerAfter;
     }
     return nok(code);
   }
+  function markerAfter(code) {
+    return markdownLineEndingOrSpace(code) ? factoryWhitespace(effects, destinationBefore)(code) : destinationBefore(code);
+  }
+  function destinationBefore(code) {
+    return factoryDestination(
+      effects,
+      destinationAfter,
+      // Note: we don’t need to reset the way `markdown-rs` does.
+      nok,
+      "definitionDestination",
+      "definitionDestinationLiteral",
+      "definitionDestinationLiteralMarker",
+      "definitionDestinationRaw",
+      "definitionDestinationString"
+    )(code);
+  }
+  function destinationAfter(code) {
+    return effects.attempt(titleBefore, after2, after2)(code);
+  }
   function after2(code) {
+    return markdownSpace(code) ? factorySpace(effects, afterWhitespace, "whitespace")(code) : afterWhitespace(code);
+  }
+  function afterWhitespace(code) {
     if (code === null || markdownLineEnding(code)) {
       effects.exit("definition");
-      if (!self2.parser.defined.includes(identifier)) {
-        self2.parser.defined.push(identifier);
-      }
+      self2.parser.defined.push(identifier);
       return ok(code);
     }
     return nok(code);
   }
 }
-function tokenizeTitle(effects, ok, nok) {
-  return start;
-  function start(code) {
-    return markdownLineEndingOrSpace(code) ? factoryWhitespace(effects, before2)(code) : nok(code);
+function tokenizeTitleBefore(effects, ok, nok) {
+  return titleBefore2;
+  function titleBefore2(code) {
+    return markdownLineEndingOrSpace(code) ? factoryWhitespace(effects, beforeMarker)(code) : nok(code);
   }
-  function before2(code) {
-    if (code === 34 || code === 39 || code === 40) {
-      return factoryTitle(
-        effects,
-        factorySpace(effects, after2, "whitespace"),
-        nok,
-        "definitionTitle",
-        "definitionTitleMarker",
-        "definitionTitleString"
-      )(code);
-    }
-    return nok(code);
+  function beforeMarker(code) {
+    return factoryTitle(
+      effects,
+      titleAfter,
+      nok,
+      "definitionTitle",
+      "definitionTitleMarker",
+      "definitionTitleString"
+    )(code);
   }
-  function after2(code) {
+  function titleAfter(code) {
+    return markdownSpace(code) ? factorySpace(effects, titleAfterOptionalWhitespace, "whitespace")(code) : titleAfterOptionalWhitespace(code);
+  }
+  function titleAfterOptionalWhitespace(code) {
     return code === null || markdownLineEnding(code) ? ok(code) : nok(code);
   }
 }
@@ -69351,13 +69781,11 @@ function tokenizeHardBreakEscape(effects, ok, nok) {
   return start;
   function start(code) {
     effects.enter("hardBreakEscape");
-    effects.enter("escapeMarker");
     effects.consume(code);
-    return open3;
+    return after2;
   }
-  function open3(code) {
+  function after2(code) {
     if (markdownLineEnding(code)) {
-      effects.exit("escapeMarker");
       effects.exit("hardBreakEscape");
       return ok(code);
     }
@@ -69395,7 +69823,6 @@ function resolveHeadingAtx(events, context) {
       type: "chunkText",
       start: events[contentStart][1].start,
       end: events[contentEnd][1].end,
-      // @ts-expect-error Constants are fine to assign.
       contentType: "text"
     };
     splice(events, contentStart, contentEnd - contentStart + 1, [
@@ -69408,52 +69835,54 @@ function resolveHeadingAtx(events, context) {
   return events;
 }
 function tokenizeHeadingAtx(effects, ok, nok) {
-  const self2 = this;
   let size2 = 0;
   return start;
   function start(code) {
     effects.enter("atxHeading");
-    effects.enter("atxHeadingSequence");
-    return fenceOpenInside(code);
+    return before2(code);
   }
-  function fenceOpenInside(code) {
+  function before2(code) {
+    effects.enter("atxHeadingSequence");
+    return sequenceOpen(code);
+  }
+  function sequenceOpen(code) {
     if (code === 35 && size2++ < 6) {
       effects.consume(code);
-      return fenceOpenInside;
+      return sequenceOpen;
     }
     if (code === null || markdownLineEndingOrSpace(code)) {
       effects.exit("atxHeadingSequence");
-      return self2.interrupt ? ok(code) : headingBreak(code);
+      return atBreak(code);
     }
     return nok(code);
   }
-  function headingBreak(code) {
+  function atBreak(code) {
     if (code === 35) {
       effects.enter("atxHeadingSequence");
-      return sequence(code);
+      return sequenceFurther(code);
     }
     if (code === null || markdownLineEnding(code)) {
       effects.exit("atxHeading");
       return ok(code);
     }
     if (markdownSpace(code)) {
-      return factorySpace(effects, headingBreak, "whitespace")(code);
+      return factorySpace(effects, atBreak, "whitespace")(code);
     }
     effects.enter("atxHeadingText");
     return data2(code);
   }
-  function sequence(code) {
+  function sequenceFurther(code) {
     if (code === 35) {
       effects.consume(code);
-      return sequence;
+      return sequenceFurther;
     }
     effects.exit("atxHeadingSequence");
-    return headingBreak(code);
+    return atBreak(code);
   }
   function data2(code) {
     if (code === null || code === 35 || markdownLineEndingOrSpace(code)) {
       effects.exit("atxHeadingText");
-      return headingBreak(code);
+      return atBreak(code);
     }
     effects.consume(code);
     return data2;
@@ -69511,6 +69940,7 @@ var htmlBlockNames = [
   "option",
   "p",
   "param",
+  "search",
   "section",
   "summary",
   "table",
@@ -69533,8 +69963,12 @@ var htmlFlow = {
   resolveTo: resolveToHtmlFlow,
   concrete: true
 };
-var nextBlankConstruct = {
-  tokenize: tokenizeNextBlank,
+var blankLineBefore = {
+  tokenize: tokenizeBlankLineBefore,
+  partial: true
+};
+var nonLazyContinuationStart = {
+  tokenize: tokenizeNonLazyContinuationStart,
   partial: true
 };
 function resolveToHtmlFlow(events) {
@@ -69553,13 +69987,16 @@ function resolveToHtmlFlow(events) {
 }
 function tokenizeHtmlFlow(effects, ok, nok) {
   const self2 = this;
-  let kind;
-  let startTag;
+  let marker;
+  let closingTag;
   let buffer;
   let index3;
-  let marker;
+  let markerB;
   return start;
   function start(code) {
+    return before2(code);
+  }
+  function before2(code) {
     effects.enter("htmlFlow");
     effects.enter("htmlFlowData");
     effects.consume(code);
@@ -69568,41 +70005,40 @@ function tokenizeHtmlFlow(effects, ok, nok) {
   function open3(code) {
     if (code === 33) {
       effects.consume(code);
-      return declarationStart;
+      return declarationOpen;
     }
     if (code === 47) {
       effects.consume(code);
+      closingTag = true;
       return tagCloseStart;
     }
     if (code === 63) {
       effects.consume(code);
-      kind = 3;
+      marker = 3;
       return self2.interrupt ? ok : continuationDeclarationInside;
     }
     if (asciiAlpha(code)) {
       effects.consume(code);
       buffer = String.fromCharCode(code);
-      startTag = true;
       return tagName;
     }
     return nok(code);
   }
-  function declarationStart(code) {
+  function declarationOpen(code) {
     if (code === 45) {
       effects.consume(code);
-      kind = 2;
+      marker = 2;
       return commentOpenInside;
     }
     if (code === 91) {
       effects.consume(code);
-      kind = 5;
-      buffer = "CDATA[";
+      marker = 5;
       index3 = 0;
       return cdataOpenInside;
     }
     if (asciiAlpha(code)) {
       effects.consume(code);
-      kind = 4;
+      marker = 4;
       return self2.interrupt ? ok : continuationDeclarationInside;
     }
     return nok(code);
@@ -69615,9 +70051,13 @@ function tokenizeHtmlFlow(effects, ok, nok) {
     return nok(code);
   }
   function cdataOpenInside(code) {
-    if (code === buffer.charCodeAt(index3++)) {
+    const value = "CDATA[";
+    if (code === value.charCodeAt(index3++)) {
       effects.consume(code);
-      return index3 === buffer.length ? self2.interrupt ? ok : continuation : cdataOpenInside;
+      if (index3 === value.length) {
+        return self2.interrupt ? ok : continuation;
+      }
+      return cdataOpenInside;
     }
     return nok(code);
   }
@@ -69631,20 +70071,22 @@ function tokenizeHtmlFlow(effects, ok, nok) {
   }
   function tagName(code) {
     if (code === null || code === 47 || code === 62 || markdownLineEndingOrSpace(code)) {
-      if (code !== 47 && startTag && htmlRawNames.includes(buffer.toLowerCase())) {
-        kind = 1;
+      const slash = code === 47;
+      const name = buffer.toLowerCase();
+      if (!slash && !closingTag && htmlRawNames.includes(name)) {
+        marker = 1;
         return self2.interrupt ? ok(code) : continuation(code);
       }
       if (htmlBlockNames.includes(buffer.toLowerCase())) {
-        kind = 6;
-        if (code === 47) {
+        marker = 6;
+        if (slash) {
           effects.consume(code);
           return basicSelfClosing;
         }
         return self2.interrupt ? ok(code) : continuation(code);
       }
-      kind = 7;
-      return self2.interrupt && !self2.parser.lazy[self2.now().line] ? nok(code) : startTag ? completeAttributeNameBefore(code) : completeClosingTagAfter(code);
+      marker = 7;
+      return self2.interrupt && !self2.parser.lazy[self2.now().line] ? nok(code) : closingTag ? completeClosingTagAfter(code) : completeAttributeNameBefore(code);
     }
     if (code === 45 || asciiAlphanumeric(code)) {
       effects.consume(code);
@@ -69706,29 +70148,29 @@ function tokenizeHtmlFlow(effects, ok, nok) {
     }
     if (code === 34 || code === 39) {
       effects.consume(code);
-      marker = code;
+      markerB = code;
       return completeAttributeValueQuoted;
     }
     if (markdownSpace(code)) {
       effects.consume(code);
       return completeAttributeValueBefore;
     }
-    marker = null;
     return completeAttributeValueUnquoted(code);
   }
   function completeAttributeValueQuoted(code) {
+    if (code === markerB) {
+      effects.consume(code);
+      markerB = null;
+      return completeAttributeValueQuotedAfter;
+    }
     if (code === null || markdownLineEnding(code)) {
       return nok(code);
-    }
-    if (code === marker) {
-      effects.consume(code);
-      return completeAttributeValueQuotedAfter;
     }
     effects.consume(code);
     return completeAttributeValueQuoted;
   }
   function completeAttributeValueUnquoted(code) {
-    if (code === null || code === 34 || code === 39 || code === 60 || code === 61 || code === 62 || code === 96 || markdownLineEndingOrSpace(code)) {
+    if (code === null || code === 34 || code === 39 || code === 47 || code === 60 || code === 61 || code === 62 || code === 96 || markdownLineEndingOrSpace(code)) {
       return completeAttributeNameAfter(code);
     }
     effects.consume(code);
@@ -69748,78 +70190,70 @@ function tokenizeHtmlFlow(effects, ok, nok) {
     return nok(code);
   }
   function completeAfter(code) {
+    if (code === null || markdownLineEnding(code)) {
+      return continuation(code);
+    }
     if (markdownSpace(code)) {
       effects.consume(code);
       return completeAfter;
     }
-    return code === null || markdownLineEnding(code) ? continuation(code) : nok(code);
+    return nok(code);
   }
   function continuation(code) {
-    if (code === 45 && kind === 2) {
+    if (code === 45 && marker === 2) {
       effects.consume(code);
       return continuationCommentInside;
     }
-    if (code === 60 && kind === 1) {
+    if (code === 60 && marker === 1) {
       effects.consume(code);
       return continuationRawTagOpen;
     }
-    if (code === 62 && kind === 4) {
+    if (code === 62 && marker === 4) {
       effects.consume(code);
       return continuationClose;
     }
-    if (code === 63 && kind === 3) {
+    if (code === 63 && marker === 3) {
       effects.consume(code);
       return continuationDeclarationInside;
     }
-    if (code === 93 && kind === 5) {
+    if (code === 93 && marker === 5) {
       effects.consume(code);
-      return continuationCharacterDataInside;
+      return continuationCdataInside;
     }
-    if (markdownLineEnding(code) && (kind === 6 || kind === 7)) {
+    if (markdownLineEnding(code) && (marker === 6 || marker === 7)) {
+      effects.exit("htmlFlowData");
       return effects.check(
-        nextBlankConstruct,
-        continuationClose,
-        continuationAtLineEnding
+        blankLineBefore,
+        continuationAfter,
+        continuationStart
       )(code);
     }
     if (code === null || markdownLineEnding(code)) {
-      return continuationAtLineEnding(code);
+      effects.exit("htmlFlowData");
+      return continuationStart(code);
     }
     effects.consume(code);
     return continuation;
   }
-  function continuationAtLineEnding(code) {
-    effects.exit("htmlFlowData");
-    return htmlContinueStart(code);
+  function continuationStart(code) {
+    return effects.check(
+      nonLazyContinuationStart,
+      continuationStartNonLazy,
+      continuationAfter
+    )(code);
   }
-  function htmlContinueStart(code) {
-    if (code === null) {
-      return done(code);
-    }
-    if (markdownLineEnding(code)) {
-      return effects.attempt(
-        {
-          tokenize: htmlLineEnd,
-          partial: true
-        },
-        htmlContinueStart,
-        done
-      )(code);
+  function continuationStartNonLazy(code) {
+    effects.enter("lineEnding");
+    effects.consume(code);
+    effects.exit("lineEnding");
+    return continuationBefore;
+  }
+  function continuationBefore(code) {
+    if (code === null || markdownLineEnding(code)) {
+      return continuationStart(code);
     }
     effects.enter("htmlFlowData");
     return continuation(code);
-  }
-  function htmlLineEnd(effects2, ok2, nok2) {
-    return start2;
-    function start2(code) {
-      effects2.enter("lineEnding");
-      effects2.consume(code);
-      effects2.exit("lineEnding");
-      return lineStart;
-    }
-    function lineStart(code) {
-      return self2.parser.lazy[self2.now().line] ? nok2(code) : ok2(code);
-    }
   }
   function continuationCommentInside(code) {
     if (code === 45) {
@@ -69837,9 +70271,13 @@ function tokenizeHtmlFlow(effects, ok, nok) {
     return continuation(code);
   }
   function continuationRawEndTag(code) {
-    if (code === 62 && htmlRawNames.includes(buffer.toLowerCase())) {
-      effects.consume(code);
-      return continuationClose;
+    if (code === 62) {
+      const name = buffer.toLowerCase();
+      if (htmlRawNames.includes(name)) {
+        effects.consume(code);
+        return continuationClose;
+      }
+      return continuation(code);
     }
     if (asciiAlpha(code) && buffer.length < 8) {
       effects.consume(code);
@@ -69848,7 +70286,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
     }
     return continuation(code);
   }
-  function continuationCharacterDataInside(code) {
+  function continuationCdataInside(code) {
     if (code === 93) {
       effects.consume(code);
       return continuationDeclarationInside;
@@ -69860,7 +70298,7 @@ function tokenizeHtmlFlow(effects, ok, nok) {
       effects.consume(code);
       return continuationClose;
     }
-    if (code === 45 && kind === 2) {
+    if (code === 45 && marker === 2) {
       effects.consume(code);
       return continuationDeclarationInside;
     }
@@ -69869,23 +70307,38 @@ function tokenizeHtmlFlow(effects, ok, nok) {
   function continuationClose(code) {
     if (code === null || markdownLineEnding(code)) {
       effects.exit("htmlFlowData");
-      return done(code);
+      return continuationAfter(code);
     }
     effects.consume(code);
     return continuationClose;
   }
-  function done(code) {
+  function continuationAfter(code) {
     effects.exit("htmlFlow");
     return ok(code);
   }
 }
-function tokenizeNextBlank(effects, ok, nok) {
+function tokenizeNonLazyContinuationStart(effects, ok, nok) {
+  const self2 = this;
   return start;
   function start(code) {
-    effects.exit("htmlFlowData");
-    effects.enter("lineEndingBlank");
+    if (markdownLineEnding(code)) {
+      effects.enter("lineEnding");
+      effects.consume(code);
+      effects.exit("lineEnding");
+      return after2;
+    }
+    return nok(code);
+  }
+  function after2(code) {
+    return self2.parser.lazy[self2.now().line] ? nok(code) : ok(code);
+  }
+}
+function tokenizeBlankLineBefore(effects, ok, nok) {
+  return start;
+  function start(code) {
+    effects.enter("lineEnding");
     effects.consume(code);
-    effects.exit("lineEndingBlank");
+    effects.exit("lineEnding");
     return effects.attempt(blankLine, ok, nok);
   }
 }
@@ -69898,7 +70351,6 @@ var htmlText = {
 function tokenizeHtmlText(effects, ok, nok) {
   const self2 = this;
   let marker;
-  let buffer;
   let index3;
   let returnState;
   return start;
@@ -69930,13 +70382,12 @@ function tokenizeHtmlText(effects, ok, nok) {
   function declarationOpen(code) {
     if (code === 45) {
       effects.consume(code);
-      return commentOpen;
+      return commentOpenInside;
     }
     if (code === 91) {
       effects.consume(code);
-      buffer = "CDATA[";
       index3 = 0;
-      return cdataOpen;
+      return cdataOpenInside;
     }
     if (asciiAlpha(code)) {
       effects.consume(code);
@@ -69944,28 +70395,12 @@ function tokenizeHtmlText(effects, ok, nok) {
     }
     return nok(code);
   }
-  function commentOpen(code) {
+  function commentOpenInside(code) {
     if (code === 45) {
       effects.consume(code);
-      return commentStart;
+      return commentEnd;
     }
     return nok(code);
-  }
-  function commentStart(code) {
-    if (code === null || code === 62) {
-      return nok(code);
-    }
-    if (code === 45) {
-      effects.consume(code);
-      return commentStartDash;
-    }
-    return comment(code);
-  }
-  function commentStartDash(code) {
-    if (code === null || code === 62) {
-      return nok(code);
-    }
-    return comment(code);
   }
   function comment(code) {
     if (code === null) {
@@ -69977,7 +70412,7 @@ function tokenizeHtmlText(effects, ok, nok) {
     }
     if (markdownLineEnding(code)) {
       returnState = comment;
-      return atLineEnding(code);
+      return lineEndingBefore(code);
     }
     effects.consume(code);
     return comment;
@@ -69985,14 +70420,18 @@ function tokenizeHtmlText(effects, ok, nok) {
   function commentClose(code) {
     if (code === 45) {
       effects.consume(code);
-      return end;
+      return commentEnd;
     }
     return comment(code);
   }
-  function cdataOpen(code) {
-    if (code === buffer.charCodeAt(index3++)) {
+  function commentEnd(code) {
+    return code === 62 ? end(code) : code === 45 ? commentClose(code) : comment(code);
+  }
+  function cdataOpenInside(code) {
+    const value = "CDATA[";
+    if (code === value.charCodeAt(index3++)) {
       effects.consume(code);
-      return index3 === buffer.length ? cdata : cdataOpen;
+      return index3 === value.length ? cdata : cdataOpenInside;
     }
     return nok(code);
   }
@@ -70006,7 +70445,7 @@ function tokenizeHtmlText(effects, ok, nok) {
     }
     if (markdownLineEnding(code)) {
       returnState = cdata;
-      return atLineEnding(code);
+      return lineEndingBefore(code);
     }
     effects.consume(code);
     return cdata;
@@ -70034,7 +70473,7 @@ function tokenizeHtmlText(effects, ok, nok) {
     }
     if (markdownLineEnding(code)) {
       returnState = declaration;
-      return atLineEnding(code);
+      return lineEndingBefore(code);
     }
     effects.consume(code);
     return declaration;
@@ -70049,7 +70488,7 @@ function tokenizeHtmlText(effects, ok, nok) {
     }
     if (markdownLineEnding(code)) {
       returnState = instruction;
-      return atLineEnding(code);
+      return lineEndingBefore(code);
     }
     effects.consume(code);
     return instruction;
@@ -70074,7 +70513,7 @@ function tokenizeHtmlText(effects, ok, nok) {
   function tagCloseBetween(code) {
     if (markdownLineEnding(code)) {
       returnState = tagCloseBetween;
-      return atLineEnding(code);
+      return lineEndingBefore(code);
     }
     if (markdownSpace(code)) {
       effects.consume(code);
@@ -70103,7 +70542,7 @@ function tokenizeHtmlText(effects, ok, nok) {
     }
     if (markdownLineEnding(code)) {
       returnState = tagOpenBetween;
-      return atLineEnding(code);
+      return lineEndingBefore(code);
     }
     if (markdownSpace(code)) {
       effects.consume(code);
@@ -70125,7 +70564,7 @@ function tokenizeHtmlText(effects, ok, nok) {
     }
     if (markdownLineEnding(code)) {
       returnState = tagOpenAttributeNameAfter;
-      return atLineEnding(code);
+      return lineEndingBefore(code);
     }
     if (markdownSpace(code)) {
       effects.consume(code);
@@ -70144,19 +70583,19 @@ function tokenizeHtmlText(effects, ok, nok) {
     }
     if (markdownLineEnding(code)) {
       returnState = tagOpenAttributeValueBefore;
-      return atLineEnding(code);
+      return lineEndingBefore(code);
     }
     if (markdownSpace(code)) {
       effects.consume(code);
       return tagOpenAttributeValueBefore;
     }
     effects.consume(code);
-    marker = void 0;
     return tagOpenAttributeValueUnquoted;
   }
   function tagOpenAttributeValueQuoted(code) {
     if (code === marker) {
       effects.consume(code);
+      marker = void 0;
       return tagOpenAttributeValueQuotedAfter;
     }
     if (code === null) {
@@ -70164,42 +70603,26 @@ function tokenizeHtmlText(effects, ok, nok) {
     }
     if (markdownLineEnding(code)) {
       returnState = tagOpenAttributeValueQuoted;
-      return atLineEnding(code);
+      return lineEndingBefore(code);
     }
     effects.consume(code);
     return tagOpenAttributeValueQuoted;
-  }
-  function tagOpenAttributeValueQuotedAfter(code) {
-    if (code === 62 || code === 47 || markdownLineEndingOrSpace(code)) {
-      return tagOpenBetween(code);
-    }
-    return nok(code);
   }
   function tagOpenAttributeValueUnquoted(code) {
     if (code === null || code === 34 || code === 39 || code === 60 || code === 61 || code === 96) {
       return nok(code);
     }
-    if (code === 62 || markdownLineEndingOrSpace(code)) {
+    if (code === 47 || code === 62 || markdownLineEndingOrSpace(code)) {
       return tagOpenBetween(code);
     }
     effects.consume(code);
     return tagOpenAttributeValueUnquoted;
   }
-  function atLineEnding(code) {
-    effects.exit("htmlTextData");
-    effects.enter("lineEnding");
-    effects.consume(code);
-    effects.exit("lineEnding");
-    return factorySpace(
-      effects,
-      afterPrefix,
-      "linePrefix",
-      self2.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4
-    );
-  }
-  function afterPrefix(code) {
-    effects.enter("htmlTextData");
-    return returnState(code);
+  function tagOpenAttributeValueQuotedAfter(code) {
+    if (code === 47 || code === 62 || markdownLineEndingOrSpace(code)) {
+      return tagOpenBetween(code);
+    }
+    return nok(code);
   }
   function end(code) {
     if (code === 62) {
@@ -70209,6 +70632,25 @@ function tokenizeHtmlText(effects, ok, nok) {
       return ok;
     }
     return nok(code);
+  }
+  function lineEndingBefore(code) {
+    effects.exit("htmlTextData");
+    effects.enter("lineEnding");
+    effects.consume(code);
+    effects.exit("lineEnding");
+    return lineEndingAfter;
+  }
+  function lineEndingAfter(code) {
+    return markdownSpace(code) ? factorySpace(
+      effects,
+      lineEndingAfterPrefix,
+      "linePrefix",
+      self2.parser.constructs.disable.null.includes("codeIndented") ? void 0 : 4
+    )(code) : lineEndingAfterPrefix(code);
+  }
+  function lineEndingAfterPrefix(code) {
+    effects.enter("htmlTextData");
+    return returnState(code);
   }
 }
 
@@ -70222,17 +70664,16 @@ var labelEnd = {
 var resourceConstruct = {
   tokenize: tokenizeResource
 };
-var fullReferenceConstruct = {
-  tokenize: tokenizeFullReference
+var referenceFullConstruct = {
+  tokenize: tokenizeReferenceFull
 };
-var collapsedReferenceConstruct = {
-  tokenize: tokenizeCollapsedReference
+var referenceCollapsedConstruct = {
+  tokenize: tokenizeReferenceCollapsed
 };
 function resolveAllLabelEnd(events) {
   let index3 = -1;
-  let token;
   while (++index3 < events.length) {
-    token = events[index3][1];
+    const token = events[index3][1];
     if (token.type === "labelImage" || token.type === "labelLink" || token.type === "labelEnd") {
       events.splice(index3 + 1, token.type === "labelImage" ? 4 : 2);
       token.type = "data";
@@ -70325,8 +70766,9 @@ function tokenizeLabelEnd(effects, ok, nok) {
     if (!labelStart) {
       return nok(code);
     }
-    if (labelStart._inactive)
-      return balanced(code);
+    if (labelStart._inactive) {
+      return labelEndNok(code);
+    }
     defined = self2.parser.defined.includes(
       normalizeIdentifier(
         self2.sliceSerialize({
@@ -70340,47 +70782,60 @@ function tokenizeLabelEnd(effects, ok, nok) {
     effects.consume(code);
     effects.exit("labelMarker");
     effects.exit("labelEnd");
-    return afterLabelEnd;
+    return after2;
   }
-  function afterLabelEnd(code) {
+  function after2(code) {
     if (code === 40) {
       return effects.attempt(
         resourceConstruct,
-        ok,
-        defined ? ok : balanced
+        labelEndOk,
+        defined ? labelEndOk : labelEndNok
       )(code);
     }
     if (code === 91) {
       return effects.attempt(
-        fullReferenceConstruct,
-        ok,
-        defined ? effects.attempt(collapsedReferenceConstruct, ok, balanced) : balanced
+        referenceFullConstruct,
+        labelEndOk,
+        defined ? referenceNotFull : labelEndNok
       )(code);
     }
-    return defined ? ok(code) : balanced(code);
+    return defined ? labelEndOk(code) : labelEndNok(code);
   }
-  function balanced(code) {
+  function referenceNotFull(code) {
+    return effects.attempt(
+      referenceCollapsedConstruct,
+      labelEndOk,
+      labelEndNok
+    )(code);
+  }
+  function labelEndOk(code) {
+    return ok(code);
+  }
+  function labelEndNok(code) {
     labelStart._balanced = true;
     return nok(code);
   }
 }
 function tokenizeResource(effects, ok, nok) {
-  return start;
-  function start(code) {
+  return resourceStart;
+  function resourceStart(code) {
     effects.enter("resource");
     effects.enter("resourceMarker");
     effects.consume(code);
     effects.exit("resourceMarker");
-    return factoryWhitespace(effects, open3);
+    return resourceBefore;
   }
-  function open3(code) {
+  function resourceBefore(code) {
+    return markdownLineEndingOrSpace(code) ? factoryWhitespace(effects, resourceOpen)(code) : resourceOpen(code);
+  }
+  function resourceOpen(code) {
     if (code === 41) {
-      return end(code);
+      return resourceEnd(code);
     }
     return factoryDestination(
       effects,
-      destinationAfter,
-      nok,
+      resourceDestinationAfter,
+      resourceDestinationMissing,
       "resourceDestination",
       "resourceDestinationLiteral",
       "resourceDestinationLiteralMarker",
@@ -70389,23 +70844,29 @@ function tokenizeResource(effects, ok, nok) {
       32
     )(code);
   }
-  function destinationAfter(code) {
-    return markdownLineEndingOrSpace(code) ? factoryWhitespace(effects, between)(code) : end(code);
+  function resourceDestinationAfter(code) {
+    return markdownLineEndingOrSpace(code) ? factoryWhitespace(effects, resourceBetween)(code) : resourceEnd(code);
   }
-  function between(code) {
+  function resourceDestinationMissing(code) {
+    return nok(code);
+  }
+  function resourceBetween(code) {
     if (code === 34 || code === 39 || code === 40) {
       return factoryTitle(
         effects,
-        factoryWhitespace(effects, end),
+        resourceTitleAfter,
         nok,
         "resourceTitle",
         "resourceTitleMarker",
         "resourceTitleString"
       )(code);
     }
-    return end(code);
+    return resourceEnd(code);
   }
-  function end(code) {
+  function resourceTitleAfter(code) {
+    return markdownLineEndingOrSpace(code) ? factoryWhitespace(effects, resourceEnd)(code) : resourceEnd(code);
+  }
+  function resourceEnd(code) {
     if (code === 41) {
       effects.enter("resourceMarker");
       effects.consume(code);
@@ -70416,38 +70877,41 @@ function tokenizeResource(effects, ok, nok) {
     return nok(code);
   }
 }
-function tokenizeFullReference(effects, ok, nok) {
+function tokenizeReferenceFull(effects, ok, nok) {
   const self2 = this;
-  return start;
-  function start(code) {
+  return referenceFull;
+  function referenceFull(code) {
     return factoryLabel.call(
       self2,
       effects,
-      afterLabel,
-      nok,
+      referenceFullAfter,
+      referenceFullMissing,
       "reference",
       "referenceMarker",
       "referenceString"
     )(code);
   }
-  function afterLabel(code) {
+  function referenceFullAfter(code) {
     return self2.parser.defined.includes(
       normalizeIdentifier(
         self2.sliceSerialize(self2.events[self2.events.length - 1][1]).slice(1, -1)
       )
     ) ? ok(code) : nok(code);
   }
+  function referenceFullMissing(code) {
+    return nok(code);
+  }
 }
-function tokenizeCollapsedReference(effects, ok, nok) {
-  return start;
-  function start(code) {
+function tokenizeReferenceCollapsed(effects, ok, nok) {
+  return referenceCollapsedStart;
+  function referenceCollapsedStart(code) {
     effects.enter("reference");
     effects.enter("referenceMarker");
     effects.consume(code);
     effects.exit("referenceMarker");
-    return open3;
+    return referenceCollapsedOpen;
   }
-  function open3(code) {
+  function referenceCollapsedOpen(code) {
     if (code === 93) {
       effects.enter("referenceMarker");
       effects.consume(code);
@@ -70538,6 +71002,9 @@ function tokenizeThematicBreak(effects, ok, nok) {
   return start;
   function start(code) {
     effects.enter("thematicBreak");
+    return before2(code);
+  }
+  function before2(code) {
     marker = code;
     return atBreak(code);
   }
@@ -70546,14 +71013,11 @@ function tokenizeThematicBreak(effects, ok, nok) {
       effects.enter("thematicBreakSequence");
       return sequence(code);
     }
-    if (markdownSpace(code)) {
-      return factorySpace(effects, atBreak, "whitespace")(code);
+    if (size2 >= 3 && (code === null || markdownLineEnding(code))) {
+      effects.exit("thematicBreak");
+      return ok(code);
     }
-    if (size2 < 3 || code !== null && !markdownLineEnding(code)) {
-      return nok(code);
-    }
-    effects.exit("thematicBreak");
-    return ok(code);
+    return nok(code);
   }
   function sequence(code) {
     if (code === marker) {
@@ -70562,7 +71026,7 @@ function tokenizeThematicBreak(effects, ok, nok) {
       return sequence;
     }
     effects.exit("thematicBreakSequence");
-    return atBreak(code);
+    return markdownSpace(code) ? factorySpace(effects, atBreak, "whitespace")(code) : atBreak(code);
   }
 }
 
@@ -70767,34 +71231,37 @@ function resolveToSetextUnderline(events, context) {
 }
 function tokenizeSetextUnderline(effects, ok, nok) {
   const self2 = this;
-  let index3 = self2.events.length;
   let marker;
-  let paragraph;
-  while (index3--) {
-    if (self2.events[index3][1].type !== "lineEnding" && self2.events[index3][1].type !== "linePrefix" && self2.events[index3][1].type !== "content") {
-      paragraph = self2.events[index3][1].type === "paragraph";
-      break;
-    }
-  }
   return start;
   function start(code) {
+    let index3 = self2.events.length;
+    let paragraph;
+    while (index3--) {
+      if (self2.events[index3][1].type !== "lineEnding" && self2.events[index3][1].type !== "linePrefix" && self2.events[index3][1].type !== "content") {
+        paragraph = self2.events[index3][1].type === "paragraph";
+        break;
+      }
+    }
     if (!self2.parser.lazy[self2.now().line] && (self2.interrupt || paragraph)) {
       effects.enter("setextHeadingLine");
-      effects.enter("setextHeadingLineSequence");
       marker = code;
-      return closingSequence(code);
+      return before2(code);
     }
     return nok(code);
   }
-  function closingSequence(code) {
+  function before2(code) {
+    effects.enter("setextHeadingLineSequence");
+    return inside2(code);
+  }
+  function inside2(code) {
     if (code === marker) {
       effects.consume(code);
-      return closingSequence;
+      return inside2;
     }
     effects.exit("setextHeadingLineSequence");
-    return factorySpace(effects, closingSequenceEnd, "lineSuffix")(code);
+    return markdownSpace(code) ? factorySpace(effects, after2, "lineSuffix")(code) : after2(code);
   }
-  function closingSequenceEnd(code) {
+  function after2(code) {
     if (code === null || markdownLineEnding(code)) {
       effects.exit("setextHeadingLine");
       return ok(code);
@@ -71056,7 +71523,14 @@ function createTokenizer(parser2, initialize, from2) {
     return sliceChunks(chunks, token);
   }
   function now() {
-    return Object.assign({}, point4);
+    const { line, column, offset, _index, _bufferIndex } = point4;
+    return {
+      line,
+      column,
+      offset,
+      _index,
+      _bufferIndex
+    };
   }
   function defineSkip(value) {
     columnStart[value.line] = value.column;
@@ -71133,10 +71607,10 @@ function createTokenizer(parser2, initialize, from2) {
       let constructIndex;
       let currentConstruct;
       let info;
-      return Array.isArray(constructs2) ? (
-        /* c8 ignore next 1 */
-        handleListOfConstructs(constructs2)
-      ) : "tokenize" in constructs2 ? handleListOfConstructs([constructs2]) : handleMapOfConstructs(constructs2);
+      return Array.isArray(constructs2) ? handleListOfConstructs(constructs2) : "tokenize" in constructs2 ? (
+        // @ts-expect-error Looks like a construct.
+        handleListOfConstructs([constructs2])
+      ) : handleMapOfConstructs(constructs2);
       function handleMapOfConstructs(map3) {
         return start;
         function start(code) {
@@ -71249,7 +71723,12 @@ function sliceChunks(chunks, token) {
   } else {
     view = chunks.slice(startIndex, endIndex);
     if (startBufferIndex > -1) {
-      view[0] = view[0].slice(startBufferIndex);
+      const head = view[0];
+      if (typeof head === "string") {
+        view[0] = head.slice(startBufferIndex);
+      } else {
+        view.shift();
+      }
     }
     if (endBufferIndex > 0) {
       view.push(chunks[endIndex].slice(0, endBufferIndex));
@@ -71376,10 +71855,11 @@ var disable = {
 };
 
 // ../simple-mind-map/node_modules/micromark/lib/parse.js
-function parse(options = {}) {
-  const constructs2 = combineExtensions(
-    // @ts-expect-error Same as above.
-    [constructs_exports].concat(options.extensions || [])
+function parse(options) {
+  const settings = options || {};
+  const constructs2 = (
+    /** @type {FullNormalizedExtension} */
+    combineExtensions([constructs_exports, ...settings.extensions || []])
   );
   const parser2 = {
     defined: [],
@@ -71493,8 +71973,8 @@ function postprocess(events) {
 function decodeNumericCharacterReference(value, base) {
   const code = Number.parseInt(value, base);
   if (
-    // C0 except for HT, LF, FF, CR, space
-    code < 9 || code === 11 || code > 13 && code < 32 || // Control character (DEL) of the basic block and C1 controls.
+    // C0 except for HT, LF, FF, CR, space.
+    code < 9 || code === 11 || code > 13 && code < 32 || // Control character (DEL) of C0, and C1 controls.
     code > 126 && code < 160 || // Lone high surrogates and low surrogates.
     code > 55295 && code < 57344 || // Noncharacters.
     code > 64975 && code < 65008 || (code & 65535) === 65535 || (code & 65535) === 65534 || // Out of range
@@ -71571,7 +72051,6 @@ var fromMarkdown = (
     }
     return compiler(options)(
       postprocess(
-        // @ts-expect-error: micromark types need to accept `null`.
         parse(options).document().write(preprocess()(value, encoding, true))
       )
     );
@@ -71810,9 +72289,10 @@ function compiler(options) {
         if (event[1].type === "listItemPrefix") {
           listItem2 = {
             type: "listItem",
-            // @ts-expect-error Patched
             _spread: false,
-            start: Object.assign({}, event[1].start)
+            start: Object.assign({}, event[1].start),
+            // @ts-expect-error: we’ll add `end` in a second.
+            end: void 0
           };
           events.splice(index3, 0, ["enter", listItem2, event[2]]);
           index3++;
@@ -72183,7 +72663,6 @@ function compiler(options) {
       type: "list",
       ordered: token.type === "listOrdered",
       start: null,
-      // @ts-expect-error Patched.
       spread: token._spread,
       children: []
     };
@@ -72191,7 +72670,6 @@ function compiler(options) {
   function listItem(token) {
     return {
       type: "listItem",
-      // @ts-expect-error Patched.
       spread: token._spread,
       checked: null,
       children: []
@@ -72426,7 +72904,7 @@ html2canvas/dist/html2canvas.js:
       ***************************************************************************** *)
 
 dompurify/dist/purify.js:
-  (*! @license DOMPurify 2.4.1 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/2.4.1/LICENSE *)
+  (*! @license DOMPurify 2.4.7 | (c) Cure53 and other contributors | Released under the Apache license 2.0 and Mozilla Public License 2.0 | github.com/cure53/DOMPurify/blob/2.4.7/LICENSE *)
 
 svg-pathdata/lib/SVGPathData.module.js:
   (*! *****************************************************************************
@@ -72446,7 +72924,7 @@ svg-pathdata/lib/SVGPathData.module.js:
 
 quill/dist/quill.js:
   (*!
-   * Quill Editor v1.3.6
+   * Quill Editor v1.3.7
    * https://quilljs.com/
    * Copyright (c) 2014, Jason Chen
    * Copyright (c) 2013, salesforce.com
@@ -72455,13 +72933,13 @@ quill/dist/quill.js:
 @svgdotjs/svg.js/dist/svg.esm.js:
   (*!
   * @svgdotjs/svg.js - A lightweight library for manipulating and animating SVG.
-  * @version 3.1.2
+  * @version 3.2.0
   * https://svgjs.dev/
   *
   * @copyright Wout Fierens <wout@mick-wout.com>
   * @license MIT
   *
-  * BUILT: Wed Jan 26 2022 23:19:07 GMT+0100 (Mitteleuropäische Normalzeit)
+  * BUILT: Mon Jun 12 2023 10:34:51 GMT+0200 (Central European Summer Time)
   *)
 
 jspdf/dist/jspdf.es.min.js:
