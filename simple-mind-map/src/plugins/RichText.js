@@ -623,7 +623,7 @@ class RichText {
   // 处理导入数据
   handleSetData(data) {
     let walk = root => {
-      if (!root.data.richText) {
+      if (root.data && !root.data.richText) {
         root.data.richText = true
         root.data.resetRichText = true
       }

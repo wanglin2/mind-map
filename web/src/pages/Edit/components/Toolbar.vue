@@ -134,6 +134,16 @@
           <span class="icon iconfont iconlianjiexian"></span>
           <span class="text">{{ $t('toolbar.associativeLine') }}</span>
         </div>
+        <div
+          class="toolbarBtn"
+          :class="{
+            disabled: activeNodes.length <= 0 || hasGeneralization
+          }"
+          @click="showFormula"
+        >
+          <span class="icon iconfont icongongshi"></span>
+          <span class="text">{{ $t('toolbar.formula') }}</span>
+        </div>
       </div>
       <!-- 导出 -->
       <div class="toolbarBlock">
@@ -257,6 +267,11 @@ export default {
       // this.$bus.$emit('showNodeIcon')
       this.$bus.$emit('close_node_icon_toolbar')
       this.setActiveSidebar('nodeIconSidebar')
+    },
+
+    // 打开公式侧边栏
+    showFormula() {
+      this.setActiveSidebar('formulaSidebar')
     },
 
     /**

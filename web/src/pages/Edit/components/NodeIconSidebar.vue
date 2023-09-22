@@ -1,9 +1,15 @@
 <template>
-  <Sidebar ref="sidebar" title="图标/贴纸">
+  <Sidebar ref="sidebar" :title="$t('nodeIconSidebar.title')">
     <div class="box" :class="{ isDark: isDark }">
       <el-tabs v-model="activeName">
-        <el-tab-pane label="图标" name="icon"></el-tab-pane>
-        <el-tab-pane label="贴纸" name="image"></el-tab-pane>
+        <el-tab-pane
+          :label="$t('nodeIconSidebar.icon')"
+          name="icon"
+        ></el-tab-pane>
+        <el-tab-pane
+          :label="$t('nodeIconSidebar.sticker')"
+          name="image"
+        ></el-tab-pane>
       </el-tabs>
       <div class="boxContent">
         <!-- 图标 -->
