@@ -215,6 +215,9 @@ class Render {
     // 设置节点标签
     this.setNodeTag = this.setNodeTag.bind(this)
     this.mindMap.command.add('SET_NODE_TAG', this.setNodeTag)
+    // 设置节点公式
+    this.insertFormula = this.insertFormula.bind(this)
+    this.mindMap.command.add('INSERT_FORMULA', this.insertFormula)
     // 添加节点概要
     this.addGeneralization = this.addGeneralization.bind(this)
     this.mindMap.command.add('ADD_GENERALIZATION', this.addGeneralization)
@@ -1275,6 +1278,15 @@ class Render {
   setNodeTag(node, tag) {
     this.setNodeDataRender(node, {
       tag
+    })
+  }
+
+  // 设置节点公式
+  insertFormula(formula) {
+    // 只在富文本模式下可用，并且需要注册Formula插件
+    if (!this.mindMap.richText || !this.mindMap.formula) return
+    this.activeNodeList.forEach(node => {
+      this.mindMap.formula.insertFormulaToNode(node, formula)
     })
   }
 
