@@ -1,11 +1,14 @@
 {
-  "name": "@wh/simple-mind-map",
-  "version": "0.0.1",
+  "name": "simple-mind-map",
+  "version": "0.7.1-fix.2",
   "description": "一个简单的web在线思维导图",
-  "authors": [
+  "authors": [{
+      "name": "街角小林",
+      "email": "1013335014@qq.com"
+    },
     {
-      "name": "isaac.wang1",
-      "email": "whao53333@gmail.com"
+      "name": "理想青年实验室",
+      "url": "http://lxqnsys.com/"
     }
   ],
   "types": "./types/index.d.ts",
@@ -13,7 +16,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wanghao1993/mind-map"
+    "url": "https://github.com/wanglin2/mind-map"
   },
   "scripts": {
     "lint": "eslint src/",
