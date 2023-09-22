@@ -164,7 +164,10 @@ function createTextNode() {
   let lineHeight = this.getStyle('lineHeight', false)
   // 文本超长自动换行
   let textStyle = this.style.getTextFontStyle()
-  let textArr = this.nodeData.data.text.split(/\n/gim)
+  let textArr = []
+  if (this.nodeData.data.text && typeof this.nodeData.data.text === 'string') {
+    textArr = this.nodeData.data.text.split(/\n/gim)
+  }
   let maxWidth = this.mindMap.opt.textAutoWrapWidth
   let isMultiLine = false
   textArr.forEach((item, index) => {

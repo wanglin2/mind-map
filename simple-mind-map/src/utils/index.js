@@ -669,6 +669,42 @@ export const checkIsNodeStyleDataKey = key => {
   return false
 }
 
+// 合并数组对象by某个key
+
+// const data = [
+//   { type: 'a', list: [{ name: 1, value: 1 }, { name: 2, value: 2 }] },
+//   { type: 'b', list: [{ name: 13, value: 3 }] },
+//   { type: 'a', list: [{ name: 1, value: 3 }, { name: 4, value: 4 }] },
+// ];
+
+// mergeObjArrayBy(data, 'type', 'name') 结果
+
+// [
+//   { type: 'a', list: [ { name: 1, value: 3 }, { name: 2, value: 2 }, { name: 4, value: 4 } ] },
+//   { type: 'b', list: [ { name: 13, value: 3 } ] }
+// ]
+
+export const mergerIconListBy = (arrList, key, name) => {
+  return arrList.reduce((result, item) => {
+    const existingItem = result.find(x => x[key] === item[key])
+    if (existingItem) {
+      item.list.forEach(newObj => {
+        const existingObj = existingItem.list.find(
+          x => x[name] === newObj[name]
+        )
+        if (existingObj) {
+          existingObj.icon = newObj.icon
+        } else {
+          existingItem.list.push(newObj)
+        }
+      })
+    } else {
+      result.push({ ...item })
+    }
+    return result
+  }, [])
+}
+
 // 从节点实例列表里找出顶层的节点
 export const getTopAncestorsFomNodeList = list => {
   let res = []
