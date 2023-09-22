@@ -716,3 +716,54 @@ export const selectAllInput = el => {
   selection.removeAllRanges()
   selection.addRange(range)
 }
+
+// 给指定的节点列表树数据添加附加数据，会修改原数据
+export const addDataToAppointNodes = (appointNodes, data = {}) => {
+  const walk = list => {
+    list.forEach(node => {
+      node.data = {
+        ...node.data,
+        ...data
+      }
+      if (node.children && node.children.length > 0) {
+        walk(node.children)
+      }
+    })
+  }
+  walk(appointNodes)
+  return appointNodes
+}
+
+// 给指定的节点列表树数据添加uid，如果不存在的话，会修改原数据
+export const createUidForAppointNodes = appointNodes => {
+  const walk = list => {
+    list.forEach(node => {
+      if (!node.data) {
+        node.data = {}
+      }
+      if (isUndef(node.data.uid)) {
+        node.data.uid = createUid()
+      }
+      if (node.children && node.children.length > 0) {
+        walk(node.children)
+      }
+    })
+  }
+  walk(appointNodes)
+  return appointNodes
+}
+
+// 传入一个数据，如果该数据是数组，那么返回该数组，否则返回一个以该数据为成员的数组
+export const formatDataToArray = data => {
+  if (!data) return []
+  return Array.isArray(data) ? data : [data]
+}
+
+//  获取节点在同级里的位置索引
+export const getNodeIndex = node => {
+  return node.parent
+    ? node.parent.children.findIndex(item => {
+        return item.uid === node.uid
+      })
+    : 0
+}
