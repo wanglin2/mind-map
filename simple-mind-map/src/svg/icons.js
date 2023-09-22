@@ -1,4 +1,4 @@
-import { mergerIconListBy } from '../utils'
+import { mergerIconList } from '../utils'
 
 // 超链接图标
 const hyperlink =
@@ -283,20 +283,18 @@ export const nodeIconList = [
 //  获取nodeIconList icon内容
 const getNodeIconListIcon = (name, extendIconList = []) => {
   let arr = name.split('_')
-  const iconList = mergerIconListBy(
-    [...nodeIconList, ...extendIconList],
-    'type',
-    'name'
-  )
-
+  const iconList = mergerIconList([...nodeIconList, ...extendIconList])
   let typeData = iconList.find(item => {
     return item.type === arr[0]
   })
-
   if (typeData) {
-    return typeData.list.find(item => {
+    let typeName = typeData.list.find(item => {
       return item.name === arr[1]
-    }).icon
+    })
+    if (typeName) {
+      return typeName.icon
+    }
+    return ''
   } else {
     return ''
   }

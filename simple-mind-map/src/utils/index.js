@@ -669,29 +669,23 @@ export const checkIsNodeStyleDataKey = key => {
   return false
 }
 
-// 合并数组对象by某个key
-
+// 合并图标数组
 // const data = [
-//   { type: 'a', list: [{ name: 1, value: 1 }, { name: 2, value: 2 }] },
-//   { type: 'b', list: [{ name: 13, value: 3 }] },
-//   { type: 'a', list: [{ name: 1, value: 3 }, { name: 4, value: 4 }] },
+//   { type: 'priority', name: '优先级图标', list: [{ name: '1', icon: 'a' }, { name: 2, icon: 'b' }] },
+//   { type: 'priority', name: '优先级图标', list: [{ name: '2', icon: 'c' }, { name: 3, icon: 'd' }] },
 // ];
 
-// mergeObjArrayBy(data, 'type', 'name') 结果
+// mergerIconList(data) 结果
 
 // [
-//   { type: 'a', list: [ { name: 1, value: 3 }, { name: 2, value: 2 }, { name: 4, value: 4 } ] },
-//   { type: 'b', list: [ { name: 13, value: 3 } ] }
+//   { type: 'priority', name: '优先级图标', list: [{ name: '1', icon: 'a' }, { name: 2, icon: 'c' }, { name: 3, icon: 'd' }] },
 // ]
-
-export const mergerIconListBy = (arrList, key, name) => {
-  return arrList.reduce((result, item) => {
-    const existingItem = result.find(x => x[key] === item[key])
+export const mergerIconList = list => {
+  return list.reduce((result, item) => {
+    const existingItem = result.find(x => x.type === item.type)
     if (existingItem) {
       item.list.forEach(newObj => {
-        const existingObj = existingItem.list.find(
-          x => x[name] === newObj[name]
-        )
+        const existingObj = existingItem.list.find(x => x.name === newObj.name)
         if (existingObj) {
           existingObj.icon = newObj.icon
         } else {
