@@ -188,5 +188,18 @@ export const defaultOpt = {
   // 拖拽节点时鼠标移动到画布边缘是否开启画布自动移动
   autoMoveWhenMouseInEdgeOnDrag: true,
   // 是否首次加载fit view
-  fit: false
+  fit: false,
+  // 拖拽多个节点时随鼠标移动的示意矩形的样式配置
+  dragMultiNodeRectConfig: {
+    width: 40,
+    height: 20,
+    fill: '' // 填充颜色，如果不传默认使用连线的颜色
+  },
+  // 节点拖拽时新位置的示意矩形的填充颜色，如果不传默认使用连线的颜色
+  dragPlaceholderRectFill: '',
+  // 节点拖拽时的透明度配置
+  dragOpacityConfig: {
+    cloneNodeOpacity: 0.5, // 跟随鼠标移动的克隆节点或矩形的透明度
+    beingDragNodeOpacity: 0.3 // 被拖拽节点的透明度
+  }
 }

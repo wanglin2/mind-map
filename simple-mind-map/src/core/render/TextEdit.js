@@ -1,4 +1,4 @@
-import { getStrWithBrFromHtml, checkNodeOuter } from '../../utils'
+import { getStrWithBrFromHtml, checkNodeOuter, focusInput, selectAllInput } from '../../utils'
 import { ERROR_TYPES } from '../../constants/constant'
 
 //  节点文字编辑类
@@ -188,33 +188,14 @@ export default class TextEdit {
     this.showTextEdit = true
     // 选中文本
     // if (!this.cacheEditingText) {
-    //   this.selectNodeText()
+    //   selectAllInput(this.textEditNode)
     // }
     if (isInserting || (selectTextOnEnterEditText && !isFromKeyDown)) {
-      this.selectNodeText()
+      selectAllInput(this.textEditNode)
     } else {
-      this.focus()
+      focusInput(this.textEditNode)
     }
     this.cacheEditingText = ''
-  }
-
-  // 聚焦
-  focus() {
-    let selection = window.getSelection()
-    let range = document.createRange()
-    range.selectNodeContents(this.textEditNode)
-    range.collapse()
-    selection.removeAllRanges()
-    selection.addRange(range)
-  }
-
-  //  选中文本
-  selectNodeText() {
-    let selection = window.getSelection()
-    let range = document.createRange()
-    range.selectNodeContents(this.textEditNode)
-    selection.removeAllRanges()
-    selection.addRange(range)
   }
 
   // 获取当前正在编辑的内容

@@ -41,7 +41,7 @@ class Export {
     let task = imageList.map(async item => {
       let imgUlr = item.attr('href') || item.attr('xlink:href')
       // 已经是data:URL形式不用转换
-      if (/^data:/.test(imgUlr)) {
+      if (/^data:/.test(imgUlr) || imgUlr === 'none') {
         return
       }
       let imgData = await imgToDataUrl(imgUlr)

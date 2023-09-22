@@ -149,8 +149,8 @@ class AssociativeLine {
         ) {
           nodeToIds.set(cur, data.associativeLineTargets)
         }
-        if (data.id) {
-          idToNode.set(data.id, cur)
+        if (data.uid) {
+          idToNode.set(data.uid, cur)
         }
       },
       () => {},
@@ -158,8 +158,8 @@ class AssociativeLine {
       0
     )
     nodeToIds.forEach((ids, node) => {
-      ids.forEach((id, index) => {
-        let toNode = idToNode.get(id)
+      ids.forEach((uid, index) => {
+        let toNode = idToNode.get(uid)
         if (!node || !toNode) return
         const associativeLinePoint = (node.nodeData.data.associativeLinePoint ||
           [])[index]
@@ -234,6 +234,11 @@ class AssociativeLine {
         controlPoints
       })
     })
+    // 双击进入关联线文本编辑状态
+    clickPath.dblclick(() => {
+      if (!this.activeLine) return
+      this.showEditTextBox(text)
+    })
     // 渲染关联线文字
     this.renderText(this.getText(node, toNode), path, text)
     this.lineList.push([path, clickPath, text, node, toNode])
@@ -252,28 +257,25 @@ class AssociativeLine {
   }) {
     let { associativeLineActiveColor } = this.mindMap.themeConfig
     // 如果当前存在激活节点，那么取消激活节点
-    if (this.mindMap.renderer.activeNodeList.length > 0) {
-      this.clearActiveNodes()
-    } else {
-      // 否则清除当前的关联线的激活状态，如果有的话
-      this.clearActiveLine()
-      // 保存当前激活的关联线信息
-      this.activeLine = [path, clickPath, text, node, toNode]
-      // 让不可见的点击线显示
-      clickPath.stroke({ color: associativeLineActiveColor })
-      // 如果没有输入过关联线文字，那么显示默认文字
-      if (!this.getText(node, toNode)) {
-        this.renderText(this.mindMap.opt.defaultAssociativeLineText, path, text)
-      }
-      // 渲染控制点和连线
-      this.renderControls(
-        startPoint,
-        endPoint,
-        controlPoints[0],
-        controlPoints[1]
-      )
-      this.mindMap.emit('associative_line_click', path, clickPath, node, toNode)
+    this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
+    // 否则清除当前的关联线的激活状态，如果有的话
+    this.clearActiveLine()
+    // 保存当前激活的关联线信息
+    this.activeLine = [path, clickPath, text, node, toNode]
+    // 让不可见的点击线显示
+    clickPath.stroke({ color: associativeLineActiveColor })
+    // 如果没有输入过关联线文字，那么显示默认文字
+    if (!this.getText(node, toNode)) {
+      this.renderText(this.mindMap.opt.defaultAssociativeLineText, path, text)
     }
+    // 渲染控制点和连线
+    this.renderControls(
+      startPoint,
+      endPoint,
+      controlPoints[0],
+      controlPoints[1]
+    )
+    this.mindMap.emit('associative_line_click', path, clickPath, node, toNode)
   }
 
   // 移除所有连接线
@@ -395,21 +397,21 @@ class AssociativeLine {
   addLine(fromNode, toNode) {
     if (!fromNode || !toNode) return
     // 目标节点如果没有id，则生成一个id
-    let id = toNode.nodeData.data.id
-    if (!id) {
-      id = uuid()
+    let uid = toNode.nodeData.data.uid
+    if (!uid) {
+      uid = uuid()
       this.mindMap.execCommand('SET_NODE_DATA', toNode, {
-        id
+        uid
       })
     }
     // 将目标节点id保存起来
     let list = fromNode.nodeData.data.associativeLineTargets || []
     // 连线节点是否存在相同的id,存在则阻止添加关联线
-    const sameLine = list.some(item => item === id)
+    const sameLine = list.some(item => item === uid)
     if (sameLine) {
       return
     }
-    list.push(id)
+    list.push(uid)
     // 保存控制点
     let [startPoint, endPoint] = computeNodePoints(fromNode, toNode)
     let controlPoints = computeCubicBezierPathPoints(
@@ -458,7 +460,7 @@ class AssociativeLine {
     let newAssociativeLineText = {}
     if (associativeLineText) {
       Object.keys(associativeLineText).forEach(item => {
-        if (item !== toNode.nodeData.data.id) {
+        if (item !== toNode.nodeData.data.uid) {
           newAssociativeLineText[item] = associativeLineText[item]
         }
       })
@@ -481,13 +483,6 @@ class AssociativeLine {
       // 文本
       associativeLineText: newAssociativeLineText
     })
-  }
-
-  // 清除当前激活的节点
-  clearActiveNodes() {
-    if (this.mindMap.renderer.activeNodeList.length > 0) {
-      this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
-    }
   }
 
   // 清除激活的线
