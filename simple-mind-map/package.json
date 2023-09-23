@@ -2,7 +2,8 @@
   "name": "simple-mind-map",
   "version": "0.7.1-fix.2",
   "description": "一个简单的web在线思维导图",
-  "authors": [{
+  "authors": [
+    {
       "name": "街角小林",
       "email": "1013335014@qq.com"
     },
