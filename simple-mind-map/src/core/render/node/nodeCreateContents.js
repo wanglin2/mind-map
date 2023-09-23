@@ -253,17 +253,14 @@ function createTagNode() {
   tagData.slice(0, this.mindMap.opt.maxTag).forEach((item, index) => {
     let tag = new G()
     // 标签文本
-    let text = new Text().text(item).x(8).cy(10)
+    let text = new Text().text(item).x(8).cy(8)
     this.style.tagText(text, index)
     let { width } = text.bbox()
     // 标签矩形
     let rect = new Rect().size(width + 16, 20)
     // 先从自定义的颜色中获取颜色，没有的话就按照内容生成
-
     const tagsColorList = this.mindMap.opt.tagsColorMap || {}
-
     const color = tagsColorList[text.node.textContent]
-
     this.style.tagRect(rect, text, color)
     tag.add(rect).add(text)
     nodes.push({

@@ -204,7 +204,5 @@ export const defaultOpt = {
   },
   // 自定义标签的颜色
   // {pass: 'green, unpass: 'red'}
-  tagsColorMap: {
-    pass: 'green'
-  }
+  tagsColorMap: {}
 }
