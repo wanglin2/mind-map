@@ -174,6 +174,104 @@
 <p>v0.6.13+</p>
 </blockquote>
 <p>判断是否是移动端环境。</p>
+<h4>getTopAncestorsFomNodeList(list)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>list</code>：Arrray，节点实例列表。</li>
+</ul>
+<p>从节点实例列表里找出最顶层的节点列表。</p>
+<h4>checkTwoRectIsOverlap(minx1, maxx1, miny1, maxy1, minx2, maxx2, miny2, maxy2)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<p>参数为两个矩形的位置。</p>
+<p>判断两个矩形是否重叠。</p>
+<h4>focusInput(el)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>el</code>：DOM节点，可聚焦的元素，一般为输入框元素。</li>
+</ul>
+<p>聚焦指定输入框。</p>
+<h4>selectAllInput(el)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>el</code>：DOM节点，可聚焦的元素，一般为输入框元素。</li>
+</ul>
+<p>聚焦并全选指定输入框。</p>
+<h4>addDataToAppointNodes(appointNodes, data = {})</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li>
+<p><code>appointNodes</code>：节点实例列表，数组类型。</p>
+</li>
+<li>
+<p><code>data</code>：要附加到指定节点实例列表树中所有节点的数据中的数据。</p>
+</li>
+</ul>
+<p>给指定的节点列表树数据添加附加数据，会修改原数据。</p>
+<h4>createUidForAppointNodes(appointNodes)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>appointNodes</code>：节点实例列表，数组类型。</li>
+</ul>
+<p>给指定的节点列表树数据添加uid（如果uid不存在的话），会修改原数据。</p>
+<h4>getNodeIndex(node)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>node</code>：节点实例。</li>
+</ul>
+<p>获取节点在同级里的位置索引。</p>
+<h4>mergerIconList(list)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>list</code>：要合并到库内部的节点图标数组。</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-comment">// const data = [</span>
+<span class="hljs-comment">//   { type: &#x27;priority&#x27;, name: &#x27;优先级图标&#x27;, list: [{ name: &#x27;1&#x27;, icon: &#x27;a&#x27; }, { name: 2, icon: &#x27;b&#x27; }] },</span>
+<span class="hljs-comment">//   { type: &#x27;priority&#x27;, name: &#x27;优先级图标&#x27;, list: [{ name: &#x27;2&#x27;, icon: &#x27;c&#x27; }, { name: 3, icon: &#x27;d&#x27; }] },</span>
+<span class="hljs-comment">// ];</span>
+
+<span class="hljs-comment">// mergerIconList(data) 结果</span>
+
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//   { type: &#x27;priority&#x27;, name: &#x27;优先级图标&#x27;, list: [{ name: &#x27;1&#x27;, icon: &#x27;a&#x27; }, { name: 2, icon: &#x27;c&#x27; }, { name: 3, icon: &#x27;d&#x27; }] },</span>
+<span class="hljs-comment">// ]</span>
+</code></pre>
+<p>合并图标数组。</p>
+<h4>generateColorByContent(str)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>str</code>：字符串。</li>
+</ul>
+<p>根据传入的内容生成颜色，同样的内容会生成同样的颜色。</p>
+<h4>htmlEscape(str)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>str</code>：字符串。</li>
+</ul>
+<p>转义传入的字符串，目前会转义如下三个字符：</p>
+<pre class="hljs"><code>&amp; -&gt; &amp;amp;
+&lt; -&gt; &amp;lt;
+&gt; -&gt; &amp;gt;
+</code></pre>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

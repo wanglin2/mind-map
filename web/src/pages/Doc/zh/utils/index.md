@@ -245,6 +245,107 @@ copyNodeTree({}, node)
 
 判断是否是移动端环境。
 
+#### getTopAncestorsFomNodeList(list)
+
+> v0.7.2+
+
+- `list`：Arrray，节点实例列表。
+
+从节点实例列表里找出最顶层的节点列表。
+
+#### checkTwoRectIsOverlap(minx1, maxx1, miny1, maxy1, minx2, maxx2, miny2, maxy2)
+
+> v0.7.2+
+
+参数为两个矩形的位置。
+
+判断两个矩形是否重叠。
+
+#### focusInput(el)
+
+> v0.7.2+
+
+- `el`：DOM节点，可聚焦的元素，一般为输入框元素。
+
+聚焦指定输入框。
+
+#### selectAllInput(el)
+
+> v0.7.2+
+
+- `el`：DOM节点，可聚焦的元素，一般为输入框元素。
+
+聚焦并全选指定输入框。
+
+#### addDataToAppointNodes(appointNodes, data = {})
+
+> v0.7.2+
+
+- `appointNodes`：节点实例列表，数组类型。
+
+- `data`：要附加到指定节点实例列表树中所有节点的数据中的数据。
+
+给指定的节点列表树数据添加附加数据，会修改原数据。
+
+#### createUidForAppointNodes(appointNodes)
+
+> v0.7.2+
+
+- `appointNodes`：节点实例列表，数组类型。
+
+给指定的节点列表树数据添加uid（如果uid不存在的话），会修改原数据。
+
+#### getNodeIndex(node) 
+
+> v0.7.2+
+
+- `node`：节点实例。
+
+获取节点在同级里的位置索引。
+
+#### mergerIconList(list)
+
+> v0.7.2+
+
+- `list`：要合并到库内部的节点图标数组。
+
+```js
+// const data = [
+//   { type: 'priority', name: '优先级图标', list: [{ name: '1', icon: 'a' }, { name: 2, icon: 'b' }] },
+//   { type: 'priority', name: '优先级图标', list: [{ name: '2', icon: 'c' }, { name: 3, icon: 'd' }] },
+// ];
+
+// mergerIconList(data) 结果
+
+// [
+//   { type: 'priority', name: '优先级图标', list: [{ name: '1', icon: 'a' }, { name: 2, icon: 'c' }, { name: 3, icon: 'd' }] },
+// ]
+```
+
+合并图标数组。
+
+#### generateColorByContent(str)
+
+> v0.7.2+
+
+- `str`：字符串。
+
+根据传入的内容生成颜色，同样的内容会生成同样的颜色。
+
+#### htmlEscape(str)
+
+> v0.7.2+
+
+- `str`：字符串。
+
+转义传入的字符串，目前会转义如下三个字符：
+
+```
+& -> &amp;
+< -> &lt;
+> -> &gt;
+```
+
 ## 在canvas中模拟css的背景属性
 
 引入：

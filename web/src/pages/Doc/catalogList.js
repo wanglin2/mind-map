@@ -35,6 +35,7 @@ let APIList = [
   'search',
   'painter',
   'scrollbar',
+  'formula',
   'xmind',
   'markdown',
   'utils'

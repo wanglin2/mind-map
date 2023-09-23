@@ -31,6 +31,24 @@
 </blockquote>
 <p>Whether the node is currently being dragged</p>
 <h2>Methods</h2>
+<h3>setOpacity(val)</h3>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>val</code>: Opacity value，0-1</li>
+</ul>
+<p>Set node transparency, including connecting lines and child nodes.</p>
+<h3>hideChildren()</h3>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<p>Hide subordinate nodes.</p>
+<h3>showChildren()</h3>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<p>Display subordinate nodes.</p>
 <h3>hasCustomStyle()</h3>
 <blockquote>
 <p>v0.6.2+</p>

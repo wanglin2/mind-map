@@ -179,6 +179,104 @@ and copying the <code>data</code> of the data object, example:</p>
 <p>v0.6.13+</p>
 </blockquote>
 <p>Determine if it is a mobile environment.</p>
+<h4>getTopAncestorsFomNodeList(list)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>list</code>: Arrray, Node instance list.</li>
+</ul>
+<p>Find the top-level node list from the node instance list.</p>
+<h4>checkTwoRectIsOverlap(minx1, maxx1, miny1, maxy1, minx2, maxx2, miny2, maxy2)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<p>The parameter is the position of two rectangles.</p>
+<p>Determine if two rectangles overlap.</p>
+<h4>focusInput(el)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>el</code>: DOM nodes, elements that can be focused, typically input box elements.</li>
+</ul>
+<p>Focus on the specified input box.</p>
+<h4>selectAllInput(el)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>el</code>: DOM nodes, elements that can be focused, typically input box elements.</li>
+</ul>
+<p>Focus and select all specified input boxes.</p>
+<h4>addDataToAppointNodes(appointNodes, data = {})</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li>
+<p><code>appointNodes</code>：Node instance list, array type.</p>
+</li>
+<li>
+<p><code>data</code>：The data to be attached to all nodes in the specified node instance list tree.</p>
+</li>
+</ul>
+<p>Adding additional data to the specified node list tree data will modify the original data.</p>
+<h4>createUidForAppointNodes(appointNodes)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>appointNodes</code>：Node instance list, array type.</li>
+</ul>
+<p>Adding a uid to the specified node list tree data (if the uid does not exist) will modify the original data.</p>
+<h4>getNodeIndex(node)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>node</code>：Node instance.</li>
+</ul>
+<p>Gets the position index of a node within its peers.</p>
+<h4>mergerIconList(list)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>list</code>：The array of node icons to be merged into the library.</li>
+</ul>
+<pre class="hljs"><code><span class="hljs-comment">// const data = [</span>
+<span class="hljs-comment">//   { type: &#x27;priority&#x27;, name: &#x27;优先级图标&#x27;, list: [{ name: &#x27;1&#x27;, icon: &#x27;a&#x27; }, { name: 2, icon: &#x27;b&#x27; }] },</span>
+<span class="hljs-comment">//   { type: &#x27;priority&#x27;, name: &#x27;优先级图标&#x27;, list: [{ name: &#x27;2&#x27;, icon: &#x27;c&#x27; }, { name: 3, icon: &#x27;d&#x27; }] },</span>
+<span class="hljs-comment">// ];</span>
+
+<span class="hljs-comment">// mergerIconList(data)  result:</span>
+
+<span class="hljs-comment">// [</span>
+<span class="hljs-comment">//   { type: &#x27;priority&#x27;, name: &#x27;优先级图标&#x27;, list: [{ name: &#x27;1&#x27;, icon: &#x27;a&#x27; }, { name: 2, icon: &#x27;c&#x27; }, { name: 3, icon: &#x27;d&#x27; }] },</span>
+<span class="hljs-comment">// ]</span>
+</code></pre>
+<p>Merge icon arrays.</p>
+<h4>htmlEscape(str)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>str</code>：String.</li>
+</ul>
+<p>Escape the incoming string, currently escaping the following three characters:</p>
+<pre class="hljs"><code>&amp; -&gt; &amp;amp;
+&lt; -&gt; &amp;lt;
+&gt; -&gt; &amp;gt;
+</code></pre>
+<h4>generateColorByContent(str)</h4>
+<blockquote>
+<p>v0.7.2+</p>
+</blockquote>
+<ul>
+<li><code>str</code>：String.</li>
+</ul>
+<p>Generate colors based on incoming content, and the same content will generate the same color.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

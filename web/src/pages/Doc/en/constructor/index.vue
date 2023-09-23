@@ -490,6 +490,34 @@
 <td>Is the first rendering scaled to fit the canvas size</td>
 <td></td>
 </tr>
+<tr>
+<td>dragMultiNodeRectConfig（v0.7.2+）</td>
+<td>Object</td>
+<td>{ width: 40, height: 20, fill: '' }</td>
+<td>The style configuration of the schematic rectangle that moves with the mouse when dragging multiple nodes, passing an object, and the field meanings are the width, height, and fill color of the rectangle</td>
+<td></td>
+</tr>
+<tr>
+<td>dragPlaceholderRectFill（v0.7.2+）</td>
+<td>String</td>
+<td></td>
+<td>The filling color of the schematic rectangle for the new position when dragging nodes. If not transmitted, the default color for the connected line is used</td>
+<td></td>
+</tr>
+<tr>
+<td>dragOpacityConfig（v0.7.2+）</td>
+<td>Object</td>
+<td>{ cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }</td>
+<td>The transparency configuration during node dragging, passing an object, and the field meanings are: the transparency of the cloned node or rectangle that follows the mouse movement, and the transparency of the dragged node</td>
+<td></td>
+</tr>
+<tr>
+<td>tagsColorMap（v0.7.2+）</td>
+<td>Object</td>
+<td>{}</td>
+<td>The color of a custom node label can be transferred to an object, where key is the label content to be assigned a color, and value is the color of the label content. If not transferred internally, a corresponding color will be generated based on the label content</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Data structure</h3>
@@ -961,7 +989,7 @@ redo. All commands are as follows:</p>
 </tr>
 <tr>
 <td>INSERT_NODE</td>
-<td>Insert a sibling node, the active node or appoint node will be the operation node. If there are multiple active nodes, only the first one will be effective</td>
+<td>Insert a sibling node, the active node or appoint node will be the operation node. If there are multiple active nodes, only the first one will be effective（v0.7.2+Supports simultaneous insertion of sibling nodes into multiple active nodes）</td>
 <td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>） 、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a> ）、 appointChildren（v0.6.14+, Optional, Specify the child nodes of the newly created node, array type）</td>
 </tr>
 <tr>
@@ -1067,17 +1095,17 @@ redo. All commands are as follows:</p>
 <tr>
 <td>INSERT_AFTER (v0.1.5+)</td>
 <td>Move Node to After Another Node</td>
-<td>node (node to move), exist (target node)</td>
+<td>node (node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), exist (target node)</td>
 </tr>
 <tr>
 <td>INSERT_BEFORE (v0.1.5+)</td>
 <td>Move Node to Before Another Node</td>
-<td>node (node to move), exist (target node)</td>
+<td>node (node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), exist (target node)</td>
 </tr>
 <tr>
 <td>MOVE_NODE_TO (v0.1.5+)</td>
 <td>Move a node as a child of another node</td>
-<td>node (the node to move), toNode (the target node)</td>
+<td>node (the node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), toNode (the target node)</td>
 </tr>
 <tr>
 <td>ADD_GENERALIZATION (v0.2.0+)</td>
@@ -1108,6 +1136,21 @@ redo. All commands are as follows:</p>
 <td>GO_TARGET_NODE（v0.6.7+）</td>
 <td>Navigate to a node, and if the node is collapsed, it will automatically expand to that node</td>
 <td>node（Node instance or node uid to locate）、callback（v0.6.9+, Callback function after positioning completion）</td>
+</tr>
+<tr>
+<td>INSERT_MULTI_NODE（v0.7.2+）</td>
+<td>Insert multiple sibling nodes into the specified node at the same time, with the operating node being the currently active node or the specified node</td>
+<td>appointNodes（Optional, specify nodes, specify multiple nodes to pass an array）, nodeList（Data list of newly inserted nodes, array type）</td>
+</tr>
+<tr>
+<td>INSERT_MULTI_CHILD_NODE（v0.7.2+）</td>
+<td>Insert multiple child nodes into the specified node simultaneously, with the operation node being the currently active node or the specified node</td>
+<td>appointNodes（Optional, specify nodes, specify multiple nodes to pass an array）, childList（Data list of newly inserted nodes, array type）</td>
+</tr>
+<tr>
+<td>INSERT_FORMULA（v0.7.2+）</td>
+<td>Insert mathematical formulas into nodes, operate on the currently active node or specified node</td>
+<td>formula（Mathematical formula to insert, LaText syntax）, appointNodes（Optional, specify the node to insert the formula into. Multiple nodes can be passed as arrays, otherwise it defaults to the currently active node）</td>
 </tr>
 </tbody>
 </table>
