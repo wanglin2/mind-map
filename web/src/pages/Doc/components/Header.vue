@@ -2,16 +2,24 @@
   <div class="headerContainer">
     <div class="left">
       <div class="title" @click="toIndex">
-        <img src="../../../assets/img/logo2.png" alt="">
+        <img src="../../../assets/img/logo2.png" alt="" />
         SimpleMindMap
       </div>
     </div>
     <div class="center">
+      <div class="btn" @click="toIndex">{{ index }}</div>
       <div class="btn" @click="toDemo">{{ demoName }}</div>
+      <div class="btn" @click="toHelp" :class="{ active: docType === 'help' }">
+        {{ helpDoc }}
+      </div>
+      <div class="btn" @click="toDev" :class="{ active: docType === 'doc' }">
+        {{ devDoc }}
+      </div>
       <el-dropdown
         trigger="click"
         placement="bottom-start"
         @command="handleCommand"
+        v-if="docType === 'doc'"
       >
         <span class="translateBtn">
           {{ currentLangName }}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -41,6 +49,7 @@ import t from '../i18n'
 export default {
   data() {
     return {
+      docType: '',
       lang: '',
       currentLangName: '',
       otherLangList: []
@@ -49,7 +58,16 @@ export default {
   computed: {
     demoName() {
       return t('demo', this.lang)
-    }
+    },
+    helpDoc() {
+      return t('help', this.lang)
+    },
+    devDoc() {
+      return t('dev', this.lang)
+    },
+    index() {
+      return t('index', this.lang)
+    },
   },
   watch: {
     $route() {
@@ -61,6 +79,12 @@ export default {
   },
   methods: {
     init() {
+      // 当前文档类型
+      let docType = /^\/([^\/]+)\//.exec(this.$route.path)
+      if (docType && docType[1]) {
+        this.docType = docType[1]
+      }
+      // 当前文档语言
       let lang = /^\/doc\/([^\/]+)\//.exec(this.$route.path)
       if (lang && lang[1]) {
         this.lang = lang[1]
@@ -87,6 +111,15 @@ export default {
         return `/doc/${path}/`
       })
       this.$router.push(url)
+    },
+
+    toHelp() {
+      this.lang = 'zh'
+      this.$router.replace('/help/zh/')
+    },
+
+    toDev() {
+      this.$router.replace('/doc/zh/')
     }
   }
 }
@@ -135,6 +168,10 @@ export default {
       font-size: 14px;
 
       &:hover {
+        color: #1ea59a;
+      }
+
+      &.active {
         color: #1ea59a;
       }
     }
