@@ -798,6 +798,7 @@ export const getNodeIndex = node => {
     : 0
 }
 
+
 // 根据内容生成颜色
 export const generateColorByContent = str => {
   let hash = 0
@@ -810,4 +811,16 @@ export const generateColorByContent = str => {
   const rng = new MersenneTwister(hash)
   const h = rng.genrand_int32() % 360
   return 'hsla(' + h + ', 50%, 50%, 1)'
+}
+
+//  html转义
+export const htmlEscape = str => {
+  ;[
+    ['&', '&amp;'],
+    ['<', '&lt;'],
+    ['>', '&gt;']
+  ].forEach(item => {
+    str = str.replace(new RegExp(item[0], 'g'), item[1])
+  })
+  return str
 }
