@@ -56,6 +56,26 @@
 
 ## 方法
 
+### setOpacity(val)
+
+> v0.7.2+
+
+- `val`：透明度，0-1
+
+设置节点透明度，包括连接线和下级节点。
+
+### hideChildren()
+
+> v0.7.2+
+
+隐藏下级节点。
+
+### showChildren()
+
+> v0.7.2+
+
+显示下级节点。
+
 ### hasCustomStyle()
 
 > v0.6.2+

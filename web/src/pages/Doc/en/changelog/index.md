@@ -1,5 +1,43 @@
 # Changelog
 
+## 0.7.2
+
+Fix:
+
+> 1.Fixed the issue of nodes not being selected when the selection area does not include node boundaries when multiple nodes are selected.
+>
+> 2.Fix the issue of errors when node text is not a string.
+>
+> 3.Fix the issue of some text disappearing when edited again when there are<>&characters in the text in non rich text mode.
+
+New:
+
+> 1.Supports inserting mathematical formulas.
+>
+> 2.Supports dragging and moving multiple nodes simultaneously.
+>
+> 3.Supports copying and cutting multiple nodes simultaneously.
+> 
+> 4.The node label color has been changed to be generated based on the label content, meaning that the same label content will generate the same color.
+>
+> 5.Optimize the insertion of child nodes: 1. When inserting child nodes into multiple nodes simultaneously, do not enter the editing state; 2. The newly inserted child node automatically enters the active state.
+>
+> 6.Optimize the insertion of sibling nodes: 1. Support the simultaneous insertion of sibling nodes into multiple nodes; 2. When calling the command to insert sibling nodes on the root node, no child nodes will be created.
+>
+> 7.Add a command to simultaneously insert multiple peers and multiple child nodes.
+>
+> 8.Changing the unique identifier of nodes from id to uid mainly affects the associated lines, which may not display properly in previous versions.
+>
+> 9.Optimize the logic of icon merging and support the expansion of icons under the internal classification of the library.
+>
+> 10.Associate line: 1. Double click the associate line to enter associate line text editing mode; If the associated line text is the default text, it will not be saved; 3. When there are active nodes, clicking on the associated line can directly activate the associated line.
+
+Demo:
+
+> 1.Fixed an issue where multiple nodes in the Zhixi mind map cannot be pasted when copying.
+>
+> 2.Add a sidebar for formula editing.
+
 ## 0.7.1-fix.2
 
 Fix: 1.Fix the issue of plugin registration method chain call reporting errors.
