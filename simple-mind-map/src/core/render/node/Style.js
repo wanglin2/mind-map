@@ -1,5 +1,8 @@
 import { tagColorList } from '../../../constants/constant'
-import { checkIsNodeStyleDataKey } from '../../../utils/index'
+import {
+  checkIsNodeStyleDataKey,
+  generateColorByContent
+} from '../../../utils/index'
 
 const rootProp = ['paddingX', 'paddingY']
 const backgroundStyleProps = [
@@ -163,10 +166,10 @@ class Style {
   }
 
   //  标签文字
-  tagText(node, index) {
+  tagText(node) {
     node
       .fill({
-        color: tagColorList[index].color
+        color: '#fff'
       })
       .css({
         'font-size': '12px'
@@ -174,9 +177,9 @@ class Style {
   }
 
   //  标签矩形
-  tagRect(node, index) {
+  tagRect(node, text, color) {
     node.fill({
-      color: tagColorList[index].background
+      color: color || generateColorByContent(text.node.textContent)
     })
   }
 
