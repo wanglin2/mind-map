@@ -1,4 +1,10 @@
-import { getStrWithBrFromHtml, checkNodeOuter, focusInput, selectAllInput } from '../../utils'
+import {
+  getStrWithBrFromHtml,
+  checkNodeOuter,
+  focusInput,
+  selectAllInput,
+  htmlEscape
+} from '../../utils'
 import { ERROR_TYPES } from '../../constants/constant'
 
 //  节点文字编辑类
@@ -167,9 +173,11 @@ export default class TextEdit {
     let scale = this.mindMap.view.scale
     let lineHeight = node.style.merge('lineHeight')
     let fontSize = node.style.merge('fontSize')
-    let textLines = (this.cacheEditingText || node.nodeData.data.text).split(
-      /\n/gim
-    )
+    let textLines = (this.cacheEditingText || node.nodeData.data.text)
+      .split(/\n/gim)
+      .map(item => {
+        return htmlEscape(item)
+      })
     let isMultiLine = node._textData.node.attr('data-ismultiLine') === 'true'
     node.style.domText(this.textEditNode, scale, isMultiLine)
     this.textEditNode.style.zIndex = nodeTextEditZIndex
