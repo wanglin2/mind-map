@@ -1282,10 +1282,12 @@ class Render {
   }
 
   // 设置节点公式
-  insertFormula(formula) {
+  insertFormula(formula, appointNodes = []) {
     // 只在富文本模式下可用，并且需要注册Formula插件
     if (!this.mindMap.richText || !this.mindMap.formula) return
-    this.activeNodeList.forEach(node => {
+    appointNodes = formatDataToArray(appointNodes)
+    const list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
+    list.forEach(node => {
       this.mindMap.formula.insertFormulaToNode(node, formula)
     })
   }
