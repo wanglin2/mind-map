@@ -38896,31 +38896,8 @@ __export(constant_exports, {
   layoutList: () => layoutList,
   layoutValueList: () => layoutValueList,
   nodeDataNoStylePropList: () => nodeDataNoStylePropList,
-  tagColorList: () => tagColorList,
   themeList: () => themeList
 });
-var tagColorList = [
-  {
-    color: "rgb(77, 65, 0)",
-    background: "rgb(255, 244, 179)"
-  },
-  {
-    color: "rgb(0, 50, 77)",
-    background: "rgb(179, 229, 255)"
-  },
-  {
-    color: "rgb(77, 0, 73)",
-    background: "rgb(255, 179, 251)"
-  },
-  {
-    color: "rgb(57, 77, 0)",
-    background: "rgb(236, 255, 179)"
-  },
-  {
-    color: "rgb(0, 77, 47)",
-    background: "rgb(179, 255, 226)"
-  }
-];
 var themeList = [
   {
     name: "\u9ED8\u8BA4",
@@ -39749,6 +39726,52 @@ function v4(options, buf, offset) {
 }
 var v4_default = v4;
 
+// ../simple-mind-map/src/utils/mersenneTwister.js
+function MersenneTwister(seed) {
+  this.N = 624;
+  this.M = 397;
+  this.MATRIX_A = 2567483615;
+  this.UPPER_MASK = 2147483648;
+  this.LOWER_MASK = 2147483647;
+  this.mt = new Array(this.N);
+  this.mti = this.N + 1;
+  this.init_genrand(seed);
+}
+MersenneTwister.prototype.init_genrand = function(s3) {
+  this.mt[0] = s3 >>> 0;
+  for (this.mti = 1; this.mti < this.N; this.mti++) {
+    s3 = this.mt[this.mti - 1] ^ this.mt[this.mti - 1] >>> 30;
+    this.mt[this.mti] = (((s3 & 4294901760) >>> 16) * 1812433253 << 16) + (s3 & 65535) * 1812433253 + this.mti;
+    this.mt[this.mti] >>>= 0;
+  }
+};
+MersenneTwister.prototype.genrand_int32 = function() {
+  var y4;
+  var mag01 = new Array(0, this.MATRIX_A);
+  if (this.mti >= this.N) {
+    var kk;
+    if (this.mti == this.N + 1)
+      this.init_genrand(5489);
+    for (kk = 0; kk < this.N - this.M; kk++) {
+      y4 = this.mt[kk] & this.UPPER_MASK | this.mt[kk + 1] & this.LOWER_MASK;
+      this.mt[kk] = this.mt[kk + this.M] ^ y4 >>> 1 ^ mag01[y4 & 1];
+    }
+    for (; kk < this.N - 1; kk++) {
+      y4 = this.mt[kk] & this.UPPER_MASK | this.mt[kk + 1] & this.LOWER_MASK;
+      this.mt[kk] = this.mt[kk + (this.M - this.N)] ^ y4 >>> 1 ^ mag01[y4 & 1];
+    }
+    y4 = this.mt[this.N - 1] & this.UPPER_MASK | this.mt[0] & this.LOWER_MASK;
+    this.mt[this.N - 1] = this.mt[this.M - 1] ^ y4 >>> 1 ^ mag01[y4 & 1];
+    this.mti = 0;
+  }
+  y4 = this.mt[this.mti++];
+  y4 ^= y4 >>> 11;
+  y4 ^= y4 << 7 & 2636928640;
+  y4 ^= y4 << 15 & 4022730752;
+  y4 ^= y4 >>> 18;
+  return y4 >>> 0;
+};
+
 // ../simple-mind-map/src/utils/index.js
 var walk = (root2, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index3 = 0) => {
   let stop = false;
@@ -40214,14 +40237,12 @@ var checkIsNodeStyleDataKey = (key) => {
   }
   return false;
 };
-var mergerIconListBy = (arrList, key, name) => {
-  return arrList.reduce((result, item) => {
-    const existingItem = result.find((x3) => x3[key] === item[key]);
+var mergerIconList = (list2) => {
+  return list2.reduce((result, item) => {
+    const existingItem = result.find((x3) => x3.type === item.type);
     if (existingItem) {
       item.list.forEach((newObj) => {
-        const existingObj = existingItem.list.find(
-          (x3) => x3[name] === newObj[name]
-        );
+        const existingObj = existingItem.list.find((x3) => x3.name === newObj.name);
         if (existingObj) {
           existingObj.icon = newObj.icon;
         } else {
@@ -40304,6 +40325,26 @@ var getNodeIndex = (node3) => {
   return node3.parent ? node3.parent.children.findIndex((item) => {
     return item.uid === node3.uid;
   }) : 0;
+};
+var generateColorByContent = (str) => {
+  let hash = 0;
+  for (let i3 = 0; i3 < str.length; i3++) {
+    hash = str.charCodeAt(i3) + ((hash << 5) - hash);
+  }
+  const rng2 = new MersenneTwister(hash);
+  const h3 = rng2.genrand_int32() % 360;
+  return "hsla(" + h3 + ", 50%, 50%, 1)";
+};
+var htmlEscape = (str) => {
+  ;
+  [
+    ["&", "&amp;"],
+    ["<", "&lt;"],
+    [">", "&gt;"]
+  ].forEach((item) => {
+    str = str.replace(new RegExp(item[0], "g"), item[1]);
+  });
+  return str;
 };
 
 // ../simple-mind-map/src/core/render/node/Style.js
@@ -40435,17 +40476,17 @@ var Style = class {
     node3.style.fontStyle = this.merge("fontStyle");
   }
   //  标签文字
-  tagText(node3, index3) {
+  tagText(node3) {
     node3.fill({
-      color: tagColorList[index3].color
+      color: "#fff"
     }).css({
       "font-size": "12px"
     });
   }
   //  标签矩形
-  tagRect(node3, index3) {
+  tagRect(node3, text4, color) {
     node3.fill({
-      color: tagColorList[index3].background
+      color: color || generateColorByContent(text4.node.textContent)
     });
   }
   //  内置图标
@@ -46904,18 +46945,18 @@ var nodeIconList = [
 ];
 var getNodeIconListIcon = (name, extendIconList = []) => {
   let arr = name.split("_");
-  const iconList = mergerIconListBy(
-    [...nodeIconList, ...extendIconList],
-    "type",
-    "name"
-  );
+  const iconList = mergerIconList([...nodeIconList, ...extendIconList]);
   let typeData = iconList.find((item) => {
     return item.type === arr[0];
   });
   if (typeData) {
-    return typeData.list.find((item) => {
+    let typeName = typeData.list.find((item) => {
       return item.name === arr[1];
-    }).icon;
+    });
+    if (typeName) {
+      return typeName.icon;
+    }
+    return "";
   } else {
     return "";
   }
@@ -47143,11 +47184,13 @@ function createTagNode() {
   let nodes = [];
   tagData.slice(0, this.mindMap.opt.maxTag).forEach((item, index3) => {
     let tag = new G();
-    let text4 = new Text2().text(item).x(8).cy(10);
+    let text4 = new Text2().text(item).x(8).cy(8);
     this.style.tagText(text4, index3);
     let { width: width2 } = text4.bbox();
     let rect = new Rect().size(width2 + 16, 20);
-    this.style.tagRect(rect, index3);
+    const tagsColorList = this.mindMap.opt.tagsColorMap || {};
+    const color = tagsColorList[text4.node.textContent];
+    this.style.tagRect(rect, text4, color);
     tag.add(rect).add(text4);
     nodes.push({
       node: tag,
@@ -50721,9 +50764,9 @@ var TextEdit = class {
     let scale = this.mindMap.view.scale;
     let lineHeight = node3.style.merge("lineHeight");
     let fontSize = node3.style.merge("fontSize");
-    let textLines = (this.cacheEditingText || node3.nodeData.data.text).split(
-      /\n/gim
-    );
+    let textLines = (this.cacheEditingText || node3.nodeData.data.text).split(/\n/gim).map((item) => {
+      return htmlEscape(item);
+    });
     let isMultiLine = node3._textData.node.attr("data-ismultiLine") === "true";
     node3.style.domText(this.textEditNode, scale, isMultiLine);
     this.textEditNode.style.zIndex = nodeTextEditZIndex;
@@ -52013,10 +52056,12 @@ var Render = class {
     });
   }
   // 设置节点公式
-  insertFormula(formula) {
+  insertFormula(formula, appointNodes = []) {
     if (!this.mindMap.richText || !this.mindMap.formula)
       return;
-    this.activeNodeList.forEach((node3) => {
+    appointNodes = formatDataToArray(appointNodes);
+    const list2 = appointNodes.length > 0 ? appointNodes : this.activeNodeList;
+    list2.forEach((node3) => {
       this.mindMap.formula.insertFormulaToNode(node3, formula);
     });
   }
@@ -54065,7 +54110,10 @@ var defaultOpt = {
     // 跟随鼠标移动的克隆节点或矩形的透明度
     beingDragNodeOpacity: 0.3
     // 被拖拽节点的透明度
-  }
+  },
+  // 自定义标签的颜色
+  // {pass: 'green, unpass: 'red'}
+  tagsColorMap: {}
 };
 
 // ../simple-mind-map/index.js
