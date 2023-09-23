@@ -1,4 +1,3 @@
-import { tagColorList } from '../../../constants/constant'
 import {
   checkIsNodeStyleDataKey,
   generateColorByContent

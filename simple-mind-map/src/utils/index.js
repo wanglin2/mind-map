@@ -798,7 +798,6 @@ export const getNodeIndex = node => {
     : 0
 }
 
-
 // 根据内容生成颜色
 export const generateColorByContent = str => {
   let hash = 0
