@@ -1,4 +1,12 @@
-# Participate in translation
+# Contribute
+
+## Participate in development
+
+If you want to contribute code, you can 'fork' this project and switch to the 'feature' branch for development. After development and testing, you can submit the 'pr' to the 'feature' branch of this project. When submitting, please try to submit functional files as much as possible. Do not submit unnecessary files.
+
+Before development, it is best to create a new 'issue' to describe the new features you want to add. We can have sufficient communication first, and when submitting a 'pr', please provide a detailed description of the features you are developing.
+
+## Participate in translation
 
 > Thanks for the first version English translation provided by [Emircan ERKUL](https://github.com/emircanerkul).
 >

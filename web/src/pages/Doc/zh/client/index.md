@@ -12,6 +12,8 @@
 
 ## 下载
 
+> 客户端版本会落后于在线版本，要尝试新功能请优先使用在线版。
+
 你可以直接下载对应的客户端安装使用，提供了两个下载地址：
 
 Github：[releases](https://github.com/wanglin2/mind-map/releases)。

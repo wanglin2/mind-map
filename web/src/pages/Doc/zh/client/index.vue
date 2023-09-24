@@ -7,6 +7,9 @@
 <p>2.支持查看最近编辑文件列表；</p>
 <p>3.支持文件的复制、删除、重命名；</p>
 <h2>下载</h2>
+<blockquote>
+<p>客户端版本会落后于在线版本，要尝试新功能请优先使用在线版。</p>
+</blockquote>
 <p>你可以直接下载对应的客户端安装使用，提供了两个下载地址：</p>
 <p>Github：<a href="https://github.com/wanglin2/mind-map/releases">releases</a>。</p>
 <p>百度云盘：<a href="https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3">地址</a>。</p>
