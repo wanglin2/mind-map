@@ -25,6 +25,8 @@ Github：[releases](https://github.com/wanglin2/mind-map/releases)。
 
 百度云盘：[地址](https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3)。
 
+> 客户端版本会落后于在线版本，尝试最新功能请优先使用在线版。
+
 # 特性
 
 - [x] 插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小打包体积
@@ -182,5 +184,9 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/敏.jpg" style="width: 50px;height: 50px;" />
         <span>敏</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/沐风牧草.jpg" style="width: 50px;height: 50px;" />
+        <span>沐风牧草</span>
     </span>
 </p>

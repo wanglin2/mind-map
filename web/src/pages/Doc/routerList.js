@@ -43,7 +43,7 @@ export default [
       { path: 'richText', title: 'RichText插件' },
       { path: 'select', title: 'Select 插件 ' },
       { path: 'start', title: '开始' },
-      { path: 'translate', title: '参与翻译' },
+      { path: 'translate', title: '贡献' },
       { path: 'utils', title: '内置工具方法' },
       { path: 'view', title: 'View实例' },
       { path: 'watermark', title: 'Watermark插件' },
@@ -84,7 +84,7 @@ export default [
       { path: 'richText', title: 'RichText plugin' },
       { path: 'select', title: 'Select plugin' },
       { path: 'start', title: 'Start' },
-      { path: 'translate', title: 'Participate in translation' },
+      { path: 'translate', title: 'Contribute' },
       { path: 'utils', title: 'Utility Methods' },
       { path: 'view', title: 'View instance' },
       { path: 'watermark', title: 'Watermark plugin' },
@@ -95,7 +95,8 @@ export default [
       { path: 'search', title: 'Search plugin' },
       { path: 'painter', title: 'Painter plugin' },
       { path: 'scrollbar', title: 'Scrollbar plugin' },
-      { path: 'formula', title: 'Formula plugin' }
+      { path: 'formula', title: 'Formula plugin' },
+      { path: 'client', title: 'Client' }
     ]
   }
 ]
