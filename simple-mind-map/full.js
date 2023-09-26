@@ -14,6 +14,7 @@ import TouchEvent from './src/plugins/TouchEvent.js'
 import Search from './src/plugins/Search.js'
 import Painter from './src/plugins/Painter.js'
 import Scrollbar from './src/plugins/Scrollbar.js'
+import Formula from './src/plugins/Formula.js'
 import xmind from './src/parse/xmind.js'
 import markdown from './src/parse/markdown.js'
 import icons from './src/svg/icons.js'
@@ -28,8 +29,7 @@ MindMap.constants = constants
 MindMap.themes = themes
 MindMap.defaultTheme = defaultTheme
 
-MindMap
-  .usePlugin(MiniMap)
+MindMap.usePlugin(MiniMap)
   .usePlugin(Watermark)
   .usePlugin(Drag)
   .usePlugin(KeyboardNavigation)
@@ -44,5 +44,6 @@ MindMap
   .usePlugin(Search)
   .usePlugin(Painter)
   .usePlugin(Scrollbar)
+  .usePlugin(Formula)
 
 export default MindMap

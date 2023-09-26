@@ -1,7 +1,8 @@
 import {
-  tagColorList,
-  nodeDataNoStylePropList
-} from '../../../constants/constant'
+  checkIsNodeStyleDataKey,
+  generateColorByContent
+} from '../../../utils/index'
+
 const rootProp = ['paddingX', 'paddingY']
 const backgroundStyleProps = [
   'backgroundColor',
@@ -164,10 +165,10 @@ class Style {
   }
 
   //  标签文字
-  tagText(node, index) {
+  tagText(node) {
     node
       .fill({
-        color: tagColorList[index].color
+        color: '#fff'
       })
       .css({
         'font-size': '12px'
@@ -175,9 +176,9 @@ class Style {
   }
 
   //  标签矩形
-  tagRect(node, index) {
+  tagRect(node, text, color) {
     node.fill({
-      color: tagColorList[index].background
+      color: color || generateColorByContent(text.node.textContent)
     })
   }
 
@@ -225,7 +226,7 @@ class Style {
   hasCustomStyle() {
     let res = false
     Object.keys(this.ctx.nodeData.data).forEach(item => {
-      if (!nodeDataNoStylePropList.includes(item)) {
+      if (checkIsNodeStyleDataKey(item)) {
         res = true
       }
     })
@@ -235,12 +236,9 @@ class Style {
   // hover和激活节点
   hoverNode(node) {
     const { hoverRectColor } = this.ctx.mindMap.opt
-    node
-      .radius(5)
-      .fill('none')
-      .stroke({
-        color: hoverRectColor
-      })
+    node.radius(5).fill('none').stroke({
+      color: hoverRectColor
+    })
   }
 }
 

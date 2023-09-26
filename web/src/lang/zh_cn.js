@@ -215,15 +215,17 @@ export default {
     shortcutKey: '快捷键',
     associativeLine: '关联线',
     save: '保存',
-    painter: '格式刷'
+    painter: '格式刷',
+    formula: '公式'
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',
-    newFeatureNoticeMessage: '本次更新支持了节点富文本编辑，但是存在一定缺陷，最主要的影响是导出为图片的时间和节点数量成正比，所以对导出需求比较依赖的话可以通过【基础样式】-【其他配置】-【是否开启节点富文本编辑】设置关掉富文本编辑模式。'
+    newFeatureNoticeMessage:
+      '本次更新支持了节点富文本编辑，但是存在一定缺陷，最主要的影响是导出为图片的时间和节点数量成正比，所以对导出需求比较依赖的话可以通过【基础样式】-【其他配置】-【是否开启节点富文本编辑】设置关掉富文本编辑模式。'
   },
   mouseAction: {
     tip1: '当前：左键拖动画布，右键框选节点',
-    tip2: '当前：左键框选节点，右键拖动画布',
+    tip2: '当前：左键框选节点，右键拖动画布'
   },
   search: {
     searchPlaceholder: '请输入查找内容',
@@ -231,5 +233,16 @@ export default {
     replace: '替换',
     replaceAll: '全部替换',
     cancel: '取消'
+  },
+  nodeIconSidebar: {
+    title: '图标/贴纸',
+    icon: '图标',
+    sticker: '贴纸'
+  },
+  formulaSidebar: {
+    title: '公式',
+    placeholder: '请输入 LaText 语法',
+    confirm: '完成',
+    common: '常用公式'
   }
 }

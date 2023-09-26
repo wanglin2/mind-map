@@ -1,4 +1,10 @@
-import { getStrWithBrFromHtml, checkNodeOuter } from '../../utils'
+import {
+  getStrWithBrFromHtml,
+  checkNodeOuter,
+  focusInput,
+  selectAllInput,
+  htmlEscape
+} from '../../utils'
 import { ERROR_TYPES } from '../../constants/constant'
 
 //  节点文字编辑类
@@ -167,9 +173,11 @@ export default class TextEdit {
     let scale = this.mindMap.view.scale
     let lineHeight = node.style.merge('lineHeight')
     let fontSize = node.style.merge('fontSize')
-    let textLines = (this.cacheEditingText || node.nodeData.data.text).split(
-      /\n/gim
-    )
+    let textLines = (this.cacheEditingText || node.nodeData.data.text)
+      .split(/\n/gim)
+      .map(item => {
+        return htmlEscape(item)
+      })
     let isMultiLine = node._textData.node.attr('data-ismultiLine') === 'true'
     node.style.domText(this.textEditNode, scale, isMultiLine)
     this.textEditNode.style.zIndex = nodeTextEditZIndex
@@ -188,33 +196,14 @@ export default class TextEdit {
     this.showTextEdit = true
     // 选中文本
     // if (!this.cacheEditingText) {
-    //   this.selectNodeText()
+    //   selectAllInput(this.textEditNode)
     // }
     if (isInserting || (selectTextOnEnterEditText && !isFromKeyDown)) {
-      this.selectNodeText()
+      selectAllInput(this.textEditNode)
     } else {
-      this.focus()
+      focusInput(this.textEditNode)
     }
     this.cacheEditingText = ''
-  }
-
-  // 聚焦
-  focus() {
-    let selection = window.getSelection()
-    let range = document.createRange()
-    range.selectNodeContents(this.textEditNode)
-    range.collapse()
-    selection.removeAllRanges()
-    selection.addRange(range)
-  }
-
-  //  选中文本
-  selectNodeText() {
-    let selection = window.getSelection()
-    let range = document.createRange()
-    range.selectNodeContents(this.textEditNode)
-    selection.removeAllRanges()
-    selection.addRange(range)
   }
 
   // 获取当前正在编辑的内容

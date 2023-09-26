@@ -90,6 +90,20 @@ class MindMap extends Base {
         cur._node.rightChildrenAreaHeight =
           rightChildrenAreaHeight +
           (rightLen + 1) * this.getMarginY(layerIndex + 1)
+
+        // 如果存在概要，则和概要的高度取最大值
+        let generalizationNodeHeight = cur._node.checkHasGeneralization()
+          ? cur._node._generalizationNodeHeight +
+            this.getMarginY(layerIndex + 1)
+          : 0
+        cur._node.leftChildrenAreaHeight2 = Math.max(
+          cur._node.leftChildrenAreaHeight,
+          generalizationNodeHeight
+        )
+        cur._node.rightChildrenAreaHeight2 = Math.max(
+          cur._node.rightChildrenAreaHeight,
+          generalizationNodeHeight
+        )
       },
       true,
       0
@@ -139,8 +153,8 @@ class MindMap extends Base {
         }
         // 判断子节点所占的高度之和是否大于该节点自身，大于则需要调整位置
         let base = this.getMarginY(layerIndex + 1) * 2 + node.height
-        let leftDifference = node.leftChildrenAreaHeight - base
-        let rightDifference = node.rightChildrenAreaHeight - base
+        let leftDifference = node.leftChildrenAreaHeight2 - base
+        let rightDifference = node.rightChildrenAreaHeight2 - base
         if (leftDifference > 0 || rightDifference > 0) {
           this.updateBrothers(node, leftDifference / 2, rightDifference / 2)
         }
@@ -158,7 +172,7 @@ class MindMap extends Base {
         return item.dir === node.dir
       })
       let index = childrenList.findIndex(item => {
-        return item === node
+        return item.uid === node.uid
       })
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {

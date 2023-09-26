@@ -104,11 +104,13 @@ export default {
     markdownFile: 'markdown file',
     tips: 'tips: .smm and .json file can be import',
     isTransparent: 'Background is transparent',
-    pngTips: 'tips: Exporting pictures in rich text mode is time-consuming. It is recommended to export to svg format',
+    pngTips:
+      'tips: Exporting pictures in rich text mode is time-consuming. It is recommended to export to svg format',
     svgTips: 'tips: Exporting pictures in rich text mode is time-consuming',
     transformingDomToImages: 'Converting nodes: ',
     notifyTitle: 'Info',
-    notifyMessage: 'If the download is not triggered, check whether it is blocked by the browser',
+    notifyMessage:
+      'If the download is not triggered, check whether it is blocked by the browser',
     paddingX: 'Padding x',
     paddingY: 'Padding y',
     useMultiPageExport: 'Export multi page'
@@ -215,15 +217,19 @@ export default {
     shortcutKey: 'Shortcut key',
     associativeLine: 'Associative line',
     save: 'Save',
-    painter: 'Painter'
+    painter: 'Painter',
+    formula: 'Formula'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',
-    newFeatureNoticeMessage: 'This update supports node rich text editing, But there are some defects, The most important impact is that the time to export the image is proportional to the number of nodes, Therefore, if you are more dependent on export requirements, you can use【Base style】-【Other config】-【Enable node rich text editing】Set to turn off rich text editing mode.'
+    newFeatureNoticeMessage:
+      'This update supports node rich text editing, But there are some defects, The most important impact is that the time to export the image is proportional to the number of nodes, Therefore, if you are more dependent on export requirements, you can use【Base style】-【Other config】-【Enable node rich text editing】Set to turn off rich text editing mode.'
   },
   mouseAction: {
-    tip1: 'Current: Left click to drag the canvas, right click to box select nodes',
-    tip2: 'Current: Left click to box select nodes, right click to drag the canvas',
+    tip1:
+      'Current: Left click to drag the canvas, right click to box select nodes',
+    tip2:
+      'Current: Left click to box select nodes, right click to drag the canvas'
   },
   search: {
     searchPlaceholder: 'Please enter the search content',
@@ -231,5 +237,16 @@ export default {
     replace: 'Replace',
     replaceAll: 'Replace all',
     cancel: 'Cancel'
+  },
+  nodeIconSidebar: {
+    title: 'Icon/Sticker',
+    icon: 'Icon',
+    sticker: 'Sticker'
+  },
+  formulaSidebar: {
+    title: 'Formula',
+    placeholder: 'Please enter LaText syntax',
+    confirm: 'Confirm',
+    common: 'Common formulas'
   }
 }

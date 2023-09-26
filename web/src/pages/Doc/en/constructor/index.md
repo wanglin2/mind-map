@@ -25,7 +25,7 @@ const mindMap = new MindMap({
 | Field Name                       | Type    | Default Value    | Description                                                  | Required |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ | -------- |
 | el                               | Element |                  | Container element, must be a DOM element                     | Yes      |
-| data                             | Object  | {}               | Mind map data, refer to: [exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js) |          |
+| data                             | Object  | {}               | Mind map data, Please refer to the introduction of 【Data structure】 below |          |
 | layout                           | String  | logicalStructure | Layout type, options: logicalStructure (logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)、timeline（v0.5.4+, timeline）、timeline2（v0.5.4+, up down alternating timeline）、fishbone（v0.5.4+, fishbone diagram） |          |
 | fishboneDeg（v0.5.4+）                      | Number |  45          |    Set the diagonal angle of the fishbone structure diagram        |        |
 | theme                            | String  | default          | Theme, options: default, classic, minions, pinkGrape, mint, gold, vitalityOrange, greenLeaf, dark2, skyGreen, classic2, classic3, classic4(v0.2.0+), classicGreen, classicBlue, blueSky, brainImpairedPink, dark, earthYellow, freshGreen, freshRed, romanticPurple, simpleBlack(v0.5.4+), courseGreen(v0.5.4+), coffee(v0.5.4+), redSpirit(v0.5.4+), blackHumour(v0.5.4+), lateNightOffice(v0.5.4+), blackGold(v0.5.4+)、、avocado(v.5.10-fix.2+)、autumn(v.5.10-fix.2+)、orangeJuice(v.5.10-fix.2+) |          |
@@ -87,6 +87,54 @@ const mindMap = new MindMap({
 | hoverRectColor（v0.7.0+）     | String  | rgb(94, 200, 248)  | The node mouse hover and the rectangular border color displayed when activated will add a transparency of 0.6 when hovering |          |
 | hoverRectPadding（v0.7.0+）     | Number  | 2  | The distance between the node mouse hover and the displayed rectangular border when activated and the node content |          |
 | selectTextOnEnterEditText（v0.7.0+）     | Boolean  | true  | Is the text selected by default when double-clicking a node to enter node text editing? By default, it will only be selected when creating a new node |          |
+| deleteNodeActive（v0.7.1+）     | Boolean  | true  | Enable the function of automatically activating adjacent nodes or parent nodes after deleting nodes |          |
+| autoMoveWhenMouseInEdgeOnDrag（v0.7.1+）     | Boolean  | true  | Whether to enable automatic canvas movement when the mouse moves to the edge of the canvas while dragging nodes |          |
+| fit（v0.7.1-fix.2+）     | Boolean  | false  | Is the first rendering scaled to fit the canvas size |          |
+| dragMultiNodeRectConfig（v0.7.2+）     | Object  | { width: 40, height: 20, fill: '' }  | The style configuration of the schematic rectangle that moves with the mouse when dragging multiple nodes, passing an object, and the field meanings are the width, height, and fill color of the rectangle |          |
+| dragPlaceholderRectFill（v0.7.2+）     |  String |   | The filling color of the schematic rectangle for the new position when dragging nodes. If not transmitted, the default color for the connected line is used |          |
+| dragOpacityConfig（v0.7.2+）     | Object  | { cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }  | The transparency configuration during node dragging, passing an object, and the field meanings are: the transparency of the cloned node or rectangle that follows the mouse movement, and the transparency of the dragged node |          |
+| tagsColorMap（v0.7.2+）     | Object  | {}  | The color of a custom node label can be transferred to an object, where key is the label content to be assigned a color, and value is the color of the label content. If not transferred internally, a corresponding color will be generated based on the label content |         |
+
+### Data structure
+
+The basic data structure is as follows:
+
+```js
+{
+  data: {
+    text: '', // The text of the node can be rich text, which is in HTML format. In this case, richText should be set to true
+    richText: false, // Is the text of the node in rich text mode
+    expand: true, // Whether the node is expanded
+    uid: '',// The unique ID of the node, which may not be passed, will be generated internally
+    icon: [], // The format of the icon can be found in the "插入和扩展节点图标" section of the tutorial
+    image: '', // URL of the image
+    imageTitle: '', // The title of the image can be blank
+    imageSize: { // The size of the image
+      width: 100, // The width of the image, mandatory
+      height: 100, // The height of the image is mandatory
+      custom: false // If set to true, the display size of the image is not controlled by the theme, and is based on imageSize.width and imageSize.height
+    },
+    hyperlink: '', // Hyperlink address
+    hyperlinkTitle: '', // Title of hyperlink
+    note: '', // Content of remarks
+    tag: [], // Tag list
+    generalization: {// The summary of the node, if there is no summary, the generalization can be set to null
+      text: ''// Summary Text
+    },
+    associativeLineTargets: [''],// If there are associated lines, then it is the uid list of the target node
+    associativeLineText: '',// Association Line Text
+    // ...For other style fields, please refer to the topic
+  },
+  children [// Child nodes, with consistent structure and root nodes
+    {
+      data: {},
+      children: []
+    }
+  ]
+}
+```
+
+If you want to add custom fields, you can add them to the same level as 'data' and 'children'. If you want to add them to the 'data' object, please use the `_` Name your custom field at the beginning, and it will be used internally to determine whether it is a custom field.
 
 ### Watermark config
 
@@ -337,7 +385,7 @@ redo. All commands are as follows:
 | SELECT_ALL                         | Select all                                                   |                                                              |
 | BACK                               | Go back a specified number of steps                          | step (the number of steps to go back, default is 1)          |
 | FORWARD                            | Go forward a specified number of steps                       | step (the number of steps to go forward, default is 1)       |
-| INSERT_NODE                        | Insert a sibling node, the active node or appoint node will be the operation node. If there are multiple active nodes, only the first one will be effective | openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is `true`） 、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to [exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js) ）、 appointChildren（v0.6.14+, Optional, Specify the child nodes of the newly created node, array type）                                                           |
+| INSERT_NODE                        | Insert a sibling node, the active node or appoint node will be the operation node. If there are multiple active nodes, only the first one will be effective（v0.7.2+Supports simultaneous insertion of sibling nodes into multiple active nodes） | openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is `true`） 、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to [exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js) ）、 appointChildren（v0.6.14+, Optional, Specify the child nodes of the newly created node, array type）                                                           |
 | INSERT_CHILD_NODE                  | Insert a child node, the active node or appoint node will be the operation node |  openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is `true`）、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to [exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js) ）、 appointChildren（v0.6.14+, Optional, Specify the child nodes of the newly created node, array type）                                                            |
 | UP_NODE                            | Move node up, the active node will be the operation node. If there are multiple active nodes, only the first one will be effective. Using this command on the root node or the first node in the list will be invalid |                                                              |
 | DOWN_NODE                          | Move node down, the active node will be the operation node. If there are multiple active nodes, only the first one will be effective. Using this command on the root node or the last node in the list will be invalid |                                                              |
@@ -358,15 +406,18 @@ redo. All commands are as follows:
 | SET_NODE_HYPERLINK                 | Set Node Hyperlink                                           | node (node to set), link (hyperlink address), title (hyperlink name, optional) |
 | SET_NODE_NOTE                      | Set Node Note                                                | node (node to set), note (note text)                         |
 | SET_NODE_TAG                       | Set Node Tag                                                 | node (node to set), tag (string array, built-in color information can be obtained in [constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/constants/constant.js)) |
-| INSERT_AFTER (v0.1.5+)             | Move Node to After Another Node                              | node (node to move), exist (target node)                     |
-| INSERT_BEFORE (v0.1.5+)            | Move Node to Before Another Node                             | node (node to move), exist (target node)                     |
-| MOVE_NODE_TO (v0.1.5+)             | Move a node as a child of another node                       | node (the node to move), toNode (the target node)            |
+| INSERT_AFTER (v0.1.5+)             | Move Node to After Another Node | node (node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), exist (target node)                     |
+| INSERT_BEFORE (v0.1.5+)            | Move Node to Before Another Node | node (node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), exist (target node)                     |
+| MOVE_NODE_TO (v0.1.5+)             | Move a node as a child of another node       | node (the node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), toNode (the target node)            |
 | ADD_GENERALIZATION (v0.2.0+)       | Add a node summary                                           | data (the data for the summary, in object format, all numerical fields of the node are supported, default is `{text: 'summary'}`) |
 | REMOVE_GENERALIZATION (v0.2.0+)    | Remove a node summary                                        |                                                              |
 | SET_NODE_CUSTOM_POSITION (v0.2.0+) | Set a custom position for a node                             | node (the node to set), left (custom x coordinate, default is undefined), top (custom y coordinate, default is undefined) |
 | RESET_LAYOUT (v0.2.0+)             | Arrange layout with one click                                |                                                              |
 | SET_NODE_SHAPE (v0.2.4+)           | Set the shape of a node                                      | node (the node to set), shape (the shape, all shapes: [Shape.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/render/node/Shape.js)) |
 | GO_TARGET_NODE（v0.6.7+）           |  Navigate to a node, and if the node is collapsed, it will automatically expand to that node   | node（Node instance or node uid to locate）、callback（v0.6.9+, Callback function after positioning completion） |
+| INSERT_MULTI_NODE（v0.7.2+）           |  Insert multiple sibling nodes into the specified node at the same time, with the operating node being the currently active node or the specified node   | appointNodes（Optional, specify nodes, specify multiple nodes to pass an array）, nodeList（Data list of newly inserted nodes, array type） |
+| INSERT_MULTI_CHILD_NODE（v0.7.2+）           |  Insert multiple child nodes into the specified node simultaneously, with the operation node being the currently active node or the specified node   | appointNodes（Optional, specify nodes, specify multiple nodes to pass an array）, childList（Data list of newly inserted nodes, array type） |
+| INSERT_FORMULA（v0.7.2+）           |  Insert mathematical formulas into nodes, operate on the currently active node or specified node   | formula（Mathematical formula to insert, LaText syntax）, appointNodes（Optional, specify the node to insert the formula into. Multiple nodes can be passed as arrays, otherwise it defaults to the currently active node） |
 
 ### setData(data)
 

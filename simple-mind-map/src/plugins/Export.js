@@ -41,7 +41,7 @@ class Export {
     let task = imageList.map(async item => {
       let imgUlr = item.attr('href') || item.attr('xlink:href')
       // 已经是data:URL形式不用转换
-      if (/^data:/.test(imgUlr)) {
+      if (/^data:/.test(imgUlr) || imgUlr === 'none') {
         return
       }
       let imgData = await imgToDataUrl(imgUlr)
@@ -58,7 +58,13 @@ class Export {
   }
 
   //   svg转png
-  svgToPng(svgSrc, transparent, checkRotate = () => { return false }) {
+  svgToPng(
+    svgSrc,
+    transparent,
+    checkRotate = () => {
+      return false
+    }
+  ) {
     return new Promise((resolve, reject) => {
       const img = new Image()
       // 跨域图片需要添加这个属性，否则画布被污染了无法导出图片
@@ -66,7 +72,10 @@ class Export {
       img.onload = async () => {
         try {
           const canvas = document.createElement('canvas')
-          const dpr = Math.max(window.devicePixelRatio, this.mindMap.opt.minExportImgCanvasScale)
+          const dpr = Math.max(
+            window.devicePixelRatio,
+            this.mindMap.opt.minExportImgCanvasScale
+          )
           const imgWidth = img.width
           const imgHeight = img.height
           // 如果宽比高长，那么旋转90度
@@ -185,7 +194,9 @@ class Export {
       // 覆盖html默认的样式
       let foreignObjectList = node.find('foreignObject')
       if (foreignObjectList.length > 0) {
-        foreignObjectList[0].add(SVG(`<style>${ this.mindMap.opt.resetCss }</style>`))
+        foreignObjectList[0].add(
+          SVG(`<style>${this.mindMap.opt.resetCss}</style>`)
+        )
       }
       str = node.svg()
       // 使用其他库（html2canvas、dom-to-image-more等）来完成导出
@@ -204,11 +215,7 @@ class Export {
     // 转换成data:url数据
     let svgUrl = await readBlob(blob)
     // 绘制到canvas上
-    let res = await this.svgToPng(
-      svgUrl,
-      transparent,
-      checkRotate
-    )
+    let res = await this.svgToPng(svgUrl, transparent, checkRotate)
     return res
   }
 
@@ -219,7 +226,7 @@ class Export {
     }
     let img = await this.png('', false, (width, height) => {
       if (width <= a4Size.width && height && a4Size.height) return false
-      return (width / height) > 1
+      return width / height > 1
     })
     this.mindMap.doExportPDF.pdf(name, img, useMultiPageExport)
   }
@@ -243,7 +250,9 @@ class Export {
     if (this.mindMap.richText) {
       let foreignObjectList = node.find('foreignObject')
       if (foreignObjectList.length > 0) {
-        foreignObjectList[0].add(SVG(`<style>${ this.mindMap.opt.resetCss }</style>`))
+        foreignObjectList[0].add(
+          SVG(`<style>${this.mindMap.opt.resetCss}</style>`)
+        )
       }
     }
     node.first().before(SVG(`<title>${name}</title>`))

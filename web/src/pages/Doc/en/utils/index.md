@@ -250,6 +250,107 @@ Convert the wrapped text of `<br>` into node rich text content in the form of `<
 
 Determine if it is a mobile environment.
 
+#### getTopAncestorsFomNodeList(list)
+
+> v0.7.2+
+
+- `list`: Arrray, Node instance list.
+
+Find the top-level node list from the node instance list.
+
+#### checkTwoRectIsOverlap(minx1, maxx1, miny1, maxy1, minx2, maxx2, miny2, maxy2)
+
+> v0.7.2+
+
+The parameter is the position of two rectangles.
+
+Determine if two rectangles overlap.
+
+#### focusInput(el)
+
+> v0.7.2+
+
+- `el`: DOM nodes, elements that can be focused, typically input box elements.
+
+Focus on the specified input box.
+
+#### selectAllInput(el)
+
+> v0.7.2+
+
+- `el`: DOM nodes, elements that can be focused, typically input box elements.
+
+Focus and select all specified input boxes.
+
+#### addDataToAppointNodes(appointNodes, data = {})
+
+> v0.7.2+
+
+- `appointNodes`：Node instance list, array type.
+
+- `data`：The data to be attached to all nodes in the specified node instance list tree.
+
+Adding additional data to the specified node list tree data will modify the original data.
+
+#### createUidForAppointNodes(appointNodes)
+
+> v0.7.2+
+
+- `appointNodes`：Node instance list, array type.
+
+Adding a uid to the specified node list tree data (if the uid does not exist) will modify the original data.
+
+#### getNodeIndex(node) 
+
+> v0.7.2+
+
+- `node`：Node instance.
+
+Gets the position index of a node within its peers.
+
+#### mergerIconList(list)
+
+> v0.7.2+
+
+- `list`：The array of node icons to be merged into the library.
+
+```js
+// const data = [
+//   { type: 'priority', name: '优先级图标', list: [{ name: '1', icon: 'a' }, { name: 2, icon: 'b' }] },
+//   { type: 'priority', name: '优先级图标', list: [{ name: '2', icon: 'c' }, { name: 3, icon: 'd' }] },
+// ];
+
+// mergerIconList(data)  result:
+
+// [
+//   { type: 'priority', name: '优先级图标', list: [{ name: '1', icon: 'a' }, { name: 2, icon: 'c' }, { name: 3, icon: 'd' }] },
+// ]
+```
+
+Merge icon arrays.
+
+#### htmlEscape(str)
+
+> v0.7.2+
+
+- `str`：String.
+
+Escape the incoming string, currently escaping the following three characters:
+
+```
+& -> &amp;
+< -> &lt;
+> -> &gt;
+```
+
+#### generateColorByContent(str)
+
+> v0.7.2+
+
+- `str`：String.
+
+Generate colors based on incoming content, and the same content will generate the same color.
+
 ## Simulate CSS background in Canvas
 
 Import:

@@ -11,12 +11,12 @@
 - [x] Pluggable architecture, in addition to core functions, other functions are provided as plugins, which can be used as needed to reduce packaging volume
 - [x] Support logical structure chart, mind map, Organizational chart, directory organization chart, timeline (horizontal and vertical), fishbone chart and other structures
 - [x] Built-in multiple themes, allowing for highly customizable styles, and supporting registration of new themes
-- [x] Node content supports text (regular text, rich text), images, icons, hyperlinks, notes, labels, and summaries
+- [x] Node content supports text (regular text, rich text), images, icons, hyperlinks, notes, labels, summaries, and math formulas
 - [x] Nodes support drag and drop (drag and move, freely adjust), multiple node shapes, and fully customize node content using DDM
 - [x] Support canvas dragging and scaling
 - [x] Supports two multi node selection methods: mouse button drag selection and Ctrl+left button selection
 - [x] Supoorts to export as `json`、`png`、`svg`、`pdf`、`markdown`、`xmind`, support import from `json`、`xmind`、`markdown`
-- [x] Support shortcut keys, forward and backward, correlation lines, search and replacement, small maps, and watermarks
+- [x] Support shortcut keys, forward and backward, correlation lines, search and replacement, small maps, watermarks, and scrollbar
 - [x] Provide rich configurations to meet various scenarios and usage habits
 
 ## Repository Catalog Introduction
@@ -62,6 +62,8 @@ The folder containing the packaged resources for the `web` folder.
 
 [My first Electron application](https://juejin.cn/post/7233012756314701884)
 
+[Explore how to export HTML and SVG as images](https://juejin.cn/post/7276712861514170409)
+
 ## Special Note
 
 This project can be used for learning and reference. Please deeply experience whether it can meet your needs when using it for actual projects.
@@ -70,7 +72,7 @@ This project may not have fully tested every function point, so there may be bug
 
 If you have suggestions or find bugs, you can submit [issues](https://github.com/wanglin2/mind-map/issues) here.
 
-The built-in themes and icons in the project come from:
+The built-in themes and icons in the project part come from:
 
 [Baidu Mind Map](https://naotu.baidu.com/)
 
@@ -191,5 +193,21 @@ Open source is not easy. If this project is helpful to you, you can invite the a
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/南风.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>南风</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/蜉蝣撼大叔.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>蜉蝣撼大叔</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/乙.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>乙</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/敏.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>敏</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/沐风牧草.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>沐风牧草</p>
     </div>
 </div>

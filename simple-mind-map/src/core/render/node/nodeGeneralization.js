@@ -2,12 +2,12 @@ import Node from './Node'
 import { createUid } from '../../../utils/index'
 
 //  检查是否存在概要
-function checkHasGeneralization () {
+function checkHasGeneralization() {
   return !!this.nodeData.data.generalization
 }
 
 //  创建概要节点
-function createGeneralizationNode () {
+function createGeneralizationNode() {
   if (this.isGeneralization || !this.checkHasGeneralization()) {
     return
   }
@@ -35,14 +35,14 @@ function createGeneralizationNode () {
 }
 
 //  更新概要节点
-function updateGeneralization () {
+function updateGeneralization() {
   if (this.isGeneralization) return
   this.removeGeneralization()
   this.createGeneralizationNode()
 }
 
 //  渲染概要节点
-function renderGeneralization () {
+function renderGeneralization() {
   if (this.isGeneralization) return
   if (!this.checkHasGeneralization()) {
     this.removeGeneralization()
@@ -65,7 +65,7 @@ function renderGeneralization () {
 }
 
 //  删除概要节点
-function removeGeneralization () {
+function removeGeneralization() {
   if (this.isGeneralization) return
   if (this._generalizationLine) {
     this._generalizationLine.remove()
@@ -86,7 +86,7 @@ function removeGeneralization () {
 }
 
 //  隐藏概要节点
-function hideGeneralization () {
+function hideGeneralization() {
   if (this.isGeneralization) return
   if (this._generalizationLine) {
     this._generalizationLine.hide()
@@ -97,7 +97,7 @@ function hideGeneralization () {
 }
 
 //  显示概要节点
-function showGeneralization () {
+function showGeneralization() {
   if (this.isGeneralization) return
   if (this._generalizationLine) {
     this._generalizationLine.show()
@@ -108,11 +108,11 @@ function showGeneralization () {
 }
 
 export default {
-    checkHasGeneralization,
-    createGeneralizationNode,
-    updateGeneralization,
-    renderGeneralization,
-    removeGeneralization,
-    hideGeneralization,
-    showGeneralization
+  checkHasGeneralization,
+  createGeneralizationNode,
+  updateGeneralization,
+  renderGeneralization,
+  removeGeneralization,
+  hideGeneralization,
+  showGeneralization
 }

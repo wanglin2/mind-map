@@ -84,7 +84,7 @@ const routes = [
   { 
     path: '/', 
     name: 'Edit', 
-    component: EditPage 
+    component: () => import(`./pages/Edit/Index.vue`) 
   },
   // 开发文档
   ...createTypeRouterList('doc', 'introduction'),

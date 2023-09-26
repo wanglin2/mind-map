@@ -3,7 +3,8 @@ import {
   resizeImgSize,
   removeHtmlStyle,
   addHtmlStyle,
-  checkIsRichText
+  checkIsRichText,
+  isUndef
 } from '../../../utils'
 import { Image, SVG, A, G, Rect, Text, ForeignObject } from '@svgdotjs/svg.js'
 import iconsSvg from '../../../svg/icons'
@@ -164,7 +165,10 @@ function createTextNode() {
   let lineHeight = this.getStyle('lineHeight', false)
   // 文本超长自动换行
   let textStyle = this.style.getTextFontStyle()
-  let textArr = this.nodeData.data.text.split(/\n/gim)
+  let textArr = []
+  if (!isUndef(this.nodeData.data.text)) {
+    textArr = String(this.nodeData.data.text).split(/\n/gim)
+  }
   let maxWidth = this.mindMap.opt.textAutoWrapWidth
   let isMultiLine = false
   textArr.forEach((item, index) => {
@@ -249,12 +253,15 @@ function createTagNode() {
   tagData.slice(0, this.mindMap.opt.maxTag).forEach((item, index) => {
     let tag = new G()
     // 标签文本
-    let text = new Text().text(item).x(8).cy(10)
+    let text = new Text().text(item).x(8).cy(8)
     this.style.tagText(text, index)
     let { width } = text.bbox()
     // 标签矩形
     let rect = new Rect().size(width + 16, 20)
-    this.style.tagRect(rect, index)
+    // 先从自定义的颜色中获取颜色，没有的话就按照内容生成
+    const tagsColorList = this.mindMap.opt.tagsColorMap || {}
+    const color = tagsColorList[text.node.textContent]
+    this.style.tagRect(rect, text, color)
     tag.add(rect).add(text)
     nodes.push({
       node: tag,

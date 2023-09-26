@@ -11,12 +11,12 @@
 <li><input type="checkbox" id="checkbox15" checked="true" /><label for="checkbox15">Pluggable architecture, in addition to core functions, other functions are provided as plugins, which can be used as needed to reduce packaging volume</label></li>
 <li><input type="checkbox" id="checkbox16" checked="true" /><label for="checkbox16">Support logical structure chart, mind map, Organizational chart, directory organization chart, timeline (horizontal and vertical), fishbone chart and other structures</label></li>
 <li><input type="checkbox" id="checkbox17" checked="true" /><label for="checkbox17">Built-in multiple themes, allowing for highly customizable styles, and supporting registration of new themes</label></li>
-<li><input type="checkbox" id="checkbox18" checked="true" /><label for="checkbox18">Node content supports text (regular text, rich text), images, icons, hyperlinks, notes, labels, and summaries</label></li>
+<li><input type="checkbox" id="checkbox18" checked="true" /><label for="checkbox18">Node content supports text (regular text, rich text), images, icons, hyperlinks, notes, labels, summaries, and math formulas</label></li>
 <li><input type="checkbox" id="checkbox19" checked="true" /><label for="checkbox19">Nodes support drag and drop (drag and move, freely adjust), multiple node shapes, and fully customize node content using DDM</label></li>
 <li><input type="checkbox" id="checkbox20" checked="true" /><label for="checkbox20">Support canvas dragging and scaling</label></li>
 <li><input type="checkbox" id="checkbox21" checked="true" /><label for="checkbox21">Supports two multi node selection methods: mouse button drag selection and Ctrl+left button selection</label></li>
 <li><input type="checkbox" id="checkbox22" checked="true" /><label for="checkbox22">Supoorts to export as </label><code>json</code>、<code>png</code>、<code>svg</code>、<code>pdf</code>、<code>markdown</code>、<code>xmind</code>, support import from <code>json</code>、<code>xmind</code>、<code>markdown</code></li>
-<li><input type="checkbox" id="checkbox23" checked="true" /><label for="checkbox23">Support shortcut keys, forward and backward, correlation lines, search and replacement, small maps, and watermarks</label></li>
+<li><input type="checkbox" id="checkbox23" checked="true" /><label for="checkbox23">Support shortcut keys, forward and backward, correlation lines, search and replacement, small maps, watermarks, and scrollbar</label></li>
 <li><input type="checkbox" id="checkbox24" checked="true" /><label for="checkbox24">Provide rich configurations to meet various scenarios and usage habits</label></li>
 </ul>
 <h2>Repository Catalog Introduction</h2>
@@ -49,11 +49,12 @@ full screen, support mini map</li>
 <p><a href="https://juejin.cn/post/7199666255883927612">When you press the direction key, how does the TV find the next focus</a></p>
 <p><a href="https://juejin.cn/post/7204854015463538744">How to simulate the background image style of css in canvas</a></p>
 <p><a href="https://juejin.cn/post/7233012756314701884">My first Electron application</a></p>
+<p><a href="https://juejin.cn/post/7276712861514170409">Explore how to export HTML and SVG as images</a></p>
 <h2>Special Note</h2>
 <p>This project can be used for learning and reference. Please deeply experience whether it can meet your needs when using it for actual projects.</p>
 <p>This project may not have fully tested every function point, so there may be bugs. In addition, when the number of nodes is very large, there may be some performance issues. Because everyone can accept different levels of congestion, you can test the maximum number of nodes yourself.</p>
 <p>If you have suggestions or find bugs, you can submit <a href="https://github.com/wanglin2/mind-map/issues">issues</a> here.</p>
-<p>The built-in themes and icons in the project come from:</p>
+<p>The built-in themes and icons in the project part come from:</p>
 <p><a href="https://naotu.baidu.com/">Baidu Mind Map</a></p>
 <p><a href="https://www.zhixi.com/">Zhixi Mind Map</a></p>
 <p>Respect the copyright, and do not use the theme and icons directly for commercial projects.</p>
@@ -150,6 +151,22 @@ full screen, support mini map</li>
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/南风.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>南风</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/蜉蝣撼大叔.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>蜉蝣撼大叔</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/乙.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>乙</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/敏.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>敏</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/沐风牧草.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>沐风牧草</p>
     </div>
 </div>
   </div>

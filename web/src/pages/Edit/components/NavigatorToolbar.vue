@@ -80,6 +80,7 @@
           <el-dropdown-item command="devDoc">开发文档</el-dropdown-item>
           <el-dropdown-item command="site">官方网站</el-dropdown-item>
           <el-dropdown-item command="issue">意见反馈</el-dropdown-item>
+          <el-dropdown-item disabled>当前：v{{ version }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -94,6 +95,7 @@ import { langList } from '@/config'
 import i18n from '@/i18n'
 import { storeLang, getLang } from '@/api'
 import { mapState, mapMutations } from 'vuex'
+import pkg from 'simple-mind-map/package.json'
 
 /**
  * @Author: 王林
@@ -114,6 +116,7 @@ export default {
   },
   data() {
     return {
+      version: pkg.version,
       langList,
       lang: '',
       isReadonly: false,

@@ -1,5 +1,91 @@
 # Changelog
 
+## 0.7.2
+
+Fix:
+
+> 1.Fixed the issue of nodes not being selected when the selection area does not include node boundaries when multiple nodes are selected.
+>
+> 2.Fix the issue of errors when node text is not a string.
+>
+> 3.Fix the issue of some text disappearing when edited again when there are<>&characters in the text in non rich text mode.
+
+New:
+
+> 1.Supports inserting mathematical formulas.
+>
+> 2.Supports dragging and moving multiple nodes simultaneously.
+>
+> 3.Supports copying and cutting multiple nodes simultaneously.
+> 
+> 4.The node label color has been changed to be generated based on the label content, meaning that the same label content will generate the same color.
+>
+> 5.Optimize the insertion of child nodes: 1. When inserting child nodes into multiple nodes simultaneously, do not enter the editing state; 2. The newly inserted child node automatically enters the active state.
+>
+> 6.Optimize the insertion of sibling nodes: 1. Support the simultaneous insertion of sibling nodes into multiple nodes; 2. When calling the command to insert sibling nodes on the root node, no child nodes will be created.
+>
+> 7.Add a command to simultaneously insert multiple peers and multiple child nodes.
+>
+> 8.Changing the unique identifier of nodes from id to uid mainly affects the associated lines, which may not display properly in previous versions.
+>
+> 9.Optimize the logic of icon merging and support the expansion of icons under the internal classification of the library.
+>
+> 10.Associate line: 1. Double click the associate line to enter associate line text editing mode; If the associated line text is the default text, it will not be saved; 3. When there are active nodes, clicking on the associated line can directly activate the associated line.
+
+Demo:
+
+> 1.Fixed an issue where multiple nodes in the Zhixi mind map cannot be pasted when copying.
+>
+> 2.Add a sidebar for formula editing.
+
+## 0.7.1-fix.2
+
+Fix: 1.Fix the issue of plugin registration method chain call reporting errors.
+
+New:
+
+> 1.Add a configuration option to adapt to the canvas size when the mind map is first loaded.
+>
+> 2.Add a command to automatically generate dts declaration files.
+
+## 0.7.1-fix.1
+
+Fix: Fixed the issue of dragging nodes without excluding the child nodes of the dragged nodes.
+
+## 0.7.1
+
+Fix:
+
+> 1.Fix the issue of unsaved associated line endpoints after changes.
+>
+> 2.Fix the issue of abnormal canvas scrolling when moving the mouse to the edge of multiple selected nodes when the distance from the top left corner of the canvas to the browser window is not 0.
+>
+> 3.Fix the issue of importing xmind file errors for nodes with empty titles.
+>
+> 4.Fix the issue where the exported xmind file prompts for corruption when opened on the latest version of xmind software.
+>
+> 5.Fix the issue where stickers cannot be displayed when exporting data with stickers in xmind format.
+>
+> 6.Fix the issue of node right-click event reporting errors when the select plugin is not registered.
+>
+> 7.There is no issue with removing duplicates in the method of registering plugins.
+
+New:
+
+> 1.Reconstruct node drag and drop logic: optimize drag and drop difficulties in some situations, adapt to various structures, and automatically move the canvas when the mouse moves to the edge of the canvas during drag and drop.
+>
+> 2.Reconstruct the scrollbar plugin to optimize the user experience.
+>
+> 3.Imperfect resolution of conflicts between logical structure diagrams, mind maps, directory organization diagrams, organization chart summaries, and nodes (the summaries should be rewritten or deleted later).
+>
+> 4.Activate adjacent nodes after deleting them.
+>
+> 5.In node data_ The starting field is considered a custom field.
+
+Demo:
+
+> 1.The page will display the current core library version number.
+
 ## 0.7.0
 
 Breaking change: Removed the section of node activation style in the theme file, Setting the activation style of nodes is no longer supported, and the activation effect has been changed to a unified node outer border style, while also supporting the mouse hover effect.

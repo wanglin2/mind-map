@@ -39,7 +39,7 @@
 <td>data</td>
 <td>Object</td>
 <td>{}</td>
-<td>Mind map data, refer to: <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a></td>
+<td>Mind map data, Please refer to the introduction of 【Data structure】 below</td>
 <td></td>
 </tr>
 <tr>
@@ -469,8 +469,93 @@
 <td>Is the text selected by default when double-clicking a node to enter node text editing? By default, it will only be selected when creating a new node</td>
 <td></td>
 </tr>
+<tr>
+<td>deleteNodeActive（v0.7.1+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Enable the function of automatically activating adjacent nodes or parent nodes after deleting nodes</td>
+<td></td>
+</tr>
+<tr>
+<td>autoMoveWhenMouseInEdgeOnDrag（v0.7.1+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Whether to enable automatic canvas movement when the mouse moves to the edge of the canvas while dragging nodes</td>
+<td></td>
+</tr>
+<tr>
+<td>fit（v0.7.1-fix.2+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Is the first rendering scaled to fit the canvas size</td>
+<td></td>
+</tr>
+<tr>
+<td>dragMultiNodeRectConfig（v0.7.2+）</td>
+<td>Object</td>
+<td>{ width: 40, height: 20, fill: '' }</td>
+<td>The style configuration of the schematic rectangle that moves with the mouse when dragging multiple nodes, passing an object, and the field meanings are the width, height, and fill color of the rectangle</td>
+<td></td>
+</tr>
+<tr>
+<td>dragPlaceholderRectFill（v0.7.2+）</td>
+<td>String</td>
+<td></td>
+<td>The filling color of the schematic rectangle for the new position when dragging nodes. If not transmitted, the default color for the connected line is used</td>
+<td></td>
+</tr>
+<tr>
+<td>dragOpacityConfig（v0.7.2+）</td>
+<td>Object</td>
+<td>{ cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }</td>
+<td>The transparency configuration during node dragging, passing an object, and the field meanings are: the transparency of the cloned node or rectangle that follows the mouse movement, and the transparency of the dragged node</td>
+<td></td>
+</tr>
+<tr>
+<td>tagsColorMap（v0.7.2+）</td>
+<td>Object</td>
+<td>{}</td>
+<td>The color of a custom node label can be transferred to an object, where key is the label content to be assigned a color, and value is the color of the label content. If not transferred internally, a corresponding color will be generated based on the label content</td>
+<td></td>
+</tr>
 </tbody>
 </table>
+<h3>Data structure</h3>
+<p>The basic data structure is as follows:</p>
+<pre class="hljs"><code>{
+  <span class="hljs-attr">data</span>: {
+    <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// The text of the node can be rich text, which is in HTML format. In this case, richText should be set to true</span>
+    <span class="hljs-attr">richText</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// Is the text of the node in rich text mode</span>
+    <span class="hljs-attr">expand</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">// Whether the node is expanded</span>
+    <span class="hljs-attr">uid</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// The unique ID of the node, which may not be passed, will be generated internally</span>
+    <span class="hljs-attr">icon</span>: [], <span class="hljs-comment">// The format of the icon can be found in the &quot;插入和扩展节点图标&quot; section of the tutorial</span>
+    <span class="hljs-attr">image</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// URL of the image</span>
+    <span class="hljs-attr">imageTitle</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// The title of the image can be blank</span>
+    <span class="hljs-attr">imageSize</span>: { <span class="hljs-comment">// The size of the image</span>
+      <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-comment">// The width of the image, mandatory</span>
+      <span class="hljs-attr">height</span>: <span class="hljs-number">100</span>, <span class="hljs-comment">// The height of the image is mandatory</span>
+      <span class="hljs-attr">custom</span>: <span class="hljs-literal">false</span> <span class="hljs-comment">// If set to true, the display size of the image is not controlled by the theme, and is based on imageSize.width and imageSize.height</span>
+    },
+    <span class="hljs-attr">hyperlink</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Hyperlink address</span>
+    <span class="hljs-attr">hyperlinkTitle</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Title of hyperlink</span>
+    <span class="hljs-attr">note</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Content of remarks</span>
+    <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// Tag list</span>
+    <span class="hljs-attr">generalization</span>: {<span class="hljs-comment">// The summary of the node, if there is no summary, the generalization can be set to null</span>
+      <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span><span class="hljs-comment">// Summary Text</span>
+    },
+    <span class="hljs-attr">associativeLineTargets</span>: [<span class="hljs-string">&#x27;&#x27;</span>],<span class="hljs-comment">// If there are associated lines, then it is the uid list of the target node</span>
+    <span class="hljs-attr">associativeLineText</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// Association Line Text</span>
+    <span class="hljs-comment">// ...For other style fields, please refer to the topic</span>
+  },
+  children [<span class="hljs-comment">// Child nodes, with consistent structure and root nodes</span>
+    {
+      <span class="hljs-attr">data</span>: {},
+      <span class="hljs-attr">children</span>: []
+    }
+  ]
+}
+</code></pre>
+<p>If you want to add custom fields, you can add them to the same level as 'data' and 'children'. If you want to add them to the 'data' object, please use the <code>_</code> Name your custom field at the beginning, and it will be used internally to determine whether it is a custom field.</p>
 <h3>Watermark config</h3>
 <table>
 <thead>
@@ -904,7 +989,7 @@ redo. All commands are as follows:</p>
 </tr>
 <tr>
 <td>INSERT_NODE</td>
-<td>Insert a sibling node, the active node or appoint node will be the operation node. If there are multiple active nodes, only the first one will be effective</td>
+<td>Insert a sibling node, the active node or appoint node will be the operation node. If there are multiple active nodes, only the first one will be effective（v0.7.2+Supports simultaneous insertion of sibling nodes into multiple active nodes）</td>
 <td>openEdit（v0.4.6+, Whether to activate the newly inserted node and enter editing mode, default is <code>true</code>） 、 appointNodes（v0.4.7+, Optional, appoint node, Specifying multiple nodes can pass an array）、 appointData（Optional, Specify the data for the newly created node, Such as {text: 'xxx', ...}, Detailed structure can be referred to <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a> ）、 appointChildren（v0.6.14+, Optional, Specify the child nodes of the newly created node, array type）</td>
 </tr>
 <tr>
@@ -1010,17 +1095,17 @@ redo. All commands are as follows:</p>
 <tr>
 <td>INSERT_AFTER (v0.1.5+)</td>
 <td>Move Node to After Another Node</td>
-<td>node (node to move), exist (target node)</td>
+<td>node (node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), exist (target node)</td>
 </tr>
 <tr>
 <td>INSERT_BEFORE (v0.1.5+)</td>
 <td>Move Node to Before Another Node</td>
-<td>node (node to move), exist (target node)</td>
+<td>node (node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), exist (target node)</td>
 </tr>
 <tr>
 <td>MOVE_NODE_TO (v0.1.5+)</td>
 <td>Move a node as a child of another node</td>
-<td>node (the node to move), toNode (the target node)</td>
+<td>node (the node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), toNode (the target node)</td>
 </tr>
 <tr>
 <td>ADD_GENERALIZATION (v0.2.0+)</td>
@@ -1051,6 +1136,21 @@ redo. All commands are as follows:</p>
 <td>GO_TARGET_NODE（v0.6.7+）</td>
 <td>Navigate to a node, and if the node is collapsed, it will automatically expand to that node</td>
 <td>node（Node instance or node uid to locate）、callback（v0.6.9+, Callback function after positioning completion）</td>
+</tr>
+<tr>
+<td>INSERT_MULTI_NODE（v0.7.2+）</td>
+<td>Insert multiple sibling nodes into the specified node at the same time, with the operating node being the currently active node or the specified node</td>
+<td>appointNodes（Optional, specify nodes, specify multiple nodes to pass an array）, nodeList（Data list of newly inserted nodes, array type）</td>
+</tr>
+<tr>
+<td>INSERT_MULTI_CHILD_NODE（v0.7.2+）</td>
+<td>Insert multiple child nodes into the specified node simultaneously, with the operation node being the currently active node or the specified node</td>
+<td>appointNodes（Optional, specify nodes, specify multiple nodes to pass an array）, childList（Data list of newly inserted nodes, array type）</td>
+</tr>
+<tr>
+<td>INSERT_FORMULA（v0.7.2+）</td>
+<td>Insert mathematical formulas into nodes, operate on the currently active node or specified node</td>
+<td>formula（Mathematical formula to insert, LaText syntax）, appointNodes（Optional, specify the node to insert the formula into. Multiple nodes can be passed as arrays, otherwise it defaults to the currently active node）</td>
 </tr>
 </tbody>
 </table>

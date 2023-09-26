@@ -1,8 +1,10 @@
 # Scrollbar plugin
 
 > v0.7.0+
+>
+> V0.7.1+has been refactored, and the following document is a new one.
 
-This plugin is used to help develop the functionality of horizontal and vertical scrollbar.
+This plugin is used to help develop the functionality of horizontal and vertical scrollbar. Please refer to the tutorial for detailed usage.
 
 ## Register
 
@@ -16,9 +18,24 @@ After registration and instantiation of `MindMap`, the instance can be obtained 
 
 ## Event
 
-#### scrollbar_change
+#### scrollbar_change(data)
 
-Triggered when the scrollbar data changes, you can listen to this event to update the position and size of the scrollbar.
+```js
+{
+    // Vertical scrollbar
+    vertical: {
+        top,// Top value, Percentage value
+        height// Scrollbar height, Percentage value
+    },
+    // Horizontal scrollbar
+    horizontal: {
+        left,// Left value, Percentage value
+        width// Scrollbar width, Percentage value
+    }
+}
+```
+
+Triggered when the scrollbar data changes, you can listen to this event to update the position and size of the scrollbar. Receive a parameter representing the latest scrollbar position and size information, which you can use to update the style of the scrollbar element.
 
 ## Method
 
@@ -32,9 +49,9 @@ Set the size of the scroll bar container, which is the width of the container fo
 
 ### calculationScrollbar()
 
-> You need to first call the setScrollBarWrapSize method to set the width and height of the scroll bar container element.
+> Usually, you do not need to call this method. If the scroll bar is not updated when rendering for the first time, you can manually call this method to obtain the scroll bar data.
 >
-> Generally, it is necessary to monitor scrollbar_change event, and then call it to update the scroll bar.
+> You need to first call the setScrollBarWrapSize method to set the width and height of the scroll bar container element.
 
 Return value: 
 
@@ -53,7 +70,7 @@ Return value:
 }
 ```
 
-Obtain the size and position of the scroll bar, and you can set it to the scroll bar element based on the return value to achieve the effect of rendering and caring about the scroll bar.
+Obtain the size and position of the scrollbar.
 
 ### onMousedown(e, type)
 
@@ -62,3 +79,11 @@ Obtain the size and position of the scroll bar, and you can set it to the scroll
 - `type`: The type of scroll bar pressed, vertical(Vertical scrollbar)、horizontal(Horizontal scrollbar)。
 
 This method needs to be called when the mouse press event of the scrollbar element occurs.
+
+### onClick(e, type)
+
+- `e`：The event object for the mouse click event.
+
+- `type`：The type of scroll bar on click, vertical(Vertical scrollbar)、horizontal(Horizontal scrollbar)。
+
+This method needs to be called when the click event of the scrollbar element is triggered.

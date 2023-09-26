@@ -1,9 +1,15 @@
 <template>
-  <Sidebar ref="sidebar" title="图标/贴纸">
+  <Sidebar ref="sidebar" :title="$t('nodeIconSidebar.title')">
     <div class="box" :class="{ isDark: isDark }">
       <el-tabs v-model="activeName">
-        <el-tab-pane label="图标" name="icon"></el-tab-pane>
-        <el-tab-pane label="贴纸" name="image"></el-tab-pane>
+        <el-tab-pane
+          :label="$t('nodeIconSidebar.icon')"
+          name="icon"
+        ></el-tab-pane>
+        <el-tab-pane
+          :label="$t('nodeIconSidebar.sticker')"
+          name="image"
+        ></el-tab-pane>
       </el-tabs>
       <div class="boxContent">
         <!-- 图标 -->
@@ -52,6 +58,7 @@
 import Sidebar from './Sidebar'
 import { mapState } from 'vuex'
 import { nodeIconList } from 'simple-mind-map/src/svg/icons'
+import { mergerIconList } from 'simple-mind-map/src/utils/index'
 import icon from '@/config/icon'
 import image from '@/config/image'
 
@@ -63,7 +70,7 @@ export default {
   data() {
     return {
       activeName: 'icon',
-      nodeIconList: [...nodeIconList, ...icon],
+      nodeIconList: mergerIconList([...nodeIconList, ...icon]),
       nodeImageList: [...image],
       iconList: [],
       nodeImage: '',

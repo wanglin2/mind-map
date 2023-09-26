@@ -1,24 +1,26 @@
 # 如何渲染滚动条
 
-> 需要先注册 Scrollbar 插件
+> v0.7.1+, 需要先注册 Scrollbar 插件
 
 滚动条分为水平和垂直滚动条，所以你需要创建如下模板：
 
 ```html
 <!-- 垂直 -->
-<div class="scrollbar verticalScrollbar" ref="verticalScrollbarRef">
+<div class="scrollbar verticalScrollbar" ref="verticalScrollbarRef" @click="onVerticalScrollbarClick">
     <div
         class="scrollbarInner"
         :style="verticalScrollbarStyle"
+        @click.stop
         @mousedown="onVerticalScrollbarMousedown"
     ></div>
 </div>
 
 <!-- 水平 -->
-<div class="scrollbar horizontalScrollbar" ref="horizontalScrollbarRef">
+<div class="scrollbar horizontalScrollbar" ref="horizontalScrollbarRef" @click="onHorizontalScrollbarClick">
     <div
         class="scrollbarInner"
         :style="horizontalScrollbarStyle"
+        @click.stop
         @mousedown="onHorizontalScrollbarMousedown"
     ></div>
 </div>
@@ -63,7 +65,7 @@
 }
 ```
 
-垂直滚动条的`top`和`height`、水平滚动条的`left`和`width`值需要调用插件的方法获取。
+垂直滚动条的`top`和`height`、水平滚动条的`left`和`width`值需要根据插件返回的数据进行设置。
 
 首先你需要调用`setScrollBarWrapSize`方法传递你的滚动条容器的宽和高：
 
@@ -82,13 +84,13 @@ mindMap.scrollbar.setScrollBarWrapSize(width, height)
 ```js
 mindMap.('scrollbar_change', this.updateScrollbar)
 
-// 调用插件方法更新滚动条位置和大小
+// 根据事件返回的滚动条数据更新滚动条元素：
 {
-    updateScrollbar() {
+    updateScrollbar(data) {
         const {
             vertical,
             horizontal
-        } = mindMap.scrollbar.calculationScrollbar()
+        } = data
         this.verticalScrollbarStyle = {
             top: vertical.top + '%',
             height: vertical.height + '%'
@@ -101,7 +103,7 @@ mindMap.('scrollbar_change', this.updateScrollbar)
 }
 ```
 
-调用插件的`calculationScrollbar`方法来获取滚动条元素的位置和大小，返回的是百分比数值，所以需要添加`%`。
+事件返回数据的是百分比数值，所以需要添加`%`。
 
 最后，需要给滚动条元素绑定`mousedown`事件，并且调用插件的`onMousedown`方法：
 
@@ -111,6 +113,18 @@ mindMap.scrollbar.onMousedown(e, 'vertical')
 
 // 水平滚动条元素
 mindMap.scrollbar.onMousedown(e, 'horizontal')
+```
+
+这样就能实现鼠标拖动滚动条更新画布位置的功能。
+
+如果你还需要实现点击滚动条容器元素实现滚动条位置的跳变功能，那么需要给滚动条元素绑定点击事件，并且调用插件的`onClick`方法：
+
+```js
+// 垂直滚动条元素
+mindMap.scrollbar.onClick(e, 'vertical')
+
+// 水平滚动条元素
+mindMap.scrollbar.onClick(e, 'horizontal')
 ```
 
 以上就是实现滚动条渲染的全部步骤。

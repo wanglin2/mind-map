@@ -113,7 +113,7 @@ class Event extends EventEmitter {
       this.isMiddleMousedown ||
       (useLeftKeySelectionRightKeyDrag
         ? this.isRightMousedown
-        : this.isLeftMousedown) 		
+        : this.isLeftMousedown)
     ) {
       e.preventDefault()
       this.emit('drag', e, this)

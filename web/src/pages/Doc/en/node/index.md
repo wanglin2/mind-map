@@ -56,6 +56,26 @@ Whether the node is currently being dragged
 
 ## Methods
 
+### setOpacity(val)
+
+> v0.7.2+
+
+- `val`: Opacity value，0-1
+
+Set node transparency, including connecting lines and child nodes.
+
+### hideChildren()
+
+> v0.7.2+
+
+Hide subordinate nodes.
+
+### showChildren()
+
+> v0.7.2+
+
+Display subordinate nodes.
+
 ### hasCustomStyle()
 
 > v0.6.2+

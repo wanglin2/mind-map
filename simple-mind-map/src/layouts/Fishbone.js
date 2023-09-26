@@ -159,7 +159,8 @@ class Fishbone extends Base {
       let marginY = this.getMarginY(node.layerIndex)
       totalHeight +=
         node.height +
-        (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0) + marginY
+        (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0) +
+        marginY
       if (node.children.length) {
         node.children.forEach(item => {
           loop(item)
@@ -193,7 +194,7 @@ class Fishbone extends Base {
     if (node.parent && !node.parent.isRoot) {
       let childrenList = node.parent.children
       let index = childrenList.findIndex(item => {
-        return item === node
+        return item.uid === node.uid
       })
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {

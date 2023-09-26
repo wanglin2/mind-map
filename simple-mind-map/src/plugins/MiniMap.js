@@ -1,4 +1,8 @@
-import { isWhite, isTransparent, getVisibleColorFromTheme } from '../utils/index'
+import {
+  isWhite,
+  isTransparent,
+  getVisibleColorFromTheme
+} from '../utils/index'
 
 // 小地图插件
 class MiniMap {
@@ -78,7 +82,7 @@ class MiniMap {
       viewBoxStyle.left = miniMapBoxLeft + actWidth
     }
 
-    Object.keys(viewBoxStyle).forEach((key) => {
+    Object.keys(viewBoxStyle).forEach(key => {
       viewBoxStyle[key] = viewBoxStyle[key] + 'px'
     })
 
@@ -106,7 +110,7 @@ class MiniMap {
     }
     let children = svg.children()
     if (children && children.length > 0) {
-      children.forEach((node) => {
+      children.forEach(node => {
         this.removeNodeContent(node)
       })
     }

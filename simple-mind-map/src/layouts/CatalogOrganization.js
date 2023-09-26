@@ -87,11 +87,18 @@ class CatalogOrganization extends Base {
               totalLeft += cur.width + marginX
             })
           } else {
-            let totalTop = node.top + node.height + marginY + (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
+            let totalTop =
+              node.top +
+              this.getNodeHeightWithGeneralization(node) +
+              marginY +
+              (this.getNodeActChildrenLength(node) > 0 ? node.expandBtnSize : 0)
             node.children.forEach(cur => {
               cur.left = node.left + node.width * 0.5
               cur.top = totalTop
-              totalTop += cur.height + marginY + (this.getNodeActChildrenLength(cur) > 0 ? cur.expandBtnSize : 0)
+              totalTop +=
+                this.getNodeHeightWithGeneralization(cur) +
+                marginY +
+                (this.getNodeActChildrenLength(cur) > 0 ? cur.expandBtnSize : 0)
             })
           }
         }
@@ -112,7 +119,7 @@ class CatalogOrganization extends Base {
         }
         // 调整left
         if (parent && parent.isRoot) {
-          let areaWidth = this.getNodeAreaWidth(node)
+          let areaWidth = this.getNodeAreaWidth(node, true)
           let difference = areaWidth - node.width
           if (difference > 0) {
             this.updateBrothersLeft(node, difference)
@@ -124,7 +131,13 @@ class CatalogOrganization extends Base {
           let marginY = this.getMarginY(layerIndex + 1)
           let totalHeight =
             node.children.reduce((h, item) => {
-              return h + item.height + (this.getNodeActChildrenLength(item) > 0 ? item.expandBtnSize : 0)
+              return (
+                h +
+                this.getNodeHeightWithGeneralization(item) +
+                (this.getNodeActChildrenLength(item) > 0
+                  ? item.expandBtnSize
+                  : 0)
+              )
             }, 0) +
             len * marginY
           this.updateBrothersTop(node, totalHeight)
@@ -134,7 +147,7 @@ class CatalogOrganization extends Base {
         if (isRoot) {
           let { right, left } = this.getNodeBoundaries(node, 'h')
           let childrenWidth = right - left
-          let offset = (node.left - left) - (childrenWidth - node.width) / 2
+          let offset = node.left - left - (childrenWidth - node.width) / 2
           this.updateChildren(node.children, 'left', offset)
         }
       },
@@ -147,7 +160,7 @@ class CatalogOrganization extends Base {
     if (node.parent) {
       let childrenList = node.parent.children
       let index = childrenList.findIndex(item => {
-        return item === node
+        return item.uid === node.uid
       })
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition() || _index <= index) {
@@ -170,7 +183,7 @@ class CatalogOrganization extends Base {
     if (node.parent && !node.parent.isRoot) {
       let childrenList = node.parent.children
       let index = childrenList.findIndex(item => {
-        return item === node
+        return item.uid === node.uid
       })
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
