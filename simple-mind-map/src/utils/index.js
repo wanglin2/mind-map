@@ -170,8 +170,10 @@ export const copyNodeTree = (
   keepId = false
 ) => {
   tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data)
-  // 去除节点uid，因为节点uid不能重复
-  if (tree.data.uid && !keepId) delete tree.data.uid
+  // 重新创建节点uid，因为节点uid不能重复
+  if (!keepId) {
+    tree.data.uid = createUid()
+  }
   if (removeActiveState) {
     tree.data.isActive = false
   }
