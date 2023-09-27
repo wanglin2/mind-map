@@ -841,8 +841,12 @@ export const isSameObject = (a, b) => {
       // b没有a的一个字段，那么肯定不相同
       if (!keysb.includes(key)) return false
       // 字段名称一样，那么需要递归判断它们的值
-      return isSameObject(a[key], b[key])
+      const isSame = isSameObject(a[key], b[key])
+      if (!isSame) {
+        return false
+      }
     }
+    return true
   } else if (type === 'Array') {
     // 如果都是数组
     // 数组长度不一样，肯定不相同
@@ -854,8 +858,12 @@ export const isSameObject = (a, b) => {
       const typea = getType(itema)
       const typeb = getType(itemb)
       if (typea !== typeb) return false
-      return isSameObject(itema, itemb)
+      const isSame = isSameObject(itema, itemb)
+      if (!isSame) {
+        return false
+      }
     }
+    return true
   } else {
     // 其他类型，直接全等判断
     return a === b
