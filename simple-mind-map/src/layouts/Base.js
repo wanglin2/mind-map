@@ -129,6 +129,10 @@ class Base {
         this.renderer.addActiveNode(newNode)
       }
     }
+    // 如果当前节点在激活节点列表里，那么添加上激活的状态
+    if (this.mindMap.renderer.findActiveNodeIndex(newNode) !== -1) {
+      newNode.nodeData.data.isActive = true
+    }
     // 根节点
     if (isRoot) {
       newNode.isRoot = true
