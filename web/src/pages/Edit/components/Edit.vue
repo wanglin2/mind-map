@@ -389,6 +389,16 @@ export default {
       if (hasFileURL) {
         this.$bus.$emit('handle_file_url')
       }
+      if (this.$route.query.userName) {
+        this.mindMap.cooperate.setUserInfo({
+          id: Math.random(),
+          name: this.$route.query.userName,
+          color: ['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399'][
+            Math.floor(Math.random() * 5)
+          ],
+          avatar: Math.random() > 0.5 ? 'https://img0.baidu.com/it/u=4270674549,2416627993&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1696006800&t=4d32871d14a7224a4591d0c3c7a97311' : ''
+        })
+      }
     },
 
     // url中是否存在要打开的文件
