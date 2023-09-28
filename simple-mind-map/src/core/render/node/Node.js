@@ -6,6 +6,7 @@ import nodeExpandBtnMethods from './nodeExpandBtn'
 import nodeCommandWrapsMethods from './nodeCommandWraps'
 import nodeCreateContentsMethods from './nodeCreateContents'
 import nodeExpandBtnPlaceholderRectMethods from './nodeExpandBtnPlaceholderRect'
+import nodeCooperateMethods from './nodeCooperate'
 import { CONSTANTS } from '../../../constants/constant'
 
 //  节点类
@@ -55,6 +56,8 @@ class Node {
     this.parent = opt.parent || null
     // 子节点
     this.children = opt.children || []
+    // 当前同时操作该节点的用户列表
+    this.userList = []
     // 节点内容的容器
     this.group = null
     this.shapeNode = null // 节点形状节点
@@ -74,6 +77,7 @@ class Node {
     this._openExpandNode = null
     this._closeExpandNode = null
     this._fillExpandNode = null
+    this._userListGroup = null
     this._lines = []
     this._generalizationLine = null
     this._generalizationNode = null
@@ -120,6 +124,10 @@ class Node {
     // 创建节点内容的相关方法
     Object.keys(nodeCreateContentsMethods).forEach(item => {
       this[item] = nodeCreateContentsMethods[item].bind(this)
+    })
+    // 协同相关
+    Object.keys(nodeCooperateMethods).forEach((item) => {
+      this[item] = nodeCooperateMethods[item].bind(this)
     })
     // 初始化
     this.getSize()
@@ -283,6 +291,7 @@ class Node {
     this.group.add(this.shapeNode)
     // 渲染一个隐藏的矩形区域，用来触发展开收起按钮的显示
     this.renderExpandBtnPlaceholderRect()
+    this.createUserListNode()
     // 概要节点添加一个带所属节点id的类名
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass('generalization_' + this.generalizationBelongNode.uid)
@@ -527,6 +536,7 @@ class Node {
     }
     // 更新概要
     this.renderGeneralization()
+    this.updateUserListNode()
     // 更新节点位置
     let t = this.group.transform()
     // // 如果上次不在可视区内，且本次也不在，那么直接返回

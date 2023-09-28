@@ -204,5 +204,10 @@ export const defaultOpt = {
   },
   // 自定义标签的颜色
   // {pass: 'green, unpass: 'red'}
-  tagsColorMap: {}
+  tagsColorMap: {},
+  // 节点协作样式配置
+  cooperateStyle: {
+    avatarSize: 22,// 头像大小
+    fontSize: 12,// 如果是文字头像，那么文字的大小
+  }
 }
