@@ -18,7 +18,8 @@ import {
   addDataToAppointNodes,
   createUidForAppointNodes,
   formatDataToArray,
-  getNodeIndex
+  getNodeIndex,
+  createUid
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -494,15 +495,17 @@ class Render {
       const index = parent.nodeData.children.findIndex(item => {
         return item.data.uid === node.uid
       })
-      parent.nodeData.children.splice(index + 1, 0, {
+      const newNodeData = {
         inserting: handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式,
         data: {
           text: text,
           ...params,
+          uid: createUid(),
           ...(appointData || {})
         },
-        children: [...appointChildren]
-      })
+        children: [...createUidForAppointNodes(appointChildren)]
+      }
+      parent.nodeData.children.splice(index + 1, 0, newNodeData)
     })
     Object.keys(needDestroyNodeList).forEach(key => {
       needDestroyNodeList[key].destroy()
@@ -546,10 +549,11 @@ class Render {
       const index = parent.nodeData.children.findIndex(item => {
         return item.data.uid === node.uid
       })
+      const newNodeList = createUidForAppointNodes(simpleDeepClone(nodeList))
       parent.nodeData.children.splice(
         index + 1,
         0,
-        ...createUidForAppointNodes(simpleDeepClone(nodeList))
+        ...newNodeList
       )
     })
     Object.keys(needDestroyNodeList).forEach(key => {
@@ -598,15 +602,17 @@ class Render {
       const text = node.isRoot
         ? defaultInsertSecondLevelNodeText
         : defaultInsertBelowSecondLevelNodeText
-      node.nodeData.children.push({
+      const newNode = {
         inserting: handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式
         data: {
           text: text,
+          uid: createUid(),
           ...params,
           ...(appointData || {})
         },
-        children: [...appointChildren]
-      })
+        children: [...createUidForAppointNodes(appointChildren)]
+      }
+      node.nodeData.children.push(newNode)
       // 插入子节点时自动展开子节点
       node.nodeData.data.expand = true
       if (node.isRoot) {
@@ -644,6 +650,7 @@ class Render {
       if (!node.nodeData.children) {
         node.nodeData.children = []
       }
+      childList = createUidForAppointNodes(childList)
       node.nodeData.children.push(...childList)
       // 插入子节点时自动展开子节点
       node.nodeData.data.expand = true

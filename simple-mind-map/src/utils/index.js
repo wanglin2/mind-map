@@ -170,8 +170,10 @@ export const copyNodeTree = (
   keepId = false
 ) => {
   tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data)
-  // 去除节点uid，因为节点uid不能重复
-  if (tree.data.uid && !keepId) delete tree.data.uid
+  // 重新创建节点uid，因为节点uid不能重复
+  if (!keepId) {
+    tree.data.uid = createUid()
+  }
   if (removeActiveState) {
     tree.data.isActive = false
   }
@@ -464,7 +466,7 @@ export const removeHTMLEntities = str => {
 
 // 获取一个数据的类型
 export const getType = data => {
-  return Object.prototype.toString.call(data).slice(7, -1)
+  return Object.prototype.toString.call(data).slice(8, -1)
 }
 
 // 判断一个数据是否是null和undefined和空字符串
@@ -822,4 +824,50 @@ export const htmlEscape = str => {
     str = str.replace(new RegExp(item[0], 'g'), item[1])
   })
   return str
+}
+
+// 判断两个对象是否相同，只处理对象或数组
+export const isSameObject = (a, b) => {
+  const type = getType(a)
+  // a、b类型不一致，那么肯定不相同
+  if (type !== getType(b)) return false
+  // 如果都是对象
+  if (type === 'Object') {
+    const keysa = Object.keys(a)
+    const keysb = Object.keys(b)
+    // 对象字段数量不一样，肯定不相同
+    if (keysa.length !== keysb.length) return false
+    // 字段数量一样，那么需要遍历字段进行判断
+    for (let i = 0; i < keysa.length; i++) {
+      const key = keysa[i]
+      // b没有a的一个字段，那么肯定不相同
+      if (!keysb.includes(key)) return false
+      // 字段名称一样，那么需要递归判断它们的值
+      const isSame = isSameObject(a[key], b[key])
+      if (!isSame) {
+        return false
+      }
+    }
+    return true
+  } else if (type === 'Array') {
+    // 如果都是数组
+    // 数组长度不一样，肯定不相同
+    if (a.length !== b.length) return false
+    // 长度一样，那么需要遍历进行判断
+    for (let i = 0; i < a.length; i++) {
+      const itema = a[i]
+      const itemb = b[i]
+      const typea = getType(itema)
+      const typeb = getType(itemb)
+      if (typea !== typeb) return false
+      const isSame = isSameObject(itema, itemb)
+      if (!isSame) {
+        return false
+      }
+    }
+    return true
+  } else {
+    // 其他类型，直接全等判断
+    return a === b
+  }
 }
