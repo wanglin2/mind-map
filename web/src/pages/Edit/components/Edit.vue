@@ -96,7 +96,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(Painter)
   .usePlugin(ScrollbarPlugin)
   .usePlugin(Formula)
-  .usePlugin(Cooperate)
+  // .usePlugin(Cooperate)// 协同插件
 
 // 注册自定义主题
 customThemeList.forEach(item => {
@@ -389,16 +389,8 @@ export default {
       if (hasFileURL) {
         this.$bus.$emit('handle_file_url')
       }
-      if (this.$route.query.userName) {
-        this.mindMap.cooperate.setUserInfo({
-          id: Math.random(),
-          name: this.$route.query.userName,
-          color: ['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399'][
-            Math.floor(Math.random() * 5)
-          ],
-          avatar: Math.random() > 0.5 ? 'https://img0.baidu.com/it/u=4270674549,2416627993&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1696006800&t=4d32871d14a7224a4591d0c3c7a97311' : ''
-        })
-      }
+      // 协同测试
+      this.cooperateTest()
     },
 
     // url中是否存在要打开的文件
@@ -591,6 +583,24 @@ export default {
         // 动态删除指定节点
         // this.mindMap.execCommand('REMOVE_NODE', this.mindMap.renderer.root.children[0])
       }, 5000)
+    },
+
+    // 协同测试
+    cooperateTest() {
+      if (this.mindMap.cooperate && this.$route.query.userName) {
+        this.mindMap.cooperate.setProvider(null, {
+          roomName: 'demo-room',
+          signalingList: ['ws://192.168.3.125:4444']
+        })
+        this.mindMap.cooperate.setUserInfo({
+          id: Math.random(),
+          name: this.$route.query.userName,
+          color: ['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399'][
+            Math.floor(Math.random() * 5)
+          ],
+          avatar: Math.random() > 0.5 ? 'https://img0.baidu.com/it/u=4270674549,2416627993&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1696006800&t=4d32871d14a7224a4591d0c3c7a97311' : ''
+        })
+      }
     }
   }
 }
