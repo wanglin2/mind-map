@@ -23,7 +23,7 @@
     "lint": "eslint src/",
     "format": "prettier --write .",
     "types": "npx -p typescript tsc index.js --declaration --allowJs --emitDeclarationOnly --outDir types --target es2017",
-    "serve": "node ./bin/server.mjs"
+    "wsServe": "node ./bin/server.mjs"
   },
   "module": "index.js",
   "main": "./dist/simpleMindMap.umd.min.js",
