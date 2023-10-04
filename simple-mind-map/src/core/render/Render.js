@@ -97,6 +97,15 @@ class Render {
     )(this, this.mindMap.opt.layout)
   }
 
+  // 重新设置思维导图数据
+  setData(data) {
+    if (this.mindMap.richText) {
+      this.renderTree = this.mindMap.richText.handleSetData(data)
+    } else {
+      this.renderTree = data
+    }
+  }
+
   //   绑定事件
   bindEvent() {
     // 点击事件
