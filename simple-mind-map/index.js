@@ -258,15 +258,13 @@ class MindMap {
 
   //  动态设置思维导图数据，纯节点数据
   setData(data) {
+    data = simpleDeepClone(data || {})
     this.execCommand('CLEAR_ACTIVE_NODE')
     this.command.clearHistory()
     this.command.addHistory()
-    if (this.richText) {
-      this.renderer.renderTree = this.richText.handleSetData(data)
-    } else {
-      this.renderer.renderTree = data
-    }
+    this.renderer.setData(data)
     this.reRender(() => {}, CONSTANTS.SET_DATA)
+    this.emit('set_data', data)
   }
 
   //  动态设置思维导图数据，包括节点数据、布局、主题、视图
