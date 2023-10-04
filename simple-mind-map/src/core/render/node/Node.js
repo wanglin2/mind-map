@@ -126,9 +126,11 @@ class Node {
       this[item] = nodeCreateContentsMethods[item].bind(this)
     })
     // 协同相关
-    Object.keys(nodeCooperateMethods).forEach((item) => {
-      this[item] = nodeCooperateMethods[item].bind(this)
-    })
+    if (this.mindMap.cooperate) {
+      Object.keys(nodeCooperateMethods).forEach((item) => {
+        this[item] = nodeCooperateMethods[item].bind(this)
+      })
+    }
     // 初始化
     this.getSize()
   }
@@ -291,7 +293,8 @@ class Node {
     this.group.add(this.shapeNode)
     // 渲染一个隐藏的矩形区域，用来触发展开收起按钮的显示
     this.renderExpandBtnPlaceholderRect()
-    this.createUserListNode()
+    // 创建协同头像节点
+    if (this.createUserListNode) this.createUserListNode()
     // 概要节点添加一个带所属节点id的类名
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass('generalization_' + this.generalizationBelongNode.uid)
@@ -536,7 +539,8 @@ class Node {
     }
     // 更新概要
     this.renderGeneralization()
-    this.updateUserListNode()
+    // 更新协同头像
+    if (this.updateUserListNode) this.updateUserListNode()
     // 更新节点位置
     let t = this.group.transform()
     // // 如果上次不在可视区内，且本次也不在，那么直接返回
