@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.7.3
+
+New: 1.Add a Cooperate editing plugin.
+
+Demo: 1.Fix the automatic closing of the sidebar caused by the formula sidebar component.
+
 ## 0.7.2
 
 Fix:

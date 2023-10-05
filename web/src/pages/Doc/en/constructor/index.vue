@@ -518,6 +518,13 @@
 <td>The color of a custom node label can be transferred to an object, where key is the label content to be assigned a color, and value is the color of the label content. If not transferred internally, a corresponding color will be generated based on the label content</td>
 <td></td>
 </tr>
+<tr>
+<td>cooperateStyle（v0.7.3+）</td>
+<td>Object</td>
+<td>{ avatarSize: 22, fontSize: 12 }</td>
+<td>The configuration of personnel avatar style during node collaboration editing, with field meanings as follows: avatar size, and if it is a text avatar, the size of the text</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Data structure</h3>
@@ -920,6 +927,11 @@ poor performance and should be used sparingly.</p>
 <td>view_theme_change（v0.6.12+）</td>
 <td>Triggered after calling the setTheme method to set the theme</td>
 <td>theme（theme name）</td>
+</tr>
+<tr>
+<td>set_data（v0.7.3+）</td>
+<td>Triggered when the setData method is called to dynamically set mind map data</td>
+<td>data（New Mind Map Data）</td>
 </tr>
 </tbody>
 </table>

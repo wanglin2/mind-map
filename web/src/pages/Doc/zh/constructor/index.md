@@ -94,6 +94,7 @@ const mindMap = new MindMap({
 | dragPlaceholderRectFill（v0.7.2+）     |  String |   | 节点拖拽时新位置的示意矩形的填充颜色，如果不传默认使用连线的颜色 |
 | dragOpacityConfig（v0.7.2+）     | Object  | { cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }  | 节点拖拽时的透明度配置，传递一个对象，字段含义分别为：跟随鼠标移动的克隆节点或矩形的透明度、被拖拽节点的透明度 |
 | tagsColorMap（v0.7.2+）     | Object  | {}  | 自定义节点标签的颜色，可传一个对象，key为要指定颜色的标签内容，value为该标签内容的颜色，如果不传内部会根据标签内容生成对应的颜色 |
+| cooperateStyle（v0.7.3+）     | Object  | { avatarSize: 22, fontSize: 12 }  | 节点协作编辑时的人员头像样式配置，字段含义分别为：头像大小、如果是文字头像，那么文字的大小 |
 
 ### 数据结构
 
@@ -307,6 +308,7 @@ mindMap.setTheme('主题名称')
 | svg_mouseleave（v0.5.1+）    | 鼠标移出svg画布时触发   | e（事件对象）  |
 | node_icon_click（v0.6.10+）    | 点击节点内的图标时触发   | this（节点实例）、item（点击的图标名称）、e（事件对象）  |
 | view_theme_change（v0.6.12+）    | 调用了setTheme方法设置主题后触发   | theme（设置的新主题名称）  |
+| set_data（v0.7.3+）    | 调用了setData方法动态设置思维导图数据时触发   | data（新的思维导图数据）  |
 
 ### emit(event, ...args)
 

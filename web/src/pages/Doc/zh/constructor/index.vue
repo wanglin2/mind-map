@@ -447,6 +447,12 @@
 <td>{}</td>
 <td>自定义节点标签的颜色，可传一个对象，key为要指定颜色的标签内容，value为该标签内容的颜色，如果不传内部会根据标签内容生成对应的颜色</td>
 </tr>
+<tr>
+<td>cooperateStyle（v0.7.3+）</td>
+<td>Object</td>
+<td>{ avatarSize: 22, fontSize: 12 }</td>
+<td>节点协作编辑时的人员头像样式配置，字段含义分别为：头像大小、如果是文字头像，那么文字的大小</td>
+</tr>
 </tbody>
 </table>
 <h3>数据结构</h3>
@@ -842,6 +848,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>view_theme_change（v0.6.12+）</td>
 <td>调用了setTheme方法设置主题后触发</td>
 <td>theme（设置的新主题名称）</td>
+</tr>
+<tr>
+<td>set_data（v0.7.3+）</td>
+<td>调用了setData方法动态设置思维导图数据时触发</td>
+<td>data（新的思维导图数据）</td>
 </tr>
 </tbody>
 </table>

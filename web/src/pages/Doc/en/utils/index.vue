@@ -277,6 +277,14 @@ and copying the <code>data</code> of the data object, example:</p>
 <li><code>str</code>：String.</li>
 </ul>
 <p>Generate colors based on incoming content, and the same content will generate the same color.</p>
+<h4>isSameObject(a, b)</h4>
+<blockquote>
+<p>v0.7.3+</p>
+</blockquote>
+<ul>
+<li><code>a</code>、<code>b</code>: Object | Array, Two objects to compare</li>
+</ul>
+<p>Determine whether two objects are the same, only handling objects or arrays.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

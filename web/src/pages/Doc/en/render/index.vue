@@ -9,6 +9,11 @@ accessed through <code>mindMap.renderer</code>.</p>
 <h3>root</h3>
 <p>Gets the root node of the node tree</p>
 <h2>Methods</h2>
+<h3>setData(data)</h3>
+<blockquote>
+<p>v0.7.3+</p>
+</blockquote>
+<p>Dynamically set mind map data.</p>
 <h3>clearActive()</h3>
 <p>Clears the currently active node</p>
 <h3>clearAllActive()</h3>

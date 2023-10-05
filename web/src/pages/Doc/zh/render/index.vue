@@ -8,6 +8,11 @@
 <h3>root</h3>
 <p>获取节点树的根节点</p>
 <h2>方法</h2>
+<h3>setData(data)</h3>
+<blockquote>
+<p>v0.7.3+</p>
+</blockquote>
+<p>动态设置思维导图数据。</p>
 <h3>clearActive()</h3>
 <p>清除当前激活的节点</p>
 <h3>clearAllActive()</h3>
