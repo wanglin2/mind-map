@@ -272,6 +272,14 @@
 &lt; -&gt; &amp;lt;
 &gt; -&gt; &amp;gt;
 </code></pre>
+<h4>isSameObject(a, b)</h4>
+<blockquote>
+<p>v0.7.3+</p>
+</blockquote>
+<ul>
+<li><code>a</code>、<code>b</code>：Object | Array, 要进行对比的两个对象</li>
+</ul>
+<p>判断两个对象是否相同，只处理对象或数组。</p>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

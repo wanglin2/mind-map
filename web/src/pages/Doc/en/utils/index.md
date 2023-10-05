@@ -351,6 +351,14 @@ Escape the incoming string, currently escaping the following three characters:
 
 Generate colors based on incoming content, and the same content will generate the same color.
 
+#### isSameObject(a, b)
+
+> v0.7.3+
+
+- `a`、`b`: Object | Array, Two objects to compare
+
+Determine whether two objects are the same, only handling objects or arrays.
+
 ## Simulate CSS background in Canvas
 
 Import:

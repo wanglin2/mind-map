@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.7.3</h2>
+<p>New: 1.Add a Cooperate editing plugin.</p>
+<p>Demo: 1.Fix the automatic closing of the sidebar caused by the formula sidebar component.</p>
 <h2>0.7.2</h2>
 <p>Fix:</p>
 <blockquote>

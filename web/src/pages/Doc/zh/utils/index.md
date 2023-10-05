@@ -346,6 +346,14 @@ copyNodeTree({}, node)
 > -> &gt;
 ```
 
+#### isSameObject(a, b)
+
+> v0.7.3+
+
+- `a`、`b`：Object | Array, 要进行对比的两个对象
+
+判断两个对象是否相同，只处理对象或数组。
+
 ## 在canvas中模拟css的背景属性
 
 引入：

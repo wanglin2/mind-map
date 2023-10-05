@@ -15,6 +15,12 @@ Gets the root node of the node tree
 
 ## Methods
 
+### setData(data)
+
+> v0.7.3+
+
+Dynamically set mind map data.
+
 ### clearActive()
 
 Clears the currently active node

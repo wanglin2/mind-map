@@ -189,4 +189,16 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/沐风牧草.jpg" style="width: 50px;height: 50px;" />
         <span>沐风牧草</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/有希.jpg" style="width: 50px;height: 50px;" />
+        <span>有希</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/樊笼.jpg" style="width: 50px;height: 50px;" />
+        <span>樊笼</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/达仁科技.jpg" style="width: 50px;height: 50px;" />
+        <span>达仁科技</span>
+    </span>
 </p>

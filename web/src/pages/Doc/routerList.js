@@ -57,6 +57,7 @@ export default [
       { path: 'painter', title: 'Painter插件' },
       { path: 'scrollbar', title: 'Scrollbar插件' },
       { path: 'formula', title: 'Formula插件' },
+      { path: 'cooperate', title: 'Cooperate插件' },
       { path: 'help1', title: '概要/关联线' },
       { path: 'help2', title: '客户端' },
       { path: 'help3', title: '打开预览在线文件' },
@@ -96,6 +97,7 @@ export default [
       { path: 'painter', title: 'Painter plugin' },
       { path: 'scrollbar', title: 'Scrollbar plugin' },
       { path: 'formula', title: 'Formula plugin' },
+      { path: 'cooperate', title: 'Cooperate plugin' },
       { path: 'client', title: 'Client' }
     ]
   }
