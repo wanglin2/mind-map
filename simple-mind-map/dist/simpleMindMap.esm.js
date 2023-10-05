@@ -39886,8 +39886,9 @@ var copyRenderTree = (tree, root2, removeActiveState = false) => {
 };
 var copyNodeTree = (tree, root2, removeActiveState = false, keepId = false) => {
   tree.data = simpleDeepClone(root2.nodeData ? root2.nodeData.data : root2.data);
-  if (tree.data.uid && !keepId)
-    delete tree.data.uid;
+  if (!keepId) {
+    tree.data.uid = createUid();
+  }
   if (removeActiveState) {
     tree.data.isActive = false;
   }
@@ -40127,7 +40128,7 @@ var removeHTMLEntities = (str) => {
   return str;
 };
 var getType = (data2) => {
-  return Object.prototype.toString.call(data2).slice(7, -1);
+  return Object.prototype.toString.call(data2).slice(8, -1);
 };
 var isUndef = (data2) => {
   return data2 === null || data2 === void 0 || data2 === "";
@@ -47339,6 +47340,86 @@ var nodeExpandBtnPlaceholderRect_default = {
   updateExpandBtnPlaceholderRect
 };
 
+// ../simple-mind-map/src/core/render/node/nodeCooperate.js
+function createUserListNode() {
+  if (!this.mindMap.cooperate)
+    return;
+  this._userListGroup = new G();
+  this.group.add(this._userListGroup);
+}
+function createTextAvatar(item) {
+  const { avatarSize, fontSize } = this.mindMap.opt.cooperateStyle;
+  const g2 = new G();
+  const str = item.isMore ? item.name : String(item.name)[0];
+  const circle = new Circle().size(avatarSize, avatarSize);
+  circle.fill({
+    color: item.color || generateColorByContent(str)
+  });
+  const text4 = new Text2().text(str).fill({
+    color: "#fff"
+  }).css({
+    "font-size": fontSize
+  }).dx(-fontSize / 2).dy((avatarSize - fontSize) / 2);
+  g2.add(circle).add(text4);
+  return g2;
+}
+function createImageAvatar(item) {
+  const { avatarSize } = this.mindMap.opt.cooperateStyle;
+  return new Image2().load(item.avatar).size(avatarSize, avatarSize);
+}
+function updateUserListNode() {
+  if (!this._userListGroup)
+    return;
+  const { avatarSize } = this.mindMap.opt.cooperateStyle;
+  this._userListGroup.clear();
+  const length2 = this.userList.length;
+  const maxShowCount = Math.floor(this.width / avatarSize);
+  const list2 = [];
+  if (length2 > maxShowCount) {
+    list2.push(...this.userList.slice(0, maxShowCount - 1), {
+      isMore: true,
+      name: "+" + (length2 - maxShowCount + 1)
+    });
+  } else {
+    list2.push(...this.userList);
+  }
+  list2.forEach((item, index3) => {
+    let node3 = null;
+    if (item.avatar) {
+      node3 = this.createImageAvatar(item);
+    } else {
+      node3 = this.createTextAvatar(item);
+    }
+    node3.x(index3 * avatarSize).cy(-avatarSize / 2);
+    this._userListGroup.add(node3);
+  });
+}
+function addUser(userInfo) {
+  if (this.userList.find((item) => {
+    return item.id == userInfo.id;
+  }))
+    return;
+  this.userList.push(userInfo);
+  this.updateUserListNode();
+}
+function removeUser(userInfo) {
+  const index3 = this.userList.findIndex((item) => {
+    return item.id == userInfo.id;
+  });
+  if (index3 === -1)
+    return;
+  this.userList.splice(index3, 1);
+  this.updateUserListNode();
+}
+var nodeCooperate_default = {
+  createUserListNode,
+  updateUserListNode,
+  createTextAvatar,
+  createImageAvatar,
+  addUser,
+  removeUser
+};
+
 // ../simple-mind-map/src/core/render/node/Node.js
 var Node2 = class {
   //  构造函数
@@ -47367,6 +47448,7 @@ var Node2 = class {
     this.isDrag = false;
     this.parent = opt.parent || null;
     this.children = opt.children || [];
+    this.userList = [];
     this.group = null;
     this.shapeNode = null;
     this.hoverNode = null;
@@ -47384,6 +47466,7 @@ var Node2 = class {
     this._openExpandNode = null;
     this._closeExpandNode = null;
     this._fillExpandNode = null;
+    this._userListGroup = null;
     this._lines = [];
     this._generalizationLine = null;
     this._generalizationNode = null;
@@ -47418,6 +47501,11 @@ var Node2 = class {
     Object.keys(nodeCreateContents_default).forEach((item) => {
       this[item] = nodeCreateContents_default[item].bind(this);
     });
+    if (this.mindMap.cooperate) {
+      Object.keys(nodeCooperate_default).forEach((item) => {
+        this[item] = nodeCooperate_default[item].bind(this);
+      });
+    }
     this.getSize();
   }
   // 支持自定义位置
@@ -47547,6 +47635,8 @@ var Node2 = class {
     this.style.shape(this.shapeNode);
     this.group.add(this.shapeNode);
     this.renderExpandBtnPlaceholderRect();
+    if (this.createUserListNode)
+      this.createUserListNode();
     if (this.isGeneralization && this.generalizationBelongNode) {
       this.group.addClass("generalization_" + this.generalizationBelongNode.uid);
     }
@@ -47746,6 +47836,8 @@ var Node2 = class {
       }
     }
     this.renderGeneralization();
+    if (this.updateUserListNode)
+      this.updateUserListNode();
     let t3 = this.group.transform();
     if (this.left === t3.translateX && this.top === t3.translateY)
       return;
@@ -48204,6 +48296,9 @@ var Base2 = class {
       if (data2.data.isActive) {
         this.renderer.addActiveNode(newNode);
       }
+    }
+    if (this.mindMap.renderer.findActiveNodeIndex(newNode) !== -1) {
+      newNode.nodeData.data.isActive = true;
     }
     if (isRoot) {
       newNode.isRoot = true;
@@ -51052,6 +51147,14 @@ var Render = class {
   setLayout() {
     this.layout = new (layouts[this.mindMap.opt.layout] ? layouts[this.mindMap.opt.layout] : layouts[CONSTANTS.LAYOUT.LOGICAL_STRUCTURE])(this, this.mindMap.opt.layout);
   }
+  // 重新设置思维导图数据
+  setData(data2) {
+    if (this.mindMap.richText) {
+      this.renderTree = this.mindMap.richText.handleSetData(data2);
+    } else {
+      this.renderTree = data2;
+    }
+  }
   //   绑定事件
   bindEvent() {
     this.mindMap.on("draw_click", (e2) => {
@@ -51350,16 +51453,18 @@ var Render = class {
       const index3 = parent.nodeData.children.findIndex((item) => {
         return item.data.uid === node3.uid;
       });
-      parent.nodeData.children.splice(index3 + 1, 0, {
+      const newNodeData = {
         inserting: handleMultiNodes ? false : openEdit,
         // 如果同时对多个节点插入子节点，那么无需进入编辑模式,
         data: {
           text: text4,
           ...params,
+          uid: createUid(),
           ...appointData || {}
         },
-        children: [...appointChildren]
-      });
+        children: [...createUidForAppointNodes(appointChildren)]
+      };
+      parent.nodeData.children.splice(index3 + 1, 0, newNodeData);
     });
     Object.keys(needDestroyNodeList).forEach((key) => {
       needDestroyNodeList[key].destroy();
@@ -51400,10 +51505,11 @@ var Render = class {
       const index3 = parent.nodeData.children.findIndex((item) => {
         return item.data.uid === node3.uid;
       });
+      const newNodeList = createUidForAppointNodes(simpleDeepClone(nodeList));
       parent.nodeData.children.splice(
         index3 + 1,
         0,
-        ...createUidForAppointNodes(simpleDeepClone(nodeList))
+        ...newNodeList
       );
     });
     Object.keys(needDestroyNodeList).forEach((key) => {
@@ -51444,16 +51550,18 @@ var Render = class {
         node3.nodeData.children = [];
       }
       const text4 = node3.isRoot ? defaultInsertSecondLevelNodeText : defaultInsertBelowSecondLevelNodeText;
-      node3.nodeData.children.push({
+      const newNode = {
         inserting: handleMultiNodes ? false : openEdit,
         // 如果同时对多个节点插入子节点，那么无需进入编辑模式
         data: {
           text: text4,
+          uid: createUid(),
           ...params,
           ...appointData || {}
         },
-        children: [...appointChildren]
-      });
+        children: [...createUidForAppointNodes(appointChildren)]
+      };
+      node3.nodeData.children.push(newNode);
       node3.nodeData.data.expand = true;
       if (node3.isRoot) {
         node3.destroy();
@@ -51489,6 +51597,7 @@ var Render = class {
       if (!node3.nodeData.children) {
         node3.nodeData.children = [];
       }
+      childList = createUidForAppointNodes(childList);
       node3.nodeData.children.push(...childList);
       node3.nodeData.data.expand = true;
       if (node3.isRoot) {
@@ -54113,7 +54222,14 @@ var defaultOpt = {
   },
   // 自定义标签的颜色
   // {pass: 'green, unpass: 'red'}
-  tagsColorMap: {}
+  tagsColorMap: {},
+  // 节点协作样式配置
+  cooperateStyle: {
+    avatarSize: 22,
+    // 头像大小
+    fontSize: 12
+    // 如果是文字头像，那么文字的大小
+  }
 };
 
 // ../simple-mind-map/index.js
@@ -54296,16 +54412,14 @@ var MindMap2 = class {
   }
   //  动态设置思维导图数据，纯节点数据
   setData(data2) {
+    data2 = simpleDeepClone(data2 || {});
     this.execCommand("CLEAR_ACTIVE_NODE");
     this.command.clearHistory();
     this.command.addHistory();
-    if (this.richText) {
-      this.renderer.renderTree = this.richText.handleSetData(data2);
-    } else {
-      this.renderer.renderTree = data2;
-    }
+    this.renderer.setData(data2);
     this.reRender(() => {
     }, CONSTANTS.SET_DATA);
+    this.emit("set_data", data2);
   }
   //  动态设置思维导图数据，包括节点数据、布局、主题、视图
   setFullData(data2) {
