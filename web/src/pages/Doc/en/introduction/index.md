@@ -18,6 +18,7 @@
 - [x] Supoorts to export as `json`、`png`、`svg`、`pdf`、`markdown`、`xmind`, support import from `json`、`xmind`、`markdown`
 - [x] Support shortcut keys, forward and backward, correlation lines, search and replacement, small maps, watermarks, and scrollbar
 - [x] Provide rich configurations to meet various scenarios and usage habits
+- [x] Support collaborative editing
 
 ## Repository Catalog Introduction
 
@@ -116,7 +117,7 @@ Unsupported: `IE` browser.
 
 Open source is not easy. If this project is helpful to you, you can invite the author to have a cup of coffee~
 
-> Please note the 【mind map】 for transfer. Your avatar and name will appear below.
+> Please note the 【mind map】 for transfer. 
 
 <img src="../../../../assets/img/alipay.jpg" style="width: 300px" />
 

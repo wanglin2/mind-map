@@ -25,9 +25,15 @@ npm i
 npm link simple-mind-map
 </code></pre>
 <ol start="2">
-<li>Modify <code>web/src/pages/Edit/components/Edit.vue</code> file, To register Cooperate plugin, uncomment the line:</li>
+<li>Modify <code>web/src/pages/Edit/components/Edit.vue</code> file</li>
 </ol>
+<p>To register Cooperate plugin, uncomment the line:</p>
 <pre class="hljs"><code><span class="hljs-comment">// .usePlugin(Cooperate)// Cooperate plugin</span>
+</code></pre>
+<p>Change the signaling server address to your local IP:</p>
+<pre class="hljs"><code><span class="hljs-comment">// cooperateTest function</span>
+
+<span class="hljs-attr">signalingList</span>: [<span class="hljs-string">&#x27;ws://【your ip】:4444&#x27;</span>]
 </code></pre>
 <ol start="3">
 <li>To register a collaborative plugin, uncomment the line:</li>
