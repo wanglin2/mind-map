@@ -89,23 +89,28 @@ class Select {
         }
       )
     })
-    this.mindMap.on('mouseup', () => {
-      if (this.mindMap.opt.readonly) {
-        return
-      }
-      if (!this.isMousedown) {
-        return
-      }
-      this.checkTriggerNodeActiveEvent()
-      clearTimeout(this.autoMoveTimer)
-      this.isMousedown = false
-      this.cacheActiveList = []
-      if (this.rect) this.rect.remove()
-      this.rect = null
-      setTimeout(() => {
-        this.isSelecting = false
-      }, 0)
-    })
+    this.onMouseup = this.onMouseup.bind(this)
+    this.mindMap.on('mouseup', this.onMouseup)
+    this.mindMap.on('node_mouseup', this.onMouseup)
+  }
+
+  // 结束框选
+  onMouseup() {
+    if (this.mindMap.opt.readonly) {
+      return
+    }
+    if (!this.isMousedown) {
+      return
+    }
+    this.checkTriggerNodeActiveEvent()
+    clearTimeout(this.autoMoveTimer)
+    this.isMousedown = false
+    this.cacheActiveList = []
+    if (this.rect) this.rect.remove()
+    this.rect = null
+    setTimeout(() => {
+      this.isSelecting = false
+    }, 0)
   }
 
   // 如果激活节点改变了，那么触发事件
