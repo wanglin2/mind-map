@@ -25,9 +25,15 @@ npm i
 npm link simple-mind-map
 </code></pre>
 <ol start="2">
-<li>修改<code>web/src/pages/Edit/components/Edit.vue</code>文件，注册协同插件，即取消该行注释：</li>
+<li>修改<code>web/src/pages/Edit/components/Edit.vue</code>文件</li>
 </ol>
+<p>注册协同插件，即取消该行注释：</p>
 <pre class="hljs"><code><span class="hljs-comment">// .usePlugin(Cooperate)// 协同插件</span>
+</code></pre>
+<p>将信令服务器地址改为你本机的ip：</p>
+<pre class="hljs"><code><span class="hljs-comment">// cooperateTest 函数</span>
+
+<span class="hljs-attr">signalingList</span>: [<span class="hljs-string">&#x27;ws://【你的ip】:4444&#x27;</span>]
 </code></pre>
 <ol start="3">
 <li>启动demo项目的本地服务：</li>

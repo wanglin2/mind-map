@@ -30,10 +30,20 @@ npm i
 npm link simple-mind-map
 ```
 
-2. 修改`web/src/pages/Edit/components/Edit.vue`文件，注册协同插件，即取消该行注释：
+2. 修改`web/src/pages/Edit/components/Edit.vue`文件
+
+注册协同插件，即取消该行注释：
 
 ```js
 // .usePlugin(Cooperate)// 协同插件
+```
+
+将信令服务器地址改为你本机的ip：
+
+```js
+// cooperateTest 函数
+
+signalingList: ['ws://【你的ip】:4444']
 ```
 
 3. 启动demo项目的本地服务：

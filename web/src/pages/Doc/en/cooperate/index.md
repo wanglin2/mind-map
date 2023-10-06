@@ -30,10 +30,20 @@ npm i
 npm link simple-mind-map
 ```
 
-2. Modify `web/src/pages/Edit/components/Edit.vue` file, To register Cooperate plugin, uncomment the line:
+2. Modify `web/src/pages/Edit/components/Edit.vue` file
+
+To register Cooperate plugin, uncomment the line:
 
 ```js
 // .usePlugin(Cooperate)// Cooperate plugin
+```
+
+Change the signaling server address to your local IP:
+
+```js
+// cooperateTest function
+
+signalingList: ['ws://【your ip】:4444']
 ```
 
 3. To register a collaborative plugin, uncomment the line:
