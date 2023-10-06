@@ -184,6 +184,7 @@ class Select {
 
   //  创建矩形
   createRect(x, y) {
+    if (this.rect) this.rect.remove()
     this.rect = this.mindMap.svg
       .polygon()
       .stroke({
