@@ -512,7 +512,7 @@ class Render {
           uid: createUid(),
           ...(appointData || {})
         },
-        children: [...createUidForAppointNodes(appointChildren)]
+        children: [...createUidForAppointNodes(appointChildren, true)]
       }
       parent.nodeData.children.splice(index + 1, 0, newNodeData)
     })
@@ -558,7 +558,7 @@ class Render {
       const index = parent.nodeData.children.findIndex(item => {
         return item.data.uid === node.uid
       })
-      const newNodeList = createUidForAppointNodes(simpleDeepClone(nodeList))
+      const newNodeList = createUidForAppointNodes(simpleDeepClone(nodeList), true)
       parent.nodeData.children.splice(
         index + 1,
         0,
@@ -619,7 +619,7 @@ class Render {
           ...params,
           ...(appointData || {})
         },
-        children: [...createUidForAppointNodes(appointChildren)]
+        children: [...createUidForAppointNodes(appointChildren, true)]
       }
       node.nodeData.children.push(newNode)
       // 插入子节点时自动展开子节点
@@ -659,7 +659,7 @@ class Render {
       if (!node.nodeData.children) {
         node.nodeData.children = []
       }
-      childList = createUidForAppointNodes(childList)
+      childList = createUidForAppointNodes(childList, true)
       node.nodeData.children.push(...childList)
       // 插入子节点时自动展开子节点
       node.nodeData.data.expand = true
@@ -1071,7 +1071,9 @@ class Render {
     this.activeNodeList.forEach(node => {
       node.nodeData.children.push(
         ...data.map(item => {
-          return simpleDeepClone(item)
+          const newData = simpleDeepClone(item)
+          createUidForAppointNodes([newData], true)
+          return newData
         })
       )
     })
