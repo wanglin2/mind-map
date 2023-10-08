@@ -4,7 +4,7 @@
 
 ## 插入子节点
 
-插入子节点很节点，执行`INSERT_CHILD_NODE`命令即可：
+插入子节点很简单，执行`INSERT_CHILD_NODE`命令即可：
 
 ```js
 mindMap.execCommand('INSERT_CHILD_NODE')

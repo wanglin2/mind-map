@@ -1,6 +1,17 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.7.3-fix.1</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fixed some issues where the box selection area did not disappear when multiple nodes were selected.</p>
+<p>2.Fixed an issue where the box selection area does not disappear when releasing the mouse over multiple selected nodes.</p>
+<p>3.Fixed rendering anomalies caused by duplicate node uids when pasting nodes multiple times.</p>
+</blockquote>
+<p>Demo：</p>
+<blockquote>
+<p>1.Add protocol selection function to the hyperlink input box.</p>
+</blockquote>
 <h2>0.7.3</h2>
 <p>New: 1.Add a Cooperate editing plugin.</p>
 <p>Demo: 1.Fix the automatic closing of the sidebar caused by the formula sidebar component.</p>

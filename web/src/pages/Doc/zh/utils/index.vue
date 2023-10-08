@@ -44,15 +44,20 @@
 <p>复制渲染树数据，示例：</p>
 <pre class="hljs"><code>copyRenderTree({}, <span class="hljs-built_in">this</span>.mindMap.renderer.renderTree)
 </code></pre>
-<h4>copyNodeTree(tree, root, removeActiveState, keepId)</h4>
+<h4>copyNodeTree(tree, root, removeActiveState, removeId)</h4>
 <ul>
 <li>
 <p><code>removeActiveState</code>：<code>Boolean</code>，默认为<code>false</code>，是否移除节点的激活状态</p>
 </li>
 <li>
-<p><code>keepId</code>：v0.4.6+，<code>Boolean</code>，默认为<code>false</code>，是否保留被复制节点的<code>id</code>，默认会删除<code>id</code>防止节点<code>id</code>重复，但是对于移动节点的场景，节点原<code>id</code>需要保留</p>
+<p><code>removeId</code>：v0.7.3-fix.1+，是否移除节点数据中的uid，默认为<code>true</code></p>
 </li>
 </ul>
+<blockquote>
+<ul>
+<li><code>keepId</code>： （原第四个参数）<code>Boolean</code>，默认为<code>false</code>，是否保留被复制节点的<code>id</code>，默认会删除<code>id</code>防止节点<code>id</code>重复，但是对于移动节点的场景，节点原<code>id</code>需要保留。</li>
+</ul>
+</blockquote>
 <p>复制节点树数据，主要是剔除其中的引用<code>node</code>实例的<code>_node</code>，然后复制<code>data</code>对象的数据，示例：</p>
 <pre class="hljs"><code>copyNodeTree({}, node)
 </code></pre>
@@ -217,12 +222,17 @@
 </li>
 </ul>
 <p>给指定的节点列表树数据添加附加数据，会修改原数据。</p>
-<h4>createUidForAppointNodes(appointNodes)</h4>
+<h4>createUidForAppointNodes(appointNodes, createNewId)</h4>
 <blockquote>
 <p>v0.7.2+</p>
 </blockquote>
 <ul>
-<li><code>appointNodes</code>：节点实例列表，数组类型。</li>
+<li>
+<p><code>appointNodes</code>：节点实例列表，数组类型。</p>
+</li>
+<li>
+<p><code>createNewId</code>：v0.7.3-fix.1+，<code>Boolean</code>，默认为<code>false</code>，即如果节点不存在<code>uid</code>的话，会创建新的<code>uid</code>。如果传<code>true</code>，那么无论节点数据原来是否存在<code>uid</code>，都会创建新的<code>uid</code></p>
+</li>
 </ul>
 <p>给指定的节点列表树数据添加uid（如果uid不存在的话），会修改原数据。</p>
 <h4>getNodeIndex(node)</h4>

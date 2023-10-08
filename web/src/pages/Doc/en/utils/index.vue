@@ -54,9 +54,14 @@ basic data, otherwise it will throw an error</p>
 <p><code>removeActiveState</code>: <code>Boolean</code>, default is <code>false</code>, Whether to remove the active state of the node</p>
 </li>
 <li>
-<p><code>keepId</code>: v0.4.6+, <code>Boolean</code>, default is <code>false</code>, Whether to retain the <code>id</code> of the replicated node will be deleted by default to prevent duplicate node <code>id</code>. However, for mobile node scenarios, the original <code>id</code> of the node needs to be retained</p>
+<p><code>removeId</code>：v0.7.3-fix.1+, Is remove the uid from the node data, default is <code>true</code></p>
 </li>
 </ul>
+<blockquote>
+<ul>
+<li><code>keepId</code>: (Original fourth parameter) v0.4.6+, <code>Boolean</code>, default is <code>false</code>, Whether to retain the <code>id</code> of the replicated node will be deleted by default to prevent duplicate node <code>id</code>. However, for mobile node scenarios, the original <code>id</code> of the node needs to be retained</li>
+</ul>
+</blockquote>
 <p>Copy node tree data, mainly eliminating the reference <code>node</code> instance <code>_node</code>
 and copying the <code>data</code> of the data object, example:</p>
 <pre class="hljs"><code>copyNodeTree({}, node);
@@ -222,12 +227,17 @@ and copying the <code>data</code> of the data object, example:</p>
 </li>
 </ul>
 <p>Adding additional data to the specified node list tree data will modify the original data.</p>
-<h4>createUidForAppointNodes(appointNodes)</h4>
+<h4>createUidForAppointNodes(appointNodes, createNewId)</h4>
 <blockquote>
 <p>v0.7.2+</p>
 </blockquote>
 <ul>
-<li><code>appointNodes</code>：Node instance list, array type.</li>
+<li>
+<p><code>appointNodes</code>：Node instance list, array type.</p>
+</li>
+<li>
+<p><code>createNewId</code>：v0.7.3-fix.1+, <code>Boolean</code>, default is <code>false</code>, If the node does not have a 'uid', a new 'uid' will be created. If 'true' is passed, a new 'uid' will be created regardless of whether the node data originally exists or not`</p>
+</li>
 </ul>
 <p>Adding a uid to the specified node list tree data (if the uid does not exist) will modify the original data.</p>
 <h4>getNodeIndex(node)</h4>

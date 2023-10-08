@@ -3,7 +3,7 @@
     <h1>插入/删除节点、前进回退</h1>
 <p>首先和操作节点内容一样，也需要监听节点的激活事件，然后禁用相关按钮。</p>
 <h2>插入子节点</h2>
-<p>插入子节点很节点，执行<code>INSERT_CHILD_NODE</code>命令即可：</p>
+<p>插入子节点很简单，执行<code>INSERT_CHILD_NODE</code>命令即可：</p>
 <pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_CHILD_NODE&#x27;</span>)
 </code></pre>
 <p>这样就会在当前激活节点（如果存在多个激活节点，默认会操作第一个激活节点）下添加一个子节点。</p>
