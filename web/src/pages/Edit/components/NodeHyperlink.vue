@@ -87,6 +87,8 @@ export default {
       const res = this.link.match(/^(https?):\/\//)
       if (res && res[1]) {
         this.protocol = res[1]
+      } else if (!this.link) {
+        this.protocol = 'https'
       } else if (setProtocolNoneIfNotExist) {
         this.protocol = 'none'
       }
