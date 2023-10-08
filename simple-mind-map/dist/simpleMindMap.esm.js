@@ -39884,9 +39884,11 @@ var copyRenderTree = (tree, root2, removeActiveState = false) => {
   }
   return tree;
 };
-var copyNodeTree = (tree, root2, removeActiveState = false, keepId = false) => {
+var copyNodeTree = (tree, root2, removeActiveState = false, removeId = true) => {
   tree.data = simpleDeepClone(root2.nodeData ? root2.nodeData.data : root2.data);
-  if (!keepId) {
+  if (removeId) {
+    delete tree.data.uid;
+  } else if (!tree.data.uid) {
     tree.data.uid = createUid();
   }
   if (removeActiveState) {
@@ -39895,11 +39897,11 @@ var copyNodeTree = (tree, root2, removeActiveState = false, keepId = false) => {
   tree.children = [];
   if (root2.children && root2.children.length > 0) {
     root2.children.forEach((item, index3) => {
-      tree.children[index3] = copyNodeTree({}, item, removeActiveState, keepId);
+      tree.children[index3] = copyNodeTree({}, item, removeActiveState, removeId);
     });
   } else if (root2.nodeData && root2.nodeData.children && root2.nodeData.children.length > 0) {
     root2.nodeData.children.forEach((item, index3) => {
-      tree.children[index3] = copyNodeTree({}, item, removeActiveState, keepId);
+      tree.children[index3] = copyNodeTree({}, item, removeActiveState, removeId);
     });
   }
   return tree;
@@ -40300,13 +40302,13 @@ var addDataToAppointNodes = (appointNodes, data2 = {}) => {
   walk2(appointNodes);
   return appointNodes;
 };
-var createUidForAppointNodes = (appointNodes) => {
+var createUidForAppointNodes = (appointNodes, createNewId = false) => {
   const walk2 = (list2) => {
     list2.forEach((node3) => {
       if (!node3.data) {
         node3.data = {};
       }
-      if (isUndef(node3.data.uid)) {
+      if (createNewId || isUndef(node3.data.uid)) {
         node3.data.uid = createUid();
       }
       if (node3.children && node3.children.length > 0) {
@@ -51462,7 +51464,7 @@ var Render = class {
           uid: createUid(),
           ...appointData || {}
         },
-        children: [...createUidForAppointNodes(appointChildren)]
+        children: [...createUidForAppointNodes(appointChildren, true)]
       };
       parent.nodeData.children.splice(index3 + 1, 0, newNodeData);
     });
@@ -51505,7 +51507,7 @@ var Render = class {
       const index3 = parent.nodeData.children.findIndex((item) => {
         return item.data.uid === node3.uid;
       });
-      const newNodeList = createUidForAppointNodes(simpleDeepClone(nodeList));
+      const newNodeList = createUidForAppointNodes(simpleDeepClone(nodeList), true);
       parent.nodeData.children.splice(
         index3 + 1,
         0,
@@ -51559,7 +51561,7 @@ var Render = class {
           ...params,
           ...appointData || {}
         },
-        children: [...createUidForAppointNodes(appointChildren)]
+        children: [...createUidForAppointNodes(appointChildren, true)]
       };
       node3.nodeData.children.push(newNode);
       node3.nodeData.data.expand = true;
@@ -51597,7 +51599,7 @@ var Render = class {
       if (!node3.nodeData.children) {
         node3.nodeData.children = [];
       }
-      childList = createUidForAppointNodes(childList);
+      childList = createUidForAppointNodes(childList, true);
       node3.nodeData.children.push(...childList);
       node3.nodeData.data.expand = true;
       if (node3.isRoot) {
@@ -51961,7 +51963,9 @@ var Render = class {
     this.activeNodeList.forEach((node3) => {
       node3.nodeData.children.push(
         ...data2.map((item) => {
-          return simpleDeepClone(item);
+          const newData = simpleDeepClone(item);
+          createUidForAppointNodes([newData], true);
+          return newData;
         })
       );
     });
@@ -65530,24 +65534,28 @@ var Select = class {
         }
       );
     });
-    this.mindMap.on("mouseup", () => {
-      if (this.mindMap.opt.readonly) {
-        return;
-      }
-      if (!this.isMousedown) {
-        return;
-      }
-      this.checkTriggerNodeActiveEvent();
-      clearTimeout(this.autoMoveTimer);
-      this.isMousedown = false;
-      this.cacheActiveList = [];
-      if (this.rect)
-        this.rect.remove();
-      this.rect = null;
-      setTimeout(() => {
-        this.isSelecting = false;
-      }, 0);
-    });
+    this.onMouseup = this.onMouseup.bind(this);
+    this.mindMap.on("mouseup", this.onMouseup);
+    this.mindMap.on("node_mouseup", this.onMouseup);
+  }
+  // 结束框选
+  onMouseup() {
+    if (this.mindMap.opt.readonly) {
+      return;
+    }
+    if (!this.isMousedown) {
+      return;
+    }
+    this.checkTriggerNodeActiveEvent();
+    clearTimeout(this.autoMoveTimer);
+    this.isMousedown = false;
+    this.cacheActiveList = [];
+    if (this.rect)
+      this.rect.remove();
+    this.rect = null;
+    setTimeout(() => {
+      this.isSelecting = false;
+    }, 0);
   }
   // 如果激活节点改变了，那么触发事件
   checkTriggerNodeActiveEvent() {
@@ -65614,6 +65622,8 @@ var Select = class {
   }
   //  创建矩形
   createRect(x3, y4) {
+    if (this.rect)
+      this.rect.remove();
     this.rect = this.mindMap.svg.polygon().stroke({
       color: "#0984e3"
     }).fill({

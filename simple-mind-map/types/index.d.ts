@@ -95,6 +95,10 @@ declare class MindMap {
             beingDragNodeOpacity: number;
         };
         tagsColorMap: {};
+        cooperateStyle: {
+            avatarSize: number;
+            fontSize: number;
+        };
     });
     opt: any;
     el: any;
@@ -159,14 +163,14 @@ declare class MindMap {
     destroy(): void;
 }
 declare namespace MindMap {
-    let pluginList: any[];
+    const pluginList: any[];
     function usePlugin(plugin: any, opt?: {}): typeof MindMap;
     function hasPlugin(plugin: any): number;
     function defineTheme(name: any, config?: {}): Error;
 }
-import Event from './src/core/event/Event';
-import KeyCommand from './src/core/command/KeyCommand';
-import Command from './src/core/command/Command';
-import Render from './src/core/render/Render';
-import View from './src/core/view/View';
-import BatchExecution from './src/utils/BatchExecution';
+import Event from "./src/core/event/Event";
+import KeyCommand from "./src/core/command/KeyCommand";
+import Command from "./src/core/command/Command";
+import Render from "./src/core/render/Render";
+import View from "./src/core/view/View";
+import BatchExecution from "./src/utils/BatchExecution";

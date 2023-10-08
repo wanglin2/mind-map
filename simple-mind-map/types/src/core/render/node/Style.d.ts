@@ -32,5 +32,5 @@ declare class Style {
     hoverNode(node: any): void;
 }
 declare namespace Style {
-    let cacheStyle: any;
+    const cacheStyle: any;
 }

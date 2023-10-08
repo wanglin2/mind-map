@@ -6,7 +6,7 @@ export function resizeImg(imgUrl: any, maxWidth: any, maxHeight: any): Promise<a
 export function getStrWithBrFromHtml(str: any): any;
 export function simpleDeepClone(data: any): any;
 export function copyRenderTree(tree: any, root: any, removeActiveState?: boolean): any;
-export function copyNodeTree(tree: any, root: any, removeActiveState?: boolean, keepId?: boolean): any;
+export function copyNodeTree(tree: any, root: any, removeActiveState?: boolean, removeId?: boolean): any;
 export function imgToDataUrl(src: any): Promise<any>;
 export function parseDataUrl(data: any): any;
 export function downloadFile(file: any, fileName: any): void;
@@ -62,8 +62,9 @@ export function checkTwoRectIsOverlap(minx1: any, maxx1: any, miny1: any, maxy1:
 export function focusInput(el: any): void;
 export function selectAllInput(el: any): void;
 export function addDataToAppointNodes(appointNodes: any, data?: {}): any;
-export function createUidForAppointNodes(appointNodes: any): any;
+export function createUidForAppointNodes(appointNodes: any, createNewId?: boolean): any;
 export function formatDataToArray(data: any): any[];
 export function getNodeIndex(node: any): any;
 export function generateColorByContent(str: any): string;
 export function htmlEscape(str: any): any;
+export function isSameObject(a: any, b: any): boolean;
