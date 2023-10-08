@@ -1,6 +1,11 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.7.3-fix.2</h2>
+<p>Fix some issues with collaborative editing:</p>
+<p>1.The position of the new node is incorrect when inserting peer nodes;</p>
+<p>2.Moving a position within a peer node did not trigger an update;</p>
+<p>3.The position of the mobile node inserted as a sibling node is incorrect;</p>
 <h2>0.7.3-fix.1</h2>
 <p>Fix:</p>
 <blockquote>

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.7.3-fix.2
+
+Fix some issues with collaborative editing:
+
+1.The position of the new node is incorrect when inserting peer nodes;
+
+2.Moving a position within a peer node did not trigger an update;
+
+3.The position of the mobile node inserted as a sibling node is incorrect;
+
 ## 0.7.3-fix.1
 
 Fix:
