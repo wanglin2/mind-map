@@ -40,4 +40,4 @@ declare class Base {
     };
     getNodeActChildrenLength(node: any): any;
 }
-import Lru from '../utils/Lru';
+import Lru from "../utils/Lru";

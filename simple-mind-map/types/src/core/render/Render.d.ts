@@ -22,6 +22,7 @@ declare class Render {
     currentBeingPasteType: string;
     setLayout(): void;
     layout: MindMap | CatalogOrganization | OrganizationStructure | Timeline | VerticalTimeline;
+    setData(data: any): void;
     bindEvent(): void;
     registerCommands(): void;
     selectAll(): void;
@@ -87,9 +88,9 @@ declare class Render {
     expandToNodeUid(uid: any, callback?: () => void): void;
     findNodeByUid(uid: any): any;
 }
-import TextEdit from './TextEdit';
-import MindMap from '../../layouts/MindMap';
-import CatalogOrganization from '../../layouts/CatalogOrganization';
-import OrganizationStructure from '../../layouts/OrganizationStructure';
-import Timeline from '../../layouts/Timeline';
-import VerticalTimeline from '../../layouts/VerticalTimeline';
+import TextEdit from "./TextEdit";
+import MindMap from "../../layouts/MindMap";
+import CatalogOrganization from "../../layouts/CatalogOrganization";
+import OrganizationStructure from "../../layouts/OrganizationStructure";
+import Timeline from "../../layouts/Timeline";
+import VerticalTimeline from "../../layouts/VerticalTimeline";

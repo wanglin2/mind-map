@@ -29,4 +29,4 @@ declare class removeGeneralization {
 }
 declare function hideGeneralization(): void;
 declare function showGeneralization(): void;
-import Node from './Node';
+import Node from "./Node";
