@@ -293,14 +293,16 @@ class Cooperate {
         map[uid] = node
       }
       if (parentUid) {
-        if (map[parentUid]) {
-          map[parentUid].children.push(node)
-        } else {
+        const index = data[parentUid].children.findIndex(item => {
+          return item === uid
+        })
+        if (!map[parentUid]) {
           map[parentUid] = {
             data: simpleDeepClone(data[parentUid].data),
-            children: [node]
+            children: []
           }
         }
+        map[parentUid].children[index] = node
       }
     })
     return res
