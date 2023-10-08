@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.7.3-fix.1
+
+Fix:
+
+> 1.Fixed some issues where the box selection area did not disappear when multiple nodes were selected.
+>
+> 2.Fixed an issue where the box selection area does not disappear when releasing the mouse over multiple selected nodes.
+>
+> 3.Fixed rendering anomalies caused by duplicate node uids when pasting nodes multiple times.
+
+Demo：
+
+> 1.Add protocol selection function to the hyperlink input box.
+
 ## 0.7.3
 
 New: 1.Add a Cooperate editing plugin.
