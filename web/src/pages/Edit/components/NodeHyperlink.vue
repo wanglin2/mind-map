@@ -13,7 +13,14 @@
         placeholder="http://xxxx.com/"
         @keyup.native.stop
         @keydown.native.stop
-      ></el-input>
+        @blur="handleUrl()"
+      >
+        <el-select v-model="protocol" slot="prepend" style="width: 80px;">
+          <el-option label="https" value="https"></el-option>
+          <el-option label="http" value="http"></el-option>
+          <el-option label="无" value="none"></el-option>
+        </el-select>
+      </el-input>
     </div>
     <div class="item">
       <span class="name">{{ $t('nodeHyperlink.name') }}</span>
@@ -46,7 +53,8 @@ export default {
       dialogVisible: false,
       link: '',
       linkTitle: '',
-      activeNodes: []
+      activeNodes: [],
+      protocol: 'https'
     }
   },
   created() {
@@ -63,11 +71,26 @@ export default {
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
         this.link = firstNode.getData('hyperlink')
+        this.handleUrl(true)
         this.linkTitle = firstNode.getData('hyperlinkTitle')
       } else {
         this.link = ''
         this.linkTitle = ''
       }
+    },
+
+    removeProtocol(url) {
+      return url.replace(/^https?:\/\//, '')
+    },
+
+    handleUrl(setProtocolNoneIfNotExist) {
+      const res = this.link.match(/^(https?):\/\//)
+      if (res && res[1]) {
+        this.protocol = res[1]
+      } else if (setProtocolNoneIfNotExist) {
+        this.protocol = 'none'
+      }
+      this.link = this.removeProtocol(this.link)
     },
 
     handleShowNodeLink() {
@@ -94,7 +117,10 @@ export default {
      */
     confirm() {
       this.activeNodes.forEach(node => {
-        node.setHyperlink(this.link, this.linkTitle)
+        node.setHyperlink(
+          (this.protocol === 'none' ? '' : this.protocol + '://') + this.link,
+          this.linkTitle
+        )
         this.cancel()
       })
     }
