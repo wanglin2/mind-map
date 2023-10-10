@@ -51,9 +51,10 @@ full screen, support mini map</li>
 <p><a href="https://juejin.cn/post/7204854015463538744">How to simulate the background image style of css in canvas</a></p>
 <p><a href="https://juejin.cn/post/7233012756314701884">My first Electron application</a></p>
 <p><a href="https://juejin.cn/post/7276712861514170409">Explore how to export HTML and SVG as images</a></p>
+<p><a href="https://juejin.cn/post/7287913415803764747">How does the dom-to-image library convert HTML into images</a></p>
 <h2>Special Note</h2>
 <p>This project can be used for learning and reference. Please deeply experience whether it can meet your needs when using it for actual projects.</p>
-<p>This project may not have fully tested every function point, so there may be bugs. In addition, when the number of nodes is very large, there may be some performance issues. Because everyone can accept different levels of congestion, you can test the maximum number of nodes yourself.</p>
+<p>This project may not have fully tested every function point, so there may be bugs. In addition, when the number of nodes is very large, there may be some performance issues. Because everyone can accept different levels of congestion, you can test the maximum number of nodes yourself. Generally speaking, within 500 nodes, it is more smooth, while over 1000 nodes have more noticeable lag.</p>
 <p>If you have suggestions or find bugs, you can submit <a href="https://github.com/wanglin2/mind-map/issues">issues</a> here.</p>
 <p>The built-in themes and icons in the project part come from:</p>
 <p><a href="https://naotu.baidu.com/">Baidu Mind Map</a></p>
