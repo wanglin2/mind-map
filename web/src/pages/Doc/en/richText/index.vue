@@ -4,9 +4,6 @@
 <blockquote>
 <p>v0.4.0+</p>
 </blockquote>
-<blockquote>
-<p>Note: This is a testing nature and imperfect function</p>
-</blockquote>
 <p>This plugin provides the ability to edit rich text of nodes, and takes effect after registration.</p>
 <p>By default, node editing can only uniformly apply styles to all text in the node. This plugin can support rich text editing effects. Currently, it supports bold, italic, underline, strikethrough, font, font size, color, and backgroundColor. Underline and line height are not supported.</p>
 <p>The principle of this plugin is to use <a href="https://github.com/quilljs/quill">Quill</a> editor implements rich text editing, and then uses the edited <code>DOM</code> node directly as the text data of the node, and embeds the <code>DOM</code> node through the <code>svg</code> <code>foreignObject</code> tag during rendering.</p>
@@ -21,6 +18,7 @@
 <blockquote>
 <p>The compatibility of dom to image more is relatively poor, and exported images are empty on many browsers, so you can replace them with html2canvas according to your own needs.</p>
 </blockquote>
+<p>After version <code>0.6.16+</code>, third-party libraries such as 'dom-to-image-more' and 'html2canvas' will no longer be used for export, Compatibility and export are no longer issues.</p>
 <h2>Register</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
 <span class="hljs-keyword">import</span> RichText <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/RichText.js&#x27;</span>

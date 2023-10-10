@@ -6,6 +6,16 @@
 
 该插件用于支持给节点插入公式。
 
+> 注意：公式是通过[KaTeX](https://github.com/KaTeX/KaTeX)库实现的，`KaTeX`提供了一些配置，插件默认的一个配置是：
+
+```js
+{
+    output: 'mathml'
+}
+```
+
+> 这在少数浏览器上公式可能无法成功渲染，如果你需要兼容这部分浏览器，你可以考虑把该配置改为`html`，详细文档可以参考：[Options](https://katex.org/docs/options)。使用这个配置可能还需要再引入`KaTeX`的样式文件，你可以自行测试。
+
 ## 注册
 
 ```js

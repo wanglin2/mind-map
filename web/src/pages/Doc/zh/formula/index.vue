@@ -8,6 +8,16 @@
 <p>该插件仅在富文本模式下支持，所以需要在注册了RichText插件的前提下使用</p>
 </blockquote>
 <p>该插件用于支持给节点插入公式。</p>
+<blockquote>
+<p>注意：公式是通过<a href="https://github.com/KaTeX/KaTeX">KaTeX</a>库实现的，<code>KaTeX</code>提供了一些配置，插件默认的一个配置是：</p>
+</blockquote>
+<pre class="hljs"><code>{
+    <span class="hljs-attr">output</span>: <span class="hljs-string">&#x27;mathml&#x27;</span>
+}
+</code></pre>
+<blockquote>
+<p>这在少数浏览器上公式可能无法成功渲染，如果你需要兼容这部分浏览器，你可以考虑把该配置改为<code>html</code>，详细文档可以参考：<a href="https://katex.org/docs/options">Options</a>。使用这个配置可能还需要再引入<code>KaTeX</code>的样式文件，你可以自行测试。</p>
+</blockquote>
 <h2>注册</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
 <span class="hljs-keyword">import</span> Formula <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/Formula.js&#x27;</span>

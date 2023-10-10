@@ -4,9 +4,6 @@
 <blockquote>
 <p>v0.4.0+</p>
 </blockquote>
-<blockquote>
-<p>注意：这是一个测试性质和不完善的功能</p>
-</blockquote>
 <p>该插件提供节点富文本编辑的能力，注册了即可生效。</p>
 <p>默认节点编辑只能对节点内所有文本统一应用样式，通过该插件可以支持富文本编辑的效果，目前支持：加粗、斜体、下划线、删除线、字体、字号、颜色、背景颜色。不支持上划线、行高。</p>
 <p>该插件的原理是使用<a href="https://github.com/quilljs/quill">Quill</a>编辑器实现富文本编辑，然后把编辑后生成的<code>DOM</code>节点直接作为节点的文本数据，并且在渲染的时候通过<code>svg</code>的<code>foreignObject</code>标签嵌入<code>DOM</code>节点。</p>
@@ -21,6 +18,7 @@
 <blockquote>
 <p>dom-to-image-more兼容性比较差，在很多浏览器上导出图片都是空的，所以可以根据你自己的需求替换成html2canvas。</p>
 </blockquote>
+<p>从<code>0.6.16+</code>版本后不再使用<code>dom-to-image-more</code>、<code>html2canvas</code>之类的第三方库实现导出，兼容性及导出都不再有问题。</p>
 <h2>注册</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
 <span class="hljs-keyword">import</span> RichText <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/RichText.js&#x27;</span>

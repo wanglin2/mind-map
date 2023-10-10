@@ -1,6 +1,6 @@
 # Select plugin
 
-The `Select` plugin provides the function of right-clicking to select multiple nodes.
+The `Select` plugin provides the function of select multiple nodes.
 
 ## Register
 

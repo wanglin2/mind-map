@@ -121,7 +121,7 @@
 <td>enableFreeDrag（v0.2.4+）</td>
 <td>Boolean</td>
 <td>false</td>
-<td>是否开启节点自由拖拽</td>
+<td>是否开启节点自由拖拽（自由拖拽即可以把节点拖拽到画布的任意位置，注意不是拖拽节点成为其他节点的子节点兄弟节点的功能，自由拖拽的连线会存在一定问题，所以该特性最好不要使用）</td>
 </tr>
 <tr>
 <td>watermarkConfig（v0.2.4+）</td>
