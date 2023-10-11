@@ -152,7 +152,7 @@ export default {
           type: 'warning'
         })
           .then(() => {
-            this.mindMap.setThemeConfig({})
+            this.mindMap.setThemeConfig({}, true)
             this.changeTheme(theme, {})
           })
           .catch(() => {
