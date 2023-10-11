@@ -202,4 +202,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/达仁科技.jpg" style="width: 50px;height: 50px;" />
         <span>达仁科技</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/小逗比.png" style="width: 50px;height: 50px;" />
+        <span>小逗比</span>
+    </span>
 </p>
