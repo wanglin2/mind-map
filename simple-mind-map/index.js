@@ -402,6 +402,14 @@ class MindMap {
     let clone = svg.clone()
     // 添加必要的样式
     clone.add(SVG(`<style>${cssContent}</style>`))
+    // 修正关联线箭头marker的id
+    const markerList = svg.find('marker')
+    if (markerList && markerList.length > 0) {
+      const id = markerList[0].attr('id')
+      clone.find('marker').forEach((item) => {
+        item.attr('id', id)
+      })
+    }
     // 如果实际图形宽高超出了屏幕宽高，且存在水印的话需要重新绘制水印，否则会出现超出部分没有水印的问题
     if (
       (rect.width > origWidth || rect.height > origHeight) &&
