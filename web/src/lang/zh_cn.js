@@ -66,7 +66,7 @@ export default {
     copyNode: '复制节点',
     cutNode: '剪切节点',
     pasteNode: '粘贴节点',
-    backCenter: '回到中心',
+    backCenter: '回到根节点',
     expandAll: '展开所有',
     unExpandAll: '收起所有',
     expandTo: '展开到',

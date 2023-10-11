@@ -304,7 +304,7 @@ export default {
           this.mindMap.renderer.paste()
           break
         case 'RETURN_CENTER':
-          this.mindMap.view.reset()
+          this.mindMap.renderer.setRootNodeCenter()
           break
         case 'TOGGLE_ZEN_MODE':
           this.setLocalConfig({

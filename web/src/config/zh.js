@@ -373,7 +373,7 @@ export const shortcutKeyList = [
       },
       {
         icon: 'icondingwei',
-        name: '恢复默认',
+        name: '回到根节点',
         value: 'Ctrl + Enter'
       },
       {

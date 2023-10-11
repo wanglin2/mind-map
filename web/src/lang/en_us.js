@@ -66,7 +66,7 @@ export default {
     copyNode: 'Copy node',
     cutNode: 'Cut node',
     pasteNode: 'Paste node',
-    backCenter: 'Back center',
+    backCenter: 'Back root node',
     expandAll: 'Expand all',
     unExpandAll: 'Un expand all',
     expandTo: 'Expand to',
