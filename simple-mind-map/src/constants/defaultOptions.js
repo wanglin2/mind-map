@@ -173,8 +173,8 @@ export const defaultOpt = {
       box-sizing: border-box;
     }
   `,
-  // 开启鼠标双击复位思维导图位置及缩放
-  enableDblclickReset: false,
+  // 是否在鼠标双击时回到根节点，也就是让根节点居中显示
+  enableDblclickBackToRootNode: false,
   // 导出图片时canvas的缩放倍数，该配置会和window.devicePixelRatio值取最大值
   minExportImgCanvasScale: 2,
   // 节点鼠标hover和激活时显示的矩形边框的颜色

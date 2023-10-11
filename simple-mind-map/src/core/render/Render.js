@@ -122,6 +122,11 @@ class Render {
         this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
       }
     })
+    // 鼠标双击回到根节点
+    this.mindMap.svg.on('dblclick', () => {
+      if (!this.mindMap.opt.enableDblclickBackToRootNode) return
+      this.setRootNodeCenter()
+    })
     // let timer = null
     // this.mindMap.on('view_data_change', () => {
     //   clearTimeout(timer)
@@ -299,6 +304,10 @@ class Render {
     })
     this.cut = this.cut.bind(this)
     this.mindMap.keyCommand.addShortcut('Control+x', this.cut)
+    // 根节点居中显示
+    this.mindMap.keyCommand.addShortcut('Control+Enter', () => {
+      this.setRootNodeCenter()
+    })
   }
 
   //  开启文字编辑，会禁用回车键和删除键相关快捷键防止冲突
@@ -557,12 +566,11 @@ class Render {
       const index = parent.nodeData.children.findIndex(item => {
         return item.data.uid === node.uid
       })
-      const newNodeList = createUidForAppointNodes(simpleDeepClone(nodeList), true)
-      parent.nodeData.children.splice(
-        index + 1,
-        0,
-        ...newNodeList
+      const newNodeList = createUidForAppointNodes(
+        simpleDeepClone(nodeList),
+        true
       )
+      parent.nodeData.children.splice(index + 1, 0, ...newNodeList)
     })
     Object.keys(needDestroyNodeList).forEach(key => {
       needDestroyNodeList[key].destroy()
@@ -1430,6 +1438,11 @@ class Render {
     this.mindMap.view.translateX(offsetX)
     this.mindMap.view.translateY(offsetY)
     this.mindMap.view.setScale(1)
+  }
+
+  // 回到中心主题，即设置根节点到画布中心
+  setRootNodeCenter() {
+    this.moveNodeToCenter(this.root)
   }
 
   // 展开到指定uid的节点
