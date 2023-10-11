@@ -12,7 +12,7 @@ function createGeneralizationNode() {
     return
   }
   if (!this._generalizationLine) {
-    this._generalizationLine = this.draw.path()
+    this._generalizationLine = this.lineDraw.path()
   }
   if (!this._generalizationNode) {
     this._generalizationNode = new Node({
@@ -22,7 +22,6 @@ function createGeneralizationNode() {
       uid: createUid(),
       renderer: this.renderer,
       mindMap: this.mindMap,
-      draw: this.draw,
       isGeneralization: true
     })
     this._generalizationNodeWidth = this._generalizationNode.width
@@ -79,7 +78,7 @@ function removeGeneralization() {
   }
   // hack修复当激活一个节点时创建概要，然后立即激活创建的概要节点后会重复创建概要节点并且无法删除的问题
   if (this.generalizationBelongNode) {
-    this.draw
+    this.nodeDraw
       .find('.generalization_' + this.generalizationBelongNode.uid)
       .remove()
   }

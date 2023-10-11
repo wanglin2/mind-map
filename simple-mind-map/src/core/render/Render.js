@@ -52,7 +52,6 @@ class Render {
     this.opt = opt
     this.mindMap = opt.mindMap
     this.themeConfig = this.mindMap.themeConfig
-    this.draw = this.mindMap.draw
     // 渲染树，操作过程中修改的都是这里的数据
     this.renderTree = merge({}, this.mindMap.opt.data || {})
     // 是否重新渲染
@@ -624,9 +623,6 @@ class Render {
       node.nodeData.children.push(newNode)
       // 插入子节点时自动展开子节点
       node.nodeData.data.expand = true
-      if (node.isRoot) {
-        node.destroy()
-      }
     })
     // 如果同时对多个节点插入子节点，需要清除原来激活的节点
     if (handleMultiNodes || !openEdit) {
@@ -663,9 +659,6 @@ class Render {
       node.nodeData.children.push(...childList)
       // 插入子节点时自动展开子节点
       node.nodeData.data.expand = true
-      if (node.isRoot) {
-        node.destroy()
-      }
     })
     this.clearActive()
     this.mindMap.render()
@@ -1057,9 +1050,6 @@ class Render {
     })
     this.mindMap.emit('node_active', null, [...this.activeNodeList])
     this.mindMap.render()
-    if (toNode.isRoot) {
-      toNode.destroy()
-    }
   }
 
   //   粘贴节点到节点

@@ -9,10 +9,10 @@ import {
 function createControlNodes() {
   let { associativeLineActiveColor } = this.mindMap.themeConfig
   // 连线
-  this.controlLine1 = this.draw
+  this.controlLine1 = this.associativeLineDraw
     .line()
     .stroke({ color: associativeLineActiveColor, width: 2 })
-  this.controlLine2 = this.draw
+  this.controlLine2 = this.associativeLineDraw
     .line()
     .stroke({ color: associativeLineActiveColor, width: 2 })
   // 控制点
@@ -23,7 +23,7 @@ function createControlNodes() {
 // 创建控制点
 function createOneControlNode(pointKey) {
   let { associativeLineActiveColor } = this.mindMap.themeConfig
-  return this.draw
+  return this.associativeLineDraw
     .circle(this.controlPointDiameter)
     .stroke({ color: associativeLineActiveColor })
     .fill({ color: '#fff' })

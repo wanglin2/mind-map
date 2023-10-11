@@ -7,7 +7,7 @@ import {
 
 // 创建文字节点
 function createText(data) {
-  let g = this.draw.group()
+  let g = this.associativeLineDraw.group()
   const setActive = () => {
     if (
       !this.activeLine ||

@@ -22,7 +22,9 @@ class Node {
     // 渲染实例
     this.renderer = opt.renderer
     // 渲染器
-    this.draw = opt.draw || null
+    this.draw = this.mindMap.draw
+    this.nodeDraw = this.mindMap.nodeDraw
+    this.lineDraw = this.mindMap.lineDraw
     // 样式实例
     this.style = new Style(this)
     // 形状实例
@@ -613,11 +615,11 @@ class Node {
         cursor: 'default'
       })
       this.bindGroupEvent()
-      this.draw.add(this.group)
+      this.nodeDraw.add(this.group)
       this.layout()
       this.update()
     } else {
-      this.draw.add(this.group)
+      this.nodeDraw.add(this.group)
       if (this.needLayout) {
         this.needLayout = false
         this.layout()
@@ -788,7 +790,7 @@ class Node {
     if (childrenLen > this._lines.length) {
       // 创建缺少的线
       new Array(childrenLen - this._lines.length).fill(0).forEach(() => {
-        this._lines.push(this.draw.path())
+        this._lines.push(this.lineDraw.path())
       })
     } else if (childrenLen < this._lines.length) {
       // 删除多余的线

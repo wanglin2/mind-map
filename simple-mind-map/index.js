@@ -48,8 +48,7 @@ class MindMap {
     this.addCss()
 
     // 画布
-    this.svg = SVG().addTo(this.el).size(this.width, this.height)
-    this.draw = this.svg.group()
+    this.initContainer()
 
     // 初始化主题
     this.initTheme()
@@ -79,8 +78,7 @@ class MindMap {
 
     // 视图操作类
     this.view = new View({
-      mindMap: this,
-      draw: this.draw
+      mindMap: this
     })
 
     // 批量执行类
@@ -111,6 +109,46 @@ class MindMap {
     return opt
   }
 
+  // 创建容器元素
+  initContainer() {
+    const { associativeLineIsAlwaysAboveNode } = this.opt
+    // 节点关联线容器
+    const createAssociativeLineDraw = () => {
+      this.associativeLineDraw = this.draw.group()
+      this.associativeLineDraw.addClass('smm-associative-line-container')
+    }
+    // 画布
+    this.svg = SVG().addTo(this.el).size(this.width, this.height)
+    // 容器
+    this.draw = this.svg.group()
+    this.draw.addClass('smm-container')
+    // 节点连线容器
+    this.lineDraw = this.draw.group()
+    this.lineDraw.addClass('smm-line-container')
+    // 默认处于节点下方
+    if (!associativeLineIsAlwaysAboveNode) {
+      createAssociativeLineDraw()
+    }
+    // 节点容器
+    this.nodeDraw = this.draw.group()
+    this.nodeDraw.addClass('smm-node-container')
+    // 关联线始终处于节点上方
+    if (associativeLineIsAlwaysAboveNode) {
+      createAssociativeLineDraw()
+    }
+    // 其他内容的容器
+    this.otherDraw = this.draw.group()
+    this.otherDraw.addClass('smm-other-container')
+  }
+
+  // 清空各容器
+  clearDraw() {
+    this.lineDraw.clear()
+    this.associativeLineDraw.clear()
+    this.nodeDraw.clear()
+    this.otherDraw.clear()
+  }
+
   // 添加必要的css样式到页面
   addCss() {
     this.cssEl = document.createElement('style')
@@ -136,7 +174,7 @@ class MindMap {
   //  重新渲染
   reRender(callback, source = '') {
     this.batchExecution.push('render', () => {
-      this.draw.clear()
+      this.clearDraw()
       this.initTheme()
       this.renderer.reRender = true
       this.renderer.render(callback, source)

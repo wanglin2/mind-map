@@ -13,6 +13,7 @@ class Base {
     this.mindMap = renderer.mindMap
     // 绘图对象
     this.draw = this.mindMap.draw
+    this.lineDraw = this.mindMap.lineDraw
     // 根节点
     this.root = null
     this.lru = new Lru(this.mindMap.opt.maxNodeCacheCount)
