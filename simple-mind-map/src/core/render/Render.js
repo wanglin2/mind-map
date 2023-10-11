@@ -60,6 +60,7 @@ class Render {
     this.isRendering = false
     // 是否存在等待渲染
     this.hasWaitRendering = false
+    this.waitRenderingParams = []
     // 用于缓存节点
     this.nodeCache = {}
     this.lastNodeCache = {}
@@ -332,6 +333,7 @@ class Render {
     if (this.isRendering) {
       // 等待当前渲染完毕后再进行一次渲染
       this.hasWaitRendering = true
+      this.waitRenderingParams = [callback, source]
       return
     }
     this.isRendering = true
@@ -363,8 +365,11 @@ class Render {
         this.mindMap.emit('node_tree_render_end')
         callback && callback()
         if (this.hasWaitRendering) {
+          const params = this.waitRenderingParams
           this.hasWaitRendering = false
-          this.render(callback, source)
+          this.waitRenderingParams = []
+          this.render(...params)
+          
         } else {
           // 触发一次保存，因为修改了渲染树的数据
           if (
