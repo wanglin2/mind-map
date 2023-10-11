@@ -306,7 +306,7 @@ export const shortcutKeyList = [
       },
       {
         icon: 'icondingwei',
-        name: 'Reset',
+        name: 'Back root node',
         value: 'Ctrl + Enter'
       },
       {
