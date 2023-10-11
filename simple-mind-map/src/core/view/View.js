@@ -267,7 +267,7 @@ class View {
     let drawHeight = rect.height / origTransform.scaleY
     let drawRatio = drawWidth / drawHeight
     let { width: elWidth, height: elHeight } =
-      this.mindMap.el.getBoundingClientRect()
+      this.mindMap.elRect
     elWidth = elWidth - fitPadding * 2
     elHeight = elHeight - fitPadding * 2
     let elRatio = elWidth / elHeight

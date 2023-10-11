@@ -35,13 +35,9 @@ class MindMap {
     // 容器元素
     this.el = this.opt.el
     if (!this.el) throw new Error('缺少容器元素el')
-    this.elRect = this.el.getBoundingClientRect()
-
-    // 画布宽高
-    this.width = this.elRect.width
-    this.height = this.elRect.height
-    if (this.width <= 0 || this.height <= 0)
-      throw new Error('容器元素el的宽高不能为0')
+    
+    // 获取容器尺寸位置信息
+    this.getElRectInfo()
 
     // 添加css
     this.cssEl = null
@@ -181,11 +177,18 @@ class MindMap {
     })
   }
 
-  //  容器尺寸变化，调整尺寸
-  resize() {
+  // 获取或更新容器尺寸位置信息
+  getElRectInfo() {
     this.elRect = this.el.getBoundingClientRect()
     this.width = this.elRect.width
     this.height = this.elRect.height
+    if (this.width <= 0 || this.height <= 0)
+      throw new Error('容器元素el的宽高不能为0')
+  }
+
+  //  容器尺寸变化，调整尺寸
+  resize() {
+    this.getElRectInfo()
     this.svg.size(this.width, this.height)
   }
 
@@ -385,7 +388,7 @@ class MindMap {
     const origWidth = svg.width()
     const origHeight = svg.height()
     const origTransform = draw.transform()
-    const elRect = this.el.getBoundingClientRect()
+    const elRect = this.elRect
     // 去除放大缩小的变换效果
     draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY)
     // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
