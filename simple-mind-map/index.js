@@ -35,7 +35,7 @@ class MindMap {
     // 容器元素
     this.el = this.opt.el
     if (!this.el) throw new Error('缺少容器元素el')
-    
+
     // 获取容器尺寸位置信息
     this.getElRectInfo()
 
@@ -233,10 +233,12 @@ class MindMap {
   }
 
   //  设置主题
-  setTheme(theme) {
+  setTheme(theme, notRender = false) {
     this.renderer.clearAllActive()
     this.opt.theme = theme
-    this.render(null, CONSTANTS.CHANGE_THEME)
+    if (!notRender) {
+      this.render(null, CONSTANTS.CHANGE_THEME)
+    }
     this.emit('view_theme_change', theme)
   }
 
@@ -246,13 +248,15 @@ class MindMap {
   }
 
   //  设置主题配置
-  setThemeConfig(config) {
+  setThemeConfig(config, notRender = false) {
     // 计算改变了的配置
     const changedConfig = getObjectChangedProps(this.themeConfig, config)
     this.opt.themeConfig = config
-    // 检查改变的是否是节点大小无关的主题属性
-    let res = checkIsNodeSizeIndependenceConfig(changedConfig)
-    this.render(null, res ? '' : CONSTANTS.CHANGE_THEME)
+    if (!notRender) {
+      // 检查改变的是否是节点大小无关的主题属性
+      let res = checkIsNodeSizeIndependenceConfig(changedConfig)
+      this.render(null, res ? '' : CONSTANTS.CHANGE_THEME)
+    }
   }
 
   //  获取自定义主题配置
@@ -281,7 +285,7 @@ class MindMap {
   }
 
   //  设置布局结构
-  setLayout(layout) {
+  setLayout(layout, notRender = false) {
     // 检查布局配置
     if (!layoutValueList.includes(layout)) {
       layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE
@@ -289,7 +293,9 @@ class MindMap {
     this.opt.layout = layout
     this.view.reset()
     this.renderer.setLayout()
-    this.render(null, CONSTANTS.CHANGE_LAYOUT)
+    if (!notRender) {
+      this.render(null, CONSTANTS.CHANGE_LAYOUT)
+    }
   }
 
   //  执行命令
@@ -409,7 +415,7 @@ class MindMap {
     const markerList = svg.find('marker')
     if (markerList && markerList.length > 0) {
       const id = markerList[0].attr('id')
-      clone.find('marker').forEach((item) => {
+      clone.find('marker').forEach(item => {
         item.attr('id', id)
       })
     }
