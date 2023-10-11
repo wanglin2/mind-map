@@ -252,7 +252,7 @@ class Fishbone extends Base {
         let nodeLineX = item.left
         let offset = node.height / 2 + marginY
         let offsetX = offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg))
-        let line = this.draw.path()
+        let line = this.lineDraw.path()
         if (this.checkIsTop(item)) {
           line.plot(
             `M ${nodeLineX - offsetX},${item.top + item.height + offset} L ${
@@ -273,7 +273,7 @@ class Fishbone extends Base {
       // 从根节点出发的水平线
       let nodeHalfTop = node.top + node.height / 2
       let offset = node.height / 2 + this.getMarginY(node.layerIndex + 1)
-      let line = this.draw.path()
+      let line = this.lineDraw.path()
       line.plot(
         `M ${node.left + node.width},${nodeHalfTop} L ${
           maxx - offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg))
@@ -308,7 +308,7 @@ class Fishbone extends Base {
       })
       // 斜线
       if (len >= 0) {
-        let line = this.draw.path()
+        let line = this.lineDraw.path()
         expandBtnSize = len > 0 ? expandBtnSize : 0
         let lineLength = maxx - node.left - node.width * this.indent
         lineLength = Math.max(lineLength, 0)

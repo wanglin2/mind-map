@@ -261,7 +261,7 @@ class Drag extends Base {
       const lineColor = node.style.merge('lineColor', true)
       // 如果当前被拖拽的节点数量大于1，那么创建一个矩形示意
       if (this.beingDragNodeList.length > 1) {
-        this.clone = this.draw
+        this.clone = this.mindMap.otherDraw
           .rect()
           .size(rectWidth, rectHeight)
           .radius(rectHeight / 2)
@@ -278,12 +278,12 @@ class Drag extends Base {
         if (expandEl) {
           expandEl.remove()
         }
-        this.mindMap.draw.add(this.clone)
+        this.mindMap.otherDraw.add(this.clone)
       }
       this.clone.opacity(dragOpacityConfig.cloneNodeOpacity)
       this.clone.css('z-index', 99999)
       // 同级位置提示元素
-      this.placeholder = this.draw.rect().fill({
+      this.placeholder = this.mindMap.otherDraw.rect().fill({
         color: dragPlaceholderRectFill || lineColor
       })
       // 当前被拖拽的节点的临时设置

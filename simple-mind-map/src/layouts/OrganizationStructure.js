@@ -218,7 +218,7 @@ class OrganizationStructure extends Base {
     minx = Math.min(x1, minx)
     maxx = Math.max(x1, maxx)
     // 父节点的竖线
-    let line1 = this.draw.path()
+    let line1 = this.lineDraw.path()
     node.style.line(line1)
     expandBtnSize = len > 0 && !isRoot ? expandBtnSize : 0
     line1.plot(`M ${x1},${y1 + expandBtnSize} L ${x1},${y1 + s1}`)
@@ -226,7 +226,7 @@ class OrganizationStructure extends Base {
     style && style(line1, node)
     // 水平线
     if (len > 0) {
-      let lin2 = this.draw.path()
+      let lin2 = this.lineDraw.path()
       node.style.line(lin2)
       lin2.plot(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`)
       node._lines.push(lin2)

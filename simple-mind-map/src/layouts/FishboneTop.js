@@ -276,7 +276,7 @@ class Fishbone extends Base {
       })
       // 竖线
       if (len > 0) {
-        let line = this.draw.path()
+        let line = this.lineDraw.path()
         expandBtnSize = len > 0 ? expandBtnSize : 0
         let lineLength = maxx - node.left - node.width * 0.3
         if (
