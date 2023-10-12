@@ -163,6 +163,9 @@ class Render {
       'INSERT_MULTI_CHILD_NODE',
       this.insertMultiChildNode
     )
+    // 插入父节点
+    this.insertParentNode = this.insertParentNode.bind(this)
+    this.mindMap.command.add('INSERT_PARENT_NODE', this.insertParentNode)
     // 上移节点
     this.upNode = this.upNode.bind(this)
     this.mindMap.command.add('UP_NODE', this.upNode)
@@ -263,23 +266,27 @@ class Render {
       this.mindMap.execCommand('INSERT_CHILD_NODE')
     })
     // 插入同级节点
-    this.insertNodeWrap = () => {
+    this.mindMap.keyCommand.addShortcut('Enter', () => {
       if (this.textEdit.showTextEdit) {
         return
       }
       this.mindMap.execCommand('INSERT_NODE')
-    }
-    this.mindMap.keyCommand.addShortcut('Enter', this.insertNodeWrap)
+    })
+    // 插入父节点
+    this.mindMap.keyCommand.addShortcut('Shift+Tab', () => {
+      this.mindMap.execCommand('INSERT_PARENT_NODE')
+    })
     // 插入概要
-    this.mindMap.keyCommand.addShortcut('Control+g', this.addGeneralization)
+    this.mindMap.keyCommand.addShortcut('Control+g', () => {
+      this.mindMap.execCommand('ADD_GENERALIZATION')
+    })
     // 展开/收起节点
     this.toggleActiveExpand = this.toggleActiveExpand.bind(this)
     this.mindMap.keyCommand.addShortcut('/', this.toggleActiveExpand)
     // 删除节点
-    this.removeNodeWrap = () => {
+    this.mindMap.keyCommand.addShortcut('Del|Backspace', () => {
       this.mindMap.execCommand('REMOVE_NODE')
-    }
-    this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNodeWrap)
+    })
     // 节点编辑时某些快捷键会存在冲突，需要暂时去除
     this.mindMap.on('before_show_text_edit', () => {
       this.startTextEdit()
@@ -292,19 +299,27 @@ class Render {
       this.mindMap.execCommand('SELECT_ALL')
     })
     // 一键整理布局
-    this.mindMap.keyCommand.addShortcut('Control+l', this.resetLayout)
+    this.mindMap.keyCommand.addShortcut('Control+l', () => {
+      this.mindMap.execCommand('RESET_LAYOUT', this.resetLayout)
+    })
     // 上移节点
-    this.mindMap.keyCommand.addShortcut('Control+Up', this.upNode)
+    this.mindMap.keyCommand.addShortcut('Control+Up', () => {
+      this.mindMap.execCommand('UP_NODE')
+    })
     // 下移节点
-    this.mindMap.keyCommand.addShortcut('Control+Down', this.downNode)
+    this.mindMap.keyCommand.addShortcut('Control+Down', () => {
+      this.mindMap.execCommand('DOWN_NODE')
+    })
     // 复制节点、剪切节点、粘贴节点的快捷键需开发者自行注册实现，可参考demo
-    this.copy = this.copy.bind(this)
-    this.mindMap.keyCommand.addShortcut('Control+c', this.copy)
+    this.mindMap.keyCommand.addShortcut('Control+c', () => {
+      this.copy()
+    })
     this.mindMap.keyCommand.addShortcut('Control+v', () => {
       this.onPaste()
     })
-    this.cut = this.cut.bind(this)
-    this.mindMap.keyCommand.addShortcut('Control+x', this.cut)
+    this.mindMap.keyCommand.addShortcut('Control+x', () => {
+      this.cut()
+    })
     // 根节点居中显示
     this.mindMap.keyCommand.addShortcut('Control+Enter', () => {
       this.setRootNodeCenter()
@@ -314,17 +329,11 @@ class Render {
   //  开启文字编辑，会禁用回车键和删除键相关快捷键防止冲突
   startTextEdit() {
     this.mindMap.keyCommand.save()
-    // this.mindMap.keyCommand.removeShortcut('Del|Backspace')
-    // this.mindMap.keyCommand.removeShortcut('/')
-    // this.mindMap.keyCommand.removeShortcut('Enter', this.insertNodeWrap)
   }
 
   //  结束文字编辑，会恢复回车键和删除键相关快捷键
   endTextEdit() {
     this.mindMap.keyCommand.restore()
-    // this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNodeWrap)
-    // this.mindMap.keyCommand.addShortcut('/', this.toggleActiveExpand)
-    // this.mindMap.keyCommand.addShortcut('Enter', this.insertNodeWrap)
   }
 
   //   渲染
@@ -369,7 +378,6 @@ class Render {
           this.hasWaitRendering = false
           this.waitRenderingParams = []
           this.render(...params)
-          
         } else {
           // 触发一次保存，因为修改了渲染树的数据
           if (
@@ -498,17 +506,12 @@ class Render {
     appointChildren = addDataToAppointNodes(appointChildren, {
       ...params
     })
-    const needDestroyNodeList = {}
     list.forEach(node => {
       if (node.isGeneralization || node.isRoot) {
         return
       }
       const parent = node.parent
       const isOneLayer = node.layerIndex === 1
-      // 插入二级节点时根节点需要重新渲染
-      if (isOneLayer && !needDestroyNodeList[parent.uid]) {
-        needDestroyNodeList[parent.uid] = parent
-      }
       // 新插入节点的默认文本
       const text = isOneLayer
         ? defaultInsertSecondLevelNodeText
@@ -528,9 +531,6 @@ class Render {
         children: [...createUidForAppointNodes(appointChildren, true)]
       }
       parent.nodeData.children.splice(index + 1, 0, newNodeData)
-    })
-    Object.keys(needDestroyNodeList).forEach(key => {
-      needDestroyNodeList[key].destroy()
     })
     // 如果同时对多个节点插入子节点，需要清除原来激活的节点
     if (handleMultiNodes || !openEdit) {
@@ -556,17 +556,11 @@ class Render {
       isActive: true
     }
     nodeList = addDataToAppointNodes(nodeList, params)
-    const needDestroyNodeList = {}
     list.forEach(node => {
       if (node.isGeneralization || node.isRoot) {
         return
       }
       const parent = node.parent
-      const isOneLayer = node.layerIndex === 1
-      // 插入二级节点时根节点需要重新渲染
-      if (isOneLayer && !needDestroyNodeList[parent.uid]) {
-        needDestroyNodeList[parent.uid] = parent
-      }
       // 计算插入位置
       const index = parent.nodeData.children.findIndex(item => {
         return item.data.uid === node.uid
@@ -576,9 +570,6 @@ class Render {
         true
       )
       parent.nodeData.children.splice(index + 1, 0, ...newNodeList)
-    })
-    Object.keys(needDestroyNodeList).forEach(key => {
-      needDestroyNodeList[key].destroy()
     })
     this.clearActive()
     this.mindMap.render()
@@ -674,6 +665,58 @@ class Render {
       node.nodeData.data.expand = true
     })
     this.clearActive()
+    this.mindMap.render()
+  }
+
+  // 插入父节点
+  insertParentNode(openEdit = true, appointNodes, appointData) {
+    appointNodes = formatDataToArray(appointNodes)
+    if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
+      return
+    }
+    this.textEdit.hideEditTextBox()
+    const {
+      defaultInsertSecondLevelNodeText,
+      defaultInsertBelowSecondLevelNodeText
+    } = this.mindMap.opt
+    const list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
+    const handleMultiNodes = list.length > 1
+    const isRichText = !!this.mindMap.richText
+    const params = {
+      expand: true,
+      richText: isRichText,
+      resetRichText: isRichText,
+      isActive: handleMultiNodes || !openEdit // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
+    }
+    list.forEach(node => {
+      if (node.isGeneralization || node.isRoot) {
+        return
+      }
+      const text =
+        node.layerIndex === 1
+          ? defaultInsertSecondLevelNodeText
+          : defaultInsertBelowSecondLevelNodeText
+      const newNode = {
+        inserting: handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式
+        data: {
+          text: text,
+          uid: createUid(),
+          ...params,
+          ...(appointData || {})
+        },
+        children: [node.nodeData]
+      }
+      const parent = node.parent
+      // 获取当前节点所在位置
+      const index = parent.nodeData.children.findIndex(item => {
+        return item.data.uid === node.uid
+      })
+      parent.nodeData.children.splice(index, 1, newNode)
+    })
+    // 如果同时对多个节点插入子节点，需要清除原来激活的节点
+    if (handleMultiNodes || !openEdit) {
+      this.clearActive()
+    }
     this.mindMap.render()
   }
 
