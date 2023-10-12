@@ -206,4 +206,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/小逗比.png" style="width: 50px;height: 50px;" />
         <span>小逗比</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/天清如愿.jpg" style="width: 50px;height: 50px;" />
+        <span>天清如愿</span>
+    </span>
 </p>
