@@ -20,7 +20,8 @@ import {
   formatDataToArray,
   getNodeIndex,
   createUid,
-  getNodeDataIndex
+  getNodeDataIndex,
+  getNodeIndexInNodeList
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -438,9 +439,7 @@ class Render {
 
   //  检索某个节点在激活列表里的索引
   findActiveNodeIndex(node) {
-    return this.activeNodeList.findIndex(item => {
-      return item.uid === node.uid
-    })
+    return getNodeIndexInNodeList(node, this.activeNodeList)
   }
 
   //  全选
@@ -735,9 +734,7 @@ class Render {
     }
     let parent = node.parent
     let childList = parent.children
-    let index = childList.findIndex(item => {
-      return item.uid === node.uid
-    })
+    let index = getNodeIndexInNodeList(node, childList)
     if (index === -1 || index === 0) {
       return
     }
@@ -762,9 +759,7 @@ class Render {
     }
     let parent = node.parent
     let childList = parent.children
-    let index = childList.findIndex(item => {
-      return item.uid === node.uid
-    })
+    let index = getNodeIndexInNodeList(node, childList)
     if (index === -1 || index === childList.length - 1) {
       return
     }
@@ -942,9 +937,7 @@ class Render {
       // 移动节点
       let nodeParent = item.parent
       let nodeBorthers = nodeParent.children
-      let nodeIndex = nodeBorthers.findIndex(item2 => {
-        return item.uid === item2.uid
-      })
+      let nodeIndex = getNodeIndexInNodeList(item, nodeBorthers)
       if (nodeIndex === -1) {
         return
       }
@@ -954,9 +947,7 @@ class Render {
       // 目标节点
       let existParent = exist.parent
       let existBorthers = existParent.children
-      let existIndex = existBorthers.findIndex(item2 => {
-        return item2.uid === exist.uid
-      })
+      let existIndex = getNodeIndexInNodeList(exist, existBorthers)
       if (existIndex === -1) {
         return
       }
@@ -1085,7 +1076,7 @@ class Render {
     ) {
       const node = this.activeNodeList[0]
       const broList = node.parent.children
-      const nodeIndex = broList.findIndex(item => item.uid === node.uid)
+      const nodeIndex = getNodeIndexInNodeList(node, broList)
       // 如果后面有兄弟节点
       if (nodeIndex < broList.length - 1) {
         needActiveNode = broList[nodeIndex + 1]

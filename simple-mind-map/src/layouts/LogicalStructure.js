@@ -1,5 +1,5 @@
 import Base from './Base'
-import { walk, asyncRun } from '../utils'
+import { walk, asyncRun, getNodeIndexInNodeList } from '../utils'
 
 //  逻辑结构图
 class LogicalStructure extends Base {
@@ -124,9 +124,7 @@ class LogicalStructure extends Base {
   updateBrothers(node, addHeight) {
     if (node.parent) {
       let childrenList = node.parent.children
-      let index = childrenList.findIndex(item => {
-        return item.uid === node.uid
-      })
+      let index = getNodeIndexInNodeList(node, childrenList)
       childrenList.forEach((item, _index) => {
         if (item.uid === node.uid || item.hasCustomPosition()) {
           // 适配自定义位置

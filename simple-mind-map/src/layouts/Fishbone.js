@@ -1,5 +1,5 @@
 import Base from './Base'
-import { walk, asyncRun, degToRad } from '../utils'
+import { walk, asyncRun, degToRad, getNodeIndexInNodeList } from '../utils'
 import { CONSTANTS } from '../constants/constant'
 import utils from './fishboneUtils'
 
@@ -193,9 +193,7 @@ class Fishbone extends Base {
   updateBrothersTop(node, addHeight) {
     if (node.parent && !node.parent.isRoot) {
       let childrenList = node.parent.children
-      let index = childrenList.findIndex(item => {
-        return item.uid === node.uid
-      })
+      let index = getNodeIndexInNodeList(node, childrenList)
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
           // 适配自定义位置
