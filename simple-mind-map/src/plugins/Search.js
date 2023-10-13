@@ -73,7 +73,7 @@ class Search {
     this.matchNodeList = []
     this.currentIndex = -1
     bfsWalk(this.mindMap.renderer.root, node => {
-      let { richText, text } = node.nodeData.data
+      let { richText, text } = node.getData()
       if (richText) {
         text = getTextFromHtml(text)
       }
@@ -115,7 +115,7 @@ class Search {
     if (!currentNode) return
     let text = this.getReplacedText(currentNode, this.searchText, replaceText)
     this.notResetSearchText = true
-    currentNode.setText(text, currentNode.nodeData.data.richText, true)
+    currentNode.setText(text, currentNode.getData('richText'), true)
     this.matchNodeList = this.matchNodeList.filter(node => {
       return currentNode !== node
     })
@@ -143,7 +143,7 @@ class Search {
         node,
         {
           text,
-          resetRichText: !!node.nodeData.data.richText
+          resetRichText: !!node.getData('richText')
         },
         true
       )
@@ -155,7 +155,7 @@ class Search {
 
   // 获取某个节点替换后的文本
   getReplacedText(node, searchText, replaceText) {
-    let { richText, text } = node.nodeData.data
+    let { richText, text } = node.getData()
     if (richText) {
       return replaceHtmlText(text, searchText, replaceText)
     } else {

@@ -53,7 +53,7 @@ class Painter {
     )
       return
     const style = {}
-    const painterNodeData = this.painterNode.nodeData.data
+    const painterNodeData = this.painterNode.getData()
     Object.keys(painterNodeData).forEach(key => {
       if (checkIsNodeStyleDataKey(key)) {
         style[key] = painterNodeData[key]

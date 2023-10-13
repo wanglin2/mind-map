@@ -236,17 +236,17 @@ class RichText {
         this.textEditNode.style.borderRadius = (node.height || 50) + 'px'
       }
     }
-    if (!node.nodeData.data.richText) {
+    if (!node.getData('richText')) {
       // 还不是富文本的情况
       let text = ''
-      if (!isUndef(node.nodeData.data.text)) {
-        text = String(node.nodeData.data.text).split(/\n/gim).join('<br>')
+      if (!isUndef(node.getData('text'))) {
+        text = String(node.getData('text')).split(/\n/gim).join('<br>')
       }
       let html = `<p>${text}</p>`
       this.textEditNode.innerHTML = this.cacheEditingText || html
     } else {
       this.textEditNode.innerHTML =
-        this.cacheEditingText || node.nodeData.data.text
+        this.cacheEditingText || node.getData('text')
     }
     this.initQuillEditor()
     document.querySelector('.ql-editor').style.minHeight = originHeight + 'px'
@@ -256,7 +256,7 @@ class RichText {
     this.focus(
       isInserting || (selectTextOnEnterEditText && !isFromKeyDown) ? 0 : null
     )
-    if (!node.nodeData.data.richText) {
+    if (!node.getData('richText')) {
       // 如果是非富文本的情况，需要手动应用文本样式
       this.setTextStyleIfNotRichText(node)
     }

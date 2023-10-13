@@ -73,7 +73,7 @@ class CatalogOrganization extends Base {
       null,
       (node, parent, isRoot, layerIndex) => {
         if (
-          node.nodeData.data.expand &&
+          node.getData('expand') &&
           node.children &&
           node.children.length
         ) {
@@ -114,7 +114,7 @@ class CatalogOrganization extends Base {
       this.root,
       null,
       (node, parent, isRoot, layerIndex) => {
-        if (!node.nodeData.data.expand) {
+        if (!node.getData('expand')) {
           return
         }
         // 调整left

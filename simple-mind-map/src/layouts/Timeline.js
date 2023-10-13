@@ -81,7 +81,7 @@ class Timeline extends Base {
       null,
       (node, parent, isRoot, layerIndex, index) => {
         if (
-          node.nodeData.data.expand &&
+          node.getData('expand') &&
           node.children &&
           node.children.length
         ) {
@@ -122,7 +122,7 @@ class Timeline extends Base {
       this.root,
       null,
       (node, parent, isRoot, layerIndex) => {
-        if (!node.nodeData.data.expand) {
+        if (!node.getData('expand')) {
           return
         }
         // 调整left

@@ -117,7 +117,7 @@ class MindMap extends Base {
       null,
       (node, parent, isRoot, layerIndex) => {
         if (
-          node.nodeData.data.expand &&
+          node.getData('expand') &&
           node.children &&
           node.children.length
         ) {
@@ -148,7 +148,7 @@ class MindMap extends Base {
       this.root,
       null,
       (node, parent, isRoot, layerIndex) => {
-        if (!node.nodeData.data.expand) {
+        if (!node.getData('expand')) {
           return
         }
         // 判断子节点所占的高度之和是否大于该节点自身，大于则需要调整位置

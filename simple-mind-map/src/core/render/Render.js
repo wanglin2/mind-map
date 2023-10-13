@@ -448,7 +448,7 @@ class Render {
       this.root,
       null,
       node => {
-        if (!node.nodeData.data.isActive) {
+        if (!node.getData('isActive')) {
           this.addNodeToActiveList(node)
         }
       },
@@ -625,7 +625,9 @@ class Render {
       }
       node.nodeData.children.push(newNode)
       // 插入子节点时自动展开子节点
-      node.nodeData.data.expand = true
+      node.setData({
+        expand: true
+      })
     })
     // 如果同时对多个节点插入子节点，需要清除原来激活的节点
     if (handleMultiNodes || !openEdit) {
@@ -661,7 +663,9 @@ class Render {
       childList = createUidForAppointNodes(childList, true)
       node.nodeData.children.push(...childList)
       // 插入子节点时自动展开子节点
-      node.nodeData.data.expand = true
+      node.setData({
+        expand: true
+      })
     })
     this.clearActiveNodeList()
     this.mindMap.render()
@@ -961,7 +965,9 @@ class Render {
         (node.layerIndex === 1 && toNode.layerIndex !== 1) ||
         (node.layerIndex !== 1 && toNode.layerIndex === 1)
       if (nodeLayerChanged) {
-        node.nodeData.data.resetRichText = true
+        node.setData({
+          resetRichText: true
+        })
       }
     }
   }
@@ -1331,7 +1337,7 @@ class Render {
     this.mindMap.execCommand(
       'SET_NODE_EXPAND',
       node,
-      !node.nodeData.data.expand
+      !node.getData('expand')
     )
   }
 
@@ -1410,7 +1416,7 @@ class Render {
       return
     }
     this.activeNodeList.forEach(node => {
-      if (node.nodeData.data.generalization || node.isRoot) {
+      if (node.getData('generalization') || node.isRoot) {
         return
       }
       this.mindMap.execCommand('SET_NODE_DATA', node, {
@@ -1429,7 +1435,7 @@ class Render {
       return
     }
     this.activeNodeList.forEach(node => {
-      if (!node.nodeData.data.generalization) {
+      if (!node.getData('generalization')) {
         return
       }
       this.mindMap.execCommand('SET_NODE_DATA', node, {
@@ -1485,7 +1491,7 @@ class Render {
 
   // 定位到指定节点
   goTargetNode(node, callback = () => {}) {
-    let uid = typeof node === 'string' ? node : node.nodeData.data.uid
+    let uid = typeof node === 'string' ? node : node.getData('uid')
     if (!uid) return
     this.expandToNodeUid(uid, () => {
       let targetNode = this.findNodeByUid(uid)
@@ -1571,7 +1577,7 @@ class Render {
   findNodeByUid(uid) {
     let res = null
     walk(this.root, null, node => {
-      if (node.nodeData.data.uid === uid) {
+      if (node.getData('uid') === uid) {
         res = node
         return true
       }
