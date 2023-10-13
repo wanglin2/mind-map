@@ -412,14 +412,14 @@ class Render {
   //  清除当前激活的节点列表
   clearActiveNodeList() {
     this.activeNodeList.forEach(item => {
-      this.setNodeActive(item, false)
+      this.mindMap.execCommand('SET_NODE_ACTIVE', item, false)
     })
     this.activeNodeList = []
   }
 
-  //   添加节点到激活列表里
-  addActiveNode(node) {
-    let index = this.findActiveNodeIndex(node)
+  // 添加节点到激活列表里
+  addNodeToActiveList(node) {
+    const index = this.findActiveNodeIndex(node)
     if (index === -1) {
       this.activeNodeList.push(node)
     }
@@ -449,7 +449,7 @@ class Render {
       node => {
         if (!node.nodeData.data.isActive) {
           node.nodeData.data.isActive = true
-          this.addActiveNode(node)
+          this.addNodeToActiveList(node)
           // 激活节点需要显示展开收起按钮
           node.showExpandBtn()
           setTimeout(() => {
@@ -1030,7 +1030,7 @@ class Render {
     // 激活被删除节点的兄弟节点或父节点
     if (needActiveNode) {
       this.activeNodeList.push(needActiveNode)
-      this.setNodeActive(needActiveNode, true)
+      this.mindMap.execCommand('SET_NODE_ACTIVE', needActiveNode, true)
       needActiveNode = null
     }
     this.mindMap.emit('node_active', null, [...this.activeNodeList])

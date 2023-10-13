@@ -115,7 +115,7 @@ class Drag extends Base {
     let nextNodeUid = this.nextNode ? this.nextNode.nodeData.data.uid : ''
     // 存在重叠子节点，则移动作为其子节点
     if (this.overlapNode) {
-      this.mindMap.renderer.setNodeActive(this.overlapNode, false)
+      this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, false)
       this.mindMap.execCommand(
         'MOVE_NODE_TO',
         this.beingDragNodeList,
@@ -123,7 +123,7 @@ class Drag extends Base {
       )
     } else if (this.prevNode) {
       // 存在前一个相邻节点，作为其下一个兄弟节点
-      this.mindMap.renderer.setNodeActive(this.prevNode, false)
+      this.mindMap.execCommand('SET_NODE_ACTIVE', this.prevNode, false)
       this.mindMap.execCommand(
         'INSERT_AFTER',
         this.beingDragNodeList,
@@ -131,7 +131,7 @@ class Drag extends Base {
       )
     } else if (this.nextNode) {
       // 存在下一个相邻节点，作为其前一个兄弟节点
-      this.mindMap.renderer.setNodeActive(this.nextNode, false)
+      this.mindMap.execCommand('SET_NODE_ACTIVE', this.nextNode, false)
       this.mindMap.execCommand(
         'INSERT_BEFORE',
         this.beingDragNodeList,
@@ -318,7 +318,7 @@ class Drag extends Base {
     this.placeholder.size(0, 0)
     this.nodeList.forEach(node => {
       if (node.nodeData.data.isActive) {
-        this.mindMap.renderer.setNodeActive(node, false)
+        this.mindMap.execCommand('SET_NODE_ACTIVE', node, false)
       }
       if (this.overlapNode || (this.prevNode && this.nextNode)) {
         return
@@ -353,7 +353,7 @@ class Drag extends Base {
       }
     })
     if (this.overlapNode) {
-      this.mindMap.renderer.setNodeActive(this.overlapNode, true)
+      this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, true)
     }
   }
 

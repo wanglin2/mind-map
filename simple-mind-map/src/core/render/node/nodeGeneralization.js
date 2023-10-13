@@ -28,7 +28,7 @@ function createGeneralizationNode() {
     this._generalizationNodeHeight = this._generalizationNode.height
     this._generalizationNode.generalizationBelongNode = this
     if (this.nodeData.data.generalization.isActive) {
-      this.renderer.addActiveNode(this._generalizationNode)
+      this.renderer.addNodeToActiveList(this._generalizationNode)
     }
   }
 }

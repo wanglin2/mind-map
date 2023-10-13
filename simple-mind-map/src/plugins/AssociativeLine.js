@@ -365,7 +365,7 @@ class AssociativeLine {
     this.overlapNode = null
     bfsWalk(this.mindMap.renderer.root, node => {
       if (node.nodeData.data.isActive) {
-        this.mindMap.renderer.setNodeActive(node, false)
+        this.mindMap.execCommand('SET_NODE_ACTIVE', node, false)
       }
       if (node.uid === this.creatingStartNode.uid || this.overlapNode) {
         return
@@ -378,7 +378,7 @@ class AssociativeLine {
       }
     })
     if (this.overlapNode && !this.overlapNode.nodeData.data.isActive) {
-      this.mindMap.renderer.setNodeActive(this.overlapNode, true)
+      this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, true)
     }
   }
 
@@ -387,7 +387,7 @@ class AssociativeLine {
     if (this.creatingStartNode.uid === node.uid) return
     this.addLine(this.creatingStartNode, node)
     if (this.overlapNode && this.overlapNode.nodeData.data.isActive) {
-      this.mindMap.renderer.setNodeActive(this.overlapNode, false)
+      this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, false)
     }
     this.isCreatingLine = false
     this.creatingStartNode = null
