@@ -129,7 +129,7 @@ class Node {
     })
     // 协同相关
     if (this.mindMap.cooperate) {
-      Object.keys(nodeCooperateMethods).forEach((item) => {
+      Object.keys(nodeCooperateMethods).forEach(item => {
         this[item] = nodeCooperateMethods[item].bind(this)
       })
     }
@@ -491,10 +491,16 @@ class Node {
       ) {
         return
       }
-      if (this.nodeData.data.isActive) {
+      // 如果有且只有当前节点激活了，那么不需要重新激活
+      if (
+        !(
+          this.nodeData.data.isActive &&
+          this.renderer.activeNodeList.length === 1
+        )
+      ) {
         this.renderer.clearActiveNodeList()
+        this.active(e)
       }
-      this.active(e)
       this.mindMap.emit('node_contextmenu', e, this)
     })
   }
