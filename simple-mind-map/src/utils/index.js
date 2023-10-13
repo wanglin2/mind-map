@@ -803,6 +803,15 @@ export const getNodeIndex = node => {
     : 0
 }
 
+//  获取节点在同级里的位置索引
+export const getNodeDataIndex = node => {
+  return node.parent
+    ? node.parent.nodeData.children.findIndex(item => {
+      return item.data.uid === node.uid
+    })
+    : 0
+}
+
 // 根据内容生成颜色
 export const generateColorByContent = str => {
   let hash = 0

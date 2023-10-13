@@ -19,7 +19,8 @@ import {
   createUidForAppointNodes,
   formatDataToArray,
   getNodeIndex,
-  createUid
+  createUid,
+  getNodeDataIndex
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -182,6 +183,9 @@ class Render {
     // 删除节点
     this.removeNode = this.removeNode.bind(this)
     this.mindMap.command.add('REMOVE_NODE', this.removeNode)
+    // 仅删除当前节点
+    this.removeCurrentNode = this.removeCurrentNode.bind(this)
+    this.mindMap.command.add('REMOVE_CURRENT_NODE', this.removeCurrentNode)
     // 粘贴节点
     this.pasteNode = this.pasteNode.bind(this)
     this.mindMap.command.add('PASTE_NODE', this.pasteNode)
@@ -286,6 +290,10 @@ class Render {
     // 删除节点
     this.mindMap.keyCommand.addShortcut('Del|Backspace', () => {
       this.mindMap.execCommand('REMOVE_NODE')
+    })
+    // 仅删除当前节点
+    this.mindMap.keyCommand.addShortcut('Shift+Backspace', () => {
+      this.mindMap.execCommand('REMOVE_CURRENT_NODE')
     })
     // 节点编辑时某些快捷键会存在冲突，需要暂时去除
     this.mindMap.on('before_show_text_edit', () => {
@@ -999,27 +1007,7 @@ class Render {
       root.nodeData.children = []
     } else {
       // 如果只选中了一个节点，删除后激活其兄弟节点或者父节点
-      if (
-        this.activeNodeList.length === 1 &&
-        !this.activeNodeList[0].isGeneralization &&
-        this.mindMap.opt.deleteNodeActive
-      ) {
-        const node = this.activeNodeList[0]
-        const broList = node.parent.children
-        const nodeIndex = broList.findIndex(item => item.uid === node.uid)
-        // 如果后面有兄弟节点
-        if (nodeIndex < broList.length - 1) {
-          needActiveNode = broList[nodeIndex + 1]
-        } else {
-          // 如果前面有兄弟节点
-          if (nodeIndex > 0) {
-            needActiveNode = broList[nodeIndex - 1]
-          } else {
-            // 没有兄弟节点
-            needActiveNode = node.parent
-          }
-        }
-      }
+      needActiveNode = this.getNextActiveNode()
       for (let i = 0; i < list.length; i++) {
         let node = list[i]
         if (isAppointNodes) list.splice(i, 1)
@@ -1047,6 +1035,75 @@ class Render {
     }
     this.mindMap.emit('node_active', null, [...this.activeNodeList])
     this.mindMap.render()
+  }
+
+  // 仅删除当前节点
+  removeCurrentNode(appointNodes = []) {
+    appointNodes = formatDataToArray(appointNodes)
+    if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
+      return
+    }
+    // 删除节点后需要激活的节点，如果只选中了一个节点，删除后激活其兄弟节点或者父节点
+    let needActiveNode = this.getNextActiveNode()
+    let isAppointNodes = appointNodes.length > 0
+    let list = isAppointNodes ? appointNodes : this.activeNodeList
+    list = list.filter(node => {
+      return !node.isRoot
+    })
+    for (let i = 0; i < list.length; i++) {
+      let node = list[i]
+      if (node.isGeneralization) {
+        // 删除概要节点
+        this.setNodeData(node.generalizationBelongNode, {
+          generalization: null
+        })
+        node.generalizationBelongNode.update()
+      } else {
+        const parent = node.parent
+        const index = getNodeDataIndex(node)
+        parent.nodeData.children.splice(
+          index,
+          1,
+          ...(node.nodeData.children || [])
+        )
+      }
+    }
+    this.activeNodeList = []
+    // 激活被删除节点的兄弟节点或父节点
+    if (needActiveNode) {
+      this.activeNodeList.push(needActiveNode)
+      this.mindMap.execCommand('SET_NODE_ACTIVE', needActiveNode, true)
+      needActiveNode = null
+    }
+    this.mindMap.emit('node_active', null, [...this.activeNodeList])
+    this.mindMap.render()
+  }
+
+  // 计算下一个可激活的节点
+  getNextActiveNode() {
+    let needActiveNode = null
+    if (
+      this.activeNodeList.length === 1 &&
+      !this.activeNodeList[0].isGeneralization &&
+      this.mindMap.opt.deleteNodeActive
+    ) {
+      const node = this.activeNodeList[0]
+      const broList = node.parent.children
+      const nodeIndex = broList.findIndex(item => item.uid === node.uid)
+      // 如果后面有兄弟节点
+      if (nodeIndex < broList.length - 1) {
+        needActiveNode = broList[nodeIndex + 1]
+      } else {
+        // 如果前面有兄弟节点
+        if (nodeIndex > 0) {
+          needActiveNode = broList[nodeIndex - 1]
+        } else {
+          // 没有兄弟节点
+          needActiveNode = node.parent
+        }
+      }
+    }
+    return needActiveNode
   }
 
   //  移除某个指定节点
