@@ -1218,13 +1218,15 @@ class Render {
     this.setNodeData(node, {
       isActive: active
     })
-    // 切换激活状态，需要切换展开收起按钮的显隐
-    if (active) {
-      node.showExpandBtn()
-    } else {
-      node.hideExpandBtn()
+    if (node.group) {
+      // 切换激活状态，需要切换展开收起按钮的显隐
+      if (active) {
+        node.showExpandBtn()
+      } else {
+        node.hideExpandBtn()
+      }
+      node.updateNodeActive()
     }
-    node.updateNodeActive()
   }
 
   //  设置节点是否展开
