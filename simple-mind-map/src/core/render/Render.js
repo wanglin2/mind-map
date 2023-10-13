@@ -1002,9 +1002,7 @@ class Render {
     this.activeNodeList = []
     // 激活被删除节点的兄弟节点或父节点
     if (needActiveNode) {
-      this.activeNodeList.push(needActiveNode)
-      this.mindMap.execCommand('SET_NODE_ACTIVE', needActiveNode, true)
-      needActiveNode = null
+      this.addNodeToActiveList(needActiveNode)
     }
     this.mindMap.emit('node_active', null, [...this.activeNodeList])
     this.mindMap.render()
@@ -1048,9 +1046,7 @@ class Render {
     this.activeNodeList = []
     // 激活被删除节点的兄弟节点或父节点
     if (needActiveNode) {
-      this.activeNodeList.push(needActiveNode)
-      this.mindMap.execCommand('SET_NODE_ACTIVE', needActiveNode, true)
-      needActiveNode = null
+      this.addNodeToActiveList(needActiveNode)
     }
     this.mindMap.emit('node_active', null, [...this.activeNodeList])
     this.mindMap.render()
