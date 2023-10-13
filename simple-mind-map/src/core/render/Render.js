@@ -22,7 +22,8 @@ import {
   createUid,
   getNodeDataIndex,
   getNodeIndexInNodeList,
-  setDataToClipboard
+  setDataToClipboard,
+  getDataFromClipboard
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -805,23 +806,12 @@ class Render {
     // 读取剪贴板的文字和图片
     let text = null
     let img = null
-    if (navigator.clipboard) {
-      try {
-        text = await navigator.clipboard.readText()
-        const items = await navigator.clipboard.read()
-        if (items && items.length > 0) {
-          for (const clipboardItem of items) {
-            for (const type of clipboardItem.types) {
-              if (/^image\//.test(type)) {
-                img = await clipboardItem.getType(type)
-                break
-              }
-            }
-          }
-        }
-      } catch (error) {
-        errorHandler(ERROR_TYPES.READ_CLIPBOARD_ERROR, error)
-      }
+    try {
+      const res = await getDataFromClipboard()
+      text = res.text
+      img = res.img
+    } catch (error) {
+      errorHandler(ERROR_TYPES.READ_CLIPBOARD_ERROR, error)
     }
     // 检查剪切板数据是否有变化
     // 通过图片大小来判断图片是否发生变化，可能是不准确的，但是目前没有其他好方法
