@@ -210,6 +210,11 @@ export const shortcutKeyList = [
         value: 'Enter'
       },
       {
+        icon: 'icondodeparent',
+        name: 'Insert parent node',
+        value: 'Shift + Tab'
+      },
+      {
         icon: 'iconshangyi',
         name: 'Move up node',
         value: 'Ctrl + ↑'
@@ -233,6 +238,11 @@ export const shortcutKeyList = [
         icon: 'iconshanchu',
         name: 'Delete node',
         value: 'Delete | Backspace'
+      },
+      {
+        icon: 'iconshanchu',
+        name: 'Delete current node',
+        value: 'Shift + Backspace'
       },
       {
         icon: 'iconfuzhi',

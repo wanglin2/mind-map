@@ -24,6 +24,14 @@
       </div>
       <div
         class="item"
+        @click="exec('INSERT_PARENT_NODE')"
+        :class="{ disabled: insertNodeBtnDisabled }"
+      >
+        {{ $t('contextmenu.insertParentNode') }}
+        <span class="desc">Shift + Tab</span>
+      </div>
+      <div
+        class="item"
         @click="exec('ADD_GENERALIZATION')"
         :class="{ disabled: insertNodeBtnDisabled }"
       >
@@ -49,6 +57,10 @@
       <div class="item danger" @click="exec('REMOVE_NODE')">
         {{ $t('contextmenu.deleteNode') }}
         <span class="desc">Delete</span>
+      </div>
+      <div class="item danger" @click="exec('REMOVE_CURRENT_NODE')">
+        {{ $t('contextmenu.deleteCurrentNode') }}
+        <span class="desc">Shift + Backspace</span>
       </div>
       <div
         class="item"
@@ -332,7 +344,7 @@ export default {
 
 <style lang="less" scoped>
 .listBox {
-  width: 200px;
+  width: 240px;
   background: #fff;
   box-shadow: 0 4px 12px 0 hsla(0, 0%, 69%, 0.5);
   border-radius: 4px;
