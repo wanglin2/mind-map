@@ -344,7 +344,7 @@ export default {
 
 <style lang="less" scoped>
 .listBox {
-  width: 240px;
+  width: 250px;
   background: #fff;
   box-shadow: 0 4px 12px 0 hsla(0, 0%, 69%, 0.5);
   border-radius: 4px;
