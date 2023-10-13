@@ -59,10 +59,12 @@ export default {
   contextmenu: {
     insertSiblingNode: 'Insert sibling node',
     insertChildNode: 'Insert child node',
+    insertParentNode: 'Insert parent node',
     insertSummary: 'Insert summary',
     moveUpNode: 'Move up node',
     moveDownNode: 'Move down node',
     deleteNode: 'Delete node',
+    deleteCurrentNode: 'Only del cur node',
     copyNode: 'Copy node',
     cutNode: 'Cut node',
     pasteNode: 'Paste node',

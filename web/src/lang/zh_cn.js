@@ -59,10 +59,12 @@ export default {
   contextmenu: {
     insertSiblingNode: '插入同级节点',
     insertChildNode: '插入子级节点',
+    insertParentNode: '插入父节点',
     insertSummary: '插入概要',
     moveUpNode: '上移节点',
     moveDownNode: '下移节点',
     deleteNode: '删除节点',
+    deleteCurrentNode: '仅删除当前节点',
     copyNode: '复制节点',
     cutNode: '剪切节点',
     pasteNode: '粘贴节点',
