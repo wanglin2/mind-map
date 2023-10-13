@@ -520,9 +520,7 @@ class Render {
         ? defaultInsertSecondLevelNodeText
         : defaultInsertBelowSecondLevelNodeText
       // 计算插入位置
-      const index = parent.nodeData.children.findIndex(item => {
-        return item.data.uid === node.uid
-      })
+      const index = getNodeDataIndex(node)
       const newNodeData = {
         inserting: handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式,
         data: {
@@ -565,9 +563,7 @@ class Render {
       }
       const parent = node.parent
       // 计算插入位置
-      const index = parent.nodeData.children.findIndex(item => {
-        return item.data.uid === node.uid
-      })
+      const index = getNodeDataIndex(node)
       const newNodeList = createUidForAppointNodes(
         simpleDeepClone(nodeList),
         true
@@ -711,9 +707,7 @@ class Render {
       }
       const parent = node.parent
       // 获取当前节点所在位置
-      const index = parent.nodeData.children.findIndex(item => {
-        return item.data.uid === node.uid
-      })
+      const index = getNodeDataIndex(node)
       parent.nodeData.children.splice(index, 1, newNode)
     })
     // 如果同时对多个节点插入子节点，需要清除原来激活的节点
