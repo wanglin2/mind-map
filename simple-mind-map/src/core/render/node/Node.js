@@ -492,7 +492,7 @@ class Node {
         return
       }
       if (this.nodeData.data.isActive) {
-        this.renderer.clearActive()
+        this.renderer.clearActiveNodeList()
       }
       this.active(e)
       this.mindMap.emit('node_contextmenu', e, this)
@@ -509,7 +509,7 @@ class Node {
       return
     }
     this.mindMap.emit('before_node_active', this, this.renderer.activeNodeList)
-    this.renderer.clearActive()
+    this.renderer.clearActiveNodeList()
     this.mindMap.execCommand('SET_NODE_ACTIVE', this, true)
     this.renderer.addActiveNode(this)
     this.mindMap.emit('node_active', this, [...this.renderer.activeNodeList])
