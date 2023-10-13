@@ -494,7 +494,7 @@ class RichText {
       })
     } else {
       let data = this.richTextStyleToNormalStyle(config)
-      this.mindMap.renderer.setNodeData(this.node, data)
+      this.mindMap.execCommand('SET_NODE_DATA', this.node, data)
     }
   }
 
