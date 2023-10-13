@@ -222,7 +222,7 @@ class Drag extends Base {
       // 创建克隆节点
       this.createCloneNode()
       // 清除当前所有激活的节点
-      this.mindMap.renderer.clearAllActive()
+      this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
     }
   }
 
