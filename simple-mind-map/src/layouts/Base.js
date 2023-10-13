@@ -91,7 +91,7 @@ class Base {
       // 数据上没有保存节点引用，但是通过uid找到了缓存的节点，也可以复用
       newNode = this.lru.get(data.data.uid)
       // 保存该节点上一次的数据
-      let lastData = JSON.stringify(newNode.nodeData.data)
+      let lastData = JSON.stringify(newNode.getData())
       let isLayerTypeChange = this.checkIsLayerTypeChange(
         newNode.layerIndex,
         layerIndex
@@ -132,7 +132,9 @@ class Base {
     }
     // 如果当前节点在激活节点列表里，那么添加上激活的状态
     if (this.mindMap.renderer.findActiveNodeIndex(newNode) !== -1) {
-      newNode.nodeData.data.isActive = true
+      newNode.setData({
+        isActive: true
+      })
     }
     // 根节点
     if (isRoot) {
@@ -298,12 +300,12 @@ class Base {
           let { left, right, top, bottom } = walk(child)
           // 概要内容的宽度
           let generalizationWidth =
-            child.checkHasGeneralization() && child.nodeData.data.expand
+            child.checkHasGeneralization() && child.getData('expand')
               ? child._generalizationNodeWidth + generalizationNodeMargin
               : 0
           // 概要内容的高度
           let generalizationHeight =
-            child.checkHasGeneralization() && child.nodeData.data.expand
+            child.checkHasGeneralization() && child.getData('expand')
               ? child._generalizationNodeHeight + generalizationNodeMargin
               : 0
           if (left - (dir === 'h' ? generalizationWidth : 0) < _left) {

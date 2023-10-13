@@ -173,7 +173,7 @@ export default class TextEdit {
     let scale = this.mindMap.view.scale
     let lineHeight = node.style.merge('lineHeight')
     let fontSize = node.style.merge('fontSize')
-    let textLines = (this.cacheEditingText || node.nodeData.data.text)
+    let textLines = (this.cacheEditingText || node.getData('text'))
       .split(/\n/gim)
       .map(item => {
         return htmlEscape(item)

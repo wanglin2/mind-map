@@ -12,14 +12,14 @@ import { CONSTANTS, commonCaches } from '../../../constants/constant'
 
 //  创建图片节点
 function createImgNode() {
-  let img = this.nodeData.data.image
+  let img = this.getData('image')
   if (!img) {
     return
   }
   let imgSize = this.getImgShowSize()
   let node = new Image().load(img).size(...imgSize)
-  if (this.nodeData.data.imageTitle) {
-    node.attr('title', this.nodeData.data.imageTitle)
+  if (this.getData('imageTitle')) {
+    node.attr('title', this.getData('imageTitle'))
   }
   node.on('dblclick', e => {
     this.mindMap.emit('node_img_dblclick', this, e)
@@ -42,7 +42,7 @@ function createImgNode() {
 
 //  获取图片显示宽高
 function getImgShowSize() {
-  const { custom, width, height } = this.nodeData.data.imageSize
+  const { custom, width, height } = this.getData('imageSize')
   // 如果是自定义了图片的宽高，那么不受最大宽高限制
   if (custom) return [width, height]
   return resizeImgSize(
@@ -55,7 +55,7 @@ function getImgShowSize() {
 
 //  创建icon节点
 function createIconNode() {
-  let _data = this.nodeData.data
+  let _data = this.getData()
   if (!_data.icon || _data.icon.length <= 0) {
     return []
   }
@@ -91,7 +91,7 @@ function createRichTextNode() {
   let g = new G()
   // 重新设置富文本节点内容
   let recoverText = false
-  if (this.nodeData.data.resetRichText) {
+  if (this.getData('resetRichText')) {
     delete this.nodeData.data.resetRichText
     recoverText = true
   }
@@ -102,7 +102,7 @@ function createRichTextNode() {
     }
   }
   if (recoverText) {
-    let text = this.nodeData.data.text
+    let text = this.getData('text')
     // 判断节点内容是否是富文本
     let isRichText = checkIsRichText(text)
     // 样式字符串
@@ -116,9 +116,11 @@ function createRichTextNode() {
       // 非富文本
       text = `<p><span style="${style}">${text}</span></p>`
     }
-    this.nodeData.data.text = text
+    this.setData({
+      text: text
+    })
   }
-  let html = `<div>${this.nodeData.data.text}</div>`
+  let html = `<div>${this.getData('text')}</div>`
   if (!commonCaches.measureRichtextNodeTextSizeEl) {
     commonCaches.measureRichtextNodeTextSizeEl = document.createElement('div')
     commonCaches.measureRichtextNodeTextSizeEl.style.position = 'fixed'
@@ -157,7 +159,7 @@ function createRichTextNode() {
 
 //  创建文本节点
 function createTextNode() {
-  if (this.nodeData.data.richText) {
+  if (this.getData('richText')) {
     return this.createRichTextNode()
   }
   let g = new G()
@@ -166,8 +168,8 @@ function createTextNode() {
   // 文本超长自动换行
   let textStyle = this.style.getTextFontStyle()
   let textArr = []
-  if (!isUndef(this.nodeData.data.text)) {
-    textArr = String(this.nodeData.data.text).split(/\n/gim)
+  if (!isUndef(this.getData('text'))) {
+    textArr = String(this.getData('text')).split(/\n/gim)
   }
   let maxWidth = this.mindMap.opt.textAutoWrapWidth
   let isMultiLine = false
@@ -215,7 +217,7 @@ function createTextNode() {
 
 //  创建超链接节点
 function createHyperlinkNode() {
-  let { hyperlink, hyperlinkTitle } = this.nodeData.data
+  let { hyperlink, hyperlinkTitle } = this.getData()
   if (!hyperlink) {
     return
   }
@@ -245,7 +247,7 @@ function createHyperlinkNode() {
 
 //  创建标签节点
 function createTagNode() {
-  let tagData = this.nodeData.data.tag
+  let tagData = this.getData('tag')
   if (!tagData || tagData.length <= 0) {
     return []
   }
@@ -274,7 +276,7 @@ function createTagNode() {
 
 //  创建备注节点
 function createNoteNode() {
-  if (!this.nodeData.data.note) {
+  if (!this.getData('note')) {
     return null
   }
   let iconSize = this.mindMap.themeConfig.iconSize
@@ -302,7 +304,7 @@ function createNoteNode() {
         this.mindMap.opt.customInnerElsAppendTo || document.body
       targetNode.appendChild(this.noteEl)
     }
-    this.noteEl.innerText = this.nodeData.data.note
+    this.noteEl.innerText = this.getData('note')
   }
   node.on('mouseover', () => {
     let { left, top } = node.node.getBoundingClientRect()
@@ -312,7 +314,7 @@ function createNoteNode() {
       this.noteEl.style.display = 'block'
     } else {
       this.mindMap.opt.customNoteContentShow.show(
-        this.nodeData.data.note,
+        this.getData('note'),
         left,
         top + iconSize
       )

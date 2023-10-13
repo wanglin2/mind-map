@@ -109,10 +109,10 @@ class Drag extends Base {
     })
     this.removeCloneNode()
     let overlapNodeUid = this.overlapNode
-      ? this.overlapNode.nodeData.data.uid
+      ? this.overlapNode.getData('uid')
       : ''
-    let prevNodeUid = this.prevNode ? this.prevNode.nodeData.data.uid : ''
-    let nextNodeUid = this.nextNode ? this.nextNode.nodeData.data.uid : ''
+    let prevNodeUid = this.prevNode ? this.prevNode.getData('uid') : ''
+    let nextNodeUid = this.nextNode ? this.nextNode.getData('uid') : ''
     // 存在重叠子节点，则移动作为其子节点
     if (this.overlapNode) {
       this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, false)
@@ -205,7 +205,7 @@ class Drag extends Base {
       this.offsetX = this.mouseDownX - (node.left * scaleX + translateX)
       this.offsetY = this.mouseDownY - (node.top * scaleY + translateY)
       // 如果鼠标按下的节点是激活节点，那么保存当前所有激活的节点
-      if (node.nodeData.data.isActive) {
+      if (node.getData('isActive')) {
         // 找出这些激活节点中的最顶层节点
         this.beingDragNodeList = getTopAncestorsFomNodeList(
           // 过滤掉根节点和概要节点
@@ -317,7 +317,7 @@ class Drag extends Base {
     this.nextNode = null
     this.placeholder.size(0, 0)
     this.nodeList.forEach(node => {
-      if (node.nodeData.data.isActive) {
+      if (node.getData('isActive')) {
         this.mindMap.execCommand('SET_NODE_ACTIVE', node, false)
       }
       if (this.overlapNode || (this.prevNode && this.nextNode)) {

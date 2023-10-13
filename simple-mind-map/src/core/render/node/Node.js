@@ -430,7 +430,7 @@ class Node {
       // 多选和取消多选
       if (e.ctrlKey && enableCtrlKeyNodeSelection) {
         this.isMultipleChoice = true
-        let isActive = this.nodeData.data.isActive
+        let isActive = this.getData('isActive')
         if (!isActive)
           this.mindMap.emit(
             'before_node_active',
@@ -493,7 +493,7 @@ class Node {
       // 如果有且只有当前节点激活了，那么不需要重新激活
       if (
         !(
-          this.nodeData.data.isActive &&
+          this.getData('isActive') &&
           this.renderer.activeNodeList.length === 1
         )
       ) {
@@ -510,7 +510,7 @@ class Node {
       return
     }
     e && e.stopPropagation()
-    if (this.nodeData.data.isActive) {
+    if (this.getData('isActive')) {
       return
     }
     this.mindMap.emit('before_node_active', this, this.renderer.activeNodeList)
@@ -535,7 +535,7 @@ class Node {
         this.renderExpandBtn()
       }
     } else {
-      let { isActive, expand } = this.nodeData.data
+      let { isActive, expand } = this.getData()
       // 展开状态且非激活状态，且当前鼠标不在它上面，才隐藏
       if (expand && !isActive && !this._isMouseenter) {
         this.hideExpandBtn()
@@ -602,7 +602,7 @@ class Node {
   // 更新节点激活状态
   updateNodeActive() {
     if (!this.group) return
-    const isActive = this.nodeData.data.isActive
+    const isActive = this.getData('isActive')
     this.group[isActive ? 'addClass' : 'removeClass']('active')
   }
 
@@ -635,7 +635,7 @@ class Node {
     if (
       this.children &&
       this.children.length &&
-      this.nodeData.data.expand !== false
+      this.getData('expand') !== false
     ) {
       let index = 0
       this.children.forEach(item => {
@@ -780,7 +780,7 @@ class Node {
 
   //  连线
   renderLine(deep = false) {
-    if (this.nodeData.data.expand === false) {
+    if (this.getData('expand') === false) {
       return
     }
     let childrenLen = this.nodeData.children.length
@@ -902,7 +902,7 @@ class Node {
 
   //  获取padding值
   getPaddingVale() {
-    let { isActive } = this.nodeData.data
+    let { isActive } = this.getData()
     return {
       paddingX: this.getStyle('paddingX', true, isActive),
       paddingY: this.getStyle('paddingY', true, isActive)
@@ -945,7 +945,7 @@ class Node {
 
   //  获取数据
   getData(key) {
-    return key ? this.nodeData.data[key] || '' : this.nodeData.data
+    return key ? this.nodeData.data[key] : this.nodeData.data
   }
 
   // 是否存在自定义样式

@@ -124,7 +124,7 @@ class Select {
         let cur = this.cacheActiveList[i]
         if (
           !this.mindMap.renderer.activeNodeList.find(item => {
-            return item.nodeData.data.uid === cur.nodeData.data.uid
+            return item.getData('uid') === cur.getData('uid')
           })
         ) {
           isNodeChange = true
@@ -218,12 +218,12 @@ class Select {
       if (
         checkTwoRectIsOverlap(minx, maxx, miny, maxy, left, right, top, bottom)
       ) {
-        if (node.nodeData.data.isActive) {
+        if (node.getData('isActive')) {
           return
         }
         this.mindMap.renderer.addNodeToActiveList(node)
-      } else if (node.nodeData.data.isActive) {
-        if (!node.nodeData.data.isActive) {
+      } else if (node.getData('isActive')) {
+        if (!node.getData('isActive')) {
           return
         }
         this.mindMap.renderer.removeNodeFromActiveList(node)

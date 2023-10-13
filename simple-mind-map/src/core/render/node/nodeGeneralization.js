@@ -3,7 +3,7 @@ import { createUid } from '../../../utils/index'
 
 //  检查是否存在概要
 function checkHasGeneralization() {
-  return !!this.nodeData.data.generalization
+  return !!this.getData('generalization')
 }
 
 //  创建概要节点
@@ -17,7 +17,7 @@ function createGeneralizationNode() {
   if (!this._generalizationNode) {
     this._generalizationNode = new Node({
       data: {
-        data: this.nodeData.data.generalization
+        data: this.getData('generalization')
       },
       uid: createUid(),
       renderer: this.renderer,
@@ -27,7 +27,7 @@ function createGeneralizationNode() {
     this._generalizationNodeWidth = this._generalizationNode.width
     this._generalizationNodeHeight = this._generalizationNode.height
     this._generalizationNode.generalizationBelongNode = this
-    if (this.nodeData.data.generalization.isActive) {
+    if (this.getData('generalization').isActive) {
       this.renderer.addNodeToActiveList(this._generalizationNode)
     }
   }
@@ -49,7 +49,7 @@ function renderGeneralization() {
     this._generalizationNodeHeight = 0
     return
   }
-  if (this.nodeData.data.expand === false) {
+  if (this.getData('expand') === false) {
     this.removeGeneralization()
     return
   }
