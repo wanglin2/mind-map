@@ -18,7 +18,7 @@ import {
   addDataToAppointNodes,
   createUidForAppointNodes,
   formatDataToArray,
-  getNodeIndex,
+  removeFromParentNodeData,
   createUid,
   getNodeDataIndex,
   getNodeIndexInNodeList,
@@ -972,9 +972,6 @@ class Render {
     })
     if (root) {
       this.clearActiveNodeList()
-      root.children.forEach(child => {
-        child.remove()
-      })
       root.children = []
       root.nodeData.children = []
     } else {
@@ -997,7 +994,7 @@ class Render {
           i--
         } else {
           this.removeNodeFromActiveList(node)
-          this.removeOneNode(node)
+          removeFromParentNodeData(node)
           i--
         }
       }
@@ -1086,14 +1083,6 @@ class Render {
     return needActiveNode
   }
 
-  //  移除某个指定节点
-  removeOneNode(node) {
-    let index = getNodeIndex(node)
-    node.remove()
-    node.parent.children.splice(index, 1)
-    node.parent.nodeData.children.splice(index, 1)
-  }
-
   //  复制节点
   copyNode() {
     if (this.activeNodeList.length <= 0) {
@@ -1110,19 +1099,22 @@ class Render {
     if (this.activeNodeList.length <= 0) {
       return
     }
+    // 找出激活节点中的顶层节点列表，并过滤掉根节点
     const nodeList = getTopAncestorsFomNodeList(this.activeNodeList).filter(
       node => {
         return !node.isRoot
       }
     )
+    // 复制数据
     const copyData = nodeList.map(node => {
       return copyNodeTree({}, node, true)
     })
+    // 从父节点的数据中移除
     nodeList.forEach(node => {
-      this.removeNodeFromActiveList(node)
-      this.removeOneNode(node)
+      removeFromParentNodeData(node)
     })
-    this.mindMap.emit('node_active', null, [...this.activeNodeList])
+    // 清空激活节点列表
+    this.clearActiveNodeList()
     this.mindMap.render()
     if (callback && typeof callback === 'function') {
       callback(copyData)
@@ -1138,7 +1130,7 @@ class Render {
     nodeList.forEach(item => {
       this.checkNodeLayerChange(item, toNode)
       this.removeNodeFromActiveList(item)
-      this.removeOneNode(item)
+      removeFromParentNodeData(item)
       toNode.nodeData.children.push(item.nodeData)
     })
     this.mindMap.emit('node_active', null, [...this.activeNodeList])

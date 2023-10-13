@@ -796,15 +796,6 @@ export const formatDataToArray = data => {
 }
 
 //  获取节点在同级里的位置索引
-export const getNodeIndex = node => {
-  return node.parent
-    ? node.parent.children.findIndex(item => {
-        return item.uid === node.uid
-      })
-    : 0
-}
-
-//  获取节点在同级里的位置索引
 export const getNodeDataIndex = node => {
   return node.parent
     ? node.parent.nodeData.children.findIndex(item => {
@@ -921,4 +912,12 @@ export const getDataFromClipboard = async () => {
     text,
     img
   }
+}
+
+// 从节点的父节点的nodeData.children列表中移除该节点的数据
+export const removeFromParentNodeData = node => {
+  if (!node || !node.parent) return
+  const index = getNodeDataIndex(node)
+  if (index === -1) return
+  node.parent.nodeData.children.splice(index, 1)
 }
