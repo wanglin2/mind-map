@@ -70,9 +70,9 @@ export default {
       this.activeNodes = [...args[1]]
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
-        this.link = firstNode.getData('hyperlink')
+        this.link = firstNode.getData('hyperlink') || ''
         this.handleUrl(true)
-        this.linkTitle = firstNode.getData('hyperlinkTitle')
+        this.linkTitle = firstNode.getData('hyperlinkTitle') || ''
       } else {
         this.link = ''
         this.linkTitle = ''

@@ -75,7 +75,7 @@ export default {
       this.reset()
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
-        let img = firstNode.getData('image')
+        let img = firstNode.getData('image') || ''
         if (img) {
           if (/^https?:\/\//.test(img)) {
             this.imgUrl = img
@@ -83,7 +83,7 @@ export default {
             this.img = img
           }
         }
-        this.imgTitle = firstNode.getData('imageTitle')
+        this.imgTitle = firstNode.getData('imageTitle') || ''
       }
       this.dialogVisible = true
     },
