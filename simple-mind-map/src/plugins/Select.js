@@ -221,14 +221,12 @@ class Select {
         if (node.nodeData.data.isActive) {
           return
         }
-        this.mindMap.execCommand('SET_NODE_ACTIVE', node, true)
         this.mindMap.renderer.addNodeToActiveList(node)
       } else if (node.nodeData.data.isActive) {
         if (!node.nodeData.data.isActive) {
           return
         }
-        this.mindMap.execCommand('SET_NODE_ACTIVE', node, false)
-        this.mindMap.renderer.removeActiveNode(node)
+        this.mindMap.renderer.removeNodeFromActiveList(node)
       }
     })
   }

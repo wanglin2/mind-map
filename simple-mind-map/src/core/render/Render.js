@@ -421,16 +421,18 @@ class Render {
   addNodeToActiveList(node) {
     const index = this.findActiveNodeIndex(node)
     if (index === -1) {
+      this.mindMap.execCommand('SET_NODE_ACTIVE', node, true)
       this.activeNodeList.push(node)
     }
   }
 
-  //  在激活列表里移除某个节点
-  removeActiveNode(node) {
+  // 在激活列表里移除某个节点
+  removeNodeFromActiveList(node) {
     let index = this.findActiveNodeIndex(node)
     if (index === -1) {
       return
     }
+    this.mindMap.execCommand('SET_NODE_ACTIVE', node, false)
     this.activeNodeList.splice(index, 1)
   }
 
@@ -448,13 +450,7 @@ class Render {
       null,
       node => {
         if (!node.nodeData.data.isActive) {
-          node.nodeData.data.isActive = true
           this.addNodeToActiveList(node)
-          // 激活节点需要显示展开收起按钮
-          node.showExpandBtn()
-          setTimeout(() => {
-            node.updateNodeActive()
-          }, 0)
         }
       },
       null,
@@ -1017,10 +1013,10 @@ class Render {
             generalization: null
           })
           node.generalizationBelongNode.update()
-          this.removeActiveNode(node)
+          this.removeNodeFromActiveList(node)
           i--
         } else {
-          this.removeActiveNode(node)
+          this.removeNodeFromActiveList(node)
           this.removeOneNode(node)
           i--
         }
@@ -1139,7 +1135,7 @@ class Render {
       return copyNodeTree({}, node, true)
     })
     nodeList.forEach(node => {
-      this.removeActiveNode(node)
+      this.removeNodeFromActiveList(node)
       this.removeOneNode(node)
     })
     this.mindMap.emit('node_active', null, [...this.activeNodeList])
@@ -1157,7 +1153,7 @@ class Render {
     })
     nodeList.forEach(item => {
       this.checkNodeLayerChange(item, toNode)
-      this.removeActiveNode(item)
+      this.removeNodeFromActiveList(item)
       this.removeOneNode(item)
       toNode.nodeData.children.push(item.nodeData)
     })
