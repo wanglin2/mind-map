@@ -72,7 +72,7 @@ function removeGeneralization() {
   }
   if (this._generalizationNode) {
     // 删除概要节点时要同步从激活节点里删除
-    this.renderer.removeActiveNode(this._generalizationNode)
+    this.renderer.removeNodeFromActiveList(this._generalizationNode)
     this._generalizationNode.remove()
     this._generalizationNode = null
   }
