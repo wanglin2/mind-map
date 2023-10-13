@@ -202,8 +202,8 @@ class Render {
     this.setNodeActive = this.setNodeActive.bind(this)
     this.mindMap.command.add('SET_NODE_ACTIVE', this.setNodeActive)
     // 清除所有激活节点
-    this.clearAllActive = this.clearAllActive.bind(this)
-    this.mindMap.command.add('CLEAR_ACTIVE_NODE', this.clearAllActive)
+    this.clearActiveNode = this.clearActiveNode.bind(this)
+    this.mindMap.command.add('CLEAR_ACTIVE_NODE', this.clearActiveNode)
     // 切换节点是否展开
     this.setNodeExpand = this.setNodeExpand.bind(this)
     this.mindMap.command.add('SET_NODE_EXPAND', this.setNodeExpand)
@@ -400,21 +400,21 @@ class Render {
     this.mindMap.emit('node_active', null, [...this.activeNodeList])
   }
 
+  //  清除当前所有激活节点，并会触发事件
+  clearActiveNode() {
+    if (this.activeNodeList.length <= 0) {
+      return
+    }
+    this.clearActive()
+    this.mindMap.emit('node_active', null, [])
+  }
+
   //  清除当前激活的节点
   clearActive() {
     this.activeNodeList.forEach(item => {
       this.setNodeActive(item, false)
     })
     this.activeNodeList = []
-  }
-
-  //  清除当前所有激活节点，并会触发事件
-  clearAllActive() {
-    if (this.activeNodeList.length <= 0) {
-      return
-    }
-    this.clearActive()
-    this.mindMap.emit('node_active', null, [])
   }
 
   //   添加节点到激活列表里
@@ -467,7 +467,7 @@ class Render {
 
   //  回退
   back(step) {
-    this.clearAllActive()
+    this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
     let data = this.mindMap.command.back(step)
     if (data) {
       this.renderTree = data
@@ -477,7 +477,7 @@ class Render {
 
   //  前进
   forward(step) {
-    this.clearAllActive()
+    this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
     let data = this.mindMap.command.forward(step)
     if (data) {
       this.renderTree = data

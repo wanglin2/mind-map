@@ -234,7 +234,7 @@ class MindMap {
 
   //  设置主题
   setTheme(theme, notRender = false) {
-    this.renderer.clearAllActive()
+    this.execCommand('CLEAR_ACTIVE_NODE')
     this.opt.theme = theme
     if (!notRender) {
       this.render(null, CONSTANTS.CHANGE_THEME)
@@ -381,7 +381,7 @@ class MindMap {
     this.opt.readonly = mode === CONSTANTS.MODE.READONLY
     if (this.opt.readonly) {
       // 取消当前激活的元素
-      this.renderer.clearAllActive()
+      this.execCommand('CLEAR_ACTIVE_NODE')
     }
     this.emit('mode_change', mode)
   }
