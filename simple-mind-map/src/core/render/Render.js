@@ -361,7 +361,7 @@ class Render {
     this.nodeCache = {}
     // 重新渲染需要清除激活状态
     if (this.reRender) {
-      this.clearActive()
+      this.clearActiveNodeList()
     }
     // 计算布局
     this.layout.doLayout(root => {
@@ -405,12 +405,12 @@ class Render {
     if (this.activeNodeList.length <= 0) {
       return
     }
-    this.clearActive()
+    this.clearActiveNodeList()
     this.mindMap.emit('node_active', null, [])
   }
 
-  //  清除当前激活的节点
-  clearActive() {
+  //  清除当前激活的节点列表
+  clearActiveNodeList() {
     this.activeNodeList.forEach(item => {
       this.setNodeActive(item, false)
     })
@@ -542,7 +542,7 @@ class Render {
     })
     // 如果同时对多个节点插入子节点，需要清除原来激活的节点
     if (handleMultiNodes || !openEdit) {
-      this.clearActive()
+      this.clearActiveNodeList()
     }
     this.mindMap.render()
   }
@@ -579,7 +579,7 @@ class Render {
       )
       parent.nodeData.children.splice(index + 1, 0, ...newNodeList)
     })
-    this.clearActive()
+    this.clearActiveNodeList()
     this.mindMap.render()
   }
 
@@ -638,7 +638,7 @@ class Render {
     })
     // 如果同时对多个节点插入子节点，需要清除原来激活的节点
     if (handleMultiNodes || !openEdit) {
-      this.clearActive()
+      this.clearActiveNodeList()
     }
     this.mindMap.render()
   }
@@ -672,7 +672,7 @@ class Render {
       // 插入子节点时自动展开子节点
       node.nodeData.data.expand = true
     })
-    this.clearActive()
+    this.clearActiveNodeList()
     this.mindMap.render()
   }
 
@@ -723,7 +723,7 @@ class Render {
     })
     // 如果同时对多个节点插入子节点，需要清除原来激活的节点
     if (handleMultiNodes || !openEdit) {
-      this.clearActive()
+      this.clearActiveNodeList()
     }
     this.mindMap.render()
   }
@@ -999,7 +999,7 @@ class Render {
       return node.isRoot
     })
     if (root) {
-      this.clearActive()
+      this.clearActiveNodeList()
       root.children.forEach(child => {
         child.remove()
       })
