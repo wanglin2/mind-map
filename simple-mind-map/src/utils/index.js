@@ -891,3 +891,10 @@ export const isSameObject = (a, b) => {
     return a === b
   }
 }
+
+// 将数据设置到用户剪切板中
+export const setDataToClipboard = data => {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(JSON.stringify(data))
+  }
+}

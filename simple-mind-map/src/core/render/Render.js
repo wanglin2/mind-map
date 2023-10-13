@@ -21,7 +21,8 @@ import {
   getNodeIndex,
   createUid,
   getNodeDataIndex,
-  getNodeIndexInNodeList
+  getNodeIndexInNodeList,
+  setDataToClipboard
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -774,27 +775,21 @@ class Render {
   // 复制节点
   copy() {
     this.beingCopyData = this.copyNode()
-    this.setCopyDataToClipboard(this.beingCopyData)
+    setDataToClipboard({
+      simpleMindMap: true,
+      data: this.beingCopyData
+    })
   }
 
   // 剪切节点
   cut() {
     this.mindMap.execCommand('CUT_NODE', copyData => {
       this.beingCopyData = copyData
-      this.setCopyDataToClipboard(copyData)
+      setDataToClipboard({
+        simpleMindMap: true,
+        data: copyData
+      })
     })
-  }
-
-  // 将粘贴或剪切的数据设置到用户剪切板中
-  setCopyDataToClipboard(data) {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(
-        JSON.stringify({
-          simpleMindMap: true,
-          data
-        })
-      )
-    }
   }
 
   // 粘贴节点
@@ -1334,11 +1329,7 @@ class Render {
 
   //  切换节点展开状态
   toggleNodeExpand(node) {
-    this.mindMap.execCommand(
-      'SET_NODE_EXPAND',
-      node,
-      !node.getData('expand')
-    )
+    this.mindMap.execCommand('SET_NODE_EXPAND', node, !node.getData('expand'))
   }
 
   //  设置节点文本
