@@ -1,4 +1,4 @@
-import { bfsWalk, throttle, getTopAncestorsFomNodeList } from '../utils'
+import { bfsWalk, throttle, getTopAncestorsFomNodeList, getNodeIndexInNodeList } from '../utils'
 import Base from '../layouts/Base'
 
 // 节点拖动插件
@@ -487,9 +487,7 @@ class Drag extends Base {
   getNodeDistanceToSiblingNode(checkList, node, nodeRect, dir) {
     let dir1 = dir === 'v' ? 'top' : 'left'
     let dir2 = dir === 'v' ? 'bottom' : 'right'
-    let index = checkList.findIndex(item => {
-      return item.uid === node.uid
-    })
+    let index = getNodeIndexInNodeList(node, checkList)
     let prevBrother = null
     let nextBrother = null
     if (index !== -1) {

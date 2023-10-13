@@ -437,9 +437,9 @@ class Node {
             this,
             this.renderer.activeNodeList
           )
-        this.mindMap.renderer[isActive ? 'removeNodeFromActiveList' : 'addNodeToActiveList'](
-          this
-        )
+        this.mindMap.renderer[
+          isActive ? 'removeNodeFromActiveList' : 'addNodeToActiveList'
+        ](this)
         this.mindMap.emit('node_active', isActive ? null : this, [
           ...this.mindMap.renderer.activeNodeList
         ])

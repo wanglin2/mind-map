@@ -173,7 +173,8 @@ export const copyNodeTree = (
   // 移除节点uid
   if (removeId) {
     delete tree.data.uid
-  } else if (!tree.data.uid) {// 否则保留或生成
+  } else if (!tree.data.uid) {
+    // 否则保留或生成
     tree.data.uid = createUid()
   }
   if (removeActiveState) {
@@ -807,9 +808,16 @@ export const getNodeIndex = node => {
 export const getNodeDataIndex = node => {
   return node.parent
     ? node.parent.nodeData.children.findIndex(item => {
-      return item.data.uid === node.uid
-    })
+        return item.data.uid === node.uid
+      })
     : 0
+}
+
+// 从一个节点列表里找出某个节点的索引
+export const getNodeIndexInNodeList = (node, nodeList) => {
+  return nodeList.findIndex(item => {
+    return item.uid === node.uid
+  })
 }
 
 // 根据内容生成颜色
