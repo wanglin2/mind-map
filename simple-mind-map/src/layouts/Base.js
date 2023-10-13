@@ -127,7 +127,7 @@ class Base {
       // 数据关联实际节点
       data._node = newNode
       if (data.data.isActive) {
-        this.renderer.addActiveNode(newNode)
+        this.renderer.addNodeToActiveList(newNode)
       }
     }
     // 如果当前节点在激活节点列表里，那么添加上激活的状态
