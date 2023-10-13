@@ -462,18 +462,18 @@ class Render {
 
   //  回退
   back(step) {
-    this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
-    let data = this.mindMap.command.back(step)
-    if (data) {
-      this.renderTree = data
-      this.mindMap.render()
-    }
+    this.backForward('back', step)
   }
 
   //  前进
   forward(step) {
+    this.backForward('forward', step)
+  }
+
+  // 前进回退
+  backForward(type, step) {
     this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
-    let data = this.mindMap.command.forward(step)
+    const data = this.mindMap.command[type](step)
     if (data) {
       this.renderTree = data
       this.mindMap.render()
