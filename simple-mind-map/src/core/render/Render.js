@@ -994,9 +994,13 @@ class Render {
         if (isAppointNodes) list.splice(i, 1)
         if (node.isGeneralization) {
           // 删除概要节点
-          this.setNodeData(node.generalizationBelongNode, {
-            generalization: null
-          })
+          this.mindMap.execCommand(
+            'SET_NODE_DATA',
+            node.generalizationBelongNode,
+            {
+              generalization: null
+            }
+          )
           node.generalizationBelongNode.update()
           this.removeNodeFromActiveList(node)
           i--
@@ -1035,9 +1039,13 @@ class Render {
       let node = list[i]
       if (node.isGeneralization) {
         // 删除概要节点
-        this.setNodeData(node.generalizationBelongNode, {
-          generalization: null
-        })
+        this.mindMap.execCommand(
+          'SET_NODE_DATA',
+          node.generalizationBelongNode,
+          {
+            generalization: null
+          }
+        )
         node.generalizationBelongNode.update()
       } else {
         const parent = node.parent
@@ -1215,7 +1223,7 @@ class Render {
 
   //  设置节点是否激活
   setNodeActive(node, active) {
-    this.setNodeData(node, {
+    this.mindMap.execCommand('SET_NODE_DATA', node, {
       isActive: active
     })
     if (node.group) {
@@ -1231,7 +1239,7 @@ class Render {
 
   //  设置节点是否展开
   setNodeExpand(node, expand) {
-    this.setNodeData(node, {
+    this.mindMap.execCommand('SET_NODE_DATA', node, {
       expand
     })
     if (expand) {
@@ -1405,7 +1413,7 @@ class Render {
       if (node.nodeData.data.generalization || node.isRoot) {
         return
       }
-      this.setNodeData(node, {
+      this.mindMap.execCommand('SET_NODE_DATA', node, {
         generalization: data || {
           text: '概要'
         }
@@ -1424,7 +1432,7 @@ class Render {
       if (!node.nodeData.data.generalization) {
         return
       }
-      this.setNodeData(node, {
+      this.mindMap.execCommand('SET_NODE_DATA', node, {
         generalization: null
       })
       node.update()
@@ -1436,7 +1444,7 @@ class Render {
   setNodeCustomPosition(node, left = undefined, top = undefined) {
     let nodeList = [node] || this.activeNodeList
     nodeList.forEach(item => {
-      this.setNodeData(item, {
+      this.mindMap.execCommand('SET_NODE_DATA', item, {
         customLeft: left,
         customTop: top
       })
@@ -1451,7 +1459,7 @@ class Render {
       node => {
         node.customLeft = undefined
         node.customTop = undefined
-        this.setNodeData(node, {
+        this.mindMap.execCommand('SET_NODE_DATA', node, {
           customLeft: undefined,
           customTop: undefined
         })
@@ -1498,7 +1506,7 @@ class Render {
 
   //  设置节点数据，并判断是否渲染
   setNodeDataRender(node, data, notRender = false) {
-    this.setNodeData(node, data)
+    this.mindMap.execCommand('SET_NODE_DATA', node, data)
     let changed = node.reRender()
     if (changed) {
       if (node.isGeneralization) {
