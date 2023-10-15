@@ -524,7 +524,7 @@ class Node {
     if (!this.group) {
       return
     }
-    this.updateNodeActive()
+    this.updateNodeActiveClass()
     let { alwaysShowExpandBtn } = this.mindMap.opt
     if (alwaysShowExpandBtn) {
       // 需要移除展开收缩按钮
@@ -600,10 +600,23 @@ class Node {
   }
 
   // 更新节点激活状态
-  updateNodeActive() {
+  updateNodeActiveClass() {
     if (!this.group) return
     const isActive = this.getData('isActive')
     this.group[isActive ? 'addClass' : 'removeClass']('active')
+  }
+
+  // 根据是否激活更新节点
+  updateNodeByActive(active) {
+    if (this.group) {
+      // 切换激活状态，需要切换展开收起按钮的显隐
+      if (active) {
+        this.showExpandBtn()
+      } else {
+        this.hideExpandBtn()
+      }
+      this.updateNodeActiveClass()
+    }
   }
 
   //  递归渲染
