@@ -1158,14 +1158,9 @@ class Render {
     }
     // 如果开启了富文本，则需要应用到富文本上
     if (this.mindMap.richText) {
-      let config = this.mindMap.richText.normalStyleToRichTextStyle({
+      this.mindMap.richText.setNotActiveNodeStyle(node, {
         [prop]: value
       })
-      if (Object.keys(config).length > 0) {
-        this.mindMap.richText.showEditText(node)
-        this.mindMap.richText.formatAllText(config)
-        this.mindMap.richText.hideEditText([node])
-      }
     }
     this.setNodeDataRender(node, data)
     // 更新了连线的样式
@@ -1179,12 +1174,7 @@ class Render {
     let data = { ...style }
     // 如果开启了富文本，则需要应用到富文本上
     if (this.mindMap.richText) {
-      let config = this.mindMap.richText.normalStyleToRichTextStyle(style)
-      if (Object.keys(config).length > 0) {
-        this.mindMap.richText.showEditText(node)
-        this.mindMap.richText.formatAllText(config)
-        this.mindMap.richText.hideEditText([node])
-      }
+      this.mindMap.richText.setNotActiveNodeStyle(node, style)
     }
     this.setNodeDataRender(node, data)
     // 更新了连线的样式
