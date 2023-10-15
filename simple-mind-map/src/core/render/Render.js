@@ -1203,21 +1203,6 @@ class Render {
     this.mindMap.execCommand('SET_NODE_DATA', node, {
       expand
     })
-    if (expand) {
-      // 展开
-      node.children.forEach(item => {
-        item.render()
-      })
-      node.renderLine()
-      // node.updateExpandBtnNode()
-    } else {
-      // 收缩
-      node.children.forEach(item => {
-        item.remove()
-      })
-      node.removeLine()
-      // node.updateExpandBtnNode()
-    }
     this.mindMap.render()
   }
 
