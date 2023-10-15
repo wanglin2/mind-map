@@ -1363,7 +1363,10 @@ class Render {
           text: this.mindMap.opt.defaultGeneralizationText
         }
       })
-      node.update()
+      // 插入子节点时自动展开子节点
+      node.setData({
+        expand: true
+      })
     })
     this.mindMap.render()
   }
@@ -1380,7 +1383,6 @@ class Render {
       this.mindMap.execCommand('SET_NODE_DATA', node, {
         generalization: null
       })
-      node.update()
     })
     this.mindMap.render()
   }
