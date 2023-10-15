@@ -1230,7 +1230,6 @@ class Render {
       this.renderTree,
       null,
       (node, parent, isRoot) => {
-        node._node = null
         if (!isRoot) {
           node.data.expand = false
         }
@@ -1251,7 +1250,6 @@ class Render {
       this.renderTree,
       null,
       (node, parent, isRoot, layerIndex) => {
-        node._node = null
         node.data.expand = layerIndex < level
       },
       null,
