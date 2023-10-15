@@ -1195,15 +1195,7 @@ class Render {
     this.mindMap.execCommand('SET_NODE_DATA', node, {
       isActive: active
     })
-    if (node.group) {
-      // 切换激活状态，需要切换展开收起按钮的显隐
-      if (active) {
-        node.showExpandBtn()
-      } else {
-        node.hideExpandBtn()
-      }
-      node.updateNodeActive()
-    }
+    node.updateNodeByActive(active)
   }
 
   //  设置节点是否展开
