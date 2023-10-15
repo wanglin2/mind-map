@@ -564,6 +564,16 @@ class RichText {
     return data
   }
 
+  // 给未激活的节点设置富文本样式
+  setNotActiveNodeStyle(node, style) {
+    const config = this.normalStyleToRichTextStyle(style)
+    if (Object.keys(config).length > 0) {
+      this.showEditText(node)
+      this.formatAllText(config)
+      this.hideEditText([node])
+    }
+  }
+
   // 处理导出为图片
   async handleExportPng(node) {
     let el = document.createElement('div')
