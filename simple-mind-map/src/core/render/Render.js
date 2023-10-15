@@ -1355,7 +1355,7 @@ class Render {
       }
       this.mindMap.execCommand('SET_NODE_DATA', node, {
         generalization: data || {
-          text: '概要'
+          text: this.mindMap.opt.defaultGeneralizationText
         }
       })
       node.update()

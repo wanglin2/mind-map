@@ -212,5 +212,7 @@ export const defaultOpt = {
   },
   // 关联线是否始终显示在节点上层
   // false：即创建关联线和激活关联线时处于最顶层，其他情况下处于节点下方
-  associativeLineIsAlwaysAboveNode: true
+  associativeLineIsAlwaysAboveNode: true,
+  // 插入概要的默认文本
+  defaultGeneralizationText: '概要'
 }
