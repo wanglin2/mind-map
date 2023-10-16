@@ -989,7 +989,6 @@ class Render {
               generalization: null
             }
           )
-          node.generalizationBelongNode.update()
           this.removeNodeFromActiveList(node)
           i--
         } else {
@@ -1032,7 +1031,6 @@ class Render {
             generalization: null
           }
         )
-        node.generalizationBelongNode.update()
       } else {
         const parent = node.parent
         const index = getNodeDataIndex(node)
@@ -1230,7 +1228,7 @@ class Render {
       this.renderTree,
       null,
       (node, parent, isRoot) => {
-        if (!isRoot && (node.children && node.children.length > 0)) {
+        if (!isRoot && node.children && node.children.length > 0) {
           node.data.expand = false
         }
       },
@@ -1253,7 +1251,7 @@ class Render {
         const expand = layerIndex < level
         if (expand) {
           node.data.expand = true
-        } else if (!isRoot && (node.children && node.children.length > 0)) {
+        } else if (!isRoot && node.children && node.children.length > 0) {
           node.data.expand = false
         }
       },
@@ -1456,10 +1454,6 @@ class Render {
     this.mindMap.execCommand('SET_NODE_DATA', node, data)
     let changed = node.reRender()
     if (changed) {
-      if (node.isGeneralization) {
-        // 概要节点
-        node.generalizationBelongNode.updateGeneralization()
-      }
       if (!notRender) this.mindMap.render()
     } else {
       this.mindMap.emit('node_tree_render_end')
