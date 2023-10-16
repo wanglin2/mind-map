@@ -8,7 +8,14 @@
     >
       <div class="btn el-icon-minus" @click="narrow"></div>
     </el-tooltip>
-    <div class="scaleInfo">{{ scaleNum }}%</div>
+    <div class="scaleInfo">
+      <input
+        type="text"
+        v-model="scaleNum"
+        @change="onScaleNumChange"
+        @focus="onScaleNumInputFocus"
+      />%
+    </div>
     <el-tooltip
       class="item"
       effect="dark"
@@ -38,7 +45,8 @@ export default {
   },
   data() {
     return {
-      scaleNum: 100
+      scaleNum: 100,
+      cacheScaleNum: 0
     }
   },
   watch: {
@@ -52,31 +60,36 @@ export default {
     }
   },
   methods: {
-    /**
-     * @Author: 王林25
-     * @Date: 2021-11-25 14:20:16
-     * @Desc: 转换成百分数
-     */
+    // 转换成百分数
     toPer(scale) {
       return (scale * 100).toFixed(0)
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-07-04 17:10:34
-     * @Desc: 缩小
-     */
+    // 缩小
     narrow() {
       this.mindMap.view.narrow()
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-07-04 17:10:41
-     * @Desc: 放大
-     */
+    // 放大
     enlarge() {
       this.mindMap.view.enlarge()
+    },
+
+    // 聚焦时缓存当前缩放倍数
+    onScaleNumInputFocus() {
+      this.cacheScaleNum = this.scaleNum
+    },
+
+    // 手动输入缩放倍数
+    onScaleNumChange() {
+      const scaleNum = Number(this.scaleNum)
+      if (Number.isNaN(scaleNum) || scaleNum <= 0) {
+        this.scaleNum = this.cacheScaleNum
+      } else {
+        const cx = this.mindMap.width / 2
+        const cy = this.mindMap.height / 2
+        this.mindMap.view.setScale(this.scaleNum / 100, cx, cy)
+      }
     }
   }
 }
@@ -89,11 +102,15 @@ export default {
 
   &.isDark {
     .btn {
-      color: hsla(0,0%,100%,.6);
+      color: hsla(0, 0%, 100%, 0.6);
     }
 
     .scaleInfo {
-      color: hsla(0,0%,100%,.6);
+      color: hsla(0, 0%, 100%, 0.6);
+
+      input {
+        color: hsla(0, 0%, 100%, 0.6);
+      }
     }
   }
 
@@ -102,9 +119,17 @@ export default {
   }
 
   .scaleInfo {
-    width: 40px;
-    text-align: center;
     margin: 0 20px;
+    display: flex;
+    align-items: center;
+
+    input {
+      width: 35px;
+      text-align: center;
+      background-color: transparent;
+      border: none;
+      outline: none;
+    }
   }
 }
 </style>
