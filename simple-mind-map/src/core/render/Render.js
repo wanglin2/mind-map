@@ -112,23 +112,13 @@ class Render {
 
   //   绑定事件
   bindEvent() {
-    // 点击事件
+    // 画布点击事件清除当前激活节点列表
     this.mindMap.on('draw_click', e => {
-      // 清除激活状态
-      let isTrueClick = true
-      let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
-      if (useLeftKeySelectionRightKeyDrag) {
-        let mousedownPos = this.mindMap.event.mousedownPos
-        isTrueClick =
-          Math.abs(e.clientX - mousedownPos.x) <= 5 &&
-          Math.abs(e.clientY - mousedownPos.y) <= 5
-      }
-      if (isTrueClick && this.activeNodeList.length > 0) {
-        this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
-      }
+      this.clearActiveNodeListOnDrawClick(e, 'click')
     })
-    this.mindMap.on('contextmenu', () => {
-      this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
+    // 画布右键事件事件清除当前激活节点列表
+    this.mindMap.on('contextmenu', e => {
+      this.clearActiveNodeListOnDrawClick(e, 'contextmenu')
     })
     // 鼠标双击回到根节点
     this.mindMap.svg.on('dblclick', () => {
@@ -338,6 +328,29 @@ class Render {
     this.mindMap.keyCommand.addShortcut('Control+Enter', () => {
       this.setRootNodeCenter()
     })
+  }
+
+  // 鼠标点击画布时清空当前激活节点列表
+  clearActiveNodeListOnDrawClick(e, eventType) {
+    if (this.activeNodeList.length <= 0) return
+    // 清除激活状态
+    let isTrueClick = true
+    // 是否是左键多选节点，右键拖动画布
+    const { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
+    // 如果鼠标按下和松开的距离较大，则不认为是点击事件
+    if (
+      eventType === 'contextmenu'
+        ? !useLeftKeySelectionRightKeyDrag
+        : useLeftKeySelectionRightKeyDrag
+    ) {
+      const mousedownPos = this.mindMap.event.mousedownPos
+      isTrueClick =
+        Math.abs(e.clientX - mousedownPos.x) <= 5 &&
+        Math.abs(e.clientY - mousedownPos.y) <= 5
+    }
+    if (isTrueClick) {
+      this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
+    }
   }
 
   //  开启文字编辑，会禁用回车键和删除键相关快捷键防止冲突
