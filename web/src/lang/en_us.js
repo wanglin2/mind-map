@@ -197,8 +197,8 @@ export default {
   toolbar: {
     undo: 'Undo',
     redo: 'Redo',
-    insertSiblingNode: 'Insert sibling node',
-    insertChildNode: 'Insert child node',
+    insertSiblingNode: 'Sibling node',
+    insertChildNode: 'Child node',
     deleteNode: 'Delete node',
     image: 'Image',
     icon: 'Icon',
@@ -218,7 +218,8 @@ export default {
     shortcutKey: 'Shortcut key',
     associativeLine: 'Associative line',
     painter: 'Painter',
-    formula: 'Formula'
+    formula: 'Formula',
+    more: 'More'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',

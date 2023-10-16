@@ -195,8 +195,8 @@ export default {
   toolbar: {
     undo: '回退',
     redo: '前进',
-    insertSiblingNode: '插入同级节点',
-    insertChildNode: '插入子节点',
+    insertSiblingNode: '同级节点',
+    insertChildNode: '子节点',
     deleteNode: '删除节点',
     image: '图片',
     icon: '图标',
@@ -216,7 +216,8 @@ export default {
     shortcutKey: '快捷键',
     associativeLine: '关联线',
     painter: '格式刷',
-    formula: '公式'
+    formula: '公式',
+    more: '更多'
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',

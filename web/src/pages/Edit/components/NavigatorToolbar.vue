@@ -145,6 +145,7 @@ export default {
     onLangChange(lang) {
       i18n.locale = lang
       storeLang(lang)
+      this.$bus.$emit('lang_change')
     },
 
     showSearch() {
