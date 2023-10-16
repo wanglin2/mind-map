@@ -96,7 +96,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(Painter)
   .usePlugin(ScrollbarPlugin)
   .usePlugin(Formula)
-  // .usePlugin(Cooperate)// 协同插件
+// .usePlugin(Cooperate)// 协同插件
 
 // 注册自定义主题
 customThemeList.forEach(item => {
@@ -306,7 +306,14 @@ export default {
         useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag,
         customInnerElsAppendTo: null,
         enableAutoEnterTextEditWhenKeydown: true,
-        customHandleClipboardText: handleClipboardText
+        customHandleClipboardText: handleClipboardText,
+        handleIsSplitByWrapOnPasteCreateNewNode: () => {
+          return this.$confirm('是否按换行自动分割节点？', '提示', {
+            confirmButtonText: '是',
+            cancelButtonText: '否',
+            type: 'warning'
+          })
+        }
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
         // customCreateNodeContent: (node) => {
@@ -598,7 +605,10 @@ export default {
           color: ['#409EFF', '#67C23A', '#E6A23C', '#F56C6C', '#909399'][
             Math.floor(Math.random() * 5)
           ],
-          avatar: Math.random() > 0.5 ? 'https://img0.baidu.com/it/u=4270674549,2416627993&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1696006800&t=4d32871d14a7224a4591d0c3c7a97311' : ''
+          avatar:
+            Math.random() > 0.5
+              ? 'https://img0.baidu.com/it/u=4270674549,2416627993&fm=253&app=138&size=w931&n=0&f=JPEG&fmt=auto?sec=1696006800&t=4d32871d14a7224a4591d0c3c7a97311'
+              : ''
         })
       }
     }
