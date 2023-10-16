@@ -127,6 +127,9 @@ class Render {
         this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
       }
     })
+    this.mindMap.on('contextmenu', () => {
+      this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
+    })
     // 鼠标双击回到根节点
     this.mindMap.svg.on('dblclick', () => {
       if (!this.mindMap.opt.enableDblclickBackToRootNode) return
