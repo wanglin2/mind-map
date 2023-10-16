@@ -492,10 +492,7 @@ class Node {
       }
       // 如果有且只有当前节点激活了，那么不需要重新激活
       if (
-        !(
-          this.getData('isActive') &&
-          this.renderer.activeNodeList.length === 1
-        )
+        !(this.getData('isActive') && this.renderer.activeNodeList.length === 1)
       ) {
         this.renderer.clearActiveNodeList()
         this.active(e)
@@ -693,6 +690,9 @@ class Node {
     this.removeGeneralization()
     this.removeLine()
     this.group = null
+    if (this.parent) {
+      this.parent.removeLine()
+    }
   }
 
   //  隐藏节点

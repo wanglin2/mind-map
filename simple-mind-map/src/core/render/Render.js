@@ -387,10 +387,11 @@ class Render {
       // 删除本次渲染时不再需要的节点
       Object.keys(this.lastNodeCache).forEach(uid => {
         if (!this.nodeCache[uid]) {
+          // 从激活节点列表里删除
+          this.removeNodeFromActiveList(this.lastNodeCache[uid])
+          this.emitNodeActiveEvent()
+          // 调用节点的销毁方法
           this.lastNodeCache[uid].destroy()
-          if (this.lastNodeCache[uid].parent) {
-            this.lastNodeCache[uid].parent.removeLine()
-          }
         }
       })
       // 更新根节点
@@ -416,7 +417,7 @@ class Render {
         }
       })
     })
-    this.mindMap.emit('node_active', null, [...this.activeNodeList])
+    this.emitNodeActiveEvent()
   }
 
   //  清除当前所有激活节点，并会触发事件
@@ -475,7 +476,7 @@ class Render {
       0,
       0
     )
-    this.mindMap.emit('node_active', null, [...this.activeNodeList])
+    this.emitNodeActiveEvent()
   }
 
   //  回退
@@ -1019,7 +1020,7 @@ class Render {
     if (needActiveNode) {
       this.addNodeToActiveList(needActiveNode)
     }
-    this.mindMap.emit('node_active', null, [...this.activeNodeList])
+    this.emitNodeActiveEvent()
     this.mindMap.render()
   }
 
@@ -1062,7 +1063,7 @@ class Render {
     if (needActiveNode) {
       this.addNodeToActiveList(needActiveNode)
     }
-    this.mindMap.emit('node_active', null, [...this.activeNodeList])
+    this.emitNodeActiveEvent()
     this.mindMap.render()
   }
 
@@ -1143,7 +1144,7 @@ class Render {
       removeFromParentNodeData(item)
       toNode.nodeData.children.push(item.nodeData)
     })
-    this.mindMap.emit('node_active', null, [...this.activeNodeList])
+    this.emitNodeActiveEvent()
     this.mindMap.render()
   }
 
@@ -1534,6 +1535,11 @@ class Render {
       }
     })
     return res
+  }
+
+  // 派发节点激活改变事件
+  emitNodeActiveEvent() {
+    this.mindMap.emit('node_active', null, [...this.activeNodeList])
   }
 }
 
