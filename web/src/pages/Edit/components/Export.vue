@@ -101,7 +101,7 @@ export default {
     return {
       dialogVisible: false,
       exportType: 'smm',
-      fileName: '思维导图',
+      fileName: this.$t('export.defaultFileName'),
       widthConfig: true,
       isTransparent: false,
       loading: false,

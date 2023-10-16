@@ -89,14 +89,17 @@ export default {
 
     handleNodeActive(...args) {
       this.activeNodes = [...args[1]]
-      if (this.activeNodes.length <= 0 && this.activeSidebar === 'formulaSidebar') {
+      if (
+        this.activeNodes.length <= 0 &&
+        this.activeSidebar === 'formulaSidebar'
+      ) {
         this.setActiveSidebar(null)
       }
     },
 
     confirm() {
       if (!this.localConfig.openNodeRichText) {
-        return this.$message.warning('非富文本模式下不支持插入公式')
+        return this.$message.warning(this.$t('formulaSidebar.tip'))
       }
       let str = this.formulaText.trim()
       if (!str) return
