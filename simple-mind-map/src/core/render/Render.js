@@ -819,7 +819,8 @@ class Render {
 
   // 粘贴事件
   async onPaste() {
-    const { errorHandler } = this.mindMap.opt
+    const { errorHandler, handleIsSplitByWrapOnPasteCreateNewNode } =
+      this.mindMap.opt
     // 读取剪贴板的文字和图片
     let text = null
     let img = null
@@ -884,9 +885,36 @@ class Render {
             Array.isArray(smmData) ? smmData : [smmData]
           )
         } else {
-          this.mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
-            text
+          const textArr = text.split(/\r?\n|(?<!\n)\r/g).filter(item => {
+            return !!item
           })
+          // 判断是否需要根据换行自动分割节点
+          if (textArr.length > 1 && handleIsSplitByWrapOnPasteCreateNewNode) {
+            handleIsSplitByWrapOnPasteCreateNewNode()
+              .then(() => {
+                this.mindMap.execCommand(
+                  'INSERT_MULTI_CHILD_NODE',
+                  [],
+                  textArr.map(item => {
+                    return {
+                      data: {
+                        text: item
+                      },
+                      children: []
+                    }
+                  })
+                )
+              })
+              .catch(() => {
+                this.mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
+                  text
+                })
+              })
+          } else {
+            this.mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
+              text
+            })
+          }
         }
       }
       // 存在图片，则添加到当前激活节点

@@ -214,5 +214,8 @@ export const defaultOpt = {
   // false：即创建关联线和激活关联线时处于最顶层，其他情况下处于节点下方
   associativeLineIsAlwaysAboveNode: true,
   // 插入概要的默认文本
-  defaultGeneralizationText: '概要'
+  defaultGeneralizationText: '概要',
+  // 粘贴文本的方式创建新节点时，控制是否按换行自动分割节点，即如果存在换行，那么会根据换行创建多个节点，否则只会创建一个节点
+  // 可以传递一个函数，返回promise，resolve代表根据换行分割，reject代表忽略换行
+  handleIsSplitByWrapOnPasteCreateNewNode: null
 }
