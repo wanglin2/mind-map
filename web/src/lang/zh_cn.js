@@ -112,7 +112,8 @@ export default {
     notifyMessage: '如果没有触发下载，请检查是否被浏览器拦截了',
     paddingX: '水平内边距',
     paddingY: '垂直内边距',
-    useMultiPageExport: '是否多页导出'
+    useMultiPageExport: '是否多页导出',
+    defaultFileName: '思维导图'
   },
   fullscreen: {
     fullscreenShow: '全屏查看',
@@ -121,7 +122,13 @@ export default {
   import: {
     title: '导入',
     selectFile: '选取文件',
-    supportFile: '支持.smm、.json、.xmind、.xlsx、.md文件'
+    supportFile: '支持.smm、.json、.xmind、.xlsx、.md文件',
+    enableFileTip: '请选择.smm、.json、.xmind、.xlsx、.md文件',
+    maxFileNum: '最多只能选择一个文件',
+    notSelectTip: '请选择要导入的文件',
+    fileContentError: '文件内容有误',
+    importSuccess: '导入成功',
+    fileParsingFailed: '文件解析失败'
   },
   navigatorToolbar: {
     openMiniMap: '开启小地图',
@@ -190,7 +197,14 @@ export default {
     vertical: '垂直'
   },
   theme: {
-    title: '主题'
+    title: '主题',
+    classics: '经典',
+    dark: '深色',
+    simple: '朴素',
+    coverTip: '你当前自定义过基础样式，是否覆盖？',
+    tip: '提示',
+    cover: '覆盖',
+    reserve: '保留'
   },
   toolbar: {
     undo: '回退',
@@ -217,12 +231,26 @@ export default {
     associativeLine: '关联线',
     painter: '格式刷',
     formula: '公式',
-    more: '更多'
+    more: '更多',
+    selectFileTip: '请选择文件',
+    notSupportTip: '你的浏览器或网络协议不支持该功能',
+    tip: '提示',
+    editingLocalFileTipFront: '当前正在编辑你本机的【',
+    editingLocalFileTipEnd: '】文件',
+    fileContentError: '文件内容有误',
+    fileOpenFailed: '文件打开失败',
+    defaultFileName: '思维导图',
+    creatingTip: '正在创建文件'
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',
     newFeatureNoticeMessage:
-      '本次更新支持了节点富文本编辑，但是存在一定缺陷，最主要的影响是导出为图片的时间和节点数量成正比，所以对导出需求比较依赖的话可以通过【基础样式】-【其他配置】-【是否开启节点富文本编辑】设置关掉富文本编辑模式。'
+      '本次更新支持了节点富文本编辑，但是存在一定缺陷，最主要的影响是导出为图片的时间和节点数量成正比，所以对导出需求比较依赖的话可以通过【基础样式】-【其他配置】-【是否开启节点富文本编辑】设置关掉富文本编辑模式。',
+    root: '根节点',
+    splitByWrap: '是否按换行自动分割节点？',
+    tip: '提示',
+    yes: '是',
+    no: '否'
   },
   mouseAction: {
     tip1: '当前：左键拖动画布，右键框选节点',
@@ -244,6 +272,21 @@ export default {
     title: '公式',
     placeholder: '请输入 LaText 语法',
     confirm: '完成',
-    common: '常用公式'
+    common: '常用公式',
+    tip: '非富文本模式下不支持插入公式'
+  },
+  richTextToolbar: {
+    bold: '加粗',
+    italic: '斜体',
+    underline: '下划线',
+    strike: '删除线',
+    fontFamily: '字体',
+    fontSize: '字号',
+    color: '字体颜色',
+    backgroundColor: '背景颜色',
+    removeFormat: '清除样式'
+  },
+  other: {
+    loading: '正在加载，请稍后...'
   }
 }

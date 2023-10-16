@@ -43,7 +43,7 @@ export default {
     this.initLocalConfig()
     const loading = this.$loading({
       lock: true,
-      text: '正在加载，请稍后...'
+      text: this.$t('other.loading')
     })
     await this.getUserMindMapData()
     this.show = true

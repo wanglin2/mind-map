@@ -275,7 +275,7 @@ export default {
       if (hasFileURL) {
         root = {
           data: {
-            text: '根节点'
+            text: this.$t('edit.root')
           },
           children: []
         }
@@ -308,9 +308,9 @@ export default {
         enableAutoEnterTextEditWhenKeydown: true,
         customHandleClipboardText: handleClipboardText,
         handleIsSplitByWrapOnPasteCreateNewNode: () => {
-          return this.$confirm('是否按换行自动分割节点？', '提示', {
-            confirmButtonText: '是',
-            cancelButtonText: '否',
+          return this.$confirm(this.$t('edit.splitByWrap'), this.$t('edit.tip'), {
+            confirmButtonText: this.$t('edit.yes'),
+            cancelButtonText: this.$t('edit.no'),
             type: 'warning'
           })
         }
