@@ -771,12 +771,13 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 <p>v0.6.0+</p>
 </blockquote>
 <p>Destroy mind maps. It will remove registered plugins, remove listening events, and delete all nodes on the canvas.</p>
-<h3>getSvgData({ paddingX = 0, paddingY = 0 })</h3>
+<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
 <p><code>paddingX</code>: Padding x</p>
 <p><code>paddingY</code>: Padding y</p>
+<p><code>ignoreWatermark</code>：v0.8.0+, Do not draw watermarks. If you do not need to draw watermarks, you can pass 'true' because drawing watermarks is very slow</p>
 <p>Get the <code>svg</code> data and return an object. The detailed structure is as follows:</p>
 <pre class="hljs"><code>{
   svg, <span class="hljs-comment">// Element, the overall svg element of the mind map graphics, including: svg (canvas container), g (actual mind map group)</span>
@@ -1018,6 +1019,11 @@ poor performance and should be used sparingly.</p>
 <td>set_data（v0.7.3+）</td>
 <td>Triggered when the setData method is called to dynamically set mind map data</td>
 <td>data（New Mind Map Data）</td>
+</tr>
+<tr>
+<td>resize（v0.8.0+）</td>
+<td>Triggered after the container size changes, actually when the 'resize' method of the mind map instance is called</td>
+<td></td>
 </tr>
 </tbody>
 </table>

@@ -30,7 +30,8 @@ MindMap.usePlugin(MiniMap)
 
 ```js
 {
-      svgHTML, // 小地图html
+      getImgUrl,// v0.8.0+，一个异步函数，你可以调用该函数，传递一个回调函数，回调函数可以接收一个参数，代表图片类型的小地图，你可以通过img标签进行渲染
+      svgHTML, // 小地图html，推荐使用getImgUrl方式获取图片类型的小地图，减少页面DOM数量，优化性能
       viewBoxStyle, // 视图框的位置信息
       miniMapBoxScale, // 视图框的缩放值
       miniMapBoxLeft, // 视图框的left值

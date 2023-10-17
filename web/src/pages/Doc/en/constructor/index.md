@@ -310,13 +310,15 @@ Clear `lineDraw`、`associativeLineDraw`、`nodeDraw`、`otherDraw` containers.
 
 Destroy mind maps. It will remove registered plugins, remove listening events, and delete all nodes on the canvas.
 
-### getSvgData({ paddingX = 0, paddingY = 0 })
+### getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })
 
 > v0.3.0+
 
 `paddingX`: Padding x
 
 `paddingY`: Padding y
+
+`ignoreWatermark`：v0.8.0+, Do not draw watermarks. If you do not need to draw watermarks, you can pass 'true' because drawing watermarks is very slow
 
 Get the `svg` data and return an object. The detailed structure is as follows:
 
@@ -404,6 +406,7 @@ Listen to an event. Event list:
 | node_icon_click（v0.6.10+）    | Triggered when clicking on an icon within a node   | this（node instance）、item（Click on the icon name）、e（event object）  |
 | view_theme_change（v0.6.12+）    | Triggered after calling the setTheme method to set the theme   | theme（theme name）  |
 | set_data（v0.7.3+）    |  Triggered when the setData method is called to dynamically set mind map data  | data（New Mind Map Data）  |
+| resize（v0.8.0+）    | Triggered after the container size changes, actually when the 'resize' method of the mind map instance is called   |   |
 
 ### emit(event, ...args)
 

@@ -35,7 +35,8 @@ Function return content:
 
 ```js
 {
-      svgHTML, // small map html
+      getImgUrl,// v0.8.0+, An asynchronous function that you can call and pass a callback function. The callback function can receive a parameter representing a small map of the image type, and you can render it through the img tag
+      svgHTML, // Mini map HTML, it is recommended to use the getImgUrl method to obtain image type mini maps, reduce the number of page DOM, and optimize performance
       viewBoxStyle, // view box position information
       miniMapBoxScale, // view box zoom value
       miniMapBoxLeft, // view box left value
