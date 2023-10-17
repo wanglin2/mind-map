@@ -5,30 +5,31 @@
 <p>Breaking change: Greatly optimize some of the code and slightly improve performance, mainly by using the 'render' class to remove useless logic, adjust unreasonable implementations, and extract duplicate code; Modify function names, functions, etc.</p>
 <p>Fix:</p>
 <blockquote>
-<p>Fix the issue of the arrow of the associated line disappearing when exporting images and SVGs.</p>
-<p>Fix the issue of abnormal operation returning to the root node after resizing the container.</p>
-<p>Fix that the shortcut key operations for inserting summary, moving up, down, and organizing layout with one click did not trigger data_ The issue with the change event.</p>
+<p>1.Fix the issue of the arrow of the associated line disappearing when exporting images and SVGs.</p>
+<p>2.Fix the issue of abnormal operation returning to the root node after resizing the container.</p>
+<p>3.Fix that the shortcut key operations for inserting summary, moving up, down, and organizing layout with one click did not trigger data_ The issue with the change event.</p>
+<p>4.Fix the issue of each node displaying a border when exporting images, SVGs, and PDFs with watermarks.</p>
 </blockquote>
 <p>New:</p>
 <blockquote>
-<p>Optimize the canvas DOM structure and render nodes, lines, and associated lines in layers.</p>
-<p>Optimize the watermark plugin.</p>
-<p>The setTheme, setThemeConfig, and setLayout functions add parameters that do not trigger re rendering.</p>
-<p>Add a command to insert a parent node.</p>
-<p>Add a command to only delete the current node.</p>
-<p>Automatically expand child nodes when inserting a summary.</p>
-<p>Clear the current active node when right-clicking on the canvas.</p>
-<p>The folded active nodes are synchronously deleted from the list of active nodes.</p>
-<p>Pasting text with line breaks supports controlling whether nodes are split by line breaks.</p>
+<p>1.Optimize the canvas DOM structure and render nodes, lines, and associated lines in layers.</p>
+<p>2.Optimize the watermark plugin.</p>
+<p>3.The setTheme, setThemeConfig, and setLayout functions add parameters that do not trigger re rendering.</p>
+<p>4.Add a command to insert a parent node.</p>
+<p>5.Add a command to only delete the current node.</p>
+<p>6.Automatically expand child nodes when inserting a summary.</p>
+<p>7.Clear the current active node when right-clicking on the canvas.</p>
+<p>8.The folded active nodes are synchronously deleted from the list of active nodes.</p>
+<p>9.Pasting text with line breaks supports controlling whether nodes are split by line breaks.</p>
 </blockquote>
 <p>Demo:</p>
 <blockquote>
-<p>Modify the method and copy to return to the root node.</p>
-<p>Fix the issue of ineffective first switching when switching themes in overlay mode.</p>
-<p>The right-click menu adds the function of inserting parent nodes and deleting only the current node.</p>
-<p>The top toolbar supports automatic folding into more according to the window width.</p>
-<p>Support manual input of zoom factor.</p>
-<p>Improve the English translation of the interface.</p>
+<p>1.Modify the method and copy to return to the root node.</p>
+<p>2.Fix the issue of ineffective first switching when switching themes in overlay mode.</p>
+<p>3.The right-click menu adds the function of inserting parent nodes and deleting only the current node.</p>
+<p>4.The top toolbar supports automatic folding into more according to the window width.</p>
+<p>5.Support manual input of zoom factor.</p>
+<p>6.Improve the English translation of the interface.</p>
 </blockquote>
 <h2>0.7.3-fix.2</h2>
 <p>Fix some issues with collaborative editing:</p>
