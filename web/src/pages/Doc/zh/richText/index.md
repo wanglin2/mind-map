@@ -68,6 +68,14 @@ MindMap.usePlugin(RichText, opt?)
 
 ## 方法
 
+### setNotActiveNodeStyle(node, style)
+
+> v0.8.0+
+
+- `style`：Object，样式对象。
+
+给未激活的节点设置富文本样式。
+
 ### selectAll()
 
 选中全部。当节点正在编辑中可以通过该方法选中节点内的所有文本。

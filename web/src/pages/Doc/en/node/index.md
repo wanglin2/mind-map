@@ -56,6 +56,14 @@ Whether the node is currently being dragged
 
 ## Methods
 
+### updateNodeByActive(active)
+
+> v0.8.0+
+
+- `active`：Boolean, active status.
+
+Update nodes based on whether they are activated or not. The main task is to update the display and hiding of the expand and collapse buttons for nodes.
+
 ### setOpacity(val)
 
 > v0.7.2+

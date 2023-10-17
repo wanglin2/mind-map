@@ -68,6 +68,14 @@ Replace the built-in font size list during rich text editing. The built-in list 
 
 ## Method
 
+### setNotActiveNodeStyle(node, style)
+
+> v0.8.0+
+
+- `style`：Object, style object.
+
+Set rich text style for inactive nodes.
+
 ### selectAll()
 
 Select All. When the node is being edited, you can select all the text in the node through this method.

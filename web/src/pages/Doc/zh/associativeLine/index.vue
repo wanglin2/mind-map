@@ -66,6 +66,16 @@ MindMap.usePlugin(AssociativeLine)
 <p>删除当前激活的关联线。点击某条关联线则视为激活。</p>
 <h3>clearActiveLine()</h3>
 <p>清除当前激活的关联线的激活状态。</p>
+<h3>front()</h3>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>关联线顶层显示。</p>
+<h3>back()</h3>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>关联线回到原有层级。</p>
 
   </div>
 </template>

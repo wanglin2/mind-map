@@ -290,6 +290,39 @@
 <li><code>a</code>、<code>b</code>：Object | Array, 要进行对比的两个对象</li>
 </ul>
 <p>判断两个对象是否相同，只处理对象或数组。</p>
+<h4>getNodeDataIndex(node)</h4>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>获取节点在兄弟节点中的位置索引。</p>
+<h4>getNodeIndexInNodeList(node, nodeList)</h4>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>从一个节点列表里找出某个节点的索引。</p>
+<h4>setDataToClipboard(data)</h4>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<ul>
+<li><code>data</code>：Object | Array</li>
+</ul>
+<p>将数据设置到用户剪切板中。</p>
+<h4>getDataFromClipboard()</h4>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>从用户剪贴板中读取文字和图片，返回：</p>
+<pre class="hljs"><code>{
+  text,
+  img
+}
+</code></pre>
+<h4>removeFromParentNodeData(node)</h4>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>从节点的父节点的<code>nodeData.children</code>列表中移除该节点的数据。</p>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

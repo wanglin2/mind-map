@@ -358,6 +358,45 @@ copyNodeTree({}, node)
 
 判断两个对象是否相同，只处理对象或数组。
 
+#### getNodeDataIndex(node)
+
+> v0.8.0+
+
+获取节点在兄弟节点中的位置索引。
+
+#### getNodeIndexInNodeList(node, nodeList) 
+
+> v0.8.0+
+
+从一个节点列表里找出某个节点的索引。
+
+#### setDataToClipboard(data)
+
+> v0.8.0+
+
+- `data`：Object | Array
+
+将数据设置到用户剪切板中。
+
+#### getDataFromClipboard()
+
+> v0.8.0+
+
+从用户剪贴板中读取文字和图片，返回：
+
+```js
+{
+  text,
+  img
+}
+```
+
+#### removeFromParentNodeData(node)
+
+> v0.8.0+
+
+从节点的父节点的`nodeData.children`列表中移除该节点的数据。
+
 ## 在canvas中模拟css的背景属性
 
 引入：

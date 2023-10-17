@@ -88,3 +88,15 @@ MindMap.usePlugin(AssociativeLine)
 ### clearActiveLine()
 
 清除当前激活的关联线的激活状态。
+
+### front()
+
+> v0.8.0+
+
+关联线顶层显示。
+
+### back()
+
+> v0.8.0+
+
+关联线回到原有层级。

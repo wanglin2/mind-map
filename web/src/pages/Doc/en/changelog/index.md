@@ -1,5 +1,51 @@
 # Changelog
 
+## 0.8.0
+
+Breaking change: Greatly optimize some of the code and slightly improve performance, mainly by using the 'render' class to remove useless logic, adjust unreasonable implementations, and extract duplicate code; Modify function names, functions, etc.
+
+Fix:
+
+> Fix the issue of the arrow of the associated line disappearing when exporting images and SVGs.
+>
+> Fix the issue of abnormal operation returning to the root node after resizing the container.
+>
+> Fix that the shortcut key operations for inserting summary, moving up, down, and organizing layout with one click did not trigger data_ The issue with the change event.
+
+New:
+
+> Optimize the canvas DOM structure and render nodes, lines, and associated lines in layers.
+>
+> Optimize the watermark plugin.
+>
+> The setTheme, setThemeConfig, and setLayout functions add parameters that do not trigger re rendering.
+>
+> Add a command to insert a parent node.
+>
+> Add a command to only delete the current node.
+>
+> Automatically expand child nodes when inserting a summary.
+>
+> Clear the current active node when right-clicking on the canvas.
+>
+> The folded active nodes are synchronously deleted from the list of active nodes.
+>
+> Pasting text with line breaks supports controlling whether nodes are split by line breaks.
+
+Demo:
+
+> Modify the method and copy to return to the root node.
+> 
+> Fix the issue of ineffective first switching when switching themes in overlay mode.
+>
+> The right-click menu adds the function of inserting parent nodes and deleting only the current node.
+>
+> The top toolbar supports automatic folding into more according to the window width.
+>
+> Support manual input of zoom factor.
+>
+> Improve the English translation of the interface.
+
 ## 0.7.3-fix.2
 
 Fix some issues with collaborative editing:
