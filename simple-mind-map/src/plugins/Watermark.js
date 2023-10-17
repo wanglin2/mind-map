@@ -12,10 +12,29 @@ class Watermark {
     this.text = '' // 水印文字
     this.textStyle = {} // 水印文字样式
     this.watermarkDraw = null // 容器
-    this.maxLong = Math.sqrt(
+    this.maxLong = this.getMaxLong()
+    this.updateWatermark(this.mindMap.opt.watermarkConfig || {})
+    this.bindEvent()
+  }
+
+  getMaxLong() {
+    return Math.sqrt(
       Math.pow(this.mindMap.width, 2) + Math.pow(this.mindMap.height, 2)
     )
-    this.updateWatermark(this.mindMap.opt.watermarkConfig || {})
+  }
+
+  bindEvent() {
+    this.onResize = this.onResize.bind(this)
+    this.mindMap.on('resize', this.onResize)
+  }
+
+  unBindEvent() {
+    this.mindMap.off('resize', this.onResize)
+  }
+
+  onResize() {
+    this.maxLong = this.getMaxLong()
+    this.draw()
   }
 
   // 创建水印容器
@@ -135,6 +154,16 @@ class Watermark {
     )
     this.handleConfig(config)
     this.draw()
+  }
+
+  // 插件被移除前做的事情
+  beforePluginRemove() {
+    this.unBindEvent()
+  }
+
+  // 插件被卸载前做的事情
+  beforePluginDestroy() {
+    this.unBindEvent()
   }
 }
 

@@ -190,6 +190,7 @@ class MindMap {
   resize() {
     this.getElRectInfo()
     this.svg.size(this.width, this.height)
+    this.emit('resize')
   }
 
   //  监听事件
