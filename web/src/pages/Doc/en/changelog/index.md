@@ -13,6 +13,10 @@ Fix:
 > 3.Fix that the shortcut key operations for inserting summary, moving up, down, and organizing layout with one click did not trigger data_ The issue with the change event.
 >
 > 4.Fix the issue of each node displaying a border when exporting images, SVGs, and PDFs with watermarks.
+>
+> 5.Fixed the issue of no watermarks and no redrawing after the container size was changed.
+>
+> 6.Fix the issue of slow rendering of mini maps with watermarks.
 
 New:
 
@@ -33,6 +37,8 @@ New:
 > 8.The folded active nodes are synchronously deleted from the list of active nodes.
 >
 > 9.Pasting text with line breaks supports controlling whether nodes are split by line breaks.
+>
+> 10.The mini map plugin supports returning mini maps of image types.
 
 Demo:
 
@@ -47,6 +53,8 @@ Demo:
 > 5.Support manual input of zoom factor.
 >
 > 6.Improve the English translation of the interface.
+>
+> 7.Change the mini map to render through images.
 
 ## 0.7.3-fix.2
 
