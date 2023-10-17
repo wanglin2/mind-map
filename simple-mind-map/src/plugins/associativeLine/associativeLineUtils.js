@@ -202,7 +202,7 @@ export const computeNodePoints = (fromNode, toNode) => {
   // 中心点坐标的差值
   let offsetX = toCx - fromCx
   let offsetY = toCy - fromCy
-  if (offsetX === 0 && offsetY === 0) return
+  if (offsetX === 0 && offsetY === 0) return []
   let fromDir = ''
   let toDir = ''
   if (offsetX <= 0 && offsetX <= offsetY && offsetX <= -offsetY) {
