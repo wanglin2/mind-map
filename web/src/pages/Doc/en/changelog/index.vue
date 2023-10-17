@@ -9,6 +9,8 @@
 <p>2.Fix the issue of abnormal operation returning to the root node after resizing the container.</p>
 <p>3.Fix that the shortcut key operations for inserting summary, moving up, down, and organizing layout with one click did not trigger data_ The issue with the change event.</p>
 <p>4.Fix the issue of each node displaying a border when exporting images, SVGs, and PDFs with watermarks.</p>
+<p>5.Fixed the issue of no watermarks and no redrawing after the container size was changed.</p>
+<p>6.Fix the issue of slow rendering of mini maps with watermarks.</p>
 </blockquote>
 <p>New:</p>
 <blockquote>
@@ -21,6 +23,7 @@
 <p>7.Clear the current active node when right-clicking on the canvas.</p>
 <p>8.The folded active nodes are synchronously deleted from the list of active nodes.</p>
 <p>9.Pasting text with line breaks supports controlling whether nodes are split by line breaks.</p>
+<p>10.The mini map plugin supports returning mini maps of image types.</p>
 </blockquote>
 <p>Demo:</p>
 <blockquote>
@@ -30,6 +33,7 @@
 <p>4.The top toolbar supports automatic folding into more according to the window width.</p>
 <p>5.Support manual input of zoom factor.</p>
 <p>6.Improve the English translation of the interface.</p>
+<p>7.Change the mini map to render through images.</p>
 </blockquote>
 <h2>0.7.3-fix.2</h2>
 <p>Fix some issues with collaborative editing:</p>
