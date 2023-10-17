@@ -56,6 +56,14 @@ MindMap.usePlugin(RichText, opt?)
 <pre class="hljs"><code>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, ..<span class="hljs-number">.100</span>]
 </code></pre>
 <h2>Method</h2>
+<h3>setNotActiveNodeStyle(node, style)</h3>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<ul>
+<li><code>style</code>：Object, style object.</li>
+</ul>
+<p>Set rich text style for inactive nodes.</p>
 <h3>selectAll()</h3>
 <p>Select All. When the node is being edited, you can select all the text in the node through this method.</p>
 <h3>focus()</h3>

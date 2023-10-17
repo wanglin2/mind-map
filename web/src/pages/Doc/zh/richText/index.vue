@@ -56,6 +56,14 @@ MindMap.usePlugin(RichText, opt?)
 <pre class="hljs"><code>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, ..<span class="hljs-number">.100</span>]
 </code></pre>
 <h2>方法</h2>
+<h3>setNotActiveNodeStyle(node, style)</h3>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<ul>
+<li><code>style</code>：Object，样式对象。</li>
+</ul>
+<p>给未激活的节点设置富文本样式。</p>
 <h3>selectAll()</h3>
 <p>选中全部。当节点正在编辑中可以通过该方法选中节点内的所有文本。</p>
 <h3>focus()</h3>

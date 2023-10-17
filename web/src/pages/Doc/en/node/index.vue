@@ -31,6 +31,14 @@
 </blockquote>
 <p>Whether the node is currently being dragged</p>
 <h2>Methods</h2>
+<h3>updateNodeByActive(active)</h3>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<ul>
+<li><code>active</code>：Boolean, active status.</li>
+</ul>
+<p>Update nodes based on whether they are activated or not. The main task is to update the display and hiding of the expand and collapse buttons for nodes.</p>
 <h3>setOpacity(val)</h3>
 <blockquote>
 <p>v0.7.2+</p>

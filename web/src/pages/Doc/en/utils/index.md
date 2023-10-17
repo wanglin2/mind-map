@@ -363,6 +363,45 @@ Generate colors based on incoming content, and the same content will generate th
 
 Determine whether two objects are the same, only handling objects or arrays.
 
+#### getNodeDataIndex(node)
+
+> v0.8.0+
+
+Gets the position index of a node within its sibling nodes.
+
+#### getNodeIndexInNodeList(node, nodeList) 
+
+> v0.8.0+
+
+Find the index of a node from a list of nodes.
+
+#### setDataToClipboard(data)
+
+> v0.8.0+
+
+- `data`：Object | Array
+
+Set data to the user clipboard.
+
+#### getDataFromClipboard()
+
+> v0.8.0+
+
+Reading text and images from the user's clipboard returns:
+
+```js
+{
+  text,
+  img
+}
+```
+
+#### removeFromParentNodeData(node)
+
+> v0.8.0+
+
+Remove the data of a node from its parent node's `nodeData.children` list.
+
 ## Simulate CSS background in Canvas
 
 Import:

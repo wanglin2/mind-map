@@ -82,7 +82,8 @@ const mindMap = new MindMap({
 | errorHandler（v0.6.15+）     | Function  |  | 自定义错误处理函数，目前只会抛出一些异步逻辑出错的情况。可以传递一个函数，会接收两个参数，第一个为错误的类型，第二个为错误对象 |
 | disableMouseWheelZoom（v0.6.15+）     | Boolean  | false | 禁止鼠标滚轮缩放，你仍旧可以使用api进行缩放 |
 | resetCss（v0.6.16+）     | String  |  * { margin: 0; padding: 0; box-sizing: border-box; } | 设置导出图片和svg时，针对富文本节点内容，也就是嵌入到svg中的html节点的默认样式覆盖，如果不覆盖，节点内容会发生偏移 |
-| enableDblclickReset（v0.6.17+）     | Boolean  | true（v0.7.0+改为false）  | 开启鼠标双击复位思维导图位置及缩放 |
+| enableDblclickReset（v0.6.17+）（v0.8.0+已删除该属性）     | Boolean  | true（v0.7.0+改为false）  | 开启鼠标双击复位思维导图位置及缩放 |
+| enableDblclickBackToRootNode（v0.8.0+）     | Boolean  | false  | 是否在鼠标双击时回到根节点，也就是让根节点居中显示 |
 | minExportImgCanvasScale（v0.7.0+）     | Number  | 2  | 导出图片和pdf时canvas的缩放倍数，该配置会和window.devicePixelRatio值取最大值，用于提升图片清晰度 |
 | hoverRectColor（v0.7.0+）     | String  | rgb(94, 200, 248)  | 节点鼠标hover和激活时显示的矩形边框颜色，hover时会添加0.6的透明度 |
 | hoverRectPadding（v0.7.0+）     | Number  | 2  | 节点鼠标hover和激活时显示的矩形边框距节点内容的距离 |
@@ -95,6 +96,9 @@ const mindMap = new MindMap({
 | dragOpacityConfig（v0.7.2+）     | Object  | { cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }  | 节点拖拽时的透明度配置，传递一个对象，字段含义分别为：跟随鼠标移动的克隆节点或矩形的透明度、被拖拽节点的透明度 |
 | tagsColorMap（v0.7.2+）     | Object  | {}  | 自定义节点标签的颜色，可传一个对象，key为要指定颜色的标签内容，value为该标签内容的颜色，如果不传内部会根据标签内容生成对应的颜色 |
 | cooperateStyle（v0.7.3+）     | Object  | { avatarSize: 22, fontSize: 12 }  | 节点协作编辑时的人员头像样式配置，字段含义分别为：头像大小、如果是文字头像，那么文字的大小 |
+| associativeLineIsAlwaysAboveNode（v0.8.0+）     |  Boolean | true  | 关联线是否始终显示在节点上层，如果设为false，那么创建关联线和激活关联线时处于最顶层，其他情况下处于节点下方 |
+| defaultGeneralizationText（v0.8.0+）     |  String | 概要  | 插入概要的默认文本 |
+| handleIsSplitByWrapOnPasteCreateNewNode（v0.8.0+）     | Function | null  | null  | 粘贴文本的方式创建新节点时，控制是否按换行自动分割节点，即如果存在换行，那么会根据换行创建多个节点，否则只会创建一个节点，可以传递一个函数，返回promise，resolve代表根据换行分割，reject代表忽略换行 |
 
 ### 数据结构
 
@@ -210,7 +214,95 @@ mindMap.setTheme('主题名称')
 
 当前注册的所有插件列表。
 
+## 实例属性
+
+### el
+
+容器元素。
+
+### opt
+
+配置选项对象。
+
+### svg
+
+> @svgdotjs/svg.js库调用SVG()方法返回的节点实例
+
+画布svg元素。
+
+### draw
+
+> @svgdotjs/svg.js库调用group()方法返回的节点实例
+>
+> svg节点的子节点
+
+容器元素，用于承载节点、连线等内容。
+
+### lineDraw
+
+> v0.8.0+
+>
+> @svgdotjs/svg.js库调用group()方法返回的节点实例
+>
+> draw节点的子节点
+
+节点连线元素的容器。
+
+### nodeDraw
+
+> v0.8.0+
+>
+> @svgdotjs/svg.js库调用group()方法返回的节点实例
+>
+> draw节点的子节点
+
+节点元素的容器。
+
+### associativeLineDraw
+
+> v0.8.0+
+>
+> @svgdotjs/svg.js库调用group()方法返回的节点实例
+>
+> 在注册了关联线插件的情况下可用
+>
+> draw节点的子节点
+
+关联线内容的容器。
+
+### otherDraw
+
+> v0.8.0+
+>
+> @svgdotjs/svg.js库调用group()方法返回的节点实例
+>
+> draw节点的子节点
+
+其他内容的容器。
+
+### elRect
+
+容器元素`el`的尺寸、位置信息。调用`getBoundingClientRect()`方法的返回结果。
+
+### width
+
+容器元素`el`的宽度。
+
+### height
+
+容器元素`el`的高度。
+
+### themeConfig
+
+当前主题配置。
+
 ## 实例方法
+
+### clearDraw()
+
+> v0.8.0+
+
+清空`lineDraw`、`associativeLineDraw`、`nodeDraw`、`otherDraw`容器。
 
 ### destroy()
 
@@ -318,7 +410,9 @@ mindMap.setTheme('主题名称')
 
 解绑事件
 
-### setTheme(theme)
+### setTheme(theme, notRender = false)
+
+- `notRender`：v0.8.0+，是否不要调用render方法更新画布。
 
 切换主题，可选主题见上面的选项表格
 
@@ -326,7 +420,9 @@ mindMap.setTheme('主题名称')
 
 获取当前主题
 
-### setThemeConfig(config)
+### setThemeConfig(config, notRender = false)
+
+- `notRender`：v0.8.0+，是否不要调用render方法更新画布。
 
 设置主题配置，`config`同上面选项表格里的选项`themeConfig`
 
@@ -366,7 +462,9 @@ mindMap.updateConfig({
 
 获取当前的布局结构
 
-### setLayout(layout)
+### setLayout(layout, notRender = false)
+
+- `notRender`：v0.8.0+，是否不要调用render方法更新画布。
 
 设置布局结构，可选值见上面选项表格的`layout`字段
 
@@ -413,6 +511,8 @@ mindMap.updateConfig({
 | INSERT_MULTI_NODE（v0.7.2+）           |  给指定的节点同时插入多个同级节点，操作节点为当前激活的节点或指定节点   | appointNodes（可选，指定节点，指定多个节点可以传一个数组）, nodeList（新插入节点的数据列表，数组类型） |
 | INSERT_MULTI_CHILD_NODE（v0.7.2+）           |  给指定的节点同时插入多个子节点，操作节点为当前激活的节点或指定节点   | appointNodes（可选，指定节点，指定多个节点可以传一个数组）, childList（新插入节点的数据列表，数组类型） |
 | INSERT_FORMULA（v0.7.2+）           |  给节点插入数学公式，操作节点为当前激活的节点或指定节点   | formula（要插入的数学公式，LaText语法）, appointNodes（可选，指定要插入公式的节点，多个节点可以传数组，否则默认为当前激活的节点） |
+| INSERT_PARENT_NODE（v0.8.0+）           |  给指定的节点插入父节点，操作节点为当前激活的节点或指定节点   | openEdit（是否激活新插入的节点并进入编辑模式，默认为`true`）、 appointNodes（可选，指定要插入父节点的节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考[exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)） |
+| REMOVE_CURRENT_NODE（v0.8.0+）           |   仅删除当前节点，操作节点为当前激活的节点或指定节点   | appointNodes（可选，指定要删除的节点，指定多个节点可以传一个数组） |
 
 ### setData(data)
 

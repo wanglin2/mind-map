@@ -295,6 +295,39 @@ and copying the <code>data</code> of the data object, example:</p>
 <li><code>a</code>、<code>b</code>: Object | Array, Two objects to compare</li>
 </ul>
 <p>Determine whether two objects are the same, only handling objects or arrays.</p>
+<h4>getNodeDataIndex(node)</h4>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>Gets the position index of a node within its sibling nodes.</p>
+<h4>getNodeIndexInNodeList(node, nodeList)</h4>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>Find the index of a node from a list of nodes.</p>
+<h4>setDataToClipboard(data)</h4>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<ul>
+<li><code>data</code>：Object | Array</li>
+</ul>
+<p>Set data to the user clipboard.</p>
+<h4>getDataFromClipboard()</h4>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>Reading text and images from the user's clipboard returns:</p>
+<pre class="hljs"><code>{
+  text,
+  img
+}
+</code></pre>
+<h4>removeFromParentNodeData(node)</h4>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>Remove the data of a node from its parent node's <code>nodeData.children</code> list.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>
