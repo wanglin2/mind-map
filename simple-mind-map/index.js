@@ -388,7 +388,7 @@ class MindMap {
   }
 
   // 获取svg数据
-  getSvgData({ paddingX = 0, paddingY = 0 } = {}) {
+  getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false } = {}) {
     const svg = this.svg
     const draw = this.draw
     // 保存原始信息
@@ -412,6 +412,7 @@ class MindMap {
     let clone = svg.clone()
     // 如果实际图形宽高超出了屏幕宽高，且存在水印的话需要重新绘制水印，否则会出现超出部分没有水印的问题
     if (
+      !ignoreWatermark &&
       (rect.width > origWidth || rect.height > origHeight) &&
       this.watermark &&
       this.watermark.hasWatermark()

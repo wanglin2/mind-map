@@ -28,7 +28,9 @@ class MiniMap {
    */
   calculationMiniMap(boxWidth, boxHeight) {
     let { svg, rect, origWidth, origHeight, scaleX, scaleY } =
-      this.mindMap.getSvgData()
+      this.mindMap.getSvgData({
+        ignoreWatermark: true
+      })
     // 计算数据
     const elRect = this.mindMap.elRect
     rect.x -= elRect.left
