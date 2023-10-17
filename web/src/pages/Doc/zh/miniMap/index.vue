@@ -20,7 +20,8 @@ MindMap.usePlugin(MiniMap)
 <p><code>boxHeight</code>：小地图容器的高度</p>
 <p>函数返回内容：</p>
 <pre class="hljs"><code>{
-      svgHTML, <span class="hljs-comment">// 小地图html</span>
+      getImgUrl,<span class="hljs-comment">// v0.8.0+，一个异步函数，你可以调用该函数，传递一个回调函数，回调函数可以接收一个参数，代表图片类型的小地图，你可以通过img标签进行渲染</span>
+      svgHTML, <span class="hljs-comment">// 小地图html，推荐使用getImgUrl方式获取图片类型的小地图，减少页面DOM数量，优化性能</span>
       viewBoxStyle, <span class="hljs-comment">// 视图框的位置信息</span>
       miniMapBoxScale, <span class="hljs-comment">// 视图框的缩放值</span>
       miniMapBoxLeft, <span class="hljs-comment">// 视图框的left值</span>

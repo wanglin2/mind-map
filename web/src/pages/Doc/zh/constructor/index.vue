@@ -695,12 +695,13 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <p>v0.6.0+</p>
 </blockquote>
 <p>销毁思维导图。会移除注册的插件、移除监听的事件、删除画布的所有节点。</p>
-<h3>getSvgData({ paddingX = 0, paddingY = 0 })</h3>
+<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
 <p><code>paddingX</code>：水平内边距</p>
 <p><code>paddingY</code>：垂直内边距</p>
+<p><code>ignoreWatermark</code>：v0.8.0+，不要绘制水印，如果不需要绘制水印的场景可以传<code>true</code>，因为绘制水印非常慢</p>
 <p>获取<code>svg</code>数据，返回一个对象，详细结构如下：</p>
 <pre class="hljs"><code>{
   svg, <span class="hljs-comment">// Element，思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）</span>
@@ -935,6 +936,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>set_data（v0.7.3+）</td>
 <td>调用了setData方法动态设置思维导图数据时触发</td>
 <td>data（新的思维导图数据）</td>
+</tr>
+<tr>
+<td>resize（v0.8.0+）</td>
+<td>容器尺寸改变后触发，实际上是当思维导图实例的<code>resize</code>方法被调用后触发</td>
+<td></td>
 </tr>
 </tbody>
 </table>

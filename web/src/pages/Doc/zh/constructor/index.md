@@ -310,13 +310,15 @@ mindMap.setTheme('主题名称')
 
 销毁思维导图。会移除注册的插件、移除监听的事件、删除画布的所有节点。
 
-### getSvgData({ paddingX = 0, paddingY = 0 })
+### getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })
 
 > v0.3.0+
 
 `paddingX`：水平内边距
 
 `paddingY`：垂直内边距
+
+`ignoreWatermark`：v0.8.0+，不要绘制水印，如果不需要绘制水印的场景可以传`true`，因为绘制水印非常慢
 
 获取`svg`数据，返回一个对象，详细结构如下：
 
@@ -401,6 +403,7 @@ mindMap.setTheme('主题名称')
 | node_icon_click（v0.6.10+）    | 点击节点内的图标时触发   | this（节点实例）、item（点击的图标名称）、e（事件对象）  |
 | view_theme_change（v0.6.12+）    | 调用了setTheme方法设置主题后触发   | theme（设置的新主题名称）  |
 | set_data（v0.7.3+）    | 调用了setData方法动态设置思维导图数据时触发   | data（新的思维导图数据）  |
+| resize（v0.8.0+）    |  容器尺寸改变后触发，实际上是当思维导图实例的`resize`方法被调用后触发  |   |
 
 ### emit(event, ...args)
 

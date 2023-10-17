@@ -12,6 +12,7 @@
 
 ```js
 {
+      getImgUrl,// v0.8.0+，一个异步函数，你可以调用该函数，传递一个回调函数，回调函数可以接收一个参数，代表图片类型的小地图，你可以通过img标签进行渲染
       svgHTML, // 小地图html
       viewBoxStyle, // 视图框的位置信息
       miniMapBoxScale, // 视图框的缩放值
@@ -32,7 +33,13 @@ transform-origin: left top;
 
 3.在container内创建一个视口框元素viewBoxContainer，绝对定位，设置边框样式，过渡属性（可选）
 
-4.监听data_change和view_data_change事件，最好也监听一下node_tree_render_end事件，防止初次渲染完毕后小地图没有刷新，在该事件内调用calculationMiniMap方法获取计算数据，然后将返回数据中的svgHTML渲染到miniMapContainer元素内，并且给miniMapContainer元素设置或更新如下样式：
+4.监听data_change和view_data_change事件，最好也监听一下node_tree_render_end事件，防止初次渲染完毕后小地图没有刷新，在该事件内调用calculationMiniMap方法获取计算数据，然后将返回数据中的svgHTML渲染到miniMapContainer元素内：
+
+```js
+miniMapContainer.innerHTML = svgHTML
+```
+
+并且给miniMapContainer元素设置或更新如下样式：
 
 ```js
 {
@@ -48,6 +55,14 @@ transform-origin: left top;
 6.监听container元素的mousedown、mousemove、mouseup事件，分别调用小地图插件实例的三个方法即可实现鼠标拖动时画布上的思维导图也随之拖动的效果
 
 插件的完整信息可以参考[miniMap](https://wanglin2.github.io/mind-map/#/doc/zh/miniMap)。
+
+在`v0.8.0+`版本之后，`calculationMiniMap`方法会返回`getImgUrl`属性，这是一个异步函数，你可以调用它并传递一个回调函数，回调函数可以接收一个参数，代表小地图图片数据，然后可以通过`img`标签进行渲染，替代前面的`svgHTML`，这样可以减少页面上的节点数量，能优化一定的性能：
+
+```js
+getImgUrl(img => {
+    img.src = img
+})
+```
 
 ## 完整示例
 
