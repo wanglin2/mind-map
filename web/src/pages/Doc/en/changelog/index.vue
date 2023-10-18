@@ -11,6 +11,7 @@
 <p>4.Fix the issue of each node displaying a border when exporting images, SVGs, and PDFs with watermarks.</p>
 <p>5.Fixed the issue of no watermarks and no redrawing after the container size was changed.</p>
 <p>6.Fix the issue of slow rendering of mini maps with watermarks.</p>
+<p>7.Fixed the issue where the collaboration plugin did not display the creator's avatar when creating a new node.</p>
 </blockquote>
 <p>New:</p>
 <blockquote>
