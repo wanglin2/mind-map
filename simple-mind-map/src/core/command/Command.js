@@ -1,4 +1,4 @@
-import { copyRenderTree, simpleDeepClone, nextTick } from '../../utils'
+import { copyRenderTree, simpleDeepClone, throttle } from '../../utils'
 
 //  命令类
 class Command {
@@ -11,7 +11,11 @@ class Command {
     this.activeHistoryIndex = 0
     // 注册快捷键
     this.registerShortcutKeys()
-    this.addHistory = nextTick(this.addHistory, this)
+    this.addHistory = throttle(
+      this.addHistory,
+      this.mindMap.opt.addHistoryTime,
+      this
+    )
   }
 
   //  清空历史数据
