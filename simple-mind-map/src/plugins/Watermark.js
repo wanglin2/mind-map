@@ -11,13 +11,48 @@ class Watermark {
     this.angle = 0 // 旋转角度
     this.text = '' // 水印文字
     this.textStyle = {} // 水印文字样式
+    this.watermarkDraw = null // 容器
+    this.maxLong = this.getMaxLong()
+    this.updateWatermark(this.mindMap.opt.watermarkConfig || {})
+    this.bindEvent()
+  }
+
+  getMaxLong() {
+    return Math.sqrt(
+      Math.pow(this.mindMap.width, 2) + Math.pow(this.mindMap.height, 2)
+    )
+  }
+
+  bindEvent() {
+    this.onResize = this.onResize.bind(this)
+    this.mindMap.on('resize', this.onResize)
+  }
+
+  unBindEvent() {
+    this.mindMap.off('resize', this.onResize)
+  }
+
+  onResize() {
+    this.maxLong = this.getMaxLong()
+    this.draw()
+  }
+
+  // 创建水印容器
+  createContainer() {
+    if (this.watermarkDraw) return
     this.watermarkDraw = this.mindMap.svg
       .group()
       .css({ 'pointer-events': 'none', 'user-select': 'none' })
-    this.maxLong = Math.sqrt(
-      Math.pow(this.mindMap.width, 2) + Math.pow(this.mindMap.height, 2)
-    )
-    this.updateWatermark(this.mindMap.opt.watermarkConfig || {})
+      .addClass('smm-water-mark-container')
+  }
+
+  // 删除水印容器
+  removeContainer() {
+    if (!this.watermarkDraw) {
+      return
+    }
+    this.watermarkDraw.remove()
+    this.watermarkDraw = null
   }
 
   // 获取是否存在水印
@@ -40,10 +75,14 @@ class Watermark {
   // 绘制水印
   // 非精确绘制，会绘制一些超出可视区域的水印
   draw() {
-    this.watermarkDraw.clear()
+    // 清空之前的水印
+    if (this.watermarkDraw) this.watermarkDraw.clear()
+    // 如果没有水印数据，那么水印容器也删除掉
     if (!this.hasWatermark()) {
+      this.removeContainer()
       return
     }
+    this.createContainer()
     let x = 0
     while (x < this.mindMap.width) {
       this.drawText(x)
@@ -115,6 +154,16 @@ class Watermark {
     )
     this.handleConfig(config)
     this.draw()
+  }
+
+  // 插件被移除前做的事情
+  beforePluginRemove() {
+    this.unBindEvent()
+  }
+
+  // 插件被卸载前做的事情
+  beforePluginDestroy() {
+    this.unBindEvent()
   }
 }
 

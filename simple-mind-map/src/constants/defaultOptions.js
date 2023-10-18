@@ -173,8 +173,8 @@ export const defaultOpt = {
       box-sizing: border-box;
     }
   `,
-  // 开启鼠标双击复位思维导图位置及缩放
-  enableDblclickReset: false,
+  // 是否在鼠标双击时回到根节点，也就是让根节点居中显示
+  enableDblclickBackToRootNode: false,
   // 导出图片时canvas的缩放倍数，该配置会和window.devicePixelRatio值取最大值
   minExportImgCanvasScale: 2,
   // 节点鼠标hover和激活时显示的矩形边框的颜色
@@ -204,5 +204,20 @@ export const defaultOpt = {
   },
   // 自定义标签的颜色
   // {pass: 'green, unpass: 'red'}
-  tagsColorMap: {}
+  tagsColorMap: {},
+  // 节点协作样式配置
+  cooperateStyle: {
+    avatarSize: 22,// 头像大小
+    fontSize: 12,// 如果是文字头像，那么文字的大小
+  },
+  // 关联线是否始终显示在节点上层
+  // false：即创建关联线和激活关联线时处于最顶层，其他情况下处于节点下方
+  associativeLineIsAlwaysAboveNode: true,
+  // 插入概要的默认文本
+  defaultGeneralizationText: '概要',
+  // 粘贴文本的方式创建新节点时，控制是否按换行自动分割节点，即如果存在换行，那么会根据换行创建多个节点，否则只会创建一个节点
+  // 可以传递一个函数，返回promise，resolve代表根据换行分割，reject代表忽略换行
+  handleIsSplitByWrapOnPasteCreateNewNode: null,
+  // 多少时间内只允许添加一次历史记录，避免添加没有必要的中间状态，单位：ms
+  addHistoryTime: 100
 }

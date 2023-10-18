@@ -89,23 +89,28 @@ class Select {
         }
       )
     })
-    this.mindMap.on('mouseup', () => {
-      if (this.mindMap.opt.readonly) {
-        return
-      }
-      if (!this.isMousedown) {
-        return
-      }
-      this.checkTriggerNodeActiveEvent()
-      clearTimeout(this.autoMoveTimer)
-      this.isMousedown = false
-      this.cacheActiveList = []
-      if (this.rect) this.rect.remove()
-      this.rect = null
-      setTimeout(() => {
-        this.isSelecting = false
-      }, 0)
-    })
+    this.onMouseup = this.onMouseup.bind(this)
+    this.mindMap.on('mouseup', this.onMouseup)
+    this.mindMap.on('node_mouseup', this.onMouseup)
+  }
+
+  // 结束框选
+  onMouseup() {
+    if (this.mindMap.opt.readonly) {
+      return
+    }
+    if (!this.isMousedown) {
+      return
+    }
+    this.checkTriggerNodeActiveEvent()
+    clearTimeout(this.autoMoveTimer)
+    this.isMousedown = false
+    this.cacheActiveList = []
+    if (this.rect) this.rect.remove()
+    this.rect = null
+    setTimeout(() => {
+      this.isSelecting = false
+    }, 0)
   }
 
   // 如果激活节点改变了，那么触发事件
@@ -119,7 +124,7 @@ class Select {
         let cur = this.cacheActiveList[i]
         if (
           !this.mindMap.renderer.activeNodeList.find(item => {
-            return item.nodeData.data.uid === cur.nodeData.data.uid
+            return item.getData('uid') === cur.getData('uid')
           })
         ) {
           isNodeChange = true
@@ -184,6 +189,7 @@ class Select {
 
   //  创建矩形
   createRect(x, y) {
+    if (this.rect) this.rect.remove()
     this.rect = this.mindMap.svg
       .polygon()
       .stroke({
@@ -212,17 +218,15 @@ class Select {
       if (
         checkTwoRectIsOverlap(minx, maxx, miny, maxy, left, right, top, bottom)
       ) {
-        if (node.nodeData.data.isActive) {
+        if (node.getData('isActive')) {
           return
         }
-        this.mindMap.renderer.setNodeActive(node, true)
-        this.mindMap.renderer.addActiveNode(node)
-      } else if (node.nodeData.data.isActive) {
-        if (!node.nodeData.data.isActive) {
+        this.mindMap.renderer.addNodeToActiveList(node)
+      } else if (node.getData('isActive')) {
+        if (!node.getData('isActive')) {
           return
         }
-        this.mindMap.renderer.setNodeActive(node, false)
-        this.mindMap.renderer.removeActiveNode(node)
+        this.mindMap.renderer.removeNodeFromActiveList(node)
       }
     })
   }

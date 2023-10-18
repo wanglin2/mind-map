@@ -82,11 +82,13 @@ walk(tree, null, () => {}, () => {}, false, 0, 0)
 copyRenderTree({}, this.mindMap.renderer.renderTree)
 ```
 
-#### copyNodeTree(tree, root, removeActiveState, keepId)
+#### copyNodeTree(tree, root, removeActiveState, removeId)
 
 - `removeActiveState`：`Boolean`，默认为`false`，是否移除节点的激活状态
 
-- `keepId`：v0.4.6+，`Boolean`，默认为`false`，是否保留被复制节点的`id`，默认会删除`id`防止节点`id`重复，但是对于移动节点的场景，节点原`id`需要保留
+- `removeId`：v0.7.3-fix.1+，是否移除节点数据中的uid，默认为`true`
+
+> - `keepId`： （原第四个参数）`Boolean`，默认为`false`，是否保留被复制节点的`id`，默认会删除`id`防止节点`id`重复，但是对于移动节点的场景，节点原`id`需要保留。
 
 复制节点树数据，主要是剔除其中的引用`node`实例的`_node`，然后复制`data`对象的数据，示例：
 
@@ -287,11 +289,13 @@ copyNodeTree({}, node)
 
 给指定的节点列表树数据添加附加数据，会修改原数据。
 
-#### createUidForAppointNodes(appointNodes)
+#### createUidForAppointNodes(appointNodes, createNewId)
 
 > v0.7.2+
 
 - `appointNodes`：节点实例列表，数组类型。
+
+- `createNewId`：v0.7.3-fix.1+，`Boolean`，默认为`false`，即如果节点不存在`uid`的话，会创建新的`uid`。如果传`true`，那么无论节点数据原来是否存在`uid`，都会创建新的`uid`
 
 给指定的节点列表树数据添加uid（如果uid不存在的话），会修改原数据。
 
@@ -345,6 +349,53 @@ copyNodeTree({}, node)
 < -> &lt;
 > -> &gt;
 ```
+
+#### isSameObject(a, b)
+
+> v0.7.3+
+
+- `a`、`b`：Object | Array, 要进行对比的两个对象
+
+判断两个对象是否相同，只处理对象或数组。
+
+#### getNodeDataIndex(node)
+
+> v0.8.0+
+
+获取节点在兄弟节点中的位置索引。
+
+#### getNodeIndexInNodeList(node, nodeList) 
+
+> v0.8.0+
+
+从一个节点列表里找出某个节点的索引。
+
+#### setDataToClipboard(data)
+
+> v0.8.0+
+
+- `data`：Object | Array
+
+将数据设置到用户剪切板中。
+
+#### getDataFromClipboard()
+
+> v0.8.0+
+
+从用户剪贴板中读取文字和图片，返回：
+
+```js
+{
+  text,
+  img
+}
+```
+
+#### removeFromParentNodeData(node)
+
+> v0.8.0+
+
+从节点的父节点的`nodeData.children`列表中移除该节点的数据。
 
 ## 在canvas中模拟css的背景属性
 

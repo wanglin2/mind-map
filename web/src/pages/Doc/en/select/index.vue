@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Select plugin</h1>
-<p>The <code>Select</code> plugin provides the function of right-clicking to select multiple nodes.</p>
+<p>The <code>Select</code> plugin provides the function of select multiple nodes.</p>
 <h2>Register</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
 <span class="hljs-keyword">import</span> Select <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/Select.js&#x27;</span>

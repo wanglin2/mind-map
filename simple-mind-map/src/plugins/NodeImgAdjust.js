@@ -205,7 +205,7 @@ class NodeImgAdjust {
     // 隐藏节点实际图片
     this.hideNodeImage()
     // 将节点图片渲染到自定义元素上
-    this.handleEl.style.backgroundImage = `url(${this.node.nodeData.data.image})`
+    this.handleEl.style.backgroundImage = `url(${this.node.getData('image')})`
   }
 
   // 鼠标移动
@@ -214,7 +214,7 @@ class NodeImgAdjust {
     e.preventDefault()
     // 计算当前拖拽位置对应的图片的实时大小
     let { width: imageOriginWidth, height: imageOriginHeight } =
-      this.node.nodeData.data.imageSize
+      this.node.getData('imageSize')
     let newWidth = e.clientX - this.rect.x
     let newHeight = e.clientY - this.rect.y
     if (newWidth <= 0 || newHeight <= 0) return
@@ -237,7 +237,7 @@ class NodeImgAdjust {
     // 隐藏自定义元素
     this.hideHandleEl()
     // 更新节点图片为新的大小
-    let { image, imageTitle } = this.node.nodeData.data
+    let { image, imageTitle } = this.node.getData()
     let { scaleX, scaleY } = this.mindMap.draw.transform()
     this.mindMap.execCommand('SET_NODE_IMAGE', this.node, {
       url: image,

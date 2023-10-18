@@ -1,6 +1,61 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.8.0</h2>
+<p>Breaking change: Greatly optimize some of the code and slightly improve performance, mainly by using the 'render' class to remove useless logic, adjust unreasonable implementations, and extract duplicate code; Modify function names, functions, etc.</p>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue of the arrow of the associated line disappearing when exporting images and SVGs.</p>
+<p>2.Fix the issue of abnormal operation returning to the root node after resizing the container.</p>
+<p>3.Fix that the shortcut key operations for inserting summary, moving up, down, and organizing layout with one click did not trigger data_ The issue with the change event.</p>
+<p>4.Fix the issue of each node displaying a border when exporting images, SVGs, and PDFs with watermarks.</p>
+<p>5.Fixed the issue of no watermarks and no redrawing after the container size was changed.</p>
+<p>6.Fix the issue of slow rendering of mini maps with watermarks.</p>
+<p>7.Fixed the issue where the collaboration plugin did not display the creator's avatar when creating a new node.</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Optimize the canvas DOM structure and render nodes, lines, and associated lines in layers.</p>
+<p>2.Optimize the watermark plugin.</p>
+<p>3.The setTheme, setThemeConfig, and setLayout functions add parameters that do not trigger re rendering.</p>
+<p>4.Add a command to insert a parent node.</p>
+<p>5.Add a command to only delete the current node.</p>
+<p>6.Automatically expand child nodes when inserting a summary.</p>
+<p>7.Clear the current active node when right-clicking on the canvas.</p>
+<p>8.The folded active nodes are synchronously deleted from the list of active nodes.</p>
+<p>9.Pasting text with line breaks supports controlling whether nodes are split by line breaks.</p>
+<p>10.The mini map plugin supports returning mini maps of image types.</p>
+<p>11.Only one historical record can be added within a specified time period to avoid adding unnecessary intermediate states.</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.Modify the method and copy to return to the root node.</p>
+<p>2.Fix the issue of ineffective first switching when switching themes in overlay mode.</p>
+<p>3.The right-click menu adds the function of inserting parent nodes and deleting only the current node.</p>
+<p>4.The top toolbar supports automatic folding into more according to the window width.</p>
+<p>5.Support manual input of zoom factor.</p>
+<p>6.Improve the English translation of the interface.</p>
+<p>7.Change the mini map to render through images.</p>
+</blockquote>
+<h2>0.7.3-fix.2</h2>
+<p>Fix some issues with collaborative editing:</p>
+<p>1.The position of the new node is incorrect when inserting peer nodes;</p>
+<p>2.Moving a position within a peer node did not trigger an update;</p>
+<p>3.The position of the mobile node inserted as a sibling node is incorrect;</p>
+<h2>0.7.3-fix.1</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fixed some issues where the box selection area did not disappear when multiple nodes were selected.</p>
+<p>2.Fixed an issue where the box selection area does not disappear when releasing the mouse over multiple selected nodes.</p>
+<p>3.Fixed rendering anomalies caused by duplicate node uids when pasting nodes multiple times.</p>
+</blockquote>
+<p>Demo：</p>
+<blockquote>
+<p>1.Add protocol selection function to the hyperlink input box.</p>
+</blockquote>
+<h2>0.7.3</h2>
+<p>New: 1.Add a Cooperate editing plugin.</p>
+<p>Demo: 1.Fix the automatic closing of the sidebar caused by the formula sidebar component.</p>
 <h2>0.7.2</h2>
 <p>Fix:</p>
 <blockquote>

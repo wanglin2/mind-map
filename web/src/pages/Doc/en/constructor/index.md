@@ -39,7 +39,7 @@ const mindMap = new MindMap({
 | selectTranslateLimit             | Number  | 20               | The distance from the edge when the canvas begins to offset during multi-select node |          |
 | customNoteContentShow（v0.1.6+） | Object  | null             | Custom node note content display, object type, structure: {show: (noteContent, left, top) => {// your display node note logic }, hide: () => {// your hide node note logic }} |          |
 | readonly（v0.1.7+）              | Boolean | false            | Whether it is read-only mode                                 |          |
-| enableFreeDrag（v0.2.4+）        | Boolean | false            | Enable node free drag                                        |          |
+| enableFreeDrag（v0.2.4+）        | Boolean | false            | Enable node free(Free drag means that nodes can be dragged to any position on the canvas. Please note that it is not a function of dragging nodes to become siblings of other nodes. The connection of free drag may have certain problems, so it is best not to use this feature) drag                                        |          |
 | watermarkConfig（v0.2.4+）       | Object  |                  | Watermark config, Please refer to the table 【Watermark config】 below for detailed configuration |          |
 | textAutoWrapWidth（v0.3.4+）     | Number  | 500 |   Each line of text in the node will wrap automatically when it reaches the width               |          |
 | customHandleMousewheel（v0.4.3+）     | Function  | null | User-defined mouse wheel event processing can pass a function, and the callback parameter is the event object |          |
@@ -82,7 +82,8 @@ const mindMap = new MindMap({
 | errorHandler（v0.6.15+）     | Function  |  | Custom error handling functions currently only throw some asynchronous logic errors. Can pass a function that takes two parameters, the first being the wrong type and the second being the wrong object |          |
 | disableMouseWheelZoom（v0.6.15+）     | Boolean  | false | Prohibit mouse wheel scaling, you can still use the API for scaling |          |
 | resetCss（v0.6.16+）     | String  |  * { margin: 0; padding: 0; box-sizing: border-box; } | When exporting images and SVGs, the default style overlay for rich text node content, which is embedded in HTML nodes in SVGs, will occur. If not overlaid, the node content will be offset |          |
-| enableDblclickReset（v0.6.17+）     | Boolean  | true(v0.7.0+changed to false)  | Turn on the mouse and double-click to reset the position and zoom of the mind map |          |
+| enableDblclickReset（v0.6.17+）(v0.8.0+this attribute has been deleted)     | Boolean  | true(v0.7.0+changed to false)  | Turn on the mouse and double-click to reset the position and zoom of the mind map |          |
+| enableDblclickBackToRootNode（v0.8.0+）     | Boolean  | false  | Whether to return to the root node when double clicking with the mouse, that is, to center the display of the root node |          |
 | minExportImgCanvasScale（v0.7.0+）     | Number  | 2  | The scaling factor of canvas when exporting images and PDFs, which is set to the maximum value of window.devicePixelRatio to improve image clarity |          |
 | hoverRectColor（v0.7.0+）     | String  | rgb(94, 200, 248)  | The node mouse hover and the rectangular border color displayed when activated will add a transparency of 0.6 when hovering |          |
 | hoverRectPadding（v0.7.0+）     | Number  | 2  | The distance between the node mouse hover and the displayed rectangular border when activated and the node content |          |
@@ -94,6 +95,11 @@ const mindMap = new MindMap({
 | dragPlaceholderRectFill（v0.7.2+）     |  String |   | The filling color of the schematic rectangle for the new position when dragging nodes. If not transmitted, the default color for the connected line is used |          |
 | dragOpacityConfig（v0.7.2+）     | Object  | { cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }  | The transparency configuration during node dragging, passing an object, and the field meanings are: the transparency of the cloned node or rectangle that follows the mouse movement, and the transparency of the dragged node |          |
 | tagsColorMap（v0.7.2+）     | Object  | {}  | The color of a custom node label can be transferred to an object, where key is the label content to be assigned a color, and value is the color of the label content. If not transferred internally, a corresponding color will be generated based on the label content |         |
+| cooperateStyle（v0.7.3+）     | Object  | { avatarSize: 22, fontSize: 12 }  | The configuration of personnel avatar style during node collaboration editing, with field meanings as follows: avatar size, and if it is a text avatar, the size of the text |         |
+| associativeLineIsAlwaysAboveNode（v0.8.0+）     |  Boolean | true  | Is the associated line always displayed above the node? If set to false, it will be at the top level when creating and activating the associated line, and in other cases, it will be below the node |         |
+| defaultGeneralizationText（v0.8.0+）     |  String | 概要  | Insert default text for summary |         |
+| handleIsSplitByWrapOnPasteCreateNewNode（v0.8.0+）     | Function / null  | null  | When creating a new node by pasting text, control whether to automatically split the nodes based on line breaks. If there is a line break, multiple nodes will be created based on the line break. Otherwise, only one node will be created, and a function can be passed to return promise. resolve represents splitting based on line breaks, and reject represents ignoring line breaks |         |
+| addHistoryTime（v0.8.0+）     | Number | 100  | Only one historical record can be added within the specified time to avoid adding unnecessary intermediate states. Unit: ms  |         |
 
 ### Data structure
 
@@ -209,9 +215,95 @@ Get whether a plugin is registered, The index of the plugin in the registered pl
 
 List of all currently registered plugins.
 
+## Instance props
 
+### el
+
+Container element.
+
+### opt
+
+Config options object.
+
+### svg
+
+> @svgdotjs/svg.js library calls the node instance returned by the SVG() method
+
+Canvas SVG element.
+
+### draw
+
+> @svgdotjs/svg.js library calls the node instance returned by the group() method
+>
+> Child node of SVG node
+
+Container element, used to carry content such as nodes and connections.
+
+### lineDraw
+
+> v0.8.0+
+>
+> @svgdotjs/svg.js library calls the node instance returned by the group() method
+>
+> Child node of draw node
+
+Container for node wiring elements.
+
+### nodeDraw
+
+> v0.8.0+
+>
+> @svgdotjs/svg.js library calls the node instance returned by the group() method
+>
+> Child node of draw node
+
+Container for node elements.
+
+### associativeLineDraw
+
+> v0.8.0+
+>
+> @svgdotjs/svg.js library calls the node instance returned by the group() method
+>
+> Available when the associated line plugin is registered
+>
+> Child node of draw node
+
+Container for associative line content.
+
+### otherDraw
+
+> v0.8.0+
+>
+> @svgdotjs/svg.js library calls the node instance returned by the group() method
+>
+> Child node of draw node
+
+Container for other content.
+
+### elRect
+
+The size and position information of the container element 'el'. The return result of calling the 'getBoundingClientRect()' method.
+
+### width
+
+The width of the container element 'el'.
+
+### height
+
+The height of the container element 'el'.
+
+### themeConfig
+
+Current Theme Configuration.
 
 ## Instance methods
+
+### clearDraw()
+
+> v0.8.0+
+
+Clear `lineDraw`、`associativeLineDraw`、`nodeDraw`、`otherDraw` containers.
 
 ### destroy()
 
@@ -219,13 +311,15 @@ List of all currently registered plugins.
 
 Destroy mind maps. It will remove registered plugins, remove listening events, and delete all nodes on the canvas.
 
-### getSvgData({ paddingX = 0, paddingY = 0 })
+### getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })
 
 > v0.3.0+
 
 `paddingX`: Padding x
 
 `paddingY`: Padding y
+
+`ignoreWatermark`：v0.8.0+, Do not draw watermarks. If you do not need to draw watermarks, you can pass 'true' because drawing watermarks is very slow
 
 Get the `svg` data and return an object. The detailed structure is as follows:
 
@@ -312,6 +406,8 @@ Listen to an event. Event list:
 | svg_mouseleave（v0.5.1+）    | Triggered when the mouse moves out of the SVG canvas   | e（event object）  |
 | node_icon_click（v0.6.10+）    | Triggered when clicking on an icon within a node   | this（node instance）、item（Click on the icon name）、e（event object）  |
 | view_theme_change（v0.6.12+）    | Triggered after calling the setTheme method to set the theme   | theme（theme name）  |
+| set_data（v0.7.3+）    |  Triggered when the setData method is called to dynamically set mind map data  | data（New Mind Map Data）  |
+| resize（v0.8.0+）    | Triggered after the container size changes, actually when the 'resize' method of the mind map instance is called   |   |
 
 ### emit(event, ...args)
 
@@ -321,7 +417,9 @@ Trigger an event, which can be one of the events listed above or a custom event.
 
 Unbind an event.
 
-### setTheme(theme)
+### setTheme(theme, notRender = false)
+
+- `notRender`: v0.8.0+, Is not call the render method to update the canvas.
 
 Switches the theme. Available themes can be found in the options table above.
 
@@ -329,7 +427,9 @@ Switches the theme. Available themes can be found in the options table above.
 
 Gets the current theme.
 
-### setThemeConfig(config)
+### setThemeConfig(config, notRender = false)
+
+- `notRender`: v0.8.0+, Is not call the render method to update the canvas.
 
 Sets the theme configuration. `config` is the same as the `themeConfig` option
 in the options table above.
@@ -370,7 +470,9 @@ This method only updates the configuration and has no other side effects, such a
 
 Gets the current layout structure.
 
-### setLayout(layout)
+### setLayout(layout, notRender = false)
+
+- `notRender`: v0.8.0+, Is not call the render method to update the canvas.
 
 Sets the layout structure. Available values can be found in the `layout` field
 in the options table above.
@@ -418,6 +520,8 @@ redo. All commands are as follows:
 | INSERT_MULTI_NODE（v0.7.2+）           |  Insert multiple sibling nodes into the specified node at the same time, with the operating node being the currently active node or the specified node   | appointNodes（Optional, specify nodes, specify multiple nodes to pass an array）, nodeList（Data list of newly inserted nodes, array type） |
 | INSERT_MULTI_CHILD_NODE（v0.7.2+）           |  Insert multiple child nodes into the specified node simultaneously, with the operation node being the currently active node or the specified node   | appointNodes（Optional, specify nodes, specify multiple nodes to pass an array）, childList（Data list of newly inserted nodes, array type） |
 | INSERT_FORMULA（v0.7.2+）           |  Insert mathematical formulas into nodes, operate on the currently active node or specified node   | formula（Mathematical formula to insert, LaText syntax）, appointNodes（Optional, specify the node to insert the formula into. Multiple nodes can be passed as arrays, otherwise it defaults to the currently active node） |
+| INSERT_PARENT_NODE（v0.8.0+）           |  Insert a parent node into the specified node, with the operation node being the currently active node or the specified node   | openEdit（Activate the newly inserted node and enter editing mode, default to 'true'`）、 appointNodes（Optional, specify the node to insert into the parent node, and specify that multiple nodes can pass an array）、 appointData（Optional, specify the data for the newly created node, such as {text: 'xxx', ...}, Detailed structure can be referenced [exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)） |
+| REMOVE_CURRENT_NODE（v0.8.0+）           |  Delete only the current node, operate on the currently active node or specified node    | appointNodes（Optional, specify the nodes to be deleted, and multiple nodes can be passed as an array） |
 
 ### setData(data)
 

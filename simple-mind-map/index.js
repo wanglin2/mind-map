@@ -35,21 +35,16 @@ class MindMap {
     // 容器元素
     this.el = this.opt.el
     if (!this.el) throw new Error('缺少容器元素el')
-    this.elRect = this.el.getBoundingClientRect()
 
-    // 画布宽高
-    this.width = this.elRect.width
-    this.height = this.elRect.height
-    if (this.width <= 0 || this.height <= 0)
-      throw new Error('容器元素el的宽高不能为0')
+    // 获取容器尺寸位置信息
+    this.getElRectInfo()
 
     // 添加css
     this.cssEl = null
     this.addCss()
 
     // 画布
-    this.svg = SVG().addTo(this.el).size(this.width, this.height)
-    this.draw = this.svg.group()
+    this.initContainer()
 
     // 初始化主题
     this.initTheme()
@@ -79,8 +74,7 @@ class MindMap {
 
     // 视图操作类
     this.view = new View({
-      mindMap: this,
-      draw: this.draw
+      mindMap: this
     })
 
     // 批量执行类
@@ -111,6 +105,46 @@ class MindMap {
     return opt
   }
 
+  // 创建容器元素
+  initContainer() {
+    const { associativeLineIsAlwaysAboveNode } = this.opt
+    // 节点关联线容器
+    const createAssociativeLineDraw = () => {
+      this.associativeLineDraw = this.draw.group()
+      this.associativeLineDraw.addClass('smm-associative-line-container')
+    }
+    // 画布
+    this.svg = SVG().addTo(this.el).size(this.width, this.height)
+    // 容器
+    this.draw = this.svg.group()
+    this.draw.addClass('smm-container')
+    // 节点连线容器
+    this.lineDraw = this.draw.group()
+    this.lineDraw.addClass('smm-line-container')
+    // 默认处于节点下方
+    if (!associativeLineIsAlwaysAboveNode) {
+      createAssociativeLineDraw()
+    }
+    // 节点容器
+    this.nodeDraw = this.draw.group()
+    this.nodeDraw.addClass('smm-node-container')
+    // 关联线始终处于节点上方
+    if (associativeLineIsAlwaysAboveNode) {
+      createAssociativeLineDraw()
+    }
+    // 其他内容的容器
+    this.otherDraw = this.draw.group()
+    this.otherDraw.addClass('smm-other-container')
+  }
+
+  // 清空各容器
+  clearDraw() {
+    this.lineDraw.clear()
+    this.associativeLineDraw.clear()
+    this.nodeDraw.clear()
+    this.otherDraw.clear()
+  }
+
   // 添加必要的css样式到页面
   addCss() {
     this.cssEl = document.createElement('style')
@@ -136,19 +170,27 @@ class MindMap {
   //  重新渲染
   reRender(callback, source = '') {
     this.batchExecution.push('render', () => {
-      this.draw.clear()
+      this.clearDraw()
       this.initTheme()
       this.renderer.reRender = true
       this.renderer.render(callback, source)
     })
   }
 
-  //  容器尺寸变化，调整尺寸
-  resize() {
+  // 获取或更新容器尺寸位置信息
+  getElRectInfo() {
     this.elRect = this.el.getBoundingClientRect()
     this.width = this.elRect.width
     this.height = this.elRect.height
+    if (this.width <= 0 || this.height <= 0)
+      throw new Error('容器元素el的宽高不能为0')
+  }
+
+  //  容器尺寸变化，调整尺寸
+  resize() {
+    this.getElRectInfo()
     this.svg.size(this.width, this.height)
+    this.emit('resize')
   }
 
   //  监听事件
@@ -192,10 +234,12 @@ class MindMap {
   }
 
   //  设置主题
-  setTheme(theme) {
-    this.renderer.clearAllActive()
+  setTheme(theme, notRender = false) {
+    this.execCommand('CLEAR_ACTIVE_NODE')
     this.opt.theme = theme
-    this.render(null, CONSTANTS.CHANGE_THEME)
+    if (!notRender) {
+      this.render(null, CONSTANTS.CHANGE_THEME)
+    }
     this.emit('view_theme_change', theme)
   }
 
@@ -205,13 +249,15 @@ class MindMap {
   }
 
   //  设置主题配置
-  setThemeConfig(config) {
+  setThemeConfig(config, notRender = false) {
     // 计算改变了的配置
     const changedConfig = getObjectChangedProps(this.themeConfig, config)
     this.opt.themeConfig = config
-    // 检查改变的是否是节点大小无关的主题属性
-    let res = checkIsNodeSizeIndependenceConfig(changedConfig)
-    this.render(null, res ? '' : CONSTANTS.CHANGE_THEME)
+    if (!notRender) {
+      // 检查改变的是否是节点大小无关的主题属性
+      let res = checkIsNodeSizeIndependenceConfig(changedConfig)
+      this.render(null, res ? '' : CONSTANTS.CHANGE_THEME)
+    }
   }
 
   //  获取自定义主题配置
@@ -240,7 +286,7 @@ class MindMap {
   }
 
   //  设置布局结构
-  setLayout(layout) {
+  setLayout(layout, notRender = false) {
     // 检查布局配置
     if (!layoutValueList.includes(layout)) {
       layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE
@@ -248,7 +294,9 @@ class MindMap {
     this.opt.layout = layout
     this.view.reset()
     this.renderer.setLayout()
-    this.render(null, CONSTANTS.CHANGE_LAYOUT)
+    if (!notRender) {
+      this.render(null, CONSTANTS.CHANGE_LAYOUT)
+    }
   }
 
   //  执行命令
@@ -258,15 +306,13 @@ class MindMap {
 
   //  动态设置思维导图数据，纯节点数据
   setData(data) {
+    data = simpleDeepClone(data || {})
     this.execCommand('CLEAR_ACTIVE_NODE')
     this.command.clearHistory()
     this.command.addHistory()
-    if (this.richText) {
-      this.renderer.renderTree = this.richText.handleSetData(data)
-    } else {
-      this.renderer.renderTree = data
-    }
+    this.renderer.setData(data)
     this.reRender(() => {}, CONSTANTS.SET_DATA)
+    this.emit('set_data', data)
   }
 
   //  动态设置思维导图数据，包括节点数据、布局、主题、视图
@@ -336,20 +382,20 @@ class MindMap {
     this.opt.readonly = mode === CONSTANTS.MODE.READONLY
     if (this.opt.readonly) {
       // 取消当前激活的元素
-      this.renderer.clearAllActive()
+      this.execCommand('CLEAR_ACTIVE_NODE')
     }
     this.emit('mode_change', mode)
   }
 
   // 获取svg数据
-  getSvgData({ paddingX = 0, paddingY = 0 } = {}) {
+  getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false } = {}) {
     const svg = this.svg
     const draw = this.draw
     // 保存原始信息
     const origWidth = svg.width()
     const origHeight = svg.height()
     const origTransform = draw.transform()
-    const elRect = this.el.getBoundingClientRect()
+    const elRect = this.elRect
     // 去除放大缩小的变换效果
     draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY)
     // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
@@ -364,10 +410,9 @@ class MindMap {
     draw.translate(-rect.x + elRect.left, -rect.y + elRect.top)
     // 克隆一份数据
     let clone = svg.clone()
-    // 添加必要的样式
-    clone.add(SVG(`<style>${cssContent}</style>`))
     // 如果实际图形宽高超出了屏幕宽高，且存在水印的话需要重新绘制水印，否则会出现超出部分没有水印的问题
     if (
+      !ignoreWatermark &&
       (rect.width > origWidth || rect.height > origHeight) &&
       this.watermark &&
       this.watermark.hasWatermark()
@@ -379,6 +424,16 @@ class MindMap {
       this.width = origWidth
       this.height = origHeight
       this.watermark.draw()
+    }
+    // 添加必要的样式
+    clone.add(SVG(`<style>${cssContent}</style>`))
+    // 修正关联线箭头marker的id
+    const markerList = svg.find('marker')
+    if (markerList && markerList.length > 0) {
+      const id = markerList[0].attr('id')
+      clone.find('marker').forEach(item => {
+        item.attr('id', id)
+      })
     }
     // 恢复原先的大小和变换信息
     svg.size(origWidth, origHeight)

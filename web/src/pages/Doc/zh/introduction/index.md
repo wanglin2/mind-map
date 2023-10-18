@@ -18,6 +18,7 @@
 - [x] 支持导出为`json`、`png`、`svg`、`pdf`、`markdown`、`xmind`，支持从`json`、`xmind`、`markdown`导入
 - [x] 支持快捷键、前进后退、关联线、搜索替换、小地图、水印、滚动条
 - [x] 提供丰富的配置，满足各种场景各种使用习惯
+- [x] 支持协同编辑
 
 ## 仓库目录介绍
 
@@ -55,11 +56,13 @@
 
 [探索如何将html和svg导出为图片](https://juejin.cn/post/7276712861514170409)
 
+[dom-to-image库是如何将html转换成图片的](https://juejin.cn/post/7287913415803764747)
+
 ## 特别说明
 
 本项目可用于学习和参考，用于实际项目时请先深度体验一下是否能满足您的需求。
 
-本项目可能没有完整测试到每一个功能点，所以可能存在bug，另外，当节点数量非常多的时候，性能也存在一些问题，因为每个人能接受的卡顿程度不一样，所以你可以自行测试节点数量上限。
+本项目可能没有完整测试到每一个功能点，所以可能存在bug，另外，当节点数量非常多的时候，性能也存在一些问题，因为每个人能接受的卡顿程度不一样，所以你可以自行测试节点数量上限。一般来说，500个节点以内比较流畅，1000个节点以上卡顿比较明显。
 
 如果有建议或发现了bug，可以在此提交[issues](https://github.com/wanglin2/mind-map/issues)。
 
@@ -105,11 +108,11 @@
 
 ## 请作者喝杯咖啡
 
-开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡哟~
+开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡~
 
 > 厚椰乳一盒 + 纯牛奶半盒 + 冰块 + 咖啡液 = 生椰拿铁 yyds
 
-> 推荐使用支付宝，微信获取不到头像。转账请备注【思维导图】。你的头像和名字将会出现在下面。
+> 推荐使用支付宝，微信获取不到头像。转账请备注【思维导图】。
 
 <img src="../../../../assets/img/alipay.jpg" style="width: 300px" />
 
@@ -202,5 +205,25 @@
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/沐风牧草.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>沐风牧草</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/有希.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>有希</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/樊笼.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>樊笼</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/达仁科技.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>达仁科技</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/小逗比.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>小逗比</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/天清如愿.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>天清如愿</p>
     </div>
 </div>

@@ -88,7 +88,7 @@ class Style {
 
   //  获取自身自定义样式
   getSelfStyle(prop) {
-    return this.ctx.nodeData.data[prop]
+    return this.ctx.getData(prop)
   }
 
   //  矩形
@@ -107,7 +107,7 @@ class Style {
     //   !this.ctx.isRoot &&
     //   !this.ctx.isGeneralization &&
     //   this.ctx.mindMap.themeConfig.nodeUseLineStyle &&
-    //   !this.ctx.nodeData.data.isActive
+    //   !this.ctx.getData('isActive')
     // ) {
     //   return
     // }
@@ -225,7 +225,7 @@ class Style {
   // 是否设置了自定义的样式
   hasCustomStyle() {
     let res = false
-    Object.keys(this.ctx.nodeData.data).forEach(item => {
+    Object.keys(this.ctx.getData()).forEach(item => {
       if (checkIsNodeStyleDataKey(item)) {
         res = true
       }

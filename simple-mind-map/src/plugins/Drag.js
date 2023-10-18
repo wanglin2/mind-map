@@ -1,4 +1,4 @@
-import { bfsWalk, throttle, getTopAncestorsFomNodeList } from '../utils'
+import { bfsWalk, throttle, getTopAncestorsFomNodeList, getNodeIndexInNodeList } from '../utils'
 import Base from '../layouts/Base'
 
 // 节点拖动插件
@@ -109,13 +109,13 @@ class Drag extends Base {
     })
     this.removeCloneNode()
     let overlapNodeUid = this.overlapNode
-      ? this.overlapNode.nodeData.data.uid
+      ? this.overlapNode.getData('uid')
       : ''
-    let prevNodeUid = this.prevNode ? this.prevNode.nodeData.data.uid : ''
-    let nextNodeUid = this.nextNode ? this.nextNode.nodeData.data.uid : ''
+    let prevNodeUid = this.prevNode ? this.prevNode.getData('uid') : ''
+    let nextNodeUid = this.nextNode ? this.nextNode.getData('uid') : ''
     // 存在重叠子节点，则移动作为其子节点
     if (this.overlapNode) {
-      this.mindMap.renderer.setNodeActive(this.overlapNode, false)
+      this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, false)
       this.mindMap.execCommand(
         'MOVE_NODE_TO',
         this.beingDragNodeList,
@@ -123,7 +123,7 @@ class Drag extends Base {
       )
     } else if (this.prevNode) {
       // 存在前一个相邻节点，作为其下一个兄弟节点
-      this.mindMap.renderer.setNodeActive(this.prevNode, false)
+      this.mindMap.execCommand('SET_NODE_ACTIVE', this.prevNode, false)
       this.mindMap.execCommand(
         'INSERT_AFTER',
         this.beingDragNodeList,
@@ -131,7 +131,7 @@ class Drag extends Base {
       )
     } else if (this.nextNode) {
       // 存在下一个相邻节点，作为其前一个兄弟节点
-      this.mindMap.renderer.setNodeActive(this.nextNode, false)
+      this.mindMap.execCommand('SET_NODE_ACTIVE', this.nextNode, false)
       this.mindMap.execCommand(
         'INSERT_BEFORE',
         this.beingDragNodeList,
@@ -205,7 +205,7 @@ class Drag extends Base {
       this.offsetX = this.mouseDownX - (node.left * scaleX + translateX)
       this.offsetY = this.mouseDownY - (node.top * scaleY + translateY)
       // 如果鼠标按下的节点是激活节点，那么保存当前所有激活的节点
-      if (node.nodeData.data.isActive) {
+      if (node.getData('isActive')) {
         // 找出这些激活节点中的最顶层节点
         this.beingDragNodeList = getTopAncestorsFomNodeList(
           // 过滤掉根节点和概要节点
@@ -222,7 +222,7 @@ class Drag extends Base {
       // 创建克隆节点
       this.createCloneNode()
       // 清除当前所有激活的节点
-      this.mindMap.renderer.clearAllActive()
+      this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
     }
   }
 
@@ -261,7 +261,7 @@ class Drag extends Base {
       const lineColor = node.style.merge('lineColor', true)
       // 如果当前被拖拽的节点数量大于1，那么创建一个矩形示意
       if (this.beingDragNodeList.length > 1) {
-        this.clone = this.draw
+        this.clone = this.mindMap.otherDraw
           .rect()
           .size(rectWidth, rectHeight)
           .radius(rectHeight / 2)
@@ -278,12 +278,12 @@ class Drag extends Base {
         if (expandEl) {
           expandEl.remove()
         }
-        this.mindMap.draw.add(this.clone)
+        this.mindMap.otherDraw.add(this.clone)
       }
       this.clone.opacity(dragOpacityConfig.cloneNodeOpacity)
       this.clone.css('z-index', 99999)
       // 同级位置提示元素
-      this.placeholder = this.draw.rect().fill({
+      this.placeholder = this.mindMap.otherDraw.rect().fill({
         color: dragPlaceholderRectFill || lineColor
       })
       // 当前被拖拽的节点的临时设置
@@ -317,8 +317,8 @@ class Drag extends Base {
     this.nextNode = null
     this.placeholder.size(0, 0)
     this.nodeList.forEach(node => {
-      if (node.nodeData.data.isActive) {
-        this.mindMap.renderer.setNodeActive(node, false)
+      if (node.getData('isActive')) {
+        this.mindMap.execCommand('SET_NODE_ACTIVE', node, false)
       }
       if (this.overlapNode || (this.prevNode && this.nextNode)) {
         return
@@ -353,7 +353,7 @@ class Drag extends Base {
       }
     })
     if (this.overlapNode) {
-      this.mindMap.renderer.setNodeActive(this.overlapNode, true)
+      this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, true)
     }
   }
 
@@ -487,9 +487,7 @@ class Drag extends Base {
   getNodeDistanceToSiblingNode(checkList, node, nodeRect, dir) {
     let dir1 = dir === 'v' ? 'top' : 'left'
     let dir2 = dir === 'v' ? 'bottom' : 'right'
-    let index = checkList.findIndex(item => {
-      return item.uid === node.uid
-    })
+    let index = getNodeIndexInNodeList(node, checkList)
     let prevBrother = null
     let nextBrother = null
     if (index !== -1) {

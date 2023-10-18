@@ -90,7 +90,9 @@ copyRenderTree({}, this.mindMap.renderer.renderTree);
 
 - `removeActiveState`: `Boolean`, default is `false`, Whether to remove the active state of the node
 
-- `keepId`: v0.4.6+, `Boolean`, default is `false`, Whether to retain the `id` of the replicated node will be deleted by default to prevent duplicate node `id`. However, for mobile node scenarios, the original `id` of the node needs to be retained
+- `removeId`：v0.7.3-fix.1+, Is remove the uid from the node data, default is `true`
+
+> - `keepId`: (Original fourth parameter) v0.4.6+, `Boolean`, default is `false`, Whether to retain the `id` of the replicated node will be deleted by default to prevent duplicate node `id`. However, for mobile node scenarios, the original `id` of the node needs to be retained
 
 Copy node tree data, mainly eliminating the reference `node` instance `_node`
 and copying the `data` of the data object, example:
@@ -292,11 +294,13 @@ Focus and select all specified input boxes.
 
 Adding additional data to the specified node list tree data will modify the original data.
 
-#### createUidForAppointNodes(appointNodes)
+#### createUidForAppointNodes(appointNodes, createNewId)
 
 > v0.7.2+
 
 - `appointNodes`：Node instance list, array type.
+
+- `createNewId`：v0.7.3-fix.1+, `Boolean`, default is `false`, If the node does not have a 'uid', a new 'uid' will be created. If 'true' is passed, a new 'uid' will be created regardless of whether the node data originally exists or not`
 
 Adding a uid to the specified node list tree data (if the uid does not exist) will modify the original data.
 
@@ -350,6 +354,53 @@ Escape the incoming string, currently escaping the following three characters:
 - `str`：String.
 
 Generate colors based on incoming content, and the same content will generate the same color.
+
+#### isSameObject(a, b)
+
+> v0.7.3+
+
+- `a`、`b`: Object | Array, Two objects to compare
+
+Determine whether two objects are the same, only handling objects or arrays.
+
+#### getNodeDataIndex(node)
+
+> v0.8.0+
+
+Gets the position index of a node within its sibling nodes.
+
+#### getNodeIndexInNodeList(node, nodeList) 
+
+> v0.8.0+
+
+Find the index of a node from a list of nodes.
+
+#### setDataToClipboard(data)
+
+> v0.8.0+
+
+- `data`：Object | Array
+
+Set data to the user clipboard.
+
+#### getDataFromClipboard()
+
+> v0.8.0+
+
+Reading text and images from the user's clipboard returns:
+
+```js
+{
+  text,
+  img
+}
+```
+
+#### removeFromParentNodeData(node)
+
+> v0.8.0+
+
+Remove the data of a node from its parent node's `nodeData.children` list.
 
 ## Simulate CSS background in Canvas
 

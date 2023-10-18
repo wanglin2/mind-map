@@ -4,6 +4,7 @@ declare class Base {
     renderer: any;
     mindMap: any;
     draw: any;
+    lineDraw: any;
     root: any;
     lru: Lru;
     doLayout(): void;
@@ -40,4 +41,4 @@ declare class Base {
     };
     getNodeActChildrenLength(node: any): any;
 }
-import Lru from '../utils/Lru';
+import Lru from "../utils/Lru";

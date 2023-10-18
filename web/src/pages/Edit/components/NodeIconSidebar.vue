@@ -102,7 +102,7 @@ export default {
       this.activeNodes = [...args[1]]
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
-        this.nodeImage = firstNode.getData('image')
+        this.nodeImage = firstNode.getData('image') || ''
         this.iconList = firstNode.getData('icon') || [] // 回显图标
       } else {
         this.iconList = []

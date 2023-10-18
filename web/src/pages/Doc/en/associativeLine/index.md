@@ -88,3 +88,15 @@ Deletes the currently active associative line. Clicking on an associated line is
 ### clearActiveLine()
 
 Clears the active state of the currently active association line.
+
+### front()
+
+> v0.8.0+
+
+The top-level display of the associated line.
+
+### back()
+
+> v0.8.0+
+
+The associated line returns to its original level.

@@ -121,7 +121,7 @@
 <td>enableFreeDrag（v0.2.4+）</td>
 <td>Boolean</td>
 <td>false</td>
-<td>是否开启节点自由拖拽</td>
+<td>是否开启节点自由拖拽（自由拖拽即可以把节点拖拽到画布的任意位置，注意不是拖拽节点成为其他节点的子节点兄弟节点的功能，自由拖拽的连线会存在一定问题，所以该特性最好不要使用）</td>
 </tr>
 <tr>
 <td>watermarkConfig（v0.2.4+）</td>
@@ -376,10 +376,16 @@
 <td>设置导出图片和svg时，针对富文本节点内容，也就是嵌入到svg中的html节点的默认样式覆盖，如果不覆盖，节点内容会发生偏移</td>
 </tr>
 <tr>
-<td>enableDblclickReset（v0.6.17+）</td>
+<td>enableDblclickReset（v0.6.17+）（v0.8.0+已删除该属性）</td>
 <td>Boolean</td>
 <td>true（v0.7.0+改为false）</td>
 <td>开启鼠标双击复位思维导图位置及缩放</td>
+</tr>
+<tr>
+<td>enableDblclickBackToRootNode（v0.8.0+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>是否在鼠标双击时回到根节点，也就是让根节点居中显示</td>
 </tr>
 <tr>
 <td>minExportImgCanvasScale（v0.7.0+）</td>
@@ -446,6 +452,36 @@
 <td>Object</td>
 <td>{}</td>
 <td>自定义节点标签的颜色，可传一个对象，key为要指定颜色的标签内容，value为该标签内容的颜色，如果不传内部会根据标签内容生成对应的颜色</td>
+</tr>
+<tr>
+<td>cooperateStyle（v0.7.3+）</td>
+<td>Object</td>
+<td>{ avatarSize: 22, fontSize: 12 }</td>
+<td>节点协作编辑时的人员头像样式配置，字段含义分别为：头像大小、如果是文字头像，那么文字的大小</td>
+</tr>
+<tr>
+<td>associativeLineIsAlwaysAboveNode（v0.8.0+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>关联线是否始终显示在节点上层，如果设为false，那么创建关联线和激活关联线时处于最顶层，其他情况下处于节点下方</td>
+</tr>
+<tr>
+<td>defaultGeneralizationText（v0.8.0+）</td>
+<td>String</td>
+<td>概要</td>
+<td>插入概要的默认文本</td>
+</tr>
+<tr>
+<td>handleIsSplitByWrapOnPasteCreateNewNode（v0.8.0+）</td>
+<td>Function / null</td>
+<td>null</td>
+<td>粘贴文本的方式创建新节点时，控制是否按换行自动分割节点，即如果存在换行，那么会根据换行创建多个节点，否则只会创建一个节点，可以传递一个函数，返回promise，resolve代表根据换行分割，reject代表忽略换行</td>
+</tr>
+<tr>
+<td>addHistoryTime（v0.8.0+）</td>
+<td>Number</td>
+<td>100</td>
+<td>指定时间内只允许添加一次历史记录，避免添加没有必要的中间状态，单位：ms</td>
 </tr>
 </tbody>
 </table>
@@ -601,18 +637,77 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <p>v0.3.0+</p>
 </blockquote>
 <p>当前注册的所有插件列表。</p>
+<h2>实例属性</h2>
+<h3>el</h3>
+<p>容器元素。</p>
+<h3>opt</h3>
+<p>配置选项对象。</p>
+<h3>svg</h3>
+<blockquote>
+<p>@svgdotjs/svg.js库调用SVG()方法返回的节点实例</p>
+</blockquote>
+<p>画布svg元素。</p>
+<h3>draw</h3>
+<blockquote>
+<p>@svgdotjs/svg.js库调用group()方法返回的节点实例</p>
+<p>svg节点的子节点</p>
+</blockquote>
+<p>容器元素，用于承载节点、连线等内容。</p>
+<h3>lineDraw</h3>
+<blockquote>
+<p>v0.8.0+</p>
+<p>@svgdotjs/svg.js库调用group()方法返回的节点实例</p>
+<p>draw节点的子节点</p>
+</blockquote>
+<p>节点连线元素的容器。</p>
+<h3>nodeDraw</h3>
+<blockquote>
+<p>v0.8.0+</p>
+<p>@svgdotjs/svg.js库调用group()方法返回的节点实例</p>
+<p>draw节点的子节点</p>
+</blockquote>
+<p>节点元素的容器。</p>
+<h3>associativeLineDraw</h3>
+<blockquote>
+<p>v0.8.0+</p>
+<p>@svgdotjs/svg.js库调用group()方法返回的节点实例</p>
+<p>在注册了关联线插件的情况下可用</p>
+<p>draw节点的子节点</p>
+</blockquote>
+<p>关联线内容的容器。</p>
+<h3>otherDraw</h3>
+<blockquote>
+<p>v0.8.0+</p>
+<p>@svgdotjs/svg.js库调用group()方法返回的节点实例</p>
+<p>draw节点的子节点</p>
+</blockquote>
+<p>其他内容的容器。</p>
+<h3>elRect</h3>
+<p>容器元素<code>el</code>的尺寸、位置信息。调用<code>getBoundingClientRect()</code>方法的返回结果。</p>
+<h3>width</h3>
+<p>容器元素<code>el</code>的宽度。</p>
+<h3>height</h3>
+<p>容器元素<code>el</code>的高度。</p>
+<h3>themeConfig</h3>
+<p>当前主题配置。</p>
 <h2>实例方法</h2>
+<h3>clearDraw()</h3>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>清空<code>lineDraw</code>、<code>associativeLineDraw</code>、<code>nodeDraw</code>、<code>otherDraw</code>容器。</p>
 <h3>destroy()</h3>
 <blockquote>
 <p>v0.6.0+</p>
 </blockquote>
 <p>销毁思维导图。会移除注册的插件、移除监听的事件、删除画布的所有节点。</p>
-<h3>getSvgData({ paddingX = 0, paddingY = 0 })</h3>
+<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
 <p><code>paddingX</code>：水平内边距</p>
 <p><code>paddingY</code>：垂直内边距</p>
+<p><code>ignoreWatermark</code>：v0.8.0+，不要绘制水印，如果不需要绘制水印的场景可以传<code>true</code>，因为绘制水印非常慢</p>
 <p>获取<code>svg</code>数据，返回一个对象，详细结构如下：</p>
 <pre class="hljs"><code>{
   svg, <span class="hljs-comment">// Element，思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）</span>
@@ -843,17 +938,33 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>调用了setTheme方法设置主题后触发</td>
 <td>theme（设置的新主题名称）</td>
 </tr>
+<tr>
+<td>set_data（v0.7.3+）</td>
+<td>调用了setData方法动态设置思维导图数据时触发</td>
+<td>data（新的思维导图数据）</td>
+</tr>
+<tr>
+<td>resize（v0.8.0+）</td>
+<td>容器尺寸改变后触发，实际上是当思维导图实例的<code>resize</code>方法被调用后触发</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
 <p>触发事件，可以是上面表格里的事件，也可以是自定义事件</p>
 <h3>off(event, fn)</h3>
 <p>解绑事件</p>
-<h3>setTheme(theme)</h3>
+<h3>setTheme(theme, notRender = false)</h3>
+<ul>
+<li><code>notRender</code>：v0.8.0+，是否不要调用render方法更新画布。</li>
+</ul>
 <p>切换主题，可选主题见上面的选项表格</p>
 <h3>getTheme()</h3>
 <p>获取当前主题</p>
-<h3>setThemeConfig(config)</h3>
+<h3>setThemeConfig(config, notRender = false)</h3>
+<ul>
+<li><code>notRender</code>：v0.8.0+，是否不要调用render方法更新画布。</li>
+</ul>
 <p>设置主题配置，<code>config</code>同上面选项表格里的选项<code>themeConfig</code></p>
 <h3>getCustomThemeConfig()</h3>
 <p>获取自定义主题配置</p>
@@ -878,7 +989,10 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <p>该方法只做更新配置的事情，没有其他副作用，比如触发画布重新渲染之类的</p>
 <h3>getLayout()</h3>
 <p>获取当前的布局结构</p>
-<h3>setLayout(layout)</h3>
+<h3>setLayout(layout, notRender = false)</h3>
+<ul>
+<li><code>notRender</code>：v0.8.0+，是否不要调用render方法更新画布。</li>
+</ul>
 <p>设置布局结构，可选值见上面选项表格的<code>layout</code>字段</p>
 <h3>execCommand(name, ...args)</h3>
 <p>执行命令，每执行一个命令就会在历史堆栈里添加一条记录用于回退或前进。所有命令如下：</p>
@@ -1075,6 +1189,16 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>INSERT_FORMULA（v0.7.2+）</td>
 <td>给节点插入数学公式，操作节点为当前激活的节点或指定节点</td>
 <td>formula（要插入的数学公式，LaText语法）, appointNodes（可选，指定要插入公式的节点，多个节点可以传数组，否则默认为当前激活的节点）</td>
+</tr>
+<tr>
+<td>INSERT_PARENT_NODE（v0.8.0+）</td>
+<td>给指定的节点插入父节点，操作节点为当前激活的节点或指定节点</td>
+<td>openEdit（是否激活新插入的节点并进入编辑模式，默认为<code>true</code>）、 appointNodes（可选，指定要插入父节点的节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a>）</td>
+</tr>
+<tr>
+<td>REMOVE_CURRENT_NODE（v0.8.0+）</td>
+<td>仅删除当前节点，操作节点为当前激活的节点或指定节点</td>
+<td>appointNodes（可选，指定要删除的节点，指定多个节点可以传一个数组）</td>
 </tr>
 </tbody>
 </table>

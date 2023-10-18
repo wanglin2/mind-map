@@ -167,11 +167,14 @@ export const copyNodeTree = (
   tree,
   root,
   removeActiveState = false,
-  keepId = false
+  removeId = true
 ) => {
   tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data)
-  // 重新创建节点uid，因为节点uid不能重复
-  if (!keepId) {
+  // 移除节点uid
+  if (removeId) {
+    delete tree.data.uid
+  } else if (!tree.data.uid) {
+    // 否则保留或生成
     tree.data.uid = createUid()
   }
   if (removeActiveState) {
@@ -180,7 +183,7 @@ export const copyNodeTree = (
   tree.children = []
   if (root.children && root.children.length > 0) {
     root.children.forEach((item, index) => {
-      tree.children[index] = copyNodeTree({}, item, removeActiveState, keepId)
+      tree.children[index] = copyNodeTree({}, item, removeActiveState, removeId)
     })
   } else if (
     root.nodeData &&
@@ -188,7 +191,7 @@ export const copyNodeTree = (
     root.nodeData.children.length > 0
   ) {
     root.nodeData.children.forEach((item, index) => {
-      tree.children[index] = copyNodeTree({}, item, removeActiveState, keepId)
+      tree.children[index] = copyNodeTree({}, item, removeActiveState, removeId)
     })
   }
   return tree
@@ -766,14 +769,15 @@ export const addDataToAppointNodes = (appointNodes, data = {}) => {
   return appointNodes
 }
 
-// 给指定的节点列表树数据添加uid，如果不存在的话，会修改原数据
-export const createUidForAppointNodes = appointNodes => {
+// 给指定的节点列表树数据添加uid，会修改原数据
+// createNewId默认为false，即如果节点不存在uid的话，会创建新的uid。如果传true，那么无论节点数据原来是否存在uid，都会创建新的uid
+export const createUidForAppointNodes = (appointNodes, createNewId = false) => {
   const walk = list => {
     list.forEach(node => {
       if (!node.data) {
         node.data = {}
       }
-      if (isUndef(node.data.uid)) {
+      if (createNewId || isUndef(node.data.uid)) {
         node.data.uid = createUid()
       }
       if (node.children && node.children.length > 0) {
@@ -792,12 +796,19 @@ export const formatDataToArray = data => {
 }
 
 //  获取节点在同级里的位置索引
-export const getNodeIndex = node => {
+export const getNodeDataIndex = node => {
   return node.parent
-    ? node.parent.children.findIndex(item => {
-        return item.uid === node.uid
+    ? node.parent.nodeData.children.findIndex(item => {
+        return item.data.uid === node.uid
       })
     : 0
+}
+
+// 从一个节点列表里找出某个节点的索引
+export const getNodeIndexInNodeList = (node, nodeList) => {
+  return nodeList.findIndex(item => {
+    return item.uid === node.uid
+  })
 }
 
 // 根据内容生成颜色
@@ -870,4 +881,43 @@ export const isSameObject = (a, b) => {
     // 其他类型，直接全等判断
     return a === b
   }
+}
+
+// 将数据设置到用户剪切板中
+export const setDataToClipboard = data => {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(JSON.stringify(data))
+  }
+}
+
+// 从用户剪贴板中读取文字和图片
+export const getDataFromClipboard = async () => {
+  let text = null
+  let img = null
+  if (navigator.clipboard) {
+    text = await navigator.clipboard.readText()
+    const items = await navigator.clipboard.read()
+    if (items && items.length > 0) {
+      for (const clipboardItem of items) {
+        for (const type of clipboardItem.types) {
+          if (/^image\//.test(type)) {
+            img = await clipboardItem.getType(type)
+            break
+          }
+        }
+      }
+    }
+  }
+  return {
+    text,
+    img
+  }
+}
+
+// 从节点的父节点的nodeData.children列表中移除该节点的数据
+export const removeFromParentNodeData = node => {
+  if (!node || !node.parent) return
+  const index = getNodeDataIndex(node)
+  if (index === -1) return
+  node.parent.nodeData.children.splice(index, 1)
 }

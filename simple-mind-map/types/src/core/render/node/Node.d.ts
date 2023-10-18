@@ -6,6 +6,8 @@ declare class Node {
     mindMap: any;
     renderer: any;
     draw: any;
+    nodeDraw: any;
+    lineDraw: any;
     style: Style;
     shapeInstance: Shape;
     shapePadding: {
@@ -25,6 +27,7 @@ declare class Node {
     isDrag: boolean;
     parent: any;
     children: any;
+    userList: any[];
     group: any;
     shapeNode: any;
     hoverNode: any;
@@ -42,6 +45,7 @@ declare class Node {
     _openExpandNode: any;
     _closeExpandNode: any;
     _fillExpandNode: any;
+    _userListGroup: any;
     _lines: any[];
     _generalizationLine: any;
     _generalizationNode: any;
@@ -82,7 +86,8 @@ declare class Node {
         top: any;
     };
     reRender(): boolean;
-    updateNodeActive(): void;
+    updateNodeActiveClass(): void;
+    updateNodeByActive(active: any): void;
     render(callback?: () => void): void;
     remove(): void;
     destroy(): void;
@@ -114,5 +119,5 @@ declare class Node {
     getData(key: any): any;
     hasCustomStyle(): boolean;
 }
-import Style from './Style';
-import Shape from './Shape';
+import Style from "./Style";
+import Shape from "./Shape";

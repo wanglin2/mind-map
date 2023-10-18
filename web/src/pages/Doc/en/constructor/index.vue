@@ -137,7 +137,7 @@
 <td>enableFreeDrag（v0.2.4+）</td>
 <td>Boolean</td>
 <td>false</td>
-<td>Enable node free drag</td>
+<td>Enable node free(Free drag means that nodes can be dragged to any position on the canvas. Please note that it is not a function of dragging nodes to become siblings of other nodes. The connection of free drag may have certain problems, so it is best not to use this feature) drag</td>
 <td></td>
 </tr>
 <tr>
@@ -435,10 +435,17 @@
 <td></td>
 </tr>
 <tr>
-<td>enableDblclickReset（v0.6.17+）</td>
+<td>enableDblclickReset（v0.6.17+）(v0.8.0+this attribute has been deleted)</td>
 <td>Boolean</td>
 <td>true(v0.7.0+changed to false)</td>
 <td>Turn on the mouse and double-click to reset the position and zoom of the mind map</td>
+<td></td>
+</tr>
+<tr>
+<td>enableDblclickBackToRootNode（v0.8.0+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Whether to return to the root node when double clicking with the mouse, that is, to center the display of the root node</td>
 <td></td>
 </tr>
 <tr>
@@ -516,6 +523,41 @@
 <td>Object</td>
 <td>{}</td>
 <td>The color of a custom node label can be transferred to an object, where key is the label content to be assigned a color, and value is the color of the label content. If not transferred internally, a corresponding color will be generated based on the label content</td>
+<td></td>
+</tr>
+<tr>
+<td>cooperateStyle（v0.7.3+）</td>
+<td>Object</td>
+<td>{ avatarSize: 22, fontSize: 12 }</td>
+<td>The configuration of personnel avatar style during node collaboration editing, with field meanings as follows: avatar size, and if it is a text avatar, the size of the text</td>
+<td></td>
+</tr>
+<tr>
+<td>associativeLineIsAlwaysAboveNode（v0.8.0+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Is the associated line always displayed above the node? If set to false, it will be at the top level when creating and activating the associated line, and in other cases, it will be below the node</td>
+<td></td>
+</tr>
+<tr>
+<td>defaultGeneralizationText（v0.8.0+）</td>
+<td>String</td>
+<td>概要</td>
+<td>Insert default text for summary</td>
+<td></td>
+</tr>
+<tr>
+<td>handleIsSplitByWrapOnPasteCreateNewNode（v0.8.0+）</td>
+<td>Function / null</td>
+<td>null</td>
+<td>When creating a new node by pasting text, control whether to automatically split the nodes based on line breaks. If there is a line break, multiple nodes will be created based on the line break. Otherwise, only one node will be created, and a function can be passed to return promise. resolve represents splitting based on line breaks, and reject represents ignoring line breaks</td>
+<td></td>
+</tr>
+<tr>
+<td>addHistoryTime（v0.8.0+）</td>
+<td>Number</td>
+<td>100</td>
+<td>Only one historical record can be added within the specified time to avoid adding unnecessary intermediate states. Unit: ms</td>
 <td></td>
 </tr>
 </tbody>
@@ -672,18 +714,77 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 <p>v0.3.0+</p>
 </blockquote>
 <p>List of all currently registered plugins.</p>
+<h2>Instance props</h2>
+<h3>el</h3>
+<p>Container element.</p>
+<h3>opt</h3>
+<p>Config options object.</p>
+<h3>svg</h3>
+<blockquote>
+<p>@svgdotjs/svg.js library calls the node instance returned by the SVG() method</p>
+</blockquote>
+<p>Canvas SVG element.</p>
+<h3>draw</h3>
+<blockquote>
+<p>@svgdotjs/svg.js library calls the node instance returned by the group() method</p>
+<p>Child node of SVG node</p>
+</blockquote>
+<p>Container element, used to carry content such as nodes and connections.</p>
+<h3>lineDraw</h3>
+<blockquote>
+<p>v0.8.0+</p>
+<p>@svgdotjs/svg.js library calls the node instance returned by the group() method</p>
+<p>Child node of draw node</p>
+</blockquote>
+<p>Container for node wiring elements.</p>
+<h3>nodeDraw</h3>
+<blockquote>
+<p>v0.8.0+</p>
+<p>@svgdotjs/svg.js library calls the node instance returned by the group() method</p>
+<p>Child node of draw node</p>
+</blockquote>
+<p>Container for node elements.</p>
+<h3>associativeLineDraw</h3>
+<blockquote>
+<p>v0.8.0+</p>
+<p>@svgdotjs/svg.js library calls the node instance returned by the group() method</p>
+<p>Available when the associated line plugin is registered</p>
+<p>Child node of draw node</p>
+</blockquote>
+<p>Container for associative line content.</p>
+<h3>otherDraw</h3>
+<blockquote>
+<p>v0.8.0+</p>
+<p>@svgdotjs/svg.js library calls the node instance returned by the group() method</p>
+<p>Child node of draw node</p>
+</blockquote>
+<p>Container for other content.</p>
+<h3>elRect</h3>
+<p>The size and position information of the container element 'el'. The return result of calling the 'getBoundingClientRect()' method.</p>
+<h3>width</h3>
+<p>The width of the container element 'el'.</p>
+<h3>height</h3>
+<p>The height of the container element 'el'.</p>
+<h3>themeConfig</h3>
+<p>Current Theme Configuration.</p>
 <h2>Instance methods</h2>
+<h3>clearDraw()</h3>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>Clear <code>lineDraw</code>、<code>associativeLineDraw</code>、<code>nodeDraw</code>、<code>otherDraw</code> containers.</p>
 <h3>destroy()</h3>
 <blockquote>
 <p>v0.6.0+</p>
 </blockquote>
 <p>Destroy mind maps. It will remove registered plugins, remove listening events, and delete all nodes on the canvas.</p>
-<h3>getSvgData({ paddingX = 0, paddingY = 0 })</h3>
+<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
 <p><code>paddingX</code>: Padding x</p>
 <p><code>paddingY</code>: Padding y</p>
+<p><code>ignoreWatermark</code>：v0.8.0+, Do not draw watermarks. If you do not need to draw watermarks, you can pass 'true' because drawing watermarks is very slow</p>
 <p>Get the <code>svg</code> data and return an object. The detailed structure is as follows:</p>
 <pre class="hljs"><code>{
   svg, <span class="hljs-comment">// Element, the overall svg element of the mind map graphics, including: svg (canvas container), g (actual mind map group)</span>
@@ -921,17 +1022,33 @@ poor performance and should be used sparingly.</p>
 <td>Triggered after calling the setTheme method to set the theme</td>
 <td>theme（theme name）</td>
 </tr>
+<tr>
+<td>set_data（v0.7.3+）</td>
+<td>Triggered when the setData method is called to dynamically set mind map data</td>
+<td>data（New Mind Map Data）</td>
+</tr>
+<tr>
+<td>resize（v0.8.0+）</td>
+<td>Triggered after the container size changes, actually when the 'resize' method of the mind map instance is called</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
 <p>Trigger an event, which can be one of the events listed above or a custom event.</p>
 <h3>off(event, fn)</h3>
 <p>Unbind an event.</p>
-<h3>setTheme(theme)</h3>
+<h3>setTheme(theme, notRender = false)</h3>
+<ul>
+<li><code>notRender</code>: v0.8.0+, Is not call the render method to update the canvas.</li>
+</ul>
 <p>Switches the theme. Available themes can be found in the options table above.</p>
 <h3>getTheme()</h3>
 <p>Gets the current theme.</p>
-<h3>setThemeConfig(config)</h3>
+<h3>setThemeConfig(config, notRender = false)</h3>
+<ul>
+<li><code>notRender</code>: v0.8.0+, Is not call the render method to update the canvas.</li>
+</ul>
 <p>Sets the theme configuration. <code>config</code> is the same as the <code>themeConfig</code> option
 in the options table above.</p>
 <h3>getCustomThemeConfig()</h3>
@@ -957,7 +1074,10 @@ in the options table above.</p>
 <p>This method only updates the configuration and has no other side effects, such as triggering canvas re-rendering</p>
 <h3>getLayout()</h3>
 <p>Gets the current layout structure.</p>
-<h3>setLayout(layout)</h3>
+<h3>setLayout(layout, notRender = false)</h3>
+<ul>
+<li><code>notRender</code>: v0.8.0+, Is not call the render method to update the canvas.</li>
+</ul>
 <p>Sets the layout structure. Available values can be found in the <code>layout</code> field
 in the options table above.</p>
 <h3>execCommand(name, ...args)</h3>
@@ -1151,6 +1271,16 @@ redo. All commands are as follows:</p>
 <td>INSERT_FORMULA（v0.7.2+）</td>
 <td>Insert mathematical formulas into nodes, operate on the currently active node or specified node</td>
 <td>formula（Mathematical formula to insert, LaText syntax）, appointNodes（Optional, specify the node to insert the formula into. Multiple nodes can be passed as arrays, otherwise it defaults to the currently active node）</td>
+</tr>
+<tr>
+<td>INSERT_PARENT_NODE（v0.8.0+）</td>
+<td>Insert a parent node into the specified node, with the operation node being the currently active node or the specified node</td>
+<td>openEdit（Activate the newly inserted node and enter editing mode, default to 'true'`）、 appointNodes（Optional, specify the node to insert into the parent node, and specify that multiple nodes can pass an array）、 appointData（Optional, specify the data for the newly created node, such as {text: 'xxx', ...}, Detailed structure can be referenced <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js">exampleData.js</a>）</td>
+</tr>
+<tr>
+<td>REMOVE_CURRENT_NODE（v0.8.0+）</td>
+<td>Delete only the current node, operate on the currently active node or specified node</td>
+<td>appointNodes（Optional, specify the nodes to be deleted, and multiple nodes can be passed as an array）</td>
 </tr>
 </tbody>
 </table>

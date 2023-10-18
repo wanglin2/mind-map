@@ -1,5 +1,5 @@
 import Base from './Base'
-import { walk, asyncRun, degToRad } from '../utils'
+import { walk, asyncRun, degToRad, getNodeIndexInNodeList } from '../utils'
 import { CONSTANTS } from '../constants/constant'
 import utils from './fishboneUtils'
 
@@ -112,7 +112,7 @@ class Fishbone extends Base {
       this.root,
       null,
       (node, parent, isRoot, layerIndex) => {
-        if (!node.nodeData.data.expand) {
+        if (!node.getData('expand')) {
           return
         }
         let params = { node, parent, layerIndex, ctx: this }
@@ -193,9 +193,7 @@ class Fishbone extends Base {
   updateBrothersTop(node, addHeight) {
     if (node.parent && !node.parent.isRoot) {
       let childrenList = node.parent.children
-      let index = childrenList.findIndex(item => {
-        return item.uid === node.uid
-      })
+      let index = getNodeIndexInNodeList(node, childrenList)
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
           // 适配自定义位置
@@ -252,7 +250,7 @@ class Fishbone extends Base {
         let nodeLineX = item.left
         let offset = node.height / 2 + marginY
         let offsetX = offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg))
-        let line = this.draw.path()
+        let line = this.lineDraw.path()
         if (this.checkIsTop(item)) {
           line.plot(
             `M ${nodeLineX - offsetX},${item.top + item.height + offset} L ${
@@ -273,7 +271,7 @@ class Fishbone extends Base {
       // 从根节点出发的水平线
       let nodeHalfTop = node.top + node.height / 2
       let offset = node.height / 2 + this.getMarginY(node.layerIndex + 1)
-      let line = this.draw.path()
+      let line = this.lineDraw.path()
       line.plot(
         `M ${node.left + node.width},${nodeHalfTop} L ${
           maxx - offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg))
@@ -308,7 +306,7 @@ class Fishbone extends Base {
       })
       // 斜线
       if (len >= 0) {
-        let line = this.draw.path()
+        let line = this.lineDraw.path()
         expandBtnSize = len > 0 ? expandBtnSize : 0
         let lineLength = maxx - node.left - node.width * this.indent
         lineLength = Math.max(lineLength, 0)

@@ -7,7 +7,7 @@ import {
 
 // 创建文字节点
 function createText(data) {
-  let g = this.draw.group()
+  let g = this.associativeLineDraw.group()
   const setActive = () => {
     if (
       !this.activeLine ||
@@ -110,8 +110,8 @@ function hideEditTextBox() {
   str = isDefaultText ? '' : str
   this.mindMap.execCommand('SET_NODE_DATA', node, {
     associativeLineText: {
-      ...(node.nodeData.data.associativeLineText || {}),
-      [toNode.nodeData.data.uid]: str
+      ...(node.getData('associativeLineText') || {}),
+      [toNode.getData('uid')]: str
     }
   })
   this.textEditNode.style.display = 'none'
@@ -123,11 +123,11 @@ function hideEditTextBox() {
 
 // 获取某根关联线的文字
 function getText(node, toNode) {
-  let obj = node.nodeData.data.associativeLineText
+  let obj = node.getData('associativeLineText')
   if (!obj) {
     return ''
   }
-  return obj[toNode.nodeData.data.uid] || ''
+  return obj[toNode.getData('uid')] || ''
 }
 
 // 渲染关联线文字

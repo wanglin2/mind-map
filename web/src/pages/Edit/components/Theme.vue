@@ -122,17 +122,17 @@ export default {
       })
       this.groupList = [
         {
-          name: '经典',
+          name: this.$t('theme.classics'),
           list: classicsList
         },
         {
-          name: '深色',
+          name: this.$t('theme.dark'),
           list: this.themeList.filter(item => {
             return item.dark
           })
         },
         {
-          name: '朴素',
+          name: this.$t('theme.simple'),
           list: baiduList
         }
       ]
@@ -146,13 +146,13 @@ export default {
       const customThemeConfig = this.mindMap.getCustomThemeConfig()
       const hasCustomThemeConfig = Object.keys(customThemeConfig).length > 0
       if (hasCustomThemeConfig) {
-        this.$confirm('你当前自定义过基础样式，是否覆盖？', '提示', {
-          confirmButtonText: '覆盖',
-          cancelButtonText: '保留',
+        this.$confirm(this.$t('theme.coverTip'), this.$t('theme.tip'), {
+          confirmButtonText: this.$t('theme.cover'),
+          cancelButtonText: this.$t('theme.reserve'),
           type: 'warning'
         })
           .then(() => {
-            this.mindMap.setThemeConfig({})
+            this.mindMap.setThemeConfig({}, true)
             this.changeTheme(theme, {})
           })
           .catch(() => {

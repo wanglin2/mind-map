@@ -1,149 +1,28 @@
 <template>
   <div class="toolbarContainer" :class="{ isDark: isDark }">
-    <div class="toolbar" :style="{top: IS_ELECTRON ? '40px' : 0}">
+    <div class="toolbar" :style="{top: IS_ELECTRON ? '40px' : 0}" ref="toolbarRef">
       <!-- 节点操作 -->
       <div class="toolbarBlock">
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: readonly || backEnd
-          }"
-          @click="$bus.$emit('execCommand', 'BACK')"
+        <ToolbarNodeBtnList :list="horizontalList"></ToolbarNodeBtnList>
+        <!-- 更多 -->
+        <el-popover
+          v-model="popoverShow"
+          placement="bottom-end"
+          width="120"
+          trigger="hover"
+          v-if="showMoreBtn"
+          style="margin-left: 20px;"
         >
-          <span class="icon iconfont iconhoutui-shi"></span>
-          <span class="text">{{ $t('toolbar.undo') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: readonly || forwardEnd
-          }"
-          @click="$bus.$emit('execCommand', 'FORWARD')"
-        >
-          <span class="icon iconfont iconqianjin1"></span>
-          <span class="text">{{ $t('toolbar.redo') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0 || hasGeneralization,
-            active: isInPainter
-          }"
-          @click="$bus.$emit('startPainter')"
-        >
-          <span class="icon iconfont iconjiedian"></span>
-          <span class="text">{{ $t('toolbar.painter') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0 || hasRoot || hasGeneralization
-          }"
-          @click="$bus.$emit('execCommand', 'INSERT_NODE')"
-        >
-          <span class="icon iconfont iconjiedian"></span>
-          <span class="text">{{ $t('toolbar.insertSiblingNode') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0 || hasGeneralization
-          }"
-          @click="$bus.$emit('execCommand', 'INSERT_CHILD_NODE')"
-        >
-          <span class="icon iconfont icontianjiazijiedian"></span>
-          <span class="text">{{ $t('toolbar.insertChildNode') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0
-          }"
-          @click="$bus.$emit('execCommand', 'REMOVE_NODE')"
-        >
-          <span class="icon iconfont iconshanchu"></span>
-          <span class="text">{{ $t('toolbar.deleteNode') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0
-          }"
-          @click="$bus.$emit('showNodeImage')"
-        >
-          <span class="icon iconfont iconimage"></span>
-          <span class="text">{{ $t('toolbar.image') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0
-          }"
-          @click="showNodeIcon"
-        >
-          <span class="icon iconfont iconxiaolian"></span>
-          <span class="text">{{ $t('toolbar.icon') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0
-          }"
-          @click="$bus.$emit('showNodeLink')"
-        >
-          <span class="icon iconfont iconchaolianjie"></span>
-          <span class="text">{{ $t('toolbar.link') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0
-          }"
-          @click="$bus.$emit('showNodeNote')"
-        >
-          <span class="icon iconfont iconflow-Mark"></span>
-          <span class="text">{{ $t('toolbar.note') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0
-          }"
-          @click="$bus.$emit('showNodeTag')"
-        >
-          <span class="icon iconfont iconbiaoqian"></span>
-          <span class="text">{{ $t('toolbar.tag') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0 || hasRoot || hasGeneralization
-          }"
-          @click="$bus.$emit('execCommand', 'ADD_GENERALIZATION')"
-        >
-          <span class="icon iconfont icongaikuozonglan"></span>
-          <span class="text">{{ $t('toolbar.summary') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0 || hasGeneralization
-          }"
-          @click="$bus.$emit('createAssociativeLine')"
-        >
-          <span class="icon iconfont iconlianjiexian"></span>
-          <span class="text">{{ $t('toolbar.associativeLine') }}</span>
-        </div>
-        <div
-          class="toolbarBtn"
-          :class="{
-            disabled: activeNodes.length <= 0 || hasGeneralization
-          }"
-          @click="showFormula"
-        >
-          <span class="icon iconfont icongongshi"></span>
-          <span class="text">{{ $t('toolbar.formula') }}</span>
-        </div>
+          <ToolbarNodeBtnList
+            dir="v"
+            :list="verticalList"
+            @click.native="popoverShow = false"
+          ></ToolbarNodeBtnList>
+          <div slot="reference" class="toolbarBtn">
+            <span class="icon iconfont icongongshi"></span>
+            <span class="text">{{ $t('toolbar.more') }}</span>
+          </div>
+        </el-popover>
       </div>
       <!-- 导出 -->
       <div class="toolbarBlock">
@@ -193,10 +72,12 @@ import NodeNote from './NodeNote'
 import NodeTag from './NodeTag'
 import Export from './Export'
 import Import from './Import'
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 import { Notification } from 'element-ui'
 import exampleData from 'simple-mind-map/example/exampleData'
 import { getData } from '../../../api'
+import ToolbarNodeBtnList from './ToolbarNodeBtnList.vue'
+import { throttle } from 'simple-mind-map/src/utils/index'
 
 /**
  * @Author: 王林
@@ -213,35 +94,35 @@ export default {
     NodeNote,
     NodeTag,
     Export,
-    Import
+    Import,
+    ToolbarNodeBtnList
   },
   data() {
     return {
-      activeNodes: [],
-      backEnd: false,
-      forwardEnd: true,
-      readonly: false,
-      isFullDataFile: false,
-      timer: null,
-      isInPainter: false
+      list: [
+        'back',
+        'forward',
+        'painter',
+        'siblingNode',
+        'childNode',
+        'deleteNode',
+        'image',
+        'icon',
+        'link',
+        'note',
+        'tag',
+        'summary',
+        'associativeLine',
+        'formula'
+      ],
+      horizontalList: [],
+      verticalList: [],
+      showMoreBtn: true,
+      popoverShow: false
     }
   },
   computed: {
-    ...mapState(['isHandleLocalFile', 'isDark']),
-    hasRoot() {
-      return (
-        this.activeNodes.findIndex(node => {
-          return node.isRoot
-        }) !== -1
-      )
-    },
-    hasGeneralization() {
-      return (
-        this.activeNodes.findIndex(node => {
-          return node.isGeneralization
-        }) !== -1
-      )
-    }
+    ...mapState(['isHandleLocalFile', 'isDark'])
   },
   watch: {
     isHandleLocalFile(val) {
@@ -251,68 +132,48 @@ export default {
     }
   },
   created() {
-    this.$bus.$on('mode_change', this.onModeChange)
-    this.$bus.$on('node_active', this.onNodeActive)
-    this.$bus.$on('back_forward', this.onBackForward)
     this.$bus.$on('write_local_file', this.onWriteLocalFile)
-    this.$bus.$on('painter_start', this.onPainterStart)
-    this.$bus.$on('painter_end', this.onPainterEnd)
+  },
+  mounted() {
+    this.computeToolbarShow()
+    this.computeToolbarShowThrottle = throttle(this.computeToolbarShow, 300)
+    window.addEventListener('resize', this.computeToolbarShowThrottle)
+    this.$bus.$on('lang_change', this.computeToolbarShowThrottle)
   },
   beforeDestroy() {
-    this.$bus.$off('mode_change', this.onModeChange)
-    this.$bus.$off('node_active', this.onNodeActive)
-    this.$bus.$off('back_forward', this.onBackForward)
     this.$bus.$off('write_local_file', this.onWriteLocalFile)
-    this.$bus.$off('painter_start', this.onPainterStart)
-    this.$bus.$off('painter_end', this.onPainterEnd)
+    window.removeEventListener('resize', this.computeToolbarShowThrottle)
+    this.$bus.$off('lang_change', this.computeToolbarShowThrottle)
   },
   methods: {
-    ...mapMutations(['setActiveSidebar']),
-
-    showNodeIcon() {
-      // this.$bus.$emit('showNodeIcon')
-      this.$bus.$emit('close_node_icon_toolbar')
-      this.setActiveSidebar('nodeIconSidebar')
+    // 计算工具按钮如何显示
+    computeToolbarShow() {
+      const windowWidth = window.innerWidth - 40
+      const all = [...this.list]
+      let index = 1
+      const loopCheck = () => {
+        if (index > all.length) return done()
+        this.horizontalList = all.slice(0, index)
+        this.$nextTick(() => {
+          const width = this.$refs.toolbarRef.getBoundingClientRect().width
+          if (width < windowWidth) {
+            index++
+            loopCheck()
+          } else if (index > 0 && width > windowWidth) {
+            index--
+            this.horizontalList = all.slice(0, index)
+            done()
+          }
+        })
+      }
+      const done = () => {
+        this.verticalList = all.slice(index)
+        this.showMoreBtn = this.verticalList.length > 0
+      }
+      loopCheck()
     },
 
-    // 打开公式侧边栏
-    showFormula() {
-      this.setActiveSidebar('formulaSidebar')
-    },
-
-    /**
-     * @Author: 王林25
-     * @Date: 2022-11-14 19:17:40
-     * @Desc: 监听模式切换
-     */
-    onModeChange(mode) {
-      this.readonly = mode === 'readonly'
-    },
-
-    /**
-     * @Author: 王林25
-     * @Date: 2022-11-14 19:18:06
-     * @Desc: 监听节点激活
-     */
-    onNodeActive(...args) {
-      this.activeNodes = [...args[1]]
-    },
-
-    /**
-     * @Author: 王林25
-     * @Date: 2022-11-14 19:18:31
-     * @Desc: 监听前进后退
-     */
-    onBackForward(index, len) {
-      this.backEnd = index <= 0
-      this.forwardEnd = index >= len - 1
-    },
-
-    /**
-     * @Author: 王林25
-     * @Date: 2022-11-14 19:19:14
-     * @Desc: 监听本地文件读写
-     */
+    // 监听本地文件读写
     onWriteLocalFile(content) {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
@@ -320,11 +181,7 @@ export default {
       }, 1000)
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2022-09-24 15:40:09
-     * @Desc: 打开本地文件
-     */
+    // 打开本地文件
     async openLocalFile() {
       try {
         let [_fileHandle] = await window.showOpenFilePicker({
@@ -344,7 +201,7 @@ export default {
         }
         fileHandle = _fileHandle
         if (fileHandle.kind === 'directory') {
-          this.$message.warning('请选择文件')
+          this.$message.warning(this.$t('toolbar.selectFileTip'))
           return
         }
         this.readFile()
@@ -353,17 +210,11 @@ export default {
         if (error.toString().includes('aborted')) {
           return
         }
-        this.$message.warning(
-          '你的浏览器可能不支持，建议使用最新版本的Chrome浏览器'
-        )
+        this.$message.warning(this.$t('toolbar.notSupportTip'))
       }
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2022-09-24 15:40:18
-     * @Desc: 读取本地文件
-     */
+    // 读取本地文件
     async readFile() {
       let file = await fileHandle.getFile()
       let fileReader = new FileReader()
@@ -372,8 +223,10 @@ export default {
         this.setData(fileReader.result)
         Notification.closeAll()
         Notification({
-          title: '提示',
-          message: `当前正在编辑你本机的【${file.name}】文件`,
+          title: this.$t('toolbar.tip'),
+          message: `${this.$t('toolbar.editingLocalFileTipFront')}${
+            file.name
+          }${this.$t('toolbar.editingLocalFileTipEnd')}`,
           duration: 0,
           showClose: true
         })
@@ -381,16 +234,12 @@ export default {
       fileReader.readAsText(file)
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2022-09-24 15:40:26
-     * @Desc: 渲染读取的数据
-     */
+    // 渲染读取的数据
     setData(str) {
       try {
         let data = JSON.parse(str)
         if (typeof data !== 'object') {
-          throw new Error('文件内容有误')
+          throw new Error(this.$t('toolbar.fileContentError'))
         }
         if (data.root) {
           this.isFullDataFile = true
@@ -404,15 +253,11 @@ export default {
         this.$bus.$emit('setData', data)
       } catch (error) {
         console.log(error)
-        this.$message.error('文件打开失败')
+        this.$message.error(this.$t('toolbar.fileOpenFailed'))
       }
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2022-09-24 15:40:42
-     * @Desc: 写入本地文件
-     */
+    // 写入本地文件
     async writeLocalFile(content) {
       if (!fileHandle || !this.isHandleLocalFile) {
         return
@@ -426,30 +271,18 @@ export default {
       await writable.close()
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2022-09-24 15:40:48
-     * @Desc: 创建本地文件
-     */
+    // 创建本地文件
     async createNewLocalFile() {
       await this.createLocalFile(exampleData)
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2022-09-24 15:49:17
-     * @Desc: 另存为
-     */
+    // 另存为
     async saveLocalFile() {
       let data = getData()
       await this.createLocalFile(data)
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2022-09-24 15:50:22
-     * @Desc: 创建本地文件
-     */
+    // 创建本地文件
     async createLocalFile(content) {
       try {
         let _fileHandle = await window.showSaveFilePicker({
@@ -459,14 +292,14 @@ export default {
               accept: { 'application/json': ['.smm'] }
             }
           ],
-          suggestedName: '思维导图'
+          suggestedName: this.$t('toolbar.defaultFileName')
         })
         if (!_fileHandle) {
           return
         }
         const loading = this.$loading({
           lock: true,
-          text: '正在创建文件',
+          text: this.$t('toolbar.creatingTip'),
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         })
@@ -481,18 +314,8 @@ export default {
         if (error.toString().includes('aborted')) {
           return
         }
-        this.$message.warning(
-          '你的浏览器可能不支持，建议使用最新版本的Chrome浏览器'
-        )
+        this.$message.warning(this.$t('toolbar.notSupportTip'))
       }
-    },
-
-    onPainterStart() {
-      this.isInPainter = true
-    },
-
-    onPainterEnd() {
-      this.isInPainter = false
     }
   }
 }
@@ -502,7 +325,7 @@ export default {
 .toolbarContainer {
   &.isDark {
     .toolbar {
-      color: hsla(0,0%,100%,.9);
+      color: hsla(0, 0%, 100%, 0.9);
       .toolbarBlock {
         background-color: #262a2e;
       }
@@ -516,7 +339,7 @@ export default {
         &:hover {
           &:not(.disabled) {
             .icon {
-              background: hsla(0,0%,100%,.05);
+              background: hsla(0, 0%, 100%, 0.05);
             }
           }
         }
@@ -533,14 +356,12 @@ export default {
     transform: translateX(-50%);
     top: 20px;
     width: max-content;
-    max-width: 100%;
     display: flex;
     font-size: 12px;
     font-family: PingFangSC-Regular, PingFang SC;
     font-weight: 400;
     color: rgba(26, 26, 26, 0.8);
     z-index: 2;
-    overflow-x: auto;
 
     .toolbarBlock {
       display: flex;
@@ -603,18 +424,6 @@ export default {
       .text {
         margin-top: 3px;
       }
-    }
-  }
-}
-
-@media screen and (max-width: 1040px) {
-  .toolbarContainer {
-    .toolbar {
-      left: 20px;
-      right: 20px;
-      transform: translateX(0);
-      width: auto;
-      max-width: none;
     }
   }
 }

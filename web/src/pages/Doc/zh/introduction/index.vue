@@ -18,6 +18,7 @@
 <li><input type="checkbox" id="checkbox7" checked="true" /><label for="checkbox7">支持导出为</label><code>json</code>、<code>png</code>、<code>svg</code>、<code>pdf</code>、<code>markdown</code>、<code>xmind</code>，支持从<code>json</code>、<code>xmind</code>、<code>markdown</code>导入</li>
 <li><input type="checkbox" id="checkbox8" checked="true" /><label for="checkbox8">支持快捷键、前进后退、关联线、搜索替换、小地图、水印、滚动条</label></li>
 <li><input type="checkbox" id="checkbox9" checked="true" /><label for="checkbox9">提供丰富的配置，满足各种场景各种使用习惯</label></li>
+<li><input type="checkbox" id="checkbox10" checked="true" /><label for="checkbox10">支持协同编辑</label></li>
 </ul>
 <h2>仓库目录介绍</h2>
 <p>1.<code>simple-mind-map</code></p>
@@ -25,11 +26,11 @@
 <p>2.<code>web</code></p>
 <p>使用<code>simple-mind-map</code>库，基于<code>vue2.x</code>、<code>ElementUI</code>搭建的在线思维导图。特性：</p>
 <ul>
-<li><input type="checkbox" id="checkbox10" checked="true" /><label for="checkbox10">工具栏，支持插入节点、删除节点；编辑节点图片、图标、超链接、备注、标签、概要</label></li>
-<li><input type="checkbox" id="checkbox11" checked="true" /><label for="checkbox11">侧边栏，基础样式设置面板、节点样式设置面板、大纲面板、主题选择面板、结构选择面板</label></li>
-<li><input type="checkbox" id="checkbox12" checked="true" /><label for="checkbox12">导入导出功能；数据默认保存在浏览器本地存储，也支持直接创建、打开、编辑电脑本地文件</label></li>
-<li><input type="checkbox" id="checkbox13" checked="true" /><label for="checkbox13">右键菜单，支持展开、收起、整理布局等操作</label></li>
-<li><input type="checkbox" id="checkbox14" checked="true" /><label for="checkbox14">底部栏，支持节点数量、字数统计；支持切换编辑和只读模式；支持放大缩小；支持全屏切换；支持小地图</label></li>
+<li><input type="checkbox" id="checkbox11" checked="true" /><label for="checkbox11">工具栏，支持插入节点、删除节点；编辑节点图片、图标、超链接、备注、标签、概要</label></li>
+<li><input type="checkbox" id="checkbox12" checked="true" /><label for="checkbox12">侧边栏，基础样式设置面板、节点样式设置面板、大纲面板、主题选择面板、结构选择面板</label></li>
+<li><input type="checkbox" id="checkbox13" checked="true" /><label for="checkbox13">导入导出功能；数据默认保存在浏览器本地存储，也支持直接创建、打开、编辑电脑本地文件</label></li>
+<li><input type="checkbox" id="checkbox14" checked="true" /><label for="checkbox14">右键菜单，支持展开、收起、整理布局等操作</label></li>
+<li><input type="checkbox" id="checkbox15" checked="true" /><label for="checkbox15">底部栏，支持节点数量、字数统计；支持切换编辑和只读模式；支持放大缩小；支持全屏切换；支持小地图</label></li>
 </ul>
 <p>提供文档页面服务。</p>
 <p>3.<code>dist</code></p>
@@ -41,9 +42,10 @@
 <p><a href="https://juejin.cn/post/7204854015463538744">如何在canvas中模拟css的背景图片样式</a></p>
 <p><a href="https://juejin.cn/post/7233012756314701884">我的第一个Electron应用</a></p>
 <p><a href="https://juejin.cn/post/7276712861514170409">探索如何将html和svg导出为图片</a></p>
+<p><a href="https://juejin.cn/post/7287913415803764747">dom-to-image库是如何将html转换成图片的</a></p>
 <h2>特别说明</h2>
 <p>本项目可用于学习和参考，用于实际项目时请先深度体验一下是否能满足您的需求。</p>
-<p>本项目可能没有完整测试到每一个功能点，所以可能存在bug，另外，当节点数量非常多的时候，性能也存在一些问题，因为每个人能接受的卡顿程度不一样，所以你可以自行测试节点数量上限。</p>
+<p>本项目可能没有完整测试到每一个功能点，所以可能存在bug，另外，当节点数量非常多的时候，性能也存在一些问题，因为每个人能接受的卡顿程度不一样，所以你可以自行测试节点数量上限。一般来说，500个节点以内比较流畅，1000个节点以上卡顿比较明显。</p>
 <p>如果有建议或发现了bug，可以在此提交<a href="https://github.com/wanglin2/mind-map/issues">issues</a>。</p>
 <p>项目内置的主题和图标部分来自于：</p>
 <p><a href="https://naotu.baidu.com/">百度脑图</a></p>
@@ -66,12 +68,12 @@
 <h2>License</h2>
 <p><a href="https://opensource.org/licenses/MIT">MIT</a></p>
 <h2>请作者喝杯咖啡</h2>
-<p>开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡哟~</p>
+<p>开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡~</p>
 <blockquote>
 <p>厚椰乳一盒 + 纯牛奶半盒 + 冰块 + 咖啡液 = 生椰拿铁 yyds</p>
 </blockquote>
 <blockquote>
-<p>推荐使用支付宝，微信获取不到头像。转账请备注【思维导图】。你的头像和名字将会出现在下面。</p>
+<p>推荐使用支付宝，微信获取不到头像。转账请备注【思维导图】。</p>
 </blockquote>
 <img src="../../../../assets/img/alipay.jpg" style="width: 300px" />
 <img src="../../../../assets/img/wechat.jpg" style="width: 300px" />
@@ -161,6 +163,26 @@
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/沐风牧草.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>沐风牧草</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/有希.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>有希</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/樊笼.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>樊笼</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/达仁科技.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>达仁科技</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/小逗比.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>小逗比</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/天清如愿.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>天清如愿</p>
     </div>
 </div>
   </div>

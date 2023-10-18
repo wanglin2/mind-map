@@ -25,7 +25,8 @@ MindMap.usePlugin(MiniMap)
 <p><code>boxHeight</code>: the height of the small map container</p>
 <p>Function return content:</p>
 <pre class="hljs"><code>{
-      svgHTML, <span class="hljs-comment">// small map html</span>
+      getImgUrl,<span class="hljs-comment">// v0.8.0+, An asynchronous function that you can call and pass a callback function. The callback function can receive a parameter representing a small map of the image type, and you can render it through the img tag</span>
+      svgHTML, <span class="hljs-comment">// Mini map HTML, it is recommended to use the getImgUrl method to obtain image type mini maps, reduce the number of page DOM, and optimize performance</span>
       viewBoxStyle, <span class="hljs-comment">// view box position information</span>
       miniMapBoxScale, <span class="hljs-comment">// view box zoom value</span>
       miniMapBoxLeft, <span class="hljs-comment">// view box left value</span>

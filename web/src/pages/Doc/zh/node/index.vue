@@ -31,6 +31,14 @@
 </blockquote>
 <p>节点是否正在拖拽中</p>
 <h2>方法</h2>
+<h3>updateNodeByActive(active)</h3>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<ul>
+<li><code>active</code>：Boolean，激活状态。</li>
+</ul>
+<p>根据是否激活更新节点。主要是更新节点的展开收起按钮的显示隐藏。</p>
 <h3>setOpacity(val)</h3>
 <blockquote>
 <p>v0.7.2+</p>

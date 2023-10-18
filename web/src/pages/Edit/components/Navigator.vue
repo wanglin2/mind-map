@@ -16,7 +16,9 @@
         left: svgBoxLeft + 'px',
         top: svgBoxTop + 'px'
       }"
-    ></div>
+    >
+      <img :src="mindMapImg" @mousedown.prevent />
+    </div>
     <div class="windowBox" :style="viewBoxStyle"></div>
   </div>
 </template>
@@ -44,11 +46,12 @@ export default {
         top: 0,
         bottom: 0,
         right: 0
-      }
+      },
+      mindMapImg: ''
     }
   },
   computed: {
-    ...mapState(['isDark']),
+    ...mapState(['isDark'])
   },
   mounted() {
     this.$bus.$on('toggle_mini_map', this.toggle_mini_map)
@@ -91,14 +94,16 @@ export default {
 
     drawMiniMap() {
       let {
-        svgHTML,
+        getImgUrl,
         viewBoxStyle,
         miniMapBoxScale,
         miniMapBoxLeft,
         miniMapBoxTop
       } = this.mindMap.miniMap.calculationMiniMap(this.boxWidth, this.boxHeight)
       // 渲染到小地图
-      this.$refs.svgBox.innerHTML = svgHTML
+      getImgUrl(img => {
+        this.mindMapImg = img
+      })
       this.viewBoxStyle = viewBoxStyle
       this.svgBoxScale = miniMapBoxScale
       this.svgBoxLeft = miniMapBoxLeft

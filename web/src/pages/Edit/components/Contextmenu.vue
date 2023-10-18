@@ -11,7 +11,7 @@
         @click="exec('INSERT_NODE', insertNodeBtnDisabled)"
         :class="{ disabled: insertNodeBtnDisabled }"
       >
-        {{ $t('contextmenu.insertSiblingNode') }}
+        <span class="name">{{ $t('contextmenu.insertSiblingNode') }}</span>
         <span class="desc">Enter</span>
       </div>
       <div
@@ -19,15 +19,23 @@
         @click="exec('INSERT_CHILD_NODE')"
         :class="{ disabled: isGeneralization }"
       >
-        {{ $t('contextmenu.insertChildNode') }}
+        <span class="name">{{ $t('contextmenu.insertChildNode') }}</span>
         <span class="desc">Tab</span>
+      </div>
+      <div
+        class="item"
+        @click="exec('INSERT_PARENT_NODE')"
+        :class="{ disabled: insertNodeBtnDisabled }"
+      >
+        <span class="name">{{ $t('contextmenu.insertParentNode') }}</span>
+        <span class="desc">Shift + Tab</span>
       </div>
       <div
         class="item"
         @click="exec('ADD_GENERALIZATION')"
         :class="{ disabled: insertNodeBtnDisabled }"
       >
-        {{ $t('contextmenu.insertSummary') }}
+        <span class="name">{{ $t('contextmenu.insertSummary') }}</span>
         <span class="desc">Ctrl + G</span>
       </div>
       <div
@@ -35,7 +43,7 @@
         @click="exec('UP_NODE')"
         :class="{ disabled: upNodeBtnDisabled }"
       >
-        {{ $t('contextmenu.moveUpNode') }}
+        <span class="name">{{ $t('contextmenu.moveUpNode') }}</span>
         <span class="desc">Ctrl + ↑</span>
       </div>
       <div
@@ -43,19 +51,23 @@
         @click="exec('DOWN_NODE')"
         :class="{ disabled: downNodeBtnDisabled }"
       >
-        {{ $t('contextmenu.moveDownNode') }}
+        <span class="name">{{ $t('contextmenu.moveDownNode') }}</span>
         <span class="desc">Ctrl + ↓</span>
       </div>
       <div class="item danger" @click="exec('REMOVE_NODE')">
-        {{ $t('contextmenu.deleteNode') }}
+        <span class="name">{{ $t('contextmenu.deleteNode') }}</span>
         <span class="desc">Delete</span>
+      </div>
+      <div class="item danger" @click="exec('REMOVE_CURRENT_NODE')">
+        <span class="name">{{ $t('contextmenu.deleteCurrentNode') }}</span>
+        <span class="desc">Shift + Backspace</span>
       </div>
       <div
         class="item"
         @click="exec('COPY_NODE')"
         :class="{ disabled: isGeneralization }"
       >
-        {{ $t('contextmenu.copyNode') }}
+        <span class="name">{{ $t('contextmenu.copyNode') }}</span>
         <span class="desc">Ctrl + C</span>
       </div>
       <div
@@ -63,33 +75,33 @@
         @click="exec('CUT_NODE')"
         :class="{ disabled: isGeneralization }"
       >
-        {{ $t('contextmenu.cutNode') }}
+        <span class="name">{{ $t('contextmenu.cutNode') }}</span>
         <span class="desc">Ctrl + X</span>
       </div>
       <div class="item" @click="exec('PASTE_NODE')">
-        {{ $t('contextmenu.pasteNode') }}
+        <span class="name">{{ $t('contextmenu.pasteNode') }}</span>
         <span class="desc">Ctrl + V</span>
       </div>
       <div class="item" @click="exec('REMOVE_HYPERLINK')" v-if="hasHyperlink">
-        {{ $t('contextmenu.removeHyperlink') }}
+        <span class="name">{{ $t('contextmenu.removeHyperlink') }}</span>
       </div>
       <div class="item" @click="exec('REMOVE_NOTE')" v-if="hasNote">
-        {{ $t('contextmenu.removeNote') }}
+        <span class="name">{{ $t('contextmenu.removeNote') }}</span>
       </div>
     </template>
     <template v-if="type === 'svg'">
       <div class="item" @click="exec('RETURN_CENTER')">
-        {{ $t('contextmenu.backCenter') }}
+        <span class="name">{{ $t('contextmenu.backCenter') }}</span>
         <span class="desc">Ctrl + Enter</span>
       </div>
       <div class="item" @click="exec('EXPAND_ALL')">
-        {{ $t('contextmenu.expandAll') }}
+        <span class="name">{{ $t('contextmenu.expandAll') }}</span>
       </div>
       <div class="item" @click="exec('UNEXPAND_ALL')">
-        {{ $t('contextmenu.unExpandAll') }}
+        <span class="name">{{ $t('contextmenu.unExpandAll') }}</span>
       </div>
       <div class="item">
-        {{ $t('contextmenu.expandTo') }}
+        <span class="name">{{ $t('contextmenu.expandTo') }}</span>
         <div class="subItems listBox" :class="{ isDark: isDark }">
           <div
             class="item"
@@ -102,15 +114,15 @@
         </div>
       </div>
       <div class="item" @click="exec('RESET_LAYOUT')">
-        {{ $t('contextmenu.arrangeLayout') }}
+        <span class="name">{{ $t('contextmenu.arrangeLayout') }}</span>
         <span class="desc">Ctrl + L</span>
       </div>
       <div class="item" @click="exec('FIT_CANVAS')">
-        {{ $t('contextmenu.fitCanvas') }}
+        <span class="name">{{ $t('contextmenu.fitCanvas') }}</span>
         <span class="desc">Ctrl + i</span>
       </div>
       <div class="item" @click="exec('TOGGLE_ZEN_MODE')">
-        {{ $t('contextmenu.zenMode') }}
+        <span class="name">{{ $t('contextmenu.zenMode') }}</span>
         {{ isZenMode ? '√' : '' }}
       </div>
       <div class="item" @click="createNewFile" v-if="IS_ELECTRON">
@@ -308,7 +320,7 @@ export default {
           this.mindMap.renderer.paste()
           break
         case 'RETURN_CENTER':
-          this.mindMap.view.reset()
+          this.mindMap.renderer.setRootNodeCenter()
           break
         case 'TOGGLE_ZEN_MODE':
           this.setLocalConfig({
@@ -341,7 +353,7 @@ export default {
 
 <style lang="less" scoped>
 .listBox {
-  width: 200px;
+  width: 250px;
   background: #fff;
   box-shadow: 0 4px 12px 0 hsla(0, 0%, 69%, 0.5);
   border-radius: 4px;
@@ -400,8 +412,17 @@ export default {
       }
     }
 
+    .name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     .desc {
       color: #999;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .subItems {

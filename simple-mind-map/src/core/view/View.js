@@ -25,15 +25,8 @@ class View {
     this.mindMap.keyCommand.addShortcut('Control+-', () => {
       this.narrow()
     })
-    this.mindMap.keyCommand.addShortcut('Control+Enter', () => {
-      this.reset()
-    })
     this.mindMap.keyCommand.addShortcut('Control+i', () => {
       this.fit()
-    })
-    this.mindMap.svg.on('dblclick', () => {
-      if (!this.mindMap.opt.enableDblclickReset) return
-      this.reset()
     })
     // 拖动视图
     this.mindMap.event.on('mousedown', () => {
@@ -267,7 +260,7 @@ class View {
     let drawHeight = rect.height / origTransform.scaleY
     let drawRatio = drawWidth / drawHeight
     let { width: elWidth, height: elHeight } =
-      this.mindMap.el.getBoundingClientRect()
+      this.mindMap.elRect
     elWidth = elWidth - fitPadding * 2
     elHeight = elHeight - fitPadding * 2
     let elRatio = elWidth / elHeight

@@ -1,5 +1,5 @@
 import Base from './Base'
-import { walk, asyncRun } from '../utils'
+import { walk, asyncRun, getNodeIndexInNodeList } from '../utils'
 import { CONSTANTS } from '../constants/constant'
 
 //  时间轴
@@ -81,7 +81,7 @@ class Timeline extends Base {
       null,
       (node, parent, isRoot, layerIndex, index) => {
         if (
-          node.nodeData.data.expand &&
+          node.getData('expand') &&
           node.children &&
           node.children.length
         ) {
@@ -122,7 +122,7 @@ class Timeline extends Base {
       this.root,
       null,
       (node, parent, isRoot, layerIndex) => {
-        if (!node.nodeData.data.expand) {
+        if (!node.getData('expand')) {
           return
         }
         // 调整left
@@ -208,9 +208,7 @@ class Timeline extends Base {
   updateBrothersTop(node, addHeight) {
     if (node.parent && !node.parent.isRoot) {
       let childrenList = node.parent.children
-      let index = childrenList.findIndex(item => {
-        return item.uid === node.uid
-      })
+      let index = getNodeIndexInNodeList(node, childrenList)
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
           // 适配自定义位置
@@ -275,7 +273,7 @@ class Timeline extends Base {
       })
       // 竖线
       if (len > 0) {
-        let line = this.draw.path()
+        let line = this.lineDraw.path()
         expandBtnSize = len > 0 ? expandBtnSize : 0
         if (
           node.parent &&

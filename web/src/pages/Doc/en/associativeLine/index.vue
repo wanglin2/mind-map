@@ -66,6 +66,16 @@ MindMap.usePlugin(AssociativeLine)
 <p>Deletes the currently active associative line. Clicking on an associated line is considered active.</p>
 <h3>clearActiveLine()</h3>
 <p>Clears the active state of the currently active association line.</p>
+<h3>front()</h3>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>The top-level display of the associated line.</p>
+<h3>back()</h3>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>The associated line returns to its original level.</p>
 
   </div>
 </template>

@@ -44,15 +44,20 @@
 <p>复制渲染树数据，示例：</p>
 <pre class="hljs"><code>copyRenderTree({}, <span class="hljs-built_in">this</span>.mindMap.renderer.renderTree)
 </code></pre>
-<h4>copyNodeTree(tree, root, removeActiveState, keepId)</h4>
+<h4>copyNodeTree(tree, root, removeActiveState, removeId)</h4>
 <ul>
 <li>
 <p><code>removeActiveState</code>：<code>Boolean</code>，默认为<code>false</code>，是否移除节点的激活状态</p>
 </li>
 <li>
-<p><code>keepId</code>：v0.4.6+，<code>Boolean</code>，默认为<code>false</code>，是否保留被复制节点的<code>id</code>，默认会删除<code>id</code>防止节点<code>id</code>重复，但是对于移动节点的场景，节点原<code>id</code>需要保留</p>
+<p><code>removeId</code>：v0.7.3-fix.1+，是否移除节点数据中的uid，默认为<code>true</code></p>
 </li>
 </ul>
+<blockquote>
+<ul>
+<li><code>keepId</code>： （原第四个参数）<code>Boolean</code>，默认为<code>false</code>，是否保留被复制节点的<code>id</code>，默认会删除<code>id</code>防止节点<code>id</code>重复，但是对于移动节点的场景，节点原<code>id</code>需要保留。</li>
+</ul>
+</blockquote>
 <p>复制节点树数据，主要是剔除其中的引用<code>node</code>实例的<code>_node</code>，然后复制<code>data</code>对象的数据，示例：</p>
 <pre class="hljs"><code>copyNodeTree({}, node)
 </code></pre>
@@ -217,12 +222,17 @@
 </li>
 </ul>
 <p>给指定的节点列表树数据添加附加数据，会修改原数据。</p>
-<h4>createUidForAppointNodes(appointNodes)</h4>
+<h4>createUidForAppointNodes(appointNodes, createNewId)</h4>
 <blockquote>
 <p>v0.7.2+</p>
 </blockquote>
 <ul>
-<li><code>appointNodes</code>：节点实例列表，数组类型。</li>
+<li>
+<p><code>appointNodes</code>：节点实例列表，数组类型。</p>
+</li>
+<li>
+<p><code>createNewId</code>：v0.7.3-fix.1+，<code>Boolean</code>，默认为<code>false</code>，即如果节点不存在<code>uid</code>的话，会创建新的<code>uid</code>。如果传<code>true</code>，那么无论节点数据原来是否存在<code>uid</code>，都会创建新的<code>uid</code></p>
+</li>
 </ul>
 <p>给指定的节点列表树数据添加uid（如果uid不存在的话），会修改原数据。</p>
 <h4>getNodeIndex(node)</h4>
@@ -272,6 +282,47 @@
 &lt; -&gt; &amp;lt;
 &gt; -&gt; &amp;gt;
 </code></pre>
+<h4>isSameObject(a, b)</h4>
+<blockquote>
+<p>v0.7.3+</p>
+</blockquote>
+<ul>
+<li><code>a</code>、<code>b</code>：Object | Array, 要进行对比的两个对象</li>
+</ul>
+<p>判断两个对象是否相同，只处理对象或数组。</p>
+<h4>getNodeDataIndex(node)</h4>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>获取节点在兄弟节点中的位置索引。</p>
+<h4>getNodeIndexInNodeList(node, nodeList)</h4>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>从一个节点列表里找出某个节点的索引。</p>
+<h4>setDataToClipboard(data)</h4>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<ul>
+<li><code>data</code>：Object | Array</li>
+</ul>
+<p>将数据设置到用户剪切板中。</p>
+<h4>getDataFromClipboard()</h4>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>从用户剪贴板中读取文字和图片，返回：</p>
+<pre class="hljs"><code>{
+  text,
+  img
+}
+</code></pre>
+<h4>removeFromParentNodeData(node)</h4>
+<blockquote>
+<p>v0.8.0+</p>
+</blockquote>
+<p>从节点的父节点的<code>nodeData.children</code>列表中移除该节点的数据。</p>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

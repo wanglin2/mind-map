@@ -1,7 +1,7 @@
 // 获取目标节点在起始节点的目标数组中的索引
 export const getAssociativeLineTargetIndex = (node, toNode) => {
-  return node.nodeData.data.associativeLineTargets.findIndex(item => {
-    return item === toNode.nodeData.data.uid
+  return node.getData('associativeLineTargets').findIndex(item => {
+    return item === toNode.getData('uid')
   })
 }
 
@@ -202,7 +202,7 @@ export const computeNodePoints = (fromNode, toNode) => {
   // 中心点坐标的差值
   let offsetX = toCx - fromCx
   let offsetY = toCy - fromCy
-  if (offsetX === 0 && offsetY === 0) return
+  if (offsetX === 0 && offsetY === 0) return []
   let fromDir = ''
   let toDir = ''
   if (offsetX <= 0 && offsetX <= offsetY && offsetX <= -offsetY) {
@@ -231,7 +231,7 @@ export const getNodeLinePath = (startPoint, endPoint, node, toNode) => {
   // 控制点
   let controlPoints = []
   let associativeLineTargetControlOffsets =
-    node.nodeData.data.associativeLineTargetControlOffsets
+    node.getData('associativeLineTargetControlOffsets')
   if (
     associativeLineTargetControlOffsets &&
     associativeLineTargetControlOffsets[targetIndex]

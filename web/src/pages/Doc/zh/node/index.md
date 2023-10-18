@@ -56,6 +56,14 @@
 
 ## 方法
 
+### updateNodeByActive(active)
+
+> v0.8.0+
+
+- `active`：Boolean，激活状态。
+
+根据是否激活更新节点。主要是更新节点的展开收起按钮的显示隐藏。
+
 ### setOpacity(val)
 
 > v0.7.2+

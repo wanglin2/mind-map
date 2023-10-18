@@ -1,7 +1,8 @@
 import {
   isWhite,
   isTransparent,
-  getVisibleColorFromTheme
+  getVisibleColorFromTheme,
+  readBlob
 } from '../utils/index'
 
 // 小地图插件
@@ -27,7 +28,9 @@ class MiniMap {
    */
   calculationMiniMap(boxWidth, boxHeight) {
     let { svg, rect, origWidth, origHeight, scaleX, scaleY } =
-      this.mindMap.getSvgData()
+      this.mindMap.getSvgData({
+        ignoreWatermark: true
+      })
     // 计算数据
     const elRect = this.mindMap.elRect
     rect.x -= elRect.left
@@ -85,10 +88,18 @@ class MiniMap {
     Object.keys(viewBoxStyle).forEach(key => {
       viewBoxStyle[key] = viewBoxStyle[key] + 'px'
     })
-
     this.removeNodeContent(svg)
+    const svgStr = svg.svg()
+
     return {
-      svgHTML: svg.svg(), // 小地图html
+      getImgUrl: async callback => {
+        const blob = new Blob([svgStr], {
+          type: 'image/svg+xml'
+        })
+        const res = await readBlob(blob)
+        callback(res)
+      },
+      svgHTML: svgStr, // 小地图html
       viewBoxStyle, // 视图框的位置信息
       miniMapBoxScale, // 视图框的缩放值
       miniMapBoxLeft, // 视图框的left值

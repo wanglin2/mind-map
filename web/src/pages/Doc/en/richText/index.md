@@ -2,8 +2,6 @@
 
 > v0.4.0+
 
-> Note: This is a testing nature and imperfect function
-
 This plugin provides the ability to edit rich text of nodes, and takes effect after registration.
 
 By default, node editing can only uniformly apply styles to all text in the node. This plugin can support rich text editing effects. Currently, it supports bold, italic, underline, strikethrough, font, font size, color, and backgroundColor. Underline and line height are not supported.
@@ -19,6 +17,8 @@ The principle of this plugin is to use [Quill](https://github.com/quilljs/quill)
 `V0.6.13+` version uses [dom-to-image-more](https://github.com/1904labs/dom-to-image-more) Replaced 'html2canvas' to address the issue of ineffective color export for nodes.
 
 > The compatibility of dom to image more is relatively poor, and exported images are empty on many browsers, so you can replace them with html2canvas according to your own needs.
+
+After version `0.6.16+`, third-party libraries such as 'dom-to-image-more' and 'html2canvas' will no longer be used for export, Compatibility and export are no longer issues.
 
 ## Register
 
@@ -67,6 +67,14 @@ Replace the built-in font size list during rich text editing. The built-in list 
 ```
 
 ## Method
+
+### setNotActiveNodeStyle(node, style)
+
+> v0.8.0+
+
+- `style`：Object, style object.
+
+Set rich text style for inactive nodes.
 
 ### selectAll()
 

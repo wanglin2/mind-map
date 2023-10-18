@@ -107,7 +107,7 @@ export default {
     onChange(file) {
       let reg = /\.(smm|xmind|json|xlsx|md)$/
       if (!reg.test(file.name)) {
-        this.$message.error('请选择.smm、.json、.xmind、.xlsx、.md文件')
+        this.$message.error(this.$t('import.enableFileTip'))
         this.fileList = []
       } else {
         this.fileList.push(file)
@@ -120,7 +120,7 @@ export default {
      * @Desc: 数量超出限制
      */
     onExceed() {
-      this.$message.error('最多只能选择一个文件')
+      this.$message.error(this.$t('import.maxFileNum'))
     },
 
     /**
@@ -139,7 +139,7 @@ export default {
      */
     confirm() {
       if (this.fileList.length <= 0) {
-        return this.$message.error('请选择要导入的文件')
+        return this.$message.error(this.$t('import.notSelectTip'))
       }
       this.$store.commit('setIsHandleLocalFile', false)
       let file = this.fileList[0]
@@ -151,7 +151,7 @@ export default {
         this.handleExcel(file)
       } else if (/\.md$/.test(file.name)) {
         this.handleMd(file)
-      } 
+      }
       this.cancel()
     },
 
@@ -167,14 +167,14 @@ export default {
         try {
           let data = JSON.parse(evt.target.result)
           if (typeof data !== 'object') {
-            throw new Error('文件内容有误')
+            throw new Error(this.$t('import.fileContentError'))
           }
           addMindMapNodeStickerProtocol(data.root ? data.root : data)
           this.$bus.$emit('setData', data)
-          this.$message.success('导入成功')
+          this.$message.success(this.$t('import.importSuccess'))
         } catch (error) {
           console.log(error)
-          this.$message.error('文件解析失败')
+          this.$message.error(this.$t('import.fileParsingFailed'))
         }
       }
     },
@@ -188,10 +188,10 @@ export default {
       try {
         let data = await xmind.parseXmindFile(file.raw)
         this.$bus.$emit('setData', data)
-        this.$message.success('导入成功')
+        this.$message.success(this.$t('import.importSuccess'))
       } catch (error) {
         console.log(error)
-        this.$message.error('文件解析失败')
+        this.$message.error(this.$t('import.fileParsingFailed'))
       }
     },
 
@@ -255,10 +255,10 @@ export default {
           }
         }
         this.$bus.$emit('setData', layers[0][0])
-        this.$message.success('导入成功')
+        this.$message.success(this.$t('import.importSuccess'))
       } catch (error) {
         console.log(error)
-        this.$message.error('文件解析失败')
+        this.$message.error(this.$t('import.fileParsingFailed'))
       }
     },
 
@@ -270,10 +270,10 @@ export default {
         try {
           let data = await markdown.transformMarkdownTo(evt.target.result)
           this.$bus.$emit('setData', data)
-          this.$message.success('导入成功')
+          this.$message.success(this.$t('import.importSuccess'))
         } catch (error) {
           console.log(error)
-          this.$message.error('文件解析失败')
+          this.$message.error(this.$t('import.fileParsingFailed'))
         }
       }
     }

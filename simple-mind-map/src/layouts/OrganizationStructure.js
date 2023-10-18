@@ -1,5 +1,5 @@
 import Base from './Base'
-import { walk, asyncRun } from '../utils'
+import { walk, asyncRun, getNodeIndexInNodeList } from '../utils'
 
 //  组织结构图
 // 和逻辑结构图基本一样，只是方向变成向下生长，所以先计算节点的top，后计算节点的left、最后调整节点的left即可
@@ -79,7 +79,7 @@ class OrganizationStructure extends Base {
       null,
       (node, parent, isRoot, layerIndex) => {
         if (
-          node.nodeData.data.expand &&
+          node.getData('expand') &&
           node.children &&
           node.children.length
         ) {
@@ -104,7 +104,7 @@ class OrganizationStructure extends Base {
       this.root,
       null,
       (node, parent, isRoot, layerIndex) => {
-        if (!node.nodeData.data.expand) {
+        if (!node.getData('expand')) {
           return
         }
         // 判断子节点所占的宽度之和是否大于该节点自身，大于则需要调整位置
@@ -125,9 +125,7 @@ class OrganizationStructure extends Base {
   updateBrothers(node, addWidth) {
     if (node.parent) {
       let childrenList = node.parent.children
-      let index = childrenList.findIndex(item => {
-        return item.uid === node.uid
-      })
+      let index = getNodeIndexInNodeList(node, childrenList)
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
           // 适配自定义位置
@@ -218,7 +216,7 @@ class OrganizationStructure extends Base {
     minx = Math.min(x1, minx)
     maxx = Math.max(x1, maxx)
     // 父节点的竖线
-    let line1 = this.draw.path()
+    let line1 = this.lineDraw.path()
     node.style.line(line1)
     expandBtnSize = len > 0 && !isRoot ? expandBtnSize : 0
     line1.plot(`M ${x1},${y1 + expandBtnSize} L ${x1},${y1 + s1}`)
@@ -226,7 +224,7 @@ class OrganizationStructure extends Base {
     style && style(line1, node)
     // 水平线
     if (len > 0) {
-      let lin2 = this.draw.path()
+      let lin2 = this.lineDraw.path()
       node.style.line(lin2)
       lin2.plot(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`)
       node._lines.push(lin2)

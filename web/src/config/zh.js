@@ -277,6 +277,11 @@ export const shortcutKeyList = [
         value: 'Enter'
       },
       {
+        icon: 'icondodeparent',
+        name: '插入父节点',
+        value: 'Shift + Tab'
+      },
+      {
         icon: 'iconshangyi',
         name: '上移节点',
         value: 'Ctrl + ↑'
@@ -300,6 +305,11 @@ export const shortcutKeyList = [
         icon: 'iconshanchu',
         name: '删除节点',
         value: 'Delete | Backspace'
+      },
+      {
+        icon: 'iconshanchu',
+        name: '仅删除当前节点',
+        value: 'Shift + Backspace'
       },
       {
         icon: 'iconfuzhi',
@@ -373,7 +383,7 @@ export const shortcutKeyList = [
       },
       {
         icon: 'icondingwei',
-        name: '恢复默认',
+        name: '回到根节点',
         value: 'Ctrl + Enter'
       },
       {

@@ -18,8 +18,12 @@ import {
   addDataToAppointNodes,
   createUidForAppointNodes,
   formatDataToArray,
-  getNodeIndex,
-  createUid
+  removeFromParentNodeData,
+  createUid,
+  getNodeDataIndex,
+  getNodeIndexInNodeList,
+  setDataToClipboard,
+  getDataFromClipboard
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -52,7 +56,6 @@ class Render {
     this.opt = opt
     this.mindMap = opt.mindMap
     this.themeConfig = this.mindMap.themeConfig
-    this.draw = this.mindMap.draw
     // 渲染树，操作过程中修改的都是这里的数据
     this.renderTree = merge({}, this.mindMap.opt.data || {})
     // 是否重新渲染
@@ -61,6 +64,7 @@ class Render {
     this.isRendering = false
     // 是否存在等待渲染
     this.hasWaitRendering = false
+    this.waitRenderingParams = []
     // 用于缓存节点
     this.nodeCache = {}
     this.lastNodeCache = {}
@@ -97,22 +101,29 @@ class Render {
     )(this, this.mindMap.opt.layout)
   }
 
+  // 重新设置思维导图数据
+  setData(data) {
+    if (this.mindMap.richText) {
+      this.renderTree = this.mindMap.richText.handleSetData(data)
+    } else {
+      this.renderTree = data
+    }
+  }
+
   //   绑定事件
   bindEvent() {
-    // 点击事件
+    // 画布点击事件清除当前激活节点列表
     this.mindMap.on('draw_click', e => {
-      // 清除激活状态
-      let isTrueClick = true
-      let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
-      if (useLeftKeySelectionRightKeyDrag) {
-        let mousedownPos = this.mindMap.event.mousedownPos
-        isTrueClick =
-          Math.abs(e.clientX - mousedownPos.x) <= 5 &&
-          Math.abs(e.clientY - mousedownPos.y) <= 5
-      }
-      if (isTrueClick && this.activeNodeList.length > 0) {
-        this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
-      }
+      this.clearActiveNodeListOnDrawClick(e, 'click')
+    })
+    // 画布右键事件事件清除当前激活节点列表
+    this.mindMap.on('contextmenu', e => {
+      this.clearActiveNodeListOnDrawClick(e, 'contextmenu')
+    })
+    // 鼠标双击回到根节点
+    this.mindMap.svg.on('dblclick', () => {
+      if (!this.mindMap.opt.enableDblclickBackToRootNode) return
+      this.setRootNodeCenter()
     })
     // let timer = null
     // this.mindMap.on('view_data_change', () => {
@@ -149,6 +160,9 @@ class Render {
       'INSERT_MULTI_CHILD_NODE',
       this.insertMultiChildNode
     )
+    // 插入父节点
+    this.insertParentNode = this.insertParentNode.bind(this)
+    this.mindMap.command.add('INSERT_PARENT_NODE', this.insertParentNode)
     // 上移节点
     this.upNode = this.upNode.bind(this)
     this.mindMap.command.add('UP_NODE', this.upNode)
@@ -165,6 +179,9 @@ class Render {
     // 删除节点
     this.removeNode = this.removeNode.bind(this)
     this.mindMap.command.add('REMOVE_NODE', this.removeNode)
+    // 仅删除当前节点
+    this.removeCurrentNode = this.removeCurrentNode.bind(this)
+    this.mindMap.command.add('REMOVE_CURRENT_NODE', this.removeCurrentNode)
     // 粘贴节点
     this.pasteNode = this.pasteNode.bind(this)
     this.mindMap.command.add('PASTE_NODE', this.pasteNode)
@@ -181,8 +198,8 @@ class Render {
     this.setNodeActive = this.setNodeActive.bind(this)
     this.mindMap.command.add('SET_NODE_ACTIVE', this.setNodeActive)
     // 清除所有激活节点
-    this.clearAllActive = this.clearAllActive.bind(this)
-    this.mindMap.command.add('CLEAR_ACTIVE_NODE', this.clearAllActive)
+    this.clearActiveNode = this.clearActiveNode.bind(this)
+    this.mindMap.command.add('CLEAR_ACTIVE_NODE', this.clearActiveNode)
     // 切换节点是否展开
     this.setNodeExpand = this.setNodeExpand.bind(this)
     this.mindMap.command.add('SET_NODE_EXPAND', this.setNodeExpand)
@@ -249,23 +266,31 @@ class Render {
       this.mindMap.execCommand('INSERT_CHILD_NODE')
     })
     // 插入同级节点
-    this.insertNodeWrap = () => {
+    this.mindMap.keyCommand.addShortcut('Enter', () => {
       if (this.textEdit.showTextEdit) {
         return
       }
       this.mindMap.execCommand('INSERT_NODE')
-    }
-    this.mindMap.keyCommand.addShortcut('Enter', this.insertNodeWrap)
+    })
+    // 插入父节点
+    this.mindMap.keyCommand.addShortcut('Shift+Tab', () => {
+      this.mindMap.execCommand('INSERT_PARENT_NODE')
+    })
     // 插入概要
-    this.mindMap.keyCommand.addShortcut('Control+g', this.addGeneralization)
+    this.mindMap.keyCommand.addShortcut('Control+g', () => {
+      this.mindMap.execCommand('ADD_GENERALIZATION')
+    })
     // 展开/收起节点
     this.toggleActiveExpand = this.toggleActiveExpand.bind(this)
     this.mindMap.keyCommand.addShortcut('/', this.toggleActiveExpand)
     // 删除节点
-    this.removeNodeWrap = () => {
+    this.mindMap.keyCommand.addShortcut('Del|Backspace', () => {
       this.mindMap.execCommand('REMOVE_NODE')
-    }
-    this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNodeWrap)
+    })
+    // 仅删除当前节点
+    this.mindMap.keyCommand.addShortcut('Shift+Backspace', () => {
+      this.mindMap.execCommand('REMOVE_CURRENT_NODE')
+    })
     // 节点编辑时某些快捷键会存在冲突，需要暂时去除
     this.mindMap.on('before_show_text_edit', () => {
       this.startTextEdit()
@@ -278,35 +303,64 @@ class Render {
       this.mindMap.execCommand('SELECT_ALL')
     })
     // 一键整理布局
-    this.mindMap.keyCommand.addShortcut('Control+l', this.resetLayout)
+    this.mindMap.keyCommand.addShortcut('Control+l', () => {
+      this.mindMap.execCommand('RESET_LAYOUT', this.resetLayout)
+    })
     // 上移节点
-    this.mindMap.keyCommand.addShortcut('Control+Up', this.upNode)
+    this.mindMap.keyCommand.addShortcut('Control+Up', () => {
+      this.mindMap.execCommand('UP_NODE')
+    })
     // 下移节点
-    this.mindMap.keyCommand.addShortcut('Control+Down', this.downNode)
+    this.mindMap.keyCommand.addShortcut('Control+Down', () => {
+      this.mindMap.execCommand('DOWN_NODE')
+    })
     // 复制节点、剪切节点、粘贴节点的快捷键需开发者自行注册实现，可参考demo
-    this.copy = this.copy.bind(this)
-    this.mindMap.keyCommand.addShortcut('Control+c', this.copy)
+    this.mindMap.keyCommand.addShortcut('Control+c', () => {
+      this.copy()
+    })
     this.mindMap.keyCommand.addShortcut('Control+v', () => {
       this.onPaste()
     })
-    this.cut = this.cut.bind(this)
-    this.mindMap.keyCommand.addShortcut('Control+x', this.cut)
+    this.mindMap.keyCommand.addShortcut('Control+x', () => {
+      this.cut()
+    })
+    // 根节点居中显示
+    this.mindMap.keyCommand.addShortcut('Control+Enter', () => {
+      this.setRootNodeCenter()
+    })
+  }
+
+  // 鼠标点击画布时清空当前激活节点列表
+  clearActiveNodeListOnDrawClick(e, eventType) {
+    if (this.activeNodeList.length <= 0) return
+    // 清除激活状态
+    let isTrueClick = true
+    // 是否是左键多选节点，右键拖动画布
+    const { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
+    // 如果鼠标按下和松开的距离较大，则不认为是点击事件
+    if (
+      eventType === 'contextmenu'
+        ? !useLeftKeySelectionRightKeyDrag
+        : useLeftKeySelectionRightKeyDrag
+    ) {
+      const mousedownPos = this.mindMap.event.mousedownPos
+      isTrueClick =
+        Math.abs(e.clientX - mousedownPos.x) <= 5 &&
+        Math.abs(e.clientY - mousedownPos.y) <= 5
+    }
+    if (isTrueClick) {
+      this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
+    }
   }
 
   //  开启文字编辑，会禁用回车键和删除键相关快捷键防止冲突
   startTextEdit() {
     this.mindMap.keyCommand.save()
-    // this.mindMap.keyCommand.removeShortcut('Del|Backspace')
-    // this.mindMap.keyCommand.removeShortcut('/')
-    // this.mindMap.keyCommand.removeShortcut('Enter', this.insertNodeWrap)
   }
 
   //  结束文字编辑，会恢复回车键和删除键相关快捷键
   endTextEdit() {
     this.mindMap.keyCommand.restore()
-    // this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeNodeWrap)
-    // this.mindMap.keyCommand.addShortcut('/', this.toggleActiveExpand)
-    // this.mindMap.keyCommand.addShortcut('Enter', this.insertNodeWrap)
   }
 
   //   渲染
@@ -315,6 +369,7 @@ class Render {
     if (this.isRendering) {
       // 等待当前渲染完毕后再进行一次渲染
       this.hasWaitRendering = true
+      this.waitRenderingParams = [callback, source]
       return
     }
     this.isRendering = true
@@ -325,17 +380,18 @@ class Render {
     this.nodeCache = {}
     // 重新渲染需要清除激活状态
     if (this.reRender) {
-      this.clearActive()
+      this.clearActiveNodeList()
     }
     // 计算布局
     this.layout.doLayout(root => {
       // 删除本次渲染时不再需要的节点
       Object.keys(this.lastNodeCache).forEach(uid => {
         if (!this.nodeCache[uid]) {
+          // 从激活节点列表里删除
+          this.removeNodeFromActiveList(this.lastNodeCache[uid])
+          this.emitNodeActiveEvent()
+          // 调用节点的销毁方法
           this.lastNodeCache[uid].destroy()
-          if (this.lastNodeCache[uid].parent) {
-            this.lastNodeCache[uid].parent.removeLine()
-          }
         }
       })
       // 更新根节点
@@ -346,8 +402,10 @@ class Render {
         this.mindMap.emit('node_tree_render_end')
         callback && callback()
         if (this.hasWaitRendering) {
+          const params = this.waitRenderingParams
           this.hasWaitRendering = false
-          this.render(callback, source)
+          this.waitRenderingParams = []
+          this.render(...params)
         } else {
           // 触发一次保存，因为修改了渲染树的数据
           if (
@@ -359,48 +417,48 @@ class Render {
         }
       })
     })
-    this.mindMap.emit('node_active', null, [...this.activeNodeList])
+    this.emitNodeActiveEvent()
   }
 
-  //  清除当前激活的节点
-  clearActive() {
+  //  清除当前所有激活节点，并会触发事件
+  clearActiveNode() {
+    if (this.activeNodeList.length <= 0) {
+      return
+    }
+    this.clearActiveNodeList()
+    this.mindMap.emit('node_active', null, [])
+  }
+
+  //  清除当前激活的节点列表
+  clearActiveNodeList() {
     this.activeNodeList.forEach(item => {
-      this.setNodeActive(item, false)
+      this.mindMap.execCommand('SET_NODE_ACTIVE', item, false)
     })
     this.activeNodeList = []
   }
 
-  //  清除当前所有激活节点，并会触发事件
-  clearAllActive() {
-    if (this.activeNodeList.length <= 0) {
-      return
-    }
-    this.clearActive()
-    this.mindMap.emit('node_active', null, [])
-  }
-
-  //   添加节点到激活列表里
-  addActiveNode(node) {
-    let index = this.findActiveNodeIndex(node)
+  // 添加节点到激活列表里
+  addNodeToActiveList(node) {
+    const index = this.findActiveNodeIndex(node)
     if (index === -1) {
+      this.mindMap.execCommand('SET_NODE_ACTIVE', node, true)
       this.activeNodeList.push(node)
     }
   }
 
-  //  在激活列表里移除某个节点
-  removeActiveNode(node) {
+  // 在激活列表里移除某个节点
+  removeNodeFromActiveList(node) {
     let index = this.findActiveNodeIndex(node)
     if (index === -1) {
       return
     }
+    this.mindMap.execCommand('SET_NODE_ACTIVE', node, false)
     this.activeNodeList.splice(index, 1)
   }
 
   //  检索某个节点在激活列表里的索引
   findActiveNodeIndex(node) {
-    return this.activeNodeList.findIndex(item => {
-      return item.uid === node.uid
-    })
+    return getNodeIndexInNodeList(node, this.activeNodeList)
   }
 
   //  全选
@@ -409,14 +467,8 @@ class Render {
       this.root,
       null,
       node => {
-        if (!node.nodeData.data.isActive) {
-          node.nodeData.data.isActive = true
-          this.addActiveNode(node)
-          // 激活节点需要显示展开收起按钮
-          node.showExpandBtn()
-          setTimeout(() => {
-            node.updateNodeActive()
-          }, 0)
+        if (!node.getData('isActive')) {
+          this.addNodeToActiveList(node)
         }
       },
       null,
@@ -424,23 +476,23 @@ class Render {
       0,
       0
     )
-    this.mindMap.emit('node_active', null, [...this.activeNodeList])
+    this.emitNodeActiveEvent()
   }
 
   //  回退
   back(step) {
-    this.clearAllActive()
-    let data = this.mindMap.command.back(step)
-    if (data) {
-      this.renderTree = data
-      this.mindMap.render()
-    }
+    this.backForward('back', step)
   }
 
   //  前进
   forward(step) {
-    this.clearAllActive()
-    let data = this.mindMap.command.forward(step)
+    this.backForward('forward', step)
+  }
+
+  // 前进回退
+  backForward(type, step) {
+    this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
+    const data = this.mindMap.command[type](step)
     if (data) {
       this.renderTree = data
       this.mindMap.render()
@@ -476,25 +528,18 @@ class Render {
     appointChildren = addDataToAppointNodes(appointChildren, {
       ...params
     })
-    const needDestroyNodeList = {}
     list.forEach(node => {
       if (node.isGeneralization || node.isRoot) {
         return
       }
       const parent = node.parent
       const isOneLayer = node.layerIndex === 1
-      // 插入二级节点时根节点需要重新渲染
-      if (isOneLayer && !needDestroyNodeList[parent.uid]) {
-        needDestroyNodeList[parent.uid] = parent
-      }
       // 新插入节点的默认文本
       const text = isOneLayer
         ? defaultInsertSecondLevelNodeText
         : defaultInsertBelowSecondLevelNodeText
       // 计算插入位置
-      const index = parent.nodeData.children.findIndex(item => {
-        return item.data.uid === node.uid
-      })
+      const index = getNodeDataIndex(node)
       const newNodeData = {
         inserting: handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式,
         data: {
@@ -503,16 +548,13 @@ class Render {
           uid: createUid(),
           ...(appointData || {})
         },
-        children: [...createUidForAppointNodes(appointChildren)]
+        children: [...createUidForAppointNodes(appointChildren, true)]
       }
       parent.nodeData.children.splice(index + 1, 0, newNodeData)
     })
-    Object.keys(needDestroyNodeList).forEach(key => {
-      needDestroyNodeList[key].destroy()
-    })
     // 如果同时对多个节点插入子节点，需要清除原来激活的节点
     if (handleMultiNodes || !openEdit) {
-      this.clearActive()
+      this.clearActiveNodeList()
     }
     this.mindMap.render()
   }
@@ -534,32 +576,20 @@ class Render {
       isActive: true
     }
     nodeList = addDataToAppointNodes(nodeList, params)
-    const needDestroyNodeList = {}
     list.forEach(node => {
       if (node.isGeneralization || node.isRoot) {
         return
       }
       const parent = node.parent
-      const isOneLayer = node.layerIndex === 1
-      // 插入二级节点时根节点需要重新渲染
-      if (isOneLayer && !needDestroyNodeList[parent.uid]) {
-        needDestroyNodeList[parent.uid] = parent
-      }
       // 计算插入位置
-      const index = parent.nodeData.children.findIndex(item => {
-        return item.data.uid === node.uid
-      })
-      const newNodeList = createUidForAppointNodes(simpleDeepClone(nodeList))
-      parent.nodeData.children.splice(
-        index + 1,
-        0,
-        ...newNodeList
+      const index = getNodeDataIndex(node)
+      const newNodeList = createUidForAppointNodes(
+        simpleDeepClone(nodeList),
+        true
       )
+      parent.nodeData.children.splice(index + 1, 0, ...newNodeList)
     })
-    Object.keys(needDestroyNodeList).forEach(key => {
-      needDestroyNodeList[key].destroy()
-    })
-    this.clearActive()
+    this.clearActiveNodeList()
     this.mindMap.render()
   }
 
@@ -610,18 +640,17 @@ class Render {
           ...params,
           ...(appointData || {})
         },
-        children: [...createUidForAppointNodes(appointChildren)]
+        children: [...createUidForAppointNodes(appointChildren, true)]
       }
       node.nodeData.children.push(newNode)
       // 插入子节点时自动展开子节点
-      node.nodeData.data.expand = true
-      if (node.isRoot) {
-        node.destroy()
-      }
+      node.setData({
+        expand: true
+      })
     })
     // 如果同时对多个节点插入子节点，需要清除原来激活的节点
     if (handleMultiNodes || !openEdit) {
-      this.clearActive()
+      this.clearActiveNodeList()
     }
     this.mindMap.render()
   }
@@ -650,15 +679,64 @@ class Render {
       if (!node.nodeData.children) {
         node.nodeData.children = []
       }
-      childList = createUidForAppointNodes(childList)
+      childList = createUidForAppointNodes(childList, true)
       node.nodeData.children.push(...childList)
       // 插入子节点时自动展开子节点
-      node.nodeData.data.expand = true
-      if (node.isRoot) {
-        node.destroy()
-      }
+      node.setData({
+        expand: true
+      })
     })
-    this.clearActive()
+    this.clearActiveNodeList()
+    this.mindMap.render()
+  }
+
+  // 插入父节点
+  insertParentNode(openEdit = true, appointNodes, appointData) {
+    appointNodes = formatDataToArray(appointNodes)
+    if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
+      return
+    }
+    this.textEdit.hideEditTextBox()
+    const {
+      defaultInsertSecondLevelNodeText,
+      defaultInsertBelowSecondLevelNodeText
+    } = this.mindMap.opt
+    const list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
+    const handleMultiNodes = list.length > 1
+    const isRichText = !!this.mindMap.richText
+    const params = {
+      expand: true,
+      richText: isRichText,
+      resetRichText: isRichText,
+      isActive: handleMultiNodes || !openEdit // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
+    }
+    list.forEach(node => {
+      if (node.isGeneralization || node.isRoot) {
+        return
+      }
+      const text =
+        node.layerIndex === 1
+          ? defaultInsertSecondLevelNodeText
+          : defaultInsertBelowSecondLevelNodeText
+      const newNode = {
+        inserting: handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式
+        data: {
+          text: text,
+          uid: createUid(),
+          ...params,
+          ...(appointData || {})
+        },
+        children: [node.nodeData]
+      }
+      const parent = node.parent
+      // 获取当前节点所在位置
+      const index = getNodeDataIndex(node)
+      parent.nodeData.children.splice(index, 1, newNode)
+    })
+    // 如果同时对多个节点插入子节点，需要清除原来激活的节点
+    if (handleMultiNodes || !openEdit) {
+      this.clearActiveNodeList()
+    }
     this.mindMap.render()
   }
 
@@ -673,9 +751,7 @@ class Render {
     }
     let parent = node.parent
     let childList = parent.children
-    let index = childList.findIndex(item => {
-      return item.uid === node.uid
-    })
+    let index = getNodeIndexInNodeList(node, childList)
     if (index === -1 || index === 0) {
       return
     }
@@ -700,9 +776,7 @@ class Render {
     }
     let parent = node.parent
     let childList = parent.children
-    let index = childList.findIndex(item => {
-      return item.uid === node.uid
-    })
+    let index = getNodeIndexInNodeList(node, childList)
     if (index === -1 || index === childList.length - 1) {
       return
     }
@@ -719,27 +793,21 @@ class Render {
   // 复制节点
   copy() {
     this.beingCopyData = this.copyNode()
-    this.setCopyDataToClipboard(this.beingCopyData)
+    setDataToClipboard({
+      simpleMindMap: true,
+      data: this.beingCopyData
+    })
   }
 
   // 剪切节点
   cut() {
     this.mindMap.execCommand('CUT_NODE', copyData => {
       this.beingCopyData = copyData
-      this.setCopyDataToClipboard(copyData)
+      setDataToClipboard({
+        simpleMindMap: true,
+        data: copyData
+      })
     })
-  }
-
-  // 将粘贴或剪切的数据设置到用户剪切板中
-  setCopyDataToClipboard(data) {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(
-        JSON.stringify({
-          simpleMindMap: true,
-          data
-        })
-      )
-    }
   }
 
   // 粘贴节点
@@ -751,27 +819,17 @@ class Render {
 
   // 粘贴事件
   async onPaste() {
-    const { errorHandler } = this.mindMap.opt
+    const { errorHandler, handleIsSplitByWrapOnPasteCreateNewNode } =
+      this.mindMap.opt
     // 读取剪贴板的文字和图片
     let text = null
     let img = null
-    if (navigator.clipboard) {
-      try {
-        text = await navigator.clipboard.readText()
-        const items = await navigator.clipboard.read()
-        if (items && items.length > 0) {
-          for (const clipboardItem of items) {
-            for (const type of clipboardItem.types) {
-              if (/^image\//.test(type)) {
-                img = await clipboardItem.getType(type)
-                break
-              }
-            }
-          }
-        }
-      } catch (error) {
-        errorHandler(ERROR_TYPES.READ_CLIPBOARD_ERROR, error)
-      }
+    try {
+      const res = await getDataFromClipboard()
+      text = res.text
+      img = res.img
+    } catch (error) {
+      errorHandler(ERROR_TYPES.READ_CLIPBOARD_ERROR, error)
     }
     // 检查剪切板数据是否有变化
     // 通过图片大小来判断图片是否发生变化，可能是不准确的，但是目前没有其他好方法
@@ -827,9 +885,36 @@ class Render {
             Array.isArray(smmData) ? smmData : [smmData]
           )
         } else {
-          this.mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
-            text
+          const textArr = text.split(/\r?\n|(?<!\n)\r/g).filter(item => {
+            return !!item
           })
+          // 判断是否需要根据换行自动分割节点
+          if (textArr.length > 1 && handleIsSplitByWrapOnPasteCreateNewNode) {
+            handleIsSplitByWrapOnPasteCreateNewNode()
+              .then(() => {
+                this.mindMap.execCommand(
+                  'INSERT_MULTI_CHILD_NODE',
+                  [],
+                  textArr.map(item => {
+                    return {
+                      data: {
+                        text: item
+                      },
+                      children: []
+                    }
+                  })
+                )
+              })
+              .catch(() => {
+                this.mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
+                  text
+                })
+              })
+          } else {
+            this.mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
+              text
+            })
+          }
         }
       }
       // 存在图片，则添加到当前激活节点
@@ -880,9 +965,7 @@ class Render {
       // 移动节点
       let nodeParent = item.parent
       let nodeBorthers = nodeParent.children
-      let nodeIndex = nodeBorthers.findIndex(item2 => {
-        return item.uid === item2.uid
-      })
+      let nodeIndex = getNodeIndexInNodeList(item, nodeBorthers)
       if (nodeIndex === -1) {
         return
       }
@@ -892,9 +975,7 @@ class Render {
       // 目标节点
       let existParent = exist.parent
       let existBorthers = existParent.children
-      let existIndex = existBorthers.findIndex(item2 => {
-        return item2.uid === exist.uid
-      })
+      let existIndex = getNodeIndexInNodeList(exist, existBorthers)
       if (existIndex === -1) {
         return
       }
@@ -914,7 +995,9 @@ class Render {
         (node.layerIndex === 1 && toNode.layerIndex !== 1) ||
         (node.layerIndex !== 1 && toNode.layerIndex === 1)
       if (nodeLayerChanged) {
-        node.nodeData.data.resetRichText = true
+        node.setData({
+          resetRichText: true
+        })
       }
     }
   }
@@ -933,49 +1016,29 @@ class Render {
       return node.isRoot
     })
     if (root) {
-      this.clearActive()
-      root.children.forEach(child => {
-        child.remove()
-      })
+      this.clearActiveNodeList()
       root.children = []
       root.nodeData.children = []
     } else {
       // 如果只选中了一个节点，删除后激活其兄弟节点或者父节点
-      if (
-        this.activeNodeList.length === 1 &&
-        !this.activeNodeList[0].isGeneralization &&
-        this.mindMap.opt.deleteNodeActive
-      ) {
-        const node = this.activeNodeList[0]
-        const broList = node.parent.children
-        const nodeIndex = broList.findIndex(item => item.uid === node.uid)
-        // 如果后面有兄弟节点
-        if (nodeIndex < broList.length - 1) {
-          needActiveNode = broList[nodeIndex + 1]
-        } else {
-          // 如果前面有兄弟节点
-          if (nodeIndex > 0) {
-            needActiveNode = broList[nodeIndex - 1]
-          } else {
-            // 没有兄弟节点
-            needActiveNode = node.parent
-          }
-        }
-      }
+      needActiveNode = this.getNextActiveNode()
       for (let i = 0; i < list.length; i++) {
         let node = list[i]
         if (isAppointNodes) list.splice(i, 1)
         if (node.isGeneralization) {
           // 删除概要节点
-          this.setNodeData(node.generalizationBelongNode, {
-            generalization: null
-          })
-          node.generalizationBelongNode.update()
-          this.removeActiveNode(node)
+          this.mindMap.execCommand(
+            'SET_NODE_DATA',
+            node.generalizationBelongNode,
+            {
+              generalization: null
+            }
+          )
+          this.removeNodeFromActiveList(node)
           i--
         } else {
-          this.removeActiveNode(node)
-          this.removeOneNode(node)
+          this.removeNodeFromActiveList(node)
+          removeFromParentNodeData(node)
           i--
         }
       }
@@ -983,20 +1046,80 @@ class Render {
     this.activeNodeList = []
     // 激活被删除节点的兄弟节点或父节点
     if (needActiveNode) {
-      this.activeNodeList.push(needActiveNode)
-      this.setNodeActive(needActiveNode, true)
-      needActiveNode = null
+      this.addNodeToActiveList(needActiveNode)
     }
-    this.mindMap.emit('node_active', null, [...this.activeNodeList])
+    this.emitNodeActiveEvent()
     this.mindMap.render()
   }
 
-  //  移除某个指定节点
-  removeOneNode(node) {
-    let index = getNodeIndex(node)
-    node.remove()
-    node.parent.children.splice(index, 1)
-    node.parent.nodeData.children.splice(index, 1)
+  // 仅删除当前节点
+  removeCurrentNode(appointNodes = []) {
+    appointNodes = formatDataToArray(appointNodes)
+    if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
+      return
+    }
+    // 删除节点后需要激活的节点，如果只选中了一个节点，删除后激活其兄弟节点或者父节点
+    let needActiveNode = this.getNextActiveNode()
+    let isAppointNodes = appointNodes.length > 0
+    let list = isAppointNodes ? appointNodes : this.activeNodeList
+    list = list.filter(node => {
+      return !node.isRoot
+    })
+    for (let i = 0; i < list.length; i++) {
+      let node = list[i]
+      if (node.isGeneralization) {
+        // 删除概要节点
+        this.mindMap.execCommand(
+          'SET_NODE_DATA',
+          node.generalizationBelongNode,
+          {
+            generalization: null
+          }
+        )
+      } else {
+        const parent = node.parent
+        const index = getNodeDataIndex(node)
+        parent.nodeData.children.splice(
+          index,
+          1,
+          ...(node.nodeData.children || [])
+        )
+      }
+    }
+    this.activeNodeList = []
+    // 激活被删除节点的兄弟节点或父节点
+    if (needActiveNode) {
+      this.addNodeToActiveList(needActiveNode)
+    }
+    this.emitNodeActiveEvent()
+    this.mindMap.render()
+  }
+
+  // 计算下一个可激活的节点
+  getNextActiveNode() {
+    let needActiveNode = null
+    if (
+      this.activeNodeList.length === 1 &&
+      !this.activeNodeList[0].isGeneralization &&
+      this.mindMap.opt.deleteNodeActive
+    ) {
+      const node = this.activeNodeList[0]
+      const broList = node.parent.children
+      const nodeIndex = getNodeIndexInNodeList(node, broList)
+      // 如果后面有兄弟节点
+      if (nodeIndex < broList.length - 1) {
+        needActiveNode = broList[nodeIndex + 1]
+      } else {
+        // 如果前面有兄弟节点
+        if (nodeIndex > 0) {
+          needActiveNode = broList[nodeIndex - 1]
+        } else {
+          // 没有兄弟节点
+          needActiveNode = node.parent
+        }
+      }
+    }
+    return needActiveNode
   }
 
   //  复制节点
@@ -1015,19 +1138,22 @@ class Render {
     if (this.activeNodeList.length <= 0) {
       return
     }
+    // 找出激活节点中的顶层节点列表，并过滤掉根节点
     const nodeList = getTopAncestorsFomNodeList(this.activeNodeList).filter(
       node => {
         return !node.isRoot
       }
     )
+    // 复制数据
     const copyData = nodeList.map(node => {
       return copyNodeTree({}, node, true)
     })
+    // 从父节点的数据中移除
     nodeList.forEach(node => {
-      this.removeActiveNode(node)
-      this.removeOneNode(node)
+      removeFromParentNodeData(node)
     })
-    this.mindMap.emit('node_active', null, [...this.activeNodeList])
+    // 清空激活节点列表
+    this.clearActiveNodeList()
     this.mindMap.render()
     if (callback && typeof callback === 'function') {
       callback(copyData)
@@ -1042,15 +1168,12 @@ class Render {
     })
     nodeList.forEach(item => {
       this.checkNodeLayerChange(item, toNode)
-      this.removeActiveNode(item)
-      this.removeOneNode(item)
+      this.removeNodeFromActiveList(item)
+      removeFromParentNodeData(item)
       toNode.nodeData.children.push(item.nodeData)
     })
-    this.mindMap.emit('node_active', null, [...this.activeNodeList])
+    this.emitNodeActiveEvent()
     this.mindMap.render()
-    if (toNode.isRoot) {
-      toNode.destroy()
-    }
   }
 
   //   粘贴节点到节点
@@ -1062,7 +1185,9 @@ class Render {
     this.activeNodeList.forEach(node => {
       node.nodeData.children.push(
         ...data.map(item => {
-          return simpleDeepClone(item)
+          const newData = simpleDeepClone(item)
+          createUidForAppointNodes([newData], true)
+          return newData
         })
       )
     })
@@ -1076,14 +1201,9 @@ class Render {
     }
     // 如果开启了富文本，则需要应用到富文本上
     if (this.mindMap.richText) {
-      let config = this.mindMap.richText.normalStyleToRichTextStyle({
+      this.mindMap.richText.setNotActiveNodeStyle(node, {
         [prop]: value
       })
-      if (Object.keys(config).length > 0) {
-        this.mindMap.richText.showEditText(node)
-        this.mindMap.richText.formatAllText(config)
-        this.mindMap.richText.hideEditText([node])
-      }
     }
     this.setNodeDataRender(node, data)
     // 更新了连线的样式
@@ -1097,12 +1217,7 @@ class Render {
     let data = { ...style }
     // 如果开启了富文本，则需要应用到富文本上
     if (this.mindMap.richText) {
-      let config = this.mindMap.richText.normalStyleToRichTextStyle(style)
-      if (Object.keys(config).length > 0) {
-        this.mindMap.richText.showEditText(node)
-        this.mindMap.richText.formatAllText(config)
-        this.mindMap.richText.hideEditText([node])
-      }
+      this.mindMap.richText.setNotActiveNodeStyle(node, style)
     }
     this.setNodeDataRender(node, data)
     // 更新了连线的样式
@@ -1120,38 +1235,17 @@ class Render {
 
   //  设置节点是否激活
   setNodeActive(node, active) {
-    this.setNodeData(node, {
+    this.mindMap.execCommand('SET_NODE_DATA', node, {
       isActive: active
     })
-    // 切换激活状态，需要切换展开收起按钮的显隐
-    if (active) {
-      node.showExpandBtn()
-    } else {
-      node.hideExpandBtn()
-    }
-    node.updateNodeActive()
+    node.updateNodeByActive(active)
   }
 
   //  设置节点是否展开
   setNodeExpand(node, expand) {
-    this.setNodeData(node, {
+    this.mindMap.execCommand('SET_NODE_DATA', node, {
       expand
     })
-    if (expand) {
-      // 展开
-      node.children.forEach(item => {
-        item.render()
-      })
-      node.renderLine()
-      // node.updateExpandBtnNode()
-    } else {
-      // 收缩
-      node.children.forEach(item => {
-        item.remove()
-      })
-      node.removeLine()
-      // node.updateExpandBtnNode()
-    }
     this.mindMap.render()
   }
 
@@ -1179,8 +1273,7 @@ class Render {
       this.renderTree,
       null,
       (node, parent, isRoot) => {
-        node._node = null
-        if (!isRoot) {
+        if (!isRoot && node.children && node.children.length > 0) {
           node.data.expand = false
         }
       },
@@ -1200,8 +1293,12 @@ class Render {
       this.renderTree,
       null,
       (node, parent, isRoot, layerIndex) => {
-        node._node = null
-        node.data.expand = layerIndex < level
+        const expand = layerIndex < level
+        if (expand) {
+          node.data.expand = true
+        } else if (!isRoot && node.children && node.children.length > 0) {
+          node.data.expand = false
+        }
       },
       null,
       true,
@@ -1223,11 +1320,7 @@ class Render {
 
   //  切换节点展开状态
   toggleNodeExpand(node) {
-    this.mindMap.execCommand(
-      'SET_NODE_EXPAND',
-      node,
-      !node.nodeData.data.expand
-    )
+    this.mindMap.execCommand('SET_NODE_EXPAND', node, !node.getData('expand'))
   }
 
   //  设置节点文本
@@ -1305,15 +1398,18 @@ class Render {
       return
     }
     this.activeNodeList.forEach(node => {
-      if (node.nodeData.data.generalization || node.isRoot) {
+      if (node.getData('generalization') || node.isRoot) {
         return
       }
-      this.setNodeData(node, {
+      this.mindMap.execCommand('SET_NODE_DATA', node, {
         generalization: data || {
-          text: '概要'
+          text: this.mindMap.opt.defaultGeneralizationText
         }
       })
-      node.update()
+      // 插入子节点时自动展开子节点
+      node.setData({
+        expand: true
+      })
     })
     this.mindMap.render()
   }
@@ -1324,13 +1420,12 @@ class Render {
       return
     }
     this.activeNodeList.forEach(node => {
-      if (!node.nodeData.data.generalization) {
+      if (!node.getData('generalization')) {
         return
       }
-      this.setNodeData(node, {
+      this.mindMap.execCommand('SET_NODE_DATA', node, {
         generalization: null
       })
-      node.update()
     })
     this.mindMap.render()
   }
@@ -1339,7 +1434,7 @@ class Render {
   setNodeCustomPosition(node, left = undefined, top = undefined) {
     let nodeList = [node] || this.activeNodeList
     nodeList.forEach(item => {
-      this.setNodeData(item, {
+      this.mindMap.execCommand('SET_NODE_DATA', item, {
         customLeft: left,
         customTop: top
       })
@@ -1354,7 +1449,7 @@ class Render {
       node => {
         node.customLeft = undefined
         node.customTop = undefined
-        this.setNodeData(node, {
+        this.mindMap.execCommand('SET_NODE_DATA', node, {
           customLeft: undefined,
           customTop: undefined
         })
@@ -1380,7 +1475,7 @@ class Render {
 
   // 定位到指定节点
   goTargetNode(node, callback = () => {}) {
-    let uid = typeof node === 'string' ? node : node.nodeData.data.uid
+    let uid = typeof node === 'string' ? node : node.getData('uid')
     if (!uid) return
     this.expandToNodeUid(uid, () => {
       let targetNode = this.findNodeByUid(uid)
@@ -1401,13 +1496,9 @@ class Render {
 
   //  设置节点数据，并判断是否渲染
   setNodeDataRender(node, data, notRender = false) {
-    this.setNodeData(node, data)
+    this.mindMap.execCommand('SET_NODE_DATA', node, data)
     let changed = node.reRender()
     if (changed) {
-      if (node.isGeneralization) {
-        // 概要节点
-        node.generalizationBelongNode.updateGeneralization()
-      }
       if (!notRender) this.mindMap.render()
     } else {
       this.mindMap.emit('node_tree_render_end')
@@ -1429,6 +1520,11 @@ class Render {
     this.mindMap.view.translateX(offsetX)
     this.mindMap.view.translateY(offsetY)
     this.mindMap.view.setScale(1)
+  }
+
+  // 回到中心主题，即设置根节点到画布中心
+  setRootNodeCenter() {
+    this.moveNodeToCenter(this.root)
   }
 
   // 展开到指定uid的节点
@@ -1461,12 +1557,17 @@ class Render {
   findNodeByUid(uid) {
     let res = null
     walk(this.root, null, node => {
-      if (node.nodeData.data.uid === uid) {
+      if (node.getData('uid') === uid) {
         res = node
         return true
       }
     })
     return res
+  }
+
+  // 派发节点激活改变事件
+  emitNodeActiveEvent() {
+    this.mindMap.emit('node_active', null, [...this.activeNodeList])
   }
 }
 

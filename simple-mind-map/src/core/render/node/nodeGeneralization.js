@@ -3,7 +3,7 @@ import { createUid } from '../../../utils/index'
 
 //  检查是否存在概要
 function checkHasGeneralization() {
-  return !!this.nodeData.data.generalization
+  return !!this.getData('generalization')
 }
 
 //  创建概要节点
@@ -12,24 +12,23 @@ function createGeneralizationNode() {
     return
   }
   if (!this._generalizationLine) {
-    this._generalizationLine = this.draw.path()
+    this._generalizationLine = this.lineDraw.path()
   }
   if (!this._generalizationNode) {
     this._generalizationNode = new Node({
       data: {
-        data: this.nodeData.data.generalization
+        data: this.getData('generalization')
       },
       uid: createUid(),
       renderer: this.renderer,
       mindMap: this.mindMap,
-      draw: this.draw,
       isGeneralization: true
     })
     this._generalizationNodeWidth = this._generalizationNode.width
     this._generalizationNodeHeight = this._generalizationNode.height
     this._generalizationNode.generalizationBelongNode = this
-    if (this.nodeData.data.generalization.isActive) {
-      this.renderer.addActiveNode(this._generalizationNode)
+    if (this.getData('generalization').isActive) {
+      this.renderer.addNodeToActiveList(this._generalizationNode)
     }
   }
 }
@@ -50,7 +49,7 @@ function renderGeneralization() {
     this._generalizationNodeHeight = 0
     return
   }
-  if (this.nodeData.data.expand === false) {
+  if (this.getData('expand') === false) {
     this.removeGeneralization()
     return
   }
@@ -73,13 +72,13 @@ function removeGeneralization() {
   }
   if (this._generalizationNode) {
     // 删除概要节点时要同步从激活节点里删除
-    this.renderer.removeActiveNode(this._generalizationNode)
+    this.renderer.removeNodeFromActiveList(this._generalizationNode)
     this._generalizationNode.remove()
     this._generalizationNode = null
   }
   // hack修复当激活一个节点时创建概要，然后立即激活创建的概要节点后会重复创建概要节点并且无法删除的问题
   if (this.generalizationBelongNode) {
-    this.draw
+    this.nodeDraw
       .find('.generalization_' + this.generalizationBelongNode.uid)
       .remove()
   }

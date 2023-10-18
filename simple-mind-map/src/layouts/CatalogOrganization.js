@@ -1,5 +1,5 @@
 import Base from './Base'
-import { walk, asyncRun } from '../utils'
+import { walk, asyncRun, getNodeIndexInNodeList } from '../utils'
 
 //  目录组织图
 class CatalogOrganization extends Base {
@@ -73,7 +73,7 @@ class CatalogOrganization extends Base {
       null,
       (node, parent, isRoot, layerIndex) => {
         if (
-          node.nodeData.data.expand &&
+          node.getData('expand') &&
           node.children &&
           node.children.length
         ) {
@@ -114,7 +114,7 @@ class CatalogOrganization extends Base {
       this.root,
       null,
       (node, parent, isRoot, layerIndex) => {
-        if (!node.nodeData.data.expand) {
+        if (!node.getData('expand')) {
           return
         }
         // 调整left
@@ -159,9 +159,7 @@ class CatalogOrganization extends Base {
   updateBrothersLeft(node, addWidth) {
     if (node.parent) {
       let childrenList = node.parent.children
-      let index = childrenList.findIndex(item => {
-        return item.uid === node.uid
-      })
+      let index = getNodeIndexInNodeList(node, childrenList)
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition() || _index <= index) {
           // 适配自定义位置
@@ -182,9 +180,7 @@ class CatalogOrganization extends Base {
   updateBrothersTop(node, addHeight) {
     if (node.parent && !node.parent.isRoot) {
       let childrenList = node.parent.children
-      let index = childrenList.findIndex(item => {
-        return item.uid === node.uid
-      })
+      let index = getNodeIndexInNodeList(node, childrenList)
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
           // 适配自定义位置
@@ -247,14 +243,14 @@ class CatalogOrganization extends Base {
       minx = Math.min(minx, x1)
       maxx = Math.max(maxx, x1)
       // 父节点的竖线
-      let line1 = this.draw.path()
+      let line1 = this.lineDraw.path()
       node.style.line(line1)
       line1.plot(`M ${x1},${y1} L ${x1},${y1 + s1}`)
       node._lines.push(line1)
       style && style(line1, node)
       // 水平线
       if (len > 0) {
-        let lin2 = this.draw.path()
+        let lin2 = this.lineDraw.path()
         node.style.line(lin2)
         lin2.plot(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`)
         node._lines.push(lin2)
@@ -315,7 +311,7 @@ class CatalogOrganization extends Base {
       })
       // 竖线
       if (len > 0) {
-        let lin2 = this.draw.path()
+        let lin2 = this.lineDraw.path()
         expandBtnSize = len > 0 ? expandBtnSize : 0
         node.style.line(lin2)
         if (maxy < y1 + expandBtnSize) {
