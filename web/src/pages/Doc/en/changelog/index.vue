@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.8.0-fix.1</h2>
+<p>Fix: Fixed the issue of creating a new node using direct paste if the pasted content contains HTML label symbols such as &lt;&gt; and the newly created node content is empty.</p>
 <h2>0.8.0</h2>
 <p>Breaking change: Greatly optimize some of the code and slightly improve performance, mainly by using the 'render' class to remove useless logic, adjust unreasonable implementations, and extract duplicate code; Modify function names, functions, etc.</p>
 <p>Fix:</p>
