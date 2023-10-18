@@ -76,7 +76,7 @@ declare class MindMap {
         disableMouseWheelZoom: boolean;
         errorHandler: (code: any, error: any) => void;
         resetCss: string;
-        enableDblclickReset: boolean;
+        enableDblclickBackToRootNode: boolean;
         minExportImgCanvasScale: number;
         hoverRectColor: string;
         hoverRectPadding: number;
@@ -99,15 +99,14 @@ declare class MindMap {
             avatarSize: number;
             fontSize: number;
         };
+        associativeLineIsAlwaysAboveNode: boolean;
+        defaultGeneralizationText: string;
+        handleIsSplitByWrapOnPasteCreateNewNode: any;
+        addHistoryTime: number;
     });
     opt: any;
     el: any;
-    elRect: any;
-    width: any;
-    height: any;
     cssEl: HTMLStyleElement;
-    svg: any;
-    draw: any;
     event: Event;
     keyCommand: KeyCommand;
     command: Command;
@@ -115,10 +114,22 @@ declare class MindMap {
     view: View;
     batchExecution: BatchExecution;
     handleOpt(opt: any): any;
+    initContainer(): void;
+    associativeLineDraw: any;
+    svg: any;
+    draw: any;
+    lineDraw: any;
+    nodeDraw: any;
+    otherDraw: any;
+    clearDraw(): void;
     addCss(): void;
     removeCss(): void;
     render(callback: any, source?: string): void;
     reRender(callback: any, source?: string): void;
+    getElRectInfo(): void;
+    elRect: any;
+    width: any;
+    height: any;
     resize(): void;
     on(event: any, fn: any): void;
     emit(event: any, ...args: any[]): void;
@@ -126,15 +137,15 @@ declare class MindMap {
     initCache(): void;
     initTheme(): void;
     themeConfig: any;
-    setTheme(theme: any): void;
+    setTheme(theme: any, notRender?: boolean): void;
     getTheme(): any;
-    setThemeConfig(config: any): void;
+    setThemeConfig(config: any, notRender?: boolean): void;
     getCustomThemeConfig(): any;
     getThemeConfig(prop: any): any;
     getConfig(prop: any): any;
     updateConfig(opt?: {}): void;
     getLayout(): any;
-    setLayout(layout: any): void;
+    setLayout(layout: any, notRender?: boolean): void;
     execCommand(...args: any[]): void;
     setData(data: any): void;
     setFullData(data: any): void;
@@ -145,9 +156,10 @@ declare class MindMap {
         y: number;
     };
     setMode(mode: any): void;
-    getSvgData({ paddingX, paddingY }?: {
+    getSvgData({ paddingX, paddingY, ignoreWatermark }?: {
         paddingX?: number;
         paddingY?: number;
+        ignoreWatermark?: boolean;
     }): {
         svg: any;
         svgHTML: any;

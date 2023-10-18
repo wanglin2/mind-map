@@ -64,7 +64,14 @@ export function selectAllInput(el: any): void;
 export function addDataToAppointNodes(appointNodes: any, data?: {}): any;
 export function createUidForAppointNodes(appointNodes: any, createNewId?: boolean): any;
 export function formatDataToArray(data: any): any[];
-export function getNodeIndex(node: any): any;
+export function getNodeDataIndex(node: any): any;
+export function getNodeIndexInNodeList(node: any, nodeList: any): any;
 export function generateColorByContent(str: any): string;
 export function htmlEscape(str: any): any;
 export function isSameObject(a: any, b: any): boolean;
+export function setDataToClipboard(data: any): void;
+export function getDataFromClipboard(): Promise<{
+    text: string;
+    img: any;
+}>;
+export function removeFromParentNodeData(node: any): void;

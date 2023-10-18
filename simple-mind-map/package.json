@@ -1,6 +1,6 @@
 {
   "name": "simple-mind-map",
-  "version": "0.7.3-fix.2",
+  "version": "0.8.0",
   "description": "一个简单的web在线思维导图",
   "authors": [
     {
@@ -22,7 +22,7 @@
   "scripts": {
     "lint": "eslint src/",
     "format": "prettier --write .",
-    "types": "npx -p typescript tsc index.js --declaration --allowJs --emitDeclarationOnly --outDir types --target es2017",
+    "types": "npx -p typescript tsc index.js --declaration --allowJs --emitDeclarationOnly --outDir types --target es2017 --skipLibCheck",
     "wsServe": "node ./bin/wsServer.mjs"
   },
   "module": "index.js",
