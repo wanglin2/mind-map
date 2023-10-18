@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.0-fix.1
+
+Fix: Fixed the issue of creating a new node using direct paste if the pasted content contains HTML label symbols such as <> and the newly created node content is empty.
+
 ## 0.8.0
 
 Breaking change: Greatly optimize some of the code and slightly improve performance, mainly by using the 'render' class to remove useless logic, adjust unreasonable implementations, and extract duplicate code; Modify function names, functions, etc.

@@ -23,7 +23,8 @@ import {
   getNodeDataIndex,
   getNodeIndexInNodeList,
   setDataToClipboard,
-  getDataFromClipboard
+  getDataFromClipboard,
+  htmlEscape
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -885,6 +886,7 @@ class Render {
             Array.isArray(smmData) ? smmData : [smmData]
           )
         } else {
+          text = htmlEscape(text)
           const textArr = text.split(/\r?\n|(?<!\n)\r/g).filter(item => {
             return !!item
           })
