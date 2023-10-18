@@ -233,10 +233,12 @@ export default {
   }
 }
 
-@media screen and (max-width: 502px) {
+@media screen and (max-width: 590px) {
   .navigatorContainer {
     left: 20px;
     overflow-x: auto;
+    overflow-y: hidden;
+    height: 60px;
   }
 }
 </style>
