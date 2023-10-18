@@ -548,10 +548,17 @@
 </tr>
 <tr>
 <td>handleIsSplitByWrapOnPasteCreateNewNode（v0.8.0+）</td>
-<td>Function</td>
-<td>null</td>
+<td>Function / null</td>
 <td>null</td>
 <td>When creating a new node by pasting text, control whether to automatically split the nodes based on line breaks. If there is a line break, multiple nodes will be created based on the line break. Otherwise, only one node will be created, and a function can be passed to return promise. resolve represents splitting based on line breaks, and reject represents ignoring line breaks</td>
+<td></td>
+</tr>
+<tr>
+<td>addHistoryTime（v0.8.0+）</td>
+<td>Number</td>
+<td>100</td>
+<td>Only one historical record can be added within the specified time to avoid adding unnecessary intermediate states. Unit: ms</td>
+<td></td>
 </tr>
 </tbody>
 </table>

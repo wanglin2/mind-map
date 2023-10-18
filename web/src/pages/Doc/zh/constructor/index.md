@@ -98,7 +98,8 @@ const mindMap = new MindMap({
 | cooperateStyle（v0.7.3+）     | Object  | { avatarSize: 22, fontSize: 12 }  | 节点协作编辑时的人员头像样式配置，字段含义分别为：头像大小、如果是文字头像，那么文字的大小 |
 | associativeLineIsAlwaysAboveNode（v0.8.0+）     |  Boolean | true  | 关联线是否始终显示在节点上层，如果设为false，那么创建关联线和激活关联线时处于最顶层，其他情况下处于节点下方 |
 | defaultGeneralizationText（v0.8.0+）     |  String | 概要  | 插入概要的默认文本 |
-| handleIsSplitByWrapOnPasteCreateNewNode（v0.8.0+）     | Function | null  | null  | 粘贴文本的方式创建新节点时，控制是否按换行自动分割节点，即如果存在换行，那么会根据换行创建多个节点，否则只会创建一个节点，可以传递一个函数，返回promise，resolve代表根据换行分割，reject代表忽略换行 |
+| handleIsSplitByWrapOnPasteCreateNewNode（v0.8.0+）     | Function / null | null  | 粘贴文本的方式创建新节点时，控制是否按换行自动分割节点，即如果存在换行，那么会根据换行创建多个节点，否则只会创建一个节点，可以传递一个函数，返回promise，resolve代表根据换行分割，reject代表忽略换行 |
+| addHistoryTime（v0.8.0+）     | Number | 100  | 指定时间内只允许添加一次历史记录，避免添加没有必要的中间状态，单位：ms  |
 
 ### 数据结构
 
