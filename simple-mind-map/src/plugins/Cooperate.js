@@ -16,6 +16,7 @@ class Cooperate {
     // 感知数据
     this.awareness = null
     this.currentAwarenessData = []
+    this.waitNodeUidMap = {} // 该列表中的uid对应的节点还未渲染完毕
     // 当前的平级对象类型的思维导图数据
     this.currentData = null
     // 用户信息
@@ -79,6 +80,10 @@ class Cooperate {
     this.onNodeActive = this.onNodeActive.bind(this)
     this.mindMap.on('node_active', this.onNodeActive)
 
+    // 监听思维导图渲染完毕事件
+    this.onNodeTreeRenderEnd = this.onNodeTreeRenderEnd.bind(this)
+    this.mindMap.on('node_tree_render_end', this.onNodeTreeRenderEnd)
+
     // 监听设置思维导图数据事件
     this.initData = this.initData.bind(this)
     this.mindMap.on('set_data', this.initData)
@@ -91,6 +96,7 @@ class Cooperate {
     }
     this.mindMap.off('data_change', this.onDataChange)
     this.mindMap.off('node_active', this.onNodeActive)
+    this.mindMap.off('node_tree_render_end', this.onNodeTreeRenderEnd)
     this.mindMap.off('set_data', this.initData)
     this.ydoc.destroy()
   }
@@ -153,6 +159,17 @@ class Cooperate {
     }
   }
 
+  // 节点树渲染完毕事件
+  onNodeTreeRenderEnd() {
+    Object.keys(this.waitNodeUidMap).forEach(uid => {
+      const node = this.mindMap.renderer.findNodeByUid(uid)
+      if (node) {
+        node.addUser(this.waitNodeUidMap[uid])
+      }
+    })
+    this.waitNodeUidMap = {}
+  }
+
   // 设置用户信息
   /**
    * {
@@ -183,23 +200,27 @@ class Cooperate {
         const nodeIdList = data.nodeIdList
         nodeIdList.forEach(uid => {
           const node = this.mindMap.renderer.findNodeByUid(uid)
-          if (node) {
-            callback(node, userInfo)
-          }
+          callback(uid, node, userInfo)
         })
       })
     }
     // 清除之前的数据
-    walk(this.currentAwarenessData, (node, userInfo) => {
-      node.removeUser(userInfo)
+    walk(this.currentAwarenessData, (uid, node, userInfo) => {
+      if (node) {
+        node.removeUser(userInfo)
+      }
     })
     // 设置当前数据
     const data = Array.from(this.awareness.getStates().values())
     this.currentAwarenessData = data
-    walk(data, (node, userInfo) => {
+    walk(data, (uid, node, userInfo) => {
       // 不显示自己
       if (userInfo.id === this.userInfo.id) return
-      node.addUser(userInfo)
+      if (node) {
+        node.addUser(userInfo)
+      } else {
+        this.waitNodeUidMap[uid] = userInfo
+      }
     })
   }
 
