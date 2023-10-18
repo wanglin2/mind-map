@@ -17,6 +17,8 @@ Fix:
 > 5.Fixed the issue of no watermarks and no redrawing after the container size was changed.
 >
 > 6.Fix the issue of slow rendering of mini maps with watermarks.
+>
+> 7.Fixed the issue where the collaboration plugin did not display the creator's avatar when creating a new node.
 
 New:
 
