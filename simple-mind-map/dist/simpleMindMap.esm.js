@@ -51820,6 +51820,7 @@ var Render = class {
             Array.isArray(smmData) ? smmData : [smmData]
           );
         } else {
+          text4 = htmlEscape(text4);
           const textArr = text4.split(/\r?\n|(?<!\n)\r/g).filter((item) => {
             return !!item;
           });
