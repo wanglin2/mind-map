@@ -39,6 +39,8 @@ New:
 > 9.Pasting text with line breaks supports controlling whether nodes are split by line breaks.
 >
 > 10.The mini map plugin supports returning mini maps of image types.
+>
+> 11.Only one historical record can be added within a specified time period to avoid adding unnecessary intermediate states.
 
 Demo:
 

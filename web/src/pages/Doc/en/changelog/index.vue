@@ -24,6 +24,7 @@
 <p>8.The folded active nodes are synchronously deleted from the list of active nodes.</p>
 <p>9.Pasting text with line breaks supports controlling whether nodes are split by line breaks.</p>
 <p>10.The mini map plugin supports returning mini maps of image types.</p>
+<p>11.Only one historical record can be added within a specified time period to avoid adding unnecessary intermediate states.</p>
 </blockquote>
 <p>Demo:</p>
 <blockquote>

@@ -473,9 +473,15 @@
 </tr>
 <tr>
 <td>handleIsSplitByWrapOnPasteCreateNewNode（v0.8.0+）</td>
-<td>Function</td>
+<td>Function / null</td>
 <td>null</td>
-<td>null</td>
+<td>粘贴文本的方式创建新节点时，控制是否按换行自动分割节点，即如果存在换行，那么会根据换行创建多个节点，否则只会创建一个节点，可以传递一个函数，返回promise，resolve代表根据换行分割，reject代表忽略换行</td>
+</tr>
+<tr>
+<td>addHistoryTime（v0.8.0+）</td>
+<td>Number</td>
+<td>100</td>
+<td>指定时间内只允许添加一次历史记录，避免添加没有必要的中间状态，单位：ms</td>
 </tr>
 </tbody>
 </table>

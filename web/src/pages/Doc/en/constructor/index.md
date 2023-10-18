@@ -98,7 +98,8 @@ const mindMap = new MindMap({
 | cooperateStyle（v0.7.3+）     | Object  | { avatarSize: 22, fontSize: 12 }  | The configuration of personnel avatar style during node collaboration editing, with field meanings as follows: avatar size, and if it is a text avatar, the size of the text |         |
 | associativeLineIsAlwaysAboveNode（v0.8.0+）     |  Boolean | true  | Is the associated line always displayed above the node? If set to false, it will be at the top level when creating and activating the associated line, and in other cases, it will be below the node |         |
 | defaultGeneralizationText（v0.8.0+）     |  String | 概要  | Insert default text for summary |         |
-| handleIsSplitByWrapOnPasteCreateNewNode（v0.8.0+）     | Function | null  | null  | When creating a new node by pasting text, control whether to automatically split the nodes based on line breaks. If there is a line break, multiple nodes will be created based on the line break. Otherwise, only one node will be created, and a function can be passed to return promise. resolve represents splitting based on line breaks, and reject represents ignoring line breaks |         |
+| handleIsSplitByWrapOnPasteCreateNewNode（v0.8.0+）     | Function / null  | null  | When creating a new node by pasting text, control whether to automatically split the nodes based on line breaks. If there is a line break, multiple nodes will be created based on the line break. Otherwise, only one node will be created, and a function can be passed to return promise. resolve represents splitting based on line breaks, and reject represents ignoring line breaks |         |
+| addHistoryTime（v0.8.0+）     | Number | 100  | Only one historical record can be added within the specified time to avoid adding unnecessary intermediate states. Unit: ms  |         |
 
 ### Data structure
 
