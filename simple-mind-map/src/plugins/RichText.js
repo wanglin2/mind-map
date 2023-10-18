@@ -422,10 +422,13 @@ class RichText {
 
   // 中文输入结束
   onCompositionEnd() {
-    if (!this.showTextEdit || !this.lostStyle) {
+    if (!this.showTextEdit) {
       return
     }
     this.isCompositing = false
+    if (!this.lostStyle) {
+      return
+    }
     this.setTextStyleIfNotRichText(this.node)
   }
 
