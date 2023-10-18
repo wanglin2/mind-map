@@ -39259,16 +39259,8 @@ var View = class {
     this.mindMap.keyCommand.addShortcut("Control+-", () => {
       this.narrow();
     });
-    this.mindMap.keyCommand.addShortcut("Control+Enter", () => {
-      this.reset();
-    });
     this.mindMap.keyCommand.addShortcut("Control+i", () => {
       this.fit();
-    });
-    this.mindMap.svg.on("dblclick", () => {
-      if (!this.mindMap.opt.enableDblclickReset)
-        return;
-      this.reset();
     });
     this.mindMap.event.on("mousedown", () => {
       this.sx = this.x;
@@ -39471,7 +39463,7 @@ var View = class {
     let drawWidth = rect.width / origTransform.scaleX;
     let drawHeight = rect.height / origTransform.scaleY;
     let drawRatio = drawWidth / drawHeight;
-    let { width: elWidth, height: elHeight } = this.mindMap.el.getBoundingClientRect();
+    let { width: elWidth, height: elHeight } = this.mindMap.elRect;
     elWidth = elWidth - fitPadding * 2;
     elHeight = elHeight - fitPadding * 2;
     let elRatio = elWidth / elHeight;
@@ -40324,10 +40316,15 @@ var formatDataToArray = (data2) => {
     return [];
   return Array.isArray(data2) ? data2 : [data2];
 };
-var getNodeIndex = (node3) => {
-  return node3.parent ? node3.parent.children.findIndex((item) => {
-    return item.uid === node3.uid;
+var getNodeDataIndex = (node3) => {
+  return node3.parent ? node3.parent.nodeData.children.findIndex((item) => {
+    return item.data.uid === node3.uid;
   }) : 0;
+};
+var getNodeIndexInNodeList = (node3, nodeList) => {
+  return nodeList.findIndex((item) => {
+    return item.uid === node3.uid;
+  });
 };
 var generateColorByContent = (str) => {
   let hash = 0;
@@ -40348,6 +40345,41 @@ var htmlEscape = (str) => {
     str = str.replace(new RegExp(item[0], "g"), item[1]);
   });
   return str;
+};
+var setDataToClipboard = (data2) => {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(JSON.stringify(data2));
+  }
+};
+var getDataFromClipboard = async () => {
+  let text4 = null;
+  let img = null;
+  if (navigator.clipboard) {
+    text4 = await navigator.clipboard.readText();
+    const items = await navigator.clipboard.read();
+    if (items && items.length > 0) {
+      for (const clipboardItem of items) {
+        for (const type of clipboardItem.types) {
+          if (/^image\//.test(type)) {
+            img = await clipboardItem.getType(type);
+            break;
+          }
+        }
+      }
+    }
+  }
+  return {
+    text: text4,
+    img
+  };
+};
+var removeFromParentNodeData = (node3) => {
+  if (!node3 || !node3.parent)
+    return;
+  const index3 = getNodeDataIndex(node3);
+  if (index3 === -1)
+    return;
+  node3.parent.nodeData.children.splice(index3, 1);
 };
 
 // ../simple-mind-map/src/core/render/node/Style.js
@@ -40420,7 +40452,7 @@ var Style = class {
   }
   //  获取自身自定义样式
   getSelfStyle(prop) {
-    return this.ctx.nodeData.data[prop];
+    return this.ctx.getData(prop);
   }
   //  矩形
   rect(node3) {
@@ -40528,7 +40560,7 @@ var Style = class {
   // 是否设置了自定义的样式
   hasCustomStyle() {
     let res = false;
-    Object.keys(this.ctx.nodeData.data).forEach((item) => {
+    Object.keys(this.ctx.getData()).forEach((item) => {
       if (checkIsNodeStyleDataKey(item)) {
         res = true;
       }
@@ -46363,31 +46395,30 @@ var shapeList = [
 
 // ../simple-mind-map/src/core/render/node/nodeGeneralization.js
 function checkHasGeneralization() {
-  return !!this.nodeData.data.generalization;
+  return !!this.getData("generalization");
 }
 function createGeneralizationNode() {
   if (this.isGeneralization || !this.checkHasGeneralization()) {
     return;
   }
   if (!this._generalizationLine) {
-    this._generalizationLine = this.draw.path();
+    this._generalizationLine = this.lineDraw.path();
   }
   if (!this._generalizationNode) {
     this._generalizationNode = new Node_default({
       data: {
-        data: this.nodeData.data.generalization
+        data: this.getData("generalization")
       },
       uid: createUid(),
       renderer: this.renderer,
       mindMap: this.mindMap,
-      draw: this.draw,
       isGeneralization: true
     });
     this._generalizationNodeWidth = this._generalizationNode.width;
     this._generalizationNodeHeight = this._generalizationNode.height;
     this._generalizationNode.generalizationBelongNode = this;
-    if (this.nodeData.data.generalization.isActive) {
-      this.renderer.addActiveNode(this._generalizationNode);
+    if (this.getData("generalization").isActive) {
+      this.renderer.addNodeToActiveList(this._generalizationNode);
     }
   }
 }
@@ -46406,7 +46437,7 @@ function renderGeneralization() {
     this._generalizationNodeHeight = 0;
     return;
   }
-  if (this.nodeData.data.expand === false) {
+  if (this.getData("expand") === false) {
     this.removeGeneralization();
     return;
   }
@@ -46427,12 +46458,12 @@ function removeGeneralization() {
     this._generalizationLine = null;
   }
   if (this._generalizationNode) {
-    this.renderer.removeActiveNode(this._generalizationNode);
+    this.renderer.removeNodeFromActiveList(this._generalizationNode);
     this._generalizationNode.remove();
     this._generalizationNode = null;
   }
   if (this.generalizationBelongNode) {
-    this.draw.find(".generalization_" + this.generalizationBelongNode.uid).remove();
+    this.nodeDraw.find(".generalization_" + this.generalizationBelongNode.uid).remove();
   }
 }
 function hideGeneralization() {
@@ -46518,7 +46549,7 @@ function sumNode(data2 = []) {
   );
 }
 function updateExpandBtnNode() {
-  let { expand } = this.nodeData.data;
+  let { expand } = this.getData();
   if (expand === this._lastExpandBtnType)
     return;
   if (this._expandBtn) {
@@ -46581,7 +46612,7 @@ function renderExpandBtn() {
       this.mindMap.execCommand(
         "SET_NODE_EXPAND",
         this,
-        !this.nodeData.data.expand
+        !this.getData("expand")
       );
       this.mindMap.emit("expand_btn_click", this);
     });
@@ -46611,7 +46642,7 @@ function showExpandBtn() {
 function hideExpandBtn() {
   if (this.mindMap.opt.alwaysShowExpandBtn || this._isMouseenter)
     return;
-  let { isActive, expand } = this.nodeData.data;
+  let { isActive, expand } = this.getData();
   if (!isActive && expand) {
     setTimeout(() => {
       this.removeExpandBtn();
@@ -46973,14 +47004,14 @@ var icons_default = {
 
 // ../simple-mind-map/src/core/render/node/nodeCreateContents.js
 function createImgNode() {
-  let img = this.nodeData.data.image;
+  let img = this.getData("image");
   if (!img) {
     return;
   }
   let imgSize = this.getImgShowSize();
   let node3 = new Image2().load(img).size(...imgSize);
-  if (this.nodeData.data.imageTitle) {
-    node3.attr("title", this.nodeData.data.imageTitle);
+  if (this.getData("imageTitle")) {
+    node3.attr("title", this.getData("imageTitle"));
   }
   node3.on("dblclick", (e2) => {
     this.mindMap.emit("node_img_dblclick", this, e2);
@@ -47001,7 +47032,7 @@ function createImgNode() {
   };
 }
 function getImgShowSize() {
-  const { custom, width: width2, height: height2 } = this.nodeData.data.imageSize;
+  const { custom, width: width2, height: height2 } = this.getData("imageSize");
   if (custom)
     return [width2, height2];
   return resizeImgSize(
@@ -47012,7 +47043,7 @@ function getImgShowSize() {
   );
 }
 function createIconNode() {
-  let _data = this.nodeData.data;
+  let _data = this.getData();
   if (!_data.icon || _data.icon.length <= 0) {
     return [];
   }
@@ -47043,7 +47074,7 @@ function createRichTextNode() {
   const { textAutoWrapWidth } = this.mindMap.opt;
   let g2 = new G();
   let recoverText = false;
-  if (this.nodeData.data.resetRichText) {
+  if (this.getData("resetRichText")) {
     delete this.nodeData.data.resetRichText;
     recoverText = true;
   }
@@ -47053,7 +47084,7 @@ function createRichTextNode() {
     }
   }
   if (recoverText) {
-    let text4 = this.nodeData.data.text;
+    let text4 = this.getData("text");
     let isRichText = checkIsRichText(text4);
     let style = this.style.createStyleText();
     if (isRichText) {
@@ -47062,9 +47093,11 @@ function createRichTextNode() {
     } else {
       text4 = `<p><span style="${style}">${text4}</span></p>`;
     }
-    this.nodeData.data.text = text4;
+    this.setData({
+      text: text4
+    });
   }
-  let html2 = `<div>${this.nodeData.data.text}</div>`;
+  let html2 = `<div>${this.getData("text")}</div>`;
   if (!commonCaches.measureRichtextNodeTextSizeEl) {
     commonCaches.measureRichtextNodeTextSizeEl = document.createElement("div");
     commonCaches.measureRichtextNodeTextSizeEl.style.position = "fixed";
@@ -47100,7 +47133,7 @@ function createRichTextNode() {
   };
 }
 function createTextNode() {
-  if (this.nodeData.data.richText) {
+  if (this.getData("richText")) {
     return this.createRichTextNode();
   }
   let g2 = new G();
@@ -47108,8 +47141,8 @@ function createTextNode() {
   let lineHeight = this.getStyle("lineHeight", false);
   let textStyle = this.style.getTextFontStyle();
   let textArr = [];
-  if (!isUndef(this.nodeData.data.text)) {
-    textArr = String(this.nodeData.data.text).split(/\n/gim);
+  if (!isUndef(this.getData("text"))) {
+    textArr = String(this.getData("text")).split(/\n/gim);
   }
   let maxWidth = this.mindMap.opt.textAutoWrapWidth;
   let isMultiLine = false;
@@ -47155,7 +47188,7 @@ function createTextNode() {
   };
 }
 function createHyperlinkNode() {
-  let { hyperlink: hyperlink2, hyperlinkTitle } = this.nodeData.data;
+  let { hyperlink: hyperlink2, hyperlinkTitle } = this.getData();
   if (!hyperlink2) {
     return;
   }
@@ -47180,7 +47213,7 @@ function createHyperlinkNode() {
   };
 }
 function createTagNode() {
-  let tagData = this.nodeData.data.tag;
+  let tagData = this.getData("tag");
   if (!tagData || tagData.length <= 0) {
     return [];
   }
@@ -47204,7 +47237,7 @@ function createTagNode() {
   return nodes;
 }
 function createNoteNode() {
-  if (!this.nodeData.data.note) {
+  if (!this.getData("note")) {
     return null;
   }
   let iconSize = this.mindMap.themeConfig.iconSize;
@@ -47228,7 +47261,7 @@ function createNoteNode() {
       const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body;
       targetNode.appendChild(this.noteEl);
     }
-    this.noteEl.innerText = this.nodeData.data.note;
+    this.noteEl.innerText = this.getData("note");
   }
   node3.on("mouseover", () => {
     let { left, top } = node3.node.getBoundingClientRect();
@@ -47238,7 +47271,7 @@ function createNoteNode() {
       this.noteEl.style.display = "block";
     } else {
       this.mindMap.opt.customNoteContentShow.show(
-        this.nodeData.data.note,
+        this.getData("note"),
         left,
         top + iconSize
       );
@@ -47430,7 +47463,9 @@ var Node2 = class {
     this.uid = opt.uid;
     this.mindMap = opt.mindMap;
     this.renderer = opt.renderer;
-    this.draw = opt.draw || null;
+    this.draw = this.mindMap.draw;
+    this.nodeDraw = this.mindMap.nodeDraw;
+    this.lineDraw = this.mindMap.lineDraw;
     this.style = new Style_default(this);
     this.shapeInstance = new Shape2(this);
     this.shapePadding = {
@@ -47740,17 +47775,14 @@ var Node2 = class {
       }
       if (e2.ctrlKey && enableCtrlKeyNodeSelection) {
         this.isMultipleChoice = true;
-        let isActive = this.nodeData.data.isActive;
+        let isActive = this.getData("isActive");
         if (!isActive)
           this.mindMap.emit(
             "before_node_active",
             this,
             this.renderer.activeNodeList
           );
-        this.mindMap.execCommand("SET_NODE_ACTIVE", this, !isActive);
-        this.mindMap.renderer[isActive ? "removeActiveNode" : "addActiveNode"](
-          this
-        );
+        this.mindMap.renderer[isActive ? "removeNodeFromActiveList" : "addNodeToActiveList"](this);
         this.mindMap.emit("node_active", isActive ? null : this, [
           ...this.mindMap.renderer.activeNodeList
         ]);
@@ -47794,10 +47826,10 @@ var Node2 = class {
       if (this.mindMap.select && !useLeftKeySelectionRightKeyDrag && this.mindMap.select.hasSelectRange()) {
         return;
       }
-      if (this.nodeData.data.isActive) {
-        this.renderer.clearActive();
+      if (!(this.getData("isActive") && this.renderer.activeNodeList.length === 1)) {
+        this.renderer.clearActiveNodeList();
+        this.active(e2);
       }
-      this.active(e2);
       this.mindMap.emit("node_contextmenu", e2, this);
     });
   }
@@ -47807,13 +47839,12 @@ var Node2 = class {
       return;
     }
     e2 && e2.stopPropagation();
-    if (this.nodeData.data.isActive) {
+    if (this.getData("isActive")) {
       return;
     }
     this.mindMap.emit("before_node_active", this, this.renderer.activeNodeList);
-    this.renderer.clearActive();
-    this.mindMap.execCommand("SET_NODE_ACTIVE", this, true);
-    this.renderer.addActiveNode(this);
+    this.renderer.clearActiveNodeList();
+    this.renderer.addNodeToActiveList(this);
     this.mindMap.emit("node_active", this, [...this.renderer.activeNodeList]);
   }
   //  更新节点
@@ -47821,7 +47852,7 @@ var Node2 = class {
     if (!this.group) {
       return;
     }
-    this.updateNodeActive();
+    this.updateNodeActiveClass();
     let { alwaysShowExpandBtn } = this.mindMap.opt;
     if (alwaysShowExpandBtn) {
       if (this._expandBtn && this.nodeData.children.length <= 0) {
@@ -47830,7 +47861,7 @@ var Node2 = class {
         this.renderExpandBtn();
       }
     } else {
-      let { isActive, expand } = this.nodeData.data;
+      let { isActive, expand } = this.getData();
       if (expand && !isActive && !this._isMouseenter) {
         this.hideExpandBtn();
       } else {
@@ -47864,11 +47895,22 @@ var Node2 = class {
     return sizeChange;
   }
   // 更新节点激活状态
-  updateNodeActive() {
+  updateNodeActiveClass() {
     if (!this.group)
       return;
-    const isActive = this.nodeData.data.isActive;
+    const isActive = this.getData("isActive");
     this.group[isActive ? "addClass" : "removeClass"]("active");
+  }
+  // 根据是否激活更新节点
+  updateNodeByActive(active) {
+    if (this.group) {
+      if (active) {
+        this.showExpandBtn();
+      } else {
+        this.hideExpandBtn();
+      }
+      this.updateNodeActiveClass();
+    }
   }
   //  递归渲染
   render(callback = () => {
@@ -47881,11 +47923,11 @@ var Node2 = class {
         cursor: "default"
       });
       this.bindGroupEvent();
-      this.draw.add(this.group);
+      this.nodeDraw.add(this.group);
       this.layout();
       this.update();
     } else {
-      this.draw.add(this.group);
+      this.nodeDraw.add(this.group);
       if (this.needLayout) {
         this.needLayout = false;
         this.layout();
@@ -47893,7 +47935,7 @@ var Node2 = class {
       this.updateExpandBtnPlaceholderRect();
       this.update();
     }
-    if (this.children && this.children.length && this.nodeData.data.expand !== false) {
+    if (this.children && this.children.length && this.getData("expand") !== false) {
       let index3 = 0;
       this.children.forEach((item) => {
         item.render(() => {
@@ -47935,6 +47977,9 @@ var Node2 = class {
     this.removeGeneralization();
     this.removeLine();
     this.group = null;
+    if (this.parent) {
+      this.parent.removeLine();
+    }
   }
   //  隐藏节点
   hide() {
@@ -48022,7 +48067,7 @@ var Node2 = class {
   }
   //  连线
   renderLine(deep = false) {
-    if (this.nodeData.data.expand === false) {
+    if (this.getData("expand") === false) {
       return;
     }
     let childrenLen = this.nodeData.children.length;
@@ -48031,7 +48076,7 @@ var Node2 = class {
     }
     if (childrenLen > this._lines.length) {
       new Array(childrenLen - this._lines.length).fill(0).forEach(() => {
-        this._lines.push(this.draw.path());
+        this._lines.push(this.lineDraw.path());
       });
     } else if (childrenLen < this._lines.length) {
       this._lines.slice(childrenLen).forEach((line) => {
@@ -48119,7 +48164,7 @@ var Node2 = class {
   }
   //  获取padding值
   getPaddingVale() {
-    let { isActive } = this.nodeData.data;
+    let { isActive } = this.getData();
     return {
       paddingX: this.getStyle("paddingX", true, isActive),
       paddingY: this.getStyle("paddingY", true, isActive)
@@ -48152,7 +48197,7 @@ var Node2 = class {
   }
   //  获取数据
   getData(key) {
-    return key ? this.nodeData.data[key] || "" : this.nodeData.data;
+    return key ? this.nodeData.data[key] : this.nodeData.data;
   }
   // 是否存在自定义样式
   hasCustomStyle() {
@@ -48201,6 +48246,7 @@ var Base2 = class {
     this.renderer = renderer;
     this.mindMap = renderer.mindMap;
     this.draw = this.mindMap.draw;
+    this.lineDraw = this.mindMap.lineDraw;
     this.root = null;
     this.lru = new Lru(this.mindMap.opt.maxNodeCacheCount);
   }
@@ -48265,7 +48311,7 @@ var Base2 = class {
       }
     } else if (this.lru.has(data2.data.uid) && !this.renderer.reRender) {
       newNode = this.lru.get(data2.data.uid);
-      let lastData = JSON.stringify(newNode.nodeData.data);
+      let lastData = JSON.stringify(newNode.getData());
       let isLayerTypeChange = this.checkIsLayerTypeChange(
         newNode.layerIndex,
         layerIndex
@@ -48296,11 +48342,13 @@ var Base2 = class {
       this.cacheNode(uid, newNode);
       data2._node = newNode;
       if (data2.data.isActive) {
-        this.renderer.addActiveNode(newNode);
+        this.renderer.addNodeToActiveList(newNode);
       }
     }
     if (this.mindMap.renderer.findActiveNodeIndex(newNode) !== -1) {
-      newNode.nodeData.data.isActive = true;
+      newNode.setData({
+        isActive: true
+      });
     }
     if (isRoot) {
       newNode.isRoot = true;
@@ -48439,8 +48487,8 @@ var Base2 = class {
       if (root2.children && root2.children.length > 0) {
         root2.children.forEach((child) => {
           let { left: left2, right: right2, top: top2, bottom: bottom2 } = walk2(child);
-          let generalizationWidth = child.checkHasGeneralization() && child.nodeData.data.expand ? child._generalizationNodeWidth + generalizationNodeMargin : 0;
-          let generalizationHeight = child.checkHasGeneralization() && child.nodeData.data.expand ? child._generalizationNodeHeight + generalizationNodeMargin : 0;
+          let generalizationWidth = child.checkHasGeneralization() && child.getData("expand") ? child._generalizationNodeWidth + generalizationNodeMargin : 0;
+          let generalizationHeight = child.checkHasGeneralization() && child.getData("expand") ? child._generalizationNodeHeight + generalizationNodeMargin : 0;
           if (left2 - (dir === "h" ? generalizationWidth : 0) < _left) {
             _left = left2 - (dir === "h" ? generalizationWidth : 0);
           }
@@ -48546,7 +48594,7 @@ var LogicalStructure = class extends Base_default {
       this.root,
       null,
       (node3, parent, isRoot, layerIndex) => {
-        if (node3.nodeData.data.expand && node3.children && node3.children.length) {
+        if (node3.getData("expand") && node3.children && node3.children.length) {
           let marginY = this.getMarginY(layerIndex + 1);
           let top = node3.top + node3.height / 2 - node3.childrenAreaHeight / 2;
           let totalTop = top + marginY;
@@ -48566,7 +48614,7 @@ var LogicalStructure = class extends Base_default {
       this.root,
       null,
       (node3, parent, isRoot, layerIndex) => {
-        if (!node3.nodeData.data.expand) {
+        if (!node3.getData("expand")) {
           return;
         }
         let difference2 = node3.childrenAreaHeight2 - this.getMarginY(layerIndex + 1) * 2 - node3.height;
@@ -48582,9 +48630,7 @@ var LogicalStructure = class extends Base_default {
   updateBrothers(node3, addHeight) {
     if (node3.parent) {
       let childrenList = node3.parent.children;
-      let index3 = childrenList.findIndex((item) => {
-        return item.uid === node3.uid;
-      });
+      let index3 = getNodeIndexInNodeList(node3, childrenList);
       childrenList.forEach((item, _index) => {
         if (item.uid === node3.uid || item.hasCustomPosition()) {
           return;
@@ -48815,7 +48861,7 @@ var MindMap = class extends Base_default {
       this.root,
       null,
       (node3, parent, isRoot, layerIndex) => {
-        if (node3.nodeData.data.expand && node3.children && node3.children.length) {
+        if (node3.getData("expand") && node3.children && node3.children.length) {
           let marginY = this.getMarginY(layerIndex + 1);
           let baseTop = node3.top + node3.height / 2 + marginY;
           let leftTotalTop = baseTop - node3.leftChildrenAreaHeight / 2;
@@ -48841,7 +48887,7 @@ var MindMap = class extends Base_default {
       this.root,
       null,
       (node3, parent, isRoot, layerIndex) => {
-        if (!node3.nodeData.data.expand) {
+        if (!node3.getData("expand")) {
           return;
         }
         let base = this.getMarginY(layerIndex + 1) * 2 + node3.height;
@@ -48861,9 +48907,7 @@ var MindMap = class extends Base_default {
       let childrenList = node3.parent.children.filter((item) => {
         return item.dir === node3.dir;
       });
-      let index3 = childrenList.findIndex((item) => {
-        return item.uid === node3.uid;
-      });
+      let index3 = getNodeIndexInNodeList(node3, childrenList);
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
           return;
@@ -49100,7 +49144,7 @@ var CatalogOrganization = class extends Base_default {
       this.root,
       null,
       (node3, parent, isRoot, layerIndex) => {
-        if (node3.nodeData.data.expand && node3.children && node3.children.length) {
+        if (node3.getData("expand") && node3.children && node3.children.length) {
           let marginX = this.getMarginX(layerIndex + 1);
           let marginY = this.getMarginY(layerIndex + 1);
           if (isRoot) {
@@ -49130,7 +49174,7 @@ var CatalogOrganization = class extends Base_default {
       this.root,
       null,
       (node3, parent, isRoot, layerIndex) => {
-        if (!node3.nodeData.data.expand) {
+        if (!node3.getData("expand")) {
           return;
         }
         if (parent && parent.isRoot) {
@@ -49164,9 +49208,7 @@ var CatalogOrganization = class extends Base_default {
   updateBrothersLeft(node3, addWidth) {
     if (node3.parent) {
       let childrenList = node3.parent.children;
-      let index3 = childrenList.findIndex((item) => {
-        return item.uid === node3.uid;
-      });
+      let index3 = getNodeIndexInNodeList(node3, childrenList);
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition() || _index <= index3) {
           return;
@@ -49183,9 +49225,7 @@ var CatalogOrganization = class extends Base_default {
   updateBrothersTop(node3, addHeight) {
     if (node3.parent && !node3.parent.isRoot) {
       let childrenList = node3.parent.children;
-      let index3 = childrenList.findIndex((item) => {
-        return item.uid === node3.uid;
-      });
+      let index3 = getNodeIndexInNodeList(node3, childrenList);
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
           return;
@@ -49235,13 +49275,13 @@ var CatalogOrganization = class extends Base_default {
       });
       minx = Math.min(minx, x1);
       maxx = Math.max(maxx, x1);
-      let line1 = this.draw.path();
+      let line1 = this.lineDraw.path();
       node3.style.line(line1);
       line1.plot(`M ${x1},${y1} L ${x1},${y1 + s1}`);
       node3._lines.push(line1);
       style && style(line1, node3);
       if (len > 0) {
-        let lin2 = this.draw.path();
+        let lin2 = this.lineDraw.path();
         node3.style.line(lin2);
         lin2.plot(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`);
         node3._lines.push(lin2);
@@ -49287,7 +49327,7 @@ var CatalogOrganization = class extends Base_default {
         style && style(lines[index3], item);
       });
       if (len > 0) {
-        let lin2 = this.draw.path();
+        let lin2 = this.lineDraw.path();
         expandBtnSize = len > 0 ? expandBtnSize : 0;
         node3.style.line(lin2);
         if (maxy < y1 + expandBtnSize) {
@@ -49400,7 +49440,7 @@ var OrganizationStructure = class extends Base_default {
       this.root,
       null,
       (node3, parent, isRoot, layerIndex) => {
-        if (node3.nodeData.data.expand && node3.children && node3.children.length) {
+        if (node3.getData("expand") && node3.children && node3.children.length) {
           let marginX = this.getMarginY(layerIndex + 1);
           let left = node3.left + node3.width / 2 - node3.childrenAreaWidth / 2;
           let totalLeft = left + marginX;
@@ -49420,7 +49460,7 @@ var OrganizationStructure = class extends Base_default {
       this.root,
       null,
       (node3, parent, isRoot, layerIndex) => {
-        if (!node3.nodeData.data.expand) {
+        if (!node3.getData("expand")) {
           return;
         }
         let difference2 = node3.childrenAreaWidth2 - this.getMarginY(layerIndex + 1) * 2 - node3.width;
@@ -49436,9 +49476,7 @@ var OrganizationStructure = class extends Base_default {
   updateBrothers(node3, addWidth) {
     if (node3.parent) {
       let childrenList = node3.parent.children;
-      let index3 = childrenList.findIndex((item) => {
-        return item.uid === node3.uid;
-      });
+      let index3 = getNodeIndexInNodeList(node3, childrenList);
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
           return;
@@ -49514,14 +49552,14 @@ var OrganizationStructure = class extends Base_default {
     });
     minx = Math.min(x1, minx);
     maxx = Math.max(x1, maxx);
-    let line1 = this.draw.path();
+    let line1 = this.lineDraw.path();
     node3.style.line(line1);
     expandBtnSize = len > 0 && !isRoot ? expandBtnSize : 0;
     line1.plot(`M ${x1},${y1 + expandBtnSize} L ${x1},${y1 + s1}`);
     node3._lines.push(line1);
     style && style(line1, node3);
     if (len > 0) {
-      let lin2 = this.draw.path();
+      let lin2 = this.lineDraw.path();
       node3.style.line(lin2);
       lin2.plot(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`);
       node3._lines.push(lin2);
@@ -49627,7 +49665,7 @@ var Timeline2 = class extends Base_default {
       this.root,
       null,
       (node3, parent, isRoot, layerIndex, index3) => {
-        if (node3.nodeData.data.expand && node3.children && node3.children.length) {
+        if (node3.getData("expand") && node3.children && node3.children.length) {
           let marginX = this.getMarginX(layerIndex + 1);
           let marginY = this.getMarginY(layerIndex + 1);
           if (isRoot) {
@@ -49657,7 +49695,7 @@ var Timeline2 = class extends Base_default {
       this.root,
       null,
       (node3, parent, isRoot, layerIndex) => {
-        if (!node3.nodeData.data.expand) {
+        if (!node3.getData("expand")) {
           return;
         }
         if (node3.isRoot) {
@@ -49720,9 +49758,7 @@ var Timeline2 = class extends Base_default {
   updateBrothersTop(node3, addHeight) {
     if (node3.parent && !node3.parent.isRoot) {
       let childrenList = node3.parent.children;
-      let index3 = childrenList.findIndex((item) => {
-        return item.uid === node3.uid;
-      });
+      let index3 = getNodeIndexInNodeList(node3, childrenList);
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
           return;
@@ -49777,7 +49813,7 @@ var Timeline2 = class extends Base_default {
         style && style(lines[index3], item);
       });
       if (len > 0) {
-        let line = this.draw.path();
+        let line = this.lineDraw.path();
         expandBtnSize = len > 0 ? expandBtnSize : 0;
         if (node3.parent && node3.parent.isRoot && node3.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP) {
           line.plot(`M ${x3},${top} L ${x3},${miny}`);
@@ -49918,7 +49954,7 @@ var VerticalTimeline = class extends Base_default {
       this.root,
       null,
       (node3, parent, isRoot, layerIndex, index3) => {
-        if (node3.nodeData.data.expand && node3.children && node3.children.length) {
+        if (node3.getData("expand") && node3.children && node3.children.length) {
           let marginY = this.getMarginY(layerIndex + 1);
           if (isRoot) {
             let top = node3.top + node3.height;
@@ -49948,7 +49984,7 @@ var VerticalTimeline = class extends Base_default {
       this.root,
       null,
       (node3, parent, isRoot, layerIndex) => {
-        if (!node3.nodeData.data.expand) {
+        if (!node3.getData("expand")) {
           return;
         }
         if (isRoot)
@@ -49967,9 +50003,7 @@ var VerticalTimeline = class extends Base_default {
   updateBrothers(node3, addHeight) {
     if (node3.parent) {
       let childrenList = node3.parent.children;
-      let index3 = childrenList.findIndex((item) => {
-        return item.uid === node3.uid;
-      });
+      let index3 = getNodeIndexInNodeList(node3, childrenList);
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition())
           return;
@@ -50003,9 +50037,7 @@ var VerticalTimeline = class extends Base_default {
   updateBrothersTop(node3, addHeight) {
     if (node3.parent && !node3.parent.isRoot) {
       let childrenList = node3.parent.children;
-      let index3 = childrenList.findIndex((item) => {
-        return item.uid === node3.uid;
-      });
+      let index3 = getNodeIndexInNodeList(node3, childrenList);
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
           return;
@@ -50466,7 +50498,7 @@ var Fishbone = class extends Base_default {
       this.root,
       null,
       (node3, parent, isRoot, layerIndex) => {
-        if (!node3.nodeData.data.expand) {
+        if (!node3.getData("expand")) {
           return;
         }
         let params = { node: node3, parent, layerIndex, ctx: this };
@@ -50540,9 +50572,7 @@ var Fishbone = class extends Base_default {
   updateBrothersTop(node3, addHeight) {
     if (node3.parent && !node3.parent.isRoot) {
       let childrenList = node3.parent.children;
-      let index3 = childrenList.findIndex((item) => {
-        return item.uid === node3.uid;
-      });
+      let index3 = getNodeIndexInNodeList(node3, childrenList);
       childrenList.forEach((item, _index) => {
         if (item.hasCustomPosition()) {
           return;
@@ -50590,7 +50620,7 @@ var Fishbone = class extends Base_default {
         let nodeLineX = item.left;
         let offset2 = node3.height / 2 + marginY;
         let offsetX = offset2 / Math.tan(degToRad(this.mindMap.opt.fishboneDeg));
-        let line2 = this.draw.path();
+        let line2 = this.lineDraw.path();
         if (this.checkIsTop(item)) {
           line2.plot(
             `M ${nodeLineX - offsetX},${item.top + item.height + offset2} L ${item.left},${item.top + item.height}`
@@ -50606,7 +50636,7 @@ var Fishbone = class extends Base_default {
       });
       let nodeHalfTop = node3.top + node3.height / 2;
       let offset = node3.height / 2 + this.getMarginY(node3.layerIndex + 1);
-      let line = this.draw.path();
+      let line = this.lineDraw.path();
       line.plot(
         `M ${node3.left + node3.width},${nodeHalfTop} L ${maxx - offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg))},${nodeHalfTop}`
       );
@@ -50636,7 +50666,7 @@ var Fishbone = class extends Base_default {
         }
       });
       if (len >= 0) {
-        let line = this.draw.path();
+        let line = this.lineDraw.path();
         expandBtnSize = len > 0 ? expandBtnSize : 0;
         let lineLength = maxx - node3.left - node3.width * this.indent;
         lineLength = Math.max(lineLength, 0);
@@ -50861,7 +50891,7 @@ var TextEdit = class {
     let scale = this.mindMap.view.scale;
     let lineHeight = node3.style.merge("lineHeight");
     let fontSize = node3.style.merge("fontSize");
-    let textLines = (this.cacheEditingText || node3.nodeData.data.text).split(/\n/gim).map((item) => {
+    let textLines = (this.cacheEditingText || node3.getData("text")).split(/\n/gim).map((item) => {
       return htmlEscape(item);
     });
     let isMultiLine = node3._textData.node.attr("data-ismultiLine") === "true";
@@ -51124,11 +51154,11 @@ var Render = class {
     this.opt = opt;
     this.mindMap = opt.mindMap;
     this.themeConfig = this.mindMap.themeConfig;
-    this.draw = this.mindMap.draw;
     this.renderTree = (0, import_deepmerge.default)({}, this.mindMap.opt.data || {});
     this.reRender = false;
     this.isRendering = false;
     this.hasWaitRendering = false;
+    this.waitRenderingParams = [];
     this.nodeCache = {};
     this.lastNodeCache = {};
     this.renderSource = "";
@@ -51160,15 +51190,15 @@ var Render = class {
   //   绑定事件
   bindEvent() {
     this.mindMap.on("draw_click", (e2) => {
-      let isTrueClick = true;
-      let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt;
-      if (useLeftKeySelectionRightKeyDrag) {
-        let mousedownPos = this.mindMap.event.mousedownPos;
-        isTrueClick = Math.abs(e2.clientX - mousedownPos.x) <= 5 && Math.abs(e2.clientY - mousedownPos.y) <= 5;
-      }
-      if (isTrueClick && this.activeNodeList.length > 0) {
-        this.mindMap.execCommand("CLEAR_ACTIVE_NODE");
-      }
+      this.clearActiveNodeListOnDrawClick(e2, "click");
+    });
+    this.mindMap.on("contextmenu", (e2) => {
+      this.clearActiveNodeListOnDrawClick(e2, "contextmenu");
+    });
+    this.mindMap.svg.on("dblclick", () => {
+      if (!this.mindMap.opt.enableDblclickBackToRootNode)
+        return;
+      this.setRootNodeCenter();
     });
   }
   //  注册命令
@@ -51190,6 +51220,8 @@ var Render = class {
       "INSERT_MULTI_CHILD_NODE",
       this.insertMultiChildNode
     );
+    this.insertParentNode = this.insertParentNode.bind(this);
+    this.mindMap.command.add("INSERT_PARENT_NODE", this.insertParentNode);
     this.upNode = this.upNode.bind(this);
     this.mindMap.command.add("UP_NODE", this.upNode);
     this.downNode = this.downNode.bind(this);
@@ -51202,6 +51234,8 @@ var Render = class {
     this.mindMap.command.add("MOVE_NODE_TO", this.moveNodeTo);
     this.removeNode = this.removeNode.bind(this);
     this.mindMap.command.add("REMOVE_NODE", this.removeNode);
+    this.removeCurrentNode = this.removeCurrentNode.bind(this);
+    this.mindMap.command.add("REMOVE_CURRENT_NODE", this.removeCurrentNode);
     this.pasteNode = this.pasteNode.bind(this);
     this.mindMap.command.add("PASTE_NODE", this.pasteNode);
     this.cutNode = this.cutNode.bind(this);
@@ -51212,8 +51246,8 @@ var Render = class {
     this.mindMap.command.add("SET_NODE_STYLES", this.setNodeStyles);
     this.setNodeActive = this.setNodeActive.bind(this);
     this.mindMap.command.add("SET_NODE_ACTIVE", this.setNodeActive);
-    this.clearAllActive = this.clearAllActive.bind(this);
-    this.mindMap.command.add("CLEAR_ACTIVE_NODE", this.clearAllActive);
+    this.clearActiveNode = this.clearActiveNode.bind(this);
+    this.mindMap.command.add("CLEAR_ACTIVE_NODE", this.clearActiveNode);
     this.setNodeExpand = this.setNodeExpand.bind(this);
     this.mindMap.command.add("SET_NODE_EXPAND", this.setNodeExpand);
     this.expandAllNode = this.expandAllNode.bind(this);
@@ -51259,20 +51293,26 @@ var Render = class {
     this.mindMap.keyCommand.addShortcut("Tab", () => {
       this.mindMap.execCommand("INSERT_CHILD_NODE");
     });
-    this.insertNodeWrap = () => {
+    this.mindMap.keyCommand.addShortcut("Enter", () => {
       if (this.textEdit.showTextEdit) {
         return;
       }
       this.mindMap.execCommand("INSERT_NODE");
-    };
-    this.mindMap.keyCommand.addShortcut("Enter", this.insertNodeWrap);
-    this.mindMap.keyCommand.addShortcut("Control+g", this.addGeneralization);
+    });
+    this.mindMap.keyCommand.addShortcut("Shift+Tab", () => {
+      this.mindMap.execCommand("INSERT_PARENT_NODE");
+    });
+    this.mindMap.keyCommand.addShortcut("Control+g", () => {
+      this.mindMap.execCommand("ADD_GENERALIZATION");
+    });
     this.toggleActiveExpand = this.toggleActiveExpand.bind(this);
     this.mindMap.keyCommand.addShortcut("/", this.toggleActiveExpand);
-    this.removeNodeWrap = () => {
+    this.mindMap.keyCommand.addShortcut("Del|Backspace", () => {
       this.mindMap.execCommand("REMOVE_NODE");
-    };
-    this.mindMap.keyCommand.addShortcut("Del|Backspace", this.removeNodeWrap);
+    });
+    this.mindMap.keyCommand.addShortcut("Shift+Backspace", () => {
+      this.mindMap.execCommand("REMOVE_CURRENT_NODE");
+    });
     this.mindMap.on("before_show_text_edit", () => {
       this.startTextEdit();
     });
@@ -51282,16 +51322,41 @@ var Render = class {
     this.mindMap.keyCommand.addShortcut("Control+a", () => {
       this.mindMap.execCommand("SELECT_ALL");
     });
-    this.mindMap.keyCommand.addShortcut("Control+l", this.resetLayout);
-    this.mindMap.keyCommand.addShortcut("Control+Up", this.upNode);
-    this.mindMap.keyCommand.addShortcut("Control+Down", this.downNode);
-    this.copy = this.copy.bind(this);
-    this.mindMap.keyCommand.addShortcut("Control+c", this.copy);
+    this.mindMap.keyCommand.addShortcut("Control+l", () => {
+      this.mindMap.execCommand("RESET_LAYOUT", this.resetLayout);
+    });
+    this.mindMap.keyCommand.addShortcut("Control+Up", () => {
+      this.mindMap.execCommand("UP_NODE");
+    });
+    this.mindMap.keyCommand.addShortcut("Control+Down", () => {
+      this.mindMap.execCommand("DOWN_NODE");
+    });
+    this.mindMap.keyCommand.addShortcut("Control+c", () => {
+      this.copy();
+    });
     this.mindMap.keyCommand.addShortcut("Control+v", () => {
       this.onPaste();
     });
-    this.cut = this.cut.bind(this);
-    this.mindMap.keyCommand.addShortcut("Control+x", this.cut);
+    this.mindMap.keyCommand.addShortcut("Control+x", () => {
+      this.cut();
+    });
+    this.mindMap.keyCommand.addShortcut("Control+Enter", () => {
+      this.setRootNodeCenter();
+    });
+  }
+  // 鼠标点击画布时清空当前激活节点列表
+  clearActiveNodeListOnDrawClick(e2, eventType) {
+    if (this.activeNodeList.length <= 0)
+      return;
+    let isTrueClick = true;
+    const { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt;
+    if (eventType === "contextmenu" ? !useLeftKeySelectionRightKeyDrag : useLeftKeySelectionRightKeyDrag) {
+      const mousedownPos = this.mindMap.event.mousedownPos;
+      isTrueClick = Math.abs(e2.clientX - mousedownPos.x) <= 5 && Math.abs(e2.clientY - mousedownPos.y) <= 5;
+    }
+    if (isTrueClick) {
+      this.mindMap.execCommand("CLEAR_ACTIVE_NODE");
+    }
   }
   //  开启文字编辑，会禁用回车键和删除键相关快捷键防止冲突
   startTextEdit() {
@@ -51306,6 +51371,7 @@ var Render = class {
   }, source) {
     if (this.isRendering) {
       this.hasWaitRendering = true;
+      this.waitRenderingParams = [callback, source];
       return;
     }
     this.isRendering = true;
@@ -51313,15 +51379,14 @@ var Render = class {
     this.lastNodeCache = this.nodeCache;
     this.nodeCache = {};
     if (this.reRender) {
-      this.clearActive();
+      this.clearActiveNodeList();
     }
     this.layout.doLayout((root2) => {
       Object.keys(this.lastNodeCache).forEach((uid) => {
         if (!this.nodeCache[uid]) {
+          this.removeNodeFromActiveList(this.lastNodeCache[uid]);
+          this.emitNodeActiveEvent();
           this.lastNodeCache[uid].destroy();
-          if (this.lastNodeCache[uid].parent) {
-            this.lastNodeCache[uid].parent.removeLine();
-          }
         }
       });
       this.root = root2;
@@ -51330,8 +51395,10 @@ var Render = class {
         this.mindMap.emit("node_tree_render_end");
         callback && callback();
         if (this.hasWaitRendering) {
+          const params = this.waitRenderingParams;
           this.hasWaitRendering = false;
-          this.render(callback, source);
+          this.waitRenderingParams = [];
+          this.render(...params);
         } else {
           if (this.mindMap.richText && [CONSTANTS.CHANGE_THEME, CONSTANTS.SET_DATA].includes(source)) {
             this.mindMap.command.addHistory();
@@ -51339,43 +51406,43 @@ var Render = class {
         }
       });
     });
-    this.mindMap.emit("node_active", null, [...this.activeNodeList]);
-  }
-  //  清除当前激活的节点
-  clearActive() {
-    this.activeNodeList.forEach((item) => {
-      this.setNodeActive(item, false);
-    });
-    this.activeNodeList = [];
+    this.emitNodeActiveEvent();
   }
   //  清除当前所有激活节点，并会触发事件
-  clearAllActive() {
+  clearActiveNode() {
     if (this.activeNodeList.length <= 0) {
       return;
     }
-    this.clearActive();
+    this.clearActiveNodeList();
     this.mindMap.emit("node_active", null, []);
   }
-  //   添加节点到激活列表里
-  addActiveNode(node3) {
-    let index3 = this.findActiveNodeIndex(node3);
+  //  清除当前激活的节点列表
+  clearActiveNodeList() {
+    this.activeNodeList.forEach((item) => {
+      this.mindMap.execCommand("SET_NODE_ACTIVE", item, false);
+    });
+    this.activeNodeList = [];
+  }
+  // 添加节点到激活列表里
+  addNodeToActiveList(node3) {
+    const index3 = this.findActiveNodeIndex(node3);
     if (index3 === -1) {
+      this.mindMap.execCommand("SET_NODE_ACTIVE", node3, true);
       this.activeNodeList.push(node3);
     }
   }
-  //  在激活列表里移除某个节点
-  removeActiveNode(node3) {
+  // 在激活列表里移除某个节点
+  removeNodeFromActiveList(node3) {
     let index3 = this.findActiveNodeIndex(node3);
     if (index3 === -1) {
       return;
     }
+    this.mindMap.execCommand("SET_NODE_ACTIVE", node3, false);
     this.activeNodeList.splice(index3, 1);
   }
   //  检索某个节点在激活列表里的索引
   findActiveNodeIndex(node3) {
-    return this.activeNodeList.findIndex((item) => {
-      return item.uid === node3.uid;
-    });
+    return getNodeIndexInNodeList(node3, this.activeNodeList);
   }
   //  全选
   selectAll() {
@@ -51383,13 +51450,8 @@ var Render = class {
       this.root,
       null,
       (node3) => {
-        if (!node3.nodeData.data.isActive) {
-          node3.nodeData.data.isActive = true;
-          this.addActiveNode(node3);
-          node3.showExpandBtn();
-          setTimeout(() => {
-            node3.updateNodeActive();
-          }, 0);
+        if (!node3.getData("isActive")) {
+          this.addNodeToActiveList(node3);
         }
       },
       null,
@@ -51397,21 +51459,20 @@ var Render = class {
       0,
       0
     );
-    this.mindMap.emit("node_active", null, [...this.activeNodeList]);
+    this.emitNodeActiveEvent();
   }
   //  回退
   back(step) {
-    this.clearAllActive();
-    let data2 = this.mindMap.command.back(step);
-    if (data2) {
-      this.renderTree = data2;
-      this.mindMap.render();
-    }
+    this.backForward("back", step);
   }
   //  前进
   forward(step) {
-    this.clearAllActive();
-    let data2 = this.mindMap.command.forward(step);
+    this.backForward("forward", step);
+  }
+  // 前进回退
+  backForward(type, step) {
+    this.mindMap.execCommand("CLEAR_ACTIVE_NODE");
+    const data2 = this.mindMap.command[type](step);
     if (data2) {
       this.renderTree = data2;
       this.mindMap.render();
@@ -51441,20 +51502,14 @@ var Render = class {
     appointChildren = addDataToAppointNodes(appointChildren, {
       ...params
     });
-    const needDestroyNodeList = {};
     list2.forEach((node3) => {
       if (node3.isGeneralization || node3.isRoot) {
         return;
       }
       const parent = node3.parent;
       const isOneLayer = node3.layerIndex === 1;
-      if (isOneLayer && !needDestroyNodeList[parent.uid]) {
-        needDestroyNodeList[parent.uid] = parent;
-      }
       const text4 = isOneLayer ? defaultInsertSecondLevelNodeText : defaultInsertBelowSecondLevelNodeText;
-      const index3 = parent.nodeData.children.findIndex((item) => {
-        return item.data.uid === node3.uid;
-      });
+      const index3 = getNodeDataIndex(node3);
       const newNodeData = {
         inserting: handleMultiNodes ? false : openEdit,
         // 如果同时对多个节点插入子节点，那么无需进入编辑模式,
@@ -51468,11 +51523,8 @@ var Render = class {
       };
       parent.nodeData.children.splice(index3 + 1, 0, newNodeData);
     });
-    Object.keys(needDestroyNodeList).forEach((key) => {
-      needDestroyNodeList[key].destroy();
-    });
     if (handleMultiNodes || !openEdit) {
-      this.clearActive();
+      this.clearActiveNodeList();
     }
     this.mindMap.render();
   }
@@ -51494,30 +51546,19 @@ var Render = class {
       isActive: true
     };
     nodeList = addDataToAppointNodes(nodeList, params);
-    const needDestroyNodeList = {};
     list2.forEach((node3) => {
       if (node3.isGeneralization || node3.isRoot) {
         return;
       }
       const parent = node3.parent;
-      const isOneLayer = node3.layerIndex === 1;
-      if (isOneLayer && !needDestroyNodeList[parent.uid]) {
-        needDestroyNodeList[parent.uid] = parent;
-      }
-      const index3 = parent.nodeData.children.findIndex((item) => {
-        return item.data.uid === node3.uid;
-      });
-      const newNodeList = createUidForAppointNodes(simpleDeepClone(nodeList), true);
-      parent.nodeData.children.splice(
-        index3 + 1,
-        0,
-        ...newNodeList
+      const index3 = getNodeDataIndex(node3);
+      const newNodeList = createUidForAppointNodes(
+        simpleDeepClone(nodeList),
+        true
       );
+      parent.nodeData.children.splice(index3 + 1, 0, ...newNodeList);
     });
-    Object.keys(needDestroyNodeList).forEach((key) => {
-      needDestroyNodeList[key].destroy();
-    });
-    this.clearActive();
+    this.clearActiveNodeList();
     this.mindMap.render();
   }
   //  插入子节点
@@ -51564,13 +51605,12 @@ var Render = class {
         children: [...createUidForAppointNodes(appointChildren, true)]
       };
       node3.nodeData.children.push(newNode);
-      node3.nodeData.data.expand = true;
-      if (node3.isRoot) {
-        node3.destroy();
-      }
+      node3.setData({
+        expand: true
+      });
     });
     if (handleMultiNodes || !openEdit) {
-      this.clearActive();
+      this.clearActiveNodeList();
     }
     this.mindMap.render();
   }
@@ -51601,12 +51641,57 @@ var Render = class {
       }
       childList = createUidForAppointNodes(childList, true);
       node3.nodeData.children.push(...childList);
-      node3.nodeData.data.expand = true;
-      if (node3.isRoot) {
-        node3.destroy();
-      }
+      node3.setData({
+        expand: true
+      });
     });
-    this.clearActive();
+    this.clearActiveNodeList();
+    this.mindMap.render();
+  }
+  // 插入父节点
+  insertParentNode(openEdit = true, appointNodes, appointData) {
+    appointNodes = formatDataToArray(appointNodes);
+    if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
+      return;
+    }
+    this.textEdit.hideEditTextBox();
+    const {
+      defaultInsertSecondLevelNodeText,
+      defaultInsertBelowSecondLevelNodeText
+    } = this.mindMap.opt;
+    const list2 = appointNodes.length > 0 ? appointNodes : this.activeNodeList;
+    const handleMultiNodes = list2.length > 1;
+    const isRichText = !!this.mindMap.richText;
+    const params = {
+      expand: true,
+      richText: isRichText,
+      resetRichText: isRichText,
+      isActive: handleMultiNodes || !openEdit
+      // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
+    };
+    list2.forEach((node3) => {
+      if (node3.isGeneralization || node3.isRoot) {
+        return;
+      }
+      const text4 = node3.layerIndex === 1 ? defaultInsertSecondLevelNodeText : defaultInsertBelowSecondLevelNodeText;
+      const newNode = {
+        inserting: handleMultiNodes ? false : openEdit,
+        // 如果同时对多个节点插入子节点，那么无需进入编辑模式
+        data: {
+          text: text4,
+          uid: createUid(),
+          ...params,
+          ...appointData || {}
+        },
+        children: [node3.nodeData]
+      };
+      const parent = node3.parent;
+      const index3 = getNodeDataIndex(node3);
+      parent.nodeData.children.splice(index3, 1, newNode);
+    });
+    if (handleMultiNodes || !openEdit) {
+      this.clearActiveNodeList();
+    }
     this.mindMap.render();
   }
   //  上移节点，多个节点只会操作第一个节点
@@ -51620,9 +51705,7 @@ var Render = class {
     }
     let parent = node3.parent;
     let childList = parent.children;
-    let index3 = childList.findIndex((item) => {
-      return item.uid === node3.uid;
-    });
+    let index3 = getNodeIndexInNodeList(node3, childList);
     if (index3 === -1 || index3 === 0) {
       return;
     }
@@ -51644,9 +51727,7 @@ var Render = class {
     }
     let parent = node3.parent;
     let childList = parent.children;
-    let index3 = childList.findIndex((item) => {
-      return item.uid === node3.uid;
-    });
+    let index3 = getNodeIndexInNodeList(node3, childList);
     if (index3 === -1 || index3 === childList.length - 1) {
       return;
     }
@@ -51660,25 +51741,20 @@ var Render = class {
   // 复制节点
   copy() {
     this.beingCopyData = this.copyNode();
-    this.setCopyDataToClipboard(this.beingCopyData);
+    setDataToClipboard({
+      simpleMindMap: true,
+      data: this.beingCopyData
+    });
   }
   // 剪切节点
   cut() {
     this.mindMap.execCommand("CUT_NODE", (copyData) => {
       this.beingCopyData = copyData;
-      this.setCopyDataToClipboard(copyData);
+      setDataToClipboard({
+        simpleMindMap: true,
+        data: copyData
+      });
     });
-  }
-  // 将粘贴或剪切的数据设置到用户剪切板中
-  setCopyDataToClipboard(data2) {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(
-        JSON.stringify({
-          simpleMindMap: true,
-          data: data2
-        })
-      );
-    }
   }
   // 粘贴节点
   paste() {
@@ -51688,26 +51764,15 @@ var Render = class {
   }
   // 粘贴事件
   async onPaste() {
-    const { errorHandler } = this.mindMap.opt;
+    const { errorHandler, handleIsSplitByWrapOnPasteCreateNewNode } = this.mindMap.opt;
     let text4 = null;
     let img = null;
-    if (navigator.clipboard) {
-      try {
-        text4 = await navigator.clipboard.readText();
-        const items = await navigator.clipboard.read();
-        if (items && items.length > 0) {
-          for (const clipboardItem of items) {
-            for (const type of clipboardItem.types) {
-              if (/^image\//.test(type)) {
-                img = await clipboardItem.getType(type);
-                break;
-              }
-            }
-          }
-        }
-      } catch (error) {
-        errorHandler(ERROR_TYPES.READ_CLIPBOARD_ERROR, error);
-      }
+    try {
+      const res = await getDataFromClipboard();
+      text4 = res.text;
+      img = res.img;
+    } catch (error) {
+      errorHandler(ERROR_TYPES.READ_CLIPBOARD_ERROR, error);
     }
     const imgSize = img ? img.size : 0;
     if (this.beingPasteText !== text4 || this.beingPasteImgSize !== imgSize) {
@@ -51755,9 +51820,33 @@ var Render = class {
             Array.isArray(smmData) ? smmData : [smmData]
           );
         } else {
-          this.mindMap.execCommand("INSERT_CHILD_NODE", false, [], {
-            text: text4
+          const textArr = text4.split(/\r?\n|(?<!\n)\r/g).filter((item) => {
+            return !!item;
           });
+          if (textArr.length > 1 && handleIsSplitByWrapOnPasteCreateNewNode) {
+            handleIsSplitByWrapOnPasteCreateNewNode().then(() => {
+              this.mindMap.execCommand(
+                "INSERT_MULTI_CHILD_NODE",
+                [],
+                textArr.map((item) => {
+                  return {
+                    data: {
+                      text: item
+                    },
+                    children: []
+                  };
+                })
+              );
+            }).catch(() => {
+              this.mindMap.execCommand("INSERT_CHILD_NODE", false, [], {
+                text: text4
+              });
+            });
+          } else {
+            this.mindMap.execCommand("INSERT_CHILD_NODE", false, [], {
+              text: text4
+            });
+          }
         }
       }
       if (img) {
@@ -51802,9 +51891,7 @@ var Render = class {
       this.checkNodeLayerChange(item, exist);
       let nodeParent = item.parent;
       let nodeBorthers = nodeParent.children;
-      let nodeIndex = nodeBorthers.findIndex((item2) => {
-        return item.uid === item2.uid;
-      });
+      let nodeIndex = getNodeIndexInNodeList(item, nodeBorthers);
       if (nodeIndex === -1) {
         return;
       }
@@ -51812,9 +51899,7 @@ var Render = class {
       nodeParent.nodeData.children.splice(nodeIndex, 1);
       let existParent = exist.parent;
       let existBorthers = existParent.children;
-      let existIndex = existBorthers.findIndex((item2) => {
-        return item2.uid === exist.uid;
-      });
+      let existIndex = getNodeIndexInNodeList(exist, existBorthers);
       if (existIndex === -1) {
         return;
       }
@@ -51831,7 +51916,9 @@ var Render = class {
     if (this.mindMap.richText) {
       let nodeLayerChanged = node3.layerIndex === 1 && toNode3.layerIndex !== 1 || node3.layerIndex !== 1 && toNode3.layerIndex === 1;
       if (nodeLayerChanged) {
-        node3.nodeData.data.resetRichText = true;
+        node3.setData({
+          resetRichText: true
+        });
       }
     }
   }
@@ -51848,60 +51935,96 @@ var Render = class {
       return node3.isRoot;
     });
     if (root2) {
-      this.clearActive();
-      root2.children.forEach((child) => {
-        child.remove();
-      });
+      this.clearActiveNodeList();
       root2.children = [];
       root2.nodeData.children = [];
     } else {
-      if (this.activeNodeList.length === 1 && !this.activeNodeList[0].isGeneralization && this.mindMap.opt.deleteNodeActive) {
-        const node3 = this.activeNodeList[0];
-        const broList = node3.parent.children;
-        const nodeIndex = broList.findIndex((item) => item.uid === node3.uid);
-        if (nodeIndex < broList.length - 1) {
-          needActiveNode = broList[nodeIndex + 1];
-        } else {
-          if (nodeIndex > 0) {
-            needActiveNode = broList[nodeIndex - 1];
-          } else {
-            needActiveNode = node3.parent;
-          }
-        }
-      }
+      needActiveNode = this.getNextActiveNode();
       for (let i3 = 0; i3 < list2.length; i3++) {
         let node3 = list2[i3];
         if (isAppointNodes)
           list2.splice(i3, 1);
         if (node3.isGeneralization) {
-          this.setNodeData(node3.generalizationBelongNode, {
-            generalization: null
-          });
-          node3.generalizationBelongNode.update();
-          this.removeActiveNode(node3);
+          this.mindMap.execCommand(
+            "SET_NODE_DATA",
+            node3.generalizationBelongNode,
+            {
+              generalization: null
+            }
+          );
+          this.removeNodeFromActiveList(node3);
           i3--;
         } else {
-          this.removeActiveNode(node3);
-          this.removeOneNode(node3);
+          this.removeNodeFromActiveList(node3);
+          removeFromParentNodeData(node3);
           i3--;
         }
       }
     }
     this.activeNodeList = [];
     if (needActiveNode) {
-      this.activeNodeList.push(needActiveNode);
-      this.setNodeActive(needActiveNode, true);
-      needActiveNode = null;
+      this.addNodeToActiveList(needActiveNode);
     }
-    this.mindMap.emit("node_active", null, [...this.activeNodeList]);
+    this.emitNodeActiveEvent();
     this.mindMap.render();
   }
-  //  移除某个指定节点
-  removeOneNode(node3) {
-    let index3 = getNodeIndex(node3);
-    node3.remove();
-    node3.parent.children.splice(index3, 1);
-    node3.parent.nodeData.children.splice(index3, 1);
+  // 仅删除当前节点
+  removeCurrentNode(appointNodes = []) {
+    appointNodes = formatDataToArray(appointNodes);
+    if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
+      return;
+    }
+    let needActiveNode = this.getNextActiveNode();
+    let isAppointNodes = appointNodes.length > 0;
+    let list2 = isAppointNodes ? appointNodes : this.activeNodeList;
+    list2 = list2.filter((node3) => {
+      return !node3.isRoot;
+    });
+    for (let i3 = 0; i3 < list2.length; i3++) {
+      let node3 = list2[i3];
+      if (node3.isGeneralization) {
+        this.mindMap.execCommand(
+          "SET_NODE_DATA",
+          node3.generalizationBelongNode,
+          {
+            generalization: null
+          }
+        );
+      } else {
+        const parent = node3.parent;
+        const index3 = getNodeDataIndex(node3);
+        parent.nodeData.children.splice(
+          index3,
+          1,
+          ...node3.nodeData.children || []
+        );
+      }
+    }
+    this.activeNodeList = [];
+    if (needActiveNode) {
+      this.addNodeToActiveList(needActiveNode);
+    }
+    this.emitNodeActiveEvent();
+    this.mindMap.render();
+  }
+  // 计算下一个可激活的节点
+  getNextActiveNode() {
+    let needActiveNode = null;
+    if (this.activeNodeList.length === 1 && !this.activeNodeList[0].isGeneralization && this.mindMap.opt.deleteNodeActive) {
+      const node3 = this.activeNodeList[0];
+      const broList = node3.parent.children;
+      const nodeIndex = getNodeIndexInNodeList(node3, broList);
+      if (nodeIndex < broList.length - 1) {
+        needActiveNode = broList[nodeIndex + 1];
+      } else {
+        if (nodeIndex > 0) {
+          needActiveNode = broList[nodeIndex - 1];
+        } else {
+          needActiveNode = node3.parent;
+        }
+      }
+    }
+    return needActiveNode;
   }
   //  复制节点
   copyNode() {
@@ -51927,10 +52050,9 @@ var Render = class {
       return copyNodeTree({}, node3, true);
     });
     nodeList.forEach((node3) => {
-      this.removeActiveNode(node3);
-      this.removeOneNode(node3);
+      removeFromParentNodeData(node3);
     });
-    this.mindMap.emit("node_active", null, [...this.activeNodeList]);
+    this.clearActiveNodeList();
     this.mindMap.render();
     if (callback && typeof callback === "function") {
       callback(copyData);
@@ -51944,15 +52066,12 @@ var Render = class {
     });
     nodeList.forEach((item) => {
       this.checkNodeLayerChange(item, toNode3);
-      this.removeActiveNode(item);
-      this.removeOneNode(item);
+      this.removeNodeFromActiveList(item);
+      removeFromParentNodeData(item);
       toNode3.nodeData.children.push(item.nodeData);
     });
-    this.mindMap.emit("node_active", null, [...this.activeNodeList]);
+    this.emitNodeActiveEvent();
     this.mindMap.render();
-    if (toNode3.isRoot) {
-      toNode3.destroy();
-    }
   }
   //   粘贴节点到节点
   pasteNode(data2) {
@@ -51977,14 +52096,9 @@ var Render = class {
       [prop]: value
     };
     if (this.mindMap.richText) {
-      let config = this.mindMap.richText.normalStyleToRichTextStyle({
+      this.mindMap.richText.setNotActiveNodeStyle(node3, {
         [prop]: value
       });
-      if (Object.keys(config).length > 0) {
-        this.mindMap.richText.showEditText(node3);
-        this.mindMap.richText.formatAllText(config);
-        this.mindMap.richText.hideEditText([node3]);
-      }
     }
     this.setNodeDataRender(node3, data2);
     if (lineStyleProps.includes(prop)) {
@@ -51996,12 +52110,7 @@ var Render = class {
   setNodeStyles(node3, style) {
     let data2 = { ...style };
     if (this.mindMap.richText) {
-      let config = this.mindMap.richText.normalStyleToRichTextStyle(style);
-      if (Object.keys(config).length > 0) {
-        this.mindMap.richText.showEditText(node3);
-        this.mindMap.richText.formatAllText(config);
-        this.mindMap.richText.hideEditText([node3]);
-      }
+      this.mindMap.richText.setNotActiveNodeStyle(node3, style);
     }
     this.setNodeDataRender(node3, data2);
     let props = Object.keys(style);
@@ -52018,32 +52127,16 @@ var Render = class {
   }
   //  设置节点是否激活
   setNodeActive(node3, active) {
-    this.setNodeData(node3, {
+    this.mindMap.execCommand("SET_NODE_DATA", node3, {
       isActive: active
     });
-    if (active) {
-      node3.showExpandBtn();
-    } else {
-      node3.hideExpandBtn();
-    }
-    node3.updateNodeActive();
+    node3.updateNodeByActive(active);
   }
   //  设置节点是否展开
   setNodeExpand(node3, expand) {
-    this.setNodeData(node3, {
+    this.mindMap.execCommand("SET_NODE_DATA", node3, {
       expand
     });
-    if (expand) {
-      node3.children.forEach((item) => {
-        item.render();
-      });
-      node3.renderLine();
-    } else {
-      node3.children.forEach((item) => {
-        item.remove();
-      });
-      node3.removeLine();
-    }
     this.mindMap.render();
   }
   //  展开所有
@@ -52069,8 +52162,7 @@ var Render = class {
       this.renderTree,
       null,
       (node3, parent, isRoot) => {
-        node3._node = null;
-        if (!isRoot) {
+        if (!isRoot && node3.children && node3.children.length > 0) {
           node3.data.expand = false;
         }
       },
@@ -52089,8 +52181,12 @@ var Render = class {
       this.renderTree,
       null,
       (node3, parent, isRoot, layerIndex) => {
-        node3._node = null;
-        node3.data.expand = layerIndex < level;
+        const expand = layerIndex < level;
+        if (expand) {
+          node3.data.expand = true;
+        } else if (!isRoot && node3.children && node3.children.length > 0) {
+          node3.data.expand = false;
+        }
       },
       null,
       true,
@@ -52110,11 +52206,7 @@ var Render = class {
   }
   //  切换节点展开状态
   toggleNodeExpand(node3) {
-    this.mindMap.execCommand(
-      "SET_NODE_EXPAND",
-      node3,
-      !node3.nodeData.data.expand
-    );
+    this.mindMap.execCommand("SET_NODE_EXPAND", node3, !node3.getData("expand"));
   }
   //  设置节点文本
   setNodeText(node3, text4, richText, resetRichText) {
@@ -52184,15 +52276,17 @@ var Render = class {
       return;
     }
     this.activeNodeList.forEach((node3) => {
-      if (node3.nodeData.data.generalization || node3.isRoot) {
+      if (node3.getData("generalization") || node3.isRoot) {
         return;
       }
-      this.setNodeData(node3, {
+      this.mindMap.execCommand("SET_NODE_DATA", node3, {
         generalization: data2 || {
-          text: "\u6982\u8981"
+          text: this.mindMap.opt.defaultGeneralizationText
         }
       });
-      node3.update();
+      node3.setData({
+        expand: true
+      });
     });
     this.mindMap.render();
   }
@@ -52202,13 +52296,12 @@ var Render = class {
       return;
     }
     this.activeNodeList.forEach((node3) => {
-      if (!node3.nodeData.data.generalization) {
+      if (!node3.getData("generalization")) {
         return;
       }
-      this.setNodeData(node3, {
+      this.mindMap.execCommand("SET_NODE_DATA", node3, {
         generalization: null
       });
-      node3.update();
     });
     this.mindMap.render();
   }
@@ -52216,7 +52309,7 @@ var Render = class {
   setNodeCustomPosition(node3, left = void 0, top = void 0) {
     let nodeList = [node3];
     nodeList.forEach((item) => {
-      this.setNodeData(item, {
+      this.mindMap.execCommand("SET_NODE_DATA", item, {
         customLeft: left,
         customTop: top
       });
@@ -52230,7 +52323,7 @@ var Render = class {
       (node3) => {
         node3.customLeft = void 0;
         node3.customTop = void 0;
-        this.setNodeData(node3, {
+        this.mindMap.execCommand("SET_NODE_DATA", node3, {
           customLeft: void 0,
           customTop: void 0
         });
@@ -52255,7 +52348,7 @@ var Render = class {
   // 定位到指定节点
   goTargetNode(node3, callback = () => {
   }) {
-    let uid = typeof node3 === "string" ? node3 : node3.nodeData.data.uid;
+    let uid = typeof node3 === "string" ? node3 : node3.getData("uid");
     if (!uid)
       return;
     this.expandToNodeUid(uid, () => {
@@ -52275,12 +52368,9 @@ var Render = class {
   }
   //  设置节点数据，并判断是否渲染
   setNodeDataRender(node3, data2, notRender = false) {
-    this.setNodeData(node3, data2);
+    this.mindMap.execCommand("SET_NODE_DATA", node3, data2);
     let changed = node3.reRender();
     if (changed) {
-      if (node3.isGeneralization) {
-        node3.generalizationBelongNode.updateGeneralization();
-      }
       if (!notRender)
         this.mindMap.render();
     } else {
@@ -52302,6 +52392,10 @@ var Render = class {
     this.mindMap.view.translateX(offsetX);
     this.mindMap.view.translateY(offsetY);
     this.mindMap.view.setScale(1);
+  }
+  // 回到中心主题，即设置根节点到画布中心
+  setRootNodeCenter() {
+    this.moveNodeToCenter(this.root);
   }
   // 展开到指定uid的节点
   expandToNodeUid(uid, callback = () => {
@@ -52333,12 +52427,16 @@ var Render = class {
   findNodeByUid(uid) {
     let res = null;
     walk(this.root, null, (node3) => {
-      if (node3.nodeData.data.uid === uid) {
+      if (node3.getData("uid") === uid) {
         res = node3;
         return true;
       }
     });
     return res;
+  }
+  // 派发节点激活改变事件
+  emitNodeActiveEvent() {
+    this.mindMap.emit("node_active", null, [...this.activeNodeList]);
   }
 };
 var Render_default = Render;
@@ -53850,7 +53948,11 @@ var Command = class {
     this.history = [];
     this.activeHistoryIndex = 0;
     this.registerShortcutKeys();
-    this.addHistory = nextTick(this.addHistory, this);
+    this.addHistory = throttle(
+      this.addHistory,
+      this.mindMap.opt.addHistoryTime,
+      this
+    );
   }
   //  清空历史数据
   clearHistory() {
@@ -54192,8 +54294,8 @@ var defaultOpt = {
       box-sizing: border-box;
     }
   `,
-  // 开启鼠标双击复位思维导图位置及缩放
-  enableDblclickReset: false,
+  // 是否在鼠标双击时回到根节点，也就是让根节点居中显示
+  enableDblclickBackToRootNode: false,
   // 导出图片时canvas的缩放倍数，该配置会和window.devicePixelRatio值取最大值
   minExportImgCanvasScale: 2,
   // 节点鼠标hover和激活时显示的矩形边框的颜色
@@ -54233,7 +54335,17 @@ var defaultOpt = {
     // 头像大小
     fontSize: 12
     // 如果是文字头像，那么文字的大小
-  }
+  },
+  // 关联线是否始终显示在节点上层
+  // false：即创建关联线和激活关联线时处于最顶层，其他情况下处于节点下方
+  associativeLineIsAlwaysAboveNode: true,
+  // 插入概要的默认文本
+  defaultGeneralizationText: "\u6982\u8981",
+  // 粘贴文本的方式创建新节点时，控制是否按换行自动分割节点，即如果存在换行，那么会根据换行创建多个节点，否则只会创建一个节点
+  // 可以传递一个函数，返回promise，resolve代表根据换行分割，reject代表忽略换行
+  handleIsSplitByWrapOnPasteCreateNewNode: null,
+  // 多少时间内只允许添加一次历史记录，避免添加没有必要的中间状态，单位：ms
+  addHistoryTime: 100
 };
 
 // ../simple-mind-map/index.js
@@ -54248,15 +54360,10 @@ var MindMap2 = class {
     this.el = this.opt.el;
     if (!this.el)
       throw new Error("\u7F3A\u5C11\u5BB9\u5668\u5143\u7D20el");
-    this.elRect = this.el.getBoundingClientRect();
-    this.width = this.elRect.width;
-    this.height = this.elRect.height;
-    if (this.width <= 0 || this.height <= 0)
-      throw new Error("\u5BB9\u5668\u5143\u7D20el\u7684\u5BBD\u9AD8\u4E0D\u80FD\u4E3A0");
+    this.getElRectInfo();
     this.cssEl = null;
     this.addCss();
-    this.svg = SVG().addTo(this.el).size(this.width, this.height);
-    this.draw = this.svg.group();
+    this.initContainer();
     this.initTheme();
     this.initCache();
     this.event = new Event_default({
@@ -54272,8 +54379,7 @@ var MindMap2 = class {
       mindMap: this
     });
     this.view = new View_default({
-      mindMap: this,
-      draw: this.draw
+      mindMap: this
     });
     this.batchExecution = new BatchExecution_default();
     MindMap2.pluginList.forEach((plugin) => {
@@ -54293,6 +54399,36 @@ var MindMap2 = class {
     }
     opt.theme = opt.theme && themes_default[opt.theme] ? opt.theme : "default";
     return opt;
+  }
+  // 创建容器元素
+  initContainer() {
+    const { associativeLineIsAlwaysAboveNode } = this.opt;
+    const createAssociativeLineDraw = () => {
+      this.associativeLineDraw = this.draw.group();
+      this.associativeLineDraw.addClass("smm-associative-line-container");
+    };
+    this.svg = SVG().addTo(this.el).size(this.width, this.height);
+    this.draw = this.svg.group();
+    this.draw.addClass("smm-container");
+    this.lineDraw = this.draw.group();
+    this.lineDraw.addClass("smm-line-container");
+    if (!associativeLineIsAlwaysAboveNode) {
+      createAssociativeLineDraw();
+    }
+    this.nodeDraw = this.draw.group();
+    this.nodeDraw.addClass("smm-node-container");
+    if (associativeLineIsAlwaysAboveNode) {
+      createAssociativeLineDraw();
+    }
+    this.otherDraw = this.draw.group();
+    this.otherDraw.addClass("smm-other-container");
+  }
+  // 清空各容器
+  clearDraw() {
+    this.lineDraw.clear();
+    this.associativeLineDraw.clear();
+    this.nodeDraw.clear();
+    this.otherDraw.clear();
   }
   // 添加必要的css样式到页面
   addCss() {
@@ -54316,18 +54452,25 @@ var MindMap2 = class {
   //  重新渲染
   reRender(callback, source = "") {
     this.batchExecution.push("render", () => {
-      this.draw.clear();
+      this.clearDraw();
       this.initTheme();
       this.renderer.reRender = true;
       this.renderer.render(callback, source);
     });
   }
-  //  容器尺寸变化，调整尺寸
-  resize() {
+  // 获取或更新容器尺寸位置信息
+  getElRectInfo() {
     this.elRect = this.el.getBoundingClientRect();
     this.width = this.elRect.width;
     this.height = this.elRect.height;
+    if (this.width <= 0 || this.height <= 0)
+      throw new Error("\u5BB9\u5668\u5143\u7D20el\u7684\u5BBD\u9AD8\u4E0D\u80FD\u4E3A0");
+  }
+  //  容器尺寸变化，调整尺寸
+  resize() {
+    this.getElRectInfo();
     this.svg.size(this.width, this.height);
+    this.emit("resize");
   }
   //  监听事件
   on(event, fn) {
@@ -54363,10 +54506,12 @@ var MindMap2 = class {
     Style_default.setBackgroundStyle(this.el, this.themeConfig);
   }
   //  设置主题
-  setTheme(theme) {
-    this.renderer.clearAllActive();
+  setTheme(theme, notRender = false) {
+    this.execCommand("CLEAR_ACTIVE_NODE");
     this.opt.theme = theme;
-    this.render(null, CONSTANTS.CHANGE_THEME);
+    if (!notRender) {
+      this.render(null, CONSTANTS.CHANGE_THEME);
+    }
     this.emit("view_theme_change", theme);
   }
   //  获取当前主题
@@ -54374,11 +54519,13 @@ var MindMap2 = class {
     return this.opt.theme;
   }
   //  设置主题配置
-  setThemeConfig(config) {
+  setThemeConfig(config, notRender = false) {
     const changedConfig = getObjectChangedProps(this.themeConfig, config);
     this.opt.themeConfig = config;
-    let res = checkIsNodeSizeIndependenceConfig(changedConfig);
-    this.render(null, res ? "" : CONSTANTS.CHANGE_THEME);
+    if (!notRender) {
+      let res = checkIsNodeSizeIndependenceConfig(changedConfig);
+      this.render(null, res ? "" : CONSTANTS.CHANGE_THEME);
+    }
   }
   //  获取自定义主题配置
   getCustomThemeConfig() {
@@ -54401,14 +54548,16 @@ var MindMap2 = class {
     return this.opt.layout;
   }
   //  设置布局结构
-  setLayout(layout) {
+  setLayout(layout, notRender = false) {
     if (!layoutValueList.includes(layout)) {
       layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE;
     }
     this.opt.layout = layout;
     this.view.reset();
     this.renderer.setLayout();
-    this.render(null, CONSTANTS.CHANGE_LAYOUT);
+    if (!notRender) {
+      this.render(null, CONSTANTS.CHANGE_LAYOUT);
+    }
   }
   //  执行命令
   execCommand(...args) {
@@ -54487,18 +54636,18 @@ var MindMap2 = class {
     }
     this.opt.readonly = mode === CONSTANTS.MODE.READONLY;
     if (this.opt.readonly) {
-      this.renderer.clearAllActive();
+      this.execCommand("CLEAR_ACTIVE_NODE");
     }
     this.emit("mode_change", mode);
   }
   // 获取svg数据
-  getSvgData({ paddingX = 0, paddingY = 0 } = {}) {
+  getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false } = {}) {
     const svg2 = this.svg;
     const draw = this.draw;
     const origWidth = svg2.width();
     const origHeight = svg2.height();
     const origTransform = draw.transform();
-    const elRect = this.el.getBoundingClientRect();
+    const elRect = this.elRect;
     draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY);
     const rect = draw.rbox();
     rect.width += paddingX * 2;
@@ -54507,8 +54656,7 @@ var MindMap2 = class {
     svg2.size(rect.width, rect.height);
     draw.translate(-rect.x + elRect.left, -rect.y + elRect.top);
     let clone = svg2.clone();
-    clone.add(SVG(`<style>${cssContent}</style>`));
-    if ((rect.width > origWidth || rect.height > origHeight) && this.watermark && this.watermark.hasWatermark()) {
+    if (!ignoreWatermark && (rect.width > origWidth || rect.height > origHeight) && this.watermark && this.watermark.hasWatermark()) {
       this.width = rect.width;
       this.height = rect.height;
       this.watermark.draw();
@@ -54516,6 +54664,14 @@ var MindMap2 = class {
       this.width = origWidth;
       this.height = origHeight;
       this.watermark.draw();
+    }
+    clone.add(SVG(`<style>${cssContent}</style>`));
+    const markerList = svg2.find("marker");
+    if (markerList && markerList.length > 0) {
+      const id = markerList[0].attr("id");
+      clone.find("marker").forEach((item) => {
+        item.attr("id", id);
+      });
     }
     svg2.size(origWidth, origHeight);
     draw.transform(origTransform);
@@ -54627,7 +54783,9 @@ var MiniMap = class {
    * boxHeight：小地图容器的高度
    */
   calculationMiniMap(boxWidth, boxHeight) {
-    let { svg: svg2, rect, origWidth, origHeight, scaleX, scaleY } = this.mindMap.getSvgData();
+    let { svg: svg2, rect, origWidth, origHeight, scaleX, scaleY } = this.mindMap.getSvgData({
+      ignoreWatermark: true
+    });
     const elRect = this.mindMap.elRect;
     rect.x -= elRect.left;
     rect.x2 -= elRect.left;
@@ -54672,8 +54830,16 @@ var MiniMap = class {
       viewBoxStyle[key] = viewBoxStyle[key] + "px";
     });
     this.removeNodeContent(svg2);
+    const svgStr = svg2.svg();
     return {
-      svgHTML: svg2.svg(),
+      getImgUrl: async (callback) => {
+        const blob = new Blob([svgStr], {
+          type: "image/svg+xml"
+        });
+        const res = await readBlob(blob);
+        callback(res);
+      },
+      svgHTML: svgStr,
       // 小地图html
       viewBoxStyle,
       // 视图框的位置信息
@@ -54745,11 +54911,40 @@ var Watermark = class {
     this.angle = 0;
     this.text = "";
     this.textStyle = {};
-    this.watermarkDraw = this.mindMap.svg.group().css({ "pointer-events": "none", "user-select": "none" });
-    this.maxLong = Math.sqrt(
+    this.watermarkDraw = null;
+    this.maxLong = this.getMaxLong();
+    this.updateWatermark(this.mindMap.opt.watermarkConfig || {});
+    this.bindEvent();
+  }
+  getMaxLong() {
+    return Math.sqrt(
       Math.pow(this.mindMap.width, 2) + Math.pow(this.mindMap.height, 2)
     );
-    this.updateWatermark(this.mindMap.opt.watermarkConfig || {});
+  }
+  bindEvent() {
+    this.onResize = this.onResize.bind(this);
+    this.mindMap.on("resize", this.onResize);
+  }
+  unBindEvent() {
+    this.mindMap.off("resize", this.onResize);
+  }
+  onResize() {
+    this.maxLong = this.getMaxLong();
+    this.draw();
+  }
+  // 创建水印容器
+  createContainer() {
+    if (this.watermarkDraw)
+      return;
+    this.watermarkDraw = this.mindMap.svg.group().css({ "pointer-events": "none", "user-select": "none" }).addClass("smm-water-mark-container");
+  }
+  // 删除水印容器
+  removeContainer() {
+    if (!this.watermarkDraw) {
+      return;
+    }
+    this.watermarkDraw.remove();
+    this.watermarkDraw = null;
   }
   // 获取是否存在水印
   hasWatermark() {
@@ -54766,10 +54961,13 @@ var Watermark = class {
   // 绘制水印
   // 非精确绘制，会绘制一些超出可视区域的水印
   draw() {
-    this.watermarkDraw.clear();
+    if (this.watermarkDraw)
+      this.watermarkDraw.clear();
     if (!this.hasWatermark()) {
+      this.removeContainer();
       return;
     }
+    this.createContainer();
     let x3 = 0;
     while (x3 < this.mindMap.width) {
       this.drawText(x3);
@@ -54836,6 +55034,14 @@ var Watermark = class {
     );
     this.handleConfig(config);
     this.draw();
+  }
+  // 插件被移除前做的事情
+  beforePluginRemove() {
+    this.unBindEvent();
+  }
+  // 插件被卸载前做的事情
+  beforePluginDestroy() {
+    this.unBindEvent();
   }
 };
 Watermark.instanceName = "watermark";
@@ -64976,25 +65182,25 @@ var Drag = class extends Base_default {
       node3.endDrag();
     });
     this.removeCloneNode();
-    let overlapNodeUid = this.overlapNode ? this.overlapNode.nodeData.data.uid : "";
-    let prevNodeUid = this.prevNode ? this.prevNode.nodeData.data.uid : "";
-    let nextNodeUid = this.nextNode ? this.nextNode.nodeData.data.uid : "";
+    let overlapNodeUid = this.overlapNode ? this.overlapNode.getData("uid") : "";
+    let prevNodeUid = this.prevNode ? this.prevNode.getData("uid") : "";
+    let nextNodeUid = this.nextNode ? this.nextNode.getData("uid") : "";
     if (this.overlapNode) {
-      this.mindMap.renderer.setNodeActive(this.overlapNode, false);
+      this.mindMap.execCommand("SET_NODE_ACTIVE", this.overlapNode, false);
       this.mindMap.execCommand(
         "MOVE_NODE_TO",
         this.beingDragNodeList,
         this.overlapNode
       );
     } else if (this.prevNode) {
-      this.mindMap.renderer.setNodeActive(this.prevNode, false);
+      this.mindMap.execCommand("SET_NODE_ACTIVE", this.prevNode, false);
       this.mindMap.execCommand(
         "INSERT_AFTER",
         this.beingDragNodeList,
         this.prevNode
       );
     } else if (this.nextNode) {
-      this.mindMap.renderer.setNodeActive(this.nextNode, false);
+      this.mindMap.execCommand("SET_NODE_ACTIVE", this.nextNode, false);
       this.mindMap.execCommand(
         "INSERT_BEFORE",
         this.beingDragNodeList,
@@ -65055,7 +65261,7 @@ var Drag = class extends Base_default {
       let { scaleX, scaleY, translateX, translateY } = this.drawTransform;
       this.offsetX = this.mouseDownX - (node3.left * scaleX + translateX);
       this.offsetY = this.mouseDownY - (node3.top * scaleY + translateY);
-      if (node3.nodeData.data.isActive) {
+      if (node3.getData("isActive")) {
         this.beingDragNodeList = getTopAncestorsFomNodeList(
           // 过滤掉根节点和概要节点
           this.mindMap.renderer.activeNodeList.filter((item) => {
@@ -65067,7 +65273,7 @@ var Drag = class extends Base_default {
       }
       this.nodeTreeToList();
       this.createCloneNode();
-      this.mindMap.renderer.clearAllActive();
+      this.mindMap.execCommand("CLEAR_ACTIVE_NODE");
     }
   }
   // 节点由树转换成数组，从子节点到根节点
@@ -65102,7 +65308,7 @@ var Drag = class extends Base_default {
       const node3 = this.beingDragNodeList[0];
       const lineColor = node3.style.merge("lineColor", true);
       if (this.beingDragNodeList.length > 1) {
-        this.clone = this.draw.rect().size(rectWidth, rectHeight).radius(rectHeight / 2).fill({
+        this.clone = this.mindMap.otherDraw.rect().size(rectWidth, rectHeight).radius(rectHeight / 2).fill({
           color: rectFill || lineColor
         });
         this.offsetX = rectWidth / 2;
@@ -65113,11 +65319,11 @@ var Drag = class extends Base_default {
         if (expandEl) {
           expandEl.remove();
         }
-        this.mindMap.draw.add(this.clone);
+        this.mindMap.otherDraw.add(this.clone);
       }
       this.clone.opacity(dragOpacityConfig.cloneNodeOpacity);
       this.clone.css("z-index", 99999);
-      this.placeholder = this.draw.rect().fill({
+      this.placeholder = this.mindMap.otherDraw.rect().fill({
         color: dragPlaceholderRectFill || lineColor
       });
       this.beingDragNodeList.forEach((node4) => {
@@ -65145,8 +65351,8 @@ var Drag = class extends Base_default {
     this.nextNode = null;
     this.placeholder.size(0, 0);
     this.nodeList.forEach((node3) => {
-      if (node3.nodeData.data.isActive) {
-        this.mindMap.renderer.setNodeActive(node3, false);
+      if (node3.getData("isActive")) {
+        this.mindMap.execCommand("SET_NODE_ACTIVE", node3, false);
       }
       if (this.overlapNode || this.prevNode && this.nextNode) {
         return;
@@ -65181,7 +65387,7 @@ var Drag = class extends Base_default {
       }
     });
     if (this.overlapNode) {
-      this.mindMap.renderer.setNodeActive(this.overlapNode, true);
+      this.mindMap.execCommand("SET_NODE_ACTIVE", this.overlapNode, true);
     }
   }
   // 垂直方向比较
@@ -65284,9 +65490,7 @@ var Drag = class extends Base_default {
   getNodeDistanceToSiblingNode(checkList, node3, nodeRect, dir) {
     let dir1 = dir === "v" ? "top" : "left";
     let dir2 = dir === "v" ? "bottom" : "right";
-    let index3 = checkList.findIndex((item) => {
-      return item.uid === node3.uid;
-    });
+    let index3 = getNodeIndexInNodeList(node3, checkList);
     let prevBrother = null;
     let nextBrother = null;
     if (index3 !== -1) {
@@ -65565,7 +65769,7 @@ var Select = class {
       for (let i3 = 0; i3 < this.cacheActiveList.length; i3++) {
         let cur = this.cacheActiveList[i3];
         if (!this.mindMap.renderer.activeNodeList.find((item) => {
-          return item.nodeData.data.uid === cur.nodeData.data.uid;
+          return item.getData("uid") === cur.getData("uid");
         })) {
           isNodeChange = true;
           break;
@@ -65644,17 +65848,15 @@ var Select = class {
       left = left * scaleX + translateX;
       top = top * scaleY + translateY;
       if (checkTwoRectIsOverlap(minx, maxx, miny, maxy, left, right, top, bottom)) {
-        if (node3.nodeData.data.isActive) {
+        if (node3.getData("isActive")) {
           return;
         }
-        this.mindMap.renderer.setNodeActive(node3, true);
-        this.mindMap.renderer.addActiveNode(node3);
-      } else if (node3.nodeData.data.isActive) {
-        if (!node3.nodeData.data.isActive) {
+        this.mindMap.renderer.addNodeToActiveList(node3);
+      } else if (node3.getData("isActive")) {
+        if (!node3.getData("isActive")) {
           return;
         }
-        this.mindMap.renderer.setNodeActive(node3, false);
-        this.mindMap.renderer.removeActiveNode(node3);
+        this.mindMap.renderer.removeNodeFromActiveList(node3);
       }
     });
   }
@@ -65668,8 +65870,8 @@ var Select_default = Select;
 
 // ../simple-mind-map/src/plugins/associativeLine/associativeLineUtils.js
 var getAssociativeLineTargetIndex = (node3, toNode3) => {
-  return node3.nodeData.data.associativeLineTargets.findIndex((item) => {
-    return item === toNode3.nodeData.data.uid;
+  return node3.getData("associativeLineTargets").findIndex((item) => {
+    return item === toNode3.getData("uid");
   });
 };
 var computeCubicBezierPathPoints = (x1, y1, x22, y22) => {
@@ -65833,7 +66035,7 @@ var computeNodePoints = (fromNode, toNode3) => {
   let offsetX = toCx - fromCx;
   let offsetY = toCy - fromCy;
   if (offsetX === 0 && offsetY === 0)
-    return;
+    return [];
   let fromDir = "";
   let toDir = "";
   if (offsetX <= 0 && offsetX <= offsetY && offsetX <= -offsetY) {
@@ -65854,7 +66056,7 @@ var computeNodePoints = (fromNode, toNode3) => {
 var getNodeLinePath = (startPoint, endPoint, node3, toNode3) => {
   let targetIndex = getAssociativeLineTargetIndex(node3, toNode3);
   let controlPoints = [];
-  let associativeLineTargetControlOffsets = node3.nodeData.data.associativeLineTargetControlOffsets;
+  let associativeLineTargetControlOffsets = node3.getData("associativeLineTargetControlOffsets");
   if (associativeLineTargetControlOffsets && associativeLineTargetControlOffsets[targetIndex]) {
     let offsets = associativeLineTargetControlOffsets[targetIndex];
     controlPoints = [
@@ -65907,14 +66109,14 @@ var getDefaultControlPointOffsets = (startPoint, endPoint) => {
 // ../simple-mind-map/src/plugins/associativeLine/associativeLineControls.js
 function createControlNodes() {
   let { associativeLineActiveColor } = this.mindMap.themeConfig;
-  this.controlLine1 = this.draw.line().stroke({ color: associativeLineActiveColor, width: 2 });
-  this.controlLine2 = this.draw.line().stroke({ color: associativeLineActiveColor, width: 2 });
+  this.controlLine1 = this.associativeLineDraw.line().stroke({ color: associativeLineActiveColor, width: 2 });
+  this.controlLine2 = this.associativeLineDraw.line().stroke({ color: associativeLineActiveColor, width: 2 });
   this.controlPoint1 = this.createOneControlNode("controlPoint1");
   this.controlPoint2 = this.createOneControlNode("controlPoint2");
 }
 function createOneControlNode(pointKey) {
   let { associativeLineActiveColor } = this.mindMap.themeConfig;
-  return this.draw.circle(this.controlPointDiameter).stroke({ color: associativeLineActiveColor }).fill({ color: "#fff" }).click((e2) => {
+  return this.associativeLineDraw.circle(this.controlPointDiameter).stroke({ color: associativeLineActiveColor }).fill({ color: "#fff" }).click((e2) => {
     e2.stopPropagation();
   }).mousedown((e2) => {
     this.onControlPointMousedown(e2, pointKey);
@@ -65939,7 +66141,7 @@ function onControlPointMousemove(e2) {
   this[this.mousedownControlPointKey].x(x3 - radius).y(y4 - radius);
   let [, , , node3, toNode3] = this.activeLine;
   let targetIndex = getAssociativeLineTargetIndex(node3, toNode3);
-  let { associativeLinePoint, associativeLineTargetControlOffsets } = node3.nodeData.data;
+  let { associativeLinePoint, associativeLineTargetControlOffsets } = node3.getData();
   associativeLinePoint = associativeLinePoint || [];
   const nodePos = this.getNodePos(node3);
   const toNodePos = this.getNodePos(toNode3);
@@ -66017,7 +66219,7 @@ function onControlPointMouseup(e2) {
   let { pos, startPoint, endPoint, targetIndex } = this.controlPointMousemoveState;
   let [, , , node3] = this.activeLine;
   let offsetList = [];
-  let { associativeLinePoint, associativeLineTargetControlOffsets } = node3.nodeData.data;
+  let { associativeLinePoint, associativeLineTargetControlOffsets } = node3.getData();
   if (!associativeLinePoint) {
     associativeLinePoint = [];
   }
@@ -66135,7 +66337,7 @@ var associativeLineControls_default = {
 
 // ../simple-mind-map/src/plugins/associativeLine/associativeLineText.js
 function createText(data2) {
-  let g2 = this.draw.group();
+  let g2 = this.associativeLineDraw.group();
   const setActive = () => {
     if (!this.activeLine || this.activeLine[3] !== data2.node || this.activeLine[4] !== data2.toNode) {
       this.setActiveLine({
@@ -66221,8 +66423,8 @@ function hideEditTextBox() {
   str = isDefaultText ? "" : str;
   this.mindMap.execCommand("SET_NODE_DATA", node3, {
     associativeLineText: {
-      ...node3.nodeData.data.associativeLineText || {},
-      [toNode3.nodeData.data.uid]: str
+      ...node3.getData("associativeLineText") || {},
+      [toNode3.getData("uid")]: str
     }
   });
   this.textEditNode.style.display = "none";
@@ -66232,11 +66434,11 @@ function hideEditTextBox() {
   this.mindMap.emit("hide_text_edit");
 }
 function getText2(node3, toNode3) {
-  let obj = node3.nodeData.data.associativeLineText;
+  let obj = node3.getData("associativeLineText");
   if (!obj) {
     return "";
   }
-  return obj[toNode3.nodeData.data.uid] || "";
+  return obj[toNode3.getData("uid")] || "";
 }
 function renderText(str, path2, text4) {
   if (!str)
@@ -66288,7 +66490,7 @@ var associativeLineText_default = {
 var AssociativeLine = class {
   constructor(opt = {}) {
     this.mindMap = opt.mindMap;
-    this.draw = this.mindMap.draw;
+    this.associativeLineDraw = this.mindMap.associativeLineDraw;
     this.lineList = [];
     this.activeLine = null;
     this.isCreatingLine = false;
@@ -66351,7 +66553,7 @@ var AssociativeLine = class {
   }
   // 创建箭头
   createMarker() {
-    return this.draw.marker(20, 20, (add) => {
+    return this.associativeLineDraw.marker(20, 20, (add) => {
       add.ref(12, 5);
       add.size(10, 10);
       add.attr("orient", "auto-start-reverse");
@@ -66394,7 +66596,7 @@ var AssociativeLine = class {
       (cur) => {
         if (!cur)
           return;
-        let data2 = cur.nodeData.data;
+        let data2 = cur.getData();
         if (data2.associativeLineTargets && data2.associativeLineTargets.length > 0) {
           nodeToIds.set(cur, data2.associativeLineTargets);
         }
@@ -66412,7 +66614,7 @@ var AssociativeLine = class {
         let toNode3 = idToNode.get(uid);
         if (!node3 || !toNode3)
           return;
-        const associativeLinePoint = (node3.nodeData.data.associativeLinePoint || [])[index3];
+        const associativeLinePoint = (node3.getData("associativeLinePoint") || [])[index3];
         const [startPoint, endPoint] = this.updateAllLinesPos(
           node3,
           toNode3,
@@ -66437,7 +66639,7 @@ var AssociativeLine = class {
       node3,
       toNode3
     );
-    let path2 = this.draw.path();
+    let path2 = this.associativeLineDraw.path();
     path2.stroke({
       width: associativeLineWidth,
       color: associativeLineColor,
@@ -66445,7 +66647,7 @@ var AssociativeLine = class {
     }).fill({ color: "none" });
     path2.plot(pathStr);
     path2.marker("end", this.marker);
-    let clickPath = this.draw.path();
+    let clickPath = this.associativeLineDraw.path();
     clickPath.stroke({ width: associativeLineActiveWidth, color: "transparent" }).fill({ color: "none" });
     clickPath.plot(pathStr);
     let text4 = this.createText({
@@ -66504,6 +66706,7 @@ var AssociativeLine = class {
       controlPoints[1]
     );
     this.mindMap.emit("associative_line_click", path2, clickPath, node3, toNode3);
+    this.front();
   }
   // 移除所有连接线
   removeAllLines() {
@@ -66526,9 +66729,10 @@ var AssociativeLine = class {
     let { associativeLineWidth, associativeLineColor } = this.mindMap.themeConfig;
     if (this.isCreatingLine || !fromNode)
       return;
+    this.front();
     this.isCreatingLine = true;
     this.creatingStartNode = fromNode;
-    this.creatingLine = this.draw.path();
+    this.creatingLine = this.associativeLineDraw.path();
     this.creatingLine.stroke({
       width: associativeLineWidth,
       color: associativeLineColor,
@@ -66580,8 +66784,8 @@ var AssociativeLine = class {
   checkOverlapNode(x3, y4) {
     this.overlapNode = null;
     bfsWalk(this.mindMap.renderer.root, (node3) => {
-      if (node3.nodeData.data.isActive) {
-        this.mindMap.renderer.setNodeActive(node3, false);
+      if (node3.getData("isActive")) {
+        this.mindMap.execCommand("SET_NODE_ACTIVE", node3, false);
       }
       if (node3.uid === this.creatingStartNode.uid || this.overlapNode) {
         return;
@@ -66593,8 +66797,8 @@ var AssociativeLine = class {
         this.overlapNode = node3;
       }
     });
-    if (this.overlapNode && !this.overlapNode.nodeData.data.isActive) {
-      this.mindMap.renderer.setNodeActive(this.overlapNode, true);
+    if (this.overlapNode && !this.overlapNode.getData("isActive")) {
+      this.mindMap.execCommand("SET_NODE_ACTIVE", this.overlapNode, true);
     }
   }
   // 完成创建连接线
@@ -66602,27 +66806,28 @@ var AssociativeLine = class {
     if (this.creatingStartNode.uid === node3.uid)
       return;
     this.addLine(this.creatingStartNode, node3);
-    if (this.overlapNode && this.overlapNode.nodeData.data.isActive) {
-      this.mindMap.renderer.setNodeActive(this.overlapNode, false);
+    if (this.overlapNode && this.overlapNode.getData("isActive")) {
+      this.mindMap.execCommand("SET_NODE_ACTIVE", this.overlapNode, false);
     }
     this.isCreatingLine = false;
     this.creatingStartNode = null;
     this.creatingLine.remove();
     this.creatingLine = null;
     this.overlapNode = null;
+    this.back();
   }
   // 添加连接线
   addLine(fromNode, toNode3) {
     if (!fromNode || !toNode3)
       return;
-    let uid = toNode3.nodeData.data.uid;
+    let uid = toNode3.getData("uid");
     if (!uid) {
       uid = v4_default();
       this.mindMap.execCommand("SET_NODE_DATA", toNode3, {
         uid
       });
     }
-    let list2 = fromNode.nodeData.data.associativeLineTargets || [];
+    let list2 = fromNode.getData("associativeLineTargets") || [];
     const sameLine = list2.some((item) => item === uid);
     if (sameLine) {
       return;
@@ -66635,7 +66840,7 @@ var AssociativeLine = class {
       endPoint.x,
       endPoint.y
     );
-    let offsetList = fromNode.nodeData.data.associativeLineTargetControlOffsets || [];
+    let offsetList = fromNode.getData("associativeLineTargetControlOffsets") || [];
     offsetList[list2.length - 1] = [
       {
         x: controlPoints[0].x - startPoint.x,
@@ -66646,7 +66851,7 @@ var AssociativeLine = class {
         y: controlPoints[1].y - endPoint.y
       }
     ];
-    let associativeLinePoint = fromNode.nodeData.data.associativeLinePoint || [];
+    let associativeLinePoint = fromNode.getData("associativeLinePoint") || [];
     associativeLinePoint[list2.length - 1] = { startPoint, endPoint };
     this.mindMap.execCommand("SET_NODE_DATA", fromNode, {
       associativeLineTargets: list2,
@@ -66665,13 +66870,13 @@ var AssociativeLine = class {
       associativeLinePoint,
       associativeLineTargetControlOffsets,
       associativeLineText
-    } = node3.nodeData.data;
+    } = node3.getData();
     associativeLinePoint = associativeLinePoint || [];
     let targetIndex = getAssociativeLineTargetIndex(node3, toNode3);
     let newAssociativeLineText = {};
     if (associativeLineText) {
       Object.keys(associativeLineText).forEach((item) => {
-        if (item !== toNode3.nodeData.data.uid) {
+        if (item !== toNode3.getData("uid")) {
           newAssociativeLineText[item] = associativeLineText[item];
         }
       });
@@ -66706,6 +66911,7 @@ var AssociativeLine = class {
       }
       this.activeLine = null;
       this.removeControls();
+      this.back();
     }
   }
   // 处理节点正在拖拽事件
@@ -66731,6 +66937,19 @@ var AssociativeLine = class {
     });
     this.showControls();
     this.isNodeDragging = false;
+  }
+  // 关联线顶层显示
+  front() {
+    if (this.mindMap.opt.associativeLineIsAlwaysAboveNode)
+      return;
+    this.associativeLineDraw.front();
+  }
+  // 关联线回到原有层级
+  back() {
+    if (this.mindMap.opt.associativeLineIsAlwaysAboveNode)
+      return;
+    this.associativeLineDraw.back();
+    this.associativeLineDraw.forward();
   }
 };
 AssociativeLine.instanceName = "associativeLine";
@@ -66930,15 +67149,15 @@ var RichText = class {
         this.textEditNode.style.borderRadius = (node3.height || 50) + "px";
       }
     }
-    if (!node3.nodeData.data.richText) {
+    if (!node3.getData("richText")) {
       let text4 = "";
-      if (!isUndef(node3.nodeData.data.text)) {
-        text4 = String(node3.nodeData.data.text).split(/\n/gim).join("<br>");
+      if (!isUndef(node3.getData("text"))) {
+        text4 = String(node3.getData("text")).split(/\n/gim).join("<br>");
       }
       let html2 = `<p>${text4}</p>`;
       this.textEditNode.innerHTML = this.cacheEditingText || html2;
     } else {
-      this.textEditNode.innerHTML = this.cacheEditingText || node3.nodeData.data.text;
+      this.textEditNode.innerHTML = this.cacheEditingText || node3.getData("text");
     }
     this.initQuillEditor();
     document.querySelector(".ql-editor").style.minHeight = originHeight + "px";
@@ -66946,7 +67165,7 @@ var RichText = class {
     this.focus(
       isInserting || selectTextOnEnterEditText && !isFromKeyDown ? 0 : null
     );
-    if (!node3.nodeData.data.richText) {
+    if (!node3.getData("richText")) {
       this.setTextStyleIfNotRichText(node3);
     }
     this.cacheEditingText = "";
@@ -67158,7 +67377,7 @@ var RichText = class {
       });
     } else {
       let data2 = this.richTextStyleToNormalStyle(config);
-      this.mindMap.renderer.setNodeData(this.node, data2);
+      this.mindMap.execCommand("SET_NODE_DATA", this.node, data2);
     }
   }
   // 将普通节点样式对象转换成富文本样式对象
@@ -67224,6 +67443,15 @@ var RichText = class {
       }
     });
     return data2;
+  }
+  // 给未激活的节点设置富文本样式
+  setNotActiveNodeStyle(node3, style) {
+    const config = this.normalStyleToRichTextStyle(style);
+    if (Object.keys(config).length > 0) {
+      this.showEditText(node3);
+      this.formatAllText(config);
+      this.hideEditText([node3]);
+    }
   }
   // 处理导出为图片
   async handleExportPng(node3) {
@@ -67481,14 +67709,14 @@ var NodeImgAdjust = class {
   onMousedown() {
     this.isMousedown = true;
     this.hideNodeImage();
-    this.handleEl.style.backgroundImage = `url(${this.node.nodeData.data.image})`;
+    this.handleEl.style.backgroundImage = `url(${this.node.getData("image")})`;
   }
   // 鼠标移动
   onMousemove(e2) {
     if (!this.isMousedown)
       return;
     e2.preventDefault();
-    let { width: imageOriginWidth, height: imageOriginHeight } = this.node.nodeData.data.imageSize;
+    let { width: imageOriginWidth, height: imageOriginHeight } = this.node.getData("imageSize");
     let newWidth = e2.clientX - this.rect.x;
     let newHeight = e2.clientY - this.rect.y;
     if (newWidth <= 0 || newHeight <= 0)
@@ -67509,7 +67737,7 @@ var NodeImgAdjust = class {
       return;
     this.showNodeImage();
     this.hideHandleEl();
-    let { image, imageTitle } = this.node.nodeData.data;
+    let { image, imageTitle } = this.node.getData();
     let { scaleX, scaleY } = this.mindMap.draw.transform();
     this.mindMap.execCommand("SET_NODE_IMAGE", this.node, {
       url: image,
@@ -67741,7 +67969,7 @@ var Search = class {
     this.matchNodeList = [];
     this.currentIndex = -1;
     bfsWalk(this.mindMap.renderer.root, (node3) => {
-      let { richText, text: text4 } = node3.nodeData.data;
+      let { richText, text: text4 } = node3.getData();
       if (richText) {
         text4 = getTextFromHtml(text4);
       }
@@ -67777,7 +68005,7 @@ var Search = class {
       return;
     let text4 = this.getReplacedText(currentNode, this.searchText, replaceText);
     this.notResetSearchText = true;
-    currentNode.setText(text4, currentNode.nodeData.data.richText, true);
+    currentNode.setText(text4, currentNode.getData("richText"), true);
     this.matchNodeList = this.matchNodeList.filter((node3) => {
       return currentNode !== node3;
     });
@@ -67799,7 +68027,7 @@ var Search = class {
         node3,
         {
           text: text4,
-          resetRichText: !!node3.nodeData.data.richText
+          resetRichText: !!node3.getData("richText")
         },
         true
       );
@@ -67810,7 +68038,7 @@ var Search = class {
   }
   // 获取某个节点替换后的文本
   getReplacedText(node3, searchText, replaceText) {
-    let { richText, text: text4 } = node3.nodeData.data;
+    let { richText, text: text4 } = node3.getData();
     if (richText) {
       return replaceHtmlText(text4, searchText, replaceText);
     } else {
@@ -67871,7 +68099,7 @@ var Painter = class {
     if (!node3 || !this.isInPainter || !this.painterNode || !node3 || node3.uid === this.painterNode.uid)
       return;
     const style = {};
-    const painterNodeData = this.painterNode.nodeData.data;
+    const painterNodeData = this.painterNode.getData();
     Object.keys(painterNodeData).forEach((key) => {
       if (checkIsNodeStyleDataKey(key)) {
         style[key] = painterNodeData[key];

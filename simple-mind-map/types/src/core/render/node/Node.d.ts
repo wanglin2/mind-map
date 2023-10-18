@@ -6,6 +6,8 @@ declare class Node {
     mindMap: any;
     renderer: any;
     draw: any;
+    nodeDraw: any;
+    lineDraw: any;
     style: Style;
     shapeInstance: Shape;
     shapePadding: {
@@ -84,7 +86,8 @@ declare class Node {
         top: any;
     };
     reRender(): boolean;
-    updateNodeActive(): void;
+    updateNodeActiveClass(): void;
+    updateNodeByActive(active: any): void;
     render(callback?: () => void): void;
     remove(): void;
     destroy(): void;

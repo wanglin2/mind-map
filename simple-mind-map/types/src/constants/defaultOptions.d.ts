@@ -72,7 +72,7 @@ export namespace defaultOpt {
     const disableMouseWheelZoom: boolean;
     function errorHandler(code: any, error: any): void;
     const resetCss: string;
-    const enableDblclickReset: boolean;
+    const enableDblclickBackToRootNode: boolean;
     const minExportImgCanvasScale: number;
     const hoverRectColor: string;
     const hoverRectPadding: number;
@@ -97,4 +97,8 @@ export namespace defaultOpt {
         const fontSize_2: number;
         export { fontSize_2 as fontSize };
     }
+    const associativeLineIsAlwaysAboveNode: boolean;
+    const defaultGeneralizationText: string;
+    const handleIsSplitByWrapOnPasteCreateNewNode: any;
+    const addHistoryTime: number;
 }
