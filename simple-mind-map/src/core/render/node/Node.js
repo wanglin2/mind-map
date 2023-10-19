@@ -1,6 +1,6 @@
 import Style from './Style'
 import Shape from './Shape'
-import { G, ForeignObject, SVG, Rect } from '@svgdotjs/svg.js'
+import { G, ForeignObject, Rect } from '@svgdotjs/svg.js'
 import nodeGeneralizationMethods from './nodeGeneralization'
 import nodeExpandBtnMethods from './nodeExpandBtn'
 import nodeCommandWrapsMethods from './nodeCommandWraps'
@@ -8,6 +8,7 @@ import nodeCreateContentsMethods from './nodeCreateContents'
 import nodeExpandBtnPlaceholderRectMethods from './nodeExpandBtnPlaceholderRect'
 import nodeCooperateMethods from './nodeCooperate'
 import { CONSTANTS } from '../../../constants/constant'
+import { copyNodeTree } from '../../../utils/index'
 
 //  节点类
 class Node {
@@ -959,6 +960,11 @@ class Node {
   //  获取数据
   getData(key) {
     return key ? this.nodeData.data[key] : this.nodeData.data
+  }
+
+  // 获取该节点的纯数据，即不包含对节点实例的引用
+  getPureData(removeActiveState = true, removeId = false) {
+    return copyNodeTree({}, this, removeActiveState, removeId)
   }
 
   // 是否存在自定义样式
