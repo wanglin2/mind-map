@@ -1188,7 +1188,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>INSERT_FORMULA（v0.7.2+）</td>
 <td>给节点插入数学公式，操作节点为当前激活的节点或指定节点</td>
-<td>formula（要插入的数学公式，LaText语法）, appointNodes（可选，指定要插入公式的节点，多个节点可以传数组，否则默认为当前激活的节点）</td>
+<td>formula（要插入的数学公式，LaTeX 语法）, appointNodes（可选，指定要插入公式的节点，多个节点可以传数组，否则默认为当前激活的节点）</td>
 </tr>
 <tr>
 <td>INSERT_PARENT_NODE（v0.8.0+）</td>
