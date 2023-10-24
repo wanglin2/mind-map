@@ -270,7 +270,7 @@ export default {
   },
   formulaSidebar: {
     title: '公式',
-    placeholder: '请输入 LaText 语法',
+    placeholder: '请输入 LaTeX 语法',
     confirm: '完成',
     common: '常用公式',
     tip: '非富文本模式下不支持插入公式'
