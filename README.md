@@ -218,4 +218,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
         <span>飞箭</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/戚永峰.png" style="width: 50px;height: 50px;" />
+        <span>戚永峰</span>
+    </span>
 </p>
