@@ -214,4 +214,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/敬明朗.jpg" style="width: 50px;height: 50px;" />
         <span>敬明朗</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>飞箭</span>
+    </span>
 </p>
