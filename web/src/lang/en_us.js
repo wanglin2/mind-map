@@ -276,7 +276,7 @@ export default {
   },
   formulaSidebar: {
     title: 'Formula',
-    placeholder: 'Please enter LaText syntax',
+    placeholder: 'Please enter LaTeX syntax',
     confirm: 'Confirm',
     common: 'Common formulas',
     tip: 'Inserting formulas is not supported in non rich text mode'

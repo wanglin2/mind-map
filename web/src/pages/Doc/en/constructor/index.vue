@@ -1270,7 +1270,7 @@ redo. All commands are as follows:</p>
 <tr>
 <td>INSERT_FORMULA（v0.7.2+）</td>
 <td>Insert mathematical formulas into nodes, operate on the currently active node or specified node</td>
-<td>formula（Mathematical formula to insert, LaText syntax）, appointNodes（Optional, specify the node to insert the formula into. Multiple nodes can be passed as arrays, otherwise it defaults to the currently active node）</td>
+<td>formula（Mathematical formula to insert, LaTeX syntax）, appointNodes（Optional, specify the node to insert the formula into. Multiple nodes can be passed as arrays, otherwise it defaults to the currently active node）</td>
 </tr>
 <tr>
 <td>INSERT_PARENT_NODE（v0.8.0+）</td>
