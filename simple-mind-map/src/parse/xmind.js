@@ -262,7 +262,7 @@ const transformOldXmind = content => {
       // 分析概要位置
       // xmind 支持合并概要,现在的组件不支持合并概要，分别拆分开来
       let summariesPosition = {}
-      if (typeof summariesNode == 'undefined' && summariesNode.elements && summariesNode.elements.length > 0) {
+      if (typeof summariesNode != 'undefined' && summariesNode.elements && summariesNode.elements.length > 0) {
         summariesNode.elements.forEach(item => {
           // 使用正则表达式提取位置数字,例如 (2,3)
           const match = item.attributes.range.match(/\((\d+),(\d+)\)/)
