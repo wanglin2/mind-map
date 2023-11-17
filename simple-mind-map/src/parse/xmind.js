@@ -122,7 +122,7 @@ const transformXmind = async (content, files) => {
       let summariesPosition = {}
       if (node.summaries && node.summaries.length > 0) {
         node.summaries.forEach(item => {
-          // 使用正则表达式提取第二个数字,例如 (2,3)
+          // 使用正则表达式提取位置数字,例如 (2,3)
           const match = item.range.match(/\((\d+),(\d+)\)/)
           const firstNumber = match ? parseInt(match[1], 10) : null
           const secondNumber = match ? parseInt(match[2], 10) : null
@@ -227,20 +227,87 @@ const transformOldXmind = content => {
     } catch (error) {
       console.log(error)
     }
+
+    // 概要
+    if (node.currentSummary) {
+      let summaryText = ''
+      if (node.currentSummary
+        && node.currentSummary.elements
+        && node.currentSummary.elements[0]
+        && node.currentSummary.elements[0].elements
+        && node.currentSummary.elements[0].elements[0]) {
+        summaryText = node.currentSummary.elements[0].elements[0].text
+      }
+      newNode.data.generalization = {
+        text: summaryText,
+        expand: true,
+        isActive: false,
+      }
+    }
+
     // 子节点
     newNode.children = []
+
     let _children = getItemByName(nodeElements, 'children')
     if (_children && _children.elements && _children.elements.length > 0) {
+      let summaryNode = null
+      let summariesNode = getItemByName(nodeElements, 'summaries')
       _children.elements.forEach(item => {
+        if (item.name === 'topics' && item.attributes.type === 'summary') {
+          summaryNode = item
+          return
+        }
+      })
+
+      // 分析概要位置
+      // xmind 支持合并概要,现在的组件不支持合并概要，分别拆分开来
+      let summariesPosition = {}
+      if (summariesNode !== null && summariesNode.elements && summariesNode.elements.length > 0) {
+        summariesNode.elements.forEach(item => {
+          // 使用正则表达式提取位置数字,例如 (2,3)
+          const match = item.attributes.range.match(/\((\d+),(\d+)\)/)
+          const firstNumber = match ? parseInt(match[1], 10) : null
+          const secondNumber = match ? parseInt(match[2], 10) : null
+          summariesPosition[item.attributes['topic-id']] = []
+          for (let i = firstNumber; i <= secondNumber; i++) {
+            summariesPosition[item.attributes['topic-id']].push(i)
+          }
+        })
+      }
+
+      let summariesPositionData = {}
+      if (summaryNode !== null && summaryNode.elements && summaryNode.elements.length > 0) {
+        summaryNode.elements.forEach(summary => {
+          if (Object.prototype.hasOwnProperty.call(summariesPosition, summary.attributes.id)) {
+            summariesPosition[summary.attributes.id].forEach (index => {
+              summariesPositionData[index] = summary
+            })
+          }
+        })
+      }
+
+      _children.elements.forEach((item, index) => {
         if (item.name === 'topics') {
-          ;(item.elements || []).forEach(item2 => {
-            let newChild = {}
-            newNode.children.push(newChild)
-            walk(item2, newChild)
-          })
+          if (item.attributes.type !== 'summary') {
+            (item.elements || []).forEach((item2, index2) => {
+              let newChild = {}
+              let currentSummary = null
+              if (Object.prototype.hasOwnProperty.call(summariesPositionData, index2)) {
+                currentSummary = summariesPositionData[index2]
+              }
+              newNode.children.push(newChild)
+              item2.currentSummary = currentSummary
+              walk(item2, newChild)
+            })
+          }
         } else {
           let newChild = {}
+          let currentSummary = null
+          if (Object.prototype.hasOwnProperty.call(summariesPositionData, index)) {
+            currentSummary = summariesPositionData[index]
+          }
           newNode.children.push(newChild)
+          item.currentSummary = currentSummary
           walk(item, newChild)
         }
       })
