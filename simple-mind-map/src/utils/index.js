@@ -629,7 +629,7 @@ export const textToNodeRichTextWithWrap = html => {
   }
   return list
     .map(item => {
-      return `<p><span>${item}</span></p>`
+      return `<p><span>${htmlEscape(item)}</span></p>`
     })
     .join('')
 }
