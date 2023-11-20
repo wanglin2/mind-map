@@ -24,7 +24,7 @@
     >
       <span
         class="nodeEdit"
-        contenteditable="true"
+        :contenteditable="!isReadonly"
         :key="getKey()"
         @keydown.stop="onNodeInputKeydown($event, node)"
         @keyup.stop
@@ -69,7 +69,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isDark'])
+    ...mapState(['isDark', 'isReadonly'])
   },
   created() {
     window.addEventListener('keydown', this.onKeyDown)

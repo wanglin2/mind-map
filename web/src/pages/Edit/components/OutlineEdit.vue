@@ -32,7 +32,7 @@
           >
             <span
               class="nodeEdit"
-              contenteditable="true"
+              :contenteditable="!isReadonly"
               :key="getKey()"
               @blur="onBlur($event, node)"
               @keydown.stop="onNodeInputKeydown($event, node)"
@@ -76,7 +76,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isOutlineEdit', 'isDark'])
+    ...mapState(['isOutlineEdit', 'isDark', 'isReadonly'])
   },
   watch: {
     isOutlineEdit(val) {
