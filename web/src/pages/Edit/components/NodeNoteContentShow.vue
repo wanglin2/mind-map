@@ -27,7 +27,8 @@ export default {
       editor: null,
       show: false,
       left: 0,
-      top: 0
+      top: 0,
+      node: null
     }
   },
   created() {
@@ -35,6 +36,8 @@ export default {
     this.$bus.$on('hideNoteContent', this.hideNoteContent)
     document.body.addEventListener('click', this.hideNoteContent)
     this.$bus.$on('node_active', this.hideNoteContent)
+    this.$bus.$on('scale', this.onScale)
+    this.$bus.$on('svg_mousedown', this.hideNoteContent)
   },
   mounted() {
     this.initEditor()
@@ -44,34 +47,37 @@ export default {
     this.$bus.$off('hideNoteContent', this.hideNoteContent)
     document.body.removeEventListener('click', this.hideNoteContent)
     this.$bus.$off('node_active', this.hideNoteContent)
+    this.$bus.$off('scale', this.onScale)
+    this.$bus.$off('svg_mousedown', this.hideNoteContent)
   },
   methods: {
-    /**
-     * @Author: 王林25
-     * @Date: 2022-11-14 19:56:08
-     * @Desc: 显示备注浮层
-     */
-    onShowNoteContent(content, left, top) {
+    // 显示备注浮层
+    onShowNoteContent(content, left, top, node) {
+      this.node = node
       this.editor.setMarkdown(content)
-      this.left = left
-      this.top = top
+      this.updateNoteContentPosition(left, top)
       this.show = true
     },
 
-    /**
-     * @Author: 王林25
-     * @Date: 2022-11-14 19:56:20
-     * @Desc: 隐藏备注浮层
-     */
+    // 更新位置
+    updateNoteContentPosition(left, top) {
+      this.left = left
+      this.top = top
+    },
+
+    // 画布缩放事件
+    onScale() {
+      if (!this.node || !this.show) return
+      const { left, top } = this.node.getNoteContentPosition()
+      this.updateNoteContentPosition(left, top)
+    },
+
+    // 隐藏备注浮层
     hideNoteContent() {
       this.show = false
     },
 
-    /**
-     * @Author: 王林25
-     * @Date: 2022-05-09 11:37:05
-     * @Desc: 初始化编辑器
-     */
+    // 初始化编辑器
     initEditor() {
       if (!this.editor) {
         this.editor = new Viewer({
