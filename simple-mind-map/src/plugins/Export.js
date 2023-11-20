@@ -2,7 +2,8 @@ import {
   imgToDataUrl,
   downloadFile,
   readBlob,
-  removeHTMLEntities
+  removeHTMLEntities,
+  resizeImgSize
 } from '../utils'
 import { SVG } from '@svgdotjs/svg.js'
 import drawBackgroundImageToCanvas from '../utils/simulateCSSBackgroundInCanvas'
@@ -63,7 +64,8 @@ class Export {
     transparent,
     checkRotate = () => {
       return false
-    }
+    },
+    compress
   ) {
     return new Promise((resolve, reject) => {
       const img = new Image()
@@ -76,8 +78,19 @@ class Export {
             window.devicePixelRatio,
             this.mindMap.opt.minExportImgCanvasScale
           )
-          const imgWidth = img.width
-          const imgHeight = img.height
+          let imgWidth = img.width
+          let imgHeight = img.height
+          // 压缩图片
+          if (compress) {
+            const compressedSize = resizeImgSize(
+              imgWidth,
+              imgHeight,
+              compress.width,
+              compress.height
+            )
+            imgWidth = compressedSize[0]
+            imgHeight = compressedSize[1]
+          }
           // 如果宽比高长，那么旋转90度
           const needRotate = checkRotate(imgWidth, imgHeight)
           if (needRotate) {
@@ -186,7 +199,7 @@ class Export {
    * 方法1.把svg的图片都转化成data:url格式，再转换
    * 方法2.把svg的图片提取出来再挨个绘制到canvas里，最后一起转换
    */
-  async png(name, transparent = false, checkRotate) {
+  async png(name, transparent = false, checkRotate, compress) {
     let { node, str } = await this.getSvgData()
     // 如果开启了富文本，则使用htmltocanvas转换为图片
     if (this.mindMap.richText) {
@@ -215,19 +228,26 @@ class Export {
     // 转换成data:url数据
     let svgUrl = await readBlob(blob)
     // 绘制到canvas上
-    let res = await this.svgToPng(svgUrl, transparent, checkRotate)
+    let res = await this.svgToPng(svgUrl, transparent, checkRotate, compress)
     return res
   }
 
   //  导出为pdf
-  async pdf(name, useMultiPageExport) {
+  async pdf(name, useMultiPageExport, maxImageWidth) {
     if (!this.mindMap.doExportPDF) {
       throw new Error('请注册ExportPDF插件')
     }
-    let img = await this.png('', false, (width, height) => {
-      if (width <= a4Size.width && height && a4Size.height) return false
-      return width / height > 1
-    })
+    let img = await this.png(
+      '',
+      false,
+      (width, height) => {
+        if (width <= a4Size.width && height && a4Size.height) return false
+        return width / height > 1
+      },
+      {
+        width: maxImageWidth || a4Size.width * 2
+      }
+    )
     await this.mindMap.doExportPDF.pdf(name, img, useMultiPageExport)
   }
 
