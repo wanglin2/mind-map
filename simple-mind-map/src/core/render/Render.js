@@ -464,6 +464,7 @@ class Render {
 
   //  全选
   selectAll() {
+    if (this.mindMap.opt.readonly) return
     walk(
       this.root,
       null,
