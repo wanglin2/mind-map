@@ -887,7 +887,7 @@ class Render {
           )
         } else {
           text = htmlEscape(text)
-          const textArr = text.split(/\r?\n|(?<!\n)\r/g).filter(item => {
+          const textArr = text.split(new RegExp('\r?\n|(?<!\n)\r', 'g')).filter(item => {
             return !!item
           })
           // 判断是否需要根据换行自动分割节点
