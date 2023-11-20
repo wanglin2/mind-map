@@ -449,9 +449,12 @@ export default {
      */
     async export(...args) {
       try {
-        this.mindMap.export(...args)
+        showLoading()
+        await this.mindMap.export(...args)
+        hideLoading()
       } catch (error) {
         console.log(error)
+        hideLoading()
       }
     },
 
