@@ -228,7 +228,7 @@ class Export {
       if (width <= a4Size.width && height && a4Size.height) return false
       return width / height > 1
     })
-    this.mindMap.doExportPDF.pdf(name, img, useMultiPageExport)
+    await this.mindMap.doExportPDF.pdf(name, img, useMultiPageExport)
   }
 
   // 导出为xmind
