@@ -233,7 +233,7 @@ export default {
     formula: '公式',
     more: '更多',
     selectFileTip: '请选择文件',
-    notSupportTip: '你的浏览器或网络协议不支持该功能',
+    notSupportTip: '你的浏览器不支持该功能，或者当前页面非https协议',
     tip: '提示',
     editingLocalFileTipFront: '当前正在编辑你本机的【',
     editingLocalFileTipEnd: '】文件',
