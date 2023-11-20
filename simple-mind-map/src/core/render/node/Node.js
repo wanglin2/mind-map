@@ -849,11 +849,23 @@ class Node {
     return this.customLeft !== undefined && this.customTop !== undefined
   }
 
-  //  检查节点是否存在自定义位置的祖先节点
+  //  检查节点是否存在自定义位置的祖先节点，包含自身
   ancestorHasCustomPosition() {
     let node = this
     while (node) {
       if (node.hasCustomPosition()) {
+        return true
+      }
+      node = node.parent
+    }
+    return false
+  }
+
+  //  检查是否存在概要的祖先节点
+  ancestorHasGeneralization() {
+    let node = this.parent
+    while (node) {
+      if (node.getData('generalization')) {
         return true
       }
       node = node.parent
