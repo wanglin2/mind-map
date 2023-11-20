@@ -237,7 +237,7 @@ export default {
     more: 'More',
     selectFileTip: 'Please select a file',
     notSupportTip:
-      'Your browser or network protocol does not support this feature',
+      'Your browser does not support this feature, or the current page is not using the HTTPS protocol',
     tip: 'Tip',
     editingLocalFileTipFront: 'Currently editing your local【',
     editingLocalFileTipEnd: '】file',
