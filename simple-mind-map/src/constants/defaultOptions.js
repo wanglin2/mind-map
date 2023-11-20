@@ -219,5 +219,7 @@ export const defaultOpt = {
   // 可以传递一个函数，返回promise，resolve代表根据换行分割，reject代表忽略换行
   handleIsSplitByWrapOnPasteCreateNewNode: null,
   // 多少时间内只允许添加一次历史记录，避免添加没有必要的中间状态，单位：ms
-  addHistoryTime: 100
+  addHistoryTime: 100,
+  // 是否禁止拖动画布
+  isDisableDrag: false
 }

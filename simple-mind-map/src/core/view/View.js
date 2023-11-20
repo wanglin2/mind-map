@@ -30,12 +30,14 @@ class View {
     })
     // 拖动视图
     this.mindMap.event.on('mousedown', () => {
+      if (this.mindMap.opt.isDisableDrag) return
       this.sx = this.x
       this.sy = this.y
     })
     this.mindMap.event.on('drag', (e, event) => {
-      if (e.ctrlKey) {
-        // 按住ctrl键拖动为多选
+      // 按住ctrl键拖动为多选
+      // 禁用拖拽
+      if (e.ctrlKey || this.mindMap.opt.isDisableDrag) {        
         return
       }
       if (this.firstDrag) {
