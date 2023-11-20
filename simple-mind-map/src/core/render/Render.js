@@ -1400,10 +1400,12 @@ class Render {
     if (this.activeNodeList.length <= 0) {
       return
     }
+    let hasAncestorsExistGeneralization = false
     this.activeNodeList.forEach(node => {
       if (node.getData('generalization') || node.isRoot) {
         return
       }
+      hasAncestorsExistGeneralization = node.ancestorHasGeneralization()
       this.mindMap.execCommand('SET_NODE_DATA', node, {
         generalization: data || {
           text: this.mindMap.opt.defaultGeneralizationText
@@ -1414,7 +1416,12 @@ class Render {
         expand: true
       })
     })
-    this.mindMap.render()
+    this.mindMap.render(() => {
+      // 修复祖先节点存在概要时位置未更新的问题
+      if (hasAncestorsExistGeneralization) {
+        this.mindMap.render()
+      }
+    })
   }
 
   //  删除节点概要
