@@ -160,6 +160,9 @@ export const defaultOpt = {
   customHandleClipboardText: null,
   // 禁止鼠标滚轮缩放，你仍旧可以使用api进行缩放
   disableMouseWheelZoom: false,
+  // 禁止双指缩放，你仍旧可以使用api进行缩放
+  // 需要注册TouchEvent插件后生效
+  disableTouchZoom: false,
   // 错误处理函数
   errorHandler: (code, error) => {
     console.error(code, error)
