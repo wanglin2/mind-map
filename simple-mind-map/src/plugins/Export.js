@@ -188,7 +188,6 @@ class Export {
    */
   async png(name, transparent = false, checkRotate) {
     let { node, str } = await this.getSvgData()
-    str = removeHTMLEntities(str)
     // 如果开启了富文本，则使用htmltocanvas转换为图片
     if (this.mindMap.richText) {
       // 覆盖html默认的样式
@@ -208,6 +207,7 @@ class Export {
       // )
       // return imgDataUrl
     }
+    str = removeHTMLEntities(str)
     // 转换成blob数据
     let blob = new Blob([str], {
       type: 'image/svg+xml'
