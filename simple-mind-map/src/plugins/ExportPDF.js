@@ -1,4 +1,4 @@
-import JsPDF from 'jspdf'
+import JsPDF from '../utils/jspdf'
 import { a4Size } from '../constants/constant'
 
 //  导出PDF插件，需要通过Export插件使用
