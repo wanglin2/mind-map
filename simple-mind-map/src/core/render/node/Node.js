@@ -74,6 +74,7 @@ class Node {
     this._tagData = null
     this._noteData = null
     this.noteEl = null
+    this.noteContentIsShow = false
     this._expandBtn = null
     this._lastExpandBtnType = null
     this._showExpandBtn = false
@@ -970,6 +971,11 @@ class Node {
   // 是否存在自定义样式
   hasCustomStyle() {
     return this.style.hasCustomStyle()
+  }
+
+  // 获取节点的尺寸和位置信息，位置信息相对于页面
+  getRect() {
+    return this.group.rbox()
   }
 }
 

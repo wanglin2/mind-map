@@ -307,16 +307,17 @@ function createNoteNode() {
     this.noteEl.innerText = this.getData('note')
   }
   node.on('mouseover', () => {
-    let { left, top } = node.node.getBoundingClientRect()
+    const { left, top } = this.getNoteContentPosition()
     if (!this.mindMap.opt.customNoteContentShow) {
       this.noteEl.style.left = left + 'px'
-      this.noteEl.style.top = top + iconSize + 'px'
+      this.noteEl.style.top = top + 'px'
       this.noteEl.style.display = 'block'
     } else {
       this.mindMap.opt.customNoteContentShow.show(
         this.getData('note'),
         left,
-        top + iconSize
+        top,
+        this
       )
     }
   })
@@ -331,6 +332,19 @@ function createNoteNode() {
     node,
     width: iconSize,
     height: iconSize
+  }
+}
+
+// 获取节点备注显示位置
+function getNoteContentPosition() {
+  const iconSize = this.mindMap.themeConfig.iconSize
+  const { scaleY } = this.mindMap.view.getTransformData().transform
+  const iconSizeAddScale = iconSize * scaleY
+  let { left, top } = this._noteData.node.node.getBoundingClientRect()
+  top += iconSizeAddScale
+  return {
+    left,
+    top
   }
 }
 
@@ -368,6 +382,7 @@ export default {
   createHyperlinkNode,
   createTagNode,
   createNoteNode,
+  getNoteContentPosition,
   measureCustomNodeContentSize,
   isUseCustomNodeContent
 }
