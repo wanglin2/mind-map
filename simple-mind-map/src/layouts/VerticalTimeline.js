@@ -97,11 +97,7 @@ class VerticalTimeline extends Base {
       this.root,
       null,
       (node, parent, isRoot, layerIndex, index) => {
-        if (
-          node.getData('expand') &&
-          node.children &&
-          node.children.length
-        ) {
+        if (node.getData('expand') && node.children && node.children.length) {
           let marginY = this.getMarginY(layerIndex + 1)
           // 定位二级节点的top
           if (isRoot) {
@@ -386,32 +382,35 @@ class VerticalTimeline extends Base {
   }
 
   //  创建概要节点
-  renderGeneralization(node, gLine, gNode) {
-    let isLeft = node.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
-    let {
-      top,
-      bottom,
-      left,
-      right,
-      generalizationLineMargin,
-      generalizationNodeMargin
-    } = this.getNodeBoundaries(node, 'h', isLeft)
-    let x = isLeft
-      ? left - generalizationLineMargin
-      : right + generalizationLineMargin
-    let x1 = x
-    let y1 = top
-    let x2 = x
-    let y2 = bottom
-    let cx = x1 + (isLeft ? -20 : 20)
-    let cy = y1 + (y2 - y1) / 2
-    let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
-    gLine.plot(path)
-    gNode.left =
-      x +
-      (isLeft ? -generalizationNodeMargin : generalizationNodeMargin) -
-      (isLeft ? gNode.width : 0)
-    gNode.top = top + (bottom - top - gNode.height) / 2
+  renderGeneralization(list) {
+    list.forEach(item => {
+      let isLeft = item.node.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
+      let {
+        top,
+        bottom,
+        left,
+        right,
+        generalizationLineMargin,
+        generalizationNodeMargin
+      } = this.getNodeGeneralizationRenderBoundaries(item, 'h')
+      let x = isLeft
+        ? left - generalizationLineMargin
+        : right + generalizationLineMargin
+      let x1 = x
+      let y1 = top
+      let x2 = x
+      let y2 = bottom
+      let cx = x1 + (isLeft ? -20 : 20)
+      let cy = y1 + (y2 - y1) / 2
+      let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
+      item.generalizationLine.plot(path)
+      item.generalizationNode.left =
+        x +
+        (isLeft ? -generalizationNodeMargin : generalizationNodeMargin) -
+        (isLeft ? item.generalizationNode.width : 0)
+      item.generalizationNode.top =
+        top + (bottom - top - item.generalizationNode.height) / 2
+    })
   }
 
   // 渲染展开收起按钮的隐藏占位元素
