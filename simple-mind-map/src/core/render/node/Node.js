@@ -917,6 +917,18 @@ class Node {
     return false
   }
 
+  // 检查当前节点是否是某个节点的父节点
+  isParent(node) {
+    if (this.uid === node.uid) {
+      return false
+    }
+    const parent = node.parent
+    if (parent && this.uid === parent.uid) {
+      return true
+    }
+    return false
+  }
+
   //  检测当前节点是否是某个节点的兄弟节点
   isBrother(node) {
     if (!this.parent || this.uid === node.uid) {
