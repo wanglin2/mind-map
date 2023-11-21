@@ -83,8 +83,7 @@ class Node {
     this._fillExpandNode = null
     this._userListGroup = null
     this._lines = []
-    this._generalizationLine = null
-    this._generalizationNode = null
+    this._generalizationList = []
     this._unVisibleRectRegionNode = null
     this._isMouseenter = false
     // 尺寸信息
@@ -751,10 +750,7 @@ class Node {
       item.setOpacity(val)
     })
     // 概要节点
-    if (this._generalizationNode) {
-      this._generalizationLine.opacity(val)
-      this._generalizationNode.group.opacity(val)
-    }
+    this.setGeneralizationOpacity(val)
   }
 
   // 隐藏子节点
@@ -861,11 +857,11 @@ class Node {
     return false
   }
 
-  //  检查是否存在概要的祖先节点
+  //  检查是否存在有概要的祖先节点
   ancestorHasGeneralization() {
     let node = this.parent
     while (node) {
-      if (node.getData('generalization')) {
+      if (node.checkHasGeneralization()) {
         return true
       }
       node = node.parent
@@ -937,6 +933,15 @@ class Node {
     return this.parent.children.find(item => {
       return item.uid === node.uid
     })
+  }
+
+  // 获取该节点在兄弟节点列表中的索引
+  getIndexInBrothers() {
+    return this.parent && this.parent.children
+      ? this.parent.children.findIndex(item => {
+          return item.uid === this.uid
+        })
+      : -1
   }
 
   //  获取padding值

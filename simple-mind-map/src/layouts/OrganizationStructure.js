@@ -243,24 +243,27 @@ class OrganizationStructure extends Base {
   }
 
   //  创建概要节点
-  renderGeneralization(node, gLine, gNode) {
-    let {
-      bottom,
-      left,
-      right,
-      generalizationLineMargin,
-      generalizationNodeMargin
-    } = this.getNodeBoundaries(node, 'v')
-    let x1 = left
-    let y1 = bottom + generalizationLineMargin
-    let x2 = right
-    let y2 = bottom + generalizationLineMargin
-    let cx = x1 + (x2 - x1) / 2
-    let cy = y1 + 20
-    let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
-    gLine.plot(path)
-    gNode.top = bottom + generalizationNodeMargin
-    gNode.left = left + (right - left - gNode.width) / 2
+  renderGeneralization(list) {
+    list.forEach(item => {
+      let {
+        bottom,
+        left,
+        right,
+        generalizationLineMargin,
+        generalizationNodeMargin
+      } = this.getNodeGeneralizationRenderBoundaries(item, 'v')
+      let x1 = left
+      let y1 = bottom + generalizationLineMargin
+      let x2 = right
+      let y2 = bottom + generalizationLineMargin
+      let cx = x1 + (x2 - x1) / 2
+      let cy = y1 + 20
+      let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
+      item.generalizationLine.plot(path)
+      item.generalizationNode.top = bottom + generalizationNodeMargin
+      item.generalizationNode.left = left + (right - left - item.generalizationNode.width) / 2
+    })
+    
   }
 
   // 渲染展开收起按钮的隐藏占位元素
