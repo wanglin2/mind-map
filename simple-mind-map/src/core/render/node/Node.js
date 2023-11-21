@@ -903,7 +903,7 @@ class Node {
   }
 
   //  检测当前节点是否是某个节点的祖先节点
-  isParent(node) {
+  isAncestor(node) {
     if (this.uid === node.uid) {
       return false
     }
