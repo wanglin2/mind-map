@@ -677,7 +677,7 @@ class Drag extends Base {
   // 检查某个节点是否在被拖拽节点内
   checkIsInBeingDragNodeList(node) {
     return !!this.beingDragNodeList.find(item => {
-      return item.uid === node.uid || item.isParent(node)
+      return item.uid === node.uid || item.isAncestor(node)
     })
   }
 }

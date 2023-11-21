@@ -713,7 +713,7 @@ export const getTopAncestorsFomNodeList = list => {
   list.forEach(node => {
     if (
       !list.find(item => {
-        return item.uid !== node.uid && item.isParent(node)
+        return item.uid !== node.uid && item.isAncestor(node)
       })
     ) {
       res.push(node)
@@ -728,7 +728,7 @@ export const checkHasSupSubRelation = list => {
     const cur = list[i]
     if (
       list.find(item => {
-        return item.uid !== cur.uid && cur.isParent(item)
+        return item.uid !== cur.uid && cur.isAncestor(item)
       })
     ) {
       return true
