@@ -24,7 +24,8 @@ import {
   getNodeIndexInNodeList,
   setDataToClipboard,
   getDataFromClipboard,
-  htmlEscape
+  htmlEscape,
+  checkHasSupSubRelation
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -888,9 +889,11 @@ class Render {
           )
         } else {
           text = htmlEscape(text)
-          const textArr = text.split(new RegExp('\r?\n|(?<!\n)\r', 'g')).filter(item => {
-            return !!item
-          })
+          const textArr = text
+            .split(new RegExp('\r?\n|(?<!\n)\r', 'g'))
+            .filter(item => {
+              return !!item
+            })
           // 判断是否需要根据换行自动分割节点
           if (textArr.length > 1 && handleIsSplitByWrapOnPasteCreateNewNode) {
             handleIsSplitByWrapOnPasteCreateNewNode()
@@ -1416,9 +1419,11 @@ class Render {
         expand: true
       })
     })
+    const hasSupSubRelation = checkHasSupSubRelation(this.activeNodeList)
     this.mindMap.render(() => {
       // 修复祖先节点存在概要时位置未更新的问题
-      if (hasAncestorsExistGeneralization) {
+      // 修复同时给存在上下级关系的节点添加概要时重叠的问题
+      if (hasSupSubRelation || hasAncestorsExistGeneralization) {
         this.mindMap.render()
       }
     })

@@ -722,6 +722,21 @@ export const getTopAncestorsFomNodeList = list => {
   return res
 }
 
+// 从给定的节点实例列表里判断是否存在上下级关系
+export const checkHasSupSubRelation = list => {
+  for (let i = 0; i < list.length; i++) {
+    const cur = list[i]
+    if (
+      list.find(item => {
+        return item.uid !== cur.uid && cur.isParent(item)
+      })
+    ) {
+      return true
+    }
+  }
+  return false
+}
+
 // 判断两个矩形是否重叠
 export const checkTwoRectIsOverlap = (
   minx1,
