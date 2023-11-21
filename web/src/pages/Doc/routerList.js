@@ -31,6 +31,7 @@ export default [
       { path: 'course22', title: '如何实现搜索、替换' },
       { path: 'course23', title: '如何渲染滚动条' },
       { path: 'course24', title: '如何开发一个插件' },
+      { path: 'course25', title: '关于概要' },
       { path: 'doExport', title: 'Export 插件' },
       { path: 'drag', title: 'Drag插件' },
       { path: 'introduction', title: '简介' },
