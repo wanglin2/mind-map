@@ -28,6 +28,7 @@ export default class TextEdit {
   bindEvent() {
     this.show = this.show.bind(this)
     this.onScale = this.onScale.bind(this)
+    this.onKeydown = this.onKeydown.bind(this)
     // 节点双击事件
     this.mindMap.on('node_dblclick', this.show)
     // 点击事件
@@ -63,15 +64,26 @@ export default class TextEdit {
     this.mindMap.on('scale', this.onScale)
     // // 监听按键事件，判断是否自动进入文本编辑模式
     if (this.mindMap.opt.enableAutoEnterTextEditWhenKeydown) {
-      window.addEventListener('keydown', e => {
-        const activeNodeList = this.mindMap.renderer.activeNodeList
-        if (activeNodeList.length <= 0 || activeNodeList.length > 1) return
-        const node = activeNodeList[0]
-        // 当正在输入中文或英文或数字时，如果没有按下组合键，那么自动进入文本编辑模式
-        if (node && this.checkIsAutoEnterTextEditKey(e)) {
-          this.show(node, e, false, true)
-        }
-      })
+      window.addEventListener('keydown', this.onKeydown)
+    }
+    this.mindMap.on('beforeDestroy', () => {
+      this.unBindEvent()
+    })
+  }
+
+  // 解绑事件
+  unBindEvent() {
+    window.removeEventListener('keydown', this.onKeydown)
+  }
+
+  // 按键事件
+  onKeydown(e) {
+    const activeNodeList = this.mindMap.renderer.activeNodeList
+    if (activeNodeList.length <= 0 || activeNodeList.length > 1) return
+    const node = activeNodeList[0]
+    // 当正在输入中文或英文或数字时，如果没有按下组合键，那么自动进入文本编辑模式
+    if (node && this.checkIsAutoEnterTextEditKey(e)) {
+      this.show(node, e, false, true)
     }
   }
 

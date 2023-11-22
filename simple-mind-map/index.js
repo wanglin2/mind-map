@@ -486,6 +486,7 @@ class MindMap {
 
   // 销毁
   destroy() {
+    this.emit('beforeDestroy')
     // 移除插件
     ;[...MindMap.pluginList].forEach(plugin => {
       if (this[plugin.instanceName].beforePluginDestroy) {

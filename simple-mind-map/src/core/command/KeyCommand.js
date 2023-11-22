@@ -38,6 +38,7 @@ export default class KeyCommand {
 
   //  绑定事件
   bindEvent() {
+    this.onKeydown = this.onKeydown.bind(this)
     // 只有当鼠标在画布内才响应快捷键
     this.mindMap.on('svg_mouseenter', () => {
       this.isInSvg = true
@@ -55,25 +56,36 @@ export default class KeyCommand {
       }
       this.isInSvg = false
     })
-    window.addEventListener('keydown', e => {
-      if (
-        this.isPause ||
-        (this.mindMap.opt.enableShortcutOnlyWhenMouseInSvg && !this.isInSvg)
-      ) {
-        return
-      }
-      Object.keys(this.shortcutMap).forEach(key => {
-        if (this.checkKey(e, key)) {
-          // 粘贴事件不组织，因为要监听paste事件
-          if (!this.checkKey(e, 'Control+v')) {
-            e.stopPropagation()
-            e.preventDefault()
-          }
-          this.shortcutMap[key].forEach(fn => {
-            fn()
-          })
+    window.addEventListener('keydown', this.onKeydown)
+    this.mindMap.on('beforeDestroy', () => {
+      this.unBindEvent()
+    })
+  }
+
+  // 解绑事件
+  unBindEvent() {
+    window.removeEventListener('keydown', this.onKeydown)
+  }
+
+  // 按键事件
+  onKeydown(e) {
+    if (
+      this.isPause ||
+      (this.mindMap.opt.enableShortcutOnlyWhenMouseInSvg && !this.isInSvg)
+    ) {
+      return
+    }
+    Object.keys(this.shortcutMap).forEach(key => {
+      if (this.checkKey(e, key)) {
+        // 粘贴事件不组织，因为要监听paste事件
+        if (!this.checkKey(e, 'Control+v')) {
+          e.stopPropagation()
+          e.preventDefault()
         }
-      })
+        this.shortcutMap[key].forEach(fn => {
+          fn()
+        })
+      }
     })
   }
 
