@@ -1408,7 +1408,7 @@ class Render {
     }
     const nodeList = this.activeNodeList.filter(node => {
       return (
-        !node.isRoot && !node.isGeneralization && !node.checkHasGeneralization()
+        !node.isRoot && !node.isGeneralization && !node.checkHasSelfGeneralization()
       )
     })
     const list = parseAddGeneralizationNodeList(nodeList)
