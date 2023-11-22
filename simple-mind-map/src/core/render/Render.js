@@ -25,7 +25,7 @@ import {
   setDataToClipboard,
   getDataFromClipboard,
   htmlEscape,
-  checkHasSupSubRelation
+  parseAddGeneralizationNodeList
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -1032,14 +1032,7 @@ class Render {
         let node = list[i]
         if (isAppointNodes) list.splice(i, 1)
         if (node.isGeneralization) {
-          // 删除概要节点
-          this.mindMap.execCommand(
-            'SET_NODE_DATA',
-            node.generalizationBelongNode,
-            {
-              generalization: null
-            }
-          )
+          this.deleteNodeGeneralization(node)
           this.removeNodeFromActiveList(node)
           i--
         } else {
@@ -1056,6 +1049,22 @@ class Render {
     }
     this.emitNodeActiveEvent()
     this.mindMap.render()
+  }
+
+  // 删除概要节点，即从所属节点里删除该概要
+  deleteNodeGeneralization(node) {
+    const targetNode = node.generalizationBelongNode
+    const index = targetNode.getGeneralizationNodeIndex(node)
+    let generalization = targetNode.getData('generalization')
+    if (Array.isArray(generalization)) {
+      generalization.splice(index, 1)
+    } else {
+      generalization = null
+    }
+    // 删除概要节点
+    this.mindMap.execCommand('SET_NODE_DATA', targetNode, {
+      generalization
+    })
   }
 
   // 仅删除当前节点
@@ -1075,13 +1084,7 @@ class Render {
       let node = list[i]
       if (node.isGeneralization) {
         // 删除概要节点
-        this.mindMap.execCommand(
-          'SET_NODE_DATA',
-          node.generalizationBelongNode,
-          {
-            generalization: null
-          }
-        )
+        this.deleteNodeGeneralization(node)
       } else {
         const parent = node.parent
         const index = getNodeDataIndex(node)
@@ -1403,29 +1406,41 @@ class Render {
     if (this.activeNodeList.length <= 0) {
       return
     }
-    let hasAncestorsExistGeneralization = false
-    this.activeNodeList.forEach(node => {
-      if (node.getData('generalization') || node.isRoot) {
-        return
-      }
-      hasAncestorsExistGeneralization = node.ancestorHasGeneralization()
-      this.mindMap.execCommand('SET_NODE_DATA', node, {
-        generalization: data || {
+    const nodeList = this.activeNodeList.filter(node => {
+      return (
+        !node.isRoot && !node.isGeneralization && !node.checkHasSelfGeneralization()
+      )
+    })
+    const list = parseAddGeneralizationNodeList(nodeList)
+    list.forEach(item => {
+      const newData = {
+        ...(data || {
           text: this.mindMap.opt.defaultGeneralizationText
+        }),
+        range: item.range || null
+      }
+      let generalization = item.node.getData('generalization')
+      if (generalization) {
+        if (Array.isArray(generalization)) {
+          generalization.push(newData)
+        } else {
+          generalization = [generalization, newData]
         }
+      } else {
+        generalization = [newData]
+      }
+      this.mindMap.execCommand('SET_NODE_DATA', item.node, {
+        generalization
       })
       // 插入子节点时自动展开子节点
-      node.setData({
+      item.node.setData({
         expand: true
       })
     })
-    const hasSupSubRelation = checkHasSupSubRelation(this.activeNodeList)
     this.mindMap.render(() => {
       // 修复祖先节点存在概要时位置未更新的问题
       // 修复同时给存在上下级关系的节点添加概要时重叠的问题
-      if (hasSupSubRelation || hasAncestorsExistGeneralization) {
-        this.mindMap.render()
-      }
+      this.mindMap.render()
     })
   }
 
@@ -1435,7 +1450,7 @@ class Render {
       return
     }
     this.activeNodeList.forEach(node => {
-      if (!node.getData('generalization')) {
+      if (!node.checkHasGeneralization()) {
         return
       }
       this.mindMap.execCommand('SET_NODE_DATA', node, {

@@ -346,6 +346,50 @@ class Base {
     }
   }
 
+  // 获取指定索引区间的子节点的边界范围
+  getChildrenBoundaries(node, dir, startIndex = 0, endIndex) {
+    let { generalizationLineMargin, generalizationNodeMargin } =
+      this.mindMap.themeConfig
+    const children = node.children.slice(startIndex, endIndex + 1)
+    let left = Infinity
+    let right = -Infinity
+    let top = Infinity
+    let bottom = -Infinity
+    children.forEach(item => {
+      const cur = this.getNodeBoundaries(item, dir)
+      left = cur.left < left ? cur.left : left
+      right = cur.right > right ? cur.right : right
+      top = cur.top < top ? cur.top : top
+      bottom = cur.bottom > bottom ? cur.bottom : bottom
+    })
+    return {
+      left,
+      right,
+      top,
+      bottom,
+      generalizationLineMargin,
+      generalizationNodeMargin
+    }
+  }
+
+  // 获取节点概要的渲染边界
+  getNodeGeneralizationRenderBoundaries(item, dir) {
+    let res = null
+    // 区间
+    if (item.range) {
+      res = this.getChildrenBoundaries(
+        item.node,
+        dir,
+        item.range[0],
+        item.range[1]
+      )
+    } else {
+      // 整体概要
+      res = this.getNodeBoundaries(item.node, dir)
+    }
+    return res
+  }
+
   // 获取节点实际存在几个子节点
   getNodeActChildrenLength(node) {
     return node.nodeData.children && node.nodeData.children.length
