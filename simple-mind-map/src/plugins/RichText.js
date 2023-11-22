@@ -651,11 +651,13 @@ class RichText {
   beforePluginRemove() {
     this.transformAllNodesToNormalNode()
     document.head.removeChild(this.styleEl)
+    this.unbindEvent()
   }
 
   // 插件被卸载前做的事情
   beforePluginDestroy() {
     document.head.removeChild(this.styleEl)
+    this.unbindEvent()
   }
 }
 

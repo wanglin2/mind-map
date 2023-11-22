@@ -308,11 +308,15 @@ export default {
         enableAutoEnterTextEditWhenKeydown: true,
         customHandleClipboardText: handleClipboardText,
         handleIsSplitByWrapOnPasteCreateNewNode: () => {
-          return this.$confirm(this.$t('edit.splitByWrap'), this.$t('edit.tip'), {
-            confirmButtonText: this.$t('edit.yes'),
-            cancelButtonText: this.$t('edit.no'),
-            type: 'warning'
-          })
+          return this.$confirm(
+            this.$t('edit.splitByWrap'),
+            this.$t('edit.tip'),
+            {
+              confirmButtonText: this.$t('edit.yes'),
+              cancelButtonText: this.$t('edit.no'),
+              type: 'warning'
+            }
+          )
         }
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
@@ -399,6 +403,11 @@ export default {
       }
       // 协同测试
       this.cooperateTest()
+      // 销毁
+      // setTimeout(() => {
+      //   console.log('销毁')
+      //   this.mindMap.destroy()
+      // }, 10000)
     },
 
     // url中是否存在要打开的文件
