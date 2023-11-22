@@ -737,6 +737,56 @@ export const checkHasSupSubRelation = list => {
   return false
 }
 
+// 解析要添加概要的节点实例列表
+export const parseAddGeneralizationNodeList = list => {
+  const cache = {}
+  const uidToParent = {}
+  list.forEach(node => {
+    const parent = node.parent
+    if (parent) {
+      const pUid = parent.uid
+      uidToParent[pUid] = parent
+      const index = node.getIndexInBrothers()
+      const data = {
+        node,
+        index
+      }
+      if (cache[pUid]) {
+        if (
+          !cache[pUid].find(item => {
+            return item.index === data.index
+          })
+        ) {
+          cache[pUid].push(data)
+        }
+      } else {
+        cache[pUid] = [data]
+      }
+    }
+  })
+  const res = []
+  Object.keys(cache).forEach(uid => {
+    if (cache[uid].length > 1) {
+      const rangeList = cache[uid]
+        .map(item => {
+          return item.index
+        })
+        .sort((a, b) => {
+          return a - b
+        })
+      res.push({
+        node: uidToParent[uid],
+        range: [rangeList[0], rangeList[rangeList.length - 1]]
+      })
+    } else {
+      res.push({
+        node: cache[uid][0].node
+      })
+    }
+  })
+  return res
+}
+
 // 判断两个矩形是否重叠
 export const checkTwoRectIsOverlap = (
   minx1,
