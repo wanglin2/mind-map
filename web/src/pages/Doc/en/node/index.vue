@@ -31,6 +31,44 @@
 </blockquote>
 <p>Whether the node is currently being dragged</p>
 <h2>Methods</h2>
+<h3>setGeneralizationOpacity(val)</h3>
+<blockquote>
+<p>v0.9.0+</p>
+</blockquote>
+<ul>
+<li><code>val</code>：Number, 0-1，Opacity</li>
+</ul>
+<p>Set the transparency of summary nodes and curves.</p>
+<h3>formatGetGeneralization()</h3>
+<blockquote>
+<p>v0.9.0+</p>
+</blockquote>
+<p>Obtain node summary data.</p>
+<h3>getIndexInBrothers()</h3>
+<blockquote>
+<p>v0.9.0+</p>
+</blockquote>
+<p>Gets the index of the node in the sibling node list.</p>
+<h3>getRectInSvg()</h3>
+<blockquote>
+<p>v0.9.0+</p>
+</blockquote>
+<p>Obtain the size and position information of the node. The width and height are the actual width and height after applying the scaling effect, and the position information is relative to the canvas.</p>
+<h3>getRect()</h3>
+<blockquote>
+<p>v0.8.1+</p>
+</blockquote>
+<p>Obtain the size and position information of the node. The width and height are the actual width and height after applying the scaling effect, and the position is relative to the upper left corner of the browser window.</p>
+<h3>ancestorHasGeneralization()</h3>
+<blockquote>
+<p>v0.8.1+</p>
+</blockquote>
+<p>Check if there are ancestor nodes with a summary.</p>
+<h3>getNoteContentPosition()</h3>
+<blockquote>
+<p>v0.8.1+</p>
+</blockquote>
+<p>Obtain the display position of node comments. When a node has comments and is displaying a state, dragging or zooming will cause the comment floating layer to detach from the node. This method can be used to obtain a new position and update the comment floating layer.</p>
 <h3>updateNodeByActive(active)</h3>
 <blockquote>
 <p>v0.8.0+</p>
@@ -143,9 +181,16 @@ nodeData, <code>SET_NODE_DATA</code> command's shortcut method</p>
 <p>Show node and its sub-nodes</p>
 <h3>isParent(node)</h3>
 <blockquote>
-<p>v0.1.5+</p>
+<p>v0.1.5+：Detect whether the current node is an ancestor node of a certain node</p>
 </blockquote>
-<p>Check if the current node is an ancestor of a certain node</p>
+<blockquote>
+<p>v0.8.1+：Detect whether the current node is the parent node of a certain node</p>
+</blockquote>
+<h3>isAncestor(node)</h3>
+<blockquote>
+<p>v0.8.1+</p>
+</blockquote>
+<p>Detect whether the current node is an ancestor node of a certain node</p>
 <h3>isBrother(node)</h3>
 <blockquote>
 <p>v0.1.5+</p>
@@ -156,6 +201,11 @@ nodeData, <code>SET_NODE_DATA</code> command's shortcut method</p>
 <p>v0.2.0+</p>
 </blockquote>
 <p>Check if there is a summary</p>
+<h3>checkHasSelfGeneralization()</h3>
+<blockquote>
+<p>v0.9.0+</p>
+</blockquote>
+<p>Check if there is a summary of oneself, not a sub node interval summary</p>
 <h3>hideGeneralization()</h3>
 <blockquote>
 <p>v0.2.0+</p>

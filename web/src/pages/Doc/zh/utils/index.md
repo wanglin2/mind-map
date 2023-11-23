@@ -397,6 +397,12 @@ copyNodeTree({}, node)
 
 从节点的父节点的`nodeData.children`列表中移除该节点的数据。
 
+#### checkHasSupSubRelation()
+
+> v0.8.1+
+
+从给定的节点实例列表里判断是否存在上下级关系。
+
 ## 在canvas中模拟css的背景属性
 
 引入：

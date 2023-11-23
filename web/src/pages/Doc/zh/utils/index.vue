@@ -323,6 +323,11 @@
 <p>v0.8.0+</p>
 </blockquote>
 <p>从节点的父节点的<code>nodeData.children</code>列表中移除该节点的数据。</p>
+<h4>checkHasSupSubRelation()</h4>
+<blockquote>
+<p>v0.8.1+</p>
+</blockquote>
+<p>从给定的节点实例列表里判断是否存在上下级关系。</p>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

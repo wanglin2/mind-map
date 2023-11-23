@@ -1,6 +1,36 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.9.0</h2>
+<p>New:</p>
+<p>1.Support adding summaries to some child nodes of the same node.</p>
+<p>2.Moving the mouse into the summary will highlight its node.</p>
+<p>3.Importing and exporting xmind files supports processing profiles.</p>
+<h2>0.8.1</h2>
+<p>Fix：</p>
+<blockquote>
+<p>1.Fix the issue where the activation status of the summary node in the history data has not been deleted, which can cause data to be triggered when clicking on the summary node_ Change event.</p>
+<p>2.Fix the issue of blank pages and exceptions thrown by the console when running in Safari browser.</p>
+<p>3.Fixed the issue of icon floating layer and note floating layer detached from nodes when scaling the canvas.</p>
+<p>4.Fixed the issue of selecting all nodes in read-only mode.</p>
+<p>5.Fix the presence of node content has   in rich text mode; Error exporting as image.</p>
+<p>6.Fixed the issue of overlapping profiles when adding profiles to oneself first and then to subordinates; Fix the issue of overlapping profiles when adding profiles to nodes with hierarchical relationships at the same time.</p>
+<p>7.Fix the issue of exporting PDF errors when there are many nodes.</p>
+</blockquote>
+<p>New：</p>
+<blockquote>
+<p>1.Add a configuration option that prohibits dragging the canvas.</p>
+<p>2.Add a configuration option to prohibit double finger scaling of the canvas.</p>
+<p>3.Add compression parameters to the method of exporting PNG; Optimize the problem of excessive volume when exporting PDF from nodes with large amounts of data.</p>
+<p>4.Rename the isParent method of the node instance to isAncestor and add the isParent method at the same time.</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.Fixed the issue of being able to search for replacement and edit outlines in read-only mode.</p>
+<p>2.Fix the issue where the outline cannot be displayed and edited when the node content is an HTML tag.</p>
+<p>3.Fix the issue where when multiple nodes are selected and icons are added at the same time, all node icons will be unified as the icon of the first node.</p>
+<p>4.Adding loading to the export operation.</p>
+</blockquote>
 <h2>0.8.0-fix.1</h2>
 <p>Fix: Fixed the issue of creating a new node using direct paste if the pasted content contains HTML label symbols such as &lt;&gt; and the newly created node content is empty.</p>
 <h2>0.8.0</h2>

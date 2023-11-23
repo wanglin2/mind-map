@@ -37,7 +37,7 @@ const mindMap = new MindMap({
 | textContentMargin                | Number  | 2                | 节点里各种文字信息的间距，如图标和文字的间距                 |
 | selectTranslateStep              | Number  | 3                | 多选节点时鼠标移动到边缘时的画布移动偏移量                   |
 | selectTranslateLimit             | Number  | 20               | 多选节点时鼠标移动距边缘多少距离时开始偏移                   |
-| customNoteContentShow（v0.1.6+） | Object  | null             | 自定义节点备注内容显示，Object类型，结构为：{show: (noteContent, left, top) => {// 你的显示节点备注逻辑 }, hide: () => {// 你的隐藏节点备注逻辑 }} |
+| customNoteContentShow（v0.1.6+） | Object  | null             | 自定义节点备注内容显示，Object类型，结构为：{show: (noteContent, left, top, node) => {// 你的显示节点备注逻辑。node为v0.8.1+版本新增的回参，代表节点实例 }, hide: () => {// 你的隐藏节点备注逻辑 }} |
 | readonly（v0.1.7+）              | Boolean | false            | 是否是只读模式                                               |
 | enableFreeDrag（v0.2.4+）        | Boolean | false            | 是否开启节点自由拖拽（自由拖拽即可以把节点拖拽到画布的任意位置，注意不是拖拽节点成为其他节点的子节点兄弟节点的功能，自由拖拽的连线会存在一定问题，所以该特性最好不要使用）                                         |
 | watermarkConfig（v0.2.4+）       | Object  |                  | 水印配置，详细配置请参考下方表格【水印配置】                 |
@@ -100,6 +100,9 @@ const mindMap = new MindMap({
 | defaultGeneralizationText（v0.8.0+）     |  String | 概要  | 插入概要的默认文本 |
 | handleIsSplitByWrapOnPasteCreateNewNode（v0.8.0+）     | Function / null | null  | 粘贴文本的方式创建新节点时，控制是否按换行自动分割节点，即如果存在换行，那么会根据换行创建多个节点，否则只会创建一个节点，可以传递一个函数，返回promise，resolve代表根据换行分割，reject代表忽略换行 |
 | addHistoryTime（v0.8.0+）     | Number | 100  | 指定时间内只允许添加一次历史记录，避免添加没有必要的中间状态，单位：ms  |
+| isDisableDrag（v0.8.1+）     | Boolean | false  | 是否禁止拖动画布  |
+| disableTouchZoom（v0.8.1+）     | Boolean | false  | 禁止双指缩放，你仍旧可以使用api进行缩放，对TouchEvent插件生效  |
+| highlightNodeBoxStyle（v0.9.0+）     | Object | { stroke: 'rgb(94, 200, 248)', fill: 'transparent' }  | 鼠标移入概要高亮所属节点时的高亮框样式  |
 
 ### 数据结构
 
@@ -405,6 +408,7 @@ mindMap.setTheme('主题名称')
 | view_theme_change（v0.6.12+）    | 调用了setTheme方法设置主题后触发   | theme（设置的新主题名称）  |
 | set_data（v0.7.3+）    | 调用了setData方法动态设置思维导图数据时触发   | data（新的思维导图数据）  |
 | resize（v0.8.0+）    |  容器尺寸改变后触发，实际上是当思维导图实例的`resize`方法被调用后触发  |   |
+| beforeDestroy（v0.9.0+）    |  思维导图销毁前触发，即调用了destroy方法触发  |   |
 
 ### emit(event, ...args)
 

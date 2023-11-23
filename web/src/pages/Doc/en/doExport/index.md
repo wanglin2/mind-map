@@ -38,7 +38,7 @@ a.download = 'xxx'
 a.click()
 ```
 
-### png(name, transparent = false, checkRotate)
+### png(name, transparent = false, checkRotate, compress)
 
 > Versions below v0.7.0 are: png(name, transparent = false, rotateWhenWidthLongerThenHeight)
 
@@ -48,7 +48,9 @@ a.click()
 
 - `rotateWhenWidthLongerThenHeight`: v0.6.15+, V0.7.0+abandoned, Boolean, false, Automatically rotate 90 degrees when the image has a width to height ratio
 
-- `checkRotate`: v0.7.0+, Function, You can pass a function that takes two parameters, the width and height of the image, and returns true or false. True represents that the image needs to be rotated by 90 degrees.
+- `checkRotate`: v0.7.0+, Function, You can pass a function that takes two parameters, the width and height of the image, and returns true or false. True represents that the image needs to be rotated by 90 degrees
+
+- `compress`：v0.8.1+，null | { width, height }, The parameter for compressing images. In some cases, the length and width of the exported image may be very large. If you want to reduce it, you can use this parameter to control it. Only one width or height can be provided, and it will be scaled proportionally
 
 Exports as `png`.
 
@@ -72,13 +74,15 @@ svg(
 
 Exports as `svg`.
 
-### pdf(name, useMultiPageExport)
+### pdf(name, useMultiPageExport, maxImageWidth)
 
 > v0.2.1+
 
 - `name`：File name
 
 - `useMultiPageExport`: v0.6.15+, Boolean, false, Whether to export multiple pages, default to single page
+
+- `maxImageWidth`：v0.8.1+，null | Number，The default is twice the width of A4 paper, which is a parameter for compressing images. In some cases, the length and width of the image may be very large, resulting in a very large PDF volume. Therefore, if you want to reduce the volume, you can use this parameter to control the maximum width of the image
 
 Export as `pdf`. Unlike other export methods, this method does not return data and directly triggers the download.
 

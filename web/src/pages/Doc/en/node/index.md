@@ -56,6 +56,50 @@ Whether the node is currently being dragged
 
 ## Methods
 
+### setGeneralizationOpacity(val)
+
+> v0.9.0+
+
+- `val`：Number, 0-1，Opacity
+
+Set the transparency of summary nodes and curves.
+
+### formatGetGeneralization()
+
+> v0.9.0+
+
+Obtain node summary data.
+
+### getIndexInBrothers()
+
+> v0.9.0+
+
+Gets the index of the node in the sibling node list.
+
+### getRectInSvg()
+
+> v0.9.0+
+
+Obtain the size and position information of the node. The width and height are the actual width and height after applying the scaling effect, and the position information is relative to the canvas.
+
+### getRect()
+
+> v0.8.1+
+
+Obtain the size and position information of the node. The width and height are the actual width and height after applying the scaling effect, and the position is relative to the upper left corner of the browser window.
+
+### ancestorHasGeneralization()
+
+> v0.8.1+
+
+Check if there are ancestor nodes with a summary.
+
+### getNoteContentPosition()
+
+> v0.8.1+
+
+Obtain the display position of node comments. When a node has comments and is displaying a state, dragging or zooming will cause the comment floating layer to detach from the node. This method can be used to obtain a new position and update the comment floating layer.
+
 ### updateNodeByActive(active)
 
 > v0.8.0+
@@ -207,9 +251,15 @@ Show node and its sub-nodes
 
 ### isParent(node)
 
-> v0.1.5+
+> v0.1.5+：Detect whether the current node is an ancestor node of a certain node
 
-Check if the current node is an ancestor of a certain node
+> v0.8.1+：Detect whether the current node is the parent node of a certain node
+
+### isAncestor(node) 
+
+> v0.8.1+
+
+Detect whether the current node is an ancestor node of a certain node
 
 ### isBrother(node)
 
@@ -222,6 +272,12 @@ Check if the current node is a sibling of a certain node
 > v0.2.0+
 
 Check if there is a summary
+
+### checkHasSelfGeneralization()
+
+> v0.9.0+
+
+Check if there is a summary of oneself, not a sub node interval summary
 
 ### hideGeneralization()
 

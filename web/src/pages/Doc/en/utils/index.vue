@@ -328,6 +328,11 @@ and copying the <code>data</code> of the data object, example:</p>
 <p>v0.8.0+</p>
 </blockquote>
 <p>Remove the data of a node from its parent node's <code>nodeData.children</code> list.</p>
+<h4>checkHasSupSubRelation()</h4>
+<blockquote>
+<p>v0.8.1+</p>
+</blockquote>
+<p>Determine whether there is a hierarchical relationship from the given node instance list.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>
