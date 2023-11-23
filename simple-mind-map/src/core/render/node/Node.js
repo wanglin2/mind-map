@@ -458,12 +458,18 @@ class Node {
       this._isMouseenter = true
       // 显示展开收起按钮
       this.showExpandBtn()
+      if (this.isGeneralization) {
+        this.handleGeneralizationMouseenter()
+      }
       this.mindMap.emit('node_mouseenter', this, e)
     })
     this.group.on('mouseleave', e => {
       if (!this._isMouseenter) return
       this._isMouseenter = false
       this.hideExpandBtn()
+      if (this.isGeneralization) {
+        this.handleGeneralizationMouseleave()
+      }
       this.mindMap.emit('node_mouseleave', this, e)
     })
     // 双击事件
@@ -1002,9 +1008,28 @@ class Node {
     return this.style.hasCustomStyle()
   }
 
-  // 获取节点的尺寸和位置信息，位置信息相对于页面
+  // 获取节点的尺寸和位置信息，宽高是应用了缩放效果后的实际宽高，位置是相对于浏览器窗口左上角的位置
   getRect() {
     return this.group.rbox()
+  }
+
+  // 获取节点的尺寸和位置信息，宽高是应用了缩放效果后的实际宽高，位置信息相对于画布
+  getRectInSvg() {
+    let { scaleX, scaleY, translateX, translateY } =
+      this.mindMap.draw.transform()
+    let { left, top, width, height } = this
+    let right = (left + width) * scaleX + translateX
+    let bottom = (top + height) * scaleY + translateY
+    left = left * scaleX + translateX
+    top = top * scaleY + translateY
+    return {
+      left,
+      right,
+      top,
+      bottom,
+      width: width * scaleX,
+      height: height * scaleY
+    }
   }
 }
 

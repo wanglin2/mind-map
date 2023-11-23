@@ -224,5 +224,10 @@ export const defaultOpt = {
   // 多少时间内只允许添加一次历史记录，避免添加没有必要的中间状态，单位：ms
   addHistoryTime: 100,
   // 是否禁止拖动画布
-  isDisableDrag: false
+  isDisableDrag: false,
+  // 鼠标移入概要高亮所属节点时的高亮框样式
+  highlightNodeBoxStyle: {
+    stroke: 'rgb(94, 200, 248)',
+    fill: 'transparent'
+  }
 }

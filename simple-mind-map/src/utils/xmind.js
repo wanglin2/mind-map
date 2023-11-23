@@ -154,15 +154,12 @@ export const handleNodeImageToXmind = async (
     try {
       let imgName = ''
       let imgData = node.data.image
-      console.log(1, imgData)
       // base64之外的其他图片要先转换成data:url
       if (!/^data:/.test(node.data.image)) {
         imgData = await imgToDataUrl(node.data.image)
-        console.log(2, imgData)
       }
       // 从data:url中解析出图片类型和ase64
       let dataUrlRes = parseDataUrl(imgData)
-      console.log(3, dataUrlRes)
       imgName = 'image_' + imageList.length + '.' + dataUrlRes.type
       imageList.push({
         name: imgName,
