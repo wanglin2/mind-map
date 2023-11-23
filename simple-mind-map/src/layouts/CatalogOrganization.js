@@ -72,11 +72,7 @@ class CatalogOrganization extends Base {
       this.root,
       null,
       (node, parent, isRoot, layerIndex) => {
-        if (
-          node.getData('expand') &&
-          node.children &&
-          node.children.length
-        ) {
+        if (node.getData('expand') && node.children && node.children.length) {
           let marginX = this.getMarginX(layerIndex + 1)
           let marginY = this.getMarginY(layerIndex + 1)
           if (isRoot) {
@@ -339,24 +335,27 @@ class CatalogOrganization extends Base {
   }
 
   //  创建概要节点
-  renderGeneralization(node, gLine, gNode) {
-    let {
-      top,
-      bottom,
-      right,
-      generalizationLineMargin,
-      generalizationNodeMargin
-    } = this.getNodeBoundaries(node, 'h')
-    let x1 = right + generalizationLineMargin
-    let y1 = top
-    let x2 = right + generalizationLineMargin
-    let y2 = bottom
-    let cx = x1 + 20
-    let cy = y1 + (y2 - y1) / 2
-    let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
-    gLine.plot(path)
-    gNode.left = right + generalizationNodeMargin
-    gNode.top = top + (bottom - top - gNode.height) / 2
+  renderGeneralization(list) {
+    list.forEach(item => {
+      let {
+        top,
+        bottom,
+        right,
+        generalizationLineMargin,
+        generalizationNodeMargin
+      } = this.getNodeGeneralizationRenderBoundaries(item, 'h')
+      let x1 = right + generalizationLineMargin
+      let y1 = top
+      let x2 = right + generalizationLineMargin
+      let y2 = bottom
+      let cx = x1 + 20
+      let cy = y1 + (y2 - y1) / 2
+      let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
+      item.generalizationLine.plot(path)
+      item.generalizationNode.left = right + generalizationNodeMargin
+      item.generalizationNode.top =
+        top + (bottom - top - item.generalizationNode.height) / 2
+    })
   }
 
   // 渲染展开收起按钮的隐藏占位元素

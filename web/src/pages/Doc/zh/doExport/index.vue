@@ -27,7 +27,7 @@ a.href = <span class="hljs-string">&#x27;xxx.png&#x27;</span><span class="hljs-c
 a.download = <span class="hljs-string">&#x27;xxx&#x27;</span>
 a.click()
 </code></pre>
-<h3>png(name, transparent = false, checkRotate)</h3>
+<h3>png(name, transparent = false, checkRotate, compress)</h3>
 <blockquote>
 <p>v0.7.0以下版本为： png(name, transparent = false, rotateWhenWidthLongerThenHeight)</p>
 </blockquote>
@@ -42,7 +42,10 @@ a.click()
 <p><code>rotateWhenWidthLongerThenHeight</code>: v0.6.15+，v0.7.0+已废弃，Boolean, false, 是否在图片宽比高长时自动旋转90度</p>
 </li>
 <li>
-<p><code>checkRotate</code>：v0.7.0+，Function，可以传递一个函数，接收图片的宽度和高度两个参数，返回true或false，true代表图片需要旋转90度。</p>
+<p><code>checkRotate</code>：v0.7.0+，Function，可以传递一个函数，接收图片的宽度和高度两个参数，返回true或false，true代表图片需要旋转90度</p>
+</li>
+<li>
+<p><code>compress</code>：v0.8.1+，null | { width, height }, 压缩图片的参数，某些情况下导出的图片长宽可能非常大，如果希望减小，那么可以通过该参数来控制，宽或高只提供一个即可，会按比例缩放</p>
 </li>
 </ul>
 <p>导出为<code>png</code>。</p>
@@ -66,7 +69,7 @@ a.click()
 )
 </code></pre>
 <p>导出为<code>svg</code>。</p>
-<h3>pdf(name, useMultiPageExport)</h3>
+<h3>pdf(name, useMultiPageExport, maxImageWidth)</h3>
 <blockquote>
 <p>v0.2.1+</p>
 </blockquote>
@@ -76,6 +79,9 @@ a.click()
 </li>
 <li>
 <p><code>useMultiPageExport</code>: v0.6.15+，Boolean, false, 是否多页导出，默认为单页</p>
+</li>
+<li>
+<p><code>maxImageWidth</code>：v0.8.1+，null | Number，默认为a4纸的宽度的2倍, 压缩图片的参数，某些情况下图片的长宽可能非常大，导致pdf体积也非常大，所以如果希望减小体积，那么可以通过该参数来控制图片的最大宽度</p>
 </li>
 </ul>
 <p>导出为<code>pdf</code>，和其他导出方法不一样，这个方法不会返回数据，会直接触发下载。</p>

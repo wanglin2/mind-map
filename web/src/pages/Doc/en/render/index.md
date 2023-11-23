@@ -15,6 +15,24 @@ Gets the root node of the node tree.
 
 ## Methods
 
+### highlightNode(node, range)
+
+> v0.9.0+
+
+- `node`：Target node instance to highlight
+
+- `range`：Optional, Array, a range array, [0, 1]
+
+Highlight a node or child node. If the 'range' parameter is not passed, the specified 'node' node is directly highlighted. If the 'range' passes a range of child nodes to be highlighted, the child nodes of that range will be highlighted.
+
+The highlight effect is wrapped by a rectangular box, and the stroke and fill style of the rectangle can be configured through the 'highlightNodeBoxStyle' instantiation option.
+
+### closeHighlightNode()
+
+> v0.9.0+
+
+隐藏节点高亮框。
+
 ### setRootNodeCenter()
 
 > v0.8.0+

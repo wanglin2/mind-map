@@ -48,6 +48,7 @@ class TouchEvent {
       let touch = e.touches[0]
       this.dispatchMouseEvent('mousemove', touch.target, touch)
     } else if (len === 2) {
+      if (this.mindMap.opt.disableTouchZoom) return
       let touch1 = e.touches[0]
       let touch2 = e.touches[1]
       let ox = touch1.clientX - touch2.clientX

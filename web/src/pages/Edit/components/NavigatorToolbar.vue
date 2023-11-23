@@ -119,21 +119,20 @@ export default {
       version: pkg.version,
       langList,
       lang: '',
-      isReadonly: false,
       openMiniMap: false
     }
   },
   computed: {
-    ...mapState(['isDark'])
+    ...mapState(['isDark', 'isReadonly'])
   },
   created() {
     this.lang = getLang()
   },
   methods: {
-    ...mapMutations(['setIsDark']),
+    ...mapMutations(['setIsDark', 'setIsReadonly']),
 
     readonlyChange() {
-      this.isReadonly = !this.isReadonly
+      this.setIsReadonly(!this.isReadonly)
       this.mindMap.setMode(this.isReadonly ? 'readonly' : 'edit')
     },
 

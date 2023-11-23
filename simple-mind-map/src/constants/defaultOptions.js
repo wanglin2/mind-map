@@ -160,6 +160,9 @@ export const defaultOpt = {
   customHandleClipboardText: null,
   // 禁止鼠标滚轮缩放，你仍旧可以使用api进行缩放
   disableMouseWheelZoom: false,
+  // 禁止双指缩放，你仍旧可以使用api进行缩放
+  // 需要注册TouchEvent插件后生效
+  disableTouchZoom: false,
   // 错误处理函数
   errorHandler: (code, error) => {
     console.error(code, error)
@@ -219,5 +222,12 @@ export const defaultOpt = {
   // 可以传递一个函数，返回promise，resolve代表根据换行分割，reject代表忽略换行
   handleIsSplitByWrapOnPasteCreateNewNode: null,
   // 多少时间内只允许添加一次历史记录，避免添加没有必要的中间状态，单位：ms
-  addHistoryTime: 100
+  addHistoryTime: 100,
+  // 是否禁止拖动画布
+  isDisableDrag: false,
+  // 鼠标移入概要高亮所属节点时的高亮框样式
+  highlightNodeBoxStyle: {
+    stroke: 'rgb(94, 200, 248)',
+    fill: 'transparent'
+  }
 }

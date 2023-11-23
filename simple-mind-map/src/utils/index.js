@@ -152,6 +152,9 @@ export const copyRenderTree = (tree, root, removeActiveState = false) => {
   tree.data = simpleDeepClone(root.data)
   if (removeActiveState) {
     tree.data.isActive = false
+    if (tree.data.generalization) {
+      tree.data.generalization.isActive = false
+    }
   }
   tree.children = []
   if (root.children && root.children.length > 0) {
@@ -626,7 +629,7 @@ export const textToNodeRichTextWithWrap = html => {
   }
   return list
     .map(item => {
-      return `<p><span>${item}</span></p>`
+      return `<p><span>${htmlEscape(item)}</span></p>`
     })
     .join('')
 }
@@ -710,10 +713,75 @@ export const getTopAncestorsFomNodeList = list => {
   list.forEach(node => {
     if (
       !list.find(item => {
-        return item.uid !== node.uid && item.isParent(node)
+        return item.uid !== node.uid && item.isAncestor(node)
       })
     ) {
       res.push(node)
+    }
+  })
+  return res
+}
+
+// 从给定的节点实例列表里判断是否存在上下级关系
+export const checkHasSupSubRelation = list => {
+  for (let i = 0; i < list.length; i++) {
+    const cur = list[i]
+    if (
+      list.find(item => {
+        return item.uid !== cur.uid && cur.isAncestor(item)
+      })
+    ) {
+      return true
+    }
+  }
+  return false
+}
+
+// 解析要添加概要的节点实例列表
+export const parseAddGeneralizationNodeList = list => {
+  const cache = {}
+  const uidToParent = {}
+  list.forEach(node => {
+    const parent = node.parent
+    if (parent) {
+      const pUid = parent.uid
+      uidToParent[pUid] = parent
+      const index = node.getIndexInBrothers()
+      const data = {
+        node,
+        index
+      }
+      if (cache[pUid]) {
+        if (
+          !cache[pUid].find(item => {
+            return item.index === data.index
+          })
+        ) {
+          cache[pUid].push(data)
+        }
+      } else {
+        cache[pUid] = [data]
+      }
+    }
+  })
+  const res = []
+  Object.keys(cache).forEach(uid => {
+    if (cache[uid].length > 1) {
+      const rangeList = cache[uid]
+        .map(item => {
+          return item.index
+        })
+        .sort((a, b) => {
+          return a - b
+        })
+      res.push({
+        node: uidToParent[uid],
+        range: [rangeList[0], rangeList[rangeList.length - 1]]
+      })
+    } else {
+      res.push({
+        node: cache[uid][0].node
+      })
     }
   })
   return res

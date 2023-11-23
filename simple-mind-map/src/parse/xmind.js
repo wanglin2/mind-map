@@ -1,12 +1,18 @@
 import JSZip from 'jszip'
 import xmlConvert from 'xml-js'
+import { getTextFromHtml, isUndef } from '../utils/index'
 import {
-  getTextFromHtml,
-  imgToDataUrl,
-  parseDataUrl,
-  getImageSize,
-  isUndef
-} from '../utils/index'
+  getSummaryText,
+  getSummaryText2,
+  getRoot,
+  getItemByName,
+  getElementsByType,
+  addSummaryData,
+  handleNodeImageFromXmind,
+  handleNodeImageToXmind,
+  getXmindContentXmlData,
+  parseNodeGeneralizationToXmind
+} from '../utils/xmind'
 
 //  解析.xmind文件
 const parseXmindFile = file => {
@@ -43,18 +49,18 @@ const parseXmindFile = file => {
 
 //  转换xmind数据
 const transformXmind = async (content, files) => {
-  let data = JSON.parse(content)[0]
-  let nodeTree = data.rootTopic
-  let newTree = {}
-  let waitLoadImageList = []
-  let walk = async (node, newNode) => {
+  const data = JSON.parse(content)[0]
+  const nodeTree = data.rootTopic
+  const newTree = {}
+  const waitLoadImageList = []
+  const walk = async (node, newNode) => {
     newNode.data = {
       // 节点内容
       text: isUndef(node.title) ? '' : node.title
     }
     // 节点备注
     if (node.notes) {
-      let notesData = node.notes.realHTML || node.notes.plain
+      const notesData = node.notes.realHTML || node.notes.plain
       newNode.data.note = notesData ? notesData.content || '' : ''
     }
     // 超链接
@@ -66,41 +72,26 @@ const transformXmind = async (content, files) => {
       newNode.data.tag = node.labels
     }
     // 图片
-    if (node.image && /\.(jpg|jpeg|png|gif|webp)$/.test(node.image.src)) {
-      // 处理异步逻辑
-      let resolve = null
-      let promise = new Promise(_resolve => {
-        resolve = _resolve
-      })
-      waitLoadImageList.push(promise)
-      try {
-        // 读取图片
-        let imageType = /\.([^.]+)$/.exec(node.image.src)[1]
-        let imageBase64 =
-          `data:image/${imageType};base64,` +
-          (await files['resources/' + node.image.src.split('/')[1]].async(
-            'base64'
-          ))
-        newNode.data.image = imageBase64
-        // 如果图片尺寸不存在
-        if (!node.image.width && !node.image.height) {
-          let imageSize = await getImageSize(imageBase64)
-          newNode.data.imageSize = {
-            width: imageSize.width,
-            height: imageSize.height
-          }
-        } else {
-          newNode.data.imageSize = {
-            width: node.image.width,
-            height: node.image.height
-          }
-        }
-        resolve()
-      } catch (error) {
-        console.log(error)
-        resolve()
-      }
+    handleNodeImageFromXmind(node, newNode, waitLoadImageList, files)
+    // 概要
+    const selfSummary = []
+    const childrenSummary = []
+    if (newNode._summary) {
+      selfSummary.push(newNode._summary)
     }
+    if (Array.isArray(node.summaries) && node.summaries.length > 0) {
+      node.summaries.forEach(item => {
+        addSummaryData(
+          selfSummary,
+          childrenSummary,
+          () => {
+            return getSummaryText(node, item.topicId)
+          },
+          item.range
+        )
+      })
+    }
+    newNode.data.generalization = selfSummary
     // 子节点
     newNode.children = []
     if (
@@ -108,9 +99,12 @@ const transformXmind = async (content, files) => {
       node.children.attached &&
       node.children.attached.length > 0
     ) {
-      node.children.attached.forEach(item => {
-        let newChild = {}
+      node.children.attached.forEach((item, index) => {
+        const newChild = {}
         newNode.children.push(newChild)
+        if (childrenSummary[index]) {
+          newChild._summary = childrenSummary[index]
+        }
         walk(item, newChild)
       })
     }
@@ -122,39 +116,21 @@ const transformXmind = async (content, files) => {
 
 //  转换旧版xmind数据，xmind8
 const transformOldXmind = content => {
-  let data = JSON.parse(content)
-  let elements = data.elements
-  let root = null
-  let getRoot = arr => {
-    if (!arr) return
-    for (let i = 0; i < arr.length; i++) {
-      if (!root && arr[i].name === 'topic') {
-        root = arr[i]
-        return
-      }
-    }
-    arr.forEach(item => {
-      getRoot(item.elements)
-    })
-  }
-  getRoot(elements)
-  let newTree = {}
-  let getItemByName = (arr, name) => {
-    return arr.find(item => {
-      return item.name === name
-    })
-  }
-  let walk = (node, newNode) => {
-    let nodeElements = node.elements
+  const data = JSON.parse(content)
+  const elements = data.elements
+  const root = getRoot(elements)
+  const newTree = {}
+  const walk = (node, newNode) => {
+    const nodeElements = node.elements
     let nodeTitle = getItemByName(nodeElements, 'title')
     nodeTitle = nodeTitle && nodeTitle.elements && nodeTitle.elements[0].text
+    // 节点内容
     newNode.data = {
-      // 节点内容
       text: isUndef(nodeTitle) ? '' : nodeTitle
     }
+    // 节点备注
     try {
-      // 节点备注
-      let notesElement = getItemByName(nodeElements, 'notes')
+      const notesElement = getItemByName(nodeElements, 'notes')
       if (notesElement) {
         newNode.data.note =
           notesElement.elements[0].elements[0].elements[0].text
@@ -162,8 +138,8 @@ const transformOldXmind = content => {
     } catch (error) {
       console.log(error)
     }
+    // 超链接
     try {
-      // 超链接
       if (
         node.attributes &&
         node.attributes['xlink:href'] &&
@@ -174,9 +150,9 @@ const transformOldXmind = content => {
     } catch (error) {
       console.log(error)
     }
+    // 标签
     try {
-      // 标签
-      let labelsElement = getItemByName(nodeElements, 'labels')
+      const labelsElement = getItemByName(nodeElements, 'labels')
       if (labelsElement) {
         newNode.data.tag = labelsElement.elements.map(item => {
           return item.elements[0].text
@@ -185,22 +161,50 @@ const transformOldXmind = content => {
     } catch (error) {
       console.log(error)
     }
+    const childrenItem = getItemByName(nodeElements, 'children')
+    // 概要
+    const selfSummary = []
+    const childrenSummary = []
+    try {
+      if (newNode._summary) {
+        selfSummary.push(newNode._summary)
+      }
+      const summariesItem = getItemByName(nodeElements, 'summaries')
+      if (
+        summariesItem &&
+        Array.isArray(summariesItem.elements) &&
+        summariesItem.elements.length > 0
+      ) {
+        summariesItem.elements.forEach(item => {
+          addSummaryData(
+            selfSummary,
+            childrenSummary,
+            () => {
+              return getSummaryText2(childrenItem, item.attributes['topic-id'])
+            },
+            item.attributes.range
+          )
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    newNode.data.generalization = selfSummary
     // 子节点
     newNode.children = []
-    let _children = getItemByName(nodeElements, 'children')
-    if (_children && _children.elements && _children.elements.length > 0) {
-      _children.elements.forEach(item => {
-        if (item.name === 'topics') {
-          ;(item.elements || []).forEach(item2 => {
-            let newChild = {}
-            newNode.children.push(newChild)
-            walk(item2, newChild)
-          })
-        } else {
-          let newChild = {}
-          newNode.children.push(newChild)
-          walk(item, newChild)
+    if (
+      childrenItem &&
+      childrenItem.elements &&
+      childrenItem.elements.length > 0
+    ) {
+      const children = getElementsByType(childrenItem.elements, 'attached')
+      children.forEach((item, index) => {
+        const newChild = {}
+        newNode.children.push(newChild)
+        if (childrenSummary[index]) {
+          newChild._summary = childrenSummary[index]
         }
+        walk(item, newChild)
       })
     }
   }
@@ -209,6 +213,7 @@ const transformOldXmind = content => {
 }
 
 // 数据转换为xmind文件
+// 直接转换为最新版本的xmind文件 2023.09.11172
 const transformToXmind = async (data, name) => {
   const id = 'simpleMindMap_' + Date.now()
   const imageList = []
@@ -244,38 +249,7 @@ const transformToXmind = async (data, name) => {
       newData.labels = node.data.tag || []
     }
     // 图片
-    if (node.data.image) {
-      // 处理异步逻辑
-      let resolve = null
-      let promise = new Promise(_resolve => {
-        resolve = _resolve
-      })
-      waitLoadImageList.push(promise)
-      try {
-        let imgName = ''
-        let imgData = node.data.image
-        // base64之外的其他图片要先转换成data:url
-        if (!/^data:/.test(node.data.image)) {
-          imgData = await imgToDataUrl(node.data.image)
-        }
-        // 从data:url中解析出图片类型和ase64
-        let dataUrlRes = parseDataUrl(imgData)
-        imgName = 'image_' + imageList.length + '.' + dataUrlRes.type
-        imageList.push({
-          name: imgName,
-          data: dataUrlRes.base64
-        })
-        newData.image = {
-          src: 'xap:resources/' + imgName,
-          width: node.data.imageSize.width,
-          height: node.data.imageSize.height
-        }
-        resolve()
-      } catch (error) {
-        console.log(error)
-        resolve()
-      }
-    }
+    handleNodeImageToXmind(node, newNode, waitLoadImageList, imageList)
     // 样式
     // 暂时不考虑样式
     if (isRoot) {
@@ -293,6 +267,20 @@ const transformToXmind = async (data, name) => {
         newNode[key] = newData[key]
       })
     }
+    // 概要
+    const { summary, summaries } = parseNodeGeneralizationToXmind(node)
+    if (isRoot) {
+      if (summaries.length > 0) {
+        newNode.rootTopic.children.summary = summary
+        newNode.rootTopic.summaries = summaries
+      }
+    } else {
+      if (summaries.length > 0) {
+        newNode.children.summary = summary
+        newNode.summaries = summaries
+      }
+    }
+    // 子节点
     if (node.children && node.children.length > 0) {
       node.children.forEach(child => {
         let newChild = {}
@@ -309,10 +297,15 @@ const transformToXmind = async (data, name) => {
   zip.file('content.json', JSON.stringify(contentData))
   zip.file(
     'metadata.json',
-    `{"modifier":"","dataStructureVersion":"1","layoutEngineVersion":"2","activeSheetId":"${id}"}`
+    `{"modifier":"","dataStructureVersion":"2","creator":{"name":"mind-map"},"layoutEngineVersion":"3","activeSheetId":"${id}"}`
   )
+  zip.file('content.xml', getXmindContentXmlData())
   const manifestData = {
-    'file-entries': { 'content.json': {}, 'metadata.json': {} }
+    'file-entries': {
+      'content.json': {},
+      'metadata.json': {},
+      'Thumbnails/thumbnail.png': {}
+    }
   }
   // 图片
   if (imageList.length > 0) {

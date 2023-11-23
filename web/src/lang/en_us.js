@@ -239,7 +239,7 @@ export default {
     more: 'More',
     selectFileTip: 'Please select a file',
     notSupportTip:
-      'Your browser or network protocol does not support this feature',
+      'Your browser does not support this feature, or the current page is not using the HTTPS protocol',
     tip: 'Tip',
     editingLocalFileTipFront: 'Currently editing your local【',
     editingLocalFileTipEnd: '】file',
@@ -278,7 +278,7 @@ export default {
   },
   formulaSidebar: {
     title: 'Formula',
-    placeholder: 'Please enter LaText syntax',
+    placeholder: 'Please enter LaTeX syntax',
     confirm: 'Confirm',
     common: 'Common formulas',
     tip: 'Inserting formulas is not supported in non rich text mode'

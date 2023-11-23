@@ -67,6 +67,8 @@ The folder containing the packaged resources for the `web` folder.
 
 [How does the dom-to-image library convert HTML into images](https://juejin.cn/post/7287913415803764747)
 
+[Two days to achieve collaborative editing of mind maps? It's really possible to use Yjs](https://juejin.cn/post/7295669711533998117)
+
 ## Special Note
 
 This project can be used for learning and reference. Please deeply experience whether it can meet your needs when using it for actual projects.
@@ -232,5 +234,23 @@ Open source is not easy. If this project is helpful to you, you can invite the a
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/天清如愿.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>天清如愿</p>
+    </div>
+</div>
+<div style="display: flex;">
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/敬明朗.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>敬明朗</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/default.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>飞箭</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/戚永峰.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>戚永峰</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/moom.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>moom</p>
     </div>
 </div>

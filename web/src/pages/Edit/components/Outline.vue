@@ -24,7 +24,7 @@
     >
       <span
         class="nodeEdit"
-        contenteditable="true"
+        :contenteditable="!isReadonly"
         :key="getKey()"
         @keydown.stop="onNodeInputKeydown($event, node)"
         @keyup.stop
@@ -42,7 +42,8 @@ import {
   nodeRichTextToTextWithWrap,
   textToNodeRichTextWithWrap,
   getTextFromHtml,
-  createUid
+  createUid,
+  htmlEscape
 } from 'simple-mind-map/src/utils'
 
 // 大纲树
@@ -69,7 +70,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isDark'])
+    ...mapState(['isDark', 'isReadonly'])
   },
   created() {
     window.addEventListener('keydown', this.onKeyDown)
@@ -129,10 +130,11 @@ export default {
       let data = this.mindMap.getData()
       data.root = true // 标记根节点
       let walk = root => {
-        const text = (root.data.richText
+        let text = (root.data.richText
           ? nodeRichTextToTextWithWrap(root.data.text)
           : root.data.text
         ).replaceAll(/\n/g, '<br>')
+        text = htmlEscape(text)
         root.textCache = text // 保存一份修改前的数据，用于对比是否修改了
         root.label = text
         root.uid = root.data.uid

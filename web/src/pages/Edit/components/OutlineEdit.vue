@@ -32,7 +32,7 @@
           >
             <span
               class="nodeEdit"
-              contenteditable="true"
+              :contenteditable="!isReadonly"
               :key="getKey()"
               @blur="onBlur($event, node)"
               @keydown.stop="onNodeInputKeydown($event, node)"
@@ -54,7 +54,8 @@ import {
   textToNodeRichTextWithWrap,
   getTextFromHtml,
   createUid,
-  simpleDeepClone
+  simpleDeepClone,
+  htmlEscape
 } from 'simple-mind-map/src/utils'
 import { storeData } from '@/api'
 
@@ -76,7 +77,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isOutlineEdit', 'isDark'])
+    ...mapState(['isOutlineEdit', 'isDark', 'isReadonly'])
   },
   watch: {
     isOutlineEdit(val) {
@@ -102,10 +103,11 @@ export default {
       let data = this.mindMap.getData()
       data.root = true // 标记根节点
       let walk = root => {
-        const text = (root.data.richText
+        let text = (root.data.richText
           ? nodeRichTextToTextWithWrap(root.data.text)
           : root.data.text
         ).replaceAll(/\n/g, '<br>')
+        text = htmlEscape(text)
         root.textCache = text // 保存一份修改前的数据，用于对比是否修改了
         root.label = text
         root.uid = root.data.uid

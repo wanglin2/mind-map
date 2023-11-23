@@ -24,7 +24,8 @@ const store = new Vuex.Store({
     activeSidebar: '', // 当前显示的侧边栏
     localEditList: [],// 客户端中正在编辑的思维导图列表
     isDark: false,// 是否是暗黑模式
-    isOutlineEdit: false// 是否是大纲编辑模式
+    isOutlineEdit: false,// 是否是大纲编辑模式
+    isReadonly: false// 是否只读
   },
   mutations: {
     // 设置本地文件名
@@ -93,7 +94,12 @@ const store = new Vuex.Store({
     // 设置大纲编辑模式
     setIsOutlineEdit(state, data) {
       state.isOutlineEdit = data
-    }
+    },
+
+    // 设置是否只读
+    setIsReadonly(state, data) {
+      state.isReadonly = data
+    },
   },
   actions: {
     /**

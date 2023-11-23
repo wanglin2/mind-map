@@ -235,7 +235,7 @@ export default {
     formula: '公式',
     more: '更多',
     selectFileTip: '请选择文件',
-    notSupportTip: '你的浏览器或网络协议不支持该功能',
+    notSupportTip: '你的浏览器不支持该功能，或者当前页面非https协议',
     tip: '提示',
     editingLocalFileTipFront: '当前正在编辑你本机的【',
     editingLocalFileTipEnd: '】文件',
@@ -272,7 +272,7 @@ export default {
   },
   formulaSidebar: {
     title: '公式',
-    placeholder: '请输入 LaText 语法',
+    placeholder: '请输入 LaTeX 语法',
     confirm: '完成',
     common: '常用公式',
     tip: '非富文本模式下不支持插入公式'

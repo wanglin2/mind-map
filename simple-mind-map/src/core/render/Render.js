@@ -24,11 +24,13 @@ import {
   getNodeIndexInNodeList,
   setDataToClipboard,
   getDataFromClipboard,
-  htmlEscape
+  htmlEscape,
+  parseAddGeneralizationNodeList
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
 import { CONSTANTS, ERROR_TYPES } from '../../constants/constant'
+import { Polygon } from '@svgdotjs/svg.js'
 
 // 布局列表
 const layouts = {
@@ -83,6 +85,8 @@ class Render {
     this.beingPasteText = ''
     this.beingPasteImgSize = 0
     this.currentBeingPasteType = ''
+    // 节点高亮框
+    this.highlightBoxNode = null
     // 布局
     this.setLayout()
     // 绑定事件
@@ -464,6 +468,7 @@ class Render {
 
   //  全选
   selectAll() {
+    if (this.mindMap.opt.readonly) return
     walk(
       this.root,
       null,
@@ -887,9 +892,11 @@ class Render {
           )
         } else {
           text = htmlEscape(text)
-          const textArr = text.split(/\r?\n|(?<!\n)\r/g).filter(item => {
-            return !!item
-          })
+          const textArr = text
+            .split(new RegExp('\r?\n|(?<!\n)\r', 'g'))
+            .filter(item => {
+              return !!item
+            })
           // 判断是否需要根据换行自动分割节点
           if (textArr.length > 1 && handleIsSplitByWrapOnPasteCreateNewNode) {
             handleIsSplitByWrapOnPasteCreateNewNode()
@@ -1028,14 +1035,7 @@ class Render {
         let node = list[i]
         if (isAppointNodes) list.splice(i, 1)
         if (node.isGeneralization) {
-          // 删除概要节点
-          this.mindMap.execCommand(
-            'SET_NODE_DATA',
-            node.generalizationBelongNode,
-            {
-              generalization: null
-            }
-          )
+          this.deleteNodeGeneralization(node)
           this.removeNodeFromActiveList(node)
           i--
         } else {
@@ -1052,6 +1052,23 @@ class Render {
     }
     this.emitNodeActiveEvent()
     this.mindMap.render()
+  }
+
+  // 删除概要节点，即从所属节点里删除该概要
+  deleteNodeGeneralization(node) {
+    const targetNode = node.generalizationBelongNode
+    const index = targetNode.getGeneralizationNodeIndex(node)
+    let generalization = targetNode.getData('generalization')
+    if (Array.isArray(generalization)) {
+      generalization.splice(index, 1)
+    } else {
+      generalization = null
+    }
+    // 删除概要节点
+    this.mindMap.execCommand('SET_NODE_DATA', targetNode, {
+      generalization
+    })
+    this.closeHighlightNode()
   }
 
   // 仅删除当前节点
@@ -1071,13 +1088,7 @@ class Render {
       let node = list[i]
       if (node.isGeneralization) {
         // 删除概要节点
-        this.mindMap.execCommand(
-          'SET_NODE_DATA',
-          node.generalizationBelongNode,
-          {
-            generalization: null
-          }
-        )
+        this.deleteNodeGeneralization(node)
       } else {
         const parent = node.parent
         const index = getNodeDataIndex(node)
@@ -1399,21 +1410,44 @@ class Render {
     if (this.activeNodeList.length <= 0) {
       return
     }
-    this.activeNodeList.forEach(node => {
-      if (node.getData('generalization') || node.isRoot) {
-        return
-      }
-      this.mindMap.execCommand('SET_NODE_DATA', node, {
-        generalization: data || {
+    const nodeList = this.activeNodeList.filter(node => {
+      return (
+        !node.isRoot &&
+        !node.isGeneralization &&
+        !node.checkHasSelfGeneralization()
+      )
+    })
+    const list = parseAddGeneralizationNodeList(nodeList)
+    list.forEach(item => {
+      const newData = {
+        ...(data || {
           text: this.mindMap.opt.defaultGeneralizationText
+        }),
+        range: item.range || null
+      }
+      let generalization = item.node.getData('generalization')
+      if (generalization) {
+        if (Array.isArray(generalization)) {
+          generalization.push(newData)
+        } else {
+          generalization = [generalization, newData]
         }
+      } else {
+        generalization = [newData]
+      }
+      this.mindMap.execCommand('SET_NODE_DATA', item.node, {
+        generalization
       })
       // 插入子节点时自动展开子节点
-      node.setData({
+      item.node.setData({
         expand: true
       })
     })
-    this.mindMap.render()
+    this.mindMap.render(() => {
+      // 修复祖先节点存在概要时位置未更新的问题
+      // 修复同时给存在上下级关系的节点添加概要时重叠的问题
+      this.mindMap.render()
+    })
   }
 
   //  删除节点概要
@@ -1422,7 +1456,7 @@ class Render {
       return
     }
     this.activeNodeList.forEach(node => {
-      if (!node.getData('generalization')) {
+      if (!node.checkHasGeneralization()) {
         return
       }
       this.mindMap.execCommand('SET_NODE_DATA', node, {
@@ -1430,6 +1464,7 @@ class Render {
       })
     })
     this.mindMap.render()
+    this.closeHighlightNode()
   }
 
   //  设置节点自定义位置
@@ -1570,6 +1605,60 @@ class Render {
   // 派发节点激活改变事件
   emitNodeActiveEvent() {
     this.mindMap.emit('node_active', null, [...this.activeNodeList])
+  }
+
+  // 高亮节点或子节点
+  highlightNode(node, range) {
+    const { highlightNodeBoxStyle = {} } = this.mindMap.opt
+    if (!this.highlightBoxNode) {
+      this.highlightBoxNode = new Polygon()
+        .stroke({
+          color: highlightNodeBoxStyle.stroke || 'transparent'
+        })
+        .fill({
+          color: highlightNodeBoxStyle.fill || 'transparent'
+        })
+    }
+    let minx = Infinity,
+      miny = Infinity,
+      maxx = -Infinity,
+      maxy = -Infinity
+    if (range) {
+      const children = node.children.slice(range[0], range[1] + 1)
+      children.forEach(child => {
+        if (child.left < minx) {
+          minx = child.left
+        }
+        if (child.top < miny) {
+          miny = child.top
+        }
+        const right = child.left + child.width
+        const bottom = child.top + child.height
+        if (right > maxx) {
+          maxx = right
+        }
+        if (bottom > maxy) {
+          maxy = bottom
+        }
+      })
+    } else {
+      minx = node.left
+      miny = node.top
+      maxx = node.left + node.width
+      maxy = node.top + node.height
+    }
+    this.highlightBoxNode.plot([
+      [minx, miny],
+      [maxx, miny],
+      [maxx, maxy],
+      [minx, maxy]
+    ])
+    this.mindMap.otherDraw.add(this.highlightBoxNode)
+  }
+
+  // 关闭高亮
+  closeHighlightNode() {
+    this.highlightBoxNode.remove()
   }
 }
 

@@ -58,6 +58,8 @@
 
 [dom-to-image库是如何将html转换成图片的](https://juejin.cn/post/7287913415803764747)
 
+[两天实现思维导图的协同编辑？用Yjs真的可以](https://juejin.cn/post/7295669711533998117)
+
 ## 特别说明
 
 本项目可用于学习和参考，用于实际项目时请先深度体验一下是否能满足您的需求。
@@ -225,5 +227,23 @@
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/天清如愿.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>天清如愿</p>
+    </div>
+</div>
+<div style="display: flex;">
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/敬明朗.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>敬明朗</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/default.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>飞箭</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/戚永峰.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>戚永峰</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/moom.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>moom</p>
     </div>
 </div>

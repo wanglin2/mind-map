@@ -1,6 +1,6 @@
 import Style from './Style'
 import Shape from './Shape'
-import { G, ForeignObject, SVG, Rect } from '@svgdotjs/svg.js'
+import { G, ForeignObject, Rect } from '@svgdotjs/svg.js'
 import nodeGeneralizationMethods from './nodeGeneralization'
 import nodeExpandBtnMethods from './nodeExpandBtn'
 import nodeCommandWrapsMethods from './nodeCommandWraps'
@@ -8,6 +8,7 @@ import nodeCreateContentsMethods from './nodeCreateContents'
 import nodeExpandBtnPlaceholderRectMethods from './nodeExpandBtnPlaceholderRect'
 import nodeCooperateMethods from './nodeCooperate'
 import { CONSTANTS } from '../../../constants/constant'
+import { copyNodeTree } from '../../../utils/index'
 
 //  节点类
 class Node {
@@ -73,6 +74,7 @@ class Node {
     this._tagData = null
     this._noteData = null
     this.noteEl = null
+    this.noteContentIsShow = false
     this._expandBtn = null
     this._lastExpandBtnType = null
     this._showExpandBtn = false
@@ -81,8 +83,7 @@ class Node {
     this._fillExpandNode = null
     this._userListGroup = null
     this._lines = []
-    this._generalizationLine = null
-    this._generalizationNode = null
+    this._generalizationList = []
     this._unVisibleRectRegionNode = null
     this._isMouseenter = false
     // 尺寸信息
@@ -457,12 +458,18 @@ class Node {
       this._isMouseenter = true
       // 显示展开收起按钮
       this.showExpandBtn()
+      if (this.isGeneralization) {
+        this.handleGeneralizationMouseenter()
+      }
       this.mindMap.emit('node_mouseenter', this, e)
     })
     this.group.on('mouseleave', e => {
       if (!this._isMouseenter) return
       this._isMouseenter = false
       this.hideExpandBtn()
+      if (this.isGeneralization) {
+        this.handleGeneralizationMouseleave()
+      }
       this.mindMap.emit('node_mouseleave', this, e)
     })
     // 双击事件
@@ -749,10 +756,7 @@ class Node {
       item.setOpacity(val)
     })
     // 概要节点
-    if (this._generalizationNode) {
-      this._generalizationLine.opacity(val)
-      this._generalizationNode.group.opacity(val)
-    }
+    this.setGeneralizationOpacity(val)
   }
 
   // 隐藏子节点
@@ -847,11 +851,23 @@ class Node {
     return this.customLeft !== undefined && this.customTop !== undefined
   }
 
-  //  检查节点是否存在自定义位置的祖先节点
+  //  检查节点是否存在自定义位置的祖先节点，包含自身
   ancestorHasCustomPosition() {
     let node = this
     while (node) {
       if (node.hasCustomPosition()) {
+        return true
+      }
+      node = node.parent
+    }
+    return false
+  }
+
+  //  检查是否存在有概要的祖先节点
+  ancestorHasGeneralization() {
+    let node = this.parent
+    while (node) {
+      if (node.checkHasGeneralization()) {
         return true
       }
       node = node.parent
@@ -889,7 +905,7 @@ class Node {
   }
 
   //  检测当前节点是否是某个节点的祖先节点
-  isParent(node) {
+  isAncestor(node) {
     if (this.uid === node.uid) {
       return false
     }
@@ -903,6 +919,18 @@ class Node {
     return false
   }
 
+  // 检查当前节点是否是某个节点的父节点
+  isParent(node) {
+    if (this.uid === node.uid) {
+      return false
+    }
+    const parent = node.parent
+    if (parent && this.uid === parent.uid) {
+      return true
+    }
+    return false
+  }
+
   //  检测当前节点是否是某个节点的兄弟节点
   isBrother(node) {
     if (!this.parent || this.uid === node.uid) {
@@ -911,6 +939,15 @@ class Node {
     return this.parent.children.find(item => {
       return item.uid === node.uid
     })
+  }
+
+  // 获取该节点在兄弟节点列表中的索引
+  getIndexInBrothers() {
+    return this.parent && this.parent.children
+      ? this.parent.children.findIndex(item => {
+          return item.uid === this.uid
+        })
+      : -1
   }
 
   //  获取padding值
@@ -961,9 +998,38 @@ class Node {
     return key ? this.nodeData.data[key] : this.nodeData.data
   }
 
+  // 获取该节点的纯数据，即不包含对节点实例的引用
+  getPureData(removeActiveState = true, removeId = false) {
+    return copyNodeTree({}, this, removeActiveState, removeId)
+  }
+
   // 是否存在自定义样式
   hasCustomStyle() {
     return this.style.hasCustomStyle()
+  }
+
+  // 获取节点的尺寸和位置信息，宽高是应用了缩放效果后的实际宽高，位置是相对于浏览器窗口左上角的位置
+  getRect() {
+    return this.group.rbox()
+  }
+
+  // 获取节点的尺寸和位置信息，宽高是应用了缩放效果后的实际宽高，位置信息相对于画布
+  getRectInSvg() {
+    let { scaleX, scaleY, translateX, translateY } =
+      this.mindMap.draw.transform()
+    let { left, top, width, height } = this
+    let right = (left + width) * scaleX + translateX
+    let bottom = (top + height) * scaleY + translateY
+    left = left * scaleX + translateX
+    top = top * scaleY + translateY
+    return {
+      left,
+      right,
+      top,
+      bottom,
+      width: width * scaleX,
+      height: height * scaleY
+    }
   }
 }
 

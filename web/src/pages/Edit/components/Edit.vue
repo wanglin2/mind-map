@@ -335,8 +335,8 @@ export default {
         nodeTextEditZIndex: 1000,
         nodeNoteTooltipZIndex: 1000,
         customNoteContentShow: {
-          show: (content, left, top) => {
-            this.$bus.$emit('showNoteContent', content, left, top)
+          show: (content, left, top, node) => {
+            this.$bus.$emit('showNoteContent', content, left, top, node)
           },
           hide: () => {
             // this.$bus.$emit('hideNoteContent')
@@ -349,11 +349,15 @@ export default {
         enableAutoEnterTextEditWhenKeydown: true,
         customHandleClipboardText: handleClipboardText,
         handleIsSplitByWrapOnPasteCreateNewNode: () => {
-          return this.$confirm(this.$t('edit.splitByWrap'), this.$t('edit.tip'), {
-            confirmButtonText: this.$t('edit.yes'),
-            cancelButtonText: this.$t('edit.no'),
-            type: 'warning'
-          })
+          return this.$confirm(
+            this.$t('edit.splitByWrap'),
+            this.$t('edit.tip'),
+            {
+              confirmButtonText: this.$t('edit.yes'),
+              cancelButtonText: this.$t('edit.no'),
+              type: 'warning'
+            }
+          )
         }
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
@@ -421,7 +425,8 @@ export default {
         'generalization_node_contextmenu',
         'painter_start',
         'painter_end',
-        'scrollbar_change'
+        'scrollbar_change',
+        'scale'
       ].forEach(event => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args)
@@ -439,6 +444,16 @@ export default {
       }
       // 协同测试
       this.cooperateTest()
+      // 销毁
+      // setTimeout(() => {
+      //   console.log('销毁')
+      //   this.mindMap.destroy()
+      // }, 10000)
+      // 测试
+      // setTimeout(() => {
+      //   console.log(this.mindMap.renderer.root.getRect())
+      //   console.log(this.mindMap.renderer.root.getRectInSvg())
+      // }, 5000);
     },
 
     // url中是否存在要打开的文件
@@ -489,9 +504,12 @@ export default {
      */
     async export(...args) {
       try {
-        this.mindMap.export(...args)
+        showLoading()
+        await this.mindMap.export(...args)
+        hideLoading()
       } catch (error) {
         console.log(error)
+        hideLoading()
       }
     },
 
