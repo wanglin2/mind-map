@@ -30,6 +30,7 @@ import {
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
 import { CONSTANTS, ERROR_TYPES } from '../../constants/constant'
+import { Polygon } from '@svgdotjs/svg.js'
 
 // 布局列表
 const layouts = {
@@ -84,6 +85,8 @@ class Render {
     this.beingPasteText = ''
     this.beingPasteImgSize = 0
     this.currentBeingPasteType = ''
+    // 节点高亮框
+    this.highlightBoxNode = null
     // 布局
     this.setLayout()
     // 绑定事件
@@ -1065,6 +1068,7 @@ class Render {
     this.mindMap.execCommand('SET_NODE_DATA', targetNode, {
       generalization
     })
+    this.closeHighlightNode()
   }
 
   // 仅删除当前节点
@@ -1408,7 +1412,9 @@ class Render {
     }
     const nodeList = this.activeNodeList.filter(node => {
       return (
-        !node.isRoot && !node.isGeneralization && !node.checkHasSelfGeneralization()
+        !node.isRoot &&
+        !node.isGeneralization &&
+        !node.checkHasSelfGeneralization()
       )
     })
     const list = parseAddGeneralizationNodeList(nodeList)
@@ -1458,6 +1464,7 @@ class Render {
       })
     })
     this.mindMap.render()
+    this.closeHighlightNode()
   }
 
   //  设置节点自定义位置
@@ -1598,6 +1605,60 @@ class Render {
   // 派发节点激活改变事件
   emitNodeActiveEvent() {
     this.mindMap.emit('node_active', null, [...this.activeNodeList])
+  }
+
+  // 高亮节点或子节点
+  highlightNode(node, range) {
+    const { highlightNodeBoxStyle = {} } = this.mindMap.opt
+    if (!this.highlightBoxNode) {
+      this.highlightBoxNode = new Polygon()
+        .stroke({
+          color: highlightNodeBoxStyle.stroke || 'transparent'
+        })
+        .fill({
+          color: highlightNodeBoxStyle.fill || 'transparent'
+        })
+    }
+    let minx = Infinity,
+      miny = Infinity,
+      maxx = -Infinity,
+      maxy = -Infinity
+    if (range) {
+      const children = node.children.slice(range[0], range[1] + 1)
+      children.forEach(child => {
+        if (child.left < minx) {
+          minx = child.left
+        }
+        if (child.top < miny) {
+          miny = child.top
+        }
+        const right = child.left + child.width
+        const bottom = child.top + child.height
+        if (right > maxx) {
+          maxx = right
+        }
+        if (bottom > maxy) {
+          maxy = bottom
+        }
+      })
+    } else {
+      minx = node.left
+      miny = node.top
+      maxx = node.left + node.width
+      maxy = node.top + node.height
+    }
+    this.highlightBoxNode.plot([
+      [minx, miny],
+      [maxx, miny],
+      [maxx, maxy],
+      [minx, maxy]
+    ])
+    this.mindMap.otherDraw.add(this.highlightBoxNode)
+  }
+
+  // 关闭高亮
+  closeHighlightNode() {
+    this.highlightBoxNode.remove()
   }
 }
 

@@ -177,6 +177,29 @@ function setGeneralizationOpacity(val) {
   })
 }
 
+// 处理概要节点鼠标移入事件
+function handleGeneralizationMouseenter() {
+  const belongNode = this.generalizationBelongNode
+  const list = belongNode.formatGetGeneralization()
+  const index = belongNode.getGeneralizationNodeIndex(this)
+  const generalizationData = list[index]
+  // 区间概要，框子节点
+  if (
+    Array.isArray(generalizationData.range) &&
+    generalizationData.range.length > 0
+  ) {
+    this.mindMap.renderer.highlightNode(belongNode, generalizationData.range)
+  } else {
+    // 否则框自己
+    this.mindMap.renderer.highlightNode(belongNode)
+  }
+}
+
+// 处理概要节点鼠标移出事件
+function handleGeneralizationMouseleave() {
+  this.mindMap.renderer.closeHighlightNode()
+}
+
 export default {
   formatGetGeneralization,
   checkHasGeneralization,
@@ -189,5 +212,7 @@ export default {
   removeGeneralization,
   hideGeneralization,
   showGeneralization,
-  setGeneralizationOpacity
+  setGeneralizationOpacity,
+  handleGeneralizationMouseenter,
+  handleGeneralizationMouseleave
 }
