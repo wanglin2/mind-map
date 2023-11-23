@@ -67,6 +67,8 @@ The folder containing the packaged resources for the `web` folder.
 
 [How does the dom-to-image library convert HTML into images](https://juejin.cn/post/7287913415803764747)
 
+[Two days to achieve collaborative editing of mind maps? It's really possible to use Yjs](https://juejin.cn/post/7295669711533998117)
+
 ## Special Note
 
 This project can be used for learning and reference. Please deeply experience whether it can meet your needs when using it for actual projects.

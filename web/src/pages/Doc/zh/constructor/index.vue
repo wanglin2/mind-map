@@ -109,7 +109,7 @@
 <td>customNoteContentShow（v0.1.6+）</td>
 <td>Object</td>
 <td>null</td>
-<td>自定义节点备注内容显示，Object类型，结构为：{show: (noteContent, left, top) =&gt; {// 你的显示节点备注逻辑 }, hide: () =&gt; {// 你的隐藏节点备注逻辑 }}</td>
+<td>自定义节点备注内容显示，Object类型，结构为：{show: (noteContent, left, top, node) =&gt; {// 你的显示节点备注逻辑。node为v0.8.1+版本新增的回参，代表节点实例 }, hide: () =&gt; {// 你的隐藏节点备注逻辑 }}</td>
 </tr>
 <tr>
 <td>readonly（v0.1.7+）</td>
@@ -482,6 +482,24 @@
 <td>Number</td>
 <td>100</td>
 <td>指定时间内只允许添加一次历史记录，避免添加没有必要的中间状态，单位：ms</td>
+</tr>
+<tr>
+<td>isDisableDrag（v0.8.1+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>是否禁止拖动画布</td>
+</tr>
+<tr>
+<td>disableTouchZoom（v0.8.1+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>禁止双指缩放，你仍旧可以使用api进行缩放，对TouchEvent插件生效</td>
+</tr>
+<tr>
+<td>highlightNodeBoxStyle（v0.9.0+）</td>
+<td>Object</td>
+<td>{ stroke: 'rgb(94, 200, 248)', fill: 'transparent' }</td>
+<td>鼠标移入概要高亮所属节点时的高亮框样式</td>
 </tr>
 </tbody>
 </table>
@@ -946,6 +964,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>resize（v0.8.0+）</td>
 <td>容器尺寸改变后触发，实际上是当思维导图实例的<code>resize</code>方法被调用后触发</td>
+<td></td>
+</tr>
+<tr>
+<td>beforeDestroy（v0.9.0+）</td>
+<td>思维导图销毁前触发，即调用了destroy方法触发</td>
 <td></td>
 </tr>
 </tbody>

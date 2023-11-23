@@ -27,7 +27,7 @@ a.href = <span class="hljs-string">&#x27;xxx.png&#x27;</span><span class="hljs-c
 a.download = <span class="hljs-string">&#x27;xxx&#x27;</span>
 a.click()
 </code></pre>
-<h3>png(name, transparent = false, checkRotate)</h3>
+<h3>png(name, transparent = false, checkRotate, compress)</h3>
 <blockquote>
 <p>Versions below v0.7.0 are: png(name, transparent = false, rotateWhenWidthLongerThenHeight)</p>
 </blockquote>
@@ -42,7 +42,10 @@ a.click()
 <p><code>rotateWhenWidthLongerThenHeight</code>: v0.6.15+, V0.7.0+abandoned, Boolean, false, Automatically rotate 90 degrees when the image has a width to height ratio</p>
 </li>
 <li>
-<p><code>checkRotate</code>: v0.7.0+, Function, You can pass a function that takes two parameters, the width and height of the image, and returns true or false. True represents that the image needs to be rotated by 90 degrees.</p>
+<p><code>checkRotate</code>: v0.7.0+, Function, You can pass a function that takes two parameters, the width and height of the image, and returns true or false. True represents that the image needs to be rotated by 90 degrees</p>
+</li>
+<li>
+<p><code>compress</code>：v0.8.1+，null | { width, height }, The parameter for compressing images. In some cases, the length and width of the exported image may be very large. If you want to reduce it, you can use this parameter to control it. Only one width or height can be provided, and it will be scaled proportionally</p>
 </li>
 </ul>
 <p>Exports as <code>png</code>.</p>
@@ -66,7 +69,7 @@ a.click()
 )
 </code></pre>
 <p>Exports as <code>svg</code>.</p>
-<h3>pdf(name, useMultiPageExport)</h3>
+<h3>pdf(name, useMultiPageExport, maxImageWidth)</h3>
 <blockquote>
 <p>v0.2.1+</p>
 </blockquote>
@@ -76,6 +79,9 @@ a.click()
 </li>
 <li>
 <p><code>useMultiPageExport</code>: v0.6.15+, Boolean, false, Whether to export multiple pages, default to single page</p>
+</li>
+<li>
+<p><code>maxImageWidth</code>：v0.8.1+，null | Number，The default is twice the width of A4 paper, which is a parameter for compressing images. In some cases, the length and width of the image may be very large, resulting in a very large PDF volume. Therefore, if you want to reduce the volume, you can use this parameter to control the maximum width of the image</p>
 </li>
 </ul>
 <p>Export as <code>pdf</code>. Unlike other export methods, this method does not return data and directly triggers the download.</p>

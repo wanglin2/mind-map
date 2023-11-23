@@ -14,6 +14,24 @@
 
 ## 方法
 
+### highlightNode(node, range)
+
+> v0.9.0+
+
+- `node`：要高亮的目标节点实例
+
+- `range`：可选，Array，一个范围数组，[0, 1]
+
+高亮节点或子节点。如果`range`参数没有传递，那么直接高亮指定的`node`节点，如果`range`传递了一个要高亮的子节点的范围，那么会高亮该范围的子节点。
+
+高亮效果为通过一个矩形框来包裹，矩形的描边和填充样式可以通过`highlightNodeBoxStyle`实例化选项进行配置。
+
+### closeHighlightNode()
+
+> v0.9.0+
+
+隐藏节点高亮框。
+
 ### setRootNodeCenter()
 
 > v0.8.0+

@@ -8,6 +8,25 @@
 <h3>root</h3>
 <p>获取节点树的根节点。</p>
 <h2>方法</h2>
+<h3>highlightNode(node, range)</h3>
+<blockquote>
+<p>v0.9.0+</p>
+</blockquote>
+<ul>
+<li>
+<p><code>node</code>：要高亮的目标节点实例</p>
+</li>
+<li>
+<p><code>range</code>：可选，Array，一个范围数组，[0, 1]</p>
+</li>
+</ul>
+<p>高亮节点或子节点。如果<code>range</code>参数没有传递，那么直接高亮指定的<code>node</code>节点，如果<code>range</code>传递了一个要高亮的子节点的范围，那么会高亮该范围的子节点。</p>
+<p>高亮效果为通过一个矩形框来包裹，矩形的描边和填充样式可以通过<code>highlightNodeBoxStyle</code>实例化选项进行配置。</p>
+<h3>closeHighlightNode()</h3>
+<blockquote>
+<p>v0.9.0+</p>
+</blockquote>
+<p>隐藏节点高亮框。</p>
 <h3>setRootNodeCenter()</h3>
 <blockquote>
 <p>v0.8.0+</p>

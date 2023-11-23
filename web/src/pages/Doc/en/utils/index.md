@@ -402,6 +402,12 @@ Reading text and images from the user's clipboard returns:
 
 Remove the data of a node from its parent node's `nodeData.children` list.
 
+#### checkHasSupSubRelation()
+
+> v0.8.1+
+
+Determine whether there is a hierarchical relationship from the given node instance list.
+
 ## Simulate CSS background in Canvas
 
 Import:

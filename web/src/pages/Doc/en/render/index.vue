@@ -9,6 +9,25 @@ accessed through <code>mindMap.renderer</code>.</p>
 <h3>root</h3>
 <p>Gets the root node of the node tree.</p>
 <h2>Methods</h2>
+<h3>highlightNode(node, range)</h3>
+<blockquote>
+<p>v0.9.0+</p>
+</blockquote>
+<ul>
+<li>
+<p><code>node</code>：Target node instance to highlight</p>
+</li>
+<li>
+<p><code>range</code>：Optional, Array, a range array, [0, 1]</p>
+</li>
+</ul>
+<p>Highlight a node or child node. If the 'range' parameter is not passed, the specified 'node' node is directly highlighted. If the 'range' passes a range of child nodes to be highlighted, the child nodes of that range will be highlighted.</p>
+<p>The highlight effect is wrapped by a rectangular box, and the stroke and fill style of the rectangle can be configured through the 'highlightNodeBoxStyle' instantiation option.</p>
+<h3>closeHighlightNode()</h3>
+<blockquote>
+<p>v0.9.0+</p>
+</blockquote>
+<p>隐藏节点高亮框。</p>
 <h3>setRootNodeCenter()</h3>
 <blockquote>
 <p>v0.8.0+</p>

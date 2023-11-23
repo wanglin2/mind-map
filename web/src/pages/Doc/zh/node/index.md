@@ -56,6 +56,50 @@
 
 ## 方法
 
+### setGeneralizationOpacity(val)
+
+> v0.9.0+
+
+- `val`：Number, 0-1，透明度
+
+设置概要节点及曲线的透明度。
+
+### formatGetGeneralization()
+
+> v0.9.0+
+
+获取节点概要数据。
+
+### getIndexInBrothers()
+
+> v0.9.0+
+
+获取该节点在兄弟节点列表中的索引。
+
+### getRectInSvg()
+
+> v0.9.0+
+
+获取节点的尺寸和位置信息，宽高是应用了缩放效果后的实际宽高，位置信息相对于画布。
+
+### getRect()
+
+> v0.8.1+
+
+获取节点的尺寸和位置信息，宽高是应用了缩放效果后的实际宽高，位置是相对于浏览器窗口左上角的位置。
+
+### ancestorHasGeneralization()
+
+> v0.8.1+
+
+检查是否存在有概要的祖先节点。
+
+### getNoteContentPosition()
+
+> v0.8.1+
+
+获取节点备注显示位置。当节点存在备注且正在显示状态时，如果拖动或缩放会导致备注浮层和节点脱离，那么可以通过该方法获取新位置更新备注浮层。
+
 ### updateNodeByActive(active)
 
 > v0.8.0+
@@ -204,7 +248,13 @@
 
 ### isParent(node)
 
-> v0.1.5+
+> v0.1.5+：检测当前节点是否是某个节点的祖先节点
+
+> v0.8.1+：检测当前节点是否是某个节点的父节点
+
+### isAncestor(node) 
+
+> v0.8.1+
 
 检测当前节点是否是某个节点的祖先节点
 
@@ -219,6 +269,12 @@
 > v0.2.0+
 
 检查是否存在概要 
+
+### checkHasSelfGeneralization()
+
+> v0.9.0+
+
+检查是否存在自身的概要，非子节点区间概要
 
 ### hideGeneralization()
 

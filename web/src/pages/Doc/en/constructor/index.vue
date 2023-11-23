@@ -123,7 +123,7 @@
 <td>customNoteContentShow（v0.1.6+）</td>
 <td>Object</td>
 <td>null</td>
-<td>Custom node note content display, object type, structure: {show: (noteContent, left, top) =&gt; {// your display node note logic }, hide: () =&gt; {// your hide node note logic }}</td>
+<td>Custom node note content display, object type, structure: {show: (noteContent, left, top, node) =&gt; {// your display node note logic. node is a new parameter added in v0.8.1+ version, representing node instances }, hide: () =&gt; {// your hide node note logic }}</td>
 <td></td>
 </tr>
 <tr>
@@ -558,6 +558,27 @@
 <td>Number</td>
 <td>100</td>
 <td>Only one historical record can be added within the specified time to avoid adding unnecessary intermediate states. Unit: ms</td>
+<td></td>
+</tr>
+<tr>
+<td>isDisableDrag（v0.8.1+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Is disable dragging the canvas</td>
+<td></td>
+</tr>
+<tr>
+<td>disableTouchZoom（v0.8.1+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Prohibit double finger scaling, you can still use the API for scaling, which takes effect on the TouchEvent plugin</td>
+<td></td>
+</tr>
+<tr>
+<td>highlightNodeBoxStyle（v0.9.0+）</td>
+<td>Object</td>
+<td>{ stroke: 'rgb(94, 200, 248)', fill: 'transparent' }</td>
+<td>Highlight box style when the mouse moves into the summary to highlight the node it belongs to</td>
 <td></td>
 </tr>
 </tbody>
@@ -1030,6 +1051,11 @@ poor performance and should be used sparingly.</p>
 <tr>
 <td>resize（v0.8.0+）</td>
 <td>Triggered after the container size changes, actually when the 'resize' method of the mind map instance is called</td>
+<td></td>
+</tr>
+<tr>
+<td>beforeDestroy（v0.9.0+）</td>
+<td>Triggered before destroying the mind map, i.e. triggered by calling the destroy method</td>
 <td></td>
 </tr>
 </tbody>
