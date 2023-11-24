@@ -82,7 +82,7 @@ mindMap.scrollbar.setScrollBarWrapSize(width, height)
 然后你需要监听`scrollbar_change`方法来获取滚动条大小和位置数据：
 
 ```js
-mindMap.('scrollbar_change', this.updateScrollbar)
+mindMap.on('scrollbar_change', this.updateScrollbar)
 
 // 根据事件返回的滚动条数据更新滚动条元素：
 {
