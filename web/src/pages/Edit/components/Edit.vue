@@ -317,7 +317,17 @@ export default {
               type: 'warning'
             }
           )
-        }
+        },
+        errorHandler: (code, err) => {
+          console.error(err)
+          switch (code) {
+            case 'export_error':
+              this.$message.error('导出失败')
+              break
+            default:
+              break
+          }
+        },
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
         // customCreateNodeContent: (node) => {
@@ -344,7 +354,7 @@ export default {
         //   return comp.$el
         // },
         // 示例3：普通元素
-        // customCreateNodeContent: (node) => {
+        // customCreateNodeContent: node => {
         //   let el = document.createElement('div')
         //   el.style.cssText = `
         //     width: 203px;
@@ -357,9 +367,12 @@ export default {
         //     justify-content: center;
         //     align-items: center;
         //   `
-        //   el.innerHTML = node.nodeData.data.text
+        //   el.innerHTML = `
+        //     ${node.nodeData.data.text}
+        //     <img crossOrigin="anonymous" src="/img/cactus.jpg" />
+        //   `
         //   return el
-        // },
+        // }
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
