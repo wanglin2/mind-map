@@ -351,3 +351,14 @@ export const cssContent = `
     stroke-width: 2;
   }
 `
+
+// html自闭合标签列表
+export const selfCloseTagList = [
+  'img',
+  'br',
+  'hr',
+  'input',
+  'link',
+  'meta',
+  'area'
+]

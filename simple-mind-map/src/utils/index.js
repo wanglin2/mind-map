@@ -1,5 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
-import { nodeDataNoStylePropList } from '../constants/constant'
+import {
+  nodeDataNoStylePropList,
+  selfCloseTagList
+} from '../constants/constant'
 import MersenneTwister from './mersenneTwister'
 //  深度优先遍历树
 export const walk = (
@@ -988,4 +991,15 @@ export const removeFromParentNodeData = node => {
   const index = getNodeDataIndex(node)
   if (index === -1) return
   node.parent.nodeData.children.splice(index, 1)
+}
+
+// 给html自闭合标签添加闭合状态
+export const handleSelfCloseTags = str => {
+  selfCloseTagList.forEach(tagName => {
+    str = str.replaceAll(
+      new RegExp(`<${tagName}([^>]*)>`, 'g'),
+      `<${tagName} $1 />`
+    )
+  })
+  return str
 }

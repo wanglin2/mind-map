@@ -3,7 +3,8 @@ import {
   downloadFile,
   readBlob,
   removeHTMLEntities,
-  resizeImgSize
+  resizeImgSize,
+  handleSelfCloseTags
 } from '../utils'
 import { SVG } from '@svgdotjs/svg.js'
 import drawBackgroundImageToCanvas from '../utils/simulateCSSBackgroundInCanvas'
@@ -20,7 +21,7 @@ class Export {
   //  导出
   async export(type, isDownload = true, name = '思维导图', ...args) {
     if (this[type]) {
-      let result = await this[type](name, ...args)
+      const result = await this[type](name, ...args)
       if (isDownload && type !== 'pdf') {
         downloadFile(result, name + '.' + type)
       }
@@ -30,6 +31,20 @@ class Export {
     }
   }
 
+  // 创建图片url转换任务
+  createTransformImgTaskList(svg, tagName, propName, getUrlFn) {
+    const imageList = svg.find(tagName)
+    return imageList.map(async item => {
+      const imgUlr = getUrlFn(item)
+      // 已经是data:URL形式不用转换
+      if (/^data:/.test(imgUlr) || imgUlr === 'none') {
+        return
+      }
+      const imgData = await imgToDataUrl(imgUlr)
+      item.attr(propName, imgData)
+    })
+  }
+
   //  获取svg数据
   async getSvgData() {
     let { exportPaddingX, exportPaddingY } = this.mindMap.opt
@@ -37,19 +52,34 @@ class Export {
       paddingX: exportPaddingX,
       paddingY: exportPaddingY
     })
-    // 把图片的url转换成data:url类型，否则导出会丢失图片
-    let imageList = svg.find('image')
-    let task = imageList.map(async item => {
-      let imgUlr = item.attr('href') || item.attr('xlink:href')
-      // 已经是data:URL形式不用转换
-      if (/^data:/.test(imgUlr) || imgUlr === 'none') {
-        return
+    // svg的image标签，把图片的url转换成data:url类型，否则导出会丢失图片
+    const task1 = this.createTransformImgTaskList(
+      svg,
+      'image',
+      'href',
+      item => {
+        return item.attr('href') || item.attr('xlink:href')
       }
-      let imgData = await imgToDataUrl(imgUlr)
-      item.attr('href', imgData)
+    )
+    // html的img标签
+    const task2 = this.createTransformImgTaskList(svg, 'img', 'src', item => {
+      return item.attr('src')
     })
-    await Promise.all(task)
-    if (imageList.length > 0) {
+    const taskList = [...task1, ...task2]
+    await Promise.all(taskList)
+    // 开启了节点富文本编辑，需要增加一些样式
+    let isAddResetCss
+    if (this.mindMap.richText) {
+      const foreignObjectList = svg.find('foreignObject')
+      if (foreignObjectList.length > 0) {
+        foreignObjectList[0].add(
+          SVG(`<style>${this.mindMap.opt.resetCss}</style>`)
+        )
+        isAddResetCss = true
+      }
+    }
+    // svg节点内容有变，需要重新获取html字符串
+    if (taskList.length > 0 || isAddResetCss) {
       svgHTML = svg.svg()
     }
     return {
@@ -131,7 +161,7 @@ class Export {
   //  在canvas上绘制思维导图背景
   drawBackgroundToCanvas(ctx, width, height) {
     return new Promise((resolve, reject) => {
-      let {
+      const {
         backgroundColor = '#fff',
         backgroundImage,
         backgroundRepeat = 'no-repeat',
@@ -175,7 +205,7 @@ class Export {
   //  在svg上绘制思维导图背景
   drawBackgroundToSvg(svg) {
     return new Promise(async resolve => {
-      let {
+      const {
         backgroundColor = '#fff',
         backgroundImage,
         backgroundRepeat = 'repeat'
@@ -184,7 +214,7 @@ class Export {
       svg.css('background-color', backgroundColor)
       // 背景图片
       if (backgroundImage && backgroundImage !== 'none') {
-        let imgDataUrl = await imgToDataUrl(backgroundImage)
+        const imgDataUrl = await imgToDataUrl(backgroundImage)
         svg.css('background-image', `url(${imgDataUrl})`)
         svg.css('background-repeat', backgroundRepeat)
         resolve()
@@ -200,35 +230,10 @@ class Export {
    * 方法2.把svg的图片提取出来再挨个绘制到canvas里，最后一起转换
    */
   async png(name, transparent = false, checkRotate, compress) {
-    let { node, str } = await this.getSvgData()
-    // 如果开启了富文本，则使用htmltocanvas转换为图片
-    if (this.mindMap.richText) {
-      // 覆盖html默认的样式
-      let foreignObjectList = node.find('foreignObject')
-      if (foreignObjectList.length > 0) {
-        foreignObjectList[0].add(
-          SVG(`<style>${this.mindMap.opt.resetCss}</style>`)
-        )
-      }
-      str = node.svg()
-      // 使用其他库（html2canvas、dom-to-image-more等）来完成导出
-      // let res = await this.mindMap.richText.handleExportPng(node.node)
-      // let imgDataUrl = await this.svgToPng(
-      //   res,
-      //   transparent,
-      //   checkRotate
-      // )
-      // return imgDataUrl
-    }
-    str = removeHTMLEntities(str)
-    // 转换成blob数据
-    let blob = new Blob([str], {
-      type: 'image/svg+xml'
-    })
-    // 转换成data:url数据
-    let svgUrl = await readBlob(blob)
+    const { str } = await this.getSvgData()
+    const svgUrl = await this.fixSvgStrAndToBlob(str)
     // 绘制到canvas上
-    let res = await this.svgToPng(svgUrl, transparent, checkRotate, compress)
+    const res = await this.svgToPng(svgUrl, transparent, checkRotate, compress)
     return res
   }
 
@@ -237,7 +242,7 @@ class Export {
     if (!this.mindMap.doExportPDF) {
       throw new Error('请注册ExportPDF插件')
     }
-    let img = await this.png(
+    const img = await this.png(
       '',
       false,
       (width, height) => {
@@ -263,51 +268,50 @@ class Export {
   }
 
   //  导出为svg
-  // plusCssText：附加的css样式，如果svg中存在dom节点，想要设置一些针对节点的样式可以通过这个参数传入
   async svg(name) {
-    let { node } = await this.getSvgData()
-    // 开启了节点富文本编辑
-    if (this.mindMap.richText) {
-      let foreignObjectList = node.find('foreignObject')
-      if (foreignObjectList.length > 0) {
-        foreignObjectList[0].add(
-          SVG(`<style>${this.mindMap.opt.resetCss}</style>`)
-        )
-      }
-    }
+    const { node } = await this.getSvgData()
     node.first().before(SVG(`<title>${name}</title>`))
     await this.drawBackgroundToSvg(node)
-    let str = node.svg()
+    const str = node.svg()
+    const res = await this.fixSvgStrAndToBlob(str)
+    return res
+  }
+
+  // 修复svg字符串，并且转换为blob数据
+  async fixSvgStrAndToBlob(str) {
+    // 移除字符串中的html实体
     str = removeHTMLEntities(str)
+    // 给html自闭合标签添加闭合状态
+    str = handleSelfCloseTags(str)
     // 转换成blob数据
-    let blob = new Blob([str], {
+    const blob = new Blob([str], {
       type: 'image/svg+xml'
     })
-    let res = await readBlob(blob)
+    const res = await readBlob(blob)
     return res
   }
 
   //  导出为json
   async json(name, withConfig = true) {
-    let data = this.mindMap.getData(withConfig)
-    let str = JSON.stringify(data)
-    let blob = new Blob([str])
-    let res = await readBlob(blob)
+    const data = this.mindMap.getData(withConfig)
+    const str = JSON.stringify(data)
+    const blob = new Blob([str])
+    const res = await readBlob(blob)
     return res
   }
 
   //  专有文件，其实就是json文件
   async smm(name, withConfig) {
-    let res = await this.json(name, withConfig)
+    const res = await this.json(name, withConfig)
     return res
   }
 
   // markdown文件
   async md() {
-    let data = this.mindMap.getData()
-    let content = transformToMarkdown(data)
-    let blob = new Blob([content])
-    let res = await readBlob(blob)
+    const data = this.mindMap.getData()
+    const content = transformToMarkdown(data)
+    const blob = new Blob([content])
+    const res = await readBlob(blob)
     return res
   }
 }

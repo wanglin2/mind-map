@@ -179,6 +179,7 @@ class Node {
     let { isUseCustomNodeContent, customCreateNodeContent } = this.mindMap.opt
     if (isUseCustomNodeContent && customCreateNodeContent) {
       this._customNodeContent = customCreateNodeContent(this)
+      this._customNodeContent.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
     }
     // 如果没有返回内容，那么还是使用内置的节点内容
     if (this._customNodeContent) return
