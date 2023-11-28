@@ -12,6 +12,7 @@ class BatchExecution {
   //  添加任务
   push(name, fn) {
     if (this.has[name]) {
+      this.replaceTask(name, fn)
       return
     }
     this.has[name] = true
@@ -20,6 +21,19 @@ class BatchExecution {
       fn
     })
     this.nextTick()
+  }
+
+  // 替换任务
+  replaceTask(name, fn) {
+    const index = this.queue.findIndex(item => {
+      return item.name === name
+    })
+    if (index !== -1) {
+      this.queue[index] = {
+        name,
+        fn
+      }
+    }
   }
 
   //   执行队列
