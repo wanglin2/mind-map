@@ -442,9 +442,7 @@ class Node {
         this.mindMap.renderer[
           isActive ? 'removeNodeFromActiveList' : 'addNodeToActiveList'
         ](this)
-        this.mindMap.emit('node_active', isActive ? null : this, [
-          ...this.mindMap.renderer.activeNodeList
-        ])
+        this.renderer.emitNodeActiveEvent(isActive ? null : this)
       }
       this.mindMap.emit('node_mousedown', this, e)
     })
@@ -475,7 +473,7 @@ class Node {
     })
     // 双击事件
     this.group.on('dblclick', e => {
-      if (this.mindMap.opt.readonly) {
+      if (this.mindMap.opt.readonly || e.ctrlKey) {
         return
       }
       e.stopPropagation()
@@ -521,7 +519,7 @@ class Node {
     this.mindMap.emit('before_node_active', this, this.renderer.activeNodeList)
     this.renderer.clearActiveNodeList()
     this.renderer.addNodeToActiveList(this)
-    this.mindMap.emit('node_active', this, [...this.renderer.activeNodeList])
+    this.renderer.emitNodeActiveEvent(this)
   }
 
   //  更新节点

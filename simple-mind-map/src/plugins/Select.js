@@ -133,9 +133,7 @@ class Select {
       }
     }
     if (isNumChange || isNodeChange) {
-      this.mindMap.emit('node_active', null, [
-        ...this.mindMap.renderer.activeNodeList
-      ])
+      this.mindMap.renderer.emitNodeActiveEvent()
     }
   }
 
