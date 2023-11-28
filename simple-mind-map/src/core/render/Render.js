@@ -25,7 +25,8 @@ import {
   setDataToClipboard,
   getDataFromClipboard,
   htmlEscape,
-  parseAddGeneralizationNodeList
+  parseAddGeneralizationNodeList,
+  checkNodeListIsEqual
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -87,6 +88,9 @@ class Render {
     this.currentBeingPasteType = ''
     // 节点高亮框
     this.highlightBoxNode = null
+    // 上一次节点激活数据
+    this.lastActiveNode = null
+    this.lastActiveNodeList = []
     // 布局
     this.setLayout()
     // 绑定事件
@@ -335,6 +339,24 @@ class Render {
     })
   }
 
+  // 派发节点激活事件
+  emitNodeActiveEvent(node = null, activeNodeList = [...this.activeNodeList]) {
+    let isChange = false
+    isChange = this.lastActiveNode !== node
+    if (!isChange) {
+      isChange = !checkNodeListIsEqual(
+        this.lastActiveNodeList,
+        activeNodeList
+      )
+    }
+    if (!isChange) return
+    this.lastActiveNode = node
+    this.lastActiveNodeList = [...activeNodeList]
+    this.mindMap.batchExecution.push('emitNodeActiveEvent', () => {
+      this.mindMap.emit('node_active', node, activeNodeList)
+    })
+  }
+
   // 鼠标点击画布时清空当前激活节点列表
   clearActiveNodeListOnDrawClick(e, eventType) {
     if (this.activeNodeList.length <= 0) return
@@ -431,7 +453,7 @@ class Render {
       return
     }
     this.clearActiveNodeList()
-    this.mindMap.emit('node_active', null, [])
+    this.emitNodeActiveEvent(null, [])
   }
 
   //  清除当前激活的节点列表
@@ -1600,11 +1622,6 @@ class Render {
       }
     })
     return res
-  }
-
-  // 派发节点激活改变事件
-  emitNodeActiveEvent() {
-    this.mindMap.emit('node_active', null, [...this.activeNodeList])
   }
 
   // 高亮节点或子节点

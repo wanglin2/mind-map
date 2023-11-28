@@ -1003,3 +1003,18 @@ export const handleSelfCloseTags = str => {
   })
   return str
 }
+
+// 检查两个节点列表是否包含的节点是一样的
+export const checkNodeListIsEqual = (list1, list2) => {
+  if (list1.length !== list2.length) return false
+  for (let i = 0; i < list1.length; i++) {
+    if (
+      !list2.find(item => {
+        return item.uid === list1[i].uid
+      })
+    ) {
+      return false
+    }
+  }
+  return true
+}
