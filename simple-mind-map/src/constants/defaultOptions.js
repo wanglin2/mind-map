@@ -229,5 +229,7 @@ export const defaultOpt = {
   highlightNodeBoxStyle: {
     stroke: 'rgb(94, 200, 248)',
     fill: 'transparent'
-  }
+  },
+  // 创建新节点时默认不聚焦新节点，不进入新节点的编辑状态
+  notFocusNewNodeOnCreateNewNode: false
 }
