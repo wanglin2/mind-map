@@ -344,10 +344,7 @@ class Render {
     let isChange = false
     isChange = this.lastActiveNode !== node
     if (!isChange) {
-      isChange = !checkNodeListIsEqual(
-        this.lastActiveNodeList,
-        activeNodeList
-      )
+      isChange = !checkNodeListIsEqual(this.lastActiveNodeList, activeNodeList)
     }
     if (!isChange) return
     this.lastActiveNode = node
@@ -541,16 +538,20 @@ class Render {
     this.textEdit.hideEditTextBox()
     const {
       defaultInsertSecondLevelNodeText,
-      defaultInsertBelowSecondLevelNodeText
+      defaultInsertBelowSecondLevelNodeText,
+      notFocusNewNodeOnCreateNewNode
     } = this.mindMap.opt
     const list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     const handleMultiNodes = list.length > 1
     const isRichText = !!this.mindMap.richText
+    const focusNewNode = notFocusNewNodeOnCreateNewNode
+      ? false
+      : handleMultiNodes || !openEdit
     const params = {
       expand: true,
       richText: isRichText,
       resetRichText: isRichText,
-      isActive: handleMultiNodes || !openEdit // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
+      isActive: focusNewNode // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
     }
     // 动态指定的子节点数据也需要添加相关属性
     appointChildren = addDataToAppointNodes(appointChildren, {
@@ -569,7 +570,8 @@ class Render {
       // 计算插入位置
       const index = getNodeDataIndex(node)
       const newNodeData = {
-        inserting: handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式,
+        inserting:
+          notFocusNewNodeOnCreateNewNode || handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式,
         data: {
           text: text,
           ...params,
@@ -581,7 +583,7 @@ class Render {
       parent.nodeData.children.splice(index + 1, 0, newNodeData)
     })
     // 如果同时对多个节点插入子节点，需要清除原来激活的节点
-    if (handleMultiNodes || !openEdit) {
+    if (focusNewNode) {
       this.clearActiveNodeList()
     }
     this.mindMap.render()
@@ -597,11 +599,13 @@ class Render {
     this.textEdit.hideEditTextBox()
     const list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     const isRichText = !!this.mindMap.richText
+    const { notFocusNewNodeOnCreateNewNode } = this.mindMap.opt
+    const focusNewNode = !notFocusNewNodeOnCreateNewNode
     const params = {
       expand: true,
       richText: isRichText,
       resetRichText: isRichText,
-      isActive: true
+      isActive: focusNewNode
     }
     nodeList = addDataToAppointNodes(nodeList, params)
     list.forEach(node => {
@@ -617,7 +621,9 @@ class Render {
       )
       parent.nodeData.children.splice(index + 1, 0, ...newNodeList)
     })
-    this.clearActiveNodeList()
+    if (focusNewNode) {
+      this.clearActiveNodeList()
+    }
     this.mindMap.render()
   }
 
@@ -635,16 +641,20 @@ class Render {
     this.textEdit.hideEditTextBox()
     const {
       defaultInsertSecondLevelNodeText,
-      defaultInsertBelowSecondLevelNodeText
+      defaultInsertBelowSecondLevelNodeText,
+      notFocusNewNodeOnCreateNewNode
     } = this.mindMap.opt
     const list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     const handleMultiNodes = list.length > 1
     const isRichText = !!this.mindMap.richText
+    const focusNewNode = notFocusNewNodeOnCreateNewNode
+      ? false
+      : handleMultiNodes || !openEdit
     const params = {
       expand: true,
       richText: isRichText,
       resetRichText: isRichText,
-      isActive: handleMultiNodes || !openEdit // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
+      isActive: focusNewNode // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
     }
     // 动态指定的子节点数据也需要添加相关属性
     appointChildren = addDataToAppointNodes(appointChildren, {
@@ -661,7 +671,8 @@ class Render {
         ? defaultInsertSecondLevelNodeText
         : defaultInsertBelowSecondLevelNodeText
       const newNode = {
-        inserting: handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式
+        inserting:
+          notFocusNewNodeOnCreateNewNode || handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式
         data: {
           text: text,
           uid: createUid(),
@@ -677,7 +688,7 @@ class Render {
       })
     })
     // 如果同时对多个节点插入子节点，需要清除原来激活的节点
-    if (handleMultiNodes || !openEdit) {
+    if (focusNewNode) {
       this.clearActiveNodeList()
     }
     this.mindMap.render()
@@ -693,11 +704,13 @@ class Render {
     this.textEdit.hideEditTextBox()
     const list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     const isRichText = !!this.mindMap.richText
+    const { notFocusNewNodeOnCreateNewNode } = this.mindMap.opt
+    const focusNewNode = !notFocusNewNodeOnCreateNewNode
     const params = {
       expand: true,
       richText: isRichText,
       resetRichText: isRichText,
-      isActive: true
+      isActive: focusNewNode
     }
     childList = addDataToAppointNodes(childList, params)
     list.forEach(node => {
@@ -714,7 +727,9 @@ class Render {
         expand: true
       })
     })
-    this.clearActiveNodeList()
+    if (focusNewNode) {
+      this.clearActiveNodeList()
+    }
     this.mindMap.render()
   }
 
@@ -727,16 +742,20 @@ class Render {
     this.textEdit.hideEditTextBox()
     const {
       defaultInsertSecondLevelNodeText,
-      defaultInsertBelowSecondLevelNodeText
+      defaultInsertBelowSecondLevelNodeText,
+      notFocusNewNodeOnCreateNewNode
     } = this.mindMap.opt
     const list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     const handleMultiNodes = list.length > 1
     const isRichText = !!this.mindMap.richText
+    const focusNewNode = notFocusNewNodeOnCreateNewNode
+      ? false
+      : handleMultiNodes || !openEdit
     const params = {
       expand: true,
       richText: isRichText,
       resetRichText: isRichText,
-      isActive: handleMultiNodes || !openEdit // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
+      isActive: focusNewNode // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
     }
     list.forEach(node => {
       if (node.isGeneralization || node.isRoot) {
@@ -747,7 +766,8 @@ class Render {
           ? defaultInsertSecondLevelNodeText
           : defaultInsertBelowSecondLevelNodeText
       const newNode = {
-        inserting: handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式
+        inserting:
+          notFocusNewNodeOnCreateNewNode || handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式
         data: {
           text: text,
           uid: createUid(),
@@ -762,7 +782,7 @@ class Render {
       parent.nodeData.children.splice(index, 1, newNode)
     })
     // 如果同时对多个节点插入子节点，需要清除原来激活的节点
-    if (handleMultiNodes || !openEdit) {
+    if (focusNewNode) {
       this.clearActiveNodeList()
     }
     this.mindMap.render()
