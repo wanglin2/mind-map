@@ -65,6 +65,9 @@ class Search {
     this.currentIndex = -1
     this.notResetSearchText = false
     this.isSearching = false
+    if (this.mindMap.opt.readonly) {
+      this.mindMap.renderer.closeHighlightNode()
+    }
     this.emitEvent()
   }
 
@@ -96,6 +99,10 @@ class Search {
     this.mindMap.execCommand('GO_TARGET_NODE', currentNode, () => {
       this.notResetSearchText = false
       callback()
+      // 只读模式下节点无法激活，所以通过高亮的方式
+      if (this.mindMap.opt.readonly) {
+        this.mindMap.renderer.highlightNode(currentNode)
+      }
     })
   }
 
