@@ -315,6 +315,11 @@ export const shortcutKeyList = [
         value: 'Ctrl + -'
       },
       {
+        icon: 'iconfangda',
+        name: 'Zoom in/Zoom out',
+        value: 'Ctrl + Mouse wheel'
+      },
+      {
         icon: 'icondingwei',
         name: 'Back root node',
         value: 'Ctrl + Enter'
