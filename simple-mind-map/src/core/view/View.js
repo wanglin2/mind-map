@@ -72,7 +72,7 @@ class View {
         return customHandleMousewheel(e)
       }
       // 鼠标滚轮事件控制缩放
-      if (mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
+      if (mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM || e.ctrlKey) {
         if (disableMouseWheelZoom) return
         const { x: clientX, y: clientY } = this.mindMap.toPos(
           e.clientX,
