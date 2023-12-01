@@ -5,7 +5,7 @@ import {
   selectAllInput,
   htmlEscape
 } from '../../utils'
-import { ERROR_TYPES } from '../../constants/constant'
+import { ERROR_TYPES, CONSTANTS } from '../../constants/constant'
 
 //  节点文字编辑类
 export default class TextEdit {
@@ -53,6 +53,12 @@ export default class TextEdit {
     // 节点激活前事件
     this.mindMap.on('before_node_active', () => {
       this.hideEditTextBox()
+    })
+    // 鼠标滚动事件
+    this.mindMap.on('mousewheel', () => {
+      if (this.mindMap.opt.mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.MOVE) {
+        this.hideEditTextBox()
+      }
     })
     // 注册编辑快捷键
     this.mindMap.keyCommand.addShortcut('F2', () => {
