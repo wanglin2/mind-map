@@ -382,6 +382,11 @@ export const shortcutKeyList = [
         value: 'Ctrl + -'
       },
       {
+        icon: 'iconfangda',
+        name: '放大/缩小',
+        value: 'Ctrl + 鼠标滚动'
+      },
+      {
         icon: 'icondingwei',
         name: '回到根节点',
         value: 'Ctrl + Enter'
