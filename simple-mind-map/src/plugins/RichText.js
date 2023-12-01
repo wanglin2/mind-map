@@ -153,7 +153,7 @@ class RichText {
   }
 
   // 显示文本编辑控件
-  showEditText(node, rect, isInserting, isFromKeyDown) {
+  showEditText({ node, rect, isInserting, isFromKeyDown, isFromScale }) {
     if (this.showTextEdit) {
       return
     }
@@ -167,7 +167,9 @@ class RichText {
     this.node = node
     this.isInserting = isInserting
     if (!rect) rect = node._textData.node.node.getBoundingClientRect()
-    this.mindMap.emit('before_show_text_edit')
+    if (!isFromScale) {
+      this.mindMap.emit('before_show_text_edit')
+    }
     this.mindMap.renderer.textEdit.registerTmpShortcut()
     // 原始宽高
     let g = node._textData.node
@@ -571,7 +573,7 @@ class RichText {
   setNotActiveNodeStyle(node, style) {
     const config = this.normalStyleToRichTextStyle(style)
     if (Object.keys(config).length > 0) {
-      this.showEditText(node)
+      this.showEditText({ node })
       this.formatAllText(config)
       this.hideEditText([node])
     }
