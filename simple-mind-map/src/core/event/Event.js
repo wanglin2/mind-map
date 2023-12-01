@@ -133,18 +133,10 @@ class Event extends EventEmitter {
     e.stopPropagation()
     e.preventDefault()
     let dir
-    // 解决mac触控板双指缩放方向相反的问题
-    if (e.ctrlKey) {
-      if (e.deltaY > 0) dir = CONSTANTS.DIR.UP
-      if (e.deltaY < 0) dir = CONSTANTS.DIR.DOWN
-      if (e.deltaX > 0) dir = CONSTANTS.DIR.LEFT
-      if (e.deltaX < 0) dir = CONSTANTS.DIR.RIGHT
-    } else {
-      if ((e.wheelDeltaY || e.detail) > 0) dir = CONSTANTS.DIR.UP
-      if ((e.wheelDeltaY || e.detail) < 0) dir = CONSTANTS.DIR.DOWN
-      if ((e.wheelDeltaX || e.detail) > 0) dir = CONSTANTS.DIR.LEFT
-      if ((e.wheelDeltaX || e.detail) < 0) dir = CONSTANTS.DIR.RIGHT
-    }
+    if (e.deltaY < 0) dir = CONSTANTS.DIR.UP
+    if (e.deltaY > 0) dir = CONSTANTS.DIR.DOWN
+    if (e.deltaX < 0) dir = CONSTANTS.DIR.LEFT
+    if (e.deltaX > 0) dir = CONSTANTS.DIR.RIGHT
     // 判断是否是触控板
     let isTouchPad = false
     // mac、windows
