@@ -210,8 +210,8 @@ export const defaultOpt = {
   tagsColorMap: {},
   // 节点协作样式配置
   cooperateStyle: {
-    avatarSize: 22,// 头像大小
-    fontSize: 12,// 如果是文字头像，那么文字的大小
+    avatarSize: 22, // 头像大小
+    fontSize: 12 // 如果是文字头像，那么文字的大小
   },
   // 关联线是否始终显示在节点上层
   // false：即创建关联线和激活关联线时处于最顶层，其他情况下处于节点下方
@@ -230,6 +230,11 @@ export const defaultOpt = {
     stroke: 'rgb(94, 200, 248)',
     fill: 'transparent'
   },
-  // 创建新节点时默认不聚焦新节点，不进入新节点的编辑状态
-  notFocusNewNodeOnCreateNewNode: false
+  // 创建新节点时的行为
+  /*
+    DEFAULT  ：默认会激活新创建的节点，并且进入编辑模式。如果同时创建了多个新节点，那么只会激活而不会进入编辑模式
+    NOT_ACTIVE  : 不激活新创建的节点
+    ACTIVE_ONLY  : 只激活新创建的节点，不进入编辑模式
+  */
+  createNewNodeBehavior: CONSTANTS.CREATE_NEW_NODE_BEHAVIOR.DEFAULT
 }

@@ -524,6 +524,36 @@ class Render {
     }
   }
 
+  // 获取创建新节点的行为
+  getNewNodeBehavior(openEdit = false, handleMultiNodes = false) {
+    const { createNewNodeBehavior } = this.mindMap.opt
+    let focusNewNode = false // 是否激活新节点
+    let inserting = false // 新节点是否进入编辑模式
+    switch (createNewNodeBehavior) {
+      // 默认会激活新创建的节点，并且进入编辑模式。如果同时创建了多个新节点，那么只会激活而不会进入编辑模式
+      case CONSTANTS.CREATE_NEW_NODE_BEHAVIOR.DEFAULT:
+        focusNewNode = handleMultiNodes || !openEdit
+        inserting = handleMultiNodes ? false : openEdit // 如果同时对多个节点插入子节点，那么无需进入编辑模式
+        break
+      // 不激活新创建的节点
+      case CONSTANTS.CREATE_NEW_NODE_BEHAVIOR.NOT_ACTIVE:
+        focusNewNode = false
+        inserting = false
+        break
+      // 只激活新创建的节点，不进入编辑模式
+      case CONSTANTS.CREATE_NEW_NODE_BEHAVIOR.ACTIVE_ONLY:
+        focusNewNode = true
+        inserting = false
+        break
+      default:
+        break
+    }
+    return {
+      focusNewNode,
+      inserting
+    }
+  }
+
   //  插入同级节点
   insertNode(
     openEdit = true,
@@ -538,15 +568,15 @@ class Render {
     this.textEdit.hideEditTextBox()
     const {
       defaultInsertSecondLevelNodeText,
-      defaultInsertBelowSecondLevelNodeText,
-      notFocusNewNodeOnCreateNewNode
+      defaultInsertBelowSecondLevelNodeText
     } = this.mindMap.opt
     const list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     const handleMultiNodes = list.length > 1
     const isRichText = !!this.mindMap.richText
-    const focusNewNode = notFocusNewNodeOnCreateNewNode
-      ? false
-      : handleMultiNodes || !openEdit
+    const { focusNewNode, inserting } = this.getNewNodeBehavior(
+      openEdit,
+      handleMultiNodes
+    )
     const params = {
       expand: true,
       richText: isRichText,
@@ -570,8 +600,7 @@ class Render {
       // 计算插入位置
       const index = getNodeDataIndex(node)
       const newNodeData = {
-        inserting:
-          notFocusNewNodeOnCreateNewNode || handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式,
+        inserting,
         data: {
           text: text,
           ...params,
@@ -599,8 +628,7 @@ class Render {
     this.textEdit.hideEditTextBox()
     const list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     const isRichText = !!this.mindMap.richText
-    const { notFocusNewNodeOnCreateNewNode } = this.mindMap.opt
-    const focusNewNode = !notFocusNewNodeOnCreateNewNode
+    const { focusNewNode } = this.getNewNodeBehavior(false, true)
     const params = {
       expand: true,
       richText: isRichText,
@@ -641,20 +669,20 @@ class Render {
     this.textEdit.hideEditTextBox()
     const {
       defaultInsertSecondLevelNodeText,
-      defaultInsertBelowSecondLevelNodeText,
-      notFocusNewNodeOnCreateNewNode
+      defaultInsertBelowSecondLevelNodeText
     } = this.mindMap.opt
     const list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     const handleMultiNodes = list.length > 1
     const isRichText = !!this.mindMap.richText
-    const focusNewNode = notFocusNewNodeOnCreateNewNode
-      ? false
-      : handleMultiNodes || !openEdit
+    const { focusNewNode, inserting } = this.getNewNodeBehavior(
+      openEdit,
+      handleMultiNodes
+    )
     const params = {
       expand: true,
       richText: isRichText,
       resetRichText: isRichText,
-      isActive: focusNewNode // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
+      isActive: focusNewNode
     }
     // 动态指定的子节点数据也需要添加相关属性
     appointChildren = addDataToAppointNodes(appointChildren, {
@@ -671,8 +699,7 @@ class Render {
         ? defaultInsertSecondLevelNodeText
         : defaultInsertBelowSecondLevelNodeText
       const newNode = {
-        inserting:
-          notFocusNewNodeOnCreateNewNode || handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式
+        inserting,
         data: {
           text: text,
           uid: createUid(),
@@ -704,8 +731,7 @@ class Render {
     this.textEdit.hideEditTextBox()
     const list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     const isRichText = !!this.mindMap.richText
-    const { notFocusNewNodeOnCreateNewNode } = this.mindMap.opt
-    const focusNewNode = !notFocusNewNodeOnCreateNewNode
+    const { focusNewNode } = this.getNewNodeBehavior(false, true)
     const params = {
       expand: true,
       richText: isRichText,
@@ -742,20 +768,20 @@ class Render {
     this.textEdit.hideEditTextBox()
     const {
       defaultInsertSecondLevelNodeText,
-      defaultInsertBelowSecondLevelNodeText,
-      notFocusNewNodeOnCreateNewNode
+      defaultInsertBelowSecondLevelNodeText
     } = this.mindMap.opt
     const list = appointNodes.length > 0 ? appointNodes : this.activeNodeList
     const handleMultiNodes = list.length > 1
     const isRichText = !!this.mindMap.richText
-    const focusNewNode = notFocusNewNodeOnCreateNewNode
-      ? false
-      : handleMultiNodes || !openEdit
+    const { focusNewNode, inserting } = this.getNewNodeBehavior(
+      openEdit,
+      handleMultiNodes
+    )
     const params = {
       expand: true,
       richText: isRichText,
       resetRichText: isRichText,
-      isActive: focusNewNode // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
+      isActive: focusNewNode
     }
     list.forEach(node => {
       if (node.isGeneralization || node.isRoot) {
@@ -766,8 +792,7 @@ class Render {
           ? defaultInsertSecondLevelNodeText
           : defaultInsertBelowSecondLevelNodeText
       const newNode = {
-        inserting:
-          notFocusNewNodeOnCreateNewNode || handleMultiNodes ? false : openEdit, // 如果同时对多个节点插入子节点，那么无需进入编辑模式
+        inserting,
         data: {
           text: text,
           uid: createUid(),
