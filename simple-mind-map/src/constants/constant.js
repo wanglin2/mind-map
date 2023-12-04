@@ -229,6 +229,11 @@ export const CONSTANTS = {
   SCROLL_BAR_DIR: {
     VERTICAL: 'vertical',
     HORIZONTAL: 'horizontal'
+  },
+  CREATE_NEW_NODE_BEHAVIOR: {
+    DEFAULT: 'default',
+    NOT_ACTIVE: 'notActive',
+    ACTIVE_ONLY: 'activeOnly'
   }
 }
 
