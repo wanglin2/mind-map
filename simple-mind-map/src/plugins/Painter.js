@@ -38,6 +38,7 @@ class Painter {
   }
 
   onEndPainter() {
+    if (!this.isInPainter) return
     this.endPainter()
     this.mindMap.emit('painter_end')
   }
