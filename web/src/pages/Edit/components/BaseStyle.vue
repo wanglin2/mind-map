@@ -753,6 +753,36 @@
           </el-select>
         </div>
       </div>
+      <!-- 配置创建新节点时的行为 -->
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.createNewNodeBehavior') }}</span>
+          <el-select
+            size="mini"
+            style="width: 120px"
+            v-model="config.createNewNodeBehavior"
+            placeholder=""
+            @change="
+              value => {
+                updateOtherConfig('createNewNodeBehavior', value)
+              }
+            "
+          >
+            <el-option
+              :label="$t('baseStyle.default')"
+              value="default"
+            ></el-option>
+            <el-option
+              :label="$t('baseStyle.notActive')"
+              value="notActive"
+            ></el-option>
+            <el-option
+              :label="$t('baseStyle.activeOnly')"
+              value="activeOnly"
+            ></el-option>
+          </el-select>
+        </div>
+      </div>
       <!-- 是否显示滚动条 -->
       <div class="row">
         <div class="rowItem">
@@ -843,7 +873,8 @@ export default {
       config: {
         enableFreeDrag: false,
         mousewheelAction: 'zoom',
-        mousewheelZoomActionReverse: false
+        mousewheelZoomActionReverse: false,
+        createNewNodeBehavior: 'default'
       },
       watermarkConfig: {
         show: false,
@@ -968,7 +999,8 @@ export default {
       ;[
         'enableFreeDrag',
         'mousewheelAction',
-        'mousewheelZoomActionReverse'
+        'mousewheelZoomActionReverse',
+        'createNewNodeBehavior'
       ].forEach(key => {
         this.config[key] = this.mindMap.getConfig(key)
       })
@@ -979,9 +1011,7 @@ export default {
       this.enableNodeRichText = this.localConfig.openNodeRichText
       this.mousewheelAction = this.localConfig.mousewheelAction
       this.mousewheelZoomActionReverse = this.localConfig.mousewheelZoomActionReverse
-      ;[
-        'isShowScrollbar'
-      ].forEach(key => {
+      ;['isShowScrollbar'].forEach(key => {
         this.localConfigs[key] = this.localConfig[key]
       })
     },
