@@ -30,8 +30,8 @@ export default class TextEdit {
     this.onScale = this.onScale.bind(this)
     this.onKeydown = this.onKeydown.bind(this)
     // 节点双击事件
-    this.mindMap.on('node_dblclick', node => {
-      this.show({ node })
+    this.mindMap.on('node_dblclick', (node, e, isInserting) => {
+      this.show({ node, e, isInserting })
     })
     // 点击事件
     this.mindMap.on('draw_click', () => {
