@@ -70,6 +70,7 @@ export namespace defaultOpt {
     const richTextEditFakeInPlace: boolean;
     const customHandleClipboardText: any;
     const disableMouseWheelZoom: boolean;
+    const disableTouchZoom: boolean;
     function errorHandler(code: any, error: any): void;
     const resetCss: string;
     const enableDblclickBackToRootNode: boolean;
@@ -101,4 +102,11 @@ export namespace defaultOpt {
     const defaultGeneralizationText: string;
     const handleIsSplitByWrapOnPasteCreateNewNode: any;
     const addHistoryTime: number;
+    const isDisableDrag: boolean;
+    namespace highlightNodeBoxStyle {
+        export const stroke: string;
+        const fill_2: string;
+        export { fill_2 as fill };
+    }
+    const createNewNodeBehavior: string;
 }

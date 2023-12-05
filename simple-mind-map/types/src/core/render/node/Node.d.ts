@@ -39,6 +39,7 @@ declare class Node {
     _tagData: any;
     _noteData: any;
     noteEl: any;
+    noteContentIsShow: boolean;
     _expandBtn: any;
     _lastExpandBtnType: any;
     _showExpandBtn: boolean;
@@ -47,8 +48,7 @@ declare class Node {
     _fillExpandNode: any;
     _userListGroup: any;
     _lines: any[];
-    _generalizationLine: any;
-    _generalizationNode: any;
+    _generalizationList: any[];
     _unVisibleRectRegionNode: any;
     _isMouseenter: boolean;
     _rectInfo: {
@@ -102,11 +102,14 @@ declare class Node {
     getShape(): any;
     hasCustomPosition(): boolean;
     ancestorHasCustomPosition(): boolean;
+    ancestorHasGeneralization(): boolean;
     addChildren(node: any): void;
     styleLine(line: any, node: any): void;
     removeLine(): void;
+    isAncestor(node: any): boolean;
     isParent(node: any): boolean;
     isBrother(node: any): any;
+    getIndexInBrothers(): any;
     getPaddingVale(): {
         paddingX: any;
         paddingY: any;
@@ -117,7 +120,17 @@ declare class Node {
     getSelfInhertStyle(prop: any): any;
     getBorderWidth(): any;
     getData(key: any): any;
+    getPureData(removeActiveState?: boolean, removeId?: boolean): any;
     hasCustomStyle(): boolean;
+    getRect(): any;
+    getRectInSvg(): {
+        left: any;
+        right: any;
+        top: any;
+        bottom: any;
+        width: number;
+        height: number;
+    };
 }
 import Style from "./Style";
 import Shape from "./Shape";

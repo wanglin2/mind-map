@@ -74,6 +74,7 @@ declare class MindMap {
         richTextEditFakeInPlace: boolean;
         customHandleClipboardText: any;
         disableMouseWheelZoom: boolean;
+        disableTouchZoom: boolean;
         errorHandler: (code: any, error: any) => void;
         resetCss: string;
         enableDblclickBackToRootNode: boolean;
@@ -103,6 +104,12 @@ declare class MindMap {
         defaultGeneralizationText: string;
         handleIsSplitByWrapOnPasteCreateNewNode: any;
         addHistoryTime: number;
+        isDisableDrag: boolean;
+        highlightNodeBoxStyle: {
+            stroke: string;
+            fill: string;
+        };
+        createNewNodeBehavior: string;
     });
     opt: any;
     el: any;

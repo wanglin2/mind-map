@@ -80,6 +80,11 @@ export namespace CONSTANTS {
         const VERTICAL: string;
         const HORIZONTAL: string;
     }
+    namespace CREATE_NEW_NODE_BEHAVIOR {
+        const DEFAULT: string;
+        const NOT_ACTIVE: string;
+        const ACTIVE_ONLY: string;
+    }
 }
 export const initRootNodePositionMap: {
     [x: string]: number;
@@ -107,3 +112,4 @@ export namespace a4Size {
     const height: number;
 }
 export const cssContent: "\n  /* 鼠标hover和激活时渲染的矩形 */\n  .smm-hover-node{\n    display: none;\n    opacity: 0.6;\n    stroke-width: 1;\n  }\n\n  .smm-node:not(.smm-node-dragging):hover .smm-hover-node{\n    display: block;\n  }\n\n  .smm-node.active .smm-hover-node{\n    display: block;\n    opacity: 1;\n    stroke-width: 2;\n  }\n";
+export const selfCloseTagList: string[];

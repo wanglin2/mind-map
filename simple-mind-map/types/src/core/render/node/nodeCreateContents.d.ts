@@ -7,6 +7,7 @@ declare namespace _default {
     export { createHyperlinkNode };
     export { createTagNode };
     export { createNoteNode };
+    export { getNoteContentPosition };
     export { measureCustomNodeContentSize };
     export { isUseCustomNodeContent };
 }
@@ -38,6 +39,10 @@ declare function createNoteNode(): {
 declare class createNoteNode {
     noteEl: HTMLDivElement;
 }
+declare function getNoteContentPosition(): {
+    left: any;
+    top: any;
+};
 declare function measureCustomNodeContentSize(content: any): {
     width: any;
     height: any;

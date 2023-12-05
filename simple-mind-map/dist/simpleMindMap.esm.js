@@ -39045,6 +39045,7 @@ __export(constant_exports, {
   layoutList: () => layoutList,
   layoutValueList: () => layoutValueList,
   nodeDataNoStylePropList: () => nodeDataNoStylePropList,
+  selfCloseTagList: () => selfCloseTagList,
   themeList: () => themeList
 });
 var themeList = [
@@ -39275,6 +39276,11 @@ var CONSTANTS = {
   SCROLL_BAR_DIR: {
     VERTICAL: "vertical",
     HORIZONTAL: "horizontal"
+  },
+  CREATE_NEW_NODE_BEHAVIOR: {
+    DEFAULT: "default",
+    NOT_ACTIVE: "notActive",
+    ACTIVE_ONLY: "activeOnly"
   }
 };
 var initRootNodePositionMap = {
@@ -39384,6 +39390,15 @@ var cssContent = `
     stroke-width: 2;
   }
 `;
+var selfCloseTagList = [
+  "img",
+  "br",
+  "hr",
+  "input",
+  "link",
+  "meta",
+  "area"
+];
 
 // ../simple-mind-map/src/core/view/View.js
 var View = class {
@@ -39446,7 +39461,7 @@ var View = class {
       if (customHandleMousewheel && typeof customHandleMousewheel === "function") {
         return customHandleMousewheel(e2);
       }
-      if (mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM) {
+      if (mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM || e2.ctrlKey) {
         if (disableMouseWheelZoom)
           return;
         const { x: clientX, y: clientY } = this.mindMap.toPos(
@@ -39773,25 +39788,14 @@ var Event2 = class extends import_eventemitter3.default {
     e2.stopPropagation();
     e2.preventDefault();
     let dir;
-    if (e2.ctrlKey) {
-      if (e2.deltaY > 0)
-        dir = CONSTANTS.DIR.UP;
-      if (e2.deltaY < 0)
-        dir = CONSTANTS.DIR.DOWN;
-      if (e2.deltaX > 0)
-        dir = CONSTANTS.DIR.LEFT;
-      if (e2.deltaX < 0)
-        dir = CONSTANTS.DIR.RIGHT;
-    } else {
-      if ((e2.wheelDeltaY || e2.detail) > 0)
-        dir = CONSTANTS.DIR.UP;
-      if ((e2.wheelDeltaY || e2.detail) < 0)
-        dir = CONSTANTS.DIR.DOWN;
-      if ((e2.wheelDeltaX || e2.detail) > 0)
-        dir = CONSTANTS.DIR.LEFT;
-      if ((e2.wheelDeltaX || e2.detail) < 0)
-        dir = CONSTANTS.DIR.RIGHT;
-    }
+    if (e2.deltaY < 0)
+      dir = CONSTANTS.DIR.UP;
+    if (e2.deltaY > 0)
+      dir = CONSTANTS.DIR.DOWN;
+    if (e2.deltaX < 0)
+      dir = CONSTANTS.DIR.LEFT;
+    if (e2.deltaX > 0)
+      dir = CONSTANTS.DIR.RIGHT;
     let isTouchPad = false;
     if (e2.wheelDeltaY === e2.deltaY * -3 || Math.abs(e2.wheelDeltaY) <= 10) {
       isTouchPad = true;
@@ -40578,6 +40582,27 @@ var removeFromParentNodeData = (node3) => {
   if (index3 === -1)
     return;
   node3.parent.nodeData.children.splice(index3, 1);
+};
+var handleSelfCloseTags = (str) => {
+  selfCloseTagList.forEach((tagName) => {
+    str = str.replaceAll(
+      new RegExp(`<${tagName}([^>]*)>`, "g"),
+      `<${tagName} $1 />`
+    );
+  });
+  return str;
+};
+var checkNodeListIsEqual = (list1, list2) => {
+  if (list1.length !== list2.length)
+    return false;
+  for (let i2 = 0; i2 < list1.length; i2++) {
+    if (!list2.find((item) => {
+      return item.uid === list1[i2].uid;
+    })) {
+      return false;
+    }
+  }
+  return true;
 };
 
 // ../simple-mind-map/src/core/render/node/Style.js
@@ -47866,6 +47891,7 @@ var Node2 = class {
     let { isUseCustomNodeContent: isUseCustomNodeContent2, customCreateNodeContent } = this.mindMap.opt;
     if (isUseCustomNodeContent2 && customCreateNodeContent) {
       this._customNodeContent = customCreateNodeContent(this);
+      this._customNodeContent.setAttribute("xmlns", "http://www.w3.org/1999/xhtml");
     }
     if (this._customNodeContent)
       return;
@@ -48070,9 +48096,7 @@ var Node2 = class {
             this.renderer.activeNodeList
           );
         this.mindMap.renderer[isActive ? "removeNodeFromActiveList" : "addNodeToActiveList"](this);
-        this.mindMap.emit("node_active", isActive ? null : this, [
-          ...this.mindMap.renderer.activeNodeList
-        ]);
+        this.renderer.emitNodeActiveEvent(isActive ? null : this);
       }
       this.mindMap.emit("node_mousedown", this, e2);
     });
@@ -48103,7 +48127,7 @@ var Node2 = class {
       this.mindMap.emit("node_mouseleave", this, e2);
     });
     this.group.on("dblclick", (e2) => {
-      if (this.mindMap.opt.readonly) {
+      if (this.mindMap.opt.readonly || e2.ctrlKey) {
         return;
       }
       e2.stopPropagation();
@@ -48138,7 +48162,7 @@ var Node2 = class {
     this.mindMap.emit("before_node_active", this, this.renderer.activeNodeList);
     this.renderer.clearActiveNodeList();
     this.renderer.addNodeToActiveList(this);
-    this.mindMap.emit("node_active", this, [...this.renderer.activeNodeList]);
+    this.renderer.emitNodeActiveEvent(this);
   }
   //  更新节点
   update() {
@@ -51164,7 +51188,9 @@ var TextEdit = class {
     this.show = this.show.bind(this);
     this.onScale = this.onScale.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
-    this.mindMap.on("node_dblclick", this.show);
+    this.mindMap.on("node_dblclick", (node3, e2, isInserting) => {
+      this.show({ node: node3, e: e2, isInserting });
+    });
     this.mindMap.on("draw_click", () => {
       this.hideEditTextBox();
     });
@@ -51182,11 +51208,18 @@ var TextEdit = class {
     this.mindMap.on("before_node_active", () => {
       this.hideEditTextBox();
     });
+    this.mindMap.on("mousewheel", () => {
+      if (this.mindMap.opt.mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.MOVE) {
+        this.hideEditTextBox();
+      }
+    });
     this.mindMap.keyCommand.addShortcut("F2", () => {
       if (this.renderer.activeNodeList.length <= 0) {
         return;
       }
-      this.show(this.renderer.activeNodeList[0]);
+      this.show({
+        node: this.renderer.activeNodeList[0]
+      });
     });
     this.mindMap.on("scale", this.onScale);
     if (this.mindMap.opt.enableAutoEnterTextEditWhenKeydown) {
@@ -51207,7 +51240,12 @@ var TextEdit = class {
       return;
     const node3 = activeNodeList[0];
     if (node3 && this.checkIsAutoEnterTextEditKey(e2)) {
-      this.show(node3, e2, false, true);
+      this.show({
+        node: node3,
+        e: e2,
+        isInserting: false,
+        isFromKeyDown: true
+      });
     }
   }
   // 判断是否是自动进入文本编模式的按钮
@@ -51227,11 +51265,16 @@ var TextEdit = class {
   //  显示文本编辑框
   // isInserting：是否是刚创建的节点
   // isFromKeyDown：是否是在按键事件进入的编辑
-  async show(node3, e2, isInserting = false, isFromKeyDown = false) {
+  async show({
+    node: node3,
+    isInserting = false,
+    isFromKeyDown = false,
+    isFromScale = false
+  }) {
     if (node3.isUseCustomNodeContent()) {
       return;
     }
-    let { beforeTextEdit } = this.mindMap.opt;
+    const { beforeTextEdit } = this.mindMap.opt;
     if (typeof beforeTextEdit === "function") {
       let isShow = false;
       try {
@@ -51244,14 +51287,21 @@ var TextEdit = class {
         return;
     }
     this.currentNode = node3;
-    let { offsetLeft, offsetTop } = checkNodeOuter(this.mindMap, node3);
+    const { offsetLeft, offsetTop } = checkNodeOuter(this.mindMap, node3);
     this.mindMap.view.translateXY(offsetLeft, offsetTop);
-    let rect = node3._textData.node.node.getBoundingClientRect();
+    const rect = node3._textData.node.node.getBoundingClientRect();
+    const params = {
+      node: node3,
+      rect,
+      isInserting,
+      isFromKeyDown,
+      isFromScale
+    };
     if (this.mindMap.richText) {
-      this.mindMap.richText.showEditText(node3, rect, isInserting, isFromKeyDown);
+      this.mindMap.richText.showEditText(params);
       return;
     }
-    this.showEditTextBox(node3, rect, isInserting, isFromKeyDown);
+    this.showEditTextBox(params);
   }
   // 处理画布缩放
   onScale() {
@@ -51264,14 +51314,19 @@ var TextEdit = class {
       this.cacheEditingText = this.getEditText();
       this.showTextEdit = false;
     }
-    this.show(this.currentNode);
+    this.show({
+      node: this.currentNode,
+      isFromScale: true
+    });
   }
   //  显示文本编辑框
-  showEditTextBox(node3, rect, isInserting, isFromKeyDown) {
+  showEditTextBox({ node: node3, rect, isInserting, isFromKeyDown, isFromScale }) {
     if (this.showTextEdit)
       return;
     const { nodeTextEditZIndex, textAutoWrapWidth, selectTextOnEnterEditText } = this.mindMap.opt;
-    this.mindMap.emit("before_show_text_edit");
+    if (!isFromScale) {
+      this.mindMap.emit("before_show_text_edit");
+    }
     this.registerTmpShortcut();
     if (!this.textEditNode) {
       this.textEditNode = document.createElement("div");
@@ -51577,6 +51632,8 @@ var Render = class {
     this.beingPasteImgSize = 0;
     this.currentBeingPasteType = "";
     this.highlightBoxNode = null;
+    this.lastActiveNode = null;
+    this.lastActiveNodeList = [];
     this.setLayout();
     this.bindEvent();
     this.registerCommands();
@@ -51751,6 +51808,21 @@ var Render = class {
       this.setRootNodeCenter();
     });
   }
+  // 派发节点激活事件
+  emitNodeActiveEvent(node3 = null, activeNodeList = [...this.activeNodeList]) {
+    let isChange = false;
+    isChange = this.lastActiveNode !== node3;
+    if (!isChange) {
+      isChange = !checkNodeListIsEqual(this.lastActiveNodeList, activeNodeList);
+    }
+    if (!isChange)
+      return;
+    this.lastActiveNode = node3;
+    this.lastActiveNodeList = [...activeNodeList];
+    this.mindMap.batchExecution.push("emitNodeActiveEvent", () => {
+      this.mindMap.emit("node_active", node3, activeNodeList);
+    });
+  }
   // 鼠标点击画布时清空当前激活节点列表
   clearActiveNodeListOnDrawClick(e2, eventType) {
     if (this.activeNodeList.length <= 0)
@@ -51821,7 +51893,7 @@ var Render = class {
       return;
     }
     this.clearActiveNodeList();
-    this.mindMap.emit("node_active", null, []);
+    this.emitNodeActiveEvent(null, []);
   }
   //  清除当前激活的节点列表
   clearActiveNodeList() {
@@ -51887,6 +51959,32 @@ var Render = class {
       this.mindMap.render();
     }
   }
+  // 获取创建新节点的行为
+  getNewNodeBehavior(openEdit = false, handleMultiNodes = false) {
+    const { createNewNodeBehavior } = this.mindMap.opt;
+    let focusNewNode = false;
+    let inserting = false;
+    switch (createNewNodeBehavior) {
+      case CONSTANTS.CREATE_NEW_NODE_BEHAVIOR.DEFAULT:
+        focusNewNode = handleMultiNodes || !openEdit;
+        inserting = handleMultiNodes ? false : openEdit;
+        break;
+      case CONSTANTS.CREATE_NEW_NODE_BEHAVIOR.NOT_ACTIVE:
+        focusNewNode = false;
+        inserting = false;
+        break;
+      case CONSTANTS.CREATE_NEW_NODE_BEHAVIOR.ACTIVE_ONLY:
+        focusNewNode = true;
+        inserting = false;
+        break;
+      default:
+        break;
+    }
+    return {
+      focusNewNode,
+      inserting
+    };
+  }
   //  插入同级节点
   insertNode(openEdit = true, appointNodes = [], appointData = null, appointChildren = []) {
     appointNodes = formatDataToArray(appointNodes);
@@ -51901,11 +51999,15 @@ var Render = class {
     const list2 = appointNodes.length > 0 ? appointNodes : this.activeNodeList;
     const handleMultiNodes = list2.length > 1;
     const isRichText = !!this.mindMap.richText;
+    const { focusNewNode, inserting } = this.getNewNodeBehavior(
+      openEdit,
+      handleMultiNodes
+    );
     const params = {
       expand: true,
       richText: isRichText,
       resetRichText: isRichText,
-      isActive: handleMultiNodes || !openEdit
+      isActive: focusNewNode
       // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
     };
     appointChildren = addDataToAppointNodes(appointChildren, {
@@ -51920,8 +52022,7 @@ var Render = class {
       const text4 = isOneLayer ? defaultInsertSecondLevelNodeText : defaultInsertBelowSecondLevelNodeText;
       const index3 = getNodeDataIndex(node3);
       const newNodeData = {
-        inserting: handleMultiNodes ? false : openEdit,
-        // 如果同时对多个节点插入子节点，那么无需进入编辑模式,
+        inserting,
         data: {
           text: text4,
           ...params,
@@ -51932,7 +52033,7 @@ var Render = class {
       };
       parent.nodeData.children.splice(index3 + 1, 0, newNodeData);
     });
-    if (handleMultiNodes || !openEdit) {
+    if (focusNewNode) {
       this.clearActiveNodeList();
     }
     this.mindMap.render();
@@ -51948,11 +52049,12 @@ var Render = class {
     this.textEdit.hideEditTextBox();
     const list2 = appointNodes.length > 0 ? appointNodes : this.activeNodeList;
     const isRichText = !!this.mindMap.richText;
+    const { focusNewNode } = this.getNewNodeBehavior(false, true);
     const params = {
       expand: true,
       richText: isRichText,
       resetRichText: isRichText,
-      isActive: true
+      isActive: focusNewNode
     };
     nodeList = addDataToAppointNodes(nodeList, params);
     list2.forEach((node3) => {
@@ -51967,7 +52069,9 @@ var Render = class {
       );
       parent.nodeData.children.splice(index3 + 1, 0, ...newNodeList);
     });
-    this.clearActiveNodeList();
+    if (focusNewNode) {
+      this.clearActiveNodeList();
+    }
     this.mindMap.render();
   }
   //  插入子节点
@@ -51984,12 +52088,15 @@ var Render = class {
     const list2 = appointNodes.length > 0 ? appointNodes : this.activeNodeList;
     const handleMultiNodes = list2.length > 1;
     const isRichText = !!this.mindMap.richText;
+    const { focusNewNode, inserting } = this.getNewNodeBehavior(
+      openEdit,
+      handleMultiNodes
+    );
     const params = {
       expand: true,
       richText: isRichText,
       resetRichText: isRichText,
-      isActive: handleMultiNodes || !openEdit
-      // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
+      isActive: focusNewNode
     };
     appointChildren = addDataToAppointNodes(appointChildren, {
       ...params
@@ -52003,8 +52110,7 @@ var Render = class {
       }
       const text4 = node3.isRoot ? defaultInsertSecondLevelNodeText : defaultInsertBelowSecondLevelNodeText;
       const newNode = {
-        inserting: handleMultiNodes ? false : openEdit,
-        // 如果同时对多个节点插入子节点，那么无需进入编辑模式
+        inserting,
         data: {
           text: text4,
           uid: createUid(),
@@ -52018,7 +52124,7 @@ var Render = class {
         expand: true
       });
     });
-    if (handleMultiNodes || !openEdit) {
+    if (focusNewNode) {
       this.clearActiveNodeList();
     }
     this.mindMap.render();
@@ -52034,11 +52140,12 @@ var Render = class {
     this.textEdit.hideEditTextBox();
     const list2 = appointNodes.length > 0 ? appointNodes : this.activeNodeList;
     const isRichText = !!this.mindMap.richText;
+    const { focusNewNode } = this.getNewNodeBehavior(false, true);
     const params = {
       expand: true,
       richText: isRichText,
       resetRichText: isRichText,
-      isActive: true
+      isActive: focusNewNode
     };
     childList = addDataToAppointNodes(childList, params);
     list2.forEach((node3) => {
@@ -52054,7 +52161,9 @@ var Render = class {
         expand: true
       });
     });
-    this.clearActiveNodeList();
+    if (focusNewNode) {
+      this.clearActiveNodeList();
+    }
     this.mindMap.render();
   }
   // 插入父节点
@@ -52071,12 +52180,15 @@ var Render = class {
     const list2 = appointNodes.length > 0 ? appointNodes : this.activeNodeList;
     const handleMultiNodes = list2.length > 1;
     const isRichText = !!this.mindMap.richText;
+    const { focusNewNode, inserting } = this.getNewNodeBehavior(
+      openEdit,
+      handleMultiNodes
+    );
     const params = {
       expand: true,
       richText: isRichText,
       resetRichText: isRichText,
-      isActive: handleMultiNodes || !openEdit
-      // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
+      isActive: focusNewNode
     };
     list2.forEach((node3) => {
       if (node3.isGeneralization || node3.isRoot) {
@@ -52084,8 +52196,7 @@ var Render = class {
       }
       const text4 = node3.layerIndex === 1 ? defaultInsertSecondLevelNodeText : defaultInsertBelowSecondLevelNodeText;
       const newNode = {
-        inserting: handleMultiNodes ? false : openEdit,
-        // 如果同时对多个节点插入子节点，那么无需进入编辑模式
+        inserting,
         data: {
           text: text4,
           uid: createUid(),
@@ -52098,7 +52209,7 @@ var Render = class {
       const index3 = getNodeDataIndex(node3);
       parent.nodeData.children.splice(index3, 1, newNode);
     });
-    if (handleMultiNodes || !openEdit) {
+    if (focusNewNode) {
       this.clearActiveNodeList();
     }
     this.mindMap.render();
@@ -52864,10 +52975,6 @@ var Render = class {
       }
     });
     return res;
-  }
-  // 派发节点激活改变事件
-  emitNodeActiveEvent() {
-    this.mindMap.emit("node_active", null, [...this.activeNodeList]);
   }
   // 高亮节点或子节点
   highlightNode(node3, range) {
@@ -54585,6 +54692,7 @@ var BatchExecution = class {
   //  添加任务
   push(name, fn) {
     if (this.has[name]) {
+      this.replaceTask(name, fn);
       return;
     }
     this.has[name] = true;
@@ -54593,6 +54701,18 @@ var BatchExecution = class {
       fn
     });
     this.nextTick();
+  }
+  // 替换任务
+  replaceTask(name, fn) {
+    const index3 = this.queue.findIndex((item) => {
+      return item.name === name;
+    });
+    if (index3 !== -1) {
+      this.queue[index3] = {
+        name,
+        fn
+      };
+    }
   }
   //   执行队列
   flush() {
@@ -54663,12 +54783,12 @@ var defaultOpt = {
   // 可以传一个函数，回调参数为事件对象
   customHandleMousewheel: null,
   // 鼠标滚动的行为，如果customHandleMousewheel传了自定义函数，这个属性不生效
-  mousewheelAction: CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM,
+  mousewheelAction: CONSTANTS.MOUSE_WHEEL_ACTION.MOVE,
   // zoom（放大缩小）、move（上下移动）
   // 当mousewheelAction设为move时，可以通过该属性控制鼠标滚动一下视图移动的步长，单位px
   mousewheelMoveStep: 100,
-  // 当mousewheelAction设为zoom时，默认向前滚动是缩小，向后滚动是放大，如果该属性设为true，那么会反过来
-  mousewheelZoomActionReverse: false,
+  // 当mousewheelAction设为zoom时，或者按住Ctrl键时，默认向前滚动是缩小，向后滚动是放大，如果该属性设为true，那么会反过来
+  mousewheelZoomActionReverse: true,
   // 默认插入的二级节点的文字
   defaultInsertSecondLevelNodeText: "\u4E8C\u7EA7\u8282\u70B9",
   // 默认插入的二级以下节点的文字
@@ -54843,7 +54963,14 @@ var defaultOpt = {
   highlightNodeBoxStyle: {
     stroke: "rgb(94, 200, 248)",
     fill: "transparent"
-  }
+  },
+  // 创建新节点时的行为
+  /*
+    DEFAULT  ：默认会激活新创建的节点，并且进入编辑模式。如果同时创建了多个新节点，那么只会激活而不会进入编辑模式
+    NOT_ACTIVE  : 不激活新创建的节点
+    ACTIVE_ONLY  : 只激活新创建的节点，不进入编辑模式
+  */
+  createNewNodeBehavior: CONSTANTS.CREATE_NEW_NODE_BEHAVIOR.DEFAULT
 };
 
 // ../simple-mind-map/index.js
@@ -55225,6 +55352,11 @@ var MindMap2 = class {
   // 销毁
   destroy() {
     this.emit("beforeDestroy");
+    this.renderer.textEdit.hideEditTextBox();
+    if (this.associativeLine) {
+      this.associativeLine.hideEditTextBox();
+    }
+    ;
     [...MindMap2.pluginList].forEach((plugin) => {
       if (this[plugin.instanceName].beforePluginDestroy) {
         this[plugin.instanceName].beforePluginDestroy();
@@ -76008,7 +76140,7 @@ var Export = class {
   //  导出
   async export(type, isDownload = true, name = "\u601D\u7EF4\u5BFC\u56FE", ...args) {
     if (this[type]) {
-      let result = await this[type](name, ...args);
+      const result = await this[type](name, ...args);
       if (isDownload && type !== "pdf") {
         downloadFile(result, name + "." + type);
       }
@@ -76017,6 +76149,18 @@ var Export = class {
       return null;
     }
   }
+  // 创建图片url转换任务
+  createTransformImgTaskList(svg2, tagName, propName, getUrlFn) {
+    const imageList = svg2.find(tagName);
+    return imageList.map(async (item) => {
+      const imgUlr = getUrlFn(item);
+      if (/^data:/.test(imgUlr) || imgUlr === "none") {
+        return;
+      }
+      const imgData = await imgToDataUrl(imgUlr);
+      item.attr(propName, imgData);
+    });
+  }
   //  获取svg数据
   async getSvgData() {
     let { exportPaddingX, exportPaddingY } = this.mindMap.opt;
@@ -76024,17 +76168,30 @@ var Export = class {
       paddingX: exportPaddingX,
       paddingY: exportPaddingY
     });
-    let imageList = svg2.find("image");
-    let task = imageList.map(async (item) => {
-      let imgUlr = item.attr("href") || item.attr("xlink:href");
-      if (/^data:/.test(imgUlr) || imgUlr === "none") {
-        return;
+    const task1 = this.createTransformImgTaskList(
+      svg2,
+      "image",
+      "href",
+      (item) => {
+        return item.attr("href") || item.attr("xlink:href");
       }
-      let imgData = await imgToDataUrl(imgUlr);
-      item.attr("href", imgData);
+    );
+    const task2 = this.createTransformImgTaskList(svg2, "img", "src", (item) => {
+      return item.attr("src");
     });
-    await Promise.all(task);
-    if (imageList.length > 0) {
+    const taskList = [...task1, ...task2];
+    await Promise.all(taskList);
+    let isAddResetCss;
+    if (this.mindMap.richText) {
+      const foreignObjectList = svg2.find("foreignObject");
+      if (foreignObjectList.length > 0) {
+        foreignObjectList[0].add(
+          SVG(`<style>${this.mindMap.opt.resetCss}</style>`)
+        );
+        isAddResetCss = true;
+      }
+    }
+    if (taskList.length > 0 || isAddResetCss) {
       svgHTML = svg2.svg();
     }
     return {
@@ -76104,7 +76261,7 @@ var Export = class {
   //  在canvas上绘制思维导图背景
   drawBackgroundToCanvas(ctx, width2, height2) {
     return new Promise((resolve, reject) => {
-      let {
+      const {
         backgroundColor = "#fff",
         backgroundImage,
         backgroundRepeat = "no-repeat",
@@ -76145,14 +76302,14 @@ var Export = class {
   //  在svg上绘制思维导图背景
   drawBackgroundToSvg(svg2) {
     return new Promise(async (resolve) => {
-      let {
+      const {
         backgroundColor = "#fff",
         backgroundImage,
         backgroundRepeat = "repeat"
       } = this.mindMap.themeConfig;
       svg2.css("background-color", backgroundColor);
       if (backgroundImage && backgroundImage !== "none") {
-        let imgDataUrl = await imgToDataUrl(backgroundImage);
+        const imgDataUrl = await imgToDataUrl(backgroundImage);
         svg2.css("background-image", `url(${imgDataUrl})`);
         svg2.css("background-repeat", backgroundRepeat);
         resolve();
@@ -76167,22 +76324,9 @@ var Export = class {
    * 方法2.把svg的图片提取出来再挨个绘制到canvas里，最后一起转换
    */
   async png(name, transparent = false, checkRotate, compress) {
-    let { node: node3, str } = await this.getSvgData();
-    if (this.mindMap.richText) {
-      let foreignObjectList = node3.find("foreignObject");
-      if (foreignObjectList.length > 0) {
-        foreignObjectList[0].add(
-          SVG(`<style>${this.mindMap.opt.resetCss}</style>`)
-        );
-      }
-      str = node3.svg();
-    }
-    str = removeHTMLEntities(str);
-    let blob = new Blob([str], {
-      type: "image/svg+xml"
-    });
-    let svgUrl = await readBlob(blob);
-    let res = await this.svgToPng(svgUrl, transparent, checkRotate, compress);
+    const { str } = await this.getSvgData();
+    const svgUrl = await this.fixSvgStrAndToBlob(str);
+    const res = await this.svgToPng(svgUrl, transparent, checkRotate, compress);
     return res;
   }
   //  导出为pdf
@@ -76190,7 +76334,7 @@ var Export = class {
     if (!this.mindMap.doExportPDF) {
       throw new Error("\u8BF7\u6CE8\u518CExportPDF\u63D2\u4EF6");
     }
-    let img = await this.png(
+    const img = await this.png(
       "",
       false,
       (width2, height2) => {
@@ -76215,46 +76359,43 @@ var Export = class {
     return res;
   }
   //  导出为svg
-  // plusCssText：附加的css样式，如果svg中存在dom节点，想要设置一些针对节点的样式可以通过这个参数传入
   async svg(name) {
-    let { node: node3 } = await this.getSvgData();
-    if (this.mindMap.richText) {
-      let foreignObjectList = node3.find("foreignObject");
-      if (foreignObjectList.length > 0) {
-        foreignObjectList[0].add(
-          SVG(`<style>${this.mindMap.opt.resetCss}</style>`)
-        );
-      }
-    }
+    const { node: node3 } = await this.getSvgData();
     node3.first().before(SVG(`<title>${name}</title>`));
     await this.drawBackgroundToSvg(node3);
-    let str = node3.svg();
+    const str = node3.svg();
+    const res = await this.fixSvgStrAndToBlob(str);
+    return res;
+  }
+  // 修复svg字符串，并且转换为blob数据
+  async fixSvgStrAndToBlob(str) {
     str = removeHTMLEntities(str);
-    let blob = new Blob([str], {
+    str = handleSelfCloseTags(str);
+    const blob = new Blob([str], {
       type: "image/svg+xml"
     });
-    let res = await readBlob(blob);
+    const res = await readBlob(blob);
     return res;
   }
   //  导出为json
   async json(name, withConfig = true) {
-    let data2 = this.mindMap.getData(withConfig);
-    let str = JSON.stringify(data2);
-    let blob = new Blob([str]);
-    let res = await readBlob(blob);
+    const data2 = this.mindMap.getData(withConfig);
+    const str = JSON.stringify(data2);
+    const blob = new Blob([str]);
+    const res = await readBlob(blob);
     return res;
   }
   //  专有文件，其实就是json文件
   async smm(name, withConfig) {
-    let res = await this.json(name, withConfig);
+    const res = await this.json(name, withConfig);
     return res;
   }
   // markdown文件
   async md() {
-    let data2 = this.mindMap.getData();
-    let content3 = transformToMarkdown(data2);
-    let blob = new Blob([content3]);
-    let res = await readBlob(blob);
+    const data2 = this.mindMap.getData();
+    const content3 = transformToMarkdown(data2);
+    const blob = new Blob([content3]);
+    const res = await readBlob(blob);
     return res;
   }
 };
@@ -76381,12 +76522,14 @@ var Drag = class extends Base_default {
       );
       this.mindMap.render();
     }
+    if (this.isDragging) {
+      this.mindMap.emit("node_dragend", {
+        overlapNodeUid,
+        prevNodeUid,
+        nextNodeUid
+      });
+    }
     this.reset();
-    this.mindMap.emit("node_dragend", {
-      overlapNodeUid,
-      prevNodeUid,
-      nextNodeUid
-    });
   }
   //  拖动中
   onMove(x2, y3, e2) {
@@ -76932,9 +77075,7 @@ var Select = class {
       }
     }
     if (isNumChange || isNodeChange) {
-      this.mindMap.emit("node_active", null, [
-        ...this.mindMap.renderer.activeNodeList
-      ]);
+      this.mindMap.renderer.emitNodeActiveEvent();
     }
   }
   //  鼠标移动事件
@@ -78230,7 +78371,7 @@ var RichText = class {
     import_quill.default.register(SizeStyle, true);
   }
   // 显示文本编辑控件
-  showEditText(node3, rect, isInserting, isFromKeyDown) {
+  showEditText({ node: node3, rect, isInserting, isFromKeyDown, isFromScale }) {
     if (this.showTextEdit) {
       return;
     }
@@ -78245,7 +78386,9 @@ var RichText = class {
     this.isInserting = isInserting;
     if (!rect)
       rect = node3._textData.node.node.getBoundingClientRect();
-    this.mindMap.emit("before_show_text_edit");
+    if (!isFromScale) {
+      this.mindMap.emit("before_show_text_edit");
+    }
     this.mindMap.renderer.textEdit.registerTmpShortcut();
     let g = node3._textData.node;
     let originWidth = g.attr("data-width");
@@ -78606,7 +78749,7 @@ var RichText = class {
   setNotActiveNodeStyle(node3, style) {
     const config = this.normalStyleToRichTextStyle(style);
     if (Object.keys(config).length > 0) {
-      this.showEditText(node3);
+      this.showEditText({ node: node3 });
       this.formatAllText(config);
       this.hideEditText([node3]);
     }
@@ -79124,6 +79267,9 @@ var Search = class {
     this.currentIndex = -1;
     this.notResetSearchText = false;
     this.isSearching = false;
+    if (this.mindMap.opt.readonly) {
+      this.mindMap.renderer.closeHighlightNode();
+    }
     this.emitEvent();
   }
   // 搜索匹配的节点
@@ -79154,6 +79300,9 @@ var Search = class {
     this.mindMap.execCommand("GO_TARGET_NODE", currentNode, () => {
       this.notResetSearchText = false;
       callback();
+      if (this.mindMap.opt.readonly) {
+        this.mindMap.renderer.highlightNode(currentNode);
+      }
     });
   }
   // 替换当前节点
@@ -79253,6 +79402,8 @@ var Painter = class {
     this.isInPainter = false;
   }
   onEndPainter() {
+    if (!this.isInPainter)
+      return;
     this.endPainter();
     this.mindMap.emit("painter_end");
   }

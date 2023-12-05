@@ -20,6 +20,9 @@ declare class Render {
     beingPasteText: string;
     beingPasteImgSize: number;
     currentBeingPasteType: string;
+    highlightBoxNode: any;
+    lastActiveNode: any;
+    lastActiveNodeList: any[];
     setLayout(): void;
     layout: MindMap | CatalogOrganization | OrganizationStructure | Timeline | VerticalTimeline;
     setData(data: any): void;
@@ -66,6 +69,7 @@ declare class Render {
     goTargetNode(node: any, callback?: () => void): void;
     registerShortcutKeys(): void;
     toggleActiveExpand(): void;
+    emitNodeActiveEvent(node?: any, activeNodeList?: any[]): void;
     clearActiveNodeListOnDrawClick(e: any, eventType: any): void;
     startTextEdit(): void;
     endTextEdit(): void;
@@ -75,12 +79,17 @@ declare class Render {
     removeNodeFromActiveList(node: any): void;
     findActiveNodeIndex(node: any): any;
     backForward(type: any, step: any): void;
+    getNewNodeBehavior(openEdit?: boolean, handleMultiNodes?: boolean): {
+        focusNewNode: boolean;
+        inserting: boolean;
+    };
     copy(): void;
     cut(): void;
     paste(): void;
     onPaste(): Promise<void>;
     insertTo(node: any, exist: any, dir?: string): void;
     checkNodeLayerChange(node: any, toNode: any): void;
+    deleteNodeGeneralization(node: any): void;
     getNextActiveNode(): any;
     copyNode(): any;
     toggleNodeExpand(node: any): void;
@@ -89,7 +98,8 @@ declare class Render {
     setRootNodeCenter(): void;
     expandToNodeUid(uid: any, callback?: () => void): void;
     findNodeByUid(uid: any): any;
-    emitNodeActiveEvent(): void;
+    highlightNode(node: any, range: any): void;
+    closeHighlightNode(): void;
 }
 import TextEdit from "./TextEdit";
 import MindMap from "../../layouts/MindMap";

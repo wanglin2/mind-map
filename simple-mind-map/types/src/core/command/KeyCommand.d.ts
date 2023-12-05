@@ -11,6 +11,8 @@ export default class KeyCommand {
     save(): void;
     restore(): void;
     bindEvent(): void;
+    onKeydown(e: any): void;
+    unBindEvent(): void;
     checkKey(e: any, key: any): boolean;
     getOriginEventCodeArr(e: any): any[];
     hasCombinationKey(e: any): any;
