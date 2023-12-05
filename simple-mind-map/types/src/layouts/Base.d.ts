@@ -39,6 +39,22 @@ declare class Base {
         generalizationLineMargin: any;
         generalizationNodeMargin: any;
     };
+    getChildrenBoundaries(node: any, dir: any, startIndex: number, endIndex: any): {
+        left: number;
+        right: number;
+        top: number;
+        bottom: number;
+        generalizationLineMargin: any;
+        generalizationNodeMargin: any;
+    };
+    getNodeGeneralizationRenderBoundaries(item: any, dir: any): {
+        left: any;
+        right: any;
+        top: any;
+        bottom: any;
+        generalizationLineMargin: any;
+        generalizationNodeMargin: any;
+    };
     getNodeActChildrenLength(node: any): any;
 }
 import Lru from "../utils/Lru";

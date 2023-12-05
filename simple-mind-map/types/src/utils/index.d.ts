@@ -58,6 +58,8 @@ export function getObjectChangedProps(oldObject: any, newObject: any): {};
 export function checkIsNodeStyleDataKey(key: any): boolean;
 export function mergerIconList(list: any): any;
 export function getTopAncestorsFomNodeList(list: any): any[];
+export function checkHasSupSubRelation(list: any): boolean;
+export function parseAddGeneralizationNodeList(list: any): any[];
 export function checkTwoRectIsOverlap(minx1: any, maxx1: any, miny1: any, maxy1: any, minx2: any, maxx2: any, miny2: any, maxy2: any): boolean;
 export function focusInput(el: any): void;
 export function selectAllInput(el: any): void;
@@ -75,3 +77,5 @@ export function getDataFromClipboard(): Promise<{
     img: any;
 }>;
 export function removeFromParentNodeData(node: any): void;
+export function handleSelfCloseTags(str: any): any;
+export function checkNodeListIsEqual(list1: any, list2: any): boolean;
