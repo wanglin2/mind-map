@@ -43,9 +43,9 @@ const mindMap = new MindMap({
 | watermarkConfig（v0.2.4+）       | Object  |                  | 水印配置，详细配置请参考下方表格【水印配置】                 |
 | textAutoWrapWidth（v0.3.4+）     | Number  | 500 |   节点内每行文本达到该宽度后自动换行               |
 | customHandleMousewheel（v0.4.3+）     | Function  | null | 自定义鼠标滚轮事件处理，可以传一个函数，回调参数为事件对象                 |
-| mousewheelAction（v0.4.3+）     | String  | zoom | 鼠标滚轮的行为，`zoom`（放大缩小）、`move`（上下移动）。如果`customHandleMousewheel`传了自定义函数，这个属性不生效                 |
+| mousewheelAction（v0.4.3+）     | String  | zoom（v0.9.1+默认改为move） | 鼠标滚轮的行为，`zoom`（放大缩小）、`move`（上下移动）。如果`customHandleMousewheel`传了自定义函数，这个属性不生效                 |
 | mousewheelMoveStep（v0.4.3+）     | Number  | 100 | 当`mousewheelAction`设为`move`时，可以通过该属性控制鼠标滚动一下视图移动的步长，单位`px`               |
-| mousewheelZoomActionReverse（v0.6.5+）     | Boolean  | false |  当mousewheelAction设为zoom时，默认向前滚动是缩小，向后滚动是放大，如果该属性设为true，那么会反过来  |
+| mousewheelZoomActionReverse（v0.6.5+）     | Boolean  | false（v0.9.1+默认改为true） |  当mousewheelAction设为zoom时，或者按住Ctrl键时，默认向前滚动是缩小，向后滚动是放大，如果该属性设为true，那么会反过来  |
 | defaultInsertSecondLevelNodeText（v0.4.7+）     | String  | 二级节点 | 默认插入的二级节点的文字               |
 | defaultInsertBelowSecondLevelNodeText（v0.4.7+）     | String  | 分支主题 | 默认插入的二级以下节点的文字               |
 | expandBtnStyle（v0.5.0+）     | Object  | { color: '#808080', fill: '#fff', fontSize: 13, strokeColor: '#333333' } | 展开收起按钮的颜色，（fontSize及strokeColor字段为0.7.0+版本新增的，用于设置收起时显示节点数量的文字样式）  |
@@ -103,6 +103,7 @@ const mindMap = new MindMap({
 | isDisableDrag（v0.8.1+）     | Boolean | false  | 是否禁止拖动画布  |
 | disableTouchZoom（v0.8.1+）     | Boolean | false  | 禁止双指缩放，你仍旧可以使用api进行缩放，对TouchEvent插件生效  |
 | highlightNodeBoxStyle（v0.9.0+）     | Object | { stroke: 'rgb(94, 200, 248)', fill: 'transparent' }  | 鼠标移入概要高亮所属节点时的高亮框样式  |
+| createNewNodeBehavior（v0.9.1+）     | String | default  | 创建新节点时的行为。default（默认会激活新创建的节点，并且进入编辑模式。如果同时创建了多个新节点，那么只会激活而不会进入编辑模式）、notActive（不激活新创建的节点）、activeOnly（只激活新创建的节点，不进入编辑模式）  |
 
 ### 数据结构
 

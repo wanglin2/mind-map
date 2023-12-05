@@ -1,6 +1,26 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.9.1</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue of exporting images, SVGs, and PDFs with errors when customizing node content.</p>
+<p>2.Optimize the distribution of node activation events, do not distribute events when the activation node has not changed, and skip intermediate events when distributing multiple events in a short period of time.</p>
+<p>3.Fix the issue where the edit box and node detach when scrolling the canvas with the mouse while the node is in editing mode.</p>
+<p>4.Fix the issue of shortcut keys becoming invalid when zooming the canvas with the mouse wheel and then exiting node editing while in node editing mode.</p>
+<p>5.Fix the issue where clicking on a node can also trigger node_dragend event.</p>
+<p>6.Fix that clicking on the canvas and nodes while not in the format brush will also trigger the painter_end event.</p>
+<p>7.Fixed the issue where the mind map text editing box was not destroyed during node text editing and associated line text editing.</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.When holding down the Ctrl key, disable the node double-click event.</p>
+<p>2.Support configuring the behavior when creating new nodes: focusing and entering editing, not focusing, only focusing.</p>
+<p>3.When searching in read-only mode, add a highlight effect to the currently matched node.</p>
+<p>4.The default behavior of the mouse scroll wheel is to move the canvas up and down; The default is to scroll forward to enlarge the canvas and zoom back.</p>
+<p>5.When the mouse scroll wheel behavior is to move the canvas up and down, it supports holding down the Ctrl key to zoom in and out of the canvas.</p>
+</blockquote>
+<p>Demo：支持配置创建新节点时的行为。</p>
 <h2>0.9.0</h2>
 <p>New:</p>
 <p>1.Support adding summaries to some child nodes of the same node.</p>

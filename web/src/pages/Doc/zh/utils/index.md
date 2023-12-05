@@ -403,6 +403,22 @@ copyNodeTree({}, node)
 
 从给定的节点实例列表里判断是否存在上下级关系。
 
+#### handleSelfCloseTags(str)
+
+> v0.9.1+
+
+- `str`：html字符串
+
+给html自闭合标签添加闭合状态，`<div><img src="xxx"></div>` -> `<div><img src="xxx" /></div>`。
+
+#### checkNodeListIsEqual(list1, list2)
+
+> v0.9.1+
+
+- `list1/list2`：节点实例列表
+
+检查两个节点实例列表包含的节点是否是一样的。
+
 ## 在canvas中模拟css的背景属性
 
 引入：

@@ -164,7 +164,7 @@
 <tr>
 <td>mousewheelAction（v0.4.3+）</td>
 <td>String</td>
-<td>zoom</td>
+<td>zoom（v0.9.1+ default is move）</td>
 <td>The behavior of the mouse wheel, <code>zoom</code>(Zoom in and out)、<code>move</code>(Move up and down). If <code>customHandleMousewheel</code> passes a custom function, this property will not take effect</td>
 <td></td>
 </tr>
@@ -178,8 +178,8 @@
 <tr>
 <td>mousewheelZoomActionReverse（v0.6.5+）</td>
 <td>Boolean</td>
-<td>false</td>
-<td>When <code>mousewheelAction</code> is set to <code>zoom</code>, the default scrolling forward is to zoom out, and scrolling backward is to zoom in. If this property is set to true, it will be reversed</td>
+<td>false（v0.9.1+ default is true）</td>
+<td>When <code>mousewheelAction</code> is set to <code>zoom</code>, Or when holding down the Ctrl key, the default scrolling forward is to zoom out, and scrolling backward is to zoom in. If this property is set to true, it will be reversed</td>
 <td></td>
 </tr>
 <tr>
@@ -579,6 +579,13 @@
 <td>Object</td>
 <td>{ stroke: 'rgb(94, 200, 248)', fill: 'transparent' }</td>
 <td>Highlight box style when the mouse moves into the summary to highlight the node it belongs to</td>
+<td></td>
+</tr>
+<tr>
+<td>createNewNodeBehavior（v0.9.1+）</td>
+<td>String</td>
+<td>default</td>
+<td>Behavior when creating a new node. default（By default, newly created nodes will be activated and enter editing mode. If multiple new nodes are created simultaneously, they will only be activated and will not enter editing mode）、notActive（Do not activate newly created nodes）、activeOnly（Only activate newly created nodes and do not enter editing mode）</td>
 <td></td>
 </tr>
 </tbody>

@@ -144,7 +144,7 @@
 <tr>
 <td>mousewheelAction（v0.4.3+）</td>
 <td>String</td>
-<td>zoom</td>
+<td>zoom（v0.9.1+默认改为move）</td>
 <td>鼠标滚轮的行为，<code>zoom</code>（放大缩小）、<code>move</code>（上下移动）。如果<code>customHandleMousewheel</code>传了自定义函数，这个属性不生效</td>
 </tr>
 <tr>
@@ -156,8 +156,8 @@
 <tr>
 <td>mousewheelZoomActionReverse（v0.6.5+）</td>
 <td>Boolean</td>
-<td>false</td>
-<td>当mousewheelAction设为zoom时，默认向前滚动是缩小，向后滚动是放大，如果该属性设为true，那么会反过来</td>
+<td>false（v0.9.1+默认改为true）</td>
+<td>当mousewheelAction设为zoom时，或者按住Ctrl键时，默认向前滚动是缩小，向后滚动是放大，如果该属性设为true，那么会反过来</td>
 </tr>
 <tr>
 <td>defaultInsertSecondLevelNodeText（v0.4.7+）</td>
@@ -500,6 +500,12 @@
 <td>Object</td>
 <td>{ stroke: 'rgb(94, 200, 248)', fill: 'transparent' }</td>
 <td>鼠标移入概要高亮所属节点时的高亮框样式</td>
+</tr>
+<tr>
+<td>createNewNodeBehavior（v0.9.1+）</td>
+<td>String</td>
+<td>default</td>
+<td>创建新节点时的行为。default（默认会激活新创建的节点，并且进入编辑模式。如果同时创建了多个新节点，那么只会激活而不会进入编辑模式）、notActive（不激活新创建的节点）、activeOnly（只激活新创建的节点，不进入编辑模式）</td>
 </tr>
 </tbody>
 </table>
