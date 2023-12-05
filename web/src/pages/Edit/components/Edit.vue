@@ -188,6 +188,7 @@ export default {
     this.$bus.$off('node_tree_render_end', this.handleHideLoading)
     this.$bus.$off('showLoading', this.handleShowLoading)
     window.removeEventListener('resize', this.handleResize)
+    this.mindMap.destroy()
   },
   methods: {
     handleStartTextEdit() {
