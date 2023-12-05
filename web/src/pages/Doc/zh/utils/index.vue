@@ -328,6 +328,22 @@
 <p>v0.8.1+</p>
 </blockquote>
 <p>从给定的节点实例列表里判断是否存在上下级关系。</p>
+<h4>handleSelfCloseTags(str)</h4>
+<blockquote>
+<p>v0.9.1+</p>
+</blockquote>
+<ul>
+<li><code>str</code>：html字符串</li>
+</ul>
+<p>给html自闭合标签添加闭合状态，<code>&lt;div&gt;&lt;img src=&quot;xxx&quot;&gt;&lt;/div&gt;</code> -&gt; <code>&lt;div&gt;&lt;img src=&quot;xxx&quot; /&gt;&lt;/div&gt;</code>。</p>
+<h4>checkNodeListIsEqual(list1, list2)</h4>
+<blockquote>
+<p>v0.9.1+</p>
+</blockquote>
+<ul>
+<li><code>list1/list2</code>：节点实例列表</li>
+</ul>
+<p>检查两个节点实例列表包含的节点是否是一样的。</p>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

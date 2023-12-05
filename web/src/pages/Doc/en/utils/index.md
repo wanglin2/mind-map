@@ -408,6 +408,22 @@ Remove the data of a node from its parent node's `nodeData.children` list.
 
 Determine whether there is a hierarchical relationship from the given node instance list.
 
+#### handleSelfCloseTags(str)
+
+> v0.9.1+
+
+- `str`: html string
+
+Add a closed state to HTML self closing tags, `<div><img src="xxx"></div>` -> `<div><img src="xxx" /></div>`。
+
+#### checkNodeListIsEqual(list1, list2)
+
+> v0.9.1+
+
+- `list1/list2`: Node instance list
+
+Check if the two node instance lists contain the same nodes.
+
 ## Simulate CSS background in Canvas
 
 Import:

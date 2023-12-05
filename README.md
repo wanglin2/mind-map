@@ -226,4 +226,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/moom.jpg" style="width: 50px;height: 50px;" />
         <span>moom</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/张扬.png" style="width: 50px;height: 50px;" />
+        <span>张扬</span>
+    </span>
 </p>

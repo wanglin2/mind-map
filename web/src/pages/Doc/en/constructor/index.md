@@ -43,9 +43,9 @@ const mindMap = new MindMap({
 | watermarkConfig（v0.2.4+）       | Object  |                  | Watermark config, Please refer to the table 【Watermark config】 below for detailed configuration |          |
 | textAutoWrapWidth（v0.3.4+）     | Number  | 500 |   Each line of text in the node will wrap automatically when it reaches the width               |          |
 | customHandleMousewheel（v0.4.3+）     | Function  | null | User-defined mouse wheel event processing can pass a function, and the callback parameter is the event object |          |
-| mousewheelAction（v0.4.3+）     | String  | zoom | The behavior of the mouse wheel, `zoom`(Zoom in and out)、`move`(Move up and down). If `customHandleMousewheel` passes a custom function, this property will not take effect                 |          |
+| mousewheelAction（v0.4.3+）     | String  | zoom（v0.9.1+ default is move） | The behavior of the mouse wheel, `zoom`(Zoom in and out)、`move`(Move up and down). If `customHandleMousewheel` passes a custom function, this property will not take effect                 |          |
 | mousewheelMoveStep（v0.4.3+）     | Number  | 100 | When the `mousewheelAction` is set to `move`, you can use this attribute to control the step length of the view movement when the mouse scrolls. The unit is `px`  |          |
-| mousewheelZoomActionReverse（v0.6.5+）     | Boolean  | false | When `mousewheelAction` is set to `zoom`, the default scrolling forward is to zoom out, and scrolling backward is to zoom in. If this property is set to true, it will be reversed   |          |
+| mousewheelZoomActionReverse（v0.6.5+）     | Boolean  | false（v0.9.1+ default is true） | When `mousewheelAction` is set to `zoom`, Or when holding down the Ctrl key, the default scrolling forward is to zoom out, and scrolling backward is to zoom in. If this property is set to true, it will be reversed   |          |
 | defaultInsertSecondLevelNodeText（v0.4.7+）     | String  | 二级节点 | Text of the default inserted secondary node               |          |
 | defaultInsertBelowSecondLevelNodeText（v0.4.7+）     | String  | 分支主题 | Text for nodes below the second level inserted by default               |          |
 | expandBtnStyle（v0.5.0+）     | Object  | { color: '#808080', fill: '#fff', fontSize: 13, strokeColor: '#333333' } | Expand the color of the stow button, (The fontSize and strokeColor fields were added in version 0.7.0+to set the text style for displaying the number of nodes when folded) |          |
@@ -103,6 +103,7 @@ const mindMap = new MindMap({
 | isDisableDrag（v0.8.1+）     | Boolean | false  | Is disable dragging the canvas  |         |
 | disableTouchZoom（v0.8.1+）     | Boolean | false  |  Prohibit double finger scaling, you can still use the API for scaling, which takes effect on the TouchEvent plugin |         |
 | highlightNodeBoxStyle（v0.9.0+）     | Object | { stroke: 'rgb(94, 200, 248)', fill: 'transparent' }  |  Highlight box style when the mouse moves into the summary to highlight the node it belongs to |         |
+| createNewNodeBehavior（v0.9.1+）     | String | default  | Behavior when creating a new node. default（By default, newly created nodes will be activated and enter editing mode. If multiple new nodes are created simultaneously, they will only be activated and will not enter editing mode）、notActive（Do not activate newly created nodes）、activeOnly（Only activate newly created nodes and do not enter editing mode）  |         |
 
 ### Data structure
 
