@@ -1,4 +1,4 @@
 node_modules
 .DS_Store
 dist_electron
-dist
+simple-mind-map/dist
