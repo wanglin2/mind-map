@@ -101,8 +101,8 @@ function createRichTextNode() {
       recoverText = true
     }
   }
-  if (recoverText) {
-    let text = this.getData('text')
+  let text = this.getData('text')
+  if (recoverText && !isUndef(text)) {
     // 判断节点内容是否是富文本
     let isRichText = checkIsRichText(text)
     // 样式字符串
