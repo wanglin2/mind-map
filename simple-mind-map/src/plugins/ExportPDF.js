@@ -20,7 +20,11 @@ class ExportPDF {
   // 单页导出
   onePageExport(name, img) {
     return new Promise((resolve, reject) => {
-      let pdf = new JsPDF('', 'pt', 'a4')
+      let pdf = new JsPDF({
+        unit: 'pt',
+        format: 'a4',
+        compress: true
+      })
       let a4Ratio = a4Size.width / a4Size.height
       let image = new Image()
       image.onload = () => {
@@ -75,7 +79,11 @@ class ExportPDF {
         // a4纸的尺寸[595.28,841.89]，图片在pdf中图片的宽高
         let imgWidth = a4Size.width
         let imgHeight = (a4Size.width / imageWidth) * imageHeight
-        let pdf = new JsPDF('', 'pt', 'a4')
+        let pdf = new JsPDF({
+          unit: 'pt',
+          format: 'a4',
+          compress: true
+        })
         // 有两个高度需要区分，一个是图片的实际高度，和生成pdf的页面高度(841.89)
         // 当内容未超过pdf一页显示的范围，无需分页
         if (leftHeight < pageHeight) {
@@ -102,7 +110,7 @@ class ExportPDF {
         pdf.save(name)
         resolve()
       }
-      image.onerror = (e) => {
+      image.onerror = e => {
         reject(e)
       }
       image.src = img
