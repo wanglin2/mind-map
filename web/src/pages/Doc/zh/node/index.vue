@@ -31,6 +31,19 @@
 </blockquote>
 <p>节点是否正在拖拽中</p>
 <h2>方法</h2>
+<h3>getPureData(removeActiveState = true, removeId = false)</h3>
+<blockquote>
+<p>v0.9.0+</p>
+</blockquote>
+<ul>
+<li>
+<p><code>removeActiveState</code>：是否移除节点的激活状态</p>
+</li>
+<li>
+<p><code>removeId</code>：是否移除节点的uid字段</p>
+</li>
+</ul>
+<p>序列化节点，获取该节点的纯数据，不包含对节点实例的引用。</p>
 <h3>setGeneralizationOpacity(val)</h3>
 <blockquote>
 <p>v0.9.0+</p>

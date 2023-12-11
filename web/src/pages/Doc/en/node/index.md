@@ -56,6 +56,16 @@ Whether the node is currently being dragged
 
 ## Methods
 
+### getPureData(removeActiveState = true, removeId = false)
+
+> v0.9.0+
+
+- `removeActiveState`：Is remove the activation status of the node
+
+- `removeId`：Is remove the uid of the node
+
+Serialize a node to obtain its pure data, excluding references to node instances.
+
 ### setGeneralizationOpacity(val)
 
 > v0.9.0+

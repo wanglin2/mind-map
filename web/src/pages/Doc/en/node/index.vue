@@ -31,6 +31,19 @@
 </blockquote>
 <p>Whether the node is currently being dragged</p>
 <h2>Methods</h2>
+<h3>getPureData(removeActiveState = true, removeId = false)</h3>
+<blockquote>
+<p>v0.9.0+</p>
+</blockquote>
+<ul>
+<li>
+<p><code>removeActiveState</code>：Is remove the activation status of the node</p>
+</li>
+<li>
+<p><code>removeId</code>：Is remove the uid of the node</p>
+</li>
+</ul>
+<p>Serialize a node to obtain its pure data, excluding references to node instances.</p>
 <h3>setGeneralizationOpacity(val)</h3>
 <blockquote>
 <p>v0.9.0+</p>

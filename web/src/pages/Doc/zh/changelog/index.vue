@@ -1,6 +1,10 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.9.1-fix.1</h2>
+<p>修复：</p>
+<p>1.修复自定义节点方法返回null时报错的问题。</p>
+<p>2.修复导出pdf文件体积很大的问题。</p>
 <h2>0.9.1</h2>
 <p>修复：</p>
 <blockquote>

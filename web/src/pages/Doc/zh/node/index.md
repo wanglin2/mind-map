@@ -56,6 +56,16 @@
 
 ## 方法
 
+### getPureData(removeActiveState = true, removeId = false)
+
+> v0.9.0+
+
+- `removeActiveState`：是否移除节点的激活状态
+
+- `removeId`：是否移除节点的uid字段
+
+序列化节点，获取该节点的纯数据，不包含对节点实例的引用。
+
 ### setGeneralizationOpacity(val)
 
 > v0.9.0+
