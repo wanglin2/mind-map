@@ -495,7 +495,7 @@ class MindMap {
     }
     // 移除插件
     ;[...MindMap.pluginList].forEach(plugin => {
-      if (this[plugin.instanceName].beforePluginDestroy) {
+      if (this[plugin.instanceName] && this[plugin.instanceName].beforePluginDestroy) {
         this[plugin.instanceName].beforePluginDestroy()
       }
       this[plugin.instanceName] = null

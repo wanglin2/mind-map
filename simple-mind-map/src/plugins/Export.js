@@ -9,7 +9,7 @@ import {
 import { SVG } from '@svgdotjs/svg.js'
 import drawBackgroundImageToCanvas from '../utils/simulateCSSBackgroundInCanvas'
 import { transformToMarkdown } from '../parse/toMarkdown'
-import { a4Size } from '../constants/constant'
+import { a4Size, ERROR_TYPES } from '../constants/constant'
 
 //  导出插件
 class Export {
@@ -47,7 +47,8 @@ class Export {
 
   //  获取svg数据
   async getSvgData() {
-    let { exportPaddingX, exportPaddingY } = this.mindMap.opt
+    let { exportPaddingX, exportPaddingY, errorHandler, resetCss } =
+      this.mindMap.opt
     let { svg, svgHTML } = this.mindMap.getSvgData({
       paddingX: exportPaddingX,
       paddingY: exportPaddingY
@@ -66,15 +67,17 @@ class Export {
       return item.attr('src')
     })
     const taskList = [...task1, ...task2]
-    await Promise.all(taskList)
+    try {
+      await Promise.all(taskList)
+    } catch (error) {
+      errorHandler(ERROR_TYPES.EXPORT_LOAD_IMAGE_ERROR, error)
+    }
     // 开启了节点富文本编辑，需要增加一些样式
     let isAddResetCss
     if (this.mindMap.richText) {
       const foreignObjectList = svg.find('foreignObject')
       if (foreignObjectList.length > 0) {
-        foreignObjectList[0].add(
-          SVG(`<style>${this.mindMap.opt.resetCss}</style>`)
-        )
+        foreignObjectList[0].add(SVG(`<style>${resetCss}</style>`))
         isAddResetCss = true
       }
     }

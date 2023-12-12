@@ -328,7 +328,8 @@ export const ERROR_TYPES = {
   CUSTOM_HANDLE_CLIPBOARD_TEXT_ERROR: 'custom_handle_clipboard_text_error',
   LOAD_CLIPBOARD_IMAGE_ERROR: 'load_clipboard_image_error',
   BEFORE_TEXT_EDIT_ERROR: 'before_text_edit_error',
-  EXPORT_ERROR: 'export_error'
+  EXPORT_ERROR: 'export_error',
+  EXPORT_LOAD_IMAGE_ERROR: 'export_load_image_error'
 }
 
 // a4纸的宽高
