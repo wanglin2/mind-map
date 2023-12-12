@@ -236,5 +236,7 @@ export const defaultOpt = {
     NOT_ACTIVE  : 不激活新创建的节点
     ACTIVE_ONLY  : 只激活新创建的节点，不进入编辑模式
   */
-  createNewNodeBehavior: CONSTANTS.CREATE_NEW_NODE_BEHAVIOR.DEFAULT
+  createNewNodeBehavior: CONSTANTS.CREATE_NEW_NODE_BEHAVIOR.DEFAULT,
+  // 当节点图片加载失败时显示的默认图片
+  defaultNodeImage: ''
 }
