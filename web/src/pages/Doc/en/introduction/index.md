@@ -261,4 +261,8 @@ Open source is not easy. If this project is helpful to you, you can invite the a
         <img src="../../../../assets/avatar/长沙利奥软件.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>长沙利奥软件</p>
     </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/HaHN.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>HaHN</p>
+    </div>
 </div>
