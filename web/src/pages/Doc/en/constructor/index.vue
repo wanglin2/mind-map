@@ -588,6 +588,13 @@
 <td>Behavior when creating a new node. default（By default, newly created nodes will be activated and enter editing mode. If multiple new nodes are created simultaneously, they will only be activated and will not enter editing mode）、notActive（Do not activate newly created nodes）、activeOnly（Only activate newly created nodes and do not enter editing mode）</td>
 <td></td>
 </tr>
+<tr>
+<td>defaultNodeImage（v0.9.1-fix.2+）</td>
+<td>String</td>
+<td></td>
+<td>Image address, the default image displayed when node image loading fails</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Data structure</h3>

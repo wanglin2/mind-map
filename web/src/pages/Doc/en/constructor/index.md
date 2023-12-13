@@ -104,6 +104,7 @@ const mindMap = new MindMap({
 | disableTouchZoom（v0.8.1+）     | Boolean | false  |  Prohibit double finger scaling, you can still use the API for scaling, which takes effect on the TouchEvent plugin |         |
 | highlightNodeBoxStyle（v0.9.0+）     | Object | { stroke: 'rgb(94, 200, 248)', fill: 'transparent' }  |  Highlight box style when the mouse moves into the summary to highlight the node it belongs to |         |
 | createNewNodeBehavior（v0.9.1+）     | String | default  | Behavior when creating a new node. default（By default, newly created nodes will be activated and enter editing mode. If multiple new nodes are created simultaneously, they will only be activated and will not enter editing mode）、notActive（Do not activate newly created nodes）、activeOnly（Only activate newly created nodes and do not enter editing mode）  |         |
+| defaultNodeImage（v0.9.1-fix.2+）     | String |   | Image address, the default image displayed when node image loading fails  |         |
 
 ### Data structure
 

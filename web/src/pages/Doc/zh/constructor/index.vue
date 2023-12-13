@@ -507,6 +507,12 @@
 <td>default</td>
 <td>创建新节点时的行为。default（默认会激活新创建的节点，并且进入编辑模式。如果同时创建了多个新节点，那么只会激活而不会进入编辑模式）、notActive（不激活新创建的节点）、activeOnly（只激活新创建的节点，不进入编辑模式）</td>
 </tr>
+<tr>
+<td>defaultNodeImage（v0.9.1-fix.2+）</td>
+<td>String</td>
+<td></td>
+<td>图片地址，当节点图片加载失败时显示的默认图片</td>
+</tr>
 </tbody>
 </table>
 <h3>数据结构</h3>

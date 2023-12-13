@@ -1,12 +1,26 @@
 # Changelog
 
+## 0.9.1-fix.2
+
+Fix:
+
+> 1.Fix the issue where some browsers display default text when node text is empty.
+>
+> 2.Fix the issue of text style loss when inputting text again when the node text content is empty.
+>
+> 3.Fix the issue where exporting images also fails when node image loading fails.
+
+New:
+
+> 1.Support configuring the default image displayed when node image loading fails.
+
 ## 0.9.1-fix.1
 
-修复：
+Fix:
 
-1.修复自定义节点方法返回null时报错的问题。
+1.Fix the issue of custom node methods reporting null errors.
 
-2.修复导出pdf文件体积很大的问题。
+2.Fix the issue of large volume of exported PDF files.
 
 ## 0.9.1
 

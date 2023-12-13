@@ -104,6 +104,7 @@ const mindMap = new MindMap({
 | disableTouchZoom（v0.8.1+）     | Boolean | false  | 禁止双指缩放，你仍旧可以使用api进行缩放，对TouchEvent插件生效  |
 | highlightNodeBoxStyle（v0.9.0+）     | Object | { stroke: 'rgb(94, 200, 248)', fill: 'transparent' }  | 鼠标移入概要高亮所属节点时的高亮框样式  |
 | createNewNodeBehavior（v0.9.1+）     | String | default  | 创建新节点时的行为。default（默认会激活新创建的节点，并且进入编辑模式。如果同时创建了多个新节点，那么只会激活而不会进入编辑模式）、notActive（不激活新创建的节点）、activeOnly（只激活新创建的节点，不进入编辑模式）  |
+| defaultNodeImage（v0.9.1-fix.2+）     | String |   | 图片地址，当节点图片加载失败时显示的默认图片  |
 
 ### 数据结构
 
