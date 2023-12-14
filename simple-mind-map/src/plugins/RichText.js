@@ -96,8 +96,13 @@ class RichText {
         border: none;
       }
 
+      .smm-richtext-node-wrap {
+        word-break: break-all;
+      }
+
       .smm-richtext-node-wrap p {
         font-family: auto;
+        
       }
 
       .smm-richtext-node-edit-wrap p {
