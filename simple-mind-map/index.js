@@ -162,15 +162,14 @@ class MindMap {
   render(callback, source = '') {
     this.batchExecution.push('render', () => {
       this.initTheme()
-      this.renderer.reRender = false
       this.renderer.render(callback, source)
     })
   }
 
   //  重新渲染
   reRender(callback, source = '') {
+    this.clearDraw() // 清空画布的操作不能放到队列任务里，否则当reRender后又执行了render，当前回调会被覆盖掉
     this.batchExecution.push('render', () => {
-      this.clearDraw()
       this.initTheme()
       this.renderer.reRender = true
       this.renderer.render(callback, source)
@@ -495,7 +494,10 @@ class MindMap {
     }
     // 移除插件
     ;[...MindMap.pluginList].forEach(plugin => {
-      if (this[plugin.instanceName] && this[plugin.instanceName].beforePluginDestroy) {
+      if (
+        this[plugin.instanceName] &&
+        this[plugin.instanceName].beforePluginDestroy
+      ) {
         this[plugin.instanceName].beforePluginDestroy()
       }
       this[plugin.instanceName] = null

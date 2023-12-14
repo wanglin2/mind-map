@@ -431,6 +431,7 @@ class Render {
           this.waitRenderingParams = []
           this.render(...params)
         } else {
+          if (this.reRender) this.reRender = false
           // 触发一次保存，因为修改了渲染树的数据
           if (
             this.mindMap.richText &&
