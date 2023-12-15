@@ -387,6 +387,13 @@ class Render {
     this.mindMap.keyCommand.restore()
   }
 
+  // 清空节点缓存池
+  clearCache() {
+    this.layout.lru.clear()
+    this.nodeCache = {}
+    this.lastNodeCache = {}
+  }
+
   //   渲染
   render(callback = () => {}, source) {
     // 如果当前还没有渲染完毕，不再触发渲染
@@ -431,7 +438,9 @@ class Render {
           this.waitRenderingParams = []
           this.render(...params)
         } else {
-          if (this.reRender) this.reRender = false
+          if (this.reRender) {
+            this.reRender = false
+          }
           // 触发一次保存，因为修改了渲染树的数据
           if (
             this.mindMap.richText &&

@@ -35,4 +35,9 @@ export default class Lru {
       return this.pool.get(key)
     }
   }
+
+  clear() {
+    this.size = 0
+    this.pool = new Map()
+  }
 }

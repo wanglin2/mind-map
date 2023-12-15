@@ -168,12 +168,10 @@ class MindMap {
 
   //  重新渲染
   reRender(callback, source = '') {
-    this.clearDraw() // 清空画布的操作不能放到队列任务里，否则当reRender后又执行了render，当前回调会被覆盖掉
-    this.batchExecution.push('render', () => {
-      this.initTheme()
-      this.renderer.reRender = true
-      this.renderer.render(callback, source)
-    })
+    this.renderer.reRender = true // 标记为重新渲染
+    this.renderer.clearCache() // 清空节点缓存池
+    this.clearDraw() // 清空画布
+    this.render(callback, (source = ''))
   }
 
   // 获取或更新容器尺寸位置信息
