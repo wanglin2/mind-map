@@ -41,7 +41,7 @@ class Base {
   cacheNode(uid, node) {
     // 记录本次渲染时的节点
     this.renderer.nodeCache[uid] = node
-    // 记录所有渲染时的节点
+    // 缓存所有渲染过的节点
     this.lru.add(uid, node)
   }
 
@@ -70,11 +70,12 @@ class Base {
   //  创建节点实例
   createNode(data, parent, isRoot, layerIndex) {
     // 创建节点
+    const uid = data.data.uid
     let newNode = null
     // 数据上保存了节点引用，那么直接复用节点
     if (data && data._node && !this.renderer.reRender) {
       newNode = data._node
-      let isLayerTypeChange = this.checkIsLayerTypeChange(
+      const isLayerTypeChange = this.checkIsLayerTypeChange(
         newNode.layerIndex,
         layerIndex
       )
@@ -87,43 +88,49 @@ class Base {
         newNode.getSize()
         newNode.needLayout = true
       }
-    } else if (this.lru.has(data.data.uid) && !this.renderer.reRender) {
-      // 数据上没有保存节点引用，但是通过uid找到了缓存的节点，也可以复用
-      newNode = this.lru.get(data.data.uid)
+    } else if (
+      (this.lru.has(uid) || this.renderer.lastNodeCache[uid]) &&
+      !this.renderer.reRender
+    ) {
+      // 节点数据上没有节点实例
+      // 但是通过uid在节点缓存池中找到了缓存的节点
+      // 或者在上一次渲染缓存对象中找到了节点
+      // 也可以直接复用
+      newNode = this.lru.get(uid) || this.renderer.lastNodeCache[uid]
       // 保存该节点上一次的数据
-      let lastData = JSON.stringify(newNode.getData())
-      let isLayerTypeChange = this.checkIsLayerTypeChange(
+      const lastData = JSON.stringify(newNode.getData())
+      const isLayerTypeChange = this.checkIsLayerTypeChange(
         newNode.layerIndex,
         layerIndex
       )
       newNode.reset()
       newNode.nodeData = newNode.handleData(data || {})
       newNode.layerIndex = layerIndex
-      this.cacheNode(data.data.uid, newNode)
+      this.cacheNode(uid, newNode)
       this.checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(newNode)
       data._node = newNode
       // 主题或主题配置改变了需要重新计算节点大小和布局
-      let isResizeSource = this.checkIsNeedResizeSources()
+      const isResizeSource = this.checkIsNeedResizeSources()
       // 节点数据改变了需要重新计算节点大小和布局
-      let isNodeDataChange = lastData !== JSON.stringify(data.data)
+      const isNodeDataChange = lastData !== JSON.stringify(data.data)
       if (isResizeSource || isNodeDataChange || isLayerTypeChange) {
         newNode.getSize()
         newNode.needLayout = true
       }
     } else {
       // 创建新节点
-      let uid = data.data.uid || createUid()
+      const newUid = uid || createUid()
       newNode = new Node({
         data,
-        uid,
+        uid: newUid,
         renderer: this.renderer,
         mindMap: this.mindMap,
         draw: this.draw,
         layerIndex
       })
       // uid保存到数据上，为了节点复用
-      data.data.uid = uid
-      this.cacheNode(uid, newNode)
+      data.data.uid = newUid
+      this.cacheNode(newUid, newNode)
       // 数据关联实际节点
       data._node = newNode
       if (data.data.isActive) {

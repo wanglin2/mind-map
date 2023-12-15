@@ -329,7 +329,7 @@ export default {
             default:
               break
           }
-        },
+        }
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
         // customCreateNodeContent: (node) => {
@@ -428,6 +428,12 @@ export default {
       //   console.log(this.mindMap.renderer.root.getRect())
       //   console.log(this.mindMap.renderer.root.getRectInSvg())
       // }, 5000);
+      // setTimeout(() => {
+      //   this.mindMap.renderer.renderTree.data.fillColor = 'red'
+      //   this.mindMap.render()
+      //   this.mindMap.reRender()
+      //   this.mindMap.render()
+      // }, 5000)
     },
 
     // url中是否存在要打开的文件
