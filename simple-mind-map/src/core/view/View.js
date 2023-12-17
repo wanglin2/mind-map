@@ -37,7 +37,7 @@ class View {
     this.mindMap.event.on('drag', (e, event) => {
       // 按住ctrl键拖动为多选
       // 禁用拖拽
-      if (e.ctrlKey || this.mindMap.opt.isDisableDrag) {        
+      if (e.ctrlKey || this.mindMap.opt.isDisableDrag) {
         return
       }
       if (this.firstDrag) {
@@ -56,7 +56,7 @@ class View {
     })
     // 放大缩小视图
     this.mindMap.event.on('mousewheel', (e, dir, event, isTouchPad) => {
-      let {
+      const {
         customHandleMousewheel,
         mousewheelAction,
         mouseScaleCenterUseMousePosition,
@@ -78,8 +78,8 @@ class View {
           e.clientX,
           e.clientY
         )
-        let cx = mouseScaleCenterUseMousePosition ? clientX : undefined
-        let cy = mouseScaleCenterUseMousePosition ? clientY : undefined
+        const cx = mouseScaleCenterUseMousePosition ? clientX : undefined
+        const cy = mouseScaleCenterUseMousePosition ? clientY : undefined
         switch (dir) {
           // 鼠标滚轮，向上和向左，都是缩小
           case CONSTANTS.DIR.UP:
@@ -113,11 +113,11 @@ class View {
             break
           // 右移
           case CONSTANTS.DIR.LEFT:
-            this.translateX(-step)
+            this.translateX(step)
             break
           // 左移
           case CONSTANTS.DIR.RIGHT:
-            this.translateX(step)
+            this.translateX(-step)
             break
         }
       }
@@ -261,8 +261,7 @@ class View {
     let drawWidth = rect.width / origTransform.scaleX
     let drawHeight = rect.height / origTransform.scaleY
     let drawRatio = drawWidth / drawHeight
-    let { width: elWidth, height: elHeight } =
-      this.mindMap.elRect
+    let { width: elWidth, height: elHeight } = this.mindMap.elRect
     elWidth = elWidth - fitPadding * 2
     elHeight = elHeight - fitPadding * 2
     let elRatio = elWidth / elHeight
