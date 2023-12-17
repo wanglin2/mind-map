@@ -55,7 +55,7 @@ class View {
       this.firstDrag = true
     })
     // 放大缩小视图
-    this.mindMap.event.on('mousewheel', (e, dir, event, isTouchPad) => {
+    this.mindMap.event.on('mousewheel', (e, dirs, event, isTouchPad) => {
       const {
         customHandleMousewheel,
         mousewheelAction,
@@ -71,7 +71,7 @@ class View {
       ) {
         return customHandleMousewheel(e)
       }
-      // 鼠标滚轮事件控制缩放
+      // 1.鼠标滚轮事件控制缩放
       if (mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM || e.ctrlKey) {
         if (disableMouseWheelZoom) return
         const { x: clientX, y: clientY } = this.mindMap.toPos(
@@ -80,46 +80,52 @@ class View {
         )
         const cx = mouseScaleCenterUseMousePosition ? clientX : undefined
         const cy = mouseScaleCenterUseMousePosition ? clientY : undefined
-        switch (dir) {
+        // 如果来自触控板，那么过滤掉左右的移动
+        if (
+          isTouchPad &&
+          (dirs.includes(CONSTANTS.DIR.LEFT) ||
+            dirs.includes(CONSTANTS.DIR.RIGHT))
+        ) {
+          dirs = dirs.filter(dir => {
+            return ![CONSTANTS.DIR.LEFT, CONSTANTS.DIR.RIGHT].includes(dir)
+          })
+        }
+        switch (true) {
           // 鼠标滚轮，向上和向左，都是缩小
-          case CONSTANTS.DIR.UP:
-          case CONSTANTS.DIR.LEFT:
+          case dirs.includes(CONSTANTS.DIR.UP || CONSTANTS.DIR.LEFT):
             mousewheelZoomActionReverse
               ? this.enlarge(cx, cy, isTouchPad)
               : this.narrow(cx, cy, isTouchPad)
             break
           // 鼠标滚轮，向下和向右，都是放大
-          case CONSTANTS.DIR.DOWN:
-          case CONSTANTS.DIR.RIGHT:
+          case dirs.includes(CONSTANTS.DIR.DOWN || CONSTANTS.DIR.RIGHT):
             mousewheelZoomActionReverse
               ? this.narrow(cx, cy, isTouchPad)
               : this.enlarge(cx, cy, isTouchPad)
             break
         }
       } else {
-        // 鼠标滚轮事件控制画布移动
-        let step = mousewheelMoveStep
-        if (isTouchPad) {
-          step = 5
+        // 2.鼠标滚轮事件控制画布移动
+        const step = isTouchPad ? 5 : mousewheelMoveStep
+        let mx = 0
+        let my = 0
+        // 上移
+        if (dirs.includes(CONSTANTS.DIR.DOWN)) {
+          my = -step
         }
-        switch (dir) {
-          // 上移
-          case CONSTANTS.DIR.DOWN:
-            this.translateY(-step)
-            break
-          // 下移
-          case CONSTANTS.DIR.UP:
-            this.translateY(step)
-            break
-          // 右移
-          case CONSTANTS.DIR.LEFT:
-            this.translateX(step)
-            break
-          // 左移
-          case CONSTANTS.DIR.RIGHT:
-            this.translateX(-step)
-            break
+        // 下移
+        if (dirs.includes(CONSTANTS.DIR.UP)) {
+          my = step
         }
+        // 右移
+        if (dirs.includes(CONSTANTS.DIR.LEFT)) {
+          mx = step
+        }
+        // 左移
+        if (dirs.includes(CONSTANTS.DIR.RIGHT)) {
+          mx = -step
+        }
+        this.translateXY(mx, my)
       }
     })
   }
