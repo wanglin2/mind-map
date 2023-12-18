@@ -128,22 +128,22 @@ class Event extends EventEmitter {
     this.emit('mouseup', e, this)
   }
 
-  //  鼠标滚动
+  //  鼠标滚动/触控板滑动
   onMousewheel(e) {
     e.stopPropagation()
     e.preventDefault()
-    let dir
-    if (e.deltaY < 0) dir = CONSTANTS.DIR.UP
-    if (e.deltaY > 0) dir = CONSTANTS.DIR.DOWN
-    if (e.deltaX < 0) dir = CONSTANTS.DIR.LEFT
-    if (e.deltaX > 0) dir = CONSTANTS.DIR.RIGHT
+    const dirs = []
+    if (e.deltaY < 0) dirs.push(CONSTANTS.DIR.UP)
+    if (e.deltaY > 0) dirs.push(CONSTANTS.DIR.DOWN)
+    if (e.deltaX < 0) dirs.push(CONSTANTS.DIR.LEFT)
+    if (e.deltaX > 0) dirs.push(CONSTANTS.DIR.RIGHT)
     // 判断是否是触控板
     let isTouchPad = false
     // mac、windows
     if (e.wheelDeltaY === e.deltaY * -3 || Math.abs(e.wheelDeltaY) <= 10) {
       isTouchPad = true
     }
-    this.emit('mousewheel', e, dir, this, isTouchPad)
+    this.emit('mousewheel', e, dirs, this, isTouchPad)
   }
 
   //  鼠标右键菜单事件
