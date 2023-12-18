@@ -120,11 +120,6 @@ Search for the index of a node in the active list.
 
 Get the position index of a node among its siblings.
 
-### copyNode()
-
-Copy a node, the active node is the node to be operated on, if there are
-multiple active nodes, only the first node will be operated on.
-
 ### setNodeDataRender(node, data, notRender)
 
 - `notRender`: v0.6.9+, `Boolean`, Default is `false`, Do not trigger rendering.
@@ -181,21 +176,29 @@ Find the corresponding node instance based on the uid.
 
 > v0.6.8+
 
-Copy nodes. After calling this method, the current activated node data will be stored. Multiple activated nodes will only operate on the first node, and subsequent calls to the 'paste()' method can be pasted.
+Copy nodes. After calling this method, the current activated node data will be stored. and subsequent calls to the 'paste()' method can be pasted.
+
+If the browser and protocol (https) support 'js' to manipulate clipboard data, the copied node data will also be added to the user's clipboard.
 
 ### cut()
 
 > v0.6.8+
 
-Cut a node. After calling this method, the currently active node will be cut and the node data will be stored. Multiple nodes will only operate on the first node, and subsequent calls to the 'paste()' method can be pasted.
+Cut a node. After calling this method, the currently active node will be cut and the node data will be stored. and subsequent calls to the 'paste()' method can be pasted.
+
+If the browser and protocol (https) support 'js' to manipulate clipboard data, the copied node data will also be added to the user's clipboard.
 
 ### paste()
 
 > v0.6.8+
 
-Pasting nodes can be done by calling the 'copy()' or 'cut()' method after calling it. This method does not support pasting data from the user's clipboard. Please use the built-in 'Ctrl+v' shortcut key.
+Pasting nodes can be done by calling the 'copy()' or 'cut()' method after calling it. 
+
+If the browser and protocol (https) support 'js' to manipulate clipboard data, data copied from other places can also be pasted. For example, you can paste' simple mind map 'nodes across browsers. If it is non' simple mind map 'node data, the text and images in the clipboard will be extracted and pasted. The text will be pasted as a child node by default, and the images will be added to the current node by default.
 
 ### clearCache()
+
+> v0.9.2+
 
 Empty the node cache pool.
 

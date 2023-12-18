@@ -95,8 +95,6 @@
 <p>检索某个节点在激活列表里的索引。</p>
 <h3>getNodeIndex(node)</h3>
 <p>获取节点在同级里的位置索引。</p>
-<h3>copyNode()</h3>
-<p>复制节点，操作节点为当前激活节点，有多个激活节点只会操作第一个节点。</p>
 <h3>setNodeDataRender(node, data, notRender)</h3>
 <ul>
 <li><code>notRender</code>：v0.6.9+，<code>Boolean</code>，默认为<code>false</code>，是否不要触发渲染。</li>
@@ -148,18 +146,24 @@
 <blockquote>
 <p>v0.6.8+</p>
 </blockquote>
-<p>复制节点，调用该方法后会存储当前激活的节点数据，多个激活节点只会操作第一个节点，后续调用<code>paste()</code>方法时可以进行粘贴。</p>
+<p>复制节点，调用该方法后会存储当前激活的节点数据，后续调用<code>paste()</code>方法时可以进行粘贴。</p>
+<p>如果浏览器及协议（https）支持<code>js</code>操作剪贴板数据，那么复制的节点数据也会同时添加到用户的剪贴板中。</p>
 <h3>cut()</h3>
 <blockquote>
 <p>v0.6.8+</p>
 </blockquote>
-<p>剪切节点，调用该方法后会剪切当前激活的节点，并且存储该节点数据，多个节点只会操作第一个节点，后续调用<code>paste()</code>方法时可以进行粘贴。</p>
+<p>剪切节点，调用该方法后会剪切当前激活的节点，并且存储该节点数据，后续调用<code>paste()</code>方法时可以进行粘贴。</p>
+<p>如果浏览器及协议（https）支持<code>js</code>操作剪贴板数据，那么复制的节点数据也会同时添加到用户的剪贴板中。</p>
 <h3>paste()</h3>
 <blockquote>
 <p>v0.6.8+</p>
 </blockquote>
-<p>粘贴节点，在调用了<code>copy()</code>或<code>cut()</code>方法后可以调用该方法进行粘贴节点。该方法不支持粘贴用户剪贴板中的数据，请使用内置的<code>Ctrl+v</code>快捷键。</p>
+<p>粘贴节点，在调用了<code>copy()</code>或<code>cut()</code>方法后可以调用该方法进行粘贴节点。</p>
+<p>如果浏览器及协议（https）支持<code>js</code>操作剪贴板数据，那么其他地方复制的数据也可以进行粘贴，比如你可以进行跨浏览器粘贴<code>simple-mind-map</code>节点，如果是非<code>simple-mind-map</code>节点数据，那么会提取出剪切板中的文本和图片进行粘贴，文本默认会粘贴为子节点，图片默认会添加到当前的节点中。</p>
 <h3>clearCache()</h3>
+<blockquote>
+<p>v0.9.2+</p>
+</blockquote>
 <p>清空节点缓存池。</p>
 <h3>emitNodeActiveEvent(node = null, activeNodeList = [...this.activeNodeList])</h3>
 <ul>

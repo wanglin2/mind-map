@@ -24,6 +24,7 @@
     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;当前所在：&#x27;</span>+ (data.currentIndex + <span class="hljs-number">1</span>), <span class="hljs-string">&#x27;匹配总数：&#x27;</span> + data.total)
 })
 </code></pre>
+<p>如果是只读模式下搜索，搜索匹配到的节点不会被激活，而是被高亮。</p>
 
   </div>
 </template>

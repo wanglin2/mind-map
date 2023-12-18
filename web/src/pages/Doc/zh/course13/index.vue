@@ -15,6 +15,10 @@
         <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;Enter&#x27;</span>
       },
       {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;插入父节点&#x27;</span>,
+        <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;Shift + Tab&#x27;</span>
+      },
+      {
         <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;上移节点&#x27;</span>,
         <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;Ctrl + ↑&#x27;</span>
       },
@@ -33,6 +37,10 @@
       {
         <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;删除节点&#x27;</span>,
         <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;Delete | Backspace&#x27;</span>
+      },
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;仅删除当前节点&#x27;</span>,
+        <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;Shift + Backspace&#x27;</span>
       },
       {
         <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;复制节点&#x27;</span>,
@@ -88,8 +96,16 @@
         <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;Ctrl + -&#x27;</span>
       },
       {
-        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;恢复默认&#x27;</span>,
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;放大缩小&#x27;</span>,
+        <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;Ctrl + 鼠标滚动&#x27;</span>
+      },
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;回到根节点&#x27;</span>,
         <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;Ctrl + Enter&#x27;</span>
+      },
+      {
+        <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;适应画布&#x27;</span>,
+        <span class="hljs-attr">value</span>: <span class="hljs-string">&#x27;Ctrl + i&#x27;</span>
       }
     ]
   }

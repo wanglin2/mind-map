@@ -1,6 +1,21 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.9.2</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue of no line breaks when node text contains consecutive numbers or letters.</p>
+<p>2.Fix the issue of duplicate node drawing when importing files with the same UID as existing nodes on the current canvas.</p>
+<p>3.Fix the issue of duplicate rendering of nodes caused by forward and backward when the number of nodes exceeds the maximum number of cache pools.</p>
+<p>4.Fix the issue of the canvas moving in the opposite direction when scrolling horizontally with the mouse or touchpad.</p>
+<p>5.Fix the issue where the mouse in flag is not reset when a node is destroyed.</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Modify the mousewheel event, change the dir flag to dirs, support storing multiple directions, and optimize the dual finger movement operation of the touchpad.</p>
+<p>2.The TextEdit class adds the isShowTextEdit method to determine whether the current node is in an editing state.</p>
+<p>3.Change the paste method of the render class to support pasting clipboard data.</p>
+</blockquote>
 <h2>0.9.1-fix.2</h2>
 <p>Fix:</p>
 <blockquote>

@@ -397,6 +397,10 @@ drawBackgroundImageToCanvas(ctx, width, height, img, {
 <p>Check if a cache exists.</p>
 <h4>get(key)</h4>
 <p>Gets the value of a cache.</p>
+<blockquote>
+<p>v0.9.2+</p>
+</blockquote>
+<p>Empty the cache pool.</p>
 
   </div>
 </template>

@@ -910,7 +910,7 @@ poor performance and should be used sparingly.</p>
 <tr>
 <td>mousewheel</td>
 <td>Mouse scroll event</td>
-<td>e (event object), dir (up or down scroll), this (Event event class instance) 、isTouchPad（v0.6.1+, Is it an event triggered by the touchpad）</td>
+<td>e (event object), dir (up or down scroll. v0.9.2+ changed to dirs, array type, which supports saving multiple directions simultaneously), this (Event event class instance) 、isTouchPad（v0.6.1+, Is it an event triggered by the touchpad）</td>
 </tr>
 <tr>
 <td>contextmenu</td>
