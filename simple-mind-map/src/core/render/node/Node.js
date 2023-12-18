@@ -165,6 +165,11 @@ class Node {
     this.top = 0
   }
 
+  // 节点被删除时需要复位的数据
+  resetWhenDelete() {
+    this._isMouseenter = false
+  }
+
   //  处理数据
   handleData(data) {
     data.data.expand = data.data.expand === false ? false : true
@@ -694,6 +699,7 @@ class Node {
   // 销毁节点，不但会从画布删除，而且原节点直接置空，后续无法再插回画布
   destroy() {
     if (!this.group) return
+    this.resetWhenDelete()
     this.group.remove()
     this.removeGeneralization()
     this.removeLine()
