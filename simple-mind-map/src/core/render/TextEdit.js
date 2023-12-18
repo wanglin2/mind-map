@@ -126,6 +126,14 @@ export default class TextEdit {
     })
   }
 
+  // 获取当前文本编辑框是否处于显示状态，也就是是否处在文本编辑状态
+  isShowTextEdit() {
+    if (this.mindMap.richText) {
+      return this.mindMap.richText.showTextEdit
+    }
+    return this.showTextEdit
+  }
+
   //  显示文本编辑框
   // isInserting：是否是刚创建的节点
   // isFromKeyDown：是否是在按键事件进入的编辑

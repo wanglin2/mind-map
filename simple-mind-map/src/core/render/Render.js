@@ -276,9 +276,6 @@ class Render {
     })
     // 插入同级节点
     this.mindMap.keyCommand.addShortcut('Enter', () => {
-      if (this.textEdit.showTextEdit) {
-        return
-      }
       this.mindMap.execCommand('INSERT_NODE')
     })
     // 插入父节点

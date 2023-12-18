@@ -44,13 +44,10 @@ export default class KeyCommand {
       this.isInSvg = true
     })
     this.mindMap.on('svg_mouseleave', () => {
-      if (this.mindMap.richText && this.mindMap.richText.showTextEdit) {
-        return
-      }
+      if (this.mindMap.renderer.textEdit.isShowTextEdit()) return
       if (
-        this.mindMap.renderer.textEdit.showTextEdit ||
-        (this.mindMap.associativeLine &&
-          this.mindMap.associativeLine.showTextEdit)
+        this.mindMap.associativeLine &&
+        this.mindMap.associativeLine.showTextEdit
       ) {
         return
       }
