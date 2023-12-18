@@ -320,15 +320,17 @@ class Render {
     this.mindMap.keyCommand.addShortcut('Control+Down', () => {
       this.mindMap.execCommand('DOWN_NODE')
     })
-    // 复制节点、剪切节点、粘贴节点的快捷键需开发者自行注册实现，可参考demo
+    // 复制节点、
     this.mindMap.keyCommand.addShortcut('Control+c', () => {
       this.copy()
     })
-    this.mindMap.keyCommand.addShortcut('Control+v', () => {
-      this.onPaste()
-    })
+    // 剪切节点
     this.mindMap.keyCommand.addShortcut('Control+x', () => {
       this.cut()
+    })
+    // 粘贴节点
+    this.mindMap.keyCommand.addShortcut('Control+v', () => {
+      this.paste()
     })
     // 根节点居中显示
     this.mindMap.keyCommand.addShortcut('Control+Enter', () => {
@@ -873,6 +875,7 @@ class Render {
   // 复制节点
   copy() {
     this.beingCopyData = this.copyNode()
+    if (!this.beingCopyData) return
     setDataToClipboard({
       simpleMindMap: true,
       data: this.beingCopyData
@@ -889,16 +892,9 @@ class Render {
       })
     })
   }
-
-  // 粘贴节点
-  paste() {
-    if (this.beingCopyData) {
-      this.mindMap.execCommand('PASTE_NODE', this.beingCopyData)
-    }
-  }
-
-  // 粘贴事件
-  async onPaste() {
+  
+  // 粘贴
+  async paste() {
     const { errorHandler, handleIsSplitByWrapOnPasteCreateNewNode } =
       this.mindMap.opt
     // 读取剪贴板的文字和图片
@@ -1020,7 +1016,9 @@ class Render {
       }
     } else {
       // 粘贴节点数据
-      this.paste()
+      if (this.beingCopyData) {
+        this.mindMap.execCommand('PASTE_NODE', this.beingCopyData)
+      }
     }
   }
 
@@ -1212,7 +1210,7 @@ class Render {
   //  复制节点
   copyNode() {
     if (this.activeNodeList.length <= 0) {
-      return
+      return null
     }
     const nodeList = getTopAncestorsFomNodeList(this.activeNodeList)
     return nodeList.map(node => {
