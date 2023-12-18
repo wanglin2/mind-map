@@ -1,4 +1,4 @@
-# Render实例
+# Render 实例
 
 `render`实例负载整个渲染过程，可通过`mindMap.renderer`获取到。
 
@@ -10,7 +10,15 @@
 
 ### root
 
-获取节点树的根节点。
+节点树，也就是思维导图节点实例树。
+
+### renderTree
+
+渲染树，也就是思维导图的数据树。
+
+### layout
+
+当前的布局实例。
 
 ## 方法
 
@@ -112,10 +120,6 @@
 
 获取节点在同级里的位置索引。
 
-### removeOneNode(node)
-
-删除某个指定节点。
-
 ### copyNode()
 
 复制节点，操作节点为当前激活节点，有多个激活节点只会操作第一个节点。
@@ -156,19 +160,19 @@
 
 > v0.6.7+
 
-- `uid`：节点uid
+- `uid`：节点 uid
 
 - `callback`：展开完成的回调函数
 
-展开到指定uid的节点。
+展开到指定 uid 的节点。
 
 ### findNodeByUid(uid)
 
 > v0.6.7+
 
-- `uid`：节点uid
+- `uid`：节点 uid
 
-根据uid找到对应的节点实例。
+根据 uid 找到对应的节点实例。
 
 ### copy()
 
@@ -187,3 +191,15 @@
 > v0.6.8+
 
 粘贴节点，在调用了`copy()`或`cut()`方法后可以调用该方法进行粘贴节点。该方法不支持粘贴用户剪贴板中的数据，请使用内置的`Ctrl+v`快捷键。
+
+### clearCache()
+
+清空节点缓存池。
+
+### emitNodeActiveEvent(node = null, activeNodeList = [...this.activeNodeList])
+
+- `node`：本次激活的节点
+
+- `activeNodeList`：当前所有激活的节点
+
+派发节点激活事件，也就是触发`node_active`事件。

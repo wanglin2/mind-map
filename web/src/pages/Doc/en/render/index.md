@@ -11,7 +11,13 @@ Gets the current list of active nodes.
 
 ### root
 
-Gets the root node of the node tree.
+Node tree, also known as the mind map node instance tree.
+
+### renderTree
+
+The rendering tree, also known as the data tree of the mind map.
+
+### layout
 
 ## Methods
 
@@ -114,10 +120,6 @@ Search for the index of a node in the active list.
 
 Get the position index of a node among its siblings.
 
-### removeOneNode(node)
-
-Delete a specific node.
-
 ### copyNode()
 
 Copy a node, the active node is the node to be operated on, if there are
@@ -192,3 +194,15 @@ Cut a node. After calling this method, the currently active node will be cut and
 > v0.6.8+
 
 Pasting nodes can be done by calling the 'copy()' or 'cut()' method after calling it. This method does not support pasting data from the user's clipboard. Please use the built-in 'Ctrl+v' shortcut key.
+
+### clearCache()
+
+Empty the node cache pool.
+
+### emitNodeActiveEvent(node = null, activeNodeList = [...this.activeNodeList])
+
+- `node`：The node activated this time
+
+- `activeNodeList`：All currently activated nodes
+
+Dispatch node activation event, which triggers `node_active` event.
