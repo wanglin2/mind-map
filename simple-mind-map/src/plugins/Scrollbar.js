@@ -10,6 +10,8 @@ class Scrollbar {
       width: 0, // 水平滚动条的容器宽度
       height: 0 // 垂直滚动条的容器高度
     }
+    // 中心点差值
+    this.rootCenterOffset = null
     // 思维导图实际高度
     this.chartHeight = 0
     this.chartWidth = 0
@@ -40,6 +42,26 @@ class Scrollbar {
     this.mindMap.on('mouseup', this.onMouseup)
     this.mindMap.on('node_tree_render_end', this.updateScrollbar)
     this.mindMap.on('view_data_change', this.updateScrollbar)
+  }
+
+  // 当initRootNodePosition配置不为默认的['center','center']时，计算当前配置和默认配置情况下，中心点位置的差值
+  // 因为拖动滚动条设置思维导图位置是根据默认配置计算的
+  setRootCenterOffset(width, height) {
+    if (this.rootCenterOffset) return
+    const tmpNode = {
+      width: width,
+      height: height
+    }
+    const tmpNode2 = {
+      width: width,
+      height: height
+    }
+    this.mindMap.renderer.layout.setNodeCenter(tmpNode, ['center', 'center'])
+    this.mindMap.renderer.layout.setNodeCenter(tmpNode2)
+    this.rootCenterOffset = {
+      x: tmpNode2.left - tmpNode.left,
+      y: tmpNode2.top - tmpNode.top
+    }
   }
 
   // 解绑事件
@@ -171,6 +193,7 @@ class Scrollbar {
     const t = this.mindMap.draw.transform()
     const drawRect = this.mindMap.draw.rbox()
     const rootRect = this.mindMap.renderer.root.group.rbox()
+    this.setRootCenterOffset(rootRect.width, rootRect.height)
     if (type === CONSTANTS.SCROLL_BAR_DIR.VERTICAL) {
       // 滚动条新位置
       let oy = offset
@@ -178,7 +201,7 @@ class Scrollbar {
       if (oy <= 0) {
         oy = 0
       }
-      let max =
+      const max =
         ((100 - scrollbarData.vertical.height) / 100) *
         this.scrollbarWrapSize.height
       if (oy >= max) {
@@ -193,7 +216,12 @@ class Scrollbar {
       // 内边距
       const paddingY = this.mindMap.height / 2
       // 图形新位置
-      let chartTop = oyPx + yOffset - paddingY * t.scaleY + paddingY
+      const chartTop =
+        oyPx +
+        yOffset -
+        paddingY * t.scaleY +
+        paddingY -
+        this.rootCenterOffset.y * t.scaleX
       this.mindMap.view.translateYTo(chartTop)
       this.emitEvent({
         horizontal: scrollbarData.horizontal,
@@ -209,7 +237,7 @@ class Scrollbar {
       if (ox <= 0) {
         ox = 0
       }
-      let max =
+      const max =
         ((100 - scrollbarData.horizontal.width) / 100) *
         this.scrollbarWrapSize.width
       if (ox >= max) {
@@ -217,14 +245,19 @@ class Scrollbar {
       }
       // 转换成百分比
       const oxPercentage = (ox / this.scrollbarWrapSize.width) * 100
-      // 转换成相对于图形高度的距离
+      // 转换成相对于图形宽度的距离
       const oxPx = (-oxPercentage / 100) * this.chartWidth
       // 节点中心点到图形最左边的距离
       const xOffset = rootRect.x - drawRect.x
       // 内边距
       const paddingX = this.mindMap.width / 2
       // 图形新位置
-      let chartLeft = oxPx + xOffset - paddingX * t.scaleX + paddingX
+      const chartLeft =
+        oxPx +
+        xOffset -
+        paddingX * t.scaleX +
+        paddingX -
+        this.rootCenterOffset.x * t.scaleX
       this.mindMap.view.translateXTo(chartLeft)
       this.emitEvent({
         vertical: scrollbarData.vertical,

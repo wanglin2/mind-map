@@ -169,8 +169,9 @@ class Base {
   }
 
   //  定位节点到画布中间
-  setNodeCenter(node) {
+  setNodeCenter(node, position) {
     let { initRootNodePosition } = this.mindMap.opt
+    initRootNodePosition = position || initRootNodePosition
     let { CENTER } = CONSTANTS.INIT_ROOT_NODE_POSITION
     if (
       !initRootNodePosition ||
