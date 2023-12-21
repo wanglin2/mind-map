@@ -34,6 +34,7 @@ class Event extends EventEmitter {
     this.onMousedown = this.onMousedown.bind(this)
     this.onMousemove = this.onMousemove.bind(this)
     this.onMouseup = this.onMouseup.bind(this)
+    this.onNodeMouseup = this.onNodeMouseup.bind(this)
     this.onMousewheel = this.onMousewheel.bind(this)
     this.onContextmenu = this.onContextmenu.bind(this)
     this.onSvgMousedown = this.onSvgMousedown.bind(this)
@@ -50,6 +51,7 @@ class Event extends EventEmitter {
     this.mindMap.svg.on('mousedown', this.onSvgMousedown)
     window.addEventListener('mousemove', this.onMousemove)
     window.addEventListener('mouseup', this.onMouseup)
+    this.on('node_mouseup', this.onNodeMouseup)
     this.mindMap.el.addEventListener('wheel', this.onMousewheel)
     this.mindMap.svg.on('contextmenu', this.onContextmenu)
     this.mindMap.svg.on('mouseenter', this.onMouseenter)
@@ -64,6 +66,7 @@ class Event extends EventEmitter {
     this.mindMap.el.removeEventListener('mousedown', this.onMousedown)
     window.removeEventListener('mousemove', this.onMousemove)
     window.removeEventListener('mouseup', this.onMouseup)
+    this.off('node_mouseup', this.onNodeMouseup)
     this.mindMap.el.removeEventListener('wheel', this.onMousewheel)
     this.mindMap.svg.off('contextmenu', this.onContextmenu)
     this.mindMap.svg.off('mouseenter', this.onMouseenter)
@@ -122,10 +125,15 @@ class Event extends EventEmitter {
 
   //  鼠标松开事件
   onMouseup(e) {
+    this.onNodeMouseup()
+    this.emit('mouseup', e, this)
+  }
+
+  // 节点鼠标松开事件
+  onNodeMouseup() {
     this.isLeftMousedown = false
     this.isRightMousedown = false
     this.isMiddleMousedown = false
-    this.emit('mouseup', e, this)
   }
 
   //  鼠标滚动/触控板滑动
