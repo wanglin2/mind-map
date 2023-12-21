@@ -10,8 +10,6 @@ class Scrollbar {
       width: 0, // 水平滚动条的容器宽度
       height: 0 // 垂直滚动条的容器高度
     }
-    // 中心点差值
-    this.rootCenterOffset = null
     // 思维导图实际高度
     this.chartHeight = 0
     this.chartWidth = 0
@@ -42,26 +40,6 @@ class Scrollbar {
     this.mindMap.on('mouseup', this.onMouseup)
     this.mindMap.on('node_tree_render_end', this.updateScrollbar)
     this.mindMap.on('view_data_change', this.updateScrollbar)
-  }
-
-  // 当initRootNodePosition配置不为默认的['center','center']时，计算当前配置和默认配置情况下，中心点位置的差值
-  // 因为拖动滚动条设置思维导图位置是根据默认配置计算的
-  setRootCenterOffset(width, height) {
-    if (this.rootCenterOffset) return
-    const tmpNode = {
-      width: width,
-      height: height
-    }
-    const tmpNode2 = {
-      width: width,
-      height: height
-    }
-    this.mindMap.renderer.layout.setNodeCenter(tmpNode, ['center', 'center'])
-    this.mindMap.renderer.layout.setNodeCenter(tmpNode2)
-    this.rootCenterOffset = {
-      x: tmpNode2.left - tmpNode.left,
-      y: tmpNode2.top - tmpNode.top
-    }
   }
 
   // 解绑事件
@@ -193,7 +171,10 @@ class Scrollbar {
     const t = this.mindMap.draw.transform()
     const drawRect = this.mindMap.draw.rbox()
     const rootRect = this.mindMap.renderer.root.group.rbox()
-    this.setRootCenterOffset(rootRect.width, rootRect.height)
+    const rootCenterOffset = this.mindMap.renderer.layout.getRootCenterOffset(
+      rootRect.width,
+      rootRect.height
+    )
     if (type === CONSTANTS.SCROLL_BAR_DIR.VERTICAL) {
       // 滚动条新位置
       let oy = offset
@@ -221,7 +202,7 @@ class Scrollbar {
         yOffset -
         paddingY * t.scaleY +
         paddingY -
-        this.rootCenterOffset.y * t.scaleX
+        rootCenterOffset.y * t.scaleY
       this.mindMap.view.translateYTo(chartTop)
       this.emitEvent({
         horizontal: scrollbarData.horizontal,
@@ -257,7 +238,7 @@ class Scrollbar {
         xOffset -
         paddingX * t.scaleX +
         paddingX -
-        this.rootCenterOffset.x * t.scaleX
+        rootCenterOffset.x * t.scaleX
       this.mindMap.view.translateXTo(chartLeft)
       this.emitEvent({
         vertical: scrollbarData.vertical,

@@ -194,7 +194,9 @@ class View {
 
   //   应用变换
   transform() {
-    this.limitMindMapInCanvas()
+    try {
+      this.limitMindMapInCanvas()
+    } catch (error) {}
     this.mindMap.draw.transform({
       origin: [0, 0],
       scale: this.scale,
@@ -313,7 +315,16 @@ class View {
 
   // 将思维导图限制在画布内
   limitMindMapInCanvas() {
-    if (!this.mindMap.opt.isLimitMindMapInCanvas) return
+    const { isLimitMindMapInCanvasWhenHasScrollbar, isLimitMindMapInCanvas } =
+      this.mindMap.opt
+    // 如果注册了滚动条插件，那么使用isLimitMindMapInCanvasWhenHasScrollbar配置
+    if (this.mindMap.scrollbar) {
+      if (!isLimitMindMapInCanvasWhenHasScrollbar) return
+    } else {
+      // 否则使用isLimitMindMapInCanvas配置
+      if (!isLimitMindMapInCanvas) return
+    }
+
     let { scale, left, top, right, bottom } = this.getPositionLimit()
 
     // 如果缩放值改变了

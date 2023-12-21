@@ -241,5 +241,7 @@ export const defaultOpt = {
   defaultNodeImage: '',
   // 是否将思维导图限制在画布内
   // 比如向右拖动时，思维导图图形的最左侧到达画布中心时将无法继续向右拖动，其他同理
-  isLimitMindMapInCanvas: false
+  isLimitMindMapInCanvas: false,
+  // 当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas不再起作用
+  isLimitMindMapInCanvasWhenHasScrollbar: true
 }

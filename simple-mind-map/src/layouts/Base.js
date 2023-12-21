@@ -17,6 +17,8 @@ class Base {
     // 根节点
     this.root = null
     this.lru = new Lru(this.mindMap.opt.maxNodeCacheCount)
+    // 当initRootNodePosition不为默认的值时，根节点的位置距默认的配置时根节点距离的差值
+    this.rootNodeCenterOffset = null
   }
 
   //  计算节点位置
@@ -195,9 +197,10 @@ class Base {
     )
   }
 
-  // 当initRootNodePosition配置不为默认的['center','center']时，计算当前配置和默认配置情况下，中心点位置的差值
+  // 当initRootNodePosition配置不为默认的['center','center']时，计算当前配置和默认配置情况下，根节点位置的差值
   getRootCenterOffset(width, height) {
-    // 如果initRootNodePosition是默认的，那么不需要计算
+    // 因为根节点的大小不会影响这个差值，所以计算一次就足够了
+    if (this.rootNodeCenterOffset) return this.rootNodeCenterOffset
     let { initRootNodePosition } = this.mindMap.opt
     const { CENTER } = CONSTANTS.INIT_ROOT_NODE_POSITION
     initRootNodePosition = this.formatInitRootNodePosition(initRootNodePosition)
@@ -205,26 +208,29 @@ class Base {
       initRootNodePosition[0] === CENTER &&
       initRootNodePosition[1] === CENTER
     ) {
-      return {
+      // 如果initRootNodePosition是默认的，那么不需要计算
+      this.rootNodeCenterOffset = {
         x: 0,
         y: 0
       }
+    } else {
+      // 否则需要计算当前配置和默认配置的差值
+      const tmpNode = {
+        width: width,
+        height: height
+      }
+      const tmpNode2 = {
+        width: width,
+        height: height
+      }
+      this.setNodeCenter(tmpNode, [CENTER, CENTER])
+      this.setNodeCenter(tmpNode2)
+      this.rootNodeCenterOffset = {
+        x: tmpNode2.left - tmpNode.left,
+        y: tmpNode2.top - tmpNode.top
+      }
     }
-    // 否则需要计算当前配置和默认配置的差值
-    const tmpNode = {
-      width: width,
-      height: height
-    }
-    const tmpNode2 = {
-      width: width,
-      height: height
-    }
-    this.setNodeCenter(tmpNode, ['center', 'center'])
-    this.setNodeCenter(tmpNode2)
-    return {
-      x: tmpNode2.left - tmpNode.left,
-      y: tmpNode2.top - tmpNode.top
-    }
+    return this.rootNodeCenterOffset
   }
 
   //  更新子节点属性
