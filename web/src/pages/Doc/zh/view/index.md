@@ -10,6 +10,8 @@
 
 缩放思维导图至适应画布。
 
+注意该方法不能在`setData`、`setFullData`方法调用后立即调用，需要监听`node_tree_render_end`事件调用`fit`。
+
 ### translateX(step)
 
 `x`方向进行平移，`step`：要平移的像素

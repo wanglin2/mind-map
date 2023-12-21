@@ -9,6 +9,7 @@ through <code>mindMap.view</code></p>
 <p>v0.6.0+</p>
 </blockquote>
 <p>Zoom the mind map to fit the canvas.</p>
+<p>Note that this method cannot be called immediately after calling the 'setData' and 'setFullData' methods, and needs to listen to the 'node_tree_render_end' event calls 'fit'.</p>
 <h3>translateX(step)</h3>
 <p>Translate in the <code>x</code> direction, <code>step</code>: number of pixels to translate</p>
 <h3>translateY(step)</h3>

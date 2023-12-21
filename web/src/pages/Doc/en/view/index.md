@@ -11,6 +11,8 @@ through `mindMap.view`
 
 Zoom the mind map to fit the canvas.
 
+Note that this method cannot be called immediately after calling the 'setData' and 'setFullData' methods, and needs to listen to the 'node_tree_render_end' event calls 'fit'.
+
 ### translateX(step)
 
 Translate in the `x` direction, `step`: number of pixels to translate
