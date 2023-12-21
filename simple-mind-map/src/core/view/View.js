@@ -261,17 +261,17 @@ class View {
 
   // 适应画布大小
   fit() {
-    let { fitPadding } = this.mindMap.opt
-    let draw = this.mindMap.draw
-    let origTransform = draw.transform()
-    let rect = draw.rbox()
-    let drawWidth = rect.width / origTransform.scaleX
-    let drawHeight = rect.height / origTransform.scaleY
-    let drawRatio = drawWidth / drawHeight
+    const { fitPadding } = this.mindMap.opt
+    const draw = this.mindMap.draw
+    const origTransform = draw.transform()
+    const rect = draw.rbox()
+    const drawWidth = rect.width / origTransform.scaleX
+    const drawHeight = rect.height / origTransform.scaleY
+    const drawRatio = drawWidth / drawHeight
     let { width: elWidth, height: elHeight } = this.mindMap.elRect
     elWidth = elWidth - fitPadding * 2
     elHeight = elHeight - fitPadding * 2
-    let elRatio = elWidth / elHeight
+    const elRatio = elWidth / elHeight
     let newScale = 0
     let flag = ''
     if (drawWidth <= elWidth && drawHeight <= elHeight) {
@@ -292,7 +292,10 @@ class View {
       newScale = newWidth / drawWidth
     }
     this.setScale(newScale)
-    let newRect = draw.rbox()
+    const newRect = draw.rbox()
+    // 需要考虑画布容器距浏览器窗口左上角的距离
+    newRect.x -= this.mindMap.elRect.left
+    newRect.y -= this.mindMap.elRect.top
     let newX = 0
     let newY = 0
     if (flag === 1) {
