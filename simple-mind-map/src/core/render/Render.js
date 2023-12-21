@@ -892,7 +892,7 @@ class Render {
       })
     })
   }
-  
+
   // 粘贴
   async paste() {
     const { errorHandler, handleIsSplitByWrapOnPasteCreateNewNode } =
@@ -1368,7 +1368,7 @@ class Render {
       0
     )
     this.mindMap.render(() => {
-      this.mindMap.view.reset()
+      this.setRootNodeCenter()
     })
   }
 
