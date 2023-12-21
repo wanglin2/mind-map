@@ -194,6 +194,7 @@ class View {
 
   //   应用变换
   transform() {
+    this.limitMindMapInCanvas()
     this.mindMap.draw.transform({
       origin: [0, 0],
       scale: this.scale,
@@ -305,6 +306,64 @@ class View {
       newY = -newRect.y + fitPadding
     }
     this.translateXY(newX, newY)
+  }
+
+  // 将思维导图限制在画布内
+  limitMindMapInCanvas() {
+    if (!this.mindMap.opt.isLimitMindMapInCanvas) return
+    let { scale, left, top, right, bottom } = this.getPositionLimit()
+
+    // 如果缩放值改变了
+    const scaleRatio = this.scale / scale
+    left *= scaleRatio
+    right *= scaleRatio
+    top *= scaleRatio
+    bottom *= scaleRatio
+
+    // 加上画布中心点距离
+    const centerX = this.mindMap.width / 2
+    const centerY = this.mindMap.height / 2
+    const scaleOffset = this.scale - 1
+    left -= scaleOffset * centerX
+    right -= scaleOffset * centerX
+    top -= scaleOffset * centerY
+    bottom -= scaleOffset * centerY
+
+    // 判断是否超出边界
+    if (this.x > left) {
+      this.x = left
+    }
+    if (this.x < right) {
+      this.x = right
+    }
+    if (this.y > top) {
+      this.y = top
+    }
+    if (this.y < bottom) {
+      this.y = bottom
+    }
+  }
+
+  // 计算图形四个方向的位置边界值
+  getPositionLimit() {
+    const { scaleX, scaleY } = this.mindMap.draw.transform()
+    const drawRect = this.mindMap.draw.rbox()
+    const rootRect = this.mindMap.renderer.root.group.rbox()
+    const rootCenterOffset = this.mindMap.renderer.layout.getRootCenterOffset(
+      rootRect.width,
+      rootRect.height
+    )
+    const left = rootRect.x - drawRect.x - rootCenterOffset.x * scaleX
+    const right = rootRect.x - drawRect.x2 - rootCenterOffset.x * scaleX
+    const top = rootRect.y - drawRect.y - rootCenterOffset.y * scaleY
+    const bottom = rootRect.y - drawRect.y2 - rootCenterOffset.y * scaleY
+    return {
+      scale: scaleX,
+      left,
+      right,
+      top,
+      bottom
+    }
   }
 }
 

@@ -168,18 +168,21 @@ class Base {
     }
   }
 
+  // 规范initRootNodePosition配置
+  formatInitRootNodePosition(pos) {
+    const { CENTER } = CONSTANTS.INIT_ROOT_NODE_POSITION
+    if (!pos || !Array.isArray(pos) || pos.length < 2) {
+      pos = [CENTER, CENTER]
+    }
+    return pos
+  }
+
   //  定位节点到画布中间
   setNodeCenter(node, position) {
     let { initRootNodePosition } = this.mindMap.opt
-    initRootNodePosition = position || initRootNodePosition
-    let { CENTER } = CONSTANTS.INIT_ROOT_NODE_POSITION
-    if (
-      !initRootNodePosition ||
-      !Array.isArray(initRootNodePosition) ||
-      initRootNodePosition.length < 2
-    ) {
-      initRootNodePosition = [CENTER, CENTER]
-    }
+    initRootNodePosition = this.formatInitRootNodePosition(
+      position || initRootNodePosition
+    )
     node.left = this.formatPosition(
       initRootNodePosition[0],
       this.mindMap.width,
@@ -190,6 +193,38 @@ class Base {
       this.mindMap.height,
       node.height
     )
+  }
+
+  // 当initRootNodePosition配置不为默认的['center','center']时，计算当前配置和默认配置情况下，中心点位置的差值
+  getRootCenterOffset(width, height) {
+    // 如果initRootNodePosition是默认的，那么不需要计算
+    let { initRootNodePosition } = this.mindMap.opt
+    const { CENTER } = CONSTANTS.INIT_ROOT_NODE_POSITION
+    initRootNodePosition = this.formatInitRootNodePosition(initRootNodePosition)
+    if (
+      initRootNodePosition[0] === CENTER &&
+      initRootNodePosition[1] === CENTER
+    ) {
+      return {
+        x: 0,
+        y: 0
+      }
+    }
+    // 否则需要计算当前配置和默认配置的差值
+    const tmpNode = {
+      width: width,
+      height: height
+    }
+    const tmpNode2 = {
+      width: width,
+      height: height
+    }
+    this.setNodeCenter(tmpNode, ['center', 'center'])
+    this.setNodeCenter(tmpNode2)
+    return {
+      x: tmpNode2.left - tmpNode.left,
+      y: tmpNode2.top - tmpNode.top
+    }
   }
 
   //  更新子节点属性
