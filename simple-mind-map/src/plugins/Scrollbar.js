@@ -261,6 +261,11 @@ class Scrollbar {
     this.updateMindMapView(type, offset)
   }
 
+  // 插件被移除前做的事情
+  beforePluginRemove() {
+    this.unBindEvent()
+  }
+
   // 插件被卸载前做的事情
   beforePluginDestroy() {
     this.unBindEvent()

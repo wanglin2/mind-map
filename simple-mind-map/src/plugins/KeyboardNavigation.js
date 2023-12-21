@@ -7,19 +7,61 @@ class KeyboardNavigation {
   constructor(opt) {
     this.opt = opt
     this.mindMap = opt.mindMap
-    this.onKeyup = this.onKeyup.bind(this)
-    this.mindMap.keyCommand.addShortcut(CONSTANTS.KEY_DIR.LEFT, () => {
-      this.onKeyup(CONSTANTS.KEY_DIR.LEFT)
-    })
-    this.mindMap.keyCommand.addShortcut(CONSTANTS.KEY_DIR.UP, () => {
-      this.onKeyup(CONSTANTS.KEY_DIR.UP)
-    })
-    this.mindMap.keyCommand.addShortcut(CONSTANTS.KEY_DIR.RIGHT, () => {
-      this.onKeyup(CONSTANTS.KEY_DIR.RIGHT)
-    })
-    this.mindMap.keyCommand.addShortcut(CONSTANTS.KEY_DIR.DOWN, () => {
-      this.onKeyup(CONSTANTS.KEY_DIR.DOWN)
-    })
+
+    this.addShortcut()
+  }
+
+  addShortcut() {
+    this.onLeftKeyUp = this.onLeftKeyUp.bind(this)
+    this.onUpKeyUp = this.onUpKeyUp.bind(this)
+    this.onRightKeyUp = this.onRightKeyUp.bind(this)
+    this.onDownKeyUp = this.onDownKeyUp.bind(this)
+
+    this.mindMap.keyCommand.addShortcut(
+      CONSTANTS.KEY_DIR.LEFT,
+      this.onLeftKeyUp
+    )
+    this.mindMap.keyCommand.addShortcut(CONSTANTS.KEY_DIR.UP, this.onUpKeyUp)
+    this.mindMap.keyCommand.addShortcut(
+      CONSTANTS.KEY_DIR.RIGHT,
+      this.onRightKeyUp
+    )
+    this.mindMap.keyCommand.addShortcut(
+      CONSTANTS.KEY_DIR.DOWN,
+      this.onDownKeyUp
+    )
+  }
+
+  removeShortcut() {
+    this.mindMap.keyCommand.removeShortcut(
+      CONSTANTS.KEY_DIR.LEFT,
+      this.onLeftKeyUp
+    )
+    this.mindMap.keyCommand.removeShortcut(CONSTANTS.KEY_DIR.UP, this.onUpKeyUp)
+    this.mindMap.keyCommand.removeShortcut(
+      CONSTANTS.KEY_DIR.RIGHT,
+      this.onRightKeyUp
+    )
+    this.mindMap.keyCommand.removeShortcut(
+      CONSTANTS.KEY_DIR.DOWN,
+      this.onDownKeyUp
+    )
+  }
+
+  onLeftKeyUp() {
+    this.onKeyup(CONSTANTS.KEY_DIR.LEFT)
+  }
+
+  onUpKeyUp() {
+    this.onKeyup(CONSTANTS.KEY_DIR.UP)
+  }
+
+  onRightKeyUp() {
+    this.onKeyup(CONSTANTS.KEY_DIR.RIGHT)
+  }
+
+  onDownKeyUp() {
+    this.onKeyup(CONSTANTS.KEY_DIR.DOWN)
   }
 
   //  处理按键事件
@@ -227,6 +269,16 @@ class KeyboardNavigation {
       x: (left + right) / 2,
       y: (top + bottom) / 2
     }
+  }
+
+  // 插件被移除前做的事情
+  beforePluginRemove() {
+    this.removeShortcut()
+  }
+
+  // 插件被卸载前做的事情
+  beforePluginDestroy() {
+    this.removeShortcut()
   }
 }
 

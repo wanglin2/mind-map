@@ -18,80 +18,97 @@ class Select {
 
   //  绑定事件
   bindEvent() {
-    this.checkInNodes = throttle(this.checkInNodes, 300, this)
-    this.mindMap.on('mousedown', e => {
-      if (this.mindMap.opt.readonly) {
-        return
-      }
-      let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
-      if (
-        !e.ctrlKey &&
-        (useLeftKeySelectionRightKeyDrag ? e.which !== 1 : e.which !== 3)
-      ) {
-        return
-      }
-      e.preventDefault()
-      this.isMousedown = true
-      this.cacheActiveList = [...this.mindMap.renderer.activeNodeList]
-      let { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
-      this.mouseDownX = x
-      this.mouseDownY = y
-      this.createRect(x, y)
-    })
-    this.mindMap.on('mousemove', e => {
-      if (this.mindMap.opt.readonly) {
-        return
-      }
-      if (!this.isMousedown) {
-        return
-      }
-      let { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
-      this.mouseMoveX = x
-      this.mouseMoveY = y
-      if (
-        Math.abs(x - this.mouseDownX) <= 10 &&
-        Math.abs(y - this.mouseDownY) <= 10
-      ) {
-        return
-      }
-      this.clearAutoMoveTimer()
-      this.onMove(
-        e.clientX,
-        e.clientY,
-        () => {
-          this.isSelecting = true
-          // 绘制矩形
-          this.rect.plot([
-            [this.mouseDownX, this.mouseDownY],
-            [this.mouseMoveX, this.mouseDownY],
-            [this.mouseMoveX, this.mouseMoveY],
-            [this.mouseDownX, this.mouseMoveY]
-          ])
-          this.checkInNodes()
-        },
-        (dir, step) => {
-          switch (dir) {
-            case 'left':
-              this.mouseDownX += step
-              break
-            case 'top':
-              this.mouseDownY += step
-              break
-            case 'right':
-              this.mouseDownX -= step
-              break
-            case 'bottom':
-              this.mouseDownY -= step
-              break
-            default:
-              break
-          }
-        }
-      )
-    })
+    this.onMousedown = this.onMousedown.bind(this)
+    this.onMousemove = this.onMousemove.bind(this)
     this.onMouseup = this.onMouseup.bind(this)
+    this.checkInNodes = throttle(this.checkInNodes, 300, this)
+
+    this.mindMap.on('mousedown', this.onMousedown)
+    this.mindMap.on('mousemove', this.onMousemove)
     this.mindMap.on('mouseup', this.onMouseup)
     this.mindMap.on('node_mouseup', this.onMouseup)
+  }
+
+  // 解绑事件
+  unBindEvent() {
+    this.mindMap.off('mousedown', this.onMousedown)
+    this.mindMap.off('mousemove', this.onMousemove)
+    this.mindMap.off('mouseup', this.onMouseup)
+    this.mindMap.off('node_mouseup', this.onMouseup)
+  }
+
+  // 鼠标按下
+  onMousedown(e) {
+    if (this.mindMap.opt.readonly) {
+      return
+    }
+    let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
+    if (
+      !e.ctrlKey &&
+      (useLeftKeySelectionRightKeyDrag ? e.which !== 1 : e.which !== 3)
+    ) {
+      return
+    }
+    e.preventDefault()
+    this.isMousedown = true
+    this.cacheActiveList = [...this.mindMap.renderer.activeNodeList]
+    let { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
+    this.mouseDownX = x
+    this.mouseDownY = y
+    this.createRect(x, y)
+  }
+
+  // 鼠标移动
+  onMousemove(e) {
+    if (this.mindMap.opt.readonly) {
+      return
+    }
+    if (!this.isMousedown) {
+      return
+    }
+    let { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
+    this.mouseMoveX = x
+    this.mouseMoveY = y
+    if (
+      Math.abs(x - this.mouseDownX) <= 10 &&
+      Math.abs(y - this.mouseDownY) <= 10
+    ) {
+      return
+    }
+    this.clearAutoMoveTimer()
+    this.onMove(
+      e.clientX,
+      e.clientY,
+      () => {
+        this.isSelecting = true
+        // 绘制矩形
+        this.rect.plot([
+          [this.mouseDownX, this.mouseDownY],
+          [this.mouseMoveX, this.mouseDownY],
+          [this.mouseMoveX, this.mouseMoveY],
+          [this.mouseDownX, this.mouseMoveY]
+        ])
+        this.checkInNodes()
+      },
+      (dir, step) => {
+        switch (dir) {
+          case 'left':
+            this.mouseDownX += step
+            break
+          case 'top':
+            this.mouseDownY += step
+            break
+          case 'right':
+            this.mouseDownX -= step
+            break
+          case 'bottom':
+            this.mouseDownY -= step
+            break
+          default:
+            break
+        }
+      }
+    )
   }
 
   // 结束框选
@@ -232,6 +249,16 @@ class Select {
   // 是否存在选区
   hasSelectRange() {
     return this.isSelecting
+  }
+
+  // 插件被移除前做的事情
+  beforePluginRemove() {
+    this.unBindEvent()
+  }
+
+  // 插件被卸载前做的事情
+  beforePluginDestroy() {
+    this.unBindEvent()
   }
 }
 
