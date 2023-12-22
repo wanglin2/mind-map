@@ -80,16 +80,7 @@ class View {
         )
         const cx = mouseScaleCenterUseMousePosition ? clientX : undefined
         const cy = mouseScaleCenterUseMousePosition ? clientY : undefined
-        // 如果来自触控板，那么过滤掉左右的移动
-        if (
-          isTouchPad &&
-          (dirs.includes(CONSTANTS.DIR.LEFT) ||
-            dirs.includes(CONSTANTS.DIR.RIGHT))
-        ) {
-          dirs = dirs.filter(dir => {
-            return ![CONSTANTS.DIR.LEFT, CONSTANTS.DIR.RIGHT].includes(dir)
-          })
-        }
+
         switch (true) {
           // 鼠标滚轮，向上和向左，都是缩小
           case dirs.includes(CONSTANTS.DIR.UP || CONSTANTS.DIR.LEFT):
@@ -109,6 +100,16 @@ class View {
         const step = isTouchPad ? 5 : mousewheelMoveStep
         let mx = 0
         let my = 0
+        // 如果来自触控板，那么过滤掉左右的移动
+        if (
+          isTouchPad &&
+          (dirs.includes(CONSTANTS.DIR.LEFT) ||
+            dirs.includes(CONSTANTS.DIR.RIGHT))
+        ) {
+          dirs = dirs.filter(dir => {
+            return ![CONSTANTS.DIR.LEFT, CONSTANTS.DIR.RIGHT].includes(dir)
+          })
+        }
         // 上移
         if (dirs.includes(CONSTANTS.DIR.DOWN)) {
           my = -step
@@ -196,7 +197,7 @@ class View {
   transform() {
     try {
       this.limitMindMapInCanvas()
-    } catch (error) {}
+    } catch (error) { }
     this.mindMap.draw.transform({
       origin: [0, 0],
       scale: this.scale,
