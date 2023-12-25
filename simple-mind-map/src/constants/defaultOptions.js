@@ -244,5 +244,17 @@ export const defaultOpt = {
   // 比如向右拖动时，思维导图图形的最左侧到达画布中心时将无法继续向右拖动，其他同理
   isLimitMindMapInCanvas: false,
   // 当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas不再起作用
-  isLimitMindMapInCanvasWhenHasScrollbar: true
+  isLimitMindMapInCanvasWhenHasScrollbar: true,
+  // 在节点上粘贴剪贴板中的图片的处理方法，默认是转换为data:url数据插入到节点中，你可以通过该方法来将图片数据上传到服务器，实现保存图片的url
+  // 可以传递一个异步方法，接收Blob类型的图片数据，需要返回如下结构：
+  /*
+    {
+      url,    // 图片url
+      size: {
+        width,  // 图片的宽度
+        height  //图片的高度
+      }
+    }
+  */
+  handleNodePasteImg: null
 }

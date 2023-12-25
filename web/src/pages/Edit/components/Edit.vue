@@ -338,6 +338,20 @@ export default {
               break
           }
         }
+        // handleNodePasteImg: img => {
+        //   console.log(img)
+        //   return new Promise(resolve => {
+        //     setTimeout(() => {
+        //       resolve({
+        //         url: require('../../../assets/img/themes/autumn.jpg'),
+        //         size: {
+        //           width: 100,
+        //           height: 100
+        //         }
+        //       })
+        //     }, 200)
+        //   })
+        // }
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
         // customCreateNodeContent: (node) => {

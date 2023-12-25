@@ -895,8 +895,11 @@ class Render {
 
   // 粘贴
   async paste() {
-    const { errorHandler, handleIsSplitByWrapOnPasteCreateNewNode } =
-      this.mindMap.opt
+    const {
+      errorHandler,
+      handleIsSplitByWrapOnPasteCreateNewNode,
+      handleNodePasteImg
+    } = this.mindMap.opt
     // 读取剪贴板的文字和图片
     let text = null
     let img = null
@@ -999,7 +1002,13 @@ class Render {
       // 存在图片，则添加到当前激活节点
       if (img) {
         try {
-          let imgData = await loadImage(img)
+          let imgData = null
+          // 自定义图片处理函数
+          if (handleNodePasteImg && typeof handleNodePasteImg === 'function') {
+            imgData = await handleNodePasteImg(img)
+          } else {
+            imgData = await loadImage(img)
+          }
           if (this.activeNodeList.length > 0) {
             this.activeNodeList.forEach(node => {
               this.mindMap.execCommand('SET_NODE_IMAGE', node, {
