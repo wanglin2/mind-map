@@ -416,11 +416,11 @@ class MindMap {
     ) {
       this.width = rect.width
       this.height = rect.height
-      this.watermark.draw()
+      this.watermark.onResize()
       clone = svg.clone()
       this.width = origWidth
       this.height = origHeight
-      this.watermark.draw()
+      this.watermark.onResize()
     }
     // 添加必要的样式
     clone.add(SVG(`<style>${cssContent}</style>`))
