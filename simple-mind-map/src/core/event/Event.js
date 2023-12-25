@@ -29,6 +29,7 @@ class Event extends EventEmitter {
 
   //  绑定函数上下文
   bindFn() {
+    this.onBodyMousedown = this.onBodyMousedown.bind(this)
     this.onBodyClick = this.onBodyClick.bind(this)
     this.onDrawClick = this.onDrawClick.bind(this)
     this.onMousedown = this.onMousedown.bind(this)
@@ -45,6 +46,7 @@ class Event extends EventEmitter {
 
   //  绑定事件
   bind() {
+    document.body.addEventListener('mousedown', this.onBodyMousedown)
     document.body.addEventListener('click', this.onBodyClick)
     this.mindMap.svg.on('click', this.onDrawClick)
     this.mindMap.el.addEventListener('mousedown', this.onMousedown)
@@ -61,6 +63,7 @@ class Event extends EventEmitter {
 
   //  解绑事件
   unbind() {
+    document.body.removeEventListener('mousedown', this.onBodyMousedown)
     document.body.removeEventListener('click', this.onBodyClick)
     this.mindMap.svg.off('click', this.onDrawClick)
     this.mindMap.el.removeEventListener('mousedown', this.onMousedown)
@@ -77,6 +80,11 @@ class Event extends EventEmitter {
   //   画布的单击事件
   onDrawClick(e) {
     this.emit('draw_click', e)
+  }
+
+  // 页面的鼠标按下事件
+  onBodyMousedown(e) {
+    this.emit('body_mousedown', e)
   }
 
   // 页面的单击事件
