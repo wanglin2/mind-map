@@ -332,12 +332,6 @@ export const ERROR_TYPES = {
   EXPORT_LOAD_IMAGE_ERROR: 'export_load_image_error'
 }
 
-// a4纸的宽高
-export const a4Size = {
-  width: 592.28,
-  height: 841.89
-}
-
 // css
 export const cssContent = `
   /* 鼠标hover和激活时渲染的矩形 */
