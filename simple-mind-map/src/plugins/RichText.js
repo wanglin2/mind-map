@@ -260,8 +260,7 @@ class RichText {
       this.textEditNode.innerHTML = this.cacheEditingText || html
     } else {
       // 已经是富文本
-      this.textEditNode.innerHTML =
-        this.cacheEditingText || nodeText
+      this.textEditNode.innerHTML = this.cacheEditingText || nodeText
     }
     this.initQuillEditor()
     document.querySelector('.ql-editor').style.minHeight = originHeight + 'px'
@@ -377,6 +376,8 @@ class RichText {
           rectInfo,
           formatInfo
         )
+      } else {
+        this.mindMap.emit('rich_text_selection_change', false, null, null)
       }
     })
     this.quill.on('text-change', () => {
