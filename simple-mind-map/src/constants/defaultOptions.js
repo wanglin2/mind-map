@@ -40,6 +40,7 @@ export const defaultOpt = {
   enableFreeDrag: false,
   // 水印配置
   watermarkConfig: {
+    onlyExport: false,// 是否仅在导出时添加水印
     text: '',
     lineSpacing: 100,
     textSpacing: 100,

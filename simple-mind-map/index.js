@@ -407,20 +407,34 @@ class MindMap {
     draw.translate(-rect.x + elRect.left, -rect.y + elRect.top)
     // 克隆一份数据
     let clone = svg.clone()
-    // 如果实际图形宽高超出了屏幕宽高，且存在水印的话需要重新绘制水印，否则会出现超出部分没有水印的问题
-    if (
-      !ignoreWatermark &&
-      (rect.width > origWidth || rect.height > origHeight) &&
-      this.watermark &&
-      this.watermark.hasWatermark()
-    ) {
-      this.width = rect.width
-      this.height = rect.height
-      this.watermark.onResize()
-      clone = svg.clone()
-      this.width = origWidth
-      this.height = origHeight
-      this.watermark.onResize()
+    // 是否存在水印
+    const hasWatermark = this.watermark && this.watermark.hasWatermark()
+    if (!ignoreWatermark && hasWatermark) {
+      this.watermark.isInExport = true
+      // 是否是仅导出时需要水印
+      const { onlyExport } = this.opt.watermarkConfig
+      // 是否需要重新绘制水印
+      const needReDrawWatermark =
+        rect.width > origWidth || rect.height > origHeight
+      // 如果实际图形宽高超出了屏幕宽高，且存在水印的话需要重新绘制水印，否则会出现超出部分没有水印的问题
+      if (needReDrawWatermark) {
+        this.width = rect.width
+        this.height = rect.height
+        this.watermark.onResize()
+        clone = svg.clone()
+        this.width = origWidth
+        this.height = origHeight
+        this.watermark.onResize()
+      } else if (onlyExport) {
+        // 如果是仅导出时需要水印，那么需要进行绘制
+        this.watermark.onResize()
+        clone = svg.clone()
+      }
+      // 如果是仅导出时需要水印，需要清除
+      if (onlyExport) {
+        this.watermark.clear()
+      }
+      this.watermark.isInExport = false
     }
     // 添加必要的样式
     clone.add(SVG(`<style>${cssContent}</style>`))

@@ -12,6 +12,7 @@ class Watermark {
     this.text = '' // 水印文字
     this.textStyle = {} // 水印文字样式
     this.watermarkDraw = null // 容器
+    this.isInExport = false // 是否是在导出过程中
     this.maxLong = this.getMaxLong()
     this.updateWatermark(this.mindMap.opt.watermarkConfig || {})
     this.bindEvent()
@@ -72,11 +73,18 @@ class Watermark {
     this.textStyle = Object.assign(this.textStyle, textStyle || {})
   }
 
+  // 清除水印
+  clear() {
+    if (this.watermarkDraw) this.watermarkDraw.clear()
+  }
+
   // 绘制水印
   // 非精确绘制，会绘制一些超出可视区域的水印
   draw() {
-    // 清空之前的水印
-    if (this.watermarkDraw) this.watermarkDraw.clear()
+    this.clear()
+    // 如果是仅导出需要水印，那么非导出中不渲染
+    const { onlyExport } = this.mindMap.opt.watermarkConfig
+    if (onlyExport && !this.isInExport) return
     // 如果没有水印数据，那么水印容器也删除掉
     if (!this.hasWatermark()) {
       this.removeContainer()
