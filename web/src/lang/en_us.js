@@ -27,6 +27,7 @@ export default {
     enableFreeDrag: 'Enable node free drag',
     watermark: 'Watermark',
     showWatermark: 'Is show watermark',
+    onlyExport: 'Only export',
     watermarkDefaultText: 'Watermark text',
     watermarkText: 'Watermark text',
     watermarkTextColor: 'Text color',

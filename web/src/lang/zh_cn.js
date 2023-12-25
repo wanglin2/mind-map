@@ -28,6 +28,7 @@ export default {
     watermark: '水印',
     showWatermark: '是否显示水印',
     watermarkDefaultText: '水印文字',
+    onlyExport: '是否仅在导出时显示',
     watermarkText: '水印文字',
     watermarkTextColor: '文字颜色',
     watermarkLineSpacing: '水印行间距',

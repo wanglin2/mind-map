@@ -566,6 +566,16 @@
         </div>
       </div>
       <template v-if="watermarkConfig.show">
+        <!-- 是否仅在导出时显示 -->
+        <div class="row">
+          <div class="rowItem">
+            <el-checkbox
+              v-model="watermarkConfig.onlyExport"
+              @change="updateWatermarkConfig"
+              >{{ $t('baseStyle.onlyExport') }}</el-checkbox
+            >
+          </div>
+        </div>
         <!-- 水印文字 -->
         <div class="row">
           <div class="rowItem">
@@ -878,6 +888,7 @@ export default {
       },
       watermarkConfig: {
         show: false,
+        onlyExport: false,
         text: '',
         lineSpacing: 100,
         textSpacing: 100,
@@ -1019,7 +1030,7 @@ export default {
     // 初始化水印配置
     initWatermark() {
       let config = this.mindMap.getConfig('watermarkConfig')
-      ;['text', 'lineSpacing', 'textSpacing', 'angle'].forEach(key => {
+      ;['text', 'lineSpacing', 'textSpacing', 'angle', 'onlyExport'].forEach(key => {
         this.watermarkConfig[key] = config[key]
       })
       this.watermarkConfig.show = !!config.text
