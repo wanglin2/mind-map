@@ -238,4 +238,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/HaHN.jpg" style="width: 50px;height: 50px;" />
         <span>HaHN</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/继龙.jpg" style="width: 50px;height: 50px;" />
+        <span>继龙</span>
+    </span>
 </p>
