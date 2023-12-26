@@ -245,8 +245,7 @@ class Timeline extends Base {
         let x2 = item.left
         let y = node.top + node.height / 2
         let path = `M ${x1},${y} L ${x2},${y}`
-        lines[index].plot(path)
-        style && style(lines[index], item)
+        this.setLineStyle(style, lines[index], path, item)
         prevBother = item
       })
     } else {
@@ -264,8 +263,7 @@ class Timeline extends Base {
         }
         // 水平线
         let path = `M ${x},${y} L ${item.left},${y}`
-        lines[index].plot(path)
-        style && style(lines[index], item)
+        this.setLineStyle(style, lines[index], path, item)
       })
       // 竖线
       if (len > 0) {

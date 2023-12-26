@@ -443,6 +443,12 @@ class Base {
   getNodeActChildrenLength(node) {
     return node.nodeData.children && node.nodeData.children.length
   }
+
+  // 设置连线样式
+  setLineStyle(style, line, path, childNode) {
+    line.plot(path)
+    style && style(line, childNode, true)
+  }
 }
 
 export default Base

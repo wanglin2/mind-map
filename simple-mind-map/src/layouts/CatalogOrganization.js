@@ -233,8 +233,7 @@ class CatalogOrganization extends Base {
           `M ${x2},${y1 + s1} L ${x2},${y1 + s1 > y2 ? y2 + item.height : y2}` +
           nodeUseLineStylePath
         // 竖线
-        lines[index].plot(path)
-        style && style(lines[index], item)
+        this.setLineStyle(style, lines[index], path, item)
       })
       minx = Math.min(minx, x1)
       maxx = Math.max(maxx, x1)
@@ -302,8 +301,7 @@ class CatalogOrganization extends Base {
             }`
           : ''
         path += nodeUseLineStylePath
-        lines[index].plot(path)
-        style && style(lines[index], item)
+        this.setLineStyle(style, lines[index], path, item)
       })
       // 竖线
       if (len > 0) {
