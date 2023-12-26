@@ -106,6 +106,21 @@ class Export {
           )
           let imgWidth = img.width
           let imgHeight = img.height
+          // 检查是否超出canvas支持的像素上限
+          const maxSize = 16384 / dpr
+          const maxArea = maxSize * maxSize
+          if (imgWidth * imgHeight > maxArea) {
+            let newWidth = null
+            let newHeight = null
+            if (imgWidth > maxSize) {
+              newWidth = maxArea / imgHeight
+            } else if (imgHeight > maxSize) {
+              newHeight = maxArea / imgWidth
+            }
+            const res = resizeImgSize(imgWidth, imgHeight, newWidth, newHeight)
+            imgWidth = res[0]
+            imgHeight = res[1]
+          }
           canvas.width = imgWidth * dpr
           canvas.height = imgHeight * dpr
           canvas.style.width = imgWidth + 'px'
@@ -205,6 +220,7 @@ class Export {
     const { str } = await this.getSvgData()
     const svgUrl = await this.fixSvgStrAndToBlob(str)
     const res = await this.svgToPng(svgUrl, transparent)
+    console.log(res)
     return res
   }
 
