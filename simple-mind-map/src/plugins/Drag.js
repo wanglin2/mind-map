@@ -112,7 +112,7 @@ class Drag extends Base {
     ) {
       return
     }
-    this.mindMap.emit('node_dragging')
+    this.mindMap.emit('node_dragging', this.mousedownNode)
     this.handleStartMove()
     this.onMove(x, y, e)
   }
