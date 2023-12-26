@@ -98,7 +98,7 @@ export const defaultOpt = {
   // 是否在点击了画布外的区域时结束节点文本的编辑状态
   isEndNodeTextEditOnClickOuter: true,
   // 最大历史记录数
-  maxHistoryCount: 1000,
+  maxHistoryCount: 500,
   // 是否一直显示节点的展开收起按钮，默认为鼠标移上去和激活时才显示
   alwaysShowExpandBtn: false,
   // 扩展节点可插入的图标
