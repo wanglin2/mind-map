@@ -214,7 +214,7 @@
 
 ### setData(data)
 
-设置节点数据，`SET_NODE_DATA`命令的快捷方法
+设置节点数据，`SET_NODE_DATA`命令的快捷方法，这个方法和命令不会更新视图，所以如果你要修改文本，就使用`setText`方法，或者用手指文本的命令。
 
 ### setText(text, richText, resetRichText)
 

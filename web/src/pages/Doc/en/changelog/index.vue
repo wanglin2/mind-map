@@ -9,12 +9,34 @@
 <p>3.Fix the issue of duplicate rendering of nodes caused by forward and backward when the number of nodes exceeds the maximum number of cache pools.</p>
 <p>4.Fix the issue of the canvas moving in the opposite direction when scrolling horizontally with the mouse or touchpad.</p>
 <p>5.Fix the issue where the mouse in flag is not reset when a node is destroyed.</p>
+<p>6.Fix the issue of incorrect position calculation in the scrollbar plugin when the 'initRootNodePosition' configuration is not set to the default '[center, center]'.</p>
+<p>7.Fix the issue where dragging the canvas cannot stop when the mouse is released on the node.</p>
+<p>8.Fix the issue of errors in the position calculated by the view. fit method when the canvas container is not 0 from the top left corner of the browser window.</p>
+<p>9.Fix the issue where the watermark in the exported image does not fully cover the entire image when there are a large number of nodes.</p>
+<p>10.Fix the issue of inserting formula errors.</p>
+<p>11.Fix the issue of losing the selected text status when the mouse moves out of the editing box while selecting text in the node text editing state.</p>
+<p>12.When repairing node rich text editing, Fix the issue 'rich_text_selection_change' event is not triggered when the text selection range is 'null'.</p>
+<p>13.Fix the issue of no 'node' instance in the 'node_dragging' event callback.</p>
+<p>14.Fix the issue of too many nodes and the canvas size being too large to export PNG.</p>
 </blockquote>
 <p>New:</p>
 <blockquote>
 <p>1.Modify the mousewheel event, change the dir flag to dirs, support storing multiple directions, and optimize the dual finger movement operation of the touchpad.</p>
 <p>2.The TextEdit class adds the isShowTextEdit method to determine whether the current node is in an editing state.</p>
 <p>3.Change the paste method of the render class to support pasting clipboard data.</p>
+<p>4.Add a configuration option to restrict mind map graphics within the canvas.</p>
+<p>5.When registering the scrollbar plugin, it supports configuring whether to restrict the mind map within the canvas.</p>
+<p>6.Folding all nodes will move the mind map root node to the center of the canvas.</p>
+<p>7.Support the configuration option of displaying watermarks only during export.</p>
+<p>8.When pasting images from the clipboard at a node, custom processing functions are supported to upload the images to your server.</p>
+<p>9.Refactoring the export logic of the PDF, the exported PDF size is no longer a fixed A4, but the size of the mind map, while deleting the configuration for pagination export.</p>
+<p>10.Node connections support displaying arrows as a field for the theme.</p>
+<p>11.The maximum number of historical records is adjusted to 500 by default.</p>
+</blockquote>
+<p>Demo：</p>
+<blockquote>
+<p>1.Support configuration to display watermarks only during export.</p>
+<p>2.Basic style configuration line supports displaying arrows.</p>
 </blockquote>
 <h2>0.9.1-fix.2</h2>
 <p>Fix:</p>

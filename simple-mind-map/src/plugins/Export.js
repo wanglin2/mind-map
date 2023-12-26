@@ -220,7 +220,6 @@ class Export {
     const { str } = await this.getSvgData()
     const svgUrl = await this.fixSvgStrAndToBlob(str)
     const res = await this.svgToPng(svgUrl, transparent)
-    console.log(res)
     return res
   }
 

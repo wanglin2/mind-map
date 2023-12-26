@@ -217,7 +217,7 @@ if `key` is not passed, return the `data` object
 ### setData(data)
 
 Set the value of the specified key in the data object of the node's real data
-nodeData, `SET_NODE_DATA` command's shortcut method
+nodeData, `SET_NODE_DATA` command's shortcut method. This method and command will not update the view, so if you want to modify the text, use the 'setText' method or use the command pointing to the text.
 
 ### setText(text, richText)
 

@@ -61,7 +61,7 @@ const mindMap = new MindMap({
 | nodeTextEditZIndex（v0.5.5+）     | Number  | 3000 |   | z-index of node text edit box elements         |
 | nodeNoteTooltipZIndex（v0.5.5+）     | Number  | 3000 | z-index of floating layer elements in node comments  |          |
 | isEndNodeTextEditOnClickOuter（v0.5.5+）     | Boolean  | true | Whether to end the editing status of node text when clicking on an area outside the canvas  |          |
-| maxHistoryCount（v0.5.6+）     | Number  | 1000 |   | Maximum number of history records         |
+| maxHistoryCount（v0.5.6+）     | Number  | 1000（v0.9.2+ changed 500） |   | Maximum number of history records         |
 | alwaysShowExpandBtn（v0.5.8+）     | Boolean  | false | Whether to always display the expand and collapse buttons of nodes, which are only displayed when the mouse is moved up and activated by default  |          |
 | iconList（v0.5.8+）     | Array  | [] | The icons that can be inserted into the extension node, and each item in the array is an object. Please refer to the "Icon Configuration" table below for the detailed structure of the object  |          |
 | maxNodeCacheCount（v0.5.10+）     |  Number | 1000 | The maximum number of cached nodes. To optimize performance, an internal node cache pool is maintained to reuse nodes. This attribute allows you to specify the maximum number of caches in the pool  |          |
@@ -105,6 +105,9 @@ const mindMap = new MindMap({
 | highlightNodeBoxStyle（v0.9.0+）     | Object | { stroke: 'rgb(94, 200, 248)', fill: 'transparent' }  |  Highlight box style when the mouse moves into the summary to highlight the node it belongs to |         |
 | createNewNodeBehavior（v0.9.1+）     | String | default  | Behavior when creating a new node. default（By default, newly created nodes will be activated and enter editing mode. If multiple new nodes are created simultaneously, they will only be activated and will not enter editing mode）、notActive（Do not activate newly created nodes）、activeOnly（Only activate newly created nodes and do not enter editing mode）  |         |
 | defaultNodeImage（v0.9.1-fix.2+）     | String |   | Image address, the default image displayed when node image loading fails  |         |
+| handleNodePasteImg（v0.9.2+）     | null or Function | null  | The processing method for pasting images from the clipboard on a node is to convert them into data:URL data and insert them into the node by default. You can use this method to upload image data to the server and save the URL of the image. An asynchronous method can be passed to receive image data of Blob type, and the specified structure needs to be returned: { url, size: {width, height} }  |         |
+| isLimitMindMapInCanvas（v0.9.2+）     | Boolean |  false | Whether to limit the mind map within the canvas. For example, when dragging to the right, the leftmost part of the mind map graphic will not be able to continue dragging to the right when it reaches the center of the canvas, and the same applies to other things |
+| isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）     | Boolean |  true | When registering the Scrollbar plugin, will the mind map be limited to the canvas and the isLimitMindMapInCanvas configuration no longer work |
 
 ### Data structure
 
@@ -156,6 +159,7 @@ If you want to add custom fields, you can add them to the same level as 'data' a
 | textSpacing | Number | 100                                         | Spacing between watermarks in the same row                   |
 | angle       | Number | 30                                          | Tilt angle of watermark, range: [0, 90]                      |
 | textStyle   | Object | {color: '#999', opacity: 0.5, fontSize: 14} | Watermark text style                                         |
+| onlyExport（v0.9.2+）   | Boolean | false |  Is only add watermarks during export                        |
 
 ### Icon Configuration
 
@@ -414,6 +418,8 @@ Listen to an event. Event list:
 | set_data（v0.7.3+）    |  Triggered when the setData method is called to dynamically set mind map data  | data（New Mind Map Data）  |
 | resize（v0.8.0+）    | Triggered after the container size changes, actually when the 'resize' method of the mind map instance is called   |   |
 | beforeDestroy（v0.9.0+）    |  Triggered before destroying the mind map, i.e. triggered by calling the destroy method  |   |
+| body_mousedown（v0.9.2+）    | Mousedown event of document.body                      | e（event object）      |
+| body_click    | Click event of document.body                       | e（event object）      |
 
 ### emit(event, ...args)
 
@@ -507,7 +513,7 @@ redo. All commands are as follows:
 | EXPAND_ALL                         | Expand all nodes                                             |                                                              |
 | UNEXPAND_ALL                       | Collapse all nodes                                           |                                                              |
 | UNEXPAND_TO_LEVEL (v0.2.8+)        | Expand to a specified level                                  | level (the level to expand to, 1, 2, 3...)                   |
-| SET_NODE_DATA                      | Update node data, that is, update the data in the data object of the node data object | node (the node to set), data (object, the data to update, e.g. `{expand: true}`) |
+| SET_NODE_DATA                      | Update node data, that is, update the data in the data object of the node data object. Note that this command will not trigger view updates | node (the node to set), data (object, the data to update, e.g. `{expand: true}`) |
 | SET_NODE_TEXT                      | Set node text                                                | node (the node to set), text (the new text for the node), richText（v0.4.0+, If you want to set a rich text character, you need to set it to `true`）、resetRichText（v0.6.10+Do you want to reset rich text? The default is false. If true is passed, the style of the rich text node will be reset） |
 | SET_NODE_IMAGE                     | Set Node Image                                               | node (node to set), imgData (object, image information, structured as: `{url, title, width, height}`, the width and height of the image must be passed) |
 | SET_NODE_ICON                      | Set Node Icon                                                | node (node to set), icons (array, predefined image names array, available icons can be obtained in the nodeIconList list in the [icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js) file, icon name is type_name, such as ['priority_1']) |

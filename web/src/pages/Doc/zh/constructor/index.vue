@@ -252,7 +252,7 @@
 <tr>
 <td>maxHistoryCount（v0.5.6+）</td>
 <td>Number</td>
-<td>1000</td>
+<td>1000（v0.9.2+改为500）</td>
 <td>最大历史记录数</td>
 </tr>
 <tr>
@@ -513,6 +513,24 @@
 <td></td>
 <td>图片地址，当节点图片加载失败时显示的默认图片</td>
 </tr>
+<tr>
+<td>handleNodePasteImg（v0.9.2+）</td>
+<td>null 或 Function</td>
+<td>null</td>
+<td>在节点上粘贴剪贴板中的图片的处理方法，默认是转换为data:url数据插入到节点中，你可以通过该方法来将图片数据上传到服务器，实现保存图片的url。可以传递一个异步方法，接收Blob类型的图片数据，需要返回指定结构：{ url, size: {width, height} }</td>
+</tr>
+<tr>
+<td>isLimitMindMapInCanvas（v0.9.2+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>是否将思维导图限制在画布内。比如向右拖动时，思维导图图形的最左侧到达画布中心时将无法继续向右拖动，其他同理</td>
+</tr>
+<tr>
+<td>isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas配置不再起作用</td>
+</tr>
 </tbody>
 </table>
 <h3>数据结构</h3>
@@ -591,6 +609,12 @@
 <td>Object</td>
 <td>{color: '#999', opacity: 0.5, fontSize: 14}</td>
 <td>水印文字样式</td>
+</tr>
+<tr>
+<td>onlyExport（v0.9.2+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>是否仅在导出时添加水印</td>
 </tr>
 </tbody>
 </table>
@@ -983,6 +1007,16 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>思维导图销毁前触发，即调用了destroy方法触发</td>
 <td></td>
 </tr>
+<tr>
+<td>body_mousedown（v0.9.2+）</td>
+<td>document.body的鼠标按下事件</td>
+<td>e（事件对象）</td>
+</tr>
+<tr>
+<td>body_click</td>
+<td>document.body的点击事件</td>
+<td>e（事件对象）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
@@ -1132,7 +1166,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </tr>
 <tr>
 <td>SET_NODE_DATA</td>
-<td>更新节点数据，即更新节点数据对象里<code>data</code>对象的数据</td>
+<td>更新节点数据，即更新节点数据对象里<code>data</code>对象的数据，注意这个命令不会触发视图的更新</td>
 <td>node（要设置的节点）、data（对象，要更新的数据，如<code>{expand: true}</code>）</td>
 </tr>
 <tr>

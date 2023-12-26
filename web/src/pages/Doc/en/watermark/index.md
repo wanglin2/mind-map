@@ -49,3 +49,9 @@ mindMap.watermark.updateWatermark({
 > v0.3.2+
 
 Gets whether the watermark exists.
+
+### clear()
+
+> v0.9.2+
+
+Clear watermark.

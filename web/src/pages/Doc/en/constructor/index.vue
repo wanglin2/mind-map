@@ -290,7 +290,7 @@
 <tr>
 <td>maxHistoryCount（v0.5.6+）</td>
 <td>Number</td>
-<td>1000</td>
+<td>1000（v0.9.2+ changed 500）</td>
 <td></td>
 <td>Maximum number of history records</td>
 </tr>
@@ -595,6 +595,27 @@
 <td>Image address, the default image displayed when node image loading fails</td>
 <td></td>
 </tr>
+<tr>
+<td>handleNodePasteImg（v0.9.2+）</td>
+<td>null or Function</td>
+<td>null</td>
+<td>The processing method for pasting images from the clipboard on a node is to convert them into data:URL data and insert them into the node by default. You can use this method to upload image data to the server and save the URL of the image. An asynchronous method can be passed to receive image data of Blob type, and the specified structure needs to be returned: { url, size: {width, height} }</td>
+<td></td>
+</tr>
+<tr>
+<td>isLimitMindMapInCanvas（v0.9.2+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Whether to limit the mind map within the canvas. For example, when dragging to the right, the leftmost part of the mind map graphic will not be able to continue dragging to the right when it reaches the center of the canvas, and the same applies to other things</td>
+<td></td>
+</tr>
+<tr>
+<td>isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>When registering the Scrollbar plugin, will the mind map be limited to the canvas and the isLimitMindMapInCanvas configuration no longer work</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Data structure</h3>
@@ -673,6 +694,12 @@
 <td>Object</td>
 <td>{color: '#999', opacity: 0.5, fontSize: 14}</td>
 <td>Watermark text style</td>
+</tr>
+<tr>
+<td>onlyExport（v0.9.2+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Is only add watermarks during export</td>
 </tr>
 </tbody>
 </table>
@@ -1072,6 +1099,16 @@ poor performance and should be used sparingly.</p>
 <td>Triggered before destroying the mind map, i.e. triggered by calling the destroy method</td>
 <td></td>
 </tr>
+<tr>
+<td>body_mousedown（v0.9.2+）</td>
+<td>Mousedown event of document.body</td>
+<td>e（event object）</td>
+</tr>
+<tr>
+<td>body_click</td>
+<td>Click event of document.body</td>
+<td>e（event object）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
@@ -1219,7 +1256,7 @@ redo. All commands are as follows:</p>
 </tr>
 <tr>
 <td>SET_NODE_DATA</td>
-<td>Update node data, that is, update the data in the data object of the node data object</td>
+<td>Update node data, that is, update the data in the data object of the node data object. Note that this command will not trigger view updates</td>
 <td>node (the node to set), data (object, the data to update, e.g. <code>{expand: true}</code>)</td>
 </tr>
 <tr>

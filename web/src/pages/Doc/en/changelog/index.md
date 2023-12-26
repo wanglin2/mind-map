@@ -13,6 +13,24 @@ Fix:
 > 4.Fix the issue of the canvas moving in the opposite direction when scrolling horizontally with the mouse or touchpad.
 >
 > 5.Fix the issue where the mouse in flag is not reset when a node is destroyed.
+>
+> 6.Fix the issue of incorrect position calculation in the scrollbar plugin when the 'initRootNodePosition' configuration is not set to the default '[center, center]'.
+>
+> 7.Fix the issue where dragging the canvas cannot stop when the mouse is released on the node.
+>
+> 8.Fix the issue of errors in the position calculated by the view. fit method when the canvas container is not 0 from the top left corner of the browser window.
+>
+> 9.Fix the issue where the watermark in the exported image does not fully cover the entire image when there are a large number of nodes.
+>
+> 10.Fix the issue of inserting formula errors.
+>
+> 11.Fix the issue of losing the selected text status when the mouse moves out of the editing box while selecting text in the node text editing state.
+>
+> 12.When repairing node rich text editing, Fix the issue 'rich_text_selection_change' event is not triggered when the text selection range is 'null'.
+>
+> 13.Fix the issue of no 'node' instance in the 'node_dragging' event callback.
+>
+> 14.Fix the issue of too many nodes and the canvas size being too large to export PNG.
 
 New:
 
@@ -21,6 +39,28 @@ New:
 > 2.The TextEdit class adds the isShowTextEdit method to determine whether the current node is in an editing state.
 >
 > 3.Change the paste method of the render class to support pasting clipboard data.
+>
+> 4.Add a configuration option to restrict mind map graphics within the canvas.
+>
+> 5.When registering the scrollbar plugin, it supports configuring whether to restrict the mind map within the canvas.
+>
+> 6.Folding all nodes will move the mind map root node to the center of the canvas.
+>
+> 7.Support the configuration option of displaying watermarks only during export.
+>
+> 8.When pasting images from the clipboard at a node, custom processing functions are supported to upload the images to your server.
+>
+> 9.Refactoring the export logic of the PDF, the exported PDF size is no longer a fixed A4, but the size of the mind map, while deleting the configuration for pagination export.
+>
+> 10.Node connections support displaying arrows as a field for the theme.
+>
+> 11.The maximum number of historical records is adjusted to 500 by default.
+
+Demo：
+
+> 1.Support configuration to display watermarks only during export.
+>
+> 2.Basic style configuration line supports displaying arrows.
 
 ## 0.9.1-fix.2
 
