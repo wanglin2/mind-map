@@ -11,6 +11,7 @@ export default {
     width: '粗细',
     style: '风格',
     lineOfOutline: '概要的连线',
+    showArrow: '是否显示箭头',
     nodePadding: '节点内边距',
     nodeMargin: '节点外边距',
     horizontal: '水平',

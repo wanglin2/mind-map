@@ -11,6 +11,7 @@ export default {
     width: 'Width',
     style: 'Style',
     lineOfOutline: 'Line of outline',
+    showArrow: 'Is show arrow',
     nodePadding: 'Node padding',
     nodeMargin: 'Node margin',
     horizontal: 'Horizontal',
