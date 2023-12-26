@@ -31,6 +31,19 @@
 </blockquote>
 <p>Whether the node is currently being dragged</p>
 <h2>Methods</h2>
+<h3>getPureData(removeActiveState = true, removeId = false)</h3>
+<blockquote>
+<p>v0.9.0+</p>
+</blockquote>
+<ul>
+<li>
+<p><code>removeActiveState</code>：Is remove the activation status of the node</p>
+</li>
+<li>
+<p><code>removeId</code>：Is remove the uid of the node</p>
+</li>
+</ul>
+<p>Serialize a node to obtain its pure data, excluding references to node instances.</p>
 <h3>setGeneralizationOpacity(val)</h3>
 <blockquote>
 <p>v0.9.0+</p>
@@ -148,7 +161,7 @@ default <code>false</code></p>
 if <code>key</code> is not passed, return the <code>data</code> object</p>
 <h3>setData(data)</h3>
 <p>Set the value of the specified key in the data object of the node's real data
-nodeData, <code>SET_NODE_DATA</code> command's shortcut method</p>
+nodeData, <code>SET_NODE_DATA</code> command's shortcut method. This method and command will not update the view, so if you want to modify the text, use the 'setText' method or use the command pointing to the text.</p>
 <h3>setText(text, richText)</h3>
 <ul>
 <li>

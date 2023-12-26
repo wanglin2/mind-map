@@ -226,4 +226,20 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/moom.jpg" style="width: 50px;height: 50px;" />
         <span>moom</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/张扬.png" style="width: 50px;height: 50px;" />
+        <span>张扬</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/长沙利奥软件.jpg" style="width: 50px;height: 50px;" />
+        <span>长沙利奥软件</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/HaHN.jpg" style="width: 50px;height: 50px;" />
+        <span>HaHN</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/继龙.jpg" style="width: 50px;height: 50px;" />
+        <span>继龙</span>
+    </span>
 </p>

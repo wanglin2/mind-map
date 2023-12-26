@@ -70,7 +70,7 @@ mindMap.scrollbar.setScrollBarWrapSize(width, height)
 </code></pre>
 <p>如果容器大小发生了改变需要再次调用该方法传递改变后的大小。</p>
 <p>然后你需要监听<code>scrollbar_change</code>方法来获取滚动条大小和位置数据：</p>
-<pre class="hljs"><code>mindMap.(<span class="hljs-string">&#x27;scrollbar_change&#x27;</span>, <span class="hljs-built_in">this</span>.updateScrollbar)
+<pre class="hljs"><code>mindMap.on(<span class="hljs-string">&#x27;scrollbar_change&#x27;</span>, <span class="hljs-built_in">this</span>.updateScrollbar)
 
 <span class="hljs-comment">// 根据事件返回的滚动条数据更新滚动条元素：</span>
 {

@@ -18,6 +18,7 @@ let APIList = [
   'constructor',
   'node',
   'render',
+  'textEdit',
   'view',
   'keyCommand',
   'command',

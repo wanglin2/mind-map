@@ -22,8 +22,17 @@ class Search {
     this.notResetSearchText = false
     // 是否自动跳转下一个匹配节点
     this.isJumpNext = false
+
+    this.bindEvent()
+  }
+
+  bindEvent() {
     this.onDataChange = this.onDataChange.bind(this)
     this.mindMap.on('data_change', this.onDataChange)
+  }
+
+  unBindEvent() {
+    this.mindMap.off('data_change', this.onDataChange)
   }
 
   // 节点数据改变了，需要重新搜索
@@ -65,6 +74,9 @@ class Search {
     this.currentIndex = -1
     this.notResetSearchText = false
     this.isSearching = false
+    if (this.mindMap.opt.readonly) {
+      this.mindMap.renderer.closeHighlightNode()
+    }
     this.emitEvent()
   }
 
@@ -96,6 +108,10 @@ class Search {
     this.mindMap.execCommand('GO_TARGET_NODE', currentNode, () => {
       this.notResetSearchText = false
       callback()
+      // 只读模式下节点无法激活，所以通过高亮的方式
+      if (this.mindMap.opt.readonly) {
+        this.mindMap.renderer.highlightNode(currentNode)
+      }
     })
   }
 
@@ -169,6 +185,16 @@ class Search {
       currentIndex: this.currentIndex,
       total: this.matchNodeList.length
     })
+  }
+
+  // 插件被移除前做的事情
+  beforePluginRemove() {
+    this.unBindEvent()
+  }
+
+  // 插件被卸载前做的事情
+  beforePluginDestroy() {
+    this.unBindEvent()
   }
 }
 

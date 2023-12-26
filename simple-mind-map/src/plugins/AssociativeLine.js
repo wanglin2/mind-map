@@ -59,41 +59,68 @@ class AssociativeLine {
 
   // 监听事件
   bindEvent() {
-    // 节点树渲染完毕后渲染连接线
     this.renderAllLines = this.renderAllLines.bind(this)
+    this.onDrawClick = this.onDrawClick.bind(this)
+    this.onNodeClick = this.onNodeClick.bind(this)
+    this.removeLine = this.removeLine.bind(this)
+    this.addLine = this.addLine.bind(this)
+    this.onMousemove = this.onMousemove.bind(this)
+    this.onNodeDragging = this.onNodeDragging.bind(this)
+    this.onNodeDragend = this.onNodeDragend.bind(this)
+    this.onControlPointMouseup = this.onControlPointMouseup.bind(this)
+
+    // 节点树渲染完毕后渲染连接线
     this.mindMap.on('node_tree_render_end', this.renderAllLines)
     // 状态改变后重新渲染连接线
     this.mindMap.on('data_change', this.renderAllLines)
     // 监听画布和节点点击事件，用于清除当前激活的连接线
-    this.mindMap.on('draw_click', () => {
-      if (this.isControlPointMousedown) {
-        return
-      }
-      this.clearActiveLine()
-    })
-    this.mindMap.on('node_click', node => {
-      if (this.isCreatingLine) {
-        this.completeCreateLine(node)
-      } else {
-        this.clearActiveLine()
-      }
-    })
+    this.mindMap.on('draw_click', this.onDrawClick)
+    this.mindMap.on('node_click', this.onNodeClick)
     // 注册删除快捷键
-    this.mindMap.keyCommand.addShortcut(
-      'Del|Backspace',
-      this.removeLine.bind(this)
-    )
+    this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeLine)
     // 注册添加连接线的命令
-    this.mindMap.command.add('ADD_ASSOCIATIVE_LINE', this.addLine.bind(this))
+    this.mindMap.command.add('ADD_ASSOCIATIVE_LINE', this.addLine)
     // 监听鼠标移动事件
-    this.mindMap.on('mousemove', this.onMousemove.bind(this))
+    this.mindMap.on('mousemove', this.onMousemove)
     // 节点拖拽事件
-    this.mindMap.on('node_dragging', this.onNodeDragging.bind(this))
-    this.mindMap.on('node_dragend', this.onNodeDragend.bind(this))
+    this.mindMap.on('node_dragging', this.onNodeDragging)
+    this.mindMap.on('node_dragend', this.onNodeDragend)
     // 拖拽控制点
-    this.mindMap.on('mouseup', this.onControlPointMouseup.bind(this))
+    this.mindMap.on('mouseup', this.onControlPointMouseup)
     // 缩放事件
     this.mindMap.on('scale', this.onScale)
+  }
+
+  // 解绑事件
+  unBindEvent() {
+    this.mindMap.off('node_tree_render_end', this.renderAllLines)
+    this.mindMap.off('data_change', this.renderAllLines)
+    this.mindMap.off('draw_click', this.onDrawClick)
+    this.mindMap.off('node_click', this.onNodeClick)
+    this.mindMap.keyCommand.removeShortcut('Del|Backspace', this.removeLine)
+    this.mindMap.command.remove('ADD_ASSOCIATIVE_LINE', this.addLine)
+    this.mindMap.off('mousemove', this.onMousemove)
+    this.mindMap.off('node_dragging', this.onNodeDragging)
+    this.mindMap.off('node_dragend', this.onNodeDragend)
+    this.mindMap.off('mouseup', this.onControlPointMouseup)
+    this.mindMap.off('scale', this.onScale)
+  }
+
+  // 画布点击事件
+  onDrawClick() {
+    if (this.isControlPointMousedown) {
+      return
+    }
+    this.clearActiveLine()
+  }
+
+  // 节点点击事件
+  onNodeClick(node) {
+    if (this.isCreatingLine) {
+      this.completeCreateLine(node)
+    } else {
+      this.clearActiveLine()
+    }
   }
 
   // 创建箭头
@@ -543,6 +570,16 @@ class AssociativeLine {
     if (this.mindMap.opt.associativeLineIsAlwaysAboveNode) return
     this.associativeLineDraw.back() // 最底层
     this.associativeLineDraw.forward() // 连线层上面
+  }
+
+  // 插件被移除前做的事情
+  beforePluginRemove() {
+    this.unBindEvent()
+  }
+
+  // 插件被卸载前做的事情
+  beforePluginDestroy() {
+    this.unBindEvent()
   }
 }
 

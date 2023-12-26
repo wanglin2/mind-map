@@ -56,6 +56,16 @@
 
 ## 方法
 
+### getPureData(removeActiveState = true, removeId = false)
+
+> v0.9.0+
+
+- `removeActiveState`：是否移除节点的激活状态
+
+- `removeId`：是否移除节点的uid字段
+
+序列化节点，获取该节点的纯数据，不包含对节点实例的引用。
+
 ### setGeneralizationOpacity(val)
 
 > v0.9.0+
@@ -204,7 +214,7 @@
 
 ### setData(data)
 
-设置节点数据，`SET_NODE_DATA`命令的快捷方法
+设置节点数据，`SET_NODE_DATA`命令的快捷方法，这个方法和命令不会更新视图，所以如果你要修改文本，就使用`setText`方法，或者用手指文本的命令。
 
 ### setText(text, richText, resetRichText)
 

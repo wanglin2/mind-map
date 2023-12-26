@@ -37,6 +37,11 @@ MindMap.usePlugin(Watermark)
 <p>v0.3.2+</p>
 </blockquote>
 <p>Gets whether the watermark exists.</p>
+<h3>clear()</h3>
+<blockquote>
+<p>v0.9.2+</p>
+</blockquote>
+<p>Clear watermark.</p>
 
   </div>
 </template>

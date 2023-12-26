@@ -165,6 +165,11 @@ class Node {
     this.top = 0
   }
 
+  // 节点被删除时需要复位的数据
+  resetWhenDelete() {
+    this._isMouseenter = false
+  }
+
   //  处理数据
   handleData(data) {
     data.data.expand = data.data.expand === false ? false : true
@@ -181,7 +186,13 @@ class Node {
       this._customNodeContent = customCreateNodeContent(this)
     }
     // 如果没有返回内容，那么还是使用内置的节点内容
-    if (this._customNodeContent) return
+    if (this._customNodeContent) {
+      this._customNodeContent.setAttribute(
+        'xmlns',
+        'http://www.w3.org/1999/xhtml'
+      )
+      return
+    }
     this._imgData = this.createImgNode()
     this._iconData = this.createIconNode()
     this._textData = this.createTextNode()
@@ -441,9 +452,7 @@ class Node {
         this.mindMap.renderer[
           isActive ? 'removeNodeFromActiveList' : 'addNodeToActiveList'
         ](this)
-        this.mindMap.emit('node_active', isActive ? null : this, [
-          ...this.mindMap.renderer.activeNodeList
-        ])
+        this.renderer.emitNodeActiveEvent(isActive ? null : this)
       }
       this.mindMap.emit('node_mousedown', this, e)
     })
@@ -474,7 +483,7 @@ class Node {
     })
     // 双击事件
     this.group.on('dblclick', e => {
-      if (this.mindMap.opt.readonly) {
+      if (this.mindMap.opt.readonly || e.ctrlKey) {
         return
       }
       e.stopPropagation()
@@ -520,7 +529,7 @@ class Node {
     this.mindMap.emit('before_node_active', this, this.renderer.activeNodeList)
     this.renderer.clearActiveNodeList()
     this.renderer.addNodeToActiveList(this)
-    this.mindMap.emit('node_active', this, [...this.renderer.activeNodeList])
+    this.renderer.emitNodeActiveEvent(this)
   }
 
   //  更新节点
@@ -693,6 +702,7 @@ class Node {
   // 销毁节点，不但会从画布删除，而且原节点直接置空，后续无法再插回画布
   destroy() {
     if (!this.group) return
+    this.resetWhenDelete()
     this.group.remove()
     this.removeGeneralization()
     this.removeLine()
@@ -824,9 +834,9 @@ class Node {
     this.renderer.layout.renderLine(
       this,
       this._lines,
-      (line, node) => {
+      (...args) => {
         // 添加样式
-        this.styleLine(line, node)
+        this.styleLine(...args)
       },
       this.style.getStyle('lineStyle', true)
     )
@@ -881,19 +891,26 @@ class Node {
   }
 
   //  设置连线样式
-  styleLine(line, node) {
-    let width =
-      node.getSelfInhertStyle('lineWidth') || node.getStyle('lineWidth', true)
-    let color =
-      node.getSelfInhertStyle('lineColor') || node.getStyle('lineColor', true)
-    let dasharray =
-      node.getSelfInhertStyle('lineDasharray') ||
-      node.getStyle('lineDasharray', true)
-    this.style.line(line, {
-      width,
-      color,
-      dasharray
-    })
+  styleLine(line, childNode, enableMarker) {
+    const width =
+      childNode.getSelfInhertStyle('lineWidth') ||
+      childNode.getStyle('lineWidth', true)
+    const color =
+      childNode.getSelfInhertStyle('lineColor') ||
+      childNode.getStyle('lineColor', true)
+    const dasharray =
+      childNode.getSelfInhertStyle('lineDasharray') ||
+      childNode.getStyle('lineDasharray', true)
+    this.style.line(
+      line,
+      {
+        width,
+        color,
+        dasharray
+      },
+      enableMarker,
+      childNode
+    )
   }
 
   //  移除连线

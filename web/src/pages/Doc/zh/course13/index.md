@@ -16,6 +16,10 @@
         value: 'Enter'
       },
       {
+        name: '插入父节点',
+        value: 'Shift + Tab'
+      },
+      {
         name: '上移节点',
         value: 'Ctrl + ↑'
       },
@@ -34,6 +38,10 @@
       {
         name: '删除节点',
         value: 'Delete | Backspace'
+      },
+      {
+        name: '仅删除当前节点',
+        value: 'Shift + Backspace'
       },
       {
         name: '复制节点',
@@ -89,8 +97,16 @@
         value: 'Ctrl + -'
       },
       {
-        name: '恢复默认',
+        name: '放大缩小',
+        value: 'Ctrl + 鼠标滚动'
+      },
+      {
+        name: '回到根节点',
         value: 'Ctrl + Enter'
+      },
+      {
+        name: '适应画布',
+        value: 'Ctrl + i'
       }
     ]
   }

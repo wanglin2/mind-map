@@ -37,3 +37,5 @@ mindMap.on('search_info_change', data => {
     console.log('当前所在：'+ (data.currentIndex + 1), '匹配总数：' + data.total)
 })
 ```
+
+如果是只读模式下搜索，搜索匹配到的节点不会被激活，而是被高亮。

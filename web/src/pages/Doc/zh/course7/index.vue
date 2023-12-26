@@ -1,6 +1,9 @@
 <template>
   <div>
     <h1>开启节点自由拖拽</h1>
+<blockquote>
+<p>节点自由拖拽的连线可能不会符合你的预期，这个问题基本上不会改，所以自由拖拽功能不建议使用。</p>
+</blockquote>
 <p>节点支持自由拖拽，也就是可以把它拖动到你指定的位置，默认是不开启的，如果需要开启可以在实例化<code>simple-mind-map</code>时传入开启的选项：</p>
 <pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({
     <span class="hljs-comment">// ...</span>

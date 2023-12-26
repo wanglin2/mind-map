@@ -333,6 +333,22 @@ and copying the <code>data</code> of the data object, example:</p>
 <p>v0.8.1+</p>
 </blockquote>
 <p>Determine whether there is a hierarchical relationship from the given node instance list.</p>
+<h4>handleSelfCloseTags(str)</h4>
+<blockquote>
+<p>v0.9.1+</p>
+</blockquote>
+<ul>
+<li><code>str</code>: html string</li>
+</ul>
+<p>Add a closed state to HTML self closing tags, <code>&lt;div&gt;&lt;img src=&quot;xxx&quot;&gt;&lt;/div&gt;</code> -&gt; <code>&lt;div&gt;&lt;img src=&quot;xxx&quot; /&gt;&lt;/div&gt;</code>。</p>
+<h4>checkNodeListIsEqual(list1, list2)</h4>
+<blockquote>
+<p>v0.9.1+</p>
+</blockquote>
+<ul>
+<li><code>list1/list2</code>: Node instance list</li>
+</ul>
+<p>Check if the two node instance lists contain the same nodes.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>
@@ -381,6 +397,10 @@ drawBackgroundImageToCanvas(ctx, width, height, img, {
 <p>Check if a cache exists.</p>
 <h4>get(key)</h4>
 <p>Gets the value of a cache.</p>
+<blockquote>
+<p>v0.9.2+</p>
+</blockquote>
+<p>Empty the cache pool.</p>
 
   </div>
 </template>

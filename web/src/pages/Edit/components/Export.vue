@@ -48,16 +48,10 @@
           @keydown.native.stop
         ></el-input>
         <el-checkbox
-          v-show="['png'].includes(exportType)"
+          v-show="['png', 'pdf'].includes(exportType)"
           v-model="isTransparent"
           style="margin-left: 12px"
           >{{ $t('export.isTransparent') }}</el-checkbox
-        >
-        <el-checkbox
-          v-show="['pdf'].includes(exportType)"
-          v-model="useMultiPageExport"
-          style="margin-left: 12px"
-          >{{ $t('export.useMultiPageExport') }}</el-checkbox
         >
       </div>
       <div class="downloadTypeList">
@@ -107,8 +101,7 @@ export default {
       loading: false,
       loadingText: '',
       paddingX: 10,
-      paddingY: 10,
-      useMultiPageExport: false
+      paddingY: 10
     }
   },
   computed: {
@@ -185,7 +178,7 @@ export default {
           this.isTransparent
         )
       } else if (this.exportType === 'pdf') {
-        this.$bus.$emit('export', this.exportType, true, this.fileName, this.useMultiPageExport)
+        this.$bus.$emit('export', this.exportType, true, this.fileName, this.isTransparent)
       } else {
         this.$bus.$emit('export', this.exportType, true, this.fileName)
       }

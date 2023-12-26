@@ -2,12 +2,12 @@
   <div>
     <h1>插入/删除节点、前进回退</h1>
 <p>首先和操作节点内容一样，也需要监听节点的激活事件，然后禁用相关按钮。</p>
+<p>以下命令都支持传递一些参数，详情请参考【API】-【构造函数】-【execCommand方法】小节中该命令的介绍。</p>
 <h2>插入子节点</h2>
 <p>插入子节点很简单，执行<code>INSERT_CHILD_NODE</code>命令即可：</p>
 <pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_CHILD_NODE&#x27;</span>)
 </code></pre>
 <p>这样就会在当前激活节点（如果存在多个激活节点，默认会操作第一个激活节点）下添加一个子节点。</p>
-<p><code>INSERT_CHILD_NODE</code>命令还支持传入几个参数，详细详细请阅读【API】-【构造函数】-【execCommand方法】。</p>
 <p>如果你想获取插入节点的实例，可以这样操作：</p>
 <p>1.需要指定新插入节点的<code>id</code>，比如：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> { createUid } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils&#x27;</span>
@@ -23,15 +23,41 @@ mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_CHILD_NODE&#x27;</spa
     <span class="hljs-keyword">const</span> node = mindMap.renderer.findNodeByUid(uid)
 })
 </code></pre>
-<h2>插入兄弟节点</h2>
-<p>插入兄弟节点和插入子节点方式完全一致：</p>
+<h2>插入多个子节点</h2>
+<p>如果你要同时插入多个子节点，那么可以执行<code>INSERT_MULTI_CHILD_NODE</code>命令：</p>
+<pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_MULTI_CHILD_NODE&#x27;</span>, [], childList)
+</code></pre>
+<p><code>childList</code>是要插入的子节点数据的数组，必传。</p>
+<pre class="hljs"><code>[
+    {
+        <span class="hljs-attr">data</span>: {
+              <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;自定义节点1&#x27;</span>
+        }
+    }
+]
+</code></pre>
+<h2>插入同级节点</h2>
+<p>插入同级节点和插入子节点方式完全一致：</p>
 <pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_NODE&#x27;</span>)
+</code></pre>
+<h2>插入多个同级节点</h2>
+<p>插入多个同级节点可以执行<code>INSERT_MULTI_NODE</code>命令：</p>
+<pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_NODE&#x27;</span>. [], nodeList)
+</code></pre>
+<p><code>nodeList</code>是要插入的同级节点数据的数组，必传。</p>
+<h2>插入父节点</h2>
+<p>要插入父节点可以调用<code>INSERT_PARENT_NODE</code>命令：</p>
+<pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_PARENT_NODE&#x27;</span>)
 </code></pre>
 <h2>删除节点</h2>
 <p>删除节点也是执行命令：</p>
 <pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;REMOVE_NODE&#x27;</span>)
 </code></pre>
 <p>会删除当前激活的所有节点。</p>
+<h2>仅删除当前节点</h2>
+<p><code>REMOVE_CURRENT_NODE</code>命令可以仅删除激活的节点，子节点不会被删除。</p>
+<pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;REMOVE_CURRENT_NODE&#x27;</span>)
+</code></pre>
 <h2>前进回退</h2>
 <p>首先需要监听<code>back_forward</code>事件，事件回调中可以获取当前的历史记录总数，以及当前所在的历史记录索引，那么就可以判断当前是否处于历史记录的最开始，还是最后，然后对前进回退按钮进行禁用。</p>
 <pre class="hljs"><code><span class="hljs-keyword">const</span> isStart = ref(<span class="hljs-literal">true</span>)

@@ -37,6 +37,11 @@ MindMap.usePlugin(Watermark)
 <p>v0.3.2+</p>
 </blockquote>
 <p>获取是否存在水印。</p>
+<h3>clear()</h3>
+<blockquote>
+<p>v0.9.2+</p>
+</blockquote>
+<p>清除水印。</p>
 
   </div>
 </template>

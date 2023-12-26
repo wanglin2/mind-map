@@ -5,7 +5,7 @@ import {
   selectAllInput,
   htmlEscape
 } from '../../utils'
-import { ERROR_TYPES } from '../../constants/constant'
+import { ERROR_TYPES, CONSTANTS } from '../../constants/constant'
 
 //  节点文字编辑类
 export default class TextEdit {
@@ -21,6 +21,7 @@ export default class TextEdit {
     this.showTextEdit = false
     // 如果编辑过程中缩放画布了，那么缓存当前编辑的内容
     this.cacheEditingText = ''
+    this.hasBodyMousedown = false
     this.bindEvent()
   }
 
@@ -30,13 +31,20 @@ export default class TextEdit {
     this.onScale = this.onScale.bind(this)
     this.onKeydown = this.onKeydown.bind(this)
     // 节点双击事件
-    this.mindMap.on('node_dblclick', this.show)
+    this.mindMap.on('node_dblclick', (node, e, isInserting) => {
+      this.show({ node, e, isInserting })
+    })
     // 点击事件
     this.mindMap.on('draw_click', () => {
       // 隐藏文本编辑框
       this.hideEditTextBox()
     })
+    this.mindMap.on('body_mousedown', () => {
+      this.hasBodyMousedown = true
+    })
     this.mindMap.on('body_click', () => {
+      if (!this.hasBodyMousedown) return
+      this.hasBodyMousedown = false
       // 隐藏文本编辑框
       if (this.mindMap.opt.isEndNodeTextEditOnClickOuter) {
         this.hideEditTextBox()
@@ -54,12 +62,22 @@ export default class TextEdit {
     this.mindMap.on('before_node_active', () => {
       this.hideEditTextBox()
     })
+    // 鼠标滚动事件
+    this.mindMap.on('mousewheel', () => {
+      if (
+        this.mindMap.opt.mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.MOVE
+      ) {
+        this.hideEditTextBox()
+      }
+    })
     // 注册编辑快捷键
     this.mindMap.keyCommand.addShortcut('F2', () => {
       if (this.renderer.activeNodeList.length <= 0) {
         return
       }
-      this.show(this.renderer.activeNodeList[0])
+      this.show({
+        node: this.renderer.activeNodeList[0]
+      })
     })
     this.mindMap.on('scale', this.onScale)
     // // 监听按键事件，判断是否自动进入文本编辑模式
@@ -83,7 +101,12 @@ export default class TextEdit {
     const node = activeNodeList[0]
     // 当正在输入中文或英文或数字时，如果没有按下组合键，那么自动进入文本编辑模式
     if (node && this.checkIsAutoEnterTextEditKey(e)) {
-      this.show(node, e, false, true)
+      this.show({
+        node,
+        e,
+        isInserting: false,
+        isFromKeyDown: true
+      })
     }
   }
 
@@ -109,15 +132,28 @@ export default class TextEdit {
     })
   }
 
+  // 获取当前文本编辑框是否处于显示状态，也就是是否处在文本编辑状态
+  isShowTextEdit() {
+    if (this.mindMap.richText) {
+      return this.mindMap.richText.showTextEdit
+    }
+    return this.showTextEdit
+  }
+
   //  显示文本编辑框
   // isInserting：是否是刚创建的节点
   // isFromKeyDown：是否是在按键事件进入的编辑
-  async show(node, e, isInserting = false, isFromKeyDown = false) {
+  async show({
+    node,
+    isInserting = false,
+    isFromKeyDown = false,
+    isFromScale = false
+  }) {
     // 使用了自定义节点内容那么不响应编辑事件
     if (node.isUseCustomNodeContent()) {
       return
     }
-    let { beforeTextEdit } = this.mindMap.opt
+    const { beforeTextEdit } = this.mindMap.opt
     if (typeof beforeTextEdit === 'function') {
       let isShow = false
       try {
@@ -129,14 +165,21 @@ export default class TextEdit {
       if (!isShow) return
     }
     this.currentNode = node
-    let { offsetLeft, offsetTop } = checkNodeOuter(this.mindMap, node)
+    const { offsetLeft, offsetTop } = checkNodeOuter(this.mindMap, node)
     this.mindMap.view.translateXY(offsetLeft, offsetTop)
-    let rect = node._textData.node.node.getBoundingClientRect()
+    const rect = node._textData.node.node.getBoundingClientRect()
+    const params = {
+      node,
+      rect,
+      isInserting,
+      isFromKeyDown,
+      isFromScale
+    }
     if (this.mindMap.richText) {
-      this.mindMap.richText.showEditText(node, rect, isInserting, isFromKeyDown)
+      this.mindMap.richText.showEditText(params)
       return
     }
-    this.showEditTextBox(node, rect, isInserting, isFromKeyDown)
+    this.showEditTextBox(params)
   }
 
   // 处理画布缩放
@@ -150,15 +193,20 @@ export default class TextEdit {
       this.cacheEditingText = this.getEditText()
       this.showTextEdit = false
     }
-    this.show(this.currentNode)
+    this.show({
+      node: this.currentNode,
+      isFromScale: true
+    })
   }
 
   //  显示文本编辑框
-  showEditTextBox(node, rect, isInserting, isFromKeyDown) {
+  showEditTextBox({ node, rect, isInserting, isFromKeyDown, isFromScale }) {
     if (this.showTextEdit) return
     const { nodeTextEditZIndex, textAutoWrapWidth, selectTextOnEnterEditText } =
       this.mindMap.opt
-    this.mindMap.emit('before_show_text_edit')
+    if (!isFromScale) {
+      this.mindMap.emit('before_show_text_edit')
+    }
     this.registerTmpShortcut()
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div')

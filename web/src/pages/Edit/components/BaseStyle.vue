@@ -199,6 +199,19 @@
           </el-select>
         </div>
       </div>
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="style.showLineMarker"
+            @change="
+              value => {
+                update('showLineMarker', value)
+              }
+            "
+            >{{ $t('baseStyle.showArrow') }}</el-checkbox
+          >
+        </div>
+      </div>
       <!-- 概要连线 -->
       <div class="title noTop">{{ $t('baseStyle.lineOfOutline') }}</div>
       <div class="row">
@@ -566,6 +579,16 @@
         </div>
       </div>
       <template v-if="watermarkConfig.show">
+        <!-- 是否仅在导出时显示 -->
+        <div class="row">
+          <div class="rowItem">
+            <el-checkbox
+              v-model="watermarkConfig.onlyExport"
+              @change="updateWatermarkConfig"
+              >{{ $t('baseStyle.onlyExport') }}</el-checkbox
+            >
+          </div>
+        </div>
         <!-- 水印文字 -->
         <div class="row">
           <div class="rowItem">
@@ -753,6 +776,36 @@
           </el-select>
         </div>
       </div>
+      <!-- 配置创建新节点时的行为 -->
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.createNewNodeBehavior') }}</span>
+          <el-select
+            size="mini"
+            style="width: 120px"
+            v-model="config.createNewNodeBehavior"
+            placeholder=""
+            @change="
+              value => {
+                updateOtherConfig('createNewNodeBehavior', value)
+              }
+            "
+          >
+            <el-option
+              :label="$t('baseStyle.default')"
+              value="default"
+            ></el-option>
+            <el-option
+              :label="$t('baseStyle.notActive')"
+              value="notActive"
+            ></el-option>
+            <el-option
+              :label="$t('baseStyle.activeOnly')"
+              value="activeOnly"
+            ></el-option>
+          </el-select>
+        </div>
+      </div>
       <!-- 是否显示滚动条 -->
       <div class="row">
         <div class="rowItem">
@@ -817,6 +870,7 @@ export default {
         lineColor: '',
         lineWidth: '',
         lineStyle: '',
+        showLineMarker: '',
         rootLineKeepSameInCurve: '',
         generalizationLineWidth: '',
         generalizationLineColor: '',
@@ -843,10 +897,12 @@ export default {
       config: {
         enableFreeDrag: false,
         mousewheelAction: 'zoom',
-        mousewheelZoomActionReverse: false
+        mousewheelZoomActionReverse: false,
+        createNewNodeBehavior: 'default'
       },
       watermarkConfig: {
         show: false,
+        onlyExport: false,
         text: '',
         lineSpacing: 100,
         textSpacing: 100,
@@ -933,6 +989,7 @@ export default {
         'backgroundColor',
         'lineWidth',
         'lineStyle',
+        'showLineMarker',
         'rootLineKeepSameInCurve',
         'lineColor',
         'generalizationLineWidth',
@@ -968,7 +1025,8 @@ export default {
       ;[
         'enableFreeDrag',
         'mousewheelAction',
-        'mousewheelZoomActionReverse'
+        'mousewheelZoomActionReverse',
+        'createNewNodeBehavior'
       ].forEach(key => {
         this.config[key] = this.mindMap.getConfig(key)
       })
@@ -979,9 +1037,7 @@ export default {
       this.enableNodeRichText = this.localConfig.openNodeRichText
       this.mousewheelAction = this.localConfig.mousewheelAction
       this.mousewheelZoomActionReverse = this.localConfig.mousewheelZoomActionReverse
-      ;[
-        'isShowScrollbar'
-      ].forEach(key => {
+      ;['isShowScrollbar'].forEach(key => {
         this.localConfigs[key] = this.localConfig[key]
       })
     },
@@ -989,9 +1045,11 @@ export default {
     // 初始化水印配置
     initWatermark() {
       let config = this.mindMap.getConfig('watermarkConfig')
-      ;['text', 'lineSpacing', 'textSpacing', 'angle'].forEach(key => {
-        this.watermarkConfig[key] = config[key]
-      })
+      ;['text', 'lineSpacing', 'textSpacing', 'angle', 'onlyExport'].forEach(
+        key => {
+          this.watermarkConfig[key] = config[key]
+        }
+      )
       this.watermarkConfig.show = !!config.text
       this.watermarkConfig.textStyle = { ...config.textStyle }
     },

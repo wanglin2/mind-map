@@ -171,6 +171,10 @@ class Scrollbar {
     const t = this.mindMap.draw.transform()
     const drawRect = this.mindMap.draw.rbox()
     const rootRect = this.mindMap.renderer.root.group.rbox()
+    const rootCenterOffset = this.mindMap.renderer.layout.getRootCenterOffset(
+      rootRect.width,
+      rootRect.height
+    )
     if (type === CONSTANTS.SCROLL_BAR_DIR.VERTICAL) {
       // 滚动条新位置
       let oy = offset
@@ -178,7 +182,7 @@ class Scrollbar {
       if (oy <= 0) {
         oy = 0
       }
-      let max =
+      const max =
         ((100 - scrollbarData.vertical.height) / 100) *
         this.scrollbarWrapSize.height
       if (oy >= max) {
@@ -193,7 +197,12 @@ class Scrollbar {
       // 内边距
       const paddingY = this.mindMap.height / 2
       // 图形新位置
-      let chartTop = oyPx + yOffset - paddingY * t.scaleY + paddingY
+      const chartTop =
+        oyPx +
+        yOffset -
+        paddingY * t.scaleY +
+        paddingY -
+        rootCenterOffset.y * t.scaleY
       this.mindMap.view.translateYTo(chartTop)
       this.emitEvent({
         horizontal: scrollbarData.horizontal,
@@ -209,7 +218,7 @@ class Scrollbar {
       if (ox <= 0) {
         ox = 0
       }
-      let max =
+      const max =
         ((100 - scrollbarData.horizontal.width) / 100) *
         this.scrollbarWrapSize.width
       if (ox >= max) {
@@ -217,14 +226,19 @@ class Scrollbar {
       }
       // 转换成百分比
       const oxPercentage = (ox / this.scrollbarWrapSize.width) * 100
-      // 转换成相对于图形高度的距离
+      // 转换成相对于图形宽度的距离
       const oxPx = (-oxPercentage / 100) * this.chartWidth
       // 节点中心点到图形最左边的距离
       const xOffset = rootRect.x - drawRect.x
       // 内边距
       const paddingX = this.mindMap.width / 2
       // 图形新位置
-      let chartLeft = oxPx + xOffset - paddingX * t.scaleX + paddingX
+      const chartLeft =
+        oxPx +
+        xOffset -
+        paddingX * t.scaleX +
+        paddingX -
+        rootCenterOffset.x * t.scaleX
       this.mindMap.view.translateXTo(chartLeft)
       this.emitEvent({
         vertical: scrollbarData.vertical,
@@ -245,6 +259,11 @@ class Scrollbar {
       offset = e.clientX - e.currentTarget.getBoundingClientRect().left
     }
     this.updateMindMapView(type, offset)
+  }
+
+  // 插件被移除前做的事情
+  beforePluginRemove() {
+    this.unBindEvent()
   }
 
   // 插件被卸载前做的事情

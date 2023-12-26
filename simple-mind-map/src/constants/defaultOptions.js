@@ -40,6 +40,7 @@ export const defaultOpt = {
   enableFreeDrag: false,
   // 水印配置
   watermarkConfig: {
+    onlyExport: false,// 是否仅在导出时添加水印
     text: '',
     lineSpacing: 100,
     textSpacing: 100,
@@ -56,11 +57,11 @@ export const defaultOpt = {
   // 可以传一个函数，回调参数为事件对象
   customHandleMousewheel: null,
   // 鼠标滚动的行为，如果customHandleMousewheel传了自定义函数，这个属性不生效
-  mousewheelAction: CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM, // zoom（放大缩小）、move（上下移动）
+  mousewheelAction: CONSTANTS.MOUSE_WHEEL_ACTION.MOVE, // zoom（放大缩小）、move（上下移动）
   // 当mousewheelAction设为move时，可以通过该属性控制鼠标滚动一下视图移动的步长，单位px
   mousewheelMoveStep: 100,
-  // 当mousewheelAction设为zoom时，默认向前滚动是缩小，向后滚动是放大，如果该属性设为true，那么会反过来
-  mousewheelZoomActionReverse: false,
+  // 当mousewheelAction设为zoom时，或者按住Ctrl键时，默认向前滚动是缩小，向后滚动是放大，如果该属性设为true，那么会反过来
+  mousewheelZoomActionReverse: true,
   // 默认插入的二级节点的文字
   defaultInsertSecondLevelNodeText: '二级节点',
   // 默认插入的二级以下节点的文字
@@ -97,7 +98,7 @@ export const defaultOpt = {
   // 是否在点击了画布外的区域时结束节点文本的编辑状态
   isEndNodeTextEditOnClickOuter: true,
   // 最大历史记录数
-  maxHistoryCount: 1000,
+  maxHistoryCount: 500,
   // 是否一直显示节点的展开收起按钮，默认为鼠标移上去和激活时才显示
   alwaysShowExpandBtn: false,
   // 扩展节点可插入的图标
@@ -210,8 +211,8 @@ export const defaultOpt = {
   tagsColorMap: {},
   // 节点协作样式配置
   cooperateStyle: {
-    avatarSize: 22,// 头像大小
-    fontSize: 12,// 如果是文字头像，那么文字的大小
+    avatarSize: 22, // 头像大小
+    fontSize: 12 // 如果是文字头像，那么文字的大小
   },
   // 关联线是否始终显示在节点上层
   // false：即创建关联线和激活关联线时处于最顶层，其他情况下处于节点下方
@@ -229,5 +230,31 @@ export const defaultOpt = {
   highlightNodeBoxStyle: {
     stroke: 'rgb(94, 200, 248)',
     fill: 'transparent'
-  }
+  },
+  // 创建新节点时的行为
+  /*
+    DEFAULT  ：默认会激活新创建的节点，并且进入编辑模式。如果同时创建了多个新节点，那么只会激活而不会进入编辑模式
+    NOT_ACTIVE  : 不激活新创建的节点
+    ACTIVE_ONLY  : 只激活新创建的节点，不进入编辑模式
+  */
+  createNewNodeBehavior: CONSTANTS.CREATE_NEW_NODE_BEHAVIOR.DEFAULT,
+  // 当节点图片加载失败时显示的默认图片
+  defaultNodeImage: '',
+  // 是否将思维导图限制在画布内
+  // 比如向右拖动时，思维导图图形的最左侧到达画布中心时将无法继续向右拖动，其他同理
+  isLimitMindMapInCanvas: false,
+  // 当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas不再起作用
+  isLimitMindMapInCanvasWhenHasScrollbar: true,
+  // 在节点上粘贴剪贴板中的图片的处理方法，默认是转换为data:url数据插入到节点中，你可以通过该方法来将图片数据上传到服务器，实现保存图片的url
+  // 可以传递一个异步方法，接收Blob类型的图片数据，需要返回如下结构：
+  /*
+    {
+      url,    // 图片url
+      size: {
+        width,  // 图片的宽度
+        height  //图片的高度
+      }
+    }
+  */
+  handleNodePasteImg: null
 }

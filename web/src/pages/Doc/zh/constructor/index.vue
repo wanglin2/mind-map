@@ -144,7 +144,7 @@
 <tr>
 <td>mousewheelAction（v0.4.3+）</td>
 <td>String</td>
-<td>zoom</td>
+<td>zoom（v0.9.1+默认改为move）</td>
 <td>鼠标滚轮的行为，<code>zoom</code>（放大缩小）、<code>move</code>（上下移动）。如果<code>customHandleMousewheel</code>传了自定义函数，这个属性不生效</td>
 </tr>
 <tr>
@@ -156,8 +156,8 @@
 <tr>
 <td>mousewheelZoomActionReverse（v0.6.5+）</td>
 <td>Boolean</td>
-<td>false</td>
-<td>当mousewheelAction设为zoom时，默认向前滚动是缩小，向后滚动是放大，如果该属性设为true，那么会反过来</td>
+<td>false（v0.9.1+默认改为true）</td>
+<td>当mousewheelAction设为zoom时，或者按住Ctrl键时，默认向前滚动是缩小，向后滚动是放大，如果该属性设为true，那么会反过来</td>
 </tr>
 <tr>
 <td>defaultInsertSecondLevelNodeText（v0.4.7+）</td>
@@ -252,7 +252,7 @@
 <tr>
 <td>maxHistoryCount（v0.5.6+）</td>
 <td>Number</td>
-<td>1000</td>
+<td>1000（v0.9.2+改为500）</td>
 <td>最大历史记录数</td>
 </tr>
 <tr>
@@ -501,6 +501,36 @@
 <td>{ stroke: 'rgb(94, 200, 248)', fill: 'transparent' }</td>
 <td>鼠标移入概要高亮所属节点时的高亮框样式</td>
 </tr>
+<tr>
+<td>createNewNodeBehavior（v0.9.1+）</td>
+<td>String</td>
+<td>default</td>
+<td>创建新节点时的行为。default（默认会激活新创建的节点，并且进入编辑模式。如果同时创建了多个新节点，那么只会激活而不会进入编辑模式）、notActive（不激活新创建的节点）、activeOnly（只激活新创建的节点，不进入编辑模式）</td>
+</tr>
+<tr>
+<td>defaultNodeImage（v0.9.1-fix.2+）</td>
+<td>String</td>
+<td></td>
+<td>图片地址，当节点图片加载失败时显示的默认图片</td>
+</tr>
+<tr>
+<td>handleNodePasteImg（v0.9.2+）</td>
+<td>null 或 Function</td>
+<td>null</td>
+<td>在节点上粘贴剪贴板中的图片的处理方法，默认是转换为data:url数据插入到节点中，你可以通过该方法来将图片数据上传到服务器，实现保存图片的url。可以传递一个异步方法，接收Blob类型的图片数据，需要返回指定结构：{ url, size: {width, height} }</td>
+</tr>
+<tr>
+<td>isLimitMindMapInCanvas（v0.9.2+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>是否将思维导图限制在画布内。比如向右拖动时，思维导图图形的最左侧到达画布中心时将无法继续向右拖动，其他同理</td>
+</tr>
+<tr>
+<td>isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas配置不再起作用</td>
+</tr>
 </tbody>
 </table>
 <h3>数据结构</h3>
@@ -579,6 +609,12 @@
 <td>Object</td>
 <td>{color: '#999', opacity: 0.5, fontSize: 14}</td>
 <td>水印文字样式</td>
+</tr>
+<tr>
+<td>onlyExport（v0.9.2+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>是否仅在导出时添加水印</td>
 </tr>
 </tbody>
 </table>
@@ -814,7 +850,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>mousewheel</td>
 <td>鼠标滚动事件</td>
-<td>e（事件对象）、dir（向上up还是向下down滚动）、this（Event事件类实例）、isTouchPad（v0.6.1+，是否是触控板触发的事件）</td>
+<td>e（事件对象）、dir（向上up还是向下down滚动。v0.9.2+已改为dirs，数组类型，即支持同时保存多个方向）、this（Event事件类实例）、isTouchPad（v0.6.1+，是否是触控板触发的事件）</td>
 </tr>
 <tr>
 <td>contextmenu</td>
@@ -971,6 +1007,16 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>思维导图销毁前触发，即调用了destroy方法触发</td>
 <td></td>
 </tr>
+<tr>
+<td>body_mousedown（v0.9.2+）</td>
+<td>document.body的鼠标按下事件</td>
+<td>e（事件对象）</td>
+</tr>
+<tr>
+<td>body_click</td>
+<td>document.body的点击事件</td>
+<td>e（事件对象）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
@@ -1120,7 +1166,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </tr>
 <tr>
 <td>SET_NODE_DATA</td>
-<td>更新节点数据，即更新节点数据对象里<code>data</code>对象的数据</td>
+<td>更新节点数据，即更新节点数据对象里<code>data</code>对象的数据，注意这个命令不会触发视图的更新</td>
 <td>node（要设置的节点）、data（对象，要更新的数据，如<code>{expand: true}</code>）</td>
 </tr>
 <tr>
