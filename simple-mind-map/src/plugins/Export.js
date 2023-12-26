@@ -92,7 +92,7 @@ class Export {
   }
 
   //   svg转png
-  svgToPng(svgSrc, transparent, ignoreDpr = false) {
+  svgToPng(svgSrc, transparent) {
     return new Promise((resolve, reject) => {
       const img = new Image()
       // 跨域图片需要添加这个属性，否则画布被污染了无法导出图片
@@ -100,12 +100,10 @@ class Export {
       img.onload = async () => {
         try {
           const canvas = document.createElement('canvas')
-          const dpr = ignoreDpr
-            ? 1
-            : Math.max(
-                window.devicePixelRatio,
-                this.mindMap.opt.minExportImgCanvasScale
-              )
+          const dpr = Math.max(
+            window.devicePixelRatio,
+            this.mindMap.opt.minExportImgCanvasScale
+          )
           let imgWidth = img.width
           let imgHeight = img.height
           canvas.width = imgWidth * dpr
@@ -215,9 +213,7 @@ class Export {
     if (!this.mindMap.doExportPDF) {
       throw new Error('请注册ExportPDF插件')
     }
-    const { str } = await this.getSvgData()
-    const svgUrl = await this.fixSvgStrAndToBlob(str)
-    const img = await this.svgToPng(svgUrl, transparent, true)
+    const img = await this.png(name, transparent)
     await this.mindMap.doExportPDF.pdf(name, img)
   }
 
