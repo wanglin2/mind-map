@@ -1,10 +1,14 @@
-import JsPDF from '../utils/jspdf'
+// import JsPDF from '../utils/jspdf'
 
 //  导出PDF插件，需要通过Export插件使用
+let jsPDF = null
 class ExportPDF {
   //  构造函数
   constructor(opt) {
-    this.mindMap = opt.mindMap
+    import('jspdf').then((res) => {
+      jsPDF = res.jsPDF
+      this.mindMap = opt.mindMap
+    })
   }
 
   //  导出为pdf
@@ -14,7 +18,7 @@ class ExportPDF {
       image.onload = () => {
         const imageWidth = image.width
         const imageHeight = image.height
-        const pdf = new JsPDF({
+        const pdf = new jsPDF({
           unit: 'px',
           format: [imageWidth, imageHeight],
           compress: true,
