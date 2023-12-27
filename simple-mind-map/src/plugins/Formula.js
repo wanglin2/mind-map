@@ -1,4 +1,4 @@
-import katex from 'katex'
+// import katex from 'katex'
 import Quill from 'quill'
 
 // 数学公式支持插件
@@ -8,7 +8,9 @@ class Formula {
   constructor(opt) {
     this.opt = opt
     this.mindMap = opt.mindMap
-    window.katex = katex
+    import('katex').then((res) => {
+      window.katex = katex
+    })
     this.extendQuill()
   }
 
