@@ -16,7 +16,7 @@ mindMap.export(type, isDownload, fileName, ...)
 
 `type`：文件类型
 
-`isDownload`：传`true`会触发下载，`false`则不会，函数会返回导出文件的数据，`data:url`格式，你可以自行下载，`pdf`不支持该参数，默认会直接下载。
+`isDownload`：传`true`会触发下载，`false`则不会，函数会返回导出文件的数据，`data:url`格式，你可以自行下载，（v0.9.2之前的版本，`pdf`不支持该参数，默认会直接下载）。
 
 `fileName`：下载的文件名称
 
