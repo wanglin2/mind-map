@@ -240,7 +240,7 @@ function createHyperlinkNode() {
     return
   }
   let iconSize = this.mindMap.themeConfig.iconSize
-  let node = new SVG()
+  let node = new SVG().size(iconSize, iconSize)
   // 超链接节点
   let a = new A().to(hyperlink).target('_blank')
   a.node.addEventListener('click', e => {
@@ -298,7 +298,7 @@ function createNoteNode() {
     return null
   }
   let iconSize = this.mindMap.themeConfig.iconSize
-  let node = new SVG().attr('cursor', 'pointer')
+  let node = new SVG().attr('cursor', 'pointer').size(iconSize, iconSize)
   // 透明的层，用来作为鼠标区域
   node.add(new Rect().size(iconSize, iconSize).fill({ color: 'transparent' }))
   // 备注图标
