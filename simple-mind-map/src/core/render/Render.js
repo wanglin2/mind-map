@@ -1419,6 +1419,7 @@ class Render {
 
   //  设置节点文本
   setNodeText(node, text, richText, resetRichText) {
+    richText = richText === undefined ? node.getData('richText') : richText
     this.setNodeDataRender(node, {
       text,
       richText,
