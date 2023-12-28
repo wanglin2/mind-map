@@ -360,7 +360,8 @@ class Node {
     // 文字
     if (this._textData) {
       this._textData.node.attr('data-offsetx', textContentOffsetX)
-      this._textData.node.x(textContentOffsetX).y(0)
+      // 修复safari浏览器节点存在图标时文字位置不正确的问题
+      ;(this._textData.nodeContent || this._textData.node).x(textContentOffsetX).y(0)
       textContentNested.add(this._textData.node)
       textContentOffsetX += this._textData.width + textContentItemMargin
     }

@@ -170,6 +170,7 @@ function createRichTextNode() {
   g.add(foreignObject)
   return {
     node: g,
+    nodeContent: foreignObject,
     width,
     height
   }
