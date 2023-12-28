@@ -22,7 +22,7 @@ class Export {
   async export(type, isDownload = true, name = '思维导图', ...args) {
     if (this[type]) {
       const result = await this[type](name, ...args)
-      if (isDownload && type !== 'pdf') {
+      if (isDownload) {
         downloadFile(result, name + '.' + type)
       }
       return result
@@ -229,7 +229,11 @@ class Export {
       throw new Error('请注册ExportPDF插件')
     }
     const img = await this.png(name, transparent)
-    await this.mindMap.doExportPDF.pdf(name, img)
+    // 使用jspdf库
+    // await this.mindMap.doExportPDF.pdf(name, img)
+    // 使用pdf-lib库
+    const res = await this.mindMap.doExportPDF.pdf(img)
+    return res
   }
 
   // 导出为xmind
