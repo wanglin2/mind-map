@@ -3,7 +3,10 @@ import {
   checkNodeOuter,
   focusInput,
   selectAllInput,
-  htmlEscape
+  htmlEscape,
+  handleInputPasteText,
+  checkSmmFormatData,
+  getTextFromHtml
 } from '../../utils'
 import { ERROR_TYPES, CONSTANTS } from '../../constants/constant'
 
@@ -224,6 +227,16 @@ export default class TextEdit {
       this.textEditNode.addEventListener('keydown', e => {
         if (this.checkIsAutoEnterTextEditKey(e)) {
           e.stopPropagation()
+        }
+      })
+      this.textEditNode.addEventListener('paste', e => {
+        const text = e.clipboardData.getData('text')
+        const { isSmm, data } = checkSmmFormatData(text)
+        if (isSmm && data[0] && data[0].data) {
+          // 只取第一个节点的纯文本
+          handleInputPasteText(e, getTextFromHtml(data[0].data.text))
+        } else {
+          handleInputPasteText(e)
         }
       })
       const targetNode =

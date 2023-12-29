@@ -1058,3 +1058,19 @@ export const checkSmmFormatData = data => {
     data: isSmm ? smmData : String(data)
   }
 }
+
+// 处理输入框的粘贴事件，会去除文本的html格式、换行
+export const handleInputPasteText = (e, text) => {
+  e.preventDefault()
+  const selection = window.getSelection()
+  if (!selection.rangeCount) return
+  selection.deleteFromDocument()
+  text = text || e.clipboardData.getData('text')
+  // 去除格式
+  text = getTextFromHtml(text)
+  // 去除换行
+  text = text.replaceAll(/\n/g, '')
+  const node = document.createTextNode(text)
+  selection.getRangeAt(0).insertNode(node)
+  selection.collapseToEnd()
+}
