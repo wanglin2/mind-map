@@ -52,10 +52,10 @@ import { mapState, mapMutations } from 'vuex'
 import {
   nodeRichTextToTextWithWrap,
   textToNodeRichTextWithWrap,
-  getTextFromHtml,
   createUid,
   simpleDeepClone,
-  htmlEscape
+  htmlEscape,
+  handleInputPasteText
 } from 'simple-mind-map/src/utils'
 import { storeData } from '@/api'
 
@@ -211,18 +211,7 @@ export default {
 
     // 拦截粘贴事件
     onPaste(e) {
-      e.preventDefault()
-      const selection = window.getSelection()
-      if (!selection.rangeCount) return
-      selection.deleteFromDocument()
-      let text = (e.clipboardData || window.clipboardData).getData('text')
-      // 去除格式
-      text = getTextFromHtml(text)
-      // 去除换行
-      text = text.replaceAll(/\n/g, '')
-      const node = document.createTextNode(text)
-      selection.getRangeAt(0).insertNode(node)
-      selection.collapseToEnd()
+      handleInputPasteText(e)
     },
 
     // 生成唯一的key
