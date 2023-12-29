@@ -78,10 +78,10 @@ export default {
     init() {
       this.list = formulaList.map(item => {
         return {
-          overview: window.katex.renderToString(item, {
-            throwOnError: false,
-            output: 'mathml'
-          }),
+          overview: window.katex.renderToString(
+            item,
+            this.mindMap.formula.getKatexConfig()
+          ),
           text: item
         }
       })
