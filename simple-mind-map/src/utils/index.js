@@ -1018,3 +1018,12 @@ export const checkNodeListIsEqual = (list1, list2) => {
   }
   return true
 }
+
+// 获取浏览器的chrome内核版本
+export const getChromeVersion = () => {
+  const match = navigator.userAgent.match(/\s+Chrome\/(.*)\s+/)
+  if (match && match[1]) {
+    return Number.parseFloat(match[1])
+  }
+  return ''
+}
