@@ -6,7 +6,8 @@ import {
   getTextFromHtml,
   isWhite,
   getVisibleColorFromTheme,
-  isUndef
+  isUndef,
+  checkSmmFormatData
 } from '../utils'
 import { CONSTANTS } from '../constants/constant'
 
@@ -397,7 +398,7 @@ class RichText {
     // 拦截粘贴，只允许粘贴纯文本
     this.quill.clipboard.addMatcher(Node.TEXT_NODE, node => {
       let style = this.getPasteTextStyle()
-      return new Delta().insert(node.data, style)
+      return new Delta().insert(this.formatPasteText(node.data), style)
     })
     this.quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
       let ops = []
@@ -407,7 +408,7 @@ class RichText {
         if (op.insert && typeof op.insert === 'string' && op.insert !== '\n') {
           ops.push({
             attributes: { ...style },
-            insert: op.insert
+            insert: this.formatPasteText(op.insert)
           })
         }
       })
@@ -426,6 +427,17 @@ class RichText {
       )
     }
     return {}
+  }
+
+  // 处理粘贴的文本内容
+  formatPasteText(text) {
+    const { isSmm, data } = checkSmmFormatData(text)
+    if (isSmm && data[0] && data[0].data) {
+      // 只取第一个节点的纯文本
+      return getTextFromHtml(data[0].data.text)
+    } else {
+      return text
+    }
   }
 
   // 正则输入中文

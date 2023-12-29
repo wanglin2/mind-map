@@ -1027,3 +1027,34 @@ export const getChromeVersion = () => {
   }
   return ''
 }
+
+// 创建smm粘贴的粘贴数据
+export const createSmmFormatData = data => {
+  return {
+    simpleMindMap: true,
+    data
+  }
+}
+
+// 检查是否是smm粘贴格式的数据
+export const checkSmmFormatData = data => {
+  let smmData = null
+  // 如果是字符串，则尝试解析为对象
+  if (typeof data === 'string') {
+    try {
+      const parsedData = JSON.parse(data)
+      // 判断是否是对象，且存在属性标志
+      if (typeof parsedData === 'object' && parsedData.simpleMindMap) {
+        smmData = parsedData.data
+      }
+    } catch (error) {}
+  } else if (typeof data === 'object' && data.simpleMindMap) {
+    // 否则如果是对象，则检查属性标志
+    smmData = data.data
+  }
+  const isSmm = !!smmData
+  return {
+    isSmm,
+    data: isSmm ? smmData : String(data)
+  }
+}
