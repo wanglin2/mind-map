@@ -138,10 +138,10 @@ function corsEnabled(url) {
 
 function click(node) {
   try {
-    node.dispatchEvent(new MouseEvent("click"));
+    node.dispatchEvent(new MouseEvent("click",{view:document.defaultView}));
   } catch (e) {
     var evt = document.createEvent("MouseEvents");
-    evt.initMouseEvent("click", true, true, window, 0, 0, 0, 80, 20, false, false, false, false, 0, null);
+    evt.initMouseEvent("click", true, true, document.defaultView, 0, 0, 0, 80, 20, false, false, false, false, 0, null);
     node.dispatchEvent(evt);
   }
 }
