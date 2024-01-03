@@ -7,7 +7,7 @@
 [![GitHub forks](https://img.shields.io/github/forks/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/network/members)
 ![license](https://img.shields.io/npm/l/express.svg)
 
-> 一个简单&强大的Web思维导图
+> 一个简单&强大的 Web 思维导图
 
 本项目包含两部分：
 
@@ -27,7 +27,7 @@ Github：[releases](https://github.com/wanglin2/mind-map/releases)。
 
 > 客户端版本会落后于在线版本，尝试最新功能请优先使用在线版。
 
-> 如果访问github比较慢，可以使用：http://lxqnsys.com/simple-mind-map/#/index
+> 如果访问 github 比较慢，可以使用：http://lxqnsys.com/simple-mind-map/#/index
 
 # 特性
 
@@ -37,7 +37,7 @@ Github：[releases](https://github.com/wanglin2/mind-map/releases)。
 - [x] 节点内容支持文本（普通文本、富文本）、图片、图标、超链接、备注、标签、概要、数学公式
 - [x] 节点支持拖拽（拖拽移动、自由调整）、多种节点形状，支持使用 DDM 完全自定义节点内容
 - [x] 支持画布拖动、缩放
-- [x] 支持鼠标按键拖动选择和Ctrl+左键两种多选节点方式
+- [x] 支持鼠标按键拖动选择和 Ctrl+左键两种多选节点方式
 - [x] 支持导出为`json`、`png`、`svg`、`pdf`、`markdown`、`xmind`，支持从`json`、`xmind`、`markdown`导入
 - [x] 支持快捷键、前进后退、关联线、搜索替换、小地图、水印、滚动条
 - [x] 提供丰富的配置，满足各种场景各种使用习惯
@@ -51,7 +51,7 @@ npm i simple-mind-map
 
 # 使用
 
-提供一个宽高不为0的容器元素：
+提供一个宽高不为 0 的容器元素：
 
 ```html
 <div id="mindMapContainer"></div>
@@ -72,13 +72,13 @@ npm i simple-mind-map
 import MindMap from "simple-mind-map";
 
 const mindMap = new MindMap({
-  el: document.getElementById('mindMapContainer'),
+  el: document.getElementById("mindMapContainer"),
   data: {
-    "data": {
-        "text": "根节点"
+    data: {
+      text: "根节点",
     },
-    "children": []
-  }
+    children: [],
+  },
 });
 ```
 
@@ -88,7 +88,7 @@ const mindMap = new MindMap({
 
 # License
 
-请尽情享受开源：[MIT](./LICENSE)
+[MIT](./LICENSE)
 
 # 微信交流群
 
@@ -243,5 +243,9 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/继龙.jpg" style="width: 50px;height: 50px;" />
         <span>继龙</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/欣.jpg" style="width: 50px;height: 50px;" />
+        <span>欣</span>
     </span>
 </p>
