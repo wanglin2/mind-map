@@ -1,6 +1,5 @@
 import katex from 'katex'
 import Quill from 'quill'
-import 'katex/dist/katex.min.css'
 import { getChromeVersion } from '../utils/index'
 
 // 数学公式支持插件

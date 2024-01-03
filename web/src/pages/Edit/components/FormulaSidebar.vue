@@ -34,6 +34,7 @@
 import Sidebar from './Sidebar'
 import { mapState, mapMutations } from 'vuex'
 import { formulaList } from '@/config/constant'
+import 'simple-mind-map/node_modules/katex/dist/katex.min.css'
 
 export default {
   name: 'FormulaSidebar',
