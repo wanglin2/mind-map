@@ -249,6 +249,48 @@
             </el-popover>
           </div>
         </div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">{{ $t('style.gradientStyle') }}</span>
+            <div
+                class="styleBtn"
+                :class="{
+                  actived: style.gradientStyle === true
+                }"
+                @click="toggleGradientStyle"
+              >
+                {{style.gradientStyle ? '渐变' : '单一'}}
+              </div>
+          </div>
+          <div class="rowItem">
+            <span class="name">{{ $t('style.startColor') }}</span>
+            <span
+              class="block"
+              v-popover:popover6
+              :style="{ backgroundColor: style.startColor }"
+            ></span>
+            <el-popover ref="popover6" placement="bottom" trigger="hover">
+              <Color
+                :color="style.startColor"
+                @change="changeStartColor"
+              ></Color>
+            </el-popover>
+          </div>
+          <div class="rowItem">
+            <span class="name">{{ $t('style.endColor') }}</span>
+            <span
+              class="block"
+              v-popover:popover7
+              :style="{ backgroundColor: style.endColor }"
+            ></span>
+            <el-popover ref="popover7" placement="bottom" trigger="hover">
+              <Color
+                :color="style.endColor"
+                @change="changeEndColor"
+              ></Color>
+            </el-popover>
+          </div>
+        </div>
         <!-- 形状 -->
         <div class="title">{{ $t('style.shape') }}</div>
         <div class="row">
@@ -601,6 +643,40 @@ export default {
     changeFillColor(color) {
       this.style.fillColor = color
       this.update('fillColor')
+    },
+
+    /**
+     * @Author: lxr_cel
+     * @Date: 2024-01-02 10:28:17
+     * @Desc: 切换渐变背景
+     */
+    toggleGradientStyle() {
+      if (this.style.gradientStyle === false) {
+        this.style.gradientStyle = true
+      } else {
+        this.style.gradientStyle = false
+      }
+      this.update('gradientStyle')
+    },
+
+    /**
+     * @Author: lxr_cel
+     * @Date: 2024-01-02 11:09:27
+     * @Desc: 切换渐变开始颜色
+     */
+    changeStartColor(color) {
+      this.style.startColor = color;
+      this.update('startColor')
+    },
+
+    /**
+     * @Author: lxr_cel
+     * @Date: 2024-01-02 10:10:34
+     * @Desc: 切换渐变结束颜色
+     */
+    changeEndColor(color) {
+      this.style.endColor = color;
+      this.update('endColor')
     }
   }
 }
