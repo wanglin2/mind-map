@@ -2,6 +2,7 @@ import {
   checkIsNodeStyleDataKey,
   generateColorByContent
 } from '../../../utils/index'
+import { Gradient } from '@svgdotjs/svg.js'
 
 const rootProp = ['paddingX', 'paddingY']
 const backgroundStyleProps = [
@@ -86,6 +87,14 @@ class Style {
     return this.merge(prop, root)
   }
 
+  createGradient() {
+    let gradient = new Gradient("linear")
+    gradient.id()
+    gradient.stop(0,this.merge('startColor'))
+    gradient.stop(1, this.merge('endColor'))
+    return gradient
+  }
+
   //  获取自身自定义样式
   getSelfStyle(prop) {
     return this.ctx.getData(prop)
@@ -98,10 +107,18 @@ class Style {
   }
 
   //   矩形外的其他形状
-  shape(node) {
-    node.fill({
-      color: this.merge('fillColor')
-    })
+  shape(node, uid) {
+    if (this.merge('gradientStyle')) {
+      node.fill('url(#' + uid + ')'
+      )
+    } else {
+      node.fill({
+        color: this.merge('fillColor')
+      })
+    }
+    // node.fill({
+    //   color: this.merge('fillColor')
+    // })
     // 节点使用横线样式，不需要渲染非激活状态的边框样式
     // if (
     //   !this.ctx.isRoot &&

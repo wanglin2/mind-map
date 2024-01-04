@@ -70,7 +70,10 @@ export default {
     borderWidth: 0,
     borderDasharray: 'none',
     borderRadius: 5,
-    textDecoration: 'none'
+    textDecoration: 'none',
+    gradientStyle: true,
+    startColor: '#549688',
+    endColor: '#fff',
   },
   // 二级节点样式
   second: {
@@ -88,7 +91,10 @@ export default {
     borderWidth: 1,
     borderDasharray: 'none',
     borderRadius: 5,
-    textDecoration: 'none'
+    textDecoration: 'none',
+    gradientStyle: false,
+    startColor: '#549688',
+    endColor: '#fff',
   },
   // 三级及以下节点样式
   node: {
@@ -106,7 +112,10 @@ export default {
     borderWidth: 0,
     borderRadius: 5,
     borderDasharray: 'none',
-    textDecoration: 'none'
+    textDecoration: 'none',
+    gradientStyle: false,
+    startColor: '#549688',
+    endColor: '#fff',
   },
   // 概要节点样式
   generalization: {
@@ -124,7 +133,10 @@ export default {
     borderWidth: 1,
     borderDasharray: 'none',
     borderRadius: 5,
-    textDecoration: 'none'
+    textDecoration: 'none',
+    gradientStyle: false,
+    startColor: '#549688',
+    endColor: '#fff',
   }
 }
 
