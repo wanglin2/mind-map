@@ -65,6 +65,14 @@ const mindMap = new MindMap({
 
 默认引入的是未打包的`ES`模块，且只包含核心功能，不包含未注册的插件内容，能有效减小体积，不过你需要在你的项目中配置`babel`编译`simple-mind-map`，防止一些较新的`js`语法部分浏览器不支持。
 
+如果你不想一开始就加载所有插件，想在实例化了之后再异步加载和注册插件，可以这么做：
+
+```js
+import('simple-mind-map/src/plugins/Export.js').then(res => {
+  mindMap.addPlugin(res.default)
+})
+```
+
 如果你需要`umd`模块格式的文件，比如以`CDN`的方式在浏览器上使用，那么你可以从`/simple-mind-map/dist/`目录中找到`simpleMindMap.umd.min.js`文件和`simpleMindMap.css`文件，复制到你的项目中，然后在页面中引入：
 
 ```html
@@ -77,6 +85,14 @@ const mindMap = new MindMap({
 这种方式的缺点是会包含所有的内容，包括你没有注册的插件，所以整体体积会比较大。
 
 （v0.5.4+）如果你想直接在浏览器端通过`ES`模块的方式来使用，你可以在`/simple-mind-map/dist/`目录中找到`simpleMindMap.esm.js`和`simpleMindMap.esm.css`文件。
+
+也可以使用在线cdn服务，比如：
+
+```
+https://unpkg.com/browse/simple-mind-map@0.9.2/dist/
+```
+
+可以找到某个版本的所有打包后的文件。
 
 ## 开发
 
@@ -96,6 +112,8 @@ npm i
 npm link simple-mind-map
 npm run serve
 ```
+
+> 如果安装依赖出错，可以尝试调整node版本，作者使用的是14.x版本。
 
 ### 打包库
 
@@ -118,6 +136,15 @@ npm run buildLibrary
 ```
 
 支持`module`字段的环境会以`index.js`为入口，否则会以打包后的`simpleMindMap.umd.min.js`为入口。
+
+#### 生成TypeScript类型文件
+
+```bash
+cd simple-mind-map
+npm run types
+```
+
+即可得到`simple-mind-map/types/`目录下的类型文件。
 
 ### 编译文档
 

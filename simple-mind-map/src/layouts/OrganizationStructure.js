@@ -78,11 +78,7 @@ class OrganizationStructure extends Base {
       this.root,
       null,
       (node, parent, isRoot, layerIndex) => {
-        if (
-          node.getData('expand') &&
-          node.children &&
-          node.children.length
-        ) {
+        if (node.getData('expand') && node.children && node.children.length) {
           let marginX = this.getMarginY(layerIndex + 1)
           // 第一个子节点的left值 = 该节点中心的left值 - 子节点的宽度之和的一半
           let left = node.left + node.width / 2 - node.childrenAreaWidth / 2
@@ -175,8 +171,7 @@ class OrganizationStructure extends Base {
         ? ` L ${item.left},${y2} L ${item.left + item.width},${y2}`
         : ''
       let path = `M ${x1},${y1} L ${x2},${y2}` + nodeUseLineStylePath
-      lines[index].plot(path)
-      style && style(lines[index], item)
+      this.setLineStyle(style, lines[index], path, item)
     })
   }
 
@@ -210,8 +205,7 @@ class OrganizationStructure extends Base {
         ? ` L ${item.left},${y2} L ${item.left + item.width},${y2}`
         : ''
       let path = `M ${x2},${y1 + s1} L ${x2},${y2}` + nodeUseLineStylePath
-      lines[index].plot(path)
-      style && style(lines[index], item)
+      this.setLineStyle(style, lines[index], path, item)
     })
     minx = Math.min(x1, minx)
     maxx = Math.max(x1, maxx)
@@ -261,9 +255,9 @@ class OrganizationStructure extends Base {
       let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
       item.generalizationLine.plot(path)
       item.generalizationNode.top = bottom + generalizationNodeMargin
-      item.generalizationNode.left = left + (right - left - item.generalizationNode.width) / 2
+      item.generalizationNode.left =
+        left + (right - left - item.generalizationNode.width) / 2
     })
-    
   }
 
   // 渲染展开收起按钮的隐藏占位元素

@@ -40,6 +40,7 @@ export const defaultOpt = {
   enableFreeDrag: false,
   // 水印配置
   watermarkConfig: {
+    onlyExport: false,// 是否仅在导出时添加水印
     text: '',
     lineSpacing: 100,
     textSpacing: 100,
@@ -97,7 +98,7 @@ export const defaultOpt = {
   // 是否在点击了画布外的区域时结束节点文本的编辑状态
   isEndNodeTextEditOnClickOuter: true,
   // 最大历史记录数
-  maxHistoryCount: 1000,
+  maxHistoryCount: 500,
   // 是否一直显示节点的展开收起按钮，默认为鼠标移上去和激活时才显示
   alwaysShowExpandBtn: false,
   // 扩展节点可插入的图标
@@ -236,5 +237,24 @@ export const defaultOpt = {
     NOT_ACTIVE  : 不激活新创建的节点
     ACTIVE_ONLY  : 只激活新创建的节点，不进入编辑模式
   */
-  createNewNodeBehavior: CONSTANTS.CREATE_NEW_NODE_BEHAVIOR.DEFAULT
+  createNewNodeBehavior: CONSTANTS.CREATE_NEW_NODE_BEHAVIOR.DEFAULT,
+  // 当节点图片加载失败时显示的默认图片
+  defaultNodeImage: '',
+  // 是否将思维导图限制在画布内
+  // 比如向右拖动时，思维导图图形的最左侧到达画布中心时将无法继续向右拖动，其他同理
+  isLimitMindMapInCanvas: false,
+  // 当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas不再起作用
+  isLimitMindMapInCanvasWhenHasScrollbar: true,
+  // 在节点上粘贴剪贴板中的图片的处理方法，默认是转换为data:url数据插入到节点中，你可以通过该方法来将图片数据上传到服务器，实现保存图片的url
+  // 可以传递一个异步方法，接收Blob类型的图片数据，需要返回如下结构：
+  /*
+    {
+      url,    // 图片url
+      size: {
+        width,  // 图片的宽度
+        height  //图片的高度
+      }
+    }
+  */
+  handleNodePasteImg: null
 }

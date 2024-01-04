@@ -116,11 +116,7 @@ class MindMap extends Base {
       this.root,
       null,
       (node, parent, isRoot, layerIndex) => {
-        if (
-          node.getData('expand') &&
-          node.children &&
-          node.children.length
-        ) {
+        if (node.getData('expand') && node.children && node.children.length) {
           let marginY = this.getMarginY(layerIndex + 1)
           let baseTop = node.top + node.height / 2 + marginY
           // 第一个子节点的top值 = 该节点中心的top值 - 子节点的高度之和的一半
@@ -247,8 +243,7 @@ class MindMap extends Base {
       let path = `M ${x1},${y1} L ${x1 + _s},${y1} L ${x1 + _s},${y2} L ${
         x2 + nodeUseLineStyleOffset
       },${y2}`
-      lines[index].plot(path)
-      style && style(lines[index], item)
+      this.setLineStyle(style, lines[index], path, item)
     })
   }
 
@@ -287,8 +282,7 @@ class MindMap extends Base {
         }
       }
       let path = `M ${x1},${y1} L ${x2},${y2}` + nodeUseLineStylePath
-      lines[index].plot(path)
-      style && style(lines[index], item)
+      this.setLineStyle(style, lines[index], path, item)
     })
   }
 
@@ -332,8 +326,7 @@ class MindMap extends Base {
       } else {
         path = this.cubicBezierPath(x1, y1, x2, y2) + nodeUseLineStylePath
       }
-      lines[index].plot(path)
-      style && style(lines[index], item)
+      this.setLineStyle(style, lines[index], path, item)
     })
   }
 
@@ -384,7 +377,8 @@ class MindMap extends Base {
         x +
         (isLeft ? -generalizationNodeMargin : generalizationNodeMargin) -
         (isLeft ? item.generalizationNode.width : 0)
-        item.generalizationNode.top = top + (bottom - top - item.generalizationNode.height) / 2
+      item.generalizationNode.top =
+        top + (bottom - top - item.generalizationNode.height) / 2
     })
   }
 

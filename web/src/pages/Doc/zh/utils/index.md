@@ -494,3 +494,9 @@ let lru = new Lru(max)
 #### get(key)
 
 获取某个缓存的值。
+
+#### clear()
+
+> v0.9.2+
+
+清空缓存池。

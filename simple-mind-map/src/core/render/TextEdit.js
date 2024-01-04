@@ -21,6 +21,7 @@ export default class TextEdit {
     this.showTextEdit = false
     // 如果编辑过程中缩放画布了，那么缓存当前编辑的内容
     this.cacheEditingText = ''
+    this.hasBodyMousedown = false
     this.bindEvent()
   }
 
@@ -38,7 +39,12 @@ export default class TextEdit {
       // 隐藏文本编辑框
       this.hideEditTextBox()
     })
+    this.mindMap.on('body_mousedown', () => {
+      this.hasBodyMousedown = true
+    })
     this.mindMap.on('body_click', () => {
+      if (!this.hasBodyMousedown) return
+      this.hasBodyMousedown = false
       // 隐藏文本编辑框
       if (this.mindMap.opt.isEndNodeTextEditOnClickOuter) {
         this.hideEditTextBox()
@@ -124,6 +130,14 @@ export default class TextEdit {
     this.mindMap.keyCommand.addShortcut('Tab', () => {
       this.hideEditTextBox()
     })
+  }
+
+  // 获取当前文本编辑框是否处于显示状态，也就是是否处在文本编辑状态
+  isShowTextEdit() {
+    if (this.mindMap.richText) {
+      return this.mindMap.richText.showTextEdit
+    }
+    return this.showTextEdit
   }
 
   //  显示文本编辑框

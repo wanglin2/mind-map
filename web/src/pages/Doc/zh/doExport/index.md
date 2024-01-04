@@ -48,9 +48,9 @@ a.click()
 
 - `rotateWhenWidthLongerThenHeight`: v0.6.15+，v0.7.0+已废弃，Boolean, false, 是否在图片宽比高长时自动旋转90度
 
-- `checkRotate`：v0.7.0+，Function，可以传递一个函数，接收图片的宽度和高度两个参数，返回true或false，true代表图片需要旋转90度
+- `checkRotate`：v0.7.0+，（v0.9.2+已废弃），Function，可以传递一个函数，接收图片的宽度和高度两个参数，返回true或false，true代表图片需要旋转90度
 
-- `compress`：v0.8.1+，null | { width, height }, 压缩图片的参数，某些情况下导出的图片长宽可能非常大，如果希望减小，那么可以通过该参数来控制，宽或高只提供一个即可，会按比例缩放
+- `compress`：v0.8.1+，（v0.9.2+已废弃），null | { width, height }, 压缩图片的参数，某些情况下导出的图片长宽可能非常大，如果希望减小，那么可以通过该参数来控制，宽或高只提供一个即可，会按比例缩放
 
 导出为`png`。
 
@@ -74,15 +74,19 @@ svg(
 
 导出为`svg`。
 
-### pdf(name, useMultiPageExport, maxImageWidth)
+### pdf(name, transparent = false)
+
+> v0.8.1：pdf(name, useMultiPageExport, maxImageWidth)
 
 > v0.2.1+
 
 - `name`：文件名称
 
-- `useMultiPageExport`: v0.6.15+，Boolean, false, 是否多页导出，默认为单页
+- `useMultiPageExport`: v0.6.15+，（v0.9.2+已废弃），Boolean, false, 是否多页导出，默认为单页
 
-- `maxImageWidth`：v0.8.1+，null | Number，默认为a4纸的宽度的2倍, 压缩图片的参数，某些情况下图片的长宽可能非常大，导致pdf体积也非常大，所以如果希望减小体积，那么可以通过该参数来控制图片的最大宽度
+- `maxImageWidth`：v0.8.1+，（v0.9.2+已废弃），null | Number，默认为a4纸的宽度的2倍, 压缩图片的参数，某些情况下图片的长宽可能非常大，导致pdf体积也非常大，所以如果希望减小体积，那么可以通过该参数来控制图片的最大宽度
+
+- `transparent`：v0.9.2+，Boolean，默认为false，指定导出图片的背景是否是透明的
 
 导出为`pdf`，和其他导出方法不一样，这个方法不会返回数据，会直接触发下载。
 

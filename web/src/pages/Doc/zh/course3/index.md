@@ -2,6 +2,8 @@
 
 首先和操作节点内容一样，也需要监听节点的激活事件，然后禁用相关按钮。
 
+以下命令都支持传递一些参数，详情请参考【API】-【构造函数】-【execCommand方法】小节中该命令的介绍。
+
 ## 插入子节点
 
 插入子节点很简单，执行`INSERT_CHILD_NODE`命令即可：
@@ -11,8 +13,6 @@ mindMap.execCommand('INSERT_CHILD_NODE')
 ```
 
 这样就会在当前激活节点（如果存在多个激活节点，默认会操作第一个激活节点）下添加一个子节点。
-
-`INSERT_CHILD_NODE`命令还支持传入几个参数，详细详细请阅读【API】-【构造函数】-【execCommand方法】。
 
 如果你想获取插入节点的实例，可以这样操作：
 
@@ -36,12 +36,50 @@ mindMap.on('node_tree_render_end', () => {
 })
 ```
 
-## 插入兄弟节点
+## 插入多个子节点
 
-插入兄弟节点和插入子节点方式完全一致：
+如果你要同时插入多个子节点，那么可以执行`INSERT_MULTI_CHILD_NODE`命令：
+
+```js
+mindMap.execCommand('INSERT_MULTI_CHILD_NODE', [], childList)
+```
+
+`childList`是要插入的子节点数据的数组，必传。
+
+```js
+[
+    {
+        data: {
+              text: '自定义节点1'
+        }
+    }
+]
+```
+
+## 插入同级节点
+
+插入同级节点和插入子节点方式完全一致：
 
 ```js
 mindMap.execCommand('INSERT_NODE')
+```
+
+## 插入多个同级节点
+
+插入多个同级节点可以执行`INSERT_MULTI_NODE`命令：
+
+```js
+mindMap.execCommand('INSERT_NODE'. [], nodeList)
+```
+
+`nodeList`是要插入的同级节点数据的数组，必传。
+
+## 插入父节点
+
+要插入父节点可以调用`INSERT_PARENT_NODE`命令：
+
+```js
+mindMap.execCommand('INSERT_PARENT_NODE')
 ```
 
 ## 删除节点
@@ -53,6 +91,14 @@ mindMap.execCommand('REMOVE_NODE')
 ```
 
 会删除当前激活的所有节点。
+
+## 仅删除当前节点
+
+`REMOVE_CURRENT_NODE`命令可以仅删除激活的节点，子节点不会被删除。
+
+```js
+mindMap.execCommand('REMOVE_CURRENT_NODE')
+```
 
 ## 前进回退
 

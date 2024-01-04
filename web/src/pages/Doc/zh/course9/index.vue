@@ -4,14 +4,20 @@
 <p>鼠标滚轮的行为支持放大缩小画布和上下移动画布，可以在实例化时通过配置指定：</p>
 <pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({
     <span class="hljs-comment">// ...</span>
-    <span class="hljs-attr">mousewheelAction</span>: <span class="hljs-string">&#x27;zoom&#x27;</span><span class="hljs-comment">// zoom（放大缩小）、move（上下移动）</span>
+    <span class="hljs-attr">mousewheelAction</span>: <span class="hljs-string">&#x27;move&#x27;</span><span class="hljs-comment">// zoom（放大缩小）、move（上下移动）</span>
     <span class="hljs-comment">// 当mousewheelAction设为move时，可以通过该属性控制鼠标滚动一下视图移动的步长，单位px</span>
     <span class="hljs-attr">mousewheelMoveStep</span>: <span class="hljs-number">100</span>,
+    <span class="hljs-comment">// 鼠标缩放是否以鼠标当前位置为中心点，否则以画布中心点</span>
+    <span class="hljs-attr">mouseScaleCenterUseMousePosition</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-comment">// 当mousewheelAction设为zoom时，或者按住Ctrl键时，默认向前滚动是缩小，向后滚动是放大，如果该属性设为true，那么会反过来</span>
+    <span class="hljs-attr">mousewheelZoomActionReverse</span>: <span class="hljs-literal">true</span>,
+    <span class="hljs-comment">// 禁止鼠标滚轮缩放，你仍旧可以使用api进行缩放</span>
+    <span class="hljs-attr">disableMouseWheelZoom</span>: <span class="hljs-literal">false</span>,
 })
 </code></pre>
 <p>如果需要动态的切换行为可以使用<code>updateConfig</code>方法：</p>
 <pre class="hljs"><code>mindMap.updateConfig({
-    <span class="hljs-attr">mousewheelAction</span>: <span class="hljs-string">&#x27;move&#x27;</span>
+    <span class="hljs-attr">mousewheelAction</span>: <span class="hljs-string">&#x27;zoom&#x27;</span>
 })
 </code></pre>
 <p>此外也支持让你自行处理鼠标滚轮事件：</p>

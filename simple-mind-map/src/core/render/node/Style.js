@@ -56,6 +56,9 @@ class Style {
   //  构造函数
   constructor(ctx) {
     this.ctx = ctx
+    // 箭头图标
+    this._markerPath = null
+    this._marker = null
   }
 
   //  合并样式
@@ -207,8 +210,38 @@ class Style {
   }
 
   //  连线
-  line(node, { width, color, dasharray } = {}) {
-    node.stroke({ width, color, dasharray }).fill({ color: 'none' })
+  line(line, { width, color, dasharray } = {}, enableMarker, childNode) {
+    line.stroke({ color, dasharray, width }).fill({ color: 'none' })
+    // 可以显示箭头
+    if (enableMarker) {
+      const showMarker = this.merge('showLineMarker', true)
+      const childNodeStyle = childNode.style
+      // 显示箭头
+      if (showMarker) {
+        // 创建子节点箭头标记
+        childNodeStyle._marker =
+          childNodeStyle._marker || childNodeStyle.createMarker()
+        // 设置样式
+        childNodeStyle._markerPath.stroke({ color }).fill({ color })
+        line.marker('end', childNodeStyle._marker)
+      } else if (childNodeStyle._marker) {
+        // 不显示箭头，则删除该子节点的箭头标记
+        line.attr('marker-end', '')
+        childNodeStyle._marker.remove()
+        childNodeStyle._marker = null
+      }
+    }
+  }
+
+  // 创建箭头
+  createMarker() {
+    return this.ctx.lineDraw.marker(20, 20, add => {
+      add.ref(8, 5)
+      add.size(20, 20)
+      add.attr('markerUnits', 'userSpaceOnUse')
+      add.attr('orient', 'auto-start-reverse')
+      this._markerPath = add.path('M0,0 L2,5 L0,10 L10,5 Z')
+    })
   }
 
   //  概要连线

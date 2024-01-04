@@ -17,6 +17,8 @@ class Base {
     // 根节点
     this.root = null
     this.lru = new Lru(this.mindMap.opt.maxNodeCacheCount)
+    // 当initRootNodePosition不为默认的值时，根节点的位置距默认的配置时根节点距离的差值
+    this.rootNodeCenterOffset = null
   }
 
   //  计算节点位置
@@ -41,7 +43,7 @@ class Base {
   cacheNode(uid, node) {
     // 记录本次渲染时的节点
     this.renderer.nodeCache[uid] = node
-    // 记录所有渲染时的节点
+    // 缓存所有渲染过的节点
     this.lru.add(uid, node)
   }
 
@@ -70,11 +72,12 @@ class Base {
   //  创建节点实例
   createNode(data, parent, isRoot, layerIndex) {
     // 创建节点
+    const uid = data.data.uid
     let newNode = null
     // 数据上保存了节点引用，那么直接复用节点
     if (data && data._node && !this.renderer.reRender) {
       newNode = data._node
-      let isLayerTypeChange = this.checkIsLayerTypeChange(
+      const isLayerTypeChange = this.checkIsLayerTypeChange(
         newNode.layerIndex,
         layerIndex
       )
@@ -87,43 +90,49 @@ class Base {
         newNode.getSize()
         newNode.needLayout = true
       }
-    } else if (this.lru.has(data.data.uid) && !this.renderer.reRender) {
-      // 数据上没有保存节点引用，但是通过uid找到了缓存的节点，也可以复用
-      newNode = this.lru.get(data.data.uid)
+    } else if (
+      (this.lru.has(uid) || this.renderer.lastNodeCache[uid]) &&
+      !this.renderer.reRender
+    ) {
+      // 节点数据上没有节点实例
+      // 但是通过uid在节点缓存池中找到了缓存的节点
+      // 或者在上一次渲染缓存对象中找到了节点
+      // 也可以直接复用
+      newNode = this.lru.get(uid) || this.renderer.lastNodeCache[uid]
       // 保存该节点上一次的数据
-      let lastData = JSON.stringify(newNode.getData())
-      let isLayerTypeChange = this.checkIsLayerTypeChange(
+      const lastData = JSON.stringify(newNode.getData())
+      const isLayerTypeChange = this.checkIsLayerTypeChange(
         newNode.layerIndex,
         layerIndex
       )
       newNode.reset()
       newNode.nodeData = newNode.handleData(data || {})
       newNode.layerIndex = layerIndex
-      this.cacheNode(data.data.uid, newNode)
+      this.cacheNode(uid, newNode)
       this.checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(newNode)
       data._node = newNode
       // 主题或主题配置改变了需要重新计算节点大小和布局
-      let isResizeSource = this.checkIsNeedResizeSources()
+      const isResizeSource = this.checkIsNeedResizeSources()
       // 节点数据改变了需要重新计算节点大小和布局
-      let isNodeDataChange = lastData !== JSON.stringify(data.data)
+      const isNodeDataChange = lastData !== JSON.stringify(data.data)
       if (isResizeSource || isNodeDataChange || isLayerTypeChange) {
         newNode.getSize()
         newNode.needLayout = true
       }
     } else {
       // 创建新节点
-      let uid = data.data.uid || createUid()
+      const newUid = uid || createUid()
       newNode = new Node({
         data,
-        uid,
+        uid: newUid,
         renderer: this.renderer,
         mindMap: this.mindMap,
         draw: this.draw,
         layerIndex
       })
       // uid保存到数据上，为了节点复用
-      data.data.uid = uid
-      this.cacheNode(uid, newNode)
+      data.data.uid = newUid
+      this.cacheNode(newUid, newNode)
       // 数据关联实际节点
       data._node = newNode
       if (data.data.isActive) {
@@ -161,17 +170,21 @@ class Base {
     }
   }
 
-  //  定位节点到画布中间
-  setNodeCenter(node) {
-    let { initRootNodePosition } = this.mindMap.opt
-    let { CENTER } = CONSTANTS.INIT_ROOT_NODE_POSITION
-    if (
-      !initRootNodePosition ||
-      !Array.isArray(initRootNodePosition) ||
-      initRootNodePosition.length < 2
-    ) {
-      initRootNodePosition = [CENTER, CENTER]
+  // 规范initRootNodePosition配置
+  formatInitRootNodePosition(pos) {
+    const { CENTER } = CONSTANTS.INIT_ROOT_NODE_POSITION
+    if (!pos || !Array.isArray(pos) || pos.length < 2) {
+      pos = [CENTER, CENTER]
     }
+    return pos
+  }
+
+  //  定位节点到画布中间
+  setNodeCenter(node, position) {
+    let { initRootNodePosition } = this.mindMap.opt
+    initRootNodePosition = this.formatInitRootNodePosition(
+      position || initRootNodePosition
+    )
     node.left = this.formatPosition(
       initRootNodePosition[0],
       this.mindMap.width,
@@ -182,6 +195,42 @@ class Base {
       this.mindMap.height,
       node.height
     )
+  }
+
+  // 当initRootNodePosition配置不为默认的['center','center']时，计算当前配置和默认配置情况下，根节点位置的差值
+  getRootCenterOffset(width, height) {
+    // 因为根节点的大小不会影响这个差值，所以计算一次就足够了
+    if (this.rootNodeCenterOffset) return this.rootNodeCenterOffset
+    let { initRootNodePosition } = this.mindMap.opt
+    const { CENTER } = CONSTANTS.INIT_ROOT_NODE_POSITION
+    initRootNodePosition = this.formatInitRootNodePosition(initRootNodePosition)
+    if (
+      initRootNodePosition[0] === CENTER &&
+      initRootNodePosition[1] === CENTER
+    ) {
+      // 如果initRootNodePosition是默认的，那么不需要计算
+      this.rootNodeCenterOffset = {
+        x: 0,
+        y: 0
+      }
+    } else {
+      // 否则需要计算当前配置和默认配置的差值
+      const tmpNode = {
+        width: width,
+        height: height
+      }
+      const tmpNode2 = {
+        width: width,
+        height: height
+      }
+      this.setNodeCenter(tmpNode, [CENTER, CENTER])
+      this.setNodeCenter(tmpNode2)
+      this.rootNodeCenterOffset = {
+        x: tmpNode2.left - tmpNode.left,
+        y: tmpNode2.top - tmpNode.top
+      }
+    }
+    return this.rootNodeCenterOffset
   }
 
   //  更新子节点属性
@@ -393,6 +442,12 @@ class Base {
   // 获取节点实际存在几个子节点
   getNodeActChildrenLength(node) {
     return node.nodeData.children && node.nodeData.children.length
+  }
+
+  // 设置连线样式
+  setLineStyle(style, line, path, childNode) {
+    line.plot(path)
+    style && style(line, childNode, true)
   }
 }
 

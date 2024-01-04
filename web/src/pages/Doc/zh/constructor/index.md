@@ -61,7 +61,7 @@ const mindMap = new MindMap({
 | nodeTextEditZIndex（v0.5.5+）     | Number  | 3000 | 节点文本编辑框元素的z-index  |
 | nodeNoteTooltipZIndex（v0.5.5+）     | Number  | 3000 | 节点备注浮层元素的z-index  |
 | isEndNodeTextEditOnClickOuter（v0.5.5+）     | Boolean  | true |  是否在点击了画布外的区域时结束节点文本的编辑状态 |
-| maxHistoryCount（v0.5.6+）     | Number  | 1000 | 最大历史记录数  |
+| maxHistoryCount（v0.5.6+）     | Number  | 1000（v0.9.2+改为500） | 最大历史记录数  |
 | alwaysShowExpandBtn（v0.5.8+）     | Boolean  | false | 是否一直显示节点的展开收起按钮，默认为鼠标移上去和激活时才显示  |
 | iconList（v0.5.8+）     | Array  | [] | 扩展节点可插入的图标，数组的每一项为一个对象，对象详细结构请参考下方【图标配置】表格  |
 | maxNodeCacheCount（v0.5.10+）     |  Number | 1000 | 节点最大缓存数量。为了优化性能，内部会维护一个节点缓存池，用来复用节点，通过该属性可以指定池的最大缓存数量  |
@@ -104,6 +104,10 @@ const mindMap = new MindMap({
 | disableTouchZoom（v0.8.1+）     | Boolean | false  | 禁止双指缩放，你仍旧可以使用api进行缩放，对TouchEvent插件生效  |
 | highlightNodeBoxStyle（v0.9.0+）     | Object | { stroke: 'rgb(94, 200, 248)', fill: 'transparent' }  | 鼠标移入概要高亮所属节点时的高亮框样式  |
 | createNewNodeBehavior（v0.9.1+）     | String | default  | 创建新节点时的行为。default（默认会激活新创建的节点，并且进入编辑模式。如果同时创建了多个新节点，那么只会激活而不会进入编辑模式）、notActive（不激活新创建的节点）、activeOnly（只激活新创建的节点，不进入编辑模式）  |
+| defaultNodeImage（v0.9.1-fix.2+）     | String |   | 图片地址，当节点图片加载失败时显示的默认图片  |
+| handleNodePasteImg（v0.9.2+）     | null 或 Function | null  | 在节点上粘贴剪贴板中的图片的处理方法，默认是转换为data:url数据插入到节点中，你可以通过该方法来将图片数据上传到服务器，实现保存图片的url。可以传递一个异步方法，接收Blob类型的图片数据，需要返回指定结构：{ url, size: {width, height} }  |
+| isLimitMindMapInCanvas（v0.9.2+）     | Boolean |  false | 是否将思维导图限制在画布内。比如向右拖动时，思维导图图形的最左侧到达画布中心时将无法继续向右拖动，其他同理 |
+| isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）     | Boolean |  true | 当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas配置不再起作用 |
 
 ### 数据结构
 
@@ -155,6 +159,7 @@ const mindMap = new MindMap({
 | textSpacing | Number | 100                                         | 同一行水印之间的间距                 |
 | angle       | Number | 30                                          | 水印的倾斜角度，范围：[0, 90]        |
 | textStyle   | Object | {color: '#999', opacity: 0.5, fontSize: 14} | 水印文字样式                         |
+| onlyExport（v0.9.2+）   | Boolean | false | 是否仅在导出时添加水印                         |
 
 ### 图标配置
 
@@ -378,7 +383,7 @@ mindMap.setTheme('主题名称')
 | mousemove                        | el元素的鼠标移动事件                       | e（事件对象）、this（Event事件类实例）                       |
 | drag                             | 如果是按住左键拖动的话会触发拖动事件       | e（事件对象）、this（Event事件类实例）                       |
 | mouseup                          | el元素的鼠标松开事件                       | e（事件对象）、this（Event事件类实例）                       |
-| mousewheel                       | 鼠标滚动事件                               | e（事件对象）、dir（向上up还是向下down滚动）、this（Event事件类实例）、isTouchPad（v0.6.1+，是否是触控板触发的事件） |
+| mousewheel                       | 鼠标滚动事件                               | e（事件对象）、dir（向上up还是向下down滚动。v0.9.2+已改为dirs，数组类型，即支持同时保存多个方向）、this（Event事件类实例）、isTouchPad（v0.6.1+，是否是触控板触发的事件） |
 | contextmenu                      | svg画布的鼠标右键菜单事件                  | e（事件对象）                                                |
 | node_click                       | 节点的单击事件                             | this（节点实例）、e（事件对象）                              |
 | node_mousedown                   | 节点的鼠标按下事件                         | this（节点实例）、e（事件对象）                              |
@@ -410,6 +415,8 @@ mindMap.setTheme('主题名称')
 | set_data（v0.7.3+）    | 调用了setData方法动态设置思维导图数据时触发   | data（新的思维导图数据）  |
 | resize（v0.8.0+）    |  容器尺寸改变后触发，实际上是当思维导图实例的`resize`方法被调用后触发  |   |
 | beforeDestroy（v0.9.0+）    |  思维导图销毁前触发，即调用了destroy方法触发  |   |
+| body_mousedown（v0.9.2+）    | document.body的鼠标按下事件                      | e（事件对象）      |
+| body_click    | document.body的点击事件                      | e（事件对象）      |
 
 ### emit(event, ...args)
 
@@ -501,7 +508,7 @@ mindMap.updateConfig({
 | EXPAND_ALL                          | 展开所有节点                                                 |                                                              |
 | UNEXPAND_ALL                        | 收起所有节点                                                 |                                                              |
 | UNEXPAND_TO_LEVEL（v0.2.8+）        | 展开到指定层级                                               | level（要展开到的层级，1、2、3...）                          |
-| SET_NODE_DATA                       | 更新节点数据，即更新节点数据对象里`data`对象的数据           | node（要设置的节点）、data（对象，要更新的数据，如`{expand: true}`） |
+| SET_NODE_DATA                       | 更新节点数据，即更新节点数据对象里`data`对象的数据，注意这个命令不会触发视图的更新           | node（要设置的节点）、data（对象，要更新的数据，如`{expand: true}`） |
 | SET_NODE_TEXT                       | 设置节点文本                                                 | node（要设置的节点）、text（要设置的文本字符串，换行可以使用`\n`）、richText（v0.4.0+，如果要设置的是富文本字符，需要设为`true`）、resetRichText（v0.6.10+是否要复位富文本，默认为false，如果传true那么会重置富文本节点的样式） |
 | SET_NODE_IMAGE                      | 设置节点图片                                                 | node（要设置的节点）、imgData（对象，图片信息，结构为：`{url, title, width, height}`，图片的宽高必须要传） |
 | SET_NODE_ICON                       | 设置节点图标                                                 | node（要设置的节点）、icons（数组，预定义的图片名称组成的数组，可用图标可在[icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js)文件里的`nodeIconList`列表里获取到，图标名称为`type_name`，如`['priority_1']`） |

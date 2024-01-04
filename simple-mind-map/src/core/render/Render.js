@@ -276,9 +276,6 @@ class Render {
     })
     // 插入同级节点
     this.mindMap.keyCommand.addShortcut('Enter', () => {
-      if (this.textEdit.showTextEdit) {
-        return
-      }
       this.mindMap.execCommand('INSERT_NODE')
     })
     // 插入父节点
@@ -323,15 +320,17 @@ class Render {
     this.mindMap.keyCommand.addShortcut('Control+Down', () => {
       this.mindMap.execCommand('DOWN_NODE')
     })
-    // 复制节点、剪切节点、粘贴节点的快捷键需开发者自行注册实现，可参考demo
+    // 复制节点、
     this.mindMap.keyCommand.addShortcut('Control+c', () => {
       this.copy()
     })
-    this.mindMap.keyCommand.addShortcut('Control+v', () => {
-      this.onPaste()
-    })
+    // 剪切节点
     this.mindMap.keyCommand.addShortcut('Control+x', () => {
       this.cut()
+    })
+    // 粘贴节点
+    this.mindMap.keyCommand.addShortcut('Control+v', () => {
+      this.paste()
     })
     // 根节点居中显示
     this.mindMap.keyCommand.addShortcut('Control+Enter', () => {
@@ -387,6 +386,13 @@ class Render {
     this.mindMap.keyCommand.restore()
   }
 
+  // 清空节点缓存池
+  clearCache() {
+    this.layout.lru.clear()
+    this.nodeCache = {}
+    this.lastNodeCache = {}
+  }
+
   //   渲染
   render(callback = () => {}, source) {
     // 如果当前还没有渲染完毕，不再触发渲染
@@ -431,6 +437,9 @@ class Render {
           this.waitRenderingParams = []
           this.render(...params)
         } else {
+          if (this.reRender) {
+            this.reRender = false
+          }
           // 触发一次保存，因为修改了渲染树的数据
           if (
             this.mindMap.richText &&
@@ -866,6 +875,7 @@ class Render {
   // 复制节点
   copy() {
     this.beingCopyData = this.copyNode()
+    if (!this.beingCopyData) return
     setDataToClipboard({
       simpleMindMap: true,
       data: this.beingCopyData
@@ -883,17 +893,13 @@ class Render {
     })
   }
 
-  // 粘贴节点
-  paste() {
-    if (this.beingCopyData) {
-      this.mindMap.execCommand('PASTE_NODE', this.beingCopyData)
-    }
-  }
-
-  // 粘贴事件
-  async onPaste() {
-    const { errorHandler, handleIsSplitByWrapOnPasteCreateNewNode } =
-      this.mindMap.opt
+  // 粘贴
+  async paste() {
+    const {
+      errorHandler,
+      handleIsSplitByWrapOnPasteCreateNewNode,
+      handleNodePasteImg
+    } = this.mindMap.opt
     // 读取剪贴板的文字和图片
     let text = null
     let img = null
@@ -996,7 +1002,13 @@ class Render {
       // 存在图片，则添加到当前激活节点
       if (img) {
         try {
-          let imgData = await loadImage(img)
+          let imgData = null
+          // 自定义图片处理函数
+          if (handleNodePasteImg && typeof handleNodePasteImg === 'function') {
+            imgData = await handleNodePasteImg(img)
+          } else {
+            imgData = await loadImage(img)
+          }
           if (this.activeNodeList.length > 0) {
             this.activeNodeList.forEach(node => {
               this.mindMap.execCommand('SET_NODE_IMAGE', node, {
@@ -1013,7 +1025,9 @@ class Render {
       }
     } else {
       // 粘贴节点数据
-      this.paste()
+      if (this.beingCopyData) {
+        this.mindMap.execCommand('PASTE_NODE', this.beingCopyData)
+      }
     }
   }
 
@@ -1205,7 +1219,7 @@ class Render {
   //  复制节点
   copyNode() {
     if (this.activeNodeList.length <= 0) {
-      return
+      return null
     }
     const nodeList = getTopAncestorsFomNodeList(this.activeNodeList)
     return nodeList.map(node => {
@@ -1363,7 +1377,7 @@ class Render {
       0
     )
     this.mindMap.render(() => {
-      this.mindMap.view.reset()
+      this.setRootNodeCenter()
     })
   }
 

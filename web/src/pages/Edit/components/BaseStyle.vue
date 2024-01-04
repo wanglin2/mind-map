@@ -199,6 +199,19 @@
           </el-select>
         </div>
       </div>
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="style.showLineMarker"
+            @change="
+              value => {
+                update('showLineMarker', value)
+              }
+            "
+            >{{ $t('baseStyle.showArrow') }}</el-checkbox
+          >
+        </div>
+      </div>
       <!-- 概要连线 -->
       <div class="title noTop">{{ $t('baseStyle.lineOfOutline') }}</div>
       <div class="row">
@@ -566,6 +579,16 @@
         </div>
       </div>
       <template v-if="watermarkConfig.show">
+        <!-- 是否仅在导出时显示 -->
+        <div class="row">
+          <div class="rowItem">
+            <el-checkbox
+              v-model="watermarkConfig.onlyExport"
+              @change="updateWatermarkConfig"
+              >{{ $t('baseStyle.onlyExport') }}</el-checkbox
+            >
+          </div>
+        </div>
         <!-- 水印文字 -->
         <div class="row">
           <div class="rowItem">
@@ -847,6 +870,7 @@ export default {
         lineColor: '',
         lineWidth: '',
         lineStyle: '',
+        showLineMarker: '',
         rootLineKeepSameInCurve: '',
         generalizationLineWidth: '',
         generalizationLineColor: '',
@@ -878,6 +902,7 @@ export default {
       },
       watermarkConfig: {
         show: false,
+        onlyExport: false,
         text: '',
         lineSpacing: 100,
         textSpacing: 100,
@@ -964,6 +989,7 @@ export default {
         'backgroundColor',
         'lineWidth',
         'lineStyle',
+        'showLineMarker',
         'rootLineKeepSameInCurve',
         'lineColor',
         'generalizationLineWidth',
@@ -1019,9 +1045,11 @@ export default {
     // 初始化水印配置
     initWatermark() {
       let config = this.mindMap.getConfig('watermarkConfig')
-      ;['text', 'lineSpacing', 'textSpacing', 'angle'].forEach(key => {
-        this.watermarkConfig[key] = config[key]
-      })
+      ;['text', 'lineSpacing', 'textSpacing', 'angle', 'onlyExport'].forEach(
+        key => {
+          this.watermarkConfig[key] = config[key]
+        }
+      )
       this.watermarkConfig.show = !!config.text
       this.watermarkConfig.textStyle = { ...config.textStyle }
     },

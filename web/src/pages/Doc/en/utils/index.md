@@ -499,3 +499,7 @@ Check if a cache exists.
 #### get(key)
 
 Gets the value of a cache.
+
+> v0.9.2+
+
+Empty the cache pool.

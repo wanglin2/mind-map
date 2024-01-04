@@ -392,6 +392,11 @@ drawBackgroundImageToCanvas(ctx, width, height, img, {
 <p>检查某个缓存是否存在。</p>
 <h4>get(key)</h4>
 <p>获取某个缓存的值。</p>
+<h4>clear()</h4>
+<blockquote>
+<p>v0.9.2+</p>
+</blockquote>
+<p>清空缓存池。</p>
 
   </div>
 </template>

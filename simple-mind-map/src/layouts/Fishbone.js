@@ -300,8 +300,7 @@ class Fishbone extends Base {
         // 水平线
         if (node.layerIndex > 1) {
           let path = `M ${x},${y} L ${item.left},${y}`
-          lines[index].plot(path)
-          style && style(lines[index], item)
+          this.setLineStyle(style, lines[index], path, item)
         }
       })
       // 斜线

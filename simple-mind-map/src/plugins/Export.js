@@ -9,7 +9,7 @@ import {
 import { SVG } from '@svgdotjs/svg.js'
 import drawBackgroundImageToCanvas from '../utils/simulateCSSBackgroundInCanvas'
 import { transformToMarkdown } from '../parse/toMarkdown'
-import { a4Size } from '../constants/constant'
+import { ERROR_TYPES } from '../constants/constant'
 
 //  导出插件
 class Export {
@@ -47,7 +47,8 @@ class Export {
 
   //  获取svg数据
   async getSvgData() {
-    let { exportPaddingX, exportPaddingY } = this.mindMap.opt
+    let { exportPaddingX, exportPaddingY, errorHandler, resetCss } =
+      this.mindMap.opt
     let { svg, svgHTML } = this.mindMap.getSvgData({
       paddingX: exportPaddingX,
       paddingY: exportPaddingY
@@ -66,15 +67,17 @@ class Export {
       return item.attr('src')
     })
     const taskList = [...task1, ...task2]
-    await Promise.all(taskList)
+    try {
+      await Promise.all(taskList)
+    } catch (error) {
+      errorHandler(ERROR_TYPES.EXPORT_LOAD_IMAGE_ERROR, error)
+    }
     // 开启了节点富文本编辑，需要增加一些样式
     let isAddResetCss
     if (this.mindMap.richText) {
       const foreignObjectList = svg.find('foreignObject')
       if (foreignObjectList.length > 0) {
-        foreignObjectList[0].add(
-          SVG(`<style>${this.mindMap.opt.resetCss}</style>`)
-        )
+        foreignObjectList[0].add(SVG(`<style>${resetCss}</style>`))
         isAddResetCss = true
       }
     }
@@ -89,14 +92,7 @@ class Export {
   }
 
   //   svg转png
-  svgToPng(
-    svgSrc,
-    transparent,
-    checkRotate = () => {
-      return false
-    },
-    compress
-  ) {
+  svgToPng(svgSrc, transparent) {
     return new Promise((resolve, reject) => {
       const img = new Image()
       // 跨域图片需要添加这个属性，否则画布被污染了无法导出图片
@@ -110,36 +106,27 @@ class Export {
           )
           let imgWidth = img.width
           let imgHeight = img.height
-          // 压缩图片
-          if (compress) {
-            const compressedSize = resizeImgSize(
-              imgWidth,
-              imgHeight,
-              compress.width,
-              compress.height
-            )
-            imgWidth = compressedSize[0]
-            imgHeight = compressedSize[1]
+          // 检查是否超出canvas支持的像素上限
+          const maxSize = 16384 / dpr
+          const maxArea = maxSize * maxSize
+          if (imgWidth * imgHeight > maxArea) {
+            let newWidth = null
+            let newHeight = null
+            if (imgWidth > maxSize) {
+              newWidth = maxArea / imgHeight
+            } else if (imgHeight > maxSize) {
+              newHeight = maxArea / imgWidth
+            }
+            const res = resizeImgSize(imgWidth, imgHeight, newWidth, newHeight)
+            imgWidth = res[0]
+            imgHeight = res[1]
           }
-          // 如果宽比高长，那么旋转90度
-          const needRotate = checkRotate(imgWidth, imgHeight)
-          if (needRotate) {
-            canvas.width = imgHeight * dpr
-            canvas.height = imgWidth * dpr
-            canvas.style.width = imgHeight + 'px'
-            canvas.style.height = imgWidth + 'px'
-          } else {
-            canvas.width = imgWidth * dpr
-            canvas.height = imgHeight * dpr
-            canvas.style.width = imgWidth + 'px'
-            canvas.style.height = imgHeight + 'px'
-          }
+          canvas.width = imgWidth * dpr
+          canvas.height = imgHeight * dpr
+          canvas.style.width = imgWidth + 'px'
+          canvas.style.height = imgHeight + 'px'
           const ctx = canvas.getContext('2d')
           ctx.scale(dpr, dpr)
-          if (needRotate) {
-            ctx.rotate(0.5 * Math.PI)
-            ctx.translate(0, -imgHeight)
-          }
           // 绘制背景
           if (!transparent) {
             await this.drawBackgroundToCanvas(ctx, imgWidth, imgHeight)
@@ -229,31 +216,20 @@ class Export {
    * 方法1.把svg的图片都转化成data:url格式，再转换
    * 方法2.把svg的图片提取出来再挨个绘制到canvas里，最后一起转换
    */
-  async png(name, transparent = false, checkRotate, compress) {
+  async png(name, transparent = false) {
     const { str } = await this.getSvgData()
     const svgUrl = await this.fixSvgStrAndToBlob(str)
-    // 绘制到canvas上
-    const res = await this.svgToPng(svgUrl, transparent, checkRotate, compress)
+    const res = await this.svgToPng(svgUrl, transparent)
     return res
   }
 
   //  导出为pdf
-  async pdf(name, useMultiPageExport, maxImageWidth) {
+  async pdf(name, transparent = false) {
     if (!this.mindMap.doExportPDF) {
       throw new Error('请注册ExportPDF插件')
     }
-    const img = await this.png(
-      '',
-      false,
-      (width, height) => {
-        if (width <= a4Size.width && height && a4Size.height) return false
-        return width / height > 1
-      },
-      {
-        width: maxImageWidth || a4Size.width * 2
-      }
-    )
-    await this.mindMap.doExportPDF.pdf(name, img, useMultiPageExport)
+    const img = await this.png(name, transparent)
+    await this.mindMap.doExportPDF.pdf(name, img)
   }
 
   // 导出为xmind

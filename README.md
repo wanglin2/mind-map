@@ -27,6 +27,8 @@ Github：[releases](https://github.com/wanglin2/mind-map/releases)。
 
 > 客户端版本会落后于在线版本，尝试最新功能请优先使用在线版。
 
+> 如果访问github比较慢，可以使用：http://lxqnsys.com/simple-mind-map/#/index
+
 # 特性
 
 - [x] 插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小打包体积
@@ -86,7 +88,7 @@ const mindMap = new MindMap({
 
 # License
 
-[MIT](./LICENSE)
+请尽情享受开源：[MIT](./LICENSE)
 
 # 微信交流群
 
@@ -229,5 +231,17 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/张扬.png" style="width: 50px;height: 50px;" />
         <span>张扬</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/长沙利奥软件.jpg" style="width: 50px;height: 50px;" />
+        <span>长沙利奥软件</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/HaHN.jpg" style="width: 50px;height: 50px;" />
+        <span>HaHN</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/继龙.jpg" style="width: 50px;height: 50px;" />
+        <span>继龙</span>
     </span>
 </p>

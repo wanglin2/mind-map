@@ -49,3 +49,9 @@ mindMap.watermark.updateWatermark({
 > v0.3.2+
 
 获取是否存在水印。
+
+### clear()
+
+> v0.9.2+
+
+清除水印。

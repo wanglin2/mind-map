@@ -56,6 +56,16 @@ Whether the node is currently being dragged
 
 ## Methods
 
+### getPureData(removeActiveState = true, removeId = false)
+
+> v0.9.0+
+
+- `removeActiveState`：Is remove the activation status of the node
+
+- `removeId`：Is remove the uid of the node
+
+Serialize a node to obtain its pure data, excluding references to node instances.
+
 ### setGeneralizationOpacity(val)
 
 > v0.9.0+
@@ -207,7 +217,7 @@ if `key` is not passed, return the `data` object
 ### setData(data)
 
 Set the value of the specified key in the data object of the node's real data
-nodeData, `SET_NODE_DATA` command's shortcut method
+nodeData, `SET_NODE_DATA` command's shortcut method. This method and command will not update the view, so if you want to modify the text, use the 'setText' method or use the command pointing to the text.
 
 ### setText(text, richText)
 

@@ -96,8 +96,13 @@ class RichText {
         border: none;
       }
 
+      .smm-richtext-node-wrap {
+        word-break: break-all;
+      }
+
       .smm-richtext-node-wrap p {
         font-family: auto;
+        
       }
 
       .smm-richtext-node-edit-wrap p {
@@ -238,17 +243,24 @@ class RichText {
         this.textEditNode.style.borderRadius = (node.height || 50) + 'px'
       }
     }
-    if (!node.getData('richText')) {
-      // 还不是富文本的情况
-      let text = ''
-      if (!isUndef(node.getData('text'))) {
-        text = String(node.getData('text')).split(/\n/gim).join('<br>')
-      }
+    // 节点文本内容
+    const nodeText = node.getData('text')
+    // 是否是空文本
+    const isEmptyText = isUndef(nodeText)
+    // 是否是非空的非富文本
+    const noneEmptyNoneRichText = !node.getData('richText') && !isEmptyText
+    // 如果是空文本，那么设置为丢失样式状态，否则输入不会带上样式
+    if (isEmptyText) {
+      this.lostStyle = true
+    }
+    if (noneEmptyNoneRichText) {
+      // 还不是富文本
+      let text = String(nodeText).split(/\n/gim).join('<br>')
       let html = `<p>${text}</p>`
       this.textEditNode.innerHTML = this.cacheEditingText || html
     } else {
-      this.textEditNode.innerHTML =
-        this.cacheEditingText || node.getData('text')
+      // 已经是富文本
+      this.textEditNode.innerHTML = this.cacheEditingText || nodeText
     }
     this.initQuillEditor()
     document.querySelector('.ql-editor').style.minHeight = originHeight + 'px'
@@ -258,7 +270,7 @@ class RichText {
     this.focus(
       isInserting || (selectTextOnEnterEditText && !isFromKeyDown) ? 0 : null
     )
-    if (!node.getData('richText')) {
+    if (noneEmptyNoneRichText) {
       // 如果是非富文本的情况，需要手动应用文本样式
       this.setTextStyleIfNotRichText(node)
     }
@@ -364,6 +376,8 @@ class RichText {
           rectInfo,
           formatInfo
         )
+      } else {
+        this.mindMap.emit('rich_text_selection_change', false, null, null)
       }
     })
     this.quill.on('text-change', () => {

@@ -55,49 +55,66 @@ class Drag extends Base {
 
   //  绑定事件
   bindEvent() {
-    this.checkOverlapNode = throttle(this.checkOverlapNode, 300, this)
-    this.mindMap.on('node_mousedown', (node, e) => {
-      // 只读模式、不是鼠标左键按下、按下的是概要节点或根节点直接返回
-      if (
-        this.mindMap.opt.readonly ||
-        e.which !== 1 ||
-        node.isGeneralization ||
-        node.isRoot
-      ) {
-        return
-      }
-      e.preventDefault()
-      this.isMousedown = true
-      // 记录鼠标按下时的节点
-      this.mousedownNode = node
-      // 记录鼠标按下的坐标
-      const { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
-      this.mouseDownX = x
-      this.mouseDownY = y
-    })
-    this.mindMap.on('mousemove', e => {
-      if (this.mindMap.opt.readonly || !this.isMousedown) {
-        return
-      }
-      e.preventDefault()
-      const { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
-      this.mouseMoveX = x
-      this.mouseMoveY = y
-      // 还没开始移动时鼠标位移过小不认为是拖拽
-      if (
-        !this.isDragging &&
-        Math.abs(x - this.mouseDownX) <= this.checkDragOffset &&
-        Math.abs(y - this.mouseDownY) <= this.checkDragOffset
-      ) {
-        return
-      }
-      this.mindMap.emit('node_dragging')
-      this.handleStartMove()
-      this.onMove(x, y, e)
-    })
+    this.onNodeMousedown = this.onNodeMousedown.bind(this)
+    this.onMousemove = this.onMousemove.bind(this)
     this.onMouseup = this.onMouseup.bind(this)
+    this.checkOverlapNode = throttle(this.checkOverlapNode, 300, this)
+
+    this.mindMap.on('node_mousedown', this.onNodeMousedown)
+    this.mindMap.on('mousemove', this.onMousemove)
     this.mindMap.on('node_mouseup', this.onMouseup)
     this.mindMap.on('mouseup', this.onMouseup)
+  }
+
+  // 解绑事件
+  unBindEvent() {
+    this.mindMap.off('node_mousedown', this.onNodeMousedown)
+    this.mindMap.off('mousemove', this.onMousemove)
+    this.mindMap.off('node_mouseup', this.onMouseup)
+    this.mindMap.off('mouseup', this.onMouseup)
+  }
+
+  // 节点鼠标按下事件
+  onNodeMousedown(node, e) {
+    // 只读模式、不是鼠标左键按下、按下的是概要节点或根节点直接返回
+    if (
+      this.mindMap.opt.readonly ||
+      e.which !== 1 ||
+      node.isGeneralization ||
+      node.isRoot
+    ) {
+      return
+    }
+    e.preventDefault()
+    this.isMousedown = true
+    // 记录鼠标按下时的节点
+    this.mousedownNode = node
+    // 记录鼠标按下的坐标
+    const { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
+    this.mouseDownX = x
+    this.mouseDownY = y
+  }
+
+  // 鼠标移动事件
+  onMousemove(e) {
+    if (this.mindMap.opt.readonly || !this.isMousedown) {
+      return
+    }
+    e.preventDefault()
+    const { x, y } = this.mindMap.toPos(e.clientX, e.clientY)
+    this.mouseMoveX = x
+    this.mouseMoveY = y
+    // 还没开始移动时鼠标位移过小不认为是拖拽
+    if (
+      !this.isDragging &&
+      Math.abs(x - this.mouseDownX) <= this.checkDragOffset &&
+      Math.abs(y - this.mouseDownY) <= this.checkDragOffset
+    ) {
+      return
+    }
+    this.mindMap.emit('node_dragging', this.mousedownNode)
+    this.handleStartMove()
+    this.onMove(x, y, e)
   }
 
   //  鼠标松开事件
@@ -684,6 +701,16 @@ class Drag extends Base {
     return !!this.beingDragNodeList.find(item => {
       return item.uid === node.uid || item.isAncestor(node)
     })
+  }
+
+  // 插件被移除前做的事情
+  beforePluginRemove() {
+    this.unBindEvent()
+  }
+
+  // 插件被卸载前做的事情
+  beforePluginDestroy() {
+    this.unBindEvent()
   }
 }
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>结构</h1>
-<p><code>simple-mind-map</code>目前支持四种结构：logicalStructure（逻辑结构图）、mindMap（思维导图）、organizationStructure（组织结构图）、catalogOrganization（目录组织图）、timeline（时间轴）、timeline2（时间轴2）、fishbone（鱼骨图）、verticalTimeline（v0.6.6+竖向时间轴）。</p>
+<p><code>simple-mind-map</code>目前支持的结构：logicalStructure（逻辑结构图）、mindMap（思维导图）、organizationStructure（组织结构图）、catalogOrganization（目录组织图）、timeline（时间轴）、timeline2（时间轴2）、fishbone（鱼骨图）、verticalTimeline（v0.6.6+竖向时间轴）。</p>
 <p>可以在实例化<code>simple-mind-map</code>时通过选项指定使用的结构：</p>
 <pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({
     <span class="hljs-comment">// ...</span>

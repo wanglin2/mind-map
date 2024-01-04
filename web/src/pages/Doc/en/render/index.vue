@@ -7,7 +7,10 @@ accessed through <code>mindMap.renderer</code>.</p>
 <h3>activeNodeList</h3>
 <p>Gets the current list of active nodes.</p>
 <h3>root</h3>
-<p>Gets the root node of the node tree.</p>
+<p>Node tree, also known as the mind map node instance tree.</p>
+<h3>renderTree</h3>
+<p>The rendering tree, also known as the data tree of the mind map.</p>
+<h3>layout</h3>
 <h2>Methods</h2>
 <h3>highlightNode(node, range)</h3>
 <blockquote>
@@ -93,11 +96,6 @@ disable the enter key and delete key related shortcuts to prevent conflicts.</p>
 <p>Search for the index of a node in the active list.</p>
 <h3>getNodeIndex(node)</h3>
 <p>Get the position index of a node among its siblings.</p>
-<h3>removeOneNode(node)</h3>
-<p>Delete a specific node.</p>
-<h3>copyNode()</h3>
-<p>Copy a node, the active node is the node to be operated on, if there are
-multiple active nodes, only the first node will be operated on.</p>
 <h3>setNodeDataRender(node, data, notRender)</h3>
 <ul>
 <li><code>notRender</code>: v0.6.9+, <code>Boolean</code>, Default is <code>false</code>, Do not trigger rendering.</li>
@@ -151,17 +149,35 @@ is an object, e.g. <code>{text: 'I am new text'}</code>.</p>
 <blockquote>
 <p>v0.6.8+</p>
 </blockquote>
-<p>Copy nodes. After calling this method, the current activated node data will be stored. Multiple activated nodes will only operate on the first node, and subsequent calls to the 'paste()' method can be pasted.</p>
+<p>Copy nodes. After calling this method, the current activated node data will be stored. and subsequent calls to the 'paste()' method can be pasted.</p>
+<p>If the browser and protocol (https) support 'js' to manipulate clipboard data, the copied node data will also be added to the user's clipboard.</p>
 <h3>cut()</h3>
 <blockquote>
 <p>v0.6.8+</p>
 </blockquote>
-<p>Cut a node. After calling this method, the currently active node will be cut and the node data will be stored. Multiple nodes will only operate on the first node, and subsequent calls to the 'paste()' method can be pasted.</p>
+<p>Cut a node. After calling this method, the currently active node will be cut and the node data will be stored. and subsequent calls to the 'paste()' method can be pasted.</p>
+<p>If the browser and protocol (https) support 'js' to manipulate clipboard data, the copied node data will also be added to the user's clipboard.</p>
 <h3>paste()</h3>
 <blockquote>
 <p>v0.6.8+</p>
 </blockquote>
-<p>Pasting nodes can be done by calling the 'copy()' or 'cut()' method after calling it. This method does not support pasting data from the user's clipboard. Please use the built-in 'Ctrl+v' shortcut key.</p>
+<p>Pasting nodes can be done by calling the 'copy()' or 'cut()' method after calling it.</p>
+<p>If the browser and protocol (https) support 'js' to manipulate clipboard data, data copied from other places can also be pasted. For example, you can paste' simple mind map 'nodes across browsers. If it is non' simple mind map 'node data, the text and images in the clipboard will be extracted and pasted. The text will be pasted as a child node by default, and the images will be added to the current node by default.</p>
+<h3>clearCache()</h3>
+<blockquote>
+<p>v0.9.2+</p>
+</blockquote>
+<p>Empty the node cache pool.</p>
+<h3>emitNodeActiveEvent(node = null, activeNodeList = [...this.activeNodeList])</h3>
+<ul>
+<li>
+<p><code>node</code>：The node activated this time</p>
+</li>
+<li>
+<p><code>activeNodeList</code>：All currently activated nodes</p>
+</li>
+</ul>
+<p>Dispatch node activation event, which triggers <code>node_active</code> event.</p>
 
   </div>
 </template>

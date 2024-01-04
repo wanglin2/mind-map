@@ -31,6 +31,19 @@
 </blockquote>
 <p>节点是否正在拖拽中</p>
 <h2>方法</h2>
+<h3>getPureData(removeActiveState = true, removeId = false)</h3>
+<blockquote>
+<p>v0.9.0+</p>
+</blockquote>
+<ul>
+<li>
+<p><code>removeActiveState</code>：是否移除节点的激活状态</p>
+</li>
+<li>
+<p><code>removeId</code>：是否移除节点的uid字段</p>
+</li>
+</ul>
+<p>序列化节点，获取该节点的纯数据，不包含对节点实例的引用。</p>
 <h3>setGeneralizationOpacity(val)</h3>
 <blockquote>
 <p>v0.9.0+</p>
@@ -141,7 +154,7 @@
 <h3>getData(key)</h3>
 <p>获取该节点真实数据<code>nodeData</code>的<code>data</code>对象里的指定值，<code>key</code>不传返回这个<code>data</code>对象</p>
 <h3>setData(data)</h3>
-<p>设置节点数据，<code>SET_NODE_DATA</code>命令的快捷方法</p>
+<p>设置节点数据，<code>SET_NODE_DATA</code>命令的快捷方法，这个方法和命令不会更新视图，所以如果你要修改文本，就使用<code>setText</code>方法，或者用手指文本的命令。</p>
 <h3>setText(text, richText, resetRichText)</h3>
 <ul>
 <li>

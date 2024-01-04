@@ -6,18 +6,35 @@ import {
   checkIsRichText,
   isUndef
 } from '../../../utils'
-import { Image, SVG, A, G, Rect, Text, ForeignObject } from '@svgdotjs/svg.js'
+import {
+  Image as SVGImage,
+  SVG,
+  A,
+  G,
+  Rect,
+  Text,
+  ForeignObject
+} from '@svgdotjs/svg.js'
 import iconsSvg from '../../../svg/icons'
 import { CONSTANTS, commonCaches } from '../../../constants/constant'
 
 //  创建图片节点
 function createImgNode() {
-  let img = this.getData('image')
+  const img = this.getData('image')
   if (!img) {
     return
   }
-  let imgSize = this.getImgShowSize()
-  let node = new Image().load(img).size(...imgSize)
+  const imgSize = this.getImgShowSize()
+  const node = new SVGImage().load(img).size(...imgSize)
+  // 如果指定了加载失败显示的图片，那么加载一下图片检测是否失败
+  const { defaultNodeImage } = this.mindMap.opt
+  if (defaultNodeImage) {
+    const imgEl = new Image()
+    imgEl.onerror = () => {
+      node.load(defaultNodeImage)
+    }
+    imgEl.src = img
+  }
   if (this.getData('imageTitle')) {
     node.attr('title', this.getData('imageTitle'))
   }
@@ -71,7 +88,7 @@ function createIconNode() {
       node = SVG(src)
     } else {
       // 图片图标
-      node = new Image().load(src)
+      node = new SVGImage().load(src)
     }
     node.size(iconSize, iconSize)
     node.on('click', e => {
@@ -101,8 +118,8 @@ function createRichTextNode() {
       recoverText = true
     }
   }
-  if (recoverText) {
-    let text = this.getData('text')
+  let text = this.getData('text')
+  if (recoverText && !isUndef(text)) {
     // 判断节点内容是否是富文本
     let isRichText = checkIsRichText(text)
     // 样式字符串
@@ -140,6 +157,7 @@ function createRichTextNode() {
     let elTmp = div.children[0]
     elTmp.classList.add('smm-richtext-node-wrap')
     height = elTmp.getBoundingClientRect().height
+    div.innerHTML = html
   }
   width = Math.ceil(width) + 1 // 修复getBoundingClientRect方法对实际宽度是小数的元素获取到的值是整数，导致宽度不够文本发生换行的问题
   height = Math.ceil(height)

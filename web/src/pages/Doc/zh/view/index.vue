@@ -8,6 +8,7 @@
 <p>v0.6.0+</p>
 </blockquote>
 <p>缩放思维导图至适应画布。</p>
+<p>注意该方法不能在<code>setData</code>、<code>setFullData</code>方法调用后立即调用，需要监听<code>node_tree_render_end</code>事件调用<code>fit</code>。</p>
 <h3>translateX(step)</h3>
 <p><code>x</code>方向进行平移，<code>step</code>：要平移的像素</p>
 <h3>translateY(step)</h3>

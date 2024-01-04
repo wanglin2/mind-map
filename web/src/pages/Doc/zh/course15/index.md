@@ -88,37 +88,15 @@ mindMap.on('expand_btn_click', hide)
 
 接下来介绍一下复制、剪切、粘贴的实现。
 
-一般来说你的右键菜单中肯定也会添加这三个按钮，另外快捷键操作也是必不可少的，但是这三个快捷键是没有内置的，所以你需要自己注册一下：
+一般来说你的右键菜单中肯定也会添加这三个按钮，当点击这三个按钮时你需要调用对应的方法： 
 
 ```js
-mindMap.keyCommand.addShortcut('Control+c', copy)
-mindMap.keyCommand.addShortcut('Control+v', paste)
-mindMap.keyCommand.addShortcut('Control+x', cut)
+// 当点击了复制按钮时调用
+mindMap.renderer.copy()
+
+// 当点击了剪切按钮时调用
+mindMap.renderer.cut()
+
+// 当点击了粘贴按钮时调用
+mindMap.renderer.paste()
 ```
-
-如需删除调用`removeShortcut`方法即可。
-
-接下来实现一下这三个方法：
-
-```js
-// 保存复制/剪切的节点的数据，后续可以原来粘贴
-let copyData = null
-
-const copy = () => {
-    copyData = mindMap.renderer.copyNode()
-}
-
-const cut = () => {
-    mindMap.execCommand('CUT_NODE', _copyData => {
-        copyData = _copyData
-    })
-}
-
-const paste = () => {
-    mindMap.execCommand('PASTE_NODE', copyData)
-}
-```
-
-## 完整示例
-
-<iframe style="width: 100%; height: 455px; border: none;" src="https://wanglin2.github.io/playground/#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" />

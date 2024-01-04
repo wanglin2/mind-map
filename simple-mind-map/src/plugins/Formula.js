@@ -37,7 +37,7 @@ class Formula {
   // 给指定的节点插入指定公式
   insertFormulaToNode(node, formula) {
     let richTextPlugin = this.mindMap.richText
-    richTextPlugin.showEditText(node)
+    richTextPlugin.showEditText({ node })
     richTextPlugin.quill.insertEmbed(
       richTextPlugin.quill.getLength() - 1,
       'formula',

@@ -5,9 +5,15 @@
 ```js
 new MindMap({
     // ...
-    mousewheelAction: 'zoom'// zoom（放大缩小）、move（上下移动）
+    mousewheelAction: 'move'// zoom（放大缩小）、move（上下移动）
     // 当mousewheelAction设为move时，可以通过该属性控制鼠标滚动一下视图移动的步长，单位px
     mousewheelMoveStep: 100,
+    // 鼠标缩放是否以鼠标当前位置为中心点，否则以画布中心点
+    mouseScaleCenterUseMousePosition: true,
+    // 当mousewheelAction设为zoom时，或者按住Ctrl键时，默认向前滚动是缩小，向后滚动是放大，如果该属性设为true，那么会反过来
+    mousewheelZoomActionReverse: true,
+    // 禁止鼠标滚轮缩放，你仍旧可以使用api进行缩放
+    disableMouseWheelZoom: false,
 })
 ```
 
@@ -15,7 +21,7 @@ new MindMap({
 
 ```js
 mindMap.updateConfig({
-    mousewheelAction: 'move'
+    mousewheelAction: 'zoom'
 })
 ```
 

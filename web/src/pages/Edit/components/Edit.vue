@@ -94,7 +94,6 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(TouchEvent)
   .usePlugin(SearchPlugin)
   .usePlugin(Painter)
-  .usePlugin(ScrollbarPlugin)
   .usePlugin(Formula)
 // .usePlugin(Cooperate)// 协同插件
 
@@ -145,6 +144,7 @@ export default {
     ...mapState({
       isZenMode: state => state.localConfig.isZenMode,
       openNodeRichText: state => state.localConfig.openNodeRichText,
+      isShowScrollbar: state => state.localConfig.isShowScrollbar,
       useLeftKeySelectionRightKeyDrag: state =>
         state.localConfig.useLeftKeySelectionRightKeyDrag,
       isShowScrollbar: state => state.localConfig.isShowScrollbar
@@ -156,6 +156,13 @@ export default {
         this.addRichTextPlugin()
       } else {
         this.removeRichTextPlugin()
+      }
+    },
+    isShowScrollbar() {
+      if (this.isShowScrollbar) {
+        this.addScrollbarPlugin()
+      } else {
+        this.removeScrollbarPlugin()
       }
     }
   },
@@ -308,6 +315,8 @@ export default {
         customInnerElsAppendTo: null,
         enableAutoEnterTextEditWhenKeydown: true,
         customHandleClipboardText: handleClipboardText,
+        defaultNodeImage: require('../../../assets/img/图片加载失败.svg'),
+        initRootNodePosition: ['center', 'center'],
         handleIsSplitByWrapOnPasteCreateNewNode: () => {
           return this.$confirm(
             this.$t('edit.splitByWrap'),
@@ -328,7 +337,21 @@ export default {
             default:
               break
           }
-        },
+        }
+        // handleNodePasteImg: img => {
+        //   console.log(img)
+        //   return new Promise(resolve => {
+        //     setTimeout(() => {
+        //       resolve({
+        //         url: require('../../../assets/img/themes/autumn.jpg'),
+        //         size: {
+        //           width: 100,
+        //           height: 100
+        //         }
+        //       })
+        //     }, 200)
+        //   })
+        // }
         // isUseCustomNodeContent: true,
         // 示例1：组件里用到了router、store、i18n等实例化vue组件时需要用到的东西
         // customCreateNodeContent: (node) => {
@@ -376,6 +399,7 @@ export default {
         // }
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
+      if (this.isShowScrollbar) this.addScrollbarPlugin()
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
         this.manualSave()
       })
@@ -427,6 +451,12 @@ export default {
       //   console.log(this.mindMap.renderer.root.getRect())
       //   console.log(this.mindMap.renderer.root.getRectInSvg())
       // }, 5000);
+      // setTimeout(() => {
+      //   this.mindMap.renderer.renderTree.data.fillColor = 'red'
+      //   this.mindMap.render()
+      //   this.mindMap.reRender()
+      //   this.mindMap.render()
+      // }, 5000)
     },
 
     // url中是否存在要打开的文件
@@ -515,6 +545,17 @@ export default {
     // 移除节点富文本编辑插件
     removeRichTextPlugin() {
       this.mindMap.removePlugin(RichText)
+    },
+
+    // 加载滚动条插件
+    addScrollbarPlugin() {
+      if (!this.mindMap) return
+      this.mindMap.addPlugin(ScrollbarPlugin)
+    },
+
+    // 移除滚动条插件
+    removeScrollbarPlugin() {
+      this.mindMap.removePlugin(ScrollbarPlugin)
     },
 
     // 测试动态插入节点
