@@ -1074,3 +1074,108 @@ export const handleInputPasteText = (e, text) => {
   selection.getRangeAt(0).insertNode(node)
   selection.collapseToEnd()
 }
+
+// 将思维导图树结构转平级对象
+/*
+    {
+        data: {
+            uid: 'xxx'
+        },
+        children: [
+            {
+                data: {
+                    uid: 'xxx'
+                },
+                children: []
+            }
+        ]
+    }
+    转为：
+    {
+        uid: {
+            children: [uid1, uid2],
+            data: {}
+        }
+    }
+  */
+export const transformTreeDataToObject = data => {
+  const res = {}
+  const walk = (root, parent) => {
+    const uid = root.data.uid
+    if (parent) {
+      parent.children.push(uid)
+    }
+    res[uid] = {
+      isRoot: !parent,
+      data: {
+        ...root.data
+      },
+      children: []
+    }
+    if (root.children && root.children.length > 0) {
+      root.children.forEach(item => {
+        walk(item, res[uid])
+      })
+    }
+  }
+  walk(data, null)
+  return res
+}
+
+// 将平级对象转树结构
+// transformTreeDataToObject方法的反向操作
+// 找到父节点的uid
+const _findParentUid = (data, targetUid) => {
+  const uids = Object.keys(data)
+  let res = ''
+  uids.forEach(uid => {
+    const children = data[uid].children
+    const isParent =
+      children.findIndex(childUid => {
+        return childUid === targetUid
+      }) !== -1
+    if (isParent) {
+      res = uid
+    }
+  })
+  return res
+}
+export const transformObjectToTreeData = data => {
+  const uids = Object.keys(data)
+  if (uids.length <= 0) return null
+  const rootKey = uids.find(uid => {
+    return data[uid].isRoot
+  })
+  if (!rootKey || !data[rootKey]) return null
+  // 根节点
+  const res = {
+    data: simpleDeepClone(data[rootKey].data),
+    children: []
+  }
+  const map = {}
+  map[rootKey] = res
+  uids.forEach(uid => {
+    const parentUid = _findParentUid(data, uid)
+    const cur = data[uid]
+    const node = map[uid] || {
+      data: simpleDeepClone(cur.data),
+      children: []
+    }
+    if (!map[uid]) {
+      map[uid] = node
+    }
+    if (parentUid) {
+      const index = data[parentUid].children.findIndex(item => {
+        return item === uid
+      })
+      if (!map[parentUid]) {
+        map[parentUid] = {
+          data: simpleDeepClone(data[parentUid].data),
+          children: []
+        }
+      }
+      map[parentUid].children[index] = node
+    }
+  })
+  return res
+}
