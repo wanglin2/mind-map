@@ -485,7 +485,10 @@ export default {
         borderRadius: '',
         lineColor: '',
         lineDasharray: '',
-        lineWidth: ''
+        lineWidth: '',
+        gradientStyle: false,
+        startColor: '',
+        endColor: ''
       }
     }
   },
@@ -560,7 +563,10 @@ export default {
         'borderRadius',
         'lineColor',
         'lineDasharray',
-        'lineWidth'
+        'lineWidth',
+        'gradientStyle',
+        'startColor',
+        'endColor'
       ].forEach(item => {
         this.style[item] = this.activeNodes[0].getStyle(item, false)
       })
