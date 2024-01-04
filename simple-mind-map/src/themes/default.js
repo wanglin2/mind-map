@@ -73,7 +73,7 @@ export default {
     borderDasharray: 'none',
     borderRadius: 5,
     textDecoration: 'none',
-    gradientStyle: true,
+    gradientStyle: false,
     startColor: '#549688',
     endColor: '#fff',
   },
