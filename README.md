@@ -248,4 +248,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/欣.jpg" style="width: 50px;height: 50px;" />
         <span>欣</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>易空小易</span>
+    </span>
 </p>
