@@ -131,6 +131,7 @@ function updateGeneralizationData() {
 function removeGeneralization() {
   if (this.isGeneralization) return
   this._generalizationList.forEach(item => {
+    item.generalizationNode.style.onRemove()
     if (item.generalizationLine) {
       item.generalizationLine.remove()
       item.generalizationLine = null

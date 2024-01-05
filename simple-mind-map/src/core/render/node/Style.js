@@ -59,6 +59,8 @@ class Style {
     // 箭头图标
     this._markerPath = null
     this._marker = null
+    // 渐变背景
+    this._gradient = null
   }
 
   //  合并样式
@@ -90,14 +92,6 @@ class Style {
     return this.merge(prop, root)
   }
 
-  createGradient() {
-    let gradient = new Gradient("linear")
-    gradient.id()
-    gradient.stop(0,this.merge('startColor'))
-    gradient.stop(1, this.merge('endColor'))
-    return gradient
-  }
-
   //  获取自身自定义样式
   getSelfStyle(prop) {
     return this.ctx.getData(prop)
@@ -109,19 +103,22 @@ class Style {
     node.radius(this.merge('borderRadius'))
   }
 
-  //   矩形外的其他形状
-  shape(node, uid) {
+  // 形状
+  shape(node) {
     if (this.merge('gradientStyle')) {
-      node.fill('url(#' + uid + ')'
-      )
+      if (!this._gradient) {
+        this._gradient = this.ctx.nodeDraw.gradient('linear')
+      }
+      this._gradient.update(add => {
+        add.stop(0, this.merge('startColor'))
+        add.stop(1, this.merge('endColor'))
+      })
+      node.fill(this._gradient)
     } else {
       node.fill({
         color: this.merge('fillColor')
       })
     }
-    // node.fill({
-    //   color: this.merge('fillColor')
-    // })
     // 节点使用横线样式，不需要渲染非激活状态的边框样式
     // if (
     //   !this.ctx.isRoot &&
@@ -289,6 +286,22 @@ class Style {
     node.radius(5).fill('none').stroke({
       color: hoverRectColor
     })
+  }
+
+  // 所属节点被删除时的操作
+  onRemove() {
+    if (this._marker) {
+      this._marker.remove()
+      this._marker = null
+    }
+    if (this._markerPath) {
+      this._markerPath.remove()
+      this._markerPath = null
+    }
+    if (this._gradient) {
+      this._gradient.remove()
+      this._gradient = null
+    }
   }
 }
 

@@ -75,7 +75,7 @@ export default {
     textDecoration: 'none',
     gradientStyle: false,
     startColor: '#549688',
-    endColor: '#fff',
+    endColor: '#fff'
   },
   // 二级节点样式
   second: {
@@ -96,7 +96,7 @@ export default {
     textDecoration: 'none',
     gradientStyle: false,
     startColor: '#549688',
-    endColor: '#fff',
+    endColor: '#fff'
   },
   // 三级及以下节点样式
   node: {
@@ -117,7 +117,7 @@ export default {
     textDecoration: 'none',
     gradientStyle: false,
     startColor: '#549688',
-    endColor: '#fff',
+    endColor: '#fff'
   },
   // 概要节点样式
   generalization: {
@@ -138,7 +138,7 @@ export default {
     textDecoration: 'none',
     gradientStyle: false,
     startColor: '#549688',
-    endColor: '#fff',
+    endColor: '#fff'
   }
 }
 
@@ -174,7 +174,10 @@ const nodeSizeIndependenceList = [
   'backgroundPosition',
   'backgroundSize',
   'rootLineKeepSameInCurve',
-  'showLineMarker'
+  'showLineMarker',
+  'gradientStyle',
+  'startColor',
+  'endColor'
 ]
 export const checkIsNodeSizeIndependenceConfig = config => {
   let keys = Object.keys(config)

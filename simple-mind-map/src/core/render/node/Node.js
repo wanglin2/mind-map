@@ -1,6 +1,6 @@
 import Style from './Style'
 import Shape from './Shape'
-import { G, ForeignObject, Rect, Defs } from '@svgdotjs/svg.js'
+import { G, ForeignObject, Rect } from '@svgdotjs/svg.js'
 import nodeGeneralizationMethods from './nodeGeneralization'
 import nodeExpandBtnMethods from './nodeExpandBtn'
 import nodeCommandWrapsMethods from './nodeCommandWraps'
@@ -63,8 +63,6 @@ class Node {
     this.userList = []
     // 节点内容的容器
     this.group = null
-    this.defsNode = null // 节点静态元素
-    this.gradientNode = null // 节点渐变背景
     this.shapeNode = null // 节点形状节点
     this.hoverNode = null // 节点hover和激活的节点
     // 节点内容对象
@@ -301,17 +299,11 @@ class Node {
     let { paddingY } = this.getPaddingVale()
     const halfBorderWidth = this.getBorderWidth() / 2
     paddingY += this.shapePadding.paddingY + halfBorderWidth
-    // 节点静态元素
-    this.defsNode = new Defs()
-    // 节点渐变背景
-    this.gradientNode = this.style.createGradient()
-    this.defsNode.add(this.gradientNode)
-    this.group.add(this.defsNode)
     // 节点形状
     this.shapeNode = this.shapeInstance.createShape()
     this.shapeNode.addClass('smm-node-shape')
     this.shapeNode.translate(halfBorderWidth, halfBorderWidth)
-    this.style.shape(this.shapeNode, this.gradientNode.id())
+    this.style.shape(this.shapeNode)
     this.group.add(this.shapeNode)
     // 渲染一个隐藏的矩形区域，用来触发展开收起按钮的显示
     this.renderExpandBtnPlaceholderRect()
@@ -369,7 +361,9 @@ class Node {
     if (this._textData) {
       this._textData.node.attr('data-offsetx', textContentOffsetX)
       // 修复safari浏览器节点存在图标时文字位置不正确的问题
-      ;(this._textData.nodeContent || this._textData.node).x(textContentOffsetX).y(0)
+      ;(this._textData.nodeContent || this._textData.node)
+        .x(textContentOffsetX)
+        .y(0)
       textContentNested.add(this._textData.node)
       textContentOffsetX += this._textData.width + textContentItemMargin
     }
@@ -719,6 +713,7 @@ class Node {
     if (this.parent) {
       this.parent.removeLine()
     }
+    this.style.onRemove()
   }
 
   //  隐藏节点
