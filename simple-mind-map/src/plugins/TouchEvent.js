@@ -137,7 +137,7 @@ class TouchEvent {
       }
     }
     let event = new MouseEvent(eventName, {
-      view: window,
+      view: document.defaultView,
       bubbles: true,
       cancelable: true,
       ...opt
