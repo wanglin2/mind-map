@@ -438,14 +438,22 @@ class MindMap {
     }
     // 添加必要的样式
     clone.add(SVG(`<style>${cssContent}</style>`))
-    // 修正关联线箭头marker的id
-    const markerList = svg.find('marker')
-    if (markerList && markerList.length > 0) {
-      const id = markerList[0].attr('id')
-      clone.find('marker').forEach(item => {
-        item.attr('id', id)
-      })
-    }
+    // 修正defs里定义的元素的id，因为clone时defs里的元素的id会继续递增，导致和内容中引用的id对不上
+    const defs = svg.find('defs')
+    const defs2 = clone.find('defs')
+    defs.forEach((def, defIndex) => {
+      const def2 = defs2[defIndex]
+      if (!def2) return
+      const children = def.children()
+      const children2 = def2.children()
+      for (let i = 0; i < children.length; i++) {
+        const child = children[i]
+        const child2 = children2[i]
+        if (child && child2) {
+          child2.attr('id', child.attr('id'))
+        }
+      }
+    })
     // 恢复原先的大小和变换信息
     svg.size(origWidth, origHeight)
     draw.transform(origTransform)
