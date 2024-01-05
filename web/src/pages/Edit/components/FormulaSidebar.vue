@@ -34,6 +34,7 @@
 import Sidebar from './Sidebar'
 import { mapState, mapMutations } from 'vuex'
 import { formulaList } from '@/config/constant'
+import 'simple-mind-map/node_modules/katex/dist/katex.min.css'
 
 export default {
   name: 'FormulaSidebar',
@@ -78,10 +79,10 @@ export default {
     init() {
       this.list = formulaList.map(item => {
         return {
-          overview: window.katex.renderToString(item, {
-            throwOnError: false,
-            output: 'mathml'
-          }),
+          overview: window.katex.renderToString(
+            item,
+            this.mindMap.formula.getKatexConfig()
+          ),
           text: item
         }
       })

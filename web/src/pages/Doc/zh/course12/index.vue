@@ -237,7 +237,7 @@ mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_CHILD_NODE&#x27;</spa
     <span class="hljs-keyword">if</span> (!selection.rangeCount) <span class="hljs-keyword">return</span>
     selection.deleteFromDocument()<span class="hljs-comment">// 删除当前选区，也就是如果当前用户在输入框中选择了一些文本，会被删除</span>
     <span class="hljs-comment">// 从剪贴板里取出文本数据</span>
-    <span class="hljs-keyword">let</span> text = (e.clipboardData || <span class="hljs-built_in">window</span>.clipboardData).getData(<span class="hljs-string">&#x27;text&#x27;</span>)
+    <span class="hljs-keyword">let</span> text = e.clipboardData.getData(<span class="hljs-string">&#x27;text&#x27;</span>)
     <span class="hljs-comment">// 调用库提供的getTextFromHtml方法去除格式</span>
     text = getTextFromHtml(text)
     <span class="hljs-comment">// 去除换行</span>

@@ -2,6 +2,7 @@ import {
   checkIsNodeStyleDataKey,
   generateColorByContent
 } from '../../../utils/index'
+import { Gradient } from '@svgdotjs/svg.js'
 
 const rootProp = ['paddingX', 'paddingY']
 const backgroundStyleProps = [
@@ -58,6 +59,8 @@ class Style {
     // 箭头图标
     this._markerPath = null
     this._marker = null
+    // 渐变背景
+    this._gradient = null
   }
 
   //  合并样式
@@ -100,11 +103,22 @@ class Style {
     node.radius(this.merge('borderRadius'))
   }
 
-  //   矩形外的其他形状
+  // 形状
   shape(node) {
-    node.fill({
-      color: this.merge('fillColor')
-    })
+    if (this.merge('gradientStyle')) {
+      if (!this._gradient) {
+        this._gradient = this.ctx.nodeDraw.gradient('linear')
+      }
+      this._gradient.update(add => {
+        add.stop(0, this.merge('startColor'))
+        add.stop(1, this.merge('endColor'))
+      })
+      node.fill(this._gradient)
+    } else {
+      node.fill({
+        color: this.merge('fillColor')
+      })
+    }
     // 节点使用横线样式，不需要渲染非激活状态的边框样式
     // if (
     //   !this.ctx.isRoot &&
@@ -272,6 +286,22 @@ class Style {
     node.radius(5).fill('none').stroke({
       color: hoverRectColor
     })
+  }
+
+  // 所属节点被删除时的操作
+  onRemove() {
+    if (this._marker) {
+      this._marker.remove()
+      this._marker = null
+    }
+    if (this._markerPath) {
+      this._markerPath.remove()
+      this._markerPath = null
+    }
+    if (this._gradient) {
+      this._gradient.remove()
+      this._gradient = null
+    }
   }
 }
 

@@ -1,6 +1,13 @@
 import * as Y from 'yjs'
 import { WebrtcProvider } from 'y-webrtc'
-import { isSameObject, simpleDeepClone, getType, isUndef } from '../utils/index'
+import {
+  isSameObject,
+  simpleDeepClone,
+  getType,
+  isUndef,
+  transformTreeDataToObject,
+  transformObjectToTreeData
+} from '../utils/index'
 
 // 协同插件
 class Cooperate {
@@ -39,7 +46,7 @@ class Cooperate {
     // 创建共享数据
     this.ymap = this.ydoc.getMap()
     // 思维导图树结构转平级对象结构
-    this.currentData = this.transformTreeDataToObject(data)
+    this.currentData = transformTreeDataToObject(data)
     // 将思维导图数据添加到共享数据中
     Object.keys(this.currentData).forEach(uid => {
       this.ymap.set(uid, this.currentData[uid])
@@ -108,7 +115,7 @@ class Cooperate {
     if (isSameObject(data, this.currentData)) return
     this.currentData = data
     // 平级对象转树结构
-    const res = this.transformObjectToTreeData(data)
+    const res = transformObjectToTreeData(data)
     if (!res) return
     // 更新思维导图画布
     this.mindMap.renderer.setData(res)
@@ -118,7 +125,7 @@ class Cooperate {
 
   // 当前思维导图改变后的处理，触发同步
   onDataChange(data) {
-    const res = this.transformTreeDataToObject(data)
+    const res = transformTreeDataToObject(data)
     this.updateChanges(res)
   }
 
@@ -222,111 +229,6 @@ class Cooperate {
         this.waitNodeUidMap[uid] = userInfo
       }
     })
-  }
-
-  // 将树结构转平级对象
-  /*
-    {
-        data: {
-            uid: 'xxx'
-        },
-        children: [
-            {
-                data: {
-                    uid: 'xxx'
-                },
-                children: []
-            }
-        ]
-    }
-    转为：
-    {
-        uid: {
-            children: [uid1, uid2],
-            data: {}
-        }
-    }
-  */
-  transformTreeDataToObject(data) {
-    const res = {}
-    const walk = (root, parent) => {
-      const uid = root.data.uid
-      if (parent) {
-        parent.children.push(uid)
-      }
-      res[uid] = {
-        isRoot: !parent,
-        data: {
-          ...root.data
-        },
-        children: []
-      }
-      if (root.children && root.children.length > 0) {
-        root.children.forEach(item => {
-          walk(item, res[uid])
-        })
-      }
-    }
-    walk(data, null)
-    return res
-  }
-
-  // 找到父节点的uid
-  findParentUid(data, targetUid) {
-    const uids = Object.keys(data)
-    let res = ''
-    uids.forEach(uid => {
-      const children = data[uid].children
-      const isParent =
-        children.findIndex(childUid => {
-          return childUid === targetUid
-        }) !== -1
-      if (isParent) {
-        res = uid
-      }
-    })
-    return res
-  }
-
-  // 将平级对象转树结构
-  transformObjectToTreeData(data) {
-    const uids = Object.keys(data)
-    if (uids.length <= 0) return null
-    const rootKey = uids.find(uid => {
-      return data[uid].isRoot
-    })
-    if (!rootKey || !data[rootKey]) return null
-    // 根节点
-    const res = {
-      data: simpleDeepClone(data[rootKey].data),
-      children: []
-    }
-    const map = {}
-    map[rootKey] = res
-    uids.forEach(uid => {
-      const parentUid = this.findParentUid(data, uid)
-      const cur = data[uid]
-      const node = map[uid] || {
-        data: simpleDeepClone(cur.data),
-        children: []
-      }
-      if (!map[uid]) {
-        map[uid] = node
-      }
-      if (parentUid) {
-        const index = data[parentUid].children.findIndex(item => {
-          return item === uid
-        })
-        if (!map[parentUid]) {
-          map[parentUid] = {
-            data: simpleDeepClone(data[parentUid].data),
-            children: []
-          }
-        }
-        map[parentUid].children[index] = node
-      }
-    })
-    return res
   }
 
   // 插件被移除前做的事情

@@ -26,7 +26,9 @@ import {
   getDataFromClipboard,
   htmlEscape,
   parseAddGeneralizationNodeList,
-  checkNodeListIsEqual
+  checkNodeListIsEqual,
+  createSmmFormatData,
+  checkSmmFormatData
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -876,20 +878,14 @@ class Render {
   copy() {
     this.beingCopyData = this.copyNode()
     if (!this.beingCopyData) return
-    setDataToClipboard({
-      simpleMindMap: true,
-      data: this.beingCopyData
-    })
+    setDataToClipboard(createSmmFormatData(this.beingCopyData))
   }
 
   // 剪切节点
   cut() {
     this.mindMap.execCommand('CUT_NODE', copyData => {
       this.beingCopyData = copyData
-      setDataToClipboard({
-        simpleMindMap: true,
-        data: copyData
-      })
+      setDataToClipboard(createSmmFormatData(copyData))
     })
   }
 
@@ -936,10 +932,11 @@ class Render {
             const res = await this.mindMap.opt.customHandleClipboardText(text)
             if (!isUndef(res)) {
               useDefault = false
-              if (typeof res === 'object' && res.simpleMindMap) {
-                smmData = res.data
+              const checkRes = checkSmmFormatData(res)
+              if (checkRes.isSmm) {
+                smmData = checkRes.data
               } else {
-                text = String(res)
+                text = checkRes.data
               }
             }
           } catch (error) {
@@ -948,13 +945,11 @@ class Render {
         }
         // 默认处理
         if (useDefault) {
-          try {
-            const parsedData = JSON.parse(text)
-            if (parsedData && parsedData.simpleMindMap) {
-              smmData = parsedData.data
-            }
-          } catch (error) {
-            errorHandler(ERROR_TYPES.PARSE_PASTE_DATA_ERROR, error)
+          const checkRes = checkSmmFormatData(text)
+          if (checkRes.isSmm) {
+            smmData = checkRes.data
+          } else {
+            text = checkRes.data
           }
         }
         if (smmData) {
@@ -1419,6 +1414,7 @@ class Render {
 
   //  设置节点文本
   setNodeText(node, text, richText, resetRichText) {
+    richText = richText === undefined ? node.getData('richText') : richText
     this.setNodeDataRender(node, {
       text,
       richText,
