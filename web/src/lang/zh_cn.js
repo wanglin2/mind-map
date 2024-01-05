@@ -200,7 +200,10 @@ export default {
     line: '线条',
     nodePadding: '节点内边距',
     horizontal: '水平',
-    vertical: '垂直'
+    vertical: '垂直',
+    gradientStyle: '渐变',
+    startColor: '起始',
+    endColor: '结束'
   },
   theme: {
     title: '主题',
