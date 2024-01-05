@@ -201,7 +201,8 @@ class RichText {
         box-shadow: 0 0 20px rgba(0,0,0,.5);
         outline: none; 
         word-break: 
-        break-all;padding: ${paddingY}px ${paddingX}px;
+        break-all;
+        padding: ${paddingY}px ${paddingX}px;
       `
       this.textEditNode.addEventListener('click', e => {
         e.stopPropagation()

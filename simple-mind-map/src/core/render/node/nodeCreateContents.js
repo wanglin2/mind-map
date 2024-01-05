@@ -159,7 +159,7 @@ function createRichTextNode() {
     height = elTmp.getBoundingClientRect().height
     div.innerHTML = html
   }
-  width = Math.ceil(width) + 1 // 修复getBoundingClientRect方法对实际宽度是小数的元素获取到的值是整数，导致宽度不够文本发生换行的问题
+  width = Math.min(Math.ceil(width) + 1, textAutoWrapWidth) // 修复getBoundingClientRect方法对实际宽度是小数的元素获取到的值是整数，导致宽度不够文本发生换行的问题
   height = Math.ceil(height)
   g.attr('data-width', width)
   g.attr('data-height', height)
@@ -222,7 +222,7 @@ function createTextNode() {
     g.add(node)
   })
   let { width, height } = g.bbox()
-  width = Math.ceil(width)
+  width = Math.min(Math.ceil(width), maxWidth)
   height = Math.ceil(height)
   g.attr('data-width', width)
   g.attr('data-height', height)
