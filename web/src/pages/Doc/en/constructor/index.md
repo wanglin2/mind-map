@@ -420,6 +420,7 @@ Listen to an event. Event list:
 | beforeDestroy（v0.9.0+）    |  Triggered before destroying the mind map, i.e. triggered by calling the destroy method  |   |
 | body_mousedown（v0.9.2+）    | Mousedown event of document.body                      | e（event object）      |
 | body_click    | Click event of document.body                       | e（event object）      |
+| data_change_detail（v0.9.3+）    |  The detailed changes in rendering tree data will return an array, with each item representing an update point and each item being an object, There is a 'type' attribute that represents the type of detail, Including 'create' (create node), 'update' (update node), 'delete' (delete node), There is a 'data' attribute that represents the current updated node data. If it is of the 'update' type, there will also be an 'oldData' attribute that saves the data of the node before the update  | arr（Detail data）      |
 
 ### emit(event, ...args)
 

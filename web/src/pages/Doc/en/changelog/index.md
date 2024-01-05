@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.9.3
+
+Fix
+
+> 1.Fix the issue of text misalignment when nodes have icons in Safari browser.
+>
+> 2.Fix the issue of formula rendering in browsers with lower versions of Chrome kernel.
+>
+> 3.Fix the issue of new MouseEvent code execution errors when used in micro front-end framework applications.
+>
+> 4.Fix the issue of missing arrows on node connections, arrows on associated lines, and gradient backgrounds when exporting images.
+
+New:
+
+> 1.Export PDF from jspdf library to pdf-lib library.
+>
+> 2.If the second parameter of the set node text command (SETNODE-TEXT) is not passed, the previous value will be used.
+>
+> 3.There is an issue of incorrect width and height of exported images in Firefox browser when optimizing nodes with hyperlinks and comments.
+>
+> 4.In node text editing, if the pasted data is in SMM format, the pure text of the first node will be taken out for pasting.
+>
+> 5.Add interception operations for pasting when editing nodes without rich text.
+>
+> 6.Add a detailed event (data_change_detail) for updating node data, which can retrieve newly created, updated, or deleted node data.
+>
+> 7.Theme configuration supports setting node gradient background color.
+
+Demo:
+
+1.Support setting the background of node gradients.
+
 ## 0.9.2
 
 Fix:

@@ -419,6 +419,51 @@ copyNodeTree({}, node)
 
 检查两个节点实例列表包含的节点是否是一样的。
 
+#### getChromeVersion()
+
+> v0.9.3+
+
+获取当前浏览器使用的`Chrome`内核版本。如果当前浏览器使用的不是 `Chrome`内核，那么会返回空字符串。
+
+#### transformTreeDataToObject(data)
+
+> v0.9.3+
+
+- `data`：思维导图节点数据。
+
+将思维导图树结构转平级对象。
+
+```js
+{
+        data: {
+            uid: 'xxx'
+        },
+        children: [
+            {
+                data: {
+                    uid: 'xxx'
+                },
+                children: []
+            }
+        ]
+    }
+```
+转为：
+```js
+    {
+        uid: {
+            children: [uid1, uid2],
+            data: {}
+        }
+    }
+```
+
+#### transformObjectToTreeData(data)
+
+> v0.9.3+
+
+将平级对象转树结构。transformTreeDataToObject方法的反向操作。
+
 ## 在canvas中模拟css的背景属性
 
 引入：

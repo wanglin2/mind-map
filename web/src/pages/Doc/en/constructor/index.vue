@@ -1109,6 +1109,11 @@ poor performance and should be used sparingly.</p>
 <td>Click event of document.body</td>
 <td>e（event object）</td>
 </tr>
+<tr>
+<td>data_change_detail（v0.9.3+）</td>
+<td>The detailed changes in rendering tree data will return an array, with each item representing an update point and each item being an object, There is a 'type' attribute that represents the type of detail, Including 'create' (create node), 'update' (update node), 'delete' (delete node), There is a 'data' attribute that represents the current updated node data. If it is of the 'update' type, there will also be an 'oldData' attribute that saves the data of the node before the update</td>
+<td>arr（Detail data）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>

@@ -219,9 +219,9 @@ if `key` is not passed, return the `data` object
 Set the value of the specified key in the data object of the node's real data
 nodeData, `SET_NODE_DATA` command's shortcut method. This method and command will not update the view, so if you want to modify the text, use the 'setText' method or use the command pointing to the text.
 
-### setText(text, richText)
+### setText(text, richText, resetRichText)
 
-- `richText`: v0.4.2+，`Boolean`, If you want to set rich text content, that is, `html` character, `richText` needs to be passed `true`
+- `richText`: v0.4.2+，`Boolean`, If you want to set rich text content, that is, `html` character, `richText` needs to be passed `true`. After version 0.9.3+, if this parameter is not passed, it will use previous value.
 
 - `resetRichText`: v0.6.10+, `Boolean`, whether to reset rich text, The default is 'false'. If 'true' is passed, the style of the rich text node will be reset
 

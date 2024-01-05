@@ -344,6 +344,46 @@
 <li><code>list1/list2</code>：节点实例列表</li>
 </ul>
 <p>检查两个节点实例列表包含的节点是否是一样的。</p>
+<h4>getChromeVersion()</h4>
+<blockquote>
+<p>v0.9.3+</p>
+</blockquote>
+<p>获取当前浏览器使用的<code>Chrome</code>内核版本。如果当前浏览器使用的不是 <code>Chrome</code>内核，那么会返回空字符串。</p>
+<h4>transformTreeDataToObject(data)</h4>
+<blockquote>
+<p>v0.9.3+</p>
+</blockquote>
+<ul>
+<li><code>data</code>：思维导图节点数据。</li>
+</ul>
+<p>将思维导图树结构转平级对象。</p>
+<pre class="hljs"><code>{
+        <span class="hljs-attr">data</span>: {
+            <span class="hljs-attr">uid</span>: <span class="hljs-string">&#x27;xxx&#x27;</span>
+        },
+        <span class="hljs-attr">children</span>: [
+            {
+                <span class="hljs-attr">data</span>: {
+                    <span class="hljs-attr">uid</span>: <span class="hljs-string">&#x27;xxx&#x27;</span>
+                },
+                <span class="hljs-attr">children</span>: []
+            }
+        ]
+    }
+</code></pre>
+<p>转为：</p>
+<pre class="hljs"><code>    {
+        <span class="hljs-attr">uid</span>: {
+            <span class="hljs-attr">children</span>: [uid1, uid2],
+            <span class="hljs-attr">data</span>: {}
+        }
+    }
+</code></pre>
+<h4>transformObjectToTreeData(data)</h4>
+<blockquote>
+<p>v0.9.3+</p>
+</blockquote>
+<p>将平级对象转树结构。transformTreeDataToObject方法的反向操作。</p>
 <h2>在canvas中模拟css的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

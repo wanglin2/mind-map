@@ -1017,6 +1017,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>document.body的点击事件</td>
 <td>e（事件对象）</td>
 </tr>
+<tr>
+<td>data_change_detail（v0.9.3+）</td>
+<td>渲染树数据变化的明细，会返回一个数组，每一项代表一个更新点，每一项都是一个对象，存在一个<code>type</code>属性，代表明细的类型，包含<code>create</code>（创建节点）、<code>update</code>（更新节点）、<code>delete</code>（删除节点），存在一个<code>data</code>属性，代表当前更新的节点数据，如果是<code>update</code>类型，还会存在一个<code>oldData</code>属性，保存了更新前该节点的数据</td>
+<td>arr（明细数据）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>

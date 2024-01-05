@@ -349,6 +349,46 @@ and copying the <code>data</code> of the data object, example:</p>
 <li><code>list1/list2</code>: Node instance list</li>
 </ul>
 <p>Check if the two node instance lists contain the same nodes.</p>
+<h4>getChromeVersion()</h4>
+<blockquote>
+<p>v0.9.3+</p>
+</blockquote>
+<p>Get the current version of the Chrome kernel used by the browser. If the current browser is not using the 'Chrome' kernel, an empty string will be returned.</p>
+<h4>transformTreeDataToObject(data)</h4>
+<blockquote>
+<p>v0.9.3+</p>
+</blockquote>
+<ul>
+<li><code>data</code>：Mind map node data.</li>
+</ul>
+<p>Convert the mind map tree structure to a level object.</p>
+<pre class="hljs"><code>{
+        <span class="hljs-attr">data</span>: {
+            <span class="hljs-attr">uid</span>: <span class="hljs-string">&#x27;xxx&#x27;</span>
+        },
+        <span class="hljs-attr">children</span>: [
+            {
+                <span class="hljs-attr">data</span>: {
+                    <span class="hljs-attr">uid</span>: <span class="hljs-string">&#x27;xxx&#x27;</span>
+                },
+                <span class="hljs-attr">children</span>: []
+            }
+        ]
+    }
+</code></pre>
+<p>Convert to:</p>
+<pre class="hljs"><code>    {
+        <span class="hljs-attr">uid</span>: {
+            <span class="hljs-attr">children</span>: [uid1, uid2],
+            <span class="hljs-attr">data</span>: {}
+        }
+    }
+</code></pre>
+<h4>transformObjectToTreeData(data)</h4>
+<blockquote>
+<p>v0.9.3+</p>
+</blockquote>
+<p>Convert flat objects into a tree structure. Reverse operation of the transformTreeDataToObject method.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>
