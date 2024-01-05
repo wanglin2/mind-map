@@ -28,7 +28,7 @@ MindMap.iconList = icons.nodeIconList
 MindMap.constants = constants
 MindMap.themes = themes
 MindMap.defaultTheme = defaultTheme
-MindMap.version = '0.9.2'
+MindMap.version = '0.9.3'
 
 MindMap.usePlugin(MiniMap)
   .usePlugin(Watermark)
