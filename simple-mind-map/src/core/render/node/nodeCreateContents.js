@@ -128,7 +128,12 @@ function createRichTextNode() {
       // 如果是富文本那么线移除内联样式
       text = removeHtmlStyle(text)
       // 再添加新的内联样式
+      let _text = text
       text = addHtmlStyle(text, 'span', style)
+      // 给span添加样式没有成功，则尝试给strong标签添加样式
+      if (text === _text) {
+        text = addHtmlStyle(text, 'strong', style)
+      }
     } else {
       // 非富文本
       text = `<p><span style="${style}">${text}</span></p>`
