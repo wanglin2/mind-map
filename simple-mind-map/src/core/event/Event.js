@@ -165,6 +165,8 @@ class Event extends EventEmitter {
   //  鼠标右键菜单事件
   onContextmenu(e) {
     e.preventDefault()
+    // Mac上按住ctrl键点击鼠标左键不知为何触发的是contextmenu事件
+    if (e.ctrlKey) return
     this.emit('contextmenu', e)
   }
 
