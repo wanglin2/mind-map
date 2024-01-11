@@ -576,7 +576,25 @@ export const getVisibleColorFromTheme = themeConfig => {
   }
 }
 
+// 去掉DOM节点中的公式标签
+export const removeFormulaTags = node => {
+  const walk = root => {
+    const childNodes = root.childNodes
+    childNodes.forEach(node => {
+      if (node.nodeType === 1) {
+        if (node.classList.contains('ql-formula')) {
+          node.parentNode.removeChild(node)
+        } else {
+          walk(node)
+        }
+      }
+    })
+  }
+  walk(node)
+}
+
 // 将<p><span></span><p>形式的节点富文本内容转换成\n换行的文本
+// 会过滤掉节点中的格式节点
 let nodeRichTextToTextWithWrapEl = null
 export const nodeRichTextToTextWithWrap = html => {
   if (!nodeRichTextToTextWithWrapEl) {
@@ -589,6 +607,7 @@ export const nodeRichTextToTextWithWrap = html => {
     const node = childNodes[i]
     if (node.nodeType === 1) {
       // 元素节点
+      removeFormulaTags(node)
       if (node.tagName.toLowerCase() === 'p') {
         res += node.textContent + '\n'
       } else {
