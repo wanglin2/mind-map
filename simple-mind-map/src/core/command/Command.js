@@ -177,48 +177,55 @@ class Command {
 
   // 派发思维导图更新明细事件
   emitDataUpdatesEvent(lastData, data) {
-    // 如果data_change_detail没有监听者，那么不进行计算，节省性能
-    const eventName = 'data_change_detail'
-    const count = this.mindMap.event.listenerCount(eventName)
-    if (count > 0 && lastData && data) {
-      const lastDataObj = simpleDeepClone(transformTreeDataToObject(lastData))
-      const dataObj = simpleDeepClone(transformTreeDataToObject(data))
-      const res = []
-      const walkReplace = (root, obj) => {
-        if (root.children && root.children.length > 0) {
-          root.children.forEach((childUid, index) => {
-            root.children[index] = obj[childUid]
-            walkReplace(root.children[index], obj)
-          })
+    try {
+      // 如果data_change_detail没有监听者，那么不进行计算，节省性能
+      const eventName = 'data_change_detail'
+      const count = this.mindMap.event.listenerCount(eventName)
+      if (count > 0 && lastData && data) {
+        const lastDataObj = simpleDeepClone(transformTreeDataToObject(lastData))
+        const dataObj = simpleDeepClone(transformTreeDataToObject(data))
+        const res = []
+        const walkReplace = (root, obj) => {
+          if (root.children && root.children.length > 0) {
+            root.children.forEach((childUid, index) => {
+              root.children[index] =
+                typeof childUid === 'string'
+                  ? obj[childUid]
+                  : obj[childUid.data.uid]
+              walkReplace(root.children[index], obj)
+            })
+          }
+          return root
         }
-        return root
+        // 找出新增的或修改的
+        Object.keys(dataObj).forEach(uid => {
+          // 新增的或已经存在的，如果数据发生了改变
+          if (!lastDataObj[uid]) {
+            res.push({
+              action: 'create',
+              data: walkReplace(dataObj[uid], dataObj)
+            })
+          } else if (!isSameObject(lastDataObj[uid], dataObj[uid])) {
+            res.push({
+              action: 'update',
+              oldData: walkReplace(lastDataObj[uid], lastDataObj),
+              data: walkReplace(dataObj[uid], dataObj)
+            })
+          }
+        })
+        // 找出删除的
+        Object.keys(lastDataObj).forEach(uid => {
+          if (!dataObj[uid]) {
+            res.push({
+              action: 'delete',
+              data: walkReplace(lastDataObj[uid], lastDataObj)
+            })
+          }
+        })
+        this.mindMap.emit(eventName, res)
       }
-      // 找出新增的或修改的
-      Object.keys(dataObj).forEach(uid => {
-        // 新增的或已经存在的，如果数据发生了改变
-        if (!lastDataObj[uid]) {
-          res.push({
-            action: 'create',
-            data: walkReplace(dataObj[uid], dataObj)
-          })
-        } else if (!isSameObject(lastDataObj[uid], dataObj[uid])) {
-          res.push({
-            action: 'update',
-            oldData: walkReplace(lastDataObj[uid], lastDataObj),
-            data: walkReplace(dataObj[uid], dataObj)
-          })
-        }
-      })
-      // 找出删除的
-      Object.keys(lastDataObj).forEach(uid => {
-        if (!dataObj[uid]) {
-          res.push({
-            action: 'delete',
-            data: walkReplace(lastDataObj[uid], lastDataObj)
-          })
-        }
-      })
-      this.mindMap.emit(eventName, res)
+    } catch (error) {
+      this.mindMap.opt.errorHandler && this.mindMap.opt.errorHandler(error)
     }
   }
 }
