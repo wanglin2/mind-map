@@ -486,9 +486,9 @@ class RichText {
   }
 
   // 格式化当前选中的文本
-  formatText(config = {}, clear = false) {
+  formatText(config = {}, clear = false, pure = false) {
     if (!this.range && !this.lastRange) return
-    this.syncFormatToNodeConfig(config, clear)
+    if(!pure) this.syncFormatToNodeConfig(config, clear)
     let rangeLost = !this.range
     let range = rangeLost ? this.lastRange : this.range
     clear
@@ -501,7 +501,24 @@ class RichText {
 
   // 清除当前选中文本的样式
   removeFormat() {
+    // 先移除全部样式
     this.formatText({}, true)
+    // 再将样式恢复为当前主题改节点的默认样式
+    const style = {}
+    if (this.node) {
+      ;[
+        'fontFamily',
+        'fontSize',
+        'fontWeight',
+        'fontStyle',
+        'textDecoration',
+        'color'
+      ].forEach(key => {
+        style[key] = this.node.style.merge(key)
+      })
+    }
+    const config = this.normalStyleToRichTextStyle(style)
+    this.formatText(config, false, true)
   }
 
   // 格式化指定范围的文本
