@@ -329,7 +329,8 @@ export const ERROR_TYPES = {
   LOAD_CLIPBOARD_IMAGE_ERROR: 'load_clipboard_image_error',
   BEFORE_TEXT_EDIT_ERROR: 'before_text_edit_error',
   EXPORT_ERROR: 'export_error',
-  EXPORT_LOAD_IMAGE_ERROR: 'export_load_image_error'
+  EXPORT_LOAD_IMAGE_ERROR: 'export_load_image_error',
+  DATA_CHANGE_DETAIL_EVENT_ERROR: 'data_change_detail_event_error'
 }
 
 // css

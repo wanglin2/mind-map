@@ -5,6 +5,7 @@ import {
   isSameObject,
   transformTreeDataToObject
 } from '../../utils'
+import { ERROR_TYPES } from '../../constants/constant'
 
 //  命令类
 class Command {
@@ -225,7 +226,10 @@ class Command {
         this.mindMap.emit(eventName, res)
       }
     } catch (error) {
-      this.mindMap.opt.errorHandler && this.mindMap.opt.errorHandler(error)
+      this.mindMap.opt.errorHandler(
+        ERROR_TYPES.DATA_CHANGE_DETAIL_EVENT_ERROR,
+        error
+      )
     }
   }
 }
