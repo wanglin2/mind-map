@@ -240,9 +240,12 @@ class MindMap extends Base {
       let y2 = item.top + item.height / 2
       y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
-      let path = `M ${x1},${y1} L ${x1 + _s},${y1} L ${x1 + _s},${y2} L ${
-        x2 + nodeUseLineStyleOffset
-      },${y2}`
+      let path = this.createFoldLine([
+        [x1, y1],
+        [x1 + _s, y1],
+        [x1 + _s, y2],
+        [x2 + nodeUseLineStyleOffset, y2]
+      ])
       this.setLineStyle(style, lines[index], path, item)
     })
   }

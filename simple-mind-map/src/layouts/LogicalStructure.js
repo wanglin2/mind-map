@@ -178,9 +178,12 @@ class LogicalStructure extends Base {
       let nodeUseLineStyleOffset = nodeUseLineStyle ? item.width : 0
       y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
-      let path = `M ${x1},${y1} L ${x1 + s1},${y1} L ${x1 + s1},${y2} L ${
-        x2 + nodeUseLineStyleOffset
-      },${y2}`
+      let path = this.createFoldLine([
+        [x1, y1],
+        [x1 + s1, y1],
+        [x1 + s1, y2],
+        [x2 + nodeUseLineStyleOffset, y2]
+      ])
       this.setLineStyle(style, lines[index], path, item)
     })
   }

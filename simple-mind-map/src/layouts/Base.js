@@ -295,6 +295,65 @@ class Base {
     return `M ${x1},${y1} C ${cx1},${cy1} ${cx2},${cy2} ${x2},${y2}`
   }
 
+  // 根据a,b两个点的位置，计算去除圆角大小后的新的b点
+  computeNewPoint(a, b, radius = 0) {
+    // x坐标相同
+    if (a[0] === b[0]) {
+      // b在a下方
+      if (b[1] > a[1]) {
+        return [b[0], b[1] - radius]
+      } else {
+        // b在a上方
+        return [b[0], b[1] + radius]
+      }
+    } else if (a[1] === b[1]) {
+      // y坐标相同
+      // b在a右边
+      if (b[0] > a[0]) {
+        return [b[0] - radius, b[1]]
+      } else {
+        return [b[0] + radius, b[1]]
+      }
+    }
+  }
+
+  // 创建一段折线路径
+  // 最后一个拐角支持圆角
+  createFoldLine(list) {
+    const { lineRadius } = this.mindMap.themeConfig
+    const len = list.length
+    let path = ''
+    let radiusPath = ''
+    if (len >= 3 && lineRadius > 0) {
+      const start = list[len - 3]
+      const center = list[len - 2]
+      const end = list[len - 1]
+      // 如果三点在一条直线，那么不用处理
+      const isOneLine =
+        (start[0] === center[0] && center[0] === end[0]) ||
+        (start[1] === center[1] && center[1] === end[1])
+      if (!isOneLine) {
+        const cStart = this.computeNewPoint(start, center, lineRadius)
+        const cEnd = this.computeNewPoint(end, center, lineRadius)
+        radiusPath = `Q ${center[0]},${center[1]} ${cEnd[0]},${cEnd[1]}`
+        list.splice(len - 2, 1, cStart, radiusPath)
+      }
+    }
+    list.forEach((item, index) => {
+      if (typeof item === 'string') {
+        path += item
+      } else {
+        const [x, y] = item
+        if (index === 0) {
+          path += `M ${x},${y}`
+        } else {
+          path += `L ${x},${y}`
+        }
+      }
+    })
+    return path
+  }
+
   //   获取节点的marginX
   getMarginX(layerIndex) {
     const { themeConfig, opt } = this.mindMap

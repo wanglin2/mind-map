@@ -259,11 +259,12 @@ class VerticalTimeline extends Base {
         node.children.forEach((item, index) => {
           let itemLeft = item.left
           let itemYCenter = item.top + item.height / 2
-          let path = `
-            M ${nodeRight},${nodeYCenter} 
-            L ${nodeRight + offset},${nodeYCenter} 
-            L ${nodeRight + offset},${itemYCenter} 
-            L ${itemLeft},${itemYCenter}`
+          let path = this.createFoldLine([
+            [nodeRight, nodeYCenter],
+            [nodeRight + offset, nodeYCenter],
+            [nodeRight + offset, itemYCenter],
+            [itemLeft, itemYCenter]
+          ])
           this.setLineStyle(style, lines[index], path, item)
         })
       } else {
@@ -274,11 +275,12 @@ class VerticalTimeline extends Base {
         node.children.forEach((item, index) => {
           let itemRight = item.left + item.width
           let itemYCenter = item.top + item.height / 2
-          let path = `
-            M ${nodeLeft},${nodeYCenter} 
-            L ${nodeLeft - offset},${nodeYCenter} 
-            L ${nodeLeft - offset},${itemYCenter} 
-            L ${itemRight},${itemYCenter}`
+          let path = this.createFoldLine([
+            [nodeLeft, nodeYCenter],
+            [nodeLeft - offset, nodeYCenter],
+            [nodeLeft - offset, itemYCenter],
+            [itemRight, itemYCenter]
+          ])
           this.setLineStyle(style, lines[index], path, item)
         })
       }
