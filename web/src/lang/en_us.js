@@ -10,6 +10,7 @@ export default {
     line: 'Line',
     width: 'Width',
     style: 'Style',
+    lineRadius: 'Radius',
     lineOfOutline: 'Line of outline',
     showArrow: 'Is show arrow',
     nodePadding: 'Node padding',

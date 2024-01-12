@@ -10,6 +10,7 @@ export default {
     line: '连线',
     width: '粗细',
     style: '风格',
+    lineRadius: '圆角大小',
     lineOfOutline: '概要的连线',
     showArrow: '是否显示箭头',
     nodePadding: '节点内边距',

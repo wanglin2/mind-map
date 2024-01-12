@@ -294,6 +294,7 @@ class MindMap {
     if (!notRender) {
       this.render(null, CONSTANTS.CHANGE_LAYOUT)
     }
+    this.emit('layout_change', layout)
   }
 
   //  执行命令

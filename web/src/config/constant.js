@@ -81,3 +81,31 @@ export const formulaList = [
   '\\begin{matrix}x & y \\\\z & v\\end{matrix}',
   '\\begin{cases}3x + 5y +  z \\\\7x - 2y + 4z \\\\-6x + 3y + 2z\\end{cases}'
 ]
+
+export const supportLineStyleLayoutsMap = {
+  curve: ['logicalStructure', 'mindMap', 'verticalTimeline'],
+  direct: [
+    'logicalStructure',
+    'mindMap',
+    'organizationStructure',
+    'verticalTimeline'
+  ]
+}
+
+export const supportLineRadiusLayouts = [
+  'logicalStructure',
+  'mindMap',
+  'verticalTimeline'
+]
+
+export const supportNodeUseLineStyleLayouts = [
+  'logicalStructure',
+  'mindMap',
+  'catalogOrganization',
+  'organizationStructure'
+]
+
+export const supportRootLineKeepSameInCurveLayouts = [
+  'logicalStructure',
+  'mindMap'
+]

@@ -17,10 +17,10 @@ export default {
   // 连线样式
   lineDasharray: 'none',
   // 连线风格
-  lineStyle: 'straight', // 针对logicalStructure、mindMap两种结构。曲线（curve）、直线（straight）、直连（direct）
-  // 曲线连接时，根节点和其他节点的连接线样式保持统一，默认根节点为 ( 型，其他节点为 { 型，设为true后，都为 { 型
+  lineStyle: 'straight', // 曲线（curve）【仅支持logicalStructure、mindMap、verticalTimeline三种结构】、直线（straight）、直连（direct）【仅支持logicalStructure、mindMap、organizationStructure、verticalTimeline四种结构】
+  // 曲线连接时，根节点和其他节点的连接线样式保持统一，默认根节点为 ( 型，其他节点为 { 型，设为true后，都为 { 型。仅支持logicalStructure、mindMap两种结构
   rootLineKeepSameInCurve: true,
-  // 直线连接时，连线的圆角大小，设置为0代表没有圆角，仅支持logicalStructure、mindMap、verticalTimeline三种结构
+  // 直线连接(straight)时，连线的圆角大小，设置为0代表没有圆角，仅支持logicalStructure、mindMap、verticalTimeline三种结构
   lineRadius: 5,
   // 连线尾部是否显示标记，目前只支持箭头
   showLineMarker: false,
@@ -58,7 +58,7 @@ export default {
   backgroundPosition: 'center center',
   // 设置背景图片大小
   backgroundSize: 'cover',
-  // 节点使用横线样式
+  // 节点使用只有底边横线的样式，仅支持logicalStructure、mindMap、catalogOrganization、organizationStructure四种结构
   nodeUseLineStyle: false,
   // 根节点样式
   root: {
@@ -178,6 +178,7 @@ const nodeSizeIndependenceList = [
   'rootLineKeepSameInCurve',
   'showLineMarker',
   'gradientStyle',
+  'lineRadius',
   'startColor',
   'endColor'
 ]
