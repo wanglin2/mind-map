@@ -71,7 +71,7 @@ MindMap.usePlugin(RichText, opt?)
 <p>v0.4.7+</p>
 </blockquote>
 <p>聚焦。</p>
-<h3>formatText(config = {})</h3>
+<h3>formatText(config = {}, clear = false, pure = false)</h3>
 <ul>
 <li><code>config</code>：对象，键为样式属性，值为样式值，完整的配置如下：</li>
 </ul>
@@ -85,7 +85,15 @@ MindMap.usePlugin(RichText, opt?)
     <span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;#333&#x27;</span> <span class="hljs-comment">// 颜色</span>
 }
 </code></pre>
-<p>格式化当前选中的文本。</p>
+<ul>
+<li>
+<p><code>clear</code>：是否是清除样式</p>
+</li>
+<li>
+<p><code>pure</code>：v0.9.4+，如果设为true，那么仅会格式化文本样式，不会同步到节点的数据中</p>
+</li>
+</ul>
+<p>格式化当前选中的文本。会将样式设置同步到节点的数据中。</p>
 <h3>formatRangeText(range, config = {})</h3>
 <ul>
 <li><code>range</code>：<code>Quill</code>的范围对象，格式如下：</li>

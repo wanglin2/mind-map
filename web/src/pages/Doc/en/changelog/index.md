@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.9.4
+
+Fix:
+
+> 1.Fix the issue of inconsistent text wrapping caused by inconsistent text area width during node display and editing in some cases.
+>
+> 2.Fixed the issue where gradients were not applied to the edit box during rich text editing for nodes with gradient backgrounds.
+>
+> 3.Fix the issue of text style loss after switching themes for nodes defined in bold by the theme.
+>
+> 4.Fix the issue on Mac where the useLeftKeySelectionRightKeyDrag option is set to true and cannot hold down the Ctrl key to select multiple nodes.
+>
+> 5.Fix the issue where text styles are lost after clearing styles during node rich text editing, and switching themes does not restore them.
+>
+> 6.Fix data issue when deleting nodes with child nodes_ Change_ The issue of error reporting in detail events.
+
+New:
+
+> 1.Add the lineRadius property to the theme configuration to set the size of the rounded corners when connecting straight lines.
+
+Demo:
+
+> 1.Remove the display of formulas from the outline.
+>
+> 2.Some configurations in the basic style that only support partial structures are displayed and hidden based on the current structure.
+>
+> 3.Add configuration for connecting rounded corners.
+>
+> 4.Automatically hide the sidebar when importing files.
+
 ## 0.9.3
 
 Fix

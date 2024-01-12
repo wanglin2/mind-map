@@ -86,7 +86,7 @@ Select All. When the node is being edited, you can select all the text in the no
 
 Focus.
 
-### formatText(config = {})
+### formatText(config = {}, clear = false, pure = false)
 
 - `config`：Object. The key is the style attribute and the value is the style value. The complete configuration is as follows:
 
@@ -102,7 +102,11 @@ Focus.
 }
 ```
 
-Formats the currently selected text.
+- `clear`：Is clear style
+
+- `pure`：v0.9.4+, If set to true, only the text style will be formatted and will not be synchronized to the node's data
+
+Formats the currently selected text. The style settings will be synchronized to the data of the node.
 
 ### formatRangeText(range, config = {})
 

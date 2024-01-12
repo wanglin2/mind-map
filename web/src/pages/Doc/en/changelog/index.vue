@@ -1,6 +1,27 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.9.4</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue of inconsistent text wrapping caused by inconsistent text area width during node display and editing in some cases.</p>
+<p>2.Fixed the issue where gradients were not applied to the edit box during rich text editing for nodes with gradient backgrounds.</p>
+<p>3.Fix the issue of text style loss after switching themes for nodes defined in bold by the theme.</p>
+<p>4.Fix the issue on Mac where the useLeftKeySelectionRightKeyDrag option is set to true and cannot hold down the Ctrl key to select multiple nodes.</p>
+<p>5.Fix the issue where text styles are lost after clearing styles during node rich text editing, and switching themes does not restore them.</p>
+<p>6.Fix data issue when deleting nodes with child nodes_ Change_ The issue of error reporting in detail events.</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Add the lineRadius property to the theme configuration to set the size of the rounded corners when connecting straight lines.</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.Remove the display of formulas from the outline.</p>
+<p>2.Some configurations in the basic style that only support partial structures are displayed and hidden based on the current structure.</p>
+<p>3.Add configuration for connecting rounded corners.</p>
+<p>4.Automatically hide the sidebar when importing files.</p>
+</blockquote>
 <h2>0.9.3</h2>
 <p>Fix</p>
 <blockquote>

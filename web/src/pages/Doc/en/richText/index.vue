@@ -71,7 +71,7 @@ MindMap.usePlugin(RichText, opt?)
 <p>v0.4.7+</p>
 </blockquote>
 <p>Focus.</p>
-<h3>formatText(config = {})</h3>
+<h3>formatText(config = {}, clear = false, pure = false)</h3>
 <ul>
 <li><code>config</code>：Object. The key is the style attribute and the value is the style value. The complete configuration is as follows:</li>
 </ul>
@@ -85,7 +85,15 @@ MindMap.usePlugin(RichText, opt?)
     <span class="hljs-attr">color</span>: <span class="hljs-string">&#x27;#333&#x27;</span> <span class="hljs-comment">// color</span>
 }
 </code></pre>
-<p>Formats the currently selected text.</p>
+<ul>
+<li>
+<p><code>clear</code>：Is clear style</p>
+</li>
+<li>
+<p><code>pure</code>：v0.9.4+, If set to true, only the text style will be formatted and will not be synchronized to the node's data</p>
+</li>
+</ul>
+<p>Formats the currently selected text. The style settings will be synchronized to the data of the node.</p>
 <h3>formatRangeText(range, config = {})</h3>
 <ul>
 <li><code>range</code>：The range object of <code>Quill</code>, has the following format:</li>

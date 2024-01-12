@@ -418,6 +418,7 @@ mindMap.setTheme('主题名称')
 | body_mousedown（v0.9.2+）    | document.body的鼠标按下事件                      | e（事件对象）      |
 | body_click    | document.body的点击事件                      | e（事件对象）      |
 | data_change_detail（v0.9.3+）    |  渲染树数据变化的明细，会返回一个数组，每一项代表一个更新点，每一项都是一个对象，存在一个`type`属性，代表明细的类型，包含`create`（创建节点）、`update`（更新节点）、`delete`（删除节点），存在一个`data`属性，代表当前更新的节点数据，如果是`update`类型，还会存在一个`oldData`属性，保存了更新前该节点的数据  | arr（明细数据）      |
+| layout_change（v0.9.4+）    | 修改结构时触发，即调用了mindMap.setLayout()方法时触发  | layout（新的结构）      |
 
 ### emit(event, ...args)
 

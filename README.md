@@ -27,7 +27,7 @@ Github：[releases](https://github.com/wanglin2/mind-map/releases)。
 
 > 客户端版本会落后于在线版本，尝试最新功能请优先使用在线版。
 
-> 如果访问 github 比较慢，可以使用：http://lxqnsys.com/simple-mind-map/#/index
+> 如果访问 github 比较慢，可以使用【更新可能会滞后】：http://lxqnsys.com/simple-mind-map/#/index
 
 # 特性
 

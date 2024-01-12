@@ -1114,6 +1114,11 @@ poor performance and should be used sparingly.</p>
 <td>The detailed changes in rendering tree data will return an array, with each item representing an update point and each item being an object, There is a 'type' attribute that represents the type of detail, Including 'create' (create node), 'update' (update node), 'delete' (delete node), There is a 'data' attribute that represents the current updated node data. If it is of the 'update' type, there will also be an 'oldData' attribute that saves the data of the node before the update</td>
 <td>arr（Detail data）</td>
 </tr>
+<tr>
+<td>layout_change（v0.9.4+）</td>
+<td>Triggered when modifying the structure, i.e. when the mindMap.setLayout() method is called</td>
+<td>layout（New layout）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
