@@ -263,5 +263,7 @@ export const defaultOpt = {
     // from和to可选值：left、top、bottom、right
     from: '', // 关联线起始节点上端点的位置
     to: '' // 关联线目标节点上端点的位置
-  }
+  },
+  // 是否允许调整关联线两个端点的位置
+  enableAdjustAssociativeLinePoints: true
 }
