@@ -169,22 +169,26 @@ export const getNodePoint = (node, dir = 'right', range = 0, e = null) => {
     case 'left':
       return {
         x: left,
-        y: top + height / 2 - range
+        y: top + height / 2 - range,
+        dir
       }
     case 'right':
       return {
         x: left + width,
-        y: top + height / 2 - range
+        y: top + height / 2 - range,
+        dir
       }
     case 'top':
       return {
         x: left + width / 2 - range,
-        y: top
+        y: top,
+        dir
       }
     case 'bottom':
       return {
         x: left + width / 2 - range,
-        y: top + height
+        y: top + height,
+        dir
       }
     default:
       break
