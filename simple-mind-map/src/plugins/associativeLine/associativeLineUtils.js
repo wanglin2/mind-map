@@ -223,8 +223,8 @@ export const computeNodePoints = (fromNode, toNode) => {
     toDir = 'bottom'
   } else if (offsetY > 0 && -offsetY < offsetX && offsetY > offsetX) {
     // down
-    fromDir = 'right'
-    toDir = 'right'
+    fromDir = 'bottom'
+    toDir = 'top'
   }
   return [getNodePoint(fromNode, fromDir), getNodePoint(toNode, toDir)]
 }
