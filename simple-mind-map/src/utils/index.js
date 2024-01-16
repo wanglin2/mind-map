@@ -1198,3 +1198,41 @@ export const transformObjectToTreeData = data => {
   })
   return res
 }
+
+// 计算两个点的直线距离
+export const getTwoPointDistance = (x1, y1, x2, y2) => {
+  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
+}
+
+// 判断两个矩形的相对位置
+// 第一个矩形在第二个矩形的什么方向
+export const getRectRelativePosition = (rect1, rect2) => {
+  // 获取第一个矩形的中心点坐标
+  const rect1CenterX = rect1.x + rect1.width / 2
+  const rect1CenterY = rect1.y + rect1.height / 2
+
+  // 获取第二个矩形的中心点坐标
+  const rect2CenterX = rect2.x + rect2.width / 2
+  const rect2CenterY = rect2.y + rect2.height / 2
+
+  // 判断第一个矩形在第二个矩形的哪个方向
+  if (rect1CenterX < rect2CenterX && rect1CenterY < rect2CenterY) {
+    return 'left-top'
+  } else if (rect1CenterX > rect2CenterX && rect1CenterY < rect2CenterY) {
+    return 'right-top'
+  } else if (rect1CenterX > rect2CenterX && rect1CenterY > rect2CenterY) {
+    return 'right-bottom'
+  } else if (rect1CenterX < rect2CenterX && rect1CenterY > rect2CenterY) {
+    return 'left-bottom'
+  } else if (rect1CenterX < rect2CenterX && rect1CenterY === rect2CenterY) {
+    return 'left'
+  } else if (rect1CenterX > rect2CenterX && rect1CenterY === rect2CenterY) {
+    return 'right'
+  } else if (rect1CenterX === rect2CenterX && rect1CenterY < rect2CenterY) {
+    return 'top'
+  } else if (rect1CenterX === rect2CenterX && rect1CenterY > rect2CenterY) {
+    return 'bottom'
+  } else {
+    return 'overlap'
+  }
+}
