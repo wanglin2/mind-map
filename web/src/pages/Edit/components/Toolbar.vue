@@ -11,7 +11,7 @@
           width="120"
           trigger="hover"
           v-if="showMoreBtn"
-          style="margin-left: 20px;"
+          :style="{ marginLeft: horizontalList.length > 0 ? '20px' : 0 }"
         >
           <ToolbarNodeBtnList
             dir="v"

@@ -16,6 +16,15 @@
       </el-select>
     </div>
     <div class="item">
+      <el-tooltip
+        effect="dark"
+        :content="$t('navigatorToolbar.backToRoot')"
+        placement="top"
+      >
+        <div class="btn iconfont icondingwei" @click="backToRoot"></div>
+      </el-tooltip>
+    </div>
+    <div class="item">
       <div class="btn iconfont iconsousuo" @click="showSearch"></div>
     </div>
     <div class="item">
@@ -180,6 +189,10 @@ export default {
       a.href = url
       a.target = '_blank'
       a.click()
+    },
+
+    backToRoot() {
+      this.mindMap.renderer.setRootNodeCenter()
     }
   }
 }

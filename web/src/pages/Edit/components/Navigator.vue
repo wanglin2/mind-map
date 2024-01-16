@@ -4,6 +4,7 @@
     class="navigatorBox"
     :class="{ isDark: isDark }"
     ref="navigatorBox"
+    :style="{ width: width + 'px' }"
     @mousedown="onMousedown"
     @mousemove="onMousemove"
     @mouseup="onMouseup"
@@ -47,25 +48,31 @@ export default {
         bottom: 0,
         right: 0
       },
-      mindMapImg: ''
+      mindMapImg: '',
+      width: 0,
+      setSizeTimer: null
     }
   },
   computed: {
     ...mapState(['isDark'])
   },
   mounted() {
+    this.setSize()
+    window.addEventListener('resize', this.setSize)
     this.$bus.$on('toggle_mini_map', this.toggle_mini_map)
     this.$bus.$on('data_change', this.data_change)
     this.$bus.$on('view_data_change', this.data_change)
     this.$bus.$on('node_tree_render_end', this.data_change)
   },
   destroyed() {
+    window.removeEventListener('resize', this.setSize)
     this.$bus.$off('toggle_mini_map', this.toggle_mini_map)
     this.$bus.$off('data_change', this.data_change)
     this.$bus.$off('view_data_change', this.data_change)
     this.$bus.$off('node_tree_render_end', this.data_change)
   },
   methods: {
+    // 切换显示小地图
     toggle_mini_map(show) {
       this.showMiniMap = show
       this.$nextTick(() => {
@@ -77,6 +84,8 @@ export default {
         }
       })
     },
+
+    // 思维导图数据改变，更新小地图
     data_change() {
       if (!this.showMiniMap) {
         return
@@ -86,6 +95,22 @@ export default {
         this.drawMiniMap()
       }, 500)
     },
+
+    // 计算容器宽度
+    setSize() {
+      clearTimeout(this.setSizeTimer)
+      this.setSizeTimer = setTimeout(() => {
+        this.width = Math.min(window.innerWidth - 80, 370)
+        this.$nextTick(() => {
+          if (this.showMiniMap) {
+            this.init()
+            this.drawMiniMap()
+          }
+        })
+      }, 300)
+    },
+
+    // 获取宽高
     init() {
       let { width, height } = this.$refs.navigatorBox.getBoundingClientRect()
       this.boxWidth = width
@@ -128,7 +153,6 @@ export default {
 <style lang="less" scoped>
 .navigatorBox {
   position: absolute;
-  width: 350px;
   height: 220px;
   background-color: #fff;
   bottom: 80px;

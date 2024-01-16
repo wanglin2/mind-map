@@ -143,7 +143,8 @@ export default {
     openMiniMap: 'Open mini map',
     closeMiniMap: 'Close mini map',
     readonly: 'Change to eadonly',
-    edit: 'Change to edit'
+    edit: 'Change to edit',
+    backToRoot: 'Back to root node'
   },
   nodeHyperlink: {
     title: 'Link',

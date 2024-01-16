@@ -141,7 +141,8 @@ export default {
     openMiniMap: '开启小地图',
     closeMiniMap: '关闭小地图',
     readonly: '切换为只读模式',
-    edit: '切换为编辑模式'
+    edit: '切换为编辑模式',
+    backToRoot: '回到根节点'
   },
   nodeHyperlink: {
     title: '超链接',
