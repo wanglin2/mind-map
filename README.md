@@ -258,4 +258,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
         <span>建明</span>
     </span>
+     <span>
+        <img src="./web/src/assets/avatar/汪津合.jpg" style="width: 50px;height: 50px;" />
+        <span>汪津合</span>
+    </span>
 </p>
