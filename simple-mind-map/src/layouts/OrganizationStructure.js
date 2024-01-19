@@ -213,14 +213,16 @@ class OrganizationStructure extends Base {
     let line1 = this.lineDraw.path()
     node.style.line(line1)
     expandBtnSize = len > 0 && !isRoot ? expandBtnSize : 0
-    line1.plot(`M ${x1},${y1 + expandBtnSize} L ${x1},${y1 + s1}`)
+    line1.plot(
+      this.transformPath(`M ${x1},${y1 + expandBtnSize} L ${x1},${y1 + s1}`)
+    )
     node._lines.push(line1)
     style && style(line1, node)
     // 水平线
     if (len > 0) {
       let lin2 = this.lineDraw.path()
       node.style.line(lin2)
-      lin2.plot(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`)
+      lin2.plot(this.transformPath(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`))
       node._lines.push(lin2)
       style && style(lin2, node)
     }
@@ -253,7 +255,7 @@ class OrganizationStructure extends Base {
       let cx = x1 + (x2 - x1) / 2
       let cy = y1 + 20
       let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
-      item.generalizationLine.plot(path)
+      item.generalizationLine.plot(this.transformPath(path))
       item.generalizationNode.top = bottom + generalizationNodeMargin
       item.generalizationNode.left =
         left + (right - left - item.generalizationNode.width) / 2

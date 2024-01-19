@@ -274,9 +274,13 @@ class Timeline extends Base {
           node.parent.isRoot &&
           node.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP
         ) {
-          line.plot(`M ${x},${top} L ${x},${miny}`)
+          line.plot(this.transformPath(`M ${x},${top} L ${x},${miny}`))
         } else {
-          line.plot(`M ${x},${top + height + expandBtnSize} L ${x},${maxy}`)
+          line.plot(
+            this.transformPath(
+              `M ${x},${top + height + expandBtnSize} L ${x},${maxy}`
+            )
+          )
         }
         node.style.line(line)
         node._lines.push(line)
@@ -325,9 +329,10 @@ class Timeline extends Base {
       let cx = x1 + 20
       let cy = y1 + (y2 - y1) / 2
       let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
-      item.generalizationLine.plot(path)
+      item.generalizationLine.plot(this.transformPath(path))
       item.generalizationNode.left = right + generalizationNodeMargin
-      item.generalizationNode.top = top + (bottom - top - item.generalizationNode.height) / 2
+      item.generalizationNode.top =
+        top + (bottom - top - item.generalizationNode.height) / 2
     })
   }
 

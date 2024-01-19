@@ -265,5 +265,15 @@ export const defaultOpt = {
     to: '' // 关联线目标节点上端点的位置
   },
   // 是否允许调整关联线两个端点的位置
-  enableAdjustAssociativeLinePoints: true
+  enableAdjustAssociativeLinePoints: true,
+  // 自定义创建节点形状的方法，可以传一个函数，均接收一个参数
+  // 矩形、圆角矩形、椭圆、圆等形状会调用该方法
+  // 接收svg path字符串，返回svg节点
+  customCreateNodePath: null,
+  // 菱形、平行四边形、八角矩形、外三角矩形、内三角矩形等形状会调用该方法
+  // 接收points数组点位，返回svg节点
+  customCreateNodePolygon: null,
+  // 自定义转换节点连线路径的方法
+  // 接收svg path字符串，返回转换后的svg path字符串
+  customTransformNodeLinePath: null
 }

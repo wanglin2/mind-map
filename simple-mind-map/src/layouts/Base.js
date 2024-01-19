@@ -505,8 +505,18 @@ class Base {
 
   // 设置连线样式
   setLineStyle(style, line, path, childNode) {
-    line.plot(path)
+    line.plot(this.transformPath(path))
     style && style(line, childNode, true)
+  }
+
+  // 转换路径，可以转换成特殊风格的线条样式
+  transformPath(path) {
+    const { customTransformNodeLinePath } = this.mindMap.opt
+    if (customTransformNodeLinePath) {
+      return customTransformNodeLinePath(path)
+    } else {
+      return path
+    }
   }
 }
 
