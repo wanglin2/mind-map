@@ -570,15 +570,23 @@ export default {
 
     // 加载手绘风格插件
     addHandDrawnLikeStylePlugin() {
-      if (!this.mindMap) return
-      this.mindMap.addPlugin(HandDrawnLikeStyle)
-      this.mindMap.reRender()
+      try {
+        if (!this.mindMap) return
+        this.mindMap.addPlugin(HandDrawnLikeStyle)
+        this.mindMap.reRender()
+      } catch (error) {
+        console.log('手绘风格插件不存在')
+      }
     },
 
     // 移除手绘风格插件
     removeHandDrawnLikeStylePlugin() {
-      this.mindMap.removePlugin(HandDrawnLikeStyle)
-      this.mindMap.reRender()
+      try {
+        this.mindMap.removePlugin(HandDrawnLikeStyle)
+        this.mindMap.reRender()
+      } catch (error) {
+        console.log('手绘风格插件不存在')
+      }
     },
 
     // 测试动态插入节点
