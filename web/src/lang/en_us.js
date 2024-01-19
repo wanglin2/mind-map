@@ -58,7 +58,8 @@ export default {
     associativeLineText: 'Associative line text',
     fontFamily: 'Font family',
     fontSize: 'Font size',
-    isShowScrollbar: 'Is show scrollbar'
+    isShowScrollbar: 'Is show scrollbar',
+    isUseHandDrawnLikeStyle: 'Is use hand drawn like style'
   },
   color: {
     moreColor: 'More color'

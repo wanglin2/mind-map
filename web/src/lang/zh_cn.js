@@ -58,7 +58,8 @@ export default {
     associativeLineText: '关联线文字',
     fontFamily: '字体',
     fontSize: '字号',
-    isShowScrollbar: '是否显示滚动条'
+    isShowScrollbar: '是否显示滚动条',
+    isUseHandDrawnLikeStyle: '是否开启手绘风格'
   },
   color: {
     moreColor: '更多颜色'
