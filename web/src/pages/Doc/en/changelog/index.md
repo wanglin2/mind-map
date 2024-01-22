@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.9.5
+
+Fix:
+
+> 1.Fix the issue of missing inter zone summaries when expanding and folding nodes.
+>
+> 2.Fix the issue where the position of the newly created associated line is always on the right side of the node without changing according to its relative position.
+
+New:
+
+> 1.Add configuration for the initial positions of the two endpoints when creating associated lines.
+>
+> 2.Add a configuration that prohibits adjusting the endpoint position of associated lines.
+>
+> 3.Add a hand drawn style plugin.
+
+Demo:
+
+> 1.Optimize interface adaptation on mobile devices.
+>
+> 2.Supports enabling hand drawn styles.
+
 ## 0.9.4
 
 Fix:

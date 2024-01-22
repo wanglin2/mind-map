@@ -38,6 +38,7 @@ let APIList = [
   'scrollbar',
   'formula',
   'cooperate',
+  'handDrawnLikeStyle',
   'xmind',
   'markdown',
   'utils'

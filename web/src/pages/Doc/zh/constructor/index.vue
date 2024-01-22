@@ -531,6 +531,18 @@
 <td>true</td>
 <td>当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas配置不再起作用</td>
 </tr>
+<tr>
+<td>associativeLineInitPointsPosition（v0.9.5+）</td>
+<td>null / { from, to }</td>
+<td>{ from: '', to: '' }</td>
+<td>默认情况下，新创建的关联线两个端点的位置是根据两个节点中心点的相对位置来计算的，如果你想固定位置，可以通过这个选项来配置。from和to都不传，则都自动计算，如果只传一个，另一个则会自动计算。from和to可选值：left、top、bottom、right</td>
+</tr>
+<tr>
+<td>enableAdjustAssociativeLinePoints（v0.9.5+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>是否允许调整关联线两个端点的位置</td>
+</tr>
 </tbody>
 </table>
 <h3>数据结构</h3>

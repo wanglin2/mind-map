@@ -108,6 +108,8 @@ const mindMap = new MindMap({
 | handleNodePasteImg（v0.9.2+）     | null 或 Function | null  | 在节点上粘贴剪贴板中的图片的处理方法，默认是转换为data:url数据插入到节点中，你可以通过该方法来将图片数据上传到服务器，实现保存图片的url。可以传递一个异步方法，接收Blob类型的图片数据，需要返回指定结构：{ url, size: {width, height} }  |
 | isLimitMindMapInCanvas（v0.9.2+）     | Boolean |  false | 是否将思维导图限制在画布内。比如向右拖动时，思维导图图形的最左侧到达画布中心时将无法继续向右拖动，其他同理 |
 | isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）     | Boolean |  true | 当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas配置不再起作用 |
+| associativeLineInitPointsPosition（v0.9.5+）     | null / { from, to } | { from: '', to: '' }  | 默认情况下，新创建的关联线两个端点的位置是根据两个节点中心点的相对位置来计算的，如果你想固定位置，可以通过这个选项来配置。from和to都不传，则都自动计算，如果只传一个，另一个则会自动计算。from和to可选值：left、top、bottom、right |
+| enableAdjustAssociativeLinePoints（v0.9.5+）     | Boolean | true  | 是否允许调整关联线两个端点的位置 |
 
 ### 数据结构
 
