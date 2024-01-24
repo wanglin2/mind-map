@@ -197,10 +197,12 @@ class LogicalStructure extends Base {
     if (!this.mindMap.opt.alwaysShowExpandBtn) {
       expandBtnSize = 0
     }
-    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
+    const { nodeUseLineStyle } = this.mindMap.themeConfig
     node.children.forEach((item, index) => {
-      let x1 =
-        node.layerIndex === 0 ? left + width / 2 : left + width + expandBtnSize
+      if (node.layerIndex === 0) {
+        expandBtnSize = 0
+      }
+      let x1 = left + width + expandBtnSize
       let y1 = top + height / 2
       let x2 = item.left
       let y2 = item.top + item.height / 2

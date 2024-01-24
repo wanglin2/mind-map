@@ -161,13 +161,14 @@ class OrganizationStructure extends Base {
       return []
     }
     let { left, top, width, height } = node
+    const { nodeUseLineStyle } = this.mindMap.themeConfig
     let x1 = left + width / 2
     let y1 = top + height
     node.children.forEach((item, index) => {
       let x2 = item.left + item.width / 2
       let y2 = item.top
       // 节点使用横线风格，需要额外渲染横线
-      let nodeUseLineStylePath = this.mindMap.themeConfig.nodeUseLineStyle
+      let nodeUseLineStylePath = nodeUseLineStyle
         ? ` L ${item.left},${y2} L ${item.left + item.width},${y2}`
         : ''
       let path = `M ${x1},${y1} L ${x2},${y2}` + nodeUseLineStylePath

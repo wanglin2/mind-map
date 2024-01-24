@@ -259,12 +259,13 @@ class MindMap extends Base {
     if (!this.mindMap.opt.alwaysShowExpandBtn) {
       expandBtnSize = 0
     }
-    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
+    const { nodeUseLineStyle } = this.mindMap.themeConfig
     node.children.forEach((item, index) => {
+      if (node.layerIndex === 0) {
+        expandBtnSize = 0
+      }
       let x1 =
-        node.layerIndex === 0
-          ? left + width / 2
-          : item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
+        item.dir === CONSTANTS.LAYOUT_GROW_DIR.LEFT
           ? left - expandBtnSize
           : left + width + expandBtnSize
       let y1 = top + height / 2
