@@ -59,7 +59,10 @@ export default {
     fontFamily: 'Font family',
     fontSize: 'Font size',
     isShowScrollbar: 'Is show scrollbar',
-    isUseHandDrawnLikeStyle: 'Is use hand drawn like style'
+    isUseHandDrawnLikeStyle: 'Is use hand drawn like style',
+    rootLineStartPos: 'Root line start pos',
+    center: 'Center',
+    right: 'Right'
   },
   color: {
     moreColor: 'More color'

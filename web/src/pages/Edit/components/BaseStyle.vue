@@ -148,6 +148,7 @@
         </div>
       </div>
       <div class="row">
+        <!-- 线宽 -->
         <div class="rowItem" v-if="lineStyleListShow.length > 1">
           <span class="name">{{ $t('baseStyle.style') }}</span>
           <el-select
@@ -176,6 +177,7 @@
             </el-option>
           </el-select>
         </div>
+        <!-- 根节点连线样式 -->
         <div
           class="rowItem"
           v-if="
@@ -204,6 +206,7 @@
           </el-select>
         </div>
         <div class="rowItem" v-if="showLineRadius">
+          <!-- 连线圆角大小 -->
           <span class="name">{{ $t('baseStyle.lineRadius') }}</span>
           <el-select
             size="mini"
@@ -222,6 +225,37 @@
               :label="item"
               :value="item"
             >
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="row">
+        <!-- 根节点连线起始位置 -->
+        <div
+          class="rowItem"
+          v-if="
+            style.lineStyle === 'curve' && showRootLineKeepSameInCurveLayouts
+          "
+        >
+          <span class="name">{{ $t('baseStyle.rootLineStartPos') }}</span>
+          <el-select
+            size="mini"
+            style="width: 80px"
+            v-model="style.rootLineStartPositionKeepSameInCurve"
+            placeholder=""
+            @change="
+              value => {
+                update('rootLineStartPositionKeepSameInCurve', value)
+              }
+            "
+          >
+            <el-option
+              key="center"
+              :label="$t('baseStyle.center')"
+              :value="false"
+            >
+            </el-option>
+            <el-option key="right" :label="$t('baseStyle.right')" :value="true">
             </el-option>
           </el-select>
         </div>
@@ -917,6 +951,7 @@ export default {
         lineStyle: '',
         showLineMarker: '',
         rootLineKeepSameInCurve: '',
+        rootLineStartPositionKeepSameInCurve: '',
         lineRadius: 0,
         generalizationLineWidth: '',
         generalizationLineColor: '',
@@ -1076,6 +1111,7 @@ export default {
         'lineStyle',
         'showLineMarker',
         'rootLineKeepSameInCurve',
+        'rootLineStartPositionKeepSameInCurve',
         'lineRadius',
         'lineColor',
         'generalizationLineWidth',

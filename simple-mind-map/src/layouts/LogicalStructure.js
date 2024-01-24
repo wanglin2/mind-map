@@ -224,10 +224,19 @@ class LogicalStructure extends Base {
     if (!this.mindMap.opt.alwaysShowExpandBtn) {
       expandBtnSize = 0
     }
-    let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
+    const {
+      nodeUseLineStyle,
+      rootLineStartPositionKeepSameInCurve,
+      rootLineKeepSameInCurve
+    } = this.mindMap.themeConfig
     node.children.forEach((item, index) => {
+      if (node.layerIndex === 0) {
+        expandBtnSize = 0
+      }
       let x1 =
-        node.layerIndex === 0 ? left + width / 2 : left + width + expandBtnSize
+        node.layerIndex === 0 && !rootLineStartPositionKeepSameInCurve
+          ? left + width / 2
+          : left + width + expandBtnSize
       let y1 = top + height / 2
       let x2 = item.left
       let y2 = item.top + item.height / 2
@@ -238,7 +247,7 @@ class LogicalStructure extends Base {
       let nodeUseLineStylePath = nodeUseLineStyle
         ? ` L ${item.left + item.width},${y2}`
         : ''
-      if (node.isRoot && !this.mindMap.themeConfig.rootLineKeepSameInCurve) {
+      if (node.isRoot && !rootLineKeepSameInCurve) {
         path = this.quadraticCurvePath(x1, y1, x2, y2) + nodeUseLineStylePath
       } else {
         path = this.cubicBezierPath(x1, y1, x2, y2) + nodeUseLineStylePath

@@ -59,7 +59,10 @@ export default {
     fontFamily: '字体',
     fontSize: '字号',
     isShowScrollbar: '是否显示滚动条',
-    isUseHandDrawnLikeStyle: '是否开启手绘风格'
+    isUseHandDrawnLikeStyle: '是否开启手绘风格',
+    rootLineStartPos: '根节点连线起始位置',
+    center: '中心',
+    right: '右侧'
   },
   color: {
     moreColor: '更多颜色'
