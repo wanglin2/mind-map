@@ -394,6 +394,27 @@
               </el-option>
             </el-select>
           </div>
+          <div class="rowItem">
+            <span class="name">{{ $t('style.arrowDir') }}</span>
+            <el-select
+              size="mini"
+              style="width: 80px"
+              v-model="style.lineMarkerDir"
+              placeholder=""
+              @change="update('lineMarkerDir')"
+            >
+              <el-option
+                key="start"
+                :label="$t('style.arrowDirStart')"
+                value="start"
+              ></el-option>
+              <el-option
+                key="end"
+                :label="$t('style.arrowDirEnd')"
+                value="end"
+              ></el-option>
+            </el-select>
+          </div>
         </div>
         <!-- 节点内边距 -->
         <div class="title noTop">{{ $t('style.nodePadding') }}</div>
@@ -478,6 +499,7 @@ export default {
         lineColor: '',
         lineDasharray: '',
         lineWidth: '',
+        lineMarkerDir: '',
         gradientStyle: false,
         startColor: '',
         endColor: ''
@@ -556,6 +578,7 @@ export default {
         'lineColor',
         'lineDasharray',
         'lineWidth',
+        'lineMarkerDir',
         'gradientStyle',
         'startColor',
         'endColor'

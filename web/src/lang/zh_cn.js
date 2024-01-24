@@ -206,7 +206,10 @@ export default {
     vertical: '垂直',
     gradientStyle: '渐变',
     startColor: '起始',
-    endColor: '结束'
+    endColor: '结束',
+    arrowDir: '箭头位置',
+    arrowDirStart: '头部',
+    arrowDirEnd: '尾部'
   },
   theme: {
     title: '主题',

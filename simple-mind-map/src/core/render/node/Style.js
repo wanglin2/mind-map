@@ -220,9 +220,14 @@ class Style {
           childNodeStyle._marker || childNodeStyle.createMarker()
         // 设置样式
         childNodeStyle._markerPath.stroke({ color }).fill({ color })
-        line.marker('end', childNodeStyle._marker)
+        // 箭头位置可能会发生改变，所以需要先删除
+        line.attr('marker-start', '')
+        line.attr('marker-end', '')
+        const dir = childNodeStyle.merge('lineMarkerDir')
+        line.marker(dir, childNodeStyle._marker)
       } else if (childNodeStyle._marker) {
         // 不显示箭头，则删除该子节点的箭头标记
+        line.attr('marker-start', '')
         line.attr('marker-end', '')
         childNodeStyle._marker.remove()
         childNodeStyle._marker = null

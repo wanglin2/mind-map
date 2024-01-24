@@ -22,7 +22,7 @@ export default {
   rootLineKeepSameInCurve: true,
   // 直线连接(straight)时，连线的圆角大小，设置为0代表没有圆角，仅支持logicalStructure、mindMap、verticalTimeline三种结构
   lineRadius: 5,
-  // 连线尾部是否显示标记，目前只支持箭头
+  // 连线是否显示标记，目前只支持箭头
   showLineMarker: false,
   // 概要连线的粗细
   generalizationLineWidth: 1,
@@ -77,7 +77,9 @@ export default {
     textDecoration: 'none',
     gradientStyle: false,
     startColor: '#549688',
-    endColor: '#fff'
+    endColor: '#fff',
+    // 连线标记的位置，start（头部）、end（尾部），该配置在showLineMarker配置为true时生效
+    lineMarkerDir: 'end'
   },
   // 二级节点样式
   second: {
@@ -98,7 +100,8 @@ export default {
     textDecoration: 'none',
     gradientStyle: false,
     startColor: '#549688',
-    endColor: '#fff'
+    endColor: '#fff',
+    lineMarkerDir: 'end'
   },
   // 三级及以下节点样式
   node: {
@@ -119,7 +122,8 @@ export default {
     textDecoration: 'none',
     gradientStyle: false,
     startColor: '#549688',
-    endColor: '#fff'
+    endColor: '#fff',
+    lineMarkerDir: 'end'
   },
   // 概要节点样式
   generalization: {
@@ -196,4 +200,9 @@ export const checkIsNodeSizeIndependenceConfig = config => {
   return true
 }
 
-export const lineStyleProps = ['lineColor', 'lineDasharray', 'lineWidth']
+export const lineStyleProps = [
+  'lineColor',
+  'lineDasharray',
+  'lineWidth',
+  'lineMarkerDir'
+]

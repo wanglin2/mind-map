@@ -208,7 +208,10 @@ export default {
     vertical: 'Vertical',
     gradientStyle: 'Gradient',
     startColor: 'Start',
-    endColor: 'End'
+    endColor: 'End',
+    arrowDir: 'Arrow dir',
+    arrowDirStart: 'Start',
+    arrowDirEnd: 'End'
   },
   theme: {
     title: 'Theme',
