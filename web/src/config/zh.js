@@ -397,6 +397,36 @@ export const shortcutKeyList = [
         value: 'Ctrl + i'
       }
     ]
+  },
+  {
+    type: '大纲操作',
+    list: [
+      {
+        icon: 'iconhuanhang',
+        name: '文本换行',
+        value: 'Shift + Enter'
+      },
+      {
+        icon: 'iconshanchu',
+        name: '删除节点',
+        value: 'Delete'
+      },
+      {
+        icon: 'icontianjiazijiedian',
+        name: '插入下级节点',
+        value: 'Tab'
+      },
+      {
+        icon: 'iconjiedian',
+        name: '插入同级节点',
+        value: 'Enter'
+      },
+      {
+        icon: 'icondodeparent',
+        name: '上移一个层级',
+        value: 'Shift + Tab'
+      },
+    ]
   }
 ]
 

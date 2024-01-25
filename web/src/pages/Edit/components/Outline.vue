@@ -99,6 +99,7 @@ export default {
       // 在大纲里操作节点时不要响应该事件，否则会重新刷新树
       if (this.notHandleDataChange) {
         this.notHandleDataChange = false
+        this.isAfterCreateNewNode = false
         return
       }
       if (this.isAfterCreateNewNode) {
@@ -223,15 +224,28 @@ export default {
     // 节点输入区域按键事件
     onNodeInputKeydown(e) {
       if (e.keyCode === 13 && !e.shiftKey) {
+        // 插入兄弟节点
         e.preventDefault()
         this.insertType = 'insertNode'
         e.target.blur()
       }
       if (e.keyCode === 9) {
         e.preventDefault()
-        this.insertType = 'insertChildNode'
-        e.target.blur()
+        if (e.shiftKey) {
+          // 节点上升一级
+          this.insertType = 'moveUp'
+          e.target.blur()
+        } else {
+          // 插入子节点
+          this.insertType = 'insertChildNode'
+          e.target.blur()
+        }
       }
+    },
+
+    // 节点上移一个层级
+    moveUp() {
+      this.mindMap.execCommand('MOVE_UP_ONE_LEVEL')
     },
 
     // 插入兄弟节点

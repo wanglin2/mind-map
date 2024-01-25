@@ -330,6 +330,36 @@ export const shortcutKeyList = [
         value: 'Ctrl + i'
       }
     ]
+  },
+  {
+    type: 'Outline Operation',
+    list: [
+      {
+        icon: 'iconhuanhang',
+        name: 'Text Wrap',
+        value: 'Shift + Enter'
+      },
+      {
+        icon: 'iconshanchu',
+        name: 'Delete current node',
+        value: 'Delete'
+      },
+      {
+        icon: 'icontianjiazijiedian',
+        name: 'Inert child node',
+        value: 'Tab'
+      },
+      {
+        icon: 'iconjiedian',
+        name: 'Insert sibling node',
+        value: 'Enter'
+      },
+      {
+        icon: 'icondodeparent',
+        name: 'Move up one level',
+        value: 'Shift + Tab'
+      },
+    ]
   }
 ]
 

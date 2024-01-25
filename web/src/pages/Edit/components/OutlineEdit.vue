@@ -178,7 +178,13 @@ export default {
       }
       if (e.keyCode === 9) {
         e.preventDefault()
-        this.$refs.tree.append(data, node)
+        if (e.shiftKey) {
+          // 上移一个层级
+          this.$refs.tree.insertAfter(node.data, node.parent)
+          this.$refs.tree.remove(node)
+        } else {
+          this.$refs.tree.append(data, node)
+        }
       }
       this.save()
       this.$nextTick(() => {
