@@ -85,8 +85,12 @@ class Base {
       newNode.layerIndex = layerIndex
       this.cacheNode(data._node.uid, newNode)
       this.checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(newNode)
-      // 主题或主题配置改变了需要重新计算节点大小和布局
-      if (this.checkIsNeedResizeSources() || isLayerTypeChange) {
+      // 主题或主题配置改变了、节点层级改变了，需要重新渲染节点文本等情况需要重新计算节点大小和布局
+      if (
+        this.checkIsNeedResizeSources() ||
+        isLayerTypeChange ||
+        newNode.getData('resetRichText')
+      ) {
         newNode.getSize()
         newNode.needLayout = true
       }
@@ -113,9 +117,14 @@ class Base {
       data._node = newNode
       // 主题或主题配置改变了需要重新计算节点大小和布局
       const isResizeSource = this.checkIsNeedResizeSources()
-      // 节点数据改变了需要重新计算节点大小和布局
+      // 主题或主题配置改变了、节点层级改变了，需要重新渲染节点文本，节点数据改变了等情况需要重新计算节点大小和布局
       const isNodeDataChange = lastData !== JSON.stringify(data.data)
-      if (isResizeSource || isNodeDataChange || isLayerTypeChange) {
+      if (
+        isResizeSource ||
+        isNodeDataChange ||
+        isLayerTypeChange ||
+        newNode.getData('resetRichText')
+      ) {
         newNode.getSize()
         newNode.needLayout = true
       }

@@ -397,6 +397,10 @@ class Render {
 
   //   渲染
   render(callback = () => {}, source) {
+    // 切换主题时，被收起的节点需要添加样式复位的标注
+    if (source === CONSTANTS.CHANGE_THEME) {
+      this.resetUnExpandNodeStyle()
+    }
     // 如果当前还没有渲染完毕，不再触发渲染
     if (this.isRendering) {
       // 等待当前渲染完毕后再进行一次渲染
@@ -453,6 +457,18 @@ class Render {
       })
     })
     this.emitNodeActiveEvent()
+  }
+
+  // 给当前被收起来的节点数据添加文本复位标志
+  resetUnExpandNodeStyle() {
+    walk(this.renderTree, null, node => {
+      if (!node.data.expand) {
+        walk(node, null, node2 => {
+          node2.data.resetRichText = true
+        })
+        return true
+      }
+    })
   }
 
   //  清除当前所有激活节点，并会触发事件

@@ -186,6 +186,9 @@ function createTextNode() {
   if (this.getData('richText')) {
     return this.createRichTextNode()
   }
+  if (this.getData('resetRichText')) {
+    delete this.nodeData.data.resetRichText
+  }
   let g = new G()
   let fontSize = this.getStyle('fontSize', false)
   let lineHeight = this.getStyle('lineHeight', false)
