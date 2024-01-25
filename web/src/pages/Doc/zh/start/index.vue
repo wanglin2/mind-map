@@ -121,6 +121,8 @@ npm run build
 <pre class="hljs"><code>resolve: { <span class="hljs-attr">alias</span>: { <span class="hljs-attr">stream</span>: <span class="hljs-string">&quot;stream-browserify&quot;</span> } }
 </code></pre>
 <p>不同的打包工具可能具体配置不一样，原理就是排除<code>stream</code>依赖。</p>
+<h3>4.点击【新建】、【打开】、【另存为】按钮时提示浏览器不支持，或者非https协议。</h3>
+<p>浏览器上操作电脑本地文件使用的是<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/showOpenFilePicker">window.showOpenFilePicker</a>api，如果不支持，要么是浏览器不支持这个API，要么是因为页面非https协议，你可以按F12，或者在页面通过鼠标右键菜单中的【检查】打开浏览器控制台，在其中的【控制台】或【console】tab中输入<code>window.showOpenFilePicker</code>按回车，如果返回<code>undefined</code>则代表不支持，如果返回的不是这个，而页面依旧提示提示浏览器不支持，或者非https协议，那么可以提交issue，或者联系作者。</p>
 
   </div>
 </template>

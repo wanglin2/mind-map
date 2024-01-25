@@ -138,6 +138,8 @@ module. If you need it, you can try using other libraries to parse <code>xml</co
 <pre class="hljs"><code>resolve: { <span class="hljs-attr">alias</span>: { <span class="hljs-attr">stream</span>: <span class="hljs-string">&quot;stream-browserify&quot;</span> } }
 </code></pre>
 <p>Different packaging tools may have different specific configurations, with the principle of excluding 'stream' dependencies.</p>
+<h3>When clicking the [New], [Open], or [Save As] buttons, it will prompt that the browser does not support it or is not using the HTTPS protocol.</h3>
+<p>The browser uses API <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/showOpenFilePicker">window.showOpenFilePicker</a> to operate local files on the computer. If it is not supported, either the browser does not support this API or the page is not using the HTTPS protocol, You can press F12, or open the browser console through the right-click menu on the page and enter 'window.showOpenFilePicker' in the 'Console' tab. If it returns 'undefined', it means it is not supported. If it does not return this message and the page still prompts that the browser does not support it or is not using the HTTPS protocol, you can submit an issue or contact the author.</p>
 
   </div>
 </template>

@@ -189,3 +189,7 @@ resolve: { alias: { stream: "stream-browserify" } }
 ```
 
 不同的打包工具可能具体配置不一样，原理就是排除`stream`依赖。
+
+### 4.点击【新建】、【打开】、【另存为】按钮时提示浏览器不支持，或者非https协议。
+
+浏览器上操作电脑本地文件使用的是[window.showOpenFilePicker](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/showOpenFilePicker)api，如果不支持，要么是浏览器不支持这个API，要么是因为页面非https协议，你可以按F12，或者在页面通过鼠标右键菜单中的【检查】打开浏览器控制台，在其中的【控制台】或【console】tab中输入`window.showOpenFilePicker`按回车，如果返回`undefined`则代表不支持，如果返回的不是这个，而页面依旧提示提示浏览器不支持，或者非https协议，那么可以提交issue，或者联系作者。
