@@ -180,6 +180,9 @@ class Render {
     // 下移节点
     this.downNode = this.downNode.bind(this)
     this.mindMap.command.add('DOWN_NODE', this.downNode)
+    //  将一个节点上移一个层级
+    this.moveUpOneLevel = this.moveUpOneLevel.bind(this)
+    this.mindMap.command.add('MOVE_UP_ONE_LEVEL', this.moveUpOneLevel)
     // 移动节点
     this.insertAfter = this.insertAfter.bind(this)
     this.mindMap.command.add('INSERT_AFTER', this.insertAfter)
@@ -887,6 +890,22 @@ class Render {
     // 节点数据
     parent.nodeData.children.splice(index, 1)
     parent.nodeData.children.splice(insertIndex, 0, node.nodeData)
+    this.mindMap.render()
+  }
+
+  // 将节点上移一个层级，多个节点只会操作第一个节点
+  moveUpOneLevel(node) {
+    node = node || this.activeNodeList[0]
+    if (!node || node.isRoot || node.layerIndex <= 1) {
+      return
+    }
+    const parent = node.parent
+    const grandpa = parent.parent
+    const index = getNodeIndexInNodeList(node, parent.children)
+    const parentIndex = getNodeIndexInNodeList(parent, grandpa.children)
+    // 节点数据
+    parent.nodeData.children.splice(index, 1)
+    grandpa.nodeData.children.splice(parentIndex + 1, 0, node.nodeData)
     this.mindMap.render()
   }
 
