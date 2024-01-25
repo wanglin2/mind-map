@@ -1291,6 +1291,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>仅删除当前节点，操作节点为当前激活的节点或指定节点</td>
 <td>appointNodes（可选，指定要删除的节点，指定多个节点可以传一个数组）</td>
 </tr>
+<tr>
+<td>MOVE_UP_ONE_LEVEL（v0.9.6+）</td>
+<td>将指定节点上移一个层级</td>
+<td>node（可选，指定要上移层级的节点，不传则为当前激活节点中的第一个）</td>
+</tr>
 </tbody>
 </table>
 <h3>setData(data)</h3>

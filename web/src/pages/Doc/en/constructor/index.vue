@@ -1390,6 +1390,11 @@ redo. All commands are as follows:</p>
 <td>Delete only the current node, operate on the currently active node or specified node</td>
 <td>appointNodes（Optional, specify the nodes to be deleted, and multiple nodes can be passed as an array）</td>
 </tr>
+<tr>
+<td>MOVE_UP_ONE_LEVEL（v0.9.6+）</td>
+<td>Move the specified node up one level</td>
+<td>node（Optional, specify the node to move up the hierarchy, if not passed, it will be the first node in the current active node）</td>
+</tr>
 </tbody>
 </table>
 <h3>setData(data)</h3>

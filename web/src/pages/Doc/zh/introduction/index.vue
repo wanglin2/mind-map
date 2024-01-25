@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>简介</h1>
-<p><code>simple-mind-map</code>是一个简单&amp;强大的Web思维导图库，不依赖任何特定框架。可以帮助你快速开发思维导图产品。</p>
+<p><code>simple-mind-map</code>【中文名：思绪思维导图】是一个简单&amp;强大的Web思维导图库，不依赖任何特定框架。可以帮助你快速开发思维导图产品。</p>
 <blockquote>
 <p>如果你只是想使用思维导图，你也完全可以把本项目的demo作为一个普通的在线思维导图工具使用。点击右上角的【在线示例】开始使用吧。</p>
 <p>另外也提供了客户端可供下载，支持<code>Windows</code>、<code>Mac</code>及<code>Linux</code>，<a href="/mind-map/#/doc/zh/client">点此了解更多</a>。</p>

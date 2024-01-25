@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.9.6
+
+Fix:
+
+> 1.Fix the issue where the style of the collapsed nodes remains unchanged when switching themes;
+
+New:
+
+> 1.Add new fields to the theme, used to set the display position, head or tail, of node line arrows;
+>
+> 2.New field added to the theme, used to set the starting position of the root node line when connecting curves;
+>
+> 3.Mac dual finger touch event moves the canvas to increase sensitivity slightly;
+>
+> 4.Add MOVE_ UP_ ONE_ The LEVEL command is used to move a node up one level;
+
+Demo:
+
+> 1.The outline supports pressing Shift+Tab to move nodes up one level;
+>
+> 2.Support setting the position of node arrow display;
+>
+> 3.Support setting the starting position of root node connections;
+
 ## 0.9.5
 
 Fix:

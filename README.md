@@ -2,12 +2,12 @@
 
 [![npm-version](https://img.shields.io/npm/v/simple-mind-map)](https://www.npmjs.com/package/simple-mind-map)
 ![npm download](https://img.shields.io/npm/dm/simple-mind-map)
-[![GitHub stars](https://img.shields.io/github/stars/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/issues)
-[![GitHub forks](https://img.shields.io/github/forks/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/network/members)
 ![license](https://img.shields.io/npm/l/express.svg)
+[![GitHub stars](https://img.shields.io/github/stars/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/network/members)
 
-> 一个简单&强大的 Web 思维导图
+> 中文名：思绪思维导图。一个简单&强大的 Web 思维导图。
 
 本项目包含两部分：
 
@@ -87,6 +87,8 @@ const mindMap = new MindMap({
 # License
 
 [MIT](./LICENSE)
+
+保留`mind-map`版权声明的情况下可随意商用。
 
 # 微信交流群
 
