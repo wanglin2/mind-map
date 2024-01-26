@@ -131,11 +131,11 @@ export default {
       let data = this.mindMap.getData()
       data.root = true // 标记根节点
       let walk = root => {
-        let text = (root.data.richText
+        let text = root.data.richText
           ? nodeRichTextToTextWithWrap(root.data.text)
           : root.data.text
-        ).replaceAll(/\n/g, '<br>')
         text = htmlEscape(text)
+        text = text.replaceAll(/\n/g, '<br>')
         root.textCache = text // 保存一份修改前的数据，用于对比是否修改了
         root.label = text
         root.uid = root.data.uid
