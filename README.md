@@ -268,4 +268,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
         <span>博文</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/慕智打印-兰兰.jpg" style="width: 50px;height: 50px;" />
+        <span>慕智打印-兰兰</span>
+    </span>
 </p>
