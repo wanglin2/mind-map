@@ -90,7 +90,11 @@ Exports as `svg`.
 
 Export as `pdf`. Unlike other export methods, this method does not return data and directly triggers the download.
 
+> In versions before v0.9.3, this method does not return data and will directly trigger the download.
+
 > After v0.6.0, an additional ExportPDF plugin needs to be registered
+
+> The internal export of PDF uses the PDF lib library to convert images into PDF. Currently, when exporting PDF with a large number of nodes, some content may be lost. Therefore, it is recommended that capable developers implement the PDF export function themselves. If there are backend developers in the project, they can also seek support from backend developers.
 
 ```js
 import ExportPDF from 'simple-mind-map/src/plugins/ExportPDF.js'

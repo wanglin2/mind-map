@@ -221,6 +221,7 @@ function resetControlPoint() {
 
 // 渲染控制点
 function renderControls(startPoint, endPoint, point1, point2) {
+  if (!this.mindMap.opt.enableAdjustAssociativeLinePoints) return
   if (!this.controlLine1) {
     this.createControlNodes()
   }

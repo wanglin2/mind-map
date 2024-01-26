@@ -531,6 +531,18 @@
 <td>true</td>
 <td>当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas配置不再起作用</td>
 </tr>
+<tr>
+<td>associativeLineInitPointsPosition（v0.9.5+）</td>
+<td>null / { from, to }</td>
+<td>{ from: '', to: '' }</td>
+<td>默认情况下，新创建的关联线两个端点的位置是根据两个节点中心点的相对位置来计算的，如果你想固定位置，可以通过这个选项来配置。from和to都不传，则都自动计算，如果只传一个，另一个则会自动计算。from和to可选值：left、top、bottom、right</td>
+</tr>
+<tr>
+<td>enableAdjustAssociativeLinePoints（v0.9.5+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>是否允许调整关联线两个端点的位置</td>
+</tr>
 </tbody>
 </table>
 <h3>数据结构</h3>
@@ -1017,6 +1029,16 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>document.body的点击事件</td>
 <td>e（事件对象）</td>
 </tr>
+<tr>
+<td>data_change_detail（v0.9.3+）</td>
+<td>渲染树数据变化的明细，会返回一个数组，每一项代表一个更新点，每一项都是一个对象，存在一个<code>type</code>属性，代表明细的类型，包含<code>create</code>（创建节点）、<code>update</code>（更新节点）、<code>delete</code>（删除节点），存在一个<code>data</code>属性，代表当前更新的节点数据，如果是<code>update</code>类型，还会存在一个<code>oldData</code>属性，保存了更新前该节点的数据</td>
+<td>arr（明细数据）</td>
+</tr>
+<tr>
+<td>layout_change（v0.9.4+）</td>
+<td>修改结构时触发，即调用了mindMap.setLayout()方法时触发</td>
+<td>layout（新的结构）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
@@ -1268,6 +1290,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>REMOVE_CURRENT_NODE（v0.8.0+）</td>
 <td>仅删除当前节点，操作节点为当前激活的节点或指定节点</td>
 <td>appointNodes（可选，指定要删除的节点，指定多个节点可以传一个数组）</td>
+</tr>
+<tr>
+<td>MOVE_UP_ONE_LEVEL（v0.9.6+）</td>
+<td>将指定节点上移一个层级</td>
+<td>node（可选，指定要上移层级的节点，不传则为当前激活节点中的第一个）</td>
 </tr>
 </tbody>
 </table>

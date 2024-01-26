@@ -1,6 +1,87 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.9.6</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue where the style of the collapsed nodes remains unchanged when switching themes;</p>
+<p>2.Fix the issue of losing the new text style when switching themes for text wrapping;</p>
+<p>3.Fix the issue where the style of the newline text remains unchanged when switching themes;</p>
+<p>4.Fixed the issue of adding mathematical formulas to nodes and not changing the text style when switching themes;</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Add new fields to the theme, used to set the display position, head or tail, of node line arrows;</p>
+<p>2.New field added to the theme, used to set the starting position of the root node line when connecting curves;</p>
+<p>3.Mac dual finger touch event moves the canvas to increase sensitivity slightly;</p>
+<p>4.Add MOVE_ UP_ ONE_ The LEVEL command is used to move a node up one level;</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.The outline supports pressing Shift+Tab to move nodes up one level;</p>
+<p>2.Support setting the position of node arrow display;</p>
+<p>3.Support setting the starting position of root node connections;</p>
+<p>4.Add two new themes;</p>
+<p>5.Fix the issue of text wrapping not taking effect in the outline and displaying the br tag;</p>
+</blockquote>
+<h2>0.9.5</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue of missing inter zone summaries when expanding and folding nodes.</p>
+<p>2.Fix the issue where the position of the newly created associated line is always on the right side of the node without changing according to its relative position.</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Add configuration for the initial positions of the two endpoints when creating associated lines.</p>
+<p>2.Add a configuration that prohibits adjusting the endpoint position of associated lines.</p>
+<p>3.Add a hand drawn style plugin.</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.Optimize interface adaptation on mobile devices.</p>
+<p>2.Supports enabling hand drawn styles.</p>
+</blockquote>
+<h2>0.9.4</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue of inconsistent text wrapping caused by inconsistent text area width during node display and editing in some cases.</p>
+<p>2.Fixed the issue where gradients were not applied to the edit box during rich text editing for nodes with gradient backgrounds.</p>
+<p>3.Fix the issue of text style loss after switching themes for nodes defined in bold by the theme.</p>
+<p>4.Fix the issue on Mac where the useLeftKeySelectionRightKeyDrag option is set to true and cannot hold down the Ctrl key to select multiple nodes.</p>
+<p>5.Fix the issue where text styles are lost after clearing styles during node rich text editing, and switching themes does not restore them.</p>
+<p>6.Fix data issue when deleting nodes with child nodes_ Change_ The issue of error reporting in detail events.</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Add the lineRadius property to the theme configuration to set the size of the rounded corners when connecting straight lines.</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.Remove the display of formulas from the outline.</p>
+<p>2.Some configurations in the basic style that only support partial structures are displayed and hidden based on the current structure.</p>
+<p>3.Add configuration for connecting rounded corners.</p>
+<p>4.Automatically hide the sidebar when importing files.</p>
+</blockquote>
+<h2>0.9.3</h2>
+<p>Fix</p>
+<blockquote>
+<p>1.Fix the issue of text misalignment when nodes have icons in Safari browser.</p>
+<p>2.Fix the issue of formula rendering in browsers with lower versions of Chrome kernel.</p>
+<p>3.Fix the issue of new MouseEvent code execution errors when used in micro front-end framework applications.</p>
+<p>4.Fix the issue of missing arrows on node connections, arrows on associated lines, and gradient backgrounds when exporting images.</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Export PDF from jspdf library to pdf-lib library.</p>
+<p>2.If the second parameter of the set node text command (SETNODE-TEXT) is not passed, the previous value will be used.</p>
+<p>3.There is an issue of incorrect width and height of exported images in Firefox browser when optimizing nodes with hyperlinks and comments.</p>
+<p>4.In node text editing, if the pasted data is in SMM format, the pure text of the first node will be taken out for pasting.</p>
+<p>5.Add interception operations for pasting when editing nodes without rich text.</p>
+<p>6.Add a detailed event (data_change_detail) for updating node data, which can retrieve newly created, updated, or deleted node data.</p>
+<p>7.Theme configuration supports setting node gradient background color.</p>
+</blockquote>
+<p>Demo:</p>
+<p>1.Support setting the background of node gradients.</p>
 <h2>0.9.2</h2>
 <p>Fix:</p>
 <blockquote>

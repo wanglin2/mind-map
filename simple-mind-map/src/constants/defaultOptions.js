@@ -40,7 +40,7 @@ export const defaultOpt = {
   enableFreeDrag: false,
   // 水印配置
   watermarkConfig: {
-    onlyExport: false,// 是否仅在导出时添加水印
+    onlyExport: false, // 是否仅在导出时添加水印
     text: '',
     lineSpacing: 100,
     textSpacing: 100,
@@ -256,5 +256,24 @@ export const defaultOpt = {
       }
     }
   */
-  handleNodePasteImg: null
+  handleNodePasteImg: null,
+  // 默认情况下，新创建的关联线两个端点的位置是根据两个节点中心点的相对位置来计算的，如果你想固定位置，可以通过这个属性来配置
+  // from和to都不传，则都自动计算，如果只传一个，另一个则会自动计算
+  associativeLineInitPointsPosition: {
+    // from和to可选值：left、top、bottom、right
+    from: '', // 关联线起始节点上端点的位置
+    to: '' // 关联线目标节点上端点的位置
+  },
+  // 是否允许调整关联线两个端点的位置
+  enableAdjustAssociativeLinePoints: true,
+  // 自定义创建节点形状的方法，可以传一个函数，均接收一个参数
+  // 矩形、圆角矩形、椭圆、圆等形状会调用该方法
+  // 接收svg path字符串，返回svg节点
+  customCreateNodePath: null,
+  // 菱形、平行四边形、八角矩形、外三角矩形、内三角矩形等形状会调用该方法
+  // 接收points数组点位，返回svg节点
+  customCreateNodePolygon: null,
+  // 自定义转换节点连线路径的方法
+  // 接收svg path字符串，返回转换后的svg path字符串
+  customTransformNodeLinePath: null
 }

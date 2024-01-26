@@ -36,12 +36,18 @@ export default {
     }) {
       if (node.parent && node.parent.isRoot) {
         line.plot(
-          `M ${x},${top} L ${x + lineLength},${
-            top - Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg)) * lineLength
-          }`
+          ctx.transformPath(
+            `M ${x},${top} L ${x + lineLength},${
+              top - Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg)) * lineLength
+            }`
+          )
         )
       } else {
-        line.plot(`M ${x},${top + height + expandBtnSize} L ${x},${maxy}`)
+        line.plot(
+          ctx.transformPath(
+            `M ${x},${top + height + expandBtnSize} L ${x},${maxy}`
+          )
+        )
       }
     },
     computedLeftTopValue({ layerIndex, node, ctx }) {
@@ -135,14 +141,16 @@ export default {
     renderLine({ node, line, top, x, lineLength, height, miny, ctx }) {
       if (node.parent && node.parent.isRoot) {
         line.plot(
-          `M ${x},${top + height} L ${x + lineLength},${
-            top +
-            height +
-            Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg)) * lineLength
-          }`
+          ctx.transformPath(
+            `M ${x},${top + height} L ${x + lineLength},${
+              top +
+              height +
+              Math.tan(degToRad(ctx.mindMap.opt.fishboneDeg)) * lineLength
+            }`
+          )
         )
       } else {
-        line.plot(`M ${x},${top} L ${x},${miny}`)
+        line.plot(ctx.transformPath(`M ${x},${top} L ${x},${miny}`))
       }
     },
     computedLeftTopValue({ layerIndex, node, ctx }) {

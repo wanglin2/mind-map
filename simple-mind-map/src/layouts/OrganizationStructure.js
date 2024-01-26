@@ -161,13 +161,14 @@ class OrganizationStructure extends Base {
       return []
     }
     let { left, top, width, height } = node
+    const { nodeUseLineStyle } = this.mindMap.themeConfig
     let x1 = left + width / 2
     let y1 = top + height
     node.children.forEach((item, index) => {
       let x2 = item.left + item.width / 2
       let y2 = item.top
       // 节点使用横线风格，需要额外渲染横线
-      let nodeUseLineStylePath = this.mindMap.themeConfig.nodeUseLineStyle
+      let nodeUseLineStylePath = nodeUseLineStyle
         ? ` L ${item.left},${y2} L ${item.left + item.width},${y2}`
         : ''
       let path = `M ${x1},${y1} L ${x2},${y2}` + nodeUseLineStylePath
@@ -213,14 +214,16 @@ class OrganizationStructure extends Base {
     let line1 = this.lineDraw.path()
     node.style.line(line1)
     expandBtnSize = len > 0 && !isRoot ? expandBtnSize : 0
-    line1.plot(`M ${x1},${y1 + expandBtnSize} L ${x1},${y1 + s1}`)
+    line1.plot(
+      this.transformPath(`M ${x1},${y1 + expandBtnSize} L ${x1},${y1 + s1}`)
+    )
     node._lines.push(line1)
     style && style(line1, node)
     // 水平线
     if (len > 0) {
       let lin2 = this.lineDraw.path()
       node.style.line(lin2)
-      lin2.plot(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`)
+      lin2.plot(this.transformPath(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`))
       node._lines.push(lin2)
       style && style(lin2, node)
     }
@@ -253,7 +256,7 @@ class OrganizationStructure extends Base {
       let cx = x1 + (x2 - x1) / 2
       let cy = y1 + 20
       let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
-      item.generalizationLine.plot(path)
+      item.generalizationLine.plot(this.transformPath(path))
       item.generalizationNode.top = bottom + generalizationNodeMargin
       item.generalizationNode.left =
         left + (right - left - item.generalizationNode.width) / 2

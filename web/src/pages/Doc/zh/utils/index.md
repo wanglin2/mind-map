@@ -45,7 +45,15 @@ import {walk, ...} from 'simple-mind-map/src/utils'
 示例：
 
 ```js
-walk(tree, null, () => {}, () => {}, false, 0, 0)
+walk(
+  tree,
+  null,
+  () => {},
+  () => {},
+  false,
+  0,
+  0
+)
 ```
 
 #### bfsWalk(root, callback)
@@ -86,7 +94,7 @@ copyRenderTree({}, this.mindMap.renderer.renderTree)
 
 - `removeActiveState`：`Boolean`，默认为`false`，是否移除节点的激活状态
 
-- `removeId`：v0.7.3-fix.1+，是否移除节点数据中的uid，默认为`true`
+- `removeId`：v0.7.3-fix.1+，是否移除节点数据中的 uid，默认为`true`
 
 > - `keepId`： （原第四个参数）`Boolean`，默认为`false`，是否保留被复制节点的`id`，默认会删除`id`防止节点`id`重复，但是对于移动节点的场景，节点原`id`需要保留。
 
@@ -98,7 +106,7 @@ copyNodeTree({}, node)
 
 #### imgToDataUrl(src)
 
-图片转成dataURL
+图片转成 dataURL
 
 #### downloadFile(file, fileName)
 
@@ -137,12 +145,14 @@ copyNodeTree({}, node)
 测量文本的宽高，返回值：
 
 ```js
-{ width, height }
+{
+  width, height
+}
 ```
 
 #### getTextFromHtml(html)
 
-提取html字符串里的纯文本内容。
+提取 html 字符串里的纯文本内容。
 
 #### readBlob(blob)
 
@@ -158,8 +168,8 @@ copyNodeTree({}, node)
 
 ```js
 {
-  type,// 数据的文件类型
-  base64// base64数据
+  type, // 数据的文件类型
+    base64 // base64数据
 }
 ```
 
@@ -167,14 +177,13 @@ copyNodeTree({}, node)
 
 > v0.6.6+
 
-- `src`：图片的url
+- `src`：图片的 url
 
 获取图片的大小。返回：
 
 ```js
 {
-  width,
-  height
+  width, height
 }
 ```
 
@@ -182,14 +191,14 @@ copyNodeTree({}, node)
 
 > v0.6.8+
 
-- `imgFile`：图片类型的File对象
+- `imgFile`：图片类型的 File 对象
 
 加载图片，返回：
 
 ```js
 {
-  url,// DataUrl
-  size// { width, height } 图片宽高
+  url, // DataUrl
+    size // { width, height } 图片宽高
 }
 ```
 
@@ -203,13 +212,13 @@ copyNodeTree({}, node)
 
 > v0.6.10+
 
-移除html字符串中节点的内联样式。
+移除 html 字符串中节点的内联样式。
 
 #### addHtmlStyle(html, tag, style)
 
 > v0.6.10+
 
-给html标签中指定的标签添加内联样式。
+给 html 标签中指定的标签添加内联样式。
 
 #### checkIsRichText(str)
 
@@ -267,7 +276,7 @@ copyNodeTree({}, node)
 
 > v0.7.2+
 
-- `el`：DOM节点，可聚焦的元素，一般为输入框元素。
+- `el`：DOM 节点，可聚焦的元素，一般为输入框元素。
 
 聚焦指定输入框。
 
@@ -275,7 +284,7 @@ copyNodeTree({}, node)
 
 > v0.7.2+
 
-- `el`：DOM节点，可聚焦的元素，一般为输入框元素。
+- `el`：DOM 节点，可聚焦的元素，一般为输入框元素。
 
 聚焦并全选指定输入框。
 
@@ -297,9 +306,9 @@ copyNodeTree({}, node)
 
 - `createNewId`：v0.7.3-fix.1+，`Boolean`，默认为`false`，即如果节点不存在`uid`的话，会创建新的`uid`。如果传`true`，那么无论节点数据原来是否存在`uid`，都会创建新的`uid`
 
-给指定的节点列表树数据添加uid（如果uid不存在的话），会修改原数据。
+给指定的节点列表树数据添加 uid（如果 uid 不存在的话），会修改原数据。
 
-#### getNodeIndex(node) 
+#### getNodeIndex(node)
 
 > v0.7.2+
 
@@ -364,7 +373,7 @@ copyNodeTree({}, node)
 
 获取节点在兄弟节点中的位置索引。
 
-#### getNodeIndexInNodeList(node, nodeList) 
+#### getNodeIndexInNodeList(node, nodeList)
 
 > v0.8.0+
 
@@ -386,8 +395,7 @@ copyNodeTree({}, node)
 
 ```js
 {
-  text,
-  img
+  text, img
 }
 ```
 
@@ -407,9 +415,9 @@ copyNodeTree({}, node)
 
 > v0.9.1+
 
-- `str`：html字符串
+- `str`：html 字符串
 
-给html自闭合标签添加闭合状态，`<div><img src="xxx"></div>` -> `<div><img src="xxx" /></div>`。
+给 html 自闭合标签添加闭合状态，`<div><img src="xxx"></div>` -> `<div><img src="xxx" /></div>`。
 
 #### checkNodeListIsEqual(list1, list2)
 
@@ -419,7 +427,64 @@ copyNodeTree({}, node)
 
 检查两个节点实例列表包含的节点是否是一样的。
 
-## 在canvas中模拟css的背景属性
+#### getChromeVersion()
+
+> v0.9.3+
+
+获取当前浏览器使用的`Chrome`内核版本。如果当前浏览器使用的不是 `Chrome`内核，那么会返回空字符串。
+
+#### transformTreeDataToObject(data)
+
+> v0.9.3+
+
+- `data`：思维导图节点数据。
+
+将思维导图树结构转平级对象。
+
+```js
+{
+        data: {
+            uid: 'xxx'
+        },
+        children: [
+            {
+                data: {
+                    uid: 'xxx'
+                },
+                children: []
+            }
+        ]
+    }
+```
+
+转为：
+
+```js
+    {
+        uid: {
+            children: [uid1, uid2],
+            data: {}
+        }
+    }
+```
+
+#### transformObjectToTreeData(data)
+
+> v0.9.3+
+
+将平级对象转树结构。transformTreeDataToObject 方法的反向操作。
+
+#### removeHtmlNodeByClass(html, selector)
+
+> v0.9.6+
+
+- `html`：html 字符串
+
+- `selector`：节点选择器，比如类选择器，id 选择器
+
+去除指定 html 字符串中指定选择器的节点，然后返回处理后的 html 字符串。
+
+## 在 canvas 中模拟 css 的背景属性
 
 引入：
 
@@ -436,20 +501,27 @@ let img = '/1.jpg'
 let canvas = document.createElement('canvas')
 canvas.width = width
 canvas.height = height
-drawBackgroundImageToCanvas(ctx, width, height, img, {
-  backgroundRepeat: 'repeat-y',
-  backgroundSize: '60%',
-  backgroundPosition: 'center center'
-}, (err) => {
-  if (err) {
-    // 失败
-  } else {
-    // 成功
+drawBackgroundImageToCanvas(
+  ctx,
+  width,
+  height,
+  img,
+  {
+    backgroundRepeat: 'repeat-y',
+    backgroundSize: '60%',
+    backgroundPosition: 'center center'
+  },
+  err => {
+    if (err) {
+      // 失败
+    } else {
+      // 成功
+    }
   }
-})
+)
 ```
 
-## LRU缓存类
+## LRU 缓存类
 
 > v0.5.10+
 

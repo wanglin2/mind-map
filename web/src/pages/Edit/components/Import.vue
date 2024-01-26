@@ -36,6 +36,7 @@ import xmind from 'simple-mind-map/src/parse/xmind.js'
 import markdown from 'simple-mind-map/src/parse/markdown.js'
 import { fileToBuffer, addMindMapNodeStickerProtocol } from '@/utils'
 import { read, utils } from 'xlsx'
+import { mapMutations } from 'vuex'
 
 /**
  * @Author: 王林
@@ -66,6 +67,8 @@ export default {
     this.$bus.$off('handle_file_url', this.handleFileURL)
   },
   methods: {
+    ...mapMutations(['setActiveSidebar']),
+
     handleShowImport() {
       this.dialogVisible = true
     },
@@ -153,6 +156,7 @@ export default {
         this.handleMd(file)
       }
       this.cancel()
+      this.setActiveSidebar(null)
     },
 
     /**

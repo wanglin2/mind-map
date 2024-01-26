@@ -128,7 +128,12 @@ function createRichTextNode() {
       // 如果是富文本那么线移除内联样式
       text = removeHtmlStyle(text)
       // 再添加新的内联样式
+      let _text = text
       text = addHtmlStyle(text, 'span', style)
+      // 给span添加样式没有成功，则尝试给strong标签添加样式
+      if (text === _text) {
+        text = addHtmlStyle(text, 'strong', style)
+      }
     } else {
       // 非富文本
       text = `<p><span style="${style}">${text}</span></p>`
@@ -159,7 +164,7 @@ function createRichTextNode() {
     height = elTmp.getBoundingClientRect().height
     div.innerHTML = html
   }
-  width = Math.ceil(width) + 1 // 修复getBoundingClientRect方法对实际宽度是小数的元素获取到的值是整数，导致宽度不够文本发生换行的问题
+  width = Math.min(Math.ceil(width) + 1, textAutoWrapWidth) // 修复getBoundingClientRect方法对实际宽度是小数的元素获取到的值是整数，导致宽度不够文本发生换行的问题
   height = Math.ceil(height)
   g.attr('data-width', width)
   g.attr('data-height', height)
@@ -170,6 +175,7 @@ function createRichTextNode() {
   g.add(foreignObject)
   return {
     node: g,
+    nodeContent: foreignObject,
     width,
     height
   }
@@ -179,6 +185,9 @@ function createRichTextNode() {
 function createTextNode() {
   if (this.getData('richText')) {
     return this.createRichTextNode()
+  }
+  if (this.getData('resetRichText')) {
+    delete this.nodeData.data.resetRichText
   }
   let g = new G()
   let fontSize = this.getStyle('fontSize', false)
@@ -221,7 +230,7 @@ function createTextNode() {
     g.add(node)
   })
   let { width, height } = g.bbox()
-  width = Math.ceil(width)
+  width = Math.min(Math.ceil(width), maxWidth)
   height = Math.ceil(height)
   g.attr('data-width', width)
   g.attr('data-height', height)
@@ -240,7 +249,7 @@ function createHyperlinkNode() {
     return
   }
   let iconSize = this.mindMap.themeConfig.iconSize
-  let node = new SVG()
+  let node = new SVG().size(iconSize, iconSize)
   // 超链接节点
   let a = new A().to(hyperlink).target('_blank')
   a.node.addEventListener('click', e => {
@@ -298,7 +307,7 @@ function createNoteNode() {
     return null
   }
   let iconSize = this.mindMap.themeConfig.iconSize
-  let node = new SVG().attr('cursor', 'pointer')
+  let node = new SVG().attr('cursor', 'pointer').size(iconSize, iconSize)
   // 透明的层，用来作为鼠标区域
   node.add(new Rect().size(iconSize, iconSize).fill({ color: 'transparent' }))
   // 备注图标

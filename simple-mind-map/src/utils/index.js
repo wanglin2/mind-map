@@ -489,9 +489,27 @@ export const removeHtmlStyle = html => {
 }
 
 // 给html标签中指定的标签添加内联样式
+let addHtmlStyleEl = null
 export const addHtmlStyle = (html, tag, style) => {
-  const reg = new RegExp(`(<${tag}[^>]*)(>[^<>]*</${tag}>)`, 'g')
-  return html.replaceAll(reg, `$1 style="${style}"$2`)
+  if (!addHtmlStyleEl) {
+    addHtmlStyleEl = document.createElement('div')
+  }
+  addHtmlStyleEl.innerHTML = html
+  let walk = root => {
+    let childNodes = root.childNodes
+    childNodes.forEach(node => {
+      if (node.nodeType === 1) {
+        // 元素节点
+        if (node.tagName.toLowerCase() === tag) {
+          node.style.cssText = style
+        } else {
+          walk(node)
+        }
+      }
+    })
+  }
+  walk(addHtmlStyleEl)
+  return addHtmlStyleEl.innerHTML
 }
 
 // 检查一个字符串是否是富文本字符
@@ -535,6 +553,20 @@ export const replaceHtmlText = (html, searchText, replaceText) => {
   return replaceHtmlTextEl.innerHTML
 }
 
+// 去除html字符串中指定选择器的节点，然后返回html字符串
+let removeHtmlNodeByClassEl = null
+export const removeHtmlNodeByClass = (html, selector) => {
+  if (!removeHtmlNodeByClassEl) {
+    removeHtmlNodeByClassEl = document.createElement('div')
+  }
+  removeHtmlNodeByClassEl.innerHTML = html
+  const node = removeHtmlNodeByClassEl.querySelector(selector)
+  if (node) {
+    node.parentNode.removeChild(node)
+  }
+  return removeHtmlNodeByClassEl.innerHTML
+}
+
 // 判断一个颜色是否是白色
 export const isWhite = color => {
   color = String(color).replaceAll(/\s+/g, '')
@@ -576,7 +608,25 @@ export const getVisibleColorFromTheme = themeConfig => {
   }
 }
 
+// 去掉DOM节点中的公式标签
+export const removeFormulaTags = node => {
+  const walk = root => {
+    const childNodes = root.childNodes
+    childNodes.forEach(node => {
+      if (node.nodeType === 1) {
+        if (node.classList.contains('ql-formula')) {
+          node.parentNode.removeChild(node)
+        } else {
+          walk(node)
+        }
+      }
+    })
+  }
+  walk(node)
+}
+
 // 将<p><span></span><p>形式的节点富文本内容转换成\n换行的文本
+// 会过滤掉节点中的格式节点
 let nodeRichTextToTextWithWrapEl = null
 export const nodeRichTextToTextWithWrap = html => {
   if (!nodeRichTextToTextWithWrapEl) {
@@ -589,6 +639,7 @@ export const nodeRichTextToTextWithWrap = html => {
     const node = childNodes[i]
     if (node.nodeType === 1) {
       // 元素节点
+      removeFormulaTags(node)
       if (node.tagName.toLowerCase() === 'p') {
         res += node.textContent + '\n'
       } else {
@@ -1017,4 +1068,203 @@ export const checkNodeListIsEqual = (list1, list2) => {
     }
   }
   return true
+}
+
+// 获取浏览器的chrome内核版本
+export const getChromeVersion = () => {
+  const match = navigator.userAgent.match(/\s+Chrome\/(.*)\s+/)
+  if (match && match[1]) {
+    return Number.parseFloat(match[1])
+  }
+  return ''
+}
+
+// 创建smm粘贴的粘贴数据
+export const createSmmFormatData = data => {
+  return {
+    simpleMindMap: true,
+    data
+  }
+}
+
+// 检查是否是smm粘贴格式的数据
+export const checkSmmFormatData = data => {
+  let smmData = null
+  // 如果是字符串，则尝试解析为对象
+  if (typeof data === 'string') {
+    try {
+      const parsedData = JSON.parse(data)
+      // 判断是否是对象，且存在属性标志
+      if (typeof parsedData === 'object' && parsedData.simpleMindMap) {
+        smmData = parsedData.data
+      }
+    } catch (error) {}
+  } else if (typeof data === 'object' && data.simpleMindMap) {
+    // 否则如果是对象，则检查属性标志
+    smmData = data.data
+  }
+  const isSmm = !!smmData
+  return {
+    isSmm,
+    data: isSmm ? smmData : String(data)
+  }
+}
+
+// 处理输入框的粘贴事件，会去除文本的html格式、换行
+export const handleInputPasteText = (e, text) => {
+  e.preventDefault()
+  const selection = window.getSelection()
+  if (!selection.rangeCount) return
+  selection.deleteFromDocument()
+  text = text || e.clipboardData.getData('text')
+  // 去除格式
+  text = getTextFromHtml(text)
+  // 去除换行
+  text = text.replaceAll(/\n/g, '')
+  const node = document.createTextNode(text)
+  selection.getRangeAt(0).insertNode(node)
+  selection.collapseToEnd()
+}
+
+// 将思维导图树结构转平级对象
+/*
+    {
+        data: {
+            uid: 'xxx'
+        },
+        children: [
+            {
+                data: {
+                    uid: 'xxx'
+                },
+                children: []
+            }
+        ]
+    }
+    转为：
+    {
+        uid: {
+            children: [uid1, uid2],
+            data: {}
+        }
+    }
+  */
+export const transformTreeDataToObject = data => {
+  const res = {}
+  const walk = (root, parent) => {
+    const uid = root.data.uid
+    if (parent) {
+      parent.children.push(uid)
+    }
+    res[uid] = {
+      isRoot: !parent,
+      data: {
+        ...root.data
+      },
+      children: []
+    }
+    if (root.children && root.children.length > 0) {
+      root.children.forEach(item => {
+        walk(item, res[uid])
+      })
+    }
+  }
+  walk(data, null)
+  return res
+}
+
+// 将平级对象转树结构
+// transformTreeDataToObject方法的反向操作
+// 找到父节点的uid
+const _findParentUid = (data, targetUid) => {
+  const uids = Object.keys(data)
+  let res = ''
+  uids.forEach(uid => {
+    const children = data[uid].children
+    const isParent =
+      children.findIndex(childUid => {
+        return childUid === targetUid
+      }) !== -1
+    if (isParent) {
+      res = uid
+    }
+  })
+  return res
+}
+export const transformObjectToTreeData = data => {
+  const uids = Object.keys(data)
+  if (uids.length <= 0) return null
+  const rootKey = uids.find(uid => {
+    return data[uid].isRoot
+  })
+  if (!rootKey || !data[rootKey]) return null
+  // 根节点
+  const res = {
+    data: simpleDeepClone(data[rootKey].data),
+    children: []
+  }
+  const map = {}
+  map[rootKey] = res
+  uids.forEach(uid => {
+    const parentUid = _findParentUid(data, uid)
+    const cur = data[uid]
+    const node = map[uid] || {
+      data: simpleDeepClone(cur.data),
+      children: []
+    }
+    if (!map[uid]) {
+      map[uid] = node
+    }
+    if (parentUid) {
+      const index = data[parentUid].children.findIndex(item => {
+        return item === uid
+      })
+      if (!map[parentUid]) {
+        map[parentUid] = {
+          data: simpleDeepClone(data[parentUid].data),
+          children: []
+        }
+      }
+      map[parentUid].children[index] = node
+    }
+  })
+  return res
+}
+
+// 计算两个点的直线距离
+export const getTwoPointDistance = (x1, y1, x2, y2) => {
+  return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2))
+}
+
+// 判断两个矩形的相对位置
+// 第一个矩形在第二个矩形的什么方向
+export const getRectRelativePosition = (rect1, rect2) => {
+  // 获取第一个矩形的中心点坐标
+  const rect1CenterX = rect1.x + rect1.width / 2
+  const rect1CenterY = rect1.y + rect1.height / 2
+
+  // 获取第二个矩形的中心点坐标
+  const rect2CenterX = rect2.x + rect2.width / 2
+  const rect2CenterY = rect2.y + rect2.height / 2
+
+  // 判断第一个矩形在第二个矩形的哪个方向
+  if (rect1CenterX < rect2CenterX && rect1CenterY < rect2CenterY) {
+    return 'left-top'
+  } else if (rect1CenterX > rect2CenterX && rect1CenterY < rect2CenterY) {
+    return 'right-top'
+  } else if (rect1CenterX > rect2CenterX && rect1CenterY > rect2CenterY) {
+    return 'right-bottom'
+  } else if (rect1CenterX < rect2CenterX && rect1CenterY > rect2CenterY) {
+    return 'left-bottom'
+  } else if (rect1CenterX < rect2CenterX && rect1CenterY === rect2CenterY) {
+    return 'left'
+  } else if (rect1CenterX > rect2CenterX && rect1CenterY === rect2CenterY) {
+    return 'right'
+  } else if (rect1CenterX === rect2CenterX && rect1CenterY < rect2CenterY) {
+    return 'top'
+  } else if (rect1CenterX === rect2CenterX && rect1CenterY > rect2CenterY) {
+    return 'bottom'
+  } else {
+    return 'overlap'
+  }
 }

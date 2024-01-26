@@ -41,9 +41,9 @@ import { mapState } from 'vuex'
 import {
   nodeRichTextToTextWithWrap,
   textToNodeRichTextWithWrap,
-  getTextFromHtml,
   createUid,
-  htmlEscape
+  htmlEscape,
+  handleInputPasteText
 } from 'simple-mind-map/src/utils'
 
 // 大纲树
@@ -99,6 +99,7 @@ export default {
       // 在大纲里操作节点时不要响应该事件，否则会重新刷新树
       if (this.notHandleDataChange) {
         this.notHandleDataChange = false
+        this.isAfterCreateNewNode = false
         return
       }
       if (this.isAfterCreateNewNode) {
@@ -130,11 +131,11 @@ export default {
       let data = this.mindMap.getData()
       data.root = true // 标记根节点
       let walk = root => {
-        let text = (root.data.richText
+        let text = root.data.richText
           ? nodeRichTextToTextWithWrap(root.data.text)
           : root.data.text
-        ).replaceAll(/\n/g, '<br>')
         text = htmlEscape(text)
+        text = text.replaceAll(/\n/g, '<br>')
         root.textCache = text // 保存一份修改前的数据，用于对比是否修改了
         root.label = text
         root.uid = root.data.uid
@@ -212,18 +213,7 @@ export default {
 
     // 拦截粘贴事件
     onPaste(e) {
-      e.preventDefault()
-      const selection = window.getSelection()
-      if (!selection.rangeCount) return
-      selection.deleteFromDocument()
-      let text = (e.clipboardData || window.clipboardData).getData('text')
-      // 去除格式
-      text = getTextFromHtml(text)
-      // 去除换行
-      text = text.replaceAll(/\n/g, '')
-      const node = document.createTextNode(text)
-      selection.getRangeAt(0).insertNode(node)
-      selection.collapseToEnd()
+      handleInputPasteText(e)
     },
 
     // 生成唯一的key
@@ -234,15 +224,28 @@ export default {
     // 节点输入区域按键事件
     onNodeInputKeydown(e) {
       if (e.keyCode === 13 && !e.shiftKey) {
+        // 插入兄弟节点
         e.preventDefault()
         this.insertType = 'insertNode'
         e.target.blur()
       }
       if (e.keyCode === 9) {
         e.preventDefault()
-        this.insertType = 'insertChildNode'
-        e.target.blur()
+        if (e.shiftKey) {
+          // 节点上升一级
+          this.insertType = 'moveUp'
+          e.target.blur()
+        } else {
+          // 插入子节点
+          this.insertType = 'insertChildNode'
+          e.target.blur()
+        }
       }
+    },
+
+    // 节点上移一个层级
+    moveUp() {
+      this.mindMap.execCommand('MOVE_UP_ONE_LEVEL')
     },
 
     // 插入兄弟节点

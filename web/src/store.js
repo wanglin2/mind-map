@@ -19,7 +19,9 @@ const store = new Vuex.Store({
       // 鼠标行为
       useLeftKeySelectionRightKeyDrag: false,
       // 是否显示滚动条
-      isShowScrollbar: false
+      isShowScrollbar: false,
+      // 是否开启手绘风格
+      isUseHandDrawnLikeStyle: false
     },
     activeSidebar: '', // 当前显示的侧边栏
     localEditList: [],// 客户端中正在编辑的思维导图列表

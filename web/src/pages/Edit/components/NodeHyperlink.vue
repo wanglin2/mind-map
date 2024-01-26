@@ -3,7 +3,8 @@
     class="nodeHyperlinkDialog"
     :title="$t('nodeHyperlink.title')"
     :visible.sync="dialogVisible"
-    width="500"
+    :width="isMobile ? '90%' : '50%'"
+    :top="isMobile ? '20px' : '15vh'"
   >
     <div class="item">
       <span class="name">{{ $t('nodeHyperlink.link') }}</span>
@@ -41,6 +42,8 @@
 </template>
 
 <script>
+import { isMobile } from 'simple-mind-map/src/utils/index'
+
 /**
  * @Author: 王林
  * @Date: 2021-06-24 22:53:17
@@ -54,7 +57,8 @@ export default {
       link: '',
       linkTitle: '',
       activeNodes: [],
-      protocol: 'https'
+      protocol: 'https',
+      isMobile: isMobile()
     }
   },
   created() {

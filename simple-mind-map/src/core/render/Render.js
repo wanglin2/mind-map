@@ -26,7 +26,9 @@ import {
   getDataFromClipboard,
   htmlEscape,
   parseAddGeneralizationNodeList,
-  checkNodeListIsEqual
+  checkNodeListIsEqual,
+  createSmmFormatData,
+  checkSmmFormatData
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -178,6 +180,9 @@ class Render {
     // 下移节点
     this.downNode = this.downNode.bind(this)
     this.mindMap.command.add('DOWN_NODE', this.downNode)
+    //  将一个节点上移一个层级
+    this.moveUpOneLevel = this.moveUpOneLevel.bind(this)
+    this.mindMap.command.add('MOVE_UP_ONE_LEVEL', this.moveUpOneLevel)
     // 移动节点
     this.insertAfter = this.insertAfter.bind(this)
     this.mindMap.command.add('INSERT_AFTER', this.insertAfter)
@@ -395,6 +400,10 @@ class Render {
 
   //   渲染
   render(callback = () => {}, source) {
+    // 切换主题时，被收起的节点需要添加样式复位的标注
+    if (source === CONSTANTS.CHANGE_THEME) {
+      this.resetUnExpandNodeStyle()
+    }
     // 如果当前还没有渲染完毕，不再触发渲染
     if (this.isRendering) {
       // 等待当前渲染完毕后再进行一次渲染
@@ -437,6 +446,7 @@ class Render {
           this.waitRenderingParams = []
           this.render(...params)
         } else {
+          this.renderSource = ''
           if (this.reRender) {
             this.reRender = false
           }
@@ -451,6 +461,18 @@ class Render {
       })
     })
     this.emitNodeActiveEvent()
+  }
+
+  // 给当前被收起来的节点数据添加文本复位标志
+  resetUnExpandNodeStyle() {
+    walk(this.renderTree, null, node => {
+      if (!node.data.expand) {
+        walk(node, null, node2 => {
+          node2.data.resetRichText = true
+        })
+        return true
+      }
+    })
   }
 
   //  清除当前所有激活节点，并会触发事件
@@ -872,24 +894,35 @@ class Render {
     this.mindMap.render()
   }
 
+  // 将节点上移一个层级，多个节点只会操作第一个节点
+  moveUpOneLevel(node) {
+    node = node || this.activeNodeList[0]
+    if (!node || node.isRoot || node.layerIndex <= 1) {
+      return
+    }
+    const parent = node.parent
+    const grandpa = parent.parent
+    const index = getNodeIndexInNodeList(node, parent.children)
+    const parentIndex = getNodeIndexInNodeList(parent, grandpa.children)
+    // 节点数据
+    this.checkNodeLayerChange(node, parent)
+    parent.nodeData.children.splice(index, 1)
+    grandpa.nodeData.children.splice(parentIndex + 1, 0, node.nodeData)
+    this.mindMap.render()
+  }
+
   // 复制节点
   copy() {
     this.beingCopyData = this.copyNode()
     if (!this.beingCopyData) return
-    setDataToClipboard({
-      simpleMindMap: true,
-      data: this.beingCopyData
-    })
+    setDataToClipboard(createSmmFormatData(this.beingCopyData))
   }
 
   // 剪切节点
   cut() {
     this.mindMap.execCommand('CUT_NODE', copyData => {
       this.beingCopyData = copyData
-      setDataToClipboard({
-        simpleMindMap: true,
-        data: copyData
-      })
+      setDataToClipboard(createSmmFormatData(copyData))
     })
   }
 
@@ -936,10 +969,11 @@ class Render {
             const res = await this.mindMap.opt.customHandleClipboardText(text)
             if (!isUndef(res)) {
               useDefault = false
-              if (typeof res === 'object' && res.simpleMindMap) {
-                smmData = res.data
+              const checkRes = checkSmmFormatData(res)
+              if (checkRes.isSmm) {
+                smmData = checkRes.data
               } else {
-                text = String(res)
+                text = checkRes.data
               }
             }
           } catch (error) {
@@ -948,13 +982,11 @@ class Render {
         }
         // 默认处理
         if (useDefault) {
-          try {
-            const parsedData = JSON.parse(text)
-            if (parsedData && parsedData.simpleMindMap) {
-              smmData = parsedData.data
-            }
-          } catch (error) {
-            errorHandler(ERROR_TYPES.PARSE_PASTE_DATA_ERROR, error)
+          const checkRes = checkSmmFormatData(text)
+          if (checkRes.isSmm) {
+            smmData = checkRes.data
+          } else {
+            text = checkRes.data
           }
         }
         if (smmData) {
@@ -1079,11 +1111,12 @@ class Render {
   }
 
   // 如果是富文本模式，那么某些层级变化需要更新样式
-  checkNodeLayerChange(node, toNode) {
+  checkNodeLayerChange(node, toNode, toNodeIsParent = false) {
     if (this.mindMap.richText) {
+      const toIndex = toNodeIsParent ? toNode.layerIndex + 1 : toNode.layerIndex
       let nodeLayerChanged =
-        (node.layerIndex === 1 && toNode.layerIndex !== 1) ||
-        (node.layerIndex !== 1 && toNode.layerIndex === 1)
+        (node.layerIndex === 1 && toIndex !== 1) ||
+        (node.layerIndex !== 1 && toIndex === 1)
       if (nodeLayerChanged) {
         node.setData({
           resetRichText: true
@@ -1261,7 +1294,7 @@ class Render {
       return !item.isRoot
     })
     nodeList.forEach(item => {
-      this.checkNodeLayerChange(item, toNode)
+      this.checkNodeLayerChange(item, toNode, true)
       this.removeNodeFromActiveList(item)
       removeFromParentNodeData(item)
       toNode.nodeData.children.push(item.nodeData)
@@ -1419,6 +1452,7 @@ class Render {
 
   //  设置节点文本
   setNodeText(node, text, richText, resetRichText) {
+    richText = richText === undefined ? node.getData('richText') : richText
     this.setNodeDataRender(node, {
       text,
       richText,

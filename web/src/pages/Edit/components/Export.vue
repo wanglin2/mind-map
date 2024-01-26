@@ -3,17 +3,18 @@
     class="nodeExportDialog"
     :title="$t('export.title')"
     :visible.sync="dialogVisible"
-    width="700px"
     v-loading.fullscreen.lock="loading"
     :element-loading-text="loadingText"
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
+    :width="isMobile ? '90%' : '50%'"
+    :top="isMobile? '20px' : '15vh'"
   >
     <div class="exportContainer" :class="{ isDark: isDark }">
       <div class="nameInputBox">
         <span class="name">{{ $t('export.filename') }}</span>
         <el-input
-          style="width: 300px"
+          style="max-width: 300px"
           v-model="fileName"
           size="mini"
           @keydown.native.stop
@@ -29,30 +30,33 @@
         class="paddingInputBox"
         v-show="['svg', 'png', 'pdf'].includes(exportType)"
       >
-        <span class="name">{{ $t('export.paddingX') }}</span>
-        <el-input
-          style="width: 100px"
-          v-model="paddingX"
-          size="mini"
-          @change="onPaddingChange"
-          @keydown.native.stop
-        ></el-input>
-        <span class="name" style="margin-left: 10px;">{{
-          $t('export.paddingY')
-        }}</span>
-        <el-input
-          style="width: 100px"
-          v-model="paddingY"
-          size="mini"
-          @change="onPaddingChange"
-          @keydown.native.stop
-        ></el-input>
-        <el-checkbox
-          v-show="['png', 'pdf'].includes(exportType)"
-          v-model="isTransparent"
-          style="margin-left: 12px"
-          >{{ $t('export.isTransparent') }}</el-checkbox
-        >
+        <div class="paddingInputGroup">
+          <span class="name">{{ $t('export.paddingX') }}</span>
+          <el-input
+            style="max-width: 100px"
+            v-model="paddingX"
+            size="mini"
+            @change="onPaddingChange"
+            @keydown.native.stop
+          ></el-input>
+        </div>
+        <div class="paddingInputGroup">
+          <span class="name">{{ $t('export.paddingY') }}</span>
+          <el-input
+            style="width: 100px"
+            v-model="paddingY"
+            size="mini"
+            @change="onPaddingChange"
+            @keydown.native.stop
+          ></el-input>
+        </div>
+        <div class="paddingInputGroup">
+          <el-checkbox
+            v-show="['png', 'pdf'].includes(exportType)"
+            v-model="isTransparent"
+            >{{ $t('export.isTransparent') }}</el-checkbox
+          >
+        </div>
       </div>
       <div class="downloadTypeList">
         <div
@@ -83,6 +87,7 @@
 <script>
 import { mapState } from 'vuex'
 import { downTypeList } from '@/config'
+import { isMobile } from 'simple-mind-map/src/utils/index'
 
 /**
  * @Author: 王林
@@ -101,7 +106,8 @@ export default {
       loading: false,
       loadingText: '',
       paddingX: 10,
-      paddingY: 10
+      paddingY: 10,
+      isMobile: isMobile()
     }
   },
   computed: {
@@ -178,7 +184,13 @@ export default {
           this.isTransparent
         )
       } else if (this.exportType === 'pdf') {
-        this.$bus.$emit('export', this.exportType, true, this.fileName, this.isTransparent)
+        this.$bus.$emit(
+          'export',
+          this.exportType,
+          true,
+          this.fileName,
+          this.isTransparent
+        )
       } else {
         this.$bus.$emit('export', this.exportType, true, this.fileName)
       }
@@ -223,7 +235,18 @@ export default {
   }
 
   .paddingInputBox {
-    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .paddingInputGroup {
+      margin-right: 12px;
+      margin-bottom: 12px;
+
+      &:last-of-type {
+        margin-right: 0;
+      }
+    }
 
     .name {
       margin-right: 10px;
@@ -262,6 +285,7 @@ export default {
       .icon {
         font-size: 30px;
         margin-right: 10px;
+        flex-shrink: 0;
 
         &.png {
           color: #ffc038;
@@ -289,15 +313,26 @@ export default {
       }
 
       .info {
+        width: 100%;
+        overflow: hidden;
+
         .name {
           color: #1a1a1a;
           font-size: 15px;
           margin-bottom: 5px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .desc {
           color: #999;
           font-size: 12px;
+          display: -webkit-box; /* 必须设置display属性为-webkit-box */
+          overflow: hidden; /* 超出部分隐藏 */
+          text-overflow: ellipsis; /* 显示省略号 */
+          -webkit-line-clamp: 2; /* 限制显示两行 */
+          -webkit-box-orient: vertical; /* 垂直方向上的换行 */
         }
       }
     }

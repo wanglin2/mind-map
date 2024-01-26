@@ -424,6 +424,61 @@ Add a closed state to HTML self closing tags, `<div><img src="xxx"></div>` -> `<
 
 Check if the two node instance lists contain the same nodes.
 
+#### getChromeVersion()
+
+> v0.9.3+
+
+Get the current version of the Chrome kernel used by the browser. If the current browser is not using the 'Chrome' kernel, an empty string will be returned.
+
+#### transformTreeDataToObject(data)
+
+> v0.9.3+
+
+- `data`：Mind map node data.
+
+Convert the mind map tree structure to a level object.
+
+```js
+{
+        data: {
+            uid: 'xxx'
+        },
+        children: [
+            {
+                data: {
+                    uid: 'xxx'
+                },
+                children: []
+            }
+        ]
+    }
+```
+Convert to:
+```js
+    {
+        uid: {
+            children: [uid1, uid2],
+            data: {}
+        }
+    }
+```
+
+#### transformObjectToTreeData(data)
+
+> v0.9.3+
+
+Convert flat objects into a tree structure. Reverse operation of the transformTreeDataToObject method.
+
+#### removeHtmlNodeByClass(html, selector)
+
+> v0.9.6+
+
+- `html`：html string
+
+- `selector`：Node selectors, such as class selectors and id selectors
+
+Remove the node of the specified selector from the specified HTML string, and then return the processed HTML string.
+
 ## Simulate CSS background in Canvas
 
 Import:

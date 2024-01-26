@@ -16,6 +16,14 @@
 
 > 这在少数浏览器上公式可能无法成功渲染，如果你需要兼容这部分浏览器，你可以考虑把该配置改为`html`，详细文档可以参考：[Options](https://katex.org/docs/options)。使用这个配置可能还需要再引入`KaTeX`的样式文件，你可以自行测试。
 
+> v.0.9.3+版本内部会判断当前浏览器的Chrome内核版本是否低于100，是的话会自动将`output`由`mathml`转为`html`，此时需要引入`KaTeX`的样式文件，库内部没有引入，所以需要你手动在项目中引入。如果你是通过`npm`方式引入`simple-mind-map`，那么你可以这么引入：
+>
+> ```js
+> import 'simple-mind-map/node_modules/katex/dist/katex.min.css'
+> ```
+> 如果你使用的是`.umd.js`、`.esm.js`之类的打包后的文件，那么可以通过在线的CDN服务来引入，比如：`https://unpkg.com/browse/katex@0.16.9/dist/`，当然，最好是把`katex`的`css`文件，以及对应的`fonts`目录下的字体文件上传到你自己的服务器上。
+
+
 ## 注册
 
 ```js
@@ -44,3 +52,9 @@ mindMap.execCommand('INSERT_FORMULA', 'a^2', [Node])
 ```
 
 通过第二个参数传入指定的节点实例即可。
+
+## 方法
+
+### getKatexConfig()
+
+获取当前传递给`Katex`的配置。

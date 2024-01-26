@@ -1,5 +1,123 @@
 # Changelog
 
+## 0.9.6
+
+Fix:
+
+> 1.Fix the issue where the style of the collapsed nodes remains unchanged when switching themes;
+>
+> 2.Fix the issue of losing the new text style when switching themes for text wrapping;
+>
+> 3.Fix the issue where the style of the newline text remains unchanged when switching themes;
+>
+> 4.Fixed the issue of adding mathematical formulas to nodes and not changing the text style when switching themes;
+
+New:
+
+> 1.Add new fields to the theme, used to set the display position, head or tail, of node line arrows;
+>
+> 2.New field added to the theme, used to set the starting position of the root node line when connecting curves;
+>
+> 3.Mac dual finger touch event moves the canvas to increase sensitivity slightly;
+>
+> 4.Add MOVE_ UP_ ONE_ The LEVEL command is used to move a node up one level;
+
+Demo:
+
+> 1.The outline supports pressing Shift+Tab to move nodes up one level;
+>
+> 2.Support setting the position of node arrow display;
+>
+> 3.Support setting the starting position of root node connections;
+>
+> 4.Add two new themes;
+>
+> 5.Fix the issue of text wrapping not taking effect in the outline and displaying the br tag; 
+
+## 0.9.5
+
+Fix:
+
+> 1.Fix the issue of missing inter zone summaries when expanding and folding nodes.
+>
+> 2.Fix the issue where the position of the newly created associated line is always on the right side of the node without changing according to its relative position.
+
+New:
+
+> 1.Add configuration for the initial positions of the two endpoints when creating associated lines.
+>
+> 2.Add a configuration that prohibits adjusting the endpoint position of associated lines.
+>
+> 3.Add a hand drawn style plugin.
+
+Demo:
+
+> 1.Optimize interface adaptation on mobile devices.
+>
+> 2.Supports enabling hand drawn styles.
+
+## 0.9.4
+
+Fix:
+
+> 1.Fix the issue of inconsistent text wrapping caused by inconsistent text area width during node display and editing in some cases.
+>
+> 2.Fixed the issue where gradients were not applied to the edit box during rich text editing for nodes with gradient backgrounds.
+>
+> 3.Fix the issue of text style loss after switching themes for nodes defined in bold by the theme.
+>
+> 4.Fix the issue on Mac where the useLeftKeySelectionRightKeyDrag option is set to true and cannot hold down the Ctrl key to select multiple nodes.
+>
+> 5.Fix the issue where text styles are lost after clearing styles during node rich text editing, and switching themes does not restore them.
+>
+> 6.Fix data issue when deleting nodes with child nodes_ Change_ The issue of error reporting in detail events.
+
+New:
+
+> 1.Add the lineRadius property to the theme configuration to set the size of the rounded corners when connecting straight lines.
+
+Demo:
+
+> 1.Remove the display of formulas from the outline.
+>
+> 2.Some configurations in the basic style that only support partial structures are displayed and hidden based on the current structure.
+>
+> 3.Add configuration for connecting rounded corners.
+>
+> 4.Automatically hide the sidebar when importing files.
+
+## 0.9.3
+
+Fix
+
+> 1.Fix the issue of text misalignment when nodes have icons in Safari browser.
+>
+> 2.Fix the issue of formula rendering in browsers with lower versions of Chrome kernel.
+>
+> 3.Fix the issue of new MouseEvent code execution errors when used in micro front-end framework applications.
+>
+> 4.Fix the issue of missing arrows on node connections, arrows on associated lines, and gradient backgrounds when exporting images.
+
+New:
+
+> 1.Export PDF from jspdf library to pdf-lib library.
+>
+> 2.If the second parameter of the set node text command (SETNODE-TEXT) is not passed, the previous value will be used.
+>
+> 3.There is an issue of incorrect width and height of exported images in Firefox browser when optimizing nodes with hyperlinks and comments.
+>
+> 4.In node text editing, if the pasted data is in SMM format, the pure text of the first node will be taken out for pasting.
+>
+> 5.Add interception operations for pasting when editing nodes without rich text.
+>
+> 6.Add a detailed event (data_change_detail) for updating node data, which can retrieve newly created, updated, or deleted node data.
+>
+> 7.Theme configuration supports setting node gradient background color.
+
+Demo:
+
+1.Support setting the background of node gradients.
+
 ## 0.9.2
 
 Fix:

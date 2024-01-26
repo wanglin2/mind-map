@@ -1,3 +1,5 @@
+import { getRectRelativePosition } from '../../utils/index'
+
 // 获取目标节点在起始节点的目标数组中的索引
 export const getAssociativeLineTargetIndex = (node, toNode) => {
   return node.getData('associativeLineTargets').findIndex(item => {
@@ -7,13 +9,20 @@ export const getAssociativeLineTargetIndex = (node, toNode) => {
 
 // 计算贝塞尔曲线的控制点
 export const computeCubicBezierPathPoints = (x1, y1, x2, y2) => {
+  const min = 5
   let cx1 = x1 + (x2 - x1) / 2
   let cy1 = y1
   let cx2 = cx1
   let cy2 = y2
-  if (Math.abs(x1 - x2) <= 5) {
+  if (Math.abs(x1 - x2) <= min) {
     cx1 = x1 + (y2 - y1) / 2
     cx2 = cx1
+  }
+  if (Math.abs(y1 - y2) <= min) {
+    cx1 = x1
+    cy1 = y1 - (x2 - x1) / 2
+    cx2 = x2
+    cy2 = cy1
   }
   return [
     {
@@ -39,7 +48,9 @@ const getNodeRect = node => {
     right: left + width,
     bottom: top + height,
     left,
-    top
+    top,
+    width,
+    height
   }
 }
 
@@ -169,22 +180,26 @@ export const getNodePoint = (node, dir = 'right', range = 0, e = null) => {
     case 'left':
       return {
         x: left,
-        y: top + height / 2 - range
+        y: top + height / 2 - range,
+        dir
       }
     case 'right':
       return {
         x: left + width,
-        y: top + height / 2 - range
+        y: top + height / 2 - range,
+        dir
       }
     case 'top':
       return {
         x: left + width / 2 - range,
-        y: top
+        y: top,
+        dir
       }
     case 'bottom':
       return {
         x: left + width / 2 - range,
-        y: top + height
+        y: top + height,
+        dir
       }
     default:
       break
@@ -193,34 +208,64 @@ export const getNodePoint = (node, dir = 'right', range = 0, e = null) => {
 
 // 根据两个节点的位置计算节点的连接点
 export const computeNodePoints = (fromNode, toNode) => {
-  let fromRect = getNodeRect(fromNode)
-  let fromCx = (fromRect.right + fromRect.left) / 2
-  let fromCy = (fromRect.bottom + fromRect.top) / 2
-  let toRect = getNodeRect(toNode)
-  let toCx = (toRect.right + toRect.left) / 2
-  let toCy = (toRect.bottom + toRect.top) / 2
-  // 中心点坐标的差值
-  let offsetX = toCx - fromCx
-  let offsetY = toCy - fromCy
-  if (offsetX === 0 && offsetY === 0) return []
+  const fromRect = getNodeRect(fromNode)
+  const toRect = getNodeRect(toNode)
   let fromDir = ''
   let toDir = ''
-  if (offsetX <= 0 && offsetX <= offsetY && offsetX <= -offsetY) {
-    // left
-    fromDir = 'left'
-    toDir = 'right'
-  } else if (offsetX > 0 && offsetX >= -offsetY && offsetX >= offsetY) {
-    // right
-    fromDir = 'right'
-    toDir = 'left'
-  } else if (offsetY <= 0 && offsetY < offsetX && offsetY < -offsetX) {
-    // up
-    fromDir = 'top'
-    toDir = 'bottom'
-  } else if (offsetY > 0 && -offsetY < offsetX && offsetY > offsetX) {
-    // down
-    fromDir = 'right'
-    toDir = 'right'
+  const dir = getRectRelativePosition(
+    {
+      x: fromRect.left,
+      y: fromRect.top,
+      width: fromRect.width,
+      height: fromRect.height
+    },
+    {
+      x: toRect.left,
+      y: toRect.top,
+      width: toRect.width,
+      height: toRect.height
+    }
+  )
+  // 起始矩形在结束矩形的什么方向
+  switch (dir) {
+    case 'left-top':
+      fromDir = 'right'
+      toDir = 'top'
+      break
+    case 'right-top':
+      fromDir = 'left'
+      toDir = 'top'
+      break
+    case 'right-bottom':
+      fromDir = 'left'
+      toDir = 'bottom'
+      break
+    case 'left-bottom':
+      fromDir = 'right'
+      toDir = 'bottom'
+      break
+    case 'left':
+      fromDir = 'right'
+      toDir = 'left'
+      break
+    case 'right':
+      fromDir = 'left'
+      toDir = 'right'
+      break
+    case 'top':
+      fromDir = 'right'
+      toDir = 'right'
+      break
+    case 'bottom':
+      fromDir = 'left'
+      toDir = 'left'
+      break
+    case 'overlap':
+      fromDir = 'right'
+      toDir = 'right'
+      break
+    default:
+      break
   }
   return [getNodePoint(fromNode, fromDir), getNodePoint(toNode, toDir)]
 }
@@ -230,8 +275,9 @@ export const getNodeLinePath = (startPoint, endPoint, node, toNode) => {
   let targetIndex = getAssociativeLineTargetIndex(node, toNode)
   // 控制点
   let controlPoints = []
-  let associativeLineTargetControlOffsets =
-    node.getData('associativeLineTargetControlOffsets')
+  let associativeLineTargetControlOffsets = node.getData(
+    'associativeLineTargetControlOffsets'
+  )
   if (
     associativeLineTargetControlOffsets &&
     associativeLineTargetControlOffsets[targetIndex]

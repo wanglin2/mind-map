@@ -158,7 +158,7 @@
 <h3>setText(text, richText, resetRichText)</h3>
 <ul>
 <li>
-<p><code>richText</code>：v0.4.2+，<code>Boolean</code>，如果要设置的是富文本内容，也就是<code>html</code>字符，<code>richText</code>需要传<code>true</code></p>
+<p><code>richText</code>：v0.4.2+，<code>Boolean</code>，如果要设置的是富文本内容，也就是<code>html</code>字符，<code>richText</code>需要传<code>true</code>。在v0.9.3+版本后该参数不传会默认使用之前的值。</p>
 </li>
 <li>
 <p><code>resetRichText</code>：v0.6.10+，<code>Boolean</code>，是否要复位富文本，默认为<code>false</code>，如果传<code>true</code>那么会重置富文本节点的样式</p>

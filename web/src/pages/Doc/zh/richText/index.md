@@ -86,7 +86,7 @@ MindMap.usePlugin(RichText, opt?)
 
 聚焦。
 
-### formatText(config = {})
+### formatText(config = {}, clear = false, pure = false)
 
 - `config`：对象，键为样式属性，值为样式值，完整的配置如下：
 
@@ -102,7 +102,11 @@ MindMap.usePlugin(RichText, opt?)
 }
 ```
 
-格式化当前选中的文本。
+- `clear`：是否是清除样式
+
+- `pure`：v0.9.4+，如果设为true，那么仅会格式化文本样式，不会同步到节点的数据中
+
+格式化当前选中的文本。会将样式设置同步到节点的数据中。
 
 ### formatRangeText(range, config = {})
 

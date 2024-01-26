@@ -148,7 +148,8 @@
         </div>
       </div>
       <div class="row">
-        <div class="rowItem">
+        <!-- 线宽 -->
+        <div class="rowItem" v-if="lineStyleListShow.length > 1">
           <span class="name">{{ $t('baseStyle.style') }}</span>
           <el-select
             size="mini"
@@ -162,7 +163,7 @@
             "
           >
             <el-option
-              v-for="item in lineStyleList"
+              v-for="item in lineStyleListShow"
               :key="item.value"
               :label="item.name"
               :value="item.value"
@@ -176,7 +177,13 @@
             </el-option>
           </el-select>
         </div>
-        <div class="rowItem" v-if="style.lineStyle === 'curve'">
+        <!-- 根节点连线样式 -->
+        <div
+          class="rowItem"
+          v-if="
+            style.lineStyle === 'curve' && showRootLineKeepSameInCurveLayouts
+          "
+        >
           <span class="name">{{ $t('baseStyle.rootStyle') }}</span>
           <el-select
             size="mini"
@@ -195,6 +202,60 @@
               :label="item.name"
               :value="item.value"
             >
+            </el-option>
+          </el-select>
+        </div>
+        <div class="rowItem" v-if="showLineRadius">
+          <!-- 连线圆角大小 -->
+          <span class="name">{{ $t('baseStyle.lineRadius') }}</span>
+          <el-select
+            size="mini"
+            style="width: 80px"
+            v-model="style.lineRadius"
+            placeholder=""
+            @change="
+              value => {
+                update('lineRadius', value)
+              }
+            "
+          >
+            <el-option
+              v-for="item in [0, 2, 5, 7, 10, 12, 15]"
+              :key="item"
+              :label="item"
+              :value="item"
+            >
+            </el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="row">
+        <!-- 根节点连线起始位置 -->
+        <div
+          class="rowItem"
+          v-if="
+            style.lineStyle === 'curve' && showRootLineKeepSameInCurveLayouts
+          "
+        >
+          <span class="name">{{ $t('baseStyle.rootLineStartPos') }}</span>
+          <el-select
+            size="mini"
+            style="width: 80px"
+            v-model="style.rootLineStartPositionKeepSameInCurve"
+            placeholder=""
+            @change="
+              value => {
+                update('rootLineStartPositionKeepSameInCurve', value)
+              }
+            "
+          >
+            <el-option
+              key="center"
+              :label="$t('baseStyle.center')"
+              :value="false"
+            >
+            </el-option>
+            <el-option key="right" :label="$t('baseStyle.right')" :value="true">
             </el-option>
           </el-select>
         </div>
@@ -426,20 +487,22 @@
         </div>
       </div>
       <!-- 节点边框风格 -->
-      <div class="title noTop">{{ $t('baseStyle.nodeBorderType') }}</div>
-      <div class="row">
-        <div class="rowItem">
-          <el-checkbox
-            v-model="style.nodeUseLineStyle"
-            @change="
-              value => {
-                update('nodeUseLineStyle', value)
-              }
-            "
-            >{{ $t('baseStyle.nodeUseLineStyle') }}</el-checkbox
-          >
+      <template v-if="showNodeUseLineStyle">
+        <div class="title noTop">{{ $t('baseStyle.nodeBorderType') }}</div>
+        <div class="row">
+          <div class="rowItem">
+            <el-checkbox
+              v-model="style.nodeUseLineStyle"
+              @change="
+                value => {
+                  update('nodeUseLineStyle', value)
+                }
+              "
+              >{{ $t('baseStyle.nodeUseLineStyle') }}</el-checkbox
+            >
+          </div>
         </div>
-      </div>
+      </template>
       <!-- 内边距 -->
       <div class="title noTop">{{ $t('baseStyle.nodePadding') }}</div>
       <div class="row">
@@ -816,6 +879,16 @@
           >
         </div>
       </div>
+      <!-- 是否开启手绘风格 -->
+      <!-- <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="localConfigs.isUseHandDrawnLikeStyle"
+            @change="updateLocalConfig('isUseHandDrawnLikeStyle', $event)"
+            >{{ $t('baseStyle.isUseHandDrawnLikeStyle') }}</el-checkbox
+          >
+        </div>
+      </div> -->
     </div>
   </Sidebar>
 </template>
@@ -837,6 +910,12 @@ import {
 import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
 import { mapState, mapMutations } from 'vuex'
+import {
+  supportLineStyleLayoutsMap,
+  supportLineRadiusLayouts,
+  supportNodeUseLineStyleLayouts,
+  supportRootLineKeepSameInCurveLayouts
+} from '@/config/constant'
 
 /**
  * @Author: 王林
@@ -872,6 +951,8 @@ export default {
         lineStyle: '',
         showLineMarker: '',
         rootLineKeepSameInCurve: '',
+        rootLineStartPositionKeepSameInCurve: '',
+        lineRadius: 0,
         generalizationLineWidth: '',
         generalizationLineColor: '',
         associativeLineColor: '',
@@ -916,13 +997,14 @@ export default {
       updateWatermarkTimer: null,
       enableNodeRichText: true,
       localConfigs: {
-        isShowScrollbar: false
-      }
+        isShowScrollbar: false,
+        isUseHandDrawnLikeStyle: false
+      },
+      currentLayout: '' // 当前结构
     }
   },
   computed: {
     ...mapState(['activeSidebar', 'localConfig', 'isDark']),
-
     lineStyleList() {
       return lineStyleList[this.$i18n.locale] || lineStyleList.zh
     },
@@ -948,6 +1030,32 @@ export default {
     },
     lineStyleMap() {
       return lineStyleMap[this.$i18n.locale] || lineStyleMap.zh
+    },
+    showNodeUseLineStyle() {
+      return supportNodeUseLineStyleLayouts.includes(this.currentLayout)
+    },
+    showLineRadius() {
+      return (
+        this.style.lineStyle === 'straight' &&
+        supportLineRadiusLayouts.includes(this.currentLayout)
+      )
+    },
+    lineStyleListShow() {
+      const res = []
+      this.lineStyleList.forEach(item => {
+        const list = supportLineStyleLayoutsMap[item.value]
+        if (list) {
+          if (list.includes(this.currentLayout)) {
+            res.push(item)
+          }
+        } else {
+          res.push(item)
+        }
+      })
+      return res
+    },
+    showRootLineKeepSameInCurveLayouts() {
+      return supportRootLineKeepSameInCurveLayouts.includes(this.currentLayout)
     }
   },
   watch: {
@@ -957,8 +1065,20 @@ export default {
         this.initStyle()
         this.initConfig()
         this.initWatermark()
+        this.currentLayout = this.mindMap.getLayout()
       } else {
         this.$refs.sidebar.show = false
+      }
+    },
+    lineStyleListShow: {
+      deep: true,
+      handler() {
+        const has = this.lineStyleListShow.find(item => {
+          return item.value === this.style.lineStyle
+        })
+        if (!has) {
+          this.style.lineStyle = this.lineStyleListShow[0].value
+        }
       }
     }
   },
@@ -991,6 +1111,8 @@ export default {
         'lineStyle',
         'showLineMarker',
         'rootLineKeepSameInCurve',
+        'rootLineStartPositionKeepSameInCurve',
+        'lineRadius',
         'lineColor',
         'generalizationLineWidth',
         'generalizationLineColor',
@@ -1037,7 +1159,7 @@ export default {
       this.enableNodeRichText = this.localConfig.openNodeRichText
       this.mousewheelAction = this.localConfig.mousewheelAction
       this.mousewheelZoomActionReverse = this.localConfig.mousewheelZoomActionReverse
-      ;['isShowScrollbar'].forEach(key => {
+      ;['isShowScrollbar', 'isUseHandDrawnLikeStyle'].forEach(key => {
         this.localConfigs[key] = this.localConfig[key]
       })
     },

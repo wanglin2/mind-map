@@ -106,7 +106,7 @@ class View {
         }
       } else {
         // 2.鼠标滚轮事件控制画布移动
-        const step = isTouchPad ? 5 : mousewheelMoveStep
+        const step = isTouchPad ? 10 : mousewheelMoveStep
         let mx = 0
         let my = 0
         // 上移

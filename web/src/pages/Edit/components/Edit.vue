@@ -47,6 +47,7 @@ import Painter from 'simple-mind-map/src/plugins/Painter.js'
 import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
 import Formula from 'simple-mind-map/src/plugins/Formula.js'
 import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
+// import HandDrawnLikeStyle from 'simple-mind-map-plugin-handdrawnlikestyle'
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -153,7 +154,8 @@ export default {
       isShowScrollbar: state => state.localConfig.isShowScrollbar,
       useLeftKeySelectionRightKeyDrag: state =>
         state.localConfig.useLeftKeySelectionRightKeyDrag,
-      isShowScrollbar: state => state.localConfig.isShowScrollbar
+      isUseHandDrawnLikeStyle: state =>
+        state.localConfig.isUseHandDrawnLikeStyle
     })
   },
   watch: {
@@ -169,6 +171,13 @@ export default {
         this.addScrollbarPlugin()
       } else {
         this.removeScrollbarPlugin()
+      }
+    },
+    isUseHandDrawnLikeStyle() {
+      if (this.isUseHandDrawnLikeStyle) {
+        this.addHandDrawnLikeStylePlugin()
+      } else {
+        this.removeHandDrawnLikeStylePlugin()
       }
     }
   },
@@ -441,6 +450,7 @@ export default {
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
       if (this.isShowScrollbar) this.addScrollbarPlugin()
+      if (this.isUseHandDrawnLikeStyle) this.addHandDrawnLikeStylePlugin()
       // this.mindMap.keyCommand.addShortcut('Control+s', () => {
       //   this.manualSave()
       // })
@@ -621,6 +631,27 @@ export default {
     // 移除滚动条插件
     removeScrollbarPlugin() {
       this.mindMap.removePlugin(ScrollbarPlugin)
+    },
+
+    // 加载手绘风格插件
+    addHandDrawnLikeStylePlugin() {
+      try {
+        if (!this.mindMap) return
+        this.mindMap.addPlugin(HandDrawnLikeStyle)
+        this.mindMap.reRender()
+      } catch (error) {
+        console.log('手绘风格插件不存在')
+      }
+    },
+
+    // 移除手绘风格插件
+    removeHandDrawnLikeStylePlugin() {
+      try {
+        this.mindMap.removePlugin(HandDrawnLikeStyle)
+        this.mindMap.reRender()
+      } catch (error) {
+        console.log('手绘风格插件不存在')
+      }
     },
 
     // 测试动态插入节点

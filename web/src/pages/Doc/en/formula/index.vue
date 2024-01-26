@@ -21,6 +21,12 @@
 <blockquote>
 <p>This formula may not render successfully on a few browsers. If you need to be compatible with these browsers, you can consider changing the configuration to 'HTML'. For detailed documentation, please refer to <a href="https://katex.org/docs/options">Options</a>. Using this configuration may require the introduction of a 'KaTeX' style file, which you can test on your own.</p>
 </blockquote>
+<blockquote>
+<p>v0.9.3+will internally determine whether the current Chrome kernel version of the browser is lower than 100, If so, it will automatically convert 'output' from 'mathml' to 'html', At this point, the style file for 'KaTeX' needs to be imported, but it is not imported within the library, so you need to manually import it in the project. If you introduced 'simple-mind-map' through the 'npm' method, you can introduce it as follows:</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;simple-mind-map/node_modules/katex/dist/katex.min.css&#x27;</span>
+</code></pre>
+<p>If you are using packaged files such as '.umd.js' or '.esm.js', you can import them through online CDN services, such as <code>https://unpkg.com/browse/katex@0.16.9/dist/</code>, Of course, it is best to upload the 'css' file of the 'katex' and the corresponding font files in the 'fonts' directory to your own server.</p>
+</blockquote>
 <h2>Register</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
 <span class="hljs-keyword">import</span> Formula <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/Formula.js&#x27;</span>
@@ -37,6 +43,9 @@ MindMap.usePlugin(Formula)
 <pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_FORMULA&#x27;</span>, <span class="hljs-string">&#x27;a^2&#x27;</span>, [Node])
 </code></pre>
 <p>Pass in the specified node instance through the second parameter.</p>
+<h2>Methods</h2>
+<h3>getKatexConfig()</h3>
+<p>Get the current configuration passed to <code>Katex</code>.</p>
 
   </div>
 </template>

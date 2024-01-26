@@ -218,7 +218,7 @@
 
 ### setText(text, richText, resetRichText)
 
-- `richText`：v0.4.2+，`Boolean`，如果要设置的是富文本内容，也就是`html`字符，`richText`需要传`true`
+- `richText`：v0.4.2+，`Boolean`，如果要设置的是富文本内容，也就是`html`字符，`richText`需要传`true`。在v0.9.3+版本后该参数不传会默认使用之前的值。
 
 - `resetRichText`：v0.6.10+，`Boolean`，是否要复位富文本，默认为`false`，如果传`true`那么会重置富文本节点的样式
 

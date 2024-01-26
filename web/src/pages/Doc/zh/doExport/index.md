@@ -88,9 +88,13 @@ svg(
 
 - `transparent`：v0.9.2+，Boolean，默认为false，指定导出图片的背景是否是透明的
 
-导出为`pdf`，和其他导出方法不一样，这个方法不会返回数据，会直接触发下载。
+导出为`pdf`，
+
+> v0.9.3之前的版本这个方法不会返回数据，会直接触发下载。
 
 > v0.6.0版本以后，需要额外注册一个ExportPDF插件
+
+> 内部导出pdf使用的是pdf-lib库将图片转为pdf，目前当节点数量比较大时导出pdf可能会丢失部分内容，所以建议有能力的开发者自行实现pdf的导出功能，如果项目中有后端开发，也可以寻求后端开发人员的支持。
 
 ```js
 import ExportPDF from 'simple-mind-map/src/plugins/ExportPDF.js'

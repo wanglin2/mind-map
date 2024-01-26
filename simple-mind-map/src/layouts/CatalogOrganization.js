@@ -240,14 +240,14 @@ class CatalogOrganization extends Base {
       // 父节点的竖线
       let line1 = this.lineDraw.path()
       node.style.line(line1)
-      line1.plot(`M ${x1},${y1} L ${x1},${y1 + s1}`)
+      line1.plot(this.transformPath(`M ${x1},${y1} L ${x1},${y1 + s1}`))
       node._lines.push(line1)
       style && style(line1, node)
       // 水平线
       if (len > 0) {
         let lin2 = this.lineDraw.path()
         node.style.line(lin2)
-        lin2.plot(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`)
+        lin2.plot(this.transformPath(`M ${minx},${y1 + s1} L ${maxx},${y1 + s1}`))
         node._lines.push(lin2)
         style && style(lin2, node)
       }
@@ -311,7 +311,9 @@ class CatalogOrganization extends Base {
         if (maxy < y1 + expandBtnSize) {
           lin2.hide()
         } else {
-          lin2.plot(`M ${x2},${y1 + expandBtnSize} L ${x2},${maxy}`)
+          lin2.plot(
+            this.transformPath(`M ${x2},${y1 + expandBtnSize} L ${x2},${maxy}`)
+          )
           lin2.show()
         }
         node._lines.push(lin2)
@@ -349,7 +351,7 @@ class CatalogOrganization extends Base {
       let cx = x1 + 20
       let cy = y1 + (y2 - y1) / 2
       let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
-      item.generalizationLine.plot(path)
+      item.generalizationLine.plot(this.transformPath(path))
       item.generalizationNode.left = right + generalizationNodeMargin
       item.generalizationNode.top =
         top + (bottom - top - item.generalizationNode.height) / 2

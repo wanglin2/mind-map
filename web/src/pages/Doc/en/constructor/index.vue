@@ -616,6 +616,27 @@
 <td>When registering the Scrollbar plugin, will the mind map be limited to the canvas and the isLimitMindMapInCanvas configuration no longer work</td>
 <td></td>
 </tr>
+<tr>
+<td>associativeLineInitPointsPosition（v0.9.5+）</td>
+<td>null / { from, to }</td>
+<td>{ from: '', to: '' }</td>
+<td>By default, the position of the two endpoints of a newly created association line is calculated based on the relative position of the center points of the two nodes. If you want to fix the position, you can configure it through this option. If neither from nor to is transmitted, they will be automatically calculated. If only one is transmitted, the other will be automatically calculated. from and to optional values</td>
+<td></td>
+</tr>
+<tr>
+<td>：left、top、bottom、right</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>enableAdjustAssociativeLinePoints（v0.9.5+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Is it allowed to adjust the position of the two endpoints of the associated line</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Data structure</h3>
@@ -1109,6 +1130,16 @@ poor performance and should be used sparingly.</p>
 <td>Click event of document.body</td>
 <td>e（event object）</td>
 </tr>
+<tr>
+<td>data_change_detail（v0.9.3+）</td>
+<td>The detailed changes in rendering tree data will return an array, with each item representing an update point and each item being an object, There is a 'type' attribute that represents the type of detail, Including 'create' (create node), 'update' (update node), 'delete' (delete node), There is a 'data' attribute that represents the current updated node data. If it is of the 'update' type, there will also be an 'oldData' attribute that saves the data of the node before the update</td>
+<td>arr（Detail data）</td>
+</tr>
+<tr>
+<td>layout_change（v0.9.4+）</td>
+<td>Triggered when modifying the structure, i.e. when the mindMap.setLayout() method is called</td>
+<td>layout（New layout）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
@@ -1358,6 +1389,11 @@ redo. All commands are as follows:</p>
 <td>REMOVE_CURRENT_NODE（v0.8.0+）</td>
 <td>Delete only the current node, operate on the currently active node or specified node</td>
 <td>appointNodes（Optional, specify the nodes to be deleted, and multiple nodes can be passed as an array）</td>
+</tr>
+<tr>
+<td>MOVE_UP_ONE_LEVEL（v0.9.6+）</td>
+<td>Move the specified node up one level</td>
+<td>node（Optional, specify the node to move up the hierarchy, if not passed, it will be the first node in the current active node）</td>
 </tr>
 </tbody>
 </table>

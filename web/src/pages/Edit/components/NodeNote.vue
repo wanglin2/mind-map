@@ -3,7 +3,8 @@
     class="nodeNoteDialog"
     :title="$t('nodeNote.title')"
     :visible.sync="dialogVisible"
-    width="500"
+    :width="isMobile ? '90%' : '50%'"
+    :top="isMobile ? '20px' : '15vh'"
   >
     <!-- <el-input
       type="textarea"
@@ -26,6 +27,7 @@
 <script>
 import Editor from '@toast-ui/editor'
 import '@toast-ui/editor/dist/toastui-editor.css' // Editor's Style
+import { isMobile } from 'simple-mind-map/src/utils/index'
 
 /**
  * @Author: 王林
@@ -39,7 +41,8 @@ export default {
       dialogVisible: false,
       note: '',
       activeNodes: [],
-      editor: null
+      editor: null,
+      isMobile: isMobile()
     }
   },
   created() {

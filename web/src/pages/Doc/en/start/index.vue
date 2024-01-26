@@ -53,6 +53,11 @@ compile this dependency:</p>
 <p>If you want to implement a complete mind map, you usually need to develop some UI interfaces to achieve more functions through the interfaces provided by the <code>simple-mind-map</code> library.</p>
 <p><code>simple-mind-map</code> supports rich configurations, events, commands, and some additional plugin extensions. Read the subsequent documentation to learn more.</p>
 <p>The non-packaged 'ES' module is introduced by default, and only contains core functions, not unregistered plugin content, which can effectively reduce the size. However, you need to configure the <code>babel</code> compilation <code>simple mind-map</code> in your project to prevent some newer <code>js</code> syntax some browsers not supporting it.</p>
+<p>If you don't want to load all plugins from the beginning and want to load and register plugins asynchronously after instantiation, you can do this:</p>
+<pre class="hljs"><code><span class="hljs-keyword">import</span>(<span class="hljs-string">&#x27;simple-mind-map/src/plugins/Export.js&#x27;</span>).then(<span class="hljs-function"><span class="hljs-params">res</span> =&gt;</span> {
+  mindMap.addPlugin(res.default)
+})
+</code></pre>
 <p>If you need a file in the format of <code>umd</code> module, such as <code>CDN</code> in the browser, Then you can find the <code>simpleMindMap.umd.min.js</code> file and <code>simpleMindMap.css</code> file in the <code>/simple-mind-map/dist/</code> directory, copy it to your project, and then import it into the page:</p>
 <pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;simpleMindMap.css&quot;</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">scr</span>=<span class="hljs-string">&quot;simpleMindMap.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
@@ -60,6 +65,10 @@ compile this dependency:</p>
 <p>A global variable <code>window.simpleMindMap</code> will be created. you can get <code>MindMap</code> constructor by <code>window.simpleMindMap.default</code>, for more detail info you can log <code>window.simpleMindMap</code>.</p>
 <p>The disadvantage of this method is that it will contain all the content, including the plugins you have not registered, so the overall volume will be relatively large.</p>
 <p>（v0.5.4+）If you want to use the <code>ES</code> module directly on the browser side, you can find the <code>simpleMindMap.esm.js</code> and <code>simpleMindMap.esm.css</code> files in the <code>/simple-mind-map/dist/</code> directory.</p>
+<p>Online CDN services can also be used, such as:</p>
+<pre class="hljs"><code>https://unpkg.com/browse/simple-mind-map@0.9.2/dist/
+</code></pre>
+<p>You can find all the packaged files for a certain version.</p>
 <h2>Development</h2>
 <p>If you only use library, you don't need to read this section.</p>
 <h3>Local Development</h3>
@@ -74,6 +83,9 @@ npm i
 npm link simple-mind-map
 npm run serve
 </code></pre>
+<blockquote>
+<p>If there is an installation dependency error, you can try adjusting the node version. The author is using version 14. x.</p>
+</blockquote>
 <h3>Packaging the Library</h3>
 <p>Since version <code>0.2.0</code>, we have added support for packaging the core library
 simple-mind-map. This uses the same packaging tool as the sample project web.</p>
@@ -91,6 +103,11 @@ fields:</p>
 <p>Environments that support the <code>module</code> field will use <code>index.js</code> as the entry
 point, otherwise the packed <code>simpleMindMap.umd.min.js</code> will be used as the entry
 point.</p>
+<h4>Generate TypeScript type files</h4>
+<pre class="hljs"><code><span class="hljs-built_in">cd</span> simple-mind-map
+npm run types
+</code></pre>
+<p>You can obtain the type files in the 'simple-mind-map/types/' directory.</p>
 <h3>Compile the doc</h3>
 <pre class="hljs"><code><span class="hljs-built_in">cd</span> web 
 npm run buildDoc
@@ -121,6 +138,8 @@ module. If you need it, you can try using other libraries to parse <code>xml</co
 <pre class="hljs"><code>resolve: { <span class="hljs-attr">alias</span>: { <span class="hljs-attr">stream</span>: <span class="hljs-string">&quot;stream-browserify&quot;</span> } }
 </code></pre>
 <p>Different packaging tools may have different specific configurations, with the principle of excluding 'stream' dependencies.</p>
+<h3>When clicking the [New], [Open], or [Save As] buttons, it will prompt that the browser does not support it or is not using the HTTPS protocol.</h3>
+<p>The browser uses API <a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/showOpenFilePicker">window.showOpenFilePicker</a> to operate local files on the computer. If it is not supported, either the browser does not support this API or the page is not using the HTTPS protocol, You can press F12, or open the browser console through the right-click menu on the page and enter 'window.showOpenFilePicker' in the 'Console' tab. If it returns 'undefined', it means it is not supported. If it does not return this message and the page still prompts that the browser does not support it or is not using the HTTPS protocol, you can submit an issue or contact the author.</p>
 
   </div>
 </template>

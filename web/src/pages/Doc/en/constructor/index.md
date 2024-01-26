@@ -106,8 +106,11 @@ const mindMap = new MindMap({
 | createNewNodeBehavior（v0.9.1+）     | String | default  | Behavior when creating a new node. default（By default, newly created nodes will be activated and enter editing mode. If multiple new nodes are created simultaneously, they will only be activated and will not enter editing mode）、notActive（Do not activate newly created nodes）、activeOnly（Only activate newly created nodes and do not enter editing mode）  |         |
 | defaultNodeImage（v0.9.1-fix.2+）     | String |   | Image address, the default image displayed when node image loading fails  |         |
 | handleNodePasteImg（v0.9.2+）     | null or Function | null  | The processing method for pasting images from the clipboard on a node is to convert them into data:URL data and insert them into the node by default. You can use this method to upload image data to the server and save the URL of the image. An asynchronous method can be passed to receive image data of Blob type, and the specified structure needs to be returned: { url, size: {width, height} }  |         |
-| isLimitMindMapInCanvas（v0.9.2+）     | Boolean |  false | Whether to limit the mind map within the canvas. For example, when dragging to the right, the leftmost part of the mind map graphic will not be able to continue dragging to the right when it reaches the center of the canvas, and the same applies to other things |
-| isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）     | Boolean |  true | When registering the Scrollbar plugin, will the mind map be limited to the canvas and the isLimitMindMapInCanvas configuration no longer work |
+| isLimitMindMapInCanvas（v0.9.2+）     | Boolean |  false | Whether to limit the mind map within the canvas. For example, when dragging to the right, the leftmost part of the mind map graphic will not be able to continue dragging to the right when it reaches the center of the canvas, and the same applies to other things |         |
+| isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）     | Boolean |  true | When registering the Scrollbar plugin, will the mind map be limited to the canvas and the isLimitMindMapInCanvas configuration no longer work |         |
+| associativeLineInitPointsPosition（v0.9.5+）     | null / { from, to } | { from: '', to: '' }  | By default, the position of the two endpoints of a newly created association line is calculated based on the relative position of the center points of the two nodes. If you want to fix the position, you can configure it through this option. If neither from nor to is transmitted, they will be automatically calculated. If only one is transmitted, the other will be automatically calculated. from and to optional values
+：left、top、bottom、right |         |
+| enableAdjustAssociativeLinePoints（v0.9.5+）     | Boolean | true  | Is it allowed to adjust the position of the two endpoints of the associated line |
 
 ### Data structure
 
@@ -420,6 +423,8 @@ Listen to an event. Event list:
 | beforeDestroy（v0.9.0+）    |  Triggered before destroying the mind map, i.e. triggered by calling the destroy method  |   |
 | body_mousedown（v0.9.2+）    | Mousedown event of document.body                      | e（event object）      |
 | body_click    | Click event of document.body                       | e（event object）      |
+| data_change_detail（v0.9.3+）    |  The detailed changes in rendering tree data will return an array, with each item representing an update point and each item being an object, There is a 'type' attribute that represents the type of detail, Including 'create' (create node), 'update' (update node), 'delete' (delete node), There is a 'data' attribute that represents the current updated node data. If it is of the 'update' type, there will also be an 'oldData' attribute that saves the data of the node before the update  | arr（Detail data）      |
+| layout_change（v0.9.4+）    |  Triggered when modifying the structure, i.e. when the mindMap.setLayout() method is called | layout（New layout）      |
 
 ### emit(event, ...args)
 
@@ -534,6 +539,7 @@ redo. All commands are as follows:
 | INSERT_FORMULA（v0.7.2+）           |  Insert mathematical formulas into nodes, operate on the currently active node or specified node   | formula（Mathematical formula to insert, LaTeX syntax）, appointNodes（Optional, specify the node to insert the formula into. Multiple nodes can be passed as arrays, otherwise it defaults to the currently active node） |
 | INSERT_PARENT_NODE（v0.8.0+）           |  Insert a parent node into the specified node, with the operation node being the currently active node or the specified node   | openEdit（Activate the newly inserted node and enter editing mode, default to 'true'`）、 appointNodes（Optional, specify the node to insert into the parent node, and specify that multiple nodes can pass an array）、 appointData（Optional, specify the data for the newly created node, such as {text: 'xxx', ...}, Detailed structure can be referenced [exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)） |
 | REMOVE_CURRENT_NODE（v0.8.0+）           |  Delete only the current node, operate on the currently active node or specified node    | appointNodes（Optional, specify the nodes to be deleted, and multiple nodes can be passed as an array） |
+| MOVE_UP_ONE_LEVEL（v0.9.6+）           | Move the specified node up one level     | node（Optional, specify the node to move up the hierarchy, if not passed, it will be the first node in the current active node） |
 
 ### setData(data)
 

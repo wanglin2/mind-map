@@ -1,10 +1,11 @@
-import { Rect, Polygon, Path } from '@svgdotjs/svg.js'
+import { Polygon, Path, SVG } from '@svgdotjs/svg.js'
 import { CONSTANTS } from '../../../constants/constant'
 
 //  节点形状类
 export default class Shape {
   constructor(node) {
     this.node = node
+    this.mindMap = node.mindMap
   }
 
   //  形状需要的padding
@@ -106,11 +107,29 @@ export default class Shape {
     }
   }
 
+  // 创建路径节点
+  createPath(pathStr) {
+    const { customCreateNodePath } = this.mindMap.opt
+    if (customCreateNodePath) {
+      return SVG(customCreateNodePath(pathStr))
+    }
+    return new Path().plot(pathStr)
+  }
+
+  // 创建多边形节点
+  createPolygon(points) {
+    const { customCreateNodePolygon } = this.mindMap.opt
+    if (customCreateNodePolygon) {
+      return SVG(customCreateNodePolygon(points))
+    }
+    return new Polygon().plot(points)
+  }
+
   // 创建矩形
   createRect() {
     let { width, height } = this.getNodeSize()
     let borderRadius = this.node.style.merge('borderRadius')
-    return new Path().plot(`
+    const pathStr = `
       M${borderRadius},0
       L${width - borderRadius},0
       C${width - borderRadius},0 ${width},${0} ${width},${borderRadius}
@@ -123,7 +142,8 @@ export default class Shape {
       L${0},${borderRadius}
       C${0},${borderRadius} ${0},${0} ${borderRadius},${0}
       Z
-    `)
+    `
+    return this.createPath(pathStr)
   }
 
   //  创建菱形
@@ -139,12 +159,13 @@ export default class Shape {
     let bottomY = height
     let leftX = 0
     let leftY = halfHeight
-    return new Polygon().plot([
+    const points = [
       [topX, topY],
       [rightX, rightY],
       [bottomX, bottomY],
       [leftX, leftY]
-    ])
+    ]
+    return this.createPolygon(points)
   }
 
   //  创建平行四边形
@@ -152,32 +173,34 @@ export default class Shape {
     let { paddingX } = this.node.getPaddingVale()
     paddingX = paddingX || this.node.shapePadding.paddingX
     let { width, height } = this.getNodeSize()
-    return new Polygon().plot([
+    const points = [
       [paddingX, 0],
       [width, 0],
       [width - paddingX, height],
       [0, height]
-    ])
+    ]
+    return this.createPolygon(points)
   }
 
   //  创建圆角矩形
   createRoundedRectangle() {
     let { width, height } = this.getNodeSize()
     let halfHeight = height / 2
-    return new Path().plot(`
+    const pathStr = `
       M${halfHeight},0
       L${width - halfHeight},0
       A${height / 2},${height / 2} 0 0,1 ${width - halfHeight},${height} 
       L${halfHeight},${height}
       A${height / 2},${height / 2} 0 0,1 ${halfHeight},${0}
-    `)
+    `
+    return this.createPath(pathStr)
   }
 
   //  创建八角矩形
   createOctagonalRectangle() {
     let w = 5
     let { width, height } = this.getNodeSize()
-    return new Polygon().plot([
+    const points = [
       [0, w],
       [w, 0],
       [width - w, 0],
@@ -186,7 +209,8 @@ export default class Shape {
       [width - w, height],
       [w, height],
       [0, height - w]
-    ])
+    ]
+    return this.createPolygon(points)
   }
 
   //  创建外三角矩形
@@ -194,14 +218,15 @@ export default class Shape {
     let { paddingX } = this.node.getPaddingVale()
     paddingX = paddingX || this.node.shapePadding.paddingX
     let { width, height } = this.getNodeSize()
-    return new Polygon().plot([
+    const points = [
       [paddingX, 0],
       [width - paddingX, 0],
       [width, height / 2],
       [width - paddingX, height],
       [paddingX, height],
       [0, height / 2]
-    ])
+    ]
+    return this.createPolygon(points)
   }
 
   //  创建内三角矩形
@@ -209,14 +234,15 @@ export default class Shape {
     let { paddingX } = this.node.getPaddingVale()
     paddingX = paddingX || this.node.shapePadding.paddingX
     let { width, height } = this.getNodeSize()
-    return new Polygon().plot([
+    const points = [
       [0, 0],
       [width, 0],
       [width - paddingX / 2, height / 2],
       [width, height],
       [0, height],
       [paddingX / 2, height / 2]
-    ])
+    ]
+    return this.createPolygon(points)
   }
 
   //  创建椭圆
@@ -224,12 +250,13 @@ export default class Shape {
     let { width, height } = this.getNodeSize()
     let halfWidth = width / 2
     let halfHeight = height / 2
-    return new Path().plot(`
+    const pathStr = `
       M${halfWidth},0
       A${halfWidth},${halfHeight} 0 0,1 ${halfWidth},${height} 
       M${halfWidth},${height} 
       A${halfWidth},${halfHeight} 0 0,1 ${halfWidth},${0} 
-    `)
+    `
+    return this.createPath(pathStr)
   }
 
   //  创建圆
@@ -237,12 +264,13 @@ export default class Shape {
     let { width, height } = this.getNodeSize()
     let halfWidth = width / 2
     let halfHeight = height / 2
-    return new Path().plot(`
+    const pathStr = `
       M${halfWidth},0
       A${halfWidth},${halfHeight} 0 0,1 ${halfWidth},${height} 
       M${halfWidth},${height} 
       A${halfWidth},${halfHeight} 0 0,1 ${halfWidth},${0} 
-    `)
+    `
+    return this.createPath(pathStr)
   }
 }
 

@@ -287,7 +287,7 @@ onPaste(e) {
     if (!selection.rangeCount) return
     selection.deleteFromDocument()// 删除当前选区，也就是如果当前用户在输入框中选择了一些文本，会被删除
     // 从剪贴板里取出文本数据
-    let text = (e.clipboardData || window.clipboardData).getData('text')
+    let text = e.clipboardData.getData('text')
     // 调用库提供的getTextFromHtml方法去除格式
     text = getTextFromHtml(text)
     // 去除换行

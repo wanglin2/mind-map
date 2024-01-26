@@ -52,10 +52,10 @@ import { mapState, mapMutations } from 'vuex'
 import {
   nodeRichTextToTextWithWrap,
   textToNodeRichTextWithWrap,
-  getTextFromHtml,
   createUid,
   simpleDeepClone,
-  htmlEscape
+  htmlEscape,
+  handleInputPasteText
 } from 'simple-mind-map/src/utils'
 import { storeData } from '@/api'
 
@@ -103,11 +103,11 @@ export default {
       let data = this.mindMap.getData()
       data.root = true // 标记根节点
       let walk = root => {
-        let text = (root.data.richText
+        let text = root.data.richText
           ? nodeRichTextToTextWithWrap(root.data.text)
           : root.data.text
-        ).replaceAll(/\n/g, '<br>')
         text = htmlEscape(text)
+        text = text.replaceAll(/\n/g, '<br>')
         root.textCache = text // 保存一份修改前的数据，用于对比是否修改了
         root.label = text
         root.uid = root.data.uid
@@ -178,7 +178,13 @@ export default {
       }
       if (e.keyCode === 9) {
         e.preventDefault()
-        this.$refs.tree.append(data, node)
+        if (e.shiftKey) {
+          // 上移一个层级
+          this.$refs.tree.insertAfter(node.data, node.parent)
+          this.$refs.tree.remove(node)
+        } else {
+          this.$refs.tree.append(data, node)
+        }
       }
       this.save()
       this.$nextTick(() => {
@@ -211,18 +217,7 @@ export default {
 
     // 拦截粘贴事件
     onPaste(e) {
-      e.preventDefault()
-      const selection = window.getSelection()
-      if (!selection.rangeCount) return
-      selection.deleteFromDocument()
-      let text = (e.clipboardData || window.clipboardData).getData('text')
-      // 去除格式
-      text = getTextFromHtml(text)
-      // 去除换行
-      text = text.replaceAll(/\n/g, '')
-      const node = document.createTextNode(text)
-      selection.getRangeAt(0).insertNode(node)
-      selection.collapseToEnd()
+      handleInputPasteText(e)
     },
 
     // 生成唯一的key

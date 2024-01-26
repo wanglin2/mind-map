@@ -360,7 +360,10 @@ class Node {
     // 文字
     if (this._textData) {
       this._textData.node.attr('data-offsetx', textContentOffsetX)
-      this._textData.node.x(textContentOffsetX).y(0)
+      // 修复safari浏览器节点存在图标时文字位置不正确的问题
+      ;(this._textData.nodeContent || this._textData.node)
+        .x(textContentOffsetX)
+        .y(0)
       textContentNested.add(this._textData.node)
       textContentOffsetX += this._textData.width + textContentItemMargin
     }
@@ -492,7 +495,7 @@ class Node {
     // 右键菜单事件
     this.group.on('contextmenu', e => {
       const { readonly, useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
-      // 按住ctrl键点击鼠标左键不知为何触发的是contextmenu事件
+      // Mac上按住ctrl键点击鼠标左键不知为何触发的是contextmenu事件
       if (readonly || e.ctrlKey) {
         return
       }
@@ -710,6 +713,7 @@ class Node {
     if (this.parent) {
       this.parent.removeLine()
     }
+    this.style.onRemove()
   }
 
   //  隐藏节点

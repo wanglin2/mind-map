@@ -10,6 +10,7 @@ export default {
     line: 'Line',
     width: 'Width',
     style: 'Style',
+    lineRadius: 'Radius',
     lineOfOutline: 'Line of outline',
     showArrow: 'Is show arrow',
     nodePadding: 'Node padding',
@@ -57,7 +58,11 @@ export default {
     associativeLineText: 'Associative line text',
     fontFamily: 'Font family',
     fontSize: 'Font size',
-    isShowScrollbar: 'Is show scrollbar'
+    isShowScrollbar: 'Is show scrollbar',
+    isUseHandDrawnLikeStyle: 'Is use hand drawn like style',
+    rootLineStartPos: 'Root line start pos',
+    center: 'Center',
+    right: 'Right'
   },
   color: {
     moreColor: 'More color'
@@ -143,7 +148,8 @@ export default {
     openMiniMap: 'Open mini map',
     closeMiniMap: 'Close mini map',
     readonly: 'Change to eadonly',
-    edit: 'Change to edit'
+    edit: 'Change to edit',
+    backToRoot: 'Back to root node'
   },
   nodeHyperlink: {
     title: 'Link',
@@ -203,7 +209,13 @@ export default {
     line: 'Line',
     nodePadding: 'Node padding',
     horizontal: 'Horizontal',
-    vertical: 'Vertical'
+    vertical: 'Vertical',
+    gradientStyle: 'Gradient',
+    startColor: 'Start',
+    endColor: 'End',
+    arrowDir: 'Arrow dir',
+    arrowDirStart: 'Start',
+    arrowDirEnd: 'End'
   },
   theme: {
     title: 'Theme',

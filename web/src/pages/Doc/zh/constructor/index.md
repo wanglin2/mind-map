@@ -108,6 +108,8 @@ const mindMap = new MindMap({
 | handleNodePasteImg（v0.9.2+）     | null 或 Function | null  | 在节点上粘贴剪贴板中的图片的处理方法，默认是转换为data:url数据插入到节点中，你可以通过该方法来将图片数据上传到服务器，实现保存图片的url。可以传递一个异步方法，接收Blob类型的图片数据，需要返回指定结构：{ url, size: {width, height} }  |
 | isLimitMindMapInCanvas（v0.9.2+）     | Boolean |  false | 是否将思维导图限制在画布内。比如向右拖动时，思维导图图形的最左侧到达画布中心时将无法继续向右拖动，其他同理 |
 | isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）     | Boolean |  true | 当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas配置不再起作用 |
+| associativeLineInitPointsPosition（v0.9.5+）     | null / { from, to } | { from: '', to: '' }  | 默认情况下，新创建的关联线两个端点的位置是根据两个节点中心点的相对位置来计算的，如果你想固定位置，可以通过这个选项来配置。from和to都不传，则都自动计算，如果只传一个，另一个则会自动计算。from和to可选值：left、top、bottom、right |
+| enableAdjustAssociativeLinePoints（v0.9.5+）     | Boolean | true  | 是否允许调整关联线两个端点的位置 |
 
 ### 数据结构
 
@@ -417,6 +419,8 @@ mindMap.setTheme('主题名称')
 | beforeDestroy（v0.9.0+）    |  思维导图销毁前触发，即调用了destroy方法触发  |   |
 | body_mousedown（v0.9.2+）    | document.body的鼠标按下事件                      | e（事件对象）      |
 | body_click    | document.body的点击事件                      | e（事件对象）      |
+| data_change_detail（v0.9.3+）    |  渲染树数据变化的明细，会返回一个数组，每一项代表一个更新点，每一项都是一个对象，存在一个`type`属性，代表明细的类型，包含`create`（创建节点）、`update`（更新节点）、`delete`（删除节点），存在一个`data`属性，代表当前更新的节点数据，如果是`update`类型，还会存在一个`oldData`属性，保存了更新前该节点的数据  | arr（明细数据）      |
+| layout_change（v0.9.4+）    | 修改结构时触发，即调用了mindMap.setLayout()方法时触发  | layout（新的结构）      |
 
 ### emit(event, ...args)
 
@@ -529,6 +533,7 @@ mindMap.updateConfig({
 | INSERT_FORMULA（v0.7.2+）           |  给节点插入数学公式，操作节点为当前激活的节点或指定节点   | formula（要插入的数学公式，LaTeX 语法）, appointNodes（可选，指定要插入公式的节点，多个节点可以传数组，否则默认为当前激活的节点） |
 | INSERT_PARENT_NODE（v0.8.0+）           |  给指定的节点插入父节点，操作节点为当前激活的节点或指定节点   | openEdit（是否激活新插入的节点并进入编辑模式，默认为`true`）、 appointNodes（可选，指定要插入父节点的节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考[exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)） |
 | REMOVE_CURRENT_NODE（v0.8.0+）           |   仅删除当前节点，操作节点为当前激活的节点或指定节点   | appointNodes（可选，指定要删除的节点，指定多个节点可以传一个数组） |
+| MOVE_UP_ONE_LEVEL（v0.9.6+）           |  将指定节点上移一个层级    | node（可选，指定要上移层级的节点，不传则为当前激活节点中的第一个） |
 
 ### setData(data)
 

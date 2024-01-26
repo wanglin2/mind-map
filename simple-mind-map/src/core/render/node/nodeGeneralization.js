@@ -104,7 +104,7 @@ function renderGeneralization() {
 
 // 更新节点概要数据
 function updateGeneralizationData() {
-  const childrenLength = this.children.length
+  const childrenLength = this.nodeData.children.length
   const list = this.formatGetGeneralization()
   const newList = []
   list.forEach(item => {
@@ -131,6 +131,7 @@ function updateGeneralizationData() {
 function removeGeneralization() {
   if (this.isGeneralization) return
   this._generalizationList.forEach(item => {
+    item.generalizationNode.style.onRemove()
     if (item.generalizationLine) {
       item.generalizationLine.remove()
       item.generalizationLine = null

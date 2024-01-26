@@ -6,7 +6,9 @@ import {
   getTextFromHtml,
   isWhite,
   getVisibleColorFromTheme,
-  isUndef
+  isUndef,
+  checkSmmFormatData,
+  removeHtmlNodeByClass
 } from '../utils'
 import { CONSTANTS } from '../constants/constant'
 
@@ -200,7 +202,8 @@ class RichText {
         box-shadow: 0 0 20px rgba(0,0,0,.5);
         outline: none; 
         word-break: 
-        break-all;padding: ${paddingY}px ${paddingX}px;
+        break-all;
+        padding: ${paddingY}px ${paddingX}px;
       `
       this.textEditNode.addEventListener('click', e => {
         e.stopPropagation()
@@ -216,18 +219,10 @@ class RichText {
       const targetNode = customInnerElsAppendTo || document.body
       targetNode.appendChild(this.textEditNode)
     }
-    // 使用节点的填充色，否则如果节点颜色是白色的话编辑时看不见
-    let bgColor = node.style.merge('fillColor')
-    let color = node.style.merge('color')
     this.textEditNode.style.marginLeft = `-${paddingX * scaleX}px`
     this.textEditNode.style.marginTop = `-${paddingY * scaleY}px`
     this.textEditNode.style.zIndex = nodeTextEditZIndex
-    this.textEditNode.style.backgroundColor =
-      bgColor === 'transparent'
-        ? isWhite(color)
-          ? getVisibleColorFromTheme(this.mindMap.themeConfig)
-          : '#fff'
-        : bgColor
+    this.textEditNode.style.background = this.getBackground(node)
     this.textEditNode.style.minWidth = originWidth + paddingX * 2 + 'px'
     this.textEditNode.style.minHeight = originHeight + 'px'
     this.textEditNode.style.left = rect.left + 'px'
@@ -277,6 +272,27 @@ class RichText {
     this.cacheEditingText = ''
   }
 
+  // 获取编辑区域的背景填充
+  getBackground(node) {
+    const gradientStyle = node.style.merge('gradientStyle')
+    // 当前使用的是渐变色背景
+    if (gradientStyle) {
+      const startColor = node.style.merge('startColor')
+      const endColor = node.style.merge('endColor')
+      return `linear-gradient(to right, ${startColor}, ${endColor})`
+    } else {
+      // 单色背景
+      const bgColor = node.style.merge('fillColor')
+      const color = node.style.merge('color')
+      // 默认使用节点的填充色，否则如果节点颜色是白色的话编辑时看不见
+      return bgColor === 'transparent'
+        ? isWhite(color)
+          ? getVisibleColorFromTheme(this.mindMap.themeConfig)
+          : '#fff'
+        : bgColor
+    }
+  }
+
   // 如果是非富文本的情况，需要手动应用文本样式
   setTextStyleIfNotRichText(node) {
     let style = {
@@ -294,6 +310,8 @@ class RichText {
   // 获取当前正在编辑的内容
   getEditText() {
     let html = this.quill.container.firstChild.innerHTML
+    // 去除ql-cursor节点
+    html = removeHtmlNodeByClass(html, '.ql-cursor')
     // 去除最后的空行
     return html.replace(/<p><br><\/p>$/, '')
   }
@@ -397,7 +415,7 @@ class RichText {
     // 拦截粘贴，只允许粘贴纯文本
     this.quill.clipboard.addMatcher(Node.TEXT_NODE, node => {
       let style = this.getPasteTextStyle()
-      return new Delta().insert(node.data, style)
+      return new Delta().insert(this.formatPasteText(node.data), style)
     })
     this.quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
       let ops = []
@@ -407,7 +425,7 @@ class RichText {
         if (op.insert && typeof op.insert === 'string' && op.insert !== '\n') {
           ops.push({
             attributes: { ...style },
-            insert: op.insert
+            insert: this.formatPasteText(op.insert)
           })
         }
       })
@@ -426,6 +444,17 @@ class RichText {
       )
     }
     return {}
+  }
+
+  // 处理粘贴的文本内容
+  formatPasteText(text) {
+    const { isSmm, data } = checkSmmFormatData(text)
+    if (isSmm && data[0] && data[0].data) {
+      // 只取第一个节点的纯文本
+      return getTextFromHtml(data[0].data.text)
+    } else {
+      return text
+    }
   }
 
   // 正则输入中文
@@ -460,9 +489,9 @@ class RichText {
   }
 
   // 格式化当前选中的文本
-  formatText(config = {}, clear = false) {
+  formatText(config = {}, clear = false, pure = false) {
     if (!this.range && !this.lastRange) return
-    this.syncFormatToNodeConfig(config, clear)
+    if (!pure) this.syncFormatToNodeConfig(config, clear)
     let rangeLost = !this.range
     let range = rangeLost ? this.lastRange : this.range
     clear
@@ -475,7 +504,24 @@ class RichText {
 
   // 清除当前选中文本的样式
   removeFormat() {
+    // 先移除全部样式
     this.formatText({}, true)
+    // 再将样式恢复为当前主题改节点的默认样式
+    const style = {}
+    if (this.node) {
+      ;[
+        'fontFamily',
+        'fontSize',
+        'fontWeight',
+        'fontStyle',
+        'textDecoration',
+        'color'
+      ].forEach(key => {
+        style[key] = this.node.style.merge(key)
+      })
+    }
+    const config = this.normalStyleToRichTextStyle(style)
+    this.formatText(config, false, true)
   }
 
   // 格式化指定范围的文本
@@ -591,36 +637,6 @@ class RichText {
       this.formatAllText(config)
       this.hideEditText([node])
     }
-  }
-
-  // 处理导出为图片
-  async handleExportPng(node) {
-    let el = document.createElement('div')
-    el.style.position = 'absolute'
-    el.style.left = '-9999999px'
-    el.appendChild(node)
-    this.mindMap.el.appendChild(el)
-    // 遍历所有节点，将它们的margin和padding设为0
-    let walk = root => {
-      root.style.margin = 0
-      root.style.padding = 0
-      if (root.hasChildNodes()) {
-        Array.from(root.children).forEach(item => {
-          walk(item)
-        })
-      }
-    }
-    walk(node)
-
-    // 如果使用html2canvas
-    // let canvas = await html2canvas(el, {
-    //   backgroundColor: null
-    // })
-    // return canvas.toDataURL()
-
-    const res = await domtoimage.toPng(el)
-    this.mindMap.el.removeChild(el)
-    return res
   }
 
   // 将所有节点转换成非富文本节点

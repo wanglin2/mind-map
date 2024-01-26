@@ -10,6 +10,7 @@ export default {
     line: '连线',
     width: '粗细',
     style: '风格',
+    lineRadius: '圆角大小',
     lineOfOutline: '概要的连线',
     showArrow: '是否显示箭头',
     nodePadding: '节点内边距',
@@ -57,7 +58,11 @@ export default {
     associativeLineText: '关联线文字',
     fontFamily: '字体',
     fontSize: '字号',
-    isShowScrollbar: '是否显示滚动条'
+    isShowScrollbar: '是否显示滚动条',
+    isUseHandDrawnLikeStyle: '是否开启手绘风格',
+    rootLineStartPos: '根节点连线起始位置',
+    center: '中心',
+    right: '右侧'
   },
   color: {
     moreColor: '更多颜色'
@@ -141,7 +146,8 @@ export default {
     openMiniMap: '开启小地图',
     closeMiniMap: '关闭小地图',
     readonly: '切换为只读模式',
-    edit: '切换为编辑模式'
+    edit: '切换为编辑模式',
+    backToRoot: '回到根节点'
   },
   nodeHyperlink: {
     title: '超链接',
@@ -201,7 +207,13 @@ export default {
     line: '线条',
     nodePadding: '节点内边距',
     horizontal: '水平',
-    vertical: '垂直'
+    vertical: '垂直',
+    gradientStyle: '渐变',
+    startColor: '起始',
+    endColor: '结束',
+    arrowDir: '箭头位置',
+    arrowDirStart: '头部',
+    arrowDirEnd: '尾部'
   },
   theme: {
     title: '主题',

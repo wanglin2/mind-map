@@ -253,15 +253,19 @@ class Fishbone extends Base {
         let line = this.lineDraw.path()
         if (this.checkIsTop(item)) {
           line.plot(
-            `M ${nodeLineX - offsetX},${item.top + item.height + offset} L ${
-              item.left
-            },${item.top + item.height}`
+            this.transformPath(
+              `M ${nodeLineX - offsetX},${item.top + item.height + offset} L ${
+                item.left
+              },${item.top + item.height}`
+            )
           )
         } else {
           line.plot(
-            `M ${nodeLineX - offsetX},${item.top - offset} L ${nodeLineX},${
-              item.top
-            }`
+            this.transformPath(
+              `M ${nodeLineX - offsetX},${item.top - offset} L ${nodeLineX},${
+                item.top
+              }`
+            )
           )
         }
         node.style.line(line)
@@ -273,9 +277,11 @@ class Fishbone extends Base {
       let offset = node.height / 2 + this.getMarginY(node.layerIndex + 1)
       let line = this.lineDraw.path()
       line.plot(
-        `M ${node.left + node.width},${nodeHalfTop} L ${
-          maxx - offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg))
-        },${nodeHalfTop}`
+        this.transformPath(
+          `M ${node.left + node.width},${nodeHalfTop} L ${
+            maxx - offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg))
+          },${nodeHalfTop}`
+        )
       )
       node.style.line(line)
       node._lines.push(line)
@@ -372,7 +378,7 @@ class Fishbone extends Base {
       let cx = x1 + 20
       let cy = y1 + (y2 - y1) / 2
       let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
-      item.generalizationLine.plot(path)
+      item.generalizationLine.plot(this.transformPath(path))
       item.generalizationNode.left = right + generalizationNodeMargin
       item.generalizationNode.top =
         top + (bottom - top - item.generalizationNode.height) / 2

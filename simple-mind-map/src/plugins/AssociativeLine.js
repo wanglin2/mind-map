@@ -451,6 +451,17 @@ class AssociativeLine {
       endPoint.x,
       endPoint.y
     )
+    // 检查是否存在固定位置的配置
+    const { associativeLineInitPointsPosition } = this.mindMap.opt
+    if (associativeLineInitPointsPosition) {
+      const { from, to } = associativeLineInitPointsPosition
+      if (from) {
+        startPoint.dir = from
+      }
+      if (to) {
+        endPoint.dir = to
+      }
+    }
     let offsetList =
       fromNode.getData('associativeLineTargetControlOffsets') || []
     // 保存的实际是控制点和端点的差值，否则当节点位置改变了，控制点还是原来的位置，连线就不对了

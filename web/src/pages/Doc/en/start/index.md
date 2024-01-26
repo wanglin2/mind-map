@@ -70,6 +70,14 @@ If you want to implement a complete mind map, you usually need to develop some U
 
 The non-packaged 'ES' module is introduced by default, and only contains core functions, not unregistered plugin content, which can effectively reduce the size. However, you need to configure the `babel` compilation `simple mind-map` in your project to prevent some newer `js` syntax some browsers not supporting it.
 
+If you don't want to load all plugins from the beginning and want to load and register plugins asynchronously after instantiation, you can do this:
+
+```js
+import('simple-mind-map/src/plugins/Export.js').then(res => {
+  mindMap.addPlugin(res.default)
+})
+```
+
 If you need a file in the format of `umd` module, such as `CDN` in the browser, Then you can find the `simpleMindMap.umd.min.js` file and `simpleMindMap.css` file in the `/simple-mind-map/dist/` directory, copy it to your project, and then import it into the page:
 
 ```html
@@ -82,6 +90,14 @@ A global variable `window.simpleMindMap` will be created. you can get `MindMap` 
 The disadvantage of this method is that it will contain all the content, including the plugins you have not registered, so the overall volume will be relatively large.
 
 （v0.5.4+）If you want to use the `ES` module directly on the browser side, you can find the `simpleMindMap.esm.js` and `simpleMindMap.esm.css` files in the `/simple-mind-map/dist/` directory.
+
+Online CDN services can also be used, such as:
+
+```
+https://unpkg.com/browse/simple-mind-map@0.9.2/dist/
+```
+
+You can find all the packaged files for a certain version.
 
 ## Development
 
@@ -101,6 +117,8 @@ npm i
 npm link simple-mind-map
 npm run serve
 ```
+
+> If there is an installation dependency error, you can try adjusting the node version. The author is using version 14. x.
 
 ### Packaging the Library
 
@@ -127,6 +145,15 @@ fields:
 Environments that support the `module` field will use `index.js` as the entry
 point, otherwise the packed `simpleMindMap.umd.min.js` will be used as the entry
 point.
+
+#### Generate TypeScript type files
+
+```bash
+cd simple-mind-map
+npm run types
+```
+
+You can obtain the type files in the 'simple-mind-map/types/' directory.
 
 ### Compile the doc
 
@@ -178,3 +205,7 @@ resolve: { alias: { stream: "stream-browserify" } }
 ```
 
 Different packaging tools may have different specific configurations, with the principle of excluding 'stream' dependencies.
+
+### When clicking the [New], [Open], or [Save As] buttons, it will prompt that the browser does not support it or is not using the HTTPS protocol.
+
+The browser uses API [window.showOpenFilePicker](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/showOpenFilePicker) to operate local files on the computer. If it is not supported, either the browser does not support this API or the page is not using the HTTPS protocol, You can press F12, or open the browser console through the right-click menu on the page and enter 'window.showOpenFilePicker' in the 'Console' tab. If it returns 'undefined', it means it is not supported. If it does not return this message and the page still prompts that the browser does not support it or is not using the HTTPS protocol, you can submit an issue or contact the author.

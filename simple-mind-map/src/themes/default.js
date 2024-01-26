@@ -17,10 +17,14 @@ export default {
   // 连线样式
   lineDasharray: 'none',
   // 连线风格
-  lineStyle: 'straight', // 针对logicalStructure、mindMap两种结构。曲线（curve）、直线（straight）、直连（direct）
-  // 曲线连接时，根节点和其他节点的连接线样式保持统一，默认根节点为 ( 型，其他节点为 { 型，设为true后，都为 { 型
+  lineStyle: 'straight', // 曲线（curve）【仅支持logicalStructure、mindMap、verticalTimeline三种结构】、直线（straight）、直连（direct）【仅支持logicalStructure、mindMap、organizationStructure、verticalTimeline四种结构】
+  // 曲线连接时，根节点和其他节点的连接线样式保持统一，默认根节点为 ( 型，其他节点为 { 型，设为true后，都为 { 型。仅支持logicalStructure、mindMap两种结构
   rootLineKeepSameInCurve: true,
-  // 连线尾部是否显示标记，目前只支持箭头
+  // 曲线连接时，根节点和其他节点的连线起始位置保持统一，默认根节点的连线起始位置在节点中心，其他节点在节点右侧，如果该配置设为true，那么根节点的连线起始位置也会在节点右侧
+  rootLineStartPositionKeepSameInCurve: false,
+  // 直线连接(straight)时，连线的圆角大小，设置为0代表没有圆角，仅支持logicalStructure、mindMap、verticalTimeline三种结构
+  lineRadius: 5,
+  // 连线是否显示标记，目前只支持箭头
   showLineMarker: false,
   // 概要连线的粗细
   generalizationLineWidth: 1,
@@ -56,7 +60,7 @@ export default {
   backgroundPosition: 'center center',
   // 设置背景图片大小
   backgroundSize: 'cover',
-  // 节点使用横线样式
+  // 节点使用只有底边横线的样式，仅支持logicalStructure、mindMap、catalogOrganization、organizationStructure四种结构
   nodeUseLineStyle: false,
   // 根节点样式
   root: {
@@ -72,7 +76,12 @@ export default {
     borderWidth: 0,
     borderDasharray: 'none',
     borderRadius: 5,
-    textDecoration: 'none'
+    textDecoration: 'none',
+    gradientStyle: false,
+    startColor: '#549688',
+    endColor: '#fff',
+    // 连线标记的位置，start（头部）、end（尾部），该配置在showLineMarker配置为true时生效
+    lineMarkerDir: 'end'
   },
   // 二级节点样式
   second: {
@@ -90,7 +99,11 @@ export default {
     borderWidth: 1,
     borderDasharray: 'none',
     borderRadius: 5,
-    textDecoration: 'none'
+    textDecoration: 'none',
+    gradientStyle: false,
+    startColor: '#549688',
+    endColor: '#fff',
+    lineMarkerDir: 'end'
   },
   // 三级及以下节点样式
   node: {
@@ -108,7 +121,11 @@ export default {
     borderWidth: 0,
     borderRadius: 5,
     borderDasharray: 'none',
-    textDecoration: 'none'
+    textDecoration: 'none',
+    gradientStyle: false,
+    startColor: '#549688',
+    endColor: '#fff',
+    lineMarkerDir: 'end'
   },
   // 概要节点样式
   generalization: {
@@ -126,7 +143,10 @@ export default {
     borderWidth: 1,
     borderDasharray: 'none',
     borderRadius: 5,
-    textDecoration: 'none'
+    textDecoration: 'none',
+    gradientStyle: false,
+    startColor: '#549688',
+    endColor: '#fff'
   }
 }
 
@@ -162,7 +182,12 @@ const nodeSizeIndependenceList = [
   'backgroundPosition',
   'backgroundSize',
   'rootLineKeepSameInCurve',
-  'showLineMarker'
+  'rootLineStartPositionKeepSameInCurve',
+  'showLineMarker',
+  'gradientStyle',
+  'lineRadius',
+  'startColor',
+  'endColor'
 ]
 export const checkIsNodeSizeIndependenceConfig = config => {
   let keys = Object.keys(config)
@@ -178,4 +203,9 @@ export const checkIsNodeSizeIndependenceConfig = config => {
   return true
 }
 
-export const lineStyleProps = ['lineColor', 'lineDasharray', 'lineWidth']
+export const lineStyleProps = [
+  'lineColor',
+  'lineDasharray',
+  'lineWidth',
+  'lineMarkerDir'
+]
