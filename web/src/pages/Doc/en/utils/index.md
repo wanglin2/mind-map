@@ -469,6 +469,16 @@ Convert to:
 
 Convert flat objects into a tree structure. Reverse operation of the transformTreeDataToObject method.
 
+#### removeHtmlNodeByClass(html, selector)
+
+> v0.9.6+
+
+- `html`：html string
+
+- `selector`：Node selectors, such as class selectors and id selectors
+
+Remove the node of the specified selector from the specified HTML string, and then return the processed HTML string.
+
 ## Simulate CSS background in Canvas
 
 Import:
