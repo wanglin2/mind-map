@@ -7,7 +7,8 @@ import {
   isWhite,
   getVisibleColorFromTheme,
   isUndef,
-  checkSmmFormatData
+  checkSmmFormatData,
+  removeHtmlNodeByClass
 } from '../utils'
 import { CONSTANTS } from '../constants/constant'
 
@@ -309,6 +310,8 @@ class RichText {
   // 获取当前正在编辑的内容
   getEditText() {
     let html = this.quill.container.firstChild.innerHTML
+    // 去除ql-cursor节点
+    html = removeHtmlNodeByClass(html, '.ql-cursor')
     // 去除最后的空行
     return html.replace(/<p><br><\/p>$/, '')
   }
@@ -488,7 +491,7 @@ class RichText {
   // 格式化当前选中的文本
   formatText(config = {}, clear = false, pure = false) {
     if (!this.range && !this.lastRange) return
-    if(!pure) this.syncFormatToNodeConfig(config, clear)
+    if (!pure) this.syncFormatToNodeConfig(config, clear)
     let rangeLost = !this.range
     let range = rangeLost ? this.lastRange : this.range
     clear
@@ -634,36 +637,6 @@ class RichText {
       this.formatAllText(config)
       this.hideEditText([node])
     }
-  }
-
-  // 处理导出为图片
-  async handleExportPng(node) {
-    let el = document.createElement('div')
-    el.style.position = 'absolute'
-    el.style.left = '-9999999px'
-    el.appendChild(node)
-    this.mindMap.el.appendChild(el)
-    // 遍历所有节点，将它们的margin和padding设为0
-    let walk = root => {
-      root.style.margin = 0
-      root.style.padding = 0
-      if (root.hasChildNodes()) {
-        Array.from(root.children).forEach(item => {
-          walk(item)
-        })
-      }
-    }
-    walk(node)
-
-    // 如果使用html2canvas
-    // let canvas = await html2canvas(el, {
-    //   backgroundColor: null
-    // })
-    // return canvas.toDataURL()
-
-    const res = await domtoimage.toPng(el)
-    this.mindMap.el.removeChild(el)
-    return res
   }
 
   // 将所有节点转换成非富文本节点

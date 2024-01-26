@@ -535,6 +535,20 @@ export const replaceHtmlText = (html, searchText, replaceText) => {
   return replaceHtmlTextEl.innerHTML
 }
 
+// 去除html字符串中指定选择器的节点，然后返回html字符串
+let removeHtmlNodeByClassEl = null
+export const removeHtmlNodeByClass = (html, selector) => {
+  if (!removeHtmlNodeByClassEl) {
+    removeHtmlNodeByClassEl = document.createElement('div')
+  }
+  removeHtmlNodeByClassEl.innerHTML = html
+  const node = removeHtmlNodeByClassEl.querySelector(selector)
+  if (node) {
+    node.parentNode.removeChild(node)
+  }
+  return removeHtmlNodeByClassEl.innerHTML
+}
+
 // 判断一个颜色是否是白色
 export const isWhite = color => {
   color = String(color).replaceAll(/\s+/g, '')
