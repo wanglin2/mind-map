@@ -446,6 +446,7 @@ class Render {
           this.waitRenderingParams = []
           this.render(...params)
         } else {
+          this.renderSource = ''
           if (this.reRender) {
             this.reRender = false
           }
