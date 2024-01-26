@@ -489,9 +489,27 @@ export const removeHtmlStyle = html => {
 }
 
 // 给html标签中指定的标签添加内联样式
+let addHtmlStyleEl = null
 export const addHtmlStyle = (html, tag, style) => {
-  const reg = new RegExp(`(<${tag}[^>]*)(>[^<>]*</${tag}>)`, 'g')
-  return html.replaceAll(reg, `$1 style="${style}"$2`)
+  if (!addHtmlStyleEl) {
+    addHtmlStyleEl = document.createElement('div')
+  }
+  addHtmlStyleEl.innerHTML = html
+  let walk = root => {
+    let childNodes = root.childNodes
+    childNodes.forEach(node => {
+      if (node.nodeType === 1) {
+        // 元素节点
+        if (node.tagName.toLowerCase() === tag) {
+          node.style.cssText = style
+        } else {
+          walk(node)
+        }
+      }
+    })
+  }
+  walk(addHtmlStyleEl)
+  return addHtmlStyleEl.innerHTML
 }
 
 // 检查一个字符串是否是富文本字符
