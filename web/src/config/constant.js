@@ -55,7 +55,9 @@ export const themeMap = {
   classic5: require('../assets/img/themes/classic5.jpg'),
   dark3: require('../assets/img/themes/dark3.jpg'),
   dark4: require('../assets/img/themes/dark4.jpg'),
-  cactus: require('../assets/img/themes/cactus.jpg')
+  cactus: require('../assets/img/themes/cactus.jpg'),
+  classic6: require('../assets/img/themes/classic6.jpg'),
+  classic7: require('../assets/img/themes/classic7.jpg'),
 }
 
 // 公式列表

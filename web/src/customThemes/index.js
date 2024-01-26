@@ -7,6 +7,8 @@ import neonLamp from './neonLamp'
 import darkNightLceBlade from './darkNightLceBlade'
 import morandi from './morandi'
 import classic5 from './classic5'
+import classic6 from './classic6'
+import classic7 from './classic7'
 import dark3 from './dark3'
 import dark4 from './dark4'
 import cactus from './cactus'
@@ -82,6 +84,18 @@ export default [
         name: '仙人掌',
         value: 'cactus',
         theme: cactus,
+        dark: false
+    },
+    {
+        name: '脑图经典6',
+        value: 'classic6',
+        theme: classic6,
+        dark: false
+    },
+    {
+        name: '脑图经典7',
+        value: 'classic7',
+        theme: classic7,
         dark: false
     }
 ]
