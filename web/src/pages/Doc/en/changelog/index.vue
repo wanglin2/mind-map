@@ -5,6 +5,9 @@
 <p>Fix:</p>
 <blockquote>
 <p>1.Fix the issue where the style of the collapsed nodes remains unchanged when switching themes;</p>
+<p>2.Fix the issue of losing the new text style when switching themes for text wrapping;</p>
+<p>3.Fix the issue where the style of the newline text remains unchanged when switching themes;</p>
+<p>4.Fixed the issue of adding mathematical formulas to nodes and not changing the text style when switching themes;</p>
 </blockquote>
 <p>New:</p>
 <blockquote>
@@ -18,6 +21,8 @@
 <p>1.The outline supports pressing Shift+Tab to move nodes up one level;</p>
 <p>2.Support setting the position of node arrow display;</p>
 <p>3.Support setting the starting position of root node connections;</p>
+<p>4.Add two new themes;</p>
+<p>5.Fix the issue of text wrapping not taking effect in the outline and displaying the br tag;</p>
 </blockquote>
 <h2>0.9.5</h2>
 <p>Fix:</p>

@@ -32,7 +32,7 @@ Demo:
 >
 > 4.Add two new themes;
 >
-> 5.Fix the issue of text wrapping not taking effect in the outline and displaying the br tag;
+> 5.Fix the issue of text wrapping not taking effect in the outline and displaying the br tag; 
 
 ## 0.9.5
 

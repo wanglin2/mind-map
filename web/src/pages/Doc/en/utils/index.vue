@@ -389,6 +389,19 @@ and copying the <code>data</code> of the data object, example:</p>
 <p>v0.9.3+</p>
 </blockquote>
 <p>Convert flat objects into a tree structure. Reverse operation of the transformTreeDataToObject method.</p>
+<h4>removeHtmlNodeByClass(html, selector)</h4>
+<blockquote>
+<p>v0.9.6+</p>
+</blockquote>
+<ul>
+<li>
+<p><code>html</code>：html string</p>
+</li>
+<li>
+<p><code>selector</code>：Node selectors, such as class selectors and id selectors</p>
+</li>
+</ul>
+<p>Remove the node of the specified selector from the specified HTML string, and then return the processed HTML string.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>
