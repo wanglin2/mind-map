@@ -905,6 +905,7 @@ class Render {
     const index = getNodeIndexInNodeList(node, parent.children)
     const parentIndex = getNodeIndexInNodeList(parent, grandpa.children)
     // 节点数据
+    this.checkNodeLayerChange(node, parent)
     parent.nodeData.children.splice(index, 1)
     grandpa.nodeData.children.splice(parentIndex + 1, 0, node.nodeData)
     this.mindMap.render()
@@ -1110,11 +1111,12 @@ class Render {
   }
 
   // 如果是富文本模式，那么某些层级变化需要更新样式
-  checkNodeLayerChange(node, toNode) {
+  checkNodeLayerChange(node, toNode, toNodeIsParent = false) {
     if (this.mindMap.richText) {
+      const toIndex = toNodeIsParent ? toNode.layerIndex + 1 : toNode.layerIndex
       let nodeLayerChanged =
-        (node.layerIndex === 1 && toNode.layerIndex !== 1) ||
-        (node.layerIndex !== 1 && toNode.layerIndex === 1)
+        (node.layerIndex === 1 && toIndex !== 1) ||
+        (node.layerIndex !== 1 && toIndex === 1)
       if (nodeLayerChanged) {
         node.setData({
           resetRichText: true
@@ -1292,7 +1294,7 @@ class Render {
       return !item.isRoot
     })
     nodeList.forEach(item => {
-      this.checkNodeLayerChange(item, toNode)
+      this.checkNodeLayerChange(item, toNode, true)
       this.removeNodeFromActiveList(item)
       removeFromParentNodeData(item)
       toNode.nodeData.children.push(item.nodeData)
