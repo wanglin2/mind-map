@@ -94,7 +94,9 @@ export default {
     fitCanvas: '适应画布',
     removeImage: '移除图片',
     removeHyperlink: '移除超链接',
-    removeNote: '移除备注'
+    removeNote: '移除备注',
+    removeCustomStyles: '一键去除自定义样式',
+    removeAllNodeCustomStyles: '一键去除所有节点自定义样式'
   },
   count: {
     words: '字数',

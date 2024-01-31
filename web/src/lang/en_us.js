@@ -94,7 +94,9 @@ export default {
     fitCanvas: 'Fit canvas',
     removeImage: 'Remove image',
     removeHyperlink: 'Remove hyperlink',
-    removeNote: 'Remove note'
+    removeNote: 'Remove note',
+    removeCustomStyles: 'Remove custom styles',
+    removeAllNodeCustomStyles: 'Remove all node custom styles'
   },
   count: {
     words: 'Words',
