@@ -149,15 +149,17 @@ export default {
         this.$confirm(this.$t('theme.coverTip'), this.$t('theme.tip'), {
           confirmButtonText: this.$t('theme.cover'),
           cancelButtonText: this.$t('theme.reserve'),
-          type: 'warning'
+          type: 'warning',
+          distinguishCancelAndClose: true,
+          callback: action => {
+            if (action === 'confirm') {
+              this.mindMap.setThemeConfig({}, true)
+              this.changeTheme(theme, {})
+            } else if (action === 'cancel') {
+              this.changeTheme(theme, customThemeConfig)
+            }
+          }
         })
-          .then(() => {
-            this.mindMap.setThemeConfig({}, true)
-            this.changeTheme(theme, {})
-          })
-          .catch(() => {
-            this.changeTheme(theme, customThemeConfig)
-          })
       } else {
         this.changeTheme(theme, customThemeConfig)
       }
