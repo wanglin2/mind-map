@@ -688,6 +688,52 @@ export const textToNodeRichTextWithWrap = html => {
     .join('')
 }
 
+// 去除富文本内容的样式，包括样式标签，比如strong、em、s等
+// 但要保留数学公式内容
+let removeRichTextStyesEl = null
+export const removeRichTextStyes = html => {
+  if (!removeRichTextStyesEl) {
+    removeRichTextStyesEl = document.createElement('div')
+  }
+  removeRichTextStyesEl.innerHTML = html
+  // 首先用占位文本替换掉所有的公式
+  const formulaList = removeRichTextStyesEl.querySelectorAll('.ql-formula')
+  Array.from(formulaList).forEach(el => {
+    const placeholder = document.createTextNode('$smmformula$')
+    el.parentNode.replaceChild(placeholder, el)
+  })
+  // 然后遍历每行节点，去掉内部的所有标签，转为文本
+  const childNodes = removeRichTextStyesEl.childNodes
+  let list = []
+  for (let i = 0; i < childNodes.length; i++) {
+    const node = childNodes[i]
+    if (node.nodeType === 1) {
+      // 元素节点
+      list.push(node.textContent)
+    } else if (node.nodeType === 3) {
+      // 文本节点
+      list.push(node.nodeValue)
+    }
+  }
+  // 拼接文本
+  html = list
+    .map(item => {
+      return `<p><span>${htmlEscape(item)}</span></p>`
+    })
+    .join('')
+  // 将公式添加回去
+  if (formulaList.length > 0) {
+    html = html.replace(/\$smmformula\$/g, '<span class="smmformula"></span>')
+    removeRichTextStyesEl.innerHTML = html
+    const els = removeRichTextStyesEl.querySelectorAll('.smmformula')
+    Array.from(els).forEach((el, index) => {
+      el.parentNode.replaceChild(formulaList[index], el)
+    })
+    html = removeRichTextStyesEl.innerHTML
+  }
+  return html
+}
+
 // 判断是否是移动端环境
 export const isMobile = () => {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(

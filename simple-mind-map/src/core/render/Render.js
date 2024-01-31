@@ -28,7 +28,9 @@ import {
   parseAddGeneralizationNodeList,
   checkNodeListIsEqual,
   createSmmFormatData,
-  checkSmmFormatData
+  checkSmmFormatData,
+  checkIsNodeStyleDataKey,
+  removeRichTextStyes
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -271,6 +273,15 @@ class Render {
     // 定位节点
     this.goTargetNode = this.goTargetNode.bind(this)
     this.mindMap.command.add('GO_TARGET_NODE', this.goTargetNode)
+    // 一键去除节点自定义样式
+    this.removeCustomStyles = this.removeCustomStyles.bind(this)
+    this.mindMap.command.add('REMOVE_CUSTOM_STYLES', this.removeCustomStyles)
+    // 一键去除所有节点自定义样式
+    this.removeAllNodeCustomStyles = this.removeAllNodeCustomStyles.bind(this)
+    this.mindMap.command.add(
+      'REMOVE_ALL_NODE_CUSTOM_STYLES',
+      this.removeAllNodeCustomStyles
+    )
   }
 
   //  注册快捷键
@@ -909,6 +920,65 @@ class Render {
     parent.nodeData.children.splice(index, 1)
     grandpa.nodeData.children.splice(parentIndex + 1, 0, node.nodeData)
     this.mindMap.render()
+  }
+
+  // 移除节点数据的自定义样式的内部方法
+  _handleRemoveCustomStyles(nodeData) {
+    let hasCustomStyles = false
+    Object.keys(nodeData).forEach(key => {
+      if (checkIsNodeStyleDataKey(key)) {
+        hasCustomStyles = true
+        delete nodeData[key]
+      }
+    })
+    // 如果是富文本，那么还要处理富文本内容
+    if (hasCustomStyles && this.mindMap.richText) {
+      nodeData.resetRichText = true
+      nodeData.text = removeRichTextStyes(nodeData.text)
+    }
+    return hasCustomStyles
+  }
+
+  // 一键去除自定义样式
+  removeCustomStyles(node) {
+    node = node || this.activeNodeList[0]
+    if (!node) {
+      return
+    }
+    const hasCustomStyles = this._handleRemoveCustomStyles(node.getData())
+    if (hasCustomStyles) {
+      this.reRenderNodeCheckChange(node)
+    }
+  }
+
+  // 一键去除所有节点自定义样式
+  removeAllNodeCustomStyles(appointNodes) {
+    appointNodes = formatDataToArray(appointNodes)
+    let hasCustomStyles = false
+    // 指定了节点列表，那么遍历该节点列表
+    if (appointNodes.length > 0) {
+      appointNodes.forEach(node => {
+        const _hasCustomStyles = this._handleRemoveCustomStyles(node.getData())
+        if (_hasCustomStyles) hasCustomStyles = true
+      })
+    } else {
+      // 否则遍历整棵树
+      walk(this.renderTree, null, node => {
+        const _hasCustomStyles = this._handleRemoveCustomStyles(node.data)
+        if (_hasCustomStyles) hasCustomStyles = true
+        // 不要忘记概要节点
+        if (node.data.generalization && node.data.generalization.length > 0) {
+          node.data.generalization.forEach(generalizationData => {
+            const _hasCustomStyles =
+              this._handleRemoveCustomStyles(generalizationData)
+            if (_hasCustomStyles) hasCustomStyles = true
+          })
+        }
+      })
+    }
+    if (hasCustomStyles) {
+      this.mindMap.reRender()
+    }
   }
 
   // 复制节点
@@ -1649,6 +1719,11 @@ class Render {
   //  设置节点数据，并判断是否渲染
   setNodeDataRender(node, data, notRender = false) {
     this.mindMap.execCommand('SET_NODE_DATA', node, data)
+    this.reRenderNodeCheckChange(node, notRender)
+  }
+
+  // 重新节点某个节点，判断节点大小是否发生了改变，是的话触发重绘
+  reRenderNodeCheckChange(node, notRender) {
     let changed = node.reRender()
     if (changed) {
       if (!notRender) this.mindMap.render()
