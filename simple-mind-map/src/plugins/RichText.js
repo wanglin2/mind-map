@@ -326,10 +326,10 @@ class RichText {
       nodes && nodes.length > 0 ? nodes : this.mindMap.renderer.activeNodeList
     list.forEach(node => {
       this.mindMap.execCommand('SET_NODE_TEXT', node, html, true)
-      if (node.isGeneralization) {
+      // if (node.isGeneralization) {
         // 概要节点
-        node.generalizationBelongNode.updateGeneralization()
-      }
+        // node.generalizationBelongNode.updateGeneralization()
+      // }
       this.mindMap.render()
     })
     this.mindMap.emit('hide_text_edit', this.textEditNode, list)
