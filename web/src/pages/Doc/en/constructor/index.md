@@ -540,6 +540,8 @@ redo. All commands are as follows:
 | INSERT_PARENT_NODE（v0.8.0+）           |  Insert a parent node into the specified node, with the operation node being the currently active node or the specified node   | openEdit（Activate the newly inserted node and enter editing mode, default to 'true'`）、 appointNodes（Optional, specify the node to insert into the parent node, and specify that multiple nodes can pass an array）、 appointData（Optional, specify the data for the newly created node, such as {text: 'xxx', ...}, Detailed structure can be referenced [exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)） |
 | REMOVE_CURRENT_NODE（v0.8.0+）           |  Delete only the current node, operate on the currently active node or specified node    | appointNodes（Optional, specify the nodes to be deleted, and multiple nodes can be passed as an array） |
 | MOVE_UP_ONE_LEVEL（v0.9.6+）           | Move the specified node up one level     | node（Optional, specify the node to move up the hierarchy, if not passed, it will be the first node in the current active node） |
+| REMOVE_CUSTOM_STYLES（v0.9.7+）           |  One click removal of custom styles for a node    | node（Optional, specify the node to clear the custom style, otherwise it will be the first one in the current active node） |
+| REMOVE_ALL_NODE_CUSTOM_STYLES（v0.9.7+）           |   One click removal of multiple nodes or custom styles for all nodes   | appointNodes（Optional, node instance array, specifying multiple nodes to remove custom styles from. If not passed, the custom styles of all nodes on the current canvas will be removed） |
 
 ### setData(data)
 

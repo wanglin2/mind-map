@@ -1,6 +1,20 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.9.7</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue where the style is not updated when dragging nodes below level 2 to the root node to become level 2 nodes; Fix the issue where the style is not updated when moving nodes with the command to move up one level;</p>
+<p>2.Fix the issue of losing focus when activating summary nodes and then setting text styles for them;</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Add two commands to remove custom styles from nodes;</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.Add a right-click menu button to remove custom styles from nodes.</p>
+</blockquote>
 <h2>0.9.6</h2>
 <p>Fix:</p>
 <blockquote>

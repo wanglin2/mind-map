@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.9.7
+
+Fix:
+
+> 1.Fix the issue where the style is not updated when dragging nodes below level 2 to the root node to become level 2 nodes; Fix the issue where the style is not updated when moving nodes with the command to move up one level;
+>
+> 2.Fix the issue of losing focus when activating summary nodes and then setting text styles for them;
+
+New:
+
+> 1.Add two commands to remove custom styles from nodes;
+
+Demo:
+
+> 1.Add a right-click menu button to remove custom styles from nodes.
+
 ## 0.9.6
 
 Fix:

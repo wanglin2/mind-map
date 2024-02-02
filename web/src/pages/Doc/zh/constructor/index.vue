@@ -1296,6 +1296,16 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>将指定节点上移一个层级</td>
 <td>node（可选，指定要上移层级的节点，不传则为当前激活节点中的第一个）</td>
 </tr>
+<tr>
+<td>REMOVE_CUSTOM_STYLES（v0.9.7+）</td>
+<td>一键去除某个节点的自定义样式</td>
+<td>node（可选，指定要清除自定义样式的节点，不传则为当前激活节点中的第一个）</td>
+</tr>
+<tr>
+<td>REMOVE_ALL_NODE_CUSTOM_STYLES（v0.9.7+）</td>
+<td>一键去除多个节点或所有节点的自定义样式</td>
+<td>appointNodes（可选，节点实例数组，指定要去除自定义样式的多个节点，如果不传则会去除当前画布所有节点的自定义样式）</td>
+</tr>
 </tbody>
 </table>
 <h3>setData(data)</h3>

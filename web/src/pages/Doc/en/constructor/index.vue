@@ -1395,6 +1395,16 @@ redo. All commands are as follows:</p>
 <td>Move the specified node up one level</td>
 <td>node（Optional, specify the node to move up the hierarchy, if not passed, it will be the first node in the current active node）</td>
 </tr>
+<tr>
+<td>REMOVE_CUSTOM_STYLES（v0.9.7+）</td>
+<td>One click removal of custom styles for a node</td>
+<td>node（Optional, specify the node to clear the custom style, otherwise it will be the first one in the current active node）</td>
+</tr>
+<tr>
+<td>REMOVE_ALL_NODE_CUSTOM_STYLES（v0.9.7+）</td>
+<td>One click removal of multiple nodes or custom styles for all nodes</td>
+<td>appointNodes（Optional, node instance array, specifying multiple nodes to remove custom styles from. If not passed, the custom styles of all nodes on the current canvas will be removed）</td>
+</tr>
 </tbody>
 </table>
 <h3>setData(data)</h3>
