@@ -272,4 +272,12 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/慕智打印-兰兰.jpg" style="width: 50px;height: 50px;" />
         <span>慕智打印-兰兰</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>锦冰</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/旭东.png" style="width: 50px;height: 50px;" />
+        <span>旭东</span>
+    </span>
 </p>
