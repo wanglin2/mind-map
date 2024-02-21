@@ -280,4 +280,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/旭东.png" style="width: 50px;height: 50px;" />
         <span>旭东</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/俊奇.jpg" style="width: 50px;height: 50px;" />
+        <span>俊奇</span>
+    </span>
 </p>
