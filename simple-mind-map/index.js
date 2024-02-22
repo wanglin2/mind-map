@@ -39,6 +39,10 @@ class MindMap {
     // 获取容器尺寸位置信息
     this.getElRectInfo()
 
+    // 画布初始大小
+    this.initWidth = this.width
+    this.initHeight = this.height
+
     // 添加css
     this.cssEl = null
     this.addCss()

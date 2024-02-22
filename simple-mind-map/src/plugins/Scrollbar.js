@@ -40,6 +40,7 @@ class Scrollbar {
     this.mindMap.on('mouseup', this.onMouseup)
     this.mindMap.on('node_tree_render_end', this.updateScrollbar)
     this.mindMap.on('view_data_change', this.updateScrollbar)
+    this.mindMap.on('resize', this.updateScrollbar)
   }
 
   // 解绑事件
@@ -48,6 +49,7 @@ class Scrollbar {
     this.mindMap.off('mouseup', this.onMouseup)
     this.mindMap.off('node_tree_render_end', this.updateScrollbar)
     this.mindMap.off('view_data_change', this.updateScrollbar)
+    this.mindMap.off('resize', this.updateScrollbar)
   }
 
   // 渲染后、数据改变需要更新滚动条
@@ -202,7 +204,8 @@ class Scrollbar {
         yOffset -
         paddingY * t.scaleY +
         paddingY -
-        rootCenterOffset.y * t.scaleY
+        rootCenterOffset.y * t.scaleY +
+        ((this.mindMap.height - this.mindMap.initHeight) / 2) * t.scaleY // 画布宽高改变了，但是思维导图元素变换的中心点依旧是原有位置，所以需要加上中心点变化量
       this.mindMap.view.translateYTo(chartTop)
       this.emitEvent({
         horizontal: scrollbarData.horizontal,
@@ -238,7 +241,8 @@ class Scrollbar {
         xOffset -
         paddingX * t.scaleX +
         paddingX -
-        rootCenterOffset.x * t.scaleX
+        rootCenterOffset.x * t.scaleX +
+        ((this.mindMap.width - this.mindMap.initWidth) / 2) * t.scaleX // 画布宽高改变了，但是思维导图元素变换的中心点依旧是原有位置，所以需要加上中心点变化量
       this.mindMap.view.translateXTo(chartLeft)
       this.emitEvent({
         vertical: scrollbarData.vertical,
