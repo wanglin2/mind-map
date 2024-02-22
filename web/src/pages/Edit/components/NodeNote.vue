@@ -45,6 +45,13 @@ export default {
       isMobile: isMobile()
     }
   },
+  watch: {
+    dialogVisible(val, oldVal) {
+      if (!val && oldVal) {
+        this.$bus.$emit('endTextEdit')
+      }
+    }
+  },
   created() {
     this.$bus.$on('node_active', this.handleNodeActive)
     this.$bus.$on('showNodeNote', this.handleShowNodeNote)
@@ -96,7 +103,6 @@ export default {
      */
     cancel() {
       this.dialogVisible = false
-      this.$bus.$emit('endTextEdit')
     },
 
     /**
