@@ -94,6 +94,12 @@ const mindMap = new MindMap({
 
 群聊人数较多，无法通过二维码入群，可以微信添加`wanglinguanfang`拉你入群。
 
+# star
+
+如果喜欢本项目，欢迎点个star，这对我们很重要。
+
+[![Star History Chart](https://api.star-history.com/svg?repos=wanglin2/mind-map&type=Date)](https://star-history.com/#wanglin2/mind-map&Date)
+
 # 请作者喝杯咖啡
 
 开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡~
