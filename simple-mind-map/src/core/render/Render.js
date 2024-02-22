@@ -649,7 +649,7 @@ class Render {
           uid: createUid(),
           ...(appointData || {})
         },
-        children: [...createUidForAppointNodes(appointChildren, true)]
+        children: [...createUidForAppointNodes(appointChildren)]
       }
       parent.nodeData.children.splice(index + 1, 0, newNodeData)
     })
@@ -685,10 +685,7 @@ class Render {
       const parent = node.parent
       // 计算插入位置
       const index = getNodeDataIndex(node)
-      const newNodeList = createUidForAppointNodes(
-        simpleDeepClone(nodeList),
-        true
-      )
+      const newNodeList = createUidForAppointNodes(simpleDeepClone(nodeList))
       parent.nodeData.children.splice(index + 1, 0, ...newNodeList)
     })
     if (focusNewNode) {
@@ -748,7 +745,7 @@ class Render {
           ...params,
           ...(appointData || {})
         },
-        children: [...createUidForAppointNodes(appointChildren, true)]
+        children: [...createUidForAppointNodes(appointChildren)]
       }
       node.nodeData.children.push(newNode)
       // 插入子节点时自动展开子节点
@@ -788,7 +785,7 @@ class Render {
       if (!node.nodeData.children) {
         node.nodeData.children = []
       }
-      childList = createUidForAppointNodes(childList, true)
+      childList = createUidForAppointNodes(childList)
       node.nodeData.children.push(...childList)
       // 插入子节点时自动展开子节点
       node.setData({
