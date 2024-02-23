@@ -198,7 +198,7 @@ const transformOldXmind = content => {
       childrenItem.elements.length > 0
     ) {
       const children = getElementsByType(childrenItem.elements, 'attached')
-      children.forEach((item, index) => {
+      ;(children || []).forEach((item, index) => {
         const newChild = {}
         newNode.children.push(newChild)
         if (childrenSummary[index]) {
