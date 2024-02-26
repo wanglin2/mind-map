@@ -1052,6 +1052,16 @@ class Node {
       height: height * scaleY
     }
   }
+
+  // 高亮节点
+  highlight() {
+    if (this.group) this.group.addClass('smm-node-highlight')
+  }
+
+  // 取消高亮节点
+  closeHighlight() {
+    if (this.group) this.group.removeClass('smm-node-highlight')
+  }
 }
 
 export default Node

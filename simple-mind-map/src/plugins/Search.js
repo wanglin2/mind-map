@@ -69,14 +69,14 @@ class Search {
   // 结束搜索
   endSearch() {
     if (!this.isSearching) return
+    if (this.mindMap.opt.readonly && this.matchNodeList[this.currentIndex]) {
+      this.matchNodeList[this.currentIndex].closeHighlight()
+    }
     this.searchText = ''
     this.matchNodeList = []
     this.currentIndex = -1
     this.notResetSearchText = false
     this.isSearching = false
-    if (this.mindMap.opt.readonly) {
-      this.mindMap.renderer.closeHighlightNode()
-    }
     this.emitEvent()
   }
 
@@ -110,7 +110,7 @@ class Search {
       callback()
       // 只读模式下节点无法激活，所以通过高亮的方式
       if (this.mindMap.opt.readonly) {
-        this.mindMap.renderer.highlightNode(currentNode)
+        currentNode.highlight()
       }
     })
   }
