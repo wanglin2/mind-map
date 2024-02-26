@@ -132,13 +132,16 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isDark', 'isReadonly'])
+    ...mapState({
+      isReadonly: state => state.isReadonly,
+      isDark: state => state.localConfig.isDark
+    })
   },
   created() {
     this.lang = getLang()
   },
   methods: {
-    ...mapMutations(['setIsDark', 'setIsReadonly']),
+    ...mapMutations(['setLocalConfig', 'setIsReadonly']),
 
     readonlyChange() {
       this.setIsReadonly(!this.isReadonly)
@@ -161,7 +164,9 @@ export default {
     },
 
     toggleDark() {
-      this.setIsDark(!this.isDark)
+      this.setLocalConfig({
+        isDark: !this.isDark
+      })
     },
 
     handleCommand(command) {

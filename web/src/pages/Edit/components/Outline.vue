@@ -70,7 +70,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isDark', 'isReadonly'])
+    ...mapState({
+      isReadonly: state => state.isReadonly,
+      isDark: state => state.localConfig.isDark
+    })
   },
   created() {
     window.addEventListener('keydown', this.onKeyDown)

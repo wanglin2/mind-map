@@ -77,7 +77,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isOutlineEdit', 'isDark', 'isReadonly'])
+    ...mapState({
+      isReadonly: state => state.isReadonly,
+      isDark: state => state.localConfig.isDark,
+      isOutlineEdit: state => state.isOutlineEdit
+    })
   },
   watch: {
     isOutlineEdit(val) {

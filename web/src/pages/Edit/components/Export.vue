@@ -113,7 +113,7 @@ export default {
   computed: {
     ...mapState({
       openNodeRichText: state => state.localConfig.openNodeRichText,
-      isDark: state => state.isDark
+      isDark: state => state.localConfig.isDark
     }),
 
     downTypeList() {

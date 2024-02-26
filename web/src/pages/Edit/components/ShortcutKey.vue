@@ -38,7 +38,10 @@ export default {
     return {}
   },
   computed: {
-    ...mapState(['activeSidebar', 'isDark']),
+    ...mapState({
+      isDark: state => state.localConfig.isDark,
+      activeSidebar: state => state.activeSidebar
+    }),
 
     shortcutKeyList() {
       return shortcutKeyList[this.$i18n.locale] || shortcutKeyList.zh

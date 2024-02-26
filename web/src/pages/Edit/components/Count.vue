@@ -36,7 +36,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isDark']),
+    ...mapState({
+      isDark: state => state.localConfig.isDark
+    }),
   },
   created() {
     this.$bus.$on('data_change', this.onDataChange)

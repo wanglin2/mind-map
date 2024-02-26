@@ -116,7 +116,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isHandleLocalFile', 'isDark'])
+    ...mapState({
+      isDark: state => state.localConfig.isDark,
+      isHandleLocalFile: state => state.isHandleLocalFile
+    })
   },
   watch: {
     isHandleLocalFile(val) {

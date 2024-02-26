@@ -188,7 +188,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isDark']),
+    ...mapState({
+      isDark: state => state.localConfig.isDark
+    }),
     hasRoot() {
       return (
         this.activeNodes.findIndex(node => {

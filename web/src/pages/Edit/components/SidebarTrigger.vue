@@ -39,7 +39,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeSidebar', 'isDark']),
+    ...mapState({
+      isDark: state => state.localConfig.isDark,
+      activeSidebar: state => state.activeSidebar
+    }),
 
     triggerList() {
       return sidebarTriggerList[this.$i18n.locale] || sidebarTriggerList.zh

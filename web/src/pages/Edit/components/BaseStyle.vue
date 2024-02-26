@@ -1004,7 +1004,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeSidebar', 'localConfig', 'isDark']),
+    ...mapState({
+      activeSidebar: state => state.activeSidebar,
+      localConfig: state => state.localConfig,
+      isDark: state => state.localConfig.isDark
+    }),
     lineStyleList() {
       return lineStyleList[this.$i18n.locale] || lineStyleList.zh
     },
