@@ -1701,7 +1701,7 @@ class Render {
       if (targetNode) {
         targetNode.active()
         this.moveNodeToCenter(targetNode)
-        callback()
+        callback(targetNode)
       }
     })
   }

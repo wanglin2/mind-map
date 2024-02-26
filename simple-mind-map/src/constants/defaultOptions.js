@@ -275,5 +275,7 @@ export const defaultOpt = {
   customCreateNodePolygon: null,
   // 自定义转换节点连线路径的方法
   // 接收svg path字符串，返回转换后的svg path字符串
-  customTransformNodeLinePath: null
+  customTransformNodeLinePath: null,
+  // 是否仅搜索当前渲染的节点，被收起的节点不会被搜索到
+  isOnlySearchCurrentRenderNodes: false
 }

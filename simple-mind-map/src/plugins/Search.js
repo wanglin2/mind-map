@@ -4,6 +4,7 @@ import {
   isUndef,
   replaceHtmlText
 } from '../utils/index'
+import Node from '../core/render/node/Node'
 
 // 搜索插件
 class Search {
@@ -84,8 +85,14 @@ class Search {
   doSearch() {
     this.matchNodeList = []
     this.currentIndex = -1
-    bfsWalk(this.mindMap.renderer.root, node => {
-      let { richText, text } = node.getData()
+    const { isOnlySearchCurrentRenderNodes } = this.mindMap.opt
+    const tree = isOnlySearchCurrentRenderNodes
+      ? this.mindMap.renderer.root
+      : this.mindMap.renderer.renderTree
+    bfsWalk(tree, node => {
+      let { richText, text } = isOnlySearchCurrentRenderNodes
+        ? node.getData()
+        : node.data
       if (richText) {
         text = getTextFromHtml(text)
       }
@@ -103,16 +110,22 @@ class Search {
     } else {
       this.currentIndex = 0
     }
-    let currentNode = this.matchNodeList[this.currentIndex]
+    const currentNode = this.matchNodeList[this.currentIndex]
     this.notResetSearchText = true
-    this.mindMap.execCommand('GO_TARGET_NODE', currentNode, () => {
-      this.notResetSearchText = false
-      callback()
-      // 只读模式下节点无法激活，所以通过高亮的方式
-      if (this.mindMap.opt.readonly) {
-        currentNode.highlight()
+    this.mindMap.execCommand(
+      'GO_TARGET_NODE',
+      currentNode instanceof Node ? currentNode : currentNode.data.uid,
+      node => {
+        if (!(currentNode instanceof Node)) {
+          this.matchNodeList[this.currentIndex] = node
+        }
+        callback()
+        // 只读模式下节点无法激活，所以通过高亮的方式
+        if (this.mindMap.opt.readonly) {
+          node.highlight()
+        }
       }
-    })
+    )
   }
 
   // 替换当前节点
