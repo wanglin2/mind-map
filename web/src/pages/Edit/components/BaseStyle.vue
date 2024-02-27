@@ -880,7 +880,7 @@
         </div>
       </div>
       <!-- 是否开启手绘风格 -->
-      <div class="row">
+      <!-- <div class="row">
         <div class="rowItem">
           <el-checkbox
             v-model="localConfigs.isUseHandDrawnLikeStyle"
@@ -888,7 +888,7 @@
             >{{ $t('baseStyle.isUseHandDrawnLikeStyle') }}</el-checkbox
           >
         </div>
-      </div>
+      </div> -->
     </div>
   </Sidebar>
 </template>
