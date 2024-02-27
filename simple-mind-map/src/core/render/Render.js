@@ -1213,7 +1213,15 @@ class Render {
       // 如果只选中了一个节点，删除后激活其兄弟节点或者父节点
       needActiveNode = this.getNextActiveNode()
       for (let i = 0; i < list.length; i++) {
-        let node = list[i]
+        const node = list[i]
+        const currentEditNode = this.textEdit.getCurrentEditNode()
+        if (
+          currentEditNode &&
+          currentEditNode.getData('uid') === node.getData('uid')
+        ) {
+          // 如果当前节点正在编辑中，那么先完成编辑
+          this.textEdit.hideEditTextBox()
+        }
         if (isAppointNodes) list.splice(i, 1)
         if (node.isGeneralization) {
           this.deleteNodeGeneralization(node)
