@@ -112,22 +112,25 @@ class Search {
     }
     const currentNode = this.matchNodeList[this.currentIndex]
     this.notResetSearchText = true
-    this.mindMap.execCommand(
-      'GO_TARGET_NODE',
-      currentNode instanceof Node ? currentNode : currentNode.data.uid,
-      node => {
-        if (!(currentNode instanceof Node)) {
-          this.matchNodeList[this.currentIndex] = node
-        } else {
-          this.notResetSearchText = false
-        }
-        callback()
-        // 只读模式下节点无法激活，所以通过高亮的方式
-        if (this.mindMap.opt.readonly) {
-          node.highlight()
-        }
+    const uid =
+      currentNode instanceof Node
+        ? currentNode.getData('uid')
+        : currentNode.data.uid
+    const targetNode = this.mindMap.renderer.findNodeByUid(uid)
+    this.mindMap.execCommand('GO_TARGET_NODE', uid, node => {
+      if (!(currentNode instanceof Node)) {
+        this.matchNodeList[this.currentIndex] = node
       }
-    )
+      callback()
+      // 只读模式下节点无法激活，所以通过高亮的方式
+      if (this.mindMap.opt.readonly) {
+        node.highlight()
+      }
+      // 如果当前节点实例已经存在，则不会触发data_change事件，那么需要手动把标志复位
+      if (targetNode) {
+        this.notResetSearchText = false
+      }
+    })
   }
 
   // 替换当前节点
