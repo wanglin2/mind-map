@@ -9,3 +9,5 @@ content = content.replace(
   `$1'${pkg.version}'$2`
 )
 fs.writeFileSync(file, content)
+
+console.warn('请注意手绘风格选项是否开启！！！！')

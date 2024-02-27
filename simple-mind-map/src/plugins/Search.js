@@ -118,6 +118,8 @@ class Search {
       node => {
         if (!(currentNode instanceof Node)) {
           this.matchNodeList[this.currentIndex] = node
+        } else {
+          this.notResetSearchText = false
         }
         callback()
         // 只读模式下节点无法激活，所以通过高亮的方式
