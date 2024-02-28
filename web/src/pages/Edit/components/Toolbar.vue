@@ -266,23 +266,29 @@ export default {
         } else {
           dirHandle = node.data.handle
         }
-        const list = []
+        const dirList = []
+        const fileList = []
         for await (const [key, value] of dirHandle.entries()) {
           const isFile = value.kind === 'file'
           if (isFile && !/\.(smm|xmind|md|json)$/.test(value.name)) {
             continue
           }
           const enableEdit = isFile && /\.smm$/.test(value.name)
-          list.push({
+          const data = {
             id: key,
             name: value.name,
             type: value.kind,
             handle: value,
             leaf: isFile,
             enableEdit
-          })
+          }
+          if (isFile) {
+            fileList.push(data)
+          } else {
+            dirList.push(data)
+          }
         }
-        resolve(list)
+        resolve([...dirList, ...fileList])
       } catch (error) {
         console.log(error)
         this.fileTreeVisible = false
@@ -574,6 +580,7 @@ export default {
         overflow: hidden;
         border-radius: 5px;
         min-width: 200px;
+        box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
 
         &.expand {
           height: 300px;
