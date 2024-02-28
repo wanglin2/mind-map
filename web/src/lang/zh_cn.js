@@ -260,7 +260,8 @@ export default {
     fileContentError: '文件内容有误',
     fileOpenFailed: '文件打开失败',
     defaultFileName: '思维导图',
-    creatingTip: '正在创建文件'
+    creatingTip: '正在创建文件',
+    directory: '目录'
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',
