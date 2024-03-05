@@ -99,7 +99,7 @@ class MindMap {
   //  配置参数处理
   handleOpt(opt) {
     // 深拷贝一份节点数据
-    opt.data = simpleDeepClone(opt.data || {})
+    opt.data = this.handleData(opt.data)
     // 检查布局配置
     if (!layoutValueList.includes(opt.layout)) {
       opt.layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE
@@ -107,6 +107,16 @@ class MindMap {
     // 检查主题配置
     opt.theme = opt.theme && theme[opt.theme] ? opt.theme : 'default'
     return opt
+  }
+
+  // 预处理节点数据
+  handleData(data) {
+    data = simpleDeepClone(data || {})
+    // 根节点不能收起
+    if (!data.data.expand) {
+      data.data.expand = true
+    }
+    return data
   }
 
   // 创建容器元素
@@ -308,7 +318,7 @@ class MindMap {
 
   //  动态设置思维导图数据，纯节点数据
   setData(data) {
-    data = simpleDeepClone(data || {})
+    data = this.handleData(data)
     this.execCommand('CLEAR_ACTIVE_NODE')
     this.command.clearHistory()
     this.command.addHistory()
