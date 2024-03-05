@@ -294,4 +294,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/橘半.jpg" style="width: 50px;height: 50px;" />
         <span>橘半</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/pluvet.jpg" style="width: 50px;height: 50px;" />
+        <span>pluvet</span>
+    </span>
 </p>
