@@ -233,6 +233,7 @@ class Cooperate {
     // 设置当前数据
     const data = Array.from(this.awareness.getStates().values())
     this.currentAwarenessData = data
+    this.waitNodeUidMap = {}
     walk(data, (uid, node, userInfo) => {
       // 不显示自己
       if (userInfo.id === this.userInfo.id) return

@@ -94,11 +94,18 @@ function removeUser(userInfo) {
   this.updateUserListNode()
 }
 
+// 清空用户
+function emptyUser() {
+  this.userList = []
+  this.updateUserListNode()
+}
+
 export default {
   createUserListNode,
   updateUserListNode,
   createTextAvatar,
   createImageAvatar,
   addUser,
-  removeUser
+  removeUser,
+  emptyUser
 }
