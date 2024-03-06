@@ -420,6 +420,12 @@ class Node {
         this.isMultipleChoice = false
         return
       }
+      if (
+        this.mindMap.opt.onlyOneEnableActiveNodeOnCooperate &&
+        this.userList.length > 0
+      ) {
+        return
+      }
       this.active(e)
     })
     this.group.on('mousedown', e => {
@@ -486,10 +492,14 @@ class Node {
     })
     // 双击事件
     this.group.on('dblclick', e => {
-      if (this.mindMap.opt.readonly || e.ctrlKey) {
+      const { readonly, onlyOneEnableActiveNodeOnCooperate } = this.mindMap.opt
+      if (readonly || e.ctrlKey) {
         return
       }
       e.stopPropagation()
+      if (onlyOneEnableActiveNodeOnCooperate && this.userList.length > 0) {
+        return
+      }
       this.mindMap.emit('node_dblclick', this, e)
     })
     // 右键菜单事件

@@ -505,6 +505,11 @@ class Render {
 
   // 添加节点到激活列表里
   addNodeToActiveList(node) {
+    if (
+      this.mindMap.opt.onlyOneEnableActiveNodeOnCooperate &&
+      node.userList.length > 0
+    )
+      return
     const index = this.findActiveNodeIndex(node)
     if (index === -1) {
       this.mindMap.execCommand('SET_NODE_ACTIVE', node, true)
