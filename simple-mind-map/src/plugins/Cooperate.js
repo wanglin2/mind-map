@@ -131,6 +131,7 @@ class Cooperate {
 
   // 找出更新点
   updateChanges(data) {
+    const { beforeCooperateUpdate } = this.mindMap.opt
     const oldData = this.currentData
     this.currentData = data
     this.ydoc.transact(() => {
@@ -138,12 +139,24 @@ class Cooperate {
       Object.keys(data).forEach(uid => {
         // 新增的或已经存在的，如果数据发生了改变
         if (!oldData[uid] || !isSameObject(oldData[uid], data[uid])) {
+          if (beforeCooperateUpdate) {
+            beforeCooperateUpdate({
+              type: 'createOrUpdate',
+              data: data[uid]
+            })
+          }
           this.ymap.set(uid, data[uid])
         }
       })
       // 找出删除的
       Object.keys(oldData).forEach(uid => {
         if (!data[uid]) {
+          if (beforeCooperateUpdate) {
+            beforeCooperateUpdate({
+              type: 'delete',
+              data: oldData[uid]
+            })
+          }
           this.ymap.delete(uid)
         }
       })
