@@ -1618,7 +1618,8 @@ class Render {
         ...(data || {
           text: this.mindMap.opt.defaultGeneralizationText
         }),
-        range: item.range || null
+        range: item.range || null,
+        uid: createUid()
       }
       let generalization = item.node.getData('generalization')
       if (generalization) {
