@@ -715,7 +715,9 @@ class Node {
   // 销毁节点，不但会从画布删除，而且原节点直接置空，后续无法再插回画布
   destroy() {
     if (!this.group) return
-    this.emptyUser()
+    if (this.emptyUser) {
+      this.emptyUser()
+    }
     this.resetWhenDelete()
     this.group.remove()
     this.removeGeneralization()
