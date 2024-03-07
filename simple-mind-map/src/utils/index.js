@@ -4,6 +4,7 @@ import {
   selfCloseTagList
 } from '../constants/constant'
 import MersenneTwister from './mersenneTwister'
+
 //  深度优先遍历树
 export const walk = (
   root,
