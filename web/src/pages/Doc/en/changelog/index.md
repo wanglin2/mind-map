@@ -17,6 +17,8 @@ Fix:
 > 6.Fix the issue of rendering only the root node when expand: false is set to the root node in the node data;
 >
 > 7.Fix the collaborative editing plugin: When a node is selected and then folded, the activation status of the node disappears, but the selected status of the node still exists in other clients;
+>
+> 8.Optimize the export of markdowns and fix the issue of missing summaries;
 
 New:
 
@@ -31,6 +33,8 @@ New:
 > 5.Add lifecycle function configuration options before synchronizing collaborative editing node operations;
 >
 > 6.Add UID field to the summary node;
+>
+> 7.Added support for exporting txt files;
 
 Demo:
 
@@ -39,6 +43,10 @@ Demo:
 > 2.Modify the association logic between themes and dark colors;
 >
 > 3.Support reading local directories;
+>
+> 4.Fix the issue of selecting a file in the import pop-up window and then deleting it without actually deleting it;
+>
+> 5.Export new txt files;
 
 ## 0.9.7
 

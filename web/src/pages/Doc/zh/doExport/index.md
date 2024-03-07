@@ -140,3 +140,9 @@ MindMap.usePlugin(ExportXMind)
 ```
 
 导出为`xmind`文件类型，异步方法，返回一个`Promise`实例，返回的数据为一个`zip`压缩包的`data:url`数据，可以直接下载。
+
+### txt()
+
+> v0.9.8+
+
+导出`txt`文件。
