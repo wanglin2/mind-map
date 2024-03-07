@@ -308,6 +308,14 @@ export default {
         &.smm {
           color: #409eff;
         }
+
+        &.xmind {
+          color: #f55e5e;
+        }
+
+        &.txt {
+          color: #70798e;
+        }
       }
 
       .info {

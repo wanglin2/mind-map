@@ -575,5 +575,11 @@ export const downTypeList = [
     type: 'xmind',
     icon: 'iconxmind',
     desc: 'XMind格式'
+  },
+  {
+    name: 'Txt',
+    type: 'txt',
+    icon: 'iconTXT',
+    desc: '纯文本文件'
   }
 ]
