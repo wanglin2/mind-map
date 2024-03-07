@@ -20,6 +20,14 @@
 - [x] Provide rich configurations to meet various scenarios and usage habits
 - [x] Support collaborative editing
 
+> Features that will not be implemented:
+>
+> 1.Free nodes, i.e. multiple root nodes;
+>
+> 2.Continue adding nodes after the summary node;
+>
+> If you need the above features, this library may not meet your needs.
+
 ## Repository Catalog Introduction
 
 1.`simple-mind-map`

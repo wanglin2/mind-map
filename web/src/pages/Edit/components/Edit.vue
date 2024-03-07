@@ -96,7 +96,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(SearchPlugin)
   .usePlugin(Painter)
   .usePlugin(Formula)
-// .usePlugin(Cooperate)// 协同插件
+  .usePlugin(Cooperate) // 协同插件
 
 // 注册自定义主题
 customThemeList.forEach(item => {
@@ -346,6 +346,23 @@ export default {
             default:
               break
           }
+        },
+        beforeCooperateUpdate: ({ type, data }) => {
+          if (type === 'createOrUpdate') {
+            if (data.data.version === undefined) {
+              data.data.version = 0
+            }
+            const newVersion = data.data.version + 1
+            data.data.version = newVersion
+            const targetNode = this.mindMap.renderer.findNodeByUid(
+              data.data.uid
+            )
+            if (targetNode) {
+              targetNode.setData({
+                version: newVersion
+              })
+            }
+          }
         }
         // handleNodePasteImg: img => {
         //   console.log(img)
@@ -437,6 +454,24 @@ export default {
       ].forEach(event => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args)
+        })
+      })
+      this.mindMap.on('data_change_detail', actions => {
+        actions.forEach(({ action, oldData, data }) => {
+          console.log(action, oldData, data)
+          if (action === 'create') {
+            console.log('调新增接口', data)
+          } else if (action === 'update') {
+            const oldChildrenLength = oldData.children.length
+            const newChildrenLength = data.children.length
+            if (oldChildrenLength !== newChildrenLength) {
+              console.log('调移动接口', oldChildrenLength, newChildrenLength)
+            } else {
+              console.log('更新调接口')
+            }
+          } else if (action === 'delete') {
+            console.log('调删除节点', data)
+          }
         })
       })
       this.bindSaveEvent()
@@ -701,7 +736,7 @@ export default {
       if (this.mindMap.cooperate && this.$route.query.userName) {
         this.mindMap.cooperate.setProvider(null, {
           roomName: 'demo-room',
-          signalingList: ['ws://192.168.3.125:4444']
+          signalingList: ['ws://10.16.83.11:4444']
         })
         this.mindMap.cooperate.setUserInfo({
           id: Math.random(),

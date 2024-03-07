@@ -21,3 +21,9 @@ Register temporary shortcut keys, which means editing can be completed through t
 - `node`：Node instance to enter for editing
 
 Manually enable node editing. By default, it will enter node editing when double clicking or pressing F2 on the node.
+
+### getCurrentEditNode()
+
+> v0.9.8+
+
+Get the node instance currently being edited.

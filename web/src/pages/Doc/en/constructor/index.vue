@@ -637,6 +637,27 @@
 <td>Is it allowed to adjust the position of the two endpoints of the associated line</td>
 <td></td>
 </tr>
+<tr>
+<td>isOnlySearchCurrentRenderNodes（v0.9.8+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Is it necessary to only search for the current rendered node, and nodes that have been collapsed will not be searched for</td>
+<td></td>
+</tr>
+<tr>
+<td>onlyOneEnableActiveNodeOnCooperate（v0.9.8+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>During collaborative editing, the same node cannot be selected by multiple people at the same time</td>
+<td></td>
+</tr>
+<tr>
+<td>beforeCooperateUpdate（v0.9.8+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>During collaborative editing, node operations are about to be updated to the lifecycle functions of other clients. The function takes an object as a parameter:{ type: 【createOrUpdate（Create or update nodes）、delete（Delete node）】, data: 【1.When type=createOrUpdate, it represents the node data that has been created or updated, which will be synchronized to other clients, so you can modify the data; 2.When type=delete, represents the deleted node data】 }</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Data structure</h3>
@@ -1363,7 +1384,7 @@ redo. All commands are as follows:</p>
 <tr>
 <td>GO_TARGET_NODE（v0.6.7+）</td>
 <td>Navigate to a node, and if the node is collapsed, it will automatically expand to that node</td>
-<td>node（Node instance or node uid to locate）、callback（v0.6.9+, Callback function after positioning completion）</td>
+<td>node（Node instance or node uid to locate）、callback（v0.6.9+, Callback function after positioning completion, v0.9.8+receives a parameter representing the target node instance）</td>
 </tr>
 <tr>
 <td>INSERT_MULTI_NODE（v0.7.2+）</td>

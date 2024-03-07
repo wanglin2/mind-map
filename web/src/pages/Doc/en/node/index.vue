@@ -31,6 +31,16 @@
 </blockquote>
 <p>Whether the node is currently being dragged</p>
 <h2>Methods</h2>
+<h3>highlight()</h3>
+<blockquote>
+<p>v0.9.8+</p>
+</blockquote>
+<p>Highlight node.</p>
+<h3>closeHighlight()</h3>
+<blockquote>
+<p>v0.9.8+</p>
+</blockquote>
+<p>Unhighlight node.</p>
 <h3>getPureData(removeActiveState = true, removeId = false)</h3>
 <blockquote>
 <p>v0.9.0+</p>

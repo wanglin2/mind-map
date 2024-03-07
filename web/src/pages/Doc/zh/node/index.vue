@@ -31,6 +31,16 @@
 </blockquote>
 <p>节点是否正在拖拽中</p>
 <h2>方法</h2>
+<h3>highlight()</h3>
+<blockquote>
+<p>v0.9.8+</p>
+</blockquote>
+<p>高亮节点。</p>
+<h3>closeHighlight()</h3>
+<blockquote>
+<p>v0.9.8+</p>
+</blockquote>
+<p>取消高亮节点。</p>
 <h3>getPureData(removeActiveState = true, removeId = false)</h3>
 <blockquote>
 <p>v0.9.0+</p>

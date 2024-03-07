@@ -1,6 +1,32 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.9.8</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue of incorrect calculation function of mind maps within the canvas and scroll bar positions when the canvas size changes;</p>
+<p>2.Fix the issue of errors when importing some old version xmind files;</p>
+<p>3.Fix the issue where the highlight box of the collapsed node does not disappear when searching for highlighted nodes in read-only mode;</p>
+<p>4.Fix the issue where data changes during search and search results are not updated in certain situations;</p>
+<p>5.Fix the issue of deleting adjacent nodes when deleting nodes that are currently being edited;</p>
+<p>6.Fix the issue of rendering only the root node when expand: false is set to the root node in the node data;</p>
+<p>7.Fix the collaborative editing plugin: When a node is selected and then folded, the activation status of the node disappears, but the selected status of the node still exists in other clients;</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.The commands such as INSERTNODE will not overwrite custom UIDs;</p>
+<p>2.Methods for adding and removing highlighting for node instances; Adjust the way read-only mode searches for highlighted nodes;</p>
+<p>3.Add configuration for searching all nodes (including those that have been folded); Search defaults to searching all nodes;</p>
+<p>4.Add configuration options that cannot be selected by multiple people on the same node during collaborative editing;</p>
+<p>5.Add lifecycle function configuration options before synchronizing collaborative editing node operations;</p>
+<p>6.Add UID field to the summary node;</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.Fix the issue where shortcut keys become invalid after opening label pop ups and note pop ups and clicking on the mask to close them;</p>
+<p>2.Modify the association logic between themes and dark colors;</p>
+<p>3.Support reading local directories;</p>
+</blockquote>
 <h2>0.9.7</h2>
 <p>Fix:</p>
 <blockquote>

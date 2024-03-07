@@ -14,6 +14,11 @@
 <li><code>node</code>：Node instance to enter for editing</li>
 </ul>
 <p>Manually enable node editing. By default, it will enter node editing when double clicking or pressing F2 on the node.</p>
+<h3>getCurrentEditNode()</h3>
+<blockquote>
+<p>v0.9.8+</p>
+</blockquote>
+<p>Get the node instance currently being edited.</p>
 
   </div>
 </template>

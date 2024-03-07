@@ -543,6 +543,24 @@
 <td>true</td>
 <td>是否允许调整关联线两个端点的位置</td>
 </tr>
+<tr>
+<td>isOnlySearchCurrentRenderNodes（v0.9.8+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>是否仅搜索当前渲染的节点，被收起的节点不会被搜索到</td>
+</tr>
+<tr>
+<td>onlyOneEnableActiveNodeOnCooperate（v0.9.8+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>协同编辑时，同一个节点不能同时被多人选中</td>
+</tr>
+<tr>
+<td>beforeCooperateUpdate（v0.9.8+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>协同编辑时，节点操作即将更新到其他客户端前的生命周期函数。函数接收一个对象作为参数：{ type: 【createOrUpdate（创建节点或更新节点）、delete（删除节点）】, data: 【1.当type=createOrUpdate时，代表被创建或被更新的节点数据，即将同步到其他客户端，所以你可以修改该数据；2.当type=delete时，代表被删除的节点数据】 }</td>
+</tr>
 </tbody>
 </table>
 <h3>数据结构</h3>
@@ -1264,7 +1282,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>GO_TARGET_NODE（v0.6.7+）</td>
 <td>定位到某个节点，如果该节点被收起，那么会自动展开到该节点</td>
-<td>node（要定位到的节点实例或节点uid）、callback（v0.6.9+，定位完成后的回调函数）</td>
+<td>node（要定位到的节点实例或节点uid）、callback（v0.6.9+，定位完成后的回调函数，v0.9.8+接收一个参数，代表目标节点实例）</td>
 </tr>
 <tr>
 <td>INSERT_MULTI_NODE（v0.7.2+）</td>
