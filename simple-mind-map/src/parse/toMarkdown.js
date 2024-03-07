@@ -1,12 +1,7 @@
-import { walk } from '../utils'
+import { walk, nodeRichTextToTextWithWrap } from '../utils'
 
-let el = null
-const getText = str => {
-  if (!el) {
-    el = document.createElement('div')
-  }
-  el.innerHTML = str
-  return el.textContent
+const getNodeText = data => {
+  return data.richText ? nodeRichTextToTextWithWrap(data.text) : data.text
 }
 
 const getTitleMark = level => {
@@ -24,21 +19,22 @@ export const transformToMarkdown = root => {
     root,
     null,
     (node, parent, isRoot, layerIndex) => {
-      let level = layerIndex + 1
-      let text = node.data.richText ? getText(node.data.text) : node.data.text
+      const level = layerIndex + 1
       if (level <= 6) {
         content += getTitleMark(level)
       } else {
         content += getIndentMark(level)
       }
-      content += ' ' + text
+      content += ' ' + getNodeText(node.data)
       // 概要
-      let generalization = node.data.generalization
-      if (generalization && generalization.text) {
-        let generalizationText = generalization.richText
-          ? getText(generalization.text)
-          : generalization.text
-        content += `[${generalizationText}]`
+      const generalization = node.data.generalization
+      if (Array.isArray(generalization)) {
+        content += generalization.map(item => {
+          return ` [${getNodeText(item)}]`
+        })
+      } else if (generalization && generalization.text) {
+        const generalizationText = getNodeText(generalization)
+        content += ` [${generalizationText}]`
       }
       content += '\n\n'
       // 备注
