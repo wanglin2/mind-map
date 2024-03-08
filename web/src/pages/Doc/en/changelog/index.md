@@ -19,6 +19,8 @@ Fix:
 > 7.Fix the collaborative editing plugin: When a node is selected and then folded, the activation status of the node disappears, but the selected status of the node still exists in other clients;
 >
 > 8.Optimize the export of markdowns and fix the issue of missing summaries;
+>
+> 9.Fix the issue of ineffective forward and backward operations on node positions during free drag and drop;
 
 New:
 
