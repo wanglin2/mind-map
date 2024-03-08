@@ -28,6 +28,8 @@ class Cooperate {
     this.currentData = null
     // 用户信息
     this.userInfo = null
+    // 是否正在重新设置思维导图数据
+    this.isSetData = false
     // 绑定事件
     this.bindEvent()
     // 处理实例化时传入的思维导图数据
@@ -92,8 +94,8 @@ class Cooperate {
     this.mindMap.on('node_tree_render_end', this.onNodeTreeRenderEnd)
 
     // 监听设置思维导图数据事件
-    this.initData = this.initData.bind(this)
-    this.mindMap.on('set_data', this.initData)
+    this.onSetData = this.onSetData.bind(this)
+    this.mindMap.on('set_data', this.onSetData)
   }
 
   // 解绑事件
@@ -104,7 +106,7 @@ class Cooperate {
     this.mindMap.off('data_change', this.onDataChange)
     this.mindMap.off('node_active', this.onNodeActive)
     this.mindMap.off('node_tree_render_end', this.onNodeTreeRenderEnd)
-    this.mindMap.off('set_data', this.initData)
+    this.mindMap.off('set_data', this.onSetData)
     this.ydoc.destroy()
   }
 
@@ -125,6 +127,10 @@ class Cooperate {
 
   // 当前思维导图改变后的处理，触发同步
   onDataChange(data) {
+    if (this.isSetData) {
+      this.isSetData = false
+      return
+    }
     const res = transformTreeDataToObject(data)
     this.updateChanges(res)
   }
@@ -143,7 +149,7 @@ class Cooperate {
           createOrUpdateList.push({
             uid,
             data: data[uid],
-            oldData: oldData[uid],
+            oldData: oldData[uid]
           })
         }
       })
@@ -201,6 +207,12 @@ class Cooperate {
       }
     })
     this.waitNodeUidMap = {}
+  }
+
+  // 监听思维导图数据的重新设置事件
+  onSetData(data) {
+    this.isSetData = true
+    this.initData(data)
   }
 
   // 设置用户信息
