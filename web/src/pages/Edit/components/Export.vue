@@ -113,8 +113,8 @@ export default {
   computed: {
     ...mapState({
       openNodeRichText: state => state.localConfig.openNodeRichText,
-      isDark: state => state.isDark,
-      localFileName: state => state.fileName
+      localFileName: state => state.fileName,
+      isDark: state => state.localConfig.isDark
     }),
 
     downTypeList() {
@@ -309,6 +309,14 @@ export default {
 
         &.smm {
           color: #409eff;
+        }
+
+        &.xmind {
+          color: #f55e5e;
+        }
+
+        &.txt {
+          color: #70798e;
         }
       }
 

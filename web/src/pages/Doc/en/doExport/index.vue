@@ -127,6 +127,11 @@ MindMap.usePlugin(ExportPDF)
 MindMap.usePlugin(ExportXMind)
 </code></pre>
 <p>Export as an <code>xmind</code> file type, asynchronous method, returns a <code>Promise</code> instance, and the returned data is the <code>data:url</code> data of a <code>zip</code> compressed package, which can be directly downloaded.</p>
+<h3>txt()</h3>
+<blockquote>
+<p>v0.9.8+</p>
+</blockquote>
+<p>Export as <code>txt</code> file.</p>
 
   </div>
 </template>

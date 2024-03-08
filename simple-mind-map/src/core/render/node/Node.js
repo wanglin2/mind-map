@@ -203,6 +203,8 @@ class Node {
 
   //  计算节点的宽高
   getSize() {
+    this.customLeft = this.getData('customLeft') || undefined
+    this.customTop = this.getData('customTop') || undefined
     this.updateGeneralization()
     this.createNodeData()
     let { width, height } = this.getNodeRect()
@@ -420,6 +422,12 @@ class Node {
         this.isMultipleChoice = false
         return
       }
+      if (
+        this.mindMap.opt.onlyOneEnableActiveNodeOnCooperate &&
+        this.userList.length > 0
+      ) {
+        return
+      }
       this.active(e)
     })
     this.group.on('mousedown', e => {
@@ -486,10 +494,14 @@ class Node {
     })
     // 双击事件
     this.group.on('dblclick', e => {
-      if (this.mindMap.opt.readonly || e.ctrlKey) {
+      const { readonly, onlyOneEnableActiveNodeOnCooperate } = this.mindMap.opt
+      if (readonly || e.ctrlKey) {
         return
       }
       e.stopPropagation()
+      if (onlyOneEnableActiveNodeOnCooperate && this.userList.length > 0) {
+        return
+      }
       this.mindMap.emit('node_dblclick', this, e)
     })
     // 右键菜单事件
@@ -705,6 +717,9 @@ class Node {
   // 销毁节点，不但会从画布删除，而且原节点直接置空，后续无法再插回画布
   destroy() {
     if (!this.group) return
+    if (this.emptyUser) {
+      this.emptyUser()
+    }
     this.resetWhenDelete()
     this.group.remove()
     this.removeGeneralization()
@@ -1051,6 +1066,16 @@ class Node {
       width: width * scaleX,
       height: height * scaleY
     }
+  }
+
+  // 高亮节点
+  highlight() {
+    if (this.group) this.group.addClass('smm-node-highlight')
+  }
+
+  // 取消高亮节点
+  closeHighlight() {
+    if (this.group) this.group.removeClass('smm-node-highlight')
   }
 }
 

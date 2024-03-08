@@ -95,7 +95,9 @@ export default {
     create: '新建文件',
     removeImage: '移除图片',
     removeHyperlink: '移除超链接',
-    removeNote: '移除备注'
+    removeNote: '移除备注',
+    removeCustomStyles: '一键去除自定义样式',
+    removeAllNodeCustomStyles: '一键去除所有节点自定义样式'
   },
   count: {
     words: '字数',
@@ -260,7 +262,8 @@ export default {
     fileContentError: '文件内容有误',
     fileOpenFailed: '文件打开失败',
     defaultFileName: '思维导图',
-    creatingTip: '正在创建文件'
+    creatingTip: '正在创建文件',
+    directory: '目录'
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',

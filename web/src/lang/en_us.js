@@ -95,7 +95,9 @@ export default {
     create: 'Create new file',
     removeImage: 'Remove image',
     removeHyperlink: 'Remove hyperlink',
-    removeNote: 'Remove note'
+    removeNote: 'Remove note',
+    removeCustomStyles: 'Remove custom styles',
+    removeAllNodeCustomStyles: 'Remove all node custom styles'
   },
   count: {
     words: 'Words',
@@ -264,7 +266,8 @@ export default {
     fileContentError: 'File content error',
     fileOpenFailed: 'File open failed',
     defaultFileName: 'Mind map',
-    creatingTip: 'Creating file'
+    creatingTip: 'Creating file',
+    directory: 'Directory'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',

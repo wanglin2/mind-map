@@ -53,7 +53,11 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeSidebar', 'isDark', 'localConfig'])
+    ...mapState({
+      activeSidebar: state => state.activeSidebar, 
+      isDark: state => state.localConfig.isDark, 
+      localConfig: state => state.localConfig
+    })
   },
   watch: {
     activeSidebar(val) {

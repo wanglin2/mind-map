@@ -100,8 +100,6 @@ export default {
     },
 
     handleShowNodeLink() {
-      this.activeNodes[0].mindMap.keyCommand.pause()
-      this.$bus.$emit('startTextEdit')
       this.dialogVisible = true
     },
 
@@ -112,8 +110,6 @@ export default {
      */
     cancel() {
       this.dialogVisible = false
-      this.activeNodes[0].mindMap.keyCommand.recovery()
-      this.$bus.$emit('endTextEdit')
     },
 
     /**

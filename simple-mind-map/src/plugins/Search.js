@@ -4,6 +4,7 @@ import {
   isUndef,
   replaceHtmlText
 } from '../utils/index'
+import Node from '../core/render/node/Node'
 
 // 搜索插件
 class Search {
@@ -69,14 +70,14 @@ class Search {
   // 结束搜索
   endSearch() {
     if (!this.isSearching) return
+    if (this.mindMap.opt.readonly && this.matchNodeList[this.currentIndex]) {
+      this.matchNodeList[this.currentIndex].closeHighlight()
+    }
     this.searchText = ''
     this.matchNodeList = []
     this.currentIndex = -1
     this.notResetSearchText = false
     this.isSearching = false
-    if (this.mindMap.opt.readonly) {
-      this.mindMap.renderer.closeHighlightNode()
-    }
     this.emitEvent()
   }
 
@@ -84,8 +85,14 @@ class Search {
   doSearch() {
     this.matchNodeList = []
     this.currentIndex = -1
-    bfsWalk(this.mindMap.renderer.root, node => {
-      let { richText, text } = node.getData()
+    const { isOnlySearchCurrentRenderNodes } = this.mindMap.opt
+    const tree = isOnlySearchCurrentRenderNodes
+      ? this.mindMap.renderer.root
+      : this.mindMap.renderer.renderTree
+    bfsWalk(tree, node => {
+      let { richText, text } = isOnlySearchCurrentRenderNodes
+        ? node.getData()
+        : node.data
       if (richText) {
         text = getTextFromHtml(text)
       }
@@ -103,14 +110,25 @@ class Search {
     } else {
       this.currentIndex = 0
     }
-    let currentNode = this.matchNodeList[this.currentIndex]
+    const currentNode = this.matchNodeList[this.currentIndex]
     this.notResetSearchText = true
-    this.mindMap.execCommand('GO_TARGET_NODE', currentNode, () => {
-      this.notResetSearchText = false
+    const uid =
+      currentNode instanceof Node
+        ? currentNode.getData('uid')
+        : currentNode.data.uid
+    const targetNode = this.mindMap.renderer.findNodeByUid(uid)
+    this.mindMap.execCommand('GO_TARGET_NODE', uid, node => {
+      if (!(currentNode instanceof Node)) {
+        this.matchNodeList[this.currentIndex] = node
+      }
       callback()
       // 只读模式下节点无法激活，所以通过高亮的方式
       if (this.mindMap.opt.readonly) {
-        this.mindMap.renderer.highlightNode(currentNode)
+        node.highlight()
+      }
+      // 如果当前节点实例已经存在，则不会触发data_change事件，那么需要手动把标志复位
+      if (targetNode) {
+        this.notResetSearchText = false
       }
     })
   }

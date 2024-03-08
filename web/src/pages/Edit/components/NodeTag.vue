@@ -40,7 +40,10 @@
 </template>
 
 <script>
-import { generateColorByContent, isMobile } from 'simple-mind-map/src/utils/index'
+import {
+  generateColorByContent,
+  isMobile
+} from 'simple-mind-map/src/utils/index'
 
 /**
  * @Author: 王林
@@ -57,6 +60,13 @@ export default {
       activeNodes: [],
       max: 5,
       isMobile: isMobile()
+    }
+  },
+  watch: {
+    dialogVisible(val, oldVal) {
+      if (!val && oldVal) {
+        this.$bus.$emit('endTextEdit')
+      }
     }
   },
   created() {
@@ -112,7 +122,6 @@ export default {
      */
     cancel() {
       this.dialogVisible = false
-      this.$bus.$emit('endTextEdit')
     },
 
     /**

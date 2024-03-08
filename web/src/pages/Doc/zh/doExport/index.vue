@@ -129,6 +129,11 @@ MindMap.usePlugin(ExportPDF)
 MindMap.usePlugin(ExportXMind)
 </code></pre>
 <p>导出为<code>xmind</code>文件类型，异步方法，返回一个<code>Promise</code>实例，返回的数据为一个<code>zip</code>压缩包的<code>data:url</code>数据，可以直接下载。</p>
+<h3>txt()</h3>
+<blockquote>
+<p>v0.9.8+</p>
+</blockquote>
+<p>导出<code>txt</code>文件。</p>
 
   </div>
 </template>

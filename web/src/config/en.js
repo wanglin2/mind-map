@@ -480,5 +480,11 @@ export const downTypeList = [
     type: 'xmind',
     icon: 'iconxmind',
     desc: 'XMind file'
+  },
+  {
+    name: 'Txt',
+    type: 'txt',
+    icon: 'iconTXT',
+    desc: 'Plain text file'
   }
 ]

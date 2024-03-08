@@ -110,6 +110,9 @@ const mindMap = new MindMap({
 | isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）     | Boolean |  true | 当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas配置不再起作用 |
 | associativeLineInitPointsPosition（v0.9.5+）     | null / { from, to } | { from: '', to: '' }  | 默认情况下，新创建的关联线两个端点的位置是根据两个节点中心点的相对位置来计算的，如果你想固定位置，可以通过这个选项来配置。from和to都不传，则都自动计算，如果只传一个，另一个则会自动计算。from和to可选值：left、top、bottom、right |
 | enableAdjustAssociativeLinePoints（v0.9.5+）     | Boolean | true  | 是否允许调整关联线两个端点的位置 |
+| isOnlySearchCurrentRenderNodes（v0.9.8+）     | Boolean | false  | 是否仅搜索当前渲染的节点，被收起的节点不会被搜索到 |
+| onlyOneEnableActiveNodeOnCooperate（v0.9.8+）     | Boolean | false  | 协同编辑时，同一个节点不能同时被多人选中 |
+| beforeCooperateUpdate（v0.9.8+）     | Function、null | null  | 协同编辑时，节点操作即将更新到其他客户端前的生命周期函数。函数接收一个对象作为参数：{ type: 【createOrUpdate（创建节点或更新节点）、delete（删除节点）】, list: 【数组类型，1.当type=createOrUpdate时，代表被创建或被更新的节点数据，即将同步到其他客户端，所以你可以修改该数据；2.当type=delete时，代表被删除的节点数据】 } |
 
 ### 数据结构
 
@@ -527,13 +530,15 @@ mindMap.updateConfig({
 | SET_NODE_CUSTOM_POSITION（v0.2.0+） | 设置节点自定义位置                                           | node（要设置的节点）、 left（自定义的x坐标，默认为undefined）、 top（自定义的y坐标，默认为undefined） |
 | RESET_LAYOUT（v0.2.0+）             | 一键整理布局                                                 |                                                              |
 | SET_NODE_SHAPE（v0.2.4+）           | 设置节点形状                                                 | node（要设置的节点）、shape（形状，全部形状：[Shape.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/core/render/node/Shape.js)） |
-| GO_TARGET_NODE（v0.6.7+）           |  定位到某个节点，如果该节点被收起，那么会自动展开到该节点   | node（要定位到的节点实例或节点uid）、callback（v0.6.9+，定位完成后的回调函数） |
+| GO_TARGET_NODE（v0.6.7+）           |  定位到某个节点，如果该节点被收起，那么会自动展开到该节点   | node（要定位到的节点实例或节点uid）、callback（v0.6.9+，定位完成后的回调函数，v0.9.8+接收一个参数，代表目标节点实例） |
 | INSERT_MULTI_NODE（v0.7.2+）           |  给指定的节点同时插入多个同级节点，操作节点为当前激活的节点或指定节点   | appointNodes（可选，指定节点，指定多个节点可以传一个数组）, nodeList（新插入节点的数据列表，数组类型） |
 | INSERT_MULTI_CHILD_NODE（v0.7.2+）           |  给指定的节点同时插入多个子节点，操作节点为当前激活的节点或指定节点   | appointNodes（可选，指定节点，指定多个节点可以传一个数组）, childList（新插入节点的数据列表，数组类型） |
 | INSERT_FORMULA（v0.7.2+）           |  给节点插入数学公式，操作节点为当前激活的节点或指定节点   | formula（要插入的数学公式，LaTeX 语法）, appointNodes（可选，指定要插入公式的节点，多个节点可以传数组，否则默认为当前激活的节点） |
 | INSERT_PARENT_NODE（v0.8.0+）           |  给指定的节点插入父节点，操作节点为当前激活的节点或指定节点   | openEdit（是否激活新插入的节点并进入编辑模式，默认为`true`）、 appointNodes（可选，指定要插入父节点的节点，指定多个节点可以传一个数组）、 appointData（可选，指定新创建节点的数据，比如{text: 'xxx', ...}，详细结构可以参考[exampleData.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/example/exampleData.js)） |
 | REMOVE_CURRENT_NODE（v0.8.0+）           |   仅删除当前节点，操作节点为当前激活的节点或指定节点   | appointNodes（可选，指定要删除的节点，指定多个节点可以传一个数组） |
 | MOVE_UP_ONE_LEVEL（v0.9.6+）           |  将指定节点上移一个层级    | node（可选，指定要上移层级的节点，不传则为当前激活节点中的第一个） |
+| REMOVE_CUSTOM_STYLES（v0.9.7+）           |  一键去除某个节点的自定义样式    | node（可选，指定要清除自定义样式的节点，不传则为当前激活节点中的第一个） |
+| REMOVE_ALL_NODE_CUSTOM_STYLES（v0.9.7+）           |  一键去除多个节点或所有节点的自定义样式    | appointNodes（可选，节点实例数组，指定要去除自定义样式的多个节点，如果不传则会去除当前画布所有节点的自定义样式） |
 
 ### setData(data)
 

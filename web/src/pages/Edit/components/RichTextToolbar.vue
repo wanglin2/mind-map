@@ -144,7 +144,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isDark']),
+    ...mapState({
+      isDark: state => state.localConfig.isDark
+    }),
 
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh

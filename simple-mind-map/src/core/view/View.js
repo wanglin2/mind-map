@@ -128,6 +128,10 @@ class View {
         this.translateXY(mx, my)
       }
     })
+    this.mindMap.on('resize', () => {
+      if (!this.checkNeedMindMapInCanvas()) return
+      this.transform()
+    })
   }
 
   //  获取当前变换状态数据
@@ -313,19 +317,30 @@ class View {
     this.translateXY(newX, newY)
   }
 
-  // 将思维导图限制在画布内
-  limitMindMapInCanvas() {
+  // 判断是否需要将思维导图限制在画布内
+  checkNeedMindMapInCanvas() {
     const { isLimitMindMapInCanvasWhenHasScrollbar, isLimitMindMapInCanvas } =
       this.mindMap.opt
     // 如果注册了滚动条插件，那么使用isLimitMindMapInCanvasWhenHasScrollbar配置
     if (this.mindMap.scrollbar) {
-      if (!isLimitMindMapInCanvasWhenHasScrollbar) return
+      return isLimitMindMapInCanvasWhenHasScrollbar
     } else {
       // 否则使用isLimitMindMapInCanvas配置
-      if (!isLimitMindMapInCanvas) return
+      return isLimitMindMapInCanvas
     }
+  }
+
+  // 将思维导图限制在画布内
+  limitMindMapInCanvas() {
+    if (!this.checkNeedMindMapInCanvas()) return
 
     let { scale, left, top, right, bottom } = this.getPositionLimit()
+
+    // 画布宽高改变了，但是思维导图元素变换的中心点依旧是原有位置，所以需要加上中心点变化量
+    const centerXChange =
+      ((this.mindMap.width - this.mindMap.initWidth) / 2) * scale
+    const centerYChange =
+      ((this.mindMap.height - this.mindMap.initHeight) / 2) * scale
 
     // 如果缩放值改变了
     const scaleRatio = this.scale / scale
@@ -338,10 +353,10 @@ class View {
     const centerX = this.mindMap.width / 2
     const centerY = this.mindMap.height / 2
     const scaleOffset = this.scale - 1
-    left -= scaleOffset * centerX
-    right -= scaleOffset * centerX
-    top -= scaleOffset * centerY
-    bottom -= scaleOffset * centerY
+    left -= scaleOffset * centerX - centerXChange
+    right -= scaleOffset * centerX - centerXChange
+    top -= scaleOffset * centerY - centerYChange
+    bottom -= scaleOffset * centerY - centerYChange
 
     // 判断是否超出边界
     if (this.x > left) {

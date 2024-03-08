@@ -17,11 +17,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   addRecentFileList: (fileList) => ipcRenderer.invoke('addRecentFileList', fileList),
   getRecentFileList: () => ipcRenderer.invoke('getRecentFileList'),
   clearRecentFileList: () => ipcRenderer.invoke('clearRecentFileList'),
-  openFileInDir: file => ipcRenderer.send('openFileInDir', file),
+  openFileInDir: file => ipcRenderer.invoke('openFileInDir', file),
   deleteFile: file => ipcRenderer.invoke('deleteFile', file),
   onRefreshRecentFileList: callback =>
     ipcRenderer.on('refreshRecentFileList', callback),
-  openFile: file => ipcRenderer.send('openFile', file),
+  openFile: file => ipcRenderer.invoke('openFile', file),
   selectOpenFile: () => ipcRenderer.send('selectOpenFile'),
   copyFile: file => ipcRenderer.invoke('copyFile', file)
 })

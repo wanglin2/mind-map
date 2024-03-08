@@ -8,10 +8,12 @@
     <el-upload
       ref="upload"
       action="x"
+      accept=".smm,.json,.xmind,.xlsx,.md"
       :file-list="fileList"
       :auto-upload="false"
       :multiple="false"
       :on-change="onChange"
+      :on-remove="onRemove"
       :limit="1"
       :on-exceed="onExceed"
     >
@@ -115,6 +117,11 @@ export default {
       } else {
         this.fileList.push(file)
       }
+    },
+
+    // 移除文件
+    onRemove(file, fileList) {
+      this.fileList = fileList
     },
 
     /**

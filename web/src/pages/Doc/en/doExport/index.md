@@ -136,3 +136,9 @@ MindMap.usePlugin(ExportXMind)
 ```
 
 Export as an `xmind` file type, asynchronous method, returns a `Promise` instance, and the returned data is the `data:url` data of a `zip` compressed package, which can be directly downloaded.
+
+### txt()
+
+> v0.9.8+
+
+Export as `txt` file.

@@ -315,4 +315,12 @@ export default class TextEdit {
     this.textEditNode.style.transform = 'translateY(0)'
     this.showTextEdit = false
   }
+
+  // 获取当前正在编辑中的节点实例
+  getCurrentEditNode() {
+    if (this.mindMap.richText) {
+      return this.mindMap.richText.node
+    }
+    return this.currentNode
+  }
 }

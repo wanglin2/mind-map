@@ -275,5 +275,18 @@ export const defaultOpt = {
   customCreateNodePolygon: null,
   // 自定义转换节点连线路径的方法
   // 接收svg path字符串，返回转换后的svg path字符串
-  customTransformNodeLinePath: null
+  customTransformNodeLinePath: null,
+  // 是否仅搜索当前渲染的节点，被收起的节点不会被搜索到
+  isOnlySearchCurrentRenderNodes: false,
+  // 协同编辑时，同一个节点不能同时被多人选中
+  onlyOneEnableActiveNodeOnCooperate: false,
+  // 协同编辑时，节点操作即将更新到其他客户端前的生命周期函数
+  // 函数接收一个对象作为参数：
+  /*
+    {
+      type: createOrUpdate（创建节点或更新节点）、delete（删除节点）
+      data: 1.当type=createOrUpdate时，代表被创建或被更新的节点数据，即将同步到其他客户端，所以你可以修改该数据；2.当type=delete时，代表被删除的节点数据
+    }
+  */
+  beforeCooperateUpdate: null
 }

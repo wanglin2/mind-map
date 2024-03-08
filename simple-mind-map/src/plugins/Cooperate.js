@@ -28,6 +28,8 @@ class Cooperate {
     this.currentData = null
     // 用户信息
     this.userInfo = null
+    // 是否正在重新设置思维导图数据
+    this.isSetData = false
     // 绑定事件
     this.bindEvent()
     // 处理实例化时传入的思维导图数据
@@ -92,8 +94,8 @@ class Cooperate {
     this.mindMap.on('node_tree_render_end', this.onNodeTreeRenderEnd)
 
     // 监听设置思维导图数据事件
-    this.initData = this.initData.bind(this)
-    this.mindMap.on('set_data', this.initData)
+    this.onSetData = this.onSetData.bind(this)
+    this.mindMap.on('set_data', this.onSetData)
   }
 
   // 解绑事件
@@ -104,7 +106,7 @@ class Cooperate {
     this.mindMap.off('data_change', this.onDataChange)
     this.mindMap.off('node_active', this.onNodeActive)
     this.mindMap.off('node_tree_render_end', this.onNodeTreeRenderEnd)
-    this.mindMap.off('set_data', this.initData)
+    this.mindMap.off('set_data', this.onSetData)
     this.ydoc.destroy()
   }
 
@@ -125,27 +127,57 @@ class Cooperate {
 
   // 当前思维导图改变后的处理，触发同步
   onDataChange(data) {
+    if (this.isSetData) {
+      this.isSetData = false
+      return
+    }
     const res = transformTreeDataToObject(data)
     this.updateChanges(res)
   }
 
   // 找出更新点
   updateChanges(data) {
+    const { beforeCooperateUpdate } = this.mindMap.opt
     const oldData = this.currentData
     this.currentData = data
     this.ydoc.transact(() => {
       // 找出新增的或修改的
+      const createOrUpdateList = []
       Object.keys(data).forEach(uid => {
         // 新增的或已经存在的，如果数据发生了改变
         if (!oldData[uid] || !isSameObject(oldData[uid], data[uid])) {
-          this.ymap.set(uid, data[uid])
+          createOrUpdateList.push({
+            uid,
+            data: data[uid],
+            oldData: oldData[uid]
+          })
         }
       })
+      if (beforeCooperateUpdate && createOrUpdateList.length > 0) {
+        beforeCooperateUpdate({
+          type: 'createOrUpdate',
+          list: createOrUpdateList,
+          data
+        })
+      }
+      createOrUpdateList.forEach(item => {
+        this.ymap.set(item.uid, item.data)
+      })
       // 找出删除的
+      const deleteList = []
       Object.keys(oldData).forEach(uid => {
         if (!data[uid]) {
-          this.ymap.delete(uid)
+          deleteList.push({ uid, data: oldData[uid] })
         }
+      })
+      if (beforeCooperateUpdate && deleteList.length > 0) {
+        beforeCooperateUpdate({
+          type: 'delete',
+          list: deleteList
+        })
+      }
+      deleteList.forEach(item => {
+        this.ymap.delete(item.uid)
       })
     })
   }
@@ -175,6 +207,12 @@ class Cooperate {
       }
     })
     this.waitNodeUidMap = {}
+  }
+
+  // 监听思维导图数据的重新设置事件
+  onSetData(data) {
+    this.isSetData = true
+    this.initData(data)
   }
 
   // 设置用户信息
@@ -220,6 +258,7 @@ class Cooperate {
     // 设置当前数据
     const data = Array.from(this.awareness.getStates().values())
     this.currentAwarenessData = data
+    this.waitNodeUidMap = {}
     walk(data, (uid, node, userInfo) => {
       // 不显示自己
       if (userInfo.id === this.userInfo.id) return

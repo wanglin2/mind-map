@@ -98,7 +98,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(SearchPlugin)
   .usePlugin(Painter)
   .usePlugin(Formula)
-// .usePlugin(Cooperate)// 协同插件
+// .usePlugin(Cooperate) // 协同插件
 
 // 注册自定义主题
 customThemeList.forEach(item => {
@@ -766,7 +766,7 @@ export default {
       if (this.mindMap.cooperate && this.$route.query.userName) {
         this.mindMap.cooperate.setProvider(null, {
           roomName: 'demo-room',
-          signalingList: ['ws://192.168.3.125:4444']
+          signalingList: ['ws://10.16.83.11:4444']
         })
         this.mindMap.cooperate.setUserInfo({
           id: Math.random(),

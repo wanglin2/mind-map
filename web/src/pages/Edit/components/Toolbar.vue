@@ -26,6 +26,10 @@
       </div>
       <!-- 导出 -->
       <div class="toolbarBlock">
+        <div class="toolbarBtn" @click="openDirectory" v-if="!IS_ELECTRON">
+          <span class="icon iconfont icondakai"></span>
+          <span class="text">{{ $t('toolbar.directory') }}</span>
+        </div>
         <div class="toolbarBtn" @click="createNewLocalFile" v-if="!IS_ELECTRON">
           <span class="icon iconfont iconxinjian"></span>
           <span class="text">{{ $t('toolbar.newFile') }}</span>
@@ -42,9 +46,75 @@
           <span class="icon iconfont icondaoru"></span>
           <span class="text">{{ $t('toolbar.import') }}</span>
         </div>
-        <div class="toolbarBtn" @click="$bus.$emit('showExport')">
+        <div
+          class="toolbarBtn"
+          @click="$bus.$emit('showExport')"
+          style="margin-right: 0;"
+        >
           <span class="icon iconfont iconexport"></span>
           <span class="text">{{ $t('toolbar.export') }}</span>
+        </div>
+        <!-- 本地文件树 -->
+        <div
+          class="fileTreeBox"
+          v-if="fileTreeVisible"
+          :class="{ expand: fileTreeExpand }"
+        >
+          <div class="fileTreeToolbar">
+            <div class="fileTreeName">
+              {{ rootDirName ? '/' + rootDirName : '' }}
+            </div>
+            <div class="fileTreeActionList">
+              <div
+                class="btn"
+                :class="[
+                  fileTreeExpand ? 'el-icon-arrow-up' : 'el-icon-arrow-down'
+                ]"
+                @click="fileTreeExpand = !fileTreeExpand"
+              ></div>
+              <div
+                class="btn el-icon-close"
+                @click="fileTreeVisible = false"
+              ></div>
+            </div>
+          </div>
+          <div class="fileTreeWrap">
+            <el-tree
+              :props="fileTreeProps"
+              :load="loadFileTreeNode"
+              :expand-on-click-node="false"
+              node-key="id"
+              lazy
+            >
+              <span class="customTreeNode" slot-scope="{ node, data }">
+                <div class="treeNodeInfo">
+                  <span
+                    class="treeNodeIcon iconfont"
+                    :class="[
+                      data.type === 'file' ? 'iconwenjian' : 'icondakai'
+                    ]"
+                  ></span>
+                  <span class="treeNodeName">{{ node.label }}</span>
+                </div>
+                <div class="treeNodeBtnList" v-if="data.type === 'file'">
+                  <el-button
+                    type="text"
+                    size="mini"
+                    v-if="data.enableEdit"
+                    @click="editLocalFile(data)"
+                    >编辑</el-button
+                  >
+                  <el-button
+                    type="text"
+                    size="mini"
+                    v-else
+                    @click="importLocalFile(data)"
+                    >导入</el-button
+                  >
+                </div>
+              </span>
+            </el-tree>
+          </div>
         </div>
       </div>
       <div class="toolbarBlock" v-if="IS_ELECTRON">
@@ -60,7 +130,7 @@
     <NodeNote></NodeNote>
     <NodeTag></NodeTag>
     <Export></Export>
-    <Import></Import>
+    <Import ref="ImportRef"></Import>
   </div>
 </template>
 
@@ -118,11 +188,22 @@ export default {
       horizontalList: [],
       verticalList: [],
       showMoreBtn: true,
-      popoverShow: false
+      popoverShow: false,
+      fileTreeProps: {
+        label: 'name',
+        children: 'children',
+        isLeaf: 'leaf'
+      },
+      fileTreeVisible: false,
+      rootDirName: '',
+      fileTreeExpand: true
     }
   },
   computed: {
-    ...mapState(['isHandleLocalFile', 'isDark'])
+    ...mapState({
+      isDark: state => state.localConfig.isDark,
+      isHandleLocalFile: state => state.isHandleLocalFile
+    })
   },
   watch: {
     isHandleLocalFile(val) {
@@ -179,6 +260,82 @@ export default {
       this.timer = setTimeout(() => {
         this.writeLocalFile(content)
       }, 1000)
+    },
+
+    // 加载本地文件树
+    async loadFileTreeNode(node, resolve) {
+      try {
+        let dirHandle
+        if (node.level === 0) {
+          dirHandle = await window.showDirectoryPicker()
+          this.rootDirName = dirHandle.name
+        } else {
+          dirHandle = node.data.handle
+        }
+        const dirList = []
+        const fileList = []
+        for await (const [key, value] of dirHandle.entries()) {
+          const isFile = value.kind === 'file'
+          if (isFile && !/\.(smm|xmind|md|json)$/.test(value.name)) {
+            continue
+          }
+          const enableEdit = isFile && /\.smm$/.test(value.name)
+          const data = {
+            id: key,
+            name: value.name,
+            type: value.kind,
+            handle: value,
+            leaf: isFile,
+            enableEdit
+          }
+          if (isFile) {
+            fileList.push(data)
+          } else {
+            dirList.push(data)
+          }
+        }
+        resolve([...dirList, ...fileList])
+      } catch (error) {
+        console.log(error)
+        this.fileTreeVisible = false
+        resolve([])
+        if (error.toString().includes('aborted')) {
+          return
+        }
+        this.$message.warning(this.$t('toolbar.notSupportTip'))
+      }
+    },
+
+    // 扫描本地文件夹
+    openDirectory() {
+      this.fileTreeVisible = false
+      this.fileTreeExpand = true
+      this.rootDirName = ''
+      this.$nextTick(() => {
+        this.fileTreeVisible = true
+      })
+    },
+
+    // 编辑指定文件
+    editLocalFile(data) {
+      if (data.handle) {
+        fileHandle = data.handle
+        this.readFile()
+      }
+    },
+
+    // 导入指定文件
+    async importLocalFile(data) {
+      try {
+        const file = await data.handle.getFile()
+        this.$refs.ImportRef.onChange({
+          raw: file,
+          name: file.name
+        })
+        this.$refs.ImportRef.confirm()
+      } catch (error) {
+        console.log(error)
+      }
     },
 
     // 打开本地文件
@@ -328,6 +485,43 @@ export default {
       color: hsla(0, 0%, 100%, 0.9);
       .toolbarBlock {
         background-color: #262a2e;
+
+        .fileTreeBox {
+          background-color: #262a2e;
+
+          /deep/ .el-tree {
+            background-color: #262a2e;
+
+            &.el-tree--highlight-current {
+              .el-tree-node.is-current > .el-tree-node__content {
+                background-color: hsla(0, 0%, 100%, 0.05) !important;
+              }
+            }
+
+            .el-tree-node:focus > .el-tree-node__content {
+              background-color: hsla(0, 0%, 100%, 0.05) !important;
+            }
+
+            .el-tree-node__content:hover,
+            .el-upload-list__item:hover {
+              background-color: hsla(0, 0%, 100%, 0.02) !important;
+            }
+          }
+
+          .fileTreeWrap {
+            .customTreeNode {
+              .treeNodeInfo {
+                color: #fff;
+              }
+
+              .treeNodeBtnList {
+                .el-button {
+                  padding: 7px 5px;
+                }
+              }
+            }
+          }
+        }
       }
 
       .toolbarBtn {
@@ -372,9 +566,96 @@ export default {
       border: 1px solid rgba(0, 0, 0, 0.06);
       margin-right: 20px;
       flex-shrink: 0;
+      position: relative;
 
       &:last-of-type {
         margin-right: 0;
+      }
+
+      .fileTreeBox {
+        position: absolute;
+        left: 0;
+        top: 68px;
+        width: 100%;
+        height: 30px;
+        background-color: #fff;
+        padding: 12px 5px;
+        padding-top: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border-radius: 5px;
+        min-width: 200px;
+        box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
+
+        &.expand {
+          height: 300px;
+
+          .fileTreeWrap {
+            visibility: visible;
+          }
+        }
+
+        .fileTreeToolbar {
+          width: 100%;
+          height: 30px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          border-bottom: 1px solid #e9e9e9;
+          margin-bottom: 12px;
+          padding-left: 12px;
+
+          .fileTreeName {
+          }
+
+          .fileTreeActionList {
+            .btn {
+              font-size: 18px;
+              margin-left: 12px;
+              cursor: pointer;
+            }
+          }
+        }
+
+        .fileTreeWrap {
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          visibility: hidden;
+
+          .customTreeNode {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            padding-right: 5px;
+
+            .treeNodeInfo {
+              display: flex;
+              align-items: center;
+
+              .treeNodeIcon {
+                margin-right: 5px;
+                opacity: 0.7;
+              }
+
+              .treeNodeName {
+                max-width: 200px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+            }
+
+            .treeNodeBtnList {
+              display: flex;
+              align-items: center;
+            }
+          }
+        }
       }
     }
 

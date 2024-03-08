@@ -14,6 +14,11 @@
 <li><code>node</code>：要进入编辑的节点实例</li>
 </ul>
 <p>手动开启节点编辑。默认会在节点双击、按 F2 时进入节点编辑。</p>
+<h3>getCurrentEditNode()</h3>
+<blockquote>
+<p>v0.9.8+</p>
+</blockquote>
+<p>获取当前正在编辑中的节点实例。</p>
 
   </div>
 </template>

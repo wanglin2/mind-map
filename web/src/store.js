@@ -21,11 +21,12 @@ const store = new Vuex.Store({
       // 是否显示滚动条
       isShowScrollbar: false,
       // 是否开启手绘风格
-      isUseHandDrawnLikeStyle: false
+      isUseHandDrawnLikeStyle: false,
+      // 是否是暗黑模式
+      isDark: false, 
     },
     activeSidebar: '', // 当前显示的侧边栏
     localEditList: [],// 客户端中正在编辑的思维导图列表
-    isDark: false,// 是否是暗黑模式
     isOutlineEdit: false,// 是否是大纲编辑模式
     isReadonly: false// 是否只读
   },
@@ -71,11 +72,6 @@ const store = new Vuex.Store({
     // 设置客户端中当前正在编辑的思维导图列表
     setLocalEditList(state, list) {
       state.localEditList = list
-    },
-    
-    // 设置暗黑模式
-    setIsDark(state, data) {
-      state.isDark = data
     },
 
     // 设置大纲编辑模式

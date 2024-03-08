@@ -56,6 +56,18 @@
 
 ## 方法
 
+### highlight()
+
+> v0.9.8+
+
+高亮节点。
+
+### closeHighlight()
+
+> v0.9.8+
+
+取消高亮节点。
+
 ### getPureData(removeActiveState = true, removeId = false)
 
 > v0.9.0+

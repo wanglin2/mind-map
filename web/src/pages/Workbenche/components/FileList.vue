@@ -9,7 +9,9 @@
       <el-table v-else :data="list" style="width: 100%">
         <el-table-column label="名称">
           <template slot-scope="scope">
-            <span class="textBtn" @click="openFile(scope.row.url)">{{ scope.row.name }}</span>
+            <span class="textBtn" @click="openFile(scope.row.url)">{{
+              scope.row.name
+            }}</span>
           </template>
         </el-table-column>
         <el-table-column prop="url" label="文件路径"> </el-table-column>
@@ -85,8 +87,11 @@ export default {
     },
 
     // 在文件夹里打开文件
-    openFileInDir(file) {
-      window.electronAPI.openFileInDir(file)
+    async openFileInDir(file) {
+      const res = await window.electronAPI.openFileInDir(file)
+      if (res) {
+        this.$message.error(res)
+      }
     },
 
     // 删除文件
@@ -109,8 +114,11 @@ export default {
     },
 
     // 编辑文件
-    openFile(file) {
-      window.electronAPI.openFile(file)
+    async openFile(file) {
+      const res = await window.electronAPI.openFile(file)
+      if (res) {
+        this.$message.error(res)
+      }
     },
 
     // 清空最近文件列表
@@ -135,8 +143,12 @@ export default {
     // 复制文件
     async copyFile(file) {
       try {
-        window.electronAPI.copyFile(file)
-        this.$message.success('复制成功')
+        const res = await window.electronAPI.copyFile(file)
+        if (res) {
+          this.$message.error(res)
+        } else {
+          this.$message.success('复制成功')
+        }
       } catch (error) {
         this.$message.error('复制失败')
       }

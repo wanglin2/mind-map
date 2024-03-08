@@ -58,7 +58,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['activeSidebar', 'isDark']),
+    ...mapState({
+      isDark: state => state.localConfig.isDark,
+      activeSidebar: state => state.activeSidebar
+    }),
 
     currentList() {
       return this.groupList.find(item => {
@@ -70,7 +73,6 @@ export default {
     activeSidebar(val) {
       if (val === 'theme') {
         this.theme = this.mindMap.getTheme()
-        this.handleDark()
         this.$refs.sidebar.show = true
       } else {
         this.$refs.sidebar.show = false
@@ -80,14 +82,13 @@ export default {
   created() {
     this.initGroup()
     this.theme = this.mindMap.getTheme()
-    this.handleDark()
     this.mindMap.on('view_theme_change', this.handleViewThemeChange)
   },
   beforeDestroy() {
     this.mindMap.off('view_theme_change', this.handleViewThemeChange)
   },
   methods: {
-    ...mapMutations(['setIsDark']),
+    ...mapMutations(['setLocalConfig']),
 
     handleViewThemeChange() {
       this.theme = this.mindMap.getTheme()
@@ -149,15 +150,17 @@ export default {
         this.$confirm(this.$t('theme.coverTip'), this.$t('theme.tip'), {
           confirmButtonText: this.$t('theme.cover'),
           cancelButtonText: this.$t('theme.reserve'),
-          type: 'warning'
+          type: 'warning',
+          distinguishCancelAndClose: true,
+          callback: action => {
+            if (action === 'confirm') {
+              this.mindMap.setThemeConfig({}, true)
+              this.changeTheme(theme, {})
+            } else if (action === 'cancel') {
+              this.changeTheme(theme, customThemeConfig)
+            }
+          }
         })
-          .then(() => {
-            this.mindMap.setThemeConfig({}, true)
-            this.changeTheme(theme, {})
-          })
-          .catch(() => {
-            this.changeTheme(theme, customThemeConfig)
-          })
       } else {
         this.changeTheme(theme, customThemeConfig)
       }
@@ -178,7 +181,9 @@ export default {
       let target = this.themeList.find(item => {
         return item.value === this.theme
       })
-      this.setIsDark(target.dark)
+      this.setLocalConfig({
+        isDark: target.dark
+      })
     }
   }
 }

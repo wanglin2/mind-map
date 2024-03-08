@@ -84,6 +84,14 @@ export const bindFileHandleEvent = ({ mainWindow, initOpenFileQueue }) => {
 
   // 打开文件
   const openFile = (event, file) => {
+    // 检查文件是否存在
+    const exist = fs.existsSync(file)
+    if (!exist) {
+      removeFileInRecent(file).then(() => {
+        notifyMainWindowRefreshRecentFileList()
+      })
+      return '文件不存在'
+    }
     let id = uuid()
     idToFilePath[id] = file
     saveToRecent(file).then(() => {
@@ -91,7 +99,7 @@ export const bindFileHandleEvent = ({ mainWindow, initOpenFileQueue }) => {
     })
     createEditWindow(null, id)
   }
-  ipcMain.on('openFile', openFile)
+  ipcMain.handle('openFile', openFile)
 
   // 选择打开本地文件
   ipcMain.on('selectOpenFile', event => {
@@ -171,15 +179,22 @@ export const bindFileHandleEvent = ({ mainWindow, initOpenFileQueue }) => {
   // 添加到最近文件列表
   ipcMain.handle('addRecentFileList', async (event, fileList) => {
     try {
-        await saveFileListToRecent(fileList)
-        notifyMainWindowRefreshRecentFileList()
+      await saveFileListToRecent(fileList)
+      notifyMainWindowRefreshRecentFileList()
     } catch (error) {
-        return error
-    } 
+      return error
+    }
   })
 
   // 打开指定目录
-  ipcMain.on('openFileInDir', (event, file) => {
+  ipcMain.handle('openFileInDir', (event, file) => {
+    const exist = fs.existsSync(file)
+    if (!exist) {
+      removeFileInRecent(file).then(() => {
+        notifyMainWindowRefreshRecentFileList()
+      })
+      return '文件不存在'
+    }
     shell.showItemInFolder(file)
   })
 
@@ -211,7 +226,10 @@ export const bindFileHandleEvent = ({ mainWindow, initOpenFileQueue }) => {
     return new Promise((resolve, reject) => {
       fs.pathExists(file, (err, exists) => {
         if (err) {
-          reject(err)
+          removeFileInRecent(file).then(() => {
+            notifyMainWindowRefreshRecentFileList()
+          })
+          resolve('文件不存在')
         } else {
           if (exists) {
             let { base, ...oldPathData } = path.parse(file)
@@ -227,7 +245,7 @@ export const bindFileHandleEvent = ({ mainWindow, initOpenFileQueue }) => {
             }
             fs.copy(file, newPath, err => {
               if (err) {
-                reject(err)
+                resolve('复制出错')
               } else {
                 saveToRecent(newPath).then(() => {
                   notifyMainWindowRefreshRecentFileList()
@@ -236,7 +254,10 @@ export const bindFileHandleEvent = ({ mainWindow, initOpenFileQueue }) => {
               }
             })
           } else {
-            reject('文件不存在')
+            removeFileInRecent(file).then(() => {
+              notifyMainWindowRefreshRecentFileList()
+            })
+            resolve('文件不存在')
           }
         }
       })
@@ -244,7 +265,7 @@ export const bindFileHandleEvent = ({ mainWindow, initOpenFileQueue }) => {
   })
 
   // 直接双击文件打开应用时，需要直接打开该文件编辑
-  initOpenFileQueue.forEach((file) => {
+  initOpenFileQueue.forEach(file => {
     openFile(null, file)
   })
 

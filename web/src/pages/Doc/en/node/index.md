@@ -56,6 +56,18 @@ Whether the node is currently being dragged
 
 ## Methods
 
+### highlight()
+
+> v0.9.8+
+
+Highlight node.
+
+### closeHighlight()
+
+> v0.9.8+
+
+Unhighlight node.
+
 ### getPureData(removeActiveState = true, removeId = false)
 
 > v0.9.0+

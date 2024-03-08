@@ -47,7 +47,9 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isDark'])
+    ...mapState({
+      isDark: state => state.localConfig.isDark
+    })
   },
   mounted() {
     this.setScrollBarWrapSize()

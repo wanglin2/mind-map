@@ -94,6 +94,12 @@ const mindMap = new MindMap({
 
 群聊人数较多，无法通过二维码入群，可以微信添加`wanglinguanfang`拉你入群。
 
+# star
+
+如果喜欢本项目，欢迎点个star，这对我们很重要。
+
+[![Star History Chart](https://api.star-history.com/svg?repos=wanglin2/mind-map&type=Date)](https://star-history.com/#wanglin2/mind-map&Date)
+
 # 请作者喝杯咖啡
 
 开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡~
@@ -271,5 +277,25 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/慕智打印-兰兰.jpg" style="width: 50px;height: 50px;" />
         <span>慕智打印-兰兰</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>锦冰</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/旭东.png" style="width: 50px;height: 50px;" />
+        <span>旭东</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/俊奇.jpg" style="width: 50px;height: 50px;" />
+        <span>俊奇</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/橘半.jpg" style="width: 50px;height: 50px;" />
+        <span>橘半</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/pluvet.jpg" style="width: 50px;height: 50px;" />
+        <span>pluvet</span>
     </span>
 </p>
