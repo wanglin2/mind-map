@@ -203,6 +203,8 @@ class Node {
 
   //  计算节点的宽高
   getSize() {
+    this.customLeft = this.getData('customLeft') || undefined
+    this.customTop = this.getData('customTop') || undefined
     this.updateGeneralization()
     this.createNodeData()
     let { width, height } = this.getNodeRect()
