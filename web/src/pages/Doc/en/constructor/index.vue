@@ -655,7 +655,7 @@
 <td>beforeCooperateUpdate（v0.9.8+）</td>
 <td>Function、null</td>
 <td>null</td>
-<td>During collaborative editing, node operations are about to be updated to the lifecycle functions of other clients. The function takes an object as a parameter:{ type: 【createOrUpdate（Create or update nodes）、delete（Delete node）】, data: 【1.When type=createOrUpdate, it represents the node data that has been created or updated, which will be synchronized to other clients, so you can modify the data; 2.When type=delete, represents the deleted node data】 }</td>
+<td>During collaborative editing, node operations are about to be updated to the lifecycle functions of other clients. The function takes an object as a parameter:{ type: 【createOrUpdate（Create or update nodes）、delete（Delete node）】, list: 【Array type, 1.When type=createOrUpdate, it represents the node data that has been created or updated, which will be synchronized to other clients, so you can modify the data; 2.When type=delete, represents the deleted node data】 }</td>
 <td></td>
 </tr>
 </tbody>

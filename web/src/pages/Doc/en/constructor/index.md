@@ -113,7 +113,7 @@ const mindMap = new MindMap({
 | enableAdjustAssociativeLinePoints（v0.9.5+）     | Boolean | true  | Is it allowed to adjust the position of the two endpoints of the associated line |         |
 | isOnlySearchCurrentRenderNodes（v0.9.8+）     | Boolean | false  | Is it necessary to only search for the current rendered node, and nodes that have been collapsed will not be searched for |         |
 | onlyOneEnableActiveNodeOnCooperate（v0.9.8+）     | Boolean | false  | During collaborative editing, the same node cannot be selected by multiple people at the same time |         |
-| beforeCooperateUpdate（v0.9.8+）     | Function、null | null  | During collaborative editing, node operations are about to be updated to the lifecycle functions of other clients. The function takes an object as a parameter:{ type: 【createOrUpdate（Create or update nodes）、delete（Delete node）】, data: 【1.When type=createOrUpdate, it represents the node data that has been created or updated, which will be synchronized to other clients, so you can modify the data; 2.When type=delete, represents the deleted node data】 } |         |
+| beforeCooperateUpdate（v0.9.8+）     | Function、null | null  | During collaborative editing, node operations are about to be updated to the lifecycle functions of other clients. The function takes an object as a parameter:{ type: 【createOrUpdate（Create or update nodes）、delete（Delete node）】, list: 【Array type, 1.When type=createOrUpdate, it represents the node data that has been created or updated, which will be synchronized to other clients, so you can modify the data; 2.When type=delete, represents the deleted node data】 } |         |
 
 ### Data structure
 
