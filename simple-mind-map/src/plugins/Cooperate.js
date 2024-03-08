@@ -136,29 +136,42 @@ class Cooperate {
     this.currentData = data
     this.ydoc.transact(() => {
       // 找出新增的或修改的
+      const createOrUpdateList = []
       Object.keys(data).forEach(uid => {
         // 新增的或已经存在的，如果数据发生了改变
         if (!oldData[uid] || !isSameObject(oldData[uid], data[uid])) {
-          if (beforeCooperateUpdate) {
-            beforeCooperateUpdate({
-              type: 'createOrUpdate',
-              data: data[uid]
-            })
-          }
-          this.ymap.set(uid, data[uid])
+          createOrUpdateList.push({
+            uid,
+            data: data[uid],
+            oldData: oldData[uid],
+          })
         }
       })
+      if (beforeCooperateUpdate && createOrUpdateList.length > 0) {
+        beforeCooperateUpdate({
+          type: 'createOrUpdate',
+          list: createOrUpdateList,
+          data
+        })
+      }
+      createOrUpdateList.forEach(item => {
+        this.ymap.set(item.uid, item.data)
+      })
       // 找出删除的
+      const deleteList = []
       Object.keys(oldData).forEach(uid => {
         if (!data[uid]) {
-          if (beforeCooperateUpdate) {
-            beforeCooperateUpdate({
-              type: 'delete',
-              data: oldData[uid]
-            })
-          }
-          this.ymap.delete(uid)
+          deleteList.push({ uid, data: oldData[uid] })
         }
+      })
+      if (beforeCooperateUpdate && deleteList.length > 0) {
+        beforeCooperateUpdate({
+          type: 'delete',
+          list: deleteList
+        })
+      }
+      deleteList.forEach(item => {
+        this.ymap.delete(item.uid)
       })
     })
   }
