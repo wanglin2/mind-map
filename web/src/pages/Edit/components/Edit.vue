@@ -45,7 +45,9 @@ import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
 import Painter from 'simple-mind-map/src/plugins/Painter.js'
 import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
 import Formula from 'simple-mind-map/src/plugins/Formula.js'
-import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
+// 协同编辑插件
+// import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
+// 手绘风格插件，该插件为付费插件，详情请查看开发文档
 // import HandDrawnLikeStyle from 'simple-mind-map-plugin-handdrawnlikestyle'
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
