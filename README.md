@@ -88,7 +88,7 @@ const mindMap = new MindMap({
 
 [MIT](./LICENSE)
 
-保留`mind-map`版权声明的情况下可随意商用。
+保留`mind-map`版权声明的情况下可随意商用。如果你不想保留可以联系作者。
 
 # 微信交流群
 
@@ -297,5 +297,9 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/pluvet.jpg" style="width: 50px;height: 50px;" />
         <span>pluvet</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/皇登攀.jpg" style="width: 50px;height: 50px;" />
+        <span>皇登攀</span>
     </span>
 </p>
