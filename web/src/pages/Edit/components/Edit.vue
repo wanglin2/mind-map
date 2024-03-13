@@ -349,6 +349,13 @@ export default {
               break
           }
         }
+        // beforeShortcutRun: (key, activeNodeList) => {
+        //   console.log(key, activeNodeList)
+        //   // 阻止删除快捷键行为
+        //   if (key === 'Backspace') {
+        //     return true
+        //   }
+        // }
         // handleNodePasteImg: img => {
         //   console.log(img)
         //   return new Promise(resolve => {

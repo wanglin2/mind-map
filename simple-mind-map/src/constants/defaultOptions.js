@@ -288,5 +288,8 @@ export const defaultOpt = {
       data: 1.当type=createOrUpdate时，代表被创建或被更新的节点数据，即将同步到其他客户端，所以你可以修改该数据；2.当type=delete时，代表被删除的节点数据
     }
   */
-  beforeCooperateUpdate: null
+  beforeCooperateUpdate: null,
+  // 快捷键操作即将执行前的生命周期函数，返回true可以阻止操作执行
+  // 函数接收两个参数：key（快捷键）、activeNodeList（当前激活的节点列表）
+  beforeShortcutRun: null
 }
