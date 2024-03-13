@@ -16,6 +16,11 @@ protocol.registerSchemesAsPrivileged([
 // 创建主页面
 let mainWindow = null
 async function createMainWindow() {
+  createProtocol('app')
+  // 如果是双击smm文件打开的话那么不用加载工作台页面
+  if (initOpenFileQueue.length > 0) {
+    return
+  }
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -37,7 +42,6 @@ async function createMainWindow() {
     )
     // if (!process.env.IS_TEST) mainWindow.webContents.openDevTools()
   } else {
-    createProtocol('app')
     // 非开发环境时加载index.html
     mainWindow.loadURL('app://./index.html/#/workbenche')
   }
@@ -46,8 +50,13 @@ async function createMainWindow() {
 // 绑定事件
 let openFile = null
 const bindEvent = () => {
-  let res = bindFileHandleEvent({ mainWindow, initOpenFileQueue })
+  const res = bindFileHandleEvent({ mainWindow })
   openFile = res.openFile
+  // 直接双击文件打开应用时，需要直接打开该文件编辑
+  initOpenFileQueue.forEach(file => {
+    openFile(null, file)
+  })
+  initOpenFileQueue = []
   bindOtherHandleEvent()
 }
 
@@ -71,7 +80,7 @@ app.on('activate', () => {
 // https://stackoverflow.com/questions/62420427/how-do-i-make-my-electron-app-the-default-for-opening-files
 // https://github.com/rchrd2/example-electron-file-association
 // https://www.jianshu.com/p/a32542277b83
-const initOpenFileQueue = []
+let initOpenFileQueue = []
 app.on('will-finish-launching', () => {
   // Event fired When someone drags files onto the icon while your app is running
   if (process.platform == 'win32') {
