@@ -4,27 +4,23 @@
   "private": true,
   "description": "一个简洁的思维导图",
   "author": "街角小林<1013335014@qq.com>",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/wanglin2/mind-map"
-  },
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && node ../copy.js",
     "lint": "vue-cli-service lint",
-    "electron:build": "vue-cli-service electron:build -p never",
+    "autoBuildDoc": "node ./scripts/autoBuildDoc.js",
+    "buildDoc": "node ./scripts/buildDoc.js",
+    "buildLibrary": "node ./scripts/updateVersion.js && vue-cli-service build --mode library --target lib --name simpleMindMap ../simple-mind-map/full.js --dest ../simple-mind-map/dist && esbuild ../simple-mind-map/full.js --bundle --external:buffer --format=esm --outfile=../simple-mind-map/dist/simpleMindMap.esm.js && esbuild ../simple-mind-map/full.js --bundle --minify --external:buffer --format=esm --outfile=../simple-mind-map/dist/simpleMindMap.esm.min.js",
+    "createNodeImageList": "node ./scripts/createNodeImageList.js",
+    "electron:build": "vue-cli-service electron:build",
     "electron:build-all": "vue-cli-service electron:build -p never -mwl",
+    "electron:build-linux": "vue-cli-service electron:build -p never -l",
     "electron:build-mac": "vue-cli-service electron:build -p never -m",
     "electron:build-win": "vue-cli-service electron:build -p never -w",
-    "electron:build-linux": "vue-cli-service electron:build -p never -l",
     "electron:serve": "vue-cli-service electron:serve",
-    "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps",
-    "buildLibrary": "node ./scripts/updateVersion.js && vue-cli-service build --mode library --target lib --name simpleMindMap ../simple-mind-map/full.js --dest ../simple-mind-map/dist && esbuild ../simple-mind-map/full.js --bundle --external:buffer --format=esm --outfile=../simple-mind-map/dist/simpleMindMap.esm.js && esbuild ../simple-mind-map/full.js --bundle --minify --external:buffer --format=esm --outfile=../simple-mind-map/dist/simpleMindMap.esm.min.js",
     "format": "prettier --write src/* src/*/* src/*/*/* src/*/*/*/*",
-    "buildDoc": "node ./scripts/buildDoc.js",
-    "autoBuildDoc": "node ./scripts/autoBuildDoc.js",
-    "createNodeImageList": "node ./scripts/createNodeImageList.js"
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps"
   },
   "main": "background.js",
   "dependencies": {
@@ -54,6 +50,7 @@
     "esbuild": "^0.17.15",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "hasown": "^2.0.2",
     "less": "^3.12.2",
     "less-loader": "^7.1.0",
     "markdown-it": "^13.0.1",
@@ -83,5 +80,9 @@
     "> 1%",
     "last 2 versions",
     "not dead"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wanglin2/mind-map"
+  }
 }
