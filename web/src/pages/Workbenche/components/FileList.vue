@@ -104,7 +104,7 @@ export default {
         .then(async () => {
           let res = await window.electronAPI.deleteFile(file)
           if (res) {
-            this.$message.error('删除失败')
+            this.$message.error(res || '删除失败')
           } else {
             this.list.splice(index, 1)
             this.$message.success('删除成功')
