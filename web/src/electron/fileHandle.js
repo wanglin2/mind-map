@@ -20,6 +20,7 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
 
   // 新建编辑页面
   const openIds = []
+  const openIdToWin = {}
   const createEditWindow = async (event, id) => {
     openIds.push(id)
     const win = new BrowserWindow({
@@ -35,11 +36,13 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
         preload: path.join(__dirname, 'preload.js')
       }
     })
+    openIdToWin[id] = win
     win.on('closed', () => {
       // 从openIds数组中删除
-      let index = openIds.find(item => {
+      const index = openIds.findIndex(item => {
         return item === id
       })
+      delete openIdToWin[id]
       if (index !== -1) {
         openIds.splice(index, 1)
       }
@@ -92,6 +95,17 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
         notifyMainWindowRefreshRecentFileList()
       })
       return '文件不存在'
+    }
+    // 检查该文件是否已经打开
+    const existId = Object.keys(idToFilePath).find(item => {
+      return idToFilePath[item] === file
+    })
+    if (openIds.includes(existId)) {
+      // 将已打开的窗口移至顶端
+      if (openIdToWin[existId]) {
+        openIdToWin[existId].moveTop()
+      }
+      return
     }
     let id = uuid()
     idToFilePath[id] = file
