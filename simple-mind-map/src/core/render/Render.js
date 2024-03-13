@@ -290,6 +290,10 @@ class Render {
     this.mindMap.keyCommand.addShortcut('Tab', () => {
       this.mindMap.execCommand('INSERT_CHILD_NODE')
     })
+    // 插入下级节点
+    this.mindMap.keyCommand.addShortcut('Insert', () => {
+      this.mindMap.execCommand('INSERT_CHILD_NODE')
+    })
     // 插入同级节点
     this.mindMap.keyCommand.addShortcut('Enter', () => {
       this.mindMap.execCommand('INSERT_NODE')
