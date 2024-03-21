@@ -302,4 +302,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/皇登攀.jpg" style="width: 50px;height: 50px;" />
         <span>皇登攀</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/风格.jpg" style="width: 50px;height: 50px;" />
+        <span>风格</span>
+    </span>
 </p>

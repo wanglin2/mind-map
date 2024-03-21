@@ -46,7 +46,7 @@ import Painter from 'simple-mind-map/src/plugins/Painter.js'
 import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
 import Formula from 'simple-mind-map/src/plugins/Formula.js'
 // 协同编辑插件
-// import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
+import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
 // 手绘风格插件，该插件为付费插件，详情请查看开发文档
 // import HandDrawnLikeStyle from 'simple-mind-map-plugin-handdrawnlikestyle'
 import OutlineSidebar from './OutlineSidebar'
@@ -82,6 +82,7 @@ import handleClipboardText from '@/utils/handleClipboardText'
 import Scrollbar from './Scrollbar.vue'
 import exampleData from 'simple-mind-map/example/exampleData'
 import FormulaSidebar from './FormulaSidebar.vue'
+import { isSameObject  } from 'simple-mind-map/src/utils';
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -98,7 +99,11 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(SearchPlugin)
   .usePlugin(Painter)
   .usePlugin(Formula)
-// .usePlugin(Cooperate) // 协同插件
+.usePlugin(Cooperate) // 协同插件
+
+const request = (data) => {
+  console.log(data)
+}
 
 // 注册自定义主题
 customThemeList.forEach(item => {
@@ -305,7 +310,7 @@ export default {
       this.mindMap = new MindMap({
         el: this.$refs.mindMapContainer,
         data: root,
-        fit: false,
+        fit: true,
         layout: layout,
         theme: theme.template,
         themeConfig: theme.config,
@@ -347,6 +352,150 @@ export default {
               break
             default:
               break
+          }
+        },
+        onlyOneEnableActiveNodeOnCooperate: true,
+        beforeCooperateUpdate: ({ type, list, data }) => {
+          const { title, userINumber } = this.$route.meta
+          // 所有节点数据
+          const allData = data
+          // 创建或更新节点
+          if (type === 'createOrUpdate') {
+            // 获取节点的父节点的uid
+            const getParentUid = uid => {
+              let res = null
+              Object.keys(allData).forEach(item => {
+                if (allData[item].children.includes(uid)) {
+                  res = allData[item].data
+                }
+              })
+              return res ? res.uid : ''
+            }
+            // 找出新创建的
+            const crateList = list
+              .filter(({ oldData }) => {
+                return !oldData
+              })
+              .map(({ uid }) => {
+                return uid
+              })
+            // 遍历所有创建或更新的节点列表
+            list.forEach(({ uid, data, oldData }) => {
+              // 更新版本号
+              if (data.data.version === undefined) {
+                data.data.version = 0
+              }
+              const newVersion = data.data.version + 1
+              data.data.version = newVersion
+              const targetNode = this.mindMap.renderer.findNodeByUid(uid)
+              if (targetNode) {
+                targetNode.setData({
+                  version: newVersion
+                })
+              }
+              // 调接口
+              if (!oldData) {
+                // 新增节点
+                request({
+                  url: `/addOneNode/${title}/${userINumber}`,
+                  method: 'post',
+                  data: {
+                    parentNodeId: getParentUid(uid),
+                    newNodeContent: JSON.stringify(data.data)
+                  }
+                })
+              } else {
+                // 更新节点
+                const oldChildrenLength = oldData.children.length
+                const newChildrenLength = data.children.length
+                if (oldChildrenLength !== newChildrenLength) {
+                  if (newChildrenLength > oldChildrenLength) {
+                    const moveList = data.children.filter(item => {
+                      return (
+                        !oldData.children.includes(item) &&
+                        !crateList.includes(item)
+                      )
+                    })
+                    moveList.forEach(item => {
+                      request({
+                        url: `/changeNodeParentNode/${title}/${userINumber}`,
+                        method: 'post',
+                        data: {
+                          movedNodeId: item,
+                          newParentNodeId: uid
+                        }
+                      })
+                    })
+                  }
+                } else {
+                  if (!isSameObject(data.data, oldData.data)) {
+                    // 关联线
+                    const associativeLineTargets =
+                      data.data.associativeLineTargets || []
+                    const oldDataAssociativeLineTargets =
+                      oldData.data.associativeLineTargets || []
+                    const newTargets = []
+                    const deleteTargets = []
+                    associativeLineTargets.forEach(item => {
+                      if (!oldDataAssociativeLineTargets.includes(item)) {
+                        newTargets.push(item)
+                      }
+                    })
+                    oldDataAssociativeLineTargets.forEach(item => {
+                      if (!associativeLineTargets.includes(item)) {
+                        deleteTargets.push(item)
+                      }
+                    })
+                    // 添加关联线
+                    if (newTargets.length > 0) {
+                      newTargets.forEach(item => {
+                        request({
+                          url: `/addAssociationLine/${title}/${userINumber}`,
+                          method: 'post',
+                          data: {
+                            startNodeId: uid,
+                            endNodeId: item
+                          }
+                        })
+                      })
+                    } else if (deleteTargets.length > 0) {
+                      // 删除关联线
+                      deleteTargets.forEach(item => {
+                        request({
+                          url: `/deleteAssociationLine/${title}/${userINumber}`,
+                          method: 'post',
+                          data: {
+                            startNodeId: uid,
+                            endNodeId: item
+                          }
+                        })
+                      })
+                    } else {
+                      // 更新节点自身内容
+                      request({
+                        url: `/updateOneNodeContent/${title}/${userINumber}`,
+                        method: 'post',
+                        data: {
+                          mindMapName: title,
+                          nodeId: uid,
+                          jsonContent: JSON.stringify(data.data)
+                        }
+                      })
+                    }
+                  }
+                }
+              }
+            })
+          } else if (type === 'delete') {
+            // 删除
+            const res = this.getTopIdList(list)
+            request({
+              url: `/deleteNodeList/${title}/${userINumber}`,
+              method: 'post',
+              data: {
+                idList: res
+              }
+            })
           }
         }
         // beforeShortcutRun: (key, activeNodeList) => {
@@ -476,6 +625,22 @@ export default {
       //   this.mindMap.reRender()
       //   this.mindMap.render()
       // }, 5000)
+    },
+
+    // 获取被删除节点的顶层节点的uid列表
+    getTopIdList(list) {
+      const res = []
+      list.forEach((item) => {
+        const hasParent = list.find((item2) => {
+          return item2.data.children.includes(item.uid)
+        })
+        if (!hasParent) {
+          res.push(item)
+        }
+      })
+      return res.map((item) => {
+        return item.uid
+      })
     },
 
     // url中是否存在要打开的文件
@@ -710,7 +875,7 @@ export default {
       if (this.mindMap.cooperate && this.$route.query.userName) {
         this.mindMap.cooperate.setProvider(null, {
           roomName: 'demo-room',
-          signalingList: ['ws://10.16.83.11:4444']
+          signalingList: ['ws://10.16.83.118:4444']
         })
         this.mindMap.cooperate.setUserInfo({
           id: Math.random(),
