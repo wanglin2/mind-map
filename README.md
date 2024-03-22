@@ -86,9 +86,7 @@ const mindMap = new MindMap({
 
 # License
 
-[MIT](./LICENSE)
-
-保留`mind-map`版权声明的情况下可随意商用。如果你不想保留可以联系作者。
+[MIT](./LICENSE)。保留`mind-map`版权声明的情况下可随意商用。
 
 # 微信交流群
 
@@ -103,8 +101,6 @@ const mindMap = new MindMap({
 # 请作者喝杯咖啡
 
 开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡~
-
-> 厚椰乳一盒 + 纯牛奶半盒 + 冰块 + 咖啡液 = 生椰拿铁 yyds
 
 > 推荐使用支付宝，微信获取不到头像。转账请备注【思维导图】。
 
@@ -305,5 +301,9 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/风格.jpg" style="width: 50px;height: 50px;" />
         <span>风格</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>SR</span>
     </span>
 </p>
