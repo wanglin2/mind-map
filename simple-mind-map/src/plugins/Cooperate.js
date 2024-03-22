@@ -120,9 +120,7 @@ class Cooperate {
     const res = transformObjectToTreeData(data)
     if (!res) return
     // 更新思维导图画布
-    this.mindMap.renderer.setData(res)
-    this.mindMap.render()
-    this.mindMap.command.addHistory()
+    this.mindMap.updateData(res)
   }
 
   // 当前思维导图改变后的处理，触发同步
