@@ -94,6 +94,12 @@ function createIconNode() {
     node.on('click', e => {
       this.mindMap.emit('node_icon_click', this, item, e)
     })
+    node.on('mouseenter', e => {
+      this.mindMap.emit('node_icon_mouseenter', this, item, e)
+    })
+    node.on('mouseleave', e => {
+      this.mindMap.emit('node_icon_mouseleave', this, item, e)
+    })
     return {
       node,
       width: iconSize,
