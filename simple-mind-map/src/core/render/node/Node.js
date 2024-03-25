@@ -1047,6 +1047,17 @@ class Node {
     return copyNodeTree({}, this, removeActiveState, removeId)
   }
 
+  // 获取祖先节点列表
+  getAncestorNodes() {
+    const list = []
+    let parent = this.parent
+    while (parent) {
+      list.unshift(parent)
+      parent = parent.parent
+    }
+    return list
+  }
+
   // 是否存在自定义样式
   hasCustomStyle() {
     return this.style.hasCustomStyle()
