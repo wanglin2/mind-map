@@ -916,6 +916,7 @@ class Node {
       childNode.getStyle('lineWidth', true)
     const color =
       childNode.getSelfInhertStyle('lineColor') ||
+      this.getRainbowLineColor(childNode) ||
       childNode.getStyle('lineColor', true)
     const dasharray =
       childNode.getSelfInhertStyle('lineDasharray') ||
@@ -930,6 +931,13 @@ class Node {
       enableMarker,
       childNode
     )
+  }
+
+  // 获取彩虹线条颜色
+  getRainbowLineColor(node) {
+    return this.mindMap.rainbowLines
+      ? this.mindMap.rainbowLines.getNodeColor(node)
+      : ''
   }
 
   //  移除连线

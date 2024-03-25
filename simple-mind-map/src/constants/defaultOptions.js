@@ -291,5 +291,21 @@ export const defaultOpt = {
   beforeCooperateUpdate: null,
   // 快捷键操作即将执行前的生命周期函数，返回true可以阻止操作执行
   // 函数接收两个参数：key（快捷键）、activeNodeList（当前激活的节点列表）
-  beforeShortcutRun: null
+  beforeShortcutRun: null,
+  // 彩虹线条配置，需要先注册RainbowLines插件
+  rainbowLinesConfig: {
+    open: false,// 是否开启彩虹线条
+    colorsList: []// 自定义彩虹线条的颜色列表，如果不设置，会使用默认颜色列表
+    /*
+    [
+      'rgb(255, 213, 73)',
+      'rgb(255, 136, 126)',
+      'rgb(107, 225, 141)',
+      'rgb(151, 171, 255)',
+      'rgb(129, 220, 242)',
+      'rgb(255, 163, 125)',
+      'rgb(152, 132, 234)'
+    ]
+    */
+  }
 }
