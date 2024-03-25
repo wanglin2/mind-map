@@ -45,6 +45,7 @@ import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
 import Painter from 'simple-mind-map/src/plugins/Painter.js'
 import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
 import Formula from 'simple-mind-map/src/plugins/Formula.js'
+import RainbowLines from 'simple-mind-map/src/plugins/RainbowLines.js'
 // 协同编辑插件
 // import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
 // 手绘风格插件，该插件为付费插件，详情请查看开发文档
@@ -98,6 +99,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(SearchPlugin)
   .usePlugin(Painter)
   .usePlugin(Formula)
+  .usePlugin(RainbowLines)
 // .usePlugin(Cooperate) // 协同插件
 
 // 注册自定义主题
