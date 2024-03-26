@@ -33,6 +33,7 @@ class RainbowLines {
   // 删除所有节点的连线颜色
   removeNodeLineColor() {
     const tree = this.mindMap.renderer.renderTree
+    if (!tree) return
     walk(
       tree,
       null,

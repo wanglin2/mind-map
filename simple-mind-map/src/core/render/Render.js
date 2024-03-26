@@ -65,7 +65,7 @@ class Render {
     this.mindMap = opt.mindMap
     this.themeConfig = this.mindMap.themeConfig
     // 渲染树，操作过程中修改的都是这里的数据
-    this.renderTree = merge({}, this.mindMap.opt.data || {})
+    this.renderTree = this.mindMap.opt.data ? merge({}, this.mindMap.opt.data) : null
     // 是否重新渲染
     this.reRender = false
     // 是否正在渲染中
@@ -117,7 +117,7 @@ class Render {
   // 重新设置思维导图数据
   setData(data) {
     if (this.mindMap.richText) {
-      this.renderTree = this.mindMap.richText.handleSetData(data)
+      this.renderTree = data ? this.mindMap.richText.handleSetData(data) : null
     } else {
       this.renderTree = data
     }
@@ -436,6 +436,12 @@ class Render {
     if (this.reRender) {
       this.clearActiveNodeList()
     }
+    // 如果没有节点数据
+    if (!this.renderTree) {
+      this.isRendering = false
+      this.mindMap.emit('node_tree_render_end')
+      return
+    }
     // 计算布局
     this.layout.doLayout(root => {
       // 删除本次渲染时不再需要的节点
@@ -480,6 +486,7 @@ class Render {
 
   // 给当前被收起来的节点数据添加文本复位标志
   resetUnExpandNodeStyle() {
+    if (!this.renderTree) return
     walk(this.renderTree, null, node => {
       if (!node.data.expand) {
         walk(node, null, node2 => {
@@ -969,6 +976,7 @@ class Render {
       })
     } else {
       // 否则遍历整棵树
+      if (!this.renderTree) return
       walk(this.renderTree, null, node => {
         const _hasCustomStyles = this._handleRemoveCustomStyles(node.data)
         if (_hasCustomStyles) hasCustomStyles = true
@@ -1462,6 +1470,7 @@ class Render {
 
   //  展开所有
   expandAllNode() {
+    if (!this.renderTree) return
     walk(
       this.renderTree,
       null,
@@ -1480,6 +1489,7 @@ class Render {
 
   //  收起所有
   unexpandAllNode() {
+    if (!this.renderTree) return
     walk(
       this.renderTree,
       null,
@@ -1500,6 +1510,7 @@ class Render {
 
   //  展开到指定层级
   expandToLevel(level) {
+    if (!this.renderTree) return
     walk(
       this.renderTree,
       null,
@@ -1771,6 +1782,10 @@ class Render {
 
   // 展开到指定uid的节点
   expandToNodeUid(uid, callback = () => {}) {
+    if (!this.renderTree) {
+      callback()
+      return
+    }
     let parentsList = []
     const cache = {}
     bfsWalk(this.renderTree, (node, parent) => {

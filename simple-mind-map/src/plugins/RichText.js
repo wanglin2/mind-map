@@ -641,6 +641,7 @@ class RichText {
 
   // 将所有节点转换成非富文本节点
   transformAllNodesToNormalNode() {
+    if (!this.mindMap.renderer.renderTree) return
     walk(
       this.mindMap.renderer.renderTree,
       null,

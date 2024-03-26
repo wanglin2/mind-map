@@ -95,6 +95,7 @@ class Command {
       this.history.length > 0 ? this.history[this.history.length - 1] : null
     const data = this.getCopyData()
     // 此次数据和上次一样则不重复添加
+    if (lastData === data) return
     if (lastData && JSON.stringify(lastData) === JSON.stringify(data)) {
       return
     }
@@ -158,6 +159,7 @@ class Command {
 
   //  获取渲染树数据副本
   getCopyData() {
+    if (!this.mindMap.renderer.renderTree) return null
     return copyRenderTree({}, this.mindMap.renderer.renderTree, true)
   }
 

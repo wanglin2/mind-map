@@ -15,7 +15,12 @@ import {
   cssContent
 } from './src/constants/constant'
 import { SVG } from '@svgdotjs/svg.js'
-import { simpleDeepClone, getType, getObjectChangedProps } from './src/utils'
+import {
+  simpleDeepClone,
+  getType,
+  getObjectChangedProps,
+  isUndef
+} from './src/utils'
 import defaultTheme, {
   checkIsNodeSizeIndependenceConfig
 } from './src/themes/default'
@@ -94,7 +99,7 @@ class MindMap {
     // 初始渲染
     this.render(this.opt.fit ? () => this.view.fit() : () => {})
     setTimeout(() => {
-      this.command.addHistory()
+      if (this.opt.data) this.command.addHistory()
     }, 0)
   }
 
@@ -111,6 +116,7 @@ class MindMap {
 
   // 预处理节点数据
   handleData(data) {
+    if (isUndef(data) || Object.keys(data).length <= 0) return null
     data = simpleDeepClone(data || {})
     // 根节点不能收起
     if (data.data && !data.data.expand) {
