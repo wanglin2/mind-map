@@ -92,13 +92,13 @@ function createIconNode() {
     }
     node.size(iconSize, iconSize)
     node.on('click', e => {
-      this.mindMap.emit('node_icon_click', this, item, e)
+      this.mindMap.emit('node_icon_click', this, item, e, node)
     })
     node.on('mouseenter', e => {
-      this.mindMap.emit('node_icon_mouseenter', this, item, e)
+      this.mindMap.emit('node_icon_mouseenter', this, item, e, node)
     })
     node.on('mouseleave', e => {
-      this.mindMap.emit('node_icon_mouseleave', this, item, e)
+      this.mindMap.emit('node_icon_mouseleave', this, item, e, node)
     })
     return {
       node,

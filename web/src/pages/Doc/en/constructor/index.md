@@ -114,6 +114,8 @@ const mindMap = new MindMap({
 | isOnlySearchCurrentRenderNodes（v0.9.8+）     | Boolean | false  | Is it necessary to only search for the current rendered node, and nodes that have been collapsed will not be searched for |         |
 | onlyOneEnableActiveNodeOnCooperate（v0.9.8+）     | Boolean | false  | During collaborative editing, the same node cannot be selected by multiple people at the same time |         |
 | beforeCooperateUpdate（v0.9.8+）     | Function、null | null  | During collaborative editing, node operations are about to be updated to the lifecycle functions of other clients. The function takes an object as a parameter:{ type: 【createOrUpdate（Create or update nodes）、delete（Delete node）】, list: 【Array type, 1.When type=createOrUpdate, it represents the node data that has been created or updated, which will be synchronized to other clients, so you can modify the data; 2.When type=delete, represents the deleted node data】 } |         |
+| beforeShortcutRun（v0.9.9+）     | Function、null | null  | The lifecycle function before the shortcut operation is about to be executed, returning true can prevent the operation from executing. The function takes two parameters: key（Shortcut key）、activeNodeList（List of currently activated nodes） |
+| rainbowLinesConfig（v0.9.9+）     | Object | { open: false, colorsList: [] }  | Rainbow line configuration requires registering the RainbowLines plugin first. Object type, Structure: { open: false【Is turn on rainbow lines】, colorsList: []【Customize the color list for rainbow lines. If not set, the default color list will be used】 } |
 
 ### Data structure
 
@@ -314,6 +316,12 @@ Current Theme Configuration.
 
 ## Instance methods
 
+### updateData(data)
+
+> v0.9.9+
+
+Update canvas data. If the new data is formed by adding, deleting, modifying, and querying based on the current canvas node data, this method can be used to update the canvas data. The performance will be better, and not all nodes will be recreated, but rather reused as much as possible.
+
 ### clearDraw()
 
 > v0.8.0+
@@ -419,7 +427,9 @@ Listen to an event. Event list:
 | associative_line_click（v0.4.5+）    |  Triggered when an associated line is clicked  |  path(Connector node)、clickPath(Invisible click line node)、node(Start node)、toNode(Target node)          |
 | svg_mouseenter（v0.5.1+）    | Triggered when the mouse moves into the SVG canvas   | e（event object）  |
 | svg_mouseleave（v0.5.1+）    | Triggered when the mouse moves out of the SVG canvas   | e（event object）  |
-| node_icon_click（v0.6.10+）    | Triggered when clicking on an icon within a node   | this（node instance）、item（Click on the icon name）、e（event object）  |
+| node_icon_click（v0.6.10+）    | Triggered when clicking on an icon within a node   | this（node instance）、item（Click on the icon name）、e（event object）、node(Icon node, v0.9.9+)   |
+| node_icon_mouseenter（v0.9.9+）    |  Triggered when the mouse moves into an icon within a node  | this（node instance）、item（Click on the icon name）、e（event object）、node(Icon node)  |
+| node_icon_mouseleave（v0.9.9+）    |  Triggered when the mouse moves out of the icon within the node  | this（node instance）、item（Click on the icon name）、e（event object）、node(Icon node)  |
 | view_theme_change（v0.6.12+）    | Triggered after calling the setTheme method to set the theme   | theme（theme name）  |
 | set_data（v0.7.3+）    |  Triggered when the setData method is called to dynamically set mind map data  | data（New Mind Map Data）  |
 | resize（v0.8.0+）    | Triggered after the container size changes, actually when the 'resize' method of the mind map instance is called   |   |
@@ -428,6 +438,9 @@ Listen to an event. Event list:
 | body_click    | Click event of document.body                       | e（event object）      |
 | data_change_detail（v0.9.3+）    |  The detailed changes in rendering tree data will return an array, with each item representing an update point and each item being an object, There is a 'type' attribute that represents the type of detail, Including 'create' (create node), 'update' (update node), 'delete' (delete node), There is a 'data' attribute that represents the current updated node data. If it is of the 'update' type, there will also be an 'oldData' attribute that saves the data of the node before the update  | arr（Detail data）      |
 | layout_change（v0.9.4+）    |  Triggered when modifying the structure, i.e. when the mindMap.setLayout() method is called | layout（New layout）      |
+| node_cooperate_avatar_click（v0.9.9+）    | Triggered when the mouse clicks on a person's avatar during collaborative editing  |  userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)      |
+| node_cooperate_avatar_mouseenter（v0.9.9+）    |  Triggered when the mouse moves over a person's avatar during collaborative editing |  userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)    |
+| node_cooperate_avatar_mouseleave（v0.9.9+）    |  Triggered when removing personnel avatars with the mouse during collaborative editing |  userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)   |
 
 ### emit(event, ...args)
 

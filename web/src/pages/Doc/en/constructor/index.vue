@@ -658,6 +658,20 @@
 <td>During collaborative editing, node operations are about to be updated to the lifecycle functions of other clients. The function takes an object as a parameter:{ type: 【createOrUpdate（Create or update nodes）、delete（Delete node）】, list: 【Array type, 1.When type=createOrUpdate, it represents the node data that has been created or updated, which will be synchronized to other clients, so you can modify the data; 2.When type=delete, represents the deleted node data】 }</td>
 <td></td>
 </tr>
+<tr>
+<td>beforeShortcutRun（v0.9.9+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>The lifecycle function before the shortcut operation is about to be executed, returning true can prevent the operation from executing. The function takes two parameters: key（Shortcut key）、activeNodeList（List of currently activated nodes）</td>
+<td></td>
+</tr>
+<tr>
+<td>rainbowLinesConfig（v0.9.9+）</td>
+<td>Object</td>
+<td>{ open: false, colorsList: [] }</td>
+<td>Rainbow line configuration requires registering the RainbowLines plugin first. Object type, Structure: { open: false【Is turn on rainbow lines】, colorsList: []【Customize the color list for rainbow lines. If not set, the default color list will be used】 }</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Data structure</h3>
@@ -872,6 +886,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 <h3>themeConfig</h3>
 <p>Current Theme Configuration.</p>
 <h2>Instance methods</h2>
+<h3>updateData(data)</h3>
+<blockquote>
+<p>v0.9.9+</p>
+</blockquote>
+<p>Update canvas data. If the new data is formed by adding, deleting, modifying, and querying based on the current canvas node data, this method can be used to update the canvas data. The performance will be better, and not all nodes will be recreated, but rather reused as much as possible.</p>
 <h3>clearDraw()</h3>
 <blockquote>
 <p>v0.8.0+</p>
@@ -1119,7 +1138,17 @@ poor performance and should be used sparingly.</p>
 <tr>
 <td>node_icon_click（v0.6.10+）</td>
 <td>Triggered when clicking on an icon within a node</td>
-<td>this（node instance）、item（Click on the icon name）、e（event object）</td>
+<td>this（node instance）、item（Click on the icon name）、e（event object）、node(Icon node, v0.9.9+)</td>
+</tr>
+<tr>
+<td>node_icon_mouseenter（v0.9.9+）</td>
+<td>Triggered when the mouse moves into an icon within a node</td>
+<td>this（node instance）、item（Click on the icon name）、e（event object）、node(Icon node)</td>
+</tr>
+<tr>
+<td>node_icon_mouseleave（v0.9.9+）</td>
+<td>Triggered when the mouse moves out of the icon within the node</td>
+<td>this（node instance）、item（Click on the icon name）、e（event object）、node(Icon node)</td>
 </tr>
 <tr>
 <td>view_theme_change（v0.6.12+）</td>
@@ -1160,6 +1189,21 @@ poor performance and should be used sparingly.</p>
 <td>layout_change（v0.9.4+）</td>
 <td>Triggered when modifying the structure, i.e. when the mindMap.setLayout() method is called</td>
 <td>layout（New layout）</td>
+</tr>
+<tr>
+<td>node_cooperate_avatar_click（v0.9.9+）</td>
+<td>Triggered when the mouse clicks on a person's avatar during collaborative editing</td>
+<td>userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)</td>
+</tr>
+<tr>
+<td>node_cooperate_avatar_mouseenter（v0.9.9+）</td>
+<td>Triggered when the mouse moves over a person's avatar during collaborative editing</td>
+<td>userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)</td>
+</tr>
+<tr>
+<td>node_cooperate_avatar_mouseleave（v0.9.9+）</td>
+<td>Triggered when removing personnel avatars with the mouse during collaborative editing</td>
+<td>userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)</td>
 </tr>
 </tbody>
 </table>

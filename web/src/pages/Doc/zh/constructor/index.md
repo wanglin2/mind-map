@@ -113,6 +113,9 @@ const mindMap = new MindMap({
 | isOnlySearchCurrentRenderNodes（v0.9.8+）     | Boolean | false  | 是否仅搜索当前渲染的节点，被收起的节点不会被搜索到 |
 | onlyOneEnableActiveNodeOnCooperate（v0.9.8+）     | Boolean | false  | 协同编辑时，同一个节点不能同时被多人选中 |
 | beforeCooperateUpdate（v0.9.8+）     | Function、null | null  | 协同编辑时，节点操作即将更新到其他客户端前的生命周期函数。函数接收一个对象作为参数：{ type: 【createOrUpdate（创建节点或更新节点）、delete（删除节点）】, list: 【数组类型，1.当type=createOrUpdate时，代表被创建或被更新的节点数据，即将同步到其他客户端，所以你可以修改该数据；2.当type=delete时，代表被删除的节点数据】 } |
+| beforeShortcutRun（v0.9.9+）     | Function、null | null  | 快捷键操作即将执行前的生命周期函数，返回true可以阻止操作执行。函数接收两个参数：key（快捷键）、activeNodeList（当前激活的节点列表） |
+| rainbowLinesConfig（v0.9.9+）     | Object | { open: false, colorsList: [] }  | 彩虹线条配置，需要先注册RainbowLines插件。对象类型，结构：{ open: false【是否开启彩虹线条】, colorsList: []【自定义彩虹线条的颜色列表，如果不设置，会使用默认颜色列表】 } |
+
 
 ### 数据结构
 
@@ -313,6 +316,12 @@ mindMap.setTheme('主题名称')
 
 ## 实例方法
 
+### updateData(data)
+
+> v0.9.9+
+
+更新画布数据，如果新的数据是在当前画布节点数据基础上增删改查后形成的，那么可以使用该方法来更新画布数据。性能会更好，不会重新创建所有节点，而是会尽可能的复用。
+
 ### clearDraw()
 
 > v0.8.0+
@@ -415,7 +424,9 @@ mindMap.setTheme('主题名称')
 | associative_line_click（v0.4.5+）    |  点击某条关联线时触发  |  path（连接线节点）、clickPath（不可见的点击线节点）、node（起始节点）、toNode（目标节点）           |
 | svg_mouseenter（v0.5.1+）    | 鼠标移入svg画布时触发   | e（事件对象）  |
 | svg_mouseleave（v0.5.1+）    | 鼠标移出svg画布时触发   | e（事件对象）  |
-| node_icon_click（v0.6.10+）    | 点击节点内的图标时触发   | this（节点实例）、item（点击的图标名称）、e（事件对象）  |
+| node_icon_click（v0.6.10+）    | 点击节点内的图标时触发   | this（节点实例）、item（点击的图标名称）、e（事件对象）、node(图标节点，v0.9.9+)  |
+| node_icon_mouseenter（v0.9.9+）    |  鼠标移入节点内的图标时触发  | this（节点实例）、item（点击的图标名称）、e（事件对象）、node(图标节点)  |
+| node_icon_mouseleave（v0.9.9+）    |  鼠标移出节点内的图标时触发  | this（节点实例）、item（点击的图标名称）、e（事件对象）、node(图标节点)  |
 | view_theme_change（v0.6.12+）    | 调用了setTheme方法设置主题后触发   | theme（设置的新主题名称）  |
 | set_data（v0.7.3+）    | 调用了setData方法动态设置思维导图数据时触发   | data（新的思维导图数据）  |
 | resize（v0.8.0+）    |  容器尺寸改变后触发，实际上是当思维导图实例的`resize`方法被调用后触发  |   |
@@ -424,6 +435,9 @@ mindMap.setTheme('主题名称')
 | body_click    | document.body的点击事件                      | e（事件对象）      |
 | data_change_detail（v0.9.3+）    |  渲染树数据变化的明细，会返回一个数组，每一项代表一个更新点，每一项都是一个对象，存在一个`type`属性，代表明细的类型，包含`create`（创建节点）、`update`（更新节点）、`delete`（删除节点），存在一个`data`属性，代表当前更新的节点数据，如果是`update`类型，还会存在一个`oldData`属性，保存了更新前该节点的数据  | arr（明细数据）      |
 | layout_change（v0.9.4+）    | 修改结构时触发，即调用了mindMap.setLayout()方法时触发  | layout（新的结构）      |
+| node_cooperate_avatar_click（v0.9.9+）    | 协同编辑时，鼠标点击人员头像时触发  |  userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)      |
+| node_cooperate_avatar_mouseenter（v0.9.9+）    | 协同编辑时，鼠标移入人员头像时触发  |  userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)     |
+| node_cooperate_avatar_mouseleave（v0.9.9+）    | 协同编辑时，鼠标移除人员头像时触发  |  userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)      |
 
 ### emit(event, ...args)
 

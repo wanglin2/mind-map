@@ -561,6 +561,18 @@
 <td>null</td>
 <td>协同编辑时，节点操作即将更新到其他客户端前的生命周期函数。函数接收一个对象作为参数：{ type: 【createOrUpdate（创建节点或更新节点）、delete（删除节点）】, list: 【数组类型，1.当type=createOrUpdate时，代表被创建或被更新的节点数据，即将同步到其他客户端，所以你可以修改该数据；2.当type=delete时，代表被删除的节点数据】 }</td>
 </tr>
+<tr>
+<td>beforeShortcutRun（v0.9.9+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>快捷键操作即将执行前的生命周期函数，返回true可以阻止操作执行。函数接收两个参数：key（快捷键）、activeNodeList（当前激活的节点列表）</td>
+</tr>
+<tr>
+<td>rainbowLinesConfig（v0.9.9+）</td>
+<td>Object</td>
+<td>{ open: false, colorsList: [] }</td>
+<td>彩虹线条配置，需要先注册RainbowLines插件。对象类型，结构：{ open: false【是否开启彩虹线条】, colorsList: []【自定义彩虹线条的颜色列表，如果不设置，会使用默认颜色列表】 }</td>
+</tr>
 </tbody>
 </table>
 <h3>数据结构</h3>
@@ -775,6 +787,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <h3>themeConfig</h3>
 <p>当前主题配置。</p>
 <h2>实例方法</h2>
+<h3>updateData(data)</h3>
+<blockquote>
+<p>v0.9.9+</p>
+</blockquote>
+<p>更新画布数据，如果新的数据是在当前画布节点数据基础上增删改查后形成的，那么可以使用该方法来更新画布数据。性能会更好，不会重新创建所有节点，而是会尽可能的复用。</p>
 <h3>clearDraw()</h3>
 <blockquote>
 <p>v0.8.0+</p>
@@ -1015,7 +1032,17 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>node_icon_click（v0.6.10+）</td>
 <td>点击节点内的图标时触发</td>
-<td>this（节点实例）、item（点击的图标名称）、e（事件对象）</td>
+<td>this（节点实例）、item（点击的图标名称）、e（事件对象）、node(图标节点，v0.9.9+)</td>
+</tr>
+<tr>
+<td>node_icon_mouseenter（v0.9.9+）</td>
+<td>鼠标移入节点内的图标时触发</td>
+<td>this（节点实例）、item（点击的图标名称）、e（事件对象）、node(图标节点)</td>
+</tr>
+<tr>
+<td>node_icon_mouseleave（v0.9.9+）</td>
+<td>鼠标移出节点内的图标时触发</td>
+<td>this（节点实例）、item（点击的图标名称）、e（事件对象）、node(图标节点)</td>
 </tr>
 <tr>
 <td>view_theme_change（v0.6.12+）</td>
@@ -1056,6 +1083,21 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>layout_change（v0.9.4+）</td>
 <td>修改结构时触发，即调用了mindMap.setLayout()方法时触发</td>
 <td>layout（新的结构）</td>
+</tr>
+<tr>
+<td>node_cooperate_avatar_click（v0.9.9+）</td>
+<td>协同编辑时，鼠标点击人员头像时触发</td>
+<td>userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)</td>
+</tr>
+<tr>
+<td>node_cooperate_avatar_mouseenter（v0.9.9+）</td>
+<td>协同编辑时，鼠标移入人员头像时触发</td>
+<td>userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)</td>
+</tr>
+<tr>
+<td>node_cooperate_avatar_mouseleave（v0.9.9+）</td>
+<td>协同编辑时，鼠标移除人员头像时触发</td>
+<td>userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)</td>
 </tr>
 </tbody>
 </table>

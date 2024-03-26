@@ -1,6 +1,27 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.9.9</h2>
+<p>New:</p>
+<blockquote>
+<p>1.Support inserting child nodes with the insert key;</p>
+<p>2.Add the beforeShortcutRun instantiation option to intercept shortcut key operations;</p>
+<p>3.The method of incrementally updating canvas data by adding root instances, updateData;</p>
+<p>4.Add a rainbow line plugin;</p>
+<p>5.Add mouse in and out events to icons in nodes;</p>
+<p>6.Add the getAncestorNodes method to the node instance to obtain the list of ancestor nodes;</p>
+<p>7.Adding mouse events to personnel avatars during collaborative editing;</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.Support configuration of rainbow lines;</p>
+</blockquote>
+<p>Client:</p>
+<blockquote>
+<p>1.Double click the file to open the application without opening the workbench page;</p>
+<p>2.Fix the issue of multiple editing windows opening when repeatedly opening the same file;</p>
+<p>3.Prompt for modifying and deleting files being edited;</p>
+</blockquote>
 <h2>0.9.8</h2>
 <p>Fix:</p>
 <blockquote>
