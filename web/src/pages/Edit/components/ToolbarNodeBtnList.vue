@@ -179,7 +179,7 @@ export default {
   data() {
     return {
       activeNodes: [],
-      backEnd: false,
+      backEnd: true,
       forwardEnd: true,
       readonly: false,
       isFullDataFile: false,

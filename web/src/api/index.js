@@ -14,6 +14,7 @@ let mindMapData = null
  * @Desc: 克隆思维导图数据，去除激活状态
  */
 const copyMindMapTreeData = (tree, root) => {
+  if (!root) return null
   tree.data = simpleDeepClone(root.data)
   // tree.data.isActive = false
   tree.children = []
