@@ -37,9 +37,9 @@
 </tr>
 <tr>
 <td>data</td>
-<td>Object</td>
-<td>{}</td>
-<td>Mind map data, Please refer to the introduction of 【Data structure】 below</td>
+<td>Object 、null</td>
+<td></td>
+<td>Mind map data, Please refer to the introduction of 【Data structure】 below. V0.9.9+supports passing empty objects or null, and the canvas will display blank space</td>
 <td></td>
 </tr>
 <tr>
@@ -1474,7 +1474,7 @@ redo. All commands are as follows:</p>
 </table>
 <h3>setData(data)</h3>
 <p>Dynamic setting of mind map data, pure node data</p>
-<p><code>data</code>: mind map structure data</p>
+<p><code>data</code>: mind map structure data. V0.9.9+ supports passing empty objects or null, and the canvas will display blank space.</p>
 <h3>setFullData(<em>data</em>)</h3>
 <blockquote>
 <p>v0.2.7+</p>

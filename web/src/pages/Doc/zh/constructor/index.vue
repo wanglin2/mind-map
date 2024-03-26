@@ -35,9 +35,9 @@
 </tr>
 <tr>
 <td>data</td>
-<td>Object</td>
-<td>{}</td>
-<td>思维导图数据，可参考下方【数据结构】介绍</td>
+<td>Object 、 null</td>
+<td></td>
+<td>思维导图数据，可参考下方【数据结构】介绍。v0.9.9+支持传空对象或者null，画布会显示空白</td>
 </tr>
 <tr>
 <td>layout</td>
@@ -1370,7 +1370,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </table>
 <h3>setData(data)</h3>
 <p>动态设置思维导图数据，纯节点数据</p>
-<p><code>data</code>：思维导图结构数据</p>
+<p><code>data</code>：思维导图结构数据。v0.9.9+支持传空对象或者null，画布会显示空白。</p>
 <h3>setFullData(<em>data</em>)</h3>
 <blockquote>
 <p>v0.2.7+</p>

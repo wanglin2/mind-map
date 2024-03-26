@@ -2,6 +2,10 @@
   <div>
     <h1>Changelog</h1>
 <h2>0.9.9</h2>
+<p>修复：</p>
+<blockquote>
+<p>1.修复第一次创建关联线时，箭头颜色不正确的问题；</p>
+</blockquote>
 <p>新增：</p>
 <blockquote>
 <p>1.支持insert键插入下级节点；</p>
@@ -11,6 +15,7 @@
 <p>5.节点中的图标添加鼠标移入和移出事件；</p>
 <p>6.节点实例新增getAncestorNodes方法用于获取祖先节点列表；</p>
 <p>7.协同编辑时的人员头像增加鼠标事件；</p>
+<p>8.实例化及setData方法支持传入空的data；</p>
 </blockquote>
 <p>Demo：</p>
 <blockquote>

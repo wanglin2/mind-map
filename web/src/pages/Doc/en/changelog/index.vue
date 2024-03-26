@@ -2,6 +2,10 @@
   <div>
     <h1>Changelog</h1>
 <h2>0.9.9</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue of incorrect arrow color when creating association lines for the first time;</p>
+</blockquote>
 <p>New:</p>
 <blockquote>
 <p>1.Support inserting child nodes with the insert key;</p>
@@ -11,6 +15,7 @@
 <p>5.Add mouse in and out events to icons in nodes;</p>
 <p>6.Add the getAncestorNodes method to the node instance to obtain the list of ancestor nodes;</p>
 <p>7.Adding mouse events to personnel avatars during collaborative editing;</p>
+<p>8.Instantiation and setData methods support passing in empty data;</p>
 </blockquote>
 <p>Demo:</p>
 <blockquote>

@@ -2,6 +2,10 @@
 
 ## 0.9.9
 
+Fix:
+
+> 1.Fix the issue of incorrect arrow color when creating association lines for the first time;
+
 New:
 
 > 1.Support inserting child nodes with the insert key;
@@ -17,6 +21,8 @@ New:
 > 6.Add the getAncestorNodes method to the node instance to obtain the list of ancestor nodes;
 >
 > 7.Adding mouse events to personnel avatars during collaborative editing;
+>
+> 8.Instantiation and setData methods support passing in empty data;
 
 Demo:
 

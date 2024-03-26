@@ -25,7 +25,7 @@ const mindMap = new MindMap({
 | Field Name                       | Type    | Default Value    | Description                                                  | Required |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ | -------- |
 | el                               | Element |                  | Container element, must be a DOM element                     | Yes      |
-| data                             | Object  | {}               | Mind map data, Please refer to the introduction of 【Data structure】 below |          |
+| data                             | Object 、null  |     | Mind map data, Please refer to the introduction of 【Data structure】 below. V0.9.9+supports passing empty objects or null, and the canvas will display blank space |          |
 | layout                           | String  | logicalStructure | Layout type, options: logicalStructure (logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)、timeline（v0.5.4+, timeline）、timeline2（v0.5.4+, up down alternating timeline）、fishbone（v0.5.4+, fishbone diagram） |          |
 | fishboneDeg（v0.5.4+）                      | Number |  45          |    Set the diagonal angle of the fishbone structure diagram        |        |
 | theme                            | String  | default          | Theme, options: default, classic, minions, pinkGrape, mint, gold, vitalityOrange, greenLeaf, dark2, skyGreen, classic2, classic3, classic4(v0.2.0+), classicGreen, classicBlue, blueSky, brainImpairedPink, dark, earthYellow, freshGreen, freshRed, romanticPurple, simpleBlack(v0.5.4+), courseGreen(v0.5.4+), coffee(v0.5.4+), redSpirit(v0.5.4+), blackHumour(v0.5.4+), lateNightOffice(v0.5.4+), blackGold(v0.5.4+)、、avocado(v.5.10-fix.2+)、autumn(v.5.10-fix.2+)、orangeJuice(v.5.10-fix.2+) |          |
@@ -563,7 +563,7 @@ redo. All commands are as follows:
 
 Dynamic setting of mind map data, pure node data
 
-`data`: mind map structure data
+`data`: mind map structure data. V0.9.9+ supports passing empty objects or null, and the canvas will display blank space.
 
 ### setFullData(_data_)
 
