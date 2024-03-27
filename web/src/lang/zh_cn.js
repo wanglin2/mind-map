@@ -150,7 +150,8 @@ export default {
     closeMiniMap: '关闭小地图',
     readonly: '切换为只读模式',
     edit: '切换为编辑模式',
-    backToRoot: '回到根节点'
+    backToRoot: '回到根节点',
+    changeSourceCodeEdit: '切换为源码编辑模式'
   },
   nodeHyperlink: {
     title: '超链接',
@@ -311,5 +312,15 @@ export default {
   },
   other: {
     loading: '正在加载，请稍后...'
+  },
+  sourceCodeEdit: {
+    sourceCodeTip: '富文本模式下不建议修改样式，因为需要同步修改数据及html结构。',
+    format: '格式化',
+    copy: '复制',
+    confirm: '完成',
+    close: '关闭',
+    formatErrorTip: 'JSON格式有误，请检查后再试',
+    copyTip: '已复制到剪贴板',
+    formatTip: '格式化完成'
   }
 }

@@ -24,6 +24,7 @@
     <OutlineEdit v-if="mindMap" :mindMap="mindMap"></OutlineEdit>
     <Scrollbar v-if="isShowScrollbar && mindMap" :mindMap="mindMap"></Scrollbar>
     <FormulaSidebar v-if="mindMap" :mindMap="mindMap"></FormulaSidebar>
+    <SourceCodeEdit v-if="mindMap" :mindMap="mindMap"></SourceCodeEdit>
   </div>
 </template>
 
@@ -83,6 +84,7 @@ import handleClipboardText from '@/utils/handleClipboardText'
 import Scrollbar from './Scrollbar.vue'
 import exampleData from 'simple-mind-map/example/exampleData'
 import FormulaSidebar from './FormulaSidebar.vue'
+import SourceCodeEdit from './SourceCodeEdit.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -134,7 +136,8 @@ export default {
     NodeIconToolbar,
     OutlineEdit,
     Scrollbar,
-    FormulaSidebar
+    FormulaSidebar,
+    SourceCodeEdit
   },
   data() {
     return {

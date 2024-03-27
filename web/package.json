@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@toast-ui/editor": "^3.1.5",
+    "codemirror": "^5.65.16",
     "core-js": "^3.6.5",
     "element-ui": "^2.15.1",
     "highlight.js": "^10.7.3",

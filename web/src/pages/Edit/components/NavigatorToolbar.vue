@@ -81,6 +81,15 @@
       ></div>
     </div>
     <div class="item">
+      <el-tooltip
+        effect="dark"
+        :content="$t('navigatorToolbar.changeSourceCodeEdit')"
+        placement="top"
+      >
+        <div class="btn iconfont iconyuanma" @click="openSourceCodeEdit"></div>
+      </el-tooltip>
+    </div>
+    <div class="item">
       <el-dropdown @command="handleCommand">
         <div class="btn iconfont iconbangzhu"></div>
         <el-dropdown-menu slot="dropdown">
@@ -141,7 +150,7 @@ export default {
     this.lang = getLang()
   },
   methods: {
-    ...mapMutations(['setLocalConfig', 'setIsReadonly']),
+    ...mapMutations(['setLocalConfig', 'setIsReadonly', 'setIsOutlineEdit']),
 
     readonlyChange() {
       this.setIsReadonly(!this.isReadonly)
@@ -198,6 +207,10 @@ export default {
 
     backToRoot() {
       this.mindMap.renderer.setRootNodeCenter()
+    },
+
+    openSourceCodeEdit() {
+      this.setIsOutlineEdit(true)
     }
   }
 }

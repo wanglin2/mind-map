@@ -152,7 +152,8 @@ export default {
     closeMiniMap: 'Close mini map',
     readonly: 'Change to eadonly',
     edit: 'Change to edit',
-    backToRoot: 'Back to root node'
+    backToRoot: 'Back to root node',
+    changeSourceCodeEdit: 'Switch to source code editing mode'
   },
   nodeHyperlink: {
     title: 'Link',
@@ -317,5 +318,15 @@ export default {
   },
   other: {
     loading: 'Loading, please wait...'
+  },
+  sourceCodeEdit: {
+    sourceCodeTip: 'It is not recommended to modify the style in rich text mode because it requires synchronous modification of data and HTML structure.',
+    format: 'Format',
+    copy: 'Copy',
+    confirm: 'Complete',
+    close: 'Close',
+    formatErrorTip: 'The JSON format is incorrect. Please check and try again',
+    copyTip: 'Copied to clipboard',
+    formatTip: 'Format complete'
   }
 }
