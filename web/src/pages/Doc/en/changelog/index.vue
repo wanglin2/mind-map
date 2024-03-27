@@ -20,6 +20,7 @@
 <p>Demo:</p>
 <blockquote>
 <p>1.Support configuration of rainbow lines;</p>
+<p>2.Add source code editing mode;</p>
 </blockquote>
 <p>Client:</p>
 <blockquote>

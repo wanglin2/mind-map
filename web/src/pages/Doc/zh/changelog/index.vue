@@ -20,6 +20,7 @@
 <p>Demo：</p>
 <blockquote>
 <p>1.支持配置彩虹线条；</p>
+<p>2.新增源码编辑模式；</p>
 </blockquote>
 <p>客户端:</p>
 <blockquote>

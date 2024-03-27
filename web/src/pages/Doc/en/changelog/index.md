@@ -27,6 +27,8 @@ New:
 Demo:
 
 > 1.Support configuration of rainbow lines;
+>
+> 2.Add source code editing mode;
 
 Client:
 
