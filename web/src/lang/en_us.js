@@ -130,7 +130,9 @@ export default {
     paddingX: 'Padding x',
     paddingY: 'Padding y',
     useMultiPageExport: 'Export multi page',
-    defaultFileName: 'Mind map'
+    defaultFileName: 'Mind map',
+    addFooterTextPlaceholder: 'For example: From simple-mind-map',
+    addFooterText: 'Add text at the footer'
   },
   fullscreen: {
     fullscreenShow: 'Full screen show',
@@ -278,7 +280,8 @@ export default {
     splitByWrap: 'Is automatically split nodes based on line breaks?',
     tip: 'Tip',
     yes: 'Yes',
-    no: 'No'
+    no: 'No',
+    exportError: 'Export failed'
   },
   mouseAction: {
     tip1:

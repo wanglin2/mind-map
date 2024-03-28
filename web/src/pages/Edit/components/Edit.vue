@@ -156,7 +156,8 @@ export default {
       useLeftKeySelectionRightKeyDrag: state =>
         state.localConfig.useLeftKeySelectionRightKeyDrag,
       isUseHandDrawnLikeStyle: state =>
-        state.localConfig.isUseHandDrawnLikeStyle
+        state.localConfig.isUseHandDrawnLikeStyle,
+      extraTextOnExport: state => state.extraTextOnExport
     })
   },
   watch: {
@@ -348,12 +349,55 @@ export default {
           console.error(err)
           switch (code) {
             case 'export_error':
-              this.$message.error('导出失败')
+              this.$message.error(this.$t('edit.exportError'))
               break
             default:
               break
           }
+        },
+        addContentToFooter: () => {
+          const text = this.extraTextOnExport.trim()
+          if (!text) return null
+          const el = document.createElement('div')
+          el.className = 'footer'
+          el.innerHTML = text
+          const cssText = `
+            .footer {
+              width: 100%;
+              height: 30px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              font-size: 12px;
+              color: #979797;
+            }
+          `
+          return {
+            el,
+            cssText,
+            height: 30
+          }
         }
+        // addContentToHeader: () => {
+        //   const el = document.createElement('div')
+        //   el.className = 'footer'
+        //   el.innerHTML = '理想青年实验室'
+        //   const cssText = `
+        //     .header {
+        //       width: 100%;
+        //       height: 50px;
+        //       background: #f5f5f5;
+        //       display: flex;
+        //       justify-content: center;
+        //       align-items: center
+        //     }
+        //   `
+        //   return {
+        //     el,
+        //     cssText,
+        //     height: 50
+        //   }
+        // },
         // beforeShortcutRun: (key, activeNodeList) => {
         //   console.log(key, activeNodeList)
         //   // 阻止删除快捷键行为

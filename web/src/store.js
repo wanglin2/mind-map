@@ -26,7 +26,8 @@ const store = new Vuex.Store({
     activeSidebar: '', // 当前显示的侧边栏
     isOutlineEdit: false, // 是否是大纲编辑模式
     isReadonly: false, // 是否只读
-    isSourceCodeEdit: false// 是否是源码编辑模式
+    isSourceCodeEdit: false, // 是否是源码编辑模式
+    extraTextOnExport: ''// 导出时底部添加的文字
   },
   mutations: {
     // 设置思维导图数据
@@ -67,6 +68,11 @@ const store = new Vuex.Store({
     setIsOutlineEdit(state, data) {
       state.isSourceCodeEdit = data
     },
+
+    // 设置导出时底部添加的文字
+    setExtraTextOnExport(state, data) {
+      state.extraTextOnExport = data
+    }
   },
   actions: {
     // 设置初始思维导图数据

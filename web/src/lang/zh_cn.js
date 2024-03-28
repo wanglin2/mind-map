@@ -128,7 +128,9 @@ export default {
     paddingX: '水平内边距',
     paddingY: '垂直内边距',
     useMultiPageExport: '是否多页导出',
-    defaultFileName: '思维导图'
+    defaultFileName: '思维导图',
+    addFooterText: '底部添加文字',
+    addFooterTextPlaceholder: '比如：来自simple-mind-map'
   },
   fullscreen: {
     fullscreenShow: '全屏查看',
@@ -274,7 +276,8 @@ export default {
     splitByWrap: '是否按换行自动分割节点？',
     tip: '提示',
     yes: '是',
-    no: '否'
+    no: '否',
+    exportError: '导出失败'
   },
   mouseAction: {
     tip1: '当前：左键拖动画布，右键框选节点',
