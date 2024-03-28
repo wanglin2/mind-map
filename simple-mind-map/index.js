@@ -19,7 +19,8 @@ import {
   simpleDeepClone,
   getType,
   getObjectChangedProps,
-  isUndef
+  isUndef,
+  handleGetSvgDataExtraContent
 } from './src/utils'
 import defaultTheme, {
   checkIsNodeSizeIndependenceConfig
@@ -414,7 +415,18 @@ class MindMap {
   }
 
   // 获取svg数据
-  getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false } = {}) {
+  getSvgData({
+    paddingX = 0,
+    paddingY = 0,
+    ignoreWatermark = false,
+    addContentToHeader,
+    addContentToFooter
+  } = {}) {
+    const { cssTextList, header, headerHeight, footer, footerHeight } =
+      handleGetSvgDataExtraContent({
+        addContentToHeader,
+        addContentToFooter
+      })
     const svg = this.svg
     const draw = this.draw
     // 保存原始信息
@@ -427,8 +439,9 @@ class MindMap {
     // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
     const rect = draw.rbox()
     // 内边距
+    const fixHeight = 0
     rect.width += paddingX * 2
-    rect.height += paddingY * 2
+    rect.height += paddingY * 2 + fixHeight + headerHeight + footerHeight
     draw.translate(paddingX, paddingY)
     // 将svg设置为实际内容的宽高
     svg.size(rect.width, rect.height)
@@ -466,7 +479,21 @@ class MindMap {
       this.watermark.isInExport = false
     }
     // 添加必要的样式
-    clone.add(SVG(`<style>${cssContent}</style>`))
+    ;[cssContent, ...cssTextList].forEach(s => {
+      clone.add(SVG(`<style>${s}</style>`))
+    })
+    // 附加内容
+    if (header && headerHeight > 0) {
+      clone.findOne('.smm-container').translate(0, headerHeight)
+      header.width(rect.width)
+      header.y(paddingY)
+      clone.add(header, 0)
+    }
+    if (footer && footerHeight > 0) {
+      footer.width(rect.width)
+      footer.y(rect.height - paddingY - footerHeight)
+      clone.add(footer)
+    }
     // 修正defs里定义的元素的id，因为clone时defs里的元素的id会继续递增，导致和内容中引用的id对不上
     const defs = svg.find('defs')
     const defs2 = clone.find('defs')

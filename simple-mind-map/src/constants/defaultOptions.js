@@ -294,8 +294,8 @@ export const defaultOpt = {
   beforeShortcutRun: null,
   // 彩虹线条配置，需要先注册RainbowLines插件
   rainbowLinesConfig: {
-    open: false,// 是否开启彩虹线条
-    colorsList: []// 自定义彩虹线条的颜色列表，如果不设置，会使用默认颜色列表
+    open: false, // 是否开启彩虹线条
+    colorsList: [] // 自定义彩虹线条的颜色列表，如果不设置，会使用默认颜色列表
     /*
     [
       'rgb(255, 213, 73)',
@@ -307,5 +307,16 @@ export const defaultOpt = {
       'rgb(152, 132, 234)'
     ]
     */
-  }
+  },
+  // 导出png、svg、pdf时在头部和尾部添加自定义内容
+  // 可传递一个函数，这个函数需要返回如下数据：
+  /*
+    {
+      el,// 要追加的自定义DOM节点，样式可内联
+      cssText,// 可选，如果样式不想内联，可以传递该值，一个css字符串
+      height: 50// 返回的DOM节点的高度，必须传递
+    }
+  */
+  addContentToHeader: null,
+  addContentToFooter: null
 }

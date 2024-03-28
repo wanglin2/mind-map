@@ -4,6 +4,7 @@ import {
   selfCloseTagList
 } from '../constants/constant'
 import MersenneTwister from './mersenneTwister'
+import { ForeignObject } from '@svgdotjs/svg.js'
 
 //  深度优先遍历树
 export const walk = (
@@ -1313,5 +1314,48 @@ export const getRectRelativePosition = (rect1, rect2) => {
     return 'bottom'
   } else {
     return 'overlap'
+  }
+}
+
+// 处理获取svg内容时添加额外内容
+export const handleGetSvgDataExtraContent = ({
+  addContentToHeader,
+  addContentToFooter
+}) => {
+  // 追加内容
+  const cssTextList = []
+  let header = null
+  let headerHeight = 0
+  let footer = null
+  let footerHeight = 0
+  const handle = (fn, callback) => {
+    if (typeof fn === 'function') {
+      const { el, cssText, height } = fn()
+      if (el instanceof HTMLElement) {
+        el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
+        const foreignObject = new ForeignObject()
+        foreignObject.height(height)
+        foreignObject.add(el)
+        callback(foreignObject, height)
+      }
+      if (cssText) {
+        cssTextList.push(cssText)
+      }
+    }
+  }
+  handle(addContentToHeader, (foreignObject, height) => {
+    header = foreignObject
+    headerHeight = height
+  })
+  handle(addContentToFooter, (foreignObject, height) => {
+    footer = foreignObject
+    footerHeight = height
+  })
+  return {
+    cssTextList,
+    header,
+    headerHeight,
+    footer,
+    footerHeight
   }
 }
