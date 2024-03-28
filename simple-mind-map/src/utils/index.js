@@ -1330,7 +1330,9 @@ export const handleGetSvgDataExtraContent = ({
   let footerHeight = 0
   const handle = (fn, callback) => {
     if (typeof fn === 'function') {
-      const { el, cssText, height } = fn()
+      const res = fn()
+      if (!res) return
+      const { el, cssText, height } = res
       if (el instanceof HTMLElement) {
         el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
         const foreignObject = new ForeignObject()
