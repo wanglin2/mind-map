@@ -115,6 +115,8 @@ const mindMap = new MindMap({
 | beforeCooperateUpdate（v0.9.8+）     | Function、null | null  | 协同编辑时，节点操作即将更新到其他客户端前的生命周期函数。函数接收一个对象作为参数：{ type: 【createOrUpdate（创建节点或更新节点）、delete（删除节点）】, list: 【数组类型，1.当type=createOrUpdate时，代表被创建或被更新的节点数据，即将同步到其他客户端，所以你可以修改该数据；2.当type=delete时，代表被删除的节点数据】 } |
 | beforeShortcutRun（v0.9.9+）     | Function、null | null  | 快捷键操作即将执行前的生命周期函数，返回true可以阻止操作执行。函数接收两个参数：key（快捷键）、activeNodeList（当前激活的节点列表） |
 | rainbowLinesConfig（v0.9.9+）     | Object | { open: false, colorsList: [] }  | 彩虹线条配置，需要先注册RainbowLines插件。对象类型，结构：{ open: false【是否开启彩虹线条】, colorsList: []【自定义彩虹线条的颜色列表，如果不设置，会使用默认颜色列表】 } |
+| addContentToHeader（v0.9.9+）     | Function、null | null  | 导出png、svg、pdf时在头部添加自定义内容。可传递一个函数，这个函数可以返回null代表不添加内容，也可以返回一个对象，详细介绍请参考下方【导出时如何添加自定义内容】 |
+| addContentToFooter（v0.9.9+）     | Function、null | null  | 基本释义同addContentToHeader，在尾部添加自定义内容 |
 
 
 ### 数据结构
@@ -176,6 +178,41 @@ const mindMap = new MindMap({
 | name        | String |                                           | 图标分组的名称 |
 | type        | String |                                           | 图标分组的值 |
 | list        | Array  |                                           | 分组下的图标列表，数组的每一项为一个对象，`{ name: '', icon: '' }`，`name`代表图标的名称，`icon`代表图标，可以是`svg`图标，比如`<svg ...><path></path></svg>`，也可以是图片`url`，或者是`base64`图标，比如`data:image/png;base64,...` |
+
+### 导出时如何添加自定义内容
+
+`addContentToHeader`和`addContentToFooter`两个实例化选项可以用于在导出`png`、`svg`、`pdf`时在头部和尾部添加自定义的内容，默认为`null`，代表不配置，可以传递一个函数，函数可以返回`null`，代表不添加内容，如果要添加内容那么需要返回如下的结构：
+
+```
+{
+  el,// 要追加的自定义DOM节点，样式可内联
+  cssText,// 可选，如果样式不想内联，可以传递该值，一个css字符串
+  height: 50// 返回的DOM节点的高度，必须传递
+}
+```
+
+一个简单的示例：
+
+```js
+new MindMap({
+  addContentToFooter: () => {
+    const el = document.createElement('div')
+    el.className = 'footer'
+    el.innerHTML = '来自：simple-mind-map'
+    const cssText = `
+      .footer {
+        width: 100%;
+        height: 30px;
+      }
+    `
+    return {
+      el,
+      cssText,
+      height: 30
+    }
+  }
+})
+```
 
 ## 静态方法
 
@@ -334,7 +371,7 @@ mindMap.setTheme('主题名称')
 
 销毁思维导图。会移除注册的插件、移除监听的事件、删除画布的所有节点。
 
-### getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })
+### getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter })
 
 > v0.3.0+
 
@@ -343,6 +380,10 @@ mindMap.setTheme('主题名称')
 `paddingY`：垂直内边距
 
 `ignoreWatermark`：v0.8.0+，不要绘制水印，如果不需要绘制水印的场景可以传`true`，因为绘制水印非常慢
+
+`addContentToHeader`：v0.9.9+，Function，可以返回要追加到头部的自定义内容，详细介绍见【实例化选项】中的该配置
+
+`addContentToFooter`：v0.9.9+，Function，可以返回要追加到尾部的自定义内容，详细介绍见【实例化选项】中的该配置
 
 获取`svg`数据，返回一个对象，详细结构如下：
 

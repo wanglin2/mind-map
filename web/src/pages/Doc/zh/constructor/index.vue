@@ -573,6 +573,18 @@
 <td>{ open: false, colorsList: [] }</td>
 <td>彩虹线条配置，需要先注册RainbowLines插件。对象类型，结构：{ open: false【是否开启彩虹线条】, colorsList: []【自定义彩虹线条的颜色列表，如果不设置，会使用默认颜色列表】 }</td>
 </tr>
+<tr>
+<td>addContentToHeader（v0.9.9+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>导出png、svg、pdf时在头部添加自定义内容。可传递一个函数，这个函数可以返回null代表不添加内容，也可以返回一个对象，详细介绍请参考下方【导出时如何添加自定义内容】</td>
+</tr>
+<tr>
+<td>addContentToFooter（v0.9.9+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>基本释义同addContentToHeader，在尾部添加自定义内容</td>
+</tr>
 </tbody>
 </table>
 <h3>数据结构</h3>
@@ -691,6 +703,34 @@
 </tr>
 </tbody>
 </table>
+<h3>导出时如何添加自定义内容</h3>
+<p><code>addContentToHeader</code>和<code>addContentToFooter</code>两个实例化选项可以用于在导出<code>png</code>、<code>svg</code>、<code>pdf</code>时在头部和尾部添加自定义的内容，默认为<code>null</code>，代表不配置，可以传递一个函数，函数可以返回<code>null</code>，代表不添加内容，如果要添加内容那么需要返回如下的结构：</p>
+<pre class="hljs"><code>{
+  el,// 要追加的自定义DOM节点，样式可内联
+  cssText,// 可选，如果样式不想内联，可以传递该值，一个css字符串
+  height: 50// 返回的DOM节点的高度，必须传递
+}
+</code></pre>
+<p>一个简单的示例：</p>
+<pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({
+  <span class="hljs-attr">addContentToFooter</span>: <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> el = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>)
+    el.className = <span class="hljs-string">&#x27;footer&#x27;</span>
+    el.innerHTML = <span class="hljs-string">&#x27;来自：simple-mind-map&#x27;</span>
+    <span class="hljs-keyword">const</span> cssText = <span class="hljs-string">`
+      .footer {
+        width: 100%;
+        height: 30px;
+      }
+    `</span>
+    <span class="hljs-keyword">return</span> {
+      el,
+      cssText,
+      <span class="hljs-attr">height</span>: <span class="hljs-number">30</span>
+    }
+  }
+})
+</code></pre>
 <h2>静态方法</h2>
 <h3>defineTheme(name, config)</h3>
 <blockquote>
@@ -802,13 +842,15 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <p>v0.6.0+</p>
 </blockquote>
 <p>销毁思维导图。会移除注册的插件、移除监听的事件、删除画布的所有节点。</p>
-<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })</h3>
+<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter })</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
 <p><code>paddingX</code>：水平内边距</p>
 <p><code>paddingY</code>：垂直内边距</p>
 <p><code>ignoreWatermark</code>：v0.8.0+，不要绘制水印，如果不需要绘制水印的场景可以传<code>true</code>，因为绘制水印非常慢</p>
+<p><code>addContentToHeader</code>：v0.9.9+，Function，可以返回要追加到头部的自定义内容，详细介绍见【实例化选项】中的该配置</p>
+<p><code>addContentToFooter</code>：v0.9.9+，Function，可以返回要追加到尾部的自定义内容，详细介绍见【实例化选项】中的该配置</p>
 <p>获取<code>svg</code>数据，返回一个对象，详细结构如下：</p>
 <pre class="hljs"><code>{
   svg, <span class="hljs-comment">// Element，思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）</span>

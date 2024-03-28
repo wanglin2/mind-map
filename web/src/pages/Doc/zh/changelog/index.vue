@@ -16,11 +16,13 @@
 <p>6.节点实例新增getAncestorNodes方法用于获取祖先节点列表；</p>
 <p>7.协同编辑时的人员头像增加鼠标事件；</p>
 <p>8.实例化及setData方法支持传入空的data；</p>
+<p>9.新增导出图片时添加自定义内容的实例化选项；</p>
 </blockquote>
 <p>Demo：</p>
 <blockquote>
 <p>1.支持配置彩虹线条；</p>
 <p>2.新增源码编辑模式；</p>
+<p>3.导出png、pdf、svg支持设置底部自定义文字；</p>
 </blockquote>
 <p>客户端:</p>
 <blockquote>

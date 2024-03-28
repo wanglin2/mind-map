@@ -23,12 +23,16 @@ New:
 > 7.Adding mouse events to personnel avatars during collaborative editing;
 >
 > 8.Instantiation and setData methods support passing in empty data;
+>
+> 9.Add an instantiation option for adding custom content when exporting images;
 
 Demo:
 
 > 1.Support configuration of rainbow lines;
 >
 > 2.Add source code editing mode;
+>
+> 3.Exporting PNG, PDF, and SVG supports setting custom text at the bottom;
 
 Client:
 

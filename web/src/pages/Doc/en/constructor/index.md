@@ -114,8 +114,10 @@ const mindMap = new MindMap({
 | isOnlySearchCurrentRenderNodes（v0.9.8+）     | Boolean | false  | Is it necessary to only search for the current rendered node, and nodes that have been collapsed will not be searched for |         |
 | onlyOneEnableActiveNodeOnCooperate（v0.9.8+）     | Boolean | false  | During collaborative editing, the same node cannot be selected by multiple people at the same time |         |
 | beforeCooperateUpdate（v0.9.8+）     | Function、null | null  | During collaborative editing, node operations are about to be updated to the lifecycle functions of other clients. The function takes an object as a parameter:{ type: 【createOrUpdate（Create or update nodes）、delete（Delete node）】, list: 【Array type, 1.When type=createOrUpdate, it represents the node data that has been created or updated, which will be synchronized to other clients, so you can modify the data; 2.When type=delete, represents the deleted node data】 } |         |
-| beforeShortcutRun（v0.9.9+）     | Function、null | null  | The lifecycle function before the shortcut operation is about to be executed, returning true can prevent the operation from executing. The function takes two parameters: key（Shortcut key）、activeNodeList（List of currently activated nodes） |
-| rainbowLinesConfig（v0.9.9+）     | Object | { open: false, colorsList: [] }  | Rainbow line configuration requires registering the RainbowLines plugin first. Object type, Structure: { open: false【Is turn on rainbow lines】, colorsList: []【Customize the color list for rainbow lines. If not set, the default color list will be used】 } |
+| beforeShortcutRun（v0.9.9+）     | Function、null | null  | The lifecycle function before the shortcut operation is about to be executed, returning true can prevent the operation from executing. The function takes two parameters: key（Shortcut key）、activeNodeList（List of currently activated nodes） |         |
+| rainbowLinesConfig（v0.9.9+）     | Object | { open: false, colorsList: [] }  | Rainbow line configuration requires registering the RainbowLines plugin first. Object type, Structure: { open: false【Is turn on rainbow lines】, colorsList: []【Customize the color list for rainbow lines. If not set, the default color list will be used】 } |         |
+| addContentToHeader（v0.9.9+）     | Function、null | null  | Add custom content to the header when exporting PNG, SVG, and PDF. Can pass a function that can return null to indicate no content is added, or it can return an object, For a detailed introduction, please refer to section 【How to add custom content when exporting】 below |         |
+| addContentToFooter（v0.9.9+）     | Function、null | null  | The basic definition is the same as addContentToHeader, adding custom content at the end |         |
 
 ### Data structure
 
@@ -176,6 +178,41 @@ If you want to add custom fields, you can add them to the same level as 'data' a
 | name        | String |                                           | The name of the icon group |
 | type        | String |                                           | Values for icon grouping |
 | list        | Array  |                                           | A list of icons under grouping, with each item in the array being an object, `{ name: '', icon: '' }`，`name`represents the name of the icon, `icon`represents the icon, Can be an `svg` icon, such as `<svg ...><path></path></svg>`, also can be a image `url`, or `base64` icon, such as `data:image/png;base64,...` |
+
+### How to add custom content when exporting
+
+The two instantiation options `addContentToHeader` and `addContentToFooter` can be used to add custom content at the beginning and end when exporting `png`、`svg`、`pdf`, The default value is `null`, which means no configuration. A function can be passed and can return `null`, which means no content will be added. If you want to add content, you need to return the following structure:
+
+```
+{
+  el,// Custom DOM node to be added, styles can be inline
+  cssText,// Optional, if the style does not want to be inlined, you can pass this value as a CSS string
+  height: 50// The height of the returned DOM node must be passed
+}
+```
+
+A simple example:
+
+```js
+new MindMap({
+  addContentToFooter: () => {
+    const el = document.createElement('div')
+    el.className = 'footer'
+    el.innerHTML = 'From: simple-mind-map'
+    const cssText = `
+      .footer {
+        width: 100%;
+        height: 30px;
+      }
+    `
+    return {
+      el,
+      cssText,
+      height: 30
+    }
+  }
+})
+```
 
 ## Static methods
 
@@ -334,7 +371,7 @@ Clear `lineDraw`、`associativeLineDraw`、`nodeDraw`、`otherDraw` containers.
 
 Destroy mind maps. It will remove registered plugins, remove listening events, and delete all nodes on the canvas.
 
-### getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })
+### getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter })
 
 > v0.3.0+
 
@@ -343,6 +380,10 @@ Destroy mind maps. It will remove registered plugins, remove listening events, a
 `paddingY`: Padding y
 
 `ignoreWatermark`：v0.8.0+, Do not draw watermarks. If you do not need to draw watermarks, you can pass 'true' because drawing watermarks is very slow
+
+`addContentToHeader`：v0.9.9+, Function, You can return the custom content to be added to the header, as detailed in the configuration in 【Instantiation options】
+
+`addContentToFooter`：v0.9.9+, Function, You can return the custom content to be added to the tail, as detailed in the configuration in 【Instantiation options】
 
 Get the `svg` data and return an object. The detailed structure is as follows:
 

@@ -16,11 +16,13 @@
 <p>6.Add the getAncestorNodes method to the node instance to obtain the list of ancestor nodes;</p>
 <p>7.Adding mouse events to personnel avatars during collaborative editing;</p>
 <p>8.Instantiation and setData methods support passing in empty data;</p>
+<p>9.Add an instantiation option for adding custom content when exporting images;</p>
 </blockquote>
 <p>Demo:</p>
 <blockquote>
 <p>1.Support configuration of rainbow lines;</p>
 <p>2.Add source code editing mode;</p>
+<p>3.Exporting PNG, PDF, and SVG supports setting custom text at the bottom;</p>
 </blockquote>
 <p>Client:</p>
 <blockquote>

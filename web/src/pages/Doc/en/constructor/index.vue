@@ -672,6 +672,20 @@
 <td>Rainbow line configuration requires registering the RainbowLines plugin first. Object type, Structure: { open: false【Is turn on rainbow lines】, colorsList: []【Customize the color list for rainbow lines. If not set, the default color list will be used】 }</td>
 <td></td>
 </tr>
+<tr>
+<td>addContentToHeader（v0.9.9+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>Add custom content to the header when exporting PNG, SVG, and PDF. Can pass a function that can return null to indicate no content is added, or it can return an object, For a detailed introduction, please refer to section 【How to add custom content when exporting】 below</td>
+<td></td>
+</tr>
+<tr>
+<td>addContentToFooter（v0.9.9+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>The basic definition is the same as addContentToHeader, adding custom content at the end</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Data structure</h3>
@@ -790,6 +804,34 @@
 </tr>
 </tbody>
 </table>
+<h3>How to add custom content when exporting</h3>
+<p>The two instantiation options <code>addContentToHeader</code> and <code>addContentToFooter</code> can be used to add custom content at the beginning and end when exporting <code>png</code>、<code>svg</code>、<code>pdf</code>, The default value is <code>null</code>, which means no configuration. A function can be passed and can return <code>null</code>, which means no content will be added. If you want to add content, you need to return the following structure:</p>
+<pre class="hljs"><code>{
+  el,// Custom DOM node to be added, styles can be inline
+  cssText,// Optional, if the style does not want to be inlined, you can pass this value as a CSS string
+  height: 50// The height of the returned DOM node must be passed
+}
+</code></pre>
+<p>A simple example:</p>
+<pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({
+  <span class="hljs-attr">addContentToFooter</span>: <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> el = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>)
+    el.className = <span class="hljs-string">&#x27;footer&#x27;</span>
+    el.innerHTML = <span class="hljs-string">&#x27;From: simple-mind-map&#x27;</span>
+    <span class="hljs-keyword">const</span> cssText = <span class="hljs-string">`
+      .footer {
+        width: 100%;
+        height: 30px;
+      }
+    `</span>
+    <span class="hljs-keyword">return</span> {
+      el,
+      cssText,
+      <span class="hljs-attr">height</span>: <span class="hljs-number">30</span>
+    }
+  }
+})
+</code></pre>
 <h2>Static methods</h2>
 <h3>defineTheme(name, config)</h3>
 <blockquote>
@@ -901,13 +943,15 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 <p>v0.6.0+</p>
 </blockquote>
 <p>Destroy mind maps. It will remove registered plugins, remove listening events, and delete all nodes on the canvas.</p>
-<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })</h3>
+<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter })</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
 <p><code>paddingX</code>: Padding x</p>
 <p><code>paddingY</code>: Padding y</p>
 <p><code>ignoreWatermark</code>：v0.8.0+, Do not draw watermarks. If you do not need to draw watermarks, you can pass 'true' because drawing watermarks is very slow</p>
+<p><code>addContentToHeader</code>：v0.9.9+, Function, You can return the custom content to be added to the header, as detailed in the configuration in 【Instantiation options】</p>
+<p><code>addContentToFooter</code>：v0.9.9+, Function, You can return the custom content to be added to the tail, as detailed in the configuration in 【Instantiation options】</p>
 <p>Get the <code>svg</code> data and return an object. The detailed structure is as follows:</p>
 <pre class="hljs"><code>{
   svg, <span class="hljs-comment">// Element, the overall svg element of the mind map graphics, including: svg (canvas container), g (actual mind map group)</span>
