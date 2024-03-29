@@ -48,7 +48,9 @@ class RainbowLines {
 
   // 获取一个节点的第二层级的祖先节点
   getSecondLayerAncestor(node) {
-    if (node.layerIndex === 1) {
+    if (node.layerIndex === 0) {
+      return null
+    } else if (node.layerIndex === 1) {
       return node
     } else {
       let res = null
@@ -78,6 +80,7 @@ class RainbowLines {
     const { rainbowLinesConfig } = this.mindMap.opt
     if (!rainbowLinesConfig || !rainbowLinesConfig.open) return ''
     const ancestor = this.getSecondLayerAncestor(node)
+    if (!ancestor) return
     const index = getNodeDataIndex(ancestor)
     const colorsList = this.getColorsList()
     return colorsList[index % colorsList.length]
