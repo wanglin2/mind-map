@@ -856,6 +856,9 @@ class Render {
         },
         children: [node.nodeData]
       }
+      node.setData({
+        resetRichText: true
+      })
       const parent = node.parent
       // 获取当前节点所在位置
       const index = getNodeDataIndex(node)
