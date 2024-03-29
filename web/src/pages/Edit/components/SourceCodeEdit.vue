@@ -96,7 +96,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setIsOutlineEdit']),
+    ...mapMutations(['setIsSourceCodeEdit']),
 
     // 初始化编辑器
     initEditor() {
@@ -117,7 +117,7 @@ export default {
       try {
         const content = editor.getValue()
         const data = JSON.parse(content)
-        this.setIsOutlineEdit(false)
+        this.setIsSourceCodeEdit(false)
         this.$bus.$emit('setData', data)
       } catch (error) {
         console.log(error)
@@ -127,7 +127,7 @@ export default {
 
     // 关闭
     onClose() {
-      this.setIsOutlineEdit(false)
+      this.setIsSourceCodeEdit(false)
     },
 
     // 复制
