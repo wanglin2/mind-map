@@ -1,6 +1,16 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.9.9-fix.2</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue of the original node style not being updated during the insertion of the parent node operation;</p>
+<p>2.Fix the issue of errors when switching structures when opening rainbow lines;</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.Fix the issue where the side bar outline opens in source code editing mode when clicking full screen editing;</p>
+</blockquote>
 <h2>0.9.9-fix.1</h2>
 <p>Fix the issue where the search plugin was unable to search due to changes in the previous version.</p>
 <h2>0.9.9</h2>
