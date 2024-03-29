@@ -89,7 +89,7 @@ class Search {
     const tree = isOnlySearchCurrentRenderNodes
       ? this.mindMap.renderer.root
       : this.mindMap.renderer.renderTree
-    if (tree) return
+    if (!tree) return
     bfsWalk(tree, node => {
       let { richText, text } = isOnlySearchCurrentRenderNodes
         ? node.getData()

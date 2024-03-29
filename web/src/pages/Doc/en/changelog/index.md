@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.9.9-fix.1
+
+Fix the issue where the search plugin was unable to search due to changes in the previous version.
+
 ## 0.9.9
 
 Fix:
