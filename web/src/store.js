@@ -87,7 +87,7 @@ const store = new Vuex.Store({
     },
 
     // 设置源码编辑模式
-    setIsOutlineEdit(state, data) {
+    setIsSourceCodeEdit(state, data) {
       state.isSourceCodeEdit = data
     },
 

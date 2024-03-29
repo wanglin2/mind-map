@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.9.9-fix.2
+
+Fix:
+
+> 1.Fix the issue of the original node style not being updated during the insertion of the parent node operation;
+>
+> 2.Fix the issue of errors when switching structures when opening rainbow lines;
+
+Demo:
+
+> 1.Fix the issue where the side bar outline opens in source code editing mode when clicking full screen editing;
+
 ## 0.9.9-fix.1
 
 Fix the issue where the search plugin was unable to search due to changes in the previous version.

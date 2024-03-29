@@ -150,7 +150,7 @@ export default {
     this.lang = getLang()
   },
   methods: {
-    ...mapMutations(['setLocalConfig', 'setIsReadonly', 'setIsOutlineEdit']),
+    ...mapMutations(['setLocalConfig', 'setIsReadonly', 'setIsSourceCodeEdit']),
 
     readonlyChange() {
       this.setIsReadonly(!this.isReadonly)
@@ -218,7 +218,7 @@ export default {
     },
 
     openSourceCodeEdit() {
-      this.setIsOutlineEdit(true)
+      this.setIsSourceCodeEdit(true)
     }
   }
 }

@@ -3,6 +3,7 @@
     class="outlineEditContainer"
     :class="{ isDark: isDark }"
     ref="outlineEditContainer"
+    :style="{top: IS_ELECTRON ? '40px' : 0}"
     v-if="isOutlineEdit"
   >
     <div class="closeBtn" @click="onClose">
