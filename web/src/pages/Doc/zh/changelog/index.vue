@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.9.9-fix.1</h2>
+<p>修复上个版本的改动造成搜索插件无法搜索的问题。</p>
 <h2>0.9.9</h2>
 <p>修复：</p>
 <blockquote>

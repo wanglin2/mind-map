@@ -1,6 +1,8 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.9.9-fix.1</h2>
+<p>Fix the issue where the search plugin was unable to search due to changes in the previous version.</p>
 <h2>0.9.9</h2>
 <p>Fix:</p>
 <blockquote>
