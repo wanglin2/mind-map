@@ -48,11 +48,13 @@ class Export {
 
   //  获取svg数据
   async getSvgData() {
-    let { exportPaddingX, exportPaddingY, errorHandler, resetCss } =
+    let { exportPaddingX, exportPaddingY, errorHandler, resetCss, addContentToHeader, addContentToFooter } =
       this.mindMap.opt
     let { svg, svgHTML } = this.mindMap.getSvgData({
       paddingX: exportPaddingX,
-      paddingY: exportPaddingY
+      paddingY: exportPaddingY,
+      addContentToHeader,
+      addContentToFooter
     })
     // svg的image标签，把图片的url转换成data:url类型，否则导出会丢失图片
     const task1 = this.createTransformImgTaskList(

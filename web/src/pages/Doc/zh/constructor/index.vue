@@ -35,9 +35,9 @@
 </tr>
 <tr>
 <td>data</td>
-<td>Object</td>
-<td>{}</td>
-<td>思维导图数据，可参考下方【数据结构】介绍</td>
+<td>Object 、 null</td>
+<td></td>
+<td>思维导图数据，可参考下方【数据结构】介绍。v0.9.9+支持传空对象或者null，画布会显示空白</td>
 </tr>
 <tr>
 <td>layout</td>
@@ -561,6 +561,30 @@
 <td>null</td>
 <td>协同编辑时，节点操作即将更新到其他客户端前的生命周期函数。函数接收一个对象作为参数：{ type: 【createOrUpdate（创建节点或更新节点）、delete（删除节点）】, list: 【数组类型，1.当type=createOrUpdate时，代表被创建或被更新的节点数据，即将同步到其他客户端，所以你可以修改该数据；2.当type=delete时，代表被删除的节点数据】 }</td>
 </tr>
+<tr>
+<td>beforeShortcutRun（v0.9.9+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>快捷键操作即将执行前的生命周期函数，返回true可以阻止操作执行。函数接收两个参数：key（快捷键）、activeNodeList（当前激活的节点列表）</td>
+</tr>
+<tr>
+<td>rainbowLinesConfig（v0.9.9+）</td>
+<td>Object</td>
+<td>{ open: false, colorsList: [] }</td>
+<td>彩虹线条配置，需要先注册RainbowLines插件。对象类型，结构：{ open: false【是否开启彩虹线条】, colorsList: []【自定义彩虹线条的颜色列表，如果不设置，会使用默认颜色列表】 }</td>
+</tr>
+<tr>
+<td>addContentToHeader（v0.9.9+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>导出png、svg、pdf时在头部添加自定义内容。可传递一个函数，这个函数可以返回null代表不添加内容，也可以返回一个对象，详细介绍请参考下方【导出时如何添加自定义内容】</td>
+</tr>
+<tr>
+<td>addContentToFooter（v0.9.9+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>基本释义同addContentToHeader，在尾部添加自定义内容</td>
+</tr>
 </tbody>
 </table>
 <h3>数据结构</h3>
@@ -679,6 +703,34 @@
 </tr>
 </tbody>
 </table>
+<h3>导出时如何添加自定义内容</h3>
+<p><code>addContentToHeader</code>和<code>addContentToFooter</code>两个实例化选项可以用于在导出<code>png</code>、<code>svg</code>、<code>pdf</code>时在头部和尾部添加自定义的内容，默认为<code>null</code>，代表不配置，可以传递一个函数，函数可以返回<code>null</code>，代表不添加内容，如果要添加内容那么需要返回如下的结构：</p>
+<pre class="hljs"><code>{
+  el,// 要追加的自定义DOM节点，样式可内联
+  cssText,// 可选，如果样式不想内联，可以传递该值，一个css字符串
+  height: 50// 返回的DOM节点的高度，必须传递
+}
+</code></pre>
+<p>一个简单的示例：</p>
+<pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({
+  <span class="hljs-attr">addContentToFooter</span>: <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> el = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>)
+    el.className = <span class="hljs-string">&#x27;footer&#x27;</span>
+    el.innerHTML = <span class="hljs-string">&#x27;来自：simple-mind-map&#x27;</span>
+    <span class="hljs-keyword">const</span> cssText = <span class="hljs-string">`
+      .footer {
+        width: 100%;
+        height: 30px;
+      }
+    `</span>
+    <span class="hljs-keyword">return</span> {
+      el,
+      cssText,
+      <span class="hljs-attr">height</span>: <span class="hljs-number">30</span>
+    }
+  }
+})
+</code></pre>
 <h2>静态方法</h2>
 <h3>defineTheme(name, config)</h3>
 <blockquote>
@@ -775,6 +827,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <h3>themeConfig</h3>
 <p>当前主题配置。</p>
 <h2>实例方法</h2>
+<h3>updateData(data)</h3>
+<blockquote>
+<p>v0.9.9+</p>
+</blockquote>
+<p>更新画布数据，如果新的数据是在当前画布节点数据基础上增删改查后形成的，那么可以使用该方法来更新画布数据。性能会更好，不会重新创建所有节点，而是会尽可能的复用。</p>
 <h3>clearDraw()</h3>
 <blockquote>
 <p>v0.8.0+</p>
@@ -785,13 +842,15 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <p>v0.6.0+</p>
 </blockquote>
 <p>销毁思维导图。会移除注册的插件、移除监听的事件、删除画布的所有节点。</p>
-<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })</h3>
+<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter })</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
 <p><code>paddingX</code>：水平内边距</p>
 <p><code>paddingY</code>：垂直内边距</p>
 <p><code>ignoreWatermark</code>：v0.8.0+，不要绘制水印，如果不需要绘制水印的场景可以传<code>true</code>，因为绘制水印非常慢</p>
+<p><code>addContentToHeader</code>：v0.9.9+，Function，可以返回要追加到头部的自定义内容，详细介绍见【实例化选项】中的该配置</p>
+<p><code>addContentToFooter</code>：v0.9.9+，Function，可以返回要追加到尾部的自定义内容，详细介绍见【实例化选项】中的该配置</p>
 <p>获取<code>svg</code>数据，返回一个对象，详细结构如下：</p>
 <pre class="hljs"><code>{
   svg, <span class="hljs-comment">// Element，思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）</span>
@@ -1015,7 +1074,17 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>node_icon_click（v0.6.10+）</td>
 <td>点击节点内的图标时触发</td>
-<td>this（节点实例）、item（点击的图标名称）、e（事件对象）</td>
+<td>this（节点实例）、item（点击的图标名称）、e（事件对象）、node(图标节点，v0.9.9+)</td>
+</tr>
+<tr>
+<td>node_icon_mouseenter（v0.9.9+）</td>
+<td>鼠标移入节点内的图标时触发</td>
+<td>this（节点实例）、item（点击的图标名称）、e（事件对象）、node(图标节点)</td>
+</tr>
+<tr>
+<td>node_icon_mouseleave（v0.9.9+）</td>
+<td>鼠标移出节点内的图标时触发</td>
+<td>this（节点实例）、item（点击的图标名称）、e（事件对象）、node(图标节点)</td>
 </tr>
 <tr>
 <td>view_theme_change（v0.6.12+）</td>
@@ -1056,6 +1125,21 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>layout_change（v0.9.4+）</td>
 <td>修改结构时触发，即调用了mindMap.setLayout()方法时触发</td>
 <td>layout（新的结构）</td>
+</tr>
+<tr>
+<td>node_cooperate_avatar_click（v0.9.9+）</td>
+<td>协同编辑时，鼠标点击人员头像时触发</td>
+<td>userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)</td>
+</tr>
+<tr>
+<td>node_cooperate_avatar_mouseenter（v0.9.9+）</td>
+<td>协同编辑时，鼠标移入人员头像时触发</td>
+<td>userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)</td>
+</tr>
+<tr>
+<td>node_cooperate_avatar_mouseleave（v0.9.9+）</td>
+<td>协同编辑时，鼠标移除人员头像时触发</td>
+<td>userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)</td>
 </tr>
 </tbody>
 </table>
@@ -1328,7 +1412,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </table>
 <h3>setData(data)</h3>
 <p>动态设置思维导图数据，纯节点数据</p>
-<p><code>data</code>：思维导图结构数据</p>
+<p><code>data</code>：思维导图结构数据。v0.9.9+支持传空对象或者null，画布会显示空白。</p>
 <h3>setFullData(<em>data</em>)</h3>
 <blockquote>
 <p>v0.2.7+</p>

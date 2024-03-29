@@ -425,7 +425,7 @@ export const shortcutKeyList = [
         icon: 'icondodeparent',
         name: '上移一个层级',
         value: 'Shift + Tab'
-      },
+      }
     ]
   }
 ]

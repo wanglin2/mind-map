@@ -11,19 +11,17 @@
 
 本项目包含两部分：
 
-1.一个 js 思维导图库，不依赖任何框架，你可以使用它来快速完成 Web 思维导图产品的开发。
+1.一个 js 思维导图库，不依赖任何框架，可以使用它来快速完成 Web 思维导图产品的开发。
 
 开发文档：[https://wanglin2.github.io/mind-map/#/doc/zh/](https://wanglin2.github.io/mind-map/#/doc/zh/)。
 
-2.一个 Web 思维导图，基于思维导图库、Vue2.x、ElementUI 开发，可以操作电脑本地文件，所以你可以直接把它当做一个在线版思维导图应用使用，如果觉得 github 的响应速度慢，你也可以部署到你的服务器上。
+2.一个 Web 思维导图，基于思维导图库、Vue2.x、ElementUI 开发，可以操作电脑本地文件，可以当做一个在线版思维导图应用使用，也可以自部署和二次开发。
 
 在线地址：[https://wanglin2.github.io/mind-map/](https://wanglin2.github.io/mind-map/)。
 
-另外也提供了客户端可供下载使用，支持`Windows`、`Mac`及`Linux`，下载地址：
+此外也提供了客户端可供下载使用，支持`Windows`、`Mac`及`Linux`，下载地址：
 
-Github：[releases](https://github.com/wanglin2/mind-map/releases)。
-
-百度云盘：[地址](https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3)。
+Github：[releases](https://github.com/wanglin2/mind-map/releases)。百度云盘：[地址](https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3)。
 
 > 客户端版本会落后于在线版本，尝试最新功能请优先使用在线版。
 
@@ -86,9 +84,7 @@ const mindMap = new MindMap({
 
 # License
 
-[MIT](./LICENSE)
-
-保留`mind-map`版权声明的情况下可随意商用。
+[MIT](./LICENSE)。保留`mind-map`版权声明的情况下可随意商用。
 
 # 微信交流群
 
@@ -103,8 +99,6 @@ const mindMap = new MindMap({
 # 请作者喝杯咖啡
 
 开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡~
-
-> 厚椰乳一盒 + 纯牛奶半盒 + 冰块 + 咖啡液 = 生椰拿铁 yyds
 
 > 推荐使用支付宝，微信获取不到头像。转账请备注【思维导图】。
 
@@ -297,5 +291,29 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/pluvet.jpg" style="width: 50px;height: 50px;" />
         <span>pluvet</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/皇登攀.jpg" style="width: 50px;height: 50px;" />
+        <span>皇登攀</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/风格.jpg" style="width: 50px;height: 50px;" />
+        <span>风格</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>SR</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/逆水行舟.jpg" style="width: 50px;height: 50px;" />
+        <span>逆水行舟</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>LiuJL</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/L.jpg" style="width: 50px;height: 50px;" />
+        <span>L</span>
     </span>
 </p>

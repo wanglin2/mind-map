@@ -25,7 +25,7 @@ const mindMap = new MindMap({
 | 字段名称                         | 类型    | 默认值           | 描述                                                         |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
 | el                               | Element |                  | 容器元素，必传，必须为DOM元素                                      |
-| data                             | Object  | {}               | 思维导图数据，可参考下方【数据结构】介绍 |
+| data                             | Object 、 null  |   | 思维导图数据，可参考下方【数据结构】介绍。v0.9.9+支持传空对象或者null，画布会显示空白 |
 | layout                           | String  | logicalStructure | 布局类型，可选列表：logicalStructure（逻辑结构图）、mindMap（思维导图）、catalogOrganization（目录组织图）、organizationStructure（组织结构图）、timeline（v0.5.4+，时间轴）、timeline2（v0.5.4+，上下交替型时间轴）、fishbone（v0.5.4+，鱼骨图） |
 | fishboneDeg（v0.5.4+）                      | Number |  45          |  设置鱼骨结构图的斜线角度               |
 | theme                            | String  | default          | 主题，可选列表：default（默认）、classic（脑图经典）、minions（小黄人）、pinkGrape（粉红葡萄）、mint（薄荷）、gold（金色vip）、vitalityOrange（活力橙）、greenLeaf（绿叶）、dark2（暗色2）、skyGreen（天清绿）、classic2（脑图经典2）、classic3（脑图经典3）、classic4（脑图经典4，v0.2.0+）、classicGreen（经典绿）、classicBlue（经典蓝）、blueSky（天空蓝）、brainImpairedPink（脑残粉）、dark（暗色）、earthYellow（泥土黄）、freshGreen（清新绿）、freshRed（清新红）、romanticPurple（浪漫紫）、simpleBlack（v0.5.4+简约黑）、courseGreen（v0.5.4+课程绿）、coffee（v0.5.4+咖啡）、redSpirit（v0.5.4+红色精神）、blackHumour（v0.5.4+黑色幽默）、lateNightOffice（v0.5.4+深夜办公室）、blackGold（v0.5.4+黑金）、avocado（v.5.10-fix.2+牛油果）、autumn（v.5.10-fix.2+秋天）、orangeJuice（v.5.10-fix.2+橙汁） |
@@ -113,6 +113,11 @@ const mindMap = new MindMap({
 | isOnlySearchCurrentRenderNodes（v0.9.8+）     | Boolean | false  | 是否仅搜索当前渲染的节点，被收起的节点不会被搜索到 |
 | onlyOneEnableActiveNodeOnCooperate（v0.9.8+）     | Boolean | false  | 协同编辑时，同一个节点不能同时被多人选中 |
 | beforeCooperateUpdate（v0.9.8+）     | Function、null | null  | 协同编辑时，节点操作即将更新到其他客户端前的生命周期函数。函数接收一个对象作为参数：{ type: 【createOrUpdate（创建节点或更新节点）、delete（删除节点）】, list: 【数组类型，1.当type=createOrUpdate时，代表被创建或被更新的节点数据，即将同步到其他客户端，所以你可以修改该数据；2.当type=delete时，代表被删除的节点数据】 } |
+| beforeShortcutRun（v0.9.9+）     | Function、null | null  | 快捷键操作即将执行前的生命周期函数，返回true可以阻止操作执行。函数接收两个参数：key（快捷键）、activeNodeList（当前激活的节点列表） |
+| rainbowLinesConfig（v0.9.9+）     | Object | { open: false, colorsList: [] }  | 彩虹线条配置，需要先注册RainbowLines插件。对象类型，结构：{ open: false【是否开启彩虹线条】, colorsList: []【自定义彩虹线条的颜色列表，如果不设置，会使用默认颜色列表】 } |
+| addContentToHeader（v0.9.9+）     | Function、null | null  | 导出png、svg、pdf时在头部添加自定义内容。可传递一个函数，这个函数可以返回null代表不添加内容，也可以返回一个对象，详细介绍请参考下方【导出时如何添加自定义内容】 |
+| addContentToFooter（v0.9.9+）     | Function、null | null  | 基本释义同addContentToHeader，在尾部添加自定义内容 |
+
 
 ### 数据结构
 
@@ -173,6 +178,41 @@ const mindMap = new MindMap({
 | name        | String |                                           | 图标分组的名称 |
 | type        | String |                                           | 图标分组的值 |
 | list        | Array  |                                           | 分组下的图标列表，数组的每一项为一个对象，`{ name: '', icon: '' }`，`name`代表图标的名称，`icon`代表图标，可以是`svg`图标，比如`<svg ...><path></path></svg>`，也可以是图片`url`，或者是`base64`图标，比如`data:image/png;base64,...` |
+
+### 导出时如何添加自定义内容
+
+`addContentToHeader`和`addContentToFooter`两个实例化选项可以用于在导出`png`、`svg`、`pdf`时在头部和尾部添加自定义的内容，默认为`null`，代表不配置，可以传递一个函数，函数可以返回`null`，代表不添加内容，如果要添加内容那么需要返回如下的结构：
+
+```
+{
+  el,// 要追加的自定义DOM节点，样式可内联
+  cssText,// 可选，如果样式不想内联，可以传递该值，一个css字符串
+  height: 50// 返回的DOM节点的高度，必须传递
+}
+```
+
+一个简单的示例：
+
+```js
+new MindMap({
+  addContentToFooter: () => {
+    const el = document.createElement('div')
+    el.className = 'footer'
+    el.innerHTML = '来自：simple-mind-map'
+    const cssText = `
+      .footer {
+        width: 100%;
+        height: 30px;
+      }
+    `
+    return {
+      el,
+      cssText,
+      height: 30
+    }
+  }
+})
+```
 
 ## 静态方法
 
@@ -313,6 +353,12 @@ mindMap.setTheme('主题名称')
 
 ## 实例方法
 
+### updateData(data)
+
+> v0.9.9+
+
+更新画布数据，如果新的数据是在当前画布节点数据基础上增删改查后形成的，那么可以使用该方法来更新画布数据。性能会更好，不会重新创建所有节点，而是会尽可能的复用。
+
 ### clearDraw()
 
 > v0.8.0+
@@ -325,7 +371,7 @@ mindMap.setTheme('主题名称')
 
 销毁思维导图。会移除注册的插件、移除监听的事件、删除画布的所有节点。
 
-### getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })
+### getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter })
 
 > v0.3.0+
 
@@ -334,6 +380,10 @@ mindMap.setTheme('主题名称')
 `paddingY`：垂直内边距
 
 `ignoreWatermark`：v0.8.0+，不要绘制水印，如果不需要绘制水印的场景可以传`true`，因为绘制水印非常慢
+
+`addContentToHeader`：v0.9.9+，Function，可以返回要追加到头部的自定义内容，详细介绍见【实例化选项】中的该配置
+
+`addContentToFooter`：v0.9.9+，Function，可以返回要追加到尾部的自定义内容，详细介绍见【实例化选项】中的该配置
 
 获取`svg`数据，返回一个对象，详细结构如下：
 
@@ -415,7 +465,9 @@ mindMap.setTheme('主题名称')
 | associative_line_click（v0.4.5+）    |  点击某条关联线时触发  |  path（连接线节点）、clickPath（不可见的点击线节点）、node（起始节点）、toNode（目标节点）           |
 | svg_mouseenter（v0.5.1+）    | 鼠标移入svg画布时触发   | e（事件对象）  |
 | svg_mouseleave（v0.5.1+）    | 鼠标移出svg画布时触发   | e（事件对象）  |
-| node_icon_click（v0.6.10+）    | 点击节点内的图标时触发   | this（节点实例）、item（点击的图标名称）、e（事件对象）  |
+| node_icon_click（v0.6.10+）    | 点击节点内的图标时触发   | this（节点实例）、item（点击的图标名称）、e（事件对象）、node(图标节点，v0.9.9+)  |
+| node_icon_mouseenter（v0.9.9+）    |  鼠标移入节点内的图标时触发  | this（节点实例）、item（点击的图标名称）、e（事件对象）、node(图标节点)  |
+| node_icon_mouseleave（v0.9.9+）    |  鼠标移出节点内的图标时触发  | this（节点实例）、item（点击的图标名称）、e（事件对象）、node(图标节点)  |
 | view_theme_change（v0.6.12+）    | 调用了setTheme方法设置主题后触发   | theme（设置的新主题名称）  |
 | set_data（v0.7.3+）    | 调用了setData方法动态设置思维导图数据时触发   | data（新的思维导图数据）  |
 | resize（v0.8.0+）    |  容器尺寸改变后触发，实际上是当思维导图实例的`resize`方法被调用后触发  |   |
@@ -424,6 +476,9 @@ mindMap.setTheme('主题名称')
 | body_click    | document.body的点击事件                      | e（事件对象）      |
 | data_change_detail（v0.9.3+）    |  渲染树数据变化的明细，会返回一个数组，每一项代表一个更新点，每一项都是一个对象，存在一个`type`属性，代表明细的类型，包含`create`（创建节点）、`update`（更新节点）、`delete`（删除节点），存在一个`data`属性，代表当前更新的节点数据，如果是`update`类型，还会存在一个`oldData`属性，保存了更新前该节点的数据  | arr（明细数据）      |
 | layout_change（v0.9.4+）    | 修改结构时触发，即调用了mindMap.setLayout()方法时触发  | layout（新的结构）      |
+| node_cooperate_avatar_click（v0.9.9+）    | 协同编辑时，鼠标点击人员头像时触发  |  userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)      |
+| node_cooperate_avatar_mouseenter（v0.9.9+）    | 协同编辑时，鼠标移入人员头像时触发  |  userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)     |
+| node_cooperate_avatar_mouseleave（v0.9.9+）    | 协同编辑时，鼠标移除人员头像时触发  |  userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)      |
 
 ### emit(event, ...args)
 
@@ -544,7 +599,7 @@ mindMap.updateConfig({
 
 动态设置思维导图数据，纯节点数据
 
-`data`：思维导图结构数据
+`data`：思维导图结构数据。v0.9.9+支持传空对象或者null，画布会显示空白。
 
 ### setFullData(*data*)
 

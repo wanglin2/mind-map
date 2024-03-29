@@ -28,7 +28,9 @@ const store = new Vuex.Store({
     activeSidebar: '', // 当前显示的侧边栏
     localEditList: [],// 客户端中正在编辑的思维导图列表
     isOutlineEdit: false,// 是否是大纲编辑模式
-    isReadonly: false// 是否只读
+    isReadonly: false, // 是否只读
+    isSourceCodeEdit: false, // 是否是源码编辑模式
+    extraTextOnExport: ''// 导出时底部添加的文字
   },
   mutations: {
     // 设置本地文件名
@@ -82,6 +84,16 @@ const store = new Vuex.Store({
     // 设置是否只读
     setIsReadonly(state, data) {
       state.isReadonly = data
+    },
+
+    // 设置源码编辑模式
+    setIsOutlineEdit(state, data) {
+      state.isSourceCodeEdit = data
+    },
+
+    // 设置导出时底部添加的文字
+    setExtraTextOnExport(state, data) {
+      state.extraTextOnExport = data
     }
   },
   actions: {

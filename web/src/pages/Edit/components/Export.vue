@@ -51,6 +51,16 @@
           ></el-input>
         </div>
         <div class="paddingInputGroup">
+          <span class="name">{{ this.$t('export.addFooterText') }}</span>
+          <el-input
+            style="width: 200px"
+            v-model="extraText"
+            size="mini"
+            :placeholder="$t('export.addFooterTextPlaceholder')"
+            @keydown.native.stop
+          ></el-input>
+        </div>
+        <div class="paddingInputGroup">
           <el-checkbox
             v-show="['png', 'pdf'].includes(exportType)"
             v-model="isTransparent"
@@ -85,7 +95,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { downTypeList } from '@/config'
 import { isMobile } from 'simple-mind-map/src/utils/index'
 
@@ -107,6 +117,7 @@ export default {
       loadingText: '',
       paddingX: 10,
       paddingY: 10,
+      extraText: '',
       isMobile: isMobile()
     }
   },
@@ -128,6 +139,8 @@ export default {
     this.$bus.$off('showExport', this.handleShowExport)
   },
   methods: {
+    ...mapMutations(['setExtraTextOnExport']),
+
     handleShowExport() {
       this.fileName = this.localFileName || '思维导图'
       this.dialogVisible = true
@@ -155,6 +168,7 @@ export default {
      * @Desc:  确定
      */
     async confirm() {
+      this.setExtraTextOnExport(this.extraText)
       if (this.exportType === 'svg') {
         this.$bus.$emit(
           'export',

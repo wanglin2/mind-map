@@ -25,7 +25,7 @@ const mindMap = new MindMap({
 | Field Name                       | Type    | Default Value    | Description                                                  | Required |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ | -------- |
 | el                               | Element |                  | Container element, must be a DOM element                     | Yes      |
-| data                             | Object  | {}               | Mind map data, Please refer to the introduction of 【Data structure】 below |          |
+| data                             | Object 、null  |     | Mind map data, Please refer to the introduction of 【Data structure】 below. V0.9.9+supports passing empty objects or null, and the canvas will display blank space |          |
 | layout                           | String  | logicalStructure | Layout type, options: logicalStructure (logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)、timeline（v0.5.4+, timeline）、timeline2（v0.5.4+, up down alternating timeline）、fishbone（v0.5.4+, fishbone diagram） |          |
 | fishboneDeg（v0.5.4+）                      | Number |  45          |    Set the diagonal angle of the fishbone structure diagram        |        |
 | theme                            | String  | default          | Theme, options: default, classic, minions, pinkGrape, mint, gold, vitalityOrange, greenLeaf, dark2, skyGreen, classic2, classic3, classic4(v0.2.0+), classicGreen, classicBlue, blueSky, brainImpairedPink, dark, earthYellow, freshGreen, freshRed, romanticPurple, simpleBlack(v0.5.4+), courseGreen(v0.5.4+), coffee(v0.5.4+), redSpirit(v0.5.4+), blackHumour(v0.5.4+), lateNightOffice(v0.5.4+), blackGold(v0.5.4+)、、avocado(v.5.10-fix.2+)、autumn(v.5.10-fix.2+)、orangeJuice(v.5.10-fix.2+) |          |
@@ -114,6 +114,10 @@ const mindMap = new MindMap({
 | isOnlySearchCurrentRenderNodes（v0.9.8+）     | Boolean | false  | Is it necessary to only search for the current rendered node, and nodes that have been collapsed will not be searched for |         |
 | onlyOneEnableActiveNodeOnCooperate（v0.9.8+）     | Boolean | false  | During collaborative editing, the same node cannot be selected by multiple people at the same time |         |
 | beforeCooperateUpdate（v0.9.8+）     | Function、null | null  | During collaborative editing, node operations are about to be updated to the lifecycle functions of other clients. The function takes an object as a parameter:{ type: 【createOrUpdate（Create or update nodes）、delete（Delete node）】, list: 【Array type, 1.When type=createOrUpdate, it represents the node data that has been created or updated, which will be synchronized to other clients, so you can modify the data; 2.When type=delete, represents the deleted node data】 } |         |
+| beforeShortcutRun（v0.9.9+）     | Function、null | null  | The lifecycle function before the shortcut operation is about to be executed, returning true can prevent the operation from executing. The function takes two parameters: key（Shortcut key）、activeNodeList（List of currently activated nodes） |         |
+| rainbowLinesConfig（v0.9.9+）     | Object | { open: false, colorsList: [] }  | Rainbow line configuration requires registering the RainbowLines plugin first. Object type, Structure: { open: false【Is turn on rainbow lines】, colorsList: []【Customize the color list for rainbow lines. If not set, the default color list will be used】 } |         |
+| addContentToHeader（v0.9.9+）     | Function、null | null  | Add custom content to the header when exporting PNG, SVG, and PDF. Can pass a function that can return null to indicate no content is added, or it can return an object, For a detailed introduction, please refer to section 【How to add custom content when exporting】 below |         |
+| addContentToFooter（v0.9.9+）     | Function、null | null  | The basic definition is the same as addContentToHeader, adding custom content at the end |         |
 
 ### Data structure
 
@@ -174,6 +178,41 @@ If you want to add custom fields, you can add them to the same level as 'data' a
 | name        | String |                                           | The name of the icon group |
 | type        | String |                                           | Values for icon grouping |
 | list        | Array  |                                           | A list of icons under grouping, with each item in the array being an object, `{ name: '', icon: '' }`，`name`represents the name of the icon, `icon`represents the icon, Can be an `svg` icon, such as `<svg ...><path></path></svg>`, also can be a image `url`, or `base64` icon, such as `data:image/png;base64,...` |
+
+### How to add custom content when exporting
+
+The two instantiation options `addContentToHeader` and `addContentToFooter` can be used to add custom content at the beginning and end when exporting `png`、`svg`、`pdf`, The default value is `null`, which means no configuration. A function can be passed and can return `null`, which means no content will be added. If you want to add content, you need to return the following structure:
+
+```
+{
+  el,// Custom DOM node to be added, styles can be inline
+  cssText,// Optional, if the style does not want to be inlined, you can pass this value as a CSS string
+  height: 50// The height of the returned DOM node must be passed
+}
+```
+
+A simple example:
+
+```js
+new MindMap({
+  addContentToFooter: () => {
+    const el = document.createElement('div')
+    el.className = 'footer'
+    el.innerHTML = 'From: simple-mind-map'
+    const cssText = `
+      .footer {
+        width: 100%;
+        height: 30px;
+      }
+    `
+    return {
+      el,
+      cssText,
+      height: 30
+    }
+  }
+})
+```
 
 ## Static methods
 
@@ -314,6 +353,12 @@ Current Theme Configuration.
 
 ## Instance methods
 
+### updateData(data)
+
+> v0.9.9+
+
+Update canvas data. If the new data is formed by adding, deleting, modifying, and querying based on the current canvas node data, this method can be used to update the canvas data. The performance will be better, and not all nodes will be recreated, but rather reused as much as possible.
+
 ### clearDraw()
 
 > v0.8.0+
@@ -326,7 +371,7 @@ Clear `lineDraw`、`associativeLineDraw`、`nodeDraw`、`otherDraw` containers.
 
 Destroy mind maps. It will remove registered plugins, remove listening events, and delete all nodes on the canvas.
 
-### getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false })
+### getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter })
 
 > v0.3.0+
 
@@ -335,6 +380,10 @@ Destroy mind maps. It will remove registered plugins, remove listening events, a
 `paddingY`: Padding y
 
 `ignoreWatermark`：v0.8.0+, Do not draw watermarks. If you do not need to draw watermarks, you can pass 'true' because drawing watermarks is very slow
+
+`addContentToHeader`：v0.9.9+, Function, You can return the custom content to be added to the header, as detailed in the configuration in 【Instantiation options】
+
+`addContentToFooter`：v0.9.9+, Function, You can return the custom content to be added to the tail, as detailed in the configuration in 【Instantiation options】
 
 Get the `svg` data and return an object. The detailed structure is as follows:
 
@@ -419,7 +468,9 @@ Listen to an event. Event list:
 | associative_line_click（v0.4.5+）    |  Triggered when an associated line is clicked  |  path(Connector node)、clickPath(Invisible click line node)、node(Start node)、toNode(Target node)          |
 | svg_mouseenter（v0.5.1+）    | Triggered when the mouse moves into the SVG canvas   | e（event object）  |
 | svg_mouseleave（v0.5.1+）    | Triggered when the mouse moves out of the SVG canvas   | e（event object）  |
-| node_icon_click（v0.6.10+）    | Triggered when clicking on an icon within a node   | this（node instance）、item（Click on the icon name）、e（event object）  |
+| node_icon_click（v0.6.10+）    | Triggered when clicking on an icon within a node   | this（node instance）、item（Click on the icon name）、e（event object）、node(Icon node, v0.9.9+)   |
+| node_icon_mouseenter（v0.9.9+）    |  Triggered when the mouse moves into an icon within a node  | this（node instance）、item（Click on the icon name）、e（event object）、node(Icon node)  |
+| node_icon_mouseleave（v0.9.9+）    |  Triggered when the mouse moves out of the icon within the node  | this（node instance）、item（Click on the icon name）、e（event object）、node(Icon node)  |
 | view_theme_change（v0.6.12+）    | Triggered after calling the setTheme method to set the theme   | theme（theme name）  |
 | set_data（v0.7.3+）    |  Triggered when the setData method is called to dynamically set mind map data  | data（New Mind Map Data）  |
 | resize（v0.8.0+）    | Triggered after the container size changes, actually when the 'resize' method of the mind map instance is called   |   |
@@ -428,6 +479,9 @@ Listen to an event. Event list:
 | body_click    | Click event of document.body                       | e（event object）      |
 | data_change_detail（v0.9.3+）    |  The detailed changes in rendering tree data will return an array, with each item representing an update point and each item being an object, There is a 'type' attribute that represents the type of detail, Including 'create' (create node), 'update' (update node), 'delete' (delete node), There is a 'data' attribute that represents the current updated node data. If it is of the 'update' type, there will also be an 'oldData' attribute that saves the data of the node before the update  | arr（Detail data）      |
 | layout_change（v0.9.4+）    |  Triggered when modifying the structure, i.e. when the mindMap.setLayout() method is called | layout（New layout）      |
+| node_cooperate_avatar_click（v0.9.9+）    | Triggered when the mouse clicks on a person's avatar during collaborative editing  |  userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)      |
+| node_cooperate_avatar_mouseenter（v0.9.9+）    |  Triggered when the mouse moves over a person's avatar during collaborative editing |  userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)    |
+| node_cooperate_avatar_mouseleave（v0.9.9+）    |  Triggered when removing personnel avatars with the mouse during collaborative editing |  userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)   |
 
 ### emit(event, ...args)
 
@@ -550,7 +604,7 @@ redo. All commands are as follows:
 
 Dynamic setting of mind map data, pure node data
 
-`data`: mind map structure data
+`data`: mind map structure data. V0.9.9+ supports passing empty objects or null, and the canvas will display blank space.
 
 ### setFullData(_data_)
 

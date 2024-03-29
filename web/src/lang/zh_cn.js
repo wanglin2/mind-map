@@ -62,7 +62,9 @@ export default {
     isUseHandDrawnLikeStyle: '是否开启手绘风格',
     rootLineStartPos: '根节点连线起始位置',
     center: '中心',
-    right: '右侧'
+    right: '右侧',
+    rainbowLines: '彩虹线条',
+    notUseRainbowLines: '不使用彩虹线条'
   },
   color: {
     moreColor: '更多颜色'
@@ -127,7 +129,9 @@ export default {
     paddingX: '水平内边距',
     paddingY: '垂直内边距',
     useMultiPageExport: '是否多页导出',
-    defaultFileName: '思维导图'
+    defaultFileName: '思维导图',
+    addFooterText: '底部添加文字',
+    addFooterTextPlaceholder: '比如：来自simple-mind-map'
   },
   fullscreen: {
     fullscreenShow: '全屏查看',
@@ -149,7 +153,8 @@ export default {
     closeMiniMap: '关闭小地图',
     readonly: '切换为只读模式',
     edit: '切换为编辑模式',
-    backToRoot: '回到根节点'
+    backToRoot: '回到根节点',
+    changeSourceCodeEdit: '切换为源码编辑模式'
   },
   nodeHyperlink: {
     title: '超链接',
@@ -273,7 +278,8 @@ export default {
     splitByWrap: '是否按换行自动分割节点？',
     tip: '提示',
     yes: '是',
-    no: '否'
+    no: '否',
+    exportError: '导出失败'
   },
   mouseAction: {
     tip1: '当前：左键拖动画布，右键框选节点',
@@ -311,5 +317,15 @@ export default {
   },
   other: {
     loading: '正在加载，请稍后...'
+  },
+  sourceCodeEdit: {
+    sourceCodeTip: '富文本模式下不建议修改样式，因为需要同步修改数据及html结构。',
+    format: '格式化',
+    copy: '复制',
+    confirm: '完成',
+    close: '关闭',
+    formatErrorTip: 'JSON格式有误，请检查后再试',
+    copyTip: '已复制到剪贴板',
+    formatTip: '格式化完成'
   }
 }

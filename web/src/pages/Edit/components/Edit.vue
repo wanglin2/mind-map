@@ -24,6 +24,7 @@
     <OutlineEdit v-if="mindMap" :mindMap="mindMap"></OutlineEdit>
     <Scrollbar v-if="isShowScrollbar && mindMap" :mindMap="mindMap"></Scrollbar>
     <FormulaSidebar v-if="mindMap" :mindMap="mindMap"></FormulaSidebar>
+    <SourceCodeEdit v-if="mindMap" :mindMap="mindMap"></SourceCodeEdit>
   </div>
 </template>
 
@@ -46,6 +47,7 @@ import { downloadFile, readBlob } from 'simple-mind-map/src/utils/index'
 import Painter from 'simple-mind-map/src/plugins/Painter.js'
 import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
 import Formula from 'simple-mind-map/src/plugins/Formula.js'
+import RainbowLines from 'simple-mind-map/src/plugins/RainbowLines.js'
 // 协同编辑插件
 // import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
 // 手绘风格插件，该插件为付费插件，详情请查看开发文档
@@ -84,6 +86,7 @@ import handleClipboardText from '@/utils/handleClipboardText'
 import Scrollbar from './Scrollbar.vue'
 import exampleData from 'simple-mind-map/example/exampleData'
 import FormulaSidebar from './FormulaSidebar.vue'
+import SourceCodeEdit from './SourceCodeEdit.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -100,6 +103,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(SearchPlugin)
   .usePlugin(Painter)
   .usePlugin(Formula)
+  .usePlugin(RainbowLines)
 // .usePlugin(Cooperate) // 协同插件
 
 // 注册自定义主题
@@ -134,7 +138,8 @@ export default {
     NodeIconToolbar,
     OutlineEdit,
     Scrollbar,
-    FormulaSidebar
+    FormulaSidebar,
+    SourceCodeEdit
   },
   data() {
     return {
@@ -157,7 +162,8 @@ export default {
       useLeftKeySelectionRightKeyDrag: state =>
         state.localConfig.useLeftKeySelectionRightKeyDrag,
       isUseHandDrawnLikeStyle: state =>
-        state.localConfig.isUseHandDrawnLikeStyle
+        state.localConfig.isUseHandDrawnLikeStyle,
+      extraTextOnExport: state => state.extraTextOnExport
     })
   },
   watch: {
@@ -384,12 +390,62 @@ export default {
           console.error(err)
           switch (code) {
             case 'export_error':
-              this.$message.error('导出失败')
+              this.$message.error(this.$t('edit.exportError'))
               break
             default:
               break
           }
+        },
+        addContentToFooter: () => {
+          const text = this.extraTextOnExport.trim()
+          if (!text) return null
+          const el = document.createElement('div')
+          el.className = 'footer'
+          el.innerHTML = text
+          const cssText = `
+            .footer {
+              width: 100%;
+              height: 30px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              font-size: 12px;
+              color: #979797;
+            }
+          `
+          return {
+            el,
+            cssText,
+            height: 30
+          }
         }
+        // addContentToHeader: () => {
+        //   const el = document.createElement('div')
+        //   el.className = 'footer'
+        //   el.innerHTML = '理想青年实验室'
+        //   const cssText = `
+        //     .header {
+        //       width: 100%;
+        //       height: 50px;
+        //       background: #f5f5f5;
+        //       display: flex;
+        //       justify-content: center;
+        //       align-items: center
+        //     }
+        //   `
+        //   return {
+        //     el,
+        //     cssText,
+        //     height: 50
+        //   }
+        // },
+        // beforeShortcutRun: (key, activeNodeList) => {
+        //   console.log(key, activeNodeList)
+        //   // 阻止删除快捷键行为
+        //   if (key === 'Backspace') {
+        //     return true
+        //   }
+        // }
         // handleNodePasteImg: img => {
         //   console.log(img)
         //   return new Promise(resolve => {
@@ -768,7 +824,7 @@ export default {
       if (this.mindMap.cooperate && this.$route.query.userName) {
         this.mindMap.cooperate.setProvider(null, {
           roomName: 'demo-room',
-          signalingList: ['ws://10.16.83.11:4444']
+          signalingList: ['ws://10.16.83.118:4444']
         })
         this.mindMap.cooperate.setUserInfo({
           id: Math.random(),

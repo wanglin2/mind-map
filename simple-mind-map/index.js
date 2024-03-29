@@ -15,7 +15,13 @@ import {
   cssContent
 } from './src/constants/constant'
 import { SVG } from '@svgdotjs/svg.js'
-import { simpleDeepClone, getType, getObjectChangedProps } from './src/utils'
+import {
+  simpleDeepClone,
+  getType,
+  getObjectChangedProps,
+  isUndef,
+  handleGetSvgDataExtraContent
+} from './src/utils'
 import defaultTheme, {
   checkIsNodeSizeIndependenceConfig
 } from './src/themes/default'
@@ -94,7 +100,7 @@ class MindMap {
     // 初始渲染
     this.render(this.opt.fit ? () => this.view.fit() : () => {})
     setTimeout(() => {
-      this.command.addHistory()
+      if (this.opt.data) this.command.addHistory()
     }, 0)
   }
 
@@ -111,6 +117,7 @@ class MindMap {
 
   // 预处理节点数据
   handleData(data) {
+    if (isUndef(data) || Object.keys(data).length <= 0) return null
     data = simpleDeepClone(data || {})
     // 根节点不能收起
     if (data.data && !data.data.expand) {
@@ -316,6 +323,13 @@ class MindMap {
     this.command.exec(...args)
   }
 
+  // 更新画布数据，如果新的数据是在当前画布节点数据基础上增删改查后形成的，那么可以使用该方法来更新画布数据
+  updateData(data) {
+    this.renderer.setData(data)
+    this.render()
+    this.command.addHistory()
+  }
+
   //  动态设置思维导图数据，纯节点数据
   setData(data) {
     data = this.handleData(data)
@@ -401,7 +415,18 @@ class MindMap {
   }
 
   // 获取svg数据
-  getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false } = {}) {
+  getSvgData({
+    paddingX = 0,
+    paddingY = 0,
+    ignoreWatermark = false,
+    addContentToHeader,
+    addContentToFooter
+  } = {}) {
+    const { cssTextList, header, headerHeight, footer, footerHeight } =
+      handleGetSvgDataExtraContent({
+        addContentToHeader,
+        addContentToFooter
+      })
     const svg = this.svg
     const draw = this.draw
     // 保存原始信息
@@ -414,8 +439,9 @@ class MindMap {
     // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
     const rect = draw.rbox()
     // 内边距
+    const fixHeight = 0
     rect.width += paddingX * 2
-    rect.height += paddingY * 2
+    rect.height += paddingY * 2 + fixHeight + headerHeight + footerHeight
     draw.translate(paddingX, paddingY)
     // 将svg设置为实际内容的宽高
     svg.size(rect.width, rect.height)
@@ -453,7 +479,21 @@ class MindMap {
       this.watermark.isInExport = false
     }
     // 添加必要的样式
-    clone.add(SVG(`<style>${cssContent}</style>`))
+    ;[cssContent, ...cssTextList].forEach(s => {
+      clone.add(SVG(`<style>${s}</style>`))
+    })
+    // 附加内容
+    if (header && headerHeight > 0) {
+      clone.findOne('.smm-container').translate(0, headerHeight)
+      header.width(rect.width)
+      header.y(paddingY)
+      clone.add(header, 0)
+    }
+    if (footer && footerHeight > 0) {
+      footer.width(rect.width)
+      footer.y(rect.height - paddingY - footerHeight)
+      clone.add(footer)
+    }
     // 修正defs里定义的元素的id，因为clone时defs里的元素的id会继续递增，导致和内容中引用的id对不上
     const defs = svg.find('defs')
     const defs2 = clone.find('defs')

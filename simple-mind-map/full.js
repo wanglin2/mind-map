@@ -15,6 +15,7 @@ import Search from './src/plugins/Search.js'
 import Painter from './src/plugins/Painter.js'
 import Scrollbar from './src/plugins/Scrollbar.js'
 import Formula from './src/plugins/Formula.js'
+import RainbowLines from './src/plugins/RainbowLines.js'
 import xmind from './src/parse/xmind.js'
 import markdown from './src/parse/markdown.js'
 import icons from './src/svg/icons.js'
@@ -28,7 +29,7 @@ MindMap.iconList = icons.nodeIconList
 MindMap.constants = constants
 MindMap.themes = themes
 MindMap.defaultTheme = defaultTheme
-MindMap.version = '0.9.8'
+MindMap.version = '0.9.9'
 
 MindMap.usePlugin(MiniMap)
   .usePlugin(Watermark)
@@ -46,5 +47,6 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(Painter)
   .usePlugin(Scrollbar)
   .usePlugin(Formula)
+  .usePlugin(RainbowLines)
 
 export default MindMap

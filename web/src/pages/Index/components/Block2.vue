@@ -42,11 +42,11 @@ export default {
       dataList: [
         {
           icon: 'iconstar',
-          value: 'Github star数量2000+'
+          value: 'Github star数量3000+'
         },
         {
           icon: 'iconfork',
-          value: 'Github fork数量250+'
+          value: 'Github fork数量400+'
         },
         {
           icon: 'iconxiazai',
@@ -54,7 +54,7 @@ export default {
         },
         {
           icon: 'iconteamwork',
-          value: '代码贡献者14+'
+          value: '代码贡献者16+'
         }
       ],
       functionList: [
@@ -149,6 +149,21 @@ export default {
           icon: 'iconshezhi',
           name: '丰富的设置',
           value: '提供了丰富的功能设置，可以选择合适你的操作行为。'
+        },
+        {
+          icon: 'iconxietongwendang',
+          name: '协同编辑',
+          value: '支持协同编辑，方便多人同时编辑同一个文件。'
+        },
+        {
+          icon: 'icongongshi',
+          name: '数学公式',
+          value: '支持传入数学公式，省去截图的麻烦。'
+        },
+        {
+          icon: 'icongundongtiao',
+          name: '滚动条',
+          value: '支持显示滚动条，轻松拖动画布到指定位置。'
         }
       ]
     }

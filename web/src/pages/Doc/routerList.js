@@ -32,6 +32,7 @@ export default [
       { path: 'course23', title: '如何渲染滚动条' },
       { path: 'course24', title: '如何开发一个插件' },
       { path: 'course25', title: '关于概要' },
+      { path: 'course26', title: '如何实现AI生成节点内容' },
       { path: 'doExport', title: 'Export 插件' },
       { path: 'drag', title: 'Drag插件' },
       { path: 'introduction', title: '简介' },
@@ -60,6 +61,7 @@ export default [
       { path: 'scrollbar', title: 'Scrollbar插件' },
       { path: 'formula', title: 'Formula插件' },
       { path: 'cooperate', title: 'Cooperate插件' },
+      { path: 'rainbowLines', title: 'RainbowLines插件' },
       { path: 'handDrawnLikeStyle', title: 'HandDrawnLikeStyle收费插件' },
       { path: 'help1', title: '概要/关联线' },
       { path: 'help2', title: '客户端' },
@@ -102,6 +104,7 @@ export default [
       { path: 'scrollbar', title: 'Scrollbar plugin' },
       { path: 'formula', title: 'Formula plugin' },
       { path: 'cooperate', title: 'Cooperate plugin' },
+      { path: 'rainbowLines', title: 'RainbowLines plugin' },
       { path: 'handDrawnLikeStyle', title: 'HandDrawnLikeStyle chargeable plugin' },
       { path: 'client', title: 'Client' }
     ]

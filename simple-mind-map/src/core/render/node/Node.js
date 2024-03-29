@@ -916,6 +916,7 @@ class Node {
       childNode.getStyle('lineWidth', true)
     const color =
       childNode.getSelfInhertStyle('lineColor') ||
+      this.getRainbowLineColor(childNode) ||
       childNode.getStyle('lineColor', true)
     const dasharray =
       childNode.getSelfInhertStyle('lineDasharray') ||
@@ -930,6 +931,13 @@ class Node {
       enableMarker,
       childNode
     )
+  }
+
+  // 获取彩虹线条颜色
+  getRainbowLineColor(node) {
+    return this.mindMap.rainbowLines
+      ? this.mindMap.rainbowLines.getNodeColor(node)
+      : ''
   }
 
   //  移除连线
@@ -1037,6 +1045,17 @@ class Node {
   // 获取该节点的纯数据，即不包含对节点实例的引用
   getPureData(removeActiveState = true, removeId = false) {
     return copyNodeTree({}, this, removeActiveState, removeId)
+  }
+
+  // 获取祖先节点列表
+  getAncestorNodes() {
+    const list = []
+    let parent = this.parent
+    while (parent) {
+      list.unshift(parent)
+      parent = parent.parent
+    }
+    return list
   }
 
   // 是否存在自定义样式

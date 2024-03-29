@@ -56,6 +56,12 @@ Whether the node is currently being dragged
 
 ## Methods
 
+### getAncestorNodes()
+
+> v0.9.9+
+
+Obtain a list of ancestor node instances.
+
 ### highlight()
 
 > v0.9.8+

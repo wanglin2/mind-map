@@ -56,6 +56,12 @@
 
 ## 方法
 
+### getAncestorNodes()
+
+> v0.9.9+
+
+获取祖先节点实例列表。
+
 ### highlight()
 
 > v0.9.8+

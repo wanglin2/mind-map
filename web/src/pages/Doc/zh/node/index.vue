@@ -31,6 +31,11 @@
 </blockquote>
 <p>节点是否正在拖拽中</p>
 <h2>方法</h2>
+<h3>getAncestorNodes()</h3>
+<blockquote>
+<p>v0.9.9+</p>
+</blockquote>
+<p>获取祖先节点实例列表。</p>
 <h3>highlight()</h3>
 <blockquote>
 <p>v0.9.8+</p>

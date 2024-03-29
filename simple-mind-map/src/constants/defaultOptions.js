@@ -288,5 +288,35 @@ export const defaultOpt = {
       data: 1.当type=createOrUpdate时，代表被创建或被更新的节点数据，即将同步到其他客户端，所以你可以修改该数据；2.当type=delete时，代表被删除的节点数据
     }
   */
-  beforeCooperateUpdate: null
+  beforeCooperateUpdate: null,
+  // 快捷键操作即将执行前的生命周期函数，返回true可以阻止操作执行
+  // 函数接收两个参数：key（快捷键）、activeNodeList（当前激活的节点列表）
+  beforeShortcutRun: null,
+  // 彩虹线条配置，需要先注册RainbowLines插件
+  rainbowLinesConfig: {
+    open: false, // 是否开启彩虹线条
+    colorsList: [] // 自定义彩虹线条的颜色列表，如果不设置，会使用默认颜色列表
+    /*
+    [
+      'rgb(255, 213, 73)',
+      'rgb(255, 136, 126)',
+      'rgb(107, 225, 141)',
+      'rgb(151, 171, 255)',
+      'rgb(129, 220, 242)',
+      'rgb(255, 163, 125)',
+      'rgb(152, 132, 234)'
+    ]
+    */
+  },
+  // 导出png、svg、pdf时在头部和尾部添加自定义内容
+  // 可传递一个函数，这个函数可以返回null代表不添加内容，也可以返回如下数据：
+  /*
+    {
+      el,// 要追加的自定义DOM节点，样式可内联
+      cssText,// 可选，如果样式不想内联，可以传递该值，一个css字符串
+      height: 50// 返回的DOM节点的高度，必须传递
+    }
+  */
+  addContentToHeader: null,
+  addContentToFooter: null
 }

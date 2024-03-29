@@ -31,6 +31,11 @@
 </blockquote>
 <p>Whether the node is currently being dragged</p>
 <h2>Methods</h2>
+<h3>getAncestorNodes()</h3>
+<blockquote>
+<p>v0.9.9+</p>
+</blockquote>
+<p>Obtain a list of ancestor node instances.</p>
 <h3>highlight()</h3>
 <blockquote>
 <p>v0.9.8+</p>

@@ -1,5 +1,47 @@
 # Changelog
 
+## 0.9.9
+
+Fix:
+
+> 1.Fix the issue of incorrect arrow color when creating association lines for the first time;
+
+New:
+
+> 1.Support inserting child nodes with the insert key;
+>
+> 2.Add the beforeShortcutRun instantiation option to intercept shortcut key operations;
+>
+> 3.The method of incrementally updating canvas data by adding root instances, updateData;
+>
+> 4.Add a rainbow line plugin;
+>
+> 5.Add mouse in and out events to icons in nodes;
+>
+> 6.Add the getAncestorNodes method to the node instance to obtain the list of ancestor nodes;
+>
+> 7.Adding mouse events to personnel avatars during collaborative editing;
+>
+> 8.Instantiation and setData methods support passing in empty data;
+>
+> 9.Add an instantiation option for adding custom content when exporting images;
+
+Demo:
+
+> 1.Support configuration of rainbow lines;
+>
+> 2.Add source code editing mode;
+>
+> 3.Exporting PNG, PDF, and SVG supports setting custom text at the bottom;
+
+Client:
+
+> 1.Double click the file to open the application without opening the workbench page;
+>
+> 2.Fix the issue of multiple editing windows opening when repeatedly opening the same file;
+>
+> 3.Prompt for modifying and deleting files being edited;
+
 ## 0.9.8
 
 Fix:

@@ -339,6 +339,10 @@ class AssociativeLine {
         dasharray: [6, 4]
       })
       .fill({ color: 'none' })
+    // 箭头
+    this.markerPath
+      .stroke({ color: associativeLineColor })
+      .fill({ color: associativeLineColor })
     this.creatingLine.marker('end', this.marker)
   }
 
