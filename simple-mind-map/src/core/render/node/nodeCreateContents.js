@@ -262,7 +262,7 @@ function createHyperlinkNode() {
     e.stopPropagation()
   })
   if (hyperlinkTitle) {
-    a.attr('title', hyperlinkTitle)
+    node.add(SVG(`<title>${hyperlinkTitle}</title>`))
   }
   // 添加一个透明的层，作为鼠标区域
   a.rect(iconSize, iconSize).fill({ color: 'transparent' })
@@ -368,6 +368,36 @@ function createNoteNode() {
   }
 }
 
+//  创建附件节点
+function createAttachmentNode() {
+  const { attachmentUrl, attachmentName } = this.getData()
+  if (!attachmentUrl) {
+    return
+  }
+  const iconSize = this.mindMap.themeConfig.iconSize
+  const node = new SVG().attr('cursor', 'pointer').size(iconSize, iconSize)
+  if (attachmentName) {
+    node.add(SVG(`<title>${attachmentName}</title>`))
+  }
+  // 透明的层，用来作为鼠标区域
+  node.add(new Rect().size(iconSize, iconSize).fill({ color: 'transparent' }))
+  // 备注图标
+  const iconNode = SVG(iconsSvg.attachment).size(iconSize, iconSize)
+  this.style.iconNode(iconNode)
+  node.add(iconNode)
+  node.on('click', e => {
+    this.mindMap.emit('node_attachmentClick', this, e, node)
+  })
+  node.on('contextmenu', e => {
+    this.mindMap.emit('node_attachmentContextmenu', this, e, node)
+  })
+  return {
+    node,
+    width: iconSize,
+    height: iconSize
+  }
+}
+
 // 获取节点备注显示位置
 function getNoteContentPosition() {
   const iconSize = this.mindMap.themeConfig.iconSize
@@ -415,6 +445,7 @@ export default {
   createHyperlinkNode,
   createTagNode,
   createNoteNode,
+  createAttachmentNode,
   getNoteContentPosition,
   measureCustomNodeContentSize,
   isUseCustomNodeContent

@@ -65,7 +65,9 @@ class Render {
     this.mindMap = opt.mindMap
     this.themeConfig = this.mindMap.themeConfig
     // 渲染树，操作过程中修改的都是这里的数据
-    this.renderTree = this.mindMap.opt.data ? merge({}, this.mindMap.opt.data) : null
+    this.renderTree = this.mindMap.opt.data
+      ? merge({}, this.mindMap.opt.data)
+      : null
     // 是否重新渲染
     this.reRender = false
     // 是否正在渲染中
@@ -246,6 +248,9 @@ class Render {
     // 设置节点备注
     this.setNodeNote = this.setNodeNote.bind(this)
     this.mindMap.command.add('SET_NODE_NOTE', this.setNodeNote)
+    // 设置节点附件
+    this.setNodeAttachment = this.setNodeAttachment.bind(this)
+    this.mindMap.command.add('SET_NODE_ATTACHMENT', this.setNodeAttachment)
     // 设置节点标签
     this.setNodeTag = this.setNodeTag.bind(this)
     this.mindMap.command.add('SET_NODE_TAG', this.setNodeTag)
@@ -1597,6 +1602,14 @@ class Render {
   setNodeNote(node, note) {
     this.setNodeDataRender(node, {
       note
+    })
+  }
+
+  //  设置节点附件
+  setNodeAttachment(node, url, name = '') {
+    this.setNodeDataRender(node, {
+      attachmentUrl: url,
+      attachmentName: name
     })
   }
 
