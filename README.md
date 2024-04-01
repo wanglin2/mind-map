@@ -316,4 +316,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/L.jpg" style="width: 50px;height: 50px;" />
         <span>L</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>sunniberg</span>
+    </span>
 </p>
