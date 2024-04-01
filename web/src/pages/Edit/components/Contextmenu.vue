@@ -225,6 +225,7 @@ export default {
     this.$bus.$on('expand_btn_click', this.hide)
     this.$bus.$on('svg_mousedown', this.onMousedown)
     this.$bus.$on('mouseup', this.onMouseup)
+    this.$bus.$on('translate', this.hide)
   },
   beforeDestroy() {
     this.$bus.$off('node_contextmenu', this.show)
@@ -233,6 +234,7 @@ export default {
     this.$bus.$off('expand_btn_click', this.hide)
     this.$bus.$off('svg_mousedown', this.onMousedown)
     this.$bus.$off('mouseup', this.onMouseup)
+    this.$bus.$off('translate', this.hide)
   },
   methods: {
     ...mapMutations(['setLocalConfig']),

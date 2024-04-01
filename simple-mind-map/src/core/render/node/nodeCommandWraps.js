@@ -28,6 +28,11 @@ function setNote(note) {
   this.mindMap.execCommand('SET_NODE_NOTE', this, note)
 }
 
+//  设置附件
+function setAttachment(url, name) {
+  this.mindMap.execCommand('SET_NODE_ATTACHMENT', this, url, name)
+}
+
 //  设置标签
 function setTag(tag) {
   this.mindMap.execCommand('SET_NODE_TAG', this, tag)
@@ -55,6 +60,7 @@ export default {
   setIcon,
   setHyperlink,
   setNote,
+  setAttachment,
   setTag,
   setShape,
   setStyle,

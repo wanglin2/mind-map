@@ -75,6 +75,7 @@ class Node {
     this._noteData = null
     this.noteEl = null
     this.noteContentIsShow = false
+    this._attachmentData = null
     this._expandBtn = null
     this._lastExpandBtnType = null
     this._showExpandBtn = false
@@ -199,6 +200,7 @@ class Node {
     this._hyperlinkData = this.createHyperlinkNode()
     this._tagData = this.createTagNode()
     this._noteData = this.createNoteNode()
+    this._attachmentData = this.createAttachmentNode()
   }
 
   //  计算节点的宽高
@@ -266,6 +268,11 @@ class Node {
     if (this._noteData) {
       textContentWidth += this._noteData.width
       textContentHeight = Math.max(textContentHeight, this._noteData.height)
+    }
+    // 附件
+    if (this._attachmentData) {
+      textContentWidth += this._attachmentData.width
+      textContentHeight = Math.max(textContentHeight, this._attachmentData.height)
     }
     // 文字内容部分的尺寸
     this._rectInfo.textContentWidth = textContentWidth
@@ -398,6 +405,14 @@ class Node {
         .y((this._rectInfo.textContentHeight - this._noteData.height) / 2)
       textContentNested.add(this._noteData.node)
       textContentOffsetX += this._noteData.width
+    }
+    // 附件
+    if (this._attachmentData) {
+      this._attachmentData.node
+        .x(textContentOffsetX)
+        .y((this._rectInfo.textContentHeight - this._attachmentData.height) / 2)
+      textContentNested.add(this._attachmentData.node)
+      textContentOffsetX += this._attachmentData.width
     }
     // 文字内容整体
     textContentNested.translate(

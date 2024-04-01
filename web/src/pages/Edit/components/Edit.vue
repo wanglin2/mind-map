@@ -16,6 +16,7 @@
       v-if="mindMap"
       :mindMap="mindMap"
     ></NodeNoteContentShow>
+    <NodeAttachment v-if="mindMap" :mindMap="mindMap"></NodeAttachment>
     <NodeImgPreview v-if="mindMap" :mindMap="mindMap"></NodeImgPreview>
     <SidebarTrigger v-if="!isZenMode"></SidebarTrigger>
     <Search v-if="mindMap" :mindMap="mindMap"></Search>
@@ -87,6 +88,7 @@ import Scrollbar from './Scrollbar.vue'
 import exampleData from 'simple-mind-map/example/exampleData'
 import FormulaSidebar from './FormulaSidebar.vue'
 import SourceCodeEdit from './SourceCodeEdit.vue'
+import NodeAttachment from './NodeAttachment.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -139,7 +141,8 @@ export default {
     OutlineEdit,
     Scrollbar,
     FormulaSidebar,
-    SourceCodeEdit
+    SourceCodeEdit,
+    NodeAttachment
   },
   data() {
     return {
@@ -532,7 +535,10 @@ export default {
         'painter_start',
         'painter_end',
         'scrollbar_change',
-        'scale'
+        'scale',
+        'translate',
+        'node_attachmentClick',
+        'node_attachmentContextmenu'
       ].forEach(event => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args)

@@ -158,7 +158,8 @@ class View {
         ...viewData.transform
       })
       this.mindMap.emit('view_data_change', this.getTransformData())
-      this.mindMap.emit('scale', this.scale)
+      this.emitEvent('scale')
+      this.emitEvent('translate')
     }
   }
 
@@ -168,6 +169,7 @@ class View {
     this.x += x
     this.y += y
     this.transform()
+    this.emitEvent('translate')
   }
 
   //  平移x方向
@@ -175,12 +177,14 @@ class View {
     if (step === 0) return
     this.x += step
     this.transform()
+    this.emitEvent('translate')
   }
 
   //  平移x方式到
   translateXTo(x) {
     this.x = x
     this.transform()
+    this.emitEvent('translate')
   }
 
   //  平移y方向
@@ -188,12 +192,14 @@ class View {
     if (step === 0) return
     this.y += step
     this.transform()
+    this.emitEvent('translate')
   }
 
   //  平移y方向到
   translateYTo(y) {
     this.y = y
     this.transform()
+    this.emitEvent('translate')
   }
 
   //   应用变换
@@ -211,13 +217,17 @@ class View {
 
   //  恢复
   reset() {
-    let scaleChange = this.scale !== 1
+    const scaleChange = this.scale !== 1
+    const translateChange = this.x !== 0 || this.y !== 0
     this.scale = 1
     this.x = 0
     this.y = 0
     this.transform()
     if (scaleChange) {
-      this.mindMap.emit('scale', this.scale)
+      this.emitEvent('scale')
+    }
+    if (translateChange) {
+      this.emitEvent('translate')
     }
   }
 
@@ -227,7 +237,7 @@ class View {
     const scale = Math.max(this.scale - scaleRatio, 0.1)
     this.scaleInCenter(scale, cx, cy)
     this.transform()
-    this.mindMap.emit('scale', this.scale)
+    this.emitEvent('scale')
   }
 
   //  放大
@@ -236,7 +246,7 @@ class View {
     const scale = this.scale + scaleRatio
     this.scaleInCenter(scale, cx, cy)
     this.transform()
-    this.mindMap.emit('scale', this.scale)
+    this.emitEvent('scale')
   }
 
   // 基于指定中心进行缩放，cx，cy 可不指定，此时会使用画布中心点
@@ -262,7 +272,7 @@ class View {
       this.scale = scale
     }
     this.transform()
-    this.mindMap.emit('scale', this.scale)
+    this.emitEvent('scale')
   }
 
   // 适应画布大小
@@ -392,6 +402,16 @@ class View {
       right,
       top,
       bottom
+    }
+  }
+
+  // 派发事件
+  emitEvent(type) {
+    switch (type) {
+      case 'scale':
+        this.mindMap.emit('scale', this.scale)
+      case 'translate':
+        this.mindMap.emit('translate', this.x, this.y)
     }
   }
 }

@@ -258,6 +258,7 @@ export default {
     save: '保存',
     painter: '格式刷',
     formula: '公式',
+    attachment: '附件',
     more: '更多',
     selectFileTip: '请选择文件',
     notSupportTip: '你的浏览器不支持该功能，或者当前页面非https协议',
@@ -327,5 +328,8 @@ export default {
     formatErrorTip: 'JSON格式有误，请检查后再试',
     copyTip: '已复制到剪贴板',
     formatTip: '格式化完成'
+  },
+  attachment: {
+    deleteAttachment: '删除附件'
   }
 }

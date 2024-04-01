@@ -37,6 +37,7 @@ export default {
     document.body.addEventListener('click', this.hideNoteContent)
     this.$bus.$on('node_active', this.hideNoteContent)
     this.$bus.$on('scale', this.onScale)
+    this.$bus.$on('translate', this.onScale)
     this.$bus.$on('svg_mousedown', this.hideNoteContent)
   },
   mounted() {
@@ -48,6 +49,7 @@ export default {
     document.body.removeEventListener('click', this.hideNoteContent)
     this.$bus.$off('node_active', this.hideNoteContent)
     this.$bus.$off('scale', this.onScale)
+    this.$bus.$off('translate', this.onScale)
     this.$bus.$off('svg_mousedown', this.hideNoteContent)
   },
   methods: {
@@ -97,6 +99,8 @@ export default {
   border-radius: 5px;
   max-height: 300px;
   overflow-y: auto;
+  box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.06);
 
   &::-webkit-scrollbar {
     width: 7px;
