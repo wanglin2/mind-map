@@ -70,6 +70,7 @@ export default {
     // 点击附件图标，一般用来打开或下载附件
     onNodeAttachmentClick(node, e, icon) {
       // console.log(node.getData('attachmentUrl'))
+      this.$message.info(this.$t('attachment.tip'))
     },
 
     // 显示删除浮层

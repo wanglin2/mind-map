@@ -334,6 +334,7 @@ export default {
     formatTip: 'Format complete'
   },
   attachment: {
-    deleteAttachment: 'Delete attachment'
+    deleteAttachment: 'Delete attachment',
+    tip: 'The attachment function is only available on the client side'
   }
 }

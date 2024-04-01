@@ -328,6 +328,7 @@ export default {
     formatTip: '格式化完成'
   },
   attachment: {
-    deleteAttachment: '删除附件'
+    deleteAttachment: '删除附件',
+    tip: '附件功能仅在客户端可用'
   }
 }
