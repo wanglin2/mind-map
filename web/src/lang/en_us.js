@@ -259,6 +259,7 @@ export default {
     associativeLine: 'Associative line',
     painter: 'Painter',
     formula: 'Formula',
+    attachment: 'Attachment',
     more: 'More',
     selectFileTip: 'Please select a file',
     notSupportTip:
@@ -331,5 +332,8 @@ export default {
     formatErrorTip: 'The JSON format is incorrect. Please check and try again',
     copyTip: 'Copied to clipboard',
     formatTip: 'Format complete'
+  },
+  attachment: {
+    deleteAttachment: 'Delete attachment'
   }
 }

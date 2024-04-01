@@ -178,6 +178,7 @@ export default {
         'summary',
         'associativeLine',
         'formula'
+        // 'attachment'
       ],
       horizontalList: [],
       verticalList: [],
