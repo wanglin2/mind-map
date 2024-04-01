@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.9.10
+
+Fix:
+
+> 1.Fix the issue of all replace operation error during search;
+
+New:
+
+> 1.Add an event translate when moving the canvas;
+>
+> 2.Node content supports setting attachments;
+
+Client:
+
+> 1.Nodes support adding attachments;
+
 ## 0.9.9-fix.2
 
 Fix:

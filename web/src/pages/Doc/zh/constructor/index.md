@@ -141,6 +141,8 @@ const mindMap = new MindMap({
     hyperlink: '', // 超链接地址
     hyperlinkTitle: '', // 超链接的标题
     note: '', // 备注的内容
+    attachmentUrl: '',// v0.9.10+，附件url
+    attachmentName: '',// v0.9.10+，附件名称
     tag: [], // 标签列表
     generalization: {// 节点的概要，如果没有概要generalization设为null即可
       text: ''// 概要的文本
@@ -452,7 +454,8 @@ mindMap.setTheme('主题名称')
 | expand_btn_click                 | 节点展开或收缩事件                         | this（节点实例）                                             |
 | before_show_text_edit            | 节点文本编辑框即将打开事件                 |                                                              |
 | hide_text_edit                   | 节点文本编辑框关闭事件                     | textEditNode（文本编辑框DOM节点）、activeNodeList（当前激活的所有节点列表） |
-| scale                            | 放大缩小事件                               | scale（缩放比例）                                            |
+| scale                            | 画布放大缩小事件                               | scale（缩放比例）                                            |
+| translate（v0.9.10+）               | 画布移动事件              | x（水平位移）、y（垂直位移）                     |
 | node_img_dblclick（v0.2.15+）    | 节点内图片的双击事件                       | this（节点实例）、e（事件对象）                              |
 | node_img_mouseenter（v0.6.5+）    |  节点内图片的鼠标移入事件                      | this（节点实例）、imgNode（图片节点）、e（事件对象）                              |
 | node_img_mouseleave（v0.6.5+）    |  节点内图片的鼠标移出事件                      | this（节点实例）、imgNode（图片节点）、e（事件对象）                              |
@@ -576,6 +579,7 @@ mindMap.updateConfig({
 | SET_NODE_ICON                       | 设置节点图标                                                 | node（要设置的节点）、icons（数组，预定义的图片名称组成的数组，可用图标可在[icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js)文件里的`nodeIconList`列表里获取到，图标名称为`type_name`，如`['priority_1']`） |
 | SET_NODE_HYPERLINK                  | 设置节点超链接                                               | node（要设置的节点）、link（超链接地址）、title（超链接名称，可选） |
 | SET_NODE_NOTE                       | 设置节点备注                                                 | node（要设置的节点）、note（备注文字）                       |
+| SET_NODE_ATTACHMENT（v0.9.10+）                       | 设置节点附件                                                 | node（要设置的节点）、url（附件url）、name（附件名称，可选）                       |
 | SET_NODE_TAG                        | 设置节点标签                                                 | node（要设置的节点）、tag（字符串数组，内置颜色信息可在[constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/constants/constant.js)里获取到） |
 | INSERT_AFTER（v0.1.5+）             | 将节点移动到另一个节点的后面    | node（要移动的节点，（v0.7.2+支持传递节点数组实现同时移动多个节点））、 exist（目标节点）                     |
 | INSERT_BEFORE（v0.1.5+）            | 将节点移动到另一个节点的前面，（v0.7.2+支持传递节点数组实现同时移动多个节点）   | node（要移动的节点）、 exist（目标节点）                     |

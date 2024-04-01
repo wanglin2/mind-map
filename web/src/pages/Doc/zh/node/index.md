@@ -258,6 +258,16 @@
 
 设置节点备注，`SET_NODE_NOTE`命令的快捷方法
 
+### setAttachment(url, name)
+
+> v0.9.10+
+
+- `url`：附件的url；
+
+- `name`：附件的名称，可选
+
+设置节点附件，`SET_NODE_ATTACHMENT`命令的快捷方法
+
 ### setTag(tag)
 
 设置节点标签，`SET_NODE_TAG`的快捷方法

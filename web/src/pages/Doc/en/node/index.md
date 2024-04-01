@@ -261,9 +261,19 @@ Setting the node hyperlink, a shortcut for the `SET_NODE_HYPERLINK` command
 
 Setting the node note, a shortcut for the `SET_NODE_NOTE` command
 
+### setAttachment(url, name)
+
+> v0.9.10+
+
+- `url`：Attachment url；
+
+- `name`：Attachment name, optional
+
+Set node attachments, a shortcut for the `SET_NODE_ATTACHMENT` command
+
 ### setTag(tag)
 
-Setting the node tag, a shortcut for the `SET_NODE_TAG` command"
+Setting the node tag, a shortcut for the `SET_NODE_TAG` command
 
 ### hide()
 

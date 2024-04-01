@@ -455,7 +455,8 @@ Listen to an event. Event list:
 | expand_btn_click                 | Node expand or collapse event                                            | this (node instance)                                                                                            |
 | before_show_text_edit            | Event before node text edit box opens                                    |                                                                                                                 |
 | hide_text_edit                   | Node text edit box close event                                           | textEditNode (text edit box DOM node), activeNodeList (current list of active nodes)                            |
-| scale                            | Zoom event                                                               | scale (zoom ratio)                                                                                              |
+| scale                            | Canvas zoom event                                                               | scale (zoom ratio)                                            |
+| translate（v0.9.10+）         |   Canvas movement event           | x（translate x）、y（translate y）                     |
 | node_img_dblclick（v0.2.15+）    | Node image double-click event                                            | this (node instance), e (event object)                                                                          |
 | node_img_mouseenter（v0.6.5+）    |  Node image mouseenter event                    | this（node instance）、imgNode（img node）、e（event object）                              |
 | node_img_mouseleave（v0.6.5+）    |  Node image mouseleave event                    | this（node instance）、imgNode（img node）、e（event object）                              |
@@ -581,6 +582,7 @@ redo. All commands are as follows:
 | SET_NODE_ICON                      | Set Node Icon                                                | node (node to set), icons (array, predefined image names array, available icons can be obtained in the nodeIconList list in the [icons.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js) file, icon name is type_name, such as ['priority_1']) |
 | SET_NODE_HYPERLINK                 | Set Node Hyperlink                                           | node (node to set), link (hyperlink address), title (hyperlink name, optional) |
 | SET_NODE_NOTE                      | Set Node Note                                                | node (node to set), note (note text)                         |
+| SET_NODE_ATTACHMENT（v0.9.10+）                       |   Set node attachment               | node（node to set）、url（attachment url）、name（attachment name, optional）                       |
 | SET_NODE_TAG                       | Set Node Tag                                                 | node (node to set), tag (string array, built-in color information can be obtained in [constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/constants/constant.js)) |
 | INSERT_AFTER (v0.1.5+)             | Move Node to After Another Node | node (node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), exist (target node)                     |
 | INSERT_BEFORE (v0.1.5+)            | Move Node to Before Another Node | node (node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), exist (target node)                     |

@@ -335,7 +335,7 @@ class Render {
     })
     // 一键整理布局
     this.mindMap.keyCommand.addShortcut('Control+l', () => {
-      this.mindMap.execCommand('RESET_LAYOUT', this.resetLayout)
+      this.mindMap.execCommand('RESET_LAYOUT')
     })
     // 上移节点
     this.mindMap.keyCommand.addShortcut('Control+Up', () => {

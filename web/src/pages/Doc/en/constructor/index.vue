@@ -1116,8 +1116,13 @@ poor performance and should be used sparingly.</p>
 </tr>
 <tr>
 <td>scale</td>
-<td>Zoom event</td>
+<td>Canvas zoom event</td>
 <td>scale (zoom ratio)</td>
+</tr>
+<tr>
+<td>translate（v0.9.10+）</td>
+<td>Canvas movement event</td>
+<td>x（translate x）、y（translate y）</td>
 </tr>
 <tr>
 <td>node_img_dblclick（v0.2.15+）</td>
@@ -1423,6 +1428,11 @@ redo. All commands are as follows:</p>
 <td>SET_NODE_NOTE</td>
 <td>Set Node Note</td>
 <td>node (node to set), note (note text)</td>
+</tr>
+<tr>
+<td>SET_NODE_ATTACHMENT（v0.9.10+）</td>
+<td>Set node attachment</td>
+<td>node（node to set）、url（attachment url）、name（attachment name, optional）</td>
 </tr>
 <tr>
 <td>SET_NODE_TAG</td>
