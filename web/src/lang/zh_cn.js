@@ -330,6 +330,7 @@ export default {
     formatTip: '格式化完成'
   },
   attachment: {
-    deleteAttachment: '删除附件'
+    deleteAttachment: '删除附件',
+    openFileInDir: '在目录中显示'
   }
 }

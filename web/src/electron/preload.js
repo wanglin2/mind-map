@@ -14,7 +14,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   save: (id, data, fileName) => ipcRenderer.invoke('save', id, data, fileName),
   rename: (id, name) => ipcRenderer.invoke('rename', id, name),
   openUrl: url => ipcRenderer.send('openUrl', url),
-  addRecentFileList: (fileList) => ipcRenderer.invoke('addRecentFileList', fileList),
+  addRecentFileList: fileList =>
+    ipcRenderer.invoke('addRecentFileList', fileList),
   getRecentFileList: () => ipcRenderer.invoke('getRecentFileList'),
   clearRecentFileList: () => ipcRenderer.invoke('clearRecentFileList'),
   openFileInDir: file => ipcRenderer.invoke('openFileInDir', file),
@@ -23,5 +24,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.on('refreshRecentFileList', callback),
   openFile: file => ipcRenderer.invoke('openFile', file),
   selectOpenFile: () => ipcRenderer.send('selectOpenFile'),
-  copyFile: file => ipcRenderer.invoke('copyFile', file)
+  copyFile: file => ipcRenderer.invoke('copyFile', file),
+  selectFile: () => ipcRenderer.invoke('selectFile'),
+  openPath: path => ipcRenderer.invoke('openPath', path) 
 })

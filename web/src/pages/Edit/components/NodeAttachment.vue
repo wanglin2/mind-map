@@ -6,9 +6,14 @@
       top: this.top + 'px',
       visibility: show ? 'visible' : 'hidden'
     }"
-    @click.stop="deleteAttachment"
+    @click.stop
   >
-    <div class="menuItem">{{ $t('attachment.deleteAttachment') }}</div>
+    <div class="menuItem" @click="openFileInDir">
+      {{ $t('attachment.openFileInDir') }}
+    </div>
+    <div class="menuItem" @click="deleteAttachment">
+      {{ $t('attachment.deleteAttachment') }}
+    </div>
   </div>
 </template>
 
@@ -61,15 +66,37 @@ export default {
   },
   methods: {
     // 选择附件
-    onSelectAttachment(activeNodes) {
+    async onSelectAttachment(activeNodes) {
       // activeNodes.forEach(node => {
       //   node.setAttachment('/test.md', '我去')
       // })
+      const file = await window.electronAPI.selectFile()
+      if (file) {
+        activeNodes.forEach(node => {
+          node.setAttachment(file.file, file.name)
+        })
+      }
     },
 
     // 点击附件图标，一般用来打开或下载附件
-    onNodeAttachmentClick(node, e, icon) {
+    async onNodeAttachmentClick(node, e, icon) {
       // console.log(node.getData('attachmentUrl'))
+      const file = node.getData('attachmentUrl')
+      if (!file) return
+      const error = await window.electronAPI.openPath(file)
+      if (error) {
+        this.$message.error(error)
+      }
+    },
+
+    // 在目录中显示
+    async openFileInDir() {
+      if (!this.node || !this.show) return
+      const file = this.node.getData('attachmentUrl')
+      const error = await window.electronAPI.openFileInDir(file)
+      if (error) {
+        this.$message.error(error)
+      }
     },
 
     // 显示删除浮层
@@ -116,7 +143,7 @@ export default {
 .nodeAttachmentContextMenu {
   position: fixed;
   background-color: #fff;
-  padding: 10px;
+  padding: 10px 0;
   border-radius: 5px;
   box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
   border: 1px solid rgba(0, 0, 0, 0.06);
@@ -128,6 +155,13 @@ export default {
     color: #1a1a1a;
     cursor: pointer;
     user-select: none;
+    height: 28px;
+    line-height: 28px;
+    padding: 0 10px;
+
+    &:hover {
+      background: #f5f5f5;
+    }
   }
 }
 </style>

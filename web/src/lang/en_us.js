@@ -336,6 +336,7 @@ export default {
     formatTip: 'Format complete'
   },
   attachment: {
-    deleteAttachment: 'Delete attachment'
+    deleteAttachment: 'Delete attachment',
+    openFileInDir: 'Show in dir'
   }
 }

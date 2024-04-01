@@ -183,8 +183,8 @@ export default {
         'tag',
         'summary',
         'associativeLine',
-        'formula'
-        // 'attachment'
+        'formula',
+        'attachment'
       ],
       horizontalList: [],
       verticalList: [],

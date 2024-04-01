@@ -127,6 +127,22 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
     }
   })
 
+  // 选择本地文件
+  ipcMain.handle('selectFile', event => {
+    const res = dialog.showOpenDialogSync({
+      title: '选择'
+    })
+    if (res && res[0]) {
+      console.log(111, res[0])
+      return {
+        file: res[0],
+        name: path.basename(res[0])
+      }
+    } else {
+      return null
+    }
+  })
+
   // 获取文件内容
   ipcMain.handle('getFileContent', (event, id) => {
     return new Promise(resolve => {
@@ -211,6 +227,15 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
       return '文件不存在'
     }
     shell.showItemInFolder(file)
+  })
+
+   // 打开指定文件
+   ipcMain.handle('openPath', (event, file) => {
+    const exist = fs.existsSync(file)
+    if (!exist) {
+      return '文件不存在'
+    }
+    shell.openPath(file)
   })
 
   // 删除指定文件
