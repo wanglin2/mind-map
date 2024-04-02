@@ -5,6 +5,7 @@
 <p>Fix:</p>
 <blockquote>
 <p>1.Fix the issue of all replace operation error during search;</p>
+<p>2.Fix the issue of rendering the mini map with entity characters that are not supported by SVG in node text;</p>
 </blockquote>
 <p>New:</p>
 <blockquote>
