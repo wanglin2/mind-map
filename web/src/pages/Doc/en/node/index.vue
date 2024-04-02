@@ -195,8 +195,21 @@ nodeData, <code>SET_NODE_DATA</code> command's shortcut method. This method and 
 <p>Setting the node hyperlink, a shortcut for the <code>SET_NODE_HYPERLINK</code> command</p>
 <h3>setNote(note)</h3>
 <p>Setting the node note, a shortcut for the <code>SET_NODE_NOTE</code> command</p>
+<h3>setAttachment(url, name)</h3>
+<blockquote>
+<p>v0.9.10+</p>
+</blockquote>
+<ul>
+<li>
+<p><code>url</code>：Attachment url；</p>
+</li>
+<li>
+<p><code>name</code>：Attachment name, optional</p>
+</li>
+</ul>
+<p>Set node attachments, a shortcut for the <code>SET_NODE_ATTACHMENT</code> command</p>
 <h3>setTag(tag)</h3>
-<p>Setting the node tag, a shortcut for the <code>SET_NODE_TAG</code> command&quot;</p>
+<p>Setting the node tag, a shortcut for the <code>SET_NODE_TAG</code> command</p>
 <h3>hide()</h3>
 <blockquote>
 <p>v0.1.5+</p>

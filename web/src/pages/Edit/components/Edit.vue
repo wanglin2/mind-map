@@ -1,5 +1,12 @@
 <template>
-  <div class="editContainer" :style="{top: IS_ELECTRON ? '40px' : 0}">
+  <div
+    class="editContainer"
+    :style="{ top: IS_ELECTRON ? '40px' : 0 }"
+    @dragenter.stop.prevent="onDragenter"
+    @dragleave.stop.prevent
+    @dragover.stop.prevent
+    @drop.stop.prevent
+  >
     <div class="mindMapContainer" ref="mindMapContainer"></div>
     <Count :mindMap="mindMap" v-if="!isZenMode"></Count>
     <Navigator :mindMap="mindMap"></Navigator>
@@ -26,6 +33,15 @@
     <Scrollbar v-if="isShowScrollbar && mindMap" :mindMap="mindMap"></Scrollbar>
     <FormulaSidebar v-if="mindMap" :mindMap="mindMap"></FormulaSidebar>
     <SourceCodeEdit v-if="mindMap" :mindMap="mindMap"></SourceCodeEdit>
+    <div
+      class="dragMask"
+      v-if="showDragMask"
+      @dragleave.stop.prevent="onDragleave"
+      @dragover.stop.prevent
+      @drop.stop.prevent="onDrop"
+    >
+      <div class="dragTip">{{ $t('edit.dragTip') }}</div>
+    </div>
   </div>
 </template>
 
@@ -80,7 +96,10 @@ import i18n from '../../../i18n'
 import Search from './Search.vue'
 import NodeIconSidebar from './NodeIconSidebar.vue'
 import NodeIconToolbar from './NodeIconToolbar.vue'
-import { removeMindMapNodeStickerProtocol, addMindMapNodeStickerProtocol } from '@/utils'
+import {
+  removeMindMapNodeStickerProtocol,
+  addMindMapNodeStickerProtocol
+} from '@/utils'
 import OutlineEdit from './OutlineEdit.vue'
 import { showLoading, hideLoading } from '@/utils/loading'
 import handleClipboardText from '@/utils/handleClipboardText'
@@ -153,7 +172,8 @@ export default {
       isFirst: true,
       autoSaveTimer: null,
       isNewFile: false,
-      storeConfigTimer: null
+      storeConfigTimer: null,
+      showDragMask: false
     }
   },
   computed: {
@@ -511,11 +531,12 @@ export default {
       })
       if (this.openNodeRichText) this.addRichTextPlugin()
       if (this.isShowScrollbar) this.addScrollbarPlugin()
-      if (this.isUseHandDrawnLikeStyle) this.addHandDrawnLikeStylePlugin()
-      // this.mindMap.keyCommand.addShortcut('Control+s', () => {
-      //   this.manualSave()
-      // })
-      // 转发事件
+      if (this.isUseHandDrawnLikeStyle)
+        this.addHandDrawnLikeStylePlugin()
+        // this.mindMap.keyCommand.addShortcut('Control+s', () => {
+        //   this.manualSave()
+        // })
+        // 转发事件
       ;[
         'node_active',
         'data_change',
@@ -678,14 +699,18 @@ export default {
       let id = this.$route.params.id
       let data = this.mindMap.getData(true)
       removeMindMapNodeStickerProtocol(data.root)
-      let res = await window.electronAPI.save(id, JSON.stringify(data), this.fileName)
+      let res = await window.electronAPI.save(
+        id,
+        JSON.stringify(data),
+        this.fileName
+      )
       if (res) {
         this.isNewFile = false
         this.setFileName(res)
       }
       this.setIsUnSave(false)
     },
-    
+
     // 加载滚动条插件
     addScrollbarPlugin() {
       if (!this.mindMap) return
@@ -844,6 +869,20 @@ export default {
               : ''
         })
       }
+    },
+
+    // 拖拽文件到页面导入
+    onDragenter() {
+      this.showDragMask = true
+    },
+    onDragleave() {
+      this.showDragMask = false
+    },
+    onDrop(e) {
+      this.showDragMask = false
+      const dt = e.dataTransfer
+      const file = dt.files && dt.files[0]
+      this.$bus.$emit('importFile', file)
     }
   }
 }
@@ -856,6 +895,24 @@ export default {
   right: 0;
   top: 0;
   bottom: 0;
+
+  .dragMask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3999;
+
+    .dragTip {
+      pointer-events: none;
+      font-weight: bold;
+    }
+  }
 
   .mindMapContainer {
     position: absolute;

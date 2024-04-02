@@ -312,7 +312,9 @@ export const nodeDataNoStylePropList = [
   'associativeLineTargets',
   'associativeLineTargetControlOffsets',
   'associativeLinePoint',
-  'associativeLineText'
+  'associativeLineText',
+  'attachmentUrl',
+  'attachmentName'
 ]
 
 // 数据缓存

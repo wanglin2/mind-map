@@ -1,6 +1,25 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.9.10</h2>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue of all replace operation error during search;</p>
+<p>2.Fix the issue of rendering the mini map with entity characters that are not supported by SVG in node text;</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Add an event translate when moving the canvas;</p>
+<p>2.Node content supports setting attachments;</p>
+</blockquote>
+<p>Demo：</p>
+<blockquote>
+<p>1.Support dragging and dropping files onto the page for import;</p>
+</blockquote>
+<p>Client:</p>
+<blockquote>
+<p>1.Nodes support adding attachments;</p>
+</blockquote>
 <h2>0.9.9-fix.2</h2>
 <p>Fix:</p>
 <blockquote>

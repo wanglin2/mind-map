@@ -606,6 +606,8 @@
     <span class="hljs-attr">hyperlink</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 超链接地址</span>
     <span class="hljs-attr">hyperlinkTitle</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 超链接的标题</span>
     <span class="hljs-attr">note</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 备注的内容</span>
+    <span class="hljs-attr">attachmentUrl</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// v0.9.10+，附件url</span>
+    <span class="hljs-attr">attachmentName</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// v0.9.10+，附件名称</span>
     <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// 标签列表</span>
     <span class="hljs-attr">generalization</span>: {<span class="hljs-comment">// 节点的概要，如果没有概要generalization设为null即可</span>
       <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span><span class="hljs-comment">// 概要的文本</span>
@@ -1008,8 +1010,13 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </tr>
 <tr>
 <td>scale</td>
-<td>放大缩小事件</td>
+<td>画布放大缩小事件</td>
 <td>scale（缩放比例）</td>
+</tr>
+<tr>
+<td>translate（v0.9.10+）</td>
+<td>画布移动事件</td>
+<td>x（水平位移）、y（垂直位移）</td>
 </tr>
 <tr>
 <td>node_img_dblclick（v0.2.15+）</td>
@@ -1317,6 +1324,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>SET_NODE_NOTE</td>
 <td>设置节点备注</td>
 <td>node（要设置的节点）、note（备注文字）</td>
+</tr>
+<tr>
+<td>SET_NODE_ATTACHMENT（v0.9.10+）</td>
+<td>设置节点附件</td>
+<td>node（要设置的节点）、url（附件url）、name（附件名称，可选）</td>
 </tr>
 <tr>
 <td>SET_NODE_TAG</td>

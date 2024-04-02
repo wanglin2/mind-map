@@ -280,7 +280,8 @@ export default {
     tip: '提示',
     yes: '是',
     no: '否',
-    exportError: '导出失败'
+    exportError: '导出失败',
+    dragTip: '在此释放以导入该文件'
   },
   mouseAction: {
     tip1: '当前：左键拖动画布，右键框选节点',
@@ -331,6 +332,7 @@ export default {
   },
   attachment: {
     deleteAttachment: '删除附件',
-    openFileInDir: '在目录中显示'
+    openFileInDir: '在目录中显示',
+    tip: '附件功能仅在客户端可用'
   }
 }

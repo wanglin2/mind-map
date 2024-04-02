@@ -284,7 +284,8 @@ export default {
     tip: 'Tip',
     yes: 'Yes',
     no: 'No',
-    exportError: 'Export failed'
+    exportError: 'Export failed',
+    dragTip: 'Release here to import the file'
   },
   mouseAction: {
     tip1:
@@ -337,6 +338,7 @@ export default {
   },
   attachment: {
     deleteAttachment: 'Delete attachment',
-    openFileInDir: 'Show in dir'
+    openFileInDir: 'Show in dir',
+    tip: 'The attachment function is only available on the client side'
   }
 }

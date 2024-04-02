@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.9.10
+
+Fix:
+
+> 1.Fix the issue of all replace operation error during search;
+>
+> 2.Fix the issue of rendering the mini map with entity characters that are not supported by SVG in node text;
+
+New:
+
+> 1.Add an event translate when moving the canvas;
+>
+> 2.Node content supports setting attachments;
+
+Demo：
+
+> 1.Support dragging and dropping files onto the page for import;
+
+Client:
+
+> 1.Nodes support adding attachments;
+
 ## 0.9.9-fix.2
 
 Fix:
