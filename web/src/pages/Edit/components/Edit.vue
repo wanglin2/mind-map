@@ -1,5 +1,11 @@
 <template>
-  <div class="editContainer">
+  <div
+    class="editContainer"
+    @dragenter.stop.prevent="onDragenter"
+    @dragleave.stop.prevent
+    @dragover.stop.prevent
+    @drop.stop.prevent
+  >
     <div class="mindMapContainer" ref="mindMapContainer"></div>
     <Count :mindMap="mindMap" v-if="!isZenMode"></Count>
     <Navigator :mindMap="mindMap"></Navigator>
@@ -26,6 +32,15 @@
     <Scrollbar v-if="isShowScrollbar && mindMap" :mindMap="mindMap"></Scrollbar>
     <FormulaSidebar v-if="mindMap" :mindMap="mindMap"></FormulaSidebar>
     <SourceCodeEdit v-if="mindMap" :mindMap="mindMap"></SourceCodeEdit>
+    <div
+      class="dragMask"
+      v-if="showDragMask"
+      @dragleave.stop.prevent="onDragleave"
+      @dragover.stop.prevent
+      @drop.stop.prevent="onDrop"
+    >
+      <div class="dragTip">{{ $t('edit.dragTip') }}</div>
+    </div>
   </div>
 </template>
 
@@ -148,7 +163,8 @@ export default {
       mindMap: null,
       mindMapData: null,
       prevImg: '',
-      storeConfigTimer: null
+      storeConfigTimer: null,
+      showDragMask: false
     }
   },
   computed: {
@@ -779,6 +795,20 @@ export default {
               : ''
         })
       }
+    },
+
+    // 拖拽文件到页面导入
+    onDragenter() {
+      this.showDragMask = true
+    },
+    onDragleave() {
+      this.showDragMask = false
+    },
+    onDrop(e) {
+      this.showDragMask = false
+      const dt = e.dataTransfer
+      const file = dt.files && dt.files[0]
+      this.$bus.$emit('importFile', file)
     }
   }
 }
@@ -791,6 +821,24 @@ export default {
   right: 0;
   top: 0;
   bottom: 0;
+
+  .dragMask {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3999;
+
+    .dragTip {
+      pointer-events: none;
+      font-weight: bold;
+    }
+  }
 
   .mindMapContainer {
     position: absolute;

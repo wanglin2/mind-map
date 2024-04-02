@@ -282,7 +282,8 @@ export default {
     tip: 'Tip',
     yes: 'Yes',
     no: 'No',
-    exportError: 'Export failed'
+    exportError: 'Export failed',
+    dragTip: 'Release here to import the file'
   },
   mouseAction: {
     tip1:

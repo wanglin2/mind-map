@@ -63,10 +63,12 @@ export default {
   created() {
     this.$bus.$on('showImport', this.handleShowImport)
     this.$bus.$on('handle_file_url', this.handleFileURL)
+    this.$bus.$on('importFile', this.handleImportFile)
   },
   beforeDestroy() {
     this.$bus.$off('showImport', this.handleShowImport)
     this.$bus.$off('handle_file_url', this.handleFileURL)
+    this.$bus.$off('importFile', this.handleImportFile)
   },
   methods: {
     ...mapMutations(['setActiveSidebar']),
@@ -286,6 +288,16 @@ export default {
           this.$message.error(this.$t('import.fileParsingFailed'))
         }
       }
+    },
+
+    // 导入指定文件
+    handleImportFile(file) {
+      this.onChange({
+        raw: file,
+        name: file.name
+      })
+      if (this.fileList.length <= 0) return
+      this.confirm()
     }
   }
 }
