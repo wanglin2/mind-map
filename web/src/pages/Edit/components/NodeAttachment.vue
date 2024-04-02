@@ -93,7 +93,6 @@ export default {
 
     // 画布缩放事件
     onScale() {
-      console.log(1)
       if (!this.node || !this.show) return
       this.updatePosition()
     },

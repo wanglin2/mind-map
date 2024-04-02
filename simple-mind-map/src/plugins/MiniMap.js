@@ -93,10 +93,7 @@ class MiniMap {
 
     return {
       getImgUrl: async callback => {
-        const blob = new Blob([svgStr], {
-          type: 'image/svg+xml'
-        })
-        const res = await readBlob(blob)
+        const res = await this.mindMap.doExport.fixSvgStrAndToBlob(svgStr)
         callback(res)
       },
       svgHTML: svgStr, // 小地图html
