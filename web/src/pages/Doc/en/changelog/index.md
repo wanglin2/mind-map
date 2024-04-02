@@ -14,6 +14,10 @@ New:
 >
 > 2.Node content supports setting attachments;
 
+Demo：
+
+> 1.Support dragging and dropping files onto the page for import;
+
 Client:
 
 > 1.Nodes support adding attachments;

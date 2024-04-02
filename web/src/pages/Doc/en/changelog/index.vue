@@ -12,6 +12,10 @@
 <p>1.Add an event translate when moving the canvas;</p>
 <p>2.Node content supports setting attachments;</p>
 </blockquote>
+<p>Demo：</p>
+<blockquote>
+<p>1.Support dragging and dropping files onto the page for import;</p>
+</blockquote>
 <p>Client:</p>
 <blockquote>
 <p>1.Nodes support adding attachments;</p>

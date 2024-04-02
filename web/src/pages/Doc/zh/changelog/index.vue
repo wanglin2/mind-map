@@ -12,6 +12,10 @@
 <p>1.新增画布移动时的事件translate；</p>
 <p>2.节点内容支持设置附件；</p>
 </blockquote>
+<p>Demo：</p>
+<blockquote>
+<p>1.支持拖拽文件到页面进行导入；</p>
+</blockquote>
 <p>客户端：</p>
 <blockquote>
 <p>1.节点支持添加附件；</p>
