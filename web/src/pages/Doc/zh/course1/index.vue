@@ -17,33 +17,38 @@
 <p>这是为了避免节点内的文字因为默认样式而出现偏移。</p>
 <p>一个节点的基本数据结构如下所示：</p>
 <pre class="hljs"><code>{
-    <span class="hljs-attr">data</span>: {
-        <span class="hljs-comment">// 节点文本</span>
-        <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;根节点&#x27;</span>,
-        <span class="hljs-comment">// 图片</span>
-        <span class="hljs-attr">image</span>: <span class="hljs-string">&#x27;xxx.jpg&#x27;</span>,
-        <span class="hljs-attr">imageTitle</span>: <span class="hljs-string">&#x27;图片名称&#x27;</span>,
-        <span class="hljs-attr">imageSize</span>: {
-            <span class="hljs-attr">width</span>: <span class="hljs-number">1152</span>,
-            <span class="hljs-attr">height</span>: <span class="hljs-number">1152</span>
-        },
-        <span class="hljs-comment">// 图标</span>
-        <span class="hljs-attr">icon</span>: [<span class="hljs-string">&#x27;priority_1&#x27;</span>],
-        <span class="hljs-comment">// 标签</span>
-        <span class="hljs-attr">tag</span>: [<span class="hljs-string">&#x27;标签1&#x27;</span>, <span class="hljs-string">&#x27;标签2&#x27;</span>],
-        <span class="hljs-comment">// 链接</span>
-        <span class="hljs-attr">hyperlink</span>: <span class="hljs-string">&#x27;http://lxqnsys.com/&#x27;</span>,
-        <span class="hljs-attr">hyperlinkTitle</span>: <span class="hljs-string">&#x27;理想青年实验室&#x27;</span>,
-        <span class="hljs-comment">// 备注内容</span>
-        <span class="hljs-attr">note</span>: <span class="hljs-string">&#x27;理想青年实验室\n一个有意思的角落&#x27;</span>,
-        <span class="hljs-comment">// 概要</span>
-        <span class="hljs-attr">generalization</span>: {
-            <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;概要的内容&#x27;</span>
-        },
-        <span class="hljs-comment">// 节点是否展开</span>
-        <span class="hljs-attr">expand</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-attr">data</span>: {
+    <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 节点的文本，可以是富文本，也就是html格式的，此时richText要设为true</span>
+    <span class="hljs-attr">richText</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// 节点的文本是否是富文本模式</span>
+    <span class="hljs-attr">expand</span>: <span class="hljs-literal">true</span>, <span class="hljs-comment">// 节点是否展开</span>
+    <span class="hljs-attr">uid</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// 节点唯一的id，可不传，内部会生成</span>
+    <span class="hljs-attr">icon</span>: [], <span class="hljs-comment">// 图标，格式可参考教程里的【插入和扩展节点图标】章节</span>
+    <span class="hljs-attr">image</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 图片的url</span>
+    <span class="hljs-attr">imageTitle</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 图片的标题，可为空</span>
+    <span class="hljs-attr">imageSize</span>: { <span class="hljs-comment">// 图片的尺寸</span>
+      <span class="hljs-attr">width</span>: <span class="hljs-number">100</span>, <span class="hljs-comment">// 图片的宽度，必传</span>
+      <span class="hljs-attr">height</span>: <span class="hljs-number">100</span>, <span class="hljs-comment">// 图片的高度，必传</span>
+      <span class="hljs-attr">custom</span>: <span class="hljs-literal">false</span> <span class="hljs-comment">// 如果设为true，图片的显示大小不受主题控制，以imageSize.width和imageSize.height为准</span>
     },
-    <span class="hljs-attr">children</span>: []<span class="hljs-comment">// 子节点</span>
+    <span class="hljs-attr">hyperlink</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 超链接地址</span>
+    <span class="hljs-attr">hyperlinkTitle</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 超链接的标题</span>
+    <span class="hljs-attr">note</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 备注的内容</span>
+    <span class="hljs-attr">attachmentUrl</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// v0.9.10+，附件url</span>
+    <span class="hljs-attr">attachmentName</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// v0.9.10+，附件名称</span>
+    <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// 标签列表</span>
+    <span class="hljs-attr">generalization</span>: {<span class="hljs-comment">// 节点的概要，如果没有概要generalization设为null即可</span>
+      <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span><span class="hljs-comment">// 概要的文本</span>
+    },
+    <span class="hljs-attr">associativeLineTargets</span>: [<span class="hljs-string">&#x27;&#x27;</span>],<span class="hljs-comment">// 如果存在关联线，那么为目标节点的uid列表</span>
+    <span class="hljs-attr">associativeLineText</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// 关联线文本</span>
+    <span class="hljs-comment">// ...其他样式字段，可以参考主题</span>
+  },
+  children [<span class="hljs-comment">// 子节点，结构和根节点一致</span>
+    {
+      <span class="hljs-attr">data</span>: {},
+      <span class="hljs-attr">children</span>: []
+    }
+  ]
 }
 </code></pre>
 <p><code>icon</code>可以使用内置的图标，完整图标可以在<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/svg/icons.js">icons.js</a>文件中查看。也可以扩展图标，参考<a href="https://wanglin2.github.io/mind-map/#/doc/zh/course19/%E6%89%A9%E5%B1%95%E5%9B%BE%E6%A0%87">扩展图标</a>。</p>

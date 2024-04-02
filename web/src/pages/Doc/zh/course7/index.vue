@@ -4,6 +4,12 @@
 <blockquote>
 <p>节点自由拖拽的连线可能不会符合你的预期，这个问题基本上不会改，所以自由拖拽功能不建议使用。</p>
 </blockquote>
+<blockquote>
+<p>另外不要把节点拖拽和自由拖拽搞混，节点拖拽指拖动节点到其他节点上成为其子节点或兄弟节点，自由拖拽只是可以把节点放置在你拖动到的画布位置，并不能改变节点的层级。</p>
+</blockquote>
+<blockquote>
+<p>最后要注意这两个功能都需要先注册Drag插件。</p>
+</blockquote>
 <p>节点支持自由拖拽，也就是可以把它拖动到你指定的位置，默认是不开启的，如果需要开启可以在实例化<code>simple-mind-map</code>时传入开启的选项：</p>
 <pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({
     <span class="hljs-comment">// ...</span>
