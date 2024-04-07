@@ -350,4 +350,8 @@
         <img src="../../../../assets/avatar/default.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>sunniberg</p>
     </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/在下青铜五.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>在下青铜五</p>
+    </div>
 </div>

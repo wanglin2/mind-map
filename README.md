@@ -320,4 +320,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
         <span>sunniberg</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/在下青铜五.jpg" style="width: 50px;height: 50px;" />
+        <span>在下青铜五</span>
+    </span>
 </p>
