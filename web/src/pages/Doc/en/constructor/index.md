@@ -142,9 +142,11 @@ The basic data structure is as follows:
     hyperlinkTitle: '', // Title of hyperlink
     note: '', // Content of remarks
     tag: [], // Tag list
-    generalization: {// The summary of the node, if there is no summary, the generalization can be set to null
-      text: ''// Summary Text
-    },
+    generalization: [{// (Arrays are not supported in versions below 0.9.0, and only a single summary data can be set)The summary of the node, if there is no summary, the generalization can be set to null
+      text: '', // Summary Text
+      richText: false, // Is the text of the node in rich text mode
+      // ...The fields of other ordinary nodes are supported, But it does not support children
+    }],
     associativeLineTargets: [''],// If there are associated lines, then it is the uid list of the target node
     associativeLineText: '',// Association Line Text
     // ...For other style fields, please refer to the topic
