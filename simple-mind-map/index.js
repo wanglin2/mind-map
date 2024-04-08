@@ -10,7 +10,6 @@ import BatchExecution from './src/utils/BatchExecution'
 import {
   layoutValueList,
   CONSTANTS,
-  commonCaches,
   ERROR_TYPES,
   cssContent
 } from './src/constants/constant'
@@ -228,19 +227,10 @@ class MindMap {
 
   // 初始化缓存数据
   initCache() {
-    Object.keys(commonCaches).forEach(key => {
-      let type = getType(commonCaches[key])
-      let value = ''
-      switch (type) {
-        case 'Boolean':
-          value = false
-          break
-        default:
-          value = null
-          break
-      }
-      commonCaches[key] = value
-    })
+    this.commonCaches = {
+      measureCustomNodeContentSizeEl: null,
+      measureRichtextNodeTextSizeEl: null
+    }
   }
 
   //  设置主题

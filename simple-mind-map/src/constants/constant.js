@@ -317,12 +317,6 @@ export const nodeDataNoStylePropList = [
   'attachmentName'
 ]
 
-// 数据缓存
-export const commonCaches = {
-  measureCustomNodeContentSizeEl: null,
-  measureRichtextNodeTextSizeEl: null
-}
-
 // 错误类型
 export const ERROR_TYPES = {
   READ_CLIPBOARD_ERROR: 'read_clipboard_error',

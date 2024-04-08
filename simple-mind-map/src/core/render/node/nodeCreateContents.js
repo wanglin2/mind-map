@@ -16,7 +16,7 @@ import {
   ForeignObject
 } from '@svgdotjs/svg.js'
 import iconsSvg from '../../../svg/icons'
-import { CONSTANTS, commonCaches } from '../../../constants/constant'
+import { CONSTANTS } from '../../../constants/constant'
 
 //  创建图片节点
 function createImgNode() {
@@ -149,13 +149,13 @@ function createRichTextNode() {
     })
   }
   let html = `<div>${this.getData('text')}</div>`
-  if (!commonCaches.measureRichtextNodeTextSizeEl) {
-    commonCaches.measureRichtextNodeTextSizeEl = document.createElement('div')
-    commonCaches.measureRichtextNodeTextSizeEl.style.position = 'fixed'
-    commonCaches.measureRichtextNodeTextSizeEl.style.left = '-999999px'
-    this.mindMap.el.appendChild(commonCaches.measureRichtextNodeTextSizeEl)
+  if (!this.mindMap.commonCaches.measureRichtextNodeTextSizeEl) {
+    this.mindMap.commonCaches.measureRichtextNodeTextSizeEl = document.createElement('div')
+    this.mindMap.commonCaches.measureRichtextNodeTextSizeEl.style.position = 'fixed'
+    this.mindMap.commonCaches.measureRichtextNodeTextSizeEl.style.left = '-999999px'
+    this.mindMap.el.appendChild(this.mindMap.commonCaches.measureRichtextNodeTextSizeEl)
   }
-  let div = commonCaches.measureRichtextNodeTextSizeEl
+  let div = this.mindMap.commonCaches.measureRichtextNodeTextSizeEl
   div.innerHTML = html
   let el = div.children[0]
   el.classList.add('smm-richtext-node-wrap')
@@ -413,18 +413,18 @@ function getNoteContentPosition() {
 
 // 测量自定义节点内容元素的宽高
 function measureCustomNodeContentSize(content) {
-  if (!commonCaches.measureCustomNodeContentSizeEl) {
-    commonCaches.measureCustomNodeContentSizeEl = document.createElement('div')
-    commonCaches.measureCustomNodeContentSizeEl.style.cssText = `
+  if (!this.mindMap.commonCaches.measureCustomNodeContentSizeEl) {
+    this.mindMap.commonCaches.measureCustomNodeContentSizeEl = document.createElement('div')
+    this.mindMap.commonCaches.measureCustomNodeContentSizeEl.style.cssText = `
       position: fixed;
       left: -99999px;
       top: -99999px;
     `
-    this.mindMap.el.appendChild(commonCaches.measureCustomNodeContentSizeEl)
+    this.mindMap.el.appendChild(this.mindMap.commonCaches.measureCustomNodeContentSizeEl)
   }
-  commonCaches.measureCustomNodeContentSizeEl.innerHTML = ''
-  commonCaches.measureCustomNodeContentSizeEl.appendChild(content)
-  let rect = commonCaches.measureCustomNodeContentSizeEl.getBoundingClientRect()
+  this.mindMap.commonCaches.measureCustomNodeContentSizeEl.innerHTML = ''
+  this.mindMap.commonCaches.measureCustomNodeContentSizeEl.appendChild(content)
+  let rect = this.mindMap.commonCaches.measureCustomNodeContentSizeEl.getBoundingClientRect()
   return {
     width: rect.width,
     height: rect.height
