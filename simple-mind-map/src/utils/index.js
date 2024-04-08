@@ -157,8 +157,15 @@ export const copyRenderTree = (tree, root, removeActiveState = false) => {
   tree.data = simpleDeepClone(root.data)
   if (removeActiveState) {
     tree.data.isActive = false
-    if (tree.data.generalization) {
-      tree.data.generalization.isActive = false
+    const generalization = tree.data.generalization
+    if (generalization) {
+      if (Array.isArray(generalization)) {
+        generalization.forEach(item => {
+          item.isActive = false
+        })
+      } else {
+        generalization.isActive = false
+      }
     }
   }
   tree.children = []
