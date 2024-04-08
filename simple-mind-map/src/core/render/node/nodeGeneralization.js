@@ -51,6 +51,7 @@ function createGeneralizationNode() {
     if (!cur.generalizationNode) {
       cur.generalizationNode = new Node({
         data: {
+          inserting: item.inserting,
           data: item
         },
         uid: createUid(),
@@ -59,6 +60,7 @@ function createGeneralizationNode() {
         isGeneralization: true
       })
     }
+    delete item.inserting
     // 关联所属节点
     cur.generalizationNode.generalizationBelongNode = this
     // 大小

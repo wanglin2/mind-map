@@ -989,12 +989,18 @@ class Render {
         const _hasCustomStyles = this._handleRemoveCustomStyles(node.data)
         if (_hasCustomStyles) hasCustomStyles = true
         // 不要忘记概要节点
-        if (node.data.generalization && node.data.generalization.length > 0) {
-          node.data.generalization.forEach(generalizationData => {
-            const _hasCustomStyles =
-              this._handleRemoveCustomStyles(generalizationData)
-            if (_hasCustomStyles) hasCustomStyles = true
-          })
+        let generalization = node.data.generalization
+        if (generalization) {
+          generalization = Array.isArray(generalization)
+            ? generalization
+            : [generalization]
+          if (generalization.length > 0) {
+            generalization.forEach(generalizationData => {
+              const _hasCustomStyles =
+                this._handleRemoveCustomStyles(generalizationData)
+              if (_hasCustomStyles) hasCustomStyles = true
+            })
+          }
         }
       })
     }
@@ -1632,7 +1638,7 @@ class Render {
   }
 
   //  添加节点概要
-  addGeneralization(data) {
+  addGeneralization(data, openEdit = true) {
     if (this.activeNodeList.length <= 0) {
       return
     }
@@ -1644,13 +1650,22 @@ class Render {
       )
     })
     const list = parseAddGeneralizationNodeList(nodeList)
+    const isRichText = !!this.mindMap.richText
+    const { focusNewNode, inserting } = this.getNewNodeBehavior(
+      openEdit,
+      list.length > 1
+    )
     list.forEach(item => {
       const newData = {
+        inserting,
         ...(data || {
           text: this.mindMap.opt.defaultGeneralizationText
         }),
         range: item.range || null,
-        uid: createUid()
+        uid: createUid(),
+        richText: isRichText,
+        resetRichText: isRichText,
+        isActive: focusNewNode
       }
       let generalization = item.node.getData('generalization')
       if (generalization) {
@@ -1670,6 +1685,10 @@ class Render {
         expand: true
       })
     })
+    // 需要清除原来激活的节点
+    if (focusNewNode) {
+      this.clearActiveNodeList()
+    }
     this.mindMap.render(() => {
       // 修复祖先节点存在概要时位置未更新的问题
       // 修复同时给存在上下级关系的节点添加概要时重叠的问题
