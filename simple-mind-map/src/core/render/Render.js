@@ -1859,6 +1859,8 @@ class Render {
 
   // 高亮节点或子节点
   highlightNode(node, range) {
+    // 如果当前正在渲染，那么不进行高亮，因为节点位置可能不正确
+    if (this.isRendering) return
     const { highlightNodeBoxStyle = {} } = this.mindMap.opt
     if (!this.highlightBoxNode) {
       this.highlightBoxNode = new Polygon()
