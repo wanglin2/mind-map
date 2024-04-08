@@ -327,8 +327,8 @@ class RichText {
     list.forEach(node => {
       this.mindMap.execCommand('SET_NODE_TEXT', node, html, true)
       // if (node.isGeneralization) {
-        // 概要节点
-        // node.generalizationBelongNode.updateGeneralization()
+      // 概要节点
+      // node.generalizationBelongNode.updateGeneralization()
       // }
       this.mindMap.render()
     })
@@ -649,7 +649,18 @@ class RichText {
         if (node.data.richText) {
           node.data.richText = false
           node.data.text = getTextFromHtml(node.data.text)
-          // delete node.data.uid
+        }
+        // 概要
+        let generalization =
+          node.data && node.data.generalization ? node.data.generalization : []
+        generalization = Array.isArray(generalization)
+          ? generalization
+          : [generalization]
+        if (generalization.length > 0) {
+          generalization.forEach(item => {
+            item.richText = false
+            item.text = getTextFromHtml(item.text)
+          })
         }
       },
       null,
@@ -669,6 +680,18 @@ class RichText {
       if (root.data && !root.data.richText) {
         root.data.richText = true
         root.data.resetRichText = true
+      }
+      // 概要
+      let generalization =
+        root.data && root.data.generalization ? root.data.generalization : []
+      generalization = Array.isArray(generalization)
+        ? generalization
+        : [generalization]
+      if (generalization.length > 0) {
+        generalization.forEach(item => {
+          item.richText = true
+          item.resetRichText = true
+        })
       }
       if (root.children && root.children.length > 0) {
         Array.from(root.children).forEach(item => {
