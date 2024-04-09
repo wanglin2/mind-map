@@ -24,7 +24,7 @@ const mindMap = new MindMap({
 
 | 字段名称                         | 类型    | 默认值           | 描述                                                         |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
-| el                               | Element |                  | 容器元素，必传，必须为DOM元素                                      |
+| el                               | Element |                  | 容器元素，必传，必须为DOM元素（当容器元素在页面上的位置发生了改变，但大小没有改变的情况下必须调用`getElRectInfo()`方法更新库内部的相关信息；当大小也发生了改变后必须调用`resize()`方法，否则会造成一些功能异常）              |
 | data                             | Object 、 null  |   | 思维导图数据，可参考下方【数据结构】介绍。v0.9.9+支持传空对象或者null，画布会显示空白 |
 | layout                           | String  | logicalStructure | 布局类型，可选列表：logicalStructure（逻辑结构图）、mindMap（思维导图）、catalogOrganization（目录组织图）、organizationStructure（组织结构图）、timeline（v0.5.4+，时间轴）、timeline2（v0.5.4+，上下交替型时间轴）、fishbone（v0.5.4+，鱼骨图） |
 | fishboneDeg（v0.5.4+）                      | Number |  45          |  设置鱼骨结构图的斜线角度               |
@@ -356,6 +356,10 @@ mindMap.setTheme('主题名称')
 当前主题配置。
 
 ## 实例方法
+
+### getElRectInfo()
+
+更新容器元素的位置和大小信息。当容器元素在页面中的位置发生了改变之后务必调用该方法更新信息。如果容器元素大小也发生了改变，那么请调用`resize`方法。
 
 ### updateData(data)
 

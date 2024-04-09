@@ -31,7 +31,7 @@
 <td>el</td>
 <td>Element</td>
 <td></td>
-<td>容器元素，必传，必须为DOM元素</td>
+<td>容器元素，必传，必须为DOM元素（当容器元素在页面上的位置发生了改变，但大小没有改变的情况下必须调用<code>getElRectInfo()</code>方法更新库内部的相关信息；当大小也发生了改变后必须调用<code>resize()</code>方法，否则会造成一些功能异常）</td>
 </tr>
 <tr>
 <td>data</td>
@@ -831,6 +831,8 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <h3>themeConfig</h3>
 <p>当前主题配置。</p>
 <h2>实例方法</h2>
+<h3>getElRectInfo()</h3>
+<p>更新容器元素的位置和大小信息。当容器元素在页面中的位置发生了改变之后务必调用该方法更新信息。如果容器元素大小也发生了改变，那么请调用<code>resize</code>方法。</p>
 <h3>updateData(data)</h3>
 <blockquote>
 <p>v0.9.9+</p>
