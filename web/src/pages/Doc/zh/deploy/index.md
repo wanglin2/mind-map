@@ -73,7 +73,7 @@ docker run -d -p 8080:80 wanglin/mind-map:latest
 
 该镜像使用 `Nginx` 部署应用，会在 `80` 端口提供访问。页面未找到 或 404 错误会返回 `index.html`。
 
-你也可以自己打包镜像，项目根目录下提供了 `Dockerfile` 和 `nginx.conf` 文件，你可以根据自己的需求来修改。
+如果你想改为其他端口，或者配置https，那么你可以自己打包镜像，项目根目录下提供了 `Dockerfile` 和 `nginx.conf` 文件，可根据自己的需求来修改。
 
 首先需要在本地打包 `web` 项目：
 

@@ -44,7 +44,7 @@ npm link simple-mind-map
 <pre class="hljs"><code>docker run -d -p 8080:80 wanglin/mind-map:latest
 </code></pre>
 <p>该镜像使用 <code>Nginx</code> 部署应用，会在 <code>80</code> 端口提供访问。页面未找到 或 404 错误会返回 <code>index.html</code>。</p>
-<p>你也可以自己打包镜像，项目根目录下提供了 <code>Dockerfile</code> 和 <code>nginx.conf</code> 文件，你可以根据自己的需求来修改。</p>
+<p>如果你想改为其他端口，或者配置https，那么你可以自己打包镜像，项目根目录下提供了 <code>Dockerfile</code> 和 <code>nginx.conf</code> 文件，可根据自己的需求来修改。</p>
 <p>首先需要在本地打包 <code>web</code> 项目：</p>
 <pre class="hljs"><code><span class="hljs-built_in">cd</span> web
 npm run build
