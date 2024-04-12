@@ -41,8 +41,9 @@ npm link simple-mind-map
 <h2>Docker</h2>
 <h3>官方镜像</h3>
 <p>从 <code>v0.9.10+</code> 开始作者也提供了一个 <code>docker</code> 镜像可供使用。</p>
-<pre class="hljs"><code>docker run -d -p 8080:80 wanglin/mind-map:latest
+<pre class="hljs"><code>docker run -d -p 8090:80 wanglin1994/mind-map:[版本号]
 </code></pre>
+<p>版本号会和库的版本号保持一致，详见：<a href="/#/doc/zh/changelog">changelog</a>。</p>
 <p>该镜像使用 <code>Nginx</code> 部署应用，会在 <code>80</code> 端口提供访问。页面未找到 或 404 错误会返回 <code>index.html</code>。</p>
 <p>如果你想改为其他端口，或者配置https，那么你可以自己打包镜像，项目根目录下提供了 <code>Dockerfile</code> 和 <code>nginx.conf</code> 文件，可根据自己的需求来修改。</p>
 <p>首先需要在本地打包 <code>web</code> 项目：</p>
@@ -50,10 +51,10 @@ npm link simple-mind-map
 npm run build
 </code></pre>
 <p>然后在项目根目录执行镜像打包命令：</p>
-<pre class="hljs"><code>docker build . -t mind-map:0.9.10
+<pre class="hljs"><code>docker build . -t mind-map:[版本号]
 </code></pre>
 <p>上述命令的镜像名称你可以自行修改，打包完后可以运行以下命令启动容器：</p>
-<pre class="hljs"><code>docker run -d -p 8080:80 mind-map:0.9.10
+<pre class="hljs"><code>docker run -d -p 8080:80 mind-map:[版本号]
 </code></pre>
 <p>浏览器输入<code>http://localhost:8080</code>就能访问到了。</p>
 <h3>非官方镜像</h3>
