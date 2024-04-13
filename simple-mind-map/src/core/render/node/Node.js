@@ -272,7 +272,10 @@ class Node {
     // 附件
     if (this._attachmentData) {
       textContentWidth += this._attachmentData.width
-      textContentHeight = Math.max(textContentHeight, this._attachmentData.height)
+      textContentHeight = Math.max(
+        textContentHeight,
+        this._attachmentData.height
+      )
     }
     // 文字内容部分的尺寸
     this._rectInfo.textContentWidth = textContentWidth
@@ -466,7 +469,7 @@ class Node {
         }
       }
       // 多选和取消多选
-      if (e.ctrlKey && enableCtrlKeyNodeSelection) {
+      if ((e.ctrlKey || e.metaKey) && enableCtrlKeyNodeSelection) {
         this.isMultipleChoice = true
         let isActive = this.getData('isActive')
         if (!isActive)
@@ -510,7 +513,7 @@ class Node {
     // 双击事件
     this.group.on('dblclick', e => {
       const { readonly, onlyOneEnableActiveNodeOnCooperate } = this.mindMap.opt
-      if (readonly || e.ctrlKey) {
+      if (readonly || e.ctrlKey || e.metaKey) {
         return
       }
       e.stopPropagation()

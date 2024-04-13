@@ -37,7 +37,7 @@ class View {
     this.mindMap.event.on('drag', (e, event) => {
       // 按住ctrl键拖动为多选
       // 禁用拖拽
-      if (e.ctrlKey || this.mindMap.opt.isDisableDrag) {
+      if (e.ctrlKey || e.metaKey || this.mindMap.opt.isDisableDrag) {
         return
       }
       if (this.firstDrag) {
@@ -72,7 +72,11 @@ class View {
         return customHandleMousewheel(e)
       }
       // 1.鼠标滚轮事件控制缩放
-      if (mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM || e.ctrlKey) {
+      if (
+        mousewheelAction === CONSTANTS.MOUSE_WHEEL_ACTION.ZOOM ||
+        e.ctrlKey ||
+        e.metaKey
+      ) {
         if (disableMouseWheelZoom) return
         const { x: clientX, y: clientY } = this.mindMap.toPos(
           e.clientX,

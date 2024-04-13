@@ -44,7 +44,7 @@ class Select {
     }
     let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
     if (
-      !e.ctrlKey &&
+      !(e.ctrlKey || e.metaKey) &&
       (useLeftKeySelectionRightKeyDrag ? e.which !== 1 : e.which !== 3)
     ) {
       return
