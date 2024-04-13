@@ -63,44 +63,7 @@ However, this requires backend support, as our application is a single page clie
 
 ## Docker
 
-### Official image
-
-Starting from `v0.9.10+`, the author also provided a Docker image for use.
-
-```bash
-docker run -d -p 8080:80 wanglin/mind-map:[version]
-```
-
-The version number will be consistent with the version number of the library, as shown in [changelog](/#/doc/zh/changelog).
-
-This image uses Nginx to deploy applications and will provide access on port 80. Page not found or 404 error will return 'index. html'.
-
-If you want to change to a different port or configure HTTPS, you can package the image yourself, and the 'Dockerfile' and 'nginx.conf' files are provided in the project root directory, which you can modify according to your own needs.
-
-Firstly, it is necessary to package the 'web' project locally:
-
-```bash
-cd web
-npm run build
-```
-
-Then execute the image packaging command in the project root directory:
-
-```bash
-docker build . -t mind-map:[version]
-```
-
-You can modify the image name of the above command yourself. After packaging, you can run the following command to start the container:
-
-```bash
-docker run -d -p 8080:80 mind-map:[version]
-```
-
-Browser input `http://localhost:8080` You can access it now.
-
-### Unofficial image
-
-> Thank you very much [水车](https://github.com/shuiche-it), This section is written by him, and the corresponding Docker package is also maintained by him.
+> Thank you very much [水车](https://github.com/shuiche-it), the corresponding Docker package is maintained by him.
 
 Install directly from Docker Hub:
 

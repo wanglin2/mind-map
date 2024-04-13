@@ -39,27 +39,8 @@ npm link simple-mind-map
 </code></pre>
 <p>However, this requires backend support, as our application is a single page client application. If the backend is not properly configured, users will return 404 when accessing sub routes directly in the browser. Therefore, you need to add a candidate resource on the server that covers all situations: if the 'URL' cannot match any static resources, the same 'index. html' page should be returned.</p>
 <h2>Docker</h2>
-<h3>Official image</h3>
-<p>Starting from <code>v0.9.10+</code>, the author also provided a Docker image for use.</p>
-<pre class="hljs"><code>docker run -d -p 8080:80 wanglin/mind-map:[version]
-</code></pre>
-<p>The version number will be consistent with the version number of the library, as shown in <a href="/#/doc/zh/changelog">changelog</a>.</p>
-<p>This image uses Nginx to deploy applications and will provide access on port 80. Page not found or 404 error will return 'index. html'.</p>
-<p>If you want to change to a different port or configure HTTPS, you can package the image yourself, and the 'Dockerfile' and 'nginx.conf' files are provided in the project root directory, which you can modify according to your own needs.</p>
-<p>Firstly, it is necessary to package the 'web' project locally:</p>
-<pre class="hljs"><code><span class="hljs-built_in">cd</span> web
-npm run build
-</code></pre>
-<p>Then execute the image packaging command in the project root directory:</p>
-<pre class="hljs"><code>docker build . -t mind-map:[version]
-</code></pre>
-<p>You can modify the image name of the above command yourself. After packaging, you can run the following command to start the container:</p>
-<pre class="hljs"><code>docker run -d -p 8080:80 mind-map:[version]
-</code></pre>
-<p>Browser input <code>http://localhost:8080</code> You can access it now.</p>
-<h3>Unofficial image</h3>
 <blockquote>
-<p>Thank you very much <a href="https://github.com/shuiche-it">水车</a>, This section is written by him, and the corresponding Docker package is also maintained by him.</p>
+<p>Thank you very much <a href="https://github.com/shuiche-it">水车</a>, the corresponding Docker package is maintained by him.</p>
 </blockquote>
 <p>Install directly from Docker Hub:</p>
 <pre class="hljs"><code>docker run -d -p 8081:8080 shuiche/mind-map:latest

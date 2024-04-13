@@ -39,27 +39,8 @@ npm link simple-mind-map
 </code></pre>
 <p>不过这需要后台支持，因为我们的应用是个单页客户端应用，如果后台没有正确的配置，当用户在浏览器直接访问子路由时会返回404，所以呢你要在服务端增加一个覆盖所有情况的候选资源：如果<code>URL</code>匹配不到任何静态资源，则应该返回同一个<code>index.html</code>页面。</p>
 <h2>Docker</h2>
-<h3>官方镜像</h3>
-<p>从 <code>v0.9.10+</code> 开始作者也提供了一个 <code>docker</code> 镜像可供使用。</p>
-<pre class="hljs"><code>docker run -d -p 8090:80 wanglin1994/mind-map:[版本号]
-</code></pre>
-<p>版本号会和库的版本号保持一致，详见：<a href="/#/doc/zh/changelog">changelog</a>。</p>
-<p>该镜像使用 <code>Nginx</code> 部署应用，会在 <code>80</code> 端口提供访问。页面未找到 或 404 错误会返回 <code>index.html</code>。</p>
-<p>如果你想改为其他端口，或者配置https，那么你可以自己打包镜像，项目根目录下提供了 <code>Dockerfile</code> 和 <code>nginx.conf</code> 文件，可根据自己的需求来修改。</p>
-<p>首先需要在本地打包 <code>web</code> 项目：</p>
-<pre class="hljs"><code><span class="hljs-built_in">cd</span> web
-npm run build
-</code></pre>
-<p>然后在项目根目录执行镜像打包命令：</p>
-<pre class="hljs"><code>docker build . -t mind-map:[版本号]
-</code></pre>
-<p>上述命令的镜像名称你可以自行修改，打包完后可以运行以下命令启动容器：</p>
-<pre class="hljs"><code>docker run -d -p 8080:80 mind-map:[版本号]
-</code></pre>
-<p>浏览器输入<code>http://localhost:8080</code>就能访问到了。</p>
-<h3>非官方镜像</h3>
 <blockquote>
-<p>非常感谢<a href="https://github.com/shuiche-it">水车</a>维护的非官方镜像。</p>
+<p>非常感谢<a href="https://github.com/shuiche-it">水车</a>维护的<code>Docker</code>镜像。</p>
 </blockquote>
 <p>直接从 Docker hup 中安装：</p>
 <pre class="hljs"><code>docker run -d -p 8081:8080 shuiche/mind-map:latest

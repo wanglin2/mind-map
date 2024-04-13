@@ -63,44 +63,7 @@ const router = new VueRouter({
 
 ## Docker
 
-### 官方镜像
-
-从 `v0.9.10+` 开始作者也提供了一个 `docker` 镜像可供使用。
-
-```bash
-docker run -d -p 8090:80 wanglin1994/mind-map:[版本号]
-```
-
-版本号会和库的版本号保持一致，详见：[changelog](/#/doc/zh/changelog)。
-
-该镜像使用 `Nginx` 部署应用，会在 `80` 端口提供访问。页面未找到 或 404 错误会返回 `index.html`。
-
-如果你想改为其他端口，或者配置https，那么你可以自己打包镜像，项目根目录下提供了 `Dockerfile` 和 `nginx.conf` 文件，可根据自己的需求来修改。
-
-首先需要在本地打包 `web` 项目：
-
-```bash
-cd web
-npm run build
-```
-
-然后在项目根目录执行镜像打包命令：
-
-```bash
-docker build . -t mind-map:[版本号]
-```
-
-上述命令的镜像名称你可以自行修改，打包完后可以运行以下命令启动容器：
-
-```bash
-docker run -d -p 8080:80 mind-map:[版本号]
-```
-
-浏览器输入`http://localhost:8080`就能访问到了。
-
-### 非官方镜像
-
-> 非常感谢[水车](https://github.com/shuiche-it)维护的非官方镜像。
+> 非常感谢[水车](https://github.com/shuiche-it)维护的`Docker`镜像。
 
 直接从 Docker hup 中安装：
 
