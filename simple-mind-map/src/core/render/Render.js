@@ -1242,7 +1242,7 @@ class Render {
       root.nodeData.children = []
     } else {
       // 如果只选中了一个节点，删除后激活其兄弟节点或者父节点
-      needActiveNode = this.getNextActiveNode()
+      needActiveNode = this.getNextActiveNode(list)
       for (let i = 0; i < list.length; i++) {
         const node = list[i]
         const currentEditNode = this.textEdit.getCurrentEditNode()
@@ -1297,13 +1297,13 @@ class Render {
     if (this.activeNodeList.length <= 0 && appointNodes.length <= 0) {
       return
     }
-    // 删除节点后需要激活的节点，如果只选中了一个节点，删除后激活其兄弟节点或者父节点
-    let needActiveNode = this.getNextActiveNode()
     let isAppointNodes = appointNodes.length > 0
     let list = isAppointNodes ? appointNodes : this.activeNodeList
     list = list.filter(node => {
       return !node.isRoot
     })
+    // 删除节点后需要激活的节点，如果只选中了一个节点，删除后激活其兄弟节点或者父节点
+    let needActiveNode = this.getNextActiveNode(list)
     for (let i = 0; i < list.length; i++) {
       let node = list[i]
       if (node.isGeneralization) {
@@ -1329,7 +1329,11 @@ class Render {
   }
 
   // 计算下一个可激活的节点
-  getNextActiveNode() {
+  getNextActiveNode(deleteList) {
+    // 删除多个节点不自动激活相邻节点
+    if (deleteList.length !== 1) return null
+    // 被删除的节点不在当前激活的节点列表里，不激活相邻节点
+    if (this.findActiveNodeIndex(deleteList[0]) === -1) return null
     let needActiveNode = null
     if (
       this.activeNodeList.length === 1 &&

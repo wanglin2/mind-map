@@ -144,9 +144,10 @@ class Base {
       this.cacheNode(newUid, newNode)
       // 数据关联实际节点
       data._node = newNode
-      if (data.data.isActive) {
-        this.renderer.addNodeToActiveList(newNode)
-      }
+    }
+    // 如果该节点数据是已激活状态，那么添加到激活节点列表里
+    if (data.data.isActive) {
+      this.renderer.addNodeToActiveList(newNode)
     }
     // 如果当前节点在激活节点列表里，那么添加上激活的状态
     if (this.mindMap.renderer.findActiveNodeIndex(newNode) !== -1) {
