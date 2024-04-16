@@ -98,7 +98,8 @@ export default {
     removeHyperlink: '移除超链接',
     removeNote: '移除备注',
     removeCustomStyles: '一键去除自定义样式',
-    removeAllNodeCustomStyles: '一键去除所有节点自定义样式'
+    removeAllNodeCustomStyles: '一键去除所有节点自定义样式',
+    exportNodeToPng: '导出该节点为图片'
   },
   count: {
     words: '字数',

@@ -91,6 +91,9 @@
       <div class="item" @click="exec('REMOVE_CUSTOM_STYLES')">
         <span class="name">{{ $t('contextmenu.removeCustomStyles') }}</span>
       </div>
+      <div class="item" @click="exec('EXPORT_CUR_NODE_TO_PNG')">
+        <span class="name">{{ $t('contextmenu.exportNodeToPng') }}</span>
+      </div>
     </template>
     <template v-if="type === 'svg'">
       <div class="item" @click="exec('RETURN_CENTER')">
@@ -139,6 +142,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import { getTextFromHtml } from 'simple-mind-map/src/utils'
 
 /**
  * @Author: 王林
@@ -341,6 +345,15 @@ export default {
           break
         case 'REMOVE_NOTE':
           this.node.setNote('')
+          break
+        case 'EXPORT_CUR_NODE_TO_PNG':
+          this.mindMap.export(
+            'png',
+            true,
+            getTextFromHtml(this.node.getData('text')),
+            false,
+            this.node
+          )
           break
         default:
           this.$bus.$emit('execCommand', key, ...args)

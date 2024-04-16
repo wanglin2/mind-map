@@ -98,7 +98,8 @@ export default {
     removeHyperlink: 'Remove hyperlink',
     removeNote: 'Remove note',
     removeCustomStyles: 'Remove custom styles',
-    removeAllNodeCustomStyles: 'Remove all node custom styles'
+    removeAllNodeCustomStyles: 'Remove all node custom styles',
+    exportNodeToPng: 'Export node to png'
   },
   count: {
     words: 'Words',
