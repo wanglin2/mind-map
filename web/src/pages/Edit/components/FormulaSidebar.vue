@@ -49,13 +49,14 @@ export default {
   data() {
     return {
       formulaText: '',
-      list: []
+      list: [],
+      cache: new Set()
     }
   },
   computed: {
     ...mapState({
-      activeSidebar: state => state.activeSidebar, 
-      isDark: state => state.localConfig.isDark, 
+      activeSidebar: state => state.activeSidebar,
+      isDark: state => state.localConfig.isDark,
       localConfig: state => state.localConfig
     })
   },
@@ -81,7 +82,8 @@ export default {
     ...mapMutations(['setActiveSidebar']),
 
     init() {
-      this.list = formulaList.map(item => {
+      this.cache = new Set(JSON.parse(localStorage.getItem('formulaSidebar')))
+      this.list = [...this.cache].concat(formulaList).map(item => {
         return {
           overview: window.katex.renderToString(
             item,
@@ -108,6 +110,20 @@ export default {
       }
       let str = this.formulaText.trim()
       if (!str) return
+      const i = this.list.findIndex((v, i) => v['text'] == str)
+      const o =
+        i > -1
+          ? this.list.splice(i, 1)[0]
+          : {
+              overview: window.katex.renderToString(
+                str,
+                this.mindMap.formula.getKatexConfig()
+              ),
+              text: str
+            }
+      this.list.unshift(o)
+      if (i == -1) this.cache.add(str)
+      localStorage.setItem('formulaSidebar', JSON.stringify([...this.cache]))
       this.mindMap.execCommand('INSERT_FORMULA', str)
     }
   }
