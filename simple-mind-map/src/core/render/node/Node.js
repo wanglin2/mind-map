@@ -565,6 +565,12 @@ class Node {
     this.renderer.emitNodeActiveEvent(this)
   }
 
+  // 取消激活该节点
+  deactivate() {
+    this.mindMap.renderer.removeNodeFromActiveList(this)
+    this.mindMap.renderer.emitNodeActiveEvent()
+  }
+
   //  更新节点
   update() {
     if (!this.group) {

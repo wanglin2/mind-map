@@ -1368,3 +1368,49 @@ export const handleGetSvgDataExtraContent = ({
     footerHeight
   }
 }
+
+// 获取指定节点的包围框信息
+export const getNodeTreeBoundingRect = (node, x, y, paddingX, paddingY) => {
+  let minX = Infinity
+  let maxX = -Infinity
+  let minY = Infinity
+  let maxY = -Infinity
+  const walk = root => {
+    const { x, y, width, height } = root.group.findOne('.smm-node-shape').rbox()
+    if (x < minX) {
+      minX = x
+    }
+    if (x + width > maxX) {
+      maxX = x + width
+    }
+    if (y < minY) {
+      minY = y
+    }
+    if (y + height > maxY) {
+      maxY = y + height
+    }
+    if (root._generalizationList.length > 0) {
+      root._generalizationList.forEach(item => {
+        walk(item.generalizationNode)
+      })
+    }
+    if (root.children) {
+      root.children.forEach(item => {
+        walk(item)
+      })
+    }
+  }
+  walk(node)
+
+  minX = minX - x + paddingX
+  minY = minY - y + paddingY
+  maxX = maxX - x + paddingX
+  maxY = maxY - y + paddingY
+
+  return {
+    left: minX,
+    top: minY,
+    width: maxX - minX,
+    height: maxY - minY
+  }
+}

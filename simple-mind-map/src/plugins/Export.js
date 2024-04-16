@@ -47,15 +47,26 @@ class Export {
   }
 
   //  获取svg数据
-  async getSvgData() {
-    let { exportPaddingX, exportPaddingY, errorHandler, resetCss, addContentToHeader, addContentToFooter } =
-      this.mindMap.opt
-    let { svg, svgHTML } = this.mindMap.getSvgData({
+  async getSvgData(node) {
+    let {
+      exportPaddingX,
+      exportPaddingY,
+      errorHandler,
+      resetCss,
+      addContentToHeader,
+      addContentToFooter
+    } = this.mindMap.opt
+    let { svg, svgHTML, clipData } = this.mindMap.getSvgData({
       paddingX: exportPaddingX,
       paddingY: exportPaddingY,
       addContentToHeader,
-      addContentToFooter
+      addContentToFooter,
+      node
     })
+    if (clipData) {
+      clipData.paddingX = exportPaddingX
+      clipData.paddingY = exportPaddingY
+    }
     // svg的image标签，把图片的url转换成data:url类型，否则导出会丢失图片
     const task1 = this.createTransformImgTaskList(
       svg,
@@ -90,12 +101,13 @@ class Export {
     }
     return {
       node: svg,
-      str: svgHTML
+      str: svgHTML,
+      clipData
     }
   }
 
   //   svg转png
-  svgToPng(svgSrc, transparent) {
+  svgToPng(svgSrc, transparent, clipData = null) {
     return new Promise((resolve, reject) => {
       const img = new Image()
       // 跨域图片需要添加这个属性，否则画布被污染了无法导出图片
@@ -109,6 +121,15 @@ class Export {
           )
           let imgWidth = img.width
           let imgHeight = img.height
+          // 如果是裁减操作的话，那么需要手动添加内边距，及调整图片大小为实际的裁减区域的大小，不要忘了内边距哦
+          let paddingX = 0
+          let paddingY = 0
+          if (clipData) {
+            paddingX = clipData.paddingX
+            paddingY = clipData.paddingY
+            imgWidth = clipData.width + paddingX * 2
+            imgHeight = clipData.height + paddingY * 2
+          }
           // 检查是否超出canvas支持的像素上限
           const maxSize = 16384 / dpr
           const maxArea = maxSize * maxSize
@@ -135,7 +156,22 @@ class Export {
             await this.drawBackgroundToCanvas(ctx, imgWidth, imgHeight)
           }
           // 图片绘制到canvas里
-          ctx.drawImage(img, 0, 0, imgWidth, imgHeight)
+          // 如果有裁减数据，那么需要进行裁减
+          if (clipData) {
+            ctx.drawImage(
+              img,
+              clipData.left,
+              clipData.top,
+              clipData.width,
+              clipData.height,
+              paddingX,
+              paddingY,
+              clipData.width,
+              clipData.height
+            )
+          } else {
+            ctx.drawImage(img, 0, 0, imgWidth, imgHeight)
+          }
           resolve(canvas.toDataURL())
         } catch (error) {
           reject(error)
@@ -219,11 +255,22 @@ class Export {
    * 方法1.把svg的图片都转化成data:url格式，再转换
    * 方法2.把svg的图片提取出来再挨个绘制到canvas里，最后一起转换
    */
-  async png(name, transparent = false) {
-    const { str } = await this.getSvgData()
+  async png(name, transparent = false, node = null) {
+    this.handleNodeExport(node)
+    const { str, clipData } = await this.getSvgData(node)
     const svgUrl = await this.fixSvgStrAndToBlob(str)
-    const res = await this.svgToPng(svgUrl, transparent)
+    const res = await this.svgToPng(svgUrl, transparent, clipData)
     return res
+  }
+
+  // 导出指定节点，如果该节点是激活状态，那么取消激活和隐藏展开收起按钮
+  handleNodeExport(node) {
+    if (node && node.getData('isActive')) {
+      node.deactivate()
+      if (!this.mindMap.opt.alwaysShowExpandBtn && node.getData('expand')) {
+        node.removeExpandBtn()
+      }
+    }
   }
 
   //  导出为pdf
