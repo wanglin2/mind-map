@@ -11,6 +11,7 @@ import {
   removeHtmlNodeByClass
 } from '../utils'
 import { CONSTANTS } from '../constants/constant'
+import { latexList } from '../constants/latexList'
 
 let extended = false
 
@@ -53,6 +54,7 @@ class RichText {
     this.cacheEditingText = ''
     this.lostStyle = false
     this.isCompositing = false
+    this.latexAuto = { word: '', index: -1, list: [] }
     this.initOpt()
     this.extendQuill()
     this.appendCss()
@@ -88,7 +90,7 @@ class RichText {
         line-height: normal;
         -webkit-user-select: text;
       }
-      
+
       .ql-container {
         height: auto;
         font-size: inherit;
@@ -102,14 +104,56 @@ class RichText {
         word-break: break-all;
       }
 
+      .katex { font-size: 1.1em; }
+
+      .katex mtable mtr mrow {
+        margin: 0.2em;
+      }
+
+      .katex mtext {
+        font-size: 0.9em;
+      }
+
       .smm-richtext-node-wrap p {
         font-family: auto;
-        
+
       }
 
       .smm-richtext-node-edit-wrap p {
         font-family: auto;
       }
+
+      .latex-auto-panel{
+          position:fixed;
+          margin-top:10px;
+          overflow-y:auto;
+          color:grey;
+          border-radius:5px;
+          box-shadow: rgba(0, 0, 0, 0.2) 4px 4px 4px 1px;
+          max-height:220px;
+          min-width:180px;
+          background:white;
+          scrollbar-width: none;
+        }
+
+      .latex-auto-panel::-webkit-scrollbar{
+          display: none;
+      }
+
+      .latex-auto-panel li {
+        display: flex;
+        justify-content: space-between;
+        padding: 6px 12px;
+        padding-left: 16px;
+        list-style-type:none;
+      }
+
+      .latex-auto-panel li.active{
+        background:#85dbdb;
+        font-weight: bold;
+        color:white;
+      }
+      
     `
     this.styleEl = document.createElement('style')
     this.styleEl.type = 'text/css'
@@ -197,11 +241,11 @@ class RichText {
       this.textEditNode = document.createElement('div')
       this.textEditNode.classList.add('smm-richtext-node-edit-wrap')
       this.textEditNode.style.cssText = `
-        position:fixed; 
-        box-sizing: border-box; 
+        position:fixed;
+        box-sizing: border-box;
         box-shadow: 0 0 20px rgba(0,0,0,.5);
-        outline: none; 
-        word-break: 
+        outline: none;
+        word-break:
         break-all;
         padding: ${paddingY}px ${paddingX}px;
       `
@@ -239,7 +283,9 @@ class RichText {
       }
     }
     // 节点文本内容
-    const nodeText = node.getData('text')
+    let nodeText = node.getData('text')
+    // 将公式节点转换为 latex 格式，方便修改
+    nodeText = this.latexRichToText(nodeText);
     // 是否是空文本
     const isEmptyText = isUndef(nodeText)
     // 是否是非空的非富文本
@@ -270,6 +316,69 @@ class RichText {
       this.setTextStyleIfNotRichText(node)
     }
     this.cacheEditingText = ''
+  }
+
+  // 隐藏公式自动补全控件
+  hideLatexAutoPanel() {
+    this.latexAuto.index = -1;
+    let div = document.querySelector('.latex-auto-panel');
+    if (div !== null) div.style.display = 'none'
+  }
+
+  // 渲染公式自动补全面板
+  renderLatexAutoPanel() {
+    let liStr = this.latexAuto.list
+      .map((x, i) => `<li class="${i === this.latexAuto.index ? 'active' : ''}">
+        <span>\\${x.tag}</span>
+        <span>${x.icon}</span>
+      </li>`)
+      .reduce((acc, cur) => acc + cur, '')
+    let div = document.querySelector('.latex-auto-panel');
+    if (div === null) div = this.addLatexAutoPanel();
+    div.querySelector('ul').innerHTML = liStr;
+    document.querySelector('.latex-auto-panel').style.display = '';
+    // 激活项保持在可视范围内
+    const element = div.querySelector('.latex-auto-panel li.active')
+    if (element && element.scrollIntoViewIfNeeded) element.scrollIntoViewIfNeeded();
+    else if (element && element.scrollIntoView) element.scrollIntoView();
+  }
+
+  // 查询latex公式自动补全
+  setLatexAutoPanelContent() {
+    if (this.latexAuto.word.length < 1) return this.hideLatexAutoPanel();
+    const k = this.latexAuto.word.substring(1)
+    const tmp = latexList.reduce((res, x) => {
+      if (x.tag.startsWith(k)) res[0].push(x)
+      else if (x.tag.indexOf(k) > -1) res[1].push(x)
+      return res;
+    }, [[], []])
+    this.latexAuto.list = tmp[0].sort((a, b) => b.sort - a.sort).concat(tmp[1].sort((a, b) => b.sort - a.sort))
+    if (this.latexAuto.list.length == 0) return this.hideLatexAutoPanel();
+    this.latexAuto.index = 0;
+    this.renderLatexAutoPanel();
+  }
+
+  // 添加公式自动补全面板
+  addLatexAutoPanel() {
+    let div = document.createElement('div');
+    let innerHTML = `
+        <div class="latex-auto-panel" style="display:none;">
+          <ul></ul>
+        </div>`;
+    div.innerHTML = innerHTML;
+    document.querySelector('.ql-editor').parentNode.appendChild(div);
+    return div;
+  }
+
+  latexRichToText(nodeText) {
+    if (nodeText.indexOf('class="ql-formula"') !== -1) {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(nodeText, "text/html");
+      var els = doc.getElementsByClassName('ql-formula');
+      for (const el of els)
+        nodeText = nodeText.replace(el.outerHTML, `\$${el.getAttribute('data-value').replaceAll('<', '&lt;').replaceAll('>', '&gt;')}\$`)
+    }
+    return nodeText;
   }
 
   // 获取编辑区域的背景填充
@@ -316,19 +425,56 @@ class RichText {
     return html.replace(/<p><br><\/p>$/, '')
   }
 
+  // 使用格式化的 latex 字符串内容更新 quill 内容：输入 $*****$
+  formatLatex() {
+    const contents = this.quill.getContents();
+    const ops = contents.ops;
+    let mod = false;
+    for (let i = ops.length - 1; i >= 0; i--) {
+      const op = ops[i]
+      if (op.insert && typeof op.insert !== 'object' && op.insert !== '\n') {
+        if (/\$.+?\$/g.test(op.insert)) {
+          const m = [...op.insert.matchAll(/\$.+?\$/g)];
+          let arr = op.insert.split(/\$.+?\$/g);
+          for (let j = m.length - 1; j >= 0; j--) {
+            const exp = m[j]?.[0].slice(1, -1) ?? null;  // $...$ 之间的表达式
+            if (exp !== null && exp.trim().length > 0) {
+              arr.splice(j + 1, 0, { 'insert': { 'formula': exp } }) // 添加到对应位置之后
+              mod = true;
+            }
+            else arr.splice(j + 1, 0, "")  // 表达式为空时，占位
+          }
+          while (arr.length > 0) {
+            let v = arr.pop();
+            if (typeof v === 'string') {
+              if (v.length < 1) continue;
+              v = { 'insert': v }
+            }
+            v['attributes'] = ops[i]['attributes']
+            ops.splice(i + 1, 0, v)
+          }
+          ops.splice(i, 1) // 删除原来的字符串
+        }
+      }
+    }
+    if (mod) this.quill.setContents(contents)
+
+  }
+
   // 隐藏文本编辑控件，即完成编辑
   hideEditText(nodes) {
     if (!this.showTextEdit) {
       return
     }
+    this.formatLatex();
     let html = this.getEditText()
     let list =
       nodes && nodes.length > 0 ? nodes : this.mindMap.renderer.activeNodeList
     list.forEach(node => {
       this.mindMap.execCommand('SET_NODE_TEXT', node, html, true)
       // if (node.isGeneralization) {
-        // 概要节点
-        // node.generalizationBelongNode.updateGeneralization()
+      // 概要节点
+      // node.generalizationBelongNode.updateGeneralization()
       // }
       this.mindMap.render()
     })
@@ -342,11 +488,40 @@ class RichText {
 
   // 初始化Quill富文本编辑器
   initQuillEditor() {
+    const that = this;
     this.quill = new Quill(this.textEditNode, {
       modules: {
         toolbar: false,
         keyboard: {
           bindings: {
+            uparrow: {
+              key: 38,
+              handler: function (e) {
+                if (that.latexAuto.list.length == 0 || that.latexAuto.index == -1) return true; // 默认行为
+                that.latexAuto.index -= 1;
+                that.renderLatexAutoPanel();
+              }
+            },
+            downarrow: {
+              key: 40,
+              handler: function (e) {
+                if (that.latexAuto.list.length == 0) return true; // 默认行为
+                if (that.latexAuto.index < that.latexAuto.list.length - 1) that.latexAuto.index += 1;
+                that.renderLatexAutoPanel();
+              }
+            },
+            space: {
+              key: 32,
+              handler: function (e) {
+                if (that.latexAuto.index == -1 || that.latexAuto.index >= that.latexAuto.list.length) return true; // 默认行为
+                let cmd = that.latexAuto.list[that.latexAuto.index]?.cmd;
+                if (cmd) {
+                  that.latexAuto.list[that.latexAuto.index].sort = that.latexAuto.list[that.latexAuto.index].sort + 1;
+                  that.quill.insertText(e.index, cmd.slice(that.latexAuto.word.length - 1), 'api');
+                  that.hideLatexAutoPanel();
+                }
+              }
+            },
             enter: {
               key: 13,
               handler: function () {
@@ -355,7 +530,7 @@ class RichText {
             },
             tab: {
               key: 9,
-              handler: function () {
+              handler: function (e) {
                 // 覆盖默认的tab键
               }
             }
@@ -398,7 +573,19 @@ class RichText {
         this.mindMap.emit('rich_text_selection_change', false, null, null)
       }
     })
-    this.quill.on('text-change', () => {
+    this.quill.on('text-change', (e) => {
+      // 根据输入字符自动补全公式
+      if (e?.ops?.length > 1)
+        if (e?.ops?.[1]?.delete > 0 && this.latexAuto.word.length > 0)
+          this.latexAuto.word = this.latexAuto.word.slice(0, -(e?.ops?.[1]?.delete))
+        else if (typeof e?.ops?.[1]?.insert === 'string') {
+          const le = e.ops[1].insert.trim()
+          if (le === '') this.latexAuto.word = ''
+          else if (le === '\\') this.latexAuto.word = '\\'
+          else if (this.latexAuto.word.length > 0) this.latexAuto.word += le
+        } else this.latexAuto.word = ''
+      this.setLatexAutoPanelContent()
+
       let contents = this.quill.getContents()
       let len = contents.ops.length
       // 如果编辑过程中删除所有字符，那么会丢失主题的样式
