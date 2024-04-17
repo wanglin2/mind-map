@@ -133,3 +133,9 @@ import { createRoot } from 'react-dom/client'
 ```
 
 > 感谢[h5chenhang](https://github.com/h5chenhang)贡献的[示例代码](https://github.com/wanglin2/mind-map/issues/192)。
+
+## 常见问题
+
+1.点击自定义内容中的输入框无法获取焦点和输入
+
+解决方法：阻止输入框的`mousedown`事件的冒泡。
