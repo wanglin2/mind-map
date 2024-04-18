@@ -19,7 +19,20 @@
       </div>
       <div class="title">{{ $t('formulaSidebar.common') }}</div>
       <div class="formulaList">
-        <div class="formulaItem" v-for="(item, index) in list" :key="index">
+        <div
+          class="formulaItem"
+          v-for="(item, index) in [...customList, ...list]"
+          :key="index"
+        >
+          <el-button
+            v-if="item.custom"
+            type="text"
+            size="small"
+            style="color: red;"
+            @click="removeCustomItem(item)"
+          >
+            &nbsp;&#10006;&nbsp;
+          </el-button>
           <div class="overview" v-html="item.overview"></div>
           <div class="text" @click="formulaText = item.text">
             {{ item.text }}
@@ -50,7 +63,7 @@ export default {
     return {
       formulaText: '',
       list: [],
-      cache: new Set()
+      customList: []
     }
   },
   computed: {
@@ -60,6 +73,7 @@ export default {
       localConfig: state => state.localConfig
     })
   },
+
   watch: {
     activeSidebar(val) {
       if (val === 'formulaSidebar') {
@@ -81,17 +95,26 @@ export default {
   methods: {
     ...mapMutations(['setActiveSidebar']),
 
+    // 公式字符串转列表项
+    _listItemGen(str, isCustom = false) {
+      return {
+        overview: window.katex.renderToString(
+          str,
+          this.mindMap.formula.getKatexConfig()
+        ),
+        text: str,
+        custom: isCustom
+      }
+    },
+
     init() {
-      this.cache = new Set(JSON.parse(localStorage.getItem('formulaSidebar')))
-      this.list = [...this.cache].concat(formulaList).map(item => {
-        return {
-          overview: window.katex.renderToString(
-            item,
-            this.mindMap.formula.getKatexConfig()
-          ),
-          text: item
-        }
-      })
+      this.list = formulaList.map(item => this._listItemGen(item, false))
+      const customListStr = localStorage.getItem('formulaSidebarCustomList')
+      console.log(customListStr)
+      if (customListStr !== null)
+        this.customList = JSON.parse(customListStr).map(item =>
+          this._listItemGen(item, true)
+        )
     },
 
     handleNodeActive(...args) {
@@ -110,21 +133,30 @@ export default {
       }
       let str = this.formulaText.trim()
       if (!str) return
-      const i = this.list.findIndex((v, i) => v['text'] == str)
-      const o =
-        i > -1
-          ? this.list.splice(i, 1)[0]
-          : {
-              overview: window.katex.renderToString(
-                str,
-                this.mindMap.formula.getKatexConfig()
-              ),
-              text: str
-            }
-      this.list.unshift(o)
-      if (i == -1) this.cache.add(str)
-      localStorage.setItem('formulaSidebar', JSON.stringify([...this.cache]))
       this.mindMap.execCommand('INSERT_FORMULA', str)
+
+      // 添加到自定义列表，本地缓存
+      if (
+        this.list.findIndex((v, i) => v['text'] == str) == -1 &&
+        this.customList.findIndex((v, i) => v['text'] == str) == -1
+      ) {
+        this.customList.unshift(this._listItemGen(str, true))
+        localStorage.setItem(
+          'formulaSidebarCustomList',
+          JSON.stringify([...this.customList.map(item => item.text)])
+        )
+      }
+    },
+
+    removeCustomItem(item) {
+      const index = this.customList.findIndex(v => v['text'] == item['text'])
+      if (index !== -1) {
+        this.customList.splice(index, 1)
+        localStorage.setItem(
+          'formulaSidebarCustomList',
+          JSON.stringify([...this.customList.map(item => item.text)])
+        )
+      }
     }
   }
 }

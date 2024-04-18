@@ -316,19 +316,56 @@ class RichText {
     return html.replace(/<p><br><\/p>$/, '')
   }
 
+  // 使用格式化的 latex 字符串内容更新 quill 内容：输入 $*****$
+  formatLatex() {
+    const contents = this.quill.getContents();
+    const ops = contents.ops;
+    let mod = false;
+    for (let i = ops.length - 1; i >= 0; i--) {
+      const op = ops[i]
+      if (op.insert && typeof op.insert !== 'object' && op.insert !== '\n') {
+        const m = op.insert.matchAll(/\$.+?\$/g)?.toArray();
+        if (m.length > 0) {
+          let arr = op.insert.split(/\$.+?\$/g);
+          for (let j = m.length - 1; j >= 0; j--) {
+            const exp = m[j]?.[0].slice(1, -1) ?? null;  // $...$ 之间的表达式
+            if (exp !== null && exp.trim().length > 0) {
+              arr.splice(j + 1, 0, { 'insert': { 'formula': exp } }) // 添加到对应位置之后
+              mod = true;
+            }
+            else arr.splice(j + 1, 0, "")  // 表达式为空时，占位
+          }
+          while (arr.length > 0) {
+            let v = arr.pop();
+            if (typeof v === 'string') {
+              if (v.length < 1) continue;
+              v = { 'insert': v }
+            }
+            v['attributes'] = ops[i]['attributes']
+            ops.splice(i + 1, 0, v)
+          }
+          ops.splice(i, 1) // 删除原来的字符串
+        }
+      }
+    }
+    if (mod) this.quill.setContents(contents)
+
+  }
+
   // 隐藏文本编辑控件，即完成编辑
   hideEditText(nodes) {
     if (!this.showTextEdit) {
       return
     }
+    this.formatLatex();
     let html = this.getEditText()
     let list =
       nodes && nodes.length > 0 ? nodes : this.mindMap.renderer.activeNodeList
     list.forEach(node => {
       this.mindMap.execCommand('SET_NODE_TEXT', node, html, true)
       // if (node.isGeneralization) {
-        // 概要节点
-        // node.generalizationBelongNode.updateGeneralization()
+      // 概要节点
+      // node.generalizationBelongNode.updateGeneralization()
       // }
       this.mindMap.render()
     })

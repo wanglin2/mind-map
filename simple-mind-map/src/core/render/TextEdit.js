@@ -266,7 +266,8 @@ export default class TextEdit {
         -((lineHeight * fontSize - fontSize) / 2) * scale
       }px)`
     }
-    this.showTextEdit = true
+    this.showTextEdit = true    
+
     // 选中文本
     // if (!this.cacheEditingText) {
     //   selectAllInput(this.textEditNode)
