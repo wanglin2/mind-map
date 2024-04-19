@@ -1506,7 +1506,7 @@ class Render {
   }
 
   //  收起所有
-  unexpandAllNode() {
+  unexpandAllNode(isSetRootNodeCenter = true) {
     if (!this.renderTree) return
     walk(
       this.renderTree,
@@ -1522,7 +1522,9 @@ class Render {
       0
     )
     this.mindMap.render(() => {
-      this.setRootNodeCenter()
+      if (isSetRootNodeCenter) {
+        this.setRootNodeCenter()
+      }
     })
   }
 

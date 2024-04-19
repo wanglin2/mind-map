@@ -318,5 +318,7 @@ export const defaultOpt = {
     }
   */
   addContentToHeader: null,
-  addContentToFooter: null
+  addContentToFooter: null,
+  // 演示插件配置
+  demonstrateConfig: null
 }
