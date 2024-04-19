@@ -92,7 +92,7 @@ const mindMap = new MindMap({
 
 # star
 
-如果喜欢本项目，欢迎点个star，这对我们很重要。
+如果喜欢本项目，欢迎点个 star，这对我们很重要。
 
 [![Star History Chart](https://api.star-history.com/svg?repos=wanglin2/mind-map&type=Date)](https://star-history.com/#wanglin2/mind-map&Date)
 
@@ -323,5 +323,9 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/在下青铜五.jpg" style="width: 50px;height: 50px;" />
         <span>在下青铜五</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/木星二号.jpg" style="width: 50px;height: 50px;" />
+        <span>木星二号</span>
     </span>
 </p>
