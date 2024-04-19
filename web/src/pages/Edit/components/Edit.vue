@@ -6,7 +6,11 @@
     @dragover.stop.prevent
     @drop.stop.prevent
   >
-    <div class="mindMapContainer" ref="mindMapContainer"></div>
+    <div
+      class="mindMapContainer"
+      id="mindMapContainer"
+      ref="mindMapContainer"
+    ></div>
     <Count :mindMap="mindMap" v-if="!isZenMode"></Count>
     <Navigator :mindMap="mindMap"></Navigator>
     <NavigatorToolbar :mindMap="mindMap" v-if="!isZenMode"></NavigatorToolbar>
@@ -63,6 +67,7 @@ import Painter from 'simple-mind-map/src/plugins/Painter.js'
 import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
 import Formula from 'simple-mind-map/src/plugins/Formula.js'
 import RainbowLines from 'simple-mind-map/src/plugins/RainbowLines.js'
+import Demonstrate from 'simple-mind-map/src/plugins/Demonstrate.js'
 // 协同编辑插件
 // import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
 // 手绘风格插件，该插件为付费插件，详情请查看开发文档
@@ -119,6 +124,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(Painter)
   .usePlugin(Formula)
   .usePlugin(RainbowLines)
+  .usePlugin(Demonstrate)
 // .usePlugin(Cooperate) // 协同插件
 
 // 注册自定义主题
@@ -513,7 +519,9 @@ export default {
         'scale',
         'translate',
         'node_attachmentClick',
-        'node_attachmentContextmenu'
+        'node_attachmentContextmenu',
+        'demonstrate_jump',
+        'exit_demonstrate'
       ].forEach(event => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args)

@@ -139,6 +139,9 @@ export default {
     fullscreenShow: 'Full screen show',
     fullscreenEdit: 'Full screen edit'
   },
+  demonstrate: {
+    demonstrate: 'Enter demonstration mode'
+  },
   import: {
     title: 'Import',
     selectFile: 'Select file',

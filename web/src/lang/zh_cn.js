@@ -137,6 +137,9 @@ export default {
     fullscreenShow: '全屏查看',
     fullscreenEdit: '全屏编辑'
   },
+  demonstrate: {
+    demonstrate: '进入演示模式'
+  },
   import: {
     title: '导入',
     selectFile: '选取文件',
