@@ -31,6 +31,11 @@
 </blockquote>
 <p>节点是否正在拖拽中</p>
 <h2>方法</h2>
+<h3>deactivate()</h3>
+<blockquote>
+<p>0.9.11+</p>
+</blockquote>
+<p>取消激活该节点。</p>
 <h3>getAncestorNodes()</h3>
 <blockquote>
 <p>v0.9.9+</p>

@@ -1,5 +1,45 @@
 # Changelog
 
+## 0.9.11
+
+Fix
+
+> 1.Fix the issue where clicking on the summary will trigger the data_change_detail event;
+>
+> 2.Fix the issue where the custom style command for removing all nodes with one click does not support summaries that are not arrays;
+>
+> 3.Fix the issue where summary nodes created in rich text mode are not rich text;
+>
+> 4.Fix the issue where the rich text plugin did not process node summaries when converting node data;
+>
+> 5.Fix the issue where the highlighted box of the corresponding node will be displayed incorrectly when pressing enter to end in summary node text editing;
+>
+> 6.Fix the issue of node width and height loss after text editing when creating multiple instances simultaneously;
+>
+> 7.Fix the issue where the expand/collapse button does not disappear after deleting all child nodes of the currently activated node;
+>
+> 8.Fix the issue where the canvas automatically moves and cannot stop when dragging nodes to the edge;
+
+New:
+
+> 1.Support default focus and entering editing mode when inserting summaries;
+>
+> 2.Support holding down the Command and Win keys to select multiple nodes;
+>
+> 3.Support exporting a node as an image;
+>
+> 4.Add demonstration plugin;
+
+Demo:
+
+> 1.Add the Export as Image button in the right-click menu of the node;
+>
+> 2.Optimize the issue of incomplete menu display when clicking the right mouse button at the window edge;
+>
+> 3.Add demonstration mode;
+>
+> 4.When copying Zhixi data, create summary data in array form;
+
 ## 0.9.10
 
 Fix:

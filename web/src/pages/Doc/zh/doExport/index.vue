@@ -27,7 +27,10 @@ a.href = <span class="hljs-string">&#x27;xxx.png&#x27;</span><span class="hljs-c
 a.download = <span class="hljs-string">&#x27;xxx&#x27;</span>
 a.click()
 </code></pre>
-<h3>png(name, transparent = false, checkRotate, compress)</h3>
+<h3>png(name, transparent = false, node = null)</h3>
+<blockquote>
+<p>v0.9.2以下版本为：png(name, transparent = false, checkRotate, compress)</p>
+</blockquote>
 <blockquote>
 <p>v0.7.0以下版本为： png(name, transparent = false, rotateWhenWidthLongerThenHeight)</p>
 </blockquote>
@@ -46,6 +49,9 @@ a.click()
 </li>
 <li>
 <p><code>compress</code>：v0.8.1+，（v0.9.2+已废弃），null | { width, height }, 压缩图片的参数，某些情况下导出的图片长宽可能非常大，如果希望减小，那么可以通过该参数来控制，宽或高只提供一个即可，会按比例缩放</p>
+</li>
+<li>
+<p><code>node</code>：v0.9.11+，节点实例，如果传了，那么会仅导出该节点的内容；</p>
 </li>
 </ul>
 <p>导出为<code>png</code>。</p>
@@ -114,11 +120,13 @@ MindMap.usePlugin(ExportPDF)
 <p>v0.4.7+</p>
 </blockquote>
 <p>导出<code>markdown</code>文件。</p>
-<h3>getSvgData()</h3>
+<h3>getSvgData(node)</h3>
+<p><code>node</code>: v0.9.11+, 节点实例，如果传了，那么会返回一个<code>clipData</code>对象，代表从完整的图片中裁剪出该节点区域的位置坐标数据；</p>
 <p>获取<code>svg</code>数据，异步方法，返回一个对象：</p>
 <pre class="hljs"><code>{
-  node<span class="hljs-comment">// svg节点</span>
-  str<span class="hljs-comment">// svg字符串</span>
+  node,<span class="hljs-comment">// svg节点</span>
+  str,<span class="hljs-comment">// svg字符串</span>
+  clipData
 }
 </code></pre>
 <h3>xmind(name)</h3>

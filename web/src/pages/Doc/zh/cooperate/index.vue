@@ -60,6 +60,10 @@ npm run wsServe
 MindMap.usePlugin(Cooperate)
 </code></pre>
 <p>注册完且实例化<code>MindMap</code>后可通过<code>mindMap.cooperate</code>获取到该实例。</p>
+<h3>配置</h3>
+<p>该插件支持一些配置，可在实例化思维导图时传入，支持的配置如下：</p>
+<p><code>beforeCooperateUpdate</code></p>
+<p>详细信息见【构造函数】篇章的【实例化选项】小节。</p>
 <h2>方法</h2>
 <h3>getDoc()</h3>
 <p>获取Yjs doc实例。</p>

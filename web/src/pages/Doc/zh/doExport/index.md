@@ -38,7 +38,9 @@ a.download = 'xxx'
 a.click()
 ```
 
-### png(name, transparent = false, checkRotate, compress)
+### png(name, transparent = false, node = null)
+
+> v0.9.2以下版本为：png(name, transparent = false, checkRotate, compress)
 
 > v0.7.0以下版本为： png(name, transparent = false, rotateWhenWidthLongerThenHeight)
 
@@ -51,6 +53,8 @@ a.click()
 - `checkRotate`：v0.7.0+，（v0.9.2+已废弃），Function，可以传递一个函数，接收图片的宽度和高度两个参数，返回true或false，true代表图片需要旋转90度
 
 - `compress`：v0.8.1+，（v0.9.2+已废弃），null | { width, height }, 压缩图片的参数，某些情况下导出的图片长宽可能非常大，如果希望减小，那么可以通过该参数来控制，宽或高只提供一个即可，会按比例缩放
+
+- `node`：v0.9.11+，节点实例，如果传了，那么会仅导出该节点的内容；
 
 导出为`png`。
 
@@ -119,14 +123,17 @@ MindMap.usePlugin(ExportPDF)
 
 导出`markdown`文件。
 
-### getSvgData()
+### getSvgData(node)
+
+`node`: v0.9.11+, 节点实例，如果传了，那么会返回一个`clipData`对象，代表从完整的图片中裁剪出该节点区域的位置坐标数据；
 
 获取`svg`数据，异步方法，返回一个对象：
 
 ```js
 {
-  node// svg节点
-  str// svg字符串
+  node,// svg节点
+  str,// svg字符串
+  clipData
 }
 ```
 

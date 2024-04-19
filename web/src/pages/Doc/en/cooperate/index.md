@@ -80,6 +80,14 @@ MindMap.usePlugin(Cooperate)
 
 After registration and instantiation of `MindMap`, the instance can be obtained through `mindMap.cooperate`.
 
+### Config
+
+This plugin supports some configurations that can be passed in when instantiating a mind map. The supported configurations are as follows:
+
+`beforeCooperateUpdate`
+
+Please refer to the 【Instantiation options】 section in the 【Constructor】 section for details.
+
 ## Methods
 
 ### getDoc()

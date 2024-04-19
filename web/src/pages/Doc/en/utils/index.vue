@@ -402,6 +402,28 @@ and copying the <code>data</code> of the data object, example:</p>
 </li>
 </ul>
 <p>Remove the node of the specified selector from the specified HTML string, and then return the processed HTML string.</p>
+<h4>getOnfullscreEnevt()</h4>
+<blockquote>
+<p>v0.9.11+</p>
+</blockquote>
+<p>Detect full screen events available in the current browser. You can use it this way:</p>
+<pre class="hljs"><code><span class="hljs-keyword">const</span> fullscrrenEvent = getOnfullscreEnevt()
+
+<span class="hljs-comment">// Monitor full screen events</span>
+<span class="hljs-built_in">document</span>.addEventListener(fullscrrenEvent, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// Determine whether the current state is full screen based on whether document.fullscreenElement is null</span>
+})
+</code></pre>
+<h4>fullScreen(element)</h4>
+<blockquote>
+<p>v0.9.11+</p>
+</blockquote>
+<p>Put the specified DOM element into full screen mode.</p>
+<h4>exitFullScreen()</h4>
+<blockquote>
+<p>v0.9.11+</p>
+</blockquote>
+<p>Exit full screen mode.</p>
 <h2>Simulate CSS background in Canvas</h2>
 <p>Import:</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

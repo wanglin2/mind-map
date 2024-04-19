@@ -117,7 +117,7 @@ const mindMap = new MindMap({
 | rainbowLinesConfig（v0.9.9+）     | Object | { open: false, colorsList: [] }  | 彩虹线条配置，需要先注册RainbowLines插件。对象类型，结构：{ open: false【是否开启彩虹线条】, colorsList: []【自定义彩虹线条的颜色列表，如果不设置，会使用默认颜色列表】 } |
 | addContentToHeader（v0.9.9+）     | Function、null | null  | 导出png、svg、pdf时在头部添加自定义内容。可传递一个函数，这个函数可以返回null代表不添加内容，也可以返回一个对象，详细介绍请参考下方【导出时如何添加自定义内容】 |
 | addContentToFooter（v0.9.9+）     | Function、null | null  | 基本释义同addContentToHeader，在尾部添加自定义内容 |
-
+| demonstrateConfig（v0.9.11+）     | Object、null | null  | 演示插件Demonstrate的配置。不传则使用默认配置，可传递一个对象，如果只配置某个属性，可以只设置该属性，其他没有设置的同样会使用默认配置，完整配置请参考下方【演示插件配置】小节 |
 
 ### 数据结构
 
@@ -217,6 +217,17 @@ new MindMap({
   }
 })
 ```
+
+### 演示插件配置
+
+| 字段名称    | 类型   | 默认值                                      | 描述                                 |
+| ----------- | ------ | ------------------------------------------- | ------------------------------------ |
+| boxShadowColor | String | rgba(0, 0, 0, 0.8)  | 高亮框四周区域的颜色 |
+| borderRadius   | String | 5px                 | 高亮框的圆角大小 |
+| transition     | String | all 0.3s ease-out   | 高亮框动画的过渡属性，CSS的transition属性 |
+| zIndex         | Number | 9999                | 高亮框元素的层级 |
+| padding        | Number | 20                  | 高亮框的内边距 |
+| margin         | Number | 50                  | 高亮框的外边距 |
 
 ## 静态方法
 
@@ -379,7 +390,7 @@ mindMap.setTheme('主题名称')
 
 销毁思维导图。会移除注册的插件、移除监听的事件、删除画布的所有节点。
 
-### getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter })
+### getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter, node })
 
 > v0.3.0+
 
@@ -393,6 +404,8 @@ mindMap.setTheme('主题名称')
 
 `addContentToFooter`：v0.9.9+，Function，可以返回要追加到尾部的自定义内容，详细介绍见【实例化选项】中的该配置
 
+`node`: v0.9.11+, 节点实例，如果传了，那么仅导出该节点的内容
+
 获取`svg`数据，返回一个对象，详细结构如下：
 
 ```js
@@ -404,6 +417,7 @@ mindMap.setTheme('主题名称')
   origHeight, // Number，画布高度
   scaleX, // Number，思维导图图形的水平缩放值
   scaleY, // Number，思维导图图形的垂直缩放值
+  clipData// v0.9.11+，如果传了node，即导出指定节点的内容，那么会返回该字段，代表从完整的图片中裁剪出该节点区域的位置坐标数据
 }
 ```
 
@@ -488,6 +502,8 @@ mindMap.setTheme('主题名称')
 | node_cooperate_avatar_click（v0.9.9+）    | 协同编辑时，鼠标点击人员头像时触发  |  userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)      |
 | node_cooperate_avatar_mouseenter（v0.9.9+）    | 协同编辑时，鼠标移入人员头像时触发  |  userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)     |
 | node_cooperate_avatar_mouseleave（v0.9.9+）    | 协同编辑时，鼠标移除人员头像时触发  |  userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)      |
+| exit_demonstrate（v0.9.11+）    | 退出演示模式时触发  |     |
+| demonstrate_jump（v0.9.11+）    | 演示模式中，切换步骤时触发  |  currentStepIndex（当前播放到的步骤索引，从0开始计数）、stepLength（总的播放步骤数量）   |
 
 ### emit(event, ...args)
 
@@ -577,7 +593,7 @@ mindMap.updateConfig({
 | CLEAR_ACTIVE_NODE                   | 清除当前已激活节点的激活状态，操作节点为当前激活的节点       |                                                              |
 | SET_NODE_EXPAND                     | 设置节点是否展开                                             | node（要设置的节点）、expand（布尔值，是否展开）             |
 | EXPAND_ALL                          | 展开所有节点                                                 |                                                              |
-| UNEXPAND_ALL                        | 收起所有节点                                                 |                                                              |
+| UNEXPAND_ALL                        | 收起所有节点       | isSetRootNodeCenter（v0.9.11+，默认为true，收起所有节点后是否将根节点移至中心） |
 | UNEXPAND_TO_LEVEL（v0.2.8+）        | 展开到指定层级                                               | level（要展开到的层级，1、2、3...）                          |
 | SET_NODE_DATA                       | 更新节点数据，即更新节点数据对象里`data`对象的数据，注意这个命令不会触发视图的更新           | node（要设置的节点）、data（对象，要更新的数据，如`{expand: true}`） |
 | SET_NODE_TEXT                       | 设置节点文本                                                 | node（要设置的节点）、text（要设置的文本字符串，换行可以使用`\n`）、richText（v0.4.0+，如果要设置的是富文本字符，需要设为`true`）、resetRichText（v0.6.10+是否要复位富文本，默认为false，如果传true那么会重置富文本节点的样式） |
@@ -590,7 +606,7 @@ mindMap.updateConfig({
 | INSERT_AFTER（v0.1.5+）             | 将节点移动到另一个节点的后面    | node（要移动的节点，（v0.7.2+支持传递节点数组实现同时移动多个节点））、 exist（目标节点）                     |
 | INSERT_BEFORE（v0.1.5+）            | 将节点移动到另一个节点的前面，（v0.7.2+支持传递节点数组实现同时移动多个节点）   | node（要移动的节点）、 exist（目标节点）                     |
 | MOVE_NODE_TO（v0.1.5+）             | 移动节点作为另一个节点的子节点，（v0.7.2+支持传递节点数组实现同时移动多个节点）   | node（要移动的节点）、 toNode（目标节点）                    |
-| ADD_GENERALIZATION（v0.2.0+）       | 添加节点概要                                                 | data（概要的数据，对象格式，节点的数字段都支持，默认为{text: '概要'}） |
+| ADD_GENERALIZATION（v0.2.0+）       | 添加节点概要                                                 | data（概要的数据，对象格式，节点的数字段都支持，默认为{text: '概要'}）、openEdit（v0.9.11+，默认为true，是否默认进入文本编辑状态） |
 | REMOVE_GENERALIZATION（v0.2.0+）    | 删除节点概要                                                 |                                                              |
 | SET_NODE_CUSTOM_POSITION（v0.2.0+） | 设置节点自定义位置                                           | node（要设置的节点）、 left（自定义的x坐标，默认为undefined）、 top（自定义的y坐标，默认为undefined） |
 | RESET_LAYOUT（v0.2.0+）             | 一键整理布局                                                 |                                                              |

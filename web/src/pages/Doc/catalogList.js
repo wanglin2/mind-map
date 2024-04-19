@@ -40,6 +40,7 @@ let APIList = [
   'cooperate',
   'rainbowLines',
   'handDrawnLikeStyle',
+  'demonstrate',
   'xmind',
   'markdown',
   'utils'

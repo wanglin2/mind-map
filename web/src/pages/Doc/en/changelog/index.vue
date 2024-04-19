@@ -1,6 +1,32 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.9.11</h2>
+<p>Fix</p>
+<blockquote>
+<p>1.Fix the issue where clicking on the summary will trigger the data_change_detail event;</p>
+<p>2.Fix the issue where the custom style command for removing all nodes with one click does not support summaries that are not arrays;</p>
+<p>3.Fix the issue where summary nodes created in rich text mode are not rich text;</p>
+<p>4.Fix the issue where the rich text plugin did not process node summaries when converting node data;</p>
+<p>5.Fix the issue where the highlighted box of the corresponding node will be displayed incorrectly when pressing enter to end in summary node text editing;</p>
+<p>6.Fix the issue of node width and height loss after text editing when creating multiple instances simultaneously;</p>
+<p>7.Fix the issue where the expand/collapse button does not disappear after deleting all child nodes of the currently activated node;</p>
+<p>8.Fix the issue where the canvas automatically moves and cannot stop when dragging nodes to the edge;</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Support default focus and entering editing mode when inserting summaries;</p>
+<p>2.Support holding down the Command and Win keys to select multiple nodes;</p>
+<p>3.Support exporting a node as an image;</p>
+<p>4.Add demonstration plugin;</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.Add the Export as Image button in the right-click menu of the node;</p>
+<p>2.Optimize the issue of incomplete menu display when clicking the right mouse button at the window edge;</p>
+<p>3.Add demonstration mode;</p>
+<p>4.When copying Zhixi data, create summary data in array form;</p>
+</blockquote>
 <h2>0.9.10</h2>
 <p>Fix:</p>
 <blockquote>

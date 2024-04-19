@@ -31,6 +31,11 @@
 </blockquote>
 <p>Whether the node is currently being dragged</p>
 <h2>Methods</h2>
+<h3>deactivate()</h3>
+<blockquote>
+<p>0.9.11+</p>
+</blockquote>
+<p>Deactivate the node.</p>
 <h3>getAncestorNodes()</h3>
 <blockquote>
 <p>v0.9.9+</p>

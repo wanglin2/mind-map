@@ -585,6 +585,12 @@
 <td>null</td>
 <td>基本释义同addContentToHeader，在尾部添加自定义内容</td>
 </tr>
+<tr>
+<td>demonstrateConfig（v0.9.11+）</td>
+<td>Object、null</td>
+<td>null</td>
+<td>演示插件Demonstrate的配置。不传则使用默认配置，可传递一个对象，如果只配置某个属性，可以只设置该属性，其他没有设置的同样会使用默认配置，完整配置请参考下方【演示插件配置】小节</td>
+</tr>
 </tbody>
 </table>
 <h3>数据结构</h3>
@@ -735,6 +741,55 @@
   }
 })
 </code></pre>
+<h3>演示插件配置</h3>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>boxShadowColor</td>
+<td>String</td>
+<td>rgba(0, 0, 0, 0.8)</td>
+<td>高亮框四周区域的颜色</td>
+</tr>
+<tr>
+<td>borderRadius</td>
+<td>String</td>
+<td>5px</td>
+<td>高亮框的圆角大小</td>
+</tr>
+<tr>
+<td>transition</td>
+<td>String</td>
+<td>all 0.3s ease-out</td>
+<td>高亮框动画的过渡属性，CSS的transition属性</td>
+</tr>
+<tr>
+<td>zIndex</td>
+<td>Number</td>
+<td>9999</td>
+<td>高亮框元素的层级</td>
+</tr>
+<tr>
+<td>padding</td>
+<td>Number</td>
+<td>20</td>
+<td>高亮框的内边距</td>
+</tr>
+<tr>
+<td>margin</td>
+<td>Number</td>
+<td>50</td>
+<td>高亮框的外边距</td>
+</tr>
+</tbody>
+</table>
 <h2>静态方法</h2>
 <h3>defineTheme(name, config)</h3>
 <blockquote>
@@ -848,7 +903,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <p>v0.6.0+</p>
 </blockquote>
 <p>销毁思维导图。会移除注册的插件、移除监听的事件、删除画布的所有节点。</p>
-<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter })</h3>
+<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter, node })</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
@@ -857,6 +912,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <p><code>ignoreWatermark</code>：v0.8.0+，不要绘制水印，如果不需要绘制水印的场景可以传<code>true</code>，因为绘制水印非常慢</p>
 <p><code>addContentToHeader</code>：v0.9.9+，Function，可以返回要追加到头部的自定义内容，详细介绍见【实例化选项】中的该配置</p>
 <p><code>addContentToFooter</code>：v0.9.9+，Function，可以返回要追加到尾部的自定义内容，详细介绍见【实例化选项】中的该配置</p>
+<p><code>node</code>: v0.9.11+, 节点实例，如果传了，那么仅导出该节点的内容</p>
 <p>获取<code>svg</code>数据，返回一个对象，详细结构如下：</p>
 <pre class="hljs"><code>{
   svg, <span class="hljs-comment">// Element，思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）</span>
@@ -866,6 +922,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
   origHeight, <span class="hljs-comment">// Number，画布高度</span>
   scaleX, <span class="hljs-comment">// Number，思维导图图形的水平缩放值</span>
   scaleY, <span class="hljs-comment">// Number，思维导图图形的垂直缩放值</span>
+  clipData<span class="hljs-comment">// v0.9.11+，如果传了node，即导出指定节点的内容，那么会返回该字段，代表从完整的图片中裁剪出该节点区域的位置坐标数据</span>
 }
 </code></pre>
 <h3>render(callback)</h3>
@@ -1152,6 +1209,16 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>协同编辑时，鼠标移除人员头像时触发</td>
 <td>userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)</td>
 </tr>
+<tr>
+<td>exit_demonstrate（v0.9.11+）</td>
+<td>退出演示模式时触发</td>
+<td></td>
+</tr>
+<tr>
+<td>demonstrate_jump（v0.9.11+）</td>
+<td>演示模式中，切换步骤时触发</td>
+<td>currentStepIndex（当前播放到的步骤索引，从0开始计数）、stepLength（总的播放步骤数量）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
@@ -1292,7 +1359,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>UNEXPAND_ALL</td>
 <td>收起所有节点</td>
-<td></td>
+<td>isSetRootNodeCenter（v0.9.11+，默认为true，收起所有节点后是否将根节点移至中心）</td>
 </tr>
 <tr>
 <td>UNEXPAND_TO_LEVEL（v0.2.8+）</td>
@@ -1357,7 +1424,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>ADD_GENERALIZATION（v0.2.0+）</td>
 <td>添加节点概要</td>
-<td>data（概要的数据，对象格式，节点的数字段都支持，默认为{text: '概要'}）</td>
+<td>data（概要的数据，对象格式，节点的数字段都支持，默认为{text: '概要'}）、openEdit（v0.9.11+，默认为true，是否默认进入文本编辑状态）</td>
 </tr>
 <tr>
 <td>REMOVE_GENERALIZATION（v0.2.0+）</td>

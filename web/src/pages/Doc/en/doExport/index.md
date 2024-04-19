@@ -38,7 +38,9 @@ a.download = 'xxx'
 a.click()
 ```
 
-### png(name, transparent = false, checkRotate, compress)
+### png(name, transparent = false, node = null)
+
+> Versions below v0.9.2 are：png(name, transparent = false, checkRotate, compress)
 
 > Versions below v0.7.0 are: png(name, transparent = false, rotateWhenWidthLongerThenHeight)
 
@@ -51,6 +53,8 @@ a.click()
 - `checkRotate`: v0.7.0+, (v0.9.2+obsolete), Function, You can pass a function that takes two parameters, the width and height of the image, and returns true or false. True represents that the image needs to be rotated by 90 degrees
 
 - `compress`：v0.8.1+, (v0.9.2+obsolete)，null | { width, height }, The parameter for compressing images. In some cases, the length and width of the exported image may be very large. If you want to reduce it, you can use this parameter to control it. Only one width or height can be provided, and it will be scaled proportionally
+
+- `node`：v0.9.11+，Node instances, if passed, will only export the content of that node;
 
 Exports as `png`.
 
@@ -115,14 +119,17 @@ Return `json` data.
 
 Export as `markdown` file.
 
-### getSvgData()
+### getSvgData(node)
+
+`node`: v0.9.11+, Node instance, if passed, will return a 'clipData' object, representing the position coordinate data of the node region cropped from the complete image;
 
 Gets `svg` data, an async method that returns an object:
 
 ```js
 {
-  node // svg node
-  str // svg string
+  node, // svg node
+  str, // svg string
+  clipData
 }
 ```
 
