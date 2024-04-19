@@ -38,6 +38,7 @@ Github：[releases](https://github.com/wanglin2/mind-map/releases)。百度云�
 - [x] 支持快捷键、前进后退、关联线、搜索替换、小地图、水印、滚动条
 - [x] 提供丰富的配置，满足各种场景各种使用习惯
 - [x] 支持协同编辑
+- [x] 支持演示模式
 
 # 安装
 
