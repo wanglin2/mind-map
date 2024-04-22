@@ -260,6 +260,8 @@ export const backgroundSizeList = [
 export const store = {
   sidebarZIndex: 1 //侧边栏zIndex
 }
+const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+const ctrl = isMac?'Command':'Ctrl';
 
 // 快捷键列表
 export const shortcutKeyList = [
@@ -284,17 +286,17 @@ export const shortcutKeyList = [
       {
         icon: 'iconshangyi',
         name: '上移节点',
-        value: 'Ctrl + ↑'
+        value: `${ctrl} + ↑`
       },
       {
         icon: 'iconxiayi',
         name: '下移节点',
-        value: 'Ctrl + ↓'
+        value: `${ctrl} + ↓`
       },
       {
         icon: 'icongaikuozonglan',
         name: '插入概要',
-        value: 'Ctrl + G'
+        value: `${ctrl} + G`
       },
       {
         icon: 'iconzhankai',
@@ -314,17 +316,17 @@ export const shortcutKeyList = [
       {
         icon: 'iconfuzhi',
         name: '复制节点',
-        value: 'Ctrl + C'
+        value: `${ctrl} + C`
       },
       {
         icon: 'iconjianqie',
         name: '剪切节点',
-        value: 'Ctrl + X'
+        value: `${ctrl} + X`
       },
       {
         icon: 'iconniantie',
         name: '粘贴节点',
-        value: 'Ctrl + V'
+        value: `${ctrl} + V`
       },
       {
         icon: 'iconbianji',
@@ -339,32 +341,32 @@ export const shortcutKeyList = [
       {
         icon: 'iconhoutui-shi',
         name: '回退',
-        value: 'Ctrl + Z'
+        value: `${ctrl} + Z`
       },
       {
         icon: 'iconqianjin1',
         name: '前进',
-        value: 'Ctrl + Y'
+        value: `${ctrl} + Y`
       },
       {
         icon: 'iconquanxuan',
         name: '全选',
-        value: 'Ctrl + A'
+        value: `${ctrl} + A`
       },
       {
         icon: 'iconquanxuan',
         name: '多选',
-        value: '右键 / Ctrl + 左键'
+        value: `右键 / ${ctrl} + 左键`
       },
       {
         icon: 'iconzhengli',
         name: '一键整理布局',
-        value: 'Ctrl + L'
+        value: `${ctrl} + L`
       },
       {
         icon: 'iconsousuo',
         name: '搜索和替换',
-        value: 'Ctrl + F'
+        value: `${ctrl} + F`
       }
     ]
   },
@@ -374,27 +376,27 @@ export const shortcutKeyList = [
       {
         icon: 'iconfangda',
         name: '放大',
-        value: 'Ctrl + +'
+        value: `${ctrl} + +`
       },
       {
         icon: 'iconsuoxiao',
         name: '缩小',
-        value: 'Ctrl + -'
+        value: `${ctrl} + -`
       },
       {
         icon: 'iconfangda',
         name: '放大/缩小',
-        value: 'Ctrl + 鼠标滚动'
+        value: `${ctrl} + 鼠标滚动`
       },
       {
         icon: 'icondingwei',
         name: '回到根节点',
-        value: 'Ctrl + Enter'
+        value: `${ctrl} + Enter`
       },
       {
         icon: 'iconquanping1',
         name: '适应画布',
-        value: 'Ctrl + i'
+        value: `${ctrl} + i`
       }
     ]
   },
