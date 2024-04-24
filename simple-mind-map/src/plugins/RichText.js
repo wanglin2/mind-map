@@ -239,7 +239,9 @@ class RichText {
       }
     }
     // 节点文本内容
-    const nodeText = node.getData('text')
+    let nodeText = node.getData('text')
+    // 将公式节点转换为 latex 格式，方便修改
+    nodeText = this.latexRichToText(nodeText);
     // 是否是空文本
     const isEmptyText = isUndef(nodeText)
     // 是否是非空的非富文本
@@ -270,6 +272,17 @@ class RichText {
       this.setTextStyleIfNotRichText(node)
     }
     this.cacheEditingText = ''
+  }
+
+  latexRichToText(nodeText) {
+    if (nodeText.indexOf('class="ql-formula"') !== -1) {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(nodeText, "text/html");
+      var els = doc.getElementsByClassName('ql-formula');
+      for (const el of els)
+        nodeText = nodeText.replace(el.outerHTML, `\$${el.getAttribute('data-value')}\$`)
+    }
+    return nodeText;
   }
 
   // 获取编辑区域的背景填充
@@ -324,8 +337,8 @@ class RichText {
     for (let i = ops.length - 1; i >= 0; i--) {
       const op = ops[i]
       if (op.insert && typeof op.insert !== 'object' && op.insert !== '\n') {
-        const m = op.insert.matchAll(/\$.+?\$/g)?.toArray();
-        if (m.length > 0) {
+        if (/\$.+?\$/g.test(op.insert)) {
+          const m = [...op.insert.matchAll(/\$.+?\$/g)];
           let arr = op.insert.split(/\$.+?\$/g);
           for (let j = m.length - 1; j >= 0; j--) {
             const exp = m[j]?.[0].slice(1, -1) ?? null;  // $...$ 之间的表达式

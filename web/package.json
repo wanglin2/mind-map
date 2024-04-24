@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build && node ../copy.js",
+    "serve": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build && node ../copy.js",
     "lint": "vue-cli-service lint",
     "buildLibrary": "node ./scripts/updateVersion.js && vue-cli-service build --mode library --target lib --name simpleMindMap ../simple-mind-map/full.js --dest ../simple-mind-map/dist && esbuild ../simple-mind-map/full.js --bundle --external:buffer --format=esm --outfile=../simple-mind-map/dist/simpleMindMap.esm.js && esbuild ../simple-mind-map/full.js --bundle --minify --external:buffer --format=esm --outfile=../simple-mind-map/dist/simpleMindMap.esm.min.js",
     "format": "prettier --write src/* src/*/* src/*/*/* src/*/*/*/*",
@@ -24,7 +24,21 @@
     "vue-i18n": "^8.27.2",
     "vue-router": "^3.5.1",
     "vuex": "^3.6.2",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "simple-mind-map": "../simple-mind-map",
+    "@svgdotjs/svg.js": "^3.0.16",
+    "deepmerge": "^1.5.2",
+    "eventemitter3": "^4.0.7",
+    "jszip": "^3.10.1",
+    "mdast-util-from-markdown": "^1.3.0",
+    "pdf-lib": "^1.17.1",
+    "quill": "^1.3.6",
+    "tern": "^0.24.3",
+    "uuid": "^9.0.0",
+    "ws": "^7.5.9",
+    "xml-js": "^1.6.11",
+    "y-webrtc": "^10.2.5",
+    "yjs": "^13.6.8"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.5.0",

@@ -110,7 +110,6 @@ export default {
     init() {
       this.list = formulaList.map(item => this._listItemGen(item, false))
       const customListStr = localStorage.getItem('formulaSidebarCustomList')
-      console.log(customListStr)
       if (customListStr !== null)
         this.customList = JSON.parse(customListStr).map(item =>
           this._listItemGen(item, true)
