@@ -329,4 +329,12 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/木星二号.jpg" style="width: 50px;height: 50px;" />
         <span>木星二号</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/阿晨.jpg" style="width: 50px;height: 50px;" />
+        <span>阿晨</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>铁</span>
+    </span>
 </p>
