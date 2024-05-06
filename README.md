@@ -337,4 +337,16 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
         <span>铁</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/庆国.jpg" style="width: 50px;height: 50px;" />
+        <span>庆国</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/孟照星.jpg" style="width: 50px;height: 50px;" />
+        <span>孟照星</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/子豪.jpg" style="width: 50px;height: 50px;" />
+        <span>子豪</span>
+    </span>
 </p>
