@@ -358,4 +358,24 @@
         <img src="../../../../assets/avatar/木星二号.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>木星二号</p>
     </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/阿晨.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>阿晨</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/default.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>铁</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/庆国.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>庆国</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/孟照星.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>孟照星</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/子豪.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>子豪</p>
+    </div>
 </div>
