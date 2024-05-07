@@ -271,7 +271,8 @@ export default {
     fileOpenFailed: 'File open failed',
     defaultFileName: 'Mind map',
     creatingTip: 'Creating file',
-    directory: 'Directory'
+    directory: 'Directory',
+    autoSaveLocalFileMessage: 'Local file [{name}] saved automatically',
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',

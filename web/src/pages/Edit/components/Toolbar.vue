@@ -46,14 +46,39 @@
           <span class="icon iconfont icondaoru"></span>
           <span class="text">{{ $t('toolbar.import') }}</span>
         </div>
-        <div
-          class="toolbarBtn"
-          @click="$bus.$emit('showExport')"
-          style="margin-right: 0;"
-        >
+        <div class="toolbarBtn" @click="$bus.$emit('showExport')">
           <span class="icon iconfont iconexport"></span>
           <span class="text">{{ $t('toolbar.export') }}</span>
         </div>
+
+        <div
+          class="toolbarBtn"
+          @click="() => (loginVisible = !loginVisible)"
+          style="margin-right: 0;"
+        >
+          <span class="icon iconfont iconexport"></span>
+          <span class="text">登录</span>
+        </div>
+
+        <div class="fileTreeBox login" v-if="loginVisible">
+          <el-form :model="loginForm">
+            <el-form-item label="user name" required>
+              <el-input v-model="loginForm.name" />
+            </el-form-item>
+            <el-form-item label="password" required>
+              <el-input v-model="loginForm.password" show-password />
+            </el-form-item>
+            <el-form-item style="text-align: right;margin-bottom: 0;">
+              <el-button type="primary" @click="submit" size="mini"
+                >登录</el-button
+              >
+              <el-button @click="loginVisible = false" size="mini"
+                >取消</el-button
+              >
+            </el-form-item>
+          </el-form>
+        </div>
+
         <!-- 本地文件树 -->
         <div
           class="fileTreeBox"
@@ -139,7 +164,7 @@ import Import from './Import'
 import { mapState } from 'vuex'
 import { Notification } from 'element-ui'
 import exampleData from 'simple-mind-map/example/exampleData'
-import { getData } from '../../../api'
+import { getData, login } from '../../../api'
 import ToolbarNodeBtnList from './ToolbarNodeBtnList.vue'
 import { throttle } from 'simple-mind-map/src/utils/index'
 
@@ -149,6 +174,7 @@ import { throttle } from 'simple-mind-map/src/utils/index'
  * @Desc: 工具栏
  */
 let fileHandle = null
+let lastAutoSaveString = ''
 export default {
   name: 'Toolbar',
   components: {
@@ -190,6 +216,11 @@ export default {
         isLeaf: 'leaf'
       },
       fileTreeVisible: false,
+      loginVisible: false,
+      loginForm: {
+        name: '',
+        password: ''
+      },
       rootDirName: '',
       fileTreeExpand: true
     }
@@ -387,7 +418,7 @@ export default {
     },
 
     // 渲染读取的数据
-    setData(str) {
+    setData(str, _localFile = null) {
       try {
         let data = JSON.parse(str)
         if (typeof data !== 'object') {
@@ -421,6 +452,19 @@ export default {
       const writable = await fileHandle.createWritable()
       await writable.write(string)
       await writable.close()
+      // 如果内容修改则提示保存成功
+      const _root = JSON.stringify(content.root)
+      if (lastAutoSaveString !== _root) {
+        const _file = await fileHandle.getFile()
+        this.$message.info({
+          message: `${this.$t('toolbar.autoSaveLocalFileMessage')}`.replace(
+            '{name}',
+            _file.name
+          ),
+          duration: 1500
+        })
+        lastAutoSaveString = _root
+      }
     },
 
     // 创建本地文件
@@ -467,6 +511,19 @@ export default {
           return
         }
         this.$message.warning(this.$t('toolbar.notSupportTip'))
+      }
+    },
+
+    async submit() {
+      const { name, password } = this.loginForm
+      if (!name || !password) return this.$message.error('用户名或密码不能为空')
+      const res = await login(name, password)
+      if (res) {
+        this.loginVisible = false
+        this.$message.success('登录成功')
+        this.$store.commit('setUserInfo', res.data)
+      } else {
+        this.$message.error('用户名或密码错误')
       }
     }
   }
@@ -582,6 +639,22 @@ export default {
         border-radius: 5px;
         min-width: 200px;
         box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
+
+        &.login {
+          height: auto;
+          padding: 1em;
+          /deep/ .el-form-item {
+            display: flex;
+            margin-bottom: 1em;
+            .el-form-item__content {
+              flex-grow: 10;
+            }
+            .el-form-item__label {
+              width: 100px;
+              text-align: start;
+            }
+          }
+        }
 
         &.expand {
           height: 300px;

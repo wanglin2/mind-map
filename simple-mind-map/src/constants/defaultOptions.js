@@ -52,7 +52,7 @@ export const defaultOpt = {
     }
   },
   // 达到该宽度文本自动换行
-  textAutoWrapWidth: 500,
+  textAutoWrapWidth: 600,
   // 自定义鼠标滚轮事件处理
   // 可以传一个函数，回调参数为事件对象
   customHandleMousewheel: null,

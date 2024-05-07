@@ -267,7 +267,8 @@ export default {
     fileOpenFailed: '文件打开失败',
     defaultFileName: '思维导图',
     creatingTip: '正在创建文件',
-    directory: '目录'
+    directory: '目录',
+    autoSaveLocalFileMessage: '本地文件【{name}】已自动保存',
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',
