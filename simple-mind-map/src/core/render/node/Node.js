@@ -371,9 +371,11 @@ class Node {
     }
     // 文字
     if (this._textData) {
+      const oldX = this._textData.node.attr('data-offsetx') || 0
       this._textData.node.attr('data-offsetx', textContentOffsetX)
       // 修复safari浏览器节点存在图标时文字位置不正确的问题
       ;(this._textData.nodeContent || this._textData.node)
+        .x(-oldX)// 修复非富文本模式下同时存在图标和换行的文本时，被收起和展开时图标与文字距离会逐渐拉大的问题
         .x(textContentOffsetX)
         .y(0)
       textContentNested.add(this._textData.node)
