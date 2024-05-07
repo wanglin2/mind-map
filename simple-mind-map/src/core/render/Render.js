@@ -1801,19 +1801,28 @@ class Render {
 
   //  移动节点到画布中心
   moveNodeToCenter(node) {
+    const { resetScaleOnMoveNodeToCenter } = this.mindMap.opt
+    let { transform, state } = this.mindMap.view.getTransformData()
+    let { left, top, width, height } = node
+    if (!resetScaleOnMoveNodeToCenter) {
+      left *= transform.scaleX
+      top *= transform.scaleY
+      width *= transform.scaleX
+      height *= transform.scaleY
+    }
     let halfWidth = this.mindMap.width / 2
     let halfHeight = this.mindMap.height / 2
-    let { left, top, width, height } = node
     let nodeCenterX = left + width / 2
     let nodeCenterY = top + height / 2
-    let { state } = this.mindMap.view.getTransformData()
     let targetX = halfWidth - state.x
     let targetY = halfHeight - state.y
     let offsetX = targetX - nodeCenterX
     let offsetY = targetY - nodeCenterY
     this.mindMap.view.translateX(offsetX)
     this.mindMap.view.translateY(offsetY)
-    this.mindMap.view.setScale(1)
+    if (resetScaleOnMoveNodeToCenter) {
+      this.mindMap.view.setScale(1)
+    }
   }
 
   // 回到中心主题，即设置根节点到画布中心

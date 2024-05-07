@@ -320,5 +320,7 @@ export const defaultOpt = {
   addContentToHeader: null,
   addContentToFooter: null,
   // 演示插件配置
-  demonstrateConfig: null
+  demonstrateConfig: null,
+  // 移动节点到画布中心、回到根节点等操作时是否将缩放层级复位为100%
+  resetScaleOnMoveNodeToCenter: false
 }
