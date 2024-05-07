@@ -36,6 +36,49 @@ mindMap.on('node_tree_render_end', () => {
 })
 ```
 
+插入节点的命令也可以传入一定参数，比如创建新节点不想直接进入新节点的编辑模式，那么可以这样调用：
+
+```js
+mindMap.execCommand('INSERT_CHILD_NODE', false)
+```
+
+如果想给指定的节点插入新节点，而不是当前激活的节点，那么就可以通过第二个参数：
+
+```js
+mindMap.execCommand('INSERT_CHILD_NODE', false, [node])
+```
+
+参数是通过平铺的列表方式传递的，所以前面的参数都不能省略。
+
+如果要指定创建的新节点的一些数据，那么可以通过第三个参数：
+
+```js
+mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
+    uid: '指定uid',
+    text: '指定初始文本'
+})
+```
+
+最后一个参数可以指定创建新节点的子节点：
+
+```js
+mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
+    uid: '指定uid',
+    text: '指定初始文本'
+}, [
+    {
+        data: {
+            text: '下级节点'
+        },
+        children: []
+    }
+])
+```
+
+注意传递的是完整的节点结构数据。
+
+其他命令也是类似的，详细可以参考api文档。
+
 ## 插入多个子节点
 
 如果你要同时插入多个子节点，那么可以执行`INSERT_MULTI_CHILD_NODE`命令：

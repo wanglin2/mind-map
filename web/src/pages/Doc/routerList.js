@@ -34,6 +34,7 @@ export default [
       { path: 'course25', title: '关于概要' },
       { path: 'course26', title: '如何实现AI生成节点内容' },
       { path: 'course27', title: '快捷键操作如何传递自定义参数' },
+      { path: 'course28', title: '如何动态修改自定义元素的大小' },
       { path: 'doExport', title: 'Export 插件' },
       { path: 'drag', title: 'Drag插件' },
       { path: 'introduction', title: '简介' },
