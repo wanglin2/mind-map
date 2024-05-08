@@ -1342,9 +1342,7 @@ export const handleGetSvgDataExtraContent = ({
       const { el, cssText, height } = res
       if (el instanceof HTMLElement) {
         el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
-        const foreignObject = new ForeignObject()
-        foreignObject.height(height)
-        foreignObject.add(el)
+        const foreignObject = createForeignObjectNode({ el, height })
         callback(foreignObject, height)
       }
       if (cssText) {
@@ -1460,4 +1458,17 @@ export const exitFullScreen = () => {
   } else if (document.mozCancelFullScreen) {
     document.mozCancelFullScreen()
   }
+}
+
+// 创建foreignObject节点
+export const createForeignObjectNode = ({ el, width, height }) => {
+  const foreignObject = new ForeignObject()
+  if (width !== undefined) {
+    foreignObject.width(width)
+  }
+  if (height !== undefined) {
+    foreignObject.height(height)
+  }
+  foreignObject.add(el)
+  return foreignObject
 }
