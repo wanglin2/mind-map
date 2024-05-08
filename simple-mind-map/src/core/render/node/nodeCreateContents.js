@@ -288,6 +288,9 @@ function createTagNode() {
   let nodes = []
   tagData.slice(0, this.mindMap.opt.maxTag).forEach((item, index) => {
     let tag = new G()
+    tag.on('click', () => {
+      this.mindMap.emit('node_tag_click', this, item)
+    })
     // 标签文本
     let text = new Text().text(item).x(8).cy(8)
     this.style.tagText(text, index)
