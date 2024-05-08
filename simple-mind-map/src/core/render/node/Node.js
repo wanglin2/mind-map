@@ -482,7 +482,7 @@ class Node {
           )
         this.mindMap.renderer[
           isActive ? 'removeNodeFromActiveList' : 'addNodeToActiveList'
-        ](this)
+        ](this, true)
         this.renderer.emitNodeActiveEvent(isActive ? null : this)
       }
       this.mindMap.emit('node_mousedown', this, e)
@@ -563,7 +563,7 @@ class Node {
     }
     this.mindMap.emit('before_node_active', this, this.renderer.activeNodeList)
     this.renderer.clearActiveNodeList()
-    this.renderer.addNodeToActiveList(this)
+    this.renderer.addNodeToActiveList(this, true)
     this.renderer.emitNodeActiveEvent(this)
   }
 

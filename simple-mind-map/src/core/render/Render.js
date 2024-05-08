@@ -520,7 +520,7 @@ class Render {
   }
 
   // 添加节点到激活列表里
-  addNodeToActiveList(node) {
+  addNodeToActiveList(node, notEmitBeforeNodeActiveEvent = false) {
     if (
       this.mindMap.opt.onlyOneEnableActiveNodeOnCooperate &&
       node.userList.length > 0
@@ -528,6 +528,9 @@ class Render {
       return
     const index = this.findActiveNodeIndex(node)
     if (index === -1) {
+      if (!notEmitBeforeNodeActiveEvent) {
+        this.mindMap.emit('before_node_active', node, this.activeNodeList)
+      }
       this.mindMap.execCommand('SET_NODE_ACTIVE', node, true)
       this.activeNodeList.push(node)
     }
