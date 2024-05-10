@@ -789,7 +789,7 @@ export default {
       if (this.mindMap.cooperate && this.$route.query.userName) {
         this.mindMap.cooperate.setProvider(null, {
           roomName: 'demo-room',
-          signalingList: ['ws://10.16.83.118:4444']
+          signalingList: ['ws://localhost:4444']
         })
         this.mindMap.cooperate.setUserInfo({
           id: Math.random(),

@@ -8,7 +8,8 @@ import {
   getVisibleColorFromTheme,
   isUndef,
   checkSmmFormatData,
-  removeHtmlNodeByClass
+  removeHtmlNodeByClass,
+  formatGetNodeGeneralization
 } from '../utils'
 import { CONSTANTS } from '../constants/constant'
 
@@ -651,13 +652,9 @@ class RichText {
           node.data.text = getTextFromHtml(node.data.text)
         }
         // 概要
-        let generalization =
-          node.data && node.data.generalization ? node.data.generalization : []
-        generalization = Array.isArray(generalization)
-          ? generalization
-          : [generalization]
-        if (generalization.length > 0) {
-          generalization.forEach(item => {
+        if (node.data) {
+          const generalizationList = formatGetNodeGeneralization(node.data)
+          generalizationList.forEach(item => {
             item.richText = false
             item.text = getTextFromHtml(item.text)
           })
@@ -682,13 +679,9 @@ class RichText {
         root.data.resetRichText = true
       }
       // 概要
-      let generalization =
-        root.data && root.data.generalization ? root.data.generalization : []
-      generalization = Array.isArray(generalization)
-        ? generalization
-        : [generalization]
-      if (generalization.length > 0) {
-        generalization.forEach(item => {
+      if (root.data) {
+        const generalizationList = formatGetNodeGeneralization(root.data)
+        generalizationList.forEach(item => {
           item.richText = true
           item.resetRichText = true
         })

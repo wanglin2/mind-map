@@ -3,7 +3,8 @@ import {
   getNodeTreeBoundingRect,
   fullscrrenEvent,
   fullScreen,
-  exitFullScreen
+  exitFullScreen,
+  formatGetNodeGeneralization
 } from '../utils/index'
 import { keyMap } from '../core/command/keyMap'
 
@@ -215,7 +216,11 @@ class Demonstrate {
     // 如果该节点实例不存在，那么先展开到该节点
     if (!node) {
       this.mindMap.renderer.expandToNodeUid(uid, () => {
-        this.jump(index)
+        const node = this.mindMap.renderer.findNodeByUid(uid)
+        // 展开后还是没找到，那么就别进入了，否则会死循环
+        if (node) {
+          this.jump(index)
+        }
       })
       return
     }
@@ -283,6 +288,19 @@ class Demonstrate {
       this.stepList.push({
         type: 'node',
         node
+      })
+      // 添加概要步骤
+      const generalizationList = formatGetNodeGeneralization(node.data)
+      generalizationList.forEach(item => {
+        // 没有uid的直接过滤掉，否则会死循环
+        if (item.uid) {
+          this.stepList.push({
+            type: 'node',
+            node: {
+              data: item
+            }
+          })
+        }
       })
       if (node.children.length > 1) {
         this.stepList.push({

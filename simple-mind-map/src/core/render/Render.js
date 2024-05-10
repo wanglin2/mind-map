@@ -30,7 +30,8 @@ import {
   createSmmFormatData,
   checkSmmFormatData,
   checkIsNodeStyleDataKey,
-  removeRichTextStyes
+  removeRichTextStyes,
+  formatGetNodeGeneralization
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -992,18 +993,13 @@ class Render {
         const _hasCustomStyles = this._handleRemoveCustomStyles(node.data)
         if (_hasCustomStyles) hasCustomStyles = true
         // 不要忘记概要节点
-        let generalization = node.data.generalization
-        if (generalization) {
-          generalization = Array.isArray(generalization)
-            ? generalization
-            : [generalization]
-          if (generalization.length > 0) {
-            generalization.forEach(generalizationData => {
-              const _hasCustomStyles =
-                this._handleRemoveCustomStyles(generalizationData)
-              if (_hasCustomStyles) hasCustomStyles = true
-            })
-          }
+        const generalizationList = formatGetNodeGeneralization(node.data)
+        if (generalizationList.length > 0) {
+          generalizationList.forEach(generalizationData => {
+            const _hasCustomStyles =
+              this._handleRemoveCustomStyles(generalizationData)
+            if (_hasCustomStyles) hasCustomStyles = true
+          })
         }
       })
     }
@@ -1840,14 +1836,24 @@ class Render {
       return
     }
     let parentsList = []
+    let isGeneralization = false
     const cache = {}
     bfsWalk(this.renderTree, (node, parent) => {
       if (node.data.uid === uid) {
         parentsList = parent ? [...cache[parent.data.uid], parent] : []
         return 'stop'
-      } else {
-        cache[node.data.uid] = parent ? [...cache[parent.data.uid], parent] : []
       }
+      const generalizationList = formatGetNodeGeneralization(node.data)
+      generalizationList.forEach(item => {
+        if (item.uid === uid) {
+          parentsList = parent ? [...cache[parent.data.uid], parent] : []
+          isGeneralization = true
+        }
+      })
+      if (isGeneralization) {
+        return 'stop'
+      }
+      cache[node.data.uid] = parent ? [...cache[parent.data.uid], parent] : []
     })
     let needRender = false
     parentsList.forEach(node => {
@@ -1856,6 +1862,18 @@ class Render {
         node.data.expand = true
       }
     })
+    // 如果是展开到概要节点，那么父节点下的所有节点都需要开
+    if (isGeneralization) {
+      const lastNode = parentsList[parentsList.length - 1]
+      if (lastNode) {
+        walk(lastNode, null, node => {
+          if (!node.data.expand) {
+            needRender = true
+            node.data.expand = true
+          }
+        })
+      }
+    }
     if (needRender) {
       this.mindMap.render(callback)
     } else {
@@ -1869,6 +1887,17 @@ class Render {
     walk(this.root, null, node => {
       if (node.getData('uid') === uid) {
         res = node
+        return true
+      }
+      // 概要节点
+      let isGeneralization = false
+      ;(node._generalizationList || []).forEach(item => {
+        if (item.generalizationNode.getData('uid') === uid) {
+          res = item.generalizationNode
+          isGeneralization = true
+        }
+      })
+      if (isGeneralization) {
         return true
       }
     })

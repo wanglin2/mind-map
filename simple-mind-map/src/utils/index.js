@@ -157,16 +157,10 @@ export const copyRenderTree = (tree, root, removeActiveState = false) => {
   tree.data = simpleDeepClone(root.data)
   if (removeActiveState) {
     tree.data.isActive = false
-    const generalization = tree.data.generalization
-    if (generalization) {
-      if (Array.isArray(generalization)) {
-        generalization.forEach(item => {
-          item.isActive = false
-        })
-      } else {
-        generalization.isActive = false
-      }
-    }
+    const generalizationList = formatGetNodeGeneralization(tree.data)
+    generalizationList.forEach(item => {
+      item.isActive = false
+    })
   }
   tree.children = []
   if (root.children && root.children.length > 0) {
@@ -1471,4 +1465,14 @@ export const createForeignObjectNode = ({ el, width, height }) => {
   }
   foreignObject.add(el)
   return foreignObject
+}
+
+// 格式化获取节点的概要数据
+export const formatGetNodeGeneralization = data => {
+  const generalization = data.generalization
+  if (generalization) {
+    return Array.isArray(generalization) ? generalization : [generalization]
+  } else {
+    return []
+  }
 }
