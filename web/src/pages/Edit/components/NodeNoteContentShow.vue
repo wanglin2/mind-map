@@ -22,6 +22,14 @@ import '@toast-ui/editor/dist/toastui-editor-viewer.css'
  */
 export default {
   name: 'NodeNoteContentShow',
+  props: {
+    mindMap: {
+      type: Object,
+      default() {
+        return null
+      }
+    }
+  },
   data() {
     return {
       editor: null,
@@ -42,6 +50,7 @@ export default {
     this.$bus.$on('expand_btn_click', this.hideNoteContent)
   },
   mounted() {
+    this.mindMap.el.appendChild(this.$refs.noteContentViewer)
     this.initEditor()
   },
   beforeDestroy() {
