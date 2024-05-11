@@ -59,7 +59,6 @@ export default [
       { path: 'nodeImgAdjust', title: 'NodeImgAdjust插件' },
       { path: 'search', title: 'Search插件' },
       { path: 'painter', title: 'Painter插件' },
-      { path: 'painter', title: 'Painter插件' },
       { path: 'scrollbar', title: 'Scrollbar插件' },
       { path: 'formula', title: 'Formula插件' },
       { path: 'cooperate', title: 'Cooperate插件' },
@@ -109,7 +108,10 @@ export default [
       { path: 'cooperate', title: 'Cooperate plugin' },
       { path: 'rainbowLines', title: 'RainbowLines plugin' },
       { path: 'demonstrate', title: 'Demonstrate plugin' },
-      { path: 'handDrawnLikeStyle', title: 'HandDrawnLikeStyle chargeable plugin' },
+      {
+        path: 'handDrawnLikeStyle',
+        title: 'HandDrawnLikeStyle chargeable plugin'
+      },
       { path: 'client', title: 'Client' }
     ]
   }

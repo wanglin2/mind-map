@@ -12,16 +12,21 @@
 - [x] Support logical structure chart, mind map, Organizational chart, directory organization chart, timeline (horizontal and vertical), fishbone chart and other structures
 - [x] Built-in multiple themes, allowing for highly customizable styles, and supporting registration of new themes
 - [x] Node content supports text (regular text, rich text), images, icons, hyperlinks, notes, labels, summaries, and math formulas
-- [x] Nodes support drag and drop (drag and move, freely adjust), multiple node shapes, and fully customize node content using DDM
+- [x] Nodes support drag and drop (drag and move, freely adjust), multiple node shapes, Support for expanding node content, and fully customize node content using DDM
 - [x] Support canvas dragging and scaling
 - [x] Supports two multi node selection methods: mouse button drag selection and Ctrl+left button selection
-- [x] Supoorts to export as `json`、`png`、`svg`、`pdf`、`markdown`、`xmind`, support import from `json`、`xmind`、`markdown`
-- [x] Support shortcut keys, forward and backward, correlation lines, search and replacement, small maps, watermarks, and scrollbar
+- [x] Supoorts to export as `json`、`png`、`svg`、`pdf`、`markdown`、`xmind`、`txt`, support import from `json`、`xmind`、`markdown`
+- [x] Support shortcut keys, forward and backward, correlation lines, search and replacement, small maps, watermarks, scrollbar, Hand drawn style, and rainbow lines
 - [x] Provide rich configurations to meet various scenarios and usage habits
 - [x] Support collaborative editing
+- [x] Support demonstration mode
 
-> Features that will not be implemented:
->
+The official provides the following plugins, which can be introduced as needed (a certain function may not be effective because you did not introduce the corresponding plugin). Please refer to the documentation for specific usage methods:
+
+> RichText（Node Rich Text Plugin）、Select（Mouse Multiple Selection Node Plugin）、Drag（Node drag plugin）、AssociativeLine（Associate Line Plugin）、Export（Export plugin）、KeyboardNavigation（Keyboard navigation plugin）、MiniMap（Mini Map Plugin）、Watermark（Watermark plugin）、TouchEvent（Mobile touch event support plugin）、NodeImgAdjust（Drag and adjust node image size plugin）、Search（Search plugin）、Painter（Node Format Brush Plugin）、Scrollbar（Scroll bar plugin）、Formula（Mathematical Formula Plugin）、Cooperate（Collaborative editing plugin）、RainbowLines（Rainbow Line Plugin）、Demonstrate（Demonstration mode plugin）、HandDrawnLikeStyle（Hand drawn style plugin）[收费]
+
+Features that will not be implemented in this project:
+
 > 1.Free nodes, i.e. multiple root nodes;
 >
 > 2.Continue adding nodes after the summary node;
@@ -123,7 +128,7 @@ Unsupported: `IE` browser.
 
 ## License
 
-[MIT](https://opensource.org/licenses/MIT)
+[MIT](https://github.com/wanglin2/mind-map/blob/main/LICENSE). You can use it for commercial purposes without retaining the copyright statement of 'mind-map'. If you don't want to keep it, you can contact the author.
 
 ## Invite the author to a cup of coffee
 
@@ -384,5 +389,9 @@ Open source is not easy. If this project is helpful to you, you can invite the a
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/子豪.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>子豪</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/宏涛.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>宏涛</p>
     </div>
 </div>
