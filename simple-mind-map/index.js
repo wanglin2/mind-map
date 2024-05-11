@@ -128,13 +128,18 @@ class MindMap {
   // 创建容器元素
   initContainer() {
     const { associativeLineIsAlwaysAboveNode } = this.opt
+    // 给容器元素添加一个类名
+    this.el.classList.add('smm-mind-map-container')
     // 节点关联线容器
     const createAssociativeLineDraw = () => {
       this.associativeLineDraw = this.draw.group()
       this.associativeLineDraw.addClass('smm-associative-line-container')
     }
     // 画布
-    this.svg = SVG().addTo(this.el).size(this.width, this.height)
+    this.svg = SVG()
+      .addTo(this.el)
+      .size(this.width, this.height)
+      
     // 容器
     this.draw = this.svg.group()
     this.draw.addClass('smm-container')
@@ -432,7 +437,13 @@ class MindMap {
     // 需要裁减的区域
     let clipData = null
     if (node) {
-      clipData = getNodeTreeBoundingRect(node, rect.x, rect.y, paddingX, paddingY)
+      clipData = getNodeTreeBoundingRect(
+        node,
+        rect.x,
+        rect.y,
+        paddingX,
+        paddingY
+      )
     }
     // 内边距
     const fixHeight = 0
@@ -581,6 +592,8 @@ class MindMap {
     this.svg.remove()
     // 去除给容器元素设置的背景样式
     Style.removeBackgroundStyle(this.el)
+    // 移除给容器元素添加的类名
+    this.el.classList.remove('smm-mind-map-container')
     this.el.innerHTML = ''
     this.el = null
     this.removeCss()

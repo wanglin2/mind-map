@@ -316,7 +316,10 @@ function createNoteNode() {
     return null
   }
   let iconSize = this.mindMap.themeConfig.iconSize
-  let node = new SVG().attr('cursor', 'pointer').size(iconSize, iconSize)
+  let node = new SVG()
+    .attr('cursor', 'pointer')
+    .addClass('smm-node-note')
+    .size(iconSize, iconSize)
   // 透明的层，用来作为鼠标区域
   node.add(new Rect().size(iconSize, iconSize).fill({ color: 'transparent' }))
   // 备注图标

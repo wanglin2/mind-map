@@ -139,6 +139,7 @@ export default {
   top: 20px;
   cursor: pointer;
   z-index: 10001;
+  pointer-events: all;
 
   .icon {
     font-size: 28px;
@@ -150,6 +151,7 @@ export default {
   position: absolute;
   right: 40px;
   bottom: 20px;
+  pointer-events: all;
 
   z-index: 10001;
   display: flex;
