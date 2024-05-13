@@ -1,6 +1,32 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.9.12</h2>
+<p>Fix:</p>
+<blockquote>
+<p>Fix the issue of bold title text being parsed as undefined when importing MD files;</p>
+<p>Select all, delete nodes, activate adjacent nodes, select multiple nodes, and other operations to increase the distribution of beforeynode-active events;</p>
+<p>Change the selection of multiple nodes to real-time distribution of node activation events;</p>
+<p>Fix the issue where the distance between icons and text gradually widens when both icons and line breaks are present in non rich text mode and are folded and unfolded;</p>
+<p>Fix xss vulnerability when displaying rich text content on nodes;</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>Support parsing of HTML formatted title text in MD files;</p>
+<p>Prohibit all contents of the canvas (except for hyperlinks and note icons of nodes) from responding to mouse events in demonstration mode;</p>
+<p>The demonstration mode supports fill in the blank mode, which means that underlined text is not displayed by default and will only be displayed sequentially by pressing the enter key;</p>
+<p>Demonstration mode supports summary content;</p>
+<p>The expandToNodeUid method of the render class supports summary nodes;</p>
+<p>The findNodeByUid (find the specified node instance on the canvas based on the uid) method of the render class supports summary nodes;</p>
+<p>Add instantiation options for adding pre - and post content to nodes, allowing custom content to be added before or after node text;</p>
+<p>Click event for adding distribution node labels;</p>
+<p>When using the moveNodeToCenter method of the render class to move a specified node to the center of the canvas, scaling is not restored by default;</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>Fix the issue of node note floating layer not being displayed in full screen view mode;</p>
+<p>Fix the issue where the note floating layer does not disappear after clicking the collapse button to collapse the node when displaying the note floating layer;</p>
+</blockquote>
 <h2>0.9.11</h2>
 <p>Fix</p>
 <blockquote>

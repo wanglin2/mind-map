@@ -119,6 +119,9 @@ const mindMap = new MindMap({
 | addContentToHeader（v0.9.9+）     | Function、null | null  | Add custom content to the header when exporting PNG, SVG, and PDF. Can pass a function that can return null to indicate no content is added, or it can return an object, For a detailed introduction, please refer to section 【How to add custom content when exporting】 below |         |
 | addContentToFooter（v0.9.9+）     | Function、null | null  | The basic definition is the same as addContentToHeader, adding custom content at the end |         |
 | demonstrateConfig（v0.9.11+）     | Object、null | null  | Demonstration plugin configuration. If not transmitted, the default configuration will be used. An object can be transmitted. If only a certain property is configured, only that property can be set. Other properties that have not been set will also use the default configuration. For complete configuration, please refer to the 【Demonstration Plugin Configuration】 section below |         |
+| resetScaleOnMoveNodeToCenter（v0.9.12+）     | Boolean |  false | Whether to reset the scaling level to 100% when moving nodes to the canvas center, returning to the root node, and other operations（The underlying impact is on the moveNodeToCenter method of the render class） |         |
+| createNodePrefixContent（v0.9.12+）     | Function、null | null  | Add additional node pre content.Pre content refers to the pre content in the area of the same line as the text, excluding the node image section.You can pass a function that takes the parameters of a node instance, returns a DOM node, or returns null  |         |
+| createNodePostfixContent（v0.9.12+）     | Function、null | null  | Add additional node post content.Post content refers to the post content in the area of the same line as the text, excluding the node image section.You can pass a function that takes the parameters of a node instance, returns a DOM node, or returns null |         |
 
 ### Data structure
 
@@ -227,6 +230,7 @@ new MindMap({
 | zIndex         | Number | 9999                | The hierarchy of highlighted box elements |
 | padding        | Number | 20                  | The inner margin of the highlighted box |
 | margin         | Number | 50                  | The outer margin of the highlighted box |
+| openBlankMode（v0.9.12+） | Boolean | true     | Is enable fill in the blank mode, where underlined text is not displayed by default and only displayed sequentially by pressing the enter key |
 
 ## Static methods
 
@@ -506,6 +510,7 @@ Listen to an event. Event list:
 | node_cooperate_avatar_mouseleave（v0.9.9+）    |  Triggered when removing personnel avatars with the mouse during collaborative editing |  userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)   |
 | exit_demonstrate（v0.9.11+）    | Triggered when exiting demonstration mode  |     |
 | demonstrate_jump（v0.9.11+）    | Trigger when switching steps in demonstration mode  |  currentStepIndex（The index of the steps currently played, counting from 0）、stepLength（Total number of playback steps）   |
+| node_tag_click（v0.9.12+）    | Click events on node labels | this(Current node instance)、item（Content of clicked tags）    |
 
 ### emit(event, ...args)
 

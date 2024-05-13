@@ -76,10 +76,13 @@
 <p>v0.8.0+已废弃</p>
 </blockquote>
 <p>添加节点到激活列表里。</p>
-<h3>addNodeToActiveList(node)</h3>
+<h3>addNodeToActiveList(node, notEmitBeforeNodeActiveEvent = false)</h3>
 <blockquote>
 <p>v0.8.0+</p>
 </blockquote>
+<ul>
+<li><code>notEmitBeforeNodeActiveEvent</code>：v0.9.12+，是否不要派发<code>before_node_active</code>事件，默认为<code>false</code>，即会派发；</li>
+</ul>
 <p>添加节点到激活列表里。</p>
 <h3>removeActiveNode(node)</h3>
 <blockquote>

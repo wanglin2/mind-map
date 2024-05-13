@@ -693,6 +693,27 @@
 <td>Demonstration plugin configuration. If not transmitted, the default configuration will be used. An object can be transmitted. If only a certain property is configured, only that property can be set. Other properties that have not been set will also use the default configuration. For complete configuration, please refer to the 【Demonstration Plugin Configuration】 section below</td>
 <td></td>
 </tr>
+<tr>
+<td>resetScaleOnMoveNodeToCenter（v0.9.12+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Whether to reset the scaling level to 100% when moving nodes to the canvas center, returning to the root node, and other operations（The underlying impact is on the moveNodeToCenter method of the render class）</td>
+<td></td>
+</tr>
+<tr>
+<td>createNodePrefixContent（v0.9.12+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>Add additional node pre content.Pre content refers to the pre content in the area of the same line as the text, excluding the node image section.You can pass a function that takes the parameters of a node instance, returns a DOM node, or returns null</td>
+<td></td>
+</tr>
+<tr>
+<td>createNodePostfixContent（v0.9.12+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>Add additional node post content.Post content refers to the post content in the area of the same line as the text, excluding the node image section.You can pass a function that takes the parameters of a node instance, returns a DOM node, or returns null</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Data structure</h3>
@@ -887,6 +908,12 @@
 <td>Number</td>
 <td>50</td>
 <td>The outer margin of the highlighted box</td>
+</tr>
+<tr>
+<td>openBlankMode（v0.9.12+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Is enable fill in the blank mode, where underlined text is not displayed by default and only displayed sequentially by pressing the enter key</td>
 </tr>
 </tbody>
 </table>
@@ -1325,6 +1352,11 @@ poor performance and should be used sparingly.</p>
 <td>demonstrate_jump（v0.9.11+）</td>
 <td>Trigger when switching steps in demonstration mode</td>
 <td>currentStepIndex（The index of the steps currently played, counting from 0）、stepLength（Total number of playback steps）</td>
+</tr>
+<tr>
+<td>node_tag_click（v0.9.12+）</td>
+<td>Click events on node labels</td>
+<td>this(Current node instance)、item（Content of clicked tags）</td>
 </tr>
 </tbody>
 </table>

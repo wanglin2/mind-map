@@ -118,6 +118,9 @@ const mindMap = new MindMap({
 | addContentToHeader（v0.9.9+）     | Function、null | null  | 导出png、svg、pdf时在头部添加自定义内容。可传递一个函数，这个函数可以返回null代表不添加内容，也可以返回一个对象，详细介绍请参考下方【导出时如何添加自定义内容】 |
 | addContentToFooter（v0.9.9+）     | Function、null | null  | 基本释义同addContentToHeader，在尾部添加自定义内容 |
 | demonstrateConfig（v0.9.11+）     | Object、null | null  | 演示插件Demonstrate的配置。不传则使用默认配置，可传递一个对象，如果只配置某个属性，可以只设置该属性，其他没有设置的同样会使用默认配置，完整配置请参考下方【演示插件配置】小节 |
+| resetScaleOnMoveNodeToCenter（v0.9.12+）     | Boolean |  false | 移动节点到画布中心、回到根节点等操作时是否将缩放层级复位为100%（底层影响的是render类的moveNodeToCenter方法） |
+| createNodePrefixContent（v0.9.12+）     | Function、null | null  | 添加附加的节点前置内容。前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分。可以传递一个函数，这个函数接收一个节点实例的参数，可以返回一个DOM节点，也可以返回null |
+| createNodePostfixContent（v0.9.12+）     | Function、null | null  | 添加附加的节点后置内容。后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分。可以传递一个函数，这个函数接收一个节点实例的参数，可以返回一个DOM节点，也可以返回null |
 
 ### 数据结构
 
@@ -222,12 +225,13 @@ new MindMap({
 
 | 字段名称    | 类型   | 默认值                                      | 描述                                 |
 | ----------- | ------ | ------------------------------------------- | ------------------------------------ |
-| boxShadowColor | String | rgba(0, 0, 0, 0.8)  | 高亮框四周区域的颜色 |
-| borderRadius   | String | 5px                 | 高亮框的圆角大小 |
-| transition     | String | all 0.3s ease-out   | 高亮框动画的过渡属性，CSS的transition属性 |
-| zIndex         | Number | 9999                | 高亮框元素的层级 |
-| padding        | Number | 20                  | 高亮框的内边距 |
-| margin         | Number | 50                  | 高亮框的外边距 |
+| boxShadowColor | String  | rgba(0, 0, 0, 0.8)  | 高亮框四周区域的颜色 |
+| borderRadius   | String  | 5px                 | 高亮框的圆角大小 |
+| transition     | String  | all 0.3s ease-out   | 高亮框动画的过渡属性，CSS的transition属性 |
+| zIndex         | Number  | 9999                | 高亮框元素的层级 |
+| padding        | Number  | 20                  | 高亮框的内边距 |
+| margin         | Number  | 50                  | 高亮框的外边距 |
+| openBlankMode（v0.9.12+） | Boolean | true     | 是否开启填空模式，即带下划线的文本默认不显示，按回车键才依次显示 |
 
 ## 静态方法
 
@@ -504,6 +508,7 @@ mindMap.setTheme('主题名称')
 | node_cooperate_avatar_mouseleave（v0.9.9+）    | 协同编辑时，鼠标移除人员头像时触发  |  userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)      |
 | exit_demonstrate（v0.9.11+）    | 退出演示模式时触发  |     |
 | demonstrate_jump（v0.9.11+）    | 演示模式中，切换步骤时触发  |  currentStepIndex（当前播放到的步骤索引，从0开始计数）、stepLength（总的播放步骤数量）   |
+| node_tag_click（v0.9.12+）    | 节点标签的点击事件 | this(当前节点实例)、item（点击的标签内容）    |
 
 ### emit(event, ...args)
 

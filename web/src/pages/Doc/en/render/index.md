@@ -94,9 +94,11 @@ End text editing, restore enter key and delete key related shortcuts.
 
 Add a node to the active list.
 
-### addNodeToActiveList(node)
+### addNodeToActiveList(node, notEmitBeforeNodeActiveEvent = false)
 
 > v0.8.0+
+
+- `notEmitBeforeNodeActiveEvent`：v0.9.12+，is not distribute the 'before_node_active' event, which defaults to 'false' and will be distributed;
 
 Add a node to the active list.
 

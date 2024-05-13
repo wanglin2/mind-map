@@ -77,10 +77,13 @@ disable the enter key and delete key related shortcuts to prevent conflicts.</p>
 <p>v0.8.0+ abandoned</p>
 </blockquote>
 <p>Add a node to the active list.</p>
-<h3>addNodeToActiveList(node)</h3>
+<h3>addNodeToActiveList(node, notEmitBeforeNodeActiveEvent = false)</h3>
 <blockquote>
 <p>v0.8.0+</p>
 </blockquote>
+<ul>
+<li><code>notEmitBeforeNodeActiveEvent</code>：v0.9.12+，is not distribute the 'before_node_active' event, which defaults to 'false' and will be distributed;</li>
+</ul>
 <p>Add a node to the active list.</p>
 <h3>removeActiveNode(node)</h3>
 <blockquote>
