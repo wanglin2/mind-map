@@ -4,6 +4,8 @@
  * @returns {string} 过滤后的文本
  */
 export function defenseXSS(text) {
+    text = String(text)
+
     // 初始化结果变量
     let result = text;
 
