@@ -48,9 +48,11 @@ const handleZHIXI = async data => {
           item.children.forEach(item2 => {
             // 概要
             if (item2.data.type === 'generalize') {
-              newRoot.data.generalization = {
-                text: item2.data.text
-              }
+              newRoot.data.generalization = [
+                {
+                  text: item2.data.text
+                }
+              ]
             } else {
               children.push(item2)
             }

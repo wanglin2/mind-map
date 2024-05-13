@@ -1,5 +1,85 @@
 # Changelog
 
+## 0.9.12
+
+Fix:
+
+> Fix the issue of bold title text being parsed as undefined when importing MD files;
+>
+> Select all, delete nodes, activate adjacent nodes, select multiple nodes, and other operations to increase the distribution of beforeynode-active events;
+>
+> Change the selection of multiple nodes to real-time distribution of node activation events;
+>
+> Fix the issue where the distance between icons and text gradually widens when both icons and line breaks are present in non rich text mode and are folded and unfolded;
+>
+> Fix xss vulnerability when displaying rich text content on nodes;
+
+New:
+
+> Support parsing of HTML formatted title text in MD files;
+>
+> Prohibit all contents of the canvas (except for hyperlinks and note icons of nodes) from responding to mouse events in demonstration mode;
+>
+> The demonstration mode supports fill in the blank mode, which means that underlined text is not displayed by default and will only be displayed sequentially by pressing the enter key;
+>
+> Demonstration mode supports summary content;
+>
+> The expandToNodeUid method of the render class supports summary nodes;
+>
+> The findNodeByUid (find the specified node instance on the canvas based on the uid) method of the render class supports summary nodes;
+>
+> Add instantiation options for adding pre - and post content to nodes, allowing custom content to be added before or after node text;
+>
+> Click event for adding distribution node labels;
+>
+> When using the moveNodeToCenter method of the render class to move a specified node to the center of the canvas, scaling is not restored by default;
+
+Demo:
+
+> Fix the issue of node note floating layer not being displayed in full screen view mode;
+>
+> Fix the issue where the note floating layer does not disappear after clicking the collapse button to collapse the node when displaying the note floating layer;
+
+## 0.9.11
+
+Fix
+
+> 1.Fix the issue where clicking on the summary will trigger the data_change_detail event;
+>
+> 2.Fix the issue where the custom style command for removing all nodes with one click does not support summaries that are not arrays;
+>
+> 3.Fix the issue where summary nodes created in rich text mode are not rich text;
+>
+> 4.Fix the issue where the rich text plugin did not process node summaries when converting node data;
+>
+> 5.Fix the issue where the highlighted box of the corresponding node will be displayed incorrectly when pressing enter to end in summary node text editing;
+>
+> 6.Fix the issue of node width and height loss after text editing when creating multiple instances simultaneously;
+>
+> 7.Fix the issue where the expand/collapse button does not disappear after deleting all child nodes of the currently activated node;
+>
+> 8.Fix the issue where the canvas automatically moves and cannot stop when dragging nodes to the edge;
+
+New:
+
+> 1.Support default focus and entering editing mode when inserting summaries;
+>
+> 2.Support holding down the Command and Win keys to select multiple nodes;
+>
+> 3.Support exporting a node as an image;
+>
+> 4.Add demonstration plugin;
+
+Demo:
+
+> 1.Add the Export as Image button in the right-click menu of the node;
+>
+> 2.Optimize the issue of incomplete menu display when clicking the right mouse button at the window edge;
+>
+> 3.Add demonstration mode;
+>
+> 4.When copying Zhixi data, create summary data in array form;
+
 ## 0.9.10
 
 Fix:

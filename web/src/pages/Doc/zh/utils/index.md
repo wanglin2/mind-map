@@ -484,6 +484,33 @@ copyNodeTree({}, node)
 
 去除指定 html 字符串中指定选择器的节点，然后返回处理后的 html 字符串。
 
+#### getOnfullscreEnevt()
+
+> v0.9.11+
+
+检测当前浏览器可用的全屏事件。可以这样使用：
+
+```js
+const fullscrrenEvent = getOnfullscreEnevt()
+
+// 监听全屏事件
+document.addEventListener(fullscrrenEvent, () => {
+  // 根据document.fullscreenElement是否为null判断当前是否处于全屏状态
+})
+```
+
+#### fullScreen(element)
+
+> v0.9.11+
+
+让指定的DOM元素进入全屏状态。
+
+#### exitFullScreen()
+
+> v0.9.11+
+
+退出全屏状态。
+
 ## 在 canvas 中模拟 css 的背景属性
 
 引入：

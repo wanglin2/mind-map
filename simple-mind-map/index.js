@@ -10,17 +10,16 @@ import BatchExecution from './src/utils/BatchExecution'
 import {
   layoutValueList,
   CONSTANTS,
-  commonCaches,
   ERROR_TYPES,
   cssContent
 } from './src/constants/constant'
 import { SVG } from '@svgdotjs/svg.js'
 import {
   simpleDeepClone,
-  getType,
   getObjectChangedProps,
   isUndef,
-  handleGetSvgDataExtraContent
+  handleGetSvgDataExtraContent,
+  getNodeTreeBoundingRect
 } from './src/utils'
 import defaultTheme, {
   checkIsNodeSizeIndependenceConfig
@@ -129,13 +128,18 @@ class MindMap {
   // 创建容器元素
   initContainer() {
     const { associativeLineIsAlwaysAboveNode } = this.opt
+    // 给容器元素添加一个类名
+    this.el.classList.add('smm-mind-map-container')
     // 节点关联线容器
     const createAssociativeLineDraw = () => {
       this.associativeLineDraw = this.draw.group()
       this.associativeLineDraw.addClass('smm-associative-line-container')
     }
     // 画布
-    this.svg = SVG().addTo(this.el).size(this.width, this.height)
+    this.svg = SVG()
+      .addTo(this.el)
+      .size(this.width, this.height)
+      
     // 容器
     this.draw = this.svg.group()
     this.draw.addClass('smm-container')
@@ -228,19 +232,10 @@ class MindMap {
 
   // 初始化缓存数据
   initCache() {
-    Object.keys(commonCaches).forEach(key => {
-      let type = getType(commonCaches[key])
-      let value = ''
-      switch (type) {
-        case 'Boolean':
-          value = false
-          break
-        default:
-          value = null
-          break
-      }
-      commonCaches[key] = value
-    })
+    this.commonCaches = {
+      measureCustomNodeContentSizeEl: null,
+      measureRichtextNodeTextSizeEl: null
+    }
   }
 
   //  设置主题
@@ -420,7 +415,8 @@ class MindMap {
     paddingY = 0,
     ignoreWatermark = false,
     addContentToHeader,
-    addContentToFooter
+    addContentToFooter,
+    node
   } = {}) {
     const { cssTextList, header, headerHeight, footer, footerHeight } =
       handleGetSvgDataExtraContent({
@@ -438,6 +434,17 @@ class MindMap {
     draw.scale(1 / origTransform.scaleX, 1 / origTransform.scaleY)
     // 获取变换后的位置尺寸信息，其实是getBoundingClientRect方法的包装方法
     const rect = draw.rbox()
+    // 需要裁减的区域
+    let clipData = null
+    if (node) {
+      clipData = getNodeTreeBoundingRect(
+        node,
+        rect.x,
+        rect.y,
+        paddingX,
+        paddingY
+      )
+    }
     // 内边距
     const fixHeight = 0
     rect.width += paddingX * 2
@@ -517,6 +524,7 @@ class MindMap {
     return {
       svg: clone, // 思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）
       svgHTML: clone.svg(), // svg字符串
+      clipData,
       rect: {
         ...rect, // 思维导图图形未缩放时的位置尺寸等信息
         ratio: rect.width / rect.height // 思维导图图形的宽高比
@@ -584,6 +592,8 @@ class MindMap {
     this.svg.remove()
     // 去除给容器元素设置的背景样式
     Style.removeBackgroundStyle(this.el)
+    // 移除给容器元素添加的类名
+    this.el.classList.remove('smm-mind-map-container')
     this.el.innerHTML = ''
     this.el = null
     this.removeCss()

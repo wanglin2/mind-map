@@ -44,7 +44,7 @@ class Select {
     }
     let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
     if (
-      !e.ctrlKey &&
+      !(e.ctrlKey || e.metaKey) &&
       (useLeftKeySelectionRightKeyDrag ? e.which !== 1 : e.which !== 3)
     ) {
       return
@@ -237,11 +237,13 @@ class Select {
           return
         }
         this.mindMap.renderer.addNodeToActiveList(node)
+        this.mindMap.renderer.emitNodeActiveEvent()
       } else if (node.getData('isActive')) {
         if (!node.getData('isActive')) {
           return
         }
         this.mindMap.renderer.removeNodeFromActiveList(node)
+        this.mindMap.renderer.emitNodeActiveEvent()
       }
     })
   }

@@ -318,5 +318,13 @@ export const defaultOpt = {
     }
   */
   addContentToHeader: null,
-  addContentToFooter: null
+  addContentToFooter: null,
+  // 演示插件配置
+  demonstrateConfig: null,
+  // 移动节点到画布中心、回到根节点等操作时是否将缩放层级复位为100%
+  resetScaleOnMoveNodeToCenter: false,
+  // 添加附加的节点前置内容，前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分
+  createNodePrefixContent: null,
+  // 添加附加的节点后置内容，后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分
+  createNodePostfixContent: null
 }

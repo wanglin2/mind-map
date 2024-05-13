@@ -479,6 +479,33 @@ Convert flat objects into a tree structure. Reverse operation of the transformTr
 
 Remove the node of the specified selector from the specified HTML string, and then return the processed HTML string.
 
+#### getOnfullscreEnevt()
+
+> v0.9.11+
+
+Detect full screen events available in the current browser. You can use it this way:
+
+```js
+const fullscrrenEvent = getOnfullscreEnevt()
+
+// Monitor full screen events
+document.addEventListener(fullscrrenEvent, () => {
+  // Determine whether the current state is full screen based on whether document.fullscreenElement is null
+})
+```
+
+#### fullScreen(element)
+
+> v0.9.11+
+
+Put the specified DOM element into full screen mode.
+
+#### exitFullScreen()
+
+> v0.9.11+
+
+Exit full screen mode.
+
 ## Simulate CSS background in Canvas
 
 Import:

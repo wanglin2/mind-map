@@ -24,7 +24,7 @@ const mindMap = new MindMap({
 
 | Field Name                       | Type    | Default Value    | Description                                                  | Required |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ | -------- |
-| el                               | Element |                  | Container element, must be a DOM element                     | Yes      |
+| el                               | Element |                  | Container element, must be a DOM element（When the position of container elements on the page has changed but the size has not changed, the 'getElRectInfo()' method must be called to update the relevant information inside the library; When the size also changes, the 'resize()' method must be called, otherwise it will cause some functional exceptions）                     | Yes      |
 | data                             | Object 、null  |     | Mind map data, Please refer to the introduction of 【Data structure】 below. V0.9.9+supports passing empty objects or null, and the canvas will display blank space |          |
 | layout                           | String  | logicalStructure | Layout type, options: logicalStructure (logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)、timeline（v0.5.4+, timeline）、timeline2（v0.5.4+, up down alternating timeline）、fishbone（v0.5.4+, fishbone diagram） |          |
 | fishboneDeg（v0.5.4+）                      | Number |  45          |    Set the diagonal angle of the fishbone structure diagram        |        |
@@ -118,6 +118,10 @@ const mindMap = new MindMap({
 | rainbowLinesConfig（v0.9.9+）     | Object | { open: false, colorsList: [] }  | Rainbow line configuration requires registering the RainbowLines plugin first. Object type, Structure: { open: false【Is turn on rainbow lines】, colorsList: []【Customize the color list for rainbow lines. If not set, the default color list will be used】 } |         |
 | addContentToHeader（v0.9.9+）     | Function、null | null  | Add custom content to the header when exporting PNG, SVG, and PDF. Can pass a function that can return null to indicate no content is added, or it can return an object, For a detailed introduction, please refer to section 【How to add custom content when exporting】 below |         |
 | addContentToFooter（v0.9.9+）     | Function、null | null  | The basic definition is the same as addContentToHeader, adding custom content at the end |         |
+| demonstrateConfig（v0.9.11+）     | Object、null | null  | Demonstration plugin configuration. If not transmitted, the default configuration will be used. An object can be transmitted. If only a certain property is configured, only that property can be set. Other properties that have not been set will also use the default configuration. For complete configuration, please refer to the 【Demonstration Plugin Configuration】 section below |         |
+| resetScaleOnMoveNodeToCenter（v0.9.12+）     | Boolean |  false | Whether to reset the scaling level to 100% when moving nodes to the canvas center, returning to the root node, and other operations（The underlying impact is on the moveNodeToCenter method of the render class） |         |
+| createNodePrefixContent（v0.9.12+）     | Function、null | null  | Add additional node pre content.Pre content refers to the pre content in the area of the same line as the text, excluding the node image section.You can pass a function that takes the parameters of a node instance, returns a DOM node, or returns null  |         |
+| createNodePostfixContent（v0.9.12+）     | Function、null | null  | Add additional node post content.Post content refers to the post content in the area of the same line as the text, excluding the node image section.You can pass a function that takes the parameters of a node instance, returns a DOM node, or returns null |         |
 
 ### Data structure
 
@@ -142,9 +146,11 @@ The basic data structure is as follows:
     hyperlinkTitle: '', // Title of hyperlink
     note: '', // Content of remarks
     tag: [], // Tag list
-    generalization: {// The summary of the node, if there is no summary, the generalization can be set to null
-      text: ''// Summary Text
-    },
+    generalization: [{// (Arrays are not supported in versions below 0.9.0, and only a single summary data can be set)The summary of the node, if there is no summary, the generalization can be set to null
+      text: '', // Summary Text
+      richText: false, // Is the text of the node in rich text mode
+      // ...The fields of other ordinary nodes are supported, But it does not support children
+    }],
     associativeLineTargets: [''],// If there are associated lines, then it is the uid list of the target node
     associativeLineText: '',// Association Line Text
     // ...For other style fields, please refer to the topic
@@ -213,6 +219,18 @@ new MindMap({
   }
 })
 ```
+
+### Demonstration Plugin Configuration
+
+| Field Name  | Type   | Default Value                               | Description                          |
+| ----------- | ------ | ------------------------------------------- | ------------------------------------ |
+| boxShadowColor | String | rgba(0, 0, 0, 0.8)  | The color of the area around the highlighted box |
+| borderRadius   | String | 5px                 | The size of the rounded corners of the highlighted box |
+| transition     | String | all 0.3s ease-out   | Transition properties of highlight box animation and CSS transition properties |
+| zIndex         | Number | 9999                | The hierarchy of highlighted box elements |
+| padding        | Number | 20                  | The inner margin of the highlighted box |
+| margin         | Number | 50                  | The outer margin of the highlighted box |
+| openBlankMode（v0.9.12+） | Boolean | true     | Is enable fill in the blank mode, where underlined text is not displayed by default and only displayed sequentially by pressing the enter key |
 
 ## Static methods
 
@@ -353,6 +371,10 @@ Current Theme Configuration.
 
 ## Instance methods
 
+### getElRectInfo()
+
+Update the position and size information of container elements. Be sure to call this method to update information when the position of container elements on the page changes. If the size of container elements has also changed, please call the 'resize' method.
+
 ### updateData(data)
 
 > v0.9.9+
@@ -371,7 +393,7 @@ Clear `lineDraw`、`associativeLineDraw`、`nodeDraw`、`otherDraw` containers.
 
 Destroy mind maps. It will remove registered plugins, remove listening events, and delete all nodes on the canvas.
 
-### getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter })
+### getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter, node })
 
 > v0.3.0+
 
@@ -385,6 +407,8 @@ Destroy mind maps. It will remove registered plugins, remove listening events, a
 
 `addContentToFooter`：v0.9.9+, Function, You can return the custom content to be added to the tail, as detailed in the configuration in 【Instantiation options】
 
+`node`: v0.9.11+, Node instance, if passed, only export the content of that node
+
 Get the `svg` data and return an object. The detailed structure is as follows:
 
 ```js
@@ -396,6 +420,7 @@ Get the `svg` data and return an object. The detailed structure is as follows:
   origHeight, // Number, canvas height
   scaleX, // Number, horizontal zoom value of mind map graphics
   scaleY, // Number, vertical zoom value of mind map graphics
+  clipData// v0.9.11+，If node is passed, that is, the content of the specified node is exported, then this field will be returned, Represents the position coordinate data of the node region cropped from the complete image
 }
 ```
 
@@ -483,6 +508,9 @@ Listen to an event. Event list:
 | node_cooperate_avatar_click（v0.9.9+）    | Triggered when the mouse clicks on a person's avatar during collaborative editing  |  userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)      |
 | node_cooperate_avatar_mouseenter（v0.9.9+）    |  Triggered when the mouse moves over a person's avatar during collaborative editing |  userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)    |
 | node_cooperate_avatar_mouseleave（v0.9.9+）    |  Triggered when removing personnel avatars with the mouse during collaborative editing |  userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)   |
+| exit_demonstrate（v0.9.11+）    | Triggered when exiting demonstration mode  |     |
+| demonstrate_jump（v0.9.11+）    | Trigger when switching steps in demonstration mode  |  currentStepIndex（The index of the steps currently played, counting from 0）、stepLength（Total number of playback steps）   |
+| node_tag_click（v0.9.12+）    | Click events on node labels | this(Current node instance)、item（Content of clicked tags）    |
 
 ### emit(event, ...args)
 
@@ -574,7 +602,7 @@ redo. All commands are as follows:
 | CLEAR_ACTIVE_NODE                  | Clear the active state of the currently active node(s), the active node will be the operation node |                                                              |
 | SET_NODE_EXPAND                    | Set whether the node is expanded                             | node (the node to set), expand (boolean, whether to expand)  |
 | EXPAND_ALL                         | Expand all nodes                                             |                                                              |
-| UNEXPAND_ALL                       | Collapse all nodes                                           |                                                              |
+| UNEXPAND_ALL                       | Collapse all nodes  | isSetRootNodeCenter（v0.9.11+，default is true，Will the root node be moved to the center after retracting all nodes）  |
 | UNEXPAND_TO_LEVEL (v0.2.8+)        | Expand to a specified level                                  | level (the level to expand to, 1, 2, 3...)                   |
 | SET_NODE_DATA                      | Update node data, that is, update the data in the data object of the node data object. Note that this command will not trigger view updates | node (the node to set), data (object, the data to update, e.g. `{expand: true}`) |
 | SET_NODE_TEXT                      | Set node text                                                | node (the node to set), text (the new text for the node), richText（v0.4.0+, If you want to set a rich text character, you need to set it to `true`）、resetRichText（v0.6.10+Do you want to reset rich text? The default is false. If true is passed, the style of the rich text node will be reset） |
@@ -587,7 +615,7 @@ redo. All commands are as follows:
 | INSERT_AFTER (v0.1.5+)             | Move Node to After Another Node | node (node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), exist (target node)                     |
 | INSERT_BEFORE (v0.1.5+)            | Move Node to Before Another Node | node (node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), exist (target node)                     |
 | MOVE_NODE_TO (v0.1.5+)             | Move a node as a child of another node       | node (the node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), toNode (the target node)            |
-| ADD_GENERALIZATION (v0.2.0+)       | Add a node summary                                           | data (the data for the summary, in object format, all numerical fields of the node are supported, default is `{text: 'summary'}`) |
+| ADD_GENERALIZATION (v0.2.0+)       | Add a node summary                                           | data (the data for the summary, in object format, all numerical fields of the node are supported, default is `{text: 'summary'}`)、openEdit（v0.9.11+，Default is true，Whether to enter text editing status by default） |
 | REMOVE_GENERALIZATION (v0.2.0+)    | Remove a node summary                                        |                                                              |
 | SET_NODE_CUSTOM_POSITION (v0.2.0+) | Set a custom position for a node                             | node (the node to set), left (custom x coordinate, default is undefined), top (custom y coordinate, default is undefined) |
 | RESET_LAYOUT (v0.2.0+)             | Arrange layout with one click                                |                                                              |

@@ -40,7 +40,7 @@ npm link simple-mind-map
 <p>However, this requires backend support, as our application is a single page client application. If the backend is not properly configured, users will return 404 when accessing sub routes directly in the browser. Therefore, you need to add a candidate resource on the server that covers all situations: if the 'URL' cannot match any static resources, the same 'index. html' page should be returned.</p>
 <h2>Docker</h2>
 <blockquote>
-<p>Thank you very much <a href="https://github.com/shuiche-it">水车</a>, This section is written by him, and the corresponding Docker package is also maintained by him.</p>
+<p>Thank you very much <a href="https://github.com/shuiche-it">水车</a>, the corresponding Docker package is maintained by him.</p>
 </blockquote>
 <p>Install directly from Docker Hub:</p>
 <pre class="hljs"><code>docker run -d -p 8081:8080 shuiche/mind-map:latest

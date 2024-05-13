@@ -8,7 +8,8 @@ import {
   getVisibleColorFromTheme,
   isUndef,
   checkSmmFormatData,
-  removeHtmlNodeByClass
+  removeHtmlNodeByClass,
+  formatGetNodeGeneralization
 } from '../utils'
 import { CONSTANTS } from '../constants/constant'
 
@@ -327,8 +328,8 @@ class RichText {
     list.forEach(node => {
       this.mindMap.execCommand('SET_NODE_TEXT', node, html, true)
       // if (node.isGeneralization) {
-        // 概要节点
-        // node.generalizationBelongNode.updateGeneralization()
+      // 概要节点
+      // node.generalizationBelongNode.updateGeneralization()
       // }
       this.mindMap.render()
     })
@@ -649,7 +650,14 @@ class RichText {
         if (node.data.richText) {
           node.data.richText = false
           node.data.text = getTextFromHtml(node.data.text)
-          // delete node.data.uid
+        }
+        // 概要
+        if (node.data) {
+          const generalizationList = formatGetNodeGeneralization(node.data)
+          generalizationList.forEach(item => {
+            item.richText = false
+            item.text = getTextFromHtml(item.text)
+          })
         }
       },
       null,
@@ -669,6 +677,14 @@ class RichText {
       if (root.data && !root.data.richText) {
         root.data.richText = true
         root.data.resetRichText = true
+      }
+      // 概要
+      if (root.data) {
+        const generalizationList = formatGetNodeGeneralization(root.data)
+        generalizationList.forEach(item => {
+          item.richText = true
+          item.resetRichText = true
+        })
       }
       if (root.children && root.children.length > 0) {
         Array.from(root.children).forEach(item => {

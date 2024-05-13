@@ -122,6 +122,10 @@ class Drag extends Base {
     if (!this.isMousedown) {
       return
     }
+    // 停止自动移动
+    if (this.mindMap.opt.autoMoveWhenMouseInEdgeOnDrag && this.mindMap.select) {
+      this.mindMap.select.clearAutoMoveTimer()
+    }
     this.isMousedown = false
     // 恢复被拖拽节点的临时设置
     this.beingDragNodeList.forEach(node => {

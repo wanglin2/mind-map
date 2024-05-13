@@ -80,6 +80,14 @@ MindMap.usePlugin(Cooperate)
 
 注册完且实例化`MindMap`后可通过`mindMap.cooperate`获取到该实例。
 
+### 配置
+
+该插件支持一些配置，可在实例化思维导图时传入，支持的配置如下：
+
+`beforeCooperateUpdate`
+
+详细信息见【构造函数】篇章的【实例化选项】小节。
+
 ## 方法
 
 ### getDoc()

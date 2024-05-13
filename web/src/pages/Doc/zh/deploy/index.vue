@@ -40,7 +40,7 @@ npm link simple-mind-map
 <p>不过这需要后台支持，因为我们的应用是个单页客户端应用，如果后台没有正确的配置，当用户在浏览器直接访问子路由时会返回404，所以呢你要在服务端增加一个覆盖所有情况的候选资源：如果<code>URL</code>匹配不到任何静态资源，则应该返回同一个<code>index.html</code>页面。</p>
 <h2>Docker</h2>
 <blockquote>
-<p>非常感谢<a href="https://github.com/shuiche-it">水车</a>，本小节由他编写，对应的 Docker 包也由他维护。</p>
+<p>非常感谢<a href="https://github.com/shuiche-it">水车</a>维护的<code>Docker</code>镜像。</p>
 </blockquote>
 <p>直接从 Docker hup 中安装：</p>
 <pre class="hljs"><code>docker run -d -p 8081:8080 shuiche/mind-map:latest

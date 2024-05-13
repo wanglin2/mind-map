@@ -157,9 +157,10 @@ export const copyRenderTree = (tree, root, removeActiveState = false) => {
   tree.data = simpleDeepClone(root.data)
   if (removeActiveState) {
     tree.data.isActive = false
-    if (tree.data.generalization) {
-      tree.data.generalization.isActive = false
-    }
+    const generalizationList = formatGetNodeGeneralization(tree.data)
+    generalizationList.forEach(item => {
+      item.isActive = false
+    })
   }
   tree.children = []
   if (root.children && root.children.length > 0) {
@@ -1335,9 +1336,7 @@ export const handleGetSvgDataExtraContent = ({
       const { el, cssText, height } = res
       if (el instanceof HTMLElement) {
         el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
-        const foreignObject = new ForeignObject()
-        foreignObject.height(height)
-        foreignObject.add(el)
+        const foreignObject = createForeignObjectNode({ el, height })
         callback(foreignObject, height)
       }
       if (cssText) {
@@ -1359,5 +1358,121 @@ export const handleGetSvgDataExtraContent = ({
     headerHeight,
     footer,
     footerHeight
+  }
+}
+
+// 获取指定节点的包围框信息
+export const getNodeTreeBoundingRect = (
+  node,
+  x = 0,
+  y = 0,
+  paddingX = 0,
+  paddingY = 0,
+  excludeSelf = false
+) => {
+  let minX = Infinity
+  let maxX = -Infinity
+  let minY = Infinity
+  let maxY = -Infinity
+  const walk = (root, isRoot) => {
+    if (!(isRoot && excludeSelf)) {
+      const { x, y, width, height } = root.group
+        .findOne('.smm-node-shape')
+        .rbox()
+      if (x < minX) {
+        minX = x
+      }
+      if (x + width > maxX) {
+        maxX = x + width
+      }
+      if (y < minY) {
+        minY = y
+      }
+      if (y + height > maxY) {
+        maxY = y + height
+      }
+    }
+    if (root._generalizationList.length > 0) {
+      root._generalizationList.forEach(item => {
+        walk(item.generalizationNode)
+      })
+    }
+    if (root.children) {
+      root.children.forEach(item => {
+        walk(item)
+      })
+    }
+  }
+  walk(node, true)
+
+  minX = minX - x + paddingX
+  minY = minY - y + paddingY
+  maxX = maxX - x + paddingX
+  maxY = maxY - y + paddingY
+
+  return {
+    left: minX,
+    top: minY,
+    width: maxX - minX,
+    height: maxY - minY
+  }
+}
+
+// 全屏事件检测
+const getOnfullscreEnevt = () => {
+  if (document.documentElement.requestFullScreen) {
+    return 'fullscreenchange'
+  } else if (document.documentElement.webkitRequestFullScreen) {
+    return 'webkitfullscreenchange'
+  } else if (document.documentElement.mozRequestFullScreen) {
+    return 'mozfullscreenchange'
+  } else if (document.documentElement.msRequestFullscreen) {
+    return 'msfullscreenchange'
+  }
+}
+export const fullscrrenEvent = getOnfullscreEnevt()
+
+// 全屏
+export const fullScreen = element => {
+  if (element.requestFullScreen) {
+    element.requestFullScreen()
+  } else if (element.webkitRequestFullScreen) {
+    element.webkitRequestFullScreen()
+  } else if (element.mozRequestFullScreen) {
+    element.mozRequestFullScreen()
+  }
+}
+
+// 退出全屏
+export const exitFullScreen = () => {
+  if (document.exitFullscreen) {
+    document.exitFullscreen()
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen()
+  } else if (document.mozCancelFullScreen) {
+    document.mozCancelFullScreen()
+  }
+}
+
+// 创建foreignObject节点
+export const createForeignObjectNode = ({ el, width, height }) => {
+  const foreignObject = new ForeignObject()
+  if (width !== undefined) {
+    foreignObject.width(width)
+  }
+  if (height !== undefined) {
+    foreignObject.height(height)
+  }
+  foreignObject.add(el)
+  return foreignObject
+}
+
+// 格式化获取节点的概要数据
+export const formatGetNodeGeneralization = data => {
+  const generalization = data.generalization
+  if (generalization) {
+    return Array.isArray(generalization) ? generalization : [generalization]
+  } else {
+    return []
   }
 }

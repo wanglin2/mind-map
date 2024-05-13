@@ -56,6 +56,12 @@ Whether the node is currently being dragged
 
 ## Methods
 
+### deactivate()
+
+> 0.9.11+
+
+Deactivate the node.
+
 ### getAncestorNodes()
 
 > v0.9.9+

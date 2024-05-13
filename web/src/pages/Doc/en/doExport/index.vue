@@ -27,7 +27,10 @@ a.href = <span class="hljs-string">&#x27;xxx.png&#x27;</span><span class="hljs-c
 a.download = <span class="hljs-string">&#x27;xxx&#x27;</span>
 a.click()
 </code></pre>
-<h3>png(name, transparent = false, checkRotate, compress)</h3>
+<h3>png(name, transparent = false, node = null)</h3>
+<blockquote>
+<p>Versions below v0.9.2 are：png(name, transparent = false, checkRotate, compress)</p>
+</blockquote>
 <blockquote>
 <p>Versions below v0.7.0 are: png(name, transparent = false, rotateWhenWidthLongerThenHeight)</p>
 </blockquote>
@@ -46,6 +49,9 @@ a.click()
 </li>
 <li>
 <p><code>compress</code>：v0.8.1+, (v0.9.2+obsolete)，null | { width, height }, The parameter for compressing images. In some cases, the length and width of the exported image may be very large. If you want to reduce it, you can use this parameter to control it. Only one width or height can be provided, and it will be scaled proportionally</p>
+</li>
+<li>
+<p><code>node</code>：v0.9.11+，Node instances, if passed, will only export the content of that node;</p>
 </li>
 </ul>
 <p>Exports as <code>png</code>.</p>
@@ -112,11 +118,13 @@ MindMap.usePlugin(ExportPDF)
 <p>v0.4.7+</p>
 </blockquote>
 <p>Export as <code>markdown</code> file.</p>
-<h3>getSvgData()</h3>
+<h3>getSvgData(node)</h3>
+<p><code>node</code>: v0.9.11+, Node instance, if passed, will return a 'clipData' object, representing the position coordinate data of the node region cropped from the complete image;</p>
 <p>Gets <code>svg</code> data, an async method that returns an object:</p>
 <pre class="hljs"><code>{
-  node <span class="hljs-comment">// svg node</span>
-  str <span class="hljs-comment">// svg string</span>
+  node, <span class="hljs-comment">// svg node</span>
+  str, <span class="hljs-comment">// svg string</span>
+  clipData
 }
 </code></pre>
 <h3>xmind(name)</h3>

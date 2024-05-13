@@ -405,6 +405,28 @@
 </li>
 </ul>
 <p>去除指定 html 字符串中指定选择器的节点，然后返回处理后的 html 字符串。</p>
+<h4>getOnfullscreEnevt()</h4>
+<blockquote>
+<p>v0.9.11+</p>
+</blockquote>
+<p>检测当前浏览器可用的全屏事件。可以这样使用：</p>
+<pre class="hljs"><code><span class="hljs-keyword">const</span> fullscrrenEvent = getOnfullscreEnevt()
+
+<span class="hljs-comment">// 监听全屏事件</span>
+<span class="hljs-built_in">document</span>.addEventListener(fullscrrenEvent, <span class="hljs-function">() =&gt;</span> {
+  <span class="hljs-comment">// 根据document.fullscreenElement是否为null判断当前是否处于全屏状态</span>
+})
+</code></pre>
+<h4>fullScreen(element)</h4>
+<blockquote>
+<p>v0.9.11+</p>
+</blockquote>
+<p>让指定的DOM元素进入全屏状态。</p>
+<h4>exitFullScreen()</h4>
+<blockquote>
+<p>v0.9.11+</p>
+</blockquote>
+<p>退出全屏状态。</p>
 <h2>在 canvas 中模拟 css 的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

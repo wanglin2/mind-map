@@ -60,6 +60,10 @@ npm run wsServe
 MindMap.usePlugin(Cooperate)
 </code></pre>
 <p>After registration and instantiation of <code>MindMap</code>, the instance can be obtained through <code>mindMap.cooperate</code>.</p>
+<h3>Config</h3>
+<p>This plugin supports some configurations that can be passed in when instantiating a mind map. The supported configurations are as follows:</p>
+<p><code>beforeCooperateUpdate</code></p>
+<p>Please refer to the 【Instantiation options】 section in the 【Constructor】 section for details.</p>
 <h2>Methods</h2>
 <h3>getDoc()</h3>
 <p>Obtain Yjs doc instance.</p>

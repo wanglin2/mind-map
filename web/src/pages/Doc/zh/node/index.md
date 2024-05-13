@@ -56,6 +56,12 @@
 
 ## 方法
 
+### deactivate()
+
+> 0.9.11+
+
+取消激活该节点。
+
 ### getAncestorNodes()
 
 > v0.9.9+

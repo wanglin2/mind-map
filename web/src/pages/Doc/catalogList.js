@@ -11,7 +11,7 @@ let langList = [
   }
 ]
 let StartList = ['introduction', 'start', 'deploy', 'client', 'translate', 'changelog']
-let CourseList = new Array(27).fill(0).map((_, index) => {
+let CourseList = new Array(28).fill(0).map((_, index) => {
   return 'course' + (index + 1)
 })
 let APIList = [
@@ -40,6 +40,7 @@ let APIList = [
   'cooperate',
   'rainbowLines',
   'handDrawnLikeStyle',
+  'demonstrate',
   'xmind',
   'markdown',
   'utils'

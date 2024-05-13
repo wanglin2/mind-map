@@ -7,6 +7,18 @@ to an operation that needs to add a copy to the history stack data. The
 
 ## Methods
 
+### pause()
+
+> v0.9.11+
+
+Pause collecting historical data.
+
+### recovery()
+
+> v0.9.11+
+
+Restore the collection of historical data.
+
 ### add(name, fn)
 
 Add a command.

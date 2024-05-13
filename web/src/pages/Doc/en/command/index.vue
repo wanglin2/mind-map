@@ -6,6 +6,16 @@ includes many built-in commands and can also be added manually. A command refers
 to an operation that needs to add a copy to the history stack data. The
 <code>mindMap.command</code> instance can be obtained through this.&quot;</p>
 <h2>Methods</h2>
+<h3>pause()</h3>
+<blockquote>
+<p>v0.9.11+</p>
+</blockquote>
+<p>Pause collecting historical data.</p>
+<h3>recovery()</h3>
+<blockquote>
+<p>v0.9.11+</p>
+</blockquote>
+<p>Restore the collection of historical data.</p>
 <h3>add(name, fn)</h3>
 <p>Add a command.</p>
 <p><code>name</code>: Command name</p>

@@ -23,6 +23,34 @@ mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_CHILD_NODE&#x27;</spa
     <span class="hljs-keyword">const</span> node = mindMap.renderer.findNodeByUid(uid)
 })
 </code></pre>
+<p>插入节点的命令也可以传入一定参数，比如创建新节点不想直接进入新节点的编辑模式，那么可以这样调用：</p>
+<pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_CHILD_NODE&#x27;</span>, <span class="hljs-literal">false</span>)
+</code></pre>
+<p>如果想给指定的节点插入新节点，而不是当前激活的节点，那么就可以通过第二个参数：</p>
+<pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_CHILD_NODE&#x27;</span>, <span class="hljs-literal">false</span>, [node])
+</code></pre>
+<p>参数是通过平铺的列表方式传递的，所以前面的参数都不能省略。</p>
+<p>如果要指定创建的新节点的一些数据，那么可以通过第三个参数：</p>
+<pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_CHILD_NODE&#x27;</span>, <span class="hljs-literal">false</span>, [], {
+    <span class="hljs-attr">uid</span>: <span class="hljs-string">&#x27;指定uid&#x27;</span>,
+    <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;指定初始文本&#x27;</span>
+})
+</code></pre>
+<p>最后一个参数可以指定创建新节点的子节点：</p>
+<pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_CHILD_NODE&#x27;</span>, <span class="hljs-literal">false</span>, [], {
+    <span class="hljs-attr">uid</span>: <span class="hljs-string">&#x27;指定uid&#x27;</span>,
+    <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;指定初始文本&#x27;</span>
+}, [
+    {
+        <span class="hljs-attr">data</span>: {
+            <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;下级节点&#x27;</span>
+        },
+        <span class="hljs-attr">children</span>: []
+    }
+])
+</code></pre>
+<p>注意传递的是完整的节点结构数据。</p>
+<p>其他命令也是类似的，详细可以参考api文档。</p>
 <h2>插入多个子节点</h2>
 <p>如果你要同时插入多个子节点，那么可以执行<code>INSERT_MULTI_CHILD_NODE</code>命令：</p>
 <pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_MULTI_CHILD_NODE&#x27;</span>, [], childList)

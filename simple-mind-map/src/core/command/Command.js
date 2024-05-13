@@ -23,6 +23,18 @@ class Command {
       this.mindMap.opt.addHistoryTime,
       this
     )
+    // 是否暂停收集历史数据
+    this.isPause = false
+  }
+
+  // 暂停收集历史数据
+  pause() {
+    this.isPause = true
+  }
+
+  // 恢复收集历史数据
+  recovery() {
+    this.isPause = false
   }
 
   //  清空历史数据
@@ -88,7 +100,7 @@ class Command {
 
   //  添加回退数据
   addHistory() {
-    if (this.mindMap.opt.readonly) {
+    if (this.mindMap.opt.readonly || this.isPause) {
       return
     }
     const lastData =

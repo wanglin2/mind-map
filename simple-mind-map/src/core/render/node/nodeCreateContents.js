@@ -4,19 +4,13 @@ import {
   removeHtmlStyle,
   addHtmlStyle,
   checkIsRichText,
-  isUndef
+  isUndef,
+  createForeignObjectNode
 } from '../../../utils'
-import {
-  Image as SVGImage,
-  SVG,
-  A,
-  G,
-  Rect,
-  Text,
-  ForeignObject
-} from '@svgdotjs/svg.js'
+import { Image as SVGImage, SVG, A, G, Rect, Text } from '@svgdotjs/svg.js'
 import iconsSvg from '../../../svg/icons'
-import { CONSTANTS, commonCaches } from '../../../constants/constant'
+import { CONSTANTS } from '../../../constants/constant'
+import { defenseXSS } from '../../../utils/xss'
 
 //  创建图片节点
 function createImgNode() {
@@ -148,14 +142,19 @@ function createRichTextNode() {
       text: text
     })
   }
-  let html = `<div>${this.getData('text')}</div>`
-  if (!commonCaches.measureRichtextNodeTextSizeEl) {
-    commonCaches.measureRichtextNodeTextSizeEl = document.createElement('div')
-    commonCaches.measureRichtextNodeTextSizeEl.style.position = 'fixed'
-    commonCaches.measureRichtextNodeTextSizeEl.style.left = '-999999px'
-    this.mindMap.el.appendChild(commonCaches.measureRichtextNodeTextSizeEl)
+  let html = `<div>${defenseXSS(this.getData('text'))}</div>`
+  if (!this.mindMap.commonCaches.measureRichtextNodeTextSizeEl) {
+    this.mindMap.commonCaches.measureRichtextNodeTextSizeEl =
+      document.createElement('div')
+    this.mindMap.commonCaches.measureRichtextNodeTextSizeEl.style.position =
+      'fixed'
+    this.mindMap.commonCaches.measureRichtextNodeTextSizeEl.style.left =
+      '-999999px'
+    this.mindMap.el.appendChild(
+      this.mindMap.commonCaches.measureRichtextNodeTextSizeEl
+    )
   }
-  let div = commonCaches.measureRichtextNodeTextSizeEl
+  let div = this.mindMap.commonCaches.measureRichtextNodeTextSizeEl
   div.innerHTML = html
   let el = div.children[0]
   el.classList.add('smm-richtext-node-wrap')
@@ -174,10 +173,11 @@ function createRichTextNode() {
   height = Math.ceil(height)
   g.attr('data-width', width)
   g.attr('data-height', height)
-  let foreignObject = new ForeignObject()
-  foreignObject.width(width)
-  foreignObject.height(height)
-  foreignObject.add(div.children[0])
+  const foreignObject = createForeignObjectNode({
+    el: div.children[0],
+    width,
+    height
+  })
   g.add(foreignObject)
   return {
     node: g,
@@ -287,6 +287,9 @@ function createTagNode() {
   let nodes = []
   tagData.slice(0, this.mindMap.opt.maxTag).forEach((item, index) => {
     let tag = new G()
+    tag.on('click', () => {
+      this.mindMap.emit('node_tag_click', this, item)
+    })
     // 标签文本
     let text = new Text().text(item).x(8).cy(8)
     this.style.tagText(text, index)
@@ -313,7 +316,10 @@ function createNoteNode() {
     return null
   }
   let iconSize = this.mindMap.themeConfig.iconSize
-  let node = new SVG().attr('cursor', 'pointer').size(iconSize, iconSize)
+  let node = new SVG()
+    .attr('cursor', 'pointer')
+    .addClass('smm-node-note')
+    .size(iconSize, iconSize)
   // 透明的层，用来作为鼠标区域
   node.add(new Rect().size(iconSize, iconSize).fill({ color: 'transparent' }))
   // 备注图标
@@ -413,18 +419,22 @@ function getNoteContentPosition() {
 
 // 测量自定义节点内容元素的宽高
 function measureCustomNodeContentSize(content) {
-  if (!commonCaches.measureCustomNodeContentSizeEl) {
-    commonCaches.measureCustomNodeContentSizeEl = document.createElement('div')
-    commonCaches.measureCustomNodeContentSizeEl.style.cssText = `
+  if (!this.mindMap.commonCaches.measureCustomNodeContentSizeEl) {
+    this.mindMap.commonCaches.measureCustomNodeContentSizeEl =
+      document.createElement('div')
+    this.mindMap.commonCaches.measureCustomNodeContentSizeEl.style.cssText = `
       position: fixed;
       left: -99999px;
       top: -99999px;
     `
-    this.mindMap.el.appendChild(commonCaches.measureCustomNodeContentSizeEl)
+    this.mindMap.el.appendChild(
+      this.mindMap.commonCaches.measureCustomNodeContentSizeEl
+    )
   }
-  commonCaches.measureCustomNodeContentSizeEl.innerHTML = ''
-  commonCaches.measureCustomNodeContentSizeEl.appendChild(content)
-  let rect = commonCaches.measureCustomNodeContentSizeEl.getBoundingClientRect()
+  this.mindMap.commonCaches.measureCustomNodeContentSizeEl.innerHTML = ''
+  this.mindMap.commonCaches.measureCustomNodeContentSizeEl.appendChild(content)
+  let rect =
+    this.mindMap.commonCaches.measureCustomNodeContentSizeEl.getBoundingClientRect()
   return {
     width: rect.width,
     height: rect.height

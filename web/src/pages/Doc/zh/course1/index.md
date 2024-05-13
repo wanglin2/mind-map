@@ -44,9 +44,11 @@
     attachmentUrl: '',// v0.9.10+，附件url
     attachmentName: '',// v0.9.10+，附件名称
     tag: [], // 标签列表
-    generalization: {// 节点的概要，如果没有概要generalization设为null即可
-      text: ''// 概要的文本
-    },
+    generalization: [{// （0.9.0以下版本不支持数组，只能设置单个概要数据）节点的概要，如果没有概要generalization设为null即可
+      text: '', // 概要的文本
+      richText: false, // 节点的文本是否是富文本模式
+      // ...其他普通节点的字段都支持，但是不支持children
+    }],
     associativeLineTargets: [''],// 如果存在关联线，那么为目标节点的uid列表
     associativeLineText: '',// 关联线文本
     // ...其他样式字段，可以参考主题

@@ -99,7 +99,8 @@ export default {
     removeHyperlink: 'Remove hyperlink',
     removeNote: 'Remove note',
     removeCustomStyles: 'Remove custom styles',
-    removeAllNodeCustomStyles: 'Remove all node custom styles'
+    removeAllNodeCustomStyles: 'Remove all node custom styles',
+    exportNodeToPng: 'Export node to png'
   },
   count: {
     words: 'Words',
@@ -138,6 +139,9 @@ export default {
   fullscreen: {
     fullscreenShow: 'Full screen show',
     fullscreenEdit: 'Full screen edit'
+  },
+  demonstrate: {
+    demonstrate: 'Enter demonstration mode'
   },
   import: {
     title: 'Import',

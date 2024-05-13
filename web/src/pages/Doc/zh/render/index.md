@@ -94,9 +94,11 @@
 
 添加节点到激活列表里。
 
-### addNodeToActiveList(node)
+### addNodeToActiveList(node, notEmitBeforeNodeActiveEvent = false)
 
 > v0.8.0+
+
+- `notEmitBeforeNodeActiveEvent`：v0.9.12+，是否不要派发`before_node_active`事件，默认为`false`，即会派发；
 
 添加节点到激活列表里。
 

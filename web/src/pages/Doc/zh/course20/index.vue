@@ -111,6 +111,9 @@
 <blockquote>
 <p>感谢<a href="https://github.com/h5chenhang">h5chenhang</a>贡献的<a href="https://github.com/wanglin2/mind-map/issues/192">示例代码</a>。</p>
 </blockquote>
+<h2>常见问题</h2>
+<p>1.点击自定义内容中的输入框无法获取焦点和输入</p>
+<p>解决方法：阻止输入框的<code>mousedown</code>事件的冒泡。</p>
 
   </div>
 </template>

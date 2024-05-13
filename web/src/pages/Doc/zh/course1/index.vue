@@ -36,9 +36,11 @@
     <span class="hljs-attr">attachmentUrl</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// v0.9.10+，附件url</span>
     <span class="hljs-attr">attachmentName</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// v0.9.10+，附件名称</span>
     <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// 标签列表</span>
-    <span class="hljs-attr">generalization</span>: {<span class="hljs-comment">// 节点的概要，如果没有概要generalization设为null即可</span>
-      <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span><span class="hljs-comment">// 概要的文本</span>
-    },
+    <span class="hljs-attr">generalization</span>: [{<span class="hljs-comment">// （0.9.0以下版本不支持数组，只能设置单个概要数据）节点的概要，如果没有概要generalization设为null即可</span>
+      <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 概要的文本</span>
+      <span class="hljs-attr">richText</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// 节点的文本是否是富文本模式</span>
+      <span class="hljs-comment">// ...其他普通节点的字段都支持，但是不支持children</span>
+    }],
     <span class="hljs-attr">associativeLineTargets</span>: [<span class="hljs-string">&#x27;&#x27;</span>],<span class="hljs-comment">// 如果存在关联线，那么为目标节点的uid列表</span>
     <span class="hljs-attr">associativeLineText</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// 关联线文本</span>
     <span class="hljs-comment">// ...其他样式字段，可以参考主题</span>

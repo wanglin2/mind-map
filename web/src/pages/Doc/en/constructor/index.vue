@@ -32,7 +32,7 @@
 <td>el</td>
 <td>Element</td>
 <td></td>
-<td>Container element, must be a DOM element</td>
+<td>Container element, must be a DOM element（When the position of container elements on the page has changed but the size has not changed, the 'getElRectInfo()' method must be called to update the relevant information inside the library; When the size also changes, the 'resize()' method must be called, otherwise it will cause some functional exceptions）</td>
 <td>Yes</td>
 </tr>
 <tr>
@@ -686,6 +686,34 @@
 <td>The basic definition is the same as addContentToHeader, adding custom content at the end</td>
 <td></td>
 </tr>
+<tr>
+<td>demonstrateConfig（v0.9.11+）</td>
+<td>Object、null</td>
+<td>null</td>
+<td>Demonstration plugin configuration. If not transmitted, the default configuration will be used. An object can be transmitted. If only a certain property is configured, only that property can be set. Other properties that have not been set will also use the default configuration. For complete configuration, please refer to the 【Demonstration Plugin Configuration】 section below</td>
+<td></td>
+</tr>
+<tr>
+<td>resetScaleOnMoveNodeToCenter（v0.9.12+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Whether to reset the scaling level to 100% when moving nodes to the canvas center, returning to the root node, and other operations（The underlying impact is on the moveNodeToCenter method of the render class）</td>
+<td></td>
+</tr>
+<tr>
+<td>createNodePrefixContent（v0.9.12+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>Add additional node pre content.Pre content refers to the pre content in the area of the same line as the text, excluding the node image section.You can pass a function that takes the parameters of a node instance, returns a DOM node, or returns null</td>
+<td></td>
+</tr>
+<tr>
+<td>createNodePostfixContent（v0.9.12+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>Add additional node post content.Post content refers to the post content in the area of the same line as the text, excluding the node image section.You can pass a function that takes the parameters of a node instance, returns a DOM node, or returns null</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>Data structure</h3>
@@ -708,9 +736,11 @@
     <span class="hljs-attr">hyperlinkTitle</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Title of hyperlink</span>
     <span class="hljs-attr">note</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Content of remarks</span>
     <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// Tag list</span>
-    <span class="hljs-attr">generalization</span>: {<span class="hljs-comment">// The summary of the node, if there is no summary, the generalization can be set to null</span>
-      <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span><span class="hljs-comment">// Summary Text</span>
-    },
+    <span class="hljs-attr">generalization</span>: [{<span class="hljs-comment">// (Arrays are not supported in versions below 0.9.0, and only a single summary data can be set)The summary of the node, if there is no summary, the generalization can be set to null</span>
+      <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Summary Text</span>
+      <span class="hljs-attr">richText</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// Is the text of the node in rich text mode</span>
+      <span class="hljs-comment">// ...The fields of other ordinary nodes are supported, But it does not support children</span>
+    }],
     <span class="hljs-attr">associativeLineTargets</span>: [<span class="hljs-string">&#x27;&#x27;</span>],<span class="hljs-comment">// If there are associated lines, then it is the uid list of the target node</span>
     <span class="hljs-attr">associativeLineText</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// Association Line Text</span>
     <span class="hljs-comment">// ...For other style fields, please refer to the topic</span>
@@ -832,6 +862,61 @@
   }
 })
 </code></pre>
+<h3>Demonstration Plugin Configuration</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>boxShadowColor</td>
+<td>String</td>
+<td>rgba(0, 0, 0, 0.8)</td>
+<td>The color of the area around the highlighted box</td>
+</tr>
+<tr>
+<td>borderRadius</td>
+<td>String</td>
+<td>5px</td>
+<td>The size of the rounded corners of the highlighted box</td>
+</tr>
+<tr>
+<td>transition</td>
+<td>String</td>
+<td>all 0.3s ease-out</td>
+<td>Transition properties of highlight box animation and CSS transition properties</td>
+</tr>
+<tr>
+<td>zIndex</td>
+<td>Number</td>
+<td>9999</td>
+<td>The hierarchy of highlighted box elements</td>
+</tr>
+<tr>
+<td>padding</td>
+<td>Number</td>
+<td>20</td>
+<td>The inner margin of the highlighted box</td>
+</tr>
+<tr>
+<td>margin</td>
+<td>Number</td>
+<td>50</td>
+<td>The outer margin of the highlighted box</td>
+</tr>
+<tr>
+<td>openBlankMode（v0.9.12+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Is enable fill in the blank mode, where underlined text is not displayed by default and only displayed sequentially by pressing the enter key</td>
+</tr>
+</tbody>
+</table>
 <h2>Static methods</h2>
 <h3>defineTheme(name, config)</h3>
 <blockquote>
@@ -928,6 +1013,8 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 <h3>themeConfig</h3>
 <p>Current Theme Configuration.</p>
 <h2>Instance methods</h2>
+<h3>getElRectInfo()</h3>
+<p>Update the position and size information of container elements. Be sure to call this method to update information when the position of container elements on the page changes. If the size of container elements has also changed, please call the 'resize' method.</p>
 <h3>updateData(data)</h3>
 <blockquote>
 <p>v0.9.9+</p>
@@ -943,7 +1030,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 <p>v0.6.0+</p>
 </blockquote>
 <p>Destroy mind maps. It will remove registered plugins, remove listening events, and delete all nodes on the canvas.</p>
-<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter })</h3>
+<h3>getSvgData({ paddingX = 0, paddingY = 0, ignoreWatermark = false, addContentToHeader, addContentToFooter, node })</h3>
 <blockquote>
 <p>v0.3.0+</p>
 </blockquote>
@@ -952,6 +1039,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
 <p><code>ignoreWatermark</code>：v0.8.0+, Do not draw watermarks. If you do not need to draw watermarks, you can pass 'true' because drawing watermarks is very slow</p>
 <p><code>addContentToHeader</code>：v0.9.9+, Function, You can return the custom content to be added to the header, as detailed in the configuration in 【Instantiation options】</p>
 <p><code>addContentToFooter</code>：v0.9.9+, Function, You can return the custom content to be added to the tail, as detailed in the configuration in 【Instantiation options】</p>
+<p><code>node</code>: v0.9.11+, Node instance, if passed, only export the content of that node</p>
 <p>Get the <code>svg</code> data and return an object. The detailed structure is as follows:</p>
 <pre class="hljs"><code>{
   svg, <span class="hljs-comment">// Element, the overall svg element of the mind map graphics, including: svg (canvas container), g (actual mind map group)</span>
@@ -961,6 +1049,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;Theme name&#x27;</span>)
   origHeight, <span class="hljs-comment">// Number, canvas height</span>
   scaleX, <span class="hljs-comment">// Number, horizontal zoom value of mind map graphics</span>
   scaleY, <span class="hljs-comment">// Number, vertical zoom value of mind map graphics</span>
+  clipData<span class="hljs-comment">// v0.9.11+，If node is passed, that is, the content of the specified node is exported, then this field will be returned, Represents the position coordinate data of the node region cropped from the complete image</span>
 }
 </code></pre>
 <h3>render(callback)</h3>
@@ -1254,6 +1343,21 @@ poor performance and should be used sparingly.</p>
 <td>Triggered when removing personnel avatars with the mouse during collaborative editing</td>
 <td>userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)</td>
 </tr>
+<tr>
+<td>exit_demonstrate（v0.9.11+）</td>
+<td>Triggered when exiting demonstration mode</td>
+<td></td>
+</tr>
+<tr>
+<td>demonstrate_jump（v0.9.11+）</td>
+<td>Trigger when switching steps in demonstration mode</td>
+<td>currentStepIndex（The index of the steps currently played, counting from 0）、stepLength（Total number of playback steps）</td>
+</tr>
+<tr>
+<td>node_tag_click（v0.9.12+）</td>
+<td>Click events on node labels</td>
+<td>this(Current node instance)、item（Content of clicked tags）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
@@ -1392,7 +1496,7 @@ redo. All commands are as follows:</p>
 <tr>
 <td>UNEXPAND_ALL</td>
 <td>Collapse all nodes</td>
-<td></td>
+<td>isSetRootNodeCenter（v0.9.11+，default is true，Will the root node be moved to the center after retracting all nodes）</td>
 </tr>
 <tr>
 <td>UNEXPAND_TO_LEVEL (v0.2.8+)</td>
@@ -1457,7 +1561,7 @@ redo. All commands are as follows:</p>
 <tr>
 <td>ADD_GENERALIZATION (v0.2.0+)</td>
 <td>Add a node summary</td>
-<td>data (the data for the summary, in object format, all numerical fields of the node are supported, default is <code>{text: 'summary'}</code>)</td>
+<td>data (the data for the summary, in object format, all numerical fields of the node are supported, default is <code>{text: 'summary'}</code>)、openEdit（v0.9.11+，Default is true，Whether to enter text editing status by default）</td>
 </tr>
 <tr>
 <td>REMOVE_GENERALIZATION (v0.2.0+)</td>

@@ -63,7 +63,7 @@ However, this requires backend support, as our application is a single page clie
 
 ## Docker
 
-> Thank you very much [水车](https://github.com/shuiche-it), This section is written by him, and the corresponding Docker package is also maintained by him.
+> Thank you very much [水车](https://github.com/shuiche-it), the corresponding Docker package is maintained by him.
 
 Install directly from Docker Hub:
 

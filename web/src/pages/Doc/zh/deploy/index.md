@@ -63,7 +63,7 @@ const router = new VueRouter({
 
 ## Docker
 
-> 非常感谢[水车](https://github.com/shuiche-it)，本小节由他编写，对应的 Docker 包也由他维护。
+> 非常感谢[水车](https://github.com/shuiche-it)维护的`Docker`镜像。
 
 直接从 Docker hup 中安装：
 
