@@ -1,24 +1,28 @@
 <!DOCTYPE html><html lang=""><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1"><link rel="icon" href="dist/logo.ico"><title>思绪思维导图</title><script>// 自定义静态资源的路径
       window.externalPublicPath = './dist/'
       // 接管应用
-      window.takeOverApp = false</script><link href="dist/css/chunk-vendors.css?78d97b280dca5d10b8bc" rel="stylesheet"><link href="dist/css/app.css?78d97b280dca5d10b8bc" rel="stylesheet"></head><body><noscript><strong>We're sorry but thoughts doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="app"></div><script>const getDataFromBackend = () => {
+      window.takeOverApp = false</script><script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script><script>LA.init({
+        id: 'KRO0WxK8GT66tYCQ',
+        ck: 'KRO0WxK8GT66tYCQ',
+        autoTrack: true
+      })</script><link href="dist/css/chunk-vendors.css?2972dfe280bad8d26040" rel="stylesheet"><link href="dist/css/app.css?2972dfe280bad8d26040" rel="stylesheet"></head><body><noscript><strong>We're sorry but thoughts doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="app"></div><script>const getDataFromBackend = () => {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
             resolve({
               mindMapData: {
-                root:{
-                  "data": {
-                      "text": "根节点"
+                root: {
+                  data: {
+                    text: '根节点'
                   },
-                  "children": []
+                  children: []
                 },
-                theme:{
-                  "template":"avocado",
-                  "config":{}
+                theme: {
+                  template: 'avocado',
+                  config: {}
                 },
-                layout:"logicalStructure",
+                layout: 'logicalStructure',
                 config: {},
-                view: null,
+                view: null
               },
               lang: 'zh',
               localConfig: null
@@ -26,14 +30,14 @@
           }, 200)
         })
       }
-      const setTakeOverAppMethods = (data) => {
+      const setTakeOverAppMethods = data => {
         window.takeOverAppMethods = {}
         // 获取思维导图数据的函数
         window.takeOverAppMethods.getMindMapData = () => {
           return data.mindMapData
-        } 
+        }
         // 保存思维导图数据的函数
-        window.takeOverAppMethods.saveMindMapData = (data) => {
+        window.takeOverAppMethods.saveMindMapData = data => {
           console.log(data)
         }
         // 获取语言的函数
@@ -41,7 +45,7 @@
           return data.lang
         }
         // 保存语言的函数
-        window.takeOverAppMethods.saveLanguage = (lang) => {
+        window.takeOverAppMethods.saveLanguage = lang => {
           console.log(lang)
         }
         // 获取本地配置的函数
@@ -49,7 +53,7 @@
           return data.localConfig
         }
         // 保存本地配置的函数
-        window.takeOverAppMethods.saveLocalConfig = (config) => {
+        window.takeOverAppMethods.saveLocalConfig = config => {
           console.log(config)
         }
       }
@@ -60,10 +64,10 @@
         // 设置全局的方法
         setTakeOverAppMethods(data)
         // 思维导图实例创建完成事件
-        window.$bus.$on('app_inited', (mindMap) => {
+        window.$bus.$on('app_inited', mindMap => {
           console.log(mindMap)
         })
         // 可以通过window.$bus.$on()来监听应用的一些事件
         // 实例化页面
         window.initApp()
-      }</script><script src="dist/js/chunk-vendors.js?78d97b280dca5d10b8bc"></script><script src="dist/js/app.js?78d97b280dca5d10b8bc"></script></body></html>
+      }</script><script src="dist/js/chunk-vendors.js?2972dfe280bad8d26040"></script><script src="dist/js/app.js?2972dfe280bad8d26040"></script></body></html>
