@@ -696,6 +696,16 @@
             >
           </div>
         </div>
+        <!-- 是否在节点下方 -->
+        <div class="row">
+          <div class="rowItem">
+            <el-checkbox
+              v-model="watermarkConfig.belowNode"
+              @change="updateWatermarkConfig"
+              >{{ $t('baseStyle.belowNode') }}</el-checkbox
+            >
+          </div>
+        </div>
         <!-- 水印文字 -->
         <div class="row">
           <div class="rowItem">

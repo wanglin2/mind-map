@@ -38,6 +38,7 @@ export default {
     watermarkAngle: 'Angle',
     watermarkTextOpacity: 'Text opacity',
     watermarkTextFontSize: 'Font size',
+    belowNode: 'Display below nodes',
     isEnableNodeRichText: 'Enable node rich text editing',
     mousewheelAction: 'Mouse wheel behavior',
     zoomView: 'Zoom view',
