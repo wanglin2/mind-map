@@ -365,4 +365,16 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/宏涛.jpg" style="width: 50px;height: 50px;" />
         <span>宏涛</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/最多5个字.jpg" style="width: 50px;height: 50px;" />
+        <span>最多5个字</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/雨馨.jpg" style="width: 50px;height: 50px;" />
+        <span>雨馨</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/ZX.jpg" style="width: 50px;height: 50px;" />
+        <span>ZX</span>
+    </span>
 </p>
