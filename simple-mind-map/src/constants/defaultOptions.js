@@ -49,7 +49,8 @@ export const defaultOpt = {
       color: '#999',
       opacity: 0.5,
       fontSize: 14
-    }
+    },
+    belowNode: false
   },
   // 达到该宽度文本自动换行
   textAutoWrapWidth: 500,
@@ -326,5 +327,5 @@ export const defaultOpt = {
   // 添加附加的节点前置内容，前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分
   createNodePrefixContent: null,
   // 添加附加的节点后置内容，后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分
-  createNodePostfixContent: null
+  createNodePostfixContent: null,
 }
