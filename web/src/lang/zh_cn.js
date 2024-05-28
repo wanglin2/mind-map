@@ -150,7 +150,8 @@ export default {
     notSelectTip: '请选择要导入的文件',
     fileContentError: '文件内容有误',
     importSuccess: '导入成功',
-    fileParsingFailed: '文件解析失败'
+    fileParsingFailed: '文件解析失败',
+    xmindCanvasSelectDialogTitle: '选择要导入的画布'
   },
   navigatorToolbar: {
     openMiniMap: '开启小地图',

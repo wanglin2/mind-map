@@ -152,7 +152,8 @@ export default {
     notSelectTip: 'Please select the file to import',
     fileContentError: 'The file content is incorrect',
     importSuccess: 'Import success',
-    fileParsingFailed: 'File parsing failed'
+    fileParsingFailed: 'File parsing failed',
+    xmindCanvasSelectDialogTitle: 'Select the canvas to import'
   },
   navigatorToolbar: {
     openMiniMap: 'Open mini map',
