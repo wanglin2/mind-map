@@ -109,6 +109,10 @@ const mindMap = new MindMap({
 
 [![Star History Chart](https://api.star-history.com/svg?repos=wanglin2/mind-map&type=Date)](https://star-history.com/#wanglin2/mind-map&Date)
 
+# 关于定制
+
+如果你有个性化的商用定制需求，可以联系我们，我们提供付费开发服务。
+
 # 请作者喝杯咖啡
 
 开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡~
@@ -376,5 +380,9 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/ZX.jpg" style="width: 50px;height: 50px;" />
         <span>ZX</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/峰.jpg" style="width: 50px;height: 50px;" />
+        <span>峰</span>
     </span>
 </p>
