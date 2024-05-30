@@ -521,7 +521,7 @@ class Node {
         }
       }
       // 多选和取消多选
-      if ((e.ctrlKey || e.metaKey) && enableCtrlKeyNodeSelection) {
+      if (!readonly && (e.ctrlKey || e.metaKey) && enableCtrlKeyNodeSelection) {
         this.isMultipleChoice = true
         let isActive = this.getData('isActive')
         if (!isActive)

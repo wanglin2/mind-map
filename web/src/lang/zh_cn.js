@@ -38,6 +38,7 @@ export default {
     watermarkAngle: '旋转角度',
     watermarkTextOpacity: '文字透明度',
     watermarkTextFontSize: '文字字号',
+    belowNode: '显示在节点下方',
     isEnableNodeRichText: '是否开启节点富文本编辑',
     mousewheelAction: '鼠标滚轮行为',
     zoomView: '缩放视图',
@@ -149,7 +150,8 @@ export default {
     notSelectTip: '请选择要导入的文件',
     fileContentError: '文件内容有误',
     importSuccess: '导入成功',
-    fileParsingFailed: '文件解析失败'
+    fileParsingFailed: '文件解析失败',
+    xmindCanvasSelectDialogTitle: '选择要导入的画布'
   },
   navigatorToolbar: {
     openMiniMap: '开启小地图',

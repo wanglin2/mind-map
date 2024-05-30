@@ -704,14 +704,14 @@
 <td>createNodePrefixContent（v0.9.12+）</td>
 <td>Function、null</td>
 <td>null</td>
-<td>Add additional node pre content.Pre content refers to the pre content in the area of the same line as the text, excluding the node image section.You can pass a function that takes the parameters of a node instance, returns a DOM node, or returns null</td>
+<td>Add additional node pre content.Pre content refers to the pre content in the area of the same line as the text, excluding the node image section.You can pass a function that takes the parameters of a node instance, Can return objects in {el, width, height} format, el is a DOM node object, width and height represent the width, height, and numerical type of the content. If custom content is not required, null can also be returned</td>
 <td></td>
 </tr>
 <tr>
 <td>createNodePostfixContent（v0.9.12+）</td>
 <td>Function、null</td>
 <td>null</td>
-<td>Add additional node post content.Post content refers to the post content in the area of the same line as the text, excluding the node image section.You can pass a function that takes the parameters of a node instance, returns a DOM node, or returns null</td>
+<td>Add additional node post content.Post content refers to the post content in the area of the same line as the text, excluding the node image section. The usage is the same as createNodePrefixContent</td>
 <td></td>
 </tr>
 </tbody>

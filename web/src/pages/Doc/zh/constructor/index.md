@@ -119,8 +119,8 @@ const mindMap = new MindMap({
 | addContentToFooter（v0.9.9+）     | Function、null | null  | 基本释义同addContentToHeader，在尾部添加自定义内容 |
 | demonstrateConfig（v0.9.11+）     | Object、null | null  | 演示插件Demonstrate的配置。不传则使用默认配置，可传递一个对象，如果只配置某个属性，可以只设置该属性，其他没有设置的同样会使用默认配置，完整配置请参考下方【演示插件配置】小节 |
 | resetScaleOnMoveNodeToCenter（v0.9.12+）     | Boolean |  false | 移动节点到画布中心、回到根节点等操作时是否将缩放层级复位为100%（底层影响的是render类的moveNodeToCenter方法） |
-| createNodePrefixContent（v0.9.12+）     | Function、null | null  | 添加附加的节点前置内容。前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分。可以传递一个函数，这个函数接收一个节点实例的参数，可以返回一个DOM节点，也可以返回null |
-| createNodePostfixContent（v0.9.12+）     | Function、null | null  | 添加附加的节点后置内容。后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分。可以传递一个函数，这个函数接收一个节点实例的参数，可以返回一个DOM节点，也可以返回null |
+| createNodePrefixContent（v0.9.12+）     | Function、null | null  | 添加附加的节点前置内容。前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分。可以传递一个函数，这个函数接收一个节点实例的参数，可以返回{el, width, height}格式的对象，el为DOM节点对象，width和height代表内容的宽高，数字类型，如果不需要自定义内容，也可以返回null |
+| createNodePostfixContent（v0.9.12+）     | Function、null | null  | 添加附加的节点后置内容。后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分。用法同createNodePrefixContent |
 
 ### 数据结构
 

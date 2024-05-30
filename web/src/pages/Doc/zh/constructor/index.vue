@@ -601,13 +601,13 @@
 <td>createNodePrefixContent（v0.9.12+）</td>
 <td>Function、null</td>
 <td>null</td>
-<td>添加附加的节点前置内容。前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分。可以传递一个函数，这个函数接收一个节点实例的参数，可以返回一个DOM节点，也可以返回null</td>
+<td>添加附加的节点前置内容。前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分。可以传递一个函数，这个函数接收一个节点实例的参数，可以返回{el, width, height}格式的对象，el为DOM节点对象，width和height代表内容的宽高，数字类型，如果不需要自定义内容，也可以返回null</td>
 </tr>
 <tr>
 <td>createNodePostfixContent（v0.9.12+）</td>
 <td>Function、null</td>
 <td>null</td>
-<td>添加附加的节点后置内容。后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分。可以传递一个函数，这个函数接收一个节点实例的参数，可以返回一个DOM节点，也可以返回null</td>
+<td>添加附加的节点后置内容。后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分。用法同createNodePrefixContent</td>
 </tr>
 </tbody>
 </table>

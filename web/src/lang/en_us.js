@@ -38,6 +38,7 @@ export default {
     watermarkAngle: 'Angle',
     watermarkTextOpacity: 'Text opacity',
     watermarkTextFontSize: 'Font size',
+    belowNode: 'Display below nodes',
     isEnableNodeRichText: 'Enable node rich text editing',
     mousewheelAction: 'Mouse wheel behavior',
     zoomView: 'Zoom view',
@@ -151,7 +152,8 @@ export default {
     notSelectTip: 'Please select the file to import',
     fileContentError: 'The file content is incorrect',
     importSuccess: 'Import success',
-    fileParsingFailed: 'File parsing failed'
+    fileParsingFailed: 'File parsing failed',
+    xmindCanvasSelectDialogTitle: 'Select the canvas to import'
   },
   navigatorToolbar: {
     openMiniMap: 'Open mini map',

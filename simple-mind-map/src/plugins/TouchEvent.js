@@ -16,10 +16,12 @@ class TouchEvent {
     this.onTouchmove = this.onTouchmove.bind(this)
     this.onTouchcancel = this.onTouchcancel.bind(this)
     this.onTouchend = this.onTouchend.bind(this)
-    window.addEventListener('touchstart', this.onTouchstart)
-    window.addEventListener('touchmove', this.onTouchmove)
-    window.addEventListener('touchcancel', this.onTouchcancel)
-    window.addEventListener('touchend', this.onTouchend)
+    window.addEventListener('touchstart', this.onTouchstart, { passive: false })
+    window.addEventListener('touchmove', this.onTouchmove, { passive: false })
+    window.addEventListener('touchcancel', this.onTouchcancel, {
+      passive: false
+    })
+    window.addEventListener('touchend', this.onTouchend, { passive: false })
   }
 
   // 解绑事件
@@ -32,6 +34,7 @@ class TouchEvent {
 
   // 手指按下事件
   onTouchstart(e) {
+    e.preventDefault()
     this.touchesNum = e.touches.length
     this.touchStartScaleView = null
     if (this.touchesNum === 1) {
@@ -43,6 +46,7 @@ class TouchEvent {
 
   // 手指移动事件
   onTouchmove(e) {
+    e.preventDefault()
     let len = e.touches.length
     if (len === 1) {
       let touch = e.touches[0]
@@ -103,6 +107,7 @@ class TouchEvent {
 
   // 手指松开事件
   onTouchend(e) {
+    e.preventDefault()
     this.dispatchMouseEvent('mouseup', e.target)
     if (this.touchesNum === 1) {
       // 模拟双击事件
