@@ -313,7 +313,7 @@ class RichText {
   getEditText() {
     let html = this.quill.container.firstChild.innerHTML
     // 去除ql-cursor节点
-    html = removeHtmlNodeByClass(html, '.ql-cursor')
+    // html = removeHtmlNodeByClass(html, '.ql-cursor')
     // 去除最后的空行
     return html.replace(/<p><br><\/p>$/, '')
   }
