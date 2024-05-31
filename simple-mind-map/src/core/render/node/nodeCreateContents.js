@@ -10,7 +10,6 @@ import {
 import { Image as SVGImage, SVG, A, G, Rect, Text } from '@svgdotjs/svg.js'
 import iconsSvg from '../../../svg/icons'
 import { CONSTANTS } from '../../../constants/constant'
-import { defenseXSS } from '../../../utils/xss'
 
 //  创建图片节点
 function createImgNode() {
@@ -142,7 +141,7 @@ function createRichTextNode() {
       text: text
     })
   }
-  let html = `<div>${defenseXSS(this.getData('text'))}</div>`
+  let html = `<div>${this.getData('text')}</div>`
   if (!this.mindMap.commonCaches.measureRichtextNodeTextSizeEl) {
     this.mindMap.commonCaches.measureRichtextNodeTextSizeEl =
       document.createElement('div')
