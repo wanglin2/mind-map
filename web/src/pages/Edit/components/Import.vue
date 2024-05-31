@@ -40,7 +40,7 @@
       :show-close="false"
     >
       <el-radio-group v-model="selectCanvas" class="canvasList">
-        <el-radio v-for="(item, index) in canvasList" :label="index">{{
+        <el-radio v-for="(item, index) in canvasList" :key="index" :label="index">{{
           item.title
         }}</el-radio>
       </el-radio-group>
