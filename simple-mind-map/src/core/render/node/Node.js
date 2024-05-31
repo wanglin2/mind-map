@@ -782,9 +782,9 @@ class Node {
     if (this.nodeData.inserting) {
       delete this.nodeData.inserting
       this.active()
-      setTimeout(() => {
-        this.mindMap.emit('node_dblclick', this, null, true)
-      }, 0)
+      // setTimeout(() => {
+      this.mindMap.emit('node_dblclick', this, null, true)
+      // }, 0)
     }
   }
 
@@ -1192,7 +1192,7 @@ class Node {
       ...this.opt,
       uid: createUid()
     })
-    Object.keys(this).forEach((item) => {
+    Object.keys(this).forEach(item => {
       newNode[item] = this[item]
     })
     return newNode

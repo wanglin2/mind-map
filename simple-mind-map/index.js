@@ -136,10 +136,8 @@ class MindMap {
       this.associativeLineDraw.addClass('smm-associative-line-container')
     }
     // 画布
-    this.svg = SVG()
-      .addTo(this.el)
-      .size(this.width, this.height)
-      
+    this.svg = SVG().addTo(this.el).size(this.width, this.height)
+
     // 容器
     this.draw = this.svg.group()
     this.draw.addClass('smm-container')
