@@ -198,10 +198,15 @@ export const defaultOpt = {
   dragMultiNodeRectConfig: {
     width: 40,
     height: 20,
-    fill: '' // 填充颜色，如果不传默认使用连线的颜色
+    fill: 'rgb(94, 200, 248)' // 填充颜色
   },
-  // 节点拖拽时新位置的示意矩形的填充颜色，如果不传默认使用连线的颜色
-  dragPlaceholderRectFill: '',
+  // 节点拖拽时新位置的示意矩形的填充颜色
+  dragPlaceholderRectFill: 'rgb(94, 200, 248)',
+  // 节点拖拽时新位置的示意连线的样式配置
+  dragPlaceholderLineConfig: {
+    color: 'rgb(94, 200, 248)',
+    width: 2
+  },
   // 节点拖拽时的透明度配置
   dragOpacityConfig: {
     cloneNodeOpacity: 0.5, // 跟随鼠标移动的克隆节点或矩形的透明度
@@ -327,5 +332,5 @@ export const defaultOpt = {
   // 添加附加的节点前置内容，前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分
   createNodePrefixContent: null,
   // 添加附加的节点后置内容，后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分
-  createNodePostfixContent: null,
+  createNodePostfixContent: null
 }
