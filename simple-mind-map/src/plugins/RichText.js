@@ -9,7 +9,8 @@ import {
   isUndef,
   checkSmmFormatData,
   removeHtmlNodeByClass,
-  formatGetNodeGeneralization
+  formatGetNodeGeneralization,
+  nodeRichTextToTextWithWrap
 } from '../utils'
 import { CONSTANTS } from '../constants/constant'
 
@@ -364,6 +365,21 @@ class RichText {
         }
       },
       theme: 'snow'
+    })
+    // 拦截粘贴事件
+    this.quill.root.addEventListener('copy', event => {
+      event.preventDefault()
+      const sel = window.getSelection()
+      const originStr = sel.toString()
+      try {
+        const range = sel.getRangeAt(0)
+        const div = document.createElement('div')
+        div.appendChild(range.cloneContents())
+        const text = nodeRichTextToTextWithWrap(div.innerHTML)
+        event.clipboardData.setData('text/plain', text)
+      } catch (e) {
+        event.clipboardData.setData('text/plain', originStr)
+      }
     })
     this.quill.on('selection-change', range => {
       // 刚创建的节点全选不需要显示操作条
