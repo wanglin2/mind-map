@@ -260,11 +260,10 @@ export const backgroundSizeList = [
 export const store = {
   sidebarZIndex: 1 //侧边栏zIndex
 }
-const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-const ctrl = isMac?'⌘':'Ctrl';
-const enter = isMac?'Return':'Enter';
-const macFn = isMac?'fn + ':'';
-
+const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0
+const ctrl = isMac ? '⌘' : 'Ctrl'
+const enter = isMac ? 'Return' : 'Enter'
+const macFn = isMac ? 'fn + ' : ''
 
 // 快捷键列表
 export const shortcutKeyList = [
@@ -334,7 +333,7 @@ export const shortcutKeyList = [
       {
         icon: 'iconbianji',
         name: '编辑节点',
-        value: macFn+'F2'
+        value: macFn + 'F2'
       },
       {
         icon: 'iconhuanhang',

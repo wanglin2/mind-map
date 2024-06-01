@@ -178,11 +178,10 @@ export const backgroundPositionList = [
   }
 ]
 
-const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-const ctrl = isMac?'⌘':'Ctrl';
-const enter = isMac?'Return':'Enter';
-const macFn = isMac?'fn + ':'';
-
+const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0
+const ctrl = isMac ? '⌘' : 'Ctrl'
+const enter = isMac ? 'Return' : 'Enter'
+const macFn = isMac ? 'fn + ' : ''
 
 // 背景图片大小
 export const backgroundSizeList = [
@@ -268,7 +267,7 @@ export const shortcutKeyList = [
       {
         icon: 'iconbianji',
         name: 'Edit node',
-        value: macFn+'F2'
+        value: macFn + 'F2'
       },
       {
         icon: 'iconhuanhang',
@@ -364,7 +363,7 @@ export const shortcutKeyList = [
         icon: 'icondodeparent',
         name: 'Move up one level',
         value: 'Shift + Tab'
-      },
+      }
     ]
   }
 ]
