@@ -277,7 +277,9 @@ export default {
     fileOpenFailed: 'File open failed',
     defaultFileName: 'Mind map',
     creatingTip: 'Creating file',
-    directory: 'Directory'
+    directory: 'Directory',
+    newFileTip: 'Please export the currently edited file before creating a new one, otherwise the content will be lost',
+    openFileTip: 'Please export the currently edited file before opening it, otherwise the content will be lost'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',

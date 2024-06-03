@@ -273,7 +273,9 @@ export default {
     fileOpenFailed: '文件打开失败',
     defaultFileName: '思维导图',
     creatingTip: '正在创建文件',
-    directory: '目录'
+    directory: '目录',
+    newFileTip: '新建文件前请先导出当前编辑的文件，否则内容会丢失',
+    openFileTip: '打开文件前请先导出当前编辑的文件，否则内容会丢'
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',
