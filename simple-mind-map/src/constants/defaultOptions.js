@@ -332,5 +332,11 @@ export const defaultOpt = {
   // 添加附加的节点前置内容，前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分
   createNodePrefixContent: null,
   // 添加附加的节点后置内容，后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分
-  createNodePostfixContent: null
+  createNodePostfixContent: null,
+  // 是否开启在富文本编辑框中直接编辑数学公式
+  enableEditFormulaInRichTextEdit: true,
+  // 转换富文本内容，当进入富文本编辑时，可以通过该参数传递一个函数，函数接收文本内容，需要返回你处理后的文本内容
+  transformRichTextOnEnterEdit: null,
+  // 可以传递一个函数，即将结束富文本编辑前会执行该函数，函数接收richText实例，所以你可以在此时机更新quill文档数据
+  beforeHideRichTextEdit: null
 }

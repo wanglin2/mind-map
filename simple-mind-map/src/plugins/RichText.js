@@ -171,7 +171,8 @@ class RichText {
       customInnerElsAppendTo,
       nodeTextEditZIndex,
       textAutoWrapWidth,
-      selectTextOnEnterEditText
+      selectTextOnEnterEditText,
+      transformRichTextOnEnterEdit
     } = this.mindMap.opt
     this.node = node
     this.isInserting = isInserting
@@ -241,7 +242,10 @@ class RichText {
       }
     }
     // 节点文本内容
-    const nodeText = node.getData('text')
+    let nodeText = node.getData('text')
+    if (typeof transformRichTextOnEnterEdit === 'function') {
+      nodeText = transformRichTextOnEnterEdit(nodeText)
+    }
     // 是否是空文本
     const isEmptyText = isUndef(nodeText)
     // 是否是非空的非富文本
@@ -324,6 +328,10 @@ class RichText {
   hideEditText(nodes) {
     if (!this.showTextEdit) {
       return
+    }
+    const { beforeHideRichTextEdit } = this.mindMap.opt
+    if (typeof beforeHideRichTextEdit === 'function') {
+      beforeHideRichTextEdit(this)
     }
     let html = this.getEditText()
     let list =
