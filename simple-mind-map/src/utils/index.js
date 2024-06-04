@@ -1335,7 +1335,7 @@ export const handleGetSvgDataExtraContent = ({
       if (!res) return
       const { el, cssText, height } = res
       if (el instanceof HTMLElement) {
-        el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
+        addXmlns(el)
         const foreignObject = createForeignObjectNode({ el, height })
         callback(foreignObject, height)
       }
@@ -1524,4 +1524,9 @@ export const defenseXSS = text => {
 
   // 返回最终结果
   return result
+}
+
+// 给节点添加命名空间
+export const addXmlns = el => {
+  el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
 }

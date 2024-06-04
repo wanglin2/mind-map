@@ -11,7 +11,8 @@ import { CONSTANTS } from '../../../constants/constant'
 import {
   copyNodeTree,
   createForeignObjectNode,
-  createUid
+  createUid,
+  addXmlns
 } from '../../../utils/index'
 
 //  节点类
@@ -204,10 +205,7 @@ class Node {
     }
     // 如果没有返回内容，那么还是使用内置的节点内容
     if (this._customNodeContent) {
-      this._customNodeContent.setAttribute(
-        'xmlns',
-        'http://www.w3.org/1999/xhtml'
-      )
+      addXmlns(this._customNodeContent)
       return
     }
     this._imgData = this.createImgNode()
@@ -220,9 +218,15 @@ class Node {
     this._prefixData = createNodePrefixContent
       ? createNodePrefixContent(this)
       : null
+    if (this._prefixData && this._prefixData.el) {
+      addXmlns(this._prefixData.el)
+    }
     this._postfixData = createNodePostfixContent
       ? createNodePostfixContent(this)
       : null
+    if (this._postfixData && this._postfixData.el) {
+      addXmlns(this._postfixData.el)
+    }
   }
 
   //  计算节点的宽高
