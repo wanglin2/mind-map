@@ -2,6 +2,11 @@ import { CONSTANTS } from './constant'
 
 // 默认选项配置
 export const defaultOpt = {
+  // 【基本】
+  // 容器元素，必传，必须为DOM元素
+  el: null,
+  // 思维导图回显数据
+  data: null,
   // 是否只读
   readonly: false,
   // 布局
@@ -24,10 +29,6 @@ export const defaultOpt = {
   imgTextMargin: 5,
   // 节点里各种文字信息的间距，如图标和文字的间距
   textContentMargin: 2,
-  // 多选节点时鼠标移动到边缘时的画布移动偏移量
-  selectTranslateStep: 3,
-  // 多选节点时鼠标移动距边缘多少距离时开始偏移
-  selectTranslateLimit: 20,
   // 自定义节点备注内容显示
   customNoteContentShow: null,
   /*
@@ -36,22 +37,6 @@ export const defaultOpt = {
               hide(){}
           }
       */
-  // 是否开启节点自由拖拽
-  enableFreeDrag: false,
-  // 水印配置
-  watermarkConfig: {
-    onlyExport: false, // 是否仅在导出时添加水印
-    text: '',
-    lineSpacing: 100,
-    textSpacing: 100,
-    angle: 30,
-    textStyle: {
-      color: '#999',
-      opacity: 0.5,
-      fontSize: 14
-    },
-    belowNode: false
-  },
   // 达到该宽度文本自动换行
   textAutoWrapWidth: 500,
   // 自定义鼠标滚轮事件处理
@@ -89,9 +74,6 @@ export const defaultOpt = {
   enableShortcutOnlyWhenMouseInSvg: true,
   // 初始根节点的位置
   initRootNodePosition: null,
-  // 导出png、svg、pdf时的图形内边距，注意是单侧内边距
-  exportPaddingX: 10,
-  exportPaddingY: 10,
   // 节点文本编辑框的z-index
   nodeTextEditZIndex: 3000,
   // 节点备注浮层的z-index
@@ -117,8 +99,6 @@ export const defaultOpt = {
   ],
   // 节点最大缓存数量
   maxNodeCacheCount: 1000,
-  // 关联线默认文字
-  defaultAssociativeLineText: '关联',
   // 思维导图适应画布大小时的内边距
   fitPadding: 50,
   // 是否开启按住ctrl键多选节点功能
@@ -133,14 +113,9 @@ export const defaultOpt = {
   customCreateNodeContent: null,
   // 指定内部一些元素（节点文本编辑元素、节点备注显示元素、关联线文本编辑元素、节点图片调整按钮元素）添加到的位置，默认添加到document.body下
   customInnerElsAppendTo: null,
-  // 拖拽元素时，指示元素新位置的块的最大高度
-  nodeDragPlaceholderMaxSize: 20,
   // 是否在存在一个激活节点时，当按下中文、英文、数字按键时自动进入文本编辑模式
   // 开启该特性后，需要给你的输入框绑定keydown事件，并禁止冒泡
   enableAutoEnterTextEditWhenKeydown: false,
-  // 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果
-  // 需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果
-  richTextEditFakeInPlace: false,
   // 自定义对剪贴板文本的处理。当按ctrl+v粘贴时会读取用户剪贴板中的文本和图片，默认只会判断文本是否是普通文本和simple-mind-map格式的节点数据，如果你想处理其他思维导图的数据，比如processon、zhixi等，那么可以传递一个函数，接受当前剪贴板中的文本为参数，返回处理后的数据，可以返回两种类型：
   /*
     1.返回一个纯文本，那么会直接以该文本创建一个子节点
@@ -162,26 +137,12 @@ export const defaultOpt = {
   customHandleClipboardText: null,
   // 禁止鼠标滚轮缩放，你仍旧可以使用api进行缩放
   disableMouseWheelZoom: false,
-  // 禁止双指缩放，你仍旧可以使用api进行缩放
-  // 需要注册TouchEvent插件后生效
-  disableTouchZoom: false,
   // 错误处理函数
   errorHandler: (code, error) => {
     console.error(code, error)
   },
-  // 设置导出图片和svg时，针对富文本节点内容，也就是嵌入到svg中的html节点的默认样式覆盖
-  // 如果不覆盖，会发生偏移问题
-  resetCss: `
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-  `,
   // 是否在鼠标双击时回到根节点，也就是让根节点居中显示
   enableDblclickBackToRootNode: false,
-  // 导出图片时canvas的缩放倍数，该配置会和window.devicePixelRatio值取最大值
-  minExportImgCanvasScale: 2,
   // 节点鼠标hover和激活时显示的矩形边框的颜色
   hoverRectColor: 'rgb(94, 200, 248)',
   // 节点鼠标hover和激活时显示的矩形边框距节点内容的距离
@@ -190,28 +151,8 @@ export const defaultOpt = {
   selectTextOnEnterEditText: false,
   // 删除节点后激活相邻节点
   deleteNodeActive: true,
-  // 拖拽节点时鼠标移动到画布边缘是否开启画布自动移动
-  autoMoveWhenMouseInEdgeOnDrag: true,
   // 是否首次加载fit view
   fit: false,
-  // 拖拽多个节点时随鼠标移动的示意矩形的样式配置
-  dragMultiNodeRectConfig: {
-    width: 40,
-    height: 20,
-    fill: 'rgb(94, 200, 248)' // 填充颜色
-  },
-  // 节点拖拽时新位置的示意矩形的填充颜色
-  dragPlaceholderRectFill: 'rgb(94, 200, 248)',
-  // 节点拖拽时新位置的示意连线的样式配置
-  dragPlaceholderLineConfig: {
-    color: 'rgb(94, 200, 248)',
-    width: 2
-  },
-  // 节点拖拽时的透明度配置
-  dragOpacityConfig: {
-    cloneNodeOpacity: 0.5, // 跟随鼠标移动的克隆节点或矩形的透明度
-    beingDragNodeOpacity: 0.3 // 被拖拽节点的透明度
-  },
   // 自定义标签的颜色
   // {pass: 'green, unpass: 'red'}
   tagsColorMap: {},
@@ -220,9 +161,8 @@ export const defaultOpt = {
     avatarSize: 22, // 头像大小
     fontSize: 12 // 如果是文字头像，那么文字的大小
   },
-  // 关联线是否始终显示在节点上层
-  // false：即创建关联线和激活关联线时处于最顶层，其他情况下处于节点下方
-  associativeLineIsAlwaysAboveNode: true,
+  // 协同编辑时，同一个节点不能同时被多人选中
+  onlyOneEnableActiveNodeOnCooperate: false,
   // 插入概要的默认文本
   defaultGeneralizationText: '概要',
   // 粘贴文本的方式创建新节点时，控制是否按换行自动分割节点，即如果存在换行，那么会根据换行创建多个节点，否则只会创建一个节点
@@ -249,8 +189,6 @@ export const defaultOpt = {
   // 是否将思维导图限制在画布内
   // 比如向右拖动时，思维导图图形的最左侧到达画布中心时将无法继续向右拖动，其他同理
   isLimitMindMapInCanvas: false,
-  // 当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas不再起作用
-  isLimitMindMapInCanvasWhenHasScrollbar: true,
   // 在节点上粘贴剪贴板中的图片的处理方法，默认是转换为data:url数据插入到节点中，你可以通过该方法来将图片数据上传到服务器，实现保存图片的url
   // 可以传递一个异步方法，接收Blob类型的图片数据，需要返回如下结构：
   /*
@@ -263,15 +201,6 @@ export const defaultOpt = {
     }
   */
   handleNodePasteImg: null,
-  // 默认情况下，新创建的关联线两个端点的位置是根据两个节点中心点的相对位置来计算的，如果你想固定位置，可以通过这个属性来配置
-  // from和to都不传，则都自动计算，如果只传一个，另一个则会自动计算
-  associativeLineInitPointsPosition: {
-    // from和to可选值：left、top、bottom、right
-    from: '', // 关联线起始节点上端点的位置
-    to: '' // 关联线目标节点上端点的位置
-  },
-  // 是否允许调整关联线两个端点的位置
-  enableAdjustAssociativeLinePoints: true,
   // 自定义创建节点形状的方法，可以传一个函数，均接收一个参数
   // 矩形、圆角矩形、椭圆、圆等形状会调用该方法
   // 接收svg path字符串，返回svg节点
@@ -282,10 +211,119 @@ export const defaultOpt = {
   // 自定义转换节点连线路径的方法
   // 接收svg path字符串，返回转换后的svg path字符串
   customTransformNodeLinePath: null,
+  // 快捷键操作即将执行前的生命周期函数，返回true可以阻止操作执行
+  // 函数接收两个参数：key（快捷键）、activeNodeList（当前激活的节点列表）
+  beforeShortcutRun: null,
+  // 移动节点到画布中心、回到根节点等操作时是否将缩放层级复位为100%
+  resetScaleOnMoveNodeToCenter: false,
+  // 添加附加的节点前置内容，前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分
+  createNodePrefixContent: null,
+  // 添加附加的节点后置内容，后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分
+  createNodePostfixContent: null,
+
+  // 【Select插件】
+  // 多选节点时鼠标移动到边缘时的画布移动偏移量
+  selectTranslateStep: 3,
+  // 多选节点时鼠标移动距边缘多少距离时开始偏移
+  selectTranslateLimit: 20,
+
+  // 【Drag插件】
+  // 是否开启节点自由拖拽
+  enableFreeDrag: false,
+  // 拖拽节点时鼠标移动到画布边缘是否开启画布自动移动
+  autoMoveWhenMouseInEdgeOnDrag: true,
+  // 拖拽多个节点时随鼠标移动的示意矩形的样式配置
+  dragMultiNodeRectConfig: {
+    width: 40,
+    height: 20,
+    fill: 'rgb(94, 200, 248)' // 填充颜色
+  },
+  // 节点拖拽时新位置的示意矩形的填充颜色
+  dragPlaceholderRectFill: 'rgb(94, 200, 248)',
+  // 节点拖拽时新位置的示意连线的样式配置
+  dragPlaceholderLineConfig: {
+    color: 'rgb(94, 200, 248)',
+    width: 2
+  },
+  // 节点拖拽时的透明度配置
+  dragOpacityConfig: {
+    cloneNodeOpacity: 0.5, // 跟随鼠标移动的克隆节点或矩形的透明度
+    beingDragNodeOpacity: 0.3 // 被拖拽节点的透明度
+  },
+
+  // 【Watermark插件】
+  // 水印配置
+  watermarkConfig: {
+    onlyExport: false, // 是否仅在导出时添加水印
+    text: '',
+    lineSpacing: 100,
+    textSpacing: 100,
+    angle: 30,
+    textStyle: {
+      color: '#999',
+      opacity: 0.5,
+      fontSize: 14
+    },
+    belowNode: false
+  },
+
+  // 【Export插件】
+  // 导出png、svg、pdf时的图形内边距，注意是单侧内边距
+  exportPaddingX: 10,
+  exportPaddingY: 10,
+  // 设置导出图片和svg时，针对富文本节点内容，也就是嵌入到svg中的html节点的默认样式覆盖
+  // 如果不覆盖，会发生偏移问题
+  resetCss: `
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  `,
+  // 导出图片时canvas的缩放倍数，该配置会和window.devicePixelRatio值取最大值
+  minExportImgCanvasScale: 2,
+  // 导出png、svg、pdf时在头部和尾部添加自定义内容
+  // 可传递一个函数，这个函数可以返回null代表不添加内容，也可以返回如下数据：
+  /*
+    {
+      el,// 要追加的自定义DOM节点，样式可内联
+      cssText,// 可选，如果样式不想内联，可以传递该值，一个css字符串
+      height: 50// 返回的DOM节点的高度，必须传递
+    }
+  */
+  addContentToHeader: null,
+  addContentToFooter: null,
+
+  // 【AssociativeLine插件】
+  // 关联线默认文字
+  defaultAssociativeLineText: '关联',
+  // 关联线是否始终显示在节点上层
+  // false：即创建关联线和激活关联线时处于最顶层，其他情况下处于节点下方
+  associativeLineIsAlwaysAboveNode: true,
+  // 默认情况下，新创建的关联线两个端点的位置是根据两个节点中心点的相对位置来计算的，如果你想固定位置，可以通过这个属性来配置
+  // from和to都不传，则都自动计算，如果只传一个，另一个则会自动计算
+  associativeLineInitPointsPosition: {
+    // from和to可选值：left、top、bottom、right
+    from: '', // 关联线起始节点上端点的位置
+    to: '' // 关联线目标节点上端点的位置
+  },
+  // 是否允许调整关联线两个端点的位置
+  enableAdjustAssociativeLinePoints: true,
+
+  // 【TouchEvent插件】
+  // 禁止双指缩放，你仍旧可以使用api进行缩放
+  // 需要注册TouchEvent插件后生效
+  disableTouchZoom: false,
+
+  // 【Scrollbar插件】
+  // 当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas不再起作用
+  isLimitMindMapInCanvasWhenHasScrollbar: true,
+
+  // 【Search插件】
   // 是否仅搜索当前渲染的节点，被收起的节点不会被搜索到
   isOnlySearchCurrentRenderNodes: false,
-  // 协同编辑时，同一个节点不能同时被多人选中
-  onlyOneEnableActiveNodeOnCooperate: false,
+
+  // 【Cooperate插件】
   // 协同编辑时，节点操作即将更新到其他客户端前的生命周期函数
   // 函数接收一个对象作为参数：
   /*
@@ -295,9 +333,8 @@ export const defaultOpt = {
     }
   */
   beforeCooperateUpdate: null,
-  // 快捷键操作即将执行前的生命周期函数，返回true可以阻止操作执行
-  // 函数接收两个参数：key（快捷键）、activeNodeList（当前激活的节点列表）
-  beforeShortcutRun: null,
+
+  // 【RainbowLines插件】
   // 彩虹线条配置，需要先注册RainbowLines插件
   rainbowLinesConfig: {
     open: false, // 是否开启彩虹线条
@@ -314,29 +351,21 @@ export const defaultOpt = {
     ]
     */
   },
-  // 导出png、svg、pdf时在头部和尾部添加自定义内容
-  // 可传递一个函数，这个函数可以返回null代表不添加内容，也可以返回如下数据：
-  /*
-    {
-      el,// 要追加的自定义DOM节点，样式可内联
-      cssText,// 可选，如果样式不想内联，可以传递该值，一个css字符串
-      height: 50// 返回的DOM节点的高度，必须传递
-    }
-  */
-  addContentToHeader: null,
-  addContentToFooter: null,
+
+  // 【Demonstrate插件】
   // 演示插件配置
   demonstrateConfig: null,
-  // 移动节点到画布中心、回到根节点等操作时是否将缩放层级复位为100%
-  resetScaleOnMoveNodeToCenter: false,
-  // 添加附加的节点前置内容，前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分
-  createNodePrefixContent: null,
-  // 添加附加的节点后置内容，后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分
-  createNodePostfixContent: null,
+
+  // 【Formula插件】
   // 是否开启在富文本编辑框中直接编辑数学公式
   enableEditFormulaInRichTextEdit: true,
+
+  // 【RichText插件】
   // 转换富文本内容，当进入富文本编辑时，可以通过该参数传递一个函数，函数接收文本内容，需要返回你处理后的文本内容
   transformRichTextOnEnterEdit: null,
   // 可以传递一个函数，即将结束富文本编辑前会执行该函数，函数接收richText实例，所以你可以在此时机更新quill文档数据
-  beforeHideRichTextEdit: null
+  beforeHideRichTextEdit: null,
+  // 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果
+  // 需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果
+  richTextEditFakeInPlace: false,
 }

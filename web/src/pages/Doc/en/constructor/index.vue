@@ -17,6 +17,7 @@
 });
 </code></pre>
 <h2>Instantiation options</h2>
+<h3>1.Base</h3>
 <table>
 <thead>
 <tr>
@@ -85,13 +86,6 @@
 <td></td>
 </tr>
 <tr>
-<td>exportPadding</td>
-<td>Number</td>
-<td>20</td>
-<td>The padding for exporting images</td>
-<td></td>
-</tr>
-<tr>
 <td>imgTextMargin</td>
 <td>Number</td>
 <td>5</td>
@@ -106,20 +100,6 @@
 <td></td>
 </tr>
 <tr>
-<td>selectTranslateStep</td>
-<td>Number</td>
-<td>3</td>
-<td>The canvas offset when mouse moves to the edge during multi-select node</td>
-<td></td>
-</tr>
-<tr>
-<td>selectTranslateLimit</td>
-<td>Number</td>
-<td>20</td>
-<td>The distance from the edge when the canvas begins to offset during multi-select node</td>
-<td></td>
-</tr>
-<tr>
 <td>customNoteContentShow（v0.1.6+）</td>
 <td>Object</td>
 <td>null</td>
@@ -131,20 +111,6 @@
 <td>Boolean</td>
 <td>false</td>
 <td>Whether it is read-only mode</td>
-<td></td>
-</tr>
-<tr>
-<td>enableFreeDrag（v0.2.4+）</td>
-<td>Boolean</td>
-<td>false</td>
-<td>Enable node free(Free drag means that nodes can be dragged to any position on the canvas. Please note that it is not a function of dragging nodes to become siblings of other nodes. The connection of free drag may have certain problems, so it is best not to use this feature) drag</td>
-<td></td>
-</tr>
-<tr>
-<td>watermarkConfig（v0.2.4+）</td>
-<td>Object</td>
-<td></td>
-<td>Watermark config, Please refer to the table 【Watermark config】 below for detailed configuration</td>
 <td></td>
 </tr>
 <tr>
@@ -253,20 +219,6 @@
 <td></td>
 </tr>
 <tr>
-<td>exportPaddingX（v0.5.5+）</td>
-<td>Number</td>
-<td>10</td>
-<td>Horizontal padding of graphics when exporting PNG, SVG, and PDF</td>
-<td></td>
-</tr>
-<tr>
-<td>exportPaddingY（v0.5.5+）</td>
-<td>Number</td>
-<td>10</td>
-<td>Vertical padding of graphics when exporting PNG, SVG, and PDF</td>
-<td></td>
-</tr>
-<tr>
 <td>nodeTextEditZIndex（v0.5.5+）</td>
 <td>Number</td>
 <td>3000</td>
@@ -313,13 +265,6 @@
 <td>Number</td>
 <td>1000</td>
 <td>The maximum number of cached nodes. To optimize performance, an internal node cache pool is maintained to reuse nodes. This attribute allows you to specify the maximum number of caches in the pool</td>
-<td></td>
-</tr>
-<tr>
-<td>defaultAssociativeLineText（v0.5.11+）</td>
-<td>String</td>
-<td>关联</td>
-<td>Association Line Default Text</td>
 <td></td>
 </tr>
 <tr>
@@ -379,13 +324,6 @@
 <td></td>
 </tr>
 <tr>
-<td>nodeDragPlaceholderMaxSize（v0.6.12+）</td>
-<td>Number</td>
-<td>20</td>
-<td>When dragging an element, the maximum height of the block indicating the new position of the element</td>
-<td></td>
-</tr>
-<tr>
 <td>enableCreateHiddenInput（v0.6.13+）（v0.6.14+ remove this feature）</td>
 <td>Boolean</td>
 <td>true</td>
@@ -397,13 +335,6 @@
 <td>Boolean</td>
 <td>true</td>
 <td>Does it automatically enter text editing mode when pressing the Chinese, English, or numeric buttons when there is an activation node?</td>
-<td></td>
-</tr>
-<tr>
-<td>richTextEditFakeInPlace（v0.6.13+）</td>
-<td>Boolean</td>
-<td>false</td>
-<td>Set the rich text node edit box to match the size of the node, creating a pseudo in place editing effect. It should be noted that only when there is only text within the node and the shape is rectangular, can the effect be better</td>
 <td></td>
 </tr>
 <tr>
@@ -428,13 +359,6 @@
 <td></td>
 </tr>
 <tr>
-<td>resetCss（v0.6.16+）</td>
-<td>String</td>
-<td>* { margin: 0; padding: 0; box-sizing: border-box; }</td>
-<td>When exporting images and SVGs, the default style overlay for rich text node content, which is embedded in HTML nodes in SVGs, will occur. If not overlaid, the node content will be offset</td>
-<td></td>
-</tr>
-<tr>
 <td>enableDblclickReset（v0.6.17+）(v0.8.0+this attribute has been deleted)</td>
 <td>Boolean</td>
 <td>true(v0.7.0+changed to false)</td>
@@ -446,13 +370,6 @@
 <td>Boolean</td>
 <td>false</td>
 <td>Whether to return to the root node when double clicking with the mouse, that is, to center the display of the root node</td>
-<td></td>
-</tr>
-<tr>
-<td>minExportImgCanvasScale（v0.7.0+）</td>
-<td>Number</td>
-<td>2</td>
-<td>The scaling factor of canvas when exporting images and PDFs, which is set to the maximum value of window.devicePixelRatio to improve image clarity</td>
 <td></td>
 </tr>
 <tr>
@@ -484,38 +401,10 @@
 <td></td>
 </tr>
 <tr>
-<td>autoMoveWhenMouseInEdgeOnDrag（v0.7.1+）</td>
-<td>Boolean</td>
-<td>true</td>
-<td>Whether to enable automatic canvas movement when the mouse moves to the edge of the canvas while dragging nodes</td>
-<td></td>
-</tr>
-<tr>
 <td>fit（v0.7.1-fix.2+）</td>
 <td>Boolean</td>
 <td>false</td>
 <td>Is the first rendering scaled to fit the canvas size</td>
-<td></td>
-</tr>
-<tr>
-<td>dragMultiNodeRectConfig（v0.7.2+）</td>
-<td>Object</td>
-<td>{ width: 40, height: 20, fill: '' }</td>
-<td>The style configuration of the schematic rectangle that moves with the mouse when dragging multiple nodes, passing an object, and the field meanings are the width, height, and fill color of the rectangle</td>
-<td></td>
-</tr>
-<tr>
-<td>dragPlaceholderRectFill（v0.7.2+）</td>
-<td>String</td>
-<td></td>
-<td>The filling color of the schematic rectangle for the new position when dragging nodes. If not transmitted, the default color for the connected line is used</td>
-<td></td>
-</tr>
-<tr>
-<td>dragOpacityConfig（v0.7.2+）</td>
-<td>Object</td>
-<td>{ cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }</td>
-<td>The transparency configuration during node dragging, passing an object, and the field meanings are: the transparency of the cloned node or rectangle that follows the mouse movement, and the transparency of the dragged node</td>
 <td></td>
 </tr>
 <tr>
@@ -533,10 +422,10 @@
 <td></td>
 </tr>
 <tr>
-<td>associativeLineIsAlwaysAboveNode（v0.8.0+）</td>
+<td>onlyOneEnableActiveNodeOnCooperate（v0.9.8+）</td>
 <td>Boolean</td>
-<td>true</td>
-<td>Is the associated line always displayed above the node? If set to false, it will be at the top level when creating and activating the associated line, and in other cases, it will be below the node</td>
+<td>false</td>
+<td>During collaborative editing, the same node cannot be selected by multiple people at the same time</td>
 <td></td>
 </tr>
 <tr>
@@ -565,13 +454,6 @@
 <td>Boolean</td>
 <td>false</td>
 <td>Is disable dragging the canvas</td>
-<td></td>
-</tr>
-<tr>
-<td>disableTouchZoom（v0.8.1+）</td>
-<td>Boolean</td>
-<td>false</td>
-<td>Prohibit double finger scaling, you can still use the API for scaling, which takes effect on the TouchEvent plugin</td>
 <td></td>
 </tr>
 <tr>
@@ -610,87 +492,10 @@
 <td></td>
 </tr>
 <tr>
-<td>isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）</td>
-<td>Boolean</td>
-<td>true</td>
-<td>When registering the Scrollbar plugin, will the mind map be limited to the canvas and the isLimitMindMapInCanvas configuration no longer work</td>
-<td></td>
-</tr>
-<tr>
-<td>associativeLineInitPointsPosition（v0.9.5+）</td>
-<td>null / { from, to }</td>
-<td>{ from: '', to: '' }</td>
-<td>By default, the position of the two endpoints of a newly created association line is calculated based on the relative position of the center points of the two nodes. If you want to fix the position, you can configure it through this option. If neither from nor to is transmitted, they will be automatically calculated. If only one is transmitted, the other will be automatically calculated. from and to optional values</td>
-<td></td>
-</tr>
-<tr>
-<td>：left、top、bottom、right</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>enableAdjustAssociativeLinePoints（v0.9.5+）</td>
-<td>Boolean</td>
-<td>true</td>
-<td>Is it allowed to adjust the position of the two endpoints of the associated line</td>
-<td></td>
-</tr>
-<tr>
-<td>isOnlySearchCurrentRenderNodes（v0.9.8+）</td>
-<td>Boolean</td>
-<td>false</td>
-<td>Is it necessary to only search for the current rendered node, and nodes that have been collapsed will not be searched for</td>
-<td></td>
-</tr>
-<tr>
-<td>onlyOneEnableActiveNodeOnCooperate（v0.9.8+）</td>
-<td>Boolean</td>
-<td>false</td>
-<td>During collaborative editing, the same node cannot be selected by multiple people at the same time</td>
-<td></td>
-</tr>
-<tr>
-<td>beforeCooperateUpdate（v0.9.8+）</td>
-<td>Function、null</td>
-<td>null</td>
-<td>During collaborative editing, node operations are about to be updated to the lifecycle functions of other clients. The function takes an object as a parameter:{ type: 【createOrUpdate（Create or update nodes）、delete（Delete node）】, list: 【Array type, 1.When type=createOrUpdate, it represents the node data that has been created or updated, which will be synchronized to other clients, so you can modify the data; 2.When type=delete, represents the deleted node data】 }</td>
-<td></td>
-</tr>
-<tr>
 <td>beforeShortcutRun（v0.9.9+）</td>
 <td>Function、null</td>
 <td>null</td>
 <td>The lifecycle function before the shortcut operation is about to be executed, returning true can prevent the operation from executing. The function takes two parameters: key（Shortcut key）、activeNodeList（List of currently activated nodes）</td>
-<td></td>
-</tr>
-<tr>
-<td>rainbowLinesConfig（v0.9.9+）</td>
-<td>Object</td>
-<td>{ open: false, colorsList: [] }</td>
-<td>Rainbow line configuration requires registering the RainbowLines plugin first. Object type, Structure: { open: false【Is turn on rainbow lines】, colorsList: []【Customize the color list for rainbow lines. If not set, the default color list will be used】 }</td>
-<td></td>
-</tr>
-<tr>
-<td>addContentToHeader（v0.9.9+）</td>
-<td>Function、null</td>
-<td>null</td>
-<td>Add custom content to the header when exporting PNG, SVG, and PDF. Can pass a function that can return null to indicate no content is added, or it can return an object, For a detailed introduction, please refer to section 【How to add custom content when exporting】 below</td>
-<td></td>
-</tr>
-<tr>
-<td>addContentToFooter（v0.9.9+）</td>
-<td>Function、null</td>
-<td>null</td>
-<td>The basic definition is the same as addContentToHeader, adding custom content at the end</td>
-<td></td>
-</tr>
-<tr>
-<td>demonstrateConfig（v0.9.11+）</td>
-<td>Object、null</td>
-<td>null</td>
-<td>Demonstration plugin configuration. If not transmitted, the default configuration will be used. An object can be transmitted. If only a certain property is configured, only that property can be set. Other properties that have not been set will also use the default configuration. For complete configuration, please refer to the 【Demonstration Plugin Configuration】 section below</td>
 <td></td>
 </tr>
 <tr>
@@ -716,7 +521,7 @@
 </tr>
 </tbody>
 </table>
-<h3>Data structure</h3>
+<h3>1.1Data structure</h3>
 <p>The basic data structure is as follows:</p>
 <pre class="hljs"><code>{
   <span class="hljs-attr">data</span>: {
@@ -754,7 +559,234 @@
 }
 </code></pre>
 <p>If you want to add custom fields, you can add them to the same level as 'data' and 'children'. If you want to add them to the 'data' object, please use the <code>_</code> Name your custom field at the beginning, and it will be used internally to determine whether it is a custom field.</p>
-<h3>Watermark config</h3>
+<h3>1.2Icon Configuration</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>String</td>
+<td></td>
+<td>The name of the icon group</td>
+</tr>
+<tr>
+<td>type</td>
+<td>String</td>
+<td></td>
+<td>Values for icon grouping</td>
+</tr>
+<tr>
+<td>list</td>
+<td>Array</td>
+<td></td>
+<td>A list of icons under grouping, with each item in the array being an object, <code>{ name: '', icon: '' }</code>，<code>name</code>represents the name of the icon, <code>icon</code>represents the icon, Can be an <code>svg</code> icon, such as <code>&lt;svg ...&gt;&lt;path&gt;&lt;/path&gt;&lt;/svg&gt;</code>, also can be a image <code>url</code>, or <code>base64</code> icon, such as <code>data:image/png;base64,...</code></td>
+</tr>
+</tbody>
+</table>
+<h3>2.Export plugin</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>exportPadding</td>
+<td>Number</td>
+<td>20</td>
+<td>The padding for exporting images</td>
+<td></td>
+</tr>
+<tr>
+<td>exportPaddingX（v0.5.5+）</td>
+<td>Number</td>
+<td>10</td>
+<td>Horizontal padding of graphics when exporting PNG, SVG, and PDF</td>
+<td></td>
+</tr>
+<tr>
+<td>exportPaddingY（v0.5.5+）</td>
+<td>Number</td>
+<td>10</td>
+<td>Vertical padding of graphics when exporting PNG, SVG, and PDF</td>
+<td></td>
+</tr>
+<tr>
+<td>resetCss（v0.6.16+）</td>
+<td>String</td>
+<td>* { margin: 0; padding: 0; box-sizing: border-box; }</td>
+<td>When exporting images and SVGs, the default style overlay for rich text node content, which is embedded in HTML nodes in SVGs, will occur. If not overlaid, the node content will be offset</td>
+<td></td>
+</tr>
+<tr>
+<td>minExportImgCanvasScale（v0.7.0+）</td>
+<td>Number</td>
+<td>2</td>
+<td>The scaling factor of canvas when exporting images and PDFs, which is set to the maximum value of window.devicePixelRatio to improve image clarity</td>
+<td></td>
+</tr>
+<tr>
+<td>addContentToHeader（v0.9.9+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>Add custom content to the header when exporting PNG, SVG, and PDF. Can pass a function that can return null to indicate no content is added, or it can return an object, For a detailed introduction, please refer to section 【How to add custom content when exporting】 below</td>
+<td></td>
+</tr>
+<tr>
+<td>addContentToFooter（v0.9.9+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>The basic definition is the same as addContentToHeader, adding custom content at the end</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4>2.1How to add custom content when exporting</h4>
+<p>The two instantiation options <code>addContentToHeader</code> and <code>addContentToFooter</code> can be used to add custom content at the beginning and end when exporting <code>png</code>、<code>svg</code>、<code>pdf</code>, The default value is <code>null</code>, which means no configuration. A function can be passed and can return <code>null</code>, which means no content will be added. If you want to add content, you need to return the following structure:</p>
+<pre class="hljs"><code>{
+  el,// Custom DOM node to be added, styles can be inline
+  cssText,// Optional, if the style does not want to be inlined, you can pass this value as a CSS string
+  height: 50// The height of the returned DOM node must be passed
+}
+</code></pre>
+<p>A simple example:</p>
+<pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({
+  <span class="hljs-attr">addContentToFooter</span>: <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> el = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>)
+    el.className = <span class="hljs-string">&#x27;footer&#x27;</span>
+    el.innerHTML = <span class="hljs-string">&#x27;From: simple-mind-map&#x27;</span>
+    <span class="hljs-keyword">const</span> cssText = <span class="hljs-string">`
+      .footer {
+        width: 100%;
+        height: 30px;
+      }
+    `</span>
+    <span class="hljs-keyword">return</span> {
+      el,
+      cssText,
+      <span class="hljs-attr">height</span>: <span class="hljs-number">30</span>
+    }
+  }
+})
+</code></pre>
+<h3>3.Select plugin</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>selectTranslateStep</td>
+<td>Number</td>
+<td>3</td>
+<td>The canvas offset when mouse moves to the edge during multi-select node</td>
+<td></td>
+</tr>
+<tr>
+<td>selectTranslateLimit</td>
+<td>Number</td>
+<td>20</td>
+<td>The distance from the edge when the canvas begins to offset during multi-select node</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>4.Drag plugin</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>enableFreeDrag（v0.2.4+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Enable node free(Free drag means that nodes can be dragged to any position on the canvas. Please note that it is not a function of dragging nodes to become siblings of other nodes. The connection of free drag may have certain problems, so it is best not to use this feature) drag</td>
+<td></td>
+</tr>
+<tr>
+<td>nodeDragPlaceholderMaxSize（v0.6.12+）（v0.10.0+ has been abolished）</td>
+<td>Number</td>
+<td>20</td>
+<td>When dragging an element, the maximum height of the block indicating the new position of the element</td>
+<td></td>
+</tr>
+<tr>
+<td>autoMoveWhenMouseInEdgeOnDrag（v0.7.1+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Whether to enable automatic canvas movement when the mouse moves to the edge of the canvas while dragging nodes</td>
+<td></td>
+</tr>
+<tr>
+<td>dragMultiNodeRectConfig（v0.7.2+）</td>
+<td>Object</td>
+<td>{ width: 40, height: 20, fill: '' }</td>
+<td>The style configuration of the schematic rectangle that moves with the mouse when dragging multiple nodes, passing an object, and the field meanings are the width, height, and fill color of the rectangle</td>
+<td></td>
+</tr>
+<tr>
+<td>dragPlaceholderRectFill（v0.7.2+）</td>
+<td>String</td>
+<td></td>
+<td>The filling color of the schematic rectangle for the new position when dragging nodes. If not transmitted, the default color for the connected line is used</td>
+<td></td>
+</tr>
+<tr>
+<td>dragOpacityConfig（v0.7.2+）</td>
+<td>Object</td>
+<td>{ cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }</td>
+<td>The transparency configuration during node dragging, passing an object, and the field meanings are: the transparency of the cloned node or rectangle that follows the mouse movement, and the transparency of the dragged node</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>5.Watermark plugin</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>watermarkConfig（v0.2.4+）</td>
+<td>Object</td>
+<td></td>
+<td>Watermark config, Please refer to the table 【Watermark config】 below for detailed configuration</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4>5.1Watermark config</h4>
 <table>
 <thead>
 <tr>
@@ -803,7 +835,7 @@
 </tr>
 </tbody>
 </table>
-<h3>Icon Configuration</h3>
+<h3>6.AssociativeLine plugin</h3>
 <table>
 <thead>
 <tr>
@@ -811,58 +843,195 @@
 <th>Type</th>
 <th>Default Value</th>
 <th>Description</th>
+<th>Required</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>name</td>
+<td>defaultAssociativeLineText（v0.5.11+）</td>
 <td>String</td>
+<td>关联</td>
+<td>Association Line Default Text</td>
 <td></td>
-<td>The name of the icon group</td>
 </tr>
 <tr>
-<td>type</td>
-<td>String</td>
+<td>associativeLineIsAlwaysAboveNode（v0.8.0+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Is the associated line always displayed above the node? If set to false, it will be at the top level when creating and activating the associated line, and in other cases, it will be below the node</td>
 <td></td>
-<td>Values for icon grouping</td>
 </tr>
 <tr>
-<td>list</td>
-<td>Array</td>
+<td>associativeLineInitPointsPosition（v0.9.5+）</td>
+<td>null / { from, to }</td>
+<td>{ from: '', to: '' }</td>
+<td>By default, the position of the two endpoints of a newly created association line is calculated based on the relative position of the center points of the two nodes. If you want to fix the position, you can configure it through this option. If neither from nor to is transmitted, they will be automatically calculated. If only one is transmitted, the other will be automatically calculated. from and to optional values</td>
 <td></td>
-<td>A list of icons under grouping, with each item in the array being an object, <code>{ name: '', icon: '' }</code>，<code>name</code>represents the name of the icon, <code>icon</code>represents the icon, Can be an <code>svg</code> icon, such as <code>&lt;svg ...&gt;&lt;path&gt;&lt;/path&gt;&lt;/svg&gt;</code>, also can be a image <code>url</code>, or <code>base64</code> icon, such as <code>data:image/png;base64,...</code></td>
+</tr>
+<tr>
+<td>：left、top、bottom、right</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>enableAdjustAssociativeLinePoints（v0.9.5+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>Is it allowed to adjust the position of the two endpoints of the associated line</td>
+<td></td>
 </tr>
 </tbody>
 </table>
-<h3>How to add custom content when exporting</h3>
-<p>The two instantiation options <code>addContentToHeader</code> and <code>addContentToFooter</code> can be used to add custom content at the beginning and end when exporting <code>png</code>、<code>svg</code>、<code>pdf</code>, The default value is <code>null</code>, which means no configuration. A function can be passed and can return <code>null</code>, which means no content will be added. If you want to add content, you need to return the following structure:</p>
-<pre class="hljs"><code>{
-  el,// Custom DOM node to be added, styles can be inline
-  cssText,// Optional, if the style does not want to be inlined, you can pass this value as a CSS string
-  height: 50// The height of the returned DOM node must be passed
-}
-</code></pre>
-<p>A simple example:</p>
-<pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({
-  <span class="hljs-attr">addContentToFooter</span>: <span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-keyword">const</span> el = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>)
-    el.className = <span class="hljs-string">&#x27;footer&#x27;</span>
-    el.innerHTML = <span class="hljs-string">&#x27;From: simple-mind-map&#x27;</span>
-    <span class="hljs-keyword">const</span> cssText = <span class="hljs-string">`
-      .footer {
-        width: 100%;
-        height: 30px;
-      }
-    `</span>
-    <span class="hljs-keyword">return</span> {
-      el,
-      cssText,
-      <span class="hljs-attr">height</span>: <span class="hljs-number">30</span>
-    }
-  }
-})
-</code></pre>
-<h3>Demonstration Plugin Configuration</h3>
+<h3>7.RichText plugin</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>richTextEditFakeInPlace（v0.6.13+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Set the rich text node edit box to match the size of the node, creating a pseudo in place editing effect. It should be noted that only when there is only text within the node and the shape is rectangular, can the effect be better</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>8.TouchEvent plugin</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>disableTouchZoom（v0.8.1+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Prohibit double finger scaling, you can still use the API for scaling, which takes effect on the TouchEvent plugin</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>9.Scrollbar plugin</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>When registering the Scrollbar plugin, will the mind map be limited to the canvas and the isLimitMindMapInCanvas configuration no longer work</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>10.Search plugin</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>isOnlySearchCurrentRenderNodes（v0.9.8+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Is it necessary to only search for the current rendered node, and nodes that have been collapsed will not be searched for</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>11.Cooperate plugin</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>beforeCooperateUpdate（v0.9.8+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>During collaborative editing, node operations are about to be updated to the lifecycle functions of other clients. The function takes an object as a parameter:{ type: 【createOrUpdate（Create or update nodes）、delete（Delete node）】, list: 【Array type, 1.When type=createOrUpdate, it represents the node data that has been created or updated, which will be synchronized to other clients, so you can modify the data; 2.When type=delete, represents the deleted node data】 }</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>12.RainbowLines plugin</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rainbowLinesConfig（v0.9.9+）</td>
+<td>Object</td>
+<td>{ open: false, colorsList: [] }</td>
+<td>Rainbow line configuration requires registering the RainbowLines plugin first. Object type, Structure: { open: false【Is turn on rainbow lines】, colorsList: []【Customize the color list for rainbow lines. If not set, the default color list will be used】 }</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3>13.Demonstrate plugin</h3>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>demonstrateConfig（v0.9.11+）</td>
+<td>Object、null</td>
+<td>null</td>
+<td>Demonstration plugin configuration. If not transmitted, the default configuration will be used. An object can be transmitted. If only a certain property is configured, only that property can be set. Other properties that have not been set will also use the default configuration. For complete configuration, please refer to the 【Demonstration Plugin Configuration】 section below</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h4>13.1Demonstration Plugin Configuration</h4>
 <table>
 <thead>
 <tr>
