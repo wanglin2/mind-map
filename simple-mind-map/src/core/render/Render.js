@@ -448,6 +448,7 @@ class Render {
       this.mindMap.emit('node_tree_render_end')
       return
     }
+    this.mindMap.emit('node_tree_render_start')
     // 计算布局
     this.layout.doLayout(root => {
       // 删除本次渲染时不再需要的节点

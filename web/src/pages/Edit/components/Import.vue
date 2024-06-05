@@ -1,36 +1,56 @@
 <template>
-  <el-dialog
-    class="nodeImportDialog"
-    :title="$t('import.title')"
-    :visible.sync="dialogVisible"
-    width="300px"
-  >
-    <el-upload
-      ref="upload"
-      action="x"
-      accept=".smm,.json,.xmind,.xlsx,.md"
-      :file-list="fileList"
-      :auto-upload="false"
-      :multiple="false"
-      :on-change="onChange"
-      :on-remove="onRemove"
-      :limit="1"
-      :on-exceed="onExceed"
+  <div>
+    <el-dialog
+      class="nodeImportDialog"
+      :title="$t('import.title')"
+      :visible.sync="dialogVisible"
+      width="300px"
     >
-      <el-button slot="trigger" size="small" type="primary">{{
-        $t('import.selectFile')
-      }}</el-button>
-      <div slot="tip" class="el-upload__tip">
-        {{ $t('import.supportFile') }}
-      </div>
-    </el-upload>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
-      <el-button type="primary" @click="confirm">{{
-        $t('dialog.confirm')
-      }}</el-button>
-    </span>
-  </el-dialog>
+      <el-upload
+        ref="upload"
+        action="x"
+        accept=".smm,.json,.xmind,.xlsx,.md"
+        :file-list="fileList"
+        :auto-upload="false"
+        :multiple="false"
+        :on-change="onChange"
+        :on-remove="onRemove"
+        :limit="1"
+        :on-exceed="onExceed"
+      >
+        <el-button slot="trigger" size="small" type="primary">{{
+          $t('import.selectFile')
+        }}</el-button>
+        <div slot="tip" class="el-upload__tip">
+          {{ $t('import.supportFile') }}
+        </div>
+      </el-upload>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
+        <el-button type="primary" @click="confirm">{{
+          $t('dialog.confirm')
+        }}</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      class="xmindCanvasSelectDialog"
+      :title="$t('import.xmindCanvasSelectDialogTitle')"
+      :visible.sync="xmindCanvasSelectDialogVisible"
+      width="300px"
+      :show-close="false"
+    >
+      <el-radio-group v-model="selectCanvas" class="canvasList">
+        <el-radio v-for="(item, index) in canvasList" :key="index" :label="index">{{
+          item.title
+        }}</el-radio>
+      </el-radio-group>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmSelect">{{
+          $t('dialog.confirm')
+        }}</el-button>
+      </span>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -50,7 +70,11 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      fileList: []
+      fileList: [],
+      selectPromiseResolve: null,
+      xmindCanvasSelectDialogVisible: false,
+      selectCanvas: '',
+      canvasList: []
     }
   },
   watch: {
@@ -106,11 +130,7 @@ export default {
       }
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-08-03 22:48:42
-     * @Desc: 文件选择
-     */
+    // 文件选择
     onChange(file) {
       let reg = /\.(smm|xmind|json|xlsx|md)$/
       if (!reg.test(file.name)) {
@@ -126,29 +146,17 @@ export default {
       this.fileList = fileList
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-08-03 22:48:47
-     * @Desc: 数量超出限制
-     */
+    // 数量超出限制
     onExceed() {
       this.$message.error(this.$t('import.maxFileNum'))
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-06-22 22:08:11
-     * @Desc: 取消
-     */
+    // 取消
     cancel() {
       this.dialogVisible = false
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-06-06 22:28:20
-     * @Desc:  确定
-     */
+    // 确定
     confirm() {
       if (this.fileList.length <= 0) {
         return this.$message.error(this.$t('import.notSelectTip'))
@@ -168,11 +176,7 @@ export default {
       this.setActiveSidebar(null)
     },
 
-    /**
-     * @Author: 王林25
-     * @Date: 2022-10-24 14:19:33
-     * @Desc: 处理.smm文件
-     */
+    // 处理.smm文件
     handleSmm(file) {
       let fileReader = new FileReader()
       fileReader.readAsText(file.raw)
@@ -192,14 +196,15 @@ export default {
       }
     },
 
-    /**
-     * @Author: 王林25
-     * @Date: 2022-10-24 14:19:41
-     * @Desc: 处理.xmind文件
-     */
+    // 处理.xmind文件
     async handleXmind(file) {
       try {
-        let data = await xmind.parseXmindFile(file.raw)
+        let data = await xmind.parseXmindFile(file.raw, content => {
+          this.showSelectXmindCanvasDialog(content)
+          return new Promise(resolve => {
+            this.selectPromiseResolve = resolve
+          })
+        })
         this.$bus.$emit('setData', data)
         this.$message.success(this.$t('import.importSuccess'))
       } catch (error) {
@@ -208,11 +213,22 @@ export default {
       }
     },
 
-    /**
-     * @Author: 王林25
-     * @Date: 2022-10-24 14:19:51
-     * @Desc: 处理.xlsx文件
-     */
+    // 显示xmind文件的多个画布选择弹窗
+    showSelectXmindCanvasDialog(content) {
+      this.canvasList = content
+      this.selectCanvas = 0
+      this.xmindCanvasSelectDialogVisible = true
+    },
+
+    // 确认导入指定的画布
+    confirmSelect() {
+      this.selectPromiseResolve(this.canvasList[this.selectCanvas])
+      this.xmindCanvasSelectDialogVisible = false
+      this.canvasList = []
+      this.selectCanvas = 0
+    },
+
+    // 处理.xlsx文件
     async handleExcel(file) {
       try {
         const wb = read(await fileToBuffer(file.raw))
@@ -306,5 +322,18 @@ export default {
 
 <style lang="less" scoped>
 .nodeImportDialog {
+}
+
+.canvasList {
+  display: flex;
+  flex-direction: column;
+
+  /deep/ .el-radio {
+    margin-bottom: 12px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
 }
 </style>

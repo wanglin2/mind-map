@@ -154,6 +154,7 @@ class NodeImgAdjust {
     })
     btnEl.addEventListener('mousedown', e => {
       e.stopPropagation()
+      e.preventDefault()
       this.onMousedown(e)
     })
     btnEl.addEventListener('mouseup', e => {

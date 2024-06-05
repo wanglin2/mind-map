@@ -5,12 +5,12 @@ import {
   addHtmlStyle,
   checkIsRichText,
   isUndef,
-  createForeignObjectNode
+  createForeignObjectNode,
+  addXmlns
 } from '../../../utils'
 import { Image as SVGImage, SVG, A, G, Rect, Text } from '@svgdotjs/svg.js'
 import iconsSvg from '../../../svg/icons'
 import { CONSTANTS } from '../../../constants/constant'
-import { defenseXSS } from '../../../utils/xss'
 
 //  创建图片节点
 function createImgNode() {
@@ -142,7 +142,7 @@ function createRichTextNode() {
       text: text
     })
   }
-  let html = `<div>${defenseXSS(this.getData('text'))}</div>`
+  let html = `<div>${this.getData('text')}</div>`
   if (!this.mindMap.commonCaches.measureRichtextNodeTextSizeEl) {
     this.mindMap.commonCaches.measureRichtextNodeTextSizeEl =
       document.createElement('div')
@@ -158,7 +158,7 @@ function createRichTextNode() {
   div.innerHTML = html
   let el = div.children[0]
   el.classList.add('smm-richtext-node-wrap')
-  el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
+  addXmlns(el)
   el.style.maxWidth = textAutoWrapWidth + 'px'
   let { width, height } = el.getBoundingClientRect()
   // 如果文本为空，那么需要计算一个默认高度

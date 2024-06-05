@@ -15,7 +15,7 @@ import {
 } from '../utils/xmind'
 
 //  解析.xmind文件
-const parseXmindFile = file => {
+const parseXmindFile = (file, handleMultiCanvas) => {
   return new Promise((resolve, reject) => {
     JSZip.loadAsync(file).then(
       async zip => {
@@ -25,7 +25,7 @@ const parseXmindFile = file => {
           let xmlFile = zip.files['content.xml'] || zip.files['/content.xml']
           if (jsonFile) {
             let json = await jsonFile.async('string')
-            content = await transformXmind(json, zip.files)
+            content = await transformXmind(json, zip.files, handleMultiCanvas)
           } else if (xmlFile) {
             let xml = await xmlFile.async('string')
             let json = xmlConvert.xml2json(xml)
@@ -48,8 +48,15 @@ const parseXmindFile = file => {
 }
 
 //  转换xmind数据
-const transformXmind = async (content, files) => {
-  const data = JSON.parse(content)[0]
+const transformXmind = async (content, files, handleMultiCanvas) => {
+  content = JSON.parse(content)
+  let data = null
+  if (content.length > 1 && typeof handleMultiCanvas === 'function') {
+    data = await handleMultiCanvas(content)
+  }
+  if (!data) {
+    data = content[0]
+  }
   const nodeTree = data.rootTopic
   const newTree = {}
   const waitLoadImageList = []

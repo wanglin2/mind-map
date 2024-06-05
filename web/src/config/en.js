@@ -178,6 +178,11 @@ export const backgroundPositionList = [
   }
 ]
 
+const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0
+const ctrl = isMac ? '⌘' : 'Ctrl'
+const enter = isMac ? 'Return' : 'Enter'
+const macFn = isMac ? 'fn + ' : ''
+
 // 背景图片大小
 export const backgroundSizeList = [
   {
@@ -207,7 +212,7 @@ export const shortcutKeyList = [
       {
         icon: 'iconjiedian',
         name: 'Insert sibling node',
-        value: 'Enter'
+        value: enter
       },
       {
         icon: 'icondodeparent',
@@ -217,17 +222,17 @@ export const shortcutKeyList = [
       {
         icon: 'iconshangyi',
         name: 'Move up node',
-        value: 'Ctrl + ↑'
+        value: `${ctrl} + ↑`
       },
       {
         icon: 'iconxiayi',
         name: 'Move down node',
-        value: 'Ctrl + ↓'
+        value: `${ctrl} + ↓`
       },
       {
         icon: 'icongaikuozonglan',
         name: 'Insert summary',
-        value: 'Ctrl + G'
+        value: `${ctrl} + G`
       },
       {
         icon: 'iconzhankai',
@@ -247,57 +252,57 @@ export const shortcutKeyList = [
       {
         icon: 'iconfuzhi',
         name: 'Copy node',
-        value: 'Ctrl + C'
+        value: `${ctrl} + C`
       },
       {
         icon: 'iconjianqie',
         name: 'Cut node',
-        value: 'Ctrl + X'
+        value: `${ctrl} + X`
       },
       {
         icon: 'iconniantie',
         name: 'Paste node',
-        value: 'Ctrl + V'
+        value: `${ctrl} + V`
       },
       {
         icon: 'iconbianji',
         name: 'Edit node',
-        value: 'F2'
+        value: macFn + 'F2'
       },
       {
         icon: 'iconhuanhang',
         name: 'Text Wrap',
-        value: 'Shift + Enter'
+        value: `Shift + ${enter}`
       },
       {
         icon: 'iconhoutui-shi',
         name: 'Undo',
-        value: 'Ctrl + Z'
+        value: `${ctrl} + Z`
       },
       {
         icon: 'iconqianjin1',
         name: 'Redo',
-        value: 'Ctrl + Y'
+        value: `${ctrl} + Y`
       },
       {
         icon: 'iconquanxuan',
         name: 'Select All',
-        value: 'Ctrl + A'
+        value: `${ctrl} + A`
       },
       {
         icon: 'iconquanxuan',
         name: 'Multiple choice',
-        value: 'Right click / Ctrl + Left click'
+        value: `Right click / ${ctrl} + Left click`
       },
       {
         icon: 'iconzhengli',
         name: 'Arrange layout',
-        value: 'Ctrl + L'
+        value: `${ctrl} + L`
       },
       {
         icon: 'iconsousuo',
         name: 'Search and Replace',
-        value: 'Ctrl + F'
+        value: `${ctrl} + F`
       }
     ]
   },
@@ -307,27 +312,27 @@ export const shortcutKeyList = [
       {
         icon: 'iconfangda',
         name: 'Zoom in',
-        value: 'Ctrl + +'
+        value: `${ctrl} + +`
       },
       {
         icon: 'iconsuoxiao',
         name: 'Zoom out',
-        value: 'Ctrl + -'
+        value: `${ctrl} + -`
       },
       {
         icon: 'iconfangda',
         name: 'Zoom in/Zoom out',
-        value: 'Ctrl + Mouse wheel'
+        value: `${ctrl} + Mouse wheel`
       },
       {
         icon: 'icondingwei',
         name: 'Back root node',
-        value: 'Ctrl + Enter'
+        value: `${ctrl} + ${enter}`
       },
       {
         icon: 'iconquanping1',
         name: 'fit canvas',
-        value: 'Ctrl + i'
+        value: `${ctrl} + i`
       }
     ]
   },
@@ -337,7 +342,7 @@ export const shortcutKeyList = [
       {
         icon: 'iconhuanhang',
         name: 'Text Wrap',
-        value: 'Shift + Enter'
+        value: `Shift + ${enter}`
       },
       {
         icon: 'iconshanchu',
@@ -352,13 +357,13 @@ export const shortcutKeyList = [
       {
         icon: 'iconjiedian',
         name: 'Insert sibling node',
-        value: 'Enter'
+        value: enter
       },
       {
         icon: 'icondodeparent',
         name: 'Move up one level',
         value: 'Shift + Tab'
-      },
+      }
     ]
   }
 ]

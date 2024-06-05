@@ -82,7 +82,7 @@ app.on('activate', () => {
 // https://www.jianshu.com/p/a32542277b83
 let initOpenFileQueue = []
 app.on('will-finish-launching', () => {
-  // Event fired When someone drags files onto the icon while your app is running
+  // Event fired When someone drags files onto the icon while your app is running 
   if (process.platform == 'win32') {
     const argv = process.argv
     if (argv) {

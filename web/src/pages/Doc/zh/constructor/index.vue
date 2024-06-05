@@ -17,6 +17,7 @@
 });
 </code></pre>
 <h2>实例化选项</h2>
+<h3>1.基本</h3>
 <table>
 <thead>
 <tr>
@@ -76,12 +77,6 @@
 <td>节点里最多显示的标签数量，多余的会被丢弃</td>
 </tr>
 <tr>
-<td>exportPadding</td>
-<td>Number</td>
-<td>20</td>
-<td>导出图片时的内边距</td>
-</tr>
-<tr>
 <td>imgTextMargin</td>
 <td>Number</td>
 <td>5</td>
@@ -94,18 +89,6 @@
 <td>节点里各种文字信息的间距，如图标和文字的间距</td>
 </tr>
 <tr>
-<td>selectTranslateStep</td>
-<td>Number</td>
-<td>3</td>
-<td>多选节点时鼠标移动到边缘时的画布移动偏移量</td>
-</tr>
-<tr>
-<td>selectTranslateLimit</td>
-<td>Number</td>
-<td>20</td>
-<td>多选节点时鼠标移动距边缘多少距离时开始偏移</td>
-</tr>
-<tr>
 <td>customNoteContentShow（v0.1.6+）</td>
 <td>Object</td>
 <td>null</td>
@@ -116,18 +99,6 @@
 <td>Boolean</td>
 <td>false</td>
 <td>是否是只读模式</td>
-</tr>
-<tr>
-<td>enableFreeDrag（v0.2.4+）</td>
-<td>Boolean</td>
-<td>false</td>
-<td>是否开启节点自由拖拽（自由拖拽即可以把节点拖拽到画布的任意位置，注意不是拖拽节点成为其他节点的子节点兄弟节点的功能，自由拖拽的连线会存在一定问题，所以该特性最好不要使用）</td>
-</tr>
-<tr>
-<td>watermarkConfig（v0.2.4+）</td>
-<td>Object</td>
-<td></td>
-<td>水印配置，详细配置请参考下方表格【水印配置】</td>
 </tr>
 <tr>
 <td>textAutoWrapWidth（v0.3.4+）</td>
@@ -220,18 +191,6 @@
 <td>初始根节点的位置，可传一个数组，默认为<code>['center', 'center']</code>，代表根节点处于画布中心位置，除了<code>center</code>，关键词还可以设置<code>left</code>、<code>top</code>、<code>right</code>、<code>bottom</code>，除了可以传关键词，数组的每项还可以传递一个数字，代表具体的像素，可以传递一个百分比字符串，比如<code>['40%', '60%']</code>，代表水平位置在画布宽度的<code>40%</code>的位置，垂直位置在画布高度的<code>60%</code>的位置</td>
 </tr>
 <tr>
-<td>exportPaddingX（v0.5.5+）</td>
-<td>Number</td>
-<td>10</td>
-<td>导出png、svg、pdf时的图形水平内边距</td>
-</tr>
-<tr>
-<td>exportPaddingY（v0.5.5+）</td>
-<td>Number</td>
-<td>10</td>
-<td>导出png、svg、pdf时的图形垂直内边距</td>
-</tr>
-<tr>
 <td>nodeTextEditZIndex（v0.5.5+）</td>
 <td>Number</td>
 <td>3000</td>
@@ -272,12 +231,6 @@
 <td>Number</td>
 <td>1000</td>
 <td>节点最大缓存数量。为了优化性能，内部会维护一个节点缓存池，用来复用节点，通过该属性可以指定池的最大缓存数量</td>
-</tr>
-<tr>
-<td>defaultAssociativeLineText（v0.5.11+）</td>
-<td>String</td>
-<td>关联</td>
-<td>关联线默认文字</td>
 </tr>
 <tr>
 <td>fitPadding（v0.6.0+）</td>
@@ -328,12 +281,6 @@
 <td>指定内部一些元素（节点文本编辑元素、节点备注显示元素、关联线文本编辑元素、节点图片调整按钮元素）添加到的位置，默认添加到document.body下</td>
 </tr>
 <tr>
-<td>nodeDragPlaceholderMaxSize（v0.6.12+）</td>
-<td>Number</td>
-<td>20</td>
-<td>拖拽元素时，指示元素新位置的块的最大高度</td>
-</tr>
-<tr>
 <td>enableCreateHiddenInput（v0.6.13+）（v0.6.14+版本已去除该特性）</td>
 <td>Boolean</td>
 <td>true</td>
@@ -344,12 +291,6 @@
 <td>Boolean</td>
 <td>true</td>
 <td>是否在存在一个激活节点时，当按下中文、英文、数字按键时自动进入文本编辑模式</td>
-</tr>
-<tr>
-<td>richTextEditFakeInPlace（v0.6.13+）</td>
-<td>Boolean</td>
-<td>false</td>
-<td>设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果，需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果</td>
 </tr>
 <tr>
 <td>customHandleClipboardText（v0.6.14+）</td>
@@ -370,12 +311,6 @@
 <td>禁止鼠标滚轮缩放，你仍旧可以使用api进行缩放</td>
 </tr>
 <tr>
-<td>resetCss（v0.6.16+）</td>
-<td>String</td>
-<td>* { margin: 0; padding: 0; box-sizing: border-box; }</td>
-<td>设置导出图片和svg时，针对富文本节点内容，也就是嵌入到svg中的html节点的默认样式覆盖，如果不覆盖，节点内容会发生偏移</td>
-</tr>
-<tr>
 <td>enableDblclickReset（v0.6.17+）（v0.8.0+已删除该属性）</td>
 <td>Boolean</td>
 <td>true（v0.7.0+改为false）</td>
@@ -386,12 +321,6 @@
 <td>Boolean</td>
 <td>false</td>
 <td>是否在鼠标双击时回到根节点，也就是让根节点居中显示</td>
-</tr>
-<tr>
-<td>minExportImgCanvasScale（v0.7.0+）</td>
-<td>Number</td>
-<td>2</td>
-<td>导出图片和pdf时canvas的缩放倍数，该配置会和window.devicePixelRatio值取最大值，用于提升图片清晰度</td>
 </tr>
 <tr>
 <td>hoverRectColor（v0.7.0+）</td>
@@ -418,34 +347,10 @@
 <td>是否开启删除节点后自动激活节点相邻节点或父节点的功能</td>
 </tr>
 <tr>
-<td>autoMoveWhenMouseInEdgeOnDrag（v0.7.1+）</td>
-<td>Boolean</td>
-<td>true</td>
-<td>拖拽节点时鼠标移动到画布边缘是否开启画布自动移动</td>
-</tr>
-<tr>
 <td>fit（v0.7.1-fix.2+）</td>
 <td>Boolean</td>
 <td>false</td>
 <td>首次渲染时是否缩放至适应画布大小</td>
-</tr>
-<tr>
-<td>dragMultiNodeRectConfig（v0.7.2+）</td>
-<td>Object</td>
-<td>{ width: 40, height: 20, fill: '' }</td>
-<td>拖拽多个节点时随鼠标移动的示意矩形的样式配置，传递一个对象，字段含义分别为矩形的宽、高、填充色</td>
-</tr>
-<tr>
-<td>dragPlaceholderRectFill（v0.7.2+）</td>
-<td>String</td>
-<td></td>
-<td>节点拖拽时新位置的示意矩形的填充颜色，如果不传默认使用连线的颜色</td>
-</tr>
-<tr>
-<td>dragOpacityConfig（v0.7.2+）</td>
-<td>Object</td>
-<td>{ cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }</td>
-<td>节点拖拽时的透明度配置，传递一个对象，字段含义分别为：跟随鼠标移动的克隆节点或矩形的透明度、被拖拽节点的透明度</td>
 </tr>
 <tr>
 <td>tagsColorMap（v0.7.2+）</td>
@@ -460,10 +365,10 @@
 <td>节点协作编辑时的人员头像样式配置，字段含义分别为：头像大小、如果是文字头像，那么文字的大小</td>
 </tr>
 <tr>
-<td>associativeLineIsAlwaysAboveNode（v0.8.0+）</td>
+<td>onlyOneEnableActiveNodeOnCooperate（v0.9.8+）</td>
 <td>Boolean</td>
-<td>true</td>
-<td>关联线是否始终显示在节点上层，如果设为false，那么创建关联线和激活关联线时处于最顶层，其他情况下处于节点下方</td>
+<td>false</td>
+<td>协同编辑时，同一个节点不能同时被多人选中</td>
 </tr>
 <tr>
 <td>defaultGeneralizationText（v0.8.0+）</td>
@@ -488,12 +393,6 @@
 <td>Boolean</td>
 <td>false</td>
 <td>是否禁止拖动画布</td>
-</tr>
-<tr>
-<td>disableTouchZoom（v0.8.1+）</td>
-<td>Boolean</td>
-<td>false</td>
-<td>禁止双指缩放，你仍旧可以使用api进行缩放，对TouchEvent插件生效</td>
 </tr>
 <tr>
 <td>highlightNodeBoxStyle（v0.9.0+）</td>
@@ -526,70 +425,10 @@
 <td>是否将思维导图限制在画布内。比如向右拖动时，思维导图图形的最左侧到达画布中心时将无法继续向右拖动，其他同理</td>
 </tr>
 <tr>
-<td>isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）</td>
-<td>Boolean</td>
-<td>true</td>
-<td>当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas配置不再起作用</td>
-</tr>
-<tr>
-<td>associativeLineInitPointsPosition（v0.9.5+）</td>
-<td>null / { from, to }</td>
-<td>{ from: '', to: '' }</td>
-<td>默认情况下，新创建的关联线两个端点的位置是根据两个节点中心点的相对位置来计算的，如果你想固定位置，可以通过这个选项来配置。from和to都不传，则都自动计算，如果只传一个，另一个则会自动计算。from和to可选值：left、top、bottom、right</td>
-</tr>
-<tr>
-<td>enableAdjustAssociativeLinePoints（v0.9.5+）</td>
-<td>Boolean</td>
-<td>true</td>
-<td>是否允许调整关联线两个端点的位置</td>
-</tr>
-<tr>
-<td>isOnlySearchCurrentRenderNodes（v0.9.8+）</td>
-<td>Boolean</td>
-<td>false</td>
-<td>是否仅搜索当前渲染的节点，被收起的节点不会被搜索到</td>
-</tr>
-<tr>
-<td>onlyOneEnableActiveNodeOnCooperate（v0.9.8+）</td>
-<td>Boolean</td>
-<td>false</td>
-<td>协同编辑时，同一个节点不能同时被多人选中</td>
-</tr>
-<tr>
-<td>beforeCooperateUpdate（v0.9.8+）</td>
-<td>Function、null</td>
-<td>null</td>
-<td>协同编辑时，节点操作即将更新到其他客户端前的生命周期函数。函数接收一个对象作为参数：{ type: 【createOrUpdate（创建节点或更新节点）、delete（删除节点）】, list: 【数组类型，1.当type=createOrUpdate时，代表被创建或被更新的节点数据，即将同步到其他客户端，所以你可以修改该数据；2.当type=delete时，代表被删除的节点数据】 }</td>
-</tr>
-<tr>
 <td>beforeShortcutRun（v0.9.9+）</td>
 <td>Function、null</td>
 <td>null</td>
 <td>快捷键操作即将执行前的生命周期函数，返回true可以阻止操作执行。函数接收两个参数：key（快捷键）、activeNodeList（当前激活的节点列表）</td>
-</tr>
-<tr>
-<td>rainbowLinesConfig（v0.9.9+）</td>
-<td>Object</td>
-<td>{ open: false, colorsList: [] }</td>
-<td>彩虹线条配置，需要先注册RainbowLines插件。对象类型，结构：{ open: false【是否开启彩虹线条】, colorsList: []【自定义彩虹线条的颜色列表，如果不设置，会使用默认颜色列表】 }</td>
-</tr>
-<tr>
-<td>addContentToHeader（v0.9.9+）</td>
-<td>Function、null</td>
-<td>null</td>
-<td>导出png、svg、pdf时在头部添加自定义内容。可传递一个函数，这个函数可以返回null代表不添加内容，也可以返回一个对象，详细介绍请参考下方【导出时如何添加自定义内容】</td>
-</tr>
-<tr>
-<td>addContentToFooter（v0.9.9+）</td>
-<td>Function、null</td>
-<td>null</td>
-<td>基本释义同addContentToHeader，在尾部添加自定义内容</td>
-</tr>
-<tr>
-<td>demonstrateConfig（v0.9.11+）</td>
-<td>Object、null</td>
-<td>null</td>
-<td>演示插件Demonstrate的配置。不传则使用默认配置，可传递一个对象，如果只配置某个属性，可以只设置该属性，其他没有设置的同样会使用默认配置，完整配置请参考下方【演示插件配置】小节</td>
 </tr>
 <tr>
 <td>resetScaleOnMoveNodeToCenter（v0.9.12+）</td>
@@ -601,17 +440,17 @@
 <td>createNodePrefixContent（v0.9.12+）</td>
 <td>Function、null</td>
 <td>null</td>
-<td>添加附加的节点前置内容。前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分。可以传递一个函数，这个函数接收一个节点实例的参数，可以返回一个DOM节点，也可以返回null</td>
+<td>添加附加的节点前置内容。前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分。可以传递一个函数，这个函数接收一个节点实例的参数，可以返回{el, width, height}格式的对象，el为DOM节点对象，width和height代表内容的宽高，数字类型，如果不需要自定义内容，也可以返回null</td>
 </tr>
 <tr>
 <td>createNodePostfixContent（v0.9.12+）</td>
 <td>Function、null</td>
 <td>null</td>
-<td>添加附加的节点后置内容。后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分。可以传递一个函数，这个函数接收一个节点实例的参数，可以返回一个DOM节点，也可以返回null</td>
+<td>添加附加的节点后置内容。后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分。用法同createNodePrefixContent</td>
 </tr>
 </tbody>
 </table>
-<h3>数据结构</h3>
+<h4>1.1数据结构</h4>
 <p>基本的数据结构如下：</p>
 <pre class="hljs"><code>{
   <span class="hljs-attr">data</span>: {
@@ -651,7 +490,220 @@
 }
 </code></pre>
 <p>如果你要添加自定义的字段，可以添加到<code>data</code>、<code>children</code>同级，如果你要添加到<code>data</code>对象里，那么请使用<code>_</code>开头来命名你的自定义字段，内部会通过这个来判断是否是自定义字段。</p>
-<h3>水印配置</h3>
+<h4>1.2图标配置</h4>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>String</td>
+<td></td>
+<td>图标分组的名称</td>
+</tr>
+<tr>
+<td>type</td>
+<td>String</td>
+<td></td>
+<td>图标分组的值</td>
+</tr>
+<tr>
+<td>list</td>
+<td>Array</td>
+<td></td>
+<td>分组下的图标列表，数组的每一项为一个对象，<code>{ name: '', icon: '' }</code>，<code>name</code>代表图标的名称，<code>icon</code>代表图标，可以是<code>svg</code>图标，比如<code>&lt;svg ...&gt;&lt;path&gt;&lt;/path&gt;&lt;/svg&gt;</code>，也可以是图片<code>url</code>，或者是<code>base64</code>图标，比如<code>data:image/png;base64,...</code></td>
+</tr>
+</tbody>
+</table>
+<h3>2.Export插件</h3>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>exportPadding（已废除）</td>
+<td>Number</td>
+<td>20</td>
+<td>导出图片时的内边距</td>
+</tr>
+<tr>
+<td>exportPaddingX（v0.5.5+）</td>
+<td>Number</td>
+<td>10</td>
+<td>导出png、svg、pdf时的图形水平内边距</td>
+</tr>
+<tr>
+<td>exportPaddingY（v0.5.5+）</td>
+<td>Number</td>
+<td>10</td>
+<td>导出png、svg、pdf时的图形垂直内边距</td>
+</tr>
+<tr>
+<td>resetCss（v0.6.16+）</td>
+<td>String</td>
+<td>* { margin: 0; padding: 0; box-sizing: border-box; }</td>
+<td>设置导出图片和svg时，针对富文本节点内容，也就是嵌入到svg中的html节点的默认样式覆盖，如果不覆盖，节点内容会发生偏移</td>
+</tr>
+<tr>
+<td>minExportImgCanvasScale（v0.7.0+）</td>
+<td>Number</td>
+<td>2</td>
+<td>导出图片和pdf时canvas的缩放倍数，该配置会和window.devicePixelRatio值取最大值，用于提升图片清晰度</td>
+</tr>
+<tr>
+<td>addContentToHeader（v0.9.9+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>导出png、svg、pdf时在头部添加自定义内容。可传递一个函数，这个函数可以返回null代表不添加内容，也可以返回一个对象，详细介绍请参考下方【导出时如何添加自定义内容】</td>
+</tr>
+<tr>
+<td>addContentToFooter（v0.9.9+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>基本释义同addContentToHeader，在尾部添加自定义内容</td>
+</tr>
+</tbody>
+</table>
+<h4>2.1导出时如何添加自定义内容</h4>
+<p><code>addContentToHeader</code>和<code>addContentToFooter</code>两个实例化选项可以用于在导出<code>png</code>、<code>svg</code>、<code>pdf</code>时在头部和尾部添加自定义的内容，默认为<code>null</code>，代表不配置，可以传递一个函数，函数可以返回<code>null</code>，代表不添加内容，如果要添加内容那么需要返回如下的结构：</p>
+<pre class="hljs"><code>{
+  el,// 要追加的自定义DOM节点，样式可内联
+  cssText,// 可选，如果样式不想内联，可以传递该值，一个css字符串
+  height: 50// 返回的DOM节点的高度，必须传递
+}
+</code></pre>
+<p>一个简单的示例：</p>
+<pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({
+  <span class="hljs-attr">addContentToFooter</span>: <span class="hljs-function">() =&gt;</span> {
+    <span class="hljs-keyword">const</span> el = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>)
+    el.className = <span class="hljs-string">&#x27;footer&#x27;</span>
+    el.innerHTML = <span class="hljs-string">&#x27;来自：simple-mind-map&#x27;</span>
+    <span class="hljs-keyword">const</span> cssText = <span class="hljs-string">`
+      .footer {
+        width: 100%;
+        height: 30px;
+      }
+    `</span>
+    <span class="hljs-keyword">return</span> {
+      el,
+      cssText,
+      <span class="hljs-attr">height</span>: <span class="hljs-number">30</span>
+    }
+  }
+})
+</code></pre>
+<h3>3.Select插件</h3>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>selectTranslateStep</td>
+<td>Number</td>
+<td>3</td>
+<td>多选节点时鼠标移动到边缘时的画布移动偏移量</td>
+</tr>
+<tr>
+<td>selectTranslateLimit</td>
+<td>Number</td>
+<td>20</td>
+<td>多选节点时鼠标移动距边缘多少距离时开始偏移</td>
+</tr>
+</tbody>
+</table>
+<h3>4.Drag插件</h3>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>enableFreeDrag（v0.2.4+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>是否开启节点自由拖拽（自由拖拽即可以把节点拖拽到画布的任意位置，注意不是拖拽节点成为其他节点的子节点兄弟节点的功能，自由拖拽的连线会存在一定问题，所以该特性最好不要使用）</td>
+</tr>
+<tr>
+<td>nodeDragPlaceholderMaxSize（v0.6.12+）（v0.10.0+已废除）</td>
+<td>Number</td>
+<td>20</td>
+<td>拖拽元素时，指示元素新位置的块的最大高度</td>
+</tr>
+<tr>
+<td>autoMoveWhenMouseInEdgeOnDrag（v0.7.1+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>拖拽节点时鼠标移动到画布边缘是否开启画布自动移动</td>
+</tr>
+<tr>
+<td>dragMultiNodeRectConfig（v0.7.2+）</td>
+<td>Object</td>
+<td>{ width: 40, height: 20, fill: 'rgb(94, 200, 248)' }</td>
+<td>拖拽多个节点时随鼠标移动的示意矩形的样式配置，传递一个对象，字段含义分别为矩形的宽、高、填充色</td>
+</tr>
+<tr>
+<td>dragPlaceholderRectFill（v0.7.2+）</td>
+<td>String</td>
+<td>rgb(94, 200, 248)</td>
+<td>节点拖拽时新位置的示意矩形的填充颜色</td>
+</tr>
+<tr>
+<td>dragPlaceholderLineConfig（v0.10.0+）</td>
+<td>Object</td>
+<td>{ color: 'rgb(94, 200, 248)',  width: 2 }</td>
+<td>节点拖拽时新位置的示意连线的样式配置</td>
+</tr>
+<tr>
+<td>dragOpacityConfig（v0.7.2+）</td>
+<td>Object</td>
+<td>{ cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }</td>
+<td>节点拖拽时的透明度配置，传递一个对象，字段含义分别为：跟随鼠标移动的克隆节点或矩形的透明度、被拖拽节点的透明度</td>
+</tr>
+</tbody>
+</table>
+<h3>5.Watermark插件</h3>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>watermarkConfig（v0.2.4+）</td>
+<td>Object</td>
+<td></td>
+<td>水印配置，详细配置请参考下方表格【水印配置】</td>
+</tr>
+</tbody>
+</table>
+<h4>5.1水印配置</h4>
 <table>
 <thead>
 <tr>
@@ -698,9 +750,15 @@
 <td>false</td>
 <td>是否仅在导出时添加水印</td>
 </tr>
+<tr>
+<td>belowNode（v0.10.0+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>水印是否显示在节点下方</td>
+</tr>
 </tbody>
 </table>
-<h3>图标配置</h3>
+<h3>6.AssociativeLine插件</h3>
 <table>
 <thead>
 <tr>
@@ -712,54 +770,183 @@
 </thead>
 <tbody>
 <tr>
-<td>name</td>
+<td>defaultAssociativeLineText（v0.5.11+）</td>
 <td>String</td>
-<td></td>
-<td>图标分组的名称</td>
+<td>关联</td>
+<td>关联线默认文字</td>
 </tr>
 <tr>
-<td>type</td>
-<td>String</td>
-<td></td>
-<td>图标分组的值</td>
+<td>associativeLineIsAlwaysAboveNode（v0.8.0+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>关联线是否始终显示在节点上层，如果设为false，那么创建关联线和激活关联线时处于最顶层，其他情况下处于节点下方</td>
 </tr>
 <tr>
-<td>list</td>
-<td>Array</td>
-<td></td>
-<td>分组下的图标列表，数组的每一项为一个对象，<code>{ name: '', icon: '' }</code>，<code>name</code>代表图标的名称，<code>icon</code>代表图标，可以是<code>svg</code>图标，比如<code>&lt;svg ...&gt;&lt;path&gt;&lt;/path&gt;&lt;/svg&gt;</code>，也可以是图片<code>url</code>，或者是<code>base64</code>图标，比如<code>data:image/png;base64,...</code></td>
+<td>associativeLineInitPointsPosition（v0.9.5+）</td>
+<td>null / { from, to }</td>
+<td>{ from: '', to: '' }</td>
+<td>默认情况下，新创建的关联线两个端点的位置是根据两个节点中心点的相对位置来计算的，如果你想固定位置，可以通过这个选项来配置。from和to都不传，则都自动计算，如果只传一个，另一个则会自动计算。from和to可选值：left、top、bottom、right</td>
+</tr>
+<tr>
+<td>enableAdjustAssociativeLinePoints（v0.9.5+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>是否允许调整关联线两个端点的位置</td>
 </tr>
 </tbody>
 </table>
-<h3>导出时如何添加自定义内容</h3>
-<p><code>addContentToHeader</code>和<code>addContentToFooter</code>两个实例化选项可以用于在导出<code>png</code>、<code>svg</code>、<code>pdf</code>时在头部和尾部添加自定义的内容，默认为<code>null</code>，代表不配置，可以传递一个函数，函数可以返回<code>null</code>，代表不添加内容，如果要添加内容那么需要返回如下的结构：</p>
-<pre class="hljs"><code>{
-  el,// 要追加的自定义DOM节点，样式可内联
-  cssText,// 可选，如果样式不想内联，可以传递该值，一个css字符串
-  height: 50// 返回的DOM节点的高度，必须传递
-}
-</code></pre>
-<p>一个简单的示例：</p>
-<pre class="hljs"><code><span class="hljs-keyword">new</span> MindMap({
-  <span class="hljs-attr">addContentToFooter</span>: <span class="hljs-function">() =&gt;</span> {
-    <span class="hljs-keyword">const</span> el = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">&#x27;div&#x27;</span>)
-    el.className = <span class="hljs-string">&#x27;footer&#x27;</span>
-    el.innerHTML = <span class="hljs-string">&#x27;来自：simple-mind-map&#x27;</span>
-    <span class="hljs-keyword">const</span> cssText = <span class="hljs-string">`
-      .footer {
-        width: 100%;
-        height: 30px;
-      }
-    `</span>
-    <span class="hljs-keyword">return</span> {
-      el,
-      cssText,
-      <span class="hljs-attr">height</span>: <span class="hljs-number">30</span>
-    }
-  }
-})
-</code></pre>
-<h3>演示插件配置</h3>
+<h3>7.RichText插件</h3>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>richTextEditFakeInPlace（v0.6.13+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果，需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果</td>
+</tr>
+<tr>
+<td>enableEditFormulaInRichTextEdit（v0.10.0+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>是否开启在富文本编辑框中直接编辑数学公式</td>
+</tr>
+<tr>
+<td>transformRichTextOnEnterEdit（v0.10.0+）</td>
+<td>null、Function</td>
+<td>null</td>
+<td>转换富文本内容，可以传递一个函数，当进入富文本编辑时会调用该函数，函数接收即将被编辑的富文本内容，需要返回你处理后的富文本内容</td>
+</tr>
+<tr>
+<td>beforeHideRichTextEdit（v0.10.0+）</td>
+<td>null、Function</td>
+<td>null</td>
+<td>可以传递一个函数，即将结束富文本编辑前会执行该函数，函数接收richText实例，所以你可以在此时机更新quill文档数据</td>
+</tr>
+</tbody>
+</table>
+<h3>8.TouchEvent插件</h3>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>disableTouchZoom（v0.8.1+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>禁止双指缩放，你仍旧可以使用api进行缩放，对TouchEvent插件生效</td>
+</tr>
+</tbody>
+</table>
+<h3>9.Scrollbar插件</h3>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas配置不再起作用</td>
+</tr>
+</tbody>
+</table>
+<h3>10.Search插件</h3>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>isOnlySearchCurrentRenderNodes（v0.9.8+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>是否仅搜索当前渲染的节点，被收起的节点不会被搜索到</td>
+</tr>
+</tbody>
+</table>
+<h3>11.Cooperate插件</h3>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>beforeCooperateUpdate（v0.9.8+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>协同编辑时，节点操作即将更新到其他客户端前的生命周期函数。函数接收一个对象作为参数：{ type: 【createOrUpdate（创建节点或更新节点）、delete（删除节点）】, list: 【数组类型，1.当type=createOrUpdate时，代表被创建或被更新的节点数据，即将同步到其他客户端，所以你可以修改该数据；2.当type=delete时，代表被删除的节点数据】 }</td>
+</tr>
+</tbody>
+</table>
+<h3>12.RainbowLines插件</h3>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>rainbowLinesConfig（v0.9.9+）</td>
+<td>Object</td>
+<td>{ open: false, colorsList: [] }</td>
+<td>彩虹线条配置，需要先注册RainbowLines插件。对象类型，结构：{ open: false【是否开启彩虹线条】, colorsList: []【自定义彩虹线条的颜色列表，如果不设置，会使用默认颜色列表】 }</td>
+</tr>
+</tbody>
+</table>
+<h3>13.Demonstrate插件</h3>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>demonstrateConfig（v0.9.11+）</td>
+<td>Object、null</td>
+<td>null</td>
+<td>演示插件Demonstrate的配置。不传则使用默认配置，可传递一个对象，如果只配置某个属性，可以只设置该属性，其他没有设置的同样会使用默认配置，完整配置请参考下方【演示插件配置】小节</td>
+</tr>
+</tbody>
+</table>
+<h4>13.1演示插件配置</h4>
 <table>
 <thead>
 <tr>
@@ -1126,6 +1313,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>node_tree_render_end（v0.2.16+）</td>
 <td>节点树渲染完毕事件</td>
+<td></td>
+</tr>
+<tr>
+<td>node_tree_render_start（v0.10.0+）</td>
+<td>节点树开始渲染事件</td>
 <td></td>
 </tr>
 <tr>

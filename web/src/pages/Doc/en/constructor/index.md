@@ -22,8 +22,10 @@ const mindMap = new MindMap({
 
 ## Instantiation options
 
-| Field Name                       | Type    | Default Value    | Description                                                  | Required |
-| -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ | -------- |
+### 1.Base
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
 | el                               | Element |                  | Container element, must be a DOM element（When the position of container elements on the page has changed but the size has not changed, the 'getElRectInfo()' method must be called to update the relevant information inside the library; When the size also changes, the 'resize()' method must be called, otherwise it will cause some functional exceptions）                     | Yes      |
 | data                             | Object 、null  |     | Mind map data, Please refer to the introduction of 【Data structure】 below. V0.9.9+supports passing empty objects or null, and the canvas will display blank space |          |
 | layout                           | String  | logicalStructure | Layout type, options: logicalStructure (logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)、timeline（v0.5.4+, timeline）、timeline2（v0.5.4+, up down alternating timeline）、fishbone（v0.5.4+, fishbone diagram） |          |
@@ -32,15 +34,10 @@ const mindMap = new MindMap({
 | themeConfig                      | Object  | {}               | Theme configuration, will be merged with the selected theme, available fields refer to: [default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js) |          |
 | scaleRatio                       | Number  | 0.1              | The incremental scaling ratio                                |          |
 | maxTag                           | Number  | 5                | The maximum number of tags displayed in the node, any additional tags will be discarded |          |
-| exportPadding                    | Number  | 20               | The padding for exporting images                             |          |
 | imgTextMargin                    | Number  | 5                | The spacing between the image and text in the node           |          |
 | textContentMargin                | Number  | 2                | The spacing between various text information in the node, such as the spacing between the icon and text |          |
-| selectTranslateStep              | Number  | 3                | The canvas offset when mouse moves to the edge during multi-select node |          |
-| selectTranslateLimit             | Number  | 20               | The distance from the edge when the canvas begins to offset during multi-select node |          |
 | customNoteContentShow（v0.1.6+） | Object  | null             | Custom node note content display, object type, structure: {show: (noteContent, left, top, node) => {// your display node note logic. node is a new parameter added in v0.8.1+ version, representing node instances }, hide: () => {// your hide node note logic }} |          |
 | readonly（v0.1.7+）              | Boolean | false            | Whether it is read-only mode                                 |          |
-| enableFreeDrag（v0.2.4+）        | Boolean | false            | Enable node free(Free drag means that nodes can be dragged to any position on the canvas. Please note that it is not a function of dragging nodes to become siblings of other nodes. The connection of free drag may have certain problems, so it is best not to use this feature) drag                                        |          |
-| watermarkConfig（v0.2.4+）       | Object  |                  | Watermark config, Please refer to the table 【Watermark config】 below for detailed configuration |          |
 | textAutoWrapWidth（v0.3.4+）     | Number  | 500 |   Each line of text in the node will wrap automatically when it reaches the width               |          |
 | customHandleMousewheel（v0.4.3+）     | Function  | null | User-defined mouse wheel event processing can pass a function, and the callback parameter is the event object |          |
 | mousewheelAction（v0.4.3+）     | String  | zoom（v0.9.1+ default is move） | The behavior of the mouse wheel, `zoom`(Zoom in and out)、`move`(Move up and down). If `customHandleMousewheel` passes a custom function, this property will not take effect                 |          |
@@ -56,8 +53,6 @@ const mindMap = new MindMap({
 | enableNodeTransitionMove（v0.5.1+）（v0.6.7+ is remove this feature）     | Boolean  | true | Whether to enable node animation transition  |          |
 | nodeTransitionMoveDuration（v0.5.1+）（v0.6.7+ is remove this feature）     | Number  | 300 | If node animation transition is enabled, the transition time can be set using this attribute, in milliseconds  |          |
 | initRootNodePosition（v0.5.3+）     | Array  | null | The position of the initial root node can be passed as an array, default is `['center', 'center']`, Represents the root node at the center of the canvas, In addition to `center`, keywords can also be set to `left`, `top`, `right`, and `bottom`, In addition to passing keywords, each item in the array can also pass a number representing a specific pixel, Can pass a percentage string, such as `['40%', '60%']`, Represents a horizontal position at `40%` of the canvas width, and a vertical position at `60%` of the canvas height   |          |
-| exportPaddingX（v0.5.5+）     |  Number | 10 | Horizontal padding of graphics when exporting PNG, SVG, and PDF  |          |
-| exportPaddingY（v0.5.5+）     | Number  | 10 | Vertical padding of graphics when exporting PNG, SVG, and PDF  |          |
 | nodeTextEditZIndex（v0.5.5+）     | Number  | 3000 |   | z-index of node text edit box elements         |
 | nodeNoteTooltipZIndex（v0.5.5+）     | Number  | 3000 | z-index of floating layer elements in node comments  |          |
 | isEndNodeTextEditOnClickOuter（v0.5.5+）     | Boolean  | true | Whether to end the editing status of node text when clicking on an area outside the canvas  |          |
@@ -65,7 +60,6 @@ const mindMap = new MindMap({
 | alwaysShowExpandBtn（v0.5.8+）     | Boolean  | false | Whether to always display the expand and collapse buttons of nodes, which are only displayed when the mouse is moved up and activated by default  |          |
 | iconList（v0.5.8+）     | Array  | [] | The icons that can be inserted into the extension node, and each item in the array is an object. Please refer to the "Icon Configuration" table below for the detailed structure of the object  |          |
 | maxNodeCacheCount（v0.5.10+）     |  Number | 1000 | The maximum number of cached nodes. To optimize performance, an internal node cache pool is maintained to reuse nodes. This attribute allows you to specify the maximum number of caches in the pool  |          |
-| defaultAssociativeLineText（v0.5.11+）     |  String | 关联 | Association Line Default Text  |          |
 | fitPadding（v0.6.0+）     |  Number | 50 |  The padding of mind mapping when adapting to canvas size, Unit: px |          |
 | enableCtrlKeyNodeSelection（v0.6.0+）     | Boolean  | true |  Whether to enable the function of holding down the Ctrl key to select multiple nodes |          |
 | useLeftKeySelectionRightKeyDrag（v0.6.0+）     | Boolean  | false | Setting to left click to select multiple nodes and right click to drag the canvas.  |          |
@@ -74,56 +68,36 @@ const mindMap = new MindMap({
 | customCreateNodeContent（v0.6.3+）     |  Function/null | null | If `isUseCustomNodeContent` is set to `true`, then this option needs to be used to pass in a method that receives the node instance `node` as a parameter (if you want to obtain data for that node, you can use `node.nodeData.data`). You need to return the custom node content element, which is the DOM node. If a node does not require customization, you can return `null` |          |
 | mouseScaleCenterUseMousePosition（v0.6.4-fix.1+）     | Boolean  | true | Is the mouse zoom centered around the current position of the mouse, otherwise centered around the canvas |          |
 | customInnerElsAppendTo（v0.6.12+）     | null/HTMLElement  | null | Specify the location where some internal elements (node text editing element, node note display element, associated line text editing element, node image adjustment button element) are added, and default to document.body |          |
-| nodeDragPlaceholderMaxSize（v0.6.12+）     | Number  | 20 | When dragging an element, the maximum height of the block indicating the new position of the element |          |
 | enableCreateHiddenInput（v0.6.13+）（v0.6.14+ remove this feature）     | Boolean  | true | Is it allowed to create a hidden input box that will be focused when the node is activated for pasting data and automatically entering the text editing state |          |
 | enableAutoEnterTextEditWhenKeydown（v0.6.13+）     | Boolean  | true | Does it automatically enter text editing mode when pressing the Chinese, English, or numeric buttons when there is an activation node?|          |
-| richTextEditFakeInPlace（v0.6.13+）     | Boolean  | false | Set the rich text node edit box to match the size of the node, creating a pseudo in place editing effect. It should be noted that only when there is only text within the node and the shape is rectangular, can the effect be better |          |
 | customHandleClipboardText（v0.6.14+）     | Function  | null | Customize the processing of clipboard text. When pressing ctrl+v to paste, it will read the text and images from the user's clipboard. By default, it will only determine whether the text is regular text and node data in simple mind map format. If you want to process data from other mind maps, such as process, zhixi, etc., you can pass a function that takes the text from the current clipboard as a parameter and returns the processed data, which can be of two types: 1.If a pure text is returned, a child node will be directly created with that text; 2.Returns a node object in the following format: { simpleMindMap: true, data: { data: { text: '' }, children: [] } }, The representative is data in simple bind map format, and the node data is in the same format as the simple bind map node data. If your processing logic has asynchronous logic, you can also return a promise |          |
 | errorHandler（v0.6.15+）     | Function  |  | Custom error handling functions currently only throw some asynchronous logic errors. Can pass a function that takes two parameters, the first being the wrong type and the second being the wrong object |          |
 | disableMouseWheelZoom（v0.6.15+）     | Boolean  | false | Prohibit mouse wheel scaling, you can still use the API for scaling |          |
-| resetCss（v0.6.16+）     | String  |  * { margin: 0; padding: 0; box-sizing: border-box; } | When exporting images and SVGs, the default style overlay for rich text node content, which is embedded in HTML nodes in SVGs, will occur. If not overlaid, the node content will be offset |          |
 | enableDblclickReset（v0.6.17+）(v0.8.0+this attribute has been deleted)     | Boolean  | true(v0.7.0+changed to false)  | Turn on the mouse and double-click to reset the position and zoom of the mind map |          |
 | enableDblclickBackToRootNode（v0.8.0+）     | Boolean  | false  | Whether to return to the root node when double clicking with the mouse, that is, to center the display of the root node |          |
-| minExportImgCanvasScale（v0.7.0+）     | Number  | 2  | The scaling factor of canvas when exporting images and PDFs, which is set to the maximum value of window.devicePixelRatio to improve image clarity |          |
 | hoverRectColor（v0.7.0+）     | String  | rgb(94, 200, 248)  | The node mouse hover and the rectangular border color displayed when activated will add a transparency of 0.6 when hovering |          |
 | hoverRectPadding（v0.7.0+）     | Number  | 2  | The distance between the node mouse hover and the displayed rectangular border when activated and the node content |          |
 | selectTextOnEnterEditText（v0.7.0+）     | Boolean  | true  | Is the text selected by default when double-clicking a node to enter node text editing? By default, it will only be selected when creating a new node |          |
 | deleteNodeActive（v0.7.1+）     | Boolean  | true  | Enable the function of automatically activating adjacent nodes or parent nodes after deleting nodes |          |
-| autoMoveWhenMouseInEdgeOnDrag（v0.7.1+）     | Boolean  | true  | Whether to enable automatic canvas movement when the mouse moves to the edge of the canvas while dragging nodes |          |
 | fit（v0.7.1-fix.2+）     | Boolean  | false  | Is the first rendering scaled to fit the canvas size |          |
-| dragMultiNodeRectConfig（v0.7.2+）     | Object  | { width: 40, height: 20, fill: '' }  | The style configuration of the schematic rectangle that moves with the mouse when dragging multiple nodes, passing an object, and the field meanings are the width, height, and fill color of the rectangle |          |
-| dragPlaceholderRectFill（v0.7.2+）     |  String |   | The filling color of the schematic rectangle for the new position when dragging nodes. If not transmitted, the default color for the connected line is used |          |
-| dragOpacityConfig（v0.7.2+）     | Object  | { cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }  | The transparency configuration during node dragging, passing an object, and the field meanings are: the transparency of the cloned node or rectangle that follows the mouse movement, and the transparency of the dragged node |          |
 | tagsColorMap（v0.7.2+）     | Object  | {}  | The color of a custom node label can be transferred to an object, where key is the label content to be assigned a color, and value is the color of the label content. If not transferred internally, a corresponding color will be generated based on the label content |         |
 | cooperateStyle（v0.7.3+）     | Object  | { avatarSize: 22, fontSize: 12 }  | The configuration of personnel avatar style during node collaboration editing, with field meanings as follows: avatar size, and if it is a text avatar, the size of the text |         |
-| associativeLineIsAlwaysAboveNode（v0.8.0+）     |  Boolean | true  | Is the associated line always displayed above the node? If set to false, it will be at the top level when creating and activating the associated line, and in other cases, it will be below the node |         |
+| onlyOneEnableActiveNodeOnCooperate（v0.9.8+）     | Boolean | false  | During collaborative editing, the same node cannot be selected by multiple people at the same time |         |
 | defaultGeneralizationText（v0.8.0+）     |  String | 概要  | Insert default text for summary |         |
 | handleIsSplitByWrapOnPasteCreateNewNode（v0.8.0+）     | Function / null  | null  | When creating a new node by pasting text, control whether to automatically split the nodes based on line breaks. If there is a line break, multiple nodes will be created based on the line break. Otherwise, only one node will be created, and a function can be passed to return promise. resolve represents splitting based on line breaks, and reject represents ignoring line breaks |         |
 | addHistoryTime（v0.8.0+）     | Number | 100  | Only one historical record can be added within the specified time to avoid adding unnecessary intermediate states. Unit: ms  |         |
 | isDisableDrag（v0.8.1+）     | Boolean | false  | Is disable dragging the canvas  |         |
-| disableTouchZoom（v0.8.1+）     | Boolean | false  |  Prohibit double finger scaling, you can still use the API for scaling, which takes effect on the TouchEvent plugin |         |
 | highlightNodeBoxStyle（v0.9.0+）     | Object | { stroke: 'rgb(94, 200, 248)', fill: 'transparent' }  |  Highlight box style when the mouse moves into the summary to highlight the node it belongs to |         |
 | createNewNodeBehavior（v0.9.1+）     | String | default  | Behavior when creating a new node. default（By default, newly created nodes will be activated and enter editing mode. If multiple new nodes are created simultaneously, they will only be activated and will not enter editing mode）、notActive（Do not activate newly created nodes）、activeOnly（Only activate newly created nodes and do not enter editing mode）  |         |
 | defaultNodeImage（v0.9.1-fix.2+）     | String |   | Image address, the default image displayed when node image loading fails  |         |
 | handleNodePasteImg（v0.9.2+）     | null or Function | null  | The processing method for pasting images from the clipboard on a node is to convert them into data:URL data and insert them into the node by default. You can use this method to upload image data to the server and save the URL of the image. An asynchronous method can be passed to receive image data of Blob type, and the specified structure needs to be returned: { url, size: {width, height} }  |         |
 | isLimitMindMapInCanvas（v0.9.2+）     | Boolean |  false | Whether to limit the mind map within the canvas. For example, when dragging to the right, the leftmost part of the mind map graphic will not be able to continue dragging to the right when it reaches the center of the canvas, and the same applies to other things |         |
-| isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）     | Boolean |  true | When registering the Scrollbar plugin, will the mind map be limited to the canvas and the isLimitMindMapInCanvas configuration no longer work |         |
-| associativeLineInitPointsPosition（v0.9.5+）     | null / { from, to } | { from: '', to: '' }  | By default, the position of the two endpoints of a newly created association line is calculated based on the relative position of the center points of the two nodes. If you want to fix the position, you can configure it through this option. If neither from nor to is transmitted, they will be automatically calculated. If only one is transmitted, the other will be automatically calculated. from and to optional values
-：left、top、bottom、right |         |
-| enableAdjustAssociativeLinePoints（v0.9.5+）     | Boolean | true  | Is it allowed to adjust the position of the two endpoints of the associated line |         |
-| isOnlySearchCurrentRenderNodes（v0.9.8+）     | Boolean | false  | Is it necessary to only search for the current rendered node, and nodes that have been collapsed will not be searched for |         |
-| onlyOneEnableActiveNodeOnCooperate（v0.9.8+）     | Boolean | false  | During collaborative editing, the same node cannot be selected by multiple people at the same time |         |
-| beforeCooperateUpdate（v0.9.8+）     | Function、null | null  | During collaborative editing, node operations are about to be updated to the lifecycle functions of other clients. The function takes an object as a parameter:{ type: 【createOrUpdate（Create or update nodes）、delete（Delete node）】, list: 【Array type, 1.When type=createOrUpdate, it represents the node data that has been created or updated, which will be synchronized to other clients, so you can modify the data; 2.When type=delete, represents the deleted node data】 } |         |
 | beforeShortcutRun（v0.9.9+）     | Function、null | null  | The lifecycle function before the shortcut operation is about to be executed, returning true can prevent the operation from executing. The function takes two parameters: key（Shortcut key）、activeNodeList（List of currently activated nodes） |         |
-| rainbowLinesConfig（v0.9.9+）     | Object | { open: false, colorsList: [] }  | Rainbow line configuration requires registering the RainbowLines plugin first. Object type, Structure: { open: false【Is turn on rainbow lines】, colorsList: []【Customize the color list for rainbow lines. If not set, the default color list will be used】 } |         |
-| addContentToHeader（v0.9.9+）     | Function、null | null  | Add custom content to the header when exporting PNG, SVG, and PDF. Can pass a function that can return null to indicate no content is added, or it can return an object, For a detailed introduction, please refer to section 【How to add custom content when exporting】 below |         |
-| addContentToFooter（v0.9.9+）     | Function、null | null  | The basic definition is the same as addContentToHeader, adding custom content at the end |         |
-| demonstrateConfig（v0.9.11+）     | Object、null | null  | Demonstration plugin configuration. If not transmitted, the default configuration will be used. An object can be transmitted. If only a certain property is configured, only that property can be set. Other properties that have not been set will also use the default configuration. For complete configuration, please refer to the 【Demonstration Plugin Configuration】 section below |         |
 | resetScaleOnMoveNodeToCenter（v0.9.12+）     | Boolean |  false | Whether to reset the scaling level to 100% when moving nodes to the canvas center, returning to the root node, and other operations（The underlying impact is on the moveNodeToCenter method of the render class） |         |
-| createNodePrefixContent（v0.9.12+）     | Function、null | null  | Add additional node pre content.Pre content refers to the pre content in the area of the same line as the text, excluding the node image section.You can pass a function that takes the parameters of a node instance, returns a DOM node, or returns null  |         |
-| createNodePostfixContent（v0.9.12+）     | Function、null | null  | Add additional node post content.Post content refers to the post content in the area of the same line as the text, excluding the node image section.You can pass a function that takes the parameters of a node instance, returns a DOM node, or returns null |         |
+| createNodePrefixContent（v0.9.12+）     | Function、null | null  | Add additional node pre content.Pre content refers to the pre content in the area of the same line as the text, excluding the node image section.You can pass a function that takes the parameters of a node instance, Can return objects in {el, width, height} format, el is a DOM node object, width and height represent the width, height, and numerical type of the content. If custom content is not required, null can also be returned  |         |
+| createNodePostfixContent（v0.9.12+）     | Function、null | null  | Add additional node post content.Post content refers to the post content in the area of the same line as the text, excluding the node image section. The usage is the same as createNodePrefixContent |         |
 
-### Data structure
+### 1.1Data structure
 
 The basic data structure is as follows:
 
@@ -166,18 +140,7 @@ The basic data structure is as follows:
 
 If you want to add custom fields, you can add them to the same level as 'data' and 'children'. If you want to add them to the 'data' object, please use the `_` Name your custom field at the beginning, and it will be used internally to determine whether it is a custom field.
 
-### Watermark config
-
-| Field Name  | Type   | Default Value                               | Description                                                  |
-| ----------- | ------ | ------------------------------------------- | ------------------------------------------------------------ |
-| text        | String | ''                                          | Watermark text. If it is an empty string, the watermark will not be displayed |
-| lineSpacing | Number | 100                                         | Spacing between watermark lines                              |
-| textSpacing | Number | 100                                         | Spacing between watermarks in the same row                   |
-| angle       | Number | 30                                          | Tilt angle of watermark, range: [0, 90]                      |
-| textStyle   | Object | {color: '#999', opacity: 0.5, fontSize: 14} | Watermark text style                                         |
-| onlyExport（v0.9.2+）   | Boolean | false |  Is only add watermarks during export                        |
-
-### Icon Configuration
+### 1.2Icon Configuration
 
 | Field Name  | Type   | Default Value                               | Description                                                  |
 | ----------- | ------ | ------------------------------------------- | ------------------------------------------------------------ |
@@ -185,7 +148,19 @@ If you want to add custom fields, you can add them to the same level as 'data' a
 | type        | String |                                           | Values for icon grouping |
 | list        | Array  |                                           | A list of icons under grouping, with each item in the array being an object, `{ name: '', icon: '' }`，`name`represents the name of the icon, `icon`represents the icon, Can be an `svg` icon, such as `<svg ...><path></path></svg>`, also can be a image `url`, or `base64` icon, such as `data:image/png;base64,...` |
 
-### How to add custom content when exporting
+### 2.Export plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
+| exportPadding                    | Number  | 20               | The padding for exporting images                             |          |
+| exportPaddingX（v0.5.5+）     |  Number | 10 | Horizontal padding of graphics when exporting PNG, SVG, and PDF  |          |
+| exportPaddingY（v0.5.5+）     | Number  | 10 | Vertical padding of graphics when exporting PNG, SVG, and PDF  |          |
+| resetCss（v0.6.16+）     | String  |  * { margin: 0; padding: 0; box-sizing: border-box; } | When exporting images and SVGs, the default style overlay for rich text node content, which is embedded in HTML nodes in SVGs, will occur. If not overlaid, the node content will be offset |          |
+| minExportImgCanvasScale（v0.7.0+）     | Number  | 2  | The scaling factor of canvas when exporting images and PDFs, which is set to the maximum value of window.devicePixelRatio to improve image clarity |          |
+| addContentToHeader（v0.9.9+）     | Function、null | null  | Add custom content to the header when exporting PNG, SVG, and PDF. Can pass a function that can return null to indicate no content is added, or it can return an object, For a detailed introduction, please refer to section 【How to add custom content when exporting】 below |         |
+| addContentToFooter（v0.9.9+）     | Function、null | null  | The basic definition is the same as addContentToHeader, adding custom content at the end |         |
+
+#### 2.1How to add custom content when exporting
 
 The two instantiation options `addContentToHeader` and `addContentToFooter` can be used to add custom content at the beginning and end when exporting `png`、`svg`、`pdf`, The default value is `null`, which means no configuration. A function can be passed and can return `null`, which means no content will be added. If you want to add content, you need to return the following structure:
 
@@ -220,7 +195,99 @@ new MindMap({
 })
 ```
 
-### Demonstration Plugin Configuration
+### 3.Select plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
+| selectTranslateStep              | Number  | 3                | The canvas offset when mouse moves to the edge during multi-select node |          |
+| selectTranslateLimit             | Number  | 20               | The distance from the edge when the canvas begins to offset during multi-select node |          |
+
+### 4.Drag plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
+| enableFreeDrag（v0.2.4+）        | Boolean | false            | Enable node free(Free drag means that nodes can be dragged to any position on the canvas. Please note that it is not a function of dragging nodes to become siblings of other nodes. The connection of free drag may have certain problems, so it is best not to use this feature) drag                                        |          |
+| nodeDragPlaceholderMaxSize（v0.6.12+）（v0.10.0+ has been abolished）  | Number  | 20 | When dragging an element, the maximum height of the block indicating the new position of the element |          |
+| autoMoveWhenMouseInEdgeOnDrag（v0.7.1+）     | Boolean  | true  | Whether to enable automatic canvas movement when the mouse moves to the edge of the canvas while dragging nodes |          |
+| dragMultiNodeRectConfig（v0.7.2+）     | Object  | { width: 40, height: 20, fill: 'rgb(94, 200, 248)' }  | The style configuration of the schematic rectangle that moves with the mouse when dragging multiple nodes, passing an object, and the field meanings are the width, height, and fill color of the rectangle |          |
+| dragPlaceholderRectFill（v0.7.2+）     |  String |  rgb(94, 200, 248) | The filling color of the schematic rectangle for the new position when dragging nodes. |          |
+| dragPlaceholderLineConfig（v0.10.0+）     |  Object | { color: 'rgb(94, 200, 248)',  width: 2 }  | Style configuration of schematic lines for new positions when dragging nodes |          |
+| dragOpacityConfig（v0.7.2+）     | Object  | { cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }  | The transparency configuration during node dragging, passing an object, and the field meanings are: the transparency of the cloned node or rectangle that follows the mouse movement, and the transparency of the dragged node |          |
+
+### 5.Watermark plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
+| watermarkConfig（v0.2.4+）       | Object  |                  | Watermark config, Please refer to the table 【Watermark config】 below for detailed configuration |          |
+
+#### 5.1Watermark config
+
+| Field Name  | Type   | Default Value                               | Description                                                  |
+| ----------- | ------ | ------------------------------------------- | ------------------------------------------------------------ |
+| text        | String | ''                                          | Watermark text. If it is an empty string, the watermark will not be displayed |
+| lineSpacing | Number | 100                                         | Spacing between watermark lines                              |
+| textSpacing | Number | 100                                         | Spacing between watermarks in the same row                   |
+| angle       | Number | 30                                          | Tilt angle of watermark, range: [0, 90]                      |
+| textStyle   | Object | {color: '#999', opacity: 0.5, fontSize: 14} | Watermark text style                                         |
+| onlyExport（v0.9.2+）   | Boolean | false |  Is only add watermarks during export                        |
+| belowNode（v0.10.0+）   | Boolean | false |   Is the watermark displayed below the node                       |
+
+### 6.AssociativeLine plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
+| defaultAssociativeLineText（v0.5.11+）     |  String | 关联 | Association Line Default Text  |          |
+| associativeLineIsAlwaysAboveNode（v0.8.0+）     |  Boolean | true  | Is the associated line always displayed above the node? If set to false, it will be at the top level when creating and activating the associated line, and in other cases, it will be below the node |         |
+| associativeLineInitPointsPosition（v0.9.5+）     | null / { from, to } | { from: '', to: '' }  | By default, the position of the two endpoints of a newly created association line is calculated based on the relative position of the center points of the two nodes. If you want to fix the position, you can configure it through this option. If neither from nor to is transmitted, they will be automatically calculated. If only one is transmitted, the other will be automatically calculated. from and to optional values
+：left、top、bottom、right |         |
+| enableAdjustAssociativeLinePoints（v0.9.5+）     | Boolean | true  | Is it allowed to adjust the position of the two endpoints of the associated line |         |
+
+### 7.RichText plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
+| richTextEditFakeInPlace（v0.6.13+）     | Boolean  | false | Set the rich text node edit box to match the size of the node, creating a pseudo in place editing effect. It should be noted that only when there is only text within the node and the shape is rectangular, can the effect be better |          |
+| enableEditFormulaInRichTextEdit（v0.10.0+）     | Boolean  | true |  |   Whether to enable direct editing of mathematical formulas in rich text editing boxes       |
+| transformRichTextOnEnterEdit（v0.10.0+）     | null、Function  | null | To convert rich text content, you can pass a function that will be called when entering rich text editing. The function receives the rich text content that is about to be edited and needs to return the processed rich text content |          |
+| beforeHideRichTextEdit（v0.10.0+）     | null、Function  | null | You can pass a function that will be executed before the end of rich text editing. The function receives a richText instance, so you can update the kill document data at this time |          |
+
+### 8.TouchEvent plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
+| disableTouchZoom（v0.8.1+）     | Boolean | false  |  Prohibit double finger scaling, you can still use the API for scaling, which takes effect on the TouchEvent plugin |         |
+
+### 9.Scrollbar plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
+| isLimitMindMapInCanvasWhenHasScrollbar（v0.9.2+）     | Boolean |  true | When registering the Scrollbar plugin, will the mind map be limited to the canvas and the isLimitMindMapInCanvas configuration no longer work |         |
+
+### 10.Search plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
+| isOnlySearchCurrentRenderNodes（v0.9.8+）     | Boolean | false  | Is it necessary to only search for the current rendered node, and nodes that have been collapsed will not be searched for |         |
+
+### 11.Cooperate plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
+| beforeCooperateUpdate（v0.9.8+）     | Function、null | null  | During collaborative editing, node operations are about to be updated to the lifecycle functions of other clients. The function takes an object as a parameter:{ type: 【createOrUpdate（Create or update nodes）、delete（Delete node）】, list: 【Array type, 1.When type=createOrUpdate, it represents the node data that has been created or updated, which will be synchronized to other clients, so you can modify the data; 2.When type=delete, represents the deleted node data】 } |         |
+
+### 12.RainbowLines plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
+| rainbowLinesConfig（v0.9.9+）     | Object | { open: false, colorsList: [] }  | Rainbow line configuration requires registering the RainbowLines plugin first. Object type, Structure: { open: false【Is turn on rainbow lines】, colorsList: []【Customize the color list for rainbow lines. If not set, the default color list will be used】 } |         |
+
+### 13.Demonstrate plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
+| demonstrateConfig（v0.9.11+）     | Object、null | null  | Demonstration plugin configuration. If not transmitted, the default configuration will be used. An object can be transmitted. If only a certain property is configured, only that property can be set. Other properties that have not been set will also use the default configuration. For complete configuration, please refer to the 【Demonstration Plugin Configuration】 section below |         |
+
+#### 13.1Demonstration Plugin Configuration
 
 | Field Name  | Type   | Default Value                               | Description                          |
 | ----------- | ------ | ------------------------------------------- | ------------------------------------ |
@@ -486,7 +553,8 @@ Listen to an event. Event list:
 | node_img_mouseenter（v0.6.5+）    |  Node image mouseenter event                    | this（node instance）、imgNode（img node）、e（event object）                              |
 | node_img_mouseleave（v0.6.5+）    |  Node image mouseleave event                    | this（node instance）、imgNode（img node）、e（event object）                              |
 | node_img_mousemove（v0.6.5+）    |  Node image mousemove event                      | this（node instance）、imgNode（img node）、e（event object）                              |
-| node_tree_render_end（v0.2.16+） | Node tree render end event                                               |                                                                                                                 |
+| node_tree_render_end（v0.2.16+） | Node tree render end event              |          |
+| node_tree_render_start（v0.10.0+） | Node tree start rendering event  |           |
 | rich_text_selection_change（v0.4.0+）         |  Available when the `RichText` plugin is registered. Triggered when the text selection area changes when the node is edited         |  hasRange（Whether there is a selection）、rectInfo（Size and location information of the selected area）、formatInfo（Text formatting information of the selected area）            |
 | transforming-dom-to-images（v0.4.0+）         |  Available when the `RichText` plugin is registered. When there is a `DOM` node in `svg`, the `DOM` node will be converted to an image when exporting to an image. This event will be triggered during the conversion process. You can use this event to prompt the user about the node to which you are currently converting         |  index（Index of the node currently converted to）、len（Total number of nodes to be converted）            |
 | node_dragging（v0.4.5+）    | Triggered when a node is dragged   |  node(The currently dragged node)           |

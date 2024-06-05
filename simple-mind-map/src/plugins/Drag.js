@@ -5,6 +5,7 @@ import {
   getNodeIndexInNodeList
 } from '../utils'
 import Base from '../layouts/Base'
+import { CONSTANTS } from '../constants/constant'
 
 // 节点拖动插件
 class Drag extends Base {
@@ -38,6 +39,10 @@ class Drag extends Base {
     this.clone = null
     // 同级位置占位符
     this.placeholder = null
+    this.placeholderWidth = 50
+    this.placeholderHeight = 10
+    this.placeHolderLine = null
+    this.placeHolderExtraLines = []
     // 鼠标按下位置和节点左上角的偏移量
     this.offsetX = 0
     this.offsetY = 0
@@ -276,6 +281,7 @@ class Drag extends Base {
       const {
         dragMultiNodeRectConfig,
         dragPlaceholderRectFill,
+        dragPlaceholderLineConfig,
         dragOpacityConfig
       } = this.mindMap.opt
       const {
@@ -309,9 +315,19 @@ class Drag extends Base {
       this.clone.opacity(dragOpacityConfig.cloneNodeOpacity)
       this.clone.css('z-index', 99999)
       // 同级位置提示元素
-      this.placeholder = this.mindMap.otherDraw.rect().fill({
-        color: dragPlaceholderRectFill || lineColor
-      })
+      this.placeholder = this.mindMap.otherDraw
+        .rect()
+        .fill({
+          color: dragPlaceholderRectFill || lineColor
+        })
+        .radius(5)
+      this.placeHolderLine = this.mindMap.otherDraw
+        .path()
+        .stroke({
+          color: dragPlaceholderLineConfig.color || lineColor,
+          width: dragPlaceholderLineConfig.width
+        })
+        .fill({ color: 'none' })
       // 当前被拖拽的节点的临时设置
       this.beingDragNodeList.forEach(node => {
         // 降低透明度
@@ -331,6 +347,16 @@ class Drag extends Base {
     }
     this.clone.remove()
     this.placeholder.remove()
+    this.placeHolderLine.remove()
+    this.removeExtraLines()
+  }
+
+  // 移除额外创建的连线
+  removeExtraLines() {
+    this.placeHolderExtraLines.forEach(item => {
+      item.remove()
+    })
+    this.placeHolderExtraLines = []
   }
 
   //  检测重叠节点
@@ -338,10 +364,22 @@ class Drag extends Base {
     if (!this.drawTransform || !this.placeholder) {
       return
     }
+    const {
+      LOGICAL_STRUCTURE,
+      MIND_MAP,
+      ORGANIZATION_STRUCTURE,
+      CATALOG_ORGANIZATION,
+      TIMELINE,
+      TIMELINE2,
+      VERTICAL_TIMELINE,
+      FISHBONE
+    } = CONSTANTS.LAYOUT
     this.overlapNode = null
     this.prevNode = null
     this.nextNode = null
     this.placeholder.size(0, 0)
+    this.placeHolderLine.hide()
+    this.removeExtraLines()
     this.nodeList.forEach(node => {
       if (node.getData('isActive')) {
         this.mindMap.execCommand('SET_NODE_ACTIVE', node, false)
@@ -350,52 +388,310 @@ class Drag extends Base {
         return
       }
       switch (this.mindMap.opt.layout) {
-        case 'logicalStructure':
+        case LOGICAL_STRUCTURE:
           this.handleLogicalStructure(node)
           break
-        case 'mindMap':
+        case MIND_MAP:
           this.handleMindMap(node)
           break
-        case 'organizationStructure':
+        case ORGANIZATION_STRUCTURE:
           this.handleOrganizationStructure(node)
           break
-        case 'catalogOrganization':
+        case CATALOG_ORGANIZATION:
           this.handleCatalogOrganization(node)
           break
-        case 'timeline':
+        case TIMELINE:
           this.handleTimeLine(node)
           break
-        case 'timeline2':
+        case TIMELINE2:
           this.handleTimeLine2(node)
           break
-        case 'verticalTimeline':
+        case VERTICAL_TIMELINE:
           this.handleLogicalStructure(node)
           break
-        case 'fishbone':
+        case FISHBONE:
           this.handleFishbone(node)
           break
         default:
           this.handleLogicalStructure(node)
       }
     })
+    // 重叠节点，也就是添加为子节点
     if (this.overlapNode) {
-      this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, true)
+      this.handleOverlapNode()
+    }
+  }
+
+  // 处理作为子节点的情况
+  handleOverlapNode() {
+    const {
+      LOGICAL_STRUCTURE,
+      MIND_MAP,
+      ORGANIZATION_STRUCTURE,
+      CATALOG_ORGANIZATION,
+      TIMELINE,
+      TIMELINE2,
+      VERTICAL_TIMELINE,
+      FISHBONE
+    } = CONSTANTS.LAYOUT
+    const { LEFT, TOP, RIGHT, BOTTOM } = CONSTANTS.LAYOUT_GROW_DIR
+    const layerIndex = this.overlapNode.layerIndex
+    const children = this.overlapNode.children
+    const marginX = this.mindMap.renderer.layout.getMarginX(layerIndex + 1)
+    const marginY = this.mindMap.renderer.layout.getMarginY(layerIndex + 1)
+    const halfPlaceholderWidth = this.placeholderWidth / 2
+    const halfPlaceholderHeight = this.placeholderHeight / 2
+    let dir = ''
+    let x = ''
+    let y = ''
+    let rotate = false
+    let notRenderPlaceholder = false
+    // 目标节点存在子节点，那么基于最后一个子节点定位
+    if (children.length > 0) {
+      const lastChild = children[children.length - 1]
+      const lastNodeRect = this.getNodeRect(lastChild)
+      dir = this.getNewChildNodeDir(lastChild)
+      switch (this.mindMap.opt.layout) {
+        case LOGICAL_STRUCTURE:
+        case MIND_MAP:
+          x =
+            dir === LEFT
+              ? lastNodeRect.originRight - this.placeholderWidth
+              : lastNodeRect.originLeft
+          y = lastNodeRect.originBottom + this.minOffset - halfPlaceholderHeight
+          break
+        case ORGANIZATION_STRUCTURE:
+          rotate = true
+          x = lastNodeRect.originRight + this.minOffset - halfPlaceholderHeight
+          y = lastNodeRect.originTop
+          break
+        case CATALOG_ORGANIZATION:
+          if (layerIndex === 0) {
+            rotate = true
+            x =
+              lastNodeRect.originRight + this.minOffset - halfPlaceholderHeight
+            y = lastNodeRect.originTop
+          } else {
+            x = lastNodeRect.originLeft
+            y =
+              lastNodeRect.originBottom + this.minOffset - halfPlaceholderHeight
+          }
+          break
+        case TIMELINE:
+          if (layerIndex === 0) {
+            rotate = true
+            x =
+              lastNodeRect.originRight + this.minOffset - halfPlaceholderHeight
+            y =
+              lastNodeRect.originTop +
+              lastNodeRect.originHeight / 2 -
+              halfPlaceholderWidth
+          } else {
+            x = lastNodeRect.originLeft
+            y =
+              lastNodeRect.originBottom + this.minOffset - halfPlaceholderHeight
+          }
+          break
+        case TIMELINE2:
+          if (layerIndex === 0) {
+            rotate = true
+            x =
+              lastNodeRect.originRight + this.minOffset - halfPlaceholderHeight
+            y =
+              lastNodeRect.originTop +
+              lastNodeRect.originHeight / 2 -
+              halfPlaceholderWidth
+          } else {
+            x = lastNodeRect.originLeft
+            if (layerIndex === 1) {
+              y =
+                dir === TOP
+                  ? lastNodeRect.originTop -
+                    this.placeholderHeight -
+                    this.minOffset +
+                    halfPlaceholderHeight
+                  : lastNodeRect.originBottom +
+                    this.minOffset -
+                    halfPlaceholderHeight
+            } else {
+              y =
+                lastNodeRect.originBottom +
+                this.minOffset -
+                halfPlaceholderHeight
+            }
+          }
+          break
+        case VERTICAL_TIMELINE:
+          if (layerIndex === 0) {
+            x =
+              lastNodeRect.originLeft +
+              lastNodeRect.originWidth / 2 -
+              halfPlaceholderWidth
+            y =
+              lastNodeRect.originBottom + this.minOffset - halfPlaceholderHeight
+          } else {
+            x =
+              dir === RIGHT
+                ? lastNodeRect.originLeft
+                : lastNodeRect.originRight - this.placeholderWidth
+            y =
+              lastNodeRect.originBottom + this.minOffset - halfPlaceholderHeight
+          }
+          break
+        case FISHBONE:
+          if (layerIndex <= 1) {
+            notRenderPlaceholder = true
+            this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, true)
+          } else {
+            x = lastNodeRect.originLeft
+            y =
+              dir === TOP
+                ? lastNodeRect.originBottom +
+                  this.minOffset -
+                  halfPlaceholderHeight
+                : lastNodeRect.originTop -
+                  this.placeholderHeight -
+                  this.minOffset +
+                  halfPlaceholderHeight
+          }
+          break
+        default:
+      }
+    } else {
+      // 目标节点不存在子节点，那么基于目标节点定位
+      const nodeRect = this.getNodeRect(this.overlapNode)
+      dir = this.getNewChildNodeDir(this.overlapNode)
+      switch (this.mindMap.opt.layout) {
+        case LOGICAL_STRUCTURE:
+        case MIND_MAP:
+          x =
+            dir === RIGHT
+              ? nodeRect.originRight + marginX
+              : nodeRect.originLeft - this.placeholderWidth - marginX
+          y =
+            nodeRect.originTop +
+            (nodeRect.originHeight - this.placeholderHeight) / 2
+          break
+        case ORGANIZATION_STRUCTURE:
+          rotate = true
+          x =
+            nodeRect.originLeft +
+            (nodeRect.originWidth - this.placeholderHeight) / 2
+          y = nodeRect.originBottom + marginX
+          break
+        case CATALOG_ORGANIZATION:
+          if (layerIndex === 0) {
+            rotate = true
+          }
+          x = nodeRect.originLeft + nodeRect.originWidth * 0.5
+          y = nodeRect.originBottom + marginX
+          break
+        case TIMELINE:
+          if (layerIndex === 0) {
+            rotate = true
+          }
+          x = nodeRect.originLeft + nodeRect.originWidth * 0.5
+          y = nodeRect.originBottom + marginY
+          break
+        case TIMELINE2:
+          if (layerIndex === 0) {
+            rotate = true
+          }
+          x = nodeRect.originLeft + nodeRect.originWidth * 0.5
+          if (layerIndex === 1) {
+            y =
+              dir === TOP
+                ? nodeRect.originTop - this.placeholderHeight - marginX
+                : nodeRect.originBottom + marginX
+          } else {
+            y = nodeRect.originBottom + marginX
+          }
+          break
+        case VERTICAL_TIMELINE:
+          if (layerIndex === 0) {
+            rotate = true
+          }
+          x =
+            dir === RIGHT
+              ? nodeRect.originRight + marginX
+              : nodeRect.originLeft - this.placeholderWidth - marginX
+          y =
+            nodeRect.originTop +
+            nodeRect.originHeight / 2 -
+            halfPlaceholderHeight
+          break
+        case FISHBONE:
+          if (layerIndex <= 1) {
+            notRenderPlaceholder = true
+            this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, true)
+          } else {
+            x = nodeRect.originLeft + nodeRect.originWidth * 0.5
+            y =
+              dir === BOTTOM
+                ? nodeRect.originTop -
+                  this.placeholderHeight -
+                  this.minOffset +
+                  halfPlaceholderHeight
+                : nodeRect.originBottom + this.minOffset - halfPlaceholderHeight
+          }
+          break
+        default:
+      }
+    }
+    if (!notRenderPlaceholder) {
+      this.setPlaceholderRect({
+        x,
+        y,
+        dir,
+        rotate
+      })
+    }
+  }
+
+  // 获取节点的生长方向
+  getNewChildNodeDir(node) {
+    const {
+      LOGICAL_STRUCTURE,
+      MIND_MAP,
+      TIMELINE2,
+      VERTICAL_TIMELINE,
+      FISHBONE
+    } = CONSTANTS.LAYOUT
+    switch (this.mindMap.opt.layout) {
+      case LOGICAL_STRUCTURE:
+        return CONSTANTS.LAYOUT_GROW_DIR.RIGHT
+      case MIND_MAP:
+      case TIMELINE2:
+      case VERTICAL_TIMELINE:
+      case FISHBONE:
+        return node.dir
+      default:
+        return ''
     }
   }
 
   // 垂直方向比较
   // isReverse：是否反向
   handleVerticalCheck(node, checkList, isReverse = false) {
-    let x = this.mouseMoveX
-    let y = this.mouseMoveY
-    let nodeRect = this.getNodeRect(node)
-    if (isReverse) {
+    const { layout } = this.mindMap.opt
+    const { LAYOUT, LAYOUT_GROW_DIR } = CONSTANTS
+    const { VERTICAL_TIMELINE, FISHBONE } = LAYOUT
+    const { BOTTOM, LEFT } = LAYOUT_GROW_DIR
+    const mouseMoveX = this.mouseMoveX
+    const mouseMoveY = this.mouseMoveY
+    const nodeRect = this.getNodeRect(node)
+    const dir = this.getNewChildNodeDir(node)
+    const layerIndex = node.layerIndex
+    if (
+      isReverse ||
+      (layout === FISHBONE && dir === BOTTOM && layerIndex >= 3)
+    ) {
       checkList = checkList.reverse()
     }
-    let oneFourthHeight = nodeRect.height / 4
+    let oneFourthHeight = nodeRect.originHeight / 4
     let { prevBrotherOffset, nextBrotherOffset } =
       this.getNodeDistanceToSiblingNode(checkList, node, nodeRect, 'v')
-    if (nodeRect.left <= x && nodeRect.right >= x) {
+    if (nodeRect.left <= mouseMoveX && nodeRect.right >= mouseMoveX) {
       // 检测兄弟节点位置
       if (
         !this.overlapNode &&
@@ -405,38 +701,92 @@ class Drag extends Base {
       ) {
         let checkIsPrevNode =
           nextBrotherOffset > 0 // 距离下一个兄弟节点的距离大于0
-            ? y > nodeRect.bottom && y <= nodeRect.bottom + nextBrotherOffset // 那么在当前节点外底部判断
-            : y >= nodeRect.bottom - oneFourthHeight && y <= nodeRect.bottom // 否则在当前节点内底部1/4区间判断
+            ? mouseMoveY > nodeRect.bottom &&
+              mouseMoveY <= nodeRect.bottom + nextBrotherOffset // 那么在当前节点外底部判断
+            : mouseMoveY >= nodeRect.bottom - oneFourthHeight &&
+              mouseMoveY <= nodeRect.bottom // 否则在当前节点内底部1/4区间判断
         let checkIsNextNode =
           prevBrotherOffset > 0 // 距离上一个兄弟节点的距离大于0
-            ? y < nodeRect.top && y >= nodeRect.top - prevBrotherOffset // 那么在当前节点外底部判断
-            : y >= nodeRect.top && y <= nodeRect.top + oneFourthHeight
+            ? mouseMoveY < nodeRect.top &&
+              mouseMoveY >= nodeRect.top - prevBrotherOffset // 那么在当前节点外底部判断
+            : mouseMoveY >= nodeRect.top &&
+              mouseMoveY <= nodeRect.top + oneFourthHeight
+
+        const { scaleY } = this.drawTransform
+        let x =
+          dir === LEFT
+            ? nodeRect.originRight - this.placeholderWidth
+            : nodeRect.originLeft
+        let notRenderLine = false
+        switch (layout) {
+          case VERTICAL_TIMELINE:
+            if (layerIndex === 1) {
+              x =
+                nodeRect.originLeft +
+                nodeRect.originWidth / 2 -
+                this.placeholderWidth / 2
+            }
+            break
+          default:
+        }
         if (checkIsPrevNode) {
           if (isReverse) {
             this.nextNode = node
           } else {
             this.prevNode = node
           }
-          let size = this.formatPlaceholderSize(nextBrotherOffset)
-          this.setPlaceholderRect(
-            node.width,
-            size,
-            nodeRect.originLeft,
-            nodeRect.originBottom
-          )
+          let y =
+            nodeRect.originBottom +
+            nextBrotherOffset / scaleY - //nextBrotherOffset已经是实际间距的一半了
+            this.placeholderHeight / 2
+          switch (layout) {
+            case FISHBONE:
+              if (layerIndex === 2) {
+                notRenderLine = true
+                y =
+                  nodeRect.originBottom +
+                  this.minOffset -
+                  this.placeholderHeight / 2
+              }
+              break
+            default:
+          }
+          this.setPlaceholderRect({
+            x,
+            y,
+            dir,
+            notRenderLine
+          })
         } else if (checkIsNextNode) {
           if (isReverse) {
             this.prevNode = node
           } else {
             this.nextNode = node
           }
-          let size = this.formatPlaceholderSize(prevBrotherOffset)
-          this.setPlaceholderRect(
-            node.width,
-            size,
-            nodeRect.originLeft,
-            nodeRect.originTop - size
-          )
+          let y =
+            nodeRect.originTop -
+            this.placeholderHeight -
+            prevBrotherOffset / scaleY +
+            this.placeholderHeight / 2
+          switch (layout) {
+            case FISHBONE:
+              if (layerIndex === 2) {
+                notRenderLine = true
+                y =
+                  nodeRect.originTop -
+                  this.placeholderHeight -
+                  this.minOffset +
+                  this.placeholderHeight / 2
+              }
+              break
+            default:
+          }
+          this.setPlaceholderRect({
+            x,
+            y,
+            dir,
+            notRenderLine
+          })
         }
       }
       // 检测是否重叠
@@ -446,7 +796,7 @@ class Drag extends Base {
         prevBrotherOffset,
         nextBrotherOffset,
         size: oneFourthHeight,
-        pos: y,
+        pos: mouseMoveY,
         nodeRect
       })
     }
@@ -454,13 +804,16 @@ class Drag extends Base {
 
   // 水平方向比较
   handleHorizontalCheck(node, checkList) {
-    let x = this.mouseMoveX
-    let y = this.mouseMoveY
+    const { layout } = this.mindMap.opt
+    const { LAYOUT } = CONSTANTS
+    const { FISHBONE, TIMELINE, TIMELINE2 } = LAYOUT
+    let mouseMoveX = this.mouseMoveX
+    let mouseMoveY = this.mouseMoveY
     let nodeRect = this.getNodeRect(node)
-    let oneFourthWidth = nodeRect.width / 4
+    let oneFourthWidth = nodeRect.originWidth / 4
     let { prevBrotherOffset, nextBrotherOffset } =
       this.getNodeDistanceToSiblingNode(checkList, node, nodeRect, 'h')
-    if (nodeRect.top <= y && nodeRect.bottom >= y) {
+    if (nodeRect.top <= mouseMoveY && nodeRect.bottom >= mouseMoveY) {
       // 检测兄弟节点位置
       if (
         !this.overlapNode &&
@@ -470,30 +823,62 @@ class Drag extends Base {
       ) {
         let checkIsPrevNode =
           nextBrotherOffset > 0 // 距离下一个兄弟节点的距离大于0
-            ? x < nodeRect.right + nextBrotherOffset && x >= nodeRect.right // 那么在当前节点外底部判断
-            : x <= nodeRect.right && x >= nodeRect.right - oneFourthWidth // 否则在当前节点内底部1/4区间判断
+            ? mouseMoveX < nodeRect.right + nextBrotherOffset &&
+              mouseMoveX >= nodeRect.right // 那么在当前节点外底部判断
+            : mouseMoveX <= nodeRect.right &&
+              mouseMoveX >= nodeRect.right - oneFourthWidth // 否则在当前节点内底部1/4区间判断
         let checkIsNextNode =
           prevBrotherOffset > 0 // 距离上一个兄弟节点的距离大于0
-            ? x > nodeRect.left - prevBrotherOffset && x <= nodeRect.left // 那么在当前节点外底部判断
-            : x <= nodeRect.left + oneFourthWidth && x >= nodeRect.left
+            ? mouseMoveX > nodeRect.left - prevBrotherOffset &&
+              mouseMoveX <= nodeRect.left // 那么在当前节点外底部判断
+            : mouseMoveX <= nodeRect.left + oneFourthWidth &&
+              mouseMoveX >= nodeRect.left
+        const { scaleX } = this.drawTransform
+        const layerIndex = node.layerIndex
+        let y = nodeRect.originTop
+        let notRenderLine = false
+        switch (layout) {
+          case TIMELINE:
+          case TIMELINE2:
+            y =
+              nodeRect.originTop +
+              nodeRect.originHeight / 2 -
+              this.placeholderWidth / 2
+            break
+          case FISHBONE:
+            if (layerIndex === 1) {
+              notRenderLine = true
+              y =
+                nodeRect.originTop +
+                nodeRect.originHeight / 2 -
+                this.placeholderWidth / 2
+            }
+            break
+          default:
+        }
         if (checkIsPrevNode) {
           this.prevNode = node
-          let size = this.formatPlaceholderSize(nextBrotherOffset)
-          this.setPlaceholderRect(
-            size,
-            node.height,
-            nodeRect.originRight,
-            nodeRect.originTop
-          )
+          this.setPlaceholderRect({
+            x:
+              nodeRect.originRight +
+              nextBrotherOffset / scaleX - //nextBrotherOffset已经是实际间距的一半了
+              this.placeholderHeight / 2,
+            y,
+            rotate: true,
+            notRenderLine
+          })
         } else if (checkIsNextNode) {
           this.nextNode = node
-          let size = this.formatPlaceholderSize(prevBrotherOffset)
-          this.setPlaceholderRect(
-            size,
-            node.height,
-            nodeRect.originLeft - size,
-            nodeRect.originTop
-          )
+          this.setPlaceholderRect({
+            x:
+              nodeRect.originLeft -
+              this.placeholderHeight -
+              prevBrotherOffset / scaleX +
+              this.placeholderHeight / 2,
+            y,
+            rotate: true,
+            notRenderLine
+          })
         }
       }
       // 检测是否重叠
@@ -503,7 +888,7 @@ class Drag extends Base {
         prevBrotherOffset,
         nextBrotherOffset,
         size: oneFourthWidth,
-        pos: x,
+        pos: mouseMoveX,
         nodeRect
       })
     }
@@ -511,8 +896,12 @@ class Drag extends Base {
 
   // 获取节点距前一个和后一个节点的距离
   getNodeDistanceToSiblingNode(checkList, node, nodeRect, dir) {
-    let dir1 = dir === 'v' ? 'top' : 'left'
-    let dir2 = dir === 'v' ? 'bottom' : 'right'
+    const { TOP, LEFT, BOTTOM, RIGHT } = CONSTANTS.LAYOUT_GROW_DIR
+    let { scaleX, scaleY } = this.drawTransform
+    let dir1 = dir === 'v' ? TOP : LEFT
+    let dir2 = dir === 'v' ? BOTTOM : RIGHT
+    let scale = dir === 'v' ? scaleY : scaleX
+    let minOffset = this.minOffset * scale
     let index = getNodeIndexInNodeList(node, checkList)
     let prevBrother = null
     let nextBrother = null
@@ -531,10 +920,10 @@ class Drag extends Base {
       prevBrotherOffset = nodeRect[dir1] - prevNodeRect[dir2]
       // 间距小于10就当它不存在
       prevBrotherOffset =
-        prevBrotherOffset >= this.minOffset ? prevBrotherOffset / 2 : 0
+        prevBrotherOffset >= minOffset ? prevBrotherOffset / 2 : 0
     } else {
       // 没有前一个兄弟节点，那么假设和前一个节点的距离为20
-      prevBrotherOffset = this.minOffset
+      prevBrotherOffset = minOffset
     }
     // 和后一个兄弟节点的距离
     let nextBrotherOffset = 0
@@ -542,25 +931,70 @@ class Drag extends Base {
       let nextNodeRect = this.getNodeRect(nextBrother)
       nextBrotherOffset = nextNodeRect[dir1] - nodeRect[dir2]
       nextBrotherOffset =
-        nextBrotherOffset >= this.minOffset ? nextBrotherOffset / 2 : 0
+        nextBrotherOffset >= minOffset ? nextBrotherOffset / 2 : 0
     } else {
-      nextBrotherOffset = this.minOffset
+      nextBrotherOffset = minOffset
     }
     return {
+      prevBrother,
       prevBrotherOffset,
+      nextBrother,
       nextBrotherOffset
     }
   }
 
-  // 处理提示元素的大小
-  formatPlaceholderSize(size) {
-    const { nodeDragPlaceholderMaxSize } = this.mindMap.opt
-    return size > 0 ? Math.min(size, nodeDragPlaceholderMaxSize) : 5
-  }
-
   // 设置提示元素的大小和位置
-  setPlaceholderRect(w, h, x, y) {
+  setPlaceholderRect({ x, y, dir, rotate, notRenderLine }) {
+    let w = this.placeholderWidth
+    let h = this.placeholderHeight
+    if (rotate) {
+      const tmp = w
+      w = h
+      h = tmp
+    }
     this.placeholder.size(w, h).move(x, y)
+    if (notRenderLine) {
+      return
+    }
+    const { dragPlaceholderLineConfig } = this.mindMap.opt
+    let node = null
+    let parent = null
+    if (this.overlapNode) {
+      node = this.overlapNode
+      parent = this.overlapNode
+    } else {
+      node = this.prevNode || this.nextNode
+      parent = node.parent
+    }
+    parent = parent.fakeClone()
+    node = node.fakeClone()
+    const tmpNode = this.beingDragNodeList[0].fakeClone()
+    tmpNode.dir = dir
+    tmpNode.left = x
+    tmpNode.top = y
+    tmpNode.width = w
+    tmpNode.height = h
+    parent.children = [tmpNode]
+    parent._lines = []
+    this.placeHolderLine.show()
+    this.mindMap.renderer.layout.renderLine(
+      parent,
+      [this.placeHolderLine],
+      (...args) => {
+        // node.styleLine(...args)
+      },
+      node.style.getStyle('lineStyle', true)
+    )
+    this.placeHolderExtraLines = [...parent._lines]
+    this.placeHolderExtraLines.forEach(line => {
+      this.mindMap.otherDraw.add(line)
+      line
+        .stroke({
+          color: dragPlaceholderLineConfig.color,
+          width: dragPlaceholderLineConfig.width
+        })
+        .fill({ color: 'none' })
+    })
   }
 
   // 检测是否重叠
@@ -573,8 +1007,9 @@ class Drag extends Base {
     pos,
     nodeRect
   }) {
-    let dir1 = dir === 'v' ? 'top' : 'left'
-    let dir2 = dir === 'v' ? 'bottom' : 'right'
+    const { TOP, LEFT, BOTTOM, RIGHT } = CONSTANTS.LAYOUT_GROW_DIR
+    let dir1 = dir === 'v' ? TOP : LEFT
+    let dir2 = dir === 'v' ? BOTTOM : RIGHT
     if (!this.overlapNode && !this.prevNode && !this.nextNode) {
       if (
         nodeRect[dir1] + (prevBrotherOffset > 0 ? 0 : size) <= pos &&
@@ -638,7 +1073,7 @@ class Drag extends Base {
       this.handleHorizontalCheck(node, checkList)
     } else {
       // 处于上方的三级节点需要特殊处理，因为节点排列方向反向了
-      if (node.dir === 'top' && node.layerIndex === 2) {
+      if (node.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP && node.layerIndex === 2) {
         this.handleVerticalCheck(node, checkList, true)
       } else {
         this.handleVerticalCheck(node, checkList)
@@ -657,7 +1092,7 @@ class Drag extends Base {
       this.handleHorizontalCheck(node, checkList)
     } else {
       // 处于上方的三级节点需要特殊处理，因为节点排列方向反向了
-      if (node.dir === 'top' && node.layerIndex === 2) {
+      if (node.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP && node.layerIndex === 2) {
         this.handleVerticalCheck(node, checkList, true)
       } else {
         this.handleVerticalCheck(node, checkList)
@@ -678,6 +1113,8 @@ class Drag extends Base {
   getNodeRect(node) {
     let { scaleX, scaleY, translateX, translateY } = this.drawTransform
     let { left, top, width, height } = node
+    let originWidth = width
+    let originHeight = height
     let originLeft = left
     let originTop = top
     let originBottom = top + height
@@ -687,12 +1124,12 @@ class Drag extends Base {
     left = left * scaleX + translateX
     top = top * scaleY + translateY
     return {
-      width,
-      height,
       left,
       top,
       right,
       bottom,
+      originWidth,
+      originHeight,
       originLeft,
       originTop,
       originBottom,

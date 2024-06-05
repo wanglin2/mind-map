@@ -1,5 +1,4 @@
-import { BrowserWindow, ipcMain } from 'electron'
-import open from 'open'
+import { BrowserWindow, ipcMain, shell } from 'electron'
 
 export const bindOtherHandleEvent = () => {
   // 处理缩放事件
@@ -13,6 +12,6 @@ export const bindOtherHandleEvent = () => {
 
   // 使用默认浏览器打开指定url
   ipcMain.on('openUrl', (event, url) => {
-    open(url)
+    shell.openPath(url)
   })
 }

@@ -22,11 +22,13 @@ simpleMindMap.xmind
 
 ## 方法
 
-### xmind.parseXmindFile(file)
+### xmind.parseXmindFile(file, handleMultiCanvas)
 
 解析`.xmind`文件，返回解析后的数据，可以使用`mindMap.setData(data)`来将返回的数据渲染到画布上
 
 `file`：`File`对象
+
+`handleMultiCanvas`：v0.10.0+，可选，可传递一个函数，如果导入的xmind文件存在多个画布，那么会调用该函数，函数接收xmind画布列表数据为参数，需要返回其中一个画布的数据，比如接收的参数为`content`，要导入第二个画布的数据则返回`content[1]`。函数可以是异步函数，返回一个Promise实例。
 
 ### xmind.transformXmind(content)
 

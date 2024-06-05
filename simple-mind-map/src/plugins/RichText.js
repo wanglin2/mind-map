@@ -9,7 +9,8 @@ import {
   isUndef,
   checkSmmFormatData,
   removeHtmlNodeByClass,
-  formatGetNodeGeneralization
+  formatGetNodeGeneralization,
+  nodeRichTextToTextWithWrap
 } from '../utils'
 import { CONSTANTS } from '../constants/constant'
 
@@ -170,7 +171,8 @@ class RichText {
       customInnerElsAppendTo,
       nodeTextEditZIndex,
       textAutoWrapWidth,
-      selectTextOnEnterEditText
+      selectTextOnEnterEditText,
+      transformRichTextOnEnterEdit
     } = this.mindMap.opt
     this.node = node
     this.isInserting = isInserting
@@ -240,7 +242,10 @@ class RichText {
       }
     }
     // 节点文本内容
-    const nodeText = node.getData('text')
+    let nodeText = node.getData('text')
+    if (typeof transformRichTextOnEnterEdit === 'function') {
+      nodeText = transformRichTextOnEnterEdit(nodeText)
+    }
     // 是否是空文本
     const isEmptyText = isUndef(nodeText)
     // 是否是非空的非富文本
@@ -312,7 +317,9 @@ class RichText {
   getEditText() {
     let html = this.quill.container.firstChild.innerHTML
     // 去除ql-cursor节点
-    html = removeHtmlNodeByClass(html, '.ql-cursor')
+    // https://github.com/wanglin2/mind-map/commit/138cc4b3e824671143f0bf70e5c46796f48520d0
+    // https://github.com/wanglin2/mind-map/commit/0760500cebe8ec4e8ad84ab63f877b8b2a193aa1
+    // html = removeHtmlNodeByClass(html, '.ql-cursor')
     // 去除最后的空行
     return html.replace(/<p><br><\/p>$/, '')
   }
@@ -321,6 +328,10 @@ class RichText {
   hideEditText(nodes) {
     if (!this.showTextEdit) {
       return
+    }
+    const { beforeHideRichTextEdit } = this.mindMap.opt
+    if (typeof beforeHideRichTextEdit === 'function') {
+      beforeHideRichTextEdit(this)
     }
     let html = this.getEditText()
     let list =
@@ -364,6 +375,21 @@ class RichText {
         }
       },
       theme: 'snow'
+    })
+    // 拦截粘贴事件
+    this.quill.root.addEventListener('copy', event => {
+      event.preventDefault()
+      const sel = window.getSelection()
+      const originStr = sel.toString()
+      try {
+        const range = sel.getRangeAt(0)
+        const div = document.createElement('div')
+        div.appendChild(range.cloneContents())
+        const text = nodeRichTextToTextWithWrap(div.innerHTML)
+        event.clipboardData.setData('text/plain', text)
+      } catch (e) {
+        event.clipboardData.setData('text/plain', originStr)
+      }
     })
     this.quill.on('selection-change', range => {
       // 刚创建的节点全选不需要显示操作条

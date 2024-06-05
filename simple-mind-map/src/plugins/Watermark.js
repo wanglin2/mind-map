@@ -41,10 +41,21 @@ class Watermark {
   // 创建水印容器
   createContainer() {
     if (this.watermarkDraw) return
-    this.watermarkDraw = this.mindMap.svg
-      .group()
+    this.watermarkDraw = new G()
       .css({ 'pointer-events': 'none', 'user-select': 'none' })
       .addClass('smm-water-mark-container')
+    this.updateLayer()
+  }
+
+  // 更新水印容器层级
+  updateLayer() {
+    if (!this.watermarkDraw) return
+    const { belowNode } = this.mindMap.opt.watermarkConfig
+    if (belowNode) {
+      this.watermarkDraw.insertBefore(this.mindMap.draw)
+    } else {
+      this.mindMap.svg.add(this.watermarkDraw)
+    }
   }
 
   // 删除水印容器
@@ -160,6 +171,7 @@ class Watermark {
       this.mindMap.opt.watermarkConfig,
       config
     )
+    this.updateLayer()
     this.handleConfig(config)
     this.draw()
   }
@@ -167,11 +179,13 @@ class Watermark {
   // 插件被移除前做的事情
   beforePluginRemove() {
     this.unBindEvent()
+    this.removeContainer()
   }
 
   // 插件被卸载前做的事情
   beforePluginDestroy() {
     this.unBindEvent()
+    this.removeContainer()
   }
 }
 

@@ -8,12 +8,18 @@ import nodeCreateContentsMethods from './nodeCreateContents'
 import nodeExpandBtnPlaceholderRectMethods from './nodeExpandBtnPlaceholderRect'
 import nodeCooperateMethods from './nodeCooperate'
 import { CONSTANTS } from '../../../constants/constant'
-import { copyNodeTree, createForeignObjectNode } from '../../../utils/index'
+import {
+  copyNodeTree,
+  createForeignObjectNode,
+  createUid,
+  addXmlns
+} from '../../../utils/index'
 
 //  节点类
 class Node {
   //  构造函数
   constructor(opt = {}) {
+    this.opt = opt
     // 节点数据
     this.nodeData = this.handleData(opt.data || {})
     // uid
@@ -111,31 +117,35 @@ class Node {
     this.needLayout = false
     // 当前是否是隐藏状态
     this.isHide = false
-    // 概要相关方法
-    Object.keys(nodeGeneralizationMethods).forEach(item => {
-      this[item] = nodeGeneralizationMethods[item].bind(this)
-    })
-    // 展开收起按钮相关方法
-    Object.keys(nodeExpandBtnMethods).forEach(item => {
-      this[item] = nodeExpandBtnMethods[item].bind(this)
-    })
-    // 展开收起按钮占位元素相关方法
-    Object.keys(nodeExpandBtnPlaceholderRectMethods).forEach(item => {
-      this[item] = nodeExpandBtnPlaceholderRectMethods[item].bind(this)
-    })
-    // 命令的相关方法
-    Object.keys(nodeCommandWrapsMethods).forEach(item => {
-      this[item] = nodeCommandWrapsMethods[item].bind(this)
-    })
-    // 创建节点内容的相关方法
-    Object.keys(nodeCreateContentsMethods).forEach(item => {
-      this[item] = nodeCreateContentsMethods[item].bind(this)
-    })
-    // 协同相关
-    if (this.mindMap.cooperate) {
-      Object.keys(nodeCooperateMethods).forEach(item => {
-        this[item] = nodeCooperateMethods[item].bind(this)
+    const proto = Object.getPrototypeOf(this)
+    if (!proto.bindEvent) {
+      // 概要相关方法
+      Object.keys(nodeGeneralizationMethods).forEach(item => {
+        proto[item] = nodeGeneralizationMethods[item]
       })
+      // 展开收起按钮相关方法
+      Object.keys(nodeExpandBtnMethods).forEach(item => {
+        proto[item] = nodeExpandBtnMethods[item]
+      })
+      // 展开收起按钮占位元素相关方法
+      Object.keys(nodeExpandBtnPlaceholderRectMethods).forEach(item => {
+        proto[item] = nodeExpandBtnPlaceholderRectMethods[item]
+      })
+      // 命令的相关方法
+      Object.keys(nodeCommandWrapsMethods).forEach(item => {
+        proto[item] = nodeCommandWrapsMethods[item]
+      })
+      // 创建节点内容的相关方法
+      Object.keys(nodeCreateContentsMethods).forEach(item => {
+        proto[item] = nodeCreateContentsMethods[item]
+      })
+      // 协同相关
+      if (this.mindMap.cooperate) {
+        Object.keys(nodeCooperateMethods).forEach(item => {
+          proto[item] = nodeCooperateMethods[item]
+        })
+      }
+      proto.bindEvent = true
     }
     // 初始化
     this.getSize()
@@ -195,10 +205,7 @@ class Node {
     }
     // 如果没有返回内容，那么还是使用内置的节点内容
     if (this._customNodeContent) {
-      this._customNodeContent.setAttribute(
-        'xmlns',
-        'http://www.w3.org/1999/xhtml'
-      )
+      addXmlns(this._customNodeContent)
       return
     }
     this._imgData = this.createImgNode()
@@ -211,9 +218,15 @@ class Node {
     this._prefixData = createNodePrefixContent
       ? createNodePrefixContent(this)
       : null
+    if (this._prefixData && this._prefixData.el) {
+      addXmlns(this._prefixData.el)
+    }
     this._postfixData = createNodePostfixContent
       ? createNodePostfixContent(this)
       : null
+    if (this._postfixData && this._postfixData.el) {
+      addXmlns(this._postfixData.el)
+    }
   }
 
   //  计算节点的宽高
@@ -521,7 +534,7 @@ class Node {
         }
       }
       // 多选和取消多选
-      if ((e.ctrlKey || e.metaKey) && enableCtrlKeyNodeSelection) {
+      if (!readonly && (e.ctrlKey || e.metaKey) && enableCtrlKeyNodeSelection) {
         this.isMultipleChoice = true
         let isActive = this.getData('isActive')
         if (!isActive)
@@ -773,9 +786,9 @@ class Node {
     if (this.nodeData.inserting) {
       delete this.nodeData.inserting
       this.active()
-      setTimeout(() => {
-        this.mindMap.emit('node_dblclick', this, null, true)
-      }, 0)
+      // setTimeout(() => {
+      this.mindMap.emit('node_dblclick', this, null, true)
+      // }, 0)
     }
   }
 
@@ -1174,6 +1187,19 @@ class Node {
   // 取消高亮节点
   closeHighlight() {
     if (this.group) this.group.removeClass('smm-node-highlight')
+  }
+
+  // 伪克隆节点
+  // 克隆出的节点并不能真正当做一个节点使用
+  fakeClone() {
+    const newNode = new Node({
+      ...this.opt,
+      uid: createUid()
+    })
+    Object.keys(this).forEach(item => {
+      newNode[item] = this[item]
+    })
+    return newNode
   }
 }
 

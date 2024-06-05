@@ -22,12 +22,14 @@ simpleMindMap.xmind
 
 ## Methods
 
-### xmind.parseXmindFile(file)
+### xmind.parseXmindFile(file, handleMultiCanvas)
 
 Parsing the `.xmind` file and returning the parsed data. You can use
 `mindMap.setData(data)` to render the returned data to the canvas.
 
 `file`: `File` object
+
+`handleMultiCanvas`：v0.10.0+，Optional, a function can be passed. If there are multiple canvases in the imported xmind file, this function will be called. The function takes the xmind canvas list data as a parameter and needs to return the data of one of the canvases, For example, if the received parameter is 'content', if you want to import data from the second canvas, you will return 'content[1]'. A function can be an asynchronous function that returns a Promise instance.
 
 ### xmind.transformXmind(content)
 

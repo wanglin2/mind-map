@@ -35,6 +35,7 @@ export default [
       { path: 'course26', title: '如何实现AI生成节点内容' },
       { path: 'course27', title: '快捷键操作如何传递自定义参数' },
       { path: 'course28', title: '如何动态修改自定义元素的大小' },
+      { path: 'course29', title: '局域网docker部署解决HTTPS问题的一种方法' },
       { path: 'doExport', title: 'Export 插件' },
       { path: 'drag', title: 'Drag插件' },
       { path: 'introduction', title: '简介' },
@@ -69,7 +70,8 @@ export default [
       { path: 'help2', title: '客户端' },
       { path: 'help3', title: '打开预览在线文件' },
       { path: 'help4', title: '复制粘贴' },
-      { path: 'help5', title: '导出' }
+      { path: 'help5', title: '导出' },
+      { path: 'help6', title: '如何编辑数学公式' }
     ]
   },
   {

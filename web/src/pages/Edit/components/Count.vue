@@ -12,8 +12,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
-import {defenseXSS} from 'simple-mind-map/src/utils/xss'
+import { mapState } from 'vuex'
 
 /**
  * @Author: 王林
@@ -39,7 +38,7 @@ export default {
   computed: {
     ...mapState({
       isDark: state => state.localConfig.isDark
-    }),
+    })
   },
   created() {
     this.$bus.$on('data_change', this.onDataChange)
@@ -61,7 +60,7 @@ export default {
       this.words = 0
       this.num = 0
       this.walk(data)
-      countEl.innerHTML = defenseXSS(this.textStr)
+      countEl.innerHTML = this.textStr
       this.words = countEl.textContent.length
     },
 
@@ -102,7 +101,7 @@ export default {
     background: #262a2e;
 
     .item {
-      color: hsla(0, 0%, 100%, .6);
+      color: hsla(0, 0%, 100%, 0.6);
     }
   }
 

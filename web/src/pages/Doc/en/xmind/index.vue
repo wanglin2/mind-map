@@ -14,10 +14,11 @@
 <pre class="hljs"><code>simpleMindMap.xmind
 </code></pre>
 <h2>Methods</h2>
-<h3>xmind.parseXmindFile(file)</h3>
+<h3>xmind.parseXmindFile(file, handleMultiCanvas)</h3>
 <p>Parsing the <code>.xmind</code> file and returning the parsed data. You can use
 <code>mindMap.setData(data)</code> to render the returned data to the canvas.</p>
 <p><code>file</code>: <code>File</code> object</p>
+<p><code>handleMultiCanvas</code>：v0.10.0+，Optional, a function can be passed. If there are multiple canvases in the imported xmind file, this function will be called. The function takes the xmind canvas list data as a parameter and needs to return the data of one of the canvases, For example, if the received parameter is 'content', if you want to import data from the second canvas, you will return 'content[1]'. A function can be an asynchronous function that returns a Promise instance.</p>
 <h3>xmind.transformXmind(content)</h3>
 <blockquote>
 <p>V0.6.6+version changes the method to asynchronous and returns a Promise instance</p>

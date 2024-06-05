@@ -38,6 +38,7 @@ export default {
     watermarkAngle: 'Angle',
     watermarkTextOpacity: 'Text opacity',
     watermarkTextFontSize: 'Font size',
+    belowNode: 'Display below nodes',
     isEnableNodeRichText: 'Enable node rich text editing',
     mousewheelAction: 'Mouse wheel behavior',
     zoomView: 'Zoom view',
@@ -152,7 +153,8 @@ export default {
     notSelectTip: 'Please select the file to import',
     fileContentError: 'The file content is incorrect',
     importSuccess: 'Import success',
-    fileParsingFailed: 'File parsing failed'
+    fileParsingFailed: 'File parsing failed',
+    xmindCanvasSelectDialogTitle: 'Select the canvas to import'
   },
   navigatorToolbar: {
     openMiniMap: 'Open mini map',
@@ -277,7 +279,9 @@ export default {
     fileOpenFailed: 'File open failed',
     defaultFileName: 'Mind map',
     creatingTip: 'Creating file',
-    directory: 'Directory'
+    directory: 'Directory',
+    newFileTip: 'Please export the currently edited file before creating a new one, otherwise the content will be lost',
+    openFileTip: 'Please export the currently edited file before opening it, otherwise the content will be lost'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',

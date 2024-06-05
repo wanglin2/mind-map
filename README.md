@@ -109,9 +109,13 @@ const mindMap = new MindMap({
 
 [![Star History Chart](https://api.star-history.com/svg?repos=wanglin2/mind-map&type=Date)](https://star-history.com/#wanglin2/mind-map&Date)
 
+# 关于定制
+
+如果你有个性化的商用定制需求，可以联系我们，我们提供付费开发服务。
+
 # 请作者喝杯咖啡
 
-开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡~
+开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡，你的支持是开发者持续维护的最大动力~
 
 > 推荐使用支付宝，微信获取不到头像。转账请备注【思维导图】。
 
@@ -355,7 +359,7 @@ const mindMap = new MindMap({
     </span>
     <span>
         <img src="./web/src/assets/avatar/孟照星.jpg" style="width: 50px;height: 50px;" />
-        <span>孟照星</span>
+        <span>Alex</span>
     </span>
     <span>
         <img src="./web/src/assets/avatar/子豪.jpg" style="width: 50px;height: 50px;" />
@@ -364,5 +368,21 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/宏涛.jpg" style="width: 50px;height: 50px;" />
         <span>宏涛</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/最多5个字.jpg" style="width: 50px;height: 50px;" />
+        <span>最多5个字</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/雨馨.jpg" style="width: 50px;height: 50px;" />
+        <span>雨馨</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/ZX.jpg" style="width: 50px;height: 50px;" />
+        <span>ZX</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/峰.jpg" style="width: 50px;height: 50px;" />
+        <span>峰</span>
     </span>
 </p>

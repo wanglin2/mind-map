@@ -1,6 +1,6 @@
 {
   "name": "thoughts",
-  "version": "0.9.12",
+  "version": "0.10.0",
   "private": true,
   "description": "一个简洁的思维导图",
   "author": "街角小林<1013335014@qq.com>",
@@ -32,7 +32,6 @@
     "fs-extra": "^7.0.1",
     "highlight.js": "^10.7.3",
     "katex": "^0.16.9",
-    "open": "^6.4.0",
     "uuid": "^3.4.0",
     "v-viewer": "^1.6.4",
     "vue": "^2.6.11",

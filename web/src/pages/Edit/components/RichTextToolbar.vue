@@ -70,7 +70,10 @@
             class="fontOptionItem"
             v-for="item in fontSizeList"
             :key="item"
-            :style="{ fontSize: item + 'px' }"
+            :style="{
+              fontSize: item + 'px',
+              height: (item < 30 ? 30 : item + 10) + 'px'
+            }"
             :class="{ active: formatInfo.size === item + 'px' }"
             @click="changeFontSize(item)"
           >
