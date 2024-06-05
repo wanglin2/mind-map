@@ -1,5 +1,51 @@
 # Changelog
 
+## 0.10.0
+
+Major updates: Upgrade the interaction effect when dragging nodes;
+
+Fix:
+
+> 1.Fix the issue where read-only mode can still activate nodes by Ctrl+clicking on them;
+>
+> 2.Fix the issue of page scaling when setting up scaling in some mobile browsers;
+>
+> 3.Fix the issue of selecting text when dragging the canvas and adjusting images;
+>
+> 4.Fix the issue of multiple line breaks when copying node text with line breaks and pasting it;
+>
+> 5.Fix the issue of displaying blank space when exporting images with custom content before and after nodes;
+
+New:
+
+> 1.Add a new rendering start event node.treeRender_start;
+>
+> 2.Support displaying watermarks below nodes;
+>
+> 3.Importing xmind files with multiple canvases supports selecting the specified canvas for import;
+>
+> 4.Canceling the call to the defenseXSS function has a significant impact on performance; The defenseXSS method is provided as a tool method;
+>
+> 5.Remove the logic of removing nodes with ql cursor class names from rich text content, and fix the issue of ineffective addition of empty lines when text breaks;
+>
+> 6.Remove the logic of delayed node editing when inserting new nodes;
+>
+> 7.Support direct editing of mathematical formulas in rich text editing boxes;
+>
+> 8.Add demonstration plugins to the packaged file;
+
+Demo：
+
+> 1.支持配置水印显示在节点下方；
+>
+> 2.导入存在多个画布的xmind文件支持选择指定的画布进行导入；
+>
+> 3.优化富文本工具条下拉选项列表高度问题；
+>
+> 4.新建和打开按钮增加导出的提示，防止内容丢失；
+>
+> 5.快捷键提示支持区分windows和mac；
+
 ## 0.9.12
 
 Fix:

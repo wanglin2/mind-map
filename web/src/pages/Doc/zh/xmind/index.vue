@@ -14,9 +14,10 @@
 <pre class="hljs"><code>simpleMindMap.xmind
 </code></pre>
 <h2>方法</h2>
-<h3>xmind.parseXmindFile(file)</h3>
+<h3>xmind.parseXmindFile(file, handleMultiCanvas)</h3>
 <p>解析<code>.xmind</code>文件，返回解析后的数据，可以使用<code>mindMap.setData(data)</code>来将返回的数据渲染到画布上</p>
 <p><code>file</code>：<code>File</code>对象</p>
+<p><code>handleMultiCanvas</code>：v0.10.0+，可选，可传递一个函数，如果导入的xmind文件存在多个画布，那么会调用该函数，函数接收xmind画布列表数据为参数，需要返回其中一个画布的数据，比如接收的参数为<code>content</code>，要导入第二个画布的数据则返回<code>content[1]</code>。函数可以是异步函数，返回一个Promise实例。</p>
 <h3>xmind.transformXmind(content)</h3>
 <blockquote>
 <p>v0.6.6+版本该方法改为异步方法，返回一个Promise实例</p>

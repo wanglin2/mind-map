@@ -661,14 +661,20 @@
 <tr>
 <td>dragMultiNodeRectConfig（v0.7.2+）</td>
 <td>Object</td>
-<td>{ width: 40, height: 20, fill: '' }</td>
+<td>{ width: 40, height: 20, fill: 'rgb(94, 200, 248)' }</td>
 <td>拖拽多个节点时随鼠标移动的示意矩形的样式配置，传递一个对象，字段含义分别为矩形的宽、高、填充色</td>
 </tr>
 <tr>
 <td>dragPlaceholderRectFill（v0.7.2+）</td>
 <td>String</td>
-<td></td>
-<td>节点拖拽时新位置的示意矩形的填充颜色，如果不传默认使用连线的颜色</td>
+<td>rgb(94, 200, 248)</td>
+<td>节点拖拽时新位置的示意矩形的填充颜色</td>
+</tr>
+<tr>
+<td>dragPlaceholderLineConfig（v0.10.0+）</td>
+<td>Object</td>
+<td>{ color: 'rgb(94, 200, 248)',  width: 2 }</td>
+<td>节点拖拽时新位置的示意连线的样式配置</td>
 </tr>
 <tr>
 <td>dragOpacityConfig（v0.7.2+）</td>
@@ -744,6 +750,12 @@
 <td>false</td>
 <td>是否仅在导出时添加水印</td>
 </tr>
+<tr>
+<td>belowNode（v0.10.0+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>水印是否显示在节点下方</td>
+</tr>
 </tbody>
 </table>
 <h3>6.AssociativeLine插件</h3>
@@ -799,6 +811,24 @@
 <td>Boolean</td>
 <td>false</td>
 <td>设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果，需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果</td>
+</tr>
+<tr>
+<td>enableEditFormulaInRichTextEdit（v0.10.0+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td>是否开启在富文本编辑框中直接编辑数学公式</td>
+</tr>
+<tr>
+<td>transformRichTextOnEnterEdit（v0.10.0+）</td>
+<td>null、Function</td>
+<td>null</td>
+<td>转换富文本内容，可以传递一个函数，当进入富文本编辑时会调用该函数，函数接收即将被编辑的富文本内容，需要返回你处理后的富文本内容</td>
+</tr>
+<tr>
+<td>beforeHideRichTextEdit（v0.10.0+）</td>
+<td>null、Function</td>
+<td>null</td>
+<td>可以传递一个函数，即将结束富文本编辑前会执行该函数，函数接收richText实例，所以你可以在此时机更新quill文档数据</td>
 </tr>
 </tbody>
 </table>
@@ -1283,6 +1313,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>node_tree_render_end（v0.2.16+）</td>
 <td>节点树渲染完毕事件</td>
+<td></td>
+</tr>
+<tr>
+<td>node_tree_render_start（v0.10.0+）</td>
+<td>节点树开始渲染事件</td>
 <td></td>
 </tr>
 <tr>

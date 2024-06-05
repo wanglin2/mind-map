@@ -427,6 +427,15 @@
 <p>v0.9.11+</p>
 </blockquote>
 <p>退出全屏状态。</p>
+<h4>defenseXSS(htmlStr)</h4>
+<blockquote>
+<p>v0.10.0+</p>
+</blockquote>
+<ul>
+<li><code>htmlStr</code>：需要过滤的html字符串</li>
+</ul>
+<p>返回：过滤后的html字符串</p>
+<p>防御 XSS 攻击，过滤恶意 HTML 标签和属性。你可以在将节点数据传递给SimpleMindMap前递归遍历树数据，通过该方法处理节点富文本内容，避免 XSS 攻击。</p>
 <h2>在 canvas 中模拟 css 的背景属性</h2>
 <p>引入：</p>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> drawBackgroundImageToCanvas <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/utils/simulateCSSBackgroundInCanvas&#x27;</span>

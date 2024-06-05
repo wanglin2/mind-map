@@ -212,8 +212,9 @@ new MindMap({
 | enableFreeDrag（v0.2.4+）        | Boolean | false            | 是否开启节点自由拖拽（自由拖拽即可以把节点拖拽到画布的任意位置，注意不是拖拽节点成为其他节点的子节点兄弟节点的功能，自由拖拽的连线会存在一定问题，所以该特性最好不要使用）                                         |
 | nodeDragPlaceholderMaxSize（v0.6.12+）（v0.10.0+已废除）     | Number  | 20 | 拖拽元素时，指示元素新位置的块的最大高度 |
 | autoMoveWhenMouseInEdgeOnDrag（v0.7.1+）     | Boolean  | true  | 拖拽节点时鼠标移动到画布边缘是否开启画布自动移动 |
-| dragMultiNodeRectConfig（v0.7.2+）     | Object  | { width: 40, height: 20, fill: '' }  | 拖拽多个节点时随鼠标移动的示意矩形的样式配置，传递一个对象，字段含义分别为矩形的宽、高、填充色 |
-| dragPlaceholderRectFill（v0.7.2+）     |  String |   | 节点拖拽时新位置的示意矩形的填充颜色，如果不传默认使用连线的颜色 |
+| dragMultiNodeRectConfig（v0.7.2+）     | Object  | { width: 40, height: 20, fill: 'rgb(94, 200, 248)' }  | 拖拽多个节点时随鼠标移动的示意矩形的样式配置，传递一个对象，字段含义分别为矩形的宽、高、填充色 |
+| dragPlaceholderRectFill（v0.7.2+）     |  String | rgb(94, 200, 248)  | 节点拖拽时新位置的示意矩形的填充颜色 |
+| dragPlaceholderLineConfig（v0.10.0+）     |  Object | { color: 'rgb(94, 200, 248)',  width: 2 }  | 节点拖拽时新位置的示意连线的样式配置 |
 | dragOpacityConfig（v0.7.2+）     | Object  | { cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }  | 节点拖拽时的透明度配置，传递一个对象，字段含义分别为：跟随鼠标移动的克隆节点或矩形的透明度、被拖拽节点的透明度 |
 
 ### 5.Watermark插件
@@ -232,6 +233,7 @@ new MindMap({
 | angle       | Number | 30                                          | 水印的倾斜角度，范围：[0, 90]        |
 | textStyle   | Object | {color: '#999', opacity: 0.5, fontSize: 14} | 水印文字样式                         |
 | onlyExport（v0.9.2+）   | Boolean | false | 是否仅在导出时添加水印                         |
+| belowNode（v0.10.0+）   | Boolean | false | 水印是否显示在节点下方                         |
 
 ### 6.AssociativeLine插件
 
@@ -247,6 +249,9 @@ new MindMap({
 | 字段名称                         | 类型    | 默认值           | 描述                                                         |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
 | richTextEditFakeInPlace（v0.6.13+）     | Boolean  | false | 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果，需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果 |
+| enableEditFormulaInRichTextEdit（v0.10.0+）     | Boolean  | true | 是否开启在富文本编辑框中直接编辑数学公式 |
+| transformRichTextOnEnterEdit（v0.10.0+）     | null、Function  | null | 转换富文本内容，可以传递一个函数，当进入富文本编辑时会调用该函数，函数接收即将被编辑的富文本内容，需要返回你处理后的富文本内容 |
+| beforeHideRichTextEdit（v0.10.0+）     | null、Function  | null | 可以传递一个函数，即将结束富文本编辑前会执行该函数，函数接收richText实例，所以你可以在此时机更新quill文档数据 |
 
 ### 8.TouchEvent插件
 
@@ -547,7 +552,8 @@ mindMap.setTheme('主题名称')
 | node_img_mouseenter（v0.6.5+）    |  节点内图片的鼠标移入事件                      | this（节点实例）、imgNode（图片节点）、e（事件对象）                              |
 | node_img_mouseleave（v0.6.5+）    |  节点内图片的鼠标移出事件                      | this（节点实例）、imgNode（图片节点）、e（事件对象）                              |
 | node_img_mousemove（v0.6.5+）    |  节点内图片的鼠标移动事件                      | this（节点实例）、imgNode（图片节点）、e（事件对象）                              |
-| node_tree_render_end（v0.2.16+） | 节点树渲染完毕事件                         |                                                              |
+| node_tree_render_end（v0.2.16+） | 节点树渲染完毕事件   |           |
+| node_tree_render_start（v0.10.0+） | 节点树开始渲染事件   |           |
 | rich_text_selection_change（v0.4.0+）         |  当注册了`RichText`插件时可用。当节点编辑时，文本选区发生改变时触发         |  hasRange（是否存在选区）、rectInfo（选区的尺寸和位置信息）、formatInfo（选区的文本格式化信息）            |
 | transforming-dom-to-images（v0.4.0+）         |  当注册了`RichText`插件时可用。当`svg`中存在`DOM`节点时，导出为图片时会将`DOM`节点转换为图片，转换过程中会触发该事件，可用通过该事件给用户提示，告知目前转换到的节点         |  index（当前转换到的节点索引）、len（一共需要转换的节点数量）            |
 | node_dragging（v0.4.5+）    | 当某个节点被拖拽时触发   |  node（当前被拖拽的节点）           |

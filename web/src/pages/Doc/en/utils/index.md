@@ -506,6 +506,16 @@ Put the specified DOM element into full screen mode.
 
 Exit full screen mode.
 
+#### defenseXSS(htmlStr)
+
+> v0.10.0+
+
+- `htmlStr`：HTML strings that need to be filtered
+
+Return：Filtered HTML string
+
+Defend against XSS attacks, filter malicious HTML tags and attributes. You can recursively traverse the tree data before passing the node data to SimpleMindMap, using this method to process the rich text content of nodes and avoid XSS attacks.
+
 ## Simulate CSS background in Canvas
 
 Import:

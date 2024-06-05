@@ -745,15 +745,22 @@
 <tr>
 <td>dragMultiNodeRectConfig（v0.7.2+）</td>
 <td>Object</td>
-<td>{ width: 40, height: 20, fill: '' }</td>
+<td>{ width: 40, height: 20, fill: 'rgb(94, 200, 248)' }</td>
 <td>The style configuration of the schematic rectangle that moves with the mouse when dragging multiple nodes, passing an object, and the field meanings are the width, height, and fill color of the rectangle</td>
 <td></td>
 </tr>
 <tr>
 <td>dragPlaceholderRectFill（v0.7.2+）</td>
 <td>String</td>
+<td>rgb(94, 200, 248)</td>
+<td>The filling color of the schematic rectangle for the new position when dragging nodes.</td>
 <td></td>
-<td>The filling color of the schematic rectangle for the new position when dragging nodes. If not transmitted, the default color for the connected line is used</td>
+</tr>
+<tr>
+<td>dragPlaceholderLineConfig（v0.10.0+）</td>
+<td>Object</td>
+<td>{ color: 'rgb(94, 200, 248)',  width: 2 }</td>
+<td>Style configuration of schematic lines for new positions when dragging nodes</td>
 <td></td>
 </tr>
 <tr>
@@ -833,6 +840,12 @@
 <td>false</td>
 <td>Is only add watermarks during export</td>
 </tr>
+<tr>
+<td>belowNode（v0.10.0+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Is the watermark displayed below the node</td>
+</tr>
 </tbody>
 </table>
 <h3>6.AssociativeLine plugin</h3>
@@ -901,6 +914,27 @@
 <td>Boolean</td>
 <td>false</td>
 <td>Set the rich text node edit box to match the size of the node, creating a pseudo in place editing effect. It should be noted that only when there is only text within the node and the shape is rectangular, can the effect be better</td>
+<td></td>
+</tr>
+<tr>
+<td>enableEditFormulaInRichTextEdit（v0.10.0+）</td>
+<td>Boolean</td>
+<td>true</td>
+<td></td>
+<td>Whether to enable direct editing of mathematical formulas in rich text editing boxes</td>
+</tr>
+<tr>
+<td>transformRichTextOnEnterEdit（v0.10.0+）</td>
+<td>null、Function</td>
+<td>null</td>
+<td>To convert rich text content, you can pass a function that will be called when entering rich text editing. The function receives the rich text content that is about to be edited and needs to return the processed rich text content</td>
+<td></td>
+</tr>
+<tr>
+<td>beforeHideRichTextEdit（v0.10.0+）</td>
+<td>null、Function</td>
+<td>null</td>
+<td>You can pass a function that will be executed before the end of rich text editing. The function receives a richText instance, so you can update the kill document data at this time</td>
 <td></td>
 </tr>
 </tbody>
@@ -1405,6 +1439,11 @@ poor performance and should be used sparingly.</p>
 <tr>
 <td>node_tree_render_end（v0.2.16+）</td>
 <td>Node tree render end event</td>
+<td></td>
+</tr>
+<tr>
+<td>node_tree_render_start（v0.10.0+）</td>
+<td>Node tree start rendering event</td>
 <td></td>
 </tr>
 <tr>

@@ -70,7 +70,8 @@ export default [
       { path: 'help2', title: '客户端' },
       { path: 'help3', title: '打开预览在线文件' },
       { path: 'help4', title: '复制粘贴' },
-      { path: 'help5', title: '导出' }
+      { path: 'help5', title: '导出' },
+      { path: 'help6', title: '如何编辑数学公式' }
     ]
   },
   {

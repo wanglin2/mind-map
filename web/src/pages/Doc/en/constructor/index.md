@@ -209,8 +209,9 @@ new MindMap({
 | enableFreeDrag（v0.2.4+）        | Boolean | false            | Enable node free(Free drag means that nodes can be dragged to any position on the canvas. Please note that it is not a function of dragging nodes to become siblings of other nodes. The connection of free drag may have certain problems, so it is best not to use this feature) drag                                        |          |
 | nodeDragPlaceholderMaxSize（v0.6.12+）（v0.10.0+ has been abolished）  | Number  | 20 | When dragging an element, the maximum height of the block indicating the new position of the element |          |
 | autoMoveWhenMouseInEdgeOnDrag（v0.7.1+）     | Boolean  | true  | Whether to enable automatic canvas movement when the mouse moves to the edge of the canvas while dragging nodes |          |
-| dragMultiNodeRectConfig（v0.7.2+）     | Object  | { width: 40, height: 20, fill: '' }  | The style configuration of the schematic rectangle that moves with the mouse when dragging multiple nodes, passing an object, and the field meanings are the width, height, and fill color of the rectangle |          |
-| dragPlaceholderRectFill（v0.7.2+）     |  String |   | The filling color of the schematic rectangle for the new position when dragging nodes. If not transmitted, the default color for the connected line is used |          |
+| dragMultiNodeRectConfig（v0.7.2+）     | Object  | { width: 40, height: 20, fill: 'rgb(94, 200, 248)' }  | The style configuration of the schematic rectangle that moves with the mouse when dragging multiple nodes, passing an object, and the field meanings are the width, height, and fill color of the rectangle |          |
+| dragPlaceholderRectFill（v0.7.2+）     |  String |  rgb(94, 200, 248) | The filling color of the schematic rectangle for the new position when dragging nodes. |          |
+| dragPlaceholderLineConfig（v0.10.0+）     |  Object | { color: 'rgb(94, 200, 248)',  width: 2 }  | Style configuration of schematic lines for new positions when dragging nodes |          |
 | dragOpacityConfig（v0.7.2+）     | Object  | { cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }  | The transparency configuration during node dragging, passing an object, and the field meanings are: the transparency of the cloned node or rectangle that follows the mouse movement, and the transparency of the dragged node |          |
 
 ### 5.Watermark plugin
@@ -229,6 +230,7 @@ new MindMap({
 | angle       | Number | 30                                          | Tilt angle of watermark, range: [0, 90]                      |
 | textStyle   | Object | {color: '#999', opacity: 0.5, fontSize: 14} | Watermark text style                                         |
 | onlyExport（v0.9.2+）   | Boolean | false |  Is only add watermarks during export                        |
+| belowNode（v0.10.0+）   | Boolean | false |   Is the watermark displayed below the node                       |
 
 ### 6.AssociativeLine plugin
 
@@ -245,6 +247,9 @@ new MindMap({
 | Field Name                       | Type    | Default Value    | Description                                 | Required |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
 | richTextEditFakeInPlace（v0.6.13+）     | Boolean  | false | Set the rich text node edit box to match the size of the node, creating a pseudo in place editing effect. It should be noted that only when there is only text within the node and the shape is rectangular, can the effect be better |          |
+| enableEditFormulaInRichTextEdit（v0.10.0+）     | Boolean  | true |  |   Whether to enable direct editing of mathematical formulas in rich text editing boxes       |
+| transformRichTextOnEnterEdit（v0.10.0+）     | null、Function  | null | To convert rich text content, you can pass a function that will be called when entering rich text editing. The function receives the rich text content that is about to be edited and needs to return the processed rich text content |          |
+| beforeHideRichTextEdit（v0.10.0+）     | null、Function  | null | You can pass a function that will be executed before the end of rich text editing. The function receives a richText instance, so you can update the kill document data at this time |          |
 
 ### 8.TouchEvent plugin
 
@@ -548,7 +553,8 @@ Listen to an event. Event list:
 | node_img_mouseenter（v0.6.5+）    |  Node image mouseenter event                    | this（node instance）、imgNode（img node）、e（event object）                              |
 | node_img_mouseleave（v0.6.5+）    |  Node image mouseleave event                    | this（node instance）、imgNode（img node）、e（event object）                              |
 | node_img_mousemove（v0.6.5+）    |  Node image mousemove event                      | this（node instance）、imgNode（img node）、e（event object）                              |
-| node_tree_render_end（v0.2.16+） | Node tree render end event                                               |                                                                                                                 |
+| node_tree_render_end（v0.2.16+） | Node tree render end event              |          |
+| node_tree_render_start（v0.10.0+） | Node tree start rendering event  |           |
 | rich_text_selection_change（v0.4.0+）         |  Available when the `RichText` plugin is registered. Triggered when the text selection area changes when the node is edited         |  hasRange（Whether there is a selection）、rectInfo（Size and location information of the selected area）、formatInfo（Text formatting information of the selected area）            |
 | transforming-dom-to-images（v0.4.0+）         |  Available when the `RichText` plugin is registered. When there is a `DOM` node in `svg`, the `DOM` node will be converted to an image when exporting to an image. This event will be triggered during the conversion process. You can use this event to prompt the user about the node to which you are currently converting         |  index（Index of the node currently converted to）、len（Total number of nodes to be converted）            |
 | node_dragging（v0.4.5+）    | Triggered when a node is dragged   |  node(The currently dragged node)           |
