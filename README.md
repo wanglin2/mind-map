@@ -358,7 +358,7 @@ const mindMap = new MindMap({
         <span>庆国</span>
     </span>
     <span>
-        <img src="./web/src/assets/avatar/孟照星.jpg" style="width: 50px;height: 50px;" />
+        <img src="./web/src/assets/avatar/Alex.jpg" style="width: 50px;height: 50px;" />
         <span>Alex</span>
     </span>
     <span>

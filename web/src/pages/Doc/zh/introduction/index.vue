@@ -330,7 +330,7 @@
         <p>庆国</p>
     </div>
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
-        <img src="../../../../assets/avatar/孟照星.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <img src="../../../../assets/avatar/Alex.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>Alex</p>
     </div>
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
