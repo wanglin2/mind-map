@@ -26,7 +26,7 @@
       </div>
       <!-- 导出 -->
       <div class="toolbarBlock">
-        <div class="toolbarBtn" @click="openDirectory">
+        <div class="toolbarBtn" @click="openDirectory" v-if="!isMobile">
           <span class="icon iconfont icondakai"></span>
           <span class="text">{{ $t('toolbar.directory') }}</span>
         </div>
@@ -34,6 +34,7 @@
           effect="dark"
           :content="$t('toolbar.newFileTip')"
           placement="bottom"
+          v-if="!isMobile"
         >
           <div class="toolbarBtn" @click="createNewLocalFile">
             <span class="icon iconfont iconxinjian"></span>
@@ -44,13 +45,14 @@
           effect="dark"
           :content="$t('toolbar.openFileTip')"
           placement="bottom"
+          v-if="!isMobile"
         >
           <div class="toolbarBtn" @click="openLocalFile">
             <span class="icon iconfont iconwenjian1"></span>
             <span class="text">{{ $t('toolbar.openFile') }}</span>
           </div>
         </el-tooltip>
-        <div class="toolbarBtn" @click="saveLocalFile">
+        <div class="toolbarBtn" @click="saveLocalFile" v-if="!isMobile">
           <span class="icon iconfont iconlingcunwei"></span>
           <span class="text">{{ $t('toolbar.saveAs') }}</span>
         </div>
@@ -153,7 +155,7 @@ import { Notification } from 'element-ui'
 import exampleData from 'simple-mind-map/example/exampleData'
 import { getData } from '../../../api'
 import ToolbarNodeBtnList from './ToolbarNodeBtnList.vue'
-import { throttle } from 'simple-mind-map/src/utils/index'
+import { throttle, isMobile } from 'simple-mind-map/src/utils/index'
 
 /**
  * @Author: 王林
@@ -175,6 +177,7 @@ export default {
   },
   data() {
     return {
+      isMobile: isMobile(),
       list: [
         'back',
         'forward',
