@@ -1,3 +1,5 @@
+import { getTwoPointDistance } from '../utils'
+
 // 手势事件支持插件
 class TouchEvent {
   //  构造函数
@@ -7,6 +9,8 @@ class TouchEvent {
     this.singleTouchstartEvent = null
     this.clickNum = 0
     this.touchStartScaleView = null
+    this.lastTouchStartPosition = null
+    this.lastTouchStartDistance = 0
     this.bindEvent()
   }
 
@@ -34,11 +38,22 @@ class TouchEvent {
 
   // 手指按下事件
   onTouchstart(e) {
-    e.preventDefault()
     this.touchesNum = e.touches.length
     this.touchStartScaleView = null
     if (this.touchesNum === 1) {
       let touch = e.touches[0]
+      if (this.lastTouchStartPosition) {
+        this.lastTouchStartDistance = getTwoPointDistance(
+          this.lastTouchStartPosition.x,
+          this.lastTouchStartPosition.y,
+          touch.clientX,
+          touch.clientY
+        )
+      }
+      this.lastTouchStartPosition = {
+        x: touch.clientX,
+        y: touch.clientY
+      }
       this.singleTouchstartEvent = touch
       this.dispatchMouseEvent('mousedown', touch.target, touch)
     }
@@ -46,7 +61,6 @@ class TouchEvent {
 
   // 手指移动事件
   onTouchmove(e) {
-    e.preventDefault()
     let len = e.touches.length
     if (len === 1) {
       let touch = e.touches[0]
@@ -107,16 +121,17 @@ class TouchEvent {
 
   // 手指松开事件
   onTouchend(e) {
-    e.preventDefault()
     this.dispatchMouseEvent('mouseup', e.target)
     if (this.touchesNum === 1) {
       // 模拟双击事件
       this.clickNum++
       setTimeout(() => {
         this.clickNum = 0
+        this.lastTouchStartPosition = null
+        this.lastTouchStartDistance = 0
       }, 300)
       let ev = this.singleTouchstartEvent
-      if (this.clickNum > 1) {
+      if (this.clickNum > 1 && this.lastTouchStartDistance <= 5) {
         this.clickNum = 0
         this.dispatchMouseEvent('dblclick', ev.target, ev)
       } else {
