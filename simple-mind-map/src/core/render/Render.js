@@ -1799,9 +1799,13 @@ class Render {
     }
   }
 
-  //  移动节点到画布中心
-  moveNodeToCenter(node) {
-    const { resetScaleOnMoveNodeToCenter } = this.mindMap.opt
+  // 移动节点到画布中心
+  // resetScale参数指定是否要将画布缩放值复位为100%，当你没有显式传递时，默认值为undefined，因为实例化选项的resetScaleOnMoveNodeToCenter配置也会决定是否复位缩放，所以当你没有显式传递时使用resetScaleOnMoveNodeToCenter配置，否则使用resetScale配置
+  moveNodeToCenter(node, resetScale) {
+    let { resetScaleOnMoveNodeToCenter } = this.mindMap.opt
+    if (resetScale !== undefined) {
+      resetScaleOnMoveNodeToCenter = resetScale
+    }
     let { transform, state } = this.mindMap.view.getTransformData()
     let { left, top, width, height } = node
     if (!resetScaleOnMoveNodeToCenter) {

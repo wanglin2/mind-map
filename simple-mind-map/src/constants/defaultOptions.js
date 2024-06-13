@@ -215,6 +215,7 @@ export const defaultOpt = {
   // 函数接收两个参数：key（快捷键）、activeNodeList（当前激活的节点列表）
   beforeShortcutRun: null,
   // 移动节点到画布中心、回到根节点等操作时是否将缩放层级复位为100%
+  // 该选项实际影响的是render.moveNodeToCenter方法，moveNodeToCenter方法本身也存在第二个参数resetScale来设置是否复位，如果resetScale参数没有传递，那么使用resetScaleOnMoveNodeToCenter配置，否则使用resetScale配置
   resetScaleOnMoveNodeToCenter: false,
   // 添加附加的节点前置内容，前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分
   createNodePrefixContent: null,
