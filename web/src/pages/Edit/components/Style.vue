@@ -511,7 +511,6 @@ export default {
       isDark: state => state.localConfig.isDark,
       activeSidebar: state => state.activeSidebar
     }),
-
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
     },
