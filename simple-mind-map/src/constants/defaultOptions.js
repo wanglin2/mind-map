@@ -293,6 +293,9 @@ export const defaultOpt = {
   */
   addContentToHeader: null,
   addContentToFooter: null,
+  // 导出png、svg、pdf时会获取画布上的svg数据进行克隆，然后通过该克隆的元素进行导出，如果你想对该克隆元素做一些处理，比如新增、替换、修改其中的一些元素，那么可以通过该参数传递一个处理函数，接收svg元素对象，处理后，需要返回原svg元素对象。
+  // 需要注意的是svg对象指的是@svgdotjs/svg.js库的元素对象，所以你需要阅读该库的文档来操作该对象
+  handleBeingExportSvg: null,
 
   // 【AssociativeLine插件】
   // 关联线默认文字

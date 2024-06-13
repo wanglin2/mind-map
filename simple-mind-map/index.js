@@ -518,7 +518,6 @@ class MindMap {
     // 恢复原先的大小和变换信息
     svg.size(origWidth, origHeight)
     draw.transform(origTransform)
-
     return {
       svg: clone, // 思维导图图形的整体svg元素，包括：svg（画布容器）、g（实际的思维导图组）
       svgHTML: clone.svg(), // svg字符串

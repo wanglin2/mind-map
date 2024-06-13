@@ -54,7 +54,8 @@ class Export {
       errorHandler,
       resetCss,
       addContentToHeader,
-      addContentToFooter
+      addContentToFooter,
+      handleBeingExportSvg
     } = this.mindMap.opt
     let { svg, svgHTML, clipData } = this.mindMap.getSvgData({
       paddingX: exportPaddingX,
@@ -67,6 +68,7 @@ class Export {
       clipData.paddingX = exportPaddingX
       clipData.paddingY = exportPaddingY
     }
+    let svgIsChange = false
     // svg的image标签，把图片的url转换成data:url类型，否则导出会丢失图片
     const task1 = this.createTransformImgTaskList(
       svg,
@@ -87,16 +89,20 @@ class Export {
       errorHandler(ERROR_TYPES.EXPORT_LOAD_IMAGE_ERROR, error)
     }
     // 开启了节点富文本编辑，需要增加一些样式
-    let isAddResetCss
     if (this.mindMap.richText) {
       const foreignObjectList = svg.find('foreignObject')
       if (foreignObjectList.length > 0) {
         foreignObjectList[0].add(SVG(`<style>${resetCss}</style>`))
-        isAddResetCss = true
+        svgIsChange = true
       }
     }
+    // 自定义处理svg的方法
+    if (typeof handleBeingExportSvg === 'function') {
+      svgIsChange = true
+      svg = handleBeingExportSvg(svg)
+    }
     // svg节点内容有变，需要重新获取html字符串
-    if (taskList.length > 0 || isAddResetCss) {
+    if (taskList.length > 0 || svgIsChange) {
       svgHTML = svg.svg()
     }
     return {
