@@ -323,6 +323,10 @@ export const defaultOpt = {
   // 禁止双指缩放，你仍旧可以使用api进行缩放
   // 需要注册TouchEvent插件后生效
   disableTouchZoom: false,
+  // 允许最大和最小的缩放值，百分数
+  // 传-1代表不限制
+  minTouchZoomScale: 20,
+  maxTouchZoomScale: -1,
 
   // 【Scrollbar插件】
   // 当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas不再起作用

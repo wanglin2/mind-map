@@ -66,7 +66,13 @@ class TouchEvent {
       let touch = e.touches[0]
       this.dispatchMouseEvent('mousemove', touch.target, touch)
     } else if (len === 2) {
-      if (this.mindMap.opt.disableTouchZoom) return
+      let { disableTouchZoom, minTouchZoomScale, maxTouchZoomScale } =
+        this.mindMap.opt
+      if (disableTouchZoom) return
+      minTouchZoomScale =
+        minTouchZoomScale === -1 ? -Infinity : minTouchZoomScale / 100
+      maxTouchZoomScale =
+        maxTouchZoomScale === -1 ? Infinity : maxTouchZoomScale / 100
       let touch1 = e.touches[0]
       let touch2 = e.touches[1]
       let ox = touch1.clientX - touch2.clientX
@@ -101,8 +107,14 @@ class TouchEvent {
       if (Math.abs(distance - viewBefore.distance) <= 10) {
         scale = viewBefore.scale
       }
+      scale =
+        scale < minTouchZoomScale
+          ? minTouchZoomScale
+          : scale > maxTouchZoomScale
+          ? maxTouchZoomScale
+          : scale
       const ratio = 1 - scale / viewBefore.scale
-      view.scale = scale < 0.1 ? 0.1 : scale
+      view.scale = scale
       view.x =
         viewBefore.x +
         (cx - viewBefore.x) * ratio +
