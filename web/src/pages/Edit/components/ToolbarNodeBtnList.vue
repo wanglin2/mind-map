@@ -167,14 +167,22 @@
         <span class="icon iconfont iconfujian"></span>
         <span class="text">{{ $t('toolbar.attachment') }}</span>
       </div>
+      <NodeAnnotationBtn
+        v-if="item === 'annotation' && supportMark"
+        :isDark="isDark"
+        :dir="dir"
+        @setAnnotation="onSetAnnotation"
+      ></NodeAnnotationBtn>
     </template>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
+import NodeAnnotationBtn from './NodeAnnotationBtn.vue'
 
 export default {
+  components: { NodeAnnotationBtn },
   props: {
     dir: {
       type: String,
@@ -200,7 +208,8 @@ export default {
   },
   computed: {
     ...mapState({
-      isDark: state => state.localConfig.isDark
+      isDark: state => state.localConfig.isDark,
+      supportMark: state => state.supportMark
     }),
     hasRoot() {
       return (
@@ -274,12 +283,17 @@ export default {
     // 选择附件
     selectAttachmentFile() {
       this.$bus.$emit('selectAttachment', this.activeNodes)
+    },
+
+    // 设置标记
+    onSetAnnotation(...args) {
+      this.$bus.$emit('execCommand', 'SET_NOTATION', this.activeNodes, ...args)
     }
   }
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .toolbarNodeBtnList {
   display: flex;
 

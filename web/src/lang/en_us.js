@@ -278,8 +278,10 @@ export default {
     defaultFileName: 'Mind map',
     creatingTip: 'Creating file',
     directory: 'Directory',
-    newFileTip: 'Please export the currently edited file before creating a new one, otherwise the content will be lost',
-    openFileTip: 'Please export the currently edited file before opening it, otherwise the content will be lost'
+    newFileTip:
+      'Please export the currently edited file before creating a new one, otherwise the content will be lost',
+    openFileTip:
+      'Please export the currently edited file before opening it, otherwise the content will be lost'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',
@@ -333,7 +335,8 @@ export default {
     loading: 'Loading, please wait...'
   },
   sourceCodeEdit: {
-    sourceCodeTip: 'It is not recommended to modify the style in rich text mode because it requires synchronous modification of data and HTML structure.',
+    sourceCodeTip:
+      'It is not recommended to modify the style in rich text mode because it requires synchronous modification of data and HTML structure.',
     format: 'Format',
     copy: 'Copy',
     confirm: 'Complete',
@@ -345,5 +348,14 @@ export default {
   attachment: {
     deleteAttachment: 'Delete attachment',
     tip: 'The attachment function is only available on the client side'
+  },
+  annotation: {
+    mark: 'Mark',
+    show: 'Show mark',
+    type: 'Type',
+    color: 'Color',
+    lineWidth: 'Line width',
+    padding: 'Padding',
+    animate: 'Animate'
   }
 }

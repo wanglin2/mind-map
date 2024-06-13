@@ -314,7 +314,8 @@ export const nodeDataNoStylePropList = [
   'associativeLinePoint',
   'associativeLineText',
   'attachmentUrl',
-  'attachmentName'
+  'attachmentName',
+  'notation'
 ]
 
 // 错误类型

@@ -72,6 +72,8 @@ import Demonstrate from 'simple-mind-map/src/plugins/Demonstrate.js'
 // import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
 // 手绘风格插件，该插件为付费插件，详情请查看开发文档
 // import HandDrawnLikeStyle from 'simple-mind-map-plugin-handdrawnlikestyle'
+// 标记插件，该插件为付费插件，详情请查看开发文档
+// import Notation from 'simple-mind-map-plugin-notation'
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -493,6 +495,13 @@ export default {
       if (this.openNodeRichText) this.addRichTextPlugin()
       if (this.isShowScrollbar) this.addScrollbarPlugin()
       if (this.isUseHandDrawnLikeStyle) this.addHandDrawnLikeStylePlugin()
+      if (typeof HandDrawnLikeStyle !== 'undefined') {
+        this.$store.commit('setSupportHandDrawnLikeStyle', true)
+      }
+      if (typeof Notation !== 'undefined') {
+        this.mindMap.addPlugin(Notation)
+        this.$store.commit('setSupportMark', true)
+      }
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
         this.manualSave()
       })
