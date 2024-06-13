@@ -13,10 +13,20 @@
       @click="exit"
       ref="exitDemonstrateBtnRef"
       v-if="isEnterDemonstrate"
+      @mousedown.stop
+      @mousemove.stop
+      @mouseup.stop
     >
       <span class="icon iconfont iconguanbi"></span>
     </div>
-    <div class="stepBox" ref="stepBoxRef" v-if="isEnterDemonstrate">
+    <div
+      class="stepBox"
+      ref="stepBoxRef"
+      v-if="isEnterDemonstrate"
+      @mousedown.stop
+      @mousemove.stop
+      @mouseup.stop
+    >
       <div class="jump" @click="prev" :class="{ disabled: curStepIndex <= 0 }">
         <span class="icon el-icon-back"></span>
       </div>
