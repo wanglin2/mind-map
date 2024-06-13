@@ -282,7 +282,8 @@ class Drag extends Base {
         dragMultiNodeRectConfig,
         dragPlaceholderRectFill,
         dragPlaceholderLineConfig,
-        dragOpacityConfig
+        dragOpacityConfig,
+        handleDragCloneNode
       } = this.mindMap.opt
       const {
         width: rectWidth,
@@ -311,6 +312,9 @@ class Drag extends Base {
           expandEl.remove()
         }
         this.mindMap.otherDraw.add(this.clone)
+        if (typeof handleDragCloneNode === 'function') {
+          handleDragCloneNode(this.clone)
+        }
       }
       this.clone.opacity(dragOpacityConfig.cloneNodeOpacity)
       this.clone.css('z-index', 99999)

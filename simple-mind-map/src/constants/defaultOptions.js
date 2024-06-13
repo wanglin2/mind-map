@@ -250,6 +250,9 @@ export const defaultOpt = {
     cloneNodeOpacity: 0.5, // 跟随鼠标移动的克隆节点或矩形的透明度
     beingDragNodeOpacity: 0.3 // 被拖拽节点的透明度
   },
+  // 拖拽单个节点时会克隆被拖拽节点，如果想修改该克隆节点，那么可以通过该选项提供一个处理函数，函数接收克隆节点对象
+  // 需要注意的是节点对象指的是@svgdotjs/svg.js库的元素对象，所以你需要阅读该库的文档来操作该对象
+  handleDragCloneNode: null,
 
   // 【Watermark插件】
   // 水印配置
