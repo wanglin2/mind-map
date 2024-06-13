@@ -493,6 +493,7 @@ class Node {
     )
     this.group.add(textContentNested)
     addHoverNode()
+    this.mindMap.emit('node_layout_end', this)
   }
 
   // 给节点绑定事件
@@ -756,7 +757,9 @@ class Node {
       this.layout()
       this.update()
     } else {
-      this.nodeDraw.add(this.group)
+      if (!this.nodeDraw.has(this.group)) {
+        this.nodeDraw.add(this.group)
+      }
       if (this.needLayout) {
         this.needLayout = false
         this.layout()

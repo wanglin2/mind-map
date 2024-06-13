@@ -466,7 +466,6 @@ class Render {
       // 渲染节点
       this.root.render(() => {
         this.isRendering = false
-        this.mindMap.emit('node_tree_render_end')
         callback && callback()
         if (this.hasWaitRendering) {
           const params = this.waitRenderingParams
@@ -486,6 +485,7 @@ class Render {
             this.mindMap.command.addHistory()
           }
         }
+        this.mindMap.emit('node_tree_render_end')
       })
     })
     this.emitNodeActiveEvent()
