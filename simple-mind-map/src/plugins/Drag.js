@@ -123,12 +123,14 @@ class Drag extends Base {
   }
 
   //  鼠标松开事件
-  onMouseup(e) {
+  async onMouseup(e) {
     if (!this.isMousedown) {
       return
     }
+    const { autoMoveWhenMouseInEdgeOnDrag, enableFreeDrag, beforeDragEnd } =
+      this.mindMap.opt
     // 停止自动移动
-    if (this.mindMap.opt.autoMoveWhenMouseInEdgeOnDrag && this.mindMap.select) {
+    if (autoMoveWhenMouseInEdgeOnDrag && this.mindMap.select) {
       this.mindMap.select.clearAutoMoveTimer()
     }
     this.isMousedown = false
@@ -142,9 +144,20 @@ class Drag extends Base {
     let overlapNodeUid = this.overlapNode ? this.overlapNode.getData('uid') : ''
     let prevNodeUid = this.prevNode ? this.prevNode.getData('uid') : ''
     let nextNodeUid = this.nextNode ? this.nextNode.getData('uid') : ''
+    if (this.isDragging && typeof beforeDragEnd === 'function') {
+      const isCancel = await beforeDragEnd({
+        overlapNodeUid,
+        prevNodeUid,
+        nextNodeUid
+      })
+      if (isCancel) {
+        this.reset()
+        return
+      }
+    }
     // 存在重叠子节点，则移动作为其子节点
     if (this.overlapNode) {
-      this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, false)
+      this.removeNodeActive(this.overlapNode)
       this.mindMap.execCommand(
         'MOVE_NODE_TO',
         this.beingDragNodeList,
@@ -152,7 +165,7 @@ class Drag extends Base {
       )
     } else if (this.prevNode) {
       // 存在前一个相邻节点，作为其下一个兄弟节点
-      this.mindMap.execCommand('SET_NODE_ACTIVE', this.prevNode, false)
+      this.removeNodeActive(this.prevNode)
       this.mindMap.execCommand(
         'INSERT_AFTER',
         this.beingDragNodeList,
@@ -160,7 +173,7 @@ class Drag extends Base {
       )
     } else if (this.nextNode) {
       // 存在下一个相邻节点，作为其前一个兄弟节点
-      this.mindMap.execCommand('SET_NODE_ACTIVE', this.nextNode, false)
+      this.removeNodeActive(this.nextNode)
       this.mindMap.execCommand(
         'INSERT_BEFORE',
         this.beingDragNodeList,
@@ -168,7 +181,7 @@ class Drag extends Base {
       )
     } else if (
       this.clone &&
-      this.mindMap.opt.enableFreeDrag &&
+      enableFreeDrag &&
       this.beingDragNodeList.length === 1
     ) {
       // 如果只拖拽了一个节点，那么设置自定义位置
@@ -199,6 +212,13 @@ class Drag extends Base {
       })
     }
     this.reset()
+  }
+
+  // 移除节点的激活状态
+  removeNodeActive(node) {
+    if (node.getData('isActive')) {
+      this.mindMap.execCommand('SET_NODE_ACTIVE', node, false)
+    }
   }
 
   //  拖动中
