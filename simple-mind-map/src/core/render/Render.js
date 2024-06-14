@@ -1553,7 +1553,7 @@ class Render {
   //  切换激活节点的展开状态
   toggleActiveExpand() {
     this.activeNodeList.forEach(node => {
-      if (node.nodeData.children.length <= 0) {
+      if (node.nodeData.children.length <= 0 || node.isRoot) {
         return
       }
       this.toggleNodeExpand(node)
