@@ -502,7 +502,7 @@
 <td>resetScaleOnMoveNodeToCenter（v0.9.12+）</td>
 <td>Boolean</td>
 <td>false</td>
-<td>Whether to reset the scaling level to 100% when moving nodes to the canvas center, returning to the root node, and other operations（The underlying impact is on the moveNodeToCenter method of the render class）</td>
+<td>Whether to reset the scaling level to 100% when moving nodes to the canvas center, returning to the root node, and other operations（This option actually affects the render. moveNodeToCenter method, and the moveNodeToCenter method itself also has a second parameter, resetScale, to set whether to reset. If the resetScale parameter is not passed, then use resetScaleOnMoveNodeToCenter configuration; otherwise, use resetScale configuration）</td>
 <td></td>
 </tr>
 <tr>
@@ -651,6 +651,13 @@
 <td>The basic definition is the same as addContentToHeader, adding custom content at the end</td>
 <td></td>
 </tr>
+<tr>
+<td>handleBeingExportSvg（v0.10.1+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>When exporting PNG, SVG, and PDF, the SVG data on the canvas will be obtained for cloning, and then exported through the cloned elements. If you want to do some processing on the cloned elements, such as adding, replacing, or modifying some of them, you can pass a processing function through this parameter to receive the SVG element object. After processing, you need to return the original SVG element object.（It should be noted that the node object refers to the element object of the @ svgdotjs/svg. js library, so you need to read the documentation of the library to operate this object）</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h4>2.1How to add custom content when exporting</h4>
@@ -768,6 +775,20 @@
 <td>Object</td>
 <td>{ cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }</td>
 <td>The transparency configuration during node dragging, passing an object, and the field meanings are: the transparency of the cloned node or rectangle that follows the mouse movement, and the transparency of the dragged node</td>
+<td></td>
+</tr>
+<tr>
+<td>beforeDragEnd（v0.10.1+）</td>
+<td>null、Function</td>
+<td>null</td>
+<td>This function is called just before the drag is completed. The function receives an object as a parameter: {overlapNodeUid,prevNodeUid,nextNodeUid}, represents drag and drop information. If you want to prevent this drag and drop, you can return true. At this time, the node.drag event will not be triggered again. Functions can be asynchronous and return Promise instances</td>
+<td></td>
+</tr>
+<tr>
+<td>handleDragCloneNode（v0.10.1+）</td>
+<td>null、Function</td>
+<td>null</td>
+<td>When dragging a single node, the dragged node will be cloned. If you want to modify the cloned node, you can provide a processing function through this option, which receives the cloned node object.（It should be noted that the node object refers to the element object of the @svgdotjs/svg.js library, so you need to read the documentation of the library to operate this object）</td>
 <td></td>
 </tr>
 </tbody>
@@ -956,6 +977,20 @@
 <td>Boolean</td>
 <td>false</td>
 <td>Prohibit double finger scaling, you can still use the API for scaling, which takes effect on the TouchEvent plugin</td>
+<td></td>
+</tr>
+<tr>
+<td>minTouchZoomScale（v0.10.1+）</td>
+<td>Number</td>
+<td>20</td>
+<td>Allow maximum and minimum scaling values, percentage, pass -1 to indicate no restrictions</td>
+<td></td>
+</tr>
+<tr>
+<td>maxTouchZoomScale（v0.10.1+）</td>
+<td>Number</td>
+<td>-1</td>
+<td>Same as minTouchZoomScale</td>
 <td></td>
 </tr>
 </tbody>
@@ -1565,6 +1600,11 @@ poor performance and should be used sparingly.</p>
 <td>node_tag_click（v0.9.12+）</td>
 <td>Click events on node labels</td>
 <td>this(Current node instance)、item（Content of clicked tags）</td>
+</tr>
+<tr>
+<td>node_layout_end（v0.10.1+）</td>
+<td>Event where the content layout of a single node is completed</td>
+<td>this(Current node instance)</td>
 </tr>
 </tbody>
 </table>

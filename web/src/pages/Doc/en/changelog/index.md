@@ -1,5 +1,35 @@
 # Changelog
 
+## 0.10.1
+
+Fix:
+
+> 1.Fix the issue where the TouchEvent plugin triggers node input when clicking twice at different positions;
+>
+> 2.Fix / shortcut the issue of being able to retrieve child nodes of the root node;
+
+New:
+
+> 1.Add instantiation options for handling SVG objects before export;
+>
+> 2.Add instantiation options for cloned nodes when modifying drag and drop nodes;
+>
+> 3.Add a content layout completion event for distributing individual nodes;
+>
+> 4.Add instantiation options for intercepting node drag and drop;
+>
+> 5.Add instantiation options to restrict the maximum and minimum values of TouchEvent plugin's double finger scaling;
+>
+> 6.Add a node editing plugin;
+
+Demo:
+
+> 1.Add node marking function;
+>
+> 2.Fix the issue where the input box in the bottom right corner cannot be entered in demonstration mode;
+>
+> 3.Do not display directory, new, or open buttons when opening on the mobile end;
+
 ## 0.10.0
 
 Major updates: Upgrade the interaction effect when dragging nodes;

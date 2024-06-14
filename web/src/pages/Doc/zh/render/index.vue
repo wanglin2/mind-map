@@ -118,12 +118,14 @@
 <p>v0.1.5+</p>
 </blockquote>
 <p>将节点移动到另一个节点的后面。</p>
-<h3>moveNodeToCenter(node)</h3>
+<h3>moveNodeToCenter(node, resetScale)</h3>
 <blockquote>
 <p>v0.2.17+</p>
 </blockquote>
+<ul>
+<li><code>resetScale</code>：v0.10.1+， 指定是否要将画布缩放值复位为100%，当你没有显式传递时，默认值为undefined，因为实例化选项的resetScaleOnMoveNodeToCenter配置也会决定是否复位缩放，所以当你没有显式传递时使用resetScaleOnMoveNodeToCenter配置，否则使用resetScale配置</li>
+</ul>
 <p>移动节点到画布中心。</p>
-<p>目前如果是存在缩放的情况下回到中心会重置缩放。</p>
 <h3>expandToNodeUid(uid, callback)</h3>
 <blockquote>
 <p>v0.6.7+</p>

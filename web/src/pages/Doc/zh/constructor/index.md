@@ -93,7 +93,7 @@ const mindMap = new MindMap({
 | handleNodePasteImg（v0.9.2+）     | null 或 Function | null  | 在节点上粘贴剪贴板中的图片的处理方法，默认是转换为data:url数据插入到节点中，你可以通过该方法来将图片数据上传到服务器，实现保存图片的url。可以传递一个异步方法，接收Blob类型的图片数据，需要返回指定结构：{ url, size: {width, height} }  |
 | isLimitMindMapInCanvas（v0.9.2+）     | Boolean |  false | 是否将思维导图限制在画布内。比如向右拖动时，思维导图图形的最左侧到达画布中心时将无法继续向右拖动，其他同理 |
 | beforeShortcutRun（v0.9.9+）     | Function、null | null  | 快捷键操作即将执行前的生命周期函数，返回true可以阻止操作执行。函数接收两个参数：key（快捷键）、activeNodeList（当前激活的节点列表） |
-| resetScaleOnMoveNodeToCenter（v0.9.12+）     | Boolean |  false | 移动节点到画布中心、回到根节点等操作时是否将缩放层级复位为100%（底层影响的是render类的moveNodeToCenter方法） |
+| resetScaleOnMoveNodeToCenter（v0.9.12+）     | Boolean |  false | 移动节点到画布中心、回到根节点等操作时是否将缩放层级复位为100%（该选项实际影响的是render.moveNodeToCenter方法，moveNodeToCenter方法本身也存在第二个参数resetScale来设置是否复位，如果resetScale参数没有传递，那么使用resetScaleOnMoveNodeToCenter配置，否则使用resetScale配置）。 |
 | createNodePrefixContent（v0.9.12+）     | Function、null | null  | 添加附加的节点前置内容。前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分。可以传递一个函数，这个函数接收一个节点实例的参数，可以返回{el, width, height}格式的对象，el为DOM节点对象，width和height代表内容的宽高，数字类型，如果不需要自定义内容，也可以返回null |
 | createNodePostfixContent（v0.9.12+）     | Function、null | null  | 添加附加的节点后置内容。后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分。用法同createNodePrefixContent |
 
@@ -162,6 +162,7 @@ const mindMap = new MindMap({
 | minExportImgCanvasScale（v0.7.0+）     | Number  | 2  | 导出图片和pdf时canvas的缩放倍数，该配置会和window.devicePixelRatio值取最大值，用于提升图片清晰度 |
 | addContentToHeader（v0.9.9+）     | Function、null | null  | 导出png、svg、pdf时在头部添加自定义内容。可传递一个函数，这个函数可以返回null代表不添加内容，也可以返回一个对象，详细介绍请参考下方【导出时如何添加自定义内容】 |
 | addContentToFooter（v0.9.9+）     | Function、null | null  | 基本释义同addContentToHeader，在尾部添加自定义内容 |
+| handleBeingExportSvg（v0.10.1+）     | Function、null | null  | 导出png、svg、pdf时会获取画布上的svg数据进行克隆，然后通过该克隆的元素进行导出，如果你想对该克隆元素做一些处理，比如新增、替换、修改其中的一些元素，那么可以通过该参数传递一个处理函数，接收svg元素对象，处理后，需要返回原svg元素对象。（需要注意的是svg对象指的是@svgdotjs/svg.js库的元素对象，所以你需要阅读该库的文档来操作该对象） |
 
 #### 2.1导出时如何添加自定义内容
 
@@ -216,6 +217,8 @@ new MindMap({
 | dragPlaceholderRectFill（v0.7.2+）     |  String | rgb(94, 200, 248)  | 节点拖拽时新位置的示意矩形的填充颜色 |
 | dragPlaceholderLineConfig（v0.10.0+）     |  Object | { color: 'rgb(94, 200, 248)',  width: 2 }  | 节点拖拽时新位置的示意连线的样式配置 |
 | dragOpacityConfig（v0.7.2+）     | Object  | { cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }  | 节点拖拽时的透明度配置，传递一个对象，字段含义分别为：跟随鼠标移动的克隆节点或矩形的透明度、被拖拽节点的透明度 |
+| beforeDragEnd（v0.10.1+）     | null、Function  | null  | 即将拖拽完成前调用该函数，函数接收一个对象作为参数：{overlapNodeUid,prevNodeUid,nextNodeUid}，代表拖拽信息，如果要阻止本次拖拽，那么可以返回true，此时node_dragend事件不会再触发。函数可以是异步函数，返回Promise实例 |
+| handleDragCloneNode（v0.10.1+）     | null、Function  | null  | 拖拽单个节点时会克隆被拖拽节点，如果想修改该克隆节点，那么可以通过该选项提供一个处理函数，函数接收克隆节点对象。（需要注意的是节点对象指的是@svgdotjs/svg.js库的元素对象，所以你需要阅读该库的文档来操作该对象） |
 
 ### 5.Watermark插件
 
@@ -258,6 +261,8 @@ new MindMap({
 | 字段名称                         | 类型    | 默认值           | 描述                                                         |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
 | disableTouchZoom（v0.8.1+）     | Boolean | false  | 禁止双指缩放，你仍旧可以使用api进行缩放，对TouchEvent插件生效  |
+| minTouchZoomScale（v0.10.1+）     | Number | 20  | 允许最大和最小的缩放值，百分数，传-1代表不限制  |
+| maxTouchZoomScale（v0.10.1+）     | Number | -1  |  同minTouchZoomScale |
 
 ### 9.Scrollbar插件
 
@@ -578,6 +583,7 @@ mindMap.setTheme('主题名称')
 | exit_demonstrate（v0.9.11+）    | 退出演示模式时触发  |     |
 | demonstrate_jump（v0.9.11+）    | 演示模式中，切换步骤时触发  |  currentStepIndex（当前播放到的步骤索引，从0开始计数）、stepLength（总的播放步骤数量）   |
 | node_tag_click（v0.9.12+）    | 节点标签的点击事件 | this(当前节点实例)、item（点击的标签内容）    |
+| node_layout_end（v0.10.1+）    | 单个节点内容布局完成的事件 | this(当前节点实例)  |
 
 ### emit(event, ...args)
 
