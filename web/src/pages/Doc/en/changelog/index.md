@@ -20,7 +20,7 @@ New:
 >
 > 5.Add instantiation options to restrict the maximum and minimum values of TouchEvent plugin's double finger scaling;
 >
-> 6.Add a node editing plugin;
+> 6.Add node marker plugin;
 
 Demo:
 

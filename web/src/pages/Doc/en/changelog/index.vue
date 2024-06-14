@@ -14,7 +14,7 @@
 <p>3.Add a content layout completion event for distributing individual nodes;</p>
 <p>4.Add instantiation options for intercepting node drag and drop;</p>
 <p>5.Add instantiation options to restrict the maximum and minimum values of TouchEvent plugin's double finger scaling;</p>
-<p>6.Add a node editing plugin;</p>
+<p>6.Add node marker plugin;</p>
 </blockquote>
 <p>Demo:</p>
 <blockquote>
