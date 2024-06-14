@@ -314,6 +314,9 @@ class View {
       newScale = newWidth / drawWidth
     }
     this.setScale(newScale)
+    // 重新计算缩放后的位置、几何信息
++    this.mindMap.getElRectInfo()
+    
     const newRect = getRbox() || draw.rbox()
     // 需要考虑画布容器距浏览器窗口左上角的距离
     newRect.x -= this.mindMap.elRect.left

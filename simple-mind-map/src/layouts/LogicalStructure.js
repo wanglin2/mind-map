@@ -176,7 +176,7 @@ class LogicalStructure extends Base {
       let y2 = item.top + item.height / 2
       // 节点使用横线风格，需要额外渲染横线
       let nodeUseLineStyleOffset = nodeUseLineStyle ? item.width : 0
-      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
+      y1 = nodeUseLineStyle ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       let path = this.createFoldLine([
         [x1, y1],
@@ -206,7 +206,7 @@ class LogicalStructure extends Base {
       let y1 = top + height / 2
       let x2 = item.left
       let y2 = item.top + item.height / 2
-      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
+      y1 = nodeUseLineStyle ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       // 节点使用横线风格，需要额外渲染横线
       let nodeUseLineStylePath = nodeUseLineStyle
@@ -243,7 +243,7 @@ class LogicalStructure extends Base {
       let x2 = item.left
       let y2 = item.top + item.height / 2
       let path = ''
-      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
+      y1 = nodeUseLineStyle ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       // 节点使用横线风格，需要额外渲染横线
       let nodeUseLineStylePath = nodeUseLineStyle

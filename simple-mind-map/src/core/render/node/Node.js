@@ -697,7 +697,9 @@ class Node {
     // }
     // 如果节点位置没有变化，则返回
     if (this.left === t.translateX && this.top === t.translateY) return
-    this.group.translate(this.left - t.translateX, this.top - t.translateY)
+    const isRootAndLineStyle = this.isRoot && this.mindMap.opt?.themeConfig?.nodeUseLineStyle
+    const y = isRootAndLineStyle ? this.top - t.translateY + this.height / 2 : this.top - t.translateY
+    this.group.translate(this.left - t.translateX, y)
   }
 
   // 获取节点相当于画布的位置

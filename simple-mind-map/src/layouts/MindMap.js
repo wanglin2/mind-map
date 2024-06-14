@@ -238,7 +238,7 @@ class MindMap extends Base {
           ? item.left + item.width
           : item.left
       let y2 = item.top + item.height / 2
-      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
+      y1 = nodeUseLineStyle ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       let path = this.createFoldLine([
         [x1, y1],
@@ -274,7 +274,7 @@ class MindMap extends Base {
           ? item.left + item.width
           : item.left
       let y2 = item.top + item.height / 2
-      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
+      y1 = nodeUseLineStyle ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       // 节点使用横线风格，需要额外渲染横线
       let nodeUseLineStylePath = ''
@@ -321,7 +321,7 @@ class MindMap extends Base {
           : item.left
       let y2 = item.top + item.height / 2
       let path = ''
-      y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
+      y1 = nodeUseLineStyle ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       // 节点使用横线风格，需要额外渲染横线
       let nodeUseLineStylePath = ''
