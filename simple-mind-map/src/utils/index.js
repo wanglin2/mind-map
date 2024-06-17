@@ -6,6 +6,13 @@ import {
 import MersenneTwister from './mersenneTwister'
 import { ForeignObject } from '@svgdotjs/svg.js'
 
+// 可以在外部定义customFun，以实现自定义id生成规则
+export const createUidOption = {
+  defaultFun: () => uuidv4(),
+  customFun: null,
+}
+  
+
 //  深度优先遍历树
 export const walk = (
   root,
@@ -446,7 +453,7 @@ export const getImageSize = src => {
 
 // 创建节点唯一的id
 export const createUid = () => {
-  return uuidv4()
+  return (typeof createUidOption?.customFun === 'function') ? createUidOption.customFun() : createUidOption.defaultFun()
 }
 
 // 加载图片文件
