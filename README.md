@@ -111,7 +111,7 @@ const mindMap = new MindMap({
 
 # 关于定制
 
-如果你有个性化的商用定制需求，可以联系我们，我们提供付费开发服务。
+如果你有个性化的商用定制需求，可以联系我们，我们提供付费开发服务，无论前端、后端、还是部署，都可以帮你一站式搞定。
 
 # 请作者喝杯咖啡
 
@@ -400,5 +400,13 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/Kyle.jpg" style="width: 50px;height: 50px;" />
         <span>Kyle</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/lsytyrt.jpg" style="width: 50px;height: 50px;" />
+        <span>lsytyrt</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/秀树因馨雨.jpg" style="width: 50px;height: 50px;" />
+        <span>秀树因馨雨</span>
     </span>
 </p>

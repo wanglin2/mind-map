@@ -273,7 +273,7 @@ export const shortcutKeyList = [
       {
         icon: 'icontianjiazijiedian',
         name: '插入下级节点',
-        value: 'Tab'
+        value: 'Tab | Insert'
       },
       {
         icon: 'iconjiedian',
