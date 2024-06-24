@@ -256,6 +256,8 @@ export const defaultOpt = {
   handleDragCloneNode: null,
   // 即将拖拽完成前调用该函数，函数接收一个对象作为参数：{overlapNodeUid,prevNodeUid,nextNodeUid}，代表拖拽信息，如果要阻止本次拖拽，那么可以返回true，此时node_dragend事件不会再触发。函数可以是异步函数，返回Promise实例
   beforeDragEnd: null,
+  // 即将开始调整节点前调用该函数，函数接收当前即将被拖拽的节点实例列表作为参数，如果要阻止本次拖拽，那么可以返回true
+  beforeDragStart: null,
 
   // 【Watermark插件】
   // 水印配置
@@ -380,5 +382,5 @@ export const defaultOpt = {
   beforeHideRichTextEdit: null,
   // 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果
   // 需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果
-  richTextEditFakeInPlace: false,
+  richTextEditFakeInPlace: false
 }

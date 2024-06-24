@@ -19,7 +19,7 @@ class Drag extends Base {
 
   //  复位
   reset() {
-    // 是否正在跳转中
+    // 是否正在拖拽中
     this.isDragging = false
     // 鼠标按下的节点
     this.mousedownNode = null
@@ -223,7 +223,7 @@ class Drag extends Base {
 
   //  拖动中
   onMove(x, y, e) {
-    if (!this.isMousedown) {
+    if (!this.isMousedown || !this.isDragging) {
       return
     }
     // 更新克隆节点的位置
@@ -245,9 +245,8 @@ class Drag extends Base {
   }
 
   // 开始拖拽时初始化一些数据
-  handleStartMove() {
+  async handleStartMove() {
     if (!this.isDragging) {
-      this.isDragging = true
       // 鼠标按下的节点
       let node = this.mousedownNode
       // 计算鼠标按下的位置距离节点左上角的距离
@@ -268,12 +267,19 @@ class Drag extends Base {
         // 否则只拖拽按下的节点
         this.beingDragNodeList = [node]
       }
+      // 拦截拖拽
+      const { beforeDragStart } = this.mindMap.opt
+      if (typeof beforeDragStart === 'function') {
+        const stop = await beforeDragStart([...this.beingDragNodeList])
+        if (stop) return
+      }
       // 将节点树转为节点数组
       this.nodeTreeToList()
       // 创建克隆节点
       this.createCloneNode()
       // 清除当前所有激活的节点
       this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
+      this.isDragging = true
     }
   }
 
