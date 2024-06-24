@@ -148,7 +148,8 @@ class Drag extends Base {
       const isCancel = await beforeDragEnd({
         overlapNodeUid,
         prevNodeUid,
-        nextNodeUid
+        nextNodeUid,
+        beingDragNodeList: [...this.beingDragNodeList]
       })
       if (isCancel) {
         this.reset()
