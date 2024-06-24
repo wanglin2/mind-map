@@ -515,6 +515,7 @@ class Node {
       this.active(e)
     })
     this.group.on('mousedown', e => {
+      e.preventDefault()
       const {
         readonly,
         enableCtrlKeyNodeSelection,
