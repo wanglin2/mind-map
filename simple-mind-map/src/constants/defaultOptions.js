@@ -221,6 +221,8 @@ export const defaultOpt = {
   createNodePrefixContent: null,
   // 添加附加的节点后置内容，后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分
   createNodePostfixContent: null,
+  // 禁止粘贴用户剪贴板中的数据，禁止将复制的数据写入用户的剪贴板中
+  disabledClipboard: false,
 
   // 【Select插件】
   // 多选节点时鼠标移动到边缘时的画布移动偏移量
