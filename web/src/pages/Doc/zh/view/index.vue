@@ -61,6 +61,9 @@
 </blockquote>
 <ul>
 <li>
+<p><code>scale</code>: 缩放数值，未缩放为<code>1</code>，小于为<code>1</code>缩小，大于<code>1</code>为放大</p>
+</li>
+<li>
 <p><code>cx</code>：（v0.6.4+）以画布指定位置进行缩放，默认为画布中心点</p>
 </li>
 <li>
