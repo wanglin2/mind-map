@@ -223,6 +223,9 @@ export const defaultOpt = {
   createNodePostfixContent: null,
   // 禁止粘贴用户剪贴板中的数据，禁止将复制的数据写入用户的剪贴板中
   disabledClipboard: false,
+  // 自定义超链接的跳转
+  // 如果不传，默认会以新窗口的方式打开超链接，可以传递一个函数，函数接收两个参数：link（超链接的url）、node（所属节点实例），只要传递了函数，就会阻止默认的跳转
+  customHyperlinkJump: null,
 
   // 【Select插件】
   // 多选节点时鼠标移动到边缘时的画布移动偏移量
