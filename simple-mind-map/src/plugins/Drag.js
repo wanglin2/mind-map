@@ -6,6 +6,7 @@ import {
 } from '../utils'
 import Base from '../layouts/Base'
 import { CONSTANTS } from '../constants/constant'
+import AutoMove from '../utils/AutoMove'
 
 // 节点拖动插件
 class Drag extends Base {
@@ -13,6 +14,7 @@ class Drag extends Base {
   constructor({ mindMap }) {
     super(mindMap.renderer)
     this.mindMap = mindMap
+    this.autoMove = new AutoMove(mindMap)
     this.reset()
     this.bindEvent()
   }
@@ -131,7 +133,7 @@ class Drag extends Base {
       this.mindMap.opt
     // 停止自动移动
     if (autoMoveWhenMouseInEdgeOnDrag && this.mindMap.select) {
-      this.mindMap.select.clearAutoMoveTimer()
+      this.autoMove.clearAutoMoveTimer()
     }
     this.isMousedown = false
     // 恢复被拖拽节点的临时设置
@@ -237,12 +239,10 @@ class Drag extends Base {
     this.clone.translate(x - t.translateX, y - t.translateY)
     // 检测新位置
     this.checkOverlapNode()
-    // 如果注册了多选节点插件，那么复用它的边缘自动移动画布功能
-    if (this.mindMap.opt.autoMoveWhenMouseInEdgeOnDrag && this.mindMap.select) {
-      this.drawTransform = this.mindMap.draw.transform()
-      this.mindMap.select.clearAutoMoveTimer()
-      this.mindMap.select.onMove(e.clientX, e.clientY)
-    }
+    // 边缘自动移动画布
+    this.drawTransform = this.mindMap.draw.transform()
+    this.autoMove.clearAutoMoveTimer()
+    this.autoMove.onMove(e.clientX, e.clientY)
   }
 
   // 开始拖拽时初始化一些数据
