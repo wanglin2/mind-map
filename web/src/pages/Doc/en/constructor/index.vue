@@ -1438,8 +1438,8 @@ poor performance and should be used sparingly.</p>
 </tr>
 <tr>
 <td>hide_text_edit</td>
-<td>Node text edit box close event</td>
-<td>textEditNode (text edit box DOM node), activeNodeList (current list of active nodes)</td>
+<td>Node text edit box close event【The end of text editing for the associated line will also trigger this event, and there are no callback parameters at this time, so defensive programming is necessary】</td>
+<td>textEditNode (text edit box DOM node), activeNodeList (current list of active nodes) 、node（v0.10.2+, Node instance for current text editing）</td>
 </tr>
 <tr>
 <td>scale</td>

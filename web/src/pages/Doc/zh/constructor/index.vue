@@ -1307,8 +1307,8 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </tr>
 <tr>
 <td>hide_text_edit</td>
-<td>节点文本编辑框关闭事件</td>
-<td>textEditNode（文本编辑框DOM节点）、activeNodeList（当前激活的所有节点列表）</td>
+<td>节点文本编辑框关闭事件【关联线的文本编辑结束也会触发该事件，此时没有回调参数，所以需要做好防御性编程】</td>
+<td>textEditNode（文本编辑框DOM节点）、activeNodeList（当前激活的所有节点列表）、node（v0.10.2+，当前文本编辑的节点实例）</td>
 </tr>
 <tr>
 <td>scale</td>
