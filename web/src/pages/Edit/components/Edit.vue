@@ -404,7 +404,31 @@ export default {
             cssText,
             height: 30
           }
-        }
+        },
+        // createNodePrefixContent: (node) => {
+        //   const el = document.createElement('div')
+        //   el.style.width = '50px'
+        //   el.style.height = '50px'
+        //   el.style.background = 'red'
+        //   return {
+        //     el,
+        //     width: 50,
+        //     height: 50
+        //   }
+        // },
+        // createNodePostfixContent: node => {
+        //   const domparser = new DOMParser()
+        //   const doc = domparser.parseFromString(
+        //     '<b style="background-color: rgb(214, 239, 214);">白日依山尽</b>',
+        //     'text/html'
+        //   )
+        //   const el = doc.querySelector('b')
+        //   return {
+        //     el,
+        //     width: 50,
+        //     height: 50
+        //   }
+        // },
         // addContentToHeader: () => {
         //   const el = document.createElement('div')
         //   el.className = 'footer'
