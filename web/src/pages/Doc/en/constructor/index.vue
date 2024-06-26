@@ -1606,6 +1606,16 @@ poor performance and should be used sparingly.</p>
 <td>Event where the content layout of a single node is completed</td>
 <td>this(Current node instance)</td>
 </tr>
+<tr>
+<td>node_attachmentClick（v0.9.10+）</td>
+<td>Click event for node attachment icon</td>
+<td>this(Current node instance)、e（Event Object）、node（Icon node）</td>
+</tr>
+<tr>
+<td>node_attachmentContextmenu（v0.9.10+）</td>
+<td>Right click event on node attachment icon</td>
+<td>this(Current node instance)、e（Event Object）、node（Icon node）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>

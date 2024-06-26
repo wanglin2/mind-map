@@ -1475,6 +1475,16 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>单个节点内容布局完成的事件</td>
 <td>this(当前节点实例)</td>
 </tr>
+<tr>
+<td>node_attachmentClick（v0.9.10+）</td>
+<td>节点附件图标的点击事件</td>
+<td>this(当前节点实例)、e（事件对象）、node（图标节点）</td>
+</tr>
+<tr>
+<td>node_attachmentContextmenu（v0.9.10+）</td>
+<td>节点附件图标的右键点击事件</td>
+<td>this(当前节点实例)、e（事件对象）、node（图标节点）</td>
+</tr>
 </tbody>
 </table>
 <h3>emit(event, ...args)</h3>
