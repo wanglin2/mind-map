@@ -38,6 +38,7 @@ function createOneControlNode(pointKey) {
 // 控制点的鼠标按下事件
 function onControlPointMousedown(e, pointKey) {
   e.stopPropagation()
+  e.preventDefault()
   this.isControlPointMousedown = true
   this.mousedownControlPointKey = pointKey
 }
