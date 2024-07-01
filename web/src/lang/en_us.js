@@ -266,6 +266,7 @@ export default {
     painter: 'Painter',
     formula: 'Formula',
     attachment: 'Attachment',
+    outerFrame: 'Outer frame',
     more: 'More',
     selectFileTip: 'Please select a file',
     notSupportTip:
@@ -357,5 +358,12 @@ export default {
     lineWidth: 'Line width',
     padding: 'Padding',
     animate: 'Animate'
+  },
+  nodeOuterFrame: {
+    outerFrameSetting: 'Setting',
+    deleteOuterFrame: 'Delete outer frame',
+    boxStyle: 'Box style',
+    boxColor: 'Box color',
+    fillColor: 'Fill color'
   }
 }

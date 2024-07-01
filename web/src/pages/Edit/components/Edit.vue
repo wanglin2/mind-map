@@ -36,6 +36,7 @@
     <Scrollbar v-if="isShowScrollbar && mindMap" :mindMap="mindMap"></Scrollbar>
     <FormulaSidebar v-if="mindMap" :mindMap="mindMap"></FormulaSidebar>
     <SourceCodeEdit v-if="mindMap" :mindMap="mindMap"></SourceCodeEdit>
+    <NodeOuterFrame v-if="mindMap" :mindMap="mindMap"></NodeOuterFrame>
     <div
       class="dragMask"
       v-if="showDragMask"
@@ -68,6 +69,7 @@ import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
 import Formula from 'simple-mind-map/src/plugins/Formula.js'
 import RainbowLines from 'simple-mind-map/src/plugins/RainbowLines.js'
 import Demonstrate from 'simple-mind-map/src/plugins/Demonstrate.js'
+import OuterFrame from 'simple-mind-map/src/plugins/OuterFrame.js'
 // 协同编辑插件
 // import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
 // 手绘风格插件，该插件为付费插件，详情请查看开发文档
@@ -109,6 +111,7 @@ import exampleData from 'simple-mind-map/example/exampleData'
 import FormulaSidebar from './FormulaSidebar.vue'
 import SourceCodeEdit from './SourceCodeEdit.vue'
 import NodeAttachment from './NodeAttachment.vue'
+import NodeOuterFrame from './NodeOuterFrame.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -127,6 +130,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(Formula)
   .usePlugin(RainbowLines)
   .usePlugin(Demonstrate)
+  .usePlugin(OuterFrame)
 // .usePlugin(Cooperate) // 协同插件
 
 // 注册自定义主题
@@ -163,7 +167,8 @@ export default {
     Scrollbar,
     FormulaSidebar,
     SourceCodeEdit,
-    NodeAttachment
+    NodeAttachment,
+    NodeOuterFrame
   },
   data() {
     return {
@@ -404,7 +409,7 @@ export default {
             cssText,
             height: 30
           }
-        },
+        }
         // createNodePrefixContent: (node) => {
         //   const el = document.createElement('div')
         //   el.style.width = '50px'

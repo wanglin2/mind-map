@@ -167,6 +167,17 @@
         <span class="icon iconfont iconfujian"></span>
         <span class="text">{{ $t('toolbar.attachment') }}</span>
       </div>
+      <div
+        v-if="item === 'outerFrame'"
+        class="toolbarBtn"
+        :class="{
+          disabled: activeNodes.length <= 0 || hasGeneralization
+        }"
+        @click="$bus.$emit('execCommand', 'ADD_OUTER_FRAME')"
+      >
+        <span class="icon iconfont iconwaikuang"></span>
+        <span class="text">{{ $t('toolbar.outerFrame') }}</span>
+      </div>
       <NodeAnnotationBtn
         v-if="item === 'annotation' && supportMark"
         :isDark="isDark"

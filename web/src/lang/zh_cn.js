@@ -263,6 +263,7 @@ export default {
     painter: '格式刷',
     formula: '公式',
     attachment: '附件',
+    outerFrame: '外框',
     more: '更多',
     selectFileTip: '请选择文件',
     notSupportTip: '你的浏览器不支持该功能，或者当前页面非https协议',
@@ -349,5 +350,12 @@ export default {
     lineWidth: '线宽',
     padding: '内边距',
     animate: '开启动画'
+  },
+  nodeOuterFrame: {
+    outerFrameSetting: '外框设置',
+    deleteOuterFrame: '删除外框',
+    boxStyle: '边框样式',
+    boxColor: '边框颜色',
+    fillColor: '填充颜色'
   }
 }
