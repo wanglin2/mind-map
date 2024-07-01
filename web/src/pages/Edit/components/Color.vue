@@ -14,6 +14,7 @@
       <span>{{ $t('color.moreColor') }}</span>
       <el-color-picker
         size="mini"
+        show-alpha
         v-model="selectColor"
         @change="changeColor"
       ></el-color-picker>
