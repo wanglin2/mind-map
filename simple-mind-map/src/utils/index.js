@@ -1368,7 +1368,8 @@ export const getNodeTreeBoundingRect = (
   y = 0,
   paddingX = 0,
   paddingY = 0,
-  excludeSelf = false
+  excludeSelf = false,
+  excludeGeneralization = false
 ) => {
   let minX = Infinity
   let maxX = -Infinity
@@ -1392,7 +1393,7 @@ export const getNodeTreeBoundingRect = (
         maxY = y + height
       }
     }
-    if (root._generalizationList.length > 0) {
+    if (!excludeGeneralization && root._generalizationList.length > 0) {
       root._generalizationList.forEach(item => {
         walk(item.generalizationNode)
       })
@@ -1410,6 +1411,49 @@ export const getNodeTreeBoundingRect = (
   maxX = maxX - x + paddingX
   maxY = maxY - y + paddingY
 
+  return {
+    left: minX,
+    top: minY,
+    width: maxX - minX,
+    height: maxY - minY
+  }
+}
+
+// 获取多个节点总的包围框
+export const getNodeListBoundingRect = (
+  nodeList,
+  x = 0,
+  y = 0,
+  paddingX = 0,
+  paddingY = 0
+) => {
+  let minX = Infinity
+  let maxX = -Infinity
+  let minY = Infinity
+  let maxY = -Infinity
+  nodeList.forEach(node => {
+    const { left, top, width, height } = getNodeTreeBoundingRect(
+      node,
+      x,
+      y,
+      paddingX,
+      paddingY,
+      false,
+      true
+    )
+    if (left < minX) {
+      minX = left
+    }
+    if (left + width > maxX) {
+      maxX = left + width
+    }
+    if (top < minY) {
+      minY = top
+    }
+    if (top + height > maxY) {
+      maxY = top + height
+    }
+  })
   return {
     left: minX,
     top: minY,
