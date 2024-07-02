@@ -7,7 +7,6 @@
     :style="{ width: width + 'px' }"
     @mousedown="onMousedown"
     @mousemove="onMousemove"
-    @mouseup="onMouseup"
   >
     <div
       class="svgBox"
@@ -65,6 +64,7 @@ export default {
     this.$bus.$on('data_change', this.data_change)
     this.$bus.$on('view_data_change', this.data_change)
     this.$bus.$on('node_tree_render_end', this.data_change)
+    window.addEventListener('mouseup', this.onMouseup)
   },
   destroyed() {
     window.removeEventListener('resize', this.setSize)
@@ -72,6 +72,7 @@ export default {
     this.$bus.$off('data_change', this.data_change)
     this.$bus.$off('view_data_change', this.data_change)
     this.$bus.$off('node_tree_render_end', this.data_change)
+    window.removeEventListener('mouseup', this.onMouseup)
   },
   methods: {
     // 切换显示小地图

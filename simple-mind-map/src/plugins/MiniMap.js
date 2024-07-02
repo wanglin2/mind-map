@@ -53,13 +53,16 @@ class MiniMap {
     let miniMapBoxScale = actWidth / rect.width
     let miniMapBoxLeft = (boxWidth - actWidth) / 2
     let miniMapBoxTop = (boxHeight - actHeight) / 2
-    // 视口框大小及位置
-    let _rectX = rect.x - (rect.width * scaleX - rect.width) / 2
-    let _rectX2 = rect.x2 + (rect.width * scaleX - rect.width) / 2
-    let _rectY = rect.y - (rect.height * scaleY - rect.height) / 2
-    let _rectY2 = rect.y2 + (rect.height * scaleY - rect.height) / 2
+    // 当前思维导图图形实际的宽高，即在缩放后的宽高
     let _rectWidth = rect.width * scaleX
     let _rectHeight = rect.height * scaleY
+    // 视口框大小及位置
+    let _rectWidthOffsetHalf = (_rectWidth - rect.width) / 2
+    let _rectHeightOffsetHalf = (_rectHeight - rect.height) / 2
+    let _rectX = rect.x - _rectWidthOffsetHalf
+    let _rectX2 = rect.x2 + _rectWidthOffsetHalf
+    let _rectY = rect.y - _rectHeightOffsetHalf
+    let _rectY2 = rect.y2 + _rectHeightOffsetHalf
     let viewBoxStyle = {
       left: 0,
       top: 0,
