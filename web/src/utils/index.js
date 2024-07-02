@@ -49,11 +49,28 @@ export const fileToBuffer = file => {
 }
 
 // 复制文本到剪贴板
-export const copy = (text) => {
-  const input = document.createElement('input')
-  input.setAttribute('value', text)
+export const copy = text => {
+  // 使用textarea可以保留换行
+  const input = document.createElement('textarea')
+  // input.setAttribute('value', text)
+  input.innerHTML = text
   document.body.appendChild(input)
   input.select()
   document.execCommand('copy')
   document.body.removeChild(input)
+}
+
+// 复制文本到剪贴板
+export const setDataToClipboard = data => {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(data)
+  }
+}
+
+// 复制图片到剪贴板
+export const setImgToClipboard = img => {
+  if (navigator.clipboard) {
+    const data = [new ClipboardItem({ ['image/png']: img })]
+    navigator.clipboard.write(data)
+  }
 }

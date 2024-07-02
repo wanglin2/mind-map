@@ -100,7 +100,15 @@ export default {
     removeNote: 'Remove note',
     removeCustomStyles: 'Remove custom styles',
     removeAllNodeCustomStyles: 'Remove all node custom styles',
-    exportNodeToPng: 'Export node to png'
+    exportNodeToPng: 'Export node to png',
+    copyToClipboard: 'Copy to clipboard',
+    copyToSmm: 'SMM',
+    copyToJson: 'JSON',
+    copyToMarkdown: 'Markdown',
+    copyToTxt: 'Txt',
+    copyToPng: 'Png',
+    copySuccess: 'Copy success',
+    copyFail: 'Copy fail'
   },
   count: {
     words: 'Words',

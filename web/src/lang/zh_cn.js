@@ -100,7 +100,15 @@ export default {
     removeNote: '移除备注',
     removeCustomStyles: '一键去除自定义样式',
     removeAllNodeCustomStyles: '一键去除所有节点自定义样式',
-    exportNodeToPng: '导出该节点为图片'
+    exportNodeToPng: '导出该节点为图片',
+    copyToClipboard: '复制到剪贴板',
+    copyToSmm: 'SMM',
+    copyToJson: 'JSON',
+    copyToMarkdown: 'Markdown',
+    copyToTxt: 'Txt',
+    copyToPng: '图片',
+    copySuccess: '复制成功',
+    copyFail: '复制失败'
   },
   count: {
     words: '字数',

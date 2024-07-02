@@ -109,6 +109,7 @@
       </div>
       <div class="item">
         <span class="name">{{ $t('contextmenu.expandTo') }}</span>
+        <span class="el-icon-arrow-right"></span>
         <div class="subItems listBox" :class="{ isDark: isDark }">
           <div
             class="item"
@@ -137,13 +138,30 @@
           $t('contextmenu.removeAllNodeCustomStyles')
         }}</span>
       </div>
+      <div class="item">
+        <span class="name">{{ $t('contextmenu.copyToClipboard') }}</span>
+        <span class="el-icon-arrow-right"></span>
+        <div class="subItems listBox" :class="{ isDark: isDark }">
+          <div
+            class="item"
+            v-for="item in copyList"
+            :key="item.value"
+            @click="copyToClipboard(item.value)"
+          >
+            {{ item.name }}
+          </div>
+        </div>
+      </div>
     </template>
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import { getTextFromHtml } from 'simple-mind-map/src/utils'
+import { getTextFromHtml, imgToDataUrl } from 'simple-mind-map/src/utils'
+import { transformToMarkdown } from 'simple-mind-map/src/parse/toMarkdown'
+import { transformToTxt } from 'simple-mind-map/src/parse/toTxt'
+import { setDataToClipboard, setImgToClipboard, copy } from '@/utils'
 
 /**
  * @Author: 王林
@@ -166,7 +184,8 @@ export default {
       type: '',
       isMousedown: false,
       mosuedownX: 0,
-      mosuedownY: 0
+      mosuedownY: 0,
+      enableCopyToClipboardApi: navigator.clipboard
     }
   },
   computed: {
@@ -183,6 +202,33 @@ export default {
         this.$t('contextmenu.level5'),
         this.$t('contextmenu.level6')
       ]
+    },
+    copyList() {
+      const list = [
+        {
+          name: this.$t('contextmenu.copyToSmm'),
+          value: 'smm'
+        },
+        {
+          name: this.$t('contextmenu.copyToJson'),
+          value: 'json'
+        },
+        {
+          name: this.$t('contextmenu.copyToMarkdown'),
+          value: 'md'
+        },
+        {
+          name: this.$t('contextmenu.copyToTxt'),
+          value: 'txt'
+        }
+      ]
+      if (this.enableCopyToClipboardApi) {
+        list.push({
+          name: this.$t('contextmenu.copyToPng'),
+          value: 'png'
+        })
+      }
+      return list
     },
     insertNodeBtnDisabled() {
       return !this.node || this.node.isRoot || this.node.isGeneralization
@@ -355,6 +401,48 @@ export default {
           break
       }
       this.hide()
+    },
+
+    // 复制到剪贴板
+    async copyToClipboard(type) {
+      try {
+        this.hide()
+        let data
+        let str
+        switch (type) {
+          case 'smm':
+          case 'json':
+            data = this.mindMap.getData(true)
+            str = JSON.stringify(data)
+            break
+          case 'md':
+            data = this.mindMap.getData()
+            str = transformToMarkdown(data)
+            break
+          case 'txt':
+            data = this.mindMap.getData()
+            str = transformToTxt(data)
+            break
+          case 'png':
+            const png = await this.mindMap.export('png', false)
+            const blob = await imgToDataUrl(png, true)
+            setImgToClipboard(blob)
+            break
+          default:
+            break
+        }
+        if (str) {
+          if (this.enableCopyToClipboardApi) {
+            setDataToClipboard(str)
+          } else {
+            copy(str)
+          }
+        }
+        this.$message.success(this.$t('contextmenu.copySuccess'))
+      } catch (error) {
+        console.log(error)
+        this.$message.error(this.$t('contextmenu.copyFail'))
+      }
     }
   }
 }
@@ -393,11 +481,11 @@ export default {
   .item {
     position: relative;
     height: 28px;
-    line-height: 28px;
     padding: 0 16px;
     cursor: pointer;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     &.danger {
       color: #f56c6c;
@@ -439,6 +527,7 @@ export default {
       left: 100%;
       top: 0;
       visibility: hidden;
+      width: 150px;
     }
   }
 }

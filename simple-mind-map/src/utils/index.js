@@ -207,7 +207,7 @@ export const copyNodeTree = (
 }
 
 //  图片转成dataURL
-export const imgToDataUrl = src => {
+export const imgToDataUrl = (src, returnBlob = false) => {
   return new Promise((resolve, reject) => {
     const img = new Image()
     // 跨域图片需要添加这个属性，否则画布被污染了无法导出图片
@@ -220,7 +220,13 @@ export const imgToDataUrl = src => {
         let ctx = canvas.getContext('2d')
         // 图片绘制到canvas里
         ctx.drawImage(img, 0, 0, img.width, img.height)
-        resolve(canvas.toDataURL())
+        if (returnBlob) {
+          canvas.toBlob(blob => {
+            resolve(blob)
+          })
+        } else {
+          resolve(canvas.toDataURL())
+        }
       } catch (e) {
         reject(e)
       }
