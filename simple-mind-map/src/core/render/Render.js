@@ -42,6 +42,8 @@ import { Polygon } from '@svgdotjs/svg.js'
 const layouts = {
   // 逻辑结构图
   [CONSTANTS.LAYOUT.LOGICAL_STRUCTURE]: LogicalStructure,
+  // 向左逻辑结构图
+  [CONSTANTS.LAYOUT.LOGICAL_STRUCTURE_LEFT]: LogicalStructure,
   // 思维导图
   [CONSTANTS.LAYOUT.MIND_MAP]: MindMap,
   // 目录组织图

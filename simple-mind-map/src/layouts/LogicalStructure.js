@@ -1,11 +1,13 @@
 import Base from './Base'
 import { walk, asyncRun, getNodeIndexInNodeList } from '../utils'
+import { CONSTANTS } from '../constants/constant'
 
 //  逻辑结构图
 class LogicalStructure extends Base {
   //  构造函数
-  constructor(opt = {}) {
+  constructor(opt = {}, layout) {
     super(opt)
+    this.isUseLeft = layout === CONSTANTS.LAYOUT.LOGICAL_STRUCTURE_LEFT
   }
 
   //  布局
@@ -40,8 +42,15 @@ class LogicalStructure extends Base {
         } else {
           // 非根节点
           // 定位到父节点右侧
-          newNode.left =
-            parent._node.left + parent._node.width + this.getMarginX(layerIndex)
+          if (this.isUseLeft) {
+            newNode.left =
+              parent._node.left - newNode.width - this.getMarginX(layerIndex)
+          } else {
+            newNode.left =
+              parent._node.left +
+              parent._node.width +
+              this.getMarginX(layerIndex)
+          }
         }
         if (!cur.data.expand) {
           return true
@@ -167,15 +176,24 @@ class LogicalStructure extends Base {
     }
     let marginX = this.getMarginX(node.layerIndex + 1)
     let s1 = (marginX - expandBtnSize) * 0.6
+    if (this.isUseLeft) {
+      s1 *= -1
+    }
     let nodeUseLineStyle = this.mindMap.themeConfig.nodeUseLineStyle
     node.children.forEach((item, index) => {
-      let x1 =
-        node.layerIndex === 0 ? left + width : left + width + expandBtnSize
+      let x1
+      if (this.isUseLeft) {
+        x1 = node.layerIndex === 0 ? left : left - expandBtnSize
+      } else {
+        x1 = node.layerIndex === 0 ? left + width : left + width + expandBtnSize
+      }
       let y1 = top + height / 2
-      let x2 = item.left
+      let x2 = this.isUseLeft ? item.left + item.width : item.left
       let y2 = item.top + item.height / 2
       // 节点使用横线风格，需要额外渲染横线
-      let nodeUseLineStyleOffset = nodeUseLineStyle ? item.width : 0
+      let nodeUseLineStyleOffset = nodeUseLineStyle
+        ? item.width * (this.isUseLeft ? -1 : 1)
+        : 0
       y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       let path = this.createFoldLine([
@@ -202,15 +220,17 @@ class LogicalStructure extends Base {
       if (node.layerIndex === 0) {
         expandBtnSize = 0
       }
-      let x1 = left + width + expandBtnSize
+      let x1 = this.isUseLeft
+        ? left - expandBtnSize
+        : left + width + expandBtnSize
       let y1 = top + height / 2
-      let x2 = item.left
+      let x2 = this.isUseLeft ? item.left + item.width : item.left
       let y2 = item.top + item.height / 2
       y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       // 节点使用横线风格，需要额外渲染横线
       let nodeUseLineStylePath = nodeUseLineStyle
-        ? ` L ${item.left + item.width},${y2}`
+        ? ` L ${this.isUseLeft ? item.left : item.left + item.width},${y2}`
         : ''
       let path = `M ${x1},${y1} L ${x2},${y2}` + nodeUseLineStylePath
       this.setLineStyle(style, lines[index], path, item)
@@ -235,20 +255,33 @@ class LogicalStructure extends Base {
       if (node.layerIndex === 0) {
         expandBtnSize = 0
       }
-      let x1 =
-        node.layerIndex === 0 && !rootLineStartPositionKeepSameInCurve
-          ? left + width / 2
-          : left + width + expandBtnSize
+      let x1
+      if (this.isUseLeft) {
+        x1 =
+          node.layerIndex === 0 && !rootLineStartPositionKeepSameInCurve
+            ? left + width / 2
+            : left - expandBtnSize
+      } else {
+        x1 =
+          node.layerIndex === 0 && !rootLineStartPositionKeepSameInCurve
+            ? left + width / 2
+            : left + width + expandBtnSize
+      }
       let y1 = top + height / 2
-      let x2 = item.left
+      let x2 = this.isUseLeft ? item.left + item.width : item.left
       let y2 = item.top + item.height / 2
       let path = ''
       y1 = nodeUseLineStyle && !node.isRoot ? y1 + height / 2 : y1
       y2 = nodeUseLineStyle ? y2 + item.height / 2 : y2
       // 节点使用横线风格，需要额外渲染横线
-      let nodeUseLineStylePath = nodeUseLineStyle
-        ? ` L ${item.left + item.width},${y2}`
-        : ''
+      let nodeUseLineStylePath
+      if (this.isUseLeft) {
+        nodeUseLineStylePath = nodeUseLineStyle ? ` L ${item.left},${y2}` : ''
+      } else {
+        nodeUseLineStylePath = nodeUseLineStyle
+          ? ` L ${item.left + item.width},${y2}`
+          : ''
+      }
       if (node.isRoot && !rootLineKeepSameInCurve) {
         path = this.quadraticCurvePath(x1, y1, x2, y2) + nodeUseLineStylePath
       } else {
@@ -260,14 +293,17 @@ class LogicalStructure extends Base {
 
   //  渲染按钮
   renderExpandBtn(node, btn) {
-    let { width, height } = node
+    let { width, height, expandBtnSize, layerIndex } = node
+    if (layerIndex === 0) {
+      expandBtnSize = 0
+    }
     let { translateX, translateY } = btn.transform()
     // 节点使用横线风格，需要调整展开收起按钮位置
     let nodeUseLineStyleOffset = this.mindMap.themeConfig.nodeUseLineStyle
       ? height / 2
       : 0
     // 位置没有变化则返回
-    let _x = width
+    let _x = this.isUseLeft ? 0 - expandBtnSize : width
     let _y = height / 2 + nodeUseLineStyleOffset
     if (_x === translateX && _y === translateY) {
       return
@@ -279,29 +315,42 @@ class LogicalStructure extends Base {
   renderGeneralization(list) {
     list.forEach(item => {
       let {
+        left,
         top,
         bottom,
         right,
         generalizationLineMargin,
         generalizationNodeMargin
       } = this.getNodeGeneralizationRenderBoundaries(item, 'h')
-      let x1 = right + generalizationLineMargin
+      let x = this.isUseLeft
+        ? left - generalizationLineMargin
+        : right + generalizationLineMargin
+      let x1 = x
       let y1 = top
-      let x2 = right + generalizationLineMargin
+      let x2 = x
       let y2 = bottom
-      let cx = x1 + 20
+      let cx = x1 + (this.isUseLeft ? -20 : 20)
       let cy = y1 + (y2 - y1) / 2
       let path = `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
       item.generalizationLine.plot(path)
-      item.generalizationNode.left = right + generalizationNodeMargin
+      item.generalizationNode.left =
+        x +
+        (this.isUseLeft
+          ? -generalizationNodeMargin
+          : generalizationNodeMargin) -
+        (this.isUseLeft ? item.generalizationNode.width : 0)
       item.generalizationNode.top =
         top + (bottom - top - item.generalizationNode.height) / 2
     })
   }
 
   // 渲染展开收起按钮的隐藏占位元素
-  renderExpandBtnRect(rect, expandBtnSize, width, height, node) {
-    rect.size(expandBtnSize, height).x(width).y(0)
+  renderExpandBtnRect(rect, expandBtnSize, width, height) {
+    if (this.isUseLeft) {
+      rect.size(expandBtnSize, height).x(-expandBtnSize).y(0)
+    } else {
+      rect.size(expandBtnSize, height).x(width).y(0)
+    }
   }
 }
 

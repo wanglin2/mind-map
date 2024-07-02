@@ -397,6 +397,7 @@ class Drag extends Base {
     }
     const {
       LOGICAL_STRUCTURE,
+      LOGICAL_STRUCTURE_LEFT,
       MIND_MAP,
       ORGANIZATION_STRUCTURE,
       CATALOG_ORGANIZATION,
@@ -420,6 +421,7 @@ class Drag extends Base {
       }
       switch (this.mindMap.opt.layout) {
         case LOGICAL_STRUCTURE:
+        case LOGICAL_STRUCTURE_LEFT:
           this.handleLogicalStructure(node)
           break
         case MIND_MAP:
@@ -457,6 +459,7 @@ class Drag extends Base {
   handleOverlapNode() {
     const {
       LOGICAL_STRUCTURE,
+      LOGICAL_STRUCTURE_LEFT,
       MIND_MAP,
       ORGANIZATION_STRUCTURE,
       CATALOG_ORGANIZATION,
@@ -489,6 +492,10 @@ class Drag extends Base {
             dir === LEFT
               ? lastNodeRect.originRight - this.placeholderWidth
               : lastNodeRect.originLeft
+          y = lastNodeRect.originBottom + this.minOffset - halfPlaceholderHeight
+          break
+        case LOGICAL_STRUCTURE_LEFT:
+          x = lastNodeRect.originRight - this.placeholderWidth
           y = lastNodeRect.originBottom + this.minOffset - halfPlaceholderHeight
           break
         case ORGANIZATION_STRUCTURE:
@@ -603,6 +610,12 @@ class Drag extends Base {
             nodeRect.originTop +
             (nodeRect.originHeight - this.placeholderHeight) / 2
           break
+        case LOGICAL_STRUCTURE_LEFT:
+          x = nodeRect.originLeft - this.placeholderWidth - marginX
+          y =
+            nodeRect.originTop +
+            (nodeRect.originHeight - this.placeholderHeight) / 2
+          break
         case ORGANIZATION_STRUCTURE:
           rotate = true
           x =
@@ -683,6 +696,7 @@ class Drag extends Base {
   getNewChildNodeDir(node) {
     const {
       LOGICAL_STRUCTURE,
+      LOGICAL_STRUCTURE_LEFT,
       MIND_MAP,
       TIMELINE2,
       VERTICAL_TIMELINE,
@@ -691,6 +705,8 @@ class Drag extends Base {
     switch (this.mindMap.opt.layout) {
       case LOGICAL_STRUCTURE:
         return CONSTANTS.LAYOUT_GROW_DIR.RIGHT
+      case LOGICAL_STRUCTURE_LEFT:
+        return CONSTANTS.LAYOUT_GROW_DIR.LEFT
       case MIND_MAP:
       case TIMELINE2:
       case VERTICAL_TIMELINE:
