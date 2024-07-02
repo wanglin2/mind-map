@@ -63,7 +63,7 @@ export default {
     isUseHandDrawnLikeStyle: 'Is use hand drawn like style',
     rootLineStartPos: 'Root line start pos',
     center: 'Center',
-    right: 'Right',
+    edge: 'Edge',
     rainbowLines: 'Rainbow lines',
     notUseRainbowLines: 'Not use rainbow lines'
   },

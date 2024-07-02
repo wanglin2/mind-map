@@ -255,7 +255,7 @@
               :value="false"
             >
             </el-option>
-            <el-option key="right" :label="$t('baseStyle.right')" :value="true">
+            <el-option key="right" :label="$t('baseStyle.edge')" :value="true">
             </el-option>
           </el-select>
         </div>

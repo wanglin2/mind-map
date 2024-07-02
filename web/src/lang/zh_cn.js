@@ -63,7 +63,7 @@ export default {
     isUseHandDrawnLikeStyle: '是否开启手绘风格',
     rootLineStartPos: '根节点连线起始位置',
     center: '中心',
-    right: '右侧',
+    edge: '边缘',
     rainbowLines: '彩虹线条',
     notUseRainbowLines: '不使用彩虹线条'
   },

@@ -1,6 +1,7 @@
 //  布局结构图片映射
 export const layoutImgMap = {
   logicalStructure: require('../assets/img/structures/logicalStructure.png'),
+  logicalStructureLeft: require('../assets/img/structures/logicalStructureLeft.jpg'),
   mindMap: require('../assets/img/structures/mindMap.png'),
   organizationStructure: require('../assets/img/structures/organizationStructure.png'),
   catalogOrganization: require('../assets/img/structures/catalogOrganization.png'),
@@ -85,9 +86,15 @@ export const formulaList = [
 ]
 
 export const supportLineStyleLayoutsMap = {
-  curve: ['logicalStructure', 'mindMap', 'verticalTimeline'],
+  curve: [
+    'logicalStructure',
+    'logicalStructureLeft',
+    'mindMap',
+    'verticalTimeline'
+  ],
   direct: [
     'logicalStructure',
+    'logicalStructureLeft',
     'mindMap',
     'organizationStructure',
     'verticalTimeline'
@@ -96,12 +103,14 @@ export const supportLineStyleLayoutsMap = {
 
 export const supportLineRadiusLayouts = [
   'logicalStructure',
+  'logicalStructureLeft',
   'mindMap',
   'verticalTimeline'
 ]
 
 export const supportNodeUseLineStyleLayouts = [
   'logicalStructure',
+  'logicalStructureLeft',
   'mindMap',
   'catalogOrganization',
   'organizationStructure'
@@ -109,6 +118,7 @@ export const supportNodeUseLineStyleLayouts = [
 
 export const supportRootLineKeepSameInCurveLayouts = [
   'logicalStructure',
+  'logicalStructureLeft',
   'mindMap'
 ]
 
