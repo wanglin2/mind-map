@@ -427,7 +427,7 @@ class Node {
       ;(this._textData.nodeContent || this._textData.node)
         .x(-oldX) // 修复非富文本模式下同时存在图标和换行的文本时，被收起和展开时图标与文字距离会逐渐拉大的问题
         .x(textContentOffsetX)
-        .y(0)
+        .y((this._rectInfo.textContentHeight - this._textData.height) / 2)
       textContentNested.add(this._textData.node)
       textContentOffsetX += this._textData.width + textContentItemMargin
     }
@@ -493,6 +493,7 @@ class Node {
     )
     this.group.add(textContentNested)
     addHoverNode()
+    this.mindMap.emit('node_layout_end', this)
   }
 
   // 给节点绑定事件
@@ -514,6 +515,7 @@ class Node {
       this.active(e)
     })
     this.group.on('mousedown', e => {
+      e.preventDefault()
       const {
         readonly,
         enableCtrlKeyNodeSelection,
@@ -756,7 +758,9 @@ class Node {
       this.layout()
       this.update()
     } else {
-      this.nodeDraw.add(this.group)
+      if (!this.nodeDraw.has(this.group)) {
+        this.nodeDraw.add(this.group)
+      }
       if (this.needLayout) {
         this.needLayout = false
         this.layout()

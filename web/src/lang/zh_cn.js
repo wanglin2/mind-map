@@ -63,7 +63,7 @@ export default {
     isUseHandDrawnLikeStyle: '是否开启手绘风格',
     rootLineStartPos: '根节点连线起始位置',
     center: '中心',
-    right: '右侧',
+    edge: '边缘',
     rainbowLines: '彩虹线条',
     notUseRainbowLines: '不使用彩虹线条'
   },
@@ -101,7 +101,15 @@ export default {
     removeNote: '移除备注',
     removeCustomStyles: '一键去除自定义样式',
     removeAllNodeCustomStyles: '一键去除所有节点自定义样式',
-    exportNodeToPng: '导出该节点为图片'
+    exportNodeToPng: '导出该节点为图片',
+    copyToClipboard: '复制到剪贴板',
+    copyToSmm: 'SMM',
+    copyToJson: 'JSON',
+    copyToMarkdown: 'Markdown',
+    copyToTxt: 'Txt',
+    copyToPng: '图片',
+    copySuccess: '复制成功',
+    copyFail: '复制失败'
   },
   count: {
     words: '字数',
@@ -265,6 +273,7 @@ export default {
     painter: '格式刷',
     formula: '公式',
     attachment: '附件',
+    outerFrame: '外框',
     more: '更多',
     selectFileTip: '请选择文件',
     notSupportTip: '你的浏览器不支持该功能，或者当前页面非https协议',
@@ -329,7 +338,8 @@ export default {
     loading: '正在加载，请稍后...'
   },
   sourceCodeEdit: {
-    sourceCodeTip: '富文本模式下不建议修改样式，因为需要同步修改数据及html结构。',
+    sourceCodeTip:
+      '富文本模式下不建议修改样式，因为需要同步修改数据及html结构。',
     format: '格式化',
     copy: '复制',
     confirm: '完成',
@@ -342,5 +352,21 @@ export default {
     deleteAttachment: '删除附件',
     openFileInDir: '在目录中显示',
     tip: '附件功能仅在客户端可用'
+  },
+  annotation: {
+    mark: '标记',
+    show: '显示标记',
+    type: '类型',
+    color: '颜色',
+    lineWidth: '线宽',
+    padding: '内边距',
+    animate: '开启动画'
+  },
+  nodeOuterFrame: {
+    outerFrameSetting: '外框设置',
+    deleteOuterFrame: '删除外框',
+    boxStyle: '边框样式',
+    boxColor: '边框颜色',
+    fillColor: '填充颜色'
   }
 }

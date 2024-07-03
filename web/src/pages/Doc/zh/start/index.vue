@@ -123,6 +123,12 @@ npm run build
 <p>不同的打包工具可能具体配置不一样，原理就是排除<code>stream</code>依赖。</p>
 <h3>4.点击【新建】、【打开】、【另存为】按钮时提示浏览器不支持，或者非https协议。</h3>
 <p>浏览器上操作电脑本地文件使用的是<a href="https://developer.mozilla.org/zh-CN/docs/Web/API/Window/showOpenFilePicker">window.showOpenFilePicker</a>api，如果不支持，要么是浏览器不支持这个API，要么是因为页面非https协议，你可以按F12，或者在页面通过鼠标右键菜单中的【检查】打开浏览器控制台，在其中的【控制台】或【console】tab中输入<code>window.showOpenFilePicker</code>按回车，如果返回<code>undefined</code>则代表不支持，如果返回的不是这个，而页面依旧提示提示浏览器不支持，或者非https协议，那么可以提交issue，或者联系作者。</p>
+<h3>5.引入simple-mind-map报错，报错信息如下：</h3>
+<img src="../../../../assets/img/docs/错误.jpg" style="width: 850px" />
+<p>这是因为你的构建环境不支持该js语法，该语法出自<code>@svgdotjs/svg.js</code>库，解决方法如下：</p>
+<p>1.手动降低<code>@svgdotjs/svg.js</code>库的版本，你可以在你的项目中手动安装低版本，比如：<code>npm i @svgdotjs/svg.js@3.0.16</code></p>
+<p>2.不降低版本的话，可以通过修改你的构建工具的相关配置，修改<code>babel</code>的配置，让它编译一下<code>node_modules</code>中的<code>simple-mind-map</code>库，或<code>@svgdotjs/svg.js</code>库，如果用的是<code>vue-cli</code>或<code>vite</code>，它们也直接提供了相关配置。另外需要安装编译该语法的<code>babel</code>插件，并且配置到<code>babel</code>的配置文件中：</p>
+<p><code>@babel/plugin-proposal-nullish-coalescing-operator</code>、<code>@babel/plugin-proposal-optional-chaining</code>。</p>
 
   </div>
 </template>

@@ -121,12 +121,14 @@ is an object, e.g. <code>{text: 'I am new text'}</code>.</p>
 <p>v0.1.5+</p>
 </blockquote>
 <p>Move a node behind another node.</p>
-<h3>moveNodeToCenter(node)</h3>
+<h3>moveNodeToCenter(node, resetScale)</h3>
 <blockquote>
 <p>v0.2.17+</p>
 </blockquote>
+<ul>
+<li><code>resetScale</code>: v0.10.1+, Specify whether to reset the canvas scaling value to 100%. When you do not explicitly pass it, the default value is undefined, because the resetScaleOnMoveNodeToCenter configuration of the instantiation option also determines whether to reset scaling. Therefore, use the resetScaleOnMoveNodeToCenter configuration when you do not explicitly pass it, otherwise use the resetScale configuration</li>
+</ul>
 <p>Move a node to the center of the canvas.</p>
-<p>Currently, if there is zoom, returning to the center will reset the zoom.</p>
 <h3>expandToNodeUid(uid, callback)</h3>
 <blockquote>
 <p>v0.6.7+</p>

@@ -254,12 +254,16 @@ function createHyperlinkNode() {
   if (!hyperlink) {
     return
   }
+  const { customHyperlinkJump } = this.mindMap.opt
   let iconSize = this.mindMap.themeConfig.iconSize
   let node = new SVG().size(iconSize, iconSize)
   // 超链接节点
   let a = new A().to(hyperlink).target('_blank')
   a.node.addEventListener('click', e => {
-    e.stopPropagation()
+    if (typeof customHyperlinkJump === 'function') {
+      e.preventDefault()
+      customHyperlinkJump(hyperlink, this)
+    }
   })
   if (hyperlinkTitle) {
     node.add(SVG(`<title>${hyperlinkTitle}</title>`))

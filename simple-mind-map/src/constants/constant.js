@@ -174,6 +174,7 @@ export const CONSTANTS = {
   },
   LAYOUT: {
     LOGICAL_STRUCTURE: 'logicalStructure',
+    LOGICAL_STRUCTURE_LEFT: 'logicalStructureLeft',
     MIND_MAP: 'mindMap',
     ORGANIZATION_STRUCTURE: 'organizationStructure',
     CATALOG_ORGANIZATION: 'catalogOrganization',
@@ -252,6 +253,10 @@ export const layoutList = [
     value: CONSTANTS.LAYOUT.LOGICAL_STRUCTURE
   },
   {
+    name: '向左逻辑结构图',
+    value: CONSTANTS.LAYOUT.LOGICAL_STRUCTURE_LEFT
+  },
+  {
     name: '思维导图',
     value: CONSTANTS.LAYOUT.MIND_MAP
   },
@@ -282,6 +287,7 @@ export const layoutList = [
 ]
 export const layoutValueList = [
   CONSTANTS.LAYOUT.LOGICAL_STRUCTURE,
+  CONSTANTS.LAYOUT.LOGICAL_STRUCTURE_LEFT,
   CONSTANTS.LAYOUT.MIND_MAP,
   CONSTANTS.LAYOUT.CATALOG_ORGANIZATION,
   CONSTANTS.LAYOUT.ORGANIZATION_STRUCTURE,
@@ -314,7 +320,9 @@ export const nodeDataNoStylePropList = [
   'associativeLinePoint',
   'associativeLineText',
   'attachmentUrl',
-  'attachmentName'
+  'attachmentName',
+  'notation',
+  'outerFrame'
 ]
 
 // 错误类型

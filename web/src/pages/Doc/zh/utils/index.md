@@ -104,7 +104,11 @@ copyRenderTree({}, this.mindMap.renderer.renderTree)
 copyNodeTree({}, node)
 ```
 
-#### imgToDataUrl(src)
+#### imgToDataUrl(src, returnBlob = false)
+
+- `src`：图片url
+
+- `returnBlob`：v0.10.2+，是否以Blob格式返回结果，默认为DataURL格式
 
 图片转成 dataURL
 

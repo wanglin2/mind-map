@@ -41,6 +41,8 @@ let APIList = [
   'rainbowLines',
   'handDrawnLikeStyle',
   'demonstrate',
+  'notation',
+  'outerFrame',
   'xmind',
   'markdown',
   'utils'

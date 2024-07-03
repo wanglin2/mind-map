@@ -47,7 +47,7 @@
 <td>layout</td>
 <td>String</td>
 <td>logicalStructure</td>
-<td>Layout type, options: logicalStructure (logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)、timeline（v0.5.4+, timeline）、timeline2（v0.5.4+, up down alternating timeline）、fishbone（v0.5.4+, fishbone diagram）</td>
+<td>Layout type, options: logicalStructure (logical structure diagram), logicalStructureLeft(v0.10.2+, Leftward logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)、timeline（v0.5.4+, timeline）、timeline2（v0.5.4+, up down alternating timeline）、fishbone（v0.5.4+, fishbone diagram）</td>
 <td></td>
 </tr>
 <tr>
@@ -502,7 +502,7 @@
 <td>resetScaleOnMoveNodeToCenter（v0.9.12+）</td>
 <td>Boolean</td>
 <td>false</td>
-<td>Whether to reset the scaling level to 100% when moving nodes to the canvas center, returning to the root node, and other operations（The underlying impact is on the moveNodeToCenter method of the render class）</td>
+<td>Whether to reset the scaling level to 100% when moving nodes to the canvas center, returning to the root node, and other operations（This option actually affects the render. moveNodeToCenter method, and the moveNodeToCenter method itself also has a second parameter, resetScale, to set whether to reset. If the resetScale parameter is not passed, then use resetScaleOnMoveNodeToCenter configuration; otherwise, use resetScale configuration）</td>
 <td></td>
 </tr>
 <tr>
@@ -517,6 +517,20 @@
 <td>Function、null</td>
 <td>null</td>
 <td>Add additional node post content.Post content refers to the post content in the area of the same line as the text, excluding the node image section. The usage is the same as createNodePrefixContent</td>
+<td></td>
+</tr>
+<tr>
+<td>disabledClipboard（v0.10.2+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Is prohibit pasting data from the user's clipboard and writing copied node data to the user's clipboard. At this time, only node data from the canvas can be copied and pasted</td>
+<td></td>
+</tr>
+<tr>
+<td>customHyperlinkJump（v0.10.2+）</td>
+<td>null、Function</td>
+<td>false</td>
+<td>Customize the jump of hyperlinks. If not passed, the hyperlink will be opened as a new window by default, and a function can be passed, The function takes two parameters: link（The URL of the hyperlink）、node（Node instance to which it belongs）, As long as a function is passed, it will block the default jump</td>
 <td></td>
 </tr>
 </tbody>
@@ -651,6 +665,13 @@
 <td>The basic definition is the same as addContentToHeader, adding custom content at the end</td>
 <td></td>
 </tr>
+<tr>
+<td>handleBeingExportSvg（v0.10.1+）</td>
+<td>Function、null</td>
+<td>null</td>
+<td>When exporting PNG, SVG, and PDF, the SVG data on the canvas will be obtained for cloning, and then exported through the cloned elements. If you want to do some processing on the cloned elements, such as adding, replacing, or modifying some of them, you can pass a processing function through this parameter to receive the SVG element object. After processing, you need to return the original SVG element object.（It should be noted that the node object refers to the element object of the @ svgdotjs/svg. js library, so you need to read the documentation of the library to operate this object）</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h4>2.1How to add custom content when exporting</h4>
@@ -768,6 +789,27 @@
 <td>Object</td>
 <td>{ cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }</td>
 <td>The transparency configuration during node dragging, passing an object, and the field meanings are: the transparency of the cloned node or rectangle that follows the mouse movement, and the transparency of the dragged node</td>
+<td></td>
+</tr>
+<tr>
+<td>beforeDragEnd（v0.10.1+）</td>
+<td>null、Function</td>
+<td>null</td>
+<td>This function is called just before the drag is completed. The function receives an object as a parameter: {overlapNodeUid,prevNodeUid,nextNodeUid,beingDragNodeList}, represents drag and drop information. If you want to prevent this drag and drop, you can return true. At this time, the node.drag event will not be triggered again. Functions can be asynchronous and return Promise instances. 'beingDragNodeList' is a newly added callback parameter for v0.10.2+, which is the list of nodes that are currently being dragged</td>
+<td></td>
+</tr>
+<tr>
+<td>handleDragCloneNode（v0.10.1+）</td>
+<td>null、Function</td>
+<td>null</td>
+<td>When dragging a single node, the dragged node will be cloned. If you want to modify the cloned node, you can provide a processing function through this option, which receives the cloned node object.（It should be noted that the node object refers to the element object of the @svgdotjs/svg.js library, so you need to read the documentation of the library to operate this object）</td>
+<td></td>
+</tr>
+<tr>
+<td>beforeDragStart（v0.10.2+）</td>
+<td>null、Function（(nodeList) =&gt; {}）</td>
+<td>null</td>
+<td>This function is called just before the node is dragged. The function receives the list of node instances to be dragged as parameters. If you want to prevent this drag, you can return true. It can be an asynchronous function that returns a Promise instance</td>
 <td></td>
 </tr>
 </tbody>
@@ -956,6 +998,20 @@
 <td>Boolean</td>
 <td>false</td>
 <td>Prohibit double finger scaling, you can still use the API for scaling, which takes effect on the TouchEvent plugin</td>
+<td></td>
+</tr>
+<tr>
+<td>minTouchZoomScale（v0.10.1+）</td>
+<td>Number</td>
+<td>20</td>
+<td>Allow maximum and minimum scaling values, percentage, pass -1 to indicate no restrictions</td>
+<td></td>
+</tr>
+<tr>
+<td>maxTouchZoomScale（v0.10.1+）</td>
+<td>Number</td>
+<td>-1</td>
+<td>Same as minTouchZoomScale</td>
 <td></td>
 </tr>
 </tbody>
@@ -1403,8 +1459,8 @@ poor performance and should be used sparingly.</p>
 </tr>
 <tr>
 <td>hide_text_edit</td>
-<td>Node text edit box close event</td>
-<td>textEditNode (text edit box DOM node), activeNodeList (current list of active nodes)</td>
+<td>Node text edit box close event【The end of text editing for the associated line will also trigger this event, and there are no callback parameters at this time, so defensive programming is necessary】</td>
+<td>textEditNode (text edit box DOM node), activeNodeList (current list of active nodes) 、node（v0.10.2+, Node instance for current text editing）</td>
 </tr>
 <tr>
 <td>scale</td>
@@ -1565,6 +1621,21 @@ poor performance and should be used sparingly.</p>
 <td>node_tag_click（v0.9.12+）</td>
 <td>Click events on node labels</td>
 <td>this(Current node instance)、item（Content of clicked tags）</td>
+</tr>
+<tr>
+<td>node_layout_end（v0.10.1+）</td>
+<td>Event where the content layout of a single node is completed</td>
+<td>this(Current node instance)</td>
+</tr>
+<tr>
+<td>node_attachmentClick（v0.9.10+）</td>
+<td>Click event for node attachment icon</td>
+<td>this(Current node instance)、e（Event Object）、node（Icon node）</td>
+</tr>
+<tr>
+<td>node_attachmentContextmenu（v0.9.10+）</td>
+<td>Right click event on node attachment icon</td>
+<td>this(Current node instance)、e（Event Object）、node（Icon node）</td>
 </tr>
 </tbody>
 </table>

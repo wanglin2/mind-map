@@ -1,6 +1,10 @@
 <template>
   <div class="toolbarContainer" :class="{ isDark: isDark }">
-    <div class="toolbar" :style="{top: IS_ELECTRON ? '40px' : 0}" ref="toolbarRef">
+    <div
+      class="toolbar"
+      :style="{ top: IS_ELECTRON ? '40px' : 0 }"
+      ref="toolbarRef"
+    >
       <!-- 节点操作 -->
       <div class="toolbarBlock">
         <ToolbarNodeBtnList :list="horizontalList"></ToolbarNodeBtnList>
@@ -26,19 +30,45 @@
       </div>
       <!-- 导出 -->
       <div class="toolbarBlock">
-        <div class="toolbarBtn" @click="openDirectory" v-if="!IS_ELECTRON">
+        <div
+          class="toolbarBtn"
+          @click="openDirectory"
+          v-if="!IS_ELECTRON && !isMobile"
+        >
           <span class="icon iconfont icondakai"></span>
           <span class="text">{{ $t('toolbar.directory') }}</span>
         </div>
-        <div class="toolbarBtn" @click="createNewLocalFile" v-if="!IS_ELECTRON">
-          <span class="icon iconfont iconxinjian"></span>
-          <span class="text">{{ $t('toolbar.newFile') }}</span>
-        </div>
-        <div class="toolbarBtn" @click="openLocalFile" v-if="!IS_ELECTRON">
-          <span class="icon iconfont icondakai"></span>
-          <span class="text">{{ $t('toolbar.openFile') }}</span>
-        </div>
-        <div class="toolbarBtn" @click="saveLocalFile" v-if="!IS_ELECTRON">
+        <el-tooltip
+          effect="dark"
+          :content="$t('toolbar.newFileTip')"
+          placement="bottom"
+          v-if="!isMobile && !IS_ELECTRON"
+        >
+          <div
+            class="toolbarBtn"
+            @click="createNewLocalFile"
+            v-if="!IS_ELECTRON"
+          >
+            <span class="icon iconfont iconxinjian"></span>
+            <span class="text">{{ $t('toolbar.newFile') }}</span>
+          </div>
+        </el-tooltip>
+        <el-tooltip
+          effect="dark"
+          :content="$t('toolbar.openFileTip')"
+          placement="bottom"
+          v-if="!isMobile && !IS_ELECTRON"
+        >
+          <div class="toolbarBtn" @click="openLocalFile" v-if="!IS_ELECTRON">
+            <span class="icon iconfont icondakai"></span>
+            <span class="text">{{ $t('toolbar.openFile') }}</span>
+          </div>
+        </el-tooltip>
+        <div
+          class="toolbarBtn"
+          @click="saveLocalFile"
+          v-if="!IS_ELECTRON && !isMobile"
+        >
           <span class="icon iconfont iconlingcunwei"></span>
           <span class="text">{{ $t('toolbar.saveAs') }}</span>
         </div>
@@ -147,7 +177,7 @@ import { Notification } from 'element-ui'
 import exampleData from 'simple-mind-map/example/exampleData'
 import { getData } from '../../../api'
 import ToolbarNodeBtnList from './ToolbarNodeBtnList.vue'
-import { throttle } from 'simple-mind-map/src/utils/index'
+import { throttle, isMobile } from 'simple-mind-map/src/utils/index'
 
 /**
  * @Author: 王林
@@ -169,6 +199,7 @@ export default {
   },
   data() {
     return {
+      isMobile: isMobile(),
       list: [
         'back',
         'forward',
@@ -184,7 +215,9 @@ export default {
         'summary',
         'associativeLine',
         'formula',
-        'attachment'
+        'attachment',
+        'outerFrame',
+        'annotation'
       ],
       horizontalList: [],
       verticalList: [],

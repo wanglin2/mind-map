@@ -9,7 +9,7 @@
 <h2>Features</h2>
 <ul>
 <li><input type="checkbox" id="checkbox17" checked="true" /><label for="checkbox17">Pluggable architecture, in addition to core functions, other functions are provided as plugins, which can be used as needed to reduce packaging volume</label></li>
-<li><input type="checkbox" id="checkbox18" checked="true" /><label for="checkbox18">Support logical structure chart, mind map, Organizational chart, directory organization chart, timeline (horizontal and vertical), fishbone chart and other structures</label></li>
+<li><input type="checkbox" id="checkbox18" checked="true" /><label for="checkbox18">Support logical structure chart(Left and Right Logical Structure Diagram), mind map, Organizational chart, directory organization chart, timeline (horizontal and vertical), fishbone chart and other structures</label></li>
 <li><input type="checkbox" id="checkbox19" checked="true" /><label for="checkbox19">Built-in multiple themes, allowing for highly customizable styles, and supporting registration of new themes</label></li>
 <li><input type="checkbox" id="checkbox20" checked="true" /><label for="checkbox20">Node content supports text (regular text, rich text), images, icons, hyperlinks, notes, labels, summaries, and math formulas</label></li>
 <li><input type="checkbox" id="checkbox21" checked="true" /><label for="checkbox21">Nodes support drag and drop (drag and move, freely adjust), multiple node shapes, Support for expanding node content, and fully customize node content using DDM</label></li>
@@ -23,7 +23,7 @@
 </ul>
 <p>The official provides the following plugins, which can be introduced as needed (a certain function may not be effective because you did not introduce the corresponding plugin). Please refer to the documentation for specific usage methods:</p>
 <blockquote>
-<p>RichText（Node Rich Text Plugin）、Select（Mouse Multiple Selection Node Plugin）、Drag（Node drag plugin）、AssociativeLine（Associate Line Plugin）、Export（Export plugin）、KeyboardNavigation（Keyboard navigation plugin）、MiniMap（Mini Map Plugin）、Watermark（Watermark plugin）、TouchEvent（Mobile touch event support plugin）、NodeImgAdjust（Drag and adjust node image size plugin）、Search（Search plugin）、Painter（Node Format Brush Plugin）、Scrollbar（Scroll bar plugin）、Formula（Mathematical Formula Plugin）、Cooperate（Collaborative editing plugin）、RainbowLines（Rainbow Line Plugin）、Demonstrate（Demonstration mode plugin）、HandDrawnLikeStyle（Hand drawn style plugin）[收费]</p>
+<p>RichText（Node Rich Text Plugin）、Select（Mouse Multiple Selection Node Plugin）、Drag（Node drag plugin）、AssociativeLine（Associate Line Plugin）、Export（Export plugin）、KeyboardNavigation（Keyboard navigation plugin）、MiniMap（Mini Map Plugin）、Watermark（Watermark plugin）、TouchEvent（Mobile touch event support plugin）、NodeImgAdjust（Drag and adjust node image size plugin）、Search（Search plugin）、Painter（Node Format Brush Plugin）、Scrollbar（Scroll bar plugin）、Formula（Mathematical Formula Plugin）、Cooperate（Collaborative editing plugin）、RainbowLines（Rainbow Line Plugin）、Demonstrate（Demonstration mode plugin）、OuterFrame（Outer frame plugin）、HandDrawnLikeStyle（Hand drawn style plugin）[charge]、Notation（Node marker plugin）[charge]</p>
 </blockquote>
 <p>Features that will not be implemented in this project:</p>
 <blockquote>
@@ -337,7 +337,7 @@ full screen, support mini map</li>
         <p>庆国</p>
     </div>
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
-        <img src="../../../../assets/avatar/孟照星.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <img src="../../../../assets/avatar/Alex.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>Alex</p>
     </div>
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
@@ -365,6 +365,37 @@ full screen, support mini map</li>
         <p>峰</p>
     </div>
 </div>
+<div style="display: flex;">
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/default.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>协成</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/木木.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>木木</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/好名字.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>好名字</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/Kyle.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>Kyle</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/lsytyrt.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>lsytyrt</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/秀树因馨雨.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>秀树因馨雨</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/buddy.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>buddy</p>
+    </div>
+</div>
+
   </div>
 </template>
 

@@ -69,7 +69,15 @@
 <p>复制节点树数据，主要是剔除其中的引用<code>node</code>实例的<code>_node</code>，然后复制<code>data</code>对象的数据，示例：</p>
 <pre class="hljs"><code>copyNodeTree({}, node)
 </code></pre>
-<h4>imgToDataUrl(src)</h4>
+<h4>imgToDataUrl(src, returnBlob = false)</h4>
+<ul>
+<li>
+<p><code>src</code>：图片url</p>
+</li>
+<li>
+<p><code>returnBlob</code>：v0.10.2+，是否以Blob格式返回结果，默认为DataURL格式</p>
+</li>
+</ul>
 <p>图片转成 dataURL</p>
 <h4>downloadFile(file, fileName)</h4>
 <p>下载文件</p>

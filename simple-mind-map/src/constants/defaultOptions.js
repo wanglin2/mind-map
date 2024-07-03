@@ -215,11 +215,17 @@ export const defaultOpt = {
   // 函数接收两个参数：key（快捷键）、activeNodeList（当前激活的节点列表）
   beforeShortcutRun: null,
   // 移动节点到画布中心、回到根节点等操作时是否将缩放层级复位为100%
+  // 该选项实际影响的是render.moveNodeToCenter方法，moveNodeToCenter方法本身也存在第二个参数resetScale来设置是否复位，如果resetScale参数没有传递，那么使用resetScaleOnMoveNodeToCenter配置，否则使用resetScale配置
   resetScaleOnMoveNodeToCenter: false,
   // 添加附加的节点前置内容，前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分
   createNodePrefixContent: null,
   // 添加附加的节点后置内容，后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分
   createNodePostfixContent: null,
+  // 禁止粘贴用户剪贴板中的数据，禁止将复制的数据写入用户的剪贴板中
+  disabledClipboard: false,
+  // 自定义超链接的跳转
+  // 如果不传，默认会以新窗口的方式打开超链接，可以传递一个函数，函数接收两个参数：link（超链接的url）、node（所属节点实例），只要传递了函数，就会阻止默认的跳转
+  customHyperlinkJump: null,
 
   // 【Select插件】
   // 多选节点时鼠标移动到边缘时的画布移动偏移量
@@ -250,6 +256,13 @@ export const defaultOpt = {
     cloneNodeOpacity: 0.5, // 跟随鼠标移动的克隆节点或矩形的透明度
     beingDragNodeOpacity: 0.3 // 被拖拽节点的透明度
   },
+  // 拖拽单个节点时会克隆被拖拽节点，如果想修改该克隆节点，那么可以通过该选项提供一个处理函数，函数接收克隆节点对象
+  // 需要注意的是节点对象指的是@svgdotjs/svg.js库的元素对象，所以你需要阅读该库的文档来操作该对象
+  handleDragCloneNode: null,
+  // 即将拖拽完成前调用该函数，函数接收一个对象作为参数：{overlapNodeUid,prevNodeUid,nextNodeUid}，代表拖拽信息，如果要阻止本次拖拽，那么可以返回true，此时node_dragend事件不会再触发。函数可以是异步函数，返回Promise实例
+  beforeDragEnd: null,
+  // 即将开始调整节点前调用该函数，函数接收当前即将被拖拽的节点实例列表作为参数，如果要阻止本次拖拽，那么可以返回true
+  beforeDragStart: null,
 
   // 【Watermark插件】
   // 水印配置
@@ -293,6 +306,9 @@ export const defaultOpt = {
   */
   addContentToHeader: null,
   addContentToFooter: null,
+  // 导出png、svg、pdf时会获取画布上的svg数据进行克隆，然后通过该克隆的元素进行导出，如果你想对该克隆元素做一些处理，比如新增、替换、修改其中的一些元素，那么可以通过该参数传递一个处理函数，接收svg元素对象，处理后，需要返回原svg元素对象。
+  // 需要注意的是svg对象指的是@svgdotjs/svg.js库的元素对象，所以你需要阅读该库的文档来操作该对象
+  handleBeingExportSvg: null,
 
   // 【AssociativeLine插件】
   // 关联线默认文字
@@ -314,6 +330,10 @@ export const defaultOpt = {
   // 禁止双指缩放，你仍旧可以使用api进行缩放
   // 需要注册TouchEvent插件后生效
   disableTouchZoom: false,
+  // 允许最大和最小的缩放值，百分数
+  // 传-1代表不限制
+  minTouchZoomScale: 20,
+  maxTouchZoomScale: -1,
 
   // 【Scrollbar插件】
   // 当注册了滚动条插件（Scrollbar）时，是否将思维导图限制在画布内，isLimitMindMapInCanvas不再起作用
@@ -367,5 +387,5 @@ export const defaultOpt = {
   beforeHideRichTextEdit: null,
   // 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果
   // 需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果
-  richTextEditFakeInPlace: false,
+  richTextEditFakeInPlace: false
 }

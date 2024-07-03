@@ -255,7 +255,7 @@
               :value="false"
             >
             </el-option>
-            <el-option key="right" :label="$t('baseStyle.right')" :value="true">
+            <el-option key="right" :label="$t('baseStyle.edge')" :value="true">
             </el-option>
           </el-select>
         </div>
@@ -934,7 +934,7 @@
         </div>
       </div>
       <!-- 是否开启手绘风格 -->
-      <!-- <div class="row">
+      <div class="row" v-if="supportHandDrawnLikeStyle">
         <div class="rowItem">
           <el-checkbox
             v-model="localConfigs.isUseHandDrawnLikeStyle"
@@ -942,7 +942,7 @@
             >{{ $t('baseStyle.isUseHandDrawnLikeStyle') }}</el-checkbox
           >
         </div>
-      </div> -->
+      </div>
     </div>
   </Sidebar>
 </template>
@@ -1065,7 +1065,8 @@ export default {
     ...mapState({
       activeSidebar: state => state.activeSidebar,
       localConfig: state => state.localConfig,
-      isDark: state => state.localConfig.isDark
+      isDark: state => state.localConfig.isDark,
+      supportHandDrawnLikeStyle: state => state.supportHandDrawnLikeStyle
     }),
     lineStyleList() {
       return lineStyleList[this.$i18n.locale] || lineStyleList.zh

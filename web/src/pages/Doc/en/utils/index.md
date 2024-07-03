@@ -101,7 +101,11 @@ and copying the `data` of the data object, example:
 copyNodeTree({}, node);
 ```
 
-#### imgToDataUrl(src)
+#### imgToDataUrl(src, returnBlob = false)
+
+- `src`：Image url
+
+- `returnBlob`：v0.10.2+，Is the result returned in Blob format, defaulting to DataURL format
 
 Convert image to dataURL
 

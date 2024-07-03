@@ -286,7 +286,6 @@ export default class TextEdit {
 
   //  隐藏文本编辑框
   hideEditTextBox() {
-    this.currentNode = null
     if (this.mindMap.richText) {
       return this.mindMap.richText.hideEditText()
     }
@@ -305,8 +304,10 @@ export default class TextEdit {
     this.mindMap.emit(
       'hide_text_edit',
       this.textEditNode,
-      this.renderer.activeNodeList
+      this.renderer.activeNodeList,
+      this.currentNode
     )
+    this.currentNode = null
     this.textEditNode.style.display = 'none'
     this.textEditNode.innerHTML = ''
     this.textEditNode.style.fontFamily = 'inherit'

@@ -99,6 +99,7 @@ class Event extends EventEmitter {
 
   //  鼠标按下事件
   onMousedown(e) {
+    e.preventDefault()
     // 鼠标左键
     if (e.which === 1) {
       this.isLeftMousedown = true
@@ -114,6 +115,7 @@ class Event extends EventEmitter {
 
   //  鼠标移动事件
   onMousemove(e) {
+    e.preventDefault()
     let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
     this.mousemovePos.x = e.clientX
     this.mousemovePos.y = e.clientY

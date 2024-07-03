@@ -70,6 +70,8 @@ getTransformData method"
 
 > v0.2.17+
 
+- `scale`: Scaling values, not scaled to '1', scaled to '1' for values less than, scaled to '1' for values greater than, scaled to '1' for values greater than
+
 - `cx`:（v0.6.4+）Zoom to the specified position on the canvas, default to the center point of the canvas
 
 - `cy`:（v0.6.4+）Zoom to the specified position on the canvas, default to the center point of the canvas

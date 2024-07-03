@@ -207,7 +207,7 @@ export const shortcutKeyList = [
       {
         icon: 'icontianjiazijiedian',
         name: 'Inert child node',
-        value: 'Tab'
+        value: 'Tab | Insert'
       },
       {
         icon: 'iconjiedian',

@@ -1,3 +1,5 @@
+import { getTwoPointDistance } from '../utils'
+
 // 手势事件支持插件
 class TouchEvent {
   //  构造函数
@@ -7,6 +9,8 @@ class TouchEvent {
     this.singleTouchstartEvent = null
     this.clickNum = 0
     this.touchStartScaleView = null
+    this.lastTouchStartPosition = null
+    this.lastTouchStartDistance = 0
     this.bindEvent()
   }
 
@@ -34,11 +38,22 @@ class TouchEvent {
 
   // 手指按下事件
   onTouchstart(e) {
-    e.preventDefault()
     this.touchesNum = e.touches.length
     this.touchStartScaleView = null
     if (this.touchesNum === 1) {
       let touch = e.touches[0]
+      if (this.lastTouchStartPosition) {
+        this.lastTouchStartDistance = getTwoPointDistance(
+          this.lastTouchStartPosition.x,
+          this.lastTouchStartPosition.y,
+          touch.clientX,
+          touch.clientY
+        )
+      }
+      this.lastTouchStartPosition = {
+        x: touch.clientX,
+        y: touch.clientY
+      }
       this.singleTouchstartEvent = touch
       this.dispatchMouseEvent('mousedown', touch.target, touch)
     }
@@ -46,13 +61,18 @@ class TouchEvent {
 
   // 手指移动事件
   onTouchmove(e) {
-    e.preventDefault()
     let len = e.touches.length
     if (len === 1) {
       let touch = e.touches[0]
       this.dispatchMouseEvent('mousemove', touch.target, touch)
     } else if (len === 2) {
-      if (this.mindMap.opt.disableTouchZoom) return
+      let { disableTouchZoom, minTouchZoomScale, maxTouchZoomScale } =
+        this.mindMap.opt
+      if (disableTouchZoom) return
+      minTouchZoomScale =
+        minTouchZoomScale === -1 ? -Infinity : minTouchZoomScale / 100
+      maxTouchZoomScale =
+        maxTouchZoomScale === -1 ? Infinity : maxTouchZoomScale / 100
       let touch1 = e.touches[0]
       let touch2 = e.touches[1]
       let ox = touch1.clientX - touch2.clientX
@@ -87,8 +107,14 @@ class TouchEvent {
       if (Math.abs(distance - viewBefore.distance) <= 10) {
         scale = viewBefore.scale
       }
+      scale =
+        scale < minTouchZoomScale
+          ? minTouchZoomScale
+          : scale > maxTouchZoomScale
+          ? maxTouchZoomScale
+          : scale
       const ratio = 1 - scale / viewBefore.scale
-      view.scale = scale < 0.1 ? 0.1 : scale
+      view.scale = scale
       view.x =
         viewBefore.x +
         (cx - viewBefore.x) * ratio +
@@ -107,16 +133,17 @@ class TouchEvent {
 
   // 手指松开事件
   onTouchend(e) {
-    e.preventDefault()
     this.dispatchMouseEvent('mouseup', e.target)
     if (this.touchesNum === 1) {
       // 模拟双击事件
       this.clickNum++
       setTimeout(() => {
         this.clickNum = 0
+        this.lastTouchStartPosition = null
+        this.lastTouchStartDistance = 0
       }, 300)
       let ev = this.singleTouchstartEvent
-      if (this.clickNum > 1) {
+      if (this.clickNum > 1 && this.lastTouchStartDistance <= 5) {
         this.clickNum = 0
         this.dispatchMouseEvent('dblclick', ev.target, ev)
       } else {

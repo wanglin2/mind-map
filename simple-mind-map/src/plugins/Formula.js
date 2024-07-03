@@ -101,7 +101,7 @@ class Formula {
           const m = [...insert.matchAll(/\$.+?\$/g)]
           const arr = insert.split(/\$.+?\$/g)
           for (let j = m.length - 1; j >= 0; j--) {
-            const exp = m[j]?.[0].slice(1, -1) ?? null // $...$ 之间的表达式
+            const exp = m[j] && m[j][0] ? m[j][0].slice(1, -1) || null : null // $...$ 之间的表达式
             if (exp !== null && exp.trim().length > 0) {
               const isLegal = this.checkFormulaIsLegal(exp)
               if (isLegal) {

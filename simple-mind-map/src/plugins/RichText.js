@@ -344,7 +344,7 @@ class RichText {
       // }
       this.mindMap.render()
     })
-    this.mindMap.emit('hide_text_edit', this.textEditNode, list)
+    this.mindMap.emit('hide_text_edit', this.textEditNode, list, this.node)
     this.textEditNode.style.display = 'none'
     this.showTextEdit = false
     this.mindMap.emit('rich_text_selection_change', false)

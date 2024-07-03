@@ -6,6 +6,7 @@ import {
 } from '../utils'
 import Base from '../layouts/Base'
 import { CONSTANTS } from '../constants/constant'
+import AutoMove from '../utils/AutoMove'
 
 // 节点拖动插件
 class Drag extends Base {
@@ -13,13 +14,14 @@ class Drag extends Base {
   constructor({ mindMap }) {
     super(mindMap.renderer)
     this.mindMap = mindMap
+    this.autoMove = new AutoMove(mindMap)
     this.reset()
     this.bindEvent()
   }
 
   //  复位
   reset() {
-    // 是否正在跳转中
+    // 是否正在拖拽中
     this.isDragging = false
     // 鼠标按下的节点
     this.mousedownNode = null
@@ -123,13 +125,15 @@ class Drag extends Base {
   }
 
   //  鼠标松开事件
-  onMouseup(e) {
+  async onMouseup(e) {
     if (!this.isMousedown) {
       return
     }
+    const { autoMoveWhenMouseInEdgeOnDrag, enableFreeDrag, beforeDragEnd } =
+      this.mindMap.opt
     // 停止自动移动
-    if (this.mindMap.opt.autoMoveWhenMouseInEdgeOnDrag && this.mindMap.select) {
-      this.mindMap.select.clearAutoMoveTimer()
+    if (autoMoveWhenMouseInEdgeOnDrag && this.mindMap.select) {
+      this.autoMove.clearAutoMoveTimer()
     }
     this.isMousedown = false
     // 恢复被拖拽节点的临时设置
@@ -142,9 +146,21 @@ class Drag extends Base {
     let overlapNodeUid = this.overlapNode ? this.overlapNode.getData('uid') : ''
     let prevNodeUid = this.prevNode ? this.prevNode.getData('uid') : ''
     let nextNodeUid = this.nextNode ? this.nextNode.getData('uid') : ''
+    if (this.isDragging && typeof beforeDragEnd === 'function') {
+      const isCancel = await beforeDragEnd({
+        overlapNodeUid,
+        prevNodeUid,
+        nextNodeUid,
+        beingDragNodeList: [...this.beingDragNodeList]
+      })
+      if (isCancel) {
+        this.reset()
+        return
+      }
+    }
     // 存在重叠子节点，则移动作为其子节点
     if (this.overlapNode) {
-      this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, false)
+      this.removeNodeActive(this.overlapNode)
       this.mindMap.execCommand(
         'MOVE_NODE_TO',
         this.beingDragNodeList,
@@ -152,7 +168,7 @@ class Drag extends Base {
       )
     } else if (this.prevNode) {
       // 存在前一个相邻节点，作为其下一个兄弟节点
-      this.mindMap.execCommand('SET_NODE_ACTIVE', this.prevNode, false)
+      this.removeNodeActive(this.prevNode)
       this.mindMap.execCommand(
         'INSERT_AFTER',
         this.beingDragNodeList,
@@ -160,7 +176,7 @@ class Drag extends Base {
       )
     } else if (this.nextNode) {
       // 存在下一个相邻节点，作为其前一个兄弟节点
-      this.mindMap.execCommand('SET_NODE_ACTIVE', this.nextNode, false)
+      this.removeNodeActive(this.nextNode)
       this.mindMap.execCommand(
         'INSERT_BEFORE',
         this.beingDragNodeList,
@@ -168,7 +184,7 @@ class Drag extends Base {
       )
     } else if (
       this.clone &&
-      this.mindMap.opt.enableFreeDrag &&
+      enableFreeDrag &&
       this.beingDragNodeList.length === 1
     ) {
       // 如果只拖拽了一个节点，那么设置自定义位置
@@ -201,9 +217,16 @@ class Drag extends Base {
     this.reset()
   }
 
+  // 移除节点的激活状态
+  removeNodeActive(node) {
+    if (node.getData('isActive')) {
+      this.mindMap.execCommand('SET_NODE_ACTIVE', node, false)
+    }
+  }
+
   //  拖动中
   onMove(x, y, e) {
-    if (!this.isMousedown) {
+    if (!this.isMousedown || !this.isDragging) {
       return
     }
     // 更新克隆节点的位置
@@ -216,18 +239,15 @@ class Drag extends Base {
     this.clone.translate(x - t.translateX, y - t.translateY)
     // 检测新位置
     this.checkOverlapNode()
-    // 如果注册了多选节点插件，那么复用它的边缘自动移动画布功能
-    if (this.mindMap.opt.autoMoveWhenMouseInEdgeOnDrag && this.mindMap.select) {
-      this.drawTransform = this.mindMap.draw.transform()
-      this.mindMap.select.clearAutoMoveTimer()
-      this.mindMap.select.onMove(e.clientX, e.clientY)
-    }
+    // 边缘自动移动画布
+    this.drawTransform = this.mindMap.draw.transform()
+    this.autoMove.clearAutoMoveTimer()
+    this.autoMove.onMove(e.clientX, e.clientY)
   }
 
   // 开始拖拽时初始化一些数据
-  handleStartMove() {
+  async handleStartMove() {
     if (!this.isDragging) {
-      this.isDragging = true
       // 鼠标按下的节点
       let node = this.mousedownNode
       // 计算鼠标按下的位置距离节点左上角的距离
@@ -248,12 +268,19 @@ class Drag extends Base {
         // 否则只拖拽按下的节点
         this.beingDragNodeList = [node]
       }
+      // 拦截拖拽
+      const { beforeDragStart } = this.mindMap.opt
+      if (typeof beforeDragStart === 'function') {
+        const stop = await beforeDragStart([...this.beingDragNodeList])
+        if (stop) return
+      }
       // 将节点树转为节点数组
       this.nodeTreeToList()
       // 创建克隆节点
       this.createCloneNode()
       // 清除当前所有激活的节点
       this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
+      this.isDragging = true
     }
   }
 
@@ -282,7 +309,8 @@ class Drag extends Base {
         dragMultiNodeRectConfig,
         dragPlaceholderRectFill,
         dragPlaceholderLineConfig,
-        dragOpacityConfig
+        dragOpacityConfig,
+        handleDragCloneNode
       } = this.mindMap.opt
       const {
         width: rectWidth,
@@ -311,6 +339,9 @@ class Drag extends Base {
           expandEl.remove()
         }
         this.mindMap.otherDraw.add(this.clone)
+        if (typeof handleDragCloneNode === 'function') {
+          handleDragCloneNode(this.clone)
+        }
       }
       this.clone.opacity(dragOpacityConfig.cloneNodeOpacity)
       this.clone.css('z-index', 99999)
@@ -366,6 +397,7 @@ class Drag extends Base {
     }
     const {
       LOGICAL_STRUCTURE,
+      LOGICAL_STRUCTURE_LEFT,
       MIND_MAP,
       ORGANIZATION_STRUCTURE,
       CATALOG_ORGANIZATION,
@@ -389,6 +421,7 @@ class Drag extends Base {
       }
       switch (this.mindMap.opt.layout) {
         case LOGICAL_STRUCTURE:
+        case LOGICAL_STRUCTURE_LEFT:
           this.handleLogicalStructure(node)
           break
         case MIND_MAP:
@@ -426,6 +459,7 @@ class Drag extends Base {
   handleOverlapNode() {
     const {
       LOGICAL_STRUCTURE,
+      LOGICAL_STRUCTURE_LEFT,
       MIND_MAP,
       ORGANIZATION_STRUCTURE,
       CATALOG_ORGANIZATION,
@@ -458,6 +492,10 @@ class Drag extends Base {
             dir === LEFT
               ? lastNodeRect.originRight - this.placeholderWidth
               : lastNodeRect.originLeft
+          y = lastNodeRect.originBottom + this.minOffset - halfPlaceholderHeight
+          break
+        case LOGICAL_STRUCTURE_LEFT:
+          x = lastNodeRect.originRight - this.placeholderWidth
           y = lastNodeRect.originBottom + this.minOffset - halfPlaceholderHeight
           break
         case ORGANIZATION_STRUCTURE:
@@ -572,6 +610,12 @@ class Drag extends Base {
             nodeRect.originTop +
             (nodeRect.originHeight - this.placeholderHeight) / 2
           break
+        case LOGICAL_STRUCTURE_LEFT:
+          x = nodeRect.originLeft - this.placeholderWidth - marginX
+          y =
+            nodeRect.originTop +
+            (nodeRect.originHeight - this.placeholderHeight) / 2
+          break
         case ORGANIZATION_STRUCTURE:
           rotate = true
           x =
@@ -652,6 +696,7 @@ class Drag extends Base {
   getNewChildNodeDir(node) {
     const {
       LOGICAL_STRUCTURE,
+      LOGICAL_STRUCTURE_LEFT,
       MIND_MAP,
       TIMELINE2,
       VERTICAL_TIMELINE,
@@ -660,6 +705,8 @@ class Drag extends Base {
     switch (this.mindMap.opt.layout) {
       case LOGICAL_STRUCTURE:
         return CONSTANTS.LAYOUT_GROW_DIR.RIGHT
+      case LOGICAL_STRUCTURE_LEFT:
+        return CONSTANTS.LAYOUT_GROW_DIR.LEFT
       case MIND_MAP:
       case TIMELINE2:
       case VERTICAL_TIMELINE:

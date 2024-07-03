@@ -148,13 +148,13 @@ Move a node in front of another node.
 
 Move a node behind another node.
 
-### moveNodeToCenter(node)
+### moveNodeToCenter(node, resetScale)
 
 > v0.2.17+
 
-Move a node to the center of the canvas.
+- `resetScale`: v0.10.1+, Specify whether to reset the canvas scaling value to 100%. When you do not explicitly pass it, the default value is undefined, because the resetScaleOnMoveNodeToCenter configuration of the instantiation option also determines whether to reset scaling. Therefore, use the resetScaleOnMoveNodeToCenter configuration when you do not explicitly pass it, otherwise use the resetScale configuration
 
-Currently, if there is zoom, returning to the center will reset the zoom.
+Move a node to the center of the canvas.
 
 ### expandToNodeUid(uid, callback)
 

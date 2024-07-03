@@ -207,7 +207,7 @@ export const copyNodeTree = (
 }
 
 //  图片转成dataURL
-export const imgToDataUrl = src => {
+export const imgToDataUrl = (src, returnBlob = false) => {
   return new Promise((resolve, reject) => {
     const img = new Image()
     // 跨域图片需要添加这个属性，否则画布被污染了无法导出图片
@@ -220,7 +220,13 @@ export const imgToDataUrl = src => {
         let ctx = canvas.getContext('2d')
         // 图片绘制到canvas里
         ctx.drawImage(img, 0, 0, img.width, img.height)
-        resolve(canvas.toDataURL())
+        if (returnBlob) {
+          canvas.toBlob(blob => {
+            resolve(blob)
+          })
+        } else {
+          resolve(canvas.toDataURL())
+        }
       } catch (e) {
         reject(e)
       }
@@ -1368,7 +1374,8 @@ export const getNodeTreeBoundingRect = (
   y = 0,
   paddingX = 0,
   paddingY = 0,
-  excludeSelf = false
+  excludeSelf = false,
+  excludeGeneralization = false
 ) => {
   let minX = Infinity
   let maxX = -Infinity
@@ -1392,7 +1399,7 @@ export const getNodeTreeBoundingRect = (
         maxY = y + height
       }
     }
-    if (root._generalizationList.length > 0) {
+    if (!excludeGeneralization && root._generalizationList.length > 0) {
       root._generalizationList.forEach(item => {
         walk(item.generalizationNode)
       })
@@ -1410,6 +1417,49 @@ export const getNodeTreeBoundingRect = (
   maxX = maxX - x + paddingX
   maxY = maxY - y + paddingY
 
+  return {
+    left: minX,
+    top: minY,
+    width: maxX - minX,
+    height: maxY - minY
+  }
+}
+
+// 获取多个节点总的包围框
+export const getNodeListBoundingRect = (
+  nodeList,
+  x = 0,
+  y = 0,
+  paddingX = 0,
+  paddingY = 0
+) => {
+  let minX = Infinity
+  let maxX = -Infinity
+  let minY = Infinity
+  let maxY = -Infinity
+  nodeList.forEach(node => {
+    const { left, top, width, height } = getNodeTreeBoundingRect(
+      node,
+      x,
+      y,
+      paddingX,
+      paddingY,
+      false,
+      true
+    )
+    if (left < minX) {
+      minX = left
+    }
+    if (left + width > maxX) {
+      maxX = left + width
+    }
+    if (top < minY) {
+      minY = top
+    }
+    if (top + height > maxY) {
+      maxY = top + height
+    }
+  })
   return {
     left: minX,
     top: minY,

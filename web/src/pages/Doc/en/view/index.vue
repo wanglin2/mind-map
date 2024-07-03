@@ -63,6 +63,9 @@ getTransformData method&quot;</p>
 </blockquote>
 <ul>
 <li>
+<p><code>scale</code>: Scaling values, not scaled to '1', scaled to '1' for values less than, scaled to '1' for values greater than, scaled to '1' for values greater than</p>
+</li>
+<li>
 <p><code>cx</code>:（v0.6.4+）Zoom to the specified position on the canvas, default to the center point of the canvas</p>
 </li>
 <li>

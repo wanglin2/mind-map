@@ -58,20 +58,31 @@ to the <code>miniMapContainer</code> element and set <code>miniMapContainer</cod
 <p>At this point, when the mind map on the canvas changes, the small map will also
 be updated in real time, and the view box element will reflect the position of
 the viewport on the mind map graph in real time</p>
-<p>6.Listen for the <code>mousedown</code>, <code>mousemove</code>, and <code>mouseup</code> events of the
-<code>container</code> element, and call the three methods that will be introduced below to
-achieve the effect of the mind map on the canvas being dragged with the mouse</p>
+<p>6.Listen for the <code>mousedown</code>, <code>mousemove</code>events of the
+<code>container</code> element, And listen for the 'mouseup' event of the 'window' (if 'mouseup' is bound to the 'container' element, the entire dragging behavior of the 'container' element cannot be stopped when the mouse is moved out), and call the three methods that will be introduced below to achieve the effect of the mind map on the canvas being dragged with the mouse</p>
+<p>7.In v0.10.2+version, it supports dragging and dropping viewport boxes within the mini map to achieve synchronized dragging of the canvas, Implementing this feature can listen to the 'mousedown' of the 'viewBoxContainer' element（Need to prevent bubbles, otherwise it will trigger the 'mousedown' event of the 'container' element）、<code>mousemove</code> event, Call the 'onViewBoxMousedown' and 'onViewBoxMousemove' methods of the mini map plugin instance separately, At the same time, it is necessary to listen for the 'mini_map_view_box_position_change' event to update the viewBoxContainer element in real-time</p>
+<p>For detailed tutorials, please refer to<a href="https://wanglin2.github.io/mind-map/#/doc/zh/course14">How to render a mini map</a>。</p>
 <h3>onMousedown(e)</h3>
-<p>Small map mouse down event executes this function</p>
+<p>Small map mouse down event executes this function.</p>
 <p><code>e</code>: event object</p>
 <h3>onMousemove(e, sensitivityNum = 5)</h3>
 <p>This function is executed on the small map mouse move event.</p>
 <p><code>e</code>: event object</p>
 <p><code>sensitivityNum</code>: drag sensitivity, the higher the sensitivity, the greater the
 actual canvas dragging distance on the small map when dragging the same distance
-on the small map</p>
+on the small map.</p>
 <h3>onMouseup()</h3>
 <p>This function is executed on the small map mouse release event.</p>
+<h3>onViewBoxMousedown(e)</h3>
+<blockquote>
+<p>v0.10.2+</p>
+</blockquote>
+<p>Call this method for the viewport box element mouse down event.</p>
+<h3>onViewBoxMousemove(e)</h3>
+<blockquote>
+<p>v0.10.2+</p>
+</blockquote>
+<p>Call this method for the mouse movement event of the viewport box element.</p>
 
   </div>
 </template>

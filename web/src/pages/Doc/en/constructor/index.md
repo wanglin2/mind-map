@@ -28,7 +28,7 @@ const mindMap = new MindMap({
 | -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
 | el                               | Element |                  | Container element, must be a DOM element（When the position of container elements on the page has changed but the size has not changed, the 'getElRectInfo()' method must be called to update the relevant information inside the library; When the size also changes, the 'resize()' method must be called, otherwise it will cause some functional exceptions）                     | Yes      |
 | data                             | Object 、null  |     | Mind map data, Please refer to the introduction of 【Data structure】 below. V0.9.9+supports passing empty objects or null, and the canvas will display blank space |          |
-| layout                           | String  | logicalStructure | Layout type, options: logicalStructure (logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)、timeline（v0.5.4+, timeline）、timeline2（v0.5.4+, up down alternating timeline）、fishbone（v0.5.4+, fishbone diagram） |          |
+| layout                           | String  | logicalStructure | Layout type, options: logicalStructure (logical structure diagram), logicalStructureLeft(v0.10.2+, Leftward logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)、timeline（v0.5.4+, timeline）、timeline2（v0.5.4+, up down alternating timeline）、fishbone（v0.5.4+, fishbone diagram） |          |
 | fishboneDeg（v0.5.4+）                      | Number |  45          |    Set the diagonal angle of the fishbone structure diagram        |        |
 | theme                            | String  | default          | Theme, options: default, classic, minions, pinkGrape, mint, gold, vitalityOrange, greenLeaf, dark2, skyGreen, classic2, classic3, classic4(v0.2.0+), classicGreen, classicBlue, blueSky, brainImpairedPink, dark, earthYellow, freshGreen, freshRed, romanticPurple, simpleBlack(v0.5.4+), courseGreen(v0.5.4+), coffee(v0.5.4+), redSpirit(v0.5.4+), blackHumour(v0.5.4+), lateNightOffice(v0.5.4+), blackGold(v0.5.4+)、、avocado(v.5.10-fix.2+)、autumn(v.5.10-fix.2+)、orangeJuice(v.5.10-fix.2+) |          |
 | themeConfig                      | Object  | {}               | Theme configuration, will be merged with the selected theme, available fields refer to: [default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js) |          |
@@ -93,9 +93,11 @@ const mindMap = new MindMap({
 | handleNodePasteImg（v0.9.2+）     | null or Function | null  | The processing method for pasting images from the clipboard on a node is to convert them into data:URL data and insert them into the node by default. You can use this method to upload image data to the server and save the URL of the image. An asynchronous method can be passed to receive image data of Blob type, and the specified structure needs to be returned: { url, size: {width, height} }  |         |
 | isLimitMindMapInCanvas（v0.9.2+）     | Boolean |  false | Whether to limit the mind map within the canvas. For example, when dragging to the right, the leftmost part of the mind map graphic will not be able to continue dragging to the right when it reaches the center of the canvas, and the same applies to other things |         |
 | beforeShortcutRun（v0.9.9+）     | Function、null | null  | The lifecycle function before the shortcut operation is about to be executed, returning true can prevent the operation from executing. The function takes two parameters: key（Shortcut key）、activeNodeList（List of currently activated nodes） |         |
-| resetScaleOnMoveNodeToCenter（v0.9.12+）     | Boolean |  false | Whether to reset the scaling level to 100% when moving nodes to the canvas center, returning to the root node, and other operations（The underlying impact is on the moveNodeToCenter method of the render class） |         |
+| resetScaleOnMoveNodeToCenter（v0.9.12+）     | Boolean |  false | Whether to reset the scaling level to 100% when moving nodes to the canvas center, returning to the root node, and other operations（This option actually affects the render. moveNodeToCenter method, and the moveNodeToCenter method itself also has a second parameter, resetScale, to set whether to reset. If the resetScale parameter is not passed, then use resetScaleOnMoveNodeToCenter configuration; otherwise, use resetScale configuration） |         |
 | createNodePrefixContent（v0.9.12+）     | Function、null | null  | Add additional node pre content.Pre content refers to the pre content in the area of the same line as the text, excluding the node image section.You can pass a function that takes the parameters of a node instance, Can return objects in {el, width, height} format, el is a DOM node object, width and height represent the width, height, and numerical type of the content. If custom content is not required, null can also be returned  |         |
 | createNodePostfixContent（v0.9.12+）     | Function、null | null  | Add additional node post content.Post content refers to the post content in the area of the same line as the text, excluding the node image section. The usage is the same as createNodePrefixContent |         |
+| disabledClipboard（v0.10.2+）     | Boolean | false | Is prohibit pasting data from the user's clipboard and writing copied node data to the user's clipboard. At this time, only node data from the canvas can be copied and pasted |         |
+| customHyperlinkJump（v0.10.2+）     | null、Function | false | Customize the jump of hyperlinks. If not passed, the hyperlink will be opened as a new window by default, and a function can be passed, The function takes two parameters: link（The URL of the hyperlink）、node（Node instance to which it belongs）, As long as a function is passed, it will block the default jump |         |
 
 ### 1.1Data structure
 
@@ -159,6 +161,7 @@ If you want to add custom fields, you can add them to the same level as 'data' a
 | minExportImgCanvasScale（v0.7.0+）     | Number  | 2  | The scaling factor of canvas when exporting images and PDFs, which is set to the maximum value of window.devicePixelRatio to improve image clarity |          |
 | addContentToHeader（v0.9.9+）     | Function、null | null  | Add custom content to the header when exporting PNG, SVG, and PDF. Can pass a function that can return null to indicate no content is added, or it can return an object, For a detailed introduction, please refer to section 【How to add custom content when exporting】 below |         |
 | addContentToFooter（v0.9.9+）     | Function、null | null  | The basic definition is the same as addContentToHeader, adding custom content at the end |         |
+| handleBeingExportSvg（v0.10.1+）     | Function、null | null  | When exporting PNG, SVG, and PDF, the SVG data on the canvas will be obtained for cloning, and then exported through the cloned elements. If you want to do some processing on the cloned elements, such as adding, replacing, or modifying some of them, you can pass a processing function through this parameter to receive the SVG element object. After processing, you need to return the original SVG element object.（It should be noted that the node object refers to the element object of the @ svgdotjs/svg. js library, so you need to read the documentation of the library to operate this object） |         |
 
 #### 2.1How to add custom content when exporting
 
@@ -213,6 +216,9 @@ new MindMap({
 | dragPlaceholderRectFill（v0.7.2+）     |  String |  rgb(94, 200, 248) | The filling color of the schematic rectangle for the new position when dragging nodes. |          |
 | dragPlaceholderLineConfig（v0.10.0+）     |  Object | { color: 'rgb(94, 200, 248)',  width: 2 }  | Style configuration of schematic lines for new positions when dragging nodes |          |
 | dragOpacityConfig（v0.7.2+）     | Object  | { cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }  | The transparency configuration during node dragging, passing an object, and the field meanings are: the transparency of the cloned node or rectangle that follows the mouse movement, and the transparency of the dragged node |          |
+| beforeDragEnd（v0.10.1+）     | null、Function  | null  | This function is called just before the drag is completed. The function receives an object as a parameter: {overlapNodeUid,prevNodeUid,nextNodeUid,beingDragNodeList}, represents drag and drop information. If you want to prevent this drag and drop, you can return true. At this time, the node.drag event will not be triggered again. Functions can be asynchronous and return Promise instances. 'beingDragNodeList' is a newly added callback parameter for v0.10.2+, which is the list of nodes that are currently being dragged |          |
+| handleDragCloneNode（v0.10.1+）     | null、Function  | null  | When dragging a single node, the dragged node will be cloned. If you want to modify the cloned node, you can provide a processing function through this option, which receives the cloned node object.（It should be noted that the node object refers to the element object of the @svgdotjs/svg.js library, so you need to read the documentation of the library to operate this object） |          |
+| beforeDragStart（v0.10.2+）     | null、Function（(nodeList) => {}）  | null  | This function is called just before the node is dragged. The function receives the list of node instances to be dragged as parameters. If you want to prevent this drag, you can return true. It can be an asynchronous function that returns a Promise instance |          |
 
 ### 5.Watermark plugin
 
@@ -256,6 +262,8 @@ new MindMap({
 | Field Name                       | Type    | Default Value    | Description                                 | Required |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
 | disableTouchZoom（v0.8.1+）     | Boolean | false  |  Prohibit double finger scaling, you can still use the API for scaling, which takes effect on the TouchEvent plugin |         |
+| minTouchZoomScale（v0.10.1+）     | Number | 20  | Allow maximum and minimum scaling values, percentage, pass -1 to indicate no restrictions  |         |
+| maxTouchZoomScale（v0.10.1+）     | Number | -1  |  Same as minTouchZoomScale |         |
 
 ### 9.Scrollbar plugin
 
@@ -546,7 +554,7 @@ Listen to an event. Event list:
 | node_active                      | Node activation event                                                    | this (node instance), activeNodeList (current list of active nodes)                                             |
 | expand_btn_click                 | Node expand or collapse event                                            | this (node instance)                                                                                            |
 | before_show_text_edit            | Event before node text edit box opens                                    |                                                                                                                 |
-| hide_text_edit                   | Node text edit box close event                                           | textEditNode (text edit box DOM node), activeNodeList (current list of active nodes)                            |
+| hide_text_edit                   | Node text edit box close event【The end of text editing for the associated line will also trigger this event, and there are no callback parameters at this time, so defensive programming is necessary】    | textEditNode (text edit box DOM node), activeNodeList (current list of active nodes) 、node（v0.10.2+, Node instance for current text editing）                 |
 | scale                            | Canvas zoom event                                                               | scale (zoom ratio)                                            |
 | translate（v0.9.10+）         |   Canvas movement event           | x（translate x）、y（translate y）                     |
 | node_img_dblclick（v0.2.15+）    | Node image double-click event                                            | this (node instance), e (event object)                                                                          |
@@ -579,6 +587,9 @@ Listen to an event. Event list:
 | exit_demonstrate（v0.9.11+）    | Triggered when exiting demonstration mode  |     |
 | demonstrate_jump（v0.9.11+）    | Trigger when switching steps in demonstration mode  |  currentStepIndex（The index of the steps currently played, counting from 0）、stepLength（Total number of playback steps）   |
 | node_tag_click（v0.9.12+）    | Click events on node labels | this(Current node instance)、item（Content of clicked tags）    |
+| node_layout_end（v0.10.1+）    | Event where the content layout of a single node is completed | this(Current node instance)  |
+| node_attachmentClick（v0.9.10+）    | Click event for node attachment icon | this(Current node instance)、e（Event Object）、node（Icon node）  |
+| node_attachmentContextmenu（v0.9.10+）    | Right click event on node attachment icon | this(Current node instance)、e（Event Object）、node（Icon node）  |
 
 ### emit(event, ...args)
 
