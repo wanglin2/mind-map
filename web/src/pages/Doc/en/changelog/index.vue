@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Changelog</h1>
-<h2>0.10.2</h2>
+<h2>0.10.2 / 0.10.2-fix.1</h2>
 <blockquote>
 <p>2024.7.3</p>
 </blockquote>
