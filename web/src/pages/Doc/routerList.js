@@ -65,6 +65,7 @@ export default [
       { path: 'cooperate', title: 'Cooperate插件' },
       { path: 'rainbowLines', title: 'RainbowLines插件' },
       { path: 'demonstrate', title: 'Demonstrate插件' },
+      { path: 'outerFrame', title: 'OuterFrame插件' },
       { path: 'handDrawnLikeStyle', title: 'HandDrawnLikeStyle收费插件' },
       { path: 'notation', title: 'Notation收费插件' },
       { path: 'help1', title: '概要/关联线' },
@@ -111,6 +112,7 @@ export default [
       { path: 'cooperate', title: 'Cooperate plugin' },
       { path: 'rainbowLines', title: 'RainbowLines plugin' },
       { path: 'demonstrate', title: 'Demonstrate plugin' },
+      { path: 'outerFrame', title: 'OuterFrame plugin' },
       {
         path: 'handDrawnLikeStyle',
         title: 'HandDrawnLikeStyle chargeable plugin'

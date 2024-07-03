@@ -35,15 +35,31 @@
 </code></pre>
 <p>5.将viewBoxStyle对象设置为viewBoxContainer元素的样式</p>
 <p>到这一步，当画布上的思维导图变化了，小地图也会实时更新，并且视口框元素会实时反映视口在思维导图图形上的位置</p>
-<p>6.监听container元素的mousedown、mousemove、mouseup事件，分别调用小地图插件实例的三个方法即可实现鼠标拖动时画布上的思维导图也随之拖动的效果</p>
+<p>6.监听container元素的mousedown、mousemove事件，并且监听window的mouseup事件（如果将mouseup绑定到container元素上，那么鼠标移出container元素整个拖拽行为无法停止），分别调用小地图插件实例的三个方法即可实现鼠标拖动时画布上的思维导图也随之拖动的效果</p>
 <p>插件的完整信息可以参考<a href="https://wanglin2.github.io/mind-map/#/doc/zh/miniMap">miniMap</a>。</p>
 <p>在<code>v0.8.0+</code>版本之后，<code>calculationMiniMap</code>方法会返回<code>getImgUrl</code>属性，这是一个异步函数，你可以调用它并传递一个回调函数，回调函数可以接收一个参数，代表小地图图片数据，然后可以通过<code>img</code>标签进行渲染，替代前面的<code>svgHTML</code>，这样可以减少页面上的节点数量，能优化一定的性能：</p>
 <pre class="hljs"><code>getImgUrl(<span class="hljs-function"><span class="hljs-params">img</span> =&gt;</span> {
     img.src = img
 })
 </code></pre>
+<p>在<code>v0.10.2+</code>版本之后，支持拖拽小地图内的视口框元素来同步移动画布位置，也就是可以拖拽<code>viewBoxContainer</code>元素，要实现这个特性，需要监听<code>viewBoxContainer</code>元素的<code>mousedown</code>（需要阻止冒泡，否则会触发container元素的mousedown事件）、<code>mousemove</code>事件，分别调用小地图插件实例的方法：</p>
+<pre class="hljs"><code><span class="hljs-comment">// mousedown事件调用</span>
+mindMap.miniMap.onViewBoxMousedown(e)
+<span class="hljs-comment">// mousemove事件调用</span>
+mindMap.miniMap.onViewBoxMousemove(e)
+</code></pre>
+<p>同时需要监听<code>mini_map_view_box_position_change</code>事件来实时更新<code>viewBoxContainer</code>元素：</p>
+<pre class="hljs"><code>mindMap.on(<span class="hljs-string">&#x27;mini_map_view_box_position_change&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">{ left, right, top, bottom }</span>) =&gt;</span> {
+    viewBoxStyle.left = left
+    viewBoxStyle.right = right
+    viewBoxStyle.top = top
+    viewBoxStyle.bottom = bottom
+})
+</code></pre>
+<p>需要注意，如果你给<code>viewBoxContainer</code>元素设置了<code>css</code>的<code>transition</code>属性来增加过渡效果，那么在<code>mini_map_view_box_position_change</code>事件里需要临时去除，否则拖动会不流畅，可以在前面的<code>mouseup</code>事件里恢复。</p>
 <h2>完整示例</h2>
-<iframe style="width: 100%; height: 455px; border: none;" src="https://wanglin2.github.io/playground/#eNrFVt2O20QUfpWRASULWSfbUgQhW5UCEkgNQqUSF0yVeu1J4sqesTzjJFWUm4oLhEBcIH6LBFyBhBStEBdsJXgaki1vwTn2jD12stpy1ZU28sz3nZ85c35m6byRJO4sY07fGUg/DRNFJFNZcp3yME5EqsiSpGzcIYIPRcYVCzpETr0oEvPbbExWZJyKmLRAQ6uUGIY8GHpJAVFHwnbEDmPYPYy9hDqUE0J5xBTBPWQeE55FEeWUd7tkc/rF5ofTzaO/N+uzzXe/nn//8Wb917+/fUu5L7hUBH6VF3KWfhgGagqyR73eDvYOCydTBeA1wHK120d/bL8+LZUbCXAhBBfeNIIgAudtoz8HhjML2fymWHygHkRM48tViWoNSPC9knC0B7/FxugSwr098B2BkaijWRJ4ikFEwyGC7QNyfJ0sMYJwpCfrn8/X35RH2n51uv18jRjGFuQ8kNAhdrUZF1z0s8hTIVxosdWuB7TTDCL4klvb/vn79scvN5/YMSQ78XNnXpQxN+Qof2d4C1xAT1w5m+ASRexwFnRDshFLuQltndwA63wM9UV0xOpsiPxFZIAoX2EOFReS14FkgZhzvA9WXUgz0hYTaPuUxGKGFp9CCTIvUJLleXG5iiypFJTF3LYSyipGNjdF3M4hQljUJ4Hws5hx5U6Yejti+HnzwbtBu6UlyxxoHXQKKYxlv9COf9TBDepYW8W2YguF29TZ/nT25NOH5w/PijaBfyutDIn+NIyClHEkf1TpaKjba6Vp6Z/Hn50//qVprG5wj9G7FWbznpEH5lPvGTm4eXVbCPWeCNj7QoZY7SDZiiDzWx3S8uHq4Jru5vTVwetFR65SR/B2C48w8qcenzAQsftQ3hBsKpbt6H/wObg1UiljIzhTwNIR/O7KYIcddIuhBOMIForBJAEKrAgZBOGM+JEn5TF1tPa3oFCok8OaEAYVWuYnUAZdQG2iiaTRWDbB6mZuxKaeAbeq2zCoKhhYrBUDV01GllR4piciIdodqmoOWT41ey11bBYMjr0ci9KX2FmB1chLlXpcjkUa98k9ic20/fyy0V5XB/dqSYlDZqz6zen2Emkli1aDqURiE3HOFbyysBVVq8pTHYgc0V/2fTXuXg8NOyrlOWsDpXHr5bf5GnStBINlriRn3NAvG+q43eI5o9ujy2Ts+lJSp6wh7LsmF039z3Gw9vGh8kLOIyQpqzJlOI1nLAfygsb/55o5a1RVgt6JFFGmCkFzHT29ykNuFrvmp/lk75OXe71kYSzvt/uisRx76SQEu0Zr4gVByCdmo3TdLUvnKX0+Mj5ot6115Xm5ZVy/ZnleRb7+lrvMfpn3hyIN88OhR+hFQ3Mzxy7VfCJSaGx9ciVZEADCgKSTk/aVq692yCuv4X/RdLULRkcUkZ57VRrj0P3yFHQ6TpGA+H5270vB4bmee0A1AAlYDhvI+gySHSeM24VPN4VRH8YMc/XwJBVzCa+0+yChq3TPC72Q3c10lNK+rZzVf9RSHZw=" />
+<p>在线Demo小地图代码：<a href="https://github.com/wanglin2/mind-map/blob/main/web/src/pages/Edit/components/Navigator.vue">Navigator.vue</a>。</p>
+<iframe style="width: 100%; height: 455px; border: none;" src="https://wanglin2.github.io/playground/#eNrFV1tvG0UU/iujBWQHnLXbUgQmqUpLJZAShEoED2zlbrxje6v1zmp3bKeyLEGFArSp8sCt0EqkApFKSFGEEGrShl/jS/LEX+Cc2Znd2bXdhCcs2d6Z853LnDm37RvvBIHZ7VCjaixF9dANOIko7wSXLN9tByzkpE9C2igR5q+yjs+pUyJRy/Y81rtOG2RAGiFrkwJIKCQcq67vrNpBTLKMCLY9utiG3cW2HViG5RNi+R7lBPcQuUz8judZvuWXy2S0vz16tD96+Pdo72D045PJT1+M9o5Ofn9g+XXmR5zAL7ddn4afuA5vAe+5SmWK9h51my0OxItAE2LHD/8cf7+fCFccYIILJlxVjMAC5y2iPQsK03Vp7wrb+Ijf9qik9wcJtefy1lpo+5HLXeZLOg87NEFIHSiibicizs2gr9AGGo3kygzyGkNfZamdwLE5BZ+7q0gsLpDlS6SPPoZDH+89nuz9kBx6/N3++P4e0tD7wGcDh7wEU6oxwcR6x7PxMEKqHRSzLi/l3Qy2CG3jp3+Mf/5m9JXuZTLlYbNrex1quj7yr62ugAloiRl1m7hEFt3hMVyBdIomXLk2C84Rs3h09Tw40rJo8Pw8MJAsf4BRFl+IyJSIOqyHwVCk6YXkPa0hATZLSJt1UeMZhCByjpCOiAtNRDZik3NhzL5AQydI5WNo7W6Otn8ZP96EBD15vjPe+XK89fXw6b3h4b3hs79SEz6Ob+zsPskzKK0zdU52n43uPnmRzjO5MM8w96TDo/uTo73Rr7sQ4uNvD0bbD4aHm/883zp59Nnxb5/HNWbKjg9Z7OmrLdtvCmP6kIANXiIhpk+JcBaUyDrjHArm4NR7atheJC5qOk1MFAsQ/JuDECqxiuD/HAzYg/GAgT2TLk1dljZLVyUtoqgVIa3E055qDUVBIoR6VeKweqdNfW42Kb/mUXy8cvt9p1iQnEndKCyUYi7Mv2osHT+WgRuWoW3F25xucNy2jPHOwfHdO5M7B3Hzwc9ACkNgveV6Tkh9BH+aysiJm6klr2l4uDU53M0ryyqcofRGStNx/5MF6lHuKT7IFn6dMf4Bc6gKaeAsYLAVSqRQh6uDa7oh4IOFt+M+n6Yb84sFPEKtLvIAWPTeJZqIDsW4q/0HvA9m1XhIaQ3O5NCwBr+zeHrAw3qm7TjXumDxihtxCuEFARdXOeBJKt6UEiwZNZhiasK6dbZRC6QnUivn5D1WFPguleM5CyYsWHAKwxHYBytClhy3S+qeHUXLliG1vgv1yDIEWQJcJ6UmyQGQpTJQdaC6RiUx6dppWFwWZ8YqC3StHSmExWME1sQUgSuFkAotnlGpac23f8vQUTDLzMRokGqElQdQubDnWBkbLGxXyc0I+3vx5X6u4w8WbmZiHueeBq/mB67XSCHYKOSQUP10II5eMS6pG9zig9RS6QhBkU/6jeTuRPeQLLBzPJSePzP75DBKVj/XNKr58VSzOBsAZgQnFnecb8ApBx45FxD5zqmJz0Zk8qyelspa8MNSHFMgLssXCcswy/Hbg+wbJo3aZj2KLCMpLtjEVZ6owtjDKbWK7wWvCBwhKkmrEHA42napIIhKh9+X8vmkRKWM9nrEvA6PGVUgVeRKBItaTKtviTG5Sl6vVIINpXm23leV5rYdNl3Qq6QGULBcv6k2EtPNJK3PaPM5ZYM0W1unlidbyvSLmuWp57OvTqfpTzJ2kcH0gYcT4wpYkZOcz4hTJa+zECp+lZwPNggQXIeEzfXi+Qtvlsgbb+E37kbSBCXD80jFvBCdotzMZVBShubKEtKgzouANkpGHM748mveipgP79pChiUJEM5JT4cshyFcNHKzDI9mCBOV26YY+YvrIetFYNAt4JDVasbrdcw7nTfIJU86MAb/Ak6Okok=" />
   </div>
 </template>
 

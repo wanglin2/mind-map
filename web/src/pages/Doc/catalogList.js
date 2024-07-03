@@ -42,6 +42,7 @@ let APIList = [
   'handDrawnLikeStyle',
   'demonstrate',
   'notation',
+  'outerFrame',
   'xmind',
   'markdown',
   'utils'

@@ -47,7 +47,7 @@
 <td>layout</td>
 <td>String</td>
 <td>logicalStructure</td>
-<td>Layout type, options: logicalStructure (logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)、timeline（v0.5.4+, timeline）、timeline2（v0.5.4+, up down alternating timeline）、fishbone（v0.5.4+, fishbone diagram）</td>
+<td>Layout type, options: logicalStructure (logical structure diagram), logicalStructureLeft(v0.10.2+, Leftward logical structure diagram), mindMap (mind map), catalogOrganization (catalog organization diagram), organizationStructure (organization structure diagram)、timeline（v0.5.4+, timeline）、timeline2（v0.5.4+, up down alternating timeline）、fishbone（v0.5.4+, fishbone diagram）</td>
 <td></td>
 </tr>
 <tr>
@@ -519,6 +519,20 @@
 <td>Add additional node post content.Post content refers to the post content in the area of the same line as the text, excluding the node image section. The usage is the same as createNodePrefixContent</td>
 <td></td>
 </tr>
+<tr>
+<td>disabledClipboard（v0.10.2+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Is prohibit pasting data from the user's clipboard and writing copied node data to the user's clipboard. At this time, only node data from the canvas can be copied and pasted</td>
+<td></td>
+</tr>
+<tr>
+<td>customHyperlinkJump（v0.10.2+）</td>
+<td>null、Function</td>
+<td>false</td>
+<td>Customize the jump of hyperlinks. If not passed, the hyperlink will be opened as a new window by default, and a function can be passed, The function takes two parameters: link（The URL of the hyperlink）、node（Node instance to which it belongs）, As long as a function is passed, it will block the default jump</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>1.1Data structure</h3>
@@ -781,7 +795,7 @@
 <td>beforeDragEnd（v0.10.1+）</td>
 <td>null、Function</td>
 <td>null</td>
-<td>This function is called just before the drag is completed. The function receives an object as a parameter: {overlapNodeUid,prevNodeUid,nextNodeUid}, represents drag and drop information. If you want to prevent this drag and drop, you can return true. At this time, the node.drag event will not be triggered again. Functions can be asynchronous and return Promise instances</td>
+<td>This function is called just before the drag is completed. The function receives an object as a parameter: {overlapNodeUid,prevNodeUid,nextNodeUid,beingDragNodeList}, represents drag and drop information. If you want to prevent this drag and drop, you can return true. At this time, the node.drag event will not be triggered again. Functions can be asynchronous and return Promise instances. 'beingDragNodeList' is a newly added callback parameter for v0.10.2+, which is the list of nodes that are currently being dragged</td>
 <td></td>
 </tr>
 <tr>
@@ -789,6 +803,13 @@
 <td>null、Function</td>
 <td>null</td>
 <td>When dragging a single node, the dragged node will be cloned. If you want to modify the cloned node, you can provide a processing function through this option, which receives the cloned node object.（It should be noted that the node object refers to the element object of the @svgdotjs/svg.js library, so you need to read the documentation of the library to operate this object）</td>
+<td></td>
+</tr>
+<tr>
+<td>beforeDragStart（v0.10.2+）</td>
+<td>null、Function（(nodeList) =&gt; {}）</td>
+<td>null</td>
+<td>This function is called just before the node is dragged. The function receives the list of node instances to be dragged as parameters. If you want to prevent this drag, you can return true. It can be an asynchronous function that returns a Promise instance</td>
 <td></td>
 </tr>
 </tbody>

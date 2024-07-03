@@ -81,13 +81,16 @@ At this point, when the mind map on the canvas changes, the small map will also
 be updated in real time, and the view box element will reflect the position of
 the viewport on the mind map graph in real time
 
-6.Listen for the `mousedown`, `mousemove`, and `mouseup` events of the
-`container` element, and call the three methods that will be introduced below to
-achieve the effect of the mind map on the canvas being dragged with the mouse
+6.Listen for the `mousedown`, `mousemove`events of the
+`container` element, And listen for the 'mouseup' event of the 'window' (if 'mouseup' is bound to the 'container' element, the entire dragging behavior of the 'container' element cannot be stopped when the mouse is moved out), and call the three methods that will be introduced below to achieve the effect of the mind map on the canvas being dragged with the mouse
+
+7.In v0.10.2+version, it supports dragging and dropping viewport boxes within the mini map to achieve synchronized dragging of the canvas, Implementing this feature can listen to the 'mousedown' of the 'viewBoxContainer' element（Need to prevent bubbles, otherwise it will trigger the 'mousedown' event of the 'container' element）、`mousemove` event, Call the 'onViewBoxMousedown' and 'onViewBoxMousemove' methods of the mini map plugin instance separately, At the same time, it is necessary to listen for the 'mini_map_view_box_position_change' event to update the viewBoxContainer element in real-time
+
+For detailed tutorials, please refer to[How to render a mini map](https://wanglin2.github.io/mind-map/#/doc/zh/course14)。
 
 ### onMousedown(e)
 
-Small map mouse down event executes this function
+Small map mouse down event executes this function.
 
 `e`: event object
 
@@ -99,8 +102,20 @@ This function is executed on the small map mouse move event.
 
 `sensitivityNum`: drag sensitivity, the higher the sensitivity, the greater the
 actual canvas dragging distance on the small map when dragging the same distance
-on the small map
+on the small map.
 
 ### onMouseup()
 
 This function is executed on the small map mouse release event.
+
+### onViewBoxMousedown(e)
+
+> v0.10.2+
+
+Call this method for the viewport box element mouse down event.
+
+### onViewBoxMousemove(e)
+
+> v0.10.2+
+
+Call this method for the mouse movement event of the viewport box element.

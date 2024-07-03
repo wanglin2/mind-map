@@ -28,7 +28,7 @@ const mindMap = new MindMap({
 | -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
 | el                               | Element |                  | 容器元素，必传，必须为DOM元素（当容器元素在页面上的位置发生了改变，但大小没有改变的情况下必须调用`getElRectInfo()`方法更新库内部的相关信息；当大小也发生了改变后必须调用`resize()`方法，否则会造成一些功能异常）              |
 | data                             | Object 、 null  |   | 思维导图数据，可参考下方【数据结构】介绍。v0.9.9+支持传空对象或者null，画布会显示空白 |
-| layout                           | String  | logicalStructure | 布局类型，可选列表：logicalStructure（逻辑结构图）、mindMap（思维导图）、catalogOrganization（目录组织图）、organizationStructure（组织结构图）、timeline（v0.5.4+，时间轴）、timeline2（v0.5.4+，上下交替型时间轴）、fishbone（v0.5.4+，鱼骨图） |
+| layout                           | String  | logicalStructure | 布局类型，可选列表：logicalStructure（逻辑结构图）、logicalStructureLeft（v0.10.2+，向左逻辑结构图）、mindMap（思维导图）、catalogOrganization（目录组织图）、organizationStructure（组织结构图）、timeline（v0.5.4+，时间轴）、timeline2（v0.5.4+，上下交替型时间轴）、fishbone（v0.5.4+，鱼骨图） |
 | fishboneDeg（v0.5.4+）                      | Number |  45          |  设置鱼骨结构图的斜线角度               |
 | theme                            | String  | default          | 主题，可选列表：default（默认）、classic（脑图经典）、minions（小黄人）、pinkGrape（粉红葡萄）、mint（薄荷）、gold（金色vip）、vitalityOrange（活力橙）、greenLeaf（绿叶）、dark2（暗色2）、skyGreen（天清绿）、classic2（脑图经典2）、classic3（脑图经典3）、classic4（脑图经典4，v0.2.0+）、classicGreen（经典绿）、classicBlue（经典蓝）、blueSky（天空蓝）、brainImpairedPink（脑残粉）、dark（暗色）、earthYellow（泥土黄）、freshGreen（清新绿）、freshRed（清新红）、romanticPurple（浪漫紫）、simpleBlack（v0.5.4+简约黑）、courseGreen（v0.5.4+课程绿）、coffee（v0.5.4+咖啡）、redSpirit（v0.5.4+红色精神）、blackHumour（v0.5.4+黑色幽默）、lateNightOffice（v0.5.4+深夜办公室）、blackGold（v0.5.4+黑金）、avocado（v.5.10-fix.2+牛油果）、autumn（v.5.10-fix.2+秋天）、orangeJuice（v.5.10-fix.2+橙汁） |
 | themeConfig                      | Object  | {}               | 主题配置，会和所选择的主题进行合并，可用字段可参考：[default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js) |
@@ -96,6 +96,8 @@ const mindMap = new MindMap({
 | resetScaleOnMoveNodeToCenter（v0.9.12+）     | Boolean |  false | 移动节点到画布中心、回到根节点等操作时是否将缩放层级复位为100%（该选项实际影响的是render.moveNodeToCenter方法，moveNodeToCenter方法本身也存在第二个参数resetScale来设置是否复位，如果resetScale参数没有传递，那么使用resetScaleOnMoveNodeToCenter配置，否则使用resetScale配置）。 |
 | createNodePrefixContent（v0.9.12+）     | Function、null | null  | 添加附加的节点前置内容。前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分。可以传递一个函数，这个函数接收一个节点实例的参数，可以返回{el, width, height}格式的对象，el为DOM节点对象，width和height代表内容的宽高，数字类型，如果不需要自定义内容，也可以返回null |
 | createNodePostfixContent（v0.9.12+）     | Function、null | null  | 添加附加的节点后置内容。后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分。用法同createNodePrefixContent |
+| disabledClipboard（v0.10.2+）     | Boolean | false | 是否禁止粘贴用户剪贴板中的数据，禁止将复制的节点数据写入用户的剪贴板中，此时只能复制和粘贴画布内的节点数据 |
+| customHyperlinkJump（v0.10.2+）     | null、Function | false | 自定义超链接的跳转。如果不传，默认会以新窗口的方式打开超链接，可以传递一个函数，函数接收两个参数：link（超链接的url）、node（所属节点实例），只要传递了函数，就会阻止默认的跳转 |
 
 #### 1.1数据结构
 
@@ -217,8 +219,9 @@ new MindMap({
 | dragPlaceholderRectFill（v0.7.2+）     |  String | rgb(94, 200, 248)  | 节点拖拽时新位置的示意矩形的填充颜色 |
 | dragPlaceholderLineConfig（v0.10.0+）     |  Object | { color: 'rgb(94, 200, 248)',  width: 2 }  | 节点拖拽时新位置的示意连线的样式配置 |
 | dragOpacityConfig（v0.7.2+）     | Object  | { cloneNodeOpacity: 0.5, beingDragNodeOpacity: 0.3 }  | 节点拖拽时的透明度配置，传递一个对象，字段含义分别为：跟随鼠标移动的克隆节点或矩形的透明度、被拖拽节点的透明度 |
-| beforeDragEnd（v0.10.1+）     | null、Function  | null  | 即将拖拽完成前调用该函数，函数接收一个对象作为参数：{overlapNodeUid,prevNodeUid,nextNodeUid}，代表拖拽信息，如果要阻止本次拖拽，那么可以返回true，此时node_dragend事件不会再触发。函数可以是异步函数，返回Promise实例 |
+| beforeDragEnd（v0.10.1+）     | null、Function  | null  | 即将拖拽完成前调用该函数，函数接收一个对象作为参数：{overlapNodeUid,prevNodeUid,nextNodeUid,beingDragNodeList}，代表拖拽信息，如果要阻止本次拖拽，那么可以返回true，此时node_dragend事件不会再触发。函数可以是异步函数，返回Promise实例。beingDragNodeList为v0.10.2+新增的回调参数，为当前被拖拽的节点列表 |
 | handleDragCloneNode（v0.10.1+）     | null、Function  | null  | 拖拽单个节点时会克隆被拖拽节点，如果想修改该克隆节点，那么可以通过该选项提供一个处理函数，函数接收克隆节点对象。（需要注意的是节点对象指的是@svgdotjs/svg.js库的元素对象，所以你需要阅读该库的文档来操作该对象） |
+| beforeDragStart（v0.10.2+）     | null、Function（(nodeList) => {}）  | null  | 即将开始拖拽节点前调用该函数，函数接收当前即将被拖拽的节点实例列表作为参数，如果要阻止本次拖拽，那么可以返回true。可以是异步函数，返回一个Promise实例 |
 
 ### 5.Watermark插件
 

@@ -47,16 +47,28 @@ MindMap.usePlugin(MiniMap)
 </code></pre>
 <p>5.将<code>viewBoxStyle</code>对象设置为<code>viewBoxContainer</code>元素的样式</p>
 <p>到这一步，当画布上的思维导图变化了，小地图也会实时更新，并且视口框元素会实时反映视口在思维导图图形上的位置</p>
-<p>6.监听<code>container</code>元素的<code>mousedown</code>、<code>mousemove</code>、<code>mouseup</code>事件，分别调用下面即将介绍的三个方法即可实现鼠标拖动时画布上的思维导图也随之拖动的效果</p>
+<p>6.监听<code>container</code>元素的<code>mousedown</code>、<code>mousemove</code>事件，并且监听<code>window</code>的<code>mouseup</code>事件（如果将<code>mouseup</code>绑定到<code>container</code>元素上，那么鼠标移出<code>container</code>元素整个拖拽行为无法停止），分别调用下面即将介绍的三个方法即可实现鼠标拖动时画布上的思维导图也随之拖动的效果</p>
+<p>7.在v0.10.2+版本，支持拖拽小地图内的视口框来实现同步拖拽画布，实现该特性可以监听<code>viewBoxContainer</code>元素的<code>mousedown</code>（需要阻止冒泡，否则会触发<code>container</code>元素的<code>mousedown</code>事件）、<code>mousemove</code>事件，分别调用小地图插件实例的<code>onViewBoxMousedown</code>和<code>onViewBoxMousemove</code>方法，同时需要监听mini_map_view_box_position_change事件来实时更新viewBoxContainer元素。</p>
+<p>详细教程请参考<a href="https://wanglin2.github.io/mind-map/#/doc/zh/course14">如何渲染一个小地图</a>。</p>
 <h3>onMousedown(e)</h3>
-<p>小地图鼠标按下事件执行该函数</p>
+<p>小地图鼠标按下事件执行该函数。</p>
 <p><code>e</code>：事件对象</p>
 <h3>onMousemove(e, sensitivityNum = 5)</h3>
-<p>小地图鼠标移动事件执行该函数</p>
+<p>小地图鼠标移动事件执行该函数。</p>
 <p><code>e</code>：事件对象</p>
 <p><code>sensitivityNum</code>：拖动灵敏度，灵敏度越大，在小地图上拖动相同距离时实际上的画布拖动距离就越大</p>
 <h3>onMouseup()</h3>
-<p>小地图鼠标松开事件执行该函数</p>
+<p>小地图鼠标松开事件执行该函数。</p>
+<h3>onViewBoxMousedown(e)</h3>
+<blockquote>
+<p>v0.10.2+</p>
+</blockquote>
+<p>视口框元素鼠标按下事件调用该方法。</p>
+<h3>onViewBoxMousemove(e)</h3>
+<blockquote>
+<p>v0.10.2+</p>
+</blockquote>
+<p>视口框元素鼠标移动事件调用该方法。</p>
 
   </div>
 </template>

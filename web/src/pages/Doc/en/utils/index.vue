@@ -66,7 +66,15 @@ basic data, otherwise it will throw an error</p>
 and copying the <code>data</code> of the data object, example:</p>
 <pre class="hljs"><code>copyNodeTree({}, node);
 </code></pre>
-<h4>imgToDataUrl(src)</h4>
+<h4>imgToDataUrl(src, returnBlob = false)</h4>
+<ul>
+<li>
+<p><code>src</code>：Image url</p>
+</li>
+<li>
+<p><code>returnBlob</code>：v0.10.2+，Is the result returned in Blob format, defaulting to DataURL format</p>
+</li>
+</ul>
 <p>Convert image to dataURL</p>
 <h4>downloadFile(file, fileName)</h4>
 <p>Download file</p>
