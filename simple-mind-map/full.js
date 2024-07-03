@@ -17,6 +17,7 @@ import Scrollbar from './src/plugins/Scrollbar.js'
 import Formula from './src/plugins/Formula.js'
 import RainbowLines from './src/plugins/RainbowLines.js'
 import Demonstrate from './src/plugins/Demonstrate.js'
+import OuterFrame from './src/plugins/OuterFrame.js'
 import xmind from './src/parse/xmind.js'
 import markdown from './src/parse/markdown.js'
 import icons from './src/svg/icons.js'
@@ -30,7 +31,7 @@ MindMap.iconList = icons.nodeIconList
 MindMap.constants = constants
 MindMap.themes = themes
 MindMap.defaultTheme = defaultTheme
-MindMap.version = '0.10.1'
+MindMap.version = '0.10.2'
 
 MindMap.usePlugin(MiniMap)
   .usePlugin(Watermark)
@@ -50,5 +51,6 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(Formula)
   .usePlugin(RainbowLines)
   .usePlugin(Demonstrate)
+  .usePlugin(OuterFrame)
 
 export default MindMap
