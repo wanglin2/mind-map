@@ -19,6 +19,7 @@ class MiniMap {
       x: 0,
       y: 0
     }
+    this.currentState = null
   }
 
   //  计算小地图的渲染数据
@@ -93,7 +94,14 @@ class MiniMap {
     })
     this.removeNodeContent(svg)
     const svgStr = svg.svg()
-
+    this.currentState = {
+      viewBoxStyle: {
+        ...viewBoxStyle
+      },
+      miniMapBoxScale,
+      miniMapBoxLeft,
+      miniMapBoxTop
+    }
     return {
       getImgUrl: async callback => {
         const res = await this.mindMap.doExport.fixSvgStrAndToBlob(svgStr)
@@ -144,7 +152,7 @@ class MiniMap {
 
   //  小地图鼠标移动事件
   onMousemove(e, sensitivityNum = 5) {
-    if (!this.isMousedown) {
+    if (!this.isMousedown || this.isViewBoxMousedown) {
       return
     }
     let ox = e.clientX - this.mousedownPos.x
@@ -157,6 +165,57 @@ class MiniMap {
   //  小地图鼠标松开事件
   onMouseup() {
     this.isMousedown = false
+    this.isViewBoxMousedown = false
+  }
+
+  // 视口框鼠标按下事件
+  onViewBoxMousedown(e) {
+    this.isViewBoxMousedown = true
+    this.mousedownPos = {
+      x: e.clientX,
+      y: e.clientY
+    }
+    // 保存视图当前的偏移量
+    let transformData = this.mindMap.view.getTransformData()
+    this.startViewPos = {
+      x: transformData.state.x,
+      y: transformData.state.y
+    }
+  }
+
+  // 视口框鼠标移动事件
+  onViewBoxMousemove(e) {
+    if (!this.isViewBoxMousedown || !this.currentState || this.isMousedown)
+      return
+    let ox = e.clientX - this.mousedownPos.x
+    let oy = e.clientY - this.mousedownPos.y
+    const { viewBoxStyle, miniMapBoxScale, miniMapBoxLeft, miniMapBoxTop } =
+      this.currentState
+    const left = Math.max(
+      miniMapBoxLeft,
+      Number.parseFloat(viewBoxStyle.left) + ox
+    )
+    const right = Math.max(
+      miniMapBoxLeft,
+      Number.parseFloat(viewBoxStyle.right) - ox
+    )
+    const top = Math.max(
+      miniMapBoxTop,
+      Number.parseFloat(viewBoxStyle.top) + oy
+    )
+    const bottom = Math.max(
+      miniMapBoxTop,
+      Number.parseFloat(viewBoxStyle.bottom) - oy
+    )
+    this.mindMap.emit('mini_map_view_box_position_change', {
+      left: left + 'px',
+      right: right + 'px',
+      top: top + 'px',
+      bottom: bottom + 'px'
+    })
+    // 在视图最初偏移量上累加更新量
+    this.mindMap.view.translateXTo(-ox / miniMapBoxScale + this.startViewPos.x)
+    this.mindMap.view.translateYTo(-oy / miniMapBoxScale + this.startViewPos.y)
   }
 }
 
