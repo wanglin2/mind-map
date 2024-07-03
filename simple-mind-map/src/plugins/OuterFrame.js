@@ -340,7 +340,7 @@ class OuterFrame {
     if (!this.activeOuterFrame) return
     const { el } = this.activeOuterFrame
     el.stroke({
-      dasharray: '5,5'
+      dasharray: el.cacheStyle.dasharray || defaultStyle.strokeDasharray
     })
     this.activeOuterFrame = null
   }
@@ -362,6 +362,9 @@ class OuterFrame {
       })
       .x(x)
       .y(y)
+    el.cacheStyle = {
+      dasharray: styleConfig.strokeDasharray
+    }
     this.outerFrameElList.push(el)
     return el
   }
