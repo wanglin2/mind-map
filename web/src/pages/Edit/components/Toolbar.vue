@@ -194,8 +194,8 @@ export default {
         'associativeLine',
         'formula',
         // 'attachment',
+        'outerFrame',
         'annotation',
-        'outerFrame'
       ],
       horizontalList: [],
       verticalList: [],
