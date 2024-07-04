@@ -25,6 +25,8 @@ Github：[releases](https://github.com/wanglin2/mind-map/releases)。百度云�
 
 > 客户端版本会落后于在线版本，尝试最新功能请优先使用在线版。
 
+如果你需要带后端的可部署版本，可以尝试我们开发的另一个项目[理想文档](https://github.com/wanglin2/lx-doc)。
+
 # 特性
 
 - [x] 插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小打包体积
