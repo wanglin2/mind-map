@@ -83,6 +83,11 @@ class Base {
       )
       newNode.reset()
       newNode.layerIndex = layerIndex
+      if (isRoot) {
+        newNode.isRoot = true
+      } else {
+        newNode.parent = parent._node
+      }
       this.cacheNode(data._node.uid, newNode)
       this.checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(newNode)
       // 主题或主题配置改变了、节点层级改变了，需要重新渲染节点文本等情况需要重新计算节点大小和布局
@@ -112,6 +117,11 @@ class Base {
       newNode.reset()
       newNode.nodeData = newNode.handleData(data || {})
       newNode.layerIndex = layerIndex
+      if (isRoot) {
+        newNode.isRoot = true
+      } else {
+        newNode.parent = parent._node
+      }
       this.cacheNode(uid, newNode)
       this.checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(newNode)
       data._node = newNode
@@ -137,7 +147,9 @@ class Base {
         renderer: this.renderer,
         mindMap: this.mindMap,
         draw: this.draw,
-        layerIndex
+        layerIndex,
+        isRoot,
+        parent: !isRoot ? parent._node : null
       })
       // uid保存到数据上，为了节点复用
       data.data.uid = newUid
@@ -157,11 +169,9 @@ class Base {
     }
     // 根节点
     if (isRoot) {
-      newNode.isRoot = true
       this.root = newNode
     } else {
       // 互相收集
-      newNode.parent = parent._node
       parent._node.addChildren(newNode)
     }
     return newNode
