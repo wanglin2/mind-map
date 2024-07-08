@@ -187,7 +187,8 @@ export default class TextEdit {
 
   // 处理画布缩放
   onScale() {
-    if (!this.currentNode) return
+    const node = this.getCurrentEditNode()
+    if (!node) return
     if (this.mindMap.richText) {
       this.mindMap.richText.cacheEditingText =
         this.mindMap.richText.getEditText()
@@ -197,7 +198,7 @@ export default class TextEdit {
       this.showTextEdit = false
     }
     this.show({
-      node: this.currentNode,
+      node,
       isFromScale: true
     })
   }
