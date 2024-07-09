@@ -70,7 +70,7 @@ mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_CHILD_NODE&#x27;</spa
 </code></pre>
 <h2>插入多个同级节点</h2>
 <p>插入多个同级节点可以执行<code>INSERT_MULTI_NODE</code>命令：</p>
-<pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_NODE&#x27;</span>. [], nodeList)
+<pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_MULTI_NODE&#x27;</span>. [], nodeList)
 </code></pre>
 <p><code>nodeList</code>是要插入的同级节点数据的数组，必传。</p>
 <h2>插入父节点</h2>
