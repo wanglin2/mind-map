@@ -302,7 +302,7 @@ function createTagNode() {
   let { maxTag, tagsColorMap } = this.mindMap.opt
   tagsColorMap = tagsColorMap || {}
   const nodes = []
-  tagData.slice(0, maxTag).forEach(item => {
+  tagData.slice(0, maxTag).forEach((item, index) => {
     let str = ''
     let style = {
       ...defaultTagStyle
@@ -320,7 +320,7 @@ function createTagNode() {
     // 创建容器节点
     const tag = new G()
     tag.on('click', () => {
-      this.mindMap.emit('node_tag_click', this, item)
+      this.mindMap.emit('node_tag_click', this, item, index, tag)
     })
     // 标签文本
     const text = new Text().text(str)
