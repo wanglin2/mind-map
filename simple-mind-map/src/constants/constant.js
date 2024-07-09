@@ -235,6 +235,10 @@ export const CONSTANTS = {
     DEFAULT: 'default',
     NOT_ACTIVE: 'notActive',
     ACTIVE_ONLY: 'activeOnly'
+  },
+  TAG_POSITION: {
+    RIGHT: 'right',
+    BOTTOM: 'bottom'
   }
 }
 
