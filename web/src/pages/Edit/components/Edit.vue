@@ -37,6 +37,7 @@
     <FormulaSidebar v-if="mindMap" :mindMap="mindMap"></FormulaSidebar>
     <SourceCodeEdit v-if="mindMap" :mindMap="mindMap"></SourceCodeEdit>
     <NodeOuterFrame v-if="mindMap" :mindMap="mindMap"></NodeOuterFrame>
+    <NodeTagStyle v-if="mindMap" :mindMap="mindMap"></NodeTagStyle>
     <div
       class="dragMask"
       v-if="showDragMask"
@@ -112,6 +113,7 @@ import FormulaSidebar from './FormulaSidebar.vue'
 import SourceCodeEdit from './SourceCodeEdit.vue'
 import NodeAttachment from './NodeAttachment.vue'
 import NodeOuterFrame from './NodeOuterFrame.vue'
+import NodeTagStyle from './NodeTagStyle.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -168,7 +170,8 @@ export default {
     FormulaSidebar,
     SourceCodeEdit,
     NodeAttachment,
-    NodeOuterFrame
+    NodeOuterFrame,
+    NodeTagStyle
   },
   data() {
     return {

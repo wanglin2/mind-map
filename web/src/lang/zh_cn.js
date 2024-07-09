@@ -365,5 +365,9 @@ export default {
     boxStyle: '边框样式',
     boxColor: '边框颜色',
     fillColor: '填充颜色'
+  },
+  nodeTagStyle: {
+    placeholder: '请输入标签内容',
+    delete: '删除此标签'
   }
 }

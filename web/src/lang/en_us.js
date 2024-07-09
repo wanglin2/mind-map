@@ -373,5 +373,9 @@ export default {
     boxStyle: 'Box style',
     boxColor: 'Box color',
     fillColor: 'Fill color'
+  },
+  nodeTagStyle: {
+    placeholder: 'Please enter the tag content',
+    delete: 'Delete this tag'
   }
 }
