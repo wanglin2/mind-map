@@ -31,7 +31,8 @@ import {
   checkSmmFormatData,
   checkIsNodeStyleDataKey,
   removeRichTextStyes,
-  formatGetNodeGeneralization
+  formatGetNodeGeneralization,
+  sortNodeList
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -1373,7 +1374,8 @@ class Render {
     if (this.activeNodeList.length <= 0) {
       return null
     }
-    const nodeList = getTopAncestorsFomNodeList(this.activeNodeList)
+    let nodeList = getTopAncestorsFomNodeList(this.activeNodeList)
+    nodeList = sortNodeList(nodeList)
     return nodeList.map(node => {
       return copyNodeTree({}, node, true)
     })
@@ -1385,11 +1387,12 @@ class Render {
       return
     }
     // 找出激活节点中的顶层节点列表，并过滤掉根节点
-    const nodeList = getTopAncestorsFomNodeList(this.activeNodeList).filter(
+    let nodeList = getTopAncestorsFomNodeList(this.activeNodeList).filter(
       node => {
         return !node.isRoot
       }
     )
+    nodeList = sortNodeList(nodeList)
     // 复制数据
     const copyData = nodeList.map(node => {
       return copyNodeTree({}, node, true)

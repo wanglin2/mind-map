@@ -31,11 +31,14 @@ class LogicalStructure extends Base {
 
   //  遍历数据计算节点的left、width、height
   computedBaseValue() {
+    let sortIndex = 0
     walk(
       this.renderer.renderTree,
       null,
       (cur, parent, isRoot, layerIndex) => {
         let newNode = this.createNode(cur, parent, isRoot, layerIndex)
+        newNode.sortIndex = sortIndex
+        sortIndex++
         // 根节点定位在画布中心位置
         if (isRoot) {
           this.setNodeCenter(newNode)

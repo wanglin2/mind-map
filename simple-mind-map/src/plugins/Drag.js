@@ -2,7 +2,8 @@ import {
   bfsWalk,
   throttle,
   getTopAncestorsFomNodeList,
-  getNodeIndexInNodeList
+  getNodeIndexInNodeList,
+  sortNodeList
 } from '../utils'
 import Base from '../layouts/Base'
 import { CONSTANTS } from '../constants/constant'
@@ -258,11 +259,14 @@ class Drag extends Base {
       // 如果鼠标按下的节点是激活节点，那么保存当前所有激活的节点
       if (node.getData('isActive')) {
         // 找出这些激活节点中的最顶层节点
-        this.beingDragNodeList = getTopAncestorsFomNodeList(
-          // 过滤掉根节点和概要节点
-          this.mindMap.renderer.activeNodeList.filter(item => {
-            return !item.isRoot && !item.isGeneralization
-          })
+        // 并按索引从小到大排序
+        this.beingDragNodeList = sortNodeList(
+          getTopAncestorsFomNodeList(
+            // 过滤掉根节点和概要节点
+            this.mindMap.renderer.activeNodeList.filter(item => {
+              return !item.isRoot && !item.isGeneralization
+            })
+          )
         )
       } else {
         // 否则只拖拽按下的节点

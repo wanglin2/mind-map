@@ -1580,3 +1580,12 @@ export const defenseXSS = text => {
 export const addXmlns = el => {
   el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
 }
+
+// 给一组节点实例升序排序，依据其sortIndex值
+export const sortNodeList = nodeList => {
+  nodeList = [...nodeList]
+  nodeList.sort((a, b) => {
+    return a.sortIndex - b.sortIndex
+  })
+  return nodeList
+}
