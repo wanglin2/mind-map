@@ -25,7 +25,7 @@ Github：[releases](https://github.com/wanglin2/mind-map/releases)。百度云�
 
 > 客户端版本会落后于在线版本，尝试最新功能请优先使用在线版。
 
-如果你需要带后端的可部署版本，可以尝试我们开发的另一个项目[理想文档](https://github.com/wanglin2/lx-doc)。
+【云存储版本】如果你需要带后端的云存储版本，可以尝试我们开发的另一个项目[理想文档](https://github.com/wanglin2/lx-doc)。
 
 # 特性
 
@@ -37,7 +37,7 @@ Github：[releases](https://github.com/wanglin2/mind-map/releases)。百度云�
 - [x] 支持画布拖动、缩放
 - [x] 支持鼠标按键拖动选择和 Ctrl+左键两种多选节点方式
 - [x] 支持导出为`json`、`png`、`svg`、`pdf`、`markdown`、`xmind`、`txt`，支持从`json`、`xmind`、`markdown`导入
-- [x] 支持快捷键、前进后退、关联线、搜索替换、小地图、水印、滚动条、手绘风格、彩虹线条
+- [x] 支持快捷键、前进后退、关联线、搜索替换、小地图、水印、滚动条、手绘风格、彩虹线条、标记、外框
 - [x] 提供丰富的配置，满足各种场景各种使用习惯
 - [x] 支持协同编辑
 - [x] 支持演示模式
