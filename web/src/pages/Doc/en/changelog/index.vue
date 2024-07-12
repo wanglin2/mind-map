@@ -1,6 +1,43 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.10.3</h2>
+<blockquote>
+<p>2024.7.12</p>
+</blockquote>
+<p>Node tag data structure update:</p>
+<p>The node tag data has been changed from a string array to an object array, mainly to support setting the style of a single tag. The current node tag data structure is as follows:</p>
+<pre class="hljs"><code>{
+     <span class="hljs-attr">tag</span>: [<span class="hljs-string">&#x27;tag&#x27;</span>]
+}
+</code></pre>
+<p>Change to the following:</p>
+<pre class="hljs"><code>{
+     <span class="hljs-attr">tag</span>: [
+          {
+               <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;tag&#x27;</span>,
+               <span class="hljs-attr">style</span>: {}
+          }
+     ]
+}
+</code></pre>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue where the isRoot and parent attributes of node instances obtained through methods customCreateNodeContent and createNodePrefixContent are both null;</p>
+<p>2.Fixed the issue where the last edited node would enter editing mode when zooming in and out of the canvas using the scroll wheel or shortcut keys after editing the node text, and the mind map shortcut keys would become invalid;</p>
+<p>3.Fixed the issue where multiple nodes can be selected simultaneously, allowing unlimited insertion of summaries;</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Support setting single label styles for nodes;</p>
+<p>2.Add instantiation options for displaying the location of node labels;</p>
+<p>3.Two callback parameters have been added to the node_tag_click event;</p>
+<p>4.When copying, cutting, or moving multiple nodes, operate them in the order they are on the nodes, rather than in the order they are activated;</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.Support clicking on node tags to modify text and color;</p>
+</blockquote>
 <h2>0.10.2 / 0.10.2-fix.1</h2>
 <blockquote>
 <p>2024.7.3</p>

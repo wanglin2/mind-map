@@ -34,6 +34,7 @@ const mindMap = new MindMap({
 | themeConfig                      | Object  | {}               | Theme configuration, will be merged with the selected theme, available fields refer to: [default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js) |          |
 | scaleRatio                       | Number  | 0.1              | The incremental scaling ratio                                |          |
 | maxTag                           | Number  | 5                | The maximum number of tags displayed in the node, any additional tags will be discarded |          |
+| tagPosition（v0.10.3+）      | String  | right      | The position of the tag display relative to the node text，bottom（Below the text）、right（On the right side of the text）             |          |
 | imgTextMargin                    | Number  | 5                | The spacing between the image and text in the node           |          |
 | textContentMargin                | Number  | 2                | The spacing between various text information in the node, such as the spacing between the icon and text |          |
 | customNoteContentShow（v0.1.6+） | Object  | null             | Custom node note content display, object type, structure: {show: (noteContent, left, top, node) => {// your display node note logic. node is a new parameter added in v0.8.1+ version, representing node instances }, hide: () => {// your hide node note logic }} |          |
@@ -121,7 +122,7 @@ The basic data structure is as follows:
     hyperlink: '', // Hyperlink address
     hyperlinkTitle: '', // Title of hyperlink
     note: '', // Content of remarks
-    tag: [], // Tag list
+    tag: [], // Tag list, Prior to v0.10.3, only string arrays, i.e. ['tag'], were supported. However, v0.10.3+versions support object arrays, i.e. [{text: 'tag', style: {}}]. The specific supported label styles can refer to the "Tag Styles" below
     generalization: [{// (Arrays are not supported in versions below 0.9.0, and only a single summary data can be set)The summary of the node, if there is no summary, the generalization can be set to null
       text: '', // Summary Text
       richText: false, // Is the text of the node in rich text mode
@@ -141,6 +142,19 @@ The basic data structure is as follows:
 ```
 
 If you want to add custom fields, you can add them to the same level as 'data' and 'children'. If you want to add them to the 'data' object, please use the `_` Name your custom field at the beginning, and it will be used internally to determine whether it is a custom field.
+
+##### Tag Styles
+
+The style object of the tag supports the following properties:
+
+| Field Name    | Type   | Default Value     | Description        |
+| ----------- | ------ | -------- | ----------- |
+| radius | Number | 3 | The corner size of the tag rectangle |
+| fontSize | Number | 12 | Font size, it is recommended that the height of the text should not exceed height |
+| fill | String |  | Background color of tag rectangle | 
+| height | Number | 20 | Height of tag rectangle |
+| paddingX | Number | 8 | Horizontal margin, if width is set, this configuration will be ignored |
+| width | Number |  | The width of the tag rectangle, if not set, defaults to the width of the text plus paddingX * 2 |
 
 ### 1.2Icon Configuration
 
@@ -586,7 +600,7 @@ Listen to an event. Event list:
 | node_cooperate_avatar_mouseleave（v0.9.9+）    |  Triggered when removing personnel avatars with the mouse during collaborative editing |  userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)   |
 | exit_demonstrate（v0.9.11+）    | Triggered when exiting demonstration mode  |     |
 | demonstrate_jump（v0.9.11+）    | Trigger when switching steps in demonstration mode  |  currentStepIndex（The index of the steps currently played, counting from 0）、stepLength（Total number of playback steps）   |
-| node_tag_click（v0.9.12+）    | Click events on node labels | this(Current node instance)、item（Content of clicked tags）    |
+| node_tag_click（v0.9.12+）    | Click events on node labels | this(Current node instance)、item（Content of clicked tags）、index（v0.10.3+，The index of this tag in the tag list）、tagNode（v0.10.3+，Tag node, G instance of @svgdotjs/svg.js library, Can be used to obtain label position and size information）     |
 | node_layout_end（v0.10.1+）    | Event where the content layout of a single node is completed | this(Current node instance)  |
 | node_attachmentClick（v0.9.10+）    | Click event for node attachment icon | this(Current node instance)、e（Event Object）、node（Icon node）  |
 | node_attachmentContextmenu（v0.9.10+）    | Right click event on node attachment icon | this(Current node instance)、e（Event Object）、node（Icon node）  |
@@ -690,7 +704,7 @@ redo. All commands are as follows:
 | SET_NODE_HYPERLINK                 | Set Node Hyperlink                                           | node (node to set), link (hyperlink address), title (hyperlink name, optional) |
 | SET_NODE_NOTE                      | Set Node Note                                                | node (node to set), note (note text)                         |
 | SET_NODE_ATTACHMENT（v0.9.10+）                       |   Set node attachment               | node（node to set）、url（attachment url）、name（attachment name, optional）                       |
-| SET_NODE_TAG                       | Set Node Tag                                                 | node (node to set), tag (string array, built-in color information can be obtained in [constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/constants/constant.js)) |
+| SET_NODE_TAG                       | Set Node Tag                                                 | node (node to set), tag (Previous versions before v0.10.3 only support string arrays, i.e. ['tag'], while v0.10.3+versions support object arrays, i.e. [{text: 'tag', style: {} }]) |
 | INSERT_AFTER (v0.1.5+)             | Move Node to After Another Node | node (node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), exist (target node)                     |
 | INSERT_BEFORE (v0.1.5+)            | Move Node to Before Another Node | node (node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), exist (target node)                     |
 | MOVE_NODE_TO (v0.1.5+)             | Move a node as a child of another node       | node (the node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), toNode (the target node)            |

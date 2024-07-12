@@ -77,6 +77,12 @@
 <td>节点里最多显示的标签数量，多余的会被丢弃</td>
 </tr>
 <tr>
+<td>tagPosition（v0.10.3+）</td>
+<td>String</td>
+<td>right</td>
+<td>标签显示的位置，相对于节点文本，bottom（下方）、right（右侧）</td>
+</tr>
+<tr>
 <td>imgTextMargin</td>
 <td>Number</td>
 <td>5</td>
@@ -483,7 +489,7 @@
     <span class="hljs-attr">note</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 备注的内容</span>
     <span class="hljs-attr">attachmentUrl</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// v0.9.10+，附件url</span>
     <span class="hljs-attr">attachmentName</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// v0.9.10+，附件名称</span>
-    <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// 标签列表</span>
+    <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// 标签列表，v0.10.3以前的版本只支持字符串数组，即[&#x27;标签&#x27;]，v0.10.3+版本支持对象数组，即[{text: &#x27;标签&#x27;, style: {}}]，具体支持的标签样式可参考下方【标签的样式】</span>
     <span class="hljs-attr">generalization</span>: [{<span class="hljs-comment">// （0.9.0以下版本不支持数组，只能设置单个概要数据）节点的概要，如果没有概要generalization设为null即可</span>
       <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 概要的文本</span>
       <span class="hljs-attr">richText</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// 节点的文本是否是富文本模式</span>
@@ -502,6 +508,56 @@
 }
 </code></pre>
 <p>如果你要添加自定义的字段，可以添加到<code>data</code>、<code>children</code>同级，如果你要添加到<code>data</code>对象里，那么请使用<code>_</code>开头来命名你的自定义字段，内部会通过这个来判断是否是自定义字段。</p>
+<h5>标签的样式</h5>
+<p>标签的样式<code>style</code>对象支持以下属性：</p>
+<table>
+<thead>
+<tr>
+<th>字段名称</th>
+<th>类型</th>
+<th>默认值</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>radius</td>
+<td>Number</td>
+<td>3</td>
+<td>标签矩形的圆角大小</td>
+</tr>
+<tr>
+<td>fontSize</td>
+<td>Number</td>
+<td>12</td>
+<td>字号，建议文字高度不要大于height</td>
+</tr>
+<tr>
+<td>fill</td>
+<td>String</td>
+<td></td>
+<td>标签矩形的背景颜色</td>
+</tr>
+<tr>
+<td>height</td>
+<td>Number</td>
+<td>20</td>
+<td>标签矩形的高度</td>
+</tr>
+<tr>
+<td>paddingX</td>
+<td>Number</td>
+<td>8</td>
+<td>水平内边距，如果设置了width，将忽略该配置</td>
+</tr>
+<tr>
+<td>width</td>
+<td>Number</td>
+<td></td>
+<td>标签矩形的宽度，如果不设置，默认以文字的宽度+paddingX*2为宽度</td>
+</tr>
+</tbody>
+</table>
 <h4>1.2图标配置</h4>
 <table>
 <thead>
@@ -1486,7 +1542,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>node_tag_click（v0.9.12+）</td>
 <td>节点标签的点击事件</td>
-<td>this(当前节点实例)、item（点击的标签内容）</td>
+<td>this(当前节点实例)、item（点击的标签内容）、index（v0.10.3+，该标签在标签列表里的索引）、tagNode（v0.10.3+，标签节点，@svgdotjs/svg.js库的G实例，可以用于获取标签位置和大小信息）</td>
 </tr>
 <tr>
 <td>node_layout_end（v0.10.1+）</td>
@@ -1688,7 +1744,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <tr>
 <td>SET_NODE_TAG</td>
 <td>设置节点标签</td>
-<td>node（要设置的节点）、tag（字符串数组，内置颜色信息可在<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/constants/constant.js">constant.js</a>里获取到）</td>
+<td>node（要设置的节点）、tag（v0.10.3以前的版本只支持字符串数组，即['标签']，v0.10.3+版本支持对象数组，即[{ text: '标签', style: {} }]）</td>
 </tr>
 <tr>
 <td>INSERT_AFTER（v0.1.5+）</td>

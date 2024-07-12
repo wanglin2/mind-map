@@ -34,6 +34,7 @@ const mindMap = new MindMap({
 | themeConfig                      | Object  | {}               | 主题配置，会和所选择的主题进行合并，可用字段可参考：[default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js) |
 | scaleRatio                       | Number  | 0.1              | 放大缩小的增量比例                                           |
 | maxTag                           | Number  | 5                | 节点里最多显示的标签数量，多余的会被丢弃                     |
+| tagPosition（v0.10.3+）      | String  | right      | 标签显示的位置，相对于节点文本，bottom（下方）、right（右侧）             |
 | imgTextMargin                    | Number  | 5                | 节点里图片和文字的间距                                       |
 | textContentMargin                | Number  | 2                | 节点里各种文字信息的间距，如图标和文字的间距                 |
 | customNoteContentShow（v0.1.6+） | Object  | null             | 自定义节点备注内容显示，Object类型，结构为：{show: (noteContent, left, top, node) => {// 你的显示节点备注逻辑。node为v0.8.1+版本新增的回参，代表节点实例 }, hide: () => {// 你的隐藏节点备注逻辑 }} |
@@ -123,7 +124,7 @@ const mindMap = new MindMap({
     note: '', // 备注的内容
     attachmentUrl: '',// v0.9.10+，附件url
     attachmentName: '',// v0.9.10+，附件名称
-    tag: [], // 标签列表
+    tag: [], // 标签列表，v0.10.3以前的版本只支持字符串数组，即['标签']，v0.10.3+版本支持对象数组，即[{text: '标签', style: {}}]，具体支持的标签样式可参考下方【标签的样式】
     generalization: [{// （0.9.0以下版本不支持数组，只能设置单个概要数据）节点的概要，如果没有概要generalization设为null即可
       text: '', // 概要的文本
       richText: false, // 节点的文本是否是富文本模式
@@ -143,6 +144,19 @@ const mindMap = new MindMap({
 ```
 
 如果你要添加自定义的字段，可以添加到`data`、`children`同级，如果你要添加到`data`对象里，那么请使用`_`开头来命名你的自定义字段，内部会通过这个来判断是否是自定义字段。
+
+##### 标签的样式
+
+标签的样式`style`对象支持以下属性：
+
+| 字段名称    | 类型   | 默认值     | 描述        |
+| ----------- | ------ | -------- | ----------- |
+| radius | Number | 3 | 标签矩形的圆角大小 |
+| fontSize | Number | 12 | 字号，建议文字高度不要大于height |
+| fill | String |  | 标签矩形的背景颜色 | 
+| height | Number | 20 | 标签矩形的高度 |
+| paddingX | Number | 8 | 水平内边距，如果设置了width，将忽略该配置 |
+| width | Number |  | 标签矩形的宽度，如果不设置，默认以文字的宽度+paddingX*2为宽度 |
 
 #### 1.2图标配置
 
@@ -585,7 +599,7 @@ mindMap.setTheme('主题名称')
 | node_cooperate_avatar_mouseleave（v0.9.9+）    | 协同编辑时，鼠标移除人员头像时触发  |  userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)      |
 | exit_demonstrate（v0.9.11+）    | 退出演示模式时触发  |     |
 | demonstrate_jump（v0.9.11+）    | 演示模式中，切换步骤时触发  |  currentStepIndex（当前播放到的步骤索引，从0开始计数）、stepLength（总的播放步骤数量）   |
-| node_tag_click（v0.9.12+）    | 节点标签的点击事件 | this(当前节点实例)、item（点击的标签内容）    |
+| node_tag_click（v0.9.12+）    | 节点标签的点击事件 | this(当前节点实例)、item（点击的标签内容）、index（v0.10.3+，该标签在标签列表里的索引）、tagNode（v0.10.3+，标签节点，@svgdotjs/svg.js库的G实例，可以用于获取标签位置和大小信息）    |
 | node_layout_end（v0.10.1+）    | 单个节点内容布局完成的事件 | this(当前节点实例)  |
 | node_attachmentClick（v0.9.10+）    | 节点附件图标的点击事件 | this(当前节点实例)、e（事件对象）、node（图标节点）  |
 | node_attachmentContextmenu（v0.9.10+）    | 节点附件图标的右键点击事件 | this(当前节点实例)、e（事件对象）、node（图标节点）  |
@@ -687,7 +701,7 @@ mindMap.updateConfig({
 | SET_NODE_HYPERLINK                  | 设置节点超链接                                               | node（要设置的节点）、link（超链接地址）、title（超链接名称，可选） |
 | SET_NODE_NOTE                       | 设置节点备注                                                 | node（要设置的节点）、note（备注文字）                       |
 | SET_NODE_ATTACHMENT（v0.9.10+）                       | 设置节点附件                                                 | node（要设置的节点）、url（附件url）、name（附件名称，可选）                       |
-| SET_NODE_TAG                        | 设置节点标签                                                 | node（要设置的节点）、tag（字符串数组，内置颜色信息可在[constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/constants/constant.js)里获取到） |
+| SET_NODE_TAG                        | 设置节点标签                                                 | node（要设置的节点）、tag（v0.10.3以前的版本只支持字符串数组，即['标签']，v0.10.3+版本支持对象数组，即[{ text: '标签', style: {} }]） |
 | INSERT_AFTER（v0.1.5+）             | 将节点移动到另一个节点的后面    | node（要移动的节点，（v0.7.2+支持传递节点数组实现同时移动多个节点））、 exist（目标节点）                     |
 | INSERT_BEFORE（v0.1.5+）            | 将节点移动到另一个节点的前面，（v0.7.2+支持传递节点数组实现同时移动多个节点）   | node（要移动的节点）、 exist（目标节点）                     |
 | MOVE_NODE_TO（v0.1.5+）             | 移动节点作为另一个节点的子节点，（v0.7.2+支持传递节点数组实现同时移动多个节点）   | node（要移动的节点）、 toNode（目标节点）                    |

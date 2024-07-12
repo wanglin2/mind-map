@@ -1,6 +1,43 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.10.3</h2>
+<blockquote>
+<p>2024.7.12</p>
+</blockquote>
+<p>节点标签数据结构更新：</p>
+<p>节点标签数据由字符串数组，改为对象数组，主要是为了支持设置单个标签的样式，当前节点的标签数据结构如下：</p>
+<pre class="hljs"><code>{
+     <span class="hljs-attr">tag</span>: [<span class="hljs-string">&#x27;标签&#x27;</span>]
+}
+</code></pre>
+<p>改为如下：</p>
+<pre class="hljs"><code>{
+     <span class="hljs-attr">tag</span>: [
+          {
+               <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;标签&#x27;</span>,
+               <span class="hljs-attr">style</span>: {}
+          }
+     ]
+}
+</code></pre>
+<p>修复：</p>
+<blockquote>
+<p>1.修复customCreateNodeContent、createNodePrefixContent等方法里获取到的节点实例的isRoot和parent等属性都为null的问题；</p>
+<p>2.修复编辑过节点文本后，再使用滚轮或快捷键缩放画布时上次被编辑的节点会进入编辑状态，同时思维导图快捷键会失效的问题；</p>
+<p>3.修复同时选中多个节点，可以无限插入概要的问题；</p>
+</blockquote>
+<p>新增：</p>
+<blockquote>
+<p>1.支持设置节点单个标签样式；</p>
+<p>2.新增节点标签显示位置的实例化选项；</p>
+<p>3.node_tag_click事件新增两个回调参数；</p>
+<p>4.复制、剪切、移动多个节点时，按其在节点上的顺序进行操作，而不是激活的顺序；</p>
+</blockquote>
+<p>Demo：</p>
+<blockquote>
+<p>1.支持点击节点标签进行文本和颜色的修改；</p>
+</blockquote>
 <h2>0.10.2 / 0.10.2-fix.1</h2>
 <blockquote>
 <p>2024.7.3</p>

@@ -86,6 +86,13 @@
 <td></td>
 </tr>
 <tr>
+<td>tagPosition（v0.10.3+）</td>
+<td>String</td>
+<td>right</td>
+<td>The position of the tag display relative to the node text，bottom（Below the text）、right（On the right side of the text）</td>
+<td></td>
+</tr>
+<tr>
 <td>imgTextMargin</td>
 <td>Number</td>
 <td>5</td>
@@ -554,7 +561,7 @@
     <span class="hljs-attr">hyperlink</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Hyperlink address</span>
     <span class="hljs-attr">hyperlinkTitle</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Title of hyperlink</span>
     <span class="hljs-attr">note</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Content of remarks</span>
-    <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// Tag list</span>
+    <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// Tag list, Prior to v0.10.3, only string arrays, i.e. [&#x27;tag&#x27;], were supported. However, v0.10.3+versions support object arrays, i.e. [{text: &#x27;tag&#x27;, style: {}}]. The specific supported label styles can refer to the &quot;Tag Styles&quot; below</span>
     <span class="hljs-attr">generalization</span>: [{<span class="hljs-comment">// (Arrays are not supported in versions below 0.9.0, and only a single summary data can be set)The summary of the node, if there is no summary, the generalization can be set to null</span>
       <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Summary Text</span>
       <span class="hljs-attr">richText</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// Is the text of the node in rich text mode</span>
@@ -573,6 +580,56 @@
 }
 </code></pre>
 <p>If you want to add custom fields, you can add them to the same level as 'data' and 'children'. If you want to add them to the 'data' object, please use the <code>_</code> Name your custom field at the beginning, and it will be used internally to determine whether it is a custom field.</p>
+<h5>Tag Styles</h5>
+<p>The style object of the tag supports the following properties:</p>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>radius</td>
+<td>Number</td>
+<td>3</td>
+<td>The corner size of the tag rectangle</td>
+</tr>
+<tr>
+<td>fontSize</td>
+<td>Number</td>
+<td>12</td>
+<td>Font size, it is recommended that the height of the text should not exceed height</td>
+</tr>
+<tr>
+<td>fill</td>
+<td>String</td>
+<td></td>
+<td>Background color of tag rectangle</td>
+</tr>
+<tr>
+<td>height</td>
+<td>Number</td>
+<td>20</td>
+<td>Height of tag rectangle</td>
+</tr>
+<tr>
+<td>paddingX</td>
+<td>Number</td>
+<td>8</td>
+<td>Horizontal margin, if width is set, this configuration will be ignored</td>
+</tr>
+<tr>
+<td>width</td>
+<td>Number</td>
+<td></td>
+<td>The width of the tag rectangle, if not set, defaults to the width of the text plus paddingX * 2</td>
+</tr>
+</tbody>
+</table>
 <h3>1.2Icon Configuration</h3>
 <table>
 <thead>
@@ -1620,7 +1677,7 @@ poor performance and should be used sparingly.</p>
 <tr>
 <td>node_tag_click（v0.9.12+）</td>
 <td>Click events on node labels</td>
-<td>this(Current node instance)、item（Content of clicked tags）</td>
+<td>this(Current node instance)、item（Content of clicked tags）、index（v0.10.3+，The index of this tag in the tag list）、tagNode（v0.10.3+，Tag node, G instance of @svgdotjs/svg.js library, Can be used to obtain label position and size information）</td>
 </tr>
 <tr>
 <td>node_layout_end（v0.10.1+）</td>
@@ -1820,7 +1877,7 @@ redo. All commands are as follows:</p>
 <tr>
 <td>SET_NODE_TAG</td>
 <td>Set Node Tag</td>
-<td>node (node to set), tag (string array, built-in color information can be obtained in <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/constants/constant.js">constant.js</a>)</td>
+<td>node (node to set), tag (Previous versions before v0.10.3 only support string arrays, i.e. ['tag'], while v0.10.3+versions support object arrays, i.e. [{text: 'tag', style: {} }])</td>
 </tr>
 <tr>
 <td>INSERT_AFTER (v0.1.5+)</td>

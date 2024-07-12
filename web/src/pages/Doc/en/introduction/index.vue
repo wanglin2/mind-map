@@ -68,10 +68,7 @@ full screen, support mini map</li>
 <p>This project can be used for learning and reference. Please deeply experience whether it can meet your needs when using it for actual projects.</p>
 <p>This project may not have fully tested every function point, so there may be bugs. In addition, when the number of nodes is very large, there may be some performance issues. Because everyone can accept different levels of congestion, you can test the maximum number of nodes yourself. Generally speaking, within 500 nodes, it is more smooth, while over 1000 nodes have more noticeable lag.</p>
 <p>If you have suggestions or find bugs, you can submit <a href="https://github.com/wanglin2/mind-map/issues">issues</a> here.</p>
-<p>The built-in themes and icons in the project part come from:</p>
-<p><a href="https://naotu.baidu.com/">Baidu Mind Map</a></p>
-<p><a href="https://www.zhixi.com/">Zhixi Mind Map</a></p>
-<p>Respect the copyright, and do not use the theme and icons directly for commercial projects.</p>
+<p>The built-in themes and icons in the project part come from:<a href="https://naotu.baidu.com/">Baidu Mind Map</a>、<a href="https://www.zhixi.com/">Zhixi Mind Map</a>。Respect the copyright, and do not use the theme and icons directly for commercial projects.</p>
 <h2>Why not？</h2>
 <p>1.<a href="https://www.zhixi.com/">Zhixi</a></p>
 <p>Zhixi is a free mind mapping product that supports multi end synchronization. The UI design is beautiful and the features are complete, but it is not open source, so it can only be used as a user and cannot be used in your project.</p>

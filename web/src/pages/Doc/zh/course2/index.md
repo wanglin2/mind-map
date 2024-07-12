@@ -148,6 +148,23 @@ activeNodes.value.forEach(node => {
 const tagArr = activeNode.getData('tag') || []
 ```
 
+v0.10.3+版本支持设置单个标签的样式，所以标签数据的类型也由字符串数组（即`['标签']`），改为对象数组（即`[{text: '标签', style: {}}]`）。所以要插入指定样式的标签可以这样操作：
+
+```js
+activeNodes.value.forEach(node => {
+    node.setTag([
+        {
+            text: '标签1',
+            style: {
+                fill: 'red'
+            }
+        }
+    ])
+})
+```
+
+`style`具体支持的属性可以参考【构造函数】文档。
+
 ## 插入概要
 
 插入概要可以不需要实现UI，直接调用插入概要的命令即可：

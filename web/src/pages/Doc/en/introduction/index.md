@@ -90,13 +90,7 @@ This project may not have fully tested every function point, so there may be bug
 
 If you have suggestions or find bugs, you can submit [issues](https://github.com/wanglin2/mind-map/issues) here.
 
-The built-in themes and icons in the project part come from:
-
-[Baidu Mind Map](https://naotu.baidu.com/)
-
-[Zhixi Mind Map](https://www.zhixi.com/)
-
-Respect the copyright, and do not use the theme and icons directly for commercial projects.
+The built-in themes and icons in the project part come from:[Baidu Mind Map](https://naotu.baidu.com/)、[Zhixi Mind Map](https://www.zhixi.com/)。Respect the copyright, and do not use the theme and icons directly for commercial projects.
 
 ## Why not？
 

@@ -1,5 +1,54 @@
 # Changelog
 
+## 0.10.3
+
+> 2024.7.12
+
+Node tag data structure update:
+
+The node tag data has been changed from a string array to an object array, mainly to support setting the style of a single tag. The current node tag data structure is as follows:
+
+```js
+{
+     tag: ['tag']
+}
+```
+
+Change to the following:
+
+```js
+{
+     tag: [
+          {
+               text: 'tag',
+               style: {}
+          }
+     ]
+}
+```
+
+Fix:
+
+> 1.Fix the issue where the isRoot and parent attributes of node instances obtained through methods customCreateNodeContent and createNodePrefixContent are both null;
+>
+> 2.Fixed the issue where the last edited node would enter editing mode when zooming in and out of the canvas using the scroll wheel or shortcut keys after editing the node text, and the mind map shortcut keys would become invalid;
+>
+> 3.Fixed the issue where multiple nodes can be selected simultaneously, allowing unlimited insertion of summaries;
+
+New:
+
+> 1.Support setting single label styles for nodes;
+>
+> 2.Add instantiation options for displaying the location of node labels;
+>
+> 3.Two callback parameters have been added to the node_tag_click event;
+>
+> 4.When copying, cutting, or moving multiple nodes, operate them in the order they are on the nodes, rather than in the order they are activated;
+
+Demo:
+
+> 1.Support clicking on node tags to modify text and color;
+
 ## 0.10.2 / 0.10.2-fix.1
 
 > 2024.7.3

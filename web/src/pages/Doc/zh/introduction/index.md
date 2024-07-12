@@ -82,13 +82,7 @@
 
 如果有建议或发现了bug，可以在此提交[issues](https://github.com/wanglin2/mind-map/issues)。
 
-项目内置的主题和图标部分来自于：
-
-[百度脑图](https://naotu.baidu.com/)
-
-[知犀思维导图](https://www.zhixi.com/)
-
-尊重版权，主题和图标请勿直接用于商业项目。
+项目内置的主题和图标部分来自于：[百度脑图](https://naotu.baidu.com/)、[知犀思维导图](https://www.zhixi.com/)。尊重版权，主题和图标请勿直接用于商业项目。
 
 ## 为什么不是？
 
