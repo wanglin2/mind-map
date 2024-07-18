@@ -65,7 +65,8 @@ export default {
     center: '中心',
     edge: '边缘',
     rainbowLines: '彩虹线条',
-    notUseRainbowLines: '不使用彩虹线条'
+    notUseRainbowLines: '不使用彩虹线条',
+    outerFramePadding: '外框内边距'
   },
   color: {
     moreColor: '更多颜色'

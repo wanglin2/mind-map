@@ -65,7 +65,8 @@ export default {
     center: 'Center',
     edge: 'Edge',
     rainbowLines: 'Rainbow lines',
-    notUseRainbowLines: 'Not use rainbow lines'
+    notUseRainbowLines: 'Not use rainbow lines',
+    outerFramePadding: 'Outer frame padding'
   },
   color: {
     moreColor: 'More color'
