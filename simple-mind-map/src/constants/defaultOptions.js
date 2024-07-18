@@ -381,6 +381,12 @@ export const defaultOpt = {
   // 【Formula插件】
   // 是否开启在富文本编辑框中直接编辑数学公式
   enableEditFormulaInRichTextEdit: true,
+  // katex库的字体文件的请求路径。仅当katex的output配置为html时才会请求字体文件。可以通过mindMap.formula.getKatexConfig()方法来获取当前的配置
+  // 字体文件可以从node_modules中找到：katex/dist/fonts/。可以上传到你的服务器或cdn
+  // 最终的字体请求路径为`${katexFontPath}fonts/KaTeX_AMS-Regular.woff2`，可以自行拼接进行测试是否可以访问
+  katexFontPath: 'https://unpkg.com/katex@0.16.11/dist/',
+  // 自定义katex库的输出模式。默认当Chrome内核100以下会使用html方式，否则使用mathml方式，如果你有自己的规则，那么可以传递一个函数，函数返回值为：mathml或html
+  getKatexOutputType: null,
 
   // 【RichText插件】
   // 转换富文本内容，当进入富文本编辑时，可以通过该参数传递一个函数，函数接收文本内容，需要返回你处理后的文本内容
