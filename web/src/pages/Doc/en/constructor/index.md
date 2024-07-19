@@ -267,7 +267,6 @@ new MindMap({
 | Field Name                       | Type    | Default Value    | Description                                 | Required |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
 | richTextEditFakeInPlace（v0.6.13+）     | Boolean  | false | Set the rich text node edit box to match the size of the node, creating a pseudo in place editing effect. It should be noted that only when there is only text within the node and the shape is rectangular, can the effect be better |          |
-| enableEditFormulaInRichTextEdit（v0.10.0+）     | Boolean  | true |  |   Whether to enable direct editing of mathematical formulas in rich text editing boxes       |
 | transformRichTextOnEnterEdit（v0.10.0+）     | null、Function  | null | To convert rich text content, you can pass a function that will be called when entering rich text editing. The function receives the rich text content that is about to be edited and needs to return the processed rich text content |          |
 | beforeHideRichTextEdit（v0.10.0+）     | null、Function  | null | You can pass a function that will be executed before the end of rich text editing. The function receives a richText instance, so you can update the kill document data at this time |          |
 
@@ -320,6 +319,21 @@ new MindMap({
 | padding        | Number | 20                  | The inner margin of the highlighted box |
 | margin         | Number | 50                  | The outer margin of the highlighted box |
 | openBlankMode（v0.9.12+） | Boolean | true     | Is enable fill in the blank mode, where underlined text is not displayed by default and only displayed sequentially by pressing the enter key |
+
+#### 14.Formula plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
+| enableEditFormulaInRichTextEdit（v0.10.0+）     | Boolean  | true | Do you want to enable direct editing of mathematical formulas in the rich text editing box |
+| katexFontPath（v0.10.3+）     | String  | https://unpkg.com/katex@0.16.11/dist | The request path for font files in the Katex library. Font files will only be requested when Katex's output is configured as html. The current configuration can be obtained through the mindMap.formula.getKatexConfig() method. The font file can be found in node_modules: katex/dist/fonts/. You can upload it to your server or CDN. The final font request path is `${katexFontPath}fonts/KaTeX_AMS-Regular.woff2`, which can be concatenated by oneself to test whether it can be accessed |
+| getKatexOutputType（v0.10.3+）     | Function、null  | null | Customize the output mode of the Katex library. By default, when the Chrome kernel is below 100, html mode will be used. Otherwise, mathml mode will be used. If you have your own rules, you can pass a function that returns either mathml or html |
+
+#### 15.OuterFrame plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
+| outerFramePaddingX（v0.10.3+）     | Number  | 10 | Horizontal inner margin of the outer frame |
+| outerFramePaddingY（v0.10.3+）     | Number  | 10 | Vertical inner margin of the outer frame |
 
 ## Static methods
 

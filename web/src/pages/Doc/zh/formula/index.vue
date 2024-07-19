@@ -24,6 +24,9 @@
 </code></pre>
 <p>如果你使用的是<code>.umd.js</code>、<code>.esm.js</code>之类的打包后的文件，那么可以通过在线的CDN服务来引入，比如：<code>https://unpkg.com/browse/katex@0.16.9/dist/</code>，当然，最好是把<code>katex</code>的<code>css</code>文件，以及对应的<code>fonts</code>目录下的字体文件上传到你自己的服务器上。</p>
 </blockquote>
+<blockquote>
+<p>v0.10.3+版本会默认引入<code>KaTeX</code>的样式文件。所以你无需再手动引入。当<code>Katex</code>库的渲染模式为<code>html</code>时它会依赖一些字体文件，插件并不包含这些文件，你需要通过<code>katexFontPath</code>实例化选项来设置字体文件的路径。</p>
+</blockquote>
 <h2>问题</h2>
 <p>1.在有的浏览器上显示的是公式源码</p>
 <p>这是因为有的浏览器不支持<code>KaTex</code>库的<code>mathml</code>输出模式，可以通过<code>getKatexOutputType</code>实例化选项来将输出模式改为<code>html</code>。</p>

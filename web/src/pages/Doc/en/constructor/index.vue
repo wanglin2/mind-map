@@ -1016,13 +1016,6 @@
 <td></td>
 </tr>
 <tr>
-<td>enableEditFormulaInRichTextEdit（v0.10.0+）</td>
-<td>Boolean</td>
-<td>true</td>
-<td></td>
-<td>Whether to enable direct editing of mathematical formulas in rich text editing boxes</td>
-</tr>
-<tr>
 <td>transformRichTextOnEnterEdit（v0.10.0+）</td>
 <td>null、Function</td>
 <td>null</td>
@@ -1233,6 +1226,17 @@
 </tr>
 </tbody>
 </table>
+<h4>14.Formula plugin</h4>
+<p>| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
+| enableEditFormulaInRichTextEdit（v0.10.0+）     | Boolean  | true | Do you want to enable direct editing of mathematical formulas in the rich text editing box |
+| katexFontPath（v0.10.3+）     | String  | https://unpkg.com/katex@0.16.11/dist | The request path for font files in the Katex library. Font files will only be requested when Katex's output is configured as html. The current configuration can be obtained through the mindMap.formula.getKatexConfig() method. The font file can be found in node_modules: katex/dist/fonts/. You can upload it to your server or CDN. The final font request path is <code>${katexFontPath}fonts/KaTeX_AMS-Regular.woff2</code>, which can be concatenated by oneself to test whether it can be accessed |
+| getKatexOutputType（v0.10.3+）     | Function、null  | null | Customize the output mode of the Katex library. By default, when the Chrome kernel is below 100, html mode will be used. Otherwise, mathml mode will be used. If you have your own rules, you can pass a function that returns either mathml or html |</p>
+<h4>15.OuterFrame plugin</h4>
+<p>| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
+| outerFramePaddingX（v0.10.3+）     | Number  | 10 | Horizontal inner margin of the outer frame |
+| outerFramePaddingY（v0.10.3+）     | Number  | 10 | Vertical inner margin of the outer frame |</p>
 <h2>Static methods</h2>
 <h3>defineTheme(name, config)</h3>
 <blockquote>

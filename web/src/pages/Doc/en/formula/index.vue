@@ -27,7 +27,10 @@
 </code></pre>
 <p>If you are using packaged files such as '.umd.js' or '.esm.js', you can import them through online CDN services, such as <code>https://unpkg.com/browse/katex@0.16.9/dist/</code>, Of course, it is best to upload the 'css' file of the 'katex' and the corresponding font files in the 'fonts' directory to your own server.</p>
 </blockquote>
-<h2>问题</h2>
+<blockquote>
+<p>Version v0.10.3+ will default to importing the style files of 'KaTeX'. So you don't need to manually introduce it anymore. When the rendering mode of the Katex library is html, it depends on some font files, which are not included in the plugin. You need to use the <code>katexFontPath</code> instantiation option to set the path of the font files.</p>
+</blockquote>
+<h2>Problem</h2>
 <p>1.On some browsers, the formula source code is displayed</p>
 <p>This is because some browsers do not support the 'mathml' output mode of the 'KaTex' library. You can change the output mode to 'html' by using the 'getKatexOutputType' instantiation option.</p>
 <p>2.Sometimes formulas and text may display line breaks</p>

@@ -2,9 +2,11 @@
 
 ## 0.10.3
 
-> 2024.7.12
+> 2024.7.19
 
-Node tag data structure update:
+Updates that require special attention:
+
+1.Node tag data structure update
 
 The node tag data has been changed from a string array to an object array, mainly to support setting the style of a single tag. The current node tag data structure is as follows:
 
@@ -27,6 +29,10 @@ Change to the following:
 }
 ```
 
+2.Related to mathematical formulas
+
+The mathematical formula plugin Formula defaults to importing styles from the Katex library, so there is no need to manually import them in the application. At the same time, the path of the Katex library font file needs to be configured through the katexFontPath instantiation option.
+
 Fix:
 
 > 1.Fix the issue where the isRoot and parent attributes of node instances obtained through methods customCreateNodeContent and createNodePrefixContent are both null;
@@ -37,17 +43,31 @@ Fix:
 
 New:
 
-> 1.Support setting single label styles for nodes;
+> 1.Modified the data type of the node tag field tag to support setting a single node tag style;
 >
-> 2.Add instantiation options for displaying the location of node labels;
+> 2.Add instantiation options for displaying the location (Equivalent to node text) of node labels;
 >
 > 3.Two callback parameters have been added to the node_tag_click event;
 >
 > 4.When copying, cutting, or moving multiple nodes, operate them in the order they are on the nodes, rather than in the order they are activated;
+>
+> 5.If a formula plugin is registered and there are formulas in the node, then when exporting SVG, it is necessary to add styles from the Katex library;
+>
+> 6.Support instantiation options for custom katex library rendering modes;
+>
+> 7.The formula plugin defaults to importing styles from the Katex library;
+>
+> 8.Add instantiation options for custom katex library font file paths;
+>
+> 9.Add instantiation options for setting the inner margin of the outer frame;
 
 Demo:
 
 > 1.Support clicking on node tags to modify text and color;
+>
+> 2.Remove the logic of introducing formula library styles;
+>
+> 3.Support configuring the inner margin of the outer frame;
 
 ## 0.10.2 / 0.10.2-fix.1
 

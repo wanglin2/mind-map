@@ -423,4 +423,12 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/Tobin.jpg" style="width: 50px;height: 50px;" />
         <span>Tobin</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/夏虫不语冰.jpg" style="width: 50px;height: 50px;" />
+        <span>夏虫不语冰</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/晴空.jpg" style="width: 50px;height: 50px;" />
+        <span>晴空</span>
+    </span>
 </p>

@@ -3,9 +3,10 @@
     <h1>Changelog</h1>
 <h2>0.10.3</h2>
 <blockquote>
-<p>2024.7.12</p>
+<p>2024.7.19</p>
 </blockquote>
-<p>节点标签数据结构更新：</p>
+<p>需要特别关注的更新：</p>
+<p>1.节点标签数据结构更新</p>
 <p>节点标签数据由字符串数组，改为对象数组，主要是为了支持设置单个标签的样式，当前节点的标签数据结构如下：</p>
 <pre class="hljs"><code>{
      <span class="hljs-attr">tag</span>: [<span class="hljs-string">&#x27;标签&#x27;</span>]
@@ -21,6 +22,8 @@
      ]
 }
 </code></pre>
+<p>2.数学公式相关</p>
+<p>数学公式插件Formula默认会引入Katex库的样式，所以应用中不需要再手动引入，同时需要通过katexFontPath实例化选项来配置Katex库字体文件的路径。</p>
 <p>修复：</p>
 <blockquote>
 <p>1.修复customCreateNodeContent、createNodePrefixContent等方法里获取到的节点实例的isRoot和parent等属性都为null的问题；</p>
@@ -29,14 +32,21 @@
 </blockquote>
 <p>新增：</p>
 <blockquote>
-<p>1.支持设置节点单个标签样式；</p>
-<p>2.新增节点标签显示位置的实例化选项；</p>
+<p>1.修改了节点标签字段tag的数据类型，以支持设置节点单个标签样式；</p>
+<p>2.新增节点标签显示位置（相当于节点文本）的实例化选项；</p>
 <p>3.node_tag_click事件新增两个回调参数；</p>
 <p>4.复制、剪切、移动多个节点时，按其在节点上的顺序进行操作，而不是激活的顺序；</p>
+<p>5.如果注册了公式插件并且节点里存在公式，那么导出svg时需要添加katex库的样式；</p>
+<p>6.支持自定义katex库渲染模式的实例化选项；</p>
+<p>7.公式插件默认引入katex库的样式；</p>
+<p>8.增加自定义katex库字体文件路径的实例化选项；</p>
+<p>9.新增设置外框内边距的实例化选项；</p>
 </blockquote>
 <p>Demo：</p>
 <blockquote>
 <p>1.支持点击节点标签进行文本和颜色的修改；</p>
+<p>2.去除引入公式库样式的逻辑；</p>
+<p>3.支持配置外框内边距；</p>
 </blockquote>
 <h2>0.10.2 / 0.10.2-fix.1</h2>
 <blockquote>

@@ -269,7 +269,6 @@ new MindMap({
 | 字段名称                         | 类型    | 默认值           | 描述                                                         |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
 | richTextEditFakeInPlace（v0.6.13+）     | Boolean  | false | 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果，需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果 |
-| enableEditFormulaInRichTextEdit（v0.10.0+）     | Boolean  | true | 是否开启在富文本编辑框中直接编辑数学公式 |
 | transformRichTextOnEnterEdit（v0.10.0+）     | null、Function  | null | 转换富文本内容，可以传递一个函数，当进入富文本编辑时会调用该函数，函数接收即将被编辑的富文本内容，需要返回你处理后的富文本内容 |
 | beforeHideRichTextEdit（v0.10.0+）     | null、Function  | null | 可以传递一个函数，即将结束富文本编辑前会执行该函数，函数接收richText实例，所以你可以在此时机更新quill文档数据 |
 
@@ -322,6 +321,21 @@ new MindMap({
 | padding        | Number  | 20                  | 高亮框的内边距 |
 | margin         | Number  | 50                  | 高亮框的外边距 |
 | openBlankMode（v0.9.12+） | Boolean | true     | 是否开启填空模式，即带下划线的文本默认不显示，按回车键才依次显示 |
+
+#### 14.Formula插件
+
+| 字段名称                         | 类型    | 默认值           | 描述                                                         |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
+| enableEditFormulaInRichTextEdit（v0.10.0+）     | Boolean  | true | 是否开启在富文本编辑框中直接编辑数学公式 |
+| katexFontPath（v0.10.3+）     | String  | https://unpkg.com/katex@0.16.11/dist | katex库的字体文件的请求路径。仅当katex的output配置为html时才会请求字体文件。可以通过mindMap.formula.getKatexConfig()方法来获取当前的配置。字体文件可以从node_modules中找到：katex/dist/fonts/。可以上传到你的服务器或cdn。最终的字体请求路径为`${katexFontPath}fonts/KaTeX_AMS-Regular.woff2`，可以自行拼接进行测试是否可以访问 |
+| getKatexOutputType（v0.10.3+）     | Function、null  | null | 自定义katex库的输出模式。默认当Chrome内核100以下会使用html方式，否则使用mathml方式，如果你有自己的规则，那么可以传递一个函数，函数返回值为：mathml或html |
+
+#### 15.OuterFrame插件
+
+| 字段名称                         | 类型    | 默认值           | 描述                                                         |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
+| outerFramePaddingX（v0.10.3+）     | Number  | 10 | 外框的水平内边距 |
+| outerFramePaddingY（v0.10.3+）     | Number  | 10 | 外框的垂直内边距 |
 
 ## 静态方法
 

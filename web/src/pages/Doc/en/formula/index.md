@@ -25,7 +25,9 @@ This plugin is used to support inserting formulas into nodes.
 > ```
 > If you are using packaged files such as '.umd.js' or '.esm.js', you can import them through online CDN services, such as `https://unpkg.com/browse/katex@0.16.9/dist/`, Of course, it is best to upload the 'css' file of the 'katex' and the corresponding font files in the 'fonts' directory to your own server.
 
-## 问题
+> Version v0.10.3+ will default to importing the style files of 'KaTeX'. So you don't need to manually introduce it anymore. When the rendering mode of the Katex library is html, it depends on some font files, which are not included in the plugin. You need to use the `katexFontPath` instantiation option to set the path of the font files.
+
+## Problem
 
 1.On some browsers, the formula source code is displayed
 
