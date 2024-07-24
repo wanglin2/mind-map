@@ -10,9 +10,7 @@ function createExpandNodeContent() {
   // 根据配置判断是否显示数量按钮
   if (this.mindMap.opt.isShowExpandNum) {
     // 展开的节点
-    this._openExpandNode = SVG()
-      .text()
-      .size(this.expandBtnSize, this.expandBtnSize)
+    this._openExpandNode = SVG().text()
     // 文本垂直居中
     this._openExpandNode.attr({
       'text-anchor': 'middle',
@@ -126,11 +124,7 @@ function renderExpandBtn() {
     this._expandBtn.on('click', e => {
       e.stopPropagation()
       // 展开收缩
-      this.mindMap.execCommand(
-        'SET_NODE_EXPAND',
-        this,
-        !this.getData('expand')
-      )
+      this.mindMap.execCommand('SET_NODE_EXPAND', this, !this.getData('expand'))
       this.mindMap.emit('expand_btn_click', this)
     })
     this._expandBtn.on('dblclick', e => {
