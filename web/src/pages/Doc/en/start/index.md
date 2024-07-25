@@ -225,7 +225,7 @@ The browser uses API [window.showOpenFilePicker](https://developer.mozilla.org/z
 
 This is because your build environment does not support this JavaScript syntax, which comes from the '@svgdotjs/svg.js' library. The solution is as follows:
 
-1.Manually reduce the version of the '@svgdotjs/svg.js' library. You can manually install the lower version in your project, such as: `npm i @svgdotjs/svg.js@3.0.16`
+1.Manually reduce the version of the '@svgdotjs/svg.js' library. You can manually install the lower version in your project, such as: `npm i @svgdotjs/svg.js@3.2.0`
 
 2.If you don't reduce the version, you can modify the relevant configuration of your build tool, modify the configuration of 'babel', and have it compile the 'simple-mind-map' library in 'node.modules' or the  '@svgdotjs/svg.js' library. If you are using 'vue-cli' or 'vite', they also provide the relevant configuration directly. In addition, it is necessary to install the 'babel' plugin that compiles this syntax and configure it in the 'babel' configuration file:
 

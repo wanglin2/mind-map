@@ -148,7 +148,7 @@ module. If you need it, you can try using other libraries to parse <code>xml</co
 <h3>5.Import simple-mind-map error message, the error message is as follows:</h3>
 <img src="../../../../assets/img/docs/错误.jpg" style="width: 850px" />
 <p>This is because your build environment does not support this JavaScript syntax, which comes from the '@svgdotjs/svg.js' library. The solution is as follows:</p>
-<p>1.Manually reduce the version of the '@svgdotjs/svg.js' library. You can manually install the lower version in your project, such as: <code>npm i @svgdotjs/svg.js@3.0.16</code></p>
+<p>1.Manually reduce the version of the '@svgdotjs/svg.js' library. You can manually install the lower version in your project, such as: <code>npm i @svgdotjs/svg.js@3.2.0</code></p>
 <p>2.If you don't reduce the version, you can modify the relevant configuration of your build tool, modify the configuration of 'babel', and have it compile the 'simple-mind-map' library in 'node.modules' or the  '@svgdotjs/svg.js' library. If you are using 'vue-cli' or 'vite', they also provide the relevant configuration directly. In addition, it is necessary to install the 'babel' plugin that compiles this syntax and configure it in the 'babel' configuration file:</p>
 <p><code>@babel/plugin-proposal-nullish-coalescing-operator</code>、<code>@babel/plugin-proposal-optional-chaining</code>。</p>
 

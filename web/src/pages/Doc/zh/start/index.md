@@ -209,7 +209,7 @@ resolve: { alias: { stream: "stream-browserify" } }
 
 这是因为你的构建环境不支持该js语法，该语法出自`@svgdotjs/svg.js`库，解决方法如下：
 
-1.手动降低`@svgdotjs/svg.js`库的版本，你可以在你的项目中手动安装低版本，比如：`npm i @svgdotjs/svg.js@3.0.16`
+1.手动降低`@svgdotjs/svg.js`库的版本，你可以在你的项目中手动安装低版本，比如：`npm i @svgdotjs/svg.js@3.2.0`
 
 2.不降低版本的话，可以通过修改你的构建工具的相关配置，修改`babel`的配置，让它编译一下`node_modules`中的`simple-mind-map`库，或`@svgdotjs/svg.js`库，如果用的是`vue-cli`或`vite`，它们也直接提供了相关配置。另外需要安装编译该语法的`babel`插件，并且配置到`babel`的配置文件中：
 

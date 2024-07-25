@@ -131,7 +131,7 @@ npm run build
 <h3>5.引入simple-mind-map报错，报错信息如下：</h3>
 <img src="../../../../assets/img/docs/错误.jpg" style="width: 850px" />
 <p>这是因为你的构建环境不支持该js语法，该语法出自<code>@svgdotjs/svg.js</code>库，解决方法如下：</p>
-<p>1.手动降低<code>@svgdotjs/svg.js</code>库的版本，你可以在你的项目中手动安装低版本，比如：<code>npm i @svgdotjs/svg.js@3.0.16</code></p>
+<p>1.手动降低<code>@svgdotjs/svg.js</code>库的版本，你可以在你的项目中手动安装低版本，比如：<code>npm i @svgdotjs/svg.js@3.2.0</code></p>
 <p>2.不降低版本的话，可以通过修改你的构建工具的相关配置，修改<code>babel</code>的配置，让它编译一下<code>node_modules</code>中的<code>simple-mind-map</code>库，或<code>@svgdotjs/svg.js</code>库，如果用的是<code>vue-cli</code>或<code>vite</code>，它们也直接提供了相关配置。另外需要安装编译该语法的<code>babel</code>插件，并且配置到<code>babel</code>的配置文件中：</p>
 <p><code>@babel/plugin-proposal-nullish-coalescing-operator</code>、<code>@babel/plugin-proposal-optional-chaining</code>。</p>
 
