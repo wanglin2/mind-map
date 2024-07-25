@@ -297,6 +297,13 @@ class OuterFrame {
             if (range[0] === -1 || range[1] === -1) return
             const { left, top, width, height } =
               getNodeListBoundingRect(nodeList)
+            if (
+              !Number.isFinite(left) ||
+              !Number.isFinite(top) ||
+              !Number.isFinite(width) ||
+              !Number.isFinite(height)
+            )
+              return
             const el = this.createOuterFrameEl(
               (left -
                 outerFramePaddingX -

@@ -32,7 +32,8 @@ import {
   checkIsNodeStyleDataKey,
   removeRichTextStyes,
   formatGetNodeGeneralization,
-  sortNodeList
+  sortNodeList,
+  throttle
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -144,13 +145,40 @@ class Render {
       if (!this.mindMap.opt.enableDblclickBackToRootNode) return
       this.setRootNodeCenter()
     })
-    // let timer = null
-    // this.mindMap.on('view_data_change', () => {
-    //   clearTimeout(timer)
-    //   timer = setTimeout(() => {
-    //     this.render()
-    //   }, 300)
-    // })
+    // 性能模式
+    this.performanceMode()
+  }
+
+  // 性能模式，懒加载节点
+  performanceMode() {
+    const { openPerformance, performanceConfig } = this.mindMap.opt
+    const onViewDataChange = throttle(() => {
+      if (this.root) this.root.render()
+    }, performanceConfig.time)
+    let lastOpen = false
+    this.mindMap.on('before_update_config', opt => {
+      lastOpen = opt.openPerformance
+    })
+    this.mindMap.on('after_update_config', opt => {
+      if (opt.openPerformance && !lastOpen) {
+        // 动态开启性能模式
+        this.mindMap.on('view_data_change', onViewDataChange)
+        this.forceLoadNode()
+      }
+      if (!opt.openPerformance && lastOpen) {
+        // 动态关闭性能模式
+        this.mindMap.off('view_data_change', onViewDataChange)
+        this.forceLoadNode()
+      }
+    })
+    if (!openPerformance) return
+    this.mindMap.on('view_data_change', onViewDataChange)
+  }
+
+  // 强制渲染节点，不考虑是否在画布可视区域内
+  forceLoadNode(node) {
+    node = node || this.root
+    if (node) node.render(() => {}, true)
   }
 
   //  注册命令
@@ -453,6 +481,7 @@ class Render {
     }
     this.mindMap.emit('node_tree_render_start')
     // 计算布局
+    this.root = null
     this.layout.doLayout(root => {
       // 删除本次渲染时不再需要的节点
       Object.keys(this.lastNodeCache).forEach(uid => {

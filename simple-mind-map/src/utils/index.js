@@ -1382,22 +1382,24 @@ export const getNodeTreeBoundingRect = (
   let minY = Infinity
   let maxY = -Infinity
   const walk = (root, isRoot) => {
-    if (!(isRoot && excludeSelf)) {
-      const { x, y, width, height } = root.group
-        .findOne('.smm-node-shape')
-        .rbox()
-      if (x < minX) {
-        minX = x
-      }
-      if (x + width > maxX) {
-        maxX = x + width
-      }
-      if (y < minY) {
-        minY = y
-      }
-      if (y + height > maxY) {
-        maxY = y + height
-      }
+    if (!(isRoot && excludeSelf) && root.group) {
+      try {
+        const { x, y, width, height } = root.group
+          .findOne('.smm-node-shape')
+          .rbox()
+        if (x < minX) {
+          minX = x
+        }
+        if (x + width > maxX) {
+          maxX = x + width
+        }
+        if (y < minY) {
+          minY = y
+        }
+        if (y + height > maxY) {
+          maxY = y + height
+        }
+      } catch (e) {}
     }
     if (!excludeGeneralization && root._generalizationList.length > 0) {
       root._generalizationList.forEach(item => {

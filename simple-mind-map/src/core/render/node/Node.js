@@ -683,7 +683,7 @@ class Node {
   }
 
   //  更新节点
-  update() {
+  update(forceRender) {
     if (!this.group) {
       return
     }
@@ -710,36 +710,11 @@ class Node {
       }
     }
     // 更新概要
-    this.renderGeneralization()
+    this.renderGeneralization(forceRender)
     // 更新协同头像
     if (this.updateUserListNode) this.updateUserListNode()
     // 更新节点位置
     let t = this.group.transform()
-    // // 如果上次不在可视区内，且本次也不在，那么直接返回
-    // let { left: ox, top: oy } = this.getNodePosInClient(
-    //   t.translateX,
-    //   t.translateY
-    // )
-    // let oldIsInClient =
-    //   ox > 0 && oy > 0 && ox < this.mindMap.width && oy < this.mindMap.height
-    // let { left: nx, top: ny } = this.getNodePosInClient(this.left, this.top)
-    // let newIsNotInClient =
-    //   nx + this.width < 0 ||
-    //   ny + this.height < 0 ||
-    //   nx > this.mindMap.width ||
-    //   ny > this.mindMap.height
-    // if (!oldIsInClient && newIsNotInClient) {
-    //   if (!this.isHide) {
-    //     this.isHide = true
-    //     this.group.hide()
-    //   }
-    //   return
-    // }
-    // // 如果当前是隐藏状态，那么先显示
-    // if (this.isHide) {
-    //   this.isHide = false
-    //   this.group.show()
-    // }
     // 如果节点位置没有变化，则返回
     if (this.left === t.translateX && this.top === t.translateY) return
     this.group.translate(this.left - t.translateX, this.top - t.translateY)
@@ -755,6 +730,17 @@ class Node {
       left,
       top
     }
+  }
+
+  // 判断节点是否可见
+  checkIsInClient(padding = 0) {
+    const { left: nx, top: ny } = this.getNodePosInClient(this.left, this.top)
+    return (
+      nx + this.width > 0 - padding &&
+      ny + this.height > 0 - padding &&
+      nx < this.mindMap.width + padding &&
+      ny < this.mindMap.height + padding
+    )
   }
 
   // 重新渲染节点，即重新创建节点内容、计算节点大小、计算节点内容布局、更新展开收起按钮，概要及位置
@@ -786,31 +772,41 @@ class Node {
   }
 
   //  递归渲染
-  render(callback = () => {}) {
+  render(callback = () => {}, forceRender = false) {
     // 节点
     // 重新渲染连线
     this.renderLine()
-    if (!this.group) {
-      // 创建组
-      this.group = new G()
-      this.group.addClass('smm-node')
-      this.group.css({
-        cursor: 'default'
-      })
-      this.bindGroupEvent()
-      this.nodeDraw.add(this.group)
-      this.layout()
-      this.update()
-    } else {
-      if (!this.nodeDraw.has(this.group)) {
+    const { openPerformance, performanceConfig } = this.mindMap.opt
+    // 强制渲染、或没有开启性能模式、或不在画布可视区域内不渲染节点内容
+    if (
+      forceRender ||
+      !openPerformance ||
+      this.checkIsInClient(performanceConfig.padding)
+    ) {
+      if (!this.group) {
+        // 创建组
+        this.group = new G()
+        this.group.addClass('smm-node')
+        this.group.css({
+          cursor: 'default'
+        })
+        this.bindGroupEvent()
         this.nodeDraw.add(this.group)
-      }
-      if (this.needLayout) {
-        this.needLayout = false
         this.layout()
+        this.update(forceRender)
+      } else {
+        if (!this.nodeDraw.has(this.group)) {
+          this.nodeDraw.add(this.group)
+        }
+        if (this.needLayout) {
+          this.needLayout = false
+          this.layout()
+        }
+        this.updateExpandBtnPlaceholderRect()
+        this.update(forceRender)
       }
-      this.updateExpandBtnPlaceholderRect()
-      this.update()
+    } else if (openPerformance && performanceConfig.removeNodeWhenOutCanvas) {
+      this.remove(true)
     }
     // 子节点
     if (
@@ -825,7 +821,7 @@ class Node {
           if (index >= this.children.length) {
             callback()
           }
-        })
+        }, forceRender)
       })
     } else {
       callback()
@@ -841,11 +837,13 @@ class Node {
   }
 
   //  递归删除，只是从画布删除，节点容器还在，后续还可以重新插回画布
-  remove() {
+  remove(keepLine = false) {
     if (!this.group) return
     this.group.remove()
     this.removeGeneralization()
-    this.removeLine()
+    if (!keepLine) {
+      this.removeLine()
+    }
     // 子节点
     if (this.children && this.children.length) {
       this.children.forEach(item => {
@@ -856,6 +854,10 @@ class Node {
 
   // 销毁节点，不但会从画布删除，而且原节点直接置空，后续无法再插回画布
   destroy() {
+    this.removeLine()
+    if (this.parent) {
+      this.parent.removeLine()
+    }
     if (!this.group) return
     if (this.emptyUser) {
       this.emptyUser()
@@ -863,11 +865,7 @@ class Node {
     this.resetWhenDelete()
     this.group.remove()
     this.removeGeneralization()
-    this.removeLine()
     this.group = null
-    if (this.parent) {
-      this.parent.removeLine()
-    }
     this.style.onRemove()
   }
 

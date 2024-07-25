@@ -194,7 +194,7 @@ class MindMap {
     this.renderer.reRender = true // 标记为重新渲染
     this.renderer.clearCache() // 清空节点缓存池
     this.clearDraw() // 清空画布
-    this.render(callback, (source = ''))
+    this.render(callback, source)
   }
 
   // 获取或更新容器尺寸位置信息
@@ -288,7 +288,9 @@ class MindMap {
 
   // 更新配置
   updateConfig(opt = {}) {
+    this.emit('before_update_config', this.opt)
     this.opt = this.handleOpt(merge.all([defaultOpt, this.opt, opt]))
+    this.emit('after_update_config', this.opt)
   }
 
   //  获取当前布局结构
@@ -379,6 +381,9 @@ class MindMap {
   //  导出
   async export(...args) {
     try {
+      if (!this.doExport) {
+        throw new Error('请注册Export插件！')
+      }
       let result = await this.doExport.export(...args)
       return result
     } catch (error) {
@@ -416,6 +421,11 @@ class MindMap {
     addContentToFooter,
     node
   } = {}) {
+    const { watermarkConfig, openPerformance } = this.opt
+    // 如果开启了性能模式，那么需要先渲染所有节点
+    if (openPerformance) {
+      this.renderer.forceLoadNode(node)
+    }
     const { cssTextList, header, headerHeight, footer, footerHeight } =
       handleGetSvgDataExtraContent({
         addContentToHeader,
@@ -459,7 +469,7 @@ class MindMap {
     if (!ignoreWatermark && hasWatermark) {
       this.watermark.isInExport = true
       // 是否是仅导出时需要水印
-      const { onlyExport } = this.opt.watermarkConfig
+      const { onlyExport } = watermarkConfig
       // 是否需要重新绘制水印
       const needReDrawWatermark =
         rect.width > origWidth || rect.height > origHeight
