@@ -466,6 +466,18 @@
 <td>false</td>
 <td>自定义超链接的跳转。如果不传，默认会以新窗口的方式打开超链接，可以传递一个函数，函数接收两个参数：link（超链接的url）、node（所属节点实例），只要传递了函数，就会阻止默认的跳转</td>
 </tr>
+<tr>
+<td>openPerformance（v0.10.4+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>是否开启性能模式，默认情况下所有节点都会直接渲染，无论是否处于画布可视区域，这样当节点数量比较多时（1000+）会比较卡，如果你的数据量比较大，那么可以通过该配置开启性能模式，即只渲染画布可视区域内的节点，超出的节点不渲染，这样会大幅提高渲染速度，当然同时也会带来一些其他问题，比如：1.当拖动或是缩放画布时会实时计算并渲染未节点的节点，所以会带来一定卡顿；2.导出图片、svg、pdf时需要先渲染全部节点，所以会比较慢；3.其他目前未发现的问题</td>
+</tr>
+<tr>
+<td>performanceConfig（v0.10.4+）</td>
+<td>Object</td>
+<td>{ time: 250,  padding: 100, removeNodeWhenOutCanvas: true }</td>
+<td>性能优化模式配置。time（当视图改变后多久刷新一次节点，单位：ms）、padding（超出画布四周指定范围内依旧渲染节点）、removeNodeWhenOutCanvas（节点移出画布可视区域后是否从画布删除）</td>
+</tr>
 </tbody>
 </table>
 <h4>1.1数据结构</h4>
@@ -1608,6 +1620,16 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>node_attachmentContextmenu（v0.9.10+）</td>
 <td>节点附件图标的右键点击事件</td>
 <td>this(当前节点实例)、e（事件对象）、node（图标节点）</td>
+</tr>
+<tr>
+<td>before_update_config（v0.10.4+）</td>
+<td>更新配置前触发，即当调用了<code>mindMap.updateConfig</code>方法更新配置时触发</td>
+<td>opt（未更新前的配置对象，引用对象，而非拷贝，所以当after_update_config事件触发后，该对象也会同步变化，所以需要缓存你需要的某个配置字段）</td>
+</tr>
+<tr>
+<td>after_update_config（v0.10.4+）</td>
+<td>更新配置后触发</td>
+<td>opt（更新后的配置对象）</td>
 </tr>
 </tbody>
 </table>

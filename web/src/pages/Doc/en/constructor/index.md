@@ -99,6 +99,8 @@ const mindMap = new MindMap({
 | createNodePostfixContent（v0.9.12+）     | Function、null | null  | Add additional node post content.Post content refers to the post content in the area of the same line as the text, excluding the node image section. The usage is the same as createNodePrefixContent |         |
 | disabledClipboard（v0.10.2+）     | Boolean | false | Is prohibit pasting data from the user's clipboard and writing copied node data to the user's clipboard. At this time, only node data from the canvas can be copied and pasted |         |
 | customHyperlinkJump（v0.10.2+）     | null、Function | false | Customize the jump of hyperlinks. If not passed, the hyperlink will be opened as a new window by default, and a function can be passed, The function takes two parameters: link（The URL of the hyperlink）、node（Node instance to which it belongs）, As long as a function is passed, it will block the default jump |         |
+| openPerformance（v0.10.4+）     | Boolean | false | Whether to enable performance mode or not, by default, all nodes will be rendered directly, regardless of whether they are in the visible area of the canvas. This will cause a lag when there are a large number of nodes (1000+). If your data volume is large, you can enable performance mode through this configuration, that is, only rendering nodes within the visible area of the canvas, and not rendering nodes beyond it. This will greatly improve rendering speed, but of course, it will also bring some other problems, such as: 1. When dragging or scaling the canvas, real-time calculation and rendering of nodes without nodes will be performed, which will bring some lag; When exporting images, SVG, and PDF, all nodes need to be rendered first, so it may be slower; 3. Other currently undiscovered issues |         |
+| performanceConfig（v0.10.4+）     | Object | { time: 250,  padding: 100, removeNodeWhenOutCanvas: true } | Performance optimization mode configuration. time（How often do nodes refresh after a view change. Unit:ms）、padding（Still rendering nodes beyond the specified range around the canvas）、removeNodeWhenOutCanvas（Is the node deleted from the canvas after being moved out of the visible area of the canvas） |         |
 
 ### 1.1Data structure
 
@@ -618,6 +620,8 @@ Listen to an event. Event list:
 | node_layout_end（v0.10.1+）    | Event where the content layout of a single node is completed | this(Current node instance)  |
 | node_attachmentClick（v0.9.10+）    | Click event for node attachment icon | this(Current node instance)、e（Event Object）、node（Icon node）  |
 | node_attachmentContextmenu（v0.9.10+）    | Right click event on node attachment icon | this(Current node instance)、e（Event Object）、node（Icon node）  |
+| before_update_config（v0.10.4+）    | Triggered before updating the configuration, that is, when the 'mindMap.updateConfig' method is called to update the configuration | opt（The configuration object before updating refers to an object, not a copy, so when the after_uupdate_comfig event is triggered, the object will also change synchronously. Therefore, it is necessary to cache a certain configuration field that you need）  |
+| after_update_config（v0.10.4+）    | Triggered after updating configuration |  opt（Updated configuration object） |
 
 ### emit(event, ...args)
 

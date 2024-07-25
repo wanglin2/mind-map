@@ -78,16 +78,25 @@ import('simple-mind-map/src/plugins/Export.js').then(res => {
 })
 ```
 
-If you need a file in the format of `umd` module, such as `CDN` in the browser, Then you can find the `simpleMindMap.umd.min.js` file and `simpleMindMap.css` file in the `/simple-mind-map/dist/` directory, copy it to your project, and then import it into the page:
+If you need a file in the format of `umd` module, such as `CDN` in the browser, So you can first install `npm i simple-mind-map` through npm,, Then you can find the `simpleMindMap.umd.min.js` file and `simpleMindMap.esm.min.css` file in the `node_modules/simple-mind-map/dist/` directory, copy it to your project, and then import it into the page:
 
 ```html
-<link rel="stylesheet" href="simpleMindMap.css">
+<link rel="stylesheet" href="simpleMindMap.esm.min.css">
 <script scr="simpleMindMap.umd.min.js"></script>
 ```
 
-A global variable `window.simpleMindMap` will be created. you can get `MindMap` constructor by `window.simpleMindMap.default`, for more detail info you can log `window.simpleMindMap`.
+A global variable `window.simpleMindMap` will be created. you can get `MindMap` constructor by `window.simpleMindMap.default`, Then it can be instantiated normally, for more detail info you can log `window.simpleMindMap`.
 
-The disadvantage of this method is that it will contain all the content, including the plugins you have not registered, so the overall volume will be relatively large.
+If it is inconvenient to install using 'npm', you can also obtain these two files through some online 'CDN' services, such as:
+
+```
+https://unpkg.com/simple-mind-map@0.10.2/dist/simpleMindMap.esm.css
+https://unpkg.com/simple-mind-map@0.10.2/dist/simpleMindMap.umd.min.js
+```
+
+You can replace the version number in it.
+
+The disadvantage of this method is that it will contain all the content, including the plugins you have not registered(You can find it here [full.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/full.js#L36) View plugins packaged into files by default), so the overall volume will be relatively large. If you only want to package the specified plugin, you can modify the file and repackage it. If necessary, you can also contact the developer.
 
 （v0.5.4+）If you want to use the `ES` module directly on the browser side, you can find the `simpleMindMap.esm.js` and `simpleMindMap.esm.css` files in the `/simple-mind-map/dist/` directory.
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.10.4
+
+> 2024.7.25
+
+This update mainly adds a performance mode. When enabled, only nodes within the visible area of the canvas will be rendered, and nodes outside the area will be deleted from the canvas, improving usability in the case of large data volumes (1000+nodes). The first rendering time for 2000 nodes has been reduced from 5s+to 0.5s. However, this also brings some problems, such as a slight lag when dragging the animation canvas, as nodes will be rendered in real time, and exporting images will be slower because all nodes need to be rendered first, as well as other temporarily undiscovered issues.
+
+Fix:
+
+> 1.Delete useless code and fix the issue where the mouse hover node reports an error and does not display the expand and collapse buttons;
+
 ## 0.10.3
 
 > 2024.7.19

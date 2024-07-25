@@ -31,6 +31,14 @@
 </blockquote>
 <p>节点是否正在拖拽中</p>
 <h2>方法</h2>
+<h3>checkIsInClient(padding = 0)</h3>
+<blockquote>
+<p>v0.10.4+</p>
+</blockquote>
+<ul>
+<li><code>padding</code>: Number, 向画布四周延伸的区域大小</li>
+</ul>
+<p>判断节点是否处于画布可视区域。</p>
 <h3>deactivate()</h3>
 <blockquote>
 <p>0.9.11+</p>

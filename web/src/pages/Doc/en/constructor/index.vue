@@ -540,6 +540,20 @@
 <td>Customize the jump of hyperlinks. If not passed, the hyperlink will be opened as a new window by default, and a function can be passed, The function takes two parameters: link（The URL of the hyperlink）、node（Node instance to which it belongs）, As long as a function is passed, it will block the default jump</td>
 <td></td>
 </tr>
+<tr>
+<td>openPerformance（v0.10.4+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Whether to enable performance mode or not, by default, all nodes will be rendered directly, regardless of whether they are in the visible area of the canvas. This will cause a lag when there are a large number of nodes (1000+). If your data volume is large, you can enable performance mode through this configuration, that is, only rendering nodes within the visible area of the canvas, and not rendering nodes beyond it. This will greatly improve rendering speed, but of course, it will also bring some other problems, such as: 1. When dragging or scaling the canvas, real-time calculation and rendering of nodes without nodes will be performed, which will bring some lag; When exporting images, SVG, and PDF, all nodes need to be rendered first, so it may be slower; 3. Other currently undiscovered issues</td>
+<td></td>
+</tr>
+<tr>
+<td>performanceConfig（v0.10.4+）</td>
+<td>Object</td>
+<td>{ time: 250,  padding: 100, removeNodeWhenOutCanvas: true }</td>
+<td>Performance optimization mode configuration. time（How often do nodes refresh after a view change. Unit:ms）、padding（Still rendering nodes beyond the specified range around the canvas）、removeNodeWhenOutCanvas（Is the node deleted from the canvas after being moved out of the visible area of the canvas）</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>1.1Data structure</h3>
@@ -1697,6 +1711,16 @@ poor performance and should be used sparingly.</p>
 <td>node_attachmentContextmenu（v0.9.10+）</td>
 <td>Right click event on node attachment icon</td>
 <td>this(Current node instance)、e（Event Object）、node（Icon node）</td>
+</tr>
+<tr>
+<td>before_update_config（v0.10.4+）</td>
+<td>Triggered before updating the configuration, that is, when the 'mindMap.updateConfig' method is called to update the configuration</td>
+<td>opt（The configuration object before updating refers to an object, not a copy, so when the after_uupdate_comfig event is triggered, the object will also change synchronously. Therefore, it is necessary to cache a certain configuration field that you need）</td>
+</tr>
+<tr>
+<td>after_update_config（v0.10.4+）</td>
+<td>Triggered after updating configuration</td>
+<td>opt（Updated configuration object）</td>
 </tr>
 </tbody>
 </table>

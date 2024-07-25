@@ -73,16 +73,25 @@ import('simple-mind-map/src/plugins/Export.js').then(res => {
 })
 ```
 
-如果你需要`umd`模块格式的文件，比如以`CDN`的方式在浏览器上使用，那么你可以从`/simple-mind-map/dist/`目录中找到`simpleMindMap.umd.min.js`文件和`simpleMindMap.css`文件，复制到你的项目中，然后在页面中引入：
+如果你需要`umd`模块格式的文件，比如以`CDN`的方式在浏览器上使用，那么你可以先通过npm安装`npm i simple-mind-map`，然后在`node_modules/simple-mind-map/dist/`目录中找到`simpleMindMap.umd.min.js`文件和`simpleMindMap.esm.min.css`文件，复制到你的项目中，然后在页面中引入：
 
 ```html
-<link rel="stylesheet" href="simpleMindMap.css">
+<link rel="stylesheet" href="simpleMindMap.esm.min.css">
 <script scr="simpleMindMap.umd.min.js"></script>
 ```
 
-会创建一个全局变量`window.simpleMindMap`，可以通过`window.simpleMindMap.default`获取到`MindMap`构造函数，详细信息可以把`window.simpleMindMap`打印出来看一下。
+库会创建一个全局变量`window.simpleMindMap`，可以通过`window.simpleMindMap.default`获取到`MindMap`构造函数，然后正常实例化即可，详细信息可以把`window.simpleMindMap`打印出来看一下。
 
-这种方式的缺点是会包含所有的内容，包括你没有注册的插件，所以整体体积会比较大。
+如果不方便使用`npm`来安装，也可以通过一些在线`CDN`服务来获取到这两个文件，比如：
+
+```
+https://unpkg.com/simple-mind-map@0.10.2/dist/simpleMindMap.esm.css
+https://unpkg.com/simple-mind-map@0.10.2/dist/simpleMindMap.umd.min.js
+```
+
+你可以替换其中的版本号。
+
+这种方式的缺点是会包含所有的内容，包括你没有注册的插件（可以在这里[full.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/full.js#L36)查看默认打包进文件的插件），所以整体体积会比较大，如果只想要打包指定的插件，你可以修改该文件，然后重新打包，如有需要也可以联系开发者。
 
 （v0.5.4+）如果你想直接在浏览器端通过`ES`模块的方式来使用，你可以在`/simple-mind-map/dist/`目录中找到`simpleMindMap.esm.js`和`simpleMindMap.esm.css`文件。
 

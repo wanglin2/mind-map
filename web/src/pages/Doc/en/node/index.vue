@@ -31,6 +31,14 @@
 </blockquote>
 <p>Whether the node is currently being dragged</p>
 <h2>Methods</h2>
+<h3>checkIsInClient(padding = 0)</h3>
+<blockquote>
+<p>v0.10.4+</p>
+</blockquote>
+<ul>
+<li><code>padding</code>: Number, The size of the area extending around the canvas</li>
+</ul>
+<p>Determine whether the node is within the visible area of the canvas.</p>
 <h3>deactivate()</h3>
 <blockquote>
 <p>0.9.11+</p>
