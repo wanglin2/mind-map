@@ -27,6 +27,7 @@ export default {
     nodeUseLineStyle: '是否使用只有底边框的风格',
     otherConfig: '其他配置',
     enableFreeDrag: '是否开启节点自由拖拽',
+    openPerformance: '开启性能模式(Beta)',
     watermark: '水印',
     showWatermark: '是否显示水印',
     watermarkDefaultText: '水印文字',

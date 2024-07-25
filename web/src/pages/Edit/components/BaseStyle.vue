@@ -845,6 +845,20 @@
       </div>
       <!-- 其他配置 -->
       <div class="title noTop">{{ $t('baseStyle.otherConfig') }}</div>
+      <!-- 配置性能模式 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="config.openPerformance"
+            @change="
+              value => {
+                updateOtherConfig('openPerformance', value)
+              }
+            "
+            >{{ $t('baseStyle.openPerformance') }}</el-checkbox
+          >
+        </div>
+      </div>
       <!-- 配置开启自由拖拽 -->
       <div class="row">
         <div class="rowItem">
@@ -1062,6 +1076,7 @@ export default {
         nodeUseLineStyle: false
       },
       config: {
+        openPerformance: false,
         enableFreeDrag: false,
         mousewheelAction: 'zoom',
         mousewheelZoomActionReverse: false,
@@ -1244,6 +1259,7 @@ export default {
     // 初始化其他配置
     initConfig() {
       ;[
+        'openPerformance',
         'enableFreeDrag',
         'mousewheelAction',
         'mousewheelZoomActionReverse',
