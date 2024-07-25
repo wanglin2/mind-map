@@ -528,6 +528,7 @@ class Node {
       textContentNested.add(foreignObject)
       textContentOffsetX += this._postfixData.width
     }
+    this.group.add(textContentNested)
     // 文字内容整体
     textContentNested.translate(
       width / 2 - textContentNested.bbox().width / 2,
@@ -535,7 +536,6 @@ class Node {
         imgHeight + // 图片高度
         (imgHeight > 0 && textContentHeight > 0 ? this.blockContentMargin : 0) // 和图片的间距
     )
-    this.group.add(textContentNested)
     addHoverNode()
     this.mindMap.emit('node_layout_end', this)
   }
