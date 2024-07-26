@@ -153,7 +153,12 @@ class Render {
   performanceMode() {
     const { openPerformance, performanceConfig } = this.mindMap.opt
     const onViewDataChange = throttle(() => {
-      if (this.root) this.root.render()
+      if (this.root) {
+        this.mindMap.emit('node_tree_render_start')
+        this.root.render(() => {
+          this.mindMap.emit('node_tree_render_end')
+        })
+      }
     }, performanceConfig.time)
     let lastOpen = false
     this.mindMap.on('before_update_config', opt => {
@@ -178,7 +183,12 @@ class Render {
   // 强制渲染节点，不考虑是否在画布可视区域内
   forceLoadNode(node) {
     node = node || this.root
-    if (node) node.render(() => {}, true)
+    if (node) {
+      this.mindMap.emit('node_tree_render_start')
+      node.render(() => {
+        this.mindMap.emit('node_tree_render_end')
+      }, true)
+    }
   }
 
   //  注册命令
