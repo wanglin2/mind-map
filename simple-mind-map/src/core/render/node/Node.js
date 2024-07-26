@@ -771,8 +771,10 @@ class Node {
     }
   }
 
-  //  递归渲染
-  render(callback = () => {}, forceRender = false) {
+  // 递归渲染
+  // forceRender：强制渲染，无论是否处于画布可视区域
+  // async：异步渲染
+  render(callback = () => {}, forceRender = false, async = false) {
     // 节点
     // 重新渲染连线
     this.renderLine()
@@ -806,7 +808,7 @@ class Node {
         this.update(forceRender)
       }
     } else if (openPerformance && performanceConfig.removeNodeWhenOutCanvas) {
-      this.remove(true)
+      this.removeSelf()
     }
     // 子节点
     if (
@@ -816,12 +818,23 @@ class Node {
     ) {
       let index = 0
       this.children.forEach(item => {
-        item.render(() => {
-          index++
-          if (index >= this.children.length) {
-            callback()
-          }
-        }, forceRender)
+        const renderChild = () => {
+          item.render(
+            () => {
+              index++
+              if (index >= this.children.length) {
+                callback()
+              }
+            },
+            forceRender,
+            async
+          )
+        }
+        if (async) {
+          setTimeout(renderChild, 0)
+        } else {
+          renderChild()
+        }
       })
     } else {
       callback()
@@ -836,14 +849,19 @@ class Node {
     }
   }
 
-  //  递归删除，只是从画布删除，节点容器还在，后续还可以重新插回画布
-  remove(keepLine = false) {
+  // 删除自身，只是从画布删除，节点容器还在，后续还可以重新插回画布
+  removeSelf() {
     if (!this.group) return
     this.group.remove()
     this.removeGeneralization()
-    if (!keepLine) {
-      this.removeLine()
-    }
+  }
+
+  //  递归删除，只是从画布删除，节点容器还在，后续还可以重新插回画布
+  remove() {
+    if (!this.group) return
+    this.group.remove()
+    this.removeGeneralization()
+    this.removeLine()
     // 子节点
     if (this.children && this.children.length) {
       this.children.forEach(item => {

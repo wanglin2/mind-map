@@ -155,9 +155,13 @@ class Render {
     const onViewDataChange = throttle(() => {
       if (this.root) {
         this.mindMap.emit('node_tree_render_start')
-        this.root.render(() => {
-          this.mindMap.emit('node_tree_render_end')
-        })
+        this.root.render(
+          () => {
+            this.mindMap.emit('node_tree_render_end')
+          },
+          false,
+          true
+        )
       }
     }, performanceConfig.time)
     let lastOpen = false
