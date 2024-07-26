@@ -1482,7 +1482,18 @@ class Render {
       node.nodeData.children.push(
         ...data.map(item => {
           const newData = simpleDeepClone(item)
-          createUidForAppointNodes([newData], true)
+          createUidForAppointNodes([newData], true, node => {
+            // 可能跨层级复制，那么富文本样式需要更新
+            if (this.mindMap.richText) {
+              // 如果设置了自定义样式那么不需要更新
+              if (
+                this.mindMap.richText.checkNodeHasCustomRichTextStyle(node.data)
+              ) {
+                return
+              }
+              node.data.resetRichText = true
+            }
+          })
           return newData
         })
       )

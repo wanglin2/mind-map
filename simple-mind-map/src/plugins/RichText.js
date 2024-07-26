@@ -13,6 +13,7 @@ import {
   nodeRichTextToTextWithWrap
 } from '../utils'
 import { CONSTANTS } from '../constants/constant'
+import Node from '../core/render/node/Node'
 
 let extended = false
 
@@ -676,7 +677,7 @@ class RichText {
       'textDecoration',
       'color'
     ]
-    const nodeData = node.getData()
+    const nodeData = node instanceof Node ? node.getData() : node
     for (let i = 0; i < list.length; i++) {
       if (nodeData[list[i]] !== undefined) {
         return true

@@ -948,7 +948,7 @@ export const addDataToAppointNodes = (appointNodes, data = {}) => {
 
 // 给指定的节点列表树数据添加uid，会修改原数据
 // createNewId默认为false，即如果节点不存在uid的话，会创建新的uid。如果传true，那么无论节点数据原来是否存在uid，都会创建新的uid
-export const createUidForAppointNodes = (appointNodes, createNewId = false) => {
+export const createUidForAppointNodes = (appointNodes, createNewId = false, handle = null) => {
   const walk = list => {
     list.forEach(node => {
       if (!node.data) {
@@ -957,6 +957,7 @@ export const createUidForAppointNodes = (appointNodes, createNewId = false) => {
       if (createNewId || isUndef(node.data.uid)) {
         node.data.uid = createUid()
       }
+      handle && handle(node)
       if (node.children && node.children.length > 0) {
         walk(node.children)
       }
