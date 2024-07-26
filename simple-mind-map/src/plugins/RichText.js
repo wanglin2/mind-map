@@ -666,6 +666,25 @@ class RichText {
     }
   }
 
+  // 检查指定节点是否存在自定义的富文本样式
+  checkNodeHasCustomRichTextStyle(node) {
+    const list = [
+      'fontFamily',
+      'fontSize',
+      'fontWeight',
+      'fontStyle',
+      'textDecoration',
+      'color'
+    ]
+    const nodeData = node.getData()
+    for (let i = 0; i < list.length; i++) {
+      if (nodeData[list[i]] !== undefined) {
+        return true
+      }
+    }
+    return false
+  }
+
   // 将所有节点转换成非富文本节点
   transformAllNodesToNormalNode() {
     if (!this.mindMap.renderer.renderTree) return
