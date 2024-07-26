@@ -780,10 +780,12 @@ class Node {
     this.renderLine()
     const { openPerformance, performanceConfig } = this.mindMap.opt
     // 强制渲染、或没有开启性能模式、或不在画布可视区域内不渲染节点内容
+    // 根节点不进行懒加载，始终渲染，因为滚动条插件依赖根节点进行计算
     if (
       forceRender ||
       !openPerformance ||
-      this.checkIsInClient(performanceConfig.padding)
+      this.checkIsInClient(performanceConfig.padding) ||
+      this.isRoot
     ) {
       if (!this.group) {
         // 创建组
