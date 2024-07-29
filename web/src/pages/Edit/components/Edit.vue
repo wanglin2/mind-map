@@ -412,6 +412,9 @@ export default {
             cssText,
             height: 30
           }
+        },
+        expandBtnNumHandler: num => {
+          return num >= 100 ? '…' : num
         }
         // createNodePrefixContent: (node) => {
         //   const el = document.createElement('div')
