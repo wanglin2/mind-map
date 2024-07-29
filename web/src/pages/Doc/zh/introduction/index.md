@@ -454,4 +454,8 @@
         <img src="../../../../assets/avatar/ccccs.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>ccccs</p>
     </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/。.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>。</p>
+    </div>
 </div>

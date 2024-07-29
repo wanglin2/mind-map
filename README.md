@@ -439,4 +439,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/ccccs.jpg" style="width: 50px;height: 50px;" />
         <span>ccccs</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/。.png" style="width: 50px;height: 50px;" />
+        <span>。</span>
+    </span>
 </p>
