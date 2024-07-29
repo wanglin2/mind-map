@@ -1466,6 +1466,9 @@ class Render {
       this.checkNodeLayerChange(item, toNode, true)
       this.removeNodeFromActiveList(item)
       removeFromParentNodeData(item)
+      toNode.setData({
+        expand: true
+      })
       toNode.nodeData.children.push(item.nodeData)
     })
     this.emitNodeActiveEvent()
@@ -1479,6 +1482,9 @@ class Render {
       return
     }
     this.activeNodeList.forEach(node => {
+      node.setData({
+        expand: true
+      })
       node.nodeData.children.push(
         ...data.map(item => {
           const newData = simpleDeepClone(item)
