@@ -40,6 +40,7 @@ class Demonstrate {
       { ...defaultConfig },
       this.mindMap.opt.demonstrateConfig || {}
     )
+    this.needRestorePerformanceMode = false
   }
 
   // 进入演示模式
@@ -56,6 +57,8 @@ class Demonstrate {
   }
 
   _enter() {
+    // 如果开启了性能模式，那么需要暂停
+    this.pausePerformanceMode()
     // 添加演示用的临时的样式
     this.addTmpStyles()
     // 记录演示前的画布状态
@@ -97,7 +100,25 @@ class Demonstrate {
     this.removeHighlightEl()
     this.mindMap.command.recovery()
     this.mindMap.keyCommand.recovery()
+    this.restorePerformanceMode()
     this.mindMap.emit('exit_demonstrate')
+  }
+
+  // 暂停性能模式
+  pausePerformanceMode() {
+    const { openPerformance } = this.mindMap.opt
+    if (openPerformance) {
+      this.needRestorePerformanceMode = true
+      this.mindMap.opt.openPerformance = false
+      this.mindMap.renderer.forceLoadNode()
+    }
+  }
+
+  // 恢复性能模式
+  restorePerformanceMode() {
+    if (!this.needRestorePerformanceMode) return
+    this.mindMap.opt.openPerformance = true
+    this.mindMap.renderer.forceLoadNode()
   }
 
   // 添加临时的样式
