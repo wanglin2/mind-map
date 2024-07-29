@@ -581,6 +581,12 @@ export default {
       if (hasFileURL) {
         this.$bus.$emit('handle_file_url')
       }
+      // api/index.js文件使用
+      // 当正在编辑本地文件时通过该方法获取最新数据
+      Vue.prototype.getCurrentData = () => {
+        const fullData = this.mindMap.getData(true)
+        return { ...fullData, config: this.mindMapData.config }
+      }
       // 协同测试
       this.cooperateTest()
       // 销毁

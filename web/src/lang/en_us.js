@@ -290,9 +290,9 @@ export default {
     creatingTip: 'Creating file',
     directory: 'Directory',
     newFileTip:
-      'Please export the currently edited file before creating a new one, otherwise the content will be lost',
+      'Please export the currently edited file before creating a new one, Beware of content loss',
     openFileTip:
-      'Please export the currently edited file before opening it, otherwise the content will be lost'
+      'Please export the currently edited file before opening it, Beware of content loss'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',

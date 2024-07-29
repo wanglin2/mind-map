@@ -1,6 +1,7 @@
 import exampleData from 'simple-mind-map/example/exampleData'
 import { simpleDeepClone } from 'simple-mind-map/src/utils/index'
 import Vue from 'vue'
+import vuexStore from '@/store'
 
 const SIMPLE_MIND_MAP_DATA = 'SIMPLE_MIND_MAP_DATA'
 const SIMPLE_MIND_MAP_LANG = 'SIMPLE_MIND_MAP_LANG'
@@ -36,6 +37,9 @@ export const getData = () => {
     mindMapData = window.takeOverAppMethods.getMindMapData()
     return mindMapData
   }
+  if (vuexStore.state.isHandleLocalFile) {
+    return Vue.prototype.getCurrentData()
+  }
   let store = localStorage.getItem(SIMPLE_MIND_MAP_DATA)
   if (store === null) {
     return simpleDeepClone(exampleData)
@@ -68,6 +72,9 @@ export const storeData = data => {
       return
     }
     Vue.prototype.$bus.$emit('write_local_file', originData)
+    if (vuexStore.state.isHandleLocalFile) {
+      return
+    }
     let dataStr = JSON.stringify(originData)
     localStorage.setItem(SIMPLE_MIND_MAP_DATA, dataStr)
   } catch (error) {
@@ -98,6 +105,9 @@ export const storeConfig = config => {
       return
     }
     Vue.prototype.$bus.$emit('write_local_file', originData)
+    if (vuexStore.state.isHandleLocalFile) {
+      return
+    }
     let dataStr = JSON.stringify(originData)
     localStorage.setItem(SIMPLE_MIND_MAP_DATA, dataStr)
   } catch (error) {
