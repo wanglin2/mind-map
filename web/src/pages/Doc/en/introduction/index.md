@@ -84,9 +84,11 @@ The folder containing the packaged resources for the `web` folder.
 
 ## Special Note
 
-This project can be used for learning and reference. Please deeply experience whether it can meet your needs when using it for actual projects.
+When applying this project to actual projects, please first experience in depth whether it can meet your needs.
 
 This project may not have fully tested every function point, so there may be bugs. In addition, when the number of nodes is very large, there may be some performance issues. Because everyone can accept different levels of congestion, you can test the maximum number of nodes yourself. Generally speaking, within 500 nodes, it is more smooth, while over 1000 nodes have more noticeable lag.
+
+In v0.10.4+version, a performance mode has been added to only render nodes within the visible area of the canvas, which can improve rendering speed under large data volumes. You can experience it by turning on the 'openPerformance' instantiation option, and in the online demo, you can turn on the 'Basic Styles' - 'Enable Performance Mode' switch.
 
 If you have suggestions or find bugs, you can submit [issues](https://github.com/wanglin2/mind-map/issues) here.
 
@@ -108,7 +110,7 @@ There are many other online mind mapping products similar to Zhixi, such as [Git
 
 These open-source mind maps are also good, each with its own characteristics, but they also have certain drawbacks, such as stopping updates, average interface aesthetics, less functionality, relying on a certain framework, and so on.
 
-In summary, in open-source mind maps, it is difficult to find a better choice than `simple-mind-map`. Of course, `simple-mind-map` is far from being the best, and it also has many shortcomings, as you saw in the previous [special note]. However, `simple-mind-map` has always been in a fast iteration process, and we welcome you to join and improve it together.
+In summary, in open-source mind maps, it is difficult to find a better choice than `simple-mind-map`. Of course, `simple-mind-map` is far from being the best, and it also has many shortcomings. However, `simple-mind-map` has always been in a fast iteration process, and we welcome you to join and improve it together.
 
 ## Browser Compatibility
 
@@ -126,7 +128,7 @@ Unsupported: `IE` browser.
 
 ## Invite the author to a cup of coffee
 
-Open source is not easy. If this project is helpful to you, you can invite the author to have a cup of coffee~
+Open source is not easy. If this project is helpful to you, you can invite the author to have a cup of coffee, Your support is the biggest driving force for developers to continuously maintain~
 
 > Please note the 【mind map】 for transfer. 
 
@@ -458,6 +460,8 @@ Open source is not easy. If this project is helpful to you, you can invite the a
         <img src="../../../../assets/avatar/ccccs.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>ccccs</p>
     </div>
+</div>
+<div style="display: flex;">
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/。.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>。</p>
