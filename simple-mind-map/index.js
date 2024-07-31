@@ -208,8 +208,14 @@ class MindMap {
 
   //  容器尺寸变化，调整尺寸
   resize() {
+    const oldWidth = this.width
+    const oldHeight = this.height
     this.getElRectInfo()
     this.svg.size(this.width, this.height)
+    if (oldWidth !== this.width || oldHeight !== this.height) {
+      // 如果画布宽高改变了需要触发一次渲染
+      this.render()
+    }
     this.emit('resize')
   }
 
