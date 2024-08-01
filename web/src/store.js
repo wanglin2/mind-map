@@ -29,7 +29,8 @@ const store = new Vuex.Store({
     isSourceCodeEdit: false, // 是否是源码编辑模式
     extraTextOnExport: '', // 导出时底部添加的文字
     supportHandDrawnLikeStyle: false, // 是否支持设置手绘风格
-    supportMark: false // 是否支持标记
+    supportMark: false, // 是否支持标记
+    isDragOutlineTreeNode: false // 当前是否正在拖拽大纲树的节点
   },
   mutations: {
     // 设置思维导图数据
@@ -84,6 +85,11 @@ const store = new Vuex.Store({
     // 设置是否支持标记
     setSupportMark(state, data) {
       state.supportMark = data
+    },
+
+    // 设置树节点拖拽
+    setIsDragOutlineTreeNode(state, data) {
+      state.isDragOutlineTreeNode = data
     }
   },
   actions: {

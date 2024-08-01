@@ -192,7 +192,8 @@ export default {
         state.localConfig.useLeftKeySelectionRightKeyDrag,
       isUseHandDrawnLikeStyle: state =>
         state.localConfig.isUseHandDrawnLikeStyle,
-      extraTextOnExport: state => state.extraTextOnExport
+      extraTextOnExport: state => state.extraTextOnExport,
+      isDragOutlineTreeNode: state => state.isDragOutlineTreeNode
     })
   },
   watch: {
@@ -857,6 +858,7 @@ export default {
 
     // 拖拽文件到页面导入
     onDragenter() {
+      if (this.isDragOutlineTreeNode) return
       this.showDragMask = true
     },
     onDragleave() {
@@ -866,6 +868,7 @@ export default {
       this.showDragMask = false
       const dt = e.dataTransfer
       const file = dt.files && dt.files[0]
+      if (!file) return
       this.$bus.$emit('importFile', file)
     }
   }
