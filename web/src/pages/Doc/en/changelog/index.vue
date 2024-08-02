@@ -1,6 +1,30 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.10.5</h2>
+<blockquote>
+<p>2024.8.2</p>
+</blockquote>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fixed the issue of error when dragging the scrollbar after enabling the scrollbar plugin and performance mode;</p>
+<p>2.Fixed the issue where the rich text style of nodes was not updated when copying across levels;</p>
+<p>3.Fixed the issue where the demo plugin did not work properly after enabling performance mode;</p>
+<p>4.Fixed the issue of canvas jumping when the first rendering canvas is triggered after adjusting the canvas size;</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Move the node and change the node hierarchy. Nodes that have set custom rich text styles do not need to update the styles;</p>
+<p>2.Support clicking on the canvas to cancel the creation of associated lines;</p>
+<p>3.Automatically expand a node by moving it or copying it to a collapsed node;</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.When the number of subordinate nodes is greater than 100, the collapse button displays ellipsis;</p>
+<p>2.No longer write data to the browser cache when opening local file editing, to avoid the problem of local file data loss caused by triggering storage restrictions;</p>
+<p>3.If the local file is not saved, close the page and add an interception prompt;</p>
+<p>4.Fixed the issue in the outline where clicking and dragging a node would trigger a file drag mask on the page;</p>
+</blockquote>
 <h2>0.10.4</h2>
 <blockquote>
 <p>2024.7.25</p>

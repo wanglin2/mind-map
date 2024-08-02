@@ -8,18 +8,18 @@
 </blockquote>
 <h2>Features</h2>
 <ul>
-<li><input type="checkbox" id="checkbox170" checked="true" /><label for="checkbox170">Pluggable architecture, in addition to core functions, other functions are provided as plugins, which can be used as needed to reduce packaging volume</label></li>
-<li><input type="checkbox" id="checkbox171" checked="true" /><label for="checkbox171">Support logical structure chart(Left and Right Logical Structure Diagram), mind map, Organizational chart, directory organization chart, timeline (horizontal and vertical), fishbone chart and other structures</label></li>
-<li><input type="checkbox" id="checkbox172" checked="true" /><label for="checkbox172">Built-in multiple themes, allowing for highly customizable styles, and supporting registration of new themes</label></li>
-<li><input type="checkbox" id="checkbox173" checked="true" /><label for="checkbox173">Node content supports text (regular text, rich text), images, icons, hyperlinks, notes, labels, summaries, and math formulas</label></li>
-<li><input type="checkbox" id="checkbox174" checked="true" /><label for="checkbox174">Nodes support drag and drop (drag and move, freely adjust), multiple node shapes, Support for expanding node content, and fully customize node content using DDM</label></li>
-<li><input type="checkbox" id="checkbox175" checked="true" /><label for="checkbox175">Support canvas dragging and scaling</label></li>
-<li><input type="checkbox" id="checkbox176" checked="true" /><label for="checkbox176">Supports two multi node selection methods: mouse button drag selection and Ctrl+left button selection</label></li>
-<li><input type="checkbox" id="checkbox177" checked="true" /><label for="checkbox177">Supoorts to export as </label><code>json</code>、<code>png</code>、<code>svg</code>、<code>pdf</code>、<code>markdown</code>、<code>xmind</code>、<code>txt</code>, support import from <code>json</code>、<code>xmind</code>、<code>markdown</code></li>
-<li><input type="checkbox" id="checkbox178" checked="true" /><label for="checkbox178">Support shortcut keys, forward and backward, correlation lines, search and replacement, small maps, watermarks, scrollbar, Hand drawn style, and rainbow lines</label></li>
-<li><input type="checkbox" id="checkbox179" checked="true" /><label for="checkbox179">Provide rich configurations to meet various scenarios and usage habits</label></li>
-<li><input type="checkbox" id="checkbox180" checked="true" /><label for="checkbox180">Support collaborative editing</label></li>
-<li><input type="checkbox" id="checkbox181" checked="true" /><label for="checkbox181">Support demonstration mode</label></li>
+<li><input type="checkbox" id="checkbox34" checked="true" /><label for="checkbox34">Pluggable architecture, in addition to core functions, other functions are provided as plugins, which can be used as needed to reduce packaging volume</label></li>
+<li><input type="checkbox" id="checkbox35" checked="true" /><label for="checkbox35">Support logical structure chart(Left and Right Logical Structure Diagram), mind map, Organizational chart, directory organization chart, timeline (horizontal and vertical), fishbone chart and other structures</label></li>
+<li><input type="checkbox" id="checkbox36" checked="true" /><label for="checkbox36">Built-in multiple themes, allowing for highly customizable styles, and supporting registration of new themes</label></li>
+<li><input type="checkbox" id="checkbox37" checked="true" /><label for="checkbox37">Node content supports text (regular text, rich text), images, icons, hyperlinks, notes, labels, summaries, and math formulas</label></li>
+<li><input type="checkbox" id="checkbox38" checked="true" /><label for="checkbox38">Nodes support drag and drop (drag and move, freely adjust), multiple node shapes, Support for expanding node content, and fully customize node content using DDM</label></li>
+<li><input type="checkbox" id="checkbox39" checked="true" /><label for="checkbox39">Support canvas dragging and scaling</label></li>
+<li><input type="checkbox" id="checkbox40" checked="true" /><label for="checkbox40">Supports two multi node selection methods: mouse button drag selection and Ctrl+left button selection</label></li>
+<li><input type="checkbox" id="checkbox41" checked="true" /><label for="checkbox41">Supoorts to export as </label><code>json</code>、<code>png</code>、<code>svg</code>、<code>pdf</code>、<code>markdown</code>、<code>xmind</code>、<code>txt</code>, support import from <code>json</code>、<code>xmind</code>、<code>markdown</code></li>
+<li><input type="checkbox" id="checkbox42" checked="true" /><label for="checkbox42">Support shortcut keys, forward and backward, correlation lines, search and replacement, small maps, watermarks, scrollbar, Hand drawn style, and rainbow lines</label></li>
+<li><input type="checkbox" id="checkbox43" checked="true" /><label for="checkbox43">Provide rich configurations to meet various scenarios and usage habits</label></li>
+<li><input type="checkbox" id="checkbox44" checked="true" /><label for="checkbox44">Support collaborative editing</label></li>
+<li><input type="checkbox" id="checkbox45" checked="true" /><label for="checkbox45">Support demonstration mode</label></li>
 </ul>
 <p>The official provides the following plugins, which can be introduced as needed (a certain function may not be effective because you did not introduce the corresponding plugin). Please refer to the documentation for specific usage methods:</p>
 <blockquote>
@@ -39,16 +39,16 @@ frameworks such as Vue and React, or without a framework.</p>
 <p>This is an online mind map built using the <code>simple-mind-map</code> library and based
 on <code>Vue2.x</code> and <code>ElementUI</code>. Features include:</p>
 <ul>
-<li><input type="checkbox" id="checkbox182" checked="true" /><label for="checkbox182">Toolbar, which supports inserting and deleting nodes, and editing node</label>
+<li><input type="checkbox" id="checkbox46" checked="true" /><label for="checkbox46">Toolbar, which supports inserting and deleting nodes, and editing node</label>
 images, icons, hyperlinks, notes, tags, and summaries</li>
-<li><input type="checkbox" id="checkbox183" checked="true" /><label for="checkbox183">Sidebar, with panels for basic style settings, node style settings,</label>
+<li><input type="checkbox" id="checkbox47" checked="true" /><label for="checkbox47">Sidebar, with panels for basic style settings, node style settings,</label>
 outline, theme selection, and structure selection</li>
-<li><input type="checkbox" id="checkbox184" checked="true" /><label for="checkbox184">Import and export functionality; data is saved in the browser's local</label>
+<li><input type="checkbox" id="checkbox48" checked="true" /><label for="checkbox48">Import and export functionality; data is saved in the browser's local</label>
 storage by default, but it also supports creating, opening, and editing
 local files on the computer directly</li>
-<li><input type="checkbox" id="checkbox185" checked="true" /><label for="checkbox185">Right-click menu, which supports operations such as expanding, collapsing,</label>
+<li><input type="checkbox" id="checkbox49" checked="true" /><label for="checkbox49">Right-click menu, which supports operations such as expanding, collapsing,</label>
 and organizing layout</li>
-<li><input type="checkbox" id="checkbox186" checked="true" /><label for="checkbox186">Bottom bar, which supports node and word count statistics, switching</label>
+<li><input type="checkbox" id="checkbox50" checked="true" /><label for="checkbox50">Bottom bar, which supports node and word count statistics, switching</label>
 between edit and read-only modes, zooming in and out, and switching to
 full screen, support mini map</li>
 </ul>
@@ -421,6 +421,10 @@ full screen, support mini map</li>
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/。.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>。</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/Jeffrey.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>Jeffrey</p>
     </div>
 </div>
   </div>

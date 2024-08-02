@@ -302,13 +302,15 @@ copyNodeTree({}, node)
 
 给指定的节点列表树数据添加附加数据，会修改原数据。
 
-#### createUidForAppointNodes(appointNodes, createNewId)
+#### createUidForAppointNodes(appointNodes, createNewId, handle)
 
 > v0.7.2+
 
 - `appointNodes`：节点实例列表，数组类型。
 
 - `createNewId`：v0.7.3-fix.1+，`Boolean`，默认为`false`，即如果节点不存在`uid`的话，会创建新的`uid`。如果传`true`，那么无论节点数据原来是否存在`uid`，都会创建新的`uid`
+
+- `handle`：v0.10.5+，`null、Function`，默认为`null`，可以传递一个函数，遍历到每个节点时会调用该函数，回调参数为当前遍历到的节点。
 
 给指定的节点列表树数据添加 uid（如果 uid 不存在的话），会修改原数据。
 

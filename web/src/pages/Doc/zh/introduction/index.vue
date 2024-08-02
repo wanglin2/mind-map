@@ -8,18 +8,18 @@
 </blockquote>
 <h2>特性</h2>
 <ul>
-<li><input type="checkbox" id="checkbox153" checked="true" /><label for="checkbox153">插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小打包体积</label></li>
-<li><input type="checkbox" id="checkbox154" checked="true" /><label for="checkbox154">支持逻辑结构图（向左、向右逻辑结构图）、思维导图、组织结构图、目录组织图、时间轴（横向、竖向）、鱼骨图等结构</label></li>
-<li><input type="checkbox" id="checkbox155" checked="true" /><label for="checkbox155">内置多种主题，允许高度自定义样式，支持注册新主题</label></li>
-<li><input type="checkbox" id="checkbox156" checked="true" /><label for="checkbox156">节点内容支持文本（普通文本、富文本）、图片、图标、超链接、备注、标签、概要、数学公式</label></li>
-<li><input type="checkbox" id="checkbox157" checked="true" /><label for="checkbox157">节点支持拖拽（拖拽移动、自由调整）、多种节点形状；支持扩展节点内容、支持使用 DDM 完全自定义节点内容</label></li>
-<li><input type="checkbox" id="checkbox158" checked="true" /><label for="checkbox158">支持画布拖动、缩放</label></li>
-<li><input type="checkbox" id="checkbox159" checked="true" /><label for="checkbox159">支持鼠标按键拖动选择和 Ctrl+左键两种多选节点方式</label></li>
-<li><input type="checkbox" id="checkbox160" checked="true" /><label for="checkbox160">支持导出为</label><code>json</code>、<code>png</code>、<code>svg</code>、<code>pdf</code>、<code>markdown</code>、<code>xmind</code>、<code>txt</code>，支持从<code>json</code>、<code>xmind</code>、<code>markdown</code>导入</li>
-<li><input type="checkbox" id="checkbox161" checked="true" /><label for="checkbox161">支持快捷键、前进后退、关联线、搜索替换、小地图、水印、滚动条、手绘风格、彩虹线条</label></li>
-<li><input type="checkbox" id="checkbox162" checked="true" /><label for="checkbox162">提供丰富的配置，满足各种场景各种使用习惯</label></li>
-<li><input type="checkbox" id="checkbox163" checked="true" /><label for="checkbox163">支持协同编辑</label></li>
-<li><input type="checkbox" id="checkbox164" checked="true" /><label for="checkbox164">支持演示模式</label></li>
+<li><input type="checkbox" id="checkbox17" checked="true" /><label for="checkbox17">插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小打包体积</label></li>
+<li><input type="checkbox" id="checkbox18" checked="true" /><label for="checkbox18">支持逻辑结构图（向左、向右逻辑结构图）、思维导图、组织结构图、目录组织图、时间轴（横向、竖向）、鱼骨图等结构</label></li>
+<li><input type="checkbox" id="checkbox19" checked="true" /><label for="checkbox19">内置多种主题，允许高度自定义样式，支持注册新主题</label></li>
+<li><input type="checkbox" id="checkbox20" checked="true" /><label for="checkbox20">节点内容支持文本（普通文本、富文本）、图片、图标、超链接、备注、标签、概要、数学公式</label></li>
+<li><input type="checkbox" id="checkbox21" checked="true" /><label for="checkbox21">节点支持拖拽（拖拽移动、自由调整）、多种节点形状；支持扩展节点内容、支持使用 DDM 完全自定义节点内容</label></li>
+<li><input type="checkbox" id="checkbox22" checked="true" /><label for="checkbox22">支持画布拖动、缩放</label></li>
+<li><input type="checkbox" id="checkbox23" checked="true" /><label for="checkbox23">支持鼠标按键拖动选择和 Ctrl+左键两种多选节点方式</label></li>
+<li><input type="checkbox" id="checkbox24" checked="true" /><label for="checkbox24">支持导出为</label><code>json</code>、<code>png</code>、<code>svg</code>、<code>pdf</code>、<code>markdown</code>、<code>xmind</code>、<code>txt</code>，支持从<code>json</code>、<code>xmind</code>、<code>markdown</code>导入</li>
+<li><input type="checkbox" id="checkbox25" checked="true" /><label for="checkbox25">支持快捷键、前进后退、关联线、搜索替换、小地图、水印、滚动条、手绘风格、彩虹线条</label></li>
+<li><input type="checkbox" id="checkbox26" checked="true" /><label for="checkbox26">提供丰富的配置，满足各种场景各种使用习惯</label></li>
+<li><input type="checkbox" id="checkbox27" checked="true" /><label for="checkbox27">支持协同编辑</label></li>
+<li><input type="checkbox" id="checkbox28" checked="true" /><label for="checkbox28">支持演示模式</label></li>
 </ul>
 <p>官方提供了如下插件，可根据需求按需引入（某个功能不生效大概率是因为你没有引入对应的插件），具体使用方式请查看文档：</p>
 <blockquote>
@@ -37,11 +37,11 @@
 <p>2.<code>web</code></p>
 <p>使用<code>simple-mind-map</code>库，基于<code>vue2.x</code>、<code>ElementUI</code>搭建的在线思维导图。特性：</p>
 <ul>
-<li><input type="checkbox" id="checkbox165" checked="true" /><label for="checkbox165">工具栏，支持插入节点、删除节点；编辑节点图片、图标、超链接、备注、标签、概要</label></li>
-<li><input type="checkbox" id="checkbox166" checked="true" /><label for="checkbox166">侧边栏，基础样式设置面板、节点样式设置面板、大纲面板、主题选择面板、结构选择面板</label></li>
-<li><input type="checkbox" id="checkbox167" checked="true" /><label for="checkbox167">导入导出功能；数据默认保存在浏览器本地存储，也支持直接创建、打开、编辑电脑本地文件</label></li>
-<li><input type="checkbox" id="checkbox168" checked="true" /><label for="checkbox168">右键菜单，支持展开、收起、整理布局等操作</label></li>
-<li><input type="checkbox" id="checkbox169" checked="true" /><label for="checkbox169">底部栏，支持节点数量、字数统计；支持切换编辑和只读模式；支持放大缩小；支持全屏切换；支持小地图</label></li>
+<li><input type="checkbox" id="checkbox29" checked="true" /><label for="checkbox29">工具栏，支持插入节点、删除节点；编辑节点图片、图标、超链接、备注、标签、概要</label></li>
+<li><input type="checkbox" id="checkbox30" checked="true" /><label for="checkbox30">侧边栏，基础样式设置面板、节点样式设置面板、大纲面板、主题选择面板、结构选择面板</label></li>
+<li><input type="checkbox" id="checkbox31" checked="true" /><label for="checkbox31">导入导出功能；数据默认保存在浏览器本地存储，也支持直接创建、打开、编辑电脑本地文件</label></li>
+<li><input type="checkbox" id="checkbox32" checked="true" /><label for="checkbox32">右键菜单，支持展开、收起、整理布局等操作</label></li>
+<li><input type="checkbox" id="checkbox33" checked="true" /><label for="checkbox33">底部栏，支持节点数量、字数统计；支持切换编辑和只读模式；支持放大缩小；支持全屏切换；支持小地图</label></li>
 </ul>
 <p>提供文档页面服务。</p>
 <p>3.<code>dist</code></p>
@@ -78,7 +78,8 @@
 <h2>License</h2>
 <p><a href="https://github.com/wanglin2/mind-map/blob/main/LICENSE">MIT</a>。保留<code>mind-map</code>版权声明的情况下可随意商用。如不想保留可联系作者。</p>
 <h1>微信交流群</h1>
-<p>群聊人数较多，无法通过二维码入群，可以微信添加<code>wanglinguanfang</code>拉你入群。思维导图相关问题皆可在群里提问，不必私聊作者。</p>
+<p>一群已满，可以扫描如下二维码进入二群，如已过期，可以微信添加<code>wanglinguanfang</code>拉你入群。思维导图相关问题皆可在群里提问，不必私聊作者。</p>
+<img src="../../../../../../qrcode.jpg" style="width: 300px" />
 <h2>请作者喝杯咖啡</h2>
 <p>开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡，你的支持是开发者持续维护的最大动力~</p>
 <blockquote>
@@ -414,6 +415,10 @@
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/。.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>。</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/Jeffrey.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>Jeffrey</p>
     </div>
 </div>
   </div>

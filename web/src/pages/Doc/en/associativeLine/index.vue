@@ -49,6 +49,11 @@ MindMap.usePlugin(AssociativeLine)
 <h3>mindMap.associativeLine.activeLine</h3>
 <p>The currently active connection line and array type are the same as the structure of each item in the <code>lineList</code> array.</p>
 <h2>Methods</h2>
+<h3>cancelCreateLine()</h3>
+<blockquote>
+<p>v0.10.5+</p>
+</blockquote>
+<p>Cancel the creation of the associated line midway.</p>
 <h3>renderAllLines()</h3>
 <p>Re-render all associated lines.</p>
 <h3>removeAllLines()</h3>

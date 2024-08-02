@@ -49,6 +49,11 @@ MindMap.usePlugin(AssociativeLine)
 <h3>mindMap.associativeLine.activeLine</h3>
 <p>当前激活的连接线，数组类型，同<code>lineList</code>数组的每一项的结构。</p>
 <h2>方法</h2>
+<h3>cancelCreateLine()</h3>
+<blockquote>
+<p>v0.10.5+</p>
+</blockquote>
+<p>中途取消创建关联线。</p>
 <h3>renderAllLines()</h3>
 <p>重新渲染所有关联线。</p>
 <h3>removeAllLines()</h3>

@@ -120,7 +120,9 @@
 
 # 微信交流群
 
-群聊人数较多，无法通过二维码入群，可以微信添加`wanglinguanfang`拉你入群。思维导图相关问题皆可在群里提问，不必私聊作者。
+一群已满，可以扫描如下二维码进入二群，如已过期，可以微信添加`wanglinguanfang`拉你入群。思维导图相关问题皆可在群里提问，不必私聊作者。
+
+<img src="../../../../../../qrcode.jpg" style="width: 300px" />
 
 ## 请作者喝杯咖啡
 
@@ -461,5 +463,9 @@
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/。.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>。</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/Jeffrey.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>Jeffrey</p>
     </div>
 </div>

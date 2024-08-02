@@ -298,13 +298,15 @@ Focus and select all specified input boxes.
 
 Adding additional data to the specified node list tree data will modify the original data.
 
-#### createUidForAppointNodes(appointNodes, createNewId)
+#### createUidForAppointNodes(appointNodes, createNewId, handle)
 
 > v0.7.2+
 
 - `appointNodes`：Node instance list, array type.
 
 - `createNewId`：v0.7.3-fix.1+, `Boolean`, default is `false`, If the node does not have a 'uid', a new 'uid' will be created. If 'true' is passed, a new 'uid' will be created regardless of whether the node data originally exists or not`
+
+- `handle`：v0.10.5+, `null、Function`, default is `null`, You can pass a function that will be called when traversing each node, with the callback parameter being the current node being traversed.
 
 Adding a uid to the specified node list tree data (if the uid does not exist) will modify the original data.
 
