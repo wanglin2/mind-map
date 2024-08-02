@@ -34,6 +34,7 @@ const mindMap = new MindMap({
 | themeConfig                      | Object  | {}               | 主题配置，会和所选择的主题进行合并，可用字段可参考：[default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js) |
 | scaleRatio                       | Number  | 0.1              | 放大缩小的增量比例                                           |
 | maxTag                           | Number  | 5                | 节点里最多显示的标签数量，多余的会被丢弃                     |
+| tagPosition（v0.10.3+）      | String  | right      | 标签显示的位置，相对于节点文本，bottom（下方）、right（右侧）             |
 | imgTextMargin                    | Number  | 5                | 节点里图片和文字的间距                                       |
 | textContentMargin                | Number  | 2                | 节点里各种文字信息的间距，如图标和文字的间距                 |
 | customNoteContentShow（v0.1.6+） | Object  | null             | 自定义节点备注内容显示，Object类型，结构为：{show: (noteContent, left, top, node) => {// 你的显示节点备注逻辑。node为v0.8.1+版本新增的回参，代表节点实例 }, hide: () => {// 你的隐藏节点备注逻辑 }} |
@@ -98,6 +99,8 @@ const mindMap = new MindMap({
 | createNodePostfixContent（v0.9.12+）     | Function、null | null  | 添加附加的节点后置内容。后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分。用法同createNodePrefixContent |
 | disabledClipboard（v0.10.2+）     | Boolean | false | 是否禁止粘贴用户剪贴板中的数据，禁止将复制的节点数据写入用户的剪贴板中，此时只能复制和粘贴画布内的节点数据 |
 | customHyperlinkJump（v0.10.2+）     | null、Function | false | 自定义超链接的跳转。如果不传，默认会以新窗口的方式打开超链接，可以传递一个函数，函数接收两个参数：link（超链接的url）、node（所属节点实例），只要传递了函数，就会阻止默认的跳转 |
+| openPerformance（v0.10.4+）     | Boolean | false | 是否开启性能模式，默认情况下所有节点都会直接渲染，无论是否处于画布可视区域，这样当节点数量比较多时（1000+）会比较卡，如果你的数据量比较大，那么可以通过该配置开启性能模式，即只渲染画布可视区域内的节点，超出的节点不渲染，这样会大幅提高渲染速度，当然同时也会带来一些其他问题，比如：1.当拖动或是缩放画布时会实时计算并渲染未节点的节点，所以会带来一定卡顿；2.导出图片、svg、pdf时需要先渲染全部节点，所以会比较慢；3.其他目前未发现的问题 |
+| performanceConfig（v0.10.4+）     | Object | { time: 250,  padding: 100, removeNodeWhenOutCanvas: true } | 性能优化模式配置。time（当视图改变后多久刷新一次节点，单位：ms）、padding（超出画布四周指定范围内依旧渲染节点）、removeNodeWhenOutCanvas（节点移出画布可视区域后是否从画布删除） |
 
 #### 1.1数据结构
 
@@ -123,7 +126,7 @@ const mindMap = new MindMap({
     note: '', // 备注的内容
     attachmentUrl: '',// v0.9.10+，附件url
     attachmentName: '',// v0.9.10+，附件名称
-    tag: [], // 标签列表
+    tag: [], // 标签列表，v0.10.3以前的版本只支持字符串数组，即['标签']，v0.10.3+版本支持对象数组，即[{text: '标签', style: {}}]，具体支持的标签样式可参考下方【标签的样式】
     generalization: [{// （0.9.0以下版本不支持数组，只能设置单个概要数据）节点的概要，如果没有概要generalization设为null即可
       text: '', // 概要的文本
       richText: false, // 节点的文本是否是富文本模式
@@ -143,6 +146,19 @@ const mindMap = new MindMap({
 ```
 
 如果你要添加自定义的字段，可以添加到`data`、`children`同级，如果你要添加到`data`对象里，那么请使用`_`开头来命名你的自定义字段，内部会通过这个来判断是否是自定义字段。
+
+##### 标签的样式
+
+标签的样式`style`对象支持以下属性：
+
+| 字段名称    | 类型   | 默认值     | 描述        |
+| ----------- | ------ | -------- | ----------- |
+| radius | Number | 3 | 标签矩形的圆角大小 |
+| fontSize | Number | 12 | 字号，建议文字高度不要大于height |
+| fill | String |  | 标签矩形的背景颜色 | 
+| height | Number | 20 | 标签矩形的高度 |
+| paddingX | Number | 8 | 水平内边距，如果设置了width，将忽略该配置 |
+| width | Number |  | 标签矩形的宽度，如果不设置，默认以文字的宽度+paddingX*2为宽度 |
 
 #### 1.2图标配置
 
@@ -255,7 +271,6 @@ new MindMap({
 | 字段名称                         | 类型    | 默认值           | 描述                                                         |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
 | richTextEditFakeInPlace（v0.6.13+）     | Boolean  | false | 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果，需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果 |
-| enableEditFormulaInRichTextEdit（v0.10.0+）     | Boolean  | true | 是否开启在富文本编辑框中直接编辑数学公式 |
 | transformRichTextOnEnterEdit（v0.10.0+）     | null、Function  | null | 转换富文本内容，可以传递一个函数，当进入富文本编辑时会调用该函数，函数接收即将被编辑的富文本内容，需要返回你处理后的富文本内容 |
 | beforeHideRichTextEdit（v0.10.0+）     | null、Function  | null | 可以传递一个函数，即将结束富文本编辑前会执行该函数，函数接收richText实例，所以你可以在此时机更新quill文档数据 |
 
@@ -308,6 +323,21 @@ new MindMap({
 | padding        | Number  | 20                  | 高亮框的内边距 |
 | margin         | Number  | 50                  | 高亮框的外边距 |
 | openBlankMode（v0.9.12+） | Boolean | true     | 是否开启填空模式，即带下划线的文本默认不显示，按回车键才依次显示 |
+
+#### 14.Formula插件
+
+| 字段名称                         | 类型    | 默认值           | 描述                                                         |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
+| enableEditFormulaInRichTextEdit（v0.10.0+）     | Boolean  | true | 是否开启在富文本编辑框中直接编辑数学公式 |
+| katexFontPath（v0.10.3+）     | String  | https://unpkg.com/katex@0.16.11/dist | katex库的字体文件的请求路径。仅当katex的output配置为html时才会请求字体文件。可以通过mindMap.formula.getKatexConfig()方法来获取当前的配置。字体文件可以从node_modules中找到：katex/dist/fonts/。可以上传到你的服务器或cdn。最终的字体请求路径为`${katexFontPath}fonts/KaTeX_AMS-Regular.woff2`，可以自行拼接进行测试是否可以访问 |
+| getKatexOutputType（v0.10.3+）     | Function、null  | null | 自定义katex库的输出模式。默认当Chrome内核100以下会使用html方式，否则使用mathml方式，如果你有自己的规则，那么可以传递一个函数，函数返回值为：mathml或html |
+
+#### 15.OuterFrame插件
+
+| 字段名称                         | 类型    | 默认值           | 描述                                                         |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
+| outerFramePaddingX（v0.10.3+）     | Number  | 10 | 外框的水平内边距 |
+| outerFramePaddingY（v0.10.3+）     | Number  | 10 | 外框的垂直内边距 |
 
 ## 静态方法
 
@@ -585,10 +615,12 @@ mindMap.setTheme('主题名称')
 | node_cooperate_avatar_mouseleave（v0.9.9+）    | 协同编辑时，鼠标移除人员头像时触发  |  userInfo(人员信息)、 this(当前节点实例)、 node(头像节点)、 e(事件对象)      |
 | exit_demonstrate（v0.9.11+）    | 退出演示模式时触发  |     |
 | demonstrate_jump（v0.9.11+）    | 演示模式中，切换步骤时触发  |  currentStepIndex（当前播放到的步骤索引，从0开始计数）、stepLength（总的播放步骤数量）   |
-| node_tag_click（v0.9.12+）    | 节点标签的点击事件 | this(当前节点实例)、item（点击的标签内容）    |
+| node_tag_click（v0.9.12+）    | 节点标签的点击事件 | this(当前节点实例)、item（点击的标签内容）、index（v0.10.3+，该标签在标签列表里的索引）、tagNode（v0.10.3+，标签节点，@svgdotjs/svg.js库的G实例，可以用于获取标签位置和大小信息）    |
 | node_layout_end（v0.10.1+）    | 单个节点内容布局完成的事件 | this(当前节点实例)  |
 | node_attachmentClick（v0.9.10+）    | 节点附件图标的点击事件 | this(当前节点实例)、e（事件对象）、node（图标节点）  |
 | node_attachmentContextmenu（v0.9.10+）    | 节点附件图标的右键点击事件 | this(当前节点实例)、e（事件对象）、node（图标节点）  |
+| before_update_config（v0.10.4+）    | 更新配置前触发，即当调用了`mindMap.updateConfig`方法更新配置时触发 | opt（未更新前的配置对象，引用对象，而非拷贝，所以当after_update_config事件触发后，该对象也会同步变化，所以需要缓存你需要的某个配置字段）  |
+| after_update_config（v0.10.4+）    | 更新配置后触发 |  opt（更新后的配置对象） |
 
 ### emit(event, ...args)
 
@@ -687,7 +719,7 @@ mindMap.updateConfig({
 | SET_NODE_HYPERLINK                  | 设置节点超链接                                               | node（要设置的节点）、link（超链接地址）、title（超链接名称，可选） |
 | SET_NODE_NOTE                       | 设置节点备注                                                 | node（要设置的节点）、note（备注文字）                       |
 | SET_NODE_ATTACHMENT（v0.9.10+）                       | 设置节点附件                                                 | node（要设置的节点）、url（附件url）、name（附件名称，可选）                       |
-| SET_NODE_TAG                        | 设置节点标签                                                 | node（要设置的节点）、tag（字符串数组，内置颜色信息可在[constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/constants/constant.js)里获取到） |
+| SET_NODE_TAG                        | 设置节点标签                                                 | node（要设置的节点）、tag（v0.10.3以前的版本只支持字符串数组，即['标签']，v0.10.3+版本支持对象数组，即[{ text: '标签', style: {} }]） |
 | INSERT_AFTER（v0.1.5+）             | 将节点移动到另一个节点的后面    | node（要移动的节点，（v0.7.2+支持传递节点数组实现同时移动多个节点））、 exist（目标节点）                     |
 | INSERT_BEFORE（v0.1.5+）            | 将节点移动到另一个节点的前面，（v0.7.2+支持传递节点数组实现同时移动多个节点）   | node（要移动的节点）、 exist（目标节点）                     |
 | MOVE_NODE_TO（v0.1.5+）             | 移动节点作为另一个节点的子节点，（v0.7.2+支持传递节点数组实现同时移动多个节点）   | node（要移动的节点）、 toNode（目标节点）                    |

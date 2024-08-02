@@ -52,12 +52,17 @@
   mindMap.addPlugin(res.default)
 })
 </code></pre>
-<p>如果你需要<code>umd</code>模块格式的文件，比如以<code>CDN</code>的方式在浏览器上使用，那么你可以从<code>/simple-mind-map/dist/</code>目录中找到<code>simpleMindMap.umd.min.js</code>文件和<code>simpleMindMap.css</code>文件，复制到你的项目中，然后在页面中引入：</p>
-<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;simpleMindMap.css&quot;</span>&gt;</span>
+<p>如果你需要<code>umd</code>模块格式的文件，比如以<code>CDN</code>的方式在浏览器上使用，那么你可以先通过npm安装<code>npm i simple-mind-map</code>，然后在<code>node_modules/simple-mind-map/dist/</code>目录中找到<code>simpleMindMap.umd.min.js</code>文件和<code>simpleMindMap.esm.min.css</code>文件，复制到你的项目中，然后在页面中引入：</p>
+<pre class="hljs"><code><span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;simpleMindMap.esm.min.css&quot;</span>&gt;</span>
 <span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">scr</span>=<span class="hljs-string">&quot;simpleMindMap.umd.min.js&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
 </code></pre>
-<p>会创建一个全局变量<code>window.simpleMindMap</code>，可以通过<code>window.simpleMindMap.default</code>获取到<code>MindMap</code>构造函数，详细信息可以把<code>window.simpleMindMap</code>打印出来看一下。</p>
-<p>这种方式的缺点是会包含所有的内容，包括你没有注册的插件，所以整体体积会比较大。</p>
+<p>库会创建一个全局变量<code>window.simpleMindMap</code>，可以通过<code>window.simpleMindMap.default</code>获取到<code>MindMap</code>构造函数，然后正常实例化即可，详细信息可以把<code>window.simpleMindMap</code>打印出来看一下。</p>
+<p>如果不方便使用<code>npm</code>来安装，也可以通过一些在线<code>CDN</code>服务来获取到这两个文件，比如：</p>
+<pre class="hljs"><code>https://unpkg.com/simple-mind-map@0.10.2/dist/simpleMindMap.esm.css
+https://unpkg.com/simple-mind-map@0.10.2/dist/simpleMindMap.umd.min.js
+</code></pre>
+<p>你可以替换其中的版本号。</p>
+<p>这种方式的缺点是会包含所有的内容，包括你没有注册的插件（可以在这里<a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/full.js#L36">full.js</a>查看默认打包进文件的插件），所以整体体积会比较大，如果只想要打包指定的插件，你可以修改该文件，然后重新打包，如有需要也可以联系开发者。</p>
 <p>（v0.5.4+）如果你想直接在浏览器端通过<code>ES</code>模块的方式来使用，你可以在<code>/simple-mind-map/dist/</code>目录中找到<code>simpleMindMap.esm.js</code>和<code>simpleMindMap.esm.css</code>文件。</p>
 <p>也可以使用在线cdn服务，比如：</p>
 <pre class="hljs"><code>https://unpkg.com/browse/simple-mind-map@0.9.2/dist/
@@ -126,7 +131,7 @@ npm run build
 <h3>5.引入simple-mind-map报错，报错信息如下：</h3>
 <img src="../../../../assets/img/docs/错误.jpg" style="width: 850px" />
 <p>这是因为你的构建环境不支持该js语法，该语法出自<code>@svgdotjs/svg.js</code>库，解决方法如下：</p>
-<p>1.手动降低<code>@svgdotjs/svg.js</code>库的版本，你可以在你的项目中手动安装低版本，比如：<code>npm i @svgdotjs/svg.js@3.0.16</code></p>
+<p>1.手动降低<code>@svgdotjs/svg.js</code>库的版本，你可以在你的项目中手动安装低版本，比如：<code>npm i @svgdotjs/svg.js@3.2.0</code></p>
 <p>2.不降低版本的话，可以通过修改你的构建工具的相关配置，修改<code>babel</code>的配置，让它编译一下<code>node_modules</code>中的<code>simple-mind-map</code>库，或<code>@svgdotjs/svg.js</code>库，如果用的是<code>vue-cli</code>或<code>vite</code>，它们也直接提供了相关配置。另外需要安装编译该语法的<code>babel</code>插件，并且配置到<code>babel</code>的配置文件中：</p>
 <p><code>@babel/plugin-proposal-nullish-coalescing-operator</code>、<code>@babel/plugin-proposal-optional-chaining</code>。</p>
 

@@ -68,6 +68,7 @@ class AssociativeLine {
     this.onNodeDragging = this.onNodeDragging.bind(this)
     this.onNodeDragend = this.onNodeDragend.bind(this)
     this.onControlPointMouseup = this.onControlPointMouseup.bind(this)
+    this.cancelCreateLine = this.cancelCreateLine.bind(this)
 
     // 节点树渲染完毕后渲染连接线
     this.mindMap.on('node_tree_render_end', this.renderAllLines)
@@ -76,6 +77,7 @@ class AssociativeLine {
     // 监听画布和节点点击事件，用于清除当前激活的连接线
     this.mindMap.on('draw_click', this.onDrawClick)
     this.mindMap.on('node_click', this.onNodeClick)
+    this.mindMap.on('contextmenu', this.cancelCreateLine)
     // 注册删除快捷键
     this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeLine)
     // 注册添加连接线的命令
@@ -97,6 +99,7 @@ class AssociativeLine {
     this.mindMap.off('data_change', this.renderAllLines)
     this.mindMap.off('draw_click', this.onDrawClick)
     this.mindMap.off('node_click', this.onNodeClick)
+    this.mindMap.off('contextmenu', this.cancelCreateLine)
     this.mindMap.keyCommand.removeShortcut('Del|Backspace', this.removeLine)
     this.mindMap.command.remove('ADD_ASSOCIATIVE_LINE', this.addLine)
     this.mindMap.off('mousemove', this.onMousemove)
@@ -108,10 +111,14 @@ class AssociativeLine {
 
   // 画布点击事件
   onDrawClick() {
-    if (this.isControlPointMousedown) {
-      return
+    // 取消创建关联线
+    if (this.isCreatingLine) {
+      this.cancelCreateLine()
     }
-    this.clearActiveLine()
+    // 取消激活关联线
+    if (this.isControlPointMousedown) {
+      this.clearActiveLine()
+    }
   }
 
   // 节点点击事件
@@ -346,6 +353,16 @@ class AssociativeLine {
     this.creatingLine.marker('end', this.marker)
   }
 
+  // 取消创建关联线
+  cancelCreateLine() {
+    this.isCreatingLine = false
+    this.creatingStartNode = null
+    this.creatingLine.remove()
+    this.creatingLine = null
+    this.overlapNode = null
+    this.back()
+  }
+
   // 鼠标移动事件
   onMousemove(e) {
     this.onControlPointMousemove(e)
@@ -420,12 +437,7 @@ class AssociativeLine {
     if (this.overlapNode && this.overlapNode.getData('isActive')) {
       this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, false)
     }
-    this.isCreatingLine = false
-    this.creatingStartNode = null
-    this.creatingLine.remove()
-    this.creatingLine = null
-    this.overlapNode = null
-    this.back()
+    this.cancelCreateLine()
   }
 
   // 添加连接线

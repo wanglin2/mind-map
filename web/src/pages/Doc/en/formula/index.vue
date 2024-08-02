@@ -27,6 +27,20 @@
 </code></pre>
 <p>If you are using packaged files such as '.umd.js' or '.esm.js', you can import them through online CDN services, such as <code>https://unpkg.com/browse/katex@0.16.9/dist/</code>, Of course, it is best to upload the 'css' file of the 'katex' and the corresponding font files in the 'fonts' directory to your own server.</p>
 </blockquote>
+<blockquote>
+<p>Version v0.10.3+ will default to importing the style files of 'KaTeX'. So you don't need to manually introduce it anymore. When the rendering mode of the Katex library is html, it depends on some font files, which are not included in the plugin. You need to use the <code>katexFontPath</code> instantiation option to set the path of the font files.</p>
+</blockquote>
+<h2>Problem</h2>
+<p>1.On some browsers, the formula source code is displayed</p>
+<p>This is because some browsers do not support the 'mathml' output mode of the 'KaTex' library. You can change the output mode to 'html' by using the 'getKatexOutputType' instantiation option.</p>
+<p>2.Sometimes formulas and text may display line breaks</p>
+<p>This is usually because formula rendering uses the 'html' mode, which depends on the font file. Therefore, when rendering the mind map before the font file is loaded, the calculated formula content size may not match the actual formula size after loading the font file, resulting in a row change. We can find a way to make the font file load before rendering the mind map.</p>
+<p>3.SVG files exported on one browser have inconsistent styles when opened on another browser</p>
+<p>Because the calculation of node size depends on the proxy style of the browser, the default style of different browsers is not consistent, so the calculated node size is also inconsistent.</p>
+<p>4.The smm or json file exported on one browser cannot be rendered properly when imported on another browser</p>
+<p>Because some browsers may render in 'mathml' mode, while others may render in 'html' mode, those that support 'mathml' mode usually support 'html', while the opposite is not possible.</p>
+<p>5.Abnormal formula for exporting images when rendering in <code>html</code> mode</p>
+<p>This is caused by not loading the font, and there is currently no solution.</p>
 <h2>Register</h2>
 <pre class="hljs"><code><span class="hljs-keyword">import</span> MindMap <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map&#x27;</span>
 <span class="hljs-keyword">import</span> Formula <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/plugins/Formula.js&#x27;</span>

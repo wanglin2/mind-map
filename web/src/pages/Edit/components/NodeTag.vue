@@ -24,7 +24,7 @@
           backgroundColor: generateColorByContent(item)
         }"
       >
-        {{ item }}
+        {{ typeof item === 'string' ? item : item.text }}
         <div class="delBtn" @click="del(index)">
           <span class="iconfont iconshanchu"></span>
         </div>

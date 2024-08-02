@@ -25,6 +25,8 @@ Github：[releases](https://github.com/wanglin2/mind-map/releases)。百度云�
 
 > 客户端版本会落后于在线版本，尝试最新功能请优先使用在线版。
 
+【云存储版本】如果你需要带后端的云存储版本，可以尝试我们开发的另一个项目[理想文档](https://github.com/wanglin2/lx-doc)。
+
 # 特性
 
 - [x] 插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小打包体积
@@ -35,7 +37,7 @@ Github：[releases](https://github.com/wanglin2/mind-map/releases)。百度云�
 - [x] 支持画布拖动、缩放
 - [x] 支持鼠标按键拖动选择和 Ctrl+左键两种多选节点方式
 - [x] 支持导出为`json`、`png`、`svg`、`pdf`、`markdown`、`xmind`、`txt`，支持从`json`、`xmind`、`markdown`导入
-- [x] 支持快捷键、前进后退、关联线、搜索替换、小地图、水印、滚动条、手绘风格、彩虹线条
+- [x] 支持快捷键、前进后退、关联线、搜索替换、小地图、水印、滚动条、手绘风格、彩虹线条、标记、外框
 - [x] 提供丰富的配置，满足各种场景各种使用习惯
 - [x] 支持协同编辑
 - [x] 支持演示模式
@@ -101,7 +103,9 @@ const mindMap = new MindMap({
 
 # 微信交流群
 
-群聊人数较多，无法通过二维码入群，可以微信添加`wanglinguanfang`拉你入群。思维导图相关问题皆可在群里提问，不必私聊作者。
+一群已满，可以扫描如下二维码进入二群，如已过期，可以微信添加`wanglinguanfang`拉你入群。思维导图相关问题皆可在群里提问，不必私聊作者。
+
+<img src="./qrcode.jpg" style="width: 300px" />
 
 # star
 
@@ -412,5 +416,37 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/buddy.jpg" style="width: 50px;height: 50px;" />
         <span>buddy</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>小川</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/Tobin.jpg" style="width: 50px;height: 50px;" />
+        <span>Tobin</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/夏虫不语冰.jpg" style="width: 50px;height: 50px;" />
+        <span>夏虫不语冰</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/晴空.jpg" style="width: 50px;height: 50px;" />
+        <span>晴空</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>黄泳</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/ccccs.jpg" style="width: 50px;height: 50px;" />
+        <span>ccccs</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/。.png" style="width: 50px;height: 50px;" />
+        <span>。</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/Jeffrey.jpg" style="width: 50px;height: 50px;" />
+        <span>Jeffrey</span>
     </span>
 </p>

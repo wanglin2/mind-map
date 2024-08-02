@@ -1,8 +1,4 @@
-import {
-  checkIsNodeStyleDataKey,
-  generateColorByContent
-} from '../../../utils/index'
-import { Gradient } from '@svgdotjs/svg.js'
+import { checkIsNodeStyleDataKey } from '../../../utils/index'
 
 const rootProp = ['paddingX', 'paddingY']
 const backgroundStyleProps = [
@@ -182,21 +178,24 @@ class Style {
   }
 
   //  标签文字
-  tagText(node) {
+  tagText(node, style) {
     node
       .fill({
         color: '#fff'
       })
       .css({
-        'font-size': '12px'
+        'font-size': style.fontSize + 'px'
       })
   }
 
   //  标签矩形
-  tagRect(node, text, color) {
+  tagRect(node, style) {
     node.fill({
-      color: color || generateColorByContent(text.node.textContent)
+      color: style.fill
     })
+    if (style.radius) {
+      node.radius(style.radius)
+    }
   }
 
   //  内置图标

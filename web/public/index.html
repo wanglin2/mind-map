@@ -21,11 +21,15 @@
       src="//sdk.51.la/js-sdk-pro.min.js"
     ></script>
     <script>
-      LA.init({
-        id: 'KRO0WxK8GT66tYCQ',
-        ck: 'KRO0WxK8GT66tYCQ',
-        autoTrack: false
-      })
+      try {
+        LA.init({
+          id: 'KRO0WxK8GT66tYCQ',
+          ck: 'KRO0WxK8GT66tYCQ',
+          autoTrack: false
+        })
+      } catch (error) {
+        console.log(error)
+      }
     </script>
   </head>
   <body>

@@ -1,6 +1,7 @@
 import katex from 'katex'
 import Quill from 'quill'
 import { getChromeVersion } from '../utils/index'
+import { getBaseStyleText, getFontStyleText } from './FormulaStyle'
 
 // 数学公式支持插件
 // 该插件在富文本模式下可用
@@ -11,6 +12,9 @@ class Formula {
     this.mindMap = opt.mindMap
     window.katex = katex
     this.init()
+    this.config = this.getKatexConfig()
+    this.cssEl = null
+    this.addStyle()
     this.extendQuill()
   }
 
@@ -29,11 +33,18 @@ class Formula {
       errorColor: '#f00',
       output: 'mathml' // 默认只输出公式
     }
-    // Chrome内核100以下，mathml配置公式无法正确渲染
-    const chromeVersion = getChromeVersion()
-    if (chromeVersion && chromeVersion <= 100) {
-      config.output = 'html'
-    }
+    let { getKatexOutputType } = this.mindMap.opt
+    getKatexOutputType =
+      getKatexOutputType ||
+      function () {
+        // Chrome内核100以下，mathml配置公式无法正确渲染
+        const chromeVersion = getChromeVersion()
+        if (chromeVersion && chromeVersion <= 100) {
+          return 'html'
+        }
+      }
+    const output = getKatexOutputType() || 'mathml'
+    config.output = ['mathml', 'html'].includes(output) ? output : 'mathml'
     return config
   }
 
@@ -46,7 +57,7 @@ class Formula {
       static create(value) {
         let node = super.create(value)
         if (typeof value === 'string') {
-          katex.render(value, node, self.getKatexConfig())
+          katex.render(value, node, self.config)
           node.setAttribute('data-value', value)
         }
         return node
@@ -54,6 +65,27 @@ class Formula {
     }
 
     Quill.register('formats/formula', CustomFormulaBlot, true)
+  }
+
+  getStyleText() {
+    const { katexFontPath } = this.mindMap.opt
+    let text = ''
+    if (this.config.output === 'html') {
+      text = getFontStyleText(katexFontPath)
+    }
+    text += getBaseStyleText()
+    return text
+  }
+
+  addStyle() {
+    this.cssEl = document.createElement('style')
+    this.cssEl.type = 'text/css'
+    this.cssEl.innerHTML = this.getStyleText()
+    document.head.appendChild(this.cssEl)
+  }
+
+  removeStyle() {
+    document.head.removeChild(this.cssEl)
   }
 
   // 给指定的节点插入指定公式
@@ -135,6 +167,16 @@ class Formula {
     } catch (e) {
       return false
     }
+  }
+
+  // 插件被移除前做的事情
+  beforePluginRemove() {
+    this.removeStyle()
+  }
+
+  // 插件被卸载前做的事情
+  beforePluginDestroy() {
+    this.removeStyle()
   }
 }
 

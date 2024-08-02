@@ -34,6 +34,7 @@ const mindMap = new MindMap({
 | themeConfig                      | Object  | {}               | Theme configuration, will be merged with the selected theme, available fields refer to: [default.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/themes/default.js) |          |
 | scaleRatio                       | Number  | 0.1              | The incremental scaling ratio                                |          |
 | maxTag                           | Number  | 5                | The maximum number of tags displayed in the node, any additional tags will be discarded |          |
+| tagPosition（v0.10.3+）      | String  | right      | The position of the tag display relative to the node text，bottom（Below the text）、right（On the right side of the text）             |          |
 | imgTextMargin                    | Number  | 5                | The spacing between the image and text in the node           |          |
 | textContentMargin                | Number  | 2                | The spacing between various text information in the node, such as the spacing between the icon and text |          |
 | customNoteContentShow（v0.1.6+） | Object  | null             | Custom node note content display, object type, structure: {show: (noteContent, left, top, node) => {// your display node note logic. node is a new parameter added in v0.8.1+ version, representing node instances }, hide: () => {// your hide node note logic }} |          |
@@ -98,6 +99,8 @@ const mindMap = new MindMap({
 | createNodePostfixContent（v0.9.12+）     | Function、null | null  | Add additional node post content.Post content refers to the post content in the area of the same line as the text, excluding the node image section. The usage is the same as createNodePrefixContent |         |
 | disabledClipboard（v0.10.2+）     | Boolean | false | Is prohibit pasting data from the user's clipboard and writing copied node data to the user's clipboard. At this time, only node data from the canvas can be copied and pasted |         |
 | customHyperlinkJump（v0.10.2+）     | null、Function | false | Customize the jump of hyperlinks. If not passed, the hyperlink will be opened as a new window by default, and a function can be passed, The function takes two parameters: link（The URL of the hyperlink）、node（Node instance to which it belongs）, As long as a function is passed, it will block the default jump |         |
+| openPerformance（v0.10.4+）     | Boolean | false | Whether to enable performance mode or not, by default, all nodes will be rendered directly, regardless of whether they are in the visible area of the canvas. This will cause a lag when there are a large number of nodes (1000+). If your data volume is large, you can enable performance mode through this configuration, that is, only rendering nodes within the visible area of the canvas, and not rendering nodes beyond it. This will greatly improve rendering speed, but of course, it will also bring some other problems, such as: 1. When dragging or scaling the canvas, real-time calculation and rendering of nodes without nodes will be performed, which will bring some lag; When exporting images, SVG, and PDF, all nodes need to be rendered first, so it may be slower; 3. Other currently undiscovered issues |         |
+| performanceConfig（v0.10.4+）     | Object | { time: 250,  padding: 100, removeNodeWhenOutCanvas: true } | Performance optimization mode configuration. time（How often do nodes refresh after a view change. Unit:ms）、padding（Still rendering nodes beyond the specified range around the canvas）、removeNodeWhenOutCanvas（Is the node deleted from the canvas after being moved out of the visible area of the canvas） |         |
 
 ### 1.1Data structure
 
@@ -121,7 +124,7 @@ The basic data structure is as follows:
     hyperlink: '', // Hyperlink address
     hyperlinkTitle: '', // Title of hyperlink
     note: '', // Content of remarks
-    tag: [], // Tag list
+    tag: [], // Tag list, Prior to v0.10.3, only string arrays, i.e. ['tag'], were supported. However, v0.10.3+versions support object arrays, i.e. [{text: 'tag', style: {}}]. The specific supported label styles can refer to the "Tag Styles" below
     generalization: [{// (Arrays are not supported in versions below 0.9.0, and only a single summary data can be set)The summary of the node, if there is no summary, the generalization can be set to null
       text: '', // Summary Text
       richText: false, // Is the text of the node in rich text mode
@@ -141,6 +144,19 @@ The basic data structure is as follows:
 ```
 
 If you want to add custom fields, you can add them to the same level as 'data' and 'children'. If you want to add them to the 'data' object, please use the `_` Name your custom field at the beginning, and it will be used internally to determine whether it is a custom field.
+
+##### Tag Styles
+
+The style object of the tag supports the following properties:
+
+| Field Name    | Type   | Default Value     | Description        |
+| ----------- | ------ | -------- | ----------- |
+| radius | Number | 3 | The corner size of the tag rectangle |
+| fontSize | Number | 12 | Font size, it is recommended that the height of the text should not exceed height |
+| fill | String |  | Background color of tag rectangle | 
+| height | Number | 20 | Height of tag rectangle |
+| paddingX | Number | 8 | Horizontal margin, if width is set, this configuration will be ignored |
+| width | Number |  | The width of the tag rectangle, if not set, defaults to the width of the text plus paddingX * 2 |
 
 ### 1.2Icon Configuration
 
@@ -253,7 +269,6 @@ new MindMap({
 | Field Name                       | Type    | Default Value    | Description                                 | Required |
 | -------------------------------- | ------- | ---------------- | ------------------------------------------- | -------- |
 | richTextEditFakeInPlace（v0.6.13+）     | Boolean  | false | Set the rich text node edit box to match the size of the node, creating a pseudo in place editing effect. It should be noted that only when there is only text within the node and the shape is rectangular, can the effect be better |          |
-| enableEditFormulaInRichTextEdit（v0.10.0+）     | Boolean  | true |  |   Whether to enable direct editing of mathematical formulas in rich text editing boxes       |
 | transformRichTextOnEnterEdit（v0.10.0+）     | null、Function  | null | To convert rich text content, you can pass a function that will be called when entering rich text editing. The function receives the rich text content that is about to be edited and needs to return the processed rich text content |          |
 | beforeHideRichTextEdit（v0.10.0+）     | null、Function  | null | You can pass a function that will be executed before the end of rich text editing. The function receives a richText instance, so you can update the kill document data at this time |          |
 
@@ -306,6 +321,21 @@ new MindMap({
 | padding        | Number | 20                  | The inner margin of the highlighted box |
 | margin         | Number | 50                  | The outer margin of the highlighted box |
 | openBlankMode（v0.9.12+） | Boolean | true     | Is enable fill in the blank mode, where underlined text is not displayed by default and only displayed sequentially by pressing the enter key |
+
+#### 14.Formula plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
+| enableEditFormulaInRichTextEdit（v0.10.0+）     | Boolean  | true | Do you want to enable direct editing of mathematical formulas in the rich text editing box |
+| katexFontPath（v0.10.3+）     | String  | https://unpkg.com/katex@0.16.11/dist | The request path for font files in the Katex library. Font files will only be requested when Katex's output is configured as html. The current configuration can be obtained through the mindMap.formula.getKatexConfig() method. The font file can be found in node_modules: katex/dist/fonts/. You can upload it to your server or CDN. The final font request path is `${katexFontPath}fonts/KaTeX_AMS-Regular.woff2`, which can be concatenated by oneself to test whether it can be accessed |
+| getKatexOutputType（v0.10.3+）     | Function、null  | null | Customize the output mode of the Katex library. By default, when the Chrome kernel is below 100, html mode will be used. Otherwise, mathml mode will be used. If you have your own rules, you can pass a function that returns either mathml or html |
+
+#### 15.OuterFrame plugin
+
+| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
+| outerFramePaddingX（v0.10.3+）     | Number  | 10 | Horizontal inner margin of the outer frame |
+| outerFramePaddingY（v0.10.3+）     | Number  | 10 | Vertical inner margin of the outer frame |
 
 ## Static methods
 
@@ -586,10 +616,12 @@ Listen to an event. Event list:
 | node_cooperate_avatar_mouseleave（v0.9.9+）    |  Triggered when removing personnel avatars with the mouse during collaborative editing |  userInfo(User info)、 this(Current node instance)、 node(Avatar node)、 e(Event Object)   |
 | exit_demonstrate（v0.9.11+）    | Triggered when exiting demonstration mode  |     |
 | demonstrate_jump（v0.9.11+）    | Trigger when switching steps in demonstration mode  |  currentStepIndex（The index of the steps currently played, counting from 0）、stepLength（Total number of playback steps）   |
-| node_tag_click（v0.9.12+）    | Click events on node labels | this(Current node instance)、item（Content of clicked tags）    |
+| node_tag_click（v0.9.12+）    | Click events on node labels | this(Current node instance)、item（Content of clicked tags）、index（v0.10.3+，The index of this tag in the tag list）、tagNode（v0.10.3+，Tag node, G instance of @svgdotjs/svg.js library, Can be used to obtain label position and size information）     |
 | node_layout_end（v0.10.1+）    | Event where the content layout of a single node is completed | this(Current node instance)  |
 | node_attachmentClick（v0.9.10+）    | Click event for node attachment icon | this(Current node instance)、e（Event Object）、node（Icon node）  |
 | node_attachmentContextmenu（v0.9.10+）    | Right click event on node attachment icon | this(Current node instance)、e（Event Object）、node（Icon node）  |
+| before_update_config（v0.10.4+）    | Triggered before updating the configuration, that is, when the 'mindMap.updateConfig' method is called to update the configuration | opt（The configuration object before updating refers to an object, not a copy, so when the after_uupdate_comfig event is triggered, the object will also change synchronously. Therefore, it is necessary to cache a certain configuration field that you need）  |
+| after_update_config（v0.10.4+）    | Triggered after updating configuration |  opt（Updated configuration object） |
 
 ### emit(event, ...args)
 
@@ -690,7 +722,7 @@ redo. All commands are as follows:
 | SET_NODE_HYPERLINK                 | Set Node Hyperlink                                           | node (node to set), link (hyperlink address), title (hyperlink name, optional) |
 | SET_NODE_NOTE                      | Set Node Note                                                | node (node to set), note (note text)                         |
 | SET_NODE_ATTACHMENT（v0.9.10+）                       |   Set node attachment               | node（node to set）、url（attachment url）、name（attachment name, optional）                       |
-| SET_NODE_TAG                       | Set Node Tag                                                 | node (node to set), tag (string array, built-in color information can be obtained in [constant.js](https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/constants/constant.js)) |
+| SET_NODE_TAG                       | Set Node Tag                                                 | node (node to set), tag (Previous versions before v0.10.3 only support string arrays, i.e. ['tag'], while v0.10.3+versions support object arrays, i.e. [{text: 'tag', style: {} }]) |
 | INSERT_AFTER (v0.1.5+)             | Move Node to After Another Node | node (node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), exist (target node)                     |
 | INSERT_BEFORE (v0.1.5+)            | Move Node to Before Another Node | node (node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), exist (target node)                     |
 | MOVE_NODE_TO (v0.1.5+)             | Move a node as a child of another node       | node (the node to move, (v0.7.2+supports passing node arrays to move multiple nodes simultaneously)), toNode (the target node)            |

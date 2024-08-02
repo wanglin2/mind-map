@@ -239,7 +239,7 @@
 </li>
 </ul>
 <p>给指定的节点列表树数据添加附加数据，会修改原数据。</p>
-<h4>createUidForAppointNodes(appointNodes, createNewId)</h4>
+<h4>createUidForAppointNodes(appointNodes, createNewId, handle)</h4>
 <blockquote>
 <p>v0.7.2+</p>
 </blockquote>
@@ -249,6 +249,9 @@
 </li>
 <li>
 <p><code>createNewId</code>：v0.7.3-fix.1+，<code>Boolean</code>，默认为<code>false</code>，即如果节点不存在<code>uid</code>的话，会创建新的<code>uid</code>。如果传<code>true</code>，那么无论节点数据原来是否存在<code>uid</code>，都会创建新的<code>uid</code></p>
+</li>
+<li>
+<p><code>handle</code>：v0.10.5+，<code>null、Function</code>，默认为<code>null</code>，可以传递一个函数，遍历到每个节点时会调用该函数，回调参数为当前遍历到的节点。</p>
 </li>
 </ul>
 <p>给指定的节点列表树数据添加 uid（如果 uid 不存在的话），会修改原数据。</p>

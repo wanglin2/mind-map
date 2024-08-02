@@ -948,7 +948,7 @@ export const addDataToAppointNodes = (appointNodes, data = {}) => {
 
 // 给指定的节点列表树数据添加uid，会修改原数据
 // createNewId默认为false，即如果节点不存在uid的话，会创建新的uid。如果传true，那么无论节点数据原来是否存在uid，都会创建新的uid
-export const createUidForAppointNodes = (appointNodes, createNewId = false) => {
+export const createUidForAppointNodes = (appointNodes, createNewId = false, handle = null) => {
   const walk = list => {
     list.forEach(node => {
       if (!node.data) {
@@ -957,6 +957,7 @@ export const createUidForAppointNodes = (appointNodes, createNewId = false) => {
       if (createNewId || isUndef(node.data.uid)) {
         node.data.uid = createUid()
       }
+      handle && handle(node)
       if (node.children && node.children.length > 0) {
         walk(node.children)
       }
@@ -1382,22 +1383,24 @@ export const getNodeTreeBoundingRect = (
   let minY = Infinity
   let maxY = -Infinity
   const walk = (root, isRoot) => {
-    if (!(isRoot && excludeSelf)) {
-      const { x, y, width, height } = root.group
-        .findOne('.smm-node-shape')
-        .rbox()
-      if (x < minX) {
-        minX = x
-      }
-      if (x + width > maxX) {
-        maxX = x + width
-      }
-      if (y < minY) {
-        minY = y
-      }
-      if (y + height > maxY) {
-        maxY = y + height
-      }
+    if (!(isRoot && excludeSelf) && root.group) {
+      try {
+        const { x, y, width, height } = root.group
+          .findOne('.smm-node-shape')
+          .rbox()
+        if (x < minX) {
+          minX = x
+        }
+        if (x + width > maxX) {
+          maxX = x + width
+        }
+        if (y < minY) {
+          minY = y
+        }
+        if (y + height > maxY) {
+          maxY = y + height
+        }
+      } catch (e) {}
     }
     if (!excludeGeneralization && root._generalizationList.length > 0) {
       root._generalizationList.forEach(item => {
@@ -1579,4 +1582,13 @@ export const defenseXSS = text => {
 // 给节点添加命名空间
 export const addXmlns = el => {
   el.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
+}
+
+// 给一组节点实例升序排序，依据其sortIndex值
+export const sortNodeList = nodeList => {
+  nodeList = [...nodeList]
+  nodeList.sort((a, b) => {
+    return a.sortIndex - b.sortIndex
+  })
+  return nodeList
 }

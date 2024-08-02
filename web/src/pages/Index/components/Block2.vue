@@ -42,15 +42,15 @@ export default {
       dataList: [
         {
           icon: 'iconstar',
-          value: 'Github star数量4000+'
+          value: 'Github star数量5000+'
         },
         {
           icon: 'iconfork',
-          value: 'Github fork数量500+'
+          value: 'Github fork数量700+'
         },
         {
           icon: 'iconxiazai',
-          value: 'npm总下载次数20000+'
+          value: 'npm总下载次数30000+'
         },
         {
           icon: 'iconteamwork',

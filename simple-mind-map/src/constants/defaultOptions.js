@@ -23,6 +23,8 @@ export const defaultOpt = {
   mouseScaleCenterUseMousePosition: true,
   // 最多显示几个标签
   maxTag: 5,
+  // 标签显示的位置，相对于节点文本，bottom（下方）、right（右侧）
+  tagPosition: CONSTANTS.TAG_POSITION.RIGHT,
   // 展开收缩按钮尺寸
   expandBtnSize: 20,
   // 节点里图片和文字的间距
@@ -226,6 +228,14 @@ export const defaultOpt = {
   // 自定义超链接的跳转
   // 如果不传，默认会以新窗口的方式打开超链接，可以传递一个函数，函数接收两个参数：link（超链接的url）、node（所属节点实例），只要传递了函数，就会阻止默认的跳转
   customHyperlinkJump: null,
+  // 是否开启性能模式，默认情况下所有节点都会直接渲染，无论是否处于画布可视区域，这样当节点数量比较多时（1000+）会比较卡，如果你的数据量比较大，那么可以通过该配置开启性能模式，即只渲染画布可视区域内的节点，超出的节点不渲染，这样会大幅提高渲染速度，当然同时也会带来一些其他问题，比如：1.当拖动或是缩放画布时会实时计算并渲染未节点的节点，所以会带来一定卡顿；2.导出图片、svg、pdf时需要先渲染全部节点，所以会比较慢；3.其他目前未发现的问题
+  openPerformance: false,
+  // 性能优化模式配置
+  performanceConfig: {
+    time: 250,// 当视图改变后多久刷新一次节点，单位：ms，
+    padding: 100,// 超出画布四周指定范围内依旧渲染节点
+    removeNodeWhenOutCanvas: true,// 节点移除画布可视区域后从画布删除
+  },
 
   // 【Select插件】
   // 多选节点时鼠标移动到边缘时的画布移动偏移量
@@ -379,6 +389,12 @@ export const defaultOpt = {
   // 【Formula插件】
   // 是否开启在富文本编辑框中直接编辑数学公式
   enableEditFormulaInRichTextEdit: true,
+  // katex库的字体文件的请求路径。仅当katex的output配置为html时才会请求字体文件。可以通过mindMap.formula.getKatexConfig()方法来获取当前的配置
+  // 字体文件可以从node_modules中找到：katex/dist/fonts/。可以上传到你的服务器或cdn
+  // 最终的字体请求路径为`${katexFontPath}fonts/KaTeX_AMS-Regular.woff2`，可以自行拼接进行测试是否可以访问
+  katexFontPath: 'https://unpkg.com/katex@0.16.11/dist/',
+  // 自定义katex库的输出模式。默认当Chrome内核100以下会使用html方式，否则使用mathml方式，如果你有自己的规则，那么可以传递一个函数，函数返回值为：mathml或html
+  getKatexOutputType: null,
 
   // 【RichText插件】
   // 转换富文本内容，当进入富文本编辑时，可以通过该参数传递一个函数，函数接收文本内容，需要返回你处理后的文本内容
@@ -387,5 +403,9 @@ export const defaultOpt = {
   beforeHideRichTextEdit: null,
   // 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果
   // 需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果
-  richTextEditFakeInPlace: false
+  richTextEditFakeInPlace: false,
+
+  // 【OuterFrame】插件
+  outerFramePaddingX: 10,
+  outerFramePaddingY: 10
 }

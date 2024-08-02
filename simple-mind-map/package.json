@@ -1,6 +1,6 @@
 {
   "name": "simple-mind-map",
-  "version": "0.10.2-fix.1",
+  "version": "0.10.5",
   "description": "一个简单的web在线思维导图",
   "authors": [
     {
@@ -28,7 +28,7 @@
   "module": "index.js",
   "main": "./dist/simpleMindMap.umd.min.js",
   "dependencies": {
-    "@svgdotjs/svg.js": "^3.0.16",
+    "@svgdotjs/svg.js": "^3.2.0",
     "deepmerge": "^1.5.2",
     "eventemitter3": "^4.0.7",
     "jszip": "^3.10.1",

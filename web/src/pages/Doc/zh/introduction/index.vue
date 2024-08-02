@@ -8,18 +8,18 @@
 </blockquote>
 <h2>特性</h2>
 <ul>
-<li><input type="checkbox" id="checkbox34" checked="true" /><label for="checkbox34">插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小打包体积</label></li>
-<li><input type="checkbox" id="checkbox35" checked="true" /><label for="checkbox35">支持逻辑结构图（向左、向右逻辑结构图）、思维导图、组织结构图、目录组织图、时间轴（横向、竖向）、鱼骨图等结构</label></li>
-<li><input type="checkbox" id="checkbox36" checked="true" /><label for="checkbox36">内置多种主题，允许高度自定义样式，支持注册新主题</label></li>
-<li><input type="checkbox" id="checkbox37" checked="true" /><label for="checkbox37">节点内容支持文本（普通文本、富文本）、图片、图标、超链接、备注、标签、概要、数学公式</label></li>
-<li><input type="checkbox" id="checkbox38" checked="true" /><label for="checkbox38">节点支持拖拽（拖拽移动、自由调整）、多种节点形状；支持扩展节点内容、支持使用 DDM 完全自定义节点内容</label></li>
-<li><input type="checkbox" id="checkbox39" checked="true" /><label for="checkbox39">支持画布拖动、缩放</label></li>
-<li><input type="checkbox" id="checkbox40" checked="true" /><label for="checkbox40">支持鼠标按键拖动选择和 Ctrl+左键两种多选节点方式</label></li>
-<li><input type="checkbox" id="checkbox41" checked="true" /><label for="checkbox41">支持导出为</label><code>json</code>、<code>png</code>、<code>svg</code>、<code>pdf</code>、<code>markdown</code>、<code>xmind</code>、<code>txt</code>，支持从<code>json</code>、<code>xmind</code>、<code>markdown</code>导入</li>
-<li><input type="checkbox" id="checkbox42" checked="true" /><label for="checkbox42">支持快捷键、前进后退、关联线、搜索替换、小地图、水印、滚动条、手绘风格、彩虹线条</label></li>
-<li><input type="checkbox" id="checkbox43" checked="true" /><label for="checkbox43">提供丰富的配置，满足各种场景各种使用习惯</label></li>
-<li><input type="checkbox" id="checkbox44" checked="true" /><label for="checkbox44">支持协同编辑</label></li>
-<li><input type="checkbox" id="checkbox45" checked="true" /><label for="checkbox45">支持演示模式</label></li>
+<li><input type="checkbox" id="checkbox17" checked="true" /><label for="checkbox17">插件化架构，除核心功能外，其他功能作为插件提供，按需使用，减小打包体积</label></li>
+<li><input type="checkbox" id="checkbox18" checked="true" /><label for="checkbox18">支持逻辑结构图（向左、向右逻辑结构图）、思维导图、组织结构图、目录组织图、时间轴（横向、竖向）、鱼骨图等结构</label></li>
+<li><input type="checkbox" id="checkbox19" checked="true" /><label for="checkbox19">内置多种主题，允许高度自定义样式，支持注册新主题</label></li>
+<li><input type="checkbox" id="checkbox20" checked="true" /><label for="checkbox20">节点内容支持文本（普通文本、富文本）、图片、图标、超链接、备注、标签、概要、数学公式</label></li>
+<li><input type="checkbox" id="checkbox21" checked="true" /><label for="checkbox21">节点支持拖拽（拖拽移动、自由调整）、多种节点形状；支持扩展节点内容、支持使用 DDM 完全自定义节点内容</label></li>
+<li><input type="checkbox" id="checkbox22" checked="true" /><label for="checkbox22">支持画布拖动、缩放</label></li>
+<li><input type="checkbox" id="checkbox23" checked="true" /><label for="checkbox23">支持鼠标按键拖动选择和 Ctrl+左键两种多选节点方式</label></li>
+<li><input type="checkbox" id="checkbox24" checked="true" /><label for="checkbox24">支持导出为</label><code>json</code>、<code>png</code>、<code>svg</code>、<code>pdf</code>、<code>markdown</code>、<code>xmind</code>、<code>txt</code>，支持从<code>json</code>、<code>xmind</code>、<code>markdown</code>导入</li>
+<li><input type="checkbox" id="checkbox25" checked="true" /><label for="checkbox25">支持快捷键、前进后退、关联线、搜索替换、小地图、水印、滚动条、手绘风格、彩虹线条</label></li>
+<li><input type="checkbox" id="checkbox26" checked="true" /><label for="checkbox26">提供丰富的配置，满足各种场景各种使用习惯</label></li>
+<li><input type="checkbox" id="checkbox27" checked="true" /><label for="checkbox27">支持协同编辑</label></li>
+<li><input type="checkbox" id="checkbox28" checked="true" /><label for="checkbox28">支持演示模式</label></li>
 </ul>
 <p>官方提供了如下插件，可根据需求按需引入（某个功能不生效大概率是因为你没有引入对应的插件），具体使用方式请查看文档：</p>
 <blockquote>
@@ -37,11 +37,11 @@
 <p>2.<code>web</code></p>
 <p>使用<code>simple-mind-map</code>库，基于<code>vue2.x</code>、<code>ElementUI</code>搭建的在线思维导图。特性：</p>
 <ul>
-<li><input type="checkbox" id="checkbox46" checked="true" /><label for="checkbox46">工具栏，支持插入节点、删除节点；编辑节点图片、图标、超链接、备注、标签、概要</label></li>
-<li><input type="checkbox" id="checkbox47" checked="true" /><label for="checkbox47">侧边栏，基础样式设置面板、节点样式设置面板、大纲面板、主题选择面板、结构选择面板</label></li>
-<li><input type="checkbox" id="checkbox48" checked="true" /><label for="checkbox48">导入导出功能；数据默认保存在浏览器本地存储，也支持直接创建、打开、编辑电脑本地文件</label></li>
-<li><input type="checkbox" id="checkbox49" checked="true" /><label for="checkbox49">右键菜单，支持展开、收起、整理布局等操作</label></li>
-<li><input type="checkbox" id="checkbox50" checked="true" /><label for="checkbox50">底部栏，支持节点数量、字数统计；支持切换编辑和只读模式；支持放大缩小；支持全屏切换；支持小地图</label></li>
+<li><input type="checkbox" id="checkbox29" checked="true" /><label for="checkbox29">工具栏，支持插入节点、删除节点；编辑节点图片、图标、超链接、备注、标签、概要</label></li>
+<li><input type="checkbox" id="checkbox30" checked="true" /><label for="checkbox30">侧边栏，基础样式设置面板、节点样式设置面板、大纲面板、主题选择面板、结构选择面板</label></li>
+<li><input type="checkbox" id="checkbox31" checked="true" /><label for="checkbox31">导入导出功能；数据默认保存在浏览器本地存储，也支持直接创建、打开、编辑电脑本地文件</label></li>
+<li><input type="checkbox" id="checkbox32" checked="true" /><label for="checkbox32">右键菜单，支持展开、收起、整理布局等操作</label></li>
+<li><input type="checkbox" id="checkbox33" checked="true" /><label for="checkbox33">底部栏，支持节点数量、字数统计；支持切换编辑和只读模式；支持放大缩小；支持全屏切换；支持小地图</label></li>
 </ul>
 <p>提供文档页面服务。</p>
 <p>3.<code>dist</code></p>
@@ -56,13 +56,11 @@
 <p><a href="https://juejin.cn/post/7287913415803764747">dom-to-image库是如何将html转换成图片的</a></p>
 <p><a href="https://juejin.cn/post/7295669711533998117">两天实现思维导图的协同编辑？用Yjs真的可以</a></p>
 <h2>特别说明</h2>
-<p>本项目可用于学习和参考，用于实际项目时请先深度体验一下是否能满足您的需求。</p>
-<p>本项目可能没有完整测试到每一个功能点，所以可能存在bug，另外，当节点数量非常多的时候，性能也存在一些问题，因为每个人能接受的卡顿程度不一样，所以你可以自行测试节点数量上限。一般来说，500个节点以内比较流畅，1000个节点以上卡顿比较明显。</p>
+<p>将本项目用于实际项目时请先深度体验一下是否能满足您的需求。</p>
+<p>本项目可能没有完整测试到每一个功能点，可能存在bug，另外，当节点数量非常多的时候，性能也存在一些问题，因为每个人能接受的卡顿程度不一样，所以你可以自行测试节点数量上限。一般来说，500个节点以内比较流畅，1000个节点以上卡顿比较明显。</p>
+<p>在v0.10.4+版本新增了性能模式，只渲染画布可视区域内的节点，可以提升大数据量下的渲染速度，可以通过开启<code>openPerformance</code>实例化选项进行体验，在线Demo里可以通过打开【基础样式】-【开启性能模式】开关进行体验。</p>
 <p>如果有建议或发现了bug，可以在此提交<a href="https://github.com/wanglin2/mind-map/issues">issues</a>。</p>
-<p>项目内置的主题和图标部分来自于：</p>
-<p><a href="https://naotu.baidu.com/">百度脑图</a></p>
-<p><a href="https://www.zhixi.com/">知犀思维导图</a></p>
-<p>尊重版权，主题和图标请勿直接用于商业项目。</p>
+<p>项目内置的主题和图标部分来自于：<a href="https://naotu.baidu.com/">百度脑图</a>、<a href="https://www.zhixi.com/">知犀思维导图</a>。尊重版权，主题和图标请勿直接用于商业项目。</p>
 <h2>为什么不是？</h2>
 <p>1.<a href="https://www.zhixi.com/">知犀</a></p>
 <p>知犀是一个免费的思维导图产品，支持多端同步，ui设计很漂亮，功能也很齐全，但是它并不开源，所以只能作为一个用户，而无法在你的项目中使用。</p>
@@ -71,7 +69,7 @@
 <p><code>kityminder-core</code>是百度开发的开源的脑图工具，功能很强大，性能也很好，但是它已经不维护了，所以代码比较陈旧，界面美观度也比较一般，另外bug只能自己修，功能只能自己开发，对前端开发能力要求比较高。</p>
 <p>3.<a href="https://github.com/hizzgdev/jsmind">jsmind</a>、<a href="https://github.com/ssshooter/mind-elixir-core">Mind-elixir</a>、<a href="https://github.com/ondras/my-mind">my-mind</a>、<a href="https://github.com/awehook/blink-mind">blink-mind</a>、<a href="https://github.com/luvsic3/remind">remind</a>、<a href="https://github.com/hellowuxin/vue3-mindmap">vue3-mindmap</a>、<a href="https://github.com/zyascend/ZMindMap">ZMindMap</a>、<a href="https://github.com/RockyRen/mindmaptree">mindmaptree</a>...</p>
 <p>这些开源的思维导图也都不错，各有各的特点，但是它们也都有一定缺点，比如停止更新、界面美观度一般、功能比较少、依赖某个框架等等。</p>
-<p>综上，在开源的思维导图中，你很难找到一个比<code>simple-mind-map</code>更好的选择。当然，<code>simple-mind-map</code>也远远谈不上最好，它也有很多不足，如你在前面的【特别说明】所看到的那样，不过<code>simple-mind-map</code>一直处于快速迭代中，欢迎你加入进来一起完善它。</p>
+<p>综上，在开源的思维导图中，你很难找到一个比<code>simple-mind-map</code>更好的选择。当然，<code>simple-mind-map</code>也远远谈不上最好，它也有很多不足，不过<code>simple-mind-map</code>一直处于快速迭代中，欢迎你加入进来一起完善它。</p>
 <h2>浏览器兼容性</h2>
 <p>推荐使用最新版<code>chrome</code>浏览器。</p>
 <p>有限测试情况：</p>
@@ -80,9 +78,10 @@
 <h2>License</h2>
 <p><a href="https://github.com/wanglin2/mind-map/blob/main/LICENSE">MIT</a>。保留<code>mind-map</code>版权声明的情况下可随意商用。如不想保留可联系作者。</p>
 <h1>微信交流群</h1>
-<p>群聊人数较多，无法通过二维码入群，可以微信添加<code>wanglinguanfang</code>拉你入群。思维导图相关问题皆可在群里提问，不必私聊作者。</p>
+<p>一群已满，可以扫描如下二维码进入二群，如已过期，可以微信添加<code>wanglinguanfang</code>拉你入群。思维导图相关问题皆可在群里提问，不必私聊作者。</p>
+<img src="../../../../../../qrcode.jpg" style="width: 300px" />
 <h2>请作者喝杯咖啡</h2>
-<p>开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡~</p>
+<p>开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡，你的支持是开发者持续维护的最大动力~</p>
 <blockquote>
 <p>推荐使用支付宝，微信获取不到头像。转账请备注【思维导图】。</p>
 </blockquote>
@@ -387,8 +386,41 @@
         <img src="../../../../assets/avatar/buddy.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>buddy</p>
     </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/default.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>小川</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/Tobin.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>Tobin</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/夏虫不语冰.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>夏虫不语冰</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/晴空.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>晴空</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/default.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>黄泳</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/ccccs.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>ccccs</p>
+    </div>
 </div>
-
+<div style="display: flex;">
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/。.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>。</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/Jeffrey.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>Jeffrey</p>
+    </div>
+</div>
   </div>
 </template>
 

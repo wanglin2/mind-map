@@ -1,5 +1,5 @@
 import btnsSvg from '../../../svg/btns'
-import { SVG, Circle, G } from '@svgdotjs/svg.js'
+import { SVG, Circle, G, Text } from '@svgdotjs/svg.js'
 
 // 创建展开收起按钮的内容节点
 function createExpandNodeContent() {
@@ -10,9 +10,7 @@ function createExpandNodeContent() {
   // 根据配置判断是否显示数量按钮
   if (this.mindMap.opt.isShowExpandNum) {
     // 展开的节点
-    this._openExpandNode = SVG()
-      .text()
-      .size(this.expandBtnSize, this.expandBtnSize)
+    this._openExpandNode = new Text()
     // 文本垂直居中
     this._openExpandNode.attr({
       'text-anchor': 'middle',
@@ -81,7 +79,7 @@ function updateExpandBtnNode() {
         // 计算子节点数量
         let count = this.sumNode(this.nodeData.children)
         count = expandBtnNumHandler(count)
-        node.text(count)
+        node.text(String(count))
       } else {
         this._fillExpandNode.stroke('none')
       }
@@ -126,11 +124,7 @@ function renderExpandBtn() {
     this._expandBtn.on('click', e => {
       e.stopPropagation()
       // 展开收缩
-      this.mindMap.execCommand(
-        'SET_NODE_EXPAND',
-        this,
-        !this.getData('expand')
-      )
+      this.mindMap.execCommand('SET_NODE_EXPAND', this, !this.getData('expand'))
       this.mindMap.emit('expand_btn_click', this)
     })
     this._expandBtn.on('dblclick', e => {

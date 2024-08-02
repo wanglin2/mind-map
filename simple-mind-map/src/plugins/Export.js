@@ -4,7 +4,8 @@ import {
   readBlob,
   removeHTMLEntities,
   resizeImgSize,
-  handleSelfCloseTags
+  handleSelfCloseTags,
+  addXmlns
 } from '../utils'
 import { SVG } from '@svgdotjs/svg.js'
 import drawBackgroundImageToCanvas from '../utils/simulateCSSBackgroundInCanvas'
@@ -94,6 +95,20 @@ class Export {
       if (foreignObjectList.length > 0) {
         foreignObjectList[0].add(SVG(`<style>${resetCss}</style>`))
         svgIsChange = true
+      }
+      // 如果还开启了数学公式，还要插入katex库的样式
+      if (this.mindMap.formula) {
+        const formulaList = svg.find('.ql-formula')
+        if (formulaList.length > 0) {
+          const styleText = this.mindMap.formula.getStyleText()
+          if (styleText) {
+            const styleEl = document.createElement('style')
+            styleEl.innerHTML = styleText
+            addXmlns(styleEl)
+            foreignObjectList[0].add(styleEl)
+            svgIsChange = true
+          }
+        }
       }
     }
     // 自定义处理svg的方法

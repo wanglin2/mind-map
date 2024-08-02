@@ -813,8 +813,52 @@
           </div>
         </div>
       </template>
+      <!-- 外框内边距 -->
+      <div class="title noTop">{{ $t('baseStyle.outerFramePadding') }}</div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.horizontal') }}</span>
+          <el-slider
+            style="width: 200px"
+            v-model="outerFramePadding.outerFramePaddingX"
+            @change="
+              value => {
+                updateOuterFramePadding('outerFramePaddingX', value)
+              }
+            "
+          ></el-slider>
+        </div>
+      </div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">{{ $t('baseStyle.horizontal') }}</span>
+          <el-slider
+            style="width: 200px"
+            v-model="outerFramePadding.outerFramePaddingY"
+            @change="
+              value => {
+                updateOuterFramePadding('outerFramePaddingY', value)
+              }
+            "
+          ></el-slider>
+        </div>
+      </div>
       <!-- 其他配置 -->
       <div class="title noTop">{{ $t('baseStyle.otherConfig') }}</div>
+      <!-- 配置性能模式 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="config.openPerformance"
+            @change="
+              value => {
+                updateOtherConfig('openPerformance', value)
+              }
+            "
+            >{{ $t('baseStyle.openPerformance') }}</el-checkbox
+          >
+        </div>
+      </div>
       <!-- 配置开启自由拖拽 -->
       <div class="row">
         <div class="rowItem">
@@ -1032,6 +1076,7 @@ export default {
         nodeUseLineStyle: false
       },
       config: {
+        openPerformance: false,
         enableFreeDrag: false,
         mousewheelAction: 'zoom',
         mousewheelZoomActionReverse: false,
@@ -1058,7 +1103,11 @@ export default {
         isShowScrollbar: false,
         isUseHandDrawnLikeStyle: false
       },
-      currentLayout: '' // 当前结构
+      currentLayout: '', // 当前结构
+      outerFramePadding: {
+        outerFramePaddingX: 0,
+        outerFramePaddingY: 0
+      }
     }
   },
   computed: {
@@ -1129,6 +1178,7 @@ export default {
         this.initConfig()
         this.initWatermark()
         this.initRainbowLines()
+        this.initOuterFramePadding()
         this.currentLayout = this.mindMap.getLayout()
       } else {
         this.$refs.sidebar.show = false
@@ -1209,6 +1259,7 @@ export default {
     // 初始化其他配置
     initConfig() {
       ;[
+        'openPerformance',
         'enableFreeDrag',
         'mousewheelAction',
         'mousewheelZoomActionReverse',
@@ -1248,6 +1299,16 @@ export default {
           ? this.mindMap.rainbowLines.getColorsList()
           : null
         : null
+    },
+
+    // 外框
+    initOuterFramePadding() {
+      this.outerFramePadding.outerFramePaddingX = this.mindMap.getConfig(
+        'outerFramePaddingX'
+      )
+      this.outerFramePadding.outerFramePaddingY = this.mindMap.getConfig(
+        'outerFramePaddingX'
+      )
     },
 
     /**
@@ -1336,6 +1397,20 @@ export default {
       storeConfig({
         config: this.data.config
       })
+    },
+
+    // 更新外框
+    updateOuterFramePadding(prop, value) {
+      this.outerFramePadding[prop] = value
+      this.data.config = this.data.config || {}
+      this.data.config[prop] = value
+      this.mindMap.updateConfig({
+        [prop]: value
+      })
+      storeConfig({
+        config: this.data.config
+      })
+      this.mindMap.render()
     },
 
     // 设置margin

@@ -86,6 +86,13 @@
 <td></td>
 </tr>
 <tr>
+<td>tagPosition（v0.10.3+）</td>
+<td>String</td>
+<td>right</td>
+<td>The position of the tag display relative to the node text，bottom（Below the text）、right（On the right side of the text）</td>
+<td></td>
+</tr>
+<tr>
 <td>imgTextMargin</td>
 <td>Number</td>
 <td>5</td>
@@ -533,6 +540,20 @@
 <td>Customize the jump of hyperlinks. If not passed, the hyperlink will be opened as a new window by default, and a function can be passed, The function takes two parameters: link（The URL of the hyperlink）、node（Node instance to which it belongs）, As long as a function is passed, it will block the default jump</td>
 <td></td>
 </tr>
+<tr>
+<td>openPerformance（v0.10.4+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>Whether to enable performance mode or not, by default, all nodes will be rendered directly, regardless of whether they are in the visible area of the canvas. This will cause a lag when there are a large number of nodes (1000+). If your data volume is large, you can enable performance mode through this configuration, that is, only rendering nodes within the visible area of the canvas, and not rendering nodes beyond it. This will greatly improve rendering speed, but of course, it will also bring some other problems, such as: 1. When dragging or scaling the canvas, real-time calculation and rendering of nodes without nodes will be performed, which will bring some lag; When exporting images, SVG, and PDF, all nodes need to be rendered first, so it may be slower; 3. Other currently undiscovered issues</td>
+<td></td>
+</tr>
+<tr>
+<td>performanceConfig（v0.10.4+）</td>
+<td>Object</td>
+<td>{ time: 250,  padding: 100, removeNodeWhenOutCanvas: true }</td>
+<td>Performance optimization mode configuration. time（How often do nodes refresh after a view change. Unit:ms）、padding（Still rendering nodes beyond the specified range around the canvas）、removeNodeWhenOutCanvas（Is the node deleted from the canvas after being moved out of the visible area of the canvas）</td>
+<td></td>
+</tr>
 </tbody>
 </table>
 <h3>1.1Data structure</h3>
@@ -554,7 +575,7 @@
     <span class="hljs-attr">hyperlink</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Hyperlink address</span>
     <span class="hljs-attr">hyperlinkTitle</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Title of hyperlink</span>
     <span class="hljs-attr">note</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Content of remarks</span>
-    <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// Tag list</span>
+    <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// Tag list, Prior to v0.10.3, only string arrays, i.e. [&#x27;tag&#x27;], were supported. However, v0.10.3+versions support object arrays, i.e. [{text: &#x27;tag&#x27;, style: {}}]. The specific supported label styles can refer to the &quot;Tag Styles&quot; below</span>
     <span class="hljs-attr">generalization</span>: [{<span class="hljs-comment">// (Arrays are not supported in versions below 0.9.0, and only a single summary data can be set)The summary of the node, if there is no summary, the generalization can be set to null</span>
       <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// Summary Text</span>
       <span class="hljs-attr">richText</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// Is the text of the node in rich text mode</span>
@@ -573,6 +594,56 @@
 }
 </code></pre>
 <p>If you want to add custom fields, you can add them to the same level as 'data' and 'children'. If you want to add them to the 'data' object, please use the <code>_</code> Name your custom field at the beginning, and it will be used internally to determine whether it is a custom field.</p>
+<h5>Tag Styles</h5>
+<p>The style object of the tag supports the following properties:</p>
+<table>
+<thead>
+<tr>
+<th>Field Name</th>
+<th>Type</th>
+<th>Default Value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>radius</td>
+<td>Number</td>
+<td>3</td>
+<td>The corner size of the tag rectangle</td>
+</tr>
+<tr>
+<td>fontSize</td>
+<td>Number</td>
+<td>12</td>
+<td>Font size, it is recommended that the height of the text should not exceed height</td>
+</tr>
+<tr>
+<td>fill</td>
+<td>String</td>
+<td></td>
+<td>Background color of tag rectangle</td>
+</tr>
+<tr>
+<td>height</td>
+<td>Number</td>
+<td>20</td>
+<td>Height of tag rectangle</td>
+</tr>
+<tr>
+<td>paddingX</td>
+<td>Number</td>
+<td>8</td>
+<td>Horizontal margin, if width is set, this configuration will be ignored</td>
+</tr>
+<tr>
+<td>width</td>
+<td>Number</td>
+<td></td>
+<td>The width of the tag rectangle, if not set, defaults to the width of the text plus paddingX * 2</td>
+</tr>
+</tbody>
+</table>
 <h3>1.2Icon Configuration</h3>
 <table>
 <thead>
@@ -959,13 +1030,6 @@
 <td></td>
 </tr>
 <tr>
-<td>enableEditFormulaInRichTextEdit（v0.10.0+）</td>
-<td>Boolean</td>
-<td>true</td>
-<td></td>
-<td>Whether to enable direct editing of mathematical formulas in rich text editing boxes</td>
-</tr>
-<tr>
 <td>transformRichTextOnEnterEdit（v0.10.0+）</td>
 <td>null、Function</td>
 <td>null</td>
@@ -1176,6 +1240,17 @@
 </tr>
 </tbody>
 </table>
+<h4>14.Formula plugin</h4>
+<p>| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
+| enableEditFormulaInRichTextEdit（v0.10.0+）     | Boolean  | true | Do you want to enable direct editing of mathematical formulas in the rich text editing box |
+| katexFontPath（v0.10.3+）     | String  | https://unpkg.com/katex@0.16.11/dist | The request path for font files in the Katex library. Font files will only be requested when Katex's output is configured as html. The current configuration can be obtained through the mindMap.formula.getKatexConfig() method. The font file can be found in node_modules: katex/dist/fonts/. You can upload it to your server or CDN. The final font request path is <code>${katexFontPath}fonts/KaTeX_AMS-Regular.woff2</code>, which can be concatenated by oneself to test whether it can be accessed |
+| getKatexOutputType（v0.10.3+）     | Function、null  | null | Customize the output mode of the Katex library. By default, when the Chrome kernel is below 100, html mode will be used. Otherwise, mathml mode will be used. If you have your own rules, you can pass a function that returns either mathml or html |</p>
+<h4>15.OuterFrame plugin</h4>
+<p>| Field Name                       | Type    | Default Value    | Description                                 | Required |
+| -------------------------------- | ------- | ---------------- | ------------------------------------------------------------ |
+| outerFramePaddingX（v0.10.3+）     | Number  | 10 | Horizontal inner margin of the outer frame |
+| outerFramePaddingY（v0.10.3+）     | Number  | 10 | Vertical inner margin of the outer frame |</p>
 <h2>Static methods</h2>
 <h3>defineTheme(name, config)</h3>
 <blockquote>
@@ -1620,7 +1695,7 @@ poor performance and should be used sparingly.</p>
 <tr>
 <td>node_tag_click（v0.9.12+）</td>
 <td>Click events on node labels</td>
-<td>this(Current node instance)、item（Content of clicked tags）</td>
+<td>this(Current node instance)、item（Content of clicked tags）、index（v0.10.3+，The index of this tag in the tag list）、tagNode（v0.10.3+，Tag node, G instance of @svgdotjs/svg.js library, Can be used to obtain label position and size information）</td>
 </tr>
 <tr>
 <td>node_layout_end（v0.10.1+）</td>
@@ -1636,6 +1711,16 @@ poor performance and should be used sparingly.</p>
 <td>node_attachmentContextmenu（v0.9.10+）</td>
 <td>Right click event on node attachment icon</td>
 <td>this(Current node instance)、e（Event Object）、node（Icon node）</td>
+</tr>
+<tr>
+<td>before_update_config（v0.10.4+）</td>
+<td>Triggered before updating the configuration, that is, when the 'mindMap.updateConfig' method is called to update the configuration</td>
+<td>opt（The configuration object before updating refers to an object, not a copy, so when the after_uupdate_comfig event is triggered, the object will also change synchronously. Therefore, it is necessary to cache a certain configuration field that you need）</td>
+</tr>
+<tr>
+<td>after_update_config（v0.10.4+）</td>
+<td>Triggered after updating configuration</td>
+<td>opt（Updated configuration object）</td>
 </tr>
 </tbody>
 </table>
@@ -1820,7 +1905,7 @@ redo. All commands are as follows:</p>
 <tr>
 <td>SET_NODE_TAG</td>
 <td>Set Node Tag</td>
-<td>node (node to set), tag (string array, built-in color information can be obtained in <a href="https://github.com/wanglin2/mind-map/blob/main/simple-mind-map/src/constants/constant.js">constant.js</a>)</td>
+<td>node (node to set), tag (Previous versions before v0.10.3 only support string arrays, i.e. ['tag'], while v0.10.3+versions support object arrays, i.e. [{text: 'tag', style: {} }])</td>
 </tr>
 <tr>
 <td>INSERT_AFTER (v0.1.5+)</td>

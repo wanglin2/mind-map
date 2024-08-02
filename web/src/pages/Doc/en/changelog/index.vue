@@ -1,6 +1,86 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.10.5</h2>
+<blockquote>
+<p>2024.8.2</p>
+</blockquote>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fixed the issue of error when dragging the scrollbar after enabling the scrollbar plugin and performance mode;</p>
+<p>2.Fixed the issue where the rich text style of nodes was not updated when copying across levels;</p>
+<p>3.Fixed the issue where the demo plugin did not work properly after enabling performance mode;</p>
+<p>4.Fixed the issue of canvas jumping when the first rendering canvas is triggered after adjusting the canvas size;</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Move the node and change the node hierarchy. Nodes that have set custom rich text styles do not need to update the styles;</p>
+<p>2.Support clicking on the canvas to cancel the creation of associated lines;</p>
+<p>3.Automatically expand a node by moving it or copying it to a collapsed node;</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.When the number of subordinate nodes is greater than 100, the collapse button displays ellipsis;</p>
+<p>2.No longer write data to the browser cache when opening local file editing, to avoid the problem of local file data loss caused by triggering storage restrictions;</p>
+<p>3.If the local file is not saved, close the page and add an interception prompt;</p>
+<p>4.Fixed the issue in the outline where clicking and dragging a node would trigger a file drag mask on the page;</p>
+</blockquote>
+<h2>0.10.4</h2>
+<blockquote>
+<p>2024.7.25</p>
+</blockquote>
+<p>This update mainly adds a performance mode. When enabled, only nodes within the visible area of the canvas will be rendered, and nodes outside the area will be deleted from the canvas, improving usability in the case of large data volumes (1000+nodes). The first rendering time for 2000 nodes has been reduced from 5s+to 0.5s. However, this also brings some problems, such as a slight lag when dragging the animation canvas, as nodes will be rendered in real time, and exporting images will be slower because all nodes need to be rendered first, as well as other temporarily undiscovered issues.</p>
+<p>Fix:</p>
+<blockquote>
+<p>1.Delete useless code and fix the issue where the mouse hover node reports an error and does not display the expand and collapse buttons;</p>
+</blockquote>
+<h2>0.10.3</h2>
+<blockquote>
+<p>2024.7.19</p>
+</blockquote>
+<p>Updates that require special attention:</p>
+<p>1.Node tag data structure update</p>
+<p>The node tag data has been changed from a string array to an object array, mainly to support setting the style of a single tag. The current node tag data structure is as follows:</p>
+<pre class="hljs"><code>{
+     <span class="hljs-attr">tag</span>: [<span class="hljs-string">&#x27;tag&#x27;</span>]
+}
+</code></pre>
+<p>Change to the following:</p>
+<pre class="hljs"><code>{
+     <span class="hljs-attr">tag</span>: [
+          {
+               <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;tag&#x27;</span>,
+               <span class="hljs-attr">style</span>: {}
+          }
+     ]
+}
+</code></pre>
+<p>2.Related to mathematical formulas</p>
+<p>The mathematical formula plugin Formula defaults to importing styles from the Katex library, so there is no need to manually import them in the application. At the same time, the path of the Katex library font file needs to be configured through the katexFontPath instantiation option.</p>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue where the isRoot and parent attributes of node instances obtained through methods customCreateNodeContent and createNodePrefixContent are both null;</p>
+<p>2.Fixed the issue where the last edited node would enter editing mode when zooming in and out of the canvas using the scroll wheel or shortcut keys after editing the node text, and the mind map shortcut keys would become invalid;</p>
+<p>3.Fixed the issue where multiple nodes can be selected simultaneously, allowing unlimited insertion of summaries;</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Modified the data type of the node tag field tag to support setting a single node tag style;</p>
+<p>2.Add instantiation options for displaying the location (Equivalent to node text) of node labels;</p>
+<p>3.Two callback parameters have been added to the node_tag_click event;</p>
+<p>4.When copying, cutting, or moving multiple nodes, operate them in the order they are on the nodes, rather than in the order they are activated;</p>
+<p>5.If a formula plugin is registered and there are formulas in the node, then when exporting SVG, it is necessary to add styles from the Katex library;</p>
+<p>6.Support instantiation options for custom katex library rendering modes;</p>
+<p>7.The formula plugin defaults to importing styles from the Katex library;</p>
+<p>8.Add instantiation options for custom katex library font file paths;</p>
+<p>9.Add instantiation options for setting the inner margin of the outer frame;</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.Support clicking on node tags to modify text and color;</p>
+<p>2.Remove the logic of introducing formula library styles;</p>
+<p>3.Support configuring the inner margin of the outer frame;</p>
+</blockquote>
 <h2>0.10.2 / 0.10.2-fix.1</h2>
 <blockquote>
 <p>2024.7.3</p>

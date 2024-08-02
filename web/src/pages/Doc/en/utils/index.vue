@@ -235,7 +235,7 @@ and copying the <code>data</code> of the data object, example:</p>
 </li>
 </ul>
 <p>Adding additional data to the specified node list tree data will modify the original data.</p>
-<h4>createUidForAppointNodes(appointNodes, createNewId)</h4>
+<h4>createUidForAppointNodes(appointNodes, createNewId, handle)</h4>
 <blockquote>
 <p>v0.7.2+</p>
 </blockquote>
@@ -245,6 +245,9 @@ and copying the <code>data</code> of the data object, example:</p>
 </li>
 <li>
 <p><code>createNewId</code>：v0.7.3-fix.1+, <code>Boolean</code>, default is <code>false</code>, If the node does not have a 'uid', a new 'uid' will be created. If 'true' is passed, a new 'uid' will be created regardless of whether the node data originally exists or not`</p>
+</li>
+<li>
+<p><code>handle</code>：v0.10.5+, <code>null、Function</code>, default is <code>null</code>, You can pass a function that will be called when traversing each node, with the callback parameter being the current node being traversed.</p>
 </li>
 </ul>
 <p>Adding a uid to the specified node list tree data (if the uid does not exist) will modify the original data.</p>

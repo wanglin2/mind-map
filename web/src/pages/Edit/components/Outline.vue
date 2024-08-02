@@ -12,6 +12,8 @@
     :expand-on-click-node="false"
     :allow-drag="checkAllowDrag"
     @node-drop="onNodeDrop"
+    @node-drag-start="onNodeDragStart"
+    @node-drag-end="onNodeDragEnd"
     @current-change="onCurrentChange"
     @mouseenter.native="isInTreArea = true"
     @mouseleave.native="isInTreArea = false"
@@ -37,7 +39,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import {
   nodeRichTextToTextWithWrap,
   textToNodeRichTextWithWrap,
@@ -91,6 +93,8 @@ export default {
     this.$bus.$off('hide_text_edit', this.handleHideTextEdit)
   },
   methods: {
+    ...mapMutations(['setIsDragOutlineTreeNode']),
+
     handleHideTextEdit() {
       if (this.notHandleDataChange) {
         this.notHandleDataChange = false
@@ -279,6 +283,14 @@ export default {
       this.mindMap.execCommand('GO_TARGET_NODE', data.uid, () => {
         this.notHandleDataChange = false
       })
+    },
+
+    onNodeDragStart() {
+      this.setIsDragOutlineTreeNode(true)
+    },
+
+    onNodeDragEnd() {
+      this.setIsDragOutlineTreeNode(false)
     },
 
     // 拖拽结束事件

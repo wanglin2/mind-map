@@ -55,6 +55,12 @@ MindMap.usePlugin(AssociativeLine)
 
 ## 方法
 
+### cancelCreateLine()
+
+> v0.10.5+
+
+中途取消创建关联线。
+
 ### renderAllLines()
 
 重新渲染所有关联线。

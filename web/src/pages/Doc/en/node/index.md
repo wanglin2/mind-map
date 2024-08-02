@@ -56,6 +56,14 @@ Whether the node is currently being dragged
 
 ## Methods
 
+### checkIsInClient(padding = 0)
+
+> v0.10.4+
+
+- `padding`: Number, The size of the area extending around the canvas
+
+Determine whether the node is within the visible area of the canvas.
+
 ### deactivate()
 
 > 0.9.11+

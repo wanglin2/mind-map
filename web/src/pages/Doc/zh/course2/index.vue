@@ -97,6 +97,19 @@ activeNodes.value.forEach(<span class="hljs-function"><span class="hljs-params">
 <p>获取节点标签数据：</p>
 <pre class="hljs"><code><span class="hljs-keyword">const</span> tagArr = activeNode.getData(<span class="hljs-string">&#x27;tag&#x27;</span>) || []
 </code></pre>
+<p>v0.10.3+版本支持设置单个标签的样式，所以标签数据的类型也由字符串数组（即<code>['标签']</code>），改为对象数组（即<code>[{text: '标签', style: {}}]</code>）。所以要插入指定样式的标签可以这样操作：</p>
+<pre class="hljs"><code>activeNodes.value.forEach(<span class="hljs-function"><span class="hljs-params">node</span> =&gt;</span> {
+    node.setTag([
+        {
+            <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;标签1&#x27;</span>,
+            <span class="hljs-attr">style</span>: {
+                <span class="hljs-attr">fill</span>: <span class="hljs-string">&#x27;red&#x27;</span>
+            }
+        }
+    ])
+})
+</code></pre>
+<p><code>style</code>具体支持的属性可以参考【构造函数】文档。</p>
 <h2>插入概要</h2>
 <p>插入概要可以不需要实现UI，直接调用插入概要的命令即可：</p>
 <pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;ADD_GENERALIZATION&#x27;</span>, data)

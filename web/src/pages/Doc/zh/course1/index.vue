@@ -35,7 +35,7 @@
     <span class="hljs-attr">note</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 备注的内容</span>
     <span class="hljs-attr">attachmentUrl</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// v0.9.10+，附件url</span>
     <span class="hljs-attr">attachmentName</span>: <span class="hljs-string">&#x27;&#x27;</span>,<span class="hljs-comment">// v0.9.10+，附件名称</span>
-    <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// 标签列表</span>
+    <span class="hljs-attr">tag</span>: [], <span class="hljs-comment">// 标签列表，v0.10.3以前的版本只支持字符串数组，即[&#x27;标签&#x27;]，v0.10.3+版本支持对象数组，即[{text: &#x27;标签&#x27;, style: {}}]</span>
     <span class="hljs-attr">generalization</span>: [{<span class="hljs-comment">// （0.9.0以下版本不支持数组，只能设置单个概要数据）节点的概要，如果没有概要generalization设为null即可</span>
       <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;&#x27;</span>, <span class="hljs-comment">// 概要的文本</span>
       <span class="hljs-attr">richText</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// 节点的文本是否是富文本模式</span>

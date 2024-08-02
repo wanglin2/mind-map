@@ -56,6 +56,14 @@
 
 ## 方法
 
+### checkIsInClient(padding = 0)
+
+> v0.10.4+
+
+- `padding`: Number, 向画布四周延伸的区域大小
+
+判断节点是否处于画布可视区域。
+
 ### deactivate()
 
 > 0.9.11+

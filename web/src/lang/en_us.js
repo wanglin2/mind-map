@@ -26,7 +26,8 @@ export default {
     nodeBorderType: 'Node border style',
     nodeUseLineStyle: 'Use only has bottom border style',
     otherConfig: 'Other config',
-    enableFreeDrag: 'Enable node free drag',
+    enableFreeDrag: 'Enable node free drag(Beta)',
+    openPerformance: 'Enable performance mode',
     watermark: 'Watermark',
     showWatermark: 'Is show watermark',
     onlyExport: 'Only export',
@@ -65,7 +66,8 @@ export default {
     center: 'Center',
     edge: 'Edge',
     rainbowLines: 'Rainbow lines',
-    notUseRainbowLines: 'Not use rainbow lines'
+    notUseRainbowLines: 'Not use rainbow lines',
+    outerFramePadding: 'Outer frame padding'
   },
   color: {
     moreColor: 'More color'
@@ -290,9 +292,9 @@ export default {
     creatingTip: 'Creating file',
     directory: 'Directory',
     newFileTip:
-      'Please export the currently edited file before creating a new one, otherwise the content will be lost',
+      'Please export the currently edited file before creating a new one, Beware of content loss',
     openFileTip:
-      'Please export the currently edited file before opening it, otherwise the content will be lost'
+      'Please export the currently edited file before opening it, Beware of content loss'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',
@@ -376,5 +378,9 @@ export default {
     boxStyle: 'Box style',
     boxColor: 'Box color',
     fillColor: 'Fill color'
+  },
+  nodeTagStyle: {
+    placeholder: 'Please enter the tag content',
+    delete: 'Delete this tag'
   }
 }

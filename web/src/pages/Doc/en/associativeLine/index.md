@@ -55,6 +55,12 @@ The currently active connection line and array type are the same as the structur
 
 ## Methods
 
+### cancelCreateLine()
+
+> v0.10.5+
+
+Cancel the creation of the associated line midway.
+
 ### renderAllLines()
 
 Re-render all associated lines.

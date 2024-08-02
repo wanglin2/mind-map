@@ -76,19 +76,15 @@
 
 ## 特别说明
 
-本项目可用于学习和参考，用于实际项目时请先深度体验一下是否能满足您的需求。
+将本项目用于实际项目时请先深度体验一下是否能满足您的需求。
 
-本项目可能没有完整测试到每一个功能点，所以可能存在bug，另外，当节点数量非常多的时候，性能也存在一些问题，因为每个人能接受的卡顿程度不一样，所以你可以自行测试节点数量上限。一般来说，500个节点以内比较流畅，1000个节点以上卡顿比较明显。
+本项目可能没有完整测试到每一个功能点，可能存在bug，另外，当节点数量非常多的时候，性能也存在一些问题，因为每个人能接受的卡顿程度不一样，所以你可以自行测试节点数量上限。一般来说，500个节点以内比较流畅，1000个节点以上卡顿比较明显。
+
+在v0.10.4+版本新增了性能模式，只渲染画布可视区域内的节点，可以提升大数据量下的渲染速度，可以通过开启`openPerformance`实例化选项进行体验，在线Demo里可以通过打开【基础样式】-【开启性能模式】开关进行体验。
 
 如果有建议或发现了bug，可以在此提交[issues](https://github.com/wanglin2/mind-map/issues)。
 
-项目内置的主题和图标部分来自于：
-
-[百度脑图](https://naotu.baidu.com/)
-
-[知犀思维导图](https://www.zhixi.com/)
-
-尊重版权，主题和图标请勿直接用于商业项目。
+项目内置的主题和图标部分来自于：[百度脑图](https://naotu.baidu.com/)、[知犀思维导图](https://www.zhixi.com/)。尊重版权，主题和图标请勿直接用于商业项目。
 
 ## 为什么不是？
 
@@ -106,7 +102,7 @@
 
 这些开源的思维导图也都不错，各有各的特点，但是它们也都有一定缺点，比如停止更新、界面美观度一般、功能比较少、依赖某个框架等等。
 
-综上，在开源的思维导图中，你很难找到一个比`simple-mind-map`更好的选择。当然，`simple-mind-map`也远远谈不上最好，它也有很多不足，如你在前面的【特别说明】所看到的那样，不过`simple-mind-map`一直处于快速迭代中，欢迎你加入进来一起完善它。
+综上，在开源的思维导图中，你很难找到一个比`simple-mind-map`更好的选择。当然，`simple-mind-map`也远远谈不上最好，它也有很多不足，不过`simple-mind-map`一直处于快速迭代中，欢迎你加入进来一起完善它。
 
 ## 浏览器兼容性
 
@@ -124,11 +120,13 @@
 
 # 微信交流群
 
-群聊人数较多，无法通过二维码入群，可以微信添加`wanglinguanfang`拉你入群。思维导图相关问题皆可在群里提问，不必私聊作者。
+一群已满，可以扫描如下二维码进入二群，如已过期，可以微信添加`wanglinguanfang`拉你入群。思维导图相关问题皆可在群里提问，不必私聊作者。
+
+<img src="../../../../../../qrcode.jpg" style="width: 300px" />
 
 ## 请作者喝杯咖啡
 
-开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡~
+开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡，你的支持是开发者持续维护的最大动力~
 
 > 推荐使用支付宝，微信获取不到头像。转账请备注【思维导图】。
 
@@ -435,5 +433,39 @@
     <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
         <img src="../../../../assets/avatar/buddy.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
         <p>buddy</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/default.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>小川</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/Tobin.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>Tobin</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/夏虫不语冰.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>夏虫不语冰</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/晴空.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>晴空</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/default.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>黄泳</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/ccccs.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>ccccs</p>
+    </div>
+</div>
+<div style="display: flex;">
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/。.png" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>。</p>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center; width: fit-content; margin: 5px;">
+        <img src="../../../../assets/avatar/Jeffrey.jpg" style="width: 50px;height: 50px;object-fit: cover;border-radius: 50%;" />
+        <p>Jeffrey</p>
     </div>
 </div>

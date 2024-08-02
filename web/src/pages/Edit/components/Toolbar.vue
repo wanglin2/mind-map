@@ -230,7 +230,8 @@ export default {
       },
       fileTreeVisible: false,
       rootDirName: '',
-      fileTreeExpand: true
+      fileTreeExpand: true,
+      waitingWriteToLocalFile: false
     }
   },
   computed: {
@@ -254,11 +255,13 @@ export default {
     this.computeToolbarShowThrottle = throttle(this.computeToolbarShow, 300)
     window.addEventListener('resize', this.computeToolbarShowThrottle)
     this.$bus.$on('lang_change', this.computeToolbarShowThrottle)
+    window.addEventListener('beforeunload', this.onUnload)
   },
   beforeDestroy() {
     this.$bus.$off('write_local_file', this.onWriteLocalFile)
     window.removeEventListener('resize', this.computeToolbarShowThrottle)
     this.$bus.$off('lang_change', this.computeToolbarShowThrottle)
+    window.removeEventListener('beforeunload', this.onUnload)
   },
   methods: {
     // 计算工具按钮如何显示
@@ -291,9 +294,20 @@ export default {
     // 监听本地文件读写
     onWriteLocalFile(content) {
       clearTimeout(this.timer)
+      if (fileHandle && this.isHandleLocalFile) {
+        this.waitingWriteToLocalFile = true
+      }
       this.timer = setTimeout(() => {
         this.writeLocalFile(content)
       }, 1000)
+    },
+
+    onUnload(e) {
+      if (this.waitingWriteToLocalFile) {
+        const msg = '存在未保存的数据'
+        e.returnValue = msg
+        return msg
+      }
     },
 
     // 加载本地文件树
@@ -451,6 +465,7 @@ export default {
     // 写入本地文件
     async writeLocalFile(content) {
       if (!fileHandle || !this.isHandleLocalFile) {
+        this.waitingWriteToLocalFile = false
         return
       }
       if (!this.isFullDataFile) {
@@ -460,6 +475,7 @@ export default {
       const writable = await fileHandle.createWritable()
       await writable.write(string)
       await writable.close()
+      this.waitingWriteToLocalFile = false
     },
 
     // 创建本地文件

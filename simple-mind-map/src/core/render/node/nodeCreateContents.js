@@ -6,11 +6,22 @@ import {
   checkIsRichText,
   isUndef,
   createForeignObjectNode,
-  addXmlns
+  addXmlns,
+  generateColorByContent
 } from '../../../utils'
 import { Image as SVGImage, SVG, A, G, Rect, Text } from '@svgdotjs/svg.js'
 import iconsSvg from '../../../svg/icons'
 import { CONSTANTS } from '../../../constants/constant'
+
+// 标签默认的样式
+const defaultTagStyle = {
+  radius: 3, // 标签矩形的圆角大小
+  fontSize: 12, // 字号，建议文字高度不要大于height
+  fill: '', // 标签矩形的背景颜色
+  height: 20, // 标签矩形的高度
+  paddingX: 8 // 水平内边距，如果设置了width，将忽略该配置
+  //width: 30 // 标签矩形的宽度，如果不设置，默认以文字的宽度+paddingX*2为宽度
+}
 
 //  创建图片节点
 function createImgNode() {
@@ -284,31 +295,69 @@ function createHyperlinkNode() {
 
 //  创建标签节点
 function createTagNode() {
-  let tagData = this.getData('tag')
+  const tagData = this.getData('tag')
   if (!tagData || tagData.length <= 0) {
     return []
   }
-  let nodes = []
-  tagData.slice(0, this.mindMap.opt.maxTag).forEach((item, index) => {
-    let tag = new G()
+  let { maxTag, tagsColorMap } = this.mindMap.opt
+  tagsColorMap = tagsColorMap || {}
+  const nodes = []
+  tagData.slice(0, maxTag).forEach((item, index) => {
+    let str = ''
+    let style = {
+      ...defaultTagStyle
+    }
+    // 旧版只支持字符串类型
+    if (typeof item === 'string') {
+      str = item
+    } else {
+      // v0.10.3+版本支持对象类型
+      str = item.text
+      style = { ...defaultTagStyle, ...item.style }
+    }
+    // 是否手动设置了标签宽度
+    const hasCustomWidth = typeof style.width !== 'undefined'
+    // 创建容器节点
+    const tag = new G()
     tag.on('click', () => {
-      this.mindMap.emit('node_tag_click', this, item)
+      this.mindMap.emit('node_tag_click', this, item, index, tag)
     })
     // 标签文本
-    let text = new Text().text(item).x(8).cy(8)
-    this.style.tagText(text, index)
-    let { width } = text.bbox()
+    const text = new Text().text(str)
+    this.style.tagText(text, style)
+    // 获取文本宽高
+    const { width: textWidth, height: textHeight } = text.bbox()
+    // 矩形宽度
+    const rectWidth = hasCustomWidth
+      ? style.width
+      : textWidth + style.paddingX * 2
+    // 取文本和矩形最大宽高作为标签宽高
+    const maxWidth = hasCustomWidth ? Math.max(rectWidth, textWidth) : rectWidth
+    const maxHeight = Math.max(style.height, textHeight)
+    // 文本居中
+    if (hasCustomWidth) {
+      text.x((maxWidth - textWidth) / 2)
+    } else {
+      text.x(hasCustomWidth ? 0 : style.paddingX)
+    }
+    text.cy(-maxHeight / 2)
     // 标签矩形
-    let rect = new Rect().size(width + 16, 20)
-    // 先从自定义的颜色中获取颜色，没有的话就按照内容生成
-    const tagsColorList = this.mindMap.opt.tagsColorMap || {}
-    const color = tagsColorList[text.node.textContent]
-    this.style.tagRect(rect, text, color)
+    const rect = new Rect().size(rectWidth, style.height).cy(-maxHeight / 2)
+    if (hasCustomWidth) {
+      rect.x((maxWidth - rectWidth) / 2)
+    }
+    this.style.tagRect(rect, {
+      ...style,
+      fill:
+        style.fill || // 优先节点自身配置
+        tagsColorMap[text.node.textContent] || // 否则尝试从实例化选项tagsColorMap映射中获取颜色
+        generateColorByContent(text.node.textContent) // 否则按照标签内容生成
+    })
     tag.add(rect).add(text)
     nodes.push({
       node: tag,
-      width: width + 16,
-      height: 20
+      width: maxWidth,
+      height: maxHeight
     })
   })
   return nodes

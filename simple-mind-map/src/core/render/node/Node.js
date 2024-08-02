@@ -253,11 +253,15 @@ class Node {
         height: rect.height
       }
     }
+    const { tagPosition } = this.mindMap.opt
+    const tagIsBottom = tagPosition === CONSTANTS.TAG_POSITION.BOTTOM
     // 宽高
     let imgContentWidth = 0
     let imgContentHeight = 0
     let textContentWidth = 0
     let textContentHeight = 0
+    let tagContentWidth = 0
+    let tagContentHeight = 0
     // 存在图片
     if (this._imgData) {
       this._rectInfo.imgContentWidth = imgContentWidth = this._imgData.width
@@ -290,10 +294,20 @@ class Node {
     }
     // 标签
     if (this._tagData.length > 0) {
-      textContentWidth += this._tagData.reduce((sum, cur) => {
-        textContentHeight = Math.max(textContentHeight, cur.height)
+      let maxTagHeight = 0
+      const totalTagWidth = this._tagData.reduce((sum, cur) => {
+        maxTagHeight = Math.max(maxTagHeight, cur.height)
         return (sum += cur.width + this.textContentItemMargin)
       }, 0)
+      if (tagIsBottom) {
+        // 文字下方
+        tagContentWidth = totalTagWidth
+        tagContentHeight = maxTagHeight
+      } else {
+        // 否则在右侧
+        textContentWidth += totalTagWidth
+        textContentHeight = Math.max(textContentHeight, maxTagHeight)
+      }
     }
     // 备注
     if (this._noteData) {
@@ -325,6 +339,15 @@ class Node {
     // 纯内容宽高
     let _width = Math.max(imgContentWidth, textContentWidth)
     let _height = imgContentHeight + textContentHeight
+    // 如果标签在文字下方
+    if (tagIsBottom && tagContentHeight > 0 && textContentHeight > 0) {
+      // 那么文字和标签之间也需要间距
+      margin += this.blockContentMargin
+      // 整体高度要考虑标签宽度
+      _width = Math.max(_width, tagContentWidth)
+      // 整体高度要加上标签的高度
+      _height += tagContentHeight
+    }
     // 计算节点形状需要的附加内边距
     let { paddingX: shapePaddingX, paddingY: shapePaddingY } =
       this.shapeInstance.getShapePadding(_width, _height, paddingX, paddingY)
@@ -342,7 +365,7 @@ class Node {
   layout() {
     // 清除之前的内容
     this.group.clear()
-    const { hoverRectPadding } = this.mindMap.opt
+    const { hoverRectPadding, tagPosition } = this.mindMap.opt
     let { width, height, textContentItemMargin } = this
     let { paddingY } = this.getPaddingVale()
     const halfBorderWidth = this.getBorderWidth() / 2
@@ -382,6 +405,8 @@ class Node {
       addHoverNode()
       return
     }
+    const tagIsBottom = tagPosition === CONSTANTS.TAG_POSITION.BOTTOM
+    const { textContentHeight } = this._rectInfo
     // 图片节点
     let imgHeight = 0
     if (this._imgData) {
@@ -401,7 +426,7 @@ class Node {
       })
       foreignObject
         .x(textContentOffsetX)
-        .y((this._rectInfo.textContentHeight - this._prefixData.height) / 2)
+        .y((textContentHeight - this._prefixData.height) / 2)
       textContentNested.add(foreignObject)
       textContentOffsetX += this._prefixData.width + textContentItemMargin
     }
@@ -412,7 +437,7 @@ class Node {
       this._iconData.forEach(item => {
         item.node
           .x(textContentOffsetX + iconLeft)
-          .y((this._rectInfo.textContentHeight - item.height) / 2)
+          .y((textContentHeight - item.height) / 2)
         iconNested.add(item.node)
         iconLeft += item.width + textContentItemMargin
       })
@@ -427,7 +452,7 @@ class Node {
       ;(this._textData.nodeContent || this._textData.node)
         .x(-oldX) // 修复非富文本模式下同时存在图标和换行的文本时，被收起和展开时图标与文字距离会逐渐拉大的问题
         .x(textContentOffsetX)
-        .y((this._rectInfo.textContentHeight - this._textData.height) / 2)
+        .y((textContentHeight - this._textData.height) / 2)
       textContentNested.add(this._textData.node)
       textContentOffsetX += this._textData.width + textContentItemMargin
     }
@@ -435,29 +460,50 @@ class Node {
     if (this._hyperlinkData) {
       this._hyperlinkData.node
         .x(textContentOffsetX)
-        .y((this._rectInfo.textContentHeight - this._hyperlinkData.height) / 2)
+        .y((textContentHeight - this._hyperlinkData.height) / 2)
       textContentNested.add(this._hyperlinkData.node)
       textContentOffsetX += this._hyperlinkData.width + textContentItemMargin
     }
     // 标签
     let tagNested = new G()
     if (this._tagData && this._tagData.length > 0) {
-      let tagLeft = 0
-      this._tagData.forEach(item => {
-        item.node
-          .x(textContentOffsetX + tagLeft)
-          .y((this._rectInfo.textContentHeight - item.height) / 2)
-        tagNested.add(item.node)
-        tagLeft += item.width + textContentItemMargin
-      })
-      textContentNested.add(tagNested)
-      textContentOffsetX += tagLeft
+      if (tagIsBottom) {
+        // 标签显示在文字下方
+        let tagLeft = 0
+        this._tagData.forEach(item => {
+          item.node.x(tagLeft).y(0)
+          tagNested.add(item.node)
+          tagLeft += item.width + textContentItemMargin
+        })
+        tagNested.cx(width / 2).y(
+          paddingY + // 内边距
+            imgHeight + // 图片高度
+            textContentHeight + // 文本区域高度
+            (imgHeight > 0 && textContentHeight > 0
+              ? this.blockContentMargin
+              : 0) + // 图片和文本之间的间距
+            this.blockContentMargin // 标签和文本之间的间距
+        )
+        this.group.add(tagNested)
+      } else {
+        // 标签显示在文字右侧
+        let tagLeft = 0
+        this._tagData.forEach(item => {
+          item.node
+            .x(textContentOffsetX + tagLeft)
+            .y((textContentHeight - item.height) / 2)
+          tagNested.add(item.node)
+          tagLeft += item.width + textContentItemMargin
+        })
+        textContentNested.add(tagNested)
+        textContentOffsetX += tagLeft
+      }
     }
     // 备注
     if (this._noteData) {
       this._noteData.node
         .x(textContentOffsetX)
-        .y((this._rectInfo.textContentHeight - this._noteData.height) / 2)
+        .y((textContentHeight - this._noteData.height) / 2)
       textContentNested.add(this._noteData.node)
       textContentOffsetX += this._noteData.width
     }
@@ -465,7 +511,7 @@ class Node {
     if (this._attachmentData) {
       this._attachmentData.node
         .x(textContentOffsetX)
-        .y((this._rectInfo.textContentHeight - this._attachmentData.height) / 2)
+        .y((textContentHeight - this._attachmentData.height) / 2)
       textContentNested.add(this._attachmentData.node)
       textContentOffsetX += this._attachmentData.width
     }
@@ -478,20 +524,18 @@ class Node {
       })
       foreignObject
         .x(textContentOffsetX)
-        .y((this._rectInfo.textContentHeight - this._postfixData.height) / 2)
+        .y((textContentHeight - this._postfixData.height) / 2)
       textContentNested.add(foreignObject)
       textContentOffsetX += this._postfixData.width
     }
+    this.group.add(textContentNested)
     // 文字内容整体
     textContentNested.translate(
       width / 2 - textContentNested.bbox().width / 2,
-      imgHeight +
-        paddingY +
-        (imgHeight > 0 && this._rectInfo.textContentHeight > 0
-          ? this.blockContentMargin
-          : 0)
+      paddingY + // 内边距
+        imgHeight + // 图片高度
+        (imgHeight > 0 && textContentHeight > 0 ? this.blockContentMargin : 0) // 和图片的间距
     )
-    this.group.add(textContentNested)
     addHoverNode()
     this.mindMap.emit('node_layout_end', this)
   }
@@ -639,7 +683,7 @@ class Node {
   }
 
   //  更新节点
-  update() {
+  update(forceRender) {
     if (!this.group) {
       return
     }
@@ -666,36 +710,11 @@ class Node {
       }
     }
     // 更新概要
-    this.renderGeneralization()
+    this.renderGeneralization(forceRender)
     // 更新协同头像
     if (this.updateUserListNode) this.updateUserListNode()
     // 更新节点位置
     let t = this.group.transform()
-    // // 如果上次不在可视区内，且本次也不在，那么直接返回
-    // let { left: ox, top: oy } = this.getNodePosInClient(
-    //   t.translateX,
-    //   t.translateY
-    // )
-    // let oldIsInClient =
-    //   ox > 0 && oy > 0 && ox < this.mindMap.width && oy < this.mindMap.height
-    // let { left: nx, top: ny } = this.getNodePosInClient(this.left, this.top)
-    // let newIsNotInClient =
-    //   nx + this.width < 0 ||
-    //   ny + this.height < 0 ||
-    //   nx > this.mindMap.width ||
-    //   ny > this.mindMap.height
-    // if (!oldIsInClient && newIsNotInClient) {
-    //   if (!this.isHide) {
-    //     this.isHide = true
-    //     this.group.hide()
-    //   }
-    //   return
-    // }
-    // // 如果当前是隐藏状态，那么先显示
-    // if (this.isHide) {
-    //   this.isHide = false
-    //   this.group.show()
-    // }
     // 如果节点位置没有变化，则返回
     if (this.left === t.translateX && this.top === t.translateY) return
     this.group.translate(this.left - t.translateX, this.top - t.translateY)
@@ -711,6 +730,17 @@ class Node {
       left,
       top
     }
+  }
+
+  // 判断节点是否可见
+  checkIsInClient(padding = 0) {
+    const { left: nx, top: ny } = this.getNodePosInClient(this.left, this.top)
+    return (
+      nx + this.width > 0 - padding &&
+      ny + this.height > 0 - padding &&
+      nx < this.mindMap.width + padding &&
+      ny < this.mindMap.height + padding
+    )
   }
 
   // 重新渲染节点，即重新创建节点内容、计算节点大小、计算节点内容布局、更新展开收起按钮，概要及位置
@@ -741,32 +771,46 @@ class Node {
     }
   }
 
-  //  递归渲染
-  render(callback = () => {}) {
+  // 递归渲染
+  // forceRender：强制渲染，无论是否处于画布可视区域
+  // async：异步渲染
+  render(callback = () => {}, forceRender = false, async = false) {
     // 节点
     // 重新渲染连线
     this.renderLine()
-    if (!this.group) {
-      // 创建组
-      this.group = new G()
-      this.group.addClass('smm-node')
-      this.group.css({
-        cursor: 'default'
-      })
-      this.bindGroupEvent()
-      this.nodeDraw.add(this.group)
-      this.layout()
-      this.update()
-    } else {
-      if (!this.nodeDraw.has(this.group)) {
+    const { openPerformance, performanceConfig } = this.mindMap.opt
+    // 强制渲染、或没有开启性能模式、或不在画布可视区域内不渲染节点内容
+    // 根节点不进行懒加载，始终渲染，因为滚动条插件依赖根节点进行计算
+    if (
+      forceRender ||
+      !openPerformance ||
+      this.checkIsInClient(performanceConfig.padding) ||
+      this.isRoot
+    ) {
+      if (!this.group) {
+        // 创建组
+        this.group = new G()
+        this.group.addClass('smm-node')
+        this.group.css({
+          cursor: 'default'
+        })
+        this.bindGroupEvent()
         this.nodeDraw.add(this.group)
-      }
-      if (this.needLayout) {
-        this.needLayout = false
         this.layout()
+        this.update(forceRender)
+      } else {
+        if (!this.nodeDraw.has(this.group)) {
+          this.nodeDraw.add(this.group)
+        }
+        if (this.needLayout) {
+          this.needLayout = false
+          this.layout()
+        }
+        this.updateExpandBtnPlaceholderRect()
+        this.update(forceRender)
       }
-      this.updateExpandBtnPlaceholderRect()
-      this.update()
+    } else if (openPerformance && performanceConfig.removeNodeWhenOutCanvas) {
+      this.removeSelf()
     }
     // 子节点
     if (
@@ -776,12 +820,23 @@ class Node {
     ) {
       let index = 0
       this.children.forEach(item => {
-        item.render(() => {
-          index++
-          if (index >= this.children.length) {
-            callback()
-          }
-        })
+        const renderChild = () => {
+          item.render(
+            () => {
+              index++
+              if (index >= this.children.length) {
+                callback()
+              }
+            },
+            forceRender,
+            async
+          )
+        }
+        if (async) {
+          setTimeout(renderChild, 0)
+        } else {
+          renderChild()
+        }
       })
     } else {
       callback()
@@ -794,6 +849,13 @@ class Node {
       this.mindMap.emit('node_dblclick', this, null, true)
       // }, 0)
     }
+  }
+
+  // 删除自身，只是从画布删除，节点容器还在，后续还可以重新插回画布
+  removeSelf() {
+    if (!this.group) return
+    this.group.remove()
+    this.removeGeneralization()
   }
 
   //  递归删除，只是从画布删除，节点容器还在，后续还可以重新插回画布
@@ -812,6 +874,10 @@ class Node {
 
   // 销毁节点，不但会从画布删除，而且原节点直接置空，后续无法再插回画布
   destroy() {
+    this.removeLine()
+    if (this.parent) {
+      this.parent.removeLine()
+    }
     if (!this.group) return
     if (this.emptyUser) {
       this.emptyUser()
@@ -819,11 +885,7 @@ class Node {
     this.resetWhenDelete()
     this.group.remove()
     this.removeGeneralization()
-    this.removeLine()
     this.group = null
-    if (this.parent) {
-      this.parent.removeLine()
-    }
     this.style.onRemove()
   }
 

@@ -13,6 +13,7 @@ import {
   nodeRichTextToTextWithWrap
 } from '../utils'
 import { CONSTANTS } from '../constants/constant'
+import Node from '../core/render/node/Node'
 
 let extended = false
 
@@ -664,6 +665,25 @@ class RichText {
       this.formatAllText(config)
       this.hideEditText([node])
     }
+  }
+
+  // 检查指定节点是否存在自定义的富文本样式
+  checkNodeHasCustomRichTextStyle(node) {
+    const list = [
+      'fontFamily',
+      'fontSize',
+      'fontWeight',
+      'fontStyle',
+      'textDecoration',
+      'color'
+    ]
+    const nodeData = node instanceof Node ? node.getData() : node
+    for (let i = 0; i < list.length; i++) {
+      if (nodeData[list[i]] !== undefined) {
+        return true
+      }
+    }
+    return false
   }
 
   // 将所有节点转换成非富文本节点

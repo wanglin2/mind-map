@@ -31,7 +31,9 @@ import {
   checkSmmFormatData,
   checkIsNodeStyleDataKey,
   removeRichTextStyes,
-  formatGetNodeGeneralization
+  formatGetNodeGeneralization,
+  sortNodeList,
+  throttle
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../themes/default'
@@ -143,13 +145,54 @@ class Render {
       if (!this.mindMap.opt.enableDblclickBackToRootNode) return
       this.setRootNodeCenter()
     })
-    // let timer = null
-    // this.mindMap.on('view_data_change', () => {
-    //   clearTimeout(timer)
-    //   timer = setTimeout(() => {
-    //     this.render()
-    //   }, 300)
-    // })
+    // 性能模式
+    this.performanceMode()
+  }
+
+  // 性能模式，懒加载节点
+  performanceMode() {
+    const { openPerformance, performanceConfig } = this.mindMap.opt
+    const onViewDataChange = throttle(() => {
+      if (this.root) {
+        this.mindMap.emit('node_tree_render_start')
+        this.root.render(
+          () => {
+            this.mindMap.emit('node_tree_render_end')
+          },
+          false,
+          true
+        )
+      }
+    }, performanceConfig.time)
+    let lastOpen = false
+    this.mindMap.on('before_update_config', opt => {
+      lastOpen = opt.openPerformance
+    })
+    this.mindMap.on('after_update_config', opt => {
+      if (opt.openPerformance && !lastOpen) {
+        // 动态开启性能模式
+        this.mindMap.on('view_data_change', onViewDataChange)
+        this.forceLoadNode()
+      }
+      if (!opt.openPerformance && lastOpen) {
+        // 动态关闭性能模式
+        this.mindMap.off('view_data_change', onViewDataChange)
+        this.forceLoadNode()
+      }
+    })
+    if (!openPerformance) return
+    this.mindMap.on('view_data_change', onViewDataChange)
+  }
+
+  // 强制渲染节点，不考虑是否在画布可视区域内
+  forceLoadNode(node) {
+    node = node || this.root
+    if (node) {
+      this.mindMap.emit('node_tree_render_start')
+      node.render(() => {
+        this.mindMap.emit('node_tree_render_end')
+      }, true)
+    }
   }
 
   //  注册命令
@@ -452,6 +495,7 @@ class Render {
     }
     this.mindMap.emit('node_tree_render_start')
     // 计算布局
+    this.root = null
     this.layout.doLayout(root => {
       // 删除本次渲染时不再需要的节点
       Object.keys(this.lastNodeCache).forEach(uid => {
@@ -1220,6 +1264,10 @@ class Render {
   // 如果是富文本模式，那么某些层级变化需要更新样式
   checkNodeLayerChange(node, toNode, toNodeIsParent = false) {
     if (this.mindMap.richText) {
+      // 如果设置了自定义样式那么不需要更新
+      if (this.mindMap.richText.checkNodeHasCustomRichTextStyle(node)) {
+        return
+      }
       const toIndex = toNodeIsParent ? toNode.layerIndex + 1 : toNode.layerIndex
       let nodeLayerChanged =
         (node.layerIndex === 1 && toIndex !== 1) ||
@@ -1373,7 +1421,8 @@ class Render {
     if (this.activeNodeList.length <= 0) {
       return null
     }
-    const nodeList = getTopAncestorsFomNodeList(this.activeNodeList)
+    let nodeList = getTopAncestorsFomNodeList(this.activeNodeList)
+    nodeList = sortNodeList(nodeList)
     return nodeList.map(node => {
       return copyNodeTree({}, node, true)
     })
@@ -1385,11 +1434,12 @@ class Render {
       return
     }
     // 找出激活节点中的顶层节点列表，并过滤掉根节点
-    const nodeList = getTopAncestorsFomNodeList(this.activeNodeList).filter(
+    let nodeList = getTopAncestorsFomNodeList(this.activeNodeList).filter(
       node => {
         return !node.isRoot
       }
     )
+    nodeList = sortNodeList(nodeList)
     // 复制数据
     const copyData = nodeList.map(node => {
       return copyNodeTree({}, node, true)
@@ -1416,6 +1466,9 @@ class Render {
       this.checkNodeLayerChange(item, toNode, true)
       this.removeNodeFromActiveList(item)
       removeFromParentNodeData(item)
+      toNode.setData({
+        expand: true
+      })
       toNode.nodeData.children.push(item.nodeData)
     })
     this.emitNodeActiveEvent()
@@ -1429,10 +1482,24 @@ class Render {
       return
     }
     this.activeNodeList.forEach(node => {
+      node.setData({
+        expand: true
+      })
       node.nodeData.children.push(
         ...data.map(item => {
           const newData = simpleDeepClone(item)
-          createUidForAppointNodes([newData], true)
+          createUidForAppointNodes([newData], true, node => {
+            // 可能跨层级复制，那么富文本样式需要更新
+            if (this.mindMap.richText) {
+              // 如果设置了自定义样式那么不需要更新
+              if (
+                this.mindMap.richText.checkNodeHasCustomRichTextStyle(node.data)
+              ) {
+                return
+              }
+              node.data.resetRichText = true
+            }
+          })
           return newData
         })
       )
@@ -1665,11 +1732,13 @@ class Render {
       )
     })
     const list = parseAddGeneralizationNodeList(nodeList)
+    if (list.length <= 0) return
     const isRichText = !!this.mindMap.richText
     const { focusNewNode, inserting } = this.getNewNodeBehavior(
       openEdit,
       list.length > 1
     )
+    let needRender = false
     list.forEach(item => {
       const newData = {
         inserting,
@@ -1683,15 +1752,30 @@ class Render {
         isActive: focusNewNode
       }
       let generalization = item.node.getData('generalization')
-      if (generalization) {
-        if (Array.isArray(generalization)) {
-          generalization.push(newData)
-        } else {
-          generalization = [generalization, newData]
+      generalization = generalization
+        ? Array.isArray(generalization)
+          ? generalization
+          : [generalization]
+        : []
+      // 如果是范围概要，那么检查该范围是否存在
+      if (item.range) {
+        const isExist = !!generalization.find(item2 => {
+          return (
+            item2.range &&
+            item2.range[0] === item.range[0] &&
+            item2.range[1] === item.range[1]
+          )
+        })
+        if (isExist) {
+          return
         }
+        // 不存在则添加
+        generalization.push(newData)
       } else {
-        generalization = [newData]
+        // 不是范围概要直接添加，因为前面已经判断过是否存在
+        generalization.push(newData)
       }
+      needRender = true
       this.mindMap.execCommand('SET_NODE_DATA', item.node, {
         generalization
       })
@@ -1700,6 +1784,7 @@ class Render {
         expand: true
       })
     })
+    if (!needRender) return
     // 需要清除原来激活的节点
     if (focusNewNode) {
       this.clearActiveNodeList()

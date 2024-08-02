@@ -144,8 +144,6 @@ class OuterFrame {
     this.createDrawContainer()
     this.outerFrameElList = []
     this.activeOuterFrame = null
-    this.paddingX = 10
-    this.paddingY = 10
     this.bindEvent()
   }
 
@@ -287,6 +285,7 @@ class OuterFrame {
     let tree = this.mindMap.renderer.root
     if (!tree) return
     const t = this.mindMap.draw.transform()
+    const { outerFramePaddingX, outerFramePaddingY } = this.mindMap.opt
     walk(
       tree,
       null,
@@ -298,13 +297,26 @@ class OuterFrame {
             if (range[0] === -1 || range[1] === -1) return
             const { left, top, width, height } =
               getNodeListBoundingRect(nodeList)
+            if (
+              !Number.isFinite(left) ||
+              !Number.isFinite(top) ||
+              !Number.isFinite(width) ||
+              !Number.isFinite(height)
+            )
+              return
             const el = this.createOuterFrameEl(
-              (left - this.paddingX - this.mindMap.elRect.left - t.translateX) /
+              (left -
+                outerFramePaddingX -
+                this.mindMap.elRect.left -
+                t.translateX) /
                 t.scaleX,
-              (top - this.paddingY - this.mindMap.elRect.top - t.translateY) /
+              (top -
+                outerFramePaddingY -
+                this.mindMap.elRect.top -
+                t.translateY) /
                 t.scaleY,
-              (width + this.paddingX * 2) / t.scaleX,
-              (height + this.paddingY * 2) / t.scaleY,
+              (width + outerFramePaddingX * 2) / t.scaleX,
+              (height + outerFramePaddingY * 2) / t.scaleY,
               nodeList[0].getData('outerFrame') // 使用第一个节点的外框样式
             )
             el.on('click', e => {

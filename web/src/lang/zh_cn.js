@@ -27,6 +27,7 @@ export default {
     nodeUseLineStyle: '是否使用只有底边框的风格',
     otherConfig: '其他配置',
     enableFreeDrag: '是否开启节点自由拖拽',
+    openPerformance: '开启性能模式(Beta)',
     watermark: '水印',
     showWatermark: '是否显示水印',
     watermarkDefaultText: '水印文字',
@@ -65,7 +66,8 @@ export default {
     center: '中心',
     edge: '边缘',
     rainbowLines: '彩虹线条',
-    notUseRainbowLines: '不使用彩虹线条'
+    notUseRainbowLines: '不使用彩虹线条',
+    outerFramePadding: '外框内边距'
   },
   color: {
     moreColor: '更多颜色'
@@ -285,8 +287,8 @@ export default {
     defaultFileName: '思维导图',
     creatingTip: '正在创建文件',
     directory: '目录',
-    newFileTip: '新建文件前请先导出当前编辑的文件，否则内容会丢失',
-    openFileTip: '打开文件前请先导出当前编辑的文件，否则内容会丢'
+    newFileTip: '新建文件前请先导出当前编辑的文件，谨防内容丢失',
+    openFileTip: '打开文件前请先导出当前编辑的文件，谨防内容丢失'
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',
@@ -368,5 +370,9 @@ export default {
     boxStyle: '边框样式',
     boxColor: '边框颜色',
     fillColor: '填充颜色'
+  },
+  nodeTagStyle: {
+    placeholder: '请输入标签内容',
+    delete: '删除此标签'
   }
 }

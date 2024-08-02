@@ -112,7 +112,7 @@ mindMap.execCommand('INSERT_NODE')
 插入多个同级节点可以执行`INSERT_MULTI_NODE`命令：
 
 ```js
-mindMap.execCommand('INSERT_NODE'. [], nodeList)
+mindMap.execCommand('INSERT_MULTI_NODE'. [], nodeList)
 ```
 
 `nodeList`是要插入的同级节点数据的数组，必传。
