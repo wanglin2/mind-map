@@ -143,14 +143,7 @@ class RichText {
     }
     extended = true
 
-    // 扩展quill的字体列表
-    const FontAttributor = Quill.import('attributors/class/font')
-    FontAttributor.whitelist = fontFamilyList
-    Quill.register(FontAttributor, true)
-
-    const FontStyle = Quill.import('attributors/style/font')
-    FontStyle.whitelist = fontFamilyList
-    Quill.register(FontStyle, true)
+    this.extendFont([])
 
     // 扩展quill的字号列表
     const SizeAttributor = Quill.import('attributors/class/size')
@@ -160,6 +153,20 @@ class RichText {
     const SizeStyle = Quill.import('attributors/style/size')
     SizeStyle.whitelist = fontSizeList
     Quill.register(SizeStyle, true)
+  }
+
+  // 扩展字体列表
+  extendFont(list = [], cover = false) {
+    fontFamilyList = cover ? [...list] : [...fontFamilyList, ...list]
+
+    // 扩展quill的字体列表
+    const FontAttributor = Quill.import('attributors/class/font')
+    FontAttributor.whitelist = fontFamilyList
+    Quill.register(FontAttributor, true)
+
+    const FontStyle = Quill.import('attributors/style/font')
+    FontStyle.whitelist = fontFamilyList
+    Quill.register(FontStyle, true)
   }
 
   // 显示文本编辑控件
