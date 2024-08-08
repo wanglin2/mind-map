@@ -23,6 +23,18 @@ mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_CHILD_NODE&#x27;</spa
     <span class="hljs-keyword">const</span> node = mindMap.renderer.findNodeByUid(uid)
 })
 </code></pre>
+<p>如果你想获取到通过快捷键插入的节点，那么需要重写库默认的快捷键，比如以<code>Tab</code>键插入子节点为例：</p>
+<p>首先在实例化完后移除默认快捷键：</p>
+<pre class="hljs"><code>mindMap.keyCommand.removeShortcut(<span class="hljs-string">&#x27;Tab&#x27;</span>)
+</code></pre>
+<p>然后添加快捷键：</p>
+<pre class="hljs"><code>mindMap.keyCommand.addShortcut(<span class="hljs-string">&#x27;Tab&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+    mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_CHILD_NODE&#x27;</span>, <span class="hljs-literal">false</span>, [], {
+        uid
+    })
+})
+</code></pre>
+<p>此时你就可以指定快捷键添加节点时的uid了，那么按前面所述就可以获取到节点实例。</p>
 <p>插入节点的命令也可以传入一定参数，比如创建新节点不想直接进入新节点的编辑模式，那么可以这样调用：</p>
 <pre class="hljs"><code>mindMap.execCommand(<span class="hljs-string">&#x27;INSERT_CHILD_NODE&#x27;</span>, <span class="hljs-literal">false</span>)
 </code></pre>

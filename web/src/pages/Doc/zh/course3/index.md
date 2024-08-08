@@ -36,6 +36,26 @@ mindMap.on('node_tree_render_end', () => {
 })
 ```
 
+如果你想获取到通过快捷键插入的节点，那么需要重写库默认的快捷键，比如以`Tab`键插入子节点为例：
+
+首先在实例化完后移除默认快捷键：
+
+```js
+mindMap.keyCommand.removeShortcut('Tab')
+```
+
+然后添加快捷键：
+
+```js
+mindMap.keyCommand.addShortcut('Tab', () => {
+    mindMap.execCommand('INSERT_CHILD_NODE', false, [], {
+        uid
+    })
+})
+```
+
+此时你就可以指定快捷键添加节点时的uid了，那么按前面所述就可以获取到节点实例。
+
 插入节点的命令也可以传入一定参数，比如创建新节点不想直接进入新节点的编辑模式，那么可以这样调用：
 
 ```js
