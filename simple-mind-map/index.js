@@ -410,7 +410,9 @@ class MindMap {
     if (![CONSTANTS.MODE.READONLY, CONSTANTS.MODE.EDIT].includes(mode)) {
       return
     }
-    this.opt.readonly = mode === CONSTANTS.MODE.READONLY
+    const isReadonly = mode === CONSTANTS.MODE.READONLY
+    if (isReadonly === this.opt.readonly) return
+    this.opt.readonly = isReadonly
     if (this.opt.readonly) {
       // 取消当前激活的元素
       this.execCommand('CLEAR_ACTIVE_NODE')

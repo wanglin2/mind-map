@@ -5,6 +5,7 @@ import {
   replaceHtmlText
 } from '../utils/index'
 import Node from '../core/render/node/Node'
+import { CONSTANTS } from '../constants/constant'
 
 // 搜索插件
 class Search {
@@ -29,11 +30,14 @@ class Search {
 
   bindEvent() {
     this.onDataChange = this.onDataChange.bind(this)
+    this.onModeChange = this.onModeChange.bind(this)
     this.mindMap.on('data_change', this.onDataChange)
+    this.mindMap.on('mode_change', this.onModeChange)
   }
 
   unBindEvent() {
     this.mindMap.off('data_change', this.onDataChange)
+    this.mindMap.off('mode_change', this.onModeChange)
   }
 
   // 节点数据改变了，需要重新搜索
@@ -48,6 +52,19 @@ class Search {
       return
     }
     this.searchText = ''
+  }
+
+  // 监听只读模式切换
+  onModeChange(mode) {
+    const isReadonly = mode === CONSTANTS.MODE.READONLY
+    // 如果是由只读模式切换为非只读模式，需要清除只读模式下的节点高亮
+    if (
+      !isReadonly &&
+      this.isSearching &&
+      this.matchNodeList[this.currentIndex]
+    ) {
+      this.matchNodeList[this.currentIndex].closeHighlight()
+    }
   }
 
   // 搜索
@@ -117,6 +134,15 @@ class Search {
     } else {
       this.currentIndex = 0
     }
+    const { readonly } = this.mindMap.opt
+    // 只读模式下需要激活之前节点的高亮
+    if (readonly) {
+      this.matchNodeList.forEach(node => {
+        if (this.isNodeInstance(node)) {
+          node.closeHighlight()
+        }
+      })
+    }
     const currentNode = this.matchNodeList[this.currentIndex]
     this.notResetSearchText = true
     const uid = this.isNodeInstance(currentNode)
@@ -129,7 +155,7 @@ class Search {
       }
       callback()
       // 只读模式下节点无法激活，所以通过高亮的方式
-      if (this.mindMap.opt.readonly) {
+      if (readonly) {
         node.highlight()
       }
       // 如果当前节点实例已经存在，则不会触发data_change事件，那么需要手动把标志复位
