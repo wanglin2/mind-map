@@ -182,7 +182,8 @@ class OrganizationStructure extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize, isRoot } = node
-    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+    const { alwaysShowExpandBtn, notShowExpandBtn } = this.mindMap.opt
+    if (!alwaysShowExpandBtn || notShowExpandBtn) {
       expandBtnSize = 0
     }
     let x1 = left + width / 2

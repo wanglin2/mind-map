@@ -688,25 +688,28 @@ class Node {
       return
     }
     this.updateNodeActiveClass()
-    let { alwaysShowExpandBtn } = this.mindMap.opt
-    const childrenLength = this.nodeData.children.length
-    if (alwaysShowExpandBtn) {
-      // 需要移除展开收缩按钮
-      if (this._expandBtn && childrenLength <= 0) {
-        this.removeExpandBtn()
+    const { alwaysShowExpandBtn, notShowExpandBtn } = this.mindMap.opt
+    // 不显示展开收起按钮则不需要处理
+    if (!notShowExpandBtn) {
+      const childrenLength = this.nodeData.children.length
+      if (alwaysShowExpandBtn) {
+        // 需要移除展开收缩按钮
+        if (this._expandBtn && childrenLength <= 0) {
+          this.removeExpandBtn()
+        } else {
+          // 更新展开收起按钮
+          this.renderExpandBtn()
+        }
       } else {
-        // 更新展开收起按钮
-        this.renderExpandBtn()
-      }
-    } else {
-      let { isActive, expand } = this.getData()
-      // 展开状态且非激活状态，且当前鼠标不在它上面，才隐藏
-      if (childrenLength <= 0) {
-        this.removeExpandBtn()
-      } else if (expand && !isActive && !this._isMouseenter) {
-        this.hideExpandBtn()
-      } else {
-        this.showExpandBtn()
+        let { isActive, expand } = this.getData()
+        // 展开状态且非激活状态，且当前鼠标不在它上面，才隐藏
+        if (childrenLength <= 0) {
+          this.removeExpandBtn()
+        } else if (expand && !isActive && !this._isMouseenter) {
+          this.hideExpandBtn()
+        } else {
+          this.showExpandBtn()
+        }
       }
     }
     // 更新概要

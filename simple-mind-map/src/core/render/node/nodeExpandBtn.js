@@ -148,7 +148,8 @@ function removeExpandBtn() {
 
 // 显示展开收起按钮
 function showExpandBtn() {
-  if (this.mindMap.opt.alwaysShowExpandBtn) return
+  const { alwaysShowExpandBtn, notShowExpandBtn } = this.mindMap.opt
+  if (alwaysShowExpandBtn || notShowExpandBtn) return
   setTimeout(() => {
     this.renderExpandBtn()
   }, 0)
@@ -156,7 +157,8 @@ function showExpandBtn() {
 
 // 隐藏展开收起按钮
 function hideExpandBtn() {
-  if (this.mindMap.opt.alwaysShowExpandBtn || this._isMouseenter) return
+  const { alwaysShowExpandBtn, notShowExpandBtn } = this.mindMap.opt
+  if (alwaysShowExpandBtn || this._isMouseenter || notShowExpandBtn) return
   // 非激活状态且展开状态鼠标移出才隐藏按钮
   let { isActive, expand } = this.getData()
   if (!isActive && expand) {
