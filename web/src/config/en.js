@@ -83,6 +83,10 @@ export const borderDasharrayList = [
   {
     name: 'Dotted6',
     value: '1, 5'
+  },
+  {
+    name: 'Dotted7',
+    value: '6, 4'
   }
 ]
 

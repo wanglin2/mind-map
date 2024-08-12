@@ -133,6 +133,10 @@ export const borderDasharrayList = [
   {
     name: '虚线6',
     value: '1, 5'
+  },
+  {
+    name: '虚线7',
+    value: '6, 4'
   }
 ]
 
