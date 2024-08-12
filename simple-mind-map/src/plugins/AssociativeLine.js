@@ -68,7 +68,6 @@ class AssociativeLine {
     this.onNodeDragging = this.onNodeDragging.bind(this)
     this.onNodeDragend = this.onNodeDragend.bind(this)
     this.onControlPointMouseup = this.onControlPointMouseup.bind(this)
-    this.cancelCreateLine = this.cancelCreateLine.bind(this)
 
     // 节点树渲染完毕后渲染连接线
     this.mindMap.on('node_tree_render_end', this.renderAllLines)
@@ -77,7 +76,7 @@ class AssociativeLine {
     // 监听画布和节点点击事件，用于清除当前激活的连接线
     this.mindMap.on('draw_click', this.onDrawClick)
     this.mindMap.on('node_click', this.onNodeClick)
-    this.mindMap.on('contextmenu', this.cancelCreateLine)
+    this.mindMap.on('contextmenu', this.onDrawClick)
     // 注册删除快捷键
     this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeLine)
     // 注册添加连接线的命令
@@ -99,7 +98,7 @@ class AssociativeLine {
     this.mindMap.off('data_change', this.renderAllLines)
     this.mindMap.off('draw_click', this.onDrawClick)
     this.mindMap.off('node_click', this.onNodeClick)
-    this.mindMap.off('contextmenu', this.cancelCreateLine)
+    this.mindMap.off('contextmenu', this.onDrawClick)
     this.mindMap.keyCommand.removeShortcut('Del|Backspace', this.removeLine)
     this.mindMap.command.remove('ADD_ASSOCIATIVE_LINE', this.addLine)
     this.mindMap.off('mousemove', this.onMousemove)
@@ -116,7 +115,7 @@ class AssociativeLine {
       this.cancelCreateLine()
     }
     // 取消激活关联线
-    if (this.isControlPointMousedown) {
+    if (!this.isControlPointMousedown) {
       this.clearActiveLine()
     }
   }
