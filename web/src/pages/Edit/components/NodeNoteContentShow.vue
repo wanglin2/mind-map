@@ -8,6 +8,9 @@
       visibility: show ? 'visible' : 'hidden'
     }"
     @click.stop
+    @mousedown.stop
+    @mousemove.stop
+    @mouseup.stop
   ></div>
 </template>
 
