@@ -587,10 +587,7 @@ class MindMap {
     this.emit('beforeDestroy')
     // 清除节点编辑框
     this.renderer.textEdit.hideEditTextBox()
-    // 清除关联线文字编辑框
-    if (this.associativeLine) {
-      this.associativeLine.hideEditTextBox()
-    }
+    this.renderer.textEdit.removeTextEditEl()
     // 移除插件
     ;[...MindMap.pluginList].forEach(plugin => {
       if (

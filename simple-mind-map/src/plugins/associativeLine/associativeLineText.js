@@ -82,6 +82,13 @@ function showEditTextBox(g) {
   }
 }
 
+// 删除文本编辑框元素
+function removeTextEditEl() {
+  if (!this.textEditNode) return
+  const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
+  targetNode.removeChild(this.textEditNode)
+}
+
 // 处理画布缩放
 function onScale() {
   this.hideEditTextBox()
@@ -178,6 +185,7 @@ export default {
   styleText,
   onScale,
   showEditTextBox,
+  removeTextEditEl,
   hideEditTextBox,
   updateTextEditBoxPos,
   renderText,

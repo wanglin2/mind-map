@@ -286,6 +286,13 @@ class RichText {
     this.cacheEditingText = ''
   }
 
+  // 删除文本编辑框元素
+  removeTextEditEl() {
+    if (!this.textEditNode) return
+    const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
+    targetNode.removeChild(this.textEditNode)
+  }
+
   // 获取编辑区域的背景填充
   getBackground(node) {
     const gradientStyle = node.style.merge('gradientStyle')

@@ -280,6 +280,17 @@ export default class TextEdit {
     this.cacheEditingText = ''
   }
 
+  // 删除文本编辑元素
+  removeTextEditEl() {
+    if (this.mindMap.richText) {
+      this.mindMap.richText.removeTextEditEl()
+      return
+    }
+    if (!this.textEditNode) return
+    const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
+    targetNode.removeChild(this.textEditNode)
+  }
+
   // 获取当前正在编辑的内容
   getEditText() {
     return getStrWithBrFromHtml(this.textEditNode.innerHTML)

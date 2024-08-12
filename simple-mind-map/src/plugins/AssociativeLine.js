@@ -68,6 +68,7 @@ class AssociativeLine {
     this.onNodeDragging = this.onNodeDragging.bind(this)
     this.onNodeDragend = this.onNodeDragend.bind(this)
     this.onControlPointMouseup = this.onControlPointMouseup.bind(this)
+    this.onBeforeDestroy = this.onBeforeDestroy.bind(this)
 
     // 节点树渲染完毕后渲染连接线
     this.mindMap.on('node_tree_render_end', this.renderAllLines)
@@ -90,6 +91,8 @@ class AssociativeLine {
     this.mindMap.on('mouseup', this.onControlPointMouseup)
     // 缩放事件
     this.mindMap.on('scale', this.onScale)
+    // 实例销毁事件
+    this.mindMap.on('beforeDestroy', this.onBeforeDestroy)
   }
 
   // 解绑事件
@@ -106,6 +109,13 @@ class AssociativeLine {
     this.mindMap.off('node_dragend', this.onNodeDragend)
     this.mindMap.off('mouseup', this.onControlPointMouseup)
     this.mindMap.off('scale', this.onScale)
+    this.mindMap.off('beforeDestroy', this.onBeforeDestroy)
+  }
+
+  // 实例销毁时清除关联线文字编辑框
+  onBeforeDestroy() {
+    this.hideEditTextBox()
+    this.removeTextEditEl()
   }
 
   // 画布点击事件
