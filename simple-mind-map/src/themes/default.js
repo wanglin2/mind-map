@@ -42,6 +42,8 @@ export default {
   associativeLineActiveWidth: 8,
   // 关联线激活状态的颜色
   associativeLineActiveColor: 'rgba(2, 167, 240, 1)',
+  // 关联线样式
+  associativeLineDasharray: [6, 4],
   // 关联线文字颜色
   associativeLineTextColor: 'rgb(51, 51, 51)',
   // 关联线文字大小

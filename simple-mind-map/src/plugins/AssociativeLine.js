@@ -213,7 +213,8 @@ class AssociativeLine {
       associativeLineWidth,
       associativeLineColor,
       associativeLineActiveWidth,
-      associativeLineActiveColor
+      associativeLineActiveColor,
+      associativeLineDasharray
     } = this.mindMap.themeConfig
     // 箭头
     this.markerPath
@@ -232,7 +233,7 @@ class AssociativeLine {
       .stroke({
         width: associativeLineWidth,
         color: associativeLineColor,
-        dasharray: [6, 4]
+        dasharray: associativeLineDasharray || [6, 4]
       })
       .fill({ color: 'none' })
     path.plot(pathStr)
@@ -331,8 +332,11 @@ class AssociativeLine {
 
   // 创建连接线
   createLine(fromNode) {
-    let { associativeLineWidth, associativeLineColor } =
-      this.mindMap.themeConfig
+    let {
+      associativeLineWidth,
+      associativeLineColor,
+      associativeLineDasharray
+    } = this.mindMap.themeConfig
     if (this.isCreatingLine || !fromNode) return
     this.front()
     this.isCreatingLine = true
@@ -342,7 +346,7 @@ class AssociativeLine {
       .stroke({
         width: associativeLineWidth,
         color: associativeLineColor,
-        dasharray: [6, 4]
+        dasharray: associativeLineDasharray || [6, 4]
       })
       .fill({ color: 'none' })
     // 箭头
