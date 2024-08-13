@@ -33,8 +33,8 @@ class OrganizationStructure extends Base {
     walk(
       this.renderer.renderTree,
       null,
-      (cur, parent, isRoot, layerIndex) => {
-        let newNode = this.createNode(cur, parent, isRoot, layerIndex)
+      (cur, parent, isRoot, layerIndex, index, ancestors) => {
+        let newNode = this.createNode(cur, parent, isRoot, layerIndex, index, ancestors)
         // 根节点定位在画布中心位置
         if (isRoot) {
           this.setNodeCenter(newNode)
