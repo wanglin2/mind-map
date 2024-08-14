@@ -1965,7 +1965,7 @@ class Render {
       const generalizationList = formatGetNodeGeneralization(node.data)
       generalizationList.forEach(item => {
         if (item.uid === uid) {
-          parentsList = parent ? [...cache[parent.data.uid], parent] : []
+          parentsList = parent ? [...cache[parent.data.uid], parent, node] : []
           isGeneralization = true
         }
       })
