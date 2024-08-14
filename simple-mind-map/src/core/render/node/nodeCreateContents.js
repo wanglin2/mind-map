@@ -420,6 +420,9 @@ function createNoteNode() {
       this.mindMap.opt.customNoteContentShow.hide()
     }
   })
+  node.on('click', e => {
+    this.mindMap.emit('node_note_click', this, e, node)
+  })
   return {
     node,
     width: iconSize,
