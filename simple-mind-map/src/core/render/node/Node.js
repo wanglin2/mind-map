@@ -218,8 +218,8 @@ class Node {
     this._tagData = this.createTagNode()
     this._noteData = this.createNoteNode()
     this._attachmentData = this.createAttachmentNode()
-    if (this.mindMap.number) {
-      this._numberData = this.mindMap.number.createNumberContent(this)
+    if (this.mindMap.numbers) {
+      this._numberData = this.mindMap.numbers.createNumberContent(this)
     }
     this._prefixData = createNodePrefixContent
       ? createNodePrefixContent(this)

@@ -72,13 +72,13 @@ class Base {
   // 获取节点编号信息
   getNumberInfo({ parent, ancestors, layerIndex, index }) {
     // 编号
-    const hasNumberPlugin = !!this.mindMap.number
+    const hasNumberPlugin = !!this.mindMap.numbers
     const parentNumberStr =
       hasNumberPlugin && parent && parent._node.number
         ? parent._node.number
         : ''
     const newNumberStr = hasNumberPlugin
-      ? this.mindMap.number.getNodeNumberStr({
+      ? this.mindMap.numbers.getNodeNumberStr({
           ancestors,
           layerIndex,
           num: index + 1,
@@ -122,7 +122,7 @@ class Base {
       // 判断编号是否改变
       let isNumberChange = false
       if (hasNumberPlugin) {
-        isNumberChange = this.mindMap.number.updateNumber(newNode, newNumberStr)
+        isNumberChange = this.mindMap.numbers.updateNumber(newNode, newNumberStr)
       }
       // 主题或主题配置改变了、节点层级改变了，需要重新渲染节点文本等情况需要重新计算节点大小和布局
       if (
@@ -167,7 +167,7 @@ class Base {
       // 判断编号是否改变
       let isNumberChange = false
       if (hasNumberPlugin) {
-        isNumberChange = this.mindMap.number.updateNumber(newNode, newNumberStr)
+        isNumberChange = this.mindMap.numbers.updateNumber(newNode, newNumberStr)
       }
       if (
         isResizeSource ||

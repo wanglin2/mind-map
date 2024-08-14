@@ -110,7 +110,8 @@ export default {
     copyToTxt: 'Txt',
     copyToPng: 'Png',
     copySuccess: 'Copy success',
-    copyFail: 'Copy fail'
+    copyFail: 'Copy fail',
+    number: 'Number child nodes'
   },
   count: {
     words: 'Words',

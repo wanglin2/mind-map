@@ -77,6 +77,8 @@ import OuterFrame from 'simple-mind-map/src/plugins/OuterFrame.js'
 // import HandDrawnLikeStyle from 'simple-mind-map-plugin-handdrawnlikestyle'
 // 标记插件，该插件为付费插件，详情请查看开发文档
 // import Notation from 'simple-mind-map-plugin-notation'
+// 编号插件，该插件为付费插件，详情请查看开发文档
+// import Numbers from 'simple-mind-map-plugin-numbers'
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -537,6 +539,10 @@ export default {
       if (typeof Notation !== 'undefined') {
         this.mindMap.addPlugin(Notation)
         this.$store.commit('setSupportMark', true)
+      }
+      if (typeof Numbers !== 'undefined') {
+        this.mindMap.addPlugin(Numbers)
+        this.$store.commit('setSupportNumbers', true)
       }
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
         this.manualSave()

@@ -110,7 +110,8 @@ export default {
     copyToTxt: 'Txt',
     copyToPng: '图片',
     copySuccess: '复制成功',
-    copyFail: '复制失败'
+    copyFail: '复制失败',
+    number: '编号其子节点'
   },
   count: {
     words: '字数',

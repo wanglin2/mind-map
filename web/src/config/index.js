@@ -19,7 +19,9 @@ import {
   backgroundSizeList as backgroundSizeListZh,
   downTypeList as downTypeListZh,
   shapeListMap as shapeListMapZh,
-  lineStyleMap as lineStyleMapZh
+  lineStyleMap as lineStyleMapZh,
+  numberTypeList as numberTypeListZh,
+  numberLevelList as numberLevelListZh
 } from './zh'
 import {
   fontFamilyList as fontFamilyListEn,
@@ -32,7 +34,9 @@ import {
   shapeList as shapeListEn,
   sidebarTriggerList as sidebarTriggerListEn,
   backgroundSizeList as backgroundSizeListEn,
-  downTypeList as downTypeListEn
+  downTypeList as downTypeListEn,
+  numberTypeList as numberTypeListEn,
+  numberLevelList as numberLevelListEn
 } from './en'
 
 const fontFamilyList = {
@@ -100,6 +104,16 @@ const downTypeList = {
   en: downTypeListEn
 }
 
+const numberTypeList = {
+  zh: numberTypeListZh,
+  en: numberTypeListEn
+}
+
+const numberLevelList = {
+  zh: numberLevelListZh,
+  en: numberLevelListEn
+}
+
 export {
   fontSizeList,
   lineHeightList,
@@ -121,5 +135,7 @@ export {
   shapeList,
   shapeListMap,
   sidebarTriggerList,
-  downTypeList
+  downTypeList,
+  numberTypeList,
+  numberLevelList
 }

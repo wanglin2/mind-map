@@ -591,3 +591,63 @@ export const downTypeList = [
     desc: '纯文本文件'
   }
 ]
+
+// 编号类型列表
+export const numberTypeList = [
+  {
+    name: '无编号',
+    value: ''
+  },
+  {
+    name: '1, 2, 3',
+    value: 1
+  },
+  {
+    name: '1., 2., 3.',
+    value: 2
+  },
+  {
+    name: '(1), (2), (3)',
+    value: 3
+  },
+  {
+    name: 'a., b., c.',
+    value: 4
+  },
+  {
+    name: 'A., B., C.',
+    value: 5
+  },
+  {
+    name: 'i., ii., iii.',
+    value: 6
+  },
+  {
+    name: 'I., II., III.',
+    value: 7
+  },
+  {
+    name: '一、, 二、, 三、',
+    value: 8
+  }
+]
+
+// 编号层级列表
+export const numberLevelList = [
+  {
+    name: '编号首层',
+    value: 1
+  },
+  {
+    name: '编号前两层',
+    value: 2
+  },
+  {
+    name: '编号前三层',
+    value: 3
+  },
+  {
+    name: '编号所有层',
+    value: 0
+  }
+]
