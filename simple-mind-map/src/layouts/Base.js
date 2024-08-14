@@ -69,8 +69,37 @@ class Base {
     }
   }
 
+  // 获取节点编号信息
+  getNumberInfo({ parent, ancestors, layerIndex, index }) {
+    // 编号
+    const hasNumberPlugin = !!this.mindMap.number
+    const parentNumberStr =
+      hasNumberPlugin && parent && parent._node.number
+        ? parent._node.number
+        : ''
+    const newNumberStr = hasNumberPlugin
+      ? this.mindMap.number.getNodeNumberStr({
+          ancestors,
+          layerIndex,
+          num: index + 1,
+          parentNumberStr
+        })
+      : ''
+    return {
+      hasNumberPlugin,
+      newNumberStr
+    }
+  }
+
   //  创建节点实例
-  createNode(data, parent, isRoot, layerIndex) {
+  createNode(data, parent, isRoot, layerIndex, index, ancestors) {
+    // 编号
+    const { hasNumberPlugin, newNumberStr } = this.getNumberInfo({
+      parent,
+      ancestors,
+      layerIndex,
+      index
+    })
     // 创建节点
     const uid = data.data.uid
     let newNode = null
@@ -90,11 +119,17 @@ class Base {
       }
       this.cacheNode(data._node.uid, newNode)
       this.checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(newNode)
+      // 判断编号是否改变
+      let isNumberChange = false
+      if (hasNumberPlugin) {
+        isNumberChange = this.mindMap.number.updateNumber(newNode, newNumberStr)
+      }
       // 主题或主题配置改变了、节点层级改变了，需要重新渲染节点文本等情况需要重新计算节点大小和布局
       if (
         this.checkIsNeedResizeSources() ||
         isLayerTypeChange ||
-        newNode.getData('resetRichText')
+        newNode.getData('resetRichText') ||
+        isNumberChange
       ) {
         newNode.getSize()
         newNode.needLayout = true
@@ -129,11 +164,17 @@ class Base {
       const isResizeSource = this.checkIsNeedResizeSources()
       // 主题或主题配置改变了、节点层级改变了，需要重新渲染节点文本，节点数据改变了等情况需要重新计算节点大小和布局
       const isNodeDataChange = lastData !== JSON.stringify(data.data)
+      // 判断编号是否改变
+      let isNumberChange = false
+      if (hasNumberPlugin) {
+        isNumberChange = this.mindMap.number.updateNumber(newNode, newNumberStr)
+      }
       if (
         isResizeSource ||
         isNodeDataChange ||
         isLayerTypeChange ||
-        newNode.getData('resetRichText')
+        newNode.getData('resetRichText') ||
+        isNumberChange
       ) {
         newNode.getSize()
         newNode.needLayout = true
@@ -149,7 +190,8 @@ class Base {
         draw: this.draw,
         layerIndex,
         isRoot,
-        parent: !isRoot ? parent._node : null
+        parent: !isRoot ? parent._node : null,
+        number: newNumberStr
       })
       // uid保存到数据上，为了节点复用
       data.data.uid = newUid

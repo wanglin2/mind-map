@@ -326,7 +326,8 @@ export const nodeDataNoStylePropList = [
   'attachmentUrl',
   'attachmentName',
   'notation',
-  'outerFrame'
+  'outerFrame',
+  'number'
 ]
 
 // 错误类型

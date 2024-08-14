@@ -1,6 +1,6 @@
 import Style from './Style'
 import Shape from './Shape'
-import { G, Rect } from '@svgdotjs/svg.js'
+import { G, Rect, Text } from '@svgdotjs/svg.js'
 import nodeGeneralizationMethods from './nodeGeneralization'
 import nodeExpandBtnMethods from './nodeExpandBtn'
 import nodeCommandWrapsMethods from './nodeCommandWraps'
@@ -82,6 +82,7 @@ class Node {
     this.noteEl = null
     this.noteContentIsShow = false
     this._attachmentData = null
+    this._numberData = null
     this._prefixData = null
     this._postfixData = null
     this._expandBtn = null
@@ -105,6 +106,8 @@ class Node {
     // 概要节点的宽高
     this._generalizationNodeWidth = 0
     this._generalizationNodeHeight = 0
+    // 编号字符
+    this.number = opt.number || ''
     // 各种文字信息的间距
     this.textContentItemMargin = this.mindMap.opt.textContentMargin
     // 图片和文字节点的间距
@@ -215,6 +218,9 @@ class Node {
     this._tagData = this.createTagNode()
     this._noteData = this.createNoteNode()
     this._attachmentData = this.createAttachmentNode()
+    if (this.mindMap.number) {
+      this._numberData = this.mindMap.number.createNumberContent(this)
+    }
     this._prefixData = createNodePrefixContent
       ? createNodePrefixContent(this)
       : null
@@ -266,6 +272,11 @@ class Node {
     if (this._imgData) {
       this._rectInfo.imgContentWidth = imgContentWidth = this._imgData.width
       this._rectInfo.imgContentHeight = imgContentHeight = this._imgData.height
+    }
+    // 编号内容
+    if (this._numberData) {
+      textContentWidth += this._numberData.width
+      textContentHeight = Math.max(textContentHeight, this._numberData.height)
     }
     // 自定义前置内容
     if (this._prefixData) {
@@ -417,6 +428,14 @@ class Node {
     // 内容节点
     let textContentNested = new G()
     let textContentOffsetX = 0
+    // 编号内容
+    if (this._numberData) {
+      this._numberData.node
+        .x(textContentOffsetX)
+        .y((textContentHeight - this._numberData.height) / 2)
+      textContentNested.add(this._numberData.node)
+      textContentOffsetX += this._numberData.width + textContentItemMargin
+    }
     // 自定义前置内容
     if (this._prefixData) {
       const foreignObject = createForeignObjectNode({
@@ -1269,6 +1288,11 @@ class Node {
       newNode[item] = this[item]
     })
     return newNode
+  }
+
+  // 创建SVG文本节点
+  createSvgTextNode(text = '') {
+    return new Text().text(text)
   }
 }
 
