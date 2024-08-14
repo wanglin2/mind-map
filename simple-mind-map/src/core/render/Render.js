@@ -594,6 +594,26 @@ class Render {
     this.activeNodeList.splice(index, 1)
   }
 
+  // 手动激活多个节点，激活单个节点请直接调用节点实例的active()方法
+  activeMultiNode(nodeList = []) {
+    nodeList.forEach(node => {
+      // 手动派发节点激活前事件
+      this.mindMap.emit('before_node_active', node, this.activeNodeList)
+      // 激活节点，并将该节点添加到激活节点列表里
+      this.addNodeToActiveList(node, true)
+      // 手动派发节点激活事件
+      this.emitNodeActiveEvent(node)
+    })
+  }
+
+  // 手动取消激活多个节点
+  cancelActiveMultiNode(nodeList = []) {
+    nodeList.forEach(node => {
+      this.removeNodeFromActiveList(node)
+      this.emitNodeActiveEvent(null)
+    })
+  }
+
   //  检索某个节点在激活列表里的索引
   findActiveNodeIndex(node) {
     return getNodeIndexInNodeList(node, this.activeNodeList)
@@ -2056,6 +2076,7 @@ class Render {
 
   // 关闭高亮
   closeHighlightNode() {
+    if (!this.highlightBoxNode) return
     this.highlightBoxNode.remove()
   }
 }
