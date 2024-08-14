@@ -606,12 +606,26 @@ export default {
       //   console.log(this.mindMap.renderer.root.getRect())
       //   console.log(this.mindMap.renderer.root.getRectInSvg())
       // }, 5000);
-      // setTimeout(() => {
-      //   this.mindMap.renderer.renderTree.data.fillColor = 'red'
-      //   this.mindMap.render()
-      //   this.mindMap.reRender()
-      //   this.mindMap.render()
-      // }, 5000)
+      setTimeout(() => {
+        const id1 = '907cf148-4418-42a7-ae04-491fc483fe5e'
+        const id2 = 'd3d9d35a-cfc0-4180-b61e-69ac0dcbed17'
+        const id3 = '42c49f81-bb5b-46e3-bc20-1fc0abc1d834'
+        const id4 = '4d63d518-4efc-4765-99a8-af9955c04b40'
+        // this.mindMap.renderer.clearActiveNode()
+        // const node = this.mindMap.renderer.findNodeByUid(id2)
+        // node.active()
+
+        ;[id1, id2, id3, id4].forEach(id => {
+          const node = this.mindMap.renderer.findNodeByUid(id)
+          this.mindMap.renderer.removeNodeFromActiveList(node, true)
+          this.mindMap.renderer.emitNodeActiveEvent(null)
+        })
+
+        // const nodeList = [id1, id2, id3, id4].map(id => {
+        //   return this.mindMap.renderer.findNodeByUid(id)
+        // })
+        // this.mindMap.renderer.activeMultiNode(nodeList)
+      }, 5000)
     },
 
     // url中是否存在要打开的文件

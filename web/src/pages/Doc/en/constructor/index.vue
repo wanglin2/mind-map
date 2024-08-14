@@ -1839,7 +1839,7 @@ redo. All commands are as follows:</p>
 </tr>
 <tr>
 <td>SET_NODE_ACTIVE</td>
-<td>Set whether the node is active</td>
+<td>Set whether the node is active(This command only updates the activation fields and node activation styles in the node data. If you want to achieve the same effect as clicking on a node with the mouse, please use the 'active()' method of the node instance directly.)</td>
 <td>node (the node to set), active (boolean, whether to activate)</td>
 </tr>
 <tr>

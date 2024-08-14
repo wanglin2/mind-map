@@ -100,7 +100,7 @@ Add a node to the active list.
 
 - `notEmitBeforeNodeActiveEvent`：v0.9.12+，is not distribute the 'before_node_active' event, which defaults to 'false' and will be distributed;
 
-Add a node to the active list.
+Add a node to the active list. If you want to manually activate a node to achieve the same effect as clicking with a mouse, please directly call the 'active()' method of the node instance.
 
 ### removeActiveNode(node)
 

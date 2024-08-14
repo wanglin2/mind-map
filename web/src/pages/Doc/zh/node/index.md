@@ -56,6 +56,10 @@
 
 ## 方法
 
+### active()
+
+手动激活该节点，当前其他已激活节点会失去激活。
+
 ### checkIsInClient(padding = 0)
 
 > v0.10.4+

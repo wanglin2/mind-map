@@ -31,6 +31,8 @@
 </blockquote>
 <p>节点是否正在拖拽中</p>
 <h2>方法</h2>
+<h3>active()</h3>
+<p>手动激活该节点，当前其他已激活节点会失去激活。</p>
 <h3>checkIsInClient(padding = 0)</h3>
 <blockquote>
 <p>v0.10.4+</p>

@@ -1750,7 +1750,7 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 </tr>
 <tr>
 <td>SET_NODE_ACTIVE</td>
-<td>设置节点是否激活</td>
+<td>设置节点是否激活（该命令仅更新节点数据中的激活字段和节点激活样式，如果你想实现和鼠标点击节点激活的效果，请直接使用节点实例的<code>active()</code>方法）</td>
 <td>node（要设置的节点）、active（布尔值，是否激活）</td>
 </tr>
 <tr>

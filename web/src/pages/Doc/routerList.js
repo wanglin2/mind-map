@@ -36,6 +36,7 @@ export default [
       { path: 'course27', title: '快捷键操作如何传递自定义参数' },
       { path: 'course28', title: '如何动态修改自定义元素的大小' },
       { path: 'course29', title: '局域网docker部署解决HTTPS问题的一种方法' },
+      { path: 'course30', title: '如何通过代码激活节点' },
       { path: 'doExport', title: 'Export 插件' },
       { path: 'drag', title: 'Drag插件' },
       { path: 'introduction', title: '简介' },

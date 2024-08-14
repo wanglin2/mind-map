@@ -84,7 +84,7 @@ disable the enter key and delete key related shortcuts to prevent conflicts.</p>
 <ul>
 <li><code>notEmitBeforeNodeActiveEvent</code>：v0.9.12+，is not distribute the 'before_node_active' event, which defaults to 'false' and will be distributed;</li>
 </ul>
-<p>Add a node to the active list.</p>
+<p>Add a node to the active list. If you want to manually activate a node to achieve the same effect as clicking with a mouse, please directly call the 'active()' method of the node instance.</p>
 <h3>removeActiveNode(node)</h3>
 <blockquote>
 <p>v0.8.0+ abandoned</p>

@@ -31,6 +31,8 @@
 </blockquote>
 <p>Whether the node is currently being dragged</p>
 <h2>Methods</h2>
+<h3>active()</h3>
+<p>Manually activating this node will cause other activated nodes to lose their activation.</p>
 <h3>checkIsInClient(padding = 0)</h3>
 <blockquote>
 <p>v0.10.4+</p>

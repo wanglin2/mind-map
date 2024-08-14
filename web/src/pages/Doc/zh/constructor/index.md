@@ -706,7 +706,7 @@ mindMap.updateConfig({
 | CUT_NODE                            | 剪切节点，操作节点为当前激活的节点，如果有多个激活节点，只会对第一个有效，对根节点使用无效 | callback(回调函数，剪切的节点数据会通过调用该函数并通过参数返回) |
 | SET_NODE_STYLE                      | 修改节点单个样式                                                 | node（要设置样式的节点）、style（样式属性）、value（样式属性值）、isActive（v0.7.0+已废弃，布尔值，是否设置的是激活状态的样式） |
 | SET_NODE_STYLEs（v0.6.12+）                      | 修改节点多个样式                                                 | node（要设置样式的节点）、style（样式对象，key为样式属性，value为样式值）、isActive（v0.7.0+已废弃，布尔值，是否设置的是激活状态的样式） |
-| SET_NODE_ACTIVE                     | 设置节点是否激活                                             | node（要设置的节点）、active（布尔值，是否激活）             |
+| SET_NODE_ACTIVE                     | 设置节点是否激活（该命令仅更新节点数据中的激活字段和节点激活样式，如果你想实现和鼠标点击节点激活的效果，请直接使用节点实例的`active()`方法）   | node（要设置的节点）、active（布尔值，是否激活）             |
 | CLEAR_ACTIVE_NODE                   | 清除当前已激活节点的激活状态，操作节点为当前激活的节点       |                                                              |
 | SET_NODE_EXPAND                     | 设置节点是否展开                                             | node（要设置的节点）、expand（布尔值，是否展开）             |
 | EXPAND_ALL                          | 展开所有节点                                                 |                                                              |

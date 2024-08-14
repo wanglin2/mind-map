@@ -56,6 +56,10 @@ Whether the node is currently being dragged
 
 ## Methods
 
+### active()
+
+Manually activating this node will cause other activated nodes to lose their activation.
+
 ### checkIsInClient(padding = 0)
 
 > v0.10.4+

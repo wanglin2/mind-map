@@ -100,7 +100,7 @@
 
 - `notEmitBeforeNodeActiveEvent`：v0.9.12+，是否不要派发`before_node_active`事件，默认为`false`，即会派发；
 
-添加节点到激活列表里。
+添加节点到激活列表里。如果你想要手动激活某个节点，达到和鼠标点击激活一样的效果，请直接调用节点实例的`active()`方法。
 
 ### removeActiveNode(node)
 
