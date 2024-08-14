@@ -2,7 +2,8 @@ import {
   bfsWalk,
   getTextFromHtml,
   isUndef,
-  replaceHtmlText
+  replaceHtmlText,
+  formatGetNodeGeneralization
 } from '../utils/index'
 import Node from '../core/render/node/Node'
 import { CONSTANTS } from '../constants/constant'
@@ -109,7 +110,7 @@ class Search {
       : this.mindMap.renderer.renderTree
     if (!tree) return
     bfsWalk(tree, node => {
-      let { richText, text } = isOnlySearchCurrentRenderNodes
+      let { richText, text, generalization } = isOnlySearchCurrentRenderNodes
         ? node.getData()
         : node.data
       if (richText) {
@@ -118,6 +119,27 @@ class Search {
       if (text.includes(this.searchText)) {
         this.matchNodeList.push(node)
       }
+      // 概要节点
+      const generalizationList = formatGetNodeGeneralization({
+        generalization
+      })
+      generalizationList.forEach(gNode => {
+        let { richText, text, uid } = gNode
+        if (
+          isOnlySearchCurrentRenderNodes &&
+          !this.mindMap.renderer.findNodeByUid(uid)
+        ) {
+          return
+        }
+        if (richText) {
+          text = getTextFromHtml(text)
+        }
+        if (text.includes(this.searchText)) {
+          this.matchNodeList.push({
+            data: gNode
+          })
+        }
+      })
     })
   }
 
