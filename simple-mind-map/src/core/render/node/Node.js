@@ -375,6 +375,7 @@ class Node {
 
   //  定位节点内容
   layout() {
+    if (!this.group) return
     // 清除之前的内容
     this.group.clear()
     const { hoverRectPadding, tagPosition } = this.mindMap.opt

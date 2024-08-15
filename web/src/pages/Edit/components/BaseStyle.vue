@@ -872,7 +872,7 @@
       </div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">{{ $t('baseStyle.horizontal') }}</span>
+          <span class="name">{{ $t('baseStyle.vertical') }}</span>
           <el-slider
             style="width: 200px"
             v-model="outerFramePadding.outerFramePaddingY"
