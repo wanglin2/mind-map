@@ -70,6 +70,7 @@ export default [
       { path: 'outerFrame', title: 'OuterFrame插件' },
       { path: 'handDrawnLikeStyle', title: 'HandDrawnLikeStyle收费插件' },
       { path: 'notation', title: 'Notation收费插件' },
+      { path: 'numbers', title: 'Numbers收费插件' },
       { path: 'help1', title: '概要/关联线' },
       { path: 'help2', title: '客户端' },
       { path: 'help3', title: '打开预览在线文件' },
@@ -121,6 +122,7 @@ export default [
         title: 'HandDrawnLikeStyle chargeable plugin'
       },
       { path: 'notation', title: 'Notation chargeable plugin' },
+      { path: 'numbers', title: 'Numbers chargeable plugin' },
       { path: 'client', title: 'Client' }
     ]
   }

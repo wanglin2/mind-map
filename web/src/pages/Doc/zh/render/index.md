@@ -22,6 +22,22 @@
 
 ## 方法
 
+### activeMultiNode(nodeList = [])
+
+> v0.10.6+
+
+- `nodeList`：节点实例列表
+
+手动激活多个节点，激活单个节点请直接调用节点实例的`active()`方法。
+
+### cancelActiveMultiNode(nodeList = [])
+
+> v0.10.6+
+
+- `nodeList`：节点实例列表
+
+手动取消激活多个节点，取消激活单个节点请直接调用节点实例的`deactivate()`方法。
+
 ### highlightNode(node, range)
 
 > v0.9.0+

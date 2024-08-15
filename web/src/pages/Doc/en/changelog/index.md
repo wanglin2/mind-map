@@ -1,5 +1,63 @@
 # Changelog
 
+## 0.10.6
+
+> 2024.8.15
+
+Fix:
+
+> 1.Fix the issue where the highlighting of search nodes does not disappear in read-only mode;
+>
+> 2.Fixed the issue where the associated line plugin reported an error when clicking on the right-click menu of the mouse;
+>
+> 3.Fix the issue where clicking on the canvas cannot deactivate associated lines;
+>
+> 4.Fixed the issue where the text style of the summary node did not change when switching themes in rich text mode;
+>
+> 5.Fixed the issue where selecting both summary nodes and their corresponding nodes simultaneously and setting node styles would cause summary nodes to lose their activation status;
+>
+> 6.Fixed the issue where nodes outside the canvas would report an error when adding icons after selecting all nodes in performance mode;
+>
+> 7.Fix the issue of being unable to move forward after activating a node during rollback operation;
+
+New:
+
+> 1.Add Node Number Plugin;
+>
+> 2.Search plugin supports searching summary nodes;
+>
+> 3.Add instantiation option to not display expand and collapse buttons;
+> 
+> 4.Theme configuration supports setting the style of associated lines, namely solid or dashed lines;
+>
+> 5.Mouse box selection supports selecting summary nodes;
+>
+> 6.Select All operation supports selecting summary nodes;
+>
+> 7.Add node note icon click event;
+>
+> 8.Add manual activation and deactivation methods for multiple nodes in the render class;
+>
+> 9.Method for adding an extended font list to the RichText plugin;
+>
+> 10.Fix the issue of incomplete support for summary nodes in the GO_TARGET_deDE command;
+>
+> 11.Delete the elements of the text editing box when destroying an instance;
+
+Demo:
+
+> 1.Right click menu adds the function of setting node numbers;
+>
+> 2.Support setting the style of associated lines, namely solid or dashed lines;
+>
+> 3.Support selecting the content of the floating layer of notes with the mouse;
+>
+> 4.Change the hyperlink in the remarks to open a new window;
+>
+> 5.Fixed the issue where entering the zoom note input box when activating a node would result in inputting it into the node text;
+>
+> 6.Fixed the issue where switching themes after changing the base style, selecting overwrite, and then modifying the base style would restore the previously overwritten style;
+
 ## 0.10.5
 
 > 2024.8.2

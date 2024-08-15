@@ -12,6 +12,22 @@ accessed through <code>mindMap.renderer</code>.</p>
 <p>The rendering tree, also known as the data tree of the mind map.</p>
 <h3>layout</h3>
 <h2>Methods</h2>
+<h3>activeMultiNode(nodeList = [])</h3>
+<blockquote>
+<p>v0.10.6+</p>
+</blockquote>
+<ul>
+<li><code>nodeList</code>：Node instance list</li>
+</ul>
+<p>Manually activate multiple nodes. To activate a single node, please directly call the 'active()' method of the node instance.</p>
+<h3>cancelActiveMultiNode(nodeList = [])</h3>
+<blockquote>
+<p>v0.10.6+</p>
+</blockquote>
+<ul>
+<li><code>nodeList</code>：Node instance list</li>
+</ul>
+<p>Manually deactivate multiple nodes. To deactivate a single node, please directly call the 'deactivate()' method of the node instance.</p>
 <h3>highlightNode(node, range)</h3>
 <blockquote>
 <p>v0.9.0+</p>

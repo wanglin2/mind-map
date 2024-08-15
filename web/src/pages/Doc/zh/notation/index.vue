@@ -11,7 +11,7 @@
 <p>你也可以在在线版中进行体验，先激活节点，然后点击上方【标记】按钮添加标记。</p>
 <p>内部实现是通过<a href="https://github.com/rough-stuff/rough-notation">rough-notation</a>库，所以如果你有精力，也可以自己基于这个库来实现这个插件。</p>
 <h2>收费</h2>
-<p>现阶段收费方式比较原始，通过扫码转账备注你要购买的插件，以及你的邮箱地址，然后会将插件文件发送到你的邮箱。购买请在充分的使用和考虑后进行，如果你对前端开发不太熟悉，不知道如何使用插件，那么请谨慎考虑购买，没有特殊原因不会退费。如果你发现了 bug，或者有需求，可以提交相关的 issue。</p>
+<p>现阶段收费方式比较原始，通过扫码转账备注你要购买的插件，以及你的邮箱地址（如果达到文字上限，那么你可以分两次付款），然后会将插件文件发送到你的邮箱。购买请在充分的使用和考虑后进行，如果你对前端开发不太熟悉，不知道如何使用插件，那么请谨慎考虑购买，没有特殊原因不会退费。如果你发现了 bug，或者有需求，可以提交相关的 issue。</p>
 <p>价格：</p>
 <p>1.￥ 19.9，仅包含打包后的文件，即.cjs.min.js、.esm.min.js 两种格式的文件。</p>
 <p>2.￥ 29.9，包含未打包的源码和打包后的文件。</p>
@@ -39,7 +39,6 @@ MindMap.usePlugin(Notation)
 MindMap.usePlugin(Notation)
 </code></pre>
 <p>注册完且实例化<code>MindMap</code>后可通过<code>mindMap.notation</code>获取到该实例。</p>
-<p>注册该插件后，无需执行其他方法，手绘风格即可生效。</p>
 <p>如果你是使用 mindMap.addPlugin 方法来动态注册的组件，那么需要调用一次重新渲染的方法：</p>
 <pre class="hljs"><code>mindMap.addPlugin(Notation)
 mindMap.reRender()
@@ -54,7 +53,7 @@ mindMap.reRender()
 <p><code>appointNodes</code>：给指定的节点实例添加标记，可以传单个节点实例，也可以传递一个节点实例数组，如果传空数组，则会给当前激活的节点添加标记；</p>
 </li>
 <li>
-<p><code>show</code>：Boolean，必传，是否显示编辑；</p>
+<p><code>show</code>：Boolean，必传，是否显示标记；</p>
 </li>
 <li>
 <p><code>config</code>：Object，可选，标记配置，对象格式，对象的详细字段如下：</p>

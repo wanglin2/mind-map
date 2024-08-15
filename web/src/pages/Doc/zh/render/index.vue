@@ -12,6 +12,22 @@
 <h3>layout</h3>
 <p>当前的布局实例。</p>
 <h2>方法</h2>
+<h3>activeMultiNode(nodeList = [])</h3>
+<blockquote>
+<p>v0.10.6+</p>
+</blockquote>
+<ul>
+<li><code>nodeList</code>：节点实例列表</li>
+</ul>
+<p>手动激活多个节点，激活单个节点请直接调用节点实例的<code>active()</code>方法。</p>
+<h3>cancelActiveMultiNode(nodeList = [])</h3>
+<blockquote>
+<p>v0.10.6+</p>
+</blockquote>
+<ul>
+<li><code>nodeList</code>：节点实例列表</li>
+</ul>
+<p>手动取消激活多个节点，取消激活单个节点请直接调用节点实例的<code>deactivate()</code>方法。</p>
 <h3>highlightNode(node, range)</h3>
 <blockquote>
 <p>v0.9.0+</p>

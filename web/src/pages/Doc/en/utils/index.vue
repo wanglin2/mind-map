@@ -15,17 +15,18 @@
 <p><code>newWidth</code>：Width to zoom in to</p>
 <p><code>newHeight</code>：Height to zoom in to</p>
 <p>Scale the image proportionally. Zoom to the specified size of <code>newWidth</code> and <code>newHeight</code> while maintaining the original aspect ratio of the image.</p>
-<h4>walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)</h4>
+<h4>walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0, ancestors = [])</h4>
 <p>Depth-first traversal of a tree</p>
 <p><code>root</code>: the root node of the tree to be traversed</p>
 <p><code>parent</code>: parent node</p>
 <p><code>beforeCallback</code>: preorder traversal callback function, callback parameters are:
-root, parent, isRoot, layerIndex, index</p>
+root, parent, isRoot, layerIndex, index, ancestors</p>
 <p><code>afterCallback</code>: postorder traversal callback function, callback parameters are:
-root, parent, isRoot, layerIndex, index</p>
+root, parent, isRoot, layerIndex, index, ancestors</p>
 <p><code>isRoot</code>: whether it is the root node</p>
 <p><code>layerIndex</code>: node level</p>
 <p><code>index</code>: index of the node among its siblings</p>
+<p><code>ancestors</code>：v0.10.6+, List of all ancestor nodes of the current node</p>
 <p>Example:</p>
 <pre class="hljs"><code>walk(tree, <span class="hljs-literal">null</span>, <span class="hljs-function">() =&gt;</span> {}, <span class="hljs-function">() =&gt;</span> {}, <span class="hljs-literal">false</span>, <span class="hljs-number">0</span>, <span class="hljs-number">0</span>);
 </code></pre>

@@ -16,6 +16,8 @@
   }
 });
 </code></pre>
+<h3>特别提醒</h3>
+<p>节点树渲染是一个异步的操作，所以不能实例化完后立即调用一些需要节点渲染完成才能执行的操作，否则会发生错误和一些未知的现象，你需要监听<code>node_tree_render_end</code>事件，在节点树渲染完成后再进行。除了实例化，其他诸如：<code>setData</code>、<code>updateData</code>、<code>render</code>等方法都是异步的，也需要这样处理。</p>
 <h2>实例化选项</h2>
 <h3>1.基本</h3>
 <table>
@@ -477,6 +479,12 @@
 <td>Object</td>
 <td>{ time: 250,  padding: 100, removeNodeWhenOutCanvas: true }</td>
 <td>性能优化模式配置。time（当视图改变后多久刷新一次节点，单位：ms）、padding（超出画布四周指定范围内依旧渲染节点）、removeNodeWhenOutCanvas（节点移出画布可视区域后是否从画布删除）</td>
+</tr>
+<tr>
+<td>notShowExpandBtn（v0.10.6+）</td>
+<td>Boolean</td>
+<td>false</td>
+<td>不显示展开收起按钮，优先级比alwaysShowExpandBtn配置高</td>
 </tr>
 </tbody>
 </table>
@@ -1630,6 +1638,11 @@ mindMap.setTheme(<span class="hljs-string">&#x27;主题名称&#x27;</span>)
 <td>after_update_config（v0.10.4+）</td>
 <td>更新配置后触发</td>
 <td>opt（更新后的配置对象）</td>
+</tr>
+<tr>
+<td>node_note_click（v0.10.6+）</td>
+<td>节点备注图标的点击事件</td>
+<td>this(当前节点实例)、e（事件对象）、node（图标节点）</td>
 </tr>
 </tbody>
 </table>

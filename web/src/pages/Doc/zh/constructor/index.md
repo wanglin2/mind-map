@@ -20,6 +20,10 @@ const mindMap = new MindMap({
 });
 ```
 
+### 特别提醒
+
+节点树渲染是一个异步的操作，所以不能实例化完后立即调用一些需要节点渲染完成才能执行的操作，否则会发生错误和一些未知的现象，你需要监听`node_tree_render_end`事件，在节点树渲染完成后再进行。除了实例化，其他诸如：`setData`、`updateData`、`render`等方法都是异步的，也需要这样处理。
+
 ## 实例化选项
 
 ### 1.基本
@@ -101,6 +105,7 @@ const mindMap = new MindMap({
 | customHyperlinkJump（v0.10.2+）     | null、Function | false | 自定义超链接的跳转。如果不传，默认会以新窗口的方式打开超链接，可以传递一个函数，函数接收两个参数：link（超链接的url）、node（所属节点实例），只要传递了函数，就会阻止默认的跳转 |
 | openPerformance（v0.10.4+）     | Boolean | false | 是否开启性能模式，默认情况下所有节点都会直接渲染，无论是否处于画布可视区域，这样当节点数量比较多时（1000+）会比较卡，如果你的数据量比较大，那么可以通过该配置开启性能模式，即只渲染画布可视区域内的节点，超出的节点不渲染，这样会大幅提高渲染速度，当然同时也会带来一些其他问题，比如：1.当拖动或是缩放画布时会实时计算并渲染未节点的节点，所以会带来一定卡顿；2.导出图片、svg、pdf时需要先渲染全部节点，所以会比较慢；3.其他目前未发现的问题 |
 | performanceConfig（v0.10.4+）     | Object | { time: 250,  padding: 100, removeNodeWhenOutCanvas: true } | 性能优化模式配置。time（当视图改变后多久刷新一次节点，单位：ms）、padding（超出画布四周指定范围内依旧渲染节点）、removeNodeWhenOutCanvas（节点移出画布可视区域后是否从画布删除） |
+| notShowExpandBtn（v0.10.6+）     | Boolean | false | 不显示展开收起按钮，优先级比alwaysShowExpandBtn配置高 |
 
 #### 1.1数据结构
 
@@ -621,6 +626,7 @@ mindMap.setTheme('主题名称')
 | node_attachmentContextmenu（v0.9.10+）    | 节点附件图标的右键点击事件 | this(当前节点实例)、e（事件对象）、node（图标节点）  |
 | before_update_config（v0.10.4+）    | 更新配置前触发，即当调用了`mindMap.updateConfig`方法更新配置时触发 | opt（未更新前的配置对象，引用对象，而非拷贝，所以当after_update_config事件触发后，该对象也会同步变化，所以需要缓存你需要的某个配置字段）  |
 | after_update_config（v0.10.4+）    | 更新配置后触发 |  opt（更新后的配置对象） |
+| node_note_click（v0.10.6+）    | 节点备注图标的点击事件 | this(当前节点实例)、e（事件对象）、node（图标节点）  |
 
 ### emit(event, ...args)
 

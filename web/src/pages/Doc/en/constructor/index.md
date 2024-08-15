@@ -20,6 +20,10 @@ const mindMap = new MindMap({
 });
 ```
 
+### Special Reminder
+
+Node tree rendering is an asynchronous operation, so it is not possible to immediately call some operations that require node rendering to be completed after instantiation, otherwise errors and unknown phenomena may occur, You need to listen for the 'node_tree_render_end' event and wait until the node tree rendering is complete before proceeding. In addition to instantiation, other methods such as 'setData', 'updateData', 'render', etc. are asynchronous and need to be handled in this way.
+
 ## Instantiation options
 
 ### 1.Base
@@ -101,6 +105,7 @@ const mindMap = new MindMap({
 | customHyperlinkJump（v0.10.2+）     | null、Function | false | Customize the jump of hyperlinks. If not passed, the hyperlink will be opened as a new window by default, and a function can be passed, The function takes two parameters: link（The URL of the hyperlink）、node（Node instance to which it belongs）, As long as a function is passed, it will block the default jump |         |
 | openPerformance（v0.10.4+）     | Boolean | false | Whether to enable performance mode or not, by default, all nodes will be rendered directly, regardless of whether they are in the visible area of the canvas. This will cause a lag when there are a large number of nodes (1000+). If your data volume is large, you can enable performance mode through this configuration, that is, only rendering nodes within the visible area of the canvas, and not rendering nodes beyond it. This will greatly improve rendering speed, but of course, it will also bring some other problems, such as: 1. When dragging or scaling the canvas, real-time calculation and rendering of nodes without nodes will be performed, which will bring some lag; When exporting images, SVG, and PDF, all nodes need to be rendered first, so it may be slower; 3. Other currently undiscovered issues |         |
 | performanceConfig（v0.10.4+）     | Object | { time: 250,  padding: 100, removeNodeWhenOutCanvas: true } | Performance optimization mode configuration. time（How often do nodes refresh after a view change. Unit:ms）、padding（Still rendering nodes beyond the specified range around the canvas）、removeNodeWhenOutCanvas（Is the node deleted from the canvas after being moved out of the visible area of the canvas） |         |
+| notShowExpandBtn（v0.10.6+）     | Boolean | false | Do not display the expand/collapse button, higher priority than the 'alwaysShowExpandBtn' configuration |         |
 
 ### 1.1Data structure
 
@@ -622,6 +627,7 @@ Listen to an event. Event list:
 | node_attachmentContextmenu（v0.9.10+）    | Right click event on node attachment icon | this(Current node instance)、e（Event Object）、node（Icon node）  |
 | before_update_config（v0.10.4+）    | Triggered before updating the configuration, that is, when the 'mindMap.updateConfig' method is called to update the configuration | opt（The configuration object before updating refers to an object, not a copy, so when the after_uupdate_comfig event is triggered, the object will also change synchronously. Therefore, it is necessary to cache a certain configuration field that you need）  |
 | after_update_config（v0.10.4+）    | Triggered after updating configuration |  opt（Updated configuration object） |
+| node_note_click（v0.10.6+）    | Click event of node note icon | this(Current node instance)、e（Event Object）、node（Icon node）  |
 
 ### emit(event, ...args)
 

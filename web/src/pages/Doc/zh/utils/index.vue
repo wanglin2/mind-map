@@ -15,15 +15,16 @@
 <p><code>newWidth</code>：要缩放到的宽度</p>
 <p><code>newHeight</code>：要缩放到的高度</p>
 <p>按比例缩放图片。在保持图片原始宽高比的情况下缩放到指定的<code>newWidth</code>、<code>newHeight</code>大小。</p>
-<h4>walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)</h4>
+<h4>walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0, ancestors = [])</h4>
 <p>深度优先遍历树</p>
 <p><code>root</code>：要遍历的树的根节点</p>
 <p><code>parent</code>：父节点</p>
-<p><code>beforeCallback</code>：前序遍历回调函数，回调参数为：root, parent, isRoot, layerIndex, index</p>
-<p><code>afterCallback</code>：后序遍历回调函数，回调参数为：root, parent, isRoot, layerIndex, index</p>
+<p><code>beforeCallback</code>：前序遍历回调函数，回调参数为：root, parent, isRoot, layerIndex, index, ancestors</p>
+<p><code>afterCallback</code>：后序遍历回调函数，回调参数为：root, parent, isRoot, layerIndex, index, ancestors</p>
 <p><code>isRoot</code>：是否是根节点</p>
 <p><code>layerIndex</code>：节点层级</p>
 <p><code>index</code>：节点在同级节点里的索引</p>
+<p><code>ancestors</code>：v0.10.6+，当前节点的所有祖先节点列表</p>
 <p>示例：</p>
 <pre class="hljs"><code>walk(
   tree,

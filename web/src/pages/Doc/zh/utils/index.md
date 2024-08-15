@@ -24,7 +24,7 @@ import {walk, ...} from 'simple-mind-map/src/utils'
 
 按比例缩放图片。在保持图片原始宽高比的情况下缩放到指定的`newWidth`、`newHeight`大小。
 
-#### walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)
+#### walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0, ancestors = [])
 
 深度优先遍历树
 
@@ -32,15 +32,17 @@ import {walk, ...} from 'simple-mind-map/src/utils'
 
 `parent`：父节点
 
-`beforeCallback`：前序遍历回调函数，回调参数为：root, parent, isRoot, layerIndex, index
+`beforeCallback`：前序遍历回调函数，回调参数为：root, parent, isRoot, layerIndex, index, ancestors
 
-`afterCallback`：后序遍历回调函数，回调参数为：root, parent, isRoot, layerIndex, index
+`afterCallback`：后序遍历回调函数，回调参数为：root, parent, isRoot, layerIndex, index, ancestors
 
 `isRoot`：是否是根节点
 
 `layerIndex`：节点层级
 
 `index`：节点在同级节点里的索引
+
+`ancestors`：v0.10.6+，当前节点的所有祖先节点列表
 
 示例：
 

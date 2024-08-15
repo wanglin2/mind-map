@@ -68,6 +68,16 @@ MindMap.usePlugin(RichText, opt?)
 
 ## 方法
 
+### extendFont(list = [], cover = false)
+
+> v0.8.6+
+
+- `list`：要扩展的字体名称列表；
+
+- `cover`：是否覆盖当前的字体列表，默认为`false`，即在当前字体列表后增加；
+
+动态扩展支持的字体。
+
 ### setNotActiveNodeStyle(node, style)
 
 > v0.8.0+

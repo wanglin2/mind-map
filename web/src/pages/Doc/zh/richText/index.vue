@@ -56,6 +56,19 @@ MindMap.usePlugin(RichText, opt?)
 <pre class="hljs"><code>[<span class="hljs-number">1</span>, <span class="hljs-number">2</span>, <span class="hljs-number">3</span>, ..<span class="hljs-number">.100</span>]
 </code></pre>
 <h2>方法</h2>
+<h3>extendFont(list = [], cover = false)</h3>
+<blockquote>
+<p>v0.8.6+</p>
+</blockquote>
+<ul>
+<li>
+<p><code>list</code>：要扩展的字体名称列表；</p>
+</li>
+<li>
+<p><code>cover</code>：是否覆盖当前的字体列表，默认为<code>false</code>，即在当前字体列表后增加；</p>
+</li>
+</ul>
+<p>动态扩展支持的字体。</p>
 <h3>setNotActiveNodeStyle(node, style)</h3>
 <blockquote>
 <p>v0.8.0+</p>

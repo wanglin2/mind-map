@@ -68,6 +68,16 @@ Replace the built-in font size list during rich text editing. The built-in list 
 
 ## Method
 
+### extendFont(list = [], cover = false)
+
+> v0.8.6+
+
+- `list`：List of font names to be expanded;
+
+- `cover`：Whether to overwrite the current font list, default is 'false', which means adding after the current font list;
+
+Dynamically expand supported fonts.
+
 ### setNotActiveNodeStyle(node, style)
 
 > v0.8.0+

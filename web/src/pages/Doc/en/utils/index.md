@@ -24,7 +24,7 @@ import {walk, ...} from 'simple-mind-map/src/utils'
 
 Scale the image proportionally. Zoom to the specified size of `newWidth` and `newHeight` while maintaining the original aspect ratio of the image.
 
-#### walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0)
+#### walk(root, parent, beforeCallback, afterCallback, isRoot, layerIndex = 0, index = 0, ancestors = [])
 
 Depth-first traversal of a tree
 
@@ -33,16 +33,18 @@ Depth-first traversal of a tree
 `parent`: parent node
 
 `beforeCallback`: preorder traversal callback function, callback parameters are:
-root, parent, isRoot, layerIndex, index
+root, parent, isRoot, layerIndex, index, ancestors
 
 `afterCallback`: postorder traversal callback function, callback parameters are:
-root, parent, isRoot, layerIndex, index
+root, parent, isRoot, layerIndex, index, ancestors
 
 `isRoot`: whether it is the root node
 
 `layerIndex`: node level
 
 `index`: index of the node among its siblings
+
+`ancestors`：v0.10.6+, List of all ancestor nodes of the current node
 
 Example:
 

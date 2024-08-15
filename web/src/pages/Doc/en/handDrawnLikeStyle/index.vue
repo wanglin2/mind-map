@@ -11,7 +11,7 @@
 <p>You can also try to turn on the hand drawn style in the online version through the settings of 【 Basic Style 】 - 【 Enable Hand drawn Style 】.</p>
 <p>The internal implementation is through the <a href="https://github.com/rough-stuff/rough">rough</a> library, so if you have the energy, you can also implement this plugin based on this library yourself.</p>
 <h2>Charge</h2>
-<p>At present, the charging method is relatively primitive. By scanning the code and transferring money, please note the plugin you want to purchase and your email address, and then the plugin file will be sent to your email. Purchase should be made after full use and consideration. If you are not familiar with front-end development and do not know how to use plugins, please consider purchasing carefully. There will be no refund unless there are special reasons. If you find bugs or have requirements, you can submit relevant issues.</p>
+<p>At present, the charging method is relatively primitive. By scanning the code and transferring money, please note the plugin you want to purchase and your email address(If you reach the maximum text limit, you can make the payment in two installments), and then the plugin file will be sent to your email. Purchase should be made after full use and consideration. If you are not familiar with front-end development and do not know how to use plugins, please consider purchasing carefully. There will be no refund unless there are special reasons. If you find bugs or have requirements, you can submit relevant issues.</p>
 <p>Price:</p>
 <p>1.￥ 19.9, Only includes the packaged files, which are in two formats: .cjs.min.js and .esm.min.js.</p>
 <p>2.￥ 29.9, including unpackaged source code and packaged files.</p>

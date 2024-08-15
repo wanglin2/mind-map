@@ -43,6 +43,7 @@ let APIList = [
   'demonstrate',
   'notation',
   'outerFrame',
+  'numbers',
   'xmind',
   'markdown',
   'utils'

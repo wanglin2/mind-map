@@ -1,6 +1,43 @@
 <template>
   <div>
     <h1>Changelog</h1>
+<h2>0.10.6</h2>
+<blockquote>
+<p>2024.8.15</p>
+</blockquote>
+<p>Fix:</p>
+<blockquote>
+<p>1.Fix the issue where the highlighting of search nodes does not disappear in read-only mode;</p>
+<p>2.Fixed the issue where the associated line plugin reported an error when clicking on the right-click menu of the mouse;</p>
+<p>3.Fix the issue where clicking on the canvas cannot deactivate associated lines;</p>
+<p>4.Fixed the issue where the text style of the summary node did not change when switching themes in rich text mode;</p>
+<p>5.Fixed the issue where selecting both summary nodes and their corresponding nodes simultaneously and setting node styles would cause summary nodes to lose their activation status;</p>
+<p>6.Fixed the issue where nodes outside the canvas would report an error when adding icons after selecting all nodes in performance mode;</p>
+<p>7.Fix the issue of being unable to move forward after activating a node during rollback operation;</p>
+</blockquote>
+<p>New:</p>
+<blockquote>
+<p>1.Add Node Number Plugin;</p>
+<p>2.Search plugin supports searching summary nodes;</p>
+<p>3.Add instantiation option to not display expand and collapse buttons;</p>
+<p>4.Theme configuration supports setting the style of associated lines, namely solid or dashed lines;</p>
+<p>5.Mouse box selection supports selecting summary nodes;</p>
+<p>6.Select All operation supports selecting summary nodes;</p>
+<p>7.Add node note icon click event;</p>
+<p>8.Add manual activation and deactivation methods for multiple nodes in the render class;</p>
+<p>9.Method for adding an extended font list to the RichText plugin;</p>
+<p>10.Fix the issue of incomplete support for summary nodes in the GO_TARGET_deDE command;</p>
+<p>11.Delete the elements of the text editing box when destroying an instance;</p>
+</blockquote>
+<p>Demo:</p>
+<blockquote>
+<p>1.Right click menu adds the function of setting node numbers;</p>
+<p>2.Support setting the style of associated lines, namely solid or dashed lines;</p>
+<p>3.Support selecting the content of the floating layer of notes with the mouse;</p>
+<p>4.Change the hyperlink in the remarks to open a new window;</p>
+<p>5.Fixed the issue where entering the zoom note input box when activating a node would result in inputting it into the node text;</p>
+<p>6.Fixed the issue where switching themes after changing the base style, selecting overwrite, and then modifying the base style would restore the previously overwritten style;</p>
+</blockquote>
 <h2>0.10.5</h2>
 <blockquote>
 <p>2024.8.2</p>
