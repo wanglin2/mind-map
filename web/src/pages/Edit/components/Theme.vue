@@ -44,6 +44,10 @@ export default {
     Sidebar
   },
   props: {
+    data: {
+      type: [Object, null],
+      default: null
+    },
     mindMap: {
       type: Object
     }
@@ -155,6 +159,7 @@ export default {
           callback: action => {
             if (action === 'confirm') {
               this.mindMap.setThemeConfig({}, true)
+              this.data.theme.config = {}
               this.changeTheme(theme, {})
             } else if (action === 'cancel') {
               this.changeTheme(theme, customThemeConfig)

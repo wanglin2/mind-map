@@ -17,7 +17,7 @@
     <OutlineSidebar :mindMap="mindMap"></OutlineSidebar>
     <Style v-if="!isZenMode"></Style>
     <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
-    <Theme v-if="mindMap" :mindMap="mindMap"></Theme>
+    <Theme v-if="mindMap" :data="mindMapData" :mindMap="mindMap"></Theme>
     <Structure :mindMap="mindMap"></Structure>
     <ShortcutKey></ShortcutKey>
     <Contextmenu v-if="mindMap" :mindMap="mindMap"></Contextmenu>
