@@ -14,6 +14,8 @@
         v-model="scaleNum"
         @change="onScaleNumChange"
         @focus="onScaleNumInputFocus"
+        @keydown.stop
+        @keyup.stop
       />%
     </div>
     <el-tooltip
