@@ -629,6 +629,15 @@ class Render {
         if (!node.getData('isActive')) {
           this.addNodeToActiveList(node)
         }
+        // 概要节点
+        if (node._generalizationList && node._generalizationList.length > 0) {
+          node._generalizationList.forEach(item => {
+            const gNode = item.generalizationNode
+            if (!gNode.getData('isActive')) {
+              this.addNodeToActiveList(gNode)
+            }
+          })
+        }
       },
       null,
       true,
