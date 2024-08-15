@@ -180,7 +180,8 @@ class Select {
     let miny = Math.min(this.mouseDownY, this.mouseMoveY)
     let maxx = Math.max(this.mouseDownX, this.mouseMoveX)
     let maxy = Math.max(this.mouseDownY, this.mouseMoveY)
-    bfsWalk(this.mindMap.renderer.root, node => {
+
+    const check = node => {
       let { left, top, width, height } = node
       let right = (left + width) * scaleX + translateX
       let bottom = (top + height) * scaleY + translateY
@@ -200,6 +201,16 @@ class Select {
         }
         this.mindMap.renderer.removeNodeFromActiveList(node)
         this.mindMap.renderer.emitNodeActiveEvent()
+      }
+    }
+
+    bfsWalk(this.mindMap.renderer.root, node => {
+      check(node)
+      // 概要节点
+      if (node._generalizationList && node._generalizationList.length > 0) {
+        node._generalizationList.forEach(item => {
+          check(item.generalizationNode)
+        })
       }
     })
   }
