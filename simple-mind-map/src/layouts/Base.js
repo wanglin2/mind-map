@@ -122,7 +122,10 @@ class Base {
       // 判断编号是否改变
       let isNumberChange = false
       if (hasNumberPlugin) {
-        isNumberChange = this.mindMap.numbers.updateNumber(newNode, newNumberStr)
+        isNumberChange = this.mindMap.numbers.updateNumber(
+          newNode,
+          newNumberStr
+        )
       }
       // 主题或主题配置改变了、节点层级改变了，需要重新渲染节点文本等情况需要重新计算节点大小和布局
       if (
@@ -134,6 +137,7 @@ class Base {
         newNode.getSize()
         newNode.needLayout = true
       }
+      this.checkGetGeneralizationChange(newNode)
     } else if (
       (this.lru.has(uid) || this.renderer.lastNodeCache[uid]) &&
       !this.renderer.reRender
@@ -167,7 +171,10 @@ class Base {
       // 判断编号是否改变
       let isNumberChange = false
       if (hasNumberPlugin) {
-        isNumberChange = this.mindMap.numbers.updateNumber(newNode, newNumberStr)
+        isNumberChange = this.mindMap.numbers.updateNumber(
+          newNode,
+          newNumberStr
+        )
       }
       if (
         isResizeSource ||
@@ -179,6 +186,7 @@ class Base {
         newNode.getSize()
         newNode.needLayout = true
       }
+      this.checkGetGeneralizationChange(newNode)
     } else {
       // 创建新节点
       const newUid = uid || createUid()
@@ -217,6 +225,27 @@ class Base {
       parent._node.addChildren(newNode)
     }
     return newNode
+  }
+
+  // 检查概要节点是否需要更新
+  checkGetGeneralizationChange(node) {
+    const generalizationList = node.getData('generalization')
+    if (
+      generalizationList &&
+      node._generalizationList &&
+      node._generalizationList.length > 0
+    ) {
+      node._generalizationList.forEach((item, index) => {
+        const gNode = item.generalizationNode
+        const oldData = gNode.getData()
+        const newData = generalizationList[index]
+        if (newData && JSON.stringify(oldData) !== JSON.stringify(newData)) {
+          gNode.nodeData.data = newData
+          gNode.getSize()
+          gNode.needLayout = true
+        }
+      })
+    }
   }
 
   // 格式化节点位置

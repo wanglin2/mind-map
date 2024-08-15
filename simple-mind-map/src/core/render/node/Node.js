@@ -239,7 +239,8 @@ class Node {
   getSize() {
     this.customLeft = this.getData('customLeft') || undefined
     this.customTop = this.getData('customTop') || undefined
-    this.updateGeneralization()
+    // 这里不要更新概要，不然即使概要没修改，每次也会重新渲染
+    // this.updateGeneralization()
     this.createNodeData()
     let { width, height } = this.getNodeRect()
     // 判断节点尺寸是否有变化
