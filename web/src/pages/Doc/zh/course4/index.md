@@ -2,17 +2,11 @@
 
 本节将介绍如何更新当前激活节点的样式。
 
-样式总体上分为两类，一是常态的样式，二是激活的样式。设置的方法都是`setStyle`方法，通过第三个参数进行指定：
-
 ```js
-// 设置常态样式
 node.setStyle('样式属性', '样式值')
-
-// 设置激活样式
-node.setStyle('样式属性', '样式值', true)
 ```
 
-## 设置常态样式
+## 设置样式
 
 ### 设置文字样式
 
@@ -186,47 +180,6 @@ activeNodes.value.forEach(node => {
 activeNodes.value.forEach(node => {
     node.setStyle('paddingX', 50)
     node.setStyle('paddingY', 50)
-})
-```
-
-## 设置激活样式
-
-激活样式只支持设置边框相关样式和背景。可以通过如下方式获取支持的属性：
-
-```js
-import { supportActiveStyle } from 'simple-mind-map/src/themes/default'
-
-const checkIsSupportActive = (prop) => {
-    return supportActiveStyle.includes(prop)
-}
-```
-
-其他和数值常态样式是一样的，只需要给`setStyle`方法传入第三个参数：
-
-```js
-// 设置边框颜色
-activeNodes.value.forEach(node => {
-    node.setStyle('borderColor', '#000', true)
-})
-
-// 设置边框虚线
-activeNodes.value.forEach(node => {
-    node.setStyle('borderDasharray', '5,5', true)// node.setStyle('borderDasharray', 'none', true)
-})
-
-// 设置边框宽度
-activeNodes.value.forEach(node => {
-    node.setStyle('borderWidth', 2, true)
-})
-
-// 设置边框圆角
-activeNodes.value.forEach(node => {
-    node.setStyle('borderRadius', 5, true)
-})
-
-// 设置背景颜色
-activeNodes.value.forEach(node => {
-    node.setStyle('fillColor', '#fff', true)
 })
 ```
 

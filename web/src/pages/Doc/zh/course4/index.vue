@@ -2,14 +2,9 @@
   <div>
     <h1>设置节点样式</h1>
 <p>本节将介绍如何更新当前激活节点的样式。</p>
-<p>样式总体上分为两类，一是常态的样式，二是激活的样式。设置的方法都是<code>setStyle</code>方法，通过第三个参数进行指定：</p>
-<pre class="hljs"><code><span class="hljs-comment">// 设置常态样式</span>
-node.setStyle(<span class="hljs-string">&#x27;样式属性&#x27;</span>, <span class="hljs-string">&#x27;样式值&#x27;</span>)
-
-<span class="hljs-comment">// 设置激活样式</span>
-node.setStyle(<span class="hljs-string">&#x27;样式属性&#x27;</span>, <span class="hljs-string">&#x27;样式值&#x27;</span>, <span class="hljs-literal">true</span>)
+<pre class="hljs"><code>node.setStyle(<span class="hljs-string">&#x27;样式属性&#x27;</span>, <span class="hljs-string">&#x27;样式值&#x27;</span>)
 </code></pre>
-<h2>设置常态样式</h2>
+<h2>设置样式</h2>
 <h3>设置文字样式</h3>
 <p>文字样式目前支持：<code>字体</code>、<code>字号</code>、<code>行高</code>、<code>颜色</code>、<code>加粗</code>、<code>斜体</code>、<code>划线</code>。</p>
 <p>这些样式选择的UI界面都需要你自行开发，然后调用节点的<code>setStyle</code>方法更新。</p>
@@ -151,40 +146,6 @@ activeNodes.value.forEach(<span class="hljs-function"><span class="hljs-params">
 <pre class="hljs"><code>activeNodes.value.forEach(<span class="hljs-function"><span class="hljs-params">node</span> =&gt;</span> {
     node.setStyle(<span class="hljs-string">&#x27;paddingX&#x27;</span>, <span class="hljs-number">50</span>)
     node.setStyle(<span class="hljs-string">&#x27;paddingY&#x27;</span>, <span class="hljs-number">50</span>)
-})
-</code></pre>
-<h2>设置激活样式</h2>
-<p>激活样式只支持设置边框相关样式和背景。可以通过如下方式获取支持的属性：</p>
-<pre class="hljs"><code><span class="hljs-keyword">import</span> { supportActiveStyle } <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;simple-mind-map/src/themes/default&#x27;</span>
-
-<span class="hljs-keyword">const</span> checkIsSupportActive = <span class="hljs-function">(<span class="hljs-params">prop</span>) =&gt;</span> {
-    <span class="hljs-keyword">return</span> supportActiveStyle.includes(prop)
-}
-</code></pre>
-<p>其他和数值常态样式是一样的，只需要给<code>setStyle</code>方法传入第三个参数：</p>
-<pre class="hljs"><code><span class="hljs-comment">// 设置边框颜色</span>
-activeNodes.value.forEach(<span class="hljs-function"><span class="hljs-params">node</span> =&gt;</span> {
-    node.setStyle(<span class="hljs-string">&#x27;borderColor&#x27;</span>, <span class="hljs-string">&#x27;#000&#x27;</span>, <span class="hljs-literal">true</span>)
-})
-
-<span class="hljs-comment">// 设置边框虚线</span>
-activeNodes.value.forEach(<span class="hljs-function"><span class="hljs-params">node</span> =&gt;</span> {
-    node.setStyle(<span class="hljs-string">&#x27;borderDasharray&#x27;</span>, <span class="hljs-string">&#x27;5,5&#x27;</span>, <span class="hljs-literal">true</span>)<span class="hljs-comment">// node.setStyle(&#x27;borderDasharray&#x27;, &#x27;none&#x27;, true)</span>
-})
-
-<span class="hljs-comment">// 设置边框宽度</span>
-activeNodes.value.forEach(<span class="hljs-function"><span class="hljs-params">node</span> =&gt;</span> {
-    node.setStyle(<span class="hljs-string">&#x27;borderWidth&#x27;</span>, <span class="hljs-number">2</span>, <span class="hljs-literal">true</span>)
-})
-
-<span class="hljs-comment">// 设置边框圆角</span>
-activeNodes.value.forEach(<span class="hljs-function"><span class="hljs-params">node</span> =&gt;</span> {
-    node.setStyle(<span class="hljs-string">&#x27;borderRadius&#x27;</span>, <span class="hljs-number">5</span>, <span class="hljs-literal">true</span>)
-})
-
-<span class="hljs-comment">// 设置背景颜色</span>
-activeNodes.value.forEach(<span class="hljs-function"><span class="hljs-params">node</span> =&gt;</span> {
-    node.setStyle(<span class="hljs-string">&#x27;fillColor&#x27;</span>, <span class="hljs-string">&#x27;#fff&#x27;</span>, <span class="hljs-literal">true</span>)
 })
 </code></pre>
 <h2>完整示例</h2>
