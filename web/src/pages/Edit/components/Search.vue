@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="searchContainer"
-    :class="{ isDark: isDark, show: show }"
-    @mouseleave="onMouseleave"
-  >
+  <div class="searchContainer" :class="{ isDark: isDark, show: show }">
     <div class="closeBtnBox">
       <span class="closeBtn el-icon-close" @click="close"></span>
     </div>
@@ -15,6 +11,8 @@
         v-model="searchText"
         @keyup.native.enter.stop="onSearchNext"
         @keydown.native.stop
+        @focus="onFocus"
+        @blur="onBlur"
       >
         <i slot="prefix" class="el-input__icon el-icon-search"></i>
         <el-button
@@ -37,6 +35,8 @@
       v-model="replaceText"
       style="margin: 12px 0;"
       @keydown.native.stop
+      @focus="onFocus"
+      @blur="onBlur"
     >
       <i slot="prefix" class="el-input__icon el-icon-edit"></i>
       <el-button size="small" slot="append" @click="hideReplaceInput">{{
@@ -95,11 +95,17 @@ export default {
   created() {
     this.$bus.$on('show_search', this.showSearch)
     this.mindMap.on('search_info_change', this.handleSearchInfoChange)
+    this.mindMap.on('node_click', this.blur)
+    this.mindMap.on('draw_click', this.blur)
+    this.mindMap.on('expand_btn_click', this.blur)
     this.mindMap.keyCommand.addShortcut('Control+f', this.showSearch)
   },
   beforeDestroy() {
     this.$bus.$off('show_search', this.showSearch)
     this.mindMap.off('search_info_change', this.handleSearchInfoChange)
+    this.mindMap.off('node_click', this.blur)
+    this.mindMap.off('draw_click', this.blur)
+    this.mindMap.off('expand_btn_click', this.blur)
     this.mindMap.keyCommand.removeShortcut('Control+f', this.showSearch)
   },
   methods: {
@@ -120,6 +126,30 @@ export default {
     hideReplaceInput() {
       this.showReplaceInput = false
       this.replaceText = ''
+    },
+
+    // 输入框聚焦时，禁止思维导图节点响应按键事件自动进入文本编辑
+    onFocus() {
+      this.mindMap.updateConfig({
+        enableAutoEnterTextEditWhenKeydown: false
+      })
+    },
+
+    // 输入框失焦时恢复
+    onBlur() {
+      this.mindMap.updateConfig({
+        enableAutoEnterTextEditWhenKeydown: true
+      })
+    },
+
+    // 画布，节点点击时让输入框失焦
+    blur() {
+      if (this.$refs.searchInputRef) {
+        this.$refs.searchInputRef.blur()
+      }
+      if (this.$refs.replaceInputRef) {
+        this.$refs.replaceInputRef.blur()
+      }
     },
 
     onSearchNext() {
@@ -144,15 +174,6 @@ export default {
       this.searchText = ''
       this.hideReplaceInput()
       this.mindMap.search.endSearch()
-    },
-
-    onMouseleave() {
-      if (this.$refs.searchInputRef) {
-        this.$refs.searchInputRef.blur()
-      }
-      if (this.$refs.replaceInputRef) {
-        this.$refs.replaceInputRef.blur()
-      }
     }
   }
 }
