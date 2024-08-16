@@ -152,16 +152,6 @@ export default {
   }
 }
 
-// 支持激活样式的属性
-// 简单来说，会改变节点大小的都不支持在激活时设置，为了性能考虑，节点切换激活态时不会重新计算节点大小
-export const supportActiveStyle = [
-  'fillColor',
-  'borderColor',
-  'borderWidth',
-  'borderDasharray',
-  'borderRadius'
-]
-
 // 检测主题配置是否是节点大小无关的
 const nodeSizeIndependenceList = [
   'lineWidth',
