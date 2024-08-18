@@ -190,13 +190,13 @@ export default {
           url = 'https://github.com/wanglin2/mind-map'
           break
         case 'helpDoc':
-          url = 'https://wanglin2.github.io/mind-map/#/help/zh/'
+          url = 'https://wanglin2.github.io/mind-map-docs/help/help1.html'
           break
         case 'devDoc':
-          url = 'https://wanglin2.github.io/mind-map/#/doc/zh/introduction/'
+          url = 'https://wanglin2.github.io/mind-map-docs/start/introduction.html'
           break
         case 'site':
-          url = 'https://wanglin2.github.io/mind-map/#/index'
+          url = 'https://wanglin2.github.io/mind-map-docs/'
           break
         case 'issue':
           url = 'https://github.com/wanglin2/mind-map/issues/new'

@@ -8,8 +8,6 @@
     "lint": "vue-cli-service lint",
     "buildLibrary": "node ./scripts/updateVersion.js && vue-cli-service build --mode library --target lib --name simpleMindMap ../simple-mind-map/full.js --dest ../simple-mind-map/dist && esbuild ../simple-mind-map/full.js --bundle --external:buffer --format=esm --outfile=../simple-mind-map/dist/simpleMindMap.esm.js && esbuild ../simple-mind-map/full.js --bundle --minify --external:buffer --format=esm --outfile=../simple-mind-map/dist/simpleMindMap.esm.min.js",
     "format": "prettier --write src/* src/*/* src/*/*/* src/*/*/*/*",
-    "buildDoc": "node ./scripts/buildDoc.js",
-    "autoBuildDoc": "node ./scripts/autoBuildDoc.js",
     "createNodeImageList": "node ./scripts/createNodeImageList.js"
   },
   "dependencies": {
