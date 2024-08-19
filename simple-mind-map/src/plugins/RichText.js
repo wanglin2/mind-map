@@ -13,7 +13,7 @@ import {
   nodeRichTextToTextWithWrap
 } from '../utils'
 import { CONSTANTS } from '../constants/constant'
-import Node from '../core/render/node/Node'
+import MindMapNode from '../core/render/node/Node'
 
 let extended = false
 
@@ -691,7 +691,7 @@ class RichText {
       'textDecoration',
       'color'
     ]
-    const nodeData = node instanceof Node ? node.getData() : node
+    const nodeData = node instanceof MindMapNode ? node.getData() : node
     for (let i = 0; i < list.length; i++) {
       if (nodeData[list[i]] !== undefined) {
         return true
