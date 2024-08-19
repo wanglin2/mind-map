@@ -1,4 +1,4 @@
-import Node from '../core/render/node/Node'
+import MindMapNode from '../core/render/node/MindMapNode'
 import { CONSTANTS, initRootNodePositionMap } from '../constants/constant'
 import Lru from '../utils/Lru'
 import { createUid } from '../utils/index'
@@ -190,7 +190,7 @@ class Base {
     } else {
       // 创建新节点
       const newUid = uid || createUid()
-      newNode = new Node({
+      newNode = new MindMapNode({
         data,
         uid: newUid,
         renderer: this.renderer,

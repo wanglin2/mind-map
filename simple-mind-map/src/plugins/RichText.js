@@ -13,7 +13,7 @@ import {
   nodeRichTextToTextWithWrap
 } from '../utils'
 import { CONSTANTS } from '../constants/constant'
-import MindMapNode from '../core/render/node/Node'
+import MindMapNode from '../core/render/node/MindMapNode'
 
 let extended = false
 

@@ -5,7 +5,7 @@ import {
   replaceHtmlText,
   formatGetNodeGeneralization
 } from '../utils/index'
-import Node from '../core/render/node/Node'
+import MindMapNode from '../core/render/node/MindMapNode'
 import { CONSTANTS } from '../constants/constant'
 
 // 搜索插件
@@ -145,7 +145,7 @@ class Search {
 
   // 判断对象是否是节点实例
   isNodeInstance(node) {
-    return node instanceof Node
+    return node instanceof MindMapNode
   }
 
   // 搜索下一个，定位到下一个匹配节点
