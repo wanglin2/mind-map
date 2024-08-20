@@ -95,7 +95,7 @@ const mindMap = new MindMap({
 
 即可得到一个思维导图。
 
-想要实现更多功能？可以查看[开发文档](https://wanglin2.github.io/mind-map/#/doc/zh/)。
+想要实现更多功能？可以查看[开发文档](https://wanglin2.github.io/mind-map-docs/)。
 
 # License
 
