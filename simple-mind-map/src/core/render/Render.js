@@ -2011,6 +2011,7 @@ class Render {
 
   // 根据uid找到对应的节点实例
   findNodeByUid(uid) {
+    if (!this.root) return
     let res = null
     walk(this.root, null, node => {
       if (node.getData('uid') === uid) {

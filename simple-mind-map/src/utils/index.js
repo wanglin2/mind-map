@@ -1505,6 +1505,7 @@ export const fullScreen = element => {
 
 // 退出全屏
 export const exitFullScreen = () => {
+  if (!document.fullscreenElement) return
   if (document.exitFullscreen) {
     document.exitFullscreen()
   } else if (document.webkitExitFullscreen) {

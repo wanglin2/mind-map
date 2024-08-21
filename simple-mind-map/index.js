@@ -214,7 +214,14 @@ class MindMap {
     this.svg.size(this.width, this.height)
     if (oldWidth !== this.width || oldHeight !== this.height) {
       // 如果画布宽高改变了需要触发一次渲染
-      this.render()
+      if (this.demonstrate) {
+        // 如果存在演示插件，并且正在演示中，那么不需要触发重新渲染，否则会冲突
+        if (!this.demonstrate.isInDemonstrate) {
+          this.render()
+        }
+      } else {
+        this.render()
+      }
     }
     this.emit('resize')
   }
