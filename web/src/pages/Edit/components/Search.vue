@@ -51,12 +51,24 @@
         $t('search.replaceAll')
       }}</el-button>
     </div>
+    <div
+      class="searchResultList"
+      :style="{ height: searchResultListHeight + 'px' }"
+    >
+      <div
+        class="searchResultItem"
+        v-for="item in searchResultList"
+        :key="item.id"
+        :title="item.name"
+        v-html="item.text"
+      ></div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { isUndef } from 'simple-mind-map/src/utils/index'
+import { isUndef, getTextFromHtml } from 'simple-mind-map/src/utils/index'
 
 // 搜索替换
 export default {
@@ -74,7 +86,9 @@ export default {
       showReplaceInput: false,
       currentIndex: 0,
       total: 0,
-      showSearchInfo: false
+      showSearchInfo: false,
+      searchResultListHeight: 0,
+      searchResultList: []
     }
   },
   computed: {
@@ -98,7 +112,15 @@ export default {
     this.mindMap.on('node_click', this.blur)
     this.mindMap.on('draw_click', this.blur)
     this.mindMap.on('expand_btn_click', this.blur)
+    this.mindMap.on(
+      'search_match_node_list_change',
+      this.onSearchMatchNodeListChange
+    )
     this.mindMap.keyCommand.addShortcut('Control+f', this.showSearch)
+    window.addEventListener('resize', this.setSearchResultListHeight)
+  },
+  mounted() {
+    this.setSearchResultListHeight()
   },
   beforeDestroy() {
     this.$bus.$off('show_search', this.showSearch)
@@ -106,7 +128,12 @@ export default {
     this.mindMap.off('node_click', this.blur)
     this.mindMap.off('draw_click', this.blur)
     this.mindMap.off('expand_btn_click', this.blur)
+    this.mindMap.off(
+      'search_match_node_list_change',
+      this.onSearchMatchNodeListChange
+    )
     this.mindMap.keyCommand.removeShortcut('Control+f', this.showSearch)
+    window.removeEventListener('resize', this.setSearchResultListHeight)
   },
   methods: {
     isUndef,
@@ -174,6 +201,32 @@ export default {
       this.searchText = ''
       this.hideReplaceInput()
       this.mindMap.search.endSearch()
+    },
+
+    onSearchMatchNodeListChange(list) {
+      this.searchResultList = list.map(item => {
+        const data = item.data || item.nodeData.data
+        let name = data.text
+        const id = data.uid
+        if (data.richText) {
+          name = getTextFromHtml(name)
+        }
+        const reg = new RegExp(`${this.searchText.trim()}`, 'g')
+        name.replace(reg, (a, b, c) => {
+          console.log(a, b, c)
+        })
+        const text = ''
+        return {
+          data: item,
+          id,
+          text,
+          name
+        }
+      })
+    },
+
+    setSearchResultListHeight() {
+      this.searchResultListHeight = window.innerHeight - 267 - 24
     }
   }
 }
@@ -239,6 +292,29 @@ export default {
       transform: translateY(-50%);
       color: #909090;
       font-size: 14px;
+    }
+  }
+
+  .searchResultList {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin-top: 5px;
+    overflow-y: auto;
+
+    .searchResultItem {
+      height: 30px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      .match {
+        
+      }
     }
   }
 }
