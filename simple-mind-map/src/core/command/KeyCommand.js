@@ -27,12 +27,20 @@ export default class KeyCommand {
 
   //  保存当前注册的快捷键数据，然后清空快捷键数据
   save() {
+    // 当前已经存在缓存数据了，那么直接返回
+    if (Object.keys(this.shortcutMapCache).length > 0) {
+      return
+    }
     this.shortcutMapCache = this.shortcutMap
     this.shortcutMap = {}
   }
 
   //  恢复保存的快捷键数据，然后清空缓存数据
   restore() {
+    // 当前不存在缓存数据，那么直接返回
+    if (Object.keys(this.shortcutMapCache).length <= 0) {
+      return
+    }
     this.shortcutMap = this.shortcutMapCache
     this.shortcutMapCache = {}
   }
@@ -67,11 +75,9 @@ export default class KeyCommand {
 
   // 按键事件
   onKeydown(e) {
-    const { enableShortcutOnlyWhenMouseInSvg, beforeShortcutRun } = this.mindMap.opt
-    if (
-      this.isPause ||
-      (enableShortcutOnlyWhenMouseInSvg && !this.isInSvg)
-    ) {
+    const { enableShortcutOnlyWhenMouseInSvg, beforeShortcutRun } =
+      this.mindMap.opt
+    if (this.isPause || (enableShortcutOnlyWhenMouseInSvg && !this.isInSvg)) {
       return
     }
     Object.keys(this.shortcutMap).forEach(key => {
@@ -82,7 +88,9 @@ export default class KeyCommand {
           e.preventDefault()
         }
         if (typeof beforeShortcutRun === 'function') {
-          const isStop = beforeShortcutRun(key, [...this.mindMap.renderer.activeNodeList])
+          const isStop = beforeShortcutRun(key, [
+            ...this.mindMap.renderer.activeNodeList
+          ])
           if (isStop) return
         }
         this.shortcutMap[key].forEach(fn => {
