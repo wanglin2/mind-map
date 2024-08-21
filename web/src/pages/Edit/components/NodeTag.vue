@@ -102,7 +102,9 @@ export default {
      * @Desc: 添加
      */
     add() {
-      this.tagArr.push(this.tag)
+      const text = this.tag.trim()
+      if (!text) return
+      this.tagArr.push(text)
       this.tag = ''
     },
 
