@@ -375,7 +375,7 @@ class RichText {
         keyboard: {
           bindings: {
             enter: {
-              key: 13,
+              key: 'Enter',
               handler: function () {
                 // 覆盖默认的回车键换行
               }
