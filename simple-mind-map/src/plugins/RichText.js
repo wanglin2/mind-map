@@ -391,7 +391,7 @@ class RichText {
       },
       theme: 'snow'
     })
-    // 拦截粘贴事件
+    // 拦截复制事件，即Ctrl + c，去除多余的空行
     this.quill.root.addEventListener('copy', event => {
       event.preventDefault()
       const sel = window.getSelection()
@@ -455,16 +455,16 @@ class RichText {
       }
     })
     // 拦截粘贴，只允许粘贴纯文本
-    this.quill.clipboard.addMatcher(Node.TEXT_NODE, node => {
-      let style = this.getPasteTextStyle()
-      return new Delta().insert(this.formatPasteText(node.data), style)
-    })
+    // this.quill.clipboard.addMatcher(Node.TEXT_NODE, node => {
+    //   let style = this.getPasteTextStyle()
+    //   return new Delta().insert(this.formatPasteText(node.data), style)
+    // })
     this.quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
       let ops = []
       let style = this.getPasteTextStyle()
       delta.ops.forEach(op => {
         // 过滤出文本内容，过滤掉换行
-        if (op.insert && typeof op.insert === 'string' && op.insert !== '\n') {
+        if (op.insert && typeof op.insert === 'string') {
           ops.push({
             attributes: { ...style },
             insert: this.formatPasteText(op.insert)
