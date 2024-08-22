@@ -14,6 +14,7 @@ import {
 } from '../utils'
 import { CONSTANTS } from '../constants/constant'
 import MindMapNode from '../core/render/node/MindMapNode'
+import { Scope } from 'parchment'
 
 let extended = false
 
@@ -377,7 +378,43 @@ class RichText {
             enter: {
               key: 'Enter',
               handler: function () {
-                // 覆盖默认的回车键换行
+                // 覆盖默认的回车键，禁止换行
+              }
+            },
+            shiftEnter: {
+              key: 'Enter',
+              shiftKey: true,
+              handler: function (range, context) {
+                // 覆盖默认的换行，默认情况下新行的样式会丢失
+                const lineFormats = Object.keys(context.format).reduce(
+                  (formats, format) => {
+                    if (
+                      this.quill.scroll.query(format, Scope.BLOCK) &&
+                      !Array.isArray(context.format[format])
+                    ) {
+                      formats[format] = context.format[format]
+                    }
+                    return formats
+                  },
+                  {}
+                )
+                const delta = new Delta()
+                  .retain(range.index)
+                  .delete(range.length)
+                  .insert('\n', lineFormats)
+                this.quill.updateContents(delta, Quill.sources.USER)
+                this.quill.setSelection(range.index + 1, Quill.sources.SILENT)
+                this.quill.focus()
+                Object.keys(context.format).forEach(name => {
+                  if (lineFormats[name] != null) return
+                  if (Array.isArray(context.format[name])) return
+                  if (name === 'code' || name === 'link') return
+                  this.quill.format(
+                    name,
+                    context.format[name],
+                    Quill.sources.USER
+                  )
+                })
               }
             },
             tab: {
