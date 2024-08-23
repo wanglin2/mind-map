@@ -310,7 +310,8 @@ export default {
     replacePlaceholder: '请输入替换内容',
     replace: '替换',
     replaceAll: '全部替换',
-    cancel: '取消'
+    cancel: '取消',
+    noResult: '暂无结果'
   },
   nodeIconSidebar: {
     title: '图标/贴纸',

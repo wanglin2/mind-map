@@ -318,7 +318,8 @@ export default {
     replacePlaceholder: 'Please enter replacement content',
     replace: 'Replace',
     replaceAll: 'Replace all',
-    cancel: 'Cancel'
+    cancel: 'Cancel',
+    noResult: 'No result'
   },
   nodeIconSidebar: {
     title: 'Icon/Sticker',

@@ -54,14 +54,20 @@
     <div
       class="searchResultList"
       :style="{ height: searchResultListHeight + 'px' }"
+      v-if="showSearchResultList"
     >
       <div
         class="searchResultItem"
-        v-for="item in searchResultList"
+        v-for="(item, index) in searchResultList"
         :key="item.id"
         :title="item.name"
         v-html="item.text"
+        @click.stop="onSearchResultItemClick(index)"
       ></div>
+      <div class="empty" v-if="searchResultList.length <= 0">
+        <span class="iconfont iconwushuju"></span>
+        <span class="text">{{ $t('search.noResult') }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -88,7 +94,8 @@ export default {
       total: 0,
       showSearchInfo: false,
       searchResultListHeight: 0,
-      searchResultList: []
+      searchResultList: [],
+      showSearchResultList: false
     }
   },
   computed: {
@@ -180,9 +187,8 @@ export default {
     },
 
     onSearchNext() {
-      this.mindMap.search.search(this.searchText, () => {
-        this.$refs.searchInputRef.focus()
-      })
+      this.showSearchResultList = true
+      this.mindMap.search.search(this.searchText)
     },
 
     replace() {
@@ -195,6 +201,7 @@ export default {
 
     close() {
       this.show = false
+      this.showSearchResultList = false
       this.showSearchInfo = false
       this.total = 0
       this.currentIndex = 0
@@ -212,10 +219,9 @@ export default {
           name = getTextFromHtml(name)
         }
         const reg = new RegExp(`${this.searchText.trim()}`, 'g')
-        name.replace(reg, (a, b, c) => {
-          console.log(a, b, c)
+        const text = name.replace(reg, a => {
+          return `<span class="match">${a}</span>`
         })
-        const text = ''
         return {
           data: item,
           id,
@@ -227,6 +233,10 @@ export default {
 
     setSearchResultListHeight() {
       this.searchResultListHeight = window.innerHeight - 267 - 24
+    },
+
+    onSearchResultItemClick(index) {
+      this.mindMap.search.jump(index)
     }
   }
 }
@@ -305,15 +315,44 @@ export default {
     border-radius: 12px;
     margin-top: 5px;
     overflow-y: auto;
+    padding: 12px 0;
 
     .searchResultItem {
       height: 30px;
+      line-height: 30px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      padding: 0 12px;
+      font-size: 14px;
+      cursor: pointer;
 
-      .match {
-        
+      &:hover {
+        background-color: #f2f4f7;
+      }
+
+      /deep/.match {
+        color: #409eff;
+        font-weight: bold;
+      }
+    }
+
+    .empty {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      .iconfont {
+        font-size: 50px;
+        margin-bottom: 20px;
+      }
+
+      .text {
+        font-size: 14px;
+        color: rgba(26, 26, 26, 0.8);
       }
     }
   }
