@@ -665,6 +665,7 @@ class Render {
       this.renderTree = data
       this.mindMap.render()
     }
+    this.mindMap.emit('data_change', data)
   }
 
   // 获取创建新节点的行为
