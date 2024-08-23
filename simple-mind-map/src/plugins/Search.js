@@ -156,13 +156,22 @@ class Search {
     return node instanceof MindMapNode
   }
 
-  // 搜索下一个，定位到下一个匹配节点
-  searchNext(callback) {
+  // 搜索下一个或指定索引，定位到下一个匹配节点
+  searchNext(callback, index) {
     if (!this.isSearching || this.matchNodeList.length <= 0) return
-    if (this.currentIndex < this.matchNodeList.length - 1) {
-      this.currentIndex++
+    if (
+      index !== undefined &&
+      Number.isInteger(index) &&
+      index >= 0 &&
+      index < this.matchNodeList.length
+    ) {
+      this.currentIndex = index
     } else {
-      this.currentIndex = 0
+      if (this.currentIndex < this.matchNodeList.length - 1) {
+        this.currentIndex++
+      } else {
+        this.currentIndex = 0
+      }
     }
     const { readonly } = this.mindMap.opt
     // 只读模式下需要激活之前节点的高亮
@@ -194,6 +203,11 @@ class Search {
         this.notResetSearchText = false
       }
     })
+  }
+
+  // 定位到指定搜索结果索引的节点
+  jump(index, callback) {
+    this.searchNext(callback, index)
   }
 
   // 替换当前节点
