@@ -326,6 +326,20 @@ export default {
       padding: 0 12px;
       font-size: 14px;
       cursor: pointer;
+      position: relative;
+      padding-left: 22px;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 5px;
+        height: 5px;
+        background-color: #606266;
+        border-radius: 50%;
+      }
 
       &:hover {
         background-color: #f2f4f7;
