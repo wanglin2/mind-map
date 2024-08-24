@@ -206,7 +206,7 @@ class Search {
   }
 
   // 定位到指定搜索结果索引的节点
-  jump(index, callback) {
+  jump(index, callback = () => {}) {
     this.searchNext(callback, index)
   }
 
