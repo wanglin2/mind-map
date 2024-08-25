@@ -111,24 +111,32 @@ class View {
         }
       } else {
         // 2.鼠标滚轮事件控制画布移动
-        const step = isTouchPad ? 10 : mousewheelMoveStep
+        let stepX = 0
+        let stepY = 0
+        if (isTouchPad) {
+          // 如果是触控板，那么直接使用触控板滑动距离
+          stepX = Math.abs(e.wheelDeltaX)
+          stepY = Math.abs(e.wheelDeltaY)
+        } else {
+          stepX = stepY = mousewheelMoveStep
+        }
         let mx = 0
         let my = 0
         // 上移
         if (dirs.includes(CONSTANTS.DIR.DOWN)) {
-          my = -step
+          my = -stepY
         }
         // 下移
         if (dirs.includes(CONSTANTS.DIR.UP)) {
-          my = step
+          my = stepY
         }
         // 右移
         if (dirs.includes(CONSTANTS.DIR.LEFT)) {
-          mx = step
+          mx = stepX
         }
         // 左移
         if (dirs.includes(CONSTANTS.DIR.RIGHT)) {
-          mx = -step
+          mx = -stepX
         }
         this.translateXY(mx, my)
       }
