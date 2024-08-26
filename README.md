@@ -453,4 +453,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/张文建.jpg" style="width: 50px;height: 50px;" />
         <span>张文建</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/炫.jpg" style="width: 50px;height: 50px;" />
+        <span>炫</span>
+    </span>
 </p>

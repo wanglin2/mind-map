@@ -4,15 +4,19 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [
-  { 
-    path: '/', 
-    name: 'Edit', 
-    component: () => import(`./pages/Edit/Index.vue`) 
+  {
+    path: '/',
+    name: 'Edit',
+    component: () => import(`./pages/Edit/Index.vue`)
   },
   {
-    path: '/index', 
+    path: '/index',
     redirect: '/'
   },
+  {
+    path: '/doc/zh',
+    component: () => import(`./pages/Doc.vue`)
+  }
 ]
 
 const router = new VueRouter({
