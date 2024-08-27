@@ -288,7 +288,8 @@ class Export {
   handleNodeExport(node) {
     if (node && node.getData('isActive')) {
       node.deactivate()
-      if (!this.mindMap.opt.alwaysShowExpandBtn && node.getData('expand')) {
+      const { alwaysShowExpandBtn, notShowExpandBtn } = this.mindMap.opt
+      if (!alwaysShowExpandBtn && !notShowExpandBtn && node.getData('expand')) {
         node.removeExpandBtn()
       }
     }

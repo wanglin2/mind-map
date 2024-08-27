@@ -214,7 +214,14 @@ class MindMap {
     this.svg.size(this.width, this.height)
     if (oldWidth !== this.width || oldHeight !== this.height) {
       // 如果画布宽高改变了需要触发一次渲染
-      this.render()
+      if (this.demonstrate) {
+        // 如果存在演示插件，并且正在演示中，那么不需要触发重新渲染，否则会冲突
+        if (!this.demonstrate.isInDemonstrate) {
+          this.render()
+        }
+      } else {
+        this.render()
+      }
     }
     this.emit('resize')
   }
@@ -410,7 +417,9 @@ class MindMap {
     if (![CONSTANTS.MODE.READONLY, CONSTANTS.MODE.EDIT].includes(mode)) {
       return
     }
-    this.opt.readonly = mode === CONSTANTS.MODE.READONLY
+    const isReadonly = mode === CONSTANTS.MODE.READONLY
+    if (isReadonly === this.opt.readonly) return
+    this.opt.readonly = isReadonly
     if (this.opt.readonly) {
       // 取消当前激活的元素
       this.execCommand('CLEAR_ACTIVE_NODE')
@@ -585,10 +594,7 @@ class MindMap {
     this.emit('beforeDestroy')
     // 清除节点编辑框
     this.renderer.textEdit.hideEditTextBox()
-    // 清除关联线文字编辑框
-    if (this.associativeLine) {
-      this.associativeLine.hideEditTextBox()
-    }
+    this.renderer.textEdit.removeTextEditEl()
     // 移除插件
     ;[...MindMap.pluginList].forEach(plugin => {
       if (

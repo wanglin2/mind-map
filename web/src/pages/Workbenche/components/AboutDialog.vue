@@ -61,7 +61,7 @@ export default {
       let url = ''
       switch (type) {
         case 'homepage':
-          url = 'https://wanglin2.github.io/mind-map/#/index'
+          url = 'https://wanglin2.github.io/mind-map-docs/'
           break
         case 'mind-map':
           url = 'https://github.com/wanglin2/mind-map/tree/electron'

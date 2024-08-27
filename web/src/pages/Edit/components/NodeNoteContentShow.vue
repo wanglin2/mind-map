@@ -8,6 +8,9 @@
       visibility: show ? 'visible' : 'hidden'
     }"
     @click.stop
+    @mousedown.stop
+    @mousemove.stop
+    @mouseup.stop
   ></div>
 </template>
 
@@ -68,8 +71,17 @@ export default {
     onShowNoteContent(content, left, top, node) {
       this.node = node
       this.editor.setMarkdown(content)
+      this.handleALink()
       this.updateNoteContentPosition(left, top)
       this.show = true
+    },
+
+    // 超链接新窗口打开
+    handleALink() {
+      const list = this.$refs.noteContentViewer.querySelectorAll('a')
+      Array.from(list).forEach(a => {
+        a.setAttribute('target', '_blank')
+      })
     },
 
     // 更新位置

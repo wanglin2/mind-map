@@ -22,6 +22,8 @@ const defaultConfig = {
 class Demonstrate {
   constructor(opt) {
     this.mindMap = opt.mindMap
+    // 是否正在演示中
+    this.isInDemonstrate = false
     // 演示的步骤列表
     this.stepList = []
     // 当前所在步骤
@@ -57,6 +59,7 @@ class Demonstrate {
   }
 
   _enter() {
+    this.isInDemonstrate = true
     // 如果开启了性能模式，那么需要暂停
     this.pausePerformanceMode()
     // 添加演示用的临时的样式
@@ -74,8 +77,16 @@ class Demonstrate {
     // 计算步骤数据
     this.getStepList()
     // 收起所有节点
+    let wait = false
+    if (this.mindMap.renderer.isRendering) {
+      wait = true
+    }
     this.mindMap.execCommand('UNEXPAND_ALL', false)
     const onRenderEnd = () => {
+      if (wait) {
+        wait = false
+        return
+      }
       this.mindMap.off('node_tree_render_end', onRenderEnd)
       // 聚焦到第一步
       this.jump(this.currentStepIndex)
@@ -102,6 +113,7 @@ class Demonstrate {
     this.mindMap.keyCommand.recovery()
     this.restorePerformanceMode()
     this.mindMap.emit('exit_demonstrate')
+    this.isInDemonstrate = false
   }
 
   // 暂停性能模式

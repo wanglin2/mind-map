@@ -34,8 +34,8 @@ class VerticalTimeline extends Base {
     walk(
       this.renderer.renderTree,
       null,
-      (cur, parent, isRoot, layerIndex, index) => {
-        let newNode = this.createNode(cur, parent, isRoot, layerIndex)
+      (cur, parent, isRoot, layerIndex, index, ancestors) => {
+        let newNode = this.createNode(cur, parent, isRoot, layerIndex, index, ancestors)
         // 根节点定位在画布中心位置
         if (isRoot) {
           this.setNodeCenter(newNode)
@@ -234,7 +234,8 @@ class VerticalTimeline extends Base {
       return []
     }
     let { expandBtnSize } = node
-    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+    const { alwaysShowExpandBtn, notShowExpandBtn } = this.mindMap.opt
+    if (!alwaysShowExpandBtn || notShowExpandBtn) {
       expandBtnSize = 0
     }
     if (node.isRoot) {
@@ -293,7 +294,8 @@ class VerticalTimeline extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
-    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+    const { alwaysShowExpandBtn, notShowExpandBtn } = this.mindMap.opt
+    if (!alwaysShowExpandBtn || notShowExpandBtn) {
       expandBtnSize = 0
     }
     node.children.forEach((item, index) => {
@@ -331,7 +333,8 @@ class VerticalTimeline extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
-    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+    const { alwaysShowExpandBtn, notShowExpandBtn } = this.mindMap.opt
+    if (!alwaysShowExpandBtn || notShowExpandBtn) {
       expandBtnSize = 0
     }
     node.children.forEach((item, index) => {

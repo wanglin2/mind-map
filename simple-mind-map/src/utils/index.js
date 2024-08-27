@@ -14,11 +14,12 @@ export const walk = (
   afterCallback,
   isRoot,
   layerIndex = 0,
-  index = 0
+  index = 0,
+  ancestors = []
 ) => {
   let stop = false
   if (beforeCallback) {
-    stop = beforeCallback(root, parent, isRoot, layerIndex, index)
+    stop = beforeCallback(root, parent, isRoot, layerIndex, index, ancestors)
   }
   if (!stop && root.children && root.children.length > 0) {
     let _layerIndex = layerIndex + 1
@@ -30,11 +31,13 @@ export const walk = (
         afterCallback,
         false,
         _layerIndex,
-        nodeIndex
+        nodeIndex,
+        [...ancestors, root]
       )
     })
   }
-  afterCallback && afterCallback(root, parent, isRoot, layerIndex, index)
+  afterCallback &&
+    afterCallback(root, parent, isRoot, layerIndex, index, ancestors)
 }
 
 //  广度优先遍历树
@@ -948,7 +951,11 @@ export const addDataToAppointNodes = (appointNodes, data = {}) => {
 
 // 给指定的节点列表树数据添加uid，会修改原数据
 // createNewId默认为false，即如果节点不存在uid的话，会创建新的uid。如果传true，那么无论节点数据原来是否存在uid，都会创建新的uid
-export const createUidForAppointNodes = (appointNodes, createNewId = false, handle = null) => {
+export const createUidForAppointNodes = (
+  appointNodes,
+  createNewId = false,
+  handle = null
+) => {
   const walk = list => {
     list.forEach(node => {
       if (!node.data) {
@@ -1073,14 +1080,15 @@ export const getDataFromClipboard = async () => {
   let text = null
   let img = null
   if (navigator.clipboard) {
-    text = await navigator.clipboard.readText()
     const items = await navigator.clipboard.read()
     if (items && items.length > 0) {
       for (const clipboardItem of items) {
         for (const type of clipboardItem.types) {
           if (/^image\//.test(type)) {
             img = await clipboardItem.getType(type)
-            break
+          } else if (type === 'text/plain') {
+            const blob = await clipboardItem.getType(type)
+            text = await blob.text()
           }
         }
       }
@@ -1498,6 +1506,7 @@ export const fullScreen = element => {
 
 // 退出全屏
 export const exitFullScreen = () => {
+  if (!document.fullscreenElement) return
   if (document.exitFullscreen) {
     document.exitFullscreen()
   } else if (document.webkitExitFullscreen) {

@@ -154,7 +154,7 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
       fs.readFile(file, { encoding: 'utf-8' }, (err, data) => {
         resolve({
           name: path.parse(file).name,
-          content: JSON.parse(data)
+          content: data ? JSON.parse(data) : null
         })
       })
     })

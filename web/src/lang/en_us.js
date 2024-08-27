@@ -111,7 +111,8 @@ export default {
     copyToTxt: 'Txt',
     copyToPng: 'Png',
     copySuccess: 'Copy success',
-    copyFail: 'Copy fail'
+    copyFail: 'Copy fail',
+    number: 'Number child nodes'
   },
   count: {
     words: 'Words',
@@ -306,7 +307,8 @@ export default {
     yes: 'Yes',
     no: 'No',
     exportError: 'Export failed',
-    dragTip: 'Release here to import the file'
+    dragTip: 'Release here to import the file',
+    emptyTip: 'The file content is empty, use default data rendering'
   },
   mouseAction: {
     tip1:
@@ -319,7 +321,8 @@ export default {
     replacePlaceholder: 'Please enter replacement content',
     replace: 'Replace',
     replaceAll: 'Replace all',
-    cancel: 'Cancel'
+    cancel: 'Cancel',
+    noResult: 'No result'
   },
   nodeIconSidebar: {
     title: 'Icon/Sticker',

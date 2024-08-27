@@ -169,7 +169,7 @@ export default {
       if (!this.withTransition) {
         this.withTransition = true
       }
-      this.mindMap.miniMap.onMouseup(e)
+      if (this.mindMap.miniMap) this.mindMap.miniMap.onMouseup(e)
     },
 
     // 视口框的鼠标按下事件

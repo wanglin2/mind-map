@@ -1,6 +1,7 @@
 import storage from 'electron-json-storage'
 
 export const RECENT_FILE_LIST = 'recentFileList'
+export const CLIENT_CONFIG = 'client_config'
 
 // 保存到最近文件
 export const saveToRecent = file => {
@@ -106,4 +107,23 @@ export const replaceFileInRecent = (oldFile, newFile) => {
       }
     })
   })
+}
+
+// 保存配置
+export const saveClientConfig = config => {
+  return new Promise((resolve, reject) => {
+    storage.set(CLIENT_CONFIG, config, err => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve()
+      }
+    })
+  })
+}
+
+// 获取配置
+export const getClientConfig = () => {
+  const res = storage.getSync(CLIENT_CONFIG)
+  return res
 }

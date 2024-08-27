@@ -469,6 +469,47 @@
           </el-select>
         </div>
       </div>
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">{{ $t('style.style') }}</span>
+          <el-select
+            size="mini"
+            style="width: 80px"
+            v-model="style.associativeLineDasharray"
+            placeholder=""
+            @change="
+              value => {
+                update('associativeLineDasharray', value)
+              }
+            "
+          >
+            <el-option
+              v-for="item in borderDasharrayList"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+            >
+              <svg width="120" height="34">
+                <line
+                  x1="10"
+                  y1="17"
+                  x2="110"
+                  y2="17"
+                  stroke-width="2"
+                  :stroke="
+                    style.associativeLineDasharray === item.value
+                      ? '#409eff'
+                      : isDark
+                      ? '#fff'
+                      : '#000'
+                  "
+                  :stroke-dasharray="item.value"
+                ></line>
+              </svg>
+            </el-option>
+          </el-select>
+        </div>
+      </div>
       <!-- 关联线文字 -->
       <div class="title noTop">{{ $t('baseStyle.associativeLineText') }}</div>
       <div class="row">
@@ -831,7 +872,7 @@
       </div>
       <div class="row">
         <div class="rowItem">
-          <span class="name">{{ $t('baseStyle.horizontal') }}</span>
+          <span class="name">{{ $t('baseStyle.vertical') }}</span>
           <el-slider
             style="width: 200px"
             v-model="outerFramePadding.outerFramePaddingY"
@@ -1003,7 +1044,8 @@ import {
   fontFamilyList,
   fontSizeList,
   rootLineKeepSameInCurveList,
-  lineStyleMap
+  lineStyleMap,
+  borderDasharrayList
 } from '@/config'
 import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
@@ -1058,6 +1100,7 @@ export default {
         associativeLineColor: '',
         associativeLineWidth: 0,
         associativeLineActiveWidth: 0,
+        associativeLineDasharray: '',
         associativeLineActiveColor: '',
         associativeLineTextFontSize: 0,
         associativeLineTextColor: '',
@@ -1168,6 +1211,9 @@ export default {
     },
     showRootLineKeepSameInCurveLayouts() {
       return supportRootLineKeepSameInCurveLayouts.includes(this.currentLayout)
+    },
+    borderDasharrayList() {
+      return borderDasharrayList[this.$i18n.locale] || borderDasharrayList.zh
     }
   },
   watch: {
@@ -1233,6 +1279,7 @@ export default {
         'associativeLineColor',
         'associativeLineWidth',
         'associativeLineActiveWidth',
+        'associativeLineDasharray',
         'associativeLineActiveColor',
         'associativeLineTextFontSize',
         'associativeLineTextColor',

@@ -10,7 +10,7 @@ module.exports = {
   lintOnSave: false,
   productionSourceMap: false,
   filenameHashing: false,
-  transpileDependencies: ['yjs', 'lib0'],
+  transpileDependencies: ['yjs', 'lib0', 'quill'],
   chainWebpack: config => {
     // 移除 preload 插件
     config.plugins.delete('preload')

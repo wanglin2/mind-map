@@ -83,6 +83,10 @@ export const borderDasharrayList = [
   {
     name: 'Dotted6',
     value: '1, 5'
+  },
+  {
+    name: 'Dotted7',
+    value: '6, 4'
   }
 ]
 
@@ -491,5 +495,65 @@ export const downTypeList = [
     type: 'txt',
     icon: 'iconTXT',
     desc: 'Plain text file'
+  }
+]
+
+// 编号类型列表
+export const numberTypeList = [
+  {
+    name: 'None',
+    value: ''
+  },
+  {
+    name: '1, 2, 3',
+    value: 1
+  },
+  {
+    name: '1., 2., 3.',
+    value: 2
+  },
+  {
+    name: '(1), (2), (3)',
+    value: 3
+  },
+  {
+    name: 'a., b., c.',
+    value: 4
+  },
+  {
+    name: 'A., B., C.',
+    value: 5
+  },
+  {
+    name: 'i., ii., iii.',
+    value: 6
+  },
+  {
+    name: 'I., II., III.',
+    value: 7
+  },
+  {
+    name: '一、, 二、, 三、',
+    value: 8
+  }
+]
+
+// 编号层级列表
+export const numberLevelList = [
+  {
+    name: '1 level',
+    value: 1
+  },
+  {
+    name: '2 level',
+    value: 2
+  },
+  {
+    name: '3 level',
+    value: 3
+  },
+  {
+    name: 'All level',
+    value: 0
   }
 ]

@@ -80,6 +80,7 @@ export default {
     ...mapMutations(['setActiveSidebar']),
 
     init() {
+      if (!window.katex) return
       this.list = formulaList.map(item => {
         return {
           overview: window.katex.renderToString(

@@ -35,8 +35,8 @@ class LogicalStructure extends Base {
     walk(
       this.renderer.renderTree,
       null,
-      (cur, parent, isRoot, layerIndex) => {
-        let newNode = this.createNode(cur, parent, isRoot, layerIndex)
+      (cur, parent, isRoot, layerIndex, index, ancestors) => {
+        let newNode = this.createNode(cur, parent, isRoot, layerIndex, index, ancestors)
         newNode.sortIndex = sortIndex
         sortIndex++
         // 根节点定位在画布中心位置
@@ -174,7 +174,8 @@ class LogicalStructure extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
-    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+    const { alwaysShowExpandBtn, notShowExpandBtn } = this.mindMap.opt
+    if (!alwaysShowExpandBtn || notShowExpandBtn) {
       expandBtnSize = 0
     }
     let marginX = this.getMarginX(node.layerIndex + 1)
@@ -215,7 +216,8 @@ class LogicalStructure extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
-    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+    const { alwaysShowExpandBtn, notShowExpandBtn } = this.mindMap.opt
+    if (!alwaysShowExpandBtn || notShowExpandBtn) {
       expandBtnSize = 0
     }
     const { nodeUseLineStyle } = this.mindMap.themeConfig
@@ -246,7 +248,8 @@ class LogicalStructure extends Base {
       return []
     }
     let { left, top, width, height, expandBtnSize } = node
-    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+    const { alwaysShowExpandBtn, notShowExpandBtn } = this.mindMap.opt
+    if (!alwaysShowExpandBtn || notShowExpandBtn) {
       expandBtnSize = 0
     }
     const {

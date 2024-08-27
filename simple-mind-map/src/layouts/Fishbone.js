@@ -36,9 +36,9 @@ class Fishbone extends Base {
     walk(
       this.renderer.renderTree,
       null,
-      (node, parent, isRoot, layerIndex, index) => {
+      (node, parent, isRoot, layerIndex, index, ancestors) => {
         // 创建节点
-        let newNode = this.createNode(node, parent, isRoot, layerIndex)
+        let newNode = this.createNode(node, parent, isRoot, layerIndex, index, ancestors)
         // 根节点定位在画布中心位置
         if (isRoot) {
           this.setNodeCenter(newNode)
@@ -233,7 +233,8 @@ class Fishbone extends Base {
       return []
     }
     let { top, height, expandBtnSize } = node
-    if (!this.mindMap.opt.alwaysShowExpandBtn) {
+    const { alwaysShowExpandBtn, notShowExpandBtn } = this.mindMap.opt
+    if (!alwaysShowExpandBtn || notShowExpandBtn) {
       expandBtnSize = 0
     }
     let len = node.children.length

@@ -18,7 +18,7 @@
     <OutlineSidebar :mindMap="mindMap"></OutlineSidebar>
     <Style v-if="!isZenMode"></Style>
     <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
-    <Theme v-if="mindMap" :mindMap="mindMap"></Theme>
+    <Theme v-if="mindMap" :data="mindMapData" :mindMap="mindMap"></Theme>
     <Structure :mindMap="mindMap"></Structure>
     <ShortcutKey></ShortcutKey>
     <Contextmenu v-if="mindMap" :mindMap="mindMap"></Contextmenu>
@@ -66,7 +66,11 @@ import AssociativeLine from 'simple-mind-map/src/plugins/AssociativeLine.js'
 import TouchEvent from 'simple-mind-map/src/plugins/TouchEvent.js'
 import NodeImgAdjust from 'simple-mind-map/src/plugins/NodeImgAdjust.js'
 import SearchPlugin from 'simple-mind-map/src/plugins/Search.js'
-import { downloadFile, readBlob } from 'simple-mind-map/src/utils/index'
+import {
+  downloadFile,
+  readBlob,
+  simpleDeepClone
+} from 'simple-mind-map/src/utils/index'
 import Painter from 'simple-mind-map/src/plugins/Painter.js'
 import ScrollbarPlugin from 'simple-mind-map/src/plugins/Scrollbar.js'
 import Formula from 'simple-mind-map/src/plugins/Formula.js'
@@ -79,6 +83,8 @@ import OuterFrame from 'simple-mind-map/src/plugins/OuterFrame.js'
 // import HandDrawnLikeStyle from 'simple-mind-map-plugin-handdrawnlikestyle'
 // 标记插件，该插件为付费插件，详情请查看开发文档
 // import Notation from 'simple-mind-map-plugin-notation'
+// 编号插件，该插件为付费插件，详情请查看开发文档
+// import Numbers from 'simple-mind-map-plugin-numbers'
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -309,15 +315,33 @@ export default {
      */
     async getData() {
       let data = await window.electronAPI.getFileContent(this.$route.params.id)
+      const clientConfig = await window.electronAPI.getClientConfig()
+      const defaultTheme = clientConfig.theme || 'classic4'
+      const defaultLayout = clientConfig.layout || 'logicalStructure'
       let storeData = null
       if (data) {
-        addMindMapNodeStickerProtocol(data.content.root)
         this.setFileName(data.name)
-        storeData = data.content
+        if (data.content) {
+          addMindMapNodeStickerProtocol(data.content.root)
+          storeData = data.content
+        } else {
+          this.$message.info(this.$t('edit.emptyTip'))
+          storeData = simpleDeepClone(exampleData)
+          storeData.layout = defaultLayout
+          storeData.theme = {
+            template: defaultTheme,
+            config: {}
+          }
+        }
       } else {
         this.isNewFile = true
         this.setFileName('未命名')
         storeData = getData()
+        storeData.layout = defaultLayout
+        storeData.theme = {
+          template: defaultTheme,
+          config: {}
+        }
       }
       storeData.config = getConfig()
       this.mindMapData = storeData
@@ -582,6 +606,10 @@ export default {
       if (typeof Notation !== 'undefined') {
         this.mindMap.addPlugin(Notation)
         this.$store.commit('setSupportMark', true)
+      }
+      if (typeof Numbers !== 'undefined') {
+        this.mindMap.addPlugin(Numbers)
+        this.$store.commit('setSupportNumbers', true)
       }
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
         this.manualSave()

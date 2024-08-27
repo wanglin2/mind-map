@@ -32,7 +32,7 @@ async function createMainWindow() {
       enableRemoteModule: true,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
-    }
+    } 
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -40,8 +40,8 @@ async function createMainWindow() {
     await mainWindow.loadURL(
       process.env.WEBPACK_DEV_SERVER_URL + '/#/workbenche'
     )
-    // if (!process.env.IS_TEST) mainWindow.webContents.openDevTools()
-  } else {
+    if (!process.env.IS_TEST) mainWindow.webContents.openDevTools()
+  } else { 
     // 非开发环境时加载index.html
     mainWindow.loadURL('app://./index.html/#/workbenche')
   }

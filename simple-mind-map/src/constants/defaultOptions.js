@@ -86,6 +86,8 @@ export const defaultOpt = {
   maxHistoryCount: 500,
   // 是否一直显示节点的展开收起按钮，默认为鼠标移上去和激活时才显示
   alwaysShowExpandBtn: false,
+  // 不显示展开收起按钮，优先级比alwaysShowExpandBtn配置高
+  notShowExpandBtn: false,
   // 扩展节点可插入的图标
   iconList: [
     // {
@@ -232,9 +234,9 @@ export const defaultOpt = {
   openPerformance: false,
   // 性能优化模式配置
   performanceConfig: {
-    time: 250,// 当视图改变后多久刷新一次节点，单位：ms，
-    padding: 100,// 超出画布四周指定范围内依旧渲染节点
-    removeNodeWhenOutCanvas: true,// 节点移除画布可视区域后从画布删除
+    time: 250, // 当视图改变后多久刷新一次节点，单位：ms，
+    padding: 100, // 超出画布四周指定范围内依旧渲染节点
+    removeNodeWhenOutCanvas: true // 节点移除画布可视区域后从画布删除
   },
 
   // 【Select插件】

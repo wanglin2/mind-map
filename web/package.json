@@ -1,6 +1,6 @@
 {
   "name": "thoughts",
-  "version": "0.10.5",
+  "version": "0.11.0",
   "private": true,
   "description": "一个简洁的思维导图",
   "author": "街角小林<1013335014@qq.com>",
@@ -8,10 +8,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && node ../copy.js",
     "lint": "vue-cli-service lint",
-    "autoBuildDoc": "node ./scripts/autoBuildDoc.js",
-    "buildDoc": "node ./scripts/buildDoc.js",
     "buildLibrary": "node ./scripts/updateVersion.js && vue-cli-service build --mode library --target lib --name simpleMindMap ../simple-mind-map/full.js --dest ../simple-mind-map/dist && esbuild ../simple-mind-map/full.js --bundle --external:buffer --format=esm --outfile=../simple-mind-map/dist/simpleMindMap.esm.js && esbuild ../simple-mind-map/full.js --bundle --minify --external:buffer --format=esm --outfile=../simple-mind-map/dist/simpleMindMap.esm.min.js",
-    "createNodeImageList": "node ./scripts/createNodeImageList.js",
     "electron:build": "vue-cli-service electron:build",
     "electron:build-all": "vue-cli-service electron:build -p never -mwl",
     "electron:build-linux": "vue-cli-service electron:build -p never -l",
@@ -20,7 +17,8 @@
     "electron:serve": "vue-cli-service electron:serve",
     "format": "prettier --write src/* src/*/* src/*/*/* src/*/*/*/*",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps"
+    "postuninstall": "electron-builder install-app-deps",
+    "createNodeImageList": "node ./scripts/createNodeImageList.js"
   },
   "main": "background.js",
   "dependencies": {

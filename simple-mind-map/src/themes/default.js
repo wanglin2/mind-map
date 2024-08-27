@@ -42,6 +42,8 @@ export default {
   associativeLineActiveWidth: 8,
   // 关联线激活状态的颜色
   associativeLineActiveColor: 'rgba(2, 167, 240, 1)',
+  // 关联线样式
+  associativeLineDasharray: [6, 4],
   // 关联线文字颜色
   associativeLineTextColor: 'rgb(51, 51, 51)',
   // 关联线文字大小
@@ -149,16 +151,6 @@ export default {
     endColor: '#fff'
   }
 }
-
-// 支持激活样式的属性
-// 简单来说，会改变节点大小的都不支持在激活时设置，为了性能考虑，节点切换激活态时不会重新计算节点大小
-export const supportActiveStyle = [
-  'fillColor',
-  'borderColor',
-  'borderWidth',
-  'borderDasharray',
-  'borderRadius'
-]
 
 // 检测主题配置是否是节点大小无关的
 const nodeSizeIndependenceList = [
