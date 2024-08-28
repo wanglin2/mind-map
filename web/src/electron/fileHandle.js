@@ -128,9 +128,14 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
   })
 
   // 选择本地文件
-  ipcMain.handle('selectFile', event => {
+  ipcMain.handle('selectFile', (event, openDirectory = false) => {
+    const properties = []
+    if (openDirectory) {
+      properties.push('openDirectory')
+    }
     const res = dialog.showOpenDialogSync({
-      title: '选择'
+      title: '选择',
+      properties
     })
     if (res && res[0]) {
       console.log(111, res[0])
@@ -229,8 +234,8 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
     shell.showItemInFolder(file)
   })
 
-   // 打开指定文件
-   ipcMain.handle('openPath', (event, file) => {
+  // 打开指定文件
+  ipcMain.handle('openPath', (event, file) => {
     const exist = fs.existsSync(file)
     if (!exist) {
       return '文件不存在'

@@ -70,7 +70,7 @@ export default {
       // activeNodes.forEach(node => {
       //   node.setAttachment('/test.md', '我去')
       // })
-      const file = await window.electronAPI.selectFile()
+      const file = await window.electronAPI.selectFile(true)
       if (file) {
         activeNodes.forEach(node => {
           node.setAttachment(file.file, file.name)

@@ -25,7 +25,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   openFile: file => ipcRenderer.invoke('openFile', file),
   selectOpenFile: () => ipcRenderer.send('selectOpenFile'),
   copyFile: file => ipcRenderer.invoke('copyFile', file),
-  selectFile: () => ipcRenderer.invoke('selectFile'),
+  selectFile: openDirectory => ipcRenderer.invoke('selectFile', openDirectory),
   openPath: path => ipcRenderer.invoke('openPath', path),
   saveClientConfig: config => ipcRenderer.invoke('saveClientConfig', config),
   getClientConfig: () => ipcRenderer.invoke('getClientConfig')
