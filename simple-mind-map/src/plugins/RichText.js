@@ -360,12 +360,13 @@ class RichText {
       // }
       this.mindMap.render()
     })
-    this.mindMap.emit('hide_text_edit', this.textEditNode, list, this.node)
+    const node = this.node
     this.textEditNode.style.display = 'none'
     this.showTextEdit = false
     this.mindMap.emit('rich_text_selection_change', false)
     this.node = null
     this.isInserting = false
+    this.mindMap.emit('hide_text_edit', this.textEditNode, list, node)
   }
 
   // 初始化Quill富文本编辑器

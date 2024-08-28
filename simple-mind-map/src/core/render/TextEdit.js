@@ -313,12 +313,7 @@ export default class TextEdit {
       }
       this.mindMap.render()
     })
-    this.mindMap.emit(
-      'hide_text_edit',
-      this.textEditNode,
-      this.renderer.activeNodeList,
-      this.currentNode
-    )
+    const currentNode = this.currentNode
     this.currentNode = null
     this.textEditNode.style.display = 'none'
     this.textEditNode.innerHTML = ''
@@ -327,6 +322,12 @@ export default class TextEdit {
     this.textEditNode.style.fontWeight = 'normal'
     this.textEditNode.style.transform = 'translateY(0)'
     this.showTextEdit = false
+    this.mindMap.emit(
+      'hide_text_edit',
+      this.textEditNode,
+      this.renderer.activeNodeList,
+      currentNode
+    )
   }
 
   // 获取当前正在编辑中的节点实例
