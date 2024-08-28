@@ -128,25 +128,34 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
   })
 
   // 选择本地文件
-  ipcMain.handle('selectFile', (event, openDirectory = false) => {
-    const properties = []
-    if (openDirectory) {
-      properties.push('openDirectory')
-    }
-    const res = dialog.showOpenDialogSync({
-      title: '选择',
-      properties
-    })
-    if (res && res[0]) {
-      console.log(111, res[0])
-      return {
-        file: res[0],
-        name: path.basename(res[0])
+  ipcMain.handle(
+    'selectFile',
+    (event, openDirectory = false, relativePath = '') => {
+      const properties = ['openFile']
+      // 选择目录
+      if (openDirectory) {
+        properties.push('openDirectory')
       }
-    } else {
-      return null
+      const res = dialog.showOpenDialogSync({
+        title: '选择',
+        properties
+      })
+      if (res && res[0]) {
+        const name = path.basename(res[0])
+        let file = res[0]
+        if (relativePath) {
+          // 如果传递了路径，那么返回相对路径
+          file = path.relative(relativePath, res[0])
+        }
+        return {
+          file,
+          name
+        }
+      } else {
+        return null
+      }
     }
-  })
+  )
 
   // 获取文件内容
   ipcMain.handle('getFileContent', (event, id) => {
@@ -163,6 +172,11 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
         })
       })
     })
+  })
+
+  // 获取文件路径
+  ipcMain.handle('getFilePath', (event, id) => {
+    return idToFilePath[id]
   })
 
   // 重命名文件
@@ -227,7 +241,7 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
     const exist = fs.existsSync(file)
     if (!exist) {
       removeFileInRecent(file).then(() => {
-        notifyMainWindowRefreshRecentFileList()
+        notifyMainWindowRefreshRecentFileList() 
       })
       return '文件不存在'
     }
@@ -235,7 +249,10 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
   })
 
   // 打开指定文件
-  ipcMain.handle('openPath', (event, file) => {
+  ipcMain.handle('openPath', (event, file, relativePath = '') => {
+    if (!path.isAbsolute(file) && relativePath) {
+      file = path.resolve(relativePath, file)
+    }
     const exist = fs.existsSync(file)
     if (!exist) {
       return '文件不存在'

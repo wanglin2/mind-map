@@ -66,11 +66,18 @@ export default {
   },
   methods: {
     // 选择附件
-    async onSelectAttachment(activeNodes) {
+    async onSelectAttachment(activeNodes, config = {}) {
       // activeNodes.forEach(node => {
       //   node.setAttachment('/test.md', '我去')
       // })
-      const file = await window.electronAPI.selectFile(true)
+      const openDirectory = config.openDirectory || false
+      const isRelative = config.isRelative || false
+      // 保存相对路径
+      let filePath = ''
+      if (isRelative) {
+        filePath = await window.electronAPI.getFilePath(this.$route.params.id)
+      }
+      const file = await window.electronAPI.selectFile(openDirectory, filePath)
       if (file) {
         activeNodes.forEach(node => {
           node.setAttachment(file.file, file.name)
@@ -83,7 +90,10 @@ export default {
       // console.log(node.getData('attachmentUrl'))
       const file = node.getData('attachmentUrl')
       if (!file) return
-      const error = await window.electronAPI.openPath(file)
+      const filePath = await window.electronAPI.getFilePath(
+        this.$route.params.id
+      )
+      const error = await window.electronAPI.openPath(file, filePath)
       if (error) {
         this.$message.error(error)
       }

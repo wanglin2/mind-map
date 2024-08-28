@@ -162,10 +162,20 @@
         :class="{
           disabled: activeNodes.length <= 0 || hasGeneralization
         }"
-        @click="selectAttachmentFile"
+        @click="selectAttachmentFile(false)"
       >
         <span class="icon iconfont iconfujian"></span>
         <span class="text">{{ $t('toolbar.attachment') }}</span>
+        <div class="subToolbar">
+          <div class="subToolbarBtn" @click.stop>
+            <el-checkbox v-model="isRelative">{{
+              $t('toolbar.isRelative')
+            }}</el-checkbox>
+          </div>
+          <div class="subToolbarBtn" @click.stop="selectAttachmentFile(true)">
+            {{ $t('toolbar.selectFolder') }}
+          </div>
+        </div>
       </div>
       <div
         v-if="item === 'outerFrame'"
@@ -214,7 +224,8 @@ export default {
       readonly: false,
       isFullDataFile: false,
       timer: null,
-      isInPainter: false
+      isInPainter: false,
+      isRelative: false
     }
   },
   computed: {
@@ -292,8 +303,11 @@ export default {
     },
 
     // 选择附件
-    selectAttachmentFile() {
-      this.$bus.$emit('selectAttachment', this.activeNodes)
+    selectAttachmentFile(openDirectory) {
+      this.$bus.$emit('selectAttachment', this.activeNodes, {
+        openDirectory,
+        isRelative: this.isRelative
+      })
     },
 
     // 设置标记
@@ -328,6 +342,16 @@ export default {
       &.disabled {
         color: #54595f;
       }
+
+      .subToolbar {
+        background-color: #262a2e;
+
+        .subToolbarBtn {
+          &:hover {
+            background-color: #363b3f !important;
+          }
+        }
+      }
     }
   }
 
@@ -337,6 +361,7 @@ export default {
     flex-direction: column;
     cursor: pointer;
     margin-right: 20px;
+    position: relative;
 
     &:last-of-type {
       margin-right: 0;
@@ -346,6 +371,10 @@ export default {
       &:not(.disabled) {
         .icon {
           background: #f5f5f5;
+        }
+
+        .subToolbar {
+          visibility: visible;
         }
       }
     }
@@ -377,6 +406,42 @@ export default {
     .text {
       margin-top: 3px;
     }
+
+    .subToolbar {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 100%;
+      width: 130px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      padding: 10px 0;
+      visibility: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 100%;
+        border: 5px solid transparent;
+        border-bottom-color: #ccc;
+      }
+
+      .subToolbarBtn {
+        padding: 0 12px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+
+        &:hover {
+          background: #f5f5f5;
+        }
+      }
+    }
   }
 
   &.v {
@@ -403,6 +468,22 @@ export default {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+
+      .subToolbar {
+        left: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+
+        &::before {
+          left: auto;
+          bottom: auto;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 100%;
+          border-right-color: #ccc;
+          border-bottom-color: transparent;
+        }
       }
     }
   }

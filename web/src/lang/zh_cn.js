@@ -289,7 +289,9 @@ export default {
     creatingTip: '正在创建文件',
     directory: '目录',
     newFileTip: '新建文件前请先导出当前编辑的文件，谨防内容丢失',
-    openFileTip: '打开文件前请先导出当前编辑的文件，谨防内容丢失'
+    openFileTip: '打开文件前请先导出当前编辑的文件，谨防内容丢失',
+    isRelative: '相对路径',
+    selectFolder: '选择文件夹'
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',

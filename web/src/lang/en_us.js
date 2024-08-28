@@ -295,7 +295,9 @@ export default {
     newFileTip:
       'Please export the currently edited file before creating a new one, Beware of content loss',
     openFileTip:
-      'Please export the currently edited file before opening it, Beware of content loss'
+      'Please export the currently edited file before opening it, Beware of content loss',
+    isRelative: 'Relative path',
+    selectFolder: 'Select folder'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',
