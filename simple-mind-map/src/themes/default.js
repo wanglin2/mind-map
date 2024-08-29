@@ -82,6 +82,8 @@ export default {
     gradientStyle: false,
     startColor: '#549688',
     endColor: '#fff',
+    startDir: [0, 0],
+    endDir: [1, 0],
     // 连线标记的位置，start（头部）、end（尾部），该配置在showLineMarker配置为true时生效
     lineMarkerDir: 'end'
   },
@@ -105,6 +107,8 @@ export default {
     gradientStyle: false,
     startColor: '#549688',
     endColor: '#fff',
+    startDir: [0, 0],
+    endDir: [1, 0],
     lineMarkerDir: 'end'
   },
   // 三级及以下节点样式
@@ -127,6 +131,8 @@ export default {
     gradientStyle: false,
     startColor: '#549688',
     endColor: '#fff',
+    startDir: [0, 0],
+    endDir: [1, 0],
     lineMarkerDir: 'end'
   },
   // 概要节点样式
@@ -148,7 +154,9 @@ export default {
     textDecoration: 'none',
     gradientStyle: false,
     startColor: '#549688',
-    endColor: '#fff'
+    endColor: '#fff',
+    startDir: [0, 0],
+    endDir: [1, 0]
   }
 }
 
@@ -179,7 +187,9 @@ const nodeSizeIndependenceList = [
   'gradientStyle',
   'lineRadius',
   'startColor',
-  'endColor'
+  'endColor',
+  'startDir',
+  'endDir'
 ]
 export const checkIsNodeSizeIndependenceConfig = config => {
   let keys = Object.keys(config)

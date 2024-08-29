@@ -124,6 +124,8 @@ class Style {
       gradientStyle: this.merge('gradientStyle'),
       startColor: this.merge('startColor'),
       endColor: this.merge('endColor'),
+      startDir: this.merge('startDir'),
+      endDir: this.merge('endDir'),
       fillColor: this.merge('fillColor'),
       borderColor: this.merge('borderColor'),
       borderWidth: this.merge('borderWidth'),
@@ -137,6 +139,7 @@ class Style {
         add.stop(0, styles.startColor)
         add.stop(1, styles.endColor)
       })
+      this._gradient.from(...styles.startDir).to(...styles.endDir)
       node.fill(this._gradient)
     } else {
       node.fill({
