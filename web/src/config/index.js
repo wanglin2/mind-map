@@ -21,7 +21,8 @@ import {
   shapeListMap as shapeListMapZh,
   lineStyleMap as lineStyleMapZh,
   numberTypeList as numberTypeListZh,
-  numberLevelList as numberLevelListZh
+  numberLevelList as numberLevelListZh,
+  linearGradientDirList as linearGradientDirListZh
 } from './zh'
 import {
   fontFamilyList as fontFamilyListEn,
@@ -36,7 +37,8 @@ import {
   backgroundSizeList as backgroundSizeListEn,
   downTypeList as downTypeListEn,
   numberTypeList as numberTypeListEn,
-  numberLevelList as numberLevelListEn
+  numberLevelList as numberLevelListEn,
+  linearGradientDirList as linearGradientDirListEn
 } from './en'
 
 const fontFamilyList = {
@@ -114,6 +116,11 @@ const numberLevelList = {
   en: numberLevelListEn
 }
 
+const linearGradientDirList = {
+  zh: linearGradientDirListZh,
+  en: linearGradientDirListEn
+}
+
 export {
   fontSizeList,
   lineHeightList,
@@ -137,5 +144,6 @@ export {
   sidebarTriggerList,
   downTypeList,
   numberTypeList,
-  numberLevelList
+  numberLevelList,
+  linearGradientDirList
 }

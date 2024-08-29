@@ -238,7 +238,8 @@ export default {
     endColor: 'End',
     arrowDir: 'Arrow dir',
     arrowDirStart: 'Start',
-    arrowDirEnd: 'End'
+    arrowDirEnd: 'End',
+    direction: 'Direction'
   },
   theme: {
     title: 'Theme',

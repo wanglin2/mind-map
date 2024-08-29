@@ -557,3 +557,55 @@ export const numberLevelList = [
     value: 0
   }
 ]
+
+// 背景渐变方向
+export const linearGradientDirList = [
+  {
+    name: 'Left to right',
+    value: '1',
+    start: [0, 0],
+    end: [1, 0]
+  },
+  {
+    name: 'Right to left',
+    value: '2',
+    start: [1, 0],
+    end: [0, 0]
+  },
+  {
+    name: 'Top to bottom',
+    value: '3',
+    start: [0, 0],
+    end: [0, 1]
+  },
+  {
+    name: 'Bottom to top',
+    value: '4',
+    start: [0, 1],
+    end: [0, 0]
+  },
+  {
+    name: 'Left top to right bottom',
+    value: '5',
+    start: [0, 0],
+    end: [1, 1]
+  },
+  {
+    name: 'Left bottom to right top',
+    value: '6',
+    start: [0, 1],
+    end: [1, 0]
+  },
+  {
+    name: 'Right top to left bottom',
+    value: '7',
+    start: [1, 0],
+    end: [0, 1]
+  },
+  {
+    name: 'Right bottom to left top',
+    value: '8',
+    start: [1, 1],
+    end: [0, 0]
+  }
+]

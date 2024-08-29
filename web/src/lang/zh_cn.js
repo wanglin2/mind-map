@@ -236,7 +236,8 @@ export default {
     endColor: '结束',
     arrowDir: '箭头位置',
     arrowDirStart: '头部',
-    arrowDirEnd: '尾部'
+    arrowDirEnd: '尾部',
+    direction: '方向'
   },
   theme: {
     title: '主题',
