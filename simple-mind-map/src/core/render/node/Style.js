@@ -64,8 +64,10 @@ class Style {
     let themeConfig = this.ctx.mindMap.themeConfig
     // 三级及以下节点
     let defaultConfig = themeConfig.node
+    let useRoot = false
     if (root || rootProp.includes(prop)) {
       // 直接使用最外层样式
+      useRoot = true
       defaultConfig = themeConfig
     } else if (this.ctx.isGeneralization) {
       // 概要节点
@@ -78,21 +80,21 @@ class Style {
       defaultConfig = themeConfig.second
     }
     // 优先使用节点本身的样式
-    return this.getSelfStyle(prop) !== undefined
-      ? this.getSelfStyle(prop)
-      : defaultConfig[prop]
+    const value =
+      this.getSelfStyle(prop) !== undefined
+        ? this.getSelfStyle(prop)
+        : defaultConfig[prop]
+    if (!useRoot) {
+      this.addToEffectiveStyles({
+        [prop]: value
+      })
+    }
+    return value
   }
 
   //  获取某个样式值
   getStyle(prop, root) {
-    const value = this.merge(prop, root)
-    if (!root) {
-      const styles = {
-        [prop]: value
-      }
-      this.addToEffectiveStyles(styles)
-    }
-    return value
+    return this.merge(prop, root)
   }
 
   //  获取自身自定义样式
@@ -111,11 +113,7 @@ class Style {
   //  矩形
   rect(node) {
     this.shape(node)
-    const styles = {
-      borderRadius: this.merge('borderRadius')
-    }
-    this.addToEffectiveStyles(styles)
-    node.radius(styles.borderRadius)
+    node.radius(this.merge('borderRadius'))
   }
 
   // 形状
@@ -160,7 +158,6 @@ class Style {
       width: styles.borderWidth,
       dasharray: styles.borderDasharray
     })
-    this.addToEffectiveStyles(styles)
   }
 
   //  文字
@@ -184,7 +181,6 @@ class Style {
         'font-style': styles.fontStyle,
         'text-decoration': styles.textDecoration
       })
-    this.addToEffectiveStyles(styles)
   }
 
   // 生成内联样式
@@ -197,7 +193,6 @@ class Style {
       fontStyle: this.merge('fontStyle'),
       textDecoration: this.merge('textDecoration')
     }
-    this.addToEffectiveStyles(styles)
     return `
       color: ${styles.color};
       font-family: ${styles.fontFamily};
@@ -218,7 +213,6 @@ class Style {
       fontStyle: this.merge('fontStyle'),
       textDecoration: this.merge('textDecoration')
     }
-    this.addToEffectiveStyles(styles)
     return {
       italic: styles.fontStyle === 'italic',
       bold: styles.fontWeight,
@@ -238,7 +232,6 @@ class Style {
       textDecoration: this.merge('textDecoration'),
       lineHeight: this.merge('lineHeight')
     }
-    this.addToEffectiveStyles(styles)
     node.style.fontFamily = styles.fontFamily
     node.style.fontSize = styles.fontSize * fontSizeScale + 'px'
     node.style.fontWeight = styles.fontWeight || 'normal'
@@ -269,12 +262,8 @@ class Style {
 
   //  内置图标
   iconNode(node) {
-    const styles = {
-      color: this.merge('color')
-    }
-    this.addToEffectiveStyles(styles)
     node.attr({
-      fill: styles.color
+      fill: this.merge('color')
     })
   }
 
