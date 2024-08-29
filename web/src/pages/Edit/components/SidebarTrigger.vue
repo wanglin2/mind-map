@@ -4,7 +4,7 @@
     @click.stop
     :class="{ hasActive: show && activeSidebar, show: show, isDark: isDark }"
   >
-    <div class="toggleShowBtn" :class="{hide: !show}" @click="show = !show">
+    <div class="toggleShowBtn" :class="{ hide: !show }" @click="show = !show">
       <span class="iconfont iconjiantouyou"></span>
     </div>
     <div class="trigger">
@@ -41,11 +41,25 @@ export default {
   computed: {
     ...mapState({
       isDark: state => state.localConfig.isDark,
-      activeSidebar: state => state.activeSidebar
+      activeSidebar: state => state.activeSidebar,
+      isReadonly: state => state.isReadonly
     }),
 
     triggerList() {
-      return sidebarTriggerList[this.$i18n.locale] || sidebarTriggerList.zh
+      let list = sidebarTriggerList[this.$i18n.locale] || sidebarTriggerList.zh
+      if (this.isReadonly) {
+        list = list.filter(item => {
+          return ['outline', 'shortcutKey'].includes(item.value)
+        })
+      }
+      return list
+    }
+  },
+  watch: {
+    isReadonly(val) {
+      if (val) {
+        this.setActiveSidebar(null)
+      }
     }
   },
   methods: {
@@ -72,10 +86,10 @@ export default {
       background-color: #262a2e;
 
       .triggerItem {
-        color: hsla(0,0%,100%,.6);
+        color: hsla(0, 0%, 100%, 0.6);
 
         &:hover {
-          background-color: hsla(0,0%,100%,.05);
+          background-color: hsla(0, 0%, 100%, 0.05);
         }
       }
     }
@@ -98,7 +112,7 @@ export default {
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
-    transition: left .1s linear;
+    transition: left 0.1s linear;
     z-index: 0;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;

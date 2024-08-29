@@ -1080,14 +1080,15 @@ export const getDataFromClipboard = async () => {
   let text = null
   let img = null
   if (navigator.clipboard) {
-    text = await navigator.clipboard.readText()
     const items = await navigator.clipboard.read()
     if (items && items.length > 0) {
       for (const clipboardItem of items) {
         for (const type of clipboardItem.types) {
           if (/^image\//.test(type)) {
             img = await clipboardItem.getType(type)
-            break
+          } else if (type === 'text/plain') {
+            const blob = await clipboardItem.getType(type)
+            text = await blob.text()
           }
         }
       }
@@ -1505,6 +1506,7 @@ export const fullScreen = element => {
 
 // 退出全屏
 export const exitFullScreen = () => {
+  if (!document.fullscreenElement) return
   if (document.exitFullscreen) {
     document.exitFullscreen()
   } else if (document.webkitExitFullscreen) {

@@ -143,7 +143,6 @@ class Command {
       )
       const data = simpleDeepClone(this.history[this.activeHistoryIndex])
       this.emitDataUpdatesEvent(lastData, data)
-      this.mindMap.emit('data_change', data)
       return data
     }
   }
@@ -164,7 +163,6 @@ class Command {
       )
       const data = simpleDeepClone(this.history[this.activeHistoryIndex])
       this.emitDataUpdatesEvent(lastData, data)
-      this.mindMap.emit('data_change', data)
       return data
     }
   }

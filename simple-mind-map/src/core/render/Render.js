@@ -665,6 +665,7 @@ class Render {
       this.renderTree = data
       this.mindMap.render()
     }
+    this.mindMap.emit('data_change', data)
   }
 
   // 获取创建新节点的行为
@@ -2011,6 +2012,7 @@ class Render {
 
   // 根据uid找到对应的节点实例
   findNodeByUid(uid) {
+    if (!this.root) return
     let res = null
     walk(this.root, null, node => {
       if (node.getData('uid') === uid) {

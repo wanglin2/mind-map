@@ -16,7 +16,7 @@ import {
 } from '../../../utils/index'
 
 //  节点类
-class Node {
+class MindMapNode {
   //  构造函数
   constructor(opt = {}) {
     this.opt = opt
@@ -1282,7 +1282,7 @@ class Node {
   // 伪克隆节点
   // 克隆出的节点并不能真正当做一个节点使用
   fakeClone() {
-    const newNode = new Node({
+    const newNode = new MindMapNode({
       ...this.opt,
       uid: createUid()
     })
@@ -1298,4 +1298,4 @@ class Node {
   }
 }
 
-export default Node
+export default MindMapNode

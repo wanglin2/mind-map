@@ -13,7 +13,8 @@ import {
   nodeRichTextToTextWithWrap
 } from '../utils'
 import { CONSTANTS } from '../constants/constant'
-import Node from '../core/render/node/Node'
+import MindMapNode from '../core/render/node/MindMapNode'
+import { Scope } from 'parchment'
 
 let extended = false
 
@@ -375,9 +376,45 @@ class RichText {
         keyboard: {
           bindings: {
             enter: {
-              key: 13,
+              key: 'Enter',
               handler: function () {
-                // 覆盖默认的回车键换行
+                // 覆盖默认的回车键，禁止换行
+              }
+            },
+            shiftEnter: {
+              key: 'Enter',
+              shiftKey: true,
+              handler: function (range, context) {
+                // 覆盖默认的换行，默认情况下新行的样式会丢失
+                const lineFormats = Object.keys(context.format).reduce(
+                  (formats, format) => {
+                    if (
+                      this.quill.scroll.query(format, Scope.BLOCK) &&
+                      !Array.isArray(context.format[format])
+                    ) {
+                      formats[format] = context.format[format]
+                    }
+                    return formats
+                  },
+                  {}
+                )
+                const delta = new Delta()
+                  .retain(range.index)
+                  .delete(range.length)
+                  .insert('\n', lineFormats)
+                this.quill.updateContents(delta, Quill.sources.USER)
+                this.quill.setSelection(range.index + 1, Quill.sources.SILENT)
+                this.quill.focus()
+                Object.keys(context.format).forEach(name => {
+                  if (lineFormats[name] != null) return
+                  if (Array.isArray(context.format[name])) return
+                  if (name === 'code' || name === 'link') return
+                  this.quill.format(
+                    name,
+                    context.format[name],
+                    Quill.sources.USER
+                  )
+                })
               }
             },
             tab: {
@@ -391,7 +428,7 @@ class RichText {
       },
       theme: 'snow'
     })
-    // 拦截粘贴事件
+    // 拦截复制事件，即Ctrl + c，去除多余的空行
     this.quill.root.addEventListener('copy', event => {
       event.preventDefault()
       const sel = window.getSelection()
@@ -455,16 +492,16 @@ class RichText {
       }
     })
     // 拦截粘贴，只允许粘贴纯文本
-    this.quill.clipboard.addMatcher(Node.TEXT_NODE, node => {
-      let style = this.getPasteTextStyle()
-      return new Delta().insert(this.formatPasteText(node.data), style)
-    })
+    // this.quill.clipboard.addMatcher(Node.TEXT_NODE, node => {
+    //   let style = this.getPasteTextStyle()
+    //   return new Delta().insert(this.formatPasteText(node.data), style)
+    // })
     this.quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
       let ops = []
       let style = this.getPasteTextStyle()
       delta.ops.forEach(op => {
         // 过滤出文本内容，过滤掉换行
-        if (op.insert && typeof op.insert === 'string' && op.insert !== '\n') {
+        if (op.insert && typeof op.insert === 'string') {
           ops.push({
             attributes: { ...style },
             insert: this.formatPasteText(op.insert)
@@ -691,7 +728,7 @@ class RichText {
       'textDecoration',
       'color'
     ]
-    const nodeData = node instanceof Node ? node.getData() : node
+    const nodeData = node instanceof MindMapNode ? node.getData() : node
     for (let i = 0; i < list.length; i++) {
       if (nodeData[list[i]] !== undefined) {
         return true

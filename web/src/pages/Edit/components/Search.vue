@@ -51,12 +51,30 @@
         $t('search.replaceAll')
       }}</el-button>
     </div>
+    <div
+      class="searchResultList"
+      :style="{ height: searchResultListHeight + 'px' }"
+      v-if="showSearchResultList"
+    >
+      <div
+        class="searchResultItem"
+        v-for="(item, index) in searchResultList"
+        :key="item.id"
+        :title="item.name"
+        v-html="item.text"
+        @click.stop="onSearchResultItemClick(index)"
+      ></div>
+      <div class="empty" v-if="searchResultList.length <= 0">
+        <span class="iconfont iconwushuju"></span>
+        <span class="text">{{ $t('search.noResult') }}</span>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { isUndef } from 'simple-mind-map/src/utils/index'
+import { isUndef, getTextFromHtml } from 'simple-mind-map/src/utils/index'
 
 // 搜索替换
 export default {
@@ -74,7 +92,10 @@ export default {
       showReplaceInput: false,
       currentIndex: 0,
       total: 0,
-      showSearchInfo: false
+      showSearchInfo: false,
+      searchResultListHeight: 0,
+      searchResultList: [],
+      showSearchResultList: false
     }
   },
   computed: {
@@ -98,7 +119,15 @@ export default {
     this.mindMap.on('node_click', this.blur)
     this.mindMap.on('draw_click', this.blur)
     this.mindMap.on('expand_btn_click', this.blur)
+    this.mindMap.on(
+      'search_match_node_list_change',
+      this.onSearchMatchNodeListChange
+    )
     this.mindMap.keyCommand.addShortcut('Control+f', this.showSearch)
+    window.addEventListener('resize', this.setSearchResultListHeight)
+  },
+  mounted() {
+    this.setSearchResultListHeight()
   },
   beforeDestroy() {
     this.$bus.$off('show_search', this.showSearch)
@@ -106,7 +135,12 @@ export default {
     this.mindMap.off('node_click', this.blur)
     this.mindMap.off('draw_click', this.blur)
     this.mindMap.off('expand_btn_click', this.blur)
+    this.mindMap.off(
+      'search_match_node_list_change',
+      this.onSearchMatchNodeListChange
+    )
     this.mindMap.keyCommand.removeShortcut('Control+f', this.showSearch)
+    window.removeEventListener('resize', this.setSearchResultListHeight)
   },
   methods: {
     isUndef,
@@ -153,9 +187,8 @@ export default {
     },
 
     onSearchNext() {
-      this.mindMap.search.search(this.searchText, () => {
-        this.$refs.searchInputRef.focus()
-      })
+      this.showSearchResultList = true
+      this.mindMap.search.search(this.searchText)
     },
 
     replace() {
@@ -168,12 +201,42 @@ export default {
 
     close() {
       this.show = false
+      this.showSearchResultList = false
       this.showSearchInfo = false
       this.total = 0
       this.currentIndex = 0
       this.searchText = ''
       this.hideReplaceInput()
       this.mindMap.search.endSearch()
+    },
+
+    onSearchMatchNodeListChange(list) {
+      this.searchResultList = list.map(item => {
+        const data = item.data || item.nodeData.data
+        let name = data.text
+        const id = data.uid
+        if (data.richText) {
+          name = getTextFromHtml(name)
+        }
+        const reg = new RegExp(`${this.searchText.trim()}`, 'g')
+        const text = name.replace(reg, a => {
+          return `<span class="match">${a}</span>`
+        })
+        return {
+          data: item,
+          id,
+          text,
+          name
+        }
+      })
+    },
+
+    setSearchResultListHeight() {
+      this.searchResultListHeight = window.innerHeight - 267 - 24
+    },
+
+    onSearchResultItemClick(index) {
+      this.mindMap.search.jump(index)
     }
   }
 }
@@ -239,6 +302,72 @@ export default {
       transform: translateY(-50%);
       color: #909090;
       font-size: 14px;
+    }
+  }
+
+  .searchResultList {
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 4px 16px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    margin-top: 5px;
+    overflow-y: auto;
+    padding: 12px 0;
+
+    .searchResultItem {
+      height: 30px;
+      line-height: 30px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      padding: 0 12px;
+      font-size: 14px;
+      cursor: pointer;
+      position: relative;
+      padding-left: 22px;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 5px;
+        height: 5px;
+        background-color: #606266;
+        border-radius: 50%;
+      }
+
+      &:hover {
+        background-color: #f2f4f7;
+      }
+
+      /deep/.match {
+        color: #409eff;
+        font-weight: bold;
+      }
+    }
+
+    .empty {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      .iconfont {
+        font-size: 50px;
+        margin-bottom: 20px;
+      }
+
+      .text {
+        font-size: 14px;
+        color: rgba(26, 26, 26, 0.8);
+      }
     }
   }
 }

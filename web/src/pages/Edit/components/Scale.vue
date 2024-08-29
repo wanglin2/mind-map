@@ -12,6 +12,7 @@
       <input
         type="text"
         v-model="scaleNum"
+        @input="onScaleNumInput"
         @change="onScaleNumChange"
         @focus="onScaleNumInputFocus"
         @keydown.stop
@@ -80,6 +81,11 @@ export default {
     // 聚焦时缓存当前缩放倍数
     onScaleNumInputFocus() {
       this.cacheScaleNum = this.scaleNum
+    },
+
+    // 禁止输入非数字
+    onScaleNumInput() {
+      this.scaleNum = this.scaleNum.replace(/[^0-9]+/g, '')
     },
 
     // 手动输入缩放倍数

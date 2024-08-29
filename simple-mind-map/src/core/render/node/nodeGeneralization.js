@@ -1,4 +1,4 @@
-import Node from './Node'
+import MindMapNode from './MindMapNode'
 import { createUid } from '../../../utils/index'
 
 // 获取节点概要数据
@@ -49,7 +49,7 @@ function createGeneralizationNode() {
       cur.generalizationLine = this.lineDraw.path()
     }
     if (!cur.generalizationNode) {
-      cur.generalizationNode = new Node({
+      cur.generalizationNode = new MindMapNode({
         data: {
           inserting: item.inserting,
           data: item
