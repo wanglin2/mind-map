@@ -238,6 +238,10 @@ export const defaultOpt = {
     padding: 100, // 超出画布四周指定范围内依旧渲染节点
     removeNodeWhenOutCanvas: true // 节点移除画布可视区域后从画布删除
   },
+  // 如果节点文本为空，那么为了避免空白节点高度塌陷，会用该字段指定的文本测量一个高度
+  emptyTextMeasureHeightText: 'abc123我和你',
+  // 是否在进行节点文本编辑时实时更新节点大小和节点位置，开启后当节点数量比较多时可能会造成卡顿
+  openRealtimeRenderOnNodeTextEdit: false,
 
   // 【Select插件】
   // 多选节点时鼠标移动到边缘时的画布移动偏移量

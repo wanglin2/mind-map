@@ -57,6 +57,8 @@ class RichText {
     this.cacheEditingText = ''
     this.lostStyle = false
     this.isCompositing = false
+    this.textNodePaddingX = 6
+    this.textNodePaddingY = 4
     this.initOpt()
     this.extendQuill()
     this.appendCss()
@@ -71,14 +73,17 @@ class RichText {
   // 绑定事件
   bindEvent() {
     this.onCompositionStart = this.onCompositionStart.bind(this)
+    this.onCompositionUpdate = this.onCompositionUpdate.bind(this)
     this.onCompositionEnd = this.onCompositionEnd.bind(this)
     window.addEventListener('compositionstart', this.onCompositionStart)
+    window.addEventListener('compositionupdate', this.onCompositionUpdate)
     window.addEventListener('compositionend', this.onCompositionEnd)
   }
 
   // 解绑事件
   unbindEvent() {
     window.removeEventListener('compositionstart', this.onCompositionStart)
+    window.removeEventListener('compositionupdate', this.onCompositionUpdate)
     window.removeEventListener('compositionend', this.onCompositionEnd)
   }
 
@@ -198,8 +203,8 @@ class RichText {
     let scaleX = rect.width / originWidth
     let scaleY = rect.height / originHeight
     // 内边距
-    let paddingX = 6
-    let paddingY = 4
+    let paddingX = this.textNodePaddingX
+    let paddingY = this.textNodePaddingY
     if (richTextEditFakeInPlace) {
       let paddingValue = node.getPaddingVale()
       paddingX = paddingValue.paddingX
@@ -285,6 +290,20 @@ class RichText {
       this.setTextStyleIfNotRichText(node)
     }
     this.cacheEditingText = ''
+  }
+
+  // 更新文本编辑框的大小和位置
+  updateTextEditNode() {
+    if (!this.node) return
+    const rect = this.node._textData.node.node.getBoundingClientRect()
+    const g = this.node._textData.node
+    const originWidth = g.attr('data-width')
+    const originHeight = g.attr('data-height')
+    this.textEditNode.style.minWidth =
+      originWidth + this.textNodePaddingX * 2 + 'px'
+    this.textEditNode.style.minHeight = originHeight + 'px'
+    this.textEditNode.style.left = rect.left + 'px'
+    this.textEditNode.style.top = rect.top + 'px'
   }
 
   // 删除文本编辑框元素
@@ -491,6 +510,11 @@ class RichText {
         this.setTextStyleIfNotRichText(this.node)
         this.lostStyle = false
       }
+      this.mindMap.emit('node_text_edit_change', {
+        node: this.node,
+        text: this.getEditText(),
+        richText: true
+      })
     })
     // 拦截粘贴，只允许粘贴纯文本
     // this.quill.clipboard.addMatcher(Node.TEXT_NODE, node => {
@@ -543,6 +567,16 @@ class RichText {
       return
     }
     this.isCompositing = true
+  }
+
+  // 中文输入中
+  onCompositionUpdate() {
+    if (!this.showTextEdit || !this.node) return
+    this.mindMap.emit('node_text_edit_change', {
+      node: this.node,
+      text: this.getEditText(),
+      richText: true
+    })
   }
 
   // 中文输入结束

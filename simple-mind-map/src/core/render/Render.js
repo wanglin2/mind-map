@@ -147,6 +147,19 @@ class Render {
     })
     // 性能模式
     this.performanceMode()
+    // 实时渲染当节点文本编辑时
+    if (this.mindMap.opt.openRealtimeRenderOnNodeTextEdit) {
+      this.mindMap.on('node_text_edit_change', ({ node, text }) => {
+        node._textData = node.createTextNode(text)
+        const { width, height } = node.getNodeRect()
+        node.width = width
+        node.height = height
+        node.layout()
+        this.mindMap.render(() => {
+          this.textEdit.updateTextEditNode()
+        })
+      })
+    }
   }
 
   // 性能模式，懒加载节点
