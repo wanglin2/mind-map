@@ -58,7 +58,10 @@ class Formula {
         let node = super.create(value)
         if (typeof value === 'string') {
           katex.render(value, node, self.config)
-          node.setAttribute('data-value', value)
+          node.setAttribute(
+            'data-value',
+            value.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+          )
         }
         return node
       }
