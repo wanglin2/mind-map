@@ -110,7 +110,7 @@ class Formula {
       for (const el of els)
         nodeText = nodeText.replace(
           el.outerHTML,
-          `\$${htmlEscape(el.getAttribute('data-value'))}\$`
+          `\$${el.getAttribute('data-value')}\$`
         )
     }
     return nodeText
