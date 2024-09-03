@@ -359,6 +359,18 @@ class RichText {
     return html.replace(/<p><br><\/p>$/, '')
   }
 
+  // 给html字符串中的节点样式按样式名首字母排序
+  sortHtmlNodeStyles(html) {
+    return html.replace(/(<[^<>]+\s+style=")([^"]+)("\s*>)/g, (_, a, b, c) => {
+      let arr = b.match(/[^:]+:[^:]+;/g) || []
+      arr = arr.map(item => {
+        return item.trim()
+      })
+      arr.sort()
+      return a + arr.join('') + c
+    })
+  }
+
   // 隐藏文本编辑控件，即完成编辑
   hideEditText(nodes) {
     if (!this.showTextEdit) {
@@ -369,6 +381,7 @@ class RichText {
       beforeHideRichTextEdit(this)
     }
     let html = this.getEditText()
+    html = this.sortHtmlNodeStyles(html)
     let list =
       nodes && nodes.length > 0 ? nodes : this.mindMap.renderer.activeNodeList
     list.forEach(node => {
