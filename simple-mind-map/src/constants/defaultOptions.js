@@ -67,9 +67,7 @@ export const defaultOpt = {
     close: ''
   },
   // 处理收起节点数量
-  expandBtnNumHandler: num => {
-    return num
-  },
+  expandBtnNumHandler: null,
   // 是否显示带数量的收起按钮
   isShowExpandNum: true,
   // 是否只有当鼠标在画布内才响应快捷键事件

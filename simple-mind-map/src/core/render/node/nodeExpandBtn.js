@@ -1,5 +1,6 @@
 import btnsSvg from '../../../svg/btns'
 import { SVG, Circle, G, Text } from '@svgdotjs/svg.js'
+import { isUndef } from '../../../utils'
 
 // 创建展开收起按钮的内容节点
 function createExpandNodeContent() {
@@ -78,7 +79,12 @@ function updateExpandBtnNode() {
         })
         // 计算子节点数量
         let count = this.sumNode(this.nodeData.children)
-        count = expandBtnNumHandler(count)
+        if (typeof expandBtnNumHandler === 'function') {
+          const res = expandBtnNumHandler(count, this)
+          if (!isUndef(res)) {
+            count = res
+          }
+        }
         node.text(String(count))
       } else {
         this._fillExpandNode.stroke('none')
