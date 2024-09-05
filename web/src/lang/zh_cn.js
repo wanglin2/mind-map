@@ -155,8 +155,8 @@ export default {
   import: {
     title: '导入',
     selectFile: '选取文件',
-    supportFile: '支持.smm、.json、.xmind、.xlsx、.md文件',
-    enableFileTip: '请选择.smm、.json、.xmind、.xlsx、.md文件',
+    supportFile: '支持.smm、.json、.xmind、.xlsx、.md、 .mm文件',
+    enableFileTip: '请选择.smm、.json、.xmind、.xlsx、.md、 .mm文件',
     maxFileNum: '最多只能选择一个文件',
     notSelectTip: '请选择要导入的文件',
     fileContentError: '文件内容有误',

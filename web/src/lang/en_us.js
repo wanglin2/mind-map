@@ -157,8 +157,8 @@ export default {
   import: {
     title: 'Import',
     selectFile: 'Select file',
-    supportFile: 'Support .smm、.json、.xmind、.xlsx、.md file',
-    enableFileTip: 'Please select .smm、.json、.xmind、.xlsx、.md file',
+    supportFile: 'Support .smm、.json、.xmind、.xlsx、.md、 .mm file',
+    enableFileTip: 'Please select .smm、.json、.xmind、.xlsx、.md、 .mm file',
     maxFileNum: 'At most one file can be selected',
     notSelectTip: 'Please select the file to import',
     fileContentError: 'The file content is incorrect',

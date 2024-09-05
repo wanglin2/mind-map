@@ -589,6 +589,12 @@ export const downTypeList = [
     type: 'txt',
     icon: 'iconTXT',
     desc: '纯文本文件'
+  },
+  {
+    name: 'FreeMind',
+    type: 'mm',
+    icon: 'iconTXT',
+    desc: 'FreeMind软件格式'
   }
 ]
 

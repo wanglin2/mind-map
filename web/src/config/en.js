@@ -495,6 +495,12 @@ export const downTypeList = [
     type: 'txt',
     icon: 'iconTXT',
     desc: 'Plain text file'
+  },
+  {
+    name: 'FreeMind',
+    type: 'mm',
+    icon: 'iconTXT',
+    desc: 'FreeMind software format'
   }
 ]
 

@@ -9,7 +9,7 @@
       <el-upload
         ref="upload"
         action="x"
-        accept=".smm,.json,.xmind,.xlsx,.md"
+        accept=".smm,.json,.xmind,.xlsx,.md,.mm"
         :file-list="fileList"
         :auto-upload="false"
         :multiple="false"
@@ -40,9 +40,12 @@
       :show-close="false"
     >
       <el-radio-group v-model="selectCanvas" class="canvasList">
-        <el-radio v-for="(item, index) in canvasList" :key="index" :label="index">{{
-          item.title
-        }}</el-radio>
+        <el-radio
+          v-for="(item, index) in canvasList"
+          :key="index"
+          :label="index"
+          >{{ item.title }}</el-radio
+        >
       </el-radio-group>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="confirmSelect">{{
@@ -56,6 +59,7 @@
 <script>
 import xmind from 'simple-mind-map/src/parse/xmind.js'
 import markdown from 'simple-mind-map/src/parse/markdown.js'
+import { freemindToSmm } from 'simple-mind-map-plugin-freemind/freemindTo.js'
 import { fileToBuffer } from '@/utils'
 import { read, utils } from 'xlsx'
 import { mapMutations } from 'vuex'
@@ -106,7 +110,7 @@ export default {
       try {
         const fileURL = this.$route.query.fileURL
         if (!fileURL) return
-        const macth = /\.(smm|json|xmind|md|xlsx)$/.exec(fileURL)
+        const macth = /\.(smm|json|xmind|md|xlsx|mm)$/.exec(fileURL)
         if (!macth) {
           return
         }
@@ -124,6 +128,8 @@ export default {
           this.handleExcel(data)
         } else if (type === 'md') {
           this.handleMd(data)
+        } else if (type === 'mm') {
+          this.handleMm(data)
         }
       } catch (error) {
         console.log(error)
@@ -132,7 +138,7 @@ export default {
 
     // 文件选择
     onChange(file) {
-      let reg = /\.(smm|xmind|json|xlsx|md)$/
+      let reg = /\.(smm|xmind|json|xlsx|md|mm)$/
       if (!reg.test(file.name)) {
         this.$message.error(this.$t('import.enableFileTip'))
         this.fileList = []
@@ -171,6 +177,8 @@ export default {
         this.handleExcel(file)
       } else if (/\.md$/.test(file.name)) {
         this.handleMd(file)
+      } else if (/\.mm$/.test(file.name)) {
+        this.handleMm(file)
       }
       this.cancel()
       this.setActiveSidebar(null)
@@ -209,6 +217,33 @@ export default {
       } catch (error) {
         console.log(error)
         this.$message.error(this.$t('import.fileParsingFailed'))
+      }
+    },
+
+    // 处理Freemind格式
+    handleMm(file) {
+      const fileReader = new FileReader()
+      fileReader.readAsText(file.raw)
+      fileReader.onload = async evt => {
+        try {
+          const data = await freemindToSmm(evt.target.result, {
+            // withStyle: true,
+            transformImg: image => {
+              return new Promise(resolve => {
+                if (/^https?:\/\//.test(image)) {
+                  resolve({ url: image })
+                } else {
+                  resolve(null)
+                }
+              })
+            }
+          })
+          this.$bus.$emit('setData', data)
+          this.$message.success(this.$t('import.importSuccess'))
+        } catch (error) {
+          console.log(error)
+          this.$message.error(this.$t('import.fileParsingFailed'))
+        }
       }
     },
 
@@ -296,7 +331,7 @@ export default {
       fileReader.readAsText(file.raw)
       fileReader.onload = async evt => {
         try {
-          let data = await markdown.transformMarkdownTo(evt.target.result)
+          let data = markdown.transformMarkdownTo(evt.target.result)
           this.$bus.$emit('setData', data)
           this.$message.success(this.$t('import.importSuccess'))
         } catch (error) {

@@ -8,7 +8,7 @@
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
     :width="isMobile ? '90%' : '50%'"
-    :top="isMobile? '20px' : '15vh'"
+    :top="isMobile ? '20px' : '15vh'"
   >
     <div class="exportContainer" :class="{ isDark: isDark }">
       <div class="nameInputBox">
@@ -98,12 +98,14 @@
 import { mapState, mapMutations } from 'vuex'
 import { downTypeList } from '@/config'
 import { isMobile } from 'simple-mind-map/src/utils/index'
+import MarkdownIt from 'markdown-it'
 
 /**
  * @Author: 王林
  * @Date: 2021-06-24 22:53:54
  * @Desc: 导出
  */
+let md = null
 export default {
   name: 'Export',
   data() {
@@ -203,6 +205,22 @@ export default {
           this.fileName,
           this.isTransparent
         )
+      } else if (this.exportType === 'mm') {
+        this.$bus.$emit('export', this.exportType, true, this.fileName, {
+          transformNote: note => {
+            if (!md) {
+              md = new MarkdownIt()
+            }
+            return md.render(note)
+          },
+          transformImage: img => {
+            if (/^https?:\/\//.test(img)) {
+              return img
+            } else {
+              return ''
+            }
+          }
+        })
       } else {
         this.$bus.$emit('export', this.exportType, true, this.fileName)
       }

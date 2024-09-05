@@ -79,6 +79,8 @@ import OuterFrame from 'simple-mind-map/src/plugins/OuterFrame.js'
 // import Notation from 'simple-mind-map-plugin-notation'
 // 编号插件，该插件为付费插件，详情请查看开发文档
 // import Numbers from 'simple-mind-map-plugin-numbers'
+// Freemind软件格式导入导出插件，该插件为付费插件，详情请查看开发文档
+import Freemind from 'simple-mind-map-plugin-freemind'
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -135,6 +137,7 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(RainbowLines)
   .usePlugin(Demonstrate)
   .usePlugin(OuterFrame)
+  .usePlugin(Freemind)
 // .usePlugin(Cooperate) // 协同插件
 
 // 注册自定义主题
