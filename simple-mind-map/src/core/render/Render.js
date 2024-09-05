@@ -1606,40 +1606,53 @@ class Render {
   }
 
   //  展开所有
-  expandAllNode() {
+  expandAllNode(uid = '') {
     if (!this.renderTree) return
-    walk(
-      this.renderTree,
-      null,
-      node => {
-        if (!node.data.expand) {
-          node.data.expand = true
-        }
-      },
-      null,
-      true,
-      0,
-      0
-    )
+
+    const _walk = (node, enableExpand) => {
+      // 如果该节点为目标节点，那么修改允许展开的标志
+      if (!enableExpand && node.data.uid === uid) {
+        enableExpand = true
+      }
+      if (enableExpand && !node.data.expand) {
+        node.data.expand = true
+      }
+      if (node.children && node.children.length > 0) {
+        node.children.forEach(child => {
+          _walk(child, enableExpand)
+        })
+      }
+    }
+    _walk(this.renderTree, !uid)
+    
     this.mindMap.render()
   }
 
   //  收起所有
-  unexpandAllNode(isSetRootNodeCenter = true) {
+  unexpandAllNode(isSetRootNodeCenter = true, uid = '') {
     if (!this.renderTree) return
-    walk(
-      this.renderTree,
-      null,
-      (node, parent, isRoot) => {
-        if (!isRoot && node.children && node.children.length > 0) {
-          node.data.expand = false
-        }
-      },
-      null,
-      true,
-      0,
-      0
-    )
+
+    const _walk = (node, isRoot, enableUnExpand) => {
+      // 如果该节点为目标节点，那么修改允许展开的标志
+      if (!enableUnExpand && node.data.uid === uid) {
+        enableUnExpand = true
+      }
+      if (
+        enableUnExpand &&
+        !isRoot &&
+        node.children &&
+        node.children.length > 0
+      ) {
+        node.data.expand = false
+      }
+      if (node.children && node.children.length > 0) {
+        node.children.forEach(child => {
+          _walk(child, false, enableUnExpand)
+        })
+      }
+    }
+    _walk(this.renderTree, true, !uid)
+
     this.mindMap.render(() => {
       if (isSetRootNodeCenter) {
         this.setRootNodeCenter()
