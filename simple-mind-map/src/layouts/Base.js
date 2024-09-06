@@ -128,8 +128,9 @@ class Base {
         )
       }
       // 主题或主题配置改变了、节点层级改变了，需要重新渲染节点文本等情况需要重新计算节点大小和布局
+      const isNeedResizeSources = this.checkIsNeedResizeSources()
       if (
-        this.checkIsNeedResizeSources() ||
+        isNeedResizeSources ||
         isLayerTypeChange ||
         newNode.getData('resetRichText') ||
         isNumberChange
@@ -137,7 +138,7 @@ class Base {
         newNode.getSize()
         newNode.needLayout = true
       }
-      this.checkGetGeneralizationChange(newNode)
+      this.checkGetGeneralizationChange(newNode, isNeedResizeSources)
     } else if (
       (this.lru.has(uid) || this.renderer.lastNodeCache[uid]) &&
       !this.renderer.reRender
@@ -186,7 +187,7 @@ class Base {
         newNode.getSize()
         newNode.needLayout = true
       }
-      this.checkGetGeneralizationChange(newNode)
+      this.checkGetGeneralizationChange(newNode, isResizeSource)
     } else {
       // 创建新节点
       const newUid = uid || createUid()
@@ -228,7 +229,7 @@ class Base {
   }
 
   // 检查概要节点是否需要更新
-  checkGetGeneralizationChange(node) {
+  checkGetGeneralizationChange(node, isResizeSource) {
     const generalizationList = node.getData('generalization')
     if (
       generalizationList &&
@@ -239,7 +240,10 @@ class Base {
         const gNode = item.generalizationNode
         const oldData = gNode.getData()
         const newData = generalizationList[index]
-        if (newData && JSON.stringify(oldData) !== JSON.stringify(newData)) {
+        if (
+          isResizeSource ||
+          (newData && JSON.stringify(oldData) !== JSON.stringify(newData))
+        ) {
           gNode.nodeData.data = newData
           gNode.getSize()
           gNode.needLayout = true
