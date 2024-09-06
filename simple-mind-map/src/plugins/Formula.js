@@ -113,11 +113,7 @@ class Formula {
       for (const el of els)
         nodeText = nodeText.replace(
           el.outerHTML,
-          `\$${el
-            .getAttribute('data-value')
-            .replaceAll('&', '&amp;')
-            .replaceAll('<', '&lt;')
-            .replaceAll('>', '&gt;')}\$`
+          `$${el.getAttribute('data-value')}$`
         )
     }
     return nodeText
