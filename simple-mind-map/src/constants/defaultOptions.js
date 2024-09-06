@@ -174,11 +174,6 @@ export const defaultOpt = {
   addHistoryTime: 100,
   // 是否禁止拖动画布
   isDisableDrag: false,
-  // 鼠标移入概要高亮所属节点时的高亮框样式
-  highlightNodeBoxStyle: {
-    stroke: 'rgb(94, 200, 248)',
-    fill: 'transparent'
-  },
   // 创建新节点时的行为
   /*
     DEFAULT  ：默认会激活新创建的节点，并且进入编辑模式。如果同时创建了多个新节点，那么只会激活而不会进入编辑模式

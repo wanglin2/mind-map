@@ -99,6 +99,7 @@ class Render {
     this.currentBeingPasteType = ''
     // 节点高亮框
     this.highlightBoxNode = null
+    this.highlightBoxNodeStyle = null
     // 上一次节点激活数据
     this.lastActiveNode = null
     this.lastActiveNodeList = []
@@ -1624,7 +1625,7 @@ class Render {
       }
     }
     _walk(this.renderTree, !uid)
-    
+
     this.mindMap.render()
   }
 
@@ -2061,19 +2062,39 @@ class Render {
   }
 
   // 高亮节点或子节点
-  highlightNode(node, range) {
+  highlightNode(node, range, style) {
     // 如果当前正在渲染，那么不进行高亮，因为节点位置可能不正确
     if (this.isRendering) return
-    const { highlightNodeBoxStyle = {} } = this.mindMap.opt
+    style = {
+      stroke: 'rgb(94, 200, 248)',
+      fill: 'transparent',
+      ...(style || {})
+    }
+    // 尚未创建
     if (!this.highlightBoxNode) {
       this.highlightBoxNode = new Polygon()
         .stroke({
-          color: highlightNodeBoxStyle.stroke || 'transparent'
+          color: style.stroke || 'transparent'
         })
         .fill({
-          color: highlightNodeBoxStyle.fill || 'transparent'
+          color: style.fill || 'transparent'
         })
+    } else if (this.highlightBoxNodeStyle) {
+      // 样式更新了
+      if (
+        this.highlightBoxNodeStyle.stroke !== style.stroke ||
+        this.highlightBoxNodeStyle.fill !== style.fill
+      ) {
+        this.highlightBoxNode
+          .stroke({
+            color: style.stroke || 'transparent'
+          })
+          .fill({
+            color: style.fill || 'transparent'
+          })
+      }
     }
+    this.highlightBoxNodeStyle = { ...style }
     let minx = Infinity,
       miny = Infinity,
       maxx = -Infinity,
