@@ -348,7 +348,7 @@ class Style {
 
   // hover和激活节点
   hoverNode(node) {
-    const { hoverRectColor } = this.ctx.mindMap.opt
+    const hoverRectColor = this.merge('hoverRectColor') || this.ctx.mindMap.opt.hoverRectColor
     node.radius(5).fill('none').stroke({
       color: hoverRectColor
     })

@@ -85,7 +85,9 @@ export default {
     startDir: [0, 0],
     endDir: [1, 0],
     // 连线标记的位置，start（头部）、end（尾部），该配置在showLineMarker配置为true时生效
-    lineMarkerDir: 'end'
+    lineMarkerDir: 'end',
+    // 节点鼠标hover和激活时显示的矩形边框的颜色，主题里不设置，默认会取hoverRectColor实例化选项的值
+    hoverRectColor: ''
   },
   // 二级节点样式
   second: {
@@ -109,7 +111,8 @@ export default {
     endColor: '#fff',
     startDir: [0, 0],
     endDir: [1, 0],
-    lineMarkerDir: 'end'
+    lineMarkerDir: 'end',
+    hoverRectColor: ''
   },
   // 三级及以下节点样式
   node: {
@@ -133,7 +136,8 @@ export default {
     endColor: '#fff',
     startDir: [0, 0],
     endDir: [1, 0],
-    lineMarkerDir: 'end'
+    lineMarkerDir: 'end',
+    hoverRectColor: ''
   },
   // 概要节点样式
   generalization: {
@@ -156,7 +160,8 @@ export default {
     startColor: '#549688',
     endColor: '#fff',
     startDir: [0, 0],
-    endDir: [1, 0]
+    endDir: [1, 0],
+    hoverRectColor: ''
   }
 }
 
@@ -189,7 +194,8 @@ const nodeSizeIndependenceList = [
   'startColor',
   'endColor',
   'startDir',
-  'endDir'
+  'endDir',
+  'hoverRectColor'
 ]
 export const checkIsNodeSizeIndependenceConfig = config => {
   let keys = Object.keys(config)
