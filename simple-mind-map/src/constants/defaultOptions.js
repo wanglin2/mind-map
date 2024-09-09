@@ -410,5 +410,9 @@ export const defaultOpt = {
 
   // 【Painter】插件
   // 是否只格式刷节点手动设置的样式，不考虑节点通过主题的应用的样式
-  onlyPainterNodeCustomStyles: false
+  onlyPainterNodeCustomStyles: false,
+
+  // 【NodeImgAdjust】插件
+  // 拦截节点图片的删除，点击节点图片上的删除按钮删除图片前会调用该函数，如果函数返回true则取消删除
+  beforeDeleteNodeImg: null
 }
