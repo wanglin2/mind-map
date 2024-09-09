@@ -85,12 +85,14 @@ export const formulaList = [
   '\\begin{cases}3x + 5y +  z \\\\7x - 2y + 4z \\\\-6x + 3y + 2z\\end{cases}'
 ]
 
+// 支持某种连线类型的结构
 export const supportLineStyleLayoutsMap = {
   curve: [
     'logicalStructure',
     'logicalStructureLeft',
     'mindMap',
-    'verticalTimeline'
+    'verticalTimeline',
+    'organizationStructure'
   ],
   direct: [
     'logicalStructure',
@@ -101,6 +103,7 @@ export const supportLineStyleLayoutsMap = {
   ]
 }
 
+// 直线模式支持设置圆角的结构
 export const supportLineRadiusLayouts = [
   'logicalStructure',
   'logicalStructureLeft',
@@ -108,6 +111,7 @@ export const supportLineRadiusLayouts = [
   'verticalTimeline'
 ]
 
+// 支持只显示底边直线风格的结构
 export const supportNodeUseLineStyleLayouts = [
   'logicalStructure',
   'logicalStructureLeft',
@@ -116,10 +120,12 @@ export const supportNodeUseLineStyleLayouts = [
   'organizationStructure'
 ]
 
+// 支持曲线模式下，根节点样式和其他节点样式保持一致的结构
 export const supportRootLineKeepSameInCurveLayouts = [
   'logicalStructure',
   'logicalStructureLeft',
-  'mindMap'
+  'mindMap',
+  'organizationStructure'
 ]
 
 // 彩虹线条配置
