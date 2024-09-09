@@ -306,7 +306,8 @@ export default {
     yes: 'Yes',
     no: 'No',
     exportError: 'Export failed',
-    dragTip: 'Release here to import the file'
+    dragTip: 'Release here to import the file',
+    deleteNodeImgTip: 'Are you sure to delete the node image?'
   },
   mouseAction: {
     tip1:

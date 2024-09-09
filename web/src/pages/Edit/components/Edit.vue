@@ -421,6 +421,25 @@ export default {
         },
         expandBtnNumHandler: num => {
           return num >= 100 ? '…' : num
+        },
+        beforeDeleteNodeImg: node => {
+          return new Promise(resolve => {
+            this.$confirm(
+              this.$t('edit.deleteNodeImgTip'),
+              this.$t('edit.tip'),
+              {
+                confirmButtonText: this.$t('edit.yes'),
+                cancelButtonText: this.$t('edit.no'),
+                type: 'warning'
+              }
+            )
+              .then(() => {
+                resolve(false)
+              })
+              .catch(() => {
+                resolve(true)
+              })
+          })
         }
         // createNodePrefixContent: (node) => {
         //   const el = document.createElement('div')

@@ -300,7 +300,8 @@ export default {
     yes: '是',
     no: '否',
     exportError: '导出失败',
-    dragTip: '在此释放以导入该文件'
+    dragTip: '在此释放以导入该文件',
+    deleteNodeImgTip: '是否确认删除该节点图片？'
   },
   mouseAction: {
     tip1: '当前：左键拖动画布，右键框选节点',
