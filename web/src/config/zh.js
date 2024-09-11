@@ -593,8 +593,14 @@ export const downTypeList = [
   {
     name: 'FreeMind',
     type: 'mm',
-    icon: 'iconTXT',
+    icon: 'iconfreemind',
     desc: 'FreeMind软件格式'
+  },
+  {
+    name: 'Excel',
+    type: 'xlsx',
+    icon: 'iconfile-excel',
+    desc: 'Excel软件格式'
   }
 ]
 

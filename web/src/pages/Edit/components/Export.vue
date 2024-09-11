@@ -126,11 +126,23 @@ export default {
   computed: {
     ...mapState({
       openNodeRichText: state => state.localConfig.openNodeRichText,
-      isDark: state => state.localConfig.isDark
+      isDark: state => state.localConfig.isDark,
+      supportFreemind: state => state.supportFreemind,
+      supportExcel: state => state.supportExcel
     }),
 
     downTypeList() {
-      return downTypeList[this.$i18n.locale] || downTypeList.zh
+      const list = downTypeList[this.$i18n.locale] || downTypeList.zh
+      return list.filter(item => {
+        if (item.type === 'mm') {
+          return this.supportFreemind
+        }
+        if (item.type === 'xlsx') {
+          return this.supportExcel
+        } else {
+          return true
+        }
+      })
     }
   },
   created() {

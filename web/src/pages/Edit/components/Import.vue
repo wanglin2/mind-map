@@ -9,7 +9,7 @@
       <el-upload
         ref="upload"
         action="x"
-        accept=".smm,.json,.xmind,.xlsx,.md,.mm"
+        :accept="supportFileStr"
         :file-list="fileList"
         :auto-upload="false"
         :multiple="false"
@@ -22,7 +22,7 @@
           $t('import.selectFile')
         }}</el-button>
         <div slot="tip" class="el-upload__tip">
-          {{ $t('import.supportFile') }}
+          {{ $t('import.support') }}{{ supportFileStr }}{{ $t('import.file') }}
         </div>
       </el-upload>
       <span slot="footer" class="dialog-footer">
@@ -59,10 +59,8 @@
 <script>
 import xmind from 'simple-mind-map/src/parse/xmind.js'
 import markdown from 'simple-mind-map/src/parse/markdown.js'
-import { freemindToSmm } from 'simple-mind-map-plugin-freemind/freemindTo.js'
-import { fileToBuffer } from '@/utils'
-import { read, utils } from 'xlsx'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
+import Vue from 'vue'
 
 /**
  * @Author: 王林
@@ -79,6 +77,22 @@ export default {
       xmindCanvasSelectDialogVisible: false,
       selectCanvas: '',
       canvasList: []
+    }
+  },
+  computed: {
+    ...mapState({
+      supportFreemind: state => state.supportFreemind,
+      supportExcel: state => state.supportExcel
+    }),
+    supportFileStr() {
+      let res = '.smm,.json,.xmind,.md'
+      if (this.supportFreemind) {
+        res += ',.mm'
+      }
+      if (this.supportExcel) {
+        res += ',.xlsx'
+      }
+      return res
     }
   },
   watch: {
@@ -105,12 +119,20 @@ export default {
       this.dialogVisible = true
     },
 
+    getRegexp() {
+      return new RegExp(
+        `\.(smm|json|xmind|md${this.supportFreemind ? '|mm' : ''}${
+          this.supportExcel ? '|xlsx' : ''
+        })$`
+      )
+    },
+
     // 检查url中是否操作需要打开的文件
     async handleFileURL() {
       try {
         const fileURL = this.$route.query.fileURL
         if (!fileURL) return
-        const macth = /\.(smm|json|xmind|md|xlsx|mm)$/.exec(fileURL)
+        const macth = this.getRegexp().exec(fileURL)
         if (!macth) {
           return
         }
@@ -138,9 +160,12 @@ export default {
 
     // 文件选择
     onChange(file) {
-      let reg = /\.(smm|xmind|json|xlsx|md|mm)$/
-      if (!reg.test(file.name)) {
-        this.$message.error(this.$t('import.enableFileTip'))
+      if (!this.getRegexp().test(file.name)) {
+        this.$message.error(
+          this.$t('import.pleaseSelect') +
+            this.supportFileStr +
+            this.$t('import.file')
+        )
         this.fileList = []
       } else {
         this.fileList.push(file)
@@ -226,18 +251,21 @@ export default {
       fileReader.readAsText(file.raw)
       fileReader.onload = async evt => {
         try {
-          const data = await freemindToSmm(evt.target.result, {
-            // withStyle: true,
-            transformImg: image => {
-              return new Promise(resolve => {
-                if (/^https?:\/\//.test(image)) {
-                  resolve({ url: image })
-                } else {
-                  resolve(null)
-                }
-              })
+          const data = await Vue.prototype.Freemind.freemindToSmm(
+            evt.target.result,
+            {
+              // withStyle: true,
+              transformImg: image => {
+                return new Promise(resolve => {
+                  if (/^https?:\/\//.test(image)) {
+                    resolve({ url: image })
+                  } else {
+                    resolve(null)
+                  }
+                })
+              }
             }
-          })
+          )
           this.$bus.$emit('setData', data)
           this.$message.success(this.$t('import.importSuccess'))
         } catch (error) {
@@ -265,59 +293,8 @@ export default {
     // 处理.xlsx文件
     async handleExcel(file) {
       try {
-        const wb = read(await fileToBuffer(file.raw))
-        const data = utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {
-          header: 1
-        })
-        if (data.length <= 0) {
-          return
-        }
-        let max = 0
-        data.forEach(arr => {
-          if (arr.length > max) {
-            max = arr.length
-          }
-        })
-        let layers = []
-        let walk = layer => {
-          if (!layers[layer]) {
-            layers[layer] = []
-          }
-          for (let i = 0; i < data.length; i++) {
-            if (data[i][layer]) {
-              let node = {
-                data: {
-                  text: data[i][layer]
-                },
-                children: [],
-                _row: i
-              }
-              layers[layer].push(node)
-            }
-          }
-          if (layer < max - 1) {
-            walk(layer + 1)
-          }
-        }
-        walk(0)
-        let getParent = (arr, row) => {
-          for (let i = arr.length - 1; i >= 0; i--) {
-            if (row >= arr[i]._row) {
-              return arr[i]
-            }
-          }
-        }
-        for (let i = 1; i < layers.length; i++) {
-          let arr = layers[i]
-          for (let j = 0; j < arr.length; j++) {
-            let item = arr[j]
-            let parent = getParent(layers[i - 1], item._row)
-            if (parent) {
-              parent.children.push(item)
-            }
-          }
-        }
-        this.$bus.$emit('setData', layers[0][0])
+        const res = await Vue.prototype.Excel.excelTo(file.raw)
+        this.$bus.$emit('setData', res)
         this.$message.success(this.$t('import.importSuccess'))
       } catch (error) {
         console.log(error)
