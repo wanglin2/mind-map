@@ -495,6 +495,18 @@ export const downTypeList = [
     type: 'txt',
     icon: 'iconTXT',
     desc: '純文字檔案'
+  },
+  {
+    name: 'FreeMind',
+    type: 'mm',
+    icon: 'iconfreemind',
+    desc: 'FreeMind軟體格式'
+  },
+  {
+    name: 'Excel',
+    type: 'xlsx',
+    icon: 'iconfile-excel',
+    desc: 'Excel軟體格式'
   }
 ]
 
@@ -555,5 +567,57 @@ export const numberLevelList = [
   {
     name: '編號每一層',
     value: 0
+  }
+]
+
+// 背景渐变方向
+export const linearGradientDirList = [
+  {
+    name: '从左到右',
+    value: '1',
+    start: [0, 0],
+    end: [1, 0]
+  },
+  {
+    name: '从右到左',
+    value: '2',
+    start: [1, 0],
+    end: [0, 0]
+  },
+  {
+    name: '从上到下',
+    value: '3',
+    start: [0, 0],
+    end: [0, 1]
+  },
+  {
+    name: '从下到上',
+    value: '4',
+    start: [0, 1],
+    end: [0, 0]
+  },
+  {
+    name: '从左上到右下',
+    value: '5',
+    start: [0, 0],
+    end: [1, 1]
+  },
+  {
+    name: '从左下到右上',
+    value: '6',
+    start: [0, 1],
+    end: [1, 0]
+  },
+  {
+    name: '从右上到左下',
+    value: '7',
+    start: [1, 0],
+    end: [0, 1]
+  },
+  {
+    name: '从右下到左上',
+    value: '8',
+    start: [1, 1],
+    end: [0, 0]
   }
 ]

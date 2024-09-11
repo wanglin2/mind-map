@@ -155,8 +155,9 @@ export default {
   import: {
     title: '匯入',
     selectFile: '選擇檔案',
-    supportFile: '支援 .smm、.json、.xmind、.xlsx、.md 檔案',
-    enableFileTip: '請選擇 .smm、.json、.xmind、.xlsx、.md 檔案',
+    support: '支援',
+    file: '檔案',
+    pleaseSelect: '請選擇',
     maxFileNum: '最多只能選擇一個檔案',
     notSelectTip: '請選擇要匯入的檔案',
     fileContentError: '檔案內容有誤',
