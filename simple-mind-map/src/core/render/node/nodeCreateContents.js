@@ -114,8 +114,10 @@ function createIconNode() {
 }
 
 // 创建富文本节点
-function createRichTextNode() {
-  const { textAutoWrapWidth } = this.mindMap.opt
+function createRichTextNode(specifyText) {
+  let text =
+    typeof specifyText === 'string' ? specifyText : this.getData('text')
+  const { textAutoWrapWidth, emptyTextMeasureHeightText } = this.mindMap.opt
   let g = new G()
   // 重新设置富文本节点内容
   let recoverText = false
@@ -129,7 +131,6 @@ function createRichTextNode() {
       recoverText = true
     }
   }
-  let text = this.getData('text')
   if (recoverText && !isUndef(text)) {
     // 判断节点内容是否是富文本
     let isRichText = checkIsRichText(text)
@@ -153,7 +154,7 @@ function createRichTextNode() {
       text: text
     })
   }
-  let html = `<div>${this.getData('text')}</div>`
+  let html = `<div>${text}</div>`
   if (!this.mindMap.commonCaches.measureRichtextNodeTextSizeEl) {
     this.mindMap.commonCaches.measureRichtextNodeTextSizeEl =
       document.createElement('div')
@@ -174,7 +175,7 @@ function createRichTextNode() {
   let { width, height } = el.getBoundingClientRect()
   // 如果文本为空，那么需要计算一个默认高度
   if (height <= 0) {
-    div.innerHTML = '<p>abc123我和你</p>'
+    div.innerHTML = `<p>${emptyTextMeasureHeightText}</p>`
     let elTmp = div.children[0]
     elTmp.classList.add('smm-richtext-node-wrap')
     height = elTmp.getBoundingClientRect().height
@@ -199,10 +200,12 @@ function createRichTextNode() {
 }
 
 //  创建文本节点
-function createTextNode() {
+function createTextNode(specifyText) {
   if (this.getData('richText')) {
-    return this.createRichTextNode()
+    return this.createRichTextNode(specifyText)
   }
+  const text =
+    typeof specifyText === 'string' ? specifyText : this.getData('text')
   if (this.getData('resetRichText')) {
     delete this.nodeData.data.resetRichText
   }
@@ -212,10 +215,11 @@ function createTextNode() {
   // 文本超长自动换行
   let textStyle = this.style.getTextFontStyle()
   let textArr = []
-  if (!isUndef(this.getData('text'))) {
-    textArr = String(this.getData('text')).split(/\n/gim)
+  if (!isUndef(text)) {
+    textArr = String(text).split(/\n/gim)
   }
-  let maxWidth = this.mindMap.opt.textAutoWrapWidth
+  const { textAutoWrapWidth: maxWidth, emptyTextMeasureHeightText } =
+    this.mindMap.opt
   let isMultiLine = false
   textArr.forEach((item, index) => {
     let arr = item.split('')
@@ -247,6 +251,13 @@ function createTextNode() {
     g.add(node)
   })
   let { width, height } = g.bbox()
+  // 如果文本为空，那么需要计算一个默认高度
+  if (height <= 0) {
+    const tmpNode = new Text().text(emptyTextMeasureHeightText)
+    this.style.text(tmpNode)
+    const tmpBbox = tmpNode.bbox()
+    height = tmpBbox.height
+  }
   width = Math.min(Math.ceil(width), maxWidth)
   height = Math.ceil(height)
   g.attr('data-width', width)

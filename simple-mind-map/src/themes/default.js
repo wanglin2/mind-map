@@ -82,8 +82,12 @@ export default {
     gradientStyle: false,
     startColor: '#549688',
     endColor: '#fff',
+    startDir: [0, 0],
+    endDir: [1, 0],
     // 连线标记的位置，start（头部）、end（尾部），该配置在showLineMarker配置为true时生效
-    lineMarkerDir: 'end'
+    lineMarkerDir: 'end',
+    // 节点鼠标hover和激活时显示的矩形边框的颜色，主题里不设置，默认会取hoverRectColor实例化选项的值
+    hoverRectColor: ''
   },
   // 二级节点样式
   second: {
@@ -94,7 +98,7 @@ export default {
     fontFamily: '微软雅黑, Microsoft YaHei',
     color: '#565656',
     fontSize: 16,
-    fontWeight: 'noraml',
+    fontWeight: 'normal',
     fontStyle: 'normal',
     lineHeight: 1.5,
     borderColor: '#549688',
@@ -105,7 +109,10 @@ export default {
     gradientStyle: false,
     startColor: '#549688',
     endColor: '#fff',
-    lineMarkerDir: 'end'
+    startDir: [0, 0],
+    endDir: [1, 0],
+    lineMarkerDir: 'end',
+    hoverRectColor: ''
   },
   // 三级及以下节点样式
   node: {
@@ -116,7 +123,7 @@ export default {
     fontFamily: '微软雅黑, Microsoft YaHei',
     color: '#6a6d6c',
     fontSize: 14,
-    fontWeight: 'noraml',
+    fontWeight: 'normal',
     fontStyle: 'normal',
     lineHeight: 1.5,
     borderColor: 'transparent',
@@ -127,7 +134,10 @@ export default {
     gradientStyle: false,
     startColor: '#549688',
     endColor: '#fff',
-    lineMarkerDir: 'end'
+    startDir: [0, 0],
+    endDir: [1, 0],
+    lineMarkerDir: 'end',
+    hoverRectColor: ''
   },
   // 概要节点样式
   generalization: {
@@ -138,7 +148,7 @@ export default {
     fontFamily: '微软雅黑, Microsoft YaHei',
     color: '#565656',
     fontSize: 16,
-    fontWeight: 'noraml',
+    fontWeight: 'normal',
     fontStyle: 'normal',
     lineHeight: 1.5,
     borderColor: '#549688',
@@ -148,7 +158,10 @@ export default {
     textDecoration: 'none',
     gradientStyle: false,
     startColor: '#549688',
-    endColor: '#fff'
+    endColor: '#fff',
+    startDir: [0, 0],
+    endDir: [1, 0],
+    hoverRectColor: ''
   }
 }
 
@@ -179,7 +192,10 @@ const nodeSizeIndependenceList = [
   'gradientStyle',
   'lineRadius',
   'startColor',
-  'endColor'
+  'endColor',
+  'startDir',
+  'endDir',
+  'hoverRectColor'
 ]
 export const checkIsNodeSizeIndependenceConfig = config => {
   let keys = Object.keys(config)

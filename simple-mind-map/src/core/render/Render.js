@@ -99,6 +99,7 @@ class Render {
     this.currentBeingPasteType = ''
     // 节点高亮框
     this.highlightBoxNode = null
+    this.highlightBoxNodeStyle = null
     // 上一次节点激活数据
     this.lastActiveNode = null
     this.lastActiveNodeList = []
@@ -147,6 +148,19 @@ class Render {
     })
     // 性能模式
     this.performanceMode()
+    // 实时渲染当节点文本编辑时
+    if (this.mindMap.opt.openRealtimeRenderOnNodeTextEdit) {
+      this.mindMap.on('node_text_edit_change', ({ node, text }) => {
+        node._textData = node.createTextNode(text)
+        const { width, height } = node.getNodeRect()
+        node.width = width
+        node.height = height
+        node.layout()
+        this.mindMap.render(() => {
+          this.textEdit.updateTextEditNode()
+        })
+      })
+    }
   }
 
   // 性能模式，懒加载节点
@@ -1593,40 +1607,53 @@ class Render {
   }
 
   //  展开所有
-  expandAllNode() {
+  expandAllNode(uid = '') {
     if (!this.renderTree) return
-    walk(
-      this.renderTree,
-      null,
-      node => {
-        if (!node.data.expand) {
-          node.data.expand = true
-        }
-      },
-      null,
-      true,
-      0,
-      0
-    )
+
+    const _walk = (node, enableExpand) => {
+      // 如果该节点为目标节点，那么修改允许展开的标志
+      if (!enableExpand && node.data.uid === uid) {
+        enableExpand = true
+      }
+      if (enableExpand && !node.data.expand) {
+        node.data.expand = true
+      }
+      if (node.children && node.children.length > 0) {
+        node.children.forEach(child => {
+          _walk(child, enableExpand)
+        })
+      }
+    }
+    _walk(this.renderTree, !uid)
+
     this.mindMap.render()
   }
 
   //  收起所有
-  unexpandAllNode(isSetRootNodeCenter = true) {
+  unexpandAllNode(isSetRootNodeCenter = true, uid = '') {
     if (!this.renderTree) return
-    walk(
-      this.renderTree,
-      null,
-      (node, parent, isRoot) => {
-        if (!isRoot && node.children && node.children.length > 0) {
-          node.data.expand = false
-        }
-      },
-      null,
-      true,
-      0,
-      0
-    )
+
+    const _walk = (node, isRoot, enableUnExpand) => {
+      // 如果该节点为目标节点，那么修改允许展开的标志
+      if (!enableUnExpand && node.data.uid === uid) {
+        enableUnExpand = true
+      }
+      if (
+        enableUnExpand &&
+        !isRoot &&
+        node.children &&
+        node.children.length > 0
+      ) {
+        node.data.expand = false
+      }
+      if (node.children && node.children.length > 0) {
+        node.children.forEach(child => {
+          _walk(child, false, enableUnExpand)
+        })
+      }
+    }
+    _walk(this.renderTree, true, !uid)
+
     this.mindMap.render(() => {
       if (isSetRootNodeCenter) {
         this.setRootNodeCenter()
@@ -2035,19 +2062,39 @@ class Render {
   }
 
   // 高亮节点或子节点
-  highlightNode(node, range) {
+  highlightNode(node, range, style) {
     // 如果当前正在渲染，那么不进行高亮，因为节点位置可能不正确
     if (this.isRendering) return
-    const { highlightNodeBoxStyle = {} } = this.mindMap.opt
+    style = {
+      stroke: 'rgb(94, 200, 248)',
+      fill: 'transparent',
+      ...(style || {})
+    }
+    // 尚未创建
     if (!this.highlightBoxNode) {
       this.highlightBoxNode = new Polygon()
         .stroke({
-          color: highlightNodeBoxStyle.stroke || 'transparent'
+          color: style.stroke || 'transparent'
         })
         .fill({
-          color: highlightNodeBoxStyle.fill || 'transparent'
+          color: style.fill || 'transparent'
         })
+    } else if (this.highlightBoxNodeStyle) {
+      // 样式更新了
+      if (
+        this.highlightBoxNodeStyle.stroke !== style.stroke ||
+        this.highlightBoxNodeStyle.fill !== style.fill
+      ) {
+        this.highlightBoxNode
+          .stroke({
+            color: style.stroke || 'transparent'
+          })
+          .fill({
+            color: style.fill || 'transparent'
+          })
+      }
     }
+    this.highlightBoxNodeStyle = { ...style }
     let minx = Infinity,
       miny = Infinity,
       maxx = -Infinity,

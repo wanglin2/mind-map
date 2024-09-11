@@ -192,8 +192,14 @@ class NodeImgAdjust {
       if (this.isMousedown) return
       this.hideHandleEl()
     })
-    btnRemove.addEventListener('click', e => {
-      this.mindMap.execCommand('SET_NODE_IMAGE', this.node, { url: null })
+    btnRemove.addEventListener('click', async e => {
+      let stop = false
+      if (typeof this.mindMap.opt.beforeDeleteNodeImg === 'function') {
+        stop = await this.mindMap.opt.beforeDeleteNodeImg(this.node)
+      }
+      if (!stop) {
+        this.mindMap.execCommand('SET_NODE_IMAGE', this.node, { url: null })
+      }
     })
     // 添加元素到页面
     const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body

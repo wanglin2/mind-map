@@ -31,6 +31,8 @@ const store = new Vuex.Store({
     supportHandDrawnLikeStyle: false, // 是否支持设置手绘风格
     supportMark: false, // 是否支持标记
     supportNumbers: false, // 是否支持编号
+    supportFreemind: false, // 是否支持Freemind插件
+    supportExcel: false, // 是否支持Excel插件
     isDragOutlineTreeNode: false // 当前是否正在拖拽大纲树的节点
   },
   mutations: {
@@ -91,6 +93,16 @@ const store = new Vuex.Store({
     // 设置是否支持编号
     setSupportNumbers(state, data) {
       state.supportNumbers = data
+    },
+
+    // 设置是否支持Freemind插件
+    setSupportFreemind(state, data) {
+      state.supportFreemind = data
+    },
+
+    // 设置是否支持Excel插件
+    setSupportExcel(state, data) {
+      state.supportExcel = data
     },
 
     // 设置树节点拖拽

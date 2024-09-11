@@ -1184,9 +1184,18 @@ export const handleInputPasteText = (e, text) => {
   // 去除格式
   text = getTextFromHtml(text)
   // 去除换行
-  text = text.replaceAll(/\n/g, '')
-  const node = document.createTextNode(text)
-  selection.getRangeAt(0).insertNode(node)
+  // text = text.replaceAll(/\n/g, '')
+  const textArr = text.split(/\n/g)
+  const fragment = document.createDocumentFragment()
+  textArr.forEach((item, index) => {
+    const node = document.createTextNode(item)
+    fragment.appendChild(node)
+    if (index < textArr.length - 1) {
+      const br = document.createElement('br')
+      fragment.appendChild(br)
+    }
+  })
+  selection.getRangeAt(0).insertNode(fragment)
   selection.collapseToEnd()
 }
 

@@ -1,6 +1,6 @@
 import katex from 'katex'
 import Quill from 'quill'
-import { getChromeVersion } from '../utils/index'
+import { getChromeVersion, htmlEscape } from '../utils/index'
 import { getBaseStyleText, getFontStyleText } from './FormulaStyle'
 
 // 数学公式支持插件
@@ -58,7 +58,7 @@ class Formula {
         let node = super.create(value)
         if (typeof value === 'string') {
           katex.render(value, node, self.config)
-          node.setAttribute('data-value', value)
+          node.setAttribute('data-value', htmlEscape(value))
         }
         return node
       }
@@ -110,11 +110,7 @@ class Formula {
       for (const el of els)
         nodeText = nodeText.replace(
           el.outerHTML,
-          `\$${el
-            .getAttribute('data-value')
-            .replaceAll('&', '&amp;')
-            .replaceAll('<', '&lt;')
-            .replaceAll('>', '&gt;')}\$`
+          `\$${el.getAttribute('data-value')}\$`
         )
     }
     return nodeText

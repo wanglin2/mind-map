@@ -128,8 +128,9 @@ class Base {
         )
       }
       // 主题或主题配置改变了、节点层级改变了，需要重新渲染节点文本等情况需要重新计算节点大小和布局
+      const isNeedResizeSources = this.checkIsNeedResizeSources()
       if (
-        this.checkIsNeedResizeSources() ||
+        isNeedResizeSources ||
         isLayerTypeChange ||
         newNode.getData('resetRichText') ||
         isNumberChange
@@ -137,7 +138,7 @@ class Base {
         newNode.getSize()
         newNode.needLayout = true
       }
-      this.checkGetGeneralizationChange(newNode)
+      this.checkGetGeneralizationChange(newNode, isNeedResizeSources)
     } else if (
       (this.lru.has(uid) || this.renderer.lastNodeCache[uid]) &&
       !this.renderer.reRender
@@ -186,7 +187,7 @@ class Base {
         newNode.getSize()
         newNode.needLayout = true
       }
-      this.checkGetGeneralizationChange(newNode)
+      this.checkGetGeneralizationChange(newNode, isResizeSource)
     } else {
       // 创建新节点
       const newUid = uid || createUid()
@@ -228,7 +229,7 @@ class Base {
   }
 
   // 检查概要节点是否需要更新
-  checkGetGeneralizationChange(node) {
+  checkGetGeneralizationChange(node, isResizeSource) {
     const generalizationList = node.getData('generalization')
     if (
       generalizationList &&
@@ -239,7 +240,10 @@ class Base {
         const gNode = item.generalizationNode
         const oldData = gNode.getData()
         const newData = generalizationList[index]
-        if (newData && JSON.stringify(oldData) !== JSON.stringify(newData)) {
+        if (
+          isResizeSource ||
+          (newData && JSON.stringify(oldData) !== JSON.stringify(newData))
+        ) {
           gNode.nodeData.data = newData
           gNode.getSize()
           gNode.needLayout = true
@@ -371,18 +375,32 @@ class Base {
   }
 
   //  二次贝塞尔曲线
-  quadraticCurvePath(x1, y1, x2, y2) {
-    let cx = x1 + (x2 - x1) * 0.2
-    let cy = y1 + (y2 - y1) * 0.8
+  quadraticCurvePath(x1, y1, x2, y2, v = false) {
+    let cx, cy
+    if (v) {
+      cx = x1 + (x2 - x1) * 0.8
+      cy = y1 + (y2 - y1) * 0.2
+    } else {
+      cx = x1 + (x2 - x1) * 0.2
+      cy = y1 + (y2 - y1) * 0.8
+    }
     return `M ${x1},${y1} Q ${cx},${cy} ${x2},${y2}`
   }
 
   //  三次贝塞尔曲线
-  cubicBezierPath(x1, y1, x2, y2) {
-    let cx1 = x1 + (x2 - x1) / 2
-    let cy1 = y1
-    let cx2 = cx1
-    let cy2 = y2
+  cubicBezierPath(x1, y1, x2, y2, v = false) {
+    let cx1, cy1, cx2, cy2
+    if (v) {
+      cx1 = x1
+      cy1 = y1 + (y2 - y1) / 2
+      cx2 = x2
+      cy2 = cy1
+    } else {
+      cx1 = x1 + (x2 - x1) / 2
+      cy1 = y1
+      cx2 = cx1
+      cy2 = y2
+    }
     return `M ${x1},${y1} C ${cx1},${cy1} ${cx2},${cy2} ${x2},${y2}`
   }
 

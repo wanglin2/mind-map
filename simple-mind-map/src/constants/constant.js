@@ -328,7 +328,9 @@ export const nodeDataNoStylePropList = [
   'notation',
   'outerFrame',
   'number',
-  'range'
+  'range',
+  'customLeft',
+  'customTop'
 ]
 
 // 错误类型

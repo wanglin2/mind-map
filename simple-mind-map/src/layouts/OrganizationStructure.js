@@ -34,7 +34,14 @@ class OrganizationStructure extends Base {
       this.renderer.renderTree,
       null,
       (cur, parent, isRoot, layerIndex, index, ancestors) => {
-        let newNode = this.createNode(cur, parent, isRoot, layerIndex, index, ancestors)
+        let newNode = this.createNode(
+          cur,
+          parent,
+          isRoot,
+          layerIndex,
+          index,
+          ancestors
+        )
         // 根节点定位在画布中心位置
         if (isRoot) {
           this.setNodeCenter(newNode)
@@ -148,11 +155,54 @@ class OrganizationStructure extends Base {
 
   //  绘制连线，连接该节点到其子节点
   renderLine(node, lines, style, lineStyle) {
-    if (lineStyle === 'direct') {
+    if (lineStyle === 'curve') {
+      this.renderLineCurve(node, lines, style)
+    } else if (lineStyle === 'direct') {
       this.renderLineDirect(node, lines, style)
     } else {
       this.renderLineStraight(node, lines, style)
     }
+  }
+
+  //  曲线风格连线
+  renderLineCurve(node, lines, style) {
+    if (node.children.length <= 0) {
+      return []
+    }
+    let { left, top, width, height, expandBtnSize } = node
+    const { alwaysShowExpandBtn, notShowExpandBtn } = this.mindMap.opt
+    if (!alwaysShowExpandBtn || notShowExpandBtn) {
+      expandBtnSize = 0
+    }
+    const {
+      nodeUseLineStyle,
+      rootLineStartPositionKeepSameInCurve,
+      rootLineKeepSameInCurve
+    } = this.mindMap.themeConfig
+    node.children.forEach((item, index) => {
+      if (node.layerIndex === 0) {
+        expandBtnSize = 0
+      }
+      let x1 = left + width / 2
+      let y1 =
+        node.layerIndex === 0 && !rootLineStartPositionKeepSameInCurve
+          ? top + height / 2
+          : top + height + expandBtnSize
+      let x2 = item.left + item.width / 2
+      let y2 = item.top
+      let path = ''
+      // 节点使用横线风格，需要额外渲染横线
+      let nodeUseLineStylePath = nodeUseLineStyle
+        ? ` L ${item.left},${y2} L ${item.left + item.width},${y2}`
+        : ''
+      if (node.isRoot && !rootLineKeepSameInCurve) {
+        path =
+          this.quadraticCurvePath(x1, y1, x2, y2, true) + nodeUseLineStylePath
+      } else {
+        path = this.cubicBezierPath(x1, y1, x2, y2, true) + nodeUseLineStylePath
+      }
+      this.setLineStyle(style, lines[index], path, item)
+    })
   }
 
   //  直连风格
