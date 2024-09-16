@@ -139,7 +139,6 @@ class Render {
 
   //   绑定事件
   bindEvent() {
-    console.log('------------------------')
     // 画布点击事件清除当前激活节点列表
     this.mindMap.on('draw_click', e => {
       this.clearActiveNodeListOnDrawClick(e, 'click')
@@ -1151,7 +1150,6 @@ class Render {
     }
     // 复制的文本处理逻辑
     if (isText) this.pasteData.text = clipboardData.getData('text')
-    console.log(this.pasteData.text,'===-=-=-dasd')
     this.paste()
   }
 
