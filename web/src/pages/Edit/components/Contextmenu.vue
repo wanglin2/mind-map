@@ -56,6 +56,9 @@
         <span class="name">{{ $t('contextmenu.moveDownNode') }}</span>
         <span class="desc">Ctrl + ↓</span>
       </div>
+      <div class="item" @click="exec('EXPAND_ALL')">
+        <span class="name">{{ $t('contextmenu.expandNodeChild') }}</span>
+      </div>
       <div class="item" v-if="supportNumbers">
         <span class="name">{{ $t('contextmenu.number') }}</span>
         <span class="el-icon-arrow-right"></span>
@@ -460,6 +463,9 @@ export default {
             false,
             this.node
           )
+          break
+        case 'EXPAND_ALL':
+          this.$bus.$emit('execCommand', key, this.node.uid)
           break
         default:
           this.$bus.$emit('execCommand', key, ...args)
