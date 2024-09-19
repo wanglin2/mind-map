@@ -97,6 +97,7 @@ class Render {
     this.beingPasteText = ''
     this.beingPasteImgSize = 0
     this.currentBeingPasteType = ''
+    this.pasteData = { text: null, img: null}
     // 节点高亮框
     this.highlightBoxNode = null
     this.highlightBoxNodeStyle = null
@@ -131,6 +132,11 @@ class Render {
     }
   }
 
+   // 解绑事件
+   unBindEvent() {
+    window.removeEventListener('paste', this.handlePaste)
+  }
+
   //   绑定事件
   bindEvent() {
     // 画布点击事件清除当前激活节点列表
@@ -159,6 +165,14 @@ class Render {
         this.mindMap.render(() => {
           this.textEdit.updateTextEditNode()
         })
+      })
+    }
+    // 处理非https下的复制黏贴问题
+    if(!navigator.clipboard) {
+      this.handlePaste = this.handlePaste.bind(this)
+      window.addEventListener('paste', this.handlePaste)
+      this.mindMap.on('beforeDestroy', () => {
+        this.unBindEvent() 
       })
     }
   }
@@ -415,7 +429,7 @@ class Render {
     })
     // 粘贴节点
     this.mindMap.keyCommand.addShortcut('Control+v', () => {
-      this.paste()
+      if(navigator.clipboard) this.paste()
     })
     // 根节点居中显示
     this.mindMap.keyCommand.addShortcut('Control+Enter', () => {
@@ -1118,6 +1132,27 @@ class Render {
     })
   }
 
+  // 非https下复制黏贴，获取内容方法
+  handlePaste(event){ 
+    const clipboardData = event.clipboardData || event.originalEvent.clipboardData || window.clipboardData
+    const items = clipboardData.items
+    const clipboardType = items && items.length ? items[0].type : ''
+    const isImg = clipboardType.indexOf('image') > -1
+    const isText = clipboardType.indexOf('text') > -1
+      this.pasteData = { img: null, text: null}
+    
+    // 复制的图片处理逻辑
+    if (isImg) {
+      for (let index in items) {
+        const item = items[index]
+        if (item.kind === 'file') this.pasteData.img = item.getAsFile()
+      }
+    }
+    // 复制的文本处理逻辑
+    if (isText) this.pasteData.text = clipboardData.getData('text')
+    this.paste()
+  }
+
   // 粘贴
   async paste() {
     const {
@@ -1131,7 +1166,7 @@ class Render {
     let img = null
     if (!disabledClipboard) {
       try {
-        const res = await getDataFromClipboard()
+        const res = navigator.clipboard ? await getDataFromClipboard() : this.pasteData 
         text = res.text || ''
         img = res.img || null
       } catch (error) {
@@ -1565,7 +1600,7 @@ class Render {
     this.setNodeDataRender(node, data)
     // 更新了连线的样式
     if (lineStyleProps.includes(prop)) {
-      ;(node.parent || node).renderLine(true)
+      (node.parent || node).renderLine(true)
     }
   }
 
@@ -1586,7 +1621,7 @@ class Render {
       }
     })
     if (hasLineStyleProps) {
-      ;(node.parent || node).renderLine(true)
+      (node.parent || node).renderLine(true)
     }
   }
 
