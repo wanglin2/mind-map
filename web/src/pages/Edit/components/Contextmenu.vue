@@ -344,12 +344,11 @@ export default {
 
     // 计算右键菜单元素的显示位置
     getShowPosition(x, y) {
-      this.subItemsShowLeft = false
       const rect = this.$refs.contextmenuRef.getBoundingClientRect()
       if (x + rect.width > window.innerWidth) {
         x = x - rect.width - 20
-        this.subItemsShowLeft = true
       }
+      this.subItemsShowLeft = x + rect.width + 150 > window.innerWidth
       if (y + rect.height > window.innerHeight) {
         y = window.innerHeight - rect.height - 10
       }
