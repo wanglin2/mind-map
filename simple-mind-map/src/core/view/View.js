@@ -179,8 +179,8 @@ class View {
   //  平移x,y方向
   translateXY(x, y) {
     if (x === 0 && y === 0) return
-    this.x += x
-    this.y += y
+    this.x += x * this.mindMap.opt.translateRatio
+    this.y += y * this.mindMap.opt.translateRatio
     this.transform()
     this.emitEvent('translate')
   }
@@ -188,7 +188,7 @@ class View {
   //  平移x方向
   translateX(step) {
     if (step === 0) return
-    this.x += step
+    this.x += step * this.mindMap.opt.translateRatio
     this.transform()
     this.emitEvent('translate')
   }
@@ -203,7 +203,7 @@ class View {
   //  平移y方向
   translateY(step) {
     if (step === 0) return
-    this.y += step
+    this.y += step * this.mindMap.opt.translateRatio
     this.transform()
     this.emitEvent('translate')
   }
@@ -247,7 +247,8 @@ class View {
   //  缩小
   narrow(cx, cy, isTouchPad) {
     const scaleRatio = this.mindMap.opt.scaleRatio / (isTouchPad ? 5 : 1)
-    const scale = Math.max(this.scale - scaleRatio, 0.1)
+    // const scale = Math.max(this.scale - scaleRatio, 0.1)
+    const scale = Math.max(this.scale - scaleRatio, this.mindMap.opt.minZoomRatio / 100)
     this.scaleInCenter(scale, cx, cy)
     this.transform()
     this.emitEvent('scale')
@@ -256,7 +257,8 @@ class View {
   //  放大
   enlarge(cx, cy, isTouchPad) {
     const scaleRatio = this.mindMap.opt.scaleRatio / (isTouchPad ? 5 : 1)
-    const scale = this.scale + scaleRatio
+    // const scale = this.scale + scaleRatio
+    const scale = Math.min(this.scale + scaleRatio, this.mindMap.opt.maxZoomRatio / 100)
     this.scaleInCenter(scale, cx, cy)
     this.transform()
     this.emitEvent('scale')
