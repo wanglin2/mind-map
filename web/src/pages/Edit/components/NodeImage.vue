@@ -124,8 +124,8 @@ export default {
           node.setImage({
             url: img || 'none',
             title: this.imgTitle,
-            width: res.width,
-            height: res.height
+            width: res.width || 100,
+            height: res.height || 100
           })
         })
         this.cancel()
