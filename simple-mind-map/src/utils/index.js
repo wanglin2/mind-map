@@ -5,6 +5,7 @@ import {
 } from '../constants/constant'
 import MersenneTwister from './mersenneTwister'
 import { ForeignObject } from '@svgdotjs/svg.js'
+import merge from 'deepmerge'
 
 //  深度优先遍历树
 export const walk = (
@@ -1609,4 +1610,13 @@ export const sortNodeList = nodeList => {
     return a.sortIndex - b.sortIndex
   })
   return nodeList
+}
+
+// 合并主题配置
+export const mergeTheme = (dest, source) => {
+  return merge(dest, source, {
+    arrayMerge: (destinationArray, sourceArray) => {
+      return sourceArray
+    }
+  })
 }

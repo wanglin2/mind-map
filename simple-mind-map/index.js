@@ -19,7 +19,8 @@ import {
   getObjectChangedProps,
   isUndef,
   handleGetSvgDataExtraContent,
-  getNodeTreeBoundingRect
+  getNodeTreeBoundingRect,
+  mergeTheme
 } from './src/utils'
 import defaultTheme, {
   checkIsNodeSizeIndependenceConfig
@@ -252,7 +253,7 @@ class MindMap {
   //  设置主题
   initTheme() {
     // 合并主题配置
-    this.themeConfig = merge(theme[this.opt.theme], this.opt.themeConfig)
+    this.themeConfig = mergeTheme(theme[this.opt.theme], this.opt.themeConfig)
     // 设置背景样式
     Style.setBackgroundStyle(this.el, this.themeConfig)
   }
@@ -638,7 +639,7 @@ MindMap.defineTheme = (name, config = {}) => {
   if (theme[name]) {
     return new Error('该主题名称已存在')
   }
-  theme[name] = merge(defaultTheme, config)
+  theme[name] = mergeTheme(defaultTheme, config)
 }
 
 export default MindMap
