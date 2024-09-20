@@ -163,13 +163,14 @@ class Render {
       })
     }
     // 处理非https下的复制黏贴问题
-    if (!navigator.clipboard) {
-      this.handlePaste = this.handlePaste.bind(this)
-      window.addEventListener('paste', this.handlePaste)
-      this.mindMap.on('beforeDestroy', () => {
-        window.removeEventListener('paste', this.handlePaste)
-      })
-    }
+    // 暂时不启用，因为给页面的其他输入框（比如节点文本编辑框）粘贴内容也会触发，冲突问题暂时没有想到好的解决方法，不可能要求所有输入框都阻止冒泡
+    // if (!navigator.clipboard) {
+    //   this.handlePaste = this.handlePaste.bind(this)
+    //   window.addEventListener('paste', this.handlePaste)
+    //   this.mindMap.on('beforeDestroy', () => {
+    //     window.removeEventListener('paste', this.handlePaste)
+    //   })
+    // }
   }
 
   // 性能模式，懒加载节点
