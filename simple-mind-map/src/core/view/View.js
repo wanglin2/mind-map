@@ -138,7 +138,8 @@ class View {
         if (dirs.includes(CONSTANTS.DIR.RIGHT)) {
           mx = -stepX
         }
-        this.translateXY(mx, my)
+        // this.translateXY(mx, my)
+        this.translateXYwithRatio(mx, my)
       }
     })
     this.mindMap.on('resize', () => {
@@ -179,16 +180,25 @@ class View {
   //  平移x,y方向
   translateXY(x, y) {
     if (x === 0 && y === 0) return
-    this.x += x * this.mindMap.opt.translateRatio
-    this.y += y * this.mindMap.opt.translateRatio
+    this.x += x
+    this.y += y
     this.transform()
     this.emitEvent('translate')
   }
 
+    //  鼠标/触控板滑动时，根据配置的平移步长比例，平移x,y方向
+    translateXYwithRatio(x, y) {
+      if (x === 0 && y === 0) return
+      this.x += x * this.mindMap.opt.translateRatio
+      this.y += y * this.mindMap.opt.translateRatio
+      this.transform()
+      this.emitEvent('translate')
+    }
+
   //  平移x方向
   translateX(step) {
     if (step === 0) return
-    this.x += step * this.mindMap.opt.translateRatio
+    this.x += step
     this.transform()
     this.emitEvent('translate')
   }
@@ -203,7 +213,7 @@ class View {
   //  平移y方向
   translateY(step) {
     if (step === 0) return
-    this.y += step * this.mindMap.opt.translateRatio
+    this.y += step
     this.transform()
     this.emitEvent('translate')
   }
