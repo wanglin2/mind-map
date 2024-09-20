@@ -549,6 +549,20 @@ class RichText {
       delta.ops = ops
       return delta
     })
+    // 拦截图片的粘贴
+    this.quill.root.addEventListener(
+      'paste',
+      e => {
+        if (
+          e.clipboardData &&
+          e.clipboardData.files &&
+          e.clipboardData.files.length
+        ) {
+          e.preventDefault()
+        }
+      },
+      true
+    )
   }
 
   // 获取粘贴的文本的样式
