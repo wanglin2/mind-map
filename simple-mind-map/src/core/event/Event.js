@@ -156,7 +156,10 @@ class Event extends EventEmitter {
     // 判断是否是触控板
     let isTouchPad = false
     // mac、windows
-    if (e.wheelDeltaY === e.deltaY * -3 || Math.abs(e.wheelDeltaY) <= 10) {
+    // if (e.wheelDeltaY === e.deltaY * -3 || Math.abs(e.wheelDeltaY) <= 10) {
+    //   isTouchPad = true
+    // }
+    if (Math.abs(e.deltaY) <= 50) {
       isTouchPad = true
     }
     this.emit('mousewheel', e, dirs, this, isTouchPad)

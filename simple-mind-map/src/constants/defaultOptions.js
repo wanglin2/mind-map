@@ -19,6 +19,12 @@ export const defaultOpt = {
   themeConfig: {},
   // 放大缩小的增量比例
   scaleRatio: 0.2,
+  // 平移的步长比例
+  translateRatio: 1,
+  // 最小缩小值，百分数
+  minZoomRatio: 20,
+  // 最大放大值，百分数
+  maxZoomRatio: 400,
   // 鼠标缩放是否以鼠标当前位置为中心点，否则以画布中心点
   mouseScaleCenterUseMousePosition: true,
   // 最多显示几个标签
