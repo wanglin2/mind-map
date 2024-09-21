@@ -19,12 +19,16 @@ export const defaultOpt = {
   themeConfig: {},
   // 放大缩小的增量比例
   scaleRatio: 0.2,
-  // 平移的步长比例
+  // 平移的步长比例，只在鼠标滚轮和触控板触发的平移中应用
   translateRatio: 1,
-  // 最小缩小值，百分数
+  // 最小缩小值，百分数，最小为0，该选项只会影响view.narrow方法（影响的行为为Ctrl+-快捷键、鼠标滚轮及触控板），不会影响其他方法，比如view.setScale，所以需要你自行限制大小
   minZoomRatio: 20,
-  // 最大放大值，百分数
+  // 最大放大值，百分数，传-1代表不限制，否则传0以上数字，，该选项只会影响view.enlarge方法
   maxZoomRatio: 400,
+  // 自定义判断wheel事件是否来自电脑的触控板
+  // 默认是通过判断e.deltaY的值是否小于10，显然这种方法是不准确的，当鼠标滚动的很慢，或者触摸移动的很快时判断就失效了，如果你有更好的方法，欢迎提交issue
+  // 如果你希望自己来判断，那么传递一个函数，接收一个参数e（事件对象），需要返回true或false，代表是否是来自触控板
+  customCheckIsTouchPad: null,
   // 鼠标缩放是否以鼠标当前位置为中心点，否则以画布中心点
   mouseScaleCenterUseMousePosition: true,
   // 最多显示几个标签

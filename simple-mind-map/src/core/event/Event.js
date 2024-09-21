@@ -159,8 +159,11 @@ class Event extends EventEmitter {
     // if (e.wheelDeltaY === e.deltaY * -3 || Math.abs(e.wheelDeltaY) <= 10) {
     //   isTouchPad = true
     // }
-    if (Math.abs(e.deltaY) <= 50) {
-      isTouchPad = true
+    const { customCheckIsTouchPad } = this.mindMap.opt
+    if (typeof customCheckIsTouchPad === 'function') {
+      isTouchPad = customCheckIsTouchPad(e)
+    } else {
+      isTouchPad = Math.abs(e.deltaY) <= 10
     }
     this.emit('mousewheel', e, dirs, this, isTouchPad)
   }
