@@ -90,6 +90,8 @@ export default {
     hoverRectColor: '',
     // 点鼠标hover和激活时显示的矩形边框的圆角大小
     hoverRectRadius: 5
+    // paddingX: 15,
+    // paddingY: 5
   },
   // 二级节点样式
   second: {
@@ -116,6 +118,8 @@ export default {
     lineMarkerDir: 'end',
     hoverRectColor: '',
     hoverRectRadius: 5
+    // paddingX: 15,
+    // paddingY: 5
   },
   // 三级及以下节点样式
   node: {
@@ -142,6 +146,8 @@ export default {
     lineMarkerDir: 'end',
     hoverRectColor: '',
     hoverRectRadius: 5
+    // paddingX: 15,
+    // paddingY: 5
   },
   // 概要节点样式
   generalization: {
@@ -167,6 +173,8 @@ export default {
     endDir: [1, 0],
     hoverRectColor: '',
     hoverRectRadius: 5
+    // paddingX: 15,
+    // paddingY: 5
   }
 }
 
@@ -200,7 +208,8 @@ const nodeSizeIndependenceList = [
   'endColor',
   'startDir',
   'endDir',
-  'hoverRectColor'
+  'hoverRectColor',
+  'hoverRectRadius'
 ]
 export const checkIsNodeSizeIndependenceConfig = config => {
   let keys = Object.keys(config)
