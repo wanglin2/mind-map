@@ -564,8 +564,8 @@ class MindMap {
     let index = MindMap.hasPlugin(plugin)
     if (index === -1) {
       MindMap.usePlugin(plugin, opt)
-      this.initPlugin(plugin)
     }
+    this.initPlugin(plugin)
   }
 
   // 移除插件
@@ -584,6 +584,7 @@ class MindMap {
 
   // 实例化插件
   initPlugin(plugin) {
+    if (this[plugin.instanceName]) return
     this[plugin.instanceName] = new plugin({
       mindMap: this,
       pluginOpt: plugin.pluginOpt
