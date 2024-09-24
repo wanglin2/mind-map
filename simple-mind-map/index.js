@@ -35,6 +35,7 @@ class MindMap {
    * @param {defaultOpt} opt
    */
   constructor(opt = {}) {
+    MindMap.instanceCount++
     // 合并选项
     this.opt = this.handleOpt(merge(defaultOpt, opt))
     // 预处理节点数据
@@ -618,6 +619,7 @@ class MindMap {
     this.el.innerHTML = ''
     this.el = null
     this.removeCss()
+    MindMap.instanceCount--
   }
 }
 
@@ -634,6 +636,7 @@ MindMap.hasPlugin = plugin => {
     return item === plugin
   })
 }
+MindMap.instanceCount = 0
 
 // 定义新主题
 MindMap.defineTheme = (name, config = {}) => {
