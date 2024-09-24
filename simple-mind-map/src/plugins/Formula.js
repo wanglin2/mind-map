@@ -3,6 +3,8 @@ import Quill from 'quill'
 import { getChromeVersion, htmlEscape } from '../utils/index'
 import { getBaseStyleText, getFontStyleText } from './FormulaStyle'
 
+let extended = false
+
 // 数学公式支持插件
 // 该插件在富文本模式下可用
 class Formula {
@@ -50,6 +52,9 @@ class Formula {
 
   // 修改formula格式工具
   extendQuill() {
+    if (extended) return
+    extended = true
+
     const QuillFormula = Quill.import('formats/formula')
     const self = this
 
