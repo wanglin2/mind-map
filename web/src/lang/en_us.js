@@ -112,7 +112,8 @@ export default {
     copyToPng: 'Png',
     copySuccess: 'Copy success',
     copyFail: 'Copy fail',
-    number: 'Number child nodes'
+    number: 'Number child nodes',
+    expandNodeChild: 'Expand all sub nodes'
   },
   count: {
     words: 'Words',
@@ -158,8 +159,9 @@ export default {
   import: {
     title: 'Import',
     selectFile: 'Select file',
-    supportFile: 'Support .smm、.json、.xmind、.xlsx、.md file',
-    enableFileTip: 'Please select .smm、.json、.xmind、.xlsx、.md file',
+    support: 'Support',
+    file: 'file',
+    pleaseSelect: 'Please select',
     maxFileNum: 'At most one file can be selected',
     notSelectTip: 'Please select the file to import',
     fileContentError: 'The file content is incorrect',
@@ -239,7 +241,8 @@ export default {
     endColor: 'End',
     arrowDir: 'Arrow dir',
     arrowDirStart: 'Start',
-    arrowDirEnd: 'End'
+    arrowDirEnd: 'End',
+    direction: 'Direction'
   },
   theme: {
     title: 'Theme',
@@ -310,7 +313,8 @@ export default {
     no: 'No',
     exportError: 'Export failed',
     dragTip: 'Release here to import the file',
-    emptyTip: 'The file content is empty, use default data rendering'
+    emptyTip: 'The file content is empty, use default data rendering',
+    deleteNodeImgTip: 'Are you sure to delete the node image?'
   },
   mouseAction: {
     tip1:

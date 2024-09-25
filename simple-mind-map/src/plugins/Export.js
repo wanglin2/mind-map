@@ -129,6 +129,7 @@ class Export {
 
   //   svg转png
   svgToPng(svgSrc, transparent, clipData = null) {
+    const { maxCanvasSize, minExportImgCanvasScale } = this.mindMap.opt
     return new Promise((resolve, reject) => {
       const img = new Image()
       // 跨域图片需要添加这个属性，否则画布被污染了无法导出图片
@@ -136,10 +137,7 @@ class Export {
       img.onload = async () => {
         try {
           const canvas = document.createElement('canvas')
-          const dpr = Math.max(
-            window.devicePixelRatio,
-            this.mindMap.opt.minExportImgCanvasScale
-          )
+          const dpr = Math.max(window.devicePixelRatio, minExportImgCanvasScale)
           let imgWidth = img.width
           let imgHeight = img.height
           // 如果是裁减操作的话，那么需要手动添加内边距，及调整图片大小为实际的裁减区域的大小，不要忘了内边距哦
@@ -152,29 +150,40 @@ class Export {
             imgHeight = clipData.height + paddingY * 2
           }
           // 检查是否超出canvas支持的像素上限
-          const maxSize = 16384 / dpr
-          const maxArea = maxSize * maxSize
-          if (imgWidth * imgHeight > maxArea) {
+          // canvas大小需要乘以dpr
+          let canvasWidth = imgWidth * dpr
+          let canvasHeight = imgHeight * dpr
+          if (canvasWidth > maxCanvasSize || canvasHeight > maxCanvasSize) {
             let newWidth = null
             let newHeight = null
-            if (imgWidth > maxSize) {
-              newWidth = maxArea / imgHeight
-            } else if (imgHeight > maxSize) {
-              newHeight = maxArea / imgWidth
+            if (canvasWidth > maxCanvasSize) {
+              // 如果宽度超出限制，那么调整为上限值
+              newWidth = maxCanvasSize
+            } else if (canvasHeight > maxCanvasSize) {
+              // 高度同理
+              newHeight = maxCanvasSize
             }
-            const res = resizeImgSize(imgWidth, imgHeight, newWidth, newHeight)
-            imgWidth = res[0]
-            imgHeight = res[1]
+            // 计算缩放后的宽高
+            const res = resizeImgSize(
+              canvasWidth,
+              canvasHeight,
+              newWidth,
+              newHeight
+            )
+            canvasWidth = res[0]
+            canvasHeight = res[1]
           }
-          canvas.width = imgWidth * dpr
-          canvas.height = imgHeight * dpr
-          canvas.style.width = imgWidth + 'px'
-          canvas.style.height = imgHeight + 'px'
+          canvas.width = canvasWidth
+          canvas.height = canvasHeight
+          const styleWidth = canvasWidth / dpr
+          const styleHeight = canvasHeight / dpr
+          canvas.style.width = styleWidth + 'px'
+          canvas.style.height = styleHeight + 'px'
           const ctx = canvas.getContext('2d')
           ctx.scale(dpr, dpr)
           // 绘制背景
           if (!transparent) {
-            await this.drawBackgroundToCanvas(ctx, imgWidth, imgHeight)
+            await this.drawBackgroundToCanvas(ctx, styleWidth, styleHeight)
           }
           // 图片绘制到canvas里
           // 如果有裁减数据，那么需要进行裁减
@@ -191,7 +200,7 @@ class Export {
               clipData.height
             )
           } else {
-            ctx.drawImage(img, 0, 0, imgWidth, imgHeight)
+            ctx.drawImage(img, 0, 0, styleWidth, styleHeight)
           }
           resolve(canvas.toDataURL())
         } catch (error) {

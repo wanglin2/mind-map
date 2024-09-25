@@ -1,8 +1,8 @@
 import defaultTheme from './default'
-import merge from 'deepmerge'
+import { mergeTheme } from '../utils'
 
 // 课程绿
-export default merge(defaultTheme, {
+export default mergeTheme(defaultTheme, {
   // 连线的颜色
   lineColor: 'rgb(113, 195, 169)',
   lineWidth: 3,

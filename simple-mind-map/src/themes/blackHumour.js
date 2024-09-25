@@ -1,8 +1,8 @@
 import defaultTheme from './default'
-import merge from 'deepmerge'
+import { mergeTheme } from '../utils'
 
 // 黑色幽默
-export default merge(defaultTheme, {
+export default mergeTheme(defaultTheme, {
   // 背景颜色
   backgroundColor: 'rgb(27, 31, 34)',
   // 连线的颜色

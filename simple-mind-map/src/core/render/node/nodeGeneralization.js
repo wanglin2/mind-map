@@ -186,15 +186,29 @@ function handleGeneralizationMouseenter() {
   const list = belongNode.formatGetGeneralization()
   const index = belongNode.getGeneralizationNodeIndex(this)
   const generalizationData = list[index]
+  // 如果主题中设置了hoverRectColor颜色，那么使用该颜色
+  // 否则使用hoverRectColor实例化选项的颜色
+  // 兜底使用highlightNode方法的默认颜色
+  const hoverRectColor = this.getStyle('hoverRectColor')
+  const color = hoverRectColor || this.mindMap.opt.hoverRectColor
+  const style = color
+    ? {
+        stroke: color
+      }
+    : null
   // 区间概要，框子节点
   if (
     Array.isArray(generalizationData.range) &&
     generalizationData.range.length > 0
   ) {
-    this.mindMap.renderer.highlightNode(belongNode, generalizationData.range)
+    this.mindMap.renderer.highlightNode(
+      belongNode,
+      generalizationData.range,
+      style
+    )
   } else {
     // 否则框自己
-    this.mindMap.renderer.highlightNode(belongNode)
+    this.mindMap.renderer.highlightNode(belongNode, null, style)
   }
 }
 

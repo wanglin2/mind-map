@@ -5,6 +5,7 @@ import {
 } from '../constants/constant'
 import MersenneTwister from './mersenneTwister'
 import { ForeignObject } from '@svgdotjs/svg.js'
+import merge from 'deepmerge'
 
 //  深度优先遍历树
 export const walk = (
@@ -1184,9 +1185,18 @@ export const handleInputPasteText = (e, text) => {
   // 去除格式
   text = getTextFromHtml(text)
   // 去除换行
-  text = text.replaceAll(/\n/g, '')
-  const node = document.createTextNode(text)
-  selection.getRangeAt(0).insertNode(node)
+  // text = text.replaceAll(/\n/g, '')
+  const textArr = text.split(/\n/g)
+  const fragment = document.createDocumentFragment()
+  textArr.forEach((item, index) => {
+    const node = document.createTextNode(item)
+    fragment.appendChild(node)
+    if (index < textArr.length - 1) {
+      const br = document.createElement('br')
+      fragment.appendChild(br)
+    }
+  })
+  selection.getRangeAt(0).insertNode(fragment)
   selection.collapseToEnd()
 }
 
@@ -1600,4 +1610,13 @@ export const sortNodeList = nodeList => {
     return a.sortIndex - b.sortIndex
   })
   return nodeList
+}
+
+// 合并主题配置
+export const mergeTheme = (dest, source) => {
+  return merge(dest, source, {
+    arrayMerge: (destinationArray, sourceArray) => {
+      return sourceArray
+    }
+  })
 }

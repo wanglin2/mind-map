@@ -97,8 +97,10 @@ class Render {
     this.beingPasteText = ''
     this.beingPasteImgSize = 0
     this.currentBeingPasteType = ''
+    this.pasteData = { text: null, img: null }
     // 节点高亮框
     this.highlightBoxNode = null
+    this.highlightBoxNodeStyle = null
     // 上一次节点激活数据
     this.lastActiveNode = null
     this.lastActiveNodeList = []
@@ -147,6 +149,28 @@ class Render {
     })
     // 性能模式
     this.performanceMode()
+    // 实时渲染当节点文本编辑时
+    if (this.mindMap.opt.openRealtimeRenderOnNodeTextEdit) {
+      this.mindMap.on('node_text_edit_change', ({ node, text }) => {
+        node._textData = node.createTextNode(text)
+        const { width, height } = node.getNodeRect()
+        node.width = width
+        node.height = height
+        node.layout()
+        this.mindMap.render(() => {
+          this.textEdit.updateTextEditNode()
+        })
+      })
+    }
+    // 处理非https下的复制黏贴问题
+    // 暂时不启用，因为给页面的其他输入框（比如节点文本编辑框）粘贴内容也会触发，冲突问题暂时没有想到好的解决方法，不可能要求所有输入框都阻止冒泡
+    // if (!navigator.clipboard) {
+    //   this.handlePaste = this.handlePaste.bind(this)
+    //   window.addEventListener('paste', this.handlePaste)
+    //   this.mindMap.on('beforeDestroy', () => {
+    //     window.removeEventListener('paste', this.handlePaste)
+    //   })
+    // }
   }
 
   // 性能模式，懒加载节点
@@ -391,7 +415,7 @@ class Render {
     this.mindMap.keyCommand.addShortcut('Control+Down', () => {
       this.mindMap.execCommand('DOWN_NODE')
     })
-    // 复制节点、
+    // 复制节点
     this.mindMap.keyCommand.addShortcut('Control+c', () => {
       this.copy()
     })
@@ -401,7 +425,7 @@ class Render {
     })
     // 粘贴节点
     this.mindMap.keyCommand.addShortcut('Control+v', () => {
-      this.paste()
+      if (navigator.clipboard) this.paste()
     })
     // 根节点居中显示
     this.mindMap.keyCommand.addShortcut('Control+Enter', () => {
@@ -1104,6 +1128,28 @@ class Render {
     })
   }
 
+  // 非https下复制黏贴，获取内容方法
+  handlePaste(event) {
+    const { disabledClipboard } = this.mindMap.opt
+    if (disabledClipboard) return
+    const clipboardData =
+      event.clipboardData || event.originalEvent.clipboardData
+    const items = clipboardData.items
+    let img = null
+    let text = ''
+    Array.from(items).forEach(item => {
+      if (item.type.indexOf('image') > -1) {
+        img = item.getAsFile()
+      }
+      if (item.type.indexOf('text') > -1) {
+        text = clipboardData.getData('text')
+      }
+    })
+    this.pasteData.img = img
+    this.pasteData.text = text
+    this.paste()
+  }
+
   // 粘贴
   async paste() {
     const {
@@ -1117,7 +1163,9 @@ class Render {
     let img = null
     if (!disabledClipboard) {
       try {
-        const res = await getDataFromClipboard()
+        const res = navigator.clipboard
+          ? await getDataFromClipboard()
+          : this.pasteData
         text = res.text || ''
         img = res.img || null
       } catch (error) {
@@ -1593,40 +1641,53 @@ class Render {
   }
 
   //  展开所有
-  expandAllNode() {
+  expandAllNode(uid = '') {
     if (!this.renderTree) return
-    walk(
-      this.renderTree,
-      null,
-      node => {
-        if (!node.data.expand) {
-          node.data.expand = true
-        }
-      },
-      null,
-      true,
-      0,
-      0
-    )
+
+    const _walk = (node, enableExpand) => {
+      // 如果该节点为目标节点，那么修改允许展开的标志
+      if (!enableExpand && node.data.uid === uid) {
+        enableExpand = true
+      }
+      if (enableExpand && !node.data.expand) {
+        node.data.expand = true
+      }
+      if (node.children && node.children.length > 0) {
+        node.children.forEach(child => {
+          _walk(child, enableExpand)
+        })
+      }
+    }
+    _walk(this.renderTree, !uid)
+
     this.mindMap.render()
   }
 
   //  收起所有
-  unexpandAllNode(isSetRootNodeCenter = true) {
+  unexpandAllNode(isSetRootNodeCenter = true, uid = '') {
     if (!this.renderTree) return
-    walk(
-      this.renderTree,
-      null,
-      (node, parent, isRoot) => {
-        if (!isRoot && node.children && node.children.length > 0) {
-          node.data.expand = false
-        }
-      },
-      null,
-      true,
-      0,
-      0
-    )
+
+    const _walk = (node, isRoot, enableUnExpand) => {
+      // 如果该节点为目标节点，那么修改允许展开的标志
+      if (!enableUnExpand && node.data.uid === uid) {
+        enableUnExpand = true
+      }
+      if (
+        enableUnExpand &&
+        !isRoot &&
+        node.children &&
+        node.children.length > 0
+      ) {
+        node.data.expand = false
+      }
+      if (node.children && node.children.length > 0) {
+        node.children.forEach(child => {
+          _walk(child, false, enableUnExpand)
+        })
+      }
+    }
+    _walk(this.renderTree, true, !uid)
+
     this.mindMap.render(() => {
       if (isSetRootNodeCenter) {
         this.setRootNodeCenter()
@@ -2035,19 +2096,39 @@ class Render {
   }
 
   // 高亮节点或子节点
-  highlightNode(node, range) {
+  highlightNode(node, range, style) {
     // 如果当前正在渲染，那么不进行高亮，因为节点位置可能不正确
     if (this.isRendering) return
-    const { highlightNodeBoxStyle = {} } = this.mindMap.opt
+    style = {
+      stroke: 'rgb(94, 200, 248)',
+      fill: 'transparent',
+      ...(style || {})
+    }
+    // 尚未创建
     if (!this.highlightBoxNode) {
       this.highlightBoxNode = new Polygon()
         .stroke({
-          color: highlightNodeBoxStyle.stroke || 'transparent'
+          color: style.stroke || 'transparent'
         })
         .fill({
-          color: highlightNodeBoxStyle.fill || 'transparent'
+          color: style.fill || 'transparent'
         })
+    } else if (this.highlightBoxNodeStyle) {
+      // 样式更新了
+      if (
+        this.highlightBoxNodeStyle.stroke !== style.stroke ||
+        this.highlightBoxNodeStyle.fill !== style.fill
+      ) {
+        this.highlightBoxNode
+          .stroke({
+            color: style.stroke || 'transparent'
+          })
+          .fill({
+            color: style.fill || 'transparent'
+          })
+      }
     }
+    this.highlightBoxNodeStyle = { ...style }
     let minx = Infinity,
       miny = Infinity,
       maxx = -Infinity,

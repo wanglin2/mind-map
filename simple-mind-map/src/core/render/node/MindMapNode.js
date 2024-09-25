@@ -34,6 +34,8 @@ class MindMapNode {
     this.lineDraw = this.mindMap.lineDraw
     // 样式实例
     this.style = new Style(this)
+    // 节点当前生效的全部样式
+    this.effectiveStyles = {}
     // 形状实例
     this.shapeInstance = new Shape(this)
     this.shapePadding = {
@@ -1178,10 +1180,9 @@ class MindMapNode {
 
   //  获取padding值
   getPaddingVale() {
-    let { isActive } = this.getData()
     return {
-      paddingX: this.getStyle('paddingX', true, isActive),
-      paddingY: this.getStyle('paddingY', true, isActive)
+      paddingX: this.getStyle('paddingX'),
+      paddingY: this.getStyle('paddingY')
     }
   }
 

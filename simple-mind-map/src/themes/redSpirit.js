@@ -1,8 +1,8 @@
 import defaultTheme from './default'
-import merge from 'deepmerge'
+import { mergeTheme } from '../utils'
 
 // 红色精神
-export default merge(defaultTheme, {
+export default mergeTheme(defaultTheme, {
   // 背景颜色
   backgroundColor: 'rgb(255, 238, 228)',
   // 连线的颜色

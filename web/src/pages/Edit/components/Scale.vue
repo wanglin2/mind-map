@@ -10,6 +10,7 @@
     </el-tooltip>
     <div class="scaleInfo">
       <input
+        ref="inputRef"
         type="text"
         v-model="scaleNum"
         @input="onScaleNumInput"
@@ -55,12 +56,15 @@ export default {
   watch: {
     mindMap(val, oldVal) {
       if (val && !oldVal) {
-        this.mindMap.on('scale', scale => {
-          this.scaleNum = this.toPer(scale)
-        })
+        this.mindMap.on('scale', this.onScale)
+        this.mindMap.on('draw_click', this.onDrawClick)
         this.scaleNum = this.toPer(this.mindMap.view.scale)
       }
     }
+  },
+  beforeDestroy() {
+    this.mindMap.off('scale', this.onScale)
+    this.mindMap.off('draw_click', this.onDrawClick)
   },
   methods: {
     // 转换成百分数
@@ -98,6 +102,14 @@ export default {
         const cy = this.mindMap.height / 2
         this.mindMap.view.setScale(this.scaleNum / 100, cx, cy)
       }
+    },
+
+    onScale(scale) {
+      this.scaleNum = this.toPer(scale)
+    },
+
+    onDrawClick() {
+      if (this.$refs.inputRef) this.$refs.inputRef.blur()
     }
   }
 }
