@@ -30,8 +30,11 @@ class View {
     })
     // 拖动视图
     this.mindMap.event.on('mousedown', e => {
-      if (this.mindMap.opt.isDisableDrag) return
-      e.preventDefault()
+      const { isDisableDrag, mousedownEventPreventDefault } = this.mindMap.opt
+      if (isDisableDrag) return
+      if (mousedownEventPreventDefault) {
+        e.preventDefault()
+      }
       this.sx = this.x
       this.sy = this.y
     })

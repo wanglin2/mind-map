@@ -245,6 +245,8 @@ export const defaultOpt = {
   emptyTextMeasureHeightText: 'abc123我和你',
   // 是否在进行节点文本编辑时实时更新节点大小和节点位置，开启后当节点数量比较多时可能会造成卡顿
   openRealtimeRenderOnNodeTextEdit: false,
+  // 默认会给容器元素el绑定mousedown事件，并且会阻止其默认事件，这会带来一定问题，比如你聚焦在思维导图外的其他输入框，点击画布就不会触发其失焦，可以通过该选项关闭阻止。关闭后也会带来一定问题，比如鼠标框选节点时可能会选中节点文字，看你如何取舍
+  mousedownEventPreventDefault: true,
 
   // 【Select插件】
   // 多选节点时鼠标移动到边缘时的画布移动偏移量
