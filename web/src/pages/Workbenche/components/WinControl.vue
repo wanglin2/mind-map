@@ -1,5 +1,5 @@
 <template>
-  <div class="winControl noDrag" v-if="IS_WIN">
+  <div class="winControl noDrag" v-if="IS_WIN || IS_LINUX">
     <div class="winControlBtn iconfont iconzuixiaohua" @click="minimize"></div>
     <div
       class="winControlBtn iconfont"

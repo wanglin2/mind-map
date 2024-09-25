@@ -23,7 +23,8 @@ Vue.mixin({
     return {
       IS_ELECTRON: window.IS_ELECTRON,
       IS_MAC: window.platform === 'darwin',
-      IS_WIN: window.platform === 'win32'
+      IS_WIN: window.platform === 'win32',
+      IS_LINUX: window.platform === 'linux'
     }
   }
 })
