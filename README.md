@@ -469,4 +469,12 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
         <span>晏江</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>Eric</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/Joe.jpg" style="width: 50px;height: 50px;" />
+        <span>Joe</span>
+    </span>
 </p>
