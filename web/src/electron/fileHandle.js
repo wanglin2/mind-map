@@ -7,7 +7,9 @@ import {
   removeFileInRecent,
   replaceFileInRecent,
   getRecent,
-  saveFileListToRecent
+  saveFileListToRecent,
+  saveEditWindowSize,
+  getEditWindowSize
 } from './storage'
 import { v4 as uuid } from 'uuid'
 
@@ -21,11 +23,10 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
   // 新建编辑页面
   const openIds = []
   const openIdToWin = {}
+  const windowSize = getEditWindowSize() || {}
   const createEditWindow = async (event, id) => {
     openIds.push(id)
-    const win = new BrowserWindow({
-      width: 1200,
-      height: 800,
+    const options = {
       frame: false,
       titleBarStyle: 'hiddenInset',
       webPreferences: {
@@ -35,7 +36,18 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
         contextIsolation: true,
         preload: path.join(__dirname, 'preload.js')
       }
-    })
+    }
+    if (windowSize.width && windowSize.height) {
+      options.width = windowSize.width
+      options.height = windowSize.height
+    } else {
+      options.width = 1200
+      options.height = 800
+    }
+    const win = new BrowserWindow(options)
+    if (windowSize.maximize) {
+      win.maximize()
+    }
     openIdToWin[id] = win
     win.on('closed', () => {
       // 从openIds数组中删除
@@ -49,18 +61,46 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
       // 从idToFilePath中删除
       delete idToFilePath[id]
     })
+    win.on('resize', () => {
+      const size = win.getSize()
+      windowSize.width = size[0]
+      windowSize.height = size[1]
+      saveEditWindowSize({
+        ...windowSize
+      })
+    })
+    win.on('maximize', () => {
+      windowSize.maximize = true
+      saveEditWindowSize({
+        ...windowSize
+      })
+    })
+    win.on('unmaximize', () => {
+      windowSize.maximize = false
+      saveEditWindowSize({
+        ...windowSize
+      })
+    })
     if (process.env.WEBPACK_DEV_SERVER_URL) {
       // Load the url of the dev server if in development mode
       win.loadURL(
         process.env.WEBPACK_DEV_SERVER_URL + '/#/workbenche/edit/' + id
       )
-      // if (!process.env.IS_TEST) win.webContents.openDevTools()
+      if (!process.env.IS_TEST) win.webContents.openDevTools()
     } else {
       // Load the index.html when not in development
       win.loadURL('app://./index.html/#/workbenche/edit/' + id)
     }
   }
   ipcMain.on('create', createEditWindow)
+
+  // 获取窗口是否处于最大化
+  ipcMain.handle('getIsMaximize', (event, id) => {
+    if (openIdToWin[id]) {
+      return openIdToWin[id].isMaximized()
+    }
+    return false
+  })
 
   // 保存文件
   const idToFilePath = {}
@@ -241,7 +281,7 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
     const exist = fs.existsSync(file)
     if (!exist) {
       removeFileInRecent(file).then(() => {
-        notifyMainWindowRefreshRecentFileList() 
+        notifyMainWindowRefreshRecentFileList()
       })
       return '文件不存在'
     }

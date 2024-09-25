@@ -17,6 +17,15 @@ export default {
       isMaximize: false
     }
   },
+  async created() {
+    try {
+      this.isMaximize = await window.electronAPI.getIsMaximize(
+        this.$route.params.id
+      )
+    } catch (error) {
+      console.log(error)
+    }
+  },
   methods: {
     minimize() {
       window.electronAPI.minimize()

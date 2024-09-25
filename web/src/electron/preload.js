@@ -31,5 +31,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   openPath: (path, relativePath) =>
     ipcRenderer.invoke('openPath', path, relativePath),
   saveClientConfig: config => ipcRenderer.invoke('saveClientConfig', config),
-  getClientConfig: () => ipcRenderer.invoke('getClientConfig')
+  getClientConfig: () => ipcRenderer.invoke('getClientConfig'),
+  getIsMaximize: id => ipcRenderer.invoke('getIsMaximize', id)
 })

@@ -2,6 +2,7 @@ import storage from 'electron-json-storage'
 
 export const RECENT_FILE_LIST = 'recentFileList'
 export const CLIENT_CONFIG = 'client_config'
+export const EDIT_WINDOW_SIZE = 'edit_window_size'
 
 // 保存到最近文件
 export const saveToRecent = file => {
@@ -125,5 +126,24 @@ export const saveClientConfig = config => {
 // 获取配置
 export const getClientConfig = () => {
   const res = storage.getSync(CLIENT_CONFIG)
+  return res
+}
+
+// 保存编辑窗口大小信息
+export const saveEditWindowSize = config => {
+  return new Promise((resolve, reject) => {
+    storage.set(EDIT_WINDOW_SIZE, config, err => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve()
+      }
+    })
+  })
+}
+
+// 获取编辑窗口大小信息
+export const getEditWindowSize = () => {
+  const res = storage.getSync(EDIT_WINDOW_SIZE)
   return res
 }
