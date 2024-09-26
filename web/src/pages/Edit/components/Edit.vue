@@ -200,7 +200,9 @@ export default {
       autoSaveTimer: null,
       isNewFile: false,
       storeConfigTimer: null,
-      showDragMask: false
+      showDragMask: false,
+      lastViewData: null,
+      clientConfig: null
     }
   },
   computed: {
@@ -320,9 +322,9 @@ export default {
      */
     async getData() {
       let data = await window.electronAPI.getFileContent(this.$route.params.id)
-      const clientConfig = await window.electronAPI.getClientConfig()
-      const defaultTheme = clientConfig.theme || 'classic4'
-      const defaultLayout = clientConfig.layout || 'logicalStructure'
+      this.clientConfig = await window.electronAPI.getClientConfig()
+      const defaultTheme = this.clientConfig.theme || 'classic4'
+      const defaultLayout = this.clientConfig.layout || 'logicalStructure'
       let storeData = null
       if (data) {
         this.setFileName(data.name)
@@ -368,6 +370,15 @@ export default {
         storeData(data)
       })
       this.$bus.$on('view_data_change', data => {
+        if (
+          (!this.clientConfig || !this.clientConfig.viewTranslateChangeTriggerAutoSave) && 
+          this.lastViewData.transform.scaleX === data.transform.scaleX &&
+          this.lastViewData.transform.scaleY === data.transform.scaleY
+        ) {
+          this.lastViewData = simpleDeepClone(data)
+          return
+        }
+        this.lastViewData = simpleDeepClone(data)
         this.autoSave()
         this.setIsUnSave(true)
         clearTimeout(this.storeConfigTimer)
@@ -621,6 +632,7 @@ export default {
         //   return el
         // }
       })
+      this.lastViewData = simpleDeepClone(this.mindMap.view.getTransformData())
       if (this.openNodeRichText) this.addRichTextPlugin()
       if (this.isShowScrollbar) this.addScrollbarPlugin()
       if (this.isUseHandDrawnLikeStyle) this.addHandDrawnLikeStylePlugin()

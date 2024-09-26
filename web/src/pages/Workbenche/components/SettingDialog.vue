@@ -51,6 +51,13 @@
           alt=""
         />
       </div>
+      <div class="row">
+        <div class="label">拖动画布触发自动保存</div>
+        <el-checkbox
+          v-model="config.viewTranslateChangeTriggerAutoSave"
+          @change="onChange"
+        ></el-checkbox>
+      </div>
     </div>
   </el-dialog>
 </template>
@@ -80,7 +87,8 @@ export default {
       dialogVisible: false,
       config: {
         layout: '',
-        theme: ''
+        theme: '',
+        viewTranslateChangeTriggerAutoSave: false
       },
       clientConfig: null
     }
@@ -105,6 +113,8 @@ export default {
       this.clientConfig = await window.electronAPI.getClientConfig()
       this.config.layout = this.clientConfig.layout || 'logicalStructure'
       this.config.theme = this.clientConfig.theme || 'classic4'
+      this.config.viewTranslateChangeTriggerAutoSave =
+        this.clientConfig.viewTranslateChangeTriggerAutoSave || false
     },
 
     onChange() {
@@ -132,7 +142,8 @@ export default {
       margin-bottom: 12px;
 
       .label {
-        width: 100px;
+        width: 90px;
+        margin-right: 12px;
       }
 
       img {
