@@ -101,6 +101,10 @@ export default class TextEdit {
 
   // 按键事件
   onKeydown(e) {
+    // 检测外部传入的自定义是否进入编辑态拦截方法，有些情况阻止冒泡不管用
+    if (this.mindMap.opt.checkCustomEnterTextEdit && !this.mindMap.opt.checkCustomEnterTextEdit()) { 
+      return
+    };
     const activeNodeList = this.mindMap.renderer.activeNodeList
     if (activeNodeList.length <= 0 || activeNodeList.length > 1) return
     const node = activeNodeList[0]
