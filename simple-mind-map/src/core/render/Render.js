@@ -1156,7 +1156,8 @@ class Render {
       errorHandler,
       handleIsSplitByWrapOnPasteCreateNewNode,
       handleNodePasteImg,
-      disabledClipboard
+      disabledClipboard,
+      onlyPasteTextWhenHasImgAndText
     } = this.mindMap.opt
     // 读取剪贴板的文字和图片
     let text = ''
@@ -1261,7 +1262,7 @@ class Render {
         }
       }
       // 存在图片，则添加到当前激活节点
-      if (img) {
+      if (img && (!text || !onlyPasteTextWhenHasImgAndText)) {
         try {
           let imgData = null
           // 自定义图片处理函数
