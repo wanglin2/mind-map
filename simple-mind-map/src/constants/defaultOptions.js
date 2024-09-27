@@ -7,6 +7,8 @@ export const defaultOpt = {
   el: null,
   // 思维导图回显数据
   data: null,
+  // 要恢复的视图数据，一般通过mindMap.view.getTransformData()方法获取
+  viewData: null,
   // 是否只读
   readonly: false,
   // 布局
