@@ -98,6 +98,8 @@ class Render {
     this.beingPasteImgSize = 0
     this.currentBeingPasteType = ''
     this.pasteData = { text: null, img: null }
+    this.isInputActive = false
+    this.editableElements = false
     // 节点高亮框
     this.highlightBoxNode = null
     this.highlightBoxNodeStyle = null
@@ -164,13 +166,13 @@ class Render {
     }
     // 处理非https下的复制黏贴问题
     // 暂时不启用，因为给页面的其他输入框（比如节点文本编辑框）粘贴内容也会触发，冲突问题暂时没有想到好的解决方法，不可能要求所有输入框都阻止冒泡
-    // if (!navigator.clipboard) {
-    //   this.handlePaste = this.handlePaste.bind(this)
-    //   window.addEventListener('paste', this.handlePaste)
-    //   this.mindMap.on('beforeDestroy', () => {
-    //     window.removeEventListener('paste', this.handlePaste)
-    //   })
-    // }
+    if (!navigator.clipboard) {
+      this.handlePaste = this.handlePaste.bind(this)
+      window.addEventListener('paste', this.handlePaste)
+      this.mindMap.on('beforeDestroy', () => {
+        window.removeEventListener('paste', this.handlePaste)
+      })
+    }
   }
 
   // 性能模式，懒加载节点
@@ -1128,10 +1130,36 @@ class Render {
     })
   }
 
+  // 监听页面上是否有整处于编辑状态
+  watchPageEditInit() {
+    this.editableElements = document.querySelectorAll('input[type="text"], input[type="password"], textarea, div[contenteditable="true"]');
+    this.editableElements.forEach(element => {
+      element.addEventListener('focus', this.updateInputStatus([element]));
+      element.addEventListener('blur', this.updateInputStatus([element]));
+    });
+
+    window.addEventListener('click', this.updateInputStatus(this.editableElements));
+  }
+
+  watchPageEditUnbind(){
+    window.removeEventListener('click', this.updateInputStatus);
+    this.editableElements.forEach(element => {
+      element.removeEventListener('focus', this.updateInputStatus);
+      element.removeEventListener('blur', this.updateInputStatus);
+    });
+  }
+  
+  // 更新是否有编辑的元素的状态
+  updateInputStatus(editableElements) {
+    this.isInputActive = editableElements ? [...editableElements].some(el => el === document.activeElement) : false;
+  }
+
   // 非https下复制黏贴，获取内容方法
   handlePaste(event) {
     const { disabledClipboard } = this.mindMap.opt
-    if (disabledClipboard) return
+    this.watchPageEditInit()
+    console.log(this.isInputActive,'this.isInputActive')
+    if (disabledClipboard || this.isInputActive) return
     const clipboardData =
       event.clipboardData || event.originalEvent.clipboardData
     const items = clipboardData.items
@@ -1291,6 +1319,7 @@ class Render {
         this.mindMap.execCommand('PASTE_NODE', this.beingCopyData)
       }
     }
+    this.watchPageEditUnbind()
   }
 
   //  将节点移动到另一个节点的前面
@@ -1600,7 +1629,7 @@ class Render {
     this.setNodeDataRender(node, data)
     // 更新了连线的样式
     if (lineStyleProps.includes(prop)) {
-      ;(node.parent || node).renderLine(true)
+      (node.parent || node).renderLine(true)
     }
   }
 
@@ -1621,7 +1650,7 @@ class Render {
       }
     })
     if (hasLineStyleProps) {
-      ;(node.parent || node).renderLine(true)
+      (node.parent || node).renderLine(true)
     }
   }
 
