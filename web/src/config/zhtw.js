@@ -1,23 +1,23 @@
-// 字体列表
+// 字型列表
 export const fontFamilyList = [
   {
-    name: '宋体',
+    name: '宋體',
     value: '宋体, SimSun, Songti SC'
   },
   {
-    name: '微软雅黑',
+    name: '微軟雅黑',
     value: '微软雅黑, Microsoft YaHei'
   },
   {
-    name: '楷体',
+    name: '楷體',
     value: '楷体, 楷体_GB2312, SimKai, STKaiti'
   },
   {
-    name: '黑体',
+    name: '黑體',
     value: '黑体, SimHei, Heiti SC'
   },
   {
-    name: '隶书',
+    name: '隸書',
     value: '隶书, SimLi'
   },
   {
@@ -54,156 +54,94 @@ export const fontFamilyList = [
   }
 ]
 
-// 字号
-export const fontSizeList = [10, 12, 16, 18, 24, 32, 48]
-
-// 行高
-export const lineHeightList = [1, 1.5, 2, 2.5, 3]
-
-// 颜色
-export const colorList = [
-  '#4D4D4D',
-  '#999999',
-  '#FFFFFF',
-  '#F44E3B',
-  '#FE9200',
-  '#FCDC00',
-  '#DBDF00',
-  '#A4DD00',
-  '#68CCCA',
-  '#73D8FF',
-  '#AEA1FF',
-  '#FDA1FF',
-  '#333333',
-  '#808080',
-  '#cccccc',
-  '#D33115',
-  '#E27300',
-  '#FCC400',
-  '#B0BC00',
-  '#68BC00',
-  '#16A5A5',
-  '#009CE0',
-  '#7B64FF',
-  '#FA28FF',
-  '#000000',
-  '#666666',
-  '#B3B3B3',
-  '#9F0500',
-  '#C45100',
-  '#FB9E00',
-  '#808900',
-  '#194D33',
-  '#0C797D',
-  '#0062B1',
-  '#653294',
-  // '#AB149E',
-  'transparent'
-]
-
-// 边框宽度
-export const borderWidthList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
-// 边框样式
+// 框線樣式
 export const borderDasharrayList = [
   {
-    name: '实线',
+    name: '實線',
     value: 'none'
   },
   {
-    name: '虚线1',
+    name: '虛線 1',
     value: '5,5'
   },
   {
-    name: '虚线2',
+    name: '虛線 2',
     value: '10,10'
   },
   {
-    name: '虚线3',
+    name: '虛線 3',
     value: '20,10,5,5,5,10'
   },
   {
-    name: '虚线4',
+    name: '虛線 4',
     value: '5, 5, 1, 5'
   },
   {
-    name: '虚线5',
+    name: '虛線 5',
     value: '15, 10, 5, 10, 15'
   },
   {
-    name: '虚线6',
+    name: '虛線 6',
     value: '1, 5'
   },
   {
-    name: '虚线7',
+    name: '虛線 7',
     value: '6, 4'
   }
 ]
 
-// 圆角
-export const borderRadiusList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
-// 线宽
-export const lineWidthList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
-export const lineStyleMap = {
-  straight: `<svg width="60" height="26"><path d="M18,14L30,14L30,5L42,5" fill="none" stroke="#000" stroke-width="2"></path><path d="M18,14L30,14L30,23L42,23" fill="none" stroke="#000" stroke-width="2"></path></svg>`,
-  curve: `<svg width="60" height="26"><path d="M18,14L30,14A12,-9 0 0 1 42,5" fill="none" stroke="#000" stroke-width="2"></path><path d="M18,14L30,14A12,9 0 0 0 42,23" fill="none" stroke="#000" stroke-width="2"></path></svg>`,
-  direct: `<svg width="60" height="26"><path d="M18,14L30,14L42,5" fill="none" stroke="#000" stroke-width="2"></path><path d="M18,14L30,14L42,23" fill="none" stroke="#000" stroke-width="2"></path></svg>`
-}
-
-// 连线风格
+// 連線樣式
 export const lineStyleList = [
   {
-    name: '直线',
+    name: '直線',
     value: 'straight'
   },
   {
-    name: '曲线',
+    name: '曲線',
     value: 'curve'
   },
   {
-    name: '直连',
+    name: '直接連線',
     value: 'direct'
   }
 ]
 
-// 曲线风格中，根节点样式是否和其他节点保持一致
+// 曲線樣式中，根節點樣式是否和其他節點保持一致
 export const rootLineKeepSameInCurveList = [
   {
-    name: '括号',
+    name: '括號',
     value: false
   },
   {
-    name: '大括号',
+    name: '大括號',
     value: true
   }
 ]
 
-// 图片重复方式
+// 圖片重複方式
 export const backgroundRepeatList = [
   {
-    name: '不重复',
+    name: '不重複',
     value: 'no-repeat'
   },
   {
-    name: '重复',
+    name: '重複',
     value: 'repeat'
   },
   {
-    name: '水平方向重复',
+    name: '水平重複',
     value: 'repeat-x'
   },
   {
-    name: '垂直方向重复',
+    name: '垂直重複',
     value: 'repeat-y'
   }
 ]
 
-// 背景图片定位
+// 背景圖片位置
 export const backgroundPositionList = [
   {
-    name: '默认',
+    name: '預設',
     value: '0% 0%'
   },
   {
@@ -235,7 +173,7 @@ export const backgroundPositionList = [
     value: 'center top'
   },
   {
-    name: '居中',
+    name: '置中',
     value: 'center center'
   },
   {
@@ -244,140 +182,136 @@ export const backgroundPositionList = [
   }
 ]
 
-// 背景图片大小
-export const backgroundSizeList = [
-  {
-    name: '自动',
-    value: 'auto'
-  },
-  {
-    name: '覆盖',
-    value: 'cover'
-  },
-  {
-    name: '保持',
-    value: 'contain'
-  }
-]
-
-// 数据存储
-export const store = {
-  sidebarZIndex: 1 //侧边栏zIndex
-}
 const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0
 const ctrl = isMac ? '⌘' : 'Ctrl'
 const enter = isMac ? 'Return' : 'Enter'
 const macFn = isMac ? 'fn + ' : ''
 
-// 快捷键列表
+// 背景圖片大小
+export const backgroundSizeList = [
+  {
+    name: '自動',
+    value: 'auto'
+  },
+  {
+    name: '覆蓋',
+    value: 'cover'
+  },
+  {
+    name: '包含',
+    value: 'contain'
+  }
+]
+
+// 快捷鍵列表
 export const shortcutKeyList = [
   {
-    type: '节点操作',
+    type: '節點操作',
     list: [
       {
         icon: 'icontianjiazijiedian',
-        name: '插入下级节点',
+        name: '插入子節點',
         value: 'Tab | Insert'
       },
       {
         icon: 'iconjiedian',
-        name: '插入同级节点',
+        name: '插入同層節點',
         value: enter
       },
       {
         icon: 'icondodeparent',
-        name: '插入父节点',
+        name: '插入父節點',
         value: 'Shift + Tab'
       },
       {
         icon: 'iconshangyi',
-        name: '上移节点',
+        name: '上移節點',
         value: `${ctrl} + ↑`
       },
       {
         icon: 'iconxiayi',
-        name: '下移节点',
+        name: '下移節點',
         value: `${ctrl} + ↓`
       },
       {
         icon: 'icongaikuozonglan',
-        name: '插入概要',
+        name: '插入摘要',
         value: `${ctrl} + G`
       },
       {
         icon: 'iconzhankai',
-        name: '展开/收起节点',
+        name: '展開／收合節點',
         value: '/'
       },
       {
         icon: 'iconshanchu',
-        name: '删除节点',
+        name: '刪除節點',
         value: 'Delete | Backspace'
       },
       {
         icon: 'iconshanchu',
-        name: '仅删除当前节点',
+        name: '僅刪除目前節點',
         value: 'Shift + Backspace'
       },
       {
         icon: 'iconfuzhi',
-        name: '复制节点',
+        name: '複製節點',
         value: `${ctrl} + C`
       },
       {
         icon: 'iconjianqie',
-        name: '剪切节点',
+        name: '剪下節點',
         value: `${ctrl} + X`
       },
       {
         icon: 'iconniantie',
-        name: '粘贴节点',
+        name: '貼上節點',
         value: `${ctrl} + V`
       },
       {
         icon: 'iconbianji',
-        name: '编辑节点',
+        name: '編輯節點',
         value: macFn + 'F2'
       },
       {
         icon: 'iconhuanhang',
-        name: '文本换行',
+        name: '文字換行',
         value: `Shift + ${enter}`
       },
       {
         icon: 'iconhoutui-shi',
-        name: '回退',
+        name: '復原',
         value: `${ctrl} + Z`
       },
       {
         icon: 'iconqianjin1',
-        name: '前进',
+        name: '重做',
         value: `${ctrl} + Y`
       },
       {
         icon: 'iconquanxuan',
-        name: '全选',
+        name: '全選',
         value: `${ctrl} + A`
       },
       {
         icon: 'iconquanxuan',
-        name: '多选',
-        value: `右键 / ${ctrl} + 左键`
+        name: '多重選擇',
+        value: `右鍵 / ${ctrl} + 左鍵`
       },
       {
         icon: 'iconzhengli',
-        name: '一键整理布局',
+        name: '一鍵整理版面配置',
         value: `${ctrl} + L`
       },
       {
         icon: 'iconsousuo',
-        name: '搜索和替换',
+        name: '搜尋與取代',
         value: `${ctrl} + F`
       }
     ]
   },
   {
-    type: '画布操作',
+    type: '畫布操作',
     list: [
       {
         icon: 'iconfangda',
@@ -386,75 +320,59 @@ export const shortcutKeyList = [
       },
       {
         icon: 'iconsuoxiao',
-        name: '缩小',
+        name: '縮小',
         value: `${ctrl} + -`
       },
       {
         icon: 'iconfangda',
-        name: '放大/缩小',
-        value: `${ctrl} + 鼠标滚动`
+        name: '放大／縮小',
+        value: `${ctrl} + 滑鼠滾輪`
       },
       {
         icon: 'icondingwei',
-        name: '回到根节点',
+        name: '回到根節點',
         value: `${ctrl} + ${enter}`
       },
       {
         icon: 'iconquanping1',
-        name: '适应画布',
+        name: '適應畫布',
         value: `${ctrl} + i`
       }
     ]
   },
   {
-    type: '大纲操作',
+    type: '大綱操作',
     list: [
       {
         icon: 'iconhuanhang',
-        name: '文本换行',
+        name: '文字換行',
         value: `Shift + ${enter}`
       },
       {
         icon: 'iconshanchu',
-        name: '删除节点',
+        name: '刪除節點',
         value: 'Delete'
       },
       {
         icon: 'icontianjiazijiedian',
-        name: '插入下级节点',
+        name: '插入子節點',
         value: 'Tab'
       },
       {
         icon: 'iconjiedian',
-        name: '插入同级节点',
+        name: '插入同層節點',
         value: enter
       },
       {
         icon: 'icondodeparent',
-        name: '上移一个层级',
+        name: '上移一層',
         value: 'Shift + Tab'
       }
     ]
   }
 ]
 
-export const shapeListMap = {
-  rectangle: 'M 4 12 L 4 3 L 56 3 L 56 21 L 4 21 L 4 12 Z',
-  diamond: 'M 4 12 L 30 3 L 56 12 L 30 21 L 4 12 Z',
-  parallelogram: 'M 10 3 L 56 3 L 50 21 L 4 21 L 10 3 Z',
-  roundedRectangle:
-    'M 13 3 L 47 3 A 9 9 0, 0 1 47 21 L 13 21 A 9 9 0, 0 1 13 3 Z',
-  octagonalRectangle:
-    'M 4 12 L 4 9 L 10 3 L 50 3 L 56 9 L 56 15 L 50 21 L 10 21 L 4 15 L 4 12 Z',
-  outerTriangularRectangle:
-    'M 4 12 L 10 3 L 50 3 L 56 12 L 50 21 L 10 21 L 4 12 Z',
-  innerTriangularRectangle:
-    'M 10 12 L 4 3 L 56 3 L 50 12 L 56 21 L 4 21 L 10 12 Z',
-  ellipse: 'M 4 12 A 26 9 0, 1, 0 30 3 A 26 9 0, 0, 0 4 12 Z',
-  circle: 'M 21 12 A 9 9 0, 1, 0 30 3 A 9 9 0, 0, 0 21 12 Z'
-}
-
-// 形状列表
+// 形狀列表
 export const shapeList = [
   {
     name: '矩形',
@@ -465,11 +383,11 @@ export const shapeList = [
     value: 'diamond'
   },
   {
-    name: '平行四边形',
+    name: '平行四邊形',
     value: 'parallelogram'
   },
   {
-    name: '圆角矩形',
+    name: '圓角矩形',
     value: 'roundedRectangle'
   },
   {
@@ -481,137 +399,121 @@ export const shapeList = [
     value: 'outerTriangularRectangle'
   },
   {
-    name: '内三角矩形',
+    name: '內三角矩形',
     value: 'innerTriangularRectangle'
   },
   {
-    name: '椭圆',
+    name: '橢圓形',
     value: 'ellipse'
   },
   {
-    name: '圆',
+    name: '圓形',
     value: 'circle'
   }
 ]
 
-// 多语言列表
-export const langList = [
-  {
-    value: 'zh',
-    name: '简体中文'
-  },
-  {
-    value: 'zhtw',
-    name: '繁體中文'
-  },
-  {
-    value: 'en',
-    name: 'English'
-  }
-]
-
-// 侧边栏列表
+// 側邊欄列表
 export const sidebarTriggerList = [
   {
-    name: '节点样式',
+    name: '節點樣式',
     value: 'nodeStyle',
     icon: 'iconzhuti'
   },
   {
-    name: '基础样式',
+    name: '基礎樣式',
     value: 'baseStyle',
     icon: 'iconyangshi'
   },
   {
-    name: '主题',
+    name: '主題',
     value: 'theme',
     icon: 'iconjingzi'
   },
   {
-    name: '结构',
+    name: '結構',
     value: 'structure',
     icon: 'iconjiegou'
   },
   {
-    name: '大纲',
+    name: '大綱',
     value: 'outline',
     icon: 'iconfuhao-dagangshu'
   },
   {
-    name: '快捷键',
+    name: '快捷鍵',
     value: 'shortcutKey',
     icon: 'iconjianpan'
   }
 ]
 
-// 下载类型列表
+// 下載類型列表
 export const downTypeList = [
   {
-    name: '专有文件',
+    name: '專用檔案',
     type: 'smm',
     icon: 'iconwenjian',
-    desc: '可用于导入'
+    desc: '可用於匯入'
   },
   {
     name: 'JSON',
     type: 'json',
     icon: 'iconjson',
-    desc: '流行的数据交换格式，可用于导入'
+    desc: '常見的資料交換格式，可用於匯入'
   },
   {
-    name: '图片',
+    name: '圖片',
     type: 'png',
     icon: 'iconPNG',
-    desc: '适合查看分享'
+    desc: '適合檢視與分享'
   },
   {
     name: 'SVG',
     type: 'svg',
     icon: 'iconSVG',
-    desc: '可缩放矢量图形'
+    desc: '可縮放向量圖形'
   },
   {
     name: 'PDF',
     type: 'pdf',
     icon: 'iconpdf',
-    desc: '适合打印'
+    desc: '適合列印'
   },
   {
     name: 'Markdown',
     type: 'md',
     icon: 'iconmarkdown',
-    desc: '便于其他软件打开'
+    desc: '方便其他軟體開啟'
   },
   {
     name: 'XMind',
     type: 'xmind',
     icon: 'iconxmind',
-    desc: 'XMind格式'
+    desc: 'XMind 檔案'
   },
   {
     name: 'Txt',
     type: 'txt',
     icon: 'iconTXT',
-    desc: '纯文本文件'
+    desc: '純文字檔案'
   },
   {
     name: 'FreeMind',
     type: 'mm',
     icon: 'iconfreemind',
-    desc: 'FreeMind软件格式'
+    desc: 'FreeMind軟體格式'
   },
   {
     name: 'Excel',
     type: 'xlsx',
     icon: 'iconfile-excel',
-    desc: 'Excel软件格式'
+    desc: 'Excel軟體格式'
   }
 ]
 
-// 编号类型列表
+// 編號類型列表
 export const numberTypeList = [
   {
-    name: '无编号',
+    name: '無編號',
     value: ''
   },
   {
@@ -648,22 +550,22 @@ export const numberTypeList = [
   }
 ]
 
-// 编号层级列表
+// 編號層級列表
 export const numberLevelList = [
   {
-    name: '编号首层',
+    name: '編號第一層',
     value: 1
   },
   {
-    name: '编号前两层',
+    name: '編號前兩層',
     value: 2
   },
   {
-    name: '编号前三层',
+    name: '編號前三層',
     value: 3
   },
   {
-    name: '编号所有层',
+    name: '編號每一層',
     value: 0
   }
 ]

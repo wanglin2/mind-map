@@ -1,8 +1,8 @@
 import defaultTheme from './default'
-import merge from 'deepmerge'
+import { mergeTheme } from '../utils'
 
 //  活力橙
-export default merge(defaultTheme, {
+export default mergeTheme(defaultTheme, {
   // 连线的颜色
   lineColor: 'rgb(254, 146, 0)',
   lineWidth: 3,

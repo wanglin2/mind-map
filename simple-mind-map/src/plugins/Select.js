@@ -41,7 +41,8 @@ class Select {
 
   // 鼠标按下
   onMousedown(e) {
-    if (this.mindMap.opt.readonly) {
+    const { readonly, mousedownEventPreventDefault } = this.mindMap.opt
+    if (readonly) {
       return
     }
     let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
@@ -51,7 +52,9 @@ class Select {
     ) {
       return
     }
-    e.preventDefault()
+    if (mousedownEventPreventDefault) {
+      e.preventDefault()
+    }
     this.isMousedown = true
     this.cacheActiveList = [...this.mindMap.renderer.activeNodeList]
     let { x, y } = this.mindMap.toPos(e.clientX, e.clientY)

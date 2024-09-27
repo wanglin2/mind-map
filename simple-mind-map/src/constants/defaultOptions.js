@@ -19,6 +19,16 @@ export const defaultOpt = {
   themeConfig: {},
   // 放大缩小的增量比例
   scaleRatio: 0.2,
+  // 平移的步长比例，只在鼠标滚轮和触控板触发的平移中应用
+  translateRatio: 1,
+  // 最小缩小值，百分数，最小为0，该选项只会影响view.narrow方法（影响的行为为Ctrl+-快捷键、鼠标滚轮及触控板），不会影响其他方法，比如view.setScale，所以需要你自行限制大小
+  minZoomRatio: 20,
+  // 最大放大值，百分数，传-1代表不限制，否则传0以上数字，，该选项只会影响view.enlarge方法
+  maxZoomRatio: 400,
+  // 自定义判断wheel事件是否来自电脑的触控板
+  // 默认是通过判断e.deltaY的值是否小于10，显然这种方法是不准确的，当鼠标滚动的很慢，或者触摸移动的很快时判断就失效了，如果你有更好的方法，欢迎提交issue
+  // 如果你希望自己来判断，那么传递一个函数，接收一个参数e（事件对象），需要返回true或false，代表是否是来自触控板
+  customCheckIsTouchPad: null,
   // 鼠标缩放是否以鼠标当前位置为中心点，否则以画布中心点
   mouseScaleCenterUseMousePosition: true,
   // 最多显示几个标签
@@ -67,9 +77,7 @@ export const defaultOpt = {
     close: ''
   },
   // 处理收起节点数量
-  expandBtnNumHandler: num => {
-    return num
-  },
+  expandBtnNumHandler: null,
   // 是否显示带数量的收起按钮
   isShowExpandNum: true,
   // 是否只有当鼠标在画布内才响应快捷键事件
@@ -176,11 +184,6 @@ export const defaultOpt = {
   addHistoryTime: 100,
   // 是否禁止拖动画布
   isDisableDrag: false,
-  // 鼠标移入概要高亮所属节点时的高亮框样式
-  highlightNodeBoxStyle: {
-    stroke: 'rgb(94, 200, 248)',
-    fill: 'transparent'
-  },
   // 创建新节点时的行为
   /*
     DEFAULT  ：默认会激活新创建的节点，并且进入编辑模式。如果同时创建了多个新节点，那么只会激活而不会进入编辑模式
@@ -238,6 +241,12 @@ export const defaultOpt = {
     padding: 100, // 超出画布四周指定范围内依旧渲染节点
     removeNodeWhenOutCanvas: true // 节点移除画布可视区域后从画布删除
   },
+  // 如果节点文本为空，那么为了避免空白节点高度塌陷，会用该字段指定的文本测量一个高度
+  emptyTextMeasureHeightText: 'abc123我和你',
+  // 是否在进行节点文本编辑时实时更新节点大小和节点位置，开启后当节点数量比较多时可能会造成卡顿
+  openRealtimeRenderOnNodeTextEdit: false,
+  // 默认会给容器元素el绑定mousedown事件，并且会阻止其默认事件，这会带来一定问题，比如你聚焦在思维导图外的其他输入框，点击画布就不会触发其失焦，可以通过该选项关闭阻止。关闭后也会带来一定问题，比如鼠标框选节点时可能会选中节点文字，看你如何取舍
+  mousedownEventPreventDefault: true,
 
   // 【Select插件】
   // 多选节点时鼠标移动到边缘时的画布移动偏移量
@@ -321,6 +330,8 @@ export const defaultOpt = {
   // 导出png、svg、pdf时会获取画布上的svg数据进行克隆，然后通过该克隆的元素进行导出，如果你想对该克隆元素做一些处理，比如新增、替换、修改其中的一些元素，那么可以通过该参数传递一个处理函数，接收svg元素对象，处理后，需要返回原svg元素对象。
   // 需要注意的是svg对象指的是@svgdotjs/svg.js库的元素对象，所以你需要阅读该库的文档来操作该对象
   handleBeingExportSvg: null,
+  // 导出图片或pdf都是通过canvas将svg绘制出来，再导出，所以如果思维导图特别大，宽高可能会超出canvas支持的上限，所以会进行缩放，这个上限可以通过该参数设置，代表canvas宽和高的最大宽度
+  maxCanvasSize: 16384,
 
   // 【AssociativeLine插件】
   // 关联线默认文字
@@ -409,5 +420,13 @@ export const defaultOpt = {
 
   // 【OuterFrame】插件
   outerFramePaddingX: 10,
-  outerFramePaddingY: 10
+  outerFramePaddingY: 10,
+
+  // 【Painter】插件
+  // 是否只格式刷节点手动设置的样式，不考虑节点通过主题的应用的样式
+  onlyPainterNodeCustomStyles: false,
+
+  // 【NodeImgAdjust】插件
+  // 拦截节点图片的删除，点击节点图片上的删除按钮删除图片前会调用该函数，如果函数返回true则取消删除
+  beforeDeleteNodeImg: null
 }

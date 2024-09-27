@@ -53,17 +53,22 @@ class Painter {
       node.uid === this.painterNode.uid
     )
       return
-    const style = {}
+    let style = {}
+    // 格式刷节点所有生效的样式
+    if (!this.mindMap.opt.onlyPainterNodeCustomStyles) {
+      style = {
+        ...this.painterNode.effectiveStyles
+      }
+    }
     const painterNodeData = this.painterNode.getData()
     Object.keys(painterNodeData).forEach(key => {
       if (checkIsNodeStyleDataKey(key)) {
         style[key] = painterNodeData[key]
       }
     })
+    // 先去除目标节点的样式
+    this.mindMap.renderer._handleRemoveCustomStyles(node.getData())
     node.setStyles(style)
-    if (painterNodeData.activeStyle) {
-      node.setStyles(painterNodeData.activeStyle, true)
-    }
   }
 
   // 插件被移除前做的事情

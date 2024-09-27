@@ -19,7 +19,8 @@ import {
   getObjectChangedProps,
   isUndef,
   handleGetSvgDataExtraContent,
-  getNodeTreeBoundingRect
+  getNodeTreeBoundingRect,
+  mergeTheme
 } from './src/utils'
 import defaultTheme, {
   checkIsNodeSizeIndependenceConfig
@@ -34,6 +35,7 @@ class MindMap {
    * @param {defaultOpt} opt
    */
   constructor(opt = {}) {
+    MindMap.instanceCount++
     // 合并选项
     this.opt = this.handleOpt(merge(defaultOpt, opt))
     // 预处理节点数据
@@ -252,7 +254,7 @@ class MindMap {
   //  设置主题
   initTheme() {
     // 合并主题配置
-    this.themeConfig = merge(theme[this.opt.theme], this.opt.themeConfig)
+    this.themeConfig = mergeTheme(theme[this.opt.theme], this.opt.themeConfig)
     // 设置背景样式
     Style.setBackgroundStyle(this.el, this.themeConfig)
   }
@@ -563,8 +565,8 @@ class MindMap {
     let index = MindMap.hasPlugin(plugin)
     if (index === -1) {
       MindMap.usePlugin(plugin, opt)
-      this.initPlugin(plugin)
     }
+    this.initPlugin(plugin)
   }
 
   // 移除插件
@@ -583,6 +585,7 @@ class MindMap {
 
   // 实例化插件
   initPlugin(plugin) {
+    if (this[plugin.instanceName]) return
     this[plugin.instanceName] = new plugin({
       mindMap: this,
       pluginOpt: plugin.pluginOpt
@@ -616,6 +619,7 @@ class MindMap {
     this.el.innerHTML = ''
     this.el = null
     this.removeCss()
+    MindMap.instanceCount--
   }
 }
 
@@ -632,13 +636,14 @@ MindMap.hasPlugin = plugin => {
     return item === plugin
   })
 }
+MindMap.instanceCount = 0
 
 // 定义新主题
 MindMap.defineTheme = (name, config = {}) => {
   if (theme[name]) {
     return new Error('该主题名称已存在')
   }
-  theme[name] = merge(defaultTheme, config)
+  theme[name] = mergeTheme(defaultTheme, config)
 }
 
 export default MindMap
