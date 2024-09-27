@@ -1180,10 +1180,9 @@ class MindMapNode {
 
   //  获取padding值
   getPaddingVale() {
-    let { isActive } = this.getData()
     return {
-      paddingX: this.getStyle('paddingX', true, isActive),
-      paddingY: this.getStyle('paddingY', true, isActive)
+      paddingX: this.getStyle('paddingX'),
+      paddingY: this.getStyle('paddingY')
     }
   }
 

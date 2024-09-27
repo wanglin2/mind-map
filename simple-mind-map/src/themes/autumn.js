@@ -1,8 +1,8 @@
 import defaultTheme from './default'
-import merge from 'deepmerge'
+import { mergeTheme } from '../utils'
 
 // 秋天
-export default merge(defaultTheme, {
+export default mergeTheme(defaultTheme, {
   // 背景颜色
   backgroundColor: '#fff2df',
   // 连线的颜色

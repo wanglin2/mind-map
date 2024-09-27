@@ -224,9 +224,15 @@ class Search {
     replaceText = String(replaceText)
     let currentNode = this.matchNodeList[this.currentIndex]
     if (!currentNode) return
-    let text = this.getReplacedText(currentNode, this.searchText, replaceText)
+    // 如果当前搜索文本是替换文本的子串，那么该节点还是符合搜索结果的
+    const keep = replaceText.includes(this.searchText)
+    const text = this.getReplacedText(currentNode, this.searchText, replaceText)
     this.notResetSearchText = true
     currentNode.setText(text, currentNode.getData('richText'), true)
+    if (keep) {
+      this.updateMatchNodeList(this.matchNodeList)
+      return
+    }
     const newList = this.matchNodeList.filter(node => {
       return currentNode !== node
     })
@@ -249,6 +255,8 @@ class Search {
     )
       return
     replaceText = String(replaceText)
+    // 如果当前搜索文本是替换文本的子串，那么该节点还是符合搜索结果的
+    const keep = replaceText.includes(this.searchText)
     this.matchNodeList.forEach(node => {
       const text = this.getReplacedText(node, this.searchText, replaceText)
       if (this.isNodeInstance(node)) {
@@ -267,7 +275,11 @@ class Search {
     })
     this.mindMap.render()
     this.mindMap.command.addHistory()
-    this.endSearch()
+    if (keep) {
+      this.updateMatchNodeList(this.matchNodeList)
+    } else {
+      this.endSearch()
+    }
   }
 
   // 获取某个节点替换后的文本

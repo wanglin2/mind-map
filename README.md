@@ -103,7 +103,9 @@ const mindMap = new MindMap({
 
 # 微信交流群
 
-一群已满，可以扫描如下二维码进入二群，如已过期，可以微信添加`wanglinguanfang`拉你入群。思维导图相关问题皆可在群里提问，不必私聊作者。
+一群已满，可以扫描如下二维码进入二群，如已过期，可以微信添加`wanglinguanfang`拉你入群。
+
+大部分问题都可以通过文档解决，所以提问前请确保你已经阅读完了所有文档，文档里没有的可在群里提问，不必私聊作者。
 
 <img src="./qrcode.jpg" style="width: 300px" />
 
@@ -468,5 +470,13 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
         <span>晏江</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>Eric</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/Joe.jpg" style="width: 50px;height: 50px;" />
+        <span>Joe</span>
     </span>
 </p>

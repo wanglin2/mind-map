@@ -56,6 +56,9 @@
         <span class="name">{{ $t('contextmenu.moveDownNode') }}</span>
         <span class="desc">Ctrl + ↓</span>
       </div>
+      <div class="item" @click="exec('EXPAND_ALL')">
+        <span class="name">{{ $t('contextmenu.expandNodeChild') }}</span>
+      </div>
       <div class="item" v-if="supportNumbers">
         <span class="name">{{ $t('contextmenu.number') }}</span>
         <span class="el-icon-arrow-right"></span>
@@ -344,12 +347,11 @@ export default {
 
     // 计算右键菜单元素的显示位置
     getShowPosition(x, y) {
-      this.subItemsShowLeft = false
       const rect = this.$refs.contextmenuRef.getBoundingClientRect()
       if (x + rect.width > window.innerWidth) {
         x = x - rect.width - 20
-        this.subItemsShowLeft = true
       }
+      this.subItemsShowLeft = x + rect.width + 150 > window.innerWidth
       if (y + rect.height > window.innerHeight) {
         y = window.innerHeight - rect.height - 10
       }
@@ -461,6 +463,9 @@ export default {
             false,
             this.node
           )
+          break
+        case 'EXPAND_ALL':
+          this.$bus.$emit('execCommand', key, this.node.uid)
           break
         default:
           this.$bus.$emit('execCommand', key, ...args)

@@ -30,8 +30,11 @@ class View {
     })
     // 拖动视图
     this.mindMap.event.on('mousedown', e => {
-      if (this.mindMap.opt.isDisableDrag) return
-      e.preventDefault()
+      const { isDisableDrag, mousedownEventPreventDefault } = this.mindMap.opt
+      if (isDisableDrag) return
+      if (mousedownEventPreventDefault) {
+        e.preventDefault()
+      }
       this.sx = this.x
       this.sy = this.y
     })
@@ -63,7 +66,8 @@ class View {
         mouseScaleCenterUseMousePosition,
         mousewheelMoveStep,
         mousewheelZoomActionReverse,
-        disableMouseWheelZoom
+        disableMouseWheelZoom,
+        translateRatio
       } = this.mindMap.opt
       // 是否自定义鼠标滚轮事件
       if (
@@ -138,7 +142,7 @@ class View {
         if (dirs.includes(CONSTANTS.DIR.RIGHT)) {
           mx = -stepX
         }
-        this.translateXY(mx, my)
+        this.translateXY(mx * translateRatio, my * translateRatio)
       }
     })
     this.mindMap.on('resize', () => {
@@ -246,8 +250,9 @@ class View {
 
   //  缩小
   narrow(cx, cy, isTouchPad) {
-    const scaleRatio = this.mindMap.opt.scaleRatio / (isTouchPad ? 5 : 1)
-    const scale = Math.max(this.scale - scaleRatio, 0.1)
+    let { scaleRatio, minZoomRatio } = this.mindMap.opt
+    scaleRatio = scaleRatio / (isTouchPad ? 5 : 1)
+    const scale = Math.max(this.scale - scaleRatio, minZoomRatio / 100)
     this.scaleInCenter(scale, cx, cy)
     this.transform()
     this.emitEvent('scale')
@@ -255,8 +260,14 @@ class View {
 
   //  放大
   enlarge(cx, cy, isTouchPad) {
-    const scaleRatio = this.mindMap.opt.scaleRatio / (isTouchPad ? 5 : 1)
-    const scale = this.scale + scaleRatio
+    let { scaleRatio, maxZoomRatio } = this.mindMap.opt
+    scaleRatio = scaleRatio / (isTouchPad ? 5 : 1)
+    let scale = 0
+    if (maxZoomRatio === -1) {
+      scale = this.scale + scaleRatio
+    } else {
+      scale = Math.min(this.scale + scaleRatio, maxZoomRatio / 100)
+    }
     this.scaleInCenter(scale, cx, cy)
     this.transform()
     this.emitEvent('scale')

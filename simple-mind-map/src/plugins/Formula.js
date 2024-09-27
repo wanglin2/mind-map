@@ -3,6 +3,9 @@ import Quill from 'quill'
 import { getChromeVersion, htmlEscape } from '../utils/index'
 import { getBaseStyleText, getFontStyleText } from './FormulaStyle'
 
+let extended = false
+const QuillFormula = Quill.import('formats/formula')
+
 // 数学公式支持插件
 // 该插件在富文本模式下可用
 class Formula {
@@ -16,6 +19,18 @@ class Formula {
     this.cssEl = null
     this.addStyle()
     this.extendQuill()
+    this.onDestroy = this.onDestroy.bind(this)
+    this.mindMap.on('beforeDestroy', this.onDestroy)
+  }
+
+  onDestroy() {
+    const instanceCount = Object.getPrototypeOf(this.mindMap).constructor
+      .instanceCount
+    // 如果思维导图实例数量变成0了，那么就恢复成默认的
+    if (instanceCount <= 1) {
+      extended = false
+      Quill.register('formats/formula', QuillFormula, true)
+    }
   }
 
   init() {
@@ -50,7 +65,9 @@ class Formula {
 
   // 修改formula格式工具
   extendQuill() {
-    const QuillFormula = Quill.import('formats/formula')
+    if (extended) return
+    extended = true
+
     const self = this
 
     class CustomFormulaBlot extends QuillFormula {
@@ -168,11 +185,13 @@ class Formula {
   // 插件被移除前做的事情
   beforePluginRemove() {
     this.removeStyle()
+    this.mindMap.off('beforeDestroy', this.onDestroy)
   }
 
   // 插件被卸载前做的事情
   beforePluginDestroy() {
     this.removeStyle()
+    this.mindMap.off('beforeDestroy', this.onDestroy)
   }
 }
 

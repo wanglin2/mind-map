@@ -244,7 +244,9 @@ class Base {
           isResizeSource ||
           (newData && JSON.stringify(oldData) !== JSON.stringify(newData))
         ) {
-          gNode.nodeData.data = newData
+          if (newData) {
+            gNode.nodeData.data = newData
+          }
           gNode.getSize()
           gNode.needLayout = true
         }

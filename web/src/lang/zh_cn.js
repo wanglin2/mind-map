@@ -111,7 +111,8 @@ export default {
     copyToPng: '图片',
     copySuccess: '复制成功',
     copyFail: '复制失败',
-    number: '编号其子节点'
+    number: '编号其子节点',
+    expandNodeChild: '展开所有下级节点'
   },
   count: {
     words: '字数',

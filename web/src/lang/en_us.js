@@ -111,7 +111,8 @@ export default {
     copyToPng: 'Png',
     copySuccess: 'Copy success',
     copyFail: 'Copy fail',
-    number: 'Number child nodes'
+    number: 'Number child nodes',
+    expandNodeChild: 'Expand all sub nodes'
   },
   count: {
     words: 'Words',

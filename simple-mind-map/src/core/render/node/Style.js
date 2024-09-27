@@ -1,6 +1,5 @@
 import { checkIsNodeStyleDataKey } from '../../../utils/index'
 
-const rootProp = ['paddingX', 'paddingY']
 const backgroundStyleProps = [
   'backgroundColor',
   'backgroundImage',
@@ -62,11 +61,10 @@ class Style {
   //  合并样式
   merge(prop, root) {
     let themeConfig = this.ctx.mindMap.themeConfig
-    // 三级及以下节点
-    let defaultConfig = themeConfig.node
+    let defaultConfig = null
     let useRoot = false
-    if (root || rootProp.includes(prop)) {
-      // 直接使用最外层样式
+    if (root) {
+      // 使用最外层样式
       useRoot = true
       defaultConfig = themeConfig
     } else if (this.ctx.isGeneralization) {
@@ -78,12 +76,21 @@ class Style {
     } else if (this.ctx.layerIndex === 1) {
       // 二级节点
       defaultConfig = themeConfig.second
+    } else {
+      // 三级及以下节点
+      defaultConfig = themeConfig.node
     }
+    let value = ''
     // 优先使用节点本身的样式
-    const value =
-      this.getSelfStyle(prop) !== undefined
-        ? this.getSelfStyle(prop)
-        : defaultConfig[prop]
+    if (this.getSelfStyle(prop) !== undefined) {
+      value = this.getSelfStyle(prop)
+    } else if (defaultConfig[prop] !== undefined) {
+      // 否则使用对应层级的样式
+      value = defaultConfig[prop]
+    } else {
+      // 否则使用最外层样式
+      value = themeConfig[prop]
+    }
     if (!useRoot) {
       this.addToEffectiveStyles({
         [prop]: value
@@ -348,8 +355,10 @@ class Style {
 
   // hover和激活节点
   hoverNode(node) {
-    const hoverRectColor = this.merge('hoverRectColor') || this.ctx.mindMap.opt.hoverRectColor
-    node.radius(5).fill('none').stroke({
+    const hoverRectColor =
+      this.merge('hoverRectColor') || this.ctx.mindMap.opt.hoverRectColor
+    const hoverRectRadius = this.merge('hoverRectRadius')
+    node.radius(hoverRectRadius).fill('none').stroke({
       color: hoverRectColor
     })
   }
