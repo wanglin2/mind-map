@@ -534,6 +534,7 @@ class RichText {
     //   let style = this.getPasteTextStyle()
     //   return new Delta().insert(this.formatPasteText(node.data), style)
     // })
+    // 剪贴板里只要存在文本就会走这里，所以当剪贴板里是纯文本，或文本+图片都可以监听到和拦截，但是只有纯图片时不会走这里，所以无法拦截
     this.quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
       let ops = []
       let style = this.getPasteTextStyle()
@@ -549,7 +550,7 @@ class RichText {
       delta.ops = ops
       return delta
     })
-    // 拦截图片的粘贴
+    // 拦截图片的粘贴，当剪贴板里是纯图片，或文本+图片都可以拦截到，但是带来的问题是文本+图片时里面的文本也无法粘贴
     this.quill.root.addEventListener(
       'paste',
       e => {
