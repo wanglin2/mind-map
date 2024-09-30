@@ -102,7 +102,6 @@ class Render {
     this.highlightBoxNode = null
     this.highlightBoxNodeStyle = null
     // 上一次节点激活数据
-    this.lastActiveNode = null
     this.lastActiveNodeList = []
     // 布局
     this.setLayout()
@@ -435,13 +434,11 @@ class Render {
 
   // 派发节点激活事件
   emitNodeActiveEvent(node = null, activeNodeList = [...this.activeNodeList]) {
-    let isChange = false
-    isChange = this.lastActiveNode !== node
-    if (!isChange) {
-      isChange = !checkNodeListIsEqual(this.lastActiveNodeList, activeNodeList)
-    }
+    const isChange = !checkNodeListIsEqual(
+      this.lastActiveNodeList,
+      activeNodeList
+    )
     if (!isChange) return
-    this.lastActiveNode = node
     this.lastActiveNodeList = [...activeNodeList]
     this.mindMap.batchExecution.push('emitNodeActiveEvent', () => {
       this.mindMap.emit('node_active', node, activeNodeList)
