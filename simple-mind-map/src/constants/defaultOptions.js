@@ -251,6 +251,12 @@ export const defaultOpt = {
   mousedownEventPreventDefault: true,
   // 在激活上粘贴用户剪贴板中的数据时，如果同时存在文本和图片，那么只粘贴文本，忽略图片
   onlyPasteTextWhenHasImgAndText: true,
+  // 是否允许拖拽调整节点的宽度，实际上压缩的是节点里面文本内容的宽度，当节点文本内容宽度压缩到最小时无法继续压缩。如果节点存在图片，那么最小值以图片宽度和文本内容最小宽度的最大值为准（目前该特性仅在两种情况下可用：1.开启了富文本模式，即注册了RichText插件；2.自定义节点内容）
+  enableDragModifyNodeWidth: true,
+  // 当允许拖拽调整节点的宽度时，可以通过该选项设置节点文本内容允许压缩的最小宽度
+  minNodeTextModifyWidth: 20,
+  // 同minNodeTextModifyWidth，最大值，传-1代表不限制
+  maxNodeTextModifyWidth: -1,
 
   // 【Select插件】
   // 多选节点时鼠标移动到边缘时的画布移动偏移量

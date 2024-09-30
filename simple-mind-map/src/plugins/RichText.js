@@ -180,7 +180,7 @@ class RichText {
     if (this.showTextEdit) {
       return
     }
-    const {
+    let {
       richTextEditFakeInPlace,
       customInnerElsAppendTo,
       nodeTextEditZIndex,
@@ -188,6 +188,9 @@ class RichText {
       selectTextOnEnterEditText,
       transformRichTextOnEnterEdit
     } = this.mindMap.opt
+    textAutoWrapWidth = node.hasCustomWidth()
+      ? node.customTextWidth
+      : textAutoWrapWidth
     this.node = node
     this.isInserting = isInserting
     if (!rect) rect = node._textData.node.node.getBoundingClientRect()

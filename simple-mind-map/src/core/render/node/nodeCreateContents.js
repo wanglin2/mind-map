@@ -115,9 +115,11 @@ function createIconNode() {
 
 // 创建富文本节点
 function createRichTextNode(specifyText) {
+  const hasCustomWidth = this.hasCustomWidth()
   let text =
     typeof specifyText === 'string' ? specifyText : this.getData('text')
-  const { textAutoWrapWidth, emptyTextMeasureHeightText } = this.mindMap.opt
+  let { textAutoWrapWidth, emptyTextMeasureHeightText } = this.mindMap.opt
+  textAutoWrapWidth = hasCustomWidth ? this.customTextWidth : textAutoWrapWidth
   let g = new G()
   // 重新设置富文本节点内容
   let recoverText = false
@@ -172,6 +174,11 @@ function createRichTextNode(specifyText) {
   el.classList.add('smm-richtext-node-wrap')
   addXmlns(el)
   el.style.maxWidth = textAutoWrapWidth + 'px'
+  if (hasCustomWidth) {
+    el.style.width = this.customTextWidth + 'px'
+  } else {
+    el.style.width = ''
+  }
   let { width, height } = el.getBoundingClientRect()
   // 如果文本为空，那么需要计算一个默认高度
   if (height <= 0) {

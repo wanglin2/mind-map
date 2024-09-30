@@ -330,7 +330,8 @@ export const nodeDataNoStylePropList = [
   'number',
   'range',
   'customLeft',
-  'customTop'
+  'customTop',
+  'customTextWidth'
 ]
 
 // 错误类型
