@@ -80,6 +80,8 @@ class AssociativeLine {
     this.mindMap.on('contextmenu', this.onDrawClick)
     // 注册删除快捷键
     this.mindMap.keyCommand.addShortcut('Del|Backspace', this.removeLine)
+    // 添加点击Esc取消创建连接线
+    this.mindMap.keyCommand.addShortcut('Esc', this.cancelCreateLine)
     // 注册添加连接线的命令
     this.mindMap.command.add('ADD_ASSOCIATIVE_LINE', this.addLine)
     // 监听鼠标移动事件
@@ -103,6 +105,7 @@ class AssociativeLine {
     this.mindMap.off('node_click', this.onNodeClick)
     this.mindMap.off('contextmenu', this.onDrawClick)
     this.mindMap.keyCommand.removeShortcut('Del|Backspace', this.removeLine)
+    this.mindMap.keyCommand.removeShortcut('Esc', this.cancelCreateLine)
     this.mindMap.command.remove('ADD_ASSOCIATIVE_LINE', this.addLine)
     this.mindMap.off('mousemove', this.onMousemove)
     this.mindMap.off('node_dragging', this.onNodeDragging)
