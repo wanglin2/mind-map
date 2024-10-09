@@ -1,5 +1,4 @@
 //  默认主题
-
 export default {
   // 节点内边距
   paddingX: 15,

@@ -17,7 +17,7 @@
         :class="{ active: item.value === theme }"
       >
         <div class="imgBox">
-          <img :src="themeMap[item.value]" alt="" />
+          <img :src="themeImgMap[item.value]" alt="" />
         </div>
         <div class="name">{{ item.name }}</div>
       </div>
@@ -27,11 +27,10 @@
 
 <script>
 import Sidebar from './Sidebar'
-import { themeList } from 'simple-mind-map/src/constants/constant'
 import { storeConfig } from '@/api'
 import { mapState, mapMutations } from 'vuex'
-import { themeMap } from '@/config/constant.js'
-import customThemeList from '@/customThemes'
+import themeImgMap from 'simple-mind-map-plugin-themes/themeImgMap'
+import themeList from 'simple-mind-map-plugin-themes/themeList'
 
 /**
  * @Author: 王林
@@ -54,8 +53,15 @@ export default {
   },
   data() {
     return {
-      themeList: [...themeList, ...customThemeList].reverse(),
-      themeMap,
+      themeList: [
+        {
+          name: '默认主题',
+          value: 'default',
+          dark: false
+        },
+        ...themeList
+      ].reverse(),
+      themeImgMap,
       theme: '',
       activeName: '',
       groupList: []

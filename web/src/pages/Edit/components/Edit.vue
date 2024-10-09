@@ -71,6 +71,7 @@ import Formula from 'simple-mind-map/src/plugins/Formula.js'
 import RainbowLines from 'simple-mind-map/src/plugins/RainbowLines.js'
 import Demonstrate from 'simple-mind-map/src/plugins/Demonstrate.js'
 import OuterFrame from 'simple-mind-map/src/plugins/OuterFrame.js'
+import Themes from 'simple-mind-map-plugin-themes'
 // 协同编辑插件
 // import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
 // 手绘风格插件，该插件为付费插件，详情请查看开发文档
@@ -83,7 +84,7 @@ import OuterFrame from 'simple-mind-map/src/plugins/OuterFrame.js'
 // import Freemind from 'simple-mind-map-plugin-freemind'
 // Excel软件格式导入导出插件，该插件为付费插件，详情请查看开发文档
 // import Excel from 'simple-mind-map-plugin-excel'
-// npm link simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map
+// npm link simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map simple-mind-map-plugin-themes
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -101,7 +102,6 @@ import NodeImgPreview from './NodeImgPreview.vue'
 import SidebarTrigger from './SidebarTrigger.vue'
 import { mapState } from 'vuex'
 import icon from '@/config/icon'
-import customThemeList from '@/customThemes'
 import CustomNodeContent from './CustomNodeContent.vue'
 import Color from './Color.vue'
 import Vue from 'vue'
@@ -142,10 +142,8 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(OuterFrame)
 // .usePlugin(Cooperate) // 协同插件
 
-// 注册自定义主题
-customThemeList.forEach(item => {
-  MindMap.defineTheme(item.value, item.theme)
-})
+// 注册主题
+Themes.init(MindMap)
 
 /**
  * @Author: 王林

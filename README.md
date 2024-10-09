@@ -475,4 +475,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/Joe.jpg" style="width: 50px;height: 50px;" />
         <span>Joe</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>中文网字计划-江夏尧</span>
+    </span>
 </p>

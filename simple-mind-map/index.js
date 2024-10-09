@@ -2,7 +2,7 @@ import View from './src/core/view/View'
 import Event from './src/core/event/Event'
 import Render from './src/core/render/Render'
 import merge from 'deepmerge'
-import theme from './src/themes'
+import theme from './src/theme'
 import Style from './src/core/render/node/Style'
 import KeyCommand from './src/core/command/KeyCommand'
 import Command from './src/core/command/Command'
@@ -24,7 +24,7 @@ import {
 } from './src/utils'
 import defaultTheme, {
   checkIsNodeSizeIndependenceConfig
-} from './src/themes/default'
+} from './src/theme/default'
 import { defaultOpt } from './src/constants/defaultOptions'
 
 //  思维导图
@@ -254,7 +254,7 @@ class MindMap {
   //  设置主题
   initTheme() {
     // 合并主题配置
-    this.themeConfig = mergeTheme(theme[this.opt.theme], this.opt.themeConfig)
+    this.themeConfig = mergeTheme(theme[this.opt.theme] || theme.default, this.opt.themeConfig)
     // 设置背景样式
     Style.setBackgroundStyle(this.el, this.themeConfig)
   }
@@ -644,6 +644,12 @@ MindMap.defineTheme = (name, config = {}) => {
     return new Error('该主题名称已存在')
   }
   theme[name] = mergeTheme(defaultTheme, config)
+}
+// 移除主题
+MindMap.removeTheme = name => {
+  if (theme[name]) {
+    theme[name] = null
+  }
 }
 
 export default MindMap

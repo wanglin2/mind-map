@@ -36,7 +36,7 @@ import {
   throttle
 } from '../../utils'
 import { shapeList } from './node/Shape'
-import { lineStyleProps } from '../../themes/default'
+import { lineStyleProps } from '../../theme/default'
 import { CONSTANTS, ERROR_TYPES } from '../../constants/constant'
 import { Polygon } from '@svgdotjs/svg.js'
 
