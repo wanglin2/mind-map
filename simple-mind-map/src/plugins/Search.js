@@ -257,20 +257,18 @@ class Search {
     replaceText = String(replaceText)
     // 如果当前搜索文本是替换文本的子串，那么该节点还是符合搜索结果的
     const keep = replaceText.includes(this.searchText)
+    const hasRichTextPlugin = this.mindMap.renderer.hasRichTextPlugin()
     this.matchNodeList.forEach(node => {
       const text = this.getReplacedText(node, this.searchText, replaceText)
       if (this.isNodeInstance(node)) {
-        this.mindMap.renderer.setNodeDataRender(
-          node,
-          {
-            text,
-            resetRichText: !!node.getData('richText')
-          },
-          true
-        )
+        const data = {
+          text
+        }
+        if (hasRichTextPlugin) data.resetRichText = !!node.getData('richText')
+        this.mindMap.renderer.setNodeDataRender(node, data, true)
       } else {
         node.data.text = text
-        node.data.resetRichText = !!node.data.richText
+        if (hasRichTextPlugin) node.data.resetRichText = !!node.data.richText
       }
     })
     this.mindMap.render()
