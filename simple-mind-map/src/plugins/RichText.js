@@ -89,6 +89,18 @@ class RichText {
 
   // 插入样式
   appendCss() {
+    this.mindMap.appendCss(
+      'richText',
+      `
+      .smm-richtext-node-wrap {
+        word-break: break-all;
+      }
+
+      .smm-richtext-node-wrap p {
+        font-family: auto;
+      }
+      `
+    )
     let cssText = `
       .ql-editor {
         overflow: hidden;
@@ -105,15 +117,6 @@ class RichText {
 
       .ql-container.ql-snow {
         border: none;
-      }
-
-      .smm-richtext-node-wrap {
-        word-break: break-all;
-      }
-
-      .smm-richtext-node-wrap p {
-        font-family: auto;
-        
       }
 
       .smm-richtext-node-edit-wrap p {
@@ -864,6 +867,7 @@ class RichText {
     this.transformAllNodesToNormalNode()
     document.head.removeChild(this.styleEl)
     this.unbindEvent()
+    this.mindMap.removeAppendCss('richText')
   }
 
   // 插件被卸载前做的事情

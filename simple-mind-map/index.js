@@ -52,9 +52,9 @@ class MindMap {
     this.initWidth = this.width
     this.initHeight = this.height
 
-    // 添加css
+    // 必要的css样式
     this.cssEl = null
-    this.addCss()
+    this.cssTextMap = {} // 该样式在实例化时会动态添加到页面，同时导出为svg时也会添加到svg源码中
 
     // 画布
     this.initContainer()
@@ -97,6 +97,9 @@ class MindMap {
     MindMap.pluginList.forEach(plugin => {
       this.initPlugin(plugin)
     })
+
+    // 添加必要的css样式
+    this.addCss()
 
     // 初始渲染
     this.render(this.opt.fit ? () => this.view.fit() : () => {})
@@ -170,11 +173,41 @@ class MindMap {
     this.otherDraw.clear()
   }
 
+  // 追加必要的css样式
+  // 该样式在实例化时会动态添加到页面，同时导出为svg时也会添加到svg源码中
+  appendCss(key, str) {
+    this.cssTextMap[key] = str
+    this.removeCss()
+    this.addCss()
+  }
+
+  // 移除追加的css样式
+  removeAppendCss(key) {
+    if (this.cssTextMap[key]) {
+      delete this.cssTextMap[key]
+      this.removeCss()
+      this.addCss()
+    }
+  }
+
+  // 拼接必要的css样式
+  joinCss() {
+    return (
+      cssContent +
+      Object.keys(this.cssTextMap)
+        .map(key => {
+          return this.cssTextMap[key]
+        })
+        .join('\n')
+    )
+  }
+
   // 添加必要的css样式到页面
   addCss() {
     this.cssEl = document.createElement('style')
     this.cssEl.type = 'text/css'
-    this.cssEl.innerHTML = cssContent
+    this.cssEl.innerHTML = this.joinCss()
+
     document.head.appendChild(this.cssEl)
   }
 
@@ -254,7 +287,10 @@ class MindMap {
   //  设置主题
   initTheme() {
     // 合并主题配置
-    this.themeConfig = mergeTheme(theme[this.opt.theme] || theme.default, this.opt.themeConfig)
+    this.themeConfig = mergeTheme(
+      theme[this.opt.theme] || theme.default,
+      this.opt.themeConfig
+    )
     // 设置背景样式
     Style.setBackgroundStyle(this.el, this.themeConfig)
   }
@@ -511,7 +547,7 @@ class MindMap {
       this.watermark.isInExport = false
     }
     // 添加必要的样式
-    ;[cssContent, ...cssTextList].forEach(s => {
+    ;[this.joinCss(), ...cssTextList].forEach(s => {
       clone.add(SVG(`<style>${s}</style>`))
     })
     // 附加内容
