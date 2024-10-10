@@ -23,6 +23,8 @@ class MindMapNode {
     this.opt = opt
     // 节点数据
     this.nodeData = this.handleData(opt.data || {})
+    // 保存本次更新时的节点数据快照
+    this.nodeDataSnapshot = ''
     // uid
     this.uid = opt.uid
     // 控制实例
@@ -789,9 +791,12 @@ class MindMapNode {
     if (this.updateUserListNode) this.updateUserListNode()
     // 更新节点位置
     let t = this.group.transform()
-    // 如果节点位置没有变化，则返回
-    if (this.left === t.translateX && this.top === t.translateY) return
-    this.group.translate(this.left - t.translateX, this.top - t.translateY)
+    // 保存一份当前节点数据快照
+    this.nodeDataSnapshot = JSON.stringify(this.getData())
+    // 节点位置变化才更新，因为即使值没有变化属性设置操作也是耗时的
+    if (this.left !== t.translateX || this.top !== t.translateY) {
+      this.group.translate(this.left - t.translateX, this.top - t.translateY)
+    }
   }
 
   // 获取节点相当于画布的位置
