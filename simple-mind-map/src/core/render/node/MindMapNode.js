@@ -971,7 +971,7 @@ class MindMapNode {
 
   //  隐藏节点
   hide() {
-    this.group.hide()
+    if (this.group) this.group.hide()
     this.hideGeneralization()
     if (this.parent) {
       let index = this.parent.children.indexOf(this)
@@ -1014,7 +1014,7 @@ class MindMapNode {
   // 包括连接线和下级节点
   setOpacity(val) {
     // 自身及连线
-    this.group.opacity(val)
+    if (this.group) this.group.opacity(val)
     this._lines.forEach(line => {
       line.opacity(val)
     })
@@ -1053,13 +1053,13 @@ class MindMapNode {
   // 被拖拽中
   startDrag() {
     this.isDrag = true
-    this.group.addClass('smm-node-dragging')
+    if (this.group) this.group.addClass('smm-node-dragging')
   }
 
   // 拖拽结束
   endDrag() {
     this.isDrag = false
-    this.group.removeClass('smm-node-dragging')
+    if (this.group) this.group.removeClass('smm-node-dragging')
   }
 
   //  连线
@@ -1302,7 +1302,7 @@ class MindMapNode {
 
   // 获取节点的尺寸和位置信息，宽高是应用了缩放效果后的实际宽高，位置是相对于浏览器窗口左上角的位置
   getRect() {
-    return this.group.rbox()
+    return this.group ? this.group.rbox() : null
   }
 
   // 获取节点的尺寸和位置信息，宽高是应用了缩放效果后的实际宽高，位置信息相对于画布
