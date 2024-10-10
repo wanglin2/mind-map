@@ -479,4 +479,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
         <span>中文网字计划-江夏尧</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/梁辉.jpg" style="width: 50px;height: 50px;" />
+        <span>梁辉</span>
+    </span>
 </p>
