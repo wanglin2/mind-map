@@ -627,7 +627,7 @@
             style="width: 140px"
             v-model="style.imgMaxWidth"
             :min="10"
-            :max="300"
+            :max="500"
             @change="
               value => {
                 update('imgMaxWidth', value)
@@ -643,7 +643,7 @@
             style="width: 140px"
             v-model="style.imgMaxHeight"
             :min="10"
-            :max="300"
+            :max="500"
             @change="
               value => {
                 update('imgMaxHeight', value)

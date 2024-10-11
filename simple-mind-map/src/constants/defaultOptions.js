@@ -438,5 +438,12 @@ export const defaultOpt = {
 
   // 【NodeImgAdjust】插件
   // 拦截节点图片的删除，点击节点图片上的删除按钮删除图片前会调用该函数，如果函数返回true则取消删除
-  beforeDeleteNodeImg: null
+  beforeDeleteNodeImg: null,
+  // 删除和调整两个按钮的大小
+  imgResizeBtnSize: 25,
+  // 最大允许缩放的尺寸依据主题的配置，即主题的imgMaxWidth和imgMaxHeight配置，如果设置为false，那么使用maxImgResizeWidth和maxImgResizeHeight选项
+  maxImgResizeWidthInheritTheme: true,
+  // 最大允许缩放的尺寸，maxImgResizeWidthInheritTheme选项设置为false时生效，不限制最大值可传递Infinity
+  maxImgResizeWidth: Infinity,
+  maxImgResizeHeight: Infinity
 }
