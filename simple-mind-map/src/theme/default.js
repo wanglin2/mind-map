@@ -4,7 +4,7 @@ export default {
   paddingX: 15,
   paddingY: 5,
   // 图片显示的最大宽度
-  imgMaxWidth: 100,
+  imgMaxWidth: 200,
   // 图片显示的最大高度
   imgMaxHeight: 100,
   // icon的大小

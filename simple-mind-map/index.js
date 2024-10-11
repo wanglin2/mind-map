@@ -207,13 +207,12 @@ class MindMap {
     this.cssEl = document.createElement('style')
     this.cssEl.type = 'text/css'
     this.cssEl.innerHTML = this.joinCss()
-
     document.head.appendChild(this.cssEl)
   }
 
   // 移除css
   removeCss() {
-    document.head.removeChild(this.cssEl)
+    if (this.cssEl) document.head.removeChild(this.cssEl)
   }
 
   //  渲染，部分渲染

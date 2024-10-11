@@ -6,7 +6,6 @@ class NodeImgAdjust {
   //  构造函数
   constructor({ mindMap }) {
     this.mindMap = mindMap
-    this.resizeBtnSize = 26 // 调整按钮的大小
     this.handleEl = null // 自定义元素，用来渲染临时图片、调整按钮
     this.isShowHandleEl = false // 自定义元素是否在显示中
     this.node = null // 当前节点实例
@@ -116,6 +115,7 @@ class NodeImgAdjust {
 
   // 创建调整按钮元素
   createResizeBtnEl() {
+    const { imgResizeBtnSize } = this.mindMap.opt
     // 容器元素
     this.handleEl = document.createElement('div')
     this.handleEl.style.cssText = `
@@ -134,8 +134,8 @@ class NodeImgAdjust {
       bottom: 0;
       pointer-events: auto;
       background-color: rgba(0, 0, 0, 0.3);
-      width: ${this.resizeBtnSize}px;
-      height: ${this.resizeBtnSize}px;
+      width: ${imgResizeBtnSize}px;
+      height: ${imgResizeBtnSize}px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -178,8 +178,8 @@ class NodeImgAdjust {
       right: 0;top:0;color:#fff;
       pointer-events: auto;
       background-color: rgba(0, 0, 0, 0.3);
-      width: ${this.resizeBtnSize}px;
-      height: ${this.resizeBtnSize}px;
+      width: ${imgResizeBtnSize}px;
+      height: ${imgResizeBtnSize}px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -244,16 +244,21 @@ class NodeImgAdjust {
     // 隐藏自定义元素
     this.hideHandleEl()
     // 更新节点图片为新的大小
-    let { image, imageTitle } = this.node.getData()
+    let { image, imageTitle, imageSize } = this.node.getData()
     let { scaleX, scaleY } = this.mindMap.draw.transform()
-    this.mindMap.execCommand('SET_NODE_IMAGE', this.node, {
-      url: image,
-      title: imageTitle,
-      width: this.currentImgWidth / scaleX,
-      height: this.currentImgHeight / scaleY,
-      custom: true // 代表自定义了图片大小
-    })
-    this.isAdjusted = true
+    const newWidth = this.currentImgWidth / scaleX
+    const newHeight = this.currentImgHeight / scaleY
+    if (newWidth !== imageSize.width || newHeight !== imageSize.height) {
+      this.mindMap.execCommand('SET_NODE_IMAGE', this.node, {
+        url: image,
+        title: imageTitle,
+        width: newWidth,
+        height: newHeight,
+        custom: true // 代表自定义了图片大小
+      })
+      this.isAdjusted = true
+    }
+
     this.isMousedown = false
   }
 
