@@ -441,6 +441,9 @@ export const defaultOpt = {
   beforeDeleteNodeImg: null,
   // 删除和调整两个按钮的大小
   imgResizeBtnSize: 25,
+  // 最小允许缩放的尺寸，请传入>=0的数字
+  minImgResizeWidth: 50,
+  minImgResizeHeight: 50,
   // 最大允许缩放的尺寸依据主题的配置，即主题的imgMaxWidth和imgMaxHeight配置，如果设置为false，那么使用maxImgResizeWidth和maxImgResizeHeight选项
   maxImgResizeWidthInheritTheme: true,
   // 最大允许缩放的尺寸，maxImgResizeWidthInheritTheme选项设置为false时生效，不限制最大值可传递Infinity

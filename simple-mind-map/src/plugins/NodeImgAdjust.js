@@ -229,11 +229,26 @@ class NodeImgAdjust {
     if (!this.isMousedown) return
     e.preventDefault()
     const { scaleX, scaleY } = this.mousedownDrawTransform
-    const {
+    // 图片原始大小
+    const { width: imageOriginWidth, height: imageOriginHeight } =
+      this.node.getData('imageSize')
+    let {
+      minImgResizeWidth,
+      minImgResizeHeight,
       maxImgResizeWidthInheritTheme,
       maxImgResizeWidth,
       maxImgResizeHeight
     } = this.mindMap.opt
+    // 主题设置的最小图片宽高
+    const minRatio = minImgResizeWidth / minImgResizeHeight
+    const oRatio = imageOriginWidth / imageOriginHeight
+    if (minRatio > oRatio) {
+      // 如果最小值比例大于图片原始比例，那么要调整高度最小值
+      minImgResizeHeight = minImgResizeWidth / oRatio
+    } else {
+      // 否则调整宽度最小值
+      minImgResizeWidth = minImgResizeHeight * oRatio
+    }
     // 主题设置的最大图片宽高
     let imgMaxWidth, imgMaxHeight
     if (maxImgResizeWidthInheritTheme) {
@@ -246,10 +261,11 @@ class NodeImgAdjust {
     imgMaxWidth = imgMaxWidth * scaleX
     imgMaxHeight = imgMaxHeight * scaleY
     // 计算当前拖拽位置对应的图片的实时大小
-    const { width: imageOriginWidth, height: imageOriginHeight } =
-      this.node.getData('imageSize')
     let newWidth = Math.abs(e.clientX - this.rect.x - this.mousedownOffset.x)
     let newHeight = Math.abs(e.clientY - this.rect.y - this.mousedownOffset.y)
+    // 限制最小值
+    if (newWidth < minImgResizeWidth) newWidth = minImgResizeWidth
+    if (newHeight < minImgResizeHeight) newHeight = minImgResizeHeight
     // 限制最大值
     if (newWidth > imgMaxWidth) newWidth = imgMaxWidth
     if (newHeight > imgMaxHeight) newHeight = imgMaxHeight
