@@ -103,7 +103,7 @@ const mindMap = new MindMap({
 
 # 微信交流群
 
-微信添加`wanglinguanfang`拉你入群。根据过往的经验，大部分问题都可以通过文档解决，所以提问前请确保你已经阅读完了所有文档，文档里没有的可在群里提问，不必私聊作者。
+微信添加`wanglinguanfang`拉你入群。根据过往的经验，大部分问题都可以通过查看issue列表或文档解决，所以提问前请确保你已经阅读完了所有文档，文档里没有的可在群里提问，不必私聊作者。
 
 # star
 
@@ -120,6 +120,8 @@ const mindMap = new MindMap({
 开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡，你的支持是开发者持续维护的最大动力~
 
 > 推荐使用支付宝，微信获取不到头像。转账请备注【思维导图】。
+>
+> 也可以通过购买付费插件来支持我们：[付费插件](https://wanglin2.github.io/mind-map-docs/plugins/about.html)。
 
 <p>
   <img src="./web/src/assets/img/alipay.jpg" style="width: 300px" />

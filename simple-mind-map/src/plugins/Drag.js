@@ -93,7 +93,6 @@ class Drag extends Base {
     ) {
       return
     }
-    e.preventDefault()
     this.isMousedown = true
     // 记录鼠标按下时的节点
     this.mousedownNode = node

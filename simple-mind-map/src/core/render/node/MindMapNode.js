@@ -630,12 +630,15 @@ class MindMapNode {
       this.active(e)
     })
     this.group.on('mousedown', e => {
-      e.preventDefault()
       const {
         readonly,
         enableCtrlKeyNodeSelection,
-        useLeftKeySelectionRightKeyDrag
+        useLeftKeySelectionRightKeyDrag,
+        mousedownEventPreventDefault
       } = this.mindMap.opt
+      if (mousedownEventPreventDefault) {
+        e.preventDefault()
+      }
       // 只读模式不需要阻止冒泡
       if (!readonly) {
         if (this.isRoot) {
