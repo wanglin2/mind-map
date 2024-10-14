@@ -445,7 +445,7 @@ export const defaultOpt = {
   minImgResizeWidth: 50,
   minImgResizeHeight: 50,
   // 最大允许缩放的尺寸依据主题的配置，即主题的imgMaxWidth和imgMaxHeight配置，如果设置为false，那么使用maxImgResizeWidth和maxImgResizeHeight选项
-  maxImgResizeWidthInheritTheme: true,
+  maxImgResizeWidthInheritTheme: false,
   // 最大允许缩放的尺寸，maxImgResizeWidthInheritTheme选项设置为false时生效，不限制最大值可传递Infinity
   maxImgResizeWidth: Infinity,
   maxImgResizeHeight: Infinity

@@ -83,6 +83,7 @@ class NodeImgAdjust {
 
   // 显示自定义元素
   showHandleEl() {
+    if (this.isShowHandleEl) return
     if (!this.handleEl) {
       this.createResizeBtnEl()
     }
