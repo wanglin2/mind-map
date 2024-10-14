@@ -446,6 +446,12 @@ class AssociativeLine {
   // 完成创建连接线
   completeCreateLine(node) {
     if (this.creatingStartNode.uid === node.uid) return
+    const { beforeAssociativeLineConnection } = this.mindMap.opt
+    let stop = false
+    if (typeof beforeAssociativeLineConnection === 'function') {
+      stop = beforeAssociativeLineConnection(node)
+    }
+    if (stop) return
     this.addLine(this.creatingStartNode, node)
     if (this.overlapNode && this.overlapNode.getData('isActive')) {
       this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, false)

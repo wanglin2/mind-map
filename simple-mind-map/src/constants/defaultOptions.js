@@ -358,6 +358,8 @@ export const defaultOpt = {
   },
   // 是否允许调整关联线两个端点的位置
   enableAdjustAssociativeLinePoints: true,
+  // 关联线连接即将完成时执行，如果要阻止本次连接可以返回true，函数接收一个参数：node（目标节点实例）
+  beforeAssociativeLineConnection: null,
 
   // 【TouchEvent插件】
   // 禁止双指缩放，你仍旧可以使用api进行缩放
