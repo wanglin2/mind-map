@@ -388,8 +388,7 @@ class RichText {
     }
     let html = this.getEditText()
     html = this.sortHtmlNodeStyles(html)
-    let list =
-      nodes && nodes.length > 0 ? nodes : this.mindMap.renderer.activeNodeList
+    const list = nodes && nodes.length > 0 ? nodes : [this.node]
     list.forEach(node => {
       this.mindMap.execCommand('SET_NODE_TEXT', node, html, true)
       // if (node.isGeneralization) {

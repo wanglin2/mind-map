@@ -334,15 +334,16 @@ export default class TextEdit {
     if (!this.showTextEdit) {
       return
     }
-    this.renderer.activeNodeList.forEach(node => {
-      let str = this.getEditText()
-      this.mindMap.execCommand('SET_NODE_TEXT', node, str)
-      if (node.isGeneralization) {
-        // 概要节点
-        node.generalizationBelongNode.updateGeneralization()
-      }
-      this.mindMap.render()
-    })
+    this.mindMap.execCommand(
+      'SET_NODE_TEXT',
+      this.currentNode,
+      this.getEditText()
+    )
+    if (this.currentNode.isGeneralization) {
+      // 概要节点
+      this.currentNode.generalizationBelongNode.updateGeneralization()
+    }
+    this.mindMap.render()
     const currentNode = this.currentNode
     this.currentNode = null
     this.textEditNode.style.display = 'none'
