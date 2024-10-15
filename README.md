@@ -489,4 +489,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/海云.jpg" style="width: 50px;height: 50px;" />
         <span>海云</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/皮老板.jpg" style="width: 50px;height: 50px;" />
+        <span>皮老板</span>
+    </span>
 </p>
