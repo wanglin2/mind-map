@@ -229,20 +229,18 @@ class Style {
   }
 
   //  html文字节点
-  domText(node, fontSizeScale = 1, isMultiLine) {
+  domText(node, fontSizeScale = 1) {
     const styles = {
       color: this.merge('color'),
       fontFamily: this.merge('fontFamily'),
       fontSize: this.merge('fontSize'),
       fontWeight: this.merge('fontWeight'),
       fontStyle: this.merge('fontStyle'),
-      textDecoration: this.merge('textDecoration'),
-      lineHeight: this.merge('lineHeight')
+      textDecoration: this.merge('textDecoration')
     }
     node.style.fontFamily = styles.fontFamily
     node.style.fontSize = styles.fontSize * fontSizeScale + 'px'
     node.style.fontWeight = styles.fontWeight || 'normal'
-    node.style.lineHeight = !isMultiLine ? 'normal' : styles.lineHeight
     node.style.fontStyle = styles.fontStyle
   }
 

@@ -1,5 +1,4 @@
 import {
-  measureText,
   resizeImgSize,
   removeHtmlStyle,
   addHtmlStyle,
@@ -11,7 +10,19 @@ import {
 } from '../../../utils'
 import { Image as SVGImage, SVG, A, G, Rect, Text } from '@svgdotjs/svg.js'
 import iconsSvg from '../../../svg/icons'
-import { CONSTANTS } from '../../../constants/constant'
+import {
+  CONSTANTS,
+  noneRichTextNodeLineHeight
+} from '../../../constants/constant'
+
+// 测量svg文本宽高
+const measureText = (text, style) => {
+  const g = new G()
+  const node = new Text().text(text)
+  style.text(node)
+  g.add(node)
+  return g.bbox()
+}
 
 // 标签默认的样式
 const defaultTagStyle = {
@@ -218,16 +229,14 @@ function createTextNode(specifyText) {
   }
   let g = new G()
   let fontSize = this.getStyle('fontSize', false)
-  let lineHeight = this.getStyle('lineHeight', false)
   // 文本超长自动换行
-  let textStyle = this.style.getTextFontStyle()
   let textArr = []
   if (!isUndef(text)) {
     textArr = String(text).split(/\n/gim)
   }
   const { textAutoWrapWidth: maxWidth, emptyTextMeasureHeightText } =
     this.mindMap.opt
-  let isMultiLine = false
+  let isMultiLine = textArr.length > 1
   textArr.forEach((item, index) => {
     let arr = item.split('')
     let lines = []
@@ -235,7 +244,7 @@ function createTextNode(specifyText) {
     while (arr.length) {
       let str = arr.shift()
       let text = [...line, str].join('')
-      if (measureText(text, textStyle).width <= maxWidth) {
+      if (measureText(text, this.style).width <= maxWidth) {
         line.push(str)
       } else {
         lines.push(line.join(''))
@@ -254,7 +263,10 @@ function createTextNode(specifyText) {
   textArr.forEach((item, index) => {
     let node = new Text().text(item)
     this.style.text(node)
-    node.y(fontSize * lineHeight * index)
+    node.y(
+      fontSize * noneRichTextNodeLineHeight * index +
+        ((noneRichTextNodeLineHeight - 1) * fontSize) / 2
+    )
     g.add(node)
   })
   let { width, height } = g.bbox()

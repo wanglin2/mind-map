@@ -8,7 +8,11 @@ import {
   checkSmmFormatData,
   getTextFromHtml
 } from '../../utils'
-import { ERROR_TYPES, CONSTANTS } from '../../constants/constant'
+import {
+  ERROR_TYPES,
+  CONSTANTS,
+  noneRichTextNodeLineHeight
+} from '../../constants/constant'
 
 //  节点文字编辑类
 export default class TextEdit {
@@ -217,7 +221,17 @@ export default class TextEdit {
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div')
       this.textEditNode.classList.add('smm-node-edit-wrap')
-      this.textEditNode.style.cssText = `position:fixed;box-sizing: border-box;background-color:#fff;box-shadow: 0 0 20px rgba(0,0,0,.5);padding: ${this.textNodePaddingY}px ${this.textNodePaddingX}px;margin-left: -5px;margin-top: -3px;outline: none; word-break: break-all;`
+      this.textEditNode.style.cssText = `
+        position: fixed;
+        box-sizing: border-box;
+        background-color:#fff;
+        box-shadow: 0 0 20px rgba(0,0,0,.5);
+        padding: ${this.textNodePaddingY}px ${this.textNodePaddingX}px;
+        margin-left: -${this.textNodePaddingX}px;
+        margin-top: -${this.textNodePaddingY}px;
+        outline: none; 
+        word-break: break-all;
+      `
       this.textEditNode.setAttribute('contenteditable', true)
       this.textEditNode.addEventListener('keyup', e => {
         e.stopPropagation()
@@ -254,30 +268,31 @@ export default class TextEdit {
         this.mindMap.opt.customInnerElsAppendTo || document.body
       targetNode.appendChild(this.textEditNode)
     }
-    let scale = this.mindMap.view.scale
-    let lineHeight = node.style.merge('lineHeight')
-    let fontSize = node.style.merge('fontSize')
-    let textLines = (this.cacheEditingText || node.getData('text'))
+    const scale = this.mindMap.view.scale
+    const fontSize = node.style.merge('fontSize')
+    const textLines = (this.cacheEditingText || node.getData('text'))
       .split(/\n/gim)
       .map(item => {
         return htmlEscape(item)
       })
-    let isMultiLine = node._textData.node.attr('data-ismultiLine') === 'true'
-    node.style.domText(this.textEditNode, scale, isMultiLine)
+    const isMultiLine = node._textData.node.attr('data-ismultiLine') === 'true'
+    node.style.domText(this.textEditNode, scale)
     this.textEditNode.style.zIndex = nodeTextEditZIndex
     this.textEditNode.innerHTML = textLines.join('<br>')
     this.textEditNode.style.minWidth =
       rect.width + this.textNodePaddingX * 2 + 'px'
-    this.textEditNode.style.minHeight =
-      rect.height + this.textNodePaddingY * 2 + 'px'
+    this.textEditNode.style.minHeight = rect.height + 'px'
     this.textEditNode.style.left = rect.left + 'px'
     this.textEditNode.style.top = rect.top + 'px'
     this.textEditNode.style.display = 'block'
     this.textEditNode.style.maxWidth = textAutoWrapWidth * scale + 'px'
-    if (isMultiLine && lineHeight !== 1) {
+    if (isMultiLine) {
+      this.textEditNode.style.lineHeight = noneRichTextNodeLineHeight
       this.textEditNode.style.transform = `translateY(${
-        -((lineHeight * fontSize - fontSize) / 2) * scale
+        (((noneRichTextNodeLineHeight - 1) * fontSize) / 2) * scale
       }px)`
+    } else {
+      this.textEditNode.style.lineHeight = 'normal'
     }
     this.showTextEdit = true
     // 选中文本

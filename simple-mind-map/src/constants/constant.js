@@ -212,3 +212,6 @@ export const selfCloseTagList = [
   'meta',
   'area'
 ]
+
+// 非富文本模式下的节点文本行高
+export const noneRichTextNodeLineHeight = 1.2
