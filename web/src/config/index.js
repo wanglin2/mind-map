@@ -1,6 +1,5 @@
 import {
   fontSizeList,
-  lineHeightList,
   colorList,
   borderWidthList,
   borderRadiusList,
@@ -155,7 +154,6 @@ const linearGradientDirList = {
 
 export {
   fontSizeList,
-  lineHeightList,
   borderWidthList,
   borderRadiusList,
   lineWidthList,

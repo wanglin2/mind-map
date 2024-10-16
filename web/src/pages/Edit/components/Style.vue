@@ -13,6 +13,7 @@
             <span class="name">{{ $t('style.fontFamily') }}</span>
             <el-select
               size="mini"
+              style="width: 100px"
               v-model="style.fontFamily"
               placeholder=""
               @change="update('fontFamily')"
@@ -27,8 +28,6 @@
               </el-option>
             </el-select>
           </div>
-        </div>
-        <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('style.fontSize') }}</span>
             <el-select
@@ -44,24 +43,6 @@
                 :label="item"
                 :value="item"
                 :style="{ fontSize: item + 'px' }"
-              >
-              </el-option>
-            </el-select>
-          </div>
-          <div class="rowItem">
-            <span class="name">{{ $t('style.lineHeight') }}</span>
-            <el-select
-              size="mini"
-              style="width: 80px"
-              v-model="style.lineHeight"
-              placeholder=""
-              @change="update('lineHeight')"
-            >
-              <el-option
-                v-for="item in lineHeightList"
-                :key="item"
-                :label="item"
-                :value="item"
               >
               </el-option>
             </el-select>
@@ -474,7 +455,6 @@ import {
   borderWidthList,
   borderDasharrayList,
   borderRadiusList,
-  lineHeightList,
   shapeList,
   shapeListMap,
   linearGradientDirList
@@ -497,7 +477,6 @@ export default {
       fontSizeList,
       borderWidthList,
       borderRadiusList,
-      lineHeightList,
       activeNodes: [],
       style: {
         shape: '',
@@ -506,7 +485,6 @@ export default {
         color: '',
         fontFamily: '',
         fontSize: '',
-        lineHeight: '',
         textDecoration: '',
         fontWeight: '',
         fontStyle: '',
@@ -593,7 +571,6 @@ export default {
         'color',
         'fontFamily',
         'fontSize',
-        'lineHeight',
         'textDecoration',
         'fontWeight',
         'fontStyle',

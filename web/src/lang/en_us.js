@@ -216,7 +216,6 @@ export default {
     text: 'Text',
     fontFamily: 'Font family',
     fontSize: 'Font size',
-    lineHeight: 'Line height',
     color: 'color',
     addFontWeight: 'add font weight',
     italic: 'Italic',

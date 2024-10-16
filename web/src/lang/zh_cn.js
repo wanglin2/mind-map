@@ -214,7 +214,6 @@ export default {
     text: '文字',
     fontFamily: '字体',
     fontSize: '字号',
-    lineHeight: '行高',
     color: '颜色',
     addFontWeight: '加粗',
     italic: '斜体',
