@@ -183,7 +183,7 @@ class Style {
       })
       .css({
         'font-family': styles.fontFamily,
-        'font-size': styles.fontSize,
+        'font-size': styles.fontSize + 'px',
         'font-weight': styles.fontWeight,
         'font-style': styles.fontStyle,
         'text-decoration': styles.textDecoration
@@ -338,7 +338,7 @@ class Style {
     node2.fill({ color: color })
     fillNode.fill({ color: fill })
     if (this.ctx.mindMap.opt.isShowExpandNum) {
-      node.attr({ 'font-size': fontSize, 'font-color': fontColor })
+      node.attr({ 'font-size': fontSize + 'px', 'font-color': fontColor })
     }
   }
 

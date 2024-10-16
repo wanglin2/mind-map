@@ -166,7 +166,7 @@ function styleText(node) {
     })
     .css({
       'font-family': associativeLineTextFontFamily,
-      'font-size': associativeLineTextFontSize
+      'font-size': associativeLineTextFontSize + 'px'
     })
 }
 
