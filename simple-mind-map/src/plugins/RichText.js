@@ -301,8 +301,8 @@ class RichText {
   // 更新文本编辑框的大小和位置
   updateTextEditNode() {
     if (!this.node) return
-    const rect = this.node._textData.node.node.getBoundingClientRect()
     const g = this.node._textData.node
+    const rect = g.node.getBoundingClientRect()
     const originWidth = g.attr('data-width')
     const originHeight = g.attr('data-height')
     this.textEditNode.style.minWidth =
