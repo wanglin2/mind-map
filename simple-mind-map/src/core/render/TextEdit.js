@@ -308,7 +308,8 @@ export default class TextEdit {
   }
 
   // 更新文本编辑框的大小和位置
-  updateTextEditNode() {
+  // notChangeProps：不会发生改变的属性列表
+  updateTextEditNode(notChangeProps = []) {
     if (this.mindMap.richText) {
       this.mindMap.richText.updateTextEditNode()
       return
@@ -321,7 +322,8 @@ export default class TextEdit {
       rect.width + this.textNodePaddingX * 2 + 'px'
     this.textEditNode.style.minHeight =
       rect.height + this.textNodePaddingY * 2 + 'px'
-    this.textEditNode.style.left = rect.left + 'px'
+    if (!notChangeProps.includes('left'))
+      this.textEditNode.style.left = rect.left + 'px'
     this.textEditNode.style.top = rect.top + 'px'
   }
 

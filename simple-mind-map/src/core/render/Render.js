@@ -157,7 +157,8 @@ class Render {
         node.height = height
         node.layout()
         this.mindMap.render(() => {
-          this.textEdit.updateTextEditNode()
+          // 输入框的left不会改变，所以无需更新
+          this.textEdit.updateTextEditNode(['left'])
         })
       })
     }
