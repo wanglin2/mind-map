@@ -289,11 +289,14 @@ class NodeImgAdjust {
     // 隐藏自定义元素
     this.hideHandleEl()
     // 更新节点图片为新的大小
-    const { image, imageTitle, imageSize } = this.node.getData()
+    const { image, imageTitle } = this.node.getData()
     const { scaleX, scaleY } = this.mousedownDrawTransform
     const newWidth = this.currentImgWidth / scaleX
     const newHeight = this.currentImgHeight / scaleY
-    if (newWidth !== imageSize.width || newHeight !== imageSize.height) {
+    if (
+      Math.abs(newWidth - this.rect.width) > 1 ||
+      Math.abs(newHeight - this.rect.height) > 1
+    ) {
       this.mindMap.execCommand('SET_NODE_IMAGE', this.node, {
         url: image,
         title: imageTitle,
