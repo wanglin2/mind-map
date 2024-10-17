@@ -96,6 +96,22 @@ export default class TextEdit {
     this.mindMap.on('beforeDestroy', () => {
       this.unBindEvent()
     })
+    this.mindMap.on('after_update_config', (opt, lastOpt) => {
+      if (
+        opt.openRealtimeRenderOnNodeTextEdit !==
+        lastOpt.openRealtimeRenderOnNodeTextEdit
+      ) {
+        if (this.mindMap.richText) {
+          this.mindMap.richText.onOpenRealtimeRenderOnNodeTextEditConfigUpdate(
+            opt.openRealtimeRenderOnNodeTextEdit
+          )
+        } else {
+          this.onOpenRealtimeRenderOnNodeTextEditConfigUpdate(
+            opt.openRealtimeRenderOnNodeTextEdit
+          )
+        }
+      }
+    })
   }
 
   // 解绑事件
@@ -162,7 +178,8 @@ export default class TextEdit {
     if (node.isUseCustomNodeContent()) {
       return
     }
-    const { beforeTextEdit } = this.mindMap.opt
+    const { beforeTextEdit, openRealtimeRenderOnNodeTextEdit } =
+      this.mindMap.opt
     if (typeof beforeTextEdit === 'function') {
       let isShow = false
       try {
@@ -176,7 +193,12 @@ export default class TextEdit {
     this.currentNode = node
     const { offsetLeft, offsetTop } = checkNodeOuter(this.mindMap, node)
     this.mindMap.view.translateXY(offsetLeft, offsetTop)
-    const rect = node._textData.node.node.getBoundingClientRect()
+    const g = node._textData.node
+    const rect = g.node.getBoundingClientRect()
+    // 如果开启了大小实时更新，那么直接隐藏节点原文本
+    if (openRealtimeRenderOnNodeTextEdit) {
+      g.hide()
+    }
     const params = {
       node,
       rect,
@@ -189,6 +211,19 @@ export default class TextEdit {
       return
     }
     this.showEditTextBox(params)
+  }
+
+  // 当openRealtimeRenderOnNodeTextEdit配置更新后需要更新编辑框样式
+  onOpenRealtimeRenderOnNodeTextEditConfigUpdate(
+    openRealtimeRenderOnNodeTextEdit
+  ) {
+    if (!this.textEditNode) return
+    this.textEditNode.style.backgroundColor = openRealtimeRenderOnNodeTextEdit
+      ? 'transparent'
+      : '#fff'
+    this.textEditNode.style.boxShadow = openRealtimeRenderOnNodeTextEdit
+      ? 'none'
+      : '0 0 20px rgba(0,0,0,.5)'
   }
 
   // 处理画布缩放
@@ -212,8 +247,12 @@ export default class TextEdit {
   //  显示文本编辑框
   showEditTextBox({ node, rect, isInserting, isFromKeyDown, isFromScale }) {
     if (this.showTextEdit) return
-    const { nodeTextEditZIndex, textAutoWrapWidth, selectTextOnEnterEditText } =
-      this.mindMap.opt
+    const {
+      nodeTextEditZIndex,
+      textAutoWrapWidth,
+      selectTextOnEnterEditText,
+      openRealtimeRenderOnNodeTextEdit
+    } = this.mindMap.opt
     if (!isFromScale) {
       this.mindMap.emit('before_show_text_edit')
     }
@@ -224,8 +263,12 @@ export default class TextEdit {
       this.textEditNode.style.cssText = `
         position: fixed;
         box-sizing: border-box;
-        background-color:#fff;
-        box-shadow: 0 0 20px rgba(0,0,0,.5);
+        ${
+          openRealtimeRenderOnNodeTextEdit
+            ? ''
+            : `background-color:#fff;
+        box-shadow: 0 0 20px rgba(0,0,0,.5);`
+        }
         padding: ${this.textNodePaddingY}px ${this.textNodePaddingX}px;
         margin-left: -${this.textNodePaddingX}px;
         margin-top: -${this.textNodePaddingY}px;
@@ -351,17 +394,8 @@ export default class TextEdit {
     if (!this.showTextEdit) {
       return
     }
-    this.mindMap.execCommand(
-      'SET_NODE_TEXT',
-      this.currentNode,
-      this.getEditText()
-    )
-    if (this.currentNode.isGeneralization) {
-      // 概要节点
-      this.currentNode.generalizationBelongNode.updateGeneralization()
-    }
-    this.mindMap.render()
     const currentNode = this.currentNode
+    const text = this.getEditText()
     this.currentNode = null
     this.textEditNode.style.display = 'none'
     this.textEditNode.innerHTML = ''
@@ -370,6 +404,12 @@ export default class TextEdit {
     this.textEditNode.style.fontWeight = 'normal'
     this.textEditNode.style.transform = 'translateY(0)'
     this.showTextEdit = false
+    this.mindMap.execCommand('SET_NODE_TEXT', currentNode, text)
+    // if (currentNode.isGeneralization) {
+    //   // 概要节点
+    //   currentNode.generalizationBelongNode.updateGeneralization()
+    // }
+    this.mindMap.render()
     this.mindMap.emit(
       'hide_text_edit',
       this.textEditNode,

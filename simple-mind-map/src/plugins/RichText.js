@@ -189,7 +189,8 @@ class RichText {
       nodeTextEditZIndex,
       textAutoWrapWidth,
       selectTextOnEnterEditText,
-      transformRichTextOnEnterEdit
+      transformRichTextOnEnterEdit,
+      openRealtimeRenderOnNodeTextEdit
     } = this.mindMap.opt
     textAutoWrapWidth = node.hasCustomWidth()
       ? node.customTextWidth
@@ -222,7 +223,11 @@ class RichText {
       this.textEditNode.style.cssText = `
         position:fixed; 
         box-sizing: border-box; 
-        box-shadow: 0 0 20px rgba(0,0,0,.5);
+        ${
+          openRealtimeRenderOnNodeTextEdit
+            ? ''
+            : 'box-shadow: 0 0 20px rgba(0,0,0,.5);'
+        }
         outline: none; 
         word-break: break-all;
         padding: ${paddingY}px ${paddingX}px;
@@ -244,7 +249,9 @@ class RichText {
     this.textEditNode.style.marginLeft = `-${paddingX * scaleX}px`
     this.textEditNode.style.marginTop = `-${paddingY * scaleY}px`
     this.textEditNode.style.zIndex = nodeTextEditZIndex
-    this.textEditNode.style.background = this.getBackground(node)
+    if (!openRealtimeRenderOnNodeTextEdit) {
+      this.textEditNode.style.background = this.getBackground(node)
+    }
     this.textEditNode.style.minWidth = originWidth + paddingX * 2 + 'px'
     this.textEditNode.style.minHeight = originHeight + 'px'
     this.textEditNode.style.left = rect.left + 'px'
@@ -295,6 +302,21 @@ class RichText {
       this.setTextStyleIfNotRichText(node)
     }
     this.cacheEditingText = ''
+  }
+
+  // 当openRealtimeRenderOnNodeTextEdit配置更新后需要更新编辑框样式
+  onOpenRealtimeRenderOnNodeTextEditConfigUpdate(
+    openRealtimeRenderOnNodeTextEdit
+  ) {
+    if (!this.textEditNode) return
+    this.textEditNode.style.background = openRealtimeRenderOnNodeTextEdit
+      ? 'transparent'
+      : this.node
+      ? this.getBackground(node)
+      : ''
+    this.textEditNode.style.boxShadow = openRealtimeRenderOnNodeTextEdit
+      ? 'none'
+      : '0 0 20px rgba(0,0,0,.5)'
   }
 
   // 更新文本编辑框的大小和位置
@@ -388,6 +410,12 @@ class RichText {
     let html = this.getEditText()
     html = this.sortHtmlNodeStyles(html)
     const list = nodes && nodes.length > 0 ? nodes : [this.node]
+    const node = this.node
+    this.textEditNode.style.display = 'none'
+    this.showTextEdit = false
+    this.mindMap.emit('rich_text_selection_change', false)
+    this.node = null
+    this.isInserting = false
     list.forEach(node => {
       this.mindMap.execCommand('SET_NODE_TEXT', node, html, true)
       // if (node.isGeneralization) {
@@ -396,12 +424,6 @@ class RichText {
       // }
       this.mindMap.render()
     })
-    const node = this.node
-    this.textEditNode.style.display = 'none'
-    this.showTextEdit = false
-    this.mindMap.emit('rich_text_selection_change', false)
-    this.node = null
-    this.isInserting = false
     this.mindMap.emit('hide_text_edit', this.textEditNode, list, node)
   }
 

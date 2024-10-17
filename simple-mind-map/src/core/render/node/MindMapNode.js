@@ -428,7 +428,8 @@ class MindMapNode {
     if (!this.group) return
     // 清除之前的内容
     this.group.clear()
-    const { hoverRectPadding, tagPosition } = this.mindMap.opt
+    const { hoverRectPadding, tagPosition, openRealtimeRenderOnNodeTextEdit } =
+      this.mindMap.opt
     let { width, height, textContentItemMargin } = this
     let { paddingY } = this.getPaddingVale()
     const halfBorderWidth = this.getBorderWidth() / 2
@@ -524,6 +525,12 @@ class MindMapNode {
         .x(-oldX) // 修复非富文本模式下同时存在图标和换行的文本时，被收起和展开时图标与文字距离会逐渐拉大的问题
         .x(textContentOffsetX)
         .y((textContentHeight - this._textData.height) / 2)
+      // 如果开启了文本编辑实时渲染，需要判断当前渲染的节点是否是正在编辑的节点，是的话将透明度设置为0不显示
+      if (openRealtimeRenderOnNodeTextEdit) {
+        this._textData.node.opacity(
+          this.mindMap.renderer.textEdit.getCurrentEditNode() === this ? 0 : 1
+        )
+      }
       textContentNested.add(this._textData.node)
       textContentOffsetX += this._textData.width + textContentItemMargin
     }

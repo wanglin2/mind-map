@@ -133,6 +133,11 @@ class Render {
 
   //   绑定事件
   bindEvent() {
+    const {
+      openPerformance,
+      performanceConfig,
+      openRealtimeRenderOnNodeTextEdit
+    } = this.mindMap.opt
     // 画布点击事件清除当前激活节点列表
     this.mindMap.on('draw_click', e => {
       this.clearActiveNodeListOnDrawClick(e, 'click')
@@ -147,35 +152,6 @@ class Render {
       this.setRootNodeCenter()
     })
     // 性能模式
-    this.performanceMode()
-    // 实时渲染当节点文本编辑时
-    if (this.mindMap.opt.openRealtimeRenderOnNodeTextEdit) {
-      this.mindMap.on('node_text_edit_change', ({ node, text }) => {
-        node._textData = node.createTextNode(text)
-        const { width, height } = node.getNodeRect()
-        node.width = width
-        node.height = height
-        node.layout()
-        this.mindMap.render(() => {
-          // 输入框的left不会改变，所以无需更新
-          this.textEdit.updateTextEditNode(['left'])
-        })
-      })
-    }
-    // 处理非https下的复制黏贴问题
-    // 暂时不启用，因为给页面的其他输入框（比如节点文本编辑框）粘贴内容也会触发，冲突问题暂时没有想到好的解决方法，不可能要求所有输入框都阻止冒泡
-    // if (!navigator.clipboard) {
-    //   this.handlePaste = this.handlePaste.bind(this)
-    //   window.addEventListener('paste', this.handlePaste)
-    //   this.mindMap.on('beforeDestroy', () => {
-    //     window.removeEventListener('paste', this.handlePaste)
-    //   })
-    // }
-  }
-
-  // 性能模式，懒加载节点
-  performanceMode() {
-    const { openPerformance, performanceConfig } = this.mindMap.opt
     const onViewDataChange = throttle(() => {
       if (this.root) {
         this.mindMap.emit('node_tree_render_start')
@@ -188,24 +164,57 @@ class Render {
         )
       }
     }, performanceConfig.time)
-    let lastOpen = false
-    this.mindMap.on('before_update_config', opt => {
-      lastOpen = opt.openPerformance
-    })
-    this.mindMap.on('after_update_config', opt => {
-      if (opt.openPerformance && !lastOpen) {
-        // 动态开启性能模式
-        this.mindMap.on('view_data_change', onViewDataChange)
+    if (openPerformance) {
+      this.mindMap.on('view_data_change', onViewDataChange)
+    }
+    // 文本编辑时实时更新节点大小
+    this.onNodeTextEditChange = this.onNodeTextEditChange.bind(this)
+    if (openRealtimeRenderOnNodeTextEdit) {
+      this.mindMap.on('node_text_edit_change', this.onNodeTextEditChange)
+    }
+    // 监听配置改变事件
+    this.mindMap.on('after_update_config', (opt, lastOpt) => {
+      // 更新openPerformance配置
+      if (opt.openPerformance !== lastOpt.openPerformance) {
+        this.mindMap[opt.openPerformance ? 'on' : 'off'](
+          'view_data_change',
+          onViewDataChange
+        )
         this.forceLoadNode()
       }
-      if (!opt.openPerformance && lastOpen) {
-        // 动态关闭性能模式
-        this.mindMap.off('view_data_change', onViewDataChange)
-        this.forceLoadNode()
+      // 更新openRealtimeRenderOnNodeTextEdit配置
+      if (
+        opt.openRealtimeRenderOnNodeTextEdit !==
+        lastOpt.openRealtimeRenderOnNodeTextEdit
+      ) {
+        this.mindMap[opt.openRealtimeRenderOnNodeTextEdit ? 'on' : 'off'](
+          'node_text_edit_change',
+          this.onNodeTextEditChange
+        )
       }
     })
-    if (!openPerformance) return
-    this.mindMap.on('view_data_change', onViewDataChange)
+    // 处理非https下的复制黏贴问题
+    // 暂时不启用，因为给页面的其他输入框（比如节点文本编辑框）粘贴内容也会触发，冲突问题暂时没有想到好的解决方法，不可能要求所有输入框都阻止冒泡
+    // if (!navigator.clipboard) {
+    //   this.handlePaste = this.handlePaste.bind(this)
+    //   window.addEventListener('paste', this.handlePaste)
+    //   this.mindMap.on('beforeDestroy', () => {
+    //     window.removeEventListener('paste', this.handlePaste)
+    //   })
+    // }
+  }
+
+  // 监听文本编辑事件，实时更新节点大小
+  onNodeTextEditChange({ node, text }) {
+    node._textData = node.createTextNode(text)
+    const { width, height } = node.getNodeRect()
+    node.width = width
+    node.height = height
+    node.layout()
+    this.mindMap.render(() => {
+      // 输入框的left不会改变，所以无需更新
+      this.textEdit.updateTextEditNode(['left'])
+    })
   }
 
   // 强制渲染节点，不考虑是否在画布可视区域内
