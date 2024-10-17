@@ -6,7 +6,9 @@ import {
   htmlEscape,
   handleInputPasteText,
   checkSmmFormatData,
-  getTextFromHtml
+  getTextFromHtml,
+  isWhite,
+  getVisibleColorFromTheme
 } from '../../utils'
 import {
   ERROR_TYPES,
@@ -218,9 +220,11 @@ export default class TextEdit {
     openRealtimeRenderOnNodeTextEdit
   ) {
     if (!this.textEditNode) return
-    this.textEditNode.style.backgroundColor = openRealtimeRenderOnNodeTextEdit
+    this.textEditNode.style.background = openRealtimeRenderOnNodeTextEdit
       ? 'transparent'
-      : '#fff'
+      : this.currentNode
+      ? this.getBackground(this.currentNode)
+      : ''
     this.textEditNode.style.boxShadow = openRealtimeRenderOnNodeTextEdit
       ? 'none'
       : '0 0 20px rgba(0,0,0,.5)'
@@ -266,14 +270,14 @@ export default class TextEdit {
         ${
           openRealtimeRenderOnNodeTextEdit
             ? ''
-            : `background-color:#fff;
-        box-shadow: 0 0 20px rgba(0,0,0,.5);`
+            : `box-shadow: 0 0 20px rgba(0,0,0,.5);`
         }
         padding: ${this.textNodePaddingY}px ${this.textNodePaddingX}px;
         margin-left: -${this.textNodePaddingX}px;
         margin-top: -${this.textNodePaddingY}px;
         outline: none; 
         word-break: break-all;
+        line-break: anywhere;
       `
       this.textEditNode.setAttribute('contenteditable', true)
       this.textEditNode.addEventListener('keyup', e => {
@@ -320,6 +324,9 @@ export default class TextEdit {
       })
     const isMultiLine = node._textData.node.attr('data-ismultiLine') === 'true'
     node.style.domText(this.textEditNode, scale)
+    if (!openRealtimeRenderOnNodeTextEdit) {
+      this.textEditNode.style.background = this.getBackground(node)
+    }
     this.textEditNode.style.zIndex = nodeTextEditZIndex
     this.textEditNode.innerHTML = textLines.join('<br>')
     this.textEditNode.style.minWidth =
@@ -368,6 +375,27 @@ export default class TextEdit {
     if (!notChangeProps.includes('left'))
       this.textEditNode.style.left = rect.left + 'px'
     this.textEditNode.style.top = rect.top + 'px'
+  }
+
+  // 获取编辑区域的背景填充
+  getBackground(node) {
+    const gradientStyle = node.style.merge('gradientStyle')
+    // 当前使用的是渐变色背景
+    if (gradientStyle) {
+      const startColor = node.style.merge('startColor')
+      const endColor = node.style.merge('endColor')
+      return `linear-gradient(to right, ${startColor}, ${endColor})`
+    } else {
+      // 单色背景
+      const bgColor = node.style.merge('fillColor')
+      const color = node.style.merge('color')
+      // 默认使用节点的填充色，否则如果节点颜色是白色的话编辑时看不见
+      return bgColor === 'transparent'
+        ? isWhite(color)
+          ? getVisibleColorFromTheme(this.mindMap.themeConfig)
+          : '#fff'
+        : bgColor
+    }
   }
 
   // 删除文本编辑元素

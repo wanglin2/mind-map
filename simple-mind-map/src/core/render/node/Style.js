@@ -238,6 +238,8 @@ class Style {
       fontStyle: this.merge('fontStyle'),
       textDecoration: this.merge('textDecoration')
     }
+    node.style.color = styles.color
+    node.style.textDecoration = styles.textDecoration
     node.style.fontFamily = styles.fontFamily
     node.style.fontSize = styles.fontSize * fontSizeScale + 'px'
     node.style.fontWeight = styles.fontWeight || 'normal'
