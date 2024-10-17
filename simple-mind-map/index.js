@@ -339,8 +339,11 @@ class MindMap {
   // 更新配置
   updateConfig(opt = {}) {
     this.emit('before_update_config', this.opt)
+    const lastOpt = {
+      ...this.opt
+    }
     this.opt = this.handleOpt(merge.all([defaultOpt, this.opt, opt]))
-    this.emit('after_update_config', this.opt)
+    this.emit('after_update_config', this.opt, lastOpt)
   }
 
   //  获取当前布局结构
