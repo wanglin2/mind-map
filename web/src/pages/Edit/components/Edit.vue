@@ -367,6 +367,7 @@ export default {
             // this.$bus.$emit('hideNoteContent')
           }
         },
+        openRealtimeRenderOnNodeTextEdit: true,
         ...(config || {}),
         iconList: [...icon],
         useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag,

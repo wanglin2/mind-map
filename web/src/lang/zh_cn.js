@@ -67,7 +67,8 @@ export default {
     edge: '边缘',
     rainbowLines: '彩虹线条',
     notUseRainbowLines: '不使用彩虹线条',
-    outerFramePadding: '外框内边距'
+    outerFramePadding: '外框内边距',
+    openRealtimeRenderOnNodeTextEdit: '开启文本编辑实时渲染效果'
   },
   color: {
     moreColor: '更多颜色'

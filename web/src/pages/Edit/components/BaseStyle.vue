@@ -1008,6 +1008,18 @@
           </el-select>
         </div>
       </div>
+      <!-- 是否开启文本编辑时实时更新节点大小 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="config.openRealtimeRenderOnNodeTextEdit"
+            @change="
+              updateOtherConfig('openRealtimeRenderOnNodeTextEdit', $event)
+            "
+            >{{ $t('baseStyle.openRealtimeRenderOnNodeTextEdit') }}</el-checkbox
+          >
+        </div>
+      </div>
       <!-- 是否显示滚动条 -->
       <div class="row">
         <div class="rowItem">
@@ -1123,7 +1135,8 @@ export default {
         enableFreeDrag: false,
         mousewheelAction: 'zoom',
         mousewheelZoomActionReverse: false,
-        createNewNodeBehavior: 'default'
+        createNewNodeBehavior: 'default',
+        openRealtimeRenderOnNodeTextEdit: true
       },
       watermarkConfig: {
         show: false,
@@ -1310,7 +1323,8 @@ export default {
         'enableFreeDrag',
         'mousewheelAction',
         'mousewheelZoomActionReverse',
-        'createNewNodeBehavior'
+        'createNewNodeBehavior',
+        'openRealtimeRenderOnNodeTextEdit'
       ].forEach(key => {
         this.config[key] = this.mindMap.getConfig(key)
       })
