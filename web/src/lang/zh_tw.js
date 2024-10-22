@@ -113,7 +113,9 @@ export default {
     copySuccess: '複製成功',
     copyFail: '複製失敗',
     number: '將其子節點編號',
-    expandNodeChild: '展開所有下級節點'
+    expandNodeChild: '展開所有下級節點',
+    addToDo: '添加待辦',
+    removeToDo: '刪除待辦'
   },
   count: {
     words: '字數',

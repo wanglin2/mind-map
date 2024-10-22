@@ -167,7 +167,8 @@ export const nodeDataNoStylePropList = [
   'range',
   'customLeft',
   'customTop',
-  'customTextWidth'
+  'customTextWidth',
+  'checkbox'
 ]
 
 // 错误类型

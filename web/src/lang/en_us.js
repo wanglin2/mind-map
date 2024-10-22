@@ -113,7 +113,9 @@ export default {
     copySuccess: 'Copy success',
     copyFail: 'Copy fail',
     number: 'Number child nodes',
-    expandNodeChild: 'Expand all sub nodes'
+    expandNodeChild: 'Expand all sub nodes',
+    addToDo: 'Add toDo',
+    removeToDo: 'Remove toDo'
   },
   count: {
     words: 'Words',

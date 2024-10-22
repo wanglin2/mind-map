@@ -74,17 +74,14 @@ import OuterFrame from 'simple-mind-map/src/plugins/OuterFrame.js'
 import Themes from 'simple-mind-map-plugin-themes'
 // 协同编辑插件
 // import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
-// 手绘风格插件，该插件为付费插件，详情请查看开发文档
+// 以下插件为付费插件，详情请查看开发文档。依次为：手绘风格插件、标记插件、编号插件、Freemind软件格式导入导出插件、Excel软件格式导入导出插件、待办插件
 // import HandDrawnLikeStyle from 'simple-mind-map-plugin-handdrawnlikestyle'
-// 标记插件，该插件为付费插件，详情请查看开发文档
 // import Notation from 'simple-mind-map-plugin-notation'
-// 编号插件，该插件为付费插件，详情请查看开发文档
 // import Numbers from 'simple-mind-map-plugin-numbers'
-// Freemind软件格式导入导出插件，该插件为付费插件，详情请查看开发文档
 // import Freemind from 'simple-mind-map-plugin-freemind'
-// Excel软件格式导入导出插件，该插件为付费插件，详情请查看开发文档
 // import Excel from 'simple-mind-map-plugin-excel'
-// npm link simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map simple-mind-map-plugin-themes
+// import Checkbox from 'simple-mind-map-plugin-checkbox'
+// npm link simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map-plugin-checkbox simple-mind-map simple-mind-map-plugin-themes
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -576,6 +573,10 @@ export default {
         this.mindMap.addPlugin(Excel)
         this.$store.commit('setSupportExcel', true)
         Vue.prototype.Excel = Excel
+      }
+      if (typeof Checkbox !== 'undefined') {
+        this.mindMap.addPlugin(Checkbox)
+        this.$store.commit('setSupportCheckbox', true)
       }
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
         this.manualSave()

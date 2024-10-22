@@ -113,7 +113,9 @@ export default {
     copySuccess: '复制成功',
     copyFail: '复制失败',
     number: '编号其子节点',
-    expandNodeChild: '展开所有下级节点'
+    expandNodeChild: '展开所有下级节点',
+    addToDo: '添加待办',
+    removeToDo: '删除待办'
   },
   count: {
     words: '字数',
