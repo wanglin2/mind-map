@@ -1,6 +1,6 @@
 import Style from './Style'
 import Shape from './Shape'
-import { G, Rect, Text } from '@svgdotjs/svg.js'
+import { G, Rect, Text, SVG } from '@svgdotjs/svg.js'
 import nodeGeneralizationMethods from './nodeGeneralization'
 import nodeExpandBtnMethods from './nodeExpandBtn'
 import nodeCommandWrapsMethods from './nodeCommandWraps'
@@ -89,7 +89,6 @@ class MindMapNode {
     this.noteEl = null
     this.noteContentIsShow = false
     this._attachmentData = null
-    this._numberData = null
     this._prefixData = null
     this._postfixData = null
     this._expandBtn = null
@@ -113,8 +112,6 @@ class MindMapNode {
     // 概要节点的宽高
     this._generalizationNodeWidth = 0
     this._generalizationNodeHeight = 0
-    // 编号字符
-    this.number = opt.number || ''
     // 各种文字信息的间距
     this.textContentItemMargin = this.mindMap.opt.textContentMargin
     // 图片和文字节点的间距
@@ -207,7 +204,7 @@ class MindMapNode {
   }
 
   //  创建节点的各个内容对象数据
-  // recreateTypes：[] custom、image、icon、text、hyperlink、tag、note、attachment、numbers、prefix、postfix
+  // recreateTypes：[] custom、image、icon、text、hyperlink、tag、note、attachment、numbers、prefix、postfix、checkbox
   createNodeData(recreateTypes) {
     // 自定义节点内容
     let {
@@ -226,9 +223,11 @@ class MindMapNode {
       'tag',
       'note',
       'attachment',
-      'numbers',
       'prefix',
-      'postfix'
+      'postfix',
+      ...this.mindMap.nodeInnerPrefixList.map(item => {
+        return item.name
+      })
     ]
     const createTypes = {}
     if (Array.isArray(recreateTypes)) {
@@ -264,9 +263,11 @@ class MindMapNode {
     if (createTypes.note) this._noteData = this.createNoteNode()
     if (createTypes.attachment)
       this._attachmentData = this.createAttachmentNode()
-    if (this.mindMap.numbers && createTypes.numbers) {
-      this._numberData = this.mindMap.numbers.createNumberContent(this)
-    }
+    this.mindMap.nodeInnerPrefixList.forEach(item => {
+      if (createTypes[item.name]) {
+        this[`_${item.name}Data`] = item.createContent(this)
+      }
+    })
     if (createTypes.prefix) {
       this._prefixData = createNodePrefixContent
         ? createNodePrefixContent(this)
@@ -324,11 +325,14 @@ class MindMapNode {
       this._rectInfo.imgContentWidth = imgContentWidth = this._imgData.width
       this._rectInfo.imgContentHeight = imgContentHeight = this._imgData.height
     }
-    // 编号内容
-    if (this._numberData) {
-      textContentWidth += this._numberData.width
-      textContentHeight = Math.max(textContentHeight, this._numberData.height)
-    }
+    // 库前置内容
+    this.mindMap.nodeInnerPrefixList.forEach(item => {
+      const itemData = this[`_${item.name}Data`]
+      if (itemData) {
+        textContentWidth += itemData.width
+        textContentHeight = Math.max(textContentHeight, itemData.height)
+      }
+    })
     // 自定义前置内容
     if (this._prefixData) {
       textContentWidth += this._prefixData.width
@@ -481,14 +485,17 @@ class MindMapNode {
     // 内容节点
     let textContentNested = new G()
     let textContentOffsetX = 0
-    // 编号内容
-    if (this._numberData) {
-      this._numberData.node
-        .x(textContentOffsetX)
-        .y((textContentHeight - this._numberData.height) / 2)
-      textContentNested.add(this._numberData.node)
-      textContentOffsetX += this._numberData.width + textContentItemMargin
-    }
+    // 库前置内容
+    this.mindMap.nodeInnerPrefixList.forEach(item => {
+      const itemData = this[`_${item.name}Data`]
+      if (itemData) {
+        itemData.node
+          .x(textContentOffsetX)
+          .y((textContentHeight - itemData.height) / 2)
+        textContentNested.add(itemData.node)
+        textContentOffsetX += itemData.width + textContentItemMargin
+      }
+    })
     // 自定义前置内容
     if (this._prefixData) {
       const foreignObject = createForeignObjectNode({
@@ -1360,6 +1367,15 @@ class MindMapNode {
   // 创建SVG文本节点
   createSvgTextNode(text = '') {
     return new Text().text(text)
+  }
+
+  // 获取SVG.js库的一些对象
+  getSvgObjects() {
+    return {
+      SVG,
+      G,
+      Rect
+    }
   }
 
   // 检查是否支持拖拽调整宽度
