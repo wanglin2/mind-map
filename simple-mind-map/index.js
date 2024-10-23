@@ -483,6 +483,10 @@ class MindMap {
     if (this.opt.readonly) {
       // 取消当前激活的元素
       this.execCommand('CLEAR_ACTIVE_NODE')
+      // 如果处于编辑态，要隐藏所有的编辑框
+      if (this.renderer.textEdit.isShowTextEdit()) {
+        this.renderer.textEdit.hideEditTextBox()
+      }
     }
     this.emit('mode_change', mode)
   }
