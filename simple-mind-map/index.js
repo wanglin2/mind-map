@@ -479,15 +479,16 @@ class MindMap {
     }
     const isReadonly = mode === CONSTANTS.MODE.READONLY
     if (isReadonly === this.opt.readonly) return
-    this.opt.readonly = isReadonly
-    if (this.opt.readonly) {
-      // 取消当前激活的元素
-      this.execCommand('CLEAR_ACTIVE_NODE')
+    if (isReadonly) {
       // 如果处于编辑态，要隐藏所有的编辑框
       if (this.renderer.textEdit.isShowTextEdit()) {
         this.renderer.textEdit.hideEditTextBox()
+        this.command.originAddHistory()
       }
+      // 取消当前激活的元素
+      this.execCommand('CLEAR_ACTIVE_NODE')
     }
+    this.opt.readonly = isReadonly
     this.emit('mode_change', mode)
   }
 

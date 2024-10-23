@@ -18,6 +18,7 @@ class Command {
     this.activeHistoryIndex = 0
     // 注册快捷键
     this.registerShortcutKeys()
+    this.originAddHistory = this.addHistory.bind(this)
     this.addHistory = throttle(
       this.addHistory,
       this.mindMap.opt.addHistoryTime,
