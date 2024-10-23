@@ -535,6 +535,11 @@ export const sidebarTriggerList = [
     icon: 'iconfuhao-dagangshu'
   },
   {
+    name: '设置',
+    value: 'setting',
+    icon: 'iconshezhi'
+  },
+  {
     name: '快捷键',
     value: 'shortcutKey',
     icon: 'iconjianpan'

@@ -12,7 +12,7 @@ const backgroundStyleProps = [
 class Style {
   //   设置背景样式
   static setBackgroundStyle(el, themeConfig) {
-    if (!this.el) return
+    if (!el) return
     // 缓存容器元素原本的样式
     if (!Style.cacheStyle) {
       Style.cacheStyle = {}

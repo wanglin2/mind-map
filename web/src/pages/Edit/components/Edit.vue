@@ -38,6 +38,7 @@
     <SourceCodeEdit v-if="mindMap" :mindMap="mindMap"></SourceCodeEdit>
     <NodeOuterFrame v-if="mindMap" :mindMap="mindMap"></NodeOuterFrame>
     <NodeTagStyle v-if="mindMap" :mindMap="mindMap"></NodeTagStyle>
+    <Setting :data="mindMapData" :mindMap="mindMap"></Setting>
     <div
       class="dragMask"
       v-if="showDragMask"
@@ -118,6 +119,7 @@ import SourceCodeEdit from './SourceCodeEdit.vue'
 import NodeAttachment from './NodeAttachment.vue'
 import NodeOuterFrame from './NodeOuterFrame.vue'
 import NodeTagStyle from './NodeTagStyle.vue'
+import Setting from './Setting.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -173,7 +175,8 @@ export default {
     SourceCodeEdit,
     NodeAttachment,
     NodeOuterFrame,
-    NodeTagStyle
+    NodeTagStyle,
+    Setting
   },
   data() {
     return {
