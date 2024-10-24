@@ -70,7 +70,10 @@ export default {
     watermarkAngle: '旋转角度',
     watermarkTextOpacity: '文字透明度',
     watermarkTextFontSize: '文字字号',
-    belowNode: '显示在节点下方'
+    belowNode: '显示在节点下方',
+    tagPosition: '节点标签显示的位置',
+    tagPositionRight: '文本右侧',
+    tagPositionBottom: '文本下面'
   },
   color: {
     moreColor: '更多颜色'
