@@ -207,7 +207,7 @@ class MindMapNode {
   // recreateTypes：[] custom、image、icon、text、hyperlink、tag、note、attachment、numbers、prefix、postfix、checkbox
   createNodeData(recreateTypes) {
     // 自定义节点内容
-    let {
+    const {
       isUseCustomNodeContent,
       customCreateNodeContent,
       createNodePrefixContent,
@@ -287,15 +287,19 @@ class MindMapNode {
   }
 
   //  计算节点的宽高
-  getSize(recreateTypes) {
+  getSize(recreateTypes, opt = {}) {
+    const ignoreUpdateCustomTextWidth = opt.ignoreUpdateCustomTextWidth || false
+    if (!ignoreUpdateCustomTextWidth) {
+      this.customTextWidth = this.getData('customTextWidth') || undefined
+    }
     this.customLeft = this.getData('customLeft') || undefined
     this.customTop = this.getData('customTop') || undefined
     // 这里不要更新概要，不然即使概要没修改，每次也会重新渲染
     // this.updateGeneralization()
     this.createNodeData(recreateTypes)
-    let { width, height } = this.getNodeRect()
+    const { width, height } = this.getNodeRect()
     // 判断节点尺寸是否有变化
-    let changed = this.width !== width || this.height !== height
+    const changed = this.width !== width || this.height !== height
     this.width = width
     this.height = height
     return changed
@@ -305,7 +309,7 @@ class MindMapNode {
   getNodeRect() {
     // 自定义节点内容
     if (this.isUseCustomNodeContent()) {
-      let rect = this.measureCustomNodeContentSize(this._customNodeContent)
+      const rect = this.measureCustomNodeContentSize(this._customNodeContent)
       return {
         width: this.hasCustomWidth() ? this.customTextWidth : rect.width,
         height: rect.height
@@ -401,7 +405,7 @@ class MindMapNode {
       imgContentHeight > 0 && textContentHeight > 0
         ? this.blockContentMargin
         : 0
-    let { paddingX, paddingY } = this.getPaddingVale()
+    const { paddingX, paddingY } = this.getPaddingVale()
     // 纯内容宽高
     let _width = Math.max(imgContentWidth, textContentWidth)
     let _height = imgContentHeight + textContentHeight
@@ -415,7 +419,7 @@ class MindMapNode {
       _height += tagContentHeight
     }
     // 计算节点形状需要的附加内边距
-    let { paddingX: shapePaddingX, paddingY: shapePaddingY } =
+    const { paddingX: shapePaddingX, paddingY: shapePaddingY } =
       this.shapeInstance.getShapePadding(_width, _height, paddingX, paddingY)
     this.shapePadding.paddingX = shapePaddingX
     this.shapePadding.paddingY = shapePaddingY
@@ -670,7 +674,7 @@ class MindMapNode {
       // 多选和取消多选
       if (!readonly && (e.ctrlKey || e.metaKey) && enableCtrlKeyNodeSelection) {
         this.isMultipleChoice = true
-        let isActive = this.getData('isActive')
+        const isActive = this.getData('isActive')
         if (!isActive)
           this.mindMap.emit(
             'before_node_active',
@@ -789,7 +793,7 @@ class MindMapNode {
           this.renderExpandBtn()
         }
       } else {
-        let { isActive, expand } = this.getData()
+        const { isActive, expand } = this.getData()
         // 展开状态且非激活状态，且当前鼠标不在它上面，才隐藏
         if (childrenLength <= 0) {
           this.removeExpandBtn()
@@ -807,7 +811,7 @@ class MindMapNode {
     // 更新协同头像
     if (this.updateUserListNode) this.updateUserListNode()
     // 更新节点位置
-    let t = this.group.transform()
+    const t = this.group.transform()
     // 保存一份当前节点数据快照
     this.nodeDataSnapshot = JSON.stringify(this.getData())
     // 节点位置变化才更新，因为即使值没有变化属性设置操作也是耗时的
@@ -818,10 +822,10 @@ class MindMapNode {
 
   // 获取节点相当于画布的位置
   getNodePosInClient(_left, _top) {
-    let drawTransform = this.mindMap.draw.transform()
-    let { scaleX, scaleY, translateX, translateY } = drawTransform
-    let left = _left * scaleX + translateX
-    let top = _top * scaleY + translateY
+    const drawTransform = this.mindMap.draw.transform()
+    const { scaleX, scaleY, translateX, translateY } = drawTransform
+    const left = _left * scaleX + translateX
+    const top = _top * scaleY + translateY
     return {
       left,
       top
@@ -840,8 +844,8 @@ class MindMapNode {
   }
 
   // 重新渲染节点，即重新创建节点内容、计算节点大小、计算节点内容布局、更新展开收起按钮，概要及位置
-  reRender(recreateTypes) {
-    let sizeChange = this.getSize(recreateTypes)
+  reRender(recreateTypes, opt) {
+    const sizeChange = this.getSize(recreateTypes, opt)
     this.layout()
     this.update()
     return sizeChange
@@ -991,7 +995,7 @@ class MindMapNode {
     if (this.group) this.group.hide()
     this.hideGeneralization()
     if (this.parent) {
-      let index = this.parent.children.indexOf(this)
+      const index = this.parent.children.indexOf(this)
       this.parent._lines[index] && this.parent._lines[index].hide()
       this._lines.forEach(item => {
         item.hide()
@@ -1013,7 +1017,7 @@ class MindMapNode {
     this.group.show()
     this.showGeneralization()
     if (this.parent) {
-      let index = this.parent.children.indexOf(this)
+      const index = this.parent.children.indexOf(this)
       this.parent._lines[index] && this.parent._lines[index].show()
       this._lines.forEach(item => {
         item.show()
@@ -1259,7 +1263,7 @@ class MindMapNode {
 
   //  获取某个样式
   getStyle(prop, root) {
-    let v = this.style.merge(prop, root)
+    const v = this.style.merge(prop, root)
     return v === undefined ? '' : v
   }
 
@@ -1324,11 +1328,11 @@ class MindMapNode {
 
   // 获取节点的尺寸和位置信息，宽高是应用了缩放效果后的实际宽高，位置信息相对于画布
   getRectInSvg() {
-    let { scaleX, scaleY, translateX, translateY } =
+    const { scaleX, scaleY, translateX, translateY } =
       this.mindMap.draw.transform()
     let { left, top, width, height } = this
-    let right = (left + width) * scaleX + translateX
-    let bottom = (top + height) * scaleY + translateY
+    const right = (left + width) * scaleX + translateX
+    const bottom = (top + height) * scaleY + translateY
     left = left * scaleX + translateX
     top = top * scaleY + translateY
     return {

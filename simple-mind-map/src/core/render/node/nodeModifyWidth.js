@@ -71,7 +71,9 @@ function onDragMousemoveHandle(e) {
     this.left = this.dragHandleMousedownLeft + ox / scaleX
   }
   // 自定义内容不重新渲染，交给开发者
-  this.reRender(useCustomContent ? [] : ['text'])
+  this.reRender(useCustomContent ? [] : ['text'], {
+    ignoreUpdateCustomTextWidth: true
+  })
 }
 
 // 鼠标松开事件
