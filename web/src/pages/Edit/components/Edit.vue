@@ -368,11 +368,11 @@ export default {
           }
         },
         openRealtimeRenderOnNodeTextEdit: true,
+        enableAutoEnterTextEditWhenKeydown: true,
         ...(config || {}),
         iconList: [...icon],
         useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag,
         customInnerElsAppendTo: null,
-        enableAutoEnterTextEditWhenKeydown: true,
         customHandleClipboardText: handleClipboardText,
         defaultNodeImage: require('../../../assets/img/图片加载失败.svg'),
         initRootNodePosition: ['center', 'center'],

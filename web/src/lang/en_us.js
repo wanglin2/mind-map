@@ -76,7 +76,8 @@ export default {
     tagPosition: 'Node tag position',
     tagPositionRight: 'Text right',
     tagPositionBottom: 'Text bottom',
-    alwaysShowExpandBtn: 'Always show expand btn'
+    alwaysShowExpandBtn: 'Always show expand btn',
+    enableAutoEnterTextEditWhenKeydown: 'Auto enter text edit when keydown'
   },
   color: {
     moreColor: 'More color'

@@ -209,6 +209,16 @@
           >
         </div>
       </div>
+      <!-- 是否在键盘输入时自动进入节点文本编辑模式 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="config.enableAutoEnterTextEditWhenKeydown"
+            @change="updateOtherConfig('enableAutoEnterTextEditWhenKeydown', $event)"
+            >{{ $t('setting.enableAutoEnterTextEditWhenKeydown') }}</el-checkbox
+          >
+        </div>
+      </div>
       <!-- 是否开启手绘风格 -->
       <div class="row" v-if="supportHandDrawnLikeStyle">
         <div class="rowItem">
@@ -360,7 +370,8 @@ export default {
         createNewNodeBehavior: 'default',
         tagPosition: 'right',
         openRealtimeRenderOnNodeTextEdit: true,
-        alwaysShowExpandBtn: false
+        alwaysShowExpandBtn: false,
+        enableAutoEnterTextEditWhenKeydown: true
       },
       watermarkConfig: {
         show: false,

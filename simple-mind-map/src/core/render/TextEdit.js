@@ -113,6 +113,16 @@ export default class TextEdit {
           )
         }
       }
+      if (
+        opt.enableAutoEnterTextEditWhenKeydown !==
+        lastOpt.enableAutoEnterTextEditWhenKeydown
+      ) {
+        window[
+          opt.enableAutoEnterTextEditWhenKeydown
+            ? 'addEventListener'
+            : 'removeEventListener'
+        ]('keydown', this.onKeydown)
+      }
     })
   }
 

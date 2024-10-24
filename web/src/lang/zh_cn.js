@@ -74,7 +74,8 @@ export default {
     tagPosition: '节点标签显示的位置',
     tagPositionRight: '文本右侧',
     tagPositionBottom: '文本下面',
-    alwaysShowExpandBtn: '是否一直显示展开收起按钮'
+    alwaysShowExpandBtn: '是否一直显示展开收起按钮',
+    enableAutoEnterTextEditWhenKeydown: '键盘输入时自动进入文本编辑'
   },
   color: {
     moreColor: '更多颜色'
