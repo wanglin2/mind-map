@@ -43,7 +43,8 @@ export default {
     outerFramePadding: '外框內距',
     tagPosition: '節點標簽顯示的位置',
     tagPositionRight: '文本右側',
-    tagPositionBottom: '文本下面'
+    tagPositionBottom: '文本下面',
+    alwaysShowExpandBtn: '是否壹直顯示展開收起按鈕'
   },
   setting: {
     title: '設置',

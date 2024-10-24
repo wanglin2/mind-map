@@ -73,7 +73,8 @@ export default {
     belowNode: '显示在节点下方',
     tagPosition: '节点标签显示的位置',
     tagPositionRight: '文本右侧',
-    tagPositionBottom: '文本下面'
+    tagPositionBottom: '文本下面',
+    alwaysShowExpandBtn: '是否一直显示展开收起按钮'
   },
   color: {
     moreColor: '更多颜色'

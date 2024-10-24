@@ -199,6 +199,16 @@
           >
         </div>
       </div>
+      <!-- 是否一直显示展开收起按钮 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="config.alwaysShowExpandBtn"
+            @change="updateOtherConfig('alwaysShowExpandBtn', $event)"
+            >{{ $t('setting.alwaysShowExpandBtn') }}</el-checkbox
+          >
+        </div>
+      </div>
       <!-- 是否开启手绘风格 -->
       <div class="row" v-if="supportHandDrawnLikeStyle">
         <div class="rowItem">
@@ -349,7 +359,8 @@ export default {
         mousewheelZoomActionReverse: false,
         createNewNodeBehavior: 'default',
         tagPosition: 'right',
-        openRealtimeRenderOnNodeTextEdit: true
+        openRealtimeRenderOnNodeTextEdit: true,
+        alwaysShowExpandBtn: false
       },
       watermarkConfig: {
         show: false,
@@ -437,7 +448,7 @@ export default {
       storeConfig({
         config: this.data.config
       })
-      if (key === 'tagPosition') {
+      if (['tagPosition', 'alwaysShowExpandBtn'].includes(key)) {
         this.mindMap.reRender()
       }
     },

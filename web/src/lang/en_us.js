@@ -75,7 +75,8 @@ export default {
     belowNode: 'Display below nodes',
     tagPosition: 'Node tag position',
     tagPositionRight: 'Text right',
-    tagPositionBottom: 'Text bottom'
+    tagPositionBottom: 'Text bottom',
+    alwaysShowExpandBtn: 'Always show expand btn'
   },
   color: {
     moreColor: 'More color'
