@@ -19,6 +19,7 @@
         <el-select v-model="protocol" slot="prepend" style="width: 80px;">
           <el-option label="https" value="https"></el-option>
           <el-option label="http" value="http"></el-option>
+          <el-option label="其他" value="other"></el-option>
           <el-option label="无" value="none"></el-option>
         </el-select>
       </el-input>
@@ -88,9 +89,13 @@ export default {
     },
 
     handleUrl(setProtocolNoneIfNotExist) {
-      const res = this.link.match(/^(https?):\/\//)
+      const res = this.link.match(/^([^/:]+):\/\//)
       if (res && res[1]) {
-        this.protocol = res[1]
+        if (['https', 'http'].includes(res[1])) {
+          this.protocol = res[1]
+        } else {
+          this.protocol = 'other'
+        }
       } else if (!this.link) {
         this.protocol = 'https'
       } else if (setProtocolNoneIfNotExist) {
@@ -120,7 +125,9 @@ export default {
     confirm() {
       this.activeNodes.forEach(node => {
         node.setHyperlink(
-          (this.protocol === 'none' ? '' : this.protocol + '://') + this.link,
+          (['none', 'other'].includes(this.protocol)
+            ? ''
+            : this.protocol + '://') + this.link,
           this.linkTitle
         )
         this.cancel()

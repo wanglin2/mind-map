@@ -6,13 +6,18 @@ class NodeImgAdjust {
   //  构造函数
   constructor({ mindMap }) {
     this.mindMap = mindMap
-    this.resizeBtnSize = 26 // 调整按钮的大小
     this.handleEl = null // 自定义元素，用来渲染临时图片、调整按钮
     this.isShowHandleEl = false // 自定义元素是否在显示中
     this.node = null // 当前节点实例
     this.img = null // 当前节点的图片节点
     this.rect = null // 当前图片节点的尺寸信息
     this.isMousedown = false // 当前是否是按住调整按钮状态
+    this.mousedownDrawTransform = null //鼠标按下时对当前画布的变换
+    this.mousedownOffset = {
+      // 鼠标按下时位置和图片右下角相差的距离
+      x: 0,
+      y: 0
+    }
     this.currentImgWidth = 0 // 当前拖拽实时图片的大小
     this.currentImgHeight = 0
     this.isAdjusted = false // 是否是拖拽结束后的渲染期间
@@ -78,6 +83,7 @@ class NodeImgAdjust {
 
   // 显示自定义元素
   showHandleEl() {
+    if (this.isShowHandleEl) return
     if (!this.handleEl) {
       this.createResizeBtnEl()
     }
@@ -116,6 +122,7 @@ class NodeImgAdjust {
 
   // 创建调整按钮元素
   createResizeBtnEl() {
+    const { imgResizeBtnSize } = this.mindMap.opt
     // 容器元素
     this.handleEl = document.createElement('div')
     this.handleEl.style.cssText = `
@@ -134,8 +141,8 @@ class NodeImgAdjust {
       bottom: 0;
       pointer-events: auto;
       background-color: rgba(0, 0, 0, 0.3);
-      width: ${this.resizeBtnSize}px;
-      height: ${this.resizeBtnSize}px;
+      width: ${imgResizeBtnSize}px;
+      height: ${imgResizeBtnSize}px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -178,8 +185,8 @@ class NodeImgAdjust {
       right: 0;top:0;color:#fff;
       pointer-events: auto;
       background-color: rgba(0, 0, 0, 0.3);
-      width: ${this.resizeBtnSize}px;
-      height: ${this.resizeBtnSize}px;
+      width: ${imgResizeBtnSize}px;
+      height: ${imgResizeBtnSize}px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -207,10 +214,13 @@ class NodeImgAdjust {
   }
 
   // 鼠标按钮按下事件
-  onMousedown() {
+  onMousedown(e) {
     this.isMousedown = true
+    this.mousedownDrawTransform = this.mindMap.draw.transform()
     // 隐藏节点实际图片
     this.hideNodeImage()
+    this.mousedownOffset.x = e.clientX - this.rect.x2
+    this.mousedownOffset.y = e.clientY - this.rect.y2
     // 将节点图片渲染到自定义元素上
     this.handleEl.style.backgroundImage = `url(${this.node.getData('image')})`
   }
@@ -219,13 +229,48 @@ class NodeImgAdjust {
   onMousemove(e) {
     if (!this.isMousedown) return
     e.preventDefault()
-    // 计算当前拖拽位置对应的图片的实时大小
-    let { width: imageOriginWidth, height: imageOriginHeight } =
+    const { scaleX, scaleY } = this.mousedownDrawTransform
+    // 图片原始大小
+    const { width: imageOriginWidth, height: imageOriginHeight } =
       this.node.getData('imageSize')
-    let newWidth = e.clientX - this.rect.x
-    let newHeight = e.clientY - this.rect.y
-    if (newWidth <= 0 || newHeight <= 0) return
-    let [actWidth, actHeight] = resizeImgSizeByOriginRatio(
+    let {
+      minImgResizeWidth,
+      minImgResizeHeight,
+      maxImgResizeWidthInheritTheme,
+      maxImgResizeWidth,
+      maxImgResizeHeight
+    } = this.mindMap.opt
+    // 主题设置的最小图片宽高
+    const minRatio = minImgResizeWidth / minImgResizeHeight
+    const oRatio = imageOriginWidth / imageOriginHeight
+    if (minRatio > oRatio) {
+      // 如果最小值比例大于图片原始比例，那么要调整高度最小值
+      minImgResizeHeight = minImgResizeWidth / oRatio
+    } else {
+      // 否则调整宽度最小值
+      minImgResizeWidth = minImgResizeHeight * oRatio
+    }
+    // 主题设置的最大图片宽高
+    let imgMaxWidth, imgMaxHeight
+    if (maxImgResizeWidthInheritTheme) {
+      imgMaxWidth = this.mindMap.getThemeConfig('imgMaxWidth')
+      imgMaxHeight = this.mindMap.getThemeConfig('imgMaxHeight')
+    } else {
+      imgMaxWidth = maxImgResizeWidth
+      imgMaxHeight = maxImgResizeHeight
+    }
+    imgMaxWidth = imgMaxWidth * scaleX
+    imgMaxHeight = imgMaxHeight * scaleY
+    // 计算当前拖拽位置对应的图片的实时大小
+    let newWidth = Math.abs(e.clientX - this.rect.x - this.mousedownOffset.x)
+    let newHeight = Math.abs(e.clientY - this.rect.y - this.mousedownOffset.y)
+    // 限制最小值
+    if (newWidth < minImgResizeWidth) newWidth = minImgResizeWidth
+    if (newHeight < minImgResizeHeight) newHeight = minImgResizeHeight
+    // 限制最大值
+    if (newWidth > imgMaxWidth) newWidth = imgMaxWidth
+    if (newHeight > imgMaxHeight) newHeight = imgMaxHeight
+    const [actWidth, actHeight] = resizeImgSizeByOriginRatio(
       imageOriginWidth,
       imageOriginHeight,
       newWidth,
@@ -244,17 +289,27 @@ class NodeImgAdjust {
     // 隐藏自定义元素
     this.hideHandleEl()
     // 更新节点图片为新的大小
-    let { image, imageTitle } = this.node.getData()
-    let { scaleX, scaleY } = this.mindMap.draw.transform()
-    this.mindMap.execCommand('SET_NODE_IMAGE', this.node, {
-      url: image,
-      title: imageTitle,
-      width: this.currentImgWidth / scaleX,
-      height: this.currentImgHeight / scaleY,
-      custom: true // 代表自定义了图片大小
-    })
-    this.isAdjusted = true
+    const { image, imageTitle } = this.node.getData()
+    const { scaleX, scaleY } = this.mousedownDrawTransform
+    const newWidth = this.currentImgWidth / scaleX
+    const newHeight = this.currentImgHeight / scaleY
+    if (
+      Math.abs(newWidth - this.rect.width) > 1 ||
+      Math.abs(newHeight - this.rect.height) > 1
+    ) {
+      this.mindMap.execCommand('SET_NODE_IMAGE', this.node, {
+        url: image,
+        title: imageTitle,
+        width: newWidth,
+        height: newHeight,
+        custom: true // 代表自定义了图片大小
+      })
+      this.isAdjusted = true
+    }
     this.isMousedown = false
+    this.mousedownDrawTransform = null
+    this.mousedownOffset.x = 0
+    this.mousedownOffset.y = 0
   }
 
   // 渲染完成事件

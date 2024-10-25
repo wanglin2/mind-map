@@ -4,8 +4,6 @@ import 'quill/dist/quill.snow.css'
 import {
   walk,
   getTextFromHtml,
-  isWhite,
-  getVisibleColorFromTheme,
   isUndef,
   checkSmmFormatData,
   removeHtmlNodeByClass,
@@ -89,6 +87,18 @@ class RichText {
 
   // 插入样式
   appendCss() {
+    this.mindMap.appendCss(
+      'richText',
+      `
+      .smm-richtext-node-wrap {
+        word-break: break-all;
+      }
+
+      .smm-richtext-node-wrap p {
+        font-family: auto;
+      }
+      `
+    )
     let cssText = `
       .ql-editor {
         overflow: hidden;
@@ -105,15 +115,6 @@ class RichText {
 
       .ql-container.ql-snow {
         border: none;
-      }
-
-      .smm-richtext-node-wrap {
-        word-break: break-all;
-      }
-
-      .smm-richtext-node-wrap p {
-        font-family: auto;
-        
       }
 
       .smm-richtext-node-edit-wrap p {
@@ -180,14 +181,18 @@ class RichText {
     if (this.showTextEdit) {
       return
     }
-    const {
+    let {
       richTextEditFakeInPlace,
       customInnerElsAppendTo,
       nodeTextEditZIndex,
       textAutoWrapWidth,
       selectTextOnEnterEditText,
-      transformRichTextOnEnterEdit
+      transformRichTextOnEnterEdit,
+      openRealtimeRenderOnNodeTextEdit
     } = this.mindMap.opt
+    textAutoWrapWidth = node.hasCustomWidth()
+      ? node.customTextWidth
+      : textAutoWrapWidth
     this.node = node
     this.isInserting = isInserting
     if (!rect) rect = node._textData.node.node.getBoundingClientRect()
@@ -216,10 +221,13 @@ class RichText {
       this.textEditNode.style.cssText = `
         position:fixed; 
         box-sizing: border-box; 
-        box-shadow: 0 0 20px rgba(0,0,0,.5);
+        ${
+          openRealtimeRenderOnNodeTextEdit
+            ? ''
+            : 'box-shadow: 0 0 20px rgba(0,0,0,.5);'
+        }
         outline: none; 
-        word-break: 
-        break-all;
+        word-break: break-all;
         padding: ${paddingY}px ${paddingX}px;
       `
       this.textEditNode.addEventListener('click', e => {
@@ -239,7 +247,10 @@ class RichText {
     this.textEditNode.style.marginLeft = `-${paddingX * scaleX}px`
     this.textEditNode.style.marginTop = `-${paddingY * scaleY}px`
     this.textEditNode.style.zIndex = nodeTextEditZIndex
-    this.textEditNode.style.background = this.getBackground(node)
+    if (!openRealtimeRenderOnNodeTextEdit) {
+      this.textEditNode.style.background =
+        this.mindMap.renderer.textEdit.getBackground(node)
+    }
     this.textEditNode.style.minWidth = originWidth + paddingX * 2 + 'px'
     this.textEditNode.style.minHeight = originHeight + 'px'
     this.textEditNode.style.left = rect.left + 'px'
@@ -292,11 +303,26 @@ class RichText {
     this.cacheEditingText = ''
   }
 
+  // 当openRealtimeRenderOnNodeTextEdit配置更新后需要更新编辑框样式
+  onOpenRealtimeRenderOnNodeTextEditConfigUpdate(
+    openRealtimeRenderOnNodeTextEdit
+  ) {
+    if (!this.textEditNode) return
+    this.textEditNode.style.background = openRealtimeRenderOnNodeTextEdit
+      ? 'transparent'
+      : this.node
+      ? this.mindMap.renderer.textEdit.getBackground(this.node)
+      : ''
+    this.textEditNode.style.boxShadow = openRealtimeRenderOnNodeTextEdit
+      ? 'none'
+      : '0 0 20px rgba(0,0,0,.5)'
+  }
+
   // 更新文本编辑框的大小和位置
   updateTextEditNode() {
     if (!this.node) return
-    const rect = this.node._textData.node.node.getBoundingClientRect()
     const g = this.node._textData.node
+    const rect = g.node.getBoundingClientRect()
     const originWidth = g.attr('data-width')
     const originHeight = g.attr('data-height')
     this.textEditNode.style.minWidth =
@@ -311,27 +337,6 @@ class RichText {
     if (!this.textEditNode) return
     const targetNode = this.mindMap.opt.customInnerElsAppendTo || document.body
     targetNode.removeChild(this.textEditNode)
-  }
-
-  // 获取编辑区域的背景填充
-  getBackground(node) {
-    const gradientStyle = node.style.merge('gradientStyle')
-    // 当前使用的是渐变色背景
-    if (gradientStyle) {
-      const startColor = node.style.merge('startColor')
-      const endColor = node.style.merge('endColor')
-      return `linear-gradient(to right, ${startColor}, ${endColor})`
-    } else {
-      // 单色背景
-      const bgColor = node.style.merge('fillColor')
-      const color = node.style.merge('color')
-      // 默认使用节点的填充色，否则如果节点颜色是白色的话编辑时看不见
-      return bgColor === 'transparent'
-        ? isWhite(color)
-          ? getVisibleColorFromTheme(this.mindMap.themeConfig)
-          : '#fff'
-        : bgColor
-    }
   }
 
   // 如果是非富文本的情况，需要手动应用文本样式
@@ -382,8 +387,13 @@ class RichText {
     }
     let html = this.getEditText()
     html = this.sortHtmlNodeStyles(html)
-    let list =
-      nodes && nodes.length > 0 ? nodes : this.mindMap.renderer.activeNodeList
+    const list = nodes && nodes.length > 0 ? nodes : [this.node]
+    const node = this.node
+    this.textEditNode.style.display = 'none'
+    this.showTextEdit = false
+    this.mindMap.emit('rich_text_selection_change', false)
+    this.node = null
+    this.isInserting = false
     list.forEach(node => {
       this.mindMap.execCommand('SET_NODE_TEXT', node, html, true)
       // if (node.isGeneralization) {
@@ -392,12 +402,6 @@ class RichText {
       // }
       this.mindMap.render()
     })
-    const node = this.node
-    this.textEditNode.style.display = 'none'
-    this.showTextEdit = false
-    this.mindMap.emit('rich_text_selection_change', false)
-    this.node = null
-    this.isInserting = false
     this.mindMap.emit('hide_text_edit', this.textEditNode, list, node)
   }
 
@@ -534,6 +538,7 @@ class RichText {
     //   let style = this.getPasteTextStyle()
     //   return new Delta().insert(this.formatPasteText(node.data), style)
     // })
+    // 剪贴板里只要存在文本就会走这里，所以当剪贴板里是纯文本，或文本+图片都可以监听到和拦截，但是只有纯图片时不会走这里，所以无法拦截
     this.quill.clipboard.addMatcher(Node.ELEMENT_NODE, (node, delta) => {
       let ops = []
       let style = this.getPasteTextStyle()
@@ -549,7 +554,7 @@ class RichText {
       delta.ops = ops
       return delta
     })
-    // 拦截图片的粘贴
+    // 拦截图片的粘贴，当剪贴板里是纯图片，或文本+图片都可以拦截到，但是带来的问题是文本+图片时里面的文本也无法粘贴
     this.quill.root.addEventListener(
       'paste',
       e => {
@@ -860,6 +865,7 @@ class RichText {
     this.transformAllNodesToNormalNode()
     document.head.removeChild(this.styleEl)
     this.unbindEvent()
+    this.mindMap.removeAppendCss('richText')
   }
 
   // 插件被卸载前做的事情

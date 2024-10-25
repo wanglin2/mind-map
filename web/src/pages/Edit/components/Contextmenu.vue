@@ -89,6 +89,11 @@
           </div>
         </div>
       </div>
+      <div class="item" @click="setCheckbox" v-if="supportCheckbox">
+        <span class="name">{{
+          hasCheckbox ? $t('contextmenu.removeToDo') : $t('contextmenu.addToDo')
+        }}</span>
+      </div>
       <div class="splitLine"></div>
       <div class="item danger" @click="exec('REMOVE_NODE')">
         <span class="name">{{ $t('contextmenu.deleteNode') }}</span>
@@ -248,7 +253,8 @@ export default {
     ...mapState({
       isZenMode: state => state.localConfig.isZenMode,
       isDark: state => state.localConfig.isDark,
-      supportNumbers: state => state.supportNumbers
+      supportNumbers: state => state.supportNumbers,
+      supportCheckbox: state => state.supportCheckbox
     }),
     expandList() {
       return [
@@ -326,6 +332,9 @@ export default {
     },
     numberLevelList() {
       return numberLevelList[this.$i18n.locale] || numberLevelList.zh
+    },
+    hasCheckbox() {
+      return !!this.node.getData('checkbox')
     }
   },
   created() {
@@ -505,6 +514,21 @@ export default {
       this.mindMap.execCommand('SET_NUMBER', [], {
         [prop]: value
       })
+      this.hide()
+    },
+
+    // 设置待办
+    setCheckbox() {
+      this.mindMap.execCommand(
+        'SET_CHECKBOX',
+        [],
+        this.hasCheckbox
+          ? null
+          : {
+              done: false
+            }
+      )
+      this.hide()
     },
 
     // 复制到剪贴板

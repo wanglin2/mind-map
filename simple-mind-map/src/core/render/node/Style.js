@@ -12,6 +12,7 @@ const backgroundStyleProps = [
 class Style {
   //   设置背景样式
   static setBackgroundStyle(el, themeConfig) {
+    if (!el) return
     // 缓存容器元素原本的样式
     if (!Style.cacheStyle) {
       Style.cacheStyle = {}
@@ -183,7 +184,7 @@ class Style {
       })
       .css({
         'font-family': styles.fontFamily,
-        'font-size': styles.fontSize,
+        'font-size': styles.fontSize + 'px',
         'font-weight': styles.fontWeight,
         'font-style': styles.fontStyle,
         'text-decoration': styles.textDecoration
@@ -229,20 +230,20 @@ class Style {
   }
 
   //  html文字节点
-  domText(node, fontSizeScale = 1, isMultiLine) {
+  domText(node, fontSizeScale = 1) {
     const styles = {
       color: this.merge('color'),
       fontFamily: this.merge('fontFamily'),
       fontSize: this.merge('fontSize'),
       fontWeight: this.merge('fontWeight'),
       fontStyle: this.merge('fontStyle'),
-      textDecoration: this.merge('textDecoration'),
-      lineHeight: this.merge('lineHeight')
+      textDecoration: this.merge('textDecoration')
     }
+    node.style.color = styles.color
+    node.style.textDecoration = styles.textDecoration
     node.style.fontFamily = styles.fontFamily
     node.style.fontSize = styles.fontSize * fontSizeScale + 'px'
     node.style.fontWeight = styles.fontWeight || 'normal'
-    node.style.lineHeight = !isMultiLine ? 'normal' : styles.lineHeight
     node.style.fontStyle = styles.fontStyle
   }
 
@@ -338,7 +339,7 @@ class Style {
     node2.fill({ color: color })
     fillNode.fill({ color: fill })
     if (this.ctx.mindMap.opt.isShowExpandNum) {
-      node.attr({ 'font-size': fontSize, 'font-color': fontColor })
+      node.attr({ 'font-size': fontSize + 'px', 'font-color': fontColor })
     }
   }
 

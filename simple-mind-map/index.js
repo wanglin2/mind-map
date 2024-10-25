@@ -2,7 +2,7 @@ import View from './src/core/view/View'
 import Event from './src/core/event/Event'
 import Render from './src/core/render/Render'
 import merge from 'deepmerge'
-import theme from './src/themes'
+import theme from './src/theme'
 import Style from './src/core/render/node/Style'
 import KeyCommand from './src/core/command/KeyCommand'
 import Command from './src/core/command/Command'
@@ -24,7 +24,7 @@ import {
 } from './src/utils'
 import defaultTheme, {
   checkIsNodeSizeIndependenceConfig
-} from './src/themes/default'
+} from './src/theme/default'
 import { defaultOpt } from './src/constants/defaultOptions'
 
 //  思维导图
@@ -52,9 +52,29 @@ class MindMap {
     this.initWidth = this.width
     this.initHeight = this.height
 
-    // 添加css
+    // 必要的css样式
     this.cssEl = null
-    this.addCss()
+    this.cssTextMap = {} // 该样式在实例化时会动态添加到页面，同时导出为svg时也会添加到svg源码中
+
+    // 节点前置内容列表
+    /*
+      {
+        name: '',// 一个唯一的类型标识
+        // 创建节点的显示内容：节点元素、宽高
+        createContent: (node) => {
+          return {
+            node: null,
+            width: 0,
+            height: 0
+          }
+        },
+        // 创建保存到节点实例的opt对象中的数据
+        createNodeData: () => {},
+        // 更新节点实例的opt数据，返回数据是否改变了
+        updateNodeData: () => {},
+      }
+    */
+    this.nodeInnerPrefixList = []
 
     // 画布
     this.initContainer()
@@ -97,6 +117,9 @@ class MindMap {
     MindMap.pluginList.forEach(plugin => {
       this.initPlugin(plugin)
     })
+
+    // 添加必要的css样式
+    this.addCss()
 
     // 初始渲染
     this.render(this.opt.fit ? () => this.view.fit() : () => {})
@@ -170,17 +193,46 @@ class MindMap {
     this.otherDraw.clear()
   }
 
+  // 追加必要的css样式
+  // 该样式在实例化时会动态添加到页面，同时导出为svg时也会添加到svg源码中
+  appendCss(key, str) {
+    this.cssTextMap[key] = str
+    this.removeCss()
+    this.addCss()
+  }
+
+  // 移除追加的css样式
+  removeAppendCss(key) {
+    if (this.cssTextMap[key]) {
+      delete this.cssTextMap[key]
+      this.removeCss()
+      this.addCss()
+    }
+  }
+
+  // 拼接必要的css样式
+  joinCss() {
+    return (
+      cssContent +
+      Object.keys(this.cssTextMap)
+        .map(key => {
+          return this.cssTextMap[key]
+        })
+        .join('\n')
+    )
+  }
+
   // 添加必要的css样式到页面
   addCss() {
     this.cssEl = document.createElement('style')
     this.cssEl.type = 'text/css'
-    this.cssEl.innerHTML = cssContent
+    this.cssEl.innerHTML = this.joinCss()
     document.head.appendChild(this.cssEl)
   }
 
   // 移除css
   removeCss() {
-    document.head.removeChild(this.cssEl)
+    if (this.cssEl) document.head.removeChild(this.cssEl)
   }
 
   //  渲染，部分渲染
@@ -254,7 +306,10 @@ class MindMap {
   //  设置主题
   initTheme() {
     // 合并主题配置
-    this.themeConfig = mergeTheme(theme[this.opt.theme], this.opt.themeConfig)
+    this.themeConfig = mergeTheme(
+      theme[this.opt.theme] || theme.default,
+      this.opt.themeConfig
+    )
     // 设置背景样式
     Style.setBackgroundStyle(this.el, this.themeConfig)
   }
@@ -304,8 +359,11 @@ class MindMap {
   // 更新配置
   updateConfig(opt = {}) {
     this.emit('before_update_config', this.opt)
+    const lastOpt = {
+      ...this.opt
+    }
     this.opt = this.handleOpt(merge.all([defaultOpt, this.opt, opt]))
-    this.emit('after_update_config', this.opt)
+    this.emit('after_update_config', this.opt, lastOpt)
   }
 
   //  获取当前布局结构
@@ -421,11 +479,16 @@ class MindMap {
     }
     const isReadonly = mode === CONSTANTS.MODE.READONLY
     if (isReadonly === this.opt.readonly) return
-    this.opt.readonly = isReadonly
-    if (this.opt.readonly) {
+    if (isReadonly) {
+      // 如果处于编辑态，要隐藏所有的编辑框
+      if (this.renderer.textEdit.isShowTextEdit()) {
+        this.renderer.textEdit.hideEditTextBox()
+        this.command.originAddHistory()
+      }
       // 取消当前激活的元素
       this.execCommand('CLEAR_ACTIVE_NODE')
     }
+    this.opt.readonly = isReadonly
     this.emit('mode_change', mode)
   }
 
@@ -511,7 +574,7 @@ class MindMap {
       this.watermark.isInExport = false
     }
     // 添加必要的样式
-    ;[cssContent, ...cssTextList].forEach(s => {
+    ;[this.joinCss(), ...cssTextList].forEach(s => {
       clone.add(SVG(`<style>${s}</style>`))
     })
     // 附加内容
@@ -644,6 +707,12 @@ MindMap.defineTheme = (name, config = {}) => {
     return new Error('该主题名称已存在')
   }
   theme[name] = mergeTheme(defaultTheme, config)
+}
+// 移除主题
+MindMap.removeTheme = name => {
+  if (theme[name]) {
+    theme[name] = null
+  }
 }
 
 export default MindMap

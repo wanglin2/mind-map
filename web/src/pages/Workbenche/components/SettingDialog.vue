@@ -46,8 +46,8 @@
           </el-option>
         </el-select>
         <img
-          v-if="themeMap[config.theme]"
-          :src="themeMap[config.theme]"
+          v-if="themeImgMap[config.theme]"
+          :src="themeImgMap[config.theme]"
           alt=""
         />
       </div>
@@ -63,9 +63,10 @@
 </template>
 
 <script>
-import { themeList, layoutList } from 'simple-mind-map/src/constants/constant'
-import customThemeList from '@/customThemes'
-import { themeMap, layoutImgMap } from '@/config/constant.js'
+import { layoutList } from 'simple-mind-map/src/constants/constant'
+import { layoutImgMap } from '@/config/constant.js'
+import themeList from 'simple-mind-map-plugin-themes/themeList'
+import themeImgMap from 'simple-mind-map-plugin-themes/themeImgMap'
 
 export default {
   model: {
@@ -82,8 +83,15 @@ export default {
     return {
       layoutList,
       layoutImgMap,
-      themeList: [...themeList, ...customThemeList].reverse(),
-      themeMap,
+      themeList: [
+        {
+          name: '默认主题',
+          value: 'default',
+          dark: false
+        },
+        ...themeList
+      ].reverse(),
+      themeImgMap,
       dialogVisible: false,
       config: {
         layout: '',

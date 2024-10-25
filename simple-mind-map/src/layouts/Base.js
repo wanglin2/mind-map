@@ -69,43 +69,41 @@ class Base {
     }
   }
 
-  // 获取节点编号信息
-  getNumberInfo({ parent, ancestors, layerIndex, index }) {
-    // 编号
-    const hasNumberPlugin = !!this.mindMap.numbers
-    const parentNumberStr =
-      hasNumberPlugin && parent && parent._node.number
-        ? parent._node.number
-        : ''
-    const newNumberStr = hasNumberPlugin
-      ? this.mindMap.numbers.getNodeNumberStr({
-          ancestors,
-          layerIndex,
-          num: index + 1,
-          parentNumberStr
-        })
-      : ''
-    return {
-      hasNumberPlugin,
-      newNumberStr
+  // 节点节点数据是否发生了改变
+  checkIsNodeDataChange(lastData, curData) {
+    if (lastData) {
+      // 对比忽略激活状态和展开收起状态
+      lastData = typeof lastData === 'string' ? JSON.parse(lastData) : lastData
+      lastData.isActive = curData.isActive
+      lastData.expand = curData.expand
+      lastData = JSON.stringify(lastData)
     }
+    return lastData !== JSON.stringify(curData)
   }
 
   //  创建节点实例
   createNode(data, parent, isRoot, layerIndex, index, ancestors) {
-    // 编号
-    const { hasNumberPlugin, newNumberStr } = this.getNumberInfo({
-      parent,
-      ancestors,
-      layerIndex,
-      index
-    })
     // 创建节点
+    // 库前置内容数据
+    const nodeInnerPrefixData = {}
+    this.mindMap.nodeInnerPrefixList.forEach(item => {
+      if (item.createNodeData) {
+        const [key, value] = item.createNodeData({
+          data,
+          parent,
+          ancestors,
+          layerIndex,
+          index
+        })
+        nodeInnerPrefixData[key] = value
+      }
+    })
     const uid = data.data.uid
     let newNode = null
     // 数据上保存了节点引用，那么直接复用节点
     if (data && data._node && !this.renderer.reRender) {
       newNode = data._node
+      // 节点层级改变了
       const isLayerTypeChange = this.checkIsLayerTypeChange(
         newNode.layerIndex,
         layerIndex
@@ -119,26 +117,35 @@ class Base {
       }
       this.cacheNode(data._node.uid, newNode)
       this.checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(newNode)
-      // 判断编号是否改变
-      let isNumberChange = false
-      if (hasNumberPlugin) {
-        isNumberChange = this.mindMap.numbers.updateNumber(
-          newNode,
-          newNumberStr
-        )
-      }
-      // 主题或主题配置改变了、节点层级改变了，需要重新渲染节点文本等情况需要重新计算节点大小和布局
-      const isNeedResizeSources = this.checkIsNeedResizeSources()
+      // 库前置内容是否改变了
+      let isNodeInnerPrefixChange = false
+      this.mindMap.nodeInnerPrefixList.forEach(item => {
+        if (item.updateNodeData) {
+          const isChange = item.updateNodeData(newNode, nodeInnerPrefixData)
+          if (isChange) {
+            isNodeInnerPrefixChange = isChange
+          }
+        }
+      })
+      // 主题或主题配置改变了
+      const isResizeSource = this.checkIsNeedResizeSources()
+      // 节点数据改变了
+      const isNodeDataChange = this.checkIsNodeDataChange(
+        data._node.nodeDataSnapshot,
+        data.data
+      )
+      // 重新计算节点大小和布局
       if (
-        isNeedResizeSources ||
+        isResizeSource ||
+        isNodeDataChange ||
         isLayerTypeChange ||
         newNode.getData('resetRichText') ||
-        isNumberChange
+        isNodeInnerPrefixChange
       ) {
         newNode.getSize()
         newNode.needLayout = true
       }
-      this.checkGetGeneralizationChange(newNode, isNeedResizeSources)
+      this.checkGetGeneralizationChange(newNode, isResizeSource)
     } else if (
       (this.lru.has(uid) || this.renderer.lastNodeCache[uid]) &&
       !this.renderer.reRender
@@ -150,6 +157,7 @@ class Base {
       newNode = this.lru.get(uid) || this.renderer.lastNodeCache[uid]
       // 保存该节点上一次的数据
       const lastData = JSON.stringify(newNode.getData())
+      // 节点层级改变了
       const isLayerTypeChange = this.checkIsLayerTypeChange(
         newNode.layerIndex,
         layerIndex
@@ -167,22 +175,25 @@ class Base {
       data._node = newNode
       // 主题或主题配置改变了需要重新计算节点大小和布局
       const isResizeSource = this.checkIsNeedResizeSources()
-      // 主题或主题配置改变了、节点层级改变了，需要重新渲染节点文本，节点数据改变了等情况需要重新计算节点大小和布局
-      const isNodeDataChange = lastData !== JSON.stringify(data.data)
-      // 判断编号是否改变
-      let isNumberChange = false
-      if (hasNumberPlugin) {
-        isNumberChange = this.mindMap.numbers.updateNumber(
-          newNode,
-          newNumberStr
-        )
-      }
+      // 点数据改变了
+      const isNodeDataChange = this.checkIsNodeDataChange(lastData, data.data)
+      // 库前置内容是否改变了
+      let isNodeInnerPrefixChange = false
+      this.mindMap.nodeInnerPrefixList.forEach(item => {
+        if (item.updateNodeData) {
+          const isChange = item.updateNodeData(newNode, nodeInnerPrefixData)
+          if (isChange) {
+            isNodeInnerPrefixChange = isChange
+          }
+        }
+      })
+      // 重新计算节点大小和布局
       if (
         isResizeSource ||
         isNodeDataChange ||
         isLayerTypeChange ||
         newNode.getData('resetRichText') ||
-        isNumberChange
+        isNodeInnerPrefixChange
       ) {
         newNode.getSize()
         newNode.needLayout = true
@@ -200,7 +211,7 @@ class Base {
         layerIndex,
         isRoot,
         parent: !isRoot ? parent._node : null,
-        number: newNumberStr
+        ...nodeInnerPrefixData
       })
       // uid保存到数据上，为了节点复用
       data.data.uid = newUid

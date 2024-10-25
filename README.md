@@ -44,7 +44,7 @@ Github：[releases](https://github.com/wanglin2/mind-map/releases)。百度云�
 
 官方提供了如下插件，可根据需求按需引入（某个功能不生效大概率是因为你没有引入对应的插件），具体使用方式请查看文档：
 
-> RichText（节点富文本插件）、Select（鼠标多选节点插件）、Drag（节点拖拽插件）、AssociativeLine（关联线插件）、Export（导出插件）、KeyboardNavigation（键盘导航插件）、MiniMap（小地图插件）、Watermark（水印插件）、TouchEvent（移动端触摸事件支持插件）、NodeImgAdjust（拖拽调整节点图片大小插件）、Search（搜索插件）、Painter（节点格式刷插件）、Scrollbar（滚动条插件）、Formula（数学公式插件）、Cooperate（协同编辑插件）、RainbowLines（彩虹线条插件）、Demonstrate（演示模式插件）、OuterFrame（外框插件）、HandDrawnLikeStyle（手绘风格插件）[收费]、Notation（节点标记插件）[收费]、Numbers（节点编号插件）[收费]、Freemind（Freemind格式导入导出插件）[收费]、Excel（Excel格式导入导出插件）[收费]
+> RichText（节点富文本插件）、Select（鼠标多选节点插件）、Drag（节点拖拽插件）、AssociativeLine（关联线插件）、Export（导出插件）、KeyboardNavigation（键盘导航插件）、MiniMap（小地图插件）、Watermark（水印插件）、TouchEvent（移动端触摸事件支持插件）、NodeImgAdjust（拖拽调整节点图片大小插件）、Search（搜索插件）、Painter（节点格式刷插件）、Scrollbar（滚动条插件）、Formula（数学公式插件）、Cooperate（协同编辑插件）、RainbowLines（彩虹线条插件）、Demonstrate（演示模式插件）、OuterFrame（外框插件）、HandDrawnLikeStyle（手绘风格插件）[收费]、Notation（节点标记插件）[收费]、Numbers（节点编号插件）[收费]、Freemind（Freemind格式导入导出插件）[收费]、Excel（Excel格式导入导出插件）[收费]、Checkbox（待办插件）[收费]
 
 本项目不会实现的特性：
 
@@ -103,9 +103,7 @@ const mindMap = new MindMap({
 
 # 微信交流群
 
-一群已满，可以扫描如下二维码进入二群，如已过期，可以微信添加`wanglinguanfang`拉你入群。思维导图相关问题皆可在群里提问，不必私聊作者。
-
-<img src="./qrcode.jpg" style="width: 300px" />
+微信添加`wanglinguanfang`拉你入群。根据过往的经验，大部分问题都可以通过查看issue列表或文档解决，所以提问前请确保你已经阅读完了所有文档，文档里没有的可在群里提问，不必私聊作者。
 
 # star
 
@@ -119,9 +117,13 @@ const mindMap = new MindMap({
 
 # 请作者喝杯咖啡
 
-开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡，你的支持是开发者持续维护的最大动力~
+开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡~
 
 > 推荐使用支付宝，微信获取不到头像。转账请备注【思维导图】。
+>
+> 也可以通过购买付费插件来支持我们：[付费插件](https://wanglin2.github.io/mind-map-docs/plugins/about.html)。
+>
+> 为什么需要你的赞助：simple-mind-map 的目标是成为开源中最好的思维导图，为开发者提供一个快速实现思维导图产品的js库，为用户提供一个免费好用的思维导图软件，为了这个目标，作者已经持续开发维护了3年多，耗费了非常多的精力，随着时间的推移，simple-mind-map 已经取得了一定的成绩，相比最初，无论是功能，还是体验都已经有了翻天覆地的改变，但是收益方面却可以忽略不计，因为 simple-mind-map 是采用 MIT 许可的开源项目，永久免费，保留版权下可随意商用，这也意味着很难直接通过项目获取收益，为爱发电的激情总会慢慢消退，所以你的赞助对项目的可持续发展非常重要，是作者持续维护的最大动力。
 
 <p>
   <img src="./web/src/assets/img/alipay.jpg" style="width: 300px" />
@@ -476,5 +478,25 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/Joe.jpg" style="width: 50px;height: 50px;" />
         <span>Joe</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>中文网字计划-江夏尧</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/梁辉.jpg" style="width: 50px;height: 50px;" />
+        <span>梁辉</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/海云.jpg" style="width: 50px;height: 50px;" />
+        <span>海云</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/皮老板.jpg" style="width: 50px;height: 50px;" />
+        <span>皮老板</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/h.r.w.jpg" style="width: 50px;height: 50px;" />
+        <span>h.r.w</span>
     </span>
 </p>

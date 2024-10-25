@@ -354,6 +354,10 @@ class View {
 
   // 判断是否需要将思维导图限制在画布内
   checkNeedMindMapInCanvas() {
+    // 如果当前在演示模式，那么不需要限制
+    if (this.mindMap.demonstrate && this.mindMap.demonstrate.isInDemonstrate) {
+      return false
+    }
     const { isLimitMindMapInCanvasWhenHasScrollbar, isLimitMindMapInCanvas } =
       this.mindMap.opt
     // 如果注册了滚动条插件，那么使用isLimitMindMapInCanvasWhenHasScrollbar配置

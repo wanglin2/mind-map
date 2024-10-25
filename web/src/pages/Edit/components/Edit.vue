@@ -39,6 +39,7 @@
     <SourceCodeEdit v-if="mindMap" :mindMap="mindMap"></SourceCodeEdit>
     <NodeOuterFrame v-if="mindMap" :mindMap="mindMap"></NodeOuterFrame>
     <NodeTagStyle v-if="mindMap" :mindMap="mindMap"></NodeTagStyle>
+    <Setting :data="mindMapData" :mindMap="mindMap"></Setting>
     <div
       class="dragMask"
       v-if="showDragMask"
@@ -77,19 +78,17 @@ import Formula from 'simple-mind-map/src/plugins/Formula.js'
 import RainbowLines from 'simple-mind-map/src/plugins/RainbowLines.js'
 import Demonstrate from 'simple-mind-map/src/plugins/Demonstrate.js'
 import OuterFrame from 'simple-mind-map/src/plugins/OuterFrame.js'
+import Themes from 'simple-mind-map-plugin-themes'
 // 协同编辑插件
 // import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
-// 手绘风格插件，该插件为付费插件，详情请查看开发文档
-// import HandDrawnLikeStyle from 'simple-mind-map-plugin-handdrawnlikestyle'
-// 标记插件，该插件为付费插件，详情请查看开发文档
-// import Notation from 'simple-mind-map-plugin-notation'
-// 编号插件，该插件为付费插件，详情请查看开发文档
-// import Numbers from 'simple-mind-map-plugin-numbers'
-// Freemind软件格式导入导出插件，该插件为付费插件，详情请查看开发文档
-// import Freemind from 'simple-mind-map-plugin-freemind'
-// Excel软件格式导入导出插件，该插件为付费插件，详情请查看开发文档
-// import Excel from 'simple-mind-map-plugin-excel'
-// npm link simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map
+// 以下插件为付费插件，详情请查看开发文档。依次为：手绘风格插件、标记插件、编号插件、Freemind软件格式导入导出插件、Excel软件格式导入导出插件、待办插件
+import HandDrawnLikeStyle from 'simple-mind-map-plugin-handdrawnlikestyle'
+import Notation from 'simple-mind-map-plugin-notation'
+import Numbers from 'simple-mind-map-plugin-numbers'
+import Freemind from 'simple-mind-map-plugin-freemind'
+import Excel from 'simple-mind-map-plugin-excel'
+import Checkbox from 'simple-mind-map-plugin-checkbox'
+// npm link simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map-plugin-checkbox simple-mind-map simple-mind-map-plugin-themes
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
 import BaseStyle from './BaseStyle'
@@ -107,7 +106,6 @@ import NodeImgPreview from './NodeImgPreview.vue'
 import SidebarTrigger from './SidebarTrigger.vue'
 import { mapState, mapMutations } from 'vuex'
 import icon from '@/config/icon'
-import customThemeList from '@/customThemes'
 import CustomNodeContent from './CustomNodeContent.vue'
 import Color from './Color.vue'
 import Vue from 'vue'
@@ -131,6 +129,7 @@ import SourceCodeEdit from './SourceCodeEdit.vue'
 import NodeAttachment from './NodeAttachment.vue'
 import NodeOuterFrame from './NodeOuterFrame.vue'
 import NodeTagStyle from './NodeTagStyle.vue'
+import Setting from './Setting.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -152,10 +151,8 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(OuterFrame)
 // .usePlugin(Cooperate) // 协同插件
 
-// 注册自定义主题
-customThemeList.forEach(item => {
-  MindMap.defineTheme(item.value, item.theme)
-})
+// 注册主题
+Themes.init(MindMap)
 
 /**
  * @Author: 王林
@@ -188,7 +185,8 @@ export default {
     SourceCodeEdit,
     NodeAttachment,
     NodeOuterFrame,
-    NodeTagStyle
+    NodeTagStyle,
+    Setting
   },
   data() {
     return {
@@ -447,11 +445,12 @@ export default {
             // this.$bus.$emit('hideNoteContent')
           }
         },
+        openRealtimeRenderOnNodeTextEdit: true,
+        enableAutoEnterTextEditWhenKeydown: true,
         ...(config || {}),
         iconList: [...icon],
         useLeftKeySelectionRightKeyDrag: this.useLeftKeySelectionRightKeyDrag,
         customInnerElsAppendTo: null,
-        enableAutoEnterTextEditWhenKeydown: true,
         customHandleClipboardText: handleClipboardText,
         defaultNodeImage: require('../../../assets/img/图片加载失败.svg'),
         initRootNodePosition: ['center', 'center'],
@@ -520,6 +519,9 @@ export default {
                 resolve(true)
               })
           })
+        },
+        customHyperlinkJump(link) {
+          window.electronAPI.openUrl(link)
         }
         // createNodePrefixContent: (node) => {
         //   const el = document.createElement('div')
@@ -656,6 +658,10 @@ export default {
         this.mindMap.addPlugin(Excel)
         this.$store.commit('setSupportExcel', true)
         Vue.prototype.Excel = Excel
+      }
+      if (typeof Checkbox !== 'undefined') {
+        this.mindMap.addPlugin(Checkbox)
+        this.$store.commit('setSupportCheckbox', true)
       }
       this.mindMap.keyCommand.addShortcut('Control+s', () => {
         this.manualSave()
