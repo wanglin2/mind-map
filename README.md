@@ -499,4 +499,12 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/h.r.w.jpg" style="width: 50px;height: 50px;" />
         <span>h.r.w</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/default.png" style="width: 50px;height: 50px;" />
+        <span>Matt</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/时光匆匆.png" style="width: 50px;height: 50px;" />
+        <span>时光匆匆</span>
+    </span>
 </p>
