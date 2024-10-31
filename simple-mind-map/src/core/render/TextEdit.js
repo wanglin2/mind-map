@@ -43,7 +43,7 @@ export default class TextEdit {
     this.onKeydown = this.onKeydown.bind(this)
     // 节点双击事件
     this.mindMap.on('node_dblclick', (node, e, isInserting) => {
-      this.show({ node, e, isInserting })
+      this.show({ node, e, isInserting, isFromDbclick: true })
     })
     // 点击事件
     this.mindMap.on('draw_click', () => {
@@ -92,7 +92,7 @@ export default class TextEdit {
     })
     this.mindMap.on('scale', this.onScale)
     // // 监听按键事件，判断是否自动进入文本编辑模式
-    if (this.mindMap.opt.enableAutoEnterTextEditWhenKeydown) {
+    if (this.mindMap.opt.enableAutoEnterTextEditWhenKeydown || this.mindMap.opt.enableAutoEnterTextCoverWhenKeydown) {
       window.addEventListener('keydown', this.onKeydown)
     }
     this.mindMap.on('beforeDestroy', () => {
@@ -119,6 +119,16 @@ export default class TextEdit {
       ) {
         window[
           opt.enableAutoEnterTextEditWhenKeydown
+            ? 'addEventListener'
+            : 'removeEventListener'
+        ]('keydown', this.onKeydown)
+      }
+      if (
+        opt.enableAutoEnterTextCoverWhenKeydown !==
+        lastOpt.enableAutoEnterTextCoverWhenKeydown
+      ) {
+        window[
+          opt.enableAutoEnterTextCoverWhenKeydown
             ? 'addEventListener'
             : 'removeEventListener'
         ]('keydown', this.onKeydown)
@@ -184,7 +194,8 @@ export default class TextEdit {
     node,
     isInserting = false,
     isFromKeyDown = false,
-    isFromScale = false
+    isFromScale = false,
+    isFromDbclick = false
   }) {
     // 使用了自定义节点内容那么不响应编辑事件
     if (node.isUseCustomNodeContent()) {
@@ -216,7 +227,8 @@ export default class TextEdit {
       rect,
       isInserting,
       isFromKeyDown,
-      isFromScale
+      isFromScale,
+      isFromDbclick
     }
     if (this.mindMap.richText) {
       this.mindMap.richText.showEditText(params)
@@ -259,7 +271,7 @@ export default class TextEdit {
   }
 
   //  显示文本编辑框
-  showEditTextBox({ node, rect, isInserting, isFromKeyDown, isFromScale }) {
+  showEditTextBox({ node, rect, isInserting, isFromKeyDown, isFromScale, isFromDbclick }) {
     if (this.showTextEdit) return
     const {
       nodeTextEditZIndex,
@@ -339,6 +351,19 @@ export default class TextEdit {
     }
     this.textEditNode.style.zIndex = nodeTextEditZIndex
     this.textEditNode.innerHTML = textLines.join('<br>')
+    if(this.mindMap.opt.enableAutoEnterTextCoverWhenKeydown){
+      this.textEditNode.innerHTML = ''
+    }
+    if(this.mindMap.opt.enableAutoSelectAllTextWhenDoubleClick && isFromDbclick){
+      console.log('here')
+      this.textEditNode.innerHTML = textLines.join('<br>')
+      const selection = window.getSelection()
+      // selection.removeAllRanges()
+      const range = document.createRange()
+      range.selectNodeContents(this.textEditNode)
+      selection.addRange(range)
+      console.log('selection', selection)
+    }
     this.textEditNode.style.minWidth =
       rect.width + this.textNodePaddingX * 2 + 'px'
     this.textEditNode.style.minHeight = rect.height + 'px'
