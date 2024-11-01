@@ -43,7 +43,7 @@ export default class TextEdit {
     this.onKeydown = this.onKeydown.bind(this)
     // 节点双击事件
     this.mindMap.on('node_dblclick', (node, e, isInserting) => {
-      this.show({ node, e, isInserting, isFromDbclick: true })
+      this.show({ node, e, isInserting })
     })
     // 点击事件
     this.mindMap.on('draw_click', () => {
@@ -185,8 +185,6 @@ export default class TextEdit {
     node,
     isInserting = false,
     isFromKeyDown = false,
-    isFromScale = false,
-    isFromDbclick = false
   }) {
     // 使用了自定义节点内容那么不响应编辑事件
     if (node.isUseCustomNodeContent()) {
@@ -218,8 +216,6 @@ export default class TextEdit {
       rect,
       isInserting,
       isFromKeyDown,
-      isFromScale,
-      isFromDbclick
     }
     if (this.mindMap.richText) {
       this.mindMap.richText.showEditText(params)
@@ -236,8 +232,8 @@ export default class TextEdit {
     this.textEditNode.style.background = openRealtimeRenderOnNodeTextEdit
       ? 'transparent'
       : this.currentNode
-        ? this.getBackground(this.currentNode)
-        : ''
+      ? this.getBackground(this.currentNode)
+      : ''
     this.textEditNode.style.boxShadow = openRealtimeRenderOnNodeTextEdit
       ? 'none'
       : '0 0 20px rgba(0,0,0,.5)'
@@ -262,7 +258,7 @@ export default class TextEdit {
   }
 
   //  显示文本编辑框
-  showEditTextBox({ node, rect, isInserting, isFromKeyDown, isFromScale, isFromDbclick }) {
+  showEditTextBox({ node, rect, isInserting, isFromKeyDown, isFromScale }) {
     if (this.showTextEdit) return
     const {
       nodeTextEditZIndex,
@@ -283,8 +279,8 @@ export default class TextEdit {
         box-sizing: border-box;
         ${
           openRealtimeRenderOnNodeTextEdit
-          ? ''
-          : `box-shadow: 0 0 20px rgba(0,0,0,.5);`
+            ? ''
+            : `box-shadow: 0 0 20px rgba(0,0,0,.5);`
         }
         padding: ${this.textNodePaddingY}px ${this.textNodePaddingX}px;
         margin-left: -${this.textNodePaddingX}px;
@@ -357,7 +353,7 @@ export default class TextEdit {
       this.textEditNode.style.lineHeight = noneRichTextNodeLineHeight
       this.textEditNode.style.transform = `translateY(${
         (((noneRichTextNodeLineHeight - 1) * fontSize) / 2) * scale
-        }px)`
+      }px)`
     } else {
       this.textEditNode.style.lineHeight = 'normal'
     }
