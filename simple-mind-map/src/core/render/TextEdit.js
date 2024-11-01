@@ -92,7 +92,7 @@ export default class TextEdit {
     })
     this.mindMap.on('scale', this.onScale)
     // // 监听按键事件，判断是否自动进入文本编辑模式
-    if (this.mindMap.opt.enableAutoEnterTextEditWhenKeydown || this.mindMap.opt.enableAutoEnterTextCoverWhenKeydown) {
+    if (this.mindMap.opt.enableAutoEnterTextEditWhenKeydown || this.mindMap.opt.enableAutoEmptyTextWhenKeydown) {
       window.addEventListener('keydown', this.onKeydown)
     }
     this.mindMap.on('beforeDestroy', () => {
@@ -115,20 +115,11 @@ export default class TextEdit {
       }
       if (
         opt.enableAutoEnterTextEditWhenKeydown !==
-        lastOpt.enableAutoEnterTextEditWhenKeydown
+        lastOpt.enableAutoEnterTextEditWhenKeydown || opt.enableAutoEmptyTextWhenKeydown !==
+        lastOpt.enableAutoEmptyTextWhenKeydown
       ) {
         window[
-          opt.enableAutoEnterTextEditWhenKeydown
-            ? 'addEventListener'
-            : 'removeEventListener'
-        ]('keydown', this.onKeydown)
-      }
-      if (
-        opt.enableAutoEnterTextCoverWhenKeydown !==
-        lastOpt.enableAutoEnterTextCoverWhenKeydown
-      ) {
-        window[
-          opt.enableAutoEnterTextCoverWhenKeydown
+          opt.enableAutoEnterTextEditWhenKeydown || opt.enableAutoEmptyTextWhenKeydown 
             ? 'addEventListener'
             : 'removeEventListener'
         ]('keydown', this.onKeydown)
@@ -245,8 +236,8 @@ export default class TextEdit {
     this.textEditNode.style.background = openRealtimeRenderOnNodeTextEdit
       ? 'transparent'
       : this.currentNode
-      ? this.getBackground(this.currentNode)
-      : ''
+        ? this.getBackground(this.currentNode)
+        : ''
     this.textEditNode.style.boxShadow = openRealtimeRenderOnNodeTextEdit
       ? 'none'
       : '0 0 20px rgba(0,0,0,.5)'
@@ -277,7 +268,8 @@ export default class TextEdit {
       nodeTextEditZIndex,
       textAutoWrapWidth,
       selectTextOnEnterEditText,
-      openRealtimeRenderOnNodeTextEdit
+      openRealtimeRenderOnNodeTextEdit,
+      enableAutoEmptyTextWhenKeydown
     } = this.mindMap.opt
     if (!isFromScale) {
       this.mindMap.emit('before_show_text_edit')
@@ -291,8 +283,8 @@ export default class TextEdit {
         box-sizing: border-box;
         ${
           openRealtimeRenderOnNodeTextEdit
-            ? ''
-            : `box-shadow: 0 0 20px rgba(0,0,0,.5);`
+          ? ''
+          : `box-shadow: 0 0 20px rgba(0,0,0,.5);`
         }
         padding: ${this.textNodePaddingY}px ${this.textNodePaddingX}px;
         margin-left: -${this.textNodePaddingX}px;
@@ -351,18 +343,8 @@ export default class TextEdit {
     }
     this.textEditNode.style.zIndex = nodeTextEditZIndex
     this.textEditNode.innerHTML = textLines.join('<br>')
-    if(this.mindMap.opt.enableAutoEnterTextCoverWhenKeydown){
+    if (enableAutoEmptyTextWhenKeydown && isFromKeyDown) {
       this.textEditNode.innerHTML = ''
-    }
-    if(this.mindMap.opt.enableAutoSelectAllTextWhenDoubleClick && isFromDbclick){
-      console.log('here')
-      this.textEditNode.innerHTML = textLines.join('<br>')
-      const selection = window.getSelection()
-      // selection.removeAllRanges()
-      const range = document.createRange()
-      range.selectNodeContents(this.textEditNode)
-      selection.addRange(range)
-      console.log('selection', selection)
     }
     this.textEditNode.style.minWidth =
       rect.width + this.textNodePaddingX * 2 + 'px'
@@ -375,7 +357,7 @@ export default class TextEdit {
       this.textEditNode.style.lineHeight = noneRichTextNodeLineHeight
       this.textEditNode.style.transform = `translateY(${
         (((noneRichTextNodeLineHeight - 1) * fontSize) / 2) * scale
-      }px)`
+        }px)`
     } else {
       this.textEditNode.style.lineHeight = 'normal'
     }
