@@ -103,7 +103,7 @@ const mindMap = new MindMap({
 
 # 微信交流群
 
-微信添加`wanglinguanfang`拉你入群。根据过往的经验，大部分问题都可以通过查看issue列表或文档解决，所以提问前请确保你已经阅读完了所有文档，文档里没有的可在群里提问，不必私聊作者。
+微信添加`wanglinguanfang`拉你入群。根据过往的经验，大部分问题都可以通过查看issue列表或文档解决，所以提问前请确保你已经阅读完了所有文档，文档里没有的可在群里提问，不必私聊作者，如果你一定要私聊，请先发红包（￥9.9+每次）。
 
 # star
 
@@ -506,5 +506,13 @@ const mindMap = new MindMap({
     <span>
         <img src="./web/src/assets/avatar/时光匆匆.png" style="width: 50px;height: 50px;" />
         <span>时光匆匆</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/广兴.jpg" style="width: 50px;height: 50px;" />
+        <span>广兴</span>
+    </span>
+    <span>
+        <img src="./web/src/assets/avatar/一亩三.jpg" style="width: 50px;height: 50px;" />
+        <span>一亩三</span>
     </span>
 </p>
