@@ -249,8 +249,9 @@ export const defaultOpt = {
   emptyTextMeasureHeightText: 'abc123我和你',
   // 是否在进行节点文本编辑时实时更新节点大小和节点位置，开启后当节点数量比较多时可能会造成卡顿
   openRealtimeRenderOnNodeTextEdit: false,
-  // 默认会给容器元素el绑定mousedown事件，并且会阻止其默认事件，这会带来一定问题，比如你聚焦在思维导图外的其他输入框，点击画布就不会触发其失焦，可以通过该选项关闭阻止。关闭后也会带来一定问题，比如鼠标框选节点时可能会选中节点文字，富文本模式下一个可选的解决方法，通过样式来禁止节点文字可选：.smm-richtext-node-wrap { user-select: none; }
-  mousedownEventPreventDefault: true,
+  // 默认会给容器元素el绑定mousedown事件，可通过该选项设置是否阻止其默认事件
+  // 如果设置为true，会带来一定问题，比如你聚焦在思维导图外的其他输入框，点击画布就不会触发其失焦
+  mousedownEventPreventDefault: false,
   // 在激活上粘贴用户剪贴板中的数据时，如果同时存在文本和图片，那么只粘贴文本，忽略图片
   onlyPasteTextWhenHasImgAndText: true,
   // 是否允许拖拽调整节点的宽度，实际上压缩的是节点里面文本内容的宽度，当节点文本内容宽度压缩到最小时无法继续压缩。如果节点存在图片，那么最小值以图片宽度和文本内容最小宽度的最大值为准（目前该特性仅在两种情况下可用：1.开启了富文本模式，即注册了RichText插件；2.自定义节点内容）

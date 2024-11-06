@@ -92,6 +92,7 @@ class RichText {
       `
       .smm-richtext-node-wrap {
         word-break: break-all;
+        user-select: none;
       }
 
       .smm-richtext-node-wrap p {
