@@ -92,7 +92,8 @@ export default class TextEdit {
     })
     this.mindMap.on('scale', this.onScale)
     // // 监听按键事件，判断是否自动进入文本编辑模式
-    if (this.mindMap.opt.enableAutoEnterTextEditWhenKeydown) {
+    if (this.mindMap.opt.enableAutoEnterTextEditWhenKeydown ||
+      this.mindMap.opt.enableAutoEmptyTextWhenKeydown ) {
       window.addEventListener('keydown', this.onKeydown)
     }
     this.mindMap.on('beforeDestroy', () => {
@@ -115,10 +116,13 @@ export default class TextEdit {
       }
       if (
         opt.enableAutoEnterTextEditWhenKeydown !==
-        lastOpt.enableAutoEnterTextEditWhenKeydown
+        lastOpt.enableAutoEnterTextEditWhenKeydown ||
+        opt.enableAutoEmptyTextWhenKeydown !==
+        lastOpt.enableAutoEmptyTextWhenKeydown
       ) {
         window[
-          opt.enableAutoEnterTextEditWhenKeydown
+          opt.enableAutoEnterTextEditWhenKeydown ||
+          opt.enableAutoEmptyTextWhenKeydown
             ? 'addEventListener'
             : 'removeEventListener'
         ]('keydown', this.onKeydown)
@@ -265,7 +269,8 @@ export default class TextEdit {
       nodeTextEditZIndex,
       textAutoWrapWidth,
       selectTextOnEnterEditText,
-      openRealtimeRenderOnNodeTextEdit
+      openRealtimeRenderOnNodeTextEdit,
+      enableAutoEmptyTextWhenKeydown
     } = this.mindMap.opt
     if (!isFromScale) {
       this.mindMap.emit('before_show_text_edit')
@@ -339,6 +344,9 @@ export default class TextEdit {
     }
     this.textEditNode.style.zIndex = nodeTextEditZIndex
     this.textEditNode.innerHTML = textLines.join('<br>')
+    if (enableAutoEmptyTextWhenKeydown && isFromKeyDown) {
+      this.textEditNode.innerHTML = ''
+    }
     this.textEditNode.style.minWidth =
       rect.width + this.textNodePaddingX * 2 + 'px'
     this.textEditNode.style.minHeight = rect.height + 'px'
