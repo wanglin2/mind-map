@@ -188,7 +188,8 @@ class RichText {
       textAutoWrapWidth,
       selectTextOnEnterEditText,
       transformRichTextOnEnterEdit,
-      openRealtimeRenderOnNodeTextEdit
+      openRealtimeRenderOnNodeTextEdit,
+      autoEmptyTextWhenKeydownEnterEdit
     } = this.mindMap.opt
     textAutoWrapWidth = node.hasCustomWidth()
       ? node.customTextWidth
@@ -279,7 +280,10 @@ class RichText {
     if (isEmptyText) {
       this.lostStyle = true
     }
-    if (noneEmptyNoneRichText) {
+    if (isFromKeyDown && autoEmptyTextWhenKeydownEnterEdit) {
+      this.textEditNode.innerHTML = ''
+      this.lostStyle = true
+    } else if (noneEmptyNoneRichText) {
       // 还不是富文本
       let text = String(nodeText).split(/\n/gim).join('<br>')
       let html = `<p>${text}</p>`

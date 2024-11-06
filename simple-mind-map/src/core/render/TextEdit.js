@@ -265,7 +265,8 @@ export default class TextEdit {
       nodeTextEditZIndex,
       textAutoWrapWidth,
       selectTextOnEnterEditText,
-      openRealtimeRenderOnNodeTextEdit
+      openRealtimeRenderOnNodeTextEdit,
+      autoEmptyTextWhenKeydownEnterEdit
     } = this.mindMap.opt
     if (!isFromScale) {
       this.mindMap.emit('before_show_text_edit')
@@ -338,7 +339,11 @@ export default class TextEdit {
       this.textEditNode.style.background = this.getBackground(node)
     }
     this.textEditNode.style.zIndex = nodeTextEditZIndex
-    this.textEditNode.innerHTML = textLines.join('<br>')
+    if (isFromKeyDown && autoEmptyTextWhenKeydownEnterEdit) {
+      this.textEditNode.innerHTML = ''
+    } else {
+      this.textEditNode.innerHTML = textLines.join('<br>')
+    }
     this.textEditNode.style.minWidth =
       rect.width + this.textNodePaddingX * 2 + 'px'
     this.textEditNode.style.minHeight = rect.height + 'px'
