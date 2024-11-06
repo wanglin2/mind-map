@@ -185,6 +185,7 @@ export default class TextEdit {
     node,
     isInserting = false,
     isFromKeyDown = false,
+    isFromScale = false
   }) {
     // 使用了自定义节点内容那么不响应编辑事件
     if (node.isUseCustomNodeContent()) {
@@ -216,6 +217,7 @@ export default class TextEdit {
       rect,
       isInserting,
       isFromKeyDown,
+      isFromScale
     }
     if (this.mindMap.richText) {
       this.mindMap.richText.showEditText(params)
