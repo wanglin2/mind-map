@@ -205,8 +205,8 @@ class RichText {
     let originWidth = g.attr('data-width')
     let originHeight = g.attr('data-height')
     // 缩放值
-    let scaleX = rect.width / originWidth
-    let scaleY = rect.height / originHeight
+    const scaleX = Math.ceil(rect.width) / originWidth
+    const scaleY = Math.ceil(rect.height) / originHeight
     // 内边距
     let paddingX = this.textNodePaddingX
     let paddingY = this.textNodePaddingY
