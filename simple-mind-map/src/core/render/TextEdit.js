@@ -289,6 +289,9 @@ export default class TextEdit {
         outline: none; 
         word-break: break-all;
         line-break: anywhere;
+        transform-style: preserve-3d;
+        filter: contrast(1) saturate(1);
+        backface-visibility: hidden;
       `
       this.textEditNode.setAttribute('contenteditable', true)
       this.textEditNode.addEventListener('keyup', e => {
