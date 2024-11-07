@@ -1,4 +1,5 @@
 import { keyMap } from './keyMap'
+import { CONSTANTS } from '../../constants/constant'
 
 //  快捷按键、命令处理类
 export default class KeyCommand {
@@ -73,10 +74,28 @@ export default class KeyCommand {
     window.removeEventListener('keydown', this.onKeydown)
   }
 
+  // 根据事件目标判断是否响应快捷键事件
+  defaultEnableCheck(e) {
+    const target = e.target
+    return (
+      target === document.body ||
+      target.classList.contains(CONSTANTS.EDIT_NODE_CLASS.SMM_NODE_EDIT_WRAP) ||
+      target.classList.contains(CONSTANTS.EDIT_NODE_CLASS.RICH_TEXT_EDIT_WRAP)
+    )
+  }
+
   // 按键事件
   onKeydown(e) {
-    const { enableShortcutOnlyWhenMouseInSvg, beforeShortcutRun } =
-      this.mindMap.opt
+    const {
+      enableShortcutOnlyWhenMouseInSvg,
+      beforeShortcutRun,
+      customCheckEnableShortcut
+    } = this.mindMap.opt
+    const checkFn =
+      typeof customCheckEnableShortcut === 'function'
+        ? customCheckEnableShortcut
+        : this.defaultEnableCheck
+    if (!checkFn(e)) return
     if (this.isPause || (enableShortcutOnlyWhenMouseInSvg && !this.isInSvg)) {
       return
     }

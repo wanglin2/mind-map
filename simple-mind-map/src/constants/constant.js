@@ -75,6 +75,10 @@ export const CONSTANTS = {
   TAG_POSITION: {
     RIGHT: 'right',
     BOTTOM: 'bottom'
+  },
+  EDIT_NODE_CLASS: {
+    SMM_NODE_EDIT_WRAP: 'smm-node-edit-wrap',
+    RICH_TEXT_EDIT_WRAP: 'ql-editor'
   }
 }
 
