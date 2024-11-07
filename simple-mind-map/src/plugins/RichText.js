@@ -97,6 +97,7 @@ class RichText {
 
       .smm-richtext-node-wrap p {
         font-family: auto;
+        user-select: none;
       }
       `
     )
