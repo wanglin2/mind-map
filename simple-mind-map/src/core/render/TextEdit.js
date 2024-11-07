@@ -133,6 +133,7 @@ export default class TextEdit {
 
   // 按键事件
   onKeydown(e) {
+    if (e.target !== document.body) return
     const activeNodeList = this.mindMap.renderer.activeNodeList
     if (activeNodeList.length <= 0 || activeNodeList.length > 1) return
     const node = activeNodeList[0]
@@ -274,7 +275,9 @@ export default class TextEdit {
     this.registerTmpShortcut()
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div')
-      this.textEditNode.classList.add('smm-node-edit-wrap')
+      this.textEditNode.classList.add(
+        CONSTANTS.EDIT_NODE_CLASS.SMM_NODE_EDIT_WRAP
+      )
       this.textEditNode.style.cssText = `
         position: fixed;
         box-sizing: border-box;
