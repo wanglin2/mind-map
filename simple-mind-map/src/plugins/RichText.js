@@ -231,6 +231,12 @@ class RichText {
         outline: none; 
         word-break: break-all;
         padding: ${paddingY}px ${paddingX}px;
+        // 强制使用gpu加速精确计算
+        transform-style: preserve-3d;
+        // 使用 filter 提高清晰度 在某些1080p屏幕下，字体模糊
+        filter: contrast(1) saturate(1);
+        // 3d下 渲染层优化
+        backface-visibility: hidden;
       `
       this.textEditNode.addEventListener('click', e => {
         e.stopPropagation()
