@@ -261,7 +261,8 @@ function createTextNode(specifyText) {
   })
   textArr = textArr.join('\n').split(/\n/gim)
   textArr.forEach((item, index) => {
-    let node = new Text().text(item)
+    const node = new Text().text(item)
+    node.addClass('smm-text-node-wrap')
     this.style.text(node)
     node.y(
       fontSize * noneRichTextNodeLineHeight * index +
