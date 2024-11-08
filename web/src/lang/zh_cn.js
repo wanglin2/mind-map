@@ -121,6 +121,7 @@ export default {
     copyFail: '复制失败',
     number: '编号其子节点',
     expandNodeChild: '展开所有下级节点',
+    unExpandNodeChild: '收起所有下级节点',
     addToDo: '添加待办',
     removeToDo: '删除待办'
   },

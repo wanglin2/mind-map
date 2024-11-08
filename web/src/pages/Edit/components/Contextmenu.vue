@@ -56,6 +56,9 @@
         <span class="name">{{ $t('contextmenu.moveDownNode') }}</span>
         <span class="desc">Ctrl + ↓</span>
       </div>
+      <div class="item" @click="exec('UNEXPAND_ALL')">
+        <span class="name">{{ $t('contextmenu.unExpandNodeChild') }}</span>
+      </div>
       <div class="item" @click="exec('EXPAND_ALL')">
         <span class="name">{{ $t('contextmenu.expandNodeChild') }}</span>
       </div>
@@ -473,8 +476,12 @@ export default {
             this.node
           )
           break
+        case 'UNEXPAND_ALL':
+          const uid = this.node ? this.node.uid : ''
+          this.$bus.$emit('execCommand', key, !uid, uid)
+          break
         case 'EXPAND_ALL':
-          this.$bus.$emit('execCommand', key, this.node.uid)
+          this.$bus.$emit('execCommand', key, this.node ? this.node.uid : '')
           break
         default:
           this.$bus.$emit('execCommand', key, ...args)

@@ -123,6 +123,7 @@ export default {
     copyFail: 'Copy fail',
     number: 'Number child nodes',
     expandNodeChild: 'Expand all sub nodes',
+    unExpandNodeChild: 'Un expand all sub nodes',
     addToDo: 'Add toDo',
     removeToDo: 'Remove toDo'
   },
