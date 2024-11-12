@@ -192,14 +192,15 @@ class Style {
   }
 
   // 生成内联样式
-  createStyleText() {
+  createStyleText(customStyle) {
     const styles = {
       color: this.merge('color'),
       fontFamily: this.merge('fontFamily'),
       fontSize: this.merge('fontSize'),
       fontWeight: this.merge('fontWeight'),
       fontStyle: this.merge('fontStyle'),
-      textDecoration: this.merge('textDecoration')
+      textDecoration: this.merge('textDecoration'),
+      ...customStyle
     }
     return `
       color: ${styles.color};
@@ -352,6 +353,17 @@ class Style {
       }
     })
     return res
+  }
+
+  // 获取自定义的样式
+  getCustomStyle() {
+    let customStyle = {}
+    Object.keys(this.ctx.getData()).forEach(item => {
+      if (checkIsNodeStyleDataKey(item)) {
+        customStyle[item] = this.ctx.getData(item)
+      }
+    })
+    return customStyle
   }
 
   // hover和激活节点

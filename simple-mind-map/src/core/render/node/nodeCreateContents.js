@@ -139,16 +139,18 @@ function createRichTextNode(specifyText) {
     recoverText = true
   }
   if ([CONSTANTS.CHANGE_THEME].includes(this.mindMap.renderer.renderSource)) {
-    // 如果自定义过样式则不允许覆盖
-    if (!this.hasCustomStyle()) {
+    // // 如果自定义过样式则不允许覆盖
+    // if (!this.hasCustomStyle() ) {
       recoverText = true
-    }
+    // }
   }
   if (recoverText && !isUndef(text)) {
     // 判断节点内容是否是富文本
     let isRichText = checkIsRichText(text)
+    // 获取自定义样式
+    let customStyle = this.getCustomStyle()
     // 样式字符串
-    let style = this.style.createStyleText()
+    let style = this.style.createStyleText(customStyle)
     if (isRichText) {
       // 如果是富文本那么线移除内联样式
       text = removeHtmlStyle(text)
@@ -158,6 +160,14 @@ function createRichTextNode(specifyText) {
       // 给span添加样式没有成功，则尝试给strong标签添加样式
       if (text === _text) {
         text = addHtmlStyle(text, 'strong', style)
+      }
+      // 给strong添加样式没有成功，则尝试给s标签添加样式
+      if (text === _text) {
+        text = addHtmlStyle(text, 's', style)
+      }
+      // 给s添加样式没有成功，则尝试给em标签添加样式
+      if (text === _text) {
+        text = addHtmlStyle(text, 'em', style)
       }
     } else {
       // 非富文本
