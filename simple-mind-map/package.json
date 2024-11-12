@@ -22,7 +22,7 @@
   "scripts": {
     "lint": "eslint src/",
     "format": "prettier --write .",
-    "types": "npx -p typescript tsc index.js --declaration --allowJs --emitDeclarationOnly --outDir types --target es2017 --skipLibCheck",
+    "types": "npx -p typescript tsc index.js --declaration --allowJs --emitDeclarationOnly --outDir types --target es2017 --skipLibCheck & node ./bin/createPluginsTypeFiles.js",
     "wsServe": "node ./bin/wsServer.mjs"
   },
   "module": "index.js",
