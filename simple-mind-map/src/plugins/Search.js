@@ -257,6 +257,7 @@ class Search {
     replaceText = String(replaceText)
     // 如果当前搜索文本是替换文本的子串，那么该节点还是符合搜索结果的
     const keep = replaceText.includes(this.searchText)
+    this.notResetSearchText = true
     const hasRichTextPlugin = this.mindMap.renderer.hasRichTextPlugin()
     this.matchNodeList.forEach(node => {
       const text = this.getReplacedText(node, this.searchText, replaceText)
