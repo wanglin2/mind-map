@@ -124,6 +124,19 @@ function createIconNode() {
   })
 }
 
+// 尝试给html指定标签添加内联样式
+function tryAddHtmlStyle(text, style) {
+  const tagList = ['span', 'strong', 's', 'em', 'u']
+  let _text = text
+  for (let i = 0; i < tagList.length; i++) {
+    text = addHtmlStyle(text, tagList[i], style)
+    if (text !== _text) {
+      break
+    }
+  }
+  return text
+}
+
 // 创建富文本节点
 function createRichTextNode(specifyText) {
   const hasCustomWidth = this.hasCustomWidth()
@@ -139,36 +152,23 @@ function createRichTextNode(specifyText) {
     recoverText = true
   }
   if ([CONSTANTS.CHANGE_THEME].includes(this.mindMap.renderer.renderSource)) {
-    // // 如果自定义过样式则不允许覆盖
+    // 如果自定义过样式则不允许覆盖
     // if (!this.hasCustomStyle() ) {
-      recoverText = true
+    recoverText = true
     // }
   }
   if (recoverText && !isUndef(text)) {
     // 判断节点内容是否是富文本
-    let isRichText = checkIsRichText(text)
+    const isRichText = checkIsRichText(text)
     // 获取自定义样式
-    let customStyle = this.getCustomStyle()
+    const customStyle = this.style.getCustomStyle()
     // 样式字符串
-    let style = this.style.createStyleText(customStyle)
+    const style = this.style.createStyleText(customStyle)
     if (isRichText) {
       // 如果是富文本那么线移除内联样式
       text = removeHtmlStyle(text)
       // 再添加新的内联样式
-      let _text = text
-      text = addHtmlStyle(text, 'span', style)
-      // 给span添加样式没有成功，则尝试给strong标签添加样式
-      if (text === _text) {
-        text = addHtmlStyle(text, 'strong', style)
-      }
-      // 给strong添加样式没有成功，则尝试给s标签添加样式
-      if (text === _text) {
-        text = addHtmlStyle(text, 's', style)
-      }
-      // 给s添加样式没有成功，则尝试给em标签添加样式
-      if (text === _text) {
-        text = addHtmlStyle(text, 'em', style)
-      }
+      text = this.tryAddHtmlStyle(text, style)
     } else {
       // 非富文本
       text = `<p><span style="${style}">${text}</span></p>`
@@ -547,6 +547,7 @@ export default {
   createImgNode,
   getImgShowSize,
   createIconNode,
+  tryAddHtmlStyle,
   createRichTextNode,
   createTextNode,
   createHyperlinkNode,

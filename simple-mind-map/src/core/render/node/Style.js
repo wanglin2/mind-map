@@ -192,7 +192,7 @@ class Style {
   }
 
   // 生成内联样式
-  createStyleText(customStyle) {
+  createStyleText(customStyle = {}) {
     const styles = {
       color: this.merge('color'),
       fontFamily: this.merge('fontFamily'),
@@ -357,7 +357,7 @@ class Style {
 
   // 获取自定义的样式
   getCustomStyle() {
-    let customStyle = {}
+    const customStyle = {}
     Object.keys(this.ctx.getData()).forEach(item => {
       if (checkIsNodeStyleDataKey(item)) {
         customStyle[item] = this.ctx.getData(item)
