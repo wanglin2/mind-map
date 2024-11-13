@@ -452,8 +452,10 @@ class Base {
       const end = list[len - 1]
       // 如果三点在一条直线，那么不用处理
       const isOneLine =
-        (start[0] === center[0] && center[0] === end[0]) ||
-        (start[1] === center[1] && center[1] === end[1])
+        (start[0].toFixed(0) === center[0].toFixed(0) &&
+          center[0].toFixed(0) === end[0].toFixed(0)) ||
+        (start[1].toFixed(0) === center[1].toFixed(0) &&
+          center[1].toFixed(0) === end[1].toFixed(0))
       if (!isOneLine) {
         const cStart = this.computeNewPoint(start, center, lineRadius)
         const cEnd = this.computeNewPoint(end, center, lineRadius)
