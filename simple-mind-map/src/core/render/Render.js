@@ -1551,6 +1551,8 @@ class Render {
       return
     }
     this.activeNodeList.forEach(node => {
+      // 概要节点不允许添加下级节点
+      if (node.isGeneralization) return
       node.setData({
         expand: true
       })
