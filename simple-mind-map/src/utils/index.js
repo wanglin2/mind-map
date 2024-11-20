@@ -1069,9 +1069,14 @@ export const isSameObject = (a, b) => {
   }
 }
 
+// 检查navigator.clipboard对象的读取是否可用
+export const checkClipboardReadEnable = () => {
+  return navigator.clipboard && typeof navigator.clipboard.read === 'function'
+}
+
 // 将数据设置到用户剪切板中
 export const setDataToClipboard = data => {
-  if (navigator.clipboard) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(JSON.stringify(data))
   }
 }
@@ -1080,7 +1085,7 @@ export const setDataToClipboard = data => {
 export const getDataFromClipboard = async () => {
   let text = null
   let img = null
-  if (navigator.clipboard) {
+  if (checkClipboardReadEnable()) {
     const items = await navigator.clipboard.read()
     if (items && items.length > 0) {
       for (const clipboardItem of items) {

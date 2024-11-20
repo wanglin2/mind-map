@@ -519,4 +519,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/xbkkjbs0246658.png" style="width: 50px;height: 50px;" />
         <span>xbkkjbs0246658</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/4399行星元帅.jpg" style="width: 50px;height: 50px;" />
+        <span>4399行星元帅</span>
+    </span>
 </p>

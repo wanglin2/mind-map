@@ -62,14 +62,14 @@ export const copy = text => {
 
 // 复制文本到剪贴板
 export const setDataToClipboard = data => {
-  if (navigator.clipboard) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(data)
   }
 }
 
 // 复制图片到剪贴板
 export const setImgToClipboard = img => {
-  if (navigator.clipboard) {
+  if (navigator.clipboard && navigator.clipboard.write) {
     const data = [new ClipboardItem({ ['image/png']: img })]
     navigator.clipboard.write(data)
   }
