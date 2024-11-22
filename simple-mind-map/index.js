@@ -489,6 +489,9 @@ class MindMap {
       this.execCommand('CLEAR_ACTIVE_NODE')
     }
     this.opt.readonly = isReadonly
+    if (!isReadonly) {
+      this.command.originAddHistory()
+    }
     this.emit('mode_change', mode)
   }
 
