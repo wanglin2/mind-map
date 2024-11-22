@@ -278,6 +278,10 @@ class Style {
 
   //  连线
   line(line, { width, color, dasharray } = {}, enableMarker, childNode) {
+    const { customHandleLine } = this.ctx.mindMap.opt
+    if (typeof customHandleLine === 'function') {
+      customHandleLine(this.ctx, line, { width, color, dasharray })
+    }
     line.stroke({ color, dasharray, width }).fill({ color: 'none' })
     // 可以显示箭头
     if (enableMarker) {
