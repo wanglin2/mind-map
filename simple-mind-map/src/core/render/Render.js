@@ -34,7 +34,8 @@ import {
   formatGetNodeGeneralization,
   sortNodeList,
   throttle,
-  checkClipboardReadEnable
+  checkClipboardReadEnable,
+  isNodeNotNeedRenderData
 } from '../../utils'
 import { shapeList } from './node/Shape'
 import { lineStyleProps } from '../../theme/default'
@@ -1580,14 +1581,15 @@ class Render {
 
   //  设置节点样式
   setNodeStyle(node, prop, value) {
-    let data = {
+    const data = {
       [prop]: value
     }
     // 如果开启了富文本，则需要应用到富文本上
-    if (this.hasRichTextPlugin()) {
-      this.mindMap.richText.setNotActiveNodeStyle(node, {
-        [prop]: value
-      })
+    if (
+      this.hasRichTextPlugin() &&
+      this.mindMap.richText.isHasRichTextStyle(data)
+    ) {
+      data.resetRichText = true
     }
     this.setNodeDataRender(node, data)
     // 更新了连线的样式
@@ -1598,10 +1600,13 @@ class Render {
 
   //  设置节点多个样式
   setNodeStyles(node, style) {
-    let data = { ...style }
+    const data = { ...style }
     // 如果开启了富文本，则需要应用到富文本上
-    if (this.hasRichTextPlugin()) {
-      this.mindMap.richText.setNotActiveNodeStyle(node, style)
+    if (
+      this.hasRichTextPlugin() &&
+      this.mindMap.richText.isHasRichTextStyle(data)
+    ) {
+      data.resetRichText = true
     }
     this.setNodeDataRender(node, data)
     // 更新了连线的样式
@@ -1964,6 +1969,10 @@ class Render {
   //  设置节点数据，并判断是否渲染
   setNodeDataRender(node, data, notRender = false) {
     this.mindMap.execCommand('SET_NODE_DATA', node, data)
+    if (isNodeNotNeedRenderData(data)) {
+      this.mindMap.emit('node_tree_render_end')
+      return
+    }
     this.reRenderNodeCheckChange(node, notRender)
   }
 

@@ -57,6 +57,14 @@ class RichText {
     this.isCompositing = false
     this.textNodePaddingX = 6
     this.textNodePaddingY = 4
+    this.supportStyleProps = [
+      'fontFamily',
+      'fontSize',
+      'fontWeight',
+      'fontStyle',
+      'textDecoration',
+      'color'
+    ]
     this.initOpt()
     this.extendQuill()
     this.appendCss()
@@ -675,14 +683,7 @@ class RichText {
     // 再将样式恢复为当前主题改节点的默认样式
     const style = {}
     if (this.node) {
-      ;[
-        'fontFamily',
-        'fontSize',
-        'fontWeight',
-        'fontStyle',
-        'textDecoration',
-        'color'
-      ].forEach(key => {
+      this.supportStyleProps.forEach(key => {
         style[key] = this.node.style.merge(key)
       })
     }
@@ -713,14 +714,7 @@ class RichText {
     if (!this.node) return
     if (clear) {
       // 清除文本样式
-      ;[
-        'fontFamily',
-        'fontSize',
-        'fontWeight',
-        'fontStyle',
-        'textDecoration',
-        'color'
-      ].forEach(prop => {
+      this.supportStyleProps.forEach(prop => {
         delete this.node.nodeData.data[prop]
       })
     } else {
@@ -795,6 +789,18 @@ class RichText {
     return data
   }
 
+  // 判断一个对象是否包含了富文本支持的样式字段
+  isHasRichTextStyle(obj) {
+    const keys = Object.keys(obj)
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
+      if (this.supportStyleProps.includes(key)) {
+        return true
+      }
+    }
+    return false
+  }
+
   // 给未激活的节点设置富文本样式
   setNotActiveNodeStyle(node, style) {
     const config = this.normalStyleToRichTextStyle(style)
@@ -807,17 +813,9 @@ class RichText {
 
   // 检查指定节点是否存在自定义的富文本样式
   checkNodeHasCustomRichTextStyle(node) {
-    const list = [
-      'fontFamily',
-      'fontSize',
-      'fontWeight',
-      'fontStyle',
-      'textDecoration',
-      'color'
-    ]
     const nodeData = node instanceof MindMapNode ? node.getData() : node
-    for (let i = 0; i < list.length; i++) {
-      if (nodeData[list[i]] !== undefined) {
+    for (let i = 0; i < this.supportStyleProps.length; i++) {
+      if (nodeData[this.supportStyleProps[i]] !== undefined) {
         return true
       }
     }

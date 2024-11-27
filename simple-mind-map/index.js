@@ -336,7 +336,7 @@ class MindMap {
     this.opt.themeConfig = config
     if (!notRender) {
       // 检查改变的是否是节点大小无关的主题属性
-      let res = checkIsNodeSizeIndependenceConfig(changedConfig)
+      const res = checkIsNodeSizeIndependenceConfig(changedConfig)
       this.render(null, res ? '' : CONSTANTS.CHANGE_THEME)
     }
   }
