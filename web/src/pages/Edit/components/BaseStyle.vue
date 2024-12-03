@@ -273,6 +273,61 @@
           >
         </div>
       </div>
+      <!-- 流动效果 -->
+      <div class="row" v-if="supportLineFlow">
+        <div class="rowItem">
+          <span class="name">{{ $t('style.openLineFlow') }}</span>
+          <el-checkbox
+            v-model="style.lineFlow"
+            @change="
+              value => {
+                update('lineFlow', value)
+              }
+            "
+          ></el-checkbox>
+        </div>
+        <div class="rowItem">
+          <span class="name">{{ $t('style.direction') }}</span>
+          <el-select
+            size="mini"
+            style="width: 80px"
+            v-model="style.lineFlowForward"
+            placeholder=""
+            @change="
+              value => {
+                update('lineFlowForward', value)
+              }
+            "
+          >
+            <el-option
+              key="1"
+              :label="$t('style.forward')"
+              :value="true"
+            ></el-option>
+            <el-option
+              key="2"
+              :label="$t('style.reverse')"
+              :value="false"
+            ></el-option>
+          </el-select>
+        </div>
+      </div>
+      <div class="row" v-if="supportLineFlow">
+        <div class="rowItem">
+          <span class="name">{{ $t('style.lineFlowDuration') }}</span>
+          <el-input-number
+            v-model="style.lineFlowDuration"
+            @change="
+              value => {
+                update('lineFlowDuration', value)
+              }
+            "
+            :min="0.1"
+            size="mini"
+            :step="0.5"
+          ></el-input-number>
+        </div>
+      </div>
       <!-- 彩虹线条 -->
       <div class="title noTop">{{ $t('baseStyle.rainbowLines') }}</div>
       <div class="row">
@@ -811,6 +866,9 @@ export default {
         rootLineKeepSameInCurve: '',
         rootLineStartPositionKeepSameInCurve: '',
         lineRadius: 0,
+        lineFlow: false,
+        lineFlowForward: true,
+        lineFlowDuration: 1,
         generalizationLineWidth: '',
         generalizationLineColor: '',
         associativeLineColor: '',
@@ -847,7 +905,8 @@ export default {
     ...mapState({
       activeSidebar: state => state.activeSidebar,
       localConfig: state => state.localConfig,
-      isDark: state => state.localConfig.isDark
+      isDark: state => state.localConfig.isDark,
+      supportLineFlow: state => state.supportLineFlow
     }),
     lineStyleList() {
       return lineStyleList[this.$i18n.locale] || lineStyleList.zh
@@ -947,36 +1006,7 @@ export default {
 
     // 初始样式
     initStyle() {
-      ;[
-        'backgroundColor',
-        'lineWidth',
-        'lineStyle',
-        'showLineMarker',
-        'rootLineKeepSameInCurve',
-        'rootLineStartPositionKeepSameInCurve',
-        'lineRadius',
-        'lineColor',
-        'generalizationLineWidth',
-        'generalizationLineColor',
-        'associativeLineColor',
-        'associativeLineWidth',
-        'associativeLineActiveWidth',
-        'associativeLineDasharray',
-        'associativeLineActiveColor',
-        'associativeLineTextFontSize',
-        'associativeLineTextColor',
-        'associativeLineTextFontFamily',
-        'paddingX',
-        'paddingY',
-        'imgMaxWidth',
-        'imgMaxHeight',
-        'iconSize',
-        'backgroundImage',
-        'backgroundRepeat',
-        'backgroundPosition',
-        'backgroundSize',
-        'nodeUseLineStyle'
-      ].forEach(key => {
+      Object.keys(this.style).forEach(key => {
         this.style[key] = this.mindMap.getThemeConfig(key)
         if (key === 'backgroundImage' && this.style[key] === 'none') {
           this.style[key] = ''

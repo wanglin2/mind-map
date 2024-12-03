@@ -34,6 +34,7 @@ const store = new Vuex.Store({
     supportFreemind: false, // 是否支持Freemind插件
     supportExcel: false, // 是否支持Excel插件
     supportCheckbox: false, // 是否支持Checkbox插件
+    supportLineFlow: false, // 是否支持LineFlow插件
     isDragOutlineTreeNode: false // 当前是否正在拖拽大纲树的节点
   },
   mutations: {
@@ -109,6 +110,11 @@ const store = new Vuex.Store({
     // 设置是否支持Checkbox插件
     setSupportCheckbox(state, data) {
       state.supportCheckbox = data
+    },
+
+    // 设置是否支持Lineflow插件
+    setSupportLineFlow(state, data) {
+      state.supportLineFlow = data
     },
 
     // 设置树节点拖拽

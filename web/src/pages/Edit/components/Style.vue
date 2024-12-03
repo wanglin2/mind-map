@@ -415,6 +415,49 @@
             </el-select>
           </div>
         </div>
+        <!-- 流动效果 -->
+        <div class="row" v-if="supportLineFlow">
+          <div class="rowItem">
+            <span class="name">{{ $t('style.openLineFlow') }}</span>
+            <el-checkbox
+              v-model="style.lineFlow"
+              @change="update('lineFlow')"
+            ></el-checkbox>
+          </div>
+          <div class="rowItem">
+            <span class="name">{{ $t('style.direction') }}</span>
+            <el-select
+              size="mini"
+              style="width: 80px"
+              v-model="style.lineFlowForward"
+              placeholder=""
+              @change="update('lineFlowForward')"
+            >
+              <el-option
+                key="1"
+                :label="$t('style.forward')"
+                :value="true"
+              ></el-option>
+              <el-option
+                key="2"
+                :label="$t('style.reverse')"
+                :value="false"
+              ></el-option>
+            </el-select>
+          </div>
+        </div>
+        <div class="row" v-if="supportLineFlow">
+          <div class="rowItem">
+            <span class="name">{{ $t('style.lineFlowDuration') }}</span>
+            <el-input-number
+              v-model="style.lineFlowDuration"
+              @change="update('lineFlowDuration')"
+              :min="0.1"
+              size="mini"
+              :step="0.5"
+            ></el-input-number>
+          </div>
+        </div>
         <!-- 节点内边距 -->
         <div class="title noTop">{{ $t('style.nodePadding') }}</div>
         <div class="row">
@@ -441,7 +484,7 @@
     </div>
     <div class="tipBox" v-else>
       <div class="tipIcon iconfont icontianjiazijiedian"></div>
-      <div class="tipText">请选择一个节点</div>
+      <div class="tipText">{{ $t('style.selectNodeTip') }}</div>
     </div>
   </Sidebar>
 </template>
@@ -500,14 +543,18 @@ export default {
         gradientStyle: false,
         startColor: '',
         endColor: '',
-        linearGradientDir: ''
+        linearGradientDir: '',
+        lineFlow: false,
+        lineFlowForward: true,
+        lineFlowDuration: 1
       }
     }
   },
   computed: {
     ...mapState({
       isDark: state => state.localConfig.isDark,
-      activeSidebar: state => state.activeSidebar
+      activeSidebar: state => state.activeSidebar,
+      supportLineFlow: state => state.supportLineFlow
     }),
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
@@ -564,29 +611,7 @@ export default {
       if (this.activeNodes.length <= 0) {
         return
       }
-      ;[
-        'shape',
-        'paddingX',
-        'paddingY',
-        'color',
-        'fontFamily',
-        'fontSize',
-        'textDecoration',
-        'fontWeight',
-        'fontStyle',
-        'borderWidth',
-        'borderColor',
-        'fillColor',
-        'borderDasharray',
-        'borderRadius',
-        'lineColor',
-        'lineDasharray',
-        'lineWidth',
-        'lineMarkerDir',
-        'gradientStyle',
-        'startColor',
-        'endColor'
-      ].forEach(item => {
+      Object.keys(this.style).forEach(item => {
         this.style[item] = this.activeNodes[0].getStyle(item, false)
       })
       this.initLinearGradientDir()

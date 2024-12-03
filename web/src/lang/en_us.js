@@ -253,7 +253,12 @@ export default {
     arrowDir: 'Arrow dir',
     arrowDirStart: 'Start',
     arrowDirEnd: 'End',
-    direction: 'Direction'
+    direction: 'Direction',
+    selectNodeTip: 'Please select a node',
+    openLineFlow: 'Open line flow',
+    lineFlowDuration: 'Line flow duration',
+    forward: 'Forward',
+    reverse: 'Reverse'
   },
   theme: {
     title: 'Theme',

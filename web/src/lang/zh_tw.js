@@ -249,7 +249,12 @@ export default {
     endColor: '結束',
     arrowDir: '箭頭位置',
     arrowDirStart: '頭部',
-    arrowDirEnd: '尾部'
+    arrowDirEnd: '尾部',
+    selectNodeTip: '請選擇壹個節點',
+    openLineFlow: '開啓流動效果',
+    lineFlowDuration: '一個流動周期的時間',
+    forward: '正向',
+    reverse: '反向'
   },
   theme: {
     title: '主題',
