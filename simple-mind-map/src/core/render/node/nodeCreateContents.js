@@ -127,14 +127,15 @@ function createIconNode() {
 // 尝试给html指定标签添加内联样式
 function tryAddHtmlStyle(text, style) {
   const tagList = ['span', 'strong', 's', 'em', 'u']
-  let _text = text
-  for (let i = 0; i < tagList.length; i++) {
-    text = addHtmlStyle(text, tagList[i], style)
-    if (text !== _text) {
-      break
-    }
-  }
-  return text
+  // let _text = text
+  // for (let i = 0; i < tagList.length; i++) {
+  //   text = addHtmlStyle(text, tagList[i], style)
+  //   if (text !== _text) {
+  //     break
+  //   }
+  // }
+  // return text
+  return addHtmlStyle(text, tagList, style)
 }
 
 // 创建富文本节点
