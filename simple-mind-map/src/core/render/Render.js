@@ -988,11 +988,12 @@ class Render {
   }
 
   //  上移节点，多个节点只会操作第一个节点
-  upNode() {
-    if (this.activeNodeList.length <= 0) {
+  upNode(appointNode) {
+    if (this.activeNodeList.length <= 0 && !appointNode) {
       return
     }
-    let node = this.activeNodeList[0]
+    const list = appointNode ? [appointNode] : this.activeNodeList
+    const node = list[0]
     if (node.isRoot) {
       return
     }
@@ -1013,11 +1014,12 @@ class Render {
   }
 
   //  下移节点，多个节点只会操作第一个节点
-  downNode() {
-    if (this.activeNodeList.length <= 0) {
+  downNode(appointNode) {
+    if (this.activeNodeList.length <= 0 && !appointNode) {
       return
     }
-    let node = this.activeNodeList[0]
+    const list = appointNode ? [appointNode] : this.activeNodeList
+    const node = list[0]
     if (node.isRoot) {
       return
     }
@@ -1594,7 +1596,7 @@ class Render {
     this.setNodeDataRender(node, data)
     // 更新了连线的样式
     if (lineStyleProps.includes(prop)) {
-      ;(node.parent || node).renderLine(true)
+      (node.parent || node).renderLine(true)
     }
   }
 
@@ -1618,7 +1620,7 @@ class Render {
       }
     })
     if (hasLineStyleProps) {
-      ;(node.parent || node).renderLine(true)
+      (node.parent || node).renderLine(true)
     }
   }
 
