@@ -373,13 +373,13 @@ class RichText {
 
   // 获取当前正在编辑的内容
   getEditText() {
-    let html = this.quill.container.firstChild.innerHTML
+    return this.quill.container.firstChild.innerHTML
     // 去除ql-cursor节点
     // https://github.com/wanglin2/mind-map/commit/138cc4b3e824671143f0bf70e5c46796f48520d0
     // https://github.com/wanglin2/mind-map/commit/0760500cebe8ec4e8ad84ab63f877b8b2a193aa1
     // html = removeHtmlNodeByClass(html, '.ql-cursor')
     // 去除最后的空行
-    return html.replace(/<p><br><\/p>$/, '')
+    // return html.replace(/<p><br><\/p>$/, '')
   }
 
   // 给html字符串中的节点样式按样式名首字母排序
