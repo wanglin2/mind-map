@@ -239,9 +239,6 @@ class RichText {
         outline: none; 
         word-break: break-all;
         padding: ${paddingY}px ${paddingX}px;
-        transform-style: preserve-3d;
-        filter: contrast(1) saturate(1);
-        backface-visibility: hidden;
       `
       this.textEditNode.addEventListener('click', e => {
         e.stopPropagation()
