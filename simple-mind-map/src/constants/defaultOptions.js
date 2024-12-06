@@ -265,6 +265,9 @@ export const defaultOpt = {
   maxNodeTextModifyWidth: -1,
   // 自定义处理节点的连线方法，可以传递一个函数，函数接收三个参数：node（节点实例）、line（节点的某条连线，@svgjs库的path对象）, { width, color, dasharray }，dasharray（该条连线的虚线样式，为none代表实线），你可以修改line对象来达到修改节点连线样式的效果，比如增加流动效果
   customHandleLine: null,
+  // 实例化完后是否立刻进行一次历史数据入栈操作
+  // 即调用mindMap.command.addHistory方法
+  addHistoryOnInit: true,
 
   // 【Select插件】
   // 多选节点时鼠标移动到边缘时的画布移动偏移量

@@ -123,9 +123,11 @@ class MindMap {
 
     // 初始渲染
     this.render(this.opt.fit ? () => this.view.fit() : () => {})
-    setTimeout(() => {
-      if (this.opt.data) this.command.addHistory()
-    }, 0)
+
+    // 将初始数据添加到历史记录堆栈中
+    if (this.opt.addHistoryOnInit && this.opt.data) {
+      this.command.addHistory()
+    }
   }
 
   //  配置参数处理
@@ -574,7 +576,7 @@ class MindMap {
       this.watermark.isInExport = false
     }
     // 添加必要的样式
-    ;[this.joinCss(), ...cssTextList].forEach(s => {
+    [this.joinCss(), ...cssTextList].forEach(s => {
       clone.add(SVG(`<style>${s}</style>`))
     })
     // 附加内容
