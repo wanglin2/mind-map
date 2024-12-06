@@ -470,6 +470,9 @@ function createNoteNode() {
   node.on('click', e => {
     this.mindMap.emit('node_note_click', this, e, node)
   })
+  node.on('dblclick', e => {
+    this.mindMap.emit('node_note_dblclick', this, e, node)
+  })
   return {
     node,
     width: iconSize,
