@@ -234,12 +234,14 @@ export default {
     window.addEventListener('resize', this.computeToolbarShowThrottle)
     this.$bus.$on('lang_change', this.computeToolbarShowThrottle)
     window.addEventListener('beforeunload', this.onUnload)
+    this.$bus.$on('node_note_dblclick', this.onNodeNoteDblclick)
   },
   beforeDestroy() {
     this.$bus.$off('write_local_file', this.onWriteLocalFile)
     window.removeEventListener('resize', this.computeToolbarShowThrottle)
     this.$bus.$off('lang_change', this.computeToolbarShowThrottle)
     window.removeEventListener('beforeunload', this.onUnload)
+    this.$bus.$off('node_note_dblclick', this.onNodeNoteDblclick)
   },
   methods: {
     // 计算工具按钮如何显示
@@ -501,6 +503,11 @@ export default {
         }
         this.$message.warning(this.$t('toolbar.notSupportTip'))
       }
+    },
+
+    onNodeNoteDblclick(node, e) {
+      e.stopPropagation()
+      this.$bus.$emit('showNodeNote', node)
     }
   }
 }
