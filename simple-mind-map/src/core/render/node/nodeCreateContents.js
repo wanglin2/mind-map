@@ -270,8 +270,13 @@ function createTextNode(specifyText) {
     }
     textArr[index] = lines.join('\n')
   })
-  textArr = textArr.join('\n').split(/\n/gim)
+  textArr = textArr.join('\n').replace(/\n$/g, '').split(/\n/gim)
   textArr.forEach((item, index) => {
+    // 避免尾部的空行不占宽度
+    // 同时解决该问题：https://github.com/wanglin2/mind-map/issues/1037
+    if (item === '') {
+      item = '﻿'
+    }
     const node = new Text().text(item)
     node.addClass('smm-text-node-wrap')
     this.style.text(node)
