@@ -491,6 +491,10 @@ class MindMap {
       this.execCommand('CLEAR_ACTIVE_NODE')
     }
     this.opt.readonly = isReadonly
+    // 切换为编辑模式时，如果历史记录堆栈是空的，那么进行一次入栈操作
+    if (!isReadonly && this.command.history.length <= 0) {
+      this.command.originAddHistory()
+    }
     this.emit('mode_change', mode)
   }
 
