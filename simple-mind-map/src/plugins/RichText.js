@@ -229,14 +229,14 @@ class RichText {
       this.textEditNode = document.createElement('div')
       this.textEditNode.classList.add('smm-richtext-node-edit-wrap')
       this.textEditNode.style.cssText = `
-        position:fixed; 
-        box-sizing: border-box; 
+        position:fixed;
+        box-sizing: border-box;
         ${
           openRealtimeRenderOnNodeTextEdit
             ? ''
             : 'box-shadow: 0 0 20px rgba(0,0,0,.5);'
         }
-        outline: none; 
+        outline: none;
         word-break: break-all;
         padding: ${paddingY}px ${paddingX}px;
       `
@@ -370,7 +370,11 @@ class RichText {
 
   // 获取当前正在编辑的内容
   getEditText() {
-    return this.quill.container.firstChild.innerHTML
+    // https://github.com/slab/quill/issues/4509
+    return this.quill
+      .getSemanticHTML()
+      .replaceAll(/  +/g, match => '&nbsp;'.repeat(match.length))
+    // return this.quill.container.firstChild.innerHTML
     // 去除ql-cursor节点
     // https://github.com/wanglin2/mind-map/commit/138cc4b3e824671143f0bf70e5c46796f48520d0
     // https://github.com/wanglin2/mind-map/commit/0760500cebe8ec4e8ad84ab63f877b8b2a193aa1
