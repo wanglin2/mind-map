@@ -112,20 +112,17 @@ class Render {
 
   //  设置布局结构
   setLayout() {
+    const { layout } = this.mindMap.opt
     this.layout = new (
-      layouts[this.mindMap.opt.layout]
-        ? layouts[this.mindMap.opt.layout]
+      layouts[layout]
+        ? layouts[layout]
         : layouts[CONSTANTS.LAYOUT.LOGICAL_STRUCTURE]
-    )(this, this.mindMap.opt.layout)
+    )(this, layout)
   }
 
   // 重新设置思维导图数据
   setData(data) {
-    if (this.hasRichTextPlugin()) {
-      this.renderTree = data ? this.mindMap.richText.handleSetData(data) : null
-    } else {
-      this.renderTree = data
-    }
+    this.renderTree = data || null
   }
 
   //   绑定事件

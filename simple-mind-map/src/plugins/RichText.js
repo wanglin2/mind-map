@@ -81,9 +81,12 @@ class RichText {
     this.onCompositionStart = this.onCompositionStart.bind(this)
     this.onCompositionUpdate = this.onCompositionUpdate.bind(this)
     this.onCompositionEnd = this.onCompositionEnd.bind(this)
+    this.handleSetData = this.handleSetData.bind(this)
     window.addEventListener('compositionstart', this.onCompositionStart)
     window.addEventListener('compositionupdate', this.onCompositionUpdate)
     window.addEventListener('compositionend', this.onCompositionEnd)
+    this.mindMap.on('before_update_data', this.handleSetData)
+    this.mindMap.on('before_set_data', this.handleSetData)
   }
 
   // 解绑事件
@@ -91,6 +94,8 @@ class RichText {
     window.removeEventListener('compositionstart', this.onCompositionStart)
     window.removeEventListener('compositionupdate', this.onCompositionUpdate)
     window.removeEventListener('compositionend', this.onCompositionEnd)
+    this.mindMap.off('before_update_data', this.handleSetData)
+    this.mindMap.off('before_set_data', this.handleSetData)
   }
 
   // 插入样式
