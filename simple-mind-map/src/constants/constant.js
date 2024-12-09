@@ -172,7 +172,8 @@ export const nodeDataNoStylePropList = [
   'customLeft',
   'customTop',
   'customTextWidth',
-  'checkbox'
+  'checkbox',
+  'dir'
 ]
 
 // 错误类型

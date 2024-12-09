@@ -72,6 +72,7 @@ import Formula from 'simple-mind-map/src/plugins/Formula.js'
 import RainbowLines from 'simple-mind-map/src/plugins/RainbowLines.js'
 import Demonstrate from 'simple-mind-map/src/plugins/Demonstrate.js'
 import OuterFrame from 'simple-mind-map/src/plugins/OuterFrame.js'
+import MindMapLayoutPro from 'simple-mind-map/src/plugins/MindMapLayoutPro.js'
 import Themes from 'simple-mind-map-plugin-themes'
 // 协同编辑插件
 // import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
@@ -140,16 +141,12 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(RainbowLines)
   .usePlugin(Demonstrate)
   .usePlugin(OuterFrame)
+  .usePlugin(MindMapLayoutPro)
 // .usePlugin(Cooperate) // 协同插件
 
 // 注册主题
 Themes.init(MindMap)
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:56:17
- * @Desc: 编辑区域
- */
 export default {
   name: 'Edit',
   components: {
@@ -291,21 +288,13 @@ export default {
       }
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-07-03 22:11:37
-     * @Desc: 获取思维导图数据，实际应该调接口获取
-     */
+    // 获取思维导图数据，实际应该调接口获取
     getData() {
       let storeData = getData()
       this.mindMapData = storeData
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-08-01 10:19:07
-     * @Desc: 存储数据当数据有变时
-     */
+    // 存储数据当数据有变时
     bindSaveEvent() {
       this.$bus.$on('data_change', data => {
         storeData(data)
@@ -320,21 +309,13 @@ export default {
       })
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-08-02 23:19:52
-     * @Desc: 手动保存
-     */
+    // 手动保存
     manualSave() {
       let data = this.mindMap.getData(true)
       storeConfig(data)
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-04-10 15:01:01
-     * @Desc: 初始化
-     */
+    // 初始化
     init() {
       let hasFileURL = this.hasFileURL()
       let { root, layout, theme, view, config } = this.mindMapData
@@ -664,11 +645,7 @@ export default {
       return /\.(smm|json|xmind|md|xlsx)$/.test(fileURL)
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-08-03 23:01:13
-     * @Desc: 动态设置思维导图数据
-     */
+    // 动态设置思维导图数据
     setData(data) {
       this.handleShowLoading()
       if (data.root) {
@@ -680,29 +657,17 @@ export default {
       this.manualSave()
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-05-05 13:32:11
-     * @Desc: 重新渲染
-     */
+    // 重新渲染
     reRender() {
       this.mindMap.reRender()
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-05-04 13:08:28
-     * @Desc: 执行命令
-     */
+    // 执行命令
     execCommand(...args) {
       this.mindMap.execCommand(...args)
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-07-01 22:33:02
-     * @Desc: 导出
-     */
+    // 导出
     async export(...args) {
       try {
         showLoading()
