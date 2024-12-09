@@ -395,14 +395,17 @@ class MindMap {
 
   // 更新画布数据，如果新的数据是在当前画布节点数据基础上增删改查后形成的，那么可以使用该方法来更新画布数据
   updateData(data) {
+    this.emit('before_update_data', data)
     this.renderer.setData(data)
     this.render()
     this.command.addHistory()
+    this.emit('update_data', data)
   }
 
   //  动态设置思维导图数据，纯节点数据
   setData(data) {
     data = this.handleData(data)
+    this.emit('before_set_data', data)
     this.opt.data = data
     this.execCommand('CLEAR_ACTIVE_NODE')
     this.command.clearHistory()
