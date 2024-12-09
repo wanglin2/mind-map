@@ -61,6 +61,7 @@ class Command {
       this.commands[name].forEach(fn => {
         fn(...args)
       })
+      this.mindMap.emit('afterExecCommand', name, ...args)
       if (
         ['BACK', 'FORWARD', 'SET_NODE_ACTIVE', 'CLEAR_ACTIVE_NODE'].includes(
           name
