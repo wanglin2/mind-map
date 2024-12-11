@@ -16,6 +16,18 @@ export default class KeyCommand {
     this.bindEvent()
   }
 
+  // 扩展按键映射
+  extendKeyMap(key, code) {
+    keyMap[key] = code
+  }
+
+  // 从按键映射中删除某个键
+  removeKeyMap(key) {
+    if (typeof keyMap[key] !== 'undefined') {
+      delete keyMap[key]
+    }
+  }
+
   //  暂停快捷键响应
   pause() {
     this.isPause = true

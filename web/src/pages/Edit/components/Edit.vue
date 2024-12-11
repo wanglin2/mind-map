@@ -17,7 +17,10 @@
     <OutlineSidebar :mindMap="mindMap"></OutlineSidebar>
     <Style v-if="!isZenMode"></Style>
     <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
-    <AssociativeLineStyle v-if="mindMap" :mindMap="mindMap"></AssociativeLineStyle>
+    <AssociativeLineStyle
+      v-if="mindMap"
+      :mindMap="mindMap"
+    ></AssociativeLineStyle>
     <Theme v-if="mindMap" :data="mindMapData" :mindMap="mindMap"></Theme>
     <Structure :mindMap="mindMap"></Structure>
     <ShortcutKey></ShortcutKey>
@@ -123,7 +126,7 @@ import NodeAttachment from './NodeAttachment.vue'
 import NodeOuterFrame from './NodeOuterFrame.vue'
 import NodeTagStyle from './NodeTagStyle.vue'
 import Setting from './Setting.vue'
-import AssociativeLineStyle from './AssociativeLineStyle.vue';
+import AssociativeLineStyle from './AssociativeLineStyle.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
