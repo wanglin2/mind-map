@@ -6,8 +6,8 @@ import {
 } from './associativeLineUtils'
 
 // 创建控制点、连线节点
-function createControlNodes() {
-  let { associativeLineActiveColor } = this.mindMap.themeConfig
+function createControlNodes(node, toNode) {
+  let { associativeLineActiveColor } = this.getStyleConfig(node, toNode)
   // 连线
   this.controlLine1 = this.associativeLineDraw
     .line()
@@ -16,13 +16,13 @@ function createControlNodes() {
     .line()
     .stroke({ color: associativeLineActiveColor, width: 2 })
   // 控制点
-  this.controlPoint1 = this.createOneControlNode('controlPoint1')
-  this.controlPoint2 = this.createOneControlNode('controlPoint2')
+  this.controlPoint1 = this.createOneControlNode('controlPoint1', node, toNode)
+  this.controlPoint2 = this.createOneControlNode('controlPoint2', node, toNode)
 }
 
 // 创建控制点
-function createOneControlNode(pointKey) {
-  let { associativeLineActiveColor } = this.mindMap.themeConfig
+function createOneControlNode(pointKey, node, toNode) {
+  let { associativeLineActiveColor } = this.getStyleConfig(node, toNode)
   return this.associativeLineDraw
     .circle(this.controlPointDiameter)
     .stroke({ color: associativeLineActiveColor })
@@ -221,10 +221,10 @@ function resetControlPoint() {
 }
 
 // 渲染控制点
-function renderControls(startPoint, endPoint, point1, point2) {
+function renderControls(startPoint, endPoint, point1, point2, node, toNode) {
   if (!this.mindMap.opt.enableAdjustAssociativeLinePoints) return
   if (!this.controlLine1) {
-    this.createControlNodes()
+    this.createControlNodes(node, toNode)
   }
   let radius = this.controlPointDiameter / 2
   // 控制点和起终点的连线

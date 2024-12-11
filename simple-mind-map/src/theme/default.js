@@ -103,6 +103,7 @@ export default {
     // lineFlow,
     // lineFlowDuration,
     // lineFlowForward
+    // 关联线的所有样式
   },
   // 二级节点样式
   second: {

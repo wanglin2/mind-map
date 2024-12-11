@@ -85,7 +85,7 @@ export const defaultOpt = {
   // 是否只有当鼠标在画布内才响应快捷键事件
   enableShortcutOnlyWhenMouseInSvg: true,
   // 自定义判断是否响应快捷键事件，优先级比enableShortcutOnlyWhenMouseInSvg选项高
-  // 可以传递一个函数，接收事件对象e为参数，需要返回true或false，返回true代表允许响应快捷键事件，反之不允许，库默认当事件目标为body，或为文本编辑框元素时响应快捷键，其他不响应
+  // 可以传递一个函数，接收事件对象e为参数，需要返回true或false，返回true代表允许响应快捷键事件，反之不允许，库默认当事件目标为body，或为文本编辑框元素（普通文本编辑框、富文本编辑框、关联线文本编辑框）时响应快捷键，其他不响应
   customCheckEnableShortcut: null,
   // 初始根节点的位置
   initRootNodePosition: null,
