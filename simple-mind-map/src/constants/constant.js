@@ -78,7 +78,8 @@ export const CONSTANTS = {
   },
   EDIT_NODE_CLASS: {
     SMM_NODE_EDIT_WRAP: 'smm-node-edit-wrap',
-    RICH_TEXT_EDIT_WRAP: 'ql-editor'
+    RICH_TEXT_EDIT_WRAP: 'ql-editor',
+    ASSOCIATIVE_LINE_TEXT_EDIT_WRAP: 'associative-line-text-edit-warp'
   }
 }
 
