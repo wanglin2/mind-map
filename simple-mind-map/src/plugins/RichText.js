@@ -376,10 +376,9 @@ class RichText {
   // 获取当前正在编辑的内容
   getEditText() {
     // https://github.com/slab/quill/issues/4509
-    return this.quill
-      .getSemanticHTML()
-      .replaceAll(/  +/g, match => '&nbsp;'.repeat(match.length))
-    // return this.quill.container.firstChild.innerHTML
+    return this.quill.container.firstChild.innerHTML.replaceAll(/  +/g, match =>
+      '&nbsp;'.repeat(match.length)
+    )
     // 去除ql-cursor节点
     // https://github.com/wanglin2/mind-map/commit/138cc4b3e824671143f0bf70e5c46796f48520d0
     // https://github.com/wanglin2/mind-map/commit/0760500cebe8ec4e8ad84ab63f877b8b2a193aa1
@@ -495,7 +494,8 @@ class RichText {
         'color',
         'background',
         'font',
-        'size'
+        'size',
+        'formula'
       ], // 明确指定允许的格式，不包含有序列表，无序列表等
       theme: 'snow'
     })
