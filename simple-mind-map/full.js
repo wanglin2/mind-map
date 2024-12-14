@@ -18,6 +18,7 @@ import Formula from './src/plugins/Formula.js'
 import RainbowLines from './src/plugins/RainbowLines.js'
 import Demonstrate from './src/plugins/Demonstrate.js'
 import OuterFrame from './src/plugins/OuterFrame.js'
+import MindMapLayoutPro from './src/plugins/MindMapLayoutPro.js'
 import xmind from './src/parse/xmind.js'
 import markdown from './src/parse/markdown.js'
 import icons from './src/svg/icons.js'
@@ -50,5 +51,6 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(RainbowLines)
   .usePlugin(Demonstrate)
   .usePlugin(OuterFrame)
+  .usePlugin(MindMapLayoutPro)
 
 export default MindMap
