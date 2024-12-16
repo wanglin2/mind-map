@@ -370,6 +370,18 @@ class AssociativeLine {
           'font-size': associativeLineTextFontSize + 'px'
         })
     })
+    if (this.controlLine1) {
+      this.controlLine1.stroke({ color: associativeLineActiveColor })
+    }
+    if (this.controlLine2) {
+      this.controlLine2.stroke({ color: associativeLineActiveColor })
+    }
+    if (this.controlPoint1) {
+      this.controlPoint1.stroke({ color: associativeLineActiveColor })
+    }
+    if (this.controlPoint2) {
+      this.controlPoint2.stroke({ color: associativeLineActiveColor })
+    }
   }
 
   // 激活某根关联线

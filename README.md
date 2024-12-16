@@ -541,4 +541,8 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/Xavier.png" style="width: 50px;height: 50px;" />
         <span>Xavier</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/冒号括号.png" style="width: 50px;height: 50px;" />
+        <span>:)</span>
+    </span>
 </p>
