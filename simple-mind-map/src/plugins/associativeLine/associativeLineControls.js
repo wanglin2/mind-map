@@ -202,6 +202,7 @@ function onControlPointMouseup(e) {
     associativeLineTargetControlOffsets: offsetList,
     associativeLinePoint
   })
+  this.isNotRenderAllLines = true
   // 这里要加个setTimeout0是因为draw_click事件比mouseup事件触发的晚，所以重置isControlPointMousedown需要等draw_click事件触发完以后
   setTimeout(() => {
     this.resetControlPoint()
