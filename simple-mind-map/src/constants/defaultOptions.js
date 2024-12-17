@@ -437,9 +437,6 @@ export const defaultOpt = {
   transformRichTextOnEnterEdit: null,
   // 可以传递一个函数，即将结束富文本编辑前会执行该函数，函数接收richText实例，所以你可以在此时机更新quill文档数据
   beforeHideRichTextEdit: null,
-  // 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果
-  // 需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果
-  richTextEditFakeInPlace: false,
 
   // 【OuterFrame】插件
   outerFramePaddingX: 10,

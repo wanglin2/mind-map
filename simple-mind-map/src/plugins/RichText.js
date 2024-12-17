@@ -196,7 +196,6 @@ class RichText {
       return
     }
     let {
-      richTextEditFakeInPlace,
       customInnerElsAppendTo,
       nodeTextEditZIndex,
       textAutoWrapWidth,
@@ -225,11 +224,6 @@ class RichText {
     // 内边距
     let paddingX = this.textNodePaddingX
     let paddingY = this.textNodePaddingY
-    if (richTextEditFakeInPlace) {
-      let paddingValue = node.getPaddingVale()
-      paddingX = paddingValue.paddingX
-      paddingY = paddingValue.paddingY
-    }
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div')
       this.textEditNode.classList.add('smm-richtext-node-edit-wrap')
@@ -274,13 +268,6 @@ class RichText {
     this.textEditNode.style.maxWidth = textAutoWrapWidth + paddingX * 2 + 'px'
     this.textEditNode.style.transform = `scale(${scaleX}, ${scaleY})`
     this.textEditNode.style.transformOrigin = 'left top'
-    if (richTextEditFakeInPlace) {
-      this.textEditNode.style.borderRadius =
-        (node.style.merge('borderRadius') || 5) + 'px'
-      if (node.style.merge('shape') == 'roundedRectangle') {
-        this.textEditNode.style.borderRadius = (node.height || 50) + 'px'
-      }
-    }
     // 节点文本内容
     let nodeText = node.getData('text')
     if (typeof transformRichTextOnEnterEdit === 'function') {
