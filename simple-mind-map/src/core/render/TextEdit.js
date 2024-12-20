@@ -161,7 +161,6 @@ export default class TextEdit {
 
   //  注册临时快捷键
   registerTmpShortcut() {
-    // 注册回车快捷键
     this.mindMap.keyCommand.addShortcut('Enter', () => {
       this.hideEditTextBox()
     })
@@ -178,7 +177,7 @@ export default class TextEdit {
     return this.showTextEdit
   }
 
-  //  显示文本编辑框
+  // 显示文本编辑框
   // isInserting：是否是刚创建的节点
   // isFromKeyDown：是否是在按键事件进入的编辑
   async show({
@@ -207,6 +206,10 @@ export default class TextEdit {
     const { offsetLeft, offsetTop } = checkNodeOuter(this.mindMap, node)
     this.mindMap.view.translateXY(offsetLeft, offsetTop)
     const g = node._textData.node
+    // 需要先显示，不然宽高获取到的可能是0
+    if (openRealtimeRenderOnNodeTextEdit) {
+      g.show()
+    }
     const rect = g.node.getBoundingClientRect()
     // 如果开启了大小实时更新，那么直接隐藏节点原文本
     if (openRealtimeRenderOnNodeTextEdit) {
