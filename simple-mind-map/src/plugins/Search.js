@@ -228,7 +228,7 @@ class Search {
     const keep = replaceText.includes(this.searchText)
     const text = this.getReplacedText(currentNode, this.searchText, replaceText)
     this.notResetSearchText = true
-    currentNode.setText(text, currentNode.getData('richText'), true)
+    currentNode.setText(text, currentNode.getData('richText'))
     if (keep) {
       this.updateMatchNodeList(this.matchNodeList)
       return
@@ -258,18 +258,15 @@ class Search {
     // 如果当前搜索文本是替换文本的子串，那么该节点还是符合搜索结果的
     const keep = replaceText.includes(this.searchText)
     this.notResetSearchText = true
-    const hasRichTextPlugin = this.mindMap.renderer.hasRichTextPlugin()
     this.matchNodeList.forEach(node => {
       const text = this.getReplacedText(node, this.searchText, replaceText)
       if (this.isNodeInstance(node)) {
         const data = {
           text
         }
-        if (hasRichTextPlugin) data.resetRichText = !!node.getData('richText')
         this.mindMap.renderer.setNodeDataRender(node, data, true)
       } else {
         node.data.text = text
-        if (hasRichTextPlugin) node.data.resetRichText = !!node.data.richText
       }
     })
     this.mindMap.render()

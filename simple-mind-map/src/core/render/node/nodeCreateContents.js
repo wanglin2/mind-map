@@ -1,19 +1,17 @@
 import {
   resizeImgSize,
-  removeHtmlStyle,
-  addHtmlStyle,
+  removeRichTextStyes,
   checkIsRichText,
   isUndef,
   createForeignObjectNode,
   addXmlns,
-  generateColorByContent
+  generateColorByContent,
+  camelCaseToHyphen,
+  getNodeRichTextStyles
 } from '../../../utils'
 import { Image as SVGImage, SVG, A, G, Rect, Text } from '@svgdotjs/svg.js'
 import iconsSvg from '../../../svg/icons'
-import {
-  CONSTANTS,
-  noneRichTextNodeLineHeight
-} from '../../../constants/constant'
+import { noneRichTextNodeLineHeight } from '../../../constants/constant'
 
 // 测量svg文本宽高
 const measureText = (text, style) => {
@@ -124,20 +122,6 @@ function createIconNode() {
   })
 }
 
-// 尝试给html指定标签添加内联样式
-function tryAddHtmlStyle(text, style) {
-  const tagList = ['span', 'strong', 's', 'em', 'u']
-  // let _text = text
-  // for (let i = 0; i < tagList.length; i++) {
-  //   text = addHtmlStyle(text, tagList[i], style)
-  //   if (text !== _text) {
-  //     break
-  //   }
-  // }
-  // return text
-  return addHtmlStyle(text, tagList, style)
-}
-
 // 创建富文本节点
 function createRichTextNode(specifyText) {
   const hasCustomWidth = this.hasCustomWidth()
@@ -145,40 +129,32 @@ function createRichTextNode(specifyText) {
     typeof specifyText === 'string' ? specifyText : this.getData('text')
   let { textAutoWrapWidth, emptyTextMeasureHeightText } = this.mindMap.opt
   textAutoWrapWidth = hasCustomWidth ? this.customTextWidth : textAutoWrapWidth
-  let g = new G()
-  // 重新设置富文本节点内容
+  const g = new G()
+  // 创建富文本结构，或复位富文本样式
   let recoverText = false
   if (this.getData('resetRichText')) {
     delete this.nodeData.data.resetRichText
     recoverText = true
   }
-  if ([CONSTANTS.CHANGE_THEME].includes(this.mindMap.renderer.renderSource)) {
-    // 如果自定义过样式则不允许覆盖
-    // if (!this.hasCustomStyle() ) {
-    recoverText = true
-    // }
-  }
   if (recoverText && !isUndef(text)) {
-    // 判断节点内容是否是富文本
-    const isRichText = checkIsRichText(text)
-    // 获取自定义样式
-    const customStyle = this.style.getCustomStyle()
-    // 样式字符串
-    const style = this.style.createStyleText(customStyle)
-    if (isRichText) {
-      // 如果是富文本那么线移除内联样式
-      text = removeHtmlStyle(text)
-      // 再添加新的内联样式
-      text = this.tryAddHtmlStyle(text, style)
+    if (checkIsRichText(text)) {
+      // 如果是富文本那么移除内联样式
+      text = removeRichTextStyes(text)
     } else {
-      // 非富文本
-      text = `<p><span style="${style}">${text}</span></p>`
+      // 非富文本则改为富文本结构
+      text = `<p>${text}</p>`
     }
     this.setData({
-      text: text
+      text
     })
   }
-  let html = `<div>${text}</div>`
+  // 节点的富文本样式数据
+  const nodeTextStyleList = []
+  const nodeRichTextStyles = getNodeRichTextStyles(this)
+  Object.keys(nodeRichTextStyles).forEach(prop => {
+    nodeTextStyleList.push([prop, nodeRichTextStyles[prop]])
+  })
+  // 测量文本大小
   if (!this.mindMap.commonCaches.measureRichtextNodeTextSizeEl) {
     this.mindMap.commonCaches.measureRichtextNodeTextSizeEl =
       document.createElement('div')
@@ -190,9 +166,15 @@ function createRichTextNode(specifyText) {
       this.mindMap.commonCaches.measureRichtextNodeTextSizeEl
     )
   }
-  let div = this.mindMap.commonCaches.measureRichtextNodeTextSizeEl
+  const div = this.mindMap.commonCaches.measureRichtextNodeTextSizeEl
+  // 应用节点的文本样式
+  nodeTextStyleList.forEach(([prop, value]) => {
+    div.style[prop] = value
+  })
+  div.style.lineHeight = 1.2
+  const html = `<div>${text}</div>`
   div.innerHTML = html
-  let el = div.children[0]
+  const el = div.children[0]
   el.classList.add('smm-richtext-node-wrap')
   addXmlns(el)
   el.style.maxWidth = textAutoWrapWidth + 'px'
@@ -219,6 +201,15 @@ function createRichTextNode(specifyText) {
     width,
     height
   })
+  // 应用节点文本样式
+  // 进入文本编辑时，这个样式也会同样添加到文本编辑框的元素上
+  const foreignObjectStyle = {
+    'line-height': 1.2
+  }
+  nodeTextStyleList.forEach(([prop, value]) => {
+    foreignObjectStyle[camelCaseToHyphen(prop)] = value
+  })
+  foreignObject.css(foreignObjectStyle)
   g.add(foreignObject)
   return {
     node: g,
@@ -230,6 +221,10 @@ function createRichTextNode(specifyText) {
 
 //  创建文本节点
 function createTextNode(specifyText) {
+  if (this.getData('needUpdate')) {
+    delete this.nodeData.data.needUpdate
+  }
+  // 如果是富文本内容，那么转给富文本函数
   if (this.getData('richText')) {
     return this.createRichTextNode(specifyText)
   }
@@ -556,7 +551,6 @@ export default {
   createImgNode,
   getImgShowSize,
   createIconNode,
-  tryAddHtmlStyle,
   createRichTextNode,
   createTextNode,
   createHyperlinkNode,

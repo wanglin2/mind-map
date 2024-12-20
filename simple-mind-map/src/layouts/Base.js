@@ -49,10 +49,7 @@ class Base {
 
   // 检查当前来源是否需要重新计算节点大小
   checkIsNeedResizeSources() {
-    return [
-      CONSTANTS.CHANGE_THEME,
-      CONSTANTS.TRANSFORM_TO_NORMAL_NODE
-    ].includes(this.renderer.renderSource)
+    return [CONSTANTS.CHANGE_THEME].includes(this.renderer.renderSource)
   }
 
   // 层级类型改变
@@ -140,6 +137,7 @@ class Base {
         isNodeDataChange ||
         isLayerTypeChange ||
         newNode.getData('resetRichText') ||
+        newNode.getData('needUpdate') ||
         isNodeInnerPrefixChange
       ) {
         newNode.getSize()
@@ -193,6 +191,7 @@ class Base {
         isNodeDataChange ||
         isLayerTypeChange ||
         newNode.getData('resetRichText') ||
+        newNode.getData('needUpdate') ||
         isNodeInnerPrefixChange
       ) {
         newNode.getSize()

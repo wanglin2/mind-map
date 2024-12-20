@@ -30,7 +30,6 @@ import {
   createSmmFormatData,
   checkSmmFormatData,
   checkIsNodeStyleDataKey,
-  removeRichTextStyes,
   formatGetNodeGeneralization,
   sortNodeList,
   throttle,
@@ -547,13 +546,6 @@ class Render {
           if (this.reRender) {
             this.reRender = false
           }
-          // 触发一次保存，因为修改了渲染树的数据
-          if (
-            this.hasRichTextPlugin() &&
-            [CONSTANTS.CHANGE_THEME, CONSTANTS.SET_DATA].includes(source)
-          ) {
-            this.mindMap.command.addHistory()
-          }
         }
         this.mindMap.emit('node_tree_render_end')
       })
@@ -561,13 +553,14 @@ class Render {
     this.emitNodeActiveEvent()
   }
 
-  // 给当前被收起来的节点数据添加文本复位标志
+  // 给当前被收起来的节点数据添加更新标志
   resetUnExpandNodeStyle() {
-    if (!this.renderTree || !this.hasRichTextPlugin()) return
+    if (!this.renderTree) return
     walk(this.renderTree, null, node => {
       if (!node.data.expand) {
         walk(node, null, node2 => {
-          node2.data.resetRichText = true
+          // 主要是触发数据新旧对比，不一样则会重新创建节点
+          node2.data['needUpdate'] = true
         })
         return true
       }
@@ -750,11 +743,10 @@ class Render {
       richText: isRichText,
       isActive: focusNewNode // 如果同时对多个节点插入子节点，那么需要把新增的节点设为激活状态。如果不进入编辑状态，那么也需要手动设为激活状态
     }
-    if (isRichText) params.resetRichText = isRichText
+    if (isRichText) params.resetRichText = true
     // 动态指定的子节点数据也需要添加相关属性
-    appointChildren = addDataToAppointNodes(appointChildren, {
-      ...params
-    })
+    appointChildren = addDataToAppointNodes(appointChildren, params)
+    const alreadyIsRichText = appointData && appointData.richText
     list.forEach(node => {
       if (node.isGeneralization || node.isRoot) {
         return
@@ -767,6 +759,10 @@ class Render {
         : defaultInsertBelowSecondLevelNodeText
       // 计算插入位置
       const index = getNodeDataIndex(node)
+      // 如果指定的数据就是富文本格式，那么不需要重新创建
+      if (alreadyIsRichText && params.resetRichText) {
+        delete params.resetRichText
+      }
       const newNodeData = {
         inserting,
         data: {
@@ -802,7 +798,7 @@ class Render {
       richText: isRichText,
       isActive: focusNewNode
     }
-    if (isRichText) params.resetRichText = isRichText
+    if (isRichText) params.resetRichText = true
     nodeList = addDataToAppointNodes(nodeList, params)
     list.forEach(node => {
       if (node.isGeneralization || node.isRoot) {
@@ -848,11 +844,10 @@ class Render {
       richText: isRichText,
       isActive: focusNewNode
     }
-    if (isRichText) params.resetRichText = isRichText
+    if (isRichText) params.resetRichText = true
     // 动态指定的子节点数据也需要添加相关属性
-    appointChildren = addDataToAppointNodes(appointChildren, {
-      ...params
-    })
+    appointChildren = addDataToAppointNodes(appointChildren, params)
+    const alreadyIsRichText = appointData && appointData.richText
     list.forEach(node => {
       if (node.isGeneralization) {
         return
@@ -863,6 +858,10 @@ class Render {
       const text = node.isRoot
         ? defaultInsertSecondLevelNodeText
         : defaultInsertBelowSecondLevelNodeText
+      // 如果指定的数据就是富文本格式，那么不需要重新创建
+      if (alreadyIsRichText && params.resetRichText) {
+        delete params.resetRichText
+      }
       const newNode = {
         inserting,
         data: {
@@ -902,7 +901,7 @@ class Render {
       richText: isRichText,
       isActive: focusNewNode
     }
-    if (isRichText) params.resetRichText = isRichText
+    if (isRichText) params.resetRichText = true
     childList = addDataToAppointNodes(childList, params)
     list.forEach(node => {
       if (node.isGeneralization) {
@@ -947,7 +946,8 @@ class Render {
       richText: isRichText,
       isActive: focusNewNode
     }
-    if (isRichText) params.resetRichText = isRichText
+    if (isRichText) params.resetRichText = true
+    const alreadyIsRichText = appointData && appointData.richText
     list.forEach(node => {
       if (node.isGeneralization || node.isRoot) {
         return
@@ -956,6 +956,10 @@ class Render {
         node.layerIndex === 1
           ? defaultInsertSecondLevelNodeText
           : defaultInsertBelowSecondLevelNodeText
+      // 如果指定的数据就是富文本格式，那么不需要重新创建
+      if (alreadyIsRichText && params.resetRichText) {
+        delete params.resetRichText
+      }
       const newNode = {
         inserting,
         data: {
@@ -965,11 +969,6 @@ class Render {
           ...(appointData || {})
         },
         children: [node.nodeData]
-      }
-      if (isRichText) {
-        node.setData({
-          resetRichText: true
-        })
       }
       const parent = node.parent
       // 获取当前节点所在位置
@@ -1046,7 +1045,6 @@ class Render {
     const index = getNodeIndexInNodeList(node, parent.children)
     const parentIndex = getNodeIndexInNodeList(parent, grandpa.children)
     // 节点数据
-    this.checkNodeLayerChange(node, parent)
     parent.nodeData.children.splice(index, 1)
     grandpa.nodeData.children.splice(parentIndex + 1, 0, node.nodeData)
     this.mindMap.render()
@@ -1061,10 +1059,10 @@ class Render {
         delete nodeData[key]
       }
     })
-    // 如果是富文本，那么还要处理富文本内容
-    if (hasCustomStyles && this.hasRichTextPlugin()) {
+    // 如果是富文本，那么直接全部重新创建，因为有些样式是通过标签来渲染的
+    if (this.hasRichTextPlugin()) {
+      hasCustomStyles = true
       nodeData.resetRichText = true
-      nodeData.text = removeRichTextStyes(nodeData.text)
     }
     return hasCustomStyles
   }
@@ -1302,7 +1300,6 @@ class Render {
       nodeList.reverse()
     }
     nodeList.forEach(item => {
-      this.checkNodeLayerChange(item, exist)
       // 移动节点
       let nodeParent = item.parent
       let nodeBorthers = nodeParent.children
@@ -1327,25 +1324,6 @@ class Render {
       existParent.nodeData.children.splice(existIndex, 0, item.nodeData)
     })
     this.mindMap.render()
-  }
-
-  // 如果是富文本模式，那么某些层级变化需要更新样式
-  checkNodeLayerChange(node, toNode, toNodeIsParent = false) {
-    if (this.hasRichTextPlugin()) {
-      // 如果设置了自定义样式那么不需要更新
-      if (this.mindMap.richText.checkNodeHasCustomRichTextStyle(node)) {
-        return
-      }
-      const toIndex = toNodeIsParent ? toNode.layerIndex + 1 : toNode.layerIndex
-      let nodeLayerChanged =
-        (node.layerIndex === 1 && toIndex !== 1) ||
-        (node.layerIndex !== 1 && toIndex === 1)
-      if (nodeLayerChanged) {
-        node.setData({
-          resetRichText: true
-        })
-      }
-    }
   }
 
   //  移除节点
@@ -1531,7 +1509,6 @@ class Render {
       return !item.isRoot
     })
     nodeList.forEach(item => {
-      this.checkNodeLayerChange(item, toNode, true)
       this.removeNodeFromActiveList(item)
       removeFromParentNodeData(item)
       toNode.setData({
@@ -1558,18 +1535,7 @@ class Render {
       node.nodeData.children.push(
         ...data.map(item => {
           const newData = simpleDeepClone(item)
-          createUidForAppointNodes([newData], true, node => {
-            // 可能跨层级复制，那么富文本样式需要更新
-            if (this.hasRichTextPlugin()) {
-              // 如果设置了自定义样式那么不需要更新
-              if (
-                this.mindMap.richText.checkNodeHasCustomRichTextStyle(node.data)
-              ) {
-                return
-              }
-              node.data.resetRichText = true
-            }
-          })
+          createUidForAppointNodes([newData], true)
           return newData
         })
       )
@@ -1582,13 +1548,6 @@ class Render {
     const data = {
       [prop]: value
     }
-    // 如果开启了富文本，则需要应用到富文本上
-    if (
-      this.hasRichTextPlugin() &&
-      this.mindMap.richText.isHasRichTextStyle(data)
-    ) {
-      data.resetRichText = true
-    }
     this.setNodeDataRender(node, data)
     // 更新了连线的样式
     if (lineStyleProps.includes(prop)) {
@@ -1599,13 +1558,6 @@ class Render {
   //  设置节点多个样式
   setNodeStyles(node, style) {
     const data = { ...style }
-    // 如果开启了富文本，则需要应用到富文本上
-    if (
-      this.hasRichTextPlugin() &&
-      this.mindMap.richText.isHasRichTextStyle(data)
-    ) {
-      data.resetRichText = true
-    }
     this.setNodeDataRender(node, data)
     // 更新了连线的样式
     let props = Object.keys(style)
@@ -1826,6 +1778,7 @@ class Render {
       list.length > 1
     )
     let needRender = false
+    const alreadyIsRichText = data && data.richText
     list.forEach(item => {
       const newData = {
         inserting,
@@ -1837,7 +1790,7 @@ class Render {
         richText: isRichText,
         isActive: focusNewNode
       }
-      if (isRichText) newData.resetRichText = isRichText
+      if (isRichText && !alreadyIsRichText) newData.resetRichText = isRichText
       let generalization = item.node.getData('generalization')
       generalization = generalization
         ? Array.isArray(generalization)

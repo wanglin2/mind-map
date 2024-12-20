@@ -1,7 +1,8 @@
 import { v4 as uuidv4 } from 'uuid'
 import {
   nodeDataNoStylePropList,
-  selfCloseTagList
+  selfCloseTagList,
+  richTextSupportStyleList
 } from '../constants/constant'
 import MersenneTwister from './mersenneTwister'
 import { ForeignObject } from '@svgdotjs/svg.js'
@@ -481,7 +482,7 @@ export const loadImage = imgFile => {
 
 // 移除字符串中的html实体
 export const removeHTMLEntities = str => {
-  ;[['&nbsp;', '&#160;']].forEach(item => {
+  [['&nbsp;', '&#160;']].forEach(item => {
     str = str.replaceAll(item[0], item[1])
   })
   return str
@@ -949,6 +950,12 @@ export const selectAllInput = el => {
 
 // 给指定的节点列表树数据添加附加数据，会修改原数据
 export const addDataToAppointNodes = (appointNodes, data = {}) => {
+  data = { ...data }
+  const alreadyIsRichText = data && data.richText
+  // 如果指定的数据就是富文本格式，那么不需要重新创建
+  if (alreadyIsRichText && data.resetRichText) {
+    delete data.resetRichText
+  }
   const walk = list => {
     list.forEach(node => {
       node.data = {
@@ -1027,7 +1034,7 @@ export const generateColorByContent = str => {
 
 //  html转义
 export const htmlEscape = str => {
-  ;[
+  [
     ['&', '&amp;'],
     ['<', '&lt;'],
     ['>', '&gt;']
@@ -1638,4 +1645,17 @@ export const mergeTheme = (dest, source) => {
       return sourceArray
     }
   })
+}
+
+// 获取节点实例的文本样式数据
+export const getNodeRichTextStyles = node => {
+  const res = {}
+  richTextSupportStyleList.forEach(prop => {
+    let value = node.style.merge(prop)
+    if (prop === 'fontSize') {
+      value = value + 'px'
+    }
+    res[prop] = value
+  })
+  return res
 }
