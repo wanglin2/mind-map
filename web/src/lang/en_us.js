@@ -77,7 +77,12 @@ export default {
     tagPositionRight: 'Text right',
     tagPositionBottom: 'Text bottom',
     alwaysShowExpandBtn: 'Always show expand btn',
-    enableAutoEnterTextEditWhenKeydown: 'Auto enter text edit when keydown'
+    enableAutoEnterTextEditWhenKeydown: 'Auto enter text edit when keydown',
+    confirm: 'Confirm',
+    cancel: 'Cancel',
+    changeRichTextTip: 'This operation will clear all historical modification records and modify the mind map data. Do you want to continue?',
+    changeRichTextTip2: 'Do you want to switch to rich text mode?',
+    changeRichTextTip3: 'Do you want to switch to non rich text mode?'
   },
   color: {
     moreColor: 'More color'

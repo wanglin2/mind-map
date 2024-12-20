@@ -76,7 +76,12 @@ export default {
     watermarkAngle: '旋轉角度',
     watermarkTextOpacity: '文字透明度',
     watermarkTextFontSize: '字型大小',
-    belowNode: '顯示在節點下方'
+    belowNode: '顯示在節點下方',
+    confirm: '確定',
+    cancel: '取消',
+    changeRichTextTip: '該操作會清空所有曆史修改記錄，並且修改思維導圖數據，是否繼續？',
+    changeRichTextTip2: '是否切換爲富文本模式？',
+    changeRichTextTip3: '是否切換爲非富文本模式？'
   },
   color: {
     moreColor: '更多顏色'

@@ -75,7 +75,12 @@ export default {
     tagPositionRight: '文本右侧',
     tagPositionBottom: '文本下面',
     alwaysShowExpandBtn: '是否一直显示展开收起按钮',
-    enableAutoEnterTextEditWhenKeydown: '键盘输入时自动进入文本编辑'
+    enableAutoEnterTextEditWhenKeydown: '键盘输入时自动进入文本编辑',
+    confirm: '确定',
+    cancel: '取消',
+    changeRichTextTip: '该操作会清空所有历史修改记录，并且修改思维导图数据，是否继续？',
+    changeRichTextTip2: '是否切换为富文本模式？',
+    changeRichTextTip3: '是否切换为非富文本模式？'
   },
   color: {
     moreColor: '更多颜色'

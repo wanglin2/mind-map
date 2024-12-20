@@ -212,7 +212,7 @@ export default {
       if (!targetNode) return
       this.notHandleDataChange = true
       if (richText) {
-        targetNode.setText(textToNodeRichTextWithWrap(text), true, true)
+        targetNode.setText(textToNodeRichTextWithWrap(text), true)
       } else {
         targetNode.setText(text)
       }

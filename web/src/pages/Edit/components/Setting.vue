@@ -214,7 +214,9 @@
         <div class="rowItem">
           <el-checkbox
             v-model="config.enableAutoEnterTextEditWhenKeydown"
-            @change="updateOtherConfig('enableAutoEnterTextEditWhenKeydown', $event)"
+            @change="
+              updateOtherConfig('enableAutoEnterTextEditWhenKeydown', $event)
+            "
             >{{ $t('setting.enableAutoEnterTextEditWhenKeydown') }}</el-checkbox
           >
         </div>
@@ -496,10 +498,26 @@ export default {
 
     // 切换是否开启节点富文本编辑
     enableNodeRichTextChange(e) {
-      this.mindMap.renderer.textEdit.hideEditTextBox()
-      this.setLocalConfig({
-        openNodeRichText: e
-      })
+      this.$confirm(
+        this.$t('setting.changeRichTextTip'),
+        e
+          ? this.$t('setting.changeRichTextTip2')
+          : this.$t('setting.changeRichTextTip3'),
+        {
+          confirmButtonText: this.$t('setting.confirm'),
+          cancelButtonText: this.$t('setting.cancel'),
+          type: 'warning'
+        }
+      )
+        .then(() => {
+          this.mindMap.renderer.textEdit.hideEditTextBox()
+          this.setLocalConfig({
+            openNodeRichText: e
+          })
+        })
+        .catch(() => {
+          this.enableNodeRichText = !this.enableNodeRichText
+        })
     },
 
     // 本地配置
