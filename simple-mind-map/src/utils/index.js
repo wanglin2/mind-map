@@ -1208,6 +1208,8 @@ export const handleInputPasteText = (e, text) => {
   if (!selection.rangeCount) return
   selection.deleteFromDocument()
   text = text || e.clipboardData.getData('text')
+  // 转义特殊字符
+  text = htmlEscape(text)
   // 去除格式
   text = getTextFromHtml(text)
   // 去除换行
