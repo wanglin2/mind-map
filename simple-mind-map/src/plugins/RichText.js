@@ -8,7 +8,8 @@ import {
   checkSmmFormatData,
   formatGetNodeGeneralization,
   nodeRichTextToTextWithWrap,
-  getNodeRichTextStyles
+  getNodeRichTextStyles,
+  htmlEscape
 } from '../utils'
 import { CONSTANTS, richTextSupportStyleList } from '../constants/constant'
 import MindMapNode from '../core/render/node/MindMapNode'
@@ -760,20 +761,24 @@ class RichText {
     this.afterHandleData()
   }
 
+  handleDataToRichText(data) {
+    data.richText = true
+    data.resetRichText = true
+    data.text = htmlEscape(data.text)
+  }
+
   // 处理导入数据
   handleSetData(data) {
     const walk = root => {
       if (root.data && !root.data.richText) {
-        root.data.richText = true
-        root.data.resetRichText = true
+        this.handleDataToRichText(root.data)
       }
       // 概要
       if (root.data) {
         const generalizationList = formatGetNodeGeneralization(root.data)
         generalizationList.forEach(item => {
           if (!item.richText) {
-            item.richText = true
-            item.resetRichText = true
+            this.handleDataToRichText(item)
           }
         })
       }

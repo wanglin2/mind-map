@@ -1206,7 +1206,10 @@ class Render {
               Array.isArray(smmData) ? smmData : [smmData]
             )
           } else {
-            text = htmlEscape(text)
+            // 如果是富文本模式，那么需要转义特殊字符
+            if (this.hasRichTextPlugin()) {
+              text = htmlEscape(text)
+            }
             const textArr = text
               .split(new RegExp('\r?\n|(?<!\n)\r', 'g'))
               .filter(item => {
