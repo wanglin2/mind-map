@@ -190,6 +190,11 @@ export default class TextEdit {
     if (node.isUseCustomNodeContent()) {
       return
     }
+    // 如果有正在编辑中的节点，那么先结束它
+    const currentEditNode = this.getCurrentEditNode()
+    if (currentEditNode) {
+      this.hideEditTextBox()
+    }
     const { beforeTextEdit, openRealtimeRenderOnNodeTextEdit } =
       this.mindMap.opt
     if (typeof beforeTextEdit === 'function') {
