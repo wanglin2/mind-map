@@ -207,7 +207,6 @@ export default class TextEdit {
       }
       if (!isShow) return
     }
-    this.currentNode = node
     const { offsetLeft, offsetTop } = checkNodeOuter(this.mindMap, node)
     this.mindMap.view.translateXY(offsetLeft, offsetTop)
     const g = node._textData.node
@@ -231,6 +230,7 @@ export default class TextEdit {
       this.mindMap.richText.showEditText(params)
       return
     }
+    this.currentNode = node
     this.showEditTextBox(params)
   }
 
