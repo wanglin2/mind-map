@@ -33,6 +33,7 @@ export default class TextEdit {
     this.hasBodyMousedown = false
     this.textNodePaddingX = 5
     this.textNodePaddingY = 3
+    this.isNeedUpdateTextEditNode = false
     this.bindEvent()
   }
 
@@ -122,6 +123,18 @@ export default class TextEdit {
             ? 'addEventListener'
             : 'removeEventListener'
         ]('keydown', this.onKeydown)
+      }
+    })
+    // 正在编辑文本时，给节点添加了图标等其他内容时需要更新编辑框的位置
+    this.mindMap.on('afterExecCommand', () => {
+      if (!this.isShowTextEdit()) return
+      this.isNeedUpdateTextEditNode = true
+    })
+    this.mindMap.on('node_tree_render_end', () => {
+      if (!this.isShowTextEdit()) return
+      if (this.isNeedUpdateTextEditNode) {
+        this.isNeedUpdateTextEditNode = false
+        this.updateTextEditNode()
       }
     })
   }
