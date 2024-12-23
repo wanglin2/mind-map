@@ -107,6 +107,7 @@ class Search {
 
   // 搜索匹配的节点
   doSearch() {
+    this.clearHighlightOnReadonly()
     this.updateMatchNodeList([])
     this.currentIndex = -1
     const { isOnlySearchCurrentRenderNodes } = this.mindMap.opt
@@ -174,14 +175,8 @@ class Search {
       }
     }
     const { readonly } = this.mindMap.opt
-    // 只读模式下需要激活之前节点的高亮
-    if (readonly) {
-      this.matchNodeList.forEach(node => {
-        if (this.isNodeInstance(node)) {
-          node.closeHighlight()
-        }
-      })
-    }
+    // 只读模式下需要清除之前节点的高亮
+    this.clearHighlightOnReadonly()
     const currentNode = this.matchNodeList[this.currentIndex]
     this.notResetSearchText = true
     const uid = this.isNodeInstance(currentNode)
@@ -203,6 +198,18 @@ class Search {
         this.notResetSearchText = false
       }
     })
+  }
+
+  // 只读模式下清除现有匹配节点的高亮
+  clearHighlightOnReadonly() {
+    const { readonly } = this.mindMap.opt
+    if (readonly) {
+      this.matchNodeList.forEach(node => {
+        if (this.isNodeInstance(node)) {
+          node.closeHighlight()
+        }
+      })
+    }
   }
 
   // 定位到指定搜索结果索引的节点
