@@ -92,7 +92,7 @@ export default class TextEdit {
       })
     })
     this.mindMap.on('scale', this.onScale)
-    // // 监听按键事件，判断是否自动进入文本编辑模式
+    // 监听按键事件，判断是否自动进入文本编辑模式
     if (this.mindMap.opt.enableAutoEnterTextEditWhenKeydown) {
       window.addEventListener('keydown', this.onKeydown)
     }
@@ -152,6 +152,9 @@ export default class TextEdit {
     const node = activeNodeList[0]
     // 当正在输入中文或英文或数字时，如果没有按下组合键，那么自动进入文本编辑模式
     if (node && this.checkIsAutoEnterTextEditKey(e)) {
+      // 忽略第一个键值，避免中文输入法时进入编辑会导致第一个键值变成字母的问题
+      // 带来的问题是按的第一下纯粹是进入文本编辑，但没有变成输入
+      e.preventDefault()
       this.show({
         node,
         e,
