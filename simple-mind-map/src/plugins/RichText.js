@@ -9,7 +9,8 @@ import {
   formatGetNodeGeneralization,
   nodeRichTextToTextWithWrap,
   getNodeRichTextStyles,
-  htmlEscape
+  htmlEscape,
+  compareVersion
 } from '../utils'
 import { CONSTANTS, richTextSupportStyleList } from '../constants/constant'
 import MindMapNode from '../core/render/node/MindMapNode'
@@ -762,22 +763,29 @@ class RichText {
   }
 
   handleDataToRichText(data) {
+    const oldIsRichText = data.richText
     data.richText = true
     data.resetRichText = true
-    data.text = htmlEscape(data.text)
+    // 如果原本就是富文本，那么不能转换
+    if (!oldIsRichText) {
+      data.text = htmlEscape(data.text)
+    }
   }
 
   // 处理导入数据
   handleSetData(data) {
+    // 短期处理，为了兼容老数据，长期会去除
+    const isOldRichTextVersion =
+      !data.smmVersion || compareVersion(data.smmVersion, '0.13.0') === '<'
     const walk = root => {
-      if (root.data && !root.data.richText) {
+      if (root.data && (!root.data.richText || isOldRichTextVersion)) {
         this.handleDataToRichText(root.data)
       }
       // 概要
       if (root.data) {
         const generalizationList = formatGetNodeGeneralization(root.data)
         generalizationList.forEach(item => {
-          if (!item.richText) {
+          if (!item.richText || isOldRichTextVersion) {
             this.handleDataToRichText(item)
           }
         })

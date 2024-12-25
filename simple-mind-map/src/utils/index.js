@@ -175,7 +175,7 @@ export const copyRenderTree = (tree, root, removeActiveState = false) => {
     })
   }
   // data、children外的其他字段
-  Object.keys(root).forEach((key) => {
+  Object.keys(root).forEach(key => {
     if (!['data', 'children'].includes(key) && !/^_/.test(key)) {
       tree[key] = root[key]
     }
@@ -216,7 +216,7 @@ export const copyNodeTree = (
     })
   }
   // data、children外的其他字段
-  Object.keys(root).forEach((key) => {
+  Object.keys(root).forEach(key => {
     if (!['data', 'children'].includes(key) && !/^_/.test(key)) {
       tree[key] = root[key]
     }
@@ -1672,4 +1672,26 @@ export const getNodeRichTextStyles = node => {
     res[prop] = value
   })
   return res
+}
+
+// 判断两个版本号的关系
+/*
+a > b 返回 >
+a < b 返回 <
+a = b 返回 =
+*/
+export const compareVersion = (a, b) => {
+  const aArr = String(a).split('.')
+  const bArr = String(b).split('.')
+  const max = Math.max(aArr.length, bArr.length)
+  for (let i = 0; i < max; i++) {
+    const ai = aArr[i] || 0
+    const bi = bArr[i] || 0
+    if (ai > bi) {
+      return '>'
+    } else if (ai < bi) {
+      return '<'
+    }
+  }
+  return '='
 }
