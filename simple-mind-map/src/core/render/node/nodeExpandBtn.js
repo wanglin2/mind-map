@@ -12,6 +12,7 @@ function createExpandNodeContent() {
   if (this.mindMap.opt.isShowExpandNum) {
     // 展开的节点
     this._openExpandNode = new Text()
+    this._openExpandNode.addClass('smm-expand-btn-text')
     // 文本垂直居中
     this._openExpandNode.attr({
       'text-anchor': 'middle',

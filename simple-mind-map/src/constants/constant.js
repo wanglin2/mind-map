@@ -208,7 +208,7 @@ export const cssContent = `
     stroke-width: 2;
   }
 
-  .smm-text-node-wrap {
+  .smm-text-node-wrap, .smm-expand-btn-text {
     user-select: none;
   }
 `
