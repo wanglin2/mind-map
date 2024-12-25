@@ -6,6 +6,7 @@ import {
   transformTreeDataToObject
 } from '../../utils'
 import { ERROR_TYPES } from '../../constants/constant'
+import pkg from '../../../package.json'
 
 //  命令类
 class Command {
@@ -172,7 +173,9 @@ class Command {
   //  获取渲染树数据副本
   getCopyData() {
     if (!this.mindMap.renderer.renderTree) return null
-    return copyRenderTree({}, this.mindMap.renderer.renderTree, true)
+    const res = copyRenderTree({}, this.mindMap.renderer.renderTree, true)
+    res.smmVersion = pkg.version
+    return res
   }
 
   // 移除节点数据中的uid
