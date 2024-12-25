@@ -174,6 +174,12 @@ export const copyRenderTree = (tree, root, removeActiveState = false) => {
       tree.children[index] = copyRenderTree({}, item, removeActiveState)
     })
   }
+  // data、children外的其他字段
+  Object.keys(root).forEach((key) => {
+    if (!['data', 'children'].includes(key) && !/^_/.test(key)) {
+      tree[key] = root[key]
+    }
+  })
   return tree
 }
 
@@ -209,6 +215,12 @@ export const copyNodeTree = (
       tree.children[index] = copyNodeTree({}, item, removeActiveState, removeId)
     })
   }
+  // data、children外的其他字段
+  Object.keys(root).forEach((key) => {
+    if (!['data', 'children'].includes(key) && !/^_/.test(key)) {
+      tree[key] = root[key]
+    }
+  })
   return tree
 }
 
