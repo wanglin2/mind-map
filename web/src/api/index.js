@@ -11,24 +11,6 @@ let mindMapData = null
 
 /**
  * @Author: 王林
- * @Date: 2021-08-02 22:36:48
- * @Desc: 克隆思维导图数据，去除激活状态
- */
-const copyMindMapTreeData = (tree, root) => {
-  if (!root) return null
-  tree.data = simpleDeepClone(root.data)
-  // tree.data.isActive = false
-  tree.children = []
-  if (root.children && root.children.length > 0) {
-    root.children.forEach((item, index) => {
-      tree.children[index] = copyMindMapTreeData({}, item)
-    })
-  }
-  return tree
-}
-
-/**
- * @Author: 王林
  * @Date: 2021-08-01 10:10:49
  * @Desc: 获取缓存的思维导图数据
  */
@@ -65,7 +47,7 @@ export const storeData = data => {
     } else {
       originData = getData()
     }
-    originData.root = copyMindMapTreeData({}, data)
+    originData.root = data
     if (window.takeOverApp) {
       mindMapData = originData
       window.takeOverAppMethods.saveMindMapData(originData)
