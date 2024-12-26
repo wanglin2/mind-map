@@ -190,7 +190,8 @@ export const copyNodeTree = (
   removeActiveState = false,
   removeId = true
 ) => {
-  tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data)
+  const rootData = root.nodeData ? root.nodeData : root
+  tree.data = simpleDeepClone(rootData.data)
   // 移除节点uid
   if (removeId) {
     delete tree.data.uid
@@ -216,9 +217,9 @@ export const copyNodeTree = (
     })
   }
   // data、children外的其他字段
-  Object.keys(root).forEach(key => {
+  Object.keys(rootData).forEach(key => {
     if (!['data', 'children'].includes(key) && !/^_/.test(key)) {
-      tree[key] = root[key]
+      tree[key] = rootData[key]
     }
   })
   return tree
@@ -1005,6 +1006,7 @@ export const createUidForAppointNodes = (
   createNewId = false,
   handle = null
 ) => {
+  console.log(appointNodes)
   const walk = list => {
     list.forEach(node => {
       if (!node.data) {
