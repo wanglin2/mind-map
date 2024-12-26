@@ -290,6 +290,21 @@ export const throttle = (fn, time = 300, ctx) => {
   }
 }
 
+// 防抖函数
+export const debounce = (fn, wait = 300, ctx) => {
+  let timeout = null
+
+  return (...args) => {
+    if (timeout) clearTimeout(timeout)
+    const callNow = !timeout
+    timeout = setTimeout(() => {
+      timeout = null
+      fn.apply(ctx, args)
+    }, wait)
+    if (callNow) fn.apply(ctx, args)
+  }
+}
+
 //  异步执行任务队列
 export const asyncRun = (taskList, callback = () => {}) => {
   let index = 0

@@ -33,6 +33,7 @@ import {
   formatGetNodeGeneralization,
   sortNodeList,
   throttle,
+  debounce,
   checkClipboardReadEnable,
   isNodeNotNeedRenderData
 } from '../../utils'
@@ -161,7 +162,7 @@ class Render {
       this.mindMap.on('view_data_change', onViewDataChange)
     }
     // 文本编辑时实时更新节点大小
-    this.onNodeTextEditChange = this.onNodeTextEditChange.bind(this)
+    this.onNodeTextEditChange = debounce(this.onNodeTextEditChange, 100, this)
     if (openRealtimeRenderOnNodeTextEdit) {
       this.mindMap.on('node_text_edit_change', this.onNodeTextEditChange)
     }
