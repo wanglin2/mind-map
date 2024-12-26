@@ -160,6 +160,8 @@ class MindMapNode {
     }
     // 初始化
     this.getSize()
+    // 初始需要计算一下概要节点的大小，否则计算布局时获取不到概要的大小
+    this.updateGeneralization()
     this.initDragHandle()
   }
 
