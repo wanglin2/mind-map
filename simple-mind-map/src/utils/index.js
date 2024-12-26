@@ -1006,7 +1006,6 @@ export const createUidForAppointNodes = (
   createNewId = false,
   handle = null
 ) => {
-  console.log(appointNodes)
   const walk = list => {
     list.forEach(node => {
       if (!node.data) {

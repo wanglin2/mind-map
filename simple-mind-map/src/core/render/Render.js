@@ -748,10 +748,12 @@ class Render {
     // 动态指定的子节点数据也需要添加相关属性
     appointChildren = addDataToAppointNodes(appointChildren, params)
     const alreadyIsRichText = appointData && appointData.richText
+    let createNewId = false
     list.forEach(node => {
       if (node.isGeneralization || node.isRoot) {
         return
       }
+      appointChildren = simpleDeepClone(appointChildren)
       const parent = node.parent
       const isOneLayer = node.layerIndex === 1
       // 新插入节点的默认文本
@@ -772,8 +774,9 @@ class Render {
           uid: createUid(),
           ...(appointData || {})
         },
-        children: [...createUidForAppointNodes(appointChildren)]
+        children: [...createUidForAppointNodes(appointChildren, createNewId)]
       }
+      createNewId = true
       parent.nodeData.children.splice(index + 1, 0, newNodeData)
     })
     // 如果同时对多个节点插入子节点，需要清除原来激活的节点
@@ -801,14 +804,17 @@ class Render {
     }
     if (isRichText) params.resetRichText = true
     nodeList = addDataToAppointNodes(nodeList, params)
+    let createNewId = false
     list.forEach(node => {
       if (node.isGeneralization || node.isRoot) {
         return
       }
+      nodeList = simpleDeepClone(nodeList)
       const parent = node.parent
       // 计算插入位置
       const index = getNodeDataIndex(node)
-      const newNodeList = createUidForAppointNodes(simpleDeepClone(nodeList))
+      const newNodeList = createUidForAppointNodes(nodeList, createNewId)
+      createNewId = true
       parent.nodeData.children.splice(index + 1, 0, ...newNodeList)
     })
     if (focusNewNode) {
@@ -849,10 +855,12 @@ class Render {
     // 动态指定的子节点数据也需要添加相关属性
     appointChildren = addDataToAppointNodes(appointChildren, params)
     const alreadyIsRichText = appointData && appointData.richText
+    let createNewId = false
     list.forEach(node => {
       if (node.isGeneralization) {
         return
       }
+      appointChildren = simpleDeepClone(appointChildren)
       if (!node.nodeData.children) {
         node.nodeData.children = []
       }
@@ -871,8 +879,9 @@ class Render {
           ...params,
           ...(appointData || {})
         },
-        children: [...createUidForAppointNodes(appointChildren)]
+        children: [...createUidForAppointNodes(appointChildren, createNewId)]
       }
+      createNewId = true
       node.nodeData.children.push(newNode)
       // 插入子节点时自动展开子节点
       node.setData({
@@ -904,14 +913,18 @@ class Render {
     }
     if (isRichText) params.resetRichText = true
     childList = addDataToAppointNodes(childList, params)
+    let createNewId = false
     list.forEach(node => {
       if (node.isGeneralization) {
         return
       }
+      childList = simpleDeepClone(childList)
       if (!node.nodeData.children) {
         node.nodeData.children = []
       }
-      childList = createUidForAppointNodes(childList)
+      childList = createUidForAppointNodes(childList, createNewId)
+      // 第一个引用不需要重新创建uid，后面的需要重新创建，否则id会重复
+      createNewId = true
       node.nodeData.children.push(...childList)
       // 插入子节点时自动展开子节点
       node.setData({
@@ -1526,7 +1539,6 @@ class Render {
 
   //   粘贴节点到节点
   pasteNode(data) {
-    data = simpleDeepClone(data)
     data = formatDataToArray(data)
     this.mindMap.execCommand('INSERT_MULTI_CHILD_NODE', [], data)
   }
