@@ -1526,25 +1526,9 @@ class Render {
 
   //   粘贴节点到节点
   pasteNode(data) {
+    data = simpleDeepClone(data)
     data = formatDataToArray(data)
-    if (this.activeNodeList.length <= 0 || data.length <= 0) {
-      return
-    }
-    this.activeNodeList.forEach(node => {
-      // 概要节点不允许添加下级节点
-      if (node.isGeneralization) return
-      node.setData({
-        expand: true
-      })
-      node.nodeData.children.push(
-        ...data.map(item => {
-          const newData = simpleDeepClone(item)
-          createUidForAppointNodes([newData], true)
-          return newData
-        })
-      )
-    })
-    this.mindMap.render()
+    this.mindMap.execCommand('INSERT_MULTI_CHILD_NODE', [], data)
   }
 
   //  设置节点样式
