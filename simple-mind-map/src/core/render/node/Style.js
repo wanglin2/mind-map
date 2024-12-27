@@ -270,9 +270,9 @@ class Style {
   }
 
   //  内置图标
-  iconNode(node) {
+  iconNode(node, color) {
     node.attr({
-      fill: this.merge('color')
+      fill: color || this.merge('color')
     })
   }
 

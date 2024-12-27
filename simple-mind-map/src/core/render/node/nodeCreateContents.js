@@ -303,15 +303,16 @@ function createTextNode(specifyText) {
 
 //  创建超链接节点
 function createHyperlinkNode() {
-  let { hyperlink, hyperlinkTitle } = this.getData()
+  const { hyperlink, hyperlinkTitle } = this.getData()
   if (!hyperlink) {
     return
   }
-  const { customHyperlinkJump } = this.mindMap.opt
-  let iconSize = this.mindMap.themeConfig.iconSize
-  let node = new SVG().size(iconSize, iconSize)
+  const { customHyperlinkJump, hyperlinkIcon } = this.mindMap.opt
+  const { icon, style } = hyperlinkIcon
+  const iconSize = this.getNodeIconSize('hyperlinkIcon')
+  const node = new SVG().size(iconSize, iconSize)
   // 超链接节点
-  let a = new A().to(hyperlink).target('_blank')
+  const a = new A().to(hyperlink).target('_blank')
   a.node.addEventListener('click', e => {
     if (typeof customHyperlinkJump === 'function') {
       e.preventDefault()
@@ -324,8 +325,8 @@ function createHyperlinkNode() {
   // 添加一个透明的层，作为鼠标区域
   a.rect(iconSize, iconSize).fill({ color: 'transparent' })
   // 超链接图标
-  let iconNode = SVG(iconsSvg.hyperlink).size(iconSize, iconSize)
-  this.style.iconNode(iconNode)
+  const iconNode = SVG(icon || iconsSvg.hyperlink).size(iconSize, iconSize)
+  this.style.iconNode(iconNode, style.color)
   a.add(iconNode)
   node.add(a)
   return {
@@ -410,16 +411,17 @@ function createNoteNode() {
   if (!this.getData('note')) {
     return null
   }
-  let iconSize = this.mindMap.themeConfig.iconSize
-  let node = new SVG()
+  const { icon, style } = this.mindMap.opt.noteIcon
+  const iconSize = this.getNodeIconSize('noteIcon')
+  const node = new SVG()
     .attr('cursor', 'pointer')
     .addClass('smm-node-note')
     .size(iconSize, iconSize)
   // 透明的层，用来作为鼠标区域
   node.add(new Rect().size(iconSize, iconSize).fill({ color: 'transparent' }))
   // 备注图标
-  let iconNode = SVG(iconsSvg.note).size(iconSize, iconSize)
-  this.style.iconNode(iconNode)
+  const iconNode = SVG(icon || iconsSvg.note).size(iconSize, iconSize)
+  this.style.iconNode(iconNode, style.color)
   node.add(iconNode)
   // 备注tooltip
   if (!this.mindMap.opt.customNoteContentShow) {
@@ -481,7 +483,8 @@ function createAttachmentNode() {
   if (!attachmentUrl) {
     return
   }
-  const iconSize = this.mindMap.themeConfig.iconSize
+  const iconSize = this.getNodeIconSize('attachmentIcon')
+  const { icon, style } = this.mindMap.opt.attachmentIcon
   const node = new SVG().attr('cursor', 'pointer').size(iconSize, iconSize)
   if (attachmentName) {
     node.add(SVG(`<title>${attachmentName}</title>`))
@@ -489,8 +492,8 @@ function createAttachmentNode() {
   // 透明的层，用来作为鼠标区域
   node.add(new Rect().size(iconSize, iconSize).fill({ color: 'transparent' }))
   // 备注图标
-  const iconNode = SVG(iconsSvg.attachment).size(iconSize, iconSize)
-  this.style.iconNode(iconNode)
+  const iconNode = SVG(icon || iconsSvg.attachment).size(iconSize, iconSize)
+  this.style.iconNode(iconNode, style.color)
   node.add(iconNode)
   node.on('click', e => {
     this.mindMap.emit('node_attachmentClick', this, e, node)
@@ -505,9 +508,15 @@ function createAttachmentNode() {
   }
 }
 
+// 获取节点图标大小
+function getNodeIconSize(prop) {
+  const { style } = this.mindMap.opt[prop]
+  return isUndef(style.size) ? this.mindMap.themeConfig.iconSize : style.size
+}
+
 // 获取节点备注显示位置
 function getNoteContentPosition() {
-  const iconSize = this.mindMap.themeConfig.iconSize
+  const iconSize = this.getNodeIconSize('noteIcon')
   const { scaleY } = this.mindMap.view.getTransformData().transform
   const iconSizeAddScale = iconSize * scaleY
   let { left, top } = this._noteData.node.node.getBoundingClientRect()
@@ -558,6 +567,7 @@ export default {
   createNoteNode,
   createAttachmentNode,
   getNoteContentPosition,
+  getNodeIconSize,
   measureCustomNodeContentSize,
   isUseCustomNodeContent
 }

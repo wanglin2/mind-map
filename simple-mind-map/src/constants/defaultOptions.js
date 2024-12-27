@@ -134,7 +134,7 @@ export const defaultOpt = {
   // 开启该特性后，需要给你的输入框绑定keydown事件，并禁止冒泡
   enableAutoEnterTextEditWhenKeydown: false,
   // 当enableAutoEnterTextEditWhenKeydown选项开启时生效，当通过按键进入文本编辑时是否自动清空原有文本
-  autoEmptyTextWhenKeydownEnterEdit: false, 
+  autoEmptyTextWhenKeydownEnterEdit: false,
   // 自定义对剪贴板文本的处理。当按ctrl+v粘贴时会读取用户剪贴板中的文本和图片，默认只会判断文本是否是普通文本和simple-mind-map格式的节点数据，如果你想处理其他思维导图的数据，比如processon、zhixi等，那么可以传递一个函数，接受当前剪贴板中的文本为参数，返回处理后的数据，可以返回两种类型：
   /*
     1.返回一个纯文本，那么会直接以该文本创建一个子节点
@@ -268,6 +268,30 @@ export const defaultOpt = {
   // 实例化完后是否立刻进行一次历史数据入栈操作
   // 即调用mindMap.command.addHistory方法
   addHistoryOnInit: true,
+  // 自定义节点备注图标
+  noteIcon: {
+    icon: '', // svg字符串，如果不是确定要使用svg自带的样式，否则请去除其中的fill等样式属性
+    style: {
+      // size: 20,// 图标大小，不手动设置则会使用主题的iconSize配置
+      // color: '',// 图标颜色，不手动设置则会使用节点文本的颜色
+    }
+  },
+  // 自定义节点超链接图标
+  hyperlinkIcon: {
+    icon: '', // svg字符串，如果不是确定要使用svg自带的样式，否则请去除其中的fill等样式属性
+    style: {
+      // size: 20,// 图标大小，不手动设置则会使用主题的iconSize配置
+      // color: '',// 图标颜色，不手动设置则会使用节点文本的颜色
+    }
+  },
+  // 自定义节点附件图标
+  attachmentIcon: {
+    icon: '', // svg字符串，如果不是确定要使用svg自带的样式，否则请去除其中的fill等样式属性
+    style: {
+      // size: 20,// 图标大小，不手动设置则会使用主题的iconSize配置
+      // color: '',// 图标颜色，不手动设置则会使用节点文本的颜色
+    }
+  },
 
   // 【Select插件】
   // 多选节点时鼠标移动到边缘时的画布移动偏移量
