@@ -374,8 +374,8 @@ export default class TextEdit {
     this.textEditNode.style.minWidth =
       rect.width + this.textNodePaddingX * 2 + 'px'
     this.textEditNode.style.minHeight = rect.height + 'px'
-    this.textEditNode.style.left = rect.left + 'px'
-    this.textEditNode.style.top = rect.top + 'px'
+    this.textEditNode.style.left = Math.floor(rect.left) + 'px'
+    this.textEditNode.style.top = Math.floor(rect.top) + 'px'
     this.textEditNode.style.display = 'block'
     this.textEditNode.style.maxWidth = textAutoWrapWidth * scale + 'px'
     if (isMultiLine) {
@@ -413,8 +413,8 @@ export default class TextEdit {
       rect.width + this.textNodePaddingX * 2 + 'px'
     this.textEditNode.style.minHeight =
       rect.height + this.textNodePaddingY * 2 + 'px'
-    this.textEditNode.style.left = rect.left + 'px'
-    this.textEditNode.style.top = rect.top + 'px'
+    this.textEditNode.style.left = Math.floor(rect.left) + 'px'
+    this.textEditNode.style.top = Math.floor(rect.top) + 'px'
   }
 
   // 获取编辑区域的背景填充
