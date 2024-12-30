@@ -1160,6 +1160,8 @@ export const removeFromParentNodeData = node => {
   if (!node || !node.parent) return
   const index = getNodeDataIndex(node)
   if (index === -1) return
+  // 这里同步将实例中的关联关系也删除。此改动是因为  不再createNode方法中做重置所以在这删除操作中单独处理
+  node.parent.children.splice(index, 1)
   node.parent.nodeData.children.splice(index, 1)
 }
 

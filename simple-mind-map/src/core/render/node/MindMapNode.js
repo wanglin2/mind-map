@@ -164,7 +164,11 @@ class MindMapNode {
     this.updateGeneralization()
     this.initDragHandle()
   }
-
+  //子节点中是否包含这个节点
+  isHaveNode(node){
+    const children =  this.children
+    return children.includes(node)
+  }
   // 支持自定义位置
   get left() {
     return this.customLeft || this._left
@@ -688,6 +692,41 @@ class MindMapNode {
         ](this, true)
         this.renderer.emitNodeActiveEvent(isActive ? null : this)
       }
+      // 使用shift键进行多选和取消多选
+      if (!readonly && e.shiftKey && enableCtrlKeyNodeSelection) {
+        this.isMultipleChoice = true
+        let isActive = this.getData('isActive')
+        if (!isActive){
+          const activeNodeList =  this.renderer.activeNodeList
+          if(activeNodeList.length){
+            const children = this.parent.children
+            const currentIndex = children.indexOf(this)
+            let max = currentIndex
+            let min = currentIndex
+            let isAllChildren = true
+            for (let i = 0; i < activeNodeList.length; i++) {
+              let item = activeNodeList[i]
+              const ind = children.indexOf(item)
+              if(ind < 0){
+                isAllChildren = false
+                break;
+              } else{
+                ind >= max ? max = ind : null
+                min >= ind ? min = ind : null
+              }
+            }
+            if(isAllChildren){
+              let c = this.parent.children.slice(min,max+1)
+              c.forEach(child => {
+                this.mindMap.renderer[
+                  'addNodeToActiveList'
+                  ](child, true)
+                this.renderer.emitNodeActiveEvent(child)
+              })
+            }
+          }
+        }
+      }
       this.mindMap.emit('node_mousedown', this, e)
     })
     this.group.on('mouseup', e => {
@@ -748,8 +787,11 @@ class MindMapNode {
       if (
         !(this.getData('isActive') && this.renderer.activeNodeList.length === 1)
       ) {
-        this.renderer.clearActiveNodeList()
-        this.active(e)
+        // 多选的时候 右键在已选中的节点上时 不取消其它节点的选中状态
+        if(!this.getData('isActive')){
+          this.renderer.clearActiveNodeList()
+          this.active(e)
+        }
       }
       this.mindMap.emit('node_contextmenu', e, this)
     })
@@ -873,14 +915,23 @@ class MindMapNode {
       this.updateDragHandle()
     }
   }
-
+// 渲染父节点的连接线 只有不可见得父节点才会去渲染  这样可以做到当只渲染可见连线时 出现单个节点没有连接父节点得情况
+  renderParentLine(node,performanceConfig){
+    const parNode = node.parent
+    if(!parNode) return
+    const isInClient = parNode.checkIsInClient(performanceConfig.padding)
+    //如果父节点可见 就不继续遍历
+    if(isInClient) return
+    parNode.renderLine()
+    this.renderParentLine(parNode,performanceConfig)
+  }
   // 递归渲染
   // forceRender：强制渲染，无论是否处于画布可视区域
   // async：异步渲染
   render(callback = () => {}, forceRender = false, async = false) {
     // 节点
-    // 重新渲染连线
-    this.renderLine()
+    // 不在全量渲染
+    //this.renderLine()
     const { openPerformance, performanceConfig } = this.mindMap.opt
     // 强制渲染、或没有开启性能模式、或不在画布可视区域内不渲染节点内容
     // 根节点不进行懒加载，始终渲染，因为滚动条插件依赖根节点进行计算
@@ -890,6 +941,10 @@ class MindMapNode {
       this.checkIsInClient(performanceConfig.padding) ||
       this.isRoot
     ) {
+      //给不可见的父节点画线 防止出现单独的节点没有连线问题
+      this.renderParentLine(this,performanceConfig)
+      //只给屏幕内的节点画线
+      this.renderLine()
       if (!this.group) {
         // 创建组
         this.group = new G()

@@ -681,7 +681,8 @@ class Render {
     const data = this.mindMap.command[type](step)
     if (data) {
       this.renderTree = data
-      this.mindMap.render()
+      // 给前进后退增加类型  主要是当它这样操作时全量渲染  暂时未作两次数据得变更比对 这个是简单临时方案
+      this.mindMap.render(()=>{},"HISTORY_RECORD")
     }
     this.mindMap.emit('data_change', data)
   }
@@ -987,7 +988,12 @@ class Render {
       const parent = node.parent
       // 获取当前节点所在位置
       const index = getNodeDataIndex(node)
+      //这里主要是 节点还未创建  只能记录下创建在父节点的位置等创建好了再添加
+      newNode.data.parentIndex = index
       parent.nodeData.children.splice(index, 1, newNode)
+      //这里主要是 节点还未创建  只能清空父节点然后记录下父节点的uid等创建好了替换
+      node.parent = null;
+      node.parentUid = newNode.data.uid
     })
     // 如果同时对多个节点插入子节点，需要清除原来激活的节点
     if (focusNewNode) {
@@ -1330,6 +1336,10 @@ class Render {
       // 目标节点
       let existParent = exist.parent
       let existBorthers = existParent.children
+      item.layerIndex =exist.layerIndex
+      item.parent =exist.parent
+      item.getSize()
+      item.needLayout = true
       let existIndex = getNodeIndexInNodeList(exist, existBorthers)
       if (existIndex === -1) {
         return
@@ -1432,6 +1442,22 @@ class Render {
       } else {
         const parent = node.parent
         const index = getNodeDataIndex(node)
+        const children = node.children || [];
+        // 对子节点实例也操作
+        children.forEach((item)=>{
+          item.layerIndex =node.layerIndex
+          item.parent =node.parent
+          if(item.layerIndex === 1){
+            // 如果删除父节点后自己点变成1级节点 重新计算样式
+            item.getSize()
+            item.needLayout = true
+          }
+        })
+        parent.children.splice(
+          index,
+          1,
+          ...children
+        )
         parent.nodeData.children.splice(
           index,
           1,
@@ -1526,11 +1552,16 @@ class Render {
       return !item.isRoot
     })
     nodeList.forEach(item => {
+      item.layerIndex = toNode.layerIndex + 1
       this.removeNodeFromActiveList(item)
       removeFromParentNodeData(item)
       toNode.setData({
         expand: true
       })
+      item.parent = toNode
+      item.getSize()
+      item.needLayout = true
+      toNode.children.push(item)
       toNode.nodeData.children.push(item.nodeData)
     })
     this.emitNodeActiveEvent()
