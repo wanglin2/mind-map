@@ -341,13 +341,10 @@ export default class TextEdit {
         } else {
           handleInputPasteText(e)
         }
+        this.emitTextChangeEvent()
       })
       this.textEditNode.addEventListener('input', () => {
-        this.mindMap.emit('node_text_edit_change', {
-          node: this.currentNode,
-          text: this.getEditText(),
-          richText: false
-        })
+        this.emitTextChangeEvent()
       })
       const targetNode =
         this.mindMap.opt.customInnerElsAppendTo || document.body
@@ -397,6 +394,15 @@ export default class TextEdit {
       focusInput(this.textEditNode)
     }
     this.cacheEditingText = ''
+  }
+
+  // 派发节点文本编辑事件
+  emitTextChangeEvent() {
+    this.mindMap.emit('node_text_edit_change', {
+      node: this.currentNode,
+      text: this.getEditText(),
+      richText: false
+    })
   }
 
   // 更新文本编辑框的大小和位置
