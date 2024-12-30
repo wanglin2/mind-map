@@ -55,7 +55,7 @@ class LogicalStructure extends Base {
       (cur, parent, isRoot, layerIndex, index, ancestors) => {
         let newNode = cur?._node
         // 只有变动的节点  结构改变  和  执行撤销和前进的操作才进入创建节点的操作
-        if(!newNode || activeUiDList.includes(cur.data.uid) || this.checkIsNeedResizeSources() || this.renderer.renderSource === CONSTANTS.CHANGE_LAYOUT || this.renderer.renderSource === "HISTORY_RECORD"){
+        if(!newNode || activeUiDList.includes(cur.data.uid) || this.checkIsNeedResizeSources() || [CONSTANTS.CHANGE_LAYOUT,CONSTANTS.HISTORY_RECORD].includes(this.renderer.renderSource)){
           newNode = this.createNode(cur, parent, isRoot, layerIndex, index, ancestors,this.renderer.renderSource !== "HISTORY_RECORD")
         }
         // 将缓存节点移至外边去缓存。保证每个节点缓存都是最新的

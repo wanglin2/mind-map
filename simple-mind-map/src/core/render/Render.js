@@ -682,7 +682,7 @@ class Render {
     if (data) {
       this.renderTree = data
       // 给前进后退增加类型  主要是当它这样操作时全量渲染  暂时未作两次数据得变更比对 这个是简单临时方案
-      this.mindMap.render(()=>{},"HISTORY_RECORD")
+      this.mindMap.render(()=>{},CONSTANTS.HISTORY_RECORD)
     }
     this.mindMap.emit('data_change', data)
   }

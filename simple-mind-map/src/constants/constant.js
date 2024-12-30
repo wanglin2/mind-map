@@ -2,6 +2,7 @@
 export const CONSTANTS = {
   CHANGE_THEME: 'changeTheme',
   CHANGE_LAYOUT: 'changeLayout',
+  HISTORY_RECORD:'historyRecord',
   SET_DATA: 'setData',
   MODE: {
     READONLY: 'readonly',
