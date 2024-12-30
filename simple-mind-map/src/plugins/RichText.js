@@ -273,9 +273,7 @@ class RichText {
       this.textEditNode.innerHTML = this.cacheEditingText || nodeText
     }
     this.initQuillEditor()
-    document.querySelector(
-      '.' + CONSTANTS.EDIT_NODE_CLASS.RICH_TEXT_EDIT_WRAP
-    ).style.minHeight = originHeight + 'px'
+    this.setQuillContainerMinHeight(originHeight)
     this.showTextEdit = true
     // 如果是刚创建的节点，那么默认全选，否则普通激活不全选，除非selectTextOnEnterEditText配置为true
     // 在selectTextOnEnterEditText时，如果是在keydown事件进入的节点编辑，也不需要全选
@@ -308,6 +306,13 @@ class RichText {
     })
   }
 
+  // 设置quill编辑器容器的最小高度
+  setQuillContainerMinHeight(minHeight) {
+    document.querySelector(
+      '.' + CONSTANTS.EDIT_NODE_CLASS.RICH_TEXT_EDIT_WRAP
+    ).style.minHeight = minHeight + 'px'
+  }
+
   // 更新文本编辑框的大小和位置
   updateTextEditNode() {
     if (!this.node) return
@@ -320,6 +325,7 @@ class RichText {
     this.textEditNode.style.minHeight = originHeight + 'px'
     this.textEditNode.style.left = rect.left + 'px'
     this.textEditNode.style.top = rect.top + 'px'
+    this.setQuillContainerMinHeight(originHeight)
   }
 
   // 删除文本编辑框元素
