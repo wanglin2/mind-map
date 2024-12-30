@@ -224,6 +224,10 @@ const mindMap = new MindMap({
         <img src="./web/src/assets/avatar/峰.jpg" style="width: 50px;height: 50px;" />
         <span>峰</span>
     </span>
+    <span>
+        <img src="./web/src/assets/avatar/御风.jpg" style="width: 50px;height: 50px;" />
+        <span>御风</span>
+    </span>
 </p>
 
 ## 青铜赞助
