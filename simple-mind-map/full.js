@@ -30,7 +30,7 @@ MindMap.markdown = markdown
 MindMap.iconList = icons.nodeIconList
 MindMap.constants = constants
 MindMap.defaultTheme = defaultTheme
-MindMap.version = '0.12.2'
+MindMap.version = '0.13.0'
 
 MindMap.usePlugin(MiniMap)
   .usePlugin(Watermark)
