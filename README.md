@@ -230,6 +230,8 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>炫</b></sub>
             </a>
         </td>
+    </tr>
+    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/default.png" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
@@ -251,8 +253,6 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>千帆</b></sub>
             </a>
         </td>
-    </tr>
-    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/布林.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
@@ -302,6 +302,8 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>雨馨</b></sub>
             </a>
         </td>
+    </tr>
+    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/峰.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
@@ -393,6 +395,8 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>*棐</b></sub>
             </a>
         </td>
+    </tr>
+    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/南风.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
@@ -414,8 +418,6 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>乙</b></sub>
             </a>
         </td>
-    </tr>
-    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/敏.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
@@ -465,6 +467,8 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>飞箭</b></sub>
             </a>
         </td>
+    </tr>
+    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/戚永峰.png" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
@@ -507,8 +511,6 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>继龙</b></sub>
             </a>
         </td>
-    </tr>
-    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/欣.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
@@ -537,6 +539,8 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>建明</b></sub>
             </a>
         </td>
+    </tr>
+    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/汪津合.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
@@ -600,8 +604,6 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>SR</b></sub>
             </a>
         </td>
-    </tr>
-    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/逆水行舟.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
@@ -609,6 +611,8 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>逆水行舟</b></sub>
             </a>
         </td>
+    </tr>
+    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/L.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
@@ -679,6 +683,8 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>宏涛</b></sub>
             </a>
         </td>
+    </tr>
+    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/最多5个字.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
@@ -693,8 +699,6 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>ZX</b></sub>
             </a>
         </td>
-    </tr>
-    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/default.png" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
@@ -751,6 +755,8 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>夏虫不语冰</b></sub>
             </a>
         </td>
+    </tr>
+    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/晴空.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
@@ -786,8 +792,6 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>Lawliet</b></sub>
             </a>
         </td>
-    </tr>
-    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/一叶孤舟.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
@@ -823,6 +827,8 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>海云</b></sub>
             </a>
         </td>
+    </tr>
+    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/皮老板.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
@@ -879,8 +885,6 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>Xavier</b></sub>
             </a>
         </td>
-    </tr>
-    <tr>
         <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
             <a href="#">
                 <img src="./web/src/assets/avatar/冒号括号.png" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
