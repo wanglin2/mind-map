@@ -111,7 +111,7 @@ export default {
           ? nodeRichTextToTextWithWrap(root.data.text)
           : root.data.text
         text = htmlEscape(text)
-        text = text.replaceAll(/\n/g, '<br>')
+        text = text.replace(/\n/g, '<br>')
         root.textCache = text // 保存一份修改前的数据，用于对比是否修改了
         root.label = text
         root.uid = root.data.uid

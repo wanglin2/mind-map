@@ -293,7 +293,7 @@ class Search {
     if (richText) {
       return replaceHtmlText(text, searchText, replaceText)
     } else {
-      return text.replaceAll(searchText, replaceText)
+      return text.replace(new RegExp(searchText, 'g'), replaceText)
     }
   }
 

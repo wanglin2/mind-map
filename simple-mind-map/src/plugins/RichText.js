@@ -338,7 +338,7 @@ class RichText {
   // 获取当前正在编辑的内容
   getEditText() {
     // https://github.com/slab/quill/issues/4509
-    return this.quill.container.firstChild.innerHTML.replaceAll(/  +/g, match =>
+    return this.quill.container.firstChild.innerHTML.replace(/  +/g, match =>
       '&nbsp;'.repeat(match.length)
     )
     // 去除ql-cursor节点
