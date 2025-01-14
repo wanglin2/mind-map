@@ -8,6 +8,7 @@ import nodeCreateContentsMethods from './nodeCreateContents'
 import nodeExpandBtnPlaceholderRectMethods from './nodeExpandBtnPlaceholderRect'
 import nodeModifyWidthMethods from './nodeModifyWidth'
 import nodeCooperateMethods from './nodeCooperate'
+import QuickCreateChildBtnMethods from './QuickCreateChildBtn'
 import { CONSTANTS } from '../../../constants/constant'
 import {
   copyNodeTree,
@@ -156,6 +157,13 @@ class MindMapNode {
       Object.keys(nodeModifyWidthMethods).forEach(item => {
         proto[item] = nodeModifyWidthMethods[item]
       })
+      // 快捷创建子节点按钮
+      if (this.mindMap.opt.isShowCreateChildBtnIcon) {
+        Object.keys(QuickCreateChildBtnMethods).forEach(item => {
+          proto[item] = QuickCreateChildBtnMethods[item]
+        })
+        this.initQuickCreateChildBtn()
+      }
       proto.bindEvent = true
     }
     // 初始化
@@ -782,10 +790,11 @@ class MindMapNode {
       return
     }
     this.updateNodeActiveClass()
-    const { alwaysShowExpandBtn, notShowExpandBtn } = this.mindMap.opt
+    const { alwaysShowExpandBtn, notShowExpandBtn, isShowCreateChildBtnIcon } =
+      this.mindMap.opt
+    const childrenLength = this.getChildrenLength()
     // 不显示展开收起按钮则不需要处理
     if (!notShowExpandBtn) {
-      const childrenLength = this.nodeData.children.length
       if (alwaysShowExpandBtn) {
         // 需要移除展开收缩按钮
         if (this._expandBtn && childrenLength <= 0) {
@@ -803,6 +812,19 @@ class MindMapNode {
           this.hideExpandBtn()
         } else {
           this.showExpandBtn()
+        }
+      }
+    }
+    // 更新快速创建子节点按钮
+    if (isShowCreateChildBtnIcon) {
+      if (childrenLength > 0) {
+        this.removeQuickCreateChildBtn()
+      } else {
+        const { isActive } = this.getData()
+        if (isActive) {
+          this.showQuickCreateChildBtn()
+        } else {
+          this.hideQuickCreateChildBtn()
         }
       }
     }
@@ -863,11 +885,18 @@ class MindMapNode {
   // 根据是否激活更新节点
   updateNodeByActive(active) {
     if (this.group) {
+      const { isShowCreateChildBtnIcon } = this.mindMap.opt
       // 切换激活状态，需要切换展开收起按钮的显隐
       if (active) {
         this.showExpandBtn()
+        if (isShowCreateChildBtnIcon) {
+          this.showQuickCreateChildBtn()
+        }
       } else {
         this.hideExpandBtn()
+        if (isShowCreateChildBtnIcon) {
+          this.hideQuickCreateChildBtn()
+        }
       }
       this.updateNodeActiveClass()
       this.updateDragHandle()
@@ -1090,7 +1119,7 @@ class MindMapNode {
     if (this.getData('expand') === false) {
       return
     }
-    let childrenLen = this.nodeData.children.length
+    let childrenLen = this.getChildrenLength()
     // 切换为鱼骨结构时，清空根节点和二级节点的连线
     if (
       this.mindMap.opt.layout === CONSTANTS.LAYOUT.FISHBONE &&
@@ -1406,6 +1435,11 @@ class MindMapNode {
       this.checkEnableDragModifyNodeWidth() &&
       this.customTextWidth !== undefined
     )
+  }
+
+  // 获取子节点的数量
+  getChildrenLength() {
+    return this.nodeData.children ? this.nodeData.children.length : 0
   }
 }
 

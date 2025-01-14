@@ -292,6 +292,18 @@ export const defaultOpt = {
       // color: '',// 图标颜色，不手动设置则会使用节点文本的颜色
     }
   },
+  // 是否显示快捷创建子节点按钮
+  isShowCreateChildBtnIcon: true,
+  // 自定义快捷创建子节点按钮图标
+  quickCreateChildBtnIcon: {
+    icon: '', // svg字符串，如果不是确定要使用svg自带的样式，否则请去除其中的fill等样式属性
+    style: {
+      // 图标大小使用的是expandBtnSize选项
+      // color: '',// 图标颜色，不手动设置则会使用expandBtnStyle选项的color字段
+    }
+  },
+  // 自定义快捷创建子节点按钮的点击操作，
+  customQuickCreateChildBtnClick: null,
 
   // 【Select插件】
   // 多选节点时鼠标移动到边缘时的画布移动偏移量

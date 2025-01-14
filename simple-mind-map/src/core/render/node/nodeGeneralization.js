@@ -106,7 +106,7 @@ function renderGeneralization(forceRender) {
 
 // 更新节点概要数据
 function updateGeneralizationData() {
-  const childrenLength = this.nodeData.children.length
+  const childrenLength = this.getChildrenLength()
   const list = this.formatGetGeneralization()
   const newList = []
   list.forEach(item => {

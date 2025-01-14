@@ -79,7 +79,7 @@ function updateExpandBtnNode() {
           color: expandBtnStyle.strokeColor
         })
         // 计算子节点数量
-        let count = this.sumNode(this.nodeData.children)
+        let count = this.sumNode(this.nodeData.children || [])
         if (typeof expandBtnNumHandler === 'function') {
           const res = expandBtnNumHandler(count, this)
           if (!isUndef(res)) {
@@ -105,11 +105,7 @@ function updateExpandBtnPos() {
 
 //  创建展开收缩按钮
 function renderExpandBtn() {
-  if (
-    !this.nodeData.children ||
-    this.nodeData.children.length <= 0 ||
-    this.isRoot
-  ) {
+  if (this.getChildrenLength() <= 0 || this.isRoot) {
     return
   }
   if (this._expandBtn) {

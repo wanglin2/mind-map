@@ -3,11 +3,7 @@ import { Rect } from '@svgdotjs/svg.js'
 // 渲染展开收起按钮的隐藏占位元素
 function renderExpandBtnPlaceholderRect() {
   // 根节点或没有子节点不需要渲染
-  if (
-    !this.nodeData.children ||
-    this.nodeData.children.length <= 0 ||
-    this.isRoot
-  ) {
+  if (this.getChildrenLength() <= 0 || this.isRoot) {
     return
   }
   // 默认显示展开按钮的情况下或不显示展开收起按钮的情况下不需要渲染
@@ -48,7 +44,7 @@ function updateExpandBtnPlaceholderRect() {
     this.renderExpandBtnPlaceholderRect()
   }
   // 没有子节点到有子节点需要渲染
-  if (this.nodeData.children && this.nodeData.children.length > 0) {
+  if (this.getChildrenLength() > 0) {
     if (!this._unVisibleRectRegionNode) {
       this.renderExpandBtnPlaceholderRect()
     }
