@@ -189,7 +189,7 @@ export default {
   navigatorToolbar: {
     openMiniMap: 'Open mini map',
     closeMiniMap: 'Close mini map',
-    readonly: 'Change to eadonly',
+    readonly: 'Change to Readonly',
     edit: 'Change to edit',
     backToRoot: 'Back to root node',
     changeSourceCodeEdit: 'Switch to source code editing mode'
