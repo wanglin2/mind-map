@@ -21,7 +21,8 @@ import {
   lineStyleMap as lineStyleMapZh,
   numberTypeList as numberTypeListZh,
   numberLevelList as numberLevelListZh,
-  linearGradientDirList as linearGradientDirListZh
+  linearGradientDirList as linearGradientDirListZh,
+  alignList as alignListZh
 } from './zh'
 import {
   fontFamilyList as fontFamilyListEn,
@@ -37,7 +38,8 @@ import {
   downTypeList as downTypeListEn,
   numberTypeList as numberTypeListEn,
   numberLevelList as numberLevelListEn,
-  linearGradientDirList as linearGradientDirListEn
+  linearGradientDirList as linearGradientDirListEn,
+  alignList as alignListEn
 } from './en'
 import {
   fontFamilyList as fontFamilyListZhtw,
@@ -53,7 +55,8 @@ import {
   downTypeList as downTypeListZhtw,
   numberTypeList as numberTypeListZhtw,
   numberLevelList as numberLevelListZhtw,
-  linearGradientDirList as linearGradientDirListZhtw
+  linearGradientDirList as linearGradientDirListZhtw,
+  alignList as alignListZhtw
 } from './zhtw'
 
 const fontFamilyList = {
@@ -152,6 +155,12 @@ const linearGradientDirList = {
   zhtw: linearGradientDirListZhtw
 }
 
+const alignList = {
+  zh: alignListZh,
+  en: alignListEn,
+  zhtw: alignListZhtw
+}
+
 export {
   fontSizeList,
   borderWidthList,
@@ -175,5 +184,6 @@ export {
   downTypeList,
   numberTypeList,
   numberLevelList,
-  linearGradientDirList
+  linearGradientDirList,
+  alignList
 }

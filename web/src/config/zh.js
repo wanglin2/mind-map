@@ -721,3 +721,19 @@ export const linearGradientDirList = [
     end: [0, 0]
   }
 ]
+
+// 文本对齐方式
+export const alignList = [
+  {
+    name: '左对齐',
+    value: 'left'
+  },
+  {
+    name: '居中对齐',
+    value: 'center'
+  },
+  {
+    name: '右对齐',
+    value: 'right'
+  }
+]

@@ -10,7 +10,9 @@
         <div class="title noTop">{{ $t('style.text') }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.fontFamily') }}</span>
+            <span class="name" v-if="!openNodeRichText">{{
+              $t('style.fontFamily')
+            }}</span>
             <el-select
               size="mini"
               style="width: 100px"
@@ -29,10 +31,12 @@
             </el-select>
           </div>
           <div class="rowItem">
-            <span class="name">{{ $t('style.fontSize') }}</span>
+            <span class="name" v-if="!openNodeRichText">{{
+              $t('style.fontSize')
+            }}</span>
             <el-select
               size="mini"
-              style="width: 80px"
+              style="width: 60px"
               v-model="style.fontSize"
               placeholder=""
               @change="update('fontSize')"
@@ -43,6 +47,23 @@
                 :label="item"
                 :value="item"
                 :style="{ fontSize: item + 'px' }"
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <div class="rowItem" v-if="openNodeRichText">
+            <el-select
+              size="mini"
+              style="width: 80px"
+              v-model="style.textAlign"
+              placeholder=""
+              @change="update('textAlign')"
+            >
+              <el-option
+                v-for="item in alignList"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
               >
               </el-option>
             </el-select>
@@ -500,7 +521,8 @@ import {
   borderRadiusList,
   shapeList,
   shapeListMap,
-  linearGradientDirList
+  linearGradientDirList,
+  alignList
 } from '@/config'
 import { mapState } from 'vuex'
 
@@ -546,7 +568,8 @@ export default {
         linearGradientDir: '',
         lineFlow: false,
         lineFlowForward: true,
-        lineFlowDuration: 1
+        lineFlowDuration: 1,
+        textAlign: ''
       }
     }
   },
@@ -554,7 +577,8 @@ export default {
     ...mapState({
       isDark: state => state.localConfig.isDark,
       activeSidebar: state => state.activeSidebar,
-      supportLineFlow: state => state.supportLineFlow
+      supportLineFlow: state => state.supportLineFlow,
+      openNodeRichText: state => state.localConfig.openNodeRichText
     }),
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
@@ -572,6 +596,9 @@ export default {
       return (
         linearGradientDirList[this.$i18n.locale] || linearGradientDirList.zh
       )
+    },
+    alignList() {
+      return alignList[this.$i18n.locale] || alignList.zh
     }
   },
   watch: {

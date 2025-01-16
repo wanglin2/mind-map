@@ -357,7 +357,8 @@ export default {
     fontSize: '字型大小',
     color: '字型顏色',
     backgroundColor: '背景顏色',
-    removeFormat: '清除樣式'
+    removeFormat: '清除樣式',
+    textAlign: '對齊方式'
   },
   other: {
     loading: '載入中，請稍候...'

@@ -368,7 +368,8 @@ export default {
     fontSize: 'Font size',
     color: 'Color',
     backgroundColor: 'Background color',
-    removeFormat: 'Clear Style'
+    removeFormat: 'Clear Style',
+    textAlign: 'Text align'
   },
   other: {
     loading: 'Loading, please wait...'

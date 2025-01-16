@@ -110,6 +110,25 @@
       </el-popover>
     </el-tooltip>
 
+    <el-tooltip :content="$t('richTextToolbar.textAlign')" placement="top">
+      <el-popover placement="bottom" trigger="hover">
+        <div class="fontOptionsList" :class="{ isDark: isDark }">
+          <div
+            class="fontOptionItem"
+            v-for="item in alignList"
+            :key="item.value"
+            :class="{ active: formatInfo.align === item.value }"
+            @click="changeTextAlign(item.value)"
+          >
+            {{ item.name }}
+          </div>
+        </div>
+        <div class="btn" slot="reference">
+          <span class="icon iconfont iconjuzhongduiqi"></span>
+        </div>
+      </el-popover>
+    </el-tooltip>
+
     <el-tooltip :content="$t('richTextToolbar.removeFormat')" placement="top">
       <div class="btn" @click="removeFormat">
         <span class="icon iconfont iconqingchu"></span>
@@ -119,7 +138,7 @@
 </template>
 
 <script>
-import { fontFamilyList, fontSizeList } from '@/config'
+import { fontFamilyList, fontSizeList, alignList } from '@/config'
 import Color from './Color'
 import { mapState } from 'vuex'
 
@@ -153,6 +172,10 @@ export default {
 
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
+    },
+
+    alignList() {
+      return alignList[this.$i18n.locale] || alignList.zh
     }
   },
   created() {
@@ -227,6 +250,13 @@ export default {
       this.formatInfo.background = background
       this.mindMap.richText.formatText({
         background
+      })
+    },
+
+    changeTextAlign(align) {
+      this.formatInfo.align = align
+      this.mindMap.richText.formatText({
+        align
       })
     },
 
