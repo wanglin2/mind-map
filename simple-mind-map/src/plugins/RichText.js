@@ -97,6 +97,19 @@ class RichText {
         word-break: break-all;
         user-select: none;
       }
+
+      .ql-editor .ql-align-left, 
+      .smm-richtext-node-wrap .ql-align-left {
+        text-align: left;
+      }
+
+      .smm-richtext-node-wrap .ql-align-right {
+        text-align: right;
+      }
+
+      .smm-richtext-node-wrap .ql-align-center {
+        text-align: center;
+      }
       `
     )
     let cssText = `
@@ -106,6 +119,7 @@ class RichText {
         height: auto;
         line-height: 1.2;
         -webkit-user-select: text;
+        text-align: inherit;
       }
       
       .ql-container {
@@ -148,6 +162,8 @@ class RichText {
 
     this.extendFont([])
 
+    this.extendAlign()
+
     // 扩展quill的字号列表
     const SizeAttributor = Quill.import('attributors/class/size')
     SizeAttributor.whitelist = fontSizeList
@@ -170,6 +186,13 @@ class RichText {
     const FontStyle = Quill.import('attributors/style/font')
     FontStyle.whitelist = fontFamilyList
     Quill.register(FontStyle, true)
+  }
+
+  // 扩展文本对齐方式
+  extendAlign() {
+    const AlignFormat = Quill.import('formats/align')
+    AlignFormat.whitelist = ['right', 'center', 'justify', 'left']
+    Quill.register(AlignFormat, true)
   }
 
   // 显示文本编辑控件
@@ -444,7 +467,8 @@ class RichText {
         'background',
         'font',
         'size',
-        'formula'
+        'formula',
+        'align'
       ], // 明确指定允许的格式，不包含有序列表，无序列表等
       theme: 'snow'
     })
@@ -606,9 +630,19 @@ class RichText {
     if (!this.range && !this.lastRange) return
     const rangeLost = !this.range
     const range = rangeLost ? this.lastRange : this.range
-    clear
-      ? this.quill.removeFormat(range.index, range.length)
-      : this.quill.formatText(range.index, range.length, config)
+    if (clear) {
+      this.quill.removeFormat(range.index, range.length)
+    } else {
+      const { align, ...rest } = config
+      // 文本对齐需要对行进行格式化
+      if (align) {
+        this.quill.formatLine(range.index, range.length, 'align', align)
+      }
+      // 其他内容对文本
+      if (Object.keys(rest).length > 0) {
+        this.quill.formatText(range.index, range.length, rest)
+      }
+    }
     if (rangeLost) {
       this.quill.setSelection(this.lastRange.index, this.lastRange.length)
     }
@@ -655,6 +689,9 @@ class RichText {
         case 'color':
           config.color = value
           break
+        case 'textAlign':
+          config.align = value
+          break
         default:
           break
       }
@@ -688,6 +725,9 @@ class RichText {
           break
         case 'color':
           data.color = value
+          break
+        case 'align':
+          data.textAlign = value
           break
         default:
           break

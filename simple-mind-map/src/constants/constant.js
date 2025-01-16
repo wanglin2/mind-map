@@ -234,5 +234,6 @@ export const richTextSupportStyleList = [
   'fontWeight',
   'fontStyle',
   'textDecoration',
-  'color'
+  'color',
+  'textAlign'
 ]
