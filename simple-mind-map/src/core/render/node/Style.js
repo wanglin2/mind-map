@@ -191,45 +191,6 @@ class Style {
       })
   }
 
-  // 生成内联样式
-  createStyleText(customStyle = {}) {
-    const styles = {
-      color: this.merge('color'),
-      fontFamily: this.merge('fontFamily'),
-      fontSize: this.merge('fontSize'),
-      fontWeight: this.merge('fontWeight'),
-      fontStyle: this.merge('fontStyle'),
-      textDecoration: this.merge('textDecoration'),
-      ...customStyle
-    }
-    return `
-      color: ${styles.color};
-      font-family: ${styles.fontFamily};
-      font-size: ${styles.fontSize + 'px'};
-      font-weight: ${styles.fontWeight};
-      font-style: ${styles.fontStyle};
-      text-decoration: ${styles.textDecoration}
-    `
-  }
-
-  // 获取文本样式
-  getTextFontStyle() {
-    const styles = {
-      color: this.merge('color'),
-      fontFamily: this.merge('fontFamily'),
-      fontSize: this.merge('fontSize'),
-      fontWeight: this.merge('fontWeight'),
-      fontStyle: this.merge('fontStyle'),
-      textDecoration: this.merge('textDecoration')
-    }
-    return {
-      italic: styles.fontStyle === 'italic',
-      bold: styles.fontWeight,
-      fontSize: styles.fontSize,
-      fontFamily: styles.fontFamily
-    }
-  }
-
   //  html文字节点
   domText(node, fontSizeScale = 1) {
     const styles = {
@@ -238,7 +199,8 @@ class Style {
       fontSize: this.merge('fontSize'),
       fontWeight: this.merge('fontWeight'),
       fontStyle: this.merge('fontStyle'),
-      textDecoration: this.merge('textDecoration')
+      textDecoration: this.merge('textDecoration'),
+      textAlign: this.merge('textAlign')
     }
     node.style.color = styles.color
     node.style.textDecoration = styles.textDecoration
@@ -246,6 +208,7 @@ class Style {
     node.style.fontSize = styles.fontSize * fontSizeScale + 'px'
     node.style.fontWeight = styles.fontWeight || 'normal'
     node.style.fontStyle = styles.fontStyle
+    node.style.textAlign = styles.textAlign
   }
 
   //  标签文字

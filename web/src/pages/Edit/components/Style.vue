@@ -10,9 +10,7 @@
         <div class="title noTop">{{ $t('style.text') }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name" v-if="!openNodeRichText">{{
-              $t('style.fontFamily')
-            }}</span>
+            <!-- <span class="name">{{ $t('style.fontFamily') }}</span> -->
             <el-select
               size="mini"
               style="width: 100px"
@@ -31,9 +29,7 @@
             </el-select>
           </div>
           <div class="rowItem">
-            <span class="name" v-if="!openNodeRichText">{{
-              $t('style.fontSize')
-            }}</span>
+            <!-- <span class="name">{{ $t('style.fontSize') }}</span> -->
             <el-select
               size="mini"
               style="width: 60px"
@@ -51,7 +47,7 @@
               </el-option>
             </el-select>
           </div>
-          <div class="rowItem" v-if="openNodeRichText">
+          <div class="rowItem">
             <el-select
               size="mini"
               style="width: 80px"
@@ -577,8 +573,7 @@ export default {
     ...mapState({
       isDark: state => state.localConfig.isDark,
       activeSidebar: state => state.activeSidebar,
-      supportLineFlow: state => state.supportLineFlow,
-      openNodeRichText: state => state.localConfig.openNodeRichText
+      supportLineFlow: state => state.supportLineFlow
     }),
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
