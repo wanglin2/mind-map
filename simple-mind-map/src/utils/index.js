@@ -297,12 +297,10 @@ export const debounce = (fn, wait = 300, ctx) => {
 
   return (...args) => {
     if (timeout) clearTimeout(timeout)
-    const callNow = !timeout
     timeout = setTimeout(() => {
       timeout = null
       fn.apply(ctx, args)
     }, wait)
-    if (callNow) fn.apply(ctx, args)
   }
 }
 
