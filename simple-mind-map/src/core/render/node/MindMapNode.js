@@ -448,6 +448,10 @@ class MindMapNode {
     this.group.clear()
     const { hoverRectPadding, tagPosition, openRealtimeRenderOnNodeTextEdit } =
       this.mindMap.opt
+    // 避免编辑过程中展开收起按钮闪烁的问题
+    if (openRealtimeRenderOnNodeTextEdit && this._expandBtn) {
+      this.group.add(this._expandBtn)
+    }
     let { width, height, textContentItemMargin } = this
     let { paddingY } = this.getPaddingVale()
     const halfBorderWidth = this.getBorderWidth() / 2
