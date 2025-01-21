@@ -215,13 +215,32 @@ export default {
   computed: {
     ...mapState({
       isDark: state => state.localConfig.isDark,
-      isHandleLocalFile: state => state.isHandleLocalFile
+      isHandleLocalFile: state => state.isHandleLocalFile,
+      openNodeRichText: state => state.localConfig.openNodeRichText
     })
   },
   watch: {
     isHandleLocalFile(val) {
       if (!val) {
         Notification.closeAll()
+      }
+    },
+    openNodeRichText: {
+      immediate: true,
+      handler(val) {
+        const index = this.list.findIndex(item => {
+          return item === 'formula'
+        })
+        if (val) {
+          if (index === -1) {
+            this.list.splice(13, 0, 'formula')
+          }
+        } else {
+          if (index !== -1) {
+            this.list.splice(index, 1)
+          }
+        }
+        this.computeToolbarShow()
       }
     }
   },
@@ -246,6 +265,7 @@ export default {
   methods: {
     // 计算工具按钮如何显示
     computeToolbarShow() {
+      if (!this.$refs.toolbarRef) return
       const windowWidth = window.innerWidth - 40
       const all = [...this.list]
       let index = 1
