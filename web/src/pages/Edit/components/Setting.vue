@@ -417,8 +417,11 @@ export default {
   },
   created() {
     this.initLoacalConfig()
+    this.$bus.$on('toggleOpenNodeRichText', this.onToggleOpenNodeRichText)
   },
-  beforeDestroy() {},
+  beforeDestroy() {
+    this.$bus.$off('toggleOpenNodeRichText', this.onToggleOpenNodeRichText)
+  },
   methods: {
     ...mapMutations(['setLocalConfig']),
 
@@ -518,6 +521,13 @@ export default {
         .catch(() => {
           this.enableNodeRichText = !this.enableNodeRichText
         })
+    },
+
+    onToggleOpenNodeRichText(val) {
+      this.setLocalConfig({
+        openNodeRichText: val
+      })
+      this.enableNodeRichText = val
     },
 
     // 本地配置

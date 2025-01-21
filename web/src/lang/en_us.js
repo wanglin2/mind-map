@@ -331,7 +331,8 @@ export default {
     no: 'No',
     exportError: 'Export failed',
     dragTip: 'Release here to import the file',
-    deleteNodeImgTip: 'Are you sure to delete the node image?'
+    deleteNodeImgTip: 'Are you sure to delete the node image?',
+    autoOpenNodeRichTextTip: 'Detected imported rich text content, automatically enabled rich text mode'
   },
   mouseAction: {
     tip1:

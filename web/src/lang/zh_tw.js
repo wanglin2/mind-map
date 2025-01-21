@@ -322,7 +322,8 @@ export default {
     yes: '是',
     no: '否',
     exportError: '匯出失敗',
-    dragTip: '在此釋放以匯入檔案'
+    dragTip: '在此釋放以匯入檔案',
+    autoOpenNodeRichTextTip: '檢測到導入了富文本內容，已自動開啓富文本模式'
   },
   mouseAction: {
     tip1: '目前：左鍵拖曳畫布，右鍵框選節點',

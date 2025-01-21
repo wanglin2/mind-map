@@ -654,13 +654,24 @@ export default {
     // 动态设置思维导图数据
     setData(data) {
       this.handleShowLoading()
+      let rootNodeData = null
       if (data.root) {
         this.mindMap.setFullData(data)
+        rootNodeData = data.root
       } else {
         this.mindMap.setData(data)
+        rootNodeData = data
       }
       this.mindMap.view.reset()
       this.manualSave()
+      // 如果导入的是富文本内容，那么自动开启富文本模式
+      if (rootNodeData.data.richText && !this.openNodeRichText) {
+        this.$bus.$emit('toggleOpenNodeRichText', true)
+        this.$notify.info({
+          title: this.$t('edit.tip'),
+          message: this.$t('edit.autoOpenNodeRichTextTip')
+        })
+      }
     },
 
     // 重新渲染

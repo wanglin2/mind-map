@@ -323,7 +323,8 @@ export default {
     no: '否',
     exportError: '导出失败',
     dragTip: '在此释放以导入该文件',
-    deleteNodeImgTip: '是否确认删除该节点图片？'
+    deleteNodeImgTip: '是否确认删除该节点图片？',
+    autoOpenNodeRichTextTip: '检测到导入了富文本内容，已自动开启富文本模式'
   },
   mouseAction: {
     tip1: '当前：左键拖动画布，右键框选节点',
