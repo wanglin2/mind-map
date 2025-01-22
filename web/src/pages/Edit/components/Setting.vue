@@ -2,7 +2,6 @@
   <Sidebar ref="sidebar" :title="$t('setting.title')">
     <div class="sidebarContent" :class="{ isDark: isDark }" v-if="data">
       <!-- 水印 -->
-      <div class="title noTop">{{ $t('setting.watermark') }}</div>
       <div class="row">
         <!-- 是否显示水印 -->
         <div class="rowItem">
