@@ -7,7 +7,8 @@ function renderExpandBtnPlaceholderRect() {
     return
   }
   // 默认显示展开按钮的情况下或不显示展开收起按钮的情况下不需要渲染
-  const { alwaysShowExpandBtn, notShowExpandBtn } = this.mindMap.opt
+  const { alwaysShowExpandBtn, notShowExpandBtn, expandBtnSize } =
+    this.mindMap.opt
   if (!alwaysShowExpandBtn && !notShowExpandBtn) {
     let { width, height } = this
     if (!this._unVisibleRectRegionNode) {
@@ -19,7 +20,7 @@ function renderExpandBtnPlaceholderRect() {
     this.group.add(this._unVisibleRectRegionNode)
     this.renderer.layout.renderExpandBtnRect(
       this._unVisibleRectRegionNode,
-      this.expandBtnSize,
+      expandBtnSize,
       width,
       height,
       this

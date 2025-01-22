@@ -13,7 +13,8 @@ function showQuickCreateChildBtn() {
   if (this._quickCreateChildBtn) {
     this.group.add(this._quickCreateChildBtn)
   } else {
-    const { quickCreateChildBtnIcon, expandBtnStyle } = this.mindMap.opt
+    const { quickCreateChildBtnIcon, expandBtnStyle, expandBtnSize } =
+      this.mindMap.opt
     const { icon, style } = quickCreateChildBtnIcon
     let { color, fill } = expandBtnStyle || {
       color: '#808080',
@@ -22,17 +23,17 @@ function showQuickCreateChildBtn() {
     color = style.color || color
     // 图标节点
     const iconNode = SVG(icon || btnsSvg.quickCreateChild).size(
-      this.expandBtnSize,
-      this.expandBtnSize
+      expandBtnSize,
+      expandBtnSize
     )
     iconNode.css({
       cursor: 'pointer'
     })
-    iconNode.x(0).y(-this.expandBtnSize / 2)
+    iconNode.x(0).y(-expandBtnSize / 2)
     this.style.iconNode(iconNode, color)
     // 填充节点
-    const fillNode = new Circle().size(this.expandBtnSize)
-    fillNode.x(0).y(-this.expandBtnSize / 2)
+    const fillNode = new Circle().size(expandBtnSize)
+    fillNode.x(0).y(-expandBtnSize / 2)
     fillNode.fill({ color: fill }).css({
       cursor: 'pointer'
     })

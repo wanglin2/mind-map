@@ -95,7 +95,9 @@ export default {
     // 点鼠标hover和激活时显示的矩形边框的圆角大小
     hoverRectRadius: 5,
     // 文本对齐
-    align: 'left'
+    align: 'left',
+    // 图片放置位置
+    imgPlacement: 'top'
     // 下列样式也支持给节点设置，用于覆盖最外层的设置
     // paddingX,
     // paddingY,
@@ -131,7 +133,8 @@ export default {
     lineMarkerDir: 'end',
     hoverRectColor: '',
     hoverRectRadius: 5,
-    textAlign: 'left'
+    textAlign: 'left',
+    imgPlacement: 'top'
   },
   // 三级及以下节点样式
   node: {
@@ -157,7 +160,8 @@ export default {
     lineMarkerDir: 'end',
     hoverRectColor: '',
     hoverRectRadius: 5,
-    textAlign: 'left'
+    textAlign: 'left',
+    imgPlacement: 'top'
   },
   // 概要节点样式
   generalization: {
@@ -182,7 +186,8 @@ export default {
     endDir: [1, 0],
     hoverRectColor: '',
     hoverRectRadius: 5,
-    textAlign: 'left'
+    textAlign: 'left',
+    imgPlacement: 'top'
   }
 }
 
