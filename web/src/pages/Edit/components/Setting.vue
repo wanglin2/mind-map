@@ -221,6 +221,16 @@
           >
         </div>
       </div>
+      <!-- 是否开启文件拖入页面导入的方式 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="localConfigs.enableDragImport"
+            @change="updateLocalConfig('enableDragImport', $event)"
+            >{{ $t('setting.enableDragImport') }}</el-checkbox
+          >
+        </div>
+      </div>
       <!-- 是否开启手绘风格 -->
       <div class="row" v-if="supportHandDrawnLikeStyle">
         <div class="rowItem">
@@ -392,7 +402,8 @@ export default {
       enableNodeRichText: true,
       localConfigs: {
         isShowScrollbar: false,
-        isUseHandDrawnLikeStyle: false
+        isUseHandDrawnLikeStyle: false,
+        enableDragImport: false
       }
     }
   },
@@ -437,7 +448,7 @@ export default {
       this.enableNodeRichText = this.localConfig.openNodeRichText
       this.mousewheelAction = this.localConfig.mousewheelAction
       this.mousewheelZoomActionReverse = this.localConfig.mousewheelZoomActionReverse
-      ;['isShowScrollbar', 'isUseHandDrawnLikeStyle'].forEach(key => {
+      Object.keys(this.localConfigs).forEach(key => {
         this.localConfigs[key] = this.localConfig[key]
       })
     },

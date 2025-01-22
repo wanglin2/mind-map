@@ -197,6 +197,7 @@ export default {
       isZenMode: state => state.localConfig.isZenMode,
       openNodeRichText: state => state.localConfig.openNodeRichText,
       isShowScrollbar: state => state.localConfig.isShowScrollbar,
+      enableDragImport: state => state.localConfig.enableDragImport,
       useLeftKeySelectionRightKeyDrag: state =>
         state.localConfig.useLeftKeySelectionRightKeyDrag,
       isUseHandDrawnLikeStyle: state =>
@@ -430,7 +431,7 @@ export default {
               })
           })
         }
-        // createNodePrefixContent: (node) => {
+        // createNodePrefixContent: node => {
         //   const el = document.createElement('div')
         //   el.style.width = '50px'
         //   el.style.height = '50px'
@@ -889,13 +890,14 @@ export default {
 
     // 拖拽文件到页面导入
     onDragenter() {
-      if (this.isDragOutlineTreeNode) return
+      if (!this.enableDragImport || this.isDragOutlineTreeNode) return
       this.showDragMask = true
     },
     onDragleave() {
       this.showDragMask = false
     },
     onDrop(e) {
+      if (!this.enableDragImport) return
       this.showDragMask = false
       const dt = e.dataTransfer
       const file = dt.files && dt.files[0]

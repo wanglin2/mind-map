@@ -80,7 +80,8 @@ export default {
     cancel: '取消',
     changeRichTextTip: '该操作会清空所有历史修改记录，并且修改思维导图数据，是否继续？',
     changeRichTextTip2: '是否切换为富文本模式？',
-    changeRichTextTip3: '是否切换为非富文本模式？'
+    changeRichTextTip3: '是否切换为非富文本模式？',
+    enableDragImport: '是否允许直接拖拽文件到页面进行导入'
   },
   color: {
     moreColor: '更多颜色'

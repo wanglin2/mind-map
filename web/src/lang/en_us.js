@@ -82,7 +82,8 @@ export default {
     cancel: 'Cancel',
     changeRichTextTip: 'This operation will clear all historical modification records and modify the mind map data. Do you want to continue?',
     changeRichTextTip2: 'Do you want to switch to rich text mode?',
-    changeRichTextTip3: 'Do you want to switch to non rich text mode?'
+    changeRichTextTip3: 'Do you want to switch to non rich text mode?',
+    enableDragImport: 'Is it allowed to directly drag and drop files to the page for import'
   },
   color: {
     moreColor: 'More color'
