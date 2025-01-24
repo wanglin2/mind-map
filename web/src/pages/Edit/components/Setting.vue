@@ -321,6 +321,36 @@
           </el-select>
         </div>
       </div>
+      <!-- 图片和文本内容的间距 -->
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">{{ $t('setting.imgTextMargin') }}</span>
+          <el-slider
+            style="width: 150px"
+            v-model="config.imgTextMargin"
+            @change="
+              value => {
+                updateOtherConfig('imgTextMargin', value)
+              }
+            "
+          ></el-slider>
+        </div>
+      </div>
+      <!-- 文本各内容的间距 -->
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">{{ $t('setting.textContentMargin') }}</span>
+          <el-slider
+            style="width: 150px"
+            v-model="config.textContentMargin"
+            @change="
+              value => {
+                updateOtherConfig('textContentMargin', value)
+              }
+            "
+          ></el-slider>
+        </div>
+      </div>
     </div>
   </Sidebar>
 </template>
@@ -355,7 +385,9 @@ export default {
         createNewNodeBehavior: 'default',
         openRealtimeRenderOnNodeTextEdit: true,
         alwaysShowExpandBtn: false,
-        enableAutoEnterTextEditWhenKeydown: true
+        enableAutoEnterTextEditWhenKeydown: true,
+        imgTextMargin: 0,
+        textContentMargin: 0
       },
       watermarkConfig: {
         show: false,
@@ -447,7 +479,7 @@ export default {
       storeConfig({
         config: this.data.config
       })
-      if (['alwaysShowExpandBtn'].includes(key)) {
+      if (['alwaysShowExpandBtn', 'imgTextMargin', 'textContentMargin'].includes(key)) {
         this.mindMap.reRender()
       }
     },

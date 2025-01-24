@@ -80,7 +80,9 @@ export default {
     changeRichTextTip: '该操作会清空所有历史修改记录，并且修改思维导图数据，是否继续？',
     changeRichTextTip2: '是否切换为富文本模式？',
     changeRichTextTip3: '是否切换为非富文本模式？',
-    enableDragImport: '是否允许直接拖拽文件到页面进行导入'
+    enableDragImport: '是否允许直接拖拽文件到页面进行导入',
+    imgTextMargin: '节点图片和文本间隔',
+    textContentMargin: '节点各种内容间隔'
   },
   color: {
     moreColor: '更多颜色'
