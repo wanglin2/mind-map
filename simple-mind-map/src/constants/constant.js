@@ -71,7 +71,13 @@ export const CONSTANTS = {
     NOT_ACTIVE: 'notActive',
     ACTIVE_ONLY: 'activeOnly'
   },
-  TAG_POSITION: {
+  TAG_PLACEMENT: {
+    RIGHT: 'right',
+    BOTTOM: 'bottom'
+  },
+  IMG_PLACEMENT: {
+    LEFT: 'left',
+    TOP: 'top',
     RIGHT: 'right',
     BOTTOM: 'bottom'
   },

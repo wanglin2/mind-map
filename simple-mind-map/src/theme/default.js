@@ -96,8 +96,10 @@ export default {
     hoverRectRadius: 5,
     // 文本对齐
     align: 'left',
-    // 图片放置位置
-    imgPlacement: 'top'
+    // 图片放置位置，相对于整个文本内容
+    imgPlacement: 'top', // left、right、bottom、top
+    // 标签放置位置
+    tagPlacement: 'right' // right（文字右侧）、bottom（文本内容下方）
     // 下列样式也支持给节点设置，用于覆盖最外层的设置
     // paddingX,
     // paddingY,
@@ -134,7 +136,8 @@ export default {
     hoverRectColor: '',
     hoverRectRadius: 5,
     textAlign: 'left',
-    imgPlacement: 'top'
+    imgPlacement: 'top',
+    tagPlacement: 'right'
   },
   // 三级及以下节点样式
   node: {
@@ -161,7 +164,8 @@ export default {
     hoverRectColor: '',
     hoverRectRadius: 5,
     textAlign: 'left',
-    imgPlacement: 'top'
+    imgPlacement: 'top',
+    tagPlacement: 'right'
   },
   // 概要节点样式
   generalization: {
@@ -187,7 +191,8 @@ export default {
     hoverRectColor: '',
     hoverRectRadius: 5,
     textAlign: 'left',
-    imgPlacement: 'top'
+    imgPlacement: 'top',
+    tagPlacement: 'right'
   }
 }
 

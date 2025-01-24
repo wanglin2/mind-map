@@ -39,9 +39,11 @@ function getNodeRect() {
       height: rect.height
     }
   }
-  const { tagPosition, textContentMargin } = this.mindMap.opt
-  const tagIsBottom = tagPosition === CONSTANTS.TAG_POSITION.BOTTOM
-  const imgPlacement = this.getStyle('imgPlacement') || 'top'
+  const { TAG_PLACEMENT, IMG_PLACEMENT } = CONSTANTS
+  const { textContentMargin } = this.mindMap.opt
+  const tagPlacement = this.getStyle('tagPlacement') || TAG_PLACEMENT.RIGHT
+  const tagIsBottom = tagPlacement === TAG_PLACEMENT.BOTTOM
+  const imgPlacement = this.getStyle('imgPlacement') || IMG_PLACEMENT.TOP
   // 宽高
   let imgContentWidth = 0
   let imgContentHeight = 0
@@ -138,7 +140,7 @@ function getNodeRect() {
   // 纯内容宽高
   let _width = 0
   let _height = 0
-  if (['top', 'bottom'].includes(imgPlacement)) {
+  if ([IMG_PLACEMENT.TOP, IMG_PLACEMENT.BOTTOM].includes(imgPlacement)) {
     // 图片在上下
     _width = Math.max(imgContentWidth, textContentWidth)
     _height =
@@ -174,7 +176,6 @@ function layout() {
   this.group.clear()
   const {
     hoverRectPadding,
-    tagPosition,
     openRealtimeRenderOnNodeTextEdit,
     textContentMargin
   } = this.mindMap.opt
@@ -222,8 +223,10 @@ function layout() {
     addHoverNode()
     return
   }
-  const imgPlacement = this.getStyle('imgPlacement') || 'top'
-  const tagIsBottom = tagPosition === CONSTANTS.TAG_POSITION.BOTTOM
+  const { IMG_PLACEMENT, TAG_PLACEMENT } = CONSTANTS
+  const imgPlacement = this.getStyle('imgPlacement') || IMG_PLACEMENT.TOP
+  const tagPlacement = this.getStyle('tagPlacement') || TAG_PLACEMENT.RIGHT
+  const tagIsBottom = tagPlacement === TAG_PLACEMENT.BOTTOM
   let { textContentWidth, textContentHeight, textContentWidthWithoutTag } =
     this._rectInfo
   const textContentHeightWithTag = textContentHeight
@@ -247,16 +250,16 @@ function layout() {
     imgHeight = this._imgData.height
     this.group.add(this._imgData.node)
     switch (imgPlacement) {
-      case 'top':
+      case IMG_PLACEMENT.TOP:
         this._imgData.node.cx(width / 2).y(paddingY)
         break
-      case 'bottom':
+      case IMG_PLACEMENT.BOTTOM:
         this._imgData.node.cx(width / 2).y(height - paddingY - imgHeight)
         break
-      case 'left':
+      case IMG_PLACEMENT.LEFT:
         this._imgData.node.x(paddingX).cy(height / 2)
         break
-      case 'right':
+      case IMG_PLACEMENT.RIGHT:
         this._imgData.node.x(width - paddingX - imgWidth).cy(height / 2)
         break
       default:
@@ -400,25 +403,25 @@ function layout() {
   let translateX = 0
   let translateY = 0
   switch (imgPlacement) {
-    case 'top':
+    case IMG_PLACEMENT.TOP:
       translateX = width / 2 - bboxWidth / 2
       translateY =
         paddingY + // 内边距
         imgHeight + // 图片高度
         this.getImgTextMarin('v', 0, 0, imgHeight, textContentHeightWithTag) // 和图片的间距
       break
-    case 'bottom':
+    case IMG_PLACEMENT.BOTTOM:
       translateX = width / 2 - bboxWidth / 2
       translateY = paddingY
       break
-    case 'left':
+    case IMG_PLACEMENT.LEFT:
       translateX =
         imgWidth +
         paddingX +
         this.getImgTextMarin('h', imgWidth, textContentWidth)
       translateY = height / 2 - bboxHeight / 2
       break
-    case 'right':
+    case IMG_PLACEMENT.RIGHT:
       translateX = paddingX
       translateY = height / 2 - bboxHeight / 2
       break
