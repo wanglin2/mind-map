@@ -52,8 +52,11 @@ function createImgNode() {
   if (this.getData('imageTitle')) {
     node.attr('title', this.getData('imageTitle'))
   }
+  node.on('click', e => {
+    this.mindMap.emit('node_img_click', this, node, e)
+  })
   node.on('dblclick', e => {
-    this.mindMap.emit('node_img_dblclick', this, e)
+    this.mindMap.emit('node_img_dblclick', this, e, node)
   })
   node.on('mouseenter', e => {
     this.mindMap.emit('node_img_mouseenter', this, node, e)
