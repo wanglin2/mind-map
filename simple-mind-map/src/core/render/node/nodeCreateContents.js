@@ -219,6 +219,31 @@ function createRichTextNode(specifyText) {
   }
 }
 
+function wrapTextByUnit(units, maxWidth, style, joinChar = '') {
+  const lines = []
+  let line = []
+
+  while (units.length) {
+    const unit = units.shift()
+    const text = [...line, unit].join(joinChar)
+
+    if (measureText(text, style).width <= maxWidth) {
+      line.push(unit)
+    } else {
+      if (line.length > 0) {
+        lines.push(line.join(joinChar))
+      }
+      line = [unit]
+    }
+  }
+
+  if (line.length > 0) {
+    lines.push(line.join(joinChar))
+  }
+
+  return lines
+}
+
 //  创建文本节点
 function createTextNode(specifyText) {
   if (this.getData('needUpdate')) {
@@ -240,32 +265,42 @@ function createTextNode(specifyText) {
   if (!isUndef(text)) {
     textArr = String(text).split(/\n/gim)
   }
-  const { textAutoWrapWidth: maxWidth, emptyTextMeasureHeightText } =
-    this.mindMap.opt
+
+  const {
+    textAutoWrapWidth: maxWidth,
+    emptyTextMeasureHeightText,
+    textAutoWrapBreakWord
+  } = this.mindMap.opt
+
   let isMultiLine = textArr.length > 1
+
   textArr.forEach((item, index) => {
-    let arr = item.split('')
-    let lines = []
-    let line = []
-    while (arr.length) {
-      let str = arr.shift()
-      let text = [...line, str].join('')
-      if (measureText(text, this.style).width <= maxWidth) {
-        line.push(str)
-      } else {
-        lines.push(line.join(''))
-        line = [str]
-      }
+    let lines
+
+    if (textAutoWrapBreakWord) {
+      const words = item.split(/\s+/)
+      lines = wrapTextByUnit(words, maxWidth, this.style, ' ')
+
+      lines = lines.flatMap((line) => {
+        if (measureText(line, this.style).width > maxWidth) {
+          const chars = line.split('')
+          return wrapTextByUnit(chars, maxWidth, this.style, '')
+        }
+        return [line]
+      })
+    } else {
+      const chars = item.split('')
+      lines = wrapTextByUnit(chars, maxWidth, this.style, '')
     }
-    if (line.length > 0) {
-      lines.push(line.join(''))
-    }
+
     if (lines.length > 1) {
       isMultiLine = true
     }
     textArr[index] = lines.join('\n')
   })
+
   textArr = textArr.join('\n').replace(/\n$/g, '').split(/\n/gim)
+
   textArr.forEach((item, index) => {
     // 避免尾部的空行不占宽度
     // 同时解决该问题：https://github.com/wanglin2/mind-map/issues/1037
@@ -289,11 +324,13 @@ function createTextNode(specifyText) {
     const tmpBbox = tmpNode.bbox()
     height = tmpBbox.height
   }
+
   width = Math.min(Math.ceil(width), maxWidth)
   height = Math.ceil(height)
   g.attr('data-width', width)
   g.attr('data-height', height)
   g.attr('data-ismultiLine', isMultiLine || textArr.length > 1)
+
   return {
     node: g,
     width,
