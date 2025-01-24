@@ -79,7 +79,8 @@ class Base {
   }
 
   //  创建节点实例
-  createNode(data, parent, isRoot, layerIndex, index, ancestors) {
+  // 增加参数isNotReset，本质是不想让节点reset  但是目前只改了 logicalStructure结构的代码 为了不影响其它结构代码增加此参数做判断
+  createNode(data, parent, isRoot, layerIndex, index, ancestors,isNotReset) {
     // 创建节点
     // 库前置内容数据
     const nodeInnerPrefixData = {}
@@ -105,12 +106,21 @@ class Base {
         newNode.layerIndex,
         layerIndex
       )
-      newNode.reset()
+      // 不再重置节点  节点的子节点添加 删除等  分别再对应的操作里处理 这样可以做到只针对修改节点进行处理而不是全量处理
+      if(!isNotReset){
+        newNode.reset()
+      }
       newNode.layerIndex = layerIndex
       if (isRoot) {
         newNode.isRoot = true
       } else {
-        newNode.parent = parent._node
+        // 这里是只增加父级节点时 操作代码 只进行了数据上的添加父节点 而还没实际创建父节点所以记录父节点UId
+        // 因为遍历从上而下所以此时父节点是肯定创建好的。所以此时可正常将父节点实例给赋值。
+        if(!newNode.parentUid){
+          newNode.parent = parent._node
+        }else{
+          newNode.parent = this.renderer.nodeCache[newNode.parentUid]
+        }
       }
       this.cacheNode(data._node.uid, newNode)
       this.checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(newNode)
@@ -160,13 +170,22 @@ class Base {
         newNode.layerIndex,
         layerIndex
       )
-      newNode.reset()
+      // 不再重置节点  节点的子节点添加 删除等  分别再对应的操作里处理 这样可以做到只针对修改节点进行处理而不是全量处理
+      if(!isNotReset){
+        newNode.reset()
+      }
       newNode.nodeData = newNode.handleData(data || {})
       newNode.layerIndex = layerIndex
       if (isRoot) {
         newNode.isRoot = true
       } else {
-        newNode.parent = parent._node
+        // 这里是只增加父级节点时 操作代码 只进行了数据上的添加父节点 而还没实际创建父节点所以记录父节点UId
+        // 因为遍历从上而下所以此时父节点是肯定创建好的。所以此时可正常将父节点实例给赋值。
+        if(!newNode.parentUid){
+          newNode.parent = parent._node
+        }else{
+          newNode.parent = this.renderer.nodeCache[newNode.parentUid]
+        }
       }
       this.cacheNode(uid, newNode)
       this.checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(newNode)
@@ -233,7 +252,16 @@ class Base {
       this.root = newNode
     } else {
       // 互相收集
-      parent._node.addChildren(newNode)
+      if( !parent._node.isHaveNode(newNode)){
+        // 因为插入父级节点的时候还没创建节点还没创建号所以记录下要插入的父节点位置  创建好的时候再插入
+        // 这里同子节点关联父节点一样都是因为插入父节点的特殊性导致单独处理
+        const parentIndex = data.data.parentIndex
+        if(parentIndex || parentIndex === 0){
+          parent._node.children.splice(parentIndex, 1, newNode)
+        }else{
+          parent._node.addChildren(newNode)
+        }
+      }
     }
     return newNode
   }
