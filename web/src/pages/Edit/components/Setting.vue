@@ -321,32 +321,6 @@
           </el-select>
         </div>
       </div>
-      <!-- 标签显示的位置 -->
-      <div class="row">
-        <div class="rowItem">
-          <span class="name">{{ $t('setting.tagPosition') }}</span>
-          <el-select
-            size="mini"
-            style="width: 120px"
-            v-model="config.tagPosition"
-            placeholder=""
-            @change="
-              value => {
-                updateOtherConfig('tagPosition', value)
-              }
-            "
-          >
-            <el-option
-              :label="$t('setting.tagPositionRight')"
-              value="right"
-            ></el-option>
-            <el-option
-              :label="$t('setting.tagPositionBottom')"
-              value="bottom"
-            ></el-option>
-          </el-select>
-        </div>
-      </div>
     </div>
   </Sidebar>
 </template>
@@ -379,7 +353,6 @@ export default {
         mousewheelAction: 'zoom',
         mousewheelZoomActionReverse: false,
         createNewNodeBehavior: 'default',
-        tagPosition: 'right',
         openRealtimeRenderOnNodeTextEdit: true,
         alwaysShowExpandBtn: false,
         enableAutoEnterTextEditWhenKeydown: true
@@ -474,7 +447,7 @@ export default {
       storeConfig({
         config: this.data.config
       })
-      if (['tagPosition', 'alwaysShowExpandBtn'].includes(key)) {
+      if (['alwaysShowExpandBtn'].includes(key)) {
         this.mindMap.reRender()
       }
     },

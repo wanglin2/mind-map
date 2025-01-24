@@ -73,7 +73,6 @@ export default {
     watermarkTextOpacity: 'Text opacity',
     watermarkTextFontSize: 'Font size',
     belowNode: 'Display below nodes',
-    tagPosition: 'Node tag position',
     tagPositionRight: 'Text right',
     tagPositionBottom: 'Text bottom',
     alwaysShowExpandBtn: 'Always show expand btn',
@@ -264,7 +263,14 @@ export default {
     openLineFlow: 'Open line flow',
     lineFlowDuration: 'Line flow duration',
     forward: 'Forward',
-    reverse: 'Reverse'
+    reverse: 'Reverse',
+    img: 'Image',
+    placement: 'Placement',
+    top: 'Top',
+    bottom: 'Bottom',
+    left: 'Left',
+    right: 'Right',
+    tag: 'Tag',
   },
   theme: {
     title: 'Theme',

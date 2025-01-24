@@ -43,6 +43,10 @@
     <NodeOuterFrame v-if="mindMap" :mindMap="mindMap"></NodeOuterFrame>
     <NodeTagStyle v-if="mindMap" :mindMap="mindMap"></NodeTagStyle>
     <Setting :data="mindMapData" :mindMap="mindMap"></Setting>
+    <NodeImgPlacementToolbar
+      v-if="mindMap"
+      :mindMap="mindMap"
+    ></NodeImgPlacementToolbar>
     <div
       class="dragMask"
       v-if="showDragMask"
@@ -127,6 +131,7 @@ import NodeOuterFrame from './NodeOuterFrame.vue'
 import NodeTagStyle from './NodeTagStyle.vue'
 import Setting from './Setting.vue'
 import AssociativeLineStyle from './AssociativeLineStyle.vue'
+import NodeImgPlacementToolbar from './NodeImgPlacementToolbar.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -180,7 +185,8 @@ export default {
     NodeOuterFrame,
     NodeTagStyle,
     Setting,
-    AssociativeLineStyle
+    AssociativeLineStyle,
+    NodeImgPlacementToolbar
   },
   data() {
     return {

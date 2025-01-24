@@ -497,6 +497,50 @@
             ></el-slider>
           </div>
         </div>
+        <!-- 节点图片布局 -->
+        <div class="title noTop">{{ $t('style.img') }}</div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">{{ $t('style.placement') }}</span>
+            <el-radio-group
+              v-model="style.imgPlacement"
+              size="mini"
+              @change="update('imgPlacement')"
+            >
+              <el-radio-button label="top">{{
+                $t('style.top')
+              }}</el-radio-button>
+              <el-radio-button label="bottom">{{
+                $t('style.bottom')
+              }}</el-radio-button>
+              <el-radio-button label="left">{{
+                $t('style.left')
+              }}</el-radio-button>
+              <el-radio-button label="right">{{
+                $t('style.right')
+              }}</el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
+        <!-- 节点标签布局 -->
+        <div class="title noTop">{{ $t('style.tag') }}</div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">{{ $t('style.placement') }}</span>
+            <el-radio-group
+              v-model="style.tagPlacement"
+              size="mini"
+              @change="update('tagPlacement')"
+            >
+              <el-radio-button label="right">{{
+                $t('style.right')
+              }}</el-radio-button>
+              <el-radio-button label="bottom">{{
+                $t('style.bottom')
+              }}</el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
       </div>
     </div>
     <div class="tipBox" v-else>
@@ -565,7 +609,9 @@ export default {
         lineFlow: false,
         lineFlowForward: true,
         lineFlowDuration: 1,
-        textAlign: ''
+        textAlign: '',
+        imgPlacement: '',
+        tagPlacement: ''
       }
     }
   },

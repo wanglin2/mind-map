@@ -41,7 +41,6 @@ export default {
     rainbowLines: '彩虹線條',
     notUseRainbowLines: '不使用彩虹線條',
     outerFramePadding: '外框內距',
-    tagPosition: '節點標簽顯示的位置',
     tagPositionRight: '文本右側',
     tagPositionBottom: '文本下面',
     alwaysShowExpandBtn: '是否壹直顯示展開收起按鈕',
@@ -260,7 +259,14 @@ export default {
     openLineFlow: '開啓流動效果',
     lineFlowDuration: '一個流動周期的時間',
     forward: '正向',
-    reverse: '反向'
+    reverse: '反向',
+    img: '圖片',
+    placement: '布局',
+    top: '上',
+    bottom: '下',
+    left: '左',
+    right: '右',
+    tag: '標簽',
   },
   theme: {
     title: '主題',

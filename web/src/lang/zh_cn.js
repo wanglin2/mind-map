@@ -71,7 +71,6 @@ export default {
     watermarkTextOpacity: '文字透明度',
     watermarkTextFontSize: '文字字号',
     belowNode: '显示在节点下方',
-    tagPosition: '节点标签显示的位置',
     tagPositionRight: '文本右侧',
     tagPositionBottom: '文本下面',
     alwaysShowExpandBtn: '是否一直显示展开收起按钮',
@@ -260,7 +259,14 @@ export default {
     openLineFlow: '开启流动效果',
     lineFlowDuration: '一个流动周期的时间',
     forward: '正向',
-    reverse: '反向'
+    reverse: '反向',
+    img: '图片',
+    placement: '布局',
+    top: '上',
+    bottom: '下',
+    left: '左',
+    right: '右',
+    tag: '标签',
   },
   theme: {
     title: '主题',
