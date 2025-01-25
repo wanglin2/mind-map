@@ -71,11 +71,18 @@ export default {
     watermarkTextOpacity: '文字透明度',
     watermarkTextFontSize: '文字字号',
     belowNode: '显示在节点下方',
-    tagPosition: '节点标签显示的位置',
     tagPositionRight: '文本右侧',
     tagPositionBottom: '文本下面',
     alwaysShowExpandBtn: '是否一直显示展开收起按钮',
-    enableAutoEnterTextEditWhenKeydown: '键盘输入时自动进入文本编辑'
+    enableAutoEnterTextEditWhenKeydown: '键盘输入时自动进入文本编辑',
+    confirm: '确定',
+    cancel: '取消',
+    changeRichTextTip: '该操作会清空所有历史修改记录，并且修改思维导图数据，是否继续？',
+    changeRichTextTip2: '是否切换为富文本模式？',
+    changeRichTextTip3: '是否切换为非富文本模式？',
+    enableDragImport: '是否允许直接拖拽文件到页面进行导入',
+    imgTextMargin: '节点图片和文本间隔',
+    textContentMargin: '节点各种内容间隔'
   },
   color: {
     moreColor: '更多颜色'
@@ -122,6 +129,7 @@ export default {
     copyFail: '复制失败',
     number: '编号其子节点',
     expandNodeChild: '展开所有下级节点',
+    unExpandNodeChild: '收起所有下级节点',
     addToDo: '添加待办',
     removeToDo: '删除待办'
   },
@@ -249,7 +257,19 @@ export default {
     arrowDir: '箭头位置',
     arrowDirStart: '头部',
     arrowDirEnd: '尾部',
-    direction: '方向'
+    direction: '方向',
+    selectNodeTip: '请选择一个节点',
+    openLineFlow: '开启流动效果',
+    lineFlowDuration: '一个流动周期的时间',
+    forward: '正向',
+    reverse: '反向',
+    img: '图片',
+    placement: '布局',
+    top: '上',
+    bottom: '下',
+    left: '左',
+    right: '右',
+    tag: '标签',
   },
   theme: {
     title: '主题',
@@ -317,7 +337,8 @@ export default {
     exportError: '导出失败',
     dragTip: '在此释放以导入该文件',
     emptyTip: '文件内容为空，使用默认数据渲染',
-    deleteNodeImgTip: '是否确认删除该节点图片？'
+    deleteNodeImgTip: '是否确认删除该节点图片？',
+    autoOpenNodeRichTextTip: '检测到导入了富文本内容，已自动开启富文本模式'
   },
   mouseAction: {
     tip1: '当前：左键拖动画布，右键框选节点',
@@ -352,7 +373,8 @@ export default {
     fontSize: '字号',
     color: '字体颜色',
     backgroundColor: '背景颜色',
-    removeFormat: '清除样式'
+    removeFormat: '清除样式',
+    textAlign: '对齐方式'
   },
   other: {
     loading: '正在加载，请稍后...'

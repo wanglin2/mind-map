@@ -191,44 +191,6 @@ class Style {
       })
   }
 
-  // 生成内联样式
-  createStyleText() {
-    const styles = {
-      color: this.merge('color'),
-      fontFamily: this.merge('fontFamily'),
-      fontSize: this.merge('fontSize'),
-      fontWeight: this.merge('fontWeight'),
-      fontStyle: this.merge('fontStyle'),
-      textDecoration: this.merge('textDecoration')
-    }
-    return `
-      color: ${styles.color};
-      font-family: ${styles.fontFamily};
-      font-size: ${styles.fontSize + 'px'};
-      font-weight: ${styles.fontWeight};
-      font-style: ${styles.fontStyle};
-      text-decoration: ${styles.textDecoration}
-    `
-  }
-
-  // 获取文本样式
-  getTextFontStyle() {
-    const styles = {
-      color: this.merge('color'),
-      fontFamily: this.merge('fontFamily'),
-      fontSize: this.merge('fontSize'),
-      fontWeight: this.merge('fontWeight'),
-      fontStyle: this.merge('fontStyle'),
-      textDecoration: this.merge('textDecoration')
-    }
-    return {
-      italic: styles.fontStyle === 'italic',
-      bold: styles.fontWeight,
-      fontSize: styles.fontSize,
-      fontFamily: styles.fontFamily
-    }
-  }
-
   //  html文字节点
   domText(node, fontSizeScale = 1) {
     const styles = {
@@ -237,7 +199,8 @@ class Style {
       fontSize: this.merge('fontSize'),
       fontWeight: this.merge('fontWeight'),
       fontStyle: this.merge('fontStyle'),
-      textDecoration: this.merge('textDecoration')
+      textDecoration: this.merge('textDecoration'),
+      textAlign: this.merge('textAlign')
     }
     node.style.color = styles.color
     node.style.textDecoration = styles.textDecoration
@@ -245,6 +208,7 @@ class Style {
     node.style.fontSize = styles.fontSize * fontSizeScale + 'px'
     node.style.fontWeight = styles.fontWeight || 'normal'
     node.style.fontStyle = styles.fontStyle
+    node.style.textAlign = styles.textAlign
   }
 
   //  标签文字
@@ -269,14 +233,18 @@ class Style {
   }
 
   //  内置图标
-  iconNode(node) {
+  iconNode(node, color) {
     node.attr({
-      fill: this.merge('color')
+      fill: color || this.merge('color')
     })
   }
 
   //  连线
   line(line, { width, color, dasharray } = {}, enableMarker, childNode) {
+    const { customHandleLine } = this.ctx.mindMap.opt
+    if (typeof customHandleLine === 'function') {
+      customHandleLine(this.ctx, line, { width, color, dasharray })
+    }
     line.stroke({ color, dasharray, width }).fill({ color: 'none' })
     // 可以显示箭头
     if (enableMarker) {
@@ -352,6 +320,17 @@ class Style {
       }
     })
     return res
+  }
+
+  // 获取自定义的样式
+  getCustomStyle() {
+    const customStyle = {}
+    Object.keys(this.ctx.getData()).forEach(item => {
+      if (checkIsNodeStyleDataKey(item)) {
+        customStyle[item] = this.ctx.getData(item)
+      }
+    })
+    return customStyle
   }
 
   // hover和激活节点

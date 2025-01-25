@@ -112,7 +112,7 @@ export default {
           ? nodeRichTextToTextWithWrap(root.data.text)
           : root.data.text
         text = htmlEscape(text)
-        text = text.replaceAll(/\n/g, '<br>')
+        text = text.replace(/\n/g, '<br>')
         root.textCache = text // 保存一份修改前的数据，用于对比是否修改了
         root.label = text
         root.uid = root.data.uid
@@ -150,7 +150,6 @@ export default {
       const richText = node.data.data.richText
       const text = richText ? e.target.innerHTML : e.target.innerText
       node.data.data.text = richText ? textToNodeRichTextWithWrap(text) : text
-      if (richText) node.data.data.resetRichText = true
       node.data.textCache = e.target.innerHTML
       this.save()
     },
@@ -170,9 +169,6 @@ export default {
           richText
         },
         children: []
-      }
-      if (richText) {
-        data.data.resetRichText = true
       }
       if (e.keyCode === 13 && !e.shiftKey) {
         e.preventDefault()

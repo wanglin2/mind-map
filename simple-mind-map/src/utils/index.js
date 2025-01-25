@@ -1,11 +1,13 @@
 import { v4 as uuidv4 } from 'uuid'
 import {
   nodeDataNoStylePropList,
-  selfCloseTagList
+  selfCloseTagList,
+  richTextSupportStyleList
 } from '../constants/constant'
 import MersenneTwister from './mersenneTwister'
 import { ForeignObject } from '@svgdotjs/svg.js'
 import merge from 'deepmerge'
+import { lineStyleProps } from '../theme/default'
 
 //  深度优先遍历树
 export const walk = (
@@ -172,6 +174,12 @@ export const copyRenderTree = (tree, root, removeActiveState = false) => {
       tree.children[index] = copyRenderTree({}, item, removeActiveState)
     })
   }
+  // data、children外的其他字段
+  Object.keys(root).forEach(key => {
+    if (!['data', 'children'].includes(key) && !/^_/.test(key)) {
+      tree[key] = root[key]
+    }
+  })
   return tree
 }
 
@@ -182,7 +190,8 @@ export const copyNodeTree = (
   removeActiveState = false,
   removeId = true
 ) => {
-  tree.data = simpleDeepClone(root.nodeData ? root.nodeData.data : root.data)
+  const rootData = root.nodeData ? root.nodeData : root
+  tree.data = simpleDeepClone(rootData.data)
   // 移除节点uid
   if (removeId) {
     delete tree.data.uid
@@ -207,6 +216,12 @@ export const copyNodeTree = (
       tree.children[index] = copyNodeTree({}, item, removeActiveState, removeId)
     })
   }
+  // data、children外的其他字段
+  Object.keys(rootData).forEach(key => {
+    if (!['data', 'children'].includes(key) && !/^_/.test(key)) {
+      tree[key] = rootData[key]
+    }
+  })
   return tree
 }
 
@@ -273,6 +288,19 @@ export const throttle = (fn, time = 300, ctx) => {
       fn.call(ctx, ...args)
       timer = null
     }, time)
+  }
+}
+
+// 防抖函数
+export const debounce = (fn, wait = 300, ctx) => {
+  let timeout = null
+
+  return (...args) => {
+    if (timeout) clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      timeout = null
+      fn.apply(ctx, args)
+    }, wait)
   }
 }
 
@@ -480,8 +508,8 @@ export const loadImage = imgFile => {
 
 // 移除字符串中的html实体
 export const removeHTMLEntities = str => {
-  ;[['&nbsp;', '&#160;']].forEach(item => {
-    str = str.replaceAll(item[0], item[1])
+  [['&nbsp;', '&#160;']].forEach(item => {
+    str = str.replace(new RegExp(item[0], 'g'), item[1])
   })
   return str
 }
@@ -498,7 +526,7 @@ export const isUndef = data => {
 
 // 移除html字符串中节点的内联样式
 export const removeHtmlStyle = html => {
-  return html.replaceAll(/(<[^\s]+)\s+style=["'][^'"]+["']\s*(>)/g, '$1$2')
+  return html.replace(/(<[^\s]+)\s+style=["'][^'"]+["']\s*(>)/g, '$1$2')
 }
 
 // 给html标签中指定的标签添加内联样式
@@ -507,13 +535,14 @@ export const addHtmlStyle = (html, tag, style) => {
   if (!addHtmlStyleEl) {
     addHtmlStyleEl = document.createElement('div')
   }
+  const tags = Array.isArray(tag) ? tag : [tag]
   addHtmlStyleEl.innerHTML = html
   let walk = root => {
     let childNodes = root.childNodes
     childNodes.forEach(node => {
       if (node.nodeType === 1) {
         // 元素节点
-        if (node.tagName.toLowerCase() === tag) {
+        if (tags.includes(node.tagName.toLowerCase())) {
           node.style.cssText = style
         } else {
           walk(node)
@@ -555,7 +584,7 @@ export const replaceHtmlText = (html, searchText, replaceText) => {
         // 文本节点
         root.replaceChild(
           document.createTextNode(
-            node.nodeValue.replaceAll(searchText, replaceText)
+            node.nodeValue.replace(new RegExp(searchText, 'g'), replaceText)
           ),
           node
         )
@@ -582,7 +611,7 @@ export const removeHtmlNodeByClass = (html, selector) => {
 
 // 判断一个颜色是否是白色
 export const isWhite = color => {
-  color = String(color).replaceAll(/\s+/g, '')
+  color = String(color).replace(/\s+/g, '')
   return (
     ['#fff', '#ffffff', '#FFF', '#FFFFFF', 'rgb(255,255,255)'].includes(
       color
@@ -592,7 +621,7 @@ export const isWhite = color => {
 
 // 判断一个颜色是否是透明
 export const isTransparent = color => {
-  color = String(color).replaceAll(/\s+/g, '')
+  color = String(color).replace(/\s+/g, '')
   return (
     ['', 'transparent'].includes(color) || /rgba\(\d+,\d+,\d+,0\)/.test(color)
   )
@@ -790,6 +819,18 @@ export const checkIsNodeStyleDataKey = key => {
   return false
 }
 
+// 判断一个对象是否不需要触发节点重新创建
+export const isNodeNotNeedRenderData = config => {
+  const list = [...lineStyleProps] // 节点连线样式
+  const keys = Object.keys(config)
+  for (let i = 0; i < keys.length; i++) {
+    if (!list.includes(keys[i])) {
+      return false
+    }
+  }
+  return true
+}
+
 // 合并图标数组
 // const data = [
 //   { type: 'priority', name: '优先级图标', list: [{ name: '1', icon: 'a' }, { name: 2, icon: 'b' }] },
@@ -935,6 +976,12 @@ export const selectAllInput = el => {
 
 // 给指定的节点列表树数据添加附加数据，会修改原数据
 export const addDataToAppointNodes = (appointNodes, data = {}) => {
+  data = { ...data }
+  const alreadyIsRichText = data && data.richText
+  // 如果指定的数据就是富文本格式，那么不需要重新创建
+  if (alreadyIsRichText && data.resetRichText) {
+    delete data.resetRichText
+  }
   const walk = list => {
     list.forEach(node => {
       node.data = {
@@ -1013,7 +1060,7 @@ export const generateColorByContent = str => {
 
 //  html转义
 export const htmlEscape = str => {
-  ;[
+  [
     ['&', '&amp;'],
     ['<', '&lt;'],
     ['>', '&gt;']
@@ -1069,9 +1116,14 @@ export const isSameObject = (a, b) => {
   }
 }
 
+// 检查navigator.clipboard对象的读取是否可用
+export const checkClipboardReadEnable = () => {
+  return navigator.clipboard && typeof navigator.clipboard.read === 'function'
+}
+
 // 将数据设置到用户剪切板中
 export const setDataToClipboard = data => {
-  if (navigator.clipboard) {
+  if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(JSON.stringify(data))
   }
 }
@@ -1080,7 +1132,7 @@ export const setDataToClipboard = data => {
 export const getDataFromClipboard = async () => {
   let text = null
   let img = null
-  if (navigator.clipboard) {
+  if (checkClipboardReadEnable()) {
     const items = await navigator.clipboard.read()
     if (items && items.length > 0) {
       for (const clipboardItem of items) {
@@ -1112,7 +1164,7 @@ export const removeFromParentNodeData = node => {
 // 给html自闭合标签添加闭合状态
 export const handleSelfCloseTags = str => {
   selfCloseTagList.forEach(tagName => {
-    str = str.replaceAll(
+    str = str.replace(
       new RegExp(`<${tagName}([^>]*)>`, 'g'),
       `<${tagName} $1 />`
     )
@@ -1182,10 +1234,12 @@ export const handleInputPasteText = (e, text) => {
   if (!selection.rangeCount) return
   selection.deleteFromDocument()
   text = text || e.clipboardData.getData('text')
+  // 转义特殊字符
+  text = htmlEscape(text)
   // 去除格式
   text = getTextFromHtml(text)
   // 去除换行
-  // text = text.replaceAll(/\n/g, '')
+  // text = text.replace(/\n/g, '')
   const textArr = text.split(/\n/g)
   const fragment = document.createDocumentFragment()
   textArr.forEach((item, index) => {
@@ -1619,4 +1673,39 @@ export const mergeTheme = (dest, source) => {
       return sourceArray
     }
   })
+}
+
+// 获取节点实例的文本样式数据
+export const getNodeRichTextStyles = node => {
+  const res = {}
+  richTextSupportStyleList.forEach(prop => {
+    let value = node.style.merge(prop)
+    if (prop === 'fontSize') {
+      value = value + 'px'
+    }
+    res[prop] = value
+  })
+  return res
+}
+
+// 判断两个版本号的关系
+/*
+a > b 返回 >
+a < b 返回 <
+a = b 返回 =
+*/
+export const compareVersion = (a, b) => {
+  const aArr = String(a).split('.')
+  const bArr = String(b).split('.')
+  const max = Math.max(aArr.length, bArr.length)
+  for (let i = 0; i < max; i++) {
+    const ai = aArr[i] || 0
+    const bi = bArr[i] || 0
+    if (ai > bi) {
+      return '>'
+    } else if (ai < bi) {
+      return '<'
+    }
+  }
+  return '='
 }

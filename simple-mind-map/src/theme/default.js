@@ -15,6 +15,12 @@ export default {
   lineColor: '#549688',
   // 连线样式
   lineDasharray: 'none',
+  // 连线是否开启流动效果，仅在虚线时有效（需要注册LineFlow插件）
+  lineFlow: false,
+  // 流动效果一个周期的时间，单位：s
+  lineFlowDuration: 1,
+  // 流动方向是否是从父节点到子节点
+  lineFlowForward: true,
   // 连线风格
   lineStyle: 'straight', // 曲线（curve）【仅支持logicalStructure、mindMap、verticalTimeline三种结构】、直线（straight）、直连（direct）【仅支持logicalStructure、mindMap、organizationStructure、verticalTimeline四种结构】
   // 曲线连接时，根节点和其他节点的连接线样式保持统一，默认根节点为 ( 型，其他节点为 { 型，设为true后，都为 { 型。仅支持logicalStructure、mindMap两种结构
@@ -87,9 +93,23 @@ export default {
     // 节点鼠标hover和激活时显示的矩形边框的颜色，主题里不设置，默认会取hoverRectColor实例化选项的值
     hoverRectColor: '',
     // 点鼠标hover和激活时显示的矩形边框的圆角大小
-    hoverRectRadius: 5
-    // paddingX: 15,
-    // paddingY: 5
+    hoverRectRadius: 5,
+    // 文本对齐
+    align: 'left',
+    // 图片放置位置，相对于整个文本内容
+    imgPlacement: 'top', // left、right、bottom、top
+    // 标签放置位置
+    tagPlacement: 'right' // right（文字右侧）、bottom（文本内容下方）
+    // 下列样式也支持给节点设置，用于覆盖最外层的设置
+    // paddingX,
+    // paddingY,
+    // lineWidth,
+    // lineColor,
+    // lineDasharray,
+    // lineFlow,
+    // lineFlowDuration,
+    // lineFlowForward
+    // 关联线的所有样式
   },
   // 二级节点样式
   second: {
@@ -114,9 +134,10 @@ export default {
     endDir: [1, 0],
     lineMarkerDir: 'end',
     hoverRectColor: '',
-    hoverRectRadius: 5
-    // paddingX: 15,
-    // paddingY: 5
+    hoverRectRadius: 5,
+    textAlign: 'left',
+    imgPlacement: 'top',
+    tagPlacement: 'right'
   },
   // 三级及以下节点样式
   node: {
@@ -141,9 +162,10 @@ export default {
     endDir: [1, 0],
     lineMarkerDir: 'end',
     hoverRectColor: '',
-    hoverRectRadius: 5
-    // paddingX: 15,
-    // paddingY: 5
+    hoverRectRadius: 5,
+    textAlign: 'left',
+    imgPlacement: 'top',
+    tagPlacement: 'right'
   },
   // 概要节点样式
   generalization: {
@@ -167,9 +189,10 @@ export default {
     startDir: [0, 0],
     endDir: [1, 0],
     hoverRectColor: '',
-    hoverRectRadius: 5
-    // paddingX: 15,
-    // paddingY: 5
+    hoverRectRadius: 5,
+    textAlign: 'left',
+    imgPlacement: 'top',
+    tagPlacement: 'right'
   }
 }
 
@@ -197,14 +220,13 @@ const nodeSizeIndependenceList = [
   'rootLineKeepSameInCurve',
   'rootLineStartPositionKeepSameInCurve',
   'showLineMarker',
-  'gradientStyle',
   'lineRadius',
-  'startColor',
-  'endColor',
-  'startDir',
-  'endDir',
   'hoverRectColor',
-  'hoverRectRadius'
+  'hoverRectRadius',
+  'lineFlow',
+  'lineFlowDuration',
+  'lineFlowForward',
+  'textAlign'
 ]
 export const checkIsNodeSizeIndependenceConfig = config => {
   let keys = Object.keys(config)
@@ -220,9 +242,13 @@ export const checkIsNodeSizeIndependenceConfig = config => {
   return true
 }
 
+// 连线的样式
 export const lineStyleProps = [
   'lineColor',
   'lineDasharray',
   'lineWidth',
-  'lineMarkerDir'
+  'lineMarkerDir',
+  'lineFlow',
+  'lineFlowDuration',
+  'lineFlowForward'
 ]

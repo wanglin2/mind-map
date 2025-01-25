@@ -107,14 +107,13 @@ class Formula {
 
   // 给指定的节点插入指定公式
   insertFormulaToNode(node, formula) {
-    let richTextPlugin = this.mindMap.richText
+    const richTextPlugin = this.mindMap.richText
     richTextPlugin.showEditText({ node })
     richTextPlugin.quill.insertEmbed(
       richTextPlugin.quill.getLength() - 1,
       'formula',
       formula
     )
-    richTextPlugin.setTextStyleIfNotRichText(richTextPlugin.node)
     richTextPlugin.hideEditText([node])
   }
 
@@ -127,8 +126,18 @@ class Formula {
       for (const el of els)
         nodeText = nodeText.replace(
           el.outerHTML,
-          `\$${el.getAttribute('data-value')}\$`
+          `$${el.getAttribute('data-value')}$`
         )
+      // 如果开启了实时渲染，那么意味公式转换为源码时会影响节点尺寸，需要派发事件触发渲染
+      if (this.mindMap.opt.openRealtimeRenderOnNodeTextEdit) {
+        setTimeout(() => {
+          this.mindMap.emit('node_text_edit_change', {
+            node: this.mindMap.richText.node,
+            text: this.mindMap.richText.getEditText(),
+            richText: true
+          })
+        }, 0)
+      }
     }
     return nodeText
   }

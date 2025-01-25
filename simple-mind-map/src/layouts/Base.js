@@ -49,10 +49,7 @@ class Base {
 
   // 检查当前来源是否需要重新计算节点大小
   checkIsNeedResizeSources() {
-    return [
-      CONSTANTS.CHANGE_THEME,
-      CONSTANTS.TRANSFORM_TO_NORMAL_NODE
-    ].includes(this.renderer.renderSource)
+    return [CONSTANTS.CHANGE_THEME].includes(this.renderer.renderSource)
   }
 
   // 层级类型改变
@@ -140,6 +137,7 @@ class Base {
         isNodeDataChange ||
         isLayerTypeChange ||
         newNode.getData('resetRichText') ||
+        newNode.getData('needUpdate') ||
         isNodeInnerPrefixChange
       ) {
         newNode.getSize()
@@ -193,6 +191,7 @@ class Base {
         isNodeDataChange ||
         isLayerTypeChange ||
         newNode.getData('resetRichText') ||
+        newNode.getData('needUpdate') ||
         isNodeInnerPrefixChange
       ) {
         newNode.getSize()
@@ -452,8 +451,10 @@ class Base {
       const end = list[len - 1]
       // 如果三点在一条直线，那么不用处理
       const isOneLine =
-        (start[0] === center[0] && center[0] === end[0]) ||
-        (start[1] === center[1] && center[1] === end[1])
+        (start[0].toFixed(0) === center[0].toFixed(0) &&
+          center[0].toFixed(0) === end[0].toFixed(0)) ||
+        (start[1].toFixed(0) === center[1].toFixed(0) &&
+          center[1].toFixed(0) === end[1].toFixed(0))
       if (!isOneLine) {
         const cStart = this.computeNewPoint(start, center, lineRadius)
         const cEnd = this.computeNewPoint(end, center, lineRadius)

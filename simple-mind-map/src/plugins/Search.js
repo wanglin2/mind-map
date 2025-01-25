@@ -107,6 +107,7 @@ class Search {
 
   // 搜索匹配的节点
   doSearch() {
+    this.clearHighlightOnReadonly()
     this.updateMatchNodeList([])
     this.currentIndex = -1
     const { isOnlySearchCurrentRenderNodes } = this.mindMap.opt
@@ -174,14 +175,8 @@ class Search {
       }
     }
     const { readonly } = this.mindMap.opt
-    // 只读模式下需要激活之前节点的高亮
-    if (readonly) {
-      this.matchNodeList.forEach(node => {
-        if (this.isNodeInstance(node)) {
-          node.closeHighlight()
-        }
-      })
-    }
+    // 只读模式下需要清除之前节点的高亮
+    this.clearHighlightOnReadonly()
     const currentNode = this.matchNodeList[this.currentIndex]
     this.notResetSearchText = true
     const uid = this.isNodeInstance(currentNode)
@@ -203,6 +198,18 @@ class Search {
         this.notResetSearchText = false
       }
     })
+  }
+
+  // 只读模式下清除现有匹配节点的高亮
+  clearHighlightOnReadonly() {
+    const { readonly } = this.mindMap.opt
+    if (readonly) {
+      this.matchNodeList.forEach(node => {
+        if (this.isNodeInstance(node)) {
+          node.closeHighlight()
+        }
+      })
+    }
   }
 
   // 定位到指定搜索结果索引的节点
@@ -228,7 +235,7 @@ class Search {
     const keep = replaceText.includes(this.searchText)
     const text = this.getReplacedText(currentNode, this.searchText, replaceText)
     this.notResetSearchText = true
-    currentNode.setText(text, currentNode.getData('richText'), true)
+    currentNode.setText(text, currentNode.getData('richText'))
     if (keep) {
       this.updateMatchNodeList(this.matchNodeList)
       return
@@ -257,18 +264,16 @@ class Search {
     replaceText = String(replaceText)
     // 如果当前搜索文本是替换文本的子串，那么该节点还是符合搜索结果的
     const keep = replaceText.includes(this.searchText)
-    const hasRichTextPlugin = this.mindMap.renderer.hasRichTextPlugin()
+    this.notResetSearchText = true
     this.matchNodeList.forEach(node => {
       const text = this.getReplacedText(node, this.searchText, replaceText)
       if (this.isNodeInstance(node)) {
         const data = {
           text
         }
-        if (hasRichTextPlugin) data.resetRichText = !!node.getData('richText')
         this.mindMap.renderer.setNodeDataRender(node, data, true)
       } else {
         node.data.text = text
-        if (hasRichTextPlugin) node.data.resetRichText = !!node.data.richText
       }
     })
     this.mindMap.render()
@@ -288,7 +293,7 @@ class Search {
     if (richText) {
       return replaceHtmlText(text, searchText, replaceText)
     } else {
-      return text.replaceAll(searchText, replaceText)
+      return text.replace(new RegExp(searchText, 'g'), replaceText)
     }
   }
 

@@ -2,7 +2,6 @@
   <Sidebar ref="sidebar" :title="$t('setting.title')">
     <div class="sidebarContent" :class="{ isDark: isDark }" v-if="data">
       <!-- 水印 -->
-      <div class="title noTop">{{ $t('setting.watermark') }}</div>
       <div class="row">
         <!-- 是否显示水印 -->
         <div class="rowItem">
@@ -214,8 +213,20 @@
         <div class="rowItem">
           <el-checkbox
             v-model="config.enableAutoEnterTextEditWhenKeydown"
-            @change="updateOtherConfig('enableAutoEnterTextEditWhenKeydown', $event)"
+            @change="
+              updateOtherConfig('enableAutoEnterTextEditWhenKeydown', $event)
+            "
             >{{ $t('setting.enableAutoEnterTextEditWhenKeydown') }}</el-checkbox
+          >
+        </div>
+      </div>
+      <!-- 是否开启文件拖入页面导入的方式 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="localConfigs.enableDragImport"
+            @change="updateLocalConfig('enableDragImport', $event)"
+            >{{ $t('setting.enableDragImport') }}</el-checkbox
           >
         </div>
       </div>
@@ -310,30 +321,34 @@
           </el-select>
         </div>
       </div>
-      <!-- 标签显示的位置 -->
+      <!-- 图片和文本内容的间距 -->
       <div class="row">
         <div class="rowItem">
-          <span class="name">{{ $t('setting.tagPosition') }}</span>
-          <el-select
-            size="mini"
-            style="width: 120px"
-            v-model="config.tagPosition"
-            placeholder=""
+          <span class="name">{{ $t('setting.imgTextMargin') }}</span>
+          <el-slider
+            style="width: 150px"
+            v-model="config.imgTextMargin"
             @change="
               value => {
-                updateOtherConfig('tagPosition', value)
+                updateOtherConfig('imgTextMargin', value)
               }
             "
-          >
-            <el-option
-              :label="$t('setting.tagPositionRight')"
-              value="right"
-            ></el-option>
-            <el-option
-              :label="$t('setting.tagPositionBottom')"
-              value="bottom"
-            ></el-option>
-          </el-select>
+          ></el-slider>
+        </div>
+      </div>
+      <!-- 文本各内容的间距 -->
+      <div class="row">
+        <div class="rowItem">
+          <span class="name">{{ $t('setting.textContentMargin') }}</span>
+          <el-slider
+            style="width: 150px"
+            v-model="config.textContentMargin"
+            @change="
+              value => {
+                updateOtherConfig('textContentMargin', value)
+              }
+            "
+          ></el-slider>
         </div>
       </div>
     </div>
@@ -368,10 +383,11 @@ export default {
         mousewheelAction: 'zoom',
         mousewheelZoomActionReverse: false,
         createNewNodeBehavior: 'default',
-        tagPosition: 'right',
         openRealtimeRenderOnNodeTextEdit: true,
         alwaysShowExpandBtn: false,
-        enableAutoEnterTextEditWhenKeydown: true
+        enableAutoEnterTextEditWhenKeydown: true,
+        imgTextMargin: 0,
+        textContentMargin: 0
       },
       watermarkConfig: {
         show: false,
@@ -390,7 +406,8 @@ export default {
       enableNodeRichText: true,
       localConfigs: {
         isShowScrollbar: false,
-        isUseHandDrawnLikeStyle: false
+        isUseHandDrawnLikeStyle: false,
+        enableDragImport: false
       }
     }
   },
@@ -415,8 +432,11 @@ export default {
   },
   created() {
     this.initLoacalConfig()
+    this.$bus.$on('toggleOpenNodeRichText', this.onToggleOpenNodeRichText)
   },
-  beforeDestroy() {},
+  beforeDestroy() {
+    this.$bus.$off('toggleOpenNodeRichText', this.onToggleOpenNodeRichText)
+  },
   methods: {
     ...mapMutations(['setLocalConfig']),
 
@@ -432,7 +452,7 @@ export default {
       this.enableNodeRichText = this.localConfig.openNodeRichText
       this.mousewheelAction = this.localConfig.mousewheelAction
       this.mousewheelZoomActionReverse = this.localConfig.mousewheelZoomActionReverse
-      ;['isShowScrollbar', 'isUseHandDrawnLikeStyle'].forEach(key => {
+      Object.keys(this.localConfigs).forEach(key => {
         this.localConfigs[key] = this.localConfig[key]
       })
     },
@@ -459,7 +479,7 @@ export default {
       storeConfig({
         config: this.data.config
       })
-      if (['tagPosition', 'alwaysShowExpandBtn'].includes(key)) {
+      if (['alwaysShowExpandBtn', 'imgTextMargin', 'textContentMargin'].includes(key)) {
         this.mindMap.reRender()
       }
     },
@@ -496,10 +516,33 @@ export default {
 
     // 切换是否开启节点富文本编辑
     enableNodeRichTextChange(e) {
-      this.mindMap.renderer.textEdit.hideEditTextBox()
+      this.$confirm(
+        this.$t('setting.changeRichTextTip'),
+        e
+          ? this.$t('setting.changeRichTextTip2')
+          : this.$t('setting.changeRichTextTip3'),
+        {
+          confirmButtonText: this.$t('setting.confirm'),
+          cancelButtonText: this.$t('setting.cancel'),
+          type: 'warning'
+        }
+      )
+        .then(() => {
+          this.mindMap.renderer.textEdit.hideEditTextBox()
+          this.setLocalConfig({
+            openNodeRichText: e
+          })
+        })
+        .catch(() => {
+          this.enableNodeRichText = !this.enableNodeRichText
+        })
+    },
+
+    onToggleOpenNodeRichText(val) {
       this.setLocalConfig({
-        openNodeRichText: e
+        openNodeRichText: val
       })
+      this.enableNodeRichText = val
     },
 
     // 本地配置

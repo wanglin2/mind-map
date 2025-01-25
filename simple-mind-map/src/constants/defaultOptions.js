@@ -35,8 +35,6 @@ export const defaultOpt = {
   mouseScaleCenterUseMousePosition: true,
   // 最多显示几个标签
   maxTag: 5,
-  // 标签显示的位置，相对于节点文本，bottom（下方）、right（右侧）
-  tagPosition: CONSTANTS.TAG_POSITION.RIGHT,
   // 展开收缩按钮尺寸
   expandBtnSize: 20,
   // 节点里图片和文字的间距
@@ -84,6 +82,9 @@ export const defaultOpt = {
   isShowExpandNum: true,
   // 是否只有当鼠标在画布内才响应快捷键事件
   enableShortcutOnlyWhenMouseInSvg: true,
+  // 自定义判断是否响应快捷键事件，优先级比enableShortcutOnlyWhenMouseInSvg选项高
+  // 可以传递一个函数，接收事件对象e为参数，需要返回true或false，返回true代表允许响应快捷键事件，反之不允许，库默认当事件目标为body，或为文本编辑框元素（普通文本编辑框、富文本编辑框、关联线文本编辑框）时响应快捷键，其他不响应
+  customCheckEnableShortcut: null,
   // 初始根节点的位置
   initRootNodePosition: null,
   // 节点文本编辑框的z-index
@@ -130,6 +131,8 @@ export const defaultOpt = {
   // 是否在存在一个激活节点时，当按下中文、英文、数字按键时自动进入文本编辑模式
   // 开启该特性后，需要给你的输入框绑定keydown事件，并禁止冒泡
   enableAutoEnterTextEditWhenKeydown: false,
+  // 当enableAutoEnterTextEditWhenKeydown选项开启时生效，当通过按键进入文本编辑时是否自动清空原有文本
+  autoEmptyTextWhenKeydownEnterEdit: false,
   // 自定义对剪贴板文本的处理。当按ctrl+v粘贴时会读取用户剪贴板中的文本和图片，默认只会判断文本是否是普通文本和simple-mind-map格式的节点数据，如果你想处理其他思维导图的数据，比如processon、zhixi等，那么可以传递一个函数，接受当前剪贴板中的文本为参数，返回处理后的数据，可以返回两种类型：
   /*
     1.返回一个纯文本，那么会直接以该文本创建一个子节点
@@ -247,8 +250,9 @@ export const defaultOpt = {
   emptyTextMeasureHeightText: 'abc123我和你',
   // 是否在进行节点文本编辑时实时更新节点大小和节点位置，开启后当节点数量比较多时可能会造成卡顿
   openRealtimeRenderOnNodeTextEdit: false,
-  // 默认会给容器元素el绑定mousedown事件，并且会阻止其默认事件，这会带来一定问题，比如你聚焦在思维导图外的其他输入框，点击画布就不会触发其失焦，可以通过该选项关闭阻止。关闭后也会带来一定问题，比如鼠标框选节点时可能会选中节点文字，看你如何取舍
-  mousedownEventPreventDefault: true,
+  // 默认会给容器元素el绑定mousedown事件，可通过该选项设置是否阻止其默认事件
+  // 如果设置为true，会带来一定问题，比如你聚焦在思维导图外的其他输入框，点击画布就不会触发其失焦
+  mousedownEventPreventDefault: false,
   // 在激活上粘贴用户剪贴板中的数据时，如果同时存在文本和图片，那么只粘贴文本，忽略图片
   onlyPasteTextWhenHasImgAndText: true,
   // 是否允许拖拽调整节点的宽度，实际上压缩的是节点里面文本内容的宽度，当节点文本内容宽度压缩到最小时无法继续压缩。如果节点存在图片，那么最小值以图片宽度和文本内容最小宽度的最大值为准（目前该特性仅在两种情况下可用：1.开启了富文本模式，即注册了RichText插件；2.自定义节点内容）
@@ -257,6 +261,47 @@ export const defaultOpt = {
   minNodeTextModifyWidth: 20,
   // 同minNodeTextModifyWidth，最大值，传-1代表不限制
   maxNodeTextModifyWidth: -1,
+  // 自定义处理节点的连线方法，可以传递一个函数，函数接收三个参数：node（节点实例）、line（节点的某条连线，@svgjs库的path对象）, { width, color, dasharray }，dasharray（该条连线的虚线样式，为none代表实线），你可以修改line对象来达到修改节点连线样式的效果，比如增加流动效果
+  customHandleLine: null,
+  // 实例化完后是否立刻进行一次历史数据入栈操作
+  // 即调用mindMap.command.addHistory方法
+  addHistoryOnInit: true,
+  // 自定义节点备注图标
+  noteIcon: {
+    icon: '', // svg字符串，如果不是确定要使用svg自带的样式，否则请去除其中的fill等样式属性
+    style: {
+      // size: 20,// 图标大小，不手动设置则会使用主题的iconSize配置
+      // color: '',// 图标颜色，不手动设置则会使用节点文本的颜色
+    }
+  },
+  // 自定义节点超链接图标
+  hyperlinkIcon: {
+    icon: '', // svg字符串，如果不是确定要使用svg自带的样式，否则请去除其中的fill等样式属性
+    style: {
+      // size: 20,// 图标大小，不手动设置则会使用主题的iconSize配置
+      // color: '',// 图标颜色，不手动设置则会使用节点文本的颜色
+    }
+  },
+  // 自定义节点附件图标
+  attachmentIcon: {
+    icon: '', // svg字符串，如果不是确定要使用svg自带的样式，否则请去除其中的fill等样式属性
+    style: {
+      // size: 20,// 图标大小，不手动设置则会使用主题的iconSize配置
+      // color: '',// 图标颜色，不手动设置则会使用节点文本的颜色
+    }
+  },
+  // 是否显示快捷创建子节点按钮
+  isShowCreateChildBtnIcon: true,
+  // 自定义快捷创建子节点按钮图标
+  quickCreateChildBtnIcon: {
+    icon: '', // svg字符串，如果不是确定要使用svg自带的样式，否则请去除其中的fill等样式属性
+    style: {
+      // 图标大小使用的是expandBtnSize选项
+      // color: '',// 图标颜色，不手动设置则会使用expandBtnStyle选项的color字段
+    }
+  },
+  // 自定义快捷创建子节点按钮的点击操作，
+  customQuickCreateChildBtnClick: null,
 
   // 【Select插件】
   // 多选节点时鼠标移动到边缘时的画布移动偏移量
@@ -426,9 +471,6 @@ export const defaultOpt = {
   transformRichTextOnEnterEdit: null,
   // 可以传递一个函数，即将结束富文本编辑前会执行该函数，函数接收richText实例，所以你可以在此时机更新quill文档数据
   beforeHideRichTextEdit: null,
-  // 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果
-  // 需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果
-  richTextEditFakeInPlace: false,
 
   // 【OuterFrame】插件
   outerFramePaddingX: 10,

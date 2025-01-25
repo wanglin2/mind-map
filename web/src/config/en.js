@@ -626,3 +626,19 @@ export const linearGradientDirList = [
     end: [0, 0]
   }
 ]
+
+// 文本对齐方式
+export const alignList = [
+  {
+    name: 'Align left',
+    value: 'left'
+  },
+  {
+    name: 'Align center',
+    value: 'center'
+  },
+  {
+    name: 'Align right',
+    value: 'right'
+  }
+]

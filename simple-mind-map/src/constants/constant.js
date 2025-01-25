@@ -3,7 +3,6 @@ export const CONSTANTS = {
   CHANGE_THEME: 'changeTheme',
   CHANGE_LAYOUT: 'changeLayout',
   SET_DATA: 'setData',
-  TRANSFORM_TO_NORMAL_NODE: 'transformAllNodesToNormalNode',
   MODE: {
     READONLY: 'readonly',
     EDIT: 'edit'
@@ -72,9 +71,20 @@ export const CONSTANTS = {
     NOT_ACTIVE: 'notActive',
     ACTIVE_ONLY: 'activeOnly'
   },
-  TAG_POSITION: {
+  TAG_PLACEMENT: {
     RIGHT: 'right',
     BOTTOM: 'bottom'
+  },
+  IMG_PLACEMENT: {
+    LEFT: 'left',
+    TOP: 'top',
+    RIGHT: 'right',
+    BOTTOM: 'bottom'
+  },
+  EDIT_NODE_CLASS: {
+    SMM_NODE_EDIT_WRAP: 'smm-node-edit-wrap',
+    RICH_TEXT_EDIT_WRAP: 'ql-editor',
+    ASSOCIATIVE_LINE_TEXT_EDIT_WRAP: 'associative-line-text-edit-warp'
   }
 }
 
@@ -152,7 +162,7 @@ export const nodeDataNoStylePropList = [
   'isActive',
   'generalization',
   'richText',
-  'resetRichText',
+  'resetRichText',// 重新创建富文本内容，去掉原有样式
   'uid',
   'activeStyle',
   'associativeLineTargets',
@@ -168,7 +178,9 @@ export const nodeDataNoStylePropList = [
   'customLeft',
   'customTop',
   'customTextWidth',
-  'checkbox'
+  'checkbox',
+  'dir',
+  'needUpdate'// 重新创建节点内容
 ]
 
 // 错误类型
@@ -201,6 +213,10 @@ export const cssContent = `
     opacity: 1;
     stroke-width: 2;
   }
+
+  .smm-text-node-wrap, .smm-expand-btn-text {
+    user-select: none;
+  }
 `
 
 // html自闭合标签列表
@@ -216,3 +232,14 @@ export const selfCloseTagList = [
 
 // 非富文本模式下的节点文本行高
 export const noneRichTextNodeLineHeight = 1.2
+
+// 富文本支持的样式列表
+export const richTextSupportStyleList = [
+  'fontFamily',
+  'fontSize',
+  'fontWeight',
+  'fontStyle',
+  'textDecoration',
+  'color',
+  'textAlign'
+]
