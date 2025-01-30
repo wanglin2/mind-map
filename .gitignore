@@ -3,3 +3,4 @@ node_modules
 dist_electron
 simple-mind-map/dist
 simple-mind-map/types
+utools/dist
