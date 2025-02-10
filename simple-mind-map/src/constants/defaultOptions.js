@@ -492,5 +492,10 @@ export const defaultOpt = {
   maxImgResizeWidthInheritTheme: false,
   // 最大允许缩放的尺寸，maxImgResizeWidthInheritTheme选项设置为false时生效，不限制最大值可传递Infinity
   maxImgResizeWidth: Infinity,
-  maxImgResizeHeight: Infinity
+  maxImgResizeHeight: Infinity,
+  // 自定义删除按钮和尺寸调整按钮的内容
+  // 默认为内置图标，你可以传递一个svg字符串，或者其他的html字符串
+  // 整体大小请使用上面的minImgResizeWidth和minImgResizeHeight选项设置
+  customDeleteBtnInnerHTML: '',
+  customResizeBtnInnerHTML: ''
 }
