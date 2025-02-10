@@ -253,7 +253,9 @@ const transformToXmind = async (data, name) => {
     }
     // 标签
     if (node.data.tag !== undefined) {
-      newData.labels = node.data.tag || []
+      newData.labels = (node.data.tag || []).map(item => {
+        return typeof item === 'object' && item !== null ? item.text : item
+      })
     }
     // 图片
     handleNodeImageToXmind(node, newNode, waitLoadImageList, imageList)

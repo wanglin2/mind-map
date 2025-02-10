@@ -213,7 +213,9 @@ export default {
   },
   outline: {
     title: '大纲',
-    nodeDefaultText: '分支节点'
+    nodeDefaultText: '分支节点',
+    print: '打印',
+    fullscreen: '全屏'
   },
   scale: {
     zoomIn: '放大',

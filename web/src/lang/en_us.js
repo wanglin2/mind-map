@@ -217,7 +217,9 @@ export default {
   },
   outline: {
     title: 'Outline',
-    nodeDefaultText: 'Branch node'
+    nodeDefaultText: 'Branch node',
+    print: 'Print',
+    fullscreen: 'Fullscreen'
   },
   scale: {
     zoomIn: 'Zoom in',
