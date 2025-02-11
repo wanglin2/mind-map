@@ -152,10 +152,7 @@ export default {
     svgFile: 'SVG 檔案',
     pdfFile: 'PDF 檔案',
     markdownFile: 'Markdown 檔案',
-    tips: '提示：.smm 和 .json 檔案可以匯入',
     isTransparent: '背景透明',
-    pngTips: '提示：在豐富文字模式下匯出圖片非常耗時，建議匯出為 SVG 格式',
-    svgTips: '提示：在豐富文字模式下匯出圖片非常耗時',
     transformingDomToImages: '正在轉換節點：',
     notifyTitle: '訊息',
     notifyMessage: '如果沒有觸發下載，請檢查是否被瀏覽器封鎖',
@@ -164,7 +161,9 @@ export default {
     useMultiPageExport: '多頁匯出',
     defaultFileName: '心智圖',
     addFooterText: '在底部新增文字',
-    addFooterTextPlaceholder: '例如：來自 simple-mind-map'
+    addFooterTextPlaceholder: '例如：來自 simple-mind-map',
+    desc: '說明',
+    options: '選項'
   },
   fullscreen: {
     fullscreenShow: '全螢幕檢視',

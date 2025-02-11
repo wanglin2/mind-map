@@ -152,11 +152,7 @@ export default {
     svgFile: 'svg file',
     pdfFile: 'pdf file',
     markdownFile: 'markdown file',
-    tips: 'tips: .smm and .json file can be import',
     isTransparent: 'Background is transparent',
-    pngTips:
-      'tips: Exporting pictures in rich text mode is time-consuming. It is recommended to export to svg format',
-    svgTips: 'tips: Exporting pictures in rich text mode is time-consuming',
     transformingDomToImages: 'Converting nodes: ',
     notifyTitle: 'Info',
     notifyMessage:
@@ -166,7 +162,9 @@ export default {
     useMultiPageExport: 'Export multi page',
     defaultFileName: 'Mind map',
     addFooterTextPlaceholder: 'For example: From simple-mind-map',
-    addFooterText: 'Add text at the footer'
+    addFooterText: 'Add text at the footer',
+    desc: 'Desc',
+    options: 'Options'
   },
   fullscreen: {
     fullscreenShow: 'Full screen show',

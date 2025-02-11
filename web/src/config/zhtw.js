@@ -457,61 +457,61 @@ export const downTypeList = [
     name: '專用檔案',
     type: 'smm',
     icon: 'iconwenjian',
-    desc: '可用於匯入'
+    desc: 'SimpleMindMap私有格式，可用于再次導入，客戶端可直接編輯'
   },
   {
     name: 'JSON',
     type: 'json',
     icon: 'iconjson',
-    desc: '常見的資料交換格式，可用於匯入'
+    desc: '流行的數據交換格式，可用于再次導入'
   },
   {
     name: '圖片',
     type: 'png',
     icon: 'iconPNG',
-    desc: '適合檢視與分享'
+    desc: '常用圖片格式，適合查看分享'
   },
   {
     name: 'SVG',
     type: 'svg',
     icon: 'iconSVG',
-    desc: '可縮放向量圖形'
+    desc: '可縮放矢量圖形'
   },
   {
     name: 'PDF',
     type: 'pdf',
     icon: 'iconpdf',
-    desc: '適合列印'
+    desc: '適合查看浏覽和打印'
   },
   {
     name: 'Markdown',
     type: 'md',
     icon: 'iconmarkdown',
-    desc: '方便其他軟體開啟'
+    desc: 'md文本格式，便于其他軟件打開'
   },
   {
     name: 'XMind',
     type: 'xmind',
     icon: 'iconxmind',
-    desc: 'XMind 檔案'
+    desc: 'XMind軟件格式'
   },
   {
     name: 'Txt',
     type: 'txt',
     icon: 'iconTXT',
-    desc: '純文字檔案'
+    desc: '純文本文件'
   },
   {
     name: 'FreeMind',
     type: 'mm',
     icon: 'iconfreemind',
-    desc: 'FreeMind軟體格式'
+    desc: 'FreeMind軟件格式'
   },
   {
     name: 'Excel',
     type: 'xlsx',
     icon: 'iconfile-excel',
-    desc: 'Excel軟體格式'
+    desc: '表格文本形式，可用Excel軟件編輯'
   }
 ]
 

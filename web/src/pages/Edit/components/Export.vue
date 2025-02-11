@@ -1,16 +1,18 @@
 <template>
   <el-dialog
     class="nodeExportDialog"
+    :class="{ isMobile: isMobile, isDark: isDark }"
     :title="$t('export.title')"
     :visible.sync="dialogVisible"
     v-loading.fullscreen.lock="loading"
     :element-loading-text="loadingText"
     element-loading-spinner="el-icon-loading"
     element-loading-background="rgba(0, 0, 0, 0.8)"
-    :width="isMobile ? '90%' : '50%'"
+    :width="isMobile ? '90%' : '800px'"
     :top="isMobile ? '20px' : '15vh'"
   >
     <div class="exportContainer" :class="{ isDark: isDark }">
+      <!-- 文件名称输入 -->
       <div class="nameInputBox">
         <span class="name">{{ $t('export.filename') }}</span>
         <el-input
@@ -19,71 +21,90 @@
           size="mini"
           @keydown.native.stop
         ></el-input>
-        <el-checkbox
-          v-show="['smm', 'json'].includes(exportType)"
-          v-model="widthConfig"
-          style="margin-left: 12px"
-          >{{ $t('export.include') }}</el-checkbox
-        >
       </div>
-      <div
-        class="paddingInputBox"
-        v-show="['svg', 'png', 'pdf'].includes(exportType)"
-      >
-        <div class="paddingInputGroup">
-          <span class="name">{{ $t('export.paddingX') }}</span>
-          <el-input
-            style="max-width: 100px"
-            v-model="paddingX"
-            size="mini"
-            @change="onPaddingChange"
-            @keydown.native.stop
-          ></el-input>
-        </div>
-        <div class="paddingInputGroup">
-          <span class="name">{{ $t('export.paddingY') }}</span>
-          <el-input
-            style="width: 100px"
-            v-model="paddingY"
-            size="mini"
-            @change="onPaddingChange"
-            @keydown.native.stop
-          ></el-input>
-        </div>
-        <div class="paddingInputGroup">
-          <span class="name">{{ this.$t('export.addFooterText') }}</span>
-          <el-input
-            style="width: 200px"
-            v-model="extraText"
-            size="mini"
-            :placeholder="$t('export.addFooterTextPlaceholder')"
-            @keydown.native.stop
-          ></el-input>
-        </div>
-        <div class="paddingInputGroup">
-          <el-checkbox
-            v-show="['png', 'pdf'].includes(exportType)"
-            v-model="isTransparent"
-            >{{ $t('export.isTransparent') }}</el-checkbox
+      <!-- 导出类型选择 -->
+      <div class="downloadTypeSelectBox">
+        <!-- 类型列表 -->
+        <div class="downloadTypeList customScrollbar">
+          <div
+            class="downloadTypeItem"
+            v-for="item in downTypeList"
+            :key="item.type"
+            :class="{ active: exportType === item.type }"
+            @click="exportType = item.type"
           >
-        </div>
-      </div>
-      <div class="downloadTypeList">
-        <div
-          class="downloadTypeItem"
-          v-for="item in downTypeList"
-          :key="item.type"
-          :class="{ active: exportType === item.type }"
-          @click="exportType = item.type"
-        >
-          <div class="icon iconfont" :class="[item.icon, item.type]"></div>
-          <div class="info">
+            <div class="icon iconfont" :class="[item.icon, item.type]"></div>
             <div class="name">{{ item.name }}</div>
-            <div class="desc">{{ item.desc }}</div>
+            <div class="icon checked el-icon-check"></div>
+          </div>
+        </div>
+        <!-- 类型内容 -->
+        <div class="downloadTypeContent customScrollbar">
+          <div class="contentRow">
+            <div class="contentName">{{ $t('export.desc') }}</div>
+            <div class="contentValue">
+              {{ currentTypeData ? currentTypeData.desc : '' }}
+            </div>
+          </div>
+          <div class="contentRow">
+            <div class="contentName">{{ $t('export.options') }}</div>
+            <div class="contentValue">
+              <div
+                class="valueItem"
+                v-show="['smm', 'json'].includes(exportType)"
+              >
+                <el-checkbox v-model="widthConfig">{{
+                  $t('export.include')
+                }}</el-checkbox>
+              </div>
+              <div
+                class="valueItem"
+                v-show="['svg', 'png', 'pdf'].includes(exportType)"
+              >
+                <div class="valueSubItem">
+                  <span class="name">{{ $t('export.paddingX') }}</span>
+                  <el-input
+                    style="width: 200px"
+                    v-model="paddingX"
+                    size="mini"
+                    @change="onPaddingChange"
+                    @keydown.native.stop
+                  ></el-input>
+                </div>
+                <div class="valueSubItem">
+                  <span class="name">{{ $t('export.paddingY') }}</span>
+                  <el-input
+                    style="width: 200px"
+                    v-model="paddingY"
+                    size="mini"
+                    @change="onPaddingChange"
+                    @keydown.native.stop
+                  ></el-input>
+                </div>
+                <div class="valueSubItem">
+                  <span class="name">{{
+                    this.$t('export.addFooterText')
+                  }}</span>
+                  <el-input
+                    style="width: 200px"
+                    v-model="extraText"
+                    size="mini"
+                    :placeholder="$t('export.addFooterTextPlaceholder')"
+                    @keydown.native.stop
+                  ></el-input>
+                </div>
+                <div class="valueSubItem">
+                  <el-checkbox
+                    v-show="['png', 'pdf'].includes(exportType)"
+                    v-model="isTransparent"
+                    >{{ $t('export.isTransparent') }}</el-checkbox
+                  >
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="tip">{{ $t('export.tips') }}</div>
     </div>
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
@@ -143,6 +164,13 @@ export default {
           return true
         }
       })
+    },
+
+    currentTypeData() {
+      const cur = this.downTypeList.find(item => {
+        return item.type === this.exportType
+      })
+      return cur
     }
   },
   created() {
@@ -247,15 +275,39 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.exportContainer {
-  &.isDark {
-    .downloadTypeList {
-      .downloadTypeItem {
-        background-color: #363b3f;
+.nodeExportDialog {
+  .exportContainer {
+    &.isDark {
+      .nameInputBox {
+        .name {
+          color: hsla(0, 0%, 100%, 0.6);
+        }
+      }
 
-        .info {
-          .name {
-            color: hsla(0, 0%, 100%, 0.9);
+      .downloadTypeSelectBox {
+        .downloadTypeList {
+          .downloadTypeItem {
+            background-color: #363b3f;
+
+            &.active {
+              background-color: #262a2e;
+            }
+
+            .name {
+              color: hsla(0, 0%, 100%, 0.9);
+            }
+          }
+        }
+
+        .downloadTypeContent {
+          .contentRow {
+            .contentName {
+              color: hsla(0, 0%, 100%, 0.6);
+            }
+
+            .contentValue {
+              color: hsla(0, 0%, 100%, 0.6);
+            }
           }
         }
       }
@@ -264,125 +316,228 @@ export default {
 }
 
 .nodeExportDialog {
-  /deep/ .el-dialog__body {
-    background-color: #f2f4f7;
-  }
-
-  .nameInputBox {
-    margin-bottom: 20px;
-
-    .name {
-      margin-right: 10px;
-    }
-  }
-
-  .paddingInputBox {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-
-    .paddingInputGroup {
-      margin-right: 12px;
-      margin-bottom: 12px;
-
-      &:last-of-type {
-        margin-right: 0;
+  &.isDark {
+    /deep/ .el-dialog__body {
+      .el-checkbox {
+        .el-checkbox__label {
+          color: hsla(0, 0%, 100%, 0.6);
+        }
       }
     }
+  }
 
-    .name {
-      margin-right: 10px;
+  /deep/ .el-dialog__body {
+    padding: 0;
+    border-top: 1px solid #f2f4f7;
+    border-bottom: 1px solid #f2f4f7;
+
+    .el-checkbox__input.is-checked + .el-checkbox__label {
+      color: #409eff !important;
+    }
+
+    .el-checkbox {
+      .el-checkbox__label {
+        color: #1a1a1a;
+      }
     }
   }
 
-  .tip {
-    margin-top: 10px;
+  &.isMobile {
+    .exportContainer {
+      .downloadTypeSelectBox {
+        flex-direction: column;
 
-    &.warning {
-      color: #f56c6c;
+        .downloadTypeList {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          overflow-x: auto;
+          height: 60px;
+
+          .downloadTypeItem {
+            width: 100px;
+            flex-shrink: 0;
+            padding-left: 10px;
+
+            .icon {
+              margin-right: 5px;
+
+              &.checked {
+                display: none !important;
+              }
+            }
+          }
+        }
+
+        .downloadTypeContent {
+          .contentRow {
+            flex-direction: column;
+
+            .contentName {
+              margin-bottom: 10px;
+            }
+
+            .contentValue {
+              .valueItem {
+                .valueSubItem {
+                  display: flex;
+                  flex-direction: column;
+
+                  .name {
+                    margin-bottom: 5px;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 
-  .downloadTypeList {
+  .exportContainer {
+    width: 100%;
+    height: 450px;
+    overflow: hidden;
     display: flex;
-    flex-wrap: wrap;
-    .downloadTypeItem {
-      width: 200px;
-      height: 88px;
-      padding: 22px;
-      overflow: hidden;
-      margin: 10px;
-      border-radius: 11px;
-      box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.02);
-      background-color: #fff;
+    flex-direction: column;
+
+    .nameInputBox {
       display: flex;
       align-items: center;
-      cursor: pointer;
-      border: 2px solid transparent;
+      justify-content: center;
+      flex-wrap: wrap;
+      height: 50px;
+      flex-shrink: 0;
+      border-bottom: 1px solid #f2f4f7;
 
-      &.active {
-        border-color: #409eff;
-      }
-
-      .icon {
-        font-size: 30px;
+      .name {
         margin-right: 10px;
+      }
+    }
+
+    .downloadTypeSelectBox {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+
+      .downloadTypeList {
+        width: 210px;
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background-color: #f2f4f7;
         flex-shrink: 0;
 
-        &.png {
-          color: #ffc038;
-        }
+        .downloadTypeItem {
+          width: 100%;
+          height: 60px;
+          padding-left: 28px;
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
 
-        &.pdf {
-          color: #ff6c4d;
-        }
+          &.active {
+            background-color: #fff;
 
-        &.md {
-          color: #2b2b2b;
-        }
+            .icon {
+              &.checked {
+                display: block;
+              }
+            }
+          }
 
-        &.json {
-          color: #12c87e;
-        }
+          .icon {
+            font-size: 25px;
+            margin-right: 15px;
+            flex-shrink: 0;
 
-        &.svg {
-          color: #4380ff;
-        }
+            &.png {
+              color: #ffc038;
+            }
 
-        &.smm {
-          color: #409eff;
-        }
+            &.pdf {
+              color: #ff6c4d;
+            }
 
-        &.xmind {
-          color: #f55e5e;
-        }
+            &.md {
+              color: #2b2b2b;
+            }
 
-        &.txt {
-          color: #70798e;
+            &.json {
+              color: #12c87e;
+            }
+
+            &.svg {
+              color: #4380ff;
+            }
+
+            &.smm {
+              color: #409eff;
+            }
+
+            &.xmind {
+              color: #f55e5e;
+            }
+
+            &.txt {
+              color: #70798e;
+            }
+
+            &.checked {
+              color: #409eff;
+              font-size: 20px;
+              margin-left: auto;
+              display: none;
+            }
+          }
+
+          .name {
+            color: #1a1a1a;
+            font-size: 15px;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
         }
       }
 
-      .info {
-        width: 100%;
-        overflow: hidden;
+      .downloadTypeContent {
+        padding: 30px;
+        height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
 
-        .name {
-          color: #1a1a1a;
-          font-size: 15px;
-          margin-bottom: 5px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
+        .contentRow {
+          display: flex;
+          font-size: 14px;
+          margin-bottom: 20px;
 
-        .desc {
-          color: #999;
-          font-size: 12px;
-          display: -webkit-box; /* 必须设置display属性为-webkit-box */
-          overflow: hidden; /* 超出部分隐藏 */
-          text-overflow: ellipsis; /* 显示省略号 */
-          -webkit-line-clamp: 2; /* 限制显示两行 */
-          -webkit-box-orient: vertical; /* 垂直方向上的换行 */
+          .contentName {
+            width: 80px;
+            color: #666;
+          }
+
+          .contentValue {
+            color: #1a1a1a;
+
+            .valueItem {
+              .valueSubItem {
+                margin-bottom: 12px;
+
+                &:last-of-type {
+                  margin-right: 0;
+                }
+
+                .name {
+                  margin-right: 12px;
+                }
+              }
+            }
+          }
         }
       }
     }
