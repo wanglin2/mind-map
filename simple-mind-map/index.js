@@ -20,7 +20,8 @@ import {
   isUndef,
   handleGetSvgDataExtraContent,
   getNodeTreeBoundingRect,
-  mergeTheme
+  mergeTheme,
+  createUidForAppointNodes
 } from './src/utils'
 import defaultTheme, {
   checkIsNodeSizeIndependenceConfig
@@ -149,6 +150,8 @@ class MindMap {
     if (data.data && !data.data.expand) {
       data.data.expand = true
     }
+    // 给没有uid的节点添加uid
+    createUidForAppointNodes([data], false, null, true)
     return data
   }
 
@@ -395,6 +398,7 @@ class MindMap {
 
   // 更新画布数据，如果新的数据是在当前画布节点数据基础上增删改查后形成的，那么可以使用该方法来更新画布数据
   updateData(data) {
+    data = this.handleData(data)
     this.emit('before_update_data', data)
     this.renderer.setData(data)
     this.render()
@@ -583,7 +587,7 @@ class MindMap {
       this.watermark.isInExport = false
     }
     // 添加必要的样式
-    [this.joinCss(), ...cssTextList].forEach(s => {
+    ;[this.joinCss(), ...cssTextList].forEach(s => {
       clone.add(SVG(`<style>${s}</style>`))
     })
     // 附加内容

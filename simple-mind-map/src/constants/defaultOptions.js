@@ -302,6 +302,25 @@ export const defaultOpt = {
   },
   // 自定义快捷创建子节点按钮的点击操作，
   customQuickCreateChildBtnClick: null,
+  // 添加自定义的节点内容
+  // 可传递一个对象，格式如下：
+  /*
+    {
+      // 返回要添加的DOM元素详细
+      create: (node) => { 
+        return {
+          el, // DOM节点
+          width: 20, // 宽高
+          height: 20
+        }
+      },
+      // 处理生成的@svgdotjs/svg.js库的ForeignObject节点实例，可以设置其在节点内的位置
+      handle: ({ content, element, node }) => {
+        
+      }
+    }
+  */
+  addCustomContentToNode: null,
 
   // 【Select插件】
   // 多选节点时鼠标移动到边缘时的画布移动偏移量

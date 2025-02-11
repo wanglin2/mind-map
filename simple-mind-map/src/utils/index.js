@@ -508,7 +508,7 @@ export const loadImage = imgFile => {
 
 // 移除字符串中的html实体
 export const removeHTMLEntities = str => {
-  [['&nbsp;', '&#160;']].forEach(item => {
+  ;[['&nbsp;', '&#160;']].forEach(item => {
     str = str.replace(new RegExp(item[0], 'g'), item[1])
   })
   return str
@@ -1002,7 +1002,8 @@ export const addDataToAppointNodes = (appointNodes, data = {}) => {
 export const createUidForAppointNodes = (
   appointNodes,
   createNewId = false,
-  handle = null
+  handle = null,
+  handleGeneralization = false
 ) => {
   const walk = list => {
     list.forEach(node => {
@@ -1011,6 +1012,14 @@ export const createUidForAppointNodes = (
       }
       if (createNewId || isUndef(node.data.uid)) {
         node.data.uid = createUid()
+      }
+      if (handleGeneralization) {
+        const generalizationList = formatGetNodeGeneralization(node.data)
+        generalizationList.forEach(gNode => {
+          if (createNewId || isUndef(gNode.uid)) {
+            gNode.uid = createUid()
+          }
+        })
       }
       handle && handle(node)
       if (node.children && node.children.length > 0) {
@@ -1060,7 +1069,7 @@ export const generateColorByContent = str => {
 
 //  html转义
 export const htmlEscape = str => {
-  [
+  ;[
     ['&', '&amp;'],
     ['<', '&lt;'],
     ['>', '&gt;']
