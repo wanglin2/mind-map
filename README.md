@@ -7,9 +7,9 @@
 [![GitHub stars](https://img.shields.io/github/stars/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/network/members)
 
-> 中文名：思绪思维导图。一个简单&强大的 Web 思维导图。
+> 中文名：思绪思维导图。一个简单&强大的 Web 思维导图库和思维导图软件。
 
-本项目包含两部分：
+本项目主要包含以下内容：
 
 1.一个 js 思维导图库，不依赖任何框架，可以使用它来快速完成 Web 思维导图产品的开发。
 
@@ -104,6 +104,8 @@ const mindMap = new MindMap({
 # 微信交流群
 
 微信添加`wanglinguanfang`拉你入群。根据过往的经验，大部分问题都可以通过查看issue列表或文档解决，所以提问前请确保你已经阅读完了所有文档，文档里没有的可在群里提问，不必私聊作者，如果你一定要私聊，请先发红包（￥9.9+每次）。
+
+如果你在杭州，也欢迎来找我面基。
 
 # star
 
