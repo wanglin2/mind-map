@@ -19,13 +19,15 @@
 
 在线地址：[https://wanglin2.github.io/mind-map/](https://wanglin2.github.io/mind-map/)。
 
-此外也提供了客户端可供下载使用，支持`Windows`、`Mac`及`Linux`，下载地址：
+3.此外也支持以客户端的方式使用，现已上架[uTools](https://www.u.tools/)插件应用市场，强烈建议通过`uTools`来体验。
 
-Github：[releases](https://github.com/wanglin2/mind-map/releases)。百度云盘：[地址](https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3)。
+插件地址：[]()。
 
-> 客户端版本会落后于在线版本，尝试最新功能请优先使用在线版。
+> 独立客户端下载：Github：[releases](https://github.com/wanglin2/mind-map/releases)。百度云盘：[地址](https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3)。
+>
+> 后续不会投入太多精力在独立客户端上，建议通过`uTools`来使用，功能更强，体验更好。
 
-【云存储版本】如果你需要带后端的云存储版本，可以尝试我们开发的另一个项目[理想文档](https://github.com/wanglin2/lx-doc)。
+4.【云存储版本】如果你需要带后端的云存储版本，可以尝试我们开发的另一个项目[理想文档](https://github.com/wanglin2/lx-doc)。
 
 # 特性
 
@@ -151,6 +153,13 @@ const mindMap = new MindMap({
                 <img src="./web/src/assets/avatar/黄智彪@一米一栗科技.png" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
                 <br />
                 <sub style="font-size:14px"><b>黄智彪@一米一栗科技</b></sub>
+            </a>
+        </td>
+        <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
+            <a href="#">
+                <img src="./web/src/assets/avatar/沨沄.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
+                <br />
+                <sub style="font-size:14px"><b>沨沄</b></sub>
             </a>
         </td>
     </tr>
@@ -927,6 +936,13 @@ const mindMap = new MindMap({
                 <img src="./web/src/assets/avatar/好好先生Ervin.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
                 <br />
                 <sub style="font-size:14px"><b>好好先生Ervin</b></sub>
+            </a>
+        </td>
+        <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
+            <a href="#">
+                <img src="./web/src/assets/avatar/胡永刚.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
+                <br />
+                <sub style="font-size:14px"><b>胡永刚</b></sub>
             </a>
         </td>
     </tr>
