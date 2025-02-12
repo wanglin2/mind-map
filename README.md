@@ -21,7 +21,7 @@
 
 3.此外也支持以客户端的方式使用，现已上架[uTools](https://www.u.tools/)插件应用市场，强烈建议通过`uTools`来体验。
 
-插件地址：[]()。
+可直接在`uTools`插件应用市场中搜索`思绪`进行安装，也可以直接访问该地址：[在utools中搜索](https://www.u-tools.cn/plugins/search/?t=%E6%80%9D%E7%BB%AA%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE)，点击右侧的【启动】按钮进行安装。
 
 > 独立客户端下载：Github：[releases](https://github.com/wanglin2/mind-map/releases)。百度云盘：[地址](https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3)。
 >
