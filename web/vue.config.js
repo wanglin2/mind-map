@@ -127,6 +127,12 @@ module.exports = {
             Comment: 'A Simple Mind Map',
             'Comment[zh_CN]': '一个简洁的思维导图'
           },
+          extraFiles: [
+            {
+              from: 'build/io.github.wanglin2.mind-map.metainfo.xml',
+              to: '.'
+            }
+          ],
           icon: './build/icon.icns'
         },
         dmg: {

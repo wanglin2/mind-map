@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.wanglin2.mind-map</id>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+
+  <name>Thoughts</name>
+  <name xml:lang="zh-Hans">思绪思维导图</name>
+  <summary>Simple and powerful mind map</summary>
+  <summary xml:lang="zh-Hans">简洁、强大的思维导图</summary>
+
+  <developer id="io.github.wanglin2">
+    <name>Wang Lin</name>
+    <name xml:lang="zh-Hans">王林</name>
+  </developer>
+
+  <description>
+    <p>A localized mind mapping tool. It features a simple and appealing interface, along with powerful functionality.</p>
+    <p xml:lang="zh-Hans">一个本地化的思维导图。界面简洁、高颜值、功能强大。</p>
+  </description>
+
+  <launchable type="desktop-id">thoughts.desktop</launchable>
+
+  <content_rating type="oars-1.1" />
+
+  <url type="bugtracker">https://github.com/wanglin2/mind-map/issues</url>
+  <url type="homepage">https://wanglin2.github.io/mind-map-docs</url>
+  <url type="vcs-browser">https://github.com/wanglin2/mind-map</url>
+
+  <screenshots>
+    <screenshot type="default">
+      <image>https://raw.githubusercontent.com/wanglin2/mind-map-docs/main/src/assets/img/client/client-en_us.png</image>
+      <image xml:lang="zh-Hans">https://raw.githubusercontent.com/wanglin2/mind-map-docs/main/src/assets/img/client/client-zh_cn.png</image>
+    </screenshot>
+  </screenshots>
+
+  <releases>
+    <release version="0.12.1" date="2024-10-25" />
+      <url type="details">https://wanglin2.github.io/mind-map-docs/start/changelog.html#_0-12-1</url>
+    </release>
+  </releases>
+</component>
