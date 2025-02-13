@@ -1,6 +1,6 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('baseStyle.title')">
-    <div class="sidebarContent" :class="{ isDark: isDark }" v-if="data">
+    <div class="sidebarContent customScrollbar" :class="{ isDark: isDark }" v-if="data">
       <!-- 背景 -->
       <div class="title noTop">{{ $t('baseStyle.background') }}</div>
       <div class="row">

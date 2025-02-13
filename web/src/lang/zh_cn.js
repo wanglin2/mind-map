@@ -75,6 +75,7 @@ export default {
     tagPositionBottom: '文本下面',
     alwaysShowExpandBtn: '是否一直显示展开收起按钮',
     enableAutoEnterTextEditWhenKeydown: '键盘输入时自动进入文本编辑',
+    enableInheritAncestorLineStyle: '节点连线样式继承祖先节点的样式',
     confirm: '确定',
     cancel: '取消',
     changeRichTextTip:

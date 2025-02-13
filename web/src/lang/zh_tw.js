@@ -42,9 +42,7 @@ export default {
     notUseRainbowLines: '不使用彩虹線條',
     outerFramePadding: '外框內距',
     tagPositionRight: '文本右側',
-    tagPositionBottom: '文本下面',
-    alwaysShowExpandBtn: '是否壹直顯示展開收起按鈕',
-    enableAutoEnterTextEditWhenKeydown: '鍵盤輸入時自動進入文本編輯'
+    tagPositionBottom: '文本下面'
   },
   setting: {
     title: '設置',
@@ -84,7 +82,10 @@ export default {
     changeRichTextTip3: '是否切換爲非富文本模式？',
     enableDragImport: '是否允許直接拖拽文件到頁面進行導入',
     imgTextMargin: '節點圖片和文本間隔',
-    textContentMargin: '節點各種內容間隔'
+    textContentMargin: '節點各種內容間隔',
+    enableAutoEnterTextEditWhenKeydown: '鍵盤輸入時自動進入文本編輯',
+    enableInheritAncestorLineStyle: '節點連線樣式繼承祖先節點的樣式',
+    alwaysShowExpandBtn: '是否壹直顯示展開收起按鈕'
   },
   color: {
     moreColor: '更多顏色'

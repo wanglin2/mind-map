@@ -5,7 +5,7 @@
       :class="{ isDark: isDark }"
       v-if="activeNodes.length > 0"
     >
-      <div class="sidebarContent">
+      <div class="sidebarContent customScrollbar">
         <!-- 文字 -->
         <div class="title noTop">{{ $t('style.text') }}</div>
         <div class="row">

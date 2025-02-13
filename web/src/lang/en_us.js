@@ -84,7 +84,8 @@ export default {
     changeRichTextTip3: 'Do you want to switch to non rich text mode?',
     enableDragImport: 'Is it allowed to directly drag and drop files to the page for import',
     imgTextMargin: 'Node image and text margin',
-    textContentMargin: 'Node contents margin'
+    textContentMargin: 'Node contents margin',
+    enableInheritAncestorLineStyle: 'Node connection style inherits the style of ancestor nodes',
   },
   color: {
     moreColor: 'More color'
