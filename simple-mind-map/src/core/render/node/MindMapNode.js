@@ -296,7 +296,10 @@ class MindMapNode {
       typeof addCustomContentToNode.create === 'function'
     ) {
       this._customContentAddToNodeAdd = addCustomContentToNode.create(this)
-      if (this._customContentAddToNodeAdd && this._customContentAddToNodeAdd.el) {
+      if (
+        this._customContentAddToNodeAdd &&
+        this._customContentAddToNodeAdd.el
+      ) {
         addXmlns(this._customContentAddToNodeAdd.el)
       }
     }
@@ -883,15 +886,18 @@ class MindMapNode {
 
   //  设置连线样式
   styleLine(line, childNode, enableMarker) {
+    const { enableInheritAncestorLineStyle } = this.mindMap.opt
+    const getName = enableInheritAncestorLineStyle
+      ? 'getSelfInhertStyle'
+      : 'getSelfStyle'
     const width =
-      childNode.getSelfInhertStyle('lineWidth') ||
-      childNode.getStyle('lineWidth', true)
+      childNode[getName]('lineWidth') || childNode.getStyle('lineWidth', true)
     const color =
-      childNode.getSelfInhertStyle('lineColor') ||
+      childNode[getName]('lineColor') ||
       this.getRainbowLineColor(childNode) ||
       childNode.getStyle('lineColor', true)
     const dasharray =
-      childNode.getSelfInhertStyle('lineDasharray') ||
+      childNode[getName]('lineDasharray') ||
       childNode.getStyle('lineDasharray', true)
     this.style.line(
       line,
