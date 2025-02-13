@@ -120,7 +120,13 @@ module.exports = {
               arch: ['x64']
             }
           ],
-          category: 'Utilities',
+          category: 'Office',
+          desktop: {
+            Name: 'Thoughts',
+            'Name[zh_CN]': '思绪思维导图',
+            Comment: 'A Simple Mind Map',
+            'Comment[zh_CN]': '一个简洁的思维导图'
+          },
           icon: './build/icon.icns'
         },
         dmg: {
