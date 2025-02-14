@@ -38,5 +38,13 @@ module.exports = {
         '@': path.resolve(__dirname, './src/')
       }
     }
+  },
+  devServer: {
+    proxy: {
+      '^/api/v3/': {
+        target: 'http://ark.cn-beijing.volces.com',
+        changeOrigin: true
+      }
+    }
   }
 }
