@@ -61,6 +61,7 @@ export default {
       'Enable real-time rendering effect for text editing',
     isShowScrollbar: 'Is show scrollbar',
     isUseHandDrawnLikeStyle: 'Is use hand drawn like style',
+    isUseMomentum: 'Is open drag momentum',
     watermark: 'Watermark',
     showWatermark: 'Is show watermark',
     onlyExport: 'Only export',

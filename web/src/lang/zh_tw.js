@@ -62,6 +62,7 @@ export default {
     openRealtimeRenderOnNodeTextEdit: '開啟文本編輯實時渲染效果',
     isShowScrollbar: '顯示捲軸',
     isUseHandDrawnLikeStyle: '使用手繪風格',
+    isUseMomentum: '是否開啓拖動畫布的動量效果',
     watermark: '浮水印',
     showWatermark: '顯示浮水印',
     onlyExport: '僅在匯出時顯示',

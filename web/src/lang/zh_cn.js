@@ -59,6 +59,7 @@ export default {
     openRealtimeRenderOnNodeTextEdit: '开启文本编辑实时渲染效果',
     isShowScrollbar: '是否显示滚动条',
     isUseHandDrawnLikeStyle: '是否开启手绘风格',
+    isUseMomentum: '是否开启拖动画布的动量效果',
     watermark: '水印',
     showWatermark: '是否显示水印',
     watermarkDefaultText: '水印文字',

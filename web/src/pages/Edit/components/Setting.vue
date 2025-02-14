@@ -1,6 +1,10 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('setting.title')">
-    <div class="sidebarContent customScrollbar" :class="{ isDark: isDark }" v-if="data">
+    <div
+      class="sidebarContent customScrollbar"
+      :class="{ isDark: isDark }"
+      v-if="data"
+    >
       <!-- 水印 -->
       <div class="row">
         <!-- 是否显示水印 -->
@@ -252,6 +256,16 @@
           >
         </div>
       </div>
+      <!-- 是否开启动量效果 -->
+      <div class="row" v-if="supportMomentum">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="localConfigs.isUseMomentum"
+            @change="updateLocalConfig('isUseMomentum', $event)"
+            >{{ $t('setting.isUseMomentum') }}</el-checkbox
+          >
+        </div>
+      </div>
       <!-- 配置鼠标滚轮行为 -->
       <div class="row">
         <div class="rowItem">
@@ -420,6 +434,7 @@ export default {
       localConfigs: {
         isShowScrollbar: false,
         isUseHandDrawnLikeStyle: false,
+        isUseMomentum: false,
         enableDragImport: false
       }
     }
@@ -429,7 +444,8 @@ export default {
       activeSidebar: state => state.activeSidebar,
       localConfig: state => state.localConfig,
       isDark: state => state.localConfig.isDark,
-      supportHandDrawnLikeStyle: state => state.supportHandDrawnLikeStyle
+      supportHandDrawnLikeStyle: state => state.supportHandDrawnLikeStyle,
+      supportMomentum: state => state.supportMomentum
     })
   },
   watch: {
