@@ -181,7 +181,11 @@ function layout() {
     addCustomContentToNode
   } = this.mindMap.opt
   // 避免编辑过程中展开收起按钮闪烁的问题
-  if (openRealtimeRenderOnNodeTextEdit && this._expandBtn) {
+  if (
+    openRealtimeRenderOnNodeTextEdit &&
+    this._expandBtn &&
+    this.getChildrenLength() > 0
+  ) {
     this.group.add(this._expandBtn)
   }
   const { width, height } = this
