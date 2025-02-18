@@ -38,7 +38,14 @@ const store = new Vuex.Store({
     supportCheckbox: false, // 是否支持Checkbox插件
     supportLineFlow: false, // 是否支持LineFlow插件
     supportMomentum: false, // 是否支持Momentum插件
-    isDragOutlineTreeNode: false // 当前是否正在拖拽大纲树的节点
+    isDragOutlineTreeNode: false, // 当前是否正在拖拽大纲树的节点
+    aiConfig: {
+      api: 'http://ark.cn-beijing.volces.com/api/v3/chat/completions',
+      key: '',
+      model: '',
+      port: 3456,
+      method: 'POST'
+    }
   },
   mutations: {
     // 设置思维导图数据
@@ -53,11 +60,18 @@ const store = new Vuex.Store({
 
     // 设置本地配置
     setLocalConfig(state, data) {
-      state.localConfig = {
+      const aiConfigKeys = Object.keys(state.aiConfig)
+      Object.keys(data).forEach(key => {
+        if (aiConfigKeys.includes(key)) {
+          state.aiConfig[key] = data[key]
+        } else {
+          state.localConfig[key] = data[key]
+        }
+      })
+      storeLocalConfig({
         ...state.localConfig,
-        ...data
-      }
-      storeLocalConfig(state.localConfig)
+        ...state.aiConfig
+      })
     },
 
     // 设置当前显示的侧边栏

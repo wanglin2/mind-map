@@ -195,7 +195,8 @@ export default {
         'formula',
         // 'attachment',
         'outerFrame',
-        'annotation'
+        'annotation',
+        'ai'
       ],
       horizontalList: [],
       verticalList: [],

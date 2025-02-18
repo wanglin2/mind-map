@@ -398,7 +398,7 @@ export const nextTick = function (fn, ctx) {
 }
 
 // 检查节点是否超出画布
-export const checkNodeOuter = (mindMap, node) => {
+export const checkNodeOuter = (mindMap, node, offsetX = 0, offsetY = 0) => {
   let elRect = mindMap.elRect
   let { scaleX, scaleY, translateX, translateY } = mindMap.draw.transform()
   let { left, top, width, height } = node
@@ -408,17 +408,17 @@ export const checkNodeOuter = (mindMap, node) => {
   top = top * scaleY + translateY
   let offsetLeft = 0
   let offsetTop = 0
-  if (left < 0) {
-    offsetLeft = -left
+  if (left < 0 + offsetX) {
+    offsetLeft = -left + offsetX
   }
-  if (right > elRect.width) {
-    offsetLeft = -(right - elRect.width)
+  if (right > elRect.width - offsetX) {
+    offsetLeft = -(right - elRect.width) - offsetX
   }
-  if (top < 0) {
-    offsetTop = -top
+  if (top < 0 + offsetY) {
+    offsetTop = -top + offsetY
   }
-  if (bottom > elRect.height) {
-    offsetTop = -(bottom - elRect.height)
+  if (bottom > elRect.height - offsetY) {
+    offsetTop = -(bottom - elRect.height) - offsetY
   }
   return {
     isOuter: offsetLeft !== 0 || offsetTop !== 0,
@@ -508,7 +508,7 @@ export const loadImage = imgFile => {
 
 // 移除字符串中的html实体
 export const removeHTMLEntities = str => {
-  ;[['&nbsp;', '&#160;']].forEach(item => {
+  [['&nbsp;', '&#160;']].forEach(item => {
     str = str.replace(new RegExp(item[0], 'g'), item[1])
   })
   return str
@@ -1069,7 +1069,7 @@ export const generateColorByContent = str => {
 
 //  html转义
 export const htmlEscape = str => {
-  ;[
+  [
     ['&', '&amp;'],
     ['<', '&lt;'],
     ['>', '&gt;']

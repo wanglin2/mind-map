@@ -133,7 +133,8 @@ export default {
     expandNodeChild: '展开所有下级节点',
     unExpandNodeChild: '收起所有下级节点',
     addToDo: '添加待办',
-    removeToDo: '删除待办'
+    removeToDo: '删除待办',
+    aiCreate: 'AI续写'
   },
   count: {
     words: '字数',
@@ -323,7 +324,8 @@ export default {
     creatingTip: '正在创建文件',
     directory: '目录',
     newFileTip: '新建文件前请先导出当前编辑的文件，谨防内容丢失',
-    openFileTip: '打开文件前请先导出当前编辑的文件，谨防内容丢失'
+    openFileTip: '打开文件前请先导出当前编辑的文件，谨防内容丢失',
+    ai: 'AI'
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',
@@ -412,5 +414,8 @@ export default {
   nodeTagStyle: {
     placeholder: '请输入标签内容',
     delete: '删除此标签'
+  },
+  ai: {
+    chatTitle: 'AI对话'
   }
 }

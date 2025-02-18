@@ -445,6 +445,11 @@ export const sidebarTriggerList = [
     icon: 'iconshezhi'
   },
   {
+    name: 'AI',
+    value: 'ai',
+    icon: 'iconAIshengcheng'
+  },
+  {
     name: 'ShortcutKey',
     value: 'shortcutKey',
     icon: 'iconjianpan'

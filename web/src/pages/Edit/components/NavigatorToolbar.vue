@@ -1,5 +1,5 @@
 <template>
-  <div class="navigatorContainer" :class="{ isDark: isDark }">
+  <div class="navigatorContainer customScrollbar" :class="{ isDark: isDark }">
     <div class="item">
       <el-select
         v-model="lang"
@@ -193,7 +193,8 @@ export default {
           url = 'https://wanglin2.github.io/mind-map-docs/help/help1.html'
           break
         case 'devDoc':
-          url = 'https://wanglin2.github.io/mind-map-docs/start/introduction.html'
+          url =
+            'https://wanglin2.github.io/mind-map-docs/start/introduction.html'
           break
         case 'site':
           url = 'https://wanglin2.github.io/mind-map-docs/'
@@ -268,7 +269,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 590px) {
+@media screen and (max-width: 700px) {
   .navigatorContainer {
     left: 20px;
     overflow-x: auto;

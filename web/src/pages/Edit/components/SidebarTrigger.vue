@@ -1,13 +1,14 @@
 <template>
   <div
-    class="sidebarTriggerContainer"
+    class="sidebarTriggerContainer "
     @click.stop
     :class="{ hasActive: show && activeSidebar, show: show, isDark: isDark }"
+    :style="{ maxHeight: maxHeight + 'px' }"
   >
     <div class="toggleShowBtn" :class="{ hide: !show }" @click="show = !show">
       <span class="iconfont iconjiantouyou"></span>
     </div>
-    <div class="trigger">
+    <div class="trigger customScrollbar">
       <div
         class="triggerItem"
         v-for="item in triggerList"
@@ -35,7 +36,8 @@ export default {
   name: 'SidebarTrigger',
   data() {
     return {
-      show: true
+      show: true,
+      maxHeight: 0
     }
   },
   computed: {
@@ -62,11 +64,28 @@ export default {
       }
     }
   },
+  created() {
+    window.addEventListener('resize', this.onResize)
+    this.updateSize()
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.onResize)
+  },
   methods: {
     ...mapMutations(['setActiveSidebar']),
 
     trigger(item) {
       this.setActiveSidebar(item.value)
+    },
+
+    onResize() {
+      this.updateSize()
+    },
+
+    updateSize() {
+      const topMargin = 110
+      const bottomMargin = 80
+      this.maxHeight = window.innerHeight - topMargin - bottomMargin
     }
   }
 }
@@ -75,11 +94,13 @@ export default {
 <style lang="less" scoped>
 .sidebarTriggerContainer {
   position: fixed;
+  top: 110px;
+  bottom: 80px;
   right: -60px;
-  margin-top: 110px;
   transition: all 0.3s;
-  top: 50%;
-  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   &.isDark {
     .trigger {
@@ -145,7 +166,9 @@ export default {
     background-color: #fff;
     box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
     border-radius: 6px;
-    overflow: hidden;
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     .triggerItem {
       height: 60px;

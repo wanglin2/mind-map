@@ -134,7 +134,8 @@ export default {
     expandNodeChild: 'Expand all sub nodes',
     unExpandNodeChild: 'Un expand all sub nodes',
     addToDo: 'Add toDo',
-    removeToDo: 'Remove toDo'
+    removeToDo: 'Remove toDo',
+    aiCreate: 'AI Continuation'
   },
   count: {
     words: 'Words',
@@ -329,7 +330,8 @@ export default {
     newFileTip:
       'Please export the currently edited file before creating a new one, Beware of content loss',
     openFileTip:
-      'Please export the currently edited file before opening it, Beware of content loss'
+      'Please export the currently edited file before opening it, Beware of content loss',
+    ai: 'AI'
   },
   edit: {
     newFeatureNoticeTitle: 'New feature reminder',

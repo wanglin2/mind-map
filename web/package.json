@@ -8,7 +8,8 @@
     "lint": "vue-cli-service lint",
     "buildLibrary": "node ./scripts/updateVersion.js && vue-cli-service build --mode library --target lib --name simpleMindMap ../simple-mind-map/full.js --dest ../simple-mind-map/dist && esbuild ../simple-mind-map/full.js --bundle --external:buffer --format=esm --outfile=../simple-mind-map/dist/simpleMindMap.esm.js && esbuild ../simple-mind-map/full.js --bundle --minify --external:buffer --format=esm --outfile=../simple-mind-map/dist/simpleMindMap.esm.min.js",
     "format": "prettier --write src/* src/*/* src/*/*/* src/*/*/*/*",
-    "createNodeImageList": "node ./scripts/createNodeImageList.js"
+    "createNodeImageList": "node ./scripts/createNodeImageList.js",
+    "ai:serve": "node ./scripts/ai.js"
   },
   "dependencies": {
     "@toast-ui/editor": "^3.1.5",
@@ -34,6 +35,7 @@
     "esbuild": "^0.17.15",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "express": "^4.21.2",
     "less": "^3.12.2",
     "less-loader": "^7.1.0",
     "markdown-it": "^13.0.1",
