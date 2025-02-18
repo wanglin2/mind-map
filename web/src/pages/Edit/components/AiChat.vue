@@ -100,7 +100,6 @@ export default {
         'ai_chat',
         text,
         res => {
-          console.log(res)
           if (!md) {
             md = new MarkdownIt()
           }
