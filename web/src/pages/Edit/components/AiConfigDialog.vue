@@ -26,7 +26,7 @@
         <el-form-item label="推理接入点" prop="model">
           <el-input v-model="ruleForm.model"></el-input>
         </el-form-item>
-        <el-form-item label="接口" prop="api">
+        <!-- <el-form-item label="接口" prop="api">
           <el-input v-model="ruleForm.api"></el-input>
         </el-form-item>
         <el-form-item label="请求方式" prop="method">
@@ -34,7 +34,7 @@
             <el-option key="POST" label="POST" value="POST"></el-option>
             <el-option key="GET" label="GET" value="GET"></el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <p class="title">思绪思维导图客户端配置：</p>
         <el-form-item label="端口" prop="port">
           <el-input v-model="ruleForm.port"></el-input>

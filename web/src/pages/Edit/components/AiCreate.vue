@@ -161,12 +161,22 @@ export default {
         )
       ) {
         this.aiConfigDialogVisible = true
-        return
+        throw new Error('配置缺失')
       }
       // 检查连接
-      await fetch(`http://localhost:${this.aiConfig.port}/ai/test`, {
-        method: 'GET'
-      })
+      let isConnect = false
+      try {
+        await fetch(`http://localhost:${this.aiConfig.port}/ai/test`, {
+          method: 'GET'
+        })
+        isConnect = true
+      } catch (error) {
+        console.log(error)
+        this.clientTipDialogVisible = true
+      }
+      if (!isConnect) {
+        throw new Error('连接失败')
+      }
     },
 
     // AI生成整体
@@ -176,7 +186,6 @@ export default {
         this.createDialogVisible = true
       } catch (error) {
         console.log(error)
-        this.clientTipDialogVisible = true
       }
     },
 
