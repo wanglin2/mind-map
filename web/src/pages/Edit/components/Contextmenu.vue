@@ -140,6 +140,10 @@
       <div class="item" @click="exec('EXPORT_CUR_NODE_TO_PNG')">
         <span class="name">{{ $t('contextmenu.exportNodeToPng') }}</span>
       </div>
+      <div class="splitLine"></div>
+      <div class="item" @click="aiCreate">
+        <span class="name">{{ $t('contextmenu.aiCreate') }}</span>
+      </div>
     </template>
     <template v-if="type === 'svg'">
       <div class="item" @click="exec('RETURN_CENTER')">
@@ -569,6 +573,12 @@ export default {
         console.log(error)
         this.$message.error(this.$t('contextmenu.copyFail'))
       }
+    },
+
+    // AI续写
+    aiCreate() {
+      this.$bus.$emit('ai_create_part', this.node)
+      this.hide()
     }
   }
 }

@@ -184,6 +184,17 @@
         :dir="dir"
         @setAnnotation="onSetAnnotation"
       ></NodeAnnotationBtn>
+      <div
+        v-if="item === 'ai'"
+        class="toolbarBtn"
+        :class="{
+          disabled: hasGeneralization
+        }"
+        @click="aiCrate"
+      >
+        <span class="icon iconfont iconAIshengcheng"></span>
+        <span class="text">{{ $t('toolbar.ai') }}</span>
+      </div>
     </template>
   </div>
 </template>
@@ -299,6 +310,11 @@ export default {
     // 设置标记
     onSetAnnotation(...args) {
       this.$bus.$emit('execCommand', 'SET_NOTATION', this.activeNodes, ...args)
+    },
+
+    // AI生成整体
+    aiCrate() {
+      this.$bus.$emit('ai_create_all')
     }
   }
 }
@@ -376,6 +392,7 @@ export default {
 
     .text {
       margin-top: 3px;
+      text-align: center;
     }
   }
 

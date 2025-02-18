@@ -35,4 +35,3 @@ if (window.takeOverApp) {
 } else {
   initApp()
 }
-

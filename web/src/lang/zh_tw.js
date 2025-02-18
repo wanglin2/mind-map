@@ -134,7 +134,8 @@ export default {
     expandNodeChild: '展開所有下級節點',
     unExpandNodeChild: '收起所有下級節點',
     addToDo: '添加待辦',
-    removeToDo: '刪除待辦'
+    removeToDo: '刪除待辦',
+    aiCreate: 'AI續寫'
   },
   count: {
     words: '字數',
@@ -323,7 +324,8 @@ export default {
     creatingTip: '正在建立檔案',
     directory: '目錄',
     newFileTip: '新增檔案前，請先匯出目前編輯的檔案，以免內容遺失',
-    openFileTip: '開啟檔案前，請先匯出目前編輯的檔案，以免內容遺失'
+    openFileTip: '開啟檔案前，請先匯出目前編輯的檔案，以免內容遺失',
+    ai: 'AI'
   },
   edit: {
     newFeatureNoticeTitle: '新功能提醒',

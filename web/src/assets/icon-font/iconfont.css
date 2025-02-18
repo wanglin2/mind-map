@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2479351 */
-  src: url('iconfont.woff2?t=1739152990179') format('woff2'),
-       url('iconfont.woff?t=1739152990179') format('woff'),
-       url('iconfont.ttf?t=1739152990179') format('truetype');
+  src: url('iconfont.woff2?t=1739843331607') format('woff2'),
+       url('iconfont.woff?t=1739843331607') format('woff'),
+       url('iconfont.ttf?t=1739843331607') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.iconAIshengcheng:before {
+  content: "\e6b5";
 }
 
 .iconprinting:before {

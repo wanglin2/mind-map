@@ -995,8 +995,6 @@ export default {
     this.$bus.$off('setData', this.onSetData)
   },
   methods: {
-    ...mapMutations(['setLocalConfig']),
-
     onSetData() {
       if (this.activeSidebar !== 'baseStyle') return
       setTimeout(() => {
