@@ -182,6 +182,7 @@
         v-if="item === 'annotation' && supportMark"
         :isDark="isDark"
         :dir="dir"
+        :rightHasBtn="annotationRightHasBtn"
         @setAnnotation="onSetAnnotation"
       ></NodeAnnotationBtn>
       <div
@@ -246,6 +247,12 @@ export default {
           return node.isGeneralization
         }) !== -1
       )
+    },
+    annotationRightHasBtn() {
+      const index = this.list.findIndex(item => {
+        return item === 'annotation'
+      })
+      return index !== -1 && index < this.list.length - 1
     }
   },
   created() {
