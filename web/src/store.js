@@ -45,7 +45,8 @@ const store = new Vuex.Store({
       model: '',
       port: 3456,
       method: 'POST'
-    }
+    },
+    enableAi: false // 是否开启AI功能
   },
   mutations: {
     // 设置思维导图数据
@@ -142,6 +143,11 @@ const store = new Vuex.Store({
     // 设置树节点拖拽
     setIsDragOutlineTreeNode(state, data) {
       state.isDragOutlineTreeNode = data
+    },
+
+    // 设置是否启用AI功能
+    setEnableAi(state, data) {
+      state.enableAi = data
     }
   },
   actions: {

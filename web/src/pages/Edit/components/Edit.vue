@@ -47,8 +47,8 @@
       v-if="mindMap"
       :mindMap="mindMap"
     ></NodeImgPlacementToolbar>
-    <AiCreate v-if="mindMap" :mindMap="mindMap"></AiCreate>
-    <AiChat></AiChat>
+    <AiCreate v-if="mindMap && enableAi" :mindMap="mindMap"></AiCreate>
+    <AiChat v-if="enableAi"></AiChat>
     <div
       class="dragMask"
       v-if="showDragMask"
@@ -111,7 +111,7 @@ import { getData, storeData, storeConfig } from '@/api'
 import Navigator from './Navigator.vue'
 import NodeImgPreview from './NodeImgPreview.vue'
 import SidebarTrigger from './SidebarTrigger.vue'
-import { mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import icon from '@/config/icon'
 import CustomNodeContent from './CustomNodeContent.vue'
 import Color from './Color.vue'
@@ -217,7 +217,8 @@ export default {
         state.localConfig.isUseHandDrawnLikeStyle,
       isUseMomentum: state => state.localConfig.isUseMomentum,
       extraTextOnExport: state => state.extraTextOnExport,
-      isDragOutlineTreeNode: state => state.isDragOutlineTreeNode
+      isDragOutlineTreeNode: state => state.isDragOutlineTreeNode,
+      enableAi: state => state.enableAi
     })
   },
   watch: {
@@ -248,6 +249,11 @@ export default {
       } else {
         this.removeMomentumPlugin()
       }
+    }
+  },
+  created() {
+    if (this.$route.query && this.$route.query.ai) {
+      this.setEnableAi(true)
     }
   },
   mounted() {
@@ -282,6 +288,8 @@ export default {
     this.mindMap.destroy()
   },
   methods: {
+    ...mapMutations(['setEnableAi']),
+
     handleStartTextEdit() {
       this.mindMap.renderer.startTextEdit()
     },

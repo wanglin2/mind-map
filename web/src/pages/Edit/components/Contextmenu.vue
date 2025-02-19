@@ -140,8 +140,8 @@
       <div class="item" @click="exec('EXPORT_CUR_NODE_TO_PNG')">
         <span class="name">{{ $t('contextmenu.exportNodeToPng') }}</span>
       </div>
-      <div class="splitLine"></div>
-      <div class="item" @click="aiCreate">
+      <div class="splitLine" v-if="enableAi"></div>
+      <div class="item" @click="aiCreate" v-if="enableAi">
         <span class="name">{{ $t('contextmenu.aiCreate') }}</span>
       </div>
     </template>
@@ -257,7 +257,8 @@ export default {
       isZenMode: state => state.localConfig.isZenMode,
       isDark: state => state.localConfig.isDark,
       supportNumbers: state => state.supportNumbers,
-      supportCheckbox: state => state.supportCheckbox
+      supportCheckbox: state => state.supportCheckbox,
+      enableAi: state => state.enableAi
     }),
     expandList() {
       return [
