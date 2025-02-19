@@ -413,5 +413,58 @@ export default {
   nodeTagStyle: {
     placeholder: '請輸入標籤內容',
     delete: '刪除此標籤'
+  },
+  ai: {
+    chatTitle: 'AI對話',
+    clearRecords: '清空記錄',
+    connectFailedTitle: '客戶端連接失敗提示',
+    connectFailedTip: '客戶端連接失敗，請檢查：',
+    connectFailedCheckTip1:
+      '1.是否安裝了思緒思維導圖客戶端，如果沒有請點此安裝：',
+    connectFailedCheckTip2: '2.如果安裝了客戶端，請確認是否打開了客戶端。',
+    connectFailedCheckTip3:
+      '3.如果已經安裝並啓動了，那麽可以嘗試關閉然後重新啓動。',
+    connectFailedCheckTip4: '完成以上步驟後可點擊：',
+    baiduNetdisk: '百度網盤',
+    createMindMapTitle: '一鍵生成思維導圖',
+    createTip:
+      '請輸入一個主題，AI會根據你的主題生成思維導圖，如：杭州周末出遊計劃。',
+    importantTip: '重要提示：一鍵生成會覆蓋現有數據，建議先導出當前數據。',
+    wantModifyAiConfigTip: '想要修改AI配置？請點擊：',
+    modifyAIConfiguration: '修改AI配置',
+    chatInputPlaceholder: 'Enter 發送，Shift   Enter 換行。',
+    send: '發送',
+    stopGenerating: '停止生成',
+    generationFailed: '生成失敗',
+    aiGenerationSuccess: 'AI生成完成',
+    stoppedGenerating: '已停止生成',
+    AIConfiguration: 'AI配置',
+    VolcanoArkLargeModelConfiguration: '火山方舟大模型配置：',
+    configTip: '目前僅支持火山方舟大模型，需要自行去獲取key，詳細操作步驟見：',
+    course: '教程',
+    inferenceAccessPoint: '推理接入點',
+    mindMappingClientConfiguration: '思緒思維導圖客戶端配置：',
+    port: '端口',
+    cancel: '取消',
+    confirm: '確認',
+    close: '關閉',
+    configSaveSuccessTip: '配置保存成功',
+    apiValidateTip: '請輸入接口',
+    keyValidateTip: '請輸入API Key',
+    modelValidateTip: '請輸入推理接入點',
+    portValidateTip: '請輸入端口',
+    methodValidateTip: '請選擇請求方式',
+    noInputTip: '請輸入內容',
+    connectSuccessful: '連接成功',
+    connectFailed: '連接失敗',
+    connectionDetection: '連接檢測',
+    configurationMissing: '配置缺失',
+    aiCreateMsgPrefix: '幫我寫一個【',
+    aiCreateMsgPostfix:
+      '】，需要以Markdown格式返回，並且只能使用Markdown的標題和無序列表兩種語法，可以支持多層嵌套。只需返回內容即可。',
+    aiCreatePartMsgPrefix: '我有一個主題爲【',
+    aiCreatePartMsgCenter: '】的思維導圖，幫我續寫其中一個內容爲【',
+    aiCreatePartMsgPostfix:
+      '】的節點的下級內容，需要以Markdown格式返回，並且只能使用Markdown的標題和無序列表兩種語法，可以支持多層嵌套。只需返回內容即可。'
   }
 }

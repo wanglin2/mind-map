@@ -422,5 +422,58 @@ export default {
   nodeTagStyle: {
     placeholder: 'Please enter the tag content',
     delete: 'Delete this tag'
+  },
+  ai: {
+    chatTitle: 'AI dialogue',
+    clearRecords: 'Clear records',
+    connectFailedTitle: 'Client connection failure prompt',
+    connectFailedTip: 'Client connection failed, please check:',
+    connectFailedCheckTip1:
+      '1. Have you installed the mind mapping client? If not, please click here to install:',
+    connectFailedCheckTip2: '2. If the client is installed, please confirm if the client is opened.',
+    connectFailedCheckTip3:
+      'If it has already been installed and started, you can try closing and restarting it.',
+    connectFailedCheckTip4: 'After completing the above steps, you can click on:',
+    baiduNetdisk: 'Baidu Netdisk',
+    createMindMapTitle: 'One click generation of mind maps',
+    createTip:
+      'Please enter a theme, and AI will generate a mind map based on your theme, such as: Hangzhou weekend travel plan.',
+    importantTip: 'Important note: One click generation will overwrite existing data. It is recommended to export the current data first.',
+    wantModifyAiConfigTip: 'Do you want to modify the AI configuration? Please click on:',
+    modifyAIConfiguration: 'Modify AI configuration',
+    chatInputPlaceholder: 'Enter to send, Shift+Enter to wrap.',
+    send: 'Send',
+    stopGenerating: 'Stop generating',
+    generationFailed: 'Generation failed',
+    aiGenerationSuccess: 'AI generation completed',
+    stoppedGenerating: 'Stopped generating',
+    AIConfiguration: 'AI configuration',
+    VolcanoArkLargeModelConfiguration: 'Volcano Ark Large Model Configuration:',
+    configTip: 'At present, only the Volcano Ark model is supported, and you need to obtain the key yourself. For detailed operation steps, please refer to:',
+    course: 'Course',
+    inferenceAccessPoint: 'Inference access point',
+    mindMappingClientConfiguration: 'Mind mapping client configuration:',
+    port: 'Port',
+    cancel: 'Cancel',
+    confirm: 'Confirm',
+    close: 'Close',
+    configSaveSuccessTip: 'Configuration saved successfully',
+    apiValidateTip: 'Please enter the interface',
+    keyValidateTip: 'Please enter the API Key',
+    modelValidateTip: 'Please enter the inference access point',
+    portValidateTip: 'Please enter the port',
+    methodValidateTip: 'Please select the request method',
+    noInputTip: 'Please enter the content',
+    connectSuccessful: 'Connection successful',
+    connectFailed: 'connection failed',
+    connectionDetection: 'Connection detection',
+    configurationMissing: 'Configuration missing',
+    aiCreateMsgPrefix: 'Help me write one【',
+    aiCreateMsgPostfix:
+      '】. It needs to be returned in Markdown format and can only use two syntax: Markdown title and unordered list. It can support multiple layers of nesting. Just return the content.',
+    aiCreatePartMsgPrefix: 'I have a theme for【',
+    aiCreatePartMsgCenter: '】Can you help me continue writing one of the contents of the mind map【',
+    aiCreatePartMsgPostfix:
+      '】The subordinate content of the node needs to be returned in Markdown format and can only use two syntax: Markdown title and unordered list. It can support multi-level nesting. Just return the content.'
   }
 }

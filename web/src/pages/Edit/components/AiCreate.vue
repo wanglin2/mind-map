@@ -3,37 +3,39 @@
     <!-- 客户端连接失败提示弹窗 -->
     <el-dialog
       class="clientTipDialog"
-      title="客户端连接失败提示"
+      :title="$t('ai.connectFailedTitle')"
       :visible.sync="clientTipDialogVisible"
       width="400px"
       append-to-body
     >
       <div class="tipBox">
-        <p>客户端连接失败，请检查：</p>
+        <p>{{ $t('ai.connectFailedTip') }}</p>
         <p>
-          1.是否安装了思绪思维导图客户端，如果没有请点此安装：<a
+          {{ $t('ai.connectFailedCheckTip1')
+          }}<a
             href="https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3"
-            >百度网盘</a
+            >{{ $t('ai.baiduNetdisk') }}</a
           >、<a href="https://github.com/wanglin2/mind-map/releases">Github</a>
         </p>
-        <p>2.如果安装了客户端，请确认是否打开了客户端。</p>
-        <P>3.如果已经安装并启动了，那么可以尝试关闭然后重新启动。</P>
+        <p>{{ $t('ai.connectFailedCheckTip2') }}</p>
+        <P>{{ $t('ai.connectFailedCheckTip3') }}</P>
         <p>
-          完成以上步骤后可点击：<el-button size="small" @click="testConnect"
-            >连接检测</el-button
-          >
+          {{ $t('ai.connectFailedCheckTip4')
+          }}<el-button size="small" @click="testConnect">{{
+            $t('ai.connectionDetection')
+          }}</el-button>
         </p>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="clientTipDialogVisible = false"
-          >关闭</el-button
-        >
+        <el-button type="primary" @click="clientTipDialogVisible = false">{{
+          $t('ai.close')
+        }}</el-button>
       </div>
     </el-dialog>
     <!-- ai内容输入弹窗 -->
     <el-dialog
       class="createDialog"
-      title="一键生成思维导图"
+      :title="$t('ai.createMindMapTitle')"
       :visible.sync="createDialogVisible"
       width="450px"
       append-to-body
@@ -42,24 +44,27 @@
         <el-input
           type="textarea"
           :rows="5"
-          placeholder="请输入一个主题，AI会根据你的主题生成思维导图，如：杭州周末出游计划。"
+          :placeholder="$t('ai.createTip')"
           v-model="aiInput"
         >
         </el-input>
         <div class="tip warning">
-          重要提示：一键生成会覆盖现有数据，建议先导出当前数据。
+          {{ $t('ai.importantTip') }}
         </div>
         <div class="tip">
-          想要修改AI配置？请点击：<el-button
-            size="small"
-            @click="aiConfigDialogVisible = true"
-            >修改配置</el-button
-          >
+          {{ $t('ai.wantModifyAiConfigTip')
+          }}<el-button size="small" @click="showAiConfigDialog">{{
+            $t('ai.modifyAIConfiguration')
+          }}</el-button>
         </div>
       </div>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="closeAiCreateDialog">取消</el-button>
-        <el-button type="primary" @click="doAiCreate">确认</el-button>
+        <el-button @click="closeAiCreateDialog">{{
+          $t('ai.cancel')
+        }}</el-button>
+        <el-button type="primary" @click="doAiCreate">{{
+          $t('ai.confirm')
+        }}</el-button>
       </div>
     </el-dialog>
     <!-- ai生成中添加一个透明层，防止期间用户进行操作 -->
@@ -68,9 +73,9 @@
       ref="aiCreatingMaskRef"
       v-show="aiCreatingMaskVisible"
     >
-      <el-button type="warning" class="btn" @click="stopCreate"
-        >停止生成</el-button
-      >
+      <el-button type="warning" class="btn" @click="stopCreate">{{
+        $t('ai.stopGenerating')
+      }}</el-button>
     </div>
     <AiConfigDialog v-model="aiConfigDialogVisible"></AiConfigDialog>
   </div>
@@ -124,6 +129,8 @@ export default {
     this.$bus.$on('ai_create_all', this.aiCrateAll)
     this.$bus.$on('ai_create_part', this.aiCreatePart)
     this.$bus.$on('ai_chat', this.aiChat)
+    this.$bus.$on('ai_chat_stop', this.aiChatStop)
+    this.$bus.$on('showAiConfigDialog', this.showAiConfigDialog)
   },
   mounted() {
     document.body.appendChild(this.$refs.aiCreatingMaskRef)
@@ -132,20 +139,27 @@ export default {
     this.$bus.$off('ai_create_all', this.aiCrateAll)
     this.$bus.$off('ai_create_part', this.aiCreatePart)
     this.$bus.$off('ai_chat', this.aiChat)
+    this.$bus.$off('ai_chat_stop', this.aiChatStop)
+    this.$bus.$off('showAiConfigDialog', this.showAiConfigDialog)
   },
   methods: {
+    // 显示AI配置修改弹窗
+    showAiConfigDialog() {
+      this.aiConfigDialogVisible = true
+    },
+
     // 客户端连接检测
     async testConnect() {
       try {
         await fetch(`http://localhost:${this.aiConfig.port}/ai/test`, {
           method: 'GET'
         })
-        this.$message.success('连接成功')
+        this.$message.success(this.$t('ai.connectSuccessful'))
         this.clientTipDialogVisible = false
         this.createDialogVisible = true
       } catch (error) {
         console.log(error)
-        this.$message.error('连接失败')
+        this.$message.error(this.$t('ai.connectFailed'))
       }
     },
 
@@ -160,8 +174,8 @@ export default {
           this.aiConfig.port
         )
       ) {
-        this.aiConfigDialogVisible = true
-        throw new Error('配置缺失')
+        this.showAiConfigDialog()
+        throw new Error(this.$t('ai.configurationMissing'))
       }
       // 检查连接
       let isConnect = false
@@ -175,7 +189,7 @@ export default {
         this.clientTipDialogVisible = true
       }
       if (!isConnect) {
-        throw new Error('连接失败')
+        throw new Error(this.$t('ai.connectFailed'))
       }
     },
 
@@ -199,7 +213,7 @@ export default {
     doAiCreate() {
       const aiInputText = this.aiInput.trim()
       if (!aiInputText) {
-        this.$message.warning('请输入内容')
+        this.$message.warning(this.$t('ai.noInputTip'))
         return
       }
       this.closeAiCreateDialog()
@@ -217,7 +231,9 @@ export default {
           messages: [
             {
               role: 'user',
-              content: `帮我写一个【${aiInputText}】，需要以Markdown格式返回，并且只能使用Markdown的标题和无序列表两种语法，可以支持多层嵌套。只需返回内容即可。`
+              content: `${this.$t(
+                'ai.aiCreateMsgPrefix'
+              )}${aiInputText}${this.$t('ai.aiCreateMsgPostfix')}`
             }
           ]
         },
@@ -230,12 +246,12 @@ export default {
         content => {
           this.aiCreatingContent = content
           this.resetOnAiCreatingStop()
-          this.$message.success('AI生成完成')
+          this.$message.success(this.$t('ai.aiGenerationSuccess'))
         },
         () => {
           this.resetOnAiCreatingStop()
           this.resetOnRenderEnd()
-          this.$message.error('生成失败')
+          this.$message.error(this.$t('ai.generationFailed'))
         }
       )
     },
@@ -261,7 +277,7 @@ export default {
       this.aiInstance.stop()
       this.isAiCreating = false
       this.aiCreatingMaskVisible = false
-      this.$message.success('已停止生成')
+      this.$message.success(this.$t('ai.stoppedGenerating'))
     },
 
     // 轮询进行渲染
@@ -374,11 +390,13 @@ export default {
             messages: [
               {
                 role: 'user',
-                content: `我有一个主题为【${getStrWithBrFromHtml(
+                content: `${this.$t(
+                  'ai.aiCreatePartMsgPrefix'
+                )}${getStrWithBrFromHtml(
                   currentMindMapData.data.text
-                )}】的思维导图，帮我续写其中一个内容为【${getStrWithBrFromHtml(
+                )}${this.$t('ai.aiCreatePartMsgCenter')}${getStrWithBrFromHtml(
                   node.getData('text')
-                )}】的节点的下级内容，需要以Markdown格式返回，并且只能使用Markdown的标题和无序列表两种语法，可以支持多层嵌套。只需返回内容即可。`
+                )}${this.$t('ai.aiCreatePartMsgPostfix')}`
               }
             ]
           },
@@ -391,12 +409,12 @@ export default {
           content => {
             this.aiCreatingContent = content
             this.resetOnAiCreatingStop()
-            this.$message.success('AI生成完成')
+            this.$message.success(this.$t('ai.aiGenerationSuccess'))
           },
           () => {
             this.resetOnAiCreatingStop()
             this.resetOnRenderEnd()
-            this.$message.error('生成失败')
+            this.$message.error(this.$t('ai.generationFailed'))
           }
         )
       } catch (error) {
@@ -472,7 +490,12 @@ export default {
     },
 
     // AI对话
-    async aiChat(text, progress = () => {}, end = () => {}, err = () => {}) {
+    async aiChat(
+      messageList = [],
+      progress = () => {},
+      end = () => {},
+      err = () => {}
+    ) {
       try {
         await this.aiTest()
         // 发起请求
@@ -483,12 +506,12 @@ export default {
         this.aiInstance.init('huoshan', this.aiConfig)
         this.aiInstance.request(
           {
-            messages: [
-              {
+            messages: messageList.map(msg => {
+              return {
                 role: 'user',
-                content: text
+                content: msg
               }
-            ]
+            })
           },
           content => {
             progress(content)
@@ -502,6 +525,15 @@ export default {
         )
       } catch (error) {
         console.log(error)
+      }
+    },
+
+    // AI对话停止
+    aiChatStop() {
+      if (this.aiInstance) {
+        this.aiInstance.stop()
+        this.isAiCreating = false
+        this.aiInstance = null
       }
     }
   }

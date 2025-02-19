@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     class="aiConfigDialog"
-    title="AI配置"
+    :title="$t('ai.AIConfiguration')"
     :visible.sync="aiConfigDialogVisible"
     width="550px"
     append-to-body
@@ -13,17 +13,15 @@
         ref="ruleFormRef"
         label-width="100px"
       >
-        <p class="title">火山方舟大模型配置：</p>
+        <p class="title">{{ $t('ai.VolcanoArkLargeModelConfiguration') }}</p>
         <p class="desc">
-          目前仅支持火山方舟大模型，需要自行去获取key，详细操作步骤见：<a
-            href=""
-            >教程</a
+          {{ $t('ai.configTip') }}<a href="">{{ $t('ai.course') }}</a
           >。
         </p>
         <el-form-item label="API Key" prop="key">
           <el-input v-model="ruleForm.key"></el-input>
         </el-form-item>
-        <el-form-item label="推理接入点" prop="model">
+        <el-form-item :label="$t('ai.inferenceAccessPoint')" prop="model">
           <el-input v-model="ruleForm.model"></el-input>
         </el-form-item>
         <!-- <el-form-item label="接口" prop="api">
@@ -35,15 +33,17 @@
             <el-option key="GET" label="GET" value="GET"></el-option>
           </el-select>
         </el-form-item> -->
-        <p class="title">思绪思维导图客户端配置：</p>
-        <el-form-item label="端口" prop="port">
+        <p class="title">{{ $t('ai.mindMappingClientConfiguration') }}</p>
+        <el-form-item :label="$t('ai.port')" prop="port">
           <el-input v-model="ruleForm.port"></el-input>
         </el-form-item>
       </el-form>
     </div>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="cancel">取消</el-button>
-      <el-button type="primary" @click="confirm">确认</el-button>
+      <el-button @click="cancel">{{ $t('ai.cancel') }}</el-button>
+      <el-button type="primary" @click="confirm">{{
+        $t('ai.confirm')
+      }}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -73,13 +73,41 @@ export default {
         method: ''
       },
       rules: {
-        api: [{ required: true, message: '请输入接口', trigger: 'blur' }],
-        key: [{ required: true, message: '请输入API Key', trigger: 'blur' }],
-        model: [
-          { required: true, message: '请输入推理接入点', trigger: 'blur' }
+        api: [
+          {
+            required: true,
+            message: this.$t('ai.apiValidateTip'),
+            trigger: 'blur'
+          }
         ],
-        port: [{ required: true, message: '请输入端口', trigger: 'blur' }],
-        method: [{ required: true, message: '请选择', trigger: 'blur' }]
+        key: [
+          {
+            required: true,
+            message: this.$t('ai.keyValidateTip'),
+            trigger: 'blur'
+          }
+        ],
+        model: [
+          {
+            required: true,
+            message: this.$t('ai.modelValidateTip'),
+            trigger: 'blur'
+          }
+        ],
+        port: [
+          {
+            required: true,
+            message: this.$t('ai.portValidateTip'),
+            trigger: 'blur'
+          }
+        ],
+        method: [
+          {
+            required: true,
+            message: this.$t('ai.methodValidateTip'),
+            trigger: 'blur'
+          }
+        ]
       }
     }
   },
@@ -124,7 +152,7 @@ export default {
           this.setLocalConfig({
             ...this.ruleForm
           })
-          this.$message.success('配置保存成功')
+          this.$message.success(this.$t('ai.configSaveSuccessTip'))
         }
       })
     }
@@ -139,6 +167,10 @@ export default {
   }
 
   .aiConfigBox {
+    a {
+      color: #409eff;
+    }
+
     .title {
       margin-bottom: 12px;
       font-weight: bold;

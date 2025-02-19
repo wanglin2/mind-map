@@ -2,7 +2,14 @@
   <Sidebar ref="sidebar" :title="$t('ai.chatTitle')">
     <div class="aiChatBox" :class="{ isDark: isDark }">
       <div class="chatHeader">
-        <el-button size="mini" @click="clear">清空记录</el-button>
+        <el-button size="mini" @click="clear">
+          <span class="el-icon-delete"></span>
+          {{ $t('ai.clearRecords') }}
+        </el-button>
+        <el-button size="mini" @click="modifyAiConfig">
+          <span class="el-icon-edit"></span>
+          {{ $t('ai.modifyAIConfiguration') }}
+        </el-button>
       </div>
       <div class="chatResBox customScrollbar" ref="chatResBoxRef">
         <div
@@ -29,13 +36,22 @@
         <textarea
           v-model="text"
           class="customScrollbar"
-          placeholder="Enter 发送，Shift + Enter 换行。"
-          @keydown.enter.prevent
-          @keyup.enter.prevent="send"
+          :placeholder="$t('ai.chatInputPlaceholder')"
+          @keydown="onKeydown"
         ></textarea>
-        <el-button class="btn" size="mini" @click="send" :loading="isCreating"
-          >发送</el-button
+        <el-button class="btn" size="mini" @click="send" :loading="isCreating">
+          {{ $t('ai.send') }}
+          <span class="el-icon-position"></span>
+        </el-button>
+        <el-button
+          class="stop"
+          size="mini"
+          type="warning"
+          @click="stop"
+          v-show="isCreating"
         >
+          {{ $t('ai.stopGenerating') }}
+        </el-button>
       </div>
     </div>
   </Sidebar>
@@ -43,7 +59,7 @@
 
 <script>
 import Sidebar from './Sidebar'
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 import { createUid } from 'simple-mind-map/src/utils'
 import MarkdownIt from 'markdown-it'
 
@@ -78,6 +94,16 @@ export default {
   created() {},
   beforeDestroy() {},
   methods: {
+    onKeydown(e) {
+      if (e.keyCode === 13) {
+        if (!e.shiftKey) {
+          e.preventDefault()
+          this.send()
+        } else {
+        }
+      }
+    },
+
     send() {
       if (this.isCreating) return
       const text = this.text.trim()
@@ -85,6 +111,13 @@ export default {
         return
       }
       this.text = ''
+      const historyUserMsgList = this.chatList
+        .filter(item => {
+          return item.type === 'user'
+        })
+        .map(item => {
+          return item.content
+        })
       this.chatList.push({
         id: createUid(),
         type: 'user',
@@ -96,9 +129,10 @@ export default {
         content: ''
       })
       this.isCreating = true
+      const textList = [...historyUserMsgList, text]
       this.$bus.$emit(
         'ai_chat',
-        text,
+        textList,
         res => {
           if (!md) {
             md = new MarkdownIt()
@@ -111,12 +145,22 @@ export default {
         },
         () => {
           this.isCreating = false
+          this.$message.error(this.$t('ai.generationFailed'))
         }
       )
     },
 
+    stop() {
+      this.$bus.$emit('ai_chat_stop')
+      this.isCreating = false
+    },
+
     clear() {
       this.chatList = []
+    },
+
+    modifyAiConfig() {
+      this.$bus.$emit('showAiConfigDialog')
     }
   }
 }
@@ -283,6 +327,13 @@ export default {
       position: absolute;
       right: 12px;
       bottom: 12px;
+    }
+
+    .stop {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: -30px;
     }
   }
 }

@@ -416,6 +416,56 @@ export default {
     delete: '删除此标签'
   },
   ai: {
-    chatTitle: 'AI对话'
+    chatTitle: 'AI对话',
+    clearRecords: '清空记录',
+    connectFailedTitle: '客户端连接失败提示',
+    connectFailedTip: '客户端连接失败，请检查：',
+    connectFailedCheckTip1:
+      '1.是否安装了思绪思维导图客户端，如果没有请点此安装：',
+    connectFailedCheckTip2: '2.如果安装了客户端，请确认是否打开了客户端。',
+    connectFailedCheckTip3:
+      '3.如果已经安装并启动了，那么可以尝试关闭然后重新启动。',
+    connectFailedCheckTip4: '完成以上步骤后可点击：',
+    baiduNetdisk: '百度网盘',
+    createMindMapTitle: '一键生成思维导图',
+    createTip:
+      '请输入一个主题，AI会根据你的主题生成思维导图，如：杭州周末出游计划。',
+    importantTip: '重要提示：一键生成会覆盖现有数据，建议先导出当前数据。',
+    wantModifyAiConfigTip: '想要修改AI配置？请点击：',
+    modifyAIConfiguration: '修改AI配置',
+    chatInputPlaceholder: 'Enter 发送，Shift + Enter 换行。',
+    send: '发送',
+    stopGenerating: '停止生成',
+    generationFailed: '生成失败',
+    aiGenerationSuccess: 'AI生成完成',
+    stoppedGenerating: '已停止生成',
+    AIConfiguration: 'AI配置',
+    VolcanoArkLargeModelConfiguration: '火山方舟大模型配置：',
+    configTip: '目前仅支持火山方舟大模型，需要自行去获取key，详细操作步骤见：',
+    course: '教程',
+    inferenceAccessPoint: '推理接入点',
+    mindMappingClientConfiguration: '思绪思维导图客户端配置：',
+    port: '端口',
+    cancel: '取消',
+    confirm: '确认',
+    close: '关闭',
+    configSaveSuccessTip: '配置保存成功',
+    apiValidateTip: '请输入接口',
+    keyValidateTip: '请输入API Key',
+    modelValidateTip: '请输入推理接入点',
+    portValidateTip: '请输入端口',
+    methodValidateTip: '请选择请求方式',
+    noInputTip: '请输入内容',
+    connectSuccessful: '连接成功',
+    connectFailed: '连接失败',
+    connectionDetection: '连接检测',
+    configurationMissing: '配置缺失',
+    aiCreateMsgPrefix: '帮我写一个【',
+    aiCreateMsgPostfix:
+      '】，需要以Markdown格式返回，并且只能使用Markdown的标题和无序列表两种语法，可以支持多层嵌套。只需返回内容即可。',
+    aiCreatePartMsgPrefix: '我有一个主题为【',
+    aiCreatePartMsgCenter: '】的思维导图，帮我续写其中一个内容为【',
+    aiCreatePartMsgPostfix:
+      '】的节点的下级内容，需要以Markdown格式返回，并且只能使用Markdown的标题和无序列表两种语法，可以支持多层嵌套。只需返回内容即可。'
   }
 }
