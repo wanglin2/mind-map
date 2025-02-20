@@ -258,7 +258,7 @@ export default {
       isDark: state => state.localConfig.isDark,
       supportNumbers: state => state.supportNumbers,
       supportCheckbox: state => state.supportCheckbox,
-      enableAi: state => state.enableAi
+      enableAi: state => state.localConfig.enableAi
     }),
     expandList() {
       return [

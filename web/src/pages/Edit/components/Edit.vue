@@ -218,7 +218,7 @@ export default {
       isUseMomentum: state => state.localConfig.isUseMomentum,
       extraTextOnExport: state => state.extraTextOnExport,
       isDragOutlineTreeNode: state => state.isDragOutlineTreeNode,
-      enableAi: state => state.enableAi
+      enableAi: state => state.localConfig.enableAi
     })
   },
   watch: {
@@ -249,11 +249,6 @@ export default {
       } else {
         this.removeMomentumPlugin()
       }
-    }
-  },
-  created() {
-    if (this.$route.query && this.$route.query.ai) {
-      this.setEnableAi(true)
     }
   },
   mounted() {
@@ -288,8 +283,6 @@ export default {
     this.mindMap.destroy()
   },
   methods: {
-    ...mapMutations(['setEnableAi']),
-
     handleStartTextEdit() {
       this.mindMap.renderer.startTextEdit()
     },

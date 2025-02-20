@@ -85,7 +85,8 @@ export default {
     changeRichTextTip3: '是否切换为非富文本模式？',
     enableDragImport: '是否允许直接拖拽文件到页面进行导入',
     imgTextMargin: '节点图片和文本间隔',
-    textContentMargin: '节点各种内容间隔'
+    textContentMargin: '节点各种内容间隔',
+    enableAi: '是否开启AI功能'
   },
   color: {
     moreColor: '更多颜色'
