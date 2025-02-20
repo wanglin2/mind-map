@@ -871,14 +871,23 @@ class Render {
       if (alreadyIsRichText && params.resetRichText) {
         delete params.resetRichText
       }
+      let nodeData = {
+        text: text,
+        uid: createUid(),
+        // ...this.mindMap.opt.customNewNodeParams,
+        ...params,
+        ...(appointData || {})
+      }
+      if ( typeof this.mindMap.opt.customNewNodeParams === 'function'){
+        const return_value = this.mindMap.opt.customNewNodeParams()
+        nodeData = {
+          ...nodeData,
+          ...return_value
+        }
+      }
       const newNode = {
         inserting,
-        data: {
-          text: text,
-          uid: createUid(),
-          ...params,
-          ...(appointData || {})
-        },
+        data: nodeData,
         children: [...createUidForAppointNodes(appointChildren, createNewId)]
       }
       createNewId = true

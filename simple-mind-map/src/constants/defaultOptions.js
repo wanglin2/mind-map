@@ -307,7 +307,7 @@ export const defaultOpt = {
   /*
     {
       // 返回要添加的DOM元素详细
-      create: (node) => { 
+      create: (node) => {
         return {
           el, // DOM节点
           width: 20, // 宽高
@@ -316,7 +316,7 @@ export const defaultOpt = {
       },
       // 处理生成的@svgdotjs/svg.js库的ForeignObject节点实例，可以设置其在节点内的位置
       handle: ({ content, element, node }) => {
-        
+
       }
     }
   */
@@ -518,5 +518,9 @@ export const defaultOpt = {
   // 默认为内置图标，你可以传递一个svg字符串，或者其他的html字符串
   // 整体大小请使用上面的minImgResizeWidth和minImgResizeHeight选项设置
   customDeleteBtnInnerHTML: '',
-  customResizeBtnInnerHTML: ''
+  customResizeBtnInnerHTML: '',
+
+  // NewAdd
+  customNewNodeParams: null,
+
 }
