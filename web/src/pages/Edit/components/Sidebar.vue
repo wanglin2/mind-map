@@ -9,7 +9,7 @@
     <div class="sidebarHeader" v-if="title">
       {{ title }}
     </div>
-    <div class="sidebarContent" ref="sidebarContent">
+    <div class="sidebarContent customScrollbar" ref="sidebarContent">
       <slot></slot>
     </div>
   </div>

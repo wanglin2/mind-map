@@ -177,10 +177,15 @@ function layout() {
   const {
     hoverRectPadding,
     openRealtimeRenderOnNodeTextEdit,
-    textContentMargin
+    textContentMargin,
+    addCustomContentToNode
   } = this.mindMap.opt
   // 避免编辑过程中展开收起按钮闪烁的问题
-  if (openRealtimeRenderOnNodeTextEdit && this._expandBtn) {
+  if (
+    openRealtimeRenderOnNodeTextEdit &&
+    this._expandBtn &&
+    this.getChildrenLength() > 0
+  ) {
     this.group.add(this._expandBtn)
   }
   const { width, height } = this
@@ -428,6 +433,22 @@ function layout() {
   }
   textContentNested.translate(translateX, translateY)
   addHoverNode()
+  if (this._customContentAddToNodeAdd && this._customContentAddToNodeAdd.el) {
+    const foreignObject = createForeignObjectNode(
+      this._customContentAddToNodeAdd
+    )
+    this.group.add(foreignObject)
+    if (
+      addCustomContentToNode &&
+      typeof addCustomContentToNode.handle === 'function'
+    ) {
+      addCustomContentToNode.handle({
+        content: this._customContentAddToNodeAdd,
+        element: foreignObject,
+        node: this
+      })
+    }
+  }
   this.mindMap.emit('node_layout_end', this)
 }
 

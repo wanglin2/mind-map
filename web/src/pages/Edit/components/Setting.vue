@@ -1,6 +1,10 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('setting.title')">
-    <div class="sidebarContent" :class="{ isDark: isDark }" v-if="data">
+    <div
+      class="sidebarContent customScrollbar"
+      :class="{ isDark: isDark }"
+      v-if="data"
+    >
       <!-- 水印 -->
       <div class="row">
         <!-- 是否显示水印 -->
@@ -230,6 +234,18 @@
           >
         </div>
       </div>
+      <!-- 节点连线样式是否允许继承祖先的连线样式 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="config.enableInheritAncestorLineStyle"
+            @change="
+              updateOtherConfig('enableInheritAncestorLineStyle', $event)
+            "
+            >{{ $t('setting.enableInheritAncestorLineStyle') }}</el-checkbox
+          >
+        </div>
+      </div>
       <!-- 是否开启手绘风格 -->
       <div class="row" v-if="supportHandDrawnLikeStyle">
         <div class="rowItem">
@@ -237,6 +253,16 @@
             v-model="localConfigs.isUseHandDrawnLikeStyle"
             @change="updateLocalConfig('isUseHandDrawnLikeStyle', $event)"
             >{{ $t('setting.isUseHandDrawnLikeStyle') }}</el-checkbox
+          >
+        </div>
+      </div>
+      <!-- 是否开启动量效果 -->
+      <div class="row" v-if="supportMomentum">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="localConfigs.isUseMomentum"
+            @change="updateLocalConfig('isUseMomentum', $event)"
+            >{{ $t('setting.isUseMomentum') }}</el-checkbox
           >
         </div>
       </div>
@@ -387,7 +413,8 @@ export default {
         alwaysShowExpandBtn: false,
         enableAutoEnterTextEditWhenKeydown: true,
         imgTextMargin: 0,
-        textContentMargin: 0
+        textContentMargin: 0,
+        enableInheritAncestorLineStyle: false
       },
       watermarkConfig: {
         show: false,
@@ -407,6 +434,7 @@ export default {
       localConfigs: {
         isShowScrollbar: false,
         isUseHandDrawnLikeStyle: false,
+        isUseMomentum: false,
         enableDragImport: false
       }
     }
@@ -416,7 +444,8 @@ export default {
       activeSidebar: state => state.activeSidebar,
       localConfig: state => state.localConfig,
       isDark: state => state.localConfig.isDark,
-      supportHandDrawnLikeStyle: state => state.supportHandDrawnLikeStyle
+      supportHandDrawnLikeStyle: state => state.supportHandDrawnLikeStyle,
+      supportMomentum: state => state.supportMomentum
     })
   },
   watch: {
@@ -479,7 +508,14 @@ export default {
       storeConfig({
         config: this.data.config
       })
-      if (['alwaysShowExpandBtn', 'imgTextMargin', 'textContentMargin'].includes(key)) {
+      if (
+        [
+          'alwaysShowExpandBtn',
+          'imgTextMargin',
+          'textContentMargin',
+          'enableInheritAncestorLineStyle'
+        ].includes(key)
+      ) {
         this.mindMap.reRender()
       }
     },
@@ -524,7 +560,8 @@ export default {
         {
           confirmButtonText: this.$t('setting.confirm'),
           cancelButtonText: this.$t('setting.cancel'),
-          type: 'warning'
+          type: 'warning',
+          customClass: this.isDark ? 'darkElMessageBox' : ''
         }
       )
         .then(() => {

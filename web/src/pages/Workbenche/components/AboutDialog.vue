@@ -6,7 +6,7 @@
     width="480px"
     @close="onClose"
   >
-    <div class="aboutBox">
+    <div class="aboutBox" :class="{ isDark: isDark }">
       <img src="../../../assets/img/icon.png" alt="" />
       <h2>思绪思维导图</h2>
       <p>版本：{{ version }}</p>
@@ -29,6 +29,7 @@
 
 <script>
 import pkg from '../../../../package.json'
+import { mapState } from 'vuex'
 
 export default {
   model: {
@@ -46,6 +47,11 @@ export default {
       dialogVisible: false,
       version: pkg.version
     }
+  },
+  computed: {
+    ...mapState({
+      isDark: state => state.localConfig.isDark
+    })
   },
   watch: {
     value(val, oldVal) {
@@ -94,6 +100,13 @@ export default {
   align-items: center;
   justify-content: center;
   padding-bottom: 30px;
+
+  &.isDark {
+    .h2,
+    p {
+      color: hsla(0, 0%, 100%, 0.6);
+    }
+  }
 
   img {
     width: 100px;

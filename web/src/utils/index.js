@@ -118,3 +118,35 @@ export const setImgToClipboard = img => {
     navigator.clipboard.write(data)
   }
 }
+
+// 获取一个文件路径中的文件名
+export const getFileName = (filePath) => {
+  const res = filePath.match(/([^/]+)\.smm$/)
+  if (res && res[1]) {
+    return res[1]
+  } else {
+    return ''
+  }
+}
+
+// 打印大纲
+export const printOutline = el => {
+  const printContent = el.outerHTML
+  const iframe = document.createElement('iframe')
+  iframe.setAttribute('style', 'position: absolute; width: 0; height: 0;')
+  document.body.appendChild(iframe)
+  const iframeDoc = iframe.contentWindow.document
+  // 将当前页面的所有样式添加到iframe中
+  const styleList = document.querySelectorAll('style')
+  Array.from(styleList).forEach(el => {
+    iframeDoc.write(el.outerHTML)
+  })
+  // 设置打印展示方式 - 纵向展示
+  iframeDoc.write('<style media="print">@page {size: portrait;}</style>')
+  // 写入内容
+  iframeDoc.write('<div>' + printContent + '</div>')
+  setTimeout(function() {
+    iframe.contentWindow?.print()
+    document.body.removeChild(iframe)
+  }, 500)
+}

@@ -445,6 +445,11 @@ export const sidebarTriggerList = [
     icon: 'iconshezhi'
   },
   {
+    name: 'AI',
+    value: 'ai',
+    icon: 'iconAIshengcheng'
+  },
+  {
     name: 'ShortcutKey',
     value: 'shortcutKey',
     icon: 'iconjianpan'
@@ -457,19 +462,20 @@ export const downTypeList = [
     name: 'Dedicated file',
     type: 'smm',
     icon: 'iconwenjian',
-    desc: 'Available for import'
+    desc:
+      'SimpleMindMap private format, can be used for re import, and the client can directly edit it'
   },
   {
     name: 'JSON',
     type: 'json',
     icon: 'iconjson',
-    desc: 'Popular data exchange formats, Available for import'
+    desc: 'Popular data exchange format that can be used for re importing'
   },
   {
     name: 'Image',
     type: 'png',
     icon: 'iconPNG',
-    desc: 'Suitable for viewing and sharing'
+    desc: 'Common image formats, suitable for viewing and sharing'
   },
   {
     name: 'SVG',
@@ -481,19 +487,19 @@ export const downTypeList = [
     name: 'PDF',
     type: 'pdf',
     icon: 'iconpdf',
-    desc: 'Suitable for printing'
+    desc: 'Suitable for viewing, browsing, and printing'
   },
   {
     name: 'Markdown',
     type: 'md',
     icon: 'iconmarkdown',
-    desc: 'Easy for other software to open'
+    desc: 'MD text format, easy for other software to open'
   },
   {
     name: 'XMind',
     type: 'xmind',
     icon: 'iconxmind',
-    desc: 'XMind file'
+    desc: 'XMind software file'
   },
   {
     name: 'Txt',
@@ -511,7 +517,7 @@ export const downTypeList = [
     name: 'Excel',
     type: 'xlsx',
     icon: 'iconfile-excel',
-    desc: 'Excel software format'
+    desc: 'Table text format, editable with Excel software'
   }
 ]
 

@@ -122,7 +122,11 @@ class NodeImgAdjust {
 
   // 创建调整按钮元素
   createResizeBtnEl() {
-    const { imgResizeBtnSize } = this.mindMap.opt
+    const {
+      imgResizeBtnSize,
+      customResizeBtnInnerHTML,
+      customDeleteBtnInnerHTML
+    } = this.mindMap.opt
     // 容器元素
     this.handleEl = document.createElement('div')
     this.handleEl.style.cssText = `
@@ -134,7 +138,7 @@ class NodeImgAdjust {
     this.handleEl.className = 'node-img-handle'
     // 调整按钮元素
     const btnEl = document.createElement('div')
-    btnEl.innerHTML = btnsSvg.imgAdjust
+    btnEl.innerHTML = customResizeBtnInnerHTML || btnsSvg.imgAdjust
     btnEl.style.cssText = `
       position: absolute;
       right: 0;
@@ -179,7 +183,7 @@ class NodeImgAdjust {
     const btnRemove = document.createElement('div')
     this.handleEl.prepend(btnRemove)
     btnRemove.className = 'node-image-remove'
-    btnRemove.innerHTML = btnsSvg.remove
+    btnRemove.innerHTML = customDeleteBtnInnerHTML || btnsSvg.remove
     btnRemove.style.cssText = `
       position: absolute;
       right: 0;top:0;color:#fff;

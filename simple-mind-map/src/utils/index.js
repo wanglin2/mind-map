@@ -398,7 +398,7 @@ export const nextTick = function (fn, ctx) {
 }
 
 // 检查节点是否超出画布
-export const checkNodeOuter = (mindMap, node) => {
+export const checkNodeOuter = (mindMap, node, offsetX = 0, offsetY = 0) => {
   let elRect = mindMap.elRect
   let { scaleX, scaleY, translateX, translateY } = mindMap.draw.transform()
   let { left, top, width, height } = node
@@ -408,17 +408,17 @@ export const checkNodeOuter = (mindMap, node) => {
   top = top * scaleY + translateY
   let offsetLeft = 0
   let offsetTop = 0
-  if (left < 0) {
-    offsetLeft = -left
+  if (left < 0 + offsetX) {
+    offsetLeft = -left + offsetX
   }
-  if (right > elRect.width) {
-    offsetLeft = -(right - elRect.width)
+  if (right > elRect.width - offsetX) {
+    offsetLeft = -(right - elRect.width) - offsetX
   }
-  if (top < 0) {
-    offsetTop = -top
+  if (top < 0 + offsetY) {
+    offsetTop = -top + offsetY
   }
-  if (bottom > elRect.height) {
-    offsetTop = -(bottom - elRect.height)
+  if (bottom > elRect.height - offsetY) {
+    offsetTop = -(bottom - elRect.height) - offsetY
   }
   return {
     isOuter: offsetLeft !== 0 || offsetTop !== 0,
@@ -1002,7 +1002,8 @@ export const addDataToAppointNodes = (appointNodes, data = {}) => {
 export const createUidForAppointNodes = (
   appointNodes,
   createNewId = false,
-  handle = null
+  handle = null,
+  handleGeneralization = false
 ) => {
   const walk = list => {
     list.forEach(node => {
@@ -1011,6 +1012,14 @@ export const createUidForAppointNodes = (
       }
       if (createNewId || isUndef(node.data.uid)) {
         node.data.uid = createUid()
+      }
+      if (handleGeneralization) {
+        const generalizationList = formatGetNodeGeneralization(node.data)
+        generalizationList.forEach(gNode => {
+          if (createNewId || isUndef(gNode.uid)) {
+            gNode.uid = createUid()
+          }
+        })
       }
       handle && handle(node)
       if (node.children && node.children.length > 0) {

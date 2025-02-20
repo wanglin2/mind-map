@@ -1,5 +1,9 @@
 <template>
-  <div class="winControl noDrag" v-if="IS_WIN || IS_LINUX">
+  <div
+    class="winControl noDrag"
+    :class="{ isDark: isDark }"
+    v-if="IS_WIN || IS_LINUX"
+  >
     <div class="winControlBtn iconfont iconzuixiaohua" @click="minimize"></div>
     <div
       class="winControlBtn iconfont"
@@ -11,11 +15,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   data() {
     return {
       isMaximize: false
     }
+  },
+  computed: {
+    ...mapState({
+      isDark: state => state.localConfig.isDark
+    })
   },
   async created() {
     try {
@@ -54,6 +65,17 @@ export default {
   align-items: center;
   flex-shrink: 0;
   height: 100%;
+
+  &.isDark {
+    .winControlBtn {
+      color: #fff;
+
+      &:hover {
+        background-color: #373b3f;
+      }
+    }
+  }
+
   .winControlBtn {
     width: 40px;
     height: 100%;

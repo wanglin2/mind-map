@@ -5,6 +5,7 @@ import {
   saveToRecent,
   clearRecent,
   removeFileInRecent,
+  removeMultiFileInRecent,
   replaceFileInRecent,
   getRecent,
   saveFileListToRecent,
@@ -104,27 +105,31 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
 
   // 保存文件
   const idToFilePath = {}
-  ipcMain.handle('save', async (event, id, data, fileName = '未命名') => {
-    if (!idToFilePath[id]) {
-      const webContents = event.sender
-      const win = BrowserWindow.fromWebContents(webContents)
-      const res = dialog.showSaveDialogSync(win, {
-        title: '保存',
-        defaultPath: fileName + '.smm',
-        filters: [{ name: '思维导图', extensions: ['smm'] }]
-      })
-      if (res) {
-        idToFilePath[id] = res
-        fs.writeFile(res, data)
-        saveToRecent(res).then(() => {
-          notifyMainWindowRefreshRecentFileList()
+  ipcMain.handle(
+    'save',
+    async (event, id, data, fileName = '未命名', defaultPath = '') => {
+      if (!idToFilePath[id]) {
+        const webContents = event.sender
+        const win = BrowserWindow.fromWebContents(webContents)
+        const res = dialog.showSaveDialogSync(win, {
+          title: '保存',
+          defaultPath:
+            (defaultPath ? defaultPath + '/' : '') + fileName + '.smm',
+          filters: [{ name: '思维导图', extensions: ['smm'] }]
         })
-        return path.parse(idToFilePath[id]).name
+        if (res) {
+          idToFilePath[id] = res
+          fs.writeFile(res, data)
+          saveToRecent(res).then(() => {
+            notifyMainWindowRefreshRecentFileList()
+          })
+          return path.parse(idToFilePath[id]).name
+        }
+      } else {
+        fs.writeFile(idToFilePath[id], data)
       }
-    } else {
-      fs.writeFile(idToFilePath[id], data)
     }
-  })
+  )
 
   // 打开文件
   const openFile = (event, file) => {
@@ -157,14 +162,47 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
   ipcMain.handle('openFile', openFile)
 
   // 选择打开本地文件
-  ipcMain.on('selectOpenFile', event => {
+  ipcMain.handle('selectOpenFile', event => {
     const res = dialog.showOpenDialogSync({
       title: '选择',
       filters: [{ name: '思维导图', extensions: ['smm'] }]
     })
     if (res && res[0]) {
       openFile(null, res[0])
+      return res[0]
+    } else {
+      return null
     }
+  })
+
+  // 选择目录
+  ipcMain.handle('selectOpenFolder', event => {
+    const res = dialog.showOpenDialogSync({
+      title: '选择',
+      properties: ['openDirectory']
+    })
+    if (res && res[0]) {
+      return res[0]
+    } else {
+      return null
+    }
+  })
+
+  // 获取指定目录下指定类型的文件列表
+  ipcMain.handle('getFilesInDir', (event, dir, ext) => {
+    return new Promise((resolve, reject) => {
+      fs.readdir(dir, (err, files) => {
+        if (err) {
+          reject(err)
+        } else {
+          const reg = new RegExp(ext + '$')
+          files = files.filter(item => {
+            return reg.test(item)
+          })
+          resolve(files)
+        }
+      })
+    })
   })
 
   // 选择本地文件
@@ -266,6 +304,30 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
     }
   })
 
+  // 从最近文件列表中删除指定文件
+  ipcMain.handle('removeFileInRecent', async (event, file) => {
+    try {
+      removeFileInRecent(file).then(() => {
+        notifyMainWindowRefreshRecentFileList()
+      })
+      return ''
+    } catch (error) {
+      return '清空失败'
+    }
+  })
+
+  // 从最近文件列表中删除指定的多个文件
+  ipcMain.handle('removeMultiFileInRecent', async (event, fileList) => {
+    try {
+      removeMultiFileInRecent(fileList).then(() => {
+        notifyMainWindowRefreshRecentFileList()
+      })
+      return ''
+    } catch (error) {
+      return '删除失败'
+    }
+  })
+
   // 添加到最近文件列表
   ipcMain.handle('addRecentFileList', async (event, fileList) => {
     try {
@@ -288,6 +350,19 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
     shell.showItemInFolder(file)
   })
 
+  // 检查文件是否存在
+  ipcMain.handle('checkFileExist', (event, filePath) => {
+    return new Promise((resolve, reject) => {
+      fs.access(filePath, err => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+    })
+  })
+
   // 打开指定文件
   ipcMain.handle('openPath', (event, file, relativePath = '') => {
     if (!path.isAbsolute(file) && relativePath) {
@@ -301,7 +376,7 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
   })
 
   // 删除指定文件
-  ipcMain.handle('deleteFile', (event, file) => {
+  const deleteFile = async (event, file) => {
     let res = ''
     let id = Object.keys(idToFilePath).find(item => {
       return idToFilePath[item] === file
@@ -316,11 +391,31 @@ export const bindFileHandleEvent = ({ mainWindow }) => {
       try {
         fs.rmSync(file)
       } catch (error) {}
-      removeFileInRecent(file)
+      await removeFileInRecent(file)
     } else {
       res = '该文件正在编辑，请关闭后再试'
     }
     return res
+  }
+  ipcMain.handle('deleteFile', deleteFile)
+
+  // 删除指定的多个文件
+  ipcMain.handle('deleteMultiFile', (event, fileList) => {
+    return new Promise(resolve => {
+      const total = fileList.length
+      let count = 0
+      const failList = []
+      fileList.forEach(item => {
+        const error = deleteFile(null, item)
+        count++
+        if (error) {
+          failList.push(item)
+        }
+        if (count >= total) {
+          resolve(failList)
+        }
+      })
+    })
   })
 
   // 复制文件

@@ -95,7 +95,7 @@ export default {
     // 点鼠标hover和激活时显示的矩形边框的圆角大小
     hoverRectRadius: 5,
     // 文本对齐
-    align: 'left',
+    textAlign: 'left',// right、center、justify、left
     // 图片放置位置，相对于整个文本内容
     imgPlacement: 'top', // left、right、bottom、top
     // 标签放置位置

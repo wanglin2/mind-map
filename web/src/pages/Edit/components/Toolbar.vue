@@ -185,6 +185,27 @@ import { throttle, isMobile } from 'simple-mind-map/src/utils/index'
  * @Desc: 工具栏
  */
 let fileHandle = null
+const defaultBtnList = [
+  'back',
+  'forward',
+  'painter',
+  'siblingNode',
+  'childNode',
+  'deleteNode',
+  'image',
+  'icon',
+  'link',
+  'note',
+  'tag',
+  'summary',
+  'associativeLine',
+  'formula',
+  'attachment',
+  'outerFrame',
+  'annotation',
+  'ai'
+]
+
 export default {
   name: 'Toolbar',
   components: {
@@ -200,25 +221,6 @@ export default {
   data() {
     return {
       isMobile: isMobile(),
-      list: [
-        'back',
-        'forward',
-        'painter',
-        'siblingNode',
-        'childNode',
-        'deleteNode',
-        'image',
-        'icon',
-        'link',
-        'note',
-        'tag',
-        'summary',
-        'associativeLine',
-        'formula',
-        'attachment',
-        'outerFrame',
-        'annotation'
-      ],
       horizontalList: [],
       verticalList: [],
       showMoreBtn: true,
@@ -238,8 +240,24 @@ export default {
     ...mapState({
       isDark: state => state.localConfig.isDark,
       isHandleLocalFile: state => state.isHandleLocalFile,
-      openNodeRichText: state => state.localConfig.openNodeRichText
-    })
+      openNodeRichText: state => state.localConfig.openNodeRichText,
+      enableAi: state => state.enableAi
+    }),
+
+    btnLit() {
+      let res = [...defaultBtnList]
+      if (!this.openNodeRichText) {
+        res = res.filter(item => {
+          return item !== 'formula'
+        })
+      }
+      if (!this.enableAi) {
+        res = res.filter(item => {
+          return item !== 'ai'
+        })
+      }
+      return res
+    }
   },
   watch: {
     isHandleLocalFile(val) {
@@ -247,21 +265,9 @@ export default {
         Notification.closeAll()
       }
     },
-    openNodeRichText: {
-      immediate: true,
-      handler(val) {
-        const index = this.list.findIndex(item => {
-          return item === 'formula'
-        })
-        if (val) {
-          if (index === -1) {
-            this.list.splice(13, 0, 'formula')
-          }
-        } else {
-          if (index !== -1) {
-            this.list.splice(index, 1)
-          }
-        }
+    btnLit: {
+      deep: true,
+      handler() {
         this.computeToolbarShow()
       }
     }
@@ -289,7 +295,7 @@ export default {
     computeToolbarShow() {
       if (!this.$refs.toolbarRef) return
       const windowWidth = window.innerWidth - 40
-      const all = [...this.list]
+      const all = [...this.btnLit]
       let index = 1
       const loopCheck = () => {
         if (index > all.length) return done()

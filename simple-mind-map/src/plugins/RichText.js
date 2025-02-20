@@ -820,6 +820,7 @@ class RichText {
 
   // 处理导入数据
   handleSetData(data) {
+    if (!data) return
     // 短期处理，为了兼容老数据，长期会去除
     const isOldRichTextVersion =
       !data.smmVersion || compareVersion(data.smmVersion, '0.13.0') === '<'

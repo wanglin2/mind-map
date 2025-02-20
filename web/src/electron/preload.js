@@ -12,19 +12,24 @@ contextBridge.exposeInMainWorld('electronAPI', {
   create: id => ipcRenderer.send('create', id),
   getFileContent: id => ipcRenderer.invoke('getFileContent', id),
   getFilePath: id => ipcRenderer.invoke('getFilePath', id),
-  save: (id, data, fileName) => ipcRenderer.invoke('save', id, data, fileName),
+  save: (id, data, fileName, defaultPath) =>
+    ipcRenderer.invoke('save', id, data, fileName, defaultPath),
   rename: (id, name) => ipcRenderer.invoke('rename', id, name),
   openUrl: url => ipcRenderer.send('openUrl', url),
   addRecentFileList: fileList =>
     ipcRenderer.invoke('addRecentFileList', fileList),
   getRecentFileList: () => ipcRenderer.invoke('getRecentFileList'),
   clearRecentFileList: () => ipcRenderer.invoke('clearRecentFileList'),
+  removeFileInRecent: file => ipcRenderer.invoke('removeFileInRecent', file),
+  removeMultiFileInRecent: fileList =>
+    ipcRenderer.invoke('removeMultiFileInRecent', fileList),
   openFileInDir: file => ipcRenderer.invoke('openFileInDir', file),
   deleteFile: file => ipcRenderer.invoke('deleteFile', file),
+  deleteMultiFile: fileList => ipcRenderer.invoke('deleteMultiFile', fileList),
   onRefreshRecentFileList: callback =>
     ipcRenderer.on('refreshRecentFileList', callback),
   openFile: file => ipcRenderer.invoke('openFile', file),
-  selectOpenFile: () => ipcRenderer.send('selectOpenFile'),
+  selectOpenFile: () => ipcRenderer.invoke('selectOpenFile'),
   copyFile: file => ipcRenderer.invoke('copyFile', file),
   selectFile: (openDirectory, relativePath) =>
     ipcRenderer.invoke('selectFile', openDirectory, relativePath),
@@ -32,5 +37,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.invoke('openPath', path, relativePath),
   saveClientConfig: config => ipcRenderer.invoke('saveClientConfig', config),
   getClientConfig: () => ipcRenderer.invoke('getClientConfig'),
-  getIsMaximize: id => ipcRenderer.invoke('getIsMaximize', id)
+  getIsMaximize: id => ipcRenderer.invoke('getIsMaximize', id),
+  selectOpenFolder: () => ipcRenderer.invoke('selectOpenFolder'),
+  getFilesInDir: (dir, ext) => ipcRenderer.invoke('getFilesInDir', dir, ext),
+  checkFileExist: filePath => ipcRenderer.invoke('checkFileExist', filePath)
 })

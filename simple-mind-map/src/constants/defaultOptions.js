@@ -302,6 +302,27 @@ export const defaultOpt = {
   },
   // 自定义快捷创建子节点按钮的点击操作，
   customQuickCreateChildBtnClick: null,
+  // 添加自定义的节点内容
+  // 可传递一个对象，格式如下：
+  /*
+    {
+      // 返回要添加的DOM元素详细
+      create: (node) => { 
+        return {
+          el, // DOM节点
+          width: 20, // 宽高
+          height: 20
+        }
+      },
+      // 处理生成的@svgdotjs/svg.js库的ForeignObject节点实例，可以设置其在节点内的位置
+      handle: ({ content, element, node }) => {
+        
+      }
+    }
+  */
+  addCustomContentToNode: null,
+  // 节点连线样式是否允许继承祖先的连线样式
+  enableInheritAncestorLineStyle: true,
 
   // 【Select插件】
   // 多选节点时鼠标移动到边缘时的画布移动偏移量
@@ -492,5 +513,10 @@ export const defaultOpt = {
   maxImgResizeWidthInheritTheme: false,
   // 最大允许缩放的尺寸，maxImgResizeWidthInheritTheme选项设置为false时生效，不限制最大值可传递Infinity
   maxImgResizeWidth: Infinity,
-  maxImgResizeHeight: Infinity
+  maxImgResizeHeight: Infinity,
+  // 自定义删除按钮和尺寸调整按钮的内容
+  // 默认为内置图标，你可以传递一个svg字符串，或者其他的html字符串
+  // 整体大小请使用上面的minImgResizeWidth和minImgResizeHeight选项设置
+  customDeleteBtnInnerHTML: '',
+  customResizeBtnInnerHTML: ''
 }

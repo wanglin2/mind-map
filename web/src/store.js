@@ -7,8 +7,8 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    fileName: '',// 本地的文件名
-    isUnSave: false,// 当前操作是否未保存
+    fileName: '', // 本地的文件名
+    isUnSave: false, // 当前操作是否未保存
     mindMapData: null, // 思维导图数据
     isHandleLocalFile: false, // 是否操作的是本地文件
     localConfig: {
@@ -22,12 +22,14 @@ const store = new Vuex.Store({
       isShowScrollbar: false,
       // 是否开启手绘风格
       isUseHandDrawnLikeStyle: false,
+      // 是否开启动量效果
+      isUseMomentum: true,
       // 是否是暗黑模式
       isDark: false
     },
     activeSidebar: '', // 当前显示的侧边栏
-    localEditList: [],// 客户端中正在编辑的思维导图列表
-    isOutlineEdit: false,// 是否是大纲编辑模式
+    localEditList: [], // 客户端中正在编辑的思维导图列表
+    isOutlineEdit: false, // 是否是大纲编辑模式
     isReadonly: false, // 是否只读
     isSourceCodeEdit: false, // 是否是源码编辑模式
     extraTextOnExport: '', // 导出时底部添加的文字
@@ -38,7 +40,17 @@ const store = new Vuex.Store({
     supportExcel: false, // 是否支持Excel插件
     supportCheckbox: false, // 是否支持Checkbox插件
     supportLineFlow: false, // 是否支持LineFlow插件
-    isDragOutlineTreeNode: false // 当前是否正在拖拽大纲树的节点
+    supportMomentum: false, // 是否支持Momentum插件
+    isDragOutlineTreeNode: false, // 当前是否正在拖拽大纲树的节点
+    aiConfig: {
+      api: 'http://ark.cn-beijing.volces.com/api/v3/chat/completions',
+      key: '',
+      model: '',
+      port: 3456,
+      method: 'POST'
+    },
+    enableAi: false, // 是否开启AI功能
+    currentFolder: '' // 当前打开的目录
   },
   mutations: {
     // 设置本地文件名
@@ -49,6 +61,11 @@ const store = new Vuex.Store({
     // 设置当前操作是否未保存
     setIsUnSave(state, data) {
       state.isUnSave = data
+    },
+
+    setCurrentFolder(state, data) {
+      localStorage.setItem('currentFolder', data)
+      state.currentFolder = data
     },
 
     /**
@@ -67,11 +84,18 @@ const store = new Vuex.Store({
 
     // 设置本地配置
     setLocalConfig(state, data) {
-      state.localConfig = {
+      const aiConfigKeys = Object.keys(state.aiConfig)
+      Object.keys(data).forEach(key => {
+        if (aiConfigKeys.includes(key)) {
+          state.aiConfig[key] = data[key]
+        } else {
+          state.localConfig[key] = data[key]
+        }
+      })
+      storeLocalConfig({
         ...state.localConfig,
-        ...data
-      }
-      storeLocalConfig(state.localConfig)
+        ...state.aiConfig
+      })
     },
 
     // 设置当前显示的侧边栏
@@ -139,9 +163,19 @@ const store = new Vuex.Store({
       state.supportLineFlow = data
     },
 
+    // 设置是否支持Momentum插件
+    setSupportMomentum(state, data) {
+      state.supportMomentum = data
+    },
+
     // 设置树节点拖拽
     setIsDragOutlineTreeNode(state, data) {
       state.isDragOutlineTreeNode = data
+    },
+
+    // 设置是否启用AI功能
+    setEnableAi(state, data) {
+      state.enableAi = data
     }
   },
   actions: {

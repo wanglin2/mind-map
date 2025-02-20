@@ -5,6 +5,7 @@ import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import path from 'path'
 import { bindFileHandleEvent } from './electron/fileHandle'
 import { bindOtherHandleEvent } from './electron/otherHandle'
+import '../scripts/ai'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 

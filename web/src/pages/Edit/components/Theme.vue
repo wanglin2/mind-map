@@ -162,6 +162,7 @@ export default {
           cancelButtonText: this.$t('theme.reserve'),
           type: 'warning',
           distinguishCancelAndClose: true,
+          customClass: this.isDark ? 'darkElMessageBox' : '',
           callback: action => {
             if (action === 'confirm') {
               this.mindMap.setThemeConfig({}, true)

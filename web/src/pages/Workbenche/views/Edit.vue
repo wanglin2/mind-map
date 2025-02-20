@@ -9,7 +9,9 @@
           placeholder=""
           @blur="rename"
           @keyup.enter="rename"
-        ></el-input>
+        >
+          <template slot="append">.smm</template>
+        </el-input>
         <div class="modifyDotBox">
           <div class="modifyDot" v-show="isUnSave"></div>
         </div>
@@ -83,7 +85,8 @@ export default {
         this.$confirm('有操作尚未保存，是否确认关闭？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning'
+          type: 'warning',
+          customClass: this.isDark ? 'darkElMessageBox' : ''
         })
           .then(async () => {
             resolve()
@@ -99,7 +102,6 @@ export default {
 
 <style lang="less" scoped>
 .workbencheEditContainer {
-
   &.isDark {
     .workbencheEditHeader {
       background-color: #262a2e;

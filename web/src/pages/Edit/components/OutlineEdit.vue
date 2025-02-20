@@ -6,10 +6,26 @@
     :style="{top: IS_ELECTRON ? '40px' : 0}"
     v-if="isOutlineEdit"
   >
-    <div class="closeBtn" @click="onClose">
-      <span class="icon iconfont iconguanbi"></span>
+    <div class="btnList">
+      <el-tooltip
+        class="item"
+        effect="dark"
+        :content="$t('outline.print')"
+        placement="top"
+      >
+        <div class="btn" @click="onPrint">
+          <span class="icon iconfont iconprinting"></span>
+        </div>
+      </el-tooltip>
+      <div class="btn" @click="onClose">
+        <span class="icon iconfont iconguanbi"></span>
+      </div>
     </div>
-    <div class="outlineEditBox" ref="outlineEditBox">
+    <div
+      class="outlineEditBox"
+      id="fullScreenOutlineEditBox"
+      ref="outlineEditBox"
+    >
       <div class="outlineEdit">
         <el-tree
           ref="tree"
@@ -59,6 +75,7 @@ import {
   handleInputPasteText
 } from 'simple-mind-map/src/utils'
 import { storeData } from '@/api'
+import { printOutline } from '@/utils'
 
 // 大纲侧边栏
 export default {
@@ -226,6 +243,11 @@ export default {
       return Math.random()
     },
 
+    // 打印
+    onPrint() {
+      printOutline(this.$refs.outlineEditBox)
+    },
+
     // 关闭
     onClose() {
       this.setIsOutlineEdit(false)
@@ -275,28 +297,36 @@ export default {
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: 9999;
+  z-index: 1999;
   background-color: #fff;
   overflow: hidden;
 
   &.isDark {
     background-color: #262a2e;
 
-    .closeBtn {
-      .icon {
-        color: #fff;
+    .btnList {
+      .btn {
+        .icon {
+          color: #fff;
+        }
       }
     }
   }
 
-  .closeBtn {
+  .btnList {
     position: absolute;
     right: 40px;
     top: 20px;
-    cursor: pointer;
+    display: flex;
+    align-items: center;
 
-    .icon {
-      font-size: 28px;
+    .btn {
+      cursor: pointer;
+      margin-left: 12px;
+
+      .icon {
+        font-size: 28px;
+      }
     }
   }
 

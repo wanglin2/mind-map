@@ -18,11 +18,13 @@
     "format": "prettier --write src/* src/*/* src/*/*/* src/*/*/*/*",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "createNodeImageList": "node ./scripts/createNodeImageList.js"
+    "createNodeImageList": "node ./scripts/createNodeImageList.js",
+    "ai:serve": "node ./scripts/ai.js"
   },
   "main": "background.js",
   "dependencies": {
     "@toast-ui/editor": "^3.1.5",
+    "axios": "^1.7.9",
     "codemirror": "^5.65.16",
     "core-js": "^3.6.5",
     "electron-json-storage": "^4.6.0",
@@ -50,6 +52,7 @@
     "esbuild": "^0.17.15",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "express": "^4.21.2",
     "hasown": "^2.0.2",
     "less": "^3.12.2",
     "less-loader": "^7.1.0",

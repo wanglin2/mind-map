@@ -1,6 +1,7 @@
 <template>
   <div
     class="workbencheHomeContainer"
+    :class="{ isDark: isDark }"
     @drop="onDrop"
     @dragenter="onDragenter"
     @dragover="onDragover"
@@ -40,6 +41,8 @@ import FileList from '../components/FileList.vue'
 import AboutDialog from '../components/AboutDialog.vue'
 import SponsorDialog from '../components/SponsorDialog.vue'
 import SettingDialog from '../components/SettingDialog.vue'
+import { getLocalConfig } from '@/api'
+import { mapState, mapActions, mapMutations } from 'vuex'
 
 export default {
   components: {
@@ -58,7 +61,33 @@ export default {
       showSettingDialog: false
     }
   },
+  computed: {
+    ...mapState({
+      isDark: state => state.localConfig.isDark
+    })
+  },
+  watch: {
+    isDark() {
+      this.setBodyDark()
+    }
+  },
+  created() {
+    this.initLocalConfig()
+    this.setBodyDark()
+  },
   methods: {
+    ...mapMutations(['setLocalConfig']),
+
+    initLocalConfig() {
+      let config = getLocalConfig()
+      if (config) {
+        this.setLocalConfig({
+          ...this.$store.state.localConfig,
+          ...config
+        })
+      }
+    },
+
     handleCommand(command) {
       switch (command) {
         case 'about':
@@ -83,6 +112,12 @@ export default {
         default:
           break
       }
+    },
+
+    setBodyDark() {
+      this.isDark
+        ? document.body.classList.add('isDark')
+        : document.body.classList.remove('isDark')
     },
 
     onDrop(e) {
@@ -141,6 +176,21 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+
+  &.isDark {
+    background: rgb(39, 42, 46);
+
+    .workbencheHomeHeader {
+      background-color: #262a2e;
+
+      .rightBar {
+        .settingBtn {
+          color: #fff;
+        }
+      }
+    }
+  }
 
   .workbencheHomeHeader {
     position: relative;
@@ -169,7 +219,8 @@ export default {
   }
 
   .workbencheHomeContent {
-    flex-grow: 1;
+    width: 100%;
+    height: 100%;
     padding: 20px;
     display: flex;
     overflow: hidden;
