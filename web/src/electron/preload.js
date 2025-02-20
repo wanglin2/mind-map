@@ -40,5 +40,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getIsMaximize: id => ipcRenderer.invoke('getIsMaximize', id),
   selectOpenFolder: () => ipcRenderer.invoke('selectOpenFolder'),
   getFilesInDir: (dir, ext) => ipcRenderer.invoke('getFilesInDir', dir, ext),
-  checkFileExist: filePath => ipcRenderer.invoke('checkFileExist', filePath)
+  checkFileExist: filePath => ipcRenderer.invoke('checkFileExist', filePath),
+  getClientUUID: () => ipcRenderer.invoke('getClientUUID'),
+  openExternal: url => ipcRenderer.invoke('openExternal', url),
 })

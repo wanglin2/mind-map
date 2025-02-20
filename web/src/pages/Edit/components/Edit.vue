@@ -93,14 +93,14 @@ import Themes from 'simple-mind-map-plugin-themes'
 // 协同编辑插件
 // import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
 // 以下插件为付费插件，详情请查看开发文档。依次为：手绘风格插件、标记插件、编号插件、Freemind软件格式导入导出插件、Excel软件格式导入导出插件、待办插件、节点连线流动效果插件、动量效果插件
-// import HandDrawnLikeStyle from 'simple-mind-map-plugin-handdrawnlikestyle'
-// import Notation from 'simple-mind-map-plugin-notation'
-// import Numbers from 'simple-mind-map-plugin-numbers'
-// import Freemind from 'simple-mind-map-plugin-freemind'
-// import Excel from 'simple-mind-map-plugin-excel'
-// import Checkbox from 'simple-mind-map-plugin-checkbox'
-// import LineFlow from 'simple-mind-map-plugin-lineflow'
-// import Momentum from 'simple-mind-map-plugin-momentum'
+import HandDrawnLikeStyle from 'simple-mind-map-plugin-handdrawnlikestyle'
+import Notation from 'simple-mind-map-plugin-notation'
+import Numbers from 'simple-mind-map-plugin-numbers'
+import Freemind from 'simple-mind-map-plugin-freemind'
+import Excel from 'simple-mind-map-plugin-excel'
+import Checkbox from 'simple-mind-map-plugin-checkbox'
+import LineFlow from 'simple-mind-map-plugin-lineflow'
+import Momentum from 'simple-mind-map-plugin-momentum'
 // npm link simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map-plugin-checkbox simple-mind-map simple-mind-map-plugin-themes simple-mind-map-plugin-lineflow simple-mind-map-plugin-momentum
 import OutlineSidebar from './OutlineSidebar'
 import Style from './Style'
@@ -147,6 +147,8 @@ import AssociativeLineStyle from './AssociativeLineStyle.vue'
 import NodeImgPlacementToolbar from './NodeImgPlacementToolbar.vue'
 import AiCreate from './AiCreate.vue'
 import AiChat from './AiChat.vue'
+import { vipFileUrl } from '@/config/constant'
+import axios from 'axios'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -235,7 +237,8 @@ export default {
       extraTextOnExport: state => state.extraTextOnExport,
       isDragOutlineTreeNode: state => state.isDragOutlineTreeNode,
       isDark: state => state.localConfig.isDark,
-      enableAi: state => state.localConfig.enableAi
+      enableAi: state => state.localConfig.enableAi,
+      isVIP: state => state.isVIP
     })
   },
   watch: {
@@ -269,6 +272,7 @@ export default {
     }
   },
   async mounted() {
+    await this.getVipInfo()
     showLoading()
     // this.showNewFeatureInfo()
     await this.getData()
@@ -305,7 +309,20 @@ export default {
     this.mindMap.destroy()
   },
   methods: {
-    ...mapMutations(['setFileName', 'setIsUnSave']),
+    ...mapMutations(['setFileName', 'setIsUnSave', 'setIsVIP']),
+
+    // 获取会员信息
+    async getVipInfo() {
+      try {
+        const clientUUID = await window.electronAPI.getClientUUID()
+        const { data } = await axios.get(vipFileUrl, {
+          responseType: 'json'
+        })
+        this.setIsVIP(data.includes(clientUUID))
+      } catch (error) {
+        console.log(error)
+      }
+    },
 
     handleStartTextEdit() {
       this.mindMap.renderer.startTextEdit()
@@ -735,39 +752,41 @@ export default {
     loadPlugins() {
       if (this.openNodeRichText) this.addRichTextPlugin()
       if (this.isShowScrollbar) this.addScrollbarPlugin()
-      if (typeof HandDrawnLikeStyle !== 'undefined') {
-        this.$store.commit('setSupportHandDrawnLikeStyle', true)
-        if (this.isUseHandDrawnLikeStyle) this.addHandDrawnLikeStylePlugin()
-      }
-      if (typeof Momentum !== 'undefined') {
-        this.$store.commit('setSupportMomentum', true)
-        if (this.isUseMomentum) this.addMomentumPlugin()
-      }
-      if (typeof Notation !== 'undefined') {
-        this.mindMap.addPlugin(Notation)
-        this.$store.commit('setSupportMark', true)
-      }
-      if (typeof Numbers !== 'undefined') {
-        this.mindMap.addPlugin(Numbers)
-        this.$store.commit('setSupportNumbers', true)
-      }
-      if (typeof Freemind !== 'undefined') {
-        this.mindMap.addPlugin(Freemind)
-        this.$store.commit('setSupportFreemind', true)
-        Vue.prototype.Freemind = Freemind
-      }
-      if (typeof Excel !== 'undefined') {
-        this.mindMap.addPlugin(Excel)
-        this.$store.commit('setSupportExcel', true)
-        Vue.prototype.Excel = Excel
-      }
-      if (typeof Checkbox !== 'undefined') {
-        this.mindMap.addPlugin(Checkbox)
-        this.$store.commit('setSupportCheckbox', true)
-      }
-      if (typeof LineFlow !== 'undefined') {
-        this.mindMap.addPlugin(LineFlow)
-        this.$store.commit('setSupportLineFlow', true)
+      if (this.isVIP) {
+        if (typeof HandDrawnLikeStyle !== 'undefined') {
+          this.$store.commit('setSupportHandDrawnLikeStyle', true)
+          if (this.isUseHandDrawnLikeStyle) this.addHandDrawnLikeStylePlugin()
+        }
+        if (typeof Momentum !== 'undefined') {
+          this.$store.commit('setSupportMomentum', true)
+          if (this.isUseMomentum) this.addMomentumPlugin()
+        }
+        if (typeof Notation !== 'undefined') {
+          this.mindMap.addPlugin(Notation)
+          this.$store.commit('setSupportMark', true)
+        }
+        if (typeof Numbers !== 'undefined') {
+          this.mindMap.addPlugin(Numbers)
+          this.$store.commit('setSupportNumbers', true)
+        }
+        if (typeof Freemind !== 'undefined') {
+          this.mindMap.addPlugin(Freemind)
+          this.$store.commit('setSupportFreemind', true)
+          Vue.prototype.Freemind = Freemind
+        }
+        if (typeof Excel !== 'undefined') {
+          this.mindMap.addPlugin(Excel)
+          this.$store.commit('setSupportExcel', true)
+          Vue.prototype.Excel = Excel
+        }
+        if (typeof Checkbox !== 'undefined') {
+          this.mindMap.addPlugin(Checkbox)
+          this.$store.commit('setSupportCheckbox', true)
+        }
+        if (typeof LineFlow !== 'undefined') {
+          this.mindMap.addPlugin(LineFlow)
+          this.$store.commit('setSupportLineFlow', true)
+        }
       }
     },
 

@@ -51,7 +51,8 @@ const store = new Vuex.Store({
       port: 3456,
       method: 'POST'
     },
-    currentFolder: '' // 当前打开的目录
+    currentFolder: '', // 当前打开的目录
+    isVIP: false // 是否是会员
   },
   mutations: {
     // 设置本地文件名
@@ -172,6 +173,11 @@ const store = new Vuex.Store({
     // 设置树节点拖拽
     setIsDragOutlineTreeNode(state, data) {
       state.isDragOutlineTreeNode = data
+    },
+
+    // 设置是否是会员
+    setIsVIP(state, data) {
+      state.isVIP = data
     }
   },
   actions: {

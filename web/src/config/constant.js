@@ -156,3 +156,5 @@ export const rainbowLinesOptions = [
     ]
   }
 ]
+
+export const vipFileUrl = 'https://simple-mind-map.oss-cn-beijing.aliyuncs.com/vip.json'

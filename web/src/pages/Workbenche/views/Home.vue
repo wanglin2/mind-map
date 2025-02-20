@@ -10,11 +10,15 @@
     <div class="workbencheHomeHeader">
       <MacControl></MacControl>
       <div class="rightBar">
+        <div
+          class="vipBtn iconfont iconhuiyuan-"
+          @click="showVipDialog = true"
+        ></div>
         <el-dropdown @command="handleCommand" style="margin-right: 12px;">
           <span class="settingBtn el-icon-setting"></span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="about">关于软件</el-dropdown-item>
-            <el-dropdown-item command="sponsor">友情赞助</el-dropdown-item>
+            <!-- <el-dropdown-item command="sponsor">友情赞助</el-dropdown-item> -->
             <el-dropdown-item command="help">使用帮助</el-dropdown-item>
             <el-dropdown-item command="doc">开发文档</el-dropdown-item>
             <el-dropdown-item command="setting">设置</el-dropdown-item>
@@ -30,6 +34,7 @@
     <AboutDialog v-model="showAboutDialog"></AboutDialog>
     <SponsorDialog v-model="showSponsorDialog"></SponsorDialog>
     <SettingDialog v-model="showSettingDialog"></SettingDialog>
+    <VipDialog v-model="showVipDialog"></VipDialog>
   </div>
 </template>
 
@@ -41,6 +46,7 @@ import FileList from '../components/FileList.vue'
 import AboutDialog from '../components/AboutDialog.vue'
 import SponsorDialog from '../components/SponsorDialog.vue'
 import SettingDialog from '../components/SettingDialog.vue'
+import VipDialog from '../components/VipDialog.vue'
 import { getLocalConfig } from '@/api'
 import { mapState, mapActions, mapMutations } from 'vuex'
 
@@ -52,13 +58,15 @@ export default {
     FileList,
     AboutDialog,
     SponsorDialog,
-    SettingDialog
+    SettingDialog,
+    VipDialog
   },
   data() {
     return {
       showAboutDialog: false,
       showSponsorDialog: false,
-      showSettingDialog: false
+      showSettingDialog: false,
+      showVipDialog: false
     }
   },
   computed: {
@@ -74,6 +82,9 @@ export default {
   created() {
     this.initLocalConfig()
     this.setBodyDark()
+  },
+  mounted() {
+    this.showTip()
   },
   methods: {
     ...mapMutations(['setLocalConfig']),
@@ -164,6 +175,27 @@ export default {
     onDragleave(e) {
       e.preventDefault()
       e.stopPropagation()
+    },
+
+    showTip() {
+      const isTipped = localStorage.getItem('vip_tip')
+      if (!isTipped) {
+        const n = this.$notify({
+          title: '提示',
+          dangerouslyUseHTMLString: true,
+          message:
+            '会员功能上线了~<span style="color: #409eff; font-weight: bold; cursor: pointer;">点击了解</span>一下吧。',
+          duration: 0,
+          onClick: () => {
+            this.showVipDialog = true
+            n.close()
+            localStorage.setItem('vip_tip', true)
+          },
+          onClose: () => {
+            localStorage.setItem('vip_tip', true)
+          }
+        })
+      }
     }
   }
 }
@@ -210,6 +242,14 @@ export default {
       height: 100%;
       display: flex;
       align-items: center;
+
+      .vipBtn {
+        font-size: 20px;
+        cursor: pointer;
+        color: #e6a23c;
+        font-weight: bold;
+        margin-right: 20px;
+      }
 
       .settingBtn {
         font-size: 20px;
