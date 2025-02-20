@@ -289,7 +289,17 @@ class Export {
     this.handleNodeExport(node)
     const { str, clipData } = await this.getSvgData(node)
     const svgUrl = await this.fixSvgStrAndToBlob(str)
-    const res = await this.svgToPng(svgUrl, transparent, clipData)
+    const isSafari = () => {
+      return (
+        navigator.userAgent.includes('Safari') &&
+        !navigator.userAgent.includes('Chrome')
+      )
+    }
+    let res
+    res = await this.svgToPng(svgUrl, transparent, clipData)
+    if (isSafari()) {
+      res = await this.svgToPng(svgUrl, transparent, clipData)
+    }
     return res
   }
 
