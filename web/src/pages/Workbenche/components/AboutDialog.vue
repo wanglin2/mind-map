@@ -23,6 +23,7 @@
         <span @click="open('baiduNet')">百度云</span>
         <span @click="open('releases')">releases</span>
       </p>
+      <p>如需进微信交流群参与讨论，可微信添加：wanglinguanfang。备注：客户端</p>
     </div>
   </el-dialog>
 </template>

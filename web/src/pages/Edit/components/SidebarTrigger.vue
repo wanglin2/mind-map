@@ -45,7 +45,7 @@ export default {
       isDark: state => state.localConfig.isDark,
       activeSidebar: state => state.activeSidebar,
       isReadonly: state => state.isReadonly,
-      enableAi: state => state.enableAi
+      enableAi: state => state.localConfig.enableAi
     }),
 
     triggerList() {

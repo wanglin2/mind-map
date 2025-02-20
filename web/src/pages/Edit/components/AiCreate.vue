@@ -238,15 +238,15 @@ export default {
           ]
         },
         content => {
-          if (content && /\n$/.test(content)) {
-            this.aiCreatingContent = content
+          if (content) {
+            const arr = content.split(/\n+/)
+            this.aiCreatingContent = arr.splice(0, arr.length - 1).join('\n')
           }
           this.loopRenderOnAiCreating()
         },
         content => {
           this.aiCreatingContent = content
           this.resetOnAiCreatingStop()
-          this.$message.success(this.$t('ai.aiGenerationSuccess'))
         },
         () => {
           this.resetOnAiCreatingStop()
@@ -319,6 +319,7 @@ export default {
           // 还要触发一遍渲染，否则会丢失数据
           this.mindMap.updateData(treeData)
           this.resetOnRenderEnd()
+          this.$message.success(this.$t('ai.aiGenerationSuccess'))
         }
       }
       this.mindMap.on('node_tree_render_end', onRenderEnd)
@@ -401,15 +402,16 @@ export default {
             ]
           },
           content => {
-            if (content && /\n$/.test(content)) {
-              this.aiCreatingContent = content
+            if (content) {
+              const arr = content.split(/\n+/)
+              this.aiCreatingContent = arr.splice(0, arr.length - 1).join('\n')
             }
+
             this.loopRenderOnAiCreatingPart()
           },
           content => {
             this.aiCreatingContent = content
             this.resetOnAiCreatingStop()
-            this.$message.success(this.$t('ai.aiGenerationSuccess'))
           },
           () => {
             this.resetOnAiCreatingStop()
@@ -482,6 +484,7 @@ export default {
         } else {
           this.mindMap.updateData(treeData)
           this.resetOnRenderEnd()
+          this.$message.success(this.$t('ai.aiGenerationSuccess'))
         }
       }
       this.mindMap.on('node_tree_render_end', onRenderEnd)

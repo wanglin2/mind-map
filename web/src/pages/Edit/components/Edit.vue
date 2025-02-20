@@ -234,8 +234,8 @@ export default {
       isUseMomentum: state => state.localConfig.isUseMomentum,
       extraTextOnExport: state => state.extraTextOnExport,
       isDragOutlineTreeNode: state => state.isDragOutlineTreeNode,
-      enableAi: state => state.enableAi,
-      isDark: state => state.localConfig.isDark
+      isDark: state => state.localConfig.isDark,
+      enableAi: state => state.localConfig.enableAi
     })
   },
   watch: {
@@ -266,11 +266,6 @@ export default {
       } else {
         this.removeMomentumPlugin()
       }
-    }
-  },
-  created() {
-    if (this.$route.query && this.$route.query.ai) {
-      this.setEnableAi(true)
     }
   },
   async mounted() {
@@ -310,7 +305,7 @@ export default {
     this.mindMap.destroy()
   },
   methods: {
-    ...mapMutations(['setFileName', 'setIsUnSave', 'setEnableAi']),
+    ...mapMutations(['setFileName', 'setIsUnSave']),
 
     handleStartTextEdit() {
       this.mindMap.renderer.startTextEdit()

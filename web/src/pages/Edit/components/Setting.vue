@@ -246,6 +246,16 @@
           >
         </div>
       </div>
+      <!-- 是否开启ai功能 -->
+      <div class="row">
+        <div class="rowItem">
+          <el-checkbox
+            v-model="localConfigs.enableAi"
+            @change="updateLocalConfig('enableAi', $event)"
+            >{{ $t('setting.enableAi') }}</el-checkbox
+          >
+        </div>
+      </div>
       <!-- 是否开启手绘风格 -->
       <div class="row" v-if="supportHandDrawnLikeStyle">
         <div class="rowItem">
@@ -435,7 +445,8 @@ export default {
         isShowScrollbar: false,
         isUseHandDrawnLikeStyle: false,
         isUseMomentum: false,
-        enableDragImport: false
+        enableDragImport: false,
+        enableAi: false
       }
     }
   },

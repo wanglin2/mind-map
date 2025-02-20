@@ -25,7 +25,9 @@ const store = new Vuex.Store({
       // 是否开启动量效果
       isUseMomentum: true,
       // 是否是暗黑模式
-      isDark: false
+      isDark: false,
+      // 是否开启AI功能
+      enableAi: true
     },
     activeSidebar: '', // 当前显示的侧边栏
     localEditList: [], // 客户端中正在编辑的思维导图列表
@@ -49,7 +51,6 @@ const store = new Vuex.Store({
       port: 3456,
       method: 'POST'
     },
-    enableAi: false, // 是否开启AI功能
     currentFolder: '' // 当前打开的目录
   },
   mutations: {
@@ -171,11 +172,6 @@ const store = new Vuex.Store({
     // 设置树节点拖拽
     setIsDragOutlineTreeNode(state, data) {
       state.isDragOutlineTreeNode = data
-    },
-
-    // 设置是否启用AI功能
-    setEnableAi(state, data) {
-      state.enableAi = data
     }
   },
   actions: {

@@ -80,13 +80,17 @@ export default {
     enableAutoEnterTextEditWhenKeydown: 'Auto enter text edit when keydown',
     confirm: 'Confirm',
     cancel: 'Cancel',
-    changeRichTextTip: 'This operation will clear all historical modification records and modify the mind map data. Do you want to continue?',
+    changeRichTextTip:
+      'This operation will clear all historical modification records and modify the mind map data. Do you want to continue?',
     changeRichTextTip2: 'Do you want to switch to rich text mode?',
     changeRichTextTip3: 'Do you want to switch to non rich text mode?',
-    enableDragImport: 'Is it allowed to directly drag and drop files to the page for import',
+    enableDragImport:
+      'Is it allowed to directly drag and drop files to the page for import',
     imgTextMargin: 'Node image and text margin',
     textContentMargin: 'Node contents margin',
-    enableInheritAncestorLineStyle: 'Node connection style inherits the style of ancestor nodes',
+    enableInheritAncestorLineStyle:
+      'Node connection style inherits the style of ancestor nodes',
+    enableAi: 'Is enable AI function'
   },
   color: {
     moreColor: 'More color'
@@ -276,7 +280,7 @@ export default {
     bottom: 'Bottom',
     left: 'Left',
     right: 'Right',
-    tag: 'Tag',
+    tag: 'Tag'
   },
   theme: {
     title: 'Theme',
@@ -350,7 +354,8 @@ export default {
     dragTip: 'Release here to import the file',
     emptyTip: 'The file content is empty, use default data rendering',
     deleteNodeImgTip: 'Are you sure to delete the node image?',
-    autoOpenNodeRichTextTip: 'Detected imported rich text content, automatically enabled rich text mode'
+    autoOpenNodeRichTextTip:
+      'Detected imported rich text content, automatically enabled rich text mode'
   },
   mouseAction: {
     tip1:
@@ -436,16 +441,20 @@ export default {
     connectFailedTip: 'Client connection failed, please check:',
     connectFailedCheckTip1:
       '1. Have you installed the mind mapping client? If not, please click here to install:',
-    connectFailedCheckTip2: '2. If the client is installed, please confirm if the client is opened.',
+    connectFailedCheckTip2:
+      '2. If the client is installed, please confirm if the client is opened.',
     connectFailedCheckTip3:
       'If it has already been installed and started, you can try closing and restarting it.',
-    connectFailedCheckTip4: 'After completing the above steps, you can click on:',
+    connectFailedCheckTip4:
+      'After completing the above steps, you can click on:',
     baiduNetdisk: 'Baidu Netdisk',
     createMindMapTitle: 'One click generation of mind maps',
     createTip:
       'Please enter a theme, and AI will generate a mind map based on your theme, such as: Hangzhou weekend travel plan.',
-    importantTip: 'Important note: One click generation will overwrite existing data. It is recommended to export the current data first.',
-    wantModifyAiConfigTip: 'Do you want to modify the AI configuration? Please click on:',
+    importantTip:
+      'Important note: One click generation will overwrite existing data. It is recommended to export the current data first.',
+    wantModifyAiConfigTip:
+      'Do you want to modify the AI configuration? Please click on:',
     modifyAIConfiguration: 'Modify AI configuration',
     chatInputPlaceholder: 'Enter to send, Shift+Enter to wrap.',
     send: 'Send',
@@ -455,7 +464,8 @@ export default {
     stoppedGenerating: 'Stopped generating',
     AIConfiguration: 'AI configuration',
     VolcanoArkLargeModelConfiguration: 'Volcano Ark Large Model Configuration:',
-    configTip: 'At present, only the Volcano Ark model is supported, and you need to obtain the key yourself. For detailed operation steps, please refer to:',
+    configTip:
+      'At present, only the Volcano Ark model is supported, and you need to obtain the key yourself. For detailed operation steps, please refer to:',
     course: 'Course',
     inferenceAccessPoint: 'Inference access point',
     mindMappingClientConfiguration: 'Mind mapping client configuration:',
@@ -478,7 +488,8 @@ export default {
     aiCreateMsgPostfix:
       '】. It needs to be returned in Markdown format and can only use two syntax: Markdown title and unordered list. It can support multiple layers of nesting. Just return the content.',
     aiCreatePartMsgPrefix: 'I have a theme for【',
-    aiCreatePartMsgCenter: '】Can you help me continue writing one of the contents of the mind map【',
+    aiCreatePartMsgCenter:
+      '】Can you help me continue writing one of the contents of the mind map【',
     aiCreatePartMsgPostfix:
       '】The subordinate content of the node needs to be returned in Markdown format and can only use two syntax: Markdown title and unordered list. It can support multi-level nesting. Just return the content.'
   }

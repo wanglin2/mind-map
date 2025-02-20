@@ -241,7 +241,7 @@ export default {
       isDark: state => state.localConfig.isDark,
       isHandleLocalFile: state => state.isHandleLocalFile,
       openNodeRichText: state => state.localConfig.openNodeRichText,
-      enableAi: state => state.enableAi
+      enableAi: state => state.localConfig.enableAi
     }),
 
     btnLit() {
