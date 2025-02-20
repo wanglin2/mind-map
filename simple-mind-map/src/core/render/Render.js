@@ -879,10 +879,14 @@ class Render {
         ...(appointData || {})
       }
       if ( typeof this.mindMap.opt.customNewNodeParams === 'function'){
-        const return_value = this.mindMap.opt.customNewNodeParams()
+        let customParams = this.mindMap.opt.customNewNodeParams()
+        if (customParams && typeof customParams !== 'object') {
+          console.error('customNewNodeParams return value must be object')
+          customParams = {}
+        }
         nodeData = {
           ...nodeData,
-          ...return_value
+          ...customParams
         }
       }
       const newNode = {
