@@ -520,7 +520,7 @@ export const defaultOpt = {
   customDeleteBtnInnerHTML: '',
   customResizeBtnInnerHTML: '',
 
-  // NewAdd
+  // 自定义新增节点的属性，可以传递一个函数，需要返回一个对象，对象的属性会被添加到新节点的data属性中
   customNewNodeParams: null,
 
 }
