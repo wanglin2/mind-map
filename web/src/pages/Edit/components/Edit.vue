@@ -315,7 +315,7 @@ export default {
     async getVipInfo() {
       try {
         const clientUUID = await window.electronAPI.getClientUUID()
-        const { data } = await axios.get(vipFileUrl, {
+        const { data } = await axios.get(vipFileUrl + '?' + Date.now(), {
           responseType: 'json'
         })
         this.setIsVIP(data.includes(clientUUID))

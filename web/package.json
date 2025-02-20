@@ -32,6 +32,7 @@
     "fs-extra": "^7.0.1",
     "highlight.js": "^10.7.3",
     "katex": "^0.16.9",
+    "node-machine-id": "^1.1.12",
     "simple-mind-map-plugin-themes": "^1.0.0",
     "uuid": "^3.4.0",
     "v-viewer": "^1.6.4",

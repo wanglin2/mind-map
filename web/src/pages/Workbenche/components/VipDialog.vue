@@ -2,7 +2,7 @@
   <div>
     <el-dialog
       class="vipDialog"
-      title="思绪会员"
+      :title="''"
       :visible.sync="dialogVisible"
       width="700px"
       @close="onClose"
@@ -10,16 +10,21 @@
       <div class="vipBox customScrollbar">
         <div class="statusBox">
           <div class="left" :class="{ isVIP: isVIP }">
-            <span class="iconfont iconhuiyuan-"></span>您{{
+            <span class="iconfont iconhuiyuan-"></span
+            >{{ isVIP ? '恭喜，' : '很遗憾，' }}您{{
               isVIP ? '已' : '还不'
-            }}是会员~
+            }}是思绪会员~
           </div>
           <div class="center">
-            <div class="btn" @click="vipFunctionDialogVisible = true">
-              会员功能一览
+            <div
+              class="btn"
+              @click="vipFunctionDialogVisible = true"
+              style="text-decoration: underline; color: #e6a23c;"
+            >
+              点击查看会员功能
             </div>
           </div>
-          <div class="right"></div>
+          <!-- <div class="right"></div> -->
         </div>
         <div class="desc">
           <p>
@@ -354,7 +359,7 @@ export default {
 .vipBox {
   padding: 20px;
   padding-top: 0;
-  height: 400px;
+  height: 450px;
   overflow-y: auto;
 
   .statusBox {
@@ -376,7 +381,7 @@ export default {
       }
 
       span {
-        margin-right: 12px;
+        margin-right: 6px;
       }
     }
 
@@ -392,6 +397,7 @@ export default {
         color: #409eff;
         cursor: pointer;
         user-select: none;
+        font-size: 16px;
       }
     }
   }
@@ -400,7 +406,7 @@ export default {
     padding: 12px;
     background-color: #f5f5f5;
     margin: 12px 0;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .row {
@@ -421,11 +427,13 @@ export default {
 
     a {
       color: #409eff;
+      font-weight: bold;
     }
 
     .btn {
       color: #409eff;
       cursor: pointer;
+      font-weight: bold;
     }
 
     .emphasize {
