@@ -3,7 +3,7 @@
     class="contextmenuContainer listBox"
     v-if="isShow"
     ref="contextmenuRef"
-    :style="{ left: left + 'px', top: top + 'px' }"
+    :style="{ left: left + 'px', top: top + 'px', 'z-index': 3 }"
     :class="{ isDark: isDark }"
   >
     <template v-if="type === 'node'">
