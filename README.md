@@ -11,23 +11,25 @@
 
 本项目主要包含以下内容：
 
-1.一个 js 思维导图库，不依赖任何框架，可以使用它来快速完成 Web 思维导图产品的开发。
+- 一个 `js` 思维导图库，不依赖任何框架，可以用来快速完成 Web 思维导图产品的开发。
 
-开发文档：[https://wanglin2.github.io/mind-map-docs/](https://wanglin2.github.io/mind-map-docs/)。
+>  开发文档：[https://wanglin2.github.io/mind-map-docs/](https://wanglin2.github.io/mind-map-docs/)
 
-2.一个 Web 思维导图，基于思维导图库、Vue2.x、ElementUI 开发，可以操作电脑本地文件，可以当做一个在线版思维导图应用使用，也可以自部署和二次开发。
+- 一个 Web 思维导图，基于思维导图库、`Vue2.x`、`ElementUI` 开发，支持操作电脑本地文件，可以当做一个在线版思维导图应用使用，也可以自部署和二次开发。
 
-在线地址：[https://wanglin2.github.io/mind-map/](https://wanglin2.github.io/mind-map/)。
+>  在线地址：[https://wanglin2.github.io/mind-map/](https://wanglin2.github.io/mind-map/)
 
-3.此外也支持以客户端的方式使用，现已上架[uTools](https://www.u.tools/)插件应用市场，强烈建议通过`uTools`来体验。
+- 客户端和插件
 
-可直接在`uTools`插件应用市场中搜索`思绪`进行安装，也可以直接访问该地址：[主页](https://www.u-tools.cn/plugins/detail/%E6%80%9D%E7%BB%AA%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/)，点击右侧的【启动】按钮进行安装。
-
-> 独立客户端下载：Github：[releases](https://github.com/wanglin2/mind-map/releases)。百度云盘：[地址](https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3)。
+> 1.独立客户端，支持Windows、Mac及Linux系统。
 >
-> 后续不会投入太多精力在独立客户端上，建议通过`uTools`来使用，功能更强，体验更好。
+> 下载地址：[Github](https://github.com/wanglin2/mind-map/releases)、[百度云盘](https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3)
 
-4.【云存储版本】如果你需要带后端的云存储版本，可以尝试我们开发的另一个项目[理想文档](https://github.com/wanglin2/lx-doc)。
+> 2.`uTools`插件，现已上架[uTools](https://www.u.tools/)插件应用市场。
+>
+> 可直接在`uTools`插件应用市场中搜索`思绪`进行安装，也可以直接访问该地址：[主页](https://www.u-tools.cn/plugins/detail/%E6%80%9D%E7%BB%AA%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/)，点击右侧的【启动】按钮进行安装。
+
+- 云存储版本，如果你需要带后端的云存储版本，可以尝试我们开发的另一个项目[理想文档](https://github.com/wanglin2/lx-doc)。
 
 # 特性
 
@@ -945,6 +947,13 @@ const mindMap = new MindMap({
                 <img src="./web/src/assets/avatar/胡永刚.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
                 <br />
                 <sub style="font-size:14px"><b>胡永刚</b></sub>
+            </a>
+        </td>
+        <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
+            <a href="#">
+                <img src="./web/src/assets/avatar/旋风.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
+                <br />
+                <sub style="font-size:14px"><b>旋风</b></sub>
             </a>
         </td>
     </tr>
