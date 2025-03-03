@@ -22,11 +22,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
-
 export default {
-  name: 'NodeImgPlacementToolbar',
-  components: {},
   props: {
     mindMap: {
       type: Object

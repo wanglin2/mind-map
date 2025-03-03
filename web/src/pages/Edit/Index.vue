@@ -11,13 +11,12 @@
 </template>
 
 <script>
-import Toolbar from './components/Toolbar'
-import Edit from './components/Edit'
+import Toolbar from './components/Toolbar.vue'
+import Edit from './components/Edit.vue'
 import { mapState, mapActions, mapMutations } from 'vuex'
 import { getLocalConfig } from '@/api'
 
 export default {
-  name: 'Index',
   components: {
     Toolbar,
     Edit
@@ -54,11 +53,7 @@ export default {
     ...mapActions(['getUserMindMapData']),
     ...mapMutations(['setLocalConfig']),
 
-    /**
-     * @Author: 王林25
-     * @Date: 2022-11-14 19:07:03
-     * @Desc: 初始化本地配置
-     */
+    // 初始化本地配置
     initLocalConfig() {
       let config = getLocalConfig()
       if (config) {

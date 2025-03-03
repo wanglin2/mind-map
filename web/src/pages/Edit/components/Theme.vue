@@ -26,19 +26,14 @@
 </template>
 
 <script>
-import Sidebar from './Sidebar'
+import Sidebar from './Sidebar.vue'
 import { storeConfig } from '@/api'
 import { mapState, mapMutations } from 'vuex'
 import themeImgMap from 'simple-mind-map-plugin-themes/themeImgMap'
 import themeList from 'simple-mind-map-plugin-themes/themeList'
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:04
- * @Desc: 主题
- */
+// 主题
 export default {
-  name: 'Theme',
   components: {
     Sidebar
   },

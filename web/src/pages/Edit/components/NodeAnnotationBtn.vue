@@ -108,7 +108,7 @@
 
 <script>
 import { lineWidthList } from '@/config'
-import Color from './Color'
+import Color from './Color.vue'
 
 const defaultConfig = {
   type: 'circle',

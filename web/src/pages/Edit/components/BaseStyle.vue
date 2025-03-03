@@ -804,8 +804,8 @@
 </template>
 
 <script>
-import Sidebar from './Sidebar'
-import Color from './Color'
+import Sidebar from './Sidebar.vue'
+import Color from './Color.vue'
 import {
   lineWidthList,
   lineStyleList,
@@ -818,9 +818,9 @@ import {
   lineStyleMap,
   borderDasharrayList
 } from '@/config'
-import ImgUpload from '@/components/ImgUpload'
+import ImgUpload from '@/components/ImgUpload/index.vue'
 import { storeConfig } from '@/api'
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 import {
   supportLineStyleLayoutsMap,
   supportLineRadiusLayouts,
@@ -829,13 +829,8 @@ import {
   rainbowLinesOptions
 } from '@/config/constant'
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:52:56
- * @Desc: 基础样式
- */
+// 基础样式
 export default {
-  name: 'BaseStyle',
   components: {
     Sidebar,
     Color,

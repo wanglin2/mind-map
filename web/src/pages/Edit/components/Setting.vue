@@ -392,10 +392,10 @@
 </template>
 
 <script>
-import Sidebar from './Sidebar'
+import Sidebar from './Sidebar.vue'
 import { storeConfig } from '@/api'
 import { mapState, mapMutations } from 'vuex'
-import Color from './Color'
+import Color from './Color.vue'
 
 export default {
   components: {

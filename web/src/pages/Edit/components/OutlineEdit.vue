@@ -78,7 +78,6 @@ import { printOutline } from '@/utils'
 
 // 大纲侧边栏
 export default {
-  name: 'OutlineEdit',
   props: {
     mindMap: {
       type: Object

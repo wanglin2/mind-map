@@ -32,13 +32,8 @@
 </template>
 
 <script>
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:10
- * @Desc: 放大缩小
- */
+// 放大缩小
 export default {
-  name: 'Scale',
   props: {
     mindMap: {
       type: Object

@@ -224,13 +224,8 @@ import { transformToTxt } from 'simple-mind-map/src/parse/toTxt'
 import { setDataToClipboard, setImgToClipboard, copy } from '@/utils'
 import { numberTypeList, numberLevelList } from '@/config'
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:10
- * @Desc: 右键菜单
- */
+// 右键菜单
 export default {
-  name: 'Contextmenu',
   props: {
     mindMap: {
       type: Object

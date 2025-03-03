@@ -9,11 +9,7 @@ const SIMPLE_MIND_MAP_LOCAL_CONFIG = 'SIMPLE_MIND_MAP_LOCAL_CONFIG'
 
 let mindMapData = null
 
-/**
- * @Author: 王林
- * @Date: 2021-08-01 10:10:49
- * @Desc: 获取缓存的思维导图数据
- */
+// 获取缓存的思维导图数据
 export const getData = () => {
   if (window.takeOverApp) {
     mindMapData = window.takeOverAppMethods.getMindMapData()
@@ -34,11 +30,7 @@ export const getData = () => {
   }
 }
 
-/**
- * @Author: 王林
- * @Date: 2021-08-01 10:14:28
- * @Desc: 存储思维导图数据
- */
+// 存储思维导图数据
 export const storeData = data => {
   try {
     let originData = null
@@ -64,11 +56,7 @@ export const storeData = data => {
   }
 }
 
-/**
- * @Author: 王林
- * @Date: 2021-08-01 10:24:56
- * @Desc: 存储思维导图配置数据
- */
+// 存储思维导图配置数据
 export const storeConfig = config => {
   try {
     let originData = null
@@ -97,12 +85,7 @@ export const storeConfig = config => {
   }
 }
 
-/**
- * javascript comment
- * @Author: 王林
- * @Date: 2022-11-05 14:36:50
- * @Desc: 存储语言
- */
+// 存储语言
 export const storeLang = lang => {
   if (window.takeOverApp) {
     window.takeOverAppMethods.saveLanguage(lang)
@@ -111,12 +94,7 @@ export const storeLang = lang => {
   localStorage.setItem(SIMPLE_MIND_MAP_LANG, lang)
 }
 
-/**
- * javascript comment
- * @Author: 王林
- * @Date: 2022-11-05 14:37:36
- * @Desc: 获取存储的语言
- */
+// 获取存储的语言
 export const getLang = () => {
   if (window.takeOverApp) {
     return window.takeOverAppMethods.getLanguage() || 'zh'

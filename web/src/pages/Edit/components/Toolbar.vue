@@ -143,13 +143,13 @@
 </template>
 
 <script>
-import NodeImage from './NodeImage'
-import NodeHyperlink from './NodeHyperlink'
-import NodeIcon from './NodeIcon'
-import NodeNote from './NodeNote'
-import NodeTag from './NodeTag'
-import Export from './Export'
-import Import from './Import'
+import NodeImage from './NodeImage.vue'
+import NodeHyperlink from './NodeHyperlink.vue'
+import NodeIcon from './NodeIcon.vue'
+import NodeNote from './NodeNote.vue'
+import NodeTag from './NodeTag.vue'
+import Export from './Export.vue'
+import Import from './Import.vue'
 import { mapState } from 'vuex'
 import { Notification } from 'element-ui'
 import exampleData from 'simple-mind-map/example/exampleData'
@@ -157,11 +157,7 @@ import { getData } from '../../../api'
 import ToolbarNodeBtnList from './ToolbarNodeBtnList.vue'
 import { throttle, isMobile } from 'simple-mind-map/src/utils/index'
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:54:58
- * @Desc: 工具栏
- */
+// 工具栏
 let fileHandle = null
 const defaultBtnList = [
   'back',
@@ -185,7 +181,6 @@ const defaultBtnList = [
 ]
 
 export default {
-  name: 'Toolbar',
   components: {
     NodeImage,
     NodeHyperlink,

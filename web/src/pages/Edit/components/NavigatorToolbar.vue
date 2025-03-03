@@ -109,8 +109,8 @@
 </template>
 
 <script>
-import Scale from './Scale'
-import Fullscreen from './Fullscreen'
+import Scale from './Scale.vue'
+import Fullscreen from './Fullscreen.vue'
 import MouseAction from './MouseAction.vue'
 import { langList } from '@/config'
 import i18n from '@/i18n'
@@ -119,13 +119,8 @@ import { mapState, mapMutations } from 'vuex'
 import pkg from 'simple-mind-map/package.json'
 import Demonstrate from './Demonstrate.vue'
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:10
- * @Desc: 导航器工具栏
- */
+// 导航器工具栏
 export default {
-  name: 'NavigatorToolbar',
   components: {
     Scale,
     Fullscreen,
