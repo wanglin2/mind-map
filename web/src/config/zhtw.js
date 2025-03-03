@@ -74,19 +74,19 @@ export const borderDasharrayList = [
   },
   {
     name: '虛線 4',
-    value: '5, 5, 1, 5'
+    value: '5,5,1,5'
   },
   {
     name: '虛線 5',
-    value: '15, 10, 5, 10, 15'
+    value: '15,10,5,10,15'
   },
   {
     name: '虛線 6',
-    value: '1, 5'
+    value: '1,5'
   },
   {
     name: '虛線 7',
-    value: '6, 4'
+    value: '6,4'
   }
 ]
 
