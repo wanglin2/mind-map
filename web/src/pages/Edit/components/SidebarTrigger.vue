@@ -52,7 +52,7 @@ export default {
       let list = sidebarTriggerList[this.$i18n.locale] || sidebarTriggerList.zh
       if (this.isReadonly) {
         list = list.filter(item => {
-          return ['outline', 'shortcutKey'].includes(item.value)
+          return ['outline', 'shortcutKey', 'ai'].includes(item.value)
         })
       }
       if (!this.enableAi) {
