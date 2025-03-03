@@ -31,12 +31,14 @@ class NodeImgAdjust {
     this.onMousemove = this.onMousemove.bind(this)
     this.onMouseup = this.onMouseup.bind(this)
     this.onRenderEnd = this.onRenderEnd.bind(this)
+    this.onScale = this.onScale.bind(this)
     this.mindMap.on('node_img_mouseleave', this.onNodeImgMouseleave)
     this.mindMap.on('node_img_mousemove', this.onNodeImgMousemove)
     this.mindMap.on('mousemove', this.onMousemove)
     this.mindMap.on('mouseup', this.onMouseup)
     this.mindMap.on('node_mouseup', this.onMouseup)
     this.mindMap.on('node_tree_render_end', this.onRenderEnd)
+    this.mindMap.on('scale', this.onScale)
   }
 
   // 解绑事件
@@ -47,6 +49,15 @@ class NodeImgAdjust {
     this.mindMap.off('mouseup', this.onMouseup)
     this.mindMap.off('node_mouseup', this.onMouseup)
     this.mindMap.off('node_tree_render_end', this.onRenderEnd)
+    this.mindMap.off('scale', this.onScale)
+  }
+
+  // 如果当前操作按钮正在显示时缩放了画布，那么需要更新位置
+  onScale() {
+    if (this.node && this.img && this.isShowHandleEl) {
+      this.rect = this.img.rbox()
+      this.setHandleElRect()
+    }
   }
 
   // 节点图片鼠标移动事件
@@ -210,6 +221,7 @@ class NodeImgAdjust {
       }
       if (!stop) {
         this.mindMap.execCommand('SET_NODE_IMAGE', this.node, { url: null })
+        this.mindMap.emit('delete_node_img_from_delete_btn', this.node)
       }
     })
     // 添加元素到页面
@@ -219,6 +231,7 @@ class NodeImgAdjust {
 
   // 鼠标按钮按下事件
   onMousedown(e) {
+    this.mindMap.emit('node_img_adjust_btn_mousedown', this.node)
     this.isMousedown = true
     this.mousedownDrawTransform = this.mindMap.draw.transform()
     // 隐藏节点实际图片
