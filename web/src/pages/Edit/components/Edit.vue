@@ -593,7 +593,8 @@ export default {
         'node_attachmentContextmenu',
         'demonstrate_jump',
         'exit_demonstrate',
-        'node_note_dblclick'
+        'node_note_dblclick',
+        'node_mousedown'
       ].forEach(event => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args)
