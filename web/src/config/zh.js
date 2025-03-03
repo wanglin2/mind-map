@@ -55,7 +55,7 @@ export const fontFamilyList = [
 ]
 
 // 字号
-export const fontSizeList = [10, 12, 16, 18, 24, 32, 48]
+export const fontSizeList = [10, 12, 14, 16, 18, 24, 32, 48]
 
 // 颜色
 export const colorList = [
