@@ -13,7 +13,13 @@
       v-model="note"
     >
     </el-input> -->
-    <div class="noteEditor" ref="noteEditor" @keyup.stop @keydown.stop></div>
+    <div
+      class="noteEditor"
+      ref="noteEditor"
+      @keyup.stop
+      @keydown.stop
+      @click="onClick"
+    ></div>
     <!-- <div class="tip">换行请使用：Enter+Shift</div> -->
     <span slot="footer" class="dialog-footer">
       <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
@@ -115,6 +121,17 @@ export default {
       }
 
       this.cancel()
+    },
+
+    onClick(e) {
+      if (e.target.tagName.toLowerCase() === 'a') {
+        e.stopPropagation()
+        e.preventDefault()
+        const url = e.target.href
+        if (url) {
+          window.electronAPI.openUrl(url)
+        }
+      }
     }
   }
 }

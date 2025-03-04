@@ -15,7 +15,12 @@
       >
         <p class="title">{{ $t('ai.VolcanoArkLargeModelConfiguration') }}</p>
         <p class="desc">
-          {{ $t('ai.configTip') }}<a href="https://mp.weixin.qq.com/s/JNb7PH4sCjWzIZ9G8wStGQ" target="_blank">{{ $t('ai.course') }}</a
+          {{ $t('ai.configTip')
+          }}<a
+            @click.stop.prevent="
+              openUrl('https://mp.weixin.qq.com/s/JNb7PH4sCjWzIZ9G8wStGQ')
+            "
+            >{{ $t('ai.course') }}</a
           >。
         </p>
         <el-form-item label="API Key" prop="key">
@@ -155,6 +160,10 @@ export default {
           this.$message.success(this.$t('ai.configSaveSuccessTip'))
         }
       })
+    },
+
+    openUrl(url) {
+      window.electronAPI.openUrl(url)
     }
   }
 }
@@ -169,6 +178,7 @@ export default {
   .aiConfigBox {
     a {
       color: #409eff;
+      cursor: pointer;
     }
 
     .title {

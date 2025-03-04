@@ -13,9 +13,18 @@
         <p>
           {{ $t('ai.connectFailedCheckTip1')
           }}<a
-            href="https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3"
+            @click.stop.prevent="
+              openUrl(
+                'https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3'
+              )
+            "
             >{{ $t('ai.baiduNetdisk') }}</a
-          >、<a href="https://github.com/wanglin2/mind-map/releases">Github</a>
+          >、<a
+            @click.stop.prevent="
+              openUrl('https://github.com/wanglin2/mind-map/releases')
+            "
+            >Github</a
+          >
         </p>
         <p>{{ $t('ai.connectFailedCheckTip2') }}</p>
         <P>{{ $t('ai.connectFailedCheckTip3') }}</P>
@@ -538,6 +547,10 @@ export default {
         this.isAiCreating = false
         this.aiInstance = null
       }
+    },
+
+    openUrl(url) {
+      window.electronAPI.openUrl(url)
     }
   }
 }

@@ -75,7 +75,14 @@ export default {
     handleALink() {
       const list = this.$refs.noteContentViewer.querySelectorAll('a')
       Array.from(list).forEach(a => {
-        a.setAttribute('target', '_blank')
+        a.addEventListener('click', e => {
+          e.stopPropagation()
+          e.preventDefault()
+          const url = a.href
+          if (url) {
+            window.electronAPI.openUrl(url)
+          }
+        })
       })
     },
 
