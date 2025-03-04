@@ -22,13 +22,8 @@
 <script>
 import { fullscrrenEvent, fullScreen } from '@/utils'
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:10
- * @Desc: 全屏
- */
+// 全屏
 export default {
-  name: 'Fullscreen',
   props: {
     mindMap: {
       type: Object

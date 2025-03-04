@@ -209,28 +209,15 @@
 </template>
 
 <script>
-import Sidebar from './Sidebar'
-import Color from './Color'
+import Sidebar from './Sidebar.vue'
+import Color from './Color.vue'
 import {
   lineWidthList,
-  lineStyleList,
-  backgroundRepeatList,
-  backgroundPositionList,
-  backgroundSizeList,
   fontFamilyList,
   fontSizeList,
-  rootLineKeepSameInCurveList,
-  lineStyleMap,
   borderDasharrayList
 } from '@/config'
 import { mapState, mapMutations } from 'vuex'
-import {
-  supportLineStyleLayoutsMap,
-  supportLineRadiusLayouts,
-  supportNodeUseLineStyleLayouts,
-  supportRootLineKeepSameInCurveLayouts,
-  rainbowLinesOptions
-} from '@/config/constant'
 
 const defaultStyle = {
   associativeLineColor: '',
@@ -244,7 +231,6 @@ const defaultStyle = {
 }
 
 export default {
-  name: 'BaseStyle',
   components: {
     Sidebar,
     Color

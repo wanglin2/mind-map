@@ -88,7 +88,7 @@ class Ai {
       })
     })
     if (res.status && res.status !== 200) {
-      return false
+      throw new Error('请求失败')
     }
     return res.body.getReader()
   }

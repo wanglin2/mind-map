@@ -36,14 +36,13 @@
 </template>
 
 <script>
-import Sidebar from './Sidebar'
+import Sidebar from './Sidebar.vue'
 import { mapState, mapMutations } from 'vuex'
 import Outline from './Outline.vue'
 import { printOutline } from '@/utils'
 
 // 大纲侧边栏
 export default {
-  name: 'OutlineSidebar',
   components: {
     Sidebar,
     Outline

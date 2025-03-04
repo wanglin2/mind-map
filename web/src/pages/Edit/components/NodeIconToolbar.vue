@@ -19,10 +19,6 @@ import { mapState, mapMutations } from 'vuex'
 const allIconList = [..._nodeIconList, ...icon]
 
 export default {
-    name: 'NodeIconToolbar',
-    components: {
-
-    },
     props: {
         mindMap: {
             type: Object

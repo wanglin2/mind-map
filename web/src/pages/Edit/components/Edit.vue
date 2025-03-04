@@ -102,16 +102,16 @@ import Checkbox from 'simple-mind-map-plugin-checkbox'
 import LineFlow from 'simple-mind-map-plugin-lineflow'
 import Momentum from 'simple-mind-map-plugin-momentum'
 // npm link simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map-plugin-checkbox simple-mind-map simple-mind-map-plugin-themes simple-mind-map-plugin-lineflow simple-mind-map-plugin-momentum
-import OutlineSidebar from './OutlineSidebar'
-import Style from './Style'
-import BaseStyle from './BaseStyle'
-import Theme from './Theme'
-import Structure from './Structure'
-import Count from './Count'
-import NavigatorToolbar from './NavigatorToolbar'
-import ShortcutKey from './ShortcutKey'
-import Contextmenu from './Contextmenu'
-import RichTextToolbar from './RichTextToolbar'
+import OutlineSidebar from './OutlineSidebar.vue'
+import Style from './Style.vue'
+import BaseStyle from './BaseStyle.vue'
+import Theme from './Theme.vue'
+import Structure from './Structure.vue'
+import Count from './Count.vue'
+import NavigatorToolbar from './NavigatorToolbar.vue'
+import ShortcutKey from './ShortcutKey.vue'
+import Contextmenu from './Contextmenu.vue'
+import RichTextToolbar from './RichTextToolbar.vue'
 import NodeNoteContentShow from './NodeNoteContentShow.vue'
 import { getData, storeData, storeConfig, getConfig } from '@/api'
 import Navigator from './Navigator.vue'
@@ -175,7 +175,6 @@ MindMap.usePlugin(MiniMap)
 Themes.init(MindMap)
 
 export default {
-  name: 'Edit',
   components: {
     OutlineSidebar,
     Style,
@@ -706,7 +705,8 @@ export default {
         'node_attachmentContextmenu',
         'demonstrate_jump',
         'exit_demonstrate',
-        'node_note_dblclick'
+        'node_note_dblclick',
+        'node_mousedown'
       ].forEach(event => {
         this.mindMap.on(event, (...args) => {
           this.$bus.$emit(event, ...args)

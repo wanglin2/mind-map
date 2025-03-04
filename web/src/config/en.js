@@ -74,19 +74,19 @@ export const borderDasharrayList = [
   },
   {
     name: 'Dotted4',
-    value: '5, 5, 1, 5'
+    value: '5,5,1,5'
   },
   {
     name: 'Dotted5',
-    value: '15, 10, 5, 10, 15'
+    value: '15,10,5,10,15'
   },
   {
     name: 'Dotted6',
-    value: '1, 5'
+    value: '1,5'
   },
   {
     name: 'Dotted7',
-    value: '6, 4'
+    value: '6,4'
   }
 ]
 

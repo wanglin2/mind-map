@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import Color from './Color'
+import Color from './Color.vue'
 import { mapState } from 'vuex'
 import { lineWidthList, borderDasharrayList } from '@/config'
 

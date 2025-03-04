@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import Sidebar from './Sidebar'
+import Sidebar from './Sidebar.vue'
 import { mapState } from 'vuex'
 import { createUid } from 'simple-mind-map/src/utils'
 import MarkdownIt from 'markdown-it'

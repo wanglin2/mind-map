@@ -157,6 +157,7 @@ class AssociativeLine {
     // 取消激活关联线
     if (!this.isControlPointMousedown) {
       this.clearActiveLine()
+      this.renderAllLines()
     }
   }
 
@@ -166,6 +167,7 @@ class AssociativeLine {
       this.completeCreateLine(node)
     } else {
       this.clearActiveLine()
+      this.renderAllLines()
     }
   }
 
@@ -280,7 +282,7 @@ class AssociativeLine {
       .stroke({
         width: associativeLineWidth,
         color: associativeLineColor,
-        dasharray: associativeLineDasharray || [6, 4]
+        dasharray: associativeLineDasharray || '6,4'
       })
       .fill({ color: 'none' })
     path.plot(pathStr)
@@ -348,7 +350,7 @@ class AssociativeLine {
       .stroke({
         width: associativeLineWidth,
         color: associativeLineColor,
-        dasharray: associativeLineDasharray || [6, 4]
+        dasharray: associativeLineDasharray || '6,4'
       })
       .fill({ color: 'none' })
     clickPath
@@ -461,7 +463,7 @@ class AssociativeLine {
       .stroke({
         width: associativeLineWidth,
         color: associativeLineColor,
-        dasharray: associativeLineDasharray || [6, 4]
+        dasharray: associativeLineDasharray || '6,4'
       })
       .fill({ color: 'none' })
     // 箭头

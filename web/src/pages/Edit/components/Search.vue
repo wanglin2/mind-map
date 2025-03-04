@@ -78,7 +78,6 @@ import { isUndef, getTextFromHtml } from 'simple-mind-map/src/utils/index'
 
 // 搜索替换
 export default {
-  name: 'Search',
   props: {
     mindMap: {
       type: Object

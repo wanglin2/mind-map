@@ -59,7 +59,6 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import { storeData } from '@/api'
 import CodeMirror from 'codemirror'
 import 'codemirror/mode/javascript/javascript'
 import 'codemirror/lib/codemirror.css'
@@ -69,7 +68,6 @@ let editor = null
 
 // 源码编辑
 export default {
-  name: 'SourceCodeEdit',
   props: {
     mindMap: {
       type: Object

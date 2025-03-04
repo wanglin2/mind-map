@@ -22,11 +22,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
-
 export default {
-  name: 'NodeImgPlacementToolbar',
-  components: {},
   props: {
     mindMap: {
       type: Object
@@ -45,7 +41,6 @@ export default {
       imgPlacement: ''
     }
   },
-  computed: {},
   created() {
     this.mindMap.on('node_img_click', this.show)
     this.mindMap.on('draw_click', this.close)
@@ -53,6 +48,9 @@ export default {
     this.mindMap.on('node_dblclick', this.close)
     this.mindMap.on('node_active', this.onNodeActive)
     this.mindMap.on('scale', this.onScale)
+    this.mindMap.on('node_img_adjust_btn_mousedown', this.close)
+    this.mindMap.on('delete_node_img_from_delete_btn', this.close)
+    this.mindMap.on('translate', this.close)
   },
   mounted() {
     document.body.append(this.$refs.nodeImgPlacementToolbar)
@@ -64,6 +62,9 @@ export default {
     this.mindMap.off('node_dblclick', this.close)
     this.mindMap.off('node_active', this.onNodeActive)
     this.mindMap.off('scale', this.onScale)
+    this.mindMap.off('node_img_adjust_btn_mousedown', this.close)
+    this.mindMap.off('delete_node_img_from_delete_btn', this.close)
+    this.mindMap.off('translate', this.close)
   },
   methods: {
     show(node, imgNode) {
