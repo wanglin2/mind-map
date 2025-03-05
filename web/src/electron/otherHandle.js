@@ -15,7 +15,10 @@ export const bindOtherHandleEvent = () => {
 
   // 使用默认浏览器打开指定url
   ipcMain.on('openUrl', (event, url) => {
-    shell.openPath(url)
+    const error = shell.openPath(url)
+    if (error) {
+      shell.openExternal(url)
+    }
   })
 
   // 保存客户端配置
