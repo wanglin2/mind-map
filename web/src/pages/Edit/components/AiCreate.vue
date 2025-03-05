@@ -587,10 +587,10 @@ export default {
 .aiCreatingMask {
   position: fixed;
   left: 0;
-  top: 0;
+  top: 40px;
   width: 100%;
   height: 100%;
-  z-index: 99999;
+  z-index: 2000;
   background-color: transparent;
 
   .btn {
