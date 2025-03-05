@@ -36,7 +36,10 @@
   </screenshots>
 
   <releases>
-    <release version="0.12.1" date="2024-10-25" />
+    <release version="0.13.1" date="2025-02-13">
+      <url type="details">https://wanglin2.github.io/mind-map-docs/start/changelog.html#_0-13-1</url>
+    </release>
+    <release version="0.12.1" date="2024-10-25">
       <url type="details">https://wanglin2.github.io/mind-map-docs/start/changelog.html#_0-12-1</url>
     </release>
   </releases>
