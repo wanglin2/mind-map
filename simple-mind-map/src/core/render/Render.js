@@ -147,6 +147,9 @@ class Render {
     })
     // 性能模式
     const onViewDataChange = throttle(() => {
+      if (!this.renderTree) {
+        return
+      }
       if (this.root) {
         this.mindMap.emit('node_tree_render_start')
         this.root.render(
