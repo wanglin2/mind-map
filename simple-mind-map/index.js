@@ -11,7 +11,8 @@ import {
   layoutValueList,
   CONSTANTS,
   ERROR_TYPES,
-  cssContent
+  cssContent,
+  nodeDataNoStylePropList
 } from './src/constants/constant'
 import { SVG } from '@svgdotjs/svg.js'
 import {
@@ -587,7 +588,7 @@ class MindMap {
       this.watermark.isInExport = false
     }
     // 添加必要的样式
-    ;[this.joinCss(), ...cssTextList].forEach(s => {
+    [this.joinCss(), ...cssTextList].forEach(s => {
       clone.add(SVG(`<style>${s}</style>`))
     })
     // 附加内容
@@ -697,6 +698,39 @@ class MindMap {
     this.removeCss()
     MindMap.instanceCount--
   }
+}
+
+// 扩展节点数据中非样式的字段列表
+// 内部会根据这个列表判断，如果不在这个列表里的字段都会认为是样式字段
+/*
+比如一个节点的数据为：
+
+{
+  data: {
+    text: '',
+    note: '',
+    color: ''
+  },
+  children: []
+}
+
+color字段不在nodeDataNoStylePropList列表中，所以是样式，内部一些操作的方法会用到，所以如果你新增了自定义的节点数据，并且不是`_`开头的，那么需要通过该方法扩展
+*/
+let _extendNodeDataNoStylePropList = []
+MindMap.extendNodeDataNoStylePropList = (list = []) => {
+  _extendNodeDataNoStylePropList.push(...list)
+  nodeDataNoStylePropList.push(...list)
+}
+MindMap.resetNodeDataNoStylePropList = () => {
+  _extendNodeDataNoStylePropList.forEach(item => {
+    const index = nodeDataNoStylePropList.findIndex(item2 => {
+      return item2 === item
+    })
+    if (index !== -1) {
+      nodeDataNoStylePropList.splice(index, 1)
+    }
+  })
+  _extendNodeDataNoStylePropList = []
 }
 
 // 插件列表
