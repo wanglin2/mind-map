@@ -346,7 +346,7 @@ export default {
     tip2: '目前：左鍵框選節點，右鍵拖曳畫布'
   },
   search: {
-    searchPlaceholder: '請輸入搜尋內容',
+    searchPlaceholder: '輸入查找內容後按回車鍵',
     replacePlaceholder: '請輸入取代內容',
     replace: '取代',
     replaceAll: '全部取代',

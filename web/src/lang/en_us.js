@@ -359,7 +359,7 @@ export default {
       'Current: Left click to box select nodes, right click to drag the canvas'
   },
   search: {
-    searchPlaceholder: 'Please enter the search content',
+    searchPlaceholder: 'Enter the search content and press Enter',
     replacePlaceholder: 'Please enter replacement content',
     replace: 'Replace',
     replaceAll: 'Replace all',

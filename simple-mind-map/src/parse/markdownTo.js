@@ -1,19 +1,17 @@
 import { fromMarkdown } from 'mdast-util-from-markdown'
 
 const getNodeText = node => {
-  // 优先找出其中的text类型的子节点
-  let textChild = (node.children || []).find(item => {
-    return item.type === 'text'
-  })
-  // 没有找到，那么直接使用第一个子节点
-  textChild = textChild || node.children[0]
-  if (textChild) {
-    if (textChild.value !== undefined) {
-      return textChild.value
+  let textStr = ''
+
+  ;(node.children || []).forEach(item => {
+    if (['inlineCode', 'text'].includes(item.type)) {
+      textStr += item.value || ''
+    } else {
+      textStr += getNodeText(item)
     }
-    return getNodeText(textChild)
-  }
-  return ''
+  })
+
+  return textStr
 }
 
 // 处理list的情况

@@ -347,7 +347,7 @@ export default {
     tip2: '当前：左键框选节点，右键拖动画布'
   },
   search: {
-    searchPlaceholder: '请输入查找内容',
+    searchPlaceholder: '输入查找内容后按回车键',
     replacePlaceholder: '请输入替换内容',
     replace: '替换',
     replaceAll: '全部替换',
