@@ -20,7 +20,7 @@
 <script>
 import Sidebar from './Sidebar.vue'
 import { layoutList } from 'simple-mind-map/src/constants/constant'
-import { storeConfig } from '@/api'
+import { storeData } from '@/api'
 import { mapState } from 'vuex'
 import { layoutImgMap } from '@/config/constant.js'
 
@@ -61,7 +61,7 @@ export default {
     useLayout(layout) {
       this.layout = layout.value
       this.mindMap.setLayout(layout.value)
-      storeConfig({
+      storeData({
         layout: layout.value
       })
     }

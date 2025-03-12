@@ -13,7 +13,7 @@
 <script>
 import Toolbar from './components/Toolbar.vue'
 import Edit from './components/Edit.vue'
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import { getLocalConfig } from '@/api'
 
 export default {
@@ -44,13 +44,11 @@ export default {
       lock: true,
       text: this.$t('other.loading')
     })
-    await this.getUserMindMapData()
     this.show = true
     loading.close()
     this.setBodyDark()
   },
   methods: {
-    ...mapActions(['getUserMindMapData']),
     ...mapMutations(['setLocalConfig']),
 
     // 初始化本地配置

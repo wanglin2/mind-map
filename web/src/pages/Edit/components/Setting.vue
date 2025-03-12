@@ -3,7 +3,7 @@
     <div
       class="sidebarContent customScrollbar"
       :class="{ isDark: isDark }"
-      v-if="data"
+      v-if="configData"
     >
       <!-- 水印 -->
       <div class="row">
@@ -403,8 +403,8 @@ export default {
     Color
   },
   props: {
-    data: {
-      type: [Object, null],
+    configData: {
+      type: Object,
       default: null
     },
     mindMap: {
@@ -514,11 +514,8 @@ export default {
       this.mindMap.updateConfig({
         [key]: value
       })
-      this.data.config = this.data.config || {}
-      this.data.config[key] = value
-      storeConfig({
-        config: this.data.config
-      })
+      this.configData[key] = value
+      storeConfig(this.configData)
       if (
         [
           'alwaysShowExpandBtn',
@@ -539,13 +536,10 @@ export default {
         this.mindMap.watermark.updateWatermark({
           ...config
         })
-        this.data.config = this.data.config || {}
-        this.data.config.watermarkConfig = this.mindMap.getConfig(
+        this.configData.watermarkConfig = this.mindMap.getConfig(
           'watermarkConfig'
         )
-        storeConfig({
-          config: this.data.config
-        })
+        storeConfig(this.configData)
       }, 300)
     },
 

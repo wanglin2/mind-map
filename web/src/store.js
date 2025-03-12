@@ -1,13 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import exampleData from 'simple-mind-map/example/exampleData'
 import { storeLocalConfig } from '@/api'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
-    mindMapData: null, // 思维导图数据
     isHandleLocalFile: false, // 是否操作的是本地文件
     localConfig: {
       // 本地配置
@@ -50,11 +48,6 @@ const store = new Vuex.Store({
     }
   },
   mutations: {
-    // 设置思维导图数据
-    setMindMapData(state, data) {
-      state.mindMapData = data
-    },
-
     // 设置操作本地文件标志位
     setIsHandleLocalFile(state, data) {
       state.isHandleLocalFile = data
@@ -146,23 +139,7 @@ const store = new Vuex.Store({
       state.isDragOutlineTreeNode = data
     }
   },
-  actions: {
-    // 设置初始思维导图数据
-    getUserMindMapData(ctx) {
-      try {
-        let { data } = {
-          data: {
-            data: {
-              mindMapData: exampleData
-            }
-          }
-        }
-        ctx.commit('setMindMapData', data.data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-  }
+  actions: {}
 })
 
 export default store

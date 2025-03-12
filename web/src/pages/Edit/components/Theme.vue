@@ -27,7 +27,7 @@
 
 <script>
 import Sidebar from './Sidebar.vue'
-import { storeConfig } from '@/api'
+import { storeData } from '@/api'
 import { mapState, mapMutations } from 'vuex'
 import themeImgMap from 'simple-mind-map-plugin-themes/themeImgMap'
 import themeList from 'simple-mind-map-plugin-themes/themeList'
@@ -175,7 +175,7 @@ export default {
     changeTheme(theme, config) {
       this.$bus.$emit('showLoading')
       this.mindMap.setTheme(theme.value)
-      storeConfig({
+      storeData({
         theme: {
           template: theme.value,
           config

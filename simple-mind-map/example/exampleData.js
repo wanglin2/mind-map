@@ -932,6 +932,5 @@ export default {
     "layout": "logicalStructure",
     // "layout": "mindMap",
     // "layout": "catalogOrganization"
-    // "layout": "organizationStructure",
-    "config": {}
+    // "layout": "organizationStructure"
 }

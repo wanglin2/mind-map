@@ -16,7 +16,11 @@
     <NavigatorToolbar :mindMap="mindMap" v-if="!isZenMode"></NavigatorToolbar>
     <OutlineSidebar :mindMap="mindMap"></OutlineSidebar>
     <Style v-if="!isZenMode"></Style>
-    <BaseStyle :data="mindMapData" :mindMap="mindMap"></BaseStyle>
+    <BaseStyle
+      :data="mindMapData"
+      :configData="mindMapConfig"
+      :mindMap="mindMap"
+    ></BaseStyle>
     <AssociativeLineStyle
       v-if="mindMap"
       :mindMap="mindMap"
@@ -42,7 +46,7 @@
     <SourceCodeEdit v-if="mindMap" :mindMap="mindMap"></SourceCodeEdit>
     <NodeOuterFrame v-if="mindMap" :mindMap="mindMap"></NodeOuterFrame>
     <NodeTagStyle v-if="mindMap" :mindMap="mindMap"></NodeTagStyle>
-    <Setting :data="mindMapData" :mindMap="mindMap"></Setting>
+    <Setting :configData="mindMapConfig" :mindMap="mindMap"></Setting>
     <NodeImgPlacementToolbar
       v-if="mindMap"
       :mindMap="mindMap"
@@ -107,11 +111,11 @@ import ShortcutKey from './ShortcutKey.vue'
 import Contextmenu from './Contextmenu.vue'
 import RichTextToolbar from './RichTextToolbar.vue'
 import NodeNoteContentShow from './NodeNoteContentShow.vue'
-import { getData, storeData, storeConfig } from '@/api'
+import { getData, getConfig, storeData } from '@/api'
 import Navigator from './Navigator.vue'
 import NodeImgPreview from './NodeImgPreview.vue'
 import SidebarTrigger from './SidebarTrigger.vue'
-import { mapMutations, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import icon from '@/config/icon'
 import CustomNodeContent from './CustomNodeContent.vue'
 import Color from './Color.vue'
@@ -199,6 +203,7 @@ export default {
       enableShowLoading: true,
       mindMap: null,
       mindMapData: null,
+      mindMapConfig: {},
       prevImg: '',
       storeConfigTimer: null,
       showDragMask: false
@@ -318,19 +323,19 @@ export default {
 
     // 获取思维导图数据，实际应该调接口获取
     getData() {
-      let storeData = getData()
-      this.mindMapData = storeData
+      this.mindMapData = getData()
+      this.mindMapConfig = getConfig() || {}
     },
 
     // 存储数据当数据有变时
     bindSaveEvent() {
       this.$bus.$on('data_change', data => {
-        storeData(data)
+        storeData({ root: data })
       })
       this.$bus.$on('view_data_change', data => {
         clearTimeout(this.storeConfigTimer)
         this.storeConfigTimer = setTimeout(() => {
-          storeConfig({
+          storeData({
             view: data
           })
         }, 300)
@@ -339,14 +344,14 @@ export default {
 
     // 手动保存
     manualSave() {
-      let data = this.mindMap.getData(true)
-      storeConfig(data)
+      storeData(this.mindMap.getData(true))
     },
 
     // 初始化
     init() {
       let hasFileURL = this.hasFileURL()
-      let { root, layout, theme, view, config } = this.mindMapData
+      let { root, layout, theme, view } = this.mindMapData
+      const config = this.mindMapConfig
       // 如果url中存在要打开的文件，那么思维导图数据、主题、布局都使用默认的
       if (hasFileURL) {
         root = {
@@ -614,7 +619,7 @@ export default {
       // 当正在编辑本地文件时通过该方法获取最新数据
       Vue.prototype.getCurrentData = () => {
         const fullData = this.mindMap.getData(true)
-        return { ...fullData, config: this.mindMapData.config }
+        return { ...fullData }
       }
       // 协同测试
       this.cooperateTest()

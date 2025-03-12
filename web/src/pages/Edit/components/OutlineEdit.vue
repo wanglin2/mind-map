@@ -282,7 +282,9 @@ export default {
 
     // 保存
     save() {
-      storeData(this.getData())
+      storeData({
+        root: this.getData()
+      })
     }
   }
 }
