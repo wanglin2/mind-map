@@ -286,6 +286,7 @@ class Export {
    * 方法2.把svg的图片提取出来再挨个绘制到canvas里，最后一起转换
    */
   async png(name, transparent = false, node = null) {
+    this.mindMap.renderer.textEdit.hideEditTextBox()
     this.handleNodeExport(node)
     const { str, clipData } = await this.getSvgData(node)
     const svgUrl = await this.fixSvgStrAndToBlob(str)
@@ -330,6 +331,7 @@ class Export {
 
   //  导出为svg
   async svg(name) {
+    this.mindMap.renderer.textEdit.hideEditTextBox()
     const { node } = await this.getSvgData()
     node.first().before(SVG(`<title>${name}</title>`))
     await this.drawBackgroundToSvg(node)
