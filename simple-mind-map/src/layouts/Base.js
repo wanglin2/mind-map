@@ -49,7 +49,7 @@ class Base {
 
   // 检查当前来源是否需要重新计算节点大小
   checkIsNeedResizeSources() {
-    return [CONSTANTS.CHANGE_THEME].includes(this.renderer.renderSource)
+    return this.renderer.checkHasRenderSource(CONSTANTS.CHANGE_THEME)
   }
 
   // 层级类型改变
@@ -61,7 +61,7 @@ class Base {
 
   // 检查是否是结构布局改变重新渲染展开收起按钮占位元素
   checkIsLayoutChangeRerenderExpandBtnPlaceholderRect(node) {
-    if (this.renderer.renderSource === CONSTANTS.CHANGE_LAYOUT) {
+    if (this.renderer.checkHasRenderSource(CONSTANTS.CHANGE_LAYOUT)) {
       node.needRerenderExpandBtnPlaceholderRect = true
     }
   }

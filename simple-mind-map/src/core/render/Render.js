@@ -81,14 +81,18 @@ class Render {
     this.isRendering = false
     // 是否存在等待渲染
     this.hasWaitRendering = false
-    this.waitRenderingParams = []
     // 用于缓存节点
     this.nodeCache = {}
     this.lastNodeCache = {}
-    // 触发render的来源
-    this.renderSource = ''
+    // 收集触发render的来源
+    this.renderSourceList = []
+    // 收集render的回调函数
+    this.renderCallbackList = []
     // 当前激活的节点列表
     this.activeNodeList = []
+    // 防抖定时器
+    this.emitNodeActiveEventTimer = null
+    this.renderTimer = null
     // 根节点
     this.root = null
     // 文本编辑框，需要再bindEvent之前实例化，否则单击事件只能触发隐藏文本编辑框，而无法保存文本修改
@@ -446,9 +450,10 @@ class Render {
     )
     if (!isChange) return
     this.lastActiveNodeList = [...activeNodeList]
-    this.mindMap.batchExecution.push('emitNodeActiveEvent', () => {
+    clearTimeout(this.emitNodeActiveEventTimer)
+    this.emitNodeActiveEventTimer = setTimeout(() => {
       this.mindMap.emit('node_active', node, activeNodeList)
-    })
+    }, 0)
   }
 
   // 鼠标点击画布时清空当前激活节点列表
@@ -491,22 +496,71 @@ class Render {
     this.lastNodeCache = {}
   }
 
-  //   渲染
-  render(callback = () => {}, source) {
+  // 保存触发渲染的参数
+  addRenderParams(callback, source) {
+    if (callback) {
+      const index = this.renderCallbackList.findIndex(fn => {
+        return fn === callback
+      })
+      if (index === -1) {
+        this.renderCallbackList.push(callback)
+      }
+    }
+    if (source) {
+      const index = this.renderSourceList.findIndex(s => {
+        return s === source
+      })
+      if (index === -1) {
+        this.renderSourceList.push(source)
+      }
+    }
+  }
+
+  // 判断是否包含某种触发渲染源
+  checkHasRenderSource(val) {
+    val = Array.isArray(val) ? val : [val]
+    for (let i = 0; i < this.renderSourceList.length; i++) {
+      if (val.includes(this.renderSourceList[i])) {
+        return true
+      }
+    }
+    return false
+  }
+
+  // 渲染完毕的操作
+  onRenderEnd() {
+    this.renderCallbackList.forEach(fn => {
+      fn()
+    })
+    this.isRendering = false
+    this.reRender = false
+    this.renderCallbackList = []
+    this.renderSourceList = []
+    this.mindMap.emit('node_tree_render_end')
+  }
+
+  // 渲染
+  render(callback, source) {
+    this.addRenderParams(callback, source)
+    clearTimeout(this.renderTimer)
+    this.renderTimer = setTimeout(() => {
+      this._render()
+    }, 0)
+  }
+
+  // 真正的渲染
+  _render() {
     // 切换主题时，被收起的节点需要添加样式复位的标注
-    if (source === CONSTANTS.CHANGE_THEME) {
+    if (this.checkHasRenderSource(CONSTANTS.CHANGE_THEME)) {
       this.resetUnExpandNodeStyle()
     }
     // 如果当前还没有渲染完毕，不再触发渲染
     if (this.isRendering) {
       // 等待当前渲染完毕后再进行一次渲染
       this.hasWaitRendering = true
-      this.waitRenderingParams = [callback, source]
       return
     }
     this.isRendering = true
-    // 触发当前重新渲染的来源
-    this.renderSource = source
     // 节点缓存
     this.lastNodeCache = this.nodeCache
     this.nodeCache = {}
@@ -516,8 +570,7 @@ class Render {
     }
     // 如果没有节点数据
     if (!this.renderTree) {
-      this.isRendering = false
-      this.mindMap.emit('node_tree_render_end')
+      this.onRenderEnd()
       return
     }
     this.mindMap.emit('node_tree_render_start')
@@ -539,19 +592,12 @@ class Render {
       // 渲染节点
       this.root.render(() => {
         this.isRendering = false
-        callback && callback()
         if (this.hasWaitRendering) {
-          const params = this.waitRenderingParams
           this.hasWaitRendering = false
-          this.waitRenderingParams = []
-          this.render(...params)
-        } else {
-          this.renderSource = ''
-          if (this.reRender) {
-            this.reRender = false
-          }
+          this.render()
+          return
         }
-        this.mindMap.emit('node_tree_render_end')
+        this.onRenderEnd()
       })
     })
     this.emitNodeActiveEvent()

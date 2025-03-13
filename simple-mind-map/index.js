@@ -243,10 +243,8 @@ class MindMap {
 
   //  渲染，部分渲染
   render(callback, source = '') {
-    this.batchExecution.push('render', () => {
-      this.initTheme()
-      this.renderer.render(callback, source)
-    })
+    this.initTheme()
+    this.renderer.render(callback, source)
   }
 
   //  重新渲染
@@ -416,7 +414,7 @@ class MindMap {
     this.command.clearHistory()
     this.command.addHistory()
     this.renderer.setData(data)
-    this.reRender(() => {}, CONSTANTS.SET_DATA)
+    this.reRender()
     this.emit('set_data', data)
   }
 
