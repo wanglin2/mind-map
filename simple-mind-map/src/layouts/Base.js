@@ -74,6 +74,9 @@ class Base {
       lastData.isActive = curData.isActive
       lastData.expand = curData.expand
       lastData = JSON.stringify(lastData)
+    } else {
+      // 只在都有数据时才进行对比
+      return false
     }
     return lastData !== JSON.stringify(curData)
   }
