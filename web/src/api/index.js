@@ -61,6 +61,9 @@ export const storeData = data => {
     localStorage.setItem(SIMPLE_MIND_MAP_DATA, JSON.stringify(originData))
   } catch (error) {
     console.log(error)
+    if ('exceeded') {
+      Vue.prototype.$bus.$emit('localStorageExceeded')
+    }
   }
 }
 

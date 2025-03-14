@@ -350,7 +350,9 @@ export default {
     dragTip: 'Release here to import the file',
     deleteNodeImgTip: 'Are you sure to delete the node image?',
     autoOpenNodeRichTextTip:
-      'Detected imported rich text content, automatically enabled rich text mode'
+      'Detected imported rich text content, automatically enabled rich text mode',
+    localStorageExceededTip:
+      'The volume of the mind map you created has exceeded the maximum storage limit allowed by the browser. Please export it immediately, otherwise the data will be lost! It is recommended to download the client for use, as there is no size limit for the client.'
   },
   mouseAction: {
     tip1:

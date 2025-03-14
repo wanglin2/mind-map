@@ -339,7 +339,9 @@ export default {
     no: '否',
     exportError: '匯出失敗',
     dragTip: '在此釋放以匯入檔案',
-    autoOpenNodeRichTextTip: '檢測到導入了富文本內容，已自動開啓富文本模式'
+    autoOpenNodeRichTextTip: '檢測到導入了富文本內容，已自動開啓富文本模式',
+    localStorageExceededTip:
+      '你創建的思維導圖體積已經超過浏覽器允許存儲的上限，請立即導出，否則數據將丟失！建議下載客戶端進行使用，客戶端無大小限制。'
   },
   mouseAction: {
     tip1: '目前：左鍵拖曳畫布，右鍵框選節點',
