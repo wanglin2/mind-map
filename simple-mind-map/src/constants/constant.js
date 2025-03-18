@@ -179,7 +179,8 @@ export const nodeDataNoStylePropList = [
   'customTextWidth',
   'checkbox',
   'dir',
-  'needUpdate'// 重新创建节点内容
+  'needUpdate',// 重新创建节点内容
+  'imgMap'
 ]
 
 // 错误类型

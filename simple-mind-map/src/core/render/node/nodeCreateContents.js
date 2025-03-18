@@ -34,10 +34,11 @@ const defaultTagStyle = {
 
 //  创建图片节点
 function createImgNode() {
-  const img = this.getData('image')
+  let img = this.getData('image')
   if (!img) {
     return
   }
+  img = (this.mindMap.renderer.renderTree.data.imgMap || {})[img] || img
   const imgSize = this.getImgShowSize()
   const node = new SVGImage().load(img).size(...imgSize)
   // 如果指定了加载失败显示的图片，那么加载一下图片检测是否失败

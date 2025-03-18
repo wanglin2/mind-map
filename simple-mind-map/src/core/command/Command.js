@@ -106,6 +106,7 @@ class Command {
     if (this.mindMap.opt.readonly || this.isPause) {
       return
     }
+    this.mindMap.emit('beforeAddHistory')
     const lastData =
       this.history.length > 0 ? this.history[this.activeHistoryIndex] : null
     const data = this.getCopyData()
