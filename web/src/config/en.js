@@ -74,19 +74,19 @@ export const borderDasharrayList = [
   },
   {
     name: 'Dotted4',
-    value: '5,5,1,5'
+    value: '5, 5, 1, 5'
   },
   {
     name: 'Dotted5',
-    value: '15,10,5,10,15'
+    value: '15, 10, 5, 10, 15'
   },
   {
     name: 'Dotted6',
-    value: '1,5'
+    value: '1, 5'
   },
   {
     name: 'Dotted7',
-    value: '6,4'
+    value: '6, 4'
   }
 ]
 
@@ -445,11 +445,6 @@ export const sidebarTriggerList = [
     icon: 'iconshezhi'
   },
   {
-    name: 'AI',
-    value: 'ai',
-    icon: 'iconAIshengcheng'
-  },
-  {
     name: 'ShortcutKey',
     value: 'shortcutKey',
     icon: 'iconjianpan'
@@ -462,20 +457,19 @@ export const downTypeList = [
     name: 'Dedicated file',
     type: 'smm',
     icon: 'iconwenjian',
-    desc:
-      'SimpleMindMap private format, can be used for re import, and the client can directly edit it'
+    desc: 'Available for import'
   },
   {
     name: 'JSON',
     type: 'json',
     icon: 'iconjson',
-    desc: 'Popular data exchange format that can be used for re importing'
+    desc: 'Popular data exchange formats, Available for import'
   },
   {
     name: 'Image',
     type: 'png',
     icon: 'iconPNG',
-    desc: 'Common image formats, suitable for viewing and sharing'
+    desc: 'Suitable for viewing and sharing'
   },
   {
     name: 'SVG',
@@ -487,19 +481,19 @@ export const downTypeList = [
     name: 'PDF',
     type: 'pdf',
     icon: 'iconpdf',
-    desc: 'Suitable for viewing, browsing, and printing'
+    desc: 'Suitable for printing'
   },
   {
     name: 'Markdown',
     type: 'md',
     icon: 'iconmarkdown',
-    desc: 'MD text format, easy for other software to open'
+    desc: 'Easy for other software to open'
   },
   {
     name: 'XMind',
     type: 'xmind',
     icon: 'iconxmind',
-    desc: 'XMind software file'
+    desc: 'XMind file'
   },
   {
     name: 'Txt',
@@ -517,7 +511,7 @@ export const downTypeList = [
     name: 'Excel',
     type: 'xlsx',
     icon: 'iconfile-excel',
-    desc: 'Table text format, editable with Excel software'
+    desc: 'Excel software format'
   }
 ]
 

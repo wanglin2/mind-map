@@ -30,6 +30,7 @@
 
 <script>
 export default {
+  name: 'ImgUpload',
   model: {
     prop: 'value',
     event: 'change'
@@ -46,20 +47,32 @@ export default {
     }
   },
   methods: {
-    // 图片选择事件
+    /**
+     * @Author: 王林
+     * @Date: 2019-12-22 19:47:19
+     * @Desc: 图片选择事件
+     */
     onImgUploadInputChange(e) {
       let file = e.target.files[0]
       this.selectImg(file)
     },
 
-    // 拖动上传图片
+    /**
+     * @Author: 王林
+     * @Date: 2019-12-22 20:32:31
+     * @Desc: 拖动上传图片
+     */
     onDrop(e) {
       let dt = e.dataTransfer
       let file = dt.files && dt.files[0]
       this.selectImg(file)
     },
 
-    // 选择图片
+    /**
+     * @Author: 王林
+     * @Date: 2021-06-06 16:56:14
+     * @Desc: 选择图片
+     */
     selectImg(file) {
       this.file = file
       let fr = new FileReader()
@@ -69,7 +82,11 @@ export default {
       }
     },
 
-    // 获取图片大小
+    /**
+     * @Author: 王林
+     * @Date: 2021-06-22 23:03:46
+     * @Desc: 获取图片大小
+     */
     getSize() {
       return new Promise(resolve => {
         let img = new Image()
@@ -89,7 +106,11 @@ export default {
       })
     },
 
-    // 删除图片
+    /**
+     * @Author: 王林
+     * @Date: 2021-06-06 21:59:57
+     * @Desc: 删除图片
+     */
     deleteImg() {
       this.$emit('change', '')
       this.file = null

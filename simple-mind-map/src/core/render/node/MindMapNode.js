@@ -99,7 +99,6 @@ class MindMapNode {
     this._generalizationList = []
     this._unVisibleRectRegionNode = null
     this._isMouseenter = false
-    this._customContentAddToNodeAdd = null
     // 尺寸信息
     this._rectInfo = {
       textContentWidth: 0,
@@ -217,8 +216,7 @@ class MindMapNode {
       isUseCustomNodeContent,
       customCreateNodeContent,
       createNodePrefixContent,
-      createNodePostfixContent,
-      addCustomContentToNode
+      createNodePostfixContent
     } = this.mindMap.opt
     // 需要创建的内容类型
     const typeList = [
@@ -289,18 +287,6 @@ class MindMapNode {
         : null
       if (this._postfixData && this._postfixData.el) {
         addXmlns(this._postfixData.el)
-      }
-    }
-    if (
-      addCustomContentToNode &&
-      typeof addCustomContentToNode.create === 'function'
-    ) {
-      this._customContentAddToNodeAdd = addCustomContentToNode.create(this)
-      if (
-        this._customContentAddToNodeAdd &&
-        this._customContentAddToNodeAdd.el
-      ) {
-        addXmlns(this._customContentAddToNodeAdd.el)
       }
     }
   }
@@ -886,18 +872,15 @@ class MindMapNode {
 
   //  设置连线样式
   styleLine(line, childNode, enableMarker) {
-    const { enableInheritAncestorLineStyle } = this.mindMap.opt
-    const getName = enableInheritAncestorLineStyle
-      ? 'getSelfInhertStyle'
-      : 'getSelfStyle'
     const width =
-      childNode[getName]('lineWidth') || childNode.getStyle('lineWidth', true)
+      childNode.getSelfInhertStyle('lineWidth') ||
+      childNode.getStyle('lineWidth', true)
     const color =
-      childNode[getName]('lineColor') ||
+      childNode.getSelfInhertStyle('lineColor') ||
       this.getRainbowLineColor(childNode) ||
       childNode.getStyle('lineColor', true)
     const dasharray =
-      childNode[getName]('lineDasharray') ||
+      childNode.getSelfInhertStyle('lineDasharray') ||
       childNode.getStyle('lineDasharray', true)
     this.style.line(
       line,

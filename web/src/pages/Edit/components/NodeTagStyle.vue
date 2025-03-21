@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import Color from './Color.vue'
+import Color from './Color'
 import { mapState } from 'vuex'
 
 export default {

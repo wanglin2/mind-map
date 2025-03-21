@@ -22,8 +22,13 @@
 <script>
 import { mapState, mapMutations } from 'vuex'
 
-// 鼠标操作设置
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:53:10
+ * @Desc: 鼠标操作设置
+ */
 export default {
+  name: 'MouseAction',
   props: {
     mindMap: {
       type: Object

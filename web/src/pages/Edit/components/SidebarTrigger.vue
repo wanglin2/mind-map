@@ -1,14 +1,13 @@
 <template>
   <div
-    class="sidebarTriggerContainer "
+    class="sidebarTriggerContainer"
     @click.stop
     :class="{ hasActive: show && activeSidebar, show: show, isDark: isDark }"
-    :style="{ maxHeight: maxHeight + 'px' }"
   >
     <div class="toggleShowBtn" :class="{ hide: !show }" @click="show = !show">
       <span class="iconfont iconjiantouyou"></span>
     </div>
-    <div class="trigger customScrollbar">
+    <div class="trigger">
       <div
         class="triggerItem"
         v-for="item in triggerList"
@@ -27,32 +26,30 @@
 import { mapState, mapMutations } from 'vuex'
 import { sidebarTriggerList } from '@/config'
 
-// 侧边栏触发器
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:54:25
+ * @Desc: 侧边栏触发器
+ */
 export default {
+  name: 'SidebarTrigger',
   data() {
     return {
-      show: true,
-      maxHeight: 0
+      show: true
     }
   },
   computed: {
     ...mapState({
       isDark: state => state.localConfig.isDark,
       activeSidebar: state => state.activeSidebar,
-      isReadonly: state => state.isReadonly,
-      enableAi: state => state.localConfig.enableAi
+      isReadonly: state => state.isReadonly
     }),
 
     triggerList() {
       let list = sidebarTriggerList[this.$i18n.locale] || sidebarTriggerList.zh
       if (this.isReadonly) {
         list = list.filter(item => {
-          return ['outline', 'shortcutKey', 'ai'].includes(item.value)
-        })
-      }
-      if (!this.enableAi) {
-        list = list.filter(item => {
-          return item.value !== 'ai'
+          return ['outline', 'shortcutKey'].includes(item.value)
         })
       }
       return list
@@ -65,28 +62,11 @@ export default {
       }
     }
   },
-  created() {
-    window.addEventListener('resize', this.onResize)
-    this.updateSize()
-  },
-  beforeDestroy() {
-    window.removeEventListener('resize', this.onResize)
-  },
   methods: {
     ...mapMutations(['setActiveSidebar']),
 
     trigger(item) {
       this.setActiveSidebar(item.value)
-    },
-
-    onResize() {
-      this.updateSize()
-    },
-
-    updateSize() {
-      const topMargin = 110
-      const bottomMargin = 80
-      this.maxHeight = window.innerHeight - topMargin - bottomMargin
     }
   }
 }
@@ -95,13 +75,11 @@ export default {
 <style lang="less" scoped>
 .sidebarTriggerContainer {
   position: fixed;
-  top: 110px;
-  bottom: 80px;
   right: -60px;
+  margin-top: 110px;
   transition: all 0.3s;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  top: 50%;
+  transform: translateY(-50%);
 
   &.isDark {
     .trigger {
@@ -167,9 +145,7 @@ export default {
     background-color: #fff;
     box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
     border-radius: 6px;
-    max-height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
 
     .triggerItem {
       height: 60px;

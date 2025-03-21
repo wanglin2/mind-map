@@ -6,20 +6,24 @@
     <template v-if="show">
       <Toolbar v-if="!isZenMode"></Toolbar>
       <Edit></Edit>
+      <attachment-preview ref="attachmentPreview"></attachment-preview>
     </template>
   </div>
 </template>
 
 <script>
-import Toolbar from './components/Toolbar.vue'
-import Edit from './components/Edit.vue'
+import Toolbar from './components/Toolbar'
+import Edit from './components/Edit'
+import AttachmentPreview from './components/AttachmentPreview.vue'
 import { mapState, mapActions, mapMutations } from 'vuex'
 import { getLocalConfig } from '@/api'
 
 export default {
+  name: 'Index',
   components: {
     Toolbar,
-    Edit
+    Edit,
+    AttachmentPreview
   },
   data() {
     return {
@@ -53,7 +57,11 @@ export default {
     ...mapActions(['getUserMindMapData']),
     ...mapMutations(['setLocalConfig']),
 
-    // 初始化本地配置
+    /**
+     * @Author: 王林25
+     * @Date: 2022-11-14 19:07:03
+     * @Desc: 初始化本地配置
+     */
     initLocalConfig() {
       let config = getLocalConfig()
       if (config) {
@@ -68,6 +76,27 @@ export default {
       this.isDark
         ? document.body.classList.add('isDark')
         : document.body.classList.remove('isDark')
+    },
+
+    handleNodeAttachmentClick(node) {
+      console.log('节点附件点击事件', node.getData().attachmentUrl, node.getData().attachmentName);
+      
+      // 获取附件URL和名称
+      const attachmentUrl = node.getData().attachmentUrl;
+      const attachmentName = node.getData().attachmentName || this.getFileNameFromUrl(attachmentUrl);
+      
+      if (attachmentUrl) {
+        // 引用附件预览组件并显示
+        this.$refs.attachmentPreview.show(attachmentUrl, attachmentName);
+      }
+    },
+    
+    // 从URL中提取文件名，作为备用
+    getFileNameFromUrl(url) {
+      if (!url) return '';
+      const cleanUrl = url.split('?')[0];
+      const parts = cleanUrl.split('/');
+      return parts[parts.length - 1] || '';
     }
   }
 }

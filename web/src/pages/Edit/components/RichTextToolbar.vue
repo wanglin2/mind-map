@@ -139,10 +139,11 @@
 
 <script>
 import { fontFamilyList, fontSizeList, alignList } from '@/config'
-import Color from './Color.vue'
+import Color from './Color'
 import { mapState } from 'vuex'
 
 export default {
+  name: 'RichTextToolbar',
   components: {
     Color
   },

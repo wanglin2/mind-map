@@ -29,7 +29,11 @@ import Editor from '@toast-ui/editor'
 import '@toast-ui/editor/dist/toastui-editor.css' // Editor's Style
 import { isMobile } from 'simple-mind-map/src/utils/index'
 
-// 节点备注内容设置
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:53:54
+ * @Desc: 节点备注内容设置
+ */
 export default {
   name: 'NodeNote',
   data() {

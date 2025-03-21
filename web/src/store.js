@@ -20,12 +20,8 @@ const store = new Vuex.Store({
       isShowScrollbar: false,
       // 是否开启手绘风格
       isUseHandDrawnLikeStyle: false,
-      // 是否开启动量效果
-      isUseMomentum: true,
       // 是否是暗黑模式
-      isDark: false,
-      // 是否开启AI功能
-      enableAi: true
+      isDark: false
     },
     activeSidebar: '', // 当前显示的侧边栏
     isOutlineEdit: false, // 是否是大纲编辑模式
@@ -39,15 +35,7 @@ const store = new Vuex.Store({
     supportExcel: false, // 是否支持Excel插件
     supportCheckbox: false, // 是否支持Checkbox插件
     supportLineFlow: false, // 是否支持LineFlow插件
-    supportMomentum: false, // 是否支持Momentum插件
-    isDragOutlineTreeNode: false, // 当前是否正在拖拽大纲树的节点
-    aiConfig: {
-      api: 'http://ark.cn-beijing.volces.com/api/v3/chat/completions',
-      key: '',
-      model: '',
-      port: 3456,
-      method: 'POST'
-    }
+    isDragOutlineTreeNode: false // 当前是否正在拖拽大纲树的节点
   },
   mutations: {
     // 设置思维导图数据
@@ -62,18 +50,11 @@ const store = new Vuex.Store({
 
     // 设置本地配置
     setLocalConfig(state, data) {
-      const aiConfigKeys = Object.keys(state.aiConfig)
-      Object.keys(data).forEach(key => {
-        if (aiConfigKeys.includes(key)) {
-          state.aiConfig[key] = data[key]
-        } else {
-          state.localConfig[key] = data[key]
-        }
-      })
-      storeLocalConfig({
+      state.localConfig = {
         ...state.localConfig,
-        ...state.aiConfig
-      })
+        ...data
+      }
+      storeLocalConfig(state.localConfig)
     },
 
     // 设置当前显示的侧边栏
@@ -134,11 +115,6 @@ const store = new Vuex.Store({
     // 设置是否支持Lineflow插件
     setSupportLineFlow(state, data) {
       state.supportLineFlow = data
-    },
-
-    // 设置是否支持Momentum插件
-    setSupportMomentum(state, data) {
-      state.supportMomentum = data
     },
 
     // 设置树节点拖拽

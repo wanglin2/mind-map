@@ -50,6 +50,7 @@ import {
 
 // 大纲树
 export default {
+  name: 'Outline',
   props: {
     mindMap: {
       type: Object

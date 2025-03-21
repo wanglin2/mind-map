@@ -18,14 +18,19 @@
 </template>
 
 <script>
-import Sidebar from './Sidebar.vue'
+import Sidebar from './Sidebar'
 import { layoutList } from 'simple-mind-map/src/constants/constant'
 import { storeConfig } from '@/api'
 import { mapState } from 'vuex'
 import { layoutImgMap } from '@/config/constant.js'
 
-// 结构
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:54:14
+ * @Desc: 结构
+ */
 export default {
+  name: 'Structure',
   components: {
     Sidebar
   },
@@ -58,6 +63,11 @@ export default {
     }
   },
   methods: {
+    /**
+     * @Author: 王林
+     * @Date: 2021-06-24 23:04:38
+     * @Desc: 使用主题
+     */
     useLayout(layout) {
       this.layout = layout.value
       this.mindMap.setLayout(layout.value)
