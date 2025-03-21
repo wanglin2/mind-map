@@ -44,8 +44,13 @@
 <script>
 import { isMobile } from 'simple-mind-map/src/utils/index'
 
-// 节点超链接内容设置
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:53:17
+ * @Desc: 节点超链接内容设置
+ */
 export default {
+  name: 'NodeHyperlink',
   data() {
     return {
       dialogVisible: false,
@@ -98,10 +103,20 @@ export default {
       this.dialogVisible = true
     },
 
+    /**
+     * @Author: 王林
+     * @Date: 2021-06-22 22:08:11
+     * @Desc: 取消
+     */
     cancel() {
       this.dialogVisible = false
     },
 
+    /**
+     * @Author: 王林
+     * @Date: 2021-06-06 22:28:20
+     * @Desc:  确定
+     */
     confirm() {
       this.activeNodes.forEach(node => {
         node.setHyperlink(

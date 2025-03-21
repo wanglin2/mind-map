@@ -5,7 +5,7 @@
       :class="{ isDark: isDark }"
       v-if="activeNodes.length > 0"
     >
-      <div class="sidebarContent customScrollbar">
+      <div class="sidebarContent">
         <!-- 文字 -->
         <div class="title noTop">{{ $t('style.text') }}</div>
         <div class="row">
@@ -551,8 +551,8 @@
 </template>
 
 <script>
-import Sidebar from './Sidebar.vue'
-import Color from './Color.vue'
+import Sidebar from './Sidebar'
+import Color from './Color'
 import {
   fontFamilyList,
   fontSizeList,
@@ -566,8 +566,13 @@ import {
 } from '@/config'
 import { mapState } from 'vuex'
 
-// 节点样式设置
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:54:47
+ * @Desc: 节点样式设置
+ */
 export default {
+  name: 'Style',
   components: {
     Sidebar,
     Color
@@ -653,7 +658,11 @@ export default {
     this.$bus.$off('node_active', this.onNodeActive)
   },
   methods: {
-    // 监听节点激活事件
+    /**
+     * @Author: 王林25
+     * @Date: 2022-11-14 19:16:21
+     * @Desc: 监听节点激活事件
+     */
     onNodeActive(...args) {
       this.$nextTick(() => {
         this.activeNodes = [...args[1]]
@@ -661,7 +670,11 @@ export default {
       })
     },
 
-    // 初始节点样式
+    /**
+     * @Author: 王林
+     * @Date: 2021-05-05 09:48:52
+     * @Desc: 初始节点样式
+     */
     initNodeStyle() {
       if (this.activeNodes.length <= 0) {
         return
@@ -689,7 +702,11 @@ export default {
       }
     },
 
-    // 修改样式
+    /**
+     * @Author: 王林
+     * @Date: 2021-05-04 22:08:16
+     * @Desc: 修改样式
+     */
     update(prop) {
       if (prop === 'linearGradientDir') {
         const target = this.linearGradientDirList.find(item => {
@@ -708,7 +725,11 @@ export default {
       }
     },
 
-    // 切换加粗样式
+    /**
+     * @Author: 王林
+     * @Date: 2021-05-05 09:41:34
+     * @Desc: 切换加粗样式
+     */
     toggleFontWeight() {
       if (this.style.fontWeight === 'bold') {
         this.style.fontWeight = 'normal'
@@ -718,7 +739,11 @@ export default {
       this.update('fontWeight')
     },
 
-    // 切换字体样式
+    /**
+     * @Author: 王林
+     * @Date: 2021-05-05 09:46:39
+     * @Desc: 切换字体样式
+     */
     toggleFontStyle() {
       if (this.style.fontStyle === 'italic') {
         this.style.fontStyle = 'normal'
@@ -728,37 +753,61 @@ export default {
       this.update('fontStyle')
     },
 
-    // 修改字体颜色
+    /**
+     * @Author: 王林
+     * @Date: 2021-05-05 10:18:59
+     * @Desc: 修改字体颜色
+     */
     changeFontColor(color) {
       this.style.color = color
       this.update('color')
     },
 
-    // 修改边框颜色
+    /**
+     * @Author: 王林
+     * @Date: 2021-05-05 10:18:59
+     * @Desc: 修改边框颜色
+     */
     changeBorderColor(color) {
       this.style.borderColor = color
       this.update('borderColor')
     },
 
-    // 修改线条颜色
+    /**
+     * @Author: flydreame
+     * @Date: 2022-09-17 10:18:15
+     * @Desc: 修改线条颜色
+     */
     changeLineColor(color) {
       this.style.lineColor = color
       this.update('lineColor')
     },
 
-    // 修改背景颜色
+    /**
+     * @Author: 王林
+     * @Date: 2021-05-05 10:18:59
+     * @Desc: 修改背景颜色
+     */
     changeFillColor(color) {
       this.style.fillColor = color
       this.update('fillColor')
     },
 
-    // 切换渐变开始颜色
+    /**
+     * @Author: lxr_cel
+     * @Date: 2024-01-02 11:09:27
+     * @Desc: 切换渐变开始颜色
+     */
     changeStartColor(color) {
       this.style.startColor = color
       this.update('startColor')
     },
 
-    // 切换渐变结束颜色
+    /**
+     * @Author: lxr_cel
+     * @Date: 2024-01-02 10:10:34
+     * @Desc: 切换渐变结束颜色
+     */
     changeEndColor(color) {
       this.style.endColor = color
       this.update('endColor')

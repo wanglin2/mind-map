@@ -55,7 +55,7 @@ export const fontFamilyList = [
 ]
 
 // 字号
-export const fontSizeList = [10, 12, 14, 16, 18, 24, 32, 48]
+export const fontSizeList = [10, 12, 16, 18, 24, 32, 48]
 
 // 颜色
 export const colorList = [
@@ -121,19 +121,19 @@ export const borderDasharrayList = [
   },
   {
     name: '虚线4',
-    value: '5,5,1,5'
+    value: '5, 5, 1, 5'
   },
   {
     name: '虚线5',
-    value: '15,10,5,10,15'
+    value: '15, 10, 5, 10, 15'
   },
   {
     name: '虚线6',
-    value: '1,5'
+    value: '1, 5'
   },
   {
     name: '虚线7',
-    value: '6,4'
+    value: '6, 4'
   }
 ]
 
@@ -535,11 +535,6 @@ export const sidebarTriggerList = [
     icon: 'iconfuhao-dagangshu'
   },
   {
-    name: 'AI',
-    value: 'ai',
-    icon: 'iconAIshengcheng'
-  },
-  {
     name: '设置',
     value: 'setting',
     icon: 'iconshezhi'
@@ -557,19 +552,19 @@ export const downTypeList = [
     name: '专有文件',
     type: 'smm',
     icon: 'iconwenjian',
-    desc: 'SimpleMindMap私有格式，可用于再次导入，客户端可直接编辑'
+    desc: '可用于导入'
   },
   {
     name: 'JSON',
     type: 'json',
     icon: 'iconjson',
-    desc: '流行的数据交换格式，可用于再次导入'
+    desc: '流行的数据交换格式，可用于导入'
   },
   {
     name: '图片',
     type: 'png',
     icon: 'iconPNG',
-    desc: '常用图片格式，适合查看分享'
+    desc: '适合查看分享'
   },
   {
     name: 'SVG',
@@ -581,19 +576,19 @@ export const downTypeList = [
     name: 'PDF',
     type: 'pdf',
     icon: 'iconpdf',
-    desc: '适合查看浏览和打印'
+    desc: '适合打印'
   },
   {
     name: 'Markdown',
     type: 'md',
     icon: 'iconmarkdown',
-    desc: 'md文本格式，便于其他软件打开'
+    desc: '便于其他软件打开'
   },
   {
     name: 'XMind',
     type: 'xmind',
     icon: 'iconxmind',
-    desc: 'XMind软件格式'
+    desc: 'XMind格式'
   },
   {
     name: 'Txt',
@@ -611,7 +606,7 @@ export const downTypeList = [
     name: 'Excel',
     type: 'xlsx',
     icon: 'iconfile-excel',
-    desc: '表格文本形式，可用Excel软件编辑'
+    desc: 'Excel软件格式'
   }
 ]
 

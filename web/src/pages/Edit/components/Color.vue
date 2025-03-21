@@ -26,8 +26,13 @@
 import { colorList } from '@/config'
 import { mapState } from 'vuex'
 
-// 颜色选择器
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:53:10
+ * @Desc: 颜色选择器
+ */
 export default {
+  name: 'Color',
   props: {
     color: {
       type: String,
@@ -54,12 +59,20 @@ export default {
     this.selectColor = this.color
   },
   methods: {
-    // 点击预设颜色
+    /**
+     * @Author: 王林
+     * @Date: 2021-05-05 09:38:06
+     * @Desc: 点击预设颜色
+     */
     clickColorItem(color) {
       this.$emit('change', color)
     },
 
-    // 修改颜色
+    /**
+     * @Author: 王林
+     * @Date: 2021-05-05 10:17:26
+     * @Desc: 修改颜色
+     */
     changeColor() {
       this.$emit('change', this.selectColor)
     }

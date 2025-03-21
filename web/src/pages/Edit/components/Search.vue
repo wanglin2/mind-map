@@ -78,6 +78,7 @@ import { isUndef, getTextFromHtml } from 'simple-mind-map/src/utils/index'
 
 // 搜索替换
 export default {
+  name: 'Search',
   props: {
     mindMap: {
       type: Object
@@ -124,7 +125,6 @@ export default {
     )
     this.mindMap.keyCommand.addShortcut('Control+f', this.showSearch)
     window.addEventListener('resize', this.setSearchResultListHeight)
-    this.$bus.$on('setData', this.close)
   },
   mounted() {
     this.setSearchResultListHeight()
@@ -141,7 +141,6 @@ export default {
     )
     this.mindMap.keyCommand.removeShortcut('Control+f', this.showSearch)
     window.removeEventListener('resize', this.setSearchResultListHeight)
-    this.$bus.$off('setData', this.close)
   },
   methods: {
     isUndef,

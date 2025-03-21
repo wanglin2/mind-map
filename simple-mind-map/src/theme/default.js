@@ -48,7 +48,7 @@ export default {
   // 关联线激活状态的颜色
   associativeLineActiveColor: 'rgba(2, 167, 240, 1)',
   // 关联线样式
-  associativeLineDasharray: '6,4',
+  associativeLineDasharray: [6, 4],
   // 关联线文字颜色
   associativeLineTextColor: 'rgb(51, 51, 51)',
   // 关联线文字大小
@@ -95,7 +95,7 @@ export default {
     // 点鼠标hover和激活时显示的矩形边框的圆角大小
     hoverRectRadius: 5,
     // 文本对齐
-    textAlign: 'left',// right、center、justify、left
+    align: 'left',
     // 图片放置位置，相对于整个文本内容
     imgPlacement: 'top', // left、right、bottom、top
     // 标签放置位置

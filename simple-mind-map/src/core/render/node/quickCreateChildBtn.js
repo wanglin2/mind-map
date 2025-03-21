@@ -2,14 +2,13 @@ import btnsSvg from '../../../svg/btns'
 import { SVG, Circle, G } from '@svgdotjs/svg.js'
 
 function initQuickCreateChildBtn() {
-  if (this.isGeneralization) return
   this._quickCreateChildBtn = null
   this._showQuickCreateChildBtn = false
 }
 
 // 显示按钮
 function showQuickCreateChildBtn() {
-  if (this.isGeneralization || this.getChildrenLength() > 0) return
+  if (this.getChildrenLength() > 0) return
   // 创建按钮
   if (this._quickCreateChildBtn) {
     this.group.add(this._quickCreateChildBtn)
@@ -64,7 +63,6 @@ function showQuickCreateChildBtn() {
 
 //  移除按钮
 function removeQuickCreateChildBtn() {
-  if (this.isGeneralization) return
   if (this._quickCreateChildBtn && this._showQuickCreateChildBtn) {
     this._quickCreateChildBtn.remove()
     this._showQuickCreateChildBtn = false
@@ -73,7 +71,6 @@ function removeQuickCreateChildBtn() {
 
 // 隐藏按钮
 function hideQuickCreateChildBtn() {
-  if (this.isGeneralization) return
   const { isActive } = this.getData()
   if (!isActive) {
     this.removeQuickCreateChildBtn()

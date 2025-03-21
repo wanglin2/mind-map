@@ -62,8 +62,13 @@ import markdown from 'simple-mind-map/src/parse/markdown.js'
 import { mapMutations, mapState } from 'vuex'
 import Vue from 'vue'
 
-// 导入
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:53:54
+ * @Desc: 导入
+ */
 export default {
+  name: 'Import',
   data() {
     return {
       dialogVisible: false,

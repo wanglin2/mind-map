@@ -161,6 +161,9 @@ const alignList = {
   zhtw: alignListZhtw
 }
 
+// 文件服务器基础URL
+export const fileServerBaseUrl = 'http://localhost:3000';
+
 export {
   fontSizeList,
   borderWidthList,

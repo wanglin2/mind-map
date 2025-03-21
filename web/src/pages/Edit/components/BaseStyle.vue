@@ -1,6 +1,6 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('baseStyle.title')">
-    <div class="sidebarContent customScrollbar" :class="{ isDark: isDark }" v-if="data">
+    <div class="sidebarContent" :class="{ isDark: isDark }" v-if="data">
       <!-- 背景 -->
       <div class="title noTop">{{ $t('baseStyle.background') }}</div>
       <div class="row">
@@ -804,8 +804,8 @@
 </template>
 
 <script>
-import Sidebar from './Sidebar.vue'
-import Color from './Color.vue'
+import Sidebar from './Sidebar'
+import Color from './Color'
 import {
   lineWidthList,
   lineStyleList,
@@ -818,9 +818,9 @@ import {
   lineStyleMap,
   borderDasharrayList
 } from '@/config'
-import ImgUpload from '@/components/ImgUpload/index.vue'
+import ImgUpload from '@/components/ImgUpload'
 import { storeConfig } from '@/api'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import {
   supportLineStyleLayoutsMap,
   supportLineRadiusLayouts,
@@ -829,8 +829,13 @@ import {
   rainbowLinesOptions
 } from '@/config/constant'
 
-// 基础样式
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:52:56
+ * @Desc: 基础样式
+ */
 export default {
+  name: 'BaseStyle',
   components: {
     Sidebar,
     Color,
@@ -990,6 +995,8 @@ export default {
     this.$bus.$off('setData', this.onSetData)
   },
   methods: {
+    ...mapMutations(['setLocalConfig']),
+
     onSetData() {
       if (this.activeSidebar !== 'baseStyle') return
       setTimeout(() => {

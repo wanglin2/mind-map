@@ -1,5 +1,5 @@
 <template>
-  <div class="navigatorContainer customScrollbar" :class="{ isDark: isDark }">
+  <div class="navigatorContainer" :class="{ isDark: isDark }">
     <div class="item">
       <el-select
         v-model="lang"
@@ -109,8 +109,8 @@
 </template>
 
 <script>
-import Scale from './Scale.vue'
-import Fullscreen from './Fullscreen.vue'
+import Scale from './Scale'
+import Fullscreen from './Fullscreen'
 import MouseAction from './MouseAction.vue'
 import { langList } from '@/config'
 import i18n from '@/i18n'
@@ -119,8 +119,13 @@ import { mapState, mapMutations } from 'vuex'
 import pkg from 'simple-mind-map/package.json'
 import Demonstrate from './Demonstrate.vue'
 
-// 导航器工具栏
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:53:10
+ * @Desc: 导航器工具栏
+ */
 export default {
+  name: 'NavigatorToolbar',
   components: {
     Scale,
     Fullscreen,
@@ -188,8 +193,7 @@ export default {
           url = 'https://wanglin2.github.io/mind-map-docs/help/help1.html'
           break
         case 'devDoc':
-          url =
-            'https://wanglin2.github.io/mind-map-docs/start/introduction.html'
+          url = 'https://wanglin2.github.io/mind-map-docs/start/introduction.html'
           break
         case 'site':
           url = 'https://wanglin2.github.io/mind-map-docs/'
@@ -264,7 +268,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 590px) {
   .navigatorContainer {
     left: 20px;
     overflow-x: auto;

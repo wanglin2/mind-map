@@ -20,12 +20,17 @@
 </template>
 
 <script>
-import Sidebar from './Sidebar.vue'
+import Sidebar from './Sidebar'
 import { shortcutKeyList } from '@/config'
 import { mapState } from 'vuex'
 
-// 快捷键
+/**
+ * @Author: 王林
+ * @Date: 2021-06-24 22:54:14
+ * @Desc: 快捷键
+ */
 export default {
+  name: 'ShortcutKey',
   components: {
     Sidebar
   },

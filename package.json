@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "server": "cd server && npm install && node index.js",
+    "server:dev": "cd server && npm install && nodemon index.js"
+  }
+} 
