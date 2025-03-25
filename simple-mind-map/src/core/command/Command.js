@@ -15,7 +15,7 @@ class Command {
     this.opt = opt
     this.mindMap = opt.mindMap
     this.commands = {}
-    this.history = []
+    this.history = [] // 字符串形式存储
     this.activeHistoryIndex = 0
     // 注册快捷键
     this.registerShortcutKeys()
@@ -107,18 +107,18 @@ class Command {
       return
     }
     this.mindMap.emit('beforeAddHistory')
-    const lastData =
+    const lastDataStr =
       this.history.length > 0 ? this.history[this.activeHistoryIndex] : null
     const data = this.getCopyData()
+    const dataStr = JSON.stringify(data)
     // 此次数据和上次一样则不重复添加
-    if (lastData === data) return
-    if (lastData && JSON.stringify(lastData) === JSON.stringify(data)) {
+    if (lastDataStr && lastDataStr === dataStr) {
       return
     }
-    this.emitDataUpdatesEvent(lastData, data)
+    this.emitDataUpdatesEvent(lastDataStr, dataStr)
     // 删除当前历史指针后面的数据
     this.history = this.history.slice(0, this.activeHistoryIndex + 1)
-    this.history.push(simpleDeepClone(data))
+    this.history.push(dataStr)
     // 历史记录数超过最大数量
     if (this.history.length > this.mindMap.opt.maxHistoryCount) {
       this.history.shift()
@@ -138,15 +138,16 @@ class Command {
       return
     }
     if (this.activeHistoryIndex - step >= 0) {
-      const lastData = this.history[this.activeHistoryIndex]
+      const lastDataStr = this.history[this.activeHistoryIndex]
       this.activeHistoryIndex -= step
       this.mindMap.emit(
         'back_forward',
         this.activeHistoryIndex,
         this.history.length
       )
-      const data = simpleDeepClone(this.history[this.activeHistoryIndex])
-      this.emitDataUpdatesEvent(lastData, data)
+      const dataStr = this.history[this.activeHistoryIndex]
+      const data = JSON.parse(dataStr)
+      this.emitDataUpdatesEvent(lastDataStr, dataStr)
       return data
     }
   }
@@ -158,15 +159,16 @@ class Command {
     }
     let len = this.history.length
     if (this.activeHistoryIndex + step <= len - 1) {
-      const lastData = this.history[this.activeHistoryIndex]
+      const lastDataStr = this.history[this.activeHistoryIndex]
       this.activeHistoryIndex += step
       this.mindMap.emit(
         'back_forward',
         this.activeHistoryIndex,
         this.history.length
       )
-      const data = simpleDeepClone(this.history[this.activeHistoryIndex])
-      this.emitDataUpdatesEvent(lastData, data)
+      const dataStr = this.history[this.activeHistoryIndex]
+      const data = JSON.parse(dataStr)
+      this.emitDataUpdatesEvent(lastDataStr, dataStr)
       return data
     }
   }
@@ -195,12 +197,14 @@ class Command {
   }
 
   // 派发思维导图更新明细事件
-  emitDataUpdatesEvent(lastData, data) {
+  emitDataUpdatesEvent(lastDataStr, dataStr) {
     try {
       // 如果data_change_detail没有监听者，那么不进行计算，节省性能
       const eventName = 'data_change_detail'
       const count = this.mindMap.event.listenerCount(eventName)
-      if (count > 0 && lastData && data) {
+      if (count > 0 && lastDataStr && dataStr) {
+        const lastData = JSON.parse(lastDataStr)
+        const data = JSON.parse(dataStr)
         const lastDataObj = simpleDeepClone(transformTreeDataToObject(lastData))
         const dataObj = simpleDeepClone(transformTreeDataToObject(data))
         const res = []
