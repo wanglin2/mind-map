@@ -112,6 +112,8 @@ class Style {
 
   // 更新当前节点生效的样式数据
   addToEffectiveStyles(styles) {
+    // effectiveStyles目前只提供给格式刷插件使用，所以如果没有注册该插件，那么不需要保存该数据
+    if (!this.ctx.mindMap.painter) return
     this.ctx.effectiveStyles = {
       ...this.ctx.effectiveStyles,
       ...styles

@@ -1,8 +1,7 @@
 import {
   isWhite,
   isTransparent,
-  getVisibleColorFromTheme,
-  readBlob
+  getVisibleColorFromTheme
 } from '../utils/index'
 
 // 小地图插件
