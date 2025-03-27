@@ -136,6 +136,14 @@ import Color from './Color.vue'
 import { mapState } from 'vuex'
 import { lineWidthList, borderDasharrayList } from '@/config'
 
+const defaultStyleConfig = {
+  radius: 5,
+  strokeWidth: 2,
+  strokeColor: '#0984e3',
+  strokeDasharray: '5,5',
+  fill: 'rgba(9,132,227,0.05)'
+}
+
 export default {
   components: {
     Color
@@ -155,11 +163,7 @@ export default {
         top: 0
       },
       styleConfig: {
-        radius: 5,
-        strokeWidth: 2,
-        strokeColor: '#0984e3',
-        strokeDasharray: '5,5',
-        fill: 'rgba(9,132,227,0.05)'
+        ...defaultStyleConfig
       }
     }
   },
@@ -195,8 +199,12 @@ export default {
       // 取范围内第一个节点的外框样式
       const firstNode = parentNode.children[range[0]]
       const firstNodeOuterFrame = firstNode.getData('outerFrame')
-      Object.keys(firstNodeOuterFrame).forEach(key => {
-        this.styleConfig[key] = firstNodeOuterFrame[key]
+      Object.keys(this.styleConfig).forEach(key => {
+        if (typeof firstNodeOuterFrame[key] !== 'undefined') {
+          this.styleConfig[key] = firstNodeOuterFrame[key]
+        } else {
+          this.styleConfig[key] = defaultStyleConfig[key]
+        }
       })
       // 获取外框的位置大小信息
       const { x, y, width } = el.rbox()
