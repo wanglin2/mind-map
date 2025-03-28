@@ -135,14 +135,7 @@
 import Color from './Color.vue'
 import { mapState } from 'vuex'
 import { lineWidthList, borderDasharrayList } from '@/config'
-
-const defaultStyleConfig = {
-  radius: 5,
-  strokeWidth: 2,
-  strokeColor: '#0984e3',
-  strokeDasharray: '5,5',
-  fill: 'rgba(9,132,227,0.05)'
-}
+import OuterFrame from 'simple-mind-map/src/plugins/OuterFrame';
 
 export default {
   components: {
@@ -163,7 +156,7 @@ export default {
         top: 0
       },
       styleConfig: {
-        ...defaultStyleConfig
+        ...OuterFrame.defaultStyle
       }
     }
   },
@@ -203,7 +196,7 @@ export default {
         if (typeof firstNodeOuterFrame[key] !== 'undefined') {
           this.styleConfig[key] = firstNodeOuterFrame[key]
         } else {
-          this.styleConfig[key] = defaultStyleConfig[key]
+          this.styleConfig[key] = OuterFrame.defaultStyle[key]
         }
       })
       // 获取外框的位置大小信息

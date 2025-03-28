@@ -956,5 +956,12 @@ const mindMap = new MindMap({
                 <sub style="font-size:14px"><b>旋风</b></sub>
             </a>
         </td>
+        <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
+            <a href="#">
+                <img src="./web/src/assets/avatar/星夜寒.jpg" width="50;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
+                <br />
+                <sub style="font-size:14px"><b>星夜寒</b></sub>
+            </a>
+        </td>
     </tr>
 </table>
