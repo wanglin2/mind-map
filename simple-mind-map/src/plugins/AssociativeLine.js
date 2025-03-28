@@ -23,6 +23,8 @@ const styleProps = [
   'associativeLineTextFontFamily'
 ]
 
+const ASSOCIATIVE_LINE_TEXT_EDIT_WRAP = 'associative-line-text-edit-warp'
+
 // 关联线插件
 class AssociativeLine {
   constructor(opt = {}) {
@@ -62,9 +64,11 @@ class AssociativeLine {
       this[item] = associativeLineControlsMethods[item].bind(this)
     })
     // 关联线文字相关方法
+    this.showTextEdit = false
     Object.keys(associativeLineTextMethods).forEach(item => {
       this[item] = associativeLineTextMethods[item].bind(this)
     })
+    this.mindMap.addEditNodeClass(ASSOCIATIVE_LINE_TEXT_EDIT_WRAP)
     this.bindEvent()
   }
 
@@ -744,11 +748,13 @@ class AssociativeLine {
 
   // 插件被移除前做的事情
   beforePluginRemove() {
+    this.mindMap.deleteEditNodeClass(ASSOCIATIVE_LINE_TEXT_EDIT_WRAP)
     this.unBindEvent()
   }
 
   // 插件被卸载前做的事情
   beforePluginDestroy() {
+    this.mindMap.deleteEditNodeClass(ASSOCIATIVE_LINE_TEXT_EDIT_WRAP)
     this.unBindEvent()
   }
 }

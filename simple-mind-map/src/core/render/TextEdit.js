@@ -16,6 +16,8 @@ import {
   noneRichTextNodeLineHeight
 } from '../../constants/constant'
 
+const SMM_NODE_EDIT_WRAP = 'smm-node-edit-wrap'
+
 //  节点文字编辑类
 export default class TextEdit {
   //  构造函数
@@ -34,6 +36,7 @@ export default class TextEdit {
     this.textNodePaddingX = 5
     this.textNodePaddingY = 3
     this.isNeedUpdateTextEditNode = false
+    this.mindMap.addEditNodeClass(SMM_NODE_EDIT_WRAP)
     this.bindEvent()
   }
 
@@ -193,6 +196,16 @@ export default class TextEdit {
     return this.showTextEdit
   }
 
+  // 设置文本编辑框是否处于显示状态
+  setIsShowTextEdit(val) {
+    this.showTextEdit = val
+    if (val) {
+      this.mindMap.keyCommand.stopCheckInSvg()
+    } else {
+      this.mindMap.keyCommand.recoveryCheckInSvg()
+    }
+  }
+
   // 显示文本编辑框
   // isInserting：是否是刚创建的节点
   // isFromKeyDown：是否是在按键事件进入的编辑
@@ -275,7 +288,7 @@ export default class TextEdit {
       this.mindMap.richText.showTextEdit = false
     } else {
       this.cacheEditingText = this.getEditText()
-      this.showTextEdit = false
+      this.setIsShowTextEdit(false)
     }
     this.show({
       node,
@@ -299,9 +312,7 @@ export default class TextEdit {
     this.registerTmpShortcut()
     if (!this.textEditNode) {
       this.textEditNode = document.createElement('div')
-      this.textEditNode.classList.add(
-        CONSTANTS.EDIT_NODE_CLASS.SMM_NODE_EDIT_WRAP
-      )
+      this.textEditNode.classList.add(SMM_NODE_EDIT_WRAP)
       this.textEditNode.style.cssText = `
         position: fixed;
         box-sizing: border-box;
@@ -383,7 +394,7 @@ export default class TextEdit {
     } else {
       this.textEditNode.style.lineHeight = 'normal'
     }
-    this.showTextEdit = true
+    this.setIsShowTextEdit(true)
     // 选中文本
     // if (!this.cacheEditingText) {
     //   selectAllInput(this.textEditNode)
@@ -477,7 +488,7 @@ export default class TextEdit {
     this.textEditNode.style.fontSize = 'inherit'
     this.textEditNode.style.fontWeight = 'normal'
     this.textEditNode.style.transform = 'translateY(0)'
-    this.showTextEdit = false
+    this.setIsShowTextEdit(false)
     this.mindMap.execCommand('SET_NODE_TEXT', currentNode, text)
     // if (currentNode.isGeneralization) {
     //   // 概要节点

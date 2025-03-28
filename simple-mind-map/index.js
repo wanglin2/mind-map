@@ -78,6 +78,10 @@ class MindMap {
     */
     this.nodeInnerPrefixList = []
 
+    // 编辑节点的类名列表，快捷键响应会检查事件目标是否是body或该列表中的元素，是的话才会响应
+    // 该检查可以通过customCheckEnableShortcut选项来覆盖
+    this.editNodeClassList = []
+
     // 画布
     this.initContainer()
 
@@ -239,6 +243,29 @@ class MindMap {
   // 移除css
   removeCss() {
     if (this.cssEl) document.head.removeChild(this.cssEl)
+  }
+
+  // 检查某个编辑节点类名是否存在，返回索引
+  checkEditNodeClassIndex(className) {
+    return this.editNodeClassList.findIndex(item => {
+      return item === className
+    })
+  }
+
+  // 添加一个编辑节点类名
+  addEditNodeClass(className) {
+    const index = this.checkEditNodeClassIndex(className)
+    if (index === -1) {
+      this.editNodeClassList.push(className)
+    }
+  }
+
+  // 删除一个编辑节点类名
+  deleteEditNodeClass(className) {
+    const index = this.checkEditNodeClassIndex(className)
+    if (index !== -1) {
+      this.editNodeClassList.splice(index, 1)
+    }
   }
 
   //  渲染，部分渲染
