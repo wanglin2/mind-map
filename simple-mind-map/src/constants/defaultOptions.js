@@ -496,6 +496,7 @@ export const defaultOpt = {
   // 【OuterFrame】插件
   outerFramePaddingX: 10,
   outerFramePaddingY: 10,
+  defaultOuterFrameText: '外框',
 
   // 【Painter】插件
   // 是否只格式刷节点手动设置的样式，不考虑节点通过主题的应用的样式

@@ -12,7 +12,7 @@ import {
   htmlEscape,
   compareVersion
 } from '../utils'
-import { CONSTANTS, richTextSupportStyleList } from '../constants/constant'
+import { richTextSupportStyleList } from '../constants/constant'
 import MindMapNode from '../core/render/node/MindMapNode'
 import { Scope } from 'parchment'
 

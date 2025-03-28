@@ -1,140 +1,46 @@
 import {
   formatDataToArray,
   walk,
-  getTopAncestorsFomNodeList,
   getNodeListBoundingRect,
   createUid
 } from '../utils'
-
-// 解析要添加外框的节点实例列表
-const parseAddNodeList = list => {
-  // 找出顶层节点
-  list = getTopAncestorsFomNodeList(list)
-  const cache = {}
-  const uidToParent = {}
-  // 找出列表中节点在兄弟节点中的索引，并和父节点关联起来
-  list.forEach(node => {
-    const parent = node.parent
-    if (parent) {
-      const pUid = parent.uid
-      uidToParent[pUid] = parent
-      const index = node.getIndexInBrothers()
-      const data = {
-        node,
-        index
-      }
-      if (cache[pUid]) {
-        if (
-          !cache[pUid].find(item => {
-            return item.index === data.index
-          })
-        ) {
-          cache[pUid].push(data)
-        }
-      } else {
-        cache[pUid] = [data]
-      }
-    }
-  })
-  const res = []
-  Object.keys(cache).forEach(uid => {
-    const indexList = cache[uid]
-    const parentNode = uidToParent[uid]
-    if (indexList.length > 1) {
-      // 多个节点
-      const rangeList = indexList
-        .map(item => {
-          return item.index
-        })
-        .sort((a, b) => {
-          return a - b
-        })
-      const minIndex = rangeList[0]
-      const maxIndex = rangeList[rangeList.length - 1]
-      let curStart = -1
-      let curEnd = -1
-      for (let i = minIndex; i <= maxIndex; i++) {
-        // 连续索引
-        if (rangeList.includes(i)) {
-          if (curStart === -1) {
-            curStart = i
-          }
-          curEnd = i
-        } else {
-          // 连续断开
-          if (curStart !== -1 && curEnd !== -1) {
-            res.push({
-              node: parentNode,
-              range: [curStart, curEnd]
-            })
-          }
-          curStart = -1
-          curEnd = -1
-        }
-      }
-      // 不要忘了最后一段索引
-      if (curStart !== -1 && curEnd !== -1) {
-        res.push({
-          node: parentNode,
-          range: [curStart, curEnd]
-        })
-      }
-    } else {
-      // 单个节点
-      res.push({
-        node: parentNode,
-        range: [indexList[0].index, indexList[0].index]
-      })
-    }
-  })
-  return res
-}
-
-// 解析获取节点的子节点生成的外框列表
-const getNodeOuterFrameList = node => {
-  const children = node.children
-  if (!children || children.length <= 0) return
-  const res = []
-  const map = {}
-  children.forEach((item, index) => {
-    const outerFrameData = item.getData('outerFrame')
-    if (!outerFrameData) return
-    const groupId = outerFrameData.groupId
-    if (groupId) {
-      if (!map[groupId]) {
-        map[groupId] = []
-      }
-      map[groupId].push({
-        node: item,
-        index
-      })
-    } else {
-      res.push({
-        nodeList: [item],
-        range: [index, index]
-      })
-    }
-  })
-  Object.keys(map).forEach(id => {
-    const list = map[id]
-    res.push({
-      nodeList: list.map(item => {
-        return item.node
-      }),
-      range: [list[0].index, list[list.length - 1].index]
-    })
-  })
-  return res
-}
+import {
+  parseAddNodeList,
+  getNodeOuterFrameList
+} from './outerFrame/outerFrameUtils'
+import outerFrameTextMethods from './outerFrame/outerFrameText'
 
 // 默认外框样式
 const defaultStyle = {
+  // 外框圆角大小
   radius: 5,
+  // 外框边框宽度
   strokeWidth: 2,
+  // 外框边框颜色
   strokeColor: '#0984e3',
+  // 外框边框虚线样式
   strokeDasharray: '5,5',
-  fill: 'rgba(9,132,227,0.05)'
+  // 外框填充颜色
+  fill: 'rgba(9,132,227,0.05)',
+  // 外框文字字号
+  fontSize: 14,
+  // 外框文字字体
+  fontFamily: '微软雅黑, Microsoft YaHei',
+  // 外框文字颜色
+  color: '#fff',
+  // 外框文字行高
+  lineHeight: 1.2,
+  // 外框文字背景
+  textFill: '#0984e3',
+  // 外框文字圆角
+  textFillRadius: 5,
+  // 外框文字矩内边距，左上右下
+  textFillPadding: [5, 5, 5, 5],
+  // 外框文字水平显示位置，相对于外框
+  textAlign: 'left' // left、center、right
 }
+
+const OUTER_FRAME_TEXT_EDIT_WRAP = 'outer-frame-text-edit-warp'
 
 // 外框插件
 class OuterFrame {
@@ -142,8 +48,16 @@ class OuterFrame {
     this.mindMap = opt.mindMap
     this.draw = null
     this.createDrawContainer()
+    this.textNodeList = []
     this.outerFrameElList = []
     this.activeOuterFrame = null
+    // 文字相关方法
+    this.textEditNode = null
+    this.showTextEdit = false
+    Object.keys(outerFrameTextMethods).forEach(item => {
+      this[item] = outerFrameTextMethods[item].bind(this)
+    })
+    this.mindMap.addEditNodeClass(OUTER_FRAME_TEXT_EDIT_WRAP)
     this.bindEvent()
   }
 
@@ -164,6 +78,11 @@ class OuterFrame {
     this.clearActiveOuterFrame = this.clearActiveOuterFrame.bind(this)
     this.mindMap.on('draw_click', this.clearActiveOuterFrame)
     this.mindMap.on('node_click', this.clearActiveOuterFrame)
+    // 缩放事件
+    this.mindMap.on('scale', this.onScale)
+    // 实例销毁事件
+    this.onBeforeDestroy = this.onBeforeDestroy.bind(this)
+    this.mindMap.on('beforeDestroy', this.onBeforeDestroy)
 
     this.addOuterFrame = this.addOuterFrame.bind(this)
     this.mindMap.command.add('ADD_OUTER_FRAME', this.addOuterFrame)
@@ -181,11 +100,19 @@ class OuterFrame {
     this.mindMap.off('data_change', this.renderOuterFrames)
     this.mindMap.off('draw_click', this.clearActiveOuterFrame)
     this.mindMap.off('node_click', this.clearActiveOuterFrame)
+    this.mindMap.off('scale', this.onScale)
+    this.mindMap.off('beforeDestroy', this.onBeforeDestroy)
     this.mindMap.command.remove('ADD_OUTER_FRAME', this.addOuterFrame)
     this.mindMap.keyCommand.removeShortcut(
       'Del|Backspace',
       this.removeActiveOuterFrame
     )
+  }
+
+  // 实例销毁时清除关联线文字编辑框
+  onBeforeDestroy() {
+    this.hideEditTextBox()
+    this.removeTextEditEl()
   }
 
   // 给节点添加外框数据
@@ -279,8 +206,14 @@ class OuterFrame {
     })
   }
 
+  // 获取某个节点指定范围的带外框的第一个子节点
+  getNodeRangeFirstNode(node, range) {
+    return node.children[range[0]]
+  }
+
   // 渲染外框
   renderOuterFrames() {
+    this.clearTextNodes()
     this.clearOuterFrameElList()
     let tree = this.mindMap.renderer.root
     if (!tree) return
@@ -317,11 +250,15 @@ class OuterFrame {
                 t.scaleY,
               (width + outerFramePaddingX * 2) / t.scaleX,
               (height + outerFramePaddingY * 2) / t.scaleY,
-              nodeList[0].getData('outerFrame') // 使用第一个节点的外框样式
+              this.getStyle(nodeList[0]) // 使用第一个节点的外框样式
             )
+            // 渲染文字，如果有的话
+            const textNode = this.createText(el, cur, range)
+            this.textNodeList.push(textNode)
+            this.renderText(this.getText(nodeList[0]), el, textNode, cur, range)
             el.on('click', e => {
               e.stopPropagation()
-              this.setActiveOuterFrame(el, cur, range)
+              this.setActiveOuterFrame(el, cur, range, textNode)
             })
           })
         }
@@ -333,33 +270,54 @@ class OuterFrame {
   }
 
   // 激活外框
-  setActiveOuterFrame(el, node, range) {
+  setActiveOuterFrame(el, node, range, textNode) {
     this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
     this.clearActiveOuterFrame()
     this.activeOuterFrame = {
       el,
       node,
-      range
+      range,
+      textNode
     }
     el.stroke({
       dasharray: 'none'
     })
+    // 如果没有输入过文字，那么显示默认文字
+    if (!this.getText(this.getNodeRangeFirstNode(node, range))) {
+      this.renderText(
+        this.mindMap.opt.defaultOuterFrameText,
+        el,
+        textNode,
+        node,
+        range
+      )
+    }
     this.mindMap.emit('outer_frame_active', el, node, range)
   }
 
   // 清除当前激活的外框
   clearActiveOuterFrame() {
     if (!this.activeOuterFrame) return
-    const { el } = this.activeOuterFrame
+    const { el, textNode, node, range } = this.activeOuterFrame
     el.stroke({
       dasharray: el.cacheStyle.dasharray || defaultStyle.strokeDasharray
     })
+    // 隐藏文本编辑框
+    this.hideEditTextBox()
+    // 如果没有输入过文字，那么隐藏
+    if (!this.getText(this.getNodeRangeFirstNode(node, range))) {
+      textNode.clear()
+    }
     this.activeOuterFrame = null
+  }
+
+  // 获取指定外框的样式
+  getStyle(node) {
+    return { ...defaultStyle, ...(node.getData('outerFrame') || {}) }
   }
 
   // 创建外框元素
   createOuterFrameEl(x, y, width, height, styleConfig = {}) {
-    styleConfig = { ...defaultStyle, ...styleConfig }
     const el = this.draw
       .rect()
       .size(width, height)
@@ -381,6 +339,13 @@ class OuterFrame {
     return el
   }
 
+  // 清除文本元素
+  clearTextNodes() {
+    this.textNodeList.forEach(item => {
+      item.remove()
+    })
+  }
+
   // 清除外框元素
   clearOuterFrameElList() {
     this.outerFrameElList.forEach(item => {
@@ -392,15 +357,18 @@ class OuterFrame {
 
   // 插件被移除前做的事情
   beforePluginRemove() {
+    this.mindMap.deleteEditNodeClass(OUTER_FRAME_TEXT_EDIT_WRAP)
     this.unBindEvent()
   }
 
   // 插件被卸载前做的事情
   beforePluginDestroy() {
+    this.mindMap.deleteEditNodeClass(OUTER_FRAME_TEXT_EDIT_WRAP)
     this.unBindEvent()
   }
 }
 
 OuterFrame.instanceName = 'outerFrame'
+OuterFrame.defaultStyle = defaultStyle
 
 export default OuterFrame
