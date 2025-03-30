@@ -95,8 +95,10 @@ export default {
 
     // 更新位置
     updateNoteContentPosition(left, top) {
-      this.left = left
-      this.top = top
+      const { width, height } = this.$refs.noteContentViewer.getBoundingClientRect()
+      const { right, bottom } = this.mindMap.elRect
+      this.left = left + width > right ? right - width : left
+      this.top = top + height > bottom ? bottom - height : top
     },
 
     // 画布缩放事件
@@ -131,6 +133,7 @@ export default {
   border-radius: 5px;
   box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
   border: 1px solid rgba(0, 0, 0, 0.06);
+  z-index: 2;
 
   .noteContentWrap {
     max-width: 250px;
