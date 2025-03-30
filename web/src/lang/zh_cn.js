@@ -39,7 +39,8 @@ export default {
     edge: '边缘',
     rainbowLines: '彩虹线条',
     notUseRainbowLines: '不使用彩虹线条',
-    outerFramePadding: '外框内边距'
+    outerFramePadding: '外框内边距',
+    associativeLineStyle: '关联线样式'
   },
   setting: {
     title: '设置',
@@ -72,8 +73,6 @@ export default {
     watermarkTextOpacity: '文字透明度',
     watermarkTextFontSize: '文字字号',
     belowNode: '显示在节点下方',
-    tagPositionRight: '文本右侧',
-    tagPositionBottom: '文本下面',
     alwaysShowExpandBtn: '是否一直显示展开收起按钮',
     enableAutoEnterTextEditWhenKeydown: '键盘输入时自动进入文本编辑',
     enableInheritAncestorLineStyle: '节点连线样式继承祖先节点的样式',
@@ -341,7 +340,8 @@ export default {
     dragTip: '在此释放以导入该文件',
     deleteNodeImgTip: '是否确认删除该节点图片？',
     autoOpenNodeRichTextTip: '检测到导入了富文本内容，已自动开启富文本模式',
-    localStorageExceededTip: '你创建的思维导图体积已经超过浏览器允许存储的上限，请立即导出，否则数据将丢失！建议下载客户端进行使用，客户端无大小限制。'
+    localStorageExceededTip:
+      '你创建的思维导图体积已经超过浏览器允许存储的上限，请立即导出，否则数据将丢失！建议下载客户端进行使用，客户端无大小限制。'
   },
   mouseAction: {
     tip1: '当前：左键拖动画布，右键框选节点',
@@ -407,11 +407,29 @@ export default {
     animate: '开启动画'
   },
   nodeOuterFrame: {
-    outerFrameSetting: '外框设置',
+    nodeOuterFrameStyle: '外框样式',
+    outerFrameSetting: '外框',
     deleteOuterFrame: '删除外框',
     boxStyle: '边框样式',
     boxColor: '边框颜色',
-    fillColor: '填充颜色'
+    fillColor: '填充颜色',
+    outerFrameText: '外框文字',
+    deleteOuterFrameText: '删除文字',
+    fontFamily: '字体',
+    color: '颜色',
+    fontSize: '字号',
+    radius: '圆角',
+    fontBold: '加粗',
+    italic: '斜体',
+    lineHeight: '行高',
+    textFillRadius: '背景圆角',
+    textFill: '背景填充',
+    textAlign: '显示位置',
+    left: '左',
+    center: '中',
+    right: '右',
+    paddingX: '水平内边距',
+    paddingY: '垂直内边距'
   },
   nodeTagStyle: {
     placeholder: '请输入标签内容',

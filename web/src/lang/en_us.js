@@ -40,7 +40,8 @@ export default {
     edge: 'Edge',
     rainbowLines: 'Rainbow lines',
     notUseRainbowLines: 'Not use rainbow lines',
-    outerFramePadding: 'Outer frame padding'
+    outerFramePadding: 'Outer frame padding',
+    associativeLineStyle: 'Associative line style'
   },
   setting: {
     title: 'Setting',
@@ -74,8 +75,6 @@ export default {
     watermarkTextOpacity: 'Text opacity',
     watermarkTextFontSize: 'Font size',
     belowNode: 'Display below nodes',
-    tagPositionRight: 'Text right',
-    tagPositionBottom: 'Text bottom',
     alwaysShowExpandBtn: 'Always show expand btn',
     enableAutoEnterTextEditWhenKeydown: 'Auto enter text edit when keydown',
     confirm: 'Confirm',
@@ -420,11 +419,29 @@ export default {
     animate: 'Animate'
   },
   nodeOuterFrame: {
-    outerFrameSetting: 'Setting',
+    outerFrameSetting: 'Outer frame setting',
     deleteOuterFrame: 'Delete outer frame',
     boxStyle: 'Box style',
     boxColor: 'Box color',
-    fillColor: 'Fill color'
+    fillColor: 'Fill color',
+    nodeOuterFrameStyle: 'Outer frame style',
+    outerFrameText: 'Outer frame text',
+    deleteOuterFrameText: 'Delete outer frame text',
+    fontFamily: 'Font family',
+    color: 'Color',
+    fontSize: 'font size',
+    radius: 'Radius',
+    fontBold: 'Font bold',
+    italic: 'Italic',
+    lineHeight: 'Line height',
+    textFillRadius: 'Text fill radius',
+    textFill: 'Text fill color',
+    textAlign: 'Text align',
+    left: 'Left',
+    center: 'Center',
+    right: 'Right',
+    paddingX: 'Padding x',
+    paddingY: 'Padding y'
   },
   nodeTagStyle: {
     placeholder: 'Please enter the tag content',

@@ -41,8 +41,7 @@ export default {
     rainbowLines: '彩虹線條',
     notUseRainbowLines: '不使用彩虹線條',
     outerFramePadding: '外框內距',
-    tagPositionRight: '文本右側',
-    tagPositionBottom: '文本下面'
+    associativeLineStyle: '關聯線樣式'
   },
   setting: {
     title: '設置',
@@ -274,7 +273,8 @@ export default {
     bottom: '下',
     left: '左',
     right: '右',
-    tag: '標簽'
+    tag: '標簽',
+    direction: '方向'
   },
   theme: {
     title: '主題',
@@ -407,11 +407,29 @@ export default {
     animate: '動畫'
   },
   nodeOuterFrame: {
-    outerFrameSetting: '外框設定',
+    outerFrameSetting: '外框',
     deleteOuterFrame: '刪除外框',
     boxStyle: '邊框樣式',
     boxColor: '邊框顏色',
-    fillColor: '填充顏色'
+    fillColor: '填充顏色',
+    nodeOuterFrameStyle: '外框樣式',
+    outerFrameText: '外框文字',
+    deleteOuterFrameText: '刪除文字',
+    fontFamily: '字型',
+    color: '顏色',
+    fontSize: '字型大小',
+    radius: '圓角',
+    fontBold: '加粗',
+    italic: '斜體',
+    lineHeight: '行高',
+    textFillRadius: '背景圓角',
+    textFill: '背景填充',
+    textAlign: '顯示位置',
+    left: '左',
+    center: '中',
+    right: '右',
+    paddingX: '水平內邊距',
+    paddingY: '垂直內邊距'
   },
   nodeTagStyle: {
     placeholder: '請輸入標籤內容',
