@@ -388,6 +388,7 @@ class AssociativeLine {
     if (this.controlPoint2) {
       this.controlPoint2.stroke({ color: associativeLineActiveColor })
     }
+    this.updateTextPos(path, text)
   }
 
   // 激活某根关联线
