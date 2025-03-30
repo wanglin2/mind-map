@@ -26,6 +26,10 @@ const defaultStyle = {
   fontSize: 14,
   // 外框文字字体
   fontFamily: '微软雅黑, Microsoft YaHei',
+  // 加粗
+  fontWeight: 'normal', // bold
+  // 斜体
+  fontStyle: 'normal', // italic
   // 外框文字颜色
   color: '#fff',
   // 外框文字行高
@@ -48,6 +52,7 @@ class OuterFrame {
     this.mindMap = opt.mindMap
     this.draw = null
     this.createDrawContainer()
+    this.isNotRenderOuterFrames = false
     this.textNodeList = []
     this.outerFrameElList = []
     this.activeOuterFrame = null
@@ -183,20 +188,47 @@ class OuterFrame {
     this.mindMap.emit('outer_frame_delete')
   }
 
+  // 删除当前激活外框的文字
+  removeActiveOuterFrameText() {
+    this.updateActiveOuterFrame({
+      text: ''
+    })
+  }
+
   // 更新当前激活的外框
-  // 执行了该方法后请立即隐藏你的样式面板，因为会清除当前激活的外框
   updateActiveOuterFrame(config = {}) {
     if (!this.activeOuterFrame) return
-    const { node, range } = this.activeOuterFrame
+    this.isNotRenderOuterFrames = true
+    const { el, node, range } = this.activeOuterFrame
+    let newStrokeDasharray = ''
     this.getRangeNodeList(node, range).forEach(node => {
       const outerFrame = node.getData('outerFrame')
+      const newData = {
+        ...outerFrame,
+        ...config
+      }
+      newStrokeDasharray = newData.strokeDasharray
       this.mindMap.execCommand('SET_NODE_DATA', node, {
-        outerFrame: {
-          ...outerFrame,
-          ...config
-        }
+        outerFrame: newData
       })
     })
+    el.cacheStyle = {
+      dasharray: newStrokeDasharray
+    }
+    this.updateOuterFrameStyle()
+  }
+
+  // 更新当前激活外框的样式
+  updateOuterFrameStyle() {
+    const { el, node, range, textNode } = this.activeOuterFrame
+    const firstNode = this.getNodeRangeFirstNode(node, range)
+    const styleConfig = this.getStyle(firstNode)
+    this.styleOuterFrame(el, {
+      ...styleConfig,
+      strokeDasharray: 'none'
+    })
+    const text = this.getText(firstNode)
+    this.renderText(text, el, textNode, node, range)
   }
 
   // 获取某个节点指定范围的带外框的子节点列表
@@ -213,6 +245,11 @@ class OuterFrame {
 
   // 渲染外框
   renderOuterFrames() {
+    if (this.isNotRenderOuterFrames) {
+      this.isNotRenderOuterFrames = false
+      return
+    }
+    this.clearActiveOuterFrame()
     this.clearTextNodes()
     this.clearOuterFrameElList()
     let tree = this.mindMap.renderer.root
@@ -309,6 +346,7 @@ class OuterFrame {
       textNode.clear()
     }
     this.activeOuterFrame = null
+    this.mindMap.emit('outer_frame_deactivate')
   }
 
   // 获取指定外框的样式
@@ -318,10 +356,18 @@ class OuterFrame {
 
   // 创建外框元素
   createOuterFrameEl(x, y, width, height, styleConfig = {}) {
-    const el = this.draw
-      .rect()
-      .size(width, height)
-      .radius(styleConfig.radius)
+    const el = this.draw.rect().size(width, height).x(x).y(y)
+    this.styleOuterFrame(el, styleConfig)
+    el.cacheStyle = {
+      dasharray: styleConfig.strokeDasharray
+    }
+    this.outerFrameElList.push(el)
+    return el
+  }
+
+  // 设置外框样式
+  styleOuterFrame(el, styleConfig) {
+    el.radius(styleConfig.radius)
       .stroke({
         width: styleConfig.strokeWidth,
         color: styleConfig.strokeColor,
@@ -330,13 +376,6 @@ class OuterFrame {
       .fill({
         color: styleConfig.fill
       })
-      .x(x)
-      .y(y)
-    el.cacheStyle = {
-      dasharray: styleConfig.strokeDasharray
-    }
-    this.outerFrameElList.push(el)
-    return el
   }
 
   // 清除文本元素

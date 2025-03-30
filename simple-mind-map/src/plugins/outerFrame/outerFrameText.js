@@ -66,6 +66,8 @@ function showEditTextBox(g) {
   this.textEditNode.style.padding = `${pl}px ${pt}px ${pr}px ${pb}px`
   this.textEditNode.style.fontFamily = style.fontFamily
   this.textEditNode.style.fontSize = style.fontSize * scale + 'px'
+  this.textEditNode.style.fontWeight = style.fontWeight
+  this.textEditNode.style.fontStyle = style.fontStyle
   this.textEditNode.style.lineHeight =
     textLines.length > 1 ? style.lineHeight : 'normal'
   this.textEditNode.style.zIndex = nodeTextEditZIndex
@@ -205,7 +207,9 @@ function styleText(textNode, style) {
     })
     .css({
       'font-family': style.fontFamily,
-      'font-size': style.fontSize + 'px'
+      'font-size': style.fontSize + 'px',
+      'font-weight': style.fontWeight,
+      'font-style': style.fontStyle
     })
 }
 
