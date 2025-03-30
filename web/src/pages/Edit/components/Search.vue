@@ -23,7 +23,7 @@
           >{{ $t('search.replace') }}</el-button
         >
       </el-input>
-      <div class="searchInfo" v-if="showSearchInfo">
+      <div class="searchInfo" v-if="showSearchInfo && !isUndef(searchText)">
         {{ currentIndex }} / {{ total }}
       </div>
     </div>
@@ -155,7 +155,7 @@ export default {
     showSearch() {
       this.$bus.$emit('closeSideBar')
       this.show = true
-      // this.$refs.searchInputRef.focus()
+      this.$refs.searchInputRef.focus()
     },
 
     hideReplaceInput() {
