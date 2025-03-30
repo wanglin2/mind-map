@@ -51,6 +51,7 @@
       v-if="mindMap"
       :mindMap="mindMap"
     ></NodeImgPlacementToolbar>
+    <NodeNoteSidebar v-if="mindMap" :mindMap="mindMap"></NodeNoteSidebar>
     <AiCreate v-if="mindMap && enableAi" :mindMap="mindMap"></AiCreate>
     <AiChat v-if="enableAi"></AiChat>
     <div
@@ -140,6 +141,7 @@ import NodeTagStyle from './NodeTagStyle.vue'
 import Setting from './Setting.vue'
 import AssociativeLineStyle from './AssociativeLineStyle.vue'
 import NodeImgPlacementToolbar from './NodeImgPlacementToolbar.vue'
+import NodeNoteSidebar from './NodeNoteSidebar.vue'
 import AiCreate from './AiCreate.vue'
 import AiChat from './AiChat.vue'
 
@@ -197,6 +199,7 @@ export default {
     Setting,
     AssociativeLineStyle,
     NodeImgPlacementToolbar,
+    NodeNoteSidebar,
     AiCreate,
     AiChat
   },

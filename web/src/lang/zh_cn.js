@@ -487,5 +487,8 @@ export default {
     aiCreatePartMsgCenter: '】的思维导图，帮我续写其中一个内容为【',
     aiCreatePartMsgPostfix:
       '】的节点的下级内容，需要以Markdown格式返回，并且只能使用Markdown的标题和无序列表两种语法，可以支持多层嵌套。只需返回内容即可。'
+  },
+  note: {
+    title: '备注'
   }
 }

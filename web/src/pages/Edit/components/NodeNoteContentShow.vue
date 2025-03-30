@@ -11,7 +11,10 @@
     @mousedown.stop
     @mousemove.stop
     @mouseup.stop
-  ></div>
+    @wheel.stop
+  >
+    <div class="noteContentWrap customScrollbar" ref="noteContentWrap"></div>
+  </div>
 </template>
 
 <script>
@@ -41,7 +44,7 @@ export default {
     this.$bus.$on('showNoteContent', this.onShowNoteContent)
     this.$bus.$on('hideNoteContent', this.hideNoteContent)
     document.body.addEventListener('click', this.hideNoteContent)
-    this.$bus.$on('node_active', this.hideNoteContent)
+    this.$bus.$on('node_active', this.onNodeActive)
     this.$bus.$on('scale', this.onScale)
     this.$bus.$on('translate', this.onScale)
     this.$bus.$on('svg_mousedown', this.hideNoteContent)
@@ -55,13 +58,24 @@ export default {
     this.$bus.$off('showNoteContent', this.onShowNoteContent)
     this.$bus.$off('hideNoteContent', this.hideNoteContent)
     document.body.removeEventListener('click', this.hideNoteContent)
-    this.$bus.$off('node_active', this.hideNoteContent)
+    this.$bus.$off('node_active', this.onNodeActive)
     this.$bus.$off('scale', this.onScale)
     this.$bus.$off('translate', this.onScale)
     this.$bus.$off('svg_mousedown', this.hideNoteContent)
     this.$bus.$off('expand_btn_click', this.hideNoteContent)
   },
   methods: {
+    onNodeActive(...args) {
+      const nodes = [...args[1]]
+      if (nodes.length > 0) {
+        if (nodes[0] !== this.node) {
+          this.hideNoteContent()
+        }
+      } else {
+        this.hideNoteContent()
+      }
+    },
+
     // 显示备注浮层
     onShowNoteContent(content, left, top, node) {
       this.node = node
@@ -101,7 +115,7 @@ export default {
     initEditor() {
       if (!this.editor) {
         this.editor = new Viewer({
-          el: this.$refs.noteContentViewer
+          el: this.$refs.noteContentWrap
         })
       }
     }
@@ -115,9 +129,13 @@ export default {
   background-color: #fff;
   padding: 10px;
   border-radius: 5px;
-  max-height: 300px;
-  overflow-y: auto;
   box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
   border: 1px solid rgba(0, 0, 0, 0.06);
+
+  .noteContentWrap {
+    max-width: 250px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
 }
 </style>
