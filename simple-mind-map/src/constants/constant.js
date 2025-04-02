@@ -15,6 +15,7 @@ export const CONSTANTS = {
     TIMELINE: 'timeline',
     TIMELINE2: 'timeline2',
     FISHBONE: 'fishbone',
+    RIGHT_FISHBONE: 'rightFishbone',
     VERTICAL_TIMELINE: 'verticalTimeline'
   },
   DIR: {
@@ -127,6 +128,10 @@ export const layoutList = [
   {
     name: '鱼骨图',
     value: CONSTANTS.LAYOUT.FISHBONE
+  },
+  {
+    name: '向右鱼骨图',
+    value: CONSTANTS.LAYOUT.RIGHT_FISHBONE
   }
 ]
 export const layoutValueList = [
@@ -138,7 +143,8 @@ export const layoutValueList = [
   CONSTANTS.LAYOUT.TIMELINE,
   CONSTANTS.LAYOUT.TIMELINE2,
   CONSTANTS.LAYOUT.VERTICAL_TIMELINE,
-  CONSTANTS.LAYOUT.FISHBONE
+  CONSTANTS.LAYOUT.FISHBONE,
+  CONSTANTS.LAYOUT.RIGHT_FISHBONE
 ]
 
 // 节点数据中非样式的字段

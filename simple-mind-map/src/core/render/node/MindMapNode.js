@@ -811,7 +811,9 @@ class MindMapNode {
     let childrenLen = this.getChildrenLength()
     // 切换为鱼骨结构时，清空根节点和二级节点的连线
     if (
-      this.mindMap.opt.layout === CONSTANTS.LAYOUT.FISHBONE &&
+      [CONSTANTS.LAYOUT.FISHBONE, CONSTANTS.LAYOUT.RIGHT_FISHBONE].includes(
+        this.mindMap.opt.layout
+      ) &&
       (this.isRoot || this.layerIndex === 1)
     ) {
       childrenLen = 0
