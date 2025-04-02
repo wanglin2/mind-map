@@ -91,6 +91,15 @@ class MindMap {
     // 初始化缓存数据
     this.initCache()
 
+    // 注册插件
+    MindMap.pluginList
+      .filter(plugin => {
+        return plugin.preload
+      })
+      .forEach(plugin => {
+        this.initPlugin(plugin)
+      })
+
     // 事件类
     this.event = new Event({
       mindMap: this
@@ -120,9 +129,13 @@ class MindMap {
     this.batchExecution = new BatchExecution()
 
     // 注册插件
-    MindMap.pluginList.forEach(plugin => {
-      this.initPlugin(plugin)
-    })
+    MindMap.pluginList
+      .filter(plugin => {
+        return !plugin.preload
+      })
+      .forEach(plugin => {
+        this.initPlugin(plugin)
+      })
 
     // 添加必要的css样式
     this.addCss()
