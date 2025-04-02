@@ -117,11 +117,12 @@ class Render {
   //  设置布局结构
   setLayout() {
     const { layout } = this.mindMap.opt
-    this.layout = new (
-      layouts[layout]
-        ? layouts[layout]
-        : layouts[CONSTANTS.LAYOUT.LOGICAL_STRUCTURE]
-    )(this, layout)
+    let L = layouts[layout] || this.mindMap[layout]
+    if (!L) {
+      L = layouts[CONSTANTS.LAYOUT.LOGICAL_STRUCTURE]
+      this.mindMap.opt.layout = CONSTANTS.LAYOUT.LOGICAL_STRUCTURE
+    }
+    this.layout = new L(this, layout)
   }
 
   // 重新设置思维导图数据
