@@ -1,14 +1,19 @@
 //  布局结构图片映射
 export const layoutImgMap = {
-  logicalStructure: require('../assets/img/structures/logicalStructure.png'),
+  logicalStructure: require('../assets/img/structures/logicalStructure.jpg'),
   logicalStructureLeft: require('../assets/img/structures/logicalStructureLeft.jpg'),
-  mindMap: require('../assets/img/structures/mindMap.png'),
-  organizationStructure: require('../assets/img/structures/organizationStructure.png'),
-  catalogOrganization: require('../assets/img/structures/catalogOrganization.png'),
-  timeline: require('../assets/img/structures/timeline.png'),
-  timeline2: require('../assets/img/structures/timeline2.png'),
-  fishbone: require('../assets/img/structures/fishbone.png'),
-  verticalTimeline: require('../assets/img/structures/verticalTimeline.png')
+  mindMap: require('../assets/img/structures/mindMap.jpg'),
+  organizationStructure: require('../assets/img/structures/organizationStructure.jpg'),
+  catalogOrganization: require('../assets/img/structures/catalogOrganization.jpg'),
+  timeline: require('../assets/img/structures/timeline.jpg'),
+  timeline2: require('../assets/img/structures/timeline2.jpg'),
+  fishbone: require('../assets/img/structures/fishbone.jpg'),
+  fishbone2: require('../assets/img/structures/fishbone2.jpg'),
+  rightFishbone: require('../assets/img/structures/rightFishbone.jpg'),
+  rightFishbone2: require('../assets/img/structures/rightFishbone2.jpg'),
+  verticalTimeline: require('../assets/img/structures/verticalTimeline.jpg'),
+  verticalTimeline2: require('../assets/img/structures/verticalTimeline2.jpg'),
+  verticalTimeline3: require('../assets/img/structures/verticalTimeline3.jpg')
 }
 
 // 公式列表

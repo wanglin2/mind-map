@@ -475,7 +475,7 @@ export default {
       this.styleConfig[key] = val
       this.mindMap.outerFrame.updateActiveOuterFrame({
         [key]: val
-      })  
+      })
     },
 
     // 切换加粗样式
@@ -528,23 +528,24 @@ export default {
   padding: 20px;
 
   &.isDark {
-    .panel {
-      background-color: #262a2e;
-      border-left-color: hsla(0, 0%, 100%, 0.1);
-
-      .panelHeader {
-        .name {
-          color: #fff;
-        }
+    .panelHeader {
+      .name {
+        color: #fff;
       }
+    }
 
-      .panelBody {
-        .row {
-          .rowItem {
-            .name {
-              color: hsla(0, 0%, 100%, 0.6);
-            }
+    .panelBody {
+      .row {
+        .rowItem {
+          .name {
+            color: hsla(0, 0%, 100%, 0.6);
           }
+        }
+
+        .styleBtn {
+          background-color: #363b3f;
+          color: hsla(0, 0%, 100%, 0.6);
+          border-color: hsla(0, 0%, 100%, 0.1);
         }
       }
     }

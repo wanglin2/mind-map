@@ -648,3 +648,37 @@ export const alignList = [
     value: 'right'
   }
 ]
+
+// 结构列表
+export const layoutGroupList = [
+  {
+    name: 'Logical structure',
+    list: ['logicalStructure', 'logicalStructureLeft']
+  },
+  {
+    name: 'Mind map',
+    list: ['mindMap']
+  },
+  {
+    name: 'Organization structure',
+    list: ['organizationStructure']
+  },
+  {
+    name: 'Catalog organization',
+    list: ['catalogOrganization']
+  },
+  {
+    name: 'Timeline',
+    list: [
+      'timeline',
+      'timeline2',
+      'verticalTimeline2',
+      'verticalTimeline3',
+      'verticalTimeline'
+    ]
+  },
+  {
+    name: 'Fishbone',
+    list: ['fishbone', 'fishbone2', 'rightFishbone', 'rightFishbone2']
+  }
+]
