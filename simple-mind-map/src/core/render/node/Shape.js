@@ -120,7 +120,7 @@ export default class Shape {
         node = extendShape.createShape(this.node)
       }
     }
-    return node
+    return node || this.createRect()
   }
 
   // 获取节点减去节点边框宽度、hover节点边框宽度后的尺寸
