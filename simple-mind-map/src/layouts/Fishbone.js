@@ -184,10 +184,14 @@ class Fishbone extends Base {
           // 计算二级节点的top值
           if (parent._node.isRoot) {
             let marginY = this.getMarginY(layerIndex)
+            // 带鱼头鱼尾的鱼骨图因为根节点高度比较大，所以二级节点需要向中间靠一点
+            const topOffset = this.isFishbone2() ? parent._node.height / 4 : 0
             if (this.checkIsTop(newNode)) {
-              newNode.top = parent._node.top - newNode.height - marginY
+              newNode.top =
+                parent._node.top - newNode.height - marginY + topOffset
             } else {
-              newNode.top = parent._node.top + parent._node.height + marginY
+              newNode.top =
+                parent._node.top + parent._node.height + marginY - topOffset
             }
           }
         }
@@ -209,8 +213,11 @@ class Fishbone extends Base {
       (node, parent, isRoot, layerIndex) => {
         if (node.isRoot) {
           let marginX = this.getMarginX(layerIndex + 1)
-          let topTotalLeft = node.left + node.width + node.height + marginX
-          let bottomTotalLeft = node.left + node.width + node.height + marginX
+          const heightOffsetRatio = this.isFishbone2() ? 2 : 1
+          let topTotalLeft =
+            node.left + node.width + node.height / heightOffsetRatio + marginX
+          let bottomTotalLeft =
+            node.left + node.width + node.height / heightOffsetRatio + marginX
           node.children.forEach(item => {
             if (this.checkIsTop(item)) {
               item.left = topTotalLeft
@@ -384,7 +391,8 @@ class Fishbone extends Base {
         // 水平线段到二级节点的连线
         let marginY = this.getMarginY(item.layerIndex)
         let nodeLineX = item.left
-        let offset = node.height / 2 + marginY
+        let offset =
+          node.height / 2 + marginY - (this.isFishbone2() ? node.height / 4 : 0)
         let offsetX = offset / Math.tan(degToRad(this.mindMap.opt.fishboneDeg))
         let line = this.lineDraw.path()
         if (this.checkIsTop(item)) {
