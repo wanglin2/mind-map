@@ -407,6 +407,8 @@ class Drag extends Base {
       TIMELINE,
       TIMELINE2,
       VERTICAL_TIMELINE,
+      VERTICAL_TIMELINE2,
+      VERTICAL_TIMELINE3,
       FISHBONE,
       FISHBONE2,
       RIGHT_FISHBONE,
@@ -446,6 +448,8 @@ class Drag extends Base {
           this.handleTimeLine2(node)
           break
         case VERTICAL_TIMELINE:
+        case VERTICAL_TIMELINE2:
+        case VERTICAL_TIMELINE3:
           this.handleLogicalStructure(node)
           break
         case FISHBONE:
@@ -475,6 +479,8 @@ class Drag extends Base {
       TIMELINE,
       TIMELINE2,
       VERTICAL_TIMELINE,
+      VERTICAL_TIMELINE2,
+      VERTICAL_TIMELINE3,
       FISHBONE,
       FISHBONE2,
       RIGHT_FISHBONE,
@@ -572,6 +578,8 @@ class Drag extends Base {
           }
           break
         case VERTICAL_TIMELINE:
+        case VERTICAL_TIMELINE2:
+        case VERTICAL_TIMELINE3:
           if (layerIndex === 0) {
             x =
               lastNodeRect.originLeft +
@@ -667,6 +675,8 @@ class Drag extends Base {
           }
           break
         case VERTICAL_TIMELINE:
+        case VERTICAL_TIMELINE2:
+        case VERTICAL_TIMELINE3:
           if (layerIndex === 0) {
             rotate = true
           }
@@ -718,6 +728,8 @@ class Drag extends Base {
       MIND_MAP,
       TIMELINE2,
       VERTICAL_TIMELINE,
+      VERTICAL_TIMELINE2,
+      VERTICAL_TIMELINE3,
       FISHBONE,
       FISHBONE2,
       RIGHT_FISHBONE,
@@ -731,6 +743,8 @@ class Drag extends Base {
       case MIND_MAP:
       case TIMELINE2:
       case VERTICAL_TIMELINE:
+      case VERTICAL_TIMELINE2:
+      case VERTICAL_TIMELINE3:
       case FISHBONE:
       case FISHBONE2:
       case RIGHT_FISHBONE:
@@ -748,6 +762,8 @@ class Drag extends Base {
     const { LAYOUT, LAYOUT_GROW_DIR } = CONSTANTS
     const {
       VERTICAL_TIMELINE,
+      VERTICAL_TIMELINE2,
+      VERTICAL_TIMELINE3,
       FISHBONE,
       FISHBONE2,
       RIGHT_FISHBONE,
@@ -794,6 +810,8 @@ class Drag extends Base {
         let notRenderLine = false
         switch (layout) {
           case VERTICAL_TIMELINE:
+          case VERTICAL_TIMELINE2:
+          case VERTICAL_TIMELINE3:
             if (layerIndex === 1) {
               x =
                 nodeRect.originLeft +

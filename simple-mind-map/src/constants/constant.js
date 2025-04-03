@@ -18,7 +18,9 @@ export const CONSTANTS = {
     FISHBONE2: 'fishbone2',
     RIGHT_FISHBONE: 'rightFishbone',
     RIGHT_FISHBONE2: 'rightFishbone2',
-    VERTICAL_TIMELINE: 'verticalTimeline'
+    VERTICAL_TIMELINE: 'verticalTimeline',
+    VERTICAL_TIMELINE2: 'verticalTimeline2',
+    VERTICAL_TIMELINE3: 'verticalTimeline3'
   },
   DIR: {
     UP: 'up',
@@ -128,6 +130,14 @@ export const layoutList = [
     value: CONSTANTS.LAYOUT.VERTICAL_TIMELINE
   },
   {
+    name: '竖向时间轴2',
+    value: CONSTANTS.LAYOUT.VERTICAL_TIMELINE2
+  },
+  {
+    name: '竖向时间轴3',
+    value: CONSTANTS.LAYOUT.VERTICAL_TIMELINE3
+  },
+  {
     name: '鱼骨图',
     value: CONSTANTS.LAYOUT.FISHBONE
   },
@@ -153,6 +163,8 @@ export const layoutValueList = [
   CONSTANTS.LAYOUT.TIMELINE,
   CONSTANTS.LAYOUT.TIMELINE2,
   CONSTANTS.LAYOUT.VERTICAL_TIMELINE,
+  CONSTANTS.LAYOUT.VERTICAL_TIMELINE2,
+  CONSTANTS.LAYOUT.VERTICAL_TIMELINE3,
   CONSTANTS.LAYOUT.FISHBONE,
   CONSTANTS.LAYOUT.FISHBONE2,
   CONSTANTS.LAYOUT.RIGHT_FISHBONE,
@@ -174,7 +186,7 @@ export const nodeDataNoStylePropList = [
   'isActive',
   'generalization',
   'richText',
-  'resetRichText',// 重新创建富文本内容，去掉原有样式
+  'resetRichText', // 重新创建富文本内容，去掉原有样式
   'uid',
   'activeStyle',
   'associativeLineTargets',
@@ -192,7 +204,7 @@ export const nodeDataNoStylePropList = [
   'customTextWidth',
   'checkbox',
   'dir',
-  'needUpdate',// 重新创建节点内容
+  'needUpdate', // 重新创建节点内容
   'imgMap'
 ]
 

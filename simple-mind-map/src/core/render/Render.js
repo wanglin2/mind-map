@@ -60,6 +60,10 @@ const layouts = {
   [CONSTANTS.LAYOUT.TIMELINE2]: Timeline,
   // 竖向时间轴
   [CONSTANTS.LAYOUT.VERTICAL_TIMELINE]: VerticalTimeline,
+  // 竖向时间轴2
+  [CONSTANTS.LAYOUT.VERTICAL_TIMELINE2]: VerticalTimeline,
+  // 竖向时间轴3
+  [CONSTANTS.LAYOUT.VERTICAL_TIMELINE3]: VerticalTimeline,
   // 鱼骨图
   [CONSTANTS.LAYOUT.FISHBONE]: Fishbone,
   // 鱼骨图2
