@@ -52,12 +52,34 @@ export default class Shape {
           paddingX: actHeight > actWidth ? actOffset / 2 : 0,
           paddingY: actHeight < actWidth ? actOffset / 2 : 0
         }
-      default:
-        return {
+    }
+    const extendShape = this.getShapeFromExtendList(shape)
+    if (extendShape) {
+      return (
+        extendShape.getPadding({
+          node: this.node,
+          width,
+          height,
+          paddingX,
+          paddingY
+        }) || {
           paddingX: 0,
           paddingY: 0
         }
+      )
+    } else {
+      return {
+        paddingX: 0,
+        paddingY: 0
+      }
     }
+  }
+
+  // 从形状扩展列表里获取指定名称的形状
+  getShapeFromExtendList(shape) {
+    return this.mindMap.extendShapeList.find(item => {
+      return item.name === shape
+    })
   }
 
   //  创建形状节点
@@ -91,6 +113,12 @@ export default class Shape {
     } else if (shape === CONSTANTS.SHAPE.CIRCLE) {
       // 圆
       node = this.createCircle()
+    }
+    if (!node) {
+      const extendShape = this.getShapeFromExtendList(shape)
+      if (extendShape) {
+        node = extendShape.createShape(this.node)
+      }
     }
     return node
   }

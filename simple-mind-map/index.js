@@ -82,6 +82,22 @@ class MindMap {
     // 该检查可以通过customCheckEnableShortcut选项来覆盖
     this.editNodeClassList = []
 
+    // 扩展的节点形状列表
+    /*
+      {
+        createShape: (node) => {
+          return path
+        },
+        getPadding: ({ node, width, height, paddingX, paddingY }) => {
+          return {
+            paddingX: 0,
+            paddingY: 0
+          }  
+        }
+      }
+    */
+    this.extendShapeList = []
+
     // 画布
     this.initContainer()
 
@@ -672,6 +688,26 @@ class MindMap {
       origHeight, // 画布高度
       scaleX: origTransform.scaleX, // 思维导图图形的水平缩放值
       scaleY: origTransform.scaleY // 思维导图图形的垂直缩放值
+    }
+  }
+
+  // 扩展节点形状
+  addShape(shape) {
+    if (!shape) return
+    const exist = this.extendShapeList.find(item => {
+      return item.name === shape.name
+    })
+    if (exist) return
+    this.extendShapeList.push(shape)
+  }
+
+  // 删除扩展的形状
+  removeShape(name) {
+    const index = this.extendShapeList.findIndex(item => {
+      return item.name === name
+    })
+    if (index !== -1) {
+      this.extendShapeList.splice(index, 1)
     }
   }
 
