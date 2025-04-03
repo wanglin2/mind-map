@@ -409,7 +409,8 @@ class Drag extends Base {
       VERTICAL_TIMELINE,
       FISHBONE,
       FISHBONE2,
-      RIGHT_FISHBONE
+      RIGHT_FISHBONE,
+      RIGHT_FISHBONE2
     } = CONSTANTS.LAYOUT
     this.overlapNode = null
     this.prevNode = null
@@ -450,6 +451,7 @@ class Drag extends Base {
         case FISHBONE:
         case FISHBONE2:
         case RIGHT_FISHBONE:
+        case RIGHT_FISHBONE2:
           this.handleFishbone(node)
           break
         default:
@@ -475,7 +477,8 @@ class Drag extends Base {
       VERTICAL_TIMELINE,
       FISHBONE,
       FISHBONE2,
-      RIGHT_FISHBONE
+      RIGHT_FISHBONE,
+      RIGHT_FISHBONE2
     } = CONSTANTS.LAYOUT
     const { LEFT, TOP, RIGHT, BOTTOM } = CONSTANTS.LAYOUT_GROW_DIR
     const layerIndex = this.overlapNode.layerIndex
@@ -588,6 +591,7 @@ class Drag extends Base {
         case FISHBONE:
         case FISHBONE2:
         case RIGHT_FISHBONE:
+        case RIGHT_FISHBONE2:
           if (layerIndex <= 1) {
             notRenderPlaceholder = true
             this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, true)
@@ -678,6 +682,7 @@ class Drag extends Base {
         case FISHBONE:
         case FISHBONE2:
         case RIGHT_FISHBONE:
+        case RIGHT_FISHBONE2:
           if (layerIndex <= 1) {
             notRenderPlaceholder = true
             this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, true)
@@ -715,7 +720,8 @@ class Drag extends Base {
       VERTICAL_TIMELINE,
       FISHBONE,
       FISHBONE2,
-      RIGHT_FISHBONE
+      RIGHT_FISHBONE,
+      RIGHT_FISHBONE2
     } = CONSTANTS.LAYOUT
     switch (this.mindMap.opt.layout) {
       case LOGICAL_STRUCTURE:
@@ -728,6 +734,7 @@ class Drag extends Base {
       case FISHBONE:
       case FISHBONE2:
       case RIGHT_FISHBONE:
+      case RIGHT_FISHBONE2:
         return node.dir
       default:
         return ''
@@ -739,7 +746,13 @@ class Drag extends Base {
   handleVerticalCheck(node, checkList, isReverse = false) {
     const { layout } = this.mindMap.opt
     const { LAYOUT, LAYOUT_GROW_DIR } = CONSTANTS
-    const { VERTICAL_TIMELINE, FISHBONE, FISHBONE2, RIGHT_FISHBONE } = LAYOUT
+    const {
+      VERTICAL_TIMELINE,
+      FISHBONE,
+      FISHBONE2,
+      RIGHT_FISHBONE,
+      RIGHT_FISHBONE2
+    } = LAYOUT
     const { LEFT } = LAYOUT_GROW_DIR
     const mouseMoveX = this.mouseMoveX
     const mouseMoveY = this.mouseMoveY
@@ -789,6 +802,7 @@ class Drag extends Base {
             }
             break
           case RIGHT_FISHBONE:
+          case RIGHT_FISHBONE2:
             x =
               nodeRect.originLeft + nodeRect.originWidth - this.placeholderWidth
             break
@@ -808,6 +822,7 @@ class Drag extends Base {
             case FISHBONE:
             case FISHBONE2:
             case RIGHT_FISHBONE:
+            case RIGHT_FISHBONE2:
               if (layerIndex === 2) {
                 notRenderLine = true
                 y =
@@ -839,6 +854,7 @@ class Drag extends Base {
             case FISHBONE:
             case FISHBONE2:
             case RIGHT_FISHBONE:
+            case RIGHT_FISHBONE2:
               if (layerIndex === 2) {
                 notRenderLine = true
                 y =
@@ -875,7 +891,14 @@ class Drag extends Base {
   handleHorizontalCheck(node, checkList) {
     const { layout } = this.mindMap.opt
     const { LAYOUT } = CONSTANTS
-    const { FISHBONE, FISHBONE2, RIGHT_FISHBONE, TIMELINE, TIMELINE2 } = LAYOUT
+    const {
+      FISHBONE,
+      FISHBONE2,
+      RIGHT_FISHBONE,
+      RIGHT_FISHBONE2,
+      TIMELINE,
+      TIMELINE2
+    } = LAYOUT
     let mouseMoveX = this.mouseMoveX
     let mouseMoveY = this.mouseMoveY
     let nodeRect = this.getNodeRect(node)
@@ -917,6 +940,7 @@ class Drag extends Base {
           case FISHBONE:
           case FISHBONE2:
           case RIGHT_FISHBONE:
+          case RIGHT_FISHBONE2:
             if (layerIndex === 1) {
               notRenderLine = true
               y =
@@ -928,7 +952,7 @@ class Drag extends Base {
           default:
         }
         if (checkIsPrevNode) {
-          if (layout === RIGHT_FISHBONE) {
+          if ([RIGHT_FISHBONE, RIGHT_FISHBONE2].includes(layout)) {
             this.nextNode = node
           } else {
             this.prevNode = node
@@ -943,7 +967,7 @@ class Drag extends Base {
             notRenderLine
           })
         } else if (checkIsNextNode) {
-          if (layout === RIGHT_FISHBONE) {
+          if ([RIGHT_FISHBONE, RIGHT_FISHBONE2].includes(layout)) {
             this.prevNode = node
           } else {
             this.nextNode = node

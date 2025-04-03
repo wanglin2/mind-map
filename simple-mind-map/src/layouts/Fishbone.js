@@ -17,6 +17,11 @@ class Fishbone extends Base {
     this.maxx = 0
     this.headRatio = 1
     this.tailRatio = 0.6
+    this.paddingXRatio = 0.3
+    this.fishHeadPathStr =
+      'M4,181 C4,181, 0,177, 4,173 Q 96.09523809523809,0, 288.2857142857143,0 L 288.2857142857143,354 Q 48.047619047619044,354, 8,218.18367346938777 C8,218.18367346938777, 6,214.18367346938777, 8,214.18367346938777 L 41.183673469387756,214.18367346938777 Z'
+    this.fishTailPathStr =
+      'M 606.9342905223708 0 Q 713.1342905223709 -177 819.3342905223708 -177 L 766.2342905223709 0 L 819.3342905223708 177 Q 713.1342905223709 177 606.9342905223708 0 z'
     this.bindEvent()
     this.extendShape()
     this.beforeChange = this.beforeChange.bind(this)
@@ -50,9 +55,7 @@ class Fishbone extends Base {
     this.mindMap.addShape({
       name: 'fishHead',
       createShape: node => {
-        const rect = SVG(
-          `<path d="M4,181 C4,181, 0,177, 4,173 Q 96.09523809523809,0, 288.2857142857143,0 L 288.2857142857143,354 Q 48.047619047619044,354, 8,218.18367346938777 C8,218.18367346938777, 6,214.18367346938777, 8,214.18367346938777 L 41.183673469387756,214.18367346938777 Z"></path>`
-        )
+        const rect = SVG(`<path d="${this.fishHeadPathStr}"></path>`)
         const { width, height } = node.shapeInstance.getNodeSize()
         rect.size(width, height)
         return rect
@@ -60,7 +63,7 @@ class Fishbone extends Base {
       getPadding: ({ width, height, paddingX, paddingY }) => {
         width += paddingX * 2
         height += paddingY * 2
-        let shapePaddingX = 0.25 * width
+        let shapePaddingX = this.paddingXRatio * width
         let shapePaddingY = 0
         width += shapePaddingX * 2
         const newHeight = width / this.headRatio
@@ -99,9 +102,7 @@ class Fishbone extends Base {
     if (!this.isFishbone2()) return
     const exist = this.mindMap.lineDraw.findOne('.smm-layout-fishbone-tail')
     if (!exist) {
-      this.fishTail = SVG(
-        '<path d="M 606.9342905223708 0 Q 713.1342905223709 -177 819.3342905223708 -177 L 766.2342905223709 0 L 819.3342905223708 177 Q 713.1342905223709 177 606.9342905223708 0 z"></path>'
-      )
+      this.fishTail = SVG(`<path d="${this.fishTailPathStr}"></path>`)
       this.fishTail.addClass('smm-layout-fishbone-tail')
     } else {
       this.fishTail = exist

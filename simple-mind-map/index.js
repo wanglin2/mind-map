@@ -14,7 +14,7 @@ import {
   cssContent,
   nodeDataNoStylePropList
 } from './src/constants/constant'
-import { SVG } from '@svgdotjs/svg.js'
+import { SVG, G, Rect } from '@svgdotjs/svg.js'
 import {
   simpleDeepClone,
   getObjectChangedProps,
@@ -708,6 +708,15 @@ class MindMap {
     })
     if (index !== -1) {
       this.extendShapeList.splice(index, 1)
+    }
+  }
+
+  // 获取SVG.js库的一些对象
+  getSvgObjects() {
+    return {
+      SVG,
+      G,
+      Rect
     }
   }
 
