@@ -810,13 +810,10 @@ class MindMapNode {
     }
     let childrenLen = this.getChildrenLength()
     // 切换为鱼骨结构时，清空根节点和二级节点的连线
-    if (
-      [CONSTANTS.LAYOUT.FISHBONE, CONSTANTS.LAYOUT.RIGHT_FISHBONE].includes(
-        this.mindMap.opt.layout
-      ) &&
-      (this.isRoot || this.layerIndex === 1)
-    ) {
-      childrenLen = 0
+    if (this.mindMap.renderer.layout.nodeIsRemoveAllLines) {
+      if (this.mindMap.renderer.layout.nodeIsRemoveAllLines(this)) {
+        childrenLen = 0
+      }
     }
     if (childrenLen > this._lines.length) {
       // 创建缺少的线

@@ -8,6 +8,18 @@ const backgroundStyleProps = [
   'backgroundSize'
 ]
 
+export const shapeStyleProps = [
+  'gradientStyle',
+  'startColor',
+  'endColor',
+  'startDir',
+  'endDir',
+  'fillColor',
+  'borderColor',
+  'borderWidth',
+  'borderDasharray'
+]
+
 //  样式类
 class Style {
   //   设置背景样式
@@ -128,17 +140,10 @@ class Style {
 
   // 形状
   shape(node) {
-    const styles = {
-      gradientStyle: this.merge('gradientStyle'),
-      startColor: this.merge('startColor'),
-      endColor: this.merge('endColor'),
-      startDir: this.merge('startDir'),
-      endDir: this.merge('endDir'),
-      fillColor: this.merge('fillColor'),
-      borderColor: this.merge('borderColor'),
-      borderWidth: this.merge('borderWidth'),
-      borderDasharray: this.merge('borderDasharray')
-    }
+    const styles = {}
+    shapeStyleProps.forEach(key => {
+      styles[key] = this.merge(key)
+    })
     if (styles.gradientStyle) {
       if (!this._gradient) {
         this._gradient = this.ctx.nodeDraw.gradient('linear')

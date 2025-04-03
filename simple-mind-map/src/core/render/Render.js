@@ -61,7 +61,9 @@ const layouts = {
   // 竖向时间轴
   [CONSTANTS.LAYOUT.VERTICAL_TIMELINE]: VerticalTimeline,
   // 鱼骨图
-  [CONSTANTS.LAYOUT.FISHBONE]: Fishbone
+  [CONSTANTS.LAYOUT.FISHBONE]: Fishbone,
+  // 鱼骨图2
+  [CONSTANTS.LAYOUT.FISHBONE2]: Fishbone
 }
 
 //  渲染
@@ -116,6 +118,9 @@ class Render {
 
   //  设置布局结构
   setLayout() {
+    if (this.layout && this.layout.beforeChange) {
+      this.layout.beforeChange()
+    }
     const { layout } = this.mindMap.opt
     let L = layouts[layout] || this.mindMap[layout]
     if (!L) {

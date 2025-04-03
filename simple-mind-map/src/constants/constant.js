@@ -15,6 +15,7 @@ export const CONSTANTS = {
     TIMELINE: 'timeline',
     TIMELINE2: 'timeline2',
     FISHBONE: 'fishbone',
+    FISHBONE2: 'fishbone2',
     RIGHT_FISHBONE: 'rightFishbone',
     VERTICAL_TIMELINE: 'verticalTimeline'
   },
@@ -130,6 +131,10 @@ export const layoutList = [
     value: CONSTANTS.LAYOUT.FISHBONE
   },
   {
+    name: '鱼骨图2',
+    value: CONSTANTS.LAYOUT.FISHBONE2
+  },
+  {
     name: '向右鱼骨图',
     value: CONSTANTS.LAYOUT.RIGHT_FISHBONE
   }
@@ -144,6 +149,7 @@ export const layoutValueList = [
   CONSTANTS.LAYOUT.TIMELINE2,
   CONSTANTS.LAYOUT.VERTICAL_TIMELINE,
   CONSTANTS.LAYOUT.FISHBONE,
+  CONSTANTS.LAYOUT.FISHBONE2,
   CONSTANTS.LAYOUT.RIGHT_FISHBONE
 ]
 

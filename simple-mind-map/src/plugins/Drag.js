@@ -408,6 +408,7 @@ class Drag extends Base {
       TIMELINE2,
       VERTICAL_TIMELINE,
       FISHBONE,
+      FISHBONE2,
       RIGHT_FISHBONE
     } = CONSTANTS.LAYOUT
     this.overlapNode = null
@@ -447,6 +448,7 @@ class Drag extends Base {
           this.handleLogicalStructure(node)
           break
         case FISHBONE:
+        case FISHBONE2:
         case RIGHT_FISHBONE:
           this.handleFishbone(node)
           break
@@ -472,6 +474,7 @@ class Drag extends Base {
       TIMELINE2,
       VERTICAL_TIMELINE,
       FISHBONE,
+      FISHBONE2,
       RIGHT_FISHBONE
     } = CONSTANTS.LAYOUT
     const { LEFT, TOP, RIGHT, BOTTOM } = CONSTANTS.LAYOUT_GROW_DIR
@@ -583,6 +586,7 @@ class Drag extends Base {
           }
           break
         case FISHBONE:
+        case FISHBONE2:
         case RIGHT_FISHBONE:
           if (layerIndex <= 1) {
             notRenderPlaceholder = true
@@ -672,6 +676,7 @@ class Drag extends Base {
             halfPlaceholderHeight
           break
         case FISHBONE:
+        case FISHBONE2:
         case RIGHT_FISHBONE:
           if (layerIndex <= 1) {
             notRenderPlaceholder = true
@@ -709,6 +714,7 @@ class Drag extends Base {
       TIMELINE2,
       VERTICAL_TIMELINE,
       FISHBONE,
+      FISHBONE2,
       RIGHT_FISHBONE
     } = CONSTANTS.LAYOUT
     switch (this.mindMap.opt.layout) {
@@ -720,6 +726,7 @@ class Drag extends Base {
       case TIMELINE2:
       case VERTICAL_TIMELINE:
       case FISHBONE:
+      case FISHBONE2:
       case RIGHT_FISHBONE:
         return node.dir
       default:
@@ -732,7 +739,7 @@ class Drag extends Base {
   handleVerticalCheck(node, checkList, isReverse = false) {
     const { layout } = this.mindMap.opt
     const { LAYOUT, LAYOUT_GROW_DIR } = CONSTANTS
-    const { VERTICAL_TIMELINE, FISHBONE, RIGHT_FISHBONE } = LAYOUT
+    const { VERTICAL_TIMELINE, FISHBONE, FISHBONE2, RIGHT_FISHBONE } = LAYOUT
     const { LEFT } = LAYOUT_GROW_DIR
     const mouseMoveX = this.mouseMoveX
     const mouseMoveY = this.mouseMoveY
@@ -799,6 +806,7 @@ class Drag extends Base {
             this.placeholderHeight / 2
           switch (layout) {
             case FISHBONE:
+            case FISHBONE2:
             case RIGHT_FISHBONE:
               if (layerIndex === 2) {
                 notRenderLine = true
@@ -829,6 +837,7 @@ class Drag extends Base {
             this.placeholderHeight / 2
           switch (layout) {
             case FISHBONE:
+            case FISHBONE2:
             case RIGHT_FISHBONE:
               if (layerIndex === 2) {
                 notRenderLine = true
@@ -866,7 +875,7 @@ class Drag extends Base {
   handleHorizontalCheck(node, checkList) {
     const { layout } = this.mindMap.opt
     const { LAYOUT } = CONSTANTS
-    const { FISHBONE, RIGHT_FISHBONE, TIMELINE, TIMELINE2 } = LAYOUT
+    const { FISHBONE, FISHBONE2, RIGHT_FISHBONE, TIMELINE, TIMELINE2 } = LAYOUT
     let mouseMoveX = this.mouseMoveX
     let mouseMoveY = this.mouseMoveY
     let nodeRect = this.getNodeRect(node)
@@ -906,6 +915,7 @@ class Drag extends Base {
               this.placeholderWidth / 2
             break
           case FISHBONE:
+          case FISHBONE2:
           case RIGHT_FISHBONE:
             if (layerIndex === 1) {
               notRenderLine = true
