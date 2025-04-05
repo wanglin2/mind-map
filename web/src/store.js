@@ -45,7 +45,9 @@ const store = new Vuex.Store({
       model: '',
       port: 3456,
       method: 'POST'
-    }
+    },
+    // 扩展主题列表
+    extendThemeGroupList: []
   },
   mutations: {
     // 设置操作本地文件标志位
@@ -137,6 +139,11 @@ const store = new Vuex.Store({
     // 设置树节点拖拽
     setIsDragOutlineTreeNode(state, data) {
       state.isDragOutlineTreeNode = data
+    },
+
+    // 扩展主题列表
+    setExtendThemeGroupList(state, data) {
+      state.extendThemeGroupList = data
     }
   },
   actions: {}

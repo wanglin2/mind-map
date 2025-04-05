@@ -17,7 +17,7 @@
         :class="{ active: item.value === theme }"
       >
         <div class="imgBox">
-          <img :src="themeImgMap[item.value]" alt="" />
+          <img :src="item.img || themeImgMap[item.value]" alt="" />
         </div>
         <div class="name">{{ item.name }}</div>
       </div>
@@ -59,14 +59,19 @@ export default {
       themeImgMap,
       theme: '',
       activeName: '',
-      groupList: []
+      defaultGroupList: []
     }
   },
   computed: {
     ...mapState({
       isDark: state => state.localConfig.isDark,
-      activeSidebar: state => state.activeSidebar
+      activeSidebar: state => state.activeSidebar,
+      extendThemeGroupList: state => state.extendThemeGroupList
     }),
+
+    groupList() {
+      return [...this.defaultGroupList, ...this.extendThemeGroupList]
+    },
 
     currentList() {
       return this.groupList.find(item => {
@@ -101,7 +106,7 @@ export default {
     },
 
     initGroup() {
-      let baiduThemes = [
+      const baiduThemes = [
         'default',
         'skyGreen',
         'classic2',
@@ -117,8 +122,8 @@ export default {
         'pinkGrape',
         'mint'
       ]
-      let baiduList = []
-      let classicsList = []
+      const baiduList = []
+      const classicsList = []
       this.themeList.forEach(item => {
         if (baiduThemes.includes(item.value)) {
           baiduList.push(item)
@@ -126,7 +131,7 @@ export default {
           classicsList.push(item)
         }
       })
-      this.groupList = [
+      this.defaultGroupList = [
         {
           name: this.$t('theme.classics'),
           list: classicsList
@@ -142,7 +147,7 @@ export default {
           list: baiduList
         }
       ]
-      this.activeName = this.groupList[0].name
+      this.activeName = this.defaultGroupList[0].name
     },
 
     useTheme(theme) {
@@ -184,7 +189,11 @@ export default {
     },
 
     handleDark() {
-      let target = this.themeList.find(item => {
+      const extendThemeList = []
+      this.extendThemeGroupList.forEach(group => {
+        extendThemeList.push(...group.list)
+      })
+      let target = [...this.themeList, ...extendThemeList].find(item => {
         return item.value === this.theme
       })
       this.setLocalConfig({
@@ -213,7 +222,9 @@ export default {
     margin-bottom: 20px;
     padding-bottom: 20px;
     transition: all 0.2s;
-    border: 1px solid transparent;
+    border: 3px solid transparent;
+    border-radius: 5px;
+    overflow: hidden;
 
     &:last-of-type {
       border: none;
@@ -225,7 +236,7 @@ export default {
     }
 
     &.active {
-      border: 1px solid #67c23a;
+      border: 3px solid rgb(154, 198, 250);
     }
 
     .imgBox {

@@ -102,7 +102,8 @@ import Checkbox from 'simple-mind-map-plugin-checkbox'
 import LineFlow from 'simple-mind-map-plugin-lineflow'
 import Momentum from 'simple-mind-map-plugin-momentum'
 import RightFishbone from 'simple-mind-map-plugin-right-fishbone'
-// npm link simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map-plugin-checkbox simple-mind-map simple-mind-map-plugin-themes simple-mind-map-plugin-lineflow simple-mind-map-plugin-momentum simple-mind-map-plugin-right-fishbone
+import MoreThemes from 'simple-mind-map-plugin-more-themes'
+// npm link simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map-plugin-checkbox simple-mind-map simple-mind-map-plugin-themes simple-mind-map-plugin-lineflow simple-mind-map-plugin-momentum simple-mind-map-plugin-right-fishbone simple-mind-map-plugin-more-themes
 import OutlineSidebar from './OutlineSidebar.vue'
 import Style from './Style.vue'
 import BaseStyle from './BaseStyle.vue'
@@ -171,6 +172,10 @@ MindMap.usePlugin(MiniMap)
 
 // 注册主题
 Themes.init(MindMap)
+// 扩展主题列表
+if (typeof MoreThemes !== 'undefined') {
+  MoreThemes.init(MindMap)
+}
 
 export default {
   components: {
@@ -696,6 +701,24 @@ export default {
       if (typeof LineFlow !== 'undefined') {
         this.mindMap.addPlugin(LineFlow)
         this.$store.commit('setSupportLineFlow', true)
+      }
+      // 扩展侧边主题列表
+      if (typeof MoreThemes !== 'undefined') {
+        const extendThemeGroupList = [
+          {
+            name: '带背景', // 主题组名称
+            // 主题列表
+            list: [...MoreThemes.lightList, ...MoreThemes.darkList].map(
+              item => {
+                return {
+                  ...item,
+                  img: MoreThemes.themeImgMap[item.value]
+                }
+              }
+            )
+          }
+        ]
+        this.$store.commit('setExtendThemeGroupList', extendThemeGroupList)
       }
     },
 
