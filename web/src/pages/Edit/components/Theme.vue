@@ -1,7 +1,7 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('theme.title')">
-    <div class="themeList" :class="{ isDark: isDark }">
-      <el-tabs v-model="activeName">
+    <div class="themeGroupList" :class="{ isDark: isDark }">
+      <el-tabs v-model="activeName" class="tabBox">
         <el-tab-pane
           v-for="group in groupList"
           :key="group.name"
@@ -9,17 +9,19 @@
           :name="group.name"
         ></el-tab-pane>
       </el-tabs>
-      <div
-        class="themeItem"
-        v-for="item in currentList"
-        :key="item.value"
-        @click="useTheme(item)"
-        :class="{ active: item.value === theme }"
-      >
-        <div class="imgBox">
-          <img :src="item.img || themeImgMap[item.value]" alt="" />
+      <div class="themeListTheme customScrollbar">
+        <div
+          class="themeItem"
+          v-for="item in currentList"
+          :key="item.value"
+          @click="useTheme(item)"
+          :class="{ active: item.value === theme }"
+        >
+          <div class="imgBox">
+            <img :src="item.img || themeImgMap[item.value]" alt="" />
+          </div>
+          <div class="name">{{ item.name }}</div>
         </div>
-        <div class="name">{{ item.name }}</div>
       </div>
     </div>
   </Sidebar>
@@ -205,9 +207,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.themeList {
-  padding: 20px;
-  padding-top: 0;
+.themeGroupList {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
 
   &.isDark {
     .name {
@@ -215,40 +219,55 @@ export default {
     }
   }
 
-  .themeItem {
-    width: 100%;
-    cursor: pointer;
-    border-bottom: 1px solid #e9e9e9;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    transition: all 0.2s;
-    border: 3px solid transparent;
-    border-radius: 5px;
-    overflow: hidden;
+  .tabBox {
+    flex-shrink: 0;
 
-    &:last-of-type {
-      border: none;
+    /deep/ .el-tabs__nav-wrap {
+      display: flex;
+      justify-content: center;
     }
+  }
 
-    &:hover {
-      box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16),
-        0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);
-    }
+  .themeListTheme {
+    height: 100%;
+    overflow-y: auto;
+    padding: 0 20px;
 
-    &.active {
-      border: 3px solid rgb(154, 198, 250);
-    }
-
-    .imgBox {
+    .themeItem {
       width: 100%;
+      cursor: pointer;
+      border-bottom: 1px solid #e9e9e9;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      transition: all 0.2s;
+      border: 3px solid transparent;
+      border-radius: 5px;
+      overflow: hidden;
 
-      img {
-        width: 100%;
+      &:last-of-type {
+        border: none;
       }
-    }
-    .name {
-      text-align: center;
-      font-size: 14px;
+
+      &:hover {
+        box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16),
+          0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);
+      }
+
+      &.active {
+        border: 3px solid rgb(154, 198, 250);
+      }
+
+      .imgBox {
+        width: 100%;
+
+        img {
+          width: 100%;
+        }
+      }
+      .name {
+        text-align: center;
+        font-size: 14px;
+      }
     }
   }
 }
