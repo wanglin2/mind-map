@@ -128,7 +128,13 @@ class Export {
   }
 
   //   svg转png
-  svgToPng(svgSrc, transparent, clipData = null, fitBg = false) {
+  svgToPng(
+    svgSrc,
+    transparent,
+    clipData = null,
+    fitBg = false,
+    format = 'image/png'
+  ) {
     const { maxCanvasSize, minExportImgCanvasScale } = this.mindMap.opt
     return new Promise((resolve, reject) => {
       const img = new Image()
@@ -233,7 +239,7 @@ class Export {
           } else {
             ctx.drawImage(img, fitBgLeft, fitBgTop, imgWidth, imgHeight)
           }
-          resolve(canvas.toDataURL())
+          resolve(canvas.toDataURL(format))
         } catch (error) {
           reject(error)
         }
@@ -311,17 +317,35 @@ class Export {
     })
   }
 
+  // 导出为指定格式的图片
+  async _image(format, name, transparent = false, node = null, fitBg = false) {
+    this.mindMap.renderer.textEdit.hideEditTextBox()
+    this.handleNodeExport(node)
+    const { str, clipData } = await this.getSvgData(node)
+    const svgUrl = await this.fixSvgStrAndToBlob(str)
+    const res = await this.svgToPng(
+      svgUrl,
+      transparent,
+      clipData,
+      fitBg,
+      format
+    )
+    return res
+  }
+
   //  导出为png
   /**
    * 方法1.把svg的图片都转化成data:url格式，再转换
    * 方法2.把svg的图片提取出来再挨个绘制到canvas里，最后一起转换
    */
-  async png(name, transparent = false, node = null, fitBg = false) {
-    this.mindMap.renderer.textEdit.hideEditTextBox()
-    this.handleNodeExport(node)
-    const { str, clipData } = await this.getSvgData(node)
-    const svgUrl = await this.fixSvgStrAndToBlob(str)
-    const res = await this.svgToPng(svgUrl, transparent, clipData, fitBg)
+  async png(...args) {
+    const res = await this._image('image/png', ...args)
+    return res
+  }
+
+  // 导出为jpg
+  async jpg(...args) {
+    const res = await this._image('image/jpg', ...args)
     return res
   }
 
