@@ -41,7 +41,8 @@ export default {
     rainbowLines: 'Rainbow lines',
     notUseRainbowLines: 'Not use rainbow lines',
     outerFramePadding: 'Outer frame padding',
-    associativeLineStyle: 'Associative line style'
+    associativeLineStyle: 'Associative line style',
+    builtInBackgroundImage: 'Built in background image'
   },
   setting: {
     title: 'Setting',

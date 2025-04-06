@@ -41,7 +41,8 @@ export default {
     rainbowLines: '彩虹線條',
     notUseRainbowLines: '不使用彩虹線條',
     outerFramePadding: '外框內距',
-    associativeLineStyle: '關聯線樣式'
+    associativeLineStyle: '關聯線樣式',
+    builtInBackgroundImage: '內置背景圖片'
   },
   setting: {
     title: '設置',

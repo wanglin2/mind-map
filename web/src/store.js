@@ -47,7 +47,9 @@ const store = new Vuex.Store({
       method: 'POST'
     },
     // 扩展主题列表
-    extendThemeGroupList: []
+    extendThemeGroupList: [],
+    // 内置背景图片
+    bgList: []
   },
   mutations: {
     // 设置操作本地文件标志位
@@ -144,6 +146,11 @@ const store = new Vuex.Store({
     // 扩展主题列表
     setExtendThemeGroupList(state, data) {
       state.extendThemeGroupList = data
+    },
+
+    // 设置背景图片列表
+    setBgList(state, data) {
+      state.bgList = data
     }
   },
   actions: {}

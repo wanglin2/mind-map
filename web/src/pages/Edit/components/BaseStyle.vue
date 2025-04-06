@@ -98,6 +98,30 @@
                 </el-option>
               </el-select>
             </div>
+            <!-- 内置背景图片 -->
+            <div
+              class="rowItem spaceBetween"
+              style="margin-top: 8px; margin-bottom: 8px;"
+              v-if="bgList.length > 0"
+            >
+              <div class="name">{{ $t('baseStyle.builtInBackgroundImage') }}</div>
+              <div
+                class="iconBtn el-icon-arrow-down"
+                :class="{ top: !bgListExpand }"
+                @click="bgListExpand = !bgListExpand"
+              ></div>
+            </div>
+            <div class="bgList" :class="{ expand: bgListExpand }">
+              <div
+                class="bgItem"
+                v-for="(item, index) in bgList"
+                :key="index"
+                :class="{active: style.backgroundImage === item}"
+                @click="useBg(item)"
+              >
+                <img :src="item" alt="" />
+              </div>
+            </div>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -899,7 +923,8 @@ export default {
       outerFramePadding: {
         outerFramePaddingX: 0,
         outerFramePaddingY: 0
-      }
+      },
+      bgListExpand: true
     }
   },
   computed: {
@@ -907,7 +932,8 @@ export default {
       activeSidebar: state => state.activeSidebar,
       localConfig: state => state.localConfig,
       isDark: state => state.localConfig.isDark,
-      supportLineFlow: state => state.supportLineFlow
+      supportLineFlow: state => state.supportLineFlow,
+      bgList: state => state.bgList
     }),
     lineStyleList() {
       return lineStyleList[this.$i18n.locale] || lineStyleList.zh
@@ -1106,6 +1132,10 @@ export default {
           config: this.data.theme.config
         }
       })
+    },
+
+    useBg(bg) {
+      this.update('backgroundImage', bg)
     }
   }
 }
@@ -1172,6 +1202,10 @@ export default {
       align-items: center;
       margin-bottom: 5px;
 
+      &.spaceBetween {
+        justify-content: space-between;
+      }
+
       .name {
         font-size: 12px;
         margin-right: 10px;
@@ -1196,6 +1230,15 @@ export default {
         align-items: center;
         justify-content: center;
         cursor: pointer;
+      }
+
+      .iconBtn {
+        cursor: pointer;
+        transition: all 0.3s;
+
+        &.top {
+          transform: rotateZ(-180deg);
+        }
       }
     }
 
@@ -1222,6 +1265,38 @@ export default {
         right: 0;
         bottom: 0;
         height: 2px;
+      }
+    }
+
+    .bgList {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      height: 75px;
+
+      &.expand {
+        height: max-content;
+      }
+
+      .bgItem {
+        width: 120px;
+        height: 73px;
+        border: 1px solid #e9e9e9;
+        border-radius: 5px;
+        overflow: hidden;
+        padding: 5px;
+        margin-bottom: 8px;
+        cursor: pointer;
+
+        &.active {
+          border-color: #409eff;
+        }
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
       }
     }
   }

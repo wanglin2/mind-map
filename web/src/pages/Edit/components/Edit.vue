@@ -719,6 +719,7 @@ export default {
           }
         ]
         this.$store.commit('setExtendThemeGroupList', extendThemeGroupList)
+        this.$store.commit('setBgList', MoreThemes.bgList)
       }
     },
 
