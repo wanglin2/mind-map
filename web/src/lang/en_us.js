@@ -171,7 +171,8 @@ export default {
     addFooterTextPlaceholder: 'For example: From simple-mind-map',
     addFooterText: 'Add text at the footer',
     desc: 'Desc',
-    options: 'Options'
+    options: 'Options',
+    isFitBg: 'Whether to display the complete background image (effective when a background image is used)'
   },
   fullscreen: {
     fullscreenShow: 'Full screen show',

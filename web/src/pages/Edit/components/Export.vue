@@ -100,6 +100,11 @@
                     >{{ $t('export.isTransparent') }}</el-checkbox
                   >
                 </div>
+                <div class="valueSubItem">
+                  <el-checkbox v-show="showFitBgOption" v-model="isFitBg">{{
+                    $t('export.isFitBg')
+                  }}</el-checkbox>
+                </div>
               </div>
             </div>
           </div>
@@ -136,7 +141,8 @@ export default {
       paddingX: 10,
       paddingY: 10,
       extraText: '',
-      isMobile: isMobile()
+      isMobile: isMobile(),
+      isFitBg: true
     }
   },
   computed: {
@@ -166,6 +172,10 @@ export default {
         return item.type === this.exportType
       })
       return cur
+    },
+
+    showFitBgOption() {
+      return ['png', 'pdf'].includes(this.exportType) && !this.isTransparent
     }
   },
   created() {
@@ -220,7 +230,9 @@ export default {
           this.exportType,
           true,
           this.fileName,
-          this.isTransparent
+          this.isTransparent,
+          null,
+          this.isFitBg
         )
       } else if (this.exportType === 'pdf') {
         this.$bus.$emit(
@@ -228,7 +240,8 @@ export default {
           this.exportType,
           true,
           this.fileName,
-          this.isTransparent
+          this.isTransparent,
+          this.isFitBg
         )
       } else if (this.exportType === 'mm') {
         this.$bus.$emit('export', this.exportType, true, this.fileName, {

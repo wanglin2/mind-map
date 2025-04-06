@@ -167,7 +167,8 @@ export default {
     addFooterText: '在底部新增文字',
     addFooterTextPlaceholder: '例如：來自 simple-mind-map',
     desc: '說明',
-    options: '選項'
+    options: '選項',
+    isFitBg: '是否顯示完整背景圖片（使用了背景圖片時生效）'
   },
   fullscreen: {
     fullscreenShow: '全螢幕檢視',
