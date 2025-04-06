@@ -15,7 +15,7 @@
     <Navigator v-if="mindMap" :mindMap="mindMap"></Navigator>
     <NavigatorToolbar :mindMap="mindMap" v-if="!isZenMode"></NavigatorToolbar>
     <OutlineSidebar :mindMap="mindMap"></OutlineSidebar>
-    <Style v-if="!isZenMode"></Style>
+    <Style v-if="mindMap && !isZenMode" :mindMap="mindMap"></Style>
     <BaseStyle
       :data="mindMapData"
       :configData="mindMapConfig"
@@ -102,8 +102,9 @@ import Checkbox from 'simple-mind-map-plugin-checkbox'
 import LineFlow from 'simple-mind-map-plugin-lineflow'
 import Momentum from 'simple-mind-map-plugin-momentum'
 import RightFishbone from 'simple-mind-map-plugin-right-fishbone'
+import MoreShapes from 'simple-mind-map-plugin-more-shapes'
 import MoreThemes from 'simple-mind-map-plugin-more-themes'
-// npm link simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map-plugin-checkbox simple-mind-map simple-mind-map-plugin-themes simple-mind-map-plugin-lineflow simple-mind-map-plugin-momentum simple-mind-map-plugin-right-fishbone simple-mind-map-plugin-more-themes
+// npm link simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map-plugin-checkbox simple-mind-map simple-mind-map-plugin-themes simple-mind-map-plugin-lineflow simple-mind-map-plugin-momentum simple-mind-map-plugin-right-fishbone simple-mind-map-plugin-more-themes simple-mind-map-plugin-more-shapes
 import OutlineSidebar from './OutlineSidebar.vue'
 import Style from './Style.vue'
 import BaseStyle from './BaseStyle.vue'
@@ -701,6 +702,10 @@ export default {
       if (typeof LineFlow !== 'undefined') {
         this.mindMap.addPlugin(LineFlow)
         this.$store.commit('setSupportLineFlow', true)
+      }
+      if (typeof MoreShapes !== 'undefined') {
+        this.mindMap.addPlugin(MoreShapes)
+        this.$store.commit('setSupportMoreShapes', true)
       }
       // 扩展侧边主题列表
       if (typeof MoreThemes !== 'undefined') {

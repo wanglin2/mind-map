@@ -38,6 +38,7 @@ const store = new Vuex.Store({
     supportCheckbox: false, // 是否支持Checkbox插件
     supportLineFlow: false, // 是否支持LineFlow插件
     supportMomentum: false, // 是否支持Momentum插件
+    supportMoreShapes: false,// 是否支持MoreShapes插件
     isDragOutlineTreeNode: false, // 当前是否正在拖拽大纲树的节点
     aiConfig: {
       api: 'http://ark.cn-beijing.volces.com/api/v3/chat/completions',
@@ -136,6 +137,11 @@ const store = new Vuex.Store({
     // 设置是否支持Momentum插件
     setSupportMomentum(state, data) {
       state.supportMomentum = data
+    },
+
+    // 设置是否支持MoreShapes插件
+    setSupportMoreShapes(state, data) {
+      state.supportMoreShapes = data
     },
 
     // 设置树节点拖拽

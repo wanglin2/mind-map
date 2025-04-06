@@ -316,8 +316,13 @@
                 :key="item.value"
                 :label="item.name"
                 :value="item.value"
+                style="display: flex; justify-content: center; align-items: center;"
               >
-                <svg width="60" height="26" style="margin-top: 5px">
+                <svg
+                  :width="item.width || 60"
+                  :height="item.height || 26"
+                  style="margin-top: 5px"
+                >
                   <path
                     :d="shapeListMap[item.value]"
                     fill="none"
@@ -572,6 +577,11 @@ export default {
     Sidebar,
     Color
   },
+  props: {
+    mindMap: {
+      type: Object
+    }
+  },
   data() {
     return {
       fontSizeList,
@@ -623,10 +633,27 @@ export default {
       return borderDasharrayList[this.$i18n.locale] || borderDasharrayList.zh
     },
     shapeList() {
-      return shapeList[this.$i18n.locale] || shapeList.zh
+      return [
+        ...(shapeList[this.$i18n.locale] || shapeList.zh),
+        ...this.mindMap.extendShapeList.map(item => {
+          return {
+            width: '40px',
+            name: item.nameShow,
+            value: item.name
+          }
+        })
+      ]
     },
     shapeListMap() {
-      return shapeListMap[this.$i18n.locale] || shapeListMap.zh
+      const map = shapeListMap[this.$i18n.locale] || shapeListMap.zh
+      const map2 = {}
+      this.mindMap.extendShapeList.forEach(item => {
+        map2[item.name] = item.path
+      })
+      return {
+        ...map,
+        ...map2
+      }
     },
     linearGradientDirList() {
       return (
