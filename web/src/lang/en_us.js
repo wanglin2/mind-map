@@ -172,7 +172,8 @@ export default {
     addFooterText: 'Add text at the footer',
     desc: 'Desc',
     options: 'Options',
-    isFitBg: 'Whether to display the complete background image (effective when a background image is used)'
+    isFitBg: 'Whether to display the complete background image (effective when a background image is used)',
+    format: 'Format'
   },
   fullscreen: {
     fullscreenShow: 'Full screen show',

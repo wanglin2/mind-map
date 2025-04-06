@@ -167,7 +167,8 @@ export default {
     addFooterTextPlaceholder: '比如：来自simple-mind-map',
     desc: '说明',
     options: '选项',
-    isFitBg: '是否显示完整背景图片（使用了背景图片时生效）'
+    isFitBg: '是否显示完整背景图片（使用了背景图片时生效）',
+    format: '格式'
   },
   fullscreen: {
     fullscreenShow: '全屏查看',

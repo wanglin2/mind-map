@@ -61,6 +61,13 @@
                 class="valueItem"
                 v-show="['svg', 'png', 'pdf'].includes(exportType)"
               >
+                <div class="valueSubItem" v-if="['png'].includes(exportType)">
+                  <span class="name">{{ $t('export.format') }}</span>
+                  <el-radio-group v-model="imageFormat">
+                    <el-radio label="png">PNG</el-radio>
+                    <el-radio label="jpg">JPG</el-radio>
+                  </el-radio-group>
+                </div>
                 <div class="valueSubItem">
                   <span class="name">{{ $t('export.paddingX') }}</span>
                   <el-input
@@ -142,7 +149,8 @@ export default {
       paddingY: 10,
       extraText: '',
       isMobile: isMobile(),
-      isFitBg: true
+      isFitBg: true,
+      imageFormat: 'png'
     }
   },
   computed: {
@@ -227,7 +235,7 @@ export default {
       } else if (this.exportType === 'png') {
         this.$bus.$emit(
           'export',
-          this.exportType,
+          this.imageFormat,
           true,
           this.fileName,
           this.isTransparent,
@@ -525,6 +533,7 @@ export default {
             .valueItem {
               .valueSubItem {
                 margin-bottom: 12px;
+                display: flex;
 
                 &:last-of-type {
                   margin-right: 0;
@@ -532,6 +541,7 @@ export default {
 
                 .name {
                   margin-right: 12px;
+                  width: 100px;
                 }
               }
             }
