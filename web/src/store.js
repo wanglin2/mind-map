@@ -38,7 +38,9 @@ const store = new Vuex.Store({
     supportCheckbox: false, // 是否支持Checkbox插件
     supportLineFlow: false, // 是否支持LineFlow插件
     supportMomentum: false, // 是否支持Momentum插件
-    supportMoreShapes: false,// 是否支持MoreShapes插件
+    supportRightFishbone: false, // 是否支持RightFishbone插件
+    supportNodeLink: false, // 是否支持NodeLink插件
+    supportMoreShapes: false, // 是否支持MoreShapes插件
     isDragOutlineTreeNode: false, // 当前是否正在拖拽大纲树的节点
     aiConfig: {
       api: 'http://ark.cn-beijing.volces.com/api/v3/chat/completions',
@@ -137,6 +139,16 @@ const store = new Vuex.Store({
     // 设置是否支持Momentum插件
     setSupportMomentum(state, data) {
       state.supportMomentum = data
+    },
+
+    // 设置是否支持RightFishbone插件
+    setSupportRightFishbone(state, data) {
+      state.supportRightFishbone = data
+    },
+
+    // 设置是否支持NodeLink插件
+    setSupportNodeLink(state, data) {
+      state.supportNodeLink = data
     },
 
     // 设置是否支持MoreShapes插件

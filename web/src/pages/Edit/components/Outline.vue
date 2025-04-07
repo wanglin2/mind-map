@@ -350,7 +350,8 @@ export default {
     padding-right: 20px;
   }
 }
-
+</style>
+<style lang="less">
 .outlineTree {
   &.isDark {
     background-color: #262a2e;

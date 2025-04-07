@@ -54,6 +54,10 @@
     <NodeNoteSidebar v-if="mindMap" :mindMap="mindMap"></NodeNoteSidebar>
     <AiCreate v-if="mindMap && enableAi" :mindMap="mindMap"></AiCreate>
     <AiChat v-if="enableAi"></AiChat>
+    <LinkNodeSelect
+      v-if="mindMap && supportNodeLink"
+      :mindMap="mindMap"
+    ></LinkNodeSelect>
     <div
       class="dragMask"
       v-if="showDragMask"
@@ -92,7 +96,7 @@ import NodeBase64ImageStorage from 'simple-mind-map/src/plugins/NodeBase64ImageS
 import Themes from 'simple-mind-map-plugin-themes'
 // 协同编辑插件
 // import Cooperate from 'simple-mind-map/src/plugins/Cooperate.js'
-// 以下插件为付费插件，详情请查看开发文档。依次为：手绘风格插件、标记插件、编号插件、Freemind软件格式导入导出插件、Excel软件格式导入导出插件、待办插件、节点连线流动效果插件、动量效果插件
+// 以下插件为付费插件，详情请查看开发文档。依次为：手绘风格插件、标记插件、编号插件、Freemind软件格式导入导出插件、Excel软件格式导入导出插件、待办插件、节点连线流动效果插件、动量效果插件、向右鱼骨图插件、节点链接插件、扩展节点形状插件、扩展主题列表插件
 import HandDrawnLikeStyle from 'simple-mind-map-plugin-handdrawnlikestyle'
 import Notation from 'simple-mind-map-plugin-notation'
 import Numbers from 'simple-mind-map-plugin-numbers'
@@ -102,9 +106,12 @@ import Checkbox from 'simple-mind-map-plugin-checkbox'
 import LineFlow from 'simple-mind-map-plugin-lineflow'
 import Momentum from 'simple-mind-map-plugin-momentum'
 import RightFishbone from 'simple-mind-map-plugin-right-fishbone'
+import NodeLink from 'simple-mind-map-plugin-node-link'
 import MoreShapes from 'simple-mind-map-plugin-more-shapes'
 import MoreThemes from 'simple-mind-map-plugin-more-themes'
-// npm link simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map-plugin-checkbox simple-mind-map simple-mind-map-plugin-themes simple-mind-map-plugin-lineflow simple-mind-map-plugin-momentum simple-mind-map-plugin-right-fishbone simple-mind-map-plugin-more-themes simple-mind-map-plugin-more-shapes
+// npm link simple-mind-map simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map-plugin-checkbox simple-mind-map-plugin-lineflow simple-mind-map-plugin-momentum simple-mind-map-plugin-right-fishbone simple-mind-map-plugin-node-link
+// simple-mind-map-plugin-themes
+// simple-mind-map-plugin-more-themes simple-mind-map-plugin-more-shapes
 import OutlineSidebar from './OutlineSidebar.vue'
 import Style from './Style.vue'
 import BaseStyle from './BaseStyle.vue'
@@ -147,6 +154,7 @@ import NodeImgPlacementToolbar from './NodeImgPlacementToolbar.vue'
 import NodeNoteSidebar from './NodeNoteSidebar.vue'
 import AiCreate from './AiCreate.vue'
 import AiChat from './AiChat.vue'
+import LinkNodeSelect from './LinkNodeSelect.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -168,7 +176,6 @@ MindMap.usePlugin(MiniMap)
   .usePlugin(OuterFrame)
   .usePlugin(MindMapLayoutPro)
   .usePlugin(NodeBase64ImageStorage)
-  .usePlugin(RightFishbone)
 // .usePlugin(Cooperate) // 协同插件
 
 // 注册主题
@@ -209,7 +216,8 @@ export default {
     NodeImgPlacementToolbar,
     NodeNoteSidebar,
     AiCreate,
-    AiChat
+    AiChat,
+    LinkNodeSelect
   },
   data() {
     return {
@@ -235,7 +243,8 @@ export default {
       isUseMomentum: state => state.localConfig.isUseMomentum,
       extraTextOnExport: state => state.extraTextOnExport,
       isDragOutlineTreeNode: state => state.isDragOutlineTreeNode,
-      enableAi: state => state.localConfig.enableAi
+      enableAi: state => state.localConfig.enableAi,
+      supportNodeLink: state => state.supportNodeLink
     })
   },
   watch: {
@@ -702,6 +711,14 @@ export default {
       if (typeof LineFlow !== 'undefined') {
         this.mindMap.addPlugin(LineFlow)
         this.$store.commit('setSupportLineFlow', true)
+      }
+      if (typeof RightFishbone !== 'undefined') {
+        this.mindMap.addPlugin(RightFishbone)
+        this.$store.commit('setSupportRightFishbone', true)
+      }
+      if (typeof NodeLink !== 'undefined') {
+        this.mindMap.addPlugin(NodeLink)
+        this.$store.commit('setSupportNodeLink', true)
       }
       if (typeof MoreShapes !== 'undefined') {
         this.mindMap.addPlugin(MoreShapes)

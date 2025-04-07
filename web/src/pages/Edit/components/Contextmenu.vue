@@ -134,6 +134,9 @@
       <div class="item" @click="exec('REMOVE_NOTE')" v-if="hasNote">
         <span class="name">{{ $t('contextmenu.removeNote') }}</span>
       </div>
+      <div class="item" @click="exec('LINK_NODE')">
+        <span class="name">链接到指定节点</span>
+      </div>
       <div class="item" @click="exec('REMOVE_CUSTOM_STYLES')">
         <span class="name">{{ $t('contextmenu.removeCustomStyles') }}</span>
       </div>
@@ -477,6 +480,10 @@ export default {
           break
         case 'REMOVE_NOTE':
           this.node.setNote('')
+          break
+        case 'LINK_NODE':
+          this.$bus.$emit('show_link_node', this.node)
+          this.hide()
           break
         case 'EXPORT_CUR_NODE_TO_PNG':
           this.mindMap.export(

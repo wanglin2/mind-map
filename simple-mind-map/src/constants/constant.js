@@ -205,7 +205,8 @@ export const nodeDataNoStylePropList = [
   'checkbox',
   'dir',
   'needUpdate', // 重新创建节点内容
-  'imgMap'
+  'imgMap',
+  'nodeLink'
 ]
 
 // 错误类型
