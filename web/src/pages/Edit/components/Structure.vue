@@ -49,11 +49,24 @@ export default {
   computed: {
     ...mapState({
       isDark: state => state.localConfig.isDark,
-      activeSidebar: state => state.activeSidebar
+      activeSidebar: state => state.activeSidebar,
+      supportRightFishbone: state => state.supportRightFishbone
     }),
 
     layoutGroupList() {
-      return layoutGroupList[this.$i18n.locale] || layoutGroupList.zh
+      const groupList = layoutGroupList[this.$i18n.locale] || layoutGroupList.zh
+      return groupList.map(group => {
+        let list = [...group.list]
+        if (!this.supportRightFishbone) {
+          list = list.filter(item => {
+            return !['rightFishbone', 'rightFishbone2'].includes(item)
+          })
+        }
+        return {
+          name: group.name,
+          list
+        }
+      })
     }
   },
   watch: {

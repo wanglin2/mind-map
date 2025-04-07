@@ -136,7 +136,10 @@ export default {
     unExpandNodeChild: '收起所有下級節點',
     addToDo: '添加待辦',
     removeToDo: '刪除待辦',
-    aiCreate: 'AI續寫'
+    aiCreate: 'AI續寫',
+    modifyNodeLink: '修改節點鏈接',
+    linkToNode: '鏈接到指定節點',
+    removeNodeLink: '刪除節點鏈接'
   },
   count: {
     words: '字數',
@@ -493,5 +496,14 @@ export default {
   },
   note: {
     title: '備註'
+  },
+  nodeLink: {
+    linkToNode: '鏈接到指定節點',
+    addReturn: '是否添加反向鏈接',
+    tip1: '請選擇要鏈接到的節點',
+    tip2: '不能鏈接自己',
+    tip3: '鏈接成功',
+    tip4: '刪除成功',
+    tip5: '鏈接節點不存在，是否刪除該鏈接？'
   }
 }

@@ -135,7 +135,10 @@ export default {
     unExpandNodeChild: '收起所有下级节点',
     addToDo: '添加待办',
     removeToDo: '删除待办',
-    aiCreate: 'AI续写'
+    aiCreate: 'AI续写',
+    modifyNodeLink: '修改节点链接',
+    linkToNode: '链接到指定节点',
+    removeNodeLink: '删除节点链接'
   },
   count: {
     words: '字数',
@@ -493,5 +496,14 @@ export default {
   },
   note: {
     title: '备注'
+  },
+  nodeLink: {
+    linkToNode: '链接到指定节点',
+    addReturn: '是否添加反向链接',
+    tip1: '请选择要链接到的节点',
+    tip2: '不能链接自己',
+    tip3: '链接成功',
+    tip4: '删除成功',
+    tip5: '链接节点不存在，是否删除该链接？'
   }
 }

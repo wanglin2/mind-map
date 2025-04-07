@@ -139,7 +139,10 @@ export default {
     unExpandNodeChild: 'Un expand all sub nodes',
     addToDo: 'Add toDo',
     removeToDo: 'Remove toDo',
-    aiCreate: 'AI Continuation'
+    aiCreate: 'AI Continuation',
+    modifyNodeLink: 'Modify node link',
+    linkToNode: 'Link to node',
+    removeNodeLink: 'Remove node link'
   },
   count: {
     words: 'Words',
@@ -172,7 +175,8 @@ export default {
     addFooterText: 'Add text at the footer',
     desc: 'Desc',
     options: 'Options',
-    isFitBg: 'Whether to display the complete background image (effective when a background image is used)',
+    isFitBg:
+      'Whether to display the complete background image (effective when a background image is used)',
     format: 'Format'
   },
   fullscreen: {
@@ -511,5 +515,14 @@ export default {
   },
   note: {
     title: 'Note'
+  },
+  nodeLink: {
+    linkToNode: 'Link to node',
+    addReturn: 'Weather to add a backlink',
+    tip1: 'Please select the node to link to',
+    tip2: 'Cannot link to oneself',
+    tip3: 'Link successful',
+    tip4: 'Delete successful',
+    tip5: 'The link node does not exist. Weather to delete the link?'
   }
 }

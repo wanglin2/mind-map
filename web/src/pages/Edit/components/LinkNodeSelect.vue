@@ -1,15 +1,15 @@
 <template>
   <el-dialog
     class="nodeLinkSelectDialog"
-    title="链接到指定节点"
+    :title="$t('nodeLink.linkToNode')"
     :visible.sync="dialogVisible"
     :show-close="false"
     append-to-body
     width="400px"
   >
-    <div class="nodeTreeWrap">
+    <div class="nodeTreeWrap customScrollbar">
       <el-tree
-        ref="tree"
+        ref="treeRef"
         class="outlineTree"
         node-key="uid"
         default-expand-all
@@ -23,10 +23,10 @@
       </el-tree>
     </div>
     <div slot="footer" class="footer">
-      <el-checkbox v-model="isAddReturn" style="margin-right: auto;">是否添加反向链接</el-checkbox>
-      <el-button  @click="cancel">{{
-        $t('dialog.cancel')
-      }}</el-button>
+      <el-checkbox v-model="isAddReturn" style="margin-right: auto;">{{
+        $t('nodeLink.addReturn')
+      }}</el-checkbox>
+      <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
       <el-button type="primary" @click="confirm">{{
         $t('dialog.confirm')
       }}</el-button>
@@ -66,9 +66,11 @@ export default {
   },
   created() {
     this.$bus.$on('show_link_node', this.onShowDialog)
+    this.mindMap.on('node_link_not_find', this.onNodeLinkNotFind)
   },
   beforeDestroy() {
     this.$bus.$off('show_link_node', this.onShowDialog)
+    this.mindMap.off('node_link_not_find', this.onNodeLinkNotFind)
   },
   methods: {
     onShowDialog(node) {
@@ -91,6 +93,12 @@ export default {
       walk(data)
       this.treeData = [data]
       this.dialogVisible = true
+      this.$nextTick(() => {
+        const linkUid = node.getData('nodeLink')
+        if (linkUid) {
+          this.$refs.treeRef.setCurrentKey(linkUid)
+        }
+      })
     },
 
     close() {
@@ -112,11 +120,11 @@ export default {
 
     confirm() {
       if (!this.currentNodeData) {
-        this.$message.warning('请选择要链接到的节点')
+        this.$message.warning(this.$t('nodeLink.tip1'))
         return
       }
       if (this.currentNodeData.uid === this.node.getData('uid')) {
-        this.$message.warning('不能链接自己')
+        this.$message.warning(this.$t('nodeLink.tip2'))
         return
       }
       this.$bus.$emit(
@@ -126,8 +134,22 @@ export default {
         this.currentNodeData.uid,
         this.isAddReturn
       )
-      this.$message.success('链接成功')
+      this.$message.success(this.$t('nodeLink.tip3'))
       this.close()
+    },
+
+    onNodeLinkNotFind(node) {
+      this.$confirm(this.$t('nodeLink.tip5'), this.$t('edit.tip'), {
+        confirmButtonText: this.$t('setting.confirm'),
+        cancelButtonText: this.$t('setting.cancel'),
+        type: 'warning'
+      }).then(() => {
+        this.$bus.$emit('execCommand', 'SET_NODE_LINK', node, null)
+        this.$message({
+          type: 'success',
+          message: this.$t('nodeLink.tip4')
+        })
+      })
     }
   }
 }
