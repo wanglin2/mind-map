@@ -127,6 +127,15 @@ function getNodeRect() {
     textContentHeight = Math.max(textContentHeight, this._postfixData.height)
     spaceCount++
   }
+  // 库后置内容
+  this.mindMap.nodeInnerPostfixList.forEach(item => {
+    const itemData = this[`_${item.name}Data`]
+    if (itemData) {
+      textContentWidth += itemData.width
+      textContentHeight = Math.max(textContentHeight, itemData.height)
+      spaceCount++
+    }
+  })
   textContentWidth += (spaceCount - 1) * textContentMargin
   // 文字内容部分的尺寸
   if (tagIsBottom && textContentWidth > 0 && tagContentHeight > 0) {
@@ -401,8 +410,19 @@ function layout() {
       .x(textContentOffsetX)
       .y((textContentHeight - this._postfixData.height) / 2)
     textContentNested.add(foreignObject)
-    textContentOffsetX += this._postfixData.width
+    textContentOffsetX += this._postfixData.width + textContentMargin
   }
+  // 库后置内容
+  this.mindMap.nodeInnerPostfixList.forEach(item => {
+    const itemData = this[`_${item.name}Data`]
+    if (itemData) {
+      itemData.node
+        .x(textContentOffsetX)
+        .y((textContentHeight - itemData.height) / 2)
+      textContentNested.add(itemData.node)
+      textContentOffsetX += itemData.width + textContentMargin
+    }
+  })
   this.group.add(textContentNested)
   // 文字内容整体
   const { width: bboxWidth, height: bboxHeight } = textContentNested.bbox()

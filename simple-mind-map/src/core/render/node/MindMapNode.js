@@ -234,6 +234,9 @@ class MindMapNode {
       'postfix',
       ...this.mindMap.nodeInnerPrefixList.map(item => {
         return item.name
+      }),
+      ...this.mindMap.nodeInnerPostfixList.map(item => {
+        return item.name
       })
     ]
     const createTypes = {}
@@ -291,6 +294,11 @@ class MindMapNode {
         addXmlns(this._postfixData.el)
       }
     }
+    this.mindMap.nodeInnerPostfixList.forEach(item => {
+      if (createTypes[item.name]) {
+        this[`_${item.name}Data`] = item.createContent(this)
+      }
+    })
     if (
       addCustomContentToNode &&
       typeof addCustomContentToNode.create === 'function'

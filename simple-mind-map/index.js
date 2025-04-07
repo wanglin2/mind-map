@@ -58,7 +58,7 @@ class MindMap {
     this.cssEl = null
     this.cssTextMap = {} // 该样式在实例化时会动态添加到页面，同时导出为svg时也会添加到svg源码中
 
-    // 节点前置内容列表
+    // 节点前置/后置内容列表
     /*
       {
         name: '',// 一个唯一的类型标识
@@ -77,6 +77,7 @@ class MindMap {
       }
     */
     this.nodeInnerPrefixList = []
+    this.nodeInnerPostfixList = []
 
     // 编辑节点的类名列表，快捷键响应会检查事件目标是否是body或该列表中的元素，是的话才会响应
     // 该检查可以通过customCheckEnableShortcut选项来覆盖
