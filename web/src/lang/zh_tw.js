@@ -492,7 +492,10 @@ export default {
     aiCreatePartMsgPrefix: '我有一個主題爲【',
     aiCreatePartMsgCenter: '】的思維導圖，幫我續寫其中一個內容爲【',
     aiCreatePartMsgPostfix:
-      '】的節點的下級內容，需要以Markdown格式返回，並且只能使用Markdown的標題和無序列表兩種語法，可以支持多層嵌套。只需返回內容即可。'
+      '】的節點的下級內容',
+      aiCreatePartMsgHelp:
+      '。需要以Markdown格式返回，並且只能使用Markdown的標題和無序列表兩種語法，可以支持多層嵌套。只需返回內容即可。',
+    aiCreatePart: 'AI續寫'
   },
   note: {
     title: '備註'

@@ -491,8 +491,10 @@ export default {
       '】，需要以Markdown格式返回，并且只能使用Markdown的标题和无序列表两种语法，可以支持多层嵌套。只需返回内容即可。',
     aiCreatePartMsgPrefix: '我有一个主题为【',
     aiCreatePartMsgCenter: '】的思维导图，帮我续写其中一个内容为【',
-    aiCreatePartMsgPostfix:
-      '】的节点的下级内容，需要以Markdown格式返回，并且只能使用Markdown的标题和无序列表两种语法，可以支持多层嵌套。只需返回内容即可。'
+    aiCreatePartMsgPostfix: '】的节点的下级内容',
+    aiCreatePartMsgHelp:
+      '。需要以Markdown格式返回，并且只能使用Markdown的标题和无序列表两种语法，可以支持多层嵌套。只需返回内容即可。',
+    aiCreatePart: 'AI续写'
   },
   note: {
     title: '备注'

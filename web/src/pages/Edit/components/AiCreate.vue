@@ -78,6 +78,26 @@
       }}</el-button>
     </div>
     <AiConfigDialog v-model="aiConfigDialogVisible"></AiConfigDialog>
+    <!-- AI续写 -->
+    <el-dialog
+      class="createDialog"
+      :title="$t('ai.aiCreatePart')"
+      :visible.sync="createPartDialogVisible"
+      width="450px"
+      append-to-body
+    >
+      <div class="inputBox">
+        <el-input type="textarea" :rows="5" v-model="aiPartInput"> </el-input>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="closeAiCreatePartDialog">{{
+          $t('ai.cancel')
+        }}</el-button>
+        <el-button type="primary" @click="confirmAiCreatePart">{{
+          $t('ai.confirm')
+        }}</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -119,7 +139,11 @@ export default {
       aiConfigDialogVisible: false,
 
       mindMapDataCache: '',
-      beingAiCreateNodeUid: ''
+      beingAiCreateNodeUid: '',
+
+      createPartDialogVisible: false,
+      aiPartInput: '',
+      beingCreatePartNode: null
     }
   },
   computed: {
@@ -127,7 +151,7 @@ export default {
   },
   created() {
     this.$bus.$on('ai_create_all', this.aiCrateAll)
-    this.$bus.$on('ai_create_part', this.aiCreatePart)
+    this.$bus.$on('ai_create_part', this.showAiCreatePartDialog)
     this.$bus.$on('ai_chat', this.aiChat)
     this.$bus.$on('ai_chat_stop', this.aiChatStop)
     this.$bus.$on('showAiConfigDialog', this.showAiConfigDialog)
@@ -137,7 +161,7 @@ export default {
   },
   beforeDestroy() {
     this.$bus.$off('ai_create_all', this.aiCrateAll)
-    this.$bus.$off('ai_create_part', this.aiCreatePart)
+    this.$bus.$off('ai_create_part', this.showAiCreatePartDialog)
     this.$bus.$off('ai_chat', this.aiChat)
     this.$bus.$off('ai_chat_stop', this.aiChatStop)
     this.$bus.$off('showAiConfigDialog', this.showAiConfigDialog)
@@ -372,11 +396,47 @@ export default {
       walk(data)
     },
 
+    // 显示AI续写弹窗
+    showAiCreatePartDialog(node) {
+      this.beingCreatePartNode = node
+      const currentMindMapData = this.mindMap.getData()
+      // 填充默认内容
+      this.aiPartInput = `${this.$t(
+        'ai.aiCreatePartMsgPrefix'
+      )}${getStrWithBrFromHtml(currentMindMapData.data.text)}${this.$t(
+        'ai.aiCreatePartMsgCenter'
+      )}${getStrWithBrFromHtml(node.getData('text'))}${this.$t(
+        'ai.aiCreatePartMsgPostfix'
+      )}`
+      this.createPartDialogVisible = true
+    },
+
+    // 关闭AI续写弹窗
+    closeAiCreatePartDialog() {
+      this.createPartDialogVisible = false
+    },
+
+    // 复位AI续写弹窗数据
+    resetAiCreatePartDialog() {
+      this.beingCreatePartNode = null
+      this.aiPartInput = ''
+    },
+
+    // 确认AI续写
+    confirmAiCreatePart() {
+      if (!this.aiPartInput.trim()) return
+      this.closeAiCreatePartDialog()
+      this.aiCreatePart()
+    },
+
     // AI生成部分
-    async aiCreatePart(node) {
+    async aiCreatePart() {
       try {
+        if (!this.beingCreatePartNode) {
+          return
+        }
         await this.aiTest()
-        this.beingAiCreateNodeUid = node.getData('uid')
+        this.beingAiCreateNodeUid = this.beingCreatePartNode.getData('uid')
         const currentMindMapData = this.mindMap.getData()
         this.mindMapDataCache = JSON.stringify(currentMindMapData)
         this.aiCreatingMaskVisible = true
@@ -391,13 +451,8 @@ export default {
             messages: [
               {
                 role: 'user',
-                content: `${this.$t(
-                  'ai.aiCreatePartMsgPrefix'
-                )}${getStrWithBrFromHtml(
-                  currentMindMapData.data.text
-                )}${this.$t('ai.aiCreatePartMsgCenter')}${getStrWithBrFromHtml(
-                  node.getData('text')
-                )}${this.$t('ai.aiCreatePartMsgPostfix')}`
+                content:
+                  this.aiPartInput.trim() + this.$t('ai.aiCreatePartMsgHelp')
               }
             ]
           },
@@ -412,9 +467,11 @@ export default {
           content => {
             this.aiCreatingContent = content
             this.resetOnAiCreatingStop()
+            this.resetAiCreatePartDialog()
           },
           () => {
             this.resetOnAiCreatingStop()
+            this.resetAiCreatePartDialog()
             this.resetOnRenderEnd()
             this.$message.error(this.$t('ai.generationFailed'))
           }

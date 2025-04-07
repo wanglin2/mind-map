@@ -33,10 +33,10 @@
             <el-option key="GET" label="GET" value="GET"></el-option>
           </el-select>
         </el-form-item> -->
-        <p class="title">{{ $t('ai.mindMappingClientConfiguration') }}</p>
+        <!-- <p class="title">{{ $t('ai.mindMappingClientConfiguration') }}</p>
         <el-form-item :label="$t('ai.port')" prop="port">
           <el-input v-model="ruleForm.port"></el-input>
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
     </div>
     <div slot="footer" class="dialog-footer">

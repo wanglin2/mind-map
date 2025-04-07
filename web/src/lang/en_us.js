@@ -511,7 +511,10 @@ export default {
     aiCreatePartMsgCenter:
       '】Can you help me continue writing one of the contents of the mind map【',
     aiCreatePartMsgPostfix:
-      '】The subordinate content of the node needs to be returned in Markdown format and can only use two syntax: Markdown title and unordered list. It can support multi-level nesting. Just return the content.'
+      '】The subordinate content of the node',
+    aiCreatePartMsgHelp:
+      '. Needs to be returned in Markdown format and can only use two syntax: Markdown title and unordered list. It can support multi-level nesting. Just return the content.',
+    aiCreatePart: 'AI Continuation'
   },
   note: {
     title: 'Note'
