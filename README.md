@@ -45,10 +45,20 @@
 - [x] 提供丰富的配置，满足各种场景各种使用习惯
 - [x] 支持协同编辑
 - [x] 支持演示模式
+- [x] 更多功能等你来发现
 
 官方提供了如下插件，可根据需求按需引入（某个功能不生效大概率是因为你没有引入对应的插件），具体使用方式请查看文档：
 
-> RichText（节点富文本插件）、Select（鼠标多选节点插件）、Drag（节点拖拽插件）、AssociativeLine（关联线插件）、Export（导出插件）、KeyboardNavigation（键盘导航插件）、MiniMap（小地图插件）、Watermark（水印插件）、TouchEvent（移动端触摸事件支持插件）、NodeImgAdjust（拖拽调整节点图片大小插件）、Search（搜索插件）、Painter（节点格式刷插件）、Scrollbar（滚动条插件）、Formula（数学公式插件）、Cooperate（协同编辑插件）、RainbowLines（彩虹线条插件）、Demonstrate（演示模式插件）、OuterFrame（外框插件）、MindMapLayoutPro（思维导图布局插件）、HandDrawnLikeStyle（手绘风格插件）[收费]、Notation（节点标记插件）[收费]、Numbers（节点编号插件）[收费]、Freemind（Freemind格式导入导出插件）[收费]、Excel（Excel格式导入导出插件）[收费]、Checkbox（待办插件）[收费]、Lineflow（节点连线流动插件）[收费]、Momentum（动量效果插件）[收费]
+| RichText（节点富文本插件）           | Select（鼠标多选节点插件）                | Drag（节点拖拽插件）                 | AssociativeLine（关联线插件）        |
+| ------------------------------------ | ----------------------------------------- | ------------------------------------ | ------------------------------------ |
+| Export（导出插件）                   | KeyboardNavigation（键盘导航插件）        | MiniMap（小地图插件）                | Watermark（水印插件）                |
+| TouchEvent（移动端触摸事件支持插件） | NodeImgAdjust（拖拽调整节点图片大小插件） | Search（搜索插件）                   | Painter（节点格式刷插件）            |
+| Scrollbar（滚动条插件）              | Formula（数学公式插件）                   | Cooperate（协同编辑插件）            | RainbowLines（彩虹线条插件）         |
+| Demonstrate（演示模式插件）          | OuterFrame（外框插件）                    | MindMapLayoutPro（思维导图布局插件） |                                      |
+| HandDrawnLikeStyle（手绘风格插件）   | Notation（节点标记插件）                  | Numbers（节点编号插件）[收费]        | Freemind（Freemind格式导入导出插件） |
+| Excel（Excel格式导入导出插件）       | Checkbox（待办插件）                      | Lineflow（节点连线流动插件）         | Momentum（动量效果插件）             |
+| RightFishbone（向右鱼骨图插件）      | NodeLink（节点链接插件）                  |                                      |                                      |
+
 
 本项目不会实现的特性：
 
@@ -101,7 +111,7 @@ const mindMap = new MindMap({
 
 # License
 
-[MIT](./LICENSE)。保留`mind-map`版权声明和注明来源的情况下可随意商用，如有疑问或不想保留可联系作者。
+[MIT](./LICENSE)。保留`mind-map`版权声明和注明来源的情况下可随意商用，如有疑问或不想保留可联系作者通过付费的方式去除。
 
 # 微信交流群
 
