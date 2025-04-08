@@ -298,7 +298,9 @@ export default {
     },
 
     associativeLineDeactivate() {
-      this.setActiveSidebar('')
+      if (this.activeSidebar === 'associativeLineStyle') {
+        this.setActiveSidebar(null)
+      }
       this.activeLineNode = null
       this.activeLineToNode = null
       this.style = {

@@ -435,19 +435,11 @@ export default {
   },
   created() {
     this.mindMap.on('outer_frame_active', this.onOuterFrameActive)
-    this.mindMap.on('scale', this.hide)
-    this.mindMap.on('translate', this.hide)
-    this.mindMap.on('svg_mousedown', this.hide)
-    this.mindMap.on('expand_btn_click', this.hide)
     this.mindMap.on('outer_frame_delete', this.hide)
     this.mindMap.on('outer_frame_deactivate', this.hide)
   },
   beforeDestroy() {
     this.mindMap.off('outer_frame_active', this.onOuterFrameActive)
-    this.mindMap.off('scale', this.hide)
-    this.mindMap.off('translate', this.hide)
-    this.mindMap.off('svg_mousedown', this.hide)
-    this.mindMap.off('expand_btn_click', this.hide)
     this.mindMap.off('outer_frame_delete', this.hide)
     this.mindMap.off('outer_frame_deactivate', this.hide)
   },
@@ -510,6 +502,9 @@ export default {
     },
 
     hide() {
+      if (this.activeSidebar !== 'nodeOuterFrameStyle') {
+        return
+      }
       this.setActiveSidebar(null)
     }
   }

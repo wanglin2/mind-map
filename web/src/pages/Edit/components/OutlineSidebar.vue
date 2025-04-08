@@ -71,7 +71,7 @@ export default {
     ...mapMutations(['setIsOutlineEdit', 'setActiveSidebar']),
 
     onChangeToOutlineEdit() {
-      this.setActiveSidebar('')
+      this.setActiveSidebar(null)
       this.setIsOutlineEdit(true)
     },
 

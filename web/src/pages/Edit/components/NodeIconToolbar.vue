@@ -76,7 +76,7 @@ export default {
             this.updatePos()
             this.showNodeIconToolbar = true
             if (this.activeSidebar === 'nodeIconSidebar') {
-                this.setActiveSidebar('')
+                this.setActiveSidebar(null)
             }
         },
 

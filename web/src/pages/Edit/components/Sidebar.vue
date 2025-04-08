@@ -60,7 +60,7 @@ export default {
 
     close() {
       this.show = false
-      this.setActiveSidebar('')
+      this.setActiveSidebar(null)
     },
 
     getEl() {

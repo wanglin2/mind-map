@@ -55,6 +55,9 @@ export default {
     ...mapMutations(['setActiveSidebar']),
 
     onNodeActive(...args) {
+      if (this.activeSidebar !== 'noteSidebar') {
+        return
+      }
       const nodes = [...args[1]]
       if (nodes.length > 0) {
         if (nodes[0] !== this.node) {
