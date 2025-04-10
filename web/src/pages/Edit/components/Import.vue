@@ -4,7 +4,7 @@
       class="nodeImportDialog"
       :title="$t('import.title')"
       :visible.sync="dialogVisible"
-      width="300px"
+      width="350px"
     >
       <el-upload
         ref="upload"
@@ -21,6 +21,12 @@
         <el-button slot="trigger" size="small" type="primary">{{
           $t('import.selectFile')
         }}</el-button>
+        <el-button
+          size="small"
+          style="margin-left: 10px;"
+          @click="mdImportDialogVisible = true"
+          >{{ $t('import.mdImportDialogTitle') }}</el-button
+        >
         <div slot="tip" class="el-upload__tip">
           {{ $t('import.support') }}{{ supportFileStr }}{{ $t('import.file') }}
         </div>
@@ -53,6 +59,27 @@
         }}</el-button>
       </span>
     </el-dialog>
+    <el-dialog
+      class="mdImportDialog"
+      :title="$t('import.mdImportDialogTitle')"
+      :visible.sync="mdImportDialogVisible"
+      width="500px"
+      :show-close="false"
+    >
+      <el-input
+        type="textarea"
+        :rows="10"
+        :placeholder="$t('import.mdPlaceholder')"
+        v-model="mdStr"
+      >
+      </el-input>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancelImportMd">{{ $t('dialog.cancel') }}</el-button>
+        <el-button type="primary" @click="confirmImportFromMd">{{
+          $t('dialog.confirm')
+        }}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -71,7 +98,9 @@ export default {
       selectPromiseResolve: null,
       xmindCanvasSelectDialogVisible: false,
       selectCanvas: '',
-      canvasList: []
+      canvasList: [],
+      mdImportDialogVisible: false,
+      mdStr: ''
     }
   },
   computed: {
@@ -321,6 +350,27 @@ export default {
       })
       if (this.fileList.length <= 0) return
       this.confirm()
+    },
+
+    cancelImportMd() {
+      this.mdImportDialogVisible = false
+      this.mdStr = ''
+    },
+
+    confirmImportFromMd() {
+      if (!this.mdStr.trim()) {
+        this.$message.warning(this.$t('import.mdEmptyTip'))
+        return
+      }
+      try {
+        const data = markdown.transformMarkdownTo(this.mdStr.trim())
+        this.$bus.$emit('setData', data)
+        this.$message.success(this.$t('import.importSuccess'))
+        this.cancelImportMd()
+      } catch (error) {
+        console.log(error)
+        this.$message.error(this.$t('import.fileParsingFailed'))
+      }
     }
   }
 }

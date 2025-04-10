@@ -197,7 +197,10 @@ export default {
     fileContentError: 'The file content is incorrect',
     importSuccess: 'Import success',
     fileParsingFailed: 'File parsing failed',
-    xmindCanvasSelectDialogTitle: 'Select the canvas to import'
+    xmindCanvasSelectDialogTitle: 'Select the canvas to import',
+    mdImportDialogTitle: 'Paste Markdown content to import',
+    mdPlaceholder: 'Please enter the content in Markdown format',
+    mdEmptyTip: 'The content cannot be empty'
   },
   navigatorToolbar: {
     openMiniMap: 'Open mini map',

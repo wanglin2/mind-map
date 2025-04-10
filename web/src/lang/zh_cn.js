@@ -191,7 +191,10 @@ export default {
     fileContentError: '文件内容有误',
     importSuccess: '导入成功',
     fileParsingFailed: '文件解析失败',
-    xmindCanvasSelectDialogTitle: '选择要导入的画布'
+    xmindCanvasSelectDialogTitle: '选择要导入的画布',
+    mdImportDialogTitle: '粘贴Markdown内容导入',
+    mdPlaceholder: '请输入Markdown格式的内容',
+    mdEmptyTip: '内容不能为空'
   },
   navigatorToolbar: {
     openMiniMap: '开启小地图',
