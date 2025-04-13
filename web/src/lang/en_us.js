@@ -64,6 +64,7 @@ export default {
     isShowScrollbar: 'Is show scrollbar',
     isUseHandDrawnLikeStyle: 'Is use hand drawn like style',
     isUseMomentum: 'Is open drag momentum',
+    openBlankMode: 'Is open blank mode of the demonstrate',
     watermark: 'Watermark',
     showWatermark: 'Is show watermark',
     onlyExport: 'Only export',

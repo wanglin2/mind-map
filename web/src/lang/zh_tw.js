@@ -63,6 +63,7 @@ export default {
     isShowScrollbar: '顯示捲軸',
     isUseHandDrawnLikeStyle: '使用手繪風格',
     isUseMomentum: '是否開啓拖動畫布的動量效果',
+    openBlankMode: '是否開啓演示模式的填空功能',
     watermark: '浮水印',
     showWatermark: '顯示浮水印',
     onlyExport: '僅在匯出時顯示',
