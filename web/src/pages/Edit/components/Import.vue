@@ -367,6 +367,8 @@ export default {
         this.$bus.$emit('setData', data)
         this.$message.success(this.$t('import.importSuccess'))
         this.cancelImportMd()
+        this.cancel()
+        this.setActiveSidebar(null)
       } catch (error) {
         console.log(error)
         this.$message.error(this.$t('import.fileParsingFailed'))
