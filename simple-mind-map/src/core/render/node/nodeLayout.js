@@ -33,7 +33,9 @@ function getTagContentSize(space) {
 function getNodeRect() {
   // 自定义节点内容
   if (this.isUseCustomNodeContent()) {
-    const rect = this.measureCustomNodeContentSize(this._customNodeContent)
+    const rect = this.measureCustomNodeContentSize(
+      this._customNodeContent.cloneNode(true)
+    )
     return {
       width: this.hasCustomWidth() ? this.customTextWidth : rect.width,
       height: rect.height
@@ -178,13 +180,54 @@ function getNodeRect() {
   }
 }
 
+// 激活hover和激活边框
+function addHoverNode(width, height) {
+  const { hoverRectPadding } = this.mindMap.opt
+  this.hoverNode = new Rect()
+    .size(width + hoverRectPadding * 2, height + hoverRectPadding * 2)
+    .x(-hoverRectPadding)
+    .y(-hoverRectPadding)
+  this.hoverNode.addClass('smm-hover-node')
+  this.style.hoverNode(this.hoverNode, width, height)
+  this.group.add(this.hoverNode)
+}
+
+// 当使用了完全自定义节点内容后，可以通过该方法实时更新节点大小
+function customNodeContentRealtimeLayout() {
+  if (!this.group) return
+  if (!this.isUseCustomNodeContent()) return
+  // 删除除foreignObject外的其他元素
+  if (this.shapeNode) this.shapeNode.remove()
+  if (this._unVisibleRectRegionNode) this._unVisibleRectRegionNode.remove()
+  if (this.hoverNode) this.hoverNode.remove()
+  const { width, height } = this
+  const halfBorderWidth = this.getBorderWidth() / 2
+  // 节点形状
+  this.shapeNode = this.shapeInstance.createShape()
+  this.shapeNode.addClass('smm-node-shape')
+  this.shapeNode.translate(halfBorderWidth, halfBorderWidth)
+  this.style.shape(this.shapeNode)
+  this.group.add(this.shapeNode)
+  // 渲染一个隐藏的矩形区域，用来触发展开收起按钮的显示
+  this.renderExpandBtnPlaceholderRect()
+  // 概要节点添加一个带所属节点id的类名
+  if (this.isGeneralization && this.generalizationBelongNode) {
+    this.group.addClass('generalization_' + this.generalizationBelongNode.uid)
+  }
+  // 激活hover和激活边框
+  this.addHoverNode(width, height)
+  // 将形状元素移至底层，避免遮挡foreignObject
+  this.shapeNode.back()
+  // 更新foreignObject元素大小
+  this.group.findOne('foreignObject').size(width, height)
+}
+
 //  定位节点内容
 function layout() {
   if (!this.group) return
   // 清除之前的内容
   this.group.clear()
   const {
-    hoverRectPadding,
     openRealtimeRenderOnNodeTextEdit,
     textContentMargin,
     addCustomContentToNode
@@ -217,16 +260,6 @@ function layout() {
   if (this.isGeneralization && this.generalizationBelongNode) {
     this.group.addClass('generalization_' + this.generalizationBelongNode.uid)
   }
-  // 激活hover和激活边框
-  const addHoverNode = () => {
-    this.hoverNode = new Rect()
-      .size(width + hoverRectPadding * 2, height + hoverRectPadding * 2)
-      .x(-hoverRectPadding)
-      .y(-hoverRectPadding)
-    this.hoverNode.addClass('smm-hover-node')
-    this.style.hoverNode(this.hoverNode, width, height)
-    this.group.add(this.hoverNode)
-  }
   // 如果存在自定义节点内容，那么使用自定义节点内容
   if (this.isUseCustomNodeContent()) {
     const foreignObject = createForeignObjectNode({
@@ -235,7 +268,7 @@ function layout() {
       height
     })
     this.group.add(foreignObject)
-    addHoverNode()
+    this.addHoverNode(width, height)
     return
   }
   const { IMG_PLACEMENT, TAG_PLACEMENT } = CONSTANTS
@@ -453,7 +486,7 @@ function layout() {
       break
   }
   textContentNested.translate(translateX, translateY)
-  addHoverNode()
+  this.addHoverNode(width, height)
   if (this._customContentAddToNodeAdd && this._customContentAddToNodeAdd.el) {
     const foreignObject = createForeignObjectNode(
       this._customContentAddToNodeAdd
@@ -477,5 +510,7 @@ export default {
   getImgTextMarin,
   getTagContentSize,
   getNodeRect,
-  layout
+  addHoverNode,
+  layout,
+  customNodeContentRealtimeLayout
 }

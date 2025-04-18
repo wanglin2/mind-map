@@ -613,6 +613,13 @@ class Render {
     this.emitNodeActiveEvent()
   }
 
+  // 当某个自定义节点内容改变后，可以调用该方法实时更新该节点大小和整体节点的定位
+  renderByCustomNodeContentNode(node) {
+    node.getSize()
+    node.customNodeContentRealtimeLayout()
+    this.mindMap.render()
+  }
+
   // 给当前被收起来的节点数据添加更新标志
   resetUnExpandNodeStyle() {
     if (!this.renderTree) return
