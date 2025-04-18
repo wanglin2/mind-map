@@ -174,7 +174,8 @@ class Base {
         isResizeSource ||
         isNodeDataChange ||
         isLayerTypeChange ||
-        newNode.getData('resetRichText') ||
+        (newNode.getData('resetRichText') && // 自定义节点内容可以直接忽略resetRichText
+          !newNode.isUseCustomNodeContent()) ||
         newNode.getData('needUpdate') ||
         isNodeInnerFixChange
       ) {
@@ -224,7 +225,8 @@ class Base {
         isResizeSource ||
         isNodeDataChange ||
         isLayerTypeChange ||
-        newNode.getData('resetRichText') ||
+        (newNode.getData('resetRichText') &&
+          !newNode.isUseCustomNodeContent()) ||
         newNode.getData('needUpdate') ||
         isNodeInnerFixChange
       ) {
