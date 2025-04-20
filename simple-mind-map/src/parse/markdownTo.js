@@ -1,6 +1,7 @@
 import { fromMarkdown } from 'mdast-util-from-markdown'
 
 const getNodeText = node => {
+  if (node.type === 'list') return ''
   let textStr = ''
 
   ;(node.children || []).forEach(item => {
