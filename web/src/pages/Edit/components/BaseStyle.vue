@@ -126,7 +126,7 @@
         </el-tabs>
       </div>
       <!-- 连线 -->
-      <div class="title noTop">{{ $t('baseStyle.line') }}</div>
+      <div class="title">{{ $t('baseStyle.line') }}</div>
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.color') }}</span>
@@ -357,7 +357,7 @@
         </div>
       </div>
       <!-- 彩虹线条 -->
-      <div class="title noTop">{{ $t('baseStyle.rainbowLines') }}</div>
+      <div class="title">{{ $t('baseStyle.rainbowLines') }}</div>
       <div class="row">
         <div class="rowItem">
           <el-popover
@@ -401,7 +401,7 @@
         </div>
       </div>
       <!-- 概要连线 -->
-      <div class="title noTop">{{ $t('baseStyle.lineOfOutline') }}</div>
+      <div class="title">{{ $t('baseStyle.lineOfOutline') }}</div>
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.color') }}</span>
@@ -451,7 +451,7 @@
         </div>
       </div>
       <!-- 关联线 -->
-      <div class="title noTop">{{ $t('baseStyle.associativeLine') }}</div>
+      <div class="title">{{ $t('baseStyle.associativeLine') }}</div>
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.associativeLineColor') }}</span>
@@ -594,7 +594,7 @@
         </div>
       </div>
       <!-- 关联线文字 -->
-      <div class="title noTop">{{ $t('baseStyle.associativeLineText') }}</div>
+      <div class="title">{{ $t('baseStyle.associativeLineText') }}</div>
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.fontFamily') }}</span>
@@ -656,7 +656,7 @@
       </div>
       <!-- 节点边框风格 -->
       <template v-if="showNodeUseLineStyle">
-        <div class="title noTop">{{ $t('baseStyle.nodeBorderType') }}</div>
+        <div class="title">{{ $t('baseStyle.nodeBorderType') }}</div>
         <div class="row">
           <div class="rowItem">
             <el-checkbox
@@ -672,8 +672,8 @@
         </div>
       </template>
       <!-- 内边距 -->
-      <div class="title noTop">{{ $t('baseStyle.nodePadding') }}</div>
-      <div class="row">
+      <div class="title">{{ $t('baseStyle.nodePadding') }}</div>
+      <div class="row noBottom">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.horizontal') }}</span>
           <el-slider
@@ -702,8 +702,8 @@
         </div>
       </div>
       <!-- 图片 -->
-      <div class="title noTop">{{ $t('baseStyle.image') }}</div>
-      <div class="row">
+      <div class="title">{{ $t('baseStyle.image') }}</div>
+      <div class="row noBottom">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.maximumWidth') }}</span>
           <el-slider
@@ -736,7 +736,7 @@
         </div>
       </div>
       <!-- 图标 -->
-      <div class="title noTop">{{ $t('baseStyle.icon') }}</div>
+      <div class="title">{{ $t('baseStyle.icon') }}</div>
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.size') }}</span>
@@ -754,8 +754,8 @@
         </div>
       </div>
       <!-- 二级节点外边距 -->
-      <div class="title noTop">{{ $t('baseStyle.nodeMargin') }}</div>
-      <div class="row column">
+      <div class="title">{{ $t('baseStyle.nodeMargin') }}</div>
+      <div class="row column noBottom">
         <el-tabs
           class="tab"
           v-model="marginActiveTab"
@@ -798,8 +798,8 @@
         </div>
       </div>
       <!-- 外框内边距 -->
-      <div class="title noTop">{{ $t('baseStyle.outerFramePadding') }}</div>
-      <div class="row">
+      <div class="title">{{ $t('baseStyle.outerFramePadding') }}</div>
+      <div class="row noBottom">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.horizontal') }}</span>
           <el-slider
@@ -1167,7 +1167,7 @@ export default {
     font-weight: 500;
     color: rgba(26, 26, 26, 0.9);
     margin-bottom: 10px;
-    margin-top: 20px;
+    margin-top: 35px;
 
     &.noTop {
       margin-top: 0;
@@ -1178,6 +1178,10 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+
+    &.noBottom {
+      margin-bottom: 0;
+    }
 
     &.column {
       flex-direction: column;
