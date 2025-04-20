@@ -10,7 +10,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
 * {
   margin: 0;
   padding: 0;
@@ -18,8 +18,6 @@ export default {
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
 }
 
@@ -40,5 +38,9 @@ export default {
     background: transparent;
     display: none;
   }
+}
+
+.el-dialog{
+  border-radius: 10px;
 }
 </style>
