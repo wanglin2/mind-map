@@ -146,8 +146,8 @@ export default {
     nodes: '节点'
   },
   dialog: {
-    cancel: '取 消',
-    confirm: '确 定'
+    cancel: '取消',
+    confirm: '确定'
   },
   export: {
     title: '导出',

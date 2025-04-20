@@ -12,16 +12,6 @@
     :top="isMobile ? '20px' : '15vh'"
   >
     <div class="exportContainer" :class="{ isDark: isDark }">
-      <!-- 文件名称输入 -->
-      <div class="nameInputBox">
-        <span class="name">{{ $t('export.filename') }}</span>
-        <el-input
-          style="max-width: 300px"
-          v-model="fileName"
-          size="mini"
-          @keydown.native.stop
-        ></el-input>
-      </div>
       <!-- 导出类型选择 -->
       <div class="downloadTypeSelectBox">
         <!-- 类型列表 -->
@@ -33,97 +23,123 @@
             :class="{ active: exportType === item.type }"
             @click="exportType = item.type"
           >
-            <div class="icon iconfont" :class="[item.icon, item.type]"></div>
+            <div class="typeIcon" :class="[item.type]"></div>
             <div class="name">{{ item.name }}</div>
             <div class="icon checked el-icon-check"></div>
           </div>
         </div>
         <!-- 类型内容 -->
-        <div class="downloadTypeContent customScrollbar">
-          <div class="contentRow">
-            <div class="contentName">{{ $t('export.desc') }}</div>
-            <div class="contentValue">
-              {{ currentTypeData ? currentTypeData.desc : '' }}
+        <div class="downloadTypeContent">
+          <!-- 文件名称输入 -->
+          <div class="nameInputBox">
+            <div class="nameInput">
+              <span class="name">{{ $t('export.filename') }}</span>
+              <el-input
+                style="max-width: 250px"
+                v-model="fileName"
+                size="mini"
+                @keydown.native.stop
+              ></el-input>
             </div>
+            <span class="closeBtn el-icon-close" @click="cancel"></span>
           </div>
-          <div class="contentRow">
-            <div class="contentName">{{ $t('export.options') }}</div>
-            <div class="contentValue">
-              <div
-                class="valueItem"
-                v-show="['smm', 'json'].includes(exportType)"
-              >
-                <el-checkbox v-model="widthConfig">{{
-                  $t('export.include')
-                }}</el-checkbox>
+          <!-- 配置 -->
+          <div class="contentBox customScrollbar">
+            <div class="contentRow">
+              <div class="contentName">{{ $t('export.format') }}</div>
+              <div class="contentValue info">
+                {{ currentTypeData ? '.' + currentTypeData.type : '' }}
               </div>
-              <div
-                class="valueItem"
-                v-show="['svg', 'png', 'pdf'].includes(exportType)"
-              >
-                <div class="valueSubItem" v-if="['png'].includes(exportType)">
-                  <span class="name">{{ $t('export.format') }}</span>
-                  <el-radio-group v-model="imageFormat">
-                    <el-radio label="png">PNG</el-radio>
-                    <el-radio label="jpg">JPG</el-radio>
-                  </el-radio-group>
-                </div>
-                <div class="valueSubItem">
-                  <span class="name">{{ $t('export.paddingX') }}</span>
-                  <el-input
-                    style="width: 200px"
-                    v-model="paddingX"
-                    size="mini"
-                    @change="onPaddingChange"
-                    @keydown.native.stop
-                  ></el-input>
-                </div>
-                <div class="valueSubItem">
-                  <span class="name">{{ $t('export.paddingY') }}</span>
-                  <el-input
-                    style="width: 200px"
-                    v-model="paddingY"
-                    size="mini"
-                    @change="onPaddingChange"
-                    @keydown.native.stop
-                  ></el-input>
-                </div>
-                <div class="valueSubItem">
-                  <span class="name">{{
-                    this.$t('export.addFooterText')
-                  }}</span>
-                  <el-input
-                    style="width: 200px"
-                    v-model="extraText"
-                    size="mini"
-                    :placeholder="$t('export.addFooterTextPlaceholder')"
-                    @keydown.native.stop
-                  ></el-input>
-                </div>
-                <div class="valueSubItem">
-                  <el-checkbox
-                    v-show="['png', 'pdf'].includes(exportType)"
-                    v-model="isTransparent"
-                    >{{ $t('export.isTransparent') }}</el-checkbox
-                  >
-                </div>
-                <div class="valueSubItem">
-                  <el-checkbox v-show="showFitBgOption" v-model="isFitBg">{{
-                    $t('export.isFitBg')
+            </div>
+            <div class="contentRow">
+              <div class="contentName">{{ $t('export.desc') }}</div>
+              <div class="contentValue info">
+                {{ currentTypeData ? currentTypeData.desc : '' }}
+              </div>
+            </div>
+            <div class="contentRow">
+              <div class="contentName">{{ $t('export.options') }}</div>
+              <div class="contentValue info" v-if="noOptions">无</div>
+              <div class="contentValue" v-else>
+                <div
+                  class="valueItem"
+                  v-show="['smm', 'json'].includes(exportType)"
+                >
+                  <el-checkbox v-model="widthConfig">{{
+                    $t('export.include')
                   }}</el-checkbox>
                 </div>
+                <div
+                  class="valueItem"
+                  v-show="['svg', 'png', 'pdf'].includes(exportType)"
+                >
+                  <div class="valueSubItem" v-if="['png'].includes(exportType)">
+                    <span class="name">{{ $t('export.format') }}</span>
+                    <el-radio-group v-model="imageFormat">
+                      <el-radio label="png">PNG</el-radio>
+                      <el-radio label="jpg">JPG</el-radio>
+                    </el-radio-group>
+                  </div>
+                  <div class="valueSubItem">
+                    <span class="name">{{ $t('export.paddingX') }}</span>
+                    <el-input
+                      style="width: 200px"
+                      v-model="paddingX"
+                      size="mini"
+                      @change="onPaddingChange"
+                      @keydown.native.stop
+                    ></el-input>
+                  </div>
+                  <div class="valueSubItem">
+                    <span class="name">{{ $t('export.paddingY') }}</span>
+                    <el-input
+                      style="width: 200px"
+                      v-model="paddingY"
+                      size="mini"
+                      @change="onPaddingChange"
+                      @keydown.native.stop
+                    ></el-input>
+                  </div>
+                  <div class="valueSubItem">
+                    <span class="name">{{
+                      this.$t('export.addFooterText')
+                    }}</span>
+                    <el-input
+                      style="width: 200px"
+                      v-model="extraText"
+                      size="mini"
+                      :placeholder="$t('export.addFooterTextPlaceholder')"
+                      @keydown.native.stop
+                    ></el-input>
+                  </div>
+                  <div class="valueSubItem">
+                    <el-checkbox
+                      v-show="['png', 'pdf'].includes(exportType)"
+                      v-model="isTransparent"
+                      >{{ $t('export.isTransparent') }}</el-checkbox
+                    >
+                  </div>
+                  <div class="valueSubItem">
+                    <el-checkbox v-show="showFitBgOption" v-model="isFitBg">{{
+                      $t('export.isFitBg')
+                    }}</el-checkbox>
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
+          <!-- 按钮 -->
+          <div class="btnList">
+            <el-button @click="cancel" size="small">{{
+              $t('dialog.cancel')
+            }}</el-button>
+            <el-button type="primary" @click="confirm" size="small">{{
+              $t('export.confirm')
+            }}</el-button>
           </div>
         </div>
       </div>
     </div>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
-      <el-button type="primary" @click="confirm">{{
-        $t('dialog.confirm')
-      }}</el-button>
-    </span>
   </el-dialog>
 </template>
 
@@ -184,6 +200,10 @@ export default {
 
     showFitBgOption() {
       return ['png', 'pdf'].includes(this.exportType) && !this.isTransparent
+    },
+
+    noOptions() {
+      return ['md', 'xmind', 'txt', 'xlsx', 'mm'].includes(this.exportType)
     }
   },
   created() {
@@ -284,14 +304,10 @@ export default {
 .nodeExportDialog {
   .exportContainer {
     &.isDark {
-      .nameInputBox {
-        .name {
-          color: hsla(0, 0%, 100%, 0.6);
-        }
-      }
-
       .downloadTypeSelectBox {
         .downloadTypeList {
+          background-color: #363b3f;
+
           .downloadTypeItem {
             background-color: #363b3f;
 
@@ -306,14 +322,38 @@ export default {
         }
 
         .downloadTypeContent {
-          .contentRow {
-            .contentName {
-              color: hsla(0, 0%, 100%, 0.6);
+          .nameInputBox {
+            border-bottom: 1px solid hsla(0, 0%, 100%, 0.6);
+
+            .nameInput {
+              .name {
+                color: hsla(0, 0%, 100%, 0.6);
+              }
             }
 
-            .contentValue {
+            .closeBtn {
               color: hsla(0, 0%, 100%, 0.6);
             }
+          }
+
+          .contentBox {
+            .contentRow {
+              .contentName {
+                color: hsla(0, 0%, 100%, 0.6);
+              }
+
+              .contentValue {
+                color: hsla(0, 0%, 100%, 0.6);
+
+                &.info {
+                  background-color: transparent;
+                }
+              }
+            }
+          }
+
+          .btnList {
+            border-top: 1px solid hsla(0, 0%, 100%, 0.6);
           }
         }
       }
@@ -332,10 +372,17 @@ export default {
     }
   }
 
+  /deep/ .el-dialog {
+    border-radius: 10px;
+    overflow: hidden;
+
+    .el-dialog__header {
+      display: none;
+    }
+  }
+
   /deep/ .el-dialog__body {
     padding: 0;
-    border-top: 1px solid #f2f4f7;
-    border-bottom: 1px solid #f2f4f7;
 
     .el-checkbox__input.is-checked + .el-checkbox__label {
       color: #409eff !important;
@@ -359,11 +406,13 @@ export default {
           align-items: center;
           overflow-x: auto;
           height: 60px;
+          overflow-y: hidden;
 
           .downloadTypeItem {
             width: 100px;
             flex-shrink: 0;
-            padding-left: 10px;
+            padding-left: 5px;
+            padding-right: 5px;
 
             .icon {
               margin-right: 5px;
@@ -376,21 +425,33 @@ export default {
         }
 
         .downloadTypeContent {
-          .contentRow {
-            flex-direction: column;
+          .nameInputBox {
+            height: 70px;
 
-            .contentName {
-              margin-bottom: 10px;
+            .nameInput {
+              .name {
+                margin-bottom: 5px;
+              }
             }
+          }
 
-            .contentValue {
-              .valueItem {
-                .valueSubItem {
-                  display: flex;
-                  flex-direction: column;
+          .contentBox {
+            .contentRow {
+              flex-direction: column;
 
-                  .name {
-                    margin-bottom: 5px;
+              .contentName {
+                margin-bottom: 10px;
+              }
+
+              .contentValue {
+                .valueItem {
+                  .valueSubItem {
+                    display: flex;
+                    flex-direction: column;
+
+                    .name {
+                      margin-bottom: 5px;
+                    }
                   }
                 }
               }
@@ -403,24 +464,10 @@ export default {
 
   .exportContainer {
     width: 100%;
-    height: 450px;
+    height: 552px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-
-    .nameInputBox {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      height: 50px;
-      flex-shrink: 0;
-      border-bottom: 1px solid #f2f4f7;
-
-      .name {
-        margin-right: 10px;
-      }
-    }
 
     .downloadTypeSelectBox {
       width: 100%;
@@ -429,17 +476,18 @@ export default {
       display: flex;
 
       .downloadTypeList {
-        width: 210px;
+        width: 208px;
         height: 100%;
         overflow-y: auto;
         overflow-x: hidden;
         background-color: #f2f4f7;
         flex-shrink: 0;
+        padding: 16px 0;
 
         .downloadTypeItem {
           width: 100%;
-          height: 60px;
-          padding-left: 28px;
+          height: 52px;
+          padding: 0 30px;
           overflow: hidden;
           display: flex;
           align-items: center;
@@ -457,40 +505,7 @@ export default {
 
           .icon {
             font-size: 25px;
-            margin-right: 15px;
-            flex-shrink: 0;
-
-            &.png {
-              color: #ffc038;
-            }
-
-            &.pdf {
-              color: #ff6c4d;
-            }
-
-            &.md {
-              color: #2b2b2b;
-            }
-
-            &.json {
-              color: #12c87e;
-            }
-
-            &.svg {
-              color: #4380ff;
-            }
-
-            &.smm {
-              color: #409eff;
-            }
-
-            &.xmind {
-              color: #f55e5e;
-            }
-
-            &.txt {
-              color: #70798e;
-            }
+            font-weight: 700;
 
             &.checked {
               color: #409eff;
@@ -500,51 +515,180 @@ export default {
             }
           }
 
+          .typeIcon {
+            margin-right: 18px;
+            flex-shrink: 0;
+            width: 23px;
+            height: 26px;
+            background-size: cover;
+
+            &.png {
+              background-image: url('../../../assets/img/foramt/2.png');
+            }
+
+            &.pdf {
+              background-image: url('../../../assets/img/foramt/4.png');
+            }
+
+            &.md {
+              background-image: url('../../../assets/img/foramt/5.png');
+            }
+
+            &.json {
+              background-image: url('../../../assets/img/foramt/10.png');
+            }
+
+            &.svg {
+              background-image: url('../../../assets/img/foramt/3.png');
+            }
+
+            &.smm {
+              background-image: url('../../../assets/img/foramt/1.png');
+            }
+
+            &.xmind {
+              background-image: url('../../../assets/img/foramt/6.png');
+            }
+
+            &.txt {
+              background-image: url('../../../assets/img/foramt/7.png');
+            }
+
+            &.mm {
+              background-image: url('../../../assets/img/foramt/8.png');
+            }
+
+            &.xlsx {
+              background-image: url('../../../assets/img/foramt/9.png');
+            }
+          }
+
           .name {
-            color: #1a1a1a;
+            color: #333;
             font-size: 15px;
-            margin-bottom: 5px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-weight: bold;
           }
         }
       }
 
       .downloadTypeContent {
-        padding: 30px;
+        width: 100%;
         height: 100%;
-        overflow-y: auto;
-        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
 
-        .contentRow {
+        .nameInputBox {
           display: flex;
-          font-size: 14px;
-          margin-bottom: 20px;
+          align-items: center;
+          justify-content: space-between;
+          height: 67px;
+          flex-shrink: 0;
+          border-bottom: 1px solid #f2f4f7;
+          padding-left: 40px;
+          padding-right: 20px;
+          padding-top: 16px;
 
-          .contentName {
-            width: 80px;
-            color: #666;
+          .nameInput {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            width: 100%;
+            font-weight: bold;
+
+            .name {
+              margin-right: 10px;
+              font-size: 15px;
+              color: #333;
+              font-weight: bold;
+            }
           }
 
-          .contentValue {
-            color: #1a1a1a;
+          .closeBtn {
+            font-size: 20px;
+            cursor: pointer;
+          }
+        }
 
-            .valueItem {
-              .valueSubItem {
-                margin-bottom: 12px;
-                display: flex;
+        .contentBox {
+          height: 100%;
+          overflow-y: auto;
+          overflow-x: hidden;
+          padding: 15px 40px;
 
-                &:last-of-type {
-                  margin-right: 0;
-                }
+          .contentRow {
+            display: flex;
+            font-size: 14px;
+            margin-bottom: 20px;
 
-                .name {
-                  margin-right: 12px;
-                  width: 100px;
+            &:last-of-type {
+              margin-bottom: 0;
+            }
+
+            .contentName {
+              width: 45px;
+              color: #808080;
+              flex-shrink: 0;
+              font-size: 13px;
+              font-weight: 500;
+              line-height: 25px;
+            }
+
+            .contentValue {
+              color: #808080;
+              line-height: 23px;
+              font-weight: 500;
+              border: 1px solid transparent;
+              font-size: 14px;
+
+              &.info {
+                color: rgb(90, 158, 247);
+                background-color: rgb(245, 248, 249);
+                border: 1px solid rgb(90, 158, 247);
+                border-radius: 5px;
+                padding: 0 16px;
+              }
+
+              .valueItem {
+                .valueSubItem {
+                  margin-bottom: 12px;
+                  display: flex;
+                  align-items: center;
+
+                  &:last-of-type {
+                    margin-right: 0;
+                  }
+
+                  &.alignCenter {
+                    align-items: center;
+                  }
+
+                  .name {
+                    margin-right: 12px;
+                    width: 85px;
+                  }
                 }
               }
             }
+          }
+        }
+
+        .btnList {
+          padding: 0 40px;
+          display: flex;
+          align-items: center;
+          justify-content: flex-end;
+          height: 69px;
+          flex-shrink: 0;
+          border-top: 1px solid #f2f4f7;
+
+          /deep/ .el-button--small {
+            height: 25px;
+            padding: 0 30px;
+            border-radius: 5px;
           }
         }
       }

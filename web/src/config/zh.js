@@ -563,12 +563,6 @@ export const downTypeList = [
     desc: 'SimpleMindMap私有格式，可用于再次导入，客户端可直接编辑'
   },
   {
-    name: 'JSON',
-    type: 'json',
-    icon: 'iconjson',
-    desc: '流行的数据交换格式，可用于再次导入'
-  },
-  {
     name: '图片',
     type: 'png',
     icon: 'iconPNG',
@@ -605,17 +599,23 @@ export const downTypeList = [
     desc: '纯文本文件'
   },
   {
+    name: 'Excel',
+    type: 'xlsx',
+    icon: 'iconfile-excel',
+    desc: '表格文本形式，可用Excel软件编辑'
+  },
+  {
     name: 'FreeMind',
     type: 'mm',
     icon: 'iconfreemind',
     desc: 'FreeMind软件格式'
   },
   {
-    name: 'Excel',
-    type: 'xlsx',
-    icon: 'iconfile-excel',
-    desc: '表格文本形式，可用Excel软件编辑'
-  }
+    name: 'JSON',
+    type: 'json',
+    icon: 'iconjson',
+    desc: '流行的数据交换格式，可用于再次导入'
+  },
 ]
 
 // 编号类型列表

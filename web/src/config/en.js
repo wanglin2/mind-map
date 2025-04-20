@@ -466,12 +466,6 @@ export const downTypeList = [
       'SimpleMindMap private format, can be used for re import, and the client can directly edit it'
   },
   {
-    name: 'JSON',
-    type: 'json',
-    icon: 'iconjson',
-    desc: 'Popular data exchange format that can be used for re importing'
-  },
-  {
     name: 'Image',
     type: 'png',
     icon: 'iconPNG',
@@ -508,17 +502,23 @@ export const downTypeList = [
     desc: 'Plain text file'
   },
   {
+    name: 'Excel',
+    type: 'xlsx',
+    icon: 'iconfile-excel',
+    desc: 'Table text format, editable with Excel software'
+  },
+  {
     name: 'FreeMind',
     type: 'mm',
     icon: 'iconfreemind',
     desc: 'FreeMind software format'
   },
   {
-    name: 'Excel',
-    type: 'xlsx',
-    icon: 'iconfile-excel',
-    desc: 'Table text format, editable with Excel software'
-  }
+    name: 'JSON',
+    type: 'json',
+    icon: 'iconjson',
+    desc: 'Popular data exchange format that can be used for re importing'
+  },
 ]
 
 // 编号类型列表
