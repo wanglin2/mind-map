@@ -173,7 +173,8 @@ export default {
     desc: '說明',
     options: '選項',
     isFitBg: '是否顯示完整背景圖片（使用了背景圖片時生效）',
-    format: '格式'
+    format: '格式',
+    confirm: '匯出'
   },
   fullscreen: {
     fullscreenShow: '全螢幕檢視',
@@ -204,7 +205,13 @@ export default {
     readonly: '切換為唯讀模式',
     edit: '切換為編輯模式',
     backToRoot: '回到根節點',
-    changeSourceCodeEdit: '切換為原始碼編輯模式'
+    changeSourceCodeEdit: '切換為原始碼編輯模式',
+    shortcutKeys: '快捷鍵',
+    ai: 'AI對話',
+    downloadClient: '下載客戶端',
+    site: '官方網站',
+    current: '當前：',
+    withBg: '帶背景'
   },
   nodeHyperlink: {
     title: '超連結',
@@ -495,9 +502,8 @@ export default {
       '】，需要以Markdown格式返回，並且只能使用Markdown的標題和無序列表兩種語法，可以支持多層嵌套。只需返回內容即可。',
     aiCreatePartMsgPrefix: '我有一個主題爲【',
     aiCreatePartMsgCenter: '】的思維導圖，幫我續寫其中一個內容爲【',
-    aiCreatePartMsgPostfix:
-      '】的節點的下級內容',
-      aiCreatePartMsgHelp:
+    aiCreatePartMsgPostfix: '】的節點的下級內容',
+    aiCreatePartMsgHelp:
       '。需要以Markdown格式返回，並且只能使用Markdown的標題和無序列表兩種語法，可以支持多層嵌套。只需返回內容即可。',
     aiCreatePart: 'AI續寫'
   },

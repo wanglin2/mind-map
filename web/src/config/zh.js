@@ -537,27 +537,27 @@ export const sidebarTriggerList = [
     value: 'outline',
     icon: 'iconfuhao-dagangshu'
   },
-  {
-    name: 'AI',
-    value: 'ai',
-    icon: 'iconAIshengcheng'
-  },
+  // {
+  //   name: 'AI',
+  //   value: 'ai',
+  //   icon: 'iconAIshengcheng'
+  // },
   {
     name: '设置',
     value: 'setting',
     icon: 'iconshezhi'
   },
-  {
-    name: '快捷键',
-    value: 'shortcutKey',
-    icon: 'iconjianpan'
-  }
+  // {
+  //   name: '快捷键',
+  //   value: 'shortcutKey',
+  //   icon: 'iconjianpan'
+  // }
 ]
 
 // 下载类型列表
 export const downTypeList = [
   {
-    name: '专有文件',
+    name: '思绪文件',
     type: 'smm',
     icon: 'iconwenjian',
     desc: 'SimpleMindMap私有格式，可用于再次导入，客户端可直接编辑'

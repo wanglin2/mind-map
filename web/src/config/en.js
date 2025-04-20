@@ -439,27 +439,27 @@ export const sidebarTriggerList = [
     value: 'outline',
     icon: 'iconfuhao-dagangshu'
   },
+  // {
+  //   name: 'AI',
+  //   value: 'ai',
+  //   icon: 'iconAIshengcheng'
+  // },
   {
     name: 'Setting',
     value: 'setting',
     icon: 'iconshezhi'
   },
-  {
-    name: 'AI',
-    value: 'ai',
-    icon: 'iconAIshengcheng'
-  },
-  {
-    name: 'ShortcutKey',
-    value: 'shortcutKey',
-    icon: 'iconjianpan'
-  }
+  // {
+  //   name: 'ShortcutKey',
+  //   value: 'shortcutKey',
+  //   icon: 'iconjianpan'
+  // }
 ]
 
 // 下载类型列表
 export const downTypeList = [
   {
-    name: 'Dedicated file',
+    name: '思绪 file',
     type: 'smm',
     icon: 'iconwenjian',
     desc:

@@ -172,7 +172,8 @@ export default {
     desc: '说明',
     options: '选项',
     isFitBg: '是否显示完整背景图片（使用了背景图片时生效）',
-    format: '格式'
+    format: '格式',
+    confirm: '导出'
   },
   fullscreen: {
     fullscreenShow: '全屏查看',
@@ -203,7 +204,12 @@ export default {
     readonly: '切换为只读模式',
     edit: '切换为编辑模式',
     backToRoot: '回到根节点',
-    changeSourceCodeEdit: '切换为源码编辑模式'
+    changeSourceCodeEdit: '切换为源码编辑模式',
+    shortcutKeys: '快捷键',
+    ai: 'AI对话',
+    downloadClient: '下载客户端',
+    site: '官方网站',
+    current: '当前：'
   },
   nodeHyperlink: {
     title: '超链接',
@@ -351,7 +357,8 @@ export default {
     deleteNodeImgTip: '是否确认删除该节点图片？',
     autoOpenNodeRichTextTip: '检测到导入了富文本内容，已自动开启富文本模式',
     localStorageExceededTip:
-      '你创建的思维导图体积已经超过浏览器允许存储的上限，请立即导出，否则数据将丢失！建议下载客户端进行使用，客户端无大小限制。'
+      '你创建的思维导图体积已经超过浏览器允许存储的上限，请立即导出，否则数据将丢失！建议下载客户端进行使用，客户端无大小限制。',
+    withBg: '带背景'
   },
   mouseAction: {
     tip1: '当前：左键拖动画布，右键框选节点',

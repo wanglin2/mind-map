@@ -80,7 +80,7 @@
         @click="toggleDark"
       ></div>
     </div>
-    <div class="item">
+    <!-- <div class="item">
       <el-tooltip
         effect="dark"
         :content="$t('navigatorToolbar.changeSourceCodeEdit')"
@@ -88,19 +88,39 @@
       >
         <div class="btn iconfont iconyuanma" @click="openSourceCodeEdit"></div>
       </el-tooltip>
-    </div>
+    </div> -->
     <div class="item">
       <Demonstrate :isDark="isDark" :mindMap="mindMap"></Demonstrate>
     </div>
     <div class="item">
       <el-dropdown @command="handleCommand">
-        <div class="btn iconfont iconbangzhu"></div>
+        <div class="btn el-icon-more"></div>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="client">下载客户端</el-dropdown-item>
-          <el-dropdown-item command="github">Github</el-dropdown-item>
-          <el-dropdown-item command="site">官方网站</el-dropdown-item>
-          <el-dropdown-item command="issue">意见反馈</el-dropdown-item>
-          <el-dropdown-item disabled>当前：v{{ version }}</el-dropdown-item>
+          <el-dropdown-item command="shortcutKey">
+            <span class="iconfont iconjianpan"></span>
+            {{ $t('navigatorToolbar.shortcutKeys') }}
+          </el-dropdown-item>
+          <el-dropdown-item command="aiChat">
+            <span class="iconfont iconAIshengcheng"></span>
+            {{ $t('navigatorToolbar.ai') }}
+          </el-dropdown-item>
+          <el-dropdown-item command="client">
+            <span class="iconfont iconxiazai"></span>
+            {{ $t('navigatorToolbar.downloadClient') }}
+          </el-dropdown-item>
+          <el-dropdown-item command="github">
+            <span class="iconfont icongithub"></span>
+            Github
+          </el-dropdown-item>
+          <el-dropdown-item command="site">
+            <span class="iconfont iconwangzhan"></span>
+            {{ $t('navigatorToolbar.site') }}
+          </el-dropdown-item>
+          <el-dropdown-item disabled
+            >{{ $t('navigatorToolbar.current') }}v{{
+              version
+            }}</el-dropdown-item
+          >
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -149,7 +169,12 @@ export default {
     this.lang = getLang()
   },
   methods: {
-    ...mapMutations(['setLocalConfig', 'setIsReadonly', 'setIsSourceCodeEdit']),
+    ...mapMutations([
+      'setLocalConfig',
+      'setIsReadonly',
+      'setIsSourceCodeEdit',
+      'setActiveSidebar'
+    ]),
 
     readonlyChange() {
       this.setIsReadonly(!this.isReadonly)
@@ -178,6 +203,13 @@ export default {
     },
 
     handleCommand(command) {
+      if (command === 'shortcutKey') {
+        this.setActiveSidebar('shortcutKey')
+        return
+      } else if (command === 'aiChat') {
+        this.setActiveSidebar('ai')
+        return
+      }
       let url = ''
       switch (command) {
         case 'github':

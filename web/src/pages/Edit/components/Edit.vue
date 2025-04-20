@@ -731,7 +731,7 @@ export default {
       if (typeof MoreThemes !== 'undefined') {
         const extendThemeGroupList = [
           {
-            name: '带背景', // 主题组名称
+            name: this.$t('edit.withBg'), // 主题组名称
             // 主题列表
             list: [...MoreThemes.lightList, ...MoreThemes.darkList].map(
               item => {
