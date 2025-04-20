@@ -491,7 +491,10 @@ class RichText {
     })
     this.quill.on('selection-change', range => {
       // 刚创建的节点全选不需要显示操作条
-      if (this.isInserting) return
+      if (this.isInserting) {
+        this.isInserting = false
+        return
+      }
       this.lastRange = this.range
       this.range = null
       if (range) {
