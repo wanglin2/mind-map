@@ -107,8 +107,8 @@ import LineFlow from 'simple-mind-map-plugin-lineflow'
 import Momentum from 'simple-mind-map-plugin-momentum'
 import RightFishbone from 'simple-mind-map-plugin-right-fishbone'
 import NodeLink from 'simple-mind-map-plugin-node-link'
-import MoreShapes from 'simple-mind-map-plugin-more-shapes'
-import MoreThemes from 'simple-mind-map-plugin-more-themes'
+// import MoreShapes from 'simple-mind-map-plugin-more-shapes'
+// import MoreThemes from 'simple-mind-map-plugin-more-themes'
 // npm link simple-mind-map simple-mind-map-plugin-excel simple-mind-map-plugin-freemind simple-mind-map-plugin-numbers simple-mind-map-plugin-notation simple-mind-map-plugin-handdrawnlikestyle simple-mind-map-plugin-checkbox simple-mind-map-plugin-lineflow simple-mind-map-plugin-momentum simple-mind-map-plugin-right-fishbone simple-mind-map-plugin-node-link
 // simple-mind-map-plugin-themes
 // simple-mind-map-plugin-more-themes simple-mind-map-plugin-more-shapes
