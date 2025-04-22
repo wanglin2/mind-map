@@ -7,6 +7,8 @@ import {
   lineHeightList,
   store,
   langList,
+  shapeListMap,
+  lineStyleMap,
   fontFamilyList as fontFamilyListZh,
   borderDasharrayList as borderDasharrayListZh,
   lineStyleList as lineStyleListZh,
@@ -18,8 +20,6 @@ import {
   sidebarTriggerList as sidebarTriggerListZh,
   backgroundSizeList as backgroundSizeListZh,
   downTypeList as downTypeListZh,
-  shapeListMap as shapeListMapZh,
-  lineStyleMap as lineStyleMapZh,
   numberTypeList as numberTypeListZh,
   numberLevelList as numberLevelListZh,
   linearGradientDirList as linearGradientDirListZh,
@@ -62,113 +62,135 @@ import {
   alignList as alignListZhtw,
   layoutGroupList as layoutGroupListZhtw
 } from './zhtw'
+import {
+  fontFamilyList as fontFamilyListVi,
+  borderDasharrayList as borderDasharrayListVi,
+  lineStyleList as lineStyleListVi,
+  rootLineKeepSameInCurveList as rootLineKeepSameInCurveListVi,
+  backgroundRepeatList as backgroundRepeatListVi,
+  backgroundPositionList as backgroundPositionListVi,
+  shortcutKeyList as shortcutKeyListVi,
+  shapeList as shapeListVi,
+  sidebarTriggerList as sidebarTriggerListVi,
+  backgroundSizeList as backgroundSizeListVi,
+  downTypeList as downTypeListVi,
+  numberTypeList as numberTypeListVi,
+  numberLevelList as numberLevelListVi,
+  linearGradientDirList as linearGradientDirListVi,
+  alignList as alignListVi,
+  layoutGroupList as layoutGroupListVi
+} from './vi'
 
 const fontFamilyList = {
   zh: fontFamilyListZh,
   en: fontFamilyListEn,
-  zhtw: fontFamilyListZhtw
+  zhtw: fontFamilyListZhtw,
+  vi: fontFamilyListVi
 }
 
 const borderDasharrayList = {
   zh: borderDasharrayListZh,
   en: borderDasharrayListEn,
-  zhtw: borderDasharrayListZhtw
+  zhtw: borderDasharrayListZhtw,
+  vi: borderDasharrayListVi
 }
 
 const lineStyleList = {
   zh: lineStyleListZh,
   en: lineStyleListEn,
-  zhtw: lineStyleListZhtw
-}
-
-const lineStyleMap = {
-  zh: lineStyleMapZh,
-  en: lineStyleMapZh,
-  zhtw: lineStyleMapZh
+  zhtw: lineStyleListZhtw,
+  vi: lineStyleListVi
 }
 
 const rootLineKeepSameInCurveList = {
   zh: rootLineKeepSameInCurveListZh,
   en: rootLineKeepSameInCurveListEn,
-  zhtw: rootLineKeepSameInCurveListZhtw
+  zhtw: rootLineKeepSameInCurveListZhtw,
+  vi: rootLineKeepSameInCurveListVi
 }
 
 const backgroundRepeatList = {
   zh: backgroundRepeatListZh,
   en: backgroundRepeatListEn,
-  zhtw: backgroundRepeatListZhtw
+  zhtw: backgroundRepeatListZhtw,
+  vi: backgroundRepeatListVi
 }
 
 const backgroundPositionList = {
   zh: backgroundPositionListZh,
   en: backgroundPositionListEn,
-  zhtw: backgroundPositionListZhtw
+  zhtw: backgroundPositionListZhtw,
+  vi: backgroundPositionListVi
 }
 
 const backgroundSizeList = {
   zh: backgroundSizeListZh,
   en: backgroundSizeListEn,
-  zhtw: backgroundSizeListZhtw
+  zhtw: backgroundSizeListZhtw,
+  vi: backgroundSizeListVi
 }
 
 const shortcutKeyList = {
   zh: shortcutKeyListZh,
   en: shortcutKeyListEn,
-  zhtw: shortcutKeyListZhtw
+  zhtw: shortcutKeyListZhtw,
+  vi: shortcutKeyListVi
 }
 
 const shapeList = {
   zh: shapeListZh,
   en: shapeListEn,
-  zhtw: shapeListZhtw
-}
-
-const shapeListMap = {
-  zh: shapeListMapZh,
-  en: shapeListMapZh,
-  zhtw: shapeListMapZh
+  zhtw: shapeListZhtw,
+  vi: shapeListVi
 }
 
 const sidebarTriggerList = {
   zh: sidebarTriggerListZh,
   en: sidebarTriggerListEn,
-  zhtw: sidebarTriggerListZhtw
+  zhtw: sidebarTriggerListZhtw,
+  vi: sidebarTriggerListVi
 }
 
 const downTypeList = {
   zh: downTypeListZh,
   en: downTypeListEn,
-  zhtw: downTypeListZhtw
+  zhtw: downTypeListZhtw,
+  vi: downTypeListVi
 }
 
 const numberTypeList = {
   zh: numberTypeListZh,
   en: numberTypeListEn,
-  zhtw: numberTypeListZhtw
+  zhtw: numberTypeListZhtw,
+  vi: numberTypeListVi
 }
 
 const numberLevelList = {
   zh: numberLevelListZh,
   en: numberLevelListEn,
-  zhtw: numberLevelListZhtw
+  zhtw: numberLevelListZhtw,
+  vi: numberLevelListVi
 }
 
 const linearGradientDirList = {
   zh: linearGradientDirListZh,
   en: linearGradientDirListEn,
-  zhtw: linearGradientDirListZhtw
+  zhtw: linearGradientDirListZhtw,
+  vi: linearGradientDirListVi
 }
 
 const alignList = {
   zh: alignListZh,
   en: alignListEn,
-  zhtw: alignListZhtw
+  zhtw: alignListZhtw,
+  vi: alignListVi
 }
 
 const layoutGroupList = {
   zh: layoutGroupListZh,
   en: layoutGroupListEn,
-  zhtw: layoutGroupListZhtw
+  zhtw: layoutGroupListZhtw,
+  vi: layoutGroupListVi
 }
 
 export {

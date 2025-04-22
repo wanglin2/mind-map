@@ -78,15 +78,16 @@ export default {
     watermarkTextFontSize: 'Cỡ chữ',
     belowNode: 'Hiển thị nút bên dưới',
     alwaysShowExpandBtn: 'Luôn hiển thị nút mở rộng',
-    enableAutoEnterTextEditWhenKeydown: 'Tự động vào chế độ chỉnh sửa văn bản khi nhấn phím',
+    enableAutoEnterTextEditWhenKeydown:
+      'Tự động vào chế độ chỉnh sửa văn bản khi nhấn phím',
     confirm: 'Xác nhận',
     cancel: 'Hủy',
     changeRichTextTip:
       'Thao tác này sẽ xóa tất cả lịch sử chỉnh sửa và sửa đổi dữ liệu sơ đồ tư duy. Bạn có muốn tiếp tục?',
     changeRichTextTip2: 'Bạn có muốn chuyển sang chế độ văn bản phong phú?',
-    changeRichTextTip3: 'Bạn có muốn chuyển sang chế độ không phải văn bản phong phú?',
-    enableDragImport:
-      'Cho phép kéo và thả tệp trực tiếp vào trang để nhập',
+    changeRichTextTip3:
+      'Bạn có muốn chuyển sang chế độ không phải văn bản phong phú?',
+    enableDragImport: 'Cho phép kéo và thả tệp trực tiếp vào trang để nhập',
     imgTextMargin: 'Khoảng cách giữa hình ảnh và văn bản nút',
     textContentMargin: 'Khoảng cách nội dung nút',
     enableInheritAncestorLineStyle:
@@ -176,8 +177,7 @@ export default {
     addFooterText: 'Thêm văn bản ở chân trang',
     desc: 'Mô tả',
     options: 'Tùy chọn',
-    isFitBg:
-      'Hiển thị đầy đủ hình nền (có hiệu lực khi dùng hình nền)',
+    isFitBg: 'Hiển thị đầy đủ hình nền (có hiệu lực khi dùng hình nền)',
     format: 'Định dạng'
   },
   fullscreen: {
@@ -209,7 +209,12 @@ export default {
     readonly: 'Chuyển sang chế độ chỉ đọc',
     edit: 'Chuyển sang chế độ chỉnh sửa',
     backToRoot: 'Quay lại nút gốc',
-    changeSourceCodeEdit: 'Chuyển sang chế độ chỉnh sửa mã nguồn'
+    changeSourceCodeEdit: 'Chuyển sang chế độ chỉnh sửa mã nguồn',
+    shortcutKeys: 'Phím tắt',
+    ai: 'Đối thoại AI',
+    downloadClient: 'Tải về khách hàng',
+    site: 'Trang web chính thức',
+    current: 'Hiện tại:'
   },
   nodeHyperlink: {
     title: 'Liên kết',
@@ -296,8 +301,7 @@ export default {
     classics: 'Cổ điển',
     dark: 'Tối',
     simple: 'Đơn giản',
-    coverTip:
-      'Bạn hiện đã tùy chỉnh kiểu cơ bản, bạn có muốn ghi đè không?',
+    coverTip: 'Bạn hiện đã tùy chỉnh kiểu cơ bản, bạn có muốn ghi đè không?',
     tip: 'Mẹo',
     cover: 'Ghi đè',
     reserve: 'Giữ lại'
@@ -362,7 +366,8 @@ export default {
     autoOpenNodeRichTextTip:
       'Phát hiện nội dung văn bản phong phú nhập vào, tự động bật chế độ văn bản phong phú',
     localStorageExceededTip:
-      'Dung lượng sơ đồ tư duy bạn tạo đã vượt quá giới hạn lưu trữ tối đa cho phép của trình duyệt. Vui lòng xuất ngay lập tức, nếu không dữ liệu sẽ bị mất! Nên tải xuống ứng dụng khách để sử dụng, vì không có giới hạn kích thước khi sử dụng ứng dụng khách.'
+      'Dung lượng sơ đồ tư duy bạn tạo đã vượt quá giới hạn lưu trữ tối đa cho phép của trình duyệt. Vui lòng xuất ngay lập tức, nếu không dữ liệu sẽ bị mất! Nên tải xuống ứng dụng khách để sử dụng, vì không có giới hạn kích thước khi sử dụng ứng dụng khách.',
+    withBg: 'Với Background'
   },
   mouseAction: {
     tip1:
@@ -412,7 +417,8 @@ export default {
     copy: 'Sao chép',
     confirm: 'Hoàn thành',
     close: 'Đóng',
-    formatErrorTip: 'Định dạng JSON không chính xác. Vui lòng kiểm tra và thử lại',
+    formatErrorTip:
+      'Định dạng JSON không chính xác. Vui lòng kiểm tra và thử lại',
     copyTip: 'Đã sao chép vào clipboard',
     formatTip: 'Định dạng hoàn thành'
   },
@@ -477,8 +483,7 @@ export default {
       'Vui lòng nhập chủ đề, và AI sẽ tạo sơ đồ tư duy dựa trên chủ đề của bạn, chẳng hạn như: Kế hoạch du lịch cuối tuần Hà Nội.',
     importantTip:
       'Lưu ý quan trọng: Tạo một nhấp sẽ ghi đè dữ liệu hiện có. Nên xuất dữ liệu hiện tại trước.',
-    wantModifyAiConfigTip:
-      'Bạn muốn sửa đổi cấu hình AI? Vui lòng nhấp vào:',
+    wantModifyAiConfigTip: 'Bạn muốn sửa đổi cấu hình AI? Vui lòng nhấp vào:',
     modifyAIConfiguration: 'Sửa đổi cấu hình AI',
     chatInputPlaceholder: 'Nhấn Enter để gửi, Shift+Enter để xuống dòng.',
     send: 'Gửi',
@@ -514,8 +519,7 @@ export default {
     aiCreatePartMsgPrefix: 'Tôi có một chủ đề là【',
     aiCreatePartMsgCenter:
       '】Bạn có thể giúp tôi tiếp tục viết một trong những nội dung của sơ đồ tư duy【',
-    aiCreatePartMsgPostfix:
-      '】Nội dung phụ thuộc của nút',
+    aiCreatePartMsgPostfix: '】Nội dung phụ thuộc của nút',
     aiCreatePartMsgHelp:
       '. Cần được trả về ở định dạng Markdown và chỉ có thể sử dụng hai cú pháp: tiêu đề Markdown và danh sách không có thứ tự. Nó có thể hỗ trợ lồng ghép nhiều cấp độ. Chỉ cần trả về nội dung.',
     aiCreatePart: 'AI Tiếp tục'

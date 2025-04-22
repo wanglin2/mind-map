@@ -880,6 +880,7 @@ export default {
       rainbowLinesOptions,
       lineWidthList,
       fontSizeList,
+      lineStyleMap,
       activeTab: 'color',
       marginActiveTab: 'second',
       style: {
@@ -957,9 +958,6 @@ export default {
     },
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
-    },
-    lineStyleMap() {
-      return lineStyleMap[this.$i18n.locale] || lineStyleMap.zh
     },
     showNodeUseLineStyle() {
       return supportNodeUseLineStyleLayouts.includes(this.currentLayout)

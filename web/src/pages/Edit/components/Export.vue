@@ -629,12 +629,13 @@ export default {
             }
 
             .contentName {
-              width: 45px;
+              min-width: 40px;
               color: #808080;
               flex-shrink: 0;
               font-size: 13px;
               font-weight: 500;
               line-height: 25px;
+              margin-right: 12px;
             }
 
             .contentValue {
@@ -668,7 +669,7 @@ export default {
 
                   .name {
                     margin-right: 12px;
-                    width: 85px;
+                    min-width: 85px;
                   }
                 }
               }

@@ -6,8 +6,7 @@ Vue.use(VueI18n)
 
 const i18n = new VueI18n({
   messages,
-  locale: 'en', // Set English as default language
-  fallbackLocale: 'en' // Fallback to English if a translation is missing
+  fallbackLocale: 'zh'
 })
 
 export default i18n

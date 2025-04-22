@@ -649,13 +649,12 @@ export default {
       ]
     },
     shapeListMap() {
-      const map = shapeListMap[this.$i18n.locale] || shapeListMap.zh
       const map2 = {}
       this.mindMap.extendShapeList.forEach(item => {
         map2[item.name] = item.path
       })
       return {
-        ...map,
+        ...shapeListMap,
         ...map2
       }
     },
