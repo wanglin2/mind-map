@@ -83,3 +83,13 @@ export const printOutline = el => {
     document.body.removeChild(iframe)
   }, 500)
 }
+
+export const getParentWithClass = (el, className) => {
+  if (el.classList.contains(className)) {
+    return el
+  }
+  if (el.parentNode && el.parentNode !== document.body) {
+    return getParentWithClass(el.parentNode, className)
+  }
+  return null
+}

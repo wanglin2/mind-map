@@ -89,7 +89,7 @@
     </div>
     <div
       slot="reference"
-      class="toolbarBtn"
+      class="toolbarBtn vip"
       :style="{
         marginLeft: dir === 'v' || rightHasBtn ? '0px' : '20px',
         marginTop: dir === 'v' ? '10px' : '0px',

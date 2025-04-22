@@ -209,6 +209,13 @@ export default {
       } else if (command === 'aiChat') {
         this.setActiveSidebar('ai')
         return
+      } else if (command === 'client') {
+        this.$bus.$emit(
+          'showDownloadTip',
+          this.$t('navigatorToolbar.downloadClient'),
+          this.$t('navigatorToolbar.downloadDesc')
+        )
+        return
       }
       let url = ''
       switch (command) {
@@ -228,8 +235,7 @@ export default {
         case 'issue':
           url = 'https://github.com/wanglin2/mind-map/issues/new'
           break
-        case 'client':
-          url = 'https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3'
+
         default:
           break
       }

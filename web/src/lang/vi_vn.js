@@ -214,7 +214,8 @@ export default {
     ai: 'Đối thoại AI',
     downloadClient: 'Tải về khách hàng',
     site: 'Trang web chính thức',
-    current: 'Hiện tại:'
+    current: 'Hiện tại:',
+    downloadDesc: 'Có thể download từ địa chỉ sau:'
   },
   nodeHyperlink: {
     title: 'Liên kết',
@@ -367,7 +368,12 @@ export default {
       'Phát hiện nội dung văn bản phong phú nhập vào, tự động bật chế độ văn bản phong phú',
     localStorageExceededTip:
       'Dung lượng sơ đồ tư duy bạn tạo đã vượt quá giới hạn lưu trữ tối đa cho phép của trình duyệt. Vui lòng xuất ngay lập tức, nếu không dữ liệu sẽ bị mất! Nên tải xuống ứng dụng khách để sử dụng, vì không có giới hạn kích thước khi sử dụng ứng dụng khách.',
-    withBg: 'Với Background'
+    withBg: 'Với Background',
+    tryTipTitle: 'Mẹo dùng thử chức năng',
+    tryTipDesc:
+      'Chức năng này là chức năng dùng thử trong phiên bản web, xin vui lòng tải xuống để khách hàng sử dụng:',
+    downBaidu: 'Tải xuống Baidu',
+    downGithub: 'Tải xuống Github'
   },
   mouseAction: {
     tip1:

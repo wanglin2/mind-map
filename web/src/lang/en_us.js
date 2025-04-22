@@ -215,7 +215,8 @@ export default {
     ai: 'AI dialogue',
     downloadClient: 'Download client',
     site: 'Official website',
-    current: 'Current:'
+    current: 'Current:',
+    downloadDesc: 'You can download it from the following address:'
   },
   nodeHyperlink: {
     title: 'Link',
@@ -369,7 +370,12 @@ export default {
       'Detected imported rich text content, automatically enabled rich text mode',
     localStorageExceededTip:
       'The volume of the mind map you created has exceeded the maximum storage limit allowed by the browser. Please export it immediately, otherwise the data will be lost! It is recommended to download the client for use, as there is no size limit for the client.',
-    withBg: 'With background image'
+    withBg: 'With background image',
+    tryTipTitle: 'Function trial prompt',
+    tryTipDesc:
+      'This feature is a trial feature in the web version. Please download the client to use it:',
+    downBaidu: 'Go to Baidu Netdisk to download',
+    downGithub: 'Download from Github'
   },
   mouseAction: {
     tip1:

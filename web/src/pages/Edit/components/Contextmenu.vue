@@ -62,7 +62,7 @@
       <div class="item" @click="exec('EXPAND_ALL')">
         <span class="name">{{ $t('contextmenu.expandNodeChild') }}</span>
       </div>
-      <div class="item" v-if="supportNumbers">
+      <div class="item vip" v-if="supportNumbers">
         <span class="name">{{ $t('contextmenu.number') }}</span>
         <span class="el-icon-arrow-right"></span>
         <div
@@ -92,7 +92,7 @@
           </div>
         </div>
       </div>
-      <div class="item" @click="setCheckbox" v-if="supportCheckbox">
+      <div class="item vip" @click="setCheckbox" v-if="supportCheckbox">
         <span class="name">{{
           hasCheckbox ? $t('contextmenu.removeToDo') : $t('contextmenu.addToDo')
         }}</span>
@@ -134,14 +134,14 @@
       <div class="item" @click="exec('REMOVE_NOTE')" v-if="hasNote">
         <span class="name">{{ $t('contextmenu.removeNote') }}</span>
       </div>
-      <div class="item" @click="exec('LINK_NODE')">
+      <div class="item vip" @click="exec('LINK_NODE')">
         <span class="name">{{
           hasNodeLink
             ? $t('contextmenu.modifyNodeLink')
             : $t('contextmenu.linkToNode')
         }}</span>
       </div>
-      <div class="item" @click="exec('REMOVE_LINK_NODE')" v-if="hasNodeLink">
+      <div class="item vip" @click="exec('REMOVE_LINK_NODE')" v-if="hasNodeLink">
         <span class="name">{{ $t('contextmenu.removeNodeLink') }}</span>
       </div>
       <div class="item" @click="exec('REMOVE_CUSTOM_STYLES')">

@@ -20,7 +20,10 @@
             class="downloadTypeItem"
             v-for="item in downTypeList"
             :key="item.type"
-            :class="{ active: exportType === item.type }"
+            :class="{
+              active: exportType === item.type,
+              vip: ['mm', 'xlsx'].includes(item.type)
+            }"
             @click="exportType = item.type"
           >
             <div class="typeIcon" :class="[item.type]"></div>
@@ -77,7 +80,7 @@
                     <span class="name">{{ $t('export.format') }}</span>
                     <el-radio-group v-model="imageFormat">
                       <el-radio label="png">PNG</el-radio>
-                      <el-radio label="jpg">JPG</el-radio>
+                      <el-radio label="jpg" class="vip">JPG</el-radio>
                     </el-radio-group>
                   </div>
                   <div class="valueSubItem">

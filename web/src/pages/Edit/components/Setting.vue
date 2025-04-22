@@ -4,6 +4,7 @@
       class="sidebarContent customScrollbar"
       :class="{ isDark: isDark }"
       v-if="configData"
+      @click="onClick"
     >
       <!-- 水印 -->
       <div class="row">
@@ -257,7 +258,7 @@
         </div>
       </div>
       <!-- 是否开启手绘风格 -->
-      <div class="row" v-if="supportHandDrawnLikeStyle">
+      <div class="row vip" v-if="supportHandDrawnLikeStyle">
         <div class="rowItem">
           <el-checkbox
             v-model="localConfigs.isUseHandDrawnLikeStyle"
@@ -267,7 +268,7 @@
         </div>
       </div>
       <!-- 是否开启动量效果 -->
-      <div class="row" v-if="supportMomentum">
+      <div class="row vip" v-if="supportMomentum">
         <div class="rowItem">
           <el-checkbox
             v-model="localConfigs.isUseMomentum"
@@ -277,7 +278,7 @@
         </div>
       </div>
       <!-- 是否开启演示模式的填空功能 -->
-      <div class="row">
+      <div class="row vip">
         <div class="rowItem">
           <el-checkbox
             v-model="config.demonstrateConfig.openBlankMode"
@@ -627,6 +628,10 @@ export default {
       this.setLocalConfig({
         [key]: value
       })
+    },
+
+    onClick(e) {
+      this.$bus.$emit('vipCheckClick', e)
     }
   }
 }

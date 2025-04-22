@@ -25,6 +25,7 @@
           size="small"
           style="margin-left: 10px;"
           @click="mdImportDialogVisible = true"
+          class="vip"
           >{{ $t('import.mdImportDialogTitle') }}</el-button
         >
         <div slot="tip" class="el-upload__tip">
@@ -33,7 +34,7 @@
       </el-upload>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancel">{{ $t('dialog.cancel') }}</el-button>
-        <el-button type="primary" @click="confirm">{{
+        <el-button class="vip" type="primary" @click="confirm">{{
           $t('dialog.confirm')
         }}</el-button>
       </span>
