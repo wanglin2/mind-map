@@ -779,7 +779,7 @@ class Drag extends Base {
       checkList = checkList.reverse()
     }
     let oneFourthHeight = nodeRect.originHeight / 4
-    let { prevBrotherOffset, nextBrotherOffset } =
+    let { prevBrother, prevBrotherOffset, nextBrother, nextBrotherOffset } =
       this.getNodeDistanceToSiblingNode(checkList, node, nodeRect, 'v')
     if (nodeRect.left <= mouseMoveX && nodeRect.right >= mouseMoveX) {
       // 检测兄弟节点位置
@@ -789,6 +789,25 @@ class Drag extends Base {
         !this.nextNode &&
         !node.isRoot
       ) {
+        // 如果不在兄弟节点范围内，那么修改距离值
+        if (prevBrother) {
+          const { scaleY } = this.drawTransform
+          const brotherRect = this.getNodeRect(prevBrother)
+          if (
+            !(brotherRect.left <= mouseMoveX && brotherRect.right >= mouseMoveX)
+          ) {
+            prevBrotherOffset = this.minOffset * scaleY
+          }
+        }
+        if (nextBrother) {
+          const { scaleY } = this.drawTransform
+          const brotherRect = this.getNodeRect(nextBrother)
+          if (
+            !(brotherRect.left <= mouseMoveX && brotherRect.right >= mouseMoveX)
+          ) {
+            nextBrotherOffset = this.minOffset * scaleY
+          }
+        }
         let checkIsPrevNode =
           nextBrotherOffset > 0 // 距离下一个兄弟节点的距离大于0
             ? mouseMoveY > nodeRect.bottom &&
@@ -921,7 +940,7 @@ class Drag extends Base {
     let mouseMoveY = this.mouseMoveY
     let nodeRect = this.getNodeRect(node)
     let oneFourthWidth = nodeRect.originWidth / 4
-    let { prevBrotherOffset, nextBrotherOffset } =
+    let { prevBrother, prevBrotherOffset, nextBrother, nextBrotherOffset } =
       this.getNodeDistanceToSiblingNode(checkList, node, nodeRect, 'h')
     if (nodeRect.top <= mouseMoveY && nodeRect.bottom >= mouseMoveY) {
       // 检测兄弟节点位置
@@ -931,6 +950,24 @@ class Drag extends Base {
         !this.nextNode &&
         !node.isRoot
       ) {
+        if (prevBrother) {
+          const { scaleX } = this.drawTransform
+          const brotherRect = this.getNodeRect(prevBrother)
+          if (
+            !(brotherRect.top <= mouseMoveY && brotherRect.bottom >= mouseMoveY)
+          ) {
+            prevBrotherOffset = this.minOffset * scaleX
+          }
+        }
+        if (nextBrother) {
+          const { scaleX } = this.drawTransform
+          const brotherRect = this.getNodeRect(nextBrother)
+          if (
+            !(brotherRect.top <= mouseMoveY && brotherRect.bottom >= mouseMoveY)
+          ) {
+            nextBrotherOffset = this.minOffset * scaleX
+          }
+        }
         let checkIsPrevNode =
           nextBrotherOffset > 0 // 距离下一个兄弟节点的距离大于0
             ? mouseMoveX < nodeRect.right + nextBrotherOffset &&
