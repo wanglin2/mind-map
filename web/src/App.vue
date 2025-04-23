@@ -41,6 +41,6 @@ export default {
 }
 
 .el-dialog{
-  border-radius: 10px;
+  border-radius: 10px !important;
 }
 </style>
