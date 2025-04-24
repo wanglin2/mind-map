@@ -337,6 +337,11 @@ export const shortcutKeyList = [
         icon: 'iconquanping1',
         name: '適應畫布',
         value: `${ctrl} + i`
+      },
+      {
+        icon: 'iconshubiaoyidong',
+        name: '移動畫布',
+        value: `左鍵 / 右鍵 / 空白鍵 + 左鍵`
       }
     ]
   },

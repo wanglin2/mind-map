@@ -403,6 +403,11 @@ export const shortcutKeyList = [
         icon: 'iconquanping1',
         name: '适应画布',
         value: `${ctrl} + i`
+      },
+      {
+        icon: 'iconshubiaoyidong',
+        name: '移动画布',
+        value: `左键 / 右键 / 空格键 + 左键`
       }
     ]
   },
@@ -550,7 +555,7 @@ export const sidebarTriggerList = [
     name: '设置',
     value: 'setting',
     icon: 'iconshezhi'
-  },
+  }
   // {
   //   name: '快捷键',
   //   value: 'shortcutKey',
@@ -619,7 +624,7 @@ export const downTypeList = [
     type: 'json',
     icon: 'iconjson',
     desc: '流行的数据交换格式，可用于再次导入'
-  },
+  }
 ]
 
 // 编号类型列表

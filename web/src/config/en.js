@@ -335,8 +335,13 @@ export const shortcutKeyList = [
       },
       {
         icon: 'iconquanping1',
-        name: 'fit canvas',
+        name: 'Fit canvas',
         value: `${ctrl} + i`
+      },
+      {
+        icon: 'iconshubiaoyidong',
+        name: 'Moving canvas',
+        value: `Left click / Right click / Space bar + Left click`
       }
     ]
   },

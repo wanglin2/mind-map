@@ -341,6 +341,11 @@ export const shortcutKeyList = [
         icon: 'iconquanping1',
         name: 'Thích nghi với Canvas',
         value: `${ctrl} + i`
+      },
+      {
+        icon: 'iconshubiaoyidong',
+        name: 'Di chuyển Canvas',
+        value: `Trái / Phải / Phím cách + Trái`
       }
     ]
   },
