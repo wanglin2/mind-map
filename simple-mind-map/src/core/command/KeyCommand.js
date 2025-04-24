@@ -1,4 +1,4 @@
-import { keyMap } from './keyMap'
+import { keyMap, isKey } from './keyMap'
 
 //  快捷按键、命令处理类
 export default class KeyCommand {
@@ -13,6 +13,7 @@ export default class KeyCommand {
     this.isPause = false
     this.isInSvg = false
     this.isStopCheckInSvg = false
+    this.currentKeyCode = ''
     this.defaultEnableCheck = this.defaultEnableCheck.bind(this)
     this.bindEvent()
   }
@@ -78,6 +79,7 @@ export default class KeyCommand {
   //  绑定事件
   bindEvent() {
     this.onKeydown = this.onKeydown.bind(this)
+    this.onKeyup = this.onKeyup.bind(this)
     // 只有当鼠标在画布内才响应快捷键
     this.mindMap.on('svg_mouseenter', () => {
       this.isInSvg = true
@@ -86,6 +88,7 @@ export default class KeyCommand {
       this.isInSvg = false
     })
     window.addEventListener('keydown', this.onKeydown)
+    window.addEventListener('keyup', this.onKeyup)
     this.mindMap.on('beforeDestroy', () => {
       this.unBindEvent()
     })
@@ -94,6 +97,7 @@ export default class KeyCommand {
   // 解绑事件
   unBindEvent() {
     window.removeEventListener('keydown', this.onKeydown)
+    window.removeEventListener('keyup', this.onKeyup)
   }
 
   // 根据事件目标判断是否响应快捷键事件
@@ -109,8 +113,23 @@ export default class KeyCommand {
     return false
   }
 
+  // 当前键盘是否存在按下的按键，是的的话判断按键是否只指定按键
+  // keyName：键名称，比如：Enter、Spacebar等，完整名称列表可通过以下方法打印查看：
+  /*
+    import { keyMap } from 'simple-mind-map/src/core/command/keyMap'
+    console.log(keyMap)
+  */
+  currentIsKey(keyName) {
+    return this.currentKeyCode && isKey(this.currentKeyCode, keyName)
+  }
+
+  onKeyup() {
+    this.currentKeyCode = ''
+  }
+
   // 按键事件
   onKeydown(e) {
+    this.currentKeyCode = e.keyCode
     const {
       enableShortcutOnlyWhenMouseInSvg,
       beforeShortcutRun,

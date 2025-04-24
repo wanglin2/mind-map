@@ -48,7 +48,10 @@ class Select {
     let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
     if (
       !(e.ctrlKey || e.metaKey) &&
-      (useLeftKeySelectionRightKeyDrag ? e.which !== 1 : e.which !== 3)
+      (useLeftKeySelectionRightKeyDrag// 是否开启了左键多选节点右键拖动画布
+        ? e.which !== 1 ||// 非左键直接返回
+          (e.which === 1 && this.mindMap.keyCommand.currentIsKey('Spacebar'))// 是左键+空格也返回，因为是拖动画布
+        : e.which !== 3)// 非右键直接返回
     ) {
       return
     }

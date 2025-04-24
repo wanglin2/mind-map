@@ -122,8 +122,10 @@ class Event extends EventEmitter {
     this.emit('mousemove', e, this)
     if (
       this.isMiddleMousedown ||
-      (useLeftKeySelectionRightKeyDrag
-        ? this.isRightMousedown
+      (useLeftKeySelectionRightKeyDrag// 是否左键多选节点，右键拖动画布
+        ? this.isRightMousedown ||
+          (this.isLeftMousedown &&
+            this.mindMap.keyCommand.currentIsKey('Spacebar'))// 右键、或者左键+空格
         : this.isLeftMousedown)
     ) {
       e.preventDefault()
