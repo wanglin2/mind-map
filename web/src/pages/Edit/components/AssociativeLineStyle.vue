@@ -144,7 +144,7 @@
         </div>
       </div>
       <!-- 关联线文字 -->
-      <div class="title noTop">{{ $t('baseStyle.associativeLineText') }}</div>
+      <div class="title">{{ $t('baseStyle.associativeLineText') }}</div>
       <div class="row">
         <div class="rowItem">
           <span class="name">{{ $t('baseStyle.fontFamily') }}</span>
@@ -354,7 +354,7 @@ export default {
     font-weight: 500;
     color: rgba(26, 26, 26, 0.9);
     margin-bottom: 10px;
-    margin-top: 20px;
+    margin-top: 35px;
 
     &.noTop {
       margin-top: 0;

@@ -1,7 +1,7 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('nodeOuterFrame.nodeOuterFrameStyle')">
     <div class="sidebarContent" :class="{ isDark: isDark }">
-      <div class="panelHeader">
+      <div class="panelHeader noTop">
         <span class="name">{{ $t('nodeOuterFrame.outerFrameSetting') }}</span>
         <span class="deleteBtn" @click="deleteOuterFrame">
           {{ $t('nodeOuterFrame.deleteOuterFrame') }}
@@ -9,6 +9,19 @@
         </span>
       </div>
       <div class="panelBody">
+        <div class="row">
+          <div class="rowItem">
+            <el-checkbox
+              v-model="styleConfig.containsChildren"
+              @change="
+                value => {
+                  updateOuterFrame('containsChildren', value)
+                }
+              "
+              >外框是否包含子节点</el-checkbox
+            >
+          </div>
+        </div>
         <div class="row">
           <div class="rowItem">
             <span class="name">{{ $t('nodeOuterFrame.boxStyle') }}</span>
@@ -140,7 +153,7 @@
           </div>
         </div>
       </div>
-      <div class="panelHeader" style="margin-top: 12px;">
+      <div class="panelHeader">
         <span class="name">{{ $t('nodeOuterFrame.outerFrameText') }}</span>
         <span class="deleteBtn" @click="deleteOuterFrameText">
           {{ $t('nodeOuterFrame.deleteOuterFrameText') }}
@@ -563,7 +576,12 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+    margin-top: 35px;
+
+    &.noTop {
+      margin-top: 0;
+    }
 
     .name {
       font-size: 16px;
