@@ -297,6 +297,14 @@ class OuterFrame {
               e.stopPropagation()
               this.setActiveOuterFrame(el, cur, range, textNode)
             })
+            el.on('contextmenu', e => {
+              this.mindMap.emit('outer_frame_contextmenu', {
+                e,
+                el,
+                node: cur,
+                range
+              })
+            })
           })
         }
       },
