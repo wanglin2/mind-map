@@ -12,6 +12,8 @@ import outerFrameTextMethods from './outerFrame/outerFrameText'
 
 // 默认外框样式
 const defaultStyle = {
+  // 外框范围是否包含下级节点
+  containsChildren: true,
   // 外框圆角大小
   radius: 5,
   // 外框边框宽度
@@ -201,7 +203,8 @@ class OuterFrame {
     this.isNotRenderOuterFrames = true
     const { el, node, range } = this.activeOuterFrame
     let newStrokeDasharray = ''
-    this.getRangeNodeList(node, range).forEach(node => {
+    const nodeList = this.getRangeNodeList(node, range)
+    nodeList.forEach(node => {
       const outerFrame = node.getData('outerFrame')
       const newData = {
         ...outerFrame,
@@ -214,6 +217,18 @@ class OuterFrame {
     })
     el.cacheStyle = {
       dasharray: newStrokeDasharray
+    }
+    // 更新是否包含下级节点，需要重新计算大小
+    if (typeof config.containsChildren !== 'undefined') {
+      const { left, top, width, height } = getNodeListBoundingRect(
+        nodeList,
+        0,
+        0,
+        0,
+        0,
+        !config.containsChildren
+      )
+      this.setOuterFrameElRectInfo(el, left, top, width, height)
     }
     this.updateOuterFrameStyle()
   }
@@ -243,6 +258,21 @@ class OuterFrame {
     return node.children[range[0]]
   }
 
+  // 设置或更新外框元素位置和大小
+  setOuterFrameElRectInfo(el, left, top, width, height) {
+    const t = this.mindMap.draw.transform()
+    const { outerFramePaddingX, outerFramePaddingY } = this.mindMap.opt
+    const x =
+      (left - outerFramePaddingX - this.mindMap.elRect.left - t.translateX) /
+      t.scaleX
+    const y =
+      (top - outerFramePaddingY - this.mindMap.elRect.top - t.translateY) /
+      t.scaleY
+    const w = (width + outerFramePaddingX * 2) / t.scaleX
+    const h = (height + outerFramePaddingY * 2) / t.scaleY
+    el.size(w, h).x(x).y(y)
+  }
+
   // 渲染外框
   renderOuterFrames() {
     if (this.isNotRenderOuterFrames) {
@@ -254,8 +284,6 @@ class OuterFrame {
     this.clearOuterFrameElList()
     let tree = this.mindMap.renderer.root
     if (!tree) return
-    const t = this.mindMap.draw.transform()
-    const { outerFramePaddingX, outerFramePaddingY } = this.mindMap.opt
     walk(
       tree,
       null,
@@ -265,8 +293,15 @@ class OuterFrame {
         if (outerFrameList && outerFrameList.length > 0) {
           outerFrameList.forEach(({ nodeList, range }) => {
             if (range[0] === -1 || range[1] === -1) return
-            const { left, top, width, height } =
-              getNodeListBoundingRect(nodeList)
+            const config = this.getStyle(nodeList[0]) // 使用第一个节点的外框样式
+            const { left, top, width, height } = getNodeListBoundingRect(
+              nodeList,
+              0,
+              0,
+              0,
+              0,
+              !config.containsChildren
+            )
             if (
               !Number.isFinite(left) ||
               !Number.isFinite(top) ||
@@ -274,21 +309,8 @@ class OuterFrame {
               !Number.isFinite(height)
             )
               return
-            const el = this.createOuterFrameEl(
-              (left -
-                outerFramePaddingX -
-                this.mindMap.elRect.left -
-                t.translateX) /
-                t.scaleX,
-              (top -
-                outerFramePaddingY -
-                this.mindMap.elRect.top -
-                t.translateY) /
-                t.scaleY,
-              (width + outerFramePaddingX * 2) / t.scaleX,
-              (height + outerFramePaddingY * 2) / t.scaleY,
-              this.getStyle(nodeList[0]) // 使用第一个节点的外框样式
-            )
+            const el = this.createOuterFrameEl(config)
+            this.setOuterFrameElRectInfo(el, left, top, width, height)
             // 渲染文字，如果有的话
             const textNode = this.createText(el, cur, range)
             this.textNodeList.push(textNode)
@@ -363,8 +385,8 @@ class OuterFrame {
   }
 
   // 创建外框元素
-  createOuterFrameEl(x, y, width, height, styleConfig = {}) {
-    const el = this.draw.rect().size(width, height).x(x).y(y)
+  createOuterFrameEl(styleConfig = {}) {
+    const el = this.draw.rect()
     this.styleOuterFrame(el, styleConfig)
     el.cacheStyle = {
       dasharray: styleConfig.strokeDasharray

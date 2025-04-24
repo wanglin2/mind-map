@@ -1457,7 +1457,8 @@ export const getNodeTreeBoundingRect = (
   paddingX = 0,
   paddingY = 0,
   excludeSelf = false,
-  excludeGeneralization = false
+  excludeGeneralization = false,
+  onSelf = false
 ) => {
   let minX = Infinity
   let maxX = -Infinity
@@ -1483,6 +1484,7 @@ export const getNodeTreeBoundingRect = (
         }
       } catch (e) {}
     }
+    if (onSelf) return
     if (!excludeGeneralization && root._generalizationList.length > 0) {
       root._generalizationList.forEach(item => {
         walk(item.generalizationNode)
@@ -1515,7 +1517,8 @@ export const getNodeListBoundingRect = (
   x = 0,
   y = 0,
   paddingX = 0,
-  paddingY = 0
+  paddingY = 0,
+  onSelf = false
 ) => {
   let minX = Infinity
   let maxX = -Infinity
@@ -1529,7 +1532,8 @@ export const getNodeListBoundingRect = (
       paddingX,
       paddingY,
       false,
-      true
+      true,
+      onSelf
     )
     if (left < minX) {
       minX = left
