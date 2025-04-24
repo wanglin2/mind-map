@@ -465,7 +465,8 @@ export default {
     center: 'Center',
     right: 'Right',
     paddingX: 'Padding x',
-    paddingY: 'Padding y'
+    paddingY: 'Padding y',
+    constainsChildren: 'Does the outer frame contain child nodes'
   },
   nodeTagStyle: {
     placeholder: 'Please enter the tag content',

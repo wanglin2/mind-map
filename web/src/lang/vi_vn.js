@@ -464,7 +464,8 @@ export default {
     center: 'Giữa',
     right: 'Phải',
     paddingX: 'Đệm x',
-    paddingY: 'Đệm y'
+    paddingY: 'Đệm y',
+    constainsChildren: 'Hộp bên ngoài có chứa các nút con hay không'
   },
   nodeTagStyle: {
     placeholder: 'Vui lòng nhập nội dung thẻ',

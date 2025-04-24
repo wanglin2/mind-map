@@ -18,7 +18,7 @@
                   updateOuterFrame('containsChildren', value)
                 }
               "
-              >外框是否包含子节点</el-checkbox
+              >{{ $t('nodeOuterFrame.constainsChildren') }}</el-checkbox
             >
           </div>
         </div>

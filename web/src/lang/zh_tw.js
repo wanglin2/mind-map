@@ -451,7 +451,8 @@ export default {
     center: '中',
     right: '右',
     paddingX: '水平內邊距',
-    paddingY: '垂直內邊距'
+    paddingY: '垂直內邊距',
+    constainsChildren: '外框是否包含子節點'
   },
   nodeTagStyle: {
     placeholder: '請輸入標籤內容',
