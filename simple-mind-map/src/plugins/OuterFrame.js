@@ -242,7 +242,7 @@ class OuterFrame {
       ...styleConfig,
       strokeDasharray: 'none'
     })
-    const text = this.getText(firstNode)
+    const text = this.getText(firstNode) || this.mindMap.opt.defaultOuterFrameText
     this.renderText(text, el, textNode, node, range)
   }
 
