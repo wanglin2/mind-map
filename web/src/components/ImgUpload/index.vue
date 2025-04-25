@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { compressImage } from '@/utils'
+
 export default {
   model: {
     prop: 'value',
@@ -60,12 +62,12 @@ export default {
     },
 
     // 选择图片
-    selectImg(file) {
-      this.file = file
-      let fr = new FileReader()
-      fr.readAsDataURL(file)
-      fr.onload = e => {
-        this.$emit('change', e.target.result)
+    async selectImg(file) {
+      try {
+        const result = await compressImage(file)
+        this.$emit('change', result)
+      } catch (error) {
+        this.$message.error(error)
       }
     },
 
@@ -92,7 +94,6 @@ export default {
     // 删除图片
     deleteImg() {
       this.$emit('change', '')
-      this.file = null
     }
   }
 }

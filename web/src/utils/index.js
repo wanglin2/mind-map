@@ -93,3 +93,49 @@ export const getParentWithClass = (el, className) => {
   }
   return null
 }
+
+// 压缩图片
+export const compressImage = (file, options = {}) => {
+  return new Promise((resolve, reject) => {
+    const fileType = file.type
+    let {
+      maxWidth = 1200,
+      maxHeight = 1200,
+      quality = 0.8,
+      mimeType = ''
+    } = options
+    const reader = new FileReader()
+    reader.onload = event => {
+      // 不处理gif格式
+      if (/\/gif$/.test(fileType)) {
+        return resolve(event.target.result)
+      }
+      mimeType = mimeType || fileType
+      const img = new Image()
+      img.onload = () => {
+        // 计算新尺寸，保持宽高比
+        let width = img.width
+        let height = img.height
+        if (width > maxWidth || height > maxHeight) {
+          const ratio = Math.min(maxWidth / width, maxHeight / height)
+          width = Math.floor(width * ratio)
+          height = Math.floor(height * ratio)
+        }
+        const canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')
+        ctx.drawImage(img, 0, 0, width, height)
+        resolve(canvas.toDataURL(mimeType, quality))
+      }
+      img.onerror = function() {
+        reject(new Error('图片加载失败'))
+      }
+      img.src = event.target.result
+    }
+    reader.onerror = function() {
+      reject(new Error('文件读取失败'))
+    }
+    reader.readAsDataURL(file)
+  })
+}
