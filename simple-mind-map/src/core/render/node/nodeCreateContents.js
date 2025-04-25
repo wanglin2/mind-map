@@ -32,13 +32,19 @@ const defaultTagStyle = {
   //width: 30 // 标签矩形的宽度，如果不设置，默认以文字的宽度+paddingX*2为宽度
 }
 
+// 获取图片的真实url
+// 因为如果注册了NodeBase64ImageStorage插件，那么节点图片字段保存的实际是一个id，所以如果要获取图片真实的url可以通过该方法
+function getImageUrl() {
+  const img = this.getData('image')
+  return (this.mindMap.renderer.renderTree.data.imgMap || {})[img] || img
+}
+
 //  创建图片节点
 function createImgNode() {
-  let img = this.getData('image')
+  const img = this.getImageUrl()
   if (!img) {
     return
   }
-  img = (this.mindMap.renderer.renderTree.data.imgMap || {})[img] || img
   const imgSize = this.getImgShowSize()
   const node = new SVGImage().load(img).size(...imgSize)
   // 如果指定了加载失败显示的图片，那么加载一下图片检测是否失败
@@ -570,6 +576,7 @@ function isUseCustomNodeContent() {
 }
 
 export default {
+  getImageUrl,
   createImgNode,
   getImgShowSize,
   createIconNode,
