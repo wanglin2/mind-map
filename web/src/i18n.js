@@ -5,7 +5,8 @@ import messages from './lang'
 Vue.use(VueI18n)
 
 const i18n = new VueI18n({
-  messages
+  messages,
+  fallbackLocale: 'zh'
 })
 
 export default i18n

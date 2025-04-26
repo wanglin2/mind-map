@@ -1,7 +1,7 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('theme.title')">
-    <div class="themeList" :class="{ isDark: isDark }">
-      <el-tabs v-model="activeName">
+    <div class="themeGroupList" :class="{ isDark: isDark }">
+      <el-tabs v-model="activeName" class="tabBox">
         <el-tab-pane
           v-for="group in groupList"
           :key="group.name"
@@ -9,37 +9,33 @@
           :name="group.name"
         ></el-tab-pane>
       </el-tabs>
-      <div
-        class="themeItem"
-        v-for="item in currentList"
-        :key="item.value"
-        @click="useTheme(item)"
-        :class="{ active: item.value === theme }"
-      >
-        <div class="imgBox">
-          <img :src="themeMap[item.value]" alt="" />
+      <div class="themeListTheme customScrollbar">
+        <div
+          class="themeItem"
+          v-for="item in currentList"
+          :key="item.value"
+          @click="useTheme(item)"
+          :class="{ active: item.value === theme }"
+        >
+          <div class="imgBox">
+            <img :src="item.img || themeImgMap[item.value]" alt="" />
+          </div>
+          <div class="name">{{ item.name }}</div>
         </div>
-        <div class="name">{{ item.name }}</div>
       </div>
     </div>
   </Sidebar>
 </template>
 
 <script>
-import Sidebar from './Sidebar'
-import { themeList } from 'simple-mind-map/src/constants/constant'
-import { storeConfig } from '@/api'
+import Sidebar from './Sidebar.vue'
+import { storeData } from '@/api'
 import { mapState, mapMutations } from 'vuex'
-import { themeMap } from '@/config/constant.js'
-import customThemeList from '@/customThemes'
+import themeImgMap from 'simple-mind-map-plugin-themes/themeImgMap'
+import themeList from 'simple-mind-map-plugin-themes/themeList'
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:04
- * @Desc: 主题
- */
+// 主题
 export default {
-  name: 'Theme',
   components: {
     Sidebar
   },
@@ -54,18 +50,30 @@ export default {
   },
   data() {
     return {
-      themeList: [...themeList, ...customThemeList].reverse(),
-      themeMap,
+      themeList: [
+        {
+          name: '默认主题',
+          value: 'default',
+          dark: false
+        },
+        ...themeList
+      ].reverse(),
+      themeImgMap,
       theme: '',
       activeName: '',
-      groupList: []
+      defaultGroupList: []
     }
   },
   computed: {
     ...mapState({
       isDark: state => state.localConfig.isDark,
-      activeSidebar: state => state.activeSidebar
+      activeSidebar: state => state.activeSidebar,
+      extendThemeGroupList: state => state.extendThemeGroupList
     }),
+
+    groupList() {
+      return [...this.defaultGroupList, ...this.extendThemeGroupList]
+    },
 
     currentList() {
       return this.groupList.find(item => {
@@ -100,7 +108,7 @@ export default {
     },
 
     initGroup() {
-      let baiduThemes = [
+      const baiduThemes = [
         'default',
         'skyGreen',
         'classic2',
@@ -116,8 +124,8 @@ export default {
         'pinkGrape',
         'mint'
       ]
-      let baiduList = []
-      let classicsList = []
+      const baiduList = []
+      const classicsList = []
       this.themeList.forEach(item => {
         if (baiduThemes.includes(item.value)) {
           baiduList.push(item)
@@ -125,7 +133,7 @@ export default {
           classicsList.push(item)
         }
       })
-      this.groupList = [
+      this.defaultGroupList = [
         {
           name: this.$t('theme.classics'),
           list: classicsList
@@ -141,7 +149,7 @@ export default {
           list: baiduList
         }
       ]
-      this.activeName = this.groupList[0].name
+      this.activeName = this.defaultGroupList[0].name
     },
 
     useTheme(theme) {
@@ -174,7 +182,7 @@ export default {
     changeTheme(theme, config) {
       this.$bus.$emit('showLoading')
       this.mindMap.setTheme(theme.value)
-      storeConfig({
+      storeData({
         theme: {
           template: theme.value,
           config
@@ -183,7 +191,11 @@ export default {
     },
 
     handleDark() {
-      let target = this.themeList.find(item => {
+      const extendThemeList = []
+      this.extendThemeGroupList.forEach(group => {
+        extendThemeList.push(...group.list)
+      })
+      let target = [...this.themeList, ...extendThemeList].find(item => {
         return item.value === this.theme
       })
       this.setLocalConfig({
@@ -195,9 +207,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.themeList {
-  padding: 20px;
-  padding-top: 0;
+.themeGroupList {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
 
   &.isDark {
     .name {
@@ -205,38 +219,55 @@ export default {
     }
   }
 
-  .themeItem {
-    width: 100%;
-    cursor: pointer;
-    border-bottom: 1px solid #e9e9e9;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
-    transition: all 0.2s;
-    border: 1px solid transparent;
+  .tabBox {
+    flex-shrink: 0;
 
-    &:last-of-type {
-      border: none;
+    /deep/ .el-tabs__nav-wrap {
+      display: flex;
+      justify-content: center;
     }
+  }
 
-    &:hover {
-      box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16),
-        0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);
-    }
+  .themeListTheme {
+    height: 100%;
+    overflow-y: auto;
+    padding: 0 20px;
 
-    &.active {
-      border: 1px solid #67c23a;
-    }
-
-    .imgBox {
+    .themeItem {
       width: 100%;
+      cursor: pointer;
+      border-bottom: 1px solid #e9e9e9;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      transition: all 0.2s;
+      border: 3px solid transparent;
+      border-radius: 5px;
+      overflow: hidden;
 
-      img {
-        width: 100%;
+      &:last-of-type {
+        border: none;
       }
-    }
-    .name {
-      text-align: center;
-      font-size: 14px;
+
+      &:hover {
+        box-shadow: 0 1px 2px -2px rgba(0, 0, 0, 0.16),
+          0 3px 6px 0 rgba(0, 0, 0, 0.12), 0 5px 12px 4px rgba(0, 0, 0, 0.09);
+      }
+
+      &.active {
+        border: 3px solid rgb(154, 198, 250);
+      }
+
+      .imgBox {
+        width: 100%;
+
+        img {
+          width: 100%;
+        }
+      }
+      .name {
+        text-align: center;
+        font-size: 14px;
+      }
     }
   }
 }

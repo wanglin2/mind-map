@@ -11,11 +11,27 @@ import {
 import associativeLineControlsMethods from './associativeLine/associativeLineControls'
 import associativeLineTextMethods from './associativeLine/associativeLineText'
 
+const styleProps = [
+  'associativeLineWidth',
+  'associativeLineColor',
+  'associativeLineActiveWidth',
+  'associativeLineActiveColor',
+  'associativeLineDasharray',
+  'associativeLineTextColor',
+  'associativeLineTextFontSize',
+  'associativeLineTextLineHeight',
+  'associativeLineTextFontFamily'
+]
+
+const ASSOCIATIVE_LINE_TEXT_EDIT_WRAP = 'associative-line-text-edit-warp'
+
 // 关联线插件
 class AssociativeLine {
   constructor(opt = {}) {
     this.mindMap = opt.mindMap
     this.associativeLineDraw = this.mindMap.associativeLineDraw
+    // 本次不要重新渲染连线
+    this.isNotRenderAllLines = false
     // 当前所有连接线
     this.lineList = []
     // 当前激活的连接线
@@ -27,9 +43,6 @@ class AssociativeLine {
     this.overlapNode = null // 创建过程中的目标节点
     // 是否有节点正在被拖拽
     this.isNodeDragging = false
-    // 箭头图标
-    this.markerPath = null
-    this.marker = this.createMarker()
     // 控制点
     this.controlLine1 = null
     this.controlLine2 = null
@@ -51,9 +64,11 @@ class AssociativeLine {
       this[item] = associativeLineControlsMethods[item].bind(this)
     })
     // 关联线文字相关方法
+    this.showTextEdit = false
     Object.keys(associativeLineTextMethods).forEach(item => {
       this[item] = associativeLineTextMethods[item].bind(this)
     })
+    this.mindMap.addEditNodeClass(ASSOCIATIVE_LINE_TEXT_EDIT_WRAP)
     this.bindEvent()
   }
 
@@ -112,6 +127,25 @@ class AssociativeLine {
     this.mindMap.off('beforeDestroy', this.onBeforeDestroy)
   }
 
+  // 获取关联线的样式配置
+  // 优先级：关联线自定义样式、节点自定义样式、主题的节点层级样式、主题的最外层样式
+  getStyleConfig(node, toNode) {
+    let lineStyle = {}
+    if (toNode) {
+      const associativeLineStyle = node.getData('associativeLineStyle') || {}
+      lineStyle = associativeLineStyle[toNode.getData('uid')] || {}
+    }
+    const res = {}
+    styleProps.forEach(prop => {
+      if (typeof lineStyle[prop] !== 'undefined') {
+        res[prop] = lineStyle[prop]
+      } else {
+        res[prop] = node.getStyle(prop)
+      }
+    })
+    return res
+  }
+
   // 实例销毁时清除关联线文字编辑框
   onBeforeDestroy() {
     this.hideEditTextBox()
@@ -127,6 +161,7 @@ class AssociativeLine {
     // 取消激活关联线
     if (!this.isControlPointMousedown) {
       this.clearActiveLine()
+      this.renderAllLines()
     }
   }
 
@@ -136,16 +171,17 @@ class AssociativeLine {
       this.completeCreateLine(node)
     } else {
       this.clearActiveLine()
+      this.renderAllLines()
     }
   }
 
   // 创建箭头
-  createMarker() {
+  createMarker(callback = () => {}) {
     return this.associativeLineDraw.marker(20, 20, add => {
       add.ref(12, 5)
       add.size(10, 10)
       add.attr('orient', 'auto-start-reverse')
-      this.markerPath = add.path('M0,0 L2,5 L0,10 L10,5 Z')
+      callback(add.path('M0,0 L2,5 L0,10 L10,5 Z'))
     })
   }
 
@@ -172,6 +208,10 @@ class AssociativeLine {
 
   // 渲染所有连线
   renderAllLines() {
+    if (this.isNotRenderAllLines) {
+      this.isNotRenderAllLines = false
+      return
+    }
     // 先移除
     this.removeAllLines()
     this.removeControls()
@@ -223,11 +263,14 @@ class AssociativeLine {
       associativeLineWidth,
       associativeLineColor,
       associativeLineActiveWidth,
-      associativeLineActiveColor,
       associativeLineDasharray
-    } = this.mindMap.themeConfig
+    } = this.getStyleConfig(node, toNode)
     // 箭头
-    this.markerPath
+    let markerPath = null
+    const marker = this.createMarker(p => {
+      markerPath = p
+    })
+    markerPath
       .stroke({ color: associativeLineColor })
       .fill({ color: associativeLineColor })
     // 路径
@@ -243,11 +286,11 @@ class AssociativeLine {
       .stroke({
         width: associativeLineWidth,
         color: associativeLineColor,
-        dasharray: associativeLineDasharray || [6, 4]
+        dasharray: associativeLineDasharray || '6,4'
       })
       .fill({ color: 'none' })
     path.plot(pathStr)
-    path.marker('end', this.marker)
+    path.marker('end', marker)
     // 不可见的点击线
     let clickPath = this.associativeLineDraw.path()
     clickPath
@@ -258,6 +301,7 @@ class AssociativeLine {
     let text = this.createText({
       path,
       clickPath,
+      markerPath,
       node,
       toNode,
       startPoint,
@@ -270,6 +314,7 @@ class AssociativeLine {
       this.setActiveLine({
         path,
         clickPath,
+        markerPath,
         text,
         node,
         toNode,
@@ -284,14 +329,73 @@ class AssociativeLine {
       this.showEditTextBox(text)
     })
     // 渲染关联线文字
-    this.renderText(this.getText(node, toNode), path, text)
+    this.renderText(this.getText(node, toNode), path, text, node, toNode)
     this.lineList.push([path, clickPath, text, node, toNode])
+  }
+
+  // 更新当前激活连线的样式，一般在自定义了节点关联线的样式后调用
+  // 直接调用node.setStyle方法更新样式会直接触发关联线更新，但是关联线的激活状态会丢失
+  // 所以可以调用node.setData方法更新数据，然后再调用该方法更新样式，这样关联线激活状态不会丢失
+  updateActiveLineStyle() {
+    if (!this.activeLine) return
+    this.isNotRenderAllLines = true
+    const [path, clickPath, text, node, toNode, markerPath] = this.activeLine
+    const {
+      associativeLineWidth,
+      associativeLineColor,
+      associativeLineDasharray,
+      associativeLineActiveWidth,
+      associativeLineActiveColor,
+      associativeLineTextColor,
+      associativeLineTextFontFamily,
+      associativeLineTextFontSize
+    } = this.getStyleConfig(node, toNode)
+    path
+      .stroke({
+        width: associativeLineWidth,
+        color: associativeLineColor,
+        dasharray: associativeLineDasharray || '6,4'
+      })
+      .fill({ color: 'none' })
+    clickPath
+      .stroke({
+        width: associativeLineActiveWidth,
+        color: associativeLineActiveColor
+      })
+      .fill({ color: 'none' })
+    markerPath
+      .stroke({ color: associativeLineColor })
+      .fill({ color: associativeLineColor })
+    text.find('text').forEach(textNode => {
+      textNode
+        .fill({
+          color: associativeLineTextColor
+        })
+        .css({
+          'font-family': associativeLineTextFontFamily,
+          'font-size': associativeLineTextFontSize + 'px'
+        })
+    })
+    if (this.controlLine1) {
+      this.controlLine1.stroke({ color: associativeLineActiveColor })
+    }
+    if (this.controlLine2) {
+      this.controlLine2.stroke({ color: associativeLineActiveColor })
+    }
+    if (this.controlPoint1) {
+      this.controlPoint1.stroke({ color: associativeLineActiveColor })
+    }
+    if (this.controlPoint2) {
+      this.controlPoint2.stroke({ color: associativeLineActiveColor })
+    }
+    this.updateTextPos(path, text)
   }
 
   // 激活某根关联线
   setActiveLine({
     path,
     clickPath,
+    markerPath,
     text,
     node,
     toNode,
@@ -299,25 +403,33 @@ class AssociativeLine {
     endPoint,
     controlPoints
   }) {
-    let { associativeLineActiveColor } = this.mindMap.themeConfig
+    let { associativeLineActiveColor } = this.getStyleConfig(node, toNode)
     // 如果当前存在激活节点，那么取消激活节点
     this.mindMap.execCommand('CLEAR_ACTIVE_NODE')
     // 否则清除当前的关联线的激活状态，如果有的话
     this.clearActiveLine()
     // 保存当前激活的关联线信息
-    this.activeLine = [path, clickPath, text, node, toNode]
+    this.activeLine = [path, clickPath, text, node, toNode, markerPath]
     // 让不可见的点击线显示
     clickPath.stroke({ color: associativeLineActiveColor })
     // 如果没有输入过关联线文字，那么显示默认文字
     if (!this.getText(node, toNode)) {
-      this.renderText(this.mindMap.opt.defaultAssociativeLineText, path, text)
+      this.renderText(
+        this.mindMap.opt.defaultAssociativeLineText,
+        path,
+        text,
+        node,
+        toNode
+      )
     }
     // 渲染控制点和连线
     this.renderControls(
       startPoint,
       endPoint,
       controlPoints[0],
-      controlPoints[1]
+      controlPoints[1],
+      node,
+      toNode
     )
     this.mindMap.emit('associative_line_click', path, clickPath, node, toNode)
     this.front()
@@ -346,7 +458,7 @@ class AssociativeLine {
       associativeLineWidth,
       associativeLineColor,
       associativeLineDasharray
-    } = this.mindMap.themeConfig
+    } = this.getStyleConfig(fromNode)
     if (this.isCreatingLine || !fromNode) return
     this.front()
     this.isCreatingLine = true
@@ -356,14 +468,18 @@ class AssociativeLine {
       .stroke({
         width: associativeLineWidth,
         color: associativeLineColor,
-        dasharray: associativeLineDasharray || [6, 4]
+        dasharray: associativeLineDasharray || '6,4'
       })
       .fill({ color: 'none' })
     // 箭头
-    this.markerPath
+    let markerPath = null
+    const marker = this.createMarker(p => {
+      markerPath = p
+    })
+    markerPath
       .stroke({ color: associativeLineColor })
       .fill({ color: associativeLineColor })
-    this.creatingLine.marker('end', this.marker)
+    this.creatingLine.marker('end', marker)
   }
 
   // 取消创建关联线
@@ -446,6 +562,12 @@ class AssociativeLine {
   // 完成创建连接线
   completeCreateLine(node) {
     if (this.creatingStartNode.uid === node.uid) return
+    const { beforeAssociativeLineConnection } = this.mindMap.opt
+    let stop = false
+    if (typeof beforeAssociativeLineConnection === 'function') {
+      stop = beforeAssociativeLineConnection(node)
+    }
+    if (stop) return
     this.addLine(this.creatingStartNode, node)
     if (this.overlapNode && this.overlapNode.getData('isActive')) {
       this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, false)
@@ -523,7 +645,8 @@ class AssociativeLine {
       associativeLineTargets,
       associativeLinePoint,
       associativeLineTargetControlOffsets,
-      associativeLineText
+      associativeLineText,
+      associativeLineStyle
     } = node.getData()
     associativeLinePoint = associativeLinePoint || []
     let targetIndex = getAssociativeLineTargetIndex(node, toNode)
@@ -533,6 +656,15 @@ class AssociativeLine {
       Object.keys(associativeLineText).forEach(item => {
         if (item !== toNode.getData('uid')) {
           newAssociativeLineText[item] = associativeLineText[item]
+        }
+      })
+    }
+    // 更新关联线样式数据
+    let newAssociativeLineStyle = {}
+    if (associativeLineStyle) {
+      Object.keys(associativeLineStyle).forEach(item => {
+        if (item !== toNode.getData('uid')) {
+          newAssociativeLineStyle[item] = associativeLineStyle[item]
         }
       })
     }
@@ -552,7 +684,9 @@ class AssociativeLine {
           })
         : [],
       // 文本
-      associativeLineText: newAssociativeLineText
+      associativeLineText: newAssociativeLineText,
+      // 样式
+      associativeLineStyle: newAssociativeLineStyle
     })
   }
 
@@ -572,6 +706,7 @@ class AssociativeLine {
       this.activeLine = null
       this.removeControls()
       this.back()
+      this.mindMap.emit('associative_line_deactivate')
     }
   }
 
@@ -614,11 +749,13 @@ class AssociativeLine {
 
   // 插件被移除前做的事情
   beforePluginRemove() {
+    this.mindMap.deleteEditNodeClass(ASSOCIATIVE_LINE_TEXT_EDIT_WRAP)
     this.unBindEvent()
   }
 
   // 插件被卸载前做的事情
   beforePluginDestroy() {
+    this.mindMap.deleteEditNodeClass(ASSOCIATIVE_LINE_TEXT_EDIT_WRAP)
     this.unBindEvent()
   }
 }

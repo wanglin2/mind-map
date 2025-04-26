@@ -25,9 +25,44 @@ export default {
     belowLevel2Node: '三级及以下节点',
     nodeBorderType: '节点边框风格',
     nodeUseLineStyle: '是否使用只有底边框的风格',
-    otherConfig: '其他配置',
-    enableFreeDrag: '是否开启节点自由拖拽',
+    associativeLine: '关联线',
+    associativeLineWidth: '粗细',
+    associativeLineColor: '颜色',
+    associativeLineActiveWidth: '激活粗细',
+    associativeLineActiveColor: '激活颜色',
+    rootStyle: '根节点',
+    associativeLineText: '关联线文字',
+    fontFamily: '字体',
+    fontSize: '字号',
+    rootLineStartPos: '根节点连线起始位置',
+    center: '中心',
+    edge: '边缘',
+    rainbowLines: '彩虹线条',
+    notUseRainbowLines: '不使用彩虹线条',
+    outerFramePadding: '外框内边距',
+    associativeLineStyle: '关联线样式',
+    builtInBackgroundImage: '内置背景图片'
+  },
+  setting: {
+    title: '设置',
     openPerformance: '开启性能模式(Beta)',
+    enableFreeDrag: '是否开启节点自由拖拽',
+    isEnableNodeRichText: '是否开启节点富文本编辑',
+    mousewheelAction: '鼠标滚轮行为',
+    zoomView: '缩放视图',
+    moveViewUpDown: '上下移动视图',
+    mousewheelZoomActionReverse: '鼠标滚轮缩放',
+    mousewheelZoomActionReverse1: '向前缩小向后放大',
+    mousewheelZoomActionReverse2: '向前放大向后缩小',
+    createNewNodeBehavior: '创建新节点的行为',
+    default: '激活新节点及进入编辑',
+    notActive: '不激活新节点',
+    activeOnly: '只激活新节点，不进入编辑',
+    openRealtimeRenderOnNodeTextEdit: '开启文本编辑实时渲染效果',
+    isShowScrollbar: '是否显示滚动条',
+    isUseHandDrawnLikeStyle: '是否开启手绘风格',
+    isUseMomentum: '是否开启拖动画布的动量效果',
+    openBlankMode: '是否开启演示模式的填空功能',
     watermark: '水印',
     showWatermark: '是否显示水印',
     watermarkDefaultText: '水印文字',
@@ -40,34 +75,19 @@ export default {
     watermarkTextOpacity: '文字透明度',
     watermarkTextFontSize: '文字字号',
     belowNode: '显示在节点下方',
-    isEnableNodeRichText: '是否开启节点富文本编辑',
-    mousewheelAction: '鼠标滚轮行为',
-    zoomView: '缩放视图',
-    moveViewUpDown: '上下移动视图',
-    associativeLine: '关联线',
-    associativeLineWidth: '粗细',
-    associativeLineColor: '颜色',
-    associativeLineActiveWidth: '激活粗细',
-    associativeLineActiveColor: '激活颜色',
-    mousewheelZoomActionReverse: '鼠标滚轮缩放',
-    mousewheelZoomActionReverse1: '向前缩小向后放大',
-    mousewheelZoomActionReverse2: '向前放大向后缩小',
-    createNewNodeBehavior: '创建新节点的行为',
-    default: '激活新节点及进入编辑',
-    notActive: '不激活新节点',
-    activeOnly: '只激活新节点，不进入编辑',
-    rootStyle: '根节点',
-    associativeLineText: '关联线文字',
-    fontFamily: '字体',
-    fontSize: '字号',
-    isShowScrollbar: '是否显示滚动条',
-    isUseHandDrawnLikeStyle: '是否开启手绘风格',
-    rootLineStartPos: '根节点连线起始位置',
-    center: '中心',
-    edge: '边缘',
-    rainbowLines: '彩虹线条',
-    notUseRainbowLines: '不使用彩虹线条',
-    outerFramePadding: '外框内边距'
+    alwaysShowExpandBtn: '是否一直显示展开收起按钮',
+    enableAutoEnterTextEditWhenKeydown: '键盘输入时自动进入文本编辑',
+    enableInheritAncestorLineStyle: '节点连线样式继承祖先节点的样式',
+    confirm: '确定',
+    cancel: '取消',
+    changeRichTextTip:
+      '该操作会清空所有历史修改记录，并且修改思维导图数据，是否继续？',
+    changeRichTextTip2: '是否切换为富文本模式？',
+    changeRichTextTip3: '是否切换为非富文本模式？',
+    enableDragImport: '是否允许直接拖拽文件到页面进行导入',
+    imgTextMargin: '节点图片和文本间隔',
+    textContentMargin: '节点各种内容间隔',
+    enableAi: '是否开启AI功能'
   },
   color: {
     moreColor: '更多颜色'
@@ -111,15 +131,23 @@ export default {
     copyToPng: '图片',
     copySuccess: '复制成功',
     copyFail: '复制失败',
-    number: '编号其子节点'
+    number: '编号其子节点',
+    expandNodeChild: '展开所有下级节点',
+    unExpandNodeChild: '收起所有下级节点',
+    addToDo: '添加待办',
+    removeToDo: '删除待办',
+    aiCreate: 'AI续写',
+    modifyNodeLink: '修改节点链接',
+    linkToNode: '链接到指定节点',
+    removeNodeLink: '删除节点链接'
   },
   count: {
     words: '字数',
     nodes: '节点'
   },
   dialog: {
-    cancel: '取 消',
-    confirm: '确 定'
+    cancel: '取消',
+    confirm: '确定'
   },
   export: {
     title: '导出',
@@ -131,10 +159,7 @@ export default {
     svgFile: 'svg文件',
     pdfFile: 'pdf文件',
     markdownFile: 'markdown文件',
-    tips: 'tips：.smm和.json文件可用于导入',
     isTransparent: '背景是否透明',
-    pngTips: 'tips：富文本模式导出图片非常耗时，建议导出为svg格式',
-    svgTips: 'tips：富文本模式导出图片非常耗时',
     transformingDomToImages: '正在转换节点：',
     notifyTitle: '消息',
     notifyMessage: '如果没有触发下载，请检查是否被浏览器拦截了',
@@ -143,7 +168,12 @@ export default {
     useMultiPageExport: '是否多页导出',
     defaultFileName: '思维导图',
     addFooterText: '底部添加文字',
-    addFooterTextPlaceholder: '比如：来自simple-mind-map'
+    addFooterTextPlaceholder: '比如：来自simple-mind-map',
+    desc: '说明',
+    options: '选项',
+    isFitBg: '是否显示完整背景图片（使用了背景图片时生效）',
+    format: '格式',
+    confirm: '导出'
   },
   fullscreen: {
     fullscreenShow: '全屏查看',
@@ -155,14 +185,18 @@ export default {
   import: {
     title: '导入',
     selectFile: '选取文件',
-    supportFile: '支持.smm、.json、.xmind、.xlsx、.md文件',
-    enableFileTip: '请选择.smm、.json、.xmind、.xlsx、.md文件',
+    support: '支持',
+    file: '文件',
+    pleaseSelect: '请选择',
     maxFileNum: '最多只能选择一个文件',
     notSelectTip: '请选择要导入的文件',
     fileContentError: '文件内容有误',
     importSuccess: '导入成功',
     fileParsingFailed: '文件解析失败',
-    xmindCanvasSelectDialogTitle: '选择要导入的画布'
+    xmindCanvasSelectDialogTitle: '选择要导入的画布',
+    mdImportDialogTitle: '粘贴Markdown内容导入',
+    mdPlaceholder: '请输入Markdown格式的内容',
+    mdEmptyTip: '内容不能为空'
   },
   navigatorToolbar: {
     openMiniMap: '开启小地图',
@@ -170,7 +204,13 @@ export default {
     readonly: '切换为只读模式',
     edit: '切换为编辑模式',
     backToRoot: '回到根节点',
-    changeSourceCodeEdit: '切换为源码编辑模式'
+    changeSourceCodeEdit: '切换为源码编辑模式',
+    shortcutKeys: '快捷键',
+    ai: 'AI对话',
+    downloadClient: '下载客户端',
+    site: '官方网站',
+    current: '当前：',
+    downloadDesc: '可从如下地址下载：'
   },
   nodeHyperlink: {
     title: '超链接',
@@ -193,7 +233,9 @@ export default {
   },
   outline: {
     title: '大纲',
-    nodeDefaultText: '分支节点'
+    nodeDefaultText: '分支节点',
+    print: '打印',
+    fullscreen: '全屏'
   },
   scale: {
     zoomIn: '放大',
@@ -212,7 +254,6 @@ export default {
     text: '文字',
     fontFamily: '字体',
     fontSize: '字号',
-    lineHeight: '行高',
     color: '颜色',
     addFontWeight: '加粗',
     italic: '斜体',
@@ -237,7 +278,19 @@ export default {
     arrowDir: '箭头位置',
     arrowDirStart: '头部',
     arrowDirEnd: '尾部',
-    direction: '方向'
+    direction: '方向',
+    selectNodeTip: '请选择一个节点',
+    openLineFlow: '开启流动效果',
+    lineFlowDuration: '一个流动周期的时间',
+    forward: '正向',
+    reverse: '反向',
+    img: '图片',
+    placement: '布局',
+    top: '上',
+    bottom: '下',
+    left: '左',
+    right: '右',
+    tag: '标签'
   },
   theme: {
     title: '主题',
@@ -288,7 +341,8 @@ export default {
     creatingTip: '正在创建文件',
     directory: '目录',
     newFileTip: '新建文件前请先导出当前编辑的文件，谨防内容丢失',
-    openFileTip: '打开文件前请先导出当前编辑的文件，谨防内容丢失'
+    openFileTip: '打开文件前请先导出当前编辑的文件，谨防内容丢失',
+    ai: 'AI'
   },
   edit: {
     newFeatureNoticeTitle: '新特性提醒',
@@ -300,14 +354,23 @@ export default {
     yes: '是',
     no: '否',
     exportError: '导出失败',
-    dragTip: '在此释放以导入该文件'
+    dragTip: '在此释放以导入该文件',
+    deleteNodeImgTip: '是否确认删除该节点图片？',
+    autoOpenNodeRichTextTip: '检测到导入了富文本内容，已自动开启富文本模式',
+    localStorageExceededTip:
+      '你创建的思维导图体积已经超过浏览器允许存储的上限，请立即导出，否则数据将丢失！建议下载客户端进行使用，客户端无大小限制。',
+    withBg: '带背景',
+    tryTipTitle: '功能试用提示',
+    tryTipDesc: '该功能在网页版中为试用功能，请下载客户端使用：',
+    downBaidu: '去百度网盘下载',
+    downGithub: '去Github下载'
   },
   mouseAction: {
     tip1: '当前：左键拖动画布，右键框选节点',
     tip2: '当前：左键框选节点，右键拖动画布'
   },
   search: {
-    searchPlaceholder: '请输入查找内容',
+    searchPlaceholder: '输入查找内容后按回车键',
     replacePlaceholder: '请输入替换内容',
     replace: '替换',
     replaceAll: '全部替换',
@@ -335,7 +398,8 @@ export default {
     fontSize: '字号',
     color: '字体颜色',
     backgroundColor: '背景颜色',
-    removeFormat: '清除样式'
+    removeFormat: '清除样式',
+    textAlign: '对齐方式'
   },
   other: {
     loading: '正在加载，请稍后...'
@@ -365,14 +429,100 @@ export default {
     animate: '开启动画'
   },
   nodeOuterFrame: {
-    outerFrameSetting: '外框设置',
+    nodeOuterFrameStyle: '外框样式',
+    outerFrameSetting: '外框',
     deleteOuterFrame: '删除外框',
     boxStyle: '边框样式',
     boxColor: '边框颜色',
-    fillColor: '填充颜色'
+    fillColor: '填充颜色',
+    outerFrameText: '外框文字',
+    deleteOuterFrameText: '删除文字',
+    fontFamily: '字体',
+    color: '颜色',
+    fontSize: '字号',
+    radius: '圆角',
+    fontBold: '加粗',
+    italic: '斜体',
+    lineHeight: '行高',
+    textFillRadius: '背景圆角',
+    textFill: '背景填充',
+    textAlign: '显示位置',
+    left: '左',
+    center: '中',
+    right: '右',
+    paddingX: '水平内边距',
+    paddingY: '垂直内边距',
+    constainsChildren: '外框是否包含子节点'
   },
   nodeTagStyle: {
     placeholder: '请输入标签内容',
     delete: '删除此标签'
+  },
+  ai: {
+    chatTitle: 'AI对话',
+    clearRecords: '清空记录',
+    connectFailedTitle: '客户端连接失败提示',
+    connectFailedTip: '客户端连接失败，请检查：',
+    connectFailedCheckTip1:
+      '1.是否安装了思绪思维导图客户端，如果没有请点此安装：',
+    connectFailedCheckTip2: '2.如果安装了客户端，请确认是否打开了客户端。',
+    connectFailedCheckTip3:
+      '3.如果已经安装并启动了，那么可以尝试关闭然后重新启动。',
+    connectFailedCheckTip4: '完成以上步骤后可点击：',
+    baiduNetdisk: '百度网盘',
+    createMindMapTitle: '一键生成思维导图',
+    createTip:
+      '请输入一个主题，AI会根据你的主题生成思维导图，如：杭州周末出游计划。',
+    importantTip: '重要提示：一键生成会覆盖现有数据，建议先导出当前数据。',
+    wantModifyAiConfigTip: '想要修改AI配置？请点击：',
+    modifyAIConfiguration: '修改AI配置',
+    chatInputPlaceholder: 'Enter 发送，Shift + Enter 换行。',
+    send: '发送',
+    stopGenerating: '停止生成',
+    generationFailed: '生成失败',
+    aiGenerationSuccess: 'AI生成完成',
+    stoppedGenerating: '已停止生成',
+    AIConfiguration: 'AI配置',
+    VolcanoArkLargeModelConfiguration: '火山方舟大模型配置：',
+    configTip: '目前仅支持火山方舟大模型，需要自行去获取key，详细操作步骤见：',
+    course: '教程',
+    inferenceAccessPoint: '推理接入点',
+    mindMappingClientConfiguration: '思绪思维导图客户端配置：',
+    port: '端口',
+    cancel: '取消',
+    confirm: '确认',
+    close: '关闭',
+    configSaveSuccessTip: '配置保存成功',
+    apiValidateTip: '请输入接口',
+    keyValidateTip: '请输入API Key',
+    modelValidateTip: '请输入推理接入点',
+    portValidateTip: '请输入端口',
+    methodValidateTip: '请选择请求方式',
+    noInputTip: '请输入内容',
+    connectSuccessful: '连接成功',
+    connectFailed: '连接失败',
+    connectionDetection: '连接检测',
+    configurationMissing: '配置缺失',
+    aiCreateMsgPrefix: '帮我写一个【',
+    aiCreateMsgPostfix:
+      '】，需要以Markdown格式返回，并且只能使用Markdown的标题和无序列表两种语法，可以支持多层嵌套。只需返回内容即可。',
+    aiCreatePartMsgPrefix: '我有一个主题为【',
+    aiCreatePartMsgCenter: '】的思维导图，帮我续写其中一个内容为【',
+    aiCreatePartMsgPostfix: '】的节点的下级内容',
+    aiCreatePartMsgHelp:
+      '。需要以Markdown格式返回，并且只能使用Markdown的标题和无序列表两种语法，可以支持多层嵌套。只需返回内容即可。',
+    aiCreatePart: 'AI续写'
+  },
+  note: {
+    title: '备注'
+  },
+  nodeLink: {
+    linkToNode: '链接到指定节点',
+    addReturn: '是否添加反向链接',
+    tip1: '请选择要链接到的节点',
+    tip2: '不能链接自己',
+    tip3: '链接成功',
+    tip4: '删除成功',
+    tip5: '链接节点不存在，是否删除该链接？'
   }
 }

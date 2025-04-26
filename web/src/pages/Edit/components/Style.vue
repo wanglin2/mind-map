@@ -5,14 +5,15 @@
       :class="{ isDark: isDark }"
       v-if="activeNodes.length > 0"
     >
-      <div class="sidebarContent">
+      <div class="sidebarContent customScrollbar">
         <!-- 文字 -->
         <div class="title noTop">{{ $t('style.text') }}</div>
         <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.fontFamily') }}</span>
+            <!-- <span class="name">{{ $t('style.fontFamily') }}</span> -->
             <el-select
               size="mini"
+              style="width: 100px"
               v-model="style.fontFamily"
               placeholder=""
               @change="update('fontFamily')"
@@ -27,13 +28,11 @@
               </el-option>
             </el-select>
           </div>
-        </div>
-        <div class="row">
           <div class="rowItem">
-            <span class="name">{{ $t('style.fontSize') }}</span>
+            <!-- <span class="name">{{ $t('style.fontSize') }}</span> -->
             <el-select
               size="mini"
-              style="width: 80px"
+              style="width: 60px"
               v-model="style.fontSize"
               placeholder=""
               @change="update('fontSize')"
@@ -49,19 +48,18 @@
             </el-select>
           </div>
           <div class="rowItem">
-            <span class="name">{{ $t('style.lineHeight') }}</span>
             <el-select
               size="mini"
               style="width: 80px"
-              v-model="style.lineHeight"
+              v-model="style.textAlign"
               placeholder=""
-              @change="update('lineHeight')"
+              @change="update('textAlign')"
             >
               <el-option
-                v-for="item in lineHeightList"
-                :key="item"
-                :label="item"
-                :value="item"
+                v-for="item in alignList"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
               >
               </el-option>
             </el-select>
@@ -318,8 +316,13 @@
                 :key="item.value"
                 :label="item.name"
                 :value="item.value"
+                style="display: flex; justify-content: center; align-items: center;"
               >
-                <svg width="60" height="26" style="margin-top: 5px">
+                <svg
+                  :width="item.width || 60"
+                  :height="item.height || 26"
+                  style="margin-top: 5px"
+                >
                   <path
                     :d="shapeListMap[item.value]"
                     fill="none"
@@ -434,9 +437,52 @@
             </el-select>
           </div>
         </div>
+        <!-- 流动效果 -->
+        <div class="row" v-if="supportLineFlow">
+          <div class="rowItem">
+            <span class="name">{{ $t('style.openLineFlow') }}</span>
+            <el-checkbox
+              v-model="style.lineFlow"
+              @change="update('lineFlow')"
+            ></el-checkbox>
+          </div>
+          <div class="rowItem">
+            <span class="name">{{ $t('style.direction') }}</span>
+            <el-select
+              size="mini"
+              style="width: 80px"
+              v-model="style.lineFlowForward"
+              placeholder=""
+              @change="update('lineFlowForward')"
+            >
+              <el-option
+                key="1"
+                :label="$t('style.forward')"
+                :value="true"
+              ></el-option>
+              <el-option
+                key="2"
+                :label="$t('style.reverse')"
+                :value="false"
+              ></el-option>
+            </el-select>
+          </div>
+        </div>
+        <div class="row" v-if="supportLineFlow">
+          <div class="rowItem">
+            <span class="name">{{ $t('style.lineFlowDuration') }}</span>
+            <el-input-number
+              v-model="style.lineFlowDuration"
+              @change="update('lineFlowDuration')"
+              :min="0.1"
+              size="mini"
+              :step="0.5"
+            ></el-input-number>
+          </div>
+        </div>
         <!-- 节点内边距 -->
-        <div class="title noTop">{{ $t('style.nodePadding') }}</div>
-        <div class="row">
+        <div class="title">{{ $t('style.nodePadding') }}</div>
+        <div class="row noBottom">
           <div class="rowItem">
             <span class="name">{{ $t('style.horizontal') }}</span>
             <el-slider
@@ -456,48 +502,91 @@
             ></el-slider>
           </div>
         </div>
+        <!-- 节点图片布局 -->
+        <div class="title">{{ $t('style.img') }}</div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">{{ $t('style.placement') }}</span>
+            <el-radio-group
+              v-model="style.imgPlacement"
+              size="mini"
+              @change="update('imgPlacement')"
+            >
+              <el-radio-button label="top">{{
+                $t('style.top')
+              }}</el-radio-button>
+              <el-radio-button label="bottom">{{
+                $t('style.bottom')
+              }}</el-radio-button>
+              <el-radio-button label="left">{{
+                $t('style.left')
+              }}</el-radio-button>
+              <el-radio-button label="right">{{
+                $t('style.right')
+              }}</el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
+        <!-- 节点标签布局 -->
+        <div class="title">{{ $t('style.tag') }}</div>
+        <div class="row">
+          <div class="rowItem">
+            <span class="name">{{ $t('style.placement') }}</span>
+            <el-radio-group
+              v-model="style.tagPlacement"
+              size="mini"
+              @change="update('tagPlacement')"
+            >
+              <el-radio-button label="right">{{
+                $t('style.right')
+              }}</el-radio-button>
+              <el-radio-button label="bottom">{{
+                $t('style.bottom')
+              }}</el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
       </div>
     </div>
     <div class="tipBox" v-else>
       <div class="tipIcon iconfont icontianjiazijiedian"></div>
-      <div class="tipText">请选择一个节点</div>
+      <div class="tipText">{{ $t('style.selectNodeTip') }}</div>
     </div>
   </Sidebar>
 </template>
 
 <script>
-import Sidebar from './Sidebar'
-import Color from './Color'
+import Sidebar from './Sidebar.vue'
+import Color from './Color.vue'
 import {
   fontFamilyList,
   fontSizeList,
   borderWidthList,
   borderDasharrayList,
   borderRadiusList,
-  lineHeightList,
   shapeList,
   shapeListMap,
-  linearGradientDirList
+  linearGradientDirList,
+  alignList
 } from '@/config'
 import { mapState } from 'vuex'
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:54:47
- * @Desc: 节点样式设置
- */
+// 节点样式设置
 export default {
-  name: 'Style',
   components: {
     Sidebar,
     Color
+  },
+  props: {
+    mindMap: {
+      type: Object
+    }
   },
   data() {
     return {
       fontSizeList,
       borderWidthList,
       borderRadiusList,
-      lineHeightList,
       activeNodes: [],
       style: {
         shape: '',
@@ -506,7 +595,6 @@ export default {
         color: '',
         fontFamily: '',
         fontSize: '',
-        lineHeight: '',
         textDecoration: '',
         fontWeight: '',
         fontStyle: '',
@@ -522,14 +610,21 @@ export default {
         gradientStyle: false,
         startColor: '',
         endColor: '',
-        linearGradientDir: ''
+        linearGradientDir: '',
+        lineFlow: false,
+        lineFlowForward: true,
+        lineFlowDuration: 1,
+        textAlign: '',
+        imgPlacement: '',
+        tagPlacement: ''
       }
     }
   },
   computed: {
     ...mapState({
       isDark: state => state.localConfig.isDark,
-      activeSidebar: state => state.activeSidebar
+      activeSidebar: state => state.activeSidebar,
+      supportLineFlow: state => state.supportLineFlow
     }),
     fontFamilyList() {
       return fontFamilyList[this.$i18n.locale] || fontFamilyList.zh
@@ -538,15 +633,38 @@ export default {
       return borderDasharrayList[this.$i18n.locale] || borderDasharrayList.zh
     },
     shapeList() {
-      return shapeList[this.$i18n.locale] || shapeList.zh
+      return [
+        ...(shapeList[this.$i18n.locale] || shapeList.zh),
+        ...this.mindMap.extendShapeList
+          .filter(item => {
+            return !['fishHead'].includes(item.name)
+          })
+          .map(item => {
+            return {
+              width: '40px',
+              name: item.nameShow,
+              value: item.name
+            }
+          })
+      ]
     },
     shapeListMap() {
-      return shapeListMap[this.$i18n.locale] || shapeListMap.zh
+      const map2 = {}
+      this.mindMap.extendShapeList.forEach(item => {
+        map2[item.name] = item.path
+      })
+      return {
+        ...shapeListMap,
+        ...map2
+      }
     },
     linearGradientDirList() {
       return (
         linearGradientDirList[this.$i18n.locale] || linearGradientDirList.zh
       )
+    },
+    alignList() {
+      return alignList[this.$i18n.locale] || alignList.zh
     }
   },
   watch: {
@@ -565,11 +683,7 @@ export default {
     this.$bus.$off('node_active', this.onNodeActive)
   },
   methods: {
-    /**
-     * @Author: 王林25
-     * @Date: 2022-11-14 19:16:21
-     * @Desc: 监听节点激活事件
-     */
+    // 监听节点激活事件
     onNodeActive(...args) {
       this.$nextTick(() => {
         this.activeNodes = [...args[1]]
@@ -577,39 +691,12 @@ export default {
       })
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-05-05 09:48:52
-     * @Desc: 初始节点样式
-     */
+    // 初始节点样式
     initNodeStyle() {
       if (this.activeNodes.length <= 0) {
         return
       }
-      ;[
-        'shape',
-        'paddingX',
-        'paddingY',
-        'color',
-        'fontFamily',
-        'fontSize',
-        'lineHeight',
-        'textDecoration',
-        'fontWeight',
-        'fontStyle',
-        'borderWidth',
-        'borderColor',
-        'fillColor',
-        'borderDasharray',
-        'borderRadius',
-        'lineColor',
-        'lineDasharray',
-        'lineWidth',
-        'lineMarkerDir',
-        'gradientStyle',
-        'startColor',
-        'endColor'
-      ].forEach(item => {
+      Object.keys(this.style).forEach(item => {
         this.style[item] = this.activeNodes[0].getStyle(item, false)
       })
       this.initLinearGradientDir()
@@ -632,11 +719,7 @@ export default {
       }
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-05-04 22:08:16
-     * @Desc: 修改样式
-     */
+    // 修改样式
     update(prop) {
       if (prop === 'linearGradientDir') {
         const target = this.linearGradientDirList.find(item => {
@@ -655,11 +738,7 @@ export default {
       }
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-05-05 09:41:34
-     * @Desc: 切换加粗样式
-     */
+    // 切换加粗样式
     toggleFontWeight() {
       if (this.style.fontWeight === 'bold') {
         this.style.fontWeight = 'normal'
@@ -669,11 +748,7 @@ export default {
       this.update('fontWeight')
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-05-05 09:46:39
-     * @Desc: 切换字体样式
-     */
+    // 切换字体样式
     toggleFontStyle() {
       if (this.style.fontStyle === 'italic') {
         this.style.fontStyle = 'normal'
@@ -683,61 +758,37 @@ export default {
       this.update('fontStyle')
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-05-05 10:18:59
-     * @Desc: 修改字体颜色
-     */
+    // 修改字体颜色
     changeFontColor(color) {
       this.style.color = color
       this.update('color')
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-05-05 10:18:59
-     * @Desc: 修改边框颜色
-     */
+    // 修改边框颜色
     changeBorderColor(color) {
       this.style.borderColor = color
       this.update('borderColor')
     },
 
-    /**
-     * @Author: flydreame
-     * @Date: 2022-09-17 10:18:15
-     * @Desc: 修改线条颜色
-     */
+    // 修改线条颜色
     changeLineColor(color) {
       this.style.lineColor = color
       this.update('lineColor')
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-05-05 10:18:59
-     * @Desc: 修改背景颜色
-     */
+    // 修改背景颜色
     changeFillColor(color) {
       this.style.fillColor = color
       this.update('fillColor')
     },
 
-    /**
-     * @Author: lxr_cel
-     * @Date: 2024-01-02 11:09:27
-     * @Desc: 切换渐变开始颜色
-     */
+    // 切换渐变开始颜色
     changeStartColor(color) {
       this.style.startColor = color
       this.update('startColor')
     },
 
-    /**
-     * @Author: lxr_cel
-     * @Date: 2024-01-02 10:10:34
-     * @Desc: 切换渐变结束颜色
-     */
+    // 切换渐变结束颜色
     changeEndColor(color) {
       this.style.endColor = color
       this.update('endColor')
@@ -806,7 +857,7 @@ export default {
     font-weight: 500;
     color: rgba(26, 26, 26, 0.9);
     margin-bottom: 10px;
-    margin-top: 20px;
+    margin-top: 35px;
 
     &.noTop {
       margin-top: 0;
@@ -817,6 +868,10 @@ export default {
     display: flex;
     justify-content: space-between;
     margin-bottom: 10px;
+
+    &.noBottom {
+      margin-bottom: 0;
+    }
 
     .btnGroup {
       width: 100%;

@@ -1,39 +1,42 @@
 import btnsSvg from '../../../svg/btns'
 import { SVG, Circle, G, Text } from '@svgdotjs/svg.js'
+import { isUndef } from '../../../utils'
 
 // 创建展开收起按钮的内容节点
 function createExpandNodeContent() {
   if (this._openExpandNode) {
     return
   }
-  let { close, open } = this.mindMap.opt.expandBtnIcon || {}
+  const { expandBtnSize, expandBtnIcon, isShowExpandNum } = this.mindMap.opt
+  let { close, open } = expandBtnIcon || {}
   // 根据配置判断是否显示数量按钮
-  if (this.mindMap.opt.isShowExpandNum) {
+  if (isShowExpandNum) {
     // 展开的节点
     this._openExpandNode = new Text()
+    this._openExpandNode.addClass('smm-expand-btn-text')
     // 文本垂直居中
     this._openExpandNode.attr({
       'text-anchor': 'middle',
       'dominant-baseline': 'middle',
-      x: this.expandBtnSize / 2,
+      x: expandBtnSize / 2,
       y: 2
     })
   } else {
     this._openExpandNode = SVG(open || btnsSvg.open).size(
-      this.expandBtnSize,
-      this.expandBtnSize
+      expandBtnSize,
+      expandBtnSize
     )
-    this._openExpandNode.x(0).y(-this.expandBtnSize / 2)
+    this._openExpandNode.x(0).y(-expandBtnSize / 2)
   }
   // 收起的节点
   this._closeExpandNode = SVG(close || btnsSvg.close).size(
-    this.expandBtnSize,
-    this.expandBtnSize
+    expandBtnSize,
+    expandBtnSize
   )
-  this._closeExpandNode.x(0).y(-this.expandBtnSize / 2)
+  this._closeExpandNode.x(0).y(-expandBtnSize / 2)
   // 填充节点
-  this._fillExpandNode = new Circle().size(this.expandBtnSize)
-  this._fillExpandNode.x(0).y(-this.expandBtnSize / 2)
+  this._fillExpandNode = new Circle().size(expandBtnSize)
+  this._fillExpandNode.x(0).y(-expandBtnSize / 2)
 
   // 设置样式
   this.style.iconBtn(
@@ -77,8 +80,13 @@ function updateExpandBtnNode() {
           color: expandBtnStyle.strokeColor
         })
         // 计算子节点数量
-        let count = this.sumNode(this.nodeData.children)
-        count = expandBtnNumHandler(count)
+        let count = this.sumNode(this.nodeData.children || [])
+        if (typeof expandBtnNumHandler === 'function') {
+          const res = expandBtnNumHandler(count, this)
+          if (!isUndef(res)) {
+            count = res
+          }
+        }
         node.text(String(count))
       } else {
         this._fillExpandNode.stroke('none')
@@ -98,11 +106,7 @@ function updateExpandBtnPos() {
 
 //  创建展开收缩按钮
 function renderExpandBtn() {
-  if (
-    !this.nodeData.children ||
-    this.nodeData.children.length <= 0 ||
-    this.isRoot
-  ) {
+  if (this.getChildrenLength() <= 0 || this.isRoot) {
     return
   }
   if (this._expandBtn) {

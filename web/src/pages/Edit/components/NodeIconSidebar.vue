@@ -1,20 +1,41 @@
 <template>
   <Sidebar ref="sidebar" :title="$t('nodeIconSidebar.title')">
-    <div class="box" :class="{ isDark: isDark }">
-      <el-tabs v-model="activeName">
-        <el-tab-pane
-          :label="$t('nodeIconSidebar.icon')"
-          name="icon"
-        ></el-tab-pane>
-        <el-tab-pane
-          :label="$t('nodeIconSidebar.sticker')"
-          name="image"
-        ></el-tab-pane>
-      </el-tabs>
-      <div class="boxContent">
+    <div class="box " :class="{ isDark: isDark }">
+      <div class="boxHeader">
+        <el-tabs v-model="activeName">
+          <el-tab-pane
+            :label="$t('nodeIconSidebar.icon')"
+            name="icon"
+          ></el-tab-pane>
+          <el-tab-pane
+            :label="$t('nodeIconSidebar.sticker')"
+            name="image"
+          ></el-tab-pane>
+        </el-tabs>
+        <el-select
+          size="mini"
+          style="width: 100%; margin-bottom: 10px;"
+          v-model="currentType"
+          @change="onCurrentTypeChange"
+        >
+          <el-option
+            v-for="item in typeSelectList"
+            :key="item.name"
+            :label="item.name"
+            :value="item.name"
+          >
+          </el-option>
+        </el-select>
+      </div>
+      <div class="boxContent customScrollbar" ref="boxContentRef">
         <!-- 图标 -->
         <div class="iconBox" v-if="activeName === 'icon'">
-          <div class="item" v-for="item in nodeIconList" :key="item.name">
+          <div
+            class="item"
+            v-for="item in nodeIconList"
+            :key="item.name"
+            :data-title="item.name"
+          >
             <div class="title">{{ item.name }}</div>
             <div class="list">
               <div
@@ -32,7 +53,12 @@
         </div>
         <!-- 贴纸 -->
         <div class="imageBox" v-if="activeName === 'image'">
-          <div class="item" v-for="item in nodeImageList" :key="item.name">
+          <div
+            class="item"
+            v-for="item in nodeImageList"
+            :key="item.name"
+            :data-title="item.name"
+          >
             <div class="title">{{ item.name }}</div>
             <div class="list">
               <div
@@ -55,7 +81,7 @@
 </template>
 
 <script>
-import Sidebar from './Sidebar'
+import Sidebar from './Sidebar.vue'
 import { mapState } from 'vuex'
 import { nodeIconList } from 'simple-mind-map/src/svg/icons'
 import { mergerIconList } from 'simple-mind-map/src/utils/index'
@@ -63,7 +89,6 @@ import icon from '@/config/icon'
 import image from '@/config/image'
 
 export default {
-  name: 'NodeIconSidebar',
   components: {
     Sidebar
   },
@@ -74,14 +99,19 @@ export default {
       nodeImageList: [...image],
       iconList: [],
       nodeImage: '',
-      activeNodes: []
+      activeNodes: [],
+      currentType: ''
     }
   },
   computed: {
     ...mapState({
       activeSidebar: state => state.activeSidebar,
       isDark: state => state.localConfig.isDark
-    })
+    }),
+
+    typeSelectList() {
+      return this.activeName === 'icon' ? this.nodeIconList : this.nodeImageList
+    }
   },
   watch: {
     activeSidebar(val) {
@@ -90,6 +120,11 @@ export default {
       } else {
         this.$refs.sidebar.show = false
       }
+    },
+
+    activeName() {
+      this.currentType = ''
+      this.$refs.boxContentRef.scrollTop = 0
     }
   },
   created() {
@@ -165,6 +200,17 @@ export default {
           ...image
         })
       })
+    },
+
+    onCurrentTypeChange(val) {
+      const warp = this.$refs.boxContentRef
+      const elList = Array.from(warp.querySelectorAll('.item') || [])
+      const tar = elList.find(el => {
+        return el.getAttribute('data-title') === val
+      })
+      if (tar) {
+        warp.scrollTop = tar.offsetTop
+      }
     }
   }
 }
@@ -172,11 +218,24 @@ export default {
 
 <style lang="less" scoped>
 .box {
-  padding: 0 20px;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
   &.isDark {
     .title {
       color: #fff;
+    }
+  }
+
+  .boxHeader {
+    width: 100%;
+    flex-shrink: 0;
+    padding: 0 20px;
+
+    /deep/ .el-tabs__header {
+      margin-bottom: 10px;
     }
   }
 
@@ -187,10 +246,20 @@ export default {
   }
 
   .boxContent {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    padding: 0 20px;
+    position: relative;
+
     .iconBox {
       .item {
         margin-bottom: 20px;
         font-weight: bold;
+
+        &:last-of-type {
+          margin-bottom: 0;
+        }
 
         .title {
           margin-bottom: 10px;
@@ -238,6 +307,10 @@ export default {
     .imageBox {
       margin-bottom: 20px;
       font-weight: bold;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
 
       .title {
         margin-bottom: 10px;

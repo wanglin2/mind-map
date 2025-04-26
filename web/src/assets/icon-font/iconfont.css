@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2479351 */
-  src: url('iconfont.woff2?t=1719815803051') format('woff2'),
-       url('iconfont.woff?t=1719815803051') format('woff'),
-       url('iconfont.ttf?t=1719815803051') format('truetype');
+  src: url('iconfont.woff2?t=1745462322007') format('woff2'),
+       url('iconfont.woff?t=1745462322007') format('woff'),
+       url('iconfont.ttf?t=1745462322007') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,54 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.iconshubiaoyidong:before {
+  content: "\e659";
+}
+
+.iconvip:before {
+  content: "\e65e";
+}
+
+.iconlianjie:before {
+  content: "\e619";
+}
+
+.iconjibiji:before {
+  content: "\e618";
+}
+
+.iconhuiyuan-:before {
+  content: "\e615";
+}
+
+.iconAIshengcheng:before {
+  content: "\e6b5";
+}
+
+.iconprinting:before {
+  content: "\ea28";
+}
+
+.iconwenjianjia:before {
+  content: "\e614";
+}
+
+.iconcontentleft:before {
+  content: "\e8c9";
+}
+
+.iconjuzhongduiqi:before {
+  content: "\ec80";
+}
+
+.iconfile-excel:before {
+  content: "\e7b7";
+}
+
+.iconfreemind:before {
+  content: "\e97d";
 }
 
 .iconwaikuang:before {

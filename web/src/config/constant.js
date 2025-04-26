@@ -1,64 +1,19 @@
 //  布局结构图片映射
 export const layoutImgMap = {
-  logicalStructure: require('../assets/img/structures/logicalStructure.png'),
+  logicalStructure: require('../assets/img/structures/logicalStructure.jpg'),
   logicalStructureLeft: require('../assets/img/structures/logicalStructureLeft.jpg'),
-  mindMap: require('../assets/img/structures/mindMap.png'),
-  organizationStructure: require('../assets/img/structures/organizationStructure.png'),
-  catalogOrganization: require('../assets/img/structures/catalogOrganization.png'),
-  timeline: require('../assets/img/structures/timeline.png'),
-  timeline2: require('../assets/img/structures/timeline2.png'),
-  fishbone: require('../assets/img/structures/fishbone.png'),
-  verticalTimeline: require('../assets/img/structures/verticalTimeline.png')
-}
-
-//  主题图片映射
-export const themeMap = {
-  default: require('../assets/img/themes/default.jpg'),
-  classic: require('../assets/img/themes/classic.jpg'),
-  minions: require('../assets/img/themes/minions.jpg'),
-  pinkGrape: require('../assets/img/themes/pinkGrape.jpg'),
-  mint: require('../assets/img/themes/mint.jpg'),
-  gold: require('../assets/img/themes/gold.jpg'),
-  vitalityOrange: require('../assets/img/themes/vitalityOrange.jpg'),
-  greenLeaf: require('../assets/img/themes/greenLeaf.jpg'),
-  dark2: require('../assets/img/themes/dark2.jpg'),
-  skyGreen: require('../assets/img/themes/skyGreen.jpg'),
-  classic2: require('../assets/img/themes/classic2.jpg'),
-  classic3: require('../assets/img/themes/classic3.jpg'),
-  classic4: require('../assets/img/themes/classic4.jpg'),
-  classicGreen: require('../assets/img/themes/classicGreen.jpg'),
-  classicBlue: require('../assets/img/themes/classicBlue.jpg'),
-  blueSky: require('../assets/img/themes/blueSky.jpg'),
-  brainImpairedPink: require('../assets/img/themes/brainImpairedPink.jpg'),
-  dark: require('../assets/img/themes/dark.jpg'),
-  earthYellow: require('../assets/img/themes/earthYellow.jpg'),
-  freshGreen: require('../assets/img/themes/freshGreen.jpg'),
-  freshRed: require('../assets/img/themes/freshRed.jpg'),
-  romanticPurple: require('../assets/img/themes/romanticPurple.jpg'),
-  simpleBlack: require('../assets/img/themes/simpleBlack.jpg'),
-  courseGreen: require('../assets/img/themes/courseGreen.jpg'),
-  coffee: require('../assets/img/themes/coffee.jpg'),
-  redSpirit: require('../assets/img/themes/redSpirit.jpg'),
-  blackHumour: require('../assets/img/themes/blackHumour.jpg'),
-  lateNightOffice: require('../assets/img/themes/lateNightOffice.jpg'),
-  blackGold: require('../assets/img/themes/blackGold.jpg'),
-  autumn: require('../assets/img/themes/autumn.jpg'),
-  avocado: require('../assets/img/themes/avocado.jpg'),
-  orangeJuice: require('../assets/img/themes/orangeJuice.jpg'),
-  oreo: require('../assets/img/themes/oreo.jpg'),
-  shallowSea: require('../assets/img/themes/shallowSea.jpg'),
-  lemonBubbles: require('../assets/img/themes/lemonBubbles.jpg'),
-  rose: require('../assets/img/themes/rose.jpg'),
-  seaBlueLine: require('../assets/img/themes/seaBlueLine.jpg'),
-  neonLamp: require('../assets/img/themes/neonLamp.jpg'),
-  darkNightLceBlade: require('../assets/img/themes/darkNightLceBlade.jpg'),
-  morandi: require('../assets/img/themes/morandi.jpg'),
-  classic5: require('../assets/img/themes/classic5.jpg'),
-  dark3: require('../assets/img/themes/dark3.jpg'),
-  dark4: require('../assets/img/themes/dark4.jpg'),
-  cactus: require('../assets/img/themes/cactus.jpg'),
-  classic6: require('../assets/img/themes/classic6.jpg'),
-  classic7: require('../assets/img/themes/classic7.jpg')
+  mindMap: require('../assets/img/structures/mindMap.jpg'),
+  organizationStructure: require('../assets/img/structures/organizationStructure.jpg'),
+  catalogOrganization: require('../assets/img/structures/catalogOrganization.jpg'),
+  timeline: require('../assets/img/structures/timeline.jpg'),
+  timeline2: require('../assets/img/structures/timeline2.jpg'),
+  fishbone: require('../assets/img/structures/fishbone.jpg'),
+  fishbone2: require('../assets/img/structures/fishbone2.jpg'),
+  rightFishbone: require('../assets/img/structures/rightFishbone.jpg'),
+  rightFishbone2: require('../assets/img/structures/rightFishbone2.jpg'),
+  verticalTimeline: require('../assets/img/structures/verticalTimeline.jpg'),
+  verticalTimeline2: require('../assets/img/structures/verticalTimeline2.jpg'),
+  verticalTimeline3: require('../assets/img/structures/verticalTimeline3.jpg')
 }
 
 // 公式列表
@@ -85,12 +40,14 @@ export const formulaList = [
   '\\begin{cases}3x + 5y +  z \\\\7x - 2y + 4z \\\\-6x + 3y + 2z\\end{cases}'
 ]
 
+// 支持某种连线类型的结构
 export const supportLineStyleLayoutsMap = {
   curve: [
     'logicalStructure',
     'logicalStructureLeft',
     'mindMap',
-    'verticalTimeline'
+    'verticalTimeline',
+    'organizationStructure'
   ],
   direct: [
     'logicalStructure',
@@ -101,6 +58,7 @@ export const supportLineStyleLayoutsMap = {
   ]
 }
 
+// 直线模式支持设置圆角的结构
 export const supportLineRadiusLayouts = [
   'logicalStructure',
   'logicalStructureLeft',
@@ -108,6 +66,7 @@ export const supportLineRadiusLayouts = [
   'verticalTimeline'
 ]
 
+// 支持只显示底边直线风格的结构
 export const supportNodeUseLineStyleLayouts = [
   'logicalStructure',
   'logicalStructureLeft',
@@ -116,10 +75,12 @@ export const supportNodeUseLineStyleLayouts = [
   'organizationStructure'
 ]
 
+// 支持曲线模式下，根节点样式和其他节点样式保持一致的结构
 export const supportRootLineKeepSameInCurveLayouts = [
   'logicalStructure',
   'logicalStructureLeft',
-  'mindMap'
+  'mindMap',
+  'organizationStructure'
 ]
 
 // 彩虹线条配置

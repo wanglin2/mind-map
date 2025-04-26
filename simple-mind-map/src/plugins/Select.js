@@ -41,17 +41,23 @@ class Select {
 
   // 鼠标按下
   onMousedown(e) {
-    if (this.mindMap.opt.readonly) {
+    const { readonly, mousedownEventPreventDefault } = this.mindMap.opt
+    if (readonly) {
       return
     }
     let { useLeftKeySelectionRightKeyDrag } = this.mindMap.opt
     if (
       !(e.ctrlKey || e.metaKey) &&
-      (useLeftKeySelectionRightKeyDrag ? e.which !== 1 : e.which !== 3)
+      (useLeftKeySelectionRightKeyDrag// 是否开启了左键多选节点右键拖动画布
+        ? e.which !== 1 ||// 非左键直接返回
+          (e.which === 1 && this.mindMap.keyCommand.currentIsKey('Spacebar'))// 是左键+空格也返回，因为是拖动画布
+        : e.which !== 3)// 非右键直接返回
     ) {
       return
     }
-    e.preventDefault()
+    if (mousedownEventPreventDefault) {
+      e.preventDefault()
+    }
     this.isMousedown = true
     this.cacheActiveList = [...this.mindMap.renderer.activeNodeList]
     let { x, y } = this.mindMap.toPos(e.clientX, e.clientY)

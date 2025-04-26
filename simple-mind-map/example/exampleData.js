@@ -17,11 +17,7 @@ const createFullData = () => {
     };
 }
 
-/** 
- * @Author: 王林 
- * @Date: 2021-04-15 22:23:24 
- * @Desc: 节点较多示例数据 
- */
+// 节点较多示例数据
 const data1 = {
     "root": {
         "data": {
@@ -936,6 +932,5 @@ export default {
     "layout": "logicalStructure",
     // "layout": "mindMap",
     // "layout": "catalogOrganization"
-    // "layout": "organizationStructure",
-    "config": {}
+    // "layout": "organizationStructure"
 }

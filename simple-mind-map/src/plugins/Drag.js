@@ -93,7 +93,6 @@ class Drag extends Base {
     ) {
       return
     }
-    e.preventDefault()
     this.isMousedown = true
     // 记录鼠标按下时的节点
     this.mousedownNode = node
@@ -408,7 +407,12 @@ class Drag extends Base {
       TIMELINE,
       TIMELINE2,
       VERTICAL_TIMELINE,
-      FISHBONE
+      VERTICAL_TIMELINE2,
+      VERTICAL_TIMELINE3,
+      FISHBONE,
+      FISHBONE2,
+      RIGHT_FISHBONE,
+      RIGHT_FISHBONE2
     } = CONSTANTS.LAYOUT
     this.overlapNode = null
     this.prevNode = null
@@ -444,9 +448,14 @@ class Drag extends Base {
           this.handleTimeLine2(node)
           break
         case VERTICAL_TIMELINE:
+        case VERTICAL_TIMELINE2:
+        case VERTICAL_TIMELINE3:
           this.handleLogicalStructure(node)
           break
         case FISHBONE:
+        case FISHBONE2:
+        case RIGHT_FISHBONE:
+        case RIGHT_FISHBONE2:
           this.handleFishbone(node)
           break
         default:
@@ -470,7 +479,12 @@ class Drag extends Base {
       TIMELINE,
       TIMELINE2,
       VERTICAL_TIMELINE,
-      FISHBONE
+      VERTICAL_TIMELINE2,
+      VERTICAL_TIMELINE3,
+      FISHBONE,
+      FISHBONE2,
+      RIGHT_FISHBONE,
+      RIGHT_FISHBONE2
     } = CONSTANTS.LAYOUT
     const { LEFT, TOP, RIGHT, BOTTOM } = CONSTANTS.LAYOUT_GROW_DIR
     const layerIndex = this.overlapNode.layerIndex
@@ -564,6 +578,8 @@ class Drag extends Base {
           }
           break
         case VERTICAL_TIMELINE:
+        case VERTICAL_TIMELINE2:
+        case VERTICAL_TIMELINE3:
           if (layerIndex === 0) {
             x =
               lastNodeRect.originLeft +
@@ -581,6 +597,9 @@ class Drag extends Base {
           }
           break
         case FISHBONE:
+        case FISHBONE2:
+        case RIGHT_FISHBONE:
+        case RIGHT_FISHBONE2:
           if (layerIndex <= 1) {
             notRenderPlaceholder = true
             this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, true)
@@ -656,6 +675,8 @@ class Drag extends Base {
           }
           break
         case VERTICAL_TIMELINE:
+        case VERTICAL_TIMELINE2:
+        case VERTICAL_TIMELINE3:
           if (layerIndex === 0) {
             rotate = true
           }
@@ -669,6 +690,9 @@ class Drag extends Base {
             halfPlaceholderHeight
           break
         case FISHBONE:
+        case FISHBONE2:
+        case RIGHT_FISHBONE:
+        case RIGHT_FISHBONE2:
           if (layerIndex <= 1) {
             notRenderPlaceholder = true
             this.mindMap.execCommand('SET_NODE_ACTIVE', this.overlapNode, true)
@@ -704,7 +728,12 @@ class Drag extends Base {
       MIND_MAP,
       TIMELINE2,
       VERTICAL_TIMELINE,
-      FISHBONE
+      VERTICAL_TIMELINE2,
+      VERTICAL_TIMELINE3,
+      FISHBONE,
+      FISHBONE2,
+      RIGHT_FISHBONE,
+      RIGHT_FISHBONE2
     } = CONSTANTS.LAYOUT
     switch (this.mindMap.opt.layout) {
       case LOGICAL_STRUCTURE:
@@ -714,7 +743,12 @@ class Drag extends Base {
       case MIND_MAP:
       case TIMELINE2:
       case VERTICAL_TIMELINE:
+      case VERTICAL_TIMELINE2:
+      case VERTICAL_TIMELINE3:
       case FISHBONE:
+      case FISHBONE2:
+      case RIGHT_FISHBONE:
+      case RIGHT_FISHBONE2:
         return node.dir
       default:
         return ''
@@ -726,21 +760,26 @@ class Drag extends Base {
   handleVerticalCheck(node, checkList, isReverse = false) {
     const { layout } = this.mindMap.opt
     const { LAYOUT, LAYOUT_GROW_DIR } = CONSTANTS
-    const { VERTICAL_TIMELINE, FISHBONE } = LAYOUT
-    const { BOTTOM, LEFT } = LAYOUT_GROW_DIR
+    const {
+      VERTICAL_TIMELINE,
+      VERTICAL_TIMELINE2,
+      VERTICAL_TIMELINE3,
+      FISHBONE,
+      FISHBONE2,
+      RIGHT_FISHBONE,
+      RIGHT_FISHBONE2
+    } = LAYOUT
+    const { LEFT } = LAYOUT_GROW_DIR
     const mouseMoveX = this.mouseMoveX
     const mouseMoveY = this.mouseMoveY
     const nodeRect = this.getNodeRect(node)
     const dir = this.getNewChildNodeDir(node)
     const layerIndex = node.layerIndex
-    if (
-      isReverse ||
-      (layout === FISHBONE && dir === BOTTOM && layerIndex >= 3)
-    ) {
+    if (isReverse) {
       checkList = checkList.reverse()
     }
     let oneFourthHeight = nodeRect.originHeight / 4
-    let { prevBrotherOffset, nextBrotherOffset } =
+    let { prevBrother, prevBrotherOffset, nextBrother, nextBrotherOffset } =
       this.getNodeDistanceToSiblingNode(checkList, node, nodeRect, 'v')
     if (nodeRect.left <= mouseMoveX && nodeRect.right >= mouseMoveX) {
       // 检测兄弟节点位置
@@ -750,6 +789,25 @@ class Drag extends Base {
         !this.nextNode &&
         !node.isRoot
       ) {
+        // 如果不在兄弟节点范围内，那么修改距离值
+        if (prevBrother) {
+          const { scaleY } = this.drawTransform
+          const brotherRect = this.getNodeRect(prevBrother)
+          if (
+            !(brotherRect.left <= mouseMoveX && brotherRect.right >= mouseMoveX)
+          ) {
+            prevBrotherOffset = this.minOffset * scaleY
+          }
+        }
+        if (nextBrother) {
+          const { scaleY } = this.drawTransform
+          const brotherRect = this.getNodeRect(nextBrother)
+          if (
+            !(brotherRect.left <= mouseMoveX && brotherRect.right >= mouseMoveX)
+          ) {
+            nextBrotherOffset = this.minOffset * scaleY
+          }
+        }
         let checkIsPrevNode =
           nextBrotherOffset > 0 // 距离下一个兄弟节点的距离大于0
             ? mouseMoveY > nodeRect.bottom &&
@@ -771,12 +829,19 @@ class Drag extends Base {
         let notRenderLine = false
         switch (layout) {
           case VERTICAL_TIMELINE:
+          case VERTICAL_TIMELINE2:
+          case VERTICAL_TIMELINE3:
             if (layerIndex === 1) {
               x =
                 nodeRect.originLeft +
                 nodeRect.originWidth / 2 -
                 this.placeholderWidth / 2
             }
+            break
+          case RIGHT_FISHBONE:
+          case RIGHT_FISHBONE2:
+            x =
+              nodeRect.originLeft + nodeRect.originWidth - this.placeholderWidth
             break
           default:
         }
@@ -792,6 +857,9 @@ class Drag extends Base {
             this.placeholderHeight / 2
           switch (layout) {
             case FISHBONE:
+            case FISHBONE2:
+            case RIGHT_FISHBONE:
+            case RIGHT_FISHBONE2:
               if (layerIndex === 2) {
                 notRenderLine = true
                 y =
@@ -821,6 +889,9 @@ class Drag extends Base {
             this.placeholderHeight / 2
           switch (layout) {
             case FISHBONE:
+            case FISHBONE2:
+            case RIGHT_FISHBONE:
+            case RIGHT_FISHBONE2:
               if (layerIndex === 2) {
                 notRenderLine = true
                 y =
@@ -857,12 +928,19 @@ class Drag extends Base {
   handleHorizontalCheck(node, checkList) {
     const { layout } = this.mindMap.opt
     const { LAYOUT } = CONSTANTS
-    const { FISHBONE, TIMELINE, TIMELINE2 } = LAYOUT
+    const {
+      FISHBONE,
+      FISHBONE2,
+      RIGHT_FISHBONE,
+      RIGHT_FISHBONE2,
+      TIMELINE,
+      TIMELINE2
+    } = LAYOUT
     let mouseMoveX = this.mouseMoveX
     let mouseMoveY = this.mouseMoveY
     let nodeRect = this.getNodeRect(node)
     let oneFourthWidth = nodeRect.originWidth / 4
-    let { prevBrotherOffset, nextBrotherOffset } =
+    let { prevBrother, prevBrotherOffset, nextBrother, nextBrotherOffset } =
       this.getNodeDistanceToSiblingNode(checkList, node, nodeRect, 'h')
     if (nodeRect.top <= mouseMoveY && nodeRect.bottom >= mouseMoveY) {
       // 检测兄弟节点位置
@@ -872,6 +950,24 @@ class Drag extends Base {
         !this.nextNode &&
         !node.isRoot
       ) {
+        if (prevBrother) {
+          const { scaleX } = this.drawTransform
+          const brotherRect = this.getNodeRect(prevBrother)
+          if (
+            !(brotherRect.top <= mouseMoveY && brotherRect.bottom >= mouseMoveY)
+          ) {
+            prevBrotherOffset = this.minOffset * scaleX
+          }
+        }
+        if (nextBrother) {
+          const { scaleX } = this.drawTransform
+          const brotherRect = this.getNodeRect(nextBrother)
+          if (
+            !(brotherRect.top <= mouseMoveY && brotherRect.bottom >= mouseMoveY)
+          ) {
+            nextBrotherOffset = this.minOffset * scaleX
+          }
+        }
         let checkIsPrevNode =
           nextBrotherOffset > 0 // 距离下一个兄弟节点的距离大于0
             ? mouseMoveX < nodeRect.right + nextBrotherOffset &&
@@ -897,6 +993,9 @@ class Drag extends Base {
               this.placeholderWidth / 2
             break
           case FISHBONE:
+          case FISHBONE2:
+          case RIGHT_FISHBONE:
+          case RIGHT_FISHBONE2:
             if (layerIndex === 1) {
               notRenderLine = true
               y =
@@ -908,7 +1007,11 @@ class Drag extends Base {
           default:
         }
         if (checkIsPrevNode) {
-          this.prevNode = node
+          if ([RIGHT_FISHBONE, RIGHT_FISHBONE2].includes(layout)) {
+            this.nextNode = node
+          } else {
+            this.prevNode = node
+          }
           this.setPlaceholderRect({
             x:
               nodeRect.originRight +
@@ -919,7 +1022,11 @@ class Drag extends Base {
             notRenderLine
           })
         } else if (checkIsNextNode) {
-          this.nextNode = node
+          if ([RIGHT_FISHBONE, RIGHT_FISHBONE2].includes(layout)) {
+            this.prevNode = node
+          } else {
+            this.nextNode = node
+          }
           this.setPlaceholderRect({
             x:
               nodeRect.originLeft -
@@ -1143,7 +1250,11 @@ class Drag extends Base {
       this.handleHorizontalCheck(node, checkList)
     } else {
       // 处于上方的三级节点需要特殊处理，因为节点排列方向反向了
-      if (node.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP && node.layerIndex === 2) {
+      const is2LayerTop =
+        node.dir === CONSTANTS.LAYOUT_GROW_DIR.TOP && node.layerIndex === 2
+      const is2MoreLayerBottom =
+        node.dir === CONSTANTS.LAYOUT_GROW_DIR.BOTTOM && node.layerIndex >= 3
+      if (is2LayerTop || is2MoreLayerBottom) {
         this.handleVerticalCheck(node, checkList, true)
       } else {
         this.handleVerticalCheck(node, checkList)

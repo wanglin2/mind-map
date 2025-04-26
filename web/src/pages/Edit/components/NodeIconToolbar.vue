@@ -19,10 +19,6 @@ import { mapState, mapMutations } from 'vuex'
 const allIconList = [..._nodeIconList, ...icon]
 
 export default {
-    name: 'NodeIconToolbar',
-    components: {
-
-    },
     props: {
         mindMap: {
             type: Object
@@ -80,7 +76,7 @@ export default {
             this.updatePos()
             this.showNodeIconToolbar = true
             if (this.activeSidebar === 'nodeIconSidebar') {
-                this.setActiveSidebar('')
+                this.setActiveSidebar(null)
             }
         },
 

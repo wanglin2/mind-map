@@ -50,7 +50,6 @@ import {
 
 // 大纲树
 export default {
-  name: 'Outline',
   props: {
     mindMap: {
       type: Object
@@ -142,7 +141,7 @@ export default {
           ? nodeRichTextToTextWithWrap(root.data.text)
           : root.data.text
         text = htmlEscape(text)
-        text = text.replaceAll(/\n/g, '<br>')
+        text = text.replace(/\n/g, '<br>')
         root.textCache = text // 保存一份修改前的数据，用于对比是否修改了
         root.label = text
         root.uid = root.data.uid
@@ -212,7 +211,7 @@ export default {
       if (!targetNode) return
       this.notHandleDataChange = true
       if (richText) {
-        targetNode.setText(textToNodeRichTextWithWrap(text), true, true)
+        targetNode.setText(textToNodeRichTextWithWrap(text), true)
       } else {
         targetNode.setText(text)
       }
@@ -351,67 +350,7 @@ export default {
     padding-right: 20px;
   }
 }
-
-.outlineTree {
-  &.isDark {
-    background-color: #262a2e;
-
-    .customNode {
-      color: #fff;
-    }
-
-    &.el-tree--highlight-current {
-      /deep/ .el-tree-node.is-current > .el-tree-node__content {
-        background-color: hsla(0, 0%, 100%, 0.05) !important;
-      }
-    }
-
-    /deep/ .el-tree-node__content:hover,
-    .el-upload-list__item:hover {
-      background-color: hsla(0, 0%, 100%, 0.02) !important;
-    }
-
-    /deep/ .el-tree-node__content {
-      .el-tree-node__expand-icon {
-        color: #fff;
-
-        &.is-leaf {
-          &::after {
-            background-color: #fff;
-          }
-        }
-      }
-    }
-  }
-
-  /deep/ .el-tree-node > .el-tree-node__children {
-    overflow: inherit;
-  }
-
-  /deep/ .el-tree-node__content {
-    height: auto;
-    margin: 5px 0;
-
-    .el-tree-node__expand-icon {
-      color: #262a2e;
-
-      &.is-leaf {
-        color: transparent;
-        position: relative;
-
-        &::after {
-          background-color: #262a2e;
-          position: absolute;
-          content: '';
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          left: 10px;
-          top: 50%;
-          transform: translateY(-50%);
-        }
-      }
-    }
-  }
-}
+</style>
+<style lang="less" scoped>
+@import url('../../../style/outlineTree.less');
 </style>

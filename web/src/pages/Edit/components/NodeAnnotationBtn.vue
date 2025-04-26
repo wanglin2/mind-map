@@ -89,10 +89,12 @@
     </div>
     <div
       slot="reference"
-      class="toolbarBtn"
+      class="toolbarBtn vip"
       :style="{
-        marginLeft: dir === 'v' ? '0px' : '20px',
-        marginTop: dir === 'v' ? '10px' : '0px'
+        marginLeft: dir === 'v' || rightHasBtn ? '0px' : '20px',
+        marginTop: dir === 'v' ? '10px' : '0px',
+        marginRight: rightHasBtn ? '20px' : '0px',
+        marginBottom: dir === 'v' && rightHasBtn ? '10px' : '0px'
       }"
       :class="{
         disabled: activeNodes.length <= 0 || hasGeneralization
@@ -106,7 +108,7 @@
 
 <script>
 import { lineWidthList } from '@/config'
-import Color from './Color'
+import Color from './Color.vue'
 
 const defaultConfig = {
   type: 'circle',
@@ -128,6 +130,10 @@ export default {
     dir: {
       type: String,
       default: ''
+    },
+    rightHasBtn: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

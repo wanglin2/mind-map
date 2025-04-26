@@ -43,6 +43,18 @@ class Demonstrate {
       this.mindMap.opt.demonstrateConfig || {}
     )
     this.needRestorePerformanceMode = false
+    this.onConfigUpdate = this.onConfigUpdate.bind(this)
+    this.mindMap.on('after_update_config', this.onConfigUpdate)
+  }
+
+  // 监听配置更新
+  onConfigUpdate(opt) {
+    if (typeof opt.demonstrateConfig !== 'undefined') {
+      this.config = {
+        ...this.config,
+        ...opt.demonstrateConfig
+      }
+    }
   }
 
   // 进入演示模式
@@ -417,11 +429,13 @@ class Demonstrate {
   // 插件被移除前做的事情
   beforePluginRemove() {
     this.unBindEvent()
+    this.mindMap.off('after_update_config', this.onConfigUpdate)
   }
 
   // 插件被卸载前做的事情
   beforePluginDestroy() {
     this.unBindEvent()
+    this.mindMap.off('after_update_config', this.onConfigUpdate)
   }
 }
 

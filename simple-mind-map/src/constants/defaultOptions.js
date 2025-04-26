@@ -7,6 +7,8 @@ export const defaultOpt = {
   el: null,
   // 思维导图回显数据
   data: null,
+  // 要恢复的视图数据，一般通过mindMap.view.getTransformData()方法获取
+  viewData: null,
   // 是否只读
   readonly: false,
   // 布局
@@ -19,12 +21,20 @@ export const defaultOpt = {
   themeConfig: {},
   // 放大缩小的增量比例
   scaleRatio: 0.2,
+  // 平移的步长比例，只在鼠标滚轮和触控板触发的平移中应用
+  translateRatio: 1,
+  // 最小缩小值，百分数，最小为0，该选项只会影响view.narrow方法（影响的行为为Ctrl+-快捷键、鼠标滚轮及触控板），不会影响其他方法，比如view.setScale，所以需要你自行限制大小
+  minZoomRatio: 20,
+  // 最大放大值，百分数，传-1代表不限制，否则传0以上数字，，该选项只会影响view.enlarge方法
+  maxZoomRatio: 400,
+  // 自定义判断wheel事件是否来自电脑的触控板
+  // 默认是通过判断e.deltaY的值是否小于10，显然这种方法是不准确的，当鼠标滚动的很慢，或者触摸移动的很快时判断就失效了，如果你有更好的方法，欢迎提交issue
+  // 如果你希望自己来判断，那么传递一个函数，接收一个参数e（事件对象），需要返回true或false，代表是否是来自触控板
+  customCheckIsTouchPad: null,
   // 鼠标缩放是否以鼠标当前位置为中心点，否则以画布中心点
   mouseScaleCenterUseMousePosition: true,
   // 最多显示几个标签
   maxTag: 5,
-  // 标签显示的位置，相对于节点文本，bottom（下方）、right（右侧）
-  tagPosition: CONSTANTS.TAG_POSITION.RIGHT,
   // 展开收缩按钮尺寸
   expandBtnSize: 20,
   // 节点里图片和文字的间距
@@ -67,13 +77,14 @@ export const defaultOpt = {
     close: ''
   },
   // 处理收起节点数量
-  expandBtnNumHandler: num => {
-    return num
-  },
+  expandBtnNumHandler: null,
   // 是否显示带数量的收起按钮
   isShowExpandNum: true,
   // 是否只有当鼠标在画布内才响应快捷键事件
   enableShortcutOnlyWhenMouseInSvg: true,
+  // 自定义判断是否响应快捷键事件，优先级比enableShortcutOnlyWhenMouseInSvg选项高
+  // 可以传递一个函数，接收事件对象e为参数，需要返回true或false，返回true代表允许响应快捷键事件，反之不允许，库默认当事件目标为body，或为文本编辑框元素（普通文本编辑框、富文本编辑框、关联线文本编辑框）时响应快捷键，其他不响应
+  customCheckEnableShortcut: null,
   // 初始根节点的位置
   initRootNodePosition: null,
   // 节点文本编辑框的z-index
@@ -120,6 +131,8 @@ export const defaultOpt = {
   // 是否在存在一个激活节点时，当按下中文、英文、数字按键时自动进入文本编辑模式
   // 开启该特性后，需要给你的输入框绑定keydown事件，并禁止冒泡
   enableAutoEnterTextEditWhenKeydown: false,
+  // 当enableAutoEnterTextEditWhenKeydown选项开启时生效，当通过按键进入文本编辑时是否自动清空原有文本
+  autoEmptyTextWhenKeydownEnterEdit: false,
   // 自定义对剪贴板文本的处理。当按ctrl+v粘贴时会读取用户剪贴板中的文本和图片，默认只会判断文本是否是普通文本和simple-mind-map格式的节点数据，如果你想处理其他思维导图的数据，比如processon、zhixi等，那么可以传递一个函数，接受当前剪贴板中的文本为参数，返回处理后的数据，可以返回两种类型：
   /*
     1.返回一个纯文本，那么会直接以该文本创建一个子节点
@@ -176,11 +189,6 @@ export const defaultOpt = {
   addHistoryTime: 100,
   // 是否禁止拖动画布
   isDisableDrag: false,
-  // 鼠标移入概要高亮所属节点时的高亮框样式
-  highlightNodeBoxStyle: {
-    stroke: 'rgb(94, 200, 248)',
-    fill: 'transparent'
-  },
   // 创建新节点时的行为
   /*
     DEFAULT  ：默认会激活新创建的节点，并且进入编辑模式。如果同时创建了多个新节点，那么只会激活而不会进入编辑模式
@@ -221,7 +229,7 @@ export const defaultOpt = {
   // 移动节点到画布中心、回到根节点等操作时是否将缩放层级复位为100%
   // 该选项实际影响的是render.moveNodeToCenter方法，moveNodeToCenter方法本身也存在第二个参数resetScale来设置是否复位，如果resetScale参数没有传递，那么使用resetScaleOnMoveNodeToCenter配置，否则使用resetScale配置
   resetScaleOnMoveNodeToCenter: false,
-  // 添加附加的节点前置内容，前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分
+  // 添加附加的节点前置内容，前置内容指和文本同一行的区域中的前置内容，不包括节点图片部分。如果存在编号、任务勾选框内容，这里添加的前置内容会在这两者之后
   createNodePrefixContent: null,
   // 添加附加的节点后置内容，后置内容指和文本同一行的区域中的后置内容，不包括节点图片部分
   createNodePostfixContent: null,
@@ -242,6 +250,79 @@ export const defaultOpt = {
   emptyTextMeasureHeightText: 'abc123我和你',
   // 是否在进行节点文本编辑时实时更新节点大小和节点位置，开启后当节点数量比较多时可能会造成卡顿
   openRealtimeRenderOnNodeTextEdit: false,
+  // 默认会给容器元素el绑定mousedown事件，可通过该选项设置是否阻止其默认事件
+  // 如果设置为true，会带来一定问题，比如你聚焦在思维导图外的其他输入框，点击画布就不会触发其失焦
+  mousedownEventPreventDefault: false,
+  // 在激活上粘贴用户剪贴板中的数据时，如果同时存在文本和图片，那么只粘贴文本，忽略图片
+  onlyPasteTextWhenHasImgAndText: true,
+  // 是否允许拖拽调整节点的宽度，实际上压缩的是节点里面文本内容的宽度，当节点文本内容宽度压缩到最小时无法继续压缩。如果节点存在图片，那么最小值以图片宽度和文本内容最小宽度的最大值为准（目前该特性仅在两种情况下可用：1.开启了富文本模式，即注册了RichText插件；2.自定义节点内容）
+  enableDragModifyNodeWidth: true,
+  // 当允许拖拽调整节点的宽度时，可以通过该选项设置节点文本内容允许压缩的最小宽度
+  minNodeTextModifyWidth: 20,
+  // 同minNodeTextModifyWidth，最大值，传-1代表不限制
+  maxNodeTextModifyWidth: -1,
+  // 自定义处理节点的连线方法，可以传递一个函数，函数接收三个参数：node（节点实例）、line（节点的某条连线，@svgjs库的path对象）, { width, color, dasharray }，dasharray（该条连线的虚线样式，为none代表实线），你可以修改line对象来达到修改节点连线样式的效果，比如增加流动效果
+  customHandleLine: null,
+  // 实例化完后是否立刻进行一次历史数据入栈操作
+  // 即调用mindMap.command.addHistory方法
+  addHistoryOnInit: true,
+  // 自定义节点备注图标
+  noteIcon: {
+    icon: '', // svg字符串，如果不是确定要使用svg自带的样式，否则请去除其中的fill等样式属性
+    style: {
+      // size: 20,// 图标大小，不手动设置则会使用主题的iconSize配置
+      // color: '',// 图标颜色，不手动设置则会使用节点文本的颜色
+    }
+  },
+  // 自定义节点超链接图标
+  hyperlinkIcon: {
+    icon: '', // svg字符串，如果不是确定要使用svg自带的样式，否则请去除其中的fill等样式属性
+    style: {
+      // size: 20,// 图标大小，不手动设置则会使用主题的iconSize配置
+      // color: '',// 图标颜色，不手动设置则会使用节点文本的颜色
+    }
+  },
+  // 自定义节点附件图标
+  attachmentIcon: {
+    icon: '', // svg字符串，如果不是确定要使用svg自带的样式，否则请去除其中的fill等样式属性
+    style: {
+      // size: 20,// 图标大小，不手动设置则会使用主题的iconSize配置
+      // color: '',// 图标颜色，不手动设置则会使用节点文本的颜色
+    }
+  },
+  // 是否显示快捷创建子节点按钮
+  isShowCreateChildBtnIcon: true,
+  // 自定义快捷创建子节点按钮图标
+  quickCreateChildBtnIcon: {
+    icon: '', // svg字符串，如果不是确定要使用svg自带的样式，否则请去除其中的fill等样式属性
+    style: {
+      // 图标大小使用的是expandBtnSize选项
+      // color: '',// 图标颜色，不手动设置则会使用expandBtnStyle选项的color字段
+    }
+  },
+  // 自定义快捷创建子节点按钮的点击操作，
+  customQuickCreateChildBtnClick: null,
+  // 添加自定义的节点内容
+  // 可传递一个对象，格式如下：
+  /*
+    {
+      // 返回要添加的DOM元素详细
+      create: (node) => { 
+        return {
+          el, // DOM节点
+          width: 20, // 宽高
+          height: 20
+        }
+      },
+      // 处理生成的@svgdotjs/svg.js库的ForeignObject节点实例，可以设置其在节点内的位置
+      handle: ({ content, element, node }) => {
+        
+      }
+    }
+  */
+  addCustomContentToNode: null,
+  // 节点连线样式是否允许继承祖先的连线样式
+  enableInheritAncestorLineStyle: true,
 
   // 【Select插件】
   // 多选节点时鼠标移动到边缘时的画布移动偏移量
@@ -325,6 +406,8 @@ export const defaultOpt = {
   // 导出png、svg、pdf时会获取画布上的svg数据进行克隆，然后通过该克隆的元素进行导出，如果你想对该克隆元素做一些处理，比如新增、替换、修改其中的一些元素，那么可以通过该参数传递一个处理函数，接收svg元素对象，处理后，需要返回原svg元素对象。
   // 需要注意的是svg对象指的是@svgdotjs/svg.js库的元素对象，所以你需要阅读该库的文档来操作该对象
   handleBeingExportSvg: null,
+  // 导出图片或pdf都是通过canvas将svg绘制出来，再导出，所以如果思维导图特别大，宽高可能会超出canvas支持的上限，所以会进行缩放，这个上限可以通过该参数设置，代表canvas宽和高的最大宽度
+  maxCanvasSize: 16384,
 
   // 【AssociativeLine插件】
   // 关联线默认文字
@@ -341,6 +424,8 @@ export const defaultOpt = {
   },
   // 是否允许调整关联线两个端点的位置
   enableAdjustAssociativeLinePoints: true,
+  // 关联线连接即将完成时执行，如果要阻止本次连接可以返回true，函数接收一个参数：node（目标节点实例）
+  beforeAssociativeLineConnection: null,
 
   // 【TouchEvent插件】
   // 禁止双指缩放，你仍旧可以使用api进行缩放
@@ -407,15 +492,32 @@ export const defaultOpt = {
   transformRichTextOnEnterEdit: null,
   // 可以传递一个函数，即将结束富文本编辑前会执行该函数，函数接收richText实例，所以你可以在此时机更新quill文档数据
   beforeHideRichTextEdit: null,
-  // 设置富文本节点编辑框和节点大小一致，形成伪原地编辑的效果
-  // 需要注意的是，只有当节点内只有文本、且形状是矩形才会有比较好的效果
-  richTextEditFakeInPlace: false,
 
   // 【OuterFrame】插件
   outerFramePaddingX: 10,
   outerFramePaddingY: 10,
+  defaultOuterFrameText: '外框',
 
   // 【Painter】插件
   // 是否只格式刷节点手动设置的样式，不考虑节点通过主题的应用的样式
-  onlyPainterNodeCustomStyles: false
+  onlyPainterNodeCustomStyles: false,
+
+  // 【NodeImgAdjust】插件
+  // 拦截节点图片的删除，点击节点图片上的删除按钮删除图片前会调用该函数，如果函数返回true则取消删除
+  beforeDeleteNodeImg: null,
+  // 删除和调整两个按钮的大小
+  imgResizeBtnSize: 25,
+  // 最小允许缩放的尺寸，请传入>=0的数字
+  minImgResizeWidth: 50,
+  minImgResizeHeight: 50,
+  // 最大允许缩放的尺寸依据主题的配置，即主题的imgMaxWidth和imgMaxHeight配置，如果设置为false，那么使用maxImgResizeWidth和maxImgResizeHeight选项
+  maxImgResizeWidthInheritTheme: false,
+  // 最大允许缩放的尺寸，maxImgResizeWidthInheritTheme选项设置为false时生效，不限制最大值可传递Infinity
+  maxImgResizeWidth: Infinity,
+  maxImgResizeHeight: Infinity,
+  // 自定义删除按钮和尺寸调整按钮的内容
+  // 默认为内置图标，你可以传递一个svg字符串，或者其他的html字符串
+  // 整体大小请使用上面的minImgResizeWidth和minImgResizeHeight选项设置
+  customDeleteBtnInnerHTML: '',
+  customResizeBtnInnerHTML: ''
 }

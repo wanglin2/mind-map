@@ -1,6 +1,6 @@
 <template>
   <div
-    class="noteContentViewer"
+    class="noteContentViewer customScrollbar"
     ref="noteContentViewer"
     :style="{
       left: this.left + 'px',
@@ -11,20 +11,18 @@
     @mousedown.stop
     @mousemove.stop
     @mouseup.stop
-  ></div>
+    @wheel.stop
+  >
+    <div class="noteContentWrap customScrollbar" ref="noteContentWrap"></div>
+  </div>
 </template>
 
 <script>
 import Viewer from '@toast-ui/editor/dist/toastui-editor-viewer'
 import '@toast-ui/editor/dist/toastui-editor-viewer.css'
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:54
- * @Desc: 节点备注内容显示
- */
+// 节点备注内容显示
 export default {
-  name: 'NodeNoteContentShow',
   props: {
     mindMap: {
       type: Object,
@@ -46,7 +44,7 @@ export default {
     this.$bus.$on('showNoteContent', this.onShowNoteContent)
     this.$bus.$on('hideNoteContent', this.hideNoteContent)
     document.body.addEventListener('click', this.hideNoteContent)
-    this.$bus.$on('node_active', this.hideNoteContent)
+    this.$bus.$on('node_active', this.onNodeActive)
     this.$bus.$on('scale', this.onScale)
     this.$bus.$on('translate', this.onScale)
     this.$bus.$on('svg_mousedown', this.hideNoteContent)
@@ -60,13 +58,24 @@ export default {
     this.$bus.$off('showNoteContent', this.onShowNoteContent)
     this.$bus.$off('hideNoteContent', this.hideNoteContent)
     document.body.removeEventListener('click', this.hideNoteContent)
-    this.$bus.$off('node_active', this.hideNoteContent)
+    this.$bus.$off('node_active', this.onNodeActive)
     this.$bus.$off('scale', this.onScale)
     this.$bus.$off('translate', this.onScale)
     this.$bus.$off('svg_mousedown', this.hideNoteContent)
     this.$bus.$off('expand_btn_click', this.hideNoteContent)
   },
   methods: {
+    onNodeActive(...args) {
+      const nodes = [...args[1]]
+      if (nodes.length > 0) {
+        if (nodes[0] !== this.node) {
+          this.hideNoteContent()
+        }
+      } else {
+        this.hideNoteContent()
+      }
+    },
+
     // 显示备注浮层
     onShowNoteContent(content, left, top, node) {
       this.node = node
@@ -86,8 +95,10 @@ export default {
 
     // 更新位置
     updateNoteContentPosition(left, top) {
-      this.left = left
-      this.top = top
+      const { width, height } = this.$refs.noteContentViewer.getBoundingClientRect()
+      const { right, bottom } = this.mindMap.elRect
+      this.left = left + width > right ? right - width : left
+      this.top = top + height > bottom ? bottom - height : top
     },
 
     // 画布缩放事件
@@ -106,7 +117,7 @@ export default {
     initEditor() {
       if (!this.editor) {
         this.editor = new Viewer({
-          el: this.$refs.noteContentViewer
+          el: this.$refs.noteContentWrap
         })
       }
     }
@@ -120,26 +131,14 @@ export default {
   background-color: #fff;
   padding: 10px;
   border-radius: 5px;
-  max-height: 300px;
-  overflow-y: auto;
   box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.06);
   border: 1px solid rgba(0, 0, 0, 0.06);
+  z-index: 2;
 
-  &::-webkit-scrollbar {
-    width: 7px;
-    height: 7px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    border-radius: 7px;
-    background-color: rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-  }
-
-  &::-webkit-scrollbar-track {
-    box-shadow: none;
-    background: transparent;
-    display: none;
+  .noteContentWrap {
+    max-width: 250px;
+    max-height: 300px;
+    overflow-y: auto;
   }
 }
 </style>

@@ -23,7 +23,7 @@
           >{{ $t('search.replace') }}</el-button
         >
       </el-input>
-      <div class="searchInfo" v-if="showSearchInfo">
+      <div class="searchInfo" v-if="showSearchInfo && !isUndef(searchText)">
         {{ currentIndex }} / {{ total }}
       </div>
     </div>
@@ -78,7 +78,6 @@ import { isUndef, getTextFromHtml } from 'simple-mind-map/src/utils/index'
 
 // 搜索替换
 export default {
-  name: 'Search',
   props: {
     mindMap: {
       type: Object
@@ -125,6 +124,7 @@ export default {
     )
     this.mindMap.keyCommand.addShortcut('Control+f', this.showSearch)
     window.addEventListener('resize', this.setSearchResultListHeight)
+    this.$bus.$on('setData', this.close)
   },
   mounted() {
     this.setSearchResultListHeight()
@@ -141,6 +141,7 @@ export default {
     )
     this.mindMap.keyCommand.removeShortcut('Control+f', this.showSearch)
     window.removeEventListener('resize', this.setSearchResultListHeight)
+    this.$bus.$off('setData', this.close)
   },
   methods: {
     isUndef,
@@ -154,7 +155,7 @@ export default {
     showSearch() {
       this.$bus.$emit('closeSideBar')
       this.show = true
-      // this.$refs.searchInputRef.focus()
+      this.$refs.searchInputRef.focus()
     },
 
     hideReplaceInput() {

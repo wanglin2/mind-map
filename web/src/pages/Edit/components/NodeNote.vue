@@ -29,11 +29,7 @@ import Editor from '@toast-ui/editor'
 import '@toast-ui/editor/dist/toastui-editor.css' // Editor's Style
 import { isMobile } from 'simple-mind-map/src/utils/index'
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:54
- * @Desc: 节点备注内容设置
- */
+// 节点备注内容设置
 export default {
   name: 'NodeNote',
   data() {
@@ -42,7 +38,8 @@ export default {
       note: '',
       activeNodes: [],
       editor: null,
-      isMobile: isMobile()
+      isMobile: isMobile(),
+      appointNode: null
     }
   },
   watch: {
@@ -63,6 +60,10 @@ export default {
   methods: {
     handleNodeActive(...args) {
       this.activeNodes = [...args[1]]
+      this.updateNoteInfo()
+    },
+
+    updateNoteInfo() {
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
         this.note = firstNode.getData('note') || ''
@@ -71,19 +72,18 @@ export default {
       }
     },
 
-    handleShowNodeNote() {
+    handleShowNodeNote(node) {
       this.$bus.$emit('startTextEdit')
+      if (node) {
+        this.appointNode = node
+        this.note = node.getData('note') || ''
+      }
       this.dialogVisible = true
       this.$nextTick(() => {
         this.initEditor()
       })
     },
 
-    /**
-     * @Author: 王林25
-     * @Date: 2022-05-09 11:37:05
-     * @Desc: 初始化编辑器
-     */
     initEditor() {
       if (!this.editor) {
         this.editor = new Editor({
@@ -96,25 +96,24 @@ export default {
       this.editor.setMarkdown(this.note)
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-06-22 22:08:11
-     * @Desc: 取消
-     */
     cancel() {
       this.dialogVisible = false
+      if (this.appointNode) {
+        this.appointNode = null
+        this.updateNoteInfo()
+      }
     },
 
-    /**
-     * @Author: 王林
-     * @Date: 2021-06-06 22:28:20
-     * @Desc:  确定
-     */
     confirm() {
       this.note = this.editor.getMarkdown()
-      this.activeNodes.forEach(node => {
-        node.setNote(this.note)
-      })
+      if (this.appointNode) {
+        this.appointNode.setNote(this.note)
+      } else {
+        this.activeNodes.forEach(node => {
+          node.setNote(this.note)
+        })
+      }
+
       this.cancel()
     }
   }

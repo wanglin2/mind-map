@@ -28,7 +28,7 @@ function createTextAvatar(item) {
       color: '#fff'
     })
     .css({
-      'font-size': fontSize
+      'font-size': fontSize + 'px'
     })
     .dx(-fontSize / 2)
     .dy((avatarSize - fontSize) / 2)

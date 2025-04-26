@@ -35,7 +35,14 @@ class MindMap extends Base {
       this.renderer.renderTree,
       null,
       (cur, parent, isRoot, layerIndex, index, ancestors) => {
-        let newNode = this.createNode(cur, parent, isRoot, layerIndex, index, ancestors)
+        let newNode = this.createNode(
+          cur,
+          parent,
+          isRoot,
+          layerIndex,
+          index,
+          ancestors
+        )
         // 根节点定位在画布中心位置
         if (isRoot) {
           this.setNodeCenter(newNode)
@@ -47,9 +54,10 @@ class MindMap extends Base {
           } else {
             // 节点生长方向
             newNode.dir =
-              index % 2 === 0
+              newNode.getData('dir') ||
+              (index % 2 === 0
                 ? CONSTANTS.LAYOUT_GROW_DIR.RIGHT
-                : CONSTANTS.LAYOUT_GROW_DIR.LEFT
+                : CONSTANTS.LAYOUT_GROW_DIR.LEFT)
           }
           // 根据生长方向定位到父节点的左侧或右侧
           newNode.left =

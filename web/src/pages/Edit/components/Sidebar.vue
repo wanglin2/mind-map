@@ -9,7 +9,7 @@
     <div class="sidebarHeader" v-if="title">
       {{ title }}
     </div>
-    <div class="sidebarContent" ref="sidebarContent">
+    <div class="sidebarContent customScrollbar" ref="sidebarContent">
       <slot></slot>
     </div>
   </div>
@@ -19,13 +19,8 @@
 import { store } from '@/config'
 import { mapState, mapMutations } from 'vuex'
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:54:25
- * @Desc: 侧边栏容器
- */
+// 侧边栏容器
 export default {
-  name: 'Sidebar',
   props: {
     title: {
       type: String,
@@ -65,7 +60,7 @@ export default {
 
     close() {
       this.show = false
-      this.setActiveSidebar('')
+      this.setActiveSidebar(null)
     },
 
     getEl() {

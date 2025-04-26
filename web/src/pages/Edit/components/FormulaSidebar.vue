@@ -18,7 +18,7 @@
         >
       </div>
       <div class="title">{{ $t('formulaSidebar.common') }}</div>
-      <div class="formulaList">
+      <div class="formulaList customScrollbar">
         <div class="formulaItem" v-for="(item, index) in list" :key="index">
           <div class="overview" v-html="item.overview"></div>
           <div class="text" @click="formulaText = item.text">
@@ -31,12 +31,11 @@
 </template>
 
 <script>
-import Sidebar from './Sidebar'
+import Sidebar from './Sidebar.vue'
 import { mapState, mapMutations } from 'vuex'
 import { formulaList } from '@/config/constant'
 
 export default {
-  name: 'FormulaSidebar',
   components: {
     Sidebar
   },

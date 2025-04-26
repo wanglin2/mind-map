@@ -62,6 +62,7 @@
                 config: {},
                 view: null
               },
+              mindMapConfig: {},
               lang: 'zh',
               localConfig: null
             })
@@ -77,6 +78,14 @@
         // 保存思维导图数据的函数
         window.takeOverAppMethods.saveMindMapData = data => {
           console.log(data)
+        }
+        // 获取思维导图配置，也就是实例化时会传入的选项
+        window.takeOverAppMethods.getMindMapConfig = () => {
+          return data.mindMapConfig
+        }
+        // 保存思维导图配置
+        window.takeOverAppMethods.saveMindMapConfig = config => {
+          console.log(config)
         }
         // 获取语言的函数
         window.takeOverAppMethods.getLanguage = () => {

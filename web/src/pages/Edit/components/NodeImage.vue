@@ -3,7 +3,7 @@
     class="nodeImageDialog"
     :title="$t('nodeImage.title')"
     :visible.sync="dialogVisible"
-    :width="isMobile ? '90%' : '50%'"
+    :width="isMobile ? '90%' : '600px'"
     :top="isMobile ? '20px' : '15vh'"
   >
     <div class="title">方式一</div>
@@ -37,16 +37,11 @@
 </template>
 
 <script>
-import ImgUpload from '@/components/ImgUpload'
+import ImgUpload from '@/components/ImgUpload/index.vue'
 import { getImageSize, isMobile } from 'simple-mind-map/src/utils/index'
 
-/**
- * @Author: 王林
- * @Date: 2021-06-24 22:53:45
- * @Desc: 节点图片内容设置
- */
+// 节点图片内容设置
 export default {
-  name: 'NodeImage',
   components: {
     ImgUpload
   },
@@ -77,7 +72,7 @@ export default {
       this.reset()
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
-        let img = firstNode.getData('image') || ''
+        let img = firstNode.getImageUrl() || ''
         if (img) {
           if (/^https?:\/\//.test(img)) {
             this.imgUrl = img
@@ -124,8 +119,8 @@ export default {
           node.setImage({
             url: img || 'none',
             title: this.imgTitle,
-            width: res.width,
-            height: res.height
+            width: res.width || 100,
+            height: res.height || 100
           })
         })
         this.cancel()
