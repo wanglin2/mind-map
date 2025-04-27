@@ -1,4 +1,4 @@
-import { Circle, G, Text, Image } from '@svgdotjs/svg.js'
+import { Circle, G, Text, Image, Rect } from '@svgdotjs/svg.js'
 import { generateColorByContent } from '../../../utils/index'
 
 // 协同相关功能
@@ -16,23 +16,54 @@ function createTextAvatar(item) {
   const { avatarSize, fontSize } = this.mindMap.opt.cooperateStyle
   const g = new G()
   const str = item.isMore ? item.name : String(item.name)[0]
-  // 圆
-  const circle = new Circle().size(avatarSize, avatarSize)
-  circle.fill({
-    color: item.color || generateColorByContent(str)
-  })
-  // 文本
-  const text = new Text()
-    .text(str)
-    .fill({
-      color: '#fff'
+  
+  if (item.useRect) {
+    // 计算文本宽度
+    const textWidth = str.length * fontSize * 0.6 // 估算文本宽度
+    const rectWidth = Math.max(avatarSize, textWidth + fontSize) // 确保最小宽度为avatarSize
+    const rectHeight = avatarSize
+    
+    // 创建矩形
+    const rect = new Rect()
+      .size(rectWidth, rectHeight)
+      .radius(rectHeight / 2) // 圆角矩形
+      .fill({
+        color: item.color || generateColorByContent(str)
+      })
+    
+    // 文本
+    const text = new Text()
+      .text(str)
+      .fill({
+        color: '#fff'
+      })
+      .css({
+        'font-size': fontSize + 'px'
+      })
+      .dx(-textWidth / 2)
+      .dy((rectHeight - fontSize) / 2)
+    
+    g.add(rect).add(text)
+  } else {
+    // 原有的圆形显示逻辑
+    const circle = new Circle().size(avatarSize, avatarSize)
+    circle.fill({
+      color: item.color || generateColorByContent(str)
     })
-    .css({
-      'font-size': fontSize + 'px'
-    })
-    .dx(-fontSize / 2)
-    .dy((avatarSize - fontSize) / 2)
-  g.add(circle).add(text)
+    // 文本
+    const text = new Text()
+      .text(str)
+      .fill({
+        color: '#fff'
+      })
+      .css({
+        'font-size': fontSize + 'px'
+      })
+      .dx(-fontSize / 2)
+      .dy((avatarSize - fontSize) / 2)
+    g.add(circle).add(text)
+  }
+  
   return g
 }
 
