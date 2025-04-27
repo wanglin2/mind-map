@@ -15,12 +15,14 @@ function createUserListNode() {
 function createTextAvatar(item) {
   const { avatarSize, fontSize } = this.mindMap.opt.cooperateStyle
   const g = new G()
-  const str = item.isMore ? item.name : String(item.name)[0]
+  let str = item.isMore ? item.name : String(item.name)[0]
   
   if (item.useRect) {
+    str = String(item.name)
     // 计算文本宽度
     const textWidth = str.length * fontSize * 0.6 // 估算文本宽度
-    const rectWidth = Math.max(avatarSize, textWidth + fontSize) // 确保最小宽度为avatarSize
+    const padding = fontSize // 左右边距
+    const rectWidth = Math.max(avatarSize, textWidth + padding * 2) // 确保最小宽度为avatarSize，并添加左右边距
     const rectHeight = avatarSize
     
     // 创建矩形
@@ -38,10 +40,12 @@ function createTextAvatar(item) {
         color: '#fff'
       })
       .css({
-        'font-size': fontSize + 'px'
+        'font-size': fontSize + 'px',
+        'text-anchor': 'middle',
+        'dominant-baseline': 'central'
       })
-      .dx(-textWidth / 2)
-      .dy((rectHeight - fontSize) / 2)
+      .attr('x', rectWidth / 2)
+      .attr('y', rectHeight / 2)
     
     g.add(rect).add(text)
   } else {
