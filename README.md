@@ -29,6 +29,8 @@
 >
 > 可直接在`uTools`插件应用市场中搜索`思绪`进行安装，也可以直接访问该地址：[主页](https://www.u-tools.cn/plugins/detail/%E6%80%9D%E7%BB%AA%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/)，点击右侧的【启动】按钮进行安装。
 
+> 3.`obsidian`插件，正在开发中，敬请期待~
+
 - 云存储版本，如果你需要带后端的云存储版本，可以尝试我们开发的另一个项目[理想文档](https://github.com/wanglin2/lx-doc)。
 
 # 特性
@@ -55,7 +57,7 @@
 | TouchEvent（移动端触摸事件支持插件） | NodeImgAdjust（拖拽调整节点图片大小插件） | Search（搜索插件）                   | Painter（节点格式刷插件）            |
 | Scrollbar（滚动条插件）              | Formula（数学公式插件）                   | Cooperate（协同编辑插件）            | RainbowLines（彩虹线条插件）         |
 | Demonstrate（演示模式插件）          | OuterFrame（外框插件）                    | MindMapLayoutPro（思维导图布局插件） |                                      |
-| HandDrawnLikeStyle（手绘风格插件）   | Notation（节点标记插件）                  | Numbers（节点编号插件）[收费]        | Freemind（Freemind格式导入导出插件） |
+| HandDrawnLikeStyle（手绘风格插件）   | Notation（节点标记插件）                  | Numbers（节点编号插件）        | Freemind（Freemind格式导入导出插件） |
 | Excel（Excel格式导入导出插件）       | Checkbox（待办插件）                      | Lineflow（节点连线流动插件）         | Momentum（动量效果插件）             |
 | RightFishbone（向右鱼骨图插件）      | NodeLink（节点链接插件）                  |                                      |                                      |
 
@@ -115,9 +117,7 @@ const mindMap = new MindMap({
 
 # 微信交流群
 
-微信添加`wanglinguanfang`拉你入群。根据过往的经验，大部分问题都可以通过查看issue列表或文档解决，所以提问前请确保你已经阅读完了所有文档，文档里没有的可在群里提问，不必私聊作者，如果你一定要私聊，请先发红包（￥9.9+每次）。
-
-如果你在杭州，也欢迎来找我面基。
+微信添加`wanglinguanfang`拉你入群。根据过往的经验，大部分问题都可以通过查看issue列表或文档解决，所以提问前请确保你已经阅读完了所有文档，文档里没有的可在群里提问，不必私聊作者，如果你一定要私聊，请先赞助本项目（￥150+）。
 
 # star
 
