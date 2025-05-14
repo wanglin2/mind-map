@@ -16,10 +16,6 @@ const store = new Vuex.Store({
       useLeftKeySelectionRightKeyDrag: false,
       // 是否显示滚动条
       isShowScrollbar: false,
-      // 是否开启手绘风格
-      isUseHandDrawnLikeStyle: false,
-      // 是否开启动量效果
-      isUseMomentum: true,
       // 是否是暗黑模式
       isDark: false,
       // 是否开启AI功能
@@ -30,17 +26,6 @@ const store = new Vuex.Store({
     isReadonly: false, // 是否只读
     isSourceCodeEdit: false, // 是否是源码编辑模式
     extraTextOnExport: '', // 导出时底部添加的文字
-    supportHandDrawnLikeStyle: false, // 是否支持设置手绘风格
-    supportMark: false, // 是否支持标记
-    supportNumbers: false, // 是否支持编号
-    supportFreemind: false, // 是否支持Freemind插件
-    supportExcel: false, // 是否支持Excel插件
-    supportCheckbox: false, // 是否支持Checkbox插件
-    supportLineFlow: false, // 是否支持LineFlow插件
-    supportMomentum: false, // 是否支持Momentum插件
-    supportRightFishbone: false, // 是否支持RightFishbone插件
-    supportNodeLink: false, // 是否支持NodeLink插件
-    supportMoreShapes: false, // 是否支持MoreShapes插件
     isDragOutlineTreeNode: false, // 当前是否正在拖拽大纲树的节点
     aiConfig: {
       api: 'http://ark.cn-beijing.volces.com/api/v3/chat/completions',
@@ -99,61 +84,6 @@ const store = new Vuex.Store({
     // 设置导出时底部添加的文字
     setExtraTextOnExport(state, data) {
       state.extraTextOnExport = data
-    },
-
-    // 设置是否支持手绘风格
-    setSupportHandDrawnLikeStyle(state, data) {
-      state.supportHandDrawnLikeStyle = data
-    },
-
-    // 设置是否支持标记
-    setSupportMark(state, data) {
-      state.supportMark = data
-    },
-
-    // 设置是否支持编号
-    setSupportNumbers(state, data) {
-      state.supportNumbers = data
-    },
-
-    // 设置是否支持Freemind插件
-    setSupportFreemind(state, data) {
-      state.supportFreemind = data
-    },
-
-    // 设置是否支持Excel插件
-    setSupportExcel(state, data) {
-      state.supportExcel = data
-    },
-
-    // 设置是否支持Checkbox插件
-    setSupportCheckbox(state, data) {
-      state.supportCheckbox = data
-    },
-
-    // 设置是否支持Lineflow插件
-    setSupportLineFlow(state, data) {
-      state.supportLineFlow = data
-    },
-
-    // 设置是否支持Momentum插件
-    setSupportMomentum(state, data) {
-      state.supportMomentum = data
-    },
-
-    // 设置是否支持RightFishbone插件
-    setSupportRightFishbone(state, data) {
-      state.supportRightFishbone = data
-    },
-
-    // 设置是否支持NodeLink插件
-    setSupportNodeLink(state, data) {
-      state.supportNodeLink = data
-    },
-
-    // 设置是否支持MoreShapes插件
-    setSupportMoreShapes(state, data) {
-      state.supportMoreShapes = data
     },
 
     // 设置树节点拖拽

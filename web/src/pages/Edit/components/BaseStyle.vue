@@ -301,61 +301,6 @@
           >
         </div>
       </div>
-      <!-- 流动效果 -->
-      <div class="row" v-if="supportLineFlow">
-        <div class="rowItem">
-          <span class="name">{{ $t('style.openLineFlow') }}</span>
-          <el-checkbox
-            v-model="style.lineFlow"
-            @change="
-              value => {
-                update('lineFlow', value)
-              }
-            "
-          ></el-checkbox>
-        </div>
-        <div class="rowItem">
-          <span class="name">{{ $t('style.direction') }}</span>
-          <el-select
-            size="mini"
-            style="width: 80px"
-            v-model="style.lineFlowForward"
-            placeholder=""
-            @change="
-              value => {
-                update('lineFlowForward', value)
-              }
-            "
-          >
-            <el-option
-              key="1"
-              :label="$t('style.forward')"
-              :value="true"
-            ></el-option>
-            <el-option
-              key="2"
-              :label="$t('style.reverse')"
-              :value="false"
-            ></el-option>
-          </el-select>
-        </div>
-      </div>
-      <div class="row" v-if="supportLineFlow">
-        <div class="rowItem">
-          <span class="name">{{ $t('style.lineFlowDuration') }}</span>
-          <el-input-number
-            v-model="style.lineFlowDuration"
-            @change="
-              value => {
-                update('lineFlowDuration', value)
-              }
-            "
-            :min="0.1"
-            size="mini"
-            :step="0.5"
-          ></el-input-number>
-        </div>
-      </div>
       <!-- 彩虹线条 -->
       <div class="title">{{ $t('baseStyle.rainbowLines') }}</div>
       <div class="row">
@@ -933,7 +878,6 @@ export default {
       activeSidebar: state => state.activeSidebar,
       localConfig: state => state.localConfig,
       isDark: state => state.localConfig.isDark,
-      supportLineFlow: state => state.supportLineFlow,
       bgList: state => state.bgList
     }),
     lineStyleList() {

@@ -671,13 +671,11 @@ export const layoutGroupList = [
     list: [
       'timeline',
       'timeline2',
-      'verticalTimeline2',
-      'verticalTimeline3',
       'verticalTimeline'
     ]
   },
   {
     name: '魚骨圖',
-    list: ['fishbone', 'fishbone2', 'rightFishbone', 'rightFishbone2']
+    list: ['fishbone']
   }
 ]

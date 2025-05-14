@@ -21,8 +21,7 @@
             v-for="item in downTypeList"
             :key="item.type"
             :class="{
-              active: exportType === item.type,
-              vip: ['mm', 'xlsx'].includes(item.type)
+              active: exportType === item.type
             }"
             @click="exportType = item.type"
           >
@@ -80,7 +79,6 @@
                     <span class="name">{{ $t('export.format') }}</span>
                     <el-radio-group v-model="imageFormat">
                       <el-radio label="png">PNG</el-radio>
-                      <el-radio label="jpg" class="vip">JPG</el-radio>
                     </el-radio-group>
                   </div>
                   <div class="valueSubItem">
@@ -176,18 +174,16 @@ export default {
     ...mapState({
       openNodeRichText: state => state.localConfig.openNodeRichText,
       isDark: state => state.localConfig.isDark,
-      supportFreemind: state => state.supportFreemind,
-      supportExcel: state => state.supportExcel
     }),
 
     downTypeList() {
       const list = downTypeList[this.$i18n.locale] || downTypeList.zh
       return list.filter(item => {
         if (item.type === 'mm') {
-          return this.supportFreemind
+          return false
         }
         if (item.type === 'xlsx') {
-          return this.supportExcel
+          return false
         } else {
           return true
         }
@@ -274,22 +270,6 @@ export default {
           this.isTransparent,
           this.isFitBg
         )
-      } else if (this.exportType === 'mm') {
-        this.$bus.$emit('export', this.exportType, true, this.fileName, {
-          transformNote: note => {
-            if (!md) {
-              md = new MarkdownIt()
-            }
-            return md.render(note)
-          },
-          transformImage: img => {
-            if (/^https?:\/\//.test(img)) {
-              return img
-            } else {
-              return ''
-            }
-          }
-        })
       } else {
         this.$bus.$emit('export', this.exportType, true, this.fileName)
       }

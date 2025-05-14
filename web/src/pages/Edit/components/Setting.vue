@@ -4,7 +4,6 @@
       class="sidebarContent customScrollbar"
       :class="{ isDark: isDark }"
       v-if="configData"
-      @click="onClick"
     >
       <!-- 水印 -->
       <div class="row">
@@ -257,40 +256,6 @@
           >
         </div>
       </div>
-      <!-- 是否开启手绘风格 -->
-      <div class="row vip" v-if="supportHandDrawnLikeStyle">
-        <div class="rowItem">
-          <el-checkbox
-            v-model="localConfigs.isUseHandDrawnLikeStyle"
-            @change="updateLocalConfig('isUseHandDrawnLikeStyle', $event)"
-            >{{ $t('setting.isUseHandDrawnLikeStyle') }}</el-checkbox
-          >
-        </div>
-      </div>
-      <!-- 是否开启动量效果 -->
-      <div class="row vip" v-if="supportMomentum">
-        <div class="rowItem">
-          <el-checkbox
-            v-model="localConfigs.isUseMomentum"
-            @change="updateLocalConfig('isUseMomentum', $event)"
-            >{{ $t('setting.isUseMomentum') }}</el-checkbox
-          >
-        </div>
-      </div>
-      <!-- 是否开启演示模式的填空功能 -->
-      <div class="row vip">
-        <div class="rowItem">
-          <el-checkbox
-            v-model="config.demonstrateConfig.openBlankMode"
-            @change="
-              value => {
-                updateOtherConfig('openBlankMode', value)
-              }
-            "
-            >{{ $t('setting.openBlankMode') }}</el-checkbox
-          >
-        </div>
-      </div>
       <!-- 配置鼠标滚轮行为 -->
       <div class="row">
         <div class="rowItem">
@@ -439,10 +404,7 @@ export default {
         enableAutoEnterTextEditWhenKeydown: true,
         imgTextMargin: 0,
         textContentMargin: 0,
-        enableInheritAncestorLineStyle: false,
-        demonstrateConfig: {
-          openBlankMode: false
-        }
+        enableInheritAncestorLineStyle: false
       },
       watermarkConfig: {
         show: false,
@@ -461,8 +423,6 @@ export default {
       enableNodeRichText: true,
       localConfigs: {
         isShowScrollbar: false,
-        isUseHandDrawnLikeStyle: false,
-        isUseMomentum: false,
         enableDragImport: false,
         enableAi: false
       }
@@ -472,9 +432,7 @@ export default {
     ...mapState({
       activeSidebar: state => state.activeSidebar,
       localConfig: state => state.localConfig,
-      isDark: state => state.localConfig.isDark,
-      supportHandDrawnLikeStyle: state => state.supportHandDrawnLikeStyle,
-      supportMomentum: state => state.supportMomentum
+      isDark: state => state.localConfig.isDark
     })
   },
   watch: {
@@ -535,23 +493,10 @@ export default {
 
     // 更新其他配置
     updateOtherConfig(key, value) {
-      if (key === 'openBlankMode') {
-        this.mindMap.updateConfig({
-          demonstrateConfig: {
-            ...(this.mindMap.getConfig('demonstrateConfig') || {}),
-            openBlankMode: value
-          }
-        })
-        if (!this.configData.demonstrateConfig) {
-          this.configData.demonstrateConfig = {}
-        }
-        this.configData.demonstrateConfig[key] = value
-      } else {
-        this.mindMap.updateConfig({
-          [key]: value
-        })
-        this.configData[key] = value
-      }
+      this.mindMap.updateConfig({
+        [key]: value
+      })
+      this.configData[key] = value
       storeConfig(this.configData)
       if (
         [
@@ -628,10 +573,6 @@ export default {
       this.setLocalConfig({
         [key]: value
       })
-    },
-
-    onClick(e) {
-      this.$bus.$emit('vipCheckClick', e)
     }
   }
 }

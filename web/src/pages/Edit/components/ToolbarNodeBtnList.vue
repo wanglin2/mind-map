@@ -178,13 +178,6 @@
         <span class="icon iconfont iconwaikuang"></span>
         <span class="text">{{ $t('toolbar.outerFrame') }}</span>
       </div>
-      <NodeAnnotationBtn
-        v-if="item === 'annotation' && supportMark"
-        :isDark="isDark"
-        :dir="dir"
-        :rightHasBtn="annotationRightHasBtn"
-        @setAnnotation="onSetAnnotation"
-      ></NodeAnnotationBtn>
       <div
         v-if="item === 'ai'"
         class="toolbarBtn"
@@ -202,10 +195,8 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import NodeAnnotationBtn from './NodeAnnotationBtn.vue'
 
 export default {
-  components: { NodeAnnotationBtn },
   props: {
     dir: {
       type: String,
@@ -231,8 +222,7 @@ export default {
   },
   computed: {
     ...mapState({
-      isDark: state => state.localConfig.isDark,
-      supportMark: state => state.supportMark
+      isDark: state => state.localConfig.isDark
     }),
     hasRoot() {
       return (
