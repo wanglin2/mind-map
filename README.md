@@ -123,6 +123,18 @@ const mindMap = new MindMap({
 
 微信添加`wanglinguanfang`拉你入群。根据过往的经验，大部分问题都可以通过查看issue列表或文档解决，所以提问前请确保你已经阅读完了所有文档，文档里没有的可在群里提问，不必私聊作者，如果你一定要私聊，请先赞助本项目（￥200+）。
 
+<table>
+    <tr>
+        <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
+            <a href="http://drawon.cn/">
+                <img src="./web/src/assets/img/gzh.jpeg" width="100;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
+                <br />
+                <sub style="font-size:14px"><b>微信公众号</b></sub>
+            </a>
+        </td>
+    </tr>
+</table>
+
 # star
 
 如果喜欢本项目，欢迎点个 star，这对我们很重要。
