@@ -57,9 +57,6 @@
 | TouchEvent（移动端触摸事件支持插件） | NodeImgAdjust（拖拽调整节点图片大小插件） | Search（搜索插件）                   | Painter（节点格式刷插件）            |
 | Scrollbar（滚动条插件）              | Formula（数学公式插件）                   | Cooperate（协同编辑插件）            | RainbowLines（彩虹线条插件）         |
 | Demonstrate（演示模式插件）          | OuterFrame（外框插件）                    | MindMapLayoutPro（思维导图布局插件） |                                      |
-| HandDrawnLikeStyle（手绘风格插件）   | Notation（节点标记插件）                  | Numbers（节点编号插件）        | Freemind（Freemind格式导入导出插件） |
-| Excel（Excel格式导入导出插件）       | Checkbox（待办插件）                      | Lineflow（节点连线流动插件）         | Momentum（动量效果插件）             |
-| RightFishbone（向右鱼骨图插件）      | NodeLink（节点链接插件）                  |                                      |                                      |
 
 
 本项目不会实现的特性：
