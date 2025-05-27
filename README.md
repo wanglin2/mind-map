@@ -24,6 +24,10 @@
 > 1.独立客户端，支持Windows、Mac及Linux系统。
 >
 > 下载地址：[Github](https://github.com/wanglin2/mind-map/releases)、[百度云盘](https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3)
+> 如果在macOS上安装后无法打开，报错**不受信任**或者**移到垃圾箱**，执行下面命令后再启动即可：
+> ``` shell
+> sudo xattr -d com.apple.quarantine /Applications/思绪思维导图.app
+> ```
 
 > 2.`uTools`插件，现已上架[uTools](https://www.u.tools/)插件应用市场。
 >
