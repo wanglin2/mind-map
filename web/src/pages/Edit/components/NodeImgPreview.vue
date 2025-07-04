@@ -29,7 +29,7 @@ export default {
     onNodeTmgDblclick(node, e) {
       e.stopPropagation()
       e.preventDefault()
-      this.images = [node.nodeData.data.image]
+      this.images = [node.getImageUrl()]
       this.$viewerApi({
         images: this.images
       })

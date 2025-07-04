@@ -72,7 +72,7 @@ export default {
       this.reset()
       if (this.activeNodes.length > 0) {
         let firstNode = this.activeNodes[0]
-        let img = firstNode.getData('image') || ''
+        let img = firstNode.getImageUrl() || ''
         if (img) {
           if (/^https?:\/\//.test(img)) {
             this.imgUrl = img
