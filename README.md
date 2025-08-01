@@ -112,27 +112,11 @@ const mindMap = new MindMap({
 
 # License
 
-[MIT](./LICENSE)。保留`simple-mind-map`版权声明和注明来源的情况下可随意商用，如有疑问或不想保留可联系作者通过付费的方式去除。
+[MIT](./LICENSE)。保留`simple-mind-map`版权声明和注明来源的情况下可随意商用，如有疑问或不想保留可联系作者（微信：wanglinguanfang）通过付费的方式去除。
 
 > 示例：可以在你应用中的关于页面、帮助页面、文档页面、开源声明等任何页面添加以下内容：
 >
 > 本产品思维导图基于SimpleMindMap项目开发，版权归源项目所有，[开源协议](https://github.com/wanglin2/mind-map/blob/main/LICENSE)。
-
-# 微信交流群
-
-微信添加`wanglinguanfang`拉你入群。根据过往的经验，大部分问题都可以通过查看issue列表或文档解决，所以提问前请确保你已经阅读完了所有文档，文档里没有的可在群里提问，不必私聊作者，如果你一定要私聊，请先赞助本项目（￥200+）。
-
-<table>
-    <tr>
-        <td align="center" style="word-wrap: break-word; width: 75.0; height: 75.0">
-            <a href="http://drawon.cn/">
-                <img src="./web/src/assets/img/gzh.jpeg" width="100;"  style="border-radius:50%;align-items:center;justify-content:center;overflow:hidden;padding-top:10px"/>
-                <br />
-                <sub style="font-size:14px"><b>微信公众号</b></sub>
-            </a>
-        </td>
-    </tr>
-</table>
 
 # star
 
@@ -158,18 +142,7 @@ const mindMap = new MindMap({
     </tr>
 </table>
 
-# 请作者喝杯咖啡
-
-开源不易，如果本项目有帮助到你的话，可以考虑请作者喝杯咖啡~你的赞助对项目的可持续发展非常重要，是作者持续维护的最大动力。
-
-> 推荐使用支付宝，微信获取不到头像。转账请备注【思维导图赞助】。
-
-> 赞助等级：最强王者（￥500+）、星耀赞助（￥300+）、钻石赞助（￥200+）、黄金赞助（￥100+）、青铜赞助
-
-<p>
-  <img src="./web/src/assets/img/alipay.jpg" style="width: 300px" />
-  <img src="./web/src/assets/img/wechat.jpg" style="width: 300px" />
-</p>
+# 感谢赞赏过本项目的人
 
 ## 最强王者
 
