@@ -118,6 +118,10 @@ const mindMap = new MindMap({
 >
 > 本产品思维导图基于SimpleMindMap项目开发，版权归源项目所有，[开源协议](https://github.com/wanglin2/mind-map/blob/main/LICENSE)。
 
+# 开发帮助/技术支持/咨询等
+
+因精力有限，及重心转变，暂不提供任何开发支持（包括有偿），请见谅！
+
 # star
 
 如果喜欢本项目，欢迎点个 star，这对我们很重要。
