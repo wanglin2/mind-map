@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build && node ../copy.js",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build && node ../copy.js",
     "lint": "vue-cli-service lint",
     "buildLibrary": "node ./scripts/updateVersion.js && vue-cli-service build --mode library --target lib --name simpleMindMap ../simple-mind-map/full.js --dest ../simple-mind-map/dist && esbuild ../simple-mind-map/full.js --bundle --external:buffer --format=esm --outfile=../simple-mind-map/dist/simpleMindMap.esm.js && esbuild ../simple-mind-map/full.js --bundle --minify --external:buffer --format=esm --outfile=../simple-mind-map/dist/simpleMindMap.esm.min.js",
     "format": "prettier --write src/* src/*/* src/*/*/* src/*/*/*/*",
@@ -19,6 +19,7 @@
     "element-ui": "^2.15.1",
     "highlight.js": "^10.7.3",
     "katex": "^0.16.9",
+    "simple-mind-map": "file:../simple-mind-map",
     "simple-mind-map-plugin-themes": "^1.0.0",
     "v-viewer": "^1.6.4",
     "vue": "^2.6.11",
