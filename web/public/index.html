@@ -7,29 +7,14 @@
       name="viewport"
       content="width=device-width,user-scalable=no,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0"
     />
-    <link rel="icon" href="dist/logo.ico" />
+    <link rel="icon" href="logo.ico" />
+    <link rel="manifest" href="<%= (process.env.BASE_URL || '/').replace(/\/?$/, '') %>/manifest.json" />
     <title>思绪思维导图</title>
     <script>
-      // 自定义静态资源的路径
-      window.externalPublicPath = './dist/'
+      // 自定义静态资源的路径（根路径，无 dist 前缀）
+      window.externalPublicPath = '<%= process.env.NODE_ENV === "production" ? "/" : "" %>'
       // 接管应用
       window.takeOverApp = false
-    </script>
-    <script
-      charset="UTF-8"
-      id="LA_COLLECT"
-      src="//sdk.51.la/js-sdk-pro.min.js"
-    ></script>
-    <script>
-      try {
-        LA.init({
-          id: 'KRO0WxK8GT66tYCQ',
-          ck: 'KRO0WxK8GT66tYCQ',
-          autoTrack: false
-        })
-      } catch (error) {
-        console.log(error)
-      }
     </script>
   </head>
   <body>

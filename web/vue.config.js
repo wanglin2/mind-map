@@ -1,11 +1,15 @@
 const path = require('path')
+const webpack = require('webpack')
 const isDev = process.env.NODE_ENV === 'development'
 const isLibrary = process.env.NODE_ENV === 'library'
 
 const WebpackDynamicPublicPathPlugin = require('webpack-dynamic-public-path')
 
+// 构建时的时间戳，用于在控制台输出以便确认是否为最新版本
+const buildTime = new Date().toISOString()
+
 module.exports = {
-  publicPath: isDev ? '' : './dist',
+  publicPath: isDev ? '' : '/',
   outputDir: '../dist',
   lintOnSave: false,
   productionSourceMap: false,
@@ -37,7 +41,12 @@ module.exports = {
       alias: {
         '@': path.resolve(__dirname, './src/')
       }
-    }
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        __BUILD_TIME__: JSON.stringify(buildTime)
+      })
+    ]
   },
   devServer: {
     proxy: {

@@ -375,7 +375,12 @@ export default {
     tryTipDesc:
       'This feature is a trial feature in the web version. Please download the client to use it:',
     downBaidu: 'Go to Baidu Netdisk to download',
-    downGithub: 'Download from Github'
+    downGithub: 'Download from Github',
+    addSheet: 'Add sheet',
+    sheet: 'Sheet',
+    deleteSheet: 'Delete',
+    deleteSheetTitle: 'Delete sheet',
+    deleteSheetConfirm: 'Are you sure you want to delete "{name}"? This cannot be undone.'
   },
   mouseAction: {
     tip1:

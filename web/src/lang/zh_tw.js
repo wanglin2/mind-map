@@ -363,7 +363,12 @@ export default {
     tryTipTitle: '功能試用提示',
     tryTipDesc: '該功能在網頁版中為試用功能，請下載用戶端使用：',
     downBaidu: '去百度網盤下載',
-    downGithub: '去Github下載'
+    downGithub: '去Github下載',
+    addSheet: '添加',
+    sheet: '思維導圖',
+    deleteSheet: '刪除',
+    deleteSheetTitle: '刪除思維導圖',
+    deleteSheetConfirm: '確定要刪除「{name}」嗎？刪除後無法恢復。'
   },
   mouseAction: {
     tip1: '目前：左鍵拖曳畫布，右鍵框選節點',

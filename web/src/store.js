@@ -37,9 +37,16 @@ const store = new Vuex.Store({
     // 扩展主题列表
     extendThemeGroupList: [],
     // 内置背景图片
-    bgList: []
+    bgList: [],
+    // PWA 从系统“打开方式”传入的待打开文件句柄（FileSystemFileHandle）
+    pendingPwaFileHandle: null
   },
   mutations: {
+    // 设置 PWA 待打开文件句柄（用于 file_handlers / launchQueue）
+    setPendingPwaFileHandle(state, handle) {
+      state.pendingPwaFileHandle = handle
+    },
+
     // 设置操作本地文件标志位
     setIsHandleLocalFile(state, data) {
       state.isHandleLocalFile = data

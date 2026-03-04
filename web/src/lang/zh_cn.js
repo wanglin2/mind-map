@@ -363,7 +363,12 @@ export default {
     tryTipTitle: '功能试用提示',
     tryTipDesc: '该功能在网页版中为试用功能，请下载客户端使用：',
     downBaidu: '去百度网盘下载',
-    downGithub: '去Github下载'
+    downGithub: '去Github下载',
+    addSheet: '添加',
+    sheet: '思维导图',
+    deleteSheet: '删除',
+    deleteSheetTitle: '删除思维导图',
+    deleteSheetConfirm: '确定要删除「{name}」吗？删除后无法恢复。'
   },
   mouseAction: {
     tip1: '当前：左键拖动画布，右键框选节点',
