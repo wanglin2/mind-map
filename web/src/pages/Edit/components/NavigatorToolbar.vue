@@ -44,6 +44,23 @@
       </el-tooltip>
     </div>
     <div class="item">
+      <el-tooltip
+        effect="dark"
+        :content="
+          showAssociativeLines
+            ? $t('navigatorToolbar.hideAssociativeLines')
+            : $t('navigatorToolbar.showAssociativeLines')
+        "
+        placement="top"
+      >
+        <div 
+          class="btn iconfont iconlianjiexian" 
+          :style="{ opacity: showAssociativeLines ? 1 : 0.4 }"
+          @click="toggleAssociativeLines"
+        ></div>
+      </el-tooltip>
+    </div>
+    <div class="item">
       <!-- <el-switch
         v-model="isReadonly"
         :active-text="$t('navigatorToolbar.readonly')"
@@ -156,7 +173,8 @@ export default {
       version: pkg.version,
       langList,
       lang: '',
-      openMiniMap: false
+      openMiniMap: false,
+      showAssociativeLines: true
     }
   },
   computed: {
@@ -243,6 +261,12 @@ export default {
       a.href = url
       a.target = '_blank'
       a.click()
+    },
+
+    toggleAssociativeLines() {
+      if (this.mindMap && this.mindMap.associativeLine) {
+        this.showAssociativeLines = this.mindMap.associativeLine.toggleAllLinesVisibility()
+      }
     },
 
     backToRoot() {
