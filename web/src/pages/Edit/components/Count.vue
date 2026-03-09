@@ -74,7 +74,7 @@ export default {
   padding: 0 12px;
   position: fixed;
   left: 20px;
-  bottom: 20px;
+  bottom: 44px; /* 上移，避免与底部 sheet 栏(36px)重叠 */
   background: hsla(0, 0%, 100%, 0.8);
   border-radius: 2px;
   opacity: 0.8;

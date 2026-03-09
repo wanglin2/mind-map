@@ -373,7 +373,12 @@ export default {
     tryTipDesc:
       'Chức năng này là chức năng dùng thử trong phiên bản web, xin vui lòng tải xuống để khách hàng sử dụng:',
     downBaidu: 'Tải xuống Baidu',
-    downGithub: 'Tải xuống Github'
+    downGithub: 'Tải xuống Github',
+    addSheet: 'Thêm',
+    sheet: 'Sơ đồ tư duy',
+    deleteSheet: 'Xóa',
+    deleteSheetTitle: 'Xóa sheet',
+    deleteSheetConfirm: 'Bạn có chắc muốn xóa "{name}"? Không thể hoàn tác.'
   },
   mouseAction: {
     tip1:

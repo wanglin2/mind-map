@@ -13,6 +13,11 @@ const routes = [
     path: '/index',
     redirect: '/'
   },
+  // PWA file_handlers 打开文件时跳转到编辑页，由 launchQueue 传递文件
+  {
+    path: '/open-file',
+    redirect: '/'
+  },
   {
     path: '/doc/zh',
     component: () => import(`./pages/Doc.vue`)

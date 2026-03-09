@@ -153,7 +153,7 @@ import Import from './Import.vue'
 import { mapState } from 'vuex'
 import { Notification } from 'element-ui'
 import exampleData from 'simple-mind-map/example/exampleData'
-import { getData } from '../../../api'
+import { getData, getFileSheets, setFileSheets, SMM_VERSION } from '../../../api'
 import ToolbarNodeBtnList from './ToolbarNodeBtnList.vue'
 import { throttle, isMobile } from 'simple-mind-map/src/utils/index'
 
@@ -214,7 +214,8 @@ export default {
       isDark: state => state.localConfig.isDark,
       isHandleLocalFile: state => state.isHandleLocalFile,
       openNodeRichText: state => state.localConfig.openNodeRichText,
-      enableAi: state => state.localConfig.enableAi
+      enableAi: state => state.localConfig.enableAi,
+      pendingPwaFileHandle: state => state.pendingPwaFileHandle
     }),
 
     btnLit() {
@@ -233,6 +234,17 @@ export default {
     }
   },
   watch: {
+    // PWA 通过 file_handlers 打开文件时，由 launchQueue 传入的句柄（main 可能已预加载数据，避免再 readFile 导致二次渲染）
+    pendingPwaFileHandle(handle) {
+      if (!handle) return
+      fileHandle = handle
+      if (this.$store.state.isHandleLocalFile) {
+        this.showEditingLocalFileNotification(handle)
+      } else {
+        this.readFile()
+      }
+      this.$store.commit('setPendingPwaFileHandle', null)
+    },
     isHandleLocalFile(val) {
       if (!val) {
         Notification.closeAll()
@@ -247,6 +259,7 @@ export default {
   },
   created() {
     this.$bus.$on('write_local_file', this.onWriteLocalFile)
+    this.$bus.$on('save_as_payload', this.onSaveAsPayload)
   },
   mounted() {
     this.computeToolbarShow()
@@ -255,9 +268,20 @@ export default {
     this.$bus.$on('lang_change', this.computeToolbarShowThrottle)
     window.addEventListener('beforeunload', this.onUnload)
     this.$bus.$on('node_note_dblclick', this.onNodeNoteDblclick)
+    // PWA 启动时可能已有待打开文件（main 可能已预加载，只补 fileHandle 和提示，避免二次渲染）
+    if (this.pendingPwaFileHandle) {
+      fileHandle = this.pendingPwaFileHandle
+      if (this.$store.state.isHandleLocalFile) {
+        this.showEditingLocalFileNotification(this.pendingPwaFileHandle)
+      } else {
+        this.readFile()
+      }
+      this.$store.commit('setPendingPwaFileHandle', null)
+    }
   },
   beforeDestroy() {
     this.$bus.$off('write_local_file', this.onWriteLocalFile)
+    this.$bus.$off('save_as_payload', this.onSaveAsPayload)
     window.removeEventListener('resize', this.computeToolbarShowThrottle)
     this.$bus.$off('lang_change', this.computeToolbarShowThrottle)
     window.removeEventListener('beforeunload', this.onUnload)
@@ -297,6 +321,9 @@ export default {
       clearTimeout(this.timer)
       if (fileHandle && this.isHandleLocalFile) {
         this.waitingWriteToLocalFile = true
+      }
+      if (content && content.smmVersion === SMM_VERSION && Array.isArray(content.sheets)) {
+        setFileSheets({ sheets: content.sheets, activeIndex: content.activeIndex ?? 0 })
       }
       this.timer = setTimeout(() => {
         this.writeLocalFile(content)
@@ -420,6 +447,18 @@ export default {
       }
     },
 
+    // 仅显示“正在编辑本地文件”提示（数据已由 main 预加载时用，避免二次 readFile）
+    showEditingLocalFileNotification(handle) {
+      Notification.closeAll()
+      const name = (handle && handle.name) ? handle.name : ''
+      Notification({
+        title: this.$t('toolbar.tip'),
+        message: `${this.$t('toolbar.editingLocalFileTipFront')}${name}${this.$t('toolbar.editingLocalFileTipEnd')}`,
+        duration: 0,
+        showClose: true
+      })
+    },
+
     // 读取本地文件
     async readFile() {
       let file = await fileHandle.getFile()
@@ -440,39 +479,64 @@ export default {
       fileReader.readAsText(file)
     },
 
-    // 渲染读取的数据
+    // 渲染读取的数据（支持新格式多 sheet 与旧格式单文档）
     setData(str) {
       try {
         let data = JSON.parse(str)
         if (typeof data !== 'object') {
           throw new Error(this.$t('toolbar.fileContentError'))
         }
-        if (data.root) {
+        let sheets
+        let activeIndex
+        if (data.smmVersion === SMM_VERSION && Array.isArray(data.sheets) && data.sheets.length > 0) {
           this.isFullDataFile = true
+          sheets = data.sheets.map(s => ({
+            id: s.id || 'sheet_' + Date.now(),
+            name: s.name || '思维导图',
+            data: s.data || { ...exampleData }
+          }))
+          activeIndex = Math.min(Math.max(0, data.activeIndex ?? 0), sheets.length - 1)
+          setFileSheets({ sheets, activeIndex })
+          this.$bus.$emit('setDataFromFile', { sheets, activeIndex })
         } else {
-          this.isFullDataFile = false
-          data = {
-            ...exampleData,
-            root: data
-          }
+          this.isFullDataFile = true
+          const fullData = data.root
+            ? data
+            : { ...exampleData, root: data }
+          sheets = [
+            { id: 'sheet_' + Date.now(), name: '思维导图1', data: fullData }
+          ]
+          activeIndex = 0
+          setFileSheets({ sheets, activeIndex })
+          this.$bus.$emit('setDataFromFile', { sheets, activeIndex })
         }
-        this.$bus.$emit('setData', data)
       } catch (error) {
         console.log(error)
         this.$message.error(this.$t('toolbar.fileOpenFailed'))
       }
     },
 
-    // 写入本地文件
+    // 写入本地文件（统一使用新格式：smmVersion + sheets + activeIndex）
     async writeLocalFile(content) {
       if (!fileHandle || !this.isHandleLocalFile) {
         this.waitingWriteToLocalFile = false
         return
       }
-      if (!this.isFullDataFile) {
-        content = content.root
-      }
-      let string = JSON.stringify(content)
+      const payload =
+        content && content.smmVersion === SMM_VERSION && Array.isArray(content.sheets)
+          ? content
+          : {
+              smmVersion: SMM_VERSION,
+              sheets: [
+                {
+                  id: 'sheet_' + Date.now(),
+                  name: '思维导图1',
+                  data: content && content.root ? content : { ...exampleData, root: content }
+                }
+              ],
+              activeIndex: 0
+            }
+      const string = JSON.stringify(payload)
       const writable = await fileHandle.createWritable()
       await writable.write(string)
       await writable.close()
@@ -481,16 +545,31 @@ export default {
 
     // 创建本地文件
     async createNewLocalFile() {
-      await this.createLocalFile(exampleData)
+      const sheets = [
+        { id: 'sheet_' + Date.now(), name: '思维导图1', data: { ...exampleData } }
+      ]
+      setFileSheets({ sheets, activeIndex: 0 })
+      await this.createLocalFile({ smmVersion: SMM_VERSION, sheets, activeIndex: 0 })
     },
 
-    // 另存为
-    async saveLocalFile() {
-      let data = getData()
-      await this.createLocalFile(data)
+    // 另存为：由 Edit 提供完整 sheets 后再写入，保证多 sheet 都保存
+    saveLocalFile() {
+      this.$bus.$emit('request_save_as_payload')
     },
 
-    // 创建本地文件
+    onSaveAsPayload(content) {
+      if (content && content.sheets && content.sheets.length > 0) {
+        this.createLocalFile(content)
+      } else {
+        this.createLocalFile({
+          smmVersion: SMM_VERSION,
+          sheets: [{ id: 'sheet_' + Date.now(), name: '思维导图1', data: getData() }],
+          activeIndex: 0
+        })
+      }
+    },
+
+    // 创建本地文件（content 为新格式 { smmVersion, sheets, activeIndex }）
     async createLocalFile(content) {
       try {
         let _fileHandle = await window.showSaveFilePicker({
@@ -514,6 +593,9 @@ export default {
         fileHandle = _fileHandle
         this.$store.commit('setIsHandleLocalFile', true)
         this.isFullDataFile = true
+        if (content && content.smmVersion === SMM_VERSION && Array.isArray(content.sheets)) {
+          setFileSheets({ sheets: content.sheets, activeIndex: content.activeIndex ?? 0 })
+        }
         await this.writeLocalFile(content)
         await this.readFile()
         loading.close()

@@ -1,5 +1,5 @@
 // import JsPDF from '../utils/jspdf'
-import { PDFDocument } from 'pdf-lib'
+import { PDFDocument, StandardFonts } from 'pdf-lib'
 import { readBlob } from '../utils/index'
 
 //  导出PDF插件，需要通过Export插件使用
@@ -9,7 +9,7 @@ class ExportPDF {
     this.mindMap = opt.mindMap
   }
 
-  //  使用pdf-lib库导出为pdf
+  //  使用pdf-lib库导出为pdf（单页）
   async pdf(img) {
     return new Promise((resolve, reject) => {
       const image = new Image()
@@ -38,6 +38,49 @@ class ExportPDF {
       }
       image.src = img
     })
+  }
+
+  /**
+   * 多页 PDF：按顺序导出多张图片，每页上方显示标题（sheet 名称）
+   * @param {Array<{ img: string, title: string }>} pages - 每页的 dataURL 与标题
+   * @returns {Promise<string>} 与 readBlob 一致的 base64 等结果，供下载
+   */
+  async pdfMultiplePages(pages) {
+    if (!pages || pages.length === 0) {
+      throw new Error('pdfMultiplePages 需要至少一页')
+    }
+    const TITLE_HEIGHT = 28
+    const pdfDoc = await PDFDocument.create()
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
+
+    for (const { img, title } of pages) {
+      const image = new Image()
+      await new Promise((resolve, reject) => {
+        image.onload = resolve
+        image.onerror = reject
+        image.src = img
+      })
+      const imageWidth = image.width
+      const imageHeight = image.height
+      const page = pdfDoc.addPage([imageWidth, imageHeight + TITLE_HEIGHT])
+      page.drawText(title || '', {
+        x: 8,
+        y: imageHeight + 6,
+        size: 14,
+        font
+      })
+      const pngImage = await pdfDoc.embedPng(img)
+      page.drawImage(pngImage, {
+        x: 0,
+        y: 0,
+        width: imageWidth,
+        height: imageHeight
+      })
+    }
+
+    const pdfBytes = await pdfDoc.save()
+    const blob = new Blob([pdfBytes])
+    return readBlob(blob)
   }
 
   //  使用jspdf库导出为pdf
