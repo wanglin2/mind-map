@@ -41,7 +41,7 @@ function getImageUrl() {
 
 //  创建图片节点
 function createImgNode() {
-  const img = this.getImageUrl()
+  let img = this.getImageUrl()
   if (!img) {
     return
   }
