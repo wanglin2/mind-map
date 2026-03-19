@@ -8,6 +8,7 @@
   >
     <div
       class="mindMapContainer"
+      :class="{ withSheetTabs: !isZenMode && sheets.length > 0 }"
       id="mindMapContainer"
       ref="mindMapContainer"
     ></div>
@@ -61,6 +62,15 @@
     >
       <div class="dragTip">{{ $t('edit.dragTip') }}</div>
     </div>
+    <SheetTabs
+      v-if="!isZenMode"
+      :sheets="sheets"
+      :activeIndex="activeSheetIndex"
+      @select="switchSheet"
+      @add="addSheet"
+      @rename="renameSheet"
+      @delete="deleteSheet"
+    />
   </div>
 </template>
 
@@ -101,7 +111,10 @@ import ShortcutKey from './ShortcutKey.vue'
 import Contextmenu from './Contextmenu.vue'
 import RichTextToolbar from './RichTextToolbar.vue'
 import NodeNoteContentShow from './NodeNoteContentShow.vue'
-import { getData, getConfig, storeData } from '@/api'
+import { getData, getConfig, storeData, getSheets, setSheets, SMM_VERSION } from '@/api'
+import { transformToMarkdown } from 'simple-mind-map/src/parse/toMarkdown'
+import { transformToTxt } from 'simple-mind-map/src/parse/toTxt'
+import { downloadFile } from 'simple-mind-map/src/utils/index'
 import Navigator from './Navigator.vue'
 import NodeImgPreview from './NodeImgPreview.vue'
 import SidebarTrigger from './SidebarTrigger.vue'
@@ -117,6 +130,7 @@ import handleClipboardText from '@/utils/handleClipboardText'
 import { getParentWithClass } from '@/utils'
 import Scrollbar from './Scrollbar.vue'
 import exampleData from 'simple-mind-map/example/exampleData'
+import themeList from 'simple-mind-map-plugin-themes/themeList'
 import FormulaSidebar from './FormulaSidebar.vue'
 import NodeOuterFrame from './NodeOuterFrame.vue'
 import NodeTagStyle from './NodeTagStyle.vue'
@@ -126,6 +140,8 @@ import NodeImgPlacementToolbar from './NodeImgPlacementToolbar.vue'
 import NodeNoteSidebar from './NodeNoteSidebar.vue'
 import AiCreate from './AiCreate.vue'
 import AiChat from './AiChat.vue'
+import SheetTabs from './SheetTabs.vue'
+import { simpleDeepClone } from 'simple-mind-map/src/utils/index'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -185,7 +201,8 @@ export default {
     NodeImgPlacementToolbar,
     NodeNoteSidebar,
     AiCreate,
-    AiChat
+    AiChat,
+    SheetTabs
   },
   data() {
     return {
@@ -195,7 +212,9 @@ export default {
       mindMapConfig: {},
       prevImg: '',
       storeConfigTimer: null,
-      showDragMask: false
+      showDragMask: false,
+      sheets: [],
+      activeSheetIndex: 0
     }
   },
   computed: {
@@ -230,11 +249,17 @@ export default {
   mounted() {
     showLoading()
     this.getData()
+    if (this.$store.state.isHandleLocalFile && this.mindMapData?.theme?.template) {
+      this.syncUiThemeFromCanvas()
+    }
     this.init()
     this.$bus.$on('execCommand', this.execCommand)
     this.$bus.$on('paddingChange', this.onPaddingChange)
     this.$bus.$on('export', this.export)
     this.$bus.$on('setData', this.setData)
+    this.$bus.$on('setDataFromFile', this.setDataFromFile)
+    this.$bus.$on('prepare_write_local_file', this.onPrepareWriteLocalFile)
+    this.$bus.$on('request_save_as_payload', this.onRequestSaveAsPayload)
     this.$bus.$on('startTextEdit', this.handleStartTextEdit)
     this.$bus.$on('endTextEdit', this.handleEndTextEdit)
     this.$bus.$on('createAssociativeLine', this.handleCreateLineFromActiveNode)
@@ -244,13 +269,16 @@ export default {
     this.$bus.$on('localStorageExceeded', this.onLocalStorageExceeded)
     window.addEventListener('resize', this.handleResize)
     this.$bus.$on('showDownloadTip', this.showDownloadTip)
-    this.webTip()
+    // this.webTip() // 已移除网页版过期提示
   },
   beforeDestroy() {
     this.$bus.$off('execCommand', this.execCommand)
     this.$bus.$off('paddingChange', this.onPaddingChange)
     this.$bus.$off('export', this.export)
     this.$bus.$off('setData', this.setData)
+    this.$bus.$off('setDataFromFile', this.setDataFromFile)
+    this.$bus.$off('prepare_write_local_file', this.onPrepareWriteLocalFile)
+    this.$bus.$off('request_save_as_payload', this.onRequestSaveAsPayload)
     this.$bus.$off('startTextEdit', this.handleStartTextEdit)
     this.$bus.$off('endTextEdit', this.handleEndTextEdit)
     this.$bus.$off('createAssociativeLine', this.handleCreateLineFromActiveNode)
@@ -306,10 +334,120 @@ export default {
       }
     },
 
-    // 获取思维导图数据，实际应该调接口获取
+    // 获取思维导图数据（含多 sheet 列表与当前 sheet）
     getData() {
+      const { sheets, activeIndex } = getSheets()
+      this.sheets = sheets
+      this.activeSheetIndex = activeIndex
       this.mindMapData = getData()
       this.mindMapConfig = getConfig() || {}
+    },
+
+    // 切换 sheet
+    switchSheet(index) {
+      if (index === this.activeSheetIndex || index < 0 || index >= this.sheets.length) return
+      let nextSheets = this.sheets.slice()
+      if (this.mindMap) {
+        const fullData = this.mindMap.getData(true)
+        nextSheets[this.activeSheetIndex] = {
+          ...nextSheets[this.activeSheetIndex],
+          data: fullData
+        }
+        setSheets({ sheets: nextSheets, activeIndex: index })
+      }
+      this.sheets = nextSheets
+      this.activeSheetIndex = index
+      this.mindMapData = simpleDeepClone(this.sheets[index].data)
+      if (this.mindMap) {
+        this.mindMap.setFullData(this.mindMapData)
+      }
+    },
+
+    // 新增 sheet（主题、布局、视图与当前 sheet 保持一致，仅根节点为新建空白）
+    addSheet() {
+      let nextSheets = this.sheets.slice()
+      const currentFullData = this.mindMap
+        ? this.mindMap.getData(true)
+        : (this.sheets[this.activeSheetIndex] && this.sheets[this.activeSheetIndex].data) || {}
+      if (this.mindMap) {
+        nextSheets[this.activeSheetIndex] = {
+          ...nextSheets[this.activeSheetIndex],
+          data: currentFullData
+        }
+      }
+      const minimalRoot = {
+        data: { text: this.$t('edit.root') },
+        children: []
+      }
+      const newSheetData = {
+        root: minimalRoot,
+        layout: currentFullData.layout != null ? currentFullData.layout : exampleData.layout,
+        theme:
+          currentFullData.theme != null
+            ? simpleDeepClone(currentFullData.theme)
+            : simpleDeepClone(exampleData.theme),
+        view: currentFullData.view != null ? simpleDeepClone(currentFullData.view) : null
+      }
+      const newSheet = {
+        id: 'sheet_' + Date.now(),
+        name: this.$t('edit.sheet') + (nextSheets.length + 1),
+        data: newSheetData
+      }
+      nextSheets.push(newSheet)
+      setSheets({ sheets: nextSheets, activeIndex: nextSheets.length - 1 })
+      this.sheets = nextSheets
+      this.activeSheetIndex = nextSheets.length - 1
+      this.mindMapData = simpleDeepClone(this.sheets[this.activeSheetIndex].data)
+      if (this.mindMap) {
+        this.mindMap.setFullData(this.mindMapData)
+      }
+    },
+
+    // 重命名 sheet
+    renameSheet(index, name) {
+      const nextSheets = this.sheets.slice()
+      if (!nextSheets[index]) return
+      nextSheets[index] = { ...nextSheets[index], name }
+      setSheets({ sheets: nextSheets, activeIndex: this.activeSheetIndex })
+      this.sheets = nextSheets
+    },
+
+    // 删除 sheet（至少保留一个，删除前二次确认）
+    deleteSheet(index) {
+      if (this.sheets.length <= 1 || index < 0 || index >= this.sheets.length) return
+      const name = (this.sheets[index] && this.sheets[index].name) || this.$t('edit.sheet')
+      this.$confirm(
+        this.$t('edit.deleteSheetConfirm', { name }),
+        this.$t('edit.deleteSheetTitle'),
+        {
+          confirmButtonText: this.$t('dialog.confirm'),
+          cancelButtonText: this.$t('dialog.cancel'),
+          type: 'warning'
+        }
+      )
+        .then(() => {
+          let nextSheets = this.sheets.slice()
+          if (this.mindMap) {
+            const fullData = this.mindMap.getData(true)
+            nextSheets[this.activeSheetIndex] = {
+              ...nextSheets[this.activeSheetIndex],
+              data: fullData
+            }
+          }
+          nextSheets.splice(index, 1)
+          const newIndex =
+            index <= this.activeSheetIndex
+              ? Math.max(0, this.activeSheetIndex - 1)
+              : this.activeSheetIndex
+          setSheets({ sheets: nextSheets, activeIndex: newIndex })
+          this.sheets = nextSheets
+          this.activeSheetIndex = newIndex
+          this.mindMapData = simpleDeepClone(this.sheets[newIndex].data)
+          if (this.mindMap) {
+            this.mindMap.setFullData(this.mindMapData)
+          }
+        })
+        .catch(() => {})
     },
 
     // 存储数据当数据有变时
@@ -515,7 +653,67 @@ export default {
       return /\.(smm|json|xmind|md|xlsx)$/.test(fileURL)
     },
 
-    // 动态设置思维导图数据
+    // 另存为：按当前 UI 的完整 sheets 组包并交给 Toolbar 写入
+    onRequestSaveAsPayload() {
+      const sheets = this.sheets && this.sheets.length > 0 ? this.sheets : []
+      const idx = Math.min(Math.max(0, this.activeSheetIndex), Math.max(0, sheets.length - 1))
+      const currentData = this.mindMap ? this.mindMap.getData(true) : null
+      const fullSheets =
+        sheets.length > 0
+          ? sheets.map((s, i) =>
+              i === idx ? { ...s, data: currentData || s.data || {} } : { ...s, data: s.data || {} }
+            )
+          : [{ id: 'sheet_' + Date.now(), name: '思维导图1', data: currentData || {} }]
+      this.$bus.$emit('save_as_payload', {
+        smmVersion: SMM_VERSION,
+        sheets: fullSheets,
+        activeIndex: sheets.length > 0 ? idx : 0
+      })
+    },
+
+    // 本地文件保存前：用当前 UI 的完整 sheets 列表组包并触发写入（保证多 sheet 都写入）
+    onPrepareWriteLocalFile({ merged }) {
+      const sheets = this.sheets && this.sheets.length > 0 ? this.sheets : []
+      const idx = Math.min(Math.max(0, this.activeSheetIndex), sheets.length - 1)
+      const fullSheets =
+        sheets.length > 0
+          ? sheets.map((s, i) => (i === idx ? { ...s, data: merged } : { ...s, data: s.data || {} }))
+          : [{ id: 'sheet_' + Date.now(), name: '思维导图1', data: merged }]
+      const activeIndex = sheets.length > 0 ? idx : 0
+      setSheets({ sheets: fullSheets, activeIndex })
+      this.$bus.$emit('write_local_file', {
+        smmVersion: SMM_VERSION,
+        sheets: fullSheets,
+        activeIndex
+      })
+    },
+
+    // 从打开的文件设置多 sheet（新格式或旧格式转成的单 sheet）
+    setDataFromFile({ sheets, activeIndex }) {
+      if (!sheets || !sheets.length) return
+      const idx = Math.min(Math.max(0, activeIndex ?? 0), sheets.length - 1)
+      this.sheets = sheets
+      this.activeSheetIndex = idx
+      this.mindMapData = simpleDeepClone(sheets[idx].data)
+      this.syncUiThemeFromCanvas()
+      if (this.mindMap) {
+        this.mindMap.setFullData(this.mindMapData)
+        this.mindMap.view.reset()
+      }
+      this.handleHideLoading()
+    },
+
+    // 根据画布主题同步工具栏/侧边栏等 UI 的深色模式，避免画布深色而按钮仍是浅色
+    syncUiThemeFromCanvas() {
+      const template = this.mindMapData?.theme?.template
+      if (!template) return
+      const fullList = [{ name: '默认主题', value: 'default', dark: false }, ...themeList].reverse()
+      const item = fullList.find(t => t.value === template)
+      const isDark = item && item.dark === true
+      this.$store.commit('setLocalConfig', { isDark })
+    },
+
+    // 动态设置思维导图数据（导入等单文档场景）
     setData(data) {
       this.handleShowLoading()
       let rootNodeData = null
@@ -548,11 +746,54 @@ export default {
       this.mindMap.execCommand(...args)
     },
 
-    // 导出
-    async export(...args) {
+    // 导出（多 sheet：图片/SVG 仅当前 sheet；PDF/MD/Txt 顺序导出所有 sheet 及名称）
+    async export(type, isDownload, name, ...rest) {
       try {
         showLoading()
-        await this.mindMap.export(...args)
+        const sheets = this.sheets && this.sheets.length > 0 ? this.sheets : null
+        const currentIndex = this.activeSheetIndex
+
+        if (type === 'pdf' && sheets && sheets.length > 0 && this.mindMap.doExportPDF && this.mindMap.doExportPDF.pdfMultiplePages) {
+          const isTransparent = rest[0] !== false
+          const isFitBg = rest[1] !== false
+          const pages = []
+          for (let i = 0; i < sheets.length; i++) {
+            const sheet = sheets[i]
+            this.mindMap.setFullData(sheet.data || {})
+            const img = await this.mindMap.export('png', false, name, isTransparent, null, isFitBg)
+            pages.push({ img, title: sheet.name || `Sheet ${i + 1}` })
+          }
+          this.mindMap.setFullData(sheets[currentIndex].data || {})
+          const result = await this.mindMap.doExportPDF.pdfMultiplePages(pages)
+          if (isDownload) downloadFile(result, name + '.pdf')
+          hideLoading()
+          return
+        }
+
+        if ((type === 'md' || type === 'txt') && sheets && sheets.length > 0) {
+          const transform = type === 'md' ? transformToMarkdown : transformToTxt
+          const parts = []
+          for (let i = 0; i < sheets.length; i++) {
+            const sheet = sheets[i]
+            const title = sheet.name || `Sheet ${i + 1}`
+            const rootData = (sheet.data && sheet.data.root) ? sheet.data.root : (sheet.data || {})
+            const content = transform(rootData).trim()
+            if (type === 'md') {
+              parts.push(`## ${title}\n\n${content}`)
+            } else {
+              parts.push(`${title}\n${'─'.repeat(20)}\n\n${content}`)
+            }
+          }
+          const content = parts.join('\n\n')
+          const blob = new Blob([content], { type: type === 'md' ? 'text/markdown' : 'text/plain' })
+          const url = URL.createObjectURL(blob)
+          if (isDownload) downloadFile(url, name + (type === 'md' ? '.md' : '.txt'))
+          URL.revokeObjectURL(url)
+          hideLoading()
+          return
+        }
+
+        await this.mindMap.export(type, isDownload, name, ...rest)
         hideLoading()
       } catch (error) {
         console.log(error)
@@ -627,19 +868,19 @@ export default {
       this.$bus.$emit('importFile', file)
     },
 
-    // 网页版试用提示
-    webTip() {
-      const storageKey = 'webUseTip'
-      const data = localStorage.getItem(storageKey)
-      if (data) {
-        return
-      }
-      this.showDownloadTip(
-        '重要提示',
-        '网页版已暂停更新，部分功能缺失，请下载客户端获得完整体验~'
-      )
-      localStorage.setItem(storageKey, 1)
-    },
+    // 网页版试用提示 - 已移除
+    // webTip() {
+    //   const storageKey = 'webUseTip'
+    //   const data = localStorage.getItem(storageKey)
+    //   if (data) {
+    //     return
+    //   }
+    //   this.showDownloadTip(
+    //     '重要提示',
+    //     '网页版已暂停更新，部分功能缺失，请下载客户端获得完整体验~'
+    //   )
+    //   localStorage.setItem(storageKey, 1)
+    // },
 
     showDownloadTip(title, desc) {
       const h = this.$createElement
@@ -726,6 +967,11 @@ export default {
     top: 0px;
     width: 100%;
     height: 100%;
+  }
+
+  .mindMapContainer.withSheetTabs {
+    bottom: 36px;
+    height: auto;
   }
 }
 </style>

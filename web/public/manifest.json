@@ -1,0 +1,31 @@
+{
+  "name": "思绪思维导图",
+  "short_name": "思维导图",
+  "description": "思绪思维导图 - Mind Map",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "scope": "./",
+  "icons": [
+    {
+      "src": "logo.ico",
+      "sizes": "192x192",
+      "type": "image/x-icon",
+      "purpose": "any"
+    },
+    {
+      "src": "logo.ico",
+      "sizes": "512x512",
+      "type": "image/x-icon",
+      "purpose": "any"
+    }
+  ],
+  "file_handlers": [
+    {
+      "action": "./open-file",
+      "accept": {
+        "application/vnd.my-mindmap": [".mindmap"],
+        "application/json": [".smm"]
+      }
+    }
+  ]
+}
