@@ -44,7 +44,7 @@ Local storage, privacy-first, data security. The software can be used without an
 - [x] 7. Rich style settings: text, borders, background, shape, lines, inner/outer margins, image tag layout, etc.
 - [x] 8. Supports practical and interesting features: historical version management, presentation mode, AI generation, hand-drawn style, outline editing, watermark, scrollbars, sibling node alignment, minimap, entering specific nodes, rainbow lines, bidirectional node linking, search and replace, etc.
 
-Supports Windows, Mac, and Linux systems; supports Chinese, English, Traditional Chinese, Vietnamese, and Russian languages.
+Supports Windows, Mac, and Linux systems; supports 中文简体、繁體中文、English、Tiếng Việt、Русский、日本語、한국어、Deutsch、Français、Português languages.
 
 Download links: [Github](https://github.com/wanglin2/mind-map/releases), [Baidu Netdisk](https://pan.baidu.com/s/1C8phEJ5pagAAa-o1tU42Uw?pwd=jqfb), [Quark Netdisk](https://pan.quark.cn/s/2733982f1976)、[Microsoft App Store](https://apps.microsoft.com/detail/9p58vg94khcq?hl=zh-CN&gl=CN)
 

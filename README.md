@@ -44,7 +44,7 @@
 - [x] 7.丰富的样式设置：文字、边框、背景、形状、线条、内外边距、图片标签布局等等；
 - [x] 8.支持历史版本管理、演示模式、AI生成、手绘风格、大纲编辑、水印、滚动条、同级节点对齐、小地图、进入指定节点、彩虹线条、节点双向链接、搜索替换等等实用有趣的功能；
 
-支持Windows、Mac及Linux系统；支持中文、英文、中文繁体、越南语、俄语语言。
+支持Windows、Mac及Linux系统；支持中文简体、繁體中文、English、Tiếng Việt、Русский、日本語、한국어、Deutsch、Français、Português语言。
 
 下载地址：[Github](https://github.com/wanglin2/mind-map/releases)、[百度网盘](https://pan.baidu.com/s/1C8phEJ5pagAAa-o1tU42Uw?pwd=jqfb)、[夸克网盘](https://pan.quark.cn/s/2733982f1976)、[微软应用商店](https://apps.microsoft.com/detail/9p58vg94khcq?hl=zh-CN&gl=CN)
 
