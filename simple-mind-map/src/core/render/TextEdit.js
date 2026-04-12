@@ -489,12 +489,16 @@ export default class TextEdit {
     this.textEditNode.style.fontWeight = 'normal'
     this.textEditNode.style.transform = 'translateY(0)'
     this.setIsShowTextEdit(false)
-    this.mindMap.execCommand('SET_NODE_TEXT', currentNode, text)
-    // if (currentNode.isGeneralization) {
-    //   // 概要节点
-    //   currentNode.generalizationBelongNode.updateGeneralization()
-    // }
-    this.mindMap.render()
+    const lastText = currentNode.getData('text')
+    const hasChanged = text !== lastText
+    if (hasChanged) {
+      this.mindMap.execCommand('SET_NODE_TEXT', currentNode, text)
+      // if (currentNode.isGeneralization) {
+      //   // 概要节点
+      //   currentNode.generalizationBelongNode.updateGeneralization()
+      // }
+      this.mindMap.render()
+    }
     this.mindMap.emit(
       'hide_text_edit',
       this.textEditNode,

@@ -272,8 +272,17 @@ export const parseDataUrl = data => {
 //  下载文件
 export const downloadFile = (file, fileName) => {
   let a = document.createElement('a')
-  a.href = file
   a.download = fileName
+  if (file instanceof Blob) {
+    const url = URL.createObjectURL(file)
+    a.href = url
+    a.click()
+    setTimeout(() => {
+      URL.revokeObjectURL(url)
+    }, 0)
+    return
+  }
+  a.href = file
   a.click()
 }
 
