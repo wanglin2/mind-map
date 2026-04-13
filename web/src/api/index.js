@@ -4,6 +4,7 @@ import Vue from 'vue'
 import vuexStore from '@/store'
 
 const SIMPLE_MIND_MAP_DATA = 'SIMPLE_MIND_MAP_DATA'
+const SIMPLE_MIND_MAP_VIEW = 'SIMPLE_MIND_MAP_VIEW'
 const SIMPLE_MIND_MAP_CONFIG = 'SIMPLE_MIND_MAP_CONFIG'
 const SIMPLE_MIND_MAP_LANG = 'SIMPLE_MIND_MAP_LANG'
 const SIMPLE_MIND_MAP_LOCAL_CONFIG = 'SIMPLE_MIND_MAP_LOCAL_CONFIG'
@@ -22,14 +23,47 @@ export const getData = () => {
     return Vue.prototype.getCurrentData()
   }
   let store = localStorage.getItem(SIMPLE_MIND_MAP_DATA)
+  let view = null
+  const viewStore = localStorage.getItem(SIMPLE_MIND_MAP_VIEW)
+  if (viewStore) {
+    try {
+      view = JSON.parse(viewStore)
+    } catch (error) {
+      view = null
+    }
+  }
   if (store === null) {
-    return simpleDeepClone(exampleData)
+    const defaultData = simpleDeepClone(exampleData)
+    if (view) {
+      defaultData.view = view
+    }
+    return defaultData
   } else {
     try {
-      return JSON.parse(store)
+      const parsed = JSON.parse(store)
+      if (view) {
+        parsed.view = view
+      }
+      return parsed
     } catch (error) {
-      return simpleDeepClone(exampleData)
+      const defaultData = simpleDeepClone(exampleData)
+      if (view) {
+        defaultData.view = view
+      }
+      return defaultData
     }
+  }
+}
+
+// 存储视图数据
+export const storeViewData = view => {
+  try {
+    if (window.takeOverApp || vuexStore.state.isHandleLocalFile) {
+      return
+    }
+    localStorage.setItem(SIMPLE_MIND_MAP_VIEW, JSON.stringify(view || null))
+  } catch (error) {
+    console.log(error)
   }
 }
 
@@ -48,6 +82,11 @@ export const storeData = data => {
     originData = {
       ...originData,
       ...data
+    }
+    const { view } = originData
+    if (view !== undefined) {
+      storeViewData(view)
+      delete originData.view
     }
     if (window.takeOverApp) {
       mindMapData = originData
