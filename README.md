@@ -31,7 +31,7 @@
 
 > 客户端和插件代码不开源，正在积极开发维护中。
 
-- 思绪思维导图客户端
+## 思绪思维导图客户端
 
 本地化存储，隐私优先，数据安全，软件无需联网即可使用！
 
@@ -65,7 +65,7 @@
 
 ![](./assets/client/client6.png)
 
-- Obsidian插件
+## Obsidian插件
 
 下载地址：[Github](https://github.com/wanglin2/obsidian-simplemindmap/releases)
 
@@ -79,6 +79,6 @@
 
 ![](./assets/ob/ob5.png)
 
-- UTools插件
+## UTools插件
 
 已上架[uTools](https://www.u.tools/)插件应用市场，可直接在`uTools`插件应用市场中搜索`思绪`进行安装，也可以直接访问该地址：[主页](https://www.u-tools.cn/plugins/detail/%E6%80%9D%E7%BB%AA%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/)，点击右侧的【启动】按钮进行安装。
