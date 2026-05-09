@@ -21,12 +21,28 @@ function initDragHandle() {
   this.dragHandleMousedownBodyCursor = ''
   // 鼠标按下时记录当前节点的left值
   this.dragHandleMousedownLeft = 0
+  // 参考节点宽度列表
+  this.referenceNodeWidths = []
+  // 节点宽度与文本宽度的差值
+  this.widthDiff = 0
 
   this.onDragMousemoveHandle = this.onDragMousemoveHandle.bind(this)
   window.addEventListener('mousemove', this.onDragMousemoveHandle)
   this.onDragMouseupHandle = this.onDragMouseupHandle.bind(this)
   window.addEventListener('mouseup', this.onDragMouseupHandle)
   this.mindMap.on('node_mouseup', this.onDragMouseupHandle)
+}
+
+// 收集同级节点宽度
+function collectSiblingNodeWidths() {
+  this.referenceNodeWidths = []
+  if (this.parent && this.parent.children) {
+    this.parent.children.forEach(node => {
+      if (node !== this) {
+        this.referenceNodeWidths.push(node.width)
+      }
+    })
+  }
 }
 
 // 鼠标移动事件
@@ -51,6 +67,25 @@ function onDragMousemoveHandle(e) {
   let newWidth =
     this.dragHandleMousedownCustomTextWidth +
     (this.dragHandleIndex === 0 ? -ox : ox) / scaleX
+
+  // 吸附逻辑
+  const currentTotalWidth = newWidth + this.widthDiff
+  const SNAP_THRESHOLD = 5
+  let snapped = false
+  for (const width of this.referenceNodeWidths) {
+    if (Math.abs(currentTotalWidth - width) <= SNAP_THRESHOLD) {
+      newWidth = width - this.widthDiff
+      snapped = true
+      break
+    }
+  }
+
+  // 视觉反馈
+  if (this._dragHandleNodes && this._dragHandleNodes[this.dragHandleIndex]) {
+    this._dragHandleNodes[this.dragHandleIndex].fill({
+      color: snapped ? '#409eff' : 'transparent'
+    })
+  }
   newWidth = Math.max(newWidth, minNodeTextModifyWidth)
   if (maxNodeTextModifyWidth !== -1) {
     newWidth = Math.min(newWidth, maxNodeTextModifyWidth)
@@ -87,6 +122,10 @@ function onDragMouseupHandle() {
   this.dragHandleMousedownX = 0
   this.dragHandleIndex = 0
   this.dragHandleMousedownCustomTextWidth = 0
+  // 重置手柄颜色
+  if (this._dragHandleNodes) {
+    this._dragHandleNodes.forEach(node => node.fill({ color: 'transparent' }))
+  }
   this.setData({
     customTextWidth: this.customTextWidth
   })
@@ -119,6 +158,9 @@ function createDragHandleNode() {
           : this.customTextWidth
       this.dragHandleMousedownBodyCursor = document.body.style.cursor
       this.dragHandleMousedownLeft = this.left
+      // 计算差值和收集参考宽度
+      this.widthDiff = this.width - this.dragHandleMousedownCustomTextWidth
+      this.collectSiblingNodeWidths()
       this.isDragHandleMousedown = true
     })
   })
@@ -146,6 +188,7 @@ function updateDragHandle() {
 
 export default {
   initDragHandle,
+  collectSiblingNodeWidths,
   onDragMousemoveHandle,
   onDragMouseupHandle,
   createDragHandleNode,
