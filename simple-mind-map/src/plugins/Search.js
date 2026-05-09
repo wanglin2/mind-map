@@ -17,6 +17,8 @@ class Search {
     this.isSearching = false
     // 搜索文本
     this.searchText = ''
+    // 搜索类型：text 或 tag
+    this.searchType = 'text'
     // 匹配的节点列表
     this.matchNodeList = []
     // 当前所在的节点列表索引
@@ -69,15 +71,23 @@ class Search {
   }
 
   // 搜索
-  search(text, callback = () => {}) {
+  search(text, options = {}, callback = () => {}) {
     if (isUndef(text)) return this.endSearch()
     text = String(text)
+    const newSearchType = options.type || 'text'
     this.isSearching = true
-    if (this.searchText === text) {
-      // 和上一次搜索文本一样，那么搜索下一个
+    
+    // 检查搜索文本和类型是否都相同
+    const isSameSearch = this.searchText === text && this.searchType === newSearchType
+    
+    // 更新搜索类型
+    this.searchType = newSearchType
+    
+    if (isSameSearch) {
+      // 和上一次搜索文本和类型都一样，那么搜索下一个
       this.searchNext(callback)
     } else {
-      // 和上次搜索文本不一样，那么重新开始
+      // 只要文本或类型有一个不一样，就重新开始搜索
       this.searchText = text
       this.doSearch()
       this.searchNext(callback)
@@ -118,31 +128,74 @@ class Search {
     if (!tree) return
     const matchList = []
     bfsWalk(tree, node => {
-      let { richText, text, generalization } = isOnlySearchCurrentRenderNodes
+      let { richText, text, generalization, tag } = isOnlySearchCurrentRenderNodes
         ? node.getData()
         : node.data
-      if (richText) {
-        text = getTextFromHtml(text)
+      
+      // 根据搜索类型进行匹配
+      let isMatch = false
+      console.log('doSearch,searchType:'+this.searchType)
+      if (this.searchType === 'tag') {
+        // 标签搜索
+        if (tag && Array.isArray(tag)) {
+          // 处理标签可能是字符串或对象的情况
+          isMatch = tag.some(t => {
+            if (typeof t === 'string') {
+              return t.includes(this.searchText);
+            } else if (t && t.text) {
+              return String(t.text).includes(this.searchText);
+            }
+            return false;
+          })
+        }
+      } else {
+        // 文本搜索
+        if (richText) {
+          text = getTextFromHtml(text)
+        }
+        isMatch = text.includes(this.searchText)
       }
-      if (text.includes(this.searchText)) {
+      
+      if (isMatch) {
         matchList.push(node)
       }
+
       // 概要节点
       const generalizationList = formatGetNodeGeneralization({
         generalization
       })
       generalizationList.forEach(gNode => {
-        let { richText, text, uid } = gNode
+        let { richText, text, uid, tag } = gNode
         if (
           isOnlySearchCurrentRenderNodes &&
           !this.mindMap.renderer.findNodeByUid(uid)
         ) {
           return
         }
-        if (richText) {
-          text = getTextFromHtml(text)
+
+        // 根据搜索类型进行匹配
+        let isMatch = false
+        if (this.searchType === 'tag') {
+          // 标签搜索
+          if (tag && Array.isArray(tag)) {
+            isMatch = tag.some(t => {
+              if (typeof t === 'string') {
+                return t.includes(this.searchText);
+              } else if (t && t.text) {
+                return String(t.text).includes(this.searchText);
+              }
+              return false;
+            })
+          }
+        } else {
+          // 文本搜索
+          if (richText) {
+            text = getTextFromHtml(text)
+          }
+          isMatch = text.includes(this.searchText)
         }
-        if (text.includes(this.searchText)) {
+
+        if (isMatch) {
           matchList.push({
             data: gNode
           })
