@@ -101,7 +101,7 @@ import ShortcutKey from './ShortcutKey.vue'
 import Contextmenu from './Contextmenu.vue'
 import RichTextToolbar from './RichTextToolbar.vue'
 import NodeNoteContentShow from './NodeNoteContentShow.vue'
-import { getData, getConfig, storeData } from '@/api'
+import { getData, getConfig, storeData, storeViewData } from '@/api'
 import Navigator from './Navigator.vue'
 import NodeImgPreview from './NodeImgPreview.vue'
 import SidebarTrigger from './SidebarTrigger.vue'
@@ -195,6 +195,12 @@ export default {
       mindMapConfig: {},
       prevImg: '',
       storeConfigTimer: null,
+      storeDataTimer: null,
+      storeViewTimer: null,
+      pendingStorePatch: null,
+      idleSaveTaskId: null,
+      isCanvasPointerDown: false,
+      pendingViewDataOnDrag: null,
       showDragMask: false
     }
   },
@@ -239,6 +245,8 @@ export default {
     this.$bus.$on('endTextEdit', this.handleEndTextEdit)
     this.$bus.$on('createAssociativeLine', this.handleCreateLineFromActiveNode)
     this.$bus.$on('startPainter', this.handleStartPainter)
+    this.$bus.$on('svg_mousedown', this.handleSvgMousedown)
+    this.$bus.$on('mouseup', this.handleCanvasMouseup)
     this.$bus.$on('node_tree_render_end', this.handleHideLoading)
     this.$bus.$on('showLoading', this.handleShowLoading)
     this.$bus.$on('localStorageExceeded', this.onLocalStorageExceeded)
@@ -255,11 +263,17 @@ export default {
     this.$bus.$off('endTextEdit', this.handleEndTextEdit)
     this.$bus.$off('createAssociativeLine', this.handleCreateLineFromActiveNode)
     this.$bus.$off('startPainter', this.handleStartPainter)
+    this.$bus.$off('svg_mousedown', this.handleSvgMousedown)
+    this.$bus.$off('mouseup', this.handleCanvasMouseup)
     this.$bus.$off('node_tree_render_end', this.handleHideLoading)
     this.$bus.$off('showLoading', this.handleShowLoading)
     this.$bus.$off('localStorageExceeded', this.onLocalStorageExceeded)
     window.removeEventListener('resize', this.handleResize)
     this.$bus.$off('showDownloadTip', this.showDownloadTip)
+    clearTimeout(this.storeConfigTimer)
+    clearTimeout(this.storeDataTimer)
+    clearTimeout(this.storeViewTimer)
+    this.cancelIdleSaveTask()
     this.mindMap.destroy()
   },
   methods: {
@@ -288,6 +302,19 @@ export default {
       this.mindMap.painter.startPainter()
     },
 
+    handleSvgMousedown() {
+      this.isCanvasPointerDown = true
+    },
+
+    handleCanvasMouseup() {
+      if (!this.isCanvasPointerDown && !this.pendingViewDataOnDrag) return
+      this.isCanvasPointerDown = false
+      if (!this.pendingViewDataOnDrag) return
+      const viewData = this.pendingViewDataOnDrag
+      this.pendingViewDataOnDrag = null
+      this.queueViewDataSave(viewData, true)
+    },
+
     handleResize() {
       this.mindMap.resize()
     },
@@ -312,18 +339,84 @@ export default {
       this.mindMapConfig = getConfig() || {}
     },
 
+    // 在浏览器空闲时执行任务，减少对交互帧的抢占
+    runWhenIdle(fn) {
+      this.cancelIdleSaveTask()
+      if (typeof window.requestIdleCallback === 'function') {
+        this.idleSaveTaskId = window.requestIdleCallback(() => {
+          this.idleSaveTaskId = null
+          fn()
+        }, { timeout: 1000 })
+      } else {
+        this.idleSaveTaskId = window.setTimeout(() => {
+          this.idleSaveTaskId = null
+          fn()
+        }, 0)
+      }
+    },
+
+    cancelIdleSaveTask() {
+      if (!this.idleSaveTaskId) return
+      if (typeof window.cancelIdleCallback === 'function') {
+        window.cancelIdleCallback(this.idleSaveTaskId)
+      } else {
+        clearTimeout(this.idleSaveTaskId)
+      }
+      this.idleSaveTaskId = null
+    },
+
+    flushPendingStoreSave() {
+      if (!this.pendingStorePatch) return
+      this.runWhenIdle(() => {
+        if (!this.pendingStorePatch) return
+        const patch = this.pendingStorePatch
+        this.pendingStorePatch = null
+        if (patch.root !== undefined) {
+          storeData({ root: patch.root })
+        }
+        if (patch.view !== undefined) {
+          storeViewData(patch.view)
+        }
+      })
+    },
+
+    queueRootDataSave(data) {
+      this.pendingStorePatch = {
+        ...(this.pendingStorePatch || {}),
+        root: data
+      }
+      clearTimeout(this.storeDataTimer)
+      this.storeDataTimer = setTimeout(() => {
+        this.flushPendingStoreSave()
+      }, 1200)
+    },
+
+    queueViewDataSave(data, immediate = false) {
+      this.pendingStorePatch = {
+        ...(this.pendingStorePatch || {}),
+        view: data
+      }
+      clearTimeout(this.storeViewTimer)
+      if (immediate) {
+        this.flushPendingStoreSave()
+        return
+      }
+      this.storeViewTimer = setTimeout(() => {
+        this.flushPendingStoreSave()
+      }, 1200)
+    },
+
     // 存储数据当数据有变时
     bindSaveEvent() {
       this.$bus.$on('data_change', data => {
-        storeData({ root: data })
+        this.queueRootDataSave(data)
       })
       this.$bus.$on('view_data_change', data => {
-        clearTimeout(this.storeConfigTimer)
-        this.storeConfigTimer = setTimeout(() => {
-          storeData({
-            view: data
-          })
-        }, 300)
+        if (this.isCanvasPointerDown) {
+          this.pendingViewDataOnDrag = data
+          return
+        }
+        this.queueViewDataSave(data)
       })
     },
 

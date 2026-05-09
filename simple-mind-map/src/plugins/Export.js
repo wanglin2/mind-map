@@ -425,9 +425,9 @@ class Export {
   async json(name, withConfig = true) {
     const data = this.mindMap.getData(withConfig)
     const str = JSON.stringify(data)
-    const blob = new Blob([str])
-    const res = await readBlob(blob)
-    return res
+    return new Blob([str], {
+      type: 'application/json;charset=utf-8'
+    })
   }
 
   //  专有文件，其实就是json文件
