@@ -31,6 +31,8 @@ Learn more: [README](./README_MORE_EN.md).
 
 > The client and plugin code are not open source and are under active development and maintenance.
 
+Product official website: [http://www.sxmind.tech/](http://www.sxmind.tech/)
+
 - 思绪思维导图 Client
 
 Local storage, privacy-first, data security. The software can be used without an internet connection!
