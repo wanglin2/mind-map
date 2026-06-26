@@ -31,7 +31,7 @@ Learn more: [README](./README_MORE_EN.md).
 
 > The client and plugin code are not open source and are under active development and maintenance.
 
-Product official website: [http://www.sxmind.tech/](http://www.sxmind.tech/)
+Product official website: [http://www.sxmind.cn/](http://www.sxmind.cn/)
 
 - 思绪思维导图 Client
 

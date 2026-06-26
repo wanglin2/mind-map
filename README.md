@@ -31,7 +31,7 @@
 
 > 客户端和插件代码不开源，正在积极开发维护中。
 
-产品官网：[http://www.sxmind.tech/](http://www.sxmind.tech/)
+产品官网：[http://www.sxmind.cn/](http://www.sxmind.cn/)
 
 ## 思绪思维导图客户端
 
