@@ -26,6 +26,7 @@
       :mindMap="mindMap"
     ></AssociativeLineStyle>
     <Theme v-if="mindMap" :data="mindMapData" :mindMap="mindMap"></Theme>
+    <ThemeEditor v-if="mindMap" :data="mindMapData" :mindMap="mindMap"></ThemeEditor>
     <Structure :mindMap="mindMap"></Structure>
     <ShortcutKey></ShortcutKey>
     <Contextmenu v-if="mindMap" :mindMap="mindMap"></Contextmenu>
@@ -126,6 +127,7 @@ import NodeImgPlacementToolbar from './NodeImgPlacementToolbar.vue'
 import NodeNoteSidebar from './NodeNoteSidebar.vue'
 import AiCreate from './AiCreate.vue'
 import AiChat from './AiChat.vue'
+import ThemeEditor from './ThemeEditor.vue'
 
 // 注册插件
 MindMap.usePlugin(MiniMap)
@@ -185,7 +187,8 @@ export default {
     NodeImgPlacementToolbar,
     NodeNoteSidebar,
     AiCreate,
-    AiChat
+    AiChat,
+    ThemeEditor
   },
   data() {
     return {

@@ -532,6 +532,11 @@ export const sidebarTriggerList = [
     icon: 'iconjingzi'
   },
   {
+    name: '主题编辑器',
+    value: 'themeEditor',
+    icon: 'iconbianji'
+  },
+  {
     name: '结构',
     value: 'structure',
     icon: 'iconjiegou'

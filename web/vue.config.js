@@ -35,7 +35,8 @@ module.exports = {
   configureWebpack: {
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, './src/')
+        '@': path.resolve(__dirname, './src/'),
+        'simple-mind-map': path.resolve(__dirname, '../simple-mind-map')
       }
     }
   },
