@@ -23,7 +23,7 @@
 
 - 一个 Web 思维导图，基于思维导图库、`Vue2.x`、`ElementUI` 开发，支持操作电脑本地文件，可以当做一个在线版思维导图应用使用，也可以自部署和二次开发。
 
-> 在线地址：[https://wanglin2.github.io/mind-map/](https://wanglin2.github.io/mind-map/)
+> 在线地址：[http://web.sxmind.cn/](http://web.sxmind.cn/)
 
 了解更多信息：[README](./README_MORE_ZH.md)。
 
