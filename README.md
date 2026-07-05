@@ -23,7 +23,7 @@
 
 - 一个 Web 思维导图，基于思维导图库、`Vue2.x`、`ElementUI` 开发，支持操作电脑本地文件，可以当做一个在线版思维导图应用使用，也可以自部署和二次开发。
 
-> 在线地址：[http://web.sxmind.cn/](http://web.sxmind.cn/)
+> 在线地址：[https://web.sxmind.cn/](https://web.sxmind.cn/)
 
 了解更多信息：[README](./README_MORE_ZH.md)。
 
@@ -31,7 +31,7 @@
 
 > 客户端和插件代码不开源，正在积极开发维护中。
 
-产品官网：[http://www.sxmind.cn/](http://www.sxmind.cn/)
+产品官网：[https://sxmind.cn/](https://sxmind.cn/)
 
 ## 思绪思维导图客户端
 

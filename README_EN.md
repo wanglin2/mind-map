@@ -23,7 +23,7 @@ This project consists of two parts: an open-source JavaScript library and closed
 
 - A web-based mind map application, developed using the mind map library, `Vue2.x`, and `ElementUI`. It supports operations on local computer files, can be used as an online mind map application, and is open for self-deployment and secondary development.
 
-> Online address: [http://web.sxmind.cn/](http://web.sxmind.cn/)
+> Online address: [https://web.sxmind.cn/](https://web.sxmind.cn/)
 
 Learn more: [README](./README_MORE_EN.md).
 
@@ -31,7 +31,7 @@ Learn more: [README](./README_MORE_EN.md).
 
 > The client and plugin code are not open source and are under active development and maintenance.
 
-Product official website: [http://www.sxmind.cn/](http://www.sxmind.cn/)
+Product official website: [https://sxmind.cn/](https://sxmind.cn/)
 
 - 思绪思维导图 Client
 
