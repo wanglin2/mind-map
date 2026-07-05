@@ -209,13 +209,6 @@ export default {
       } else if (command === 'aiChat') {
         this.setActiveSidebar('ai')
         return
-      } else if (command === 'client') {
-        this.$bus.$emit(
-          'showDownloadTip',
-          this.$t('navigatorToolbar.downloadClient'),
-          this.$t('navigatorToolbar.downloadDesc')
-        )
-        return
       }
       let url = ''
       switch (command) {
@@ -230,12 +223,14 @@ export default {
             'https://wanglin2.github.io/mind-map-docs/start/introduction.html'
           break
         case 'site':
-          url = 'https://wanglin2.github.io/mind-map-docs/'
+          url = 'https://sxmind.cn/'
           break
         case 'issue':
           url = 'https://github.com/wanglin2/mind-map/issues/new'
           break
-
+        case 'client':
+          url = 'https://sxmind.cn/'
+          break
         default:
           break
       }

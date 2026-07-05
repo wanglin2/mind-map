@@ -636,7 +636,7 @@ export default {
       }
       this.showDownloadTip(
         '重要提示',
-        '网页版已暂停更新，部分功能缺失，请下载客户端获得完整体验~'
+        '网页版仅供试用，请下载客户端获得完整体验~'
       )
       localStorage.setItem(storageKey, 1)
     },
@@ -661,7 +661,7 @@ export default {
               {
                 attrs: {
                   href:
-                    'https://pan.baidu.com/s/1huasEbKsGNH2Af68dvWiOg?pwd=3bp3',
+                    'https://sxmind.cn/',
                   target: '_blank'
                 },
                 style: {
@@ -669,20 +669,7 @@ export default {
                   marginRight: '12px'
                 }
               },
-              this.$t('edit.downBaidu')
-            ),
-            h(
-              'a',
-              {
-                attrs: {
-                  href: 'https://github.com/wanglin2/mind-map/releases',
-                  target: '_blank'
-                },
-                style: {
-                  color: '#409eff'
-                }
-              },
-              this.$t('edit.downGithub')
+              '详细了解：https://sxmind.cn/'
             )
           ])
         ]),
