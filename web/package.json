@@ -19,6 +19,7 @@
     "element-ui": "^2.15.1",
     "highlight.js": "^10.7.3",
     "katex": "^0.16.9",
+    "simple-mind-map": "^0.14.0-fix.3",
     "simple-mind-map-plugin-themes": "^1.0.0",
     "v-viewer": "^1.6.4",
     "vue": "^2.6.11",
