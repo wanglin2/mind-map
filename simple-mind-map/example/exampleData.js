@@ -8,9 +8,9 @@ const createFullData = () => {
         },
         "icon": ['priority_1'],
         "tag": ["标签1", "标签2"],
-        "hyperlink": "http://lxqnsys.com/",
-        "hyperlinkTitle": "理想青年实验室",
-        "note": "理想青年实验室\n一个有意思的角落",
+        "hyperlink": "https://sxmind.cn/",
+        "hyperlinkTitle": "思绪思维导图",
+        "note": "思绪思维导图\n一个强大的思维导图工具",
         // 自定义位置
         // "customLeft": 1318,
         // "customTop": 374.5
@@ -900,7 +900,7 @@ const data5 = {
 const richTextData = {
     "root": {
         "data": {
-            "text": "<a href='http://lxqnsys.com/' target='_blank'>理想去年实验室</a>",
+            "text": "<a href='https://sxmind.cn/' target='_blank'>思绪思维导图</a>",
             "richText": true
         },
         "children": []
