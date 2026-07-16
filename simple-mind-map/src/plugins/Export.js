@@ -390,10 +390,27 @@ class Export {
     if (!this.mindMap.doExportXMind) {
       throw new Error('请注册ExportXMind插件')
     }
-    const data = this.mindMap.getData()
+    // const data = this.mindMap.getData()
+    const data = await this.changeTagObjToString(this.mindMap.getData())
     const blob = await this.mindMap.doExportXMind.xmind(data, name)
     const res = await readBlob(blob)
     return res
+  }
+  // 把tag对象数组转换成字符串数组
+  async changeTagObjToString (treeObj) {
+    const tagArr = []
+    if (treeObj.data.tag) {
+      await treeObj.data.tag.forEach(item => {
+        tagArr.push(item.text)
+        treeObj.data.tag = tagArr
+      })
+    } else {
+      treeObj.data.tag = []
+    }
+    await treeObj.children.forEach(child => {
+      this.changeTagObjToString(child)
+    })
+    return treeObj
   }
 
   //  导出为svg
