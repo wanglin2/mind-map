@@ -1,86 +1,111 @@
-<h1 align="center">Simple mind map</h1>
+<h1 align="center">Mapa Mental</h1>
 
-[![npm-version](https://img.shields.io/npm/v/simple-mind-map)](https://www.npmjs.com/package/simple-mind-map)
-![npm download](https://img.shields.io/npm/dm/simple-mind-map)
-[![GitHub issues](https://img.shields.io/github/issues/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/issues)
-![license](https://img.shields.io/npm/l/express.svg)
-[![GitHub stars](https://img.shields.io/github/stars/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/wanglin2/mind-map)](https://github.com/wanglin2/mind-map/network/members)
+<p align="center">Plataforma web para crear mapas mentales, en español.</p>
 
-[English](./README_EN.md) | 中文
+<p align="center">
+  <a href="./README_EN.md">English</a> ·
+  <a href="./README_MORE_ZH.md">中文</a>
+</p>
 
-> 中文名：思绪思维导图。一个简单&强大的 Web 思维导图库和思维导图软件。
+---
 
-本项目包含两部分：开源的JavaScript库和闭源的客户端软件。
+## Descripción
 
-# 库、Web
+Aplicación web para crear, editar y exportar mapas mentales directamente en el navegador. Toda la interfaz está en **español**: barra de herramientas, menú contextual, paneles laterales, formas de nodo, temas, exportación y catálogos de iconos y stickers.
 
-> 即本仓库中的代码，目前已进入低维护状态。
+Está basada en el proyecto de código abierto [wanglin2/mind-map](https://github.com/wanglin2/mind-map) (*Simple Mind Map*), con la localización completa al español y varias correcciones de texto fijo que no estaban traducidas.
 
-- 一个 `js` 思维导图库，不依赖任何框架，可以用来快速完成 Web 思维导图产品的开发。
+## Características
 
->  开发文档：[https://wanglin2.github.io/mind-map-docs/](https://wanglin2.github.io/mind-map-docs/)
+- Edición visual de mapas mentales con múltiples estructuras: estructura lógica, mapa mental, organigrama, catálogo organizado, línea de tiempo y espina de pescado.
+- Estilos por nodo y estilo base: colores, fuentes, bordes, formas, degradados, imágenes de fondo.
+- Temas visuales predefinidos.
+- Nodos enriquecidos: iconos, stickers, imágenes, notas, etiquetas, hipervínculos, fórmulas (LaTeX) y marcos externos.
+- Esquema de texto, búsqueda y reemplazo, numeración de nodos, resúmenes y líneas asociativas.
+- Importación y exportación: SMM, JSON, PNG, SVG, PDF, Markdown, TXT y XMind.
+- Modo presentación, modo Zen, marca de agua y atajos de teclado.
+- Funciones de IA (opcionales) para generar y ampliar mapas.
+- Todo funciona en el navegador; los datos se guardan en el almacenamiento local.
 
-- 一个 Web 思维导图，基于思维导图库、`Vue2.x`、`ElementUI` 开发，支持操作电脑本地文件，可以当做一个在线版思维导图应用使用，也可以自部署和二次开发。
+## Requisitos
 
-> 在线地址：[https://web.sxmind.cn/](https://web.sxmind.cn/)
+- **Node.js** (LTS recomendado). Verifica con `node -v`.
+- Un navegador moderno (Chrome, Edge, Firefox).
 
-了解更多信息：[README](./README_MORE_ZH.md)。
+## Uso en desarrollo
 
-# 客户端、插件
+Desde la carpeta `web`:
 
-> 客户端和插件代码不开源，正在积极开发维护中。
+```bash
+cd web
+npm install
+npm run serve
+```
 
-产品官网：[https://sxmind.cn/](https://sxmind.cn/)
+El servidor de desarrollo usa el código fuente directamente y ya está en español. Abre la dirección local que indique la terminal (normalmente `http://localhost:8080`).
 
-## 思绪思维导图客户端
+## Compilar para producción (build)
 
-本地化存储，隐私优先，数据安全，软件无需联网即可使用！
+Cada vez que cambies el código fuente, hay que recompilar para actualizar la carpeta `dist`, que es lo que sirve la aplicación.
 
-- [x] 1.支持创建无限数量的文件、节点（自由节点）；支持创建使用模板；
-- [x] 2.提供丰富的设置：基础设置、自定义字体/快捷键/右键菜单/图标、图床配置、AI配置、webdav云同步配置等等，可玩性很高；
-- [x] 3.支持思维导图、逻辑结构图、目录组织图、组织结构图、时间轴、鱼骨图、表格等多种结构类型；
-- [x] 4.内置上百个丰富好看的主题，也支持自定义主题及AI生成主题；
-- [x] 5.节点支持添加文本、图片、链接、图标、备注、附件、标签、概要节点、关联线、外框、标记、待办、描述、编号、数学公式等丰富内容；
-- [x] 6.支持导入XMind、FreeMind、Markdown、Txt、Xlsx等格式文件；支持导出为PNG、XMind、SVG、PDF、Markdown、Txt、Xlsx、FreeMind、Mermaid、Html等格式；
-- [x] 7.丰富的样式设置：文字、边框、背景、形状、线条、内外边距、图片标签布局等等；
-- [x] 8.支持历史版本管理、演示模式、AI生成、手绘风格、大纲编辑、水印、滚动条、同级节点对齐、小地图、进入指定节点、彩虹线条、节点双向链接、搜索替换等等实用有趣的功能；
+En **PowerShell** (Windows), desde la carpeta `web`:
 
-支持Windows、Mac及Linux系统；支持中文简体、繁體中文、English、Tiếng Việt、Русский、日本語、한국어、Deutsch、Français、Português语言。
+```powershell
+$env:NODE_OPTIONS="--openssl-legacy-provider"
+npm install
+npm run build
+```
 
-下载地址：[Github](https://github.com/wanglin2/mind-map/releases)、[百度网盘](https://pan.baidu.com/s/1C8phEJ5pagAAa-o1tU42Uw?pwd=jqfb)、[夸克网盘](https://pan.quark.cn/s/2733982f1976)、[微软应用商店](https://apps.microsoft.com/detail/9p58vg94khcq?hl=zh-CN&gl=CN)
+En **CMD**:
 
-> 如果在macOS上安装后无法打开，报错**不受信任**或者**移到垃圾箱**，执行下面命令后再启动即可：
-> ``` shell
-> sudo xattr -d com.apple.quarantine /Applications/思绪思维导图.app
-> ```
+```bat
+set NODE_OPTIONS=--openssl-legacy-provider
+npm install
+npm run build
+```
 
-![](./assets/client/client1.png)
+> La variable `NODE_OPTIONS=--openssl-legacy-provider` es necesaria con versiones nuevas de Node (17+), porque el proyecto usa webpack 4. Sin ella el build falla con el error `ERR_OSSL_EVP_UNSUPPORTED`.
 
-![](./assets/client/client2.png)
+El comando regenera la carpeta `dist/` (en la raíz del proyecto) y actualiza el `index.html` de la raíz. Al terminar sin errores, abre ese `index.html` y verás la plataforma lista, en español.
 
-![](./assets/client/client3.png)
+## Estructura del proyecto
 
-![](./assets/client/client4.png)
+```
+mind-map-main/
+├── index.html          # Punto de entrada (carga /dist)
+├── dist/               # Aplicación compilada (lo que se sirve)
+├── assets/             # Imágenes y recursos estáticos
+├── web/                # Código fuente de la app web (Vue 2 + Element UI)
+│   └── src/
+│       ├── lang/       # Traducciones i18n (es_es.js, en_us.js, ...)
+│       ├── config/     # Configuración por idioma (es.js, en.js, ...)
+│       └── pages/      # Páginas y componentes de la interfaz
+└── simple-mind-map/    # Librería base del mapa mental
+```
 
-![](./assets/client/client5.png)
+### Notas sobre el idioma
 
-![](./assets/client/client6.png)
+- El idioma por defecto es **español** (`web/src/i18n.js` → `locale: 'es'`).
+- Los textos de interfaz están en `web/src/lang/es_es.js`.
+- Las listas de configuración (fuentes, formas, formatos de exportación, atajos, estructuras) están en `web/src/config/es.js`.
+- Los nombres de categorías de iconos/stickers están en `web/src/config/icon.js` e `image.js`; las categorías integradas de la librería se traducen en `web/src/pages/Edit/components/NodeIconSidebar.vue`.
 
-## Obsidian插件
+Si agregas o cambias un texto, edítalo en esos archivos y vuelve a compilar.
 
-下载地址：[Github](https://github.com/wanglin2/obsidian-simplemindmap/releases)
+## Publicar en GitHub Pages
 
-![](./assets/ob/ob1.png)
+La aplicación es estática, así que se puede alojar en GitHub Pages:
 
-![](./assets/ob/ob2.png)
+1. Sube el proyecto a un repositorio de GitHub (la carpeta `dist` **sí** debe subirse; `node_modules` está ignorado en `.gitignore`).
+2. En el repositorio: **Settings → Pages → Deploy from a branch**, rama `main`, carpeta `/ (root)`.
+3. Espera 1–2 minutos. La URL será `https://TU-USUARIO.github.io/NOMBRE-DEL-REPO/`.
 
-![](./assets/ob/ob3.png)
+> GitHub Pages sirve lo que hay en `dist`, no recompila. Después de cada cambio: `npm run build` → *commit* → *push*.
 
-![](./assets/ob/ob4.png)
+## Créditos
 
-![](./assets/ob/ob5.png)
+- Proyecto original: [wanglin2/mind-map](https://github.com/wanglin2/mind-map) — *Simple Mind Map*.
+- Documentación de la librería: https://wanglin2.github.io/mind-map-docs/
+- Licencia: MIT (según el proyecto original).
 
-## UTools插件
-
-已上架[uTools](https://www.u.tools/)插件应用市场，可直接在`uTools`插件应用市场中搜索`思绪`进行安装，也可以直接访问该地址：[主页](https://www.u-tools.cn/plugins/detail/%E6%80%9D%E7%BB%AA%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/)，点击右侧的【启动】按钮进行安装。
+Localización al español y correcciones de interfaz sobre la base original.

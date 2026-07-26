@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Diagnóstico Mapa Mental</title>
+<style>
+body { font-family: monospace; background: #1e1e1e; color: #ddd; padding: 20px; }
+h2 { color: #4fc3f7; }
+.ok { color: #81c784; }
+.err { color: #ef5350; }
+.warn { color: #ffb74d; }
+#log { white-space: pre-wrap; font-size: 13px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<h2>🔍 Diagnóstico del Mapa Mental</h2>
+<div id="log"></div>
+<script>
+const log = document.getElementById('log');
+function L(msg, cls) {
+  const d = document.createElement('div');
+  d.className = cls || '';
+  d.textContent = msg;
+  log.appendChild(d);
+}
+
+// Capture all global errors
+window.onerror = function(msg, src, line, col, err) {
+  L('❌ ERROR: ' + msg, 'err');
+  L('   Fuente: ' + src, 'err');
+  L('   Línea ' + line + ', Col ' + col, 'err');
+  if (err && err.stack) L('   Stack: ' + err.stack.substring(0, 500), 'err');
+  return false;
+};
+
+window.addEventListener('unhandledrejection', function(e) {
+  L('❌ PROMISE RECHAZADA: ' + (e.reason ? e.reason.message || e.reason : 'desconocido'), 'err');
+  if (e.reason && e.reason.stack) L('   Stack: ' + e.reason.stack.substring(0, 300), 'err');
+});
+
+L('▶ Configurando entorno...', 'ok');
+
+// Set up webpackJsonp intercept BEFORE loading chunks
+window.externalPublicPath = './dist/';
+window.takeOverApp = false;
+
+// Intercept webpackJsonp pushes to track loaded chunks
+window.__originalJsonp = [];
+Object.defineProperty(window, 'webpackJsonp', {
+  configurable: true,
+  get: function() { return window.__originalJsonp; },
+  set: function(v) { window.__originalJsonp = v; }
+});
+</script>
+
+<!-- Load CSS -->
+<link href="dist/css/chunk-vendors.css?720fe4d863ea0fdcc0fb" rel="stylesheet">
+<link href="dist/css/chunk-ef5c9f42.css?720fe4d863ea0fdcc0fb" rel="stylesheet">
+<link href="dist/css/app.css?720fe4d863ea0fdcc0fb" rel="stylesheet">
+
+<script>L('✅ CSS cargado', 'ok');</script>
+
+<!-- Load JS chunks one by one with error reporting -->
+<script>L('⏳ Cargando chunk-vendors.js...');</script>
+<script src="dist/js/chunk-vendors.js?720fe4d863ea0fdcc0fb"></script>
+<script>
+try {
+  L('✅ chunk-vendors.js cargado. Módulos en webpackJsonp: ' + window.__originalJsonp.length, 'ok');
+} catch(e) { L('❌ Error tras chunk-vendors: ' + e.message, 'err'); }
+</script>
+
+<script>L('⏳ Cargando chunk-3222d6ee.js...');</script>
+<script src="dist/js/chunk-3222d6ee.js?720fe4d863ea0fdcc0fb"></script>
+<script>L('✅ chunk-3222d6ee.js cargado', 'ok');</script>
+
+<script>L('⏳ Cargando chunk-ef5c9f42.js (3.3MB - puede tardar)...');</script>
+<script src="dist/js/chunk-ef5c9f42.js?720fe4d863ea0fdcc0fb"></script>
+<script>
+try {
+  L('✅ chunk-ef5c9f42.js cargado. Total en webpackJsonp: ' + window.__originalJsonp.length, 'ok');
+  if (window.__originalJsonp.length >= 1) {
+    var last = window.__originalJsonp[window.__originalJsonp.length - 1];
+    L('   Último chunk ID: ' + JSON.stringify(last[0]), 'ok');
+    var mods = last[1];
+    var keys = Object.keys(mods);
+    L('   Módulos en último chunk: ' + keys.length + ' (primeros: ' + keys.slice(0,5).join(', ') + ')', 'ok');
+  }
+} catch(e) { L('❌ Error tras chunk-ef5c9f42: ' + e.message, 'err'); }
+</script>
+
+<script>L('⏳ Cargando app.js...');</script>
+<script src="dist/js/app.js?720fe4d863ea0fdcc0fb"></script>
+<script>
+try {
+  L('✅ app.js cargado', 'ok');
+  L('   window.initApp: ' + (typeof window.initApp), 'ok');
+  L('   window.$bus: ' + (typeof window.$bus), 'ok');
+  
+  // Check if #app got mounted
+  setTimeout(function() {
+    var app = document.getElementById('app-check');
+    L('--- Verificación post-montaje (500ms después) ---');
+    L('   Nodos en document body: ' + document.body.children.length);
+    // Check Vue instance
+    var appEl = document.querySelector('#app');
+    if (appEl) {
+      L('   #app existe. innerHTML length: ' + appEl.innerHTML.length);
+      if (appEl.innerHTML.length > 0) {
+        L('   ✅ Vue montado correctamente (tiene contenido)', 'ok');
+      } else {
+        L('   ❌ #app está vacío - Vue NO montó', 'err');
+      }
+      L('   __vue__: ' + (typeof appEl.__vue__));
+    } else {
+      L('   ❌ No se encontró #app', 'err');
+    }
+  }, 1500);
+} catch(e) { L('❌ Error tras app.js: ' + e.message, 'err'); }
+</script>
+
+<div id="app-check"></div>
+</body>
+</html>
