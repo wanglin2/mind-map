@@ -1,0 +1,51 @@
+{
+  "name": "open-source-mind-map",
+  "version": "1.0.0",
+  "description": "开源跨平台思维导图客户端 - 基于 simple-mind-map + Electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "build:win-unpacked": "electron-builder --win --dir"
+  },
+  "keywords": ["mindmap", "electron", "opensource", "simple-mind-map"],
+  "author": "Open Source Community",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^44.4.1",
+    "electron-builder": "^26.0.12"
+  },
+  "dependencies": {
+    "element-ui": "^2.15.14",
+    "simple-mind-map": "^0.14.0-fix.3",
+    "vue": "^2.6.14"
+  },
+  "build": {
+    "appId": "com.opensource.mindmap",
+    "productName": "开源思维导图",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "index.html",
+      "renderer.js",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "icon.icns"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "icon.png"
+    }
+  }
+}
