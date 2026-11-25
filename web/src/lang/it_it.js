@@ -1,0 +1,548 @@
+export default {
+  baseStyle: {
+    title: 'Stile di base',
+    background: 'Sfondo',
+    color: 'Colore',
+    image: 'Immagine',
+    imageRepeat: 'Ripeti immagine',
+    imagePosition: 'Posizione immagine',
+    imageSize: 'Dimensione immagine',
+    line: 'Linea',
+    width: 'Larghezza',
+    style: 'Stile',
+    lineRadius: 'Raggio',
+    lineOfOutline: 'Linea di contorno',
+    showArrow: 'Mostra freccia',
+    nodePadding: 'Spaziatura interna nodo (Padding)',
+    nodeMargin: 'Margine nodo',
+    horizontal: 'Orizzontale',
+    vertical: 'Verticale',
+    maximumWidth: 'Larghezza massima',
+    maximumHeight: 'Altezza massima',
+    icon: 'Icona',
+    size: 'Dimensione',
+    level2Node: 'Nodo di livello 2',
+    belowLevel2Node: 'Sotto il livello 2',
+    nodeBorderType: 'Stile bordo nodo',
+    nodeUseLineStyle: 'Usa solo stile bordo inferiore',
+    otherConfig: 'Altre configurazioni',
+    associativeLine: 'Linea associativa',
+    associativeLineWidth: 'Larghezza',
+    associativeLineColor: 'Colore',
+    associativeLineActiveWidth: 'Larghezza attiva',
+    associativeLineActiveColor: 'Colore attivo',
+    rootStyle: 'Nodo radice',
+    associativeLineText: 'Testo linea associativa',
+    fontFamily: 'Famiglia di caratteri',
+    fontSize: 'Dimensione carattere',
+    rootLineStartPos: 'Posizione inizio linea radice',
+    center: 'Centro',
+    edge: 'Bordo',
+    rainbowLines: 'Linee arcobaleno',
+    notUseRainbowLines: 'Non usare linee arcobaleno',
+    outerFramePadding: 'Spaziatura cornice esterna',
+    associativeLineStyle: 'Stile linea associativa',
+    builtInBackgroundImage: 'Immagine di sfondo integrata'
+  },
+  setting: {
+    title: 'Impostazioni',
+    openPerformance: 'Attiva modalità prestazioni',
+    enableFreeDrag: 'Attiva trascinamento libero nodi (Beta)',
+    isEnableNodeRichText: 'Attiva modifica testo formattato (Rich Text)',
+    mousewheelAction: 'Comportamento rotella mouse',
+    zoomView: 'Zoom vista',
+    moveViewUpDown: 'Sposta vista su/giù',
+    mousewheelZoomActionReverse: 'Zoom rotella mouse',
+    mousewheelZoomActionReverse1: 'Scorri avanti per rimpicciolire, indietro per ingrandire',
+    mousewheelZoomActionReverse2: 'Scorri avanti per ingrandire, indietro per rimpicciolire',
+    createNewNodeBehavior: 'Comportamento creazione nuovo nodo',
+    default: 'Attiva nuovo nodo e modifica',
+    notActive: 'Non attivare nuovo nodo',
+    activeOnly: 'Attiva solo nuovo nodo senza modificare',
+    openRealtimeRenderOnNodeTextEdit:
+      'Attiva rendering in tempo reale durante la modifica del testo',
+    isShowScrollbar: 'Mostra barra di scorrimento',
+    isUseHandDrawnLikeStyle: 'Usa stile tipo disegno a mano',
+    isUseMomentum: 'Attiva l\'effetto slancio nel trascinamento',
+    openBlankMode: 'Attiva modalità presentazione vuota',
+    watermark: 'Filigrana',
+    showWatermark: 'Mostra filigrana',
+    onlyExport: 'Solo esportazione',
+    watermarkDefaultText: 'Testo filigrana',
+    watermarkText: 'Testo filigrana',
+    watermarkTextColor: 'Colore testo',
+    watermarkLineSpacing: 'Interlinea',
+    watermarkTextSpacing: 'Spaziatura testo',
+    watermarkAngle: 'Angolo',
+    watermarkTextOpacity: 'Opacità testo',
+    watermarkTextFontSize: 'Dimensione carattere',
+    belowNode: 'Mostra sotto i nodi',
+    alwaysShowExpandBtn: 'Mostra sempre pulsante espandi',
+    enableAutoEnterTextEditWhenKeydown: 'Modifica testo automatica alla pressione di un tasto',
+    confirm: 'Conferma',
+    cancel: 'Annulla',
+    changeRichTextTip:
+      'Questa operazione cancellerà la cronologia delle modifiche e modificherà i dati della mappa mentale. Continuare?',
+    changeRichTextTip2: 'Passare alla modalità testo formattato (Rich Text)?',
+    changeRichTextTip3: 'Passare alla modalità testo semplice?',
+    enableDragImport:
+      'Consenti il trascinamento diretto dei file sulla pagina per l\'importazione',
+    imgTextMargin: 'Margine tra immagine nodo e testo',
+    textContentMargin: 'Margine dei contenuti del nodo',
+    enableInheritAncestorLineStyle:
+      'Lo stile di collegamento eredita lo stile dei nodi antenati',
+    enableAi: 'Attiva funzioni IA'
+  },
+  color: {
+    moreColor: 'Più colori'
+  },
+  contextmenu: {
+    insertSiblingNode: 'Inserisci nodo dello stesso livello',
+    insertChildNode: 'Inserisci nodo figlio',
+    insertParentNode: 'Inserisci nodo genitore',
+    insertSummary: 'Inserisci sommario',
+    moveUpNode: 'Sposta nodo su',
+    moveDownNode: 'Sposta nodo giù',
+    deleteNode: 'Elimina nodo',
+    deleteCurrentNode: 'Elimina solo nodo corrente',
+    copyNode: 'Copia nodo',
+    cutNode: 'Taglia nodo',
+    pasteNode: 'Incolla nodo',
+    backCenter: 'Torna al nodo radice',
+    expandAll: 'Espandi tutto',
+    unExpandAll: 'Comprimi tutto',
+    expandTo: 'Espandi fino a',
+    arrangeLayout: 'Disponi layout',
+    level1: 'Livello 1',
+    level2: 'Livello 2',
+    level3: 'Livello 3',
+    level4: 'Livello 4',
+    level5: 'Livello 5',
+    level6: 'Livello 6',
+    zenMode: 'Modalità Zen',
+    fitCanvas: 'Adatta alla tela',
+    removeImage: 'Rimuovi immagine',
+    removeHyperlink: 'Rimuovi collegamento',
+    removeNote: 'Rimuovi nota',
+    removeCustomStyles: 'Rimuovi stili personalizzati',
+    removeAllNodeCustomStyles: 'Rimuovi stili personalizzati da tutti i nodi',
+    exportNodeToPng: 'Esporta nodo in PNG',
+    copyToClipboard: 'Copia negli appunti',
+    copyToSmm: 'SMM',
+    copyToJson: 'JSON',
+    copyToMarkdown: 'Markdown',
+    copyToTxt: 'TXT',
+    copyToPng: 'PNG',
+    copySuccess: 'Copia riuscita',
+    copyFail: 'Copia fallita',
+    number: 'Numera nodi figli',
+    expandNodeChild: 'Espandi tutti i sotto-nodi',
+    unExpandNodeChild: 'Comprimi tutti i sotto-nodi',
+    addToDo: 'Aggiungi promemoria (To-Do)',
+    removeToDo: 'Rimuovi promemoria (To-Do)',
+    aiCreate: 'Continuazione con IA',
+    modifyNodeLink: 'Modifica collegamento nodo',
+    linkToNode: 'Collega a un nodo',
+    removeNodeLink: 'Rimuovi collegamento nodo'
+  },
+  count: {
+    words: 'Parole',
+    nodes: 'Nodi'
+  },
+  dialog: {
+    cancel: 'Annulla',
+    confirm: 'Conferma'
+  },
+  export: {
+    title: 'Esporta',
+    filename: 'Nome del file',
+    include: 'Includi configurazioni (tema e struttura)',
+    dedicatedFile: 'File dedicato',
+    jsonFile: 'File JSON',
+    imageFile: 'File Immagine',
+    svgFile: 'File SVG',
+    pdfFile: 'File PDF',
+    markdownFile: 'File Markdown',
+    isTransparent: 'Sfondo trasparente',
+    transformingDomToImages: 'Conversione nodi in corso: ',
+    notifyTitle: 'Informazione',
+    notifyMessage:
+      'Se il download non si avvia, controlla se è stato bloccato dal browser',
+    paddingX: 'Spaziatura X',
+    paddingY: 'Spaziatura Y',
+    useMultiPageExport: 'Esporta su più pagine',
+    defaultFileName: 'Mappa mentale',
+    addFooterTextPlaceholder: 'Ad esempio: Da simple-mind-map',
+    addFooterText: 'Aggiungi testo a piè di pagina',
+    desc: 'Descrizione',
+    options: 'Opzioni',
+    isFitBg:
+      'Mostra l\'immagine di sfondo completa (valido se è presente uno sfondo)',
+    format: 'Formato',
+    confirm: 'Esporta'
+  },
+  fullscreen: {
+    fullscreenShow: 'Schermo intero (Visualizzazione)',
+    fullscreenEdit: 'Schermo intero (Modifica)'
+  },
+  demonstrate: {
+    demonstrate: 'Entra in modalità presentazione'
+  },
+  import: {
+    title: 'Importa',
+    selectFile: 'Seleziona file',
+    support: 'Supporta',
+    file: 'file',
+    pleaseSelect: 'Seleziona',
+    maxFileNum: 'È possibile selezionare al massimo un file',
+    notSelectTip: 'Seleziona il file da importare',
+    fileContentError: 'Il contenuto del file non è corretto',
+    importSuccess: 'Importazione riuscita',
+    fileParsingFailed: 'Analisi del file fallita',
+    xmindCanvasSelectDialogTitle: 'Seleziona la tela da importare',
+    mdImportDialogTitle: 'Incolla il contenuto Markdown da importare',
+    mdPlaceholder: 'Inserisci il contenuto in formato Markdown',
+    mdEmptyTip: 'Il contenuto non può essere vuoto'
+  },
+  navigatorToolbar: {
+    openMiniMap: 'Apri minimappa',
+    closeMiniMap: 'Chiudi minimappa',
+    readonly: 'Cambia in Sola Lettura',
+    edit: 'Cambia in Modifica',
+    backToRoot: 'Torna al nodo radice',
+    changeSourceCodeEdit: 'Passa alla modifica del codice sorgente',
+    shortcutKeys: 'Scorciatoie da tastiera',
+    ai: 'Finestra IA',
+    downloadClient: 'Scarica client',
+    site: 'Sito ufficiale',
+    current: 'Corrente:',
+    downloadDesc: 'Puoi scaricarlo al seguente indirizzo:'
+  },
+  nodeHyperlink: {
+    title: 'Collegamento',
+    link: 'URL (Href)',
+    name: 'Nome'
+  },
+  nodeIcon: {
+    title: 'Icona'
+  },
+  nodeImage: {
+    title: 'Immagine',
+    imgTitle: 'Titolo'
+  },
+  nodeNote: {
+    title: 'Nota'
+  },
+  nodeTag: {
+    title: 'Etichetta (Tag)',
+    addTip: 'Premi Invio per aggiungere'
+  },
+  outline: {
+    title: 'Struttura (Outline)',
+    nodeDefaultText: 'Nodo ramo',
+    print: 'Stampa',
+    fullscreen: 'Schermo intero'
+  },
+  scale: {
+    zoomIn: 'Ingrandisci',
+    zoomOut: 'Rimpicciolisci'
+  },
+  shortcutKey: {
+    title: 'Scorciatoie da tastiera'
+  },
+  strusture: {
+    title: 'Struttura'
+  },
+  style: {
+    title: 'Stile nodo',
+    normal: 'Normale',
+    active: 'Attivo',
+    text: 'Testo',
+    fontFamily: 'Famiglia di caratteri',
+    fontSize: 'Dimensione carattere',
+    color: 'Colore',
+    addFontWeight: 'Aggiungi spessore carattere',
+    italic: 'Corsivo',
+    textDecoration: 'Decorazione testo',
+    underline: 'Sottolineato',
+    none: 'Nessuno',
+    lineThrough: 'Barrato',
+    overline: 'Sopralineato',
+    border: 'Bordo',
+    style: 'Stile',
+    width: 'Larghezza',
+    borderRadius: 'Raggio bordo',
+    background: 'Sfondo',
+    shape: 'Forma',
+    line: 'Linea',
+    nodePadding: 'Spaziatura interna nodo (Padding)',
+    horizontal: 'Orizzontale',
+    vertical: 'Verticale',
+    gradientStyle: 'Sfumatura',
+    startColor: 'Inizio',
+    endColor: 'Fine',
+    arrowDir: 'Direzione freccia',
+    arrowDirStart: 'Inizio',
+    arrowDirEnd: 'Fine',
+    direction: 'Direzione',
+    selectNodeTip: 'Seleziona un nodo',
+    openLineFlow: 'Attiva flusso linea',
+    lineFlowDuration: 'Durata flusso linea',
+    forward: 'Avanti',
+    reverse: 'Inverso',
+    img: 'Immagine',
+    placement: 'Posizionamento',
+    top: 'In alto',
+    bottom: 'In basso',
+    left: 'A sinistra',
+    right: 'A destra',
+    tag: 'Etichetta (Tag)'
+  },
+  theme: {
+    title: 'Tema',
+    classics: 'Classici',
+    dark: 'Scuro',
+    simple: 'Semplice',
+    coverTip:
+      'Hai personalizzato lo stile di base, vuoi sovrascriverlo?',
+    tip: 'Suggerimento',
+    cover: 'Sovrascrivi',
+    reserve: 'Mantieni'
+  },
+  toolbar: {
+    undo: 'Annulla',
+    redo: 'Ripristina',
+    insertSiblingNode: 'Nodo dello stesso livello',
+    insertChildNode: 'Nodo figlio',
+    deleteNode: 'Elimina nodo',
+    image: 'Immagine',
+    icon: 'Icona',
+    link: 'Collegamento',
+    note: 'Nota',
+    tag: 'Etichetta (Tag)',
+    summary: 'Sommario',
+    displayOutline: 'Mostra struttura',
+    baseStyle: 'Stile di base',
+    theme: 'Tema',
+    strusture: 'Struttura',
+    newFile: 'Nuovo file',
+    openFile: 'Apri file',
+    saveAs: 'Salva con nome',
+    import: 'Importa',
+    export: 'Esporta',
+    shortcutKey: 'Scorciatoie da tastiera',
+    associativeLine: 'Linea associativa',
+    painter: 'Copia formato',
+    formula: 'Formula',
+    attachment: 'Allegato',
+    outerFrame: 'Cornice esterna',
+    more: 'Altro',
+    selectFileTip: 'Seleziona un file',
+    notSupportTip:
+      'Il tuo browser non supporta questa funzionalità o la pagina corrente non utilizza il protocollo HTTPS',
+    tip: 'Suggerimento',
+    editingLocalFileTipFront: 'In modalità modifica del file locale 【',
+    editingLocalFileTipEnd: '】',
+    fileContentError: 'Errore nel contenuto del file',
+    fileOpenFailed: 'Apertura del file fallita',
+    defaultFileName: 'Mappa mentale',
+    creatingTip: 'Creazione file in corso',
+    directory: 'Directory',
+    newFileTip:
+      'Esporta il file attualmente in modifica prima di crearne uno nuovo per evitare perdite di dati',
+    openFileTip:
+      'Esporta il file attualmente in modifica prima di aprirne un altro per evitare perdite di dati',
+    ai: 'IA'
+  },
+  edit: {
+    newFeatureNoticeTitle: 'Promemoria nuova funzionalità',
+    newFeatureNoticeMessage:
+      'Questo aggiornamento supporta la modifica del testo formattato (Rich Text) nei nodi. Tuttavia, sono presenti alcune limitazioni: il tempo richiesto per l\'esportazione dell\'immagine aumenta in proporzione al numero di nodi. Se l\'esportazione frequente è una tua priorità, puoi disattivare questa opzione andando su 【Stile di base】 - 【Altre configurazioni】 - 【Attiva modifica testo formattato (Rich Text)】.',
+    root: 'Nodo radice',
+    splitByWrap: 'Dividere automaticamente i nodi in base alle interruzioni di riga?',
+    tip: 'Suggerimento',
+    yes: 'Sì',
+    no: 'No',
+    exportError: 'Esportazione fallita',
+    dragTip: 'Rilascia qui per importare il file',
+    deleteNodeImgTip: 'Sei sicuro di voler eliminare l\'immagine del nodo?',
+    autoOpenNodeRichTextTip:
+      'Rilevato contenuto in testo formattato durante l\'importazione, modalità Rich Text attivata automaticamente',
+    localStorageExceededTip:
+      'La dimensione della mappa mentale creata ha superato il limite massimo di archiviazione consentito dal browser. Esporta subito il file, altrimenti i dati andranno perduti! Si consiglia di scaricare il client desktop, che non prevede limiti di dimensioni.',
+    withBg: 'Con immagine di sfondo',
+    tryTipTitle: 'Avviso versione di prova',
+    tryTipDesc:
+      'Questa funzionalità è in versione di prova nella versione web. Scarica il client desktop per utilizzarla:',
+    downBaidu: 'Vai su Baidu Netdisk per scaricare',
+    downGithub: 'Scarica da GitHub'
+  },
+  mouseAction: {
+    tip1:
+      'Corrente: Click sinistro per trascinare la tela, click destro per selezionare i nodi con il riquadro',
+    tip2:
+      'Corrente: Click sinistro per selezionare i nodi con il riquadro, click destro per trascinare la tela'
+  },
+  search: {
+    searchPlaceholder: 'Inserisci il testo e premi Invio per cercare',
+    replacePlaceholder: 'Inserisci il testo di sostituzione',
+    replace: 'Sostituisci',
+    replaceAll: 'Sostituisci tutto',
+    cancel: 'Annulla',
+    noResult: 'Nessun risultato'
+  },
+  nodeIconSidebar: {
+    title: 'Icone/Adesivi',
+    icon: 'Icone',
+    sticker: 'Adesivi'
+  },
+  formulaSidebar: {
+    title: 'Formula',
+    placeholder: 'Inserisci la sintassi LaTeX',
+    confirm: 'Conferma',
+    common: 'Formule comuni',
+    tip: 'L\'inserimento delle formule non è supportato nella modalità testo semplice'
+  },
+  richTextToolbar: {
+    bold: 'Grassetto',
+    italic: 'Corsivo',
+    underline: 'Sottolineato',
+    strike: 'Barrato',
+    fontFamily: 'Famiglia di caratteri',
+    fontSize: 'Dimensione carattere',
+    color: 'Colore testo',
+    backgroundColor: 'Colore di sfondo',
+    removeFormat: 'Cancella formattazione',
+    textAlign: 'Allineamento testo'
+  },
+  other: {
+    loading: 'Caricamento in corso, attendere...'
+  },
+  sourceCodeEdit: {
+    sourceCodeTip:
+      'Si sconsiglia di modificare lo stile in modalità Rich Text, poiché richiede la modifica simultanea dei dati e della struttura HTML.',
+    format: 'Formatta',
+    copy: 'Copia',
+    confirm: 'Completa',
+    close: 'Chiudi',
+    formatErrorTip: 'Il formato JSON non è corretto. Controlla e riprova',
+    copyTip: 'Copiato negli appunti',
+    formatTip: 'Formattazione completata'
+  },
+  attachment: {
+    deleteAttachment: 'Elimina allegato',
+    tip: 'La funzione allegati è disponibile solo sulla versione client desktop'
+  },
+  annotation: {
+    mark: 'Contrassegna',
+    show: 'Mostra contrassegno',
+    type: 'Tipo',
+    color: 'Colore',
+    lineWidth: 'Spessore linea',
+    padding: 'Spaziatura interna (Padding)',
+    animate: 'Animazione'
+  },
+  nodeOuterFrame: {
+    outerFrameSetting: 'Impostazioni cornice esterna',
+    deleteOuterFrame: 'Elimina cornice esterna',
+    boxStyle: 'Stile riquadro',
+    boxColor: 'Colore riquadro',
+    fillColor: 'Colore di riempimento',
+    nodeOuterFrameStyle: 'Stile della cornice',
+    outerFrameText: 'Testo della cornice',
+    deleteOuterFrameText: 'Elimina testo della cornice',
+    fontFamily: 'Famiglia di caratteri',
+    color: 'Colore',
+    fontSize: 'Dimensione carattere',
+    radius: 'Raggio',
+    fontBold: 'Grassetto',
+    italic: 'Corsivo',
+    lineHeight: 'Altezza riga',
+    textFillRadius: 'Raggio riempimento testo',
+    textFill: 'Colore riempimento testo',
+    textAlign: 'Allineamento testo',
+    left: 'A sinistra',
+    center: 'Al centro',
+    right: 'A destra',
+    paddingX: 'Spaziatura X',
+    paddingY: 'Spaziatura Y'
+  },
+  nodeTagStyle: {
+    placeholder: 'Inserisci il contenuto dell\'etichetta',
+    delete: 'Elimina questa etichetta'
+  },
+  ai: {
+    chatTitle: 'Finestra IA',
+    clearRecords: 'Cancella cronologia',
+    connectFailedTitle: 'Avviso di mancata connessione al client',
+    connectFailedTip: 'Connessione al client fallita, controlla quanto segue:',
+    connectFailedCheckTip1:
+      '1. Hai installato il client desktop di mappe mentali? In caso contrario, clicca qui per installarlo:',
+    connectFailedCheckTip2:
+      '2. Se il client è installato, verifica che sia effettivamente aperto.',
+    connectFailedCheckTip3:
+      'Se è già installato e avviato, prova a chiuderlo e a riavviarlo.',
+    connectFailedCheckTip4:
+      'Dopo aver completato i passaggi precedenti, puoi cliccare su:',
+    baiduNetdisk: 'Baidu Netdisk',
+    createMindMapTitle: 'Generazione mappe mentali in un click',
+    createTip:
+      'Inserisci un argomento e l\'IA genererà una mappa mentale dedicata, ad esempio: "Piano di viaggio per il fine settimana a Roma".',
+    importantTip:
+      'Nota importante: La generazione in un click sovrascriverà i dati esistenti. Si consiglia di esportare prima i dati correnti.',
+    wantModifyAiConfigTip:
+      'Vuoi modificare la configurazione dell\'IA? Clicca su:',
+    modifyAIConfiguration: 'Modifica configurazione IA',
+    chatInputPlaceholder: 'Inserisci qui la richiesta per l\'IA...'
+        chatInputPlaceholder: 'Invio per inviare, Shift+Invio per andare a capo.',
+    send: 'Invia',
+    stopGenerating: 'Interrompi generazione',
+    generationFailed: 'Generazione fallita',
+    aiGenerationSuccess: 'Generazione IA completata',
+    stoppedGenerating: 'Generazione interrotta',
+    AIConfiguration: 'Configurazione IA',
+    VolcanoArkLargeModelConfiguration: 'Configurazione Modello Large Volcano Ark:',
+    configTip:
+      'Al momento è supportato solo il modello Volcano Ark ed è necessario ottenere la chiave autonomamente. Per i passaggi dettagliati della procedura, consulta:',
+    course: 'Guida / Corso',
+    inferenceAccessPoint: 'Punto di accesso inferenza (Access Point)',
+    mindMappingClientConfiguration: 'Configurazione client mappe mentali:',
+    port: 'Porta',
+    cancel: 'Annulla',
+    confirm: 'Conferma',
+    close: 'Chiudi',
+    configSaveSuccessTip: 'Configurazione salvata con successo',
+    apiValidateTip: 'Inserisci l\'endpoint dell\'interfaccia',
+    keyValidateTip: 'Inserisci la chiave API Key',
+    modelValidateTip: 'Inserisci il punto di accesso dell\'inferenza',
+    portValidateTip: 'Inserisci la porta',
+    methodValidateTip: 'Seleziona il metodo di richiesta',
+    noInputTip: 'Inserisci il contenuto',
+    connectSuccessful: 'Connessione riuscita',
+    connectFailed: 'Connessione fallita',
+    connectionDetection: 'Rilevamento connessione',
+    configurationMissing: 'Configurazione mancante',
+    aiCreateMsgPrefix: 'Aiutami a scrivere un testo per 【',
+    aiCreateMsgPostfix:
+      '】. Deve essere restituito in formato Markdown e può utilizzare solo due tipi di sintassi: titoli Markdown ed elenchi puntati. Può supportare più livelli di nidificazione. Restituisci solo il contenuto.',
+    aiCreatePartMsgPrefix: 'Ho un tema per 【',
+    aiCreatePartMsgCenter:
+      '】. Puoi aiutarmi a continuare a scrivere una parte dei contenuti della mappa mentale 【',
+    aiCreatePartMsgPostfix: '】 come contenuto subordinato del nodo',
+    aiCreatePartMsgHelp:
+      '. Deve essere restituito in formato Markdown e può utilizzare solo due tipi di sintassi: titoli Markdown ed elenchi puntati. Può supportare la nidificazione a più livelli. Restituisci solo il contenuto.',
+    aiCreatePart: 'Continuazione con IA'
+  },
+  note: {
+    title: 'Nota'
+  },
+  nodeLink: {
+    linkToNode: 'Collega a un nodo',
+    addReturn: 'Aggiungere un collegamento inverso (backlink)?',
+    tip1: 'Seleziona il nodo da collegare',
+    tip2: 'Impossibile collegarsi a se stessi',
+    tip3: 'Collegamento riuscito',
+    tip4: 'Eliminazione riuscita',
+    tip5: 'Il nodo collegato non esiste. Eliminare il collegamento?'
+  }
+}
