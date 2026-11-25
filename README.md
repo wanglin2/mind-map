@@ -1,4 +1,4 @@
-<h1 align="center">Simple mind map</h1>
+<h1 align="center">Simple mind map | 思绪思维导图</h1>
 
 [![npm-version](https://img.shields.io/npm/v/simple-mind-map)](https://www.npmjs.com/package/simple-mind-map)
 ![npm download](https://img.shields.io/npm/dm/simple-mind-map)
@@ -9,13 +9,13 @@
 
 [English](./README_EN.md) | 中文
 
-> 中文名：思绪思维导图。一个简单&强大的 Web 思维导图库和思维导图软件。
+> 一个强大的 Web 思维导图库和思维导图软件。
 
 本项目包含两部分：开源的JavaScript库和闭源的客户端软件。
 
 # 库、Web
 
-> 即本仓库中的代码，目前已进入低维护状态。
+> 即本仓库中的代码，目前已停止维护。
 
 - 一个 `js` 思维导图库，不依赖任何框架，可以用来快速完成 Web 思维导图产品的开发。
 
@@ -48,7 +48,7 @@
 
 支持Windows、Mac及Linux系统；支持中文简体、繁體中文、English、Tiếng Việt、Русский、日本語、한국어、Deutsch、Français、Português语言。
 
-下载地址：[Github](https://github.com/wanglin2/mind-map/releases)、[百度网盘](https://pan.baidu.com/s/1C8phEJ5pagAAa-o1tU42Uw?pwd=jqfb)、[夸克网盘](https://pan.quark.cn/s/2733982f1976)、[微软应用商店](https://apps.microsoft.com/detail/9p58vg94khcq?hl=zh-CN&gl=CN)
+下载地址：[Github](https://github.com/wanglin2/mind-map/releases)、[百度网盘](https://pan.baidu.com/s/1ofqTlLmRZNREBC5Tl1gC_w?pwd=qba2)、[夸克网盘](https://pan.quark.cn/s/70aaaa0e95a1)、[微软应用商店](https://apps.microsoft.com/detail/9p58vg94khcq?hl=zh-CN&gl=CN)
 
 > 如果在macOS上安装后无法打开，报错**不受信任**或者**移到垃圾箱**，执行下面命令后再启动即可：
 > ``` shell
@@ -84,3 +84,10 @@
 ## UTools插件
 
 已上架[uTools](https://www.u.tools/)插件应用市场，可直接在`uTools`插件应用市场中搜索`思绪`进行安装，也可以直接访问该地址：[主页](https://www.u-tools.cn/plugins/detail/%E6%80%9D%E7%BB%AA%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/)，点击右侧的【启动】按钮进行安装。
+
+## 技能
+
+一个可以让AI生成可交互可编辑思维导图HTML的技能。
+
+地址：[https://github.com/wanglin2/simple-mind-map-creator](https://github.com/wanglin2/simple-mind-map-creator)
+
