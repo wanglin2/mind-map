@@ -270,11 +270,28 @@ export const parseDataUrl = data => {
 }
 
 //  下载文件
+
 export const downloadFile = (file, fileName) => {
-  let a = document.createElement('a')
-  a.href = file
-  a.download = fileName
-  a.click()
+  // 将 Base64 数据转换为 Blob 对象
+  const byteCharacters = atob(file.split(',')[1]);
+  const byteNumbers = new Array(byteCharacters.length);
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+  const byteArray = new Uint8Array(byteNumbers);
+  const blob = new Blob([byteArray], { type: file.split(',')[0].split(':')[1].split(';')[0] });
+
+  // 创建一个临时的 URL
+  const url = URL.createObjectURL(blob);
+
+  // 创建一个 a 标签并触发下载
+  let a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  a.click();
+
+  // 释放临时 URL
+  URL.revokeObjectURL(url);
 }
 
 //  节流函数
