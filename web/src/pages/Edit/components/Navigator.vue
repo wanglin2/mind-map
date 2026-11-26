@@ -56,7 +56,9 @@ export default {
       mindMapImg: '',
       width: 0,
       setSizeTimer: null,
-      withTransition: true
+      withTransition: true,
+      lastViewX: null,
+      lastViewY: null
     }
   },
   computed: {
@@ -69,8 +71,9 @@ export default {
     window.addEventListener('resize', this.setSize)
     this.$bus.$on('toggle_mini_map', this.toggle_mini_map)
     this.$bus.$on('data_change', this.data_change)
-    this.$bus.$on('view_data_change', this.data_change)
     this.$bus.$on('node_tree_render_end', this.data_change)
+    this.$bus.$on('scale', this.data_change)
+    this.$bus.$on('translate', this.onTranslate)
     window.addEventListener('mouseup', this.onMouseup)
     this.mindMap.on(
       'mini_map_view_box_position_change',
@@ -81,8 +84,9 @@ export default {
     window.removeEventListener('resize', this.setSize)
     this.$bus.$off('toggle_mini_map', this.toggle_mini_map)
     this.$bus.$off('data_change', this.data_change)
-    this.$bus.$off('view_data_change', this.data_change)
     this.$bus.$off('node_tree_render_end', this.data_change)
+    this.$bus.$off('scale', this.data_change)
+    this.$bus.$off('translate', this.onTranslate)
     window.removeEventListener('mouseup', this.onMouseup)
     this.mindMap.off(
       'mini_map_view_box_position_change',
@@ -93,6 +97,10 @@ export default {
     // 切换显示小地图
     toggle_mini_map(show) {
       this.showMiniMap = show
+      if (!show) {
+        this.lastViewX = null
+        this.lastViewY = null
+      }
       this.$nextTick(() => {
         if (this.$refs.navigatorBox) {
           this.init()
@@ -112,6 +120,46 @@ export default {
       this.timer = setTimeout(() => {
         this.drawMiniMap()
       }, 500)
+    },
+
+    // 画布平移时仅更新视口框，避免频繁重绘小地图图片
+    onTranslate(x, y) {
+      if (!this.showMiniMap) return
+      if (this.lastViewX === null || this.lastViewY === null) {
+        this.lastViewX = x
+        this.lastViewY = y
+        return
+      }
+      const dx = x - this.lastViewX
+      const dy = y - this.lastViewY
+      this.lastViewX = x
+      this.lastViewY = y
+      if (dx === 0 && dy === 0) return
+      const currentState = this.mindMap.miniMap.currentState
+      if (!currentState) return
+      const { miniMapBoxScale, miniMapBoxLeft, miniMapBoxTop } = currentState
+      const boxDx = -dx * miniMapBoxScale
+      const boxDy = -dy * miniMapBoxScale
+      const left = Math.max(
+        miniMapBoxLeft,
+        Number.parseFloat(this.viewBoxStyle.left) + boxDx
+      )
+      const right = Math.max(
+        miniMapBoxLeft,
+        Number.parseFloat(this.viewBoxStyle.right) - boxDx
+      )
+      const top = Math.max(
+        miniMapBoxTop,
+        Number.parseFloat(this.viewBoxStyle.top) + boxDy
+      )
+      const bottom = Math.max(
+        miniMapBoxTop,
+        Number.parseFloat(this.viewBoxStyle.bottom) - boxDy
+      )
+      this.viewBoxStyle.left = left + 'px'
+      this.viewBoxStyle.right = right + 'px'
+      this.viewBoxStyle.top = top + 'px'
+      this.viewBoxStyle.bottom = bottom + 'px'
     },
 
     // 计算容器宽度
@@ -152,6 +200,9 @@ export default {
       this.svgBoxScale = miniMapBoxScale
       this.svgBoxLeft = miniMapBoxLeft
       this.svgBoxTop = miniMapBoxTop
+      const viewData = this.mindMap.view.getTransformData()
+      this.lastViewX = viewData.state.x
+      this.lastViewY = viewData.state.y
     },
 
     // 小地图鼠标按下事件
