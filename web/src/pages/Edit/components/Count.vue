@@ -46,6 +46,7 @@ export default {
   methods: {
     // 监听数据变化
     onDataChange(data) {
+      if (!data) return
       this.textStr = ''
       this.words = 0
       this.num = 0
@@ -56,7 +57,6 @@ export default {
 
     // 遍历
     walk(data) {
-      if (!data) return
       this.num++
       this.textStr += String(data.data.text) || ''
       if (data.children && data.children.length > 0) {
