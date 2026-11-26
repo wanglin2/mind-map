@@ -1,5 +1,6 @@
 import JSZip from 'jszip'
 import xmlConvert from 'xml-js'
+import { v4 as uuid } from 'uuid'
 import { getTextFromHtml, isUndef } from '../utils/index'
 import {
   getSummaryText,
@@ -48,9 +49,15 @@ const parseXmindFile = (file, handleMultiCanvas) => {
 }
 
 //  转换xmind数据
+//  PATCHED: relationships - Added support for importing XMind relationships as associative lines
 const transformXmind = async (content, files, handleMultiCanvas) => {
   content = JSON.parse(content)
   let data = null
+  
+  // PATCH: Map xmind node IDs to SimpleMindMap UIDs
+  const xmindIdToUid = new Map()
+  const uidToNewNode = new Map()
+  
   if (content.length > 1 && typeof handleMultiCanvas === 'function') {
     data = await handleMultiCanvas(content)
   }
@@ -60,11 +67,24 @@ const transformXmind = async (content, files, handleMultiCanvas) => {
   const nodeTree = data.rootTopic
   const newTree = {}
   const waitLoadImageList = []
+  
   const walk = async (node, newNode) => {
+    // PATCH: Generate UID for this node
+    const nodeUid = uuid()
+    
     newNode.data = {
       // 节点内容
-      text: isUndef(node.title) ? '' : node.title
+      text: isUndef(node.title) ? '' : node.title,
+      // PATCH: Assign UID to node
+      uid: nodeUid
     }
+    
+    // PATCH: Store mapping from xmind ID to our UID
+    if (node.id) {
+      xmindIdToUid.set(node.id, nodeUid)
+      uidToNewNode.set(nodeUid, newNode)
+    }
+    
     // 节点备注
     if (node.notes) {
       const notesData = node.notes.realHTML || node.notes.plain
@@ -118,6 +138,44 @@ const transformXmind = async (content, files, handleMultiCanvas) => {
   }
   walk(nodeTree, newTree)
   await Promise.all(waitLoadImageList)
+  
+  // PATCH: Process relationships (associative lines)
+  const relationships = data.relationships || []
+  if (relationships.length > 0) {
+    relationships.forEach(rel => {
+      const sourceXmindId = rel.end1Id
+      const targetXmindId = rel.end2Id
+      const relationshipTitle = rel.title || ''
+      
+      // Get the SimpleMindMap UIDs
+      const sourceUid = xmindIdToUid.get(sourceXmindId)
+      const targetUid = xmindIdToUid.get(targetXmindId)
+      
+      if (sourceUid && targetUid) {
+        const sourceNode = uidToNewNode.get(sourceUid)
+        if (sourceNode && sourceNode.data) {
+          // Initialize associative line arrays if not present
+          if (!sourceNode.data.associativeLineTargets) {
+            sourceNode.data.associativeLineTargets = []
+          }
+          if (!sourceNode.data.associativeLineText) {
+            sourceNode.data.associativeLineText = {}
+          }
+          
+          // Add the target UID to the associative line targets
+          if (!sourceNode.data.associativeLineTargets.includes(targetUid)) {
+            sourceNode.data.associativeLineTargets.push(targetUid)
+          }
+          
+          // Add the relationship title/label
+          if (relationshipTitle) {
+            sourceNode.data.associativeLineText[targetUid] = relationshipTitle
+          }
+        }
+      }
+    })
+  }
+  
   return newTree
 }
 
