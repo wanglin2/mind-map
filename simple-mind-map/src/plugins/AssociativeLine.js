@@ -758,6 +758,47 @@ class AssociativeLine {
     this.mindMap.deleteEditNodeClass(ASSOCIATIVE_LINE_TEXT_EDIT_WRAP)
     this.unBindEvent()
   }
+
+  // Toggle visibility of all associative lines
+  // Returns the new visibility state (true = visible, false = hidden)
+  toggleAllLinesVisibility() {
+    if (this._linesHidden) {
+      this.showAllLines()
+      return true
+    } else {
+      this.hideAllLines()
+      return false
+    }
+  }
+
+  // Hide all associative lines and their labels
+  hideAllLines() {
+    this._linesHidden = true
+    this.lineList.forEach(line => {
+      line[0].hide() // path
+      line[1].hide() // clickPath
+      line[2].hide() // text
+    })
+    this.hideControls()
+    this.mindMap.emit('associative_line_visibility_change', false)
+  }
+
+  // Show all associative lines and their labels
+  showAllLines() {
+    this._linesHidden = false
+    this.lineList.forEach(line => {
+      line[0].show() // path
+      line[1].show() // clickPath
+      line[2].show() // text
+    })
+    this.showControls()
+    this.mindMap.emit('associative_line_visibility_change', true)
+  }
+
+  // Get current visibility state
+  getLinesVisibility() {
+    return !this._linesHidden
+  }
 }
 
 AssociativeLine.instanceName = 'associativeLine'

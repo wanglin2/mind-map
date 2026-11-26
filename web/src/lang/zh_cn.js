@@ -210,7 +210,9 @@ export default {
     downloadClient: '下载客户端',
     site: '官方网站',
     current: '当前：',
-    downloadDesc: '可从如下地址下载：'
+    downloadDesc: '可从如下地址下载：',
+    showAssociativeLines: '显示关联线',
+    hideAssociativeLines: '隐藏关联线'
   },
   nodeHyperlink: {
     title: '超链接',

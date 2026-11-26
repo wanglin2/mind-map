@@ -216,7 +216,9 @@ export default {
     downloadClient: 'Download client',
     site: 'Official website',
     current: 'Current:',
-    downloadDesc: 'You can download it from the following address:'
+    downloadDesc: 'You can download it from the following address:',
+    showAssociativeLines: 'Show associative lines',
+    hideAssociativeLines: 'Hide associative lines'
   },
   nodeHyperlink: {
     title: 'Link',
